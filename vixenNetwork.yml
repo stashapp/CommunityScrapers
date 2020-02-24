@@ -1,0 +1,25 @@
+---
+name: "Vixen/Blacked/Tushy"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - "https://www.blackedraw.com/"
+      - "https://www.blacked.com/"
+      - "https://www.tushy.com/"
+      - "https://www.tushyraw.com/"
+      - "https://www.vixen.com/"
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //div[@data-test-component="VideoModels"]/a
+    scene:
+      Title: //h1[@data-test-component="VideoTitle"]
+      Performers:
+        Name: $performer
+        URL: $performer/@href
+      Details: //p[@data-test-component="VideoDescription"]
+      Date:
+        selector: //span[@data-test-component="ReleaseDateFormatted"]
+        parseDate: "January 2, 2006"
+---
