@@ -37,7 +37,7 @@ xPathScrapers:
         parseDate: January 2 2006
       Details: //span[div[text()='Description:']]//div[2]
       Tags: 
-        Name: //div//span[div[text()='Categories:']]//a//text()
+        Name: //div//span[div[text()='Categories:']]//a//text()[1]
       Performers:
         Name: $performer
         URL: $performer/@href
