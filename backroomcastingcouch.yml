@@ -1,0 +1,28 @@
+name: backroomcastingcouch
+performerByURL:
+  - action: scrapeXPath
+    url: 
+      - backroomcastingcouch.com/free/girl
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - backroomcastingcouch.com/free/girl
+    scraper: sceneScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //title/text()
+  sceneScraper:
+    common:
+      $performer: //title/text()
+      $studio: 'BackroomCastingCouch'
+    scene:
+      Title: //title/text()
+      Details: //div[@class='videos box-shadow']//p/text()[1]
+      Tags: 
+        Name: //div[@class='row']//p//a/text()
+      Performers:
+        Name: $performer
+      Studio:
+        Name: $studio/text()
