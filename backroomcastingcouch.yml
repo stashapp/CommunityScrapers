@@ -26,3 +26,9 @@ xPathScrapers:
         Name: $performer
       Studio:
         Name: $studio/text()
+      Image:
+        selector: //a[@id='Main_PicLink']/img/@src
+        # URL is a partial url, add the first part
+        replace:
+          - regex: ^
+            with: https://backroomcastingcouch.com
