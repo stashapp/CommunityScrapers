@@ -64,10 +64,5 @@ xPathScrapers:
       Tattoos: //div[p[text()='Tattoos']]//div//p[@class='mb-0 text-center']
       Piercings: //div[p[text()='Piercings']]//div//p[@class='mb-0 text-center']
       Image:
-        selector: //div[@class='profile-image-large']//a/@href
+        selector: //div[@class='profile-image-large']//a/img/@src
         # URL is a partial url, add the first part
-        replace:
-          - regex: ^
-            with: https://www.freeones.xxx
-        subScraper:
-          selector: //figure[1]//a/@href
