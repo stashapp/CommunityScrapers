@@ -39,8 +39,11 @@ xPathScrapers:
       Tags: 
         Name: //div//span[div[text()='Categories:']]//a//text()[1]
       Performers:
-        Name: $performer
+        Name: $performer/text()
         URL: $performer/@href
       Studio:
-        Name: $studio
+        Name: $studio/text()
         URL: //div//div[div[button[span[text()='Description & Categories']]]]//a[@class='sc-11m21lp-0-n jRqcyg']/@href
+      Image:
+        selector: //section[div[div[a]]]//div//div//img/@src[1]
+        # URL is a partial url, add the first part
