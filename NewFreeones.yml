@@ -43,7 +43,17 @@ xPathScrapers:
             with:
         # reference date is: 2006/01/02
         parseDate: January 2 2006
-      Ethnicity: //div[p[text()='Ethnicity']]//div//p[@class='mb-0 text-center']
+      Ethnicity: 
+        selector: //div[p[text()='Ethnicity']]//div//p[@class='mb-0 text-center']
+        replace: 
+          - regex: Asian
+            with: "asian"
+          - regex: Caucasian
+            with: "white"
+          - regex: Black
+            with: "black"
+          - regex: Latin
+            with: "hispanic"
       Country: //div[p[text()='Personal Information']]//div//p[3]//a[last()]
       EyeColor: //div[p[text()='Eye Color']]//div//p//a//span
       Height: 
