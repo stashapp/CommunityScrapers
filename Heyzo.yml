@@ -1,0 +1,16 @@
+name: heyzo
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - en.heyzo.com/moviepages
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Details: /html/head/title/text()
+      #Details: //section/div[@id="movie"]/h1
+      Date: 
+        selector: //div[@class="info-bg"]/table/tbody/tr[1]/td[2]
+        parseDate: 2006-01-02
+      Performers: 
+        Name: //div[@class="info-bg"]/table/tbody/tr[2]/td[2]//a/text()
