@@ -1,0 +1,30 @@
+---
+name: 21sextury
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - 21sextury.com
+      - 21sextreme.com
+      - 21naturals.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Details: 
+        selector: //div[@class="sceneDesc bioToRight showMore"]//text()
+        concat: ""
+      Date:
+        selector: //div[@class="updatedDate"]
+        parseDate: "01-02-2006"
+      Image:
+        selector: //script[contains(text(), 'ScenePlayerId = ')]/text()
+        replace: 
+          - regex: .+(images(\d+)-fame\.gammacdn\.com).+(\d{5}).+(\d{5}_01)\\.+\\\/(\d{3}).+(\d{5}_01_01).+
+            with: https://images$2-fame.gammacdn.com/movies/$3/$4/previews/2/$5/top_1_960x540/$6.jpg
+      Tags:
+        Name: //div[@class='sceneCol sceneColCategories']//a
+      Performers:
+        Name: //div[@class='sceneCol sceneColActors']//a
+        URL: //div[@class='sceneCol sceneColActors']//a/@href
+---
