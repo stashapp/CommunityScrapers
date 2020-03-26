@@ -16,4 +16,11 @@ xPathScrapers:
         parseDate: 2006-01-02T15:04:05-07:00
       Performers: 
         Name: $movieinfo/p[2]/a/text()
+      Tags:
+        Name: $movieinfo/p[5]/a
+      Image:
+        selector: //video[@id="videohtml5tour"]/@poster
+        replace:
+          - regex: ^
+            with:  "https:"
 
