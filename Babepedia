@@ -72,7 +72,7 @@ xPathScrapers:
       Height: 
         selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Height:']]/text()
         replace: 
-          - regex: \d\D\d\D \D+
+          - regex: \d\D\d+\D \D+
             with: ""
           - regex:  c\D+
             with: ""
