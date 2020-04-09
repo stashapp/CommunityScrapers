@@ -34,7 +34,7 @@ xPathScrapers:
         selector: //head/meta[@property="og:site_name"]/@content
         replace: 
           - regex: Babepedia
-            with: "female"
+            with: "Female"
       URL: //head/meta[@property="og:url"]/@content
       Twitter: 
         selector: //div[@id='socialicons']//a[img[@alt='Twitter account']]/@href
