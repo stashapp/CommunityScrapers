@@ -1,7 +1,7 @@
 name: NewFreeones
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.freeones.xxx/babes?q={}
+  queryURL: https://www.freeones.xxx/babes?q={}&v=teasers&s=relevance&l=96&m%5BcanPreviewFeatures%5D=0
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
