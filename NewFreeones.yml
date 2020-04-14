@@ -12,7 +12,7 @@ performerByURL:
 xPathScrapers:
   performerSearch:
     performer:
-      Name: 	//div[@id="search-result"]//a[@class=""]//div//p
+      Name: //div[@id="search-result"]//a[@class=""]//div//p/text()
       URL: 
         selector: //div[@id="search-result"]//a[@class=""]/@href
         # URL is a partial url, add the first part
