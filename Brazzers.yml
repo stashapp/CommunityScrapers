@@ -16,7 +16,7 @@ xPathScrapers:
       Details:
         selector: //div[@id="scene-description"]/p[@itemprop="description"]
         replace: 
-           - regex: "Collapse"
+           - regex: "Collapse$"
              with:
       Tags:
         Name: //div[@class="content-box scene-fuck-stats"]/ul/li/div/a/@title|//div[@class="tag-card-container"]/a
