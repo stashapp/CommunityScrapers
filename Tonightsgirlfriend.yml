@@ -1,0 +1,26 @@
+name: tonightsgirlfriend
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.tonightsgirlfriend.com/scenes
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="scenepage-info"]
+    scene:
+      Title:
+        selector: //head/title/text()
+        replace:
+          - regex: " \\| TonightsGirlfriend\\.com"
+            with:
+      Date:
+        selector: $sceneinfo/p/span/text()
+        replace:
+          - regex: "Added: "
+            with:
+        parseDate: 01-02-06
+      Details: //div[@class="scenepage-description"]/p
+      Performers:
+        Name: $sceneinfo/p/a
+      Image: //img[@class="playcard"]/@src
