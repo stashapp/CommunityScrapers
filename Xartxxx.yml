@@ -6,8 +6,6 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $sceneinfo: //div[@class="small-12 medium-12 large-12 columns info"]
     scene:
       Title: //h1[@class="entry-title"]
       Date:
