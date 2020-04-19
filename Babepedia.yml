@@ -1,0 +1,84 @@
+name: Babepedia
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.babepedia.com/search/{}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url: 
+      - https://www.babepedia.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //div[@id="content"]//a[contains(@href, '/babe/')]
+      URL: 
+        selector: //div[@id="content"]//a[contains(@href, '/babe/')]/@href
+        replace:
+          - regex: ^
+            with: https://www.babepedia.com
+  
+  performerScraper:
+    performer:
+      Name: //h1
+      Gender: 
+        selector: //head/meta[@property="og:site_name"]/@content
+        replace: 
+          - regex: Babepedia
+            with: "Female"
+      URL: //head/meta[@property="og:url"]/@content
+      Twitter: 
+        selector: //div[@id='socialicons']//a[img[@alt='Twitter account']]/@href
+        replace:
+          - regex: https://twitter.com/
+            with: ""
+      Instagram: 
+        selector: //div[@id='socialicons']//a[img[@alt='Instagram account']]/@href
+        replace:
+          - regex: https://instagram.com/
+            with: ""
+      Birthdate:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Born:']]/text()
+        replace:
+          - regex: (\D+of\b)
+            with:
+          - regex: (^\D+)
+            with:
+        # reference date is: 2006/01/02
+        parseDate: 2 January 2006
+      Ethnicity: 
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Ethnicity:']]/text()
+        replace: 
+          - regex: Asian
+            with: "asian"
+          - regex: Caucasian
+            with: "white"
+          - regex: Black
+            with: "black"
+          - regex: Latin
+            with: "hispanic"
+      Country: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Birthplace']]/a/text()
+      EyeColor: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Eye color:']]/text()
+      Height: 
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Height:']]/text()
+        replace: 
+          - regex: \d\D\d+\D \D+
+            with: ""
+          - regex:  c\D+
+            with: ""
+      Measurements: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Measurements:']]/text()
+      FakeTits: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Boobs:']]/text()
+      CareerLength: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Years active:']]/text() 
+      Aliases: 
+        selector: //div[@id='bioarea']//h2/text()
+        replace: 
+          - regex: aka
+            with: ""
+      Tattoos: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Tattoos:']]/text()
+      Piercings: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Piercings:']]/text()
+      Image:
+        selector: //div[@id='profimg']//a/@href
+        replace:
+          - regex: ^
+            with: https://www.babepedia.com
