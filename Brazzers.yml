@@ -1,0 +1,29 @@
+name: brazzers
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.brazzers.com/scenes
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="scene-main-info"]
+    scene:
+      Title: $sceneinfo/h1[@class="scene-title"]/text()
+      Date:
+        selector: //div[@class="more-scene-info"]/aside[@class="scene-date"]/text()
+        parseDate: January 02, 2006
+      Details:
+        selector: //div[@id="scene-description"]/p[@itemprop="description"]
+        replace: 
+           - regex: "Collapse$"
+             with:
+      Tags:
+        Name: //div[@class="content-box scene-fuck-stats"]/ul/li/div/a/@title|//div[@class="tag-card-container"]/a
+      Performers:
+        Name: $sceneinfo/p[@class="related-model"]/a
+      Image:
+        selector: //div[@id="trailer-player"]/img/@src
+        replace:
+          - regex: ^
+            with: "https:"
