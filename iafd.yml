@@ -1,0 +1,76 @@
+name: iafd
+performerByName:
+  action: scrapeXPath
+  queryURL: http://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url: 
+      - http://www.iafd.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/text()
+      URL: 
+        selector: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/@href
+        replace:
+          - regex: ^
+            with: http://www.iafd.com
+  
+  performerScraper:
+    performer:
+      Name: //h1
+      Gender: 
+        selector: //form[@id='correct']/input[@name='Gender']/@value
+        replace: 
+          - regex: f
+            with: "Female"
+          - regex: m
+            with: "Male"
+      URL: //head/meta[@property="og:url"]/@content
+      Twitter: 
+        selector: //p[@class='biodata']/a[contains(text(),"http://twitter.com/")]/@href
+        replace:
+          - regex: http://twitter.com/
+            with: ""
+      Instagram: 
+        selector: //p[@class='biodata']/a[contains(text(),"http://instagram.com/")]/@href
+        replace:
+          - regex: http://instagram.com/
+            with: ""
+      Birthdate:
+        selector: //div[p[text()='Birthday']]/p[@class='biodata']/a[contains(@href, '/calendar.')]/text()
+        # reference date is: 2006/01/02
+        parseDate: January 2, 2006
+      Ethnicity: 
+        selector: //div[p[text()='Ethnicity']]/p[@class='biodata'][1]
+        replace: 
+          - regex: Asian
+            with: "asian"
+          - regex: Caucasian
+            with: "white"
+          - regex: Black
+            with: "black"
+          - regex: Latin
+            with: "hispanic"
+      Country: //div/p[text()='Nationality']/following-sibling::p[1]/text()
+      Height: 
+        selector: //div/p[text()='Height']/following-sibling::p[1]/text()
+        replace: 
+          - regex: \d+\D+\d+\D+
+            with: ""
+          - regex:  \D+$
+            with: ""
+      Measurements: //div/p[text()='Measurements']/following-sibling::p[1]/text()
+      CareerLength: 
+        selector: //div/p[@class='biodata'][contains(text(),"Started around")]/text()
+        replace: 
+          - regex: (\D+\d\d\D+)$
+            with: ""     
+      Aliases: //div[p[@class='bioheading']]//div[@class='biodata']/text()
+      Tattoos: //div/p[text()='Tattoos']/following-sibling::p[1]/text()
+      Piercings: //div/p[text()='Piercings']/following-sibling::p[1]/text()
+      Image:
+        selector: //div[@id='headshot']/img/@src
