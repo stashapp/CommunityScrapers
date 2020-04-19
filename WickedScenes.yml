@@ -1,0 +1,22 @@
+name: "wickedscenes"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - "https://www.wicked.com/en/video/"
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@id="playerTitle"]/h1/span[@class="highlight"]/text()
+      Performers:
+        Name: //div[@class="sceneCol sceneColActors"]/a/text()
+      Date:
+        selector: //ul[@class="sceneSpecs"]/li[@class="updatedDate"]/text()[2]
+        parseDate: "2006-01-02"
+      Image:
+        selector: //script[contains(text(), 'ScenePlayerId = ')]/text()
+        replace:
+          - regex: .+(images(\d+)-fame\.gammacdn\.com).+(\d{5}).+(\d{5}_0\d{1})\\.+\\\/(\d{3})\\\/(.+)\\\/(\d{5}_0\d{1}_01).+
+            with: https://images$2-fame.gammacdn.com/movies/$3/$4/previews/2/$5/$6/$7.jpg
+      Tags:
+        Name: //div[@class="sceneCol sceneColCategories"]//a
