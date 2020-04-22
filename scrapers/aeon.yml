@@ -1,0 +1,31 @@
+name: aebn
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - aebn.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="dts-section-page-heading-title"]//text()
+      Date: 
+        selector: //li[@class="section-detail-list-item-release-date"]//text()
+        replace:
+          - regex: "Released:"
+            with:
+          - regex: ","
+            with:
+        parseDate: Jan 2 2006
+      Details:
+        selector: //div[@class="dts-section-page-detail-description-body"]//text()
+      Performers:
+        Name: //div[@class="dts-star-name-overlay"]/text()
+      Tags:
+        Name: //span[@class="dts-image-display-name"]//text()
+      Image:
+        selector: //picture[@class="dts-movie-boxcover-front"]/img/@src
+        replace:
+          - regex: ^
+            with: "https:"
+          - regex: "\\?s=293w"
+            with: 
