@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="dts-section-page-heading-title"]//text()
+      Title: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
       Date: 
         selector: //li[@class="section-detail-list-item-release-date"]//text()
         replace:
@@ -15,6 +15,8 @@ xPathScrapers:
             with:
           - regex: ","
             with:
+          - regex: "Sept"
+            with: "Sep" 
         parseDate: Jan 2 2006
       Details:
         selector: //div[@class="dts-section-page-detail-description-body"]//text()
