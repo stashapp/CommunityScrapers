@@ -1,0 +1,26 @@
+name: kink
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - kink.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="shoot-info"]
+    scene:
+      Title: //h1[@class="shoot-title"]/text()
+      Date: 
+        selector: //div[@class="columns"]/div[@class="column"]/p/text()
+        replace:
+          - regex: "Date: "
+            with:
+        parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="shoot-info"]/div[@class="description"]/text()
+      Performers:
+        Name: //span[@class="names"]/a/text()
+      Tags:
+        Name: //a[@class="tag"]/text()
+      Image:
+        selector: //video[@class="video-js vjs-fluid video-player"]/@poster
