@@ -11,7 +11,7 @@ xPathScrapers:
       $info: //div[@class="gallery-info"]
     scene:
       Title: 
-        selector: //div[@class="gallery-info"]/h1
+        selector: $info/h1
       Details: $info/p
       Performers:
         Name: $info/h4/a/text()
