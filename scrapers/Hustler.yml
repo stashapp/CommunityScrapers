@@ -1,0 +1,30 @@
+name: "hustler"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - "https://hustler.com/trailers"
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $script: //script[contains(text(), 'headline')]/text()
+      $info: //div[@class="gallery-info"]
+    scene:
+      Title: 
+        selector: //div[@class="gallery-info"]/h1
+      Details: $info/p
+      Performers:
+        Name: $info/h4/a/text()
+      Date:
+        selector: $script
+        replace:
+          - regex: .+\"datePublished\"\:\s\"(\d\d/\d\d/\d\d\d\d)\".+
+            with: $1
+        parseDate: "01/02/2006"
+      Image:
+        selector: $script
+        replace: 
+          - regex: .+\"thumbnailUrl\"\:\s\"(https.+\.jpg)\".+
+            with: $1
+      Tags: 
+        Name: //span[@class="gallery-meta"]/span[@class="left"]/a/text()
