@@ -1,0 +1,23 @@
+name: "Babes"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.babes.com/scene/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $moreinfo: //div[@class="tjb798-2 flgKJM"]
+    scene:
+      Title: //h1[@class="wxt7nk-4 fSsARZ"]/text()
+      Date:
+        selector: $moreinfo/span[3]/text()
+        parseDate: January 02, 2006
+      Details: $moreinfo/span[2]/div[2]/text()
+      Tags:
+        Name: $moreinfo/span[1]/a/text()[1]
+      Performers:
+        Name: //div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
+      Image: //img[@class="tg5e7m-1 eSykzx"]/@src
+
+# Last Updated May 14, 2020
