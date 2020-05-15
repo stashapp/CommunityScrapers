@@ -1,0 +1,22 @@
+name: "ManyVids"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.manyvids.com/Video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[@class="video-details"]
+    scene:
+      Title: $details//h2/text()
+      Details: //div[@class="desc-text"]/text()
+      # Only partial dates provides, which would currently be made as 0000-01-01
+      # Date:
+      #   selector: //div[@class="mb-1"]/span[2]/text()
+      #   parseDate: Jan 02
+      Performers:
+        Name: $details//h4/a/text()
+      Image: //div[@id="rmpPlayer"]/@data-video-screenshot
+
+# Last Updated May 15, 2020
