@@ -1,0 +1,23 @@
+name: "FinishesTheJob"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.finishesthejob.com/scene/
+      - https://www.mrpov.com/scene/
+      - https://www.manojob.com/scene/
+      - https://www.thedicksuckers.com/scene/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //section[@class="scene-content"]/header
+    scene:
+      Title: $content/h1/text()
+      Details: $content/p[@itemprop="description"]/text()
+      Performers:
+        Name: $content/h4/a/text()
+      Tags:
+        Name: $content/p/a/text()
+      Image: //video[@class="plyr"]/@poster
+
+# Last Updated May 15, 2020
