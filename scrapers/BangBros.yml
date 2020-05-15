@@ -13,7 +13,9 @@ xPathScrapers:
         Name:
           selector: //div[@class="vdoTags"]/a/text()
       Performers:
-        Name: //div[@class="vdoCast"]/a[2]
+        Name: //div[@class="vdoCast"]/a[position()>1]/text()
+      Studio:
+        Name: //div[@class="vdoCast"]/a[1]/text()
       Image:
         selector: //img[@id="player-overlay-image"]/@src
         replace:
