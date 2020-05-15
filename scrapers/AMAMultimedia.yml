@@ -1,0 +1,65 @@
+# This one convers a LOT of sites (including the PornPros Network). Almost
+# all the sites follow the same structure, making this mega scraper possible.
+# I got the list of sites from here: https://www.thebestporn.com/review_company.html?id=2085
+
+# Note: THe brands associated directly with the PornPros network, require you
+# get a scene link from PornPros.com directly, as the individual sites do not
+# have scene links. These sites are:
+# publicviolations.com jurassiccock.com 18yearsold.com 40ozbounce.com
+# cockcompetition.com crueltyparty.com cumshotsurprise.com deepthroatlove.com
+# disgraced18.com eurohumpers.com flexiblepositions.com freaksofboobs.com
+# freaksofcock.com pimpparade.com shadypi.com squirtdisgrace.com
+
+# There are a small number of sites where the scene links don't exist on
+# PornPros.com OR their own sites, and are not supported. These are:
+# amateurviolations.com cumdisgrace.com lolcumshots.com massagecreep.com
+# milfhumiliation.com webcamhackers.com
+
+name: "AMA Multimedia"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://passion-hd.com/video/
+      - https://lubed.com/video/
+      - https://holed.com/video/
+      - https://pornpros.com/video/
+      - https://povd.com/video/
+      - https://tiny4k.com/video/
+      - https://castingcouch-x.com/video/
+      - https://exotic4k.com/video/
+      - https://puremature.com/video/
+      - https://fantasyhd.com/video/
+      - https://cum4k.com/video/
+      - https://wetvr.com/video/
+      - https://myveryfirsttime.com/video/
+      - https://girlcum.com/video/
+      - https://spyfam.com/video/
+      - https://baeb.com/video/
+      - https://nannyspy.com/video/
+      - https://bbcpie.com/video/
+      - https://gayroom.com/video/
+      - https://manroyale.com/video/
+      - https://gaycastings.com/video/
+      - https://damnthatsbig.com/video/
+      - https://gaycreeps.com/video/
+      - https://menpov.com/video/
+      - https://massagebait.com/video/
+      - https://bathhousebait.com/video/
+      - https://boysdestroyed.com/video/
+      - https://showerbait.com/video/
+      - https://thickandbig.com/video/
+      - https://outhim.com/video/
+      - https://officecock.com/video/
+      - https://gayviolations.com/video/
+
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="t2019-stitle py-1 py-sm-2 pt-lg-0 mb-0 border-bottom"]/text()
+      Details: //div[@id="t2019-description"]/text()
+      Performers:
+        Name: //div[@id="t2019-models"]/a/text()
+      Image: //video[@id="player"]/@poster
+
+# Last Updated May 14, 2020
