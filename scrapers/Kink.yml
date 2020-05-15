@@ -10,8 +10,8 @@ xPathScrapers:
       $sceneinfo: //div[@class="shoot-info"]
     scene:
       Title: //h1[@class="shoot-title"]/text()
-      Date: 
-        selector: //div[@class="columns"]/div[@class="column"]/p/text()
+      Date:
+        selector: //div[@class="columns"]/div[@class="column"]/p[contains(text(),"Date:")]/text()
         replace:
           - regex: "Date: "
             with:
@@ -24,3 +24,9 @@ xPathScrapers:
         Name: //a[@class="tag"]/text()
       Image:
         selector: //video[@class="video-js vjs-fluid video-player"]/@poster
+      Studio:
+        Name:
+          selector: //div[@class="column shoot-logo"]/a/@href
+          replace:
+            - regex: /channel/
+              with: ""
