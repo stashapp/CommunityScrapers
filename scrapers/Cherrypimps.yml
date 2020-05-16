@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - https://cherrypimps.com/
+      - https://petite.xxx/
       - https://wildoncam.com/
     scraper: sceneScraper
 xPathScrapers:
