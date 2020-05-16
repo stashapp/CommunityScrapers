@@ -69,6 +69,7 @@ nannyspy.com|AMAMultimedia.yml
 officecock.com|AMAMultimedia.yml
 outhim.com|AMAMultimedia.yml
 passion-hd.com|AMAMultimedia.yml
+petite.xxx|Cherrypimps.yml
 pornpros.com|AMAMultimedia.yml
 povd.com|AMAMultimedia.yml
 puremature.com|AMAMultimedia.yml
