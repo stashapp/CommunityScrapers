@@ -16,7 +16,7 @@ caribbeancom.com|Carib.yml
 castingcouch-x.com|AMAMultimedia.yml
 cherrypimps.com|Cherrypimps.yml
 cum4k.com|AMAMultimedia.yml
-czechamateurs.com|Cherrypimps.yml
+czechamateurs.com|Czechav.yml
 czechbangbus.com|Czechav.yml
 czechbitch.com|Czechav.yml
 czechcouples.com|Czechav.yml
@@ -41,7 +41,7 @@ czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
 czechwifeswap.com|Czechav.yml
 damnthatsbig.com|AMAMultimedia.yml
-digitalplayground.com|Czechav.yml
+digitalplayground.com|Digitalplayground.yml
 exotic4k.com|AMAMultimedia.yml
 fantasyhd.com|AMAMultimedia.yml
 finishesthejob.com|FinishesTheJob.yml
@@ -50,7 +50,7 @@ gaycreeps.com|AMAMultimedia.yml
 gayroom.com|AMAMultimedia.yml
 gayviolations.com|AMAMultimedia.yml
 girlcum.com|AMAMultimedia.yml
-heyzo.com|FinishesTheJob.yml
+heyzo.com|Heyzo.yml
 holed.com|AMAMultimedia.yml
 hustler.com|Hustler.yml
 japanhdv.com|JapanHDV.yml
@@ -75,7 +75,7 @@ puremature.com|AMAMultimedia.yml
 showerbait.com|AMAMultimedia.yml
 spizoo.com|Spizoo.yml
 spyfam.com|AMAMultimedia.yml
-thedicksuckers.com|Heyzo.yml
+thedicksuckers.com|FinishesTheJob.yml
 thickandbig.com|AMAMultimedia.yml
 tiny4k.com|AMAMultimedia.yml
 tokyo-hot.com|Tokyohot.yml
@@ -83,6 +83,6 @@ tonightsgirlfriend.com|Tonightsgirlfriend.yml
 vivid.com|Vivid.yml
 wetvr.com|AMAMultimedia.yml
 wicked.com|WickedScenes.yml
-wildoncam.com|Digitalplayground.yml
+wildoncam.com|Cherrypimps.yml
 x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
