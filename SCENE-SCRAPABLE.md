@@ -61,6 +61,7 @@ manroyale.com|AMAMultimedia.yml
 manyvids.com|ManyVids.yml
 massagebait.com|AMAMultimedia.yml
 menpov.com|AMAMultimedia.yml
+missax.com|MissaX.yml
 mofos.com|Mofos.yml
 mrpov.com|FinishesTheJob.yml
 mypervyfamily.com|Mypervyfamily.yml
