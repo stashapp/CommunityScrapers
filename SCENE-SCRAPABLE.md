@@ -4,6 +4,7 @@ This list is meant to keep track of which sites are already supported by existin
 Supported Site|Scraper
 ------------- | -------------
 aebn.com|AEBN.yml
+allherluv.com|AllHerLuv.yml
 babes.com|Babes.yml
 backroomcastingcouch.com|Backroomcastingcouch.yml
 baeb.com|AMAMultimedia.yml
