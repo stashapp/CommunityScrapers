@@ -43,6 +43,7 @@ czechwifeswap.com|Czechav.yml
 damnthatsbig.com|AMAMultimedia.yml
 digitalplayground.com|Digitalplayground.yml
 exotic4k.com|AMAMultimedia.yml
+familystrokes.com|FamilyStrokes.yml
 fantasyhd.com|AMAMultimedia.yml
 finishesthejob.com|FinishesTheJob.yml
 gaycastings.com|AMAMultimedia.yml
