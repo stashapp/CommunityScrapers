@@ -64,6 +64,7 @@ gaycreeps.com|AMAMultimedia.yml
 gayroom.com|AMAMultimedia.yml
 gayviolations.com|AMAMultimedia.yml
 girlcum.com|AMAMultimedia.yml
+gloryholeswallow.com|GloryHoleSwallow.yml
 happytugs.com|RealityKings.yml
 heyzo.com|Heyzo.yml
 holed.com|AMAMultimedia.yml
