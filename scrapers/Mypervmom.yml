@@ -1,0 +1,26 @@
+name: mypervmom.com
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mypervmom.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2
+      Date:
+        selector: //div[@id="title-single"]/span
+        replace:
+          - regex: (\w+\s)(\d+)\w+,(\s\d\d\d\d)
+            with: $1$2$3
+        parseDate: January 2 2006
+      Details:
+        selector: //p[@class="more"]|//span[@class="more"]/text()
+        replace:
+          - regex: ^Description\:(.+)
+            with: $1
+      Name: //div[@class="tags"]//a/text()
+      Performers:
+        Name: //div[@id="title-single"]//a
+      Image:
+        selector: //div[@class="entry"]//video/@poster

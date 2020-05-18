@@ -67,6 +67,7 @@ menpov.com|AMAMultimedia.yml
 missax.com|MissaX.yml
 mofos.com|Mofos.yml
 mrpov.com|FinishesTheJob.yml
+mypervmom.com|Mypervmom.yml
 mypervyfamily.com|Mypervyfamily.yml
 myveryfirsttime.com|AMAMultimedia.yml
 nannyspy.com|AMAMultimedia.yml
