@@ -106,6 +106,7 @@ mypervyfamily.com|Mypervyfamily.yml
 myveryfirsttime.com|AMAMultimedia.yml
 nannyspy.com|AMAMultimedia.yml
 naughtyamerica.com|NaughtyAmerica.yml
+newsensations.com/tour_ns/|NewSensationsMain.yml
 officecock.com|AMAMultimedia.yml
 outhim.com|AMAMultimedia.yml
 passion-hd.com|AMAMultimedia.yml
