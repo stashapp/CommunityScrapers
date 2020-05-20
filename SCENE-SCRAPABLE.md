@@ -142,6 +142,7 @@ spyfam.com|AMAMultimedia.yml
 stepsiblings.com|PaperStreetMedia.yml
 sweetheartvideo.com|RealityKings.yml
 sweetsinner.com|RealityKings.yml
+teamskeet.com|TeamSkeet.yml
 teensloveblackcocks.com|PaperStreetMedia.yml
 teenslovehugecocks.com|RealityKings.yml
 theassfactory.com|JulesJordan.yml

@@ -1,0 +1,21 @@
+name: "TeamSkeet"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.teamskeet.com/movies/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="col-12 sceneTitle"]/text()
+      Date:
+        selector: //div[@class="col-6 sceneDate"]/text()
+        parseDate: 01/02/2006
+      Details: //div[@class="col-12 sceneDesc"]/text()
+      Performers:
+        Name: //div[@class="col-12 contentTitle"]/a
+      Studio:
+        Name: //div[@class="siteName float-right px-3 rounded "]/a
+      Image: //stream/@poster
+
+# Last Updated May 19, 2020
