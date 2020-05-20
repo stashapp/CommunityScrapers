@@ -1,0 +1,33 @@
+name: "PaperStreetMedia"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.familystrokes.com/movies/
+      - https://www.sislovesme.com/movies/
+      - https://www.innocenthigh.com/movies/
+      - https://www.thickumz.com/movies/
+      - https://www.mylf.com/movies/
+      - https://www.shoplyfter.com/movies/
+      - https://www.daughterswap.com/movies/
+      - https://www.teensloveblackcocks.com/movies/
+      - https://www.badmilfs.com/movies/
+      - https://www.pervmom.com/movies/
+      - https://www.littleasians.com/movies/
+      - https://www.blackvalleygirls.com/movies/
+      - https://www.mylfdom.com/movies/
+      - https://www.stepsiblings.com/movies/
+      - https://www.dyked.com/movies/
+      - https://www.bbcparadise.com/movies/
+      - https://www.shoplyftermylf.com/movies/
+      - https://www.exxxtrasmall.com/movies/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //p[@class="video-title"]/text()
+      Details: //p[@class="video-description"]/text()
+      Performers:
+        Name: //p[@class="model-name"]/a/text()
+      Image: //div[@class="video-area"]//stream/@poster
+
+# Last Updated May 17, 2020
