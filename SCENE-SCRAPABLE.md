@@ -76,6 +76,7 @@ gloryholeswallow.com|GloryHoleSwallow.yml
 happytugs.com|RealityKings.yml
 heyzo.com|Heyzo.yml
 holed.com|AMAMultimedia.yml
+hungarianhoneys.com|HungarianHoneys.yml
 hustler.com|Hustler.yml
 iknowthatgirl.com|RealityKings.yml
 innocenthigh.com|PaperStreetMedia.yml
