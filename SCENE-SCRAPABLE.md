@@ -103,9 +103,13 @@ momsbangteens.com|RealityKings.yml
 momslickteens.com|RealityKings.yml
 moneytalks.com|RealityKings.yml
 mrpov.com|FinishesTheJob.yml
+mybadmilfs.com|Mypervmom.yml
+mydaughterswap.com|Mypervmom.yml
 mylf.com|PaperStreetMedia.yml
 mylfdom.com|PaperStreetMedia.yml
+mypervmom.com|Mypervmom.yml
 mypervyfamily.com|Mypervyfamily.yml
+mysislovesme.com|Mypervmom.yml
 myveryfirsttime.com|AMAMultimedia.yml
 nannyspy.com|AMAMultimedia.yml
 naughtyamerica.com|NaughtyAmerica.yml
