@@ -2,7 +2,10 @@ name: mypervmom.com
 sceneByURL:
   - action: scrapeXPath
     url:
+      - mybadmilfs.com
+      - mydaughterswap.com
       - mypervmom.com
+      - mysislovesme.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
