@@ -70,6 +70,7 @@ gaycreeps.com|AMAMultimedia.yml
 gayroom.com|AMAMultimedia.yml
 gayviolations.com|AMAMultimedia.yml
 girlcum.com|AMAMultimedia.yml
+girlgirl.com|JulesJordan.yml
 gloryholeswallow.com|GloryHoleSwallow.yml
 happytugs.com|RealityKings.yml
 heyzo.com|Heyzo.yml
@@ -78,6 +79,7 @@ hustler.com|Hustler.yml
 iknowthatgirl.com|RealityKings.yml
 innocenthigh.com|PaperStreetMedia.yml
 japanhdv.com|JapanHDV.yml
+julesjordan.com|JulesJordan.yml
 kink.com|Kink.yml
 lesbea.com|RealityKings.yml
 letstryanal.com|RealityKings.yml
@@ -87,6 +89,7 @@ lookathernow.com|RealityKings.yml
 lubed.com|AMAMultimedia.yml
 manojob.com|FinishesTheJob.yml
 manroyale.com|AMAMultimedia.yml
+manuelferrara.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
 massagebait.com|AMAMultimedia.yml
 men.com|RealityKings.yml
@@ -129,6 +132,7 @@ shoplyftermylf.com|PaperStreetMedia.yml
 showerbait.com|AMAMultimedia.yml
 sislovesme.com|PaperStreetMedia.yml
 sneakysex.com|RealityKings.yml
+spermswallowers.com|JulesJordan.yml
 spizoo.com|Spizoo.yml
 spyfam.com|AMAMultimedia.yml
 stepsiblings.com|PaperStreetMedia.yml
@@ -136,6 +140,7 @@ sweetheartvideo.com|RealityKings.yml
 sweetsinner.com|RealityKings.yml
 teensloveblackcocks.com|PaperStreetMedia.yml
 teenslovehugecocks.com|RealityKings.yml
+theassfactory.com|JulesJordan.yml
 thedicksuckers.com|FinishesTheJob.yml
 thickandbig.com|AMAMultimedia.yml
 thickumz.com|PaperStreetMedia.yml

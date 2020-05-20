@@ -1,0 +1,38 @@
+name: "JulesJordan"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.julesjordan.com/
+      - https://www.girlgirl.com/
+      - https://www.manuelferrara.com/
+      - https://www.theassfactory.com/
+      - https://www.spermswallowers.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[@class="backgroundcolor_info"]
+      $galinfo: //div[@class="gallery_info"]
+    scene:
+      Title: //div[@class="title_bar"]/span/text()
+      Date:
+        selector: $details//div[@class="cell update_date"]/text()
+        parseDate: 01/02/2006
+      Details:
+        selector: $details//span[@class="update_description"]/text()
+        concat: " "
+      Tags:
+        Name: //span[@class="update_tags"]/a/text()
+      Performers:
+        Name: $details//span[@class="update_models"]/a/text()|$galinfo//span[@class="update_models"]/div/a/text()
+      Movies:
+        Name: $details//span[@class="update_dvds"]/a/text()
+      Image:
+        selector: //script[contains(text(),'useimage')]/text()
+        replace:
+          - regex: (?:.+useimage = "([^"]+).+)
+            with: $1
+          - regex: (^\/)
+            with: https://www.julesjordan.com/
+
+# Last Updated May 20, 2020
