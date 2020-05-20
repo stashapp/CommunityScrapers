@@ -1,0 +1,24 @@
+name: "NewSensationsMain"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://network.newsensations.com/tour_ns/
+      - https://www.newsensations.com/tour_ns/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $video-area: //div[@class="trailerVideos clear"]
+      $info: //div[@class="trailerInfo"]
+    scene:
+      Title: $video-area//h3/text()
+      Details: $info//p/text()
+      Tags:
+        Name: $info//li[contains(text(),'Tags:')]/a/text()
+      Performers:
+        Name: $info//span[@class="tour_update_models"]/a/text()
+      Movies:
+        Name: $info//li[contains(text(),'DVD:')]/a/text()
+      Image: $video-area//span[@id="trailer_thumb"]/span[1]/img/@src
+
+# Last Updated May 20, 2020
