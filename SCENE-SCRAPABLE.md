@@ -128,6 +128,7 @@ publicpickups.com|RealityKings.yml
 puremature.com|AMAMultimedia.yml
 realityjunkies.com|RealityKings.yml
 realitykings.com|RealityKings.yml
+realsensual.com|RealSensual.yml
 recklessinmiami.com|RealityKings.yml
 rk.com|RealityKings.yml
 roundandbrown.com|RealityKings.yml
