@@ -54,6 +54,7 @@ damnthatsbig.com|AMAMultimedia.yml
 danejones.com|RealityKings.yml
 daughterswap.com|PaperStreetMedia.yml
 digitalplayground.com|Digitalplayground.yml
+dogfartnetwork.com|DogFart.yml
 doghousedigital.com|RealityKings.yml
 dontbreakme.com|RealityKings.yml
 dyked.com|PaperStreetMedia.yml
