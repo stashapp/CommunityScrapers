@@ -86,6 +86,7 @@ japanhdv.com|JapanHDV.yml
 julesjordan.com|JulesJordan.yml
 kink.com|Kink.yml
 lesbea.com|RealityKings.yml
+letsdoeit.com|LetsDoeIt.yml
 letstryanal.com|RealityKings.yml
 lilhumpers.com|RealityKings.yml
 littleasians.com|PaperStreetMedia.yml
