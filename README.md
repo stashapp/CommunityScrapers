@@ -3,7 +3,11 @@ This is a public repository containing scrapers created by the Stash Community.
 
 To download the scrapers you can clone the git repo or download directly any of the scrapers.
 
-When downloading directly click at the scraper.yml you want and then make sure to click the ![raw](https://user-images.githubusercontent.com/48220860/82433600-59c5d580-9a9a-11ea-8f51-f7d80e3ce735.png) button and then save page as file from the browser to preserve the correct format for the yml file.
+When downloading directly click at the scraper.yml you want and then make sure to click the raw button:
+
+![](https://user-images.githubusercontent.com/1358708/82524777-cd4cfe80-9afd-11ea-808d-5ea7bf26704f.jpg)
+
+and then save page as file from the browser to preserve the correct format for the yml file.
 
 Any scraper file has to be stored in the `~/.stash/scrapers` ( ~/.stash is where the config and database file are located) directory. If the directory is not there it needs to be created.
 
