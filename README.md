@@ -9,7 +9,7 @@ When downloading directly click at the scraper.yml you want and then make sure t
 
 and then save page as file from the browser to preserve the correct format for the yml file.
 
-Any scraper file has to be stored in the `~/.stash/scrapers` ( ~/.stash is where the config and database file are located) directory. If the directory is not there it needs to be created.
+Any scraper file has to be stored in the `~/.stash/scrapers` ( ~/.stash is where the config and database file are located) directory. If the `scrapers` directory is not there it needs to be created.
 
 After updating the scrapers directory contents or editing a scraper file a restart of stash is needed and a refresh of the edit scene/performer page.
 
