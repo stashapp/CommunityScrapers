@@ -1,0 +1,17 @@
+name: 21Naturals
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 21naturals.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@name="twitter:title"]/@content
+      Details: //meta[@name="twitter:description"]/@content
+      Date: //div[@class="updatedDate"]//text()[2]
+      Image: //meta[@name="twitter:image"]/@content
+      Performers:
+        Name: //div[@class="sceneCol sceneColActors"]/a//text()
+      Tags:
+        Name: //div[@class="sceneCol sceneColCategories"]/a//text()
