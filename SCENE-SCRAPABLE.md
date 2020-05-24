@@ -7,7 +7,7 @@ Supported Site|Scraper
 aebn.com|AEBN.yml
 allherluv.com|AllHerLuv.yml
 anilos.com|Nubiles.yml
-ashlynnbrooke.com/tour_ab/|NewSensationsNetworkSites.yml
+ashlynnbrooke.com|NewSensationsNetworkSites.yml
 babes.com|RealityKings.yml
 babesnetwork.com|RealityKings.yml
 backroomcastingcouch.com|Backroomcastingcouch.yml
@@ -76,8 +76,8 @@ familystrokes.com|PaperStreetMedia.yml
 familyxxx.com|FamilyXXX.yml
 fantasyhd.com|AMAMultimedia.yml
 finishesthejob.com|FinishesTheJob.yml
-fourfingerclub.com/tour_ffc/|NewSensationsNetworkSites.yml
-freshouttahighschool.com/tour_fohs/|NewSensationsNetworkSites.yml
+fourfingerclub.com|NewSensationsNetworkSites.yml
+freshouttahighschool.com|NewSensationsNetworkSites.yml
 gaycastings.com|AMAMultimedia.yml
 gaycreeps.com|AMAMultimedia.yml
 gayroom.com|AMAMultimedia.yml
@@ -95,7 +95,7 @@ iconmale.com|RealityKings.yml
 iknowthatgirl.com|RealityKings.yml
 innocenthigh.com|PaperStreetMedia.yml
 japanhdv.com|JapanHDV.yml
-jizzbomb.com/tour_jb/|NewSensationsNetworkSites.yml
+jizzbomb.com|NewSensationsNetworkSites.yml
 julesjordan.com|JulesJordan.yml
 kink.com|Kink.yml
 lesbea.com|RealityKings.yml
@@ -144,7 +144,7 @@ nubileset.com|Nubiles.yml
 nubilesunscripted.com|Nubiles.yml
 officecock.com|AMAMultimedia.yml
 outhim.com|AMAMultimedia.yml
-parodypass.com/tour_pp/|NewSensationsNetworkSites.yml
+parodypass.com|NewSensationsNetworkSites.yml
 passion-hd.com|AMAMultimedia.yml
 pervmom.com|PaperStreetMedia.yml
 petite.xxx|Cherrypimps.yml
@@ -165,7 +165,7 @@ rk.com|RealityKings.yml
 roundandbrown.com|RealityKings.yml
 seancody.com|RealityKings.yml
 sexyhub.com|RealityKings.yml
-shanedieselsbanginbabes.com/tour_sdbb/|NewSensationsNetworkSites.yml
+shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml
 shoplyfter.com|PaperStreetMedia.yml
 shoplyftermylf.com|PaperStreetMedia.yml
 showerbait.com|AMAMultimedia.yml
@@ -185,8 +185,8 @@ teenslovehugecocks.com|RealityKings.yml
 thatsitcomshow.com|Nubiles.yml
 theassfactory.com|JulesJordan.yml
 thedicksuckers.com|FinishesTheJob.yml
-thelesbianexperience.com/tour_tle/|NewSensationsNetworkSites.yml
-thetabutales.com/tour_tt/|NewSensationsNetworkSites.yml
+thelesbianexperience.com|NewSensationsNetworkSites.yml
+thetabutales.com|NewSensationsNetworkSites.yml
 thickandbig.com|AMAMultimedia.yml
 thickumz.com|PaperStreetMedia.yml
 tiny4k.com|AMAMultimedia.yml
@@ -194,7 +194,7 @@ tokyo-hot.com|Tokyohot.yml
 tonightsgirlfriend.com|Tonightsgirlfriend.yml
 transsensual.com|RealityKings.yml
 twistysnetwork.com|RealityKings.yml
-unlimitedmilfs.com/tour_um/|NewSensationsNetworkSites.yml
+unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vivid.com|Vivid.yml
 welivetogether.com|RealityKings.yml
 wetvr.com|AMAMultimedia.yml
