@@ -45,6 +45,7 @@ sceneByURL:
       - https://www.seancody.com/scene/
       - https://www.men.com/sceneid/
       - https://www.transsensual.com/scene/
+      - https://www.iconmale.com/scene/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
