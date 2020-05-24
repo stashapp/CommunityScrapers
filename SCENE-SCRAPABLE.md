@@ -25,6 +25,7 @@ captainstabbin.com|RealityKings.yml
 caribbeancom.com|Carib.yml
 castingcouch-x.com|AMAMultimedia.yml
 cherrypimps.com|Cherrypimps.yml
+clips4sale.com|Clips4Sale.yml
 cum4k.com|AMAMultimedia.yml
 cumfiesta.com|RealityKings.yml
 czechamateurs.com|Czechav.yml

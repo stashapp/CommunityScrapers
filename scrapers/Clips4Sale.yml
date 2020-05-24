@@ -1,0 +1,32 @@
+name: "Clips4Sale"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - clips4sale.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="clipTitle"]/h3/text()
+      Details:
+        selector: //div[@class="clip"]/div/p[position() > 1]//text()
+        concat: " "
+      Date:
+        selector: //div[@class="clearfix infoRow2 clip_details"]/div/div[2]/div[3]//span[@class="highlight"]/text()
+        replace:
+          - regex: \s.+
+            with:
+        parseDate: 1/2/06
+      Tags:
+        Name: //div[@class="clipInfo clip_details"]//a/text()
+      # Clips4Sale doesn't have an explict performer field, but performers are
+      # often included in the video tags. So we attempt to find matches there.
+      Performers:
+        Name: //div[@class="clipInfo clip_details"]//a/text()
+      Image:
+        selector: //div[@class="mediaSrc"]//video/@poster|//div[@class="mediaSrc"]/img/@src
+        replace:
+          - regex: ^\/\/
+            with: "https://"
+
+# Last Updated May 23, 2020
