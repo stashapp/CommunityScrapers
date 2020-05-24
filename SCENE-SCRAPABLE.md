@@ -83,6 +83,7 @@ holed.com|AMAMultimedia.yml
 hotwifexxx.com|HotWifeXXX.yml
 hungarianhoneys.com|HungarianHoneys.yml
 hustler.com|Hustler.yml
+iconmale.com|RealityKings.yml
 iknowthatgirl.com|RealityKings.yml
 innocenthigh.com|PaperStreetMedia.yml
 japanhdv.com|JapanHDV.yml
