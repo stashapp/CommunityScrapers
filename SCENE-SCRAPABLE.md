@@ -4,6 +4,7 @@ This list is meant to keep track of which sites are already supported by existin
 Supported Site|Scraper
 ------------- | -------------
 1000facials.com|GammaEntertainment.yml
+18vr.com|BaDoink.yml
 21naturals.com|GammaEntertainment.yml
 21sextreme.com|GammaEntertainment.yml
 8thstreetlatinas.com|RealityKings.yml
@@ -25,8 +26,10 @@ assholefever.com|GammaEntertainment.yml
 assmeat.com|Hustler.yml
 babes.com|RealityKings.yml
 babesnetwork.com|RealityKings.yml
+babevr.com|BaDoink.yml
 backroomcastingcouch.com|Backroomcastingcouch.yml
 badmilfs.com|PaperStreetMedia.yml
+badoinkvr.com|BaDoink.yml
 badteenspunished.com|Nubiles.yml
 baeb.com|AMAMultimedia.yml
 bangbros.com|BangBros.yml
@@ -173,6 +176,7 @@ jizzbomb.com|NewSensationsNetworkSites.yml
 jonnidarkkoxxx.com|GammaEntertainment.yml
 julesjordan.com|JulesJordan.yml
 kink.com|Kink.yml
+kinkvr.com|BaDoink.yml
 lanesisters.com|GammaEntertainment.yml
 legalporno.com|LegalPorno.yml
 lesbea.com|RealityKings.yml
@@ -276,6 +280,7 @@ ragingstallion.com|GammaEntertainment.yml
 realityjunkies.com|RealityKings.yml
 realitykings.com|RealityKings.yml
 realsensual.com|RealSensual.yml
+realvr.com|BaDoink.yml
 recklessinmiami.com|RealityKings.yml
 rk.com|RealityKings.yml
 roccosiffredi.com|GammaEntertainment.yml
@@ -340,6 +345,7 @@ vivid.com|GammaEntertainment.ymlvideos
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
+vrcosplayx.com|BaDoink.yml
 watchreal.com|Hustler.yml
 webyoung.com|GammaEntertainment.yml
 welivetogether.com|RealityKings.yml
