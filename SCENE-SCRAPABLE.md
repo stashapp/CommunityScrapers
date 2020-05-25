@@ -335,6 +335,9 @@ twistysnetwork.com|RealityKings.yml
 unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vcaxxx.com|Hustler.yml
 vivid.com|GammaEntertainment.ymlvideos
+vrbangers.com|VRBangers.yml
+vrbgay.com|VRBangers.yml
+vrbtrans.com|VRBangers.yml
 watchreal.com|Hustler.yml
 webyoung.com|GammaEntertainment.yml
 welivetogether.com|RealityKings.yml

@@ -1,0 +1,34 @@
+name: "VRBangers"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vrbangers.com
+      - vrbgay.com
+      - vrbtrans.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="video-content__download-info"]
+    scene:
+      Title: //h1[@class="video-content__title d-block"]/text()
+      Date:
+        selector: $info//div[@class="section__item-title-download-space"][2]/text()[2]
+        parseDate: Jan 2, 2006
+      Details:
+        selector: //div[@class="video-content__description"]//p//text()
+        concat: " "
+      Tags:
+        Name: $info //div[@class="section__item-title-download-space video-item-info-tags"]//a/text()
+      Performers:
+        Name: $info//div[@class="video-item-info--starring video-item-info--starring-download pb-0"]//a/text()
+      Studio:
+        Name: //meta[@name="dl8-customization-brand-name"]/@content
+        URL:
+          selector: //meta[@name="dl8-customization-brand-url"]/@content
+          replace:
+            - regex: ^
+              with: "https:"
+      Image: //meta[@property="og:image"][1]/@content
+
+# Last Updated May 25, 2020
