@@ -202,3 +202,4 @@ wicked.com|WickedScenes.yml
 wildoncam.com|Cherrypimps.yml
 x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
+ztod.com|ZeroTolerance.yml
