@@ -76,6 +76,7 @@ familystrokes.com|PaperStreetMedia.yml
 familyxxx.com|FamilyXXX.yml
 fantasyhd.com|AMAMultimedia.yml
 finishesthejob.com|FinishesTheJob.yml
+firstclasspov.com|Spizoo.yml
 fourfingerclub.com|NewSensationsNetworkSites.yml
 freshouttahighschool.com|NewSensationsNetworkSites.yml
 gaycastings.com|AMAMultimedia.yml
@@ -94,7 +95,9 @@ hustler.com|Hustler.yml
 iconmale.com|RealityKings.yml
 iknowthatgirl.com|RealityKings.yml
 innocenthigh.com|PaperStreetMedia.yml
+intimatelesbians.com|Spizoo.yml
 japanhdv.com|JapanHDV.yml
+jessicajaymesxxx.com|Spizoo.yml
 jizzbomb.com|NewSensationsNetworkSites.yml
 julesjordan.com|JulesJordan.yml
 kink.com|Kink.yml
@@ -121,6 +124,7 @@ momsbangteens.com|RealityKings.yml
 momslickteens.com|RealityKings.yml
 momsteachsex.com|Nubiles.yml
 moneytalks.com|RealityKings.yml
+mrluckypov.com|Spizoo.yml
 mrpov.com|FinishesTheJob.yml
 mybadmilfs.com|Mypervmom.yml
 mydaughterswap.com|Mypervmom.yml
@@ -151,7 +155,9 @@ petite.xxx|Cherrypimps.yml
 petiteballerinasfucked.com|Nubiles.yml
 petitehdporn.com|Nubiles.yml
 playboy.tv|PlayboyTV.yml
+porngoespro.com|Spizoo.yml
 pornpros.com|AMAMultimedia.yml
+pornstartease.com|Spizoo.yml
 povd.com|AMAMultimedia.yml
 princesscum.com|Nubiles.yml
 publicagent.com|RealityKings.yml
@@ -186,6 +192,7 @@ thatsitcomshow.com|Nubiles.yml
 theassfactory.com|JulesJordan.yml
 thedicksuckers.com|FinishesTheJob.yml
 thelesbianexperience.com|NewSensationsNetworkSites.yml
+thestripperexperience.com|Spizoo.yml
 thetabutales.com|NewSensationsNetworkSites.yml
 thickandbig.com|AMAMultimedia.yml
 thickumz.com|PaperStreetMedia.yml
