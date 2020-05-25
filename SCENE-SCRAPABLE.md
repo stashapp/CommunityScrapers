@@ -61,6 +61,7 @@ danejones.com|RealityKings.yml
 daughterswap.com|PaperStreetMedia.yml
 deeplush.com|Nubiles.yml
 detentiongirls.com|Nubiles.yml
+devianthardcore.com|RealityKings.yml
 digitalplayground.com|Digitalplayground.yml
 dogfartnetwork.com|DogFart.yml
 doghousedigital.com|RealityKings.yml
@@ -154,6 +155,7 @@ playboy.tv|PlayboyTV.yml
 pornpros.com|AMAMultimedia.yml
 povd.com|AMAMultimedia.yml
 princesscum.com|Nubiles.yml
+propertysex.com|RealityKings.yml
 publicagent.com|RealityKings.yml
 publicpickups.com|RealityKings.yml
 puremature.com|AMAMultimedia.yml
