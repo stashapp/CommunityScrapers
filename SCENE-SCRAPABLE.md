@@ -282,6 +282,7 @@ roundandbrown.com|RealityKings.yml
 scarybigdicks.com|Hustler.yml
 seancody.com|RealityKings.yml
 seemysextapes.com|Hustler.yml
+sexlikereal.com|SexLikeReal.yml
 sexsee.com|Hustler.yml
 sexyhub.com|RealityKings.yml
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml
