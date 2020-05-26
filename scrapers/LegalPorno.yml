@@ -1,0 +1,31 @@
+name: "LegalPorno"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - legalporno.com/watch/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $description: //dl[@class="dl-horizontal scene-description__column"]
+    scene:
+      Title:
+        selector: //h1[@class="watchpage-title"]//text()
+        concat: " "
+      Date:
+        selector: //span[@title="Release date"]/a/text()
+        parseDate: 2006-01-02
+      Details: $description/div[3]/dd/text()
+      Performers:
+        Name: $description/div[1]/dd/a[contains(@href,'legalporno.com/model')]/text()
+      Studio:
+        Name: //div[@class="col-md-4 col-lg-3 hide-mobile text-right"]/div[@class="studio-director"]//a/text()
+      Tags:
+        Name: $description/div[2]//a/text()
+      Image:
+        selector: //div[@id="player"]/@style
+        replace:
+          - regex: .+(https[^"]+).+
+            with: $1
+
+# Last Updated May 24, 2020

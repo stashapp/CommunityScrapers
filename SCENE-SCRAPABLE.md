@@ -174,6 +174,7 @@ jonnidarkkoxxx.com|GammaEntertainment.yml
 julesjordan.com|JulesJordan.yml
 kink.com|Kink.yml
 lanesisters.com|GammaEntertainment.yml
+legalporno.com|LegalPorno.yml
 lesbea.com|RealityKings.yml
 lesbianass.com|Hustler.yml
 lesbianfactor.com|GammaEntertainment.yml
