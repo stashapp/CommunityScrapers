@@ -109,6 +109,7 @@ familyxxx.com|FamilyXXX.yml
 fantasyhd.com|AMAMultimedia.yml
 fantasymassage.com|GammaEntertainment.yml
 finishesthejob.com|FinishesTheJob.yml
+firstclasspov.com|Spizoo.yml
 fistingcentral.com|GammaEntertainment.yml
 footsiebabes.com|GammaEntertainment.yml
 fourfingerclub.com|NewSensationsNetworkSites.yml
@@ -141,8 +142,10 @@ iknowthatgirl.com|RealityKings.yml
 iloveblackshemales.com|GammaEntertainment.yml
 immorallive.com|GammaEntertainment.yml
 innocenthigh.com|PaperStreetMedia.yml
+intimatelesbians.com|Spizoo.yml
 japanhdv.com|JapanHDV.yml
 jaysinxxx.com|GammaEntertainment.yml
+jessicajaymesxxx.com|Spizoo.yml
 jizzbomb.com|NewSensationsNetworkSites.yml
 jonnidarkkoxxx.com|GammaEntertainment.yml
 julesjordan.com|JulesJordan.yml
@@ -182,6 +185,7 @@ momslickteens.com|RealityKings.yml
 momsteachsex.com|Nubiles.yml
 moneytalks.com|RealityKings.yml
 motherfuckerxxx.com|GammaEntertainment.yml
+mrluckypov.com|Spizoo.yml
 mrpov.com|FinishesTheJob.yml
 mybadmilfs.com|Mypervmom.yml
 mydaughterswap.com|Mypervmom.yml
@@ -228,7 +232,9 @@ petite.xxx|Cherrypimps.yml
 petiteballerinasfucked.com|Nubiles.yml
 petitehdporn.com|Nubiles.yml
 playboy.tv|PlayboyTV.yml
+porngoespro.com|Spizoo.yml
 pornpros.com|AMAMultimedia.yml
+pornstartease.com|Spizoo.yml
 povblowjobs.com|GammaEntertainment.yml
 povd.com|AMAMultimedia.yml
 povthis.com|GammaEntertainment.yml
@@ -279,6 +285,7 @@ thatsitcomshow.com|Nubiles.yml
 theassfactory.com|JulesJordan.yml
 thedicksuckers.com|FinishesTheJob.yml
 thelesbianexperience.com|NewSensationsNetworkSites.yml
+thestripperexperience.com|Spizoo.yml
 thetabutales.com|NewSensationsNetworkSites.yml
 thickandbig.com|AMAMultimedia.yml
 thickumz.com|PaperStreetMedia.yml
