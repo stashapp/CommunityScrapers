@@ -3,6 +3,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - https://www.spizoo.com/updates/
+      - https://www.jessicajaymesxxx.com/updates/
+      - https://mrluckypov.com/updates/
+      - https://firstclasspov.com/updates/
+      - https://pornstartease.com/updates/
+      - https://intimatelesbians.com/updates/
+      - https://thestripperexperience.com/updates/
+      - https://porngoespro.com/updates/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -21,3 +28,5 @@ xPathScrapers:
       Tags:
         Name: //div[@class="col-12 col-md-6"]/div/div[@class="col-12"]/a/text()
       Image: //img[@class="update_thumb thumbs"]/@src
+
+# Last Updated May 25, 2020
