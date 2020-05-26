@@ -1,0 +1,24 @@
+name: "WowPorn"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wowporn.xxx
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"][1]/@content
+      Date:
+        selector: //div[@class="fp-player"]//meta[@itemprop="uploadDate"]/@content
+        parseDate: 2006-01-02
+      Details:
+        selector: //div[@class="video-description"]/div/p//text()
+        concat: " "
+      Tags:
+        Name: //div[@class="tags-list"]/a/text()
+      Performers:
+        # Performer names are in the tag list
+        Name: //div[@class="tags-list"]/a/text()
+      Image: //meta[@property="og:image"][1]/@content
+
+# Last Updated May 25, 2020
