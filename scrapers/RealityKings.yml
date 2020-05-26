@@ -46,6 +46,8 @@ sceneByURL:
       - https://www.men.com/sceneid/
       - https://www.transsensual.com/scene/
       - https://www.iconmale.com/scene/
+      - https://www.propertysex.com/scene/
+      - https://www.devianthardcore.com/scene/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -65,4 +67,4 @@ xPathScrapers:
         Name: //div[@class="sc-11m21lp-2 bKVlBB"]/text()
       Image: //img[@class="tg5e7m-1 eSykzx"]/@src
 
-# Last Updated May 17, 2020
+# Last Updated May 25, 2020
