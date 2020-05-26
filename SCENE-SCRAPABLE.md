@@ -345,3 +345,4 @@ wildoncam.com|Cherrypimps.yml
 x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
 xempire.com|GammaEntertainment.yml
+ztod.com|ZeroTolerance.yml
