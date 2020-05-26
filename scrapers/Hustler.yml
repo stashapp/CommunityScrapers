@@ -1,8 +1,41 @@
-name: "hustler"
+name: "Hustler"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - "https://hustler.com/trailers"
+      - https://hustler.com/trailers
+      - https://www.barelylegal.com/trailers/
+      - https://analhookers.com/trailers/
+      - https://hustlerhd.com/trailers/
+      - https://hustlerslesbians.com/trailers/
+      - https://beaverhunt.com/trailers/
+      - https://bustybeauties.com/trailers/
+      - https://hustlerparodies.com/trailers/
+      - https://muchaslatinas.com/trailers/
+      - https://hottiemoms.com/trailers/
+      - https://asianfever.com/trailers/
+      - https://hustlaz.com/trailers/
+      - https://scarybigdicks.com/trailers/
+      - https://www.hustlerstaboo.com/trailers/
+      - https://www.fuckfiesta.com/trailers/
+      - https://hometowngirls.com/trailers/
+      - https://www.hometownhoneys.com/trailers/
+      - https://bossymilfs.com/trailers/
+      - https://vcaxxx.com/trailers/
+      - https://www.lesbianass.com/trailers/
+      - https://toomanytrannies.com/trailers/
+      - https://www.assmeat.com/trailers/
+      - https://daddygetslucky.com/trailers/
+      - https://www.bootysisters.com/trailers/
+      - https://www.sexsee.com/trailers/
+      - https://www.titworld.com/trailers/
+      - https://www.pornstarhardcore.com/trailers/
+      - https://www.bootyclapxxx.com/trailers/
+      - https://www.asian18.com/trailers/
+      - https://www.battlebang.com/trailers/
+      - https://www.fuckinghardcore.com/trailers/
+      - https://www.seemysextapes.com/trailers/
+      - https://www.sororitysluts.com/trailers/
+      - https://www.watchreal.com/trailers/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -10,7 +43,7 @@ xPathScrapers:
       $script: //script[contains(text(), 'headline')]/text()
       $info: //div[@class="gallery-info"]
     scene:
-      Title: 
+      Title:
         selector: $info/h1
       Details: $info/p
       Performers:
@@ -23,8 +56,10 @@ xPathScrapers:
         parseDate: "01/02/2006"
       Image:
         selector: $script
-        replace: 
+        replace:
           - regex: .+\"thumbnailUrl\"\:\s\"(https.+\.jpg)\".+
             with: $1
-      Tags: 
+      Tags:
         Name: //span[@class="gallery-meta"]/span[@class="left"]/a/text()
+
+# Last Updated May 25, 2020
