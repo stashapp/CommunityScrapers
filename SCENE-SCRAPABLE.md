@@ -82,6 +82,7 @@ darkx.com|GammaEntertainment.yml
 daughterswap.com|PaperStreetMedia.yml
 deeplush.com|Nubiles.yml
 detentiongirls.com|Nubiles.yml
+devianthardcore.com|RealityKings.yml
 devilsfilm.com|GammaEntertainment.yml
 devilsfilmparodies.com|GammaEntertainment.yml
 devilsgangbangs.com|GammaEntertainment.yml
@@ -234,6 +235,7 @@ povthis.com|GammaEntertainment.yml
 prettydirty.com|GammaEntertainment.yml
 pridestudios.com|GammaEntertainment.yml
 princesscum.com|Nubiles.yml
+propertysex.com|RealityKings.yml
 publicagent.com|RealityKings.yml
 publicpickups.com|RealityKings.yml
 puremature.com|AMAMultimedia.yml
