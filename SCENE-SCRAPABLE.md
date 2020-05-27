@@ -343,6 +343,7 @@ wetvr.com|AMAMultimedia.yml
 whiteghetto.com|GammaEntertainment.yml
 wicked.com|GammaEntertainment.yml
 wildoncam.com|Cherrypimps.yml
+wowporn.xxx|WowPorn.yml
 x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
 xempire.com|GammaEntertainment.yml
