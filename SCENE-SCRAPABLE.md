@@ -340,6 +340,7 @@ vivid.com|GammaEntertainment.ymlvideos
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
+wankzvr.com|WankzVR.yml
 watchreal.com|Hustler.yml
 webyoung.com|GammaEntertainment.yml
 welivetogether.com|RealityKings.yml
