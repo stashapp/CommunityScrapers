@@ -67,6 +67,10 @@ xPathScrapers:
         replace:
           - regex: Unknown
             with:
+          - regex: Fake
+            with: "Yes"
+          - regex: Natural
+            with: "No"
       CareerLength:
         selector: //div[p[text()='career']]//div//div[@class='timeline-horizontal mb-3']//div//p[@class='m-0']
         concat: "-"
