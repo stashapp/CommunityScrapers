@@ -346,6 +346,7 @@ vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
 vrcosplayx.com|BaDoink.yml
+wankzvr.com|WankzVR.yml
 watchreal.com|Hustler.yml
 webyoung.com|GammaEntertainment.yml
 welivetogether.com|RealityKings.yml
