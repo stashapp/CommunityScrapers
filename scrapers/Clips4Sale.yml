@@ -9,8 +9,11 @@ xPathScrapers:
     scene:
       Title: //div[@class="clipTitle"]/h3/text()
       Details:
-        selector: //div[@class="clip"]/div/p[position() > 1]//text()
+        selector: //div[@class="clip"]/div/p//text()
         concat: " "
+        replace:
+          - regex: "Description:"
+            with:
       Date:
         selector: //div[@class="clearfix infoRow2 clip_details"]/div/div[2]/div[3]//span[@class="highlight"]/text()
         replace:
