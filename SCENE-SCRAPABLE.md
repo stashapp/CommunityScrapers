@@ -263,6 +263,7 @@ petiteballerinasfucked.com|Nubiles.yml
 petitehdporn.com|Nubiles.yml
 playboy.tv|PlayboyTV.yml
 porngoespro.com|Spizoo.yml
+Pornhub.com|Pornhub.yml
 pornpros.com|AMAMultimedia.yml
 pornstarhardcore.com|Hustler.yml
 pornstartease.com|Spizoo.yml
