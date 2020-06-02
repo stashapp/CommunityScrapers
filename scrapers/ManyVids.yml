@@ -59,8 +59,31 @@ xPathScrapers:
         parseDate: 2006.01.02
       Ethnicity:
         selector: $aboutlabel[contains(text(), 'Ethnicity')]/following-sibling::*
+        replace:
+          - regex: 'Alaskan'
+            with: 'alaskan'
+          - regex: 'Aisan'
+            with: 'aisan'
+          - regex: 'Black / Ebony'
+            with: 'black'
+          - regex: 'East Indian'
+            with: 'east indian'
+          - regex: 'Latino / Hispanic'
+            with: 'hispanic'
+          - regex: 'Middle Eastern'
+            with: 'middle eastern'
+          - regex: 'Mixed'
+            with: 'mixed'
+          - regex: 'Native American'
+            with: 'native american'
+          - regex: 'Pacific Islander'
+            with: 'pacific islander'
+          - regex: 'White / Caucasian'
+            with: 'white'
+          - regex: 'Other'
+            with: 'other'
       Country:
-        selector: $aboutlabel[contains(text(), 'Nationality')]/following-sibling::*
+        selector: $aboutlabel[contains(text(), 'Nationality')]/following-sibling::*/img/@alt
       EyeColor:
         selector: $aboutlabel[contains(text(), 'Eye Color')]/following-sibling::*
       Height:
@@ -75,8 +98,10 @@ xPathScrapers:
       Measurements:
         selector: $aboutlabel[contains(text(), 'Measurements')]/following-sibling::* | $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*
       FakeTits:
-        selector: $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*[contains(text(), 'Cohesive Gel') or contains(text(), 'Silicon') or contains(text(), 'Saline')]
+        selector: $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*[contains(text(), 'Natural') or contains(text(), 'Cohesive Gel') or contains(text(), 'Silicon') or contains(text(), 'Saline')]
         replace:
+          - regex: '^Natural.*$'
+            with: 'No'
           - regex: '\s+?[0-9]+.*'
             with: ''
       CareerLength:
@@ -93,5 +118,8 @@ xPathScrapers:
 
       Image:
         selector: //*[contains(concat(' ',normalize-space(@class),' '),' mv-model-display ')][not(@data-current-portrait = '')]/@data-current-portrait | //*[contains(concat(' ',normalize-space(@class),' '),' mv-model-display ')][not(@data-current-avatar = '')]/@data-current-avatar
+        replace:
+          - regex: '.*\.svg$'
+            with: ''
 
-# Last Updated May 31, 2020
+# Last Updated June 02, 2020
