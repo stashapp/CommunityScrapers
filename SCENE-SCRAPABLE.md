@@ -290,6 +290,7 @@ seancody.com|RealityKings.yml
 seemysextapes.com|Hustler.yml
 sexlikereal.com|SexLikeReal.yml
 sexsee.com|Hustler.yml
+sexvr.com|SexVR.yml
 sexyhub.com|RealityKings.yml
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml
 shemaleidol.com|GammaEntertainment.yml
