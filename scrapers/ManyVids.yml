@@ -49,8 +49,16 @@ xPathScrapers:
           - regex: Trans
             with: transgender_female
       URL: //a[@data-tab='about']/@href
-      Twitter: //*[@class='mv-about__banner-social']/a/i[@class='icon twitter-icon']/../@href
-      Instagram: //*[@class='mv-about__banner-social']/a/i[@class='icon instagram-icon']/../@href
+      Twitter:
+        selector: //*[@class='mv-about__banner-social']/a/i[@class='icon twitter-icon']/../@href
+        replace:
+          - regex: ^.*twitter\.com/([^/?]+).*$
+            with: $1
+      Instagram:
+        selector: //*[@class='mv-about__banner-social']/a/i[@class='icon instagram-icon']/../@href
+        replace:
+          - regex: ^.*instagram\.com/([^/?]+).*$
+            with: $1
       Birthdate:
         selector: $aboutlabel[contains(text(), 'Age')]/following-sibling::*
         replace:
