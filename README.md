@@ -24,6 +24,7 @@ Supported Site|Scraper
 babepedia.com|Babepedia.yml
 freeones.xxx|NewFreeones.yml
 iafd.com|Iafd.yml
+manyvids.com|ManyVids.yml
 sexvr.com|SexVR.yml
 
 ## Contributing
