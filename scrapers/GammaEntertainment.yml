@@ -133,9 +133,9 @@ xPathScrapers:
           - regex: <\\\/br>|<br\s\\\/>|<br>
             with: "\n"
       Tags:
-        Name: $tags/a/text()|//div[@class="sceneCol categories"]/a/text()|//div[@class="sceneCol sceneColCategories"]//span/text()|//div[@class="sceneCategories"]/a/text()
+        Name: $tags/a/text()|//div[@class="sceneCol categories"]/a/text()|//div[@class="sceneCol sceneColCategories"]//span[not(@class="categorySeparator")]/text()|//div[@class="sceneCategories"]/a/text()
       Performers:
-        Name: $actors/a/text()|$actors//span/text()|//div[@class="sceneCol actors"]/a/text()|//span[@class="slide-title"]/text()|//a[@class="pornstarName"]/strong/text()|//p[@class="starringLinks"]/a/text()|//p[@class="p-actors"]/a/text()
+        Name: $actors/a/text()|$actors//span[not(@class="actorSeparator")]/text()|//div[@class="sceneCol actors"]/a/text()|//span[@class="slide-title"]/text()|//a[@class="pornstarName"]/strong/text()|//p[@class="starringLinks"]/a/text()|//p[@class="p-actors"]/a/text()
       Movies:
         Name: $info/a/img/@title|//a[@class="sceneLink  "]/@title|//a[@class="dvdLink  "]/@title
       Image:
@@ -148,4 +148,4 @@ xPathScrapers:
           - regex: (https:\/\/transform.+)
             with: $1?width=960&height=543&enlarge=true
 
-# Last Updated May 23, 2020
+# Last Updated June 5, 2020
