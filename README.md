@@ -22,7 +22,7 @@ This list is meant to keep track of which sites are already supported by existin
 Supported Site|Scraper
 ------------- | -------------
 babepedia.com|Babepedia.yml
-freeones.xxx|NewFreeones.yml
+freeones.xxx|FreeonesCommunity.yml
 iafd.com|Iafd.yml
 manyvids.com|ManyVids.yml
 pornhub.com|Pornhub.yml
