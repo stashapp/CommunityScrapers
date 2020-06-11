@@ -1,4 +1,4 @@
-name: NewFreeones
+name: FreeonesCommunity
 performerByName:
   action: scrapeXPath
   queryURL: https://www.freeones.xxx/babes?q={}&v=teasers&s=relevance&l=96&m%5BcanPreviewFeatures%5D=0
@@ -82,3 +82,10 @@ xPathScrapers:
       Piercings: //div[p[text()='Piercings']]//div//p[@class='mb-0 text-center']
       Image:
         selector: //div[@class='profile-image-large']//a/img/@src
+      Gender:
+        selector: //meta[@name="language"]/@name
+        replace:
+          - regex: language
+            with: "Female"
+
+# Last updated June 11, 2020
