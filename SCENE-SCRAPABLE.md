@@ -131,6 +131,7 @@ footsiebabes.com|GammaEntertainment.yml
 fourfingerclub.com|NewSensationsNetworkSites.yml
 freshouttahighschool.com|NewSensationsNetworkSites.yml
 fuckfiesta.com|Hustler.yml
+fuckingawesome.com|FuckingAwesome.yml
 fuckinghardcore.com|Hustler.yml
 gapingangels.com|GammaEntertainment.yml
 gaycastings.com|AMAMultimedia.yml
