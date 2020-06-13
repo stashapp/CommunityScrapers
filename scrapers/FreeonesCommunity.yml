@@ -81,11 +81,11 @@ xPathScrapers:
       Tattoos: //div[p[text()='Tattoos']]//div//p[@class='mb-0 text-center']
       Piercings: //div[p[text()='Piercings']]//div//p[@class='mb-0 text-center']
       Image:
-        selector: //div[@class='profile-image-large']//a/img/@src
+        selector: //div[@class='profile-image-container']//a/img/@src
       Gender:
         selector: //meta[@name="language"]/@name
         replace:
           - regex: language
             with: "Female"
 
-# Last updated June 11, 2020
+# Last updated June 13, 2020
