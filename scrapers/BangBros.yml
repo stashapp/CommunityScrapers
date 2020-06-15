@@ -14,12 +14,20 @@ xPathScrapers:
           selector: //div[@class="vdoTags"]/a/text()
       Performers:
         Name: //div[@class="vdoCast"]/a[position()>1]/text()
-      Studio:
-        Name: //div[@class="vdoCast"]/a[1]/text()
       Image:
         selector: //img[@id="player-overlay-image"]/@src
         replace:
           - regex: ^
             with: "https:"
-
-# Last Updated May 14, 2020
+      Studio:
+        Name: //div[@class="vdoCast"]/a[1]/text()
+      Date:
+        selector: //div[@class="vdoCast" and contains(text(), "Release:")]
+        replace:
+          - regex: "^Release: "
+            with: "https://bangbros.com/search/"
+        subScraper:
+          selector: //span[@class="thmb_mr_cmn thmb_mr_2 clearfix"]/span[@class="faTxt"]
+        parseDate: Jan 2, 2006
+        
+# Last Updated June 9, 2020
