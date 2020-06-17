@@ -15,7 +15,7 @@ xPathScrapers:
       Performers:
         Name: //div[@class="vdoCast"]/a[position()>1]/text()
       Image:
-        selector: //img[@id="player-overlay-image"]/@src
+        selector: //video/@poster
         replace:
           - regex: ^
             with: "https:"
@@ -29,5 +29,5 @@ xPathScrapers:
         subScraper:
           selector: //span[@class="thmb_mr_cmn thmb_mr_2 clearfix"]/span[@class="faTxt"]
         parseDate: Jan 2, 2006
-        
-# Last Updated June 9, 2020
+
+# Last Updated June 17, 2020
