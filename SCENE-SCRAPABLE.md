@@ -17,6 +17,7 @@ allherluv.com|AllHerLuv.yml
 analacrobats.com|GammaEntertainment.yml
 analhookers.com|Hustler.yml
 analteenangels.com|GammaEntertainment.yml
+angelawhite.com|AngelaWhite.yml
 anilos.com|Nubiles.yml
 ashleyfires.com|GammaEntertainment.yml
 ashlynnbrooke.com|NewSensationsNetworkSites.yml
