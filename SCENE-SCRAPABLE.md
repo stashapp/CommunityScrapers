@@ -259,6 +259,8 @@ nextdoorraw.com|GammaEntertainment.yml
 nextdoorstudios.com|GammaEntertainment.yml
 nextdoortwink.com|GammaEntertainment.yml
 nfbusty.com|Nubiles.yml
+nightclub.eu|Teencoreclub.yml
+nightclubcams.com|Teencoreclub.yml
 nubilefilms.com|Nubiles.yml
 nubiles-casting.com|Nubiles.yml
 nubiles-porn.com|Nubiles.yml
@@ -348,7 +350,7 @@ teenanalcasting.com|Teencoreclub.yml
 teencoreclub.com|Teencoreclub.yml
 teencorezine.com|Teencoreclub.yml
 teendrillers.com|Teencoreclub.yml
-TeensGoPorn.com|Teencoreclub.yml
+teensgoporn.com|Teencoreclub.yml
 teensloveblackcocks.com|PaperStreetMedia.yml
 teenslovehugecocks.com|RealityKings.yml
 teensnaturalway.com|Teencoreclub.yml
@@ -393,8 +395,6 @@ whiteteensblackcocks.com|Teencoreclub.yml
 wicked.com|GammaEntertainment.yml
 wildoncam.com|Cherrypimps.yml
 wowporn.xxx|WowPorn.yml
-www.nightclub.eu|Teencoreclub.yml
-www.nightclubcams.com|Teencoreclub.yml
 x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
 xcoreclub.com|Teencoreclub.yml
