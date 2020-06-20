@@ -19,5 +19,7 @@ xPathScrapers:
       Tags:
         Name: $content/p/a/text()
       Image: //video[@class="plyr"]/@poster
+      Studio:
+        Name: //span[@itemprop="primaryImageOfPage"]/img/@alt
 
-# Last Updated May 15, 2020
+# Last Updated June 20, 2020
