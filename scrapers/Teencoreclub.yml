@@ -61,3 +61,4 @@ xPathScrapers:
         replace:
           - regex: ^.*url.([^\)]+).*$
             with: "$1"
+ 
