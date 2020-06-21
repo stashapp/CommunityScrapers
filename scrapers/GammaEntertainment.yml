@@ -9,7 +9,6 @@ sceneByURL:
       - tsplayground.com/en/video/
       - girlfriendsfilms.com/en/video/
       - 21sextreme.com/en/video/
-      - girlsway.com/en/video/
       - prettydirty.com/en/video/
       - fantasymassage.com/en/video/
       - nurumassage.com/en/video/
@@ -37,7 +36,7 @@ sceneByURL:
       - hardx.com/en/video/
       - massage-parlor.com/en/video/
       - footsiebabes.com/en/video/
-      - shemaleidol.com/en/video/
+      - tsfactor.com/en/video/
       - webyoung.com/en/video/
       - whiteghetto.com/
       - lezcuties.com/en/video/
@@ -72,7 +71,6 @@ sceneByURL:
       - strapattackers.com/
       - fistingcentral.com/
       - tittycreampies.com/
-      - iloveblackshemales.com/
       - pantypops.com/
       - ashleyfires.com/
       - cumshotoasis.com/
@@ -103,7 +101,6 @@ sceneByURL:
       - nextdoormale.com/
       - nextdoorebony.com/
       - nextdoorcasting.com/
-
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -119,6 +116,8 @@ xPathScrapers:
         replace:
           - regex: (\d{4})-(\d{2})-(\d{2})
             with: $2-$3-$1
+          - regex: (\d{2})\/(\d{2})\/(\d{4})
+            with: $1-$2-$3
           - regex: ":"
             with:
         parseDate: 01-02-2006
