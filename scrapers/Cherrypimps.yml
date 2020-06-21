@@ -29,3 +29,7 @@ xPathScrapers:
           - regex: ^Added\s+(\w.+\d)\s+\|.*
             with: $1
         parseDate: January 2, 2006
+      Studio:
+        Name: //div[@class="container"]/a[@class="logo"]/@title
+
+# Last Updated June 20, 2020
