@@ -200,7 +200,6 @@ lesbianass.com|Hustler.yml
 lesbianfactor.com|GammaEntertainment.yml
 lesbianx.com|GammaEntertainment.yml
 letsdoeit.com|LetsDoeIt.yml
-letsgodirty.com|Teencoreclub.yml
 letstryanal.com|RealityKings.yml
 lexingtonsteele.com|GammaEntertainment.yml
 lezcuties.com|GammaEntertainment.yml
@@ -259,8 +258,6 @@ nextdoorraw.com|GammaEntertainment.yml
 nextdoorstudios.com|GammaEntertainment.yml
 nextdoortwink.com|GammaEntertainment.yml
 nfbusty.com|Nubiles.yml
-nightclub.eu|Teencoreclub.yml
-nightclubcams.com|Teencoreclub.yml
 nubilefilms.com|Nubiles.yml
 nubiles-casting.com|Nubiles.yml
 nubiles-porn.com|Nubiles.yml
