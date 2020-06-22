@@ -22,22 +22,18 @@ sceneByURL:
       - https://teenstryblacks.com/
       - https://spermantino.com/
       - https://teachmyass.com/
-      - https://www.nightclub.eu/
-      - https://letsgodirty.com/
-      - https://www.nightclubcams.com/
       - https://drilledchicks.com/
       - https://analcheckups.com/
       - https://fabsluts.com/
       - https://jerk-offpass.com/
       - https://nylonspunkjunkies.com/
       - https://shegotsix.com/
-      - https://SpearTeenPussy.com/
+      - https://spearteenpussy.com/
       - https://teencoreclub.com/
       - https://teencorezine.com/
-      - https://TeensGoPorn.com/
+      - https://teensgoporn.com/
       - https://weneednewtalents.com/
       - https://xcoreclub.com/
-# the following are not mentioned on their website, but still work
       - https://youngthroats.com/
       - https://tryteens.com/
       - https://whiteteensblackcocks.com/
@@ -45,20 +41,33 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="detail-hero-title"]//h1/text()
-      Date:
-        selector: //ul[@class="detail-meta"]//li[2]//text()
-#        replace:
-#          - regex: (/d+)
-#          - with: $1 01 31
-#        parseDate: "2006 01 02"
-# damn, I don't get this fake date created... 
+      Title:
+        selector: //div[@class="detail-hero-title"]//h1/text()
+        replace:
+          - regex: \t+
+            with: ' '
       Details: //div[@class="detail-description"]/text()
       Performers:
-        Name: //div[@class="detail-hero-title"]//h1/text()
+        Name:
+          selector: //div[@class="detail-hero-title"]//h1/text()
+          replace:
+            - regex: \t+
+              with:
+          split: ','
+      Tags:
+        Name:
+          selector: //meta[@name="keywords"]/@content
+          split: ','
       Image:
         selector: //div[@class="detail-hero"]/@style
         replace:
           - regex: ^.*url.([^\)]+).*$
             with: "$1"
- 
+      Studio:
+        Name:
+          selector: //div[@class="flex-shrink-0 flex items-center"]//img[1]/@alt
+          replace:
+            - regex: \.\w+
+              with:
+
+# Last Updated June 22, 2020
