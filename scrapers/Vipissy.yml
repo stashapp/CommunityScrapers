@@ -17,7 +17,7 @@ xPathScrapers:
       Date:
         selector: //dl/dd[2]/text()
         parseDate: Jan 2,2006
-      Details: //div[@class="show_more"]/text()[1]|//div[@class="show_more showed_more"]/text()[1]
+      Details: //div[@class="show_more"]/text()[1]
       Tags: 
         Name: //p[@class="tags"]/a/text()
       Performers:

@@ -15,16 +15,16 @@ xPathScrapers:
           - regex: ^(.*)[—]\s+
             with:
       Date:
-        selector: //dl/dt[2]/span/text()
+        selector: //dl/dt[text()="Released on: "]/span/text()
         parseDate: Jan 2, 2006
-      Details: //div[@class="show_more"]/text()[1]|//div[@class="show_more showed_more"]/text()[1]
+      Details: //div[@class="show_more"]/text()[1]
       Tags: 
         Name: //p[@class="tags"]/a/text()
       Performers:
         Name: $performer/text()
       Studio:
         Name: 
-          selector: //h2[@class="title"]/div/div[2]/a/text()
+          selector: //h2[@class="title"]//div[contains(text(),"Site:")]/a/text()
           replace:
             - regex: Weliketosuck
               with: We Like To Suck
