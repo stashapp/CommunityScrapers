@@ -129,7 +129,7 @@ xPathScrapers:
             # Second regex in case no description is provided.
           - regex: .+(?:"sceneDescription":"").+
             with:
-          - regex: <\\\/br>|<br\s\\\/>|<br>
+          - regex: <\\\/br>|<br\s\\\/>|<br>|<br\\/>
             with: "\n"
       Tags:
         Name: $tags/a/text()|//div[@class="sceneCol categories"]/a/text()|//div[@class="sceneCol sceneColCategories"]//span[not(@class="categorySeparator")]/text()|//div[@class="sceneCategories"]/a/text()
@@ -153,4 +153,4 @@ xPathScrapers:
             - regex: .+(?:siteName":")([^"]+).+
               with: $1
 
-# Last Updated June 20, 2020
+# Last Updated June 22, 2020
