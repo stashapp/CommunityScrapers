@@ -29,3 +29,4 @@ xPathScrapers:
             - regex: (.*)
               with: Vipissy
       Image: //div[@id="videoplayer"]/video/@poster
+# Last Updated June 22, 2020

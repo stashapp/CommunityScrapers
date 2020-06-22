@@ -37,3 +37,4 @@ xPathScrapers:
             - regex: Simplyanal
               with: Simply Anal
       Image: //video[@id="video"]/@poster
+# Last Updated June 22, 2020
