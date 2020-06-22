@@ -15,7 +15,7 @@ xPathScrapers:
           - regex: ^(.*)[—]\s+
             with:
       Date:
-        selector: //dl/dt[text()="Released on: "]/span/text()
+        selector: //dl/dt[contains(text(),"Released on:")]/span/text()
         parseDate: Jan 2, 2006
       Details: //div[@class="show_more"]/text()[1]
       Tags: 
