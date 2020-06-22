@@ -362,4 +362,6 @@ wowporn.xxx|WowPorn.yml
 x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
 xempire.com|GammaEntertainment.yml
+xxxpawn.com|XXXPawn.yml
+xxxpawn.xxx|XXXPawn.yml
 ztod.com|ZeroTolerance.yml
