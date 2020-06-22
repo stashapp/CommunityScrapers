@@ -166,6 +166,7 @@ hustlerparodies.com|Hustler.yml
 hustlerslesbians.com|Hustler.yml
 hustlerstaboo.com|Hustler.yml
 iconmale.com|RealityKings.yml
+ikissgirls.com|IKissGirls.yml
 iknowthatgirl.com|RealityKings.yml
 iloveblackshemales.com|GammaEntertainment.yml
 immorallive.com|GammaEntertainment.yml
@@ -345,7 +346,7 @@ tsplayground.com|GammaEntertainment.yml
 twistysnetwork.com|RealityKings.yml
 unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vcaxxx.com|Hustler.yml
-vivid.com|GammaEntertainment.ymlvideos
+vivid.com|GammaEntertainment.yml
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
