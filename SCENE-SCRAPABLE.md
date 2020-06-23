@@ -14,6 +14,7 @@ alettaoceanempire.com|GammaEntertainment.yml
 allblackx.com|GammaEntertainment.yml
 allgirlmassage.com|GammaEntertainment.yml
 allherluv.com|AllHerLuv.yml
+amateureuro.com|LetsDoeIt.yml
 analacrobats.com|GammaEntertainment.yml
 analhookers.com|Hustler.yml
 analteenangels.com|GammaEntertainment.yml
@@ -105,6 +106,7 @@ devilsfilmparodies.com|GammaEntertainment.yml
 devilsgangbangs.com|GammaEntertainment.yml
 devonlee.com|GammaEntertainment.yml
 digitalplayground.com|Digitalplayground.yml
+dirtycosplay.com|LetsDoeIt.yml
 dogfartnetwork.com|DogFart.yml
 doghousedigital.com|RealityKings.yml
 dontbreakme.com|RealityKings.yml
@@ -129,6 +131,7 @@ finishesthejob.com|FinishesTheJob.yml
 firstclasspov.com|Spizoo.yml
 fistingcentral.com|GammaEntertainment.yml
 footsiebabes.com|GammaEntertainment.yml
+forbondage.com|LetsDoeIt.yml
 fourfingerclub.com|NewSensationsNetworkSites.yml
 freshouttahighschool.com|NewSensationsNetworkSites.yml
 fuckfiesta.com|Hustler.yml
@@ -193,6 +196,7 @@ littleasians.com|PaperStreetMedia.yml
 lookathernow.com|RealityKings.yml
 lubed.com|AMAMultimedia.yml
 maledigital.com|GammaEntertainment.yml
+mamacitaz.com|LetsDoeIt.yml
 manojob.com|FinishesTheJob.yml
 manroyale.com|AMAMultimedia.yml
 manuelferrara.com|JulesJordan.yml
@@ -336,6 +340,7 @@ titworld.com|Hustler.yml
 tokyo-hot.com|Tokyohot.yml
 tonightsgirlfriend.com|Tonightsgirlfriend.yml
 toomanytrannies.com|Hustler.yml
+transbella.com|LetsDoeIt.yml
 transsensual.com|RealityKings.yml
 transsexualangel.com|GammaEntertainment.yml
 transsexualroadtrip.com|GammaEntertainment.yml
@@ -346,6 +351,7 @@ twistysnetwork.com|RealityKings.yml
 unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vcaxxx.com|Hustler.yml
 vipissy.com|Vipissy.yml
+vipsexvault.com|LetsDoeIt.yml
 vivid.com|Vivid.yml
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
