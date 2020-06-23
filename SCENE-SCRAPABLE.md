@@ -165,6 +165,7 @@ hustlerparodies.com|Hustler.yml
 hustlerslesbians.com|Hustler.yml
 hustlerstaboo.com|Hustler.yml
 iconmale.com|RealityKings.yml
+ikissgirls.com|IKissGirls.yml
 iknowthatgirl.com|RealityKings.yml
 immorallive.com|GammaEntertainment.yml
 innocenthigh.com|PaperStreetMedia.yml
