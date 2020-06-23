@@ -33,3 +33,4 @@ xPathScrapers:
         subScraper:
           selector: //span[@class="thumb-added"]/text()
         parseDate: Jan 2, 2006
+# Last Updated June 23, 2020
