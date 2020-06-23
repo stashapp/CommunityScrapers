@@ -276,6 +276,7 @@ princesscum.com|Nubiles.yml
 propertysex.com|RealityKings.yml
 publicagent.com|RealityKings.yml
 publicpickups.com|RealityKings.yml
+puffynetwork.com|Puffynetwork.yml
 puremature.com|AMAMultimedia.yml
 ragingstallion.com|GammaEntertainment.yml
 realityjunkies.com|RealityKings.yml
@@ -343,6 +344,7 @@ tsplayground.com|GammaEntertainment.yml
 twistysnetwork.com|RealityKings.yml
 unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vcaxxx.com|Hustler.yml
+vipissy.com|Vipissy.yml
 vivid.com|Vivid.yml
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
@@ -360,4 +362,6 @@ wowporn.xxx|WowPorn.yml
 x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
 xempire.com|GammaEntertainment.yml
+xxxpawn.com|XXXPawn.yml
+xxxpawn.xxx|XXXPawn.yml
 ztod.com|ZeroTolerance.yml
