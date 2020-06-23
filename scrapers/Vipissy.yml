@@ -1,0 +1,32 @@
+name: vipissy
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - vipissy.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //dl/dd/a
+    scene:
+      Title: 
+        selector: //section[@class="downloads"]/strong/text()
+        replace:
+          - regex: ^(.*)[—]\s+
+            with:
+      Date:
+        selector: //dl/dd[contains(text(),"Released on:")]/text()
+        parseDate: Jan 2, 2006
+      Details: //div[@class="show_more"]/text()[1]
+      Tags: 
+        Name: //p[@class="tags"]/a/text()
+      Performers:
+        Name: $performer/text()
+      Studio:
+        Name:
+          selector: //title/text()
+          replace:
+            - regex: (.*)
+              with: Vipissy
+      Image: //div[@id="videoplayer"]/video/@poster
+# Last Updated June 22, 2020
