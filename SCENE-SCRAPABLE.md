@@ -127,6 +127,7 @@ fantasyhd.com|AMAMultimedia.yml
 fantasymassage.com|GammaEntertainment.yml
 finishesthejob.com|FinishesTheJob.yml
 firstclasspov.com|Spizoo.yml
+fistertwister.com|Fistertwister.yml
 fistingcentral.com|GammaEntertainment.yml
 footsiebabes.com|GammaEntertainment.yml
 fourfingerclub.com|NewSensationsNetworkSites.yml
