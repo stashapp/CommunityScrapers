@@ -145,7 +145,6 @@ girlfriendsfilms.com|GammaEntertainment.yml
 girlgirl.com|JulesJordan.yml
 girlsandstuds.com|GammaEntertainment.yml
 girlstryanal.com|GammaEntertainment.yml
-girlsway.com|GammaEntertainment.yml
 gloryholeswallow.com|GloryHoleSwallow.yml
 grannyghetto.com|GammaEntertainment.yml
 hairyundies.com|GammaEntertainment.yml
@@ -167,7 +166,6 @@ hustlerslesbians.com|Hustler.yml
 hustlerstaboo.com|Hustler.yml
 iconmale.com|RealityKings.yml
 iknowthatgirl.com|RealityKings.yml
-iloveblackshemales.com|GammaEntertainment.yml
 immorallive.com|GammaEntertainment.yml
 innocenthigh.com|PaperStreetMedia.yml
 intimatelesbians.com|Spizoo.yml
@@ -297,7 +295,6 @@ sexsee.com|Hustler.yml
 sexvr.com|SexVR.yml
 sexyhub.com|RealityKings.yml
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml
-shemaleidol.com|GammaEntertainment.yml
 shoplyfter.com|PaperStreetMedia.yml
 shoplyftermylf.com|PaperStreetMedia.yml
 showerbait.com|AMAMultimedia.yml
@@ -342,12 +339,13 @@ transsensual.com|RealityKings.yml
 transsexualangel.com|GammaEntertainment.yml
 transsexualroadtrip.com|GammaEntertainment.yml
 trickyspa.com|GammaEntertainment.yml
+tsfactor.com|GammaEntertainment.yml
 tsplayground.com|GammaEntertainment.yml
 twistysnetwork.com|RealityKings.yml
 unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vcaxxx.com|Hustler.yml
 vipissy.com|Vipissy.yml
-vivid.com|GammaEntertainment.ymlvideos
+vivid.com|Vivid.yml
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
