@@ -1,0 +1,26 @@
+name: fistertwister
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fistertwister.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="jumbotron"]/h2/text()[1]
+      Date:
+        selector: //li[contains(text(),"Released on:")]/strong/text()
+        parseDate: Jan 2, 2006
+      Details: //div[@class="jumbotron video-info"]/p[not(@class) and not(a)]/text()
+      Tags:
+        Name: //a[@class="btn btn-default"]/text()
+      Performers:
+        Name: //li[contains(text(),"Featuring:")]//a/text()
+      Studio:
+        Name:
+          selector: //title/text()
+          replace:
+            - regex: (.*)
+              with: Fister Twister
+      Image: //video[@id="video"]/@poster
+# Last Updated June 23, 2020
