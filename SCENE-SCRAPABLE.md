@@ -14,6 +14,7 @@ alettaoceanempire.com|GammaEntertainment.yml
 allblackx.com|GammaEntertainment.yml
 allgirlmassage.com|GammaEntertainment.yml
 allherluv.com|AllHerLuv.yml
+amateureuro.com|LetsDoeIt.yml
 analacrobats.com|GammaEntertainment.yml
 analcheckups.com|Teencoreclub.yml
 analhookers.com|Hustler.yml
@@ -112,6 +113,7 @@ devilsfilmparodies.com|GammaEntertainment.yml
 devilsgangbangs.com|GammaEntertainment.yml
 devonlee.com|GammaEntertainment.yml
 digitalplayground.com|Digitalplayground.yml
+dirtycosplay.com|LetsDoeIt.yml
 dogfartnetwork.com|DogFart.yml
 doghousedigital.com|RealityKings.yml
 dontbreakme.com|RealityKings.yml
@@ -137,9 +139,12 @@ familyxxx.com|FamilyXXX.yml
 fantasyhd.com|AMAMultimedia.yml
 fantasymassage.com|GammaEntertainment.yml
 finishesthejob.com|FinishesTheJob.yml
+firstanalquest.com|Firstanalquest.yml
 firstclasspov.com|Spizoo.yml
+fistertwister.com|Fistertwister.yml
 fistingcentral.com|GammaEntertainment.yml
 footsiebabes.com|GammaEntertainment.yml
+forbondage.com|LetsDoeIt.yml
 fourfingerclub.com|NewSensationsNetworkSites.yml
 freshouttahighschool.com|NewSensationsNetworkSites.yml
 fuckfiesta.com|Hustler.yml
@@ -157,7 +162,6 @@ girlgirl.com|JulesJordan.yml
 girlsandstuds.com|GammaEntertainment.yml
 girlsgotcream.com|Teencoreclub.yml
 girlstryanal.com|GammaEntertainment.yml
-girlsway.com|GammaEntertainment.yml
 gloryholeswallow.com|GloryHoleSwallow.yml
 grannyghetto.com|GammaEntertainment.yml
 hairyundies.com|GammaEntertainment.yml
@@ -179,11 +183,12 @@ hustlerparodies.com|Hustler.yml
 hustlerslesbians.com|Hustler.yml
 hustlerstaboo.com|Hustler.yml
 iconmale.com|RealityKings.yml
+ikissgirls.com|IKissGirls.yml
 iknowthatgirl.com|RealityKings.yml
-iloveblackshemales.com|GammaEntertainment.yml
 immorallive.com|GammaEntertainment.yml
 innocenthigh.com|PaperStreetMedia.yml
 intimatelesbians.com|Spizoo.yml
+isthisreal.com|IsThisReal.yml
 japanhdv.com|JapanHDV.yml
 jaysinxxx.com|GammaEntertainment.yml
 jerk-offpass.com|Teencoreclub.yml
@@ -210,6 +215,7 @@ lookathernow.com|RealityKings.yml
 lubed.com|AMAMultimedia.yml
 maketeengape.com|Teencoreclub.yml
 maledigital.com|GammaEntertainment.yml
+mamacitaz.com|LetsDoeIt.yml
 manojob.com|FinishesTheJob.yml
 manroyale.com|AMAMultimedia.yml
 manuelferrara.com|JulesJordan.yml
@@ -296,6 +302,7 @@ princesscum.com|Nubiles.yml
 propertysex.com|RealityKings.yml
 publicagent.com|RealityKings.yml
 publicpickups.com|RealityKings.yml
+puffynetwork.com|Puffynetwork.yml
 puremature.com|AMAMultimedia.yml
 ragingstallion.com|GammaEntertainment.yml
 realityjunkies.com|RealityKings.yml
@@ -367,16 +374,20 @@ titworld.com|Hustler.yml
 tokyo-hot.com|Tokyohot.yml
 tonightsgirlfriend.com|Tonightsgirlfriend.yml
 toomanytrannies.com|Hustler.yml
+transbella.com|LetsDoeIt.yml
 transsensual.com|RealityKings.yml
 transsexualangel.com|GammaEntertainment.yml
 transsexualroadtrip.com|GammaEntertainment.yml
 trickyspa.com|GammaEntertainment.yml
 tryteens.com|Teencoreclub.yml
+tsfactor.com|GammaEntertainment.yml
 tsplayground.com|GammaEntertainment.yml
 twistysnetwork.com|RealityKings.yml
 unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vcaxxx.com|Hustler.yml
-vivid.com|GammaEntertainment.ymlvideos
+vipissy.com|Vipissy.yml
+vipsexvault.com|LetsDoeIt.yml
+vivid.com|Vivid.yml
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
@@ -396,5 +407,7 @@ x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
 xcoreclub.com|Teencoreclub.yml
 xempire.com|GammaEntertainment.yml
+xxxpawn.com|XXXPawn.yml
+xxxpawn.xxx|XXXPawn.yml
 youngthroats.com|Teencoreclub.yml
 ztod.com|ZeroTolerance.yml
