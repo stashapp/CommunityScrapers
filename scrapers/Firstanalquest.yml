@@ -11,7 +11,8 @@ xPathScrapers:
       $title: //div[@class="badge-content"]/preceding-sibling::span/text()
     scene:
       Title: $title
-      Details: //div[@class="text-desc"]/p/text()
+      Details:
+        selector: //div[@class="text-desc"]
       Tags:
         Name: //li[strong[text()="Tags:"]]/following-sibling::li/a/text()
       Performers:
