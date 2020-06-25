@@ -36,5 +36,9 @@ xPathScrapers:
             with: https://xxxpawn.xxx/$1
         subScraper:
           selector: //video/@poster
+      Tags:
+        Name:
+          selector: //meta[@http-equiv="keywords"]/@content
+          split: ', '
 
-# Last Updated June 22, 2020
+# Last Updated June 24, 2020
