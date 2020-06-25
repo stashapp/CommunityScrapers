@@ -407,6 +407,8 @@ x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
 xcoreclub.com|Teencoreclub.yml
 xempire.com|GammaEntertainment.yml
+xnxx.com|Xnxx.yml
+xvideos.com|Xvideos.yml
 xxxpawn.com|XXXPawn.yml
 xxxpawn.xxx|XXXPawn.yml
 youngthroats.com|Teencoreclub.yml
