@@ -29,7 +29,7 @@ xPathScrapers:
       Title: //p[@class="video-title"]/text()
       Details: //p[@class="video-description"]/text()
       Performers:
-        Name: //p[@class="model-name"]/a/text()
+        Name: //p[@class="model-name"]/a
       Image: //div[@class="video-area"]//stream/@poster
 
 # Last Updated May 24, 2020
