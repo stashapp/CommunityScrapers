@@ -32,4 +32,4 @@ xPathScrapers:
         Name: //p[@class="model-name"]/a
       Image: //div[@class="video-area"]//stream/@poster
 
-# Last Updated May 24, 2020
+# Last Updated June 26, 2020
