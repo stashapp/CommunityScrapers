@@ -136,6 +136,7 @@ faketaxi.com|RealityKings.yml
 falconstudios.com|GammaEntertainment.yml
 famedigital.com|GammaEntertainment.yml
 familystrokes.com|PaperStreetMedia.yml
+familytherapyxxx.com|FamilyTherapyXXX.yml
 familyxxx.com|FamilyXXX.yml
 fantasyhd.com|AMAMultimedia.yml
 fantasymassage.com|GammaEntertainment.yml
