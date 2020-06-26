@@ -98,6 +98,7 @@ czechstreets.com|Czechav.yml
 czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
 czechwifeswap.com|Czechav.yml
+dadcrush.com|PaperStreetMedia.yml
 daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
 damnthatsbig.com|AMAMultimedia.yml
@@ -145,6 +146,7 @@ fistertwister.com|Fistertwister.yml
 fistingcentral.com|GammaEntertainment.yml
 footsiebabes.com|GammaEntertainment.yml
 forbondage.com|LetsDoeIt.yml
+fostertapes.com|PaperStreetMedia.yml
 fourfingerclub.com|NewSensationsNetworkSites.yml
 freshouttahighschool.com|NewSensationsNetworkSites.yml
 fuckfiesta.com|Hustler.yml
