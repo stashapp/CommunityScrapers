@@ -195,6 +195,7 @@ jerk-offpass.com|Teencoreclub.yml
 jessicajaymesxxx.com|Spizoo.yml
 jizzbomb.com|NewSensationsNetworkSites.yml
 jonnidarkkoxxx.com|GammaEntertainment.yml
+joymii.com|joymii.yml
 julesjordan.com|JulesJordan.yml
 kink.com|Kink.yml
 kinkvr.com|BaDoink.yml
