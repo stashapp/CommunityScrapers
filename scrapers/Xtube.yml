@@ -23,8 +23,8 @@ xPathScrapers:
               with: xtube
       Details: //meta[@property="og:description"]/@content
       Performers:
-        Name: //input[@name="contentOwnerId"]/@value
+        Name: //form[@id="postCommentForm"]/input[@name="contentOwnerId"][not (contains(.,"sponsor_"))]/@value
       Tags:
         Name: //div[@class="categories" or @class="tags"]//a/text()
       Image: //meta[@property="og:image"]/@content
-# Last Updated June 25, 2020
+# Last Updated June 26, 2020
