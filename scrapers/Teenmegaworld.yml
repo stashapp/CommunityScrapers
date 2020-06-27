@@ -1,0 +1,59 @@
+name: "Teenmegaworld"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://teenmegaworld.net/
+      - https://tmwvrnet.com/
+      - https://beauty4k.com/
+      - https://x-angels.com/
+      - https://rawcouples.com/
+      - https://firstbgg.com/
+      - https://anal-angels.com/
+      - https://anal-baeuty.com/
+      - https://creampie-angels.com/
+      - https://beauty-angels.com/
+      - https://old-n-young.com/
+      - https://fuckstudies.com/
+      - https://teensexmovs.com/
+      - https://teensexmania.com/
+      - https://trickymasseur.com/
+      - https://dirty-coach.com/
+      - https://dirty-doctor.com/
+      - https://nubilegirlshd.com/
+      - https://wow-orgasms.com/
+      - https://squirtingvirgin.com/
+      - https://nylonsx.com/
+      - https://hometoyteens.com/
+      - https://18firstsex.com/
+      - https://hometeenvids.com/
+      - https://watchmefucked.com/
+      - https://lollyhardcore.com/
+      - https://aboutgirlslove.com/
+      - https://exgfbox.com/
+      - https://gag-n-gape.com/
+      - https://soloteengirls.net/
+      - https://teenstarsonly.com/
+      - https://privateteenvideo.com/
+      - https://teens3some.com/
+      - https://atmovs.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="title-line"]//h1/text()
+      Date:
+        selector:  //div[@class="title-line"]//time/text()
+        parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="text"]//p/text()
+      Performers:
+        Name: //div[@class="site"]//a[contains(@href,"models")]/text()
+      Tags:
+        Name: //ul[@class="tag-list"]//a/text()
+      Image:
+        selector: //video/@poster
+        replace:
+          - regex: ^
+            with: "https://teenmegaworld.net"
+
+# Last Updated June 27, 2020
