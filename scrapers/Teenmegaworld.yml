@@ -3,13 +3,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - https://teenmegaworld.net/
-      - https://tmwvrnet.com/
+      #- https://tmwvrnet.com/  different layout
       - https://beauty4k.com/
       - https://x-angels.com/
       - https://rawcouples.com/
       - https://firstbgg.com/
       - https://anal-angels.com/
-      - https://anal-baeuty.com/
+      - https://anal-beauty.com/
       - https://creampie-angels.com/
       - https://beauty-angels.com/
       - https://old-n-young.com/
@@ -19,23 +19,23 @@ sceneByURL:
       - https://trickymasseur.com/
       - https://dirty-coach.com/
       - https://dirty-doctor.com/
-      - https://nubilegirlshd.com/
-      - https://wow-orgasms.com/
-      - https://squirtingvirgin.com/
-      - https://nylonsx.com/
-      - https://hometoyteens.com/
-      - https://18firstsex.com/
-      - https://hometeenvids.com/
-      - https://watchmefucked.com/
-      - https://lollyhardcore.com/
-      - https://aboutgirlslove.com/
-      - https://exgfbox.com/
-      - https://gag-n-gape.com/
-      - https://soloteengirls.net/
-      - https://teenstarsonly.com/
-      - https://privateteenvideo.com/
-      - https://teens3some.com/
-      - https://atmovs.com/
+      #- https://nubilegirlshd.com/  behind paywall...
+      #- https://wow-orgasms.com/
+      #- https://squirtingvirgin.com/
+      #- https://nylonsx.com/
+      #- https://hometoyteens.com/
+      #- https://18firstsex.com/
+      #- https://hometeenvids.com/
+      #- https://watchmefucked.com/
+      #- https://lollyhardcore.com/
+      #- https://aboutgirlslove.com/
+      #- https://exgfbox.com/
+      #- https://gag-n-gape.com/  
+      #- https://soloteengirls.net/
+      #- https://teenstarsonly.com/
+      #- https://privateteenvideo.com/
+      #- https://teens3some.com/
+      #- https://atmovs.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
