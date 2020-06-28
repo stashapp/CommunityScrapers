@@ -32,3 +32,5 @@ xPathScrapers:
           replace:
             - regex: /channel/
               with: ""
+
+# Last Updated June 28, 2020
