@@ -6,22 +6,24 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $sceneinfo: //div[@class="shoot-info"]
     scene:
       Title: //h1[@class="shoot-title"]/text()
       Date:
-        selector: //div[@class="columns"]/div[@class="column"]/p[contains(text(),"Date:")]/text()
-        replace:
-          - regex: "Date: "
-            with:
+        selector: //span[@class="shoot-date"]/text()
         parseDate: January 2, 2006
-      Details:
-        selector: //div[@class="shoot-info"]/div[@class="description"]/text()
+      Details: //p[@class="description-text"]/text()
       Performers:
-        Name: //span[@class="names"]/a/text()
+        Name: 
+          selector: //p[@class="starring"]/span[2]/a/text()
+          replace:
+            - regex: \,
+              with: ""
       Tags:
-        Name: //a[@class="tag"]/text()
+        Name: 
+          selector: //a[@class="tag"]
+          replace:
+            - regex: \,
+              with: ""
       Image:
         selector: //video[@class="video-js vjs-fluid video-player"]/@poster
       Studio:
