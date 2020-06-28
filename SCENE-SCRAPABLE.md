@@ -98,6 +98,7 @@ czechstreets.com|Czechav.yml
 czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
 czechwifeswap.com|Czechav.yml
+dadcrush.com|PaperStreetMedia.yml
 daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
 damnthatsbig.com|AMAMultimedia.yml
@@ -135,6 +136,7 @@ faketaxi.com|RealityKings.yml
 falconstudios.com|GammaEntertainment.yml
 famedigital.com|GammaEntertainment.yml
 familystrokes.com|PaperStreetMedia.yml
+familytherapyxxx.com|FamilyTherapyXXX.yml
 familyxxx.com|FamilyXXX.yml
 fantasyhd.com|AMAMultimedia.yml
 fantasymassage.com|GammaEntertainment.yml
@@ -145,6 +147,7 @@ fistertwister.com|Fistertwister.yml
 fistingcentral.com|GammaEntertainment.yml
 footsiebabes.com|GammaEntertainment.yml
 forbondage.com|LetsDoeIt.yml
+fostertapes.com|PaperStreetMedia.yml
 fourfingerclub.com|NewSensationsNetworkSites.yml
 freshouttahighschool.com|NewSensationsNetworkSites.yml
 fuckfiesta.com|Hustler.yml
@@ -195,6 +198,7 @@ jerk-offpass.com|Teencoreclub.yml
 jessicajaymesxxx.com|Spizoo.yml
 jizzbomb.com|NewSensationsNetworkSites.yml
 jonnidarkkoxxx.com|GammaEntertainment.yml
+joymii.com|joymii.yml
 julesjordan.com|JulesJordan.yml
 kink.com|Kink.yml
 kinkvr.com|BaDoink.yml
@@ -408,6 +412,7 @@ xart.xxx|Xartxxx.yml
 xcoreclub.com|Teencoreclub.yml
 xempire.com|GammaEntertainment.yml
 xnxx.com|Xnxx.yml
+xtube.com|Xtube.yml
 xvideos.com|Xvideos.yml
 xxxpawn.com|XXXPawn.yml
 xxxpawn.xxx|XXXPawn.yml
