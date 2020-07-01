@@ -1,0 +1,18 @@
+name: iafd-scene
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - http://www.iafd.com/title.rme
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Date: 
+        selector: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Release Date']/following-sibling::p[1]/text()
+        parseDate: January 2, 2006
+      Details:  //div[@id="synopsis"]/div[@class="padded-panel"]//text()
+      Studio:
+        Name: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Studio']/following-sibling::p[1]/text()
+      Performers:
+        Name: //div[@class="castbox"]/p/a
