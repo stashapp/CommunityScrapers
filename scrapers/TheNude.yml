@@ -11,20 +11,22 @@ performerByURL:
 xPathScrapers:
   performerSearch:
     performer:
-#      Name: //a[@class="model-name"]/text()
-      Name: //a[@class="model-name"]/../../a/@title
+#      Name: //a[@class="model-name"]/text()               Version to get only the name
+#      Name: //a[@class="model-name"]/../../a/@title       Version to get a little info on label/studio as well
+      Name:
+        selector: //figcaption/span
+        replace:
+          - regex: "^AKA:"
+            with: ""
       URL: //a[@class="model-name"]/@href
   performerScraper:
     performer:
-      Name: //meta[@itemprop="name"]/@content
-      URL: //meta[@itemprop="url"]/@content
+      Name: (//meta[@itemprop="name"])[1]/@content
+      URL: (//meta[@itemprop="url"])[1]/@content
       Twitter: //a[text()="TWITTER"]/@href
       Instagram: //a[text()="INSTAGRAM"]/@href
       Birthdate:
         selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
-        replace:
-          - regex: \s
-            with:
         parseDate: 02-01-2006
       Ethnicity:
         selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/../text()
@@ -70,7 +72,7 @@ xPathScrapers:
       Piercings: 
         selector: //li/span[@class="list-quest"][contains(text(),'Piercings')]/../text()
       Image:
-        selector: //meta[@itemprop="image"]/@content
+        selector: (//meta[@itemprop="image"])[1]/@content
       Gender:
         selector: //meta[@itemprop="gender"]/@content
 # Last updated July 02, 2020
