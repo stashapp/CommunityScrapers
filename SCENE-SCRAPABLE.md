@@ -185,6 +185,7 @@ hustlerhd.com|Hustler.yml
 hustlerparodies.com|Hustler.yml
 hustlerslesbians.com|Hustler.yml
 hustlerstaboo.com|Hustler.yml
+iafd.com|Iafd.yml
 iconmale.com|RealityKings.yml
 ikissgirls.com|IKissGirls.yml
 iknowthatgirl.com|RealityKings.yml
