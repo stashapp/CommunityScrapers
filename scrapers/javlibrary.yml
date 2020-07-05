@@ -2,7 +2,7 @@ name: javlibrary
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.javlibrary.com/
+      - www.javlibrary.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -27,3 +27,4 @@ xPathScrapers:
       Studio:
         Name: //div[@id="video_maker"]/table/tbody/tr/td[@class="text"]/span/a/text()
         
+# Last Updated July 5, 2020
