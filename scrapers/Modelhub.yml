@@ -1,0 +1,60 @@
+name: Modelhub
+performerByName:
+    action: scrapeXPath
+    queryURL: https://modelhub.com/model/search?q={}
+    scraper: performerSearch
+performerByURL:
+    - action: scrapeXPath
+      url:
+          - modelhub.com
+      scraper: performerScraper
+sceneByURL:
+    - action: scrapeXPath
+      url:
+          - modelhub.com/video/
+      scraper: sceneScraper
+
+xPathScrapers:
+    performerSearch:
+        performer:
+            Name: //div[@class="modelInfo"]/a/h3/text()
+            URL:
+                selector: //li[@class="modelBox"]/a/@href
+                replace:
+                    - regex: ^(.*)$
+                      with: "https://www.modelhub.com$1/bio"
+
+    performerScraper:
+        common:
+            $infoPiece: //div[@class="modelContent"]
+        performer:
+            Name: //div[@class="infoSection"]/h1/text()
+            Birthdate:
+                selector: //span[@class='bday js_lazy_bkg']/text()
+                parseDate: January 2, 2006
+            Gender: //span[contains(.,'Female')]
+            Twitter:
+                selector: //a[@class='twitter js_lazy_bkg']/@href
+                replace:
+                    - regex: twitter.com/(.*)
+                      with: $1
+            Instagram: //a[@class='instagram js_lazy_bkg']/@href
+            Height:
+                selector: //ul[@class='modelAttributes']/li[1]/div/span
+                replace:
+                    - regex: .*\((\d+)cm\)
+                      with: $1
+            FakeTits: //ul[@class='modelAttributes']/li[7]/div/span
+            Piercings: //ul[@class='modelAttributes']/li[4]/div/span/text()
+            Tattoos: //ul[@class='modelAttributes']/li[3]/div/span/text()
+            URL: //meta[@name="twitter:url"]/@content
+            Image: //img[@class='profileImg lazy']/@src
+
+    sceneScraper:
+        scene:
+            Title: //div[@class='videoShortInfo']/div[1]/h1/text()
+            Tags:
+                Name: //div[@class='videoCategories']/div/a/text()
+            Image: //div[@class='videoOverlay js-videoOverlay']/img[@class='lazy']/@src
+            Performers: //div[@class='videoAvatar']/div[1]/a[2]
+# Last Updated Jul 7, 2020
