@@ -15,6 +15,7 @@ allblackx.com|GammaEntertainment.yml
 allgirlmassage.com|GammaEntertainment.yml
 allherluv.com|AllHerLuv.yml
 amateureuro.com|LetsDoeIt.yml
+amateurallure.com|AmateurAllure.yml
 analacrobats.com|GammaEntertainment.yml
 analcheckups.com|Teencoreclub.yml
 analhookers.com|Hustler.yml
