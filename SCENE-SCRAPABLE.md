@@ -98,7 +98,9 @@ czechstreets.com|Czechav.yml
 czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
 czechwifeswap.com|Czechav.yml
-czechvr.com|Czechav.yml
+czechvr.com|CzechVR.yml
+czechvrfetish.com|CzechVRFetish.yml
+czechvrcasting.com|CzechVRCasting.yml
 dadcrush.com|PaperStreetMedia.yml
 daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
@@ -235,6 +237,7 @@ menpov.com|AMAMultimedia.yml
 milehighmedia.com|RealityKings.yml
 milfhunter.com|RealityKings.yml
 milkingtable.com|GammaEntertainment.yml
+milfvr.com|MilfVR.yml
 missax.com|MissaX.yml
 mofos.com|RealityKings.yml
 mofosnetwork.com|RealityKings.yml
