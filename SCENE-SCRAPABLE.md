@@ -98,6 +98,7 @@ czechstreets.com|Czechav.yml
 czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
 czechwifeswap.com|Czechav.yml
+czechvr.com|Czechav.yml
 dadcrush.com|PaperStreetMedia.yml
 daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
@@ -393,6 +394,7 @@ unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vcaxxx.com|Hustler.yml
 vipissy.com|Vipissy.yml
 vipsexvault.com|LetsDoeIt.yml
+virtualrealporn.com|VirtualRealPorn.yml
 vivid.com|Vivid.yml
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
