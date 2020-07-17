@@ -328,6 +328,7 @@ seancody.com|RealityKings.yml
 seductive18.com|Teencoreclub.yml
 seemysextapes.com|Hustler.yml
 sexlikereal.com|SexLikeReal.yml
+sexbabesvr.com|SexBabesVR.yml
 sexsee.com|Hustler.yml
 sexvr.com|SexVR.yml
 sexyhub.com|RealityKings.yml
@@ -398,11 +399,15 @@ vcaxxx.com|Hustler.yml
 vipissy.com|Vipissy.yml
 vipsexvault.com|LetsDoeIt.yml
 virtualrealporn.com|VirtualRealPorn.yml
+virtualtaboo.com|VirtualTaboo.yml
 vivid.com|Vivid.yml
 vrbangers.com|VRBangers.yml
+vrconk.com|VRConk.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
 vrcosplayx.com|BaDoink.yml
+vrconk.com|VRConk.yml
+vrhush.com|VRHush.yml
 wankzvr.com|WankzVR.yml
 watchreal.com|Hustler.yml
 webyoung.com|GammaEntertainment.yml
