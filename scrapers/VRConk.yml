@@ -12,7 +12,7 @@ xPathScrapers:
       Title: $info//div[contains(@class, 'video-details')]//h1/text()
       Date:
         selector: $info//div[@class="stats-container"]/ul/li[3]/span[@class="sub-label"]/text()
-        parseDate: 2016-01-02
+        parseDate: 2006-01-02
       Details:
         selector: $info//div[@class="expand-block-more"]/div[@class="d-container"][3]/text()
         concat: " "
