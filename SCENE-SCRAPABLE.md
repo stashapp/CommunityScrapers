@@ -327,8 +327,8 @@ scarybigdicks.com|Hustler.yml
 seancody.com|RealityKings.yml
 seductive18.com|Teencoreclub.yml
 seemysextapes.com|Hustler.yml
-sexlikereal.com|SexLikeReal.yml
 sexbabesvr.com|SexBabesVR.yml
+sexlikereal.com|SexLikeReal.yml
 sexsee.com|Hustler.yml
 sexvr.com|SexVR.yml
 sexyhub.com|RealityKings.yml
