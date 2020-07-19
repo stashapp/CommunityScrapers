@@ -402,11 +402,10 @@ virtualrealporn.com|VirtualRealPorn.yml
 virtualtaboo.com|VirtualTaboo.yml
 vivid.com|Vivid.yml
 vrbangers.com|VRBangers.yml
-vrconk.com|VRConk.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
-vrcosplayx.com|BaDoink.yml
 vrconk.com|VRConk.yml
+vrcosplayx.com|BaDoink.yml
 vrhush.com|VRHush.yml
 wankzvr.com|WankzVR.yml
 watchreal.com|Hustler.yml
