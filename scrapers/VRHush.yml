@@ -17,7 +17,7 @@ xPathScrapers:
         selector: $info//span[contains(@class, "full-description")]/text()
         concat: " "
       Tags:
-        Name: $info//p[@class="tag-container"]//a[@class="label label-tag"]/text()
+        Name: $info//p[@class="tag-container"]//a[contains(@class, "label label-tag")]/text()
       Performers:
         Name: $info//h5[@class="latest-scene-subtitle"]//a/text()
       Image: 
