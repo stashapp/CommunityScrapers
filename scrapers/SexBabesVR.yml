@@ -12,6 +12,9 @@ xPathScrapers:
       Title: $info//div[@class="video-group-left"]//h1[@class="title"]/text()
       Date:
         selector: $info//div[@class="video-group-left"]//div[@class="grid-one-date"]/span[@class="date-display-single"]/@content
+        replace:
+          - regex: (\d{4}-\d{2}-\d{2})T.+
+            with: $1
         parseDate: 2006-01-02
       Details:
         selector: $info//div[@class="video-group-bottom"]//text()
