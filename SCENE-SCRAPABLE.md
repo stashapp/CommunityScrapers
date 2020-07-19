@@ -236,8 +236,8 @@ men.com|RealityKings.yml
 menpov.com|AMAMultimedia.yml
 milehighmedia.com|RealityKings.yml
 milfhunter.com|RealityKings.yml
-milkingtable.com|GammaEntertainment.yml
 milfvr.com|MilfVR.yml
+milkingtable.com|GammaEntertainment.yml
 missax.com|MissaX.yml
 mofos.com|RealityKings.yml
 mofosnetwork.com|RealityKings.yml
