@@ -178,6 +178,7 @@ hometownhoneys.com|Hustler.yml
 hothouse.com|GammaEntertainment.yml
 hottiemoms.com|Hustler.yml
 hotwifexxx.com|HotWifeXXX.yml
+hucows.com|Hucows.yml
 hungarianhoneys.com|HungarianHoneys.yml
 hustlaz.com|Hustler.yml
 hustler.com|Hustler.yml
@@ -413,6 +414,7 @@ x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
 xcoreclub.com|Teencoreclub.yml
 xempire.com|GammaEntertainment.yml
+xhamster.com|Xhamster.yml
 xnxx.com|Xnxx.yml
 xtube.com|Xtube.yml
 xvideos.com|Xvideos.yml
