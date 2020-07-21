@@ -8,10 +8,12 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="entry-title"]
-      Details: //div[@class="entry-content"]/p
-      concat: " "
+      Details:
+        selector: //div[@class="entry-content"]/p
+        concat: " "
       Date:
         selector: //div[@itemprop="datePublished"]//text()
+        concat: " "
         postProcess:
           - replace:
               - regex: ^\s+
