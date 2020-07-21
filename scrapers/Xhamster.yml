@@ -6,7 +6,7 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common: 
+    common:
       $player: //div[@class="width-wrap with-player-container"]
     scene:
       Title: $player/h1
@@ -22,8 +22,8 @@ xPathScrapers:
       Studio:
         Name:
           selector: $player/ul/li/a[contains(@href,"/channels/")]
-      Tags: 
-        Name: 
+      Tags:
+        Name:
           selector: $player/ul/li/a[contains(@href,"/categories/")]
       Performers:
         Name:

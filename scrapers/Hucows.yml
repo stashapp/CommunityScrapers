@@ -17,11 +17,10 @@ xPathScrapers:
               - regex: ^\s+
                 with:
           - parseDate: 2 Jan 2006
-          - anything:
       Image: //center/a[1]/img[@class="lightboxhover"]/@src
       Studio:
         Name:
           fixed: Hucows
-      Tags: 
+      Tags:
         Name: //section[@id="categories-2"]//a
 # Last Updated June 27, 2020
