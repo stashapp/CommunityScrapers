@@ -23,11 +23,11 @@ xPathScrapers:
         parseDate: January 02, 2006
       Details: $details//p[@class="video-description"]/text()
       Tags:
-        Name: $details//p[@class="video-tags"]/a/text()
+        Name: $details//p[@class="video-tags"]//a/text()
       Performers:
         Name: $details//p[@class="video-actors"]/a/text()
       Studio:
         Name: //meta[@name="dl8-customization-brand-name"]/@content
       Image: //img[@class="video-image"]/@src
 
-# Last Updated May 25, 2020
+# Last Updated July 11, 2020

@@ -99,6 +99,9 @@ czechstreets.com|Czechav.yml
 czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
 czechwifeswap.com|Czechav.yml
+czechvr.com|CzechVR.yml
+czechvrcasting.com|CzechVR.yml
+czechvrfetish.com|CzechVR.yml
 dadcrush.com|PaperStreetMedia.yml
 daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
@@ -234,6 +237,7 @@ men.com|RealityKings.yml
 menpov.com|AMAMultimedia.yml
 milehighmedia.com|RealityKings.yml
 milfhunter.com|RealityKings.yml
+milfvr.com|MilfVR.yml
 milkingtable.com|GammaEntertainment.yml
 missax.com|MissaX.yml
 mofos.com|RealityKings.yml
@@ -324,6 +328,7 @@ scarybigdicks.com|Hustler.yml
 seancody.com|RealityKings.yml
 seductive18.com|Teencoreclub.yml
 seemysextapes.com|Hustler.yml
+sexbabesvr.com|SexBabesVR.yml
 sexlikereal.com|SexLikeReal.yml
 sexsee.com|Hustler.yml
 sexvr.com|SexVR.yml
@@ -394,11 +399,15 @@ unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vcaxxx.com|Hustler.yml
 vipissy.com|Vipissy.yml
 vipsexvault.com|LetsDoeIt.yml
+virtualrealporn.com|VirtualRealPorn.yml
+virtualtaboo.com|VirtualTaboo.yml
 vivid.com|Vivid.yml
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
+vrconk.com|VRConk.yml
 vrcosplayx.com|BaDoink.yml
+vrhush.com|VRHush.yml
 wankzvr.com|WankzVR.yml
 watchreal.com|Hustler.yml
 webyoung.com|GammaEntertainment.yml
