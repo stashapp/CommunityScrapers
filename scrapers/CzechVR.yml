@@ -31,3 +31,4 @@ xPathScrapers:
         replace:
           - regex: \s\./category
             with: /category 
+# Last Updated July 26, 2020
