@@ -99,8 +99,8 @@ czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
 czechwifeswap.com|Czechav.yml
 czechvr.com|CzechVR.yml
-czechvrcasting.com|CzechVRCasting.yml
-czechvrfetish.com|CzechVRFetish.yml
+czechvrcasting.com|CzechVR.yml
+czechvrfetish.com|CzechVR.yml
 dadcrush.com|PaperStreetMedia.yml
 daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
