@@ -14,6 +14,7 @@ alettaoceanempire.com|GammaEntertainment.yml
 allblackx.com|GammaEntertainment.yml
 allgirlmassage.com|GammaEntertainment.yml
 allherluv.com|AllHerLuv.yml
+amateurallure.com|AmateurAllure.yml
 amateureuro.com|LetsDoeIt.yml
 analacrobats.com|GammaEntertainment.yml
 analcheckups.com|Teencoreclub.yml
