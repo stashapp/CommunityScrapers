@@ -1,0 +1,32 @@
+name: "xhamster"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - xhamster.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $player: //div[@class="width-wrap with-player-container"]
+    scene:
+      Title: $player/h1
+      Details: //div[@class="ab-info controls-info__item xh-helper-hidden"]/p
+      Date:
+        selector: //div[@class="entity-info-container__date tooltip-nocache"]/@data-tooltip
+        postProcess:
+          - replace:
+              - regex: (\d{4}-\d{2}-\d{2})\s.+
+                with: $1
+          - parseDate: 2006-01-02
+      Image: //link[@as="image"]/@href
+      Studio:
+        Name:
+          selector: $player/ul/li/a[contains(@href,"/channels/")]
+      Tags:
+        Name:
+          selector: $player/ul/li/a[contains(@href,"/categories/") or contains(@href,"/tags/")]
+      Performers:
+        Name:
+          selector: $player/ul/li/a[contains(@href,"/pornstars/")]
+
+# Last Updated July 29, 2020

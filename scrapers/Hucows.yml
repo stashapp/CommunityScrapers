@@ -1,0 +1,30 @@
+name: "hucows"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hucows.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="entry-title"]
+      Details:
+        selector: //div[@class="entry-content"]/p
+        concat: " "
+      Date:
+        selector: //div[@itemprop="datePublished"]//text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ^\s+
+                with:
+          - parseDate: 2 Jan 2006
+      Image: //center/a[1]/img[@class="lightboxhover"]/@src
+      Studio:
+        Name:
+          fixed: Hucows
+      Tags:
+        Name: //section[@id="categories-2"]//a
+      Performers:
+        Name: //span[@class="posttags"]/a/text()
+# Last Updated July 29, 2020
