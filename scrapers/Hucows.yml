@@ -25,4 +25,6 @@ xPathScrapers:
           fixed: Hucows
       Tags:
         Name: //section[@id="categories-2"]//a
-# Last Updated June 27, 2020
+      Performers:
+        Name: //span[@class="posttags"]/a/text()
+# Last Updated July 29, 2020

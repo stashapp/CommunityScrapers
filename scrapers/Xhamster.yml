@@ -24,9 +24,9 @@ xPathScrapers:
           selector: $player/ul/li/a[contains(@href,"/channels/")]
       Tags:
         Name:
-          selector: $player/ul/li/a[contains(@href,"/categories/")]
+          selector: $player/ul/li/a[contains(@href,"/categories/") or contains(@href,"/tags/")]
       Performers:
         Name:
           selector: $player/ul/li/a[contains(@href,"/pornstars/")]
 
-# Last Updated June 27, 2020
+# Last Updated July 29, 2020
