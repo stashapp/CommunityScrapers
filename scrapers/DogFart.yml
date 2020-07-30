@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - https://www.dogfartnetwork.com/
+      - https://www.wefuckblackgirls.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -27,4 +28,4 @@ xPathScrapers:
           - regex: ^
             with: "https:"
 
-# Last Updated May 19, 2020
+# Last Updated July 21, 2020

@@ -1,0 +1,35 @@
+name: "Analized"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - analbbc.com/1/scene/
+      - analviolation.com/1/scene/
+      - analized.com/1/scene/
+      - baddaddypov.com/1/scene/
+      - dtfsluts.com/1/scene/
+      - girlfaction.com/1/scene/
+      - hergape.com/1/scene/
+      - homemadeanalwhores.com/1/scene/
+      - jamesdeen.com/1/scene/
+      - onlyprince.com/1/scene/
+      - pervertgallery.com/1/scene/
+      - povperverts.net/1/scene/
+      - teenageanalsluts.com/1/scene/
+      - twistedvisual.com/1/scene/
+      - yourmomdoesanal.com/1/scene/
+      - yourmomdoesporn.com/1/scene/
+      - downtofuckdating.com/1/scene/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="grid-x"]//h4[@class="text-center"]
+      Details: //p[@class="hide-for-small-only"]
+      Studio:
+        Name: //meta[@property="og:title"]/@content
+      Performers:
+        Name: //div[@class="grid-x"]//p[contains(text(), "Models:")]//a/text()
+      Tags:
+        Name: //div[@class="grid-x"]//p[contains(text(), "Categories:")]//a/text()
+
+# Last Updated July 21, 2020
