@@ -57,7 +57,7 @@ xPathScrapers:
       Title: //h1[@class="wxt7nk-4 fSsARZ"]/text()|//h2[@class="wxt7nk-4 fSsARZ"]/text()
       Date:
         selector: $moreinfo/span[div[text()='Release Date:']]/text()
-        parseDate: January 02, 2006
+        parseDate: January 2, 2006
       Details: //div[@class="tjb798-2 flgKJM"]/span[div[text()='Description:']]/div[2]/text()
       Tags:
         Name: $moreinfo/span[div[text()='Categories:']]/a/text()[1]
@@ -67,4 +67,4 @@ xPathScrapers:
         Name: //div[@class="sc-11m21lp-2 bKVlBB"]/text()
       Image: //img[@class="tg5e7m-1 eSykzx"]/@src
 
-# Last Updated May 25, 2020
+# Last Updated July 21, 2020

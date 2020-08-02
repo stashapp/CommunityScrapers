@@ -1,0 +1,23 @@
+name: "Producers Fun"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - producersfun.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="shadow video-details"]/h1/text()
+      Details: (//div[@class="shadow video-details"]/p[not(@class)])[1]/text()
+      Date:
+        selector: //p[@class="video-date"]/text()[2]
+        replace:
+          - regex: (st|nd|rd|th)\,
+            with: ","
+        parseDate: January 2, 2006
+      Image: //section[@class="top-wrapper"]/div//video/@poster
+      Tags:
+        Name:
+          selector: //p[@class="video-tags"]/a/text()
+
+# Last Updated July 21, 2020
