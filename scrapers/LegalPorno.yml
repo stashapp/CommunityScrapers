@@ -9,6 +9,12 @@ performerByURL:
     url:
       - https://www.legalporno.com
     scraper: performerScraper
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - LegalPorno.py
+      - query
 
 xPathScrapers:
   sceneScraper:
