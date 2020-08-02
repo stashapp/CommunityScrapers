@@ -22,6 +22,7 @@ sceneByURL:
       - https://www.exxxtrasmall.com/movies/
       - https://www.fostertapes.com/movies/
       - https://www.dadcrush.com/movies/
+      - https://www.teensloveanal.com/movies/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -32,4 +33,4 @@ xPathScrapers:
         Name: //p[@class="model-name"]/a
       Image: //div[@class="video-area"]//stream/@poster
 
-# Last Updated June 26, 2020
+# Last Updated July 21, 2020
