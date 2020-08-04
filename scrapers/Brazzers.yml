@@ -17,5 +17,7 @@ xPathScrapers:
       Performers:
         Name: //div[@class="sc-1b6bgon-2 jywgHS"]/span/a/text()
       Studio:
-        Name: //div[@class="vdkjux-5 gIliaY"]/text()
+        Name: //a[@class="vdkjux-5 gIliaY"]/text()
       Image: //img[@class="tg5e7m-1 lSdde"]/@src
+      
+# Last Updated August 4, 2020
