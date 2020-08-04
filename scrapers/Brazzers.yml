@@ -1,29 +1,23 @@
-name: brazzers
+name: "Brazzers"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.brazzers.com/scenes
+      - https://www.brazzers.com/video/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $sceneinfo: //div[@class="scene-main-info"]
     scene:
-      Title: $sceneinfo/h1[@class="scene-title"]/text()
+      Title: //h2[@class="font-secondary sc-1b6bgon-1 kOFSRa"]/text()
       Date:
-        selector: //div[@class="more-scene-info"]/aside[@class="scene-date"]/text()
-        parseDate: January 02, 2006
-      Details:
-        selector: //div[@id="scene-description"]/p[@itemprop="description"]
-        replace: 
-           - regex: "Collapse$"
-             with:
+        selector: //div[@class="sc-1b6bgon-0 jtRRdJ"]/text()
+        parseDate: January 2, 2006
+      Details: //div[@class="xz1bz0-0 fQiYnf"]/p]/text()
       Tags:
-        Name: //div[@class="content-box scene-fuck-stats"]/ul/li/div/a/@title|//div[@class="tag-card-container"]/a
+        Name: //div[@class="vdkjux-1 cepogm"]/a/text()
       Performers:
-        Name: $sceneinfo/p[@class="related-model"]/a
-      Image:
-        selector: //div[@id="trailer-player"]/img/@src
-        replace:
-          - regex: ^
-            with: "https:"
+        Name: //div[@class="sc-1b6bgon-2 jywgHS"]/span/a/text()
+      Studio:
+        Name: //a[@class="vdkjux-5 gIliaY"]/text()
+      Image: //img[@class="tg5e7m-1 lSdde"]/@src
+      
+# Last Updated August 4, 2020
