@@ -44,6 +44,7 @@ badmilfs.com|PaperStreetMedia.yml
 badoinkvr.com|BaDoink.yml
 badteenspunished.com|Nubiles.yml
 baeb.com|AMAMultimedia.yml
+bang.com|Bang.yml
 bangbros.com|BangBros.yml
 bangteenpussy.com|Teencoreclub.yml
 barelylegal.com|Hustler.yml
@@ -334,6 +335,7 @@ publicagent.com|RealityKings.yml
 publicpickups.com|RealityKings.yml
 puffynetwork.com|Puffynetwork.yml
 puremature.com|AMAMultimedia.yml
+puretaboo.com|PureTaboo.yml
 ragingstallion.com|GammaEntertainment.yml
 realityjunkies.com|RealityKings.yml
 realitykings.com|RealityKings.yml
