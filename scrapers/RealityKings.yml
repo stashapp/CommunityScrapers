@@ -65,6 +65,6 @@ xPathScrapers:
         Name: //div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
       Studio:
         Name: //div[@class="sc-11m21lp-2 bKVlBB"]/text()
-      Image: //img[@class="tg5e7m-1 eSykzx"]/@src
+      Image: //img[@class="tg5e7m-1 lSdde"]/@src|//img[@class="sc-1p8qg4p-2 ibyLSN"]/@src
 
-# Last Updated July 21, 2020
+# Last Updated August 04, 2020
