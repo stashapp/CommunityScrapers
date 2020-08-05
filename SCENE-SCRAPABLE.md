@@ -177,6 +177,7 @@ girlfriendsfilms.com|GammaEntertainment.yml
 girlgirl.com|JulesJordan.yml
 girlsandstuds.com|GammaEntertainment.yml
 girlsgotcream.com|Teencoreclub.yml
+girlsoutwest.com|GirlsOutWest.yml
 girlstryanal.com|GammaEntertainment.yml
 gloryholeswallow.com|GloryHoleSwallow.yml
 grannyghetto.com|GammaEntertainment.yml
