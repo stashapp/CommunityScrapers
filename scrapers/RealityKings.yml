@@ -48,6 +48,7 @@ sceneByURL:
       - https://www.iconmale.com/
       - https://www.propertysex.com/scene/
       - https://www.devianthardcore.com/scene/
+      - https://www.familyhookups.com/scene
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -67,4 +68,4 @@ xPathScrapers:
         Name: //div[@class="sc-11m21lp-2 bKVlBB"]/text()
       Image: //img[@class="tg5e7m-1 lSdde"]/@src|//img[@class="sc-1p8qg4p-2 ibyLSN"]/@src
 
-# Last Updated August 04, 2020
+# Last Updated August 05, 2020
