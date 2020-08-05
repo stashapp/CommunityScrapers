@@ -8,6 +8,13 @@ sceneByURL:
       - https://www.theassfactory.com/
       - https://www.spermswallowers.com/
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/trial/models/
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -34,5 +41,29 @@ xPathScrapers:
             with: $1
           - regex: (^\/)
             with: https://www.julesjordan.com/
+
+  performerScraper:
+    performer:
+      Name: //span[@class='title_bar_hilite']/text()
+      Birthdate:
+        selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Age')]
+        replace:
+          - regex: "Age:"
+            with:
+        parseDate: January 2, 2006
+      Measurements:
+        selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Measurements')]
+        replace:
+          - regex: "Measurements:"
+            with:
+          - regex: " "
+            with:
+      Height:
+        replace:
+          - regex: "Height:"
+            with:
+        selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Height')]
+      Image:
+        selector: //img[contains(@class,'model_bio_thumb')]/@src0_3x
 
 # Last Updated May 20, 2020
