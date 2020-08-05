@@ -7,7 +7,6 @@ Supported Site|Scraper
 18vr.com|BaDoink.yml
 21naturals.com|GammaEntertainment.yml
 21sextreme.com|GammaEntertainment.yml
-21stsextury.com|AdultTimeStudio.yml
 8thstreetlatinas.com|RealityKings.yml
 activeduty.com|GammaEntertainment.yml
 aebn.com|AEBN.yml
@@ -147,6 +146,7 @@ fakehub.com|RealityKings.yml
 faketaxi.com|RealityKings.yml
 falconstudios.com|GammaEntertainment.yml
 famedigital.com|GammaEntertainment.yml
+familyhookups.com|RealityKings.yml
 familystrokes.com|PaperStreetMedia.yml
 familytherapyxxx.com|FamilyTherapyXXX.yml
 familyxxx.com|FamilyXXX.yml
