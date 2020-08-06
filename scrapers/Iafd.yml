@@ -1,4 +1,9 @@
 name: iafd
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - http://www.iafd.com/title.rme
+    scraper: sceneScraper
 performerByName:
   action: scrapeXPath
   queryURL: http://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={}
@@ -10,6 +15,18 @@ performerByURL:
     scraper: performerScraper
 
 xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Date: 
+        selector: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Release Date']/following-sibling::p[1]
+        parseDate: Jan 2, 2006
+      Details:  //div[@id="synopsis"]/div[@class="padded-panel"]//text()
+      Studio:
+        Name: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Studio']/following-sibling::p[1]
+      Performers:
+        Name: //div[@class="castbox"]/p/a
+        
   performerSearch:
     performer:
       Name: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/text()
@@ -74,3 +91,5 @@ xPathScrapers:
       Piercings: //div/p[text()='Piercings']/following-sibling::p[1]/text()
       Image:
         selector: //div[@id='headshot']/img/@src
+        
+# Last Updated July 2, 2020

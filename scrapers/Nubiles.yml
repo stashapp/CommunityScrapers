@@ -40,6 +40,12 @@ xPathScrapers:
         concat: " "
       Performers:
         Name: //div[@class="content-pane-performers"]/a/text()
+      Studio:
+        Name:
+          selector: $contentpane//a[@class="site-link"]/text()
+          replace:
+            - regex: (.+?)\.com
+              with: $1
       Tags:
         Name: //div[@class="categories"]/a/text()
       Image:
@@ -48,4 +54,4 @@ xPathScrapers:
           - regex: ^
             with: "https:"
 
-# Last Updated May 19, 2020
+# Last Updated July 21, 2020

@@ -1,0 +1,34 @@
+name: "CzechVR"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - czechvr.com
+      - czechvrcasting.com
+      - czechvrfetish.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="post"]
+      $url: //meta[@name="dl8-customization-brand-url"]/@content
+    scene:
+      Title: $info//div[@class="nazev"]/h2/text()
+      Date:
+        selector: $info//div[@class="datum"]/text()
+        parseDate: Jan 2, 2006
+      Details:
+        selector: //div[@class="textDetail"]/text()
+        concat: " "
+      Tags:
+        Name: $info//div[@id="MoreTags"]//a/text()
+      Performers:
+        Name: $info//div[@class="featuring"]/a/text()
+      Studio:
+        Name: //meta[@name="dl8-customization-brand-name"]/@content
+      Image: 
+        selector: $url|//dl8-video/@poster
+        concat: " "
+        replace:
+          - regex: \s\./category
+            with: /category 
+# Last Updated July 26, 2020

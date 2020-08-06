@@ -1,0 +1,21 @@
+name: xnxx
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - xnxx.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="clear-infobar"]/strong/text()
+      Tags:
+        Name: //div[@class="metadata-row video-tags"]/a/text()
+      Studio:
+        Name: //span[@class="metadata"]/a[@class="gold-plate" or @class="free-plate"]/text()
+      Details: //p[@class="metadata-row video-description"]
+      Image:
+        selector: //script[contains(text(), "setThumbUrl169")]/text()
+        replace:
+          - regex: ^.+setThumbUrl169\('(.+\.jpg).+setRelated.+$
+            with: $1
+# Last Updated June 25, 2020

@@ -20,6 +20,9 @@ sceneByURL:
       - https://www.bbcparadise.com/movies/
       - https://www.shoplyftermylf.com/movies/
       - https://www.exxxtrasmall.com/movies/
+      - https://www.fostertapes.com/movies/
+      - https://www.dadcrush.com/movies/
+      - https://www.teensloveanal.com/movies/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -27,7 +30,7 @@ xPathScrapers:
       Title: //p[@class="video-title"]/text()
       Details: //p[@class="video-description"]/text()
       Performers:
-        Name: //p[@class="model-name"]/a/text()
+        Name: //p[@class="model-name"]/a
       Image: //div[@class="video-area"]//stream/@poster
 
-# Last Updated May 17, 2020
+# Last Updated July 21, 2020

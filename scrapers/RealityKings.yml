@@ -8,14 +8,14 @@ sceneByURL:
       - https://www.babesnetwork.com/scene/
       - https://www.mofosnetwork.com/scene/
       - https://www.mofos.com/scene/
-      - https://www.doghousedigital.com/scene/
-      - https://www.sweetheartvideo.com/scene/
+      - https://www.doghousedigital.com/
+      - https://www.sweetheartvideo.com/
       - https://www.milfhunter.com/scene/
       - https://www.bignaturals.com/scene/
-      - https://www.realityjunkies.com/scene/
-      - https://www.sweetsinner.com/scene/
+      - https://www.realityjunkies.com/
+      - https://www.sweetsinner.com/
       - https://www.welivetogether.com/scene/
-      - https://www.milehighmedia.com/scene/
+      - https://www.milehighmedia.com/
       - https://www.8thstreetlatinas.com/scene/
       - https://www.twistysnetwork.com/scene/
       - https://www.roundandbrown.com/scene/
@@ -44,10 +44,11 @@ sceneByURL:
       - https://www.sexyhub.com/scene/
       - https://www.seancody.com/scene/
       - https://www.men.com/sceneid/
-      - https://www.transsensual.com/scene/
-      - https://www.iconmale.com/scene/
+      - https://www.transsensual.com/
+      - https://www.iconmale.com/
       - https://www.propertysex.com/scene/
       - https://www.devianthardcore.com/scene/
+      - https://www.familyhookups.com/scene
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -57,7 +58,7 @@ xPathScrapers:
       Title: //h1[@class="wxt7nk-4 fSsARZ"]/text()|//h2[@class="wxt7nk-4 fSsARZ"]/text()
       Date:
         selector: $moreinfo/span[div[text()='Release Date:']]/text()
-        parseDate: January 02, 2006
+        parseDate: January 2, 2006
       Details: //div[@class="tjb798-2 flgKJM"]/span[div[text()='Description:']]/div[2]/text()
       Tags:
         Name: $moreinfo/span[div[text()='Categories:']]/a/text()[1]
@@ -65,6 +66,6 @@ xPathScrapers:
         Name: //div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
       Studio:
         Name: //div[@class="sc-11m21lp-2 bKVlBB"]/text()
-      Image: //img[@class="tg5e7m-1 eSykzx"]/@src
+      Image: //img[@class="tg5e7m-1 lSdde"]/@src|//img[@class="sc-1p8qg4p-2 ibyLSN"]/@src
 
-# Last Updated May 25, 2020
+# Last Updated August 05, 2020

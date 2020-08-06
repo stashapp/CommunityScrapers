@@ -19,9 +19,9 @@ xPathScrapers:
         selector: //div[@class="video-content__description"]//p//text()
         concat: " "
       Tags:
-        Name: $info //div[@class="section__item-title-download-space video-item-info-tags"]//a/text()
+        Name: $info//div[@class="section__item-title-download-space video-item-info-tags"]//a/text()
       Performers:
-        Name: $info//div[@class="video-item-info--starring video-item-info--starring-download pb-0"]//a/text()
+        Name: $info//div[contains(@class, 'video-item-info--starring-download')]//a/text()
       Studio:
         Name: //meta[@name="dl8-customization-brand-name"]/@content
         URL:

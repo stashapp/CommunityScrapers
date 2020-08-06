@@ -1,0 +1,30 @@
+name: javlibrary
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.javlibrary.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
+      Date:
+        selector: //div[@id="video_date"]/table/tbody/tr/td[@class="text"]/text()
+      Details:
+        selector: //div[@id="video_title"]/h3/a/text()
+        replace:
+          - regex: ^(.*? ){1}
+            with:
+      Tags:
+        Name: //div[@id="video_genres"]/table/tbody/tr/td[@class="text"]/span/a
+      Performers:
+        Name: //div[@id="video_cast"]/table/tbody/tr/td[@class="text"]/span/span/a
+      Image:
+        selector: //div[@id="video_jacket"]/img/@src
+        replace:
+          - regex: ^
+            with: "https:"
+      Studio:
+        Name: //div[@id="video_maker"]/table/tbody/tr/td[@class="text"]/span/a/text()
+        
+# Last Updated July 5, 2020
