@@ -13,13 +13,15 @@ Any scraper file has to be stored in the `~/.stash/scrapers` ( ~/.stash is where
 
 After updating the scrapers directory contents or editing a scraper file a restart of stash is needed and a refresh of the edit scene/performer page.(In recent stash builds instead of restarting __scrape with -> reload scrapers__ is enough)
 
+Scrapers with **useCDP** set to true require that you have properly configured the `Chrome CDP path` setting in Stash. If you decide to use a remote instance the headless chromium docker image from https://hub.docker.com/r/chromedp/headless-shell/ is highly recommended.
+
 ## Scene Scrapers
 You can find a list of sites currently supported for by community scene scraping in [SCENE-SCRAPERS.md](https://github.com/stashapp/CommunityScrapers/blob/master/SCENE-SCRAPABLE.md)
 
 For scene scrapers you have to edit the url of the scene. Once you populate that field with a specific url a button will appear.
 ![](https://user-images.githubusercontent.com/48220860/85202637-698e3f00-b310-11ea-9c06-b2cfe931474a.png)
 
-Clicking on that button will populate any **empty** fields with data found from the scraper. The only exception is the scene cover image that always gets updated from the scraper.
+Clicking on that button brings up the screne scrape popup that lets you select which fields to update.
 
 ## Performer Scrapers
 This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
