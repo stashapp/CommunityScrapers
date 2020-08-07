@@ -52,20 +52,18 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $moreinfo: //div[@class="tjb798-2 flgKJM"]
     scene:
-      Title: //h1[@class="wxt7nk-4 fSsARZ"]/text()|//h2[@class="wxt7nk-4 fSsARZ"]/text()
+      Title: //h2[contains(@class, "hzrLcs")]/text()
       Date:
-        selector: $moreinfo/span[div[text()='Release Date:']]/text()
+        selector: //div[contains(@class, "jtRRdJ")]/text()
         parseDate: January 2, 2006
-      Details: //div[@class="tjb798-2 flgKJM"]/span[div[text()='Description:']]/div[2]/text()
+      Details: //p[contains(@class, "kLbWwG")]/text()
       Tags:
-        Name: $moreinfo/span[div[text()='Categories:']]/a/text()[1]
+        Name: //div[contains(@class, "cepogm")]/a/text()
       Performers:
-        Name: //div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
+        Name: //div[contains(@class, "dEgjPa")]/span/a/text()
       Studio:
-        Name: //div[@class="sc-11m21lp-2 bKVlBB"]/text()
-      Image: //img[@class="tg5e7m-1 lSdde"]/@src|//img[@class="sc-1p8qg4p-2 ibyLSN"]/@src
+        Name: //a[contains(@class, "kXGSit")]/text()
+      Image: //img[contains(@class, "lSdde")]/@src
 
 # Last Updated August 05, 2020
