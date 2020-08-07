@@ -1,0 +1,34 @@
+name: "Vixen Media Group"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.blacked.com/
+      - https://www.blackedraw.com/
+      - https://www.deeper.com/
+      - https://www.tushy.com/
+      - https://www.tushyraw.com/
+      - https://www.vixen.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //div[@data-test-component="VideoModels"]/a
+    scene:
+      Title: //h1[@data-test-component="VideoTitle"]
+      Performers:
+        Name: $performer
+      Details: //p[@data-test-component="VideoDescription"]|//div[@data-test-component="VideoDescription"]//p
+      Date:
+        selector: //span[@data-test-component="ReleaseDateFormatted"]
+        parseDate: "January 2, 2006"
+      Image:
+        selector: //img[@class="sc-1egln9q-1 irBaDM"]/@src
+      Studio:
+        Name:
+          selector: //link[@rel="canonical"]/@href
+          replace:
+          - regex: https\://www\.(.+)\.com/.+
+            with: $1
+driver:
+  useCDP: true
+# Last Updated August 6, 2020
