@@ -1,0 +1,31 @@
+name: Bang
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.bang.com/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@name="og:title"]/@content
+      Details: //meta[@name="description"]/@content
+      Image: //meta[@name="og:image"]/@content
+      Date:
+        selector: //span[@class="hidden-xs fa-text-right fa-text-left"]/text()
+        replace:
+          - regex: (\w+\s)(\d+)\w+,(\s\d{4})
+            with: $1$2$3
+        parseDate: Jan 2 2006
+      Tags:
+        Name:
+          selector: //div[@class="genres bottom-buffer10"]/a
+      Performers:
+        Name:
+          selector: //div/span[@class="fa-text-right" and contains(text(),"With:")]/../span[@class="comma-list-container"]/span/a/text()
+      Studio:
+        Name: //div/span[@class="fa-text-right" and contains(text(),"Studio:")]/a/text()
+driver:
+  useCDP: true
+  sleep: 5
+
+#Last Updated August 4, 2020
