@@ -54,6 +54,8 @@ beaverhunt.com|Hustler.yml
 bellesafilms.com|RealityKings.yml
 bigfatcreampie.com|GammaEntertainment.yml
 bignaturals.com|RealityKings.yml
+blacked.com|vixenNetwork.yml
+blackedraw.com|vixenNetwork.yml
 blackvalleygirls.com|PaperStreetMedia.yml
 blowpass.com|GammaEntertainment.yml
 bootyclapxxx.com|Hustler.yml
@@ -114,6 +116,7 @@ damnthatsbig.com|AMAMultimedia.yml
 danejones.com|RealityKings.yml
 darkx.com|GammaEntertainment.yml
 daughterswap.com|PaperStreetMedia.yml
+deeper.com|vixenNetwork.yml
 deeplush.com|Nubiles.yml
 defiled18.com|Teencoreclub.yml
 detentiongirls.com|Nubiles.yml
@@ -415,6 +418,8 @@ trickyspa.com|GammaEntertainment.yml
 tryteens.com|Teencoreclub.yml
 tsfactor.com|GammaEntertainment.yml
 tsplayground.com|GammaEntertainment.yml
+tushy.com|vixenNetwork.yml
+tushyraw.com|vixenNetwork.yml
 twistedvisual.com|Analized.yml
 twistysnetwork.com|RealityKings.yml
 unlimitedmilfs.com|NewSensationsNetworkSites.yml
@@ -424,6 +429,7 @@ vipsexvault.com|LetsDoeIt.yml
 virtualrealporn.com|VirtualRealPorn.yml
 virtualtaboo.com|VirtualTaboo.yml
 vivid.com|Vivid.yml
+vixen.com|vixenNetwork.yml
 vrbangers.com|VRBangers.yml
 vrbgay.com|VRBangers.yml
 vrbtrans.com|VRBangers.yml
