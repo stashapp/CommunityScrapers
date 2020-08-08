@@ -50,6 +50,13 @@ sceneByURL:
       - https://www.devianthardcore.com/scene/
       - https://www.familyhookups.com/scene
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - realitykings.com/model/
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -65,5 +72,30 @@ xPathScrapers:
       Studio:
         Name: //a[contains(@class, "kXGSit")]/text()
       Image: //img[contains(@class, "lSdde")]/@src
+
+  performerScraper:
+    performer:
+      Name: //div[contains(@class, "cNKuKg")]/text()
+      Birthdate:
+        selector: //span[contains(.,"Date of Birth")]/following-sibling::span[1]/text()
+        postProcess:
+          - replace:
+            - regex: "nd"
+              with:
+            - regex: "th"
+              with:
+            - regex: "rd"
+              with:
+            - regex: "([\\d]+)st"
+              with: $1
+          - parseDate: January 2, 2006
+      Measurements: //span[contains(.,"Measurements")]/following-sibling::span[1]/text()
+      Country: //span[contains(.,"Birth Place")]/following-sibling::span[1]/text()
+      Height:
+        selector: //span[contains(.,"Height")]/following-sibling::span[1]/text()
+        postProcess:
+          - feetToCm: true
+      Image:
+        selector: //img[contains(@class, "ibyLSN")]/@src[contains(.,"model")]
 
 # Last Updated August 05, 2020
