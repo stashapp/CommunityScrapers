@@ -2,8 +2,6 @@ name: "GammaEntertainment"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - evilangel.com/en/video/
-      - wicked.com/en/video/
       - burningangel.com/en/video/
       - devilsfilm.com/en/scene/
       - tsplayground.com/en/video/
