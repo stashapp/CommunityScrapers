@@ -2,8 +2,6 @@ name: "GammaEntertainment"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - evilangel.com/en/video/
-      - wicked.com/en/video/
       - burningangel.com/en/video/
       - devilsfilm.com/en/scene/
       - tsplayground.com/en/video/
@@ -138,14 +136,7 @@ xPathScrapers:
       Movies:
         Name: $info/a/img/@title|//a[@class="sceneLink  "]/@title|//a[@class="dvdLink  "]/@title
       Image:
-        selector: //script[contains(text(), 'picPreview')]/text()
-        replace:
-          - regex: .+(?:picPreview":")([\w:]+)(?:[\\\/]+)([\w-\.]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\d_]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\w]+)(?:[\\\/]+)([\w.]+).+
-            with: $1//$2/$3/$4/$5/$6/$7/$8/$9/$10
-            # if using the transport subdomain, parameters need to be passed
-            # otherwise a cropped square image is returned by default
-          - regex: (https:\/\/transform.+)
-            with: $1?width=960&height=543&enlarge=true
+        selector: //meta[@name="twitter:image"]/@content
       Studio:
         Name:
           selector: $detailscript
