@@ -1,0 +1,33 @@
+name: "PornDB"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - metadataapi.net/scene/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      URL: //div[@class="flex-1"]/a/@href
+      Studio:
+        Name: //div[@class="mb-3 flex w-full"]/p[@class=""]/text()
+      Title: //h4[@class="text-2xl leading-none truncate ..."]/text()
+      Date:
+        selector: //small[@class="uppercase mb-5 tracking-wide text-xs font-bold text-gray-500"]/text()
+        postProcess:
+          - replace:
+            - regex: (.+\()(\d{1,2})(\w{2})(\s)(\w{3})(\s)(\d{4})(.)
+              with: $2 $5 $7
+          - parseDate: 2 Jan 2006
+      Details: //div[@class="p-6 flex flex-col"]/div[@class=""]/text()
+      Tags:
+        Name: //div[@class="my-6 flex flex-wrap"]/div/text()
+      Performers:
+        Name: //img[@class="bd-placeholder-img w-full rounded rounded-t max-w-full h-auto lazy"]/@alt
+      Image: 
+        selector: //meta[@name="twitter:images0"]/@content
+        postProcess:
+          - replace: 
+            - regex: 500x500
+              with: "1280x853"
+
+# Last Updated July 25, 2020
