@@ -119,7 +119,6 @@ daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
 damnthatsbig.com|AMAMultimedia.yml
 danejones.com|RealityKings.yml
-
 darkx.com|GammaEntertainment.yml
 daughterswap.com|PaperStreetMedia.yml
 ddfbusty.com|DDFNetwork.yml
@@ -268,7 +267,6 @@ massage-parlor.com|GammaEntertainment.yml
 massagebait.com|AMAMultimedia.yml
 men.com|RealityKings.yml
 menpov.com|AMAMultimedia.yml
-metadataapi.net|PornDB.yml
 milehighmedia.com|RealityKings.yml
 milfhunter.com|RealityKings.yml
 milfvr.com|MilfVR.yml
