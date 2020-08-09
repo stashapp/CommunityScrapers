@@ -20,12 +20,7 @@ xPathScrapers:
         selector: //div[@class="sc-1b6bgon-0 jtRRdJ"]/text()
         postProcess:
           - parseDate: January 2, 2006
-      Details:
-        selector: //p[@class="xnzhm0-1 kLbWwG"]/text()
-        postProcess:
-           - replace: 
-                - regex: "Collapse$"
-                  with:
+      Details: //div[@class="xz1bz0-0 fQiYnf"]/p/text()
       Tags:
         Name: //div[@class="vdkjux-1 cepogm"]/a/text()
       Performers:
