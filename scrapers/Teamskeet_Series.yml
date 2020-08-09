@@ -1,0 +1,17 @@
+name: Bffs
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.bffs.com/movies
+      - www.submissived.com/movies
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //p[@class="video-title"]/text()
+      Details: //p[@class="video-description"]/text()
+      Performers:
+        Name: //p[@class="model-name"]/a/text()
+      Image: //div[@class="stream-video-container"]/stream/@poster
+
+# Last Updated July 09, 2020

@@ -1,0 +1,23 @@
+name: "ReidmyLips"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - reidmylips.elxcomplete.com/updates/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //span[@class="update_title"]/text()
+      Date:
+        selector: //span[@class="availdate"]/text()[1]
+        postProcess:
+            - parseDate: 01/02/2006
+      Details: //span[@class="latest_update_description"]/text()
+      Performers:
+        Name: //span[@class="tour_update_models"]/text()
+      Studio:
+        Name: 
+            fixed: ReidMyLips
+      Image: //meta[@property="og:image"]/@content
+
+# Last Updated July 31, 2020

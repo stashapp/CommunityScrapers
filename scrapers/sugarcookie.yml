@@ -1,0 +1,25 @@
+name: sugarcookie
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sugarcookie.xxx/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="entry-title cb-entry-title cb-title"]/text()
+      Date:
+        selector: //div[@class="cb-entry-header cb-meta clearfix"]/div[@class="cb-byline"]/span[@class="cb-date"]/time[@class="updated"]/@datetime
+      Details: 
+        selector: //span[@class="cb-itemprop"]/p/strong/text()
+        concat: "\n"
+      Tags:
+        Name: //p[@class="cb-tags cb-post-footer-block"]/a/text()
+      Performers:
+        Name: //span[@class="cb-itemprop"]/p/strong/a[contains(@href,'sugarcookie.xxx/models')]/text()
+      Studio:
+        Name: 
+            fixed: SugarCookie
+      Image: //meta[@property="og:image"]/@content
+
+# Last Updated August 08, 2020

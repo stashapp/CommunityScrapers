@@ -1,0 +1,34 @@
+name: Scoreland
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - scoreland.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //*[@id="videos_page-page"]/div[3]/div[1]/h2
+      Studio:
+        name:
+          fixed: Scoreland #note that studio is fixed
+      Date:
+        selector: //*[@id="videos_page-page"]/div[4]/div[2]/div/div[3]/span[2]
+        postProcess:
+          - replace:
+            - regex: ..,
+              with:
+          - parseDate: January 2 2006
+      Details:
+        selector: //*[@id="videos_page-page"]/div[4]/div[1]/div[1]
+      Tags:
+        Name: //*[@id="videos_page-page"]/div[4]/div[1]/div[2]/a/text()
+      Performers:
+        Name: //*[@id="videos_page-page"]/div[4]/div[2]/div/div[2]/span[2]/a/text()
+      Image:
+        selector: //meta[@itemprop="image"]/@content
+        postProcess: 
+          - replace:
+            - regex: _lg
+              with: _x_800
+          
+# Last Updated August 2, 2020

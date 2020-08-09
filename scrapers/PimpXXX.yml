@@ -1,0 +1,33 @@
+name: pimpXXX
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pimp.xxx/trailers/
+      - family.xxx/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="trailer-block_title"]/text()
+      Date:
+        selector: //div[@class="info-block_data"]/p[@class="text"][1]/text()
+        postProcess:
+          - replace:
+            - regex: (\w+\s)(\w+)(\s)(\d)(.+)(\d{4})(.+)
+              with: $2 $4, $6
+          - parseDate: January 2, 2006
+      Details: //div[@class="info-block"]/p[@class="text"][1]/text()
+      Tags:
+        Name: //div[@class="info-block"]/p[@class="text"][2]/a/text()
+      Performers:
+        Name: //div[@class="info-block_data"]/p[@class="text"][2]/a/text()
+      Studio:
+        Name: //meta[@name="author"]/@content
+      Image: 
+        selector: //script[contains(.,"contentthumbs")]/text()
+        postProcess:
+          - replace:
+            - regex: (.+)(https.+contentthumbs.+)(" width="100%)(.+)
+              with: $2
+
+# Last Updated August 03, 2020

@@ -1,0 +1,19 @@
+name: nympho
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - nympho.com/view/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="title"]/text()
+      Details: //div[@class="desc"]/p/text()
+      Performers:
+        Name: //h4[@class="models"]/a/text()
+      Studio:
+        Name: 
+            fixed: Nympho
+      Image: //video[@id="ypp-player"]/@poster
+# No Date, no Tags 
+# Last Updated July 31, 2020

@@ -1,0 +1,22 @@
+name: kinkyfamily
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - kinkyfamily.com/index.php/main/view_movie
+      - free.kinkyfamily.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="title_heading"]/text()
+      Details: //div[@class="description"]/p/text()
+      Studio:
+        Name: 
+            fixed: kinkyfamily
+      Image: 
+        selector: //script[contains(.,"i.src = '")]/text()
+        postProcess:
+            - replace:
+                - regex: (.+)(i\.src = ')(.+\.jpg)(.+)
+                  with: $3
+# Last Updated August 07, 2020
