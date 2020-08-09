@@ -1,0 +1,37 @@
+name: Hot Crazy Mess
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hotcrazymess.com/video/watch/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[contains(@class, "content-pane-title")]
+      $models: //div[@class="content-pane-performers"]/a
+    scene:
+      Title: $info/h2
+      Date:
+        selector: $info//span[@class="date"]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Performers:
+        Name: $models/text()
+        URL:
+          selector: $models/@href
+          postProcess:
+            - replace:
+              - regex: ^
+                with: https://hotcrazymess.com
+      Details:
+        selector: //div[contains(@class, "content-pane-container")][2]//p
+        concat: "\n\n"
+      Tags:
+        Name: //div[@class="categories"]/a
+      Image:
+        selector: //video/@poster
+      Studio:
+        Name:
+          fixed: Hot Crazy Mess
+
+# Last Updated August 10, 2020
