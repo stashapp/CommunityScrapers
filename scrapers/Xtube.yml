@@ -11,20 +11,18 @@ xPathScrapers:
         selector: //form/h1/text()
       Date:
         selector: //script[contains(text(), "dimension10")]/text()
-        replace:
-          - regex: ^.+'(\d{4})(\d{2})(\d{2})'.+$
-            with: $2 $3, $1
-        parseDate: 01 02, 2006
+        postProcess:
+          - replace:
+            - regex: ^.+'(\d{4})(\d{2})(\d{2})'.+$
+              with: $2 $3, $1
+          - parseDate: 01 02, 2006
       Studio:
         Name:
-          selector: //title/text()
-          replace:
-            - regex: .+
-              with: xtube
+          fixed: xtube
       Details: //meta[@property="og:description"]/@content
       Performers:
         Name: //form[@id="postCommentForm"]/input[@name="contentOwnerId"]/@value[not (contains(.,"sponsor_"))]
       Tags:
         Name: //div[@class="categories" or @class="tags"]//a/text()
       Image: //meta[@property="og:image"]/@content
-# Last Updated June 27, 2020
+# Last Updated August 06, 2020

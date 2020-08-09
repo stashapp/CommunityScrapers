@@ -16,7 +16,8 @@ xPathScrapers:
         Name: //a[@class="btn btn-default label main uploader-tag hover-name"]/span[@class="name"]/text()
       Image:
         selector: //script[contains(text(), "setThumbUrl169")]/text()
-        replace:
-          - regex: ^.+setThumbUrl169\('(.+\.jpg).+setRelated.+$
-            with: $1
-# Last Updated June 25, 2020
+        postProcess:
+          - replace:
+            - regex: ^.+setThumbUrl169\('(.+\.jpg).+setRelated.+$
+              with: $1
+# Last Updated August 06, 2020
