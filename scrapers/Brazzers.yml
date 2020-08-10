@@ -29,5 +29,4 @@ xPathScrapers:
       Image:
         selector: //img[@class="tg5e7m-1 lSdde"]/@src
 
-# Remove '#' if you want get the studio without space
 # Last Updated July 28, 2020
