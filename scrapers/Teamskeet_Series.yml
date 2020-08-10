@@ -1,4 +1,4 @@
-name: Bffs
+name: "Teamskeet_Series"
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -13,5 +13,12 @@ xPathScrapers:
       Performers:
         Name: //p[@class="model-name"]/a/text()
       Image: //div[@class="stream-video-container"]/stream/@poster
+      Studio:
+        Name:
+          selector: //li[@class="nav-item login"]/a[@class="nav-link px-0"]/@href
+          postProcess:
+            - replace: 
+                  - regex: (.+members\.)(\w+)(.+)
+                    with: $2
 
-# Last Updated July 09, 2020
+# Last Updated August 10, 2020
