@@ -15,9 +15,11 @@ xPathScrapers:
       Details: //span[@class="latest_update_description"]/text()
       Performers:
         Name: //span[@class="tour_update_models"]/text()
+      Tags:
+        Name: //span[@class="update_tags"]/a/text()
       Studio:
         Name: 
             fixed: ReidMyLips
       Image: //meta[@property="og:image"]/@content
 
-# Last Updated July 31, 2020
+# Last Updated August 10, 2020
