@@ -246,6 +246,7 @@ lesbea.com|RealityKings.yml
 lesbianass.com|Hustler.yml
 lesbianfactor.com|GammaEntertainment.yml
 lesbianx.com|GammaEntertainment.yml
+lethalhardcore.com|lethalhardcore.yml
 letsdoeit.com|LetsDoeIt.yml
 letstryanal.com|RealityKings.yml
 lexingtonsteele.com|GammaEntertainment.yml
