@@ -463,6 +463,7 @@ vrbtrans.com|VRBangers.yml
 vrconk.com|VRConk.yml
 vrcosplayx.com|BaDoink.yml
 vrhush.com|VRHush.yml
+wankz.com|wankz.yml
 wankzvr.com|WankzVR.yml
 watchreal.com|Hustler.yml
 webyoung.com|GammaEntertainment.yml
