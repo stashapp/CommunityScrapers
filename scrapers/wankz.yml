@@ -1,0 +1,27 @@
+name: wankz
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wankz.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="title"]/h1/text()
+      Date:
+        selector: //div[@class="views"]/span/text()
+        postProcess:
+            - replace: 
+                - regex: (Added\s)(.+)
+                  with: $2
+            - parseDate: 2 January 2006
+      Details: //div[@class="description"]/p/text()
+      Tags:
+        Name: //a[@class="cat"]/text()
+      Performers:
+        Name: //div[@class="models-wrapper actors"]/a/span/text()
+      Studio:
+        Name: //a[@class="sitelogom"]/img/@alt
+      Image: //a[@class="noplayer"]/img/@src
+
+# Last Updated August 10, 2020
