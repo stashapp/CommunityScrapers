@@ -11,15 +11,16 @@ xPathScrapers:
       Title: //h2[@class="font-secondary sc-1b6bgon-1 kOFSRa"]/text()
       Studio:
         Name: 
-            selector: //a[@class="vdkjux-5 gIliaY"]/text()
-#            postProcess:
-#                - replace: 
-#                    - regex: " "
-#                      with: ""
+          selector: //a[@class="vdkjux-5 gIliaY"]/text()
+# Remove '#' if you want get the studio without space.
+#          postProcess:
+#              - replace: 
+#                  - regex: " "
+#                    with: ""
       Date:
         selector: //div[@class="sc-1b6bgon-0 jtRRdJ"]/text()
         postProcess:
-          - parseDate: January 2, 2006
+            - parseDate: January 2, 2006
       Details: //div[@class="xz1bz0-0 fQiYnf"]/p/text()
       Tags:
         Name: //div[@class="vdkjux-1 cepogm"]/a/text()
