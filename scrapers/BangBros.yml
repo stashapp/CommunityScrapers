@@ -15,7 +15,8 @@ xPathScrapers:
       Performers:
         Name: //div[@class="vdoCast"]/a[position()>1]/text()
       Image:
-        selector: //img[@id="player-overlay-image"]/@src
+        selector: //video/@poster
+        #selector: //img[@id="player-overlay-image"]/@src # Better image but can fail on older scenes
         replace:
           - regex: ^
             with: "https:"
