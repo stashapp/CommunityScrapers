@@ -78,7 +78,7 @@ buttman.com|GammaEntertainment.yml
 captainstabbin.com|RealityKings.yml
 caribbeancom.com|Carib.yml
 castingcouch-x.com|AMAMultimedia.yml
-cherrypimps.com|Cherrypimps.yml
+cherrypimps.com|trafficpimps.yml
 clips4sale.com|Clips4Sale.yml
 clubinfernodungeon.com|GammaEntertainment.yml
 cum4k.com|AMAMultimedia.yml
@@ -158,7 +158,7 @@ fakehub.com|RealityKings.yml
 faketaxi.com|RealityKings.yml
 falconstudios.com|GammaEntertainment.yml
 famedigital.com|GammaEntertainment.yml
-family.xxx|PimpXXX.yml
+family.xxx|trafficpimps.yml
 familyhookups.com|RealityKings.yml
 familystrokes.com|PaperStreetMedia.yml
 familytherapyxxx.com|FamilyTherapyXXX.yml
@@ -331,10 +331,10 @@ passion-hd.com|AMAMultimedia.yml
 pervertgallery.com|Analized.yml
 pervmom.com|PaperStreetMedia.yml
 peternorth.com|GammaEntertainment.yml
-petite.xxx|Cherrypimps.yml
+petite.xxx|trafficpimps.yml
 petiteballerinasfucked.com|Nubiles.yml
 petitehdporn.com|Nubiles.yml
-pimp.xxx|PimpXXX.yml
+pimp.xxx|trafficpimps.yml
 playboy.tv|PlayboyTV.yml
 porngoespro.com|Spizoo.yml
 pornhub.com|Pornhub.yml
@@ -474,7 +474,7 @@ whiteghetto.com|GammaEntertainment.yml
 whiteteensblackcocks.com|Teencoreclub.yml
 wicked.com (/movies)|WickedMovies.yml
 wicked.com|GammaEntertainment.yml
-wildoncam.com|Cherrypimps.yml
+wildoncam.com|trafficpimps.yml
 wowporn.xxx|WowPorn.yml
 x-art.com|X-artcom.yml
 xart.xxx|Xartxxx.yml
