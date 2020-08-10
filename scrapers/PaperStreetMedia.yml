@@ -38,7 +38,7 @@ xPathScrapers:
         Name:
           selector: //li[@class="nav-item login"]/a[@class="nav-link px-0"]/@href
           postProcess:
-            - replace: 
+              - replace: 
                   - regex: (.+members\.)(\w+)(.+)
                     with: $2
                     
