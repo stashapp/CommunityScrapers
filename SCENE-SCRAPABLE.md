@@ -149,7 +149,7 @@ dylanryder.com|GammaEntertainment.yml
 eroticax.com|GammaEntertainment.yml
 eurogirlsongirls.com|DDFNetwork.yml
 euroteenerotica.com|DDFNetwork.yml
-evilangel.com|GammaEntertainment_CDP.yml
+evilangel.com|GammaEntertainment.yml
 exotic4k.com|AMAMultimedia.yml
 exxxtrasmall.com|PaperStreetMedia.yml
 fabsluts.com|Teencoreclub.yml
@@ -473,7 +473,7 @@ wetvr.com|AMAMultimedia.yml
 whiteghetto.com|GammaEntertainment.yml
 whiteteensblackcocks.com|Teencoreclub.yml
 wicked.com (/movies)|WickedMovies.yml
-wicked.com|GammaEntertainment_CDP.yml
+wicked.com|GammaEntertainment.yml
 wildoncam.com|Cherrypimps.yml
 wowporn.xxx|WowPorn.yml
 x-art.com|X-artcom.yml
