@@ -9,6 +9,7 @@ xPathScrapers:
     scene:
       Title: //meta[@name="twitter:title"]/@content
       Image: //video[@class="vjs-tech"]/@poster
+#             //meta[@name="twitter:image"]/@content # Can have a better image 720p to 4K
       Date:
         selector: //span[@class="Text ScenePlayer-ReleaseDate-Text styles_3tU3Z2sLeO"]/text()
       Details:
@@ -30,4 +31,4 @@ driver:
   useCDP: true
   
 #Last Updated August 09, 2020
-#//meta[@name="twitter:image"]/@content #for image in 4K
+
