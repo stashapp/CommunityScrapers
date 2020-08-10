@@ -55,7 +55,7 @@ bbcparadise.com|PaperStreetMedia.yml
 bbcpie.com|AMAMultimedia.yml
 beaverhunt.com|Hustler.yml
 bellesafilms.com|RealityKings.yml
-bffs.com|Teamskeet_Series.yml
+bffs.com|PaperStreetMedia.yml
 bigfatcreampie.com|GammaEntertainment.yml
 bignaturals.com|RealityKings.yml
 blacked.com|vixenNetwork.yml
@@ -401,7 +401,7 @@ squirtingorgies.com|GammaEntertainment.yml
 stepsiblings.com|PaperStreetMedia.yml
 stepsiblingscaught.com|Nubiles.yml
 strapattackers.com|GammaEntertainment.yml
-submissived.com|Teamskeet_Series.yml
+submissived.com|PaperStreetMedia.yml
 sugarcookie.xxx|sugarcookie.yml
 sunnyleone.com|GammaEntertainment.yml
 sweetfemdom.com|SweetFemdom.yml
