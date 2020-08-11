@@ -21,6 +21,8 @@ You can find a list of sites currently supported for by community scene scraping
 For scene scrapers you have to edit the url of the scene. Once you populate that field with a specific url a button will appear.
 ![](https://user-images.githubusercontent.com/48220860/85202637-698e3f00-b310-11ea-9c06-b2cfe931474a.png)
 
+Some scrapers like pornDB.yml support the scrape with function so you can you use that instead of adding a url.
+
 Clicking on that button brings up the screne scrape popup that lets you select which fields to update.
 
 ## Performer Scrapers
@@ -32,6 +34,7 @@ babepedia.com|Babepedia.yml
 freeones.xxx|FreeonesCommunity.yml
 iafd.com|Iafd.yml
 manyvids.com|ManyVids.yml
+metadataapi.net|pornDB.yml
 pornhub.com|Pornhub.yml
 sexvr.com|SexVR.yml
 
