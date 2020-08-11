@@ -1,0 +1,31 @@
+name: IafdStreaming
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - streaming.iafd.com/
+    scraper: movieScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: //h1[@class="description"]/text()
+      Director: //div[@class="director"]/a/text()
+      Duration:
+        selector: //span[contains(text(), "Length")]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: " hrs. "
+              with: ":"
+            - regex: " mins."
+              with: ":00"
+      Date:
+        selector: //span[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Synopsis: //div[@class="synopsis"]//text()
+      Studio:
+        Name: //div[@class="studio"]/a/text()
+      FrontImage: //div[@class="carousel-item active"]/img/@data-src
+      BackImage: //div[@class="carousel-item"]/img/@data-src
+
