@@ -161,10 +161,7 @@ xPathScrapers:
             with: $1?width=960&height=543&enlarge=true
       Studio:
         Name:
-          selector: $detailscript
-          replace:
-            - regex: .+(?:siteName":")([^"]+).+
-              with: $1
+          selector: //span[@class="linkMainCaption"]/text()
 
   performerScraper:
     performer:
