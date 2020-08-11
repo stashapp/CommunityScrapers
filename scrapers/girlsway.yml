@@ -1,0 +1,33 @@
+name: girlsway
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - girlsway.com/en/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@name="twitter:title"]/@content
+      Image: //meta[@name="twitter:image"]/@content
+      Date:
+        selector: //span[@class="Text ScenePlayer-ReleaseDate-Text styles_3tU3Z2sLeO"]/text()
+      Details:
+        selector: //meta[@name="twitter:description"]/@content
+        replace:
+          - regex: </br>|<br>|<br/>
+            with: "\n"
+      Tags:
+        Name:
+          selector: //div[@class="BackgroundBox ScenePlayer-SceneCategories-BackgroundBox styles_1khKtnnA8W"]/a/text()
+      Performers:
+        Name:
+          selector: //div[@class="component-ActorThumb-List"]/a/@title
+      Studio:
+        Name:
+          selector: //div[@class="styles_1oxPFmiuVp"]/a/@title
+          postProcess:
+                - replace: 
+                    - regex: " "
+                      with: ""
+#Mostly don't work because the information come from a request. Only get image, title, details
+#Last Updated August 09, 2020

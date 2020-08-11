@@ -1,0 +1,27 @@
+name: DDFNetwork
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ddfnetwork.com/videos/
+      - ddfbusty.com/videos/
+      - 1by-day.com/videos/
+      - eurogirlsongirls.com/videos/
+      - euroteenerotica.com/videos/
+      - handsonhardcore.com/videos/
+      - hotlegsandfeet.com/videos/
+      - houseoftaboo.com/videos/
+      - onlyblowjob.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@itemprop="name"]/@content
+      Date: //meta[@itemprop="uploadDate"]/@content
+      Details: //meta[@name="description"]/@content
+      Tags:
+        Name: //ul[@class="tags pl-0"]/li/a/text()
+      Performers:
+        Name: //h5[@class="card-title mb-0"]/a/text()
+      Image: //meta[@itemprop="thumbnailUrl"]/@content
+
+# Last Updated July 31, 2020

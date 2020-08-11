@@ -1,0 +1,21 @@
+name: Cumlouder
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cumlouder.com/porn-video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="video-top"]/h1
+      Details: //div[@class="content"]/p/text()
+      Performers:
+        Name: //a[@class="pornstar-link"]
+      Tags:
+        Name: //ul[@class="tags"]/li/a
+      Studio:
+        Name: 
+            fixed: Cumlouder
+      Image: //video[@id="cum_player"]/@lazy
+
+# Last Updated July 30, 2020

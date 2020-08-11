@@ -1,0 +1,24 @@
+name: pornworld
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornworld.com/watch/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@name="twitter:title"]/@content
+      Date: //span[@title="Release date"]/a/text()
+      Details: //div[@class="scene-description__row"][3]/dd/text()
+      Tags:
+        Name: //div[@class="scene-description__row"][2]/dd/a/text()
+      Performers:
+        Name: //div[@class="scene-description__row"][1]/dd/a/text()
+      Image: 
+        selector: //div[@id="player"]/@style
+        postProcess:
+            - replace: 
+                - regex: (background-image:url\()(.+)(\))
+                  with: $2
+
+# Last Updated August 01, 2020
