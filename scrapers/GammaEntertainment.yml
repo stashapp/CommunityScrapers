@@ -102,6 +102,13 @@ sceneByURL:
       - nextdoorebony.com/
       - nextdoorcasting.com/
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - evilangel.com/en/pornstar/
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -152,5 +159,10 @@ xPathScrapers:
           replace:
             - regex: .+(?:siteName":")([^"]+).+
               with: $1
+
+  performerScraper:
+    performer:
+      Name: //h1[@class='actorName']
+      Image: //img[@class='actorPicture']/@src
 
 # Last Updated June 22, 2020
