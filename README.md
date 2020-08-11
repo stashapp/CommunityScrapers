@@ -21,9 +21,9 @@ You can find a list of sites currently supported for by community scene scraping
 For scene scrapers you have to edit the url of the scene. Once you populate that field with a specific url a button will appear.
 ![](https://user-images.githubusercontent.com/48220860/85202637-698e3f00-b310-11ea-9c06-b2cfe931474a.png)
 
-Some scrapers like pornDB.yml support the scrape with function so you can you use that instead of adding a url.
-
 Clicking on that button brings up the screne scrape popup that lets you select which fields to update.
+
+Some scrapers like pornDB.yml support the scrape with function so you can you use that instead of adding a url.
 
 ## Performer Scrapers
 This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
