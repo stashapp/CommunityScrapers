@@ -4,6 +4,18 @@ sceneByURL:
     url:
       - legalporno.com/watch/
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.legalporno.com
+    scraper: performerScraper
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - LegalPorno.py
+      - query
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -28,4 +40,10 @@ xPathScrapers:
           - regex: .+(https[^"]+).+
             with: $1
 
+  performerScraper:
+    performer:
+      Name: //h2
+      Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
+      Image:
+        selector: //div[@class='model--avatar']//img/@src
 # Last Updated May 24, 2020
