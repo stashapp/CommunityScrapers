@@ -15,6 +15,12 @@ performerByURL:
       - julesjordan.com/trial/models/
     scraper: performerScraper
 
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/trial/dvds/
+    scraper: movieScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -71,5 +77,20 @@ xPathScrapers:
           - feetToCm: true
       Image:
         selector: //img[contains(@class,'model_bio_thumb')]/@src0_3x
+
+  movieScraper:
+    movie:
+      Name: //span[@class="title_bar_hilite"]/text()
+      Synopsis:
+        selector: //div[@class="dvd_extra_fields"]/div/text()[not(contains(.,"Studio"))]
+        concat: " "
+        postProcess:
+          - replace:
+            - regex: "Description:"
+              with:
+      Studio:
+        Name: //span[@class="update_date"]/text()[contains(.,"Studio")]/following-sibling::a/text()
+      FrontImage: //div[@class="front"]/a/img/@src0_3x
+      BackImage: //div[@class="back"]/a/img/@src0_3x
 
 # Last Updated May 20, 2020
