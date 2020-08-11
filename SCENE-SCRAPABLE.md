@@ -254,7 +254,7 @@ massage-parlor.com|GammaEntertainment.yml
 massagebait.com|AMAMultimedia.yml
 men.com|RealityKings.yml
 menpov.com|AMAMultimedia.yml
-metadataapi.net|pornDB.yml
+metadataapi.net|ThePornDB.yml
 milehighmedia.com|RealityKings.yml
 milfhunter.com|RealityKings.yml
 milfvr.com|MilfVR.yml
