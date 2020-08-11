@@ -4,10 +4,14 @@ This list is meant to keep track of which sites are already supported by existin
 Supported Site|Scraper
 ------------- | -------------
 1000facials.com|GammaEntertainment.yml
+18eighteen.com|TheScoreGroup.yml
 18vr.com|BaDoink.yml
 1by-day.com|DDFNetwork.yml
 21naturals.com|GammaEntertainment.yml
 21sextreme.com|GammaEntertainment.yml
+40somethingmag.com|TheScoreGroup.yml
+50plusmilfs.com|TheScoreGroup.yml
+60plusmilfs.com|TheScoreGroup.yml
 8thstreetlatinas.com|RealityKings.yml
 abuseme.com|AbuseMe.yml
 activeduty.com|GammaEntertainment.yml
@@ -242,6 +246,7 @@ kink.com|Kink.yml
 kinkvr.com|BaDoink.yml
 lanesisters.com|GammaEntertainment.yml
 legalporno.com|LegalPorno.yml
+legsex.com|TheScoreGroup.yml
 lesbea.com|RealityKings.yml
 lesbianass.com|Hustler.yml
 lesbianfactor.com|GammaEntertainment.yml
@@ -339,6 +344,7 @@ pimp.xxx|trafficpimps.yml
 playboy.tv|PlayboyTV.yml
 porngoespro.com|Spizoo.yml
 pornhub.com|Pornhub.yml
+pornmegaload.com|TheScoreGroup.yml
 pornpros.com|AMAMultimedia.yml
 pornstarhardcore.com|Hustler.yml
 pornstartease.com|Spizoo.yml
@@ -369,7 +375,7 @@ rk.com|RealityKings.yml
 roccosiffredi.com|GammaEntertainment.yml
 roundandbrown.com|RealityKings.yml
 scarybigdicks.com|Hustler.yml
-scoreland.com|scoreland.yml
+scoreland.com|TheScoreGroup.yml
 seancody.com|RealityKings.yml
 seductive18.com|Teencoreclub.yml
 seemysextapes.com|Hustler.yml
@@ -483,6 +489,7 @@ xart.xxx|Xartxxx.yml
 xcoreclub.com|Teencoreclub.yml
 xempire.com|GammaEntertainment.yml
 xhamster.com|Xhamster.yml
+xlgirls.com|TheScoreGroup.yml
 xnxx.com|Xnxx.yml
 xtube.com|Xtube.yml
 xvideos.com|Xvideos.yml
