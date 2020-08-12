@@ -35,7 +35,11 @@ jsonScrapers:
       Gender: $extras.gender
       Birthdate: $extras.birthday
       Ethnicity: $extras.ethnicity
-      Height: $extras.height
+      Height:
+        selector: $extras.height
+        replace:
+          - regex: cm
+            with:
       Measurements: $extras.measurements
       Tattoos: $extras.tattoos
       Piercings: $extras.piercings
@@ -74,3 +78,4 @@ jsonScrapers:
         Name: $data.site.name
       Tags:
         Name: $data.tags.#.tag
+#Last Updated August 12, 2020
