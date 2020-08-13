@@ -366,6 +366,7 @@ publicpickups.com|RealityKings.yml
 puffynetwork.com|Puffynetwork.yml
 puremature.com|AMAMultimedia.yml
 puretaboo.com|PureTaboo.yml
+r18.com|r18.yml
 ragingstallion.com|GammaEntertainment.yml
 ravenswallowzxxx.com|Andomark.yml
 rawattack.com|RawAttack.yml
