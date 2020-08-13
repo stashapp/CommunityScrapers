@@ -17,6 +17,7 @@ abuseme.com|AbuseMe.yml
 activeduty.com|GammaEntertainment.yml
 aebn.com|AEBN.yml
 alettaoceanempire.com|GammaEntertainment.yml
+aliciasgoddesses.com|Andomark.yml
 allblackx.com|GammaEntertainment.yml
 allgirlmassage.com|GammaEntertainment.yml
 allherluv.com|AllHerLuv.yml
@@ -33,6 +34,7 @@ analyzedgirls.com|Teencoreclub.yml
 angelawhite.com|AngelaWhite.yml
 anilos.com|Nubiles.yml
 archangelvideo|ArchAngelVideo.yml
+ariellynn.com|Andomark.yml
 ashleyfires.com|GammaEntertainment.yml
 ashlynnbrooke.com|NewSensationsNetworkSites.yml
 asian18.com|Hustler.yml
@@ -364,13 +366,14 @@ puffynetwork.com|Puffynetwork.yml
 puremature.com|AMAMultimedia.yml
 puretaboo.com|PureTaboo.yml
 ragingstallion.com|GammaEntertainment.yml
+ravenswallowzxxx.com|Andomark.yml
 rawattack.com|RawAttack.yml
 realityjunkies.com|RealityKings.yml
 realitykings.com|RealityKings.yml
 realsensual.com|RealSensual.yml
 realvr.com|BaDoink.yml
 recklessinmiami.com|RealityKings.yml
-reidmylips.elxcomplete.com|reidmylips.yml
+reidmylips.elxcomplete.com|Andomark.yml
 rk.com|RealityKings.yml
 roccosiffredi.com|GammaEntertainment.yml
 roundandbrown.com|RealityKings.yml
@@ -388,6 +391,7 @@ sexyhub.com|RealityKings.yml
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml
 shegotsix.com|Teencoreclub.yml
 shemaleidol.com|GammaEntertainment.yml
+sheseducedme.com|Andomark.yml
 shoplyfter.com|PaperStreetMedia.yml
 shoplyftermylf.com|PaperStreetMedia.yml
 showerbait.com|AMAMultimedia.yml
