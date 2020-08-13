@@ -1,0 +1,36 @@
+name: r18
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - r18.com/videos
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //section[@class="clearfix"]/div[@class="product-details"]
+    scene:
+      Title: $sceneinfo/dl[2]/dd[3]/text()
+      Date:
+        selector: $sceneinfo/dl[1]/dd[@itemprop="dateCreated"]/text()
+        postProcess:
+         - replace: 
+             - regex: \.
+               with: ""
+         - parseDate: Jan 02, 2006
+      Details: //div[@class="col01"]/h1/cite[@itemprop="name"]/text()
+      Tags:
+        Name: //div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a
+      Performers:
+        Name: 
+          selector: //div[@data-type="actress-list"]/span/a/span/text()
+          # To have same name as JavLibrary
+          #postProcess:
+          #  - replace: 
+          #      - regex: (.+)(\s)(.+)
+          #        with: $3$2$1
+      Studio:
+        Name:
+            selector: $sceneinfo/dl[1]/dd[@itemprop="productionCompany"]/a/text()
+      Image: //meta[@itemprop="thumbnailUrl"]/@content
+
+# Last Updated August 13, 2020
