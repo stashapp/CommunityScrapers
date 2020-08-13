@@ -1,0 +1,33 @@
+name: "Andomark"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - reidmylips.elxcomplete.com/updates/
+      - sheseducedme.com/updates
+      - aliciasgoddesses.com/updates
+      - ariellynn.com/tour/
+      - ravenswallowzxxx.com/updates/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //span[@class="update_title"]/text()|//title/text()
+      Date:
+        selector: //span[@class="availdate"]/text()[1]|//span[@class="update_date"]/text()
+        postProcess:
+            - parseDate: 01/02/2006
+      Details: //span[@class="latest_update_description"]/text()
+      Performers:
+        Name: //span[@class="tour_update_models"]/text()|//span[@class="tour_update_models"]/a/text()
+      Tags:
+        Name: //span[@class="update_tags"]/a/text()|//span[@class="tour_update_tags"]/a/text()
+      Studio:
+        Name: 
+            selector: //link[@rel="canonical"]/@href
+            postProcess:
+                - replace: 
+                    - regex: (.+\/\/)(.+?)(\..+)
+                      with: $2
+      Image: //meta[@property="og:image"]/@content
+
+# Last Updated August 13, 2020
