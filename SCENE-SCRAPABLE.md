@@ -344,6 +344,7 @@ petiteballerinasfucked.com|Nubiles.yml
 petitehdporn.com|Nubiles.yml
 pimp.xxx|trafficpimps.yml
 playboy.tv|PlayboyTV.yml
+plumperpass.com|PlumperPass.yml
 porngoespro.com|Spizoo.yml
 pornhub.com|Pornhub.yml
 pornmegaload.com|TheScoreGroup.yml
