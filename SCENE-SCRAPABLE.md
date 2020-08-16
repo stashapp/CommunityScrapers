@@ -288,6 +288,7 @@ momsbangteens.com|RealityKings.yml
 momslickteens.com|RealityKings.yml
 momsteachsex.com|Nubiles.yml
 moneytalks.com|RealityKings.yml
+mormongirlz.com|Mormongirlz.yml
 motherfuckerxxx.com|GammaEntertainment.yml
 mrluckypov.com|Spizoo.yml
 mrpov.com|FinishesTheJob.yml
