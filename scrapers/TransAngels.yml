@@ -1,0 +1,36 @@
+name: "TransAngels"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - transangels.com/scene/
+      - https://www.transangels.com/scene/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $description_and_categories: //*[@id="root"]/div[1]/div[2]/div/div[2]/div[1]/div/section/div[1]/div[2]/div/div/div
+    scene:
+      Title: //*[@id="root"]/div[1]/div[2]/div/div[2]/div[1]/div/section/div[1]/div[1]/h1
+      Details:
+        selector: $description_and_categories/span[2]
+        replace: 
+           - regex: .*[:]
+             with:
+      Date:
+        selector: $description_and_categories/span[3]
+        replace: 
+           - regex: .*[:]
+             with:
+        parseDate: January 2, 2006
+      Performers:
+        Name: //*[@id="root"]/div[1]/div[2]/div/div[2]/div[1]/div/section/div[1]/div[1]/div/*/a
+      Tags:
+        Name: $description_and_categories/span[1]/a/text()
+      Image:
+        selector: //img[@class="tg5e7m-1 lSdde"]/@src
+        replace:
+          - regex: ^.+(https[^\"]+).+$
+            with: $1
+      Studio: 
+        Name:
+          fixed: TransAngels

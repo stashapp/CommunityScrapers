@@ -1,0 +1,27 @@
+name: "TransSensual"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - transsensual.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="wxt7nk-4 fSsARZ"]/text()
+# do /html/head/title if you want title with "TS Porn | Transsensual" added after it.
+      Details: //div[@class="tjb798-2 flgKJM"]/span[2]/div[2]/text()
+      Date:
+        selector: //div[@class="tjb798-2 flgKJM"]/span[3]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
+      Studio:
+        Name: //meta[@name="dti.network"]/@content
+      Tags:
+        Name:
+          selector: //div[@class="tjb798-2 flgKJM"]/span[1]/a/text()
+      Image:
+        selector: //img[contains(@class, "lSdde")]/@src
+
+# Last Updated August 13, 2020

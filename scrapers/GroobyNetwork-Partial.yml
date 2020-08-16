@@ -1,0 +1,63 @@
+name: "GroobyNetwork-Partial"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+    # Gone through list at: grooby.com/about/websites/
+      - asiantgirl.com #works
+      # - asianamericantgirls.com
+      - blacktgirlshardcore.com #works
+      - black-tgirls.com #works
+      - bobstgirls.com #works
+      # - braziltgirls.xxx
+      # - brazilian-transsexuals.com
+      # - canada-tgirl.com
+      # - euro-tgirls.com
+      # - femout.xxx #partially works
+      - femoutsex.xxx #works, and same scene from 'femout.xxx' works fully with this
+      - franks-tgirlworld.com #works
+      # - grooby-archives.com #partially works, date and perhaps performer don't
+      # - grooby.club
+      # - groobydvd.com
+      - groobygirls.com #works
+      # - groobyvr.com
+      # - hazel-tucker.com
+      # - krissy4u.com
+      - ladyboy-ladyboy.com #works
+      - ladyboy.xxx #works
+      # - russian-tgirls.com 
+      # - tendollartgirls.com
+      # - tgirl40.com
+      # - tgirlbbw.com
+      # - tgirljapan.com
+      # - tgirljapanhardcore.com
+      # - tgirlpornstar.com
+      # - tgirlpostop.com
+      - tgirlsex.xxx #works
+      # - tgirlsfuck.com 
+      # - tgirls.porn #performer and image works
+      - tgirls.xxx #works
+      # - transexdomination.com
+      - transexpov.com #works
+      - transgasm.com #works
+      # - ts-castingcouch.com
+      # - uk-tgirls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //p[@class="trailertitle"]/text() # done
+      Date:
+        selector: //div[@class="setdesc"]/text() # done
+        parseDate: January 2, 2006
+      Details: //div[@class="trailerpage_info"]/p[2]/text() # done
+      Performers:
+        Name: //div[@class="setdesc"]//a/text() # done
+      Studio:
+        Name: //meta[@name="author"]/@content # done
+      Image:
+        selector: //meta[@property="og:image"]/@content # done
+        
+# Last Updated August 16, 2020.
+# IMO, newer and more 'popular' sites seem to work with this.
+# So 'older' sites need another joint scraper, or perhaps even their own seperate ones.
+# Some scenes exist on multiple sites, so you can try find it on a site that works.

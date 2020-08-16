@@ -1,0 +1,19 @@
+name: trans500
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - trans500.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="col-sm-12"]/h2
+      Details: //p[@class="description"]
+      Image:
+        selector: //video[@id="my-video"]/@poster
+        replace:
+          - regex: ^
+            with: "http://www.trans500.com"
+      Studio: 
+        Name: //p[@class="pull-right"]/b/text()

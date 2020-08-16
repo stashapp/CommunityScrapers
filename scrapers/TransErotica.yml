@@ -1,0 +1,25 @@
+name: "TransErotica"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - transerotica.com/
+      - https://tour.transerotica.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="title_bar"]/text()
+      Details: //div[@class="updateDetails"]/p[2]/text()
+      Date:
+        selector: //div[@class="updateDetails"]/p[1]/span[1]
+        parseDate: 01/02/2006
+      Performers:
+        Name: /html/body/div[2]/div[3]/p[3]/span/a
+      Image: 
+        selector: //div[@id="player"]/video/@poster
+      Tags:
+        Name:
+          selector: //meta[@name="keywords"]/@content
+          split: ","
+
+# Last Updated August 16, 2020

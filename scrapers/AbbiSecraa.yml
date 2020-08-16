@@ -1,0 +1,21 @@
+name: AbbiSecraa
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - abbisecraa.com
+      - abbisecraa.com/blog/movie/item/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //*[@id="t3-mainbody"]/div/div
+    scene:
+      Title: //*[@id="system"]/article/header/h1
+      Date:
+        selector: //*[@id="system"]/article/header/p/text()
+        replace: 
+           - regex: .*[,]|\.
+             with: 
+        parseDate: 02 January 2006
+      Details:
+        selector: //*[@id="system"]/article/div[3]/div/div[1]/div
