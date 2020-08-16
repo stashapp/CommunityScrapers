@@ -349,7 +349,7 @@ propertysex.com|RealityKings.yml
 publicagent.com|RealityKings.yml
 publicpickups.com|RealityKings.yml
 puffynetwork.com|Puffynetwork.yml
-pure-ts.com|TransSensual.yml
+pure-ts.com|Pure-TS.yml
 puremature.com|AMAMultimedia.yml
 puretaboo.com|PureTaboo.yml
 ragingstallion.com|GammaEntertainment.yml
