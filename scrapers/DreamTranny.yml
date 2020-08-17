@@ -1,0 +1,30 @@
+name: "DreamTranny"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - dreamtranny.com/
+      - https://dreamtranny.com/update/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $updateInfo: /html/body/section[1]/article/div[2]
+    scene:
+      Title: $updateInfo/h2
+      Details:
+        selector: $updateInfo/div[2]/p/text()
+      Date:
+        selector: $updateInfo/div[3]/span[1]/span[2]
+        parseDate: Jan 2, 2006
+      Performers:
+        Name: /html/body/section[1]/article/div[2]/div[1]/a/text()
+      Image:
+        selector: /html/body/section[1]/article/div[1]/div[1]/a/img/@src
+        replace:
+          - regex: ^
+            with: "https://dreamtranny.com"
+      Studio: 
+        Name:
+          fixed: DreamTranny
+
+# Last Updated July 25, 2020

@@ -53,6 +53,7 @@ bbcparadise.com|PaperStreetMedia.yml
 bbcpie.com|AMAMultimedia.yml
 beaverhunt.com|Hustler.yml
 bellesafilms.com|RealityKings.yml
+bigbootytgirls.com|BigBootyTGirls.yml
 bigfatcreampie.com|GammaEntertainment.yml
 bignaturals.com|RealityKings.yml
 blacked.com|vixenNetwork.yml
@@ -106,10 +107,10 @@ czechspy.com|Czechav.yml
 czechstreets.com|Czechav.yml
 czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
-czechwifeswap.com|Czechav.yml
 czechvr.com|CzechVR.yml
 czechvrcasting.com|CzechVR.yml
 czechvrfetish.com|CzechVR.yml
+czechwifeswap.com|Czechav.yml
 dadcrush.com|PaperStreetMedia.yml
 daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
@@ -135,6 +136,7 @@ doubleteamedteens.com|Teencoreclub.yml
 downtofuckdating.com|Analized.yml
 dpfanatics.com|GammaEntertainment.yml
 dreamteenshd.com|Teencoreclub.yml
+dreamtranny.com|DreamTranny.yml
 drilledchicks.com|Teencoreclub.yml
 driverxxx.com|Nubiles.yml
 dtfsluts.com|Analized.yml
@@ -412,7 +414,10 @@ titworld.com|Hustler.yml
 tokyo-hot.com|Tokyohot.yml
 tonightsgirlfriend.com|Tonightsgirlfriend.yml
 toomanytrannies.com|Hustler.yml
+trans500.com|Trans500.yml
+transangels.com|TransAngels.yml
 transbella.com|LetsDoeIt.yml
+transerotica.com|TransErotica.yml
 transsensual.com|RealityKings.yml
 transsexualangel.com|GammaEntertainment.yml
 transsexualroadtrip.com|GammaEntertainment.yml
