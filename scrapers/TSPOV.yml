@@ -1,0 +1,34 @@
+name: "TS POV"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tspov.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: /html/body/section[1]/div[3]/div[1]/h3
+      Details: /html/body/section[1]/div[3]/div[2]/div/p
+      Date:
+        selector: /html/body/section[1]/div[3]/div[2]/h4[1]
+        replace: 
+           - regex: .*[|]
+             with: 
+        parseDate: 2006-01-02
+      Performers:
+        Name: /html/body/section[1]/div[3]/div[2]/ul/li/a/span[2]
+      Studio:
+        Name: //meta[@name="author"]/@content
+      Tags:
+        Name:
+          selector: //meta[@name="keywords"]/@content
+          split: ","
+      Image:
+        selector: //script[contains(.,'jwplayer("jwbox").setup')]/text()
+        replace:
+          - regex: (.+image:\s+")(.+jpg)(.+)
+            with: $2
+          - regex: ^
+            with: "http://www.tspov.com"
+
+# Last Updated August 13, 2020

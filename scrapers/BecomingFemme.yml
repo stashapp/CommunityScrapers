@@ -1,0 +1,32 @@
+name: "BecomingFemme"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - becomingfemme.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: /html/body/section[1]/div[3]/div[1]/h3
+      Details: /html/body/section[1]/div[3]/div[2]/div/p
+      Date:
+        selector: /html/body/section[1]/div[3]/div[2]/h4[1]
+        replace: 
+           - regex: .*[|]
+             with: 
+        parseDate: 2006-01-02
+      Performers:
+        Name: /html/body/section[1]/div[3]/div[2]/ul/li/a/span[2]
+      Studio:
+        Name: //meta[@name="author"]/@content
+      Tags:
+        Name:
+          selector: //meta[@name="keywords"]/@content
+          split: ","
+      Image:
+        selector: //*[@id="set-target-171"]/@src
+        replace:
+          - regex: ^
+            with: "http://www.becomingfemme.com"
+
+# Last Updated August 13, 2020

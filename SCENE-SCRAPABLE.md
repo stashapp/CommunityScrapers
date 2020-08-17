@@ -52,6 +52,7 @@ battlebang.com|Hustler.yml
 bbcparadise.com|PaperStreetMedia.yml
 bbcpie.com|AMAMultimedia.yml
 beaverhunt.com|Hustler.yml
+becomingfemme.com|BecomingFemme.yml
 bellesafilms.com|RealityKings.yml
 bigfatcreampie.com|GammaEntertainment.yml
 bignaturals.com|RealityKings.yml
@@ -106,10 +107,10 @@ czechspy.com|Czechav.yml
 czechstreets.com|Czechav.yml
 czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
-czechwifeswap.com|Czechav.yml
 czechvr.com|CzechVR.yml
 czechvrcasting.com|CzechVR.yml
 czechvrfetish.com|CzechVR.yml
+czechwifeswap.com|Czechav.yml
 dadcrush.com|PaperStreetMedia.yml
 daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
@@ -337,6 +338,7 @@ propertysex.com|RealityKings.yml
 publicagent.com|RealityKings.yml
 publicpickups.com|RealityKings.yml
 puffynetwork.com|Puffynetwork.yml
+pure-ts.com|Pure-TS.yml
 puremature.com|AMAMultimedia.yml
 puretaboo.com|PureTaboo.yml
 ragingstallion.com|GammaEntertainment.yml
@@ -420,6 +422,7 @@ trickyspa.com|GammaEntertainment.yml
 tryteens.com|Teencoreclub.yml
 tsfactor.com|GammaEntertainment.yml
 tsplayground.com|GammaEntertainment.yml
+tspov.com|TSPOV.yml
 tushy.com|vixenNetwork.yml
 tushyraw.com|vixenNetwork.yml
 twistedvisual.com|Analized.yml
