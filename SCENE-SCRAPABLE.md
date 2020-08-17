@@ -413,7 +413,7 @@ tokyo-hot.com|Tokyohot.yml
 tonightsgirlfriend.com|Tonightsgirlfriend.yml
 toomanytrannies.com|Hustler.yml
 transbella.com|LetsDoeIt.yml
-transsensual.com|RealityKings.yml
+transsensual.com|TransSensual.yml
 transsexualangel.com|GammaEntertainment.yml
 transsexualroadtrip.com|GammaEntertainment.yml
 trickyspa.com|GammaEntertainment.yml
