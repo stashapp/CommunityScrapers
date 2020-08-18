@@ -1,7 +1,7 @@
 name: puffynetwork
 sceneByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - puffynetwork.com
     scraper: sceneScraper
 xPathScrapers:
@@ -9,32 +9,30 @@ xPathScrapers:
     common:
       $performer: //dl/dd/a
     scene:
-      Title: 
+      Title:
         selector: //h2[@class="title"]/span/text()
-        replace:
-          - regex: ^(.*)[—]\s+
-            with:
+        postProcess:
+          - replace:
+              - regex: ^(.*)[—]\s+
+                with:
       Date:
         selector: //dl/dt[contains(text(),"Released on:")]/span/text()
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Details: //div[@class="show_more"]/text()[1]
-      Tags: 
+      Tags:
         Name: //p[@class="tags"]/a/text()
       Performers:
         Name: $performer/text()
       Studio:
-        Name: 
+        Name:
           selector: //h2[@class="title"]//div[contains(text(),"Site:")]/a/text()
-          replace:
-            - regex: Weliketosuck
-              with: We Like To Suck
-            - regex: Wetandpuffy
-              with: Wet And Puffy
-            - regex: Wetandpissy
-              with: Wet And Pissy
-            - regex: Eurobabefacials
-              with: Euro Babe Facials
-            - regex: Simplyanal
-              with: Simply Anal
+          postProcess:
+            - map:
+                Weliketosuck: We Like To Suck
+                Wetandpuffy: Wet And Puffy
+                Wetandpissy: Wet And Pissy
+                Eurobabefacials: Euro Babe Facials
+                Simplyanal: Simply Anal
       Image: //video[@id="video"]/@poster
-# Last Updated June 22, 2020
+# Last Updated August 06, 2020
