@@ -26,14 +26,24 @@ For scene scrapers you have to edit the url of the scene. Once you populate that
 
 Clicking on that button brings up the screne scrape popup that lets you select which fields to update.
 
+## Movie Scrapers
+This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
+
+Supported Site|Scraper
+------------- | -------------
+evilangel.com|GammaEntertainment.yml
+julesjordan.com|JulesJordan.yml
+
 ## Performer Scrapers
 This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
 
 Supported Site|Scraper
 ------------- | -------------
 babepedia.com|Babepedia.yml
+evilangel.com|GammaEntertainment.yml
 freeones.xxx|FreeonesCommunity.yml
 iafd.com|Iafd.yml
+julesjordan.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
 pornhub.com|Pornhub.yml
 sexvr.com|SexVR.yml
