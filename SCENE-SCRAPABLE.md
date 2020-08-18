@@ -332,6 +332,7 @@ povthis.com|GammaEntertainment.yml
 prettydirty.com|GammaEntertainment.yml
 pridestudios.com|GammaEntertainment.yml
 princesscum.com|Nubiles.yml
+private.com|Private.yml
 producersfun.com|ProducersFun.yml
 propertysex.com|RealityKings.yml
 publicagent.com|RealityKings.yml
