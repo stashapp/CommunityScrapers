@@ -15,18 +15,18 @@ xPathScrapers:
       $content: //section[@class="video-description-and-tags clearfix"]
     scene:
       Title:
-        selector: //section[@class="video-description-and-tags clearfix"]//ul[@class="scene-models-list"]/preceding-sibling::h1/text()
+        selector: $content//ul[@class="scene-models-list"]/preceding-sibling::h1/text()
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
           - parseDate: 01/02/2006
       Details: $content//p[@id="description-section"]
       Tags:
-        Name: //section[@class="video-description-and-tags clearfix"]//ul[@class="scene-tags"]/li/a/text()
+        Name: $content//ul[@class="scene-tags"]/li/a/text()
       Performers:
         Name: $content//ul[@class="scene-models-list"]//a/text()
       Studio:
-        Name: //section[@class="video-description-and-tags clearfix"]//span[@class="title-site"]/text()
+        Name: $content//span[@class="title-site"]/text()
         #fixed: Private
       Image: //meta[@property="og:image"]/@content
   movieScraper:
