@@ -1,0 +1,31 @@
+name: timtales
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - timtales.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="text"]/h1/text()
+      Date:
+        selector: //p[@class="date"]/text()
+        postProcess:
+          - replace:
+              - regex: '[^R]*$'
+                with: ""
+              - regex: " – R"
+                with: ""
+          - parseDate: January 02, 2006
+      Details: //p[@class="bodytext"]/text()
+      Performers:
+        Name: 
+          selector: //div[@class='text']//p[@class='categories'][contains(text(),'Men:')]/a
+      Tags:
+        Name: 
+          selector: //div[@class='text']//p[@class='categories'][contains(text(),'Categories:')]/a
+      Image:
+        selector: //*[@class='video player no-volume play-button']/@style
+        replace:
+          - regex: .+(https[^')]+).+
+            with: $1
