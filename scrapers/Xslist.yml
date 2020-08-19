@@ -41,15 +41,15 @@ xPathScrapers:
             - regex: "cm"
               with: ""
       Measurements: 
-        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and position()=2]
+        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and position()=3]
         postProcess:
           - replace:
             - regex: (Measurements:\s)(.+)
               with: $2
-            - regex: "/"
+            - regex: \s+\/\s+
               with: "-"
       CareerLength: 
-        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and position()=4]
+        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and position()=7]
         postProcess:
           - replace:
             - regex: (.+)(\d{4})
