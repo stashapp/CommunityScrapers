@@ -1,0 +1,31 @@
+name: himerostv
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - himeros.tv
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='scene-title']/h1/text()
+      Date:
+        selector: //div[@class='scene-date']/text()
+        postProcess:
+          - replace:
+              - regex: "Added "
+                with: ""
+          - parseDate: 01/02/2006
+      Details: //div[@class='scene-description']/text()
+      Performers:
+        Name: 
+          selector: //div[@class='scene-sidebar']//li//a
+      Tags:
+        Name: 
+          selector: //div[@class='scene-tags']//ul//a
+      Image:
+        selector: //div[@class='mejs-poster mejs-layer']//img/@src
+        replace:
+          - regex: ^
+            with: "https://himeros.tv"
+          - regex: "-1x.jpg"
+            with: "-3x.jpg"
