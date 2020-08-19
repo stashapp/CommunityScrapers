@@ -137,6 +137,7 @@ dirtycosplay.com|LetsDoeIt.yml
 dogfartnetwork.com|DogFart.yml
 doghousedigital.com|RealityKings.yml
 dontbreakme.com|RealityKings.yml
+dorcelclub.com|DorcelClub.yml
 doubleteamedteens.com|Teencoreclub.yml
 downtofuckdating.com|Analized.yml
 dpfanatics.com|GammaEntertainment.yml

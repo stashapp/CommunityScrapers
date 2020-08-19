@@ -55,7 +55,12 @@ xPathScrapers:
               Black: black
               Latin: hispanic
       Country: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Birthplace']]/a/text()
-      EyeColor: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Eye color:']]/text()
+      EyeColor:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Eye color:']]
+        postProcess:
+          - replace:
+            - regex: "Eye color: "
+              with:
       Height: 
         selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Height:']]/text()
         postProcess:
@@ -65,7 +70,15 @@ xPathScrapers:
             - regex:  c\D+
               with: ""
       Measurements: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Measurements:']]/text()
-      FakeTits: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Boobs:']]/text()
+      FakeTits:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Boobs:']]
+        postProcess:
+          - replace:
+            - regex: "Boobs: "
+              with: ""
+          - map:
+              Real/Natural: "No"
+              Fake/Enhanced: "Yes"
       CareerLength: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Years active:']]/text() 
       Aliases: 
         selector: //div[@id='bioarea']//h2/text()
@@ -83,4 +96,4 @@ xPathScrapers:
               with: /images/logo.png
             - regex: ^
               with: https://www.babepedia.com
-#Last Updated August 9, 2020
+#Last Updated August 17, 2020
