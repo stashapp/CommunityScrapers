@@ -23,7 +23,7 @@ xPathScrapers:
         selector: //div[@id="layout"]/div/h2[1]/text()
         postProcess:
           - replace:
-            - regex: (.+\()(.+)(\/.+)
+            - regex: (.+\()(\D\W+)([/)].+)
               with: $2
 
       URL: //head/meta[@property="og:url"]/@content
