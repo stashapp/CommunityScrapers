@@ -17,7 +17,9 @@ xPathScrapers:
               - regex: " – R"
                 with: ""
           - parseDate: January 02, 2006
-      Details: //p[@class="bodytext"]/text()
+      Details:
+        selector: //p[@class="bodytext"]/text()
+        concat: " "
       Performers:
         Name: 
           selector: //div[@class='text']//p[@class='categories'][contains(text(),'Men:')]/a
@@ -26,6 +28,7 @@ xPathScrapers:
           selector: //div[@class='text']//p[@class='categories'][contains(text(),'Categories:')]/a
       Image:
         selector: //*[@class='video player no-volume play-button']/@style
-        replace:
-          - regex: .+(https[^')]+).+
-            with: $1
+        postProcess:
+          - replace:
+              - regex: .+(https[^')]+).+
+                with: $1
