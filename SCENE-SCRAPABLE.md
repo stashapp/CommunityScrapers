@@ -191,6 +191,7 @@ hardcoreyouth.com|Teencoreclub.yml
 hardx.com|GammaEntertainment.yml
 hergape.com|Analized.yml
 heyzo.com|Heyzo.yml
+himeros.tv|HimerosTV.yml
 holed.com|AMAMultimedia.yml
 homemadeanalwhores.com|Analized.yml
 hometowngirls.com|Hustler.yml
@@ -467,4 +468,4 @@ yourmomdoesanal.com|Analized.yml
 yourmomdoesporn.com|Analized.yml
 ztod.com|ZeroTolerance.yml
 
-#Last Updated August 20, 2020
+#Last Updated August 21, 2020
