@@ -30,10 +30,12 @@ xPathScrapers:
         concat: ", "
         postProcess:
           - replace: 
-            - regex: \,\s\w+\s\w+\s\(.+
+            - regex: "(.+)( \\b[a-zA-Z]+\\s\\b[a-zA-Z]+)(.+?)([\\p{Han}\\p{Hiragana}\\p{Katakana}ー]+)(.+)"
+              with: $4, $1
+            - regex: "(\\b.+?|)([\\p{Han}\\p{Hiragana}\\p{Katakana}ー]+)(.+)(Profile)(.+)|(.+)"
+              with: $2$6
+            - regex: ^,|,$
               with: 
-            - regex: (.+\()(\D\W+)([\/)].+)
-              with: $2
       URL: //head/meta[@property="og:url"]/@content
       Birthdate:
         selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Born")]
