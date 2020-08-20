@@ -407,6 +407,7 @@ thetabutales.com|NewSensationsNetworkSites.yml
 thickandbig.com|AMAMultimedia.yml
 thickumz.com|PaperStreetMedia.yml
 throated.com|GammaEntertainment.yml
+timtales.com|TimTales.yml
 tiny4k.com|AMAMultimedia.yml
 tittycreampies.com|GammaEntertainment.yml
 titworld.com|Hustler.yml
@@ -465,3 +466,5 @@ youngthroats.com|Teencoreclub.yml
 yourmomdoesanal.com|Analized.yml
 yourmomdoesporn.com|Analized.yml
 ztod.com|ZeroTolerance.yml
+
+#Last Updated August 20, 2020
