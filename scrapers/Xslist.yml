@@ -6,7 +6,7 @@ performerByName:
 performerByURL:
   - action: scrapeXPath
     url: 
-      - xslist.org/
+      - xslist.org/en/model/
     scraper: performerScraper
 
 xPathScrapers:
@@ -18,22 +18,30 @@ xPathScrapers:
   
   performerScraper:
     performer:
-      Name: //span[@itemprop="name"]/text()
+      Name:
+        selector: //span[@itemprop="name"]/text()
+        # To have same name as JavLibrary so the scraper will found the performer.
+        #postProcess:
+        #  - replace: 
+        #    - regex: (.+)(\s)(.+)
+        #      with: $3$2$1
       Aliases: 
-        selector: //div[@id="layout"]/div/h2[1]/text()
+        selector: //span[@itemprop="additionalName"]/text()|//div[@id="layout"]/div/h2[1]/text()
+        concat: ", "
         postProcess:
-          - replace:
-            - regex: (.+\()(\D\W+)([/)].+)
+          - replace: 
+            - regex: \,\s\w+\s\w+\s\(.+
+              with: 
+            - regex: (.+\()(\D\W+)([\/)].+)
               with: $2
-
       URL: //head/meta[@property="og:url"]/@content
       Birthdate:
-        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and position()=1]
+        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Born")]
         postProcess:
-            - replace:
-                - regex: (Born:\s)(.+)
-                  with: $2
-            - parseDate: January 2, 2006
+          - replace:
+            - regex: (Born:\s)(.+)
+              with: $2
+          - parseDate: January 2, 2006
       Height: 
         selector: //span[@itemprop="height"]/text()[not(contains(.,"n/a"))]
         postProcess:
@@ -41,7 +49,7 @@ xPathScrapers:
             - regex: "cm"
               with: ""
       Measurements: 
-        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and position()=3]
+        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Measurements")]
         postProcess:
           - replace:
             - regex: (Measurements:\s)(.+)
@@ -49,7 +57,7 @@ xPathScrapers:
             - regex: \s+\/\s+
               with: "-"
       CareerLength: 
-        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and position()=7]
+        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"AV Activity")]
         postProcess:
           - replace:
             - regex: (.+)(\d{4})
@@ -61,5 +69,5 @@ xPathScrapers:
         fixed: "Japan"
       Gender: 
         fixed: "Female"
-        
-#Last Updated August 19, 2020
+
+#Last Updated August 20, 2020
