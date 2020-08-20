@@ -18,7 +18,7 @@ xPathScrapers:
                 with: ""
           - parseDate: January 02, 2006
       Details:
-        selector: //p[@class="bodytext"]/text()
+        selector: //div[@class='text']//p[@class='bodytext']/text()
         concat: " "
       Performers:
         Name: 
