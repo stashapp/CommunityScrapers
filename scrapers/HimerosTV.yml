@@ -7,27 +7,28 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class='scene-title']/h1/text()
+      Title: //h1[@class='highlight']/text()
       Date:
-        selector: //div[@class='scene-date']/text()
+        selector: //div[@class='update-info-row text-gray']/text() [2]
         postProcess:
           - replace:
-              - regex: "Added "
+              - regex: '.{2}$'
                 with: ""
-          - parseDate: 01/02/2006
+          - parseDate: January 2, 2006
       Details: 
-        selector: //div[@class='scene-description']//text()
+        selector: //div[@class='update-info-block']/div[@class='update-info-block'][1]//text()
         concat: " "
       Performers:
         Name: 
-          selector: //div[@class='scene-sidebar']//li//a
+          selector: //div[@class='item-title']
       Tags:
         Name: 
-          selector: //div[@class='scene-tags']//ul//a
+          selector: //ul[@class='tags']/li/a/text()
       Image:
-        selector: //div[@class='mejs-poster mejs-layer']//img/@src
-        replace:
-          - regex: ^
-            with: "https://himeros.tv"
-          - regex: "-1x.jpg"
-            with: "-3x.jpg"
+        selector: //div[@class='mejs__mediaelement']/mediaelementwrapper/video/@poster
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://himeros.tv"
+              - regex: "-1x.jpg"
+                with: "-3x.jpg"
