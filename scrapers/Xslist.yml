@@ -20,7 +20,7 @@ xPathScrapers:
     performer:
       Name:
         selector: //span[@itemprop="name"]/text()
-        # To have same name as JavLibrary so the scraper will found the performer.
+        #Uncomment below to convert to Surname Name (JavLibrary compatible)
         #postProcess:
         #  - replace: 
         #    - regex: (.+)(\s)(.+)
