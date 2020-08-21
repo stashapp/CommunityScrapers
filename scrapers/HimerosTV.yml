@@ -25,10 +25,12 @@ xPathScrapers:
         Name: 
           selector: //ul[@class='tags']/li/a/text()
       Image:
-        selector: //div[@class='mejs__mediaelement']/mediaelementwrapper/video/@poster
+        selector: //script[contains(text(),'hidden_fake_trailer')]/text()
         postProcess:
           - replace:
-              - regex: ^
-                with: "https://himeros.tv"
+              - regex: .+(?:poster=")([^"]*).+
+                with: https://himeros.tv$1
               - regex: "-1x.jpg"
                 with: "-3x.jpg"
+
+#Last Updated August 21, 2020
