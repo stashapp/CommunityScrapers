@@ -49,6 +49,7 @@ julesjordan.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
 pornhub.com|Pornhub.yml
 sexvr.com|SexVR.yml
+thenude.com|TheNude.yml
 xslist.org|Xslist.yml
 ## Contributing
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/wiki/Scraping-configuration) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
