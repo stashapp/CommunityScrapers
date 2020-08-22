@@ -106,10 +106,10 @@ czechspy.com|Czechav.yml
 czechstreets.com|Czechav.yml
 czechsupermodels.com|Czechav.yml
 czechtaxi.com|Czechav.yml
-czechwifeswap.com|Czechav.yml
 czechvr.com|CzechVR.yml
 czechvrcasting.com|CzechVR.yml
 czechvrfetish.com|CzechVR.yml
+czechwifeswap.com|Czechav.yml
 dadcrush.com|PaperStreetMedia.yml
 daddygetslucky.com|Hustler.yml
 daddyslilangel.com|Nubiles.yml
@@ -170,6 +170,7 @@ freshouttahighschool.com|NewSensationsNetworkSites.yml
 fuckfiesta.com|Hustler.yml
 fuckingawesome.com|FuckingAwesome.yml
 fuckinghardcore.com|Hustler.yml
+g46e.com|javlibrary.yml
 gapingangels.com|GammaEntertainment.yml
 gaycastings.com|AMAMultimedia.yml
 gaycreeps.com|AMAMultimedia.yml
@@ -243,6 +244,7 @@ littleasians.com|PaperStreetMedia.yml
 littlehellcat.com|Teencoreclub.yml
 lookathernow.com|RealityKings.yml
 lubed.com|AMAMultimedia.yml
+m45e.com|javlibrary.yml
 maketeengape.com|Teencoreclub.yml
 maledigital.com|GammaEntertainment.yml
 mamacitaz.com|LetsDoeIt.yml
@@ -426,6 +428,7 @@ tushy.com|vixenNetwork.yml
 tushyraw.com|vixenNetwork.yml
 twistedvisual.com|Analized.yml
 twistysnetwork.com|RealityKings.yml
+u44r.com|javlibrary.yml
 unlimitedmilfs.com|NewSensationsNetworkSites.yml
 vcaxxx.com|Hustler.yml
 vipissy.com|Vipissy.yml
