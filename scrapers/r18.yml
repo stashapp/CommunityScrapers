@@ -23,7 +23,7 @@ xPathScrapers:
       Performers:
         Name: 
           selector: //div[@data-type="actress-list"]/span/a/span/text()
-          # To have same name as JavLibrary
+          #Uncomment below to convert to Surname Name (JavLibrary compatible)
           #postProcess:
           #  - replace: 
           #      - regex: (.+)(\s)(.+)
