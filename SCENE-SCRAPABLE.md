@@ -187,6 +187,7 @@ girlstryanal.com|GammaEntertainment.yml
 gloryholeswallow.com|GloryHoleSwallow.yml
 grannyghetto.com|GammaEntertainment.yml
 hairyundies.com|GammaEntertainment.yml
+hanime.tv|hanime.yml
 happytugs.com|RealityKings.yml
 hardcoreyouth.com|Teencoreclub.yml
 hardx.com|GammaEntertainment.yml
