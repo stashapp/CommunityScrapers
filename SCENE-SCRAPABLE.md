@@ -206,7 +206,7 @@ hustlaz.com|Hustler.yml|
 hustler.com|Hustler.yml|
 hustlerhd.com|Hustler.yml|
 hustlerparodies.com|Hustler.yml|
-hustlerslesbians.com|Hustler.yml|Lesbians
+hustlerslesbians.com|Hustler.yml|Lesbian
 hustlerstaboo.com|Hustler.yml|
 iafd.com|Iafd.yml|
 iconmale.com|RealityKings.yml|Gay
