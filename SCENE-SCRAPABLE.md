@@ -447,9 +447,9 @@ vrcosplayx.com|BaDoink.yml|VR
 vrhush.com|VRHush.yml|VR
 wankzvr.com|WankzVR.yml|VR
 watchreal.com|Hustler.yml|
-webyoung.com|GammaEntertainment.yml|Lesian
+webyoung.com|GammaEntertainment.yml|Lesbian
 wefuckblackgirls.com|DogFart.yml|
-welivetogether.com|RealityKings.yml|Lesian
+welivetogether.com|RealityKings.yml|Lesbian
 weneednewtalents.com|Teencoreclub.yml|
 wetvr.com|AMAMultimedia.yml|VR
 whiteghetto.com|GammaEntertainment.yml|
