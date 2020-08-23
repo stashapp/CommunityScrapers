@@ -96,7 +96,7 @@ czechgangbang.com|Czechav.yml|
 czechgardenparty.com|Czechav.yml|
 czechharem.com|Czechav.yml|
 czechhomeorgy.com|Czechav.yml|
-czechlesbians.com|Czechav.yml|Lesbians
+czechlesbians.com|Czechav.yml|Lesbian
 czechmassage.com|Czechav.yml|
 czechmegaswingers.com|Czechav.yml|
 czechorgasm.com|Czechav.yml|
