@@ -9,11 +9,11 @@ xPathScrapers:
     scene:
       Title: //h1[@class="tv-title"]/text()
       Date:
-        selector: //div[@class="hvpimbc-item"][1]/div[@class="hvpimbc-text grey--text"]/text()
+        selector: //div[@class="hvpimbc-item"]/div[contains(.,"Release Date")]/../div[@class="hvpimbc-text grey--text"]/text()
         postProcess:
           - parseDate: January 2, 2006
       Details: 
-        selector: //div[@class="mt-3 mb-0 hvpist-description"]/p/text()|//div[@class="mt-3 mb-0 hvpist-description"]/text()
+        selector: //div[@class="mt-3 mb-0 hvpist-description"]//text()
         concat: "\n\n"
       Tags:
         Name: //div[@class="hvpis-text grey--text text--lighten-1"]/a/div
