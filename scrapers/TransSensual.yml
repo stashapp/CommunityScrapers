@@ -2,16 +2,23 @@ name: "TransSensual"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - transsensual.com
+      - transsensual.com/scene
     scraper: sceneScraper
+    
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - transsensual.com/movie
+    scraper: movieScraper
+    
 xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="wxt7nk-4 fSsARZ"]/text()
 # do /html/head/title if you want title with "TS Porn | Transsensual" added after it.
-      Details: //div[@class="tjb798-2 flgKJM"]/span[2]/div[2]/text()
+      Details: //span/div[contains(.,"Description")]/../div[not(contains(.,"Description"))]/text()
       Date:
-        selector: //div[@class="tjb798-2 flgKJM"]/span[3]/text()
+        selector: //span/div[contains(.,"Release Date")]/../text()
         postProcess:
           - parseDate: January 2, 2006
       Performers:
@@ -20,8 +27,37 @@ xPathScrapers:
         Name: //meta[@name="dti.network"]/@content
       Tags:
         Name:
-          selector: //div[@class="tjb798-2 flgKJM"]/span[1]/a/text()
+          selector: //span/div[contains(.,"Categories")]/../a
+          postProcess:
+            - replace:
+              - regex: ","
+                with: ""
       Image:
         selector: //img[contains(@class, "lSdde")]/@src
+        
+  # The movie section is kinda weird. The movies seems like they are made after the scenes.
+  # e.g. they don't seem to have front/back covers, and are basically just a compilation
+  # of some scenes they released with same theme? 
+  # So a movie has date as the earliest released scene, and other scenes have their own.
+  # Description is just name of the 'movie', so gonna go with whole 'desc & cat' as synopsis.
+  # So i'd say movies on TransSensual aren't 'proper'. But here goes:
+  movieScraper:
+    movie:
+      Name: //h2[@class='wxt7nk-4 fSsARZ']/text()
+#      Director: 
+#      Duration: 
+      Aliases: 
+        selector: //div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
+        concat: ", "
+      Date:
+        selector: //span/div[contains(.,"Release Date")]/../text()
+        parseDate: January 2, 2006
+      Synopsis: 
+        selector: //div[@class='tjb798-2 flgKJM']//text()  # just to have something in synopsis
+        concat: " "
+      Studio:
+        Name: //meta[@name="dti.network"]/@content
+      FrontImage: //img[contains(@src, "cover")]/@src
+      BackImage: //img[contains(@src, "cover")]/@src
 
-# Last Updated August 13, 2020
+# Last Updated August 24, 2020
