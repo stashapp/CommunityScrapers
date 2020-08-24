@@ -34,6 +34,7 @@ Supported Site|Scraper
 aebn.com|AEBN.yml
 evilangel.com|GammaEntertainment.yml
 julesjordan.com|JulesJordan.yml
+private.com|Private.yml
 
 ## Performer Scrapers
 This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
@@ -48,6 +49,7 @@ julesjordan.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
 pornhub.com|Pornhub.yml
 sexvr.com|SexVR.yml
-
+thenude.com|TheNude.yml
+xslist.org|Xslist.yml
 ## Contributing
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/wiki/Scraping-configuration) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
