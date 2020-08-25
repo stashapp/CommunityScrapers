@@ -59,4 +59,5 @@ xPathScrapers:
       Gender:
         fixed: Female
       Image:
-        selector: //div[@class='col-md-8 bigmodelpic']/img/@src
+        selector: //div[@class='col-md-8 bigmodelpic']/img/@sr
+#Last Updated August 12, 2020
