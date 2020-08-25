@@ -9,7 +9,12 @@ xPathScrapers:
     scene:
       Title: //meta[@name="og:title"]/@content
       Details: //meta[@name="description"]/@content
-      Image: //meta[@name="og:image"]/@content
+      Image: 
+        selector: //meta[@name="og:image"]/@content
+        postProcess:
+            - replace:
+                - regex: (.+)(\?.+)
+                  with: $1
       Date:
         selector: //span[@class="hidden-xs fa-text-right fa-text-left"]/text()
         replace:
@@ -27,5 +32,5 @@ xPathScrapers:
 driver:
   useCDP: true
   sleep: 5
-
-#Last Updated August 4, 2020
+  
+#Last Updated August 09, 2020

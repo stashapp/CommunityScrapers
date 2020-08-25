@@ -20,18 +20,15 @@ xPathScrapers:
       Image: //img[@class="player-preview"]/@src
       Studio:
         Name:
-          selector: //title/text()
-          replace:
-            - regex: (.*)
-              with: First Anal Quest
+          fixed: First Anal Quest
       Date:
         selector: $title
-        replace:
-          - regex: \s
-            with: +
-          - regex: ^([^-]+-?).+
-            with: http://www.firstanalquest.com/search/?q=$1
-        subScraper:
-          selector: //span[@class="thumb-added"]/text()
-        parseDate: Jan 2, 2006
-# Last Updated June 23, 2020
+        postProcess:
+          - replace:
+              - regex: \s
+                with: +
+              - regex: ^([^-]+-?).+
+                with: http://www.firstanalquest.com/search/?q=$1
+          - subScraper: //span[@class="thumb-added"]/text()
+          - parseDate: Jan 2, 2006
+# Last Updated August 06, 2020
