@@ -1,3 +1,5 @@
+# Should only be used when you want to match a scene using the URL
+# otherwise the ThePornDB.yml one should be preferred as it uses the JSON API 
 name: "PornDB"
 sceneByURL:
   - action: scrapeXPath
