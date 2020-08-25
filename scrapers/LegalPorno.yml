@@ -13,6 +13,7 @@ sceneByFragment:
     action: script
     script:
       - python
+      # use python3 instead if needed
       - LegalPorno.py
       - query
 
@@ -46,4 +47,4 @@ xPathScrapers:
       Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
       Image:
         selector: //div[@class='model--avatar']//img/@src
-# Last Updated May 24, 2020
+# Last Updated August 12, 2020
