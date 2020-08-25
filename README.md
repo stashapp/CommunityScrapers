@@ -26,6 +26,10 @@ For scene scrapers you have to edit the url of the scene. Once you populate that
 
 Clicking on that button brings up the screne scrape popup that lets you select which fields to update.
 
+
+Some scrapers like ThePornDB.yml support the scrape with function so you can you use that instead of adding a url.
+
+
 ## Movie Scrapers
 This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
 
@@ -47,6 +51,7 @@ freeones.xxx|FreeonesCommunity.yml
 iafd.com|Iafd.yml
 julesjordan.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
+metadataapi.net|ThePornDB.yml
 pornhub.com|Pornhub.yml
 sexvr.com|SexVR.yml
 thenude.com|TheNude.yml
