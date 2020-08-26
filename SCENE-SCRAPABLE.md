@@ -53,6 +53,7 @@ battlebang.com|Hustler.yml|
 bbcparadise.com|PaperStreetMedia.yml|
 bbcpie.com|AMAMultimedia.yml|
 beaverhunt.com|Hustler.yml|
+becomingfemme.com|ChristianXXX.yml|Trans
 bellesafilms.com|RealityKings.yml|
 bigfatcreampie.com|GammaEntertainment.yml|
 bignaturals.com|RealityKings.yml|
@@ -183,8 +184,8 @@ girlfaction.com|Analized.yml|
 girlfriendsfilms.com|GammaEntertainment.yml|Lesbian
 girlgirl.com|JulesJordan.yml|Lesbian
 girlsandstuds.com|GammaEntertainment.yml|
-girlsoutwest.com|GirlsOutWest.yml|Lesbian
 girlsgotcream.com|Teencoreclub.yml|
+girlsoutwest.com|GirlsOutWest.yml|Lesbian
 girlstryanal.com|GammaEntertainment.yml|Lesbian
 gloryholeswallow.com|GloryHoleSwallow.yml|
 grannyghetto.com|GammaEntertainment.yml|Granny
@@ -260,8 +261,8 @@ massage-parlor.com|GammaEntertainment.yml|
 massagebait.com|AMAMultimedia.yml|
 men.com|RealityKings.yml|Gay
 menpov.com|AMAMultimedia.yml|Gay
-metadataapi.net|PornDB.yml|
 metadataapi.net (JSON API)|ThePornDB.yml|
+metadataapi.net|PornDB.yml|
 milehighmedia.com|RealityKings.yml|
 milfhunter.com|RealityKings.yml|
 milfvr.com|MilfVR.yml|VR
@@ -346,6 +347,7 @@ propertysex.com|RealityKings.yml|
 publicagent.com|RealityKings.yml|
 publicpickups.com|RealityKings.yml|
 puffynetwork.com|Puffynetwork.yml|
+pure-ts.com|ChristianXXX.yml|Trans
 puremature.com|AMAMultimedia.yml|
 puretaboo.com|PureTaboo.yml|
 ragingstallion.com|GammaEntertainment.yml|Gay
@@ -430,6 +432,7 @@ trickyspa.com|GammaEntertainment.yml|
 tryteens.com|Teencoreclub.yml|
 tsfactor.com|GammaEntertainment.yml|Trans
 tsplayground.com|GammaEntertainment.yml|Trans
+tspov.com.com|ChristianXXX.yml|Trans
 tushy.com|vixenNetwork.yml|
 tushyraw.com|vixenNetwork.yml|
 twistedvisual.com|Analized.yml|
