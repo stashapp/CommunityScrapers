@@ -183,6 +183,7 @@ girlfaction.com|Analized.yml|
 girlfriendsfilms.com|GammaEntertainment.yml|Lesbian
 girlgirl.com|JulesJordan.yml|Lesbian
 girlsandstuds.com|GammaEntertainment.yml|
+girlsoutwest.com|GirlsOutWest.yml|Lesbian
 girlsgotcream.com|Teencoreclub.yml|
 girlstryanal.com|GammaEntertainment.yml|Lesbian
 gloryholeswallow.com|GloryHoleSwallow.yml|
