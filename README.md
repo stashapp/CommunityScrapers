@@ -52,6 +52,7 @@ iafd.com|Iafd.yml
 julesjordan.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
 metadataapi.net|ThePornDB.yml
+modelhub.com|Modelhub.yml
 pornhub.com|Pornhub.yml
 sexvr.com|SexVR.yml
 thenude.com|TheNude.yml
