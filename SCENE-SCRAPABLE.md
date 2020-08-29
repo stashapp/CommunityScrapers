@@ -419,6 +419,7 @@ thetabutales.com|NewSensationsNetworkSites.yml|
 thickandbig.com|AMAMultimedia.yml|
 thickumz.com|PaperStreetMedia.yml|
 throated.com|GammaEntertainment.yml|
+timtales.com|TimTales.yml|Gay
 tiny4k.com|AMAMultimedia.yml|
 tittycreampies.com|GammaEntertainment.yml|
 titworld.com|Hustler.yml|
