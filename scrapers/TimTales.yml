@@ -25,11 +25,19 @@ xPathScrapers:
         parseDate: January 02, 2006
       Details:
         selector: $info/p[@class="bodytext"]/text()
-        concat: " "
+        concat: "\n\n"
       Tags:
         Name: $info/p[@class="categories" and contains(text(), "Categories:")]/a/text()
       Performers:
-        Name: $info/p[@class="categories" and contains(text(), "Men:")]/a/text()
+        Name: 
+          selector: $info/p[@class="categories" and contains(text(), "Men:")]
+          postProcess:
+            - replace:
+               - regex: "Men:"
+                 with: 
+               - regex: (,)\s+
+                 with: $1
+          split: ","
       Image:
         selector: //div[@class="video player no-volume play-button"]/@style
         replace:
@@ -37,10 +45,7 @@ xPathScrapers:
             with: $1
       Studio:
         Name:
-          selector: //title/text()
-          replace:
-            - regex: ^.*\s\|\s(.*)\sby\s.*$
-              with: $1
+          fixed: Timtales
 
   performerScraper:
     performer:
