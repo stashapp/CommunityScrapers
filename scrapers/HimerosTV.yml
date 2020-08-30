@@ -1,0 +1,35 @@
+name: himerostv
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - himeros.tv
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class='highlight']/text()
+      Date:
+        selector: //div[@class='update-info-row text-gray']
+        postProcess:
+          - replace:
+              - regex: (Added:\s)(.+)(\s\|.+)
+                with: $2
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class='update-info-block']/div[@class='update-info-block'][1]//text()
+        concat: "\n\n"
+      Performers:
+        Name:
+          selector: //div[@class='item-title']/a[contains(@href,"/models/")]
+      Tags:
+        Name:
+          selector: //ul[@class='tags']/li/a/text()
+      Image:
+        selector: //script[contains(text(),'hidden_fake_trailer')]/text()
+        postProcess:
+          - replace:
+              - regex: .+(?:poster=")([^"]*).+
+                with: https://himeros.tv$1
+              - regex: "-1x.jpg"
+                with: "-3x.jpg"
+#Last Updated August 29, 2020

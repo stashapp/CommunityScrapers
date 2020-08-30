@@ -196,6 +196,7 @@ hardcoreyouth.com|Teencoreclub.yml|
 hardx.com|GammaEntertainment.yml|
 hergape.com|Analized.yml|
 heyzo.com|Heyzo.yml|JAV Uncensored
+himeros.tv|HimerosTV.yml|Gay
 holed.com|AMAMultimedia.yml|
 homemadeanalwhores.com|Analized.yml|
 hometowngirls.com|Hustler.yml|
