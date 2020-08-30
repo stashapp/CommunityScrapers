@@ -107,6 +107,7 @@ performerByURL:
   - action: scrapeXPath
     url:
       - evilangel.com/en/pornstar/
+      - assholefever.com/en/pornstar/
     scraper: performerScraper
 
 movieByURL:
