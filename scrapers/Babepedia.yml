@@ -69,7 +69,13 @@ xPathScrapers:
               with: ""
             - regex:  c\D+
               with: ""
-      Measurements: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Measurements:']]/text()
+      Measurements:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Measurements:']]/text()|//div[@id='bioarea']//ul/li[span[@class='label'][text()='Bra/cup size:']]/text()
+        concat: "|"
+        postProcess:
+          - replace:
+            - regex: (\d*)([a-zA-Z-]*)(\d*-\d*)(.+?)([a-zA-Z]+)(.*)
+              with: $1$5-$3
       FakeTits:
         selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Boobs:']]
         postProcess:

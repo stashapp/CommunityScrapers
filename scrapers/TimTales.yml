@@ -1,70 +1,70 @@
-name: timtales
+name: "TimTales"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - timtales.com
+      - https://www.timtales.com/videos/
     scraper: sceneScraper
-xPathScrapers:
-  sceneScraper:
-    scene:
-      Title: //div[@class="text"]/h1/text()
-      Date:
-        selector: //p[@class="date"]/text()
-        postProcess:
-          - replace:
-              - regex: '[^R]*$'
-                with: ""
-              - regex: " – R"
-                with: ""
-          - parseDate: January 02, 2006
-      Details:
-        selector: //div[@class='text']//p[@class='bodytext']/text()
-        concat: " "
-      Performers:
-        Name: 
-          selector: //div[@class='text']//p[@class='categories'][contains(text(),'Men:')]/a
-      Tags:
-        Name: 
-          selector: //div[@class='text']//p[@class='categories'][contains(text(),'Categories:')]/a
-      Image:
-        selector: //*[@class='video player no-volume play-button']/@style
-        postProcess:
-          - replace:
-              - regex: .+(https[^')]+).+
-                with: $1
-name: himerostv
-sceneByURL:
-  - action: scrapeXPath
-    url:
-      - himeros.tv
-    scraper: sceneScraper
-xPathScrapers:
-  sceneScraper:
-    scene:
-      Title: //h1[@class='highlight']/text()
-      Date:
-        selector: //div[@class='update-info-row text-gray']/text() [2]
-        postProcess:
-          - replace:
-              - regex: '.{2}$'
-                with: ""
-          - parseDate: January 2, 2006
-      Details: 
-        selector: //div[@class='update-info-block']/div[@class='update-info-block'][1]//text()
-        concat: " "
-      Performers:
-        Name: 
-          selector: //div[@class='item-title']
-      Tags:
-        Name: 
-          selector: //ul[@class='tags']/li/a/text()
-      Image:
-        selector: //script[contains(text(),'hidden_fake_trailer')]/text()
-        postProcess:
-          - replace:
-              - regex: .+(?:poster=")([^"]*).+
-                with: https://himeros.tv$1
-              - regex: "-1x.jpg"
-                with: "-3x.jpg"
 
-#Last Updated August 20, 2020
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.timtales.com/the-men/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="text"]
+    scene:
+      Title: $info/h1/text()
+      Date:
+        selector: $info/p[@class="date"]/text()
+        replace:
+          - regex: \s–\s.*$
+            with:
+        parseDate: January 02, 2006
+      Details:
+        selector: $info/p[@class="bodytext"]/text()
+        concat: "\n\n"
+      Tags:
+        Name: $info/p[@class="categories" and contains(text(), "Categories:")]/a/text()
+      Performers:
+        Name: 
+          selector: $info/p[@class="categories" and contains(text(), "Men:")]
+          postProcess:
+            - replace:
+               - regex: "Men:"
+                 with: 
+               - regex: (,)\s+
+                 with: $1
+          split: ","
+      Image:
+        selector: //div[@class="video player no-volume play-button"]/@style
+        replace:
+          - regex: .+'(.+)'.+
+            with: $1
+      Studio:
+        Name:
+          fixed: Timtales
+
+  performerScraper:
+    performer:
+      Name: //div[contains(@class, "top")]/h1/text()
+      Gender:
+        fixed: Male
+      Country: //span[text()="Country of birth:"]/following-sibling::text()
+      Height:
+        selector: //span[text()="Height:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^.*\[(.*) cm\].*$
+                with: $1
+      Measurements:
+        selector: //span[text()="Cock:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^.*\[(.*) cm\].*$
+                with: $1
+      Image: //div[@class="model-details"]/img/@src
+
+# Last Updated August 29, 2020
