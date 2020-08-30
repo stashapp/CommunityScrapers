@@ -13,6 +13,11 @@ performerByURL:
     url: 
       - http://www.iafd.com
     scraper: performerScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - iafd.com/title.rme/title=
+    scraper: movieScraper
 
 xPathScrapers:
   sceneScraper:
@@ -91,5 +96,28 @@ xPathScrapers:
       Piercings: //div/p[text()='Piercings']/following-sibling::p[1]/text()
       Image:
         selector: //div[@id='headshot']/img/@src
-        
-# Last Updated July 2, 2020
+
+  movieScraper:
+    common:
+      $biohead: //p[@class="bioheading"]
+      $biodata_link: following-sibling::p[@class="biodata"][1]/a/text()
+      $biodata: following-sibling::p[@class="biodata"][1]/text()
+    movie:
+      Name:
+        selector: //h1/text()
+        replace:
+         - regex: \([0-9]+\)
+           with:
+      Director: $biohead[contains(text(), "Directors")]/$biodata_link
+      Duration: $biohead[contains(text(), "Minutes")]/$biodata
+      Synopsis: //div[@id="synopsis"]/div[@class="padded-panel"]//text()
+      Date:
+        selector: $biohead[contains(text(), "Release Date")]/$biodata[1]
+        parseDate: Jan 2, 2006
+      Studio:
+        Name: $biohead[contains(text(), "Studio")]/$biodata_link|$biohead[contains(text(), "Distributor")]/$biodata_link
+      Aliases:
+        selector: //div[@class="col-sm-12"]/dl/dd
+        concat: ", "
+
+# Last Updated August 30, 2020
