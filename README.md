@@ -59,6 +59,7 @@ manyvids.com|ManyVids.yml
 metadataapi.net|ThePornDB.yml
 modelhub.com|Modelhub.yml
 pornhub.com|Pornhub.yml
+realitykings.com|RealityKings.yml
 sexvr.com|SexVR.yml
 thenude.com|TheNude.yml
 timtales.com|TimTales.yml
