@@ -49,6 +49,7 @@ This list is meant to keep track of which sites are already supported by existin
 
 Supported Site|Scraper
 ------------- | -------------
+assholefever.com|GammaEntertainment.yml
 babepedia.com|Babepedia.yml
 evilangel.com|GammaEntertainment.yml
 freeones.xxx|FreeonesCommunity.yml
