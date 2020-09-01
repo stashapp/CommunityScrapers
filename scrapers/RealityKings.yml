@@ -44,6 +44,7 @@ sceneByURL:
       - https://www.sexyhub.com/scene/
       - https://www.seancody.com/scene/
       - https://www.men.com/sceneid/
+      - https://www.transsensual.com/
       - https://www.iconmale.com/
       - https://www.propertysex.com/scene/
       - https://www.devianthardcore.com/scene/
@@ -55,6 +56,11 @@ performerByURL:
     url:
       - realitykings.com/model/
     scraper: performerScraper
+
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.realitykings.com/models?q={}
+  scraper: performerSearch
 
 xPathScrapers:
   sceneScraper:
@@ -83,6 +89,10 @@ xPathScrapers:
               with:
             - regex: "th"
               with:
+            - regex: "rd"
+              with:
+            - regex: "([\\d]+)st"
+              with: $1
           - parseDate: January 2, 2006
       Measurements: //span[contains(.,"Measurements")]/following-sibling::span[1]/text()
       Country: //span[contains(.,"Birth Place")]/following-sibling::span[1]/text()
@@ -93,4 +103,16 @@ xPathScrapers:
       Image:
         selector: //img[contains(@class, "ibyLSN")]/@src[contains(.,"model")]
 
-# Last Updated August 05, 2020
+  performerSearch:
+    common:
+      $result: //section[@id="73374444684"]//a[@class="aq1tgu-1 hupvSc"]
+
+    performer:
+      Name: $result/@title
+      URL:
+        selector: $result/@href
+        replace:
+          - regex: ^
+            with: https://www.realitykings.com
+
+# Last Updated August 30, 2020

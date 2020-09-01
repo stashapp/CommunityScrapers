@@ -1,6 +1,7 @@
 ## Supported Sites For Scene Scraping
 
 This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducting a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy. If you are adding a lot of sites to the list, it may be useful to paste the sites in and then use a tool [like this](https://wordcounter.net/alphabetize) to alphabetize it.
+
 Supported Site|Scraper|Content
 ------------- | ------------- | -------------
 1000facials.com|GammaEntertainment.yml|
@@ -52,6 +53,7 @@ battlebang.com|Hustler.yml|
 bbcparadise.com|PaperStreetMedia.yml|
 bbcpie.com|AMAMultimedia.yml|
 beaverhunt.com|Hustler.yml|
+becomingfemme.com|ChristianXXX.yml|Trans
 bellesafilms.com|RealityKings.yml|
 bigfatcreampie.com|GammaEntertainment.yml|
 bignaturals.com|RealityKings.yml|
@@ -171,6 +173,7 @@ fuckfiesta.com|Hustler.yml|
 fuckingawesome.com|FuckingAwesome.yml|
 fuckinghardcore.com|Hustler.yml|
 g46e.com|javlibrary.yml|JAV
+gangbangcreampie.com|GangBangCreampie.yml|
 gapingangels.com|GammaEntertainment.yml|
 gaycastings.com|AMAMultimedia.yml|Gay
 gaycreeps.com|AMAMultimedia.yml|Gay
@@ -183,6 +186,7 @@ girlfriendsfilms.com|GammaEntertainment.yml|Lesbian
 girlgirl.com|JulesJordan.yml|Lesbian
 girlsandstuds.com|GammaEntertainment.yml|
 girlsgotcream.com|Teencoreclub.yml|
+girlsoutwest.com|GirlsOutWest.yml|Lesbian
 girlstryanal.com|GammaEntertainment.yml|Lesbian
 gloryholeswallow.com|GloryHoleSwallow.yml|
 grannyghetto.com|GammaEntertainment.yml|Granny
@@ -193,6 +197,7 @@ hardcoreyouth.com|Teencoreclub.yml|
 hardx.com|GammaEntertainment.yml|
 hergape.com|Analized.yml|
 heyzo.com|Heyzo.yml|JAV Uncensored
+himeros.tv|HimerosTV.yml|Gay
 holed.com|AMAMultimedia.yml|
 homemadeanalwhores.com|Analized.yml|
 hometowngirls.com|Hustler.yml|
@@ -258,11 +263,14 @@ massage-parlor.com|GammaEntertainment.yml|
 massagebait.com|AMAMultimedia.yml|
 men.com|RealityKings.yml|Gay
 menpov.com|AMAMultimedia.yml|Gay
+metadataapi.net (JSON API)|ThePornDB.yml|
+beta.metadataapi.net|PornDB.yml|
 milehighmedia.com|RealityKings.yml|
 milfhunter.com|RealityKings.yml|
 milfvr.com|MilfVR.yml|VR
 milkingtable.com|GammaEntertainment.yml|
 missax.com|MissaX.yml|
+modelhub.com|Modelhub.yml|
 mofos.com|RealityKings.yml|
 mofosnetwork.com|RealityKings.yml|
 mommyblowsbest.com|GammaEntertainment.yml|
@@ -342,6 +350,7 @@ propertysex.com|RealityKings.yml|
 publicagent.com|RealityKings.yml|
 publicpickups.com|RealityKings.yml|
 puffynetwork.com|Puffynetwork.yml|
+pure-ts.com|ChristianXXX.yml|Trans
 puremature.com|AMAMultimedia.yml|
 puretaboo.com|PureTaboo.yml|
 ragingstallion.com|GammaEntertainment.yml|Gay
@@ -412,6 +421,7 @@ thetabutales.com|NewSensationsNetworkSites.yml|
 thickandbig.com|AMAMultimedia.yml|
 thickumz.com|PaperStreetMedia.yml|
 throated.com|GammaEntertainment.yml|
+timtales.com|TimTales.yml|Gay
 tiny4k.com|AMAMultimedia.yml|
 tittycreampies.com|GammaEntertainment.yml|
 titworld.com|Hustler.yml|
@@ -426,6 +436,7 @@ trickyspa.com|GammaEntertainment.yml|
 tryteens.com|Teencoreclub.yml|
 tsfactor.com|GammaEntertainment.yml|Trans
 tsplayground.com|GammaEntertainment.yml|Trans
+tspov.com.com|ChristianXXX.yml|Trans
 tushy.com|vixenNetwork.yml|
 tushyraw.com|vixenNetwork.yml|
 twistedvisual.com|Analized.yml|

@@ -1,0 +1,31 @@
+name: GangBangCreampie
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - gangbangcreampie.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: Gangbang Creampie
+      Performers:
+        Name: //div[@class="video_details mb mt0"]/h5[i[@class="icon-female"]]/a
+      Title:
+        selector: //h2[@class="H_underline"]/text()
+      Details:
+        selector: //div[@class="desc"]/p/text()
+        concat: "\n\n"
+      Tags:
+        Name: //h5[@class="video_categories"]/a
+      Image:
+        selector: //img[@id="set-target-1_0"]/@src
+      Date:
+        selector: //comment()[contains(.,"icon-calendar")]
+        postProcess:
+          - replace:
+              - regex: .*(\d{2}\/\d{2}\/\d{4}).*
+                with: $1
+          - parseDate: 01/02/2006
+# Last Updated August 30, 2020

@@ -51,12 +51,17 @@ xPathScrapers:
             - regex: "cm"
               with: ""
       Measurements: 
-        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Measurements")]
+        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Measurements")]|//div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Cup Size")]
+        concat: "|"
         postProcess:
           - replace:
-            - regex: (Measurements:\s)(.+)
-              with: $2
-            - regex: \s+\/\s+
+            - regex: (.+:\s\w)(\d*)(\s\/\s.?)(\d*)(\s\/\s.?)(\d*)(.+:\s)(\w*)(\s.*)
+              with: $2$8-$4-$6
+            - regex: "Measurements: B|W|H|\\s"
+              with: ""
+            - regex: "CupSize:|Cup"
+              with: ""
+            - regex: \/
               with: "-"
       CareerLength: 
         selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"AV Activity")]
