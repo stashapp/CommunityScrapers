@@ -2,7 +2,8 @@ name: trans500
 sceneByURL:
   - action: scrapeXPath
     url: 
-      - trans500.com
+      - trans500.com/tour/
+      - trans500.com/tour3/
     scraper: sceneScraper
 
 xPathScrapers:
