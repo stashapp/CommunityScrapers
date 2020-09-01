@@ -41,3 +41,5 @@ xPathScrapers:
           fixed: Trans500
       Tags:  # Either //meta[@name="keywords"]/@content OR: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
         Name: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
+
+# Last updated August 31. 2020.
