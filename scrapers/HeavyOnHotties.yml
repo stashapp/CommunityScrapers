@@ -1,0 +1,27 @@
+name: HeavyOnHotties
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - heavyonhotties.com/movies/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: /html/head/title
+      Studio: 
+        Name:
+          fixed: HeavyOnHotties
+      Date:
+        selector: //*[@id="main"]/div/div/div[1]/div/div[2]/div[2]/span[2]/strong
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Performers:
+        Name: //*[@id="main"]/div/div/div[1]/div/div[1]/h2/span/a
+      Image:
+        selector: //*[@id="video"]/@poster
+        postProcess: 
+          - replace:
+            - regex: //media.
+              with: https://
+          
+# Last Updated August 12, 2020

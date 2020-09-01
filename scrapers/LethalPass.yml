@@ -1,0 +1,29 @@
+name: "LethalPass"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lethalpass.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $description: //*[@id="playerDetail"]/div
+    scene:
+      Title: /html/body/div[1]/section/div/div[2]/div[3]/div/div/div[2]/h1/text()
+      Date:
+        selector: $description/div[2]/div/div[2]/span
+        replace: 
+           - regex: Added
+             with:
+        parseDate: 2 January 2006
+      Details: $description/div[3]/p/text()
+      Performers:
+        Name: $description/div[4]/div[1]/div/a
+      Tags:
+        Name: $description/div[4]/div[1]/p/a
+      Image:
+        selector: /html/body/div[1]/section/div/div[2]/div[2]/div/a/img/@src
+      Studio:
+        Name:
+          fixed: LethalPass
+# Last Updated July 23, 2020

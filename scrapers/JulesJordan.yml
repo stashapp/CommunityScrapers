@@ -8,6 +8,19 @@ sceneByURL:
       - https://www.theassfactory.com/
       - https://www.spermswallowers.com/
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/trial/models/
+    scraper: performerScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/trial/dvds/
+    scraper: movieScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -17,7 +30,8 @@ xPathScrapers:
       Title: //div[@class="title_bar"]/span/text()
       Date:
         selector: $details//div[@class="cell update_date"]/text()
-        parseDate: 01/02/2006
+        postProcess:
+          - parseDate: 01/02/2006
       Details:
         selector: $details//span[@class="update_description"]/text()
         concat: " "
@@ -29,10 +43,54 @@ xPathScrapers:
         Name: $details//span[@class="update_dvds"]/a/text()
       Image:
         selector: //script[contains(text(),'useimage')]/text()
-        replace:
-          - regex: (?:.+useimage = "([^"]+).+)
-            with: $1
-          - regex: (^\/)
-            with: https://www.julesjordan.com/
+        postProcess:
+          - replace:
+            - regex: (?:.+useimage = "([^"]+).+)
+              with: $1
+            - regex: (^\/)
+              with: https://www.julesjordan.com/
+
+  performerScraper:
+    performer:
+      Name: //span[@class='title_bar_hilite']/text()
+      Birthdate:
+        selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Age')]
+        postProcess:
+          - replace:
+            - regex: "Age:"
+              with:
+          - parseDate: January 2, 2006
+      Measurements:
+        selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Measurements')]
+        postProcess:
+          - replace:
+            - regex: "Measurements:"
+              with:
+            - regex: " "
+              with:
+      Height:
+        selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Height')]
+        postProcess:
+          - replace:
+            - regex: "Height:"
+              with:
+          - feetToCm: true
+      Image:
+        selector: //img[contains(@class,'model_bio_thumb')]/@src0_3x
+
+  movieScraper:
+    movie:
+      Name: //span[@class="title_bar_hilite"]/text()
+      Synopsis:
+        selector: //div[@class="dvd_extra_fields"]/div/text()[not(contains(.,"Studio"))]
+        concat: " "
+        postProcess:
+          - replace:
+            - regex: "Description:"
+              with:
+      Studio:
+        Name: //span[@class="update_date"]/text()[contains(.,"Studio")]/following-sibling::a/text()
+      FrontImage: //div[@class="front"]/a/img/@src0_3x
+      BackImage: //div[@class="back"]/a/img/@src0_3x
 
 # Last Updated May 20, 2020

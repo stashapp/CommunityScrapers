@@ -1,0 +1,23 @@
+name: "sweetfemdom"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sweetfemdom.com/tour/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="videoDetails clear"]/h3/text()
+      Date:
+        selector: //div[@class="videoInfo clear"]/p[1]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: //div[@class="videoDetails clear"]/p/text()
+      Tags:
+        Name: //div[@class="featuring clear"][2]/ul/li/a/text()
+      Performers:
+        Name: //div[@class="featuring clear"][1]/ul/li/a/text()
+      Image: 
+        selector: //meta[@property="og:image"]/@content
+
+# Last Updated July 25, 2020

@@ -1,0 +1,24 @@
+name: AdultDvdMarketPlace
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - adultdvdmarketplace.com/xcart/adult_dvd/dvd_view.php?adult_dvd_id=
+    scraper: movieScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: //meta[@property="og:title"]/@content
+      Director: //span[contains(text(),"Director")]/following-sibling::a/text()
+      Date:
+        selector: //span[contains(text(),"Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: 01/2006
+      Synopsis: //h3[contains(text(), "Description")]/following-sibling::p
+      Studio:
+        Name: //span[@itemprop="brand"]/text()
+      FrontImage: //strong[contains(text(),"Large Front")]/parent::a/@href
+      BackImage: //strong[contains(text(),"Large Back")]/parent::a/@href
+
+# Last Updated August 30, 2020

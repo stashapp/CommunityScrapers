@@ -8,7 +8,11 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
+<<<<<<< HEAD
       Title: //div[@class="col-sm-12"]/h2
+=======
+      Title: //div[@class="col-sm-12"]/p/../h2/text()
+>>>>>>> master
       Details: //p[@class="description"]
       Image:
         selector: //video[@id="my-video"]/@poster

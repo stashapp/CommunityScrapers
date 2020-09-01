@@ -1,0 +1,41 @@
+name: AbuseMe
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - abuseme.com/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="shoot-title"]/text()
+      Date:
+        selector: //div[@class="playerHdr_rgt"]/text()
+        postProcess:
+          - replace:
+            - regex: (\w+:\s)(.+)
+              with: $2
+          - parseDate: Jan 2, 2006
+      Details: //div[@class="playerTxt"]
+      Tags:
+        Name: 
+            selector: //meta[@http-equiv="keywords"]/@content
+            split: ","
+            # Bad way to get tags
+      Performers:
+        Name:
+            selector: //script[contains(.,"bbGaParams.shootModels")]/text()
+            postProcess:
+                - replace:
+                   - regex: (.+)("\d+\s:\s)(.+)( ".+)
+                     with: $3
+      Studio:
+        Name: 
+            fixed: AbuseMe
+      Image: 
+        selector: //img[@class="playerPic"]/@src
+        postProcess:
+           - replace:
+             - regex: ^\/\/
+               with: "https:"
+      
+# Last Updated August 03, 2020
