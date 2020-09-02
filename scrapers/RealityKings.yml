@@ -64,19 +64,21 @@ performerByName:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $moreinfo: //div[@class="tjb798-2 flgKJM"]
     scene:
-      Title: //h2[contains(@class, "hzrLcs")]/text()
+      Title: //h2[contains(@class, "hzrLcs")]/text()|//h1[@class="wxt7nk-4 fSsARZ"]/text()|//h2[@class="wxt7nk-4 fSsARZ"]/text()
       Date:
-        selector: //div[contains(@class, "jtRRdJ")]/text()
+        selector: $moreinfo/span[div[text()='Release Date:']]/text()|//div[contains(@class, "jtRRdJ")]/text()
         parseDate: January 2, 2006
-      Details: //p[contains(@class, "kLbWwG")]/text()
+      Details: //p[contains(@class, "kLbWwG")]/text()|//div[@class="tjb798-2 flgKJM"]/span[div[text()='Description:']]/div[2]/text()
       Tags:
-        Name: //div[contains(@class, "cepogm")]/a/text()
+        Name: $moreinfo/span[div[text()='Categories:']]/a/text()[1]|//div[contains(@class, "cepogm")]/a/text()
       Performers:
-        Name: //div[contains(@class, "dEgjPa")]/span/a/text()
+        Name: //div[contains(@class, "dEgjPa")]/span/a/text()|//div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
       Studio:
-        Name: //a[contains(@class, "kXGSit")]/text()
-      Image: //img[contains(@class, "lSdde")]/@src
+        Name: //a[contains(@class, "kXGSit")]/text()|//div[@class="sc-11m21lp-2 bKVlBB"]/text()
+      Image: //img[contains(@class, "lSdde")]/@src|//img[@class="tg5e7m-1 lSdde"]/@src|//img[@class="sc-1p8qg4p-2 ibyLSN"]/@src
 
   performerScraper:
     performer:
@@ -115,4 +117,4 @@ xPathScrapers:
           - regex: ^
             with: https://www.realitykings.com
 
-# Last Updated August 30, 2020
+# Last Updated September 2, 2020
