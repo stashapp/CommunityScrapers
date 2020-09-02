@@ -111,4 +111,4 @@ xPathScrapers:
         selector: //img[contains(@class, "ibyLSN")]/@src[contains(.,"model")]
       URL: //link[@rel="canonical"]/@href
 
-# Last Updated August 05, 2020
+# Last Updated September 2, 2020
