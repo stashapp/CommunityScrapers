@@ -55,6 +55,7 @@ bbcpie.com|AMAMultimedia.yml|
 beaverhunt.com|Hustler.yml|
 becomingfemme.com|ChristianXXX.yml|Trans
 bellesafilms.com|RealityKings.yml|
+bigbootytgirls.com|BigBootyTGirls.yml|Trans
 bigfatcreampie.com|GammaEntertainment.yml|
 bignaturals.com|RealityKings.yml|
 blacked.com|vixenNetwork.yml|
