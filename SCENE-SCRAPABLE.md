@@ -275,8 +275,8 @@ mofos.com|RealityKings.yml|
 mofosnetwork.com|RealityKings.yml|
 mommyblowsbest.com|GammaEntertainment.yml|
 mommysgirl.com|GammaEntertainment.yml|
-momsbangteens.com|RealityKings.yml|
-momslickteens.com|RealityKings.yml|Lesbian
+momsbangteens.com|RealityKingsOL.yml|
+momslickteens.com|RealityKingsOL.yml|Lesbian
 momsteachsex.com|Nubiles.yml|
 moneytalks.com|RealityKings.yml|
 motherfuckerxxx.com|GammaEntertainment.yml|
@@ -346,7 +346,7 @@ pridestudios.com|GammaEntertainment.yml|
 princesscum.com|Nubiles.yml|
 private.com|Private.yml|
 producersfun.com|ProducersFun.yml|
-propertysex.com|RealityKings.yml|
+propertysex.com|RealityKingsOL.yml|
 publicagent.com|RealityKings.yml|
 publicpickups.com|RealityKings.yml|
 puffynetwork.com|Puffynetwork.yml|
