@@ -1,0 +1,34 @@
+name: GirlsOutWest
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://tour.girlsoutwest.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='trailerTitle']/div/h3/text()
+        postProcess:
+          - replace:
+            - regex: .+-
+              with:
+      Performers:
+        Name: 
+          selector: //div[@class='trailer topSpace']/div//p/a/text()
+      Image:
+        selector: //div[@class='videoplayer']/img/@src0_1x
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://tour.girlsoutwest.com
+      Date:
+        selector: //div[@class='trailer topSpace']/div[@class='centerwrap clear']/p/text()
+        concat: " "
+        postProcess:
+          - replace:
+            - regex: (.+)(\d{2}\/\d{2}\/\d{4})(.+)
+              with: $2
+          - parseDate: 01/02/2006
+
+# Last Updated August 26, 2020
