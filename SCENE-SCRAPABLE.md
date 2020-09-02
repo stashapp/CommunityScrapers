@@ -346,7 +346,7 @@ pridestudios.com|GammaEntertainment.yml|
 princesscum.com|Nubiles.yml|
 private.com|Private.yml|
 producersfun.com|ProducersFun.yml|
-propertysex.com|RealityKings.yml|
+propertysex.com|RealityKingsOL.yml|
 publicagent.com|RealityKings.yml|
 publicpickups.com|RealityKings.yml|
 puffynetwork.com|Puffynetwork.yml|
