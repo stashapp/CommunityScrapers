@@ -35,20 +35,14 @@ xPathScrapers:
       Image:
         selector: //img[contains(@class, "lSdde")]/@src
         
-  # The movie section is kinda weird. The movies seems like they are made after the scenes.
-  # e.g. they don't seem to have front/back covers, and are basically just a compilation
-  # of some scenes they released with same theme? 
-  # So a movie has date as the earliest released scene, and other scenes have their own.
-  # Description is just name of the 'movie', so gonna go with whole 'desc & cat' as synopsis.
-  # So i'd say movies on TransSensual aren't 'proper'. But here goes:
   movieScraper:
     movie:
       Name: //h2[@class='wxt7nk-4 fSsARZ']/text()
 #      Director: 
 #      Duration: 
-      Aliases: 
-        selector: //div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
-        concat: ", "
+      # Aliases: 
+        # selector: //div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
+        # concat: ", "
       Date:
         selector: //span/div[contains(.,"Release Date")]/../text()
         parseDate: January 2, 2006
@@ -58,6 +52,6 @@ xPathScrapers:
       Studio:
         Name: //meta[@name="dti.network"]/@content
       FrontImage: //img[contains(@src, "cover")]/@src
-      BackImage: //img[contains(@src, "cover")]/@src
+#      BackImage: //img[contains(@src, "cover")]/@src
 
-# Last Updated August 24, 2020
+# Last Updated September 02, 2020
