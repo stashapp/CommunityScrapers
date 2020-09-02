@@ -35,7 +35,7 @@ asianfever.com|Hustler.yml|
 assholefever.com|GammaEntertainment.yml|
 assmeat.com|Hustler.yml|
 assteenmouth.com|Teencoreclub.yml|
-babes.com|RealityKings.yml|
+babes.com|RealityKingsOL.yml|
 babesnetwork.com|RealityKings.yml|
 babevr.com|BaDoink.yml|VR
 backroomcastingcouch.com|Backroomcastingcouch.yml|
@@ -460,7 +460,7 @@ wankzvr.com|WankzVR.yml|VR
 watchreal.com|Hustler.yml|
 webyoung.com|GammaEntertainment.yml|Lesbian
 wefuckblackgirls.com|DogFart.yml|
-welivetogether.com|RealityKings.yml|Lesbian
+welivetogether.com|RealityKingsOL.yml|Lesbian
 weneednewtalents.com|Teencoreclub.yml|
 wetvr.com|AMAMultimedia.yml|VR
 whiteghetto.com|GammaEntertainment.yml|
