@@ -3,11 +3,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - https://www.babes.com/scene/
+      - https://www.momsbangteens.com/scene/
+      - https://www.momslickteens.com/scene/
       - https://www.welivetogether.com/scene/
     scraper: sceneScraper
 
 xPathScrapers:
-
+  
   sceneScraper:
     scene:
       Title: //h2[contains(@class, "fSsARZ")]/text()|//h1[contains(@class, "fSsARZ")]
