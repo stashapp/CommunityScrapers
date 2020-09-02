@@ -22,9 +22,7 @@ sceneByURL:
       - https://www.teenslovehugecocks.com/scene/
       - https://www.lilhumpers.com/scene/
       - https://www.lookathernow.com/scene/
-      - https://www.momslickteens.com/scene/
       - https://www.sneakysex.com/scene/
-      - https://www.momsbangteens.com/scene/
       - https://www.recklessinmiami.com/scene/
       - https://www.happytugs.com/scene/
       - https://www.cumfiesta.com/scene/
@@ -42,9 +40,7 @@ sceneByURL:
       - https://www.sexyhub.com/scene/
       - https://www.seancody.com/scene/
       - https://www.men.com/sceneid/
-      - https://www.transsensual.com/
       - https://www.iconmale.com/
-      - https://www.propertysex.com/scene/
       - https://www.devianthardcore.com/scene/
       - https://www.familyhookups.com/scene
     scraper: sceneScraper
@@ -61,6 +57,19 @@ performerByName:
   scraper: performerSearch
 
 xPathScrapers:
+  
+  performerSearch:
+    common:
+      $result: //section[@id="73374444684"]//a[@class="aq1tgu-1 hupvSc"]
+
+    performer:
+      Name: $result/@title
+      URL:
+        selector: $result/@href
+        replace:
+          - regex: ^
+            with: https://www.realitykings.com
+
   sceneScraper:
     scene:
       Title: //h2[contains(@class, "hzrLcs")]/text()
@@ -100,17 +109,6 @@ xPathScrapers:
           - feetToCm: true
       Image:
         selector: //img[contains(@class, "ibyLSN")]/@src[contains(.,"model")]
+      URL: //link[@rel="canonical"]/@href
 
-  performerSearch:
-    common:
-      $result: //section[@id="73374444684"]//a[@class="aq1tgu-1 hupvSc"]
-
-    performer:
-      Name: $result/@title
-      URL:
-        selector: $result/@href
-        replace:
-          - regex: ^
-            with: https://www.realitykings.com
-
-# Last Updated August 30, 2020
+# Last Updated September 2, 2020
