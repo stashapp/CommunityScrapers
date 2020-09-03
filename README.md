@@ -43,6 +43,7 @@ iafd.com|Iafd.yml
 julesjordan.com|JulesJordan.yml
 private.com|Private.yml
 streaming.iafd.com|IafdStreaming.yml
+transsensual.com|TransSensual.yml
 
 ## Performer Scrapers
 This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
