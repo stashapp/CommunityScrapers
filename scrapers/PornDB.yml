@@ -34,4 +34,5 @@ xPathScrapers:
         #      with: "1000x1000"
 driver:
   useCDP: true
-# Last Updated August 31, 2020
+  sleep: 5
+# Last Updated September 03, 2020
