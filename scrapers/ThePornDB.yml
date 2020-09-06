@@ -1,21 +1,21 @@
 name: ThePornDB
 performerByName:
   action: scrapeJson
-  queryURL: https://metadataapi.net/api/performers?q={}
+  queryURL: https://api.metadataapi.net/performers?q={}
   scraper: performerSearch
 performerByURL:
   - action: scrapeJson
     url:
-      - https://metadataapi.net/api/performers/
+      - https://api.metadataapi.net/performers/
     scraper: performerScraper
 sceneByURL:
   - action: scrapeJson
     url:
-      - https://metadataapi.net/api/scenes/
+      - https://api.metadataapi.net/scenes/
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeJson
-  queryURL: https://metadataapi.net/api/scenes?parse={filename}&hash={oshash}&limit=1
+  queryURL: https://api.metadataapi.net/scenes?parse={filename}&hash={oshash}&limit=1
   scraper: sceneQueryScraper
 jsonScrapers:
   performerSearch:
@@ -25,7 +25,7 @@ jsonScrapers:
         selector: data.#.id
         replace:
           - regex: ^
-            with: https://metadataapi.net/api/performers/
+            with: https://api.metadataapi.net/performers/
 
   performerScraper:
     common:
@@ -78,4 +78,4 @@ jsonScrapers:
         Name: $data.site.name
       Tags:
         Name: $data.tags.#.tag
-#Last Updated August 12, 2020
+#Last Updated September 6, 2020
