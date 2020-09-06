@@ -55,7 +55,7 @@ bbcparadise.com|PaperStreetMedia.yml|
 bbcpie.com|AMAMultimedia.yml|
 beaverhunt.com|Hustler.yml|
 becomingfemme.com|ChristianXXX.yml|Trans
-bellesafilms.com|RealityKings.yml|
+bellesafilms.com|RealityKingsOL.yml|
 bigbootytgirls.com|BigBootyTGirls.yml|Trans
 bigfatcreampie.com|GammaEntertainment.yml|
 bignaturals.com|RealityKings.yml|
@@ -121,7 +121,7 @@ dadcrush.com|PaperStreetMedia.yml|
 daddygetslucky.com|Hustler.yml|
 daddyslilangel.com|Nubiles.yml|
 damnthatsbig.com|AMAMultimedia.yml|Gay
-danejones.com|RealityKings.yml|
+danejones.com|RealityKingsOL.yml|
 darkx.com|GammaEntertainment.yml|
 daughterswap.com|PaperStreetMedia.yml|
 deeper.com|vixenNetwork.yml|
@@ -247,7 +247,7 @@ ladyboy-ladyboy.com|GroobyNetwork-Partial.yml|Trans
 ladyboy.com|GroobyNetwork-Partial.yml|Trans
 lanesisters.com|GammaEntertainment.yml|
 legalporno.com|LegalPorno.yml|
-lesbea.com|RealityKings.yml|Lesbian
+lesbea.com|RealityKingsOL.yml|Lesbian
 lesbianass.com|Hustler.yml|Lesbian
 lesbianfactor.com|GammaEntertainment.yml|Lesbian
 lesbianx.com|GammaEntertainment.yml|Lesbian
@@ -380,7 +380,7 @@ sexbabesvr.com|SexBabesVR.yml|VR
 sexlikereal.com|SexLikeReal.yml|
 sexsee.com|Hustler.yml|
 sexvr.com|SexVR.yml|VR
-sexyhub.com|RealityKings.yml|
+sexyhub.com|RealityKingsOL.yml|
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml|
 shegotsix.com|Teencoreclub.yml|
 shemaleidol.com|GammaEntertainment.yml|Trans

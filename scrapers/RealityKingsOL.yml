@@ -3,9 +3,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - https://www.babes.com/scene/
+      - https://www.bellesafilms.com/scene/
+      - https://www.danejones.com/scene/
+      - https://www.lesbea.com/scene
       - https://www.momsbangteens.com/scene/
       - https://www.momslickteens.com/scene/
       - https://www.propertysex.com/scene/
+      - https://www.sexyhub.com/scene/
       - https://www.welivetogether.com/scene/
 
     scraper: sceneScraper
@@ -34,4 +38,4 @@ xPathScrapers:
                 - regex: .*www\.(.+)\.com.*
                   with: $1
       Image: //img[contains(@class, "lSdde")]/@src
-# Last Updated September 02, 2020
+# Last Updated September 06, 2020
