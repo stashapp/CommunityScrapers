@@ -102,6 +102,20 @@ sceneByURL:
       - nextdoorebony.com/
       - nextdoorcasting.com/
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - evilangel.com/en/pornstar/
+      - assholefever.com/en/pornstar/
+    scraper: performerScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - evilangel.com/en/movie/
+    scraper: movieScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -148,9 +162,25 @@ xPathScrapers:
             with: $1?width=960&height=543&enlarge=true
       Studio:
         Name:
-          selector: $detailscript
-          replace:
-            - regex: .+(?:siteName":")([^"]+).+
-              with: $1
+          selector: //span[@class="linkMainCaption"]/text()
+
+  performerScraper:
+    performer:
+      Name: //h1[@class='actorName']
+      Image: //img[@class='actorPicture']/@src
+
+  movieScraper:
+    movie:
+      Name: //h3[@class='dvdTitle']//text()
+      Director: //ul[@class='directedBy']/li/a/text()
+      Duration: //li[@class='length']/text()
+      Date:
+        selector: //li[@class='updatedOn']/text()
+        parseDate: 2006-01-02
+      Synopsis: //p[@class='descriptionText']/text()
+      Studio:
+        Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
+      FrontImage: //a[@class='frontCoverImg']/@href
+      BackImage: //a[@class='backCoverImg']/@href
 
 # Last Updated June 22, 2020

@@ -4,7 +4,6 @@ sceneByURL:
     url:
       - https://www.rk.com/scene/
       - https://www.realitykings.com/scene/
-      - https://www.babes.com/scene/
       - https://www.babesnetwork.com/scene/
       - https://www.mofosnetwork.com/scene/
       - https://www.mofos.com/scene/
@@ -14,7 +13,6 @@ sceneByURL:
       - https://www.bignaturals.com/scene/
       - https://www.realityjunkies.com/
       - https://www.sweetsinner.com/
-      - https://www.welivetogether.com/scene/
       - https://www.milehighmedia.com/
       - https://www.8thstreetlatinas.com/scene/
       - https://www.twistysnetwork.com/scene/
@@ -24,9 +22,7 @@ sceneByURL:
       - https://www.teenslovehugecocks.com/scene/
       - https://www.lilhumpers.com/scene/
       - https://www.lookathernow.com/scene/
-      - https://www.momslickteens.com/scene/
       - https://www.sneakysex.com/scene/
-      - https://www.momsbangteens.com/scene/
       - https://www.recklessinmiami.com/scene/
       - https://www.happytugs.com/scene/
       - https://www.cumfiesta.com/scene/
@@ -44,28 +40,75 @@ sceneByURL:
       - https://www.sexyhub.com/scene/
       - https://www.seancody.com/scene/
       - https://www.men.com/sceneid/
-      - https://www.transsensual.com/
       - https://www.iconmale.com/
-      - https://www.propertysex.com/scene/
       - https://www.devianthardcore.com/scene/
       - https://www.familyhookups.com/scene
     scraper: sceneScraper
-xPathScrapers:
-  sceneScraper:
-    common:
-      $moreinfo: //div[@class="tjb798-2 flgKJM"]
-    scene:
-      Title: //h1[@class="wxt7nk-4 fSsARZ"]/text()|//h2[@class="wxt7nk-4 fSsARZ"]/text()
-      Date:
-        selector: $moreinfo/span[div[text()='Release Date:']]/text()
-        parseDate: January 2, 2006
-      Details: //div[@class="tjb798-2 flgKJM"]/span[div[text()='Description:']]/div[2]/text()
-      Tags:
-        Name: $moreinfo/span[div[text()='Categories:']]/a/text()[1]
-      Performers:
-        Name: //div[@class="wxt7nk-5 cWGMuL"]/span/a/text()
-      Studio:
-        Name: //div[@class="sc-11m21lp-2 bKVlBB"]/text()
-      Image: //img[@class="tg5e7m-1 lSdde"]/@src|//img[@class="sc-1p8qg4p-2 ibyLSN"]/@src
 
-# Last Updated August 05, 2020
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - realitykings.com/model/
+    scraper: performerScraper
+
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.realitykings.com/models?q={}
+  scraper: performerSearch
+
+xPathScrapers:
+  
+  performerSearch:
+    common:
+      $result: //section[@id="73374444684"]//a[@class="aq1tgu-1 hupvSc"]
+
+    performer:
+      Name: $result/@title
+      URL:
+        selector: $result/@href
+        replace:
+          - regex: ^
+            with: https://www.realitykings.com
+
+  sceneScraper:
+    scene:
+      Title: //h2[contains(@class, "hzrLcs")]/text()
+      Date:
+        selector: //div[contains(@class, "jtRRdJ")]/text()
+        parseDate: January 2, 2006
+      Details: //p[contains(@class, "kLbWwG")]/text()
+      Tags:
+        Name: //div[contains(@class, "cepogm")]/a/text()
+      Performers:
+        Name: //div[contains(@class, "dEgjPa")]/span/a/text()
+      Studio:
+        Name: //a[contains(@class, "kXGSit")]/text()
+      Image: //img[contains(@class, "lSdde")]/@src
+
+  performerScraper:
+    performer:
+      Name: //div[contains(@class, "cNKuKg")]/text()
+      Birthdate:
+        selector: //span[contains(.,"Date of Birth")]/following-sibling::span[1]/text()
+        postProcess:
+          - replace:
+            - regex: "nd"
+              with:
+            - regex: "th"
+              with:
+            - regex: "rd"
+              with:
+            - regex: "([\\d]+)st"
+              with: $1
+          - parseDate: January 2, 2006
+      Measurements: //span[contains(.,"Measurements")]/following-sibling::span[1]/text()
+      Country: //span[contains(.,"Birth Place")]/following-sibling::span[1]/text()
+      Height:
+        selector: //span[contains(.,"Height")]/following-sibling::span[1]/text()
+        postProcess:
+          - feetToCm: true
+      Image:
+        selector: //img[contains(@class, "ibyLSN")]/@src[contains(.,"model")]
+      URL: //link[@rel="canonical"]/@href
+
+# Last Updated September 2, 2020
