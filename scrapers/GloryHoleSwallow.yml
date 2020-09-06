@@ -2,24 +2,25 @@ name: "GloryHoleSwallow"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://gloryholeswallow.com/newtour/
+      - gloryholeswallow.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $info: //div[@class='objectInfo']
     scene:
-      Details: //span[@class="latest_update_description"]/text()
-      Date:
-        selector: //ul/comment()[contains(.,'update_date')]
-        replace:
-          - regex: .+(?:<.+>)(.+)(?:<.+>)
-            with: $1
-        parseDate: Jan 02, 2006
+      Title: $info/h1/text()
+      Details: $info/div[@class='content']/p/text()
       Tags:
-        Name: //span[@class="tour_update_tags"]/a//font/text()
+        Name: $info//p[contains(text(),'Tags')]//a/text()
       Image:
-        selector: (//div[@class="back"]/center/img/@src)[1]
+        selector: //div[@id='fakeplayer']//img/@src0_1x
         replace:
           - regex: ^
-            with: https://gloryholeswallow.com/newtour/
+            with: https://gloryholeswallow.com
+      Studio:
+        Name:
+          fixed: GloryHole Swallow
+      URL: //link[@rel='canonical']/@href
 
-# Last Updated May 15, 2020
+# Last Updated September 2, 2020

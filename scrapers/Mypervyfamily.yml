@@ -8,15 +8,17 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="description"]/text()
-#     Date:
-#       selector: //div[@class="release-date"]/text()[1]
-#       parseDate: Jan 02, 2006
+      Date:
+        selector: //div[@class="release-date"][1]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
       Details:
-        selector: //div[@class="synopsis"]//text()
+        selector: //div[@class="synopsis"]/p/text()
       Tags:
-        Name: //div[@class="tags"]//a/text()
+        Name: //div[@class="tags"]/a/text()
       Performers:
         Name: //span[@class="video-performer-name overlay"]/span[@class="overlay-inner"]/text()
       Image:
         selector: //link[@rel="image_src"]/@href
-
+        
+# Last Updated July 31, 2020

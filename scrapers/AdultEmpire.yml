@@ -1,0 +1,32 @@
+name: AdultEmpire
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - adultdvdempire.com/
+    scraper: movieScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: //h1/text()
+      Director: //a[@label="Director"]/text()
+      Duration:
+        selector: //small[contains(text(), "Length")]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: " hrs. "
+              with: ":"
+            - regex: " mins."
+              with: ":00"
+      Date:
+        selector: //small[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Synopsis: //h4[contains(@class,"synopsis")]/p/text()
+      Studio:
+        Name: //a[@label="Studio"]/text()
+      FrontImage: //a[@id="front-cover"]/@data-href
+      BackImage: //a[@id="back-cover"]/@href
+
+# Last Updated August 30, 2020
