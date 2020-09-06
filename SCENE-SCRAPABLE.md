@@ -32,6 +32,7 @@ ashleyfires.com|GammaEntertainment.yml|
 ashlynnbrooke.com|NewSensationsNetworkSites.yml|
 asian18.com|Hustler.yml|
 asianfever.com|Hustler.yml|
+asiantgirl.com|GroobyNetwork-Partial.yml|Trans
 assholefever.com|GammaEntertainment.yml|
 assmeat.com|Hustler.yml|
 assteenmouth.com|Teencoreclub.yml|
@@ -58,10 +59,13 @@ bellesafilms.com|RealityKings.yml|
 bigbootytgirls.com|BigBootyTGirls.yml|Trans
 bigfatcreampie.com|GammaEntertainment.yml|
 bignaturals.com|RealityKings.yml|
+black-tgirls.com|GroobyNetwork-Partial.yml|Trans
 blacked.com|vixenNetwork.yml|
 blackedraw.com|vixenNetwork.yml|
+blacktgirlshardcore.com|GroobyNetwork-Partial.yml|Trans
 blackvalleygirls.com|PaperStreetMedia.yml|
 blowpass.com|GammaEntertainment.yml|
+bobstgirls.com|GroobyNetwork-Partial.yml|Trans
 bootyclapxxx.com|Hustler.yml|
 bootysisters.com|Hustler.yml|
 bossymilfs.com|Hustler.yml|
@@ -160,6 +164,7 @@ familytherapyxxx.com|FamilyTherapyXXX.yml|
 familyxxx.com|FamilyXXX.yml|
 fantasyhd.com|AMAMultimedia.yml|
 fantasymassage.com|GammaEntertainment.yml|
+femoutsex.com|GroobyNetwork-Partial.yml|Trans
 finishesthejob.com|FinishesTheJob.yml|
 firstanalquest.com|Firstanalquest.yml|
 firstclasspov.com|Spizoo.yml|
@@ -169,6 +174,7 @@ footsiebabes.com|GammaEntertainment.yml|
 forbondage.com|LetsDoeIt.yml|
 fostertapes.com|PaperStreetMedia.yml|
 fourfingerclub.com|NewSensationsNetworkSites.yml|
+franks-tgirlworld.com|GroobyNetwork-Partial.yml|Trans
 freshouttahighschool.com|NewSensationsNetworkSites.yml|
 fuckfiesta.com|Hustler.yml|
 fuckingawesome.com|FuckingAwesome.yml|
@@ -191,6 +197,7 @@ girlsoutwest.com|GirlsOutWest.yml|Lesbian
 girlstryanal.com|GammaEntertainment.yml|Lesbian
 gloryholeswallow.com|GloryHoleSwallow.yml|
 grannyghetto.com|GammaEntertainment.yml|Granny
+groobygirls.com|GroobyNetwork-Partial.yml|Trans
 hairyundies.com|GammaEntertainment.yml|
 hanime.tv|hanime.yml|Hentai
 happytugs.com|RealityKings.yml|
@@ -236,6 +243,8 @@ julesjordan.com|JulesJordan.yml|
 karups.com|Karups.yml|
 kink.com|Kink.yml|
 kinkvr.com|BaDoink.yml|VR
+ladyboy-ladyboy.com|GroobyNetwork-Partial.yml|Trans
+ladyboy.com|GroobyNetwork-Partial.yml|Trans
 lanesisters.com|GammaEntertainment.yml|
 legalporno.com|LegalPorno.yml|
 lesbea.com|RealityKings.yml|Lesbian
@@ -412,6 +421,8 @@ teensloveblackcocks.com|PaperStreetMedia.yml|
 teenslovehugecocks.com|RealityKings.yml|
 teensnaturalway.com|Teencoreclub.yml|
 teenstryblacks.com|Teencoreclub.yml|
+tgirls.com|GroobyNetwork-Partial.yml|Trans
+tgirlsex.com|GroobyNetwork-Partial.yml|Trans
 thatsitcomshow.com|Nubiles.yml|
 theassfactory.com|JulesJordan.yml|
 thedicksuckers.com|FinishesTheJob.yml|
@@ -430,6 +441,8 @@ tokyo-hot.com|Tokyohot.yml|JAV Uncensored
 tonightsgirlfriend.com|Tonightsgirlfriend.yml|
 toomanytrannies.com|Hustler.yml|Trans
 transbella.com|LetsDoeIt.yml|Trans
+transexpov.com|GroobyNetwork-Partial.yml|Trans
+transgasm.com|GroobyNetwork-Partial.yml|Trans
 transsensual.com|TransSensual.yml|Trans
 transsexualangel.com|GammaEntertainment.yml|Trans
 transsexualroadtrip.com|GammaEntertainment.yml|Trans
