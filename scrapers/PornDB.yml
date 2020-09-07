@@ -4,7 +4,7 @@ name: "PornDB"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - beta.metadataapi.net/scenes/
+      - metadataapi.net/scenes/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
