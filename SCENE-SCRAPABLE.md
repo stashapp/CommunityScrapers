@@ -274,7 +274,7 @@ massagebait.com|AMAMultimedia.yml|
 men.com|RealityKings.yml|Gay
 menpov.com|AMAMultimedia.yml|Gay
 metadataapi.net (JSON API)|ThePornDB.yml|
-beta.metadataapi.net|PornDB.yml|
+metadataapi.net|PornDB.yml|
 milehighmedia.com|RealityKings.yml|
 milfhunter.com|RealityKings.yml|
 milfvr.com|MilfVR.yml|VR
