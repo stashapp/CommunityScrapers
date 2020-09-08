@@ -1,0 +1,68 @@
+name: VNAGirls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.vickyathome.com
+      - https://www.shandafay.com
+      - https://www.deauxmalive.com
+      - https://www.sarajay.com
+      - https://www.carmenvalentina.com
+      - https://www.charleechaselive.com
+      - https://www.angelinacastrolive.com
+      - https://www.juliaannlive.com
+      - https://www.nikkibenz.com
+      - https://www.sunnylanelive.com
+      - https://www.pumaswedexxx.com
+      - https://www.sophiedeelive.com
+      - https://www.itscleolive.com
+      - https://www.maggiegreenlive.com
+      - https://www.bobbiedenlive.com
+      - https://www.bestoftealconrad.com
+      - https://www.jelenajensen.com
+      - https://www.pennypaxlive.com
+      - https://www.kimberleelive.com
+      - https://www.alexlegend.com
+      - https://www.sexmywife.com
+      - https://www.rubberdoll.net
+      - https://www.allanalallthetime.com
+      - https://www.fuckedfeet.com
+      - https://www.ninakayy.com
+      - https://www.romemajor.com
+      - https://www.siripornstar.com
+      - https://www.blownbyrone.com
+      - https://www.kink305.com
+      - https://www.foxxedup.com
+      - https://www.nataliastarr.com
+      - https://www.samanthagrace.net
+      - https://www.rachelstormsxxx.com
+      - https://www.kendrajames.com
+      - https://maxinex.com
+      - https://povmania.com
+      - https://maxinex.com
+      - http://www.girlgirlmania.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Performers:
+        Name:
+          selector: //div[@class='customcontent']/h3/text()
+          split: ","
+      Title:
+        selector: //div[@class='customcontent']/h1/text()
+      Details:
+        selector: //div[@class='customcontent']/div[1]/text()
+      Tags:
+        Name:
+          selector: //div[@class='customcontent']/h4/text()
+          split: ", "
+#     Image:
+#        Name: //center/img/@src
+      Date:
+        selector: //div[@class='date-and-covers']/div[@class='date']/text()
+        replace:
+          - regex: (\d+)(st|nd|rd|th)
+            with: "$1"
+        parseDate: January 2 2006
+
+# Last Updated August 30, 2020
