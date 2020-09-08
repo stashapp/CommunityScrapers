@@ -4,7 +4,7 @@ name: "PornDB"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - beta.metadataapi.net/scenes/
+      - metadataapi.net/scenes/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -35,4 +35,4 @@ xPathScrapers:
 driver:
   useCDP: true
   sleep: 5
-# Last Updated September 03, 2020
+# Last Updated September 07, 2020
