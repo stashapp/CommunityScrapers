@@ -1,0 +1,21 @@
+name: "BFFs"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bffs.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //div[@class='video-content']
+    scene:
+      Title: $content/p[@class='video-title']/text()
+      Details: $content/div[@class='scene-story']/p/text()
+      Image: //stream/@poster
+      Studio:
+        Name:
+          fixed: BFFs
+      Performers:
+        Name: $content/p[@class='model-name']/a/text()
+
+# Last Updated September 9, 2020
