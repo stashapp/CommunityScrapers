@@ -241,6 +241,7 @@ jonnidarkkoxxx.com|GammaEntertainment.yml|
 joymii.com|joymii.yml|
 julesjordan.com|JulesJordan.yml|
 karups.com|Karups.yml|
+kellymadison.com|KellyMadisonMedia.yml|
 kink.com|Kink.yml|
 kinkvr.com|BaDoink.yml|VR
 ladyboy-ladyboy.com|GroobyNetwork-Partial.yml|Trans
@@ -342,6 +343,7 @@ petite.xxx|Cherrypimps.yml|
 petiteballerinasfucked.com|Nubiles.yml|
 petitehdporn.com|Nubiles.yml|
 playboy.tv|PlayboyTV.yml|
+pornfidelity.com|KellyMadisonMedia.yml|
 porngoespro.com|Spizoo.yml|
 pornhub.com|Pornhub.yml|
 pornpros.com|AMAMultimedia.yml|
@@ -415,6 +417,7 @@ teenanalcasting.com|Teencoreclub.yml|
 teencoreclub.com|Teencoreclub.yml|
 teencorezine.com|Teencoreclub.yml|
 teendrillers.com|Teencoreclub.yml|
+teenfidelity.com|KellyMadisonMedia.yml|
 teensgoporn.com|Teencoreclub.yml|
 teensloveanal.com|PaperStreetMedia.yml|
 teensloveblackcocks.com|PaperStreetMedia.yml|
