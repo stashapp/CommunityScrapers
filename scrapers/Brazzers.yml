@@ -28,6 +28,6 @@ xPathScrapers:
         Name: //div[text()="Tags"]/../div/a/text()
       Performers:
         Name: $titlebar/div/span/a/text()
-      Image: //img[@alt=""][contains(@src,"poster")]/@src #Other way ? //img[@alt="" and not(@title)]/@src
+      Image: //img[@alt=""][contains(@src,"poster")]/@src
 
 # Last Updated September 11, 2020
