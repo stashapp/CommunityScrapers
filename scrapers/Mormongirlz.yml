@@ -14,7 +14,9 @@ xPathScrapers:
          - replace: 
               - regex: (.+)(T.+)
                 with: $1
-      Details: //div[@class="h-contant"]/div/text()
+      Details: 
+        selector: //div[@class="h-contant"]/div/text()
+        concat: "\n\n"
       Studio:
         Name:
             selector: //meta[@property="og:site_name"]/@content
@@ -29,4 +31,4 @@ xPathScrapers:
               - regex: \/\/\/\/
                 with: //
 
-# Last Updated August 15, 2020
+# Last Updated September 11, 2020
