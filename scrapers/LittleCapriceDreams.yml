@@ -1,4 +1,4 @@
-name: LittleCaprice
+name: LittleCapriceDreams
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //meta[@property="og:title"]/@content
-      Details: //meta[@property="og:description"]/@content
+      Details: //div[@class="vid_desc"]/p
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name: //meta[@property="og:site_name"]/@content
@@ -17,8 +17,5 @@ xPathScrapers:
         parseDate: January 2, 2006
       Performers:
         Name: //div[@class="vid_info_content"][1]//a
-driver:
-  useCDP: true
-  sleep: 5
 
-#Last Updated September 09, 2020
+#Last Updated September 11, 2020
