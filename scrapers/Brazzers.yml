@@ -7,26 +7,43 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $titlebar: //*[name()='path' and @d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"]/../../../../h2/..
     scene:
-      Title: //h2[@class="font-secondary sc-1b6bgon-1 kOFSRa"]/text()
+      Title: 
+        selector: //script[contains(.,"thumbnailUrl")]/text()
+        postProcess:
+          - replace:
+            - regex: (.+name":\s")(.+?)(".+)
+              with: $2
       Studio:
         Name: 
-          selector: //a[@class="vdkjux-5 gIliaY"]/text()
-# Remove '#' if you want get the studio without space.
-#          postProcess:
-#              - replace: 
-#                  - regex: " "
-#                    with: ""
+          selector: //div[text()="Subsite"]/../a/text()
+          postProcess:
+            - replace: 
+              - regex: " "
+                with: ""
       Date:
-        selector: //div[@class="sc-1b6bgon-0 jtRRdJ"]/text()
+        selector: //script[contains(.,"thumbnailUrl")]/text()
         postProcess:
-            - parseDate: January 2, 2006
-      Details: //div[@class="xz1bz0-0 fQiYnf"]/p/text()
+          - replace:
+            - regex: (.+uploadDate":\s")(.+?)(".+)
+              with: $2
+      Details:
+        selector: //script[contains(.,"thumbnailUrl")]/text()
+        postProcess:
+          - replace:
+            - regex: (.+description":\s")(.+?)(".+)
+              with: $2
       Tags:
-        Name: //div[@class="vdkjux-1 cepogm"]/a/text()
+        Name: //div[text()="Tags"]/../div/a/text()
       Performers:
-        Name: //div[@class="sc-1b6bgon-2 jywgHS"]/span/a/text()
+        Name: $titlebar/div/span/a/text()
       Image:
-        selector: //img[@class="tg5e7m-1 lSdde"]/@src
+        selector: //script[contains(.,"thumbnailUrl")]/text()
+        postProcess:
+          - replace:
+            - regex: (.+thumbnailUrl":\s")(.+?)(".+)
+              with: $2
 
-# Last Updated July 28, 2020
+# Last Updated September 11, 2020
