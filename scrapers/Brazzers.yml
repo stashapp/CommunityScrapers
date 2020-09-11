@@ -8,7 +8,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $titlebar: //*[name()='path']/../../../../h2/..
+      $titlebar: //*[name()='path'][1]/../../../../h2/..
     scene:
       Title: 
         selector: //script[contains(.,"thumbnailUrl")]/text() # Other Way: $titlebar/h2/text()
