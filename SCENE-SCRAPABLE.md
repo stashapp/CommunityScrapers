@@ -260,6 +260,7 @@ jonnidarkkoxxx.com|GammaEntertainment.yml|
 joymii.com|joymii.yml|
 julesjordan.com|JulesJordan.yml|
 karups.com|Karups.yml|
+kellymadison.com|KellyMadisonMedia.yml|
 kink.com|Kink.yml|
 kinkvr.com|BaDoink.yml|VR
 ladyboy-ladyboy.com|GroobyNetwork-Partial.yml|Trans
@@ -278,6 +279,7 @@ lexingtonsteele.com|GammaEntertainment.yml|
 lezcuties.com|GammaEntertainment.yml|Lesbian
 lilhumpers.com|RealityKings.yml|
 littleasians.com|PaperStreetMedia.yml|
+littlecaprice-dreams.com|LittleCapriceDreams.yml|
 littlehellcat.com|Teencoreclub.yml|
 lookathernow.com|RealityKings.yml|
 lubed.com|AMAMultimedia.yml|
@@ -368,6 +370,7 @@ petitehdporn.com|Nubiles.yml|
 pimp.xxx|trafficpimps.yml|
 playboy.tv|PlayboyTV.yml|
 plumperpass.com|PlumperPass.yml|
+pornfidelity.com|KellyMadisonMedia.yml|
 porngoespro.com|Spizoo.yml|
 pornhub.com|Pornhub.yml|
 pornpros.com|AMAMultimedia.yml|
@@ -452,6 +455,7 @@ teenanalcasting.com|Teencoreclub.yml|
 teencoreclub.com|Teencoreclub.yml|
 teencorezine.com|Teencoreclub.yml|
 teendrillers.com|Teencoreclub.yml|
+teenfidelity.com|KellyMadisonMedia.yml|
 teensgoporn.com|Teencoreclub.yml|
 teensloveanal.com|PaperStreetMedia.yml|
 teensloveblackcocks.com|PaperStreetMedia.yml|
