@@ -10,12 +10,7 @@ xPathScrapers:
     common:
       $titlebar: //*[name()='path'][1]/../../../../h2/..
     scene:
-      Title: 
-        selector: //script[contains(.,"thumbnailUrl")]/text() # Other Way: $titlebar/h2/text()
-        postProcess:
-          - replace:
-            - regex: (.+name":\s")(.+?)(".+)
-              with: $2
+      Title: $titlebar/h2/text()
       Studio:
         Name: 
           selector: //div[text()="Subsite"]/../a/text()
@@ -25,26 +20,14 @@ xPathScrapers:
 #                  - regex: " "
 #                    with: ""
       Date:
-        selector: //script[contains(.,"thumbnailUrl")]/text() # Other Way: $titlebar/div[2]/text() + parseDate: January 2, 2006
+        selector: $titlebar/div/text()
         postProcess:
-          - replace:
-            - regex: (.+uploadDate":\s")(.+?)(".+)
-              with: $2
-      Details:
-        selector: //script[contains(.,"thumbnailUrl")]/text() # Other Way: //h2[text()="DESCRIPTION"]/../div/p/text()
-        postProcess:
-          - replace:
-            - regex: (.+description":\s")(.+?)(".+)
-              with: $2
+          - parseDate: January 2, 2006
+      Details: //h2[text()="DESCRIPTION"]/../div/p/text()
       Tags:
         Name: //div[text()="Tags"]/../div/a/text()
       Performers:
         Name: $titlebar/div/span/a/text()
-      Image:
-        selector: //script[contains(.,"thumbnailUrl")]/text()
-        postProcess:
-          - replace:
-            - regex: (.+thumbnailUrl":\s")(.+?)(".+)
-              with: $2
+      Image: //img[@alt=""][contains(@src,"poster")]/@src #Other way ? //img[@alt="" and not(@title)]/@src
 
 # Last Updated September 11, 2020
