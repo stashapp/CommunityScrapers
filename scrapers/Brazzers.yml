@@ -19,10 +19,11 @@ xPathScrapers:
       Studio:
         Name: 
           selector: //div[text()="Subsite"]/../a/text()
-          postProcess:
-            - replace: 
-              - regex: " "
-                with: ""
+# Remove '#' if you want get the studio without space.
+#          postProcess:
+#              - replace: 
+#                  - regex: " "
+#                    with: ""
       Date:
         selector: //script[contains(.,"thumbnailUrl")]/text() # Other Way: $titlebar/div[2]/text() + parseDate: January 2, 2006
         postProcess:
