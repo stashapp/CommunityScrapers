@@ -258,6 +258,7 @@ lexingtonsteele.com|GammaEntertainment.yml|
 lezcuties.com|GammaEntertainment.yml|Lesbian
 lilhumpers.com|RealityKings.yml|
 littleasians.com|PaperStreetMedia.yml|
+littlecaprice-dreams.com|LittleCapriceDreams.yml|
 littlehellcat.com|Teencoreclub.yml|
 lookathernow.com|RealityKings.yml|
 lubed.com|AMAMultimedia.yml|
