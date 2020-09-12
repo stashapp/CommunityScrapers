@@ -67,4 +67,4 @@ timtales.com|TimTales.yml
 xslist.org|Xslist.yml
 
 ## Contributing
-Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/wiki/Scraping-configuration) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
+Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
