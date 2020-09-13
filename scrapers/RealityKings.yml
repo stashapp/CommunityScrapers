@@ -81,11 +81,13 @@ xPathScrapers:
         Name: $section//a[@href and @title]/text()
       Studio:
         Name: 
-            selector: //link[@rel="canonical"]/@href
+            selector: $section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
             postProcess:
                 - replace: 
-                    - regex: (.+www.)(.+?)(\..+)
-                      with: $2
+                    - regex: .*www\.
+                      with: ""
+                    - regex: \.com.+
+                      with: ""
       Image: //img[@alt=""][contains(@src,"poster")]/@src
 
   performerScraper:
