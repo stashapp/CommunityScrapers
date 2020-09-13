@@ -69,7 +69,7 @@ xPathScrapers:
     common:
       $section: //img[@alt=""][contains(@src,"poster")]/../../.. #img>div>div>section
     scene:
-      Title: $section//h1/text()
+      Title: $section//h1/text()|$section//h2/text()
       Date:
         selector: //div[text()="Release Date:"]/../text()
         parseDate: January 2, 2006
