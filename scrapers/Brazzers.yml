@@ -7,26 +7,27 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $titlebar: //*[name()='path'][1]/../../../../h2/..
     scene:
-      Title: //h2[@class="font-secondary sc-1b6bgon-1 kOFSRa"]/text()
+      Title: $titlebar/h2/text()
       Studio:
         Name: 
-          selector: //a[@class="vdkjux-5 gIliaY"]/text()
+          selector: //div[text()="Subsite"]/../a/text()
 # Remove '#' if you want get the studio without space.
 #          postProcess:
 #              - replace: 
 #                  - regex: " "
 #                    with: ""
       Date:
-        selector: //div[@class="sc-1b6bgon-0 jtRRdJ"]/text()
+        selector: $titlebar/div/text()
         postProcess:
-            - parseDate: January 2, 2006
-      Details: //div[@class="xz1bz0-0 fQiYnf"]/p/text()
+          - parseDate: January 2, 2006
+      Details: //h2[text()="DESCRIPTION"]/../div/p/text()
       Tags:
-        Name: //div[@class="vdkjux-1 cepogm"]/a/text()
+        Name: //div[text()="Tags"]/../div/a/text()
       Performers:
-        Name: //div[@class="sc-1b6bgon-2 jywgHS"]/span/a/text()
-      Image:
-        selector: //img[@class="tg5e7m-1 lSdde"]/@src
+        Name: $titlebar/div/span/a/text()
+      Image: //img[@alt=""][contains(@src,"poster")]/@src
 
-# Last Updated July 28, 2020
+# Last Updated September 11, 2020
