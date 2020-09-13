@@ -1,0 +1,27 @@
+name: "Mylf"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mylf.com/movies/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[contains(@class,"sceneTitle")]/text()
+      Details: //div[contains(@class,"sceneDesc")]/text()
+      Date: 
+        selector: //div[contains(@class,"sceneDate")]/text()
+        postProcess:
+            - parseDate: 01/02/2006
+      Performers:
+        Name: //div[contains(@class,"contentTitle")]/a[contains(@class,"model-name")]/text()
+      Image: //div[@class="stream-video-container"]/stream/@poster
+      Studio:
+        Name: 
+          selector: //div[contains(@class,"siteName")]/a[@href]/text()
+          postProcess:
+            - replace: 
+              - regex: \sX\s.*
+                with: ""
+
+# Last Updated September 13, 2020
