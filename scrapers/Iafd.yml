@@ -123,4 +123,4 @@ xPathScrapers:
         selector: //div[@class="col-sm-12"]/dl/dd
         concat: ", "
 
-# Last Updated August 30, 2020
+# Last Updated September 14, 2020
