@@ -266,6 +266,7 @@ m45e.com|javlibrary.yml|JAV
 maketeengape.com|Teencoreclub.yml|
 maledigital.com|GammaEntertainment.yml|Gay
 mamacitaz.com|LetsDoeIt.yml|
+mandyflores.com|Mandyflores.yml|
 manojob.com|FinishesTheJob.yml|
 manroyale.com|AMAMultimedia.yml|Gay
 manuelferrara.com|JulesJordan.yml|
