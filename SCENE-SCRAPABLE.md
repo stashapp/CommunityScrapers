@@ -273,7 +273,7 @@ manyvids.com|ManyVids.yml|
 maskurbate.com|GammaEntertainment.yml|
 massage-parlor.com|GammaEntertainment.yml|
 massagebait.com|AMAMultimedia.yml|
-men.com|RealityKings.yml|Gay
+men.com|Brazzers.yml|Gay
 menpov.com|AMAMultimedia.yml|Gay
 metadataapi.net (JSON API)|ThePornDB.yml|
 metadataapi.net|PornDB.yml|
@@ -368,7 +368,7 @@ puremature.com|AMAMultimedia.yml|
 puretaboo.com|PureTaboo.yml|
 ragingstallion.com|GammaEntertainment.yml|Gay
 realityjunkies.com|RealityKings.yml|
-realitykings.com|RealityKings.yml|
+realitykings.com|Brazzers.yml|
 realsensual.com|RealSensual.yml|
 realvr.com|BaDoink.yml|VR
 recklessinmiami.com|RealityKings.yml|
