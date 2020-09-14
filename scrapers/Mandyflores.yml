@@ -8,7 +8,8 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //span[@class="title_bar_hilite"]
-      Details: //span[@class="update_description"]/div[@align="center"]/text()[normalize-space(.)]
+      # Details: //span[@class="update_description"]/div[@align="center"]/text()[normalize-space(.)]
+      # Not working for all scenes
       Date:
         selector: //div[@class="cell update_date"][not(ancestor::span[@class="update_description"])]/text()
         postProcess:
