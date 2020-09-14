@@ -4,6 +4,8 @@ sceneByURL:
     url:
       - brazzers.com/video
       - brazzers.com/scenes
+      - men.com/sceneid/
+      - realitykings.com/scene/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -23,7 +25,7 @@ xPathScrapers:
         selector: $titlebar/div/text()
         postProcess:
           - parseDate: January 2, 2006
-      Details: //h2[text()="DESCRIPTION"]/../div/p/text()
+      Details: //h2[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'description']/../div/p/text()
       Tags:
         Name: //div[text()="Tags"]/../div/a/text()
       Performers:
