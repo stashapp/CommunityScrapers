@@ -1,0 +1,80 @@
+name: "XsList (JAV)"
+performerByName:
+  action: scrapeXPath
+  queryURL: https://xslist.org/search?query={}&lg=en
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url: 
+      - xslist.org/en/model/
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //li[@class="clearfix"]/h3/a/@title
+      URL: 
+        selector: //li[@class="clearfix"]/h3/a/@href
+  
+  performerScraper:
+    performer:
+      Name:
+        selector: //span[@itemprop="name"]/text()
+        #Uncomment below to convert to Surname Name (JavLibrary compatible)
+        #postProcess:
+        #  - replace: 
+        #    - regex: (.+)(\s)(.+)
+        #      with: $3$2$1
+      Aliases: 
+        selector: //span[@itemprop="additionalName"]/text()|//div[@id="layout"]/div/h2[1]/text()
+        concat: ", "
+        postProcess:
+          - replace: 
+            - regex: "(.+)( \\b[a-zA-Z]+\\s\\b[a-zA-Z]+)(.+?)([\\p{Han}\\p{Hiragana}\\p{Katakana}ー]+)(.+)"
+              with: $4, $1
+            - regex: "(\\b.+?|)([\\p{Han}\\p{Hiragana}\\p{Katakana}ー]+)(.+)(Profile)(.+)|(.+)"
+              with: $2$6
+            - regex: ^,|,$
+              with: 
+      URL: //head/meta[@property="og:url"]/@content
+      Birthdate:
+        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Born")]
+        postProcess:
+          - replace:
+            - regex: (Born:\s)(.+)
+              with: $2
+          - parseDate: January 2, 2006
+      Height: 
+        selector: //span[@itemprop="height"]/text()[not(contains(.,"n/a"))]
+        postProcess:
+          - replace:
+            - regex: "cm"
+              with: ""
+      Measurements: 
+        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Measurements")]|//div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Cup Size")]
+        concat: "|"
+        postProcess:
+          - replace:
+            - regex: (.+:\s\w)(\d*)(\s\/\s.?)(\d*)(\s\/\s.?)(\d*)(.+:\s)(\w*)(\s.*)
+              with: $2$8-$4-$6
+            - regex: "Measurements: B|W|H|\\s"
+              with: ""
+            - regex: "CupSize:|Cup"
+              with: ""
+            - regex: \/
+              with: "-"
+      CareerLength: 
+        selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"AV Activity")]
+        postProcess:
+          - replace:
+            - regex: (.+)(\d{4})
+              with: $2
+      Image: //a[@class="gallery-item gallery-jpg" and number(@data-height)>number(@data-width)][1]/@href|//img[@class='profile_img']/@src
+      Ethnicity: 
+        fixed: "asian"
+      Country: 
+        fixed: "Japan"
+      Gender: 
+        fixed: "Female"
+
+#Last Updated August 20, 2020

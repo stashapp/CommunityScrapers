@@ -1,23 +1,33 @@
-name: "Brazzers"
+name: 'brazzers'
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.brazzers.com/video/
+      - brazzers.com/video
+      - brazzers.com/scenes
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $titlebar: //*[name()='path'][1]/../../../../h2/..
     scene:
-      Title: //h2[@class="font-secondary sc-1b6bgon-1 kOFSRa"]/text()
-      Date:
-        selector: //div[@class="sc-1b6bgon-0 jtRRdJ"]/text()
-        parseDate: January 2, 2006
-      Details: //div[@class="xz1bz0-0 fQiYnf"]/p]/text()
-      Tags:
-        Name: //div[@class="vdkjux-1 cepogm"]/a/text()
-      Performers:
-        Name: //div[@class="sc-1b6bgon-2 jywgHS"]/span/a/text()
+      Title: $titlebar/h2/text()
       Studio:
-        Name: //a[@class="vdkjux-5 gIliaY"]/text()
-      Image: //img[@class="tg5e7m-1 lSdde"]/@src
-      
-# Last Updated August 4, 2020
+        Name: 
+          selector: //div[text()="Subsite"]/../a/text()
+# Remove '#' if you want get the studio without space.
+#          postProcess:
+#              - replace: 
+#                  - regex: " "
+#                    with: ""
+      Date:
+        selector: $titlebar/div/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: //h2[text()="DESCRIPTION"]/../div/p/text()
+      Tags:
+        Name: //div[text()="Tags"]/../div/a/text()
+      Performers:
+        Name: $titlebar/div/span/a/text()
+      Image: //img[@alt=""][contains(@src,"poster")]/@src
+
+# Last Updated September 11, 2020
