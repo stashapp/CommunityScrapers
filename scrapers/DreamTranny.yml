@@ -12,7 +12,8 @@ xPathScrapers:
         selector: //div[@class="updateDescription"]/p/text()
       Date:
         selector: //span[@class="updateDate"]/text()
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Performers:
         Name: //div[@class="updateModels"]/a/text()
       Image:
