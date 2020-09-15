@@ -60,8 +60,8 @@ xPathScrapers:
         selector: //*[contains(.,"Date of Birth")]/following-sibling::span/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
-              - regex: th|st|rd|nd
-                with: ""
+              - regex: th,|st,|rd,|nd,
+                with: ","
           - parseDate: January 2, 2006
       Measurements: //*[contains(.,"Measurements")]/following-sibling::span/text()[not(contains(.,"N/A"))]
       Country: 
