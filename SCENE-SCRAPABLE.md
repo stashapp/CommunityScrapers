@@ -37,7 +37,7 @@ assholefever.com|GammaEntertainment.yml|
 assmeat.com|Hustler.yml|
 assteenmouth.com|Teencoreclub.yml|
 babes.com|RealityKingsOL.yml|
-babesnetwork.com|RealityKings.yml|
+babesnetwork.com|MindGeek.yml|
 babevr.com|BaDoink.yml|VR
 backroomcastingcouch.com|Backroomcastingcouch.yml|
 baddaddypov.com|Analized.yml|
