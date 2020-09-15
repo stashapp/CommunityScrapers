@@ -192,9 +192,9 @@ xPathScrapers:
         postProcess:
           - map:
               Piercing: "Yes"
-      # There is no way get the gender.
-      Gender: 
-        fixed: "Female"
+# There is no Xpath to know the gender.
+#      Gender: 
+#        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
 
 # Last Updated September 14, 2020
