@@ -108,8 +108,8 @@ xPathScrapers:
         selector: //li[contains(.,"Date of Birth")]/span/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
-              - regex: th|st|rd|nd
-                with: ""
+              - regex: th,|st,|rd,|nd,
+                with: ","
           - parseDate: January 2, 2006
       Measurements: //li[contains(.,"Measurements")]/span/text()[not(contains(.,"N/A"))]
       Country: 
