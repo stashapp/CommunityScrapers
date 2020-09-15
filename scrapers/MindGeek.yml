@@ -124,6 +124,9 @@ xPathScrapers:
           - feetToCm: true
       Image:
         selector: //img[contains(@src, "model")]/@src
+# There is no xPath to know the gender.
+#      Gender: 
+#        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
 
 # Last Updated September 14, 2020
