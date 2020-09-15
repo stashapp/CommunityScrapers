@@ -37,6 +37,9 @@ xPathScrapers:
       $titlebar: //*[name()='path'][1]/../../../../h2/..
     scene:
       Title: $titlebar/h2/text()
+      Studio:
+        Name: 
+          selector: //div[text()="Subsite"]/../a/text()
 # Remove '#' if you want get the studio without space.
 #          postProcess:
 #              - replace: 
