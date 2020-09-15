@@ -1,4 +1,4 @@
-name: "RealityKings"
+name: "MindGeek"
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -13,28 +13,28 @@ sceneByURL:
       - fakehostel.com/scene/
       - fakehub.com/scene/
       - faketaxi.com/scene/
-      - familyhookups.com/scene
+      - familyhookups.com/scene/
       - happytugs.com/scene/
       - iconmale.com/
       - iknowthatgirl.com/scene/
       - letstryanal.com/scene/
       - lilhumpers.com/scene/
       - lookathernow.com/scene/
-      - milehighmedia.com/
+      - milehighmedia.com/scene/
       - milfhunter.com/scene/
       - mofos.com/scene/
       - mofosnetwork.com/scene/
       - moneytalks.com/scene/
       - publicagent.com/scene/
       - publicpickups.com/scene/
-      - realityjunkies.com/
+      - realityjunkies.com/scene/
       - recklessinmiami.com/scene/
       - rk.com/scene/
       - roundandbrown.com/scene/
       - seancody.com/scene/
       - sneakysex.com/scene/
-      - sweetheartvideo.com/
-      - sweetsinner.com/
+      - sweetheartvideo.com/scene/
+      - sweetsinner.com/scene/
       - teenslovehugecocks.com/scene/
       - twistysnetwork.com/scene/
     scraper: sceneScraper
@@ -42,27 +42,41 @@ sceneByURL:
 performerByURL:
   - action: scrapeXPath
     url:
-      - realitykings.com/model/
+      - 8thstreetlatinas.com/model/
+      - babesnetwork.com/model/
+      - bignaturals.com/model/
+      - captainstabbin.com/model/
+      - cumfiesta.com/model/
+      - devianthardcore.com/model/
+      - doghousedigital.com/
+      - dontbreakme.com/model/
+      - fakehostel.com/model/
+      - fakehub.com/model/
+      - faketaxi.com/model/
+      - familyhookups.com/model
+      - happytugs.com/model/
+      - iconmale.com/
+      - iknowthatgirl.com/model/
+      - letstryanal.com/model/
+      - lilhumpers.com/model/
+      - lookathernow.com/model/
+      - milfhunter.com/model/
+      - mofos.com/model/
+      - mofosnetwork.com/model/
+      - moneytalks.com/model/
+      - publicagent.com/model/
+      - publicpickups.com/model/
+      - recklessinmiami.com/model/
+      - rk.com/model/
+      - roundandbrown.com/model/
+      - seancody.com/model/
+      - sneakysex.com/model/
+      - sweetsinner.com/model/
+      - teenslovehugecocks.com/model/
+      - twistysnetwork.com/model/
     scraper: performerScraper
 
-performerByName:
-  action: scrapeXPath
-  queryURL: https://www.realitykings.com/models?q={}
-  scraper: performerSearch
-
 xPathScrapers:
-  performerSearch:
-    common:
-      $result: //section[@id="73374444684"]//a[@class="aq1tgu-1 hupvSc"]
-
-    performer:
-      Name: $result/@title
-      URL:
-        selector: $result/@href
-        replace:
-          - regex: ^
-            with: https://www.realitykings.com
-
   sceneScraper:
     common:
       $section: //img[@alt=""][contains(@src,"poster")]/../../.. #img>div>div>section
@@ -89,27 +103,27 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      Name: //div[contains(@class, "cNKuKg")]/text()
+      Name: //section/div/h1/text()
       Birthdate:
-        selector: //span[contains(.,"Date of Birth")]/following-sibling::span[1]/text()
+        selector: //li[contains(.,"Date of Birth")]/span/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
-              - regex: "nd"
-                with:
-              - regex: "th"
-                with:
-              - regex: "rd"
-                with:
-              - regex: "([\\d]+)st"
-                with: $1
+              - regex: th|st|rd|nd
+                with: ""
           - parseDate: January 2, 2006
-      Measurements: //span[contains(.,"Measurements")]/following-sibling::span[1]/text()
-      Country: //span[contains(.,"Birth Place")]/following-sibling::span[1]/text()
+      Measurements: //li[contains(.,"Measurements")]/span/text()[not(contains(.,"N/A"))]
+      Country: 
+        selector: //li[contains(.,"Birth Place")]/span/text()[not(contains(.,"N/A"))]
+        postProcess:
+          - replace:
+            - regex: .*?,\s
+              with: ""
       Height:
-        selector: //span[contains(.,"Height")]/following-sibling::span[1]/text()
+        selector: //li[contains(.,"Height")]/span/text()[not(contains(.,"N/A"))]
         postProcess:
           - feetToCm: true
       Image:
-        selector: //img[contains(@class, "ibyLSN")]/@src[contains(.,"model")]
+        selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated September 6, 2020
+
+# Last Updated September 14, 2020
