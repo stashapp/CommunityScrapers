@@ -46,51 +46,52 @@ xPathScrapers:
       Name: //h1
       Gender: 
         selector: //form[@id='correct']/input[@name='Gender']/@value
-        replace: 
-          - regex: f
-            with: "Female"
-          - regex: m
-            with: "Male"
+        postProcess:
+          - map:
+              f: Female
+              m: Male
       URL: //head/meta[@property="og:url"]/@content
       Twitter: 
         selector: //p[@class='biodata']/a[contains(text(),"http://twitter.com/")]/@href
-        replace:
-          - regex: http://twitter.com/
-            with: ""
+        postProcess:
+          - replace:
+            - regex: http://twitter.com/
+              with: ""
       Instagram: 
         selector: //p[@class='biodata']/a[contains(text(),"http://instagram.com/")]/@href
-        replace:
-          - regex: http://instagram.com/
-            with: ""
+        postProcess:
+          - replace:
+            - regex: http://instagram.com/
+              with: ""
       Birthdate:
         selector: //div[p[text()='Birthday']]/p[@class='biodata']/a[contains(@href, '/calendar.')]/text()
         # reference date is: 2006/01/02
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Ethnicity: 
         selector: //div[p[text()='Ethnicity']]/p[@class='biodata'][1]
-        replace: 
-          - regex: Asian
-            with: "asian"
-          - regex: Caucasian
-            with: "white"
-          - regex: Black
-            with: "black"
-          - regex: Latin
-            with: "hispanic"
+        postProcess:
+          - map:
+              Asian: asian
+              Caucasian: white
+              Black: black
+              Latin: hispanic
       Country: //div/p[text()='Nationality']/following-sibling::p[1]/text()
       Height: 
         selector: //div/p[text()='Height']/following-sibling::p[1]/text()
-        replace: 
-          - regex: \d+\D+\d+\D+
-            with: ""
-          - regex:  \D+$
-            with: ""
+        postProcess:
+          - replace:
+            - regex: \d+\D+\d+\D+
+              with: ""
+            - regex:  \D+$
+              with: ""
       Measurements: //div/p[text()='Measurements']/following-sibling::p[1]/text()
       CareerLength: 
         selector: //div/p[@class='biodata'][contains(text(),"Started around")]/text()
-        replace: 
-          - regex: (\D+\d\d\D+)$
-            with: ""     
+        postProcess:
+          - replace:
+            - regex: (\D+\d\d\D+)$
+              with: ""     
       Aliases: //div[p[@class='bioheading']]//div[@class='biodata']/text()
       Tattoos: //div/p[text()='Tattoos']/following-sibling::p[1]/text()
       Piercings: //div/p[text()='Piercings']/following-sibling::p[1]/text()
@@ -105,19 +106,21 @@ xPathScrapers:
     movie:
       Name:
         selector: //h1/text()
-        replace:
-         - regex: \([0-9]+\)
-           with:
+        postProcess:
+          - replace:
+            - regex: \([0-9]+\)
+              with:
       Director: $biohead[contains(text(), "Directors")]/$biodata_link
       Duration: $biohead[contains(text(), "Minutes")]/$biodata
       Synopsis: //div[@id="synopsis"]/div[@class="padded-panel"]//text()
       Date:
         selector: $biohead[contains(text(), "Release Date")]/$biodata[1]
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Studio:
         Name: $biohead[contains(text(), "Studio")]/$biodata_link|$biohead[contains(text(), "Distributor")]/$biodata_link
       Aliases:
         selector: //div[@class="col-sm-12"]/dl/dd
         concat: ", "
 
-# Last Updated August 30, 2020
+# Last Updated September 14, 2020
