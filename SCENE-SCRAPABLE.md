@@ -13,6 +13,7 @@ activeduty.com|GammaEntertainment.yml|Gay
 aebn.com|AEBN.yml|Straight + Gay
 alettaoceanempire.com|GammaEntertainment.yml|
 allblackx.com|GammaEntertainment.yml|
+allfinegirls.net|WowPorn.yml|
 allgirlmassage.com|GammaEntertainment.yml|Lesbian
 allherluv.com|AllHerLuv.yml|Lesbian
 amateurallure.com|AmateurAllure.yml|
@@ -486,6 +487,7 @@ whiteghetto.com|GammaEntertainment.yml|
 whiteteensblackcocks.com|Teencoreclub.yml|
 wicked.com|GammaEntertainment.yml|
 wildoncam.com|Cherrypimps.yml|
+wowgirls.xxx|WowPorn.yml|
 wowporn.xxx|WowPorn.yml|
 x-art.com|X-artcom.yml|
 xart.xxx|Xartxxx.yml|
