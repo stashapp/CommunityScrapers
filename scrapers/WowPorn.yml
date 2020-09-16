@@ -29,5 +29,7 @@ xPathScrapers:
               - replace:
                 - regex: \s-.*|\sVideos
                   with: ""
+              - map:
+                  WOW PORN: "Wow Porn"
 
 # Last Updated September 16, 2020
