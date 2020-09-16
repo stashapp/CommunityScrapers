@@ -445,6 +445,7 @@ titworld.com|Hustler.yml|
 tokyo-hot.com|Tokyohot.yml|JAV Uncensored
 tonightsgirlfriend.com|Tonightsgirlfriend.yml|
 toomanytrannies.com|Hustler.yml|Trans
+transangels.com|RealityKingsOL.yml|Trans
 transbella.com|LetsDoeIt.yml|Trans
 transexpov.com|GroobyNetwork-Partial.yml|Trans
 transgasm.com|GroobyNetwork-Partial.yml|Trans
