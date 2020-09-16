@@ -54,7 +54,7 @@ xPathScrapers:
         Name: //div[text()="Tags"]/../div/a/text()
       Performers:
         Name: $titlebar/div/span/a/text()
-      Image: //img[@alt=""][contains(@src,"poster")]/@src #Other way ? //img[@alt="" and not(@title)]/@src
+      Image: //img[@alt=""][contains(@src,"poster")]/@src
 
   performerScraper:
     performer:
@@ -183,9 +183,8 @@ xPathScrapers:
         selector: //img[contains(@src, "model")]/@src
       Ethnicity:
         selector: //*[contains(.,"Ethnicity")]/following-sibling::a/text()
-      # Sometimes Natural Tits appear in Breast Size...
       FakeTits:
-        selector: //*[contains(.,"Boob Type")]/following-sibling::a/text()
+        selector: //a[contains(@href,"/enhanced")]/text()|//a[contains(@href,"/natural-tits")]/text()
         postProcess:
           - map:
               Natural Tits: "No"
