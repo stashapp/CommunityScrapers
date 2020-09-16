@@ -6,10 +6,14 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $updateDesc: //span[@class="update_description"]
+      $divCenter: /div[@align="center"]
     scene:
       Title: //span[@class="title_bar_hilite"]
-      # Details: //span[@class="update_description"]/div[@align="center"]/text()[normalize-space(.)]
-      # Not working for all scenes
+      Details:
+        selector: $updateDesc$divCenter/span/span[@style]/text()[normalize-space(.)]|($updateDesc | $updateDesc/p)/text()[normalize-space(.)]|($updateDesc$divCenter/text())[1]|($updateDesc/text())[1]
+        concat: "\n"
       Date:
         selector: //div[@class="cell update_date"][not(ancestor::span[@class="update_description"])]/text()
         postProcess:
@@ -22,4 +26,4 @@ xPathScrapers:
       Performers:
         Name: //span[@class="update_models"][following-sibling::span[@class="update_tags"]]/a
 
-# Last Updated September 14, 2020
+# Last Updated September 16, 2020
