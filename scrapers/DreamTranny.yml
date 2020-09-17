@@ -1,0 +1,29 @@
+name: "DreamTranny"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - dreamtranny.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="updateInfo"]/h2/text()
+      Details:
+        selector: //div[@class="updateDescription"]/p/text()
+      Date:
+        selector: //span[@class="updateDate"]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Performers:
+        Name: //div[@class="updateModels"]/a/text()
+      Image:
+        selector: //img[contains(@src, "01.jpg")]/@src
+        postProcess:
+          - replace: 
+            - regex: ^
+              with: "https://dreamtranny.com"
+      Studio: 
+        Name:
+          fixed: "Dream Tranny"
+
+# Last Updated September 14, 2020

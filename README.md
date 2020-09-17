@@ -52,15 +52,17 @@ Supported Site|Scraper
 ------------- | -------------
 assholefever.com|GammaEntertainment.yml
 babepedia.com|Babepedia.yml
+brazzers.com|Brazzers.yml
 evilangel.com|GammaEntertainment.yml
 freeones.xxx|FreeonesCommunity.yml
 iafd.com|Iafd.yml
 julesjordan.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
 metadataapi.net|ThePornDB.yml
+MindGeek (27 sites)|MindGeek.yml
 modelhub.com|Modelhub.yml
 pornhub.com|Pornhub.yml
-realitykings.com|RealityKings.yml
+realitykings.com|Brazzers.yml
 sexvr.com|SexVR.yml
 thenude.com|TheNude.yml
 timtales.com|TimTales.yml
