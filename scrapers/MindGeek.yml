@@ -1,74 +1,114 @@
-name: 'Brazzers'
+name: "MindGeek"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - brazzers.com/video
-      - brazzers.com/scenes
-      - men.com/sceneid/
-      - realitykings.com/scene/
+      - 8thstreetlatinas.com/scene/
+      - babesnetwork.com/scene/
+      - bignaturals.com/scene/
+      - captainstabbin.com/scene/
+      - cumfiesta.com/scene/
+      - devianthardcore.com/scene/
+      - doghousedigital.com/
+      - dontbreakme.com/scene/
+      - fakehostel.com/scene/
+      - fakehub.com/scene/
+      - faketaxi.com/scene/
+      - familyhookups.com/scene/
+      - happytugs.com/scene/
+      - iconmale.com/
+      - iknowthatgirl.com/scene/
+      - letstryanal.com/scene/
+      - lilhumpers.com/scene/
+      - lookathernow.com/scene/
+      - milehighmedia.com/scene/
+      - milfhunter.com/scene/
+      - mofos.com/scene/
+      - mofosnetwork.com/scene/
+      - moneytalks.com/scene/
+      - publicagent.com/scene/
+      - publicpickups.com/scene/
+      - realityjunkies.com/scene/
+      - recklessinmiami.com/scene/
+      - rk.com/scene/
+      - roundandbrown.com/scene/
+      - seancody.com/scene/
+      - sneakysex.com/scene/
+      - sweetheartvideo.com/scene/
+      - sweetsinner.com/scene/
+      - teenslovehugecocks.com/scene/
+      - twistysnetwork.com/scene/
     scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
     url:
-      - brazzers.com/pornstar
+      - 8thstreetlatinas.com/model/
+      - babesnetwork.com/model/
+      - bignaturals.com/model/
+      - captainstabbin.com/model/
+      - cumfiesta.com/model/
+      - devianthardcore.com/model/
+      - doghousedigital.com/
+      - dontbreakme.com/model/
+      - familyhookups.com/model
+      - happytugs.com/model/
+      - iknowthatgirl.com/model/
+      - letstryanal.com/model/
+      - lilhumpers.com/model/
+      - lookathernow.com/model/
+      - milfhunter.com/model/
+      - mofos.com/model/
+      - mofosnetwork.com/model/
+      - moneytalks.com/model/
+      - publicpickups.com/model/
+      - recklessinmiami.com/model/
+      - rk.com/model/
+      - roundandbrown.com/model/
+      - seancody.com/model/
+      - sneakysex.com/model/
+      - sweetsinner.com/model/
+      - teenslovehugecocks.com/model/
+      - twistysnetwork.com/model/
     scraper: performerScraper
 
-performerByName:
-  action: scrapeXPath
-  queryURL: https://www.brazzers.com/pornstars?q={}
-  scraper: performerSearch
-
 xPathScrapers:
-  performerSearch:
-    common:
-      $result: //span/a[contains(@href, "/pornstar")]
-
-    performer:
-      Name: $result/@title
-      URL:
-        selector: $result/@href
-        replace:
-          - regex: ^
-            with: https://www.brazzers.com
-
   sceneScraper:
     common:
-      $titlebar: //*[name()='path'][1]/../../../../h2/..
+      $section: //img[@alt=""][contains(@src,"poster")]/../../.. #img>div>div>section
     scene:
-      Title: $titlebar/h2/text()
+      Title: $section//h1/text()|$section//h2/text()
+      Date:
+        selector: //div[text()="Release Date:"]/../text()
+        parseDate: January 2, 2006
+      Details: //div[text()="Description:"]/../div[not(@class)]/text()
+      Tags:
+        Name: //a[contains(@href,"/scenes?tags")]/text()[1]
+      Performers:
+        Name: $section//a[@href and @title]/text()
       Studio:
         Name: 
-          selector: //div[text()="Subsite"]/../a/text()
-# Remove '#' if you want get the studio without space.
-#          postProcess:
-#              - replace: 
-#                  - regex: " "
-#                    with: ""
-      Date:
-        selector: $titlebar/div/text()
-        postProcess:
-          - parseDate: January 2, 2006
-      Details: //h2[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'description']/../div/p/text()
-      Tags:
-        Name: //div[text()="Tags"]/../div/a/text()
-      Performers:
-        Name: $titlebar/div/span/a/text()
+            selector: $section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
+            postProcess:
+                - replace: 
+                    - regex: .*www\.
+                      with: ""
+                    - regex: \.com.+
+                      with: ""
       Image: //img[@alt=""][contains(@src,"poster")]/@src
 
   performerScraper:
     performer:
-      Name: //section/div/div/div[@font-size]/text() # //div[@font-size][number(translate(@font-size,"px",""))>=35]/text()
+      Name: //section/div/h1/text()|//section/div/h2[not(following-sibling::a)]/text()
       Birthdate:
-        selector: //*[contains(.,"Date of Birth")]/following-sibling::span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Date of Birth")]/span/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
               - regex: th,|st,|rd,|nd,
                 with: ","
           - parseDate: January 2, 2006
-      Measurements: //*[contains(.,"Measurements")]/following-sibling::span/text()[not(contains(.,"N/A"))]
+      Measurements: //li[contains(.,"Measurements")]/span/text()[not(contains(.,"N/A"))]
       Country: 
-        selector: //*[contains(.,"Birth Place")]/following-sibling::span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Birth Place")]/span/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
             - regex: .*?,\s
@@ -176,30 +216,12 @@ xPathScrapers:
               Wisconsin: "USA"
               Wyoming: "USA"
       Height:
-        selector: //*[contains(.,"Height")]/following-sibling::span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Height")]/span/text()[not(contains(.,"N/A"))]
         postProcess:
           - feetToCm: true
       Image:
         selector: //img[contains(@src, "model")]/@src
-      Ethnicity:
-        selector: //*[contains(.,"Ethnicity")]/following-sibling::a/text()
-      FakeTits:
-        selector: //a[contains(@href,"/enhanced")]/text()|//a[contains(@href,"/natural-tits")]/text()
-        postProcess:
-          - map:
-              Natural Tits: "No"
-              Enhanced: "Yes"
-      Tattoos:
-        selector: //*[contains(.,"Body Art")]/following-sibling::a[contains(@href,"/tattoo")]/text()
-        postProcess:
-          - map:
-              Tattoo: "Yes"
-      Piercings:
-        selector: //*[contains(.,"Body Art")]/following-sibling::a[contains(@href,"/piercing")]/text()
-        postProcess:
-          - map:
-              Piercing: "Yes"
-# There is no Xpath to know the gender.
+# There is no xPath to know the gender.
 #      Gender: 
 #        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
