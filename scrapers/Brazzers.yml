@@ -189,6 +189,11 @@ xPathScrapers:
           - map:
               Natural Tits: "No"
               Enhanced: "Yes"
+      Tattoos:
+        selector: //*[contains(.,"Body Art")]/following-sibling::a[contains(@href,"/tattoo")]/text()
+        postProcess:
+          - map:
+              Tattoo: "Yes"
       Piercings:
         selector: //*[contains(.,"Body Art")]/following-sibling::a[contains(@href,"/piercing")]/text()
         postProcess:
