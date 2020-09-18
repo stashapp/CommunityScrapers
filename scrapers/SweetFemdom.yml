@@ -9,14 +9,19 @@ xPathScrapers:
     scene:
       Title: //div[@class="videoDetails clear"]/h3/text()
       Date:
-        selector: //div[@class="videoInfo clear"]/p[1]/text()
+        selector: //div[@class="videoInfo clear"]/p/span[contains(text(),"Date Added")]/../text()
         postProcess:
           - parseDate: January 2, 2006
-      Details: //div[@class="videoDetails clear"]/p/text()
+      Details:
+        selector: //div[@class="videoDetails clear"]
+        postProcess:
+          - replace:
+              - regex: ".*\t" # remove the h3 title and tab (\t) from description
+                with: ""
       Tags:
-        Name: //div[@class="featuring clear"][2]/ul/li/a/text()
+        Name: //div[@class="featuring clear"]/ul/li[@class="label"][contains(text(),"Tags:")]/../li/a/text()
       Performers:
-        Name: //div[@class="featuring clear"][1]/ul/li/a/text()
+        Name: //div[@class="featuring clear"]/ul/li[@class="label"][contains(text(),"Featuring:")]/../li/a/text()
       Image: 
         selector: //meta[@property="og:image"]/@content
 
