@@ -28,7 +28,8 @@ xPathScrapers:
           - regex: ^
             with: "https://www.plumperpass.com/t1/"
       Studio:
-        Name: //div[@class="navbar-header"]/a[1]/text()
+        Name:
+          fixed: "Plumperpass"
       Date:
         selector: //div[@class="movie-date"]/text()
         postProcess:
