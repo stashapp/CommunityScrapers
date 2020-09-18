@@ -10,7 +10,12 @@ xPathScrapers:
       Title: //h1[@class="title-scene"]/text()
       Details: //p[@class="description-scene"]/text()
       Performers:
-        Name: //p[@class="featuring"]/a
+        Name:
+          selector: //p[@class="featuring"]/a
+          postProcess:
+            - replace:
+                - regex: \.$
+                  with: ""
       Studio:
         Name: 
             fixed: RawAttack
