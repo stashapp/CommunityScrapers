@@ -12,13 +12,14 @@ xPathScrapers:
         selector: //div[@class="release-date"][1]/text()
         postProcess:
          - parseDate: Jan 02, 2006
-      #Details: //div[@class="container-fluid video-title"]/p/text()
+      Details: //h5[@class="tag-line"]
       Tags:
         Name: //div[@class="tags"]/a/text()
       Performers:
         Name: //div[@class="video-performer"]/a/img/@title
       Studio:
-        Name: //div[@class="studio"]/span[2]/text()
+        Name: //div[@class="studio"]/span[contains(.,"Studio")]/following-sibling::span/text()
       Image: //meta[@property="og:image"]/@content
-
+      Movies:
+        Name: //p[contains(text(),"A scene from")]/a/text()
 # Last Updated August 10, 2020
