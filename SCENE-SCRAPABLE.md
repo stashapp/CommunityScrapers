@@ -19,6 +19,7 @@ activeduty.com|GammaEntertainment.yml|Gay
 aebn.com|AEBN.yml|Straight + Gay
 alettaoceanempire.com|GammaEntertainment.yml|
 aliciasgoddesses.com|Andomark.yml|
+allanal.com|nympho.yml|
 allblackx.com|GammaEntertainment.yml|
 allfinegirls.net|WowPorn.yml|
 allgirlmassage.com|GammaEntertainment.yml|Lesbian
@@ -447,6 +448,7 @@ strapattackers.com|GammaEntertainment.yml|Femdom
 submissived.com|PaperStreetMedia.yml|
 sugarcookie.xxx|sugarcookie.yml|
 sunnyleone.com|GammaEntertainment.yml|
+swallowed.com|nympho.yml|
 sweetfemdom.com|SweetFemdom.yml|
 sweetheartvideo.com|MindGeek.yml|Lesbian
 sweetsinner.com|MindGeek.yml|
@@ -493,6 +495,7 @@ transsensual.com|TransSensual.yml|Trans
 transsexualangel.com|GammaEntertainment.yml|Trans
 transsexualroadtrip.com|GammaEntertainment.yml|Trans
 trickyspa.com|GammaEntertainment.yml|
+trueanal.com|nympho.yml|
 tryteens.com|Teencoreclub.yml|
 tsfactor.com|GammaEntertainment.yml|Trans
 tsplayground.com|GammaEntertainment.yml|Trans
