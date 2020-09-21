@@ -11,8 +11,8 @@ xPathScrapers:
       Date:
         selector: //div[@class="cb-entry-header cb-meta clearfix"]/div[@class="cb-byline"]/span[@class="cb-date"]/time[@class="updated"]/@datetime
       Details: 
-        selector: //span[@class="cb-itemprop"]/p/strong/text()
-        concat: "\n"
+        selector: //span[@class="cb-itemprop"]/p/strong
+        concat: "\n\n"
       Tags:
         Name: //p[@class="cb-tags cb-post-footer-block"]/a/text()
       Performers:
