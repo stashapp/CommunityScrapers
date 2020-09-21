@@ -11,14 +11,16 @@ xPathScrapers:
       Date:
         selector: //span[@class="tag is-dark"]/text()
       Details: 
-        selector: //div[@class="is-size-6 has-text-white-ter"][3]/text()
+        selector: //div[@class="is-size-7 has-text-white-ter"]/preceding-sibling::div[1]/text()
         concat: "<br>"
         postProcess:
           - replace:
             - regex: <br>
               with: "\n"
       Performers:
-        Name: //span[@class="tag is-dark"]/a/text()
+        Name: //div[@class="is-size-6 has-text-white-ter"]/a[@class="tag is-dark"]/text()
+      Tags:
+        Name: //div[@class="is-size-7 has-text-white-ter"]/following-sibling::div/span/text()
       Studio:
         Name: 
             fixed: SexuallyBroken
