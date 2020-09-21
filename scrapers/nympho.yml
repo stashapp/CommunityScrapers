@@ -4,17 +4,29 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - nympho.com/view/
+      - swallowed.com/view/
+      - trueanal.com/view/
+      - allanal.com/view/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h2[@class="title"]/text()
-      Details: //div[@class="desc"]/p/text()
+      Title: //h2[@class="title"]/text()|//h1[@class="title"]/text()
+      Details: //div[@class="content-page-info"]/div[@class="desc"]/p/text()
       Performers:
-        Name: //h4[@class="models"]/a/text()
+        Name: //div[@class="content-page-info"]//h4[@class="models"]/a
       Studio:
-        Name: 
-            fixed: Nympho
-      Image: //video[@id="ypp-player"]/@poster
-# No Date, no Tags 
-# Last Updated July 31, 2020
+        Name:
+          selector: //a[contains(@class,"navbar-brand")]/@href
+          postProcess:
+            - replace:
+                - regex: .*tour\.(\w+).*
+                  with: $1
+            - map:
+                nympho: Nympho
+                trueanal: TrueAnal
+                swallowed: Swallowed
+
+      Image: //video[contains(@id,"ypp-player")]/@poster
+# No Date, no Tags
+# Last Updated September 20, 2020
