@@ -455,6 +455,7 @@ transsensual.com|TransSensual.yml|Trans
 transsexualangel.com|GammaEntertainment.yml|Trans
 transsexualroadtrip.com|GammaEntertainment.yml|Trans
 trickyspa.com|GammaEntertainment.yml|
+trueamateurs.com.com|MindGeek.yml|
 tryteens.com|Teencoreclub.yml|
 tsfactor.com|GammaEntertainment.yml|Trans
 tsplayground.com|GammaEntertainment.yml|Trans
