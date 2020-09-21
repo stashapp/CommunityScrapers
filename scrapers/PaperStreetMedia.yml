@@ -24,7 +24,6 @@ sceneByURL:
       - teensloveanal.com/movies/
       - bffs.com/movies
       - submissived.com/movies
-
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -36,10 +35,10 @@ xPathScrapers:
       Image: //div[@class="video-area"]//stream/@poster
       Studio:
         Name:
-          selector: //li[@class="nav-item login"]/a[@class="nav-link px-0"]/@href
+          selector: //link[@rel="canonical"]/@href
           postProcess:
               - replace: 
-                  - regex: (.+members\.)(\w+)(.+)
+                  - regex: (.+www\.)(\w+)(.+)
                     with: $2
                     
 # Last Updated August 10, 2020
