@@ -9,11 +9,11 @@ xPathScrapers:
     scene:
       Title: //meta[@name="twitter:title"]/@content
       Date: //span[@title="Release date"]/a/text()
-      Details: //div[@class="scene-description__row"][3]/dd/text()
+      Details: //div[@class="scene-description__row"]/dt[contains(.,"Description")]/../dd/text()
       Tags:
-        Name: //div[@class="scene-description__row"][2]/dd/a/text()
+        Name: //div[@class="scene-description__row"]/dt[contains(.,"Genre")]/../dd/a/text()
       Performers:
-        Name: //div[@class="scene-description__row"][1]/dd/a/text()
+        Name: //div[@class="scene-description__row"]/dt[contains(.,"Talents")]/../dd/a/text()
       Image: 
         selector: //div[@id="player"]/@style
         postProcess:
