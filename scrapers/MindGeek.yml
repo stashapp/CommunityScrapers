@@ -8,6 +8,7 @@ sceneByURL:
       - captainstabbin.com/scene/
       - cumfiesta.com/scene/
       - devianthardcore.com/scene/
+      - digitalplayground.com/scene/
       - doghousedigital.com/
       - dontbreakme.com/scene/
       - fakehostel.com/scene/
@@ -36,7 +37,9 @@ sceneByURL:
       - sweetheartvideo.com/scene/
       - sweetsinner.com/scene/
       - teenslovehugecocks.com/scene/
+      - twistys.com/scene/
       - twistysnetwork.com/scene/
+      - trueamateurs.com/scene/
     scraper: sceneScraper
 
 performerByURL:
@@ -48,6 +51,7 @@ performerByURL:
       - captainstabbin.com/model/
       - cumfiesta.com/model/
       - devianthardcore.com/model/
+      - digitalplayground.com/modelprofile/
       - doghousedigital.com/
       - dontbreakme.com/model/
       - familyhookups.com/model
@@ -68,6 +72,7 @@ performerByURL:
       - sneakysex.com/model/
       - sweetsinner.com/model/
       - teenslovehugecocks.com/model/
+      - twistys.com/model/
       - twistysnetwork.com/model/
     scraper: performerScraper
 

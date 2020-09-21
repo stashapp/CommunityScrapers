@@ -147,7 +147,7 @@ devilsfilm.com|GammaEntertainment.yml|
 devilsfilmparodies.com|GammaEntertainment.yml|
 devilsgangbangs.com|GammaEntertainment.yml|
 devonlee.com|GammaEntertainment.yml|
-digitalplayground.com|Digitalplayground.yml|
+digitalplayground.com|MindGeek.yml|
 dirtycosplay.com|LetsDoeIt.yml|
 dogfartnetwork.com|DogFart.yml|
 doghousedigital.com|MindGeek.yml|
@@ -496,6 +496,7 @@ transsexualangel.com|GammaEntertainment.yml|Trans
 transsexualroadtrip.com|GammaEntertainment.yml|Trans
 trickyspa.com|GammaEntertainment.yml|
 trueanal.com|nympho.yml|
+trueamateurs.com.com|MindGeek.yml|
 tryteens.com|Teencoreclub.yml|
 tsfactor.com|GammaEntertainment.yml|Trans
 tsplayground.com|GammaEntertainment.yml|Trans
@@ -503,6 +504,7 @@ tspov.com.com|ChristianXXX.yml|Trans
 tushy.com|vixenNetwork.yml|
 tushyraw.com|vixenNetwork.yml|
 twistedvisual.com|Analized.yml|
+twistys.com|MindGeek.yml|
 twistysnetwork.com|MindGeek.yml|
 u44r.com|javlibrary.yml|JAV
 unlimitedmilfs.com|NewSensationsNetworkSites.yml|
