@@ -28,9 +28,9 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Details: $infoblock/p[@class="text"][1]/text()
       Tags:
-        Name: $infoblock/p[@class="text"][2]/a/text()
+        Name: $infoblock/p[contains(text(),'Categories:')]/a
       Performers:
-        Name: $infodata/p[@class="text"][2]/a/text()
+        Name: $infodata/p[contains(text(),'Featuring:')]/a
       Studio:
         Name: //div[@class="container"]/a[@class="logo"]/@title
       Image: 
