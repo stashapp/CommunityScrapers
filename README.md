@@ -52,19 +52,21 @@ Supported Site|Scraper
 ------------- | -------------
 assholefever.com|GammaEntertainment.yml
 babepedia.com|Babepedia.yml
+brazzers.com|Brazzers.yml
 evilangel.com|GammaEntertainment.yml
 freeones.xxx|FreeonesCommunity.yml
 iafd.com|Iafd.yml
 julesjordan.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
 metadataapi.net|ThePornDB.yml
+MindGeek (29 sites)|MindGeek.yml
 modelhub.com|Modelhub.yml
 pornhub.com|Pornhub.yml
-realitykings.com|RealityKings.yml
+realitykings.com|Brazzers.yml
 sexvr.com|SexVR.yml
 thenude.com|TheNude.yml
 timtales.com|TimTales.yml
 xslist.org|Xslist.yml
 
 ## Contributing
-Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/wiki/Scraping-configuration) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
+Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.

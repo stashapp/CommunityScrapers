@@ -1,0 +1,50 @@
+# Note These sites require a cookie in order to not redirect to the homepage
+# This means the first attempt to scrape will fail, but the failed attempt
+# Will set the cookie in your CDP instance. Once set the scraper should work.
+
+name: "Kelly Madison Media"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornfidelity.com
+      - teenfidelity.com
+      - kellymadison.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $summary: //div[@class="card episode-summary mb-4"]
+      $script: //script[contains(text(),"chromecast")]/text()
+    scene:
+      Title:
+        selector: $script
+        replace:
+          - regex: .+(?:chromecast.+\stitle:\s')([^']+).+
+            with: $1
+          - regex: '&#039;'
+            with: "'"
+      Details: $summary//div[contains(h4,'Episode Summary')]/p/text()
+      Date:
+        selector: $summary//div/h4[contains(.,'Published:')]/text()[2]
+        replace:
+          - regex: Published:\s
+            with:
+        parseDate: 2006-01-02
+      Performers:
+        Name: $summary/div//div/h4[contains(.,'Starring')]/a/text()
+      Image:
+        selector: $script
+        replace:
+          - regex: .+(?:poster:\s")([^"]+).+
+            with: $1
+      Studio:
+        Name:
+          selector: //head/title/text()
+          replace:
+            - regex: .+Official\s(\w+).+
+              with: $1
+
+driver:
+  useCDP: true
+
+# Last Updated September 5, 2020
