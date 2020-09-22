@@ -1,16 +1,36 @@
 name: heyzo
 sceneByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - en.heyzo.com/moviepages
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $table: //div[@class="info-bg"]/table/tbody/tr
     scene:
       Details: /html/head/title/text()
       #Details: //section/div[@id="movie"]/h1
-      Date: 
-        selector: //div[@class="info-bg"]/table/tbody/tr[1]/td[2]
+      Date:
+        selector: $table/td[contains(.,"Released")]/following-sibling::td/text()
         parseDate: 2006-01-02
-      Performers: 
-        Name: //div[@class="info-bg"]/table/tbody/tr[2]/td[2]//a/text()
+      Performers:
+        Name: $table/td[contains(.,"Actress")]/following-sibling::td/a/text()
+      Image:
+        selector: //script[contains(.,"emimg")]
+        postProcess:
+          - replace:
+              - regex: .*emimg\s=\s\"([^"]+).*
+                with: https:$1
+      Title:
+        selector: //script[contains(.,"movieId =")]
+        postProcess:
+          - replace:
+              - regex: .*movieId\s=\s\"(\d+)\".*
+                with: Heyzo $1
+      Tags:
+        Name: $table/td[contains(.,"Type") or contains(.,"Sex Styles") or contains(.,"Theme") ]/following-sibling::td/a/text()
+      Studio:
+        Name:
+          fixed: Heyzo
+#Last Updated September 22, 2020
