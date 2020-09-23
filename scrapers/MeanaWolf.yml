@@ -1,0 +1,41 @@
+name: meanawolf
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - meanawolf.com/scenes/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h3/text()
+      Date:
+        selector: //span[text()="ADDED:"]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: 
+        selector: //div[@class="trailerContent"]/p/text()
+      Tags:
+        Name: //span[text()="TAGS:"]/following-sibling::a/text()
+      Performers:
+        Name: //span[text()="FEATURING:"]/following-sibling::a/text()
+      Studio:
+        Name:
+            fixed: MeanaWolf
+      Image:
+          selector: //script[contains(.,"useimage")]/text()
+          postProcess:
+            - replace:
+                - regex: (.+useimage\s=\s")(.*)(";function\sdownload\(f\).+)
+                  with: $2
+
+# Last Updated September 23, 2020
+
+# [@class="XXXX"]
+# [@id="XXXX"]
+# //b[text()='Release Date:']/../../td[2]/text()
+# //div[contains(@class,"siteName")]/a[@href]/text()
+# //*[text()="ADDED:"]/following-sibling::text()
+# //meta[@property="og:image"]/@content
+#      Studio:
+#        Name: 
+#            fixed: Studio
