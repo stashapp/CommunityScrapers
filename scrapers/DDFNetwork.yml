@@ -2,7 +2,7 @@ name: DDFNetwork
 sceneByURL:
   - action: scrapeXPath
     url:
-      - ddfnetwork.com/videos/
+      - pornworld.com/videos/
       - ddfbusty.com/videos/
       - 1by-day.com/videos/
       - eurogirlsongirls.com/videos/
@@ -17,7 +17,7 @@ xPathScrapers:
     scene:
       Title: //meta[@itemprop="name"]/@content
       Date: //meta[@itemprop="uploadDate"]/@content
-      Details: //meta[@name="description"]/@content
+      Details: //div/dt[contains(.,"Description:")]/../dd|//div[@class="descr-box"]/p
       Tags:
         Name: //ul[@class="tags pl-0"]/li/a/text()
       Performers:
