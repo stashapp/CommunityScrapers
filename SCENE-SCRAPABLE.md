@@ -137,7 +137,7 @@ danejones.com|RealityKingsOL.yml|
 darkx.com|GammaEntertainment.yml|
 daughterswap.com|PaperStreetMedia.yml|
 ddfbusty.com|DDFNetwork.yml|
-ddfnetwork.com|DDFNetwork.yml|
+pornworld.com|DDFNetwork.yml|
 deeper.com|vixenNetwork.yml|
 deeplush.com|Nubiles.yml|
 defiled18.com|Teencoreclub.yml|
