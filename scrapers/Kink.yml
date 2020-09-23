@@ -11,7 +11,7 @@ xPathScrapers:
       Date:
         selector: //span[@class="shoot-date"]/text()
         parseDate: January 2, 2006
-      Details: //p[@class="description-text"]/text()
+      Details: //span[@class="description-text"]/p
       Performers:
         Name: 
           selector: //p[@class="starring"]/span[2]/a/text()
@@ -33,4 +33,4 @@ xPathScrapers:
             - regex: /channel/
               with: ""
 
-# Last Updated June 28, 2020
+# Last Updated September 23, 2020
