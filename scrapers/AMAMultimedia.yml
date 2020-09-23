@@ -2,7 +2,7 @@
 # all the sites follow the same structure, making this mega scraper possible.
 # I got the list of sites from here: https://www.thebestporn.com/review_company.html?id=2085
 
-# Note: THe brands associated directly with the PornPros network, require you
+# Note: The brands associated directly with the PornPros network, require you
 # get a scene link from PornPros.com directly, as the individual sites do not
 # have scene links. These sites are:
 # publicviolations.com jurassiccock.com 18yearsold.com 40ozbounce.com
@@ -63,5 +63,9 @@ xPathScrapers:
       Image: //video[@id="player"]/@poster
       Studio:
         Name: //title/text()
+      Date:
+        selector: //div[contains(text(), 'RELEASED')]/span/text()
+        postProcess:
+          - parseDate: January 02, 2006
 
-# Last Updated June 20, 2020
+# Last Updated September 23, 2020
