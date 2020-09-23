@@ -19,7 +19,7 @@ xPathScrapers:
         Name:
             selector: //meta[@property="og:site_name"]/@content
       Date:
-        selector: //div[@class="stat mb-2"][3]/span[@class="value"]/text()
+        selector: //div[@class="stat mb-2"]/span[contains(.,"Date:")]/../span[@class="value"]/text()
         postProcess:
           - replace:
             - regex: ..,
@@ -31,7 +31,7 @@ xPathScrapers:
       Tags:
         Name: //div[@class="row"]/div/div[@class="mb-3"]/a/text()
       Performers:
-        Name: //div[@class="stat mb-2"][2]/span[@class="value"]/a/text()
+        Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
       Image:
         selector: //meta[@itemprop="image"]/@content
 # Enable this post process if you want better image quality but sometimes it can fail
