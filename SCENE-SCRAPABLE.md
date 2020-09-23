@@ -276,6 +276,7 @@ manyvids.com|ManyVids.yml|
 maskurbate.com|GammaEntertainment.yml|
 massage-parlor.com|GammaEntertainment.yml|
 massagebait.com|AMAMultimedia.yml|
+meanawolf.com|MeanaWolf.yml|
 men.com|Brazzers.yml|Gay
 menpov.com|AMAMultimedia.yml|Gay
 metadataapi.net (JSON API)|ThePornDB.yml|
