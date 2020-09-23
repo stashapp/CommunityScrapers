@@ -11,7 +11,9 @@ xPathScrapers:
       Date:
         selector: //span[@class="shoot-date"]/text()
         parseDate: January 2, 2006
-      Details: //span[@class="description-text"]/p
+      Details:
+        selector: //span[@class="description-text"]/p
+        concat: "\n\n"
       Performers:
         Name: 
           selector: //p[@class="starring"]/span[2]/a/text()
