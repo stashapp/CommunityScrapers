@@ -11,7 +11,7 @@ xPathScrapers:
       $movieinfo: //div[@class="movie-info section divider"] 
     scene:
       Title: /html/head/title/text()
-      # //div[contains(@class="heading")]/h1/text()
+      # //div[contains(@class,"heading")]/h1/text()
       Details: $movieinfo/p
       Date: 
         selector: //ul/li/span[contains(.,"Release Date")]/../span[@class="spec-content"]
