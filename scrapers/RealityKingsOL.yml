@@ -2,17 +2,18 @@ name: "RealityKingsOL"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.babes.com/scene/
-      - https://www.bellesafilms.com/scene/
-      - https://www.danejones.com/scene/
-      - https://www.lesbea.com/scene
-      - https://www.momsbangteens.com/scene/
-      - https://www.momslickteens.com/scene/
-      - https://www.propertysex.com/scene/
-      - https://www.sexyhub.com/scene/
-      - https://www.welivetogether.com/scene/
+      - babes.com/scene/
+      - bellesafilms.com/scene/
+      - danejones.com/scene/
+      - erito.com/scene/
+      - lesbea.com/scene
+      - momsbangteens.com/scene/
+      - momslickteens.com/scene/
+      - propertysex.com/scene/
+      - sexyhub.com/scene/
       - transangels.com/scene/
-
+      - welivetogether.com/scene/
+      
     scraper: sceneScraper
 
 xPathScrapers:
@@ -39,4 +40,4 @@ xPathScrapers:
                 - regex: .*www\.(.+)\.com.*
                   with: $1
       Image: //img[@alt=""][contains(@src,"poster")]/@src
-# Last Updated September 13, 2020
+# Last Updated September 27, 2020
