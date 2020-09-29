@@ -36,8 +36,21 @@ xPathScrapers:
         # replace: 
           # - regex: http 
             # with: https
-      Studio: 
+      Studio:
         Name: 
-          fixed: Trans500
+          selector: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
+          concat: ","
+          postProcess:
+            - replace:
+                - regex: .*(superramon).*
+                  with: "Super Ramon"
+                - regex: .*(tsgirlfriendexperience).*|.*(TSGFE).*
+                  with: "TS Girlfriend Experience"
+                - regex: .*(ikillitts).*|.*(I Kill it TS).*|.*(IKI).*
+                  with: "I Kill It TS"
+                - regex: .*(transatplay).*|.*(TAP).*|.*(trans at play).*
+                  with: "Trans at Play"
+                - regex: .*(behindtrans500).*|.*(behind the scenes).*
+                  with: "Behind Trans500" 
       Tags:  # Either //meta[@name="keywords"]/@content OR: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
         Name: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
