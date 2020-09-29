@@ -1,4 +1,4 @@
-name: trans500
+name: Trans500
 sceneByURL:
   - action: scrapeXPath
     url: 
