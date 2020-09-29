@@ -195,7 +195,7 @@ fostertapes.com|PaperStreetMedia.yml|
 fourfingerclub.com|NewSensationsNetworkSites.yml|
 franks-tgirlworld.com|GroobyNetwork-Partial.yml|Trans
 freshouttahighschool.com|NewSensationsNetworkSites.yml|
-frolicme.com|Frolicme.yml|
+frolicme.com|FrolicMe.yml|
 fuckfiesta.com|Hustler.yml|
 fuckingawesome.com|FuckingAwesome.yml|
 fuckinghardcore.com|Hustler.yml|

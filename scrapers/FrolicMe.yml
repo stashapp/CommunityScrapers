@@ -1,4 +1,4 @@
-name: "Frolicme"
+name: "FrolicMe"
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -31,4 +31,7 @@ xPathScrapers:
         Name: //h3/i[span[contains(.,"Categories")]]/..//a[contains(@href,"-films/")]/text()
       Image:
         selector: $platform/img/@src
+      Studio:
+        Name:
+          fixed: "FrolicMe"
 # Last Updated September 29, 2020
