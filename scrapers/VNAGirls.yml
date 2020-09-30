@@ -51,18 +51,29 @@ xPathScrapers:
       Title:
         selector: //div[@class='customcontent']/h1/text()
       Details:
-        selector: //div[@class='customcontent']/div[1]/text()
+        selector: //div[@class='customcontent']/div[1]/text()|//div[@class='customcontent']/h2/text()
       Tags:
         Name:
           selector: //div[@class='customcontent']/h4/text()
           split: ", "
-#     Image:
-#        Name: //center/img/@src
+      Studio:
+        Name:
+          selector: //p[@class="copyright"]
+          postProcess:
+            - replace:
+                - regex: .*\s(\w+)\.(?i)com\s.+
+                  with: $1
+      Image:
+        selector: //p[@class="copyright"]|//center/img/@src
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: .*\s(\w+\.(?i)com)\s.+\|(.+)
+                with: https://www.$1/$2
       Date:
         selector: //div[@class='date-and-covers']/div[@class='date']/text()
         replace:
           - regex: (\d+)(st|nd|rd|th)
             with: "$1"
         parseDate: January 2 2006
-
-# Last Updated August 30, 2020
+# Last Updated September 30, 2020
