@@ -1,0 +1,35 @@
+name: "LoveHerFeet"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - loveherfeet.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class='title']/text()
+      Details: //p[@class='description']/text()
+      Date:
+        selector: //div[@class='date']/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        selector: //script[contains(.,'video_content')]/text()
+        postProcess:
+          - replace:
+            - regex: .+(?:poster=")([^"]+).+
+              with: https://www.loveherfeet.com$1
+      Studio:
+        Name:
+          fixed: LoveHerFeet
+      Tags:
+        Name: //div[@class='video-tags']/a/text()
+      Performers:
+        Name:
+          selector: //div[@class='featured']/a/text()
+          postProcess:
+            - replace:
+              - regex: ','
+                with:
+
+# Last Updated September 29, 2020
