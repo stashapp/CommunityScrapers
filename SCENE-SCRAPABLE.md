@@ -490,6 +490,9 @@ tokyo-hot.com|Tokyohot.yml|JAV Uncensored
 tonightsgirlfriend.com|Tonightsgirlfriend.yml|
 toomanytrannies.com|Hustler.yml|Trans
 toughlovex.com|toughlovex.yml|
+trans500.com/tour/|Trans500.yml|Trans
+trans500.com/tour3/|Trans500.yml|Trans
+trans500.com/tourespanol|Trans500espanol|Trans
 transangels.com|RealityKingsOL.yml|Trans
 transbella.com|LetsDoeIt.yml|Trans
 transexpov.com|GroobyNetwork-Partial.yml|Trans
