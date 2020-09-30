@@ -288,6 +288,7 @@ littlehellcat.com|Teencoreclub.yml|
 lookathernow.com|MindGeek.yml|
 loveherfeet.com|LoveHerFeet.yml|Foot Fetish
 lubed.com|AMAMultimedia.yml|
+lustery.com|Lustery.yml|Amateur
 m45e.com|javlibrary.yml|JAV
 maketeengape.com|Teencoreclub.yml|
 maledigital.com|GammaEntertainment.yml|Gay
