@@ -5,34 +5,36 @@ performerByName:
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - https://www.babepedia.com
     scraper: performerScraper
 
 xPathScrapers:
   performerSearch:
     performer:
-      Name: //div[@id="content"]//a[contains(@href, '/babe/')]
-      URL: 
-        selector: //div[@id="content"]//a[contains(@href, '/babe/')]/@href
+      Name: //div[@id="content"]//a[contains(@href, '/babe/')]|//div[@id="bioarea"]/h1
+      URL:
+        selector: //div[@id="content"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
         postProcess:
           - replace:
             - regex: ^
               with: https://www.babepedia.com
-  
+            - regex: https:\/\/www\.babepedia\.comhttps:\/\/www\.babepedia\.com
+              with: https://www.babepedia.com
+
   performerScraper:
     performer:
       Name: //div[@id="bioarea"]/h1
-      Gender: 
+      Gender:
         fixed: "Female"
       URL: //head/meta[@property="og:url"]/@content
-      Twitter: 
+      Twitter:
         selector: //div[@id='socialicons']//a[img[@alt='Twitter account']]/@href
         postProcess:
           - replace:
             - regex: https://twitter.com/
               with: ""
-      Instagram: 
+      Instagram:
         selector: //div[@id='socialicons']//a[img[@alt='Instagram account']]/@href
         postProcess:
           - replace:
@@ -46,7 +48,7 @@ xPathScrapers:
                 - regex: (\w+:)(\s)(\w+)(\s)(\d+)(\w+)(\s)(\w+)(\s)(\w+)(\s)(\d+)
                   with: $5 $10 $12
             - parseDate: 2 January 2006
-      Ethnicity: 
+      Ethnicity:
         selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Ethnicity:']]/text()
         postProcess:
           - map:
@@ -61,7 +63,7 @@ xPathScrapers:
           - replace:
             - regex: "Eye color: "
               with:
-      Height: 
+      Height:
         selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Height:']]/text()
         postProcess:
           - replace:
@@ -85,8 +87,8 @@ xPathScrapers:
           - map:
               Real/Natural: "No"
               Fake/Enhanced: "Yes"
-      CareerLength: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Years active:']]/text() 
-      Aliases: 
+      CareerLength: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Years active:']]/text()
+      Aliases:
         selector: //div[@id='bioarea']//h2/text()
         postProcess:
           - replace:
@@ -102,4 +104,5 @@ xPathScrapers:
               with: /images/logo.png
             - regex: ^
               with: https://www.babepedia.com
-#Last Updated August 17, 2020
+
+#Last Updated September 30, 2020
