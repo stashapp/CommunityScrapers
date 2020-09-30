@@ -18,8 +18,10 @@ abuseme.com|AbuseMe.yml|
 activeduty.com|GammaEntertainment.yml|Gay
 aebn.com|AEBN.yml|Straight + Gay
 alettaoceanempire.com|GammaEntertainment.yml|
+alexlegend.com|VNAGirls.yml|
 aliciasgoddesses.com|Andomark.yml|
 allanal.com|nympho.yml|
+allanalallthetime.com|VNAGirls.yml|
 allblackx.com|GammaEntertainment.yml|
 allfinegirls.net|WowPorn.yml|
 allgirlmassage.com|GammaEntertainment.yml|Lesbian
@@ -35,6 +37,7 @@ analteenangels.com|GammaEntertainment.yml|
 analviolation.com|Analized.yml|
 analyzedgirls.com|Teencoreclub.yml|
 angelawhite.com|AngelaWhite.yml|
+angelinacastrolive.com|VNAGirls.yml|
 anilos.com|Nubiles.yml|
 archangelvideo|ArchAngelVideo.yml|
 ariellynn.com|Andomark.yml|
@@ -66,6 +69,7 @@ bbcpie.com|AMAMultimedia.yml|
 beaverhunt.com|Hustler.yml|
 becomingfemme.com|ChristianXXX.yml|Trans|
 bellesafilms.com|RealityKingsOL.yml|
+bestoftealconrad.com|VNAGirls.yml|
 bffs.com|PaperStreetMedia.yml|
 bigbootytgirls.com|BigBootyTGirls.yml|Trans
 bigfatcreampie.com|GammaEntertainment.yml|
@@ -75,7 +79,9 @@ blacked.com|vixenNetwork.yml|
 blackedraw.com|vixenNetwork.yml|
 blacktgirlshardcore.com|GroobyNetwork-Partial.yml|Trans
 blackvalleygirls.com|PaperStreetMedia.yml|
+blownbyrone.com|VNAGirls.yml|
 blowpass.com|GammaEntertainment.yml|
+bobbiedenlive.com|VNAGirls.yml|
 bobstgirls.com|GroobyNetwork-Partial.yml|Trans
 bootyclapxxx.com|Hustler.yml|
 bootysisters.com|Hustler.yml|
@@ -92,7 +98,9 @@ bustybeauties.com|Hustler.yml|
 buttman.com|GammaEntertainment.yml|
 captainstabbin.com|MindGeek.yml|
 caribbeancom.com|Carib.yml|JAV Uncensored
+carmenvalentina.com|VNAGirls.yml|
 castingcouch-x.com|AMAMultimedia.yml|
+charleechaselive.com|VNAGirls.yml|
 cherrypimps.com|trafficpimps.yml|
 clips4sale.com|Clips4Sale.yml|
 clubinfernodungeon.com|GammaEntertainment.yml|Gay
@@ -137,6 +145,7 @@ danejones.com|RealityKingsOL.yml|
 darkx.com|GammaEntertainment.yml|
 daughterswap.com|PaperStreetMedia.yml|
 ddfbusty.com|DDFNetwork.yml|
+deauxmalive.com|VNAGirls.yml|
 deeper.com|vixenNetwork.yml|
 deeplush.com|Nubiles.yml|
 defiled18.com|Teencoreclub.yml|
@@ -193,9 +202,11 @@ footsiebabes.com|GammaEntertainment.yml|
 forbondage.com|LetsDoeIt.yml|
 fostertapes.com|PaperStreetMedia.yml|
 fourfingerclub.com|NewSensationsNetworkSites.yml|
+foxxedup.com|VNAGirls.yml|
 franks-tgirlworld.com|GroobyNetwork-Partial.yml|Trans
 freshouttahighschool.com|NewSensationsNetworkSites.yml|
 frolicme.com|FrolicMe.yml|
+fuckedfeet.com|VNAGirls.yml|
 fuckfiesta.com|Hustler.yml|
 fuckingawesome.com|FuckingAwesome.yml|
 fuckinghardcore.com|Hustler.yml|
@@ -211,6 +222,7 @@ girlcum.com|AMAMultimedia.yml|
 girlfaction.com|Analized.yml|
 girlfriendsfilms.com|GammaEntertainment.yml|Lesbian
 girlgirl.com|JulesJordan.yml|Lesbian
+girlgirlmania.com|VNAGirls.yml|
 girlsandstuds.com|GammaEntertainment.yml|
 girlsgotcream.com|Teencoreclub.yml|
 girlsoutwest.com|GirlsOutWest.yml|Lesbian
@@ -252,20 +264,26 @@ immorallive.com|GammaEntertainment.yml|
 innocenthigh.com|PaperStreetMedia.yml|
 intimatelesbians.com|Spizoo.yml|Lesbian
 isthisreal.com|IsThisReal.yml|
+itscleolive.com|VNAGirls.yml|
 jamesdeen.com|Analized.yml|
 japanhdv.com|JapanHDV.yml|JAV Uncensored
 javlibrary.com|javlibrary.yml|JAV
 jaysinxxx.com|GammaEntertainment.yml|
 jayspov.net|JaysPov.yml|
+jelenajensen.com|VNAGirls.yml|
 jerk-offpass.com|Teencoreclub.yml|
 jessicajaymesxxx.com|Spizoo.yml|
 jizzbomb.com|NewSensationsNetworkSites.yml|
 jonnidarkkoxxx.com|GammaEntertainment.yml|
 joymii.com|joymii.yml|
 julesjordan.com|JulesJordan.yml|
+juliaannlive.com|VNAGirls.yml|
 karups.com|Karups.yml|
 kellymadison.com|KellyMadisonMedia.yml|
+kendrajames.com|VNAGirls.yml|
+kimberleelive.com|VNAGirls.yml|
 kink.com|Kink.yml|
+kink305.com|VNAGirls.yml|
 kinkvr.com|BaDoink.yml|VR
 ladyboy-ladyboy.com|GroobyNetwork-Partial.yml|Trans
 ladyboy.com|GroobyNetwork-Partial.yml|Trans
@@ -290,6 +308,7 @@ loveherfeet.com|LoveHerFeet.yml|Foot Fetish
 lubed.com|AMAMultimedia.yml|
 lustery.com|Lustery.yml|Amateur
 m45e.com|javlibrary.yml|JAV
+maggiegreenlive.com|VNAGirls.yml|
 maketeengape.com|Teencoreclub.yml|
 maledigital.com|GammaEntertainment.yml|Gay
 mamacitaz.com|LetsDoeIt.yml|
@@ -301,6 +320,7 @@ manyvids.com|ManyVids.yml|
 maskurbate.com|GammaEntertainment.yml|
 massage-parlor.com|GammaEntertainment.yml|
 massagebait.com|AMAMultimedia.yml|
+maxinex.com|VNAGirls.yml|
 meanawolf.com|MeanaWolf.yml|
 men.com|Brazzers.yml|Gay
 menpov.com|AMAMultimedia.yml|Gay
@@ -336,6 +356,7 @@ mysislovesme.com|Mypervmom.yml|
 myteenoasis.com|GammaEntertainment.yml|
 myveryfirsttime.com|AMAMultimedia.yml|
 nannyspy.com|AMAMultimedia.yml|
+nataliastarr.com|VNAGirls.yml|
 naughtyamerica.com|NaughtyAmerica.yml|
 newsensations.com/tour_ns/|NewSensationsMain.yml|
 newsensations.com/tour_rs/|NewSensationsNetworkSites.yml|
@@ -348,6 +369,8 @@ nextdoorraw.com|GammaEntertainment.yml|
 nextdoorstudios.com|GammaEntertainment.yml|
 nextdoortwink.com|GammaEntertainment.yml|
 nfbusty.com|Nubiles.yml|
+nikkibenz.com|VNAGirls.yml|
+ninakayy.com|VNAGirls.yml|
 nubilefilms.com|Nubiles.yml|
 nubiles-casting.com|Nubiles.yml|
 nubiles-porn.com|Nubiles.yml|
@@ -369,6 +392,7 @@ outofthefamily.com|GammaEntertainment.yml|
 pantypops.com|GammaEntertainment.yml|
 parodypass.com|NewSensationsNetworkSites.yml|
 passion-hd.com|AMAMultimedia.yml|
+pennypaxlive.com|VNAGirls.yml|
 pervertgallery.com|Analized.yml|
 pervmom.com|PaperStreetMedia.yml|
 peternorth.com|GammaEntertainment.yml|
@@ -387,6 +411,7 @@ pornstartease.com|Spizoo.yml|
 pornworld.com|pornworld.yml|
 povblowjobs.com|GammaEntertainment.yml|
 povd.com|AMAMultimedia.yml|
+povmania.com|VNAGirls.yml|
 povperverts.net|Analized.yml|
 povthis.com|GammaEntertainment.yml|
 prettydirty.com|GammaEntertainment.yml|
@@ -398,10 +423,12 @@ propertysex.com|RealityKingsOL.yml|
 publicagent.com|MindGeek.yml|
 publicpickups.com|MindGeek.yml|
 puffynetwork.com|Puffynetwork.yml|
+pumaswedexxx.com|VNAGirls.yml|
 pure-ts.com|ChristianXXX.yml|Trans
 puremature.com|AMAMultimedia.yml|
 puretaboo.com|PureTaboo.yml|
 r18.com|r18.yml|JAV
+rachelstormsxxx.com|VNAGirls.yml|
 ragingstallion.com|GammaEntertainment.yml|Gay
 ravenswallowzxxx.com|Andomark.yml|
 rawattack.com|RawAttack.yml|
@@ -413,7 +440,11 @@ recklessinmiami.com|MindGeek.yml|
 reidmylips.elxcomplete.com|Andomark.yml|
 rk.com|MindGeek.yml|
 roccosiffredi.com|GammaEntertainment.yml|
+romemajor.com|VNAGirls.yml|
 roundandbrown.com|MindGeek.yml|
+rubberdoll.net|VNAGirls.yml|
+samanthagrace.net|VNAGirls.yml|
+sarajay.com|VNAGirls.yml|
 scarybigdicks.com|Hustler.yml|
 scoreland.com|TheScoreGroup.yml|
 seancody.com|MindGeek.yml|
@@ -421,10 +452,12 @@ seductive18.com|Teencoreclub.yml|
 seemysextapes.com|Hustler.yml|
 sexbabesvr.com|SexBabesVR.yml|VR
 sexlikereal.com|SexLikeReal.yml|
+sexmywife.com|VNAGirls.yml|
 sexsee.com|Hustler.yml|
 sexuallybroken.com|sexuallybroken.yml|
 sexvr.com|SexVR.yml|VR
 sexyhub.com|RealityKingsOL.yml|
+shandafay.com|VNAGirls.yml|
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml|
 shegotsix.com|Teencoreclub.yml|
 shemaleidol.com|GammaEntertainment.yml|Trans
@@ -434,9 +467,11 @@ shoplyftermylf.com|PaperStreetMedia.yml|
 showerbait.com|AMAMultimedia.yml|
 silverstonedvd.com|GammaEntertainment.yml|
 silviasaint.com|GammaEntertainment.yml|
+siripornstar.com|VNAGirls.yml|
 sislovesme.com|PaperStreetMedia.yml|
 sneakysex.com|MindGeek.yml|
 soapymassage.com|GammaEntertainment.yml|
+sophiedeelive.com|VNAGirls.yml|
 sororitysluts.com|Hustler.yml|
 SpearTeenPussy.com|Teencoreclub.yml|
 spermantino.com|Teencoreclub.yml|
@@ -451,6 +486,7 @@ stepsiblingscaught.com|Nubiles.yml|
 strapattackers.com|GammaEntertainment.yml|Femdom
 submissived.com|PaperStreetMedia.yml|
 sugarcookie.xxx|sugarcookie.yml|
+sunnylanelive.com|VNAGirls.yml|
 sunnyleone.com|GammaEntertainment.yml|
 swallowed.com|nympho.yml|
 sweetfemdom.com|SweetFemdom.yml|
@@ -516,6 +552,7 @@ twistysnetwork.com|MindGeek.yml|
 u44r.com|javlibrary.yml|JAV
 unlimitedmilfs.com|NewSensationsNetworkSites.yml|
 vcaxxx.com|Hustler.yml|
+vickyathome.com|VNAGirls.yml|
 vipissy.com|Vipissy.yml|
 vipsexvault.com|LetsDoeIt.yml|
 virtualrealporn.com|VirtualRealPorn.yml|VR
