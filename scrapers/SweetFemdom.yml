@@ -1,0 +1,28 @@
+name: "sweetfemdom"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sweetfemdom.com/tour/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="videoDetails clear"]/h3/text()
+      Date:
+        selector: //div[@class="videoInfo clear"]/p/span[contains(text(),"Date Added")]/../text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="videoDetails clear"]
+        postProcess:
+          - replace:
+              - regex: ".*\t" # remove the h3 title and tab (\t) from description
+                with: ""
+      Tags:
+        Name: //div[@class="featuring clear"]/ul/li[@class="label"][contains(text(),"Tags:")]/../li/a/text()
+      Performers:
+        Name: //div[@class="featuring clear"]/ul/li[@class="label"][contains(text(),"Featuring:")]/../li/a/text()
+      Image: 
+        selector: //meta[@property="og:image"]/@content
+
+# Last Updated July 25, 2020
