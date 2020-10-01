@@ -213,6 +213,7 @@ girlgirl.com|JulesJordan.yml|Lesbian
 girlsandstuds.com|GammaEntertainment.yml|
 girlsgotcream.com|Teencoreclub.yml|
 girlsoutwest.com|GirlsOutWest.yml|Lesbian
+girlsrimming.com|GirlsRimming.yml|Rimjobs
 girlstryanal.com|GammaEntertainment.yml|Lesbian
 gloryholeswallow.com|GloryHoleSwallow.yml|
 grannyghetto.com|GammaEntertainment.yml|Granny
