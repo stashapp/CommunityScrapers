@@ -2,11 +2,11 @@ name: "JulesJordan"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.julesjordan.com/
-      - https://www.girlgirl.com/
-      - https://www.manuelferrara.com/
-      - https://www.theassfactory.com/
-      - https://www.spermswallowers.com/
+      - julesjordan.com/
+      - girlgirl.com/
+      - manuelferrara.com/
+      - theassfactory.com/
+      - spermswallowers.com/
     scraper: sceneScraper
 
 performerByURL:
@@ -93,4 +93,4 @@ xPathScrapers:
       FrontImage: //div[@class="front"]/a/img/@src0_3x
       BackImage: //div[@class="back"]/a/img/@src0_3x
 
-# Last Updated May 20, 2020
+# Last Updated October 2, 2020
