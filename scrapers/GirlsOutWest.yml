@@ -2,7 +2,7 @@ name: GirlsOutWest
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://tour.girlsoutwest.com/
+      - tour.girlsoutwest.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -14,7 +14,7 @@ xPathScrapers:
             - regex: .+-
               with:
       Performers:
-        Name: 
+        Name:
           selector: //div[@class='trailer topSpace']/div//p/a/text()
       Image:
         selector: //div[@class='videoplayer']/img/@src0_1x
@@ -31,4 +31,4 @@ xPathScrapers:
               with: $2
           - parseDate: 01/02/2006
 
-# Last Updated August 26, 2020
+# Last Updated October 3, 2020

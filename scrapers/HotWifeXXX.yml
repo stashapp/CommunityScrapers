@@ -2,7 +2,7 @@ name: "HotWifeXXX"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.hotwifexxx.com/tour_hwxxx/
+      - hotwifexxx.com/tour_hwxxx/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -21,4 +21,4 @@ xPathScrapers:
         Name: $info//span[@class="tour_update_models"]/a/text()
       Image: //span[@id="trailer_thumb"]/span[1]/img/@src
 
-# Last Updated May 19, 2020
+# Last Updated October 3, 2020

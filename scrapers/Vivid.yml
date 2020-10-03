@@ -2,7 +2,7 @@ name: Vivid
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.vivid.com/
+      - vivid.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -27,4 +27,4 @@ xPathScrapers:
             with: ""
         parseDate: Jan 2, 2006
 
-# Last Updated May 14, 2020
+# Last Updated October 3, 2020

@@ -2,7 +2,7 @@ name: LittleCapriceDreams
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.littlecaprice-dreams.com/project
+      - littlecaprice-dreams.com/project
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -18,4 +18,4 @@ xPathScrapers:
       Performers:
         Name: //div[@class="vid_info_content"][1]//a
 
-#Last Updated September 11, 2020
+# Last Updated October 3, 2020

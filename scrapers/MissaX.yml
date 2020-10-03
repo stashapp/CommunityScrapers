@@ -2,7 +2,7 @@ name: "MissaX"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://missax.com/tour/trailers/
+      - missax.com/tour/trailers/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -25,4 +25,4 @@ xPathScrapers:
           - regex: .+(?:poster=")([^"]*).+
             with: https://missax.com$1
 
-# Last Updated May 17, 2020
+# Last Updated October 3, 2020

@@ -2,7 +2,7 @@ name: xartxxx
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.xart.xxx
+      - xart.xxx
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -17,3 +17,5 @@ xPathScrapers:
       Performers:
         Name: //div[@class="meta-tags"]/a/text()
       Image: //a[@class="vlog-cover"]/img/@data-lazy-src
+
+# Last Updated October 3, 2020

@@ -2,7 +2,7 @@ name: "wickedmovies"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - "https://www.wicked.com/en/movie/"
+      - wicked.com/en/movie/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -18,3 +18,5 @@ xPathScrapers:
         selector: //a[@class="frontCoverImg"]/img/@src
       Tags:
         Name: //p[@class="dvdCol"]//a
+
+# Last Updated October 3, 2020

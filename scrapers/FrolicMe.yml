@@ -2,7 +2,7 @@ name: "FrolicMe"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.frolicme.com/films/
+      - frolicme.com/films/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -34,4 +34,5 @@ xPathScrapers:
       Studio:
         Name:
           fixed: "FrolicMe"
-# Last Updated September 29, 2020
+
+# Last Updated October 3, 2020

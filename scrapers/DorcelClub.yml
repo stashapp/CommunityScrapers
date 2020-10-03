@@ -2,7 +2,7 @@ name: dorcelclub
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.dorcelclub.com/en/scene
+      - dorcelclub.com/en/scene
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -32,5 +32,5 @@ xPathScrapers:
           fixed: DorcelClub
       Movies:
         Name: //div[@class="movie"]/a/text()
-#Last Updated August 12, 2020
 
+# Last Updated October 3, 2020
