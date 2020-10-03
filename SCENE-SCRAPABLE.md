@@ -98,6 +98,7 @@ bustybeauties.com|Hustler.yml|
 buttman.com|GammaEntertainment.yml|
 captainstabbin.com|MindGeek.yml|
 caribbeancom.com|Carib.yml|JAV Uncensored
+caribbeancompr.com|Carib.yml|JAV Uncensored
 carmenvalentina.com|VNAGirls.yml|
 castingcouch-x.com|AMAMultimedia.yml|
 charleechaselive.com|VNAGirls.yml|

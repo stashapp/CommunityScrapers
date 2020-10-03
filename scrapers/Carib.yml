@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url: 
       - en.caribbeancom.com/eng/moviepages
+      - en.caribbeancompr.com/eng/moviepages
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -10,16 +11,45 @@ xPathScrapers:
       $movieinfo: //div[@class="movie-info section divider"] 
     scene:
       Title: /html/head/title/text()
-      # //div[@class="heading heading-dense"]/h1/text()
+      # //div[contains(@class,"heading")]/h1/text()
       Details: $movieinfo/p
       Date: 
-        selector: $movieinfo/ul/li[3]/span[2]
-        parseDate: 2006/01/02
+        selector: //ul/li/span[contains(.,"Release Date")]/../span[@class="spec-content"]
+        postProcess:
+          - replace:
+              - regex: (\d{4}).(\d{2}).(\d{2})
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
       Performers: 
-        Name: $movieinfo/ul/li[1]/span[2]/a/span
+        Name:
+          selector: //ul/li/span[contains(.,"Starring")]/..//a
+          concat: "," # caribbeancom splits name/surname for some performers
+          postProcess:
+            - replace:
+                - regex: "&" # in some cases & is used instead of , to split performers
+                  with: ","
+                - regex: "([^,]),([^,])"
+                  with: "$1 $2"
+                - regex: ",,"
+                  with: ","
+          split: ","
+      Tags:
+        Name: //ul/li/span[contains(.,"Tags")]/../span/a[contains(@class,"spec")]
       Image: 
-        selector: //link[@hreflang="ja-JP"]/@href 
+        selector: //link[@hreflang="ja-JP"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/poster_en.jpg'")]
         replace:
            - regex: index\.html$
              with:  images/l.jpg
-
+           - regex: .*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
+             with: https://en.caribbeancompr.com/moviepages/$1/images/poster_en.jpg
+      Studio:
+        Name:
+          selector: //ul[@class="footer-copyright"]/li[contains(.,"©")]
+          postProcess:
+            - replace:
+                - regex: .*\s([\w]+)\.com.*
+                  with: $1
+            - map:
+                caribbeancompr: Caribbeancom Premium
+                caribbeancom: Caribbeancom
+#Last Updated September 23, 2020
