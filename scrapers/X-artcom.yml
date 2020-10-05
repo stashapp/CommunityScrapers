@@ -2,7 +2,7 @@ name: xart
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.x-art.com/videos/
+      - x-art.com/videos/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -19,3 +19,5 @@ xPathScrapers:
       Performers:
         Name: $sceneinfo/h2/a/text()
       Image: //div[@class="flex-video widescreen"]/a/img/@src
+
+# Last Updated October 3, 2020

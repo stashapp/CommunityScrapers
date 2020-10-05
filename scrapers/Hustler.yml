@@ -2,40 +2,40 @@ name: "Hustler"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://hustler.com/trailers
-      - https://www.barelylegal.com/trailers/
-      - https://analhookers.com/trailers/
-      - https://hustlerhd.com/trailers/
-      - https://hustlerslesbians.com/trailers/
-      - https://beaverhunt.com/trailers/
-      - https://bustybeauties.com/trailers/
-      - https://hustlerparodies.com/trailers/
-      - https://muchaslatinas.com/trailers/
-      - https://hottiemoms.com/trailers/
-      - https://asianfever.com/trailers/
-      - https://hustlaz.com/trailers/
-      - https://scarybigdicks.com/trailers/
-      - https://www.hustlerstaboo.com/trailers/
-      - https://www.fuckfiesta.com/trailers/
-      - https://hometowngirls.com/trailers/
-      - https://www.hometownhoneys.com/trailers/
-      - https://bossymilfs.com/trailers/
-      - https://vcaxxx.com/trailers/
-      - https://www.lesbianass.com/trailers/
-      - https://toomanytrannies.com/trailers/
-      - https://www.assmeat.com/trailers/
-      - https://daddygetslucky.com/trailers/
-      - https://www.bootysisters.com/trailers/
-      - https://www.sexsee.com/trailers/
-      - https://www.titworld.com/trailers/
-      - https://www.pornstarhardcore.com/trailers/
-      - https://www.bootyclapxxx.com/trailers/
-      - https://www.asian18.com/trailers/
-      - https://www.battlebang.com/trailers/
-      - https://www.fuckinghardcore.com/trailers/
-      - https://www.seemysextapes.com/trailers/
-      - https://www.sororitysluts.com/trailers/
-      - https://www.watchreal.com/trailers/
+      - hustler.com/trailers
+      - barelylegal.com/trailers/
+      - analhookers.com/trailers/
+      - hustlerhd.com/trailers/
+      - hustlerslesbians.com/trailers/
+      - beaverhunt.com/trailers/
+      - bustybeauties.com/trailers/
+      - hustlerparodies.com/trailers/
+      - muchaslatinas.com/trailers/
+      - hottiemoms.com/trailers/
+      - asianfever.com/trailers/
+      - hustlaz.com/trailers/
+      - scarybigdicks.com/trailers/
+      - hustlerstaboo.com/trailers/
+      - fuckfiesta.com/trailers/
+      - hometowngirls.com/trailers/
+      - hometownhoneys.com/trailers/
+      - bossymilfs.com/trailers/
+      - vcaxxx.com/trailers/
+      - lesbianass.com/trailers/
+      - toomanytrannies.com/trailers/
+      - www.assmeat.com/trailers/
+      - daddygetslucky.com/trailers/
+      - bootysisters.com/trailers/
+      - sexsee.com/trailers/
+      - titworld.com/trailers/
+      - pornstarhardcore.com/trailers/
+      - bootyclapxxx.com/trailers/
+      - asian18.com/trailers/
+      - battlebang.com/trailers/
+      - fuckinghardcore.com/trailers/
+      - seemysextapes.com/trailers/
+      - sororitysluts.com/trailers/
+      - watchreal.com/trailers/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -62,4 +62,4 @@ xPathScrapers:
       Tags:
         Name: //span[@class="gallery-meta"]/span[@class="left"]/a/text()
 
-# Last Updated May 25, 2020
+# Last Updated October 3, 2020

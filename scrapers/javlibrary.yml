@@ -2,10 +2,10 @@ name: javlibrary
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.javlibrary.com/
-      - www.m45e.com/
-      - www.u44r.com/
-      - www.g46e.com/
+      - javlibrary.com/
+      - m45e.com/
+      - u44r.com/
+      - g46e.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -29,5 +29,5 @@ xPathScrapers:
             with: "https:"
       Studio:
         Name: //div[@id="video_maker"]/table/tbody/tr/td[@class="text"]/span/a/text()
-        
-# Last Updated August 22, 2020
+
+# Last Updated October 3, 2020

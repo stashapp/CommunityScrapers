@@ -2,7 +2,7 @@ name: sexuallybroken
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.sexuallybroken.com/sb
+      - sexuallybroken.com/sb
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -10,7 +10,7 @@ xPathScrapers:
       Title: //div[@class="is-size-5 has-text-weight-bold"]/text()
       Date:
         selector: //span[@class="tag is-dark"]/text()
-      Details: 
+      Details:
         selector: //div[@class="is-size-7 has-text-white-ter"]/preceding-sibling::div[1]/text()
         concat: "<br>"
         postProcess:
@@ -22,8 +22,8 @@ xPathScrapers:
       Tags:
         Name: //div[@class="is-size-7 has-text-white-ter"]/following-sibling::div/span/text()
       Studio:
-        Name: 
+        Name:
             fixed: SexuallyBroken
       Image: //video-js[@id="videoPlayer"]/@poster
 
-# Last Updated August 06, 2020
+# Last Updated October 3, 2020

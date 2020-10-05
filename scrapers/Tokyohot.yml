@@ -1,8 +1,8 @@
 name: tokyohot
 sceneByURL:
   - action: scrapeXPath
-    url: 
-      - www.tokyo-hot.com/product/
+    url:
+      - tokyo-hot.com/product/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -10,12 +10,13 @@ xPathScrapers:
       $movieinfo: //div[@class="infowrapper"]/dl[@class="info"]
       $tagexists: count(//div[@class="infowrapper"]/dl[@class="info"]/dt[text()="Tags"])
     scene:
-      Title: //div[@class="pagetitle"]/h2/text() 
+      Title: //div[@class="pagetitle"]/h2/text()
       Details: //div[@class="sentence"]//text()
-      Date: 
+      Date:
         selector: $movieinfo/dd[$tagexists+5]/text()
         parseDate: 2006/01/02
-      Performers: 
+      Performers:
         Name: $movieinfo/dd[1]/a/text()
-      Image: //li[@class="package"]/a[1]/@href 
+      Image: //li[@class="package"]/a[1]/@href
 
+# Last Updated October 3, 2020

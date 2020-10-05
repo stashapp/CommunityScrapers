@@ -2,7 +2,7 @@ name: "TimTales"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.timtales.com/videos/
+      - timtales.com/videos/
     scraper: sceneScraper
 
 performerByURL:
@@ -29,12 +29,12 @@ xPathScrapers:
       Tags:
         Name: $info/p[@class="categories" and contains(text(), "Categories:")]/a/text()
       Performers:
-        Name: 
+        Name:
           selector: $info/p[@class="categories" and contains(text(), "Men:")]
           postProcess:
             - replace:
                - regex: "Men:"
-                 with: 
+                 with:
                - regex: (,)\s+
                  with: $1
           split: ","
@@ -67,4 +67,4 @@ xPathScrapers:
                 with: $1
       Image: //div[@class="model-details"]/img/@src
 
-# Last Updated August 29, 2020
+# Last Updated October 3, 2020
