@@ -21,7 +21,7 @@ xPathScrapers:
       Performers:
         Name: //tr/td[span[contains(.,"Name:")]]/..//a/text()
       Image:
-        selector: //script[contains(.,"movie_id=")]
+        selector: //script[contains(translate(.,"DEIMOV","deimov"), "movie_id=")]
         postProcess:
           - replace:
               - regex: .*((?i)movie_id=)(\d+_\d+).*
