@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $table: //div[@class="info-bg"]/table/tbody/tr
+      $script: //script[contains(translate(.,"DEIMOV","deimov"), "movie_id=")]
     scene:
       Details: /html/head/title/text()
       #Details: //div[@id="movie"]/h1
@@ -21,13 +21,13 @@ xPathScrapers:
       Performers:
         Name: //tr/td[span[contains(.,"Name:")]]/..//a/text()
       Image:
-        selector: //script[contains(translate(.,"DEIMOV","deimov"), "movie_id=")]
+        selector: $script
         postProcess:
           - replace:
               - regex: .*((?i)movie_id=)(\d+_\d+).*
                 with: https://www.pacopacomama.com/moviepages/$2/images/l_hd.jpg
       Title:
-        selector: //script[contains(.,"movie_id=")]
+        selector: $script
         postProcess:
           - replace:
               - regex: .*((?i)movie_id=)(\d+_\d+).*
