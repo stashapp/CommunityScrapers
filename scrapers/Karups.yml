@@ -2,7 +2,7 @@ name: "Karups"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.karups.com/video/
+      - karups.com/video/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -21,4 +21,4 @@ xPathScrapers:
       Image:
         selector: //video[@id="player"]/@poster|//div[@class="video-poster"]/img/@src
 
-# Last Updated July 20, 2020
+# Last Updated October 3, 2020

@@ -2,7 +2,7 @@ name: "RealSensual"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://realsensual.com/updates/
+      - realsensual.com/updates/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -24,4 +24,4 @@ xPathScrapers:
               with:
       Image: //video[@class="ampVideo"]/@poster
 
-# Last Updated May 19, 2020
+# Last Updated October 3, 2020

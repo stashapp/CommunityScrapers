@@ -2,7 +2,7 @@ name: Lustery
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://lustery.com/video-preview/
+      - lustery.com/video-preview/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -19,4 +19,5 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Lustery
-# Last Updated September 30, 2020
+
+# Last Updated October 3, 2020

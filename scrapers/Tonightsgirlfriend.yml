@@ -2,7 +2,7 @@ name: tonightsgirlfriend
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.tonightsgirlfriend.com/scenes
+      - tonightsgirlfriend.com/scenes
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -29,4 +29,4 @@ xPathScrapers:
           fixed: "Tonight's Girlfriend"
       URL: //link[@rel='canonical']/@href
 
-# Last Updated September 2, 2020
+# Last Updated October 3, 2020

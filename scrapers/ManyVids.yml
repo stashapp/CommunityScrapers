@@ -2,7 +2,7 @@ name: "ManyVids"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.manyvids.com/Video/
+      - manyvids.com/Video/
     scraper: sceneScraper
 performerByName:
   action: scrapeXPath
@@ -130,4 +130,4 @@ xPathScrapers:
           - regex: '.*\.svg$'
             with: ''
 
-# Last Updated June 02, 2020
+# Last Updated October 3, 2020

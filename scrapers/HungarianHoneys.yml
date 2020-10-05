@@ -2,7 +2,7 @@ name: "HungarianHoneys"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://hungarianhoneys.com/
+      - hungarianhoneys.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -24,4 +24,4 @@ xPathScrapers:
           - regex: ^
             with: https://hungarianhoneys.com
 
-# Last Updated May 19, 2020
+# Last Updated October 3, 2020

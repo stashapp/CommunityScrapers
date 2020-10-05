@@ -2,7 +2,7 @@ name: "PlayboyTV"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.playboy.tv/watch/
+      - playboy.tv/watch/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -25,5 +25,4 @@ xPathScrapers:
         # When it has episode details, the date can be stripped out.
       Image: //video[@id="video"]/@poster
 
-
-# Last Updated May 17, 2020
+# Last Updated October 3, 2020

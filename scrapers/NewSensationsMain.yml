@@ -2,8 +2,7 @@ name: "NewSensationsMain"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://network.newsensations.com/tour_ns/
-      - https://www.newsensations.com/tour_ns/
+      - newsensations.com/tour_ns/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -21,4 +20,4 @@ xPathScrapers:
         Name: $info//li[contains(text(),'DVD:')]/a/text()
       Image: $video-area//span[@id="trailer_thumb"]/span[1]/img/@src
 
-# Last Updated May 20, 2020
+# Last Updated October 3, 2020

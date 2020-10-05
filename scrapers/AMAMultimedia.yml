@@ -19,38 +19,38 @@ name: "AMA Multimedia"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://passion-hd.com/video/
-      - https://lubed.com/video/
-      - https://holed.com/video/
-      - https://pornpros.com/video/
-      - https://povd.com/video/
-      - https://tiny4k.com/video/
-      - https://castingcouch-x.com/video/
-      - https://exotic4k.com/video/
-      - https://puremature.com/video/
-      - https://fantasyhd.com/video/
-      - https://cum4k.com/video/
-      - https://wetvr.com/video/
-      - https://myveryfirsttime.com/video/
-      - https://girlcum.com/video/
-      - https://spyfam.com/video/
-      - https://baeb.com/video/
-      - https://nannyspy.com/video/
-      - https://bbcpie.com/video/
-      - https://gayroom.com/video/
-      - https://manroyale.com/video/
-      - https://gaycastings.com/video/
-      - https://damnthatsbig.com/video/
-      - https://gaycreeps.com/video/
-      - https://menpov.com/video/
-      - https://massagebait.com/video/
-      - https://bathhousebait.com/video/
-      - https://boysdestroyed.com/video/
-      - https://showerbait.com/video/
-      - https://thickandbig.com/video/
-      - https://outhim.com/video/
-      - https://officecock.com/video/
-      - https://gayviolations.com/video/
+      - passion-hd.com/video/
+      - lubed.com/video/
+      - holed.com/video/
+      - pornpros.com/video/
+      - povd.com/video/
+      - tiny4k.com/video/
+      - castingcouch-x.com/video/
+      - exotic4k.com/video/
+      - puremature.com/video/
+      - fantasyhd.com/video/
+      - cum4k.com/video/
+      - wetvr.com/video/
+      - myveryfirsttime.com/video/
+      - girlcum.com/video/
+      - spyfam.com/video/
+      - baeb.com/video/
+      - nannyspy.com/video/
+      - bbcpie.com/video/
+      - gayroom.com/video/
+      - manroyale.com/video/
+      - gaycastings.com/video/
+      - damnthatsbig.com/video/
+      - gaycreeps.com/video/
+      - menpov.com/video/
+      - massagebait.com/video/
+      - bathhousebait.com/video/
+      - boysdestroyed.com/video/
+      - showerbait.com/video/
+      - thickandbig.com/video/
+      - outhim.com/video/
+      - officecock.com/video/
+      - gayviolations.com/video/
 
     scraper: sceneScraper
 xPathScrapers:
@@ -68,4 +68,4 @@ xPathScrapers:
         postProcess:
           - parseDate: January 02, 2006
 
-# Last Updated September 23, 2020
+# Last Updated October 3, 2020

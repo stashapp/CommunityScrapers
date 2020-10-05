@@ -2,29 +2,29 @@ name: "Nubiles"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://nubilefilms.com/
-      - https://nubiles.net/
-      - https://nubiles-porn.com/
-      - https://nubilesunscripted.com/
-      - https://nubiles-casting.com/
-      - https://nubileset.com/
-      - https://nfbusty.com/
-      - https://anilos.com/
-      - https://deeplush.com/
-      - https://momsteachsex.com/
-      - https://petitehdporn.com/
-      - https://brattysis.com/
-      - https://thatsitcomshow.com/
-      - https://badteenspunished.com/
-      - https://princesscum.com/
-      - https://myfamilypies.com/
-      - https://daddyslilangel.com/
-      - https://teacherfucksteens.com/
-      - https://stepsiblingscaught.com/
-      - https://petiteballerinasfucked.com/
-      - https://driverxxx.com/
-      - https://bountyhunterporn.com/
-      - https://detentiongirls.com/
+      - nubilefilms.com/
+      - nubiles.net/
+      - nubiles-porn.com/
+      - nubilesunscripted.com/
+      - nubiles-casting.com/
+      - nubileset.com/
+      - nfbusty.com/
+      - anilos.com/
+      - deeplush.com/
+      - momsteachsex.com/
+      - petitehdporn.com/
+      - brattysis.com/
+      - thatsitcomshow.com/
+      - badteenspunished.com/
+      - princesscum.com/
+      - myfamilypies.com/
+      - daddyslilangel.com/
+      - teacherfucksteens.com/
+      - stepsiblingscaught.com/
+      - petiteballerinasfucked.com/
+      - driverxxx.com/
+      - bountyhunterporn.com/
+      - detentiongirls.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -54,4 +54,4 @@ xPathScrapers:
           - regex: ^
             with: "https:"
 
-# Last Updated July 21, 2020
+# Last Updated October 3, 2020

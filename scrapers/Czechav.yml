@@ -1,31 +1,31 @@
 name: czechav
 sceneByURL:
   - action: scrapeXPath
-    url: 
-      - https://czechstreets.com/
-      - https://czechfantasy.com/
-      - https://czechwifeswap.com/
-      - https://czechamateurs.com/
-      - https://czechcouples.com/
-      - https://czechmassage.com/
-      - https://czechharem.com/
-      - https://czechbitch.com/
-      - https://czechgangbang.com/
-      - https://czechhomeorgy.com/
-      - https://czechorgasm.com/
-      - https://czechtaxi.com/
-      - https://czechparties.com/
-      - https://czechlesbians.com/
-      - https://czechestrogenolit.com/
-      - https://czechdungeon.com/
-      - https://czechgardenparty.com/
-      - https://czechsolarium.com/
-      - https://czechsupermodels.com/
-      - https://czechgame.com/
-      - https://czechfirstvideo.com/
-      - https://czechbangbus.com/
-      - https://czechspy.com/
-      - https://czechmegaswingers.com/
+    url:
+      - czechstreets.com/
+      - czechfantasy.com/
+      - czechwifeswap.com/
+      - czechamateurs.com/
+      - czechcouples.com/
+      - czechmassage.com/
+      - czechharem.com/
+      - czechbitch.com/
+      - czechgangbang.com/
+      - czechhomeorgy.com/
+      - czechorgasm.com/
+      - czechtaxi.com/
+      - czechparties.com/
+      - czechlesbians.com/
+      - czechestrogenolit.com/
+      - czechdungeon.com/
+      - czechgardenparty.com/
+      - czechsolarium.com/
+      - czechsupermodels.com/
+      - czechgame.com/
+      - czechfirstvideo.com/
+      - czechbangbus.com/
+      - czechspy.com/
+      - czechmegaswingers.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -34,9 +34,11 @@ xPathScrapers:
     scene:
       Title: //div/h2[@class='nice-title']
       Details: //div[@class='desc-text']/p
-      Tags: 
+      Tags:
         Name: //a[@class='tag']/text()
       Studio:
         Name: $studio
       Image:
         selector: //video/@poster
+
+# Last Updated October 3, 2020

@@ -2,7 +2,7 @@ name: "TeamSkeet"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.teamskeet.com/movies/
+      - teamskeet.com/movies/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -18,4 +18,4 @@ xPathScrapers:
         Name: //div[@class="siteName float-right px-3 rounded "]/a
       Image: //stream/@poster
 
-# Last Updated May 19, 2020
+# Last Updated October 3, 2020

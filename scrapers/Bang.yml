@@ -2,14 +2,14 @@ name: Bang
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.bang.com/video
+      - bang.com/video
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title: //meta[@name="og:title"]/@content
       Details: //meta[@name="description"]/@content
-      Image: 
+      Image:
         selector: //meta[@name="og:image"]/@content
         postProcess:
             - replace:
@@ -32,5 +32,5 @@ xPathScrapers:
 driver:
   useCDP: true
   sleep: 5
-  
-#Last Updated August 09, 2020
+
+# Last Updated October 3, 2020

@@ -2,7 +2,7 @@ name: "BangBros"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://bangbros.com/
+      - bangbros.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -31,4 +31,4 @@ xPathScrapers:
           selector: //span[@class="thmb_mr_cmn thmb_mr_2 clearfix"]/span[@class="faTxt"]
         parseDate: Jan 2, 2006
 
-# Last Updated August 09, 2020
+# Last Updated October 3, 2020

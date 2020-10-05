@@ -2,10 +2,10 @@ name: "FinishesTheJob"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.finishesthejob.com/scene/
-      - https://www.mrpov.com/scene/
-      - https://www.manojob.com/scene/
-      - https://www.thedicksuckers.com/scene/
+      - finishesthejob.com/scene/
+      - mrpov.com/scene/
+      - manojob.com/scene/
+      - thedicksuckers.com/scene/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -22,4 +22,4 @@ xPathScrapers:
       Studio:
         Name: //span[@itemprop="primaryImageOfPage"]/img/@alt
 
-# Last Updated June 20, 2020
+# Last Updated October 3, 2020

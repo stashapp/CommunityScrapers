@@ -2,44 +2,44 @@ name: VNAGirls
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.vickyathome.com
-      - https://www.shandafay.com
-      - https://www.deauxmalive.com
-      - https://www.sarajay.com
-      - https://www.carmenvalentina.com
-      - https://www.charleechaselive.com
-      - https://www.angelinacastrolive.com
-      - https://www.juliaannlive.com
-      - https://www.nikkibenz.com
-      - https://www.sunnylanelive.com
-      - https://www.pumaswedexxx.com
-      - https://www.sophiedeelive.com
-      - https://www.itscleolive.com
-      - https://www.maggiegreenlive.com
-      - https://www.bobbiedenlive.com
-      - https://www.bestoftealconrad.com
-      - https://www.jelenajensen.com
-      - https://www.pennypaxlive.com
-      - https://www.kimberleelive.com
-      - https://www.alexlegend.com
-      - https://www.sexmywife.com
-      - https://www.rubberdoll.net
-      - https://www.allanalallthetime.com
-      - https://www.fuckedfeet.com
-      - https://www.ninakayy.com
-      - https://www.romemajor.com
-      - https://www.siripornstar.com
-      - https://www.blownbyrone.com
-      - https://www.kink305.com
-      - https://www.foxxedup.com
-      - https://www.nataliastarr.com
-      - https://www.samanthagrace.net
-      - https://www.rachelstormsxxx.com
-      - https://www.kendrajames.com
-      - https://maxinex.com
-      - https://povmania.com
-      - https://maxinex.com
-      - http://www.girlgirlmania.com
+      - vickyathome.com
+      - shandafay.com
+      - deauxmalive.com
+      - sarajay.com
+      - carmenvalentina.com
+      - charleechaselive.com
+      - angelinacastrolive.com
+      - juliaannlive.com
+      - nikkibenz.com
+      - sunnylanelive.com
+      - pumaswedexxx.com
+      - sophiedeelive.com
+      - itscleolive.com
+      - maggiegreenlive.com
+      - bobbiedenlive.com
+      - bestoftealconrad.com
+      - jelenajensen.com
+      - pennypaxlive.com
+      - kimberleelive.com
+      - alexlegend.com
+      - sexmywife.com
+      - rubberdoll.net
+      - allanalallthetime.com
+      - fuckedfeet.com
+      - ninakayy.com
+      - romemajor.com
+      - siripornstar.com
+      - blownbyrone.com
+      - kink305.com
+      - foxxedup.com
+      - nataliastarr.com
+      - samanthagrace.net
+      - rachelstormsxxx.com
+      - kendrajames.com
+      - maxinex.com
+      - povmania.com
+      - maxinex.com
+      - girlgirlmania.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -76,4 +76,5 @@ xPathScrapers:
           - regex: (\d+)(st|nd|rd|th)
             with: "$1"
         parseDate: January 2 2006
-# Last Updated September 30, 2020
+
+# Last Updated October 3, 2020

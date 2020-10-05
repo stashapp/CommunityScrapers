@@ -2,12 +2,12 @@ name: "Vixen Media Group"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.blacked.com/
-      - https://www.blackedraw.com/
-      - https://www.deeper.com/
-      - https://www.tushy.com/
-      - https://www.tushyraw.com/
-      - https://www.vixen.com/
+      - blacked.com/
+      - blackedraw.com/
+      - deeper.com/
+      - tushy.com/
+      - tushyraw.com/
+      - vixen.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -31,4 +31,5 @@ xPathScrapers:
             with: $1
 driver:
   useCDP: true
-# Last Updated August 6, 2020
+
+# Last Updated October 3, 2020
