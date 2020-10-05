@@ -211,6 +211,7 @@ fuckedfeet.com|VNAGirls.yml|
 fuckfiesta.com|Hustler.yml|
 fuckingawesome.com|FuckingAwesome.yml|
 fuckinghardcore.com|Hustler.yml|
+funbags.com|Voyeurweb.yml|
 g46e.com|javlibrary.yml|JAV
 gangbangcreampie.com|GangBangCreampie.yml|
 gapingangels.com|GammaEntertainment.yml|
@@ -241,6 +242,7 @@ hardx.com|GammaEntertainment.yml|
 hergape.com|Analized.yml|
 heyzo.com|Heyzo.yml|JAV Uncensored
 himeros.tv|HimerosTV.yml|Gay
+homeclips.com|Voyeurweb.yml|
 holed.com|AMAMultimedia.yml|
 homemadeanalwhores.com|Analized.yml|
 hometowngirls.com|Hustler.yml|
