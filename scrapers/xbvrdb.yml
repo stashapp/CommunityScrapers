@@ -1,0 +1,10 @@
+name: "XBVR DB"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      # use python3 instead if needed
+      - xbvrdb.py
+      - query
+
+# Last Updated August 12, 2020
