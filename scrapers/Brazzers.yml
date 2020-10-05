@@ -3,7 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - brazzers.com/video
-      - brazzers.com/scenes
+      - brazzers.com/scene
       - men.com/sceneid/
       - realitykings.com/scene/
     scraper: sceneScraper
@@ -204,4 +204,4 @@ xPathScrapers:
 #        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
 
-# Last Updated September 14, 2020
+# Last Updated October 5, 2020
