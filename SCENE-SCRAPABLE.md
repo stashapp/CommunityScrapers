@@ -475,6 +475,7 @@ sneakysex.com|MindGeek.yml|
 soapymassage.com|GammaEntertainment.yml|
 sophiedeelive.com|VNAGirls.yml|
 sororitysluts.com|Hustler.yml|
+spankbang.com|SpankBang.yml|Tube Site
 SpearTeenPussy.com|Teencoreclub.yml|
 spermantino.com|Teencoreclub.yml|
 spermswallowers.com|JulesJordan.yml|
