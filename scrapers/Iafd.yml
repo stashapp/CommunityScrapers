@@ -2,16 +2,16 @@ name: IAFD
 sceneByURL:
   - action: scrapeXPath
     url:
-      - http://www.iafd.com/title.rme
+      - iafd.com/title.rme
     scraper: sceneScraper
 performerByName:
   action: scrapeXPath
-  queryURL: http://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={}
+  queryURL: https://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={}
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
     url: 
-      - http://www.iafd.com
+      - iafd.com
     scraper: performerScraper
 movieByURL:
   - action: scrapeXPath
@@ -39,7 +39,7 @@ xPathScrapers:
         selector: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/@href
         replace:
           - regex: ^
-            with: http://www.iafd.com
+            with: https://www.iafd.com
   
   performerScraper:
     performer:
@@ -55,13 +55,13 @@ xPathScrapers:
         selector: //p[@class='biodata']/a[contains(text(),"http://twitter.com/")]/@href
         postProcess:
           - replace:
-            - regex: http://twitter.com/
+            - regex: https://twitter.com/
               with: ""
       Instagram: 
         selector: //p[@class='biodata']/a[contains(text(),"http://instagram.com/")]/@href
         postProcess:
           - replace:
-            - regex: http://instagram.com/
+            - regex: https://instagram.com/
               with: ""
       Birthdate:
         selector: //div[p[text()='Birthday']]/p[@class='biodata']/a[contains(@href, '/calendar.')]/text()
