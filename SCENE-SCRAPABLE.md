@@ -86,6 +86,7 @@ bobstgirls.com|GroobyNetwork-Partial.yml|Trans
 bootyclapxxx.com|Hustler.yml|
 bootysisters.com|Hustler.yml|
 bossymilfs.com|Hustler.yml|
+boundhoneys.com|Boundhoneys.yml|Lesbian
 bountyhunterporn.com|Nubiles.yml|
 boysdestroyed.com|AMAMultimedia.yml|Gay
 brattysis.com|Nubiles.yml|
