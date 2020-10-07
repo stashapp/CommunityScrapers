@@ -1,0 +1,31 @@
+name: Boundhoneys
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - boundhoneys.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="updateVideoTitle"]
+      Details:
+        selector: //div[@class="updateDescription"]/b/text()[normalize-space(.)]
+        concat: "\n\n"
+      Image: //meta[@name="twitter:image"]/@content
+      Studio:
+        Name:
+          fixed: Bound Honeys
+      Date:
+        selector: //a[contains(text(),"Mobile Site")]/@href
+        postProcess:
+          - replace:
+              - regex: ^\.\.
+                with: https://www.boundhoneys.com
+          - subScraper: //div[@class="updateMainTableDate"]/text()
+          - parseDate: 2 January, 2006
+      Tags:
+        Name: //div[@class=" updateCategoriesList"]/a/text()
+      Performers:
+        Name: //div[@class="updateModelsList"]/a/text()
+
+# Last Updated October 07, 2020
