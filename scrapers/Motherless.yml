@@ -1,0 +1,26 @@
+name: "Motherless"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - motherless.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+        $meta: //div[@class='media-meta']
+    scene:
+      Title: $meta//h1/text()
+      Date:
+        selector: $meta//div[@class='media-meta-stats']/span[not(contains(.,'Views')) and not(contains(.,'Favorites'))]/text()
+        postProcess:
+          - parseDate: 02 Jan 2006
+      Image: //video/@data-poster
+      Tags:
+        Name:
+          selector: //h4/a[contains(@href,"/term/")]/text()
+          postProcess:
+            - replace:
+              - regex: \#
+                with:
+
+# Last Updated October 6, 2020
