@@ -28,4 +28,4 @@ xPathScrapers:
       Performers:
         Name: //div[@class="updateModelsList"]/a/text()
 
-# Last Updated september 16, 2020
+# Last Updated October 07, 2020
