@@ -1,0 +1,40 @@
+name: Paco
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - en.pacopacomama.com/eng/moviepages
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $script: //script[contains(translate(.,"DEIMOV","deimov"), "movie_id=")]
+    scene:
+      Details: /html/head/title/text()
+      #Details: //div[@id="movie"]/h1
+      Date:
+        selector: //dt[@class="date"][contains(.,"Release Date")]
+        postProcess:
+          - replace:
+              - regex: .*(Release\sDate:\s)(\d{4}-\d{2}-\d{2}).*
+                with: $2
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //tr/td[span[contains(.,"Name:")]]/..//a/text()
+      Image:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .*((?i)movie_id=)(\d+_\d+).*
+                with: https://www.pacopacomama.com/moviepages/$2/images/l_hd.jpg
+      Title:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .*((?i)movie_id=)(\d+_\d+).*
+                with: Paco $2
+      Tags:
+        Name: //tr/td[span[contains(.,"Tags:")]]/..//a/text()
+      Studio:
+        Name:
+          fixed: PacoPacoMama
+# Last Updated October 5, 2020
