@@ -1,0 +1,20 @@
+name: "PervCity"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pervcity.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="videoInfo"]
+    scene:
+      Title: $sceneinfo/div[@class="infoHeader"]
+      Performers: 
+        Name: $sceneinfo //span[@class="tour_update_models"]/a
+      Details: $sceneinfo//p/text()
+      Image:
+        selector: //img[@class="posterimg stdimage thumbs"]/@src
+
+driver:
+  useCDP: true
