@@ -10,6 +10,7 @@ Supported Site|Scraper|Content
 1by-day.com|DDFNetwork.yml|
 21naturals.com|GammaEntertainment.yml|
 21sextreme.com|GammaEntertainment.yml|
+21sextury.com|PureTaboo.yml|
 40somethingmag.com|TheScoreGroup.yml|
 50plusmilfs.com|TheScoreGroup.yml|
 60plusmilfs.com|TheScoreGroup.yml|Granny
@@ -233,6 +234,7 @@ girlsgotcream.com|Teencoreclub.yml|
 girlsoutwest.com|GirlsOutWest.yml|Lesbian
 girlsrimming.com|GirlsRimming.yml|Rimjobs
 girlstryanal.com|GammaEntertainment.yml|Lesbian
+girlsway.com|PureTaboo.yml|Lesbian
 gloryholeswallow.com|GloryHoleSwallow.yml|
 grannyghetto.com|GammaEntertainment.yml|Granny
 groobygirls.com|GroobyNetwork-Partial.yml|Trans
