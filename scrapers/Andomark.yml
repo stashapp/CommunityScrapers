@@ -4,6 +4,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - reidmylips.elxcomplete.com/updates/
+      - reidmylips.com/updates/
       - sheseducedme.com/updates
       - aliciasgoddesses.com/updates
       - ariellynn.com/tour/
@@ -29,12 +30,13 @@ xPathScrapers:
       Tags:
         Name: //span[@class="update_tags"]/a/text()|//span[@class="tour_update_tags"]/a/text()
       Studio:
-        Name: 
+        Name:
             selector: //link[@rel="canonical"]/@href
             postProcess:
-                - replace: 
+                - replace:
                     - regex: (.+\/\/)(.+?)(\..+)
                       with: $2
       Image: //meta[@property="og:image"]/@content
+      URL: //link[@rel='canonical']/@href
 
-# Last Updated September 11, 2020
+# Last Updated October 9, 2020
