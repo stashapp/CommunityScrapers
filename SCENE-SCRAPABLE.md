@@ -179,6 +179,7 @@ eurogirlsongirls.com|DDFNetwork.yml|
 euroteenerotica.com|DDFNetwork.yml|
 evilangel.com|GammaEntertainment.yml|
 exotic4k.com|AMAMultimedia.yml|
+exploitedcollegegirls.com|ExCoGi.yml|
 exxxtrasmall.com|PaperStreetMedia.yml|
 fabsluts.com|Teencoreclub.yml|
 fakehostel.com|MindGeek.yml|
