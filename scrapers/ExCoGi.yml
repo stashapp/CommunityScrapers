@@ -1,0 +1,30 @@
+name: "ExCoGi"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - exploitedcollegegirls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class='info']
+    scene:
+      Title: $info/h4/strong/text()
+      Details:
+        selector: //article[@id='about']/p/text()
+        concat: "\n"
+      Image:
+        selector: //img[@class='img-responsive center-block main-preview']/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://exploitedcollegegirls.com
+      Studio:
+        Name:
+          fixed: Exploited College Girls
+      Tags:
+        Name: $info//a/text()
+      Performers:
+        Name: //meta[@name="twitter:description"]/@content
+
+# Last Updated October 8, 2020
