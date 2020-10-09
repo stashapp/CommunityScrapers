@@ -447,6 +447,7 @@ realsensual.com|RealSensual.yml|
 realvr.com|BaDoink.yml|VR
 recklessinmiami.com|MindGeek.yml|
 reidmylips.elxcomplete.com|Andomark.yml|
+reidmylips.com|Andomark.yml|
 rk.com|MindGeek.yml|
 roccosiffredi.com|GammaEntertainment.yml|
 romemajor.com|VNAGirls.yml|
