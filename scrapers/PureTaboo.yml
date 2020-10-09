@@ -3,21 +3,20 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - puretaboo.com/en/video
+      - girlsway.com/en/video
+      - 21sextury.com/en/video
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //meta[@name="twitter:title"]/@content
+      Title: //a[@class='sceneLink  ']/@title
       Image: //video[@class="vjs-tech"]/@poster
 #             //meta[@name="twitter:image"]/@content # Can have a better image 720p to 4K
       Date:
         selector: //span[@class="Text ScenePlayer-ReleaseDate-Text styles_3tU3Z2sLeO"]/text()
       Details:
-        selector: //meta[@name="twitter:description"]/@content
-        postProcess:
-            - replace:
-                - regex: </br>|<br>|<br/>
-                  with: "\n"
+        selector: //div[@class[contains(.,'SceneDescription')]]/text()
+        concat: "\n\n"
       Tags:
         Name:
           selector: //div[@class="BackgroundBox ScenePlayer-SceneCategories-BackgroundBox styles_1khKtnnA8W"]/a
