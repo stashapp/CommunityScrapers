@@ -1,0 +1,22 @@
+name: "WatchMyGF"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - watchmygf.me/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $middle: //div[@class='middle-item-container more']
+    scene:
+      Title: //div[@class='title-video']/span/text()
+      Image: //meta[@property='og:image']/@content
+      Studio:
+        Name: $middle//a[@href[contains(.,'channel/')]]/text()
+      Tags:
+        Name: $middle//a[@href[contains(.,'.porn') or contains(.,'tag/')]]/span/text()
+      Performers:
+        Name: $middle//a[@href[contains(.,'girls/')]]//text()
+      URL: //link[@rel='canonical']/@href
+
+# Last Updated October 8, 2020

@@ -580,6 +580,7 @@ vrcosplayx.com|BaDoink.yml|VR
 vrhush.com|VRHush.yml|VR
 wankz.com|wankz.yml|
 wankzvr.com|WankzVR.yml|VR
+watchmygf.me|WatchMyGF|Tube Site
 watchreal.com|Hustler.yml|
 webyoung.com|GammaEntertainment.yml|Lesbian
 wefuckblackgirls.com|DogFart.yml|
