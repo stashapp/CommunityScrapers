@@ -1,0 +1,23 @@
+name: "FittingRoom"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fitting-room.com/albums/
+      - fitting-room.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //head/title/text()
+      Details: //meta[@property="twitter:description"]/@content
+      Performers:
+        Name: //div[@class="info-model"]//p[@class="name"]
+      Tags:
+        Name: //meta[@property="article:tag"]/@content
+      Studio:
+        Name:
+          fixed: Fitting-Room
+      Image: //meta[@property="twitter:image"]/@content
+
+# Last Updated October 9, 2020
