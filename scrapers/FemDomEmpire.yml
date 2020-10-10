@@ -7,19 +7,22 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="title"]/h3
+      Title: //div[@class="videoDetails clear"]/h3
       Date:
-        selector: //div[@class="videoInfo clear"]/p
+        selector: //p[span[contains(.,"Date Added")]]
         postProcess:
           - replace:
             - regex: "Date Added:"
               with:
-          - parseDate: January 2, 2006      
+          - parseDate: January 2, 2006                
       Details: //div[@class="videoDetails clear"]/p
       Performers:
         Name: //li[@class="update_models"]/a
-      #Tags:
-        #Name:
+      Tags:
+        Name: //ul/li[@class="label" and contains(.,"Categories:")]/..//a
+      Studio:
+        Name:
+          fixed: FemDomEmpire  
       Image:
         selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
         postProcess:
@@ -27,5 +30,5 @@ xPathScrapers:
             - regex: .*/tour/content//
               with: "https://femdomempire.com/tour/content/"
 
-# Last Updated October 9, 2020
+# Last Updated October 10, 2020
 # Note: Date Added on older scenes seem to be incorrect on FemDomEmpire site. Newer scenes have correct date.
