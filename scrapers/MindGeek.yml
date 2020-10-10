@@ -46,8 +46,8 @@ sceneByURL:
 movieByURL:
   - action: scrapeXPath
     url:
-      - transsensual.com/movie
       - digitalplayground.com/movie
+      - transsensual.com/movie
     scraper: movieScraper
     
 performerByURL:
