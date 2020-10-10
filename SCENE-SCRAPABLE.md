@@ -547,7 +547,7 @@ transangels.com|RealityKingsOL.yml|Trans
 transbella.com|LetsDoeIt.yml|Trans
 transexpov.com|GroobyNetwork-Partial.yml|Trans
 transgasm.com|GroobyNetwork-Partial.yml|Trans
-transsensual.com|TransSensual.yml|Trans
+transsensual.com|MindGeek.yml|Trans
 transsexualangel.com|GammaEntertainment.yml|Trans
 transsexualroadtrip.com|GammaEntertainment.yml|Trans
 trickyspa.com|GammaEntertainment.yml|
