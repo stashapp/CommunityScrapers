@@ -111,7 +111,7 @@ xPathScrapers:
 
   movieScraper:
     common:
-      $section: //img[@alt][contains(@src,"cover")]/ancestor::section
+      $section: //div[text()="Release Date:"]/ancestor::section
     movie:
       Name: $section//h1/text()|$section//h2/text()
       Date:
@@ -120,7 +120,7 @@ xPathScrapers:
       Synopsis: //div[text()="Description:"]/../div[not(@class)]/text()
       Studio:
         Name: 
-          selector: $section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
+          selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace: 
               - regex: .*www\.
@@ -129,7 +129,10 @@ xPathScrapers:
                 with: ""
               - regex: " "
                 with: ""
-      FrontImage: //img[@alt][contains(@src,"cover")]/@src
+            - map:
+                digitalplayground: "Digital Playground"
+                transsensual: TransSensual
+      FrontImage: $section//picture/img[@alt]/@src
 
   performerScraper:
     performer:
