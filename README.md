@@ -64,6 +64,7 @@ modelhub.com|Modelhub.yml
 pornhub.com|Pornhub.yml
 realitykings.com|Brazzers.yml
 sexvr.com|SexVR.yml
+stasyq.com|StasyQ.yml
 thenude.com|TheNude.yml
 timtales.com|TimTales.yml
 xslist.org|Xslist.yml
