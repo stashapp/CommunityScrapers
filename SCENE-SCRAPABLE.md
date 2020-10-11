@@ -195,6 +195,7 @@ familytherapyxxx.com|FamilyTherapyXXX.yml|
 familyxxx.com|FamilyXXX.yml|
 fantasyhd.com|AMAMultimedia.yml|
 fantasymassage.com|GammaEntertainment.yml|
+femdomempire.com|FemDomEmpire.yml|
 femoutsex.com|GroobyNetwork-Partial.yml|Trans
 filf.com|filf.yml|
 filthyfamily.com|FilthyFamily|
