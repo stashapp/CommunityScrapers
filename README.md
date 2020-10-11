@@ -60,7 +60,7 @@ iafd.com|Iafd.yml
 julesjordan.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
 metadataapi.net|ThePornDB.yml
-MindGeek (29 sites)|MindGeek.yml
+MindGeek (31 sites)|MindGeek.yml
 modelhub.com|Modelhub.yml
 pornhub.com|Pornhub.yml
 realitykings.com|Brazzers.yml
