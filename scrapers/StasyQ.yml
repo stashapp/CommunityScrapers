@@ -1,0 +1,105 @@
+name: "StasyQ"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - stasyq.com/r/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - stasyq.com/m/
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.stasyq.com/search/{}
+  scraper: performerSearch
+xPathScrapers:
+  sceneScraper:
+    common:
+      $seo: //div[@class='seo-text']
+      $script: //script[contains(.,'VideoObject')]/text()
+    scene:
+      Title: //h1/text()
+      Details: $seo/p/text()
+      Date:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:uploadDate":\s")([^"]+).+
+              with: $1
+            - regex: .+schema\.org.+
+              with:
+          - parseDate: 2006-01-02
+      Image:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:thumbnailUrl":\s")([^"]+).+
+              with: $1
+            - regex: .+schema\.org.+
+              with:
+      Studio:
+        Name:
+          fixed: StasyQ
+      Tags:
+        Name: $seo//a/text()
+      Performers:
+        Name: //a[@href[contains(.,'/m/')]]//text()
+      URL: //link[@rel='canonical']/@href
+  performerSearch:
+    performer:
+      Name: //a[@href[contains(.,'/m/')]]/@alt
+      URL:
+        selector: //a[@href[contains(.,'/m/')]]/@href
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.stasyq.com
+  performerScraper:
+    common:
+      $script: //script[contains(.,'schema')]/text()
+    performer:
+      Name:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:name":\s")([^"]+).+
+              with: $1
+            - regex: .+schema\.org.+
+              with:
+      Gender:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:gender"\s:\s")([^"]+).+
+              with: $1
+            - regex: .+schema\.org.+
+              with:
+      Country:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:address":\s")([^"]+).+
+              with: $1
+            - regex: .+schema\.org.+
+              with:
+      EyeColor:
+      Height:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:height":\s")(\d+).+
+              with: $1
+            - regex: .+schema\.org.+
+              with:
+      Image:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:image":\s")([^"]+).+
+              with: https://www.stasyq.com$1
+            - regex: .+schema\.org.+
+              with:
+      URL: //link[@rel='canonical']/@href
+
+# Last Updated October 10, 2020

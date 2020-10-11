@@ -494,6 +494,7 @@ spyfam.com|AMAMultimedia.yml|
 squirtalicious.com|GammaEntertainment.yml|
 squirtinglesbian.com|GammaEntertainment.yml|Lesbian
 squirtingorgies.com|GammaEntertainment.yml|
+stasyq.com|StasyQ.yml|
 stepsiblings.com|PaperStreetMedia.yml|
 stepsiblingscaught.com|Nubiles.yml|
 strapattackers.com|GammaEntertainment.yml|Femdom
