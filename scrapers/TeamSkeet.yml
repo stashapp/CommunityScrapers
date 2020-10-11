@@ -18,4 +18,8 @@ xPathScrapers:
         Name: //div[@class="siteName float-right px-3 rounded "]/a
       Image: //stream/@poster
 
-# Last Updated October 3, 2020
+# Switched to CDP due to Cloudflare errors
+driver:
+  useCDP: true
+
+# Last Updated October 11, 2020
