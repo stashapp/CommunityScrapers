@@ -18,6 +18,7 @@ sceneByURL:
       - happytugs.com/scene/
       - iconmale.com/
       - iknowthatgirl.com/scene/
+      - kinkyspa.com/scene/
       - letstryanal.com/scene/
       - lilhumpers.com/scene/
       - lookathernow.com/scene/
@@ -39,9 +40,17 @@ sceneByURL:
       - teenslovehugecocks.com/scene/
       - twistys.com/scene/
       - twistysnetwork.com/scene/
+      - transsensual.com/scene
       - trueamateurs.com/scene/
     scraper: sceneScraper
-
+    
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - digitalplayground.com/movie
+      - transsensual.com/movie
+    scraper: movieScraper
+    
 performerByURL:
   - action: scrapeXPath
     url:
@@ -57,6 +66,7 @@ performerByURL:
       - familyhookups.com/model
       - happytugs.com/model/
       - iknowthatgirl.com/model/
+      - kinkyspa.com/model/
       - letstryanal.com/model/
       - lilhumpers.com/model/
       - lookathernow.com/model/
@@ -72,6 +82,7 @@ performerByURL:
       - sneakysex.com/model/
       - sweetsinner.com/model/
       - teenslovehugecocks.com/model/
+      - transsensual.com/model/
       - twistys.com/model/
       - twistysnetwork.com/model/
     scraper: performerScraper
@@ -79,7 +90,7 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $section: //img[@alt=""][contains(@src,"poster")]/../../.. #img>div>div>section
+      $section: //img[@alt=""][contains(@src,"poster")]/ancestor::section
     scene:
       Title: $section//h1/text()|$section//h2/text()
       Date:
@@ -100,6 +111,31 @@ xPathScrapers:
                     - regex: \.com.+
                       with: ""
       Image: //img[@alt=""][contains(@src,"poster")]/@src
+
+  movieScraper:
+    common:
+      $section: //div[text()="Release Date:"]/ancestor::section
+    movie:
+      Name: $section//h1/text()|$section//h2/text()
+      Date:
+        selector: //div[text()="Release Date:"]/../text()
+        parseDate: January 2, 2006
+      Synopsis: //div[text()="Description:"]/../div[not(@class)]/text()
+      Studio:
+        Name: 
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace: 
+              - regex: .*www\.
+                with: ""
+              - regex: \.com.+
+                with: ""
+              - regex: " "
+                with: ""
+            - map:
+                digitalplayground: "Digital Playground"
+                transsensual: TransSensual
+      FrontImage: $section//picture/img[@alt]/@src
 
   performerScraper:
     performer:
@@ -231,4 +267,4 @@ xPathScrapers:
 #        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
 
-# Last Updated September 14, 2020
+# Last Updated October 10, 2020
