@@ -565,7 +565,6 @@ tushyraw.com|vixenNetwork.yml|
 twistedvisual.com|Analized.yml|
 twistys.com|MindGeek.yml|
 twistysnetwork.com|MindGeek.yml|
-u44r.com|javlibrary.yml|JAV
 unlimitedmilfs.com|NewSensationsNetworkSites.yml|
 vcaxxx.com|Hustler.yml|
 vickyathome.com|VNAGirls.yml|
