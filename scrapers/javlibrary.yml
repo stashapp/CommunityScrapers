@@ -9,7 +9,6 @@ sceneByURL:
     url:
       - javlibrary.com/
       - m45e.com/
-      - u44r.com/
       - g46e.com/
       - b47w.com/
     scraper: sceneScraper
@@ -18,7 +17,6 @@ movieByURL:
     url:
       - javlibrary.com/
       - m45e.com/
-      - u44r.com/
       - g46e.com/
       - b47w.com/
     scraper: movieScraper
