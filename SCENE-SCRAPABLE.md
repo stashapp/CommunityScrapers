@@ -50,6 +50,7 @@ asiantgirl.com|GroobyNetwork-Partial.yml|Trans
 assholefever.com|GammaEntertainment.yml|
 assmeat.com|Hustler.yml|
 assteenmouth.com|Teencoreclub.yml|
+b47w.com|javlibrary.yml|JAV
 babes.com|RealityKingsOL.yml|
 babesnetwork.com|MindGeek.yml|
 babevr.com|BaDoink.yml|VR
