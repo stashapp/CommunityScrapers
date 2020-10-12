@@ -27,9 +27,10 @@ xPathScrapers:
       Performers:
         Name: //div[@class="clipInfo clip_details"]//a/text()
       Image:
-        selector: //div[@class="mediaSrc"]//video/@poster|//div[@class="mediaSrc"]/img/@src
+        selector: //div[@class="clipImage"]/img/@src
         replace:
           - regex: ^\/\/
             with: "https://"
+      URL: //meta[@property='og:url']/@content
 
-# Last Updated May 23, 2020
+# Last Updated October 12, 2020
