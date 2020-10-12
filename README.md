@@ -40,6 +40,7 @@ adultdvdempire.com|AdultEmpire.yml
 aebn.com|AEBN.yml
 evilangel.com|GammaEntertainment.yml
 iafd.com|Iafd.yml
+javlibrary.com (+mirror)|javlibrary.yml
 julesjordan.com|JulesJordan.yml
 private.com|Private.yml
 streaming.iafd.com|IafdStreaming.yml
