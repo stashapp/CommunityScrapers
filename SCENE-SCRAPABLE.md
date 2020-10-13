@@ -89,6 +89,7 @@ bootysisters.com|Hustler.yml|
 bossymilfs.com|Hustler.yml|
 boundhoneys.com|Boundhoneys.yml|Lesbian
 bountyhunterporn.com|Nubiles.yml|
+boxtrucksex.com|BoxTruckSex.yml|
 boysdestroyed.com|AMAMultimedia.yml|Gay
 brattysis.com|Nubiles.yml|
 brazzers.com|Brazzers.yml|
