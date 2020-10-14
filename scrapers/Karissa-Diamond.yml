@@ -9,6 +9,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@id="setTitle"]/text()
+      URL: //meta[@property='og:url']/@content
       Studio:
         Name:
           fixed: "Karissa Diamond"
