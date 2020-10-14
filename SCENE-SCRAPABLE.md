@@ -34,6 +34,7 @@ analbbc.com|Analized.yml|
 analcheckups.com|Teencoreclub.yml|
 analhookers.com|Hustler.yml|
 analized.com|Analized.yml|
+analoverdose.com|PervCity.yml|
 analteenangels.com|GammaEntertainment.yml|
 analviolation.com|Analized.yml|
 analyzedgirls.com|Teencoreclub.yml|
@@ -61,6 +62,7 @@ badteenspunished.com|Nubiles.yml|
 baeb.com|AMAMultimedia.yml|
 bang.com|Bang.yml|
 bangbros.com|BangBros.yml|
+bangingbeauties.com|PervCity.yml|
 bangteenpussy.com|Teencoreclub.yml|
 barelylegal.com|Hustler.yml|
 bathhousebait.com|AMAMultimedia.yml|Gay
@@ -105,6 +107,7 @@ carmenvalentina.com|VNAGirls.yml|
 castingcouch-x.com|AMAMultimedia.yml|
 charleechaselive.com|VNAGirls.yml|
 cherrypimps.com|trafficpimps.yml|
+chocolatebjs.com|PervCity.yml|
 clips4sale.com|Clips4Sale.yml|
 clubinfernodungeon.com|GammaEntertainment.yml|Gay
 cum4k.com|AMAMultimedia.yml|
@@ -398,6 +401,7 @@ onlyblowjob.com|DDFNetwork.yml|
 onlyprince.com|Analized.yml|
 onlyteenblowjobs.com|GammaEntertainment.yml|
 openlife.com|GammaEntertainment.yml|
+oraloverdose.com|PervCity.yml|
 outhim.com|AMAMultimedia.yml|Gay
 outofthefamily.com|GammaEntertainment.yml|
 pacopacomama.com|Paco.yml|JAV
@@ -405,6 +409,7 @@ pantypops.com|GammaEntertainment.yml|
 parodypass.com|NewSensationsNetworkSites.yml|
 passion-hd.com|AMAMultimedia.yml|
 pennypaxlive.com|VNAGirls.yml|
+pervcity.com|PervCity.yml|
 pervertgallery.com|Analized.yml|
 pervmom.com|PaperStreetMedia.yml|
 peternorth.com|GammaEntertainment.yml|
@@ -566,6 +571,7 @@ twistys.com|MindGeek.yml|
 twistysnetwork.com|MindGeek.yml|
 u44r.com|javlibrary.yml|JAV
 unlimitedmilfs.com|NewSensationsNetworkSites.yml|
+upherasshole.com|PervCity.yml|
 vcaxxx.com|Hustler.yml|
 vickyathome.com|VNAGirls.yml|
 vipissy.com|Vipissy.yml|
