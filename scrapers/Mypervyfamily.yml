@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - mypervyfamily.com
+      - filthypov.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -21,4 +22,4 @@ xPathScrapers:
       Image:
         selector: //link[@rel="image_src"]/@href
         
-# Last Updated July 31, 2020
+# Last Updated Ocotber 14, 2020
