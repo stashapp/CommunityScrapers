@@ -2,8 +2,13 @@ name: "NewSensationsMain"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - newsensations.com/tour_ns/
+      - newsensations.com/tour_ns/updates
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - newsensations.com/tour_ns/dvds
+    scraper: movieScraper
 xPathScrapers:
   sceneScraper:
     common:
@@ -19,5 +24,36 @@ xPathScrapers:
       Movies:
         Name: $info//li[contains(text(),'DVD:')]/a/text()
       Image: $video-area//span[@id="trailer_thumb"]/span[1]/img/@src
+      Studio:
+        Name:
+          fixed: NewSensations
+      URL: //link[@rel='canonical']/@href
+  movieScraper:
+    common:
+      $dvd: //div[@class='dvdSections clear']
+    movie:
+      Name:
+        selector: $dvd//h3/text()
+        postProcess:
+          - replace:
+            - regex: DVDS\s\/\s(.+)
+              with: $1
+      Date:
+        selector: $dvd//li[contains(.,'Released')]/text()
+        postProcess:
+          - replace:
+            - regex: Released:\s
+              with:
+            - regex: (\d{2})\/(\d{2})\/(\d{2})
+              with: 20$3-$1-$2
+          - parseDate: 2006-01-02
+      Studio:
+        Name:
+          fixed: NewSensations
+      Synopsis:
+        selector: //div[@class='dvdSections clear']//div[@class='dDetails']//p/text()
+        concat: " "
+      URL: //link[@rel='canonical']/@href
+      FrontImage: //div[@class='dvdcover']/img/@data-src
 
-# Last Updated October 3, 2020
+# Last Updated October 14, 2020
