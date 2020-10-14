@@ -292,6 +292,7 @@ jonnidarkkoxxx.com|GammaEntertainment.yml|
 joymii.com|joymii.yml|
 julesjordan.com|JulesJordan.yml|
 juliaannlive.com|VNAGirls.yml|
+karissa-diamond.com|Karissa-Diamond.yml|
 karups.com|Karups.yml|
 kellymadison.com|KellyMadisonMedia.yml|
 kendrajames.com|VNAGirls.yml|
