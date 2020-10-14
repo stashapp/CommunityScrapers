@@ -22,11 +22,12 @@ xPathScrapers:
       Performers:
         Name:
           fixed: "Karissa Diamond"
-      Image:
+      Image:      
         selector: //meta[@property="og:image"]/@content
-        postProcess:
-          - replace:
-            - regex: cover
-              with: cover_720
+# Uncomment if you prefer a 720p cover over 1080p
+#        postProcess:
+#          - replace:
+#            - regex: cover
+#              with: cover_720
 
 # Last Updated October 12, 2020
