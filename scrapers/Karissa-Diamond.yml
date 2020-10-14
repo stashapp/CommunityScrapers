@@ -18,7 +18,7 @@ xPathScrapers:
           - parseDate: January 02, 2006
       Details: //div[@class="well"]/text()
       Tags:
-        Name: //div[@class="col-md-5 col-md-offset-1 col-md-push-6 hidden-xs"]//div[@class="col-xs-12 tagList"]/a/text()
+        Name: //div[@class[contains(.,'hidden')]]//a[@class='tag']/text()
       Performers:
         Name:
           fixed: "Karissa Diamond"
