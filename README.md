@@ -42,6 +42,7 @@ digitalplayground.com|MindGeek.yml
 evilangel.com|GammaEntertainment.yml
 iafd.com|Iafd.yml
 julesjordan.com|JulesJordan.yml
+newsensations.com|NewSensationsMain.yml
 private.com|Private.yml
 streaming.iafd.com|IafdStreaming.yml
 transsensual.com|MindGeek.yml
