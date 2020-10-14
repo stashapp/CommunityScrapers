@@ -3,6 +3,8 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - mypervyfamily.com
+      - filthypov.com
+      - filthykings.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -20,5 +22,15 @@ xPathScrapers:
         Name: //span[@class="video-performer-name overlay"]/span[@class="overlay-inner"]/text()
       Image:
         selector: //link[@rel="image_src"]/@href
-        
-# Last Updated July 31, 2020
+      Studio:
+        Name:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+              - regex: (.+\/\/)(\w+)(.+)
+                with: $2
+            - map:
+                mypervyfamily: "My Pervy Family"
+                filthypov: "FilthyPOV"
+                filthykings: "Filthy Kings"
+# Last Updated October 14, 2020
