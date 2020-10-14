@@ -1,0 +1,55 @@
+name: "PervCity"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - analoverdose.com/trailers/
+      - bangingbeauties.com/trailers/
+      - chocolatebjs.com/trailers/
+      - oraloverdose.com/trailers/
+      - pervcity.com/trailers/
+      - upherasshole.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="videoInfo"]
+      $base: //head/base/@href
+    scene:
+      Title: $sceneinfo/div[@class="infoHeader"]
+      Performers:
+        Name: $sceneinfo//span[@class="tour_update_models"]/a
+      Details: $sceneinfo//p/text()
+      Image:
+        selector: //head/base/@href|//img[@class="posterimg stdimage thumbs"]/@src
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: ([^|]+)\|(.*)/(content/.+)
+                with: $1$3
+      Date:
+        selector: $sceneinfo/div[@class="infoHeader"]
+        postProcess:
+          - replace:
+              - regex: \s
+                with: "_"
+              - regex: ^
+                with: "https://pervcity.com/search.php?query="  
+          - subScraper:
+              selector: //div[@class="category_listing_block"]//div[@class="date"]/text()
+              postProcess:
+                - parseDate: 01-02-2006
+      Studio:
+        Name:
+          selector: //head/base/@href
+          postProcess:
+            - replace:
+                - regex: .+/([^\.]+)\.com/.*
+                  with: $1
+            - map:
+                analoverdose: AnalOverdose
+                chocolatebjs: ChocolateBjs
+                bangingbeauties: BangingBeauties
+                oraloverdose: OralOverdose
+                pervcity: PervCity
+                upherasshole: UpHerAsshole
+# Last Updated October 14, 2020
