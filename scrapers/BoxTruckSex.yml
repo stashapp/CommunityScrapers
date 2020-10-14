@@ -1,0 +1,34 @@
+name: "BoxTruckSex"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - boxtrucksex.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[@class[contains(.,'video_details')]]
+    scene:
+      Title: //h2/text()
+      Details:
+        selector: //div[@id[contains(.,'viddesc')]]/p/text()
+        concat: "\n"
+      Date:
+        selector: $details/p[@class='mb0']/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Image:
+        selector: //video[@id="jwbox_video"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.boxtrucksex.com
+      Studio:
+        Name:
+          fixed: BoxTruckSex
+      Tags:
+        Name: $details//a[@href[contains(.,'/categories/')]]/text()
+      Performers:
+        Name: $details//a[@href[contains(.,'/models/')]]/text()
+
+# Last Updated October 12, 2020
