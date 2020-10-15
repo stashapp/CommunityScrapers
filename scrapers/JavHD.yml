@@ -1,0 +1,27 @@
+name: JavHD
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - javhd.com/en/id/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Details: //p[@class="js-description-text"]
+      Performers:
+        Name: //div[@class="model-link"]/a
+      Image:
+        selector: //div[@class="player-container"]/@style
+        postProcess:
+          - replace:
+              - regex: .*url\(\'(.+)\'\).*
+                with: $1
+      Title:
+        selector: //h1[@class="info-title"]
+      Tags:
+        Name: //div[@class="tag-links"]/a/text()
+      Studio:
+        Name:
+          fixed: JavHD
+      URL: //link[@rel="canonical"]/@href
+#Last Updated September 22, 2020
