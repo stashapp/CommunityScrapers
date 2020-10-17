@@ -41,6 +41,7 @@ aebn.com|AEBN.yml
 digitalplayground.com|MindGeek.yml
 evilangel.com|GammaEntertainment.yml
 iafd.com|Iafd.yml
+javlibrary.com (+mirror)|javlibrary.yml
 julesjordan.com|JulesJordan.yml
 newsensations.com|NewSensationsMain.yml
 private.com|Private.yml

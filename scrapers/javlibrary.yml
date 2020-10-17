@@ -1,33 +1,77 @@
-name: javlibrary
+name: JavLibrary
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.javlibrary.com/en/vl_searchbyid.php?keyword={title}
+  #Note: Use the title of your scene. So if your filename is SSNI-000.mp4, remove the extension, save, then use the scraper
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
       - m45e.com/
-      - u44r.com/
       - g46e.com/
+      - b47w.com/
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - javlibrary.com/
+      - m45e.com/
+      - g46e.com/
+      - b47w.com/
+    scraper: movieScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
+      # Using URL to still get a URL with sceneByFragment if a duplicate exist.
+      URL: 
+        selector: //div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]/../@href|//meta[@property="og:url"]/@content
+        postProcess:
+          - replace:
+            - regex: (.*\?)(.*)
+              with: $2
+            - regex: ^
+              with: https://www.javlibrary.com/en/?
       Date:
         selector: //div[@id="video_date"]/table/tbody/tr/td[@class="text"]/text()
       Details:
         selector: //div[@id="video_title"]/h3/a/text()
-        replace:
-          - regex: ^(.*? ){1}
-            with:
+        postProcess:
+          - replace:
+            - regex: ^(.*? ){1}
+              with:
       Tags:
         Name: //div[@id="video_genres"]/table/tbody/tr/td[@class="text"]/span/a
       Performers:
         Name: //div[@id="video_cast"]/table/tbody/tr/td[@class="text"]/span/span/a
       Image:
         selector: //div[@id="video_jacket"]/img/@src
-        replace:
-          - regex: ^
-            with: "https:"
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https:"
       Studio:
         Name: //div[@id="video_maker"]/table/tbody/tr/td[@class="text"]/span/a/text()
+  movieScraper:
+    movie:
+      Name: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
+      Director: //div[@id='video_director']/table/tbody/tr/td[@class="text"]/span/a/text()
+      Duration: //div[@id="video_length"]/table/tbody/tr/td/span[@class="text"]/text()
+      Date: //div[@id="video_date"]/table/tbody/tr/td[@class="text"]/text()
+      Synopsis: 
+        selector: //div[@id="video_title"]/h3/a/text()
+        postProcess:
+          - replace:
+            - regex: ^(.*? ){1}
+              with:
+      Studio:
+        Name: //div[@id="video_maker"]/table/tbody/tr/td[@class="text"]/span/a/text()
+      FrontImage:
+        selector: //div[@id="video_jacket"]/img/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https:"
 
-# Last Updated October 3, 2020
+# Last Updated October 12, 2020
