@@ -2,29 +2,29 @@ name: "PaperStreetMedia"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - familystrokes.com/movies/
-      - sislovesme.com/movies/
-      - innocenthigh.com/movies/
-      - thickumz.com/movies/
-      - shoplyfter.com/movies/
-      - daughterswap.com/movies/
-      - teensloveblackcocks.com/movies/
       - badmilfs.com/movies/
-      - pervmom.com/movies/
-      - littleasians.com/movies/
-      - blackvalleygirls.com/movies/
-      - mylfdom.com/movies/
-      - stepsiblings.com/movies/
-      - dyked.com/movies/
       - bbcparadise.com/movies/
-      - shoplyftermylf.com/movies/
-      - exxxtrasmall.com/movies/
-      - fostertapes.com/movies/
+      - bffs.com/movies/
+      - blackvalleygirls.com/movies/
       - dadcrush.com/movies/
-      - teensloveanal.com/movies/
-      - bffs.com/movies
-      - submissived.com/movies
+      - daughterswap.com/movies/
+      - dyked.com/movies/
+      - exxxtrasmall.com/movies/
+      - familystrokes.com/movies/
+      - fostertapes.com/movies/
+      - innocenthigh.com/movies/
+      - littleasians.com/movies/
+      - mylfdom.com/movies/
+      - pervmom.com/movies/
+      - shoplyfter.com/movies/
+      - shoplyftermylf.com/movies/
+      - sislovesme.com/movies/
       - stayhomepov.com/movies/
+      - stepsiblings.com/movies/
+      - submissived.com/movies/
+      - teensloveanal.com/movies/
+      - teensloveblackcocks.com/movies/
+      - thickumz.com/movies/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
