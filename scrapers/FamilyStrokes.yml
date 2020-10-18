@@ -1,0 +1,22 @@
+name: "FamilyStrokes"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - familystrokes.com/movies/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //div[@class="video-content"]
+    scene:
+      Title: $content//p[@class="video-title"]/text()
+      Details: $content//p[@class="video-description"]/text()
+      Performers:
+        Name: $content//a[@class="model-name-link"]/text()
+      Image: //stream/@poster
+
+# Switched to CDP due to Cloudflare errors
+driver:
+  useCDP: false
+
+# Last Updated October 11, 2020
