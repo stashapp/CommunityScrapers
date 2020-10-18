@@ -29,7 +29,7 @@ xPathScrapers:
           - replace:
             - regex: (.+)(」.+|"\s.+)
               with: $1
-            - regex: \.|"|_|#|!|\||mp4|mkv|wmv|1080p|1080P|6M|fhd|FHD|HD|hd|Full_Hi|JG5|JG6|720p|720P|SD|_1080|「|」
+            - regex: \.|"|_|#|!|\||mp4|mkv|wmv|1080p|1080P|6M|fhd|FHD|HD|hd|Full_Hi|JG5|JG6|720p|720P|SD|「|」
               with: ""
       # Using URL to still get a URL with sceneByFragment if a duplicate exist.
       URL: 
