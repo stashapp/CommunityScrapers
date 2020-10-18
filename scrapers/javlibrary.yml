@@ -23,7 +23,14 @@ movieByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
+      Title: 
+        selector: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()|//div[@id="rightcolumn"]/div[@class="boxtitle"]/text()
+        postProcess:
+          - replace:
+            - regex: (.+)(」.+|"\s.+)
+              with: $1
+            - regex: \.|"|_|#|!|\||mp4|mkv|wmv|1080p|1080P|6M|fhd|FHD|HD|hd|Full_Hi|JG5|JG6|720p|720P|SD|_1080|「|」
+              with: ""
       # Using URL to still get a URL with sceneByFragment if a duplicate exist.
       URL: 
         selector: //div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]/../@href|//meta[@property="og:url"]/@content
@@ -74,4 +81,4 @@ xPathScrapers:
             - regex: ^
               with: "https:"
 
-# Last Updated October 12, 2020
+# Last Updated October 18, 2020
