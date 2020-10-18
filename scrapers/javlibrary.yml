@@ -5,6 +5,7 @@ sceneByFragment:
   # Note: The scraper uses the title from your scene to search for the movie id.
   # Make sure that the title is saved in the correct form e.g. SSNI-000 ( no extensions or other extra words/characters should be present) before you use the scrape with function.
   # If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
+  # If the movie have a Blu-Ray version, the scraper will set the URL of the DVD version. So you need to use the sceneScraper by URL after.
   scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
@@ -23,7 +24,7 @@ movieByURL:
       - b47w.com/
     scraper: movieScraper
 xPathScrapers:
-  sceneScraper:
+  sceneScraper by URL:
     scene:
       Title: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
       # Using URL to still get a URL with sceneByFragment if a duplicate exist.
