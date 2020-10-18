@@ -9,6 +9,7 @@ Supported Site|Scraper|Content
 18vr.com|BaDoink.yml|VR
 1by-day.com|DDFNetwork.yml|
 21naturals.com|GammaEntertainment.yml|
+21roles.com|21Roles.yml|
 21sextreme.com|GammaEntertainment.yml|
 21sextury.com|PureTaboo.yml|
 40somethingmag.com|TheScoreGroup.yml|
@@ -317,6 +318,7 @@ letsdoeit.com|LetsDoeIt.yml|
 letstryanal.com|MindGeek.yml|
 lexingtonsteele.com|GammaEntertainment.yml|
 lezcuties.com|GammaEntertainment.yml|Lesbian
+lifeselector.com|21Roles.yml|
 lilhumpers.com|MindGeek.yml|
 littleasians.com|PaperStreetMedia.yml|
 littlecaprice-dreams.com|LittleCapriceDreams.yml|
