@@ -2,7 +2,10 @@ name: JavLibrary
 sceneByFragment:
   action: scrapeXPath
   queryURL: https://www.javlibrary.com/en/vl_searchbyid.php?keyword={title}
-  #Note: Use the title of your scene. So if your filename is SSNI-000.mp4, remove the extension, save, then use the scraper
+  # Note: The scraper uses the title from your scene to search for the movie id.
+  # Make sure that the title is saved in the correct form e.g. SSNI-000 ( no extensions or other extra words/characters should be present) before you use the scrape with function.
+  # If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
+  # The scraper matches the DVD version of a title. If you want the Blu-Ray version you'll need to add the correct URL manually and scrape using that afterwards.
   scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
