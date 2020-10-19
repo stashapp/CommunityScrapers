@@ -1,39 +1,34 @@
 name: JavLibrary
 sceneByFragment:
   action: scrapeXPath
-  queryURL: https://www.javlibrary.com/en/vl_searchbyid.php?keyword={filename}
-  queryURLReplace:
-    filename:
-      - regex: -JG\d
-        with: ""
-      - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
-        with: $2
-  # Note: If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
+  queryURL: https://www.javlibrary.com/en/vl_searchbyid.php?keyword={title}
+  # Note: The scraper uses the title from your scene to search for the movie id.
+  # Make sure that the title is saved in the correct form e.g. SSNI-000 ( no extensions or other extra words/characters should be present) before you use the scrape with function.
+  # If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
   # The scraper matches the DVD version of a title. If you want the Blu-Ray version you'll need to add the correct URL manually and scrape using that afterwards.
   scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
-      - k51r.com/
-      - d52q.com/
-      - n53i.com/
+      - m45e.com/
+      - g46e.com/
+      - b47w.com/
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
-      - k51r.com/
-      - d52q.com/
-      - n53i.com/
+      - m45e.com/
+      - g46e.com/
+      - b47w.com/
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
+      Title: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
       # Using URL to still get a URL with sceneByFragment if a duplicate exist.
-      URL:
+      URL: 
         selector: //div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]/../@href|//meta[@property="og:url"]/@content
         postProcess:
           - replace:
@@ -57,8 +52,6 @@ xPathScrapers:
         selector: //div[@id="video_jacket"]/img/@src
         postProcess:
           - replace:
-            - regex: (http:|https:)
-              with:
             - regex: ^
               with: "https:"
       Studio:
@@ -67,14 +60,9 @@ xPathScrapers:
     movie:
       Name: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
       Director: //div[@id='video_director']/table/tbody/tr/td[@class="text"]/span/a/text()
-      Duration: 
-        selector: //div[@id="video_length"]/table/tbody/tr/td/span[@class="text"]/text()
-        postProcess:
-          - replace:
-            - regex: $
-              with: ":00"
+      Duration: //div[@id="video_length"]/table/tbody/tr/td/span[@class="text"]/text()
       Date: //div[@id="video_date"]/table/tbody/tr/td[@class="text"]/text()
-      Synopsis:
+      Synopsis: 
         selector: //div[@id="video_title"]/h3/a/text()
         postProcess:
           - replace:
@@ -86,19 +74,7 @@ xPathScrapers:
         selector: //div[@id="video_jacket"]/img/@src
         postProcess:
           - replace:
-            - regex: (http:|https:)
-              with:
             - regex: ^
               with: "https:"
 
-# Switched to CDP due to Cloudflare and Javascript errors.
-# The 5 second sleep in combination with the CDP driver should prevent
-# Standard Cloudflare errors in regards to their Javascript check.
-# There is still the possibility of getting a CAPTCHA block based on Cloudflare's
-# analysis of your traffic pattern. Nothing can be done about that besides
-# waiting it out or using one of the mirrors.
-driver:
-  useCDP: true
-  sleep: 5
-
-# Last Updated May 31, 2021
+# Last Updated October 12, 2020
