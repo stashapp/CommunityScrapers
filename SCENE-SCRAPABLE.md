@@ -285,6 +285,7 @@ isthisreal.com|IsThisReal.yml|
 itscleolive.com|VNAGirls.yml|
 jamesdeen.com|Analized.yml|
 japanhdv.com|JapanHDV.yml|JAV Uncensored
+javhd.com|JavHD.yml|JAV Uncensored
 javlibrary.com|javlibrary.yml|JAV
 jaysinxxx.com|GammaEntertainment.yml|
 jayspov.net|JaysPov.yml|
