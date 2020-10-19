@@ -24,7 +24,7 @@ movieByURL:
       - b47w.com/
     scraper: movieScraper
 xPathScrapers:
-  sceneScraper by URL:
+  sceneScraper:
     scene:
       Title: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
       # Using URL to still get a URL with sceneByFragment if a duplicate exist.
