@@ -5,7 +5,7 @@ sceneByFragment:
   # Note: The scraper uses the title from your scene to search for the movie id.
   # Make sure that the title is saved in the correct form e.g. SSNI-000 ( no extensions or other extra words/characters should be present) before you use the scrape with function.
   # If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
-  # If the movie have a Blu-Ray version, the scraper will set the URL of the DVD version. So you need to use the sceneScraper by URL after.
+  # The scraper matches the DVD version of a title. If you want the Blu-Ray version you'll need to add the correct URL manually and scrape using that afterwards.
   scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
