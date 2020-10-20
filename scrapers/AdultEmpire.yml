@@ -3,8 +3,13 @@ name: AdultEmpire
 movieByURL:
   - action: scrapeXPath
     url:
-      - adultdvdempire.com/
+      - adultdvdempire.com
     scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - adultdvdempire.com
+    scraper: sceneScraper
 
 xPathScrapers:
   movieScraper:
@@ -23,10 +28,40 @@ xPathScrapers:
         selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
           - parseDate: Jan 02 2006
-      Synopsis: //h4[contains(@class,"synopsis")]/p/text()
+      Synopsis:
+        selector: //h4[contains(@class,"synopsis")]//text()
+        concat: " "
       Studio:
         Name: //a[@label="Studio"]/text()
       FrontImage: //a[@id="front-cover"]/@data-href
       BackImage: //a[@id="back-cover"]/@href
+      # Rating is not yet implemented in the UX
+      # Rating:
+      #   selector: //span[@class='rating-stars-avg']/text()
+      #   postProcess:
+      #     - replace:
+      #       - regex: (\d).+
+      #         with: $1
+      URL: //meta[@name='og:url']/@content
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Details:
+        selector: //h4[contains(@class,"synopsis")]//text()
+        concat: " "
+      Date:
+        selector: //small[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Image: //a[@id="front-cover"]/@data-href
+      Studio:
+        Name: //a[@label="Studio"]/text()
+      Movies:
+        Name: //h1/text()
+      Tags:
+        Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
+      Performers:
+        Name: //a[@label="Performer"]//text()
+      URL: //meta[@name='og:url']/@content
 
-# Last Updated August 30, 2020
+# Last Updated October 13, 2020
