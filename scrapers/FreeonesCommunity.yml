@@ -28,7 +28,7 @@ xPathScrapers:
         selector: //h1
         postProcess:
           - replace:
-            - regex: \s*Bio\s*
+            - regex: \sBio\s*$
               with: ""
       URL:
         selector: //a[span[text()="Profile"]]/@href
