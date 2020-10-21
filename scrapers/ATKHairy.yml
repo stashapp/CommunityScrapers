@@ -1,0 +1,27 @@
+name: ATKHairy
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.atkhairy.com/tour/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+      Performers:
+        Name: //div[@class='watchName']/span[@itemprop='name']/text()
+      Title:
+        selector: //div[@class='video-player tour_box left ppss-scene']/@data-scene-title
+      Details:
+        selector: //span[@itemprop='description']/text()
+      Tags:
+        Name:
+          selector: //div[@class='video-tags tour_box left']/text()
+          split: " , "
+      Image:
+        selector: //video/@poster
+driver:
+  useCDP: true
+debug:
+  printHTML: true
+# Last Updated October 16, 2020

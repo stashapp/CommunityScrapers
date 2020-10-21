@@ -1,0 +1,38 @@
+name: ATKExotics
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.atkexotics.com/tour/
+      - https://www.amkingdom.com/tour/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+      Performers:
+        Name:
+          selector: //div[@class='pull-left']/text()
+          postProcess:
+            - replace:
+               - regex: (.+)(\sVideo.*)
+                 with: $1
+      Title:
+        selector: //div/b[contains(text(),'Movie:')]//following-sibling::text()[1]
+      Details:
+        selector: //div/b[contains(text(),'Description:')]//following-sibling::text()[1]
+      Tags:
+        Name:
+          selector: //div/b[contains(text(),'Tags:')]//following-sibling::text()[1]
+          split: " , "
+      Image:
+        selector: //div[@class='flowplayer minimalist is-splash is-paused is-mouseout']/@style
+        postProcess:
+          - replace: 
+             - regex: (background-image:url\()(.+)(\))
+               with: $2
+
+driver:
+  useCDP: true
+debug:
+  printHTML: true
+# Last Updated October 16, 2020
