@@ -1,0 +1,31 @@
+name:  taboopov
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://taboopov.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='title']/text()
+      Performers:
+        Name:
+          selector: //a[starts-with(@href,'/models')]/text()
+      Details:
+        selector: //div[@class='title']//following-sibling::p/text()
+      Tags:
+        Name:
+          selector: //a[starts-with(@href,'/keywords')]/text()
+      Image:
+        selector: //img[@class='photo']/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://taboopov.com
+
+driver:
+  useCDP: true
+debug:
+  printHTML: true
+# Last Updated October 16, 2020
