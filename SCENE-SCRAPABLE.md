@@ -28,6 +28,7 @@ allblackx.com|GammaEntertainment.yml|
 allfinegirls.net|WowPorn.yml|
 allgirlmassage.com|GammaEntertainment.yml|Lesbian
 allherluv.com|AllHerLuv.yml|Lesbian
+alsscan.com|SARJ-LLC.yml|
 amateurallure.com|AmateurAllure.yml|
 amateureuro.com|LetsDoeIt.yml|
 analacrobats.com|GammaEntertainment.yml|
@@ -182,6 +183,8 @@ dyked.com|PaperStreetMedia.yml|
 dylanryder.com|GammaEntertainment.yml|
 erito.com|RealityKingsOL.yml|JAV
 eroticax.com|GammaEntertainment.yml|
+errotica-archives.com|SARJ-LLC.yml|
+eternaldesire.com|SARJ-LLC.yml|
 eurogirlsongirls.com|DDFNetwork.yml|
 euroteenerotica.com|DDFNetwork.yml|
 evilangel.com|GammaEntertainment.yml|
@@ -325,6 +328,7 @@ littleasians.com|PaperStreetMedia.yml|
 littlecaprice-dreams.com|LittleCapriceDreams.yml|
 littlehellcat.com|Teencoreclub.yml|
 lookathernow.com|MindGeek.yml|
+lovehairy.com|SARJ-LLC.yml|
 loveherfeet.com|LoveHerFeet.yml|Foot Fetish
 lubed.com|AMAMultimedia.yml|
 lustery.com|Lustery.yml|Amateur
@@ -347,6 +351,9 @@ men.com|Brazzers.yml|Gay
 menpov.com|AMAMultimedia.yml|Gay
 metadataapi.net (JSON API)|ThePornDB.yml|
 metadataapi.net|PornDB.yml|
+metart.com|SARJ-LLC.yml|
+metartnetwork.com|SARJ-LLC.yml|
+metartx.com|SARJ-LLC.yml|
 milehighmedia.com|MindGeek.yml|
 milfhunter.com|MindGeek.yml|
 milfvr.com|MilfVR.yml|VR
@@ -469,6 +476,7 @@ roccosiffredi.com|GammaEntertainment.yml|
 romemajor.com|VNAGirls.yml|
 roundandbrown.com|MindGeek.yml|
 rubberdoll.net|VNAGirls.yml|
+rylskyart.com|SARJ-LLC.yml|
 samanthagrace.net|VNAGirls.yml|
 sarajay.com|VNAGirls.yml|
 scarybigdicks.com|Hustler.yml|
@@ -476,6 +484,7 @@ scoreland.com|TheScoreGroup.yml|
 seancody.com|MindGeek.yml|
 seductive18.com|Teencoreclub.yml|
 seemysextapes.com|Hustler.yml|
+sexart.com|SARJ-LLC.yml|
 sexbabesvr.com|SexBabesVR.yml|VR
 sexlikereal.com|SexLikeReal.yml|
 sexmywife.com|VNAGirls.yml|
@@ -513,6 +522,7 @@ stayhomepov.com|PaperStreetMedia.yml|
 stepsiblings.com|PaperStreetMedia.yml|
 stepsiblingscaught.com|Nubiles.yml|
 strapattackers.com|GammaEntertainment.yml|Femdom
+stunning18.com|SARJ-LLC.yml|
 submissived.com|PaperStreetMedia.yml|
 sugarcookie.xxx|sugarcookie.yml|
 sunnylanelive.com|VNAGirls.yml|
@@ -543,6 +553,7 @@ thatsitcomshow.com|Nubiles.yml|
 theassfactory.com|JulesJordan.yml|
 thedicksuckers.com|FinishesTheJob.yml|
 thelesbianexperience.com|NewSensationsNetworkSites.yml|Lesbian
+thelifeerotic.com|SARJ-LLC.yml|
 thenude.com|TheNude.yml|
 thestripperexperience.com|Spizoo.yml|
 thetabutales.com|NewSensationsNetworkSites.yml|
@@ -588,6 +599,7 @@ vipsexvault.com|LetsDoeIt.yml|
 virtualrealporn.com|VirtualRealPorn.yml|VR
 virtualtaboo.com|VirtualTaboo.yml|VR
 vivid.com|Vivid.yml|
+vivthomas.com|SARJ-LLC.yml|
 vixen.com|vixenNetwork.yml|
 vrbangers.com|VRBangers.yml|VR
 vrbgay.com|VRBangers.yml|VR
