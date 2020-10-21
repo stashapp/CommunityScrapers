@@ -46,7 +46,7 @@ xPathScrapers:
               with:
           - parseDate: January 2, 2006
       Ethnicity:
-        selector: //div[p[text()='Ethnicity']]//p[@class='mb-0 text-center']
+        selector: //div[p[text()='Ethnicity']]//a[@data-test="link_ethnicity"]
         postProcess:
           - map:
               Asian: asian
