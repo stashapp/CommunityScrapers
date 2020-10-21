@@ -98,6 +98,7 @@ boxtrucksex.com|BoxTruckSex.yml|
 boysdestroyed.com|AMAMultimedia.yml|Gay
 brattysis.com|Nubiles.yml|
 brazzers.com|Brazzers.yml|
+bruceandmorgan.com|bruceandmorgan.yml|Amateur Fetish
 brutalinvasion.com|Teencoreclub.yml|
 bskow.com|GammaEntertainment.yml|
 burningangel.com|GammaEntertainment.yml|
