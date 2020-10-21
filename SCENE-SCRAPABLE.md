@@ -635,6 +635,7 @@ xtube.com|Xtube.yml|
 xvideos.com|Xvideos.yml|
 xxxpawn.com|XXXPawn.yml|
 xxxpawn.xxx|XXXPawn.yml|
+Yanks.com|Yanks.yml|
 youngthroats.com|Teencoreclub.yml|
 youporn.com|YouPorn.yml|Tube Site
 yourmomdoesanal.com|Analized.yml|
