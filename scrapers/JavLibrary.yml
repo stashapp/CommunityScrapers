@@ -1,10 +1,12 @@
 name: JavLibrary
 sceneByFragment:
   action: scrapeXPath
-  queryURL: https://www.javlibrary.com/en/vl_searchbyid.php?keyword={title}
-  # Note: The scraper uses the title from your scene to search for the movie id.
-  # Make sure that the title is saved in the correct form e.g. SSNI-000 ( no extensions or other extra words/characters should be present) before you use the scrape with function.
-  # If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
+  queryURL: https://www.javlibrary.com/en/vl_searchbyid.php?keyword={filename}
+  queryURLReplace:
+    filename:
+      - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
+        with: $2
+  # Note: If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
   # The scraper matches the DVD version of a title. If you want the Blu-Ray version you'll need to add the correct URL manually and scrape using that afterwards.
   scraper: sceneScraper
 sceneByURL:
@@ -27,13 +29,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: 
-        selector: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()|//div[@id="rightcolumn"]/div[@class="boxtitle"]/text()
-        postProcess:
-          - replace:
-            - regex: (.+)(」.+|"\s.+)
-              with: $1
-            - regex: \.|"|_|#|!|\||mp4|mkv|avi|webm|wmv|1080p|1080P|6M|fhd|FHD|HD|hd|Full_Hi|JG5|JG6|720p|720P|SD|「|」
-              with: ""
+        selector: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
       # Using URL to still get a URL with sceneByFragment if a duplicate exist.
       URL: 
         selector: //div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]/../@href|//meta[@property="og:url"]/@content
@@ -84,4 +80,4 @@ xPathScrapers:
             - regex: ^
               with: "https:"
 
-# Last Updated October 18, 2020
+# Last Updated October 22, 2020
