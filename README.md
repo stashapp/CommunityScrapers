@@ -18,32 +18,59 @@ Scraper User Agent` setting in stash. Valid strings e.g. for firefox can be foun
 
 Scrapers with **useCDP** set to true require that you have properly configured the `Chrome CDP path` setting in Stash. If you decide to use a remote instance the headless chromium docker image from https://hub.docker.com/r/chromedp/headless-shell/ is highly recommended.
 
-## Scrapers
-You can find a list of sites currently supported for by community scraping in [SCRAPERS-LIST.md](https://github.com/stashapp/CommunityScrapers/blob/master/SCRAPERS-LIST.md)
+## Scene Scrapers
+You can find a list of sites currently supported for by community scene scraping in [SCENE-SCRAPERS.md](https://github.com/stashapp/CommunityScrapers/blob/master/SCENE-SCRAPABLE.md)
 
-For most scrapers you have to edit the url. Once you populate that field with a specific url a button will appear.  
+For scene scrapers you have to edit the url of the scene. Once you populate that field with a specific url a button will appear.
 ![](https://user-images.githubusercontent.com/48220860/85202637-698e3f00-b310-11ea-9c06-b2cfe931474a.png)
 
-Clicking on that button brings up a popup that lets you select which fields to update.
+Clicking on that button brings up the screne scrape popup that lets you select which fields to update.
 
 
-Some scrapers support the scrape with function so you can you use that instead of adding a url.
+Some scrapers like ThePornDB.yml support the scrape with function so you can you use that instead of adding a url.
 
+
+## Movie Scrapers
+This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
+
+Supported Site|Scraper
+------------- | -------------
+adultdvdmarketplace.com|AdultDvdMarketPlace.yml
+adultdvdempire.com|AdultEmpire.yml
+aebn.com|AEBN.yml
+digitalplayground.com|MindGeek.yml
+evilangel.com|GammaEntertainment.yml
+iafd.com|Iafd.yml
+javlibrary.com (+mirror)|javlibrary.yml
+julesjordan.com|JulesJordan.yml
+newsensations.com|NewSensationsMain.yml
+private.com|Private.yml
+streaming.iafd.com|IafdStreaming.yml
+transsensual.com|MindGeek.yml
+
+## Performer Scrapers
+This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
+
+Supported Site|Scraper
+------------- | -------------
+assholefever.com|GammaEntertainment.yml
+babepedia.com|Babepedia.yml
+brazzers.com|Brazzers.yml
+evilangel.com|GammaEntertainment.yml
+freeones.com|FreeonesCommunity.yml
+iafd.com|Iafd.yml
+julesjordan.com|JulesJordan.yml
+manyvids.com|ManyVids.yml
+metadataapi.net|ThePornDB.yml
+MindGeek (31 sites)|MindGeek.yml
+modelhub.com|Modelhub.yml
+pornhub.com|Pornhub.yml
+realitykings.com|Brazzers.yml
+sexvr.com|SexVR.yml
+stasyq.com|StasyQ.yml
+thenude.com|TheNude.yml
+timtales.com|TimTales.yml
+xslist.org|Xslist.yml
 
 ## Contributing
-Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.  
-
-The last line of a scraper definition (`.yml` file) must be the last updated date, in the following format:  
-`# Last Updated Month Day, Year`  
-Month = Full month name (`October`)  
-Day = Day of month, with leading zero (`04`, `16`)  
-Year = Full year (`2020`)  
-Example: `# Last Updated October 04, 2020`
-
-### Validation
-The scrapers in this repository can be validated against a schema and checked for common errors.
-
-First, install the validator's dependencies - inside the [`./validator`](./validator) folder, run: `yarn`.
-
-Then, to run the validator, use `node validate.js` in the root of the repository.  
-Specific scrapers can be checked using: `node validate.js scrapers/foo.yml scrapers/bar.yml`
+Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
