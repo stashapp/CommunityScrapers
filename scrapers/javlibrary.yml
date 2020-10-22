@@ -6,9 +6,7 @@ sceneByFragment:
     filename:
       - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
         with: $2
-  # Note: The scraper uses the title from your scene to search for the movie id.
-  # Make sure that the title is saved in the correct form e.g. SSNI-000 ( no extensions or other extra words/characters should be present) before you use the scrape with function.
-  # If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
+  # Note: If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
   # The scraper matches the DVD version of a title. If you want the Blu-Ray version you'll need to add the correct URL manually and scrape using that afterwards.
   scraper: sceneScraper
 sceneByURL:
