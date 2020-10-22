@@ -57,7 +57,7 @@ assholefever.com|GammaEntertainment.yml
 babepedia.com|Babepedia.yml
 brazzers.com|Brazzers.yml
 evilangel.com|GammaEntertainment.yml
-freeones.xxx|FreeonesCommunity.yml
+freeones.com|FreeonesCommunity.yml
 iafd.com|Iafd.yml
 julesjordan.com|JulesJordan.yml
 manyvids.com|ManyVids.yml
