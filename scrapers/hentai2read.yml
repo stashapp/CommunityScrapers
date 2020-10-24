@@ -18,8 +18,8 @@ xPathScrapers:
         selector: //b[text()="Release Year"]/following-sibling::a[not(text()="-")]/text()
         postProcess:
           - replace:
-            - regex: (\d{4}-\d{2}-\d{2})(.+)
-              with: $1
+            - regex: $
+              with: -01-01
           - parseDate: 2006-01-02
       Tags:
         Name: //b[text()="Content"]/following-sibling::a[@class="tagButton"]/text()|//b[text()="Category"]/following-sibling::a[@class="tagButton"]/text()
