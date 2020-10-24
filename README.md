@@ -77,6 +77,7 @@ This list is meant to keep track of which sites are already supported by existin
 
 Supported Site|Scraper
 ------------- | -------------
+hentai2read.com|hentai2read.yml
 nhentai.net|nhentai.yml
 
 ## Contributing
