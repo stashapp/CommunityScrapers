@@ -2,7 +2,7 @@ name: Heyzo
 sceneByURL:
   - action: scrapeXPath
     url:
-      - heyzo.com/moviepages
+      - en.heyzo.com/moviepages
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeXPath
