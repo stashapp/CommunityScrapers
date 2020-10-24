@@ -1,4 +1,4 @@
-name: nhentai
+name: hentai2read
 galleryByURL:
   - action: scrapeXPath
     url:
