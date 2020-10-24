@@ -73,11 +73,12 @@ timtales.com|TimTales.yml
 xslist.org|Xslist.yml
 
 ## Gallery Scrapers
-This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
+This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep this site list in alphabetical order to keep the list tidy.
 
 Supported Site|Scraper
 ------------- | -------------
 hentai2read.com|hentai2read.yml
+karissa-diamond.com|Karissa-Diamond.yml
 nhentai.net|nhentai.yml
 
 ## Contributing
