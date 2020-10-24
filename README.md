@@ -75,9 +75,9 @@ xslist.org|Xslist.yml
 ## Galleries Scrapers
 This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep the site list in alphabetical order to keep the list tidy.
 
-Supported Site|Scraper|Content
-------------- | ------------- | -------------
-nhentai.net|nhentai.yml|Hentai
+Supported Site|Scraper
+------------- | -------------
+nhentai.net|nhentai.yml
 
 ## Contributing
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
