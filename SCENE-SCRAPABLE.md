@@ -215,6 +215,7 @@ firstanalquest.com|Firstanalquest.yml|
 firstclasspov.com|Spizoo.yml|
 fistertwister.com|Fistertwister.yml|
 fistingcentral.com|GammaEntertainment.yml|
+fitting-room.com|FittingRoom.yml|
 footsiebabes.com|GammaEntertainment.yml|
 forbondage.com|LetsDoeIt.yml|
 fostertapes.com|PaperStreetMedia.yml|
