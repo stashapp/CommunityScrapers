@@ -1,0 +1,42 @@
+name: "FittingRoom"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fitting-room.com/videos/
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - fitting-room.com/albums/
+    scraper: galleryScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //head/title/text()
+      Details: //meta[@property="twitter:description"]/@content
+      Performers:
+        Name: //div[@class="info-model"]//p[@class="name"]
+      Tags:
+        Name: //meta[@property="article:tag"]/@content
+      Studio:
+        Name:
+          fixed: Fitting-Room
+      Image: //meta[@property="twitter:image"]/@content
+      URL: //meta[@property="twitter:url"]/@content
+  galleryScraper:
+    gallery:
+      Title:
+        selector: //head/title/text()
+      Details: //meta[@property="twitter:description"]/@content
+      Performers:
+        Name: //div[@class="info-model"]//p[@class="name"]
+      Tags:
+        Name: //meta[@property="article:tag"]/@content
+      Studio:
+        Name:
+          fixed: Fitting-Room
+      URL: //meta[@property="twitter:url"]/@content
+
+# Last Updated October 23, 2020
