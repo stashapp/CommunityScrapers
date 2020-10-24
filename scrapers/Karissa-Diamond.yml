@@ -5,6 +5,12 @@ sceneByURL:
       - karissa-diamond.com/videoCollection
     scraper: sceneScraper
 
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - karissa-diamond.com/photoCollection
+    scraper: galleryScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -30,5 +36,22 @@ xPathScrapers:
 #          - replace:
 #            - regex: cover
 #              with: cover_720
+  galleryScraper:
+    gallery:
+      Title: //div[@id="setTitle"]/text()
+      URL: //meta[@property="og:url"]/@content
+      Studio:
+        Name:
+          fixed: "Karissa Diamond"
+      Date:
+        selector: //div[@id="setDate"]/text()
+        postProcess:
+          - parseDate: January 02, 2006
+      Details: //div[@class="well"]/text()
+      Tags:
+        Name: //div[@class[contains(.,"hidden")]]//a[@class="tag"]/text()
+      Performers:
+        Name:
+          fixed: "Karissa Diamond"
 
-# Last Updated October 12, 2020
+# Last Updated October 15, 2020
