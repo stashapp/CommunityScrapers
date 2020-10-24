@@ -72,5 +72,12 @@ thenude.com|TheNude.yml
 timtales.com|TimTales.yml
 xslist.org|Xslist.yml
 
+## Gallery Scrapers
+This list is meant to keep track of which sites are already supported by existing community scrapers. And which scrapers support them. When introducing a new scraper, add the sites your scraper supports to this list in your PR. Please keep this site list in alphabetical order to keep the list tidy.
+
+Supported Site|Scraper
+------------- | -------------
+karissa-diamond.com|Karissa-Diamond.yml
+
 ## Contributing
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
