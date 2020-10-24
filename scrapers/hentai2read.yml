@@ -26,6 +26,6 @@ xPathScrapers:
       Performers:
         Name: //b[text()="Character"]/following-sibling::a[@class="tagButton" and not(text()="-")]/text()
       Studio:
-        Name: //b[text()="Author"]/following-sibling::a[@class="tagButton"]/text()
+        Name: //b[text()="Author"]/following-sibling::a[@class="tagButton" and not(text()="Unknown")]/text()
 
 # Last Updated October 24, 2020
