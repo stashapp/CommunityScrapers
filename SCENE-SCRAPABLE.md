@@ -16,7 +16,7 @@ Supported Site|Scraper|Content
 50plusmilfs.com|TheScoreGroup.yml|
 60plusmilfs.com|TheScoreGroup.yml|Granny
 8thstreetlatinas.com|MindGeek.yml|
-AbbyWinters.com|AbbyWinters.yml|Lesbian
+AbbyWinters.com|AbbyWinters.yml|
 abuseme.com|AbuseMe.yml|
 activeduty.com|GammaEntertainment.yml|Gay
 aebn.com|AEBN.yml|Straight + Gay
