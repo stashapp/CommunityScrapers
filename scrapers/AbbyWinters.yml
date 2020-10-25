@@ -2,27 +2,26 @@ name: Abby Winters
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.abbywinters.com/
+      - abbywinters.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Studio:
+        Name:
+          fixed: AbbyWinters
       Performers:
         Name:
-          selector: //td/a[starts-with(@href,'https://www.abbywinters.com/nude_girl/')]/text()
+          selector: selector: //td/a[contains(@href,'/nude_girl/')]/text()
       Title:
         selector: //div[starts-with(@class,'page-heading')]/div/h1/text()
       Details:
-        selector: //div[@class='description padd-bottom-15 padd-left-15 padd-right-15']/p/span/text()
+        selector: //div[@class[contains(.,'description')]]//text()
+        concat: " "
       Tags:
         Name:
-          selector: //p/a[starts-with(@href,'https://www.abbywinters.com/fetish/')]/text()|//p/a[starts-with(@href,'/browse/')]/text()|//p/a[starts-with(@href,'/amateurs/')]/text()
+          selector: //p/a[contains(@href,'/fetish/') or contains(@href,'/browse') or contains(@href,'/amateurs/')]/text()
       Image:
         selector: //div[@class='video-player-container video-responsive']/@data-poster
 
-driver:
-  useCDP: true
-debug:
-  printHTML: true
-# Last Updated October 21, 2020
+# Last Updated October 23, 2020
