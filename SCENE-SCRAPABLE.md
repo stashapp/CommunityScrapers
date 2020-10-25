@@ -16,6 +16,7 @@ Supported Site|Scraper|Content
 50plusmilfs.com|TheScoreGroup.yml|
 60plusmilfs.com|TheScoreGroup.yml|Granny
 8thstreetlatinas.com|MindGeek.yml|
+AbbyWinters.com|AbbyWinters.yml|
 abuseme.com|AbuseMe.yml|
 activeduty.com|GammaEntertainment.yml|Gay
 aebn.com|AEBN.yml|Straight + Gay
@@ -215,6 +216,7 @@ firstanalquest.com|Firstanalquest.yml|
 firstclasspov.com|Spizoo.yml|
 fistertwister.com|Fistertwister.yml|
 fistingcentral.com|GammaEntertainment.yml|
+fitting-room.com|FittingRoom.yml|
 footsiebabes.com|GammaEntertainment.yml|
 forbondage.com|LetsDoeIt.yml|
 fostertapes.com|PaperStreetMedia.yml|

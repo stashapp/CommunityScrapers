@@ -77,6 +77,7 @@ This list is meant to keep track of which sites are already supported by existin
 
 Supported Site|Scraper
 ------------- | -------------
+fitting-room.com|FittingRoom.yml
 hentai2read.com|hentai2read.yml
 karissa-diamond.com|Karissa-Diamond.yml
 nhentai.net|nhentai.yml
