@@ -21,7 +21,7 @@ sceneByFragment:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="shoot-title"]
+      Title: //h1[@class="shoot-title"]/text()
       Date:
         selector: //span[@class="shoot-date"]/text()
         parseDate: January 2, 2006
