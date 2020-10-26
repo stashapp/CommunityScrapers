@@ -80,6 +80,7 @@ Supported Site|Scraper
 fitting-room.com|FittingRoom.yml
 hentai2read.com|hentai2read.yml
 karissa-diamond.com|Karissa-Diamond.yml
+mplstudios.com|MPLStudios.yml
 nhentai.net|nhentai.yml
 
 ## Contributing
