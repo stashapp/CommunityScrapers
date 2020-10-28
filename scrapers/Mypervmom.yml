@@ -22,7 +22,6 @@ xPathScrapers:
         replace:
           - regex: ^Description\:(.+)
             with: $1
-      Name: //div[@class="tags"]//a/text()
       Performers:
         Name: //div[@id="title-single"]//a
       Image:
