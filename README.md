@@ -77,11 +77,34 @@ This list is meant to keep track of which sites are already supported by existin
 
 Supported Site|Scraper
 ------------- | -------------
+anilos.com|Nubiles.yml
+badteenspunished.com|Nubiles.yml
+bountyhunterporn.com|Nubiles.yml
+brattysis.com|Nubiles.yml
+daddyslilangel.com|Nubiles.yml
+deeplush.com|Nubiles.yml
+detentiongirls.com|Nubiles.yml
+driverxxx.com|Nubiles.yml
 fitting-room.com|FittingRoom.yml
 hentai2read.com|hentai2read.yml
 karissa-diamond.com|Karissa-Diamond.yml
+momsteachsex.com|Nubiles.yml
 mplstudios.com|MPLStudios.yml
+myfamilypies.com|Nubiles.yml
+nfbusty.com|Nubiles.yml
 nhentai.net|nhentai.yml
+nubilefilms.com|Nubiles.yml
+nubiles-casting.com|Nubiles.yml
+nubiles-porn.com|Nubiles.yml
+nubiles.net|Nubiles.yml
+nubileset.com|Nubiles.yml
+nubilesunscripted.com|Nubiles.yml
+petiteballerinasfucked.com|Nubiles.yml
+petitehdporn.com|Nubiles.yml
+princesscum.com|Nubiles.yml
+stepsiblingscaught.com|Nubiles.yml
+teacherfucksteens.com|Nubiles.yml
+thatsitcomshow.com|Nubiles.yml
 
 ## Contributing
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
