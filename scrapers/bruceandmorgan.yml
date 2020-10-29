@@ -2,7 +2,7 @@ name: Bruce and Morgan
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://bruceandmorgan.net/scene/
+      - bruceandmorgan.net/scene/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -17,4 +17,4 @@ xPathScrapers:
           fixed: Bruce and Morgan
 driver:
   useCDP: true
-# Last Updated September 30, 2020
+# Last Updated October 23, 2020
