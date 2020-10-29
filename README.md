@@ -78,8 +78,10 @@ This list is meant to keep track of which sites are already supported by existin
 Supported Site|Scraper
 ------------- | -------------
 fitting-room.com|FittingRoom.yml
+hentai2read.com|hentai2read.yml
 karissa-diamond.com|Karissa-Diamond.yml
 mplstudios.com|MPLStudios.yml
+nhentai.net|nhentai.yml
 
 ## Contributing
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
