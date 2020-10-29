@@ -1,0 +1,14 @@
+{
+  "name": "stash-scraper-validator",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "main": "node index.js"
+  },
+  "dependencies": {
+    "ajv": "^6.12.6",
+    "better-ajv-errors": "^0.6.7",
+    "yaml": "^1.10.0"
+  }
+}
