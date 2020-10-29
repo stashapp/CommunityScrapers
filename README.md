@@ -86,11 +86,13 @@ deeplush.com|Nubiles.yml
 detentiongirls.com|Nubiles.yml
 driverxxx.com|Nubiles.yml
 fitting-room.com|FittingRoom.yml
+hentai2read.com|hentai2read.yml
 karissa-diamond.com|Karissa-Diamond.yml
 momsteachsex.com|Nubiles.yml
 mplstudios.com|MPLStudios.yml
 myfamilypies.com|Nubiles.yml
 nfbusty.com|Nubiles.yml
+nhentai.net|nhentai.yml
 nubilefilms.com|Nubiles.yml
 nubiles-casting.com|Nubiles.yml
 nubiles-porn.com|Nubiles.yml
