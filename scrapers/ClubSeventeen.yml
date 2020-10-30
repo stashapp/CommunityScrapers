@@ -2,7 +2,7 @@ name: ClubSeventeen
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.clubseventeen.com/video.php
+      - clubseventeen.com/video.php
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
