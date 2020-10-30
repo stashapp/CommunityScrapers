@@ -1,0 +1,28 @@
+name: Yanks
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - yanks.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='blocktitle clear']/p/../h2/text()
+      Performers:
+        Name:
+          selector: //div[@class='blocktitle clear']/p/a/text()
+      Date:
+        selector: //div[@class='blocktitle clear']/p/text()
+        postProcess:
+          - replace:
+            - regex: .+(\d{4}-\d{2}-\d{2}).+
+              with: $1
+          - parseDate: 2006-01-02
+      Image:
+        selector: //div[@class='mainvideo_here']/a/img/@src
+      Studio:
+        Name:
+          fixed: Yanks
+
+# Last Updated October 30, 2020
