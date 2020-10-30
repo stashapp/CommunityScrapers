@@ -2,22 +2,30 @@ name: ATKExotics
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.atkexotics.com/tour/
-      - https://www.amkingdom.com/tour/
+      - atkexotics.com/tour/
+      - amkingdom.com/tour/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Studio:
-      Performers:
         Name:
-          selector: //div[@class='pull-left']/text()
+          selector: //div[@class='statement']/a[contains(@href,'2257')]/@href
           postProcess:
             - replace:
-               - regex: (.+)(\sVideo.*)
-                 with: $1
-      Title:
-        selector: //div/b[contains(text(),'Movie:')]//following-sibling::text()[1]
+                - regex: (?:.+www\.)(.+)(?:\.com.+)
+                  with: $1
+            - map:
+                atkexotics: "ATK Exotics"
+                amkingdom: "AMKingdom"
+      Performers:
+        Name:
+          selector: //h1
+          postProcess:
+            - replace:
+                - regex: \sVideo.*
+                  with:
+      Title: //title/text()
       Details:
         selector: //div/b[contains(text(),'Description:')]//following-sibling::text()[1]
       Tags:
@@ -25,14 +33,12 @@ xPathScrapers:
           selector: //div/b[contains(text(),'Tags:')]//following-sibling::text()[1]
           split: " , "
       Image:
-        selector: //div[@class='flowplayer minimalist is-splash is-paused is-mouseout']/@style
+        selector: //div[contains(@class,'video-wrap')]/div/@style
         postProcess:
-          - replace: 
-             - regex: (background-image:url\()(.+)(\))
-               with: $2
+          - replace:
+              - regex: (?:background-image:url\(')(.+)(?:'\))
+                with: $1
 
 driver:
   useCDP: true
-debug:
-  printHTML: true
-# Last Updated October 16, 2020
+# Last Updated October 30, 2020
