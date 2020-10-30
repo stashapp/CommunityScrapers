@@ -32,6 +32,7 @@ allherluv.com|AllHerLuv.yml|Lesbian
 alsscan.com|SARJ-LLC.yml|
 amateurallure.com|AmateurAllure.yml|
 amateureuro.com|LetsDoeIt.yml|
+amkingdom.com|ATKExotics.yml|
 analacrobats.com|GammaEntertainment.yml|
 analbbc.com|Analized.yml|
 analcheckups.com|Teencoreclub.yml|
@@ -54,6 +55,9 @@ asiantgirl.com|GroobyNetwork-Partial.yml|Trans
 assholefever.com|GammaEntertainment.yml|
 assmeat.com|Hustler.yml|
 assteenmouth.com|Teencoreclub.yml|
+atkexotics.com|ATKExotics.yml|
+atkhairy.com|ATKHairy.yml|
+atkpremium.com|ATKHairy.yml|
 aussiefelatioqueens.com|AussieFelatioQueens.yml|
 b47w.com|javlibrary.yml|JAV
 babes.com|RealityKingsOL.yml|

@@ -1,0 +1,44 @@
+name: ATKExotics
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - atkexotics.com/tour/
+      - amkingdom.com/tour/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          selector: //div[@class='statement']/a[contains(@href,'2257')]/@href
+          postProcess:
+            - replace:
+                - regex: (?:.+www\.)(.+)(?:\.com.+)
+                  with: $1
+            - map:
+                atkexotics: "ATK Exotics"
+                amkingdom: "AMKingdom"
+      Performers:
+        Name:
+          selector: //h1
+          postProcess:
+            - replace:
+                - regex: \sVideo.*
+                  with:
+      Title: //title/text()
+      Details:
+        selector: //div/b[contains(text(),'Description:')]//following-sibling::text()[1]
+      Tags:
+        Name:
+          selector: //div/b[contains(text(),'Tags:')]//following-sibling::text()[1]
+          split: " , "
+      Image:
+        selector: //div[contains(@class,'video-wrap')]/div/@style
+        postProcess:
+          - replace:
+              - regex: (?:background-image:url\(')(.+)(?:'\))
+                with: $1
+
+driver:
+  useCDP: true
+# Last Updated October 30, 2020
