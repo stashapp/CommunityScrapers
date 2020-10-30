@@ -121,6 +121,7 @@ cherrypimps.com|trafficpimps.yml|
 chocolatebjs.com|PervCity.yml|
 clips4sale.com|Clips4Sale.yml|
 clubinfernodungeon.com|GammaEntertainment.yml|Gay
+clubseventeen.com|ClubSeventeen.yml
 cum4k.com|AMAMultimedia.yml|
 cumaholicteens.com|Teencoreclub.yml|
 cumfiesta.com|MindGeek.yml|
