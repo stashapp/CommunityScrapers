@@ -1,0 +1,48 @@
+name: "SARJ LLC"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - metartnetwork.com
+      - metart.com
+      - sexart.com
+      - thelifeerotic.com
+      - errotica-archives.com
+      - alsscan.com
+      - vivthomas.com
+      - metartx.com
+      - rylskyart.com
+      - eternaldesire.com
+      - stunning18.com
+      - lovehairy.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $script: //script[contains(text(),'INITIAL_STATE')]/text()
+      $data: //div[@class='movie-data']
+    scene:
+      Title: //div[@class='info-container']/h3/a/text()
+      Details:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:]},"description":")(.+)(?:","globalContent).+
+              with: $1
+            - regex: \\"
+              with: '"'
+              # In case of blank descriptions
+            - regex: .+INITIAL_STATE.+
+              with:
+      Date:
+        selector: $data//li[span[contains(.,'Released')]]/span[@class='attr-value']/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Performers:
+        Name: $data//a[@href[contains(.,'/model/')]]/text()
+      Tags:
+        Name: //div[@class='tag-list']//a/text()
+      Image: //div[@class='img-container']/img/@src
+      Studio:
+        Name: //meta[@property='og:site_name']/@content
+
+# Last Updated October 9, 2020

@@ -34,4 +34,6 @@ xPathScrapers:
               with: $1$2$3
             - regex: ([^|]+)\|(.+)/tour/$
               with: $2$1
-# Last Updated August 23, 2020
+            - regex: ^\/\/
+              with: "https://"
+# Last Updated October 24, 2020

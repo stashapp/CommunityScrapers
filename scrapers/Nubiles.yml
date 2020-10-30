@@ -26,6 +26,34 @@ sceneByURL:
       - bountyhunterporn.com/
       - detentiongirls.com/
     scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - nubilefilms.com/photo/gallery/
+      - nubiles.net/photo/gallery/
+      - nubiles-porn.com/photo/gallery/
+      - nubilesunscripted.com/photo/gallery/
+      - nubiles-casting.com/photo/gallery/
+      - nubileset.com/photo/gallery/
+      - nfbusty.com/photo/gallery/
+      - anilos.com/photo/gallery/
+      - deeplush.com/photo/gallery/
+      - momsteachsex.com/photo/gallery/
+      - petitehdporn.com/photo/gallery/
+      - brattysis.com/photo/gallery/
+      - thatsitcomshow.com/photo/gallery/
+      - badteenspunished.com/photo/gallery/
+      - princesscum.com/photo/gallery/
+      - myfamilypies.com/photo/gallery/
+      - daddyslilangel.com/photo/gallery/
+      - teacherfucksteens.com/photo/gallery/
+      - stepsiblingscaught.com/photo/gallery/
+      - petiteballerinasfucked.com/photo/gallery/
+      - driverxxx.com/photo/gallery/
+      - bountyhunterporn.com/photo/gallery/
+      - detentiongirls.com/photo/gallery/
+    scraper: galleryScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -34,7 +62,8 @@ xPathScrapers:
       Title: //h2/text()
       Date:
         selector: $contentpane//span[@class="date"]/text()
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Details:
         selector: //div[@class="col-12 content-pane-column"]//p/text()|//div[@class="col-12 content-pane-column"]/div/text()
         concat: " "
@@ -43,15 +72,46 @@ xPathScrapers:
       Studio:
         Name:
           selector: $contentpane//a[@class="site-link"]/text()
-          replace:
-            - regex: (.+?)\.com
-              with: $1
+          postProcess:
+            - replace:
+              - regex: (.+?)\.com
+                with: $1
       Tags:
         Name: //div[@class="categories"]/a/text()
       Image:
         selector: //img[@class="fake-video-player-cover"]/@src
-        replace:
-          - regex: ^
-            with: "https:"
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+  galleryScraper:
+    common:
+      $contentpane: //div[@class="col-12 col-md-7 col-lg-5 content-pane-title"]
+    gallery:
+      Title:
+        selector: //h2
+        postProcess:
+          - replace:
+              # Remove - S11:E11 part
+              - regex: ^(.+)(?:\s-\sS\d+:E\d+)$|^(.+)$
+                with: $1$2
+      Details:
+        selector: //div[@class="col-12 content-pane-column"]//p/text()[normalize-space(.)]|//div[@class="col-12 content-pane-column"]/div/text()[normalize-space(.)]
+        concat: "\n\n"
+      Date:
+        selector: $contentpane//span[@class="date"]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Performers:
+        Name: //div[@class="content-pane-performers"]/a/text()
+      Tags:
+        Name: //div[@class="categories"]/a/text()
+      Studio:
+        Name:
+          selector: //title/text()
+          postProcess:
+            - replace:
+              - regex: ^(.+?)\s-.+$
+                with: $1
 
-# Last Updated October 3, 2020
+# Last Updated October 28, 2020

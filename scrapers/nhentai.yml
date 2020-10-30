@@ -1,0 +1,38 @@
+name: nhentai
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - nhentai.net/g/
+    scraper: galleryScraper
+xPathScrapers:
+  galleryScraper:
+    gallery:
+      Title: 
+        selector: //h1[@class="title"]/span
+        concat: " "
+      Details:
+        selector: //h2[@class="title"]/span
+        concat: " "
+      URL: 
+        selector: //div[@id="bigcontainer"]/div[@id="cover"]/a/@href
+        postProcess:
+          - replace:
+            - regex: (.+\/)(.+)
+              with: $1
+            - regex: ^
+              with: https://nhentai.net
+      Date:
+        selector: //div[contains(@class,"tag-container") and contains(.,"Uploaded:")]//time/@datetime
+        postProcess:
+          - replace:
+            - regex: (\d{4}-\d{2}-\d{2})(.+)
+              with: $1
+          - parseDate: 2006-01-02
+      Tags:
+        Name: //div[contains(@class,"tag-container") and contains(.,"Tags:")]//span[@class="name"]/text()
+      Performers:
+        Name: //div[contains(@class,"tag-container") and contains(.,"Characters:")]//span[@class="name"]/text()
+      Studio:
+        Name: //div[contains(@class,"tag-container") and contains(.,"Artists:")]//span[@class="name"]/text()
+
+# Last Updated October 24, 2020
