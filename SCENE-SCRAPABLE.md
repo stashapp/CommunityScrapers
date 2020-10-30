@@ -540,6 +540,7 @@ swallowed.com|nympho.yml|
 sweetfemdom.com|SweetFemdom.yml|
 sweetheartvideo.com|MindGeek.yml|Lesbian
 sweetsinner.com|MindGeek.yml|
+taboopov.com|taboopov.yml|
 teacherfucksteens.com|Nubiles.yml|
 teachmyass.com|Teencoreclub.yml|
 teamskeet.com|TeamSkeet.yml|
