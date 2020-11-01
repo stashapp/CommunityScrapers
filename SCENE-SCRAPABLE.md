@@ -503,6 +503,7 @@ sexvr.com|SexVR.yml|VR
 sexyhub.com|RealityKingsOL.yml|
 shandafay.com|VNAGirls.yml|
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml|
+share.myfreecams.com|MFC.yml|
 shegotsix.com|Teencoreclub.yml|
 shemaleidol.com|GammaEntertainment.yml|Trans
 sheseducedme.com|Andomark.yml|
