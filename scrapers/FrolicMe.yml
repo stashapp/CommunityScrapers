@@ -21,7 +21,7 @@ xPathScrapers:
           - replace:
               - regex: .*(datePublished":")(\d{4}-\d{2}-\d{2}).*
                 with: $2
-              - parseDate: 2006-01-02
+          - parseDate: 2006-01-02
       Details:
         selector: //h1[@class="film-entry-description"]|//div[@class="film-content"]/p
         concat: "\n\n"
