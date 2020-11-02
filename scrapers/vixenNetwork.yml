@@ -22,7 +22,9 @@ xPathScrapers:
         selector: //span[@data-test-component="ReleaseDateFormatted"]
         parseDate: "January 2, 2006"
       Image:
-        selector: //img[@class="sc-1egln9q-1 irBaDM"]/@src
+        selector: //div[contains(@class, "sc-13rgbhb-2")]//img[contains(@class, "sc-1egln9q-1")]/@src
+        # Less precise option:
+        #selector: //img[@class[contains(., "sc-1egln9q-1")]]/@src
       Studio:
         Name:
           selector: //link[@rel="canonical"]/@href
@@ -32,4 +34,4 @@ xPathScrapers:
 driver:
   useCDP: true
 
-# Last Updated October 3, 2020
+# Last Updated November 2, 2020

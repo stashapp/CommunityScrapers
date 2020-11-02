@@ -1,0 +1,31 @@
+name: hentai2read
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - hentai2read.com/
+    scraper: galleryScraper
+xPathScrapers:
+  galleryScraper:
+    gallery:
+      Title: 
+        selector: //h3[@class="block-title"]/a/text()
+      Details:
+        selector: //li[@class="text-muted" and not(text()="-")]/text()|//b[text()="Storyline"]/following-sibling::p[not(text()="Nothing yet!")]/text()
+        concat: "\n"
+      URL: 
+        selector: //link[@rel="canonical"]/@href
+      Date:
+        selector: //b[text()="Release Year"]/following-sibling::a[not(text()="-")]/text()
+        postProcess:
+          - replace:
+            - regex: $
+              with: -01-01
+          - parseDate: 2006-01-02
+      Tags:
+        Name: //b[text()="Content"]/following-sibling::a[@class="tagButton"]/text()|//b[text()="Category"]/following-sibling::a[@class="tagButton"]/text()
+      Performers:
+        Name: //b[text()="Character"]/following-sibling::a[@class="tagButton" and not(text()="-")]/text()
+      Studio:
+        Name: //b[text()="Author"]/following-sibling::a[@class="tagButton" and not(text()="Unknown")]/text()
+
+# Last Updated October 24, 2020
