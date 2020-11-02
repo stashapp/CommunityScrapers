@@ -1,9 +1,22 @@
-name: heyzo
+name: Heyzo
 sceneByURL:
   - action: scrapeXPath
     url:
       - en.heyzo.com/moviepages
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://en.heyzo.com/moviepages/{filename}
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: (.*[^a-zA-Z\d])*(\d+)[^a-zA-Z\d].*
+        # heyzo uses a 4 digit number for ids, here we take a series of numbers just to be safe
+        with: $2
+      - regex: $
+        with: /index.html
+  scraper: sceneScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -33,4 +46,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Heyzo
-#Last Updated September 22, 2020
+#Last Updated October 24, 2020

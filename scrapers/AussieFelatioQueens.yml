@@ -1,0 +1,25 @@
+name: Aussie Fellatio Queens
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - aussiefellatioqueens.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2[@class='video-title fleft text-color-3']/span[2]/text()
+      Performers:
+        Name:
+          selector: //span/span/a/span/text()
+      Details:
+        selector: //h3[contains(@class,'text-video-desc') and not(contains(@class,'short-desc'))]/span/text()
+      Tags:
+        Name:
+          selector: //div[@class='tags content-info']/h4/span/a/span/text()
+      Studio:
+        Name:
+          fixed: Aussie Fellatio Queens
+driver:
+  useCDP: true
+# Last Updated October 29, 2020

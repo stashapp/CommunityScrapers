@@ -16,6 +16,7 @@ Supported Site|Scraper|Content
 50plusmilfs.com|TheScoreGroup.yml|
 60plusmilfs.com|TheScoreGroup.yml|Granny
 8thstreetlatinas.com|MindGeek.yml|
+AbbyWinters.com|AbbyWinters.yml|
 abuseme.com|AbuseMe.yml|
 activeduty.com|GammaEntertainment.yml|Gay
 aebn.com|AEBN.yml|Straight + Gay
@@ -31,6 +32,7 @@ allherluv.com|AllHerLuv.yml|Lesbian
 alsscan.com|SARJ-LLC.yml|
 amateurallure.com|AmateurAllure.yml|
 amateureuro.com|LetsDoeIt.yml|
+amkingdom.com|ATKExotics.yml|
 analacrobats.com|GammaEntertainment.yml|
 analbbc.com|Analized.yml|
 analcheckups.com|Teencoreclub.yml|
@@ -53,7 +55,13 @@ asiantgirl.com|GroobyNetwork-Partial.yml|Trans
 assholefever.com|GammaEntertainment.yml|
 assmeat.com|Hustler.yml|
 assteenmouth.com|Teencoreclub.yml|
-Assylum.com|Assylum.yml|Fetish
+assylum.com|Assylum.yml|Fetish
+atkexotics.com|ATKExotics.yml|
+atkhairy.com|ATKHairy.yml|
+atkpremium.com|ATKHairy.yml|
+aussieass.com|AussieAss.yml|
+aussiefelatioqueens.com|AussieFelatioQueens.yml|
+aussiepov.com|AussieAss.yml|
 b47w.com|javlibrary.yml|JAV
 babes.com|RealityKingsOL.yml|
 babesnetwork.com|MindGeek.yml|
@@ -99,6 +107,7 @@ boxtrucksex.com|BoxTruckSex.yml|
 boysdestroyed.com|AMAMultimedia.yml|Gay
 brattysis.com|Nubiles.yml|
 brazzers.com|Brazzers.yml|
+bruceandmorgan.net|bruceandmorgan.yml|Amateur Fetish
 brutalinvasion.com|Teencoreclub.yml|
 bskow.com|GammaEntertainment.yml|
 burningangel.com|GammaEntertainment.yml|
@@ -216,6 +225,7 @@ firstanalquest.com|Firstanalquest.yml|
 firstclasspov.com|Spizoo.yml|
 fistertwister.com|Fistertwister.yml|
 fistingcentral.com|GammaEntertainment.yml|
+fitting-room.com|FittingRoom.yml|
 footsiebabes.com|GammaEntertainment.yml|
 forbondage.com|LetsDoeIt.yml|
 fostertapes.com|PaperStreetMedia.yml|
@@ -372,6 +382,7 @@ moneytalks.com|MindGeek.yml|
 mormongirlz.com|Mormongirlz.yml|
 motherfuckerxxx.com|GammaEntertainment.yml|
 motherless.com|Motherless.yml|Tube Site
+mplstudios.com|MPLStudios.yml|
 mrluckypov.com|Spizoo.yml|
 mrpov.com|FinishesTheJob.yml|
 muchaslatinas.com|Hustler.yml|
@@ -532,6 +543,7 @@ swallowed.com|nympho.yml|
 sweetfemdom.com|SweetFemdom.yml|
 sweetheartvideo.com|MindGeek.yml|Lesbian
 sweetsinner.com|MindGeek.yml|
+taboopov.com|taboopov.yml|
 teacherfucksteens.com|Nubiles.yml|
 teachmyass.com|Teencoreclub.yml|
 teamskeet.com|TeamSkeet.yml|
@@ -636,6 +648,7 @@ xtube.com|Xtube.yml|
 xvideos.com|Xvideos.yml|
 xxxpawn.com|XXXPawn.yml|
 xxxpawn.xxx|XXXPawn.yml|
+Yanks.com|Yanks.yml|
 youngthroats.com|Teencoreclub.yml|
 youporn.com|YouPorn.yml|Tube Site
 yourmomdoesanal.com|Analized.yml|

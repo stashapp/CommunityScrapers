@@ -1,0 +1,64 @@
+name: 'MPL Studios'
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mplstudios.com/update
+    scraper: sceneScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - mplstudios.com/update
+    scraper: galleryScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@id="update"]/text()
+      Studio:
+        Name:
+          fixed: "MPL Studios"
+      Date:
+        selector: //div[@id="date"]/text()
+        postProcess:
+          - replace:
+            - regex: (\d+)[a-z]+
+              with: $1
+          - parseDate: 2 January 2006
+      Details: //div[@id="update_text"]/text()
+      Performers:
+        Name:
+          selector: //a[@id="portfolio"]/text()
+          postProcess:
+            - replace:
+              - regex: \'.+$
+                with: ""
+      Image:
+        selector: //div[@id="main_cover"]/img/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https://mplstudios.com"
+  galleryScraper:
+    gallery:
+      Title: //div[@id="update"]/text()
+      Studio:
+        Name:
+          fixed: "MPL Studios"
+      Date:
+        selector: //div[@id="date"]/text()
+        postProcess:
+          - replace:
+            - regex: (\d+)[a-z]+
+              with: $1
+          - parseDate: January 2 2006
+      Details: //div[@id="update_text"]/text()
+      Performers:
+        Name:
+          selector: //a[@id="portfolio"]/text()
+          postProcess:
+            - replace:
+              - regex: \'.+$
+                with: ""
+
+# Last updated October 25, 2020

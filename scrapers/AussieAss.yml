@@ -1,0 +1,25 @@
+name: AussieAss
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - aussieass.com
+      - aussiepov.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: (//div[contains(@class,'preview-description')]/h4/span)[1]/text()
+      Performers:
+        Name:
+          selector: //div[contains(@class,'preview-description')]/h5//a/text()
+      Image:
+        selector: //div[@class='navbar-header']/a/@href|//img[@class='large_update_thumb left thumbs']/@src
+        concat: " "
+        postProcess:
+          - replace:
+            - regex: (.+\.com)(?:\s|\/.+\s)(.+)
+              with: $1/$2
+      Details:
+        selector: //div[contains(@class,'preview-description')]/text()[3]
+# Last Updated November 2, 2020
