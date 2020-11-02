@@ -58,7 +58,9 @@ assteenmouth.com|Teencoreclub.yml|
 atkexotics.com|ATKExotics.yml|
 atkhairy.com|ATKHairy.yml|
 atkpremium.com|ATKHairy.yml|
+aussieass.com|AussieAss.yml|
 aussiefelatioqueens.com|AussieFelatioQueens.yml|
+aussiepov.com|AussieAss.yml|
 b47w.com|javlibrary.yml|JAV
 babes.com|RealityKingsOL.yml|
 babesnetwork.com|MindGeek.yml|
