@@ -95,7 +95,8 @@ xPathScrapers:
       Title: $section//h1/text()|$section//h2/text()
       Date:
         selector: //div[text()="Release Date:"]/../text()
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Details: //div[text()="Description:"]/../div[not(@class)]/text()
       Tags:
         Name: //a[contains(@href,"/scenes?tags")]/text()[1]
@@ -119,7 +120,8 @@ xPathScrapers:
       Name: $section//h1/text()|$section//h2/text()
       Date:
         selector: //div[text()="Release Date:"]/../text()
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Synopsis: //div[text()="Description:"]/../div[not(@class)]/text()
       Studio:
         Name: 

@@ -10,7 +10,8 @@ xPathScrapers:
       Title: //h1[@class="entry-title"]
       Date:
         selector: //div[@class="meta-item meta-date"]/span/text()
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Details:
         selector: //div[@class="entry-content-single"]/p
         concat: " "

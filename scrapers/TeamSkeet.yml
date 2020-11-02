@@ -10,7 +10,8 @@ xPathScrapers:
       Title: //div[@class="col-12 sceneTitle"]/text()
       Date:
         selector: //div[@class="col-6 sceneDate"]/text()
-        parseDate: 01/02/2006
+        postProcess:
+          - parseDate: 01/02/2006
       Details: //div[@class="col-12 sceneDesc"]/text()
       Performers:
         Name: //div[@class="col-12 contentTitle"]/a

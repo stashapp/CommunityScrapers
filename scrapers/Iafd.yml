@@ -25,7 +25,8 @@ xPathScrapers:
       Title: //h1/text()
       Date: 
         selector: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Release Date']/following-sibling::p[1]
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Details:  //div[@id="synopsis"]/div[@class="padded-panel"]//text()
       Studio:
         Name: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Studio']/following-sibling::p[1]
@@ -37,9 +38,10 @@ xPathScrapers:
       Name: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/text()
       URL: 
         selector: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/@href
-        replace:
-          - regex: ^
-            with: https://www.iafd.com
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.iafd.com
   
   performerScraper:
     performer:

@@ -13,7 +13,8 @@ xPathScrapers:
         Name: //span[@class="slide-title"]/text()
       Date:
         selector: //ul[@class="dvdSpecs"]/li[@class="updatedOn"]/text()[1]
-        parseDate: "2006-01-02"
+        postProcess:
+          - parseDate: "2006-01-02"
       Image:
         selector: //a[@class="frontCoverImg"]/img/@src
       Tags:

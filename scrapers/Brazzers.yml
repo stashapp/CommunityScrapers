@@ -28,9 +28,10 @@ xPathScrapers:
       Name: $result/@title
       URL:
         selector: $result/@href
-        replace:
-          - regex: ^
-            with: https://www.brazzers.com
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.brazzers.com
 
   sceneScraper:
     common:

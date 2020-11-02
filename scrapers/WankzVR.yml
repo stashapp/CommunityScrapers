@@ -12,7 +12,8 @@ xPathScrapers:
       Title: //div[@class="detail__header detail__header-lg"]/h1
       Date:
         selector: $info//span[@class="detail__date"]/text()
-        parseDate: 2 January, 2006
+        postProcess:
+          - parseDate: 2 January, 2006
       Details:
         selector: //div[@class="detail__txt detail__txt-show_lg"]/text()|//span[@class="more__body"]/text()
         concat: " "

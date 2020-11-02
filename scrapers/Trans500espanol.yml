@@ -26,16 +26,18 @@ xPathScrapers:
       Details: //section[@id="scene-desc"]/p/text()
       Image:
         selector: //meta[@name="twitter:image0"]/@content
-        replace: 
-          - regex: http
-            with: https
+        postProcess:
+          - replace: 
+            - regex: http
+              with: https
         # selector: //div[@class="vjs-poster"]/@style
-        # replace:
-          # - regex: ^.+(http[^\&]+).+$
-            # with: $1
-        # replace: 
-          # - regex: http 
-            # with: https
+        # postProcess:
+          # - replace:
+            # - regex: ^.+(http[^\&]+).+$
+              # with: $1
+          # - replace: 
+            # - regex: http 
+              # with: https
       Studio:
         Name: 
           selector: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()

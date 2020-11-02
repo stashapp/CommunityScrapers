@@ -16,9 +16,10 @@ xPathScrapers:
     scene:
       Title:
         selector: //h1[@class="trailer-block_title"]
-        replace:
-          - regex: "LIVE$"
-            with:
+        postProcess:
+          - replace:
+            - regex: "LIVE$"
+              with:
       Date:
         selector: //div[@class="info-block_data"]/p[@class="text"][1]/text()
         postProcess:

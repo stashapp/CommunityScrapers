@@ -20,9 +20,10 @@ xPathScrapers:
       Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
       URL:
         selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
-        replace:
-          - regex: ^
-            with: "https://www.pornhub.com"
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https://www.pornhub.com"
   performerScraper:
     common:
       $infoPiece: //div[@class="infoPiece"]/span
@@ -30,25 +31,28 @@ xPathScrapers:
       Name: //h1[@itemprop="name"]
       Birthdate:
         selector: //span[@itemprop="birthDate"]
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Gender: //span[@itemprop="gender"]
       Twitter: //span[text() = 'Twitter']/../@href
       Instagram: //span[text() = 'Instagram']/../@href
       Measurements: $infoPiece[text() = 'Measurements:']/../span[@class="smallInfo"]
       Height:
         selector: $infoPiece[text() = 'Height:']/../span[@class="smallInfo"]
-        replace:
-          - regex: .*\((\d+) cm\)
-            with: $1
+        postProcess:
+          - replace:
+            - regex: .*\((\d+) cm\)
+              with: $1
       Ethnicity: $infoPiece[text() = 'Ethnicity:']/../span[@class="smallInfo"]
       FakeTits: $infoPiece[text() = 'Fake Boobs:']/../span[@class="smallInfo"]
       Piercings: $infoPiece[text() = 'Piercings:']/../span[@class="smallInfo"]
       Tattoos: $infoPiece[text() = 'Tattoos:']/../span[@class="smallInfo"]
       CareerLength:
         selector: $infoPiece[text() = 'Career Start and End:']/../span[@class="smallInfo"]
-        replace:
-          - regex: \s+to\s+
-            with: "-"
+        postProcess:
+          - replace:
+            - regex: \s+to\s+
+              with: "-"
       URL: //link[@rel="canonical"][1]/@href
   sceneScraper:
     common:
@@ -59,12 +63,13 @@ xPathScrapers:
       Details: //meta[@property="og:description"][1]/@content
       Date:
         selector: //script[contains(., 'uploadDate')]/text()
-        replace:
-          - regex: .+(?:"uploadDate":\s")([^"]+).+
-            with: $1
-          - regex: (.+)T.+
-            with: $1
-        parseDate: 2006-01-02
+        postProcess:
+          - replace:
+            - regex: .+(?:"uploadDate":\s")([^"]+).+
+              with: $1
+            - regex: (.+)T.+
+              with: $1
+          - parseDate: 2006-01-02
       Tags:
         Name: //div[@class="categoriesWrapper"]//a[not(@class="add-btn-small ")]|//div[@class="tagsWrapper"]//a[not(@class="add-btn-small")]
       Image:

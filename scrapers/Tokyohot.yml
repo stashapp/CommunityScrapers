@@ -14,7 +14,8 @@ xPathScrapers:
       Details: //div[@class="sentence"]//text()
       Date:
         selector: $movieinfo/dd[$tagexists+5]/text()
-        parseDate: 2006/01/02
+        postProcess:
+          - parseDate: 2006/01/02
       Performers:
         Name: $movieinfo/dd[1]/a/text()
       Image: //li[@class="package"]/a[1]/@href

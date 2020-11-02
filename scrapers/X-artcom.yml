@@ -12,7 +12,8 @@ xPathScrapers:
       Title: //div[@class="row info"]/div[@class="small-12 medium-12 large-12 columns"]/h1
       Date:
         selector: $sceneinfo/h2[1]/text()
-        parseDate: Jan 02, 2006
+        postProcess:
+          - parseDate: Jan 02, 2006
       Details:
         selector: $sceneinfo/p
         concat: " "

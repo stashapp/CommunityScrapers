@@ -14,7 +14,8 @@ xPathScrapers:
         Name: //meta[@property="og:site_name"]/@content
       Date:
         selector: //div[@class="vid_date"]
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Performers:
         Name: //div[@class="vid_info_content"][1]//a
 

@@ -12,10 +12,11 @@ xPathScrapers:
       Title: //h1[@class="section-title text-white"]/text()
       Date:
         selector: $desc/ul/li[1]/text()
-        replace:
-          - regex: Released\son\s
-            with:
-        parseDate: Jan 02, 2006
+        postProcess:
+          - replace:
+            - regex: Released\son\s
+              with:
+          - parseDate: Jan 02, 2006
       Details: $desc//p/text()
       Tags:
         Name: $desc//a/text()

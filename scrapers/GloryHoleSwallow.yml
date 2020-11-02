@@ -15,9 +15,10 @@ xPathScrapers:
         Name: $info//p[contains(text(),'Tags')]//a/text()
       Image:
         selector: //div[@id='fakeplayer']//img/@src0_1x
-        replace:
-          - regex: ^
-            with: https://gloryholeswallow.com
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://gloryholeswallow.com
       Studio:
         Name:
           fixed: GloryHole Swallow
