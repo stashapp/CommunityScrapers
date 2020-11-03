@@ -1,0 +1,23 @@
+name: brandibelle
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - new.brandibelle.com/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="vd-hdd"]/text()
+      Details:
+        selector: //div[@class="vd-desc"]/text()
+        concat: "<br>"
+        postProcess:
+          - replace:
+            - regex: <br>
+              with: "\n"
+      Studio:
+        Name:
+            fixed: BrandiBelle
+      Image: //img[@class="playerPic"]/@src
+
+# Last Updated Novemeber 2, 2020
