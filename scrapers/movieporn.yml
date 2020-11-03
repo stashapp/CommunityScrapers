@@ -1,0 +1,29 @@
+name: movieporn
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - movieporn.com/tour
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="episode preview"]//h2[@class="nice-title"]/text()
+      Details:
+        selector: //div[@class="desc-text"]//p/text()
+        concat: "<br>"
+        postProcess:
+          - replace:
+            - regex: <br>
+              with: "\n"
+      Tags:
+        Name: //ul[@class="tags"]//li//a[@class="tag"]/text()
+      Studio:
+        Name:
+            fixed: MoviePorn
+      Image: //div[@id="video"]/@poster
+
+# Needed to grab the image
+driver:
+  useCDP: true
+
+# Last Updated November 2, 2020
