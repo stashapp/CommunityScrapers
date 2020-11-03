@@ -1,0 +1,40 @@
+name: infernalrestraints
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - infernalrestraints.com/device
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //tbody/tr[1]/td[1]/span[1]/a[1]/text()
+      Date:
+        selector: //tbody/tr[1]/td[1]/span[2]/text()
+        postProcess:
+          - parseDate: "January 02, 2006"
+          - parseDate: "January 2, 2006"
+      Details:
+        selector: //*[@id="articleText"]/tbody/tr/td/text()
+        concat: "<br>"
+        postProcess:
+          - replace:
+            - regex: <br>
+              with: "\n"
+      Performers:
+        Name: //*[@id="articleWrapper"]/tbody/tr[1]/td/span[1]/a[2]/text()
+      Tags:
+        Name:
+          selector: //td[contains(text(),"Tags:")]/text()
+          # To remove the Tags: text from the tags
+          postProcess:
+            - replace:
+              - regex: "Tags:"
+                with:
+          split: ","
+      Studio:
+        Name:
+            fixed: Infernal Restraints
+      Image: //*[@id="my-video"]/@poster
+      URL: //meta[@name='og:url']/@content
+
+# Last Updated Novemeber 2, 2020
