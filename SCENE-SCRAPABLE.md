@@ -292,6 +292,7 @@ iconmale.com|MindGeek.yml|Gay
 ikissgirls.com|IKissGirls.yml|Lesbian
 iknowthatgirl.com|MindGeek.yml|
 immorallive.com|GammaEntertainment.yml|
+infernalrestraints.com|infernalrestraints.com|
 innocenthigh.com|PaperStreetMedia.yml|
 intimatelesbians.com|Spizoo.yml|Lesbian
 isthisreal.com|IsThisReal.yml|
