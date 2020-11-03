@@ -296,6 +296,7 @@ innocenthigh.com|PaperStreetMedia.yml|
 intimatelesbians.com|Spizoo.yml|Lesbian
 isthisreal.com|IsThisReal.yml|
 itscleolive.com|VNAGirls.yml|
+jacquieetmicheltv.net|JacquieEtMichelTV.yml|
 jamesdeen.com|Analized.yml|
 japanhdv.com|JapanHDV.yml|JAV Uncensored
 javhd.com|JavHD.yml|JAV Uncensored

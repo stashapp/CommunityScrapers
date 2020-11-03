@@ -1,0 +1,28 @@
+name: JacquieEtMicaelTV
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jacquieetmicheltv.net
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Details: //div[@class="video-description"]/p/text()[1]
+      Date:
+        selector: //span[@class="publication"]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Jacquie Et Michel TV
+      Tags:
+        Name:
+          selector: //span[@class="categories"]/a/strong/text()|//div[@class="footer-tags"]/a/text()
+          postProcess:
+            - replace:
+                - regex: \,$
+                  with:
+
+# Last Updated November 04, 2020
