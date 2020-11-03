@@ -7,21 +7,21 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //tbody/tr[1]/td[1]/span[1]/a[1]/text()
+      Title: //a[@class="articleTitleText"][1]/text()
       Date:
-        selector: //tbody/tr[1]/td[1]/span[2]/text()
+        selector: //span[@class="articlePostDateText"][1]/text()
         postProcess:
           - parseDate: "January 02, 2006"
           - parseDate: "January 2, 2006"
       Details:
-        selector: //*[@id="articleText"]/tbody/tr/td/text()
+        selector: //td[@class="articleCopyText"]/text()
         concat: "<br>"
         postProcess:
           - replace:
             - regex: <br>
               with: "\n"
       Performers:
-        Name: //*[@id="articleWrapper"]/tbody/tr[1]/td/span[1]/a[2]/text()
+        Name: //a[@class="articleTitleText"][2]/text()
       Tags:
         Name:
           selector: //td[contains(text(),"Tags:")]/text()
