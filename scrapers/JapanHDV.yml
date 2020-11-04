@@ -26,3 +26,4 @@ xPathScrapers:
             - regex: ^
               with:  "https:"
 
+# Last Updated November 4, 2020

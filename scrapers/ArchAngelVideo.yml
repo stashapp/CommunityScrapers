@@ -37,4 +37,4 @@ xPathScrapers:
       Performers:
         Name: $videoContent//a[contains(@href, "/models/")]/text()
 
-# Last Updated July 21, 2020
+# Last Updated November 4, 2020

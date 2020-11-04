@@ -40,3 +40,5 @@ xPathScrapers:
           - replace:
             - regex: ^
               with: https://backroomcastingcouch.com
+
+# Last Updated November 4, 2020

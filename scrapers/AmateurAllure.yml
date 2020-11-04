@@ -35,4 +35,4 @@ xPathScrapers:
                 - replace:
                   - regex: .+(/tour/content/contentthumbs/\d+/\d+/[^/]+\.jpg) 1920w
                     with: https://www.amateurallure.com$1
-# Last Updated July 09, 2020
+# Last Updated November 4, 2020

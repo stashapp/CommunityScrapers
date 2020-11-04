@@ -141,4 +141,4 @@ xPathScrapers:
             - regex: '.*\.svg$'
               with: ''
 
-# Last Updated October 3, 2020
+# Last Updated November 4, 2020
