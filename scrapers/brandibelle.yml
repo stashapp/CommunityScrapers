@@ -10,11 +10,6 @@ xPathScrapers:
       Title: //div[@class="vd-hdd"]/text()
       Details:
         selector: //div[@class="vd-desc"]/text()
-        concat: "<br>"
-        postProcess:
-          - replace:
-            - regex: <br>
-              with: "\n"
       Studio:
         Name:
             fixed: BrandiBelle
