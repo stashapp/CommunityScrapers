@@ -26,6 +26,11 @@ sceneByURL:
       - czechbangbus.com/
       - czechspy.com/
       - czechmegaswingers.com/
+      - movieporn.com/
+      - unrealporn.com/
+      - creativeporn.com/
+      - horrorporn.com/
+      - perversefamily.com/  
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -41,4 +46,4 @@ xPathScrapers:
       Image:
         selector: //video/@poster
 
-# Last Updated October 3, 2020
+# Last Updated November 2, 2020
