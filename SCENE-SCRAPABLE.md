@@ -58,7 +58,9 @@ assteenmouth.com|Teencoreclub.yml|
 atkexotics.com|ATKExotics.yml|
 atkhairy.com|ATKHairy.yml|
 atkpremium.com|ATKHairy.yml|
+aussieass.com|AussieAss.yml|
 aussiefelatioqueens.com|AussieFelatioQueens.yml|
+aussiepov.com|AussieAss.yml|
 b47w.com|javlibrary.yml|JAV
 babes.com|RealityKingsOL.yml|
 babesnetwork.com|MindGeek.yml|
@@ -122,6 +124,7 @@ chocolatebjs.com|PervCity.yml|
 clips4sale.com|Clips4Sale.yml|
 clubinfernodungeon.com|GammaEntertainment.yml|Gay
 clubseventeen.com|ClubSeventeen.yml|
+creativeporn.com|Czechav.yml|
 cum4k.com|AMAMultimedia.yml|
 cumaholicteens.com|Teencoreclub.yml|
 cumfiesta.com|MindGeek.yml|
@@ -273,6 +276,7 @@ holed.com|AMAMultimedia.yml|
 homemadeanalwhores.com|Analized.yml|
 hometowngirls.com|Hustler.yml|
 hometownhoneys.com|Hustler.yml|
+horrorporn.com|Czechav.yml|
 hothouse.com|GammaEntertainment.yml|
 hotlegsandfeet.com|DDFNetwork.yml|
 hottiemoms.com|Hustler.yml|
@@ -380,6 +384,7 @@ moneytalks.com|MindGeek.yml|
 mormongirlz.com|Mormongirlz.yml|
 motherfuckerxxx.com|GammaEntertainment.yml|
 motherless.com|Motherless.yml|Tube Site
+movieporn.com|Czechav.yml|
 mplstudios.com|MPLStudios.yml|
 mrluckypov.com|Spizoo.yml|
 mrpov.com|FinishesTheJob.yml|
@@ -435,6 +440,7 @@ parodypass.com|NewSensationsNetworkSites.yml|
 passion-hd.com|AMAMultimedia.yml|
 pennypaxlive.com|VNAGirls.yml|
 pervcity.com|PervCity.yml|
+perversefamily.com|Czechav.yml|
 pervertgallery.com|Analized.yml|
 pervmom.com|PaperStreetMedia.yml|
 peternorth.com|GammaEntertainment.yml|
@@ -602,6 +608,7 @@ twistedvisual.com|Analized.yml|
 twistys.com|MindGeek.yml|
 twistysnetwork.com|MindGeek.yml|
 unlimitedmilfs.com|NewSensationsNetworkSites.yml|
+unrealporn.com|Czechav.yml|
 upherasshole.com|PervCity.yml|
 vcaxxx.com|Hustler.yml|
 vickyathome.com|VNAGirls.yml|
