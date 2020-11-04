@@ -11,15 +11,10 @@ xPathScrapers:
       Date:
         selector: //span[@class="articlePostDateText"][1]/text()
         postProcess:
-          - parseDate: "January 02, 2006"
           - parseDate: "January 2, 2006"
       Details:
         selector: //td[@class="articleCopyText"]/text()
-        concat: "<br>"
-        postProcess:
-          - replace:
-            - regex: <br>
-              with: "\n"
+        concat: "\n\n"
       Performers:
         Name: //a[@class="articleTitleText"][2]/text()
       Tags:
@@ -30,11 +25,12 @@ xPathScrapers:
             - replace:
               - regex: "Tags:"
                 with:
+              - regex: ",\\s*([^,]+)"
+                with: ",$1"    
           split: ","
       Studio:
         Name:
             fixed: Infernal Restraints
       Image: //*[@id="my-video"]/@poster
-      URL: //meta[@name='og:url']/@content
 
-# Last Updated Novemeber 2, 2020
+# Last Updated Novemeber 4, 2020
