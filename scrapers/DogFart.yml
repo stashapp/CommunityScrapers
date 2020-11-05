@@ -13,8 +13,8 @@ xPathScrapers:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
           - replace:
-            - regex: ([\d-]*).+
-              with: $1
+              - regex: ([\d-]*).+
+                with: $1
           - parseDate: 2006-01-02
       Details:
         selector: //div[@class="description shorten"]/text()|//span[@class="more-desc hide"]/text()
@@ -27,7 +27,7 @@ xPathScrapers:
         selector: //meta[@itemprop="thumbnailUrl"]/@content
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
+              - regex: ^
+                with: "https:"
 
 # Last Updated November 4, 2020

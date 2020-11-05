@@ -34,15 +34,15 @@ xPathScrapers:
           selector: //p[@class="starring"]/span[@class="names h5"]/a/text()
           postProcess:
             - replace:
-              - regex: \,
-                with: ""
+                - regex: \,
+                  with: ""
       Tags:
         Name:
           selector: //a[@class="tag"]
           postProcess:
             - replace:
-              - regex: \,
-                with: ""
+                - regex: \,
+                  with: ""
       Image:
         selector: //video[@class="video-js vjs-fluid video-player"]/@poster
       Studio:
@@ -50,7 +50,7 @@ xPathScrapers:
           selector: //div[@class="column shoot-logo"]/a/@href
           postProcess:
             - replace:
-              - regex: /channel/
-                with: ""
+                - regex: /channel/
+                  with: ""
       URL: //link[@rel="canonical"]/@href
 # Last Updated November 4, 2020

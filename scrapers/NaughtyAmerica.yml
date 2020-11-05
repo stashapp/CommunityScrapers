@@ -18,8 +18,8 @@ xPathScrapers:
         selector: //div[@class="synopsis grey-text"]
         postProcess:
           - replace:
-            - regex: "Synopsis"
-              with: ""
+              - regex: "Synopsis"
+                with: ""
       Tags:
         Name: //div[@class="categories grey-text"]/a
       Performers:
@@ -30,7 +30,7 @@ xPathScrapers:
         selector: //img[@class="start-card lazyload"]/@data-src|//img[@class="start-card"]/@src|//dl8-video[@id="vr_player"]/@poster
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
+              - regex: ^
+                with: "https:"
 
 # Last Updated November 4, 2020

@@ -20,17 +20,17 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:chromecast.+\stitle:\s')([^']+).+
-              with: $1
-            - regex: '&#039;'
-              with: "'"
+              - regex: .+(?:chromecast.+\stitle:\s')([^']+).+
+                with: $1
+              - regex: '&#039;'
+                with: "'"
       Details: $summary//div[contains(h4,'Episode Summary')]/p/text()
       Date:
         selector: $summary//div/h4[contains(.,'Published:')]/text()[2]
         postProcess:
           - replace:
-            - regex: Published:\s
-              with:
+              - regex: Published:\s
+                with:
           - parseDate: 2006-01-02
       Performers:
         Name: $summary/div//div/h4[contains(.,'Starring')]/a/text()
@@ -38,15 +38,15 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:poster:\s")([^"]+).+
-              with: $1
+              - regex: .+(?:poster:\s")([^"]+).+
+                with: $1
       Studio:
         Name:
           selector: //head/title/text()
           postProcess:
             - replace:
-              - regex: .+Official\s(\w+).+
-                with: $1
+                - regex: .+Official\s(\w+).+
+                  with: $1
 
 driver:
   useCDP: true

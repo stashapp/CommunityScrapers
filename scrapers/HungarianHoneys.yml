@@ -21,9 +21,9 @@ xPathScrapers:
         selector: //script[contains(text(),'poster')]/text()
         postProcess:
           - replace:
-            - regex: .+(?:poster=")([^"]+).+
-              with: $1
-            - regex: ^
-              with: https://hungarianhoneys.com
+              - regex: .+(?:poster=")([^"]+).+
+                with: $1
+              - regex: ^
+                with: https://hungarianhoneys.com
 
 # Last Updated November 4, 2020

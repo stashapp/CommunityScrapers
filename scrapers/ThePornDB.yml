@@ -25,8 +25,8 @@ jsonScrapers:
         selector: data.#.id
         postProcess:
           - replace:
-            - regex: ^
-              with: https://api.metadataapi.net/performers/
+              - regex: ^
+                with: https://api.metadataapi.net/performers/
 
   performerScraper:
     common:
@@ -40,8 +40,8 @@ jsonScrapers:
         selector: $extras.height
         postProcess:
           - replace:
-            - regex: cm
-              with:
+              - regex: cm
+                with:
       Measurements: $extras.measurements
       Tattoos: $extras.tattoos
       Piercings: $extras.piercings

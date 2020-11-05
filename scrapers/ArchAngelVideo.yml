@@ -16,24 +16,24 @@ xPathScrapers:
         concat: " "
         postProcess:
           - replace:
-            - regex: " "
-              with:
+              - regex: " "
+                with:
           - parseDate: January2,2006
       Studio:
         Name:
           selector: //div[@id="logo"]/h1/a/img/@alt
           postProcess:
             - replace:
-              - regex: \ Productions$
-                with:
+                - regex: \ Productions$
+                  with:
       Image:
         selector: //div[@class="player-thumb"]/img/@src0_1x|//script[contains(.,"poster=")]
         postProcess:
           - replace:
-            - regex: .+poster="([^"]+)".+
-              with: $1
-            - regex: ^
-              with: "https://www.archangelvideo.com"
+              - regex: .+poster="([^"]+)".+
+                with: $1
+              - regex: ^
+                with: "https://www.archangelvideo.com"
       Performers:
         Name: $videoContent//a[contains(@href, "/models/")]/text()
 

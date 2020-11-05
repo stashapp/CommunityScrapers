@@ -11,8 +11,8 @@ xPathScrapers:
         selector: //div[@class="clearfix"]/h1/span/text()
         postProcess:
           - replace:
-            - regex: \"
-              with:
+              - regex: \"
+                with:
       Details: //div[@class="movie-desc"]/text()
       Tags:
         Name:
@@ -24,10 +24,10 @@ xPathScrapers:
         selector: //script[contains(.,'jwplayer("videoplayer").setup')]/text()
         postProcess:
           - replace:
-            - regex: (.+image:\s+")(.+jpg)(.+)
-              with: $2
-            - regex: ^
-              with: "https://www.plumperpass.com/t1/"
+              - regex: (.+image:\s+")(.+jpg)(.+)
+                with: $2
+              - regex: ^
+                with: "https://www.plumperpass.com/t1/"
       Studio:
         Name:
           fixed: "Plumperpass"

@@ -31,8 +31,8 @@ xPathScrapers:
           selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace:
-              - regex: https\://www\.(.+)\.com/.+
-                with: $1
+                - regex: https\://www\.(.+)\.com/.+
+                  with: $1
 driver:
   useCDP: true
 

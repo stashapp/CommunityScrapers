@@ -15,16 +15,16 @@ xPathScrapers:
         concat: "\n"
         postProcess:
           - replace:
-            - regex: "\n"
-              with: "\n"
+              - regex: "\n"
+                with: "\n"
       Date:
         selector: $info//h1[@class="title"]/text()
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://joymii.com/search?query="
-            - regex: \s
-              with: +
+              - regex: ^
+                with: "https://joymii.com/search?query="
+              - regex: \s
+                with: +
           - subScraper:
               selector: //div[@class="box-results row"]/div[1]//div[@class="box-release_date release_date"]/text()
           - parseDate: Jan 02, 2006
@@ -34,8 +34,8 @@ xPathScrapers:
           selector: //title/text()
           postProcess:
             - replace:
-              - regex: .+
-                with: "joymii"
+                - regex: .+
+                  with: "joymii"
       Performers:
         Name: $info//h2[@class="starring-models"]/a/text()
 

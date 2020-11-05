@@ -29,8 +29,8 @@ xPathScrapers:
           selector: //meta[@name="dl8-customization-brand-url"]/@content
           postProcess:
             - replace:
-              - regex: ^
-                with: "https:"
+                - regex: ^
+                  with: "https:"
       Image: //meta[@property="og:image"][1]/@content
 
 # Last Updated November 4, 2020

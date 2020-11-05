@@ -14,8 +14,8 @@ xPathScrapers:
         selector: $desc/ul/li[1]/text()
         postProcess:
           - replace:
-            - regex: Released\son\s
-              with:
+              - regex: Released\son\s
+                with:
           - parseDate: Jan 02, 2006
       Details: $desc//p/text()
       Tags:

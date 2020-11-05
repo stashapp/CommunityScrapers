@@ -31,6 +31,6 @@ xPathScrapers:
         concat: " "
         postProcess:
           - replace:
-            - regex: \s\./category
-              with: /category 
+              - regex: \s\./category
+                with: /category 
 # Last Updated November 4, 2020

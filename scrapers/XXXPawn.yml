@@ -13,14 +13,14 @@ xPathScrapers:
         selector: //link[@rel="canonical"]/@href
         postProcess:
           - replace:
-            - regex: .+(?:\.xxx|\.com\/video\d+)\/([\w-]+)(?:.+|)
-              with: https://xxxpawn.xxx/$1
+              - regex: .+(?:\.xxx|\.com\/video\d+)\/([\w-]+)(?:.+|)
+                with: https://xxxpawn.xxx/$1
           - subScraper:
               selector: //div[@id="title-single"]/span/text()
               postProcess:
                 - replace:
-                  - regex: (\w+\s)(\d+)\w+,(\s\d{4})
-                    with: $1$2$3
+                    - regex: (\w+\s)(\d+)\w+,(\s\d{4})
+                      with: $1$2$3
                 - parseDate: January 2 2006
       Details:
         selector: //p[@class="videoDetail"]/text()|//p[@class="more"]/text()|//span[@class="morecontent"]/span/text()
@@ -30,14 +30,14 @@ xPathScrapers:
           selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace:
-              - regex: .+
-                with: 'XXXPawn'
+                - regex: .+
+                  with: 'XXXPawn'
       Image:
         selector: //link[@rel="canonical"]/@href
         postProcess:
           - replace:
-            - regex: .+(?:\.xxx|\.com\/video\d+)\/([\w-]+)(?:.+|)
-              with: https://xxxpawn.xxx/$1
+              - regex: .+(?:\.xxx|\.com\/video\d+)\/([\w-]+)(?:.+|)
+                with: https://xxxpawn.xxx/$1
           - subScraper:
               selector: //video/@poster
       Tags:

@@ -32,8 +32,8 @@ xPathScrapers:
           selector: $search
           postProcess:
             - replace:
-              - regex: (^\d+)\s.+
-                with: "http://angelawhite.com/tour/search?query=$1"
+                - regex: (^\d+)\s.+
+                  with: "http://angelawhite.com/tour/search?query=$1"
             - subScraper:
                 selector: //div[@class="categories-list"]/a/text()
                 concat: ","
@@ -42,18 +42,18 @@ xPathScrapers:
         selector: $search
         postProcess:
           - replace:
-            - regex: \s
-              with: "+"
-            - regex: ^
-              with: "http://angelawhite.com/tour/search?query=\""
-            - regex: $
-              with: "\""
+              - regex: \s
+                with: "+"
+              - regex: ^
+                with: "http://angelawhite.com/tour/search?query=\""
+              - regex: $
+                with: "\""
           - subScraper:
               selector: //img/@src0
               postProcess:
                 - replace:
-                  - regex: ^
-                    with: http://angelawhite.com
+                    - regex: ^
+                      with: http://angelawhite.com
       Studio:
         Name: //a[@class="logo-aw"]/@title
 

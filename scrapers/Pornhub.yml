@@ -22,8 +22,8 @@ xPathScrapers:
         selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://www.pornhub.com"
+              - regex: ^
+                with: "https://www.pornhub.com"
   performerScraper:
     common:
       $infoPiece: //div[@class="infoPiece"]/span
@@ -41,8 +41,8 @@ xPathScrapers:
         selector: $infoPiece[text() = 'Height:']/../span[@class="smallInfo"]
         postProcess:
           - replace:
-            - regex: .*\((\d+) cm\)
-              with: $1
+              - regex: .*\((\d+) cm\)
+                with: $1
       Ethnicity: $infoPiece[text() = 'Ethnicity:']/../span[@class="smallInfo"]
       FakeTits: $infoPiece[text() = 'Fake Boobs:']/../span[@class="smallInfo"]
       Piercings: $infoPiece[text() = 'Piercings:']/../span[@class="smallInfo"]
@@ -51,8 +51,8 @@ xPathScrapers:
         selector: $infoPiece[text() = 'Career Start and End:']/../span[@class="smallInfo"]
         postProcess:
           - replace:
-            - regex: \s+to\s+
-              with: "-"
+              - regex: \s+to\s+
+                with: "-"
       URL: //link[@rel="canonical"][1]/@href
   sceneScraper:
     common:
@@ -65,10 +65,10 @@ xPathScrapers:
         selector: //script[contains(., 'uploadDate')]/text()
         postProcess:
           - replace:
-            - regex: .+(?:"uploadDate":\s")([^"]+).+
-              with: $1
-            - regex: (.+)T.+
-              with: $1
+              - regex: .+(?:"uploadDate":\s")([^"]+).+
+                with: $1
+              - regex: (.+)T.+
+                with: $1
           - parseDate: 2006-01-02
       Tags:
         Name: //div[@class="categoriesWrapper"]//a[not(@class="add-btn-small ")]|//div[@class="tagsWrapper"]//a[not(@class="add-btn-small")]

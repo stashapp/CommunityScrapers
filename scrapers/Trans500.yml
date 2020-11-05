@@ -15,8 +15,8 @@ xPathScrapers:
         selector: //video[@id="my-video"]/@poster
         postProcess:
           - replace:
-            - regex: ^
-              with: "http://www.trans500.com"
+              - regex: ^
+                with: "http://www.trans500.com"
       Studio: 
         Name: //p[@class="pull-right"]/b/text()
 # Last Updated November 4, 2020

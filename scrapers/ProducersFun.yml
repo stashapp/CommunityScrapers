@@ -13,8 +13,8 @@ xPathScrapers:
         selector: //p[@class="video-date"]/text()[2]
         postProcess:
           - replace:
-            - regex: (st|nd|rd|th)\,
-              with: ","
+              - regex: (st|nd|rd|th)\,
+                with: ","
           - parseDate: January 2, 2006
       Image: //section[@class="top-wrapper"]/div//video/@poster
       Tags:

@@ -19,8 +19,8 @@ xPathScrapers:
         selector: //div[@class="container"]//span[contains(.,"Added")]/text()
         postProcess:
           - replace:
-            - regex: "Added "
-              with:
+              - regex: "Added "
+                with:
           - parseDate: January 2, 2006
       Details: //p[@class="mg-md"]/text()
       Performers:

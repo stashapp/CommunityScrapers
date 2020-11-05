@@ -30,8 +30,8 @@ xPathScrapers:
         selector: $result/@href
         postProcess:
           - replace:
-            - regex: ^
-              with: https://www.brazzers.com
+              - regex: ^
+                with: https://www.brazzers.com
 
   sceneScraper:
     common:
@@ -72,8 +72,8 @@ xPathScrapers:
         selector: //*[contains(.,"Birth Place")]/following-sibling::span/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
-            - regex: .*?,\s
-              with: ""
+              - regex: .*?,\s
+                with: ""
           - map:
               AK: "USA"
               AL: "USA"

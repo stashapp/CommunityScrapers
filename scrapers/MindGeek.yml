@@ -128,12 +128,12 @@ xPathScrapers:
           selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace: 
-              - regex: .*www\.
-                with: ""
-              - regex: \.com.+
-                with: ""
-              - regex: " "
-                with: ""
+                - regex: .*www\.
+                  with: ""
+                - regex: \.com.+
+                  with: ""
+                - regex: " "
+                  with: ""
             - map:
                 digitalplayground: "Digital Playground"
                 transsensual: TransSensual
@@ -154,8 +154,8 @@ xPathScrapers:
         selector: //li[contains(.,"Birth Place")]/span/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
-            - regex: .*?,\s
-              with: ""
+              - regex: .*?,\s
+                with: ""
           - map:
               AK: "USA"
               AL: "USA"

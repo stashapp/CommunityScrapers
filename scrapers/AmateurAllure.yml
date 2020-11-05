@@ -25,14 +25,14 @@ xPathScrapers:
         selector: $title
         postProcess:
           - replace:
-            - regex: \s
-              with: "+"
-            - regex: ^
-              with: "https://www.amateurallure.com/tour/search.php?st=advanced&qall=&qany=&qex="
+              - regex: \s
+                with: "+"
+              - regex: ^
+                with: "https://www.amateurallure.com/tour/search.php?st=advanced&qall=&qany=&qex="
           - subScraper:
               selector: //img/@srcset
               postProcess:
                 - replace:
-                  - regex: .+(/tour/content/contentthumbs/\d+/\d+/[^/]+\.jpg) 1920w
-                    with: https://www.amateurallure.com$1
+                    - regex: .+(/tour/content/contentthumbs/\d+/\d+/[^/]+\.jpg) 1920w
+                      with: https://www.amateurallure.com$1
 # Last Updated November 4, 2020

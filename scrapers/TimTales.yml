@@ -21,8 +21,8 @@ xPathScrapers:
         selector: $info/p[@class="date"]/text()
         postProcess:
           - replace:
-            - regex: \s–\s.*$
-              with:
+              - regex: \s–\s.*$
+                with:
           - parseDate: January 02, 2006
       Details:
         selector: $info/p[@class="bodytext"]/text()
@@ -34,17 +34,17 @@ xPathScrapers:
           selector: $info/p[@class="categories" and contains(text(), "Men:")]
           postProcess:
             - replace:
-               - regex: "Men:"
-                 with:
-               - regex: (,)\s+
-                 with: $1
+                - regex: "Men:"
+                  with:
+                - regex: (,)\s+
+                  with: $1
           split: ","
       Image:
         selector: //div[@class="video player no-volume play-button"]/@style
         postProcess:
           - replace:
-            - regex: .+'(.+)'.+
-              with: $1
+              - regex: .+'(.+)'.+
+                with: $1
       Studio:
         Name:
           fixed: Timtales

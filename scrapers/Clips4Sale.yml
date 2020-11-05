@@ -13,14 +13,14 @@ xPathScrapers:
         concat: " "
         postProcess:
           - replace:
-            - regex: "Description:"
-              with:
+              - regex: "Description:"
+                with:
       Date:
         selector: //div[@class="clearfix infoRow2 clip_details"]/div/div[2]/div[3]//span[@class="highlight"]/text()
         postProcess:
           - replace:
-            - regex: \s.+
-              with:
+              - regex: \s.+
+                with:
           - parseDate: 1/2/06
       Tags:
         Name: //div[@class="clipInfo clip_details"]//a/text()
@@ -32,8 +32,8 @@ xPathScrapers:
         selector: //div[@class="clipImage"]/img/@src
         postProcess:
           - replace:
-            - regex: ^\/\/
-              with: "https://"
+              - regex: ^\/\/
+                with: "https://"
       URL: //meta[@property='og:url']/@content
 
 # Last Updated November 4, 2020

@@ -25,7 +25,7 @@ xPathScrapers:
         selector: $info//dl8-video/@poster
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
+              - regex: ^
+                with: "https:"
 
 # Last Updated November 4, 2020

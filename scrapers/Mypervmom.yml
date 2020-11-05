@@ -15,15 +15,15 @@ xPathScrapers:
         selector: //div[@id="title-single"]/span
         postProcess:
           - replace:
-            - regex: (\w+\s)(\d+)\w+,(\s\d\d\d\d)
-              with: $1$2$3
+              - regex: (\w+\s)(\d+)\w+,(\s\d\d\d\d)
+                with: $1$2$3
           - parseDate: January 2 2006
       Details:
         selector: //p[@class="more"]|//span[@class="more"]/text()
         postProcess:
           - replace:
-            - regex: ^Description\:(.+)
-              with: $1
+              - regex: ^Description\:(.+)
+                with: $1
       Performers:
         Name: //div[@id="title-single"]//a
       Image:

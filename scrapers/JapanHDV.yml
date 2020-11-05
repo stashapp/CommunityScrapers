@@ -23,7 +23,7 @@ xPathScrapers:
         selector: //video[@id="videohtml5tour"]/@poster
         postProcess:
           - replace:
-            - regex: ^
-              with:  "https:"
+              - regex: ^
+                with:  "https:"
 
 # Last Updated November 4, 2020

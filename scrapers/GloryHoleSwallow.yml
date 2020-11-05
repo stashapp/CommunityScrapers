@@ -17,8 +17,8 @@ xPathScrapers:
         selector: //div[@id='fakeplayer']//img/@src0_1x
         postProcess:
           - replace:
-            - regex: ^
-              with: https://gloryholeswallow.com
+              - regex: ^
+                with: https://gloryholeswallow.com
       Studio:
         Name:
           fixed: GloryHole Swallow

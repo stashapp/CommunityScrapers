@@ -52,15 +52,15 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+\"datePublished\"\:\s\"(\d\d/\d\d/\d\d\d\d)\".+
-              with: $1
+              - regex: .+\"datePublished\"\:\s\"(\d\d/\d\d/\d\d\d\d)\".+
+                with: $1
           - parseDate: "01/02/2006"
       Image:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+\"thumbnailUrl\"\:\s\"(https.+\.jpg)\".+
-              with: $1
+              - regex: .+\"thumbnailUrl\"\:\s\"(https.+\.jpg)\".+
+                with: $1
       Tags:
         Name: //span[@class="gallery-meta"]/span[@class="left"]/a/text()
 

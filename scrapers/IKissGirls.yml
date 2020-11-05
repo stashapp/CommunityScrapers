@@ -13,8 +13,8 @@ xPathScrapers:
         selector: $player//h2/text()
         postProcess:
           - replace:
-            - regex: :\sVideo
-              with:
+              - regex: :\sVideo
+                with:
       Date:
         selector: //div[strong/text()='Released:']/text()[2]
         postProcess:
@@ -30,7 +30,7 @@ xPathScrapers:
         selector: //img[@id="set-target-35"]/@src0_1x
         postProcess:
           - replace:
-            - regex: ^
-              with: https://ikissgirls.com
+              - regex: ^
+                with: https://ikissgirls.com
 
 # Last Updated November 4, 2020

@@ -40,8 +40,8 @@ xPathScrapers:
         selector: //div[@id="player"]/@style
         postProcess:
           - replace:
-            - regex: .+(https[^"]+).+
-              with: $1
+              - regex: .+(https[^"]+).+
+                with: $1
 
   performerScraper:
     performer:

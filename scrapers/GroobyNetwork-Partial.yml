@@ -35,7 +35,7 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-            - regex: ^// # bobstgirls
-              with: "https://"
+              - regex: ^// # bobstgirls
+                with: "https://"
         
 # Last Updated November 4, 2020

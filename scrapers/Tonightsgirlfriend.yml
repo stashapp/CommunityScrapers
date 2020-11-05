@@ -13,14 +13,14 @@ xPathScrapers:
         selector: //head/title/text()
         postProcess:
           - replace:
-            - regex: \sHD\sPorn\s\|\sTonightsGirlfriend\.com
-              with:
+              - regex: \sHD\sPorn\s\|\sTonightsGirlfriend\.com
+                with:
       Date:
         selector: $sceneinfo/p/span/text()
         postProcess:
           - replace:
-            - regex: "Added: "
-              with:
+              - regex: "Added: "
+                with:
           - parseDate: 01-02-06
       Details: //div[@class="scenepage-description"]/p
       Performers:

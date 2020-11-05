@@ -22,8 +22,8 @@ xPathScrapers:
           selector: $info/div[1]/div[1]/a/text()
           postProcess:
             - replace:
-              - regex: \.$
-                with:
+                - regex: \.$
+                  with:
       Image: //video[@class="ampVideo"]/@poster
 
 # Last Updated November 4, 2020

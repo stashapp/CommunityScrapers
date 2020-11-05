@@ -17,12 +17,12 @@ xPathScrapers:
         selector: //li[@class="section-detail-list-item-release-date"]//text()
         postProcess:
           - replace:
-            - regex: "Released:"
-              with:
-            - regex: ","
-              with:
-            - regex: "Sept"
-              with: "Sep"
+              - regex: "Released:"
+                with:
+              - regex: ","
+                with:
+              - regex: "Sept"
+                with: "Sep"
           - parseDate: Jan 2 2006
       Details:
         selector: //div[@class="dts-section-page-detail-description-body"]//text()
@@ -34,10 +34,10 @@ xPathScrapers:
         selector: //picture[@class="dts-movie-boxcover-front"]/img/@src
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
-            - regex: "\\?s=293w"
-              with:
+              - regex: ^
+                with: "https:"
+              - regex: "\\?s=293w"
+                with:
 
   movieScraper:
     movie:
@@ -50,12 +50,12 @@ xPathScrapers:
         selector: //li[@class="section-detail-list-item-release-date"]
         postProcess:
           - replace:
-            - regex: "Released:"
-              with:
-            - regex: ","
-              with:
-            - regex: "Sept"
-              with: "Sep"
+              - regex: "Released:"
+                with:
+              - regex: ","
+                with:
+              - regex: "Sept"
+                with: "Sep"
           - parseDate: Jan 2 2006
       Synopsis: //div[@class="dts-section-page-detail-description-body"]//text()
       Studio:
@@ -64,17 +64,17 @@ xPathScrapers:
         selector: //picture[@class="dts-movie-boxcover-front"]/img/@src
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
-            - regex: "\\?s=293w"
-              with:
+              - regex: ^
+                with: "https:"
+              - regex: "\\?s=293w"
+                with:
       BackImage:
         selector: //picture[@class="dts-movie-boxcover-back"]/img/@src
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
-            - regex: "\\?s=293w"
-              with:
+              - regex: ^
+                with: "https:"
+              - regex: "\\?s=293w"
+                with:
 
 # Last Updated November 4, 2020

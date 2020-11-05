@@ -14,8 +14,8 @@ xPathScrapers:
         selector: $info//div[@class="video-group-left"]//div[@class="grid-one-date"]/span[@class="date-display-single"]/@content
         postProcess:
           - replace:
-            - regex: (\d{4}-\d{2}-\d{2})T.+
-              with: $1
+              - regex: (\d{4}-\d{2}-\d{2})T.+
+                with: $1
           - parseDate: 2006-01-02
       Details:
         selector: $info//div[@class="video-group-bottom"]//text()
@@ -28,7 +28,7 @@ xPathScrapers:
         selector: //div[@class="splash-screen fullscreen-message is-visible"]/@style
         postProcess:
           - replace:
-            - regex: .+(http[^\)]+).+
-              with: $1
+              - regex: .+(http[^\)]+).+
+                with: $1
 
 # Last Updated November 4, 2020

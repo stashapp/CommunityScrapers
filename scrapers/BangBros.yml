@@ -19,16 +19,16 @@ xPathScrapers:
         #selector: //img[@id="player-overlay-image"]/@src # Better image but can fail on older scenes
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
+              - regex: ^
+                with: "https:"
       Studio:
         Name: //div[@class="vdoCast"]/a[1]/text()
       Date:
         selector: //div[@class="vdoCast" and contains(text(), "Release:")]
         postProcess:
           - replace:
-            - regex: "^Release: "
-              with: "https://bangbros.com/search/"
+              - regex: "^Release: "
+                with: "https://bangbros.com/search/"
           - subScraper:
               selector: //span[@class="thmb_mr_cmn thmb_mr_2 clearfix"]/span[@class="faTxt"]
           - parseDate: Jan 2, 2006

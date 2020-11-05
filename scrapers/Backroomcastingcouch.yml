@@ -18,8 +18,8 @@ xPathScrapers:
         postProcess:
           # URL is a partial url, add the first part
           - replace:
-            - regex: ^
-              with: https://backroomcastingcouch.com
+              - regex: ^
+                with: https://backroomcastingcouch.com
   sceneScraper:
     common:
       $performer: //title/text()
@@ -38,7 +38,7 @@ xPathScrapers:
         postProcess:
           # URL is a partial url, add the first part
           - replace:
-            - regex: ^
-              with: https://backroomcastingcouch.com
+              - regex: ^
+                with: https://backroomcastingcouch.com
 
 # Last Updated November 4, 2020

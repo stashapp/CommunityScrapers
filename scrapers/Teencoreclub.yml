@@ -45,16 +45,16 @@ xPathScrapers:
         selector: //div[@class="detail-hero-title"]//h1/text()
         postProcess:
           - replace:
-            - regex: \t+
-              with: ' '
+              - regex: \t+
+                with: ' '
       Details: //div[@class="detail-description"]/text()
       Performers:
         Name:
           selector: //div[@class="detail-hero-title"]//h1/text()
           postProcess:
             - replace:
-              - regex: \t+
-                with:
+                - regex: \t+
+                  with:
           split: ','
       Tags:
         Name:
@@ -64,14 +64,14 @@ xPathScrapers:
         selector: //div[@class="detail-hero"]/@style
         postProcess:
           - replace:
-            - regex: ^.*url.([^\)]+).*$
-              with: "$1"
+              - regex: ^.*url.([^\)]+).*$
+                with: "$1"
       Studio:
         Name:
           selector: //div[@class="flex-shrink-0 flex items-center"]//img[1]/@alt
           postProcess:
             - replace:
-              - regex: \.\w+
-                with:
+                - regex: \.\w+
+                  with:
 
 # Last Updated November 4, 2020

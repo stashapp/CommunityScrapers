@@ -20,14 +20,14 @@ xPathScrapers:
         selector: //title/text()
         postProcess:
           - replace:
-            - regex: (.+)(?:\s\|.+)
-              with: $1
+              - regex: (.+)(?:\s\|.+)
+                with: $1
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
           - replace:
-            - regex: (\d{4})-(\d{2})-(\d{2}).+
-              with: $1-$2-$3
+              - regex: (\d{4})-(\d{2})-(\d{2}).+
+                with: $1-$2-$3
           - parseDate: 2006-01-02
       Details: //meta[@name="description"]/@content
       Tags:

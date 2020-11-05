@@ -40,8 +40,8 @@ xPathScrapers:
         selector: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/@href
         postProcess:
           - replace:
-            - regex: ^
-              with: https://www.iafd.com
+              - regex: ^
+                with: https://www.iafd.com
   
   performerScraper:
     performer:
@@ -57,14 +57,14 @@ xPathScrapers:
         selector: //p[@class='biodata']/a[contains(text(),"http://twitter.com/")]/@href
         postProcess:
           - replace:
-            - regex: https://twitter.com/
-              with: ""
+              - regex: https://twitter.com/
+                with: ""
       Instagram: 
         selector: //p[@class='biodata']/a[contains(text(),"http://instagram.com/")]/@href
         postProcess:
           - replace:
-            - regex: https://instagram.com/
-              with: ""
+              - regex: https://instagram.com/
+                with: ""
       Birthdate:
         selector: //div[p[text()='Birthday']]/p[@class='biodata']/a[contains(@href, '/calendar.')]/text()
         # reference date is: 2006/01/02
@@ -382,17 +382,17 @@ xPathScrapers:
         selector: //div/p[text()='Height']/following-sibling::p[1]/text()
         postProcess:
           - replace:
-            - regex: \d+\D+\d+\D+
-              with: ""
-            - regex:  \D+$
-              with: ""
+              - regex: \d+\D+\d+\D+
+                with: ""
+              - regex:  \D+$
+                with: ""
       Measurements: //div/p[text()='Measurements']/following-sibling::p[1]/text()
       CareerLength: 
         selector: //div/p[@class='biodata'][contains(text(),"Started around")]/text()
         postProcess:
           - replace:
-            - regex: (\D+\d\d\D+)$
-              with: ""     
+              - regex: (\D+\d\d\D+)$
+                with: ""     
       Aliases: //div[p[@class='bioheading']]//div[@class='biodata']/text()
       Tattoos: //div/p[text()='Tattoos']/following-sibling::p[1]/text()
       Piercings: //div/p[text()='Piercings']/following-sibling::p[1]/text()
@@ -409,8 +409,8 @@ xPathScrapers:
         selector: //h1/text()
         postProcess:
           - replace:
-            - regex: \([0-9]+\)
-              with:
+              - regex: \([0-9]+\)
+                with:
       Director: $biohead[contains(text(), "Directors")]/$biodata_link
       Duration: $biohead[contains(text(), "Minutes")]/$biodata
       Synopsis: //div[@id="synopsis"]/div[@class="padded-panel"]//text()

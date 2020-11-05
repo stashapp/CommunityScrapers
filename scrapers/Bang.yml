@@ -13,14 +13,14 @@ xPathScrapers:
         selector: //meta[@name="og:image"]/@content
         postProcess:
           - replace:
-            - regex: (.+)(\?.+)
-              with: $1
+              - regex: (.+)(\?.+)
+                with: $1
       Date:
         selector: //span[@class="hidden-xs fa-text-right fa-text-left"]/text()
         postProcess:
           - replace:
-            - regex: (\w+\s)(\d+)\w+,(\s\d{4})
-              with: $1$2$3
+              - regex: (\w+\s)(\d+)\w+,(\s\d{4})
+                with: $1$2$3
           - parseDate: Jan 2 2006
       Tags:
         Name:
