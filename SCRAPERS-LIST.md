@@ -18,7 +18,7 @@ Supported Site|Scraper|S|G|M|P|Needs|Contents
 50plusmilfs.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 60plusmilfs.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Granny
 8thstreetlatinas.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
-AbbyWinters.com|AbbyWinters.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+abbywinters.com|AbbyWinters.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abuseme.com|AbuseMe.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 activeduty.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 adultdvdempire.com|AdultEmpire.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
@@ -668,7 +668,7 @@ xtube.com|Xtube.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvideos.com|Xvideos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xxxpawn.com|XXXPawn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xxxpawn.xxx|XXXPawn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-Yanks.com|Yanks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+yanks.com|Yanks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 youngthroats.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 youporn.com|YouPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
 yourmomdoesanal.com|Analized.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
