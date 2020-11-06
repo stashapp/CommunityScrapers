@@ -1,0 +1,29 @@
+name: "MFC Share"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - share.myfreecams.com/a/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h3/text()
+      Studio:
+        Name:
+          fixed: "MFC Share"
+      Date: //span[@class[contains(., "album-at")]]/@title
+      Details: //div[@class="description-view"]/text()
+      Tags:
+        Name:
+          selector: //div[@class[contains(., "tags-container")]]/a/text()
+          postProcess:
+            - replace:
+              - regex: ^#
+                with: ""
+      Performers:
+        Name: //a[@class="user-link"]
+      Image:
+        selector: //meta[@name="twitter:image"]/@content
+
+# Last updated November 1, 2020
