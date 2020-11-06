@@ -21,13 +21,13 @@ Scrapers with **useCDP** set to true require that you have properly configured t
 ## Scrapers
 You can find a list of sites currently supported for by community scraping in [SCRAPERS-LIST.md](https://github.com/stashapp/CommunityScrapers/blob/master/SCRAPERS-LIST.md)
 
-For most scrapers you have to edit the url of the scene. Once you populate that field with a specific url a button will appear.
+For most scrapers you have to edit the url. Once you populate that field with a specific url a button will appear.
 ![](https://user-images.githubusercontent.com/48220860/85202637-698e3f00-b310-11ea-9c06-b2cfe931474a.png)
 
-Clicking on that button brings up the screne scrape popup that lets you select which fields to update.
+Clicking on that button brings up a popup that lets you select which fields to update.
 
 
-Some scrapers like ThePornDB.yml support the scrape with function so you can you use that instead of adding a url.
+Some scrapers support the scrape with function so you can you use that instead of adding a url.
 
 
 ## Contributing
