@@ -87,4 +87,4 @@ xPathScrapers:
         selector: //div[contains(@class,'image-container')]//a/img/@src
       Gender:
         fixed: "Female"
-# Last updated October 21, 2020
+# Last updated November 06, 2020
