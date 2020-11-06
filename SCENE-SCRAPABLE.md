@@ -269,6 +269,7 @@ hanime.tv|hanime.yml|Hentai
 happytugs.com|MindGeek.yml|
 hardcoreyouth.com|Teencoreclub.yml|
 hardx.com|GammaEntertainment.yml|
+harmonyvision.com|HarmonyVision.yml|
 hergape.com|Analized.yml|
 heyzo.com|Heyzo.yml|JAV Uncensored
 himeros.tv|HimerosTV.yml|Gay
