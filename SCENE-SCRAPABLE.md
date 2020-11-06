@@ -64,7 +64,7 @@ aussieass.com|AussieAss.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 aussiefelatioqueens.com|AussieFelatioQueens.yml|:white_check_mark:|:x:|:x:|:x:|CDP|-
 aussiepov.com|AussieAss.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 b47w.com|javlibrary.yml|:white_check_mark:|:x:|:white_check_mark:|:x:|-|JAV
-babepedia.com|Babepedia.yml|:x:|:x:|:x:|:white_check_mark:|-|JAV
+babepedia.com|Babepedia.yml|:x:|:x:|:x:|:white_check_mark:|-|Database
 babes.com|RealityKingsOL.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 babesnetwork.com|MindGeek.yml|:white_check_mark:|:x:|:x:|:white_check_mark:|-|-
 babevr.com|BaDoink.yml|:white_check_mark:|:x:|:x:|:x:|-|VR
@@ -235,7 +235,7 @@ fostertapes.com|PaperStreetMedia.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 fourfingerclub.com|NewSensationsNetworkSites.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 foxxedup.com|VNAGirls.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 franks-tgirlworld.com|GroobyNetwork-Partial.yml|:white_check_mark:|:x:|:x:|:x:|-|Trans
-freeones.com|FreeonesCommunity.yml|:x:|:x:|:x:|:white_check_mark:|-|-
+freeones.com|FreeonesCommunity.yml|:x:|:x:|:x:|:white_check_mark:|-|Database
 freshouttahighschool.com|NewSensationsNetworkSites.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 frolicme.com|FrolicMe.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 fuckedfeet.com|VNAGirls.yml|:white_check_mark:|:x:|:x:|:x:|-|-
