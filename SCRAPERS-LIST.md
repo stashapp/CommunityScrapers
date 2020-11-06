@@ -109,7 +109,7 @@ boundhoneys.com|Boundhoneys.yml|:white_check_mark:|:x:|:x:|:x:|-|Lesbian
 bountyhunterporn.com|Nubiles.yml|:white_check_mark:|:white_check_mark:|:x:|:x:|-|-
 boxtrucksex.com|BoxTruckSex.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 boysdestroyed.com|AMAMultimedia.yml|:white_check_mark:|:x:|:x:|:x:|-|Gay
-brandibelle.com|brandibelle.yml||:white_check_mark:|:x:|:x:|:x:|-|-
+brandibelle.com|brandibelle.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 brattysis.com|Nubiles.yml|:white_check_mark:|:white_check_mark:|:x:|:x:|-|-
 brazzers.com|Brazzers.yml|:white_check_mark:|:x:|:x:|:white_check_mark:|-|-
 bruceandmorgan.net|bruceandmorgan.yml|:white_check_mark:|:x:|:x:|:x:|CDP|Amateur Fetish
@@ -304,7 +304,7 @@ iconmale.com|MindGeek.yml|:white_check_mark:|:x:|:x:|:x:|-|Gay
 ikissgirls.com|IKissGirls.yml|:white_check_mark:|:x:|:x:|:x:|-|Lesbian
 iknowthatgirl.com|MindGeek.yml|:white_check_mark:|:x:|:x:|:white_check_mark:|-|-
 immorallive.com|GammaEntertainment.yml|:white_check_mark:|:x:|:x:|:x:|-|-
-infernalrestraints.com|infernalrestraints.com||:white_check_mark:|:x:|:x:|:x:|-|-
+infernalrestraints.com|infernalrestraints.com|:white_check_mark:|:x:|:x:|:x:|-|-
 innocenthigh.com|PaperStreetMedia.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 intimatelesbians.com|Spizoo.yml|:white_check_mark:|:x:|:x:|:x:|-|Lesbian
 isthisreal.com|IsThisReal.yml|:white_check_mark:|:x:|:x:|:x:|-|-
@@ -522,7 +522,7 @@ sexvr.com|SexVR.yml|:white_check_mark:|:x:|:x:|:white_check_mark:|-|VR
 sexyhub.com|RealityKingsOL.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 shandafay.com|VNAGirls.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml|:white_check_mark:|:x:|:x:|:x:|-|-
-share.myfreecams.com|MFC.yml||:white_check_mark:|:x:|:x:|:x:|-|-
+share.myfreecams.com|MFC.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 shegotsix.com|Teencoreclub.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 shemaleidol.com|GammaEntertainment.yml|:white_check_mark:|:x:|:x:|:x:|-|Trans
 sheseducedme.com|Andomark.yml|:white_check_mark:|:x:|:x:|:x:|-|-
