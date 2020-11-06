@@ -37,7 +37,7 @@ def fetch_performer_name(name):
     res['eye_color']=row[8]
     res['height']=row[9]
     res['measurements']=row[10]
-    res['faketits']=row[11]
+    res['fake_tits']=row[11]
     res['careerlength']=row[12]
     res['tattoos']=row[13]
     res['piercings']=row[14]
