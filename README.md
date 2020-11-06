@@ -81,6 +81,7 @@ anilos.com|Nubiles.yml
 badteenspunished.com|Nubiles.yml
 bountyhunterporn.com|Nubiles.yml
 brattysis.com|Nubiles.yml
+clubseventeen.com|ClubSeventeen.yml
 daddyslilangel.com|Nubiles.yml
 deeplush.com|Nubiles.yml
 detentiongirls.com|Nubiles.yml
