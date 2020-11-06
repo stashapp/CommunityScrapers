@@ -331,7 +331,7 @@ kinkyspa.com|MindGeek.yml|:white_check_mark:|:x:|:x:|:white_check_mark:|-|-
 ladyboy-ladyboy.com|GroobyNetwork-Partial.yml|:white_check_mark:|:x:|:x:|:x:|-|Trans
 ladyboy.com|GroobyNetwork-Partial.yml|:white_check_mark:|:x:|:x:|:x:|-|Trans
 lanesisters.com|GammaEntertainment.yml|:white_check_mark:|:x:|:x:|:x:|-|-
-legalporno.com|LegalPorno.yml|:white_check_mark:|:x:|:x:|:x:|-|-
+legalporno.com|LegalPorno.yml|:white_check_mark:|:x:|:x:|:x:|python3|-
 legsex.com|TheScoreGroup.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 lesbea.com|RealityKingsOL.yml|:white_check_mark:|:x:|:x:|:x:|-|Lesbian
 lesbianass.com|Hustler.yml|:white_check_mark:|:x:|:x:|:x:|-|Lesbian
