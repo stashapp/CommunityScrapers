@@ -651,7 +651,6 @@ wowgirls.xxx|WowPorn.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 wowporn.xxx|WowPorn.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 x-art.com|X-artcom.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 xart.xxx|Xartxxx.yml|:white_check_mark:|:x:|:x:|:x:|-|-
-xbvr|xbvrdb.yml|:white_check_mark:|:x:|:x:|:x:|python3/sqlite3<br/>Check xbvrdb.py for info|-
 xcoreclub.com|Teencoreclub.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 xempire.com|GammaEntertainment.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 xhamster.com|Xhamster.yml|:white_check_mark:|:x:|:x:|:x:|-|-
