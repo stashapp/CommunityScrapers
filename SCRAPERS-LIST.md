@@ -5,7 +5,7 @@ This list is meant to keep track of which sites are already supported by existin
 Column names are **S**cenes, **G**allery, **M**ovies, **P**erformers
 
 Supported Site|Scraper|S|G|M|P|Needs|Contents
-------------- | ------------- | :----------: | :----------: | :----------: | :----------: | :----------: | ------------- 
+------------- | ------------- | :----------: | :----------: | :----------: | :----------: | :----------: | :----------: 
 1000facials.com|GammaEntertainment.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 18eighteen.com|TheScoreGroup.yml|:white_check_mark:|:x:|:x:|:x:|-|-
 18vr.com|BaDoink.yml|:white_check_mark:|:x:|:x:|:x:|-|VR
