@@ -19,7 +19,7 @@ Scraper User Agent` setting in stash. Valid strings e.g. for firefox can be foun
 Scrapers with **useCDP** set to true require that you have properly configured the `Chrome CDP path` setting in Stash. If you decide to use a remote instance the headless chromium docker image from https://hub.docker.com/r/chromedp/headless-shell/ is highly recommended.
 
 ## Scrapers
-You can find a list of sites currently supported for by community scraping in [SCRAPERS-LIST.md](https://github.com/stashapp/CommunityScrapers/blob/master/SCRAPERS-LIST.md.md)
+You can find a list of sites currently supported for by community scraping in [SCRAPERS-LIST.md](https://github.com/stashapp/CommunityScrapers/blob/master/SCRAPERS-LIST.md)
 
 For most scrapers you have to edit the url of the scene. Once you populate that field with a specific url a button will appear.
 ![](https://user-images.githubusercontent.com/48220860/85202637-698e3f00-b310-11ea-9c06-b2cfe931474a.png)
