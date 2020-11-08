@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - cumlouder.com/porn-video
+      - cumlouder.com/es/videos
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -14,8 +15,7 @@ xPathScrapers:
       Tags:
         Name: //ul[@class="tags"]/li/a
       Studio:
-        Name: 
-            fixed: Cumlouder
+        Name:
+          fixed: Cumlouder
       Image: //video[@id="cum_player"]/@lazy
-
-# Last Updated July 30, 2020
+# Last Updated November 8, 2020
