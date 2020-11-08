@@ -60,6 +60,7 @@ assholefever.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_
 assmeat.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 assteenmouth.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 asstraffic.com|AssTraffic.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+assylum.com|Assylum.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 atkexotics.com|ATKExotics.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 atkhairy.com|ATKHairy.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 atkpremium.com|ATKHairy.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
