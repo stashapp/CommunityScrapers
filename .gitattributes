@@ -1,1 +1,5 @@
-*.yml linguist-detectable
+* text=auto
+
+*.yml   eol=lf diff=yaml linguist-detectable
+*.py    eol=lf diff=python
+*.md    eol=lf diff=markdown
