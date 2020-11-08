@@ -2,7 +2,7 @@ name: assylum
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.assylum.com/session/
+      - assylum.com/session/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -10,18 +10,23 @@ xPathScrapers:
       Title:
         selector: //h3[@class='mas_title']/text()
       Performers:
-        Name: 
+        Name:
           selector: //span[@class='lc_info mas_description']/text()[1]
           postProcess:
             - replace:
-              - regex: (.+)\,
-                with: $1
+                - regex: (?:[\w\s]+\:\s)?([A-Z]?[a-z]+\d?\d?\s[A-Z]?[a-z]+\d?\d?,|[A-Z]?[a-z]+\d?\d?,)\s?([A-Z]?[a-z]+\d?\d?\s[A-Z]?[a-z]+\d?\d?,|[A-Z]?[a-z]+\d?\d?,)?\s?([A-Z]?[a-z]+\d?\d?\s[A-Z]?[a-z]+\d?\d?,|[A-Z]?[a-z]+\d?\d?,)?|.+
+                  with: $1$2$3
+                - regex: \,\s+
+                  with: ","
+                - regex: ^\s+
+                  with:
+          split: ","
       Image:
         selector: //div[@class='mainpic']/comment()
         postProcess:
           - replace:
-            - regex: .*src="(.*?)".*
-              with:  https://www.assylum.com/$1
+              - regex: .*src="(.*?)".*
+                with: https://www.assylum.com/$1
 
       Tags:
         Name:
@@ -30,7 +35,7 @@ xPathScrapers:
       Date:
         selector: //span[@class='lc_info mas_description']/text()[2]
         parseDate: January 2, 2006
-debug:
-  printHTML: true
-
-# Last Updated August 26, 2020
+      Studio:
+        Name:
+          fixed: Assylum
+# Last Updated November 4, 2020
