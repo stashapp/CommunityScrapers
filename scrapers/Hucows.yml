@@ -19,7 +19,7 @@ xPathScrapers:
               - regex: ^\s+
                 with:
           - parseDate: 2 Jan 2006
-      Image: //div[@class="imghoverclass postfeat post-single-img"]//img//@src
+      Image: //div[contains(@class,"post-single-img")]//img/@src
       Studio:
         Name:
           fixed: Hucows
@@ -27,4 +27,5 @@ xPathScrapers:
         Name: //a[@rel="category tag"]/text()
       Performers:
         Name: //span[@class="posttags"]/a/text()
-# Last Updated November 05, 2020
+
+# Last Updated November 08, 2020
