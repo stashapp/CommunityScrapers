@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - cumlouder.com/porn-video
+      - cumlouder.com/es/videos
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
