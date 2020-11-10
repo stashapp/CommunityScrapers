@@ -28,9 +28,10 @@ xPathScrapers:
       Name: $result/@title
       URL:
         selector: $result/@href
-        replace:
-          - regex: ^
-            with: https://www.brazzers.com
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.brazzers.com
 
   sceneScraper:
     common:
@@ -71,8 +72,8 @@ xPathScrapers:
         selector: //*[contains(.,"Birth Place")]/following-sibling::span/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
-            - regex: .*?,\s
-              with: ""
+              - regex: .*?,\s
+                with: ""
           - map:
               AK: "USA"
               AL: "USA"
@@ -204,4 +205,4 @@ xPathScrapers:
 #        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
 
-# Last Updated October 5, 2020
+# Last Updated November 8, 2020

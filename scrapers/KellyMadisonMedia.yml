@@ -18,33 +18,37 @@ xPathScrapers:
     scene:
       Title:
         selector: $script
-        replace:
-          - regex: .+(?:chromecast.+\stitle:\s')([^']+).+
-            with: $1
-          - regex: '&#039;'
-            with: "'"
+        postProcess:
+          - replace:
+              - regex: .+(?:chromecast.+\stitle:\s')([^']+).+
+                with: $1
+              - regex: '&#039;'
+                with: "'"
       Details: $summary//div[contains(h4,'Episode Summary')]/p/text()
       Date:
         selector: $summary//div/h4[contains(.,'Published:')]/text()[2]
-        replace:
-          - regex: Published:\s
-            with:
-        parseDate: 2006-01-02
+        postProcess:
+          - replace:
+              - regex: Published:\s
+                with:
+          - parseDate: 2006-01-02
       Performers:
         Name: $summary/div//div/h4[contains(.,'Starring')]/a/text()
       Image:
         selector: $script
-        replace:
-          - regex: .+(?:poster:\s")([^"]+).+
-            with: $1
+        postProcess:
+          - replace:
+              - regex: .+(?:poster:\s")([^"]+).+
+                with: $1
       Studio:
         Name:
           selector: //head/title/text()
-          replace:
-            - regex: .+Official\s(\w+).+
-              with: $1
+          postProcess:
+            - replace:
+                - regex: .+Official\s(\w+).+
+                  with: $1
 
 driver:
   useCDP: true
 
-# Last Updated September 5, 2020
+# Last Updated November 8, 2020

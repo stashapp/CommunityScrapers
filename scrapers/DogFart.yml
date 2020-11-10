@@ -11,10 +11,11 @@ xPathScrapers:
       Title: //h1[@class="description-title"]/text()
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
-        replace:
-          - regex: ([\d-]*).+
-            with: $1
-        parseDate: 2006-01-02
+        postProcess:
+          - replace:
+              - regex: ([\d-]*).+
+                with: $1
+          - parseDate: 2006-01-02
       Details:
         selector: //div[@class="description shorten"]/text()|//span[@class="more-desc hide"]/text()
         concat: " "
@@ -24,8 +25,9 @@ xPathScrapers:
         Name: //h4[@class="more-scenes"]/a/text()
       Image:
         selector: //meta[@itemprop="thumbnailUrl"]/@content
-        replace:
-          - regex: ^
-            with: "https:"
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

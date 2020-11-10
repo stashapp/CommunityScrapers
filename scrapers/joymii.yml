@@ -13,27 +13,30 @@ xPathScrapers:
       Details:
         selector: $info//p/text()
         concat: "\n"
-        replace:
-          - regex: "\n"
-            with: "\n"
+        postProcess:
+          - replace:
+              - regex: "\n"
+                with: "\n"
       Date:
         selector: $info//h1[@class="title"]/text()
-        replace:
-          - regex: ^
-            with: "https://joymii.com/search?query="
-          - regex: \s
-            with: +
-        subScraper:
-          selector: //div[@class="box-results row"]/div[1]//div[@class="box-release_date release_date"]/text()
-        parseDate: Jan 02, 2006
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://joymii.com/search?query="
+              - regex: \s
+                with: +
+          - subScraper:
+              selector: //div[@class="box-results row"]/div[1]//div[@class="box-release_date release_date"]/text()
+          - parseDate: Jan 02, 2006
       Image: //img[@class="cover"]/@src|//video/@poster
       Studio:
         Name:
           selector: //title/text()
-          replace:
-            - regex: .+
-              with: "joymii"
+          postProcess:
+            - replace:
+                - regex: .+
+                  with: "joymii"
       Performers:
         Name: $info//h2[@class="starring-models"]/a/text()
 
-# Last Updated June 22, 2020
+# Last Updated November 8, 2020

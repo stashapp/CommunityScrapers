@@ -10,10 +10,11 @@ xPathScrapers:
       Title: //p[@class="raiting-section__title"]/text()
       Date:
         selector: //p[@class="dvd-scenes__data"][1]/text()[1]
-        replace:
-          - regex: (?:.+Added:\s)([\d/]*).+
-            with: $1
-        parseDate: 01/02/2006
+        postProcess:
+          - replace:
+              - regex: (?:.+Added:\s)([\d/]*).+
+                with: $1
+          - parseDate: 01/02/2006
       Details: //strong/text()
       Tags:
         Name: //p[@class="dvd-scenes__data"][2]/a/text()
@@ -21,8 +22,9 @@ xPathScrapers:
         Name: //p[@class="dvd-scenes__data"][1]/a/text()
       Image:
         selector: //script[contains(text(),'hidden_fake_trailer')]/text()
-        replace:
-          - regex: .+(?:poster=")([^"]*).+
-            with: https://missax.com$1
+        postProcess:
+          - replace:
+              - regex: .+(?:poster=")([^"]*).+
+                with: https://missax.com$1
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

@@ -9,26 +9,29 @@ xPathScrapers:
     scene:
       Title:
         selector: //div[@class="container-fluid video-title"]/h1/text()
-        replace:
-          - regex: '^(.+?)\ \-\ (.+)$'
-            with: $2
+        postProcess:
+          - replace:
+              - regex: '^(.+?)\ \-\ (.+)$'
+                with: $2
       Details: //meta[@name="og:description"]/@content
       Date:
         selector: //div[@class="release-date" and contains(.,"Released:")]/text()
-        replace:
-          - regex: '^Released\:(.*)$'
-            with: $1
-        parseDate: Jan 2, 2006
+        postProcess:
+          - replace:
+              - regex: '^Released\:(.*)$'
+                with: $1
+          - parseDate: Jan 2, 2006
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           selector: //div[@class="studio"]
-          replace:
-            - regex: Studio:[\t]+([\w\s]+)
-              with: $1
+          postProcess:
+            - replace:
+                - regex: Studio:[\t]+([\w\s]+)
+                  with: $1
       Tags:
         Name: //div[@class="container mb-3"]//div[@class="tags"]//a//text()
       Performers:
         Name: //div[@class="video-performer"]/a/span/span/text()
 
-# Last Updated July 21, 2020
+# Last Updated November 8, 2020

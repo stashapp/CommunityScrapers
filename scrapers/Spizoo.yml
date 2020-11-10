@@ -17,17 +17,19 @@ xPathScrapers:
       Title: //h1
       Date:
         selector: //p[@class="date"]
-        parseDate: 2006-01-02
+        postProcess:
+          - parseDate: 2006-01-02
       Details: //p[@class="description"]
       Performers:
         Name:
           selector: //div[@class="col-3"]/a[@class="ampLink"]/text()
-          replace:
-            - regex: "\\.$"
-              with:
+          postProcess:
+            - replace:
+                - regex: "\\.$"
+                  with:
       Tags:
         Name: //div[@class="col-12 col-md-6"]/div/div[@class="col-12"]/a/text()
       Image: //video[@id="trailervideo"]/@poster
 
 
-# Last Updated May 25, 2020
+# Last Updated November 8, 2020

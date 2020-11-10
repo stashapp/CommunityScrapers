@@ -17,10 +17,11 @@ xPathScrapers:
       Title: $details/h1/text()
       Date:
         selector: $details//p[@class="video-upload-date"]/text()
-        replace:
-          - regex: Uploaded:\s
-            with:
-        parseDate: January 02, 2006
+        postProcess:
+          - replace:
+              - regex: Uploaded:\s
+                with:
+          - parseDate: January 02, 2006
       Details: $details//p[@class="video-description"]/text()
       Tags:
         Name: $details//p[@class="video-tags"]//a/text()
@@ -30,4 +31,4 @@ xPathScrapers:
         Name: //meta[@name="dl8-customization-brand-name"]/@content
       Image: //img[@class="video-image"]/@src
 
-# Last Updated July 11, 2020
+# Last Updated November 8, 2020

@@ -19,10 +19,11 @@ xPathScrapers:
       Title: $info/h1/text()
       Date:
         selector: $info/p[@class="date"]/text()
-        replace:
-          - regex: \s–\s.*$
-            with:
-        parseDate: January 02, 2006
+        postProcess:
+          - replace:
+              - regex: \s–\s.*$
+                with:
+          - parseDate: January 02, 2006
       Details:
         selector: $info/p[@class="bodytext"]/text()
         concat: "\n\n"
@@ -33,16 +34,17 @@ xPathScrapers:
           selector: $info/p[@class="categories" and contains(text(), "Men:")]
           postProcess:
             - replace:
-               - regex: "Men:"
-                 with:
-               - regex: (,)\s+
-                 with: $1
+                - regex: "Men:"
+                  with:
+                - regex: (,)\s+
+                  with: $1
           split: ","
       Image:
         selector: //div[@class="video player no-volume play-button"]/@style
-        replace:
-          - regex: .+'(.+)'.+
-            with: $1
+        postProcess:
+          - replace:
+              - regex: .+'(.+)'.+
+                with: $1
       Studio:
         Name:
           fixed: Timtales
@@ -67,4 +69,4 @@ xPathScrapers:
                 with: $1
       Image: //div[@class="model-details"]/img/@src
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

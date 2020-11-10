@@ -24,29 +24,33 @@ xPathScrapers:
       Title: //h1[@class="shoot-title"]/text()
       Date:
         selector: //span[@class="shoot-date"]/text()
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Details:
         selector: //span[@class="description-text"]/p
         concat: "\n\n"
       Performers:
         Name:
           selector: //p[@class="starring"]/span[@class="names h5"]/a/text()
-          replace:
-            - regex: \,
-              with: ""
+          postProcess:
+            - replace:
+                - regex: \,
+                  with: ""
       Tags:
         Name:
           selector: //a[@class="tag"]
-          replace:
-            - regex: \,
-              with: ""
+          postProcess:
+            - replace:
+                - regex: \,
+                  with: ""
       Image:
         selector: //video[@class="video-js vjs-fluid video-player"]/@poster
       Studio:
         Name:
           selector: //div[@class="column shoot-logo"]/a/@href
-          replace:
-            - regex: /channel/
-              with: ""
+          postProcess:
+            - replace:
+                - regex: /channel/
+                  with: ""
       URL: //link[@rel="canonical"]/@href
-# Last Updated October 25, 2020
+# Last Updated November 8, 2020

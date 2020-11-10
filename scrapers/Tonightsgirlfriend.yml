@@ -11,15 +11,17 @@ xPathScrapers:
     scene:
       Title:
         selector: //head/title/text()
-        replace:
-          - regex: \sHD\sPorn\s\|\sTonightsGirlfriend\.com
-            with:
+        postProcess:
+          - replace:
+              - regex: \sHD\sPorn\s\|\sTonightsGirlfriend\.com
+                with:
       Date:
         selector: $sceneinfo/p/span/text()
-        replace:
-          - regex: "Added: "
-            with:
-        parseDate: 01-02-06
+        postProcess:
+          - replace:
+              - regex: "Added: "
+                with:
+          - parseDate: 01-02-06
       Details: //div[@class="scenepage-description"]/p
       Performers:
         Name: $sceneinfo/p/a
@@ -29,4 +31,4 @@ xPathScrapers:
           fixed: "Tonight's Girlfriend"
       URL: //link[@rel='canonical']/@href
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

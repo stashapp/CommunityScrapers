@@ -14,24 +14,27 @@ xPathScrapers:
       Date:
         selector: $videoContent//ul[@class="item-meta"]//li[1]/text()
         concat: " "
-        replace:
-          - regex: " "
-            with:
-        parseDate: January2,2006
+        postProcess:
+          - replace:
+              - regex: " "
+                with:
+          - parseDate: January2,2006
       Studio:
-        Name: 
+        Name:
           selector: //div[@id="logo"]/h1/a/img/@alt
-          replace:
-            - regex: \ Productions$
-              with:
+          postProcess:
+            - replace:
+                - regex: \ Productions$
+                  with:
       Image:
         selector: //div[@class="player-thumb"]/img/@src0_1x|//script[contains(.,"poster=")]
-        replace:
-          - regex: .+poster="([^"]+)".+
-            with: $1
-          - regex: ^
-            with: "https://www.archangelvideo.com"
+        postProcess:
+          - replace:
+              - regex: .+poster="([^"]+)".+
+                with: $1
+              - regex: ^
+                with: "https://www.archangelvideo.com"
       Performers:
         Name: $videoContent//a[contains(@href, "/models/")]/text()
 
-# Last Updated July 21, 2020
+# Last Updated November 8, 2020

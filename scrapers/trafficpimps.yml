@@ -16,15 +16,16 @@ xPathScrapers:
     scene:
       Title:
         selector: //h1[@class="trailer-block_title"]
-        replace:
-          - regex: "LIVE$"
-            with:
+        postProcess:
+          - replace:
+              - regex: "LIVE$"
+                with:
       Date:
         selector: //div[@class="info-block_data"]/p[@class="text"][1]/text()
         postProcess:
           - replace:
-            - regex: (\w+\s)(\w+)(\s)(\d{1,2})(.+)(\d{4})(.+)
-              with: $2 $4, $6
+              - regex: (\w+\s)(\w+)(\s)(\d{1,2})(.+)(\d{4})(.+)
+                with: $2 $4, $6
           - parseDate: January 2, 2006
       Details: $infoblock/p[@class="text"][1]/text()
       Tags:
@@ -37,7 +38,7 @@ xPathScrapers:
         selector: //script[contains(.,"contentthumbs")]/text()|//img[@class="lazyload update_thumb thumbs stdimage"]/@src
         postProcess:
           - replace:
-            - regex: (.+)(https.+contentthumbs.+)(" width="100%)(.+)
-              with: $2
+              - regex: (.+)(https.+contentthumbs.+)(" width="100%)(.+)
+                with: $2
 
-# Last Updated August 10, 2020
+# Last Updated November 8, 2020

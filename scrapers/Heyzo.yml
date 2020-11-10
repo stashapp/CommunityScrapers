@@ -26,7 +26,8 @@ xPathScrapers:
       #Details: //section/div[@id="movie"]/h1
       Date:
         selector: $table/td[contains(.,"Released")]/following-sibling::td/text()
-        parseDate: 2006-01-02
+        postProcess:
+          - parseDate: 2006-01-02
       Performers:
         Name: $table/td[contains(.,"Actress")]/following-sibling::td/a/text()
       Image:
@@ -46,4 +47,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Heyzo
-#Last Updated October 24, 2020
+# Last Updated November 8, 2020

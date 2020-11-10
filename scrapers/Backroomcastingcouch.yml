@@ -15,10 +15,11 @@ xPathScrapers:
       Name: //title/text()
       Image:
         selector: //a[@id='Main_PicLink']/img/@src
-        # URL is a partial url, add the first part
-        replace:
-          - regex: ^
-            with: https://backroomcastingcouch.com
+        postProcess:
+          # URL is a partial url, add the first part
+          - replace:
+              - regex: ^
+                with: https://backroomcastingcouch.com
   sceneScraper:
     common:
       $performer: //title/text()
@@ -34,7 +35,10 @@ xPathScrapers:
         Name: $studio/text()
       Image:
         selector: //a[@id='Main_PicLink']/img/@src
-        # URL is a partial url, add the first part
-        replace:
-          - regex: ^
-            with: https://backroomcastingcouch.com
+        postProcess:
+          # URL is a partial url, add the first part
+          - replace:
+              - regex: ^
+                with: https://backroomcastingcouch.com
+
+# Last Updated November 8, 2020

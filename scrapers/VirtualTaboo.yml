@@ -12,7 +12,8 @@ xPathScrapers:
       Title: $info/div[@class="col-md-4 col right-info"]/h1
       Date:
         selector: $info/div[@class="col-md-4 col right-info"]/div[@class="info"]/span[@class="bullet"]/following-sibling::text()
-        parseDate: 02 January, 2006
+        postProcess:
+          - parseDate: 02 January, 2006
       Details:
         selector: $info//div[@class="description"]/span[@class="full hidden"]/text()
         concat: " "
@@ -21,4 +22,4 @@ xPathScrapers:
       Performers:
         Name: $info//div[@class="info"]/a/text()
       Image: //meta[@property="og:image"]/@content
-# Last Updated July 12, 2020
+# Last Updated November 8, 2020
