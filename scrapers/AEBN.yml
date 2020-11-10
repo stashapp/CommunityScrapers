@@ -1,4 +1,4 @@
-name: aebn
+name: AEBN
 sceneByURL:
   - action: scrapeXPath
     url:
