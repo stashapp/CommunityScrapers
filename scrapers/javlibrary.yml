@@ -88,7 +88,7 @@ xPathScrapers:
 # The 5 second sleep in combination with the CDP driver should prevent
 # Standard Cloudflare errors in regards to their Javascript check.
 # There is still the possibliy of getting a CAPTCHA block based on Cloudflare's
-# analasys of your traffic pattern. Nothing can be don't about that besides
+# analysis of your traffic pattern. Nothing can be done about that besides
 # waiting it out or using one of the mirrors.
 driver:
   useCDP: true
