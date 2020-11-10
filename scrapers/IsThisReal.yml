@@ -13,58 +13,65 @@ xPathScrapers:
     scene:
       Title:
         selector: $videoscript
-        replace:
-          - regex: .+(?:"sceneTitle":")([^"]+).+
-            with: $1
-          - regex: .+(?:"sceneTitle":"").+
-            with:
+        postProcess:
+          - replace:
+              - regex: .+(?:"sceneTitle":")([^"]+).+
+                with: $1
+              - regex: .+(?:"sceneTitle":"").+
+                with:
       Date:
         selector: $videoscript
-        replace:
-          - regex: .+(?:"sceneReleaseDate":")([^"]+).+
-            with: $1
-        parseDate: 2006-01-02
+        postProcess:
+          - replace:
+              - regex: .+(?:"sceneReleaseDate":")([^"]+).+
+                with: $1
+          - parseDate: 2006-01-02
       Details:
         selector: $datascript
-        replace:
-          - regex: .+(?:sceneDescription":")(.+)(?:","sceneActors).+
-            with: $1
-          - regex: .+(?:"sceneDescription":"").+
-            with:
-          - regex: <\\\/br>|<br\s\\\/>|<br>
-            with: "\n"
+        postProcess:
+          - replace:
+              - regex: .+(?:sceneDescription":")(.+)(?:","sceneActors).+
+                with: $1
+              - regex: .+(?:"sceneDescription":"").+
+                with:
+              - regex: <\\\/br>|<br\s\\\/>|<br>
+                with: "\n"
       Tags:
         Name:
           selector: $datascript
-          replace:
-            - regex: .+(?:sceneCategories":\[)(.+)(?:\],"sceneViews").+
-              with: $1
-            - regex: \"
-              with:
+          postProcess:
+            - replace:
+                - regex: .+(?:sceneCategories":\[)(.+)(?:\],"sceneViews").+
+                  with: $1
+                - regex: \"
+                  with:
           split: ","
       Performers:
         Name:
           selector: $datascript
-          replace:
-            - regex: .+(?:"sceneActors":)(.+)(?:,"sceneCategories")
-              with: $1
-            - regex: \{"actorId":"\d+","actorName":|}|\[|\]|"
-              with:
+          postProcess:
+            - replace:
+                - regex: .+(?:"sceneActors":)(.+)(?:,"sceneCategories")
+                  with: $1
+                - regex: \{"actorId":"\d+","actorName":|}|\[|\]|"
+                  with:
           split: ","
       Image:
         selector: $imagescript
-        replace:
-          - regex: .+(?:picPreview":")([\w:]+)(?:[\\\/]+)([\w-\.]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\d_]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\w]+)(?:[\\\/]+)([\w.]+).+
-            with: $1//$2/$3/$4/$5/$6/$7/$8/$9/$10
-            # if using the transport subdomain, parameters need to be passed
-            # otherwise a cropped square image is returned by default
-          - regex: (https:\/\/transform.+)
-            with: $1?width=960&height=543&enlarge=true
+        postProcess:
+          - replace:
+              - regex: .+(?:picPreview":")([\w:]+)(?:[\\\/]+)([\w-\.]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\d_]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\w]+)(?:[\\\/]+)([\w.]+).+
+                with: $1//$2/$3/$4/$5/$6/$7/$8/$9/$10
+              # if using the transport subdomain, parameters need to be passed
+              # otherwise a cropped square image is returned by default
+              - regex: (https:\/\/transform.+)
+                with: $1?width=960&height=543&enlarge=true
       Studio:
         Name:
           selector: //link[@rel="canonical"]/@href
-          replace:
-            - regex: .+(?:\/video\/)([^\/]+).+
-              with: $1
+          postProcess:
+            - replace:
+                - regex: .+(?:\/video\/)([^\/]+).+
+                  with: $1
 
-# Last Updated June 22, 2020
+# Last Updated November 8, 2020

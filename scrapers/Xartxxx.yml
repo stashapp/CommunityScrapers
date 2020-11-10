@@ -10,7 +10,8 @@ xPathScrapers:
       Title: //h1[@class="entry-title"]
       Date:
         selector: //div[@class="meta-item meta-date"]/span/text()
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Details:
         selector: //div[@class="entry-content-single"]/p
         concat: " "
@@ -18,4 +19,4 @@ xPathScrapers:
         Name: //div[@class="meta-tags"]/a/text()
       Image: //a[@class="vlog-cover"]/img/@data-lazy-src
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

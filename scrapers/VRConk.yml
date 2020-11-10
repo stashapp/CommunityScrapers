@@ -12,10 +12,11 @@ xPathScrapers:
       Title: $info//div[contains(@class, 'video-details')]//h1/text()
       Date:
         selector: $info//div[@class="stats-container"]/ul/li[3]/span[@class="sub-label"]/text()
-        replace:
-          - regex: (\d{4}-\d{2}-\d{2})\s.+
-            with: $1
-        parseDate: 2006-01-02
+        postProcess:
+          - replace:
+              - regex: (\d{4}-\d{2}-\d{2})\s.+
+                with: $1
+          - parseDate: 2006-01-02
       Details:
         selector: $info//div[@class="expand-block-more"]/div[@class="d-container"][3]/text()
         concat: " "
@@ -25,7 +26,8 @@ xPathScrapers:
         Name: $info//ul[@class="models-list"]//li/a/@title
       Image: 
         selector: //div[@class="splash-screen fullscreen-message is-visible"]/@style
-        replace:
-          - regex: ^.*url.([^\)]+).*$
-            with: "$1"
-# Last Updated July 16, 2020
+        postProcess:
+          - replace:
+              - regex: ^.*url.([^\)]+).*$
+                with: "$1"
+# Last Updated November 8, 2020

@@ -51,11 +51,12 @@ xPathScrapers:
         Name: //ul/li/span[contains(.,"Tags")]/../span/a[contains(@class,"spec")]
       Image:
         selector: //link[@hreflang="ja-JP"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/")]
-        replace:
-          - regex: index\.html$
-            with: images/l.jpg
-          - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
-            with: https://en.caribbeancompr.com/moviepages/$3/images/$1
+        postProcess:
+          - replace:
+              - regex: index\.html$
+                with: images/l.jpg
+              - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
+                with: https://en.caribbeancompr.com/moviepages/$3/images/$1
       Studio:
         Name:
           selector: //ul[@class="footer-copyright"]/li[contains(.,"©")]
@@ -66,4 +67,4 @@ xPathScrapers:
             - map:
                 caribbeancompr: Caribbeancom Premium
                 caribbeancom: Caribbeancom
-#Last Updated October 24, 2020
+# Last Updated November 8, 2020

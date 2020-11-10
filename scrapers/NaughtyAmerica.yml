@@ -12,12 +12,14 @@ xPathScrapers:
       Title: $sceneinfo/h1[@class="scene-title grey-text"]
       Date:
         selector: //div[@class="date-tags"]/span
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Details:
         selector: //div[@class="synopsis grey-text"]
-        replace:
-           - regex: "Synopsis"
-             with: ""
+        postProcess:
+          - replace:
+              - regex: "Synopsis"
+                with: ""
       Tags:
         Name: //div[@class="categories grey-text"]/a
       Performers:
@@ -26,8 +28,9 @@ xPathScrapers:
         Name: $sceneinfo/a[@class="site-title grey-text link"]
       Image:
         selector: //img[@class="start-card lazyload"]/@data-src|//img[@class="start-card"]/@src|//dl8-video[@id="vr_player"]/@poster
-        replace:
-          - regex: ^
-            with: "https:"
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

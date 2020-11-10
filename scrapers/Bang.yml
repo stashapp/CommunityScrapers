@@ -12,15 +12,16 @@ xPathScrapers:
       Image:
         selector: //meta[@name="og:image"]/@content
         postProcess:
-            - replace:
-                - regex: (.+)(\?.+)
-                  with: $1
+          - replace:
+              - regex: (.+)(\?.+)
+                with: $1
       Date:
         selector: //span[@class="hidden-xs fa-text-right fa-text-left"]/text()
-        replace:
-          - regex: (\w+\s)(\d+)\w+,(\s\d{4})
-            with: $1$2$3
-        parseDate: Jan 2 2006
+        postProcess:
+          - replace:
+              - regex: (\w+\s)(\d+)\w+,(\s\d{4})
+                with: $1$2$3
+          - parseDate: Jan 2 2006
       Tags:
         Name:
           selector: //div[@class="genres bottom-buffer10"]/a
@@ -33,4 +34,4 @@ driver:
   useCDP: true
   sleep: 5
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

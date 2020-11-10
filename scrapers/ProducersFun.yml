@@ -11,13 +11,14 @@ xPathScrapers:
       Details: (//div[@class="shadow video-details"]/p[not(@class)])[1]/text()
       Date:
         selector: //p[@class="video-date"]/text()[2]
-        replace:
-          - regex: (st|nd|rd|th)\,
-            with: ","
-        parseDate: January 2, 2006
+        postProcess:
+          - replace:
+              - regex: (st|nd|rd|th)\,
+                with: ","
+          - parseDate: January 2, 2006
       Image: //section[@class="top-wrapper"]/div//video/@poster
       Tags:
         Name:
           selector: //p[@class="video-tags"]/a/text()
 
-# Last Updated July 21, 2020
+# Last Updated November 8, 2020

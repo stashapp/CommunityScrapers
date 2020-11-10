@@ -10,16 +10,17 @@ xPathScrapers:
       Title: //div[@class="titleBlock2 clear"]/h3/text()
       Date:
         selector: //span[@class="availdate"]/text()
-        parseDate: 01/02/2006
+        postProcess:
+          - parseDate: 01/02/2006
       Details: //span[@class="latest_update_description"]/text()
       Tags:
         Name: //span[@class="update_tags"]/a/text()
       Performers:
         Name: //span[@class="tour_update_models"]/a/text()
-      Image: 
+      Image:
         selector: //meta[@property="og:image"]/@content
-      Studio: 
-        Name: 
+      Studio:
+        Name:
           fixed: BigBootyTGirls
 
-# Last Updated September 2, 2020
+# Last Updated November 8, 2020

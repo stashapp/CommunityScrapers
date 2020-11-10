@@ -20,7 +20,8 @@ xPathScrapers:
       Details: //p[@data-test-component="VideoDescription"]|//div[@data-test-component="VideoDescription"]//p
       Date:
         selector: //span[@data-test-component="ReleaseDateFormatted"]
-        parseDate: "January 2, 2006"
+        postProcess:
+          - parseDate: "January 2, 2006"
       Image:
         selector: //div[contains(@class, "sc-13rgbhb-2")]//img[contains(@class, "sc-1egln9q-1")]/@src
         # Less precise option:
@@ -28,10 +29,11 @@ xPathScrapers:
       Studio:
         Name:
           selector: //link[@rel="canonical"]/@href
-          replace:
-          - regex: https\://www\.(.+)\.com/.+
-            with: $1
+          postProcess:
+            - replace:
+                - regex: https\://www\.(.+)\.com/.+
+                  with: $1
 driver:
   useCDP: true
 
-# Last Updated November 2, 2020
+# Last Updated November 8, 2020

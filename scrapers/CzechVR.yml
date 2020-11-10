@@ -15,7 +15,8 @@ xPathScrapers:
       Title: $info//div[@class="nazev"]/h2/text()
       Date:
         selector: $info//div[@class="datum"]/text()
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Details:
         selector: //div[@class="textDetail"]/text()
         concat: " "
@@ -28,7 +29,8 @@ xPathScrapers:
       Image: 
         selector: $url|//dl8-video/@poster
         concat: " "
-        replace:
-          - regex: \s\./category
-            with: /category 
-# Last Updated July 26, 2020
+        postProcess:
+          - replace:
+              - regex: \s\./category
+                with: /category 
+# Last Updated November 8, 2020

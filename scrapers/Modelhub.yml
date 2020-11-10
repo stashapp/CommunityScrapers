@@ -33,7 +33,8 @@ xPathScrapers:
       Name: //div[@class="infoSection"]/h1/text()
       Birthdate:
         selector: //span[@class='bday js_lazy_bkg']/text()
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Gender:
         selector: //ul[@class="allStats"]/li[contains(.,"Gender")]/span
         postProcess:
@@ -111,4 +112,4 @@ xPathScrapers:
       Details: //p[@ class="videoDescription"]
       Performers:
         Name: //div[@class='videoAvatar']/div[1]/a[2]
-# Last Updated Jul 25, 2020
+# Last Updated November 8, 2020

@@ -19,10 +19,11 @@ xPathScrapers:
       Title: //div[@class="update_title"]/text()
       Date:
         selector: //div[@class="cell update_date"]/text()
-        replace:
-          - regex: Released:\s
-            with:
-        parseDate: 01/02/2006
+        postProcess:
+          - replace:
+              - regex: Released:\s
+                with:
+          - parseDate: 01/02/2006
       Details: //span[@class="update_description"]/text()
       Tags:
         Name: //span[@class="update_tags"]/a/text()
@@ -30,4 +31,4 @@ xPathScrapers:
         Name: //span[@class="update_models"]/a/text()
       Image: //video/@poster
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

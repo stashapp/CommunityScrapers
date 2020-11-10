@@ -23,9 +23,10 @@ jsonScrapers:
       Name: data.#.name
       URL:
         selector: data.#.id
-        replace:
-          - regex: ^
-            with: https://api.metadataapi.net/performers/
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://api.metadataapi.net/performers/
 
   performerScraper:
     common:
@@ -37,9 +38,10 @@ jsonScrapers:
       Ethnicity: $extras.ethnicity
       Height:
         selector: $extras.height
-        replace:
-          - regex: cm
-            with:
+        postProcess:
+          - replace:
+              - regex: cm
+                with:
       Measurements: $extras.measurements
       Tattoos: $extras.tattoos
       Piercings: $extras.piercings
@@ -78,4 +80,4 @@ jsonScrapers:
         Name: $data.site.name
       Tags:
         Name: $data.tags.#.tag
-#Last Updated September 6, 2020
+# Last Updated November 8, 2020

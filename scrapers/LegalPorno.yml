@@ -27,7 +27,8 @@ xPathScrapers:
         concat: " "
       Date:
         selector: //span[@title="Release date"]/a/text()
-        parseDate: 2006-01-02
+        postProcess:
+          - parseDate: 2006-01-02
       Details: $description/div[3]/dd/text()
       Performers:
         Name: $description/div[1]/dd/a[contains(@href,'legalporno.com/model')]/text()
@@ -37,9 +38,10 @@ xPathScrapers:
         Name: $description/div[2]//a/text()
       Image:
         selector: //div[@id="player"]/@style
-        replace:
-          - regex: .+(https[^"]+).+
-            with: $1
+        postProcess:
+          - replace:
+              - regex: .+(https[^"]+).+
+                with: $1
 
   performerScraper:
     performer:
@@ -47,4 +49,4 @@ xPathScrapers:
       Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
       Image:
         selector: //div[@class='model--avatar']//img/@src
-# Last Updated August 12, 2020
+# Last Updated November 8, 2020

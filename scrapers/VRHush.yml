@@ -12,7 +12,8 @@ xPathScrapers:
       Title: $info//h1[@class="latest-scene-title"]/text()
       Date:
         selector: $info//div[@class="row latest-scene-meta-1"]/div[@class="col-xs-6 text-left"]/text()
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Details:
         selector: $info//span[contains(@class, "full-description")]/text()
         concat: " "
@@ -22,8 +23,9 @@ xPathScrapers:
         Name: $info//h5[@class="latest-scene-subtitle"]//a/text()
       Image: 
         selector: $info//dl8-video/@poster
-        replace:
-          - regex: ^
-            with: "https:"
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
 
-# Last Updated July 17, 2020
+# Last Updated November 8, 2020

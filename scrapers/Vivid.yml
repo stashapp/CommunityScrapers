@@ -17,14 +17,16 @@ xPathScrapers:
         Name: $info/h4[contains(text(),'Starring:')]/a
       Image:
         selector: //script[contains(text(),'poster:')]|//img[@id="placard"]/@src
-        replace:
-          - regex: .+(https://content\.vivid\.com/.+\.jpg).+
-            with: $1
+        postProcess:
+          - replace:
+              - regex: .+(https://content\.vivid\.com/.+\.jpg).+
+                with: $1
       Date:
         selector: $info/h5[contains(text(),'Released:')]
-        replace:
-          - regex: "Released:"
-            with: ""
-        parseDate: Jan 2, 2006
+        postProcess:
+          - replace:
+              - regex: "Released:"
+                with: ""
+          - parseDate: Jan 2, 2006
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

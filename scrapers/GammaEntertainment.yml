@@ -127,24 +127,26 @@ xPathScrapers:
       Title: //div[@id="breadcrumb"]/span[3]/text()|//div[@id="breadCrumb"]/span[3]/text()|//div[@id="BreadcrumbMenu"]/span[3]/text()|//h1[@class="sceneTitle"]/text()|//div[@id="playerWrapper"]//h1/text()|//div[@id="scenePlayer"]//h1/text()|//div[@id="scenePlayerScene"]//h1/text()|//h3[@class="sceneTitle"]/text()
       Date:
         selector: //li[@class="updatedDate"]/text()[2]|//div[@class="updatedDate"]/text()[2]|//p[@class="updatedDate"]/text()[2]|//div[@class="sceneCol updatedDate"]/span/text()|//p[@class="p-updated"]/text()
-        replace:
-          - regex: (\d{4})-(\d{2})-(\d{2})
-            with: $2-$3-$1
-          - regex: (\d{2})\/(\d{2})\/(\d{4})
-            with: $1-$2-$3
-          - regex: ":"
-            with:
-        parseDate: 01-02-2006
+        postProcess:
+          - replace:
+              - regex: (\d{4})-(\d{2})-(\d{2})
+                with: $2-$3-$1
+              - regex: (\d{2})\/(\d{2})\/(\d{4})
+                with: $1-$2-$3
+              - regex: ":"
+                with:
+          - parseDate: 01-02-2006
       Details:
         selector: $detailscript
-        replace:
-          - regex: .+(?:sceneDescription":")(.+)(?:","sceneActors).+
-            with: $1
-            # Second regex in case no description is provided.
-          - regex: .+(?:"sceneDescription":"").+
-            with:
-          - regex: <\\\/br>|<br\s\\\/>|<br>|<br\\/>
-            with: "\n"
+        postProcess:
+          - replace:
+              - regex: .+(?:sceneDescription":")(.+)(?:","sceneActors).+
+                with: $1
+              # Second regex in case no description is provided.
+              - regex: .+(?:"sceneDescription":"").+
+                with:
+              - regex: <\\\/br>|<br\s\\\/>|<br>|<br\\/>
+                with: "\n"
       Tags:
         Name: $tags/a/text()|//div[@class="sceneCol categories"]/a/text()|//div[@class="sceneCol sceneColCategories"]//span[not(@class="categorySeparator")]/text()|//div[@class="sceneCategories"]/a/text()
       Performers:
@@ -153,13 +155,14 @@ xPathScrapers:
         Name: $info/a/img/@title|//a[@class="sceneLink  "]/@title|//a[@class="dvdLink  "]/@title
       Image:
         selector: //script[contains(text(), 'picPreview')]/text()
-        replace:
-          - regex: .+(?:picPreview":")([\w:]+)(?:[\\\/]+)([\w-\.]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\d_]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\w]+)(?:[\\\/]+)([\w.]+).+
-            with: $1//$2/$3/$4/$5/$6/$7/$8/$9/$10
-            # if using the transport subdomain, parameters need to be passed
-            # otherwise a cropped square image is returned by default
-          - regex: (https:\/\/transform.+)
-            with: $1?width=960&height=543&enlarge=true
+        postProcess:
+          - replace:
+              - regex: .+(?:picPreview":")([\w:]+)(?:[\\\/]+)([\w-\.]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\d_]+)(?:[\\\/]+)(\w+)(?:[\\\/]+)(\d+)(?:[\\\/]+)(\d+)(?:[\\\/]+)([\w]+)(?:[\\\/]+)([\w.]+).+
+                with: $1//$2/$3/$4/$5/$6/$7/$8/$9/$10
+              # if using the transport subdomain, parameters need to be passed
+              # otherwise a cropped square image is returned by default
+              - regex: (https:\/\/transform.+)
+                with: $1?width=960&height=543&enlarge=true
       Studio:
         Name:
           selector: //*[local-name()="div" or local-name()=p][contains(text(),"is a site owned and operated by Gamma")]
@@ -180,10 +183,11 @@ xPathScrapers:
       Duration: //li[@class='length']/text()
       Date:
         selector: //li[@class='updatedOn']/text()
-        parseDate: 2006-01-02
+        postProcess:
+          - parseDate: 2006-01-02
       Synopsis: //p[@class='descriptionText']/text()
       Studio:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated October 8, 2020
+# Last Updated November 8, 2020

@@ -18,11 +18,13 @@ xPathScrapers:
       Studio:
         Name:
           selector: //meta[@property="og:site_name"]/@content
-          replace:
-            - regex: \.com$
-              with:
+          postProcess:
+            - replace:
+                - regex: \.com$
+                  with:
       Date:
         selector: //div[@class="videodate"]/strong/text()
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
 
-# Last Updated June 10, 2020
+# Last Updated November 8, 2020

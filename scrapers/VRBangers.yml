@@ -14,7 +14,8 @@ xPathScrapers:
       Title: //h1[@class="video-content__title d-block"]/text()
       Date:
         selector: $info//div[@class="section__item-title-download-space"][2]/text()[2]
-        parseDate: Jan 2, 2006
+        postProcess:
+          - parseDate: Jan 2, 2006
       Details:
         selector: //div[@class="video-content__description"]//p//text()
         concat: " "
@@ -26,9 +27,10 @@ xPathScrapers:
         Name: //meta[@name="dl8-customization-brand-name"]/@content
         URL:
           selector: //meta[@name="dl8-customization-brand-url"]/@content
-          replace:
-            - regex: ^
-              with: "https:"
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https:"
       Image: //meta[@property="og:image"][1]/@content
 
-# Last Updated May 25, 2020
+# Last Updated November 8, 2020
