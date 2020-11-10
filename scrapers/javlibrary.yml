@@ -84,7 +84,7 @@ xPathScrapers:
             - regex: ^
               with: "https:"
 
-# Switched to CDP due to Cloudflare errors Javascript errors.
+# Switched to CDP due to Cloudflare and Javascript errors.
 # The 5 second sleep in combination with the CDP driver should prevent
 # Standard Cloudflare errors in regards to their Javascript check.
 # There is still the possibliy of getting a CAPTCHA block based on Cloudflare's
