@@ -19,12 +19,13 @@ xPathScrapers:
               - regex: ^\s+
                 with:
           - parseDate: 2 Jan 2006
-      Image: //center/a[1]/img[@class="lightboxhover"]/@src
+      Image: //div[contains(@class,"post-single-img")]//img/@src
       Studio:
         Name:
           fixed: Hucows
       Tags:
-        Name: //section[@id="categories-2"]//a
+        Name: //a[@rel="category tag"]/text()
       Performers:
         Name: //span[@class="posttags"]/a/text()
-# Last Updated July 29, 2020
+
+# Last Updated November 08, 2020
