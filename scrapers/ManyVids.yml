@@ -74,29 +74,18 @@ xPathScrapers:
       Ethnicity:
         selector: $aboutlabel[contains(text(), 'Ethnicity')]/following-sibling::*
         postProcess:
-          - replace:
-              - regex: 'Alaskan'
-                with: 'alaskan'
-              - regex: 'Aisan'
-                with: 'aisan'
-              - regex: 'Black / Ebony'
-                with: 'black'
-              - regex: 'East Indian'
-                with: 'east indian'
-              - regex: 'Latino / Hispanic'
-                with: 'hispanic'
-              - regex: 'Middle Eastern'
-                with: 'middle eastern'
-              - regex: 'Mixed'
-                with: 'mixed'
-              - regex: 'Native American'
-                with: 'native american'
-              - regex: 'Pacific Islander'
-                with: 'pacific islander'
-              - regex: 'White / Caucasian'
-                with: 'white'
-              - regex: 'Other'
-                with: 'other'
+          - map:
+              Alaskan: alaskan
+              Asian: asian
+              Black / Ebony: black
+              East Indian: east indian
+              Latino / Hispanic: hispanic
+              Middle Eastern: middle eastern
+              Mixed: mixed
+              Native American: native american
+              Pacific Islander: pacific islander
+              White / Caucasian: white
+              Other: other
       Country:
         selector: $aboutlabel[contains(text(), 'Nationality')]/following-sibling::*/img/@alt
       EyeColor:
@@ -133,7 +122,6 @@ xPathScrapers:
         selector: $aboutlabel[contains(text(), 'Tattoos')]/following-sibling::*
       Piercings:
         selector: $aboutlabel[contains(text(), 'Piercings')]/following-sibling::*
-
       Image:
         selector: //*[contains(concat(' ',normalize-space(@class),' '),' mv-model-display ')][not(@data-current-portrait = '')]/@data-current-portrait | //*[contains(concat(' ',normalize-space(@class),' '),' mv-model-display ')][not(@data-current-avatar = '')]/@data-current-avatar
         postProcess:
@@ -141,4 +129,4 @@ xPathScrapers:
               - regex: '.*\.svg$'
                 with: ''
 
-# Last Updated November 8, 2020
+# Last Updated November 10, 2020
