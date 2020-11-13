@@ -1,0 +1,26 @@
+name: swallowed
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - tour.swallowed.com/view
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Details: //div[@class="desc"]/p/text()
+      Image:
+        selector: //div[@class="trailer-wrap exclusive"]/div[@class="overlay-limit"]/@style
+        postProcess:
+          - replace:
+                - regex: (background-image:\surl\()([^)]+).+
+                  with: $2
+      Performers:
+        Name: //div[@class="content-page-info"]//h4[@class="models"]/a/text()
+      Date:
+        selector: //p/span[@class="post-date"]/text()
+        postProcess:
+           - parseDate: 02th Jan 2006
+      Title: //div[@class="content-page-info"]//h2[@class="title"]/text()
+      Studio:
+        Name:
+         fixed: Swallowed
