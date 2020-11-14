@@ -1,0 +1,23 @@
+name: houseofyre
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - houseofyre.com/updates
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Details: //div[@class="update_block_info"]//span[@class="latest_update_description"]/text()
+      Image: //div[@class="update_image"]//img[contains(@class,"stdimage large_update_thumb")]/@src
+      Performers:
+        Name: //div[@class="update_block_info"]//span[@class="tour_update_models"]/a/text()
+      Date:
+        selector: //div[@class="update_block_info"]//span[@class="availdate"]/text()[1]
+        postProcess:
+          - parseDate: 01/02/2006
+      Title: //div[@class="update_block_info"]//span[@class="update_title"]/text()
+      Studio:
+        Name:
+         fixed: House Of Fyre
+      Tags:
+        Name: //div[@class="update_block_info"]//span[@class="update_tags"]/a/text()
