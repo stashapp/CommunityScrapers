@@ -1,5 +1,3 @@
-  GNU nano 2.7.4                   File: Swallowed.yml                             
-
 name: swallowed
 sceneByURL:
   - action: scrapeXPath
@@ -11,7 +9,7 @@ xPathScrapers:
     scene:
       Details: //div[@class="desc"]/p/text()
       Image:
-        selector: //div[@class="trailer-wrap exclusive"]/div[@class="overlay-limit$
+        selector: //div[@class="trailer-wrap exclusive"]/div[@class="overlay-limit"]/@style
         postProcess:
           - replace:
                 - regex: (background-image:\surl\()([^)]+).+
@@ -32,3 +30,4 @@ xPathScrapers:
       Studio:
         Name:
          fixed: Swallowed
+
