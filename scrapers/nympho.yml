@@ -30,7 +30,11 @@ xPathScrapers:
                 swallowed: Swallowed
                 allanal: AllAnal
       Date:
-        selector: $info//span[@class="mobile-date date visible-xs"]
-        parseDate: 01/02/2006
+        selector: $info//span[contains(@class,"date") and not(contains(@class,"mobile"))]
+        postProcess:
+          - replace:
+              - regex: (\d+)(?:[dhnrst]+)(\s.+)
+                with: $1$2
+          - parseDate: 2 Jan 2006
       Image: //video[contains(@id,"ypp-player")]/@poster
 # Last Updated November 14, 2020
