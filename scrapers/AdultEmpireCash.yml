@@ -24,6 +24,14 @@ sceneByURL:
       - touchmywife.com/
       - westcoastproductions.com/
 
+  # VR Sites
+  - action: scrapeXPath
+    scraper: vrSceneScraper
+    url:
+      - lethalhardcorevr.com/
+      - whorecraftvr.com/
+
+movieByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
@@ -35,13 +43,6 @@ sceneByURL:
       - severesexfilms.com/
       # - shemalestrokers.com/ # Scenes published as movies?
       - thirdworldxxx.com/
-
-  # VR Sites
-  - action: scrapeXPath
-    scraper: vrSceneScraper
-    url:
-      - lethalhardcorevr.com/
-      - whorecraftvr.com/
 
 xPathScrapers:
   sceneScraper:
@@ -88,8 +89,6 @@ xPathScrapers:
               with: ":"
             - regex: " mins."
               with: ":00"
-      Tags:
-        Name: //div[@class="categories"]/a/text()
       Studio:
         Name:
           selector: //div[@class="studio"]/a
