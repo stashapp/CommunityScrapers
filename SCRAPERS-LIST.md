@@ -132,7 +132,7 @@ chocolatebjs.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clips4sale.com|Clips4Sale.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubinfernodungeon.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 clubseventeen.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|stash >= v0.3.0-42|-
-concoxxxion.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+concoxxxion.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 creativeporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cum4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cumaholicteens.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -201,7 +201,7 @@ driverxxx.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 dtfsluts.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dyked.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dylanryder.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-elegantangel.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+elegantangel.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 erito.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 eroticax.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 errotica-archives.com|SARJ-LLC.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -375,7 +375,7 @@ maketeengape.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maledigital.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 mamacitaz.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mandyflores.com|Mandyflores.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-manipulativemedia.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+manipulativemedia.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 manojob.com|FinishesTheJob.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 manroyale.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 manuelferrara.com|JulesJordan.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -530,7 +530,7 @@ screwmetoo.com|ScrewMeToo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 seancody.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 seductive18.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 seemysextapes.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-severesexfilms.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+severesexfilms.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 sexart.com|SARJ-LLC.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexbabesvr.com|SexBabesVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 sexlikereal.com|SexLikeReal.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -608,7 +608,7 @@ thestripperexperience.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thetabutales.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thickandbig.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thickumz.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-thirdworldxxx.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Asian + Latin + Trans
+thirdworldxxx.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Asian + Latin + Trans
 throated.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 timtales.com|TimTales.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 tiny4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
