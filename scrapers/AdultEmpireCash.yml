@@ -63,9 +63,8 @@ xPathScrapers:
             # Override studio name only when needed
             - map:
                 Jay Rock Clips: Jay's POV
-                Filthy Kings Clips: FilthyPOV # filthykings.com + filthypov.com
             - replace:
-                # 'Jodi West Clips' => 'Jodi West'
+                # 'Jane Doe Clips' => 'Jane Doe'
                 - regex: \sClips$
                   with:
       Image: //link[@rel="image_src"]/@href
@@ -96,7 +95,7 @@ xPathScrapers:
           selector: //div[@class="studio"]/a
           postProcess:
             - replace:
-                # 'Jodi West Clips' => 'Jodi West'
+                # 'Jane Doe Clips' => 'Jane Doe'
                 - regex: \sClips$
                   with:
       FrontImage: //link[@rel="image_src"]/@href
