@@ -3,18 +3,20 @@ name: nympho
 sceneByURL:
   - action: scrapeXPath
     url:
+      - allanal.com/view/
       - nympho.com/view/
       - swallowed.com/view/
       - trueanal.com/view/
-      - allanal.com/view/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $info: //div[@class="content-page-info"]
     scene:
       Title: //h2[@class="title"]/text()|//h1[@class="title"]/text()
-      Details: //div[@class="content-page-info"]/div[@class="desc"]/p/text()
+      Details: $info/div[@class="desc"]
       Performers:
-        Name: //div[@class="content-page-info"]//h4[@class="models"]/a
+        Name: $info//h4[@class="models"]/a
       Studio:
         Name:
           selector: //a[contains(@class,"navbar-brand")]/@href
@@ -27,7 +29,12 @@ xPathScrapers:
                 trueanal: TrueAnal
                 swallowed: Swallowed
                 allanal: AllAnal
-
+      Date:
+        selector: $info//span[contains(@class,"date") and not(contains(@class,"mobile"))]
+        postProcess:
+          - replace:
+              - regex: (\d+)(?:[dhnrst]+)\s+(.+)
+                with: "$1 $2"
+          - parseDate: 2 Jan 2006
       Image: //video[contains(@id,"ypp-player")]/@poster
-# No Date, no Tags
-# Last Updated September 20, 2020
+# Last Updated November 14, 2020
