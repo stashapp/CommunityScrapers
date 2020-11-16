@@ -14,9 +14,7 @@ xPathScrapers:
         Name: //div[@class="col-6 text-left scene-page-site mb-4"]/a/p/text()
       Title: //h3/text()
       Date:
-        selector: //small/text()
-        postProcess:
-          - parseDate: January 2, 2006
+        selector: //meta[@property="video:release_date"]/@content
       Details: //p[@class="mt-4"]/text()
       Tags:
         Name: //div[@class="my-6"]/h5/span/text()
