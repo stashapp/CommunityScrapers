@@ -12,11 +12,11 @@ xPathScrapers:
     scene:
       Title: //div[@class="clipTitle"]/h3/text()
       Details:
-        selector: //div[@class="clip"]/div/p//text()
+        selector: //div[@class="clip"]/div[1]/*|//div[@class="clip"]/div[1]/text()
         concat: "\n\n"
         postProcess:
           - replace:
-              - regex: "Description:"
+              - regex: ^Description:\s*
                 with:
       Studio:
         Name: $studio
