@@ -64,7 +64,7 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $contentpane: //div[@class="col-12 col-md-7 col-lg-5 content-pane-title"]
+      $contentpane: //div[contains(@class, "content-pane-title")]
     scene:
       Title: //h2/text()
       Date:
@@ -72,7 +72,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Details:
-        selector: //div[@class="col-12 content-pane-column"]//p/text()|//div[@class="col-12 content-pane-column"]/div/text()
+        selector: //div[contains(@class, "content-pane-column")]//p/text()|//div[contains(@class, "content-pane-column")]/div/text()
         concat: " "
       Performers:
         Name: //div[@class="content-pane-performers"]/a/text()
@@ -93,17 +93,17 @@ xPathScrapers:
                 with: "https:"
   galleryScraper:
     common:
-      $contentpane: //div[@class="col-12 col-md-7 col-lg-5 content-pane-title"]
+      $contentpane: //div[contains(@class, "content-pane-title")]
     gallery:
       Title:
         selector: //h2
         postProcess:
           - replace:
               # Remove - S11:E11 part
-              - regex: ^(.+)(?:\s-\sS\d+:E\d+)$|^(.+)$
-                with: $1$2
+              - regex: \s-\sS\d+:E\d+$
+                with:
       Details:
-        selector: //div[@class="col-12 content-pane-column"]//p/text()[normalize-space(.)]|//div[@class="col-12 content-pane-column"]/div/text()[normalize-space(.)]
+        selector: //div[contains(@class, "content-pane-column")]//p/text()[normalize-space(.)]|//div[contains(@class, "content-pane-column")]/div/text()[normalize-space(.)]
         concat: "\n\n"
       Date:
         selector: $contentpane//span[@class="date"]/text()
