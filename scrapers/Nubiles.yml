@@ -25,6 +25,10 @@ sceneByURL:
       - driverxxx.com/
       - bountyhunterporn.com/
       - detentiongirls.com/
+      - familyswap.xxx/
+      - girlsonlyporn.com/
+      - hotcrazymess.com/
+      - nubilesporn.com/
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
@@ -52,6 +56,9 @@ galleryByURL:
       - driverxxx.com/photo/gallery/
       - bountyhunterporn.com/photo/gallery/
       - detentiongirls.com/photo/gallery/
+      - familyswap.xxx/photo/gallery/
+      - girlsonlyporn.com/photo/gallery/
+      - nubilesporn.com/photo/gallery/
     scraper: galleryScraper
 
 xPathScrapers:
@@ -74,7 +81,7 @@ xPathScrapers:
           selector: $contentpane//a[@class="site-link"]/text()
           postProcess:
             - replace:
-              - regex: (.+?)\.com
+              - regex: (.+?)\.(com|xxx)
                 with: $1
       Tags:
         Name: //div[@class="categories"]/a/text()
@@ -114,4 +121,4 @@ xPathScrapers:
               - regex: ^(.+?)\s-.+$
                 with: $1
 
-# Last Updated October 28, 2020
+# Last Updated November 17, 2020
