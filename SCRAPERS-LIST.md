@@ -8,7 +8,7 @@ Supported Site|Scraper|S|G|M|P|Needs|Contents
 ------------- | ------------- | :----------: | :----------: | :----------: | :----------: | :----------: | :----------:
 1000facials.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 18eighteen.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-18vr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+18vr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 1by-day.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 21naturals.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 21roles.com|21Roles.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
@@ -71,11 +71,11 @@ b47w.com|javlibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|stash >= v
 babepedia.com|Babepedia.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Database
 babes.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 babesnetwork.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
-babevr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+babevr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 backroomcastingcouch.com|Backroomcastingcouch.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 baddaddypov.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 badmilfs.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-badoinkvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+badoinkvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 badteenspunished.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|stash >= v0.3.0-42|-
 baeb.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bang.com|Bang.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
@@ -336,7 +336,7 @@ kendrajames.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kimberleelive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kink.com|Kink.yml|:heavy_check_mark:|:x:|:x:|:x:|stash >= v0.3.0-45|-
 kink305.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-kinkvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+kinkvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 kinkyfamily.com|kinkyfamily.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kinkyspa.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 ladyboy-ladyboy.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
@@ -503,7 +503,7 @@ rawattack.com|RawAttack.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 realityjunkies.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 realitykings.com|Brazzers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 realsensual.com|RealSensual.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-realvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+realvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 recklessinmiami.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 reidmylips.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 reidmylips.elxcomplete.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -645,7 +645,7 @@ vrbangers.com|VRBangers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrbgay.com|VRBangers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrbtrans.com|VRBangers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrconk.com|VRConk.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
-vrcosplayx.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+vrcosplayx.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 vrhush.com|VRHush.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 wankz.com|wankz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wankzvr.com|WankzVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
