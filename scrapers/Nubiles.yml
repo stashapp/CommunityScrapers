@@ -2,63 +2,63 @@ name: "Nubiles"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - nubilefilms.com/
-      - nubiles.net/
-      - nubiles-porn.com/
-      - nubilesunscripted.com/
-      - nubiles-casting.com/
-      - nubileset.com/
-      - nfbusty.com/
       - anilos.com/
-      - deeplush.com/
-      - momsteachsex.com/
-      - petitehdporn.com/
-      - brattysis.com/
-      - thatsitcomshow.com/
       - badteenspunished.com/
-      - princesscum.com/
-      - myfamilypies.com/
-      - daddyslilangel.com/
-      - teacherfucksteens.com/
-      - stepsiblingscaught.com/
-      - petiteballerinasfucked.com/
-      - driverxxx.com/
       - bountyhunterporn.com/
+      - brattysis.com/
+      - daddyslilangel.com/
+      - deeplush.com/
       - detentiongirls.com/
+      - driverxxx.com/
       - familyswap.xxx/
       - girlsonlyporn.com/
       - hotcrazymess.com/
+      - momsteachsex.com/
+      - myfamilypies.com/
+      - nfbusty.com/
+      - nubilefilms.com/
+      - nubiles-casting.com/
+      - nubiles-porn.com/
+      - nubiles.net/
+      - nubileset.com/
       - nubilesporn.com/
+      - nubilesunscripted.com/
+      - petiteballerinasfucked.com/
+      - petitehdporn.com/
+      - princesscum.com/
+      - stepsiblingscaught.com/
+      - teacherfucksteens.com/
+      - thatsitcomshow.com/
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
     url:
-      - nubilefilms.com/photo/gallery/
-      - nubiles.net/photo/gallery/
-      - nubiles-porn.com/photo/gallery/
-      - nubilesunscripted.com/photo/gallery/
-      - nubiles-casting.com/photo/gallery/
-      - nubileset.com/photo/gallery/
-      - nfbusty.com/photo/gallery/
       - anilos.com/photo/gallery/
-      - deeplush.com/photo/gallery/
-      - momsteachsex.com/photo/gallery/
-      - petitehdporn.com/photo/gallery/
-      - brattysis.com/photo/gallery/
-      - thatsitcomshow.com/photo/gallery/
       - badteenspunished.com/photo/gallery/
-      - princesscum.com/photo/gallery/
-      - myfamilypies.com/photo/gallery/
-      - daddyslilangel.com/photo/gallery/
-      - teacherfucksteens.com/photo/gallery/
-      - stepsiblingscaught.com/photo/gallery/
-      - petiteballerinasfucked.com/photo/gallery/
-      - driverxxx.com/photo/gallery/
       - bountyhunterporn.com/photo/gallery/
+      - brattysis.com/photo/gallery/
+      - daddyslilangel.com/photo/gallery/
+      - deeplush.com/photo/gallery/
       - detentiongirls.com/photo/gallery/
+      - driverxxx.com/photo/gallery/
       - familyswap.xxx/photo/gallery/
       - girlsonlyporn.com/photo/gallery/
+      - momsteachsex.com/photo/gallery/
+      - myfamilypies.com/photo/gallery/
+      - nfbusty.com/photo/gallery/
+      - nubilefilms.com/photo/gallery/
+      - nubiles-casting.com/photo/gallery/
+      - nubiles-porn.com/photo/gallery/
+      - nubiles.net/photo/gallery/
+      - nubileset.com/photo/gallery/
       - nubilesporn.com/photo/gallery/
+      - nubilesunscripted.com/photo/gallery/
+      - petiteballerinasfucked.com/photo/gallery/
+      - petitehdporn.com/photo/gallery/
+      - princesscum.com/photo/gallery/
+      - stepsiblingscaught.com/photo/gallery/
+      - teacherfucksteens.com/photo/gallery/
+      - thatsitcomshow.com/photo/gallery/
     scraper: galleryScraper
 
 xPathScrapers:
