@@ -103,7 +103,9 @@ class Validator {
         console.error(`\x1b[31mError\x1b[0m in: ${relPath}:`);
         error.stack = null;
         console.error(error);
-        break;
+        result = result && false;
+        if (this.stopOnError) break;
+        else continue;
       }
 
       let valid = validate(data);
