@@ -1,0 +1,81 @@
+name: Combat Zone
+
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - tour.blackmarketxxx.com/trailers/
+      - tour.combatzonexxx.com/trailers/
+      - tour.fillyfilms.com/trailers/
+      - tour.smashpictures.com/trailers/
+
+movieByURL:
+  - action: scrapeXPath
+    scraper: movieScraper
+    url:
+      - combatzone.us/distributor/
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[contains(@class, "title")]/h2
+      Date:
+        selector: //div[@class="info"]/p/text()[contains(., "Added:")]
+        postProcess:
+          - replace:
+              - regex: ^Added:\s+
+                with:
+          - parseDate: January 2, 2006
+      Details: //div[@class="description"]/p
+      Tags:
+        Name: //ul[@class="tags"]//a
+      Performers:
+        Name: //div[@class="info"]//a[contains(@href, "/models/")]
+      Image:
+        selector: //div[@id="fakeplayer"]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://tour.combatzonexxx.com
+      Studio:
+        Name:
+          # Search for the scene in order to get the correct studio
+          selector: //div[contains(@class, "title")]/h2
+          postProcess:
+            - replace:
+                - regex: \s
+                  with: +
+                - regex: ^(.+)$
+                  with: https://tour.combatzonexxx.com/search.php?st=advanced&qall=$1&cat[]=5
+            - subScraper: //i[@class="site_badge"]/text()
+            - map:
+                BM: Black Market XXX
+                CZ: Combat Zone XXX
+                FF: Filly Films
+                SP: Smash Pictures
+
+  movieScraper:
+    movie:
+      Name: //h1
+      Date:
+        selector: //p[span[contains(text(), "Release Date:")]]/text()[2]
+        postProcess:
+          - parseDate: January 2, 2006
+      Synopsis: //p[span[contains(text(), "Synopsis:")]]/text()[2]
+      Director: //p[span[contains(text(), "Director:")]]/text()[2]
+      FrontImage:
+        selector: //img[starts-with(@src, "/distributor/cvr/") and contains(@alt, "front cover")]/@src
+        postProcess:
+          - replace:
+              - regex: ^/(.+)-s([fb]\.jpg)$
+                with: https://www.combatzone.us/$1-l$2
+      BackImage:
+        selector: //img[starts-with(@src, "/distributor/cvr/") and contains(@alt, "back cover")]/@src
+        postProcess:
+          - replace:
+              - regex: ^/(.+)-s([fb]\.jpg)$
+                with: https://www.combatzone.us/$1-l$2
+      Studio:
+        Name: //p[span[contains(text(), "Studio:")]]/text()[2]
+
+# Last Updated November 17, 2020
