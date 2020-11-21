@@ -95,4 +95,4 @@ xPathScrapers:
       FrontImage: //div[@class="front"]/a/img/@src0_3x
       BackImage: //div[@class="back"]/a/img/@src0_3x
 
-# Last Updated October November 21, 2020
+# Last Updated November 21, 2020
