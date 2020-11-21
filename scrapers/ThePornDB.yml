@@ -19,7 +19,7 @@ sceneByFragment:
   scraper: sceneQueryScraper
   queryURLReplace:
     filename:
-      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename so that it can contruct a valid url
+      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename so that it can construct a valid url
         with: "." # "%20"
 jsonScrapers:
   performerSearch:
