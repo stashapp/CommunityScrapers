@@ -1,25 +1,21 @@
 name: "Nubiles"
+# Sites from https://nubilescash.com/page/about
+
 sceneByURL:
+  # Nubiles-Porn network sites
   - action: scrapeXPath
+    scraper: nubilesPornMultiScraper
     url:
-      - anilos.com/
       - badteenspunished.com/
       - bountyhunterporn.com/
-      - brattysis.com/
       - daddyslilangel.com/
-      - deeplush.com/
       - detentiongirls.com/
       - driverxxx.com/
       - familyswap.xxx/
-      - girlsonlyporn.com/
-      - hotcrazymess.com/
       - momsteachsex.com/
       - myfamilypies.com/
-      - nfbusty.com/
-      - nubilefilms.com/
       - nubiles-casting.com/
       - nubiles-porn.com/
-      - nubiles.net/
       - nubileset.com/
       - nubilesporn.com/
       - nubilesunscripted.com/
@@ -28,28 +24,36 @@ sceneByURL:
       - princesscum.com/
       - stepsiblingscaught.com/
       - teacherfucksteens.com/
-      - thatsitcomshow.com/
-    scraper: sceneScraper
-galleryByURL:
+
+  # Other Nubiles sites
   - action: scrapeXPath
+    scraper: otherNubilesMultiScraper
     url:
-      - anilos.com/photo/gallery/
+      - anilos.com/
+      - brattysis.com/
+      - deeplush.com/
+      - girlsonlyporn.com/
+      - hotcrazymess.com/
+      - nfbusty.com/
+      - nubilefilms.com/
+      - nubiles.net/
+      - thatsitcomshow.com/
+
+galleryByURL:
+  # Nubiles-Porn network sites
+  - action: scrapeXPath
+    scraper: nubilesPornMultiScraper
+    url:
       - badteenspunished.com/photo/gallery/
       - bountyhunterporn.com/photo/gallery/
-      - brattysis.com/photo/gallery/
       - daddyslilangel.com/photo/gallery/
-      - deeplush.com/photo/gallery/
       - detentiongirls.com/photo/gallery/
       - driverxxx.com/photo/gallery/
       - familyswap.xxx/photo/gallery/
-      - girlsonlyporn.com/photo/gallery/
       - momsteachsex.com/photo/gallery/
       - myfamilypies.com/photo/gallery/
-      - nfbusty.com/photo/gallery/
-      - nubilefilms.com/photo/gallery/
       - nubiles-casting.com/photo/gallery/
       - nubiles-porn.com/photo/gallery/
-      - nubiles.net/photo/gallery/
       - nubileset.com/photo/gallery/
       - nubilesporn.com/photo/gallery/
       - nubilesunscripted.com/photo/gallery/
@@ -58,23 +62,35 @@ galleryByURL:
       - princesscum.com/photo/gallery/
       - stepsiblingscaught.com/photo/gallery/
       - teacherfucksteens.com/photo/gallery/
+
+  # Other Nubiles sites
+  - action: scrapeXPath
+    scraper: otherNubilesMultiScraper
+    url:
+      - anilos.com/photo/gallery/
+      - brattysis.com/photo/gallery/
+      - deeplush.com/photo/gallery/
+      - girlsonlyporn.com/photo/gallery/
+      - nfbusty.com/photo/gallery/
+      - nubilefilms.com/photo/gallery/
+      - nubiles.net/photo/gallery/
       - thatsitcomshow.com/photo/gallery/
-    scraper: galleryScraper
 
 xPathScrapers:
-  sceneScraper:
-    common:
+  nubilesPornMultiScraper:
+    common: &commonSelectors
       $contentpane: //div[contains(@class, "content-pane-title")]
+
     scene:
-      Title: //h2/text()
-      Date:
+      Title: &titleSelector //h2/text()
+      Date: &dateAttr
         selector: $contentpane//span[@class="date"]/text()
         postProcess:
           - parseDate: Jan 2, 2006
-      Details:
+      Details: &sceneDetailsAttr
         selector: //div[contains(@class, "content-pane-column")]//p/text()|//div[contains(@class, "content-pane-column")]/div/text()
         concat: " "
-      Performers:
+      Performers: &performersAttr
         Name: //div[@class="content-pane-performers"]/a/text()
       Studio:
         Name:
@@ -83,20 +99,18 @@ xPathScrapers:
             - replace:
               - regex: (.+?)\.(com|xxx)
                 with: $1
-      Tags:
+      Tags: &tagsAttr
         Name: //div[@class="categories"]/a/text()
-      Image:
+      Image: &imageAttr
         selector: //img[@class="fake-video-player-cover"]/@src
         postProcess:
           - replace:
               - regex: ^
                 with: "https:"
-  galleryScraper:
-    common:
-      $contentpane: //div[contains(@class, "content-pane-title")]
-    gallery:
+
+    gallery: &galleryScraper
       Title:
-        selector: //h2
+        selector: *titleSelector
         postProcess:
           - replace:
               # Remove - S11:E11 part
@@ -105,20 +119,29 @@ xPathScrapers:
       Details:
         selector: //div[contains(@class, "content-pane-column")]//p/text()[normalize-space(.)]|//div[contains(@class, "content-pane-column")]/div/text()[normalize-space(.)]
         concat: "\n\n"
-      Date:
-        selector: $contentpane//span[@class="date"]/text()
-        postProcess:
-          - parseDate: Jan 2, 2006
-      Performers:
-        Name: //div[@class="content-pane-performers"]/a/text()
-      Tags:
-        Name: //div[@class="categories"]/a/text()
-      Studio:
+      Date: *dateAttr
+      Performers: *performersAttr
+      Tags: *tagsAttr
+      Studio: &studioFromTitleAttr
         Name:
           selector: //title/text()
           postProcess:
             - replace:
               - regex: ^(.+?)\s-.+$
                 with: $1
+
+  otherNubilesMultiScraper:
+    common: *commonSelectors
+
+    scene:
+      Title: *titleSelector
+      Date: *dateAttr
+      Details: *sceneDetailsAttr
+      Performers: *performersAttr
+      Studio: *studioFromTitleAttr
+      Tags: *tagsAttr
+      Image: *imageAttr
+
+    gallery: *galleryScraper
 
 # Last Updated November 17, 2020
