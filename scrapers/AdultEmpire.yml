@@ -4,11 +4,13 @@ movieByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
+      - adultempire.com
     scraper: movieScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
+      - adultempire.com
     scraper: sceneScraper
 
 xPathScrapers:
@@ -64,4 +66,4 @@ xPathScrapers:
         Name: //a[@label="Performer"]//text()
       URL: //meta[@name='og:url']/@content
 
-# Last Updated October 13, 2020
+# Last Updated November 21, 2020
