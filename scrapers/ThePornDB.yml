@@ -17,6 +17,10 @@ sceneByFragment:
   action: scrapeJson
   queryURL: https://api.metadataapi.net/scenes?parse={filename}&hash={oshash}&limit=1
   scraper: sceneQueryScraper
+  queryURLReplace:
+    filename:
+      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename so that it can construct a valid url
+        with: "." # "%20"
 jsonScrapers:
   performerSearch:
     performer:
@@ -63,7 +67,7 @@ jsonScrapers:
         Name: data.site.name
       Tags:
         Name: data.tags.#.tag
-  
+
   sceneQueryScraper:
     common:
       $data: data.0
@@ -80,4 +84,4 @@ jsonScrapers:
         Name: $data.site.name
       Tags:
         Name: $data.tags.#.tag
-# Last Updated November 8, 2020
+# Last Updated November 20, 2020
