@@ -393,7 +393,7 @@ xPathScrapers:
           - replace:
               - regex: (\D+\d\d\D+)$
                 with: ""     
-      Aliases: //div[p[@class='bioheading']]//div[@class='biodata']/text()
+      Aliases: //div[p[@class='bioheading' and contains(normalize-space(text()),"Performer AKA")]]//div[@class='biodata' and not(text()="No known aliases")]/text()
       Tattoos: //div/p[text()='Tattoos']/following-sibling::p[1]/text()
       Piercings: //div/p[text()='Piercings']/following-sibling::p[1]/text()
       Image:
@@ -424,4 +424,4 @@ xPathScrapers:
         selector: //div[@class="col-sm-12"]/dl/dd
         concat: ", "
 
-# Last Updated November 8, 2020
+# Last Updated November 24, 2020
