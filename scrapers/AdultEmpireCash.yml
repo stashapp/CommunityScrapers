@@ -55,7 +55,9 @@ xPathScrapers:
         selector: //div[@class="release-date"][1]/text()
         postProcess:
           - parseDate: Jan 02, 2006
-      Details: //div[@class="synopsis"]//text()
+      Details:
+        selector: //div[@class="synopsis"]//text()
+        concat: "\n\n"
       Tags:
         Name: //div[@class="tags"]/a/text()
       Performers:
@@ -82,7 +84,9 @@ xPathScrapers:
         selector: //div[@class="release-date"][1]/text()
         postProcess:
           - parseDate: Jan 02, 2006
-      Synopsis: //div[@class="synopsis"]//text()
+      Synopsis:
+        selector: //div[@class="synopsis"]//text()
+        concat: "\n\n"
       Director: //div[@class="director"]/a/text()
       Duration:
         selector: //div[@class="release-date"][2]/text()
