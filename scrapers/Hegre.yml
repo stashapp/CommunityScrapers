@@ -21,6 +21,8 @@ performerByName:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $actor: //a[@class="record-model"]
     scene:
       Title: //meta[@property="og:title"]/@content
       Details:
@@ -37,9 +39,17 @@ xPathScrapers:
       Tags:
         Name: //div[@class="approved-tags"]/a
       Performers:
-        Name: //a[@class="record-model"]/@title
+        Name: $actor/@title
+        URL:
+          selector: $actor//a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://hegre.com
 
   galleryScraper:
+    common:
+      $actor: //a[@class="record-model"]
     gallery:
       Title: //div[@class="record-toolbar clearfix"]//h1
       Date:
@@ -52,7 +62,13 @@ xPathScrapers:
       Tags:
         Name: //div[@class="approved-tags"]/a
       Performers:
-        Name: //a[@class="record-model"]/@title
+        Name: $actor/@title
+        URL:
+          selector: $actor//a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://hegre.com
 
   performerSearch:
     performer:
@@ -93,4 +109,4 @@ xPathScrapers:
               - regex: \d{3}x
                 with: 640x
 
-# Last Updated November 23, 2020
+# Last Updated November 24, 2020
