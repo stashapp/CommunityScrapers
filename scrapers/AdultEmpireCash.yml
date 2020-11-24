@@ -115,11 +115,11 @@ xPathScrapers:
                 - regex: \((.+)\)
                   with: $1
       Image:
-        selector: //link[@rel="image_src"]/@href'
+        selector: //link[@rel="image_src"]/@href
         postProcess:
           - replace:
-              - regex: ^.+\/(\d+)h.+$
-                with: https://imgs1cdn.adultempire.com/product/$1_lg.jpg
+              - regex: ^.+/(\d+)h.+$
+                with: https://imgs1cdn.adultempire.com/product/${1}_lg.jpg
       Studio:
         Name: //meta[@name="og:site_name"]/@content
 
