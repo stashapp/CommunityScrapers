@@ -113,8 +113,10 @@ xPathScrapers:
             - replace:
                 - regex: (.+?)\.(com|xxx)
                   with: $1
+                # 'StepSiblingsCaught' => 'Step Siblings Caught'
                 - regex: ([a-z])-?([A-Z])
                   with: $1 $2
+                # 'Petite HDPorn' => 'Petite HD Porn'
                 - regex: ([A-Z]+)(Porn)
                   with: $1 $2
             # Fix special cases
