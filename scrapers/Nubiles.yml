@@ -6,38 +6,38 @@ sceneByURL:
   - action: scrapeXPath
     scraper: nubilesPornMultiScraper
     url:
-      - badteenspunished.com/
-      - bountyhunterporn.com/
-      - daddyslilangel.com/
-      - detentiongirls.com/
-      - driverxxx.com/
-      - familyswap.xxx/
-      - momsteachsex.com/
-      - myfamilypies.com/
-      - nubiles-casting.com/
-      - nubiles-porn.com/
-      - nubileset.com/
-      - nubilesporn.com/
-      - nubilesunscripted.com/
-      - petiteballerinasfucked.com/
-      - petitehdporn.com/
-      - princesscum.com/
-      - stepsiblingscaught.com/
-      - teacherfucksteens.com/
+      - badteenspunished.com/video/watch/
+      - bountyhunterporn.com/video/watch/
+      - daddyslilangel.com/video/watch/
+      - detentiongirls.com/video/watch/
+      - driverxxx.com/video/watch/
+      - familyswap.xxx/video/watch/
+      - momsteachsex.com/video/watch/
+      - myfamilypies.com/video/watch/
+      - nubiles-casting.com/video/watch/
+      - nubiles-porn.com/video/watch/
+      - nubileset.com/video/watch/
+      - nubilesporn.com/video/watch/
+      - nubilesunscripted.com/video/watch/
+      - petiteballerinasfucked.com/video/watch/
+      - petitehdporn.com/video/watch/
+      - princesscum.com/video/watch/
+      - stepsiblingscaught.com/video/watch/
+      - teacherfucksteens.com/video/watch/
 
   # Other Nubiles sites
   - action: scrapeXPath
     scraper: otherNubilesMultiScraper
     url:
-      - anilos.com/
-      - brattysis.com/
-      - deeplush.com/
-      - girlsonlyporn.com/
-      - hotcrazymess.com/
-      - nfbusty.com/
-      - nubilefilms.com/
-      - nubiles.net/
-      - thatsitcomshow.com/
+      - anilos.com/video/watch/
+      - brattysis.com/video/watch/
+      - deeplush.com/video/watch/
+      - girlsonlyporn.com/video/watch/
+      - hotcrazymess.com/video/watch/
+      - nfbusty.com/video/watch/
+      - nubilefilms.com/video/watch/
+      - nubiles.net/video/watch/
+      - thatsitcomshow.com/video/watch/
 
 galleryByURL:
   # Nubiles-Porn network sites
