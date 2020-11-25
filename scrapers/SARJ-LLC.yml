@@ -41,7 +41,12 @@ xPathScrapers:
         Name: $data//a[@href[contains(.,'/model/')]]/text()
       Tags:
         Name: //div[@class='tag-list']//a/text()
-      Image: //div[@class='img-container']/img/@src
+      Image:
+        selector: //div[@class='img-container']/img/@src
+        postProcess:
+          - replace:
+            - regex: cover
+              with: "wide"
       Studio:
         Name: //meta[@property='og:site_name']/@content
 
