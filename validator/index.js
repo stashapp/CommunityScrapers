@@ -34,10 +34,14 @@ function walk(directory, ext, filepaths = []) {
   return filepaths;
 }
 
+// https://stackoverflow.com/a/53833620
+const isSorted = arr => arr.every((v,i,a) => !i || a[i-1] <= v);
+
 class Validator {
   constructor(flags) {
     this.allowDeprecations = flags.includes('-d');
     this.stopOnError = !flags.includes('-a');
+    this.sortedURLs = flags.includes('-s');
     this.verbose = flags.includes('-v');
 
     const schemaPath = path.resolve(__dirname, './scraper.schema.json');
@@ -103,7 +107,9 @@ class Validator {
         console.error(`\x1b[31mError\x1b[0m in: ${relPath}:`);
         error.stack = null;
         console.error(error);
-        break;
+        result = result && false;
+        if (this.stopOnError) break;
+        else continue;
       }
 
       let valid = validate(data);
@@ -162,10 +168,12 @@ class Validator {
         return;
       }
 
+      const seenURLs = {};
+
       const type = match[1];
 
       const multiple = value instanceof Array;
-      (multiple ? value : [value]).forEach(({ action, scraper }, idx) => {
+      (multiple ? value : [value]).forEach(({ action, scraper, url }, idx) => {
         const dataPath = `/${key}${multiple ? `/${idx}` : ''}`;
 
         if (action === 'stash') {
@@ -198,6 +206,32 @@ class Validator {
               dataPath: `/xPathScrapers/${scraper}`,
             });
           }
+
+          if (url) {
+            url.forEach((u, uIdx) => {
+              const exists = seenURLs[u];
+              if (exists) {
+                errors.push({
+                  keyword: 'url',
+                  message: `URLs for type \`${type}\` should be unique, already exists on ${exists}`,
+                  params: { keyword: 'url' },
+                  dataPath: `${dataPath}/url/${uIdx}`,
+                });
+              } else {
+                seenURLs[u] = `${dataPath}/url/${uIdx}`;
+              }
+            });
+
+            if (this.sortedURLs && !isSorted(url)) {
+              errors.push({
+                keyword: 'url',
+                message: 'URL list should be sorted in ascending alphabetical order',
+                params: { keyword: 'url' },
+                dataPath: dataPath + '/url',
+              });
+            }
+          }
+
           return;
         }
 
@@ -218,6 +252,32 @@ class Validator {
               dataPath: `/jsonScrapers/${scraper}`,
             });
           }
+
+          if (url) {
+            url.forEach((u, uIdx) => {
+              const exists = seenURLs[u];
+              if (exists) {
+                errors.push({
+                  keyword: 'url',
+                  message: `URLs for type \`${type}\` should be unique, already exists on ${exists}`,
+                  params: { keyword: 'url' },
+                  dataPath: `${dataPath}/url/${uIdx}`,
+                });
+              } else {
+                seenURLs[u] = `${dataPath}/url/${uIdx}`;
+              }
+            });
+
+            if (this.sortedURLs && !isSorted(url)) {
+              errors.push({
+                keyword: 'url',
+                message: 'URL list should be sorted in ascending alphabetical order',
+                params: { keyword: 'url' },
+                dataPath: dataPath + '/url',
+              });
+            }
+          }
+
           return;
         }
 
