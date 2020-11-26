@@ -164,10 +164,12 @@ class Validator {
         return;
       }
 
+      const seenURLs = {};
+
       const type = match[1];
 
       const multiple = value instanceof Array;
-      (multiple ? value : [value]).forEach(({ action, scraper }, idx) => {
+      (multiple ? value : [value]).forEach(({ action, scraper, url }, idx) => {
         const dataPath = `/${key}${multiple ? `/${idx}` : ''}`;
 
         if (action === 'stash') {
@@ -200,6 +202,23 @@ class Validator {
               dataPath: `/xPathScrapers/${scraper}`,
             });
           }
+
+          if (url) {
+            url.forEach((u, uIdx) => {
+              const exists = seenURLs[u];
+              if (exists) {
+                errors.push({
+                  keyword: 'url',
+                  message: `URLs for type \`${type}\` should be unique, already exists on ${exists}`,
+                  params: { keyword: 'url' },
+                  dataPath: `${dataPath}/url/${uIdx}`,
+                });
+              } else {
+                seenURLs[u] = `${dataPath}/url/${uIdx}`;
+              }
+            });
+          }
+
           return;
         }
 
@@ -220,6 +239,23 @@ class Validator {
               dataPath: `/jsonScrapers/${scraper}`,
             });
           }
+
+          if (url) {
+            url.forEach((u, uIdx) => {
+              const exists = seenURLs[u];
+              if (exists) {
+                errors.push({
+                  keyword: 'url',
+                  message: `URLs for type \`${type}\` should be unique, already exists on ${exists}`,
+                  params: { keyword: 'url' },
+                  dataPath: `${dataPath}/url/${uIdx}`,
+                });
+              } else {
+                seenURLs[u] = `${dataPath}/url/${uIdx}`;
+              }
+            });
+          }
+
           return;
         }
 
