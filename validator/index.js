@@ -34,10 +34,14 @@ function walk(directory, ext, filepaths = []) {
   return filepaths;
 }
 
+// https://stackoverflow.com/a/53833620
+const isSorted = arr => arr.every((v,i,a) => !i || a[i-1] <= v);
+
 class Validator {
   constructor(flags) {
     this.allowDeprecations = flags.includes('-d');
     this.stopOnError = !flags.includes('-a');
+    this.sortedURLs = flags.includes('-s');
     this.verbose = flags.includes('-v');
 
     const schemaPath = path.resolve(__dirname, './scraper.schema.json');
@@ -217,6 +221,15 @@ class Validator {
                 seenURLs[u] = `${dataPath}/url/${uIdx}`;
               }
             });
+
+            if (this.sortedURLs && !isSorted(url)) {
+              errors.push({
+                keyword: 'url',
+                message: 'URL list should be sorted in ascending alphabetical order',
+                params: { keyword: 'url' },
+                dataPath: dataPath + '/url',
+              });
+            }
           }
 
           return;
@@ -254,6 +267,15 @@ class Validator {
                 seenURLs[u] = `${dataPath}/url/${uIdx}`;
               }
             });
+
+            if (this.sortedURLs && !isSorted(url)) {
+              errors.push({
+                keyword: 'url',
+                message: 'URL list should be sorted in ascending alphabetical order',
+                params: { keyword: 'url' },
+                dataPath: dataPath + '/url',
+              });
+            }
           }
 
           return;
