@@ -1,0 +1,31 @@
+name: wtfpass
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wtfpass.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //div[@class="tabs-container video-info-tabs"]
+    scene:
+      Title: //h2[@class="title big"]
+      Details: //div[@class="tabs-container video-info-tabs"]//div[@class="description"]
+      Date:
+        selector:
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: "_tr.mp4"
+                with:
+      Studio:
+        Name: $content//span[@class="site"]/a
+      Tags:
+        Name: $content//div[@class="data-row"]//a
+      Performers:
+        Name: //div[@class="tabs-container video-info-tabs"]//div[@class="data-row data-actress"]/a/text()
+
+# Last Updated November 29, 2020
