@@ -22,10 +22,6 @@ xPathScrapers:
     scene:
       Title: //h2[@class="title big"]
       Details: //div[@class="tabs-container video-info-tabs"]//div[@class="description"]
-      Date:
-        selector:
-        postProcess:
-          - parseDate: Jan 2, 2006
       Image:
         selector: //meta[@property="og:image"]/@content
         postProcess:
