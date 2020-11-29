@@ -226,6 +226,7 @@ famedigital.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 family.xxx|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 familyhookups.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 familystrokes.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+familyswap.xxx|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 familytherapyxxx.com|FamilyTherapyXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 familyxxx.com|FamilyXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fantasyhd.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -274,6 +275,7 @@ girlgirl.com|JulesJordan.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 girlgirlmania.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlsandstuds.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlsgotcream.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+girlsonlyporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 girlsoutwest.com|GirlsOutWest.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 girlsrimming.com|GirlsRimming.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Rimjobs
 girlstryanal.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
@@ -301,6 +303,7 @@ hometowngirls.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hometownhoneys.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornyhousehold.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 horrorporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hotcrazymess.com|Nubiles.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hothouse.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotlegsandfeet.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hottiemoms.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -454,6 +457,7 @@ nubiles-casting.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|st
 nubiles-porn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|stash >= v0.3.0-42|-
 nubiles.net|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|stash >= v0.3.0-42|-
 nubileset.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|stash >= v0.3.0-42|-
+nubilesporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 nubilesunscripted.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|stash >= v0.3.0-42|-
 nudefightclub.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nurumassage.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
