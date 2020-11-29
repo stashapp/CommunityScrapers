@@ -21,7 +21,7 @@ xPathScrapers:
       $content: //div[@class="tabs-container video-info-tabs"]
     scene:
       Title: //h2[@class="title big"]
-      Details: //div[@class="tabs-container video-info-tabs"]//div[@class="description"]
+      Details: $content//div[@class="description"]
       Image:
         selector: //meta[@property="og:image"]/@content
         postProcess:
