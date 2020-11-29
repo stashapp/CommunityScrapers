@@ -2,18 +2,18 @@ name: wtfpass
 sceneByURL:
   - action: scrapeXPath
     url:
-      - wtfpass.com
-      - collegefuckparties.com
-      - pickupfuck.com
-      - privatesextapes.com
-      - hardfuckgirls.com
-      - pornweekends.com
-      - dollsporn.com
-      - publicsexadventures.com
-      - pandafuck.com
-      - hdmassageporn.com
-      - theartporn.com
-      - meetsuckandfuck.com
+      - wtfpass.com/videos/
+      - collegefuckparties.com/videos/
+      - pickupfuck.com/videos/
+      - privatesextapes.com/videos/
+      - hardfuckgirls.com/videos/
+      - pornweekends.com/videos/
+      - dollsporn.com/videos/
+      - publicsexadventures.com/videos/
+      - pandafuck.com/videos/
+      - hdmassageporn.com/videos/
+      - theartporn.com/videos/
+      - meetsuckandfuck.com/videos/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
