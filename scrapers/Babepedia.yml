@@ -12,9 +12,14 @@ performerByURL:
 xPathScrapers:
   performerSearch:
     performer:
-      Name: //main[@id="content"]//a[contains(@href, '/babe/')]|//div[@id="bioarea"]/h1
+      Name: 
+        selector: //span[@class="results"]//a[contains(@href, '/babe/')]|//div[@id="bioarea"]/h1
+        postProcess:
+          - replace:
+            - regex: "aka(\\s+[A-Z]+)"
+              with: " aka $1"
       URL:
-        selector: //main[@id="content"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
+        selector: //span[@class="results"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
         postProcess:
           - replace:
             - regex: ^
