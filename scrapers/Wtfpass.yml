@@ -33,6 +33,6 @@ xPathScrapers:
       Tags:
         Name: $content//div[@class="data-row"]//a
       Performers:
-        Name: //div[@class="tabs-container video-info-tabs"]//div[@class="data-row data-actress"]/a/text()
+        Name: $content//div[@class="data-row data-actress"]/a/text()
 
 # Last Updated November 29, 2020
