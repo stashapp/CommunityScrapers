@@ -12,9 +12,9 @@ performerByURL:
 xPathScrapers:
   performerSearch:
     performer:
-      Name: //div[@id="content"]//a[contains(@href, '/babe/')]|//div[@id="bioarea"]/h1
+      Name: //main[@id="content"]//a[contains(@href, '/babe/')]|//div[@id="bioarea"]/h1
       URL:
-        selector: //div[@id="content"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
+        selector: //main[@id="content"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
         postProcess:
           - replace:
             - regex: ^
@@ -105,4 +105,4 @@ xPathScrapers:
             - regex: ^
               with: https://www.babepedia.com
 
-#Last Updated September 30, 2020
+#Last Updated November 29, 2020
