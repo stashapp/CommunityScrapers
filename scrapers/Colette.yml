@@ -58,7 +58,12 @@ xPathScrapers:
         selector: ($info/h2)[1]/text()
         postProcess:
           - parseDate: Jan 02, 2006
-# needs cookie
-# Name:   "_warning", Value:  "true", Path:   "/", Domain: ".colette.com"
-
-# Last Updated November 8, 2020
+driver:
+  cookies:
+    - CookieURL: "https://www.colette.com"
+      Cookies:
+        - Name: "_warning"
+          Domain: ".colette.com"
+          Value: "true"
+          Path: "/"
+# Last Updated November 29, 2020
