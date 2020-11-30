@@ -60,16 +60,19 @@ xPathScrapers:
         Name: //div[@class='tag-list']//a/text()
       Image:
         selector: //div[@class='img-container']/img/@src
+        # if you prefer the portrait covers over the landscape ones, comment out the postProcess section
         postProcess:
           - replace:
-            - regex: cover
+            - regex: (cover|clean)
               with: "wide"
       Studio:
         Name: //meta[@property='og:site_name']/@content
   galleryScraper:
     gallery:
       Title: //div[@class='info-container']/h3/a/text()
-      Details: //div[@class='description-text']/p/text()
+      Details: 
+        selector: //div[@class='description-text']/p/text()
+        concat: "\n\n"
       Date:
         selector: //div[@class='info-container']/span[@class='timestamp']/text()
         postProcess:
