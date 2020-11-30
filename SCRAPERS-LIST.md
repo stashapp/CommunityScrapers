@@ -551,6 +551,7 @@ sexsee.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexuallybroken.com|sexuallybroken.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexvr.com|SexVR.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 sexyhub.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+shagmag.com|shagmag.yml|:x:|:heavy_check_mark:|:x:|:x:|-|Magazines
 shandafay.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 share.myfreecams.com|MFC.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
