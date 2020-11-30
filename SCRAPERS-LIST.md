@@ -295,9 +295,11 @@ hardfuckgirls.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hardx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 harmonyvision.com|HarmonyVision.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 hdmassageporn.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hdsex18.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hegre.com|Hegre.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|-
 hentai2read.com|hentai2read.yml|:x:|:heavy_check_mark:|:x:|:x:|stash >= v0.3.0-42|Hentai
 hergape.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hersexdebut.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 heyzo.com|Heyzo.yml|:heavy_check_mark:|:x:|:x:|:x:|stash >= v0.3.0-45|JAV Uncensored
 himeros.tv|HimerosTV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 holed.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
