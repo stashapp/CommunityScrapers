@@ -36,5 +36,6 @@ xPathScrapers:
         Name: $content//div[@class="data-row"]//a
       Performers:
         Name: $content//div[@class="data-row data-actress"]/a/text()
+        URL: $content//div[@class="data-row data-actress"]/a/@href
 
 # Last Updated November 29, 2020
