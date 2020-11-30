@@ -1,0 +1,41 @@
+name: wtfpass
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wtfpass.com/videos/
+      - collegefuckparties.com/videos/
+      - pickupfuck.com/videos/
+      - privatesextapes.com/videos/
+      - hardfuckgirls.com/videos/
+      - pornweekends.com/videos/
+      - dollsporn.com/videos/
+      - publicsexadventures.com/videos/
+      - pandafuck.com/videos/
+      - hdmassageporn.com/videos/
+      - theartporn.com/videos/
+      - meetsuckandfuck.com/videos/
+      - hdsex18.com/videos/
+      - hersexdebut.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //div[@class="tabs-container video-info-tabs"]
+    scene:
+      Title: //h2[@class="title big"]
+      Details: $content//div[@class="description"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: "_tr.mp4"
+                with:
+      Studio:
+        Name: $content//span[@class="site"]/a
+      Tags:
+        Name: $content//div[@class="data-row"]//a
+      Performers:
+        Name: $content//div[@class="data-row data-actress"]/a/text()
+        URL: $content//div[@class="data-row data-actress"]/a/@href
+
+# Last Updated November 30, 2020
