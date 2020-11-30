@@ -1,0 +1,33 @@
+name: 'SHAGMAG'
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - shagmag.com/issues/
+    scraper: galleryScraper
+
+xPathScrapers:
+  galleryScraper:
+    gallery:
+      Title: //h1[@class="t-Page-Heading-1"]/text()
+      URL: //link[@rel="canonical"]/@href
+      Studio:
+        Name:
+          fixed: 'SHAGMAG'
+      Date:
+        selector: //h1[@class="t-Page-Heading-1"]/text()
+        postProcess:
+          - replace:
+            # There's one post per month so just assume the 1st so we can get a usable date
+            - regex: ^
+              with: '1 '
+          - parseDate: 2 January 2006
+      Performers:
+        Name:
+          selector: //small[1]/text()
+          postProcess:
+            - replace:
+              - regex: '^Feat. '
+                with: ''
+              - regex: $
+                with: ' and Julia Rose'
+          split: ' and '
