@@ -11,7 +11,7 @@ xPathScrapers:
     scene:
       Title: //img[@class="rev-slidebg"]/@title
       Details:
-        selector: //div[@class="project-caption"]/p
+        selector: //div[contains(@class,"woodmart-title-container")]//p
         concat: "\n\n"
       Image:
         selector: //img[@class="rev-slidebg"]/@src
