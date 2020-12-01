@@ -10,7 +10,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //img[@class="rev-slidebg"]/@title
-      Details: 
+      Details:
         selector: //div[@class="project-caption"]/p
         concat: "\n\n"
       Image:
