@@ -40,7 +40,6 @@ xPathScrapers:
   galleryScraper:
     common:
       $info: //div[contains(@class,"columns info")]
-      $syn: //div[@class="cntr"]//div[@class=""]/h2
     gallery:
       Title: //div[contains(@class,"row info")]//h1[not(@class)]
       Details:
