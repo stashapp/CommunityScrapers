@@ -11,12 +11,14 @@ xPathScrapers:
     scene:
       Title:
         selector: $player//h2/text()
-        replace:
-          - regex: :\sVideo
-            with:
+        postProcess:
+          - replace:
+              - regex: :\sVideo
+                with:
       Date:
         selector: //div[strong/text()='Released:']/text()[2]
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Details: //div[h3/text()='Description:']/text()[2]
       Tags:
         Name: //ul[@class='tags']//a/text()
@@ -26,8 +28,9 @@ xPathScrapers:
         Name: //meta[@name="author"]/@content
       Image:
         selector: //img[@id="set-target-35"]/@src0_1x
-        replace:
-          - regex: ^
-            with: https://ikissgirls.com
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://ikissgirls.com
 
-# Last Updated June 22, 2020
+# Last Updated November 8, 2020

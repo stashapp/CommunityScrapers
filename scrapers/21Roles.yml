@@ -10,37 +10,41 @@ xPathScrapers:
     scene:
       Title:
         selector: //title/text()
-        replace:
-          - regex: .+(?:DisplayPlayer\s-\s)(.+)(?:\s-\sDisplayPlayer)+
-            with: $1
+        postProcess:
+          - replace:
+              - regex: .+(?:DisplayPlayer\s-\s)(.+)(?:\s-\sDisplayPlayer)+
+                with: $1
       Details: //div[@class="info"]/p/text()
       Tags:
         Name:
           selector: //title/text()
-          replace:
-            - regex: .+(?:DisplayPlayer\s-\s)(.+)(?:\s-\sDisplayPlayer)+
-              with: https://21roles.com/site/search/keyword/$1
-            - regex: (.+)(?:\s-\sInteractive).+
-              with: https://lifeselector.com/site/search/keyword/$1
-          subScraper:
-            selector: //div[@class="details"]/div[contains(.,'Labels')]//a/text()
-            concat: ","
+          postProcess:
+            - replace:
+                - regex: .+(?:DisplayPlayer\s-\s)(.+)(?:\s-\sDisplayPlayer)+
+                  with: https://21roles.com/site/search/keyword/$1
+                - regex: (.+)(?:\s-\sInteractive).+
+                  with: https://lifeselector.com/site/search/keyword/$1
+            - subScraper:
+                selector: //div[@class="details"]/div[contains(.,'Labels')]//a/text()
+                concat: ","
           split: ","
       Performers:
         Name:
           selector: //div[@class="modelBlock"]/div[@class="description"]/h1/a/text()
-          replace:
-            - regex: .+(?:\/)(\d+)+
-              with: https://21roles.com/game/DisplayPlayer/gameId/$1/view/cast
-          subScraper:
-            selector: //div[@class="content"]//h1/a/text()
-            concat: ","
+          postProcess:
+            - replace:
+                - regex: .+(?:\/)(\d+)+
+                  with: https://21roles.com/game/DisplayPlayer/gameId/$1/view/cast
+            - subScraper:
+                selector: //div[@class="content"]//h1/a/text()
+                concat: ","
           split: ","
       Image:
         selector: //div[@class="signup-right-col"]//input[@id="requestUri"]/@value
-        replace:
-          - regex: .+(?:\/)(\d+)+
-            with: https://i.c7cdn.com/generator/games/$1/images/poster/1_size1600.jpg
+        postProcess:
+          - replace:
+              - regex: .+(?:\/)(\d+)+
+                with: https://i.c7cdn.com/generator/games/$1/images/poster/1_size1600.jpg
       Studio:
         Name:
           selector: //meta[@property='og:site_name']/@content
@@ -54,4 +58,4 @@ xPathScrapers:
 driver:
   useCDP: true
 
-# Last Updated October 12, 2020
+# Last Updated November 8, 2020

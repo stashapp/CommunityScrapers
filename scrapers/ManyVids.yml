@@ -24,7 +24,8 @@ xPathScrapers:
       # Only partial dates provides, which would currently be made as 0000-01-01
       # Date:
       #   selector: //div[@class="mb-1"]/span[2]/text()
-      #   parseDate: Jan 02
+      #   postProcess:
+      #     - parseDate: Jan 02
       Performers:
         Name: $details//h4/a/text()
       Image: //div[@id="rmpPlayer"]/@data-video-screenshot
@@ -34,9 +35,10 @@ xPathScrapers:
       Name: //*[contains(concat(' ', normalize-space(@class), ' '), ' profile-pic-name ')]/a/text()
       URL:
         selector: //*[contains(concat(' ', normalize-space(@class), ' '), ' profile-pic-name ')]/a/@href
-        replace:
-          - regex: '/(?:Store/Videos/)?$'
-            with: /About/
+        postProcess:
+          - replace:
+              - regex: '/(?:Store/Videos/)?$'
+                with: /About/
 
   performerScraper:
     common:
@@ -45,89 +47,86 @@ xPathScrapers:
       Name: //*[@class='mv-about__banner-name ']/text()
       Gender:
         selector: $aboutlabel[contains(text(), 'Gender')]/following-sibling::*
-        replace:
-          - regex: Trans
-            with: transgender_female
+        postProcess:
+          - replace:
+              - regex: Trans
+                with: transgender_female
       URL: //a[@data-tab='about']/@href
       Twitter:
         selector: //*[@class='mv-about__banner-social']/a/i[@class='icon twitter-icon']/../@href
-        replace:
-          - regex: ^.*twitter\.com/([^/?]+).*$
-            with: $1
+        postProcess:
+          - replace:
+              - regex: ^.*twitter\.com/([^/?]+).*$
+                with: $1
       Instagram:
         selector: //*[@class='mv-about__banner-social']/a/i[@class='icon instagram-icon']/../@href
-        replace:
-          - regex: ^.*instagram\.com/([^/?]+).*$
-            with: $1
+        postProcess:
+          - replace:
+              - regex: ^.*instagram\.com/([^/?]+).*$
+                with: $1
       Birthdate:
         selector: $aboutlabel[contains(text(), 'Age')]/following-sibling::*
-        replace:
-          - regex: ' \(.*\)$'
-            with: ''
-        parseDate: 2006.01.02
+        postProcess:
+          - replace:
+              - regex: ' \(.*\)$'
+                with: ''
+          - parseDate: 2006.01.02
       Ethnicity:
         selector: $aboutlabel[contains(text(), 'Ethnicity')]/following-sibling::*
-        replace:
-          - regex: 'Alaskan'
-            with: 'alaskan'
-          - regex: 'Aisan'
-            with: 'aisan'
-          - regex: 'Black / Ebony'
-            with: 'black'
-          - regex: 'East Indian'
-            with: 'east indian'
-          - regex: 'Latino / Hispanic'
-            with: 'hispanic'
-          - regex: 'Middle Eastern'
-            with: 'middle eastern'
-          - regex: 'Mixed'
-            with: 'mixed'
-          - regex: 'Native American'
-            with: 'native american'
-          - regex: 'Pacific Islander'
-            with: 'pacific islander'
-          - regex: 'White / Caucasian'
-            with: 'white'
-          - regex: 'Other'
-            with: 'other'
+        postProcess:
+          - map:
+              Alaskan: alaskan
+              Asian: asian
+              Black / Ebony: black
+              East Indian: east indian
+              Latino / Hispanic: hispanic
+              Middle Eastern: middle eastern
+              Mixed: mixed
+              Native American: native american
+              Pacific Islander: pacific islander
+              White / Caucasian: white
+              Other: other
       Country:
         selector: $aboutlabel[contains(text(), 'Nationality')]/following-sibling::*/img/@alt
       EyeColor:
         selector: $aboutlabel[contains(text(), 'Eye Color')]/following-sibling::*
       Height:
         selector: $aboutlabel[contains(text(), 'Height')]/following-sibling::*
-        replace:
-          - regex: '.*?or '
-            with: ''
-          - regex: ' cm$'
-            with: ''
-          - regex: \D+[\s\S]+
-            with: ""
+        postProcess:
+          - replace:
+              - regex: '.*?or '
+                with: ''
+              - regex: ' cm$'
+                with: ''
+              - regex: \D+[\s\S]+
+                with: ""
       Measurements:
         selector: $aboutlabel[contains(text(), 'Measurements')]/following-sibling::* | $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*
       FakeTits:
         selector: $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*[contains(text(), 'Natural') or contains(text(), 'Cohesive Gel') or contains(text(), 'Silicon') or contains(text(), 'Saline')]
-        replace:
-          - regex: '^Natural.*$'
-            with: 'No'
-          - regex: '\s+?[0-9]+.*'
-            with: ''
+        postProcess:
+          - replace:
+              - regex: '^Natural.*$'
+                with: 'No'
+              - regex: '\s+?[0-9]+.*'
+                with: ''
       CareerLength:
         selector: //*[@class='mv-about__banner-info']/strong/text()
-        replace:
-          - regex: '^Joined '
-            with: ''
-          - regex: $
-            with: ' - today'
+        postProcess:
+          - replace:
+              - regex: '^Joined '
+                with: ''
+              - regex: $
+                with: ' - today'
       Tattoos:
         selector: $aboutlabel[contains(text(), 'Tattoos')]/following-sibling::*
       Piercings:
         selector: $aboutlabel[contains(text(), 'Piercings')]/following-sibling::*
-
       Image:
         selector: //*[contains(concat(' ',normalize-space(@class),' '),' mv-model-display ')][not(@data-current-portrait = '')]/@data-current-portrait | //*[contains(concat(' ',normalize-space(@class),' '),' mv-model-display ')][not(@data-current-avatar = '')]/@data-current-avatar
-        replace:
-          - regex: '.*\.svg$'
-            with: ''
+        postProcess:
+          - replace:
+              - regex: '.*\.svg$'
+                with: ''
 
-# Last Updated October 3, 2020
+# Last Updated November 10, 2020

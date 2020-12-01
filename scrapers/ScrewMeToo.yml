@@ -1,0 +1,42 @@
+name: "ScrewMeToo"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - screwmetoo.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $title: //h1[@class="amp-single-title"]
+      $syn: //div[@class="cntr"]//div[@class=""]/h2
+    scene:
+      Title: $title
+      Details:
+        #selector: $syn/..//p # use this selector if you don't need the extra h2 for the description
+        selector: $syn|$syn/..//p
+        concat: "\n\n"
+      Tags:
+        Name: //div[@class="amp-category"]//a[contains(@href,"/category/")]/text()
+
+      Performers:
+        Name: //div[@class="update-info"]//a[contains(@href,"/model/")]/text()
+      Image: //div[contains(@class,"video-player")]//amp-img/@src
+      Studio:
+        Name:
+          fixed: ScrewMeToo
+      Date:
+        selector: $title
+        postProcess:
+          - replace:
+              - regex: \s # search endpoint doesnt like plain whitespace
+                with: "%20"
+              - regex: ^ # enclose search term in "" to make an exact search
+                with: '"'
+              - regex: $
+                with: '"'
+              - regex: ^
+                with: "https://screwmetoo.com/?amp=1&s="
+          - subScraper:
+              selector: //div[@class="fsdate absolute"]/span
+          - parseDate: Jan 2, 2006
+# Last Updated November 8, 2020

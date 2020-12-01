@@ -12,10 +12,11 @@ xPathScrapers:
       Title: //h1[@class="section-title text-white"]/text()
       Date:
         selector: $desc/ul/li[1]/text()
-        replace:
-          - regex: Released\son\s
-            with:
-        parseDate: Jan 02, 2006
+        postProcess:
+          - replace:
+              - regex: Released\son\s
+                with:
+          - parseDate: Jan 02, 2006
       Details: $desc//p/text()
       Tags:
         Name: $desc//a/text()
@@ -25,4 +26,4 @@ xPathScrapers:
         Name: //a[@class="btn-link dvd-title"]/text()
       Image: //img[@class="player-image"]/@src
 
-# Last Updated May 25, 2020
+# Last Updated November 8, 2020

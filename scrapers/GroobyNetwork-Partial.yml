@@ -24,7 +24,8 @@ xPathScrapers:
       Title: //p[@class="trailertitle"]/text()
       Date:
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
-        parseDate: January 2, 2006
+        postProcess:
+          - parseDate: January 2, 2006
       Details: //div[@class="trailerpage_info"]/p[not(@class)]/text()
       Performers:
         Name: //div[@class="setdesc"]//a/text()
@@ -34,7 +35,7 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-            - regex: ^// # bobstgirls
-              with: "https://"
+              - regex: ^// # bobstgirls
+                with: "https://"
         
-# Last Updated September 02, 2020.
+# Last Updated November 8, 2020

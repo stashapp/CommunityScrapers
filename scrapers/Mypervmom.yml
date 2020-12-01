@@ -13,16 +13,20 @@ xPathScrapers:
       Title: //h2
       Date:
         selector: //div[@id="title-single"]/span
-        replace:
-          - regex: (\w+\s)(\d+)\w+,(\s\d\d\d\d)
-            with: $1$2$3
-        parseDate: January 2 2006
+        postProcess:
+          - replace:
+              - regex: (\w+\s)(\d+)\w+,(\s\d\d\d\d)
+                with: $1$2$3
+          - parseDate: January 2 2006
       Details:
         selector: //p[@class="more"]|//span[@class="more"]/text()
-        replace:
-          - regex: ^Description\:(.+)
-            with: $1
+        postProcess:
+          - replace:
+              - regex: ^Description\:(.+)
+                with: $1
       Performers:
         Name: //div[@id="title-single"]//a
       Image:
         selector: //div[@class="entry"]//video/@poster
+
+# Last Updated November 8, 2020

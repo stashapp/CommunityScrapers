@@ -17,10 +17,11 @@ xPathScrapers:
       Title: //h2
       Date:
         selector: //div[@class="container"]//span[contains(.,"Added")]/text()
-        replace:
-          - regex: "Added "
-            with:
-        parseDate: January 2, 2006
+        postProcess:
+          - replace:
+              - regex: "Added "
+                with:
+          - parseDate: January 2, 2006
       Details: //p[@class="mg-md"]/text()
       Performers:
         Name: //div[@id="video-info"]//a[contains(@href,'/models')]/text()
@@ -60,4 +61,4 @@ xPathScrapers:
         fixed: Female
       Image:
         selector: //div[@class='col-md-8 bigmodelpic']/img/@sr
-#Last Updated August 12, 2020
+# Last Updated November 8, 2020

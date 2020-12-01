@@ -13,10 +13,11 @@ xPathScrapers:
       Details: //div[@class="aboutvideo"]/p
       Date:
         selector: //div[@class="video_description"]/h4[not(contains(.,"Featured"))]
-        replace: 
-           - regex: .*[|]
-             with: 
-        parseDate: 2006-01-02
+        postProcess:
+          - replace:
+              - regex: .*[|]
+                with:
+          - parseDate: 2006-01-02
       Performers:
         Name: //ul[@class="featuredModels"]/li/a/span[not(@class)]/text()
       Studio:
@@ -30,10 +31,10 @@ xPathScrapers:
         concat: "|"
         postProcess:
           - replace:
-            - regex: .+image:\s+"(.+jpg)[^|]+(\|)(.+)
-              with: $1$2$3
-            - regex: ([^|]+)\|(.+)/tour/$
-              with: $2$1
-            - regex: ^\/\/
-              with: "https://"
-# Last Updated October 24, 2020
+              - regex: .+image:\s+"(.+jpg)[^|]+(\|)(.+)
+                with: $1$2$3
+              - regex: ([^|]+)\|(.+)/tour/$
+                with: $2$1
+              - regex: ^\/\/
+                with: "https://"
+# Last Updated November 8, 2020

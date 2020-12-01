@@ -26,42 +26,45 @@ xPathScrapers:
       URL: //link[@rel="canonical"]/@href
       Gender:
         selector: //meta[@name="application-name"]/@content
-        replace:
-          - regex: .+
-            with: female
+        postProcess:
+          - replace:
+              - regex: .+
+                with: female
       Twitter: $info//li[span[@class="sub-label"]/text()="Twitter:"]/span[@class="sub-desc"]/a/@href
       Birthdate:
         selector: $info//li[@class="profile-field profile-field-fob"]/span[@class="sub-desc"]/text()
-        replace:
-          - regex: \s\(\d+\s\w+\)
-            with:
-        parseDate: 2 Jan 2006
+        postProcess:
+          - replace:
+              - regex: \s\(\d+\s\w+\)
+                with:
+          - parseDate: 2 Jan 2006
       Ethnicity:
         selector: $info//li[span[@class="sub-label"]/text()="Ethnicity:"]/span[@class="sub-desc"]/text()
-        replace:
-          - regex: Latin
-            with: 'hispanic'
-          - regex: Caucasian
-            with: 'white'
-          - regex: Ebony
-            with: 'black'
-          - regex: Asian
-            with: 'asian'
+        postProcess:
+          - replace:
+              - regex: Latin
+                with: 'hispanic'
+              - regex: Caucasian
+                with: 'white'
+              - regex: Ebony
+                with: 'black'
+              - regex: Asian
+                with: 'asian'
       Country: $info//li[span[@class="sub-label"]/text()="Country:"]/span[@class="sub-desc"]/text()
       EyeColor: $info//li[@class="profile-field profile-field-eyes"]/span[@class="sub-desc"]/text()
       Height:
         selector: $info//li[@class="profile-field profile-field-height"]/span[@class="sub-desc"]/text()
-        replace:
-          - regex: (\d+)\scm.+
-            with: $1
+        postProcess:
+          - replace:
+              - regex: (\d+)\scm.+
+                with: $1
       Measurements: $info//li[span[@class="sub-label"]/text()="Measurements:"]/span[@class="sub-desc"]/text()
       FakeTits:
         selector: $info//li[span[@class="sub-label"]/text()="Natural Tits:"]/span[@class="sub-desc"]/text()
-        replace:
-          - regex: Yes
-            with: 'No'
-          - regex: No
-            with: 'Yes'
+        postProcess:
+          - map:
+              Yes: No
+              No: Yes
       Tattoos: $info//li[span[@class="sub-label"]/text()="Tattoo(s):"]/span[@class="sub-desc"]/text()
       Piercings: $info//li[span[@class="sub-label"]/text()="Piercing(s):"]/span[@class="sub-desc"]/text()
       Aliases: $info//li[@class="profile-field profile-field-ska"]/span[@class="sub-desc"]/text()
@@ -80,4 +83,4 @@ xPathScrapers:
         Name: //span[@class="studio-name"]//text()
       Image: //dl8-video/@poster
 
-# Last Updated June 2, 2020
+# Last Updated November 10, 2020

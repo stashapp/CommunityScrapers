@@ -50,16 +50,18 @@ xPathScrapers:
         Name: $info/h4/a/text()
       Date:
         selector: $script
-        replace:
-          - regex: .+\"datePublished\"\:\s\"(\d\d/\d\d/\d\d\d\d)\".+
-            with: $1
-        parseDate: "01/02/2006"
+        postProcess:
+          - replace:
+              - regex: .+\"datePublished\"\:\s\"(\d\d/\d\d/\d\d\d\d)\".+
+                with: $1
+          - parseDate: "01/02/2006"
       Image:
         selector: $script
-        replace:
-          - regex: .+\"thumbnailUrl\"\:\s\"(https.+\.jpg)\".+
-            with: $1
+        postProcess:
+          - replace:
+              - regex: .+\"thumbnailUrl\"\:\s\"(https.+\.jpg)\".+
+                with: $1
       Tags:
         Name: //span[@class="gallery-meta"]/span[@class="left"]/a/text()
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

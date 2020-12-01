@@ -15,9 +15,10 @@ xPathScrapers:
 #      Name: //a[@class="model-name"]/../../a/@title       Version to get a little info on label/studio as well
       Name:
         selector: //figcaption/span
-        replace:
-          - regex: "^AKA:"
-            with: ""
+        postProcess:
+          - replace:
+              - regex: "^AKA:"
+                with: ""
       URL: //a[@class="model-name"]/@href
   performerScraper:
     performer:
@@ -27,40 +28,45 @@ xPathScrapers:
       Instagram: //a[text()="INSTAGRAM"]/@href
       Birthdate:
         selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
-        parseDate: 02-01-2006
+        postProcess:
+          - parseDate: 02-01-2006
       Ethnicity:
         selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/../text()
-        replace:
-          - regex: Asian
-            with: "asian"
-          - regex: Caucasian
-            with: "white"
-          - regex: Black
-            with: "black"
-          - regex: Latin
-            with: "hispanic"
+        postProcess:
+          - replace:
+              - regex: Asian
+                with: "asian"
+              - regex: Caucasian
+                with: "white"
+              - regex: Black
+                with: "black"
+              - regex: Latin
+                with: "hispanic"
       Country: 
         selector: //span[@itemprop="nationality"]/text()
-        replace:
-          - regex: "United States of America"
-            with: "United States"
+        postProcess:
+          - replace:
+              - regex: "United States of America"
+                with: "United States"
       #EyeColor: not listed
       Height:
         selector: //li/span[@class="list-quest"][contains(text(),'Height')]/../text()
-        replace:
-          - regex: ^(\d+).+$
-            with: "$1 cm"
+        postProcess:
+          - replace:
+              - regex: ^(\d+).+$
+                with: "$1 cm"
       Measurements:
         selector: //li/span[@class="list-quest"][contains(text(),'Measurements')]/../text()
       FakeTits:
         selector: //li/span[@class="list-quest"][contains(text(),'Breasts')]/../text()
-        replace:
-          - regex: ^[^\(]+\(([^\)]+)\).*$
-            with: "$1"
-          - regex: Fake
-            with: "Yes"
-          - regex: Real
-            with: "No"
+        postProcess:
+          - replace:
+              - regex: ^[^\(]+\(([^\)]+)\).*$
+                with: "$1"
+              - regex: Fake
+                with: "Yes"
+              - regex: Real
+                with: "No"
       CareerLength:
         selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/../text()
         concat: "-"
@@ -75,4 +81,4 @@ xPathScrapers:
         selector: (//meta[@itemprop="image"])[1]/@content
       Gender:
         selector: //meta[@itemprop="gender"]/@content
-# Last updated July 02, 2020
+# Last Updated November 8, 2020

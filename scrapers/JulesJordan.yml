@@ -39,8 +39,10 @@ xPathScrapers:
         Name: //span[@class="update_tags"]/a/text()
       Performers:
         Name: $details//span[@class="update_models"]/a/text()|$galinfo//span[@class="update_models"]/div/a/text()
+        URL: $details//span[@class="update_models"]/a/@href|$galinfo//span[@class="update_models"]/div/a/@href
       Movies:
         Name: $details//span[@class="update_dvds"]/a/text()
+        URL: $details//span[@class="update_dvds"]/a/@href
       Image:
         selector: //script[contains(text(),'useimage')]/text()
         postProcess:
@@ -93,4 +95,4 @@ xPathScrapers:
       FrontImage: //div[@class="front"]/a/img/@src0_3x
       BackImage: //div[@class="back"]/a/img/@src0_3x
 
-# Last Updated October 2, 2020
+# Last Updated November 21, 2020

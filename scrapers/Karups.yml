@@ -10,10 +10,11 @@ xPathScrapers:
       Title: //h1[@class="page-heading"]/span[@class="title"]/text()
       Date:
         selector: //span[@class="date"]/span[@class="content"]/text()
-        replace:
-          - regex: (st|nd|rd|th)\,
-            with: ","
-        parseDate: Jan 02, 2006
+        postProcess:
+          - replace:
+              - regex: (st|nd|rd|th)\,
+                with: ","
+          - parseDate: Jan 02, 2006
       Details:
         selector: //div[@class="content-information-description"]/p/text()
       Performers:
@@ -21,4 +22,4 @@ xPathScrapers:
       Image:
         selector: //video[@id="player"]/@poster|//div[@class="video-poster"]/img/@src
 
-# Last Updated October 3, 2020
+# Last Updated November 8, 2020

@@ -21,7 +21,7 @@ Scrapers with **useCDP** set to true require that you have properly configured t
 ## Scrapers
 You can find a list of sites currently supported for by community scraping in [SCRAPERS-LIST.md](https://github.com/stashapp/CommunityScrapers/blob/master/SCRAPERS-LIST.md)
 
-For most scrapers you have to edit the url. Once you populate that field with a specific url a button will appear.
+For most scrapers you have to edit the url. Once you populate that field with a specific url a button will appear.  
 ![](https://user-images.githubusercontent.com/48220860/85202637-698e3f00-b310-11ea-9c06-b2cfe931474a.png)
 
 Clicking on that button brings up a popup that lets you select which fields to update.
@@ -32,3 +32,11 @@ Some scrapers support the scrape with function so you can you use that instead o
 
 ## Contributing
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
+
+### Validation
+The scrapers in this repository can be validated against a schema and checked for common errors.
+
+First, install the validator's dependencies - inside the [`./validator`](./validator) folder, run: `yarn`.
+
+Then, to run the validator, use `node validate.js` in the root of the repository.  
+Specific scrapers can be checked using: `node validate.js scrapers/foo.yml scrapers/bar.yml`

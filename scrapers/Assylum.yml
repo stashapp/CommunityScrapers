@@ -1,0 +1,42 @@
+name: assylum
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - assylum.com/session/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h3[@class='mas_title']/text()
+      Performers:
+        Name:
+          selector: //span[@class='lc_info mas_description']/text()[1]
+          postProcess:
+            - replace:
+                - regex: (?:[\w\s]+\:\s)?([A-Z]?[a-z]+\d?\d?\s[A-Z]?[a-z]+\d?\d?,|[A-Z]?[a-z]+\d?\d?,)\s?([A-Z]?[a-z]+\d?\d?\s[A-Z]?[a-z]+\d?\d?,|[A-Z]?[a-z]+\d?\d?,)?\s?([A-Z]?[a-z]+\d?\d?\s[A-Z]?[a-z]+\d?\d?,|[A-Z]?[a-z]+\d?\d?,)?|.+
+                  with: $1$2$3
+                - regex: \,\s+
+                  with: ","
+                - regex: ^\s+
+                  with:
+          split: ","
+      Image:
+        selector: //div[@class='mainpic']/comment()
+        postProcess:
+          - replace:
+              - regex: .*src="(.*?)".*
+                with: https://www.assylum.com/$1
+
+      Tags:
+        Name:
+          selector: //p[@class='tags']/a/text()
+      Details: //p[@class='mas_longdescription']/text()
+      Date:
+        selector: //span[@class='lc_info mas_description']/text()[2]
+        postProcess:
+          - parseDate: January 2, 2006
+      Studio:
+        Name:
+          fixed: Assylum
+# Last Updated November 15, 2020
