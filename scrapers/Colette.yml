@@ -19,9 +19,10 @@ xPathScrapers:
       Details:
         selector: $info//p
         concat: "\n\n"
-        postProces:
-          - replace: "^HD\\sVideo:\\s*"
-            with:
+        postProcess:
+          - replace:
+              - regex: ^HD\sVideo:\s*
+                with:
       Performers:
         Name: $info/h2[contains(.,"featuring") or contains(.,"Model")]/a/text()
       Image:
