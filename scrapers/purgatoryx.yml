@@ -14,7 +14,7 @@ xPathScrapers:
         selector: //span[@class="date"]/text()
         postProcess:
           - replace:
-            - regex: Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday
+            - regex: ^\w+day\s+
               with: ""
           - parseDate:  January 02, 2006
       Details: //div[@class="description"]/p/text()
@@ -32,6 +32,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: PurgatoryX
+      # URL need to have "?trilogy=" to get the name of the Trilogy
       Movies:
         Name: //span[contains(text(),"Part of")]/following-sibling::text()
 # Last Updated December 02, 2020
