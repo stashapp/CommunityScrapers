@@ -24,6 +24,14 @@ xPathScrapers:
       Performers:
         Name:
           selector: //div[@class="model-wrap"]//li/h5
+      Tags:
+        Name:
+          selector: //meta[@name="keywords"]/@content
+          postProcess:
+            - replace:
+              - regex: \s*,\s*
+                with: ","
+          split: ","
       Studio:
         Name:
           fixed: PurgatoryX
