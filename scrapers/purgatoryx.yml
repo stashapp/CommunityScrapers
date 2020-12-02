@@ -16,7 +16,7 @@ xPathScrapers:
           - replace:
             - regex: ^\w+day\s+
               with: ""
-          - parseDate:  January 02, 2006
+          - parseDate: January 02, 2006
       Details: //div[@class="description"]/p/text()
       Performers:
         Name:
