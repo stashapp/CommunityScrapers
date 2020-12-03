@@ -24,5 +24,16 @@ xPathScrapers:
             - replace:
                 - regex: \,$
                   with:
+driver:
+  useCDP: true
+  sleep: 5
+  cookies:
+    - Cookies:
+        - Name: "dscl"
+          Domain: ".jacquieetmicheltv.net"
+          Value: "1"
+          Path: "/"
 
-# Last Updated November 04, 2020
+debug:
+  printHTML: false
+# Last Updated December 03, 2020
