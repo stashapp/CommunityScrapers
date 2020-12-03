@@ -8,7 +8,12 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="title"]/text()
-      URL: //head/link[@rel="canonical"]/@href
+      URL: 
+        selector: //head/link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+            - regex: $
+              with: "?trilogy=1"
       Image: //video[@id="main-player"]/@poster
       Date:
         selector: //span[@class="date"]/text()
@@ -21,14 +26,15 @@ xPathScrapers:
       Performers:
         Name:
           selector: //div[@class="model-wrap"]//li/h5
-      Tags:
-        Name:
-          selector: //meta[@name="keywords"]/@content
-          postProcess:
-            - replace:
-              - regex: \s*,\s*
-                with: ","
-          split: ","
+      # They use the same tags for all scenes (blowjobs,multi scene porn,exclusive videos, pornstars, hardcore, fantasy, milfs, teens, facials, trilogy)
+      #Tags:
+      #  Name:
+      #    selector: //meta[@name="keywords"]/@content
+      #    postProcess:
+      #      - replace:
+      #        - regex: \s*,\s*
+      #          with: ","
+      #    split: ","
       Studio:
         Name:
           fixed: PurgatoryX
