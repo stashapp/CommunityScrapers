@@ -43,7 +43,7 @@ xPathScrapers:
                 - regex: \s*#.+
                   with: ""
 driver:
-  useCDP: false
+  useCDP: true
   cookies:
     - CookieURL: "https://www.pornfidelity.com/"
       Cookies:
