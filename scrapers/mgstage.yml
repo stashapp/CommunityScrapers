@@ -12,8 +12,7 @@ xPathScrapers:
         selector: //th[contains(.,"配信開始日：")]/../td/text()
         postProcess:
           - parseDate: 2006/01/02
-      Details: 
-        selector: //p[@class="txt introduction"]//text()
+      Details: //p[@class="txt introduction"]//text()
       Tags:
         Name: //th[contains(.,"ジャンル：")]/../td/a/text()
       Performers:
@@ -25,8 +24,7 @@ xPathScrapers:
               - replace:
                   - regex: \s+
                     with: ""
-      Image: 
-        selector: //a[@id="EnlargeImage"]/@href
+      Image: //a[@id="EnlargeImage"]/@href
 driver:
   cookies:
     - CookieURL: "https://www.mgstage.com/product/"
