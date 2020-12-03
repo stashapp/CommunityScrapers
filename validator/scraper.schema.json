@@ -140,6 +140,52 @@
           "type": "number",
           "default": 2,
           "minimum": 1
+        },
+        "cookies": {
+          "title": "Cookie options",
+          "description": "An array of cookie items.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["Cookies"],
+            "properties": {
+              "CookieURL": {
+                "title": "URL to apply these cookies to",
+                "description": "Required if `useCDP` is `false`.",
+                "type": "string",
+                "format": "uri"
+              },
+              "Cookies": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["Domain", "Path", "Name", "Value"],
+                  "properties": {
+                    "Name": {
+                      "title": "Cookie name",
+                      "type": "string"
+                    },
+                    "Value": {
+                      "title": "Cookie value",
+                      "type": "string"
+                    },
+                    "Domain": {
+                      "title": "Cookie domain",
+                      "type": "string"
+                    },
+                    "Path": {
+                      "title": "Cookie path",
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

@@ -148,6 +148,7 @@ class Validator {
   getMappingErrors(data) {
     return [].concat(
       this._collectScraperDefinitionErrors(data),
+      this._collectCookieErrors(data),
     );
   }
 
@@ -326,6 +327,35 @@ class Validator {
         });
       }
     });
+
+    return errors;
+  }
+
+  _collectCookieErrors(data) {
+    const errors = [];
+
+    const cookies = data && data.driver.cookies;
+    if (cookies) {
+      const usesCDP = Boolean(data.driver && data.driver.useCDP);
+      cookies.forEach((cookieItem, idx) => {
+        const hasCookieURL = 'CookieURL' in cookieItem;
+        if (!usesCDP && !hasCookieURL) {
+          errors.push({
+            keyword: 'CookieURL',
+            message: '`CookieURL` is required because useCDP is `false`',
+            params: { keyword: 'CookieURL' },
+            dataPath: `/driver/cookies/${idx}`,
+          });
+        } else if (usesCDP && hasCookieURL) {
+          errors.push({
+            keyword: 'CookieURL',
+            message: 'Should not have `CookieURL` because useCDP is `true`',
+            params: { keyword: 'CookieURL' },
+            dataPath: `/driver/cookies/${idx}/CookieURL`,
+          });
+        }
+      });
+    }
 
     return errors;
   }
