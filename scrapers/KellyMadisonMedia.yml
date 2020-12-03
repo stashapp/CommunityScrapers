@@ -1,6 +1,6 @@
-# Note These sites require a cookie in order to not redirect to the homepage
-# This means the first attempt to scrape will fail, 
-# Check logs console and set "Value" in Cookies. (https://github.com/stashapp/stash/pull/934)
+# Note These sites require a cookie in order to not redirect to the homepage.
+# This means the first attempt to scrape will fail.
+# Check Logs - Debug, copy "Value" from logs to Cookies in this file. (https://github.com/stashapp/stash/pull/934)
 
 name: "Kelly Madison Media"
 sceneByURL:
