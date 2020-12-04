@@ -648,6 +648,7 @@ tonightsgirlfriend.com|Tonightsgirlfriend.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 toomanytrannies.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 touchmywife.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 toughlovex.com|toughlovex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+tour.purgatoryx.com|purgatoryx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trans500.com/tour/|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 trans500.com/tour3/|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 trans500.com/tourespanol|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
