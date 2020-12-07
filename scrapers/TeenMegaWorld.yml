@@ -1,0 +1,108 @@
+name: TeenMegaWorld
+
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - anal-angels.com/trailers/
+      - anal-beauty.com/trailers/
+      - beauty-angels.com/trailers/
+      - beauty4k.com/trailers/
+      - creampie-angels.com/trailers/
+      - dirty-coach.com/trailers/
+      - dirty-doctor.com/trailers/
+      - firstbgg.com/trailers/
+      - fuckstudies.com/trailers/
+      - gag-n-gape.com/trailers/
+      - lollyhardcore.com/trailers/
+      - nubilegirlshd.com/trailers/
+      - old-n-young.com/trailers/
+      - rawcouples.com/trailers/
+      - soloteengirls.net/trailers/
+      - teenmegaworld.net/trailers/
+      - teensexmania.com/trailers/
+      - teensexmovs.com/trailers/
+      - trickymasseur.com/trailers/
+      - x-angels.com/trailers/
+      # Behind paywall
+      # - 18firstsex.com
+      # - aboutgirlslove.com
+      # - atmovs.com
+      # - exgfbox.com
+      # - hometeenvids.com
+      # - nylonsx.com
+      # - squirtingvirgin.com
+      # - watchmefucked.com
+      # - wow-orgasms.com
+      # Unsupported sites
+      # - hometoyteens.com
+      # - privateteenvideo.com
+      # - teens3some.com
+      # - teenstarsonly.com
+  - action: scrapeXPath
+    scraper: vrSceneScraper
+    url:
+      - tmwvrnet.com/trailers/
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //div[@class="video"]
+    scene:
+      Title: $content//h1
+      Date:
+        selector:  $content//div[@class="date"]/time
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: $content//div[@class="text"]//p
+        concat: "\n\n"
+      Performers:
+        Name: $content//a[contains(@href,"/models/")]
+      Tags:
+        Name: $content//ul[@class="tag-list"]//a
+      Image:
+        selector: $content//video/@poster
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://teenmegaworld.net
+      Studio:
+        Name:
+          selector: $content//div[@class="site"]/a[1]
+          postProcess:
+            - replace:
+                - regex: \.(com|net)$
+                  with:
+
+  vrSceneScraper:
+    common:
+      $content: //div[@class="episode"]
+    scene:
+      Title: $content//h2
+      Date:
+        selector:  $content//li[@class="icons-date"]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: $content//p[@class="ep-desc"]/text()
+        concat: "\n\n"
+      Performers:
+        Name:
+          selector: $content//a[contains(@href,"/models/")]
+          postProcess:
+            - replace:
+                - regex: ",$"
+                  with:
+      Tags:
+        Name: $content//p[@class="ep-tags"]/a[position() > 1]
+      Image:
+        selector: $content//deo-video/@cover-image
+        postProcess:
+          - replace:
+              - regex: -1(x\.\w+)$
+                with: -2$1
+      Studio:
+        Name: //a[@class="h-logo"]
+
+# Last Updated December 5, 2020
