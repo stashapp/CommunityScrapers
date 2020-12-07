@@ -334,7 +334,7 @@ class Validator {
   _collectCookieErrors(data) {
     const errors = [];
 
-    const cookies = data && data.driver.cookies;
+    const cookies = data.driver && data.driver.cookies;
     if (cookies) {
       const usesCDP = Boolean(data.driver && data.driver.useCDP);
       cookies.forEach((cookieItem, idx) => {
