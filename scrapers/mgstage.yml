@@ -1,0 +1,36 @@
+name: mgstage
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.mgstage.com/product/ # www is needed here, do not remove 
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //th[contains(.,"品番：")]/../td/text()
+      Date: 
+        selector: //th[contains(.,"配信開始日：")]/../td/text()
+        postProcess:
+          - parseDate: 2006/01/02
+      Details: //p[@class="txt introduction"]//text()
+      Tags:
+        Name: //th[contains(.,"ジャンル：")]/../td/a/text()
+      Performers:
+        Name: //th[contains(.,"出演：")]/../td/a/text()
+      Studio:
+        Name:
+            selector: //th[contains(.,"メーカー：")]/../td/a/text()
+            postProcess:
+              - replace:
+                  - regex: \s+
+                    with: ""
+      Image: //a[@id="EnlargeImage"]/@href
+driver:
+  cookies:
+    - CookieURL: "https://www.mgstage.com/product/"
+      Cookies:
+        - Name: "adc"
+          Domain: ".mgstage.com"
+          Value: "1"
+          Path: "/"
+# Last Updated December 03, 2020
