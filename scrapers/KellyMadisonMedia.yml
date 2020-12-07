@@ -1,7 +1,3 @@
-# Note These sites require a cookie in order to not redirect to the homepage
-# This means the first attempt to scrape will fail, but the failed attempt
-# Will set the cookie in your CDP instance. Once set the scraper should work.
-
 name: "Kelly Madison Media"
 sceneByURL:
   - action: scrapeXPath
@@ -12,43 +8,54 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $summary: //div[@class="card episode-summary mb-4"]
-      $script: //script[contains(text(),"chromecast")]/text()
     scene:
-      Title:
-        selector: $script
+      Title: 
+        selector: //div[contains(@class,"card-header-title")]//div[@class="level-item"]/span/following-sibling::text()
         postProcess:
           - replace:
-              - regex: .+(?:chromecast.+\stitle:\s')([^']+).+
-                with: $1
-              - regex: '&#039;'
-                with: "'"
-      Details: $summary//div[contains(h4,'Episode Summary')]/p/text()
+              - regex: \s*-.+#\d+.+$
+                with: ""
+      Details: //div[@class="columns"]//*[contains(text(),'Episode Summary')]/following-sibling::text()
       Date:
-        selector: $summary//div/h4[contains(.,'Published:')]/text()[2]
+        selector: //li[contains(.,'Published:')]/text()[2]
         postProcess:
           - replace:
               - regex: Published:\s
                 with:
           - parseDate: 2006-01-02
       Performers:
-        Name: $summary/div//div/h4[contains(.,'Starring')]/a/text()
+        Name: //a[@class and contains(@href,"/models/")]/text()
       Image:
-        selector: $script
+        selector: //script[contains(text(),"poster_image")]/text() #Some url don't have it. (https://www.pornfidelity.com/episodes/73238852)
         postProcess:
           - replace:
               - regex: .+(?:poster:\s")([^"]+).+
                 with: $1
       Studio:
         Name:
-          selector: //head/title/text()
+          selector: //span[contains(text(),"Episode")]/following-sibling::text()[1]
           postProcess:
             - replace:
-                - regex: .+Official\s(\w+).+
-                  with: $1
-
+                - regex: \s*#.+
+                  with: ""
 driver:
-  useCDP: true
-
-# Last Updated November 8, 2020
+  cookies:
+    - CookieURL: "https://www.pornfidelity.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".pornfidelity.com"
+          Value: "test"
+          Path: "/"
+    - CookieURL: "https://www.teenfidelity.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".teenfidelity.com"
+          Value: "test"
+          Path: "/"
+    - CookieURL: "https://www.kellymadison.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".kellymadison.com"
+          Value: "test"
+          Path: "/"
+# Last Updated December 03, 2020
