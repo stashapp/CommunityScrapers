@@ -1,0 +1,37 @@
+name: StudioFOW
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - studiofow.com/movies
+      - studiofow.com/shorts
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //img[@class="rev-slidebg"]/@title
+      Details:
+        selector: //div[contains(@class,"woodmart-title-container")]//p
+        concat: "\n\n"
+      Image:
+        selector: //img[@class="rev-slidebg"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+      Date:
+        selector: //div[@class="title-after_title"]/text()
+        postProcess:
+          - replace:
+              - regex: "\\sFEB\\s" # in one movie date has FEB instead of FEBRUARY
+                with: " FEBRUARY "
+              - regex: "[^:]+:\\s+(\\w+)\\s+(\\d+)[^\\d]+(\\d+).*"
+                with: $1 $2 $3
+          - parseDate: January 2 2006
+      Studio:
+        Name:
+          fixed: Studio FOW
+        URL:
+          fixed: https://studiofow.com
+      URL: //link[@rel="canonical"]/@href
+# Last Updated December 1, 2020
