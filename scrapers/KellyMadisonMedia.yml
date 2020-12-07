@@ -1,5 +1,3 @@
-# Note These sites require a cookie in order to not redirect to the homepage.
-
 name: "Kelly Madison Media"
 sceneByURL:
   - action: scrapeXPath
@@ -41,7 +39,6 @@ xPathScrapers:
                 - regex: \s*#.+
                   with: ""
 driver:
-  useCDP: false
   cookies:
     - CookieURL: "https://www.pornfidelity.com/"
       Cookies:
