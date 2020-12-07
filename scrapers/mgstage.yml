@@ -2,7 +2,7 @@ name: mgstage
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.mgstage.com/product/
+      - www.mgstage.com/product/ # www is needed here, do not remove 
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
