@@ -2,43 +2,30 @@ name: trafficpimps
 sceneByURL:
   - action: scrapeXPath
     url:
-      - pimp.xxx/trailers/
-      - family.xxx/trailers/
-      - petite.xxx/trailers/
       - cherrypimps.com/
-      - wildoncam.com/
+      # - wildoncam.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $infoblock: //div[@class="info-block"]
-      $infodata: //div[@class="info-block_data"]
     scene:
       Title:
-        selector: //h1[@class="trailer-block_title"]
-        postProcess:
-          - replace:
-              - regex: "LIVE$"
-                with:
+        selector: //div[@class="item-title"]/h1/text()
       Date:
-        selector: //div[@class="info-block_data"]/p[@class="text"][1]/text()
+        selector: //div[@class="update-info-row"][1]
         postProcess:
           - replace:
-              - regex: (\w+\s)(\w+)(\s)(\d{1,2})(.+)(\d{4})(.+)
-                with: $2 $4, $6
+              - regex: \s*Added:\s
+                with: ""
           - parseDate: January 2, 2006
-      Details: $infoblock/p[@class="text"][1]/text()
+      Details: //div[@class="update-info-block"][1]/p/text()
       Tags:
-        Name: $infoblock/p[contains(text(),'Categories:')]/a
+        Name: //ul[@class="tags"]/li/a/text()
       Performers:
-        Name: $infodata/p[contains(text(),'Featuring:')]/a
+        Name: //div[contains(@class, "model-list-item")]/a/span/text()
       Studio:
-        Name: //div[@class="container"]/a[@class="logo"]/@title
-      Image: 
-        selector: //script[contains(.,"contentthumbs")]/text()|//img[@class="lazyload update_thumb thumbs stdimage"]/@src
-        postProcess:
-          - replace:
-              - regex: (.+)(https.+contentthumbs.+)(" width="100%)(.+)
-                with: $2
+        Name: //a[@class="series-item-logo"]/img/@alt
+      Image: //div[@class="player-thumb"]/img/@src
+driver:
+  useCDP: true
 
-# Last Updated November 8, 2020
+# Last Updated December 11, 2020
