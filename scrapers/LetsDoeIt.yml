@@ -33,9 +33,9 @@ xPathScrapers:
       Tags:
         Name: $details//div[@class="col"][4]//a/text()|$details//div[@class="col"][6]//a/text()
       Performers:
-        Name: $actors//h4/span/a//text()
+        Name: $actors//span/a//text()
       Studio:
-        Name: $actors/h4/a//text()
+        Name: $actors//a//text()
       Image: //picture[@class="poster"]/img/@src
 
-# Last Updated November 8, 2020
+# Last Updated December 11, 2020
