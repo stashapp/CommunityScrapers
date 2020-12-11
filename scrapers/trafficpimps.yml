@@ -24,8 +24,6 @@ xPathScrapers:
         Name: //div[contains(@class, "model-list-item")]/a/span/text()
       Studio:
         Name: //a[@class="series-item-logo"]/img/@alt
-      Image: //div[@class="player-thumb"]/img/@src
-driver:
-  useCDP: true
+      Image: //div[@class="player-thumb"]/img/@src0_1x
 
-# Last Updated December 11, 2020
+# Last Updated December 12, 2020
