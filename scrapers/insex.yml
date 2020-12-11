@@ -1,11 +1,15 @@
-name: sexuallybroken
+name: insex
 sceneByURL:
   - action: scrapeXPath
     url:
       - sexuallybroken.com/sb
+      - infernalrestraints.com/ir
+      - insex.com/is
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $studio: //title/text()
     scene:
       Title: //div[@class="is-size-5 has-text-weight-bold"]/text()
       Date:
@@ -22,8 +26,7 @@ xPathScrapers:
       Tags:
         Name: //div[@class="is-size-7 has-text-white-ter"]/following-sibling::div/span/text()
       Studio:
-        Name:
-            fixed: SexuallyBroken
+        Name: $studio
       Image: //video-js[@id="videoPlayer"]/@poster
 
-# Last Updated October 3, 2020
+# Last Updated December 8, 2020
