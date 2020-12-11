@@ -35,7 +35,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: 
-        selector: //strong[text()='ID:']/../span/a/text()|//strong[text()='ID:']/../span/text()
+        selector: //strong[text()='ID:']/../span
         concat: "|"
         postProcess:
           - replace:
@@ -59,7 +59,7 @@ xPathScrapers:
   movieScraper:
     movie:
       Name:
-        selector: //strong[text()='ID:']/../span/a/text()|//strong[text()='ID:']/../span/text()
+        selector: //strong[text()='ID:']/../span
         concat: "|"
         postProcess:
           - replace:
