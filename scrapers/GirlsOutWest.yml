@@ -14,12 +14,18 @@ xPathScrapers:
     scene:
       Title:
         selector: //div[@class='trailerTitle']/div/h3/text()
+        # uncomment the following to strip performer names from titles
+        #postProcess:
+        #  - replace:
+        #    - regex: .+-
+        #      with:
       Performers:
         Name:
           selector: //div[@class='trailer topSpace']/div//p/a/text()
         URL:
           selector: //div[@class='trailer topSpace']/div//p/a/@href
       Image:
+        # use 1x or 2x for low/medium resolution images
         selector: //div[@class='videoplayer']/img/@src0_3x
         postProcess:
           - replace:
@@ -45,6 +51,7 @@ xPathScrapers:
       Gender:
         fixed: Female
       Image:
+        # use 1x or 2x for low/medium resolution images
         selector: //div[@class='profilePic']/img/@src0_3x
         postProcess:
           - replace:
