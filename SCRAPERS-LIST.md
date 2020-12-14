@@ -503,6 +503,7 @@ pantypops.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 parodypass.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 passion-hd.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pennypaxlive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+penthousegold.com|Penthouse.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pervcity.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 perversefamily.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pervertgallery.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
