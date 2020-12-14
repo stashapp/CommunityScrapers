@@ -12,11 +12,11 @@ xPathScrapers:
     scene:
       Title: //div[@class="clipTitle"]/h3/text()
       Details:
-        selector: //div[@class="clip"]/div/p//text()
+        selector: //div[@class="clip"]/div[1]/*|//div[@class="clip"]/div[1]/text()
         concat: "\n\n"
         postProcess:
           - replace:
-              - regex: "Description:"
+              - regex: ^Description:\s*
                 with:
       Studio:
         Name: $studio
@@ -37,11 +37,11 @@ xPathScrapers:
       Performers:
         Name: $clipInfo//a/text()
       Image:
-        selector: //div[@class="clipImage"]/img/@src
+        selector: //div[contains(@class, "clipImage")]/img/@src
         postProcess:
           - replace:
-              - regex: ^\/\/
-                with: "https://"
-      URL: //meta[@property='og:url']/@content
+              - regex: ^//
+                with: https://
+      URL: //meta[@property="og:url"]/@content
 
-# Last Updated November 11, 2020
+# Last Updated December 14, 2020
