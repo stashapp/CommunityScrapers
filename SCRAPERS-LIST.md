@@ -235,7 +235,6 @@ fakehub.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 faketaxi.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 falconstudios.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 famedigital.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-family.xxx|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 familyhookups.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 familystrokes.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 familyswap.xxx|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -511,11 +510,9 @@ perversefamily.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pervertgallery.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pervmom.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 peternorth.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-petite.xxx|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 petiteballerinasfucked.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 petitehdporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 pickupfuck.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-pimp.xxx|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 playboy.tv|PlayboyTV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 plumperpass.com|PlumperPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornfidelity.com|KellyMadisonMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|stash >= v0.4.0-14|-
