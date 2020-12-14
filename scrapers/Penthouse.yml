@@ -24,6 +24,6 @@ xPathScrapers:
         Name: //div[@class="model"]/a/@title
       Tags:
         Name: //ul[@class="scene-tags"]/li/a/text()
-      Image: //meta[@itemprop="thumbnailUrl"]/@content
+      Image: //meta[@itemprop="thumbnailUrl"]/@content[not(contains(., "/no_video_preview_"))]
 
-# Last Updated December 08, 2020
+# Last Updated December 14, 2020
