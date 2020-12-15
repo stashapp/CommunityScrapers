@@ -11,6 +11,13 @@ sceneByURL:
       - 18eighteen.com/
       - legsex.com/
     scraper: sceneScraper
+    
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - 18eighteen.com/
+    scraper: galleryScraper
+    
 xPathScrapers:
   sceneScraper:
     scene:
@@ -39,5 +46,22 @@ xPathScrapers:
 #          - replace:
 #            - regex: _lg
 #              with: _x_800
-          
-# Last Updated August 11, 2020
+  galleryScraper:
+    gallery:
+      Title: //section[@id="photos_page-page"]/div[@class="row"]/div/h2/text()
+      Studio:
+        Name:
+            selector: //meta[@property="og:site_name"]/@content
+      Date:
+        selector: //div[@class="stat mb-2"]/span[contains(.,"Date:")]/../span[@class="value"]/text()
+        postProcess:
+          - replace:
+            - regex: ..,
+              with:
+          - parseDate: January 2 2006
+      Details:         
+        selector: //div[@class="row"]/div/div[@class="p-desc"]/text()
+        concat: "\n"
+      Performers:
+        Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
+# Last Updated December 10, 2020
