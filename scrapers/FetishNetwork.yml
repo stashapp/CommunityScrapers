@@ -1,0 +1,64 @@
+name: Fetishnetwork
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fetishnetwork.com/t2/showgal
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      # Title: //div[contains(@class,"detail-area")]//h3
+      Title:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: ^(.+)(?:\s\|).+$
+                with: $1
+      Details:
+        selector: //div[contains(@class,"description-long-text")]//text()
+        postProcess:
+          - replace:
+              - regex: Description:\s?
+                with:
+              - regex: �
+                with:
+      Date:
+        selector: //h4[@class="light-grey"]
+        postProcess:
+          - parseDate: Januery 2, 2006
+      Image:
+        selector: |
+          //video/@poster
+          |//div[@class="banner-img-single"]/img/@src
+          |//div[@class="banner-img banner-img-one"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: http://www.fetishnetwork.com/t2/
+      Studio:
+        Name:
+          selector: //span[@class="white-text"]
+          postProcess:
+            - replace:
+                - regex: \.com\sVideos
+                  with:
+                - regex: BDSM
+                  with: Bdsm
+                - regex: "[A-Z][^A-Z]+|[A-Z]+$"
+                  with: "$0 "
+      Performers:
+        Name:
+          # If the genre contains lesbian, split the scene title in case it contains a comma,
+          # otherwise (title does not contain names) extract performer name from image url
+          selector: |
+            //a[contains(text(),"Lesbian")]/following::h3/text()[contains(., ", ")]
+            |//video/@poster
+          split: ", "
+          postProcess:
+            - replace:
+                - regex: ^.+\d_(.*?)(?:_\d+)?_video.+$
+                  with: $1
+                - regex: _
+                  with: " "
+
+# Last Updated December 17, 2020
