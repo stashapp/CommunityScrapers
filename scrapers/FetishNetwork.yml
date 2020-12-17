@@ -25,7 +25,7 @@ xPathScrapers:
       Date:
         selector: //h4[@class="light-grey"]
         postProcess:
-          - parseDate: Januery 2, 2006
+          - parseDate: January 2, 2006
       Image:
         selector: |
           //video/@poster
