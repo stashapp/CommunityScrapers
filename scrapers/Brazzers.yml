@@ -236,4 +236,4 @@ xPathScrapers:
         Name: //div[text()="Tags"]/../div/a/text()
 
 
-# Last Updated November 8, 2020
+# Last Updated November 18, 2020
