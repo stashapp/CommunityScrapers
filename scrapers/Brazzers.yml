@@ -1,4 +1,7 @@
+###############################################################################################
 name: 'Brazzers'
+###############################################################################################
+
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -18,8 +21,17 @@ performerByName:
   action: scrapeXPath
   queryURL: https://www.brazzers.com/pornstars?q={}
   scraper: performerSearch
-
+  
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - brazzers.com/video
+      - brazzers.com/scene
+    scraper: galleryScraper
+    
+###############################################################################################
 xPathScrapers:
+###############################################################################################
   performerSearch:
     common:
       $result: //span/a[contains(@href, "/pornstar")]
@@ -204,5 +216,24 @@ xPathScrapers:
 #      Gender: 
 #        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
+
+  galleryScraper:
+    common:
+      $titlebar: //*[name()='path'][1]/../../../../h2/..
+    gallery:
+      Title: $titlebar/h2/text()
+      Studio:
+        Name:
+          selector: //div[text()="Subsite"]/../a/text()
+      Date:
+        selector: $titlebar/div/text()
+       
+      Details: //h2[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'description']/../div/p/text()
+      Performers:
+        Name: $titlebar/div/span/a/text()
+          
+      Tags:
+        Name: //div[text()="Tags"]/../div/a/text()
+
 
 # Last Updated November 8, 2020
