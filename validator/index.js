@@ -92,6 +92,7 @@ class Validator {
     const yamlLoadOptions = {
       prettyErrors: true,
       version: '1.2',
+      merge: true,
     };
 
     let result = true;
