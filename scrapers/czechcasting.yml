@@ -19,5 +19,7 @@ xPathScrapers:
         selector: //video/@poster
       Date:
         selector: //p[@class='updated']/text()
+        postProcess:
+          - parseDate: 01/02/2006
 
 # Last Updated December 9, 2020
