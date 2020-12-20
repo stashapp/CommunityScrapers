@@ -1,0 +1,48 @@
+name: data18
+performerByURL:
+  - action: scrapeXPath
+    url: 
+      - data18.com/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - data18.com/content
+    scraper: sceneScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h1
+      #Birthdate: 
+        #selector: //li[text()='Date of Birth: ']//span
+        #replace:
+          #- regex: ","
+            #with:
+        #parseDate: Jan 2, 2006
+      #Measurements: //li[text()='Measurements: ']//span
+  sceneScraper:
+    common:
+      $performer: //p[b[text()='Starring:']]/a
+      $studio: //p[b[text()='Site:']]/a
+    scene:
+      Title: //h1/text()
+      Date: 
+        selector: //span[contains(text(),'Release date:')]/a
+        replace: 
+          - regex: ","
+            with:
+        # reference date is: 2006/01/02
+        parseDate: January 2 2006
+      Details: //p[b[text()='Story:']]
+      Tags: 
+        Name: //div[b[text()='Categories:']]/a/text()
+      Performers:
+        Name: $performer
+        URL: $performer/@href
+      Studio:
+        Name: $studio/text()
+        URL: $studio/@href
+      #Image:
+        #selector: //div[p[span[b[text()='Photo Set']]]]//div[1]/a/@href
+        #subScraper:
+          #selector: //div[@id='post_view']/a/img/@src
