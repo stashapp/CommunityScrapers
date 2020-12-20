@@ -10,7 +10,7 @@ xPathScrapers:
       $studio: //*[@id="logo"]/a/img/@alt
     scene:
       Title: /html/head/title/text()
-      Details: //*[@id="girl-info"]/div/div/div[2]/p/text()
+      Details: //div[@class="description show-desc"]
       Tags:
         Name: //*[@id="girl-info"]/div/div/ul[@class='tags']/li/a[@class='tag']/text()
       Studio:
