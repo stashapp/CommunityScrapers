@@ -1,25 +1,10 @@
 name: data18
-performerByURL:
-  - action: scrapeXPath
-    url: 
-      - data18.com/
-    scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url: 
       - data18.com/content
     scraper: sceneScraper
 xPathScrapers:
-  performerScraper:
-    performer:
-      Name: //h1
-      #Birthdate: 
-        #selector: //li[text()='Date of Birth: ']//span
-        #replace:
-          #- regex: ","
-            #with:
-        #parseDate: Jan 2, 2006
-      #Measurements: //li[text()='Measurements: ']//span
   sceneScraper:
     common:
       $performer: //p[b[text()='Starring:']]/a
@@ -28,11 +13,11 @@ xPathScrapers:
       Title: //h1/text()
       Date: 
         selector: //span[contains(text(),'Release date:')]/a
-        replace: 
-          - regex: ","
-            with:
-        # reference date is: 2006/01/02
-        parseDate: January 2 2006
+        postProcess:
+          - replace: 
+            - regex: ","
+              with:
+          - parseDate: January 2 2006
       Details: //p[b[text()='Story:']]
       Tags: 
         Name: //div[b[text()='Categories:']]/a/text()
@@ -44,5 +29,9 @@ xPathScrapers:
         URL: $studio/@href
       #Image:
         #selector: //div[p[span[b[text()='Photo Set']]]]//div[1]/a/@href
-        #subScraper:
-          #selector: //div[@id='post_view']/a/img/@src
+        #postProcess:
+          #- subScraper:
+              #selector: //div[@id='post_view']/a/img/@src
+
+
+# Last Updated December 20, 2020
