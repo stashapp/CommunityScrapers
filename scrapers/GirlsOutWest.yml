@@ -1,0 +1,61 @@
+name: GirlsOutWest
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tour.girlsoutwest.com/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - tour.girlsoutwest.com/models/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='trailerTitle']/div/h3/text()
+        # uncomment the following to strip performer names from titles
+        #postProcess:
+        #  - replace:
+        #    - regex: .+-
+        #      with:
+      Performers:
+        Name:
+          selector: //div[@class='trailer topSpace']/div//p/a/text()
+        URL:
+          selector: //div[@class='trailer topSpace']/div//p/a/@href
+      Image:
+        # use 1x or 2x for low/medium resolution images
+        selector: //div[@class='videoplayer']/img/@src0_3x
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://tour.girlsoutwest.com
+      Date:
+        selector: //div[@class='trailer topSpace']/div[@class='centerwrap clear']/p/text()
+        concat: " "
+        postProcess:
+          - replace:
+            - regex: (.+)(\d{2}\/\d{2}\/\d{4})(.+)
+              with: $2
+          - parseDate: 01/02/2006
+      Studio:
+        Name:
+          fixed: Girls Out West
+        URL:
+          fixed: https://girlsoutwest.com
+  performerScraper:
+    performer:
+      Name:
+        selector: //div[@class='profileDetails clear']/h2/text()
+      Gender:
+        fixed: Female
+      Image:
+        # use 1x or 2x for low/medium resolution images
+        selector: //div[@class='profilePic']/img/@src0_3x
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://tour.girlsoutwest.com
+
+# Last Updated December 13, 2020

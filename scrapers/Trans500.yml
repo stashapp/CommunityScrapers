@@ -1,0 +1,69 @@
+name: Trans500
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - trans500.com/tour/
+      - trans500.com/tour3/
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - trans500.com/tourespanol
+    scraper: sceneScraperEspanol
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="col-sm-12"]/p/../h2/text()
+      Details: //p[@class="description"]
+      Image:
+        selector: //video[@id="my-video"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "http://www.trans500.com"
+      Studio:
+        Name: //p[@class="pull-right"]/b/text()
+
+  sceneScraperEspanol:
+    scene:
+      Title:
+        selector: //header[@id="scene-info"]/h1/text()[contains(., ":")]
+        postProcess:
+          - replace:
+              - regex: .*:.
+                with:
+      Date:
+        selector: //div[contains(text(), "Added:")]/text()  # or //div[@class="scene-infobrick"][contains(text(), "Added:")]/text()
+        postProcess:
+          - replace:
+              - regex: ".*:"
+                with:
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //div[@class="scene-infobrick"][contains(text(), "TSGirls:")]/a/text()
+      Details: //section[@id="scene-desc"]/p/text()
+      Image:
+        selector: //video/@poster|//meta[@name="twitter:image0"]/@content
+        postProcess:
+          - replace:
+              - regex: '^http:'
+                with: 'https:'
+      Studio:
+        Name:
+          selector: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
+          concat: ","
+          postProcess:
+            - replace:
+                - regex: .*(superramon).*
+                  with: "Super Ramon"
+                - regex: .*(tsgirlfriendexperience).*|.*(TSGFE).*
+                  with: "TS Girlfriend Experience"
+                - regex: .*(ikillitts).*|.*(I Kill it TS).*|.*(IKI).*
+                  with: "I Kill It TS"
+                - regex: .*(transatplay).*|.*(TAP).*|.*(trans at play).*
+                  with: "Trans at Play"
+                - regex: .*(behindtrans500).*|.*(behind the scenes).*
+                  with: "Behind Trans500"
+      Tags:  # Either //meta[@name="keywords"]/@content OR: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
+        Name: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
+# Last Updated November 10, 2020

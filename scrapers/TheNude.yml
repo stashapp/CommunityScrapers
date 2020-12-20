@@ -1,0 +1,84 @@
+name: TheNude
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.thenude.com/index.php?page=search&action=searchModels&__form_name=navbar-search&m_aka=on&m_name={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.thenude.com
+    scraper: performerScraper
+xPathScrapers:
+  performerSearch:
+    performer:
+#      Name: //a[@class="model-name"]/text()               Version to get only the name
+#      Name: //a[@class="model-name"]/../../a/@title       Version to get a little info on label/studio as well
+      Name:
+        selector: //figcaption/span
+        postProcess:
+          - replace:
+              - regex: "^AKA:"
+                with: ""
+      URL: //a[@class="model-name"]/@href
+  performerScraper:
+    performer:
+      Name: (//meta[@itemprop="name"])[1]/@content
+      URL: (//meta[@itemprop="url"])[1]/@content
+      Twitter: //a[text()="TWITTER"]/@href
+      Instagram: //a[text()="INSTAGRAM"]/@href
+      Birthdate:
+        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
+        postProcess:
+          - parseDate: 02-01-2006
+      Ethnicity:
+        selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/../text()
+        postProcess:
+          - replace:
+              - regex: Asian
+                with: "asian"
+              - regex: Caucasian
+                with: "white"
+              - regex: Black
+                with: "black"
+              - regex: Latin
+                with: "hispanic"
+      Country: 
+        selector: //span[@itemprop="nationality"]/text()
+        postProcess:
+          - replace:
+              - regex: "United States of America"
+                with: "United States"
+      #EyeColor: not listed
+      Height:
+        selector: //li/span[@class="list-quest"][contains(text(),'Height')]/../text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+).+$
+                with: "$1 cm"
+      Measurements:
+        selector: //li/span[@class="list-quest"][contains(text(),'Measurements')]/../text()
+      FakeTits:
+        selector: //li/span[@class="list-quest"][contains(text(),'Breasts')]/../text()
+        postProcess:
+          - replace:
+              - regex: ^[^\(]+\(([^\)]+)\).*$
+                with: "$1"
+              - regex: Fake
+                with: "Yes"
+              - regex: Real
+                with: "No"
+      CareerLength:
+        selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/../text()
+        concat: "-"
+      Aliases: 
+        selector: //meta[@itemprop="additionalName"]/@content
+        concat: ", "
+      Tattoos: 
+        selector: //li/span[@class="list-quest"][contains(text(),'Tattoos')]/../text()
+      Piercings: 
+        selector: //li/span[@class="list-quest"][contains(text(),'Piercings')]/../text()
+      Image:
+        selector: (//meta[@itemprop="image"])[1]/@content
+      Gender:
+        selector: //meta[@itemprop="gender"]/@content
+# Last Updated November 8, 2020

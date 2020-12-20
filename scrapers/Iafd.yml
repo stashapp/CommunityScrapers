@@ -1,0 +1,427 @@
+name: IAFD
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - iafd.com/title.rme
+    scraper: sceneScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url: 
+      - iafd.com
+    scraper: performerScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - iafd.com/title.rme/title=
+    scraper: movieScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Date: 
+        selector: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Release Date']/following-sibling::p[1]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details:  //div[@id="synopsis"]/div[@class="padded-panel"]//text()
+      Studio:
+        Name: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Studio']/following-sibling::p[1]
+      Performers:
+        Name: //div[@class="castbox"]/p/a
+        
+  performerSearch:
+    performer:
+      Name: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/text()
+      URL: 
+        selector: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.iafd.com
+  
+  performerScraper:
+    performer:
+      Name: //h1
+      Gender: 
+        selector: //form[@id='correct']/input[@name='Gender']/@value
+        postProcess:
+          - map:
+              f: Female
+              m: Male
+      URL: //head/meta[@property="og:url"]/@content
+      Twitter: 
+        selector: //p[@class='biodata']/a[contains(text(),"http://twitter.com/")]/@href
+        postProcess:
+          - replace:
+              - regex: https://twitter.com/
+                with: ""
+      Instagram: 
+        selector: //p[@class='biodata']/a[contains(text(),"http://instagram.com/")]/@href
+        postProcess:
+          - replace:
+              - regex: https://instagram.com/
+                with: ""
+      Birthdate:
+        selector: //div[p[text()='Birthday']]/p[@class='biodata']/a[contains(@href, '/calendar.')]/text()
+        # reference date is: 2006/01/02
+        postProcess:
+          - parseDate: January 2, 2006
+      Ethnicity: 
+        selector: //div[p[text()='Ethnicity']]/p[@class='biodata'][1]
+        postProcess:
+          - map:
+              Asian: asian
+              Caucasian: white
+              Black: black
+              Latin: hispanic
+      Country: 
+        selector: //div/p[text()='Nationality']/following-sibling::p[1]/text()
+        postProcess:
+          - map:
+              # https://en.wikipedia.org/wiki/List_of_adjectival_and_demonymic_forms_for_countries_and_nations
+              Abkhaz: "Abkhazia"
+              Abkhazian: "Abkhazia"
+              Afghan: "Afghanistan"
+              Albanian: "Albania"
+              Algerian: "Algeria"
+              American Samoan: "American Samoa"
+              American: "United States of America"
+              Andorran: "Andorra"
+              Angolan: "Angola"
+              Anguillan: "Anguilla"
+              Antarctic: "Antarctica"
+              Antiguan: "Antigua and Barbuda"
+              Argentine: "Argentina"
+              Argentinian: "Argentina"
+              Armenian: "Armenia"
+              Aruban: "Aruba"
+              Australian: "Australia"
+              Austrian: "Austria"
+              Azerbaijani: "Azerbaijan"
+              Azeri: "Azerbaijan"
+              Bahamian: "Bahamas"
+              Bahraini: "Bahrain"
+              Bangladeshi: "Bangladesh"
+              Barbadian: "Barbados"
+              Barbudan: "Antigua and Barbuda"
+              Basotho: "Lesotho"
+              Belarusian: "Belarus"
+              Belgian: "Belgium"
+              Belizean: "Belize"
+              Beninese: "Benin"
+              Beninois: "Benin"
+              Bermudan: "Bermuda"
+              Bermudian: "Bermuda"
+              Bhutanese: "Bhutan"
+              BIOT: "British Indian Ocean Territory"
+              Bissau-Guinean: "Guinea-Bissau"
+              Bolivian: "Bolivia"
+              Bonaire: "Bonaire"
+              Bonairean: "Bonaire"
+              Bosnian: "Bosnia and Herzegovina"
+              Botswanan: "Botswana"
+              Bouvet Island: "Bouvet Island"
+              Brazilian: "Brazil"
+              British Virgin Island: "Virgin Islands, British"
+              British: "United Kingdom"
+              Bruneian: "Brunei"
+              Bulgarian: "Bulgaria"
+              Burkinabé: "Burkina Faso"
+              Burmese: "Burma"
+              Burundian: "Burundi"
+              Cabo Verdean: "Cabo Verde"
+              Cambodian: "Cambodia"
+              Cameroonian: "Cameroon"
+              Canadian: "Canada"
+              Cantonese: "Hong Kong"
+              Caymanian: "Cayman Islands"
+              Central African: "Central African Republic"
+              Chadian: "Chad"
+              Channel Island: "Guernsey"
+              #Channel Island: "Jersey"
+              Chilean: "Chile"
+              Chinese: "China"
+              Christmas Island: "Christmas Island"
+              Cocos Island: "Cocos (Keeling) Islands"
+              Colombian: "Colombia"
+              Comoran: "Comoros"
+              Comorian: "Comoros"
+              Congolese: "Congo"
+              Cook Island: "Cook Islands"
+              Costa Rican: "Costa Rica"
+              Croatian: "Croatia"
+              Cuban: "Cuba"
+              Curaçaoan: "Curaçao"
+              Cypriot: "Cyprus"
+              Czech: "Czech Republic"
+              Danish: "Denmark"
+              Djiboutian: "Djibouti"
+              Dominican: "Dominica"
+              Dutch: "Netherlands"
+              Ecuadorian: "Ecuador"
+              Egyptian: "Egypt"
+              Emirati: "United Arab Emirates"
+              Emiri: "United Arab Emirates"
+              Emirian: "United Arab Emirates"
+              English people: "England"
+              English: "England"
+              Equatoguinean: "Equatorial Guinea"
+              Equatorial Guinean: "Equatorial Guinea"
+              Eritrean: "Eritrea"
+              Estonian: "Estonia"
+              Ethiopian: "Ethiopia"
+              European: "European Union"
+              Falkland Island: "Falkland Islands"
+              Faroese: "Faroe Islands"
+              Fijian: "Fiji"
+              Filipino: "Philippines"
+              Finnish: "Finland"
+              Formosan: "Taiwan"
+              French Guianese: "French Guiana"
+              French Polynesian: "French Polynesia"
+              French Southern Territories: "French Southern Territories"
+              French: "France"
+              Futunan: "Wallis and Futuna"
+              Gabonese: "Gabon"
+              Gambian: "Gambia"
+              Georgian: "Georgia"
+              German: "Germany"
+              Ghanaian: "Ghana"
+              Gibraltar: "Gibraltar"
+              Greek: "Greece"
+              Greenlandic: "Greenland"
+              Grenadian: "Grenada"
+              Guadeloupe: "Guadeloupe"
+              Guamanian: "Guam"
+              Guatemalan: "Guatemala"
+              Guinean: "Guinea"
+              Guyanese: "Guyana"
+              Haitian: "Haiti"
+              Heard Island: "Heard Island and McDonald Islands"
+              Hellenic: "Greece"
+              Herzegovinian: "Bosnia and Herzegovina"
+              Honduran: "Honduras"
+              Hong Kong: "Hong Kong"
+              Hong Konger: "Hong Kong"
+              Hungarian: "Hungary"
+              Icelandic: "Iceland"
+              Indian: "India"
+              Indonesian: "Indonesia"
+              Iranian: "Iran"
+              Iraqi: "Iraq"
+              Irish: "Ireland"
+              Israeli: "Israel"
+              Israelite: "Israel"
+              Italian: "Italy"
+              Ivorian: "Ivory Coast"
+              Jamaican: "Jamaica"
+              Jan Mayen: "Jan Mayen"
+              Japanese: "Japan"
+              Jordanian: "Jordan"
+              Kazakh: "Kazakhstan"
+              Kazakhstani: "Kazakhstan"
+              Kenyan: "Kenya"
+              Kirghiz: "Kyrgyzstan"
+              Kirgiz: "Kyrgyzstan"
+              Kiribati: "Kiribati"
+              Korean: "South Korea"
+              Kosovan: "Kosovo"
+              Kosovar: "Kosovo"
+              Kuwaiti: "Kuwait"
+              Kyrgyz: "Kyrgyzstan"
+              Kyrgyzstani: "Kyrgyzstan"
+              Lao: "Lao People's Democratic Republic"
+              Laotian: "Lao People's Democratic Republic"
+              Latvian: "Latvia"
+              Lebanese: "Lebanon"
+              Lettish: "Latvia"
+              Liberian: "Liberia"
+              Libyan: "Libya"
+              Liechtensteiner: "Liechtenstein"
+              Lithuanian: "Lithuania"
+              Luxembourg: "Luxembourg"
+              Luxembourgish: "Luxembourg"
+              Macanese: "Macau"
+              Macedonian: "North Macedonia"
+              Magyar: "Hungary"
+              Mahoran: "Mayotte"
+              Malagasy: "Madagascar"
+              Malawian: "Malawi"
+              Malaysian: "Malaysia"
+              Maldivian: "Maldives"
+              Malian: "Mali"
+              Malinese: "Mali"
+              Maltese: "Malta"
+              Manx: "Isle of Man"
+              Marshallese: "Marshall Islands"
+              Martinican: "Martinique"
+              Martiniquais: "Martinique"
+              Mauritanian: "Mauritania"
+              Mauritian: "Mauritius"
+              McDonald Islands: "Heard Island and McDonald Islands"
+              Mexican: "Mexico"
+              Moldovan: "Moldova"
+              Monacan: "Monaco"
+              Mongolian: "Mongolia"
+              Montenegrin: "Montenegro"
+              Montserratian: "Montserrat"
+              Monégasque: "Monaco"
+              Moroccan: "Morocco"
+              Motswana: "Botswana"
+              Mozambican: "Mozambique"
+              Myanma: "Myanmar"
+              Namibian: "Namibia"
+              Nauruan: "Nauru"
+              Nepalese: "Nepal"
+              Nepali: "Nepal"
+              Netherlandic: "Netherlands"
+              New Caledonian: "New Caledonia"
+              New Zealand: "New Zealand"
+              Ni-Vanuatu: "Vanuatu"
+              Nicaraguan: "Nicaragua"
+              Nigerian: "Nigeria"
+              Nigerien: "Niger"
+              Niuean: "Niue"
+              Norfolk Island: "Norfolk Island"
+              Northern Irish: "Northern Ireland"
+              Northern Marianan: "Northern Mariana Islands"
+              Norwegian: "Norway"
+              Omani: "Oman"
+              Pakistani: "Pakistan"
+              Palauan: "Palau"
+              Palestinian: "Palestine"
+              Panamanian: "Panama"
+              Papua New Guinean: "Papua New Guinea"
+              Papuan: "Papua New Guinea"
+              Paraguayan: "Paraguay"
+              Persian: "Iran"
+              Peruvian: "Peru"
+              Philippine: "Philippines"
+              Pitcairn Island: "Pitcairn Islands"
+              Polish: "Poland"
+              Portuguese: "Portugal"
+              Puerto Rican: "Puerto Rico"
+              Qatari: "Qatar"
+              Romanian: "Romania"
+              Russian: "Russia"
+              Rwandan: "Rwanda"
+              Saba: "Saba"
+              Saban: "Saba"
+              Sahraouian: "Western Sahara"
+              Sahrawi: "Western Sahara"
+              Sahrawian: "Western Sahara"
+              Salvadoran: "El Salvador"
+              Sammarinese: "San Marino"
+              Samoan: "Samoa"
+              Saudi Arabian: "Saudi Arabia"
+              Saudi: "Saudi Arabia"
+              Scottish: "Scotland"
+              Senegalese: "Senegal"
+              Serbian: "Serbia"
+              Seychellois: "Seychelles"
+              Sierra Leonean: "Sierra Leone"
+              Singapore: "Singapore"
+              Singaporean: "Singapore"
+              Slovak: "Slovakia"
+              Slovene: "Slovenia"
+              Slovenian: "Slovenia"
+              Solomon Island: "Solomon Islands"
+              Somali: "Somalia"
+              Somalilander: "Somaliland"
+              South African: "South Africa"
+              South Georgia Island: "South Georgia and the South Sandwich Islands"
+              South Ossetian: "South Ossetia"
+              South Sandwich Island: "South Georgia and the South Sandwich Islands"
+              South Sudanese: "South Sudan"
+              Spanish: "Spain"
+              Sri Lankan: "Sri Lanka"
+              Sudanese: "Sudan"
+              Surinamese: "Suriname"
+              Svalbard resident: "Svalbard"
+              Swati: "Eswatini"
+              Swazi: "Eswatini"
+              Swedish: "Sweden"
+              Swiss: "Switzerland"
+              Syrian: "Syrian Arab Republic"
+              Taiwanese: "Taiwan"
+              Tajikistani: "Tajikistan"
+              Tanzanian: "Tanzania"
+              Thai: "Thailand"
+              Timorese: "Timor-Leste"
+              Tobagonian: "Trinidad and Tobago"
+              Togolese: "Togo"
+              Tokelauan: "Tokelau"
+              Tongan: "Tonga"
+              Trinidadian: "Trinidad and Tobago"
+              Tunisian: "Tunisia"
+              Turkish: "Turkey"
+              Turkmen: "Turkmenistan"
+              Turks and Caicos Island: "Turks and Caicos Islands"
+              Tuvaluan: "Tuvalu"
+              Ugandan: "Uganda"
+              Ukrainian: "Ukraine"
+              Uruguayan: "Uruguay"
+              Uzbek: "Uzbekistan"
+              Uzbekistani: "Uzbekistan"
+              Vanuatuan: "Vanuatu"
+              Vatican: "Vatican City State"
+              Venezuelan: "Venezuela"
+              Vietnamese: "Vietnam"
+              Wallis and Futuna: "Wallis and Futuna"
+              Wallisian: "Wallis and Futuna"
+              Welsh: "Wales"
+              Yemeni: "Yemen"
+              Zambian: "Zambia"
+              Zimbabwean: "Zimbabwe"
+              Åland Island: "Åland Islands"
+      Height: 
+        selector: //div/p[text()='Height']/following-sibling::p[1]/text()
+        postProcess:
+          - replace:
+              - regex: \d+\D+\d+\D+
+                with: ""
+              - regex:  \D+$
+                with: ""
+      Measurements: //div/p[text()='Measurements']/following-sibling::p[1]/text()
+      CareerLength: 
+        selector: //div/p[@class='biodata'][contains(text(),"Started around")]/text()
+        postProcess:
+          - replace:
+              - regex: (\D+\d\d\D+)$
+                with: ""     
+      Aliases: //div[p[@class='bioheading' and contains(normalize-space(text()),"Performer AKA")]]//div[@class='biodata' and not(text()="No known aliases")]/text()
+      Tattoos: //div/p[text()='Tattoos']/following-sibling::p[1]/text()
+      Piercings: //div/p[text()='Piercings']/following-sibling::p[1]/text()
+      Image:
+        selector: //div[@id='headshot']/img/@src
+
+  movieScraper:
+    common:
+      $biohead: //p[@class="bioheading"]
+      $biodata_link: following-sibling::p[@class="biodata"][1]/a/text()
+      $biodata: following-sibling::p[@class="biodata"][1]/text()
+    movie:
+      Name:
+        selector: //h1/text()
+        postProcess:
+          - replace:
+              - regex: \([0-9]+\)
+                with:
+      Director: $biohead[contains(text(), "Directors")]/$biodata_link
+      Duration: $biohead[contains(text(), "Minutes")]/$biodata
+      Synopsis: //div[@id="synopsis"]/div[@class="padded-panel"]//text()
+      Date:
+        selector: $biohead[contains(text(), "Release Date")]/$biodata[1]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Studio:
+        Name: $biohead[contains(text(), "Studio")]/$biodata_link|$biohead[contains(text(), "Distributor")]/$biodata_link
+      Aliases:
+        selector: //div[@class="col-sm-12"]/dl/dd
+        concat: ", "
+
+# Last Updated November 24, 2020

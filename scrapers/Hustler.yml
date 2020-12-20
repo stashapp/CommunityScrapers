@@ -1,0 +1,67 @@
+name: "Hustler"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hustler.com/trailers
+      - barelylegal.com/trailers/
+      - analhookers.com/trailers/
+      - hustlerhd.com/trailers/
+      - hustlerslesbians.com/trailers/
+      - beaverhunt.com/trailers/
+      - bustybeauties.com/trailers/
+      - hustlerparodies.com/trailers/
+      - muchaslatinas.com/trailers/
+      - hottiemoms.com/trailers/
+      - asianfever.com/trailers/
+      - hustlaz.com/trailers/
+      - scarybigdicks.com/trailers/
+      - hustlerstaboo.com/trailers/
+      - fuckfiesta.com/trailers/
+      - hometowngirls.com/trailers/
+      - hometownhoneys.com/trailers/
+      - bossymilfs.com/trailers/
+      - vcaxxx.com/trailers/
+      - lesbianass.com/trailers/
+      - toomanytrannies.com/trailers/
+      - www.assmeat.com/trailers/
+      - daddygetslucky.com/trailers/
+      - bootysisters.com/trailers/
+      - sexsee.com/trailers/
+      - titworld.com/trailers/
+      - pornstarhardcore.com/trailers/
+      - bootyclapxxx.com/trailers/
+      - asian18.com/trailers/
+      - battlebang.com/trailers/
+      - fuckinghardcore.com/trailers/
+      - seemysextapes.com/trailers/
+      - sororitysluts.com/trailers/
+      - watchreal.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $script: //script[contains(text(), 'headline')]/text()
+      $info: //div[@class="gallery-info"]
+    scene:
+      Title:
+        selector: $info/h1
+      Details: $info/p
+      Performers:
+        Name: $info/h4/a/text()
+      Date:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+\"datePublished\"\:\s\"(\d\d/\d\d/\d\d\d\d)\".+
+                with: $1
+          - parseDate: "01/02/2006"
+      Image:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+\"thumbnailUrl\"\:\s\"(https.+\.jpg)\".+
+                with: $1
+      Tags:
+        Name: //span[@class="gallery-meta"]/span[@class="left"]/a/text()
+
+# Last Updated November 8, 2020

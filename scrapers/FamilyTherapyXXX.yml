@@ -1,0 +1,49 @@
+name: "FamilyTherapyXXX"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - familytherapyxxx.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+    scene:
+      Title: //h1/text()
+      Date:
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05-07:00
+      Details:
+        selector: //div[@class="entry-content"]/p/text()
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: "\n"
+                with: "\n"
+      Tags:
+        Name: //p[@class="post-meta"]//a/text()
+      Performers:
+        Name:
+          selector: //div[@class="entry-content"]/p[contains(text(),'***')]|
+          postProcess:
+            - replace:
+                - regex: \*\*\*|Starring\s
+                  with:
+          split: ' & '
+      Studio:
+        Name:
+          selector: //h1/text()
+          postProcess:
+            - replace:
+                - regex: .+
+                  with: 'FamilyTherapyXXX'
+      Image:
+        selector: //meta[@itemprop="contentUrl"]/@content
+        postProcess:
+          - replace:
+              - regex: .+(?:\d{4}\/\d{2}\/)([\w]+)(?:\.\w+)
+                with: https://familytherapyxxx.com/?s=$1
+          - subScraper:
+              selector: //div[@id="left-area"]/article[1]//img/@src
+
+# Last Updated November 8, 2020

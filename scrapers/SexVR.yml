@@ -1,0 +1,86 @@
+name: "SexVR"
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.sexvr.com/search/pornstars/{}/
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - sexvr.com/pornstars
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sexvr.com/video
+    scraper: sceneScraper
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //div[@class="item-col item--pornstar col"]//a/@title
+      URL: //div[@class="item-col item--pornstar col"]//a/@href
+  performerScraper:
+    common:
+      $info: //div[@class="profile-info"]
+    performer:
+      Name: $info//li[@class="profile-field profile-field-name"]/span[@class="sub-desc"]/text()
+      URL: //link[@rel="canonical"]/@href
+      Gender:
+        selector: //meta[@name="application-name"]/@content
+        postProcess:
+          - replace:
+              - regex: .+
+                with: female
+      Twitter: $info//li[span[@class="sub-label"]/text()="Twitter:"]/span[@class="sub-desc"]/a/@href
+      Birthdate:
+        selector: $info//li[@class="profile-field profile-field-fob"]/span[@class="sub-desc"]/text()
+        postProcess:
+          - replace:
+              - regex: \s\(\d+\s\w+\)
+                with:
+          - parseDate: 2 Jan 2006
+      Ethnicity:
+        selector: $info//li[span[@class="sub-label"]/text()="Ethnicity:"]/span[@class="sub-desc"]/text()
+        postProcess:
+          - replace:
+              - regex: Latin
+                with: 'hispanic'
+              - regex: Caucasian
+                with: 'white'
+              - regex: Ebony
+                with: 'black'
+              - regex: Asian
+                with: 'asian'
+      Country: $info//li[span[@class="sub-label"]/text()="Country:"]/span[@class="sub-desc"]/text()
+      EyeColor: $info//li[@class="profile-field profile-field-eyes"]/span[@class="sub-desc"]/text()
+      Height:
+        selector: $info//li[@class="profile-field profile-field-height"]/span[@class="sub-desc"]/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)\scm.+
+                with: $1
+      Measurements: $info//li[span[@class="sub-label"]/text()="Measurements:"]/span[@class="sub-desc"]/text()
+      FakeTits:
+        selector: $info//li[span[@class="sub-label"]/text()="Natural Tits:"]/span[@class="sub-desc"]/text()
+        postProcess:
+          - map:
+              Yes: No
+              No: Yes
+      Tattoos: $info//li[span[@class="sub-label"]/text()="Tattoo(s):"]/span[@class="sub-desc"]/text()
+      Piercings: $info//li[span[@class="sub-label"]/text()="Piercing(s):"]/span[@class="sub-desc"]/text()
+      Aliases: $info//li[@class="profile-field profile-field-ska"]/span[@class="sub-desc"]/text()
+      Image: //div[@class="profile-img-avatar"]/img/@src
+  sceneScraper:
+    scene:
+      Title: //div[@class="video-title"]/h1/text()
+      Details:
+        selector: //div[@class="main-description"]/text()|//div[@id="toggle-desc"]/text()
+        concat: " "
+      Tags:
+        Name: //div[@class="tags-block"]//a/text()
+      Performers:
+        Name: //div[@class="tags-block"]//a/@title
+      Studio:
+        Name: //span[@class="studio-name"]//text()
+      Image: //dl8-video/@poster
+
+# Last Updated November 10, 2020

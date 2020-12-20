@@ -1,0 +1,32 @@
+name: puretaboo
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - puretaboo.com/en/video
+      - girlsway.com/en/video
+      - 21sextury.com/en/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //a[@class='sceneLink  ']/@title
+      Image: //video[@class="vjs-tech"]/@poster
+#             //meta[@name="twitter:image"]/@content # Can have a better image 720p to 4K
+      Date:
+        selector: //span[@class="Text ScenePlayer-ReleaseDate-Text styles_3tU3Z2sLeO"]/text()
+      Details:
+        selector: //div[@class[contains(.,'SceneDescription')]]/text()
+        concat: "\n\n"
+      Tags:
+        Name:
+          selector: //div[@class="BackgroundBox ScenePlayer-SceneCategories-BackgroundBox styles_1khKtnnA8W"]/a
+      Performers:
+        Name:
+          selector: //div[@class="component-ActorThumb-List"]/a/@title
+      Studio:
+        Name:
+          selector: //div[@class="styles_1oxPFmiuVp"]/a/@title
+driver:
+  useCDP: true
+
+# Last Updated October 3, 2020

@@ -1,0 +1,60 @@
+name: "AngelaWhite"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - angelawhite.com/tour/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="video-details-inner"]
+      $search: //div[@class="video-details-inner"]/h2/text()
+    scene:
+      Title: $info/h2/text()
+      Date:
+        selector: $info/span/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: $info//p/text()
+      Performers:
+        Name:
+          selector: $search
+          postProcess:
+            - replace:
+                - regex: (^\d+)\s.+
+                  with: "http://angelawhite.com/tour/search?query=$1"
+            - subScraper:
+                selector: //div[@class="models-list"]/a/text()
+                concat: ","
+          split: ","
+      Tags:
+        Name:
+          selector: $search
+          postProcess:
+            - replace:
+                - regex: (^\d+)\s.+
+                  with: "http://angelawhite.com/tour/search?query=$1"
+            - subScraper:
+                selector: //div[@class="categories-list"]/a/text()
+                concat: ","
+          split: ","
+      Image:
+        selector: $search
+        postProcess:
+          - replace:
+              - regex: \s
+                with: "+"
+              - regex: ^
+                with: "http://angelawhite.com/tour/search?query=\""
+              - regex: $
+                with: "\""
+          - subScraper:
+              selector: //img/@src0
+              postProcess:
+                - replace:
+                    - regex: ^
+                      with: http://angelawhite.com
+      Studio:
+        Name: //a[@class="logo-aw"]/@title
+
+# Last Updated November 8, 2020

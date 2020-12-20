@@ -1,0 +1,26 @@
+name: "SiteName"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - siteurl.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+      Details:
+      Date:
+        selector:
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+      Studio:
+        Name:
+      Movies:
+        Name:
+      Tags:
+        Name:
+      Performers:
+        Name:
+
+# Last Updated June XX, 2020

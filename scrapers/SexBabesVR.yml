@@ -1,0 +1,34 @@
+name: "SexBabesVR"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sexbabesvr.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="video-info"]
+    scene:
+      Title: $info//div[@class="video-group-left"]//h1[@class="title"]/text()
+      Date:
+        selector: $info//div[@class="video-group-left"]//div[@class="grid-one-date"]/span[@class="date-display-single"]/@content
+        postProcess:
+          - replace:
+              - regex: (\d{4}-\d{2}-\d{2})T.+
+                with: $1
+          - parseDate: 2006-01-02
+      Details:
+        selector: $info//div[@class="video-group-bottom"]//text()
+        concat: " "
+      Tags:
+        Name: $info//div[@class="video-group-left"]/div[@class="video-tags"]//a/text()
+      Performers:
+        Name: $info//div[@class="video-group-left"]/div[@class="video-actress-name"]//a/text()
+      Image:
+        selector: //div[@class="splash-screen fullscreen-message is-visible"]/@style
+        postProcess:
+          - replace:
+              - regex: .+(http[^\)]+).+
+                with: $1
+
+# Last Updated November 8, 2020

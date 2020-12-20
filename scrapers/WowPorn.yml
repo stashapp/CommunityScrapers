@@ -1,0 +1,35 @@
+name: "WowPorn"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wowporn.xxx
+      - allfinegirls.net
+      - wowgirls.xxx
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"][1]/@content
+      Date:
+        selector: //div[@class="fp-player"]//meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - parseDate: 2006-01-02
+      Details:
+        selector: //div[@class="video-description"]/div/p//text()
+        concat: " "
+      Tags:
+        Name: //div[@class="tags-list"]/a/text()
+      Performers:
+        Name: //i[@class="fa fa-tag"]/following-sibling::text()
+      Image: //meta[@property="og:image"][1]/@content
+      Studio:
+        Name:
+            selector: //div[@class="logo"]/a/@title
+            postProcess:
+              - replace:
+                - regex: \s-.*|\sVideos
+                  with: ""
+              - map:
+                  WOW PORN: "Wow Porn"
+
+# Last Updated September 16, 2020

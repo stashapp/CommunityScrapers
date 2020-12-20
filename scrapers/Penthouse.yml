@@ -1,0 +1,29 @@
+name: Penthouse
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - penthousegold.com/scenes/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+          selector: //div[@class="content-desc content-new-scene"]//h1/text()
+          postProcess:
+            - replace:
+                - regex: ^Video\s-\s
+                  with: ""
+      Date: 
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - parseDate: 01/02/2006
+      Studio:
+        Name: 
+            fixed: "Penthouse"
+      Performers:
+        Name: //div[@class="model"]/a/@title
+      Tags:
+        Name: //ul[@class="scene-tags"]/li/a/text()
+      Image: //meta[@itemprop="thumbnailUrl"]/@content[not(contains(., "/no_video_preview_"))]
+
+# Last Updated December 14, 2020

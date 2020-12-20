@@ -1,0 +1,26 @@
+name: "TeamSkeet"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - teamskeet.com/movies/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="col-12 sceneTitle"]/text()
+      Date:
+        selector: //div[@class="col-6 sceneDate"]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: //div[@class="col-12 sceneDesc"]/text()
+      Performers:
+        Name: //div[@class="col-12 contentTitle"]/a
+      Studio:
+        Name: //div[@class="siteName float-right px-3 rounded "]/a
+      Image: //stream/@poster
+
+# Switched to CDP due to Cloudflare errors
+driver:
+  useCDP: true
+
+# Last Updated November 8, 2020

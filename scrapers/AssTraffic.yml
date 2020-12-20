@@ -1,0 +1,64 @@
+name: "AssTraffic"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - asstraffic.com/movies/
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - asstraffic.com/models/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2
+      Date:
+        selector: //div[@class="container"]//span[contains(.,"Added")]/text()
+        postProcess:
+          - replace:
+              - regex: "Added "
+                with:
+          - parseDate: January 2, 2006
+      Details: //p[@class="mg-md"]/text()
+      Performers:
+        Name: //div[@id="video-info"]//a[contains(@href,'/models')]/text()
+      Studio:
+        Name:
+          fixed: AssTraffic
+      Image: //video[@id='video']/@poster
+      Tags:
+        Name: //div[contains(@class,"tag-container")]/a/text()
+
+  performerScraper:
+    performer:
+      Name: //h3[@class="mg-md"]
+      Country:
+        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Nationality:']/following-sibling::text()[1]
+        postProcess:
+          - map:
+              Hungarian: Hungary
+              French: France
+              Czech: Czech Republic
+              Romanian: Romania
+              Swiss: Switzerland
+              Spanish: Spain
+              Russian: Russia
+              Austrian: Austria
+              Canadian: Canada
+              Colombian: Colombia
+              Polish: Poland
+              Slovakian: Slovakia
+              Ukrainian: Ukraine
+      Ethnicity:
+        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Ethnicity:']/following-sibling::text()[1]
+        postProcess:
+          - map:
+              caucasian: white
+      Gender:
+        fixed: Female
+      Image:
+        selector: //div[@class='col-md-8 bigmodelpic']/img/@sr
+# Last Updated November 8, 2020

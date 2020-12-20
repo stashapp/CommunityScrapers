@@ -1,0 +1,42 @@
+# Be sure to set a User Agent in Settings! (ex:Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+name: "Andomark"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - reidmylips.elxcomplete.com/updates/
+      - reidmylips.com/updates/
+      - sheseducedme.com/updates
+      - aliciasgoddesses.com/updates
+      - ariellynn.com/tour/
+      - ravenswallowzxxx.com/updates/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //span[@class="update_title"]/text()|//title/text()
+      Date:
+        selector: //span[@class="availdate"]/text()[1]|//span[@class="update_date"]/text()
+        postProcess:
+            - parseDate: 01/02/2006
+      Details: //span[@class="latest_update_description"]
+      Performers:
+        Name:
+          selector: //span[@class="tour_update_models"]
+          postProcess:
+            - replace:
+                - regex: "[\\s]*(,)[\\s]*"
+                  with: "$1"
+          split: ","
+      Tags:
+        Name: //span[@class="update_tags"]/a/text()|//span[@class="tour_update_tags"]/a/text()
+      Studio:
+        Name:
+            selector: //link[@rel="canonical"]/@href
+            postProcess:
+                - replace:
+                    - regex: (.+\/\/)(.+?)(\..+)
+                      with: $2
+      Image: //meta[@property="og:image"]/@content
+      URL: //link[@rel='canonical']/@href
+
+# Last Updated October 9, 2020

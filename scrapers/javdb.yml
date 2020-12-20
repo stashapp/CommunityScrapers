@@ -1,0 +1,97 @@
+name: JavDB
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://javdb.com/videos/search_autocomplete.json?q={filename}
+  queryURLReplace:
+    filename:
+      - regex: \..+$
+        with: ""
+  scraper: sceneQueryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - javdb.com/v/
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - javdb.com/v/
+    scraper: movieScraper
+jsonScrapers:
+  sceneQueryScraper:
+    scene:
+      Title: 0.number
+      URL: 
+        selector: 0.uid
+        postProcess:
+          - replace: 
+            - regex: ^
+              with: "https://javdb.com/v/"
+        # If you don't support cookie you can use this regex.
+        #    - regex: $
+        #      with: "?locale=en"
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //strong[text()='ID:']/../span
+        concat: "|"
+        postProcess:
+          - replace:
+            - regex: \|
+              with: ""
+      Date: //strong[text()='Released Date:']/../span/text()
+      Details: 
+        selector: //h2[@class="title is-4"]/strong/text()
+        postProcess:
+          - replace:
+            - regex: (.*?\s)(.+)
+              with: $2
+      Tags:
+        Name: //strong[text()='Tags:']/../span/a/text()
+      Performers:
+        Name: //strong[text()='Actor(s):']/../span/a/text()
+      Studio:
+        Name:
+            selector: //strong[text()='Maker:']/../span/a/text()|//strong[text()='Publisher:']/../span/a/text()
+      Image: //img[@class="video-cover"]/@src
+  movieScraper:
+    movie:
+      Name:
+        selector: //strong[text()='ID:']/../span
+        concat: "|"
+        postProcess:
+          - replace:
+            - regex: \|
+              with: ""
+      Director: //strong[text()='Director:']/../span/a/text()
+      Duration: 
+        selector: //strong[text()='Duration:']/../span/text()
+        postProcess:
+          - replace:
+            - regex: \D
+              with: ""
+      Date: //strong[text()='Released Date:']/../span/text()
+      Synopsis: 
+        selector: //h2[@class="title is-4"]/strong/text()
+        postProcess:
+          - replace:
+            - regex: (.*?\s)(.+)
+              with: $2
+      Studio:
+        Name:
+            selector: //strong[text()='Maker:']/../span/a/text()|//strong[text()='Publisher:']/../span/a/text()
+      FrontImage:
+        selector: //img[@class="video-cover"]/@src
+
+driver:
+  cookies:
+    - CookieURL: "https://javdb.com"
+      Cookies:
+        - Name: "locale"
+          Domain: "javdb.com"
+          Value: "en"
+          Path: "/"
+
+# Last Updated December 07, 2020

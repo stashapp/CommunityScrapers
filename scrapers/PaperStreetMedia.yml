@@ -1,0 +1,71 @@
+name: "PaperStreetMedia"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - badmilfs.com/movies/
+      - bbcparadise.com/movies/
+      - bffs.com/movies/
+      - blackvalleygirls.com/movies/
+      - dadcrush.com/movies/
+      - daughterswap.com/movies/
+      - dyked.com/movies/
+      - exxxtrasmall.com/movies/
+      - familystrokes.com/movies/
+      - fostertapes.com/movies/
+      - innocenthigh.com/movies/
+      - littleasians.com/movies/
+      - mylfdom.com/movies/
+      - pervmom.com/movies/
+      - shoplyfter.com/movies/
+      - shoplyftermylf.com/movies/
+      - sislovesme.com/movies/
+      - stayhomepov.com/movies/
+      - stepsiblings.com/movies/
+      - submissived.com/movies/
+      - teenpies.com/movies/
+      - teensloveanal.com/movies/
+      - teensloveblackcocks.com/movies/
+      - thickumz.com/movies/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //p[@class="video-title"]/text()
+      Details: //p[@class="video-description"]/text()
+      Performers:
+        Name: //p[@class="model-name"]/a
+      Image: //div[@class="video-area"]//stream/@poster
+      Studio:
+        Name:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace: 
+                - regex: (.+www\.)(\w+)(.+)
+                  with: $2
+            - map:
+                badmilfs: BadMilfs
+                bbcparadise: "BBC Paradise"
+                bffs: BFFs
+                blackvalleygirls: "Black Valley Girls"
+                dadcrush: DadCrush
+                daughterswap: "Daughter Swap"
+                dyked: Dyked
+                exxxtrasmall: ExxxtraSmall
+                familystrokes: "Family Strokes"
+                fostertapes: "Foster Tapes"
+                innocenthigh: "Innocent High"
+                littleasians: "Little Asians"
+                mylfdom: MYLFDom
+                pervmom: PervMom
+                shoplyfter: Shoplyfter
+                shoplyftermylf: "Shoplyfter MYLF"
+                sislovesme: SisLoveMe
+                stayhomepov: StayHomePOV
+                stepsiblings: StepSiblings
+                submissived: Submissived
+                teenpies: "Teens Pies"
+                teensloveanal: "Teens Love Anal"
+                teensloveblackcocks: "Teens Love Black Cocks"
+                thickumz: Thickumz
+                    
+# Last Updated October 20, 2020

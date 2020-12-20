@@ -1,0 +1,29 @@
+name: japanhdv
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - japanhdv.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $movieinfo: //div[@class="pure-u-1-5 hidden-sm hidden-xs"]/div[@class="video-info"]
+    scene:
+      Title: $movieinfo/p[1]/text()
+      Details: //div[@class="pure-u-xs-1-1 pure-u-sm-1-1 pure-u-2-3 text-black video-description"]/text()
+      Date: 
+        selector: //meta[@itemprop="datePublished"]/@content
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05-07:00
+      Performers: 
+        Name: $movieinfo/p[2]/a/text()
+      Tags:
+        Name: $movieinfo/p[5]/a
+      Image:
+        selector: //video[@id="videohtml5tour"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^
+                with:  "https:"
+
+# Last Updated November 8, 2020

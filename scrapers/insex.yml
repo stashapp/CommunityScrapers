@@ -1,0 +1,32 @@
+name: insex
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sexuallybroken.com/sb
+      - infernalrestraints.com/ir
+      - insex.com/is
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $studio: //title/text()
+    scene:
+      Title: //div[@class="is-size-5 has-text-weight-bold"]/text()
+      Date:
+        selector: //span[@class="tag is-dark"]/text()
+      Details:
+        selector: //div[@class="is-size-7 has-text-white-ter"]/preceding-sibling::div[1]/text()
+        concat: "<br>"
+        postProcess:
+          - replace:
+            - regex: <br>
+              with: "\n"
+      Performers:
+        Name: //div[@class="is-size-6 has-text-white-ter"]/a[@class="tag is-dark"]/text()
+      Tags:
+        Name: //div[@class="is-size-7 has-text-white-ter"]/following-sibling::div/span/text()
+      Studio:
+        Name: $studio
+      Image: //video-js[@id="videoPlayer"]/@poster
+
+# Last Updated December 8, 2020

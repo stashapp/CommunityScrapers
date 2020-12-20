@@ -1,0 +1,48 @@
+name: private
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - private.com
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - private.com
+    scraper: movieScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //section[@class="video-description-and-tags clearfix"]
+    scene:
+      Title:
+        selector: $content//ul[@class="scene-models-list"]/preceding-sibling::h1/text()
+      Date:
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: $content//p[@id="description-section"]
+      Tags:
+        Name: $content//ul[@class="scene-tags"]/li/a/text()
+      Performers:
+        Name: $content//ul[@class="scene-models-list"]//a/text()
+      Studio:
+        Name: $content//span[@class="title-site"]/text()
+        #fixed: Private
+      Image: //meta[@property="og:image"]/@content
+  movieScraper:
+    movie:
+      Name: //div[@class="dvds-wrapper"]/h1/text()
+      Director: //p[@class="director"]/span[@itemprop="name"]/text()
+      Duration:
+        selector: //p[em[contains(text(), "Duration:")]]/text()
+        postProcess:
+          - replace:
+            - regex: ^(\d+).+$
+              with: 00:$1:00
+      Date: //span[@itemprop="datePublished"]/text()
+      Studio:
+        Name:
+          fixed: Private
+      Synopsis: //p[@class="sinopsys"]
+      FrontImage: //div[@class="dvds-wrapper"]//img[@class="img-responsive"]/@src
+# Last Updated August 18, 2020

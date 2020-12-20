@@ -1,0 +1,72 @@
+name: "TimTales"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - timtales.com/videos/
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.timtales.com/the-men/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="text"]
+    scene:
+      Title: $info/h1/text()
+      Date:
+        selector: $info/p[@class="date"]/text()
+        postProcess:
+          - replace:
+              - regex: \s–\s.*$
+                with:
+          - parseDate: January 02, 2006
+      Details:
+        selector: $info/p[@class="bodytext"]/text()
+        concat: "\n\n"
+      Tags:
+        Name: $info/p[@class="categories" and contains(text(), "Categories:")]/a/text()
+      Performers:
+        Name:
+          selector: $info/p[@class="categories" and contains(text(), "Men:")]
+          postProcess:
+            - replace:
+                - regex: "Men:"
+                  with:
+                - regex: (,)\s+
+                  with: $1
+          split: ","
+      Image:
+        selector: //div[@class="video player no-volume play-button"]/@style
+        postProcess:
+          - replace:
+              - regex: .+'(.+)'.+
+                with: $1
+      Studio:
+        Name:
+          fixed: Timtales
+
+  performerScraper:
+    performer:
+      Name: //div[contains(@class, "top")]/h1/text()
+      Gender:
+        fixed: Male
+      Country: //span[text()="Country of birth:"]/following-sibling::text()
+      Height:
+        selector: //span[text()="Height:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^.*\[(.*) cm\].*$
+                with: $1
+      Measurements:
+        selector: //span[text()="Cock:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^.*\[(.*) cm\].*$
+                with: $1
+      Image: //div[@class="model-details"]/img/@src
+
+# Last Updated November 8, 2020

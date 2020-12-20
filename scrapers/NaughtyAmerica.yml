@@ -1,0 +1,36 @@
+name: naughtyamerica
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - naughtyamerica.com/scene/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="scene-info"]
+    scene:
+      Title: $sceneinfo/h1[@class="scene-title grey-text"]
+      Date:
+        selector: //div[@class="date-tags"]/span
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: //div[@class="synopsis grey-text"]
+        postProcess:
+          - replace:
+              - regex: "Synopsis"
+                with: ""
+      Tags:
+        Name: //div[@class="categories grey-text"]/a
+      Performers:
+        Name: $sceneinfo/div[@class="performer-list"]/a
+      Studio:
+        Name: $sceneinfo/a[@class="site-title grey-text link"]
+      Image:
+        selector: //img[@class="start-card lazyload"]/@data-src|//img[@class="start-card"]/@src|//dl8-video[@id="vr_player"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+
+# Last Updated November 8, 2020

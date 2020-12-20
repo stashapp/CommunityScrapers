@@ -1,0 +1,54 @@
+name: IafdStreaming
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - streaming.iafd.com/
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - streaming.iafd.com/
+    scraper: sceneScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: //h1[@class="description"]/text()
+      Director: //div[@class="director"]/a/text()
+      Duration:
+        selector: //span[contains(text(), "Length")]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: " hrs. "
+              with: ":"
+            - regex: " mins."
+              with: ":00"
+      Date:
+        selector: //span[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Synopsis: //div[@class="synopsis"]//text()
+      Studio:
+        Name: //div[@class="studio"]/a/text()
+      FrontImage: //div[@class="carousel-item active"]/img/@data-src
+      BackImage: //div[@class="carousel-item"]/img/@data-src
+
+  sceneScraper:
+    scene:
+      Title: //h1[@class="description"]/text()
+      Date:
+        selector: //span[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Details:  //h5[@class="tag-line"]/text()
+      Studio:
+        Name: //span[contains(text(), "Studio")]/following-sibling::span/text()
+      Performers:
+        Name: //a[@data-label="Performer"]/img/@title
+      Tags:
+        Name: //div[@class="tags"]/a/text()
+      Movies:
+        Name: //a[contains(@data-label, "Full Movie Text")]/text()
+
+# Last Updated August 30, 2020

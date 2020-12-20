@@ -1,0 +1,29 @@
+name: "ZeroTolerance"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ztod.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $desc: //div[@class="row player-desc"]/div[1]
+    scene:
+      Title: //h1[@class="section-title text-white"]/text()
+      Date:
+        selector: $desc/ul/li[1]/text()
+        postProcess:
+          - replace:
+              - regex: Released\son\s
+                with:
+          - parseDate: Jan 02, 2006
+      Details: $desc//p/text()
+      Tags:
+        Name: $desc//a/text()
+      Performers:
+        Name: //p[contains(text(),'Featuring Pornstars')]/a/text()
+      Movies:
+        Name: //a[@class="btn-link dvd-title"]/text()
+      Image: //img[@class="player-image"]/@src
+
+# Last Updated November 8, 2020

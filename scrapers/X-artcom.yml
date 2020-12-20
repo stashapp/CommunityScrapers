@@ -1,0 +1,24 @@
+name: xart
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - x-art.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="small-12 medium-12 large-12 columns info"]
+    scene:
+      Title: //div[@class="row info"]/div[@class="small-12 medium-12 large-12 columns"]/h1
+      Date:
+        selector: $sceneinfo/h2[1]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Details:
+        selector: $sceneinfo/p
+        concat: " "
+      Performers:
+        Name: $sceneinfo/h2/a/text()
+      Image: //div[@class="flex-video widescreen"]/a/img/@src
+
+# Last Updated November 8, 2020

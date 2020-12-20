@@ -1,0 +1,43 @@
+name: "HarmonyVision"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - harmonyvision.com/scene
+    scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - harmonyvision.com/dvd
+      - harmonyvision.com/movie
+    scraper: movieScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $meta: //div[@class="meta"]
+    scene:
+      Title: $meta//a[@class="title"]/text()
+      Details:
+        selector: //div[@class="content"]//div[contains(@class,'dscrp')]
+      Studio:
+        Name:
+          fixed: HarmonyVision
+      Performers:
+        Name: $meta/div/span[contains(.,"Featuring")]/../a/text()
+      Movies:
+        Name: $meta/div/span[contains(.,"Scene from")]/../a/text()
+  movieScraper:
+    movie:
+      Name: //div[@class="info"]/div[contains(@class,"movie-title")]/text()
+      Synopsis:
+        selector: //div[@class="info"]/div[contains(@class,"description")]
+        postProcess:
+          - replace:
+              - regex: ^Description:\s*
+                with:
+      Studio:
+        Name:
+          fixed: HarmonyVision
+      FrontImage: //div[@class="content"]//div[@class="cover"]/img/@src
+# Last Updated November 2, 2020

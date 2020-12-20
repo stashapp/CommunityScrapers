@@ -1,0 +1,34 @@
+name: firstanalquest
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - firstanalquest.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //ul[@class="list-inline"][contains(text(),"Models:")]/li/a
+      $title: //div[@class="badge-content"]/preceding-sibling::span/text()
+    scene:
+      Title: $title
+      Details:
+        selector: //div[@class="text-desc"]
+      Tags:
+        Name: //li[strong[text()="Tags:"]]/following-sibling::li/a/text()
+      Performers:
+        Name: $performer/text()
+      Image: //img[@class="player-preview"]/@src
+      Studio:
+        Name:
+          fixed: First Anal Quest
+      Date:
+        selector: $title
+        postProcess:
+          - replace:
+              - regex: \s
+                with: +
+              - regex: ^([^-]+-?).+
+                with: http://www.firstanalquest.com/search/?q=$1
+          - subScraper: //span[@class="thumb-added"]/text()
+          - parseDate: Jan 2, 2006
+# Last Updated August 06, 2020

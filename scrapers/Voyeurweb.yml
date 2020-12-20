@@ -1,0 +1,28 @@
+name: HomeClips 
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.funbags.com/contributions/view/
+      - www.homeclips.com/contributions/view/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //p[@class="contribution-title"]
+      Date:
+        selector: //p[@class="posted-date"]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: //p[@class="contribution-text"]
+      Tags:
+        Name: //div[@class="contribution-tags"]/a/text()
+      Image:
+        selector: //div[@class="contri-photos"]//img/@src
+      Studio:
+        Name: 
+          fixed: HomeClips
+        URL:
+          fixed: https://www.homeclips.com/
+        
+# Last Updated Oct 3, 2020

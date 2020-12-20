@@ -1,0 +1,93 @@
+name: Pornhub
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.pornhub.com/pornstars/search?search={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - pornhub.com
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornhub.com/view_video.php?viewkey=
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.pornhub.com/view_video.php?viewkey={filename}
+  queryURLReplace:
+    filename:
+      - regex: (?:.*[^a-zA-Z\d])+(ph(?:[a-zA-Z\d]+)).+
+        with: $1
+      - regex: .*\.[^\.]+$ # if no ph id is found in the filename
+        with: # clear the filename so that it doesn't leak to ph
+  scraper: sceneScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
+      URL:
+        selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.pornhub.com"
+  performerScraper:
+    common:
+      $infoPiece: //div[@class="infoPiece"]/span
+    performer:
+      Name: //h1[@itemprop="name"]
+      Birthdate:
+        selector: //span[@itemprop="birthDate"]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Gender: //span[@itemprop="gender"]
+      Twitter: //span[text() = 'Twitter']/../@href
+      Instagram: //span[text() = 'Instagram']/../@href
+      Measurements: $infoPiece[text() = 'Measurements:']/../span[@class="smallInfo"]
+      Height:
+        selector: $infoPiece[text() = 'Height:']/../span[@class="smallInfo"]
+        postProcess:
+          - replace:
+              - regex: .*\((\d+) cm\)
+                with: $1
+      Ethnicity: $infoPiece[text() = 'Ethnicity:']/../span[@class="smallInfo"]
+      FakeTits: $infoPiece[text() = 'Fake Boobs:']/../span[@class="smallInfo"]
+      Piercings: $infoPiece[text() = 'Piercings:']/../span[@class="smallInfo"]
+      Tattoos: $infoPiece[text() = 'Tattoos:']/../span[@class="smallInfo"]
+      CareerLength:
+        selector: $infoPiece[text() = 'Career Start and End:']/../span[@class="smallInfo"]
+        postProcess:
+          - replace:
+              - regex: \s+to\s+
+                with: "-"
+      URL: //link[@rel="canonical"][1]/@href
+  sceneScraper:
+    common:
+      $performer: //div[@class="pornstarsWrapper"]/a[@data-mxptype="Pornstar"]
+      $studio: //div[@data-type="channel"]/a
+    scene:
+      Title: //h1[@class="title"]/span/text()
+      Details: //meta[@property="og:description"][1]/@content
+      Date:
+        selector: //script[contains(., 'uploadDate')]/text()
+        postProcess:
+          - replace:
+              - regex: .+(?:"uploadDate":\s")([^"]+).+
+                with: $1
+              - regex: (.+)T.+
+                with: $1
+          - parseDate: 2006-01-02
+      Tags:
+        Name: //div[@class="categoriesWrapper"]//a[not(@class="add-btn-small ")]|//div[@class="tagsWrapper"]//a[not(@class="add-btn-small")]
+      Image:
+        selector: //meta[@property="og:image"][1]/@content
+      Performers:
+        Name: $performer/@data-mxptext
+        URL: $performer/@href
+      Studio:
+        Name: $studio
+        URL: $studio/@href
+# Last Updated November 11, 2020

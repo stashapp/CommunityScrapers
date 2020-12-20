@@ -1,0 +1,26 @@
+name: BigBootyTGirls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bigbootytgirls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="titleBlock2 clear"]/h3/text()
+      Date:
+        selector: //span[@class="availdate"]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: //span[@class="latest_update_description"]/text()
+      Tags:
+        Name: //span[@class="update_tags"]/a/text()
+      Performers:
+        Name: //span[@class="tour_update_models"]/a/text()
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: BigBootyTGirls
+
+# Last Updated November 8, 2020

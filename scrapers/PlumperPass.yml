@@ -1,0 +1,39 @@
+name: "PlumperPass"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - plumperpass.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //div[@class="clearfix"]/h1/span/text()
+        postProcess:
+          - replace:
+              - regex: \"
+                with:
+      Details: //div[@class="movie-desc"]/text()
+      Tags:
+        Name:
+          selector: //div[@class="tags clearfix"]/a/text()
+      # Note about performers: The site only list 1 model even there is 2 in the video.
+      Performers:
+        Name: //div[@class="clearfix"]/h1/a[1]/text()
+      Image:
+        selector: //script[contains(.,'jwplayer("videoplayer").setup')]/text()
+        postProcess:
+          - replace:
+              - regex: (.+image:\s+")(.+jpg)(.+)
+                with: $2
+              - regex: ^
+                with: "https://www.plumperpass.com/t1/"
+      Studio:
+        Name:
+          fixed: "Plumperpass"
+      Date:
+        selector: //div[@class="movie-date"]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+
+# Last Updated November 8, 2020

@@ -1,0 +1,91 @@
+name: "SARJ LLC"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - metartnetwork.com
+      - metart.com
+      - sexart.com
+      - thelifeerotic.com
+      - errotica-archives.com
+      - alsscan.com
+      - vivthomas.com
+      - metartx.com
+      - rylskyart.com
+      - eternaldesire.com
+      - stunning18.com
+      - lovehairy.com
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - metartnetwork.com
+      - metart.com
+      - sexart.com
+      - thelifeerotic.com
+      - errotica-archives.com
+      - alsscan.com
+      - vivthomas.com
+      - metartx.com
+      - rylskyart.com
+      - eternaldesire.com
+      - stunning18.com
+      - lovehairy.com
+    scraper: galleryScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $script: //script[contains(text(),'INITIAL_STATE')]/text()
+      $data: //div[@class='movie-data']
+    scene:
+      Title: //div[@class='info-container']/h3/a/text()
+      Details:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:]},"description":")(.+)(?:","globalContent).+
+              with: $1
+            - regex: \\"
+              with: '"'
+              # In case of blank descriptions
+            - regex: .+INITIAL_STATE.+
+              with:
+      Date:
+        selector: $data//li[span[contains(.,'Released')]]/span[@class='attr-value']/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Performers:
+        Name: $data//a[@href[contains(.,'/model/')]]/text()
+      Tags:
+        Name: //div[@class='tag-list']//a/text()
+      Image:
+        selector: //div[@class='img-container']/img/@src
+        # if you prefer the portrait covers over the landscape ones, comment out the postProcess section
+        postProcess:
+          - replace:
+            - regex: (cover|clean)
+              with: "wide"
+      Studio:
+        Name: //meta[@property='og:site_name']/@content
+  galleryScraper:
+    gallery:
+      Title: //div[@class='info-container']/h3/a/text()
+      Details: 
+        selector: //div[@class='description-text']/p/text()
+        concat: "\n\n"
+      Date:
+        selector: //div[@class='info-container']/span[@class='timestamp']/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Studio:
+        Name: //meta[@property='og:site_name']/@content
+      Tags:
+        Name: //div[@class='tag-list']//a/text()
+      Performers:
+        Name:
+          selector: //a[@type='model']/text()
+          postProcess:
+            - replace:
+              - regex: ^Cast:\s+
+                with: ""
+# Last Updated November 24, 2020

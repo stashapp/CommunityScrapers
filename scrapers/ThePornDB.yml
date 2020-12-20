@@ -1,0 +1,87 @@
+name: ThePornDB
+performerByName:
+  action: scrapeJson
+  queryURL: https://api.metadataapi.net/performers?q={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeJson
+    url:
+      - https://api.metadataapi.net/performers/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - https://api.metadataapi.net/scenes/
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://api.metadataapi.net/scenes?parse={filename}&hash={oshash}&limit=1
+  scraper: sceneQueryScraper
+  queryURLReplace:
+    filename:
+      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename so that it can construct a valid url
+        with: "." # "%20"
+jsonScrapers:
+  performerSearch:
+    performer:
+      Name: data.#.name
+      URL:
+        selector: data.#.id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://api.metadataapi.net/performers/
+
+  performerScraper:
+    common:
+      $extras: data.extras
+    performer:
+      Name: data.name
+      Gender: $extras.gender
+      Birthdate: $extras.birthday
+      Ethnicity: $extras.ethnicity
+      Height:
+        selector: $extras.height
+        postProcess:
+          - replace:
+              - regex: cm
+                with:
+      Measurements: $extras.measurements
+      Tattoos: $extras.tattoos
+      Piercings: $extras.piercings
+      Aliases: data.aliases
+      Image: data.image
+
+  sceneScraper:
+    common:
+      $performers: data.performers
+    scene:
+      Title: data.title
+      Details: data.description
+      Date: data.date
+      URL: data.url
+      Image: data.background.small
+      Performers:
+        Name: data.performers.#.name
+      Studio:
+        Name: data.site.name
+      Tags:
+        Name: data.tags.#.tag
+
+  sceneQueryScraper:
+    common:
+      $data: data.0
+      $performers: data.0.performers
+    scene:
+      Title: $data.title
+      Details: $data.description
+      Date: $data.date
+      URL: $data.url
+      Image: $data.background.small
+      Performers:
+        Name: $data.performers.#.name
+      Studio:
+        Name: $data.site.name
+      Tags:
+        Name: $data.tags.#.tag
+# Last Updated November 20, 2020

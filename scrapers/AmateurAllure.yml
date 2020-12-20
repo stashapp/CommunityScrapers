@@ -1,0 +1,38 @@
+name: AmateurAllure
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - amateurallure.com/tour/scenes/
+      - amateurallure.com/tour/search
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="scene-info"]
+      $title: //span[@class='title_bar_hilite']
+    scene:
+      Title: $title
+      Date:
+        selector: //div[@class='cell update_date']
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: //span[@class='update_description']
+      Tags:
+        Name: //span[@class='update_tags']//a/text()
+      Performers:
+        Name: //span[@class='update_models']//a
+      Image:
+        selector: $title
+        postProcess:
+          - replace:
+              - regex: \s
+                with: "+"
+              - regex: ^
+                with: "https://www.amateurallure.com/tour/search.php?st=advanced&qall=&qany=&qex="
+          - subScraper:
+              selector: //img/@srcset
+              postProcess:
+                - replace:
+                    - regex: .+(/tour/content/contentthumbs/\d+/\d+/[^/]+\.jpg) 1920w
+                      with: https://www.amateurallure.com$1
+# Last Updated November 8, 2020

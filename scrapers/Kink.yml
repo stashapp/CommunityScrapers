@@ -1,0 +1,56 @@
+name: kink
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - kink.com
+    scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.kink.com/shoot/{filename}
+  # constructs the scene URL from the filename, provided that the filename includes the scene id
+  queryURLReplace:
+    filename:
+        # the id in kink.com is a 1-6 digit number
+      - regex: ^(\d+)[^\d].*  # support filenames in the form 12345_performer_other_data.mp4
+        with: $1
+      - regex: .*\((\d+)\)\.[a-zA-Z\d]+$ #support filenames in the form scene - date - performer (12345).mp4
+        with: $1
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="shoot-title"]/text()
+      Date:
+        selector: //span[@class="shoot-date"]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: //span[@class="description-text"]/p
+        concat: "\n\n"
+      Performers:
+        Name:
+          selector: //p[@class="starring"]/span[@class="names h5"]/a/text()
+          postProcess:
+            - replace:
+                - regex: \,
+                  with: ""
+      Tags:
+        Name:
+          selector: //a[@class="tag"]
+          postProcess:
+            - replace:
+                - regex: \,
+                  with: ""
+      Image:
+        selector: //video[@class="video-js vjs-fluid video-player"]/@poster
+      Studio:
+        Name:
+          selector: //div[@class="column shoot-logo"]/a/@href
+          postProcess:
+            - replace:
+                - regex: /channel/
+                  with: ""
+      URL: //link[@rel="canonical"]/@href
+# Last Updated November 8, 2020

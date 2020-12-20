@@ -1,0 +1,90 @@
+name: FreeonesCommunity
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.freeones.com/babes?q={}&v=teasers&s=relevance&l=96&m%5BcanPreviewFeatures%5D=0
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - freeones.xxx
+      - freeones.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //div[@id="search-result"]//p[@data-test="subject-name"]/text()
+      URL:
+        selector: //div[@id="search-result"]//div[@data-test="teaser-subject"]/a/@href
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.freeones.com
+            - regex: $
+              with: /profile
+
+  performerScraper:
+    performer:
+      Name: 
+        selector: //h1
+        postProcess:
+          - replace:
+            - regex: \sBio\s*$
+              with: ""
+      URL:
+        selector: //a[span[text()="Profile"]]/@href
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.freeones.com
+      Twitter: //a[contains(@href,'twitter.com/')]/@href
+      Instagram: //a[contains(@href,'instagram.com/')]/@href
+      Birthdate:
+        selector: //div[p[text()='Personal Information']]//span[contains(text(),'Born On')]
+        postProcess:
+          - replace:
+            - regex: Born On
+              with:
+          - parseDate: January 2, 2006
+      Ethnicity:
+        selector: //div[p[text()='Ethnicity']]//a[@data-test="link_ethnicity"]
+        postProcess:
+          - map:
+              Asian: asian
+              Caucasian: white
+              Black: black
+              Latin: hispanic
+      Country: //div[p[text()='Personal Information']]//a[@data-test="link-country"]
+      EyeColor: //span[text()='Eye Color']/following-sibling::span/a
+      Height:
+        selector: //span[text()='Height']/following-sibling::span/a
+        postProcess:
+          - replace:
+            - regex: \D+[\s\S]+
+              with: ""
+          - map:
+              Unknown: ""
+      Measurements:
+        selector: //span[text()='Measurements']/following-sibling::span/span/a
+        concat: " - "
+        postProcess:
+          - map:
+              Unknown: ""
+      FakeTits:
+        selector: //span[text()='Boobs']/following-sibling::span/a
+        postProcess:
+          - map:
+              Unknown: ""
+              Fake: Yes
+              Natural: No
+      CareerLength:
+        selector: //div[p[text()='career']]//div[contains(@class,'timeline-horizontal')]//p[@class='m-0']
+        concat: "-"
+      Aliases: //p[text()='Aliases']/following-sibling::div/p
+      Tattoos: //span[text()='Tattoos']/following-sibling::span/span
+      Piercings: //span[text()='Piercings']/following-sibling::span/span
+      Image:
+        selector: //div[contains(@class,'image-container')]//a/img/@src
+      Gender:
+        fixed: "Female"
+# Last updated November 06, 2020

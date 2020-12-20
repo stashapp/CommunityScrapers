@@ -1,0 +1,71 @@
+# This one convers a LOT of sites (including the PornPros Network). Almost
+# all the sites follow the same structure, making this mega scraper possible.
+# I got the list of sites from here: https://www.thebestporn.com/review_company.html?id=2085
+
+# Note: The brands associated directly with the PornPros network, require you
+# get a scene link from PornPros.com directly, as the individual sites do not
+# have scene links. These sites are:
+# publicviolations.com jurassiccock.com 18yearsold.com 40ozbounce.com
+# cockcompetition.com crueltyparty.com cumshotsurprise.com deepthroatlove.com
+# disgraced18.com eurohumpers.com flexiblepositions.com freaksofboobs.com
+# freaksofcock.com pimpparade.com shadypi.com squirtdisgrace.com
+
+# There are a small number of sites where the scene links don't exist on
+# PornPros.com OR their own sites, and are not supported. These are:
+# amateurviolations.com cumdisgrace.com lolcumshots.com massagecreep.com
+# milfhumiliation.com webcamhackers.com
+
+name: "AMA Multimedia"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - passion-hd.com/video/
+      - lubed.com/video/
+      - holed.com/video/
+      - pornpros.com/video/
+      - povd.com/video/
+      - tiny4k.com/video/
+      - castingcouch-x.com/video/
+      - exotic4k.com/video/
+      - puremature.com/video/
+      - fantasyhd.com/video/
+      - cum4k.com/video/
+      - wetvr.com/video/
+      - myveryfirsttime.com/video/
+      - girlcum.com/video/
+      - spyfam.com/video/
+      - baeb.com/video/
+      - nannyspy.com/video/
+      - bbcpie.com/video/
+      - gayroom.com/video/
+      - manroyale.com/video/
+      - gaycastings.com/video/
+      - damnthatsbig.com/video/
+      - gaycreeps.com/video/
+      - menpov.com/video/
+      - massagebait.com/video/
+      - bathhousebait.com/video/
+      - boysdestroyed.com/video/
+      - showerbait.com/video/
+      - thickandbig.com/video/
+      - outhim.com/video/
+      - officecock.com/video/
+      - gayviolations.com/video/
+
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="t2019-stitle py-1 py-sm-2 pt-lg-0 mb-0 border-bottom"]/text()
+      Details: //div[@id="t2019-description"]/text()
+      Performers:
+        Name: //div[@id="t2019-models"]/a/text()
+      Image: //video[@id="player"]/@poster
+      Studio:
+        Name: //title/text()
+      Date:
+        selector: //div[contains(text(), 'RELEASED')]/span/text()
+        postProcess:
+          - parseDate: January 02, 2006
+
+# Last Updated October 3, 2020

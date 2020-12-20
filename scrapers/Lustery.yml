@@ -1,0 +1,23 @@
+name: Lustery
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lustery.com/video-preview/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='video-popup-info']//div[@class='title']/h3/text()
+      Performers:
+        Name:
+          selector: //div[@class='couple-and-categories']//div[@class='couple']/a/text()
+      Details: //div[@class='video-popup-info']/div[@class='description']/text()
+      Tags:
+        Name: //div[@class='tags']/a/text()
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Lustery
+
+# Last Updated October 3, 2020

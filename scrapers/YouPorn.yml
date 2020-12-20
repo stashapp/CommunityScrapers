@@ -1,0 +1,26 @@
+name: "YouPorn"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - youporn.com/watch/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $tags: //div[@class='categoriesWrapper fullWidthRow js_categoriesWrapper']
+    scene:
+      Title: //div[@class='watchVideoTitle']/h1/text()
+      Date:
+        selector: //div[@class='video-uploaded']/span/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Image: //meta[@property='og:image']/@content
+      Studio:
+        Name: //div[@class='watchTopInfoPanel']//a[@href[contains(.,'channel/')]]/text()
+      Tags:
+        Name: $tags//a[@href[contains(.,'category/') or contains(.,'porntags/')]]/text()
+      Performers:
+        Name: $tags//a[@href[contains(.,'pornstar/')]]/text()
+      URL: //meta[@property='og:url']/@content
+
+# Last Updated October 8, 2020

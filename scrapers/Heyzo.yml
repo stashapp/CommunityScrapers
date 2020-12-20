@@ -1,0 +1,50 @@
+name: Heyzo
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - en.heyzo.com/moviepages
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://en.heyzo.com/moviepages/{filename}
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: (.*[^a-zA-Z\d])*(\d+)[^a-zA-Z\d].*
+        # heyzo uses a 4 digit number for ids, here we take a series of numbers just to be safe
+        with: $2
+      - regex: $
+        with: /index.html
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $table: //div[@class="info-bg"]/table/tbody/tr
+    scene:
+      Details: /html/head/title/text()
+      #Details: //section/div[@id="movie"]/h1
+      Date:
+        selector: $table/td[contains(.,"Released")]/following-sibling::td/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: $table/td[contains(.,"Actress")]/following-sibling::td/a/text()
+      Image:
+        selector: //script[contains(.,"emimg")]
+        postProcess:
+          - replace:
+              - regex: .*emimg\s=\s\"([^"]+).*
+                with: https:$1
+      Title:
+        selector: //script[contains(.,"movieId =")]
+        postProcess:
+          - replace:
+              - regex: .*movieId\s=\s\"(\d+)\".*
+                with: Heyzo $1
+      Tags:
+        Name: $table/td[contains(.,"Type") or contains(.,"Sex Styles") or contains(.,"Theme") ]/following-sibling::td/a/text()
+      Studio:
+        Name:
+          fixed: Heyzo
+# Last Updated November 8, 2020

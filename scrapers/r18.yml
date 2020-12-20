@@ -1,0 +1,43 @@
+name: r18
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - r18.com/videos
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //section[@class="clearfix"]/div[@class="product-details"]
+    scene:
+      Title: $sceneinfo/dl/dt[contains(.,"DVD ID")]/following-sibling::dd[1]/text()
+      Date:
+        selector: $sceneinfo/dl/dt[contains(.,"Release Date")]/../dd[@itemprop="dateCreated"]/text()
+        postProcess:
+          - replace:
+              - regex: \.
+                with: ""
+              - regex: Sept
+                with: Sep
+              - regex: July
+                with: Jul
+              - regex: June
+                with: Jun
+          - parseDate: Jan 02, 2006
+      Details:
+        selector: //div[@class="col01"]/h1/cite[@itemprop="name"]/text()|//div[contains(@class,"cmn-box-description")]/p
+        concat: "\n\n"
+      Tags:
+        Name: //div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a
+      Performers:
+        Name:
+          selector: //div[@data-type="actress-list"]/span/a/span/text()
+          #Uncomment below to convert to Surname Name (JavLibrary compatible)
+          #postProcess:
+          #  - replace:
+          #      - regex: (.+)(\s)(.+)
+          #        with: $3$2$1
+      Studio:
+        Name:
+          selector: $sceneinfo/dl/dt[contains(.,"Studio")]/../dd[@itemprop="productionCompany"]/a/text()
+      Image: //meta[@itemprop="thumbnailUrl"]/@content
+# Last Updated October 11, 2020

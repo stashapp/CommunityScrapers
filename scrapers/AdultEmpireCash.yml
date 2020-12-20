@@ -1,0 +1,133 @@
+name: AdultEmpireCash
+# Sites ("Brands") from https://www.adultempirecash.com
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - concoxxxion.com/
+      - elegantangel.com/
+      - filthykings.com/
+      - filthypov.com/
+      - forbiddenfruitsfilms.com/
+      - hornyhousehold.com/
+      - jayspov.net/
+      - jodiwest.com/
+      - kingsoffetish.com/
+      - latinoguysporn.com/
+      - lethalhardcore.com/
+      - manipulativemedia.com/
+      - mypervyfamily.com/
+      - pornstarstroker.com/ # aggregator site?
+      - reaganfoxx.com/
+      - severesexfilms.com/
+      - thirdworldxxx.com/
+      - touchmywife.com/
+      - westcoastproductions.com/
+
+  # VR Sites
+  - action: scrapeXPath
+    scraper: vrSceneScraper
+    url:
+      - lethalhardcorevr.com/
+      - whorecraftvr.com/
+
+movieByURL:
+  - action: scrapeXPath
+    scraper: movieScraper
+    url:
+      # - bangmytransass.com/ # Scenes published as movies?
+      # - blacktranswhackers.com/ # Scenes published as movies?
+      - concoxxxion.com/
+      - elegantangel.com/
+      - forbiddenfruitsfilms.com/
+      - lethalhardcore.com/
+      - manipulativemedia.com/
+      - severesexfilms.com/
+      # - shemalestrokers.com/ # Scenes published as movies?
+      - thirdworldxxx.com/
+      - westcoastproductions.com/
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="description"]/text()
+      Date:
+        selector: //div[@class="release-date"][1]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Details:
+        selector: //div[@class="synopsis"]//text()
+        concat: "\n\n"
+      Tags:
+        Name: //div[@class="tags"]/a/text()
+      Performers:
+        Name: //div[@class="video-performer"]/a//text()
+      Studio:
+        Name:
+          selector: //div[@class="studio"]/span[2]
+          postProcess:
+            # Override studio name only when needed
+            - map:
+                Jay Rock Clips: Jay's POV
+            - replace:
+                # 'Jane Doe Clips' => 'Jane Doe'
+                - regex: \sClips$
+                  with:
+      Image: //link[@rel="image_src"]/@href
+      Movies:
+        Name: //h1[@class="description"]/following-sibling::p/a/text()
+
+  movieScraper:
+    movie:
+      Name: //h1[@class="description"]/text()
+      Date:
+        selector: //div[@class="release-date"][1]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Synopsis:
+        selector: //div[@class="synopsis"]//text()
+        concat: "\n\n"
+      Director: //div[@class="director"]/a/text()
+      Duration:
+        selector: //div[@class="release-date"][2]/text()
+        postProcess:
+          - replace:
+            - regex: " hrs. "
+              with: ":"
+            - regex: " mins."
+              with: ":00"
+      Studio:
+        Name:
+          selector: //div[@class="studio"]/a
+          postProcess:
+            - replace:
+                # 'Jane Doe Clips' => 'Jane Doe'
+                - regex: \sClips$
+                  with:
+      FrontImage: //link[@rel="image_src"]/@href
+
+  vrSceneScraper:
+    common:
+      $content: //div[@class="item-page-details"]
+    scene:
+      Title: $content//h1
+      Details:
+        selector: $content//div[@id="synopsis-full"]
+        concat: "\n\n"
+      Performers:
+        Name:
+          selector: $content//span[@class="overlay-inner"]//small
+          postProcess:
+            - replace:
+                - regex: \((.+)\)
+                  with: $1
+      Image:
+        selector: //link[@rel="image_src"]/@href
+        postProcess:
+          - replace:
+              - regex: ^.+/(\d+)h.+$
+                with: https://imgs1cdn.adultempire.com/product/${1}_lg.jpg
+      Studio:
+        Name: //meta[@name="og:site_name"]/@content
+
+# Last Updated November 15, 2020

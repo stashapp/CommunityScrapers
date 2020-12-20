@@ -1,0 +1,69 @@
+name: AdultEmpire
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - adultdvdempire.com
+      - adultempire.com
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - adultdvdempire.com
+      - adultempire.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: //h1/text()
+      Director: //a[@label="Director"]/text()
+      Duration:
+        selector: //small[contains(text(), "Length")]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: " hrs. "
+              with: ":"
+            - regex: " mins."
+              with: ":00"
+      Date:
+        selector: //small[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Synopsis:
+        selector: //h4[contains(@class,"synopsis")]//text()
+        concat: " "
+      Studio:
+        Name: //a[@label="Studio"]/text()
+      FrontImage: //a[@id="front-cover"]/@data-href
+      BackImage: //a[@id="back-cover"]/@href
+      # Rating is not yet implemented in the UX
+      # Rating:
+      #   selector: //span[@class='rating-stars-avg']/text()
+      #   postProcess:
+      #     - replace:
+      #       - regex: (\d).+
+      #         with: $1
+      URL: //meta[@name='og:url']/@content
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Details:
+        selector: //h4[contains(@class,"synopsis")]//text()
+        concat: " "
+      Date:
+        selector: //small[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Image: //a[@id="front-cover"]/@data-href
+      Studio:
+        Name: //a[@label="Studio"]/text()
+      Movies:
+        Name: //h1/text()
+      Tags:
+        Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
+      Performers:
+        Name: //a[@label="Performer"]//text()
+      URL: //meta[@name='og:url']/@content
+
+# Last Updated November 21, 2020

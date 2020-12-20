@@ -1,0 +1,32 @@
+name: vipissy
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vipissy.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //dl/dd/a
+    scene:
+      Title:
+        selector: //section[@class="downloads"]/strong/text()
+        postProcess:
+          - replace:
+            - regex: ^(.*)[—]\s+
+              with:
+      Date:
+        # selector: //dl/dd[contains(text(),"Released on:")]/text()
+        selector: //dt[i[@class="glyphicon glyphicon-calendar"]]/following-sibling::dd[1]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: //div[@class="show_more"]/text()[1]
+      Tags:
+        Name: //p[@class="tags"]/a/text()
+      Performers:
+        Name: $performer/text()
+      Studio:
+        Name:
+          fixed: Vipissy
+      Image: //div[@id="videoplayer"]/video/@poster
+# Last Updated August 06, 2020

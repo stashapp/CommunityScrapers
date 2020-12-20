@@ -1,0 +1,113 @@
+name: Babepedia
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.babepedia.com/search/{}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.babepedia.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: 
+        selector: //span[@class="results"]//a[contains(@href, '/babe/')]|//div[@id="bioarea"]/h1
+        postProcess:
+          - replace:
+            - regex: "aka(\\s+[A-Z]+)"
+              with: " aka $1"
+      URL:
+        selector: //span[@class="results"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.babepedia.com
+            - regex: https:\/\/www\.babepedia\.comhttps:\/\/www\.babepedia\.com
+              with: https://www.babepedia.com
+
+  performerScraper:
+    performer:
+      Name: //div[@id="bioarea"]/h1
+      Gender:
+        fixed: "Female"
+      URL: //head/meta[@property="og:url"]/@content
+      Twitter:
+        selector: //div[@id='socialicons']//a[img[@alt='Twitter account']]/@href
+        postProcess:
+          - replace:
+            - regex: https://twitter.com/
+              with: ""
+      Instagram:
+        selector: //div[@id='socialicons']//a[img[@alt='Instagram account']]/@href
+        postProcess:
+          - replace:
+            - regex: https://instagram.com/
+              with: ""
+      Birthdate:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Born:']]//text()
+        concat: " "
+        postProcess:
+            - replace:
+                - regex: (\w+:)(\s)(\w+)(\s)(\d+)(\w+)(\s)(\w+)(\s)(\w+)(\s)(\d+)
+                  with: $5 $10 $12
+            - parseDate: 2 January 2006
+      Ethnicity:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Ethnicity:']]/text()
+        postProcess:
+          - map:
+              Asian: asian
+              Caucasian: white
+              Black: black
+              Latin: hispanic
+      Country: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Birthplace']]/a/text()
+      EyeColor:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Eye color:']]
+        postProcess:
+          - replace:
+            - regex: "Eye color: "
+              with:
+      Height:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Height:']]/text()
+        postProcess:
+          - replace:
+            - regex: \d\D\d+\D \D+
+              with: ""
+            - regex:  c\D+
+              with: ""
+      Measurements:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Measurements:']]/text()|//div[@id='bioarea']//ul/li[span[@class='label'][text()='Bra/cup size:']]/text()
+        concat: "|"
+        postProcess:
+          - replace:
+            - regex: (\d*)([a-zA-Z-]*)(\d*-\d*)(.+?)([a-zA-Z]+)(.*)
+              with: $1$5-$3
+      FakeTits:
+        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Boobs:']]
+        postProcess:
+          - replace:
+            - regex: "Boobs: "
+              with: ""
+          - map:
+              Real/Natural: "No"
+              Fake/Enhanced: "Yes"
+      CareerLength: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Years active:']]/text()
+      Aliases:
+        selector: //div[@id='bioarea']//h2/text()
+        postProcess:
+          - replace:
+            - regex: aka
+              with: ""
+      Tattoos: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Tattoos:']]/text()
+      Piercings: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Piercings:']]/text()
+      Image:
+        selector: //div[@id='profimg']//a/@href
+        postProcess:
+          - replace:
+            - regex: javascript\:alert.+;
+              with: /images/logo.png
+            - regex: ^
+              with: https://www.babepedia.com
+
+#Last Updated November 29, 2020

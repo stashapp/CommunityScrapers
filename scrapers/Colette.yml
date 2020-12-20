@@ -1,0 +1,69 @@
+name: "Colette"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - colette.com/videos
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - colette.com/galleries
+    scraper: galleryScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[contains(@class,"columns info")]
+    scene:
+      Title: //div[contains(@class,"row info")]//h1[not(@class)]
+      Details:
+        selector: $info//p
+        concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: ^HD\sVideo:\s*
+                with:
+      Performers:
+        Name: $info/h2[contains(.,"featuring") or contains(.,"Model")]/a/text()
+      Image:
+        selector: //div[contains(@class,"flex-video") or contains(@class,"row info")]//img/@data-interchange
+        postProcess:
+          - replace:
+              - regex: \[.*(http[^\,]+lrg\.[^\,]+).*\]
+                with: $1
+      Studio:
+        Name:
+          fixed: Colette
+      Date:
+        selector: ($info/h2)[1]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+  galleryScraper:
+    common:
+      $info: //div[contains(@class,"columns info")]
+    gallery:
+      Title: //div[contains(@class,"row info")]//h1[not(@class)]
+      Details:
+        selector: $info//p
+        concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: ^HD\sVideo:\s*
+                with:
+      Performers:
+        Name: $info/h2[contains(.,"featuring") or contains(.,"Model")]/a/text()
+      Studio:
+        Name:
+          fixed: Colette
+      Date:
+        selector: ($info/h2)[1]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+driver:
+  cookies:
+    - CookieURL: "https://www.colette.com"
+      Cookies:
+        - Name: "_warning"
+          Domain: ".colette.com"
+          Value: "true"
+          Path: "/"
+# Last Updated November 29, 2020

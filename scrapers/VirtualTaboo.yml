@@ -1,0 +1,25 @@
+name: "VirtualTaboo"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - virtualtaboo.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="row video-detail"]
+    scene:
+      Title: $info/div[@class="col-md-4 col right-info"]/h1
+      Date:
+        selector: $info/div[@class="col-md-4 col right-info"]/div[@class="info"]/span[@class="bullet"]/following-sibling::text()
+        postProcess:
+          - parseDate: 02 January, 2006
+      Details:
+        selector: $info//div[@class="description"]/span[@class="full hidden"]/text()
+        concat: " "
+      Tags:
+        Name: $info//div[@class="tag-list"]/a/text()
+      Performers:
+        Name: $info//div[@class="info"]/a/text()
+      Image: //meta[@property="og:image"]/@content
+# Last Updated November 8, 2020

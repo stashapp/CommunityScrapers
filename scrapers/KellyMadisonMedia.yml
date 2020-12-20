@@ -1,0 +1,61 @@
+name: "Kelly Madison Media"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornfidelity.com
+      - teenfidelity.com
+      - kellymadison.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //div[contains(@class,"card-header-title")]//div[@class="level-item"]/span/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: \s*-.+#\d+.+$
+                with: ""
+      Details: //div[@class="columns"]//*[contains(text(),'Episode Summary')]/following-sibling::text()
+      Date:
+        selector: //li[contains(.,'Published:')]/text()[2]
+        postProcess:
+          - replace:
+              - regex: Published:\s
+                with:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //a[@class and contains(@href,"/models/")]/text()
+      Image:
+        selector: //script[contains(text(),"poster_image")]/text() #Some url don't have it. (https://www.pornfidelity.com/episodes/73238852)
+        postProcess:
+          - replace:
+              - regex: .+(?:poster:\s")([^"]+).+
+                with: $1
+      Studio:
+        Name:
+          selector: //span[contains(text(),"Episode")]/following-sibling::text()[1]
+          postProcess:
+            - replace:
+                - regex: \s*#.+
+                  with: ""
+driver:
+  cookies:
+    - CookieURL: "https://www.pornfidelity.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".pornfidelity.com"
+          Value: "test"
+          Path: "/"
+    - CookieURL: "https://www.teenfidelity.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".teenfidelity.com"
+          Value: "test"
+          Path: "/"
+    - CookieURL: "https://www.kellymadison.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".kellymadison.com"
+          Value: "test"
+          Path: "/"
+# Last Updated December 03, 2020

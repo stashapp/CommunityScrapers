@@ -1,0 +1,115 @@
+name: Hegre
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hegre.com/films
+      - hegre.com/massage
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - hegre.com
+    scraper: galleryScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - hegre.com
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.hegre.com/?q={}&types=Model
+  scraper: performerSearch
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $actor: //a[@class="record-model"]
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Details:
+        selector: |
+          //div[@class="film-subtitle"]/text()
+          |//div[@class="record-details-column"]//div[contains(@class, "massage-")]//text()
+        concat: "\n\n"
+      Date:
+        selector: //span[@class="date"]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Hegre
+      Tags:
+        Name: //div[@class="approved-tags"]/a
+      Performers:
+        Name: $actor/@title
+        URL:
+          selector: $actor//a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://hegre.com
+
+  galleryScraper:
+    common:
+      $actor: //a[@class="record-model"]
+    gallery:
+      Title: //div[@class="record-toolbar clearfix"]//h1
+      Date:
+        selector: //span[@class="date"]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Studio:
+        Name:
+          fixed: Hegre
+      Tags:
+        Name: //div[@class="approved-tags"]/a
+      Performers:
+        Name: $actor/@title
+        URL:
+          selector: $actor//a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://hegre.com
+
+  performerSearch:
+    performer:
+      Name: //div[@class="search-results"][not(preceding::h2[@class="no-results"])]//a/@title
+      URL:
+        selector: //div[@class="search-results"][not(preceding::h2[@class="no-results"])]//div[@id="search-results-wrapper"]//a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.hegre.com
+
+  performerScraper:
+    # Not much, but better than nothing, since most of the performers just have forenames
+    performer:
+      Name: //span[@class="label"][contains(text(),"Name")]/following-sibling::span/text()
+      Gender:
+        fixed: Female
+      Birthdate:
+        selector: //span[@class="label"][contains(text(),"Born")]/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "01 "
+          - parseDate: 02 January, 2006
+      Country:
+        selector: //span[@class="label"][contains(text(),"Country")]/following-sibling::span/text()
+      Height:
+        selector: //span[@class="label"][contains(text(),"Height")]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: cm
+                with: ""
+      Image:
+        selector: //div[@class="details"]//img/@src
+        # Newer models allow for 1440x
+        postProcess:
+          - replace:
+              - regex: \d{3}x
+                with: 640x
+
+# Last Updated December 14 2020

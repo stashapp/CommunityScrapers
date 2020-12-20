@@ -1,0 +1,66 @@
+name: AEBN
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - aebn.com
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - aebn.com
+    scraper: movieScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
+      Date:
+        selector: //li[@class="section-detail-list-item-release-date"]/text()
+        postProcess:
+          - replace:
+              - regex: "Sept"
+                with: "Sep"
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: //div[@class="dts-section-page-detail-description-body"]//text()
+      Performers:
+        Name: //div[@class="dts-star-name-overlay"]/text()
+      Tags:
+        Name: //span[@class="dts-image-display-name"]//text()
+      Image:
+        selector: //picture[@class="dts-movie-boxcover-front"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^([^?]+).*$
+                with: "https:$1"
+
+  movieScraper:
+    movie:
+      Name: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
+      Director:
+        selector: //li[@class='section-detail-list-item-director']//span//a
+        concat: ", "
+      Duration: //li[@class='section-detail-list-item-duration']/text()
+      Date:
+        selector: //li[@class="section-detail-list-item-release-date"]/text()
+        postProcess:
+          - replace:
+              - regex: "Sept"
+                with: "Sep"
+          - parseDate: Jan 2, 2006
+      Synopsis: //div[@class="dts-section-page-detail-description-body"]//text()
+      Studio:
+        Name: //div[@class='dts-studio-name-wrapper']/a/text()
+      FrontImage:
+        selector: //picture[@class="dts-movie-boxcover-front"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^([^?]+).*$
+                with: "https:$1"
+      BackImage:
+        selector: //picture[@class="dts-movie-boxcover-back"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^([^?]+).*$
+                with: "https:$1"
+
+# Last Updated November 10, 2020

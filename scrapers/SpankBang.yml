@@ -1,0 +1,21 @@
+name: "SpankBang"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - spankbang.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='left']/h1/@title
+      Details: //meta[@name='description']/@content
+      Image: //div[@class='play_cover']/img/@src
+      Studio:
+        Name: //li[@class='us']/a[@class='ul'][contains(@href,'channel')]/text()
+      Tags:
+        Name: //div[@class='ent']/a[@href[contains(.,'tag')]]/text()|//li[@class='p']/text()
+      Performers:
+        Name: //div[@class='ent']/a[@href[contains(.,'pornstar')]]/text()|//div[@class='left']/h1/a/text()
+      URL: //link[rel='canonical']/@href
+
+# Last Updated October 6, 2020

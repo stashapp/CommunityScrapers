@@ -1,0 +1,80 @@
+name: VNAGirls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vickyathome.com
+      - shandafay.com
+      - deauxmalive.com
+      - sarajay.com
+      - carmenvalentina.com
+      - charleechaselive.com
+      - angelinacastrolive.com
+      - juliaannlive.com
+      - nikkibenz.com
+      - sunnylanelive.com
+      - pumaswedexxx.com
+      - sophiedeelive.com
+      - itscleolive.com
+      - maggiegreenlive.com
+      - bobbiedenlive.com
+      - bestoftealconrad.com
+      - jelenajensen.com
+      - pennypaxlive.com
+      - kimberleelive.com
+      - alexlegend.com
+      - sexmywife.com
+      - rubberdoll.net
+      - allanalallthetime.com
+      - fuckedfeet.com
+      - ninakayy.com
+      - romemajor.com
+      - siripornstar.com
+      - blownbyrone.com
+      - kink305.com
+      - foxxedup.com
+      - nataliastarr.com
+      - samanthagrace.net
+      - rachelstormsxxx.com
+      - kendrajames.com
+      - maxinex.com
+      - povmania.com
+      - girlgirlmania.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Performers:
+        Name:
+          selector: //div[@class='customcontent']/h3/text()
+          split: ","
+      Title:
+        selector: //div[@class='customcontent']/h1/text()
+      Details:
+        selector: //div[@class='customcontent']/div[1]/text()|//div[@class='customcontent']/h2/text()
+      Tags:
+        Name:
+          selector: //div[@class='customcontent']/h4/text()
+          split: ", "
+      Studio:
+        Name:
+          selector: //p[@class="copyright"]
+          postProcess:
+            - replace:
+                - regex: .*\s(\w+)\.(?i)com\s.+
+                  with: $1
+      Image:
+        selector: //p[@class="copyright"]|//center/img/@src
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: .*\s(\w+\.(?i)com)\s.+\|(.+)
+                with: https://www.$1/$2
+      Date:
+        selector: //div[@class='date-and-covers']/div[@class='date']/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
+          - parseDate: January 2 2006
+
+# Last Updated November 8, 2020

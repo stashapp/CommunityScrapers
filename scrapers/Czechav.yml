@@ -1,0 +1,49 @@
+name: czechav
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - czechstreets.com/
+      - czechfantasy.com/
+      - czechwifeswap.com/
+      - czechamateurs.com/
+      - czechcouples.com/
+      - czechmassage.com/
+      - czechharem.com/
+      - czechbitch.com/
+      - czechgangbang.com/
+      - czechhomeorgy.com/
+      - czechorgasm.com/
+      - czechtaxi.com/
+      - czechparties.com/
+      - czechlesbians.com/
+      - czechestrogenolit.com/
+      - czechdungeon.com/
+      - czechgardenparty.com/
+      - czechsolarium.com/
+      - czechsupermodels.com/
+      - czechgame.com/
+      - czechfirstvideo.com/
+      - czechbangbus.com/
+      - czechspy.com/
+      - czechmegaswingers.com/
+      - movieporn.com/
+      - unrealporn.com/
+      - creativeporn.com/
+      - horrorporn.com/
+      - perversefamily.com/  
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $studio: //h1/img/@alt
+    scene:
+      Title: //div/h2[@class='nice-title']
+      Details: //div[@class='desc-text']/p
+      Tags:
+        Name: //a[@class='tag']/text()
+      Studio:
+        Name: $studio
+      Image:
+        selector: //video/@poster
+
+# Last Updated November 2, 2020

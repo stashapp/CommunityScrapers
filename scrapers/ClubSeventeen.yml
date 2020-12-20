@@ -1,0 +1,69 @@
+name: ClubSeventeen
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - clubseventeen.com/video.php
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - clubseventeen.com/photo.php
+    scraper: galleryScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h3[contains(@class,"dvd-title")]/span
+      Performers:
+        Name:
+          selector: //div[@class="middle"]//a[contains(@href,"girl.php")]/text()
+          postProcess:
+            - replace:
+                - regex: \s/\s.+ # clubseventeen appends the aliases to the performer's name with a " / "
+                  with:
+      Tags:
+        Name:
+          selector: //div[@class="top"]//a[contains(@href,"niche.php")]/span
+      Date:
+        selector: //div[@class='top']/p[contains(.,"DATE ADDED:")]
+        postProcess:
+          - replace:
+              - regex: .+\s(\d{2}-\d{2}-\d{4}).+
+                with: $1
+          - parseDate: 02-01-2006
+      Details:
+        selector: //div[@class='bottom']/p[@class='mt-0 hidden-lg']
+      Image:
+        selector: //div[contains(@class,'video-wrapper')]/div/@data-image
+      Studio:
+        Name:
+          fixed: ClubSeventeen
+   
+  galleryScraper:
+    gallery:
+      Title:
+        selector: //h3[contains(@class,"dvd-title")]/span
+      Performers:
+        Name:
+          selector: //div[@class="middle"]//a[contains(@href,"girl.php")]/text()
+          postProcess:
+            - replace:
+                - regex: \s/\s.+ # clubseventeen appends the aliases to the performer's name with a " / "
+                  with:
+      Tags:
+        Name:
+          selector: //div[@class="top"]//a[contains(@href,"niche.php")]/span
+      Date:
+        selector: //div[@class='top']/p[contains(.,"DATE ADDED:")]
+        postProcess:
+          - replace:
+              - regex: .+\s(\d{2}-\d{2}-\d{4}).+
+                with: $1
+          - parseDate: 02-01-2006
+      Details: # couldn't find an actual photoset with a description to test this
+        selector: //div[@class='bottom']/p[@class='mt-0 hidden-lg']
+      Studio:
+        Name:
+          fixed: ClubSeventeen
+# Last Updated October 30, 2020

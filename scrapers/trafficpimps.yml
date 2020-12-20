@@ -1,0 +1,63 @@
+name: trafficpimps
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cherrypimps.com/
+    scraper: cherryPimpsScraper
+  - action: scrapeXPath
+    url:
+      - wildoncam.com/
+    scraper: wildOnCamsScraper
+xPathScrapers:
+  cherryPimpsScraper:
+    scene:
+      Title:
+        selector: //div[@class="item-title"]/h1/text()
+      Date:
+        selector: //div[@class="update-info-row"][1]
+        postProcess:
+          - replace:
+              - regex: \s*Added:\s
+                with: ""
+          - parseDate: January 2, 2006
+      Details: //div[@class="update-info-block"][1]/p/text()
+      Tags:
+        Name: //ul[@class="tags"]/li/a/text()
+      Performers:
+        Name: //div[contains(@class, "model-list-item")]/a/span/text()
+      Studio:
+        Name: //a[@class="series-item-logo"]/img/@alt
+      Image: //div[@class="player-thumb"]/img/@src0_1x
+  wildOnCamsScraper:
+    common:
+      $infoblock: //div[@class="info-block"]
+      $infodata: //div[@class="info-block_data"]
+    scene:
+      Title:
+        selector: //h1[@class="trailer-block_title"]
+        postProcess:
+          - replace:
+            - regex: "LIVE$"
+              with: ""
+      Date:
+        selector: $infodata/p[@class="text"][1]/text()
+        postProcess:
+          - replace:
+            - regex: (\w+\s)(\w+)(\s)(\d{1,2})(.+)(\d{4})(.+)
+              with: $2 $4 $6
+          - parseDate: January 2 2006
+      Details: $infoblock/p[@class="text"][1]/text()
+      Tags:
+        Name: $infoblock/p[contains(text(), 'Categories:')]/a
+      Performers:
+        Name: $infodata/p[contains(text(), 'Featuring:')]/a
+      Studio:
+        Name: //div[@class="container"]/a[@class="logo"]/@title
+      Image:
+        selector: //script[contains(., "contentthumbs")]/text()|//img[@class="lazyload update_thumb thumbs stdimage"]/@src
+        postProcess:
+          - replace:
+            - regex: (.+)(https.+contentthumbs.+)(" width="100%)(.+)
+              with: $2
+
+# Last Updated December 14, 2020

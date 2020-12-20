@@ -1,0 +1,70 @@
+name: caribbeancom
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - en.caribbeancom.com/eng/moviepages
+      - en.caribbeancompr.com/eng/moviepages
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://en.caribbeancom{filename}
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: .*(\d{6}-\d{3}).* # carribeancom uses ids with form like 062212-055
+        with: .com/eng/moviepages/$1
+      - regex: .*(\d{6}_\d{3}).* # caribbeancompr uses 062212_055
+        with: pr.com/eng/moviepages/$1
+      - regex: $
+        with: /index.html
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $movieinfo: //div[@class="movie-info section divider"]
+    scene:
+      Title: /html/head/title/text()
+      # //div[contains(@class,"heading")]/h1/text()
+      Details: $movieinfo/p
+      Date:
+        selector: //ul/li/span[contains(.,"Release Date")]/../span[@class="spec-content"]
+        postProcess:
+          - replace:
+              - regex: (\d{4}).(\d{2}).(\d{2})
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      Performers:
+        Name:
+          selector: //ul/li/span[contains(.,"Starring")]/..//a
+          concat: "," # caribbeancom splits name/surname for some performers
+          postProcess:
+            - replace:
+                - regex: "&" # in some cases & is used instead of , to split performers
+                  with: ","
+                - regex: "([^,]),([^,])"
+                  with: "$1 $2"
+                - regex: ",,"
+                  with: ","
+          split: ","
+      Tags:
+        Name: //ul/li/span[contains(.,"Tags")]/../span/a[contains(@class,"spec")]
+      Image:
+        selector: //link[@hreflang="ja-JP"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/")]
+        postProcess:
+          - replace:
+              - regex: index\.html$
+                with: images/l.jpg
+              - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
+                with: https://en.caribbeancompr.com/moviepages/$3/images/$1
+      Studio:
+        Name:
+          selector: //ul[@class="footer-copyright"]/li[contains(.,"©")]
+          postProcess:
+            - replace:
+                - regex: .*\s([\w]+)\.com.*
+                  with: $1
+            - map:
+                caribbeancompr: Caribbeancom Premium
+                caribbeancom: Caribbeancom
+# Last Updated November 8, 2020

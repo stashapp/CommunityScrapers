@@ -1,0 +1,34 @@
+name: tonightsgirlfriend
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tonightsgirlfriend.com/scenes
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="scenepage-info"]
+    scene:
+      Title:
+        selector: //head/title/text()
+        postProcess:
+          - replace:
+              - regex: \sHD\sPorn\s\|\sTonightsGirlfriend\.com
+                with:
+      Date:
+        selector: $sceneinfo/p/span/text()
+        postProcess:
+          - replace:
+              - regex: "Added: "
+                with:
+          - parseDate: 01-02-06
+      Details: //div[@class="scenepage-description"]/p
+      Performers:
+        Name: $sceneinfo/p/a
+      Image: //img[@class="playcard"]/@src
+      Studio:
+        Name:
+          fixed: "Tonight's Girlfriend"
+      URL: //link[@rel='canonical']/@href
+
+# Last Updated November 8, 2020

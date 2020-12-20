@@ -1,0 +1,208 @@
+name: "Nubiles"
+
+# Nubiles Porn sites: https://nubilesporn.com/page/series
+# Nubile Films sites: https://nubilefilms.com/page/series
+# Standalone sites: https://nubilescash.com/page/about (contains all network sites)
+
+sceneByURL:
+  # Nubiles Porn sites
+  - action: scrapeXPath
+    scraper: nubilesPornMultiScraper
+    url:
+      - badteenspunished.com/video/watch/
+      - bountyhunterporn.com/video/watch/
+      - daddyslilangel.com/video/watch/
+      - detentiongirls.com/video/watch/
+      - driverxxx.com/video/watch/
+      - familyswap.xxx/video/watch/
+      - momsteachsex.com/video/watch/
+      - myfamilypies.com/video/watch/
+      - nubiles-casting.com/video/watch/
+      - nubiles-porn.com/video/watch/
+      - nubileset.com/video/watch/
+      - nubilesporn.com/video/watch/
+      - nubilesunscripted.com/video/watch/
+      - petiteballerinasfucked.com/video/watch/
+      - petitehdporn.com/video/watch/
+      - princesscum.com/video/watch/
+      - stepsiblingscaught.com/video/watch/
+      - teacherfucksteens.com/video/watch/
+
+  # Nubile Films sites
+  - action: scrapeXPath
+    scraper: nubileFilmsMultiScraper
+    url:
+      - girlsonlyporn.com/video/watch/
+      - hotcrazymess.com/video/watch/
+      - nubilefilms.com/video/watch/
+      - thatsitcomshow.com/video/watch/
+
+  # Standalone sites
+  - action: scrapeXPath
+    scraper: standaloneMultiScraper
+    url:
+      - anilos.com/video/watch/
+      - brattysis.com/video/watch/
+      - deeplush.com/video/watch/
+      - nfbusty.com/video/watch/
+      - nubiles.net/video/watch/
+
+galleryByURL:
+  # Nubiles Porn sites
+  - action: scrapeXPath
+    scraper: nubilesPornMultiScraper
+    url:
+      - badteenspunished.com/photo/gallery/
+      - bountyhunterporn.com/photo/gallery/
+      - daddyslilangel.com/photo/gallery/
+      - detentiongirls.com/photo/gallery/
+      - driverxxx.com/photo/gallery/
+      - familyswap.xxx/photo/gallery/
+      - momsteachsex.com/photo/gallery/
+      - myfamilypies.com/photo/gallery/
+      - nubiles-casting.com/photo/gallery/
+      - nubiles-porn.com/photo/gallery/
+      - nubileset.com/photo/gallery/
+      - nubilesporn.com/photo/gallery/
+      - nubilesunscripted.com/photo/gallery/
+      - petiteballerinasfucked.com/photo/gallery/
+      - petitehdporn.com/photo/gallery/
+      - princesscum.com/photo/gallery/
+      - stepsiblingscaught.com/photo/gallery/
+      - teacherfucksteens.com/photo/gallery/
+
+  # Nubile Films sites
+  - action: scrapeXPath
+    scraper: nubileFilmsMultiScraper
+    url:
+      - girlsonlyporn.com/photo/gallery/
+      - nubilefilms.com/photo/gallery/
+      - thatsitcomshow.com/photo/gallery/
+
+  # Standalone sites
+  - action: scrapeXPath
+    scraper: standaloneMultiScraper
+    url:
+      - anilos.com/photo/gallery/
+      - brattysis.com/photo/gallery/
+      - deeplush.com/photo/gallery/
+      - nfbusty.com/photo/gallery/
+      - nubiles.net/photo/gallery/
+
+xPathScrapers:
+  # Nubiles Porn sites
+  nubilesPornMultiScraper:
+    common: &commonSelectors
+      $contentpane: //div[contains(@class, "content-pane-title")]
+
+    scene:
+      Title: &titleSelector //h2/text()
+      Date: &dateAttr
+        selector: $contentpane//span[@class="date"]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: &detailsAttr
+        selector: //div[contains(@class, "content-pane-column")]//p/text()|//div[contains(@class, "content-pane-column")]/div/text()
+        concat: "\n\n"
+      Performers: &performersAttr
+        Name: //div[@class="content-pane-performers"]/a/text()
+      Studio: &studioFromSiteLinkAttr
+        Name:
+          selector: $contentpane//a[@class="site-link"]/text()
+          postProcess:
+            - replace:
+                - regex: (.+?)\.(com|xxx)
+                  with: $1
+                # 'StepSiblingsCaught' => 'Step Siblings Caught'
+                - regex: ([a-z])-?([A-Z])
+                  with: $1 $2
+                # 'Petite HDPorn' => 'Petite HD Porn'
+                - regex: ([A-Z]+)(Porn)
+                  with: $1 $2
+            # Fix special cases
+            - map:
+                Daddys Lil Angel: Daddy's Lil Angel
+                Nubiles ET: NubilesET
+      Tags: &tagsAttr
+        Name: //div[@class="categories"]/a/text()
+      Image: &imageAttr
+        selector: //img[@class="fake-video-player-cover"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+
+    gallery:
+      Title: &galleryTitleAttr
+        selector: *titleSelector
+        postProcess:
+          - replace:
+              # Remove - S11:E11 part
+              - regex: \s-\sS\d+:E\d+$
+                with:
+      Details: *detailsAttr
+      Date: *dateAttr
+      Performers: *performersAttr
+      Tags: *tagsAttr
+      Studio: *studioFromSiteLinkAttr
+
+  # Nubile Films sites
+  nubileFilmsMultiScraper:
+    common: *commonSelectors
+
+    scene:
+      Title: *titleSelector
+      Date: *dateAttr
+      Details: *detailsAttr
+      Performers: *performersAttr
+      Studio: &nubileFilmsStudioAttr
+        Name:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: ^.*//(?:www\.)?(.+?)/.+$
+                  with: $1
+            - map:
+                girlsonlyporn.com: Girls Only Porn
+                hotcrazymess.com: Hot Crazy Mess
+                nubilefilms.com: Nubile Films
+                thatsitcomshow.com: That Sitcom Show
+      Tags: *tagsAttr
+      Image: *imageAttr
+
+    gallery:
+      Title: *galleryTitleAttr
+      Details: *detailsAttr
+      Date: *dateAttr
+      Performers: *performersAttr
+      Tags: *tagsAttr
+      Studio: *nubileFilmsStudioAttr
+
+  # Standalone sites
+  standaloneMultiScraper:
+    common: *commonSelectors
+
+    scene:
+      Title: *titleSelector
+      Date: *dateAttr
+      Details: *detailsAttr
+      Performers: *performersAttr
+      Studio: &studioFromTitleAttr
+        Name:
+          selector: //title/text()
+          postProcess:
+            - replace:
+              - regex: ^(.+?)\s-.+$
+                with: $1
+      Tags: *tagsAttr
+      Image: *imageAttr
+
+    gallery:
+      Title: *galleryTitleAttr
+      Details: *detailsAttr
+      Date: *dateAttr
+      Performers: *performersAttr
+      Tags: *tagsAttr
+      Studio: *studioFromTitleAttr
+
+# Last Updated November 25, 2020

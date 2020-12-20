@@ -1,0 +1,43 @@
+name: TheScoreGroup
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - scoreland.com/
+      - 60plusmilfs.com/
+      - 50plusmilfs.com/
+      - 40somethingmag.com/
+      - pornmegaload.com/
+      - xlgirls.com/
+      - 18eighteen.com/
+      - legsex.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //section[@id="videos_page-page"]/div[@class="row"]/div/h2/text()
+      Studio:
+        Name:
+            selector: //meta[@property="og:site_name"]/@content
+      Date:
+        selector: //div[@class="stat mb-2"]/span[contains(.,"Date:")]/../span[@class="value"]/text()
+        postProcess:
+          - replace:
+            - regex: ..,
+              with:
+          - parseDate: January 2 2006
+      Details:
+        selector: //div[@class="row"]/div/div[@class="p-desc"]/text()
+        concat: "\n"
+      Tags:
+        Name: //div[@class="row"]/div/div[@class="mb-3"]/a/text()
+      Performers:
+        Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
+      Image:
+        selector: //meta[@itemprop="image"]/@content
+# Enable this post process if you want better image quality but sometimes it can fail
+#        postProcess: 
+#          - replace:
+#            - regex: _lg
+#              with: _x_800
+          
+# Last Updated August 11, 2020

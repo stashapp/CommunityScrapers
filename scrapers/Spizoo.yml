@@ -1,0 +1,35 @@
+name: spizoo
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - spizoo.com/updates/
+      - jessicajaymesxxx.com/updates/
+      - mrluckypov.com/updates/
+      - firstclasspov.com/updates/
+      - pornstartease.com/updates/
+      - intimatelesbians.com/updates/
+      - thestripperexperience.com/updates/
+      - porngoespro.com/updates/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Date:
+        selector: //p[@class="date"]
+        postProcess:
+          - parseDate: 2006-01-02
+      Details: //p[@class="description"]
+      Performers:
+        Name:
+          selector: //div[@class="col-3"]/a[@class="ampLink"]/text()
+          postProcess:
+            - replace:
+                - regex: "\\.$"
+                  with:
+      Tags:
+        Name: //div[@class="col-12 col-md-6"]/div/div[@class="col-12"]/a/text()
+      Image: //video[@id="trailervideo"]/@poster
+
+
+# Last Updated November 8, 2020

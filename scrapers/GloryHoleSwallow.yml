@@ -1,0 +1,27 @@
+name: "GloryHoleSwallow"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - gloryholeswallow.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class='objectInfo']
+    scene:
+      Title: $info/h1/text()
+      Details: $info/div[@class='content']/p/text()
+      Tags:
+        Name: $info//p[contains(text(),'Tags')]//a/text()
+      Image:
+        selector: //div[@id='fakeplayer']//img/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://gloryholeswallow.com
+      Studio:
+        Name:
+          fixed: GloryHole Swallow
+      URL: //link[@rel='canonical']/@href
+
+# Last Updated November 8, 2020

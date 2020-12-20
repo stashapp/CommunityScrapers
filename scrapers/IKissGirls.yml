@@ -1,0 +1,36 @@
+name: "IKissGirls"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ikissgirls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $player: //div[@class="video-player"]
+    scene:
+      Title:
+        selector: $player//h2/text()
+        postProcess:
+          - replace:
+              - regex: :\sVideo
+                with:
+      Date:
+        selector: //div[strong/text()='Released:']/text()[2]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: //div[h3/text()='Description:']/text()[2]
+      Tags:
+        Name: //ul[@class='tags']//a/text()
+      Performers:
+        Name: //div[@class="update-info-block models-list-thumbs"]//span/text()
+      Studio:
+        Name: //meta[@name="author"]/@content
+      Image:
+        selector: //img[@id="set-target-35"]/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://ikissgirls.com
+
+# Last Updated November 8, 2020

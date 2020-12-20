@@ -1,0 +1,32 @@
+name: Vivid
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vivid.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="row individual-scenes-section"]
+    scene:
+      Title: //h2[@class="scene-h2-heading"]
+      Details: $info/p
+      Tags:
+        Name: $info/h5[contains(text(),'Categories:')]/a
+      Performers:
+        Name: $info/h4[contains(text(),'Starring:')]/a
+      Image:
+        selector: //script[contains(text(),'poster:')]|//img[@id="placard"]/@src
+        postProcess:
+          - replace:
+              - regex: .+(https://content\.vivid\.com/.+\.jpg).+
+                with: $1
+      Date:
+        selector: $info/h5[contains(text(),'Released:')]
+        postProcess:
+          - replace:
+              - regex: "Released:"
+                with: ""
+          - parseDate: Jan 2, 2006
+
+# Last Updated November 8, 2020

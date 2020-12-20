@@ -1,0 +1,49 @@
+name: Expliciteart
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - explicite-art.com/visitor/video/
+      - explicite-art.com/fr/visitor/video/
+galleryByURL:
+  - action: scrapeXPath
+    scraper: galleryScraper
+    url:
+      - explicite-art.com/visitor/gallerie/
+      - explicite-art.com/fr/visitor/gallerie/
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="player-info-row"]
+    scene:
+      Details: //div[@class="player-info-desc"]/p/text()
+      Image:
+        selector: //div[@class="contents-player"]/div/script/text()
+        postProcess:
+          - replace:
+              - regex: .+(image:\s")([^"]+).+
+                with: $2
+      Performers:
+        Name: $info//a[contains(@href,"pornstars")]
+      Tags:
+        Name: $info/span[@class="tags"]/a[contains(@href,"channel")]/text()
+      Studio:
+        Name:
+          fixed: Explicite Art
+      Title: //div[@class="header"]//h1 #//head/title
+
+  galleryScraper:
+    common:
+      $info: //div[@class="player-info-row"]
+    gallery:
+      Details: //div[@class="player-info-desc"]/p/text()
+      Performers:
+        Name: $info//a[contains(@href,"pornstars")]
+      Tags:
+        Name: //div[@class="player-info-row"]/span[@class="tags"]/a[contains(@href,"channel")]/text()
+      Studio:
+        Name:
+          fixed: Explicite Art
+      Title: //div[@class="header"]//h1 #//head/title
+# Last Updated November 14, 2020

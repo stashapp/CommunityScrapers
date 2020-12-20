@@ -1,0 +1,33 @@
+name: "DogFart"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - dogfartnetwork.com/
+      - wefuckblackgirls.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="description-title"]/text()
+      Date:
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - replace:
+              - regex: ([\d-]*).+
+                with: $1
+          - parseDate: 2006-01-02
+      Details:
+        selector: //div[@class="description shorten"]/text()|//span[@class="more-desc hide"]/text()
+        concat: " "
+      Tags:
+        Name: //div[@class="categories"]/p/a/text()
+      Performers:
+        Name: //h4[@class="more-scenes"]/a/text()
+      Image:
+        selector: //meta[@itemprop="thumbnailUrl"]/@content
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+
+# Last Updated November 8, 2020

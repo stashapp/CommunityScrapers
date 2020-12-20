@@ -1,0 +1,15 @@
+name: "stash sqlite"
+performerByFragment:
+    action: script
+    script:
+      - python
+      - stash-sqlite.py
+      - fetch
+performerByName:
+    action: script
+    script:
+      - python
+      - stash-sqlite.py
+      - query
+
+# Last Updated August 12, 2020

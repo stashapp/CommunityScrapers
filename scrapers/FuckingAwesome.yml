@@ -1,0 +1,30 @@
+name: "FuckingAwesome"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fuckingawesome.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="inner-heading pull-left"]/text()
+      Details: //div[@class="more text-justify"]/text()
+      Tags:
+        Name:
+          selector: //div[@class="tags"]/ul/li/a/text()
+      Performers:
+        Name: //div[@class="pornstarnames"]/span[contains(text(),"Pornstars:")]/../ul/li/a/text()
+      Image: //img[@id="videoPlayerPreview"]/@src
+      Studio:
+        Name:
+          selector: //meta[@property="og:site_name"]/@content
+          postProcess:
+            - replace:
+                - regex: \.com$
+                  with:
+      Date:
+        selector: //div[@class="videodate"]/strong/text()
+        postProcess:
+          - parseDate: January 2, 2006
+
+# Last Updated November 8, 2020

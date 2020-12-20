@@ -1,0 +1,36 @@
+# Should only be used when you want to match a scene using the URL
+# otherwise the ThePornDB.yml one should be preferred as it uses the JSON API 
+name: "PornDB"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - metadataapi.net/scenes/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      URL: //a[@class="btn btn-secondary btn-block"]/@href
+      Studio:
+        Name: //div[@class="col-6 text-left scene-page-site mb-4"]/a/p/text() #//meta[@property="og:site_name" and @data-vue-meta="1"]/@content
+      Title: //h3/text() #//meta[@property="og:title" and @data-vue-meta="1"]/@content
+      Date:
+        selector: //meta[@property="video:release_date"]/@content
+      Details: //p[@class="mt-4"]/text() #//meta[@property="og:description" and @data-vue-meta="1"]/@content
+      Tags:
+        Name: //div[@class="my-6"]/h5/span/text()
+      Performers:
+        # Only female genders:
+        Name: //*[@data-icon="venus"]/../../../../div[@class="card-body p-3 text-center"]/text()
+        # Any genders
+        #Name: //div[@class="card performer-card"]/div[@class="card-body p-3 text-center"]/text() #//meta[@property="video:actor" and @data-vue-meta="1"]/@content
+      Image: 
+        selector: //img[@class="bd-placeholder-img w-full rounded rounded-t lazy img-fluid"]/@src[not(contains(.,"metadataapi.net%2Fdefault.png"))]|//video[@class="embed-responsive-item"]/@poster # //meta[@property="og:image:url" and @data-vue-meta="1"]/@content
+        # Uncomment if you want change the size of the picture 
+        #postProcess:
+        #  - replace:
+        #    - regex: "3000x3000"
+        #      with: "1000x1000"
+driver:
+  useCDP: true
+  sleep: 5
+# Last Updated November 16, 2020

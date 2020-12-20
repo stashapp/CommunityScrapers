@@ -1,0 +1,22 @@
+name: "VirtualRealPorn"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - virtualrealporn.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="three-quarters"]
+    scene:
+      Title: //dl8-video/@title
+      Details:
+        selector: //div[@class="g-cols onlydesktop"]//text()
+        concat: " "
+      Tags:
+        Name: //meta[@property="article:tag"]/@content
+      Performers:
+        Name: //h2[@class="w-portfolio-item-title"]/text()
+      Image: //meta[@property="og:image"]/@content
+
+# Last Updated May 25, 2020
