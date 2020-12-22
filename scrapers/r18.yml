@@ -4,12 +4,26 @@ sceneByURL:
     url:
       - r18.com/videos
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.r18.com/common/search/searchword={filename}
+  queryURLReplace:
+    filename:
+      - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
+        with: $2
+      - regex: "-"
+        with: ""
+      - regex: (\D+)(\d+)
+        with: $1-$2
+  scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
       $sceneinfo: //section[@class="clearfix"]/div[@class="product-details"]
+      $searchinfo: //li[@class="item-list"]/a//img[string(@alt)=string(preceding::div[@class="genre01"]/span/text())]
     scene:
-      Title: $sceneinfo/dl/dt[contains(.,"DVD ID")]/following-sibling::dd[1]/text()
+      Title: $searchinfo/@alt|$sceneinfo/dl/dt[contains(.,"DVD ID")]/following-sibling::dd[1]/text()
+      URL: $searchinfo/ancestor::a/@href|//link[@rel='canonical']/@href
       Date:
         selector: $sceneinfo/dl/dt[contains(.,"Release Date")]/../dd[@itemprop="dateCreated"]/text()
         postProcess:
