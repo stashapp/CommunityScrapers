@@ -1,4 +1,4 @@
-name: r18
+name: "R18 (JAV)"
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -54,4 +54,4 @@ xPathScrapers:
         Name:
           selector: $sceneinfo/dl/dt[contains(.,"Studio")]/../dd[@itemprop="productionCompany"]/a/text()
       Image: //meta[@itemprop="thumbnailUrl"]/@content
-# Last Updated October 11, 2020
+# Last Updated December 22, 2020
