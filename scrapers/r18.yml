@@ -11,9 +11,7 @@ sceneByFragment:
     filename:
       - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
         with: $2
-      - regex: "-"
-        with: ""
-      - regex: (\D+)(\d+)
+      - regex: ([a-zA-Z]+)(\d+)
         with: $1-$2
   scraper: sceneScraper
 xPathScrapers:
@@ -53,5 +51,5 @@ xPathScrapers:
       Studio:
         Name:
           selector: $sceneinfo/dl/dt[contains(.,"Studio")]/../dd[@itemprop="productionCompany"]/a/text()
-      Image: //meta[@itemprop="thumbnailUrl"]/@content
+      Image: $searchinfo/@data-original|//meta[@itemprop="thumbnailUrl"]/@content
 # Last Updated December 22, 2020
