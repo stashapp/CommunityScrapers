@@ -141,6 +141,31 @@
           "default": 2,
           "minimum": 1
         },
+        "clicks": {
+          "title": "Clicks",
+          "description": "Perform mouse clicks on elements.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["xpath"],
+            "properties": {
+              "xpath": {
+                "title": "Selector",
+                "description": "XPath selector for the element to click.",
+                "type": "string"
+              },
+              "sleep": {
+                "title": "Sleep",
+                "description": "Wait N seconds after after clicking, before continuing the scrape.\nIf unset, defaults to 2.",
+                "type": "number",
+                "default": 2,
+                "minimum": 1
+              }
+            }
+          }
+        },
         "cookies": {
           "title": "Cookie options",
           "description": "An array of cookie items.",
