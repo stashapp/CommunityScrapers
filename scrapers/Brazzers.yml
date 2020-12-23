@@ -233,7 +233,4 @@ xPathScrapers:
 #        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
 
-
-
-
-# Last Updated November 18, 2020
+# Last Updated December 23, 2020
