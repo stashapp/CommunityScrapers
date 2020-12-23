@@ -1,4 +1,5 @@
 name: 'Brazzers'
+
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -18,7 +19,14 @@ performerByName:
   action: scrapeXPath
   queryURL: https://www.brazzers.com/pornstars?q={}
   scraper: performerSearch
-
+  
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - brazzers.com/video
+      - brazzers.com/scene
+    scraper: galleryScraper
+    
 xPathScrapers:
   performerSearch:
     common:
@@ -56,7 +64,27 @@ xPathScrapers:
       Performers:
         Name: $titlebar/div/span/a/text()
       Image: //img[@alt=""][contains(@src,"poster")]/@src
-
+      
+  galleryScraper:
+    common:
+      $titlebar: //*[name()='path'][1]/../../../../h2/..
+    gallery:
+      Title: $titlebar/h2/text()
+      Studio:
+        Name:
+          selector: //div[text()="Subsite"]/../a/text()
+      Date:
+        selector: $titlebar/div/text()
+        postProcess:
+          - parseDate: January 2, 2006
+       
+      Details: //h2[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'description']/../div/p/text()
+      Performers:
+        Name: $titlebar/div/span/a/text()
+          
+      Tags:
+        Name: //div[text()="Tags"]/../div/a/text()
+        
   performerScraper:
     performer:
       Name: //section/div/div/div[@font-size]/text() # //div[@font-size][number(translate(@font-size,"px",""))>=35]/text()
@@ -205,4 +233,4 @@ xPathScrapers:
 #        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
 
-# Last Updated November 8, 2020
+# Last Updated December 23, 2020
