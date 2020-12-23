@@ -1,6 +1,4 @@
-###############################################################################################
 name: 'Brazzers'
-###############################################################################################
 
 sceneByURL:
   - action: scrapeXPath
@@ -29,9 +27,7 @@ galleryByURL:
       - brazzers.com/scene
     scraper: galleryScraper
     
-###############################################################################################
 xPathScrapers:
-###############################################################################################
   performerSearch:
     common:
       $result: //span/a[contains(@href, "/pornstar")]
@@ -68,7 +64,27 @@ xPathScrapers:
       Performers:
         Name: $titlebar/div/span/a/text()
       Image: //img[@alt=""][contains(@src,"poster")]/@src
-
+      
+  galleryScraper:
+    common:
+      $titlebar: //*[name()='path'][1]/../../../../h2/..
+    gallery:
+      Title: $titlebar/h2/text()
+      Studio:
+        Name:
+          selector: //div[text()="Subsite"]/../a/text()
+      Date:
+        selector: $titlebar/div/text()
+        postProcess:
+          - parseDate: January 2, 2006
+       
+      Details: //h2[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'description']/../div/p/text()
+      Performers:
+        Name: $titlebar/div/span/a/text()
+          
+      Tags:
+        Name: //div[text()="Tags"]/../div/a/text()
+        
   performerScraper:
     performer:
       Name: //section/div/div/div[@font-size]/text() # //div[@font-size][number(translate(@font-size,"px",""))>=35]/text()
@@ -217,23 +233,7 @@ xPathScrapers:
 #        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
 
-  galleryScraper:
-    common:
-      $titlebar: //*[name()='path'][1]/../../../../h2/..
-    gallery:
-      Title: $titlebar/h2/text()
-      Studio:
-        Name:
-          selector: //div[text()="Subsite"]/../a/text()
-      Date:
-        selector: $titlebar/div/text()
-       
-      Details: //h2[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'description']/../div/p/text()
-      Performers:
-        Name: $titlebar/div/span/a/text()
-          
-      Tags:
-        Name: //div[text()="Tags"]/../div/a/text()
+
 
 
 # Last Updated November 18, 2020
