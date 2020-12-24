@@ -18,7 +18,7 @@ xPathScrapers:
   sceneScraper:
     common:
       $sceneinfo: //section[@class="clearfix"]/div[@class="product-details"]
-      $searchinfo: //li[@class="item-list"]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]
+      $searchinfo: //li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]
     scene:
       Title: $searchinfo/@alt|$sceneinfo/dl/dt[contains(.,"DVD ID")]/following-sibling::dd[1]/text()
       URL: $searchinfo/ancestor::a/@href|//link[@rel='canonical']/@href
