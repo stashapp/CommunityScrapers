@@ -138,6 +138,8 @@ xPathScrapers:
       #        with: "Student"
       #      - regex: SK\*{2}ls
       #        with: "Skills"
+      #      - regex: P\*{4}hed
+      #        with: "Punished"
       Tags:
         Name: //div[@id="video_genres"]/table/tbody/tr/td[@class="text"]/span/a
       Performers:
