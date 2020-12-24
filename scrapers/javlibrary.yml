@@ -54,7 +54,7 @@ xPathScrapers:
       #      - regex: \|\/\/www\.javlibrary\.com\/en\/\?v=
       #        with: "?lg="
       #    - subScraper:
-      #        selector: //li[@class="item-list"]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]/ancestor::a/@href|//div[contains(text(),"Unable to find related item")]/preceding::option[@value="USD"]/@data-src
+      #        selector: //li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]/ancestor::a/@href|//div[contains(text(),"Unable to find related item")]/preceding::option[@value="USD"]/@data-src
       #    - replace:
       #      - regex: (.+\?lg=)(.+&unit=USD)
       #        with: https://www.javlibrary.com/en/?v=$2
@@ -111,7 +111,7 @@ xPathScrapers:
       #      - regex: \|\/\/www\.javlibrary\.com\/en\/\?v=
       #        with: "?lg="
       #    - subScraper:
-      #        selector: //li[@class="item-list"]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]/ancestor::a/@href|//div[contains(text(),"Unable to find related item")]/preceding::option[@value="USD"]/@data-src
+      #        selector: //li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]/ancestor::a/@href|//div[contains(text(),"Unable to find related item")]/preceding::option[@value="USD"]/@data-src
       #    - replace:
       #      - regex: (.+\?lg=)(.+&unit=USD)
       #        with: https://www.javlibrary.com/en/?v=$2
