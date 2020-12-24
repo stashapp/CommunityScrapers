@@ -363,7 +363,7 @@
       "title": "Scene object",
       "type": "object",
       "additionalProperties": false,
-      "required": [],
+      "required": ["Title"],
       "properties": {
         "Title": {
           "title": "Scene title",
@@ -431,7 +431,7 @@
       "title": "Performer object",
       "type": "object",
       "additionalProperties": false,
-      "required": [],
+      "required": ["Name"],
       "properties": {
         "Name": {
           "title": "Performer name",
@@ -508,7 +508,7 @@
       "title": "Movie object",
       "type": "object",
       "additionalProperties": false,
-      "required": [],
+      "required": ["Name"],
       "properties": {
         "Name": {
           "title": "Movie name",
@@ -562,7 +562,7 @@
       "title": "Gallery object",
       "type": "object",
       "additionalProperties": false,
-      "required": [],
+      "required": ["Title"],
       "properties": {
         "Title": {
           "title": "Gallery title",
@@ -616,6 +616,7 @@
       "title": "Studio object",
       "type": "object",
       "additionalProperties": false,
+      "required": ["Name"],
       "properties": {
         "Name": {
           "title": "Studio name",
@@ -631,6 +632,7 @@
       "title": "Tags object",
       "type": "object",
       "additionalProperties": false,
+      "required": ["Name"],
       "properties": {
         "Name": {
           "title": "Tag name",
