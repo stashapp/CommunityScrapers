@@ -628,7 +628,8 @@
       }
     },
     "tagsObject": {
-      "title": "Tags object","type": "object",
+      "title": "Tags object",
+      "type": "object",
       "additionalProperties": false,
       "properties": {
         "Name": {
