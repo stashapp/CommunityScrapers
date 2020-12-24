@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     common:
       $performer: //p[b[text()='Starring:']]/a
-      $studio: //p[b[text()='Site:']]/a
+      $studio: //p[b[text()='Site:' or text()='Studio:']]/a
     scene:
       Title: //h1/text()
       Date: 
