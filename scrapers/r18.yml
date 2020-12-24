@@ -38,6 +38,28 @@ xPathScrapers:
       Details:
         selector: //div[@class="col01"]/h1/cite[@itemprop="name"]/text()|//div[contains(@class,"cmn-box-description")]/p
         concat: "\n\n"
+        postProcess:
+          - replace:
+            - regex: R\*{2}e
+              with: "Rape"
+            - regex: G\*{7}g
+              with: "Gangbang"
+            - regex: T\*{5}e
+              with: "Torture"
+            - regex: V\*{5}t
+              with: "Violent"
+            - regex: S\*{3}e
+              with: "Slave"
+            - regex: S\*{3}ery
+              with: "Slavery"
+            - regex: D\*{3}king
+              with: "Drinking"
+            - regex: S\*{5}t
+              with: "Student"
+            - regex: SK\*{2}ls
+              with: "Skills"
+            - regex: P\*{4}hed
+              with: "Punished"
       Tags:
         Name: //div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a
       Performers:
