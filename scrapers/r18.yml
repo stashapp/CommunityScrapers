@@ -60,6 +60,8 @@ xPathScrapers:
               with: "Skills"
             - regex: P\*{4}hed
               with: "Punished"
+            - regex: D\*{2}gged
+              with: "Drugged"
       Tags:
         Name: //div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a
       Performers:
