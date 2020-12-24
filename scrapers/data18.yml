@@ -18,7 +18,14 @@ xPathScrapers:
             - regex: ","
               with:
           - parseDate: January 2 2006
-      Details: //p[b[text()='Story:']]
+      Details:
+        selector: //p[b[text()='Story:']]
+        postProcess:
+          - replace:
+              - regex: "^Story:"
+                with:
+              - regex: �
+                with: "'"
       Tags: 
         Name: //div[b[text()='Categories:']]/a/text()
       Performers:
