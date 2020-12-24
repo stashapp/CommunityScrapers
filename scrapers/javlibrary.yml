@@ -142,6 +142,16 @@ xPathScrapers:
       #        with: "Punished"
       #      - regex: D\*{2}gged
       #        with: "Drugged"
+      #      - regex: F\*{3}ed
+      #        with: "Fucked"
+      #      - regex: D\*{3}k
+      #        with: "Drunk"
+      #      - regex: S\*{8}l
+      #        with: "Schoolgirl"
+      #      - regex: R\*{4}g
+      #        with: "Raping"
+      #      - regex: P\*{4}hment
+      #        with: "Punishment"
       Tags:
         Name: //div[@id="video_genres"]/table/tbody/tr/td[@class="text"]/span/a
       Performers:
