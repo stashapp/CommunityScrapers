@@ -387,43 +387,19 @@
         },
         "Studio": {
           "title": "Scene studio",
-          "allOf": [
-            { "$ref": "#/definitions/studioObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/studioObject" }]
         },
         "Movies": {
           "title": "Scene movies",
-          "allOf": [
-            { "$ref": "#/definitions/movieObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/movieObject" }]
         },
         "Tags": {
           "title": "Scene tags",
-          "allOf": [
-            { "$ref": "#/definitions/tagsObject" },
-            {
-              "propertyNames": { "enum": ["Name"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
         },
         "Performers": {
           "title": "Scene performers",
-          "allOf": [
-            { "$ref": "#/definitions/performerObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/performerObject" }]
         }
       }
     },
@@ -532,13 +508,7 @@
         },
         "Studio": {
           "title": "Movie studio",
-          "allOf": [
-            { "$ref": "#/definitions/studioObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/studioObject" }]
         },
         "FrontImage": {
           "title": "Movie front image",
@@ -582,33 +552,15 @@
         },
         "Studio": {
           "title": "Gallery studio",
-          "allOf": [
-            { "$ref": "#/definitions/studioObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/studioObject" }]
         },
         "Tags": {
           "title": "Gallery tags",
-          "allOf": [
-            { "$ref": "#/definitions/tagsObject" },
-            {
-              "propertyNames": { "enum": ["Name"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
         },
         "Performers": {
           "title": "Gallery performers",
-          "allOf": [
-            { "$ref": "#/definitions/performerObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/performerObject" }]
         }
       }
     },
