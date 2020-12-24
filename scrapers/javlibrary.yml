@@ -136,6 +136,8 @@ xPathScrapers:
       #       with: "Drinking"
       #      - regex: S\*{5}t
       #        with: "Student"
+      #      - regex: SK\*{2}ls
+      #        with: "Skills"
       Tags:
         Name: //div[@id="video_genres"]/table/tbody/tr/td[@class="text"]/span/a
       Performers:
