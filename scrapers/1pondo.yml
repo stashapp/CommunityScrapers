@@ -1,0 +1,38 @@
+name: 1Pondo
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - en.1pondo.tv/movies/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $movieDetail: //div[@class="movie-detail"]
+    scene:
+      Title: //div[@class="movie-overview"]/h1
+      Details: //div[@class="movie-detail"]/p
+      Image:
+        selector: //div[@class="vjs-poster"]/@style
+        postProcess:
+          - replace:
+              - regex: .*\"(/assets/[^"]+)\".*
+                with: https://en.1pondo.tv$1
+      Date:
+        selector: //ul/li[span[contains(.,"Release Date:")]]/span[@class="spec-content"]
+        postProcess:
+          - parseDate: 2006/01/02
+      Tags:
+        Name:
+          selector: //ul/li[span[contains(.,"Tags:")]]/span[@class="spec-content"]//a
+      Performers:
+        Name:
+          selector: //ul/li[span[contains(.,"Featuring:")]]/span[@class="spec-content"]//a
+      Studio:
+        Name:
+          fixed: "1Pondo"
+driver:
+  useCDP: true
+  clicks:
+    - xpath: //div[@class="movie-info section divider"]/button
+#Last Updated December 7, 2020
