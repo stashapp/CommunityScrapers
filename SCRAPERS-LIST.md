@@ -610,6 +610,7 @@ spankbang.com|SpankBang.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
 spearteenpussy.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermantino.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermswallowers.com|JulesJordan.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+spermswap.com|AssTraffic.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spizoo.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spoiledvirgins.com|OldGoesYoung.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spyfam.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
