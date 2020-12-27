@@ -13,16 +13,14 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
-      - m45e.com/
-      - g46e.com/
+      - b49t.com/
       - b47w.com/
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
-      - m45e.com/
-      - g46e.com/
+      - b49t.com/
       - b47w.com/
     scraper: movieScraper
 xPathScrapers:
