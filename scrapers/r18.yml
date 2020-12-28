@@ -1,15 +1,27 @@
-name: r18
+name: "R18 (JAV)"
 sceneByURL:
   - action: scrapeXPath
     url:
       - r18.com/videos
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.r18.com/common/search/searchword={filename}
+  queryURLReplace:
+    filename:
+      - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
+        with: $2
+      - regex: ([a-zA-Z]+)(\d+)
+        with: $1-$2
+  scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
       $sceneinfo: //section[@class="clearfix"]/div[@class="product-details"]
+      $searchinfo: //li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]
     scene:
-      Title: $sceneinfo/dl/dt[contains(.,"DVD ID")]/following-sibling::dd[1]/text()
+      Title: $searchinfo/@alt|$sceneinfo/dl/dt[contains(.,"DVD ID")]/following-sibling::dd[1]/text()
+      URL: $searchinfo/ancestor::a/@href|//link[@rel='canonical']/@href
       Date:
         selector: $sceneinfo/dl/dt[contains(.,"Release Date")]/../dd[@itemprop="dateCreated"]/text()
         postProcess:
@@ -26,6 +38,40 @@ xPathScrapers:
       Details:
         selector: //div[@class="col01"]/h1/cite[@itemprop="name"]/text()|//div[contains(@class,"cmn-box-description")]/p
         concat: "\n\n"
+        postProcess:
+          - replace:
+            - regex: R\*{2}e
+              with: "Rape"
+            - regex: G\*{7}g
+              with: "Gangbang"
+            - regex: T\*{5}e
+              with: "Torture"
+            - regex: V\*{5}t
+              with: "Violent"
+            - regex: S\*{3}e
+              with: "Slave"
+            - regex: S\*{3}ery
+              with: "Slavery"
+            - regex: D\*{3}king
+              with: "Drinking"
+            - regex: S\*{5}t
+              with: "Student"
+            - regex: SK\*{2}ls
+              with: "Skills"
+            - regex: P\*{4}hed
+              with: "Punished"
+            - regex: D\*{2}gged
+              with: "Drugged"
+            - regex: F\*{3}ed
+              with: "Fucked"
+            - regex: D\*{3}k
+              with: "Drunk"
+            - regex: S\*{8}l
+              with: "Schoolgirl"
+            - regex: R\*{4}g
+              with: "Raping"
+            - regex: P\*{4}hment
+              with: "Punishment"
       Tags:
         Name: //div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a
       Performers:
@@ -39,5 +85,5 @@ xPathScrapers:
       Studio:
         Name:
           selector: $sceneinfo/dl/dt[contains(.,"Studio")]/../dd[@itemprop="productionCompany"]/a/text()
-      Image: //meta[@itemprop="thumbnailUrl"]/@content
-# Last Updated October 11, 2020
+      Image: $searchinfo/@data-original|//meta[@itemprop="thumbnailUrl"]/@content
+# Last Updated December 22, 2020
