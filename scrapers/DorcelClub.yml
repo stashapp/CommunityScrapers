@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - dorcelclub.com/en/scene
+      - dorcelclub.com/scene
     scraper: sceneScraper
     
 xPathScrapers:
