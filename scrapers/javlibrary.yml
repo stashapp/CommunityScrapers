@@ -16,6 +16,7 @@ sceneByURL:
       - m45e.com/
       - g46e.com/
       - b47w.com/
+      - b49t.com/
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
@@ -24,6 +25,7 @@ movieByURL:
       - m45e.com/
       - g46e.com/
       - b47w.com/
+      - b49t.com/
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
@@ -94,4 +96,4 @@ driver:
   useCDP: true
   sleep: 5
 
-# Last Updated November 8, 2020
+# Last Updated December 28, 2020
