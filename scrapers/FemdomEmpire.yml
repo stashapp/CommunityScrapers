@@ -31,7 +31,7 @@ xPathScrapers:
         Name:
           selector: //div[@id='logo']/h1/a/span
       Image:
-        selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
+        selector: //base/@href|//img[@class="update_thumb thumbs stdimage"]/@src0_1x
         postProcess:
           - replace:
             - regex: "(^[^|]+)\\|/tour/([^\\.]+\\.jpg).*"
