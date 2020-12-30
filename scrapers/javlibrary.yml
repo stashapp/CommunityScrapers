@@ -4,6 +4,8 @@ sceneByFragment:
   queryURL: https://www.javlibrary.com/en/vl_searchbyid.php?keyword={filename}
   queryURLReplace:
     filename:
+      - regex: -JG5|-JG6
+        with: ""
       - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
         with: $2
   # Note: If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
@@ -43,12 +45,119 @@ xPathScrapers:
               with: https://www.javlibrary.com/en/?
       Date:
         selector: //div[@id="video_date"]/table/tbody/tr/td[@class="text"]/text()
+      # Uncomment below for trying to use the release date from R18.com. Don't forget to comment/remove the "Date" above. (If you use CDP, you will wait way longer)
+      #Date:
+      #  selector: //a[text()="purchasing HERE"]/@href|//link[@rel='canonical']/@href
+      #  concat: "|"
+      #  postProcess:
+      #    - replace:
+      #      - regex: ^redirect\.php\?url=\/\/
+      #        with: "https://"
+      #      - regex: \|\/\/www\.javlibrary\.com\/en\/\?v=
+      #        with: "?lg="
+      #    - subScraper:
+      #        selector: //li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]/ancestor::a/@href|//div[contains(text(),"Unable to find related item")]/preceding::option[@value="USD"]/@data-src
+      #    - replace:
+      #      - regex: (.+\?lg=)(.+&unit=USD)
+      #        with: https://www.javlibrary.com/en/?v=$2
+      #    - subScraper:
+      #        selector: //section[@class="clearfix"]/div[@class="product-details"]/dl/dt[contains(.,"Release Date")]/../dd[@itemprop="dateCreated"]/text()|//td[@class="header" and text()="Release Date:"]/following-sibling::td/text()
+      #    - replace:
+      #      - regex: \.
+      #        with: ""
+      #      - regex: ","
+      #        with: ""
+      #      - regex: \s+
+      #        with: ""
+      #      - regex: Sept
+      #        with: "09"
+      #      - regex: Oct
+      #        with: "10"
+      #      - regex: Nov
+      #        with: "11"
+      #      - regex: Dec
+      #        with: "12"
+      #      - regex: Jan
+      #        with: "01"
+      #      - regex: Feb
+      #        with: "02"
+      #      - regex: Mar
+      #        with: "03"
+      #      - regex: Apr
+      #        with: "04"
+      #      - regex: May
+      #        with: "05"
+      #      - regex: June
+      #        with: "06"
+      #      - regex: July
+      #        with: "07"
+      #      - regex: Aug
+      #        with: "08"
+      #      - regex: (\d{2})(\d{2})(\d{4})
+      #        with: $3-$1-$2
+        
       Details:
         selector: //div[@id="video_title"]/h3/a/text()
         postProcess:
           - replace:
             - regex: ^(.*? ){1}
               with:
+      # Uncomment below for trying to use Details from R18.com. Don't forget to comment/remove the "Details" above. (If you use CDP, you will wait way longer)
+      #Details:
+      #  selector: //a[text()="purchasing HERE"]/@href|//link[@rel='canonical']/@href
+      #  concat: "|"
+      #  postProcess:
+      #    - replace:
+      #      - regex: ^redirect\.php\?url=\/\/
+      #        with: "https://"
+      #      - regex: \|\/\/www\.javlibrary\.com\/en\/\?v=
+      #        with: "?lg="
+      #    - subScraper:
+      #        selector: //li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]/ancestor::a/@href|//div[contains(text(),"Unable to find related item")]/preceding::option[@value="USD"]/@data-src
+      #    - replace:
+      #      - regex: (.+\?lg=)(.+&unit=USD)
+      #        with: https://www.javlibrary.com/en/?v=$2
+      #    - subScraper:
+      #        selector: //div[@class="col01"]/h1/cite[@itemprop="name"]/text()|//div[contains(@class,"cmn-box-description")]/p|//div[@id="video_title"]/h3/a/text()
+      #        concat: "\n\n"
+      # R18 censors somes words.
+      #    - replace:
+      #      - regex: R\*{2}e
+      #        with: "Rape"
+      #      - regex: G\*{7}g
+      #        with: "Gangbang"
+      #      - regex: T\*{5}e
+      #        with: "Torture"
+      #      - regex: V\*{5}t
+      #        with: "Violent"
+      #      - regex: S\*{3}e
+      #        with: "Slave"
+      #      - regex: S\*{3}ery
+      #        with: "Slavery"
+      #      - regex: D\*{3}king
+      #        with: "Drinking"
+      #      - regex: S\*{5}t
+      #        with: "Student"
+      #      - regex: SK\*{2}ls
+      #        with: "Skills"
+      #      - regex: P\*{4}hed
+      #        with: "Punished"
+      #      - regex: D\*{2}gged
+      #        with: "Drugged"
+      #      - regex: F\*{3}ed
+      #        with: "Fucked"
+      #      - regex: D\*{3}k
+      #        with: "Drunk"
+      #      - regex: S\*{8}l
+      #        with: "Schoolgirl"
+      #      - regex: R\*{4}g
+      #        with: "Raping"
+      #      - regex: P\*{4}hment
+      #        with: "Punishment"
+      #      - regex: M\*{4}ter
+      #        with: "Molester"
+      #      - regex: I\*{4}t
+      #        with: "Incest"
       Tags:
         Name: //div[@id="video_genres"]/table/tbody/tr/td[@class="text"]/span/a
       Performers:
@@ -96,4 +205,4 @@ driver:
   useCDP: true
   sleep: 5
 
-# Last Updated December 28, 2020
+# Last Updated December 30, 2020
