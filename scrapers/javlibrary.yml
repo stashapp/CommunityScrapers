@@ -70,7 +70,7 @@ xPathScrapers:
       #      - regex: \s+
       #        with: ""
       #      - regex: Sept
-      #       with: "09"
+      #        with: "09"
       #      - regex: Oct
       #        with: "10"
       #      - regex: Nov
@@ -88,7 +88,7 @@ xPathScrapers:
       #      - regex: May
       #        with: "05"
       #      - regex: June
-      #        with: "6"
+      #        with: "06"
       #      - regex: July
       #        with: "07"
       #      - regex: Aug
@@ -135,7 +135,7 @@ xPathScrapers:
       #      - regex: S\*{3}ery
       #        with: "Slavery"
       #      - regex: D\*{3}king
-      #       with: "Drinking"
+      #        with: "Drinking"
       #      - regex: S\*{5}t
       #        with: "Student"
       #      - regex: SK\*{2}ls
@@ -154,6 +154,10 @@ xPathScrapers:
       #        with: "Raping"
       #      - regex: P\*{4}hment
       #        with: "Punishment"
+      #      - regex: M\*{4}ter
+      #        with: "Molester"
+      #      - regex: I\*{4}t
+      #        with: "Incest"
       Tags:
         Name: //div[@id="video_genres"]/table/tbody/tr/td[@class="text"]/span/a
       Performers:
