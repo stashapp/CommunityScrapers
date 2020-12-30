@@ -634,6 +634,7 @@ swallowed.com|nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sweetfemdom.com|SweetFemdom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sweetheartvideo.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 sweetsinner.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+sweetyx.com|SweetyX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 taboopov.com|taboopov.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teacherfucksteens.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 teachmyass.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
