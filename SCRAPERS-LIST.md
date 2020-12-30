@@ -158,6 +158,7 @@ currycreampie.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechamateurs.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechbangbus.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechbitch.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechcasting.com|czechcasting.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechcouples.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechdungeon.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechestrogenolit.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
