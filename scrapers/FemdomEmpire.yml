@@ -30,20 +30,18 @@ xPathScrapers:
       Studio:
         Name:
           selector: //div[@id='logo']/h1/a/span
-        Image:
-          selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
-          postProcess:
-            - replace:
-              - regex: .*/tour/content//
-                with: "https://feminized.com/tour/content/"
+      Image:
+        selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
+        postProcess:
+          - replace:
+            - regex: "(^[^|]+)\\|/tour/([^\\.]+\\.jpg).*"
+              with: $1$2
   performerScraper:
     common:
       $performerInfo: "//div[@class='contentBox'][1]"
-      # if stash scraper supports xpath 2 we might be able to parse measurements etc from femdomempire stats lists.
-      # $profileAbout: "$performerInfo/div[@class='profile-about']/p"
     performer:
       Name:
-        selector: "$performerInfo/div[@class='profile-details']/h3"
+        selector: "$performerInfo//div[@class='profile-details']/h3"
       Gender:
         selector: "$performerInfo/div[@class='title']/h3"
         postProcess:
@@ -54,9 +52,13 @@ xPathScrapers:
             - regex: "^Mistress (.*)$"
               with: Female
       Image:
-        selector: "//li[@class='flex-active-slide']/img/@src"
-      URL:
-        selector: "//link[@rel='canonical']/@href"
+        # we use the union | and concat to get the base url for the image
+        selector: //base/@href|(//div[@class="flexslider-carousel"]//img/@src0_1x)[1] 
+        concat: "|"
+        postProcess:
+          - replace:
+            - regex: "(^[^|]+)\\|/tour/([^\\.]+\\.jpg).*"
+              with: $1$2
 
 
 # Last Updated October 10, 2020
