@@ -11,6 +11,7 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 18eighteen.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 18vr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 1by-day.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+1pondo.tv|1pondo.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP - stash >= 0.4.0-26 |JAV
 21naturals.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 21roles.com|21Roles.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 21sextreme.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -73,6 +74,7 @@ aussiefellatioqueens.com|AussieFelatioQueens.yml|:heavy_check_mark:|:x:|:x:|:x:|
 aussiepov.com|AussieAss.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 aziani.com|GangBangCreampie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 b47w.com|javlibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
+b49t.com|javlibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
 babepedia.com|Babepedia.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Database
 babes.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 babesnetwork.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-

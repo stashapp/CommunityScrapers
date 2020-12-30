@@ -1,36 +1,28 @@
-name: dorcelclub
+name: DorcelClub
 sceneByURL:
   - action: scrapeXPath
     url:
       - dorcelclub.com/en/scene
+      - dorcelclub.com/scene
     scraper: sceneScraper
+    
 xPathScrapers:
   sceneScraper:
-    common:
-      $info: //div[@class="infos"]
     scene:
-      Title: //meta[@property="og:description"]/@content
-      Image: //img[@class="lazy-load"]/@data-lazy
+      Title: //meta[@property="og:title"]/@content
+      Details: //meta[@property="og:description"]/@content
+      Image: 	//img[@class="thumbnail lazyload"]/@data-src
       Date:
-        selector: $info/div[@class="collection"]/span[@class="date"]
+        selector: //span[@class="publish_date"]
         postProcess:
-          - replace:
-              - regex: "Published "
-                with:
           - parseDate: January 02, 2006
-      Details:
-        selector: //div[@class="content-heading"]/div[@class="content_text"]/p
-
-      #DorcelClub uses categories , no tags. Uncomment the below if you want to use that as tags
-      #Tags:
-        #Name:
-          #selector: $info/div[@class="collection"]/a
       Performers:
-        Name: $info/div[@class="actors"]/a
+        Name: //div[@class="actress"]/a
       Studio:
         Name:
           fixed: DorcelClub
-      Movies:
-        Name: //div[@class="movie"]/a/text()
+      Movies:                                      
+        Name: //div[@class="left"]/span[@class="movie"]/a/text()
+        URL: //div[@class="left"]/span[@class="movie"]/a/@href
 
-# Last Updated October 3, 2020
+# Last Updated December 27, 2020
