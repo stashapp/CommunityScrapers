@@ -86,7 +86,11 @@ xPathScrapers:
           fixed: https://girlsoutwest.com
 
 driver:
-#  useCDP: true
-  clicks:
-    - xpath: //div[@class='eaav-item-allow-form']/div/button[1]
+  cookies:
+    - CookieURL: "https://tour.girlsoutwest.com"
+      Cookies:
+        - Name: "numheader"
+          Domain: "tour.girlsoutwest.com"
+          Value: "5"
+          Path: "/"
 # Last Updated December 31, 2020
