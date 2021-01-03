@@ -9,6 +9,11 @@ performerByURL:
     url:
       - tour.girlsoutwest.com/models/
     scraper: performerScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - tour.girlsoutwest.com/
+    scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -57,5 +62,35 @@ xPathScrapers:
           - replace:
             - regex: ^
               with: https://tour.girlsoutwest.com
+  galleryScraper:
+    gallery:
+      Title:
+        selector: //div[@class='trailerTitle']/div/h3/text()
+      Performers:
+        Name:
+          selector: //div[@class='trailer topSpace']/div//p/a/text()
+        URL:
+          selector: //div[@class='trailer topSpace']/div//p/a/@href
+      Date:
+        selector: //div[@class='trailer topSpace']/div[@class='centerwrap clear']/p/text()
+        concat: " "
+        postProcess:
+          - replace:
+            - regex: (.+)(\d{2}\/\d{2}\/\d{4})(.+)
+              with: $2
+          - parseDate: 01/02/2006
+      Studio:
+        Name:
+          fixed: Girls Out West
+        URL:
+          fixed: https://girlsoutwest.com
 
-# Last Updated December 13, 2020
+driver:
+  cookies:
+    - CookieURL: "https://tour.girlsoutwest.com"
+      Cookies:
+        - Name: "numheader"
+          Domain: "tour.girlsoutwest.com"
+          Value: "5"
+          Path: "/"
+# Last Updated December 31, 2020
