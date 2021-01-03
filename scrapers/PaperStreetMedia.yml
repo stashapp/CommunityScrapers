@@ -2,6 +2,7 @@ name: "PaperStreetMedia"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - analmom.com/movies/
       - badmilfs.com/movies/
       - bbcparadise.com/movies/
       - bffs.com/movies/
@@ -43,6 +44,7 @@ xPathScrapers:
                 - regex: (.+www\.)(\w+)(.+)
                   with: $2
             - map:
+                analmom: AnalMom
                 badmilfs: BadMilfs
                 bbcparadise: "BBC Paradise"
                 bffs: BFFs
