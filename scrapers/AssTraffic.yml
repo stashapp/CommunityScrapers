@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - asstraffic.com/movies/
+      - spermswap.com/movies/
     scraper: sceneScraper
 
 performerByURL:

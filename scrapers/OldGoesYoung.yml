@@ -1,0 +1,28 @@
+name: OldGoesYoung
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - oldgoesyoung.com/episode/
+      - trickyoldteacher.com/episode/
+      - spoiledvirgins.com/episode/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $wrapper: //div[@class="wrapper"]/div[@class="set-block-wrapper"]
+      $bg: //div[@class="wrapper"]/div[@class="set-block-wrapper"]/div[@class="set-bg"]
+    scene:
+      Title: $wrapper/h1/text()
+      Details: $bg/p[@class="set-description"]/text()
+      Date: 
+        selector: $bg/div[@class="set-info"]/p[@class="set-info-stats"]/span[1]
+        postProcess:
+          - parseDate: 02 Jan 2006
+      Image: //video[@id="player1"]/@poster
+      Tags:
+        Name: $bg/p[@class="niches-links"]/a/text()
+      Performers:
+        Name: $bg/div[@class="set-info"]/p[@class="set-info-models"]/a[@class="set_name"]/text()
+      Studio:
+        Name: //a[@class="h-logo"]
+# Last Updated December 26, 2020
