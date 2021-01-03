@@ -1,0 +1,38 @@
+name: mylifeinmiamiJSON
+sceneByURL:
+  - action: scrapeJson
+    scraper: sceneJson
+    url:
+      - mylifeinmiami.com/sapi/
+jsonScrapers:
+  sceneJson:
+    common:
+      $start: response.collection.0
+    scene:
+      Title: $start.title
+      Date: 
+        selector: $start.sites.collection.*.publishDate
+        postProcess:
+          - parseDate: 2006-01-02 15:04:05
+      URL: 
+        selector: $start.id
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https://mylifeinmiami.com/scene/"
+
+      Image: $start._resources.primary.0.url
+      Details: $start.description
+      Tags: 
+        Name: 
+          selector: $start.tags.collection.@join
+          postProcess:
+            - replace:
+              - regex: \"\d+\":{\"alias\":\"
+                with: ""
+            - replace:
+              - regex: \{|\"|\}
+                with: ""
+          split: ","
+
+# Last Updated January 03, 2021

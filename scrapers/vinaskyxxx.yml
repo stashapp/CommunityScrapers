@@ -1,0 +1,34 @@
+name: vinaskyxxx
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - vinaskyxxx.com/scene/
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[contains(@class,"video-title")]/span/text()
+      URL: 
+        selector: //a[@class="rate good"]/@data-target-id
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https://vinaskyxxx.com/sapi/DBbfZcKAFmBrIbU_ysvcVQ/1609772438/content.load?_method=content.load&tz=1&filter[id][fields][0]=id&filter[id][values][0]="
+            - regex: $
+              with: "&fields[0]=type&fields[1]=title&fields[2]=sites.publishDate&fields[3]=fake&fields[4]=id&fields[5]=description&fields[6]=tags._last&fields[7]=tags.alias&fields[8]=tags&fields[9]=length&fields[10]=member&fields[11]=related.relatedContentId.id&fields[12]=related.relatedContentId.title&fields[13]=targetId&fields[14]=vr&fields[15]=backLinkProp.value&fields[16]=backLinkProp.public&limit=1&transitParameters[v1]=ykYa8ALmUD&transitParameters[preset]=scene"
+      Image: 
+        selector: //div[@class="disable-player-scene-img"]/img/@src
+      Details:
+        selector: //h3[contains(@class,"text-video-desc")]/span/text()
+      Tags:
+        Name:
+          selector: //a[contains(@href,"/videos/tags=")]/span/text()
+      Performers:
+        Name:
+          fixed: "Vina Sky"
+      Studio:
+        Name:
+          fixed: "Vinaskyxxx"
+driver:
+  useCDP: true
+# Last Updated January 03, 2021
