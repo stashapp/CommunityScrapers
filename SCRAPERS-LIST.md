@@ -459,7 +459,7 @@ mydaughterswap.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 myfamilypies.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 mylf.com|Mylf.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mylfdom.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-mylifeinmiami.com|mylifeinmiami.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+mylifeinmiami.com|mylifeinmiami.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 mypervmom.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mypervyfamily.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mysislovesme.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -707,7 +707,7 @@ unrealporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 upherasshole.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vcaxxx.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vickyathome.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-vinaskyxxx.com|vinaskyxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+vinaskyxxx.com|vinaskyxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 vipissy.com|Vipissy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vipsexvault.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 virtualrealporn.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
