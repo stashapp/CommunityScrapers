@@ -27,8 +27,8 @@ xPathScrapers:
         Name:
           fixed: Dick Drainers
       Tags:
-        Name: //li[@class="label"]/following-sibling::li/a/text()
+        Name: //li[@class="label"][contains(text(),"Tags:")]/following-sibling::li/a/text()
       Performers:
-        Name: //li[@class="update_models"]//a/text()[normalize-space()]
+        Name: //li[@class="update_models"]//a/text()[normalize-space(.)]
 
-# Last Updated January 06, 2021
+# Last Updated January 08, 2021
