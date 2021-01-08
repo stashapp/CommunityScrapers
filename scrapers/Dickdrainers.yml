@@ -1,0 +1,34 @@
+name: Dickdrainers
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - dickdrainers.com/tour/trailers
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="videoDetails clear"]//h3
+      Details:
+        selector: //div[@class="videoDetails clear"]/p//text()[normalize-space(.)]
+        concat: "\n\n"
+      Date:
+        selector: //span[contains(text(), "Date Added")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        selector: //script[contains(text(), "contentthumbs")]
+        postProcess:
+          - replace:
+              - regex: ^.+poster="(.+?)".+$
+                with: $1
+              - regex: ^
+                with: http://dickdrainers.com
+      Studio:
+        Name:
+          fixed: Dick Drainers
+      Tags:
+        Name: //li[@class="label"][contains(text(),"Tags:")]/following-sibling::li/a/text()
+      Performers:
+        Name: //li[@class="update_models"]//a/text()[normalize-space(.)]
+
+# Last Updated January 08, 2021
