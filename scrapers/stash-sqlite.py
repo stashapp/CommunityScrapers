@@ -1,12 +1,27 @@
 import json
 import sys
 import sqlite3
-from os import path
+from os import path 
 
 ''' This script uses the sqlite database from another stash database and allows you to parse performers
     Copy stash-go.sqlite to the scrapers directory
-    This script needs python3 and sqlite3 
+    This script needs python3 and sqlite3
+    
+    To support extracting images from the database we need to provide a url where these image are located.
+    Stash allows you to serve custom files by adding a few lines to the configuration.
+    This plugin will then export the performer images to that folder and add the url of that image in the response.
+    
+    Make the directory and add the following to config.yml configuration:
+    custom_served_folders:
+      /stash_sqlite: /root/.stash/stash_sqlite
+   
+    Make the directory /root/.stash/stash_sqlite or update the configuration with the path
+    To enable this feature change enable_images to: True
    '''
+
+http_prefix='http://127.0.0.1:9999/custom/stash_sqlite/'
+image_output_dir='/root/.stash/stash_sqlite/'
+enable_images=False
 
 def query_performers(name):
     c = conn.cursor()
@@ -20,7 +35,7 @@ def query_performers(name):
 
 def fetch_performer_name(name):
     c = conn.cursor()
-    c.execute('SELECT name,gender,url,twitter,instagram,date(birthdate),ethnicity,country,eye_color,height,measurements,fake_tits,career_length,tattoos,piercings,aliases FROM performers WHERE lower(name) = lower(?)', (name,))
+    c.execute('SELECT name,gender,url,twitter,instagram,date(birthdate),ethnicity,country,eye_color,height,measurements,fake_tits,career_length,tattoos,piercings,aliases,id FROM performers WHERE lower(name) = lower(?)', (name,))
 
     row =c.fetchone()
     res={}
@@ -42,6 +57,15 @@ def fetch_performer_name(name):
     res['tattoos']=row[13]
     res['piercings']=row[14]
     res['aliases']=row[15]
+    if enable_images:
+        performer_id=row[16]
+        c.execute('select image from performers_image where performer_id=?',(performer_id,))
+        row=c.fetchone()
+        if row == None:
+            return res
+        with open("%s%d.jpg" % (image_output_dir,performer_id), 'wb') as file:
+            file.write(row[0])
+        res['image']="%s%d.jpg" % (http_prefix,performer_id)
     return res
 
 
