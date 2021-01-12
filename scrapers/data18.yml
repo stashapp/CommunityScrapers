@@ -1,0 +1,46 @@
+name: data18
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - data18.com/content
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //p[b[text()='Starring:']]/a
+      $studio: //p[b[text()='Site:' or text()='Studio:']]/a
+    scene:
+      Title: //h1/text()
+      Date:
+        selector: //span[contains(text(),'Release date:')]
+        postProcess:
+          - replace:
+              - regex: "^Release date:"
+                with:
+              - regex: ","
+                with:
+          - parseDate: January 2 2006
+      Details:
+        selector: //p[b[text()='Story:']]
+        postProcess:
+          - replace:
+              - regex: "^Story:"
+                with:
+              - regex: �
+                with: "'"
+      Tags:
+        Name: //div[b[text()='Categories:']]/a/text()
+      Performers:
+        Name: $performer
+        URL: $performer/@href
+      Studio:
+        Name: $studio/text()
+        URL: $studio/@href
+      Image: //div[@id="moviewrap"]/img/@src
+        # uncomment the below instead if you want to use the first image from the Photo Set (not available in all scenes)
+        #selector: //div[p[span[b[text()='Photo Set']]]]//div[1]/a/@href
+        #postProcess:
+          #- subScraper:
+              #selector: //div[@id='post_view']/a/img/@src
+
+# Last Updated January 12, 2021
