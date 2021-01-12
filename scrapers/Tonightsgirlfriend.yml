@@ -13,7 +13,7 @@ xPathScrapers:
         selector: //head/title/text()
         postProcess:
           - replace:
-              - regex: \s-\sHD\sPorn\s|\sTonightsGirlfriend.com
+              - regex: \s-\sHD\sPorn\s\|\sTonightsGirlfriend\.com
                 with:
       Date:
         selector: $sceneinfo/p/span/text()
@@ -35,4 +35,4 @@ xPathScrapers:
         Name:
           fixed: "Tonight's Girlfriend"
       URL: //link[@rel='canonical']/@href
-# Last Updated January 11, 2021
+# Last Updated January 12, 2021
