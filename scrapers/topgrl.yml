@@ -1,0 +1,34 @@
+# Pretty much a copy of insex.yml, just some small changes to deal with topgrl.com specific html. 
+name: topgrl
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - topgrl.com/tg
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $studio: //title/text()
+    scene:
+      Title:
+        selector: //div[@class="is-size-5 has-text-weight-bold"]/text()
+        # Topgrl site doesnt receive any updates anymore and lots of scene's have "[Archive]"  in the title.
+        # No idea what makes those scene's different, but I'm assuming most people don't want to add that to the title in Stash.
+        postProcess:
+          - replace:
+            - regex: (\[Archive\] )+(.*)
+              with: $2
+      Date:
+        selector: //span[@class="tag is-dark"]/text()
+      Details:
+        selector: //div[@class="is-size-5 has-text-weight-bold"]/following-sibling::div[3]/text()
+        concat: "<br>"
+        postProcess:
+          - replace:
+            - regex: <br>
+              with: "\n"
+      Performers:
+        Name: //div[@class="is-size-6 has-text-white-ter"]/a[@class="tag is-dark"]/text()
+      Studio:
+        Name: $studio
+      Image: //video-js[@id="videoPlayer"]/@poster
