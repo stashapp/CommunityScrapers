@@ -37,4 +37,4 @@ xPathScrapers:
             - replace:
                 - regex: (\.com)$
                   with:
-# Last Updated Januaey 15, 2021
+# Last Updated January 15, 2021
