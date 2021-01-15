@@ -28,7 +28,10 @@ xPathScrapers:
       #     - parseDate: Jan 02
       Performers:
         Name: $details//h4/a/text()
-      Image: //div[@id="rmpPlayer"]/@data-video-screenshot
+      Image: //meta[@name="twitter:image"]/@content|//div[contains(@id,"rmpPlayer")]/@data-video-screenshot
+      #Optional tags added, if you want to use them make sure to uncomment the below and the driver section
+      #Tags:
+        #Name: //div[@class="tags"]/a
 
   performerSearch:
     performer:
@@ -37,7 +40,7 @@ xPathScrapers:
         selector: //*[contains(concat(' ', normalize-space(@class), ' '), ' profile-pic-name ')]/a/@href
         postProcess:
           - replace:
-              - regex: '/(?:Store/Videos/)?$'
+              - regex: "/(?:Store/Videos/)?$"
                 with: /About/
 
   performerScraper:
@@ -69,7 +72,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ' \(.*\)$'
-                with: ''
+                with: ""
           - parseDate: 2006.01.02
       Ethnicity:
         selector: $aboutlabel[contains(text(), 'Ethnicity')]/following-sibling::*
@@ -94,10 +97,10 @@ xPathScrapers:
         selector: $aboutlabel[contains(text(), 'Height')]/following-sibling::*
         postProcess:
           - replace:
-              - regex: '.*?or '
-                with: ''
-              - regex: ' cm$'
-                with: ''
+              - regex: ".*?or "
+                with: ""
+              - regex: " cm$"
+                with: ""
               - regex: \D+[\s\S]+
                 with: ""
       Measurements:
@@ -106,18 +109,18 @@ xPathScrapers:
         selector: $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*[contains(text(), 'Natural') or contains(text(), 'Cohesive Gel') or contains(text(), 'Silicon') or contains(text(), 'Saline')]
         postProcess:
           - replace:
-              - regex: '^Natural.*$'
-                with: 'No'
+              - regex: "^Natural.*$"
+                with: "No"
               - regex: '\s+?[0-9]+.*'
-                with: ''
+                with: ""
       CareerLength:
         selector: //*[@class='mv-about__banner-info']/strong/text()
         postProcess:
           - replace:
-              - regex: '^Joined '
-                with: ''
+              - regex: "^Joined "
+                with: ""
               - regex: $
-                with: ' - today'
+                with: " - today"
       Tattoos:
         selector: $aboutlabel[contains(text(), 'Tattoos')]/following-sibling::*
       Piercings:
@@ -127,6 +130,8 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: '.*\.svg$'
-                with: ''
+                with: ""
+#driver:
+  #useCDP: true
 
-# Last Updated November 10, 2020
+# Last Updated January 15, 2021
