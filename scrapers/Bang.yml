@@ -30,8 +30,10 @@ xPathScrapers:
           selector: //div/span[@class="fa-text-right" and contains(text(),"With:")]/../span[@class="comma-list-container"]/span/a/text()
       Studio:
         Name: //div/span[@class="fa-text-right" and contains(text(),"Studio:")]/a/text()
+      Movies:
+        Name: //span[contains(., 'From the Movie:')]/following-sibling::a
 driver:
   useCDP: true
   sleep: 5
 
-# Last Updated November 8, 2020
+# Last Updated January 17, 2021
