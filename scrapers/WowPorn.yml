@@ -5,6 +5,8 @@ sceneByURL:
       - wowporn.xxx
       - allfinegirls.net
       - wowgirls.xxx
+      - wowgirls.com
+      - wowporn.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
