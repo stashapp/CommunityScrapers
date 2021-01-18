@@ -264,4 +264,4 @@ xPathScrapers:
         Name:
           selector: $sceneinfo/dl/dt[contains(.,"Studio")]/../dd[@itemprop="productionCompany"]/a/text()
       Image: $searchinfo/@data-original|//meta[@itemprop="thumbnailUrl"]/@content
-# Last Updated December 22, 2020
+# Last Updated January 18, 2021
