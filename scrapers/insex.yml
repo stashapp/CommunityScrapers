@@ -13,6 +13,10 @@ sceneByURL:
     url:
       - topgrl.com/tg
     scraper: topgrlScraper
+  - action: scrapeXPath
+    url:
+      - renderfiend.com/rf
+    scraper: rfScraper
 
 xPathScrapers:
   sceneScraper:
@@ -60,4 +64,20 @@ xPathScrapers:
         Name: $studio
       Image: *imageSelector
       
-# Last Updated January 15, 2021
+  rfScraper:
+    common: *commonSelectors
+    scene:
+      Title:
+        selector: *titleSelector
+      Date:
+        selector: *dateSelector
+      Details:
+        selector: //div[@class="is-size-5 has-text-weight-bold"]/following-sibling::div[2]/text()
+        concat: "<br>"
+        postProcess: *ppDetailsAttr
+      Performers: *performersAttr
+      Studio:
+        Name: $studio
+      Image: *imageSelector
+
+# Last Updated January 18, 2021
