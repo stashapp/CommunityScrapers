@@ -4,7 +4,7 @@ sceneByFragment:
   queryURL: https://www.javlibrary.com/en/vl_searchbyid.php?keyword={filename}
   queryURLReplace:
     filename:
-      - regex: -JG5|-JG6
+      - regex: -JG\d
         with: ""
       - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
         with: $2
@@ -93,7 +93,7 @@ xPathScrapers:
       #        with: "07"
       #      - regex: Aug
       #        with: "08"
-      #      - regex: (\d{2})(\d{2})(\d{4})
+      #      - regex: (\d{2}).(\d{2}).(\d{4})
       #        with: $3-$1-$2
         
       Details:
@@ -122,42 +122,216 @@ xPathScrapers:
       #        concat: "\n\n"
       # R18 censors somes words.
       #    - replace:
-      #      - regex: R\*{2}e
+      #      - regex: R\*{2}e\b
       #        with: "Rape"
-      #      - regex: G\*{7}g
-      #        with: "Gangbang"
-      #      - regex: T\*{5}e
-      #        with: "Torture"
-      #      - regex: V\*{5}t
-      #        with: "Violent"
-      #      - regex: S\*{3}e
-      #        with: "Slave"
-      #      - regex: S\*{3}ery
-      #        with: "Slavery"
-      #      - regex: D\*{3}king
-      #        with: "Drinking"
-      #      - regex: S\*{5}t
-      #        with: "Student"
-      #      - regex: SK\*{2}ls
-      #        with: "Skills"
-      #      - regex: P\*{4}hed
-      #        with: "Punished"
-      #      - regex: D\*{2}gged
-      #        with: "Drugged"
-      #      - regex: F\*{3}ed
-      #        with: "Fucked"
-      #      - regex: D\*{3}k
-      #        with: "Drunk"
-      #      - regex: S\*{8}l
-      #        with: "Schoolgirl"
-      #      - regex: R\*{4}g
+      #      - regex: R\*{2}es\b
+      #        with: "Rapes"
+      #      - regex: R\*{1}pe\b
+      #        with: "Rape" # Can be Rope ? IPX-311
+      #      - regex: R\*{4}g\b
       #        with: "Raping"
-      #      - regex: P\*{4}hment
+      #      - regex: R\*{2}ed\b
+      #        with: "Raped"
+      #      - regex: G\*{6}g\b
+      #        with: "Gangbang" # STAR-976
+      #      - regex: G\*{7}g\b
+      #        with: "Gangbang"
+      #      - regex: G\*{7}gs\b
+      #        with: "Gangbangs"
+      #      - regex: G\*{6}ged\b
+      #        with: "Gangbanged" # SSNI-242
+      #      - regex: G\*{7}ged\b
+      #        with: "Gangbanged"
+      #      - regex: G\*{9}d\b
+      #        with: "Gang-Banged"
+      #      - regex: G\*{7}ging\b
+      #        with: "Gangbanging"
+      #      - regex: P\*{1}ssy\b
+      #        with: "Pussy"
+      #      - regex: C\*{1}ck\b
+      #        with: "Cock"
+      #      - regex: C\*{1}cks\b
+      #        with: "Cocks"
+      #      - regex: Ma\*{1}ko\b
+      #        with: "Maiko"
+      #      - regex: K\*{2}l\b
+      #        with: "Kill"
+      #      - regex: K\*{2}ling\b
+      #        with: "Killing"
+      #      - regex: K\*{2}ler\b
+      #        with: "Killer"
+      #      - regex: T\*{5}e\b
+      #        with: "Torture"
+      #      - regex: T\*{5}ed\b
+      #        with: "Tortured"
+      #      - regex: V\*{5}t\b
+      #        with: "Violent"
+      #      - regex: S\*{3}e\b
+      #        with: "Slave"
+      #      - regex: S\*{3}es\b
+      #        with: "Slaves"
+      #      - regex: S\*{3}ery\b
+      #        with: "Slavery"
+      #      - regex: EnS\*{3}ed\b
+      #        with: "Enslaved"
+      #      - regex: D\*{3}king\b
+      #        with: "Drinking"
+      #      - regex: D\*{3}ks\b
+      #        with: "Drinks"
+      #      - regex: S\*{5}t\b
+      #        with: "Student"
+      #      - regex: S\*{5}ts\b
+      #        with: "Students"
+      #      - regex: SK\*{2}ls\b
+      #        with: "Skills"
+      #      - regex: SK\*{2}lfully\b
+      #        with: "Skillfully"
+      #      - regex: SK\*{2}lful\b
+      #        with: "Skillful"
+      #      - regex: SK\*{2}led\b
+      #        with: "Skilled"
+      #      - regex: P\*{4}hed\b
+      #        with: "Punished"
+      #      - regex: D\*{2}gged\b
+      #        with: "Drugged"
+      #      - regex: D\*{2}gs\b
+      #        with: "Drugs"
+      #      - regex: F\*{3}ed\b
+      #        with: "Fucked"
+      #      - regex: D\*{3}k\b
+      #        with: "Drunk"
+      #      - regex: D\*{3}kest\b
+      #        with: "Drunkest"
+      #      - regex: S\*{8}l\b
+      #        with: "Schoolgirl"
+      #      - regex: S\*{9}ls\b
+      #        with: "Schoolgirls" # Not Sure (PPPD-811)
+      #      - regex: S\*{8}ls\b
+      #        with: "Schoolgirls"
+      #      - regex: Sch\*{2}lgirl\b
+      #        with: "Schoolgirl"
+      #      - regex: Sch\*{2}lgirls\b
+      #        with: "Schoolgirls"
+      #      - regex: S\*{9}l\b
+      #        with: "School Girl" # Not Sure
+      #      - regex: P\*{4}hment\b
       #        with: "Punishment"
-      #      - regex: M\*{4}ter
+      #      - regex: P\*{4}h\b
+      #        with: "Punish"
+      #      - regex: M\*{4}ter\b
       #        with: "Molester"
-      #      - regex: I\*{4}t
+      #      - regex: M\*{4}ters\b
+      #        with: "Molesters"
+      #      - regex: M\*{4}ted\b
+      #        with: "Molested"
+      #      - regex: M\*{4}t\b
+      #        with: "Molest"
+      #      - regex: I\*{4}t\b
       #        with: "Incest"
+      #      - regex: I\*{4}tuous\b
+      #        with: "Incestuous"
+      #      - regex: V\*{5}ed\b
+      #        with: "Violated"
+      #      - regex: StepB\*{16}r\b
+      #        with: "StepBrother And Sister" # Not Sure
+      #      - regex: StepK\*{1}ds \b
+      #        with: "StepKids"
+      #      - regex: C\*{3}dhood\b
+      #        with: "Childhood"
+      #      - regex: V\*{6}e\b
+      #        with: "Violence"
+      #      - regex: C\*{3}dcare\b
+      #        with: "Childcare"
+      #      - regex: H\*{7}m\b
+      #        with: "Hypnotism"
+      #      - regex: M\*{4}tation\b
+      #        with: "Molestation"
+      #      - regex: M\*{4}ting\b
+      #        with: "Molesting"
+      #      - regex: F\*{3}e\b
+      #        with: "Force"
+      #      - regex: A\*{3}es\b
+      #        with: "Abuses"
+      #      - regex: A\*{3}e\b
+      #        with: "Abuse"
+      #      - regex: S\*{6}g\b
+      #        with: "Sleeping"
+      #      - regex: A\*{3}ed\b
+      #        with: "Abused"
+      #      - regex: D\*{2}g\b
+      #        with: "Drug"
+      #      - regex: A\*{5}ted\b
+      #        with: "Assaulted"
+      #      - regex: A\*{5}t
+      #        with: "Assault"
+      #      - regex: S\*{8}n\b
+      #        with: "Submission"
+      #      - regex: K\*{1}d\b
+      #        with: "Kid"
+      #      - regex: D\*{6}e\b
+      #        with: "Disgrace"
+      #      - regex: Y\*{8}ls\b
+      #        with: "Young Girls" # Not Sure
+      #      - regex: Y\*{8}l\b
+      #        with: "Young Girl" # Not Sure
+      #      - regex: H\*{2}t\b
+      #        with: "Hurt"
+      #      - regex: H\*{2}ts\b
+      #        with: "Hurts"
+      #      - regex: C\*{3}dren\b
+      #        with: "Children"
+      #      - regex: F\*{3}es\b
+      #        with: "Forces" # Not Sure
+      #      - regex: Chai\*{1}saw\b
+      #        with: "Chainsaw"
+      #      - regex: Lol\*{1}pop\b
+      #        with: "Lolipop"
+      #      - regex: K\*{4}pped\b
+      #        with: "Kidnapped"
+      #      - regex: K\*{4}pping\b
+      #        with: "Kidnapping"
+      #      - regex: B\*{5}p\b
+      #        with: "Bang Up" # Not Sure
+      #      - regex: D\*{3}ken\b
+      #        with: "Drunken"
+      #      - regex: Lo\*{2}ta\b
+      #        with: "Lolita"
+      #      - regex: CrumB\*{2}d\b
+      #        with: "CrumBled"
+      #      - regex: K\*{1}dding\b
+      #        with: "Kidding"
+      #      - regex: C\*{3}d\b
+      #        with: "Child"
+      #      - regex: C\*{5}y\b
+      #        with: "Cruelty"
+      #      - regex: H\*{9}n\b
+      #        with: "Humiliation"
+      #      - regex: D\*{6}eful\b
+      #        with: "Disgraceful"
+      #      - regex: B\*{3}d\b
+      #        with: "Blood"
+      #      - regex: U\*{7}g\b
+      #        with: "Unwilling"
+      #      - regex: HumB\*{2}d\b
+      #        with: "Humbled"
+      #      - regex: J\*{1}\b
+      #        with: "Jo" # Not Sure
+      #      - regex: J\*{1}s\b
+      #        with: "Jos" # Not Sure
+      #      - regex: V\*{5}es\b
+      #        with: "Violates"
+      #      - regex: D\*{6}ed\b
+      #        with: "Disgraced"
+      #      - regex: F\*{3}efully\b
+      #        with: "Forcefully"
+      #      - regex: I\*{4}ts\b
+      #        with: "Insults"
+      #      - regex: B\*{3}dy\b
+      #        with: "Bloody" # Not Sure
+      #      - regex: U\*{9}sly\b
+      #        with: "Unconsciously"
+      #      - regex: Half-A\*{4}p\b
+      #        with: "Half-Asleep" # ZMEN-037
       Tags:
         Name: //div[@id="video_genres"]/table/tbody/tr/td[@class="text"]/span/a
       Performers:
@@ -205,4 +379,4 @@ driver:
   useCDP: true
   sleep: 5
 
-# Last Updated December 30, 2020
+# Last Updated January 18, 2021
