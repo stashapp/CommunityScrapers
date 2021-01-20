@@ -21,13 +21,7 @@ xPathScrapers:
         Name: //h2//a[contains(@href,"/model/")]/text()
       Studio:
         Name: 
-          selector: //link[@rel="canonical"]/@href
-          postProcess:
-            - replace: 
-              - regex: .*www\.
-                with: ""
-              - regex: \.com.+
-                with: ""
+          fixed: "Deviante"
       Image: //img[@alt=""][contains(@src,"poster")]/@src
 
 # Last Updated January 20, 2021
