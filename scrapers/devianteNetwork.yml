@@ -32,6 +32,12 @@ xPathScrapers:
                 with: ""
               - regex: \.com.+
                 with: ""
+            - map:
+                eroticspice: EroticSpice
+                forgivemefather: Forgive Me Father
+                loveherass: Love Her Ass
+                prettydirtyteens: Pretty Dirty Teens
+                sexworking: Sex Working
       Image:
         selector: //div[contains(@class,"player-poster")]/@style
         postProcess:
