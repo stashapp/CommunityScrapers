@@ -39,11 +39,11 @@ xPathScrapers:
                 prettydirtyteens: Pretty Dirty Teens
                 sexworking: Sex Working
       Image:
-        selector: //div[contains(@class,"player-poster")]/@style
+        selector: //script[@type="application/ld+json"]/text()
         postProcess:
           - replace:
-            - regex: (.+url\(")(.+jpg)(.+)
-              with: $2
+            - regex: '.*"thumbnailUrl": "([^"]+)".*'
+              with: $1
 driver:
   useCDP: true
 # Last Updated January 20, 2021
