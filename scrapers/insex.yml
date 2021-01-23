@@ -28,11 +28,7 @@ xPathScrapers:
         selector: &dateSelector //span[@class="tag is-dark"]/text()
       Details:
         selector: //div[@class="is-size-7 has-text-white-ter"]/preceding-sibling::div[1]/text()
-        concat: "<br>"
-        postProcess: &ppDetailsAttr
-          - replace:
-              - regex: <br>
-                with: "\n"
+        concat: "\n\n"
       Performers: &performersAttr
         Name: //div[@class="is-size-6 has-text-white-ter"]/a[@class="tag is-dark"]/text()
       Tags: &tagsAttr
@@ -56,9 +52,7 @@ xPathScrapers:
         selector: *dateSelector
       Details:
         selector: //div[@class="is-size-5 has-text-weight-bold"]/following-sibling::div[3]/text()
-        concat: "<br>"
-        postProcess: *ppDetailsAttr
-
+        concat: "\n\n"
       Performers: *performersAttr
       Studio:
         Name: $studio
@@ -73,8 +67,7 @@ xPathScrapers:
         selector: *dateSelector
       Details:
         selector: //div[@class="is-size-5 has-text-weight-bold"]/following-sibling::div[2]/text()
-        concat: "<br>"
-        postProcess: *ppDetailsAttr
+        concat: "\n\n"
       Performers: *performersAttr
       Studio:
         Name: $studio
