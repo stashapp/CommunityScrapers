@@ -16,11 +16,7 @@ xPathScrapers:
           - parseDate: "January 2, 2006"
       Details:
         selector: //td[@class="articleCopyText"]/text()
-        concat: "<br>"
-        postProcess:
-          - replace:
-            - regex: <br>
-              with: "\n"
+        concat: "\n\n"
       Performers:
         Name: //span[@class="articleTitleText"]/a[@class="articleTitleText" and @alt]/text()
       Tags:
