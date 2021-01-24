@@ -12,15 +12,6 @@ xPathScrapers:
       $p4: //div[@class="p-4"]
       $img: //meta[@property="og:image"]/@content
     scene:
-      URL:
-        selector: $img
-        postProcess:
-          - replace:
-              - regex: .+2Fbg-(.+)\.[[:alnum:]]+$
-                with: $1
-              - regex: ^
-                with: https://metadataapi.net/scenes/
-
       Studio:
         Name: //meta[@name="twitter:site"]/@content
       Title: $p4/h2
