@@ -12,6 +12,14 @@ xPathScrapers:
       $p4: //div[@class="p-4"]
       $img: //meta[@property="og:image"]/@content
     scene:
+      URL:
+        selector: //script[@type="text/javascript"][contains(.,'"slug":')][1]
+        postProcess:
+          - replace:
+              - regex: '.+"title"[^{]+"slug":"([^"]+)".+'
+                with: $1
+              - regex: ^
+                with: https://metadataapi.net/scenes/
       Studio:
         Name: //meta[@name="twitter:site"]/@content
       Title: $p4/h2
