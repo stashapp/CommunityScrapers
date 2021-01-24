@@ -2,31 +2,75 @@ name: insex
 sceneByURL:
   - action: scrapeXPath
     url:
-      - sexuallybroken.com/sb
+      - hardtied.com/ht
       - infernalrestraints.com/ir
       - insex.com/is
+      - insexondemand.com/iod
+      - realtimebondage.com/rtb
+      - sexuallybroken.com/sb
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - topgrl.com/tg
+    scraper: topgrlScraper
+  - action: scrapeXPath
+    url:
+      - renderfiend.com/rf
+    scraper: rfScraper
+
 xPathScrapers:
   sceneScraper:
-    common:
+    common: &commonSelectors
       $studio: //title/text()
     scene:
-      Title: //div[@class="is-size-5 has-text-weight-bold"]/text()
+      Title: &titleSelector //div[@class="is-size-5 has-text-weight-bold"]/text()
       Date:
-        selector: //span[@class="tag is-dark"]/text()
+        selector: &dateSelector //span[@class="tag is-dark"]/text()
       Details:
         selector: //div[@class="is-size-7 has-text-white-ter"]/preceding-sibling::div[1]/text()
-        concat: "<br>"
-        postProcess:
-          - replace:
-            - regex: <br>
-              with: "\n"
-      Performers:
+        concat: "\n\n"
+      Performers: &performersAttr
         Name: //div[@class="is-size-6 has-text-white-ter"]/a[@class="tag is-dark"]/text()
-      Tags:
+      Tags: &tagsAttr
         Name: //div[@class="is-size-7 has-text-white-ter"]/following-sibling::div/span/text()
       Studio:
         Name: $studio
-      Image: //video-js[@id="videoPlayer"]/@poster
+      Image: &imageSelector //video-js[@id="videoPlayer" or @id="iodvideo"]/@poster
 
-# Last Updated December 8, 2020
+  topgrlScraper:
+    common: *commonSelectors
+    scene:
+      Title:
+        selector: *titleSelector
+        # Topgrl site doesnt receive any updates anymore and lots of scene's have "[Archive]"  in the title.
+        # No idea what makes those scene's different, but I'm assuming most people don't want to add that to the title in Stash.
+        postProcess:
+          - replace:
+              - regex: (\[Archive\] )+(.*)
+                with: $2
+      Date:
+        selector: *dateSelector
+      Details:
+        selector: //div[@class="is-size-5 has-text-weight-bold"]/following-sibling::div[3]/text()
+        concat: "\n\n"
+      Performers: *performersAttr
+      Studio:
+        Name: $studio
+      Image: *imageSelector
+      
+  rfScraper:
+    common: *commonSelectors
+    scene:
+      Title:
+        selector: *titleSelector
+      Date:
+        selector: *dateSelector
+      Details:
+        selector: //div[@class="is-size-5 has-text-weight-bold"]/following-sibling::div[2]/text()
+        concat: "\n\n"
+      Performers: *performersAttr
+      Studio:
+        Name: $studio
+      Image: *imageSelector
+
+# Last Updated January 18, 2021
