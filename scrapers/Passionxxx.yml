@@ -2,7 +2,7 @@ name: Passionxxx
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.passionxxx.com/portal/video/
+      - passionxxx.com/portal/video/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
