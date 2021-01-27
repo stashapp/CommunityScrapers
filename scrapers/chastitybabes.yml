@@ -31,7 +31,7 @@ xPathScrapers:
           selector: $performerTitle
           postProcess:
             - replace:
-              - regex: (.*) – (.*)
+              - regex: (.*) – (.*)|.*
                 with: $1
       Tags: 
         Name: //a[@rel="category tag"]/text()
