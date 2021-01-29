@@ -31,6 +31,10 @@ xPathScrapers:
           - parseDate: 1/2/06 03:04PM
       Tags:
         Name: //div/span[contains(text(),"Category:")]/../..//a
+        # Clips4Sale doesn't have an explict performer field, but performers are
+        # often included in the video tags. So we attempt to find matches there.
+      Performers:
+        Name: //div/span[contains(text(),"Keywords:")]/..//a
       Image:
         selector: //div[contains(@class, "clipImage")]/img/@src
         postProcess:
