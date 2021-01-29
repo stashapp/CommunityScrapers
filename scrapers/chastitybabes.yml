@@ -24,8 +24,7 @@ xPathScrapers:
               with: $1
           - parseDate: "Jan 2, 2006" 
       Details: 
-        selector: //div[@class="postcontent"]/p/text()
-        concat: "\n"
+        selector: //div[@class="postcontent"]/p
       Performers: 
         Name: 
           selector: $performerTitle
