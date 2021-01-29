@@ -37,11 +37,7 @@ xPathScrapers:
         Name: //a[@rel="category tag"]/text()
       Studio:
         Name:
-          selector: //title/text()
-          postProcess:
-            - replace: 
-              - regex: .* \| (.*)
-                with: $1
+          fixed: Chastity Babes
       Image: //img[@class="thumb_img"]/@src
 
 # Last Updated January 27 2021
