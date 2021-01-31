@@ -7,10 +7,9 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $clipInfo: //div[@class="clipInfo clip_details"]
-      $studio: //span[@class="clip_detail_label"][contains(text(),"From:")]/following-sibling::a
+      $studio: //span[contains(text(),"From:")]/following-sibling::a
     scene:
-      Title: //div[@class="clipTitle"]/h3/text()
+      Title: //div[@data-clipid]/following-sibling::h3
       Details:
         selector: //div[@class="clip"]/div[1]/*|//div[@class="clip"]/div[1]/text()
         concat: "\n\n"
@@ -27,15 +26,15 @@ xPathScrapers:
                 - regex: ^
                   with: https://www.clips4sale.com
       Date:
-        selector: //span[@class="clip_detail_label"][contains(text(),"Added:")]/span[@class="highlight"]
+        selector: //span[contains(text(),"Added:")]/span
         postProcess:
           - parseDate: 1/2/06 03:04PM
       Tags:
-        Name: $clipInfo//a/text()
-      # Clips4Sale doesn't have an explict performer field, but performers are
-      # often included in the video tags. So we attempt to find matches there.
+        Name: //div/span[contains(text(),"Category:")]/../..//a
+        # Clips4Sale doesn't have an explict performer field, but performers are
+        # often included in the video tags. So we attempt to find matches there.
       Performers:
-        Name: $clipInfo//a/text()
+        Name: //div/span[contains(text(),"Keywords:")]/..//a
       Image:
         selector: //div[contains(@class, "clipImage")]/img/@src
         postProcess:
@@ -43,5 +42,4 @@ xPathScrapers:
               - regex: ^//
                 with: https://
       URL: //meta[@property="og:url"]/@content
-
-# Last Updated December 14, 2020
+# Last Updated January 29, 2021
