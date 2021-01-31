@@ -1,0 +1,42 @@
+name: "ChastityBabes"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 'chastitybabes.com/archives'
+    scraper: sceneScraper
+    
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performerTitle: //h1[@id="post-title"]/text()
+    scene:
+      Title:
+        selector: $performerTitle
+        postProcess:
+          - replace:
+            - regex: (.*) – (.*)
+              with: $2
+      Date: 
+        selector: //div[@class="post_info"]/text()[1]
+        postProcess:
+          - replace:
+            - regex: '.*Posted on (.*) in.*'
+              with: $1
+          - parseDate: "Jan 2, 2006" 
+      Details: 
+        selector: //div[@class="postcontent"]/p
+      Performers: 
+        Name: 
+          selector: $performerTitle
+          postProcess:
+            - replace:
+              - regex: (.*) – (.*)|.*
+                with: $1
+      Tags: 
+        Name: //a[@rel="category tag"]/text()
+      Studio:
+        Name:
+          fixed: Chastity Babes
+      Image: //img[@class="thumb_img"]/@src
+
+# Last Updated January 27 2021
