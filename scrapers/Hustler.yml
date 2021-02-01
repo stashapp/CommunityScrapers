@@ -48,12 +48,12 @@ xPathScrapers:
         selector: //span[@class="attr-key" and contains(text(),"Released")]/following-sibling::span[@class="attr-value"]/text()
         postProcess:
           - parseDate: Jan 02, 2006
-      Image:
-        selector: //div[@class="img-container"]/img/@src
+      Image: //div[@class="img-container"]/img/@src
       Tags:
         Name: //div[@class="tag-list"]/a/text()
       Studio:
         Name: //a[@class="logo active"]/img/@alt
 driver:
   useCDP: true
+  sleep: 5
 # Last Updated February 01, 2020
