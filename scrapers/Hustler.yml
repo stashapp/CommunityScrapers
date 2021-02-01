@@ -49,7 +49,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02, 2006
       Image:
-        selector: //img[@class="cover-image"]/@src
+        selector: //div[@class="img-container"]/img/@src
       Tags:
         Name: //div[@class="tag-list"]/a/text()
       Studio:
