@@ -36,31 +36,6 @@ r = requests.get(api_URL, headers=headers)
 try:
     api_json = r.json().get('result')
     api_json['url'] = fragment["url"]
-    try:
-        # Saving the JSON to a file (Write '- logJSON' below MindGeekAPI.py in MindGeekAPI.yml)
-        if sys.argv[1] == "logJSON":
-            with open(id+".json", 'w', encoding='utf-8') as f:
-                json.dump(api_json, f, ensure_ascii=False, indent=4)
-    except IndexError:
-        pass
-
-    # Time to scrape all data
-    scrape = {}
-    scrape['title'] = api_json.get('title')
-    date = datetime.strptime(api_json.get(
-        'dateReleased'), '%Y-%m-%dT%H:%M:%S%z')
-    scrape['date'] = str(date.date())
-    scrape['details'] = api_json.get('description')
-    scrape['studio'] = {}
-    scrape['studio']['name'] = api_json['collections'][0].get('name')
-    scrape['performers'] = [
-        {"name": x.get('name')} for x in api_json.get('actors')]
-    scrape['tags'] = [{"name": x.get('name')} for x in api_json.get('tags')]
-    # Image can be poster or poster_fallback
-    scrape['image'] = api_json['images']['poster'][0]['xx'].get('url')
-    if '/poster/' not in scrape['image']:
-        scrape['image'] = api_json['images']['poster'][1]['xx'].get('url')
-    print(json.dumps(scrape))
 except:
     print("An error has occurred", file=sys.stderr)
     print(f"Request status: `{r.status_code}`", file=sys.stderr)
@@ -70,4 +45,30 @@ except:
         f.write("Scene ID: {}\n".format(id))
         f.write("Request:\n{}".format(r.text))
     exit(1)
+try:
+    # Saving the JSON to a file (Write '- logJSON' below MindGeekAPI.py in MindGeekAPI.yml)
+    if sys.argv[1] == "logJSON":
+        with open(id+".json", 'w', encoding='utf-8') as f:
+            json.dump(api_json, f, ensure_ascii=False, indent=4)
+except IndexError:
+    pass
+
+# Time to scrape all data
+scrape = {}
+scrape['title'] = api_json.get('title')
+date = datetime.strptime(api_json.get(
+    'dateReleased'), '%Y-%m-%dT%H:%M:%S%z')
+scrape['date'] = str(date.date())
+scrape['details'] = api_json.get('description')
+scrape['studio'] = {}
+scrape['studio']['name'] = api_json['collections'][0].get('name')
+scrape['performers'] = [
+    {"name": x.get('name')} for x in api_json.get('actors')]
+scrape['tags'] = [{"name": x.get('name')} for x in api_json.get('tags')]
+# Image can be poster or poster_fallback
+scrape['image'] = api_json['images']['poster'][0]['xx'].get('url')
+if '/poster/' not in scrape['image']:
+    scrape['image'] = api_json['images']['poster'][1]['xx'].get('url')
+print(json.dumps(scrape))
+
 # Last Updated February 03, 2021
