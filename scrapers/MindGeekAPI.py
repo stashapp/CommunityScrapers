@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import sys
 from datetime import datetime
@@ -31,6 +32,16 @@ headers = {
 # Send to the API
 r = requests.get(api_URL, headers=headers)
 api_json = r.json().get('result')
+
+try:
+    # Saving the JSON to a file (Write '- logJSON' below MindGeekAPI.py in MindGeekAPI.yml)
+    if sys.argv[1] == "logJSON":
+        if (os.path.isfile(id+".json") != True): # Don't re-write to the file if it's exist
+            with open(id+".json", 'w', encoding='utf-8') as f:
+                json.dump(api_json, f, ensure_ascii=False, indent=4)
+except IndexError:
+    pass
+
 # Time to scrape all data
 scrape = {}
 scrape['title'] = api_json.get('title')
