@@ -5,5 +5,5 @@ sceneByFragment:
     script:
       - python
       - MindGeekAPI.py
-
+#      - logJSON # Save the JSON from the API to a file
 # Last Updated February 03, 2021
