@@ -1,0 +1,9 @@
+# Have the url in the URL field.
+name: "MindGeekAPI"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - MindGeekAPI.py
+
+# Last Updated February 03, 2021
