@@ -10,7 +10,7 @@ performerByName:
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - iafd.com
     scraper: performerScraper
 movieByURL:
@@ -23,43 +23,48 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1/text()
-      Date: 
+      Date:
         selector: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Release Date']/following-sibling::p[1]
         postProcess:
           - parseDate: Jan 2, 2006
-      Details:  //div[@id="synopsis"]/div[@class="padded-panel"]//text()
+      Details: //div[@id="synopsis"]/div[@class="padded-panel"]//text()
       Studio:
         Name: //div[@class="col-xs-12 col-sm-3"]//p[text() = 'Studio']/following-sibling::p[1]
       Performers:
         Name: //div[@class="castbox"]/p/a
-        
+
   performerSearch:
     performer:
       Name: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/text()
-      URL: 
+      URL:
         selector: //table[@id='tblFem' or @id='tblMal']//td[a[img]]/following-sibling::td[1]/a/@href
         postProcess:
           - replace:
               - regex: ^
                 with: https://www.iafd.com
-  
+
   performerScraper:
     performer:
       Name: //h1
-      Gender: 
+      Gender:
         selector: //form[@id='correct']/input[@name='Gender']/@value
         postProcess:
           - map:
               f: Female
               m: Male
-      URL: //head/meta[@property="og:url"]/@content
-      Twitter: 
+      URL:
+        selector: //*[contains(@href,"person.rme")]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.iafd.com"
+      Twitter:
         selector: //p[@class='biodata']/a[contains(text(),"http://twitter.com/")]/@href
         postProcess:
           - replace:
               - regex: https://twitter.com/
                 with: ""
-      Instagram: 
+      Instagram:
         selector: //p[@class='biodata']/a[contains(text(),"http://instagram.com/")]/@href
         postProcess:
           - replace:
@@ -70,7 +75,7 @@ xPathScrapers:
         # reference date is: 2006/01/02
         postProcess:
           - parseDate: January 2, 2006
-      Ethnicity: 
+      Ethnicity:
         selector: //div[p[text()='Ethnicity']]/p[@class='biodata'][1]
         postProcess:
           - map:
@@ -78,7 +83,7 @@ xPathScrapers:
               Caucasian: white
               Black: black
               Latin: hispanic
-      Country: 
+      Country:
         selector: //div/p[text()='Nationality']/following-sibling::p[1]/text()
         postProcess:
           - map:
@@ -378,21 +383,21 @@ xPathScrapers:
               Zambian: "Zambia"
               Zimbabwean: "Zimbabwe"
               Åland Island: "Åland Islands"
-      Height: 
+      Height:
         selector: //div/p[text()='Height']/following-sibling::p[1]/text()
         postProcess:
           - replace:
               - regex: \d+\D+\d+\D+
                 with: ""
-              - regex:  \D+$
+              - regex: \D+$
                 with: ""
       Measurements: //div/p[text()='Measurements']/following-sibling::p[1]/text()
-      CareerLength: 
+      CareerLength:
         selector: //div/p[@class='biodata'][contains(text(),"Started around")]/text()
         postProcess:
           - replace:
               - regex: (\D+\d\d\D+)$
-                with: ""     
+                with: ""
       Aliases: //div[p[@class='bioheading' and contains(normalize-space(text()),"Performer AKA")]]//div[@class='biodata' and not(text()="No known aliases")]/text()
       Tattoos: //div/p[text()='Tattoos']/following-sibling::p[1]/text()
       Piercings: //div/p[text()='Piercings']/following-sibling::p[1]/text()
@@ -423,5 +428,4 @@ xPathScrapers:
       Aliases:
         selector: //div[@class="col-sm-12"]/dl/dd
         concat: ", "
-
-# Last Updated November 24, 2020
+# Last Updated February 3, 2021

@@ -23,9 +23,7 @@ xPathScrapers:
         postProcess:
           - parseDate: "January 2, 2006"
       Image:
-        selector: //div[contains(@class, "sc-13rgbhb-2")]//img[contains(@class, "sc-1egln9q-1")]/@src
-        # Less precise option:
-        #selector: //img[@class[contains(., "sc-1egln9q-1")]]/@src
+        selector: //picture[@data-test-component="ProgressiveImageImage"]/img/@src
       Studio:
         Name:
           selector: //link[@rel="canonical"]/@href
@@ -35,5 +33,4 @@ xPathScrapers:
                   with: $1
 driver:
   useCDP: true
-
-# Last Updated November 8, 2020
+# Last Updated February 3, 2021
