@@ -4,6 +4,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - allanal.com/view/
+      - analonly.com/view/
       - nympho.com/view/
       - swallowed.com/view/
       - trueanal.com/view/
@@ -37,4 +38,4 @@ xPathScrapers:
                 with: "$1 $2"
           - parseDate: 2 Jan 2006
       Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot
-# Last Updated January 11, 2021
+# Last Updated February 03, 2021
