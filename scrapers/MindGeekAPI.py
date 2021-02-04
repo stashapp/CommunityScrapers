@@ -186,7 +186,8 @@ try:
         except FileExistsError:
             pass  # Dir already exist
         api_json['url'] = url
-        with open("MindGeekAPI_JSON\\" + id + ".json", 'w', encoding='utf-8') as f:
+        filename = os.path.join("MindGeekAPI_JSON", id+".json")
+        with open(filename, 'w', encoding='utf-8') as f:
             json.dump(api_json, f, ensure_ascii=False, indent=4)
 except IndexError:
     pass
