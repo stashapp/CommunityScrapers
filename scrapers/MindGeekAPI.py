@@ -36,11 +36,18 @@ def get_info(url):
         except requests.Timeout:
             print("Request Timeout", file=sys.stderr)
             exit(1)
-        id = re.search('(.+releaseId\":\")(.+?)(\".+)',
-                       r.text, re.IGNORECASE).group(2)
-        token = re.search('(.+jwt\":\")(.+?)(\".+)',
-                          r.text, re.IGNORECASE).group(2)
+        try:
+            id = re.search('(.+releaseId\":\")(.+?)(\".+)',
+                        r.text, re.IGNORECASE).group(2)
+            token = re.search('(.+jwt\":\")(.+?)(\".+)',
+                            r.text, re.IGNORECASE).group(2)
+        except:
+            print("Error with the regex to get information from the request\nAre you sure that the URL is from the MindGeek Network ?", file=sys.stderr)
+            exit(1)
         write_config(url, token, todaystr)
+    if not id.isdigit():
+        print("The ID is not a digit", file=sys.stderr)
+        exit(1)
     return id, token
 
 
@@ -58,8 +65,12 @@ def check_config(url, date_today):
             difference = date_today - past
             if difference.days == 0:
                 # date is within 24 hours so using old instance
-                regex = re.match(r"(.+/)(\d+)(/.+)", url)
-                id = regex.group(2)
+                try:
+                    regex = re.match(r"(.+/)(\d+)/*", url)
+                    id = regex.group(2)
+                except:
+                    print("The ID can't be determined (Regex). Maybe wrong url ?", file=sys.stderr)
+                    exit(1)
                 token = file_instance
         except NoSectionError:
             pass
