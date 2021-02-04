@@ -31,7 +31,11 @@ def get_info(url):
     today = datetime.strptime(todaystr, '%Y-%m-%d')
     token, id = check_config(url, today)
     if not token:
-        r = requests.get(url)
+        try:
+            r = requests.get(url,timeout=(3, 5))
+        except requests.Timeout:
+            print("Request Timeout", file=sys.stderr)
+            exit(1)
         id = re.search('(.+releaseId\":\")(.+?)(\".+)',
                        r.text, re.IGNORECASE).group(2)
         token = re.search('(.+jwt\":\")(.+?)(\".+)',
@@ -121,7 +125,11 @@ def search_scene(title):
 
 
 def sendrequest(url, headers):
-    r = requests.get(url, headers=headers)
+    try:
+        r = requests.get(url, headers=headers,timeout=(3, 5))
+    except requests.Timeout:
+        print("Request Timeout", file=sys.stderr)
+        exit(1)
     try:
         api_json = r.json().get('result')
     except:
@@ -161,7 +169,7 @@ def scraping_json(api_json,url=""):
 
 fragment = json.loads(sys.stdin.read())
 print("", file=sys.stderr)
-# Get the id and instance token
+
 if not fragment["url"]:
     if fragment["title"]:
         # Trying to find the scene
