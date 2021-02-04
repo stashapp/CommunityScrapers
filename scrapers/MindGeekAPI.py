@@ -136,7 +136,7 @@ def sendrequest(url, headers):
     return api_json
 
 
-def scraping_json(api_json):
+def scraping_json(api_json,url=""):
     # Scrape JSON
     scrape = {}
     scrape['title'] = api_json.get('title')
@@ -144,6 +144,8 @@ def scraping_json(api_json):
         'dateReleased'), '%Y-%m-%dT%H:%M:%S%z')
     scrape['date'] = str(date.date())
     scrape['details'] = api_json.get('description')
+    if url:
+        scrape['url'] = url
     scrape['studio'] = {}
     scrape['studio']['name'] = api_json['collections'][0].get('name')
     scrape['performers'] = [
@@ -166,17 +168,18 @@ if not fragment["url"]:
         api_json, url_used, headers = search_scene(fragment["title"])
         id = str(api_json.get("id"))
         url = re.sub('/\d+/.+', '/' + id + "/", url_used)
+        scrape = scraping_json(api_json,url)
     else:
         print("There is no URL or Title.", file=sys.stderr)
         exit(1)
 else:
+    # URL scraping
     url = fragment["url"]
     id, headers = scraping_url(url)
     # Send to the API
     api_URL = 'https://site-api.project1service.com/v2/releases/{}'.format(id)
     api_json = sendrequest(api_URL, headers)
-
-scrape = scraping_json(api_json)
+    scrape = scraping_json(api_json)
 
 # Saving the JSON to a file (Write '- logJSON' below MindGeekAPI.py in MindGeekAPI.yml)
 try:
