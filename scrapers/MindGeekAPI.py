@@ -135,7 +135,18 @@ def search_scene(title):
                 title_filter)
             api_json = sendrequest(search_URL, headers)
             for result in api_json:
-                making_url = re.sub(
+                title_filename=""
+                try:
+                    filename = result['videos']['mediabook']['files']["320p"]['urls']['download']
+                    title_filename = re.sub('^.+filename=', '', filename)
+                    title_filename = re.sub('_.+$', '', title_filename)
+                except:
+                    pass
+                if title_filename:
+                    making_url = re.sub(
+                    '/\d+/*.+', '/' + str(result.get("id")) + "/" + title_filename, url)
+                else:
+                    making_url = re.sub(
                     '/\d+/*.+', '/' + str(result.get("id")) + "/", url)
                 saveJSON(result, making_url)
                 ratio = difflib.SequenceMatcher(
