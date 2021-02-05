@@ -26,28 +26,38 @@ def scraping_url(url):
     return id, headers
 
 
+def print_exit(q):
+    print(q, file=sys.stderr)
+    exit(1)
+
+
 def get_info(url):
     todaystr = datetime.today().strftime('%Y-%m-%d')
     today = datetime.strptime(todaystr, '%Y-%m-%d')
     token, id = check_config(url, today)
     if not token:
+        print("No instance token found, sending request...", file=sys.stderr)
         try:
-            r = requests.get(url,timeout=(3, 5))
+            r = requests.get(url, timeout=(3, 5))
         except requests.Timeout:
-            print("Request Timeout", file=sys.stderr)
-            exit(1)
+            print_exit("Request Timeout")
+        # Working: https://www.sneakysex.com/scene/4405530/test
+        # Not Work: https://www.sneakysex.com/scene/4405530
         try:
-            id = re.search('(.+releaseId\":\")(.+?)(\".+)',
-                        r.text, re.IGNORECASE).group(2)
-            token = re.search('(.+jwt\":\")(.+?)(\".+)',
-                            r.text, re.IGNORECASE).group(2)
+            check_url = re.sub('.+/', '', url)
+            if check_url.isdigit():
+                id = check_url
+            else:
+                id = re.match(r"(.+/)(\d+)/*", url).group(2)
+            token = r.cookies.get_dict().get("instance_token")
+            if token == None:
+                print_exit("Can't get the instance_token from the cookie")
         except:
-            print("Error with the regex to get information from the request\nAre you sure that the URL is from the MindGeek Network ?", file=sys.stderr)
-            exit(1)
+            print_exit(
+                "Error to get information from the request\nAre you sure that the URL is from the MindGeek Network ?")
         write_config(url, token, todaystr)
     if not id.isdigit():
-        print("The ID is not a digit", file=sys.stderr)
-        exit(1)
+        print_exit("The ID is not a digit")
     return id, token
 
 
@@ -66,12 +76,16 @@ def check_config(url, date_today):
             if difference.days == 0:
                 # date is within 24 hours so using old instance
                 try:
-                    regex = re.match(r"(.+/)(\d+)/*", url)
-                    id = regex.group(2)
+                    id = re.match(r"(.+/)(\d+)/*", url).group(2)
                 except:
-                    print("The ID can't be determined (Regex). Maybe wrong url ?", file=sys.stderr)
-                    exit(1)
+                    print_exit(
+                        "The ID can't be determined (Regex). Maybe wrong url ?")
                 token = file_instance
+                print("Using token from {}".format(
+                    set_fileurl), file=sys.stderr)
+            else:
+                print("Token from the past, getting new one".format(
+                    set_fileurl), file=sys.stderr)
         except NoSectionError:
             pass
     return token, id
@@ -121,26 +135,26 @@ def search_scene(title):
                 title_filter)
             api_json = sendrequest(search_URL, headers)
             for result in api_json:
+                making_url = re.sub(
+                    '/\d+/*.+', '/' + str(result.get("id")) + "/", url)
+                saveJSON(result, making_url)
                 ratio = difflib.SequenceMatcher(
                     None, title_filter, result.get('title')).ratio()
                 print("Found:{}\nRatio:{}".format(
                     result.get('title'), ratio), file=sys.stderr)
                 if ratio > set_ratio:
-                    return result, url, headers
-        print("Didn't find a match", file=sys.stderr)
-        exit(1)
+                    return result, making_url, headers
+        print_exit("Didn't find a match")
     else:
-        print("Can't search the scene ({} is missing)".format(
-            set_fileurl), file=sys.stderr)
-        exit(1)
+        print_exit("Can't search the scene ({} is missing)".format(
+            set_fileurl))
 
 
 def sendrequest(url, headers):
     try:
-        r = requests.get(url, headers=headers,timeout=(3, 5))
+        r = requests.get(url, headers=headers, timeout=(3, 5))
     except requests.Timeout:
-        print("Request Timeout", file=sys.stderr)
-        exit(1)
+        print_exit("Request Timeout")
     try:
         api_json = r.json().get('result')
     except:
@@ -154,9 +168,10 @@ def sendrequest(url, headers):
         exit(1)
     return api_json
 
+# Scrape JSON for Stash
 
-def scraping_json(api_json,url=""):
-    # Scrape JSON
+
+def scraping_json(api_json, url=""):
     scrape = {}
     scrape['title'] = api_json.get('title')
     date = datetime.strptime(api_json.get(
@@ -177,6 +192,24 @@ def scraping_json(api_json,url=""):
             break
     return scrape
 
+# Saving the JSON to a file (Write '- logJSON' below MindGeekAPI.py in MindGeekAPI.yml)
+
+
+def saveJSON(api_json, url):
+    try:
+        if sys.argv[1] == "logJSON":
+            try:
+                os.makedirs('MindGeekAPI_JSON')
+            except FileExistsError:
+                pass  # Dir already exist
+            api_json['url'] = url
+            filename = os.path.join(
+                "MindGeekAPI_JSON", str(api_json['id'])+".json")
+            with open(filename, 'w', encoding='utf-8') as f:
+                json.dump(api_json, f, ensure_ascii=False, indent=4)
+    except IndexError:
+        pass
+
 
 fragment = json.loads(sys.stdin.read())
 print("", file=sys.stderr)
@@ -184,13 +217,11 @@ print("", file=sys.stderr)
 if not fragment["url"]:
     if fragment["title"]:
         # Trying to find the scene
-        api_json, url_used, headers = search_scene(fragment["title"])
+        api_json, url, headers = search_scene(fragment["title"])
         id = str(api_json.get("id"))
-        url = re.sub('/\d+/.+', '/' + id + "/", url_used)
-        scrape = scraping_json(api_json,url)
+        scrape = scraping_json(api_json, url)
     else:
-        print("There is no URL or Title.", file=sys.stderr)
-        exit(1)
+        print_exit("There is no URL or Title.")
 else:
     # URL scraping
     url = fragment["url"]
@@ -199,20 +230,8 @@ else:
     api_URL = 'https://site-api.project1service.com/v2/releases/{}'.format(id)
     api_json = sendrequest(api_URL, headers)
     scrape = scraping_json(api_json)
+    saveJSON(api_json, url)
 
-# Saving the JSON to a file (Write '- logJSON' below MindGeekAPI.py in MindGeekAPI.yml)
-try:
-    if sys.argv[1] == "logJSON":
-        try:
-            os.makedirs('MindGeekAPI_JSON')
-        except FileExistsError:
-            pass  # Dir already exist
-        api_json['url'] = url
-        filename = os.path.join("MindGeekAPI_JSON", id+".json")
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(api_json, f, ensure_ascii=False, indent=4)
-except IndexError:
-    pass
 
 print(json.dumps(scrape))
 
