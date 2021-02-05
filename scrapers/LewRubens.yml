@@ -1,0 +1,14 @@
+name: LewRubens
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lewrubens.com/x-new/new-set.php?setid=
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@name="twitter:title"]/@content
+      Details: //meta[@name="twitter:description"]/@content
+      Image: //meta[@name="twitter:image"]@content
