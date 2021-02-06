@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - hegre.com/films
       - hegre.com/massage
+      - hegre.com/sexed
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
