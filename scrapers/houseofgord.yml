@@ -1,0 +1,43 @@
+name: HouseOfGord
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - houseofgord.com/d
+    scraper: sceneScraper 
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@id="detail_title"]/text()
+      Date:
+        selector: //div[@class="preview_feature_date"][1]/text()
+        postProcess:
+          - replace:
+            - regex: .*\s+added\s+(.*)
+              with: $1
+          - parseDate: "02 Jan 2006"
+      Details:
+        selector: //p[@class="preview_description"]/text()
+        concat: "\n\n"
+      Performers:
+        Name: 
+          selector: '//div[@class="preview_facets_listing"]/a[@class="ul" and position() < 1 + count(//div[@class="preview_facets_listing"]/a[@class="ul"]) - count(//div[@class="preview_facets_listing"]/text()[contains(.,"Keywords:")]/following-sibling::a[@class="ul"])]'
+      Tags:
+        Name:
+          selector: '//div[@class="preview_facets_listing"]/text()[contains(.,"Keywords:")]/following-sibling::a[@class="ul"]/text()'
+      Studio:
+        Name: 
+          fixed: House of Gord
+      Image: 
+        selector: '//video[@id="0"]/@poster|//td[@class="previewpic_item" and @style="width:53%"][1]/img/@src|//td[@class="previewpic_item"][1]/img/@src'
+
+driver:
+  cookies:
+    - CookieURL: "https://www.houseofgord.com"
+      Cookies:
+        - Name: "legal_accepted2"
+          Domain: ".houseofgord.com"
+          Value: "yes"
+          Path: "/"
+# Last Updated Februari 3, 2021
