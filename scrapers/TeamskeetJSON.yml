@@ -1,0 +1,9 @@
+# You need to have the URL.
+name: "TeamskeetJSON"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - TeamskeetJSON.py
+      - logJSON # Save the JSON from the API to a file
+# Last Updated February 07, 2021
