@@ -5,5 +5,5 @@ sceneByFragment:
     script:
       - python
       - TeamskeetJSON.py
-      - logJSON # Save the JSON from the API to a file
+#      - logJSON # Save the JSON from the API to a file
 # Last Updated February 07, 2021
