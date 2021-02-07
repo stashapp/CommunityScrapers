@@ -54,7 +54,9 @@ else:
     api_URL = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{}'.format(
         id)
     headers = {
-        'User-Agent': user_agent
+        'User-Agent': user_agent,
+        'Origin':'https://www.teamskeet.com',
+        'Referer':'https://www.teamskeet.com/'
     }
 
     # Send to the API
