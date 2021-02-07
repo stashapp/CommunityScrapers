@@ -22,10 +22,10 @@ xPathScrapers:
         concat: "\n\n"
       Performers:
         Name: 
-          selector: //div[@class="preview_facets_listing"]/a[@class="ul" and position() < 1 + count(//div[@class="preview_facets_listing"]/a[@class="ul"]) - count(//div[@class="preview_facets_listing"]/text()[contains(.,"Keywords:")]/following-sibling::a[@class="ul"])]
+          selector: //div[@class="preview_facets_listing"]/a[not(preceding-sibling::br)]/text()
       Tags:
         Name:
-          selector: //div[@class="preview_facets_listing"]/text()[contains(.,"Keywords:")]/following-sibling::a[@class="ul"]/text()
+          selector: //div[@class="preview_facets_listing"]/a[preceding-sibling::br]/text()
       Studio:
         Name: 
           fixed: House of Gord
@@ -40,4 +40,5 @@ driver:
           Domain: .houseofgord.com
           Value: yes
           Path: /
-# Last Updated Februari 3, 2021
+
+# Last Updated Februari 7, 2021
