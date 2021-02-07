@@ -10,7 +10,7 @@ xPathScrapers:
       Studio:
         Name: //a[@class="navbar-brand"]/@title
       Title:
-        selector: //h2[@class="section-title"]/text()
+        selector: //div[@class="video-player"]//h2[@class="section-title"]/text()
       Performers:
         Name:
           selector: //div[contains(@class, "models-list-thumbs")]//span/text()
