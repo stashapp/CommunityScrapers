@@ -10,6 +10,11 @@ import requests
 user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 
 
+def print_exit(q):
+    print(q, file=sys.stderr)
+    exit(1)
+
+
 def saveJSON(api_json, url):
     try:
         if sys.argv[1] == "logJSON":
@@ -30,8 +35,10 @@ fragment = json.loads(sys.stdin.read())
 if fragment["url"]:
     url = fragment["url"]
 else:
-    print("You need to set the URL (teamskeet.com/movies/*****)", file=sys.stderr)
-    exit(1)
+    print_exit('You need to set the URL (e.g. teamskeet.com/movies/*****)')
+
+if "teamskeet.com/movies/" not in url:
+    print_exit('The URL is not from a Teamskeet URL (e.g. teamskeet.com/movies/*****)')
 
 id = re.sub('.+/', '', url)
 api_URL = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{}'.format(
@@ -41,6 +48,7 @@ headers = {
 }
 
 # Send to the API
+r = ""
 try:
     r = requests.get(api_URL, headers=headers, timeout=(3, 5))
 except:
@@ -55,8 +63,7 @@ api_json_check = r.json()['found']
 if api_json_check == True:
     api_json = r.json()['_source']
 else:
-    print("Scene not found (Wrong ID)", file=sys.stderr)
-    exit(1)
+    print_exit('Scene not found (Wrong ID?)')
 
 # Time to scrape all data
 scrape = {}
