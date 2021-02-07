@@ -41,6 +41,8 @@ if "teamskeet.com/movies/" not in url:
     print_exit('The URL is not from a Teamskeet URL (e.g. teamskeet.com/movies/*****)')
 
 id = re.sub('.+/', '', url)
+if not id:
+    print_exit("Error with the ID ({})\nAre you sure that the end of your URL is correct ?".format(id))
 api_URL = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{}'.format(
     id)
 headers = {
