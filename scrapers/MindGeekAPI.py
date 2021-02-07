@@ -18,10 +18,13 @@ set_fileurl = "MindGeekAPI.ini"
 
 
 def scraping_url(url):
+    mydomain = urlparse(url).netloc
     id, instance_token = get_info(url)
     headers = {
         'Instance': instance_token,
-        'User-Agent': user_agent
+        'User-Agent': user_agent,
+        'Origin':	'https://' + mydomain,
+        'Referer':	url
     }
     return id, headers
 
@@ -135,7 +138,7 @@ def search_scene(title):
                 title_filter)
             api_json = sendrequest(search_URL, headers)
             for result in api_json:
-                title_filename=""
+                title_filename = ""
                 try:
                     filename = result['videos']['mediabook']['files']["320p"]['urls']['download']
                     title_filename = re.sub('^.+filename=', '', filename)
@@ -144,10 +147,10 @@ def search_scene(title):
                     pass
                 if title_filename:
                     making_url = re.sub(
-                    '/\d+/*.+', '/' + str(result.get("id")) + "/" + title_filename, url)
+                        '/\d+/*.+', '/' + str(result.get("id")) + "/" + title_filename, url)
                 else:
                     making_url = re.sub(
-                    '/\d+/*.+', '/' + str(result.get("id")) + "/", url)
+                        '/\d+/*.+', '/' + str(result.get("id")) + "/", url)
                 saveJSON(result, making_url)
                 ratio = difflib.SequenceMatcher(
                     None, title_filter, result.get('title')).ratio()
@@ -223,7 +226,6 @@ def saveJSON(api_json, url):
 
 
 fragment = json.loads(sys.stdin.read())
-print("", file=sys.stderr)
 
 if not fragment["url"]:
     if fragment["title"]:
