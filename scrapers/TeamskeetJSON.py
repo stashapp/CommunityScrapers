@@ -43,29 +43,37 @@ if "teamskeet.com/movies/" not in url:
 id = re.sub('.+/', '', url)
 if not id:
     print_exit("Error with the ID ({})\nAre you sure that the end of your URL is correct ?".format(id))
-api_URL = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{}'.format(
-    id)
-headers = {
-    'User-Agent': user_agent
-}
 
-# Send to the API
-r = ""
-try:
-    r = requests.get(api_URL, headers=headers, timeout=(3, 5))
-except:
-    print("An error has occurred with Requests", file=sys.stderr)
-    print(f"Request status: `{r.status_code}`", file=sys.stderr)
-    print(f"Check your TeamskeetJSON.log for more details", file=sys.stderr)
-    with open("TeamskeetJSON.log", 'w', encoding='utf-8') as f:
-        f.write("Scene ID: {}\n".format(id))
-        f.write("Request:\n{}".format(r.text))
-    exit(1)
-api_json_check = r.json()['found']
-if api_json_check == True:
-    api_json = r.json()['_source']
+filename = os.path.join("Teamskeet_JSON", id+".json")
+if (os.path.isfile(filename) == True):
+    print("Using local JSON...", file=sys.stderr)
+    with open(filename) as json_file:
+        api_json = json.load(json_file)
 else:
-    print_exit('Scene not found (Wrong ID?)')
+    print("Asking the API...", file=sys.stderr)
+    api_URL = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{}'.format(
+        id)
+    headers = {
+        'User-Agent': user_agent
+    }
+
+    # Send to the API
+    r = ""
+    try:
+        r = requests.get(api_URL, headers=headers, timeout=(3, 5))
+    except:
+        print("An error has occurred with Requests", file=sys.stderr)
+        print(f"Request status: `{r.status_code}`", file=sys.stderr)
+        print(f"Check your TeamskeetJSON.log for more details", file=sys.stderr)
+        with open("TeamskeetJSON.log", 'w', encoding='utf-8') as f:
+            f.write("Scene ID: {}\n".format(id))
+            f.write("Request:\n{}".format(r.text))
+        exit(1)
+    api_json_check = r.json()['found']
+    if api_json_check == True:
+        api_json = r.json()['_source']
+    else:
+        print_exit('Scene not found (Wrong ID?)')
 
 # Time to scrape all data
 scrape = {}
