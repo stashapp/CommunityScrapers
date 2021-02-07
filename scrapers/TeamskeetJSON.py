@@ -27,7 +27,6 @@ def saveJSON(api_json, url):
 
 
 fragment = json.loads(sys.stdin.read())
-# Get the id and instance token
 if fragment["url"]:
     url = fragment["url"]
 else:
@@ -71,10 +70,9 @@ scrape['studio']['name'] = api_json['site'].get('name')
 scrape['performers'] = [{"name": x.get('modelName')}
                         for x in api_json.get('models')]
 scrape['tags'] = [{"name": x} for x in api_json.get('tags')]
-# Image can be poster or poster_fallback
 scrape['image'] = api_json.get('img')
 
 saveJSON(api_json, url)
 print(json.dumps(scrape))
 
-# Last Updated February 04, 2021
+# Last Updated February 07, 2021
