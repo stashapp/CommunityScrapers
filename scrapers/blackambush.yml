@@ -1,0 +1,31 @@
+name: BlackAmbush
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - blackambush.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name: //a[@class="navbar-brand"]/@title
+      Title:
+        selector: //div[@class="video-player"]//h2[@class="section-title"]/text()
+      Performers:
+        Name:
+          selector: //div[contains(@class, "models-list-thumbs")]//span/text()
+      Date:
+        selector: //strong[text()="Released:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^ 
+                with: 
+          - parseDate: January 2, 2006
+      Tags:
+        Name:
+          selector: //ul[@class="tags"]//a/text()
+      Image:
+        selector: //img[contains(@class, "update_thumb")]/@src0_1x
+      Details:
+        selector: //div[@class="update-info-block"]/h3[text()="Description:"]/following-sibling::text()
+# Last Updated February 7, 2021
