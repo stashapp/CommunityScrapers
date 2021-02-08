@@ -43,11 +43,12 @@ if "teamskeet.com/movies/" not in url:
 id = re.sub('.+/', '', url)
 if not id:
     print_exit("Error with the ID ({})\nAre you sure that the end of your URL is correct ?".format(id))
-
+use_local=0
 filename = os.path.join("Teamskeet_JSON", id+".json")
 if (os.path.isfile(filename) == True):
     print("Using local JSON...", file=sys.stderr)
-    with open(filename) as json_file:
+    use_local=1
+    with open(filename, encoding="utf-8") as json_file:
         api_json = json.load(json_file)
 else:
     print("Asking the API...", file=sys.stderr)
@@ -91,7 +92,8 @@ scrape['performers'] = [{"name": x.get('modelName')}
 scrape['tags'] = [{"name": x} for x in api_json.get('tags')]
 scrape['image'] = api_json.get('img')
 
-saveJSON(api_json, url)
+if use_local == 0:
+    saveJSON(api_json, url)
 print(json.dumps(scrape))
 
-# Last Updated February 07, 2021
+# Last Updated February 08, 2021
