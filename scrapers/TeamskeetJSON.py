@@ -73,7 +73,7 @@ else:
         with open("TeamskeetJSON.log", 'w', encoding='utf-8') as f:
             f.write("Scene ID: {}\n".format(scene_id))
             f.write("Request:\n{}".format(r.text))
-        exit(1)
+        sys.exit(1)
     scene_api_json_check = r.json()['found']
     if scene_api_json_check:
         scene_api_json = r.json()['_source']
