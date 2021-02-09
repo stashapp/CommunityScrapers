@@ -11,7 +11,7 @@ import torrent_parser as tp
 
      '''
 
-path='/root/.stash/scrapers/torrents/'
+path='./torrents/'
 
 def query(title):
 #    print(f"Test",file=sys.stderr)
@@ -56,4 +56,4 @@ if sys.argv[1] == "query":
         lookup_torrent(title)
     else:
         query(title)
-    print(fragment)
+    print(json.dumps(fragment))
