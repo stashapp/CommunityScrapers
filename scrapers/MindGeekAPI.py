@@ -223,6 +223,22 @@ def save_json(api_json, url):
     except IndexError:
         pass
 
+def checking_local(url):
+    check_url = re.sub('.+/', '', url)
+    if check_url.isdigit():
+        found_scene_id = url
+    else:
+        found_scene_id = re.match(r"(.+/)(\d+)/*", url).group(2)
+    filename = os.path.join("MindGeekAPI_JSON", found_scene_id+".json")
+    if (os.path.isfile(filename) == True):
+        print("Using local JSON...", file=sys.stderr)
+        with open(filename, encoding="utf-8") as json_file:
+            api_json = json.load(json_file)
+        return api_json
+    else:
+        return None
+    
+
 
 fragment = json.loads(sys.stdin.read())
 
@@ -230,7 +246,6 @@ if not fragment["url"]:
     if fragment["title"]:
         # Trying to find the scene
         scene_api_json, scene_url, _ = search_scene(fragment["title"])
-        _ = str(scene_api_json.get("id"))
         scraped_json = scraping_json(scene_api_json, scene_url)
     else:
         print_exit("There is no URL or Title.")
@@ -238,13 +253,18 @@ if not fragment["url"]:
 else:
     # URL scraping
     scene_url = fragment["url"]
-    scene_id, request_headers = scraping_url(scene_url)
-    # Send to the API
-    api_URL = 'https://site-api.project1service.com/v2/releases/{}'.format(scene_id)
-    scene_api_json = send_request(api_URL, request_headers)
+    # Search local JSON, return none if not found
+    use_local = checking_local(scene_url)
+    if use_local is None:
+        scene_id, request_headers = scraping_url(scene_url)
+        # Send to the API
+        api_URL = 'https://site-api.project1service.com/v2/releases/{}'.format(scene_id)
+        scene_api_json = send_request(api_URL, request_headers)
+    else:
+        scene_api_json = use_local
     scraped_json = scraping_json(scene_api_json)
-    save_json(scene_api_json, scene_url)
-
+    if use_local is None:
+        save_json(scene_api_json, scene_url)
 
 print(json.dumps(scraped_json))
 
