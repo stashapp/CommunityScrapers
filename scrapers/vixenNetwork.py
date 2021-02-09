@@ -16,11 +16,14 @@ def get_from_url(url_to_parse):
 
 
 def make_request(request_url, origin_site):
-    r = requests.get(request_url, headers={
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
-        'Origin': origin_site,
-        'Referer': request_url
-    })
+    try:
+        r = requests.get(request_url, headers={
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+            'Origin': origin_site,
+            'Referer': request_url
+        }, timeout=(3, 6))
+    except requests.exceptions.RequestException:
+        return None
     if r.status_code == 200:
         return r.text
     return None
