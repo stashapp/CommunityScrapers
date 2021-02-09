@@ -2,28 +2,28 @@ import difflib
 import json
 import os
 import re
+import requests
 import sys
 from configparser import ConfigParser, NoSectionError
 from datetime import datetime
 from urllib.parse import urlparse
 
-import requests
 
 # Not necessary but why not ?
-user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
+USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 
 # Set Variable
-set_ratio = 0.8
-set_fileurl = "MindGeekAPI.ini"
+SET_RATIO = 0.8
+SET_FILE_URL = "MindGeekAPI.ini"
 
 
 def scraping_url(url):
-    mydomain = urlparse(url).netloc
+    my_domain = urlparse(url).netloc
     id, instance_token = get_info(url)
     headers = {
         'Instance': instance_token,
-        'User-Agent': user_agent,
-        'Origin':	'https://' + mydomain,
+        'User-Agent': USER_AGENT,
+        'Origin':	'https://' + my_domain,
         'Referer':	url
     }
     return id, headers
@@ -31,13 +31,13 @@ def scraping_url(url):
 
 def print_exit(q):
     print(q, file=sys.stderr)
-    exit(1)
+    sys.exit(1)
 
 
 def get_info(url):
-    todaystr = datetime.today().strftime('%Y-%m-%d')
-    today = datetime.strptime(todaystr, '%Y-%m-%d')
-    token, id = check_config(url, today)
+    today_string = datetime.today().strftime('%Y-%m-%d')
+    today = datetime.strptime(today_string, '%Y-%m-%d')
+    token, found_scene_id = check_config(url, today)
     if not token:
         print("No instance token found, sending request...", file=sys.stderr)
         try:
@@ -49,63 +49,62 @@ def get_info(url):
         try:
             check_url = re.sub('.+/', '', url)
             if check_url.isdigit():
-                id = check_url
+                found_scene_id = check_url
             else:
-                id = re.match(r"(.+/)(\d+)/*", url).group(2)
+                found_scene_id = re.match(r"(.+/)(\d+)/*", url).group(2)
             token = r.cookies.get_dict().get("instance_token")
-            if token == None:
+            if token is None:
                 print_exit("Can't get the instance_token from the cookie")
-        except:
+        except ValueError:
             print_exit(
                 "Error to get information from the request\nAre you sure that the URL is from the MindGeek Network ?")
-        write_config(url, token, todaystr)
-    if not id.isdigit():
+        write_config(url, token, today_string)
+    if not found_scene_id.isdigit():
         print_exit("The ID is not a digit")
-    return id, token
+    return found_scene_id, token
 
 
 def check_config(url, date_today):
-    mydomain = urlparse(url).netloc
+    my_domain = urlparse(url).netloc
     token = ""
-    id = ""
-    if (os.path.isfile(set_fileurl) == True):
+    found_scene_id = ""
+    if os.path.isfile(SET_FILE_URL):
         config = ConfigParser()
-        config.read(set_fileurl)
+        config.read(SET_FILE_URL)
         try:
-            file_instance = config.get(mydomain, 'instance')
-            file_date = config.get(mydomain, 'date')
+            file_instance = config.get(my_domain, 'instance')
+            file_date = config.get(my_domain, 'date')
             past = datetime.strptime(file_date, '%Y-%m-%d')
             difference = date_today - past
             if difference.days == 0:
                 # date is within 24 hours so using old instance
-                try:
-                    id = re.match(r"(.+/)(\d+)/*", url).group(2)
-                except:
-                    print_exit(
-                        "The ID can't be determined (Regex). Maybe wrong url ?")
+                match = re.match(r'(.+/)(\d+)/*', url)
+                if match is None:
+                    print_exit('The ID can\'t be determined (RegEx). Maybe wrong url?')
+                found_scene_id = match.group(2)
                 token = file_instance
                 print("Using token from {}".format(
-                    set_fileurl), file=sys.stderr)
+                    SET_FILE_URL), file=sys.stderr)
             else:
                 print("Token from the past, getting new one".format(
-                    set_fileurl), file=sys.stderr)
+                    SET_FILE_URL), file=sys.stderr)
         except NoSectionError:
             pass
-    return token, id
+    return token, found_scene_id
 
 
 def write_config(url, token, date_today):
-    mydomain = urlparse(url).netloc
+    my_domain = urlparse(url).netloc
     config = ConfigParser()
-    config.read(set_fileurl)
+    config.read(SET_FILE_URL)
     try:
-        config.get(mydomain, 'url')
+        config.get(my_domain, 'url')
     except NoSectionError:
-        config.add_section(mydomain)
-    config.set(mydomain, 'url', url)
-    config.set(mydomain, 'instance', token)
-    config.set(mydomain, 'date', date_today)
-    with open(set_fileurl, 'w') as configfile:
+        config.add_section(my_domain)
+    config.set(my_domain, 'url', url)
+    config.set(my_domain, 'instance', token)
+    config.set(my_domain, 'date', date_today)
+    with open(SET_FILE_URL, 'w') as configfile:
         config.write(configfile)
     return
 
@@ -113,17 +112,17 @@ def write_config(url, token, date_today):
 def search_scene(title):
     # Clean your title
     # Remove extension and replace .-_ by a space
-    title_filter = re.sub('[-\._\']', ' ', os.path.splitext(title)[0])
+    title_filter = re.sub(r'[-._\']', ' ', os.path.splitext(title)[0])
     # Remove resolution
     title_filter = re.sub(
-        '\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|\]|\sHD|\sSD|', '', title_filter)
+        r'\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|]|\sHD|\sSD|', '', title_filter)
     # Remove Date
     title_filter = re.sub(
-        '\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}', '', title_filter)
+        r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}', '', title_filter)
     print("Your title:{}".format(title_filter), file=sys.stderr)
-    if (os.path.isfile(set_fileurl) == True):
+    if os.path.isfile(SET_FILE_URL):
         config = ConfigParser()
-        config.read(set_fileurl)
+        config.read(SET_FILE_URL)
         dict_config = dict(config.items())
         for section in dict_config:
             if section == "DEFAULT":
@@ -131,47 +130,47 @@ def search_scene(title):
             url = config.get(section, 'url')
             print("Searching on: {}".format(
                 urlparse(url).netloc), file=sys.stderr)
-            id, headers = scraping_url(url)
+            _, headers = scraping_url(url)
             # Filter the filename to remove possible mistake
 
-            search_URL = 'https://site-api.project1service.com/v2/releases?title={}&type=scene'.format(
+            search_url = 'https://site-api.project1service.com/v2/releases?title={}&type=scene'.format(
                 title_filter)
-            api_json = sendrequest(search_URL, headers)
+            api_json = send_request(search_url, headers)
             for result in api_json:
                 title_filename = ""
                 try:
                     filename = result['videos']['mediabook']['files']["320p"]['urls']['download']
-                    title_filename = re.sub('^.+filename=', '', filename)
-                    title_filename = re.sub('_.+$', '', title_filename)
+                    title_filename = re.sub(r'^.+filename=', '', filename)
+                    title_filename = re.sub(r'_.+$', '', title_filename)
                 except:
                     pass
                 if title_filename:
                     making_url = re.sub(
-                        '/\d+/*.+', '/' + str(result.get("id")) + "/" + title_filename, url)
+                        r'/\d+/*.+', '/' + str(result.get("id")) + "/" + title_filename, url)
                 else:
                     making_url = re.sub(
-                        '/\d+/*.+', '/' + str(result.get("id")) + "/", url)
-                saveJSON(result, making_url)
+                        r'/\d+/*.+', '/' + str(result.get("id")) + "/", url)
+                save_json(result, making_url)
                 ratio = difflib.SequenceMatcher(
                     None, title_filter, result.get('title')).ratio()
                 print("Found:{}\nRatio:{}".format(
                     result.get('title'), ratio), file=sys.stderr)
-                if ratio > set_ratio:
+                if ratio > SET_RATIO:
                     return result, making_url, headers
         print_exit("Didn't find a match")
     else:
         print_exit("Can't search the scene ({} is missing)".format(
-            set_fileurl))
+            SET_FILE_URL))
 
 
-def sendrequest(url, headers):
+def send_request(url, headers):
     try:
         r = requests.get(url, headers=headers, timeout=(3, 5))
     except requests.Timeout:
         print_exit("Request Timeout")
     try:
         api_json = r.json().get('result')
-    except:
+    except (NameError, ValueError):
         print("An error has occurred", file=sys.stderr)
         print(f"Request status: `{r.status_code}`", file=sys.stderr)
         print(f"Check your MindGeekAPI.log for more details", file=sys.stderr)
@@ -179,7 +178,7 @@ def sendrequest(url, headers):
             f.write("Headers used: {}\n".format(headers))
             f.write("API URL: {}\n".format(url))
             f.write("Request:\n{}".format(r.text))
-        exit(1)
+        sys.exit(1)
     return api_json
 
 # Scrape JSON for Stash
@@ -209,7 +208,7 @@ def scraping_json(api_json, url=""):
 # Saving the JSON to a file (Write '- logJSON' below MindGeekAPI.py in MindGeekAPI.yml)
 
 
-def saveJSON(api_json, url):
+def save_json(api_json, url):
     try:
         if sys.argv[1] == "logJSON":
             try:
@@ -230,22 +229,23 @@ fragment = json.loads(sys.stdin.read())
 if not fragment["url"]:
     if fragment["title"]:
         # Trying to find the scene
-        api_json, url, headers = search_scene(fragment["title"])
-        id = str(api_json.get("id"))
-        scrape = scraping_json(api_json, url)
+        scene_api_json, scene_url, _ = search_scene(fragment["title"])
+        _ = str(scene_api_json.get("id"))
+        scraped_json = scraping_json(scene_api_json, scene_url)
     else:
         print_exit("There is no URL or Title.")
+        sys.exit(1)
 else:
     # URL scraping
-    url = fragment["url"]
-    id, headers = scraping_url(url)
+    scene_url = fragment["url"]
+    scene_id, request_headers = scraping_url(scene_url)
     # Send to the API
-    api_URL = 'https://site-api.project1service.com/v2/releases/{}'.format(id)
-    api_json = sendrequest(api_URL, headers)
-    scrape = scraping_json(api_json)
-    saveJSON(api_json, url)
+    api_URL = 'https://site-api.project1service.com/v2/releases/{}'.format(scene_id)
+    scene_api_json = send_request(api_URL, request_headers)
+    scraped_json = scraping_json(scene_api_json)
+    save_json(scene_api_json, scene_url)
 
 
-print(json.dumps(scrape))
+print(json.dumps(scraped_json))
 
-# Last Updated February 04, 2021
+# Last Updated February 09, 2021
