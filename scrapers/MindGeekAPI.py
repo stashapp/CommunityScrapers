@@ -249,7 +249,6 @@ if not fragment["url"]:
         scraped_json = scraping_json(scene_api_json, scene_url)
     else:
         print_exit("There is no URL or Title.")
-        sys.exit(1)
 else:
     # URL scraping
     scene_url = fragment["url"]
