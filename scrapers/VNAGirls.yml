@@ -2,43 +2,43 @@ name: VNAGirls
 sceneByURL:
   - action: scrapeXPath
     url:
-      - vickyathome.com
-      - shandafay.com
-      - deauxmalive.com
-      - sarajay.com
+      - alexlegend.com
+      - allanalallthetime.com
+      - angelinacastrolive.com
+      - bestoftealconrad.com
+      - blownbyrone.com
+      - bobbiedenlive.com
       - carmenvalentina.com
       - charleechaselive.com
-      - angelinacastrolive.com
-      - juliaannlive.com
-      - nikkibenz.com
-      - sunnylanelive.com
-      - pumaswedexxx.com
-      - sophiedeelive.com
-      - itscleolive.com
-      - maggiegreenlive.com
-      - bobbiedenlive.com
-      - bestoftealconrad.com
-      - jelenajensen.com
-      - pennypaxlive.com
-      - kimberleelive.com
-      - alexlegend.com
-      - sexmywife.com
-      - rubberdoll.net
-      - allanalallthetime.com
-      - fuckedfeet.com
-      - ninakayy.com
-      - romemajor.com
-      - siripornstar.com
-      - blownbyrone.com
-      - kink305.com
+      - deauxmalive.com
       - foxxedup.com
-      - nataliastarr.com
-      - samanthagrace.net
-      - rachelstormsxxx.com
-      - kendrajames.com
-      - maxinex.com
-      - povmania.com
+      - fuckedfeet.com
       - girlgirlmania.com
+      - itscleolive.com
+      - jelenajensen.com
+      - juliaannlive.com
+      - kendrajames.com
+      - kimberleelive.com
+      - kink305.com
+      - maggiegreenlive.com
+      - maxinex.com
+      - nataliastarr.com
+      - nikkibenz.com
+      - ninakayy.com
+      - pennypaxlive.com
+      - povmania.com
+      - pumaswedexxx.com
+      - rachelstormsxxx.com
+      - romemajor.com
+      - rubberdoll.net
+      - samanthagrace.net
+      - sarajay.com
+      - sexmywife.com
+      - shandafay.com
+      - siripornstar.com
+      - sophiedeelive.com
+      - sunnylanelive.com
+      - vickyathome.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -77,4 +77,4 @@ xPathScrapers:
                 with: "$1"
           - parseDate: January 2 2006
 
-# Last Updated November 8, 2020
+# Last Updated February 9, 2021
