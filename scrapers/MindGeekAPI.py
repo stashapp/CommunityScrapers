@@ -170,6 +170,8 @@ def send_request(url, headers):
         print_exit("Request Timeout")
     try:
         api_json = r.json().get('result')
+        if api_json.get('parent') is not None:
+            api_json = api_json.get('parent')
     except (NameError, ValueError):
         print("An error has occurred", file=sys.stderr)
         print(f"Request status: `{r.status_code}`", file=sys.stderr)
