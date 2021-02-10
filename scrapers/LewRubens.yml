@@ -11,4 +11,11 @@ xPathScrapers:
     scene:
       Title: //meta[@name="twitter:title"]/@content
       Details: //meta[@name="twitter:description"]/@content
-      Image: //meta[@name="twitter:image"]@content
+      Image: //meta[@name="twitter:image"]/@content
+      Studio:
+        Name:
+          fixed: Lew Rubens
+
+
+
+# Last Updated February 10, 2021
