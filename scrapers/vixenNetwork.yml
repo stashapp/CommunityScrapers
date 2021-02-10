@@ -1,12 +1,12 @@
 name: "Vixen Media Group"
 sceneByURL:
   - url:
-      - vixen.com/
-      - tushy.com/
-      - tushyraw.com/
-      - deeper.com/
       - blacked.com/
       - blackedraw.com/
+      - deeper.com/
+      - tushy.com/
+      - tushyraw.com/
+      - vixen.com/
     action: script
     script:
       - python
