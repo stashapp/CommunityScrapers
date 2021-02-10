@@ -10,7 +10,9 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //meta[@name="twitter:title"]/@content
-      Details: //meta[@name="twitter:description"]/@content
+      Details:
+        selector: //div[@class="album-details"]/div/p/text()
+        concat: "\n"
       Image: //meta[@name="twitter:image"]/@content
       Studio:
         Name:
