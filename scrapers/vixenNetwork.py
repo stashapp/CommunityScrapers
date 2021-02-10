@@ -61,7 +61,7 @@ def main():
     if site is None:
         log('The URL could not be parsed')
         sys.exit(1)
-    response = make_request(url, 'https://%s' % site)
+    response = make_request('https://%s/%s' % (site, slug), 'https://%s' % site)
     if response is None:
         log('Could not fetch page HTML')
         sys.exit(1)
