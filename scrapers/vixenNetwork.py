@@ -35,12 +35,15 @@ def fetch_page_json(page_html):
     return None if len(matches) == 0 else json.loads(matches[0])
 
 
-def save_json(scraped_json, video_id):
+def save_json(scraped_json, video_id, save_location):
+    location = 'VixenNetwork_JSON'
+    if save_location != 'save':
+        location = save_location
     try:
-        os.makedirs('VixenNetwork_JSON')
+        os.makedirs(location)
     except FileExistsError:
         pass
-    filename = os.path.join('VixenNetwork_JSON', '%s.json' % video_id)
+    filename = os.path.join(location, '%s.json' % video_id)
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(scraped_json, f, ensure_ascii=False, indent=4)
 
@@ -83,7 +86,8 @@ def main():
         'tags': [{'name': x['name']} for x in scene['categories']],
         'image': scene['images']['poster'][len(scene['images']['poster']) - 1]['src'],
     }
-    save_json(j, scene['videoId'])
+    if len(sys.argv) > 1:
+        save_json(j, scene['videoId'], sys.argv[1])
     print(json.dumps(scrape))
 
 
