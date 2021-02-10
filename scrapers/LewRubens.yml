@@ -11,8 +11,8 @@ xPathScrapers:
     scene:
       Title: //meta[@name="twitter:title"]/@content
       Details:
-        selector: //div[@class="album-details"]/div/p/text()
-        concat: "\n"
+        selector: //div[@class="album-details"]/div//p[not(starts-with(text(), "Share")) and not(ends-with(text(), "video"))]/text() | //div[@class="album-details"]/div//span[not(starts-with(text(), "Share")) and not(ends-with(text(), "video"))]/text()
+        concat: " "
       Image: //meta[@name="twitter:image"]/@content
       Studio:
         Name:
