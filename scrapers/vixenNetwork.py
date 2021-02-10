@@ -5,6 +5,10 @@ import requests
 import sys
 
 
+MINIMUM_VERSION_MAJOR = 3
+MINIMUM_VERSION_MINOR = 3
+
+
 def log(*s):
     print(*s, file=sys.stderr)
 
@@ -92,6 +96,9 @@ def main():
 
 
 if __name__ == '__main__':
+    if sys.version_info.major != MINIMUM_VERSION_MAJOR or sys.version_info.minor < MINIMUM_VERSION_MINOR:
+        log('Invalid Python version. Version %s.%s or later required.' % (MINIMUM_VERSION_MAJOR, MINIMUM_VERSION_MINOR))
+        sys.exit(1)
     try:
         main()
     except Exception as e:
