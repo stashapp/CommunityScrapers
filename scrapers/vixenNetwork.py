@@ -3,7 +3,6 @@ import os
 import re
 import requests
 import sys
-from urllib.parse import urlparse
 
 
 def log(*s):
@@ -11,8 +10,10 @@ def log(*s):
 
 
 def get_from_url(url_to_parse):
-    p = urlparse(url_to_parse)
-    return p.netloc, p.netloc[4:-4], p.path[1:]
+    m = re.match(r'(?:https?://)?(?:www\.)?((\w+)\.com)/([a-z-]+)', url_to_parse)
+    if m is None:
+        return None, None, None
+    return m.groups()
 
 
 def make_request(request_url, origin_site):
@@ -53,7 +54,10 @@ def main():
         log('No URL entered.')
         sys.exit(1)
     url = fragment['url']
-    site, studio, path = get_from_url(url)
+    site, studio, slug = get_from_url(url)
+    if site is None:
+        log('The URL could not be parsed')
+        sys.exit(1)
     response = make_request(url, 'https://%s' % site)
     if response is None:
         log('Could not fetch page HTML')
@@ -62,7 +66,7 @@ def main():
     if j is None:
         log('Could not find JSON on page')
         sys.exit(1)
-    scene_id = 'Video:%s:%s' % (studio, path)
+    scene_id = 'Video:%s:%s' % (studio, slug)
     if scene_id not in j:
         log('Could not locate scene within JSON')
         sys.exit(1)
