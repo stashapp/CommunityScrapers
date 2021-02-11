@@ -170,8 +170,6 @@ def send_request(url, headers):
         print_exit("Request Timeout")
     try:
         api_json = r.json().get('result')
-        if api_json.get('parent') is not None:
-            api_json = api_json.get('parent')
     except (NameError, ValueError):
         print("An error has occurred", file=sys.stderr)
         print(f"Request status: `{r.status_code}`", file=sys.stderr)
@@ -263,6 +261,9 @@ else:
         scene_api_json = send_request(api_URL, request_headers)
     else:
         scene_api_json = use_local
+    if scene_api_json.get('parent') is not None:
+        if scene_api_json['parent']['type'] == "scene":
+            scene_api_json = scene_api_json.get('parent')
     scraped_json = scraping_json(scene_api_json)
     if use_local is None:
         save_json(scene_api_json, scene_url)
