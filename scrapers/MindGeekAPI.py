@@ -170,14 +170,18 @@ def send_request(url, headers):
         print_exit("Request Timeout")
     try:
         api_json = r.json().get('result')
-    except (NameError, ValueError):
+    except:
         print("An error has occurred", file=sys.stderr)
-        print(f"Request status: `{r.status_code}`", file=sys.stderr)
-        print(f"Check your MindGeekAPI.log for more details", file=sys.stderr)
+        print("Request status: {}".format(r.status_code), file=sys.stderr)
+        try:
+            print("Message: {}".format(r.json()[0].get('message')), file=sys.stderr)
+        except:
+            pass
+        print("Check your MindGeekAPI.log for more details", file=sys.stderr)
         with open("MindGeekAPI.log", 'w', encoding='utf-8') as f:
             f.write("Headers used: {}\n".format(headers))
             f.write("API URL: {}\n".format(url))
-            f.write("Request:\n{}".format(r.text))
+            f.write("Response:\n{}".format(r.text))
         sys.exit(1)
     return api_json
 
