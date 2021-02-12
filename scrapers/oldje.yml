@@ -1,0 +1,45 @@
+# This scraper does not parse older scenes which use a different page layout
+name: Oldje
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - oldje.com/video
+    scraper: oldjeScraper
+  - action: scrapeXPath
+    url:
+      - oldje-3some.com/videos
+    scraper: oldje3someScraper
+xPathScrapers:
+  oldjeScraper:
+    scene:
+      Studio:
+        Name: Oldje
+      Title:
+        selector: //h1[@class="preview_header"]/span[1]
+      Tags:
+        Name:
+          selector: //a[contains(@href,'tag/')]
+      Date:
+          selector: //span[@id="updata"]/text()
+          parseDate: 2006-01-02
+      Performers:
+        Name:
+          selector: //a[@class="act_name_h"]/text()
+      Details:
+        selector: //div[@class="preview_desc"]
+      #Uncomment line below if you want to grab the preview image for a thumbnail
+      #Image: //div[@id="prev_m"]/a/img/@src
+  oldje3someScraper:
+    scene:
+      Studio:
+        Name: Oldje-3some
+      Title:
+        selector: //h1[1]
+      Tags:
+        Name:
+          selector: //a[contains(@href,'/videos/tag/')]
+      Performers:
+        Name:
+          selector: //a[contains(@href,'/models/preview/')]
+      Details:
+        selector: //div[@class="measuringWrapper"]/p
