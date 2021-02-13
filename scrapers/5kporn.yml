@@ -1,0 +1,32 @@
+name: 5KPorn
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 5kporn.com/episodes/
+      - 5kteens.com/episodes/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name: //img[contains(@class, "top-logo")]/@alt
+      Title:
+        selector: //p[@class="trailer-title"]/text()
+      Performers:
+        Name:
+          selector: //div[contains(@class, "video-summary")]//h5[contains(text(), "Starring:")]/a/text()
+      Date:
+        selector: //div[contains(@class, "video-summary")]//h5[starts-with(text(), "Published:")]/text()
+        postProcess:
+          - replace:
+            - regex: "^Published: "
+              with: ""
+      Details:
+        selector: //div[contains(@class, "video-summary")]//p/text()
+      Image:
+        selector: //a[@class="gal"][1]/img/@src
+        postProcess:
+          - replace:
+            - regex: thumb.+?\.
+              with: poster_image/poster_5k.
+# Last updated February 13, 2021
