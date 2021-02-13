@@ -28,5 +28,20 @@ xPathScrapers:
         postProcess:
           - replace:
             - regex: thumb.+?\.
-              with: poster_image/poster_5k.
+              with: poster_image/poster.
+driver:
+  cookies:
+    - CookieURL: "https://www.5kporn.com"
+      Cookies:
+        - Name: "nats"
+          Domain: ".5kporn.com"
+          Value: "INSERT ACTUAL VALUE"
+          Path: "/"
+    - CookieURL: "https://www.5kteens.com"
+      Cookies:
+        - Name: "nats"
+          Domain: ".5kteens.com"
+          Value: "INSERT ACTUAL VALUE"
+          Path: "/"
+
 # Last updated February 13, 2021
