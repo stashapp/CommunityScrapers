@@ -2,12 +2,12 @@ name: "LegalPorno"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - legalporno.com/watch/
+      - analvids.com/watch/
     scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://www.legalporno.com
+      - https://www.analvids.com
     scraper: performerScraper
 sceneByFragment:
     action: script
@@ -31,7 +31,7 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Details: $description/div[3]/dd/text()
       Performers:
-        Name: $description/div[1]/dd/a[contains(@href,'legalporno.com/model')]/text()
+        Name: $description/div[1]/dd/a[contains(@href,'analvids.com/model')]/text()
       Studio:
         Name: //div[@class="col-md-4 col-lg-3 hide-mobile text-right"]/div[@class="studio-director"]//a/text()
       Tags:
@@ -49,4 +49,4 @@ xPathScrapers:
       Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
       Image:
         selector: //div[@class='model--avatar']//img/@src
-# Last Updated November 8, 2020
+# Last Updated February 13, 2021

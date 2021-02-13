@@ -7,7 +7,7 @@ def debug(t):
   sys.stderr.write(t + "\n")
 
 def query_url(query):
-  res = requests.get(f"https://www.legalporno.com/api/autocomplete/search?q={query}")
+  res = requests.get(f"https://www.analvids.com/api/autocomplete/search?q={query}")
   data = res.json()
   results = data['terms']
   if len(results) > 1:
