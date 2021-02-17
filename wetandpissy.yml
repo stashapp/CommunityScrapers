@@ -2,7 +2,10 @@ name: wetandpissy
 sceneByURL:
   - action: scrapeXPath
     url:
+      - simplyanal.com
+      - weliketosuck.com
       - wetandpissy.com
+      - wetandpuffy.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
