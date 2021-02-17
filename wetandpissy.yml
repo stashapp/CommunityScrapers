@@ -24,6 +24,10 @@ xPathScrapers:
         Name: //span[@class="model-movie"]//a/text()
       Studio:
         Name:
-          fixed: wetandpissy
+          selector: //img[@class="logo-overley"]/@src|//ul[@class="nav-list"]/li/a/img/@src
+          postProcess:
+            - replace:
+              - regex: .+?\.(.+?)\..+
+                with: $1
       Image: //div[@id="videoplayer"]/video/@poster
 # Last Updated February 17, 2021
