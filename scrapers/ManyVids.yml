@@ -29,7 +29,9 @@ xPathScrapers:
       Performers:
         Name: $details//h4/a/text()
       Image: //div[@id="rmpPlayer"]/@data-video-screenshot
-
+      Tags:
+        Name: //div[@class="tags"]/a
+    
   performerSearch:
     performer:
       Name: //*[contains(concat(' ', normalize-space(@class), ' '), ' profile-pic-name ')]/a/text()
@@ -129,4 +131,8 @@ xPathScrapers:
               - regex: '.*\.svg$'
                 with: ''
 
-# Last Updated November 10, 2020
+# Required for parsing sceneScraper tags
+driver:
+    useCDP: true
+
+# Last Updated January 17, 2021
