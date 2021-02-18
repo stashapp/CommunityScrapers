@@ -199,14 +199,13 @@ def scraping_json(api_json, url=""):
         scrape['url'] = url
     scrape['studio'] = {}
     scrape['studio']['name'] = api_json['collections'][0].get('name')
-    try:
-        if sys.argv[2] == "female_only":
-            perf=[]
-            for x in api_json.get('actors'):
-                if x.get('gender') == "female":
-                    perf.append({"name": x.get('name')})
-            scrape['performers'] = perf
-    except:
+    if 'female_only' in sys.argv:
+        perf=[]
+        for x in api_json.get('actors'):
+            if x.get('gender') == "female":
+                perf.append({"name": x.get('name')})
+        scrape['performers'] = perf
+    else:
         scrape['performers'] = [{"name": x.get('name')} for x in api_json.get('actors')]
     scrape['tags'] = [{"name": x.get('name')} for x in api_json.get('tags')]
     # Image can be poster or poster_fallback
@@ -220,19 +219,16 @@ def scraping_json(api_json, url=""):
 
 
 def save_json(api_json, url):
-    try:
-        if sys.argv[1] == "logJSON":
-            try:
-                os.makedirs('MindGeekAPI_JSON')
-            except FileExistsError:
-                pass  # Dir already exist
-            api_json['url'] = url
-            filename = os.path.join(
-                "MindGeekAPI_JSON", str(api_json['id'])+".json")
-            with open(filename, 'w', encoding='utf-8') as f:
-                json.dump(api_json, f, ensure_ascii=False, indent=4)
-    except IndexError:
-        pass
+    if "logJSON" in sys.argv:
+        try:
+            os.makedirs('MindGeekAPI_JSON')
+        except FileExistsError:
+            pass  # Dir already exist
+        api_json['url'] = url
+        filename = os.path.join(
+            "MindGeekAPI_JSON", str(api_json['id'])+".json")
+        with open(filename, 'w', encoding='utf-8') as f:
+            json.dump(api_json, f, ensure_ascii=False, indent=4)
 
 def checking_local(url):
     check_url = re.sub('.+/', '', url)
@@ -283,7 +279,7 @@ else:
     if scene_api_json.get('parent') is not None:
         if scene_api_json['parent']['type'] == "scene":
             scene_api_json = scene_api_json.get('parent')
-    scraped_json = scraping_json(scene_api_json)
+    scraped_json = scraping_json(scene_api_json,scene_url)
     if use_local is None:
         save_json(scene_api_json, scene_url)
 
