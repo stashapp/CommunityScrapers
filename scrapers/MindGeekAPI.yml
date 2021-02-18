@@ -6,4 +6,5 @@ sceneByFragment:
       - python
       - MindGeekAPI.py
 #      - logJSON # Save the JSON from the API to a file
-# Last Updated February 03, 2021
+#      - female_only # Only getting female performers
+# Last Updated February 18, 2021
