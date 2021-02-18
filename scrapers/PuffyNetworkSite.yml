@@ -30,7 +30,12 @@ xPathScrapers:
           selector: //img[@class="logo-overley"]/@src|//ul[@class="nav-list"]/li/a/img/@src
           postProcess:
             - replace:
-              - regex: .+?\.(.+?)\..+
-                with: $1
+                - regex: .+?\.(.+?)\..+
+                  with: $1
+            - map:
+                weliketosuck: We Like To Suck
+                wetandpuffy: Wet And Puffy
+                wetandpissy: Wet And Pissy
+                simplyanal: Simply Anal
       Image: //div[@id="videoplayer"]/video/@poster
 # Last Updated February 17, 2021
