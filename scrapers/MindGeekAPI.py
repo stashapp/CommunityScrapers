@@ -199,8 +199,15 @@ def scraping_json(api_json, url=""):
         scrape['url'] = url
     scrape['studio'] = {}
     scrape['studio']['name'] = api_json['collections'][0].get('name')
-    scrape['performers'] = [
-        {"name": x.get('name')} for x in api_json.get('actors')]
+    try:
+        if sys.argv[2] == "female_only":
+            perf=[]
+            for x in api_json.get('actors'):
+                if x.get('gender') == "female":
+                    perf.append({"name": x.get('name')})
+            scrape['performers'] = perf
+    except:
+        scrape['performers'] = [{"name": x.get('name')} for x in api_json.get('actors')]
     scrape['tags'] = [{"name": x.get('name')} for x in api_json.get('tags')]
     # Image can be poster or poster_fallback
     for image_type in api_json['images']['poster']:
@@ -256,6 +263,14 @@ if not fragment["url"]:
 else:
     # URL scraping
     scene_url = fragment["url"]
+    # Check if the URL has a old format
+    if 'brazzers.com/scenes/view/id/' in scene_url:
+        print("Probably a old url, need to redirect", file=sys.stderr)
+        try:
+            r = requests.get(scene_url, headers={'User-Agent': USER_AGENT}, timeout=(3, 5))
+            scene_url = r.url
+        except:
+            print("Redirect fail, could give incorrect result.", file=sys.stderr)
     # Search local JSON, return none if not found
     use_local = checking_local(scene_url)
     if use_local is None:
