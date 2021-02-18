@@ -14,8 +14,8 @@ xPathScrapers:
         selector: //div[@class="header-title"]/h2
         postProcess:
           - replace:
-            - regex: ^(.*)[—]\s+
-              with:
+              - regex: ^(.*)[—]\s+
+                with:
       Date:
         selector: //span[@class="date-movie"]/b
         postProcess:
@@ -38,4 +38,4 @@ xPathScrapers:
                 wetandpissy: Wet And Pissy
                 simplyanal: Simply Anal
       Image: //div[@id="videoplayer"]/video/@poster
-# Last Updated February 17, 2021
+# Last Updated February 18, 2021
