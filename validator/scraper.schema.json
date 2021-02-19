@@ -500,6 +500,10 @@
           "title": "Performer aliases",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "Tags": {
+          "title": "Performer tags",
+          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
+        },
         "Image": {
           "title": "Performer image",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
