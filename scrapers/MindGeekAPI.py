@@ -42,10 +42,8 @@ def get_info(url):
         print("No instance token found, sending request...", file=sys.stderr)
         try:
             r = requests.get(url, timeout=(3, 5))
-        except requests.Timeout:
-            print_exit("Request Timeout")
-        # Working: https://www.sneakysex.com/scene/4405530/test
-        # Not Work: https://www.sneakysex.com/scene/4405530
+        except requests.exceptions.RequestException:
+            print_exit("Error with Request.")
         try:
             check_url = re.sub('.+/', '', url)
             if check_url.isdigit():
@@ -166,11 +164,7 @@ def search_scene(title):
 def send_request(url, headers):
     try:
         r = requests.get(url, headers=headers, timeout=(3, 5))
-    except requests.Timeout:
-        print_exit("Request Timeout")
-    try:
-        api_json = r.json().get('result')
-    except:
+    except requests.exceptions.RequestException:
         print("An error has occurred", file=sys.stderr)
         print("Request status: {}".format(r.status_code), file=sys.stderr)
         try:
@@ -183,6 +177,10 @@ def send_request(url, headers):
             f.write("API URL: {}\n".format(url))
             f.write("Response:\n{}".format(r.text))
         sys.exit(1)
+    try:
+        api_json = r.json().get('result')
+    except:
+        print_exit("Error getting the JSON from request", file=sys.stderr)
     return api_json
 
 # Scrape JSON for Stash
