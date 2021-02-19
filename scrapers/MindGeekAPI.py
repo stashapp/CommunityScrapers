@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 
 # Set Variable
-SET_RATIO = 0.8
+SET_RATIO = 0.75
 SET_FILE_URL = "MindGeekAPI.ini"
 
 
@@ -81,8 +81,7 @@ def check_config(url, date_today):
                     print_exit('The ID can\'t be determined (RegEx). Maybe wrong url?')
                 found_scene_id = match.group(2)
                 token = file_instance
-                print("Using token from {}".format(
-                    SET_FILE_URL), file=sys.stderr)
+                #print("Using token from {}".format(SET_FILE_URL), file=sys.stderr)
             else:
                 print("Token from the past, getting new one".format(
                     SET_FILE_URL), file=sys.stderr)
@@ -126,7 +125,7 @@ def search_scene(title):
             if section == "DEFAULT":
                 continue
             url = config.get(section, 'url')
-            print("Searching on: {}".format(
+            print("============\nSearching on: {}".format(
                 urlparse(url).netloc), file=sys.stderr)
             _, headers = scraping_url(url)
             # Filter the filename to remove possible mistake
@@ -149,9 +148,10 @@ def search_scene(title):
                     making_url = re.sub(
                         r'/\d+/*.+', '/' + str(result.get("id")) + "/", url)
                 save_json(result, making_url)
-                ratio = difflib.SequenceMatcher(
-                    None, title_filter, result.get('title')).ratio()
-                print("Found:{}\nRatio:{}".format(
+                ratio = round(difflib.SequenceMatcher(
+                    None, title_filter, result.get('title')).ratio(),3)
+                
+                print("Title:{} |Ratio:{}".format(
                     result.get('title'), ratio), file=sys.stderr)
                 if ratio > SET_RATIO:
                     return result, making_url, headers
