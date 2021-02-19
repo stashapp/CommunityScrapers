@@ -180,7 +180,7 @@ def send_request(url, headers):
     try:
         api_json = r.json().get('result')
     except:
-        print_exit("Error getting the JSON from request", file=sys.stderr)
+        print_exit("Error getting the JSON from request")
     return api_json
 
 # Scrape JSON for Stash
@@ -195,8 +195,12 @@ def scraping_json(api_json, url=""):
     scrape['details'] = api_json.get('description')
     if url:
         scrape['url'] = url
-    scrape['studio'] = {}
-    scrape['studio']['name'] = api_json['collections'][0].get('name')
+    try:
+        api_json['collections'][0].get('name') # If this create a error it wont continue so no studio at all
+        scrape['studio'] = {}
+        scrape['studio']['name'] = api_json['collections'][0].get('name')
+    except:
+        print("No studio", file=sys.stderr)
     if 'female_only' in sys.argv:
         perf=[]
         for x in api_json.get('actors'):
@@ -231,7 +235,7 @@ def save_json(api_json, url):
 def checking_local(url):
     check_url = re.sub('.+/', '', url)
     if check_url.isdigit():
-        found_scene_id = url
+        found_scene_id = check_url
     else:
         found_scene_id = re.match(r"(.+/)(\d+)/*", url).group(2)
     filename = os.path.join("MindGeekAPI_JSON", found_scene_id+".json")
