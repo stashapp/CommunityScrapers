@@ -69,13 +69,7 @@ xPathScrapers:
                 with: $1
           - parseDate: 2006-01-02
       Details:
-        selector: //h2[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'description']/../div/p/text() #|$script
-        postProcess:
-          - replace:
-              - regex: '.+description":\s*"(.+)",\s*"thumb.+'
-                with: $1
-              - regex: '\\"'
-                with: '"'
+        selector: //h2[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'description']/../div/p/text()
 
       Tags:
         Name: //div[text()="Tags"]/../div/a/text()
