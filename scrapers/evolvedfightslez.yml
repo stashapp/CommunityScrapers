@@ -1,0 +1,28 @@
+name: evolvedfightslez
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - evolvedfightslez.com/updates
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //meta[@property="og:title"]/@content
+     Date:
+        selector: //span[@class="update_date"]/text()
+        postProcess:
+          - replace:
+            - regex: ^(\d{1,2})\/(\d{1,2})\/(\d{4})$
+              with: $3-$1-$2
+          - parseDate: January 2 2006
+     Tags:
+      Name: //span[@class="tour_update_tags"][1]//a
+     Performers:
+      Name: //span[@class="tour_update_models"][1]/a/text()
+     Details: //span[@class="latest_update_description"]/text()
+     Image: //meta[@name="twitter:image"]/@content
+     Studio:
+        Name:
+          fixed: Evolvedfightslez
+# Last Updated February 21, 2021
