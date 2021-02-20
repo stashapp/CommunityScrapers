@@ -6,14 +6,16 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $pullLeft: //div[@class="pull-left"]
     scene:
      Title:
-        selector: //div[@class="pull-left"]/h5
+        selector: $pullLeft/h5
         postProcess:
           - replace:
               - regex: ^(.*)[—]\s+
      Date:
-        selector: //div[@class="pull-left"]//span/text()
+        selector: $pullLeft//span/text()
         postProcess:
           - replace:
             - regex: ^-\s(\w+)\s(\d{1,2}),\s(\d{4})$
@@ -26,4 +28,4 @@ xPathScrapers:
      Studio:
         Name:
           fixed: Mylked
-# Last Updated February 19, 2021
+# Last Updated February 21, 2021
