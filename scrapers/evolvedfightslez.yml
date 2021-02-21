@@ -24,6 +24,9 @@ xPathScrapers:
      Details: //span[@class="latest_update_description"]/text()
      Image: //meta[@name="twitter:image"]/@content
      Studio:
-        Name:
-          fixed: Evolvedfightslez
+        selector: //meta[@name="twitter:site"]/@content
+          postProcess:
+            - map:
+                "@evolvedLez": Evolved Fights Lez
+                "@EvolvedFights": Evolved Fights
 # Last Updated February 21, 2021
