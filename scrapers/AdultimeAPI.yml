@@ -4,5 +4,5 @@ sceneByFragment:
     script:
       - python
       - AdultimeAPI.py
-      - logJSON # Save the JSON from the API to a file
+      #- logJSON # Save the JSON from the API to a file
 # Last Updated February 18, 2021
