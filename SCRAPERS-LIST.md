@@ -103,6 +103,7 @@ beauty4k.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 beaverhunt.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 becomingfemme.com|ChristianXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 bellesafilms.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+bellesahouse.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bestoftealconrad.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bffs.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bigbootytgirls.com|BigBootyTGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
