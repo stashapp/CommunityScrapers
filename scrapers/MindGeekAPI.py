@@ -211,10 +211,17 @@ def scraping_json(api_json, url=""):
         scrape['performers'] = [{"name": x.get('name')} for x in api_json.get('actors')]
     scrape['tags'] = [{"name": x.get('name')} for x in api_json.get('tags')]
     # Image can be poster or poster_fallback
-    for image_type in api_json['images']['poster']:
-        if '/poster/' in image_type['xx'].get('url'):
-            scrape['image'] = image_type['xx'].get('url')
-            break
+    if type(api_json['images']['poster']) is list:
+        for image_type in api_json['images']['poster']:
+            if '/poster/' in image_type['xx'].get('url'):
+                scrape['image'] = image_type['xx'].get('url')
+                break
+    else:
+        if type(api_json['images']['poster']) is dict:
+            for _,img_value in api_json['images']['poster'].items():
+                if '/poster/' in img_value['xx'].get('url'):
+                    scrape['image'] = img_value['xx'].get('url')
+                    break
     return scrape
 
 # Saving the JSON to a file (Write '- logJSON' below MindGeekAPI.py in MindGeekAPI.yml)
