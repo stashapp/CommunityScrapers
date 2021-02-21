@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - evolvedfightslez.com/updates
+      - evolvedfights.com/updates
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -19,7 +20,7 @@ xPathScrapers:
      Tags:
       Name: //span[@class="tour_update_tags"][1]//a
      Performers:
-      Name: //span[@class="tour_update_models"][1]/a/text()
+      Name: Name: ///div[contains(@class,"model_update_block_info")]/span[@class="tour_update_models"]/a
      Details: //span[@class="latest_update_description"]/text()
      Image: //meta[@name="twitter:image"]/@content
      Studio:
