@@ -1,0 +1,10 @@
+# Have the url in the URL field.
+name: "MindGeekAPI"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - MindGeekAPI.py
+#      - logJSON # Save the JSON from the API to a file
+#      - female_only # Only getting female performers
+# Last Updated February 18, 2021
