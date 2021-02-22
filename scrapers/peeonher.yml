@@ -1,0 +1,28 @@
+name: peeonher
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - peeonher.com/updates/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //h1[@class='page_title']
+     Date:
+        selector: //strong[text()="Published"]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: (\d+)[dhnrst]+
+              with: $1
+          - parseDate: 2 January 2006
+     Performers:
+      Name: //div[@class="pull-left"]//a/text()
+     Details: //div[@class='con_left']/p[1]
+     Tags:
+        Name: //a[@class="sub_sub_tag"]//a/text()
+     Image: //div[@id="videoplayer"]/video/@poster
+     Studio:
+        Name:
+          fixed: PeeonHer
+# Last Updated February 22, 2021
