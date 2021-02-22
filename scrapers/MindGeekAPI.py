@@ -76,10 +76,10 @@ def check_config(url, date_today):
             difference = date_today - past
             if difference.days == 0:
                 # date is within 24 hours so using old instance
-                match = re.match(r'(.+/)(\d+)/*', url)
+                match = re.search(r'/(\d+)/', url)
                 if match is None:
                     print_exit('The ID can\'t be determined (RegEx). Maybe wrong url?')
-                found_scene_id = match.group(2)
+                found_scene_id = match.group(1)
                 token = file_instance
                 #print("Using token from {}".format(SET_FILE_URL), file=sys.stderr)
             else:
