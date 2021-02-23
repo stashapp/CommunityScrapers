@@ -1,9 +1,13 @@
 import json
 import os
+import pathlib
 import re
 import requests
 import sys
 from datetime import datetime
+
+USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
+DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
 
 
 # Not necessary but why not ?
@@ -18,12 +22,11 @@ def save_json(api_json, url):
     try:
         if sys.argv[1] == "logJSON":
             try:
-                os.makedirs('Teamskeet_JSON')
+                os.makedirs(DIR_JSON)
             except FileExistsError:
                 pass  # Dir already exist
             api_json['url'] = url
-            filename = os.path.join(
-                "Teamskeet_JSON", str(api_json['id'])+".json")
+            filename = os.path.join(DIR_JSON, str(api_json['id'])+".json")
             with open(filename, 'w', encoding='utf-8') as file:
                 json.dump(api_json, file, ensure_ascii=False, indent=4)
     except IndexError:
@@ -46,7 +49,7 @@ if not scene_id:
     debug("Error with the ID ({})\nAre you sure that the end of your URL is correct ?".format(scene_id))
     sys.exit(1)
 use_local = 0
-json_file = os.path.join("Teamskeet_JSON", scene_id+".json")
+json_file = os.path.join(DIR_JSON, scene_id+".json")
 if os.path.isfile(json_file):
     print("Using local JSON...", file=sys.stderr)
     use_local = 1
@@ -70,7 +73,7 @@ else:
         print("An error has occurred with Requests", file=sys.stderr)
         print(f"Request status: `{r.status_code}`", file=sys.stderr)
         print(f"Check your TeamskeetJSON.log for more details", file=sys.stderr)
-        with open("TeamskeetJSON.log", 'w', encoding='utf-8') as f:
+        with open("TeamskeetAPI.log", 'w', encoding='utf-8') as f:
             f.write("Scene ID: {}\n".format(scene_id))
             f.write("Request:\n{}".format(r.text))
         sys.exit(1)
