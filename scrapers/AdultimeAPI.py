@@ -388,7 +388,7 @@ if scene_url:
         if check_url.isdigit():
             search_api_id = check_url
         else:
-            search_api_id = re.match(r"(.+/)(\d+)/*", scene_url).group(2)
+            search_api_id = re.search(r"/(\d+)/*", scene_url).group(1)
         debug("ID: {}".format(search_api_id))
     except:
         search_api_id = None
