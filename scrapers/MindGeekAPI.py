@@ -49,7 +49,7 @@ def get_info(url):
             if check_url.isdigit():
                 found_scene_id = check_url
             else:
-                found_scene_id = re.match(r"(.+/)(\d+)/*", url).group(2)
+                found_scene_id = re.search(r"/(\d+)/*", url).group(1)
             token = r.cookies.get_dict().get("instance_token")
             if token is None:
                 print_exit("Can't get the instance_token from the cookie")
@@ -76,7 +76,7 @@ def check_config(url, date_today):
             difference = date_today - past
             if difference.days == 0:
                 # date is within 24 hours so using old instance
-                match = re.search(r'/(\d+)/', url)
+                match = re.search(r'/(\d+)/*', url)
                 if match is None:
                     print_exit('The ID can\'t be determined (RegEx). Maybe wrong url?')
                 found_scene_id = match.group(1)
@@ -244,7 +244,7 @@ def checking_local(url):
     if check_url.isdigit():
         found_scene_id = check_url
     else:
-        found_scene_id = re.match(r"(.+/)(\d+)/*", url).group(2)
+        found_scene_id = re.search(r"/(\d+)/*", url).group(1)
     filename = os.path.join("MindGeekAPI_JSON", found_scene_id+".json")
     if (os.path.isfile(filename) == True):
         print("Using local JSON...", file=sys.stderr)
