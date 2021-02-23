@@ -18,9 +18,6 @@ HEADERS = {
     "Referer": "https://members.adulttime.com/"
 }
 
-# Set Variable
-DB_PATH = r"C:\Users\Winter\.stash\Full.sqlite"
-
 
 def debug(q):
     print(q, file=sys.stderr)
@@ -370,6 +367,16 @@ def create_index(api_json):
 
 
 fragment = json.loads(sys.stdin.read())
+
+# Get your database
+DB_PATH=""
+config_path = os.path.join(USERFOLDER_PATH, "config.yml")
+if (os.path.isfile(config_path) == True):
+    with open(config_path) as f:
+        for line in f:
+            if "database: " in line:
+                DB_PATH = line.replace("database: ","").rstrip('\n')
+                break
 
 scene_id = fragment["id"]
 scene_title = fragment["title"]
