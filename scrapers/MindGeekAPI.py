@@ -1,6 +1,7 @@
 import difflib
 import json
 import os
+import pathlib
 import re
 import requests
 import sys
@@ -9,6 +10,8 @@ from datetime import datetime
 from urllib.parse import urlparse
 
 
+USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
+DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON", "MindGeekAPI")
 # Not necessary but why not ?
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 
@@ -29,9 +32,8 @@ def scraping_url(url):
     return id, headers
 
 
-def print_exit(q):
+def debug(q):
     print(q, file=sys.stderr)
-    sys.exit(1)
 
 
 def get_info(url):
@@ -39,11 +41,12 @@ def get_info(url):
     today = datetime.strptime(today_string, '%Y-%m-%d')
     token, found_scene_id = check_config(url, today)
     if not token:
-        print("No instance token found, sending request...", file=sys.stderr)
+        debug("No instance token found, sending request...")
         try:
             r = requests.get(url, timeout=(3, 5))
         except requests.exceptions.RequestException:
-            print_exit("Error with Request.")
+            debug("Error with Request.")
+            sys.exit(1)
         try:
             check_url = re.sub('.+/', '', url)
             if check_url.isdigit():
@@ -52,13 +55,15 @@ def get_info(url):
                 found_scene_id = re.search(r"/(\d+)/*", url).group(1)
             token = r.cookies.get_dict().get("instance_token")
             if token is None:
-                print_exit("Can't get the instance_token from the cookie")
+                debug("Can't get the instance_token from the cookie")
+                sys.exit(1)
         except ValueError:
-            print_exit(
-                "Error to get information from the request\nAre you sure that the URL is from the MindGeek Network ?")
+            debug("Error to get information from the request\nAre you sure that the URL is from the MindGeek Network ?")
+            sys.exit(1)
         write_config(url, token, today_string)
     if not found_scene_id.isdigit():
-        print_exit("The ID is not a digit")
+        debug("The ID is not a digit")
+        sys.exit(1)
     return found_scene_id, token
 
 
@@ -76,15 +81,16 @@ def check_config(url, date_today):
             difference = date_today - past
             if difference.days == 0:
                 # date is within 24 hours so using old instance
-                match = re.search(r'/(\d+)/*', url)
+                match = re.search(r"/(\d+)/*", url)
                 if match is None:
-                    print_exit('The ID can\'t be determined (RegEx). Maybe wrong url?')
+                    debug('The ID can\'t be determined (RegEx). Maybe wrong url?')
+                    sys.exit(1)
                 found_scene_id = match.group(1)
                 token = file_instance
-                #print("Using token from {}".format(SET_FILE_URL), file=sys.stderr)
+                #debug("Using token from {}".format(SET_FILE_URL))
             else:
-                print("Token from the past, getting new one".format(
-                    SET_FILE_URL), file=sys.stderr)
+                debug("Token from the past, getting new one".format(
+                    SET_FILE_URL))
         except NoSectionError:
             pass
     return token, found_scene_id
@@ -116,7 +122,7 @@ def search_scene(title):
     # Remove Date
     title_filter = re.sub(
         r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}', '', title_filter)
-    print("Your title:{}".format(title_filter), file=sys.stderr)
+    debug("Your title:{}".format(title_filter))
     if os.path.isfile(SET_FILE_URL):
         config = ConfigParser()
         config.read(SET_FILE_URL)
@@ -125,8 +131,8 @@ def search_scene(title):
             if section == "DEFAULT":
                 continue
             url = config.get(section, 'url')
-            print("============\nSearching on: {}".format(
-                urlparse(url).netloc), file=sys.stderr)
+            debug("============\nSearching on: {}".format(
+                urlparse(url).netloc))
             _, headers = scraping_url(url)
             # Filter the filename to remove possible mistake
 
@@ -149,29 +155,31 @@ def search_scene(title):
                         r'/\d+/*.+', '/' + str(result.get("id")) + "/", url)
                 save_json(result, making_url)
                 ratio = round(difflib.SequenceMatcher(
-                    None, title_filter, result.get('title')).ratio(),3)
-                
-                print("Title:{} |Ratio:{}".format(
-                    result.get('title'), ratio), file=sys.stderr)
+                    None, title_filter, result.get('title')).ratio(), 3)
+
+                debug("Title:{} |Ratio:{}".format(
+                    result.get('title'), ratio))
                 if ratio > SET_RATIO:
                     return result, making_url, headers
-        print_exit("Didn't find a match")
+        debug("Didn't find a match")
+        sys.exit(1)
     else:
-        print_exit("Can't search the scene ({} is missing)".format(
+        debug("Can't search the scene ({} is missing)".format(
             SET_FILE_URL))
+        sys.exit(1)
 
 
 def send_request(url, headers):
     try:
         r = requests.get(url, headers=headers, timeout=(3, 5))
     except requests.exceptions.RequestException:
-        print("An error has occurred", file=sys.stderr)
-        print("Request status: {}".format(r.status_code), file=sys.stderr)
+        debug("An error has occurred")
+        debug("Request status: {}".format(r.status_code))
         try:
-            print("Message: {}".format(r.json()[0].get('message')), file=sys.stderr)
+            debug("Message: {}".format(r.json()[0].get('message')))
         except:
             pass
-        print("Check your MindGeekAPI.log for more details", file=sys.stderr)
+        debug("Check your MindGeekAPI.log for more details")
         with open("MindGeekAPI.log", 'w', encoding='utf-8') as f:
             f.write("Headers used: {}\n".format(headers))
             f.write("API URL: {}\n".format(url))
@@ -180,7 +188,8 @@ def send_request(url, headers):
     try:
         api_json = r.json().get('result')
     except:
-        print_exit("Error getting the JSON from request")
+        debug("Error getting the JSON from request")
+        sys.exit(1)
     return api_json
 
 # Scrape JSON for Stash
@@ -200,9 +209,9 @@ def scraping_json(api_json, url=""):
         scrape['studio'] = {}
         scrape['studio']['name'] = api_json['collections'][0].get('name')
     except:
-        print("No studio", file=sys.stderr)
+        debug("No studio")
     if 'female_only' in sys.argv:
-        perf=[]
+        perf = []
         for x in api_json.get('actors'):
             if x.get('gender') == "female":
                 perf.append({"name": x.get('name')})
@@ -218,7 +227,7 @@ def scraping_json(api_json, url=""):
                 break
     else:
         if type(api_json['images']['poster']) is dict:
-            for _,img_value in api_json['images']['poster'].items():
+            for _, img_value in api_json['images']['poster'].items():
                 if '/poster/' in img_value['xx'].get('url'):
                     scrape['image'] = img_value['xx'].get('url')
                     break
@@ -230,14 +239,14 @@ def scraping_json(api_json, url=""):
 def save_json(api_json, url):
     if "logJSON" in sys.argv:
         try:
-            os.makedirs('MindGeekAPI_JSON')
+            os.makedirs(DIR_JSON)
         except FileExistsError:
             pass  # Dir already exist
         api_json['url'] = url
-        filename = os.path.join(
-            "MindGeekAPI_JSON", str(api_json['id'])+".json")
+        filename = os.path.join(DIR_JSON, str(api_json['id'])+".json")
         with open(filename, 'w', encoding='utf-8') as f:
             json.dump(api_json, f, ensure_ascii=False, indent=4)
+
 
 def checking_local(url):
     check_url = re.sub('.+/', '', url)
@@ -245,15 +254,14 @@ def checking_local(url):
         found_scene_id = check_url
     else:
         found_scene_id = re.search(r"/(\d+)/*", url).group(1)
-    filename = os.path.join("MindGeekAPI_JSON", found_scene_id+".json")
+    filename = os.path.join(DIR_JSON, found_scene_id+".json")
     if (os.path.isfile(filename) == True):
-        print("Using local JSON...", file=sys.stderr)
+        debug("Using local JSON...")
         with open(filename, encoding="utf-8") as json_file:
             api_json = json.load(json_file)
         return api_json
     else:
         return None
-    
 
 
 fragment = json.loads(sys.stdin.read())
@@ -264,18 +272,20 @@ if not fragment["url"]:
         scene_api_json, scene_url, _ = search_scene(fragment["title"])
         scraped_json = scraping_json(scene_api_json, scene_url)
     else:
-        print_exit("There is no URL or Title.")
+        debug("There is no URL or Title.")
+        sys.exit(1)
 else:
     # URL scraping
     scene_url = fragment["url"]
     # Check if the URL has a old format
     if 'brazzers.com/scenes/view/id/' in scene_url:
-        print("Probably a old url, need to redirect", file=sys.stderr)
+        debug("Probably a old url, need to redirect")
         try:
-            r = requests.get(scene_url, headers={'User-Agent': USER_AGENT}, timeout=(3, 5))
+            r = requests.get(scene_url, headers={
+                             'User-Agent': USER_AGENT}, timeout=(3, 5))
             scene_url = r.url
         except:
-            print("Redirect fail, could give incorrect result.", file=sys.stderr)
+            debug("Redirect fail, could give incorrect result.")
     # Search local JSON, return none if not found
     use_local = checking_local(scene_url)
     if use_local is None:
@@ -288,10 +298,10 @@ else:
     if scene_api_json.get('parent') is not None:
         if scene_api_json['parent']['type'] == "scene":
             scene_api_json = scene_api_json.get('parent')
-    scraped_json = scraping_json(scene_api_json,scene_url)
+    scraped_json = scraping_json(scene_api_json, scene_url)
     if use_local is None:
         save_json(scene_api_json, scene_url)
 
 print(json.dumps(scraped_json))
 
-# Last Updated February 09, 2021
+# Last Updated February 23, 2021
