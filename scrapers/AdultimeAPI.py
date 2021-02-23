@@ -19,7 +19,6 @@ HEADERS = {
 }
 
 # Set Variable
-SET_RATIO = 0.8
 DB_PATH = r"C:\Users\Winter\.stash\Full.sqlite"
 
 
