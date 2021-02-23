@@ -7,22 +7,22 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //h1[@class='page_title']
-     Date:
+      Date:
         selector: //strong[text()="Published"]/following-sibling::text()
         postProcess:
           - replace:
-            - regex: (\d+)[dhnrst]+
-              with: $1
+              - regex: (\d+)[dhnrst]+
+                with: $1
           - parseDate: 2 January 2006
-     Performers:
+      Performers:
         Name: //a[@class="sub_sub_model"]
-     Details: //div[@class='con_left']
-     Tags:
+      Details: //div[@class='con_left']/p
+      Tags:
         Name: //a[@class="sub_sub_tag"]
-     Image: //div[@id="videoplayer"]/video/@poster
-     Studio:
+      Image: //div[@id="videoplayer"]/video/@poster
+      Studio:
         Name:
           fixed: PeeonHer
-# Last Updated February 22, 2021
+# Last Updated February 23, 2021
