@@ -2,11 +2,15 @@ import datetime
 import difflib
 import json
 import os
+import pathlib
 import re
 import sqlite3
 import sys
 
 import requests
+
+USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
+DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Adultime")
 
 HEADERS = {
     "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
@@ -95,7 +99,7 @@ def match_result(json_scene, range_duration=10, single=False, debug_log=True):
 
 def check_local(q):
     if q.isdigit():
-        filename = os.path.join("Adultime", q+".json")
+        filename = os.path.join(DIR_JSON, q+".json")
         if (os.path.isfile(filename) == True):
             print("Using local JSON...", file=sys.stderr)
             with open(filename, encoding="utf-8") as json_file:
@@ -105,7 +109,7 @@ def check_local(q):
                 return str(api_json['clip_id'])
         else:
             return None
-    index = os.path.join("Adultime", "index.txt")
+    index = os.path.join(DIR_JSON, "index.txt")
     if (os.path.isfile(index) == True):
         with open(index) as f:
             remember_id=""
@@ -325,15 +329,14 @@ def scraping_json(api_json, url):
 def save_json(api_json, url):
     if "logJSON" in sys.argv:
         try:
-            os.makedirs('Adultime')
+            os.makedirs(DIR_JSON)
         except FileExistsError:
             pass  # Dir already exist
         if url:
             api_json['url'] = url
-        filename = os.path.join(
-            "Adultime", str(api_json['clip_id'])+".json")
+        filename = os.path.join(DIR_JSON, str(api_json['clip_id'])+".json")
         if (os.path.isfile(filename) == False):
-            filename_index = os.path.join("Adultime", "index.txt")
+            filename_index = os.path.join(DIR_JSON, "index.txt")
             index_value = create_index(api_json)
             print(index_value, file=open(filename_index, "a"))
         with open(filename, 'w', encoding='utf-8') as f:
@@ -426,7 +429,7 @@ if scene_title is not None and result is None:
     result = check_local(scene_title)
 
 if result is not None:
-    with open(os.path.join("Adultime", result+".json"), encoding="utf-8") as json_file:
+    with open(os.path.join(DIR_JSON, result+".json"), encoding="utf-8") as json_file:
         api_json = json.load(json_file)
         use_local = True
 
