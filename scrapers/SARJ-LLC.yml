@@ -1,91 +1,92 @@
-name: "SARJ LLC"
-sceneByURL:
-  - action: scrapeXPath
+name: SARJ LLC
+sceneByURL: &urls
+  - action: scrapeJson
     url:
-      - metartnetwork.com
-      - metart.com
-      - sexart.com
-      - thelifeerotic.com
-      - errotica-archives.com
       - alsscan.com
-      - vivthomas.com
+      - errotica-archives.com
+      - eternaldesire.com
+      - lovehairy.com
+      - metartnetwork.com
       - metartx.com
       - rylskyart.com
-      - eternaldesire.com
+      - sexart.com
       - stunning18.com
-      - lovehairy.com
+      - thelifeerotic.com
+      - vivthomas.com
     scraper: sceneScraper
-galleryByURL:
-  - action: scrapeXPath
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '^(?:.+\.)?([^.]+)\.com/.+movie/(\d+)/(\w+)/?$'
+          with: https://www.$1.com/api/movie?name=$3&date=$2
+sceneByFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  scraper: sceneScraper
+  queryURLReplace:
     url:
-      - metartnetwork.com
-      - metart.com
-      - sexart.com
-      - thelifeerotic.com
-      - errotica-archives.com
-      - alsscan.com
-      - vivthomas.com
-      - metartx.com
-      - rylskyart.com
-      - eternaldesire.com
-      - stunning18.com
-      - lovehairy.com
-    scraper: galleryScraper
+      - regex: '^(?:.+\.)?([^.]+)\.com/.+movie/(\d+)/(\w+)/?$'
+        with: https://www.$1.com/api/movie?name=$3&date=$2
 
-xPathScrapers:
+galleryByURL:
+  - action: scrapeJson
+    url: *urls
+    scraper: galleryScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '^(?:.+\.)?([^.]+)\.com/.+gallery/(\d+)/(\w+)/?$'
+          with: https://www.$1.com/api/gallery?name=$3&date=$2&page=1&mediaFirst=42
+
+jsonScrapers:
   sceneScraper:
-    common:
-      $script: //script[contains(text(),'INITIAL_STATE')]/text()
-      $data: //div[@class='movie-data']
     scene:
-      Title: //div[@class='info-container']/h3/a/text()
-      Details:
-        selector: $script
+      Title: name
+      Details: description
+      Date: &date
+        selector: publishedAt
         postProcess:
           - replace:
-            - regex: .+(?:]},"description":")(.+)(?:","globalContent).+
-              with: $1
-            - regex: \\"
-              with: '"'
-              # In case of blank descriptions
-            - regex: .+INITIAL_STATE.+
-              with:
-      Date:
-        selector: $data//li[span[contains(.,'Released')]]/span[@class='attr-value']/text()
-        postProcess:
-          - parseDate: Jan 02, 2006
-      Performers:
-        Name: $data//a[@href[contains(.,'/model/')]]/text()
-      Tags:
-        Name: //div[@class='tag-list']//a/text()
+              - regex: (\d{4}-\d{2}-\d{2})T.+
+                with: $1
+          - parseDate: 2006-01-02
       Image:
-        selector: //div[@class='img-container']/img/@src
-        # if you prefer the portrait covers over the landscape ones, comment out the postProcess section
+        selector: media|@join
         postProcess:
           - replace:
-            - regex: (cover|clean)
-              with: "wide"
+              - regex: '.+siteUUID":"([^"]+)".+galleryUUID":"([^"]+)".+'
+                with: https://cdn.metartnetwork.com/$1/media/$2/wide_$2.jpg
+      Performers: &performers
+        Name: models.#.name
       Studio:
-        Name: //meta[@property='og:site_name']/@content
+        Name:
+          selector: media.siteUUID
+          postProcess: &studioPP
+            - map:
+                2163551D11D0439686AD9D291C8DFD71: ALS Scan
+                15A9FFA04E3511DF98790800200C9A66: Errotica Archives
+                706DF46B88884F7BB226097952427754: Eternal Desire
+                5A68E1D7B6E69E7401226779D559A10A: Love Hairy
+                E6B595104E3411DF98790800200C9A66: Met Art
+                E7DFB70DF31C45B3B5E0BF10D733D349: Met Art X
+                D99236C04DD011E1B86C0800200C9A66: Rylsky Art
+                94DB3D0036FC11E1B86C0800200C9A66: Sex Art
+                18A2E47EAEFD45F29033A5FCAF1F5B91: Stunning 18
+                FDAFDF209DC311E0AA820800200C9A66: The Life Erotic
+                4F23028982B542FA9C6DAAA747E9B5B3: Viv Thomas
+      Tags:
+        Name: tags
+
   galleryScraper:
     gallery:
-      Title: //div[@class='info-container']/h3/a/text()
-      Details: 
-        selector: //div[@class='description-text']/p/text()
-        concat: "\n\n"
-      Date:
-        selector: //div[@class='info-container']/span[@class='timestamp']/text()
-        postProcess:
-          - parseDate: Jan 02, 2006
+      Title: name
+      Details: description
+      Date: *date
+      Performers: *performers
       Studio:
-        Name: //meta[@property='og:site_name']/@content
-      Tags:
-        Name: //div[@class='tag-list']//a/text()
-      Performers:
         Name:
-          selector: //a[@type='model']/text()
-          postProcess:
-            - replace:
-              - regex: ^Cast:\s+
-                with: ""
-# Last Updated November 24, 2020
+          selector: siteUUID
+          postProcess: *studioPP
+      Tags:
+        Name: tags
+# Last Updated February 24, 2021
