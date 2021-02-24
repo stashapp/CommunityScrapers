@@ -188,7 +188,7 @@
                 "items": {
                   "type": "object",
                   "additionalProperties": false,
-                  "required": ["Domain", "Path", "Name", "Value"],
+                  "required": ["Domain", "Path", "Name"],
                   "properties": {
                     "Name": {
                       "title": "Cookie name",
@@ -198,6 +198,11 @@
                       "title": "Cookie value",
                       "type": "string"
                     },
+                    "ValueRandom": {
+                      "title": "Generate a random string with the length of N (> 0) characters",
+                      "type": "integer",
+                      "minimum": 1
+                    },
                     "Domain": {
                       "title": "Cookie domain",
                       "type": "string"
@@ -206,7 +211,11 @@
                       "title": "Cookie path",
                       "type": "string"
                     }
-                  }
+                  },
+                  "oneOf": [
+                    { "required": ["ValueRandom"] },
+                    { "required": ["Value"] }
+                  ]
                 }
               }
             }
