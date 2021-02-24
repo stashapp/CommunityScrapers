@@ -11,7 +11,7 @@ xPathScrapers:
         selector: //h1
       Performers:
         Name: //ul[@class="scene-models-list"]//a
-      Details: //section[1]/div[2]/div[1]/p[1]
+      Details: //section/h1[1]
       Tags:
         Name: //ul[@class="scene-tags"]//li
       Image: //meta[@itemprop="thumbnailUrl"]//@content
