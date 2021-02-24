@@ -1,4 +1,4 @@
-name: Karat Media
+name: karatmedia
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -26,19 +26,17 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $performer: //p[2]/a[1]/span[1]
+      $performer: //p/a[1]/span[1]
     scene:
       Title:
-        selector: //*[@id=''b-main-wrapper'']/div/div/div/h1[1]
+        selector: //h1[@class='b-box-title']
       Date:
-        selector: //*[@id=''b-main-wrapper'']/div/div/div/div/div/div[2]
+        selector: //div[@class='b-likes-group-info']/div[2]
         postProcess:
           - parseDate: 02 January 2006
-      Details: //div[4]/div[2]/p[1]
+      Details: //p[@class="b-video-info__text"]/text()
       Tags:
-        Name: //p[4]//a
-      Performers:
-        Name: $performer/text()
+        Name: //p[@class="b-video-info__text"]//a
       Studio:
         Name:
           selector: //span[@class="b-header-logo"]/text()
