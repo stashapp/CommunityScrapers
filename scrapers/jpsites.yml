@@ -1,0 +1,42 @@
+name: jpsites
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - idols69.com/set/
+      - analnippon.com/set/
+      - ocreampies.com/set/
+      - 18tokyo.com/set/
+      - jpshavers.com/set/
+      - japaneseslurp.com/set/
+      - jpteacher.com/set/
+      - jschoolgirls.com/set/
+      - jcosplay.com/set/
+      - officesexjp.com/set/
+      - jpnurse.com/set/
+      - myracequeens.com/set/
+      - jpmilfs.com/set/
+      - japaneseflashers.com/set/
+      - bukkakenow.com/set/
+      - outdoorjp.com/set/
+      - bigtitstokyo.com/set/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //p[2]/a[1]/span[1]
+    scene:
+      Title:
+        selector: //*[@id=''b-main-wrapper'']/div/div/div/h1[1]
+      Date:
+        selector: //*[@id=''b-main-wrapper'']/div/div/div/div/div/div[2]
+        postProcess:
+          - parseDate: 02 January 2006
+      Details: //div[4]/div[2]/p[1]
+      Tags:
+        Name: //p[4]//a
+      Performers:
+        Name: $performer/text()
+      Studio:
+        Name:
+          selector: //span[@class="b-header-logo"]/text()
+      Image: '//div[@class="b-fake-player"]//@src
