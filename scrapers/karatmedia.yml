@@ -1,24 +1,27 @@
-name: jpsites
+name: Karat Media
 sceneByURL:
   - action: scrapeXPath
     url:
-      - idols69.com/set/
-      - analnippon.com/set/
-      - ocreampies.com/set/
       - 18tokyo.com/set/
-      - jpshavers.com/set/
+      - alljapanesepass.com/set/
+      - analnippon.com/set/
+      - bigtitstokyo.com/set/
+      - bukkakenow.com/set/
+      - idols69.com/set/
+      - japaneseflashers.com/set/
       - japaneseslurp.com/set/
+      - jcosplay.com/set/
+      - jpmilfs.com/set/
+      - jpnurse.com/set/
+      - jpshavers.com/set/
       - jpteacher.com/set/
       - jschoolgirls.com/set/
-      - jcosplay.com/set/
-      - officesexjp.com/set/
-      - jpnurse.com/set/
       - myracequeens.com/set/
-      - jpmilfs.com/set/
-      - japaneseflashers.com/set/
-      - bukkakenow.com/set/
+      - ocreampies.com/set/
+      - officesexjp.com/set/
       - outdoorjp.com/set/
-      - bigtitstokyo.com/set/
+      - povjp.com/set/
+      - tokyobang.com/set/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -39,4 +42,6 @@ xPathScrapers:
       Studio:
         Name:
           selector: //span[@class="b-header-logo"]/text()
-      Image: '//div[@class="b-fake-player"]//@src
+      Image: //div[@class="b-fake-player"]//@src
+      # Last Updated February 24, 2021
+      
