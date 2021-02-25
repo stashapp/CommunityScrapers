@@ -1,7 +1,7 @@
 name: SARJ LLC
-sceneByURL: &urls
+sceneByURL:
   - action: scrapeJson
-    url:
+    url: &urls
       - alsscan.com
       - errotica-archives.com
       - eternaldesire.com
@@ -89,4 +89,4 @@ jsonScrapers:
           postProcess: *studioPP
       Tags:
         Name: tags
-# Last Updated February 24, 2021
+# Last Updated February 25, 2021
