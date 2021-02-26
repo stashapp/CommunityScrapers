@@ -1,0 +1,28 @@
+name: Perfect Gonzo
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - perfectgonzo.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //div[@class="col-sm-3 col-md-3 col-md-offset-1 no-padding-side"]//a
+    scene:
+      Title:
+        selector: //div[@class="col-sm-6 col-md-6 no-padding-left no-padding-right"]/h2
+      Date:
+        selector: //div[@class="col-sm-6 col-md-6 no-padding-left no-padding-right text-right"]/span
+        postProcess:
+          - replace:
+              - regex: 'Added|,'
+                with: ''
+          - parseDate: January 02 2006
+      Details: //div[@class="col-sm-8 col-md-8 no-padding-side"]/p
+      Tags:
+        Name: //div[@class="col-sm-8 col-md-8 no-padding-side tag-container"]//a
+      Studio:
+        Name:
+          fixed: Perfect Gonzo
+      Image: //video[@id="video"]/@poster | //div[@class="container bloc-sm"]//@src
+      # Last Updated February 26, 2021
