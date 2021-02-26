@@ -1,4 +1,4 @@
-name: spizoo
+name: Spizoo
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -22,13 +22,11 @@ xPathScrapers:
       Details: //p[@class="description"]
       Performers:
         Name:
-          selector: //section[@id="sceneInfo"]//a[contains(@href,"/model")]/text()
+          selector: //section[@id="sceneInfo"]//a[contains(@href,"/model")]/@title
           postProcess:
             - replace:
-              - regex: \s\(.+
-                with:
-              - regex: \W+$
-                with:
+                - regex: \s\(.+
+                  with:
       Tags:
         Name: //section[@id="sceneInfo"]//a[contains(@href,"/categorie")]/text()
       Image: //video[@id="trailervideo"]/@poster
