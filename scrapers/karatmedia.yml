@@ -25,8 +25,6 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $performer: //p/a[1]/span[1]
     scene:
       Title:
         selector: //h1[@class='b-box-title']
@@ -41,5 +39,7 @@ xPathScrapers:
         Name:
           selector: //span[@class="b-header-logo"]/text()
       Image: //div[@class="b-fake-player"]//@src
-      # Last Updated February 24, 2021
+      Performers:
+       Name: //p/a[1]/span[1]
+      # Last Updated February 27, 2021
       
