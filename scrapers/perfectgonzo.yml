@@ -6,8 +6,6 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $performer: //div[@class="col-sm-3 col-md-3 col-md-offset-1 no-padding-side"]//a
     scene:
       Title:
         selector: //div[@class="col-sm-6 col-md-6 no-padding-left no-padding-right"]/h2
@@ -25,4 +23,6 @@ xPathScrapers:
         Name:
           fixed: Perfect Gonzo
       Image: //video[@id="video"]/@poster | //div[@class="container bloc-sm"]//@src
-      # Last Updated February 26, 2021
+      Performers:
+       Name: //div[@class="col-sm-3 col-md-3 col-md-offset-1 no-padding-side"]//a
+        # Last Updated February 26, 2021
