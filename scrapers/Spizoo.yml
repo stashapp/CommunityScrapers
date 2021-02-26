@@ -2,14 +2,14 @@ name: spizoo
 sceneByURL:
   - action: scrapeXPath
     url:
-      - spizoo.com/updates/
+      - firstclasspov.com/updates/
+      - intimatelesbians.com/updates/
       - jessicajaymesxxx.com/updates/
       - mrluckypov.com/updates/
-      - firstclasspov.com/updates/
-      - pornstartease.com/updates/
-      - intimatelesbians.com/updates/
-      - thestripperexperience.com/updates/
       - porngoespro.com/updates/
+      - pornstartease.com/updates/
+      - spizoo.com/updates/
+      - thestripperexperience.com/updates/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -25,8 +25,10 @@ xPathScrapers:
           selector: //section[@id="sceneInfo"]//a[contains(@href,"/model")]/text()
           postProcess:
             - replace:
-                - regex: "\\.$"
-                  with:
+              - regex: \s\(.+
+                with:
+              - regex: \W+$
+                with:
       Tags:
         Name: //section[@id="sceneInfo"]//a[contains(@href,"/categorie")]/text()
       Image: //video[@id="trailervideo"]/@poster
