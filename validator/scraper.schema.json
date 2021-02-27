@@ -262,6 +262,23 @@
               "title": "Script executable/argument",
               "type": "string"
             }
+          },
+          "queryURL": {
+            "title": "Query URL",
+            "type": "string"
+          },
+          "queryURLReplace": {
+            "title": "Query URL Replace",
+            "type": "object",
+            "additionalProperties": false,
+            "propertyNames": {
+              "enum": ["url"]
+            },
+            "patternProperties": {
+              "^\\w+$": {
+                "$ref": "#/definitions/replaceKey"
+              }
+            }
           }
         },
         "allOf": [
@@ -318,7 +335,7 @@
           "type": "object",
           "additionalProperties": false,
           "propertyNames": {
-            "enum": ["checksum", "filename", "oshash", "title"]
+            "enum": ["checksum", "filename", "oshash", "title", "url"]
           },
           "patternProperties": {
             "^\\w+$": {
