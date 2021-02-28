@@ -42,19 +42,21 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $customcontent: //div[@class='customcontent']
     scene:
       Performers:
         Name:
-          selector: //div[@class='customcontent']/h3/text()
+          selector: $customcontent/h3/text()
           split: ","
       Title:
-        selector: //div[@class='customcontent']/h1/text()
+        selector: $customcontent/h1/text()
       Details:
-        selector: //div[@class='customcontent']/div[1]/text()|//div[@class='customcontent']/h2/text()
+        selector: $customcontent/div|$customcontent/h2/text()
       Tags:
         Name:
-          selector: //div[@class='customcontent']/h4/text()
-          split: ", "
+          selector: $customcontent/h4/text()
+          split: ","
       Studio:
         Name:
           selector: //p[@class="copyright"]
@@ -76,5 +78,4 @@ xPathScrapers:
               - regex: (\d+)(st|nd|rd|th)
                 with: "$1"
           - parseDate: January 2 2006
-
-# Last Updated February 9, 2021
+# Last Updated February 28, 2021
