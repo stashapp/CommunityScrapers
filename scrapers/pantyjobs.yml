@@ -15,9 +15,7 @@ xPathScrapers:
         selector: >-
           //div[@class="post-entry"]/p[not (starts-with(.,"Members get full
           access"))]
-        concat: |+
-
-
+        concat: "\n\n"
       Image: '//meta[@property="og:image"]/@content'
       Studio:
         Name:
