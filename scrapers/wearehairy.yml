@@ -13,7 +13,7 @@ xPathScrapers:
         selector: //span[@class="added"]//@datetime
         postProcess:
           - parseDate: 2006-01-02
-      Details: //div[@class="desc"]//p
+      Details: //div[@class="line"][contains(h3,"Description")]/p
       Tags:
         Name: //div[@class="tagline"]//a
       Image: //video[@id="trailer"]/@poster
