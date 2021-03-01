@@ -14,6 +14,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^(.*)[—]\s+
+                with:
      Date:
         selector: $pullLeft//span/text()
         postProcess:
