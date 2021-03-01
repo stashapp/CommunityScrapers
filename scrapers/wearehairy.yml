@@ -18,7 +18,7 @@ xPathScrapers:
         Name: //div[@class="tagline"]//a
       Image: //video[@id="trailer"]/@poster
       Performers:
-        Name: //div/div[@class="title" and 1]/a[1]
+        Name: //div[@class="meet"]//a
       Studio:
           Name:
             fixed: WeAreHairy
