@@ -8,21 +8,21 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //div[@class="col-sm-6 col-md-6 no-padding-left no-padding-right"]/h2
+        selector: //div[@class="row"]//h2
       Date:
-        selector: //div[@class="col-sm-6 col-md-6 no-padding-left no-padding-right text-right"]/span
+        selector: //div[@class="row"]//span
         postProcess:
           - replace:
-              - regex: 'Added|,'
-                with: ''
-          - parseDate: January 02 2006
-      Details: //div[@class="col-sm-8 col-md-8 no-padding-side"]/p
+              - regex: "Added "
+                with: ""
+          - parseDate: January 2, 2006
+      Details: //p[@class="mg-md"]
       Tags:
-        Name: //div[@class="col-sm-8 col-md-8 no-padding-side tag-container"]//a
+        Name: //div[contains(h4,"Tags:")]//a
       Studio:
         Name:
           fixed: Perfect Gonzo
       Image: //video[@id="video"]/@poster | //div[@class="container bloc-sm"]//@src
       Performers:
-       Name: //div[@class="col-sm-3 col-md-3 col-md-offset-1 no-padding-side"]//a
-        # Last Updated February 26, 2021
+        Name: //div[contains(h4,"Featured model")]//a
+# Last Updated February 26, 2021
