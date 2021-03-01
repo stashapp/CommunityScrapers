@@ -1,4 +1,4 @@
-name: FistFlush
+name: sapphicnetwork
 sceneByURL:
   - action: scrapeXPath
     url:
