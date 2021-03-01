@@ -12,7 +12,7 @@ xPathScrapers:
       Date:
         selector: //span[@class="added"]//@datetime
         postProcess:
-          - parseDate: 2006 Jan 02
+          - parseDate: 2006-01-02
       Details: //div[@class="desc"]//p
       Tags:
         Name: //div[@class="tagline"]//a
