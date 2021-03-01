@@ -1,0 +1,41 @@
+name: FistFlush
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fistflush.com
+      - givemepink.com
+      - sapphicerotica.com
+      - sapphix.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="col-sm-6 col-md-6 no-padding-left no-padding-right"]/h2
+      Date:
+        selector: //div[@class="col-sm-6 col-md-6 no-padding-left no-padding-right text-right"]/span
+        postProcess:
+          - replace:
+              - regex: 'Added|,'
+                with: ''
+          - parseDate: January 2 2006
+      Details: //div[@class="col-sm-8 col-md-8 no-padding-side"]/p
+      Tags:
+        Name: //div[@class='col-sm-8 col-md-8 no-padding-side vidpage']//a
+      Performers:
+       Name: //div[@class='col-sm-3 col-md-3 col-md-offset-1 no-padding-side']//a
+      Studio:
+        Name:
+          selector: //a[text()="Join Now"]/@href
+          postProcess:
+            - replace:
+              - regex: ^.*//(?:in\.)?(.+?)/.+$
+                with: $1
+            - map:
+                Weliketosuck: We Like To Suck
+                Wetandpuffy: Wet And Puffy
+                Wetandpissy: Wet And Pissy
+                Eurobabefacials: Euro Babe Facials
+                Simplyanal: Simply Anal
+      Image: //video[@id="video"]/@poster | //div[@class="col-sm-12"]//@src
+# Last Updated March 01, 2021
