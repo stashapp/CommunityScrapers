@@ -1,19 +1,24 @@
 name: 1Pondo
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - en.1pondo.tv/movies/
     scraper: sceneScraper
+    queryURL: "https://en.1pondo.tv/dyn/phpauto/movie_details/movie_id/{url}.json"
+    queryURLReplace:
+      url:
+        - regex: '.+/movies/(\d{6})_(\d{3}).+'
+          with: "${1}_${2}"
 sceneByFragment:
   action: scrapeJson
   queryURL: "https://en.1pondo.tv/dyn/phpauto/movie_details/movie_id/{filename}.json"
-  scraper: sceneJSON
+  scraper: sceneScraper
   queryURLReplace:
     filename:
       - regex: '.*(\d{6})[_.-](\d{3}).+'
         with: "${1}_${2}"
 jsonScrapers:
-  sceneJSON:
+  sceneScraper:
     scene:
       Title: TitleEn
       Details:
