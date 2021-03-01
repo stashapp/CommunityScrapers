@@ -14,7 +14,7 @@ xPathScrapers:
       Details: //div[@class="content-desc"]/div/p
       Tags:
         Name: //ul[@class="scene-tags"]//li
-      Image: //meta[@itemprop="thumbnailUrl"]//@content
+      Image: //meta[@itemprop="thumbnailUrl"]/@content
       Studio:
         Name:
           fixed: PrivateCastings
