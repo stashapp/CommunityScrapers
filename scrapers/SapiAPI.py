@@ -75,7 +75,6 @@ scene_id = re.search(r"/(\d+)/*", SCENE_URL).group(1)
 if not scene_id:
     debug("Error with the ID ({})\nAre you sure that your URL is correct ?".format(SCENE_URL))
     sys.exit(1)
-use_local = False
 
 timenow = datetime.datetime.now()
 api_key1, api_key2 = check_config(timenow.day)
