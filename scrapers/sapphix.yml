@@ -31,11 +31,5 @@ xPathScrapers:
             - replace:
               - regex: ^.*//(?:in\.)?(.+?)/.+$
                 with: $1
-            - map:
-                Weliketosuck: We Like To Suck
-                Wetandpuffy: Wet And Puffy
-                Wetandpissy: Wet And Pissy
-                Eurobabefacials: Euro Babe Facials
-                Simplyanal: Simply Anal
       Image: //video[@id="video"]/@poster | //div[@class="col-sm-12"]//@src
 # Last Updated March 01, 2021
