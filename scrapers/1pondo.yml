@@ -4,35 +4,40 @@ sceneByURL:
     url:
       - en.1pondo.tv/movies/
     scraper: sceneScraper
-
-xPathScrapers:
-  sceneScraper:
-    common:
-      $movieDetail: //div[@class="movie-detail"]
+sceneByFragment:
+  action: scrapeJson
+  queryURL: "https://en.1pondo.tv/dyn/phpauto/movie_details/movie_id/{filename}.json"
+  scraper: sceneJSON
+  queryURLReplace:
+    filename:
+      - regex: '.*(\d{6})[_.-](\d{3}).+'
+        with: "${1}_${2}"
+jsonScrapers:
+  sceneJSON:
     scene:
-      Title: //div[@class="movie-overview"]/h1
-      Details: //div[@class="movie-detail"]/p
-      Image:
-        selector: //div[@class="vjs-poster"]/@style
+      Title: TitleEn
+      Details:
+        selector: DescEn
         postProcess:
           - replace:
-              - regex: .*\"(/assets/[^"]+)\".*
-                with: https://en.1pondo.tv$1
+              - regex: ^\s+(.+)\s+$
+                with: $1
       Date:
-        selector: //ul/li[span[contains(.,"Release Date:")]]/span[@class="spec-content"]
+        selector: Release
         postProcess:
-          - parseDate: 2006/01/02
-      Tags:
-        Name:
-          selector: //ul/li[span[contains(.,"Tags:")]]/span[@class="spec-content"]//a
+          - parseDate: 2006-01-02
+      Image: ThumbHigh
       Performers:
-        Name:
-          selector: //ul/li[span[contains(.,"Featuring:")]]/span[@class="spec-content"]//a
+        Name: ActressesEn
       Studio:
         Name:
-          fixed: "1Pondo"
-driver:
-  useCDP: true
-  clicks:
-    - xpath: //div[@class="movie-info section divider"]/button
-#Last Updated December 7, 2020
+          fixed: 1Pondo
+      Tags:
+        Name: UCNAMEEn
+      URL:
+        selector: MovieThumb
+        postProcess:
+          - replace:
+              - regex: 'https://www\.1pondo\.tv/moviepages/([^/]+)/.+'
+                with: https://en.1pondo.tv/movies/$1/
+#Last Updated March 2, 2021
