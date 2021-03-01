@@ -25,7 +25,7 @@ def debug(q):
 
 def check_db(DB_PATH, scene_id):
     try:
-        sqliteConnection = sqlite3.connect(DB_PATH)
+        sqliteConnection = sqlite3.connect("file:" + DB_PATH + "?mode=ro",uri=True)
         cursor = sqliteConnection.cursor()
         debug("Database successfully connected to SQLite")
         sqlite_select_Query = "SELECT size,duration,height from scenes WHERE id="+scene_id+";"
@@ -381,9 +381,10 @@ if (os.path.isfile(config_path) == True):
 scene_id = fragment["id"]
 scene_title = fragment["title"]
 scene_url = fragment["url"]
-
-db_size, db_duration, db_height = check_db(DB_PATH, scene_id)
-
+if DB_PATH:
+    db_size, db_duration, db_height = check_db(DB_PATH, scene_id)
+else:
+    debug("Can't find the database")
 search_api_id = None
 search_api_urltitle = None
 
