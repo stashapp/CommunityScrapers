@@ -1,0 +1,25 @@
+name: wearehairy
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wearehairy.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@itemprop="name"]//h1
+      Date:
+        selector: //span[@class="added"]//@datetime
+        postProcess:
+          - parseDate: 2006 Jan 02
+      Details: //div[@class="desc"]//p
+      Tags:
+        Name: //div[@class="tagline"]//a
+      Image: //video[@id="trailer"]/@poster
+      Performers:
+        Name: //div/div[@class="title" and 1]/a[1]
+      Studio:
+          Name:
+            fixed: WeAreHairy
+# Last Updated March 01, 2021
