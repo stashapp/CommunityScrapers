@@ -2,7 +2,7 @@ name: "My Slavegirl"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - 'my-slavegirl.com/en/collections/'
+      - my-slavegirl.com/en/collections/
     scraper: sceneScraper
     
 xPathScrapers:
