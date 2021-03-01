@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: '//div[@class=''col-md-12 aligncenter'']/h1'
+        selector: //div[@class="col-md-12 aligncenter"]/h1
       Performers:
         Name: '//h2[1]'
       Details:
