@@ -1,8 +1,8 @@
 name: "SapiAPI"
 sceneByURL:
   - url:
-      - mylifeinmiami.com/scene/
       - fallinlovia.com/scene/
+      - mylifeinmiami.com/scene/
       - vinaskyxxx.com/scene/
     action: script
     script:
