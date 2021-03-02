@@ -22,7 +22,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Perfect Gonzo
-      Image: //video[@id="video"]/@poster | //div[@class="container bloc-sm"]//@src
+      Image: //video[@id="video"]/@poster | //div[@id="video-hero"]//img/@src
       Performers:
         Name: //div[contains(h4,"Featured model")]//a
-# Last Updated February 26, 2021
+# Last Updated March 2, 2021
