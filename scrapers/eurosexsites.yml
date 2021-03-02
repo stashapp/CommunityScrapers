@@ -1,0 +1,35 @@
+name: eurosexsites
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - chickiporn.com/videos/
+      - cashforsextape.com/videos/
+      - hardfucktales.com/videos/
+      - mypickupgirls.com/videos/
+      - porntraveling.com/videos/
+      - studentsexparties.com/videos/
+      
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //meta[@property="og:title"]/@content
+     Performers:
+      Name: //div[@class='data-row data-actress']//@alt
+     Details: //meta[@property="og:description"]/@content
+     Tags:
+      Name: //div[@class='video-page-tab-info']/div[@class='data-row' and 2]/a[@class='link-blue' and 1]
+     Image: //meta[@property="og:image"]/@content
+     Studio:
+        Name:
+          selector: //div[@class="header-logo-container"]//@href
+          postProcess:
+            - map:
+                https://chickiporn.com/: Chicki Porn
+                https://cashforsextape.com/: Cash For Sex
+                https://hardfucktales.com/: Hard Fuck Tales
+                https://mypickupgirls.com/: My Pickup Girls
+                https://porntraveling.com/: Porn Traveling
+                https://studentsexparties.com/: Student Sex Parties
+# Last Updated March 03, 2021
