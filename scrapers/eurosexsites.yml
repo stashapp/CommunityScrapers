@@ -1,4 +1,4 @@
-name: eurosexsites
+name: Serious Partners Co
 sceneByURL:
   - action: scrapeXPath
     url:
