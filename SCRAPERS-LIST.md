@@ -762,6 +762,7 @@ vrbtrans.com|VRBangers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrconk.com|VRConk.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrcosplayx.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 vrhush.com|VRHush.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+wankitnow.com|wankitnow.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 wankz.com|wankz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wankzvr.com|WankzVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 watchingmydaughtergoblack.com|DogFart.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
