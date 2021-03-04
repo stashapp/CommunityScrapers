@@ -9,6 +9,14 @@ xPathScrapers:
     scene:
      Title:
         selector: //h1[@class='page_title']/text()
+     Date:
+       selector: //span[@class="day"]/span/text()|//span[@class="day"]/text()
+       concat: "/"
+       postProcess:
+         - replace:
+             - regex: ^(\w+)/(\d+)$ # for dates with current year
+               with: $1/21/$2 # the year part needs to be updated every year
+         - parseDate: Jan/06/02
      Performers:
       Name: //span[@class="meta_modelcategory meta_category"]//a
      Details: //meta[@property="og:description"]/@content
@@ -18,4 +26,4 @@ xPathScrapers:
      Studio:
         Name:
           fixed: Wank It Now
-# Last Updated March 03, 2021
+# Last Updated March 04, 2021
