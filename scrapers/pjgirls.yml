@@ -2,7 +2,7 @@ name: pjgirls
 sceneByURL:
   - action: scrapeXPath
     url:
-      - pjgirls.com
+      - pjgirls.com/en/video
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
