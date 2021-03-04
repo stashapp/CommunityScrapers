@@ -23,7 +23,7 @@ xPathScrapers:
         Name:
           selector: //div[@class="pdSRC"]//a[starts-with(@href,"/dvds/")]
      Tags:
-      Name: //a[@class='cat' and 1]
+      Name: //a[@class='cat']
      Image:
         selector: //a[@class="noplayer"]//@src
      Studio:
