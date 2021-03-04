@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
      Title:
-        selector: //div[@class="title"]/h1
+        selector: //div[@class="pdSRC"]//a[starts-with(@href,"/sites/")]
      Date:
         selector: //div[@class="views"]/span
         postProcess:
@@ -19,6 +19,9 @@ xPathScrapers:
      Performers:
       Name: //a[@class="model"]//a
      Details: //div[@class="description"]/p
+     Movies:
+        Name:
+          selector: //div[@class="pdSRC"]//a[starts-with(@href,"/dvds/")]
      Tags:
       Name: //a[@class='cat' and 1]
      Image:
