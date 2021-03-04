@@ -14,7 +14,7 @@ xPathScrapers:
               - regex: "VIDEO:"
                 with: ""
      Date:
-        selector: //div[@class='info']/h3[1]
+        selector: //div[@class='info']/h3[not(starts-with(.,"LENGTH"))]
         postProcess:
           - replace:
               - regex: ","
