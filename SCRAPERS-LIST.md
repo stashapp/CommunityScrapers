@@ -649,7 +649,6 @@ sororitysluts.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 spankbang.com|SpankBang.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
 spankmonster.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 spearteenpussy.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-spearteenpussy.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermantino.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermswallowers.com|JulesJordan.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermswap.com|AssTraffic.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
