@@ -21,8 +21,8 @@ def sendRequest(url, headers):
     except requests.exceptions.RequestException:
         debug("An error has occurred with Requests")
         debug(f"Request status: `{r.status_code}`")
-        debug(f"Check your SapiAPI.log for more details")
-        with open("SapiAPI.log", 'w', encoding='utf-8') as f:
+        debug(f"Check your ModelCentroAPI.log for more details")
+        with open("ModelCentroAPI.log", 'w', encoding='utf-8') as f:
             f.write("Request:\n{}".format(r.text))
         sys.exit(1)
     return r
@@ -62,14 +62,13 @@ def write_config(keys1, keys2):
         config.write(configfile)
     return
 
-
 FRAGMENT = json.loads(sys.stdin.read())
 USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
 SCENE_URL = FRAGMENT["url"]
 DOMAIN_URL = urlparse(SCENE_URL).netloc
 DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON", DOMAIN_URL)
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
-SET_FILE_URL = "SapiAPI.ini"
+SET_FILE_URL = "ModelCentroAPI.ini"
 
 scene_id = re.search(r"/(\d+)/*", SCENE_URL).group(1)
 if not scene_id:
@@ -122,8 +121,7 @@ scrape['studio'] = {}
 scrape['studio']['name'] = re.sub('www\.|\.com', '', DOMAIN_URL)
 scrape['tags'] = [{"name": scene_api_json['tags']['collection'][x].get('alias')} for x in scene_api_json['tags']['collection']]
 scrape['image'] = scene_api_json['_resources']['primary'][0]['url']
-# Print the result
-for key_name, key_value in scrape.items():
+for key_name, key_value in json.items():
     debug('{}:{}'.format(key_name, key_value))
 
 print(json.dumps(scrape))
