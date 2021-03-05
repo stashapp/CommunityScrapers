@@ -1,4 +1,4 @@
-name: "SapiAPI"
+name: "ModelCentroAPI"
 sceneByURL:
   - url:
       - fallinlovia.com/scene/
@@ -7,5 +7,5 @@ sceneByURL:
     action: script
     script:
       - python
-      - SapiAPI.py
+      - ModelCentroAPI.py
 # Last Updated March 01, 2021
