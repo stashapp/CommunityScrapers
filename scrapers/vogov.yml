@@ -9,9 +9,9 @@ xPathScrapers:
     scene:
       Title: //meta[@property="og:title"]/@content
       Date:
-         selector: //ul[@class='list-unstyled info-video-details']/li[1]/span[1]
-         postProcess:
-           - parseDate: Jan 02, 2006
+        selector: //div[@class="video-page-description"]//li[contains(.,"Release Date")]/span
+        postProcess:
+          - parseDate: Jan 2, 2006
       Details: //meta[@property="og:description"]/@content
       Performers:
         Name: //div[@class="info-video-models"]//a
