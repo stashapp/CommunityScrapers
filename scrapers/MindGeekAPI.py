@@ -103,7 +103,7 @@ def write_config(url, token, date_today):
         config.get(my_domain, 'url')
     except NoSectionError:
         config.add_section(my_domain)
-    config.set(my_domain, 'url', 'https://' + my_domain)
+    config.set(my_domain, 'url', url)
     config.set(my_domain, 'instance', token)
     config.set(my_domain, 'date', date_today)
     with open(SET_FILE_URL, 'w') as configfile:
