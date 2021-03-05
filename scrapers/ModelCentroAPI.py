@@ -121,7 +121,7 @@ scrape['studio'] = {}
 scrape['studio']['name'] = re.sub('www\.|\.com', '', DOMAIN_URL)
 scrape['tags'] = [{"name": scene_api_json['tags']['collection'][x].get('alias')} for x in scene_api_json['tags']['collection']]
 scrape['image'] = scene_api_json['_resources']['primary'][0]['url']
-for key_name, key_value in json.items():
+for key_name, key_value in scrape.items():
     debug('{}:{}'.format(key_name, key_value))
 
 print(json.dumps(scrape))
