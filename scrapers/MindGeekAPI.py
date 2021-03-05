@@ -226,12 +226,15 @@ def scraping_json(api_json, url=""):
     backup_image=None
     if type(api_json['images']['poster']) is list:
         for image_type in api_json['images']['poster']:
-            if '/poster_fallback/' in image_type['xx'].get('url') and backup_image is None:
-                backup_image = image_type['xx'].get('url')
-                continue
-            if '/poster/' in image_type['xx'].get('url'):
-                scrape['image'] = image_type['xx'].get('url')
-                break
+            try:
+                if '/poster_fallback/' in image_type['xx'].get('url') and backup_image is None:
+                    backup_image = image_type['xx'].get('url')
+                    continue
+                if '/poster/' in image_type['xx'].get('url'):
+                    scrape['image'] = image_type['xx'].get('url')
+                    break
+            except TypeError:
+                pass
     else:
         if type(api_json['images']['poster']) is dict:
             for _, img_value in api_json['images']['poster'].items():
