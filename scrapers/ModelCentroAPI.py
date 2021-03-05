@@ -20,8 +20,8 @@ def sendRequest(url, headers):
         r = requests.get(url, headers=headers, timeout=(3, 5))
     except requests.exceptions.RequestException:
         debug("An error has occurred with Requests")
-        debug(f"Request status: `{r.status_code}`")
-        debug(f"Check your ModelCentroAPI.log for more details")
+        debug("Request status: {}".format(r.status_code))
+        debug("Check your ModelCentroAPI.log for more details")
         with open("ModelCentroAPI.log", 'w', encoding='utf-8') as f:
             f.write("Request:\n{}".format(r.text))
         sys.exit(1)
@@ -97,20 +97,34 @@ if api_key1 is None:
         debug("There is a problem with getting API identification")
         sys.exit(1)
 
-debug("Asking the API...")
+debug("Asking the Scene API...")
 api_url = "https://{}/sapi/{}/{}/content.load?_method=content.load&tz=1&filter[id][fields][0]=id&filter[id][values][0]={}&transitParameters[v1]=ykYa8ALmUD&transitParameters[preset]=scene".format(
     DOMAIN_URL, api_key1, api_key2, scene_id)
 headers = {
     'User-Agent': USER_AGENT,
     'Referer': SCENE_URL
 }
-r = ""
 r = sendRequest(api_url, headers)
 try:
     scene_api_json = r.json()['response']['collection'][0]
 except:
     debug("Error with Request API")
     sys.exit(1)
+
+debug("Trying the Performer API...")
+perf_list = []
+api_url = "https://{}/sapi/{}/{}/model.getModelContent?_method=model.getModelContent&tz=1&fields[0]=modelId.stageName&transitParameters[contentId]={}".format(
+    DOMAIN_URL, api_key1, api_key2, scene_id)
+r = sendRequest(api_url, headers)
+try:
+    performer_api_json = r.json()['response']['collection']
+    for perf_id in performer_api_json:
+        for perf_id2 in performer_api_json[perf_id]['modelId']['collection']:
+            performer_name=performer_api_json[perf_id]['modelId']['collection'][perf_id2]['stageName']
+            perf_list.append({"name": performer_name})
+except:
+    debug("Performer API failed")
+    pass
 # Time to scrape all data
 scrape = {}
 scrape['title'] = scene_api_json.get('title')
@@ -119,10 +133,12 @@ scrape['date'] = str(date.date())
 scrape['details'] = scene_api_json.get('description')
 scrape['studio'] = {}
 scrape['studio']['name'] = re.sub('www\.|\.com', '', DOMAIN_URL)
+if perf_list:
+    scrape['performers'] = perf_list
 scrape['tags'] = [{"name": scene_api_json['tags']['collection'][x].get('alias')} for x in scene_api_json['tags']['collection']]
 scrape['image'] = scene_api_json['_resources']['primary'][0]['url']
 for key_name, key_value in scrape.items():
-    debug('{}:{}'.format(key_name, key_value))
+    debug('[{}]:{}'.format(key_name, key_value))
 
 print(json.dumps(scrape))
 
