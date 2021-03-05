@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
      Title:
-        selector: //div[@class="pdSRC"]//a[starts-with(@href,"/sites/")]
+        selector: //div[@class="title"]/h1/text()|//div[@class="pdSRC"]//a[starts-with(@href,"/dvds/")]
      Date:
         selector: //div[@class="views"]/span
         postProcess:
