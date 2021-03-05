@@ -89,8 +89,7 @@ def check_config(url, date_today):
                 token = file_instance
                 #debug("Using token from {}".format(SET_FILE_URL))
             else:
-                debug("Token from the past, getting new one".format(
-                    SET_FILE_URL))
+                debug("Token from the past, getting new one".format(SET_FILE_URL))
         except NoSectionError:
             pass
     return token, found_scene_id
@@ -104,12 +103,9 @@ def write_config(url, token, date_today):
         config.get(my_domain, 'url')
     except NoSectionError:
         config.add_section(my_domain)
-    if url:
-        config.set(my_domain, 'url', url)
-    if token:
-        config.set(my_domain, 'instance', token)
-    if date_today:
-        config.set(my_domain, 'date', date_today)
+    config.set(my_domain, 'url', 'https://' + my_domain)
+    config.set(my_domain, 'instance', token)
+    config.set(my_domain, 'date', date_today)
     with open(SET_FILE_URL, 'w') as configfile:
         config.write(configfile)
     return
@@ -312,7 +308,6 @@ else:
         # Send to the API
         api_URL = 'https://site-api.project1service.com/v2/releases/{}'.format(scene_id)
         scene_api_json = send_request(api_URL, request_headers)
-        write_config(scene_url,"","")
     else:
         scene_api_json = use_local
     if scene_api_json.get('parent') is not None:
