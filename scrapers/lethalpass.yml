@@ -1,0 +1,32 @@
+name: lethalpass
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lethalpass.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //div[@class="title"]/h1/text()|//div[@class="pdSRC"]//a[starts-with(@href,"/dvds/")]
+     Date:
+        selector: //div[@class="views"]/span
+        postProcess:
+          - replace:
+              - regex: "Added "
+                with: ""
+          - parseDate: 2 January 2006
+     Performers:
+      Name: //a[@class="model"]//a
+     Details: //div[@class="description"]/p
+     Movies:
+        Name:
+          selector: //div[@class="pdSRC"]//a[starts-with(@href,"/dvds/")]
+     Tags:
+      Name: //a[@class='cat']
+     Image:
+        selector: //a[@class="noplayer"]//@src
+     Studio:
+        Name:
+          selector: //div[@class="pdSRC"]//img/@alt
+# Last Updated March 04, 2021
