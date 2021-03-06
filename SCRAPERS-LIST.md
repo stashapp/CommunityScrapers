@@ -767,6 +767,7 @@ virtualtaboo.com|VirtualTaboo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vivid.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vivthomas.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|stash>=v0.5.0-17|-
 vixen.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python >= 3.3|-
+vogov.com|vogov.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vrbangers.com|VRBangers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrbgay.com|VRBangers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrbtrans.com|VRBangers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
