@@ -1,4 +1,4 @@
-name: bellapass.yml
+name: bellapass
 sceneByURL:
   - action: scrapeXPath
     url:
