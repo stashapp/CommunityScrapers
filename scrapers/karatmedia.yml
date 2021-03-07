@@ -38,6 +38,28 @@ xPathScrapers:
       Studio:
         Name:
           selector: //span[@class="b-header-logo"]/text()
+          postProcess:
+            - map:
+                18Tokyo.com: 18 Tokyo
+                AllJapanesePass.com: All Japanese Pass
+                AnalNippon.com: Anal Nippon
+                BigTitsTokyo.com: Big Tits Tokyo
+                BukkakeNow.com: Bukkake Now
+                Idols69.com: Idols 69
+                JapaneseFlashers.com: Japanese Flashers
+                JapaneseSlurp.com: Japanese Slurp
+                JCosplay.com: Japanese Cosplay
+                JPMilfs.com: Japanese Milfs
+                JPNurse.com: Japanese Nurse
+                JPShavers.com: Japanese Shaved Pussy
+                JPTeacher.com: Japanese Teacher
+                JSchoolGirls.com: Japanese School Girls
+                MyRaceQueens.com: My Race Queens
+                OCreamPies.com: O Creampies
+                OfficeSexJP.com: Japanese Office Sex
+                OutdoorJP.com: Outdoor JP
+                POVJP.com: POV JP
+                TokyoBang.com: Tokyo Bang
       Image: //div[@class="b-fake-player"]//@src
       Performers:
        Name: //p/a[1]/span[1]
