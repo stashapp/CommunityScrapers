@@ -40,7 +40,7 @@ def fetch_page_json(page_html):
 
 
 def save_json(scraped_json, video_id, save_location):
-    location = 'VixenNetwork_JSON'
+    location = os.path.join('..', 'scraperJSON', 'VixenNetwork')
     if save_location != 'save':
         location = save_location
     try:
