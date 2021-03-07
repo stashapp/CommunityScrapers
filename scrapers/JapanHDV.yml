@@ -10,7 +10,7 @@ xPathScrapers:
       $movieinfo: //div[@class="pure-u-1-5 hidden-sm hidden-xs"]/div[@class="video-info"]
     scene:
       Title: $movieinfo/p[1]/text()
-      Details: //div[@class="pure-u-xs-1-1 pure-u-sm-1-1 pure-u-2-3 text-black video-description"]/text()
+      Details: //meta[@property="og:description"]/@content
       Date: 
         selector: //meta[@itemprop="datePublished"]/@content
         postProcess:
@@ -25,5 +25,4 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with:  "https:"
-
-# Last Updated November 8, 2020
+# Last Updated March 5, 2021

@@ -27,10 +27,10 @@ xPathScrapers:
       Studio:
         Name: //meta[@name="author"]/@content
       Image:
-        selector: //img[@id="set-target-35"]/@src0_1x
+        selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
         postProcess:
           - replace:
               - regex: ^
                 with: https://ikissgirls.com
 
-# Last Updated November 8, 2020
+# Last Updated March 3, 2021
