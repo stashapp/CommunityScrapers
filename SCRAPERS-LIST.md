@@ -734,7 +734,7 @@ tittycreampies.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 titworld.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 tmwvrnet.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tokyo-hot.com|Tokyohot.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
-toykobang.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
+tokyobang.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 tonightsgirlfriend.com|Tonightsgirlfriend.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 toomanytrannies.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Trans
 topgrl.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
