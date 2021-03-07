@@ -89,8 +89,7 @@ def check_config(url, date_today):
                 token = file_instance
                 #debug("Using token from {}".format(SET_FILE_URL))
             else:
-                debug("Token from the past, getting new one".format(
-                    SET_FILE_URL))
+                debug("Token from the past, getting new one".format(SET_FILE_URL))
         except NoSectionError:
             pass
     return token, found_scene_id
@@ -164,8 +163,7 @@ def search_scene(title):
         debug("Didn't find a match")
         sys.exit(1)
     else:
-        debug("Can't search the scene ({} is missing)".format(
-            SET_FILE_URL))
+        debug("Can't search the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(SET_FILE_URL))
         sys.exit(1)
 
 
@@ -186,7 +184,12 @@ def send_request(url, headers):
             f.write("Response:\n{}".format(r.text))
         sys.exit(1)
     try:
-        api_json = r.json().get('result')
+        if type(r.json()) == list:
+            api_json = r.json()[0].get('message')
+            debug("Message: {}".format(api_json))
+            sys.exit(1)
+        else:
+            api_json = r.json().get('result')
     except:
         debug("Error getting the JSON from request")
         sys.exit(1)
@@ -220,17 +223,33 @@ def scraping_json(api_json, url=""):
         scrape['performers'] = [{"name": x.get('name')} for x in api_json.get('actors')]
     scrape['tags'] = [{"name": x.get('name')} for x in api_json.get('tags')]
     # Image can be poster or poster_fallback
+    backup_image=None
     if type(api_json['images']['poster']) is list:
         for image_type in api_json['images']['poster']:
-            if '/poster/' in image_type['xx'].get('url'):
-                scrape['image'] = image_type['xx'].get('url')
-                break
+            try:
+                if '/poster_fallback/' in image_type['xx'].get('url') and backup_image is None:
+                    backup_image = image_type['xx'].get('url')
+                    continue
+                if '/poster/' in image_type['xx'].get('url'):
+                    scrape['image'] = image_type['xx'].get('url')
+                    break
+            except TypeError:
+                pass
     else:
         if type(api_json['images']['poster']) is dict:
             for _, img_value in api_json['images']['poster'].items():
-                if '/poster/' in img_value['xx'].get('url'):
-                    scrape['image'] = img_value['xx'].get('url')
-                    break
+                try:
+                    if '/poster_fallback/' in img_value['xx'].get('url') and backup_image is None:
+                        backup_image = img_value['xx'].get('url')
+                        continue
+                    if '/poster/' in img_value['xx'].get('url'):
+                        scrape['image'] = img_value['xx'].get('url')
+                        break
+                except TypeError:
+                    pass
+    if scrape.get('image') is None and backup_image:
+        debug("Using alternate image")
+        scrape['image'] = backup_image
     return scrape
 
 # Saving the JSON to a file (Write '- logJSON' below MindGeekAPI.py in MindGeekAPI.yml)
@@ -281,8 +300,7 @@ else:
     if 'brazzers.com/scenes/view/id/' in scene_url:
         debug("Probably a old url, need to redirect")
         try:
-            r = requests.get(scene_url, headers={
-                             'User-Agent': USER_AGENT}, timeout=(3, 5))
+            r = requests.get(scene_url, headers={'User-Agent': USER_AGENT}, timeout=(3, 5))
             scene_url = r.url
         except:
             debug("Redirect fail, could give incorrect result.")
@@ -304,4 +322,4 @@ else:
 
 print(json.dumps(scraped_json))
 
-# Last Updated February 23, 2021
+# Last Updated March 05, 2021
