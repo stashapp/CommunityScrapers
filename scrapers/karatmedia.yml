@@ -63,5 +63,6 @@ xPathScrapers:
       Image: //div[@class="b-fake-player"]//@src
       Performers:
        Name: //p/a[1]/span[1]
-      # Last Updated February 27, 2021
+       #Name: //p/a[1]/span[not(text()="Amateur" or text()="Japanese AV Model")] # Uncomment if you dont want Amateur,JAV Mode
+# Last Updated February 27, 2021
       
