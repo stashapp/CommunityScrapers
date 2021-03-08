@@ -36,8 +36,7 @@ def check_db(DB_PATH, scene_id):
         db_height = int(record[0][2])
         cursor.close()
         sqliteConnection.close()
-        debug("[Db] Size:{}, Duration:{}, Height:{}".format(
-            db_size, db_duration, db_height))
+        debug("[Db] Size:{}, Duration:{}, Height:{}".format(db_size, db_duration, db_height))
         return db_size, db_duration, db_height
     except:
         debug("Error with the database")
@@ -49,7 +48,10 @@ def match_result(json_scene, range_duration=10, single=False, debug_log=True):
     json_duration = int(json_scene.get("length"))
     json_size = ""
     try:
-        json_size = int(json_scene["download_file_sizes"].get(str(db_height)+"p"))
+        if str(db_height) == "2160":
+            json_size = int(json_scene["download_file_sizes"].get("4k"))
+        else:
+            json_size = int(json_scene["download_file_sizes"].get(str(db_height)+"p"))
     except:
         pass
     if not json_size or json_size is None:
@@ -345,11 +347,15 @@ def create_index(api_json):
     json_id = api_json["clip_id"]
     json_title = api_json["url_title"]
     json_length = api_json["length"]
+    json_size_4k = ""
     json_size_1080 = ""
     json_size_720 = ""
     json_size_480 = ""
     try:
         if api_json.get("download_file_sizes") is not None:
+            if api_json["download_file_sizes"].get("4k") is not None:
+                json_size_4k = "4k:" + \
+                    str(api_json["download_file_sizes"].get("4k")) + "|"
             if api_json["download_file_sizes"].get("1080p") is not None:
                 json_size_1080 = "1080:" + \
                     str(api_json["download_file_sizes"].get("1080p")) + "|"
@@ -361,17 +367,16 @@ def create_index(api_json):
                     str(api_json["download_file_sizes"].get("480p")) + "|"
     except:
         print("[Index] Problem with filesize {}".format(json_id))
-    index_value = "{}|{}|{}|{}{}{}".format(
-        json_id, json_title, json_length, json_size_1080, json_size_720, json_size_480)
+    index_value = "{}|{}|{}|{}{}{}{}".format(json_id, json_title, json_length, json_size_4k, json_size_1080, json_size_720, json_size_480)
     return index_value
 
 
 fragment = json.loads(sys.stdin.read())
 
 # Get your database
-DB_PATH=""
+DB_PATH = None
 config_path = os.path.join(USERFOLDER_PATH, "config.yml")
-if (os.path.isfile(config_path) == True):
+if (os.path.isfile(config_path) == True and DB_PATH is None):
     with open(config_path) as f:
         for line in f:
             if "database: " in line:
@@ -384,6 +389,9 @@ scene_url = fragment["url"]
 if DB_PATH:
     db_size, db_duration, db_height = check_db(DB_PATH, scene_id)
 else:
+    db_size = None
+    db_duration = None
+    db_height = None
     debug("Can't find the database")
 search_api_id = None
 search_api_urltitle = None
