@@ -20,7 +20,7 @@ xPathScrapers:
       Name: //li[@class="update_models"]/a
      Details: //div[@class="videoDetails clear"]/p
      Tags:
-      Name: //div[@class="featuring clear"][2]//a
+      Name: //ul[contains(li,"Tags:")]//a
      Image:
         selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
         postProcess:
