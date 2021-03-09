@@ -10,7 +10,7 @@ xPathScrapers:
      Title:
         selector: //div[@class="videoDetails clear"]/h3
      Date:
-        selector: //div[@class='videoInfo clear']/p[1]
+        selector: //div[@class='videoInfo clear']/p[contains(span,"Date Added:")]
         postProcess:
           - replace:
               - regex: "Date Added:"
