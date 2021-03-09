@@ -27,11 +27,11 @@ def make_request(request_url, origin_site):
             'Origin': origin_site,
             'Referer': request_url
         }, timeout=(3, 6))
-    except requests.exceptions.RequestException:
-        return None
+    except requests.exceptions.RequestException as e:
+        return None, e
     if r.status_code == 200:
-        return r.text
-    return None
+        return r.text, None
+    return None, 'HTTP Error: %s' % r.status_code
 
 
 def fetch_page_json(page_html):
@@ -40,7 +40,7 @@ def fetch_page_json(page_html):
 
 
 def save_json(scraped_json, video_id, save_location):
-    location = 'VixenNetwork_JSON'
+    location = os.path.join('..', 'scraperJSON', 'VixenNetwork')
     if save_location != 'save':
         location = save_location
     try:
@@ -60,14 +60,14 @@ def main():
     if not fragment['url']:
         log('No URL entered.')
         sys.exit(1)
-    url = fragment['url']
+    url = fragment['url'].strip()
     site, studio, slug = get_from_url(url)
     if site is None:
         log('The URL could not be parsed')
         sys.exit(1)
-    response = make_request('https://%s/%s' % (site, slug), 'https://%s' % site)
-    if response is None:
-        log('Could not fetch page HTML')
+    response, err = make_request('https://%s/%s' % (site, slug), 'https://%s' % site)
+    if err is not None:
+        log('Could not fetch page HTML', err)
         sys.exit(1)
     j = fetch_page_json(response)
     if j is None:

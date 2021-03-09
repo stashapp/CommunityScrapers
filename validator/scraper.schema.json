@@ -188,7 +188,7 @@
                 "items": {
                   "type": "object",
                   "additionalProperties": false,
-                  "required": ["Domain", "Path", "Name", "Value"],
+                  "required": ["Domain", "Path", "Name"],
                   "properties": {
                     "Name": {
                       "title": "Cookie name",
@@ -198,6 +198,11 @@
                       "title": "Cookie value",
                       "type": "string"
                     },
+                    "ValueRandom": {
+                      "title": "Generate a random string with the length of N (> 0) characters",
+                      "type": "integer",
+                      "minimum": 1
+                    },
                     "Domain": {
                       "title": "Cookie domain",
                       "type": "string"
@@ -206,7 +211,11 @@
                       "title": "Cookie path",
                       "type": "string"
                     }
-                  }
+                  },
+                  "oneOf": [
+                    { "required": ["ValueRandom"] },
+                    { "required": ["Value"] }
+                  ]
                 }
               }
             }
@@ -252,6 +261,23 @@
             "items": {
               "title": "Script executable/argument",
               "type": "string"
+            }
+          },
+          "queryURL": {
+            "title": "Query URL",
+            "type": "string"
+          },
+          "queryURLReplace": {
+            "title": "Query URL Replace",
+            "type": "object",
+            "additionalProperties": false,
+            "propertyNames": {
+              "enum": ["url"]
+            },
+            "patternProperties": {
+              "^\\w+$": {
+                "$ref": "#/definitions/replaceKey"
+              }
             }
           }
         },
@@ -309,7 +335,7 @@
           "type": "object",
           "additionalProperties": false,
           "propertyNames": {
-            "enum": ["checksum", "filename", "oshash", "title"]
+            "enum": ["checksum", "filename", "oshash", "title", "url"]
           },
           "patternProperties": {
             "^\\w+$": {
@@ -363,7 +389,7 @@
       "title": "Scene object",
       "type": "object",
       "additionalProperties": false,
-      "required": [],
+      "required": ["Title"],
       "properties": {
         "Title": {
           "title": "Scene title",
@@ -387,43 +413,19 @@
         },
         "Studio": {
           "title": "Scene studio",
-          "allOf": [
-            { "$ref": "#/definitions/studioObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/studioObject" }]
         },
         "Movies": {
           "title": "Scene movies",
-          "allOf": [
-            { "$ref": "#/definitions/movieObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/movieObject" }]
         },
         "Tags": {
           "title": "Scene tags",
-          "allOf": [
-            { "$ref": "#/definitions/tagsObject" },
-            {
-              "propertyNames": { "enum": ["Name"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
         },
         "Performers": {
           "title": "Scene performers",
-          "allOf": [
-            { "$ref": "#/definitions/performerObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/performerObject" }]
         }
       }
     },
@@ -431,7 +433,7 @@
       "title": "Performer object",
       "type": "object",
       "additionalProperties": false,
-      "required": [],
+      "required": ["Name"],
       "properties": {
         "Name": {
           "title": "Performer name",
@@ -508,7 +510,7 @@
       "title": "Movie object",
       "type": "object",
       "additionalProperties": false,
-      "required": [],
+      "required": ["Name"],
       "properties": {
         "Name": {
           "title": "Movie name",
@@ -532,13 +534,7 @@
         },
         "Studio": {
           "title": "Movie studio",
-          "allOf": [
-            { "$ref": "#/definitions/studioObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/studioObject" }]
         },
         "FrontImage": {
           "title": "Movie front image",
@@ -562,7 +558,7 @@
       "title": "Gallery object",
       "type": "object",
       "additionalProperties": false,
-      "required": [],
+      "required": ["Title"],
       "properties": {
         "Title": {
           "title": "Gallery title",
@@ -582,33 +578,15 @@
         },
         "Studio": {
           "title": "Gallery studio",
-          "allOf": [
-            { "$ref": "#/definitions/studioObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/studioObject" }]
         },
         "Tags": {
           "title": "Gallery tags",
-          "allOf": [
-            { "$ref": "#/definitions/tagsObject" },
-            {
-              "propertyNames": { "enum": ["Name"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
         },
         "Performers": {
           "title": "Gallery performers",
-          "allOf": [
-            { "$ref": "#/definitions/performerObject" },
-            {
-              "propertyNames": { "enum": ["Name", "URL"] },
-              "required": ["Name"]
-            }
-          ]
+          "allOf": [{ "$ref": "#/definitions/performerObject" }]
         }
       }
     },
@@ -616,6 +594,7 @@
       "title": "Studio object",
       "type": "object",
       "additionalProperties": false,
+      "required": ["Name"],
       "properties": {
         "Name": {
           "title": "Studio name",
@@ -628,8 +607,10 @@
       }
     },
     "tagsObject": {
-      "title": "Tags object","type": "object",
+      "title": "Tags object",
+      "type": "object",
       "additionalProperties": false,
+      "required": ["Name"],
       "properties": {
         "Name": {
           "title": "Tag name",

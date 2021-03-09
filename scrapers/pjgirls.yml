@@ -1,0 +1,37 @@
+name: pjgirls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pjgirls.com/en/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //div[@class='container']/h1
+        postProcess:
+          - replace:
+              - regex: "VIDEO:"
+                with: ""
+     Date:
+        selector: //div[@class='info']/h3[not(starts-with(.,"LENGTH"))]
+        postProcess:
+          - replace:
+              - regex: ","
+                with: ""
+          - parseDate: January 2 2006
+     Performers:
+      Name: //div[@class='info']//a
+     Details: //div[@class="text"]/p[1]
+     Tags:
+      Name: //div[@class="detailTagy clear"]//a
+     Image:
+        selector: //div[@class="videoObal"]//@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "http://www.pjgirls.com/"
+     Studio:
+        Name:
+          fixed: PJGIRLS
+# Last Updated March 02, 2021
