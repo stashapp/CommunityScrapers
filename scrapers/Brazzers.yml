@@ -247,10 +247,13 @@ xPathScrapers:
         postProcess:
           - map:
               Piercing: "Yes"
+      Tags:
+        Name: //div/div/h2[text()="TAGS"]/../..//a/text()
       # There is no Xpath to know the gender.
       #      Gender:
       #        fixed: "Female"
       URL: //link[@rel="canonical"]/@href
+
 driver:
   useCDP: true
-# Last Updated February 19, 2021
+# Last Updated March 10, 2021
