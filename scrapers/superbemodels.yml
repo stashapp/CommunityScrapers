@@ -14,7 +14,7 @@ xPathScrapers:
            - parseDate: January 2, 2006
       Details: //div[@class="item description-video"]/p
       Performers:
-        Name: //a[@class="models-name-box "]//a
+        Name: //a[@class="models-name-box "]
       Tags:
         Name:
            selector: //div[@class="item item-tags-change"]//a
