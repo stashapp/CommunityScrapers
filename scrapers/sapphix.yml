@@ -11,25 +11,25 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //div[@class="col-sm-6 col-md-6 no-padding-left no-padding-right"]/h2
+        selector: //div[@class="container"]//h2
       Date:
-        selector: //div[@class="col-sm-6 col-md-6 no-padding-left no-padding-right text-right"]/span
+        selector: //div[@class="container"]//span[contains(.,"Added")]
         postProcess:
           - replace:
-              - regex: 'Added|,'
-                with: ''
+              - regex: "Added|,"
+                with: ""
           - parseDate: January 2 2006
-      Details: //div[@class="col-sm-8 col-md-8 no-padding-side"]/p
+      Details: //p[@class="mg-md"]
       Tags:
-        Name: //div[@class='col-sm-8 col-md-8 no-padding-side vidpage']//a
+        Name: //div[contains(h4,"Tags:")]//a
       Performers:
-       Name: //div[@class='col-sm-3 col-md-3 col-md-offset-1 no-padding-side']//a
+        Name: //div[contains(h4,"Featured model")]//a
       Studio:
         Name:
           selector: //a[text()="Join Now"]/@href
           postProcess:
             - replace:
-              - regex: ^.*//(?:in\.)?(.+?)/.+$
-                with: $1
-      Image: //video[@id="video"]/@poster | //div[@class="col-sm-12"]//@src
+                - regex: ^.*//(?:in\.)?(.+?)/.+$
+                  with: $1
+      Image: //video[@id="video"]/@poster | //div[@class="col-sm-12"]//img/@src
 # Last Updated March 01, 2021
