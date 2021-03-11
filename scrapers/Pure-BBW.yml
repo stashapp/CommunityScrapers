@@ -10,15 +10,16 @@ xPathScrapers:
       Title:
         selector: //div[@class="video_membership"]/div[@class="titlebox clear"]/h3/text()
       Details: //div[@class="aboutvideo"]/p/text()
-
       Performers:
         Name: //div[@class="video_description"]/ul[@class="featuredModels"]/li/a/span/text()
       Image:
-        selector: //div[@class="videohere"]/img[contains(@class,"stdimage")]/@src
+        selector: //div[@class="videohere"]/img[contains(@class,"stdimage")]/@src | //script[contains(.,'jwplayer("jwbox").setup')]/text()
         postProcess:
           - replace:
-              - regex: ^
-                with: "https://pure-bbw.com/"
+            - regex: (.+image:\s+")(.+jpg)(.+)
+              with: $2
+            - regex: ^
+              with: "https://pure-bbw.com/"
       Studio:
         Name:
           fixed: Pure-BBW
@@ -29,5 +30,4 @@ xPathScrapers:
             - regex: .*(\d{4})-(\d{2})-(\d{2}).*
               with: $1-$2-$3
           - parseDate: 2006-01-02
-
 # Last Updated March 11, 2021
