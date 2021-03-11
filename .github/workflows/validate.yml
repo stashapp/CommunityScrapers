@@ -16,4 +16,4 @@ jobs:
       with:
         node-version: '12.x'
     - run: cd ./validator && yarn install --frozen-lockfile
-    - run: node ./validate.js
+    - run: node ./validate.js --ci
