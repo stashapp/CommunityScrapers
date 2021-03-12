@@ -31,4 +31,4 @@ xPathScrapers:
               - regex: \sX\s.*
                 with: ""
 
-# Last Updated September 13, 2020
+# Last Updated March 12, 2021
