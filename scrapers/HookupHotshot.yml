@@ -19,9 +19,6 @@ xPathScrapers:
         selector: //div[@class="videoInfo clear"]/p[1]/text()
         postProcess:
           - parseDate: January 2, 2006
-#      Details:
-#        selector: //div[@class[contains(.,'description')]]//text()
-#        concat: " "
       Tags:
         Name:
           selector: //div[@class="featuring clear"][2]/ul/li
