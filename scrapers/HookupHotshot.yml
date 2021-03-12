@@ -1,0 +1,38 @@
+name: Hookup Hotshot
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hookuphotshot.com/trailers
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: HookupHotshot
+      Performers:
+        Name:
+          selector: //li[@class="update_models"]/a
+      Title:
+        selector: //div[@class="videoDetails clear"]/h3
+      Date:
+        selector: //div[@class="videoInfo clear"]/p[1]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+#      Details:
+#        selector: //div[@class[contains(.,'description')]]//text()
+#        concat: " "
+      Tags:
+        Name:
+          selector: //div[@class="featuring clear"][2]/ul/li
+      Image:
+       selector: //img[@class="mejs__poster-img"]/@src
+       postProcess:
+          - replace:
+              - regex: ^
+                with: "https://hookuphotshot.com"
+
+driver:
+  useCDP: true
+
+# Last Updated March 12, 2021
