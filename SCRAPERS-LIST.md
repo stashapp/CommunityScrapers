@@ -462,6 +462,7 @@ metartnetwork.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|sta
 metartx.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|stash>=v0.5.0-17|-
 milehighmedia.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 milfhunter.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+milfed.com|milfed.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 milfvr.com|MilfVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 milkingtable.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 missax.com|MissaX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
