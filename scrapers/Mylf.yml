@@ -13,6 +13,13 @@ xPathScrapers:
         selector: //div[contains(@class,"sceneDate")]/text()
         postProcess:
             - parseDate: 01/02/2006
+      Tags:
+        Name: 
+          selector: //div[@class="col-12 tags-container"]//a
+          postProcess:
+            - replace: 
+              - regex: "[^a-zA-Z0-9]+"
+                with: $1   
       Performers:
         Name: //div[contains(@class,"contentTitle")]/a[contains(@class,"model-name")]/text()
       Image: //div[@class="stream-video-container"]/stream/@poster
