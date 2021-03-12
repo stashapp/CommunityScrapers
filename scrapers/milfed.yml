@@ -1,0 +1,26 @@
+name: milfed
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - milfed.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2[@class="sc-1b6bgon-2 iOqDVI font-primary"]/text()
+      Date:
+        selector: //div[@class="sc-1b6bgon-1 jZtBDX"]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: //p[@class="xnzhm0-1 jlxcEX"]/text()
+      Tags:
+        Name: //a[@class="vdkjux-0 benbAz"]//a
+      Performers:
+        Name: //a[@class="sc-1b6bgon-7 etqjfV"]//a
+      Studio:
+        Name:
+          fixed: MILFED
+      Image:
+        selector: //div[@class="tg5e7m-2 hQwXfp"]//@src
+# Last Updated March 12, 2021
