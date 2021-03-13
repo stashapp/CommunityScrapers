@@ -23,11 +23,12 @@ xPathScrapers:
         Name:
           selector: //div[@class="featuring clear"][2]/ul/li
       Image:
-       selector: //img[@class="mejs__poster-img"]/@src
-       postProcess:
-          - replace:
-              - regex: ^
-                with: "https://hookuphotshot.com"
+       selector: //div[@class="player-thumb"]/img/@src
+# or //img[@class="mejs__poster-img"]/@src 
+#       postProcess:
+#          - replace:
+#              - regex: ^
+#                with: "https://hookuphotshot.com"
 
 driver:
   useCDP: true
