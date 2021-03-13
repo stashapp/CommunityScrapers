@@ -75,8 +75,8 @@ xPathScrapers:
         postProcess:
           - map:
               Unknown: ""
-              Fake: Yes
-              Natural: No
+              Fake: "Yes"
+              Natural: "No"
       CareerLength:
         selector: //div[contains(@class,'timeline-horizontal')]//p[@class='m-0']
         concat: "-"
@@ -95,4 +95,5 @@ xPathScrapers:
         selector: //div[contains(@class,'image-container')]//a/img/@src
       Gender:
         fixed: "Female"
-# Last updated January 31, 2021
+
+# Last updated March 13, 2021
