@@ -1,0 +1,37 @@
+name: "SeeHimFuck"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://seehimfuck.com/trailers/
+      
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="videoDetails clear"]/h3/text()
+      Date:
+        selector: //div[@class="videoInfo clear"]/p/span[contains(text(),"Date Added")]/../text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="videoDetails clear"]
+        postProcess:
+          - replace:
+              - regex: ".*\t" 
+                with: ""
+      Studio:
+          Name:
+           fixed: SeeHimFuck
+      Tags:
+        Name: //div[@class="featuring clear"]/ul/li[@class="label"][contains(text(),"Tags:")]/../li/a/text()
+      Performers:
+        Name: //div[@class="featuring clear"]/ul/li[@class="label"][contains(text(),"Featuring:")]/../li/a/text()
+      Image:
+        selector: //script[contains(text(), "contentthumbs")]
+        postProcess:
+          - replace:
+              - regex: ^.+poster="(.+?)".+$
+                with: $1
+              - regex: ^
+                with: http://seehimfuck.com
+               
