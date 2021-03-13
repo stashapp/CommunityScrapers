@@ -28,11 +28,11 @@ xPathScrapers:
         Name: //div[@class="featuring clear"][2]//a
       Image:
         selector: //base/@href|//img[@class="update_thumb thumbs stdimage"]/@src0_1x
-        concat: "/"
+        concat: "|"
         postProcess:
           - replace:
-              - regex: ^
-                with:  $1
+              - regex: "[|]"
+                with: ""
       Studio:
         Name:
           selector: //meta[@name="author"]/@content
