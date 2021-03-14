@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //div[@class="title_bar"]/text()
+        selector: (//div[@class="title_bar"])[1]
       Details: //div[@class="gallery_description"]/text()
       Performers:
         Name: //a[@class="model_category_link"][contains(@href, 'sets.php')]/text()
