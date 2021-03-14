@@ -33,6 +33,8 @@ xPathScrapers:
           - replace:
               - regex: "[|]"
                 with: ""
+              - regex: "^//"
+                with: "https://"
       Studio:
         Name:
           selector: //meta[@name="author"]/@content
