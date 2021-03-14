@@ -14,14 +14,7 @@ xPathScrapers:
         Name: //a[@class="model_category_link"][contains(@href, 'sets.php')]/text()
       Tags:
         Name: //a[@class="model_category_link"][contains(@href, 'category.php')]/text()
-      Image:
-        selector: //img[@class="thumbs"]/@src
-        postProcess:
-          - replace:
-            - regex: (.+image:\s+")(.+jpg)(.+)
-              with: $2
-            - regex: ^
-              with: "https://desperateamateurs.com/"
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Desperate Amateurs
