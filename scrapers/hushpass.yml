@@ -22,7 +22,7 @@ xPathScrapers:
         Name:
           fixed: HushPass
       Image:
-        selector: //img[@class="update_thumb thumbs stdimage"][1]/@src0_1x
+        selector: //div[@class="player-thumb"]//img[@class="update_thumb thumbs stdimage"]/@src0_1x
         postProcess:
           - replace:
               - regex: ^
