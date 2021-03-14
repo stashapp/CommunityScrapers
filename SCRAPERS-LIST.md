@@ -55,6 +55,7 @@ analteenangels.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analvids.com|LegalPorno.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python >= 3.6|-
 analviolation.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analyzedgirls.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+angelasommers.com|angelasommers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 angelawhite.com|AngelaWhite.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 angelinacastrolive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 anilos.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
