@@ -144,6 +144,8 @@ class Validator {
     if (!this.verbose && result) {
       console.log('\x1b[32mValidation passed!\x1b[0m');
     }
+
+    return result;
   }
 
   getMappingErrors(data) {
@@ -367,7 +369,10 @@ function main(flags, files) {
   flags = (flags === undefined) ? args.filter(arg => arg.startsWith('-')) : flags;
   files = (files === undefined) ? args.filter(arg => !arg.startsWith('-')) : files;
   const validator = new Validator(flags);
-  validator.run(files);
+  const result = validator.run(files);
+  if (flags.includes('--ci')) {
+    process.exit(result ? 0 : 1);
+  }
 }
 
 if (require.main === module) {
