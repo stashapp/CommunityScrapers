@@ -1,0 +1,29 @@
+name: superbemodels
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - superbemodels.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="item-name-model-video item-tags-change"]//h1
+      Date:
+        selector: //span[@class="duration-box duration-box-change"][contains(span,"Release date:")]/em
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: //div[@class="item description-video"]/p
+      Performers:
+        Name: //a[@class="models-name-box "]
+      Tags:
+        Name:
+          selector: //div[@class="item item-tags-change"]//a
+          postProcess:
+            - replace:
+                - regex: ","
+                  with: ""
+      Studio:
+        Name:
+          fixed: superbemodels
+      Image: //div[@class="block-screenshots"]/a[contains(@href,"/1.jpg")]/@href
+# Last Updated March 15, 2021

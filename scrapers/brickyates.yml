@@ -1,0 +1,33 @@
+name: brickyates
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - brickyates.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //div[@class="videoDetails clear"]/h3
+     Date:
+        selector: //div[@class='videoInfo clear']/p[contains(span,"Date Added:")]
+        postProcess:
+          - replace:
+              - regex: "Date Added:"
+                with: ""
+          - parseDate: January 2, 2006
+     Performers:
+      Name: //li[@class="update_models"]/a
+     Details: //div[@class="videoDetails clear"]/p
+     Tags:
+      Name: //ul[contains(li,"Tags:")]//a
+     Image:
+        selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.brickyates.com"
+     Studio:
+        Name:
+          fixed: brickyates
+# Last Updated March 07, 2021

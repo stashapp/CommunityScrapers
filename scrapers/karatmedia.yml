@@ -1,0 +1,68 @@
+name: karatmedia
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 18tokyo.com/set/
+      - alljapanesepass.com/set/
+      - analnippon.com/set/
+      - bigtitstokyo.com/set/
+      - bukkakenow.com/set/
+      - idols69.com/set/
+      - japaneseflashers.com/set/
+      - japaneseslurp.com/set/
+      - jcosplay.com/set/
+      - jpmilfs.com/set/
+      - jpnurse.com/set/
+      - jpshavers.com/set/
+      - jpteacher.com/set/
+      - jschoolgirls.com/set/
+      - myracequeens.com/set/
+      - ocreampies.com/set/
+      - officesexjp.com/set/
+      - outdoorjp.com/set/
+      - povjp.com/set/
+      - tokyobang.com/set/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class='b-box-title']
+      Date:
+        selector: //div[@class='b-likes-group-info']/div[2]
+        postProcess:
+          - parseDate: 02 January 2006
+      Details: //p[@class="b-video-info__text"]/text()
+      Tags:
+        Name: //p[@class="b-video-info__text"]//a
+      Studio:
+        Name:
+          selector: //span[@class="b-header-logo"]/text()
+          postProcess:
+            - map:
+                18Tokyo.com: 18 Tokyo
+                AllJapanesePass.com: All Japanese Pass
+                AnalNippon.com: Anal Nippon
+                BigTitsTokyo.com: Big Tits Tokyo
+                BukkakeNow.com: Bukkake Now
+                Idols69.com: Idols 69
+                JapaneseFlashers.com: Japanese Flashers
+                JapaneseSlurp.com: Japanese Slurp
+                JCosplay.com: Japanese Cosplay
+                JPMilfs.com: Japanese Milfs
+                JPNurse.com: Japanese Nurse
+                JPShavers.com: Japanese Shaved Pussy
+                JPTeacher.com: Japanese Teacher
+                JSchoolGirls.com: Japanese School Girls
+                MyRaceQueens.com: My Race Queens
+                OCreamPies.com: O Creampies
+                OfficeSexJP.com: Japanese Office Sex
+                OutdoorJP.com: Outdoor JP
+                POVJP.com: POV JP
+                TokyoBang.com: Tokyo Bang
+      Image: //div[@class="b-fake-player"]//@src
+      Performers:
+       Name: //p/a[1]/span[1]
+       #Name: //p/a[1]/span[not(text()="Amateur" or text()="Japanese AV Model")] # Uncomment if you dont want Amateur,JAV Mode
+# Last Updated February 27, 2021
+      
