@@ -13,7 +13,6 @@ sceneByURL:
       - mofosnetwork.com/scene/
       - realityjunkies.com/scene/
       - rk.com/scene/
-      - seancody.com/scene/
       - sweetheartvideo.com/scene/
       - sweetsinner.com/scene/
       - teenslovehugecocks.com/scene/
@@ -33,6 +32,7 @@ sceneByURL:
       - milfed.com/scene/
       - mofos.com/scene/
       - publicagent.com/scene/
+      - seancody.com/scene/
       - transsensual.com/scene
       - trueamateurs.com/scene/
     scraper: scriptScraper
@@ -285,4 +285,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated March 15, 2021
+# Last Updated March 16, 2021
