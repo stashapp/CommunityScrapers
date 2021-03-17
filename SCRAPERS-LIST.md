@@ -381,7 +381,7 @@ houseofyre.com|HouseOfFyre.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hucows.com|Hucows.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hungarianhoneys.com|HungarianHoneys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hunterleigh.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-hushpass.com:hushpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hushpass.com|hushpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hustlaz.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hustler.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hustlerhd.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
