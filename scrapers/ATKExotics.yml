@@ -41,4 +41,15 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated October 30, 2020
+  cookies:
+    - Cookies:
+        - Name: __cfduid
+          ValueRandom: 43
+          Domain: .amkingdom.com
+          Path: /
+    - Cookies:
+        - Name: __cfduid
+          ValueRandom: 43
+          Domain: .atkexotics.com
+          Path: /
+# Last Updated March 15, 2021

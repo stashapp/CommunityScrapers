@@ -1,0 +1,28 @@
+name: "DesperateAmateurs"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - desperateamateurs.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: (//div[@class="title_bar"])[1]
+      Details: //div[@class="gallery_description"]/text()
+      Performers:
+        Name: //a[@class="model_category_link"][contains(@href, 'sets.php')]/text()
+      Tags:
+        Name: //a[@class="model_category_link"][contains(@href, 'category.php')]/text()
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Desperate Amateurs
+      Date:
+        selector: //table[@width="100%"]//td[@class="date"]/text()
+        postProcess:
+          - replace:
+              - regex: .*(\d{2})/(\d{2})/(\d{4}).*
+                with: $1/$2/$3
+          - parseDate: 01/02/2006
+# Last Updated March 14, 2021

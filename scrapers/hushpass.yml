@@ -1,0 +1,30 @@
+name: hushpass
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hushpass.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //meta[@property="og:title"]/@content
+      Date:
+        selector: //div[@class="update-info-row"]//strong[contains(.,"Released:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: //div[@class="update-info-block"]//h3[contains(.,"Description:")]/following-sibling::text()
+      Tags:
+        Name: //ul[@class="tags"]//a
+      Performers:
+        Name: //div[@class="update-info-block models-list-thumbs"]//a
+      Studio:
+        Name:
+          fixed: HushPass
+      Image:
+        selector: //div[@class="player-thumb"]//img[@class="update_thumb thumbs stdimage"]/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://hushpass.com"
+# Last Updated March 11, 2021
