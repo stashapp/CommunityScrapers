@@ -9,7 +9,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //a[@class='sceneLink  ']/@title
+      Title: //h3[@class='sceneTitle']/text()
       Image: //video[@class="vjs-tech"]/@poster
 #             //meta[@name="twitter:image"]/@content # Can have a better image 720p to 4K
       Date:
