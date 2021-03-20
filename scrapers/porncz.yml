@@ -40,21 +40,22 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //div[@class="heading-detail"]/h1
-     Performers:
-      Name: //div[@class="video-info-item color_05-text" and contains(text(), "Actors:")]//a
-     Details: //meta[@name="description"]/@content
-     Tags:
-      Name: //div[@class="video-info-item color_05-text" and contains(text(), "Genres:")]//a
-     Image:
+      Performers:
+        Name: //div[@class="video-info-item color_05-text" and contains(text(), "Actors:")]//a
+      Details: //meta[@name="description"]/@content
+      Tags:
+        Name: //div[@class="video-info-item color_05-text" and contains(text(), "Genres:")]//a
+      Image:
         selector: //meta[@property="og:url"]/@content|//meta[@property="og:image"]/@content
         concat: "|"
         postProcess:
           - replace:
               - regex: (https://[^/]+)[^|]+\|(.+)
                 with: $1$2
-     Studio:
+      Studio:
         Name:
           selector: //a[@class="video-detail-logo"]//@alt
 # Last Updated March 16, 2021
+
