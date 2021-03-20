@@ -431,6 +431,7 @@ javlibrary.com|javlibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|
 jaysinxxx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jayspov.net|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jcosplay.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
+jeffsmodels.com|JeffsModels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jelenajensen.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jerk-offpass.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jessicajaymesxxx.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
