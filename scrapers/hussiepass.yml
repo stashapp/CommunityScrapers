@@ -1,0 +1,36 @@
+name: hussiepass
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hussiepass.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //div[@class="videoDetails clear"]/h3
+     Date:
+        selector: //div[@class='videoInfo clear']/p[contains(span,"Date Added:")]/text()
+        postProcess:
+          - replace:
+              - regex: "Date Added:"
+                with: ""
+          - parseDate: 2006-01-02
+     Performers:
+      Name: 
+        selector: //li[@class="update_models"]//a
+        postProcess:
+          - replace:
+              - regex: "[^a-zA-Z0-9]+"
+                with: " "
+     Details:
+        selector: //meta[@property="og:description"]/@content
+        postProcess:
+          - replace:
+              - regex: "[^a-zA-Z0-9]+"
+                with: " "
+     Image: //meta[@property="og:image"]/@content
+     Studio:
+        Name:
+          fixed: Hussie Pass
+# Last Updated March 21, 2021
