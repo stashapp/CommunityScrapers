@@ -23,7 +23,7 @@ xPathScrapers:
         Name:
           fixed: "Jeff's Models"
       Date:
-        selector: //div[@class="updateMeta"]/span[@class="updateMetaDate"]/span[@class="updateDate"]/text()
+        selector: //span[@class="updateDate"]/text()
         postProcess:
           - parseDate: Jan 2, 2006
 
