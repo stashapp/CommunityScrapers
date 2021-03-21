@@ -21,7 +21,7 @@ xPathScrapers:
         selector: //li[@class="update_models"]//a
         postProcess:
           - replace:
-              - regex: "[^a-zA-Z0-9]+"
+              - regex: "[^a-zA-Z0-9]"
                 with: " "
      Details:
         selector: //meta[@property="og:description"]/@content
