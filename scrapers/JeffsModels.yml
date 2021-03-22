@@ -17,8 +17,8 @@ xPathScrapers:
         selector: //a[@class="hi iconPlay"]/img[@alt="Main Sample"]/@src
         postProcess:
           - replace:
-             - regex: ^
-               with: "https://jeffsmodels.com"
+              - regex: ^
+                with: "https://jeffsmodels.com"
       Studio:
         Name:
           fixed: "Jeff's Models"
@@ -26,5 +26,4 @@ xPathScrapers:
         selector: //span[@class="updateDate"]/text()
         postProcess:
           - parseDate: Jan 2, 2006
-
 # Last Updated March 19, 2021
