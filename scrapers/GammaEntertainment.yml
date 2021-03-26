@@ -166,11 +166,13 @@ xPathScrapers:
                 with: $1?width=960&height=543&enlarge=true
       Studio:
         Name:
-          selector: //*[local-name()="div" or local-name()=p][contains(text(),"is a site owned and operated by Gamma")]
+          selector: //*[local-name()="div" or local-name()=p][contains(text(),"is a site owned and operated by Gamma")]|//meta[@name="twitter:domain"]/@content
           postProcess:
             - replace:
                 - regex: ([^\.]+)\.com(\s+)is(.+)
                   with: $1
+                - regex: \.com$
+                  with: ""
             - map:
                 1000facials: 1000 Facials
                 21naturals: 21 Natural
@@ -292,4 +294,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated November 8, 2020
+# Last Updated March 26, 2021
