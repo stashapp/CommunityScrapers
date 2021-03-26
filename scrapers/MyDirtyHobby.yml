@@ -1,0 +1,9 @@
+name: "MyDirtyHobby"
+sceneByURL:
+  - url:
+      - mydirtyhobby.com/profil/
+    action: script
+    script:
+      - python
+      - MyDirtyHobby.py
+

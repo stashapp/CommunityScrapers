@@ -539,6 +539,7 @@ muchaslatinas.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 my-slavegirl.com|my-slavegirl.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mybadmilfs.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mydaughterswap.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+mydirtyhobby.com|MyDirtyHobby.yml|:heavy_check_mark:|:x:|:x:|:x:|Python > 3.7|-
 myfamilypies.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 mylf.com|Mylf.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mylfdom.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
