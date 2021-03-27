@@ -17,6 +17,12 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Performers:
-        Name: //div[@class="vid_info_content"][1]//a
+        Name:
+          selector: //div[@class="vid_info_title" and contains(text(), "Models")]/following-sibling::text()
+          split: ', '
+      Tags:
+        Name:
+          selector: //div[@class="vid_info_title" and contains(text(), "Tags")]/following-sibling::text()
+          split: ', '
 
-# Last Updated November 8, 2020
+# Last Updated March 28, 2021
