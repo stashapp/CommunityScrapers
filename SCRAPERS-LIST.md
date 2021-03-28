@@ -383,7 +383,7 @@ homeclips.com|Voyeurweb.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 homemadeanalwhores.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hometowngirls.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hometownhoneys.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
-hookuphotshot.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+hookuphotshot.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornydoctor.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornygirlscz.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornyhousehold.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
