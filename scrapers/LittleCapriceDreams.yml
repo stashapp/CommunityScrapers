@@ -20,5 +20,4 @@ xPathScrapers:
         Name: //div[@class="vid_infos"]/div[contains(div, "Models")]//a
       Tags:
         Name: //div[@class="vid_infos"]/div[contains(div, "Tags")]//a
-
 # Last Updated March 28, 2021
