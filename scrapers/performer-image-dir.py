@@ -1,8 +1,9 @@
+import base64
 import json
+import mimetypes
 import os
 import sys
 from pathlib import Path
-from urllib.parse import quote, urljoin
 
 '''
 This script is here to allow you to search for performer images based on a directory.
@@ -12,23 +13,14 @@ https://github.com/Trizkat/actress-pics
 
 This script needs python3
 
-To support extracting images from the database we need to provide a url where these image are located.
-Stash allows you to serve custom files by adding a few lines to the configuration.
-This plugin returns the url of that image in the response.
-
-Make the directory and add the following to config.yml configuration:
-custom_served_folders:
-  /actress-pics: /root/.stash/scrapers/actress-pics
-
-Then clone the actress-pics github project to a folder within stash such as a sub directory in the scrapers folder:
+Clone the actress-pics github project to a folder within stash such as a sub directory in the scrapers folder:
 cd /root/.stash/scrapers/
 git clone https://github.com/Trizkat/actress-pics.git
 
-update path, url_prefix, and preference as needed
+update path and preference below as needed
 '''
 
-path = Path(r'/root/.stash/scrapers/actress-pics/')
-http_prefix = 'http://127.0.0.1:9999/custom/actress-pics/'
+path = r'/root/.stash/scrapers/actress-pics/'
 preference = ['Front_Topless', 'Front_Nude', 'Front_NN']
 
 debug = True
@@ -57,8 +49,7 @@ def fetch():
     for root, dirs, files in os.walk(path):
         if fragment['name'] in root:
             for f in files:
-                # construct a UNIX-style file path relative to the `actress-pics` path
-                candidates.append(Path(root, f).relative_to(path).as_posix())
+                candidates.append(str(Path(root, f)))
 
     # Look throuh preferences for an image that matches the preference
     candidates.sort()
@@ -66,15 +57,22 @@ def fetch():
         for f in candidates:
             if pattern in f:
                 # return first candiate that matches pattern, replace space with %20 for url encoding
-                fragment['image'] = urljoin(http_prefix, quote(f))
+                fragment['image'] = make_image_data_url(f)
                 print(json.dumps(fragment))
                 exit(0)
 
     # Just use the first image in the folder as a fall back
     if candidates:
-        fragment['image'] = urljoin(http_prefix, quote(candidates[0]))
+        fragment['image'] = make_image_data_url(candidates[0])
 
     print(json.dumps(fragment))
+
+def make_image_data_url(image_path):
+    # type: (str,) -> str
+    mime, _ = mimetypes.guess_type(image_path)
+    with open(image_path, 'rb') as img:
+        encoded = base64.b64encode(img.read()).decode()
+    return 'data:{0};base64,{1}'.format(mime, encoded)
 
 
 if sys.argv[1] == 'query':
