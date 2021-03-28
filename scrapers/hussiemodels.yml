@@ -1,0 +1,56 @@
+name: hussiemodels
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hussiepass.com/trailers/
+      - hookuphotshot.com/trailers
+      - seehimfuck.com/trailers
+      - povpornstars.com
+      # Removes all emoticons from Title, Description, Performers and Tags.
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //div[@class="videoDetails clear"]/h3
+     Date:
+        selector: //div[@class='videoInfo clear']/p[contains(span,"Date Added:")]/text()
+        postProcess:
+          - replace:
+              - regex:
+                with:
+          - parseDate: 2006-01-02
+     Performers:
+      Name:
+        selector: //li[@class="update_models"]//a
+        postProcess:
+          - replace:
+              - regex: "[^\x00-\x7F]"
+                with:
+     Details:
+        selector: //meta[@property="og:description"]/@content
+        postProcess:
+          - replace:
+              - regex: "[^\x00-\x7F]"
+                with:
+     Image: //meta[@property="og:image"]/@content
+     Tags:
+       Name:
+         selector: //li[@class="label" and contains(text(), "Tags:")]/following-sibling::text()
+         postProcess:
+           - replace:
+              - regex: "[^\x00-\x7F]"
+                with:
+     Studio:
+       Name:
+         selector: //head/base/@href
+         postProcess:
+           - replace:
+               - regex: https://([^.]+)\.com/
+                 with: $1
+           - map:
+               hookuphotshot: HookUpHotshot
+               hussiepass: Hussie Pass
+               seehimfuck: See HIM Fuck
+               https://www.povpornstars.com/tour/: POV Pornstar
+# Last Updated March 28, 2021
