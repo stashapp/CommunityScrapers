@@ -17,6 +17,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Performers:
-        Name: //div[@class="vid_info_content"][1]//a
-
-# Last Updated November 8, 2020
+        Name: //div[@class="vid_infos"]/div[contains(div, "Models")]//a
+      Tags:
+        Name: //div[@class="vid_infos"]/div[contains(div, "Tags")]//a
+# Last Updated March 28, 2021
