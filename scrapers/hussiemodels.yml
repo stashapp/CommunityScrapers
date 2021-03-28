@@ -16,9 +16,6 @@ xPathScrapers:
      Date:
         selector: //div[@class='videoInfo clear']/p[contains(span,"Date Added:")]/text()
         postProcess:
-          - replace:
-              - regex:
-                with:
           - parseDate: 2006-01-02
      Performers:
       Name:
