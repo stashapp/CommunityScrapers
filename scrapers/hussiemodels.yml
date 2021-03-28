@@ -43,11 +43,11 @@ xPathScrapers:
          selector: //head/base/@href
          postProcess:
            - replace:
-               - regex: https://([^.]+)\.com/
-                 with: $1
-           - map:
-               hookuphotshot: HookUpHotshot
-               hussiepass: Hussie Pass
-               seehimfuck: See HIM Fuck
-               https://www.povpornstars.com/tour/: POV Pornstar
-# Last Updated March 28, 2021
+                - regex: ^https://(?:(?:[^.]+\.)?)([^.]+)\.com/.*
+                  with: $1
+            - map:
+                hookuphotshot: HookUp Hotshot
+                hussiepass: Hussie Pass
+                seehimfuck: See HIM Fuck
+                povpornstars: POV Pornstars
+# Last Updated March 29, 2021
