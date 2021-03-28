@@ -39,10 +39,10 @@ xPathScrapers:
               - regex: "[^\x00-\x7F]"
                 with:
      Studio:
-       Name:
-         selector: //head/base/@href
-         postProcess:
-           - replace:
+        Name:
+          selector: //head/base/@href
+          postProcess:
+            - replace:
                 - regex: ^https://(?:(?:[^.]+\.)?)([^.]+)\.com/.*
                   with: $1
             - map:
