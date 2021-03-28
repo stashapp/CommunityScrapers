@@ -383,6 +383,7 @@ homeclips.com|Voyeurweb.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 homemadeanalwhores.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hometowngirls.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hometownhoneys.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+hookuphotshot.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hornydoctor.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornygirlscz.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornyhousehold.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -401,6 +402,7 @@ hungarianhoneys.com|HungarianHoneys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hunterleigh.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hunterpov.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hushpass.com|hushpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hussiepass.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hustlaz.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hustler.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hustlerhd.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
@@ -629,6 +631,7 @@ povd.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 povjp.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 povmania.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 povperverts.net|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+povpornstars.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 povthis.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 prettydirty.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 prettydirtyteens.com|devianteNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
@@ -678,6 +681,7 @@ scoreland.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 screwmetoo.com|ScrewMeToo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 seancody.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 seductive18.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+seehimfuck.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 seemysextapes.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 sensualpain.com|insexOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 severesexfilms.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
