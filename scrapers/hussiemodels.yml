@@ -11,34 +11,34 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //div[@class="videoDetails clear"]/h3
-     Date:
+      Date:
         selector: //div[@class='videoInfo clear']/p[contains(span,"Date Added:")]/text()
         postProcess:
           - parseDate: 2006-01-02
-     Performers:
-      Name:
-        selector: //li[@class="update_models"]//a
-        postProcess:
-          - replace:
-              - regex: "[^\x00-\x7F]"
-                with:
-     Details:
+      Performers:
+        Name:
+          selector: //li[@class="update_models"]//a
+          postProcess:
+            - replace:
+                - regex: "[^\x00-\x7F]"
+                  with:
+      Details:
         selector: //meta[@property="og:description"]/@content
         postProcess:
           - replace:
               - regex: "[^\x00-\x7F]"
                 with:
-     Image: //meta[@property="og:image"]/@content
-     Tags:
-       Name:
-         selector: //li[@class="label" and contains(text(), "Tags:")]/following-sibling::text()
-         postProcess:
-           - replace:
-              - regex: "[^\x00-\x7F]"
-                with:
-     Studio:
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name:
+          selector: //li[@class="label" and contains(text(), "Tags:")]/following-sibling::text()
+          postProcess:
+            - replace:
+                - regex: "[^\x00-\x7F]"
+                  with:
+      Studio:
         Name:
           selector: //head/base/@href
           postProcess:
