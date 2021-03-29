@@ -18,6 +18,7 @@ const safeRequire = (name) => {
 
 const Ajv = safeRequire('ajv');
 const betterAjvErrors = safeRequire('better-ajv-errors');
+const chalk = safeRequire('chalk');
 const YAML = safeRequire('yaml');
 
 // https://www.peterbe.com/plog/nodejs-fs-walk-or-glob-or-fast-glob
@@ -54,6 +55,8 @@ class Validator {
     });
 
     this.mappingPattern = /^([a-z]+)By(Fragment|Name|URL)$/;
+    this.commentPrefix = /^# *Last Updated/i;
+    this.commentPattern = /^# Last Updated ((?:Jan|Febr)uary|March|April|May|June|July|August|(?:Septem|Octo|Novem|Decem)ber) (0[1-9]|[1-3]\d), (\d{4})$/;
 
     if (!!this.ajv.getKeyword('deprecated')) {
       this.ajv.removeKeyword('deprecated');
@@ -100,9 +103,9 @@ class Validator {
 
     for (const file of scrapers) {
       const relPath = path.relative(process.cwd(), file);
-      let data;
+      let contents, data;
       try {
-        const contents = fs.readFileSync(file, 'utf8');
+        contents = fs.readFileSync(file, 'utf8');
         data = YAML.parse(contents, yamlLoadOptions);
       } catch (error) {
         console.error(`\x1b[31mError\x1b[0m in: ${relPath}:`);
@@ -126,9 +129,36 @@ class Validator {
         valid = valid && validMapping;
       }
 
+      // Output validation errors
       if (!valid) {
         const output = betterAjvErrors('scraper', data, validate.errors, { indent: 2 });
         console.log(output);
+      }
+
+      // Verify that there is a "Last Updated" comment
+      if (valid) {
+        const lines = contents
+          .split(/\r?\n/g)
+          .slice(-5)
+          .reverse()
+          .filter(line => !!line.trim());
+
+        const commentLine = lines.findIndex(line => this.commentPrefix.test(line));
+        let validComment = false;
+        if (commentLine === -1) {
+          console.error(chalk.red(`${chalk.bold('ERROR')} 'Last Updated' comment is missing.`));
+        } else {
+          if (commentLine !== 0) {
+            console.error(chalk.red(`${chalk.bold('ERROR')} 'Last Updated' comment is not the last line.`));
+          }
+
+          const comment = lines[commentLine];
+          validComment = this.commentPattern.test(comment);
+          if (!validComment) {
+            console.error(chalk.red(`${chalk.bold('ERROR')} 'Last Updated' comment's format is invalid: ${comment}.`));
+          }
+        }
+        valid = valid && validComment;
       }
 
       if (this.verbose || !valid) {
