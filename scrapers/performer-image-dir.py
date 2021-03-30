@@ -79,3 +79,5 @@ if sys.argv[1] == 'query':
     query()
 elif sys.argv[1] == 'fetch':
     fetch()
+
+# Last Updated March 28, 2021
