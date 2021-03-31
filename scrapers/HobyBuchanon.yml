@@ -14,12 +14,11 @@ xPathScrapers:
       Date:
         selector: //time/@datetime
         postProcess:
-           - replace:
+          - replace:
               - regex: ^(.{10}).*$
                 with: $1
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: HobyBuchanon
-
 # Last Updated March 30, 2021
