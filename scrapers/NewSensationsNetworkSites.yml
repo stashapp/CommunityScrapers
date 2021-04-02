@@ -2,16 +2,16 @@ name: "NewSensationsNetworkSites"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - thetabutales.com/tour_tt/
-      - jizzbomb.com/tour_jb/
-      - freshoutofhighschool.com/tour_fohs/
-      - newsensations.com/tour_rs/
-      - fourfingerclub.com/tour_ffc/
       - ashlynnbrooke.com/tour_ab/
-      - thelesbianexperience.com/tour_tle/
-      - unlimitedmilfs.com/tour_um/
-      - shanedieselsbanginbabes.com/tour_sdbb/
+      - fourfingerclub.com/tour_ffc/
+      - freshoutofhighschool.com/tour_fohs/
+      - jizzbomb.com/tour_jb/
+      - newsensations.com/tour_rs/
       - parodypass.com/tour_pp/
+      - shanedieselsbanginbabes.com/tour_sdbb/
+      - thelesbianexperience.com/tour_tle/
+      - thetabutales.com/tour_tt/
+      - unlimitedmilfs.com/tour_um/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -31,6 +31,6 @@ xPathScrapers:
         Name: //span[@class="update_tags"]/a/text()
       Performers:
         Name: //span[@class="update_models"]/a/text() | //div[@class="sceneTextLink"]/p/span[@class="tour_update_models"]/a
-      Image: //video/@poster
+      Image: //video[@id]/@poster
 
 # Last Updated April 1, 2021
