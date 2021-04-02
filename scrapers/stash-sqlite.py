@@ -1,27 +1,17 @@
+import base64
+import imghdr
 import json
+import mimetypes
 import sys
 import sqlite3
-from os import path 
+from os import path
 
-''' This script uses the sqlite database from another stash database and allows you to parse performers
-    Copy stash-go.sqlite to the scrapers directory
-    This script needs python3 and sqlite3
-    
-    To support extracting images from the database we need to provide a url where these image are located.
-    Stash allows you to serve custom files by adding a few lines to the configuration.
-    This plugin will then export the performer images to that folder and add the url of that image in the response.
-    
-    Make the directory and add the following to config.yml configuration:
-    custom_served_folders:
-      /stash_sqlite: /root/.stash/stash_sqlite
-   
-    Make the directory /root/.stash/stash_sqlite or update the configuration with the path
-    To enable this feature change enable_images to: True
-   '''
+'''
+This script uses the sqlite database from another stash database and allows you to parse performers
+Copy stash-go.sqlite to the scrapers directory
 
-http_prefix='http://127.0.0.1:9999/custom/stash_sqlite/'
-image_output_dir='/root/.stash/stash_sqlite/'
-enable_images=False
+This script needs python3
+'''
 
 def query_performers(name):
     c = conn.cursor()
@@ -32,6 +22,13 @@ def query_performers(name):
         res['name']= row[0]
         rec.append(res)
     return rec
+
+def make_image_data_url(image_data):
+    # type: (bytes,) -> str
+    img_type = imghdr.what(None, h=image_data) or 'jpeg'
+    mime = mimetypes.types_map.get('.' + img_type, 'image/jpeg')
+    encoded = base64.b64encode(image_data).decode()
+    return 'data:{0};base64,{1}'.format(mime, encoded)
 
 def fetch_performer_name(name):
     c = conn.cursor()
@@ -57,15 +54,16 @@ def fetch_performer_name(name):
     res['tattoos']=row[13]
     res['piercings']=row[14]
     res['aliases']=row[15]
-    if enable_images:
-        performer_id=row[16]
-        c.execute('select image from performers_image where performer_id=?',(performer_id,))
-        row=c.fetchone()
-        if row == None:
-            return res
-        with open("%s%d.jpg" % (image_output_dir,performer_id), 'wb') as file:
-            file.write(row[0])
-        res['image']="%s%d.jpg" % (http_prefix,performer_id)
+
+    performer_id=row[16]
+    c.execute('select image from performers_image where performer_id=?',(performer_id,))
+    row=c.fetchone()
+    if row == None:
+        return res
+
+    image = make_image_data_url(row[0])
+    res['image']=image
+
     return res
 
 
@@ -79,7 +77,7 @@ conn = sqlite3.connect('stash-go.sqlite',detect_types=sqlite3.PARSE_DECLTYPES|sq
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
-    print(json.dumps(fragment),file=sys.stderr)
+    print("input: " + json.dumps(fragment),file=sys.stderr)
     result = query_performers(fragment['name'])
     if not result:
         print(f"Could not determine details for performer: `{fragment['name']}`",file=sys.stderr)
@@ -90,7 +88,7 @@ if sys.argv[1] == "query":
 
 if sys.argv[1] == "fetch":
     fragment = json.loads(sys.stdin.read())
-    print(json.dumps(fragment),file=sys.stderr)
+    print("input: " + json.dumps(fragment),file=sys.stderr)
     result = fetch_performer_name(fragment['name'])
     if not result:
         print(f"Could not determine details for performer: `{fragment['name']}`",file=sys.stderr)
@@ -98,3 +96,5 @@ if sys.argv[1] == "fetch":
     else:
         print (json.dumps(result))
     conn.close()
+
+# Last Updated March 31, 2021
