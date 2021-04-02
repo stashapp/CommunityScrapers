@@ -23,7 +23,7 @@ xPathScrapers:
       Details: //div[@class='description']/p[contains(span,"Description:")]/text()
       Performers:
         Name: //div[@class="sceneTextLink"]/p/span[@class="tour_update_models"]/a
-      Image: //span[@id='trailer_thumb']//img/@src
+      Image: span[@id='trailer_thumb']//img[not(@alt)]/@src
       Studio:
         Name:
           fixed: NewSensations
