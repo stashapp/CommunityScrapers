@@ -12,6 +12,11 @@ xPathScrapers:
       Date:
         selector: //dd[i[contains(@class,"fa-calendar")]]
         postProcess:
+          - replace:
+            - regex: ^(today).+
+              with: today
+            - regex: ^(yesterday).+
+              with: yesterday
           - parseDate: 1/2/06
       Performers:
         Name: //dd[@class="right"]/a[starts-with(@href,"/profil/")]
@@ -22,4 +27,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: My Dirty Hobby
-# Last Updated March 26, 2021
+# Last Updated April, 2 2021
