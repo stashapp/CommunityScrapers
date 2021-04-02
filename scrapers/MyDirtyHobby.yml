@@ -13,10 +13,8 @@ xPathScrapers:
         selector: //dd[i[contains(@class,"fa-calendar")]]
         postProcess:
           - replace:
-            - regex: ^(today).+
-              with: today
-            - regex: ^(yesterday).+
-              with: yesterday
+            - regex: ^(today|yesterday).+
+              with: $1
           - parseDate: 1/2/06
       Performers:
         Name: //dd[@class="right"]/a[starts-with(@href,"/profil/")]
