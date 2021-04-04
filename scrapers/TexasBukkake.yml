@@ -15,7 +15,7 @@ xPathScrapers:
           selector: //span/a[@class="text-yellow-300"]
       Title:
         selector: //div/h1[@class=" text-white text-xl md:text-1xl lg:text-3xl"]
-      Details: //text()[following-sibling::hr[@class="my-3"]][1]
+      Details: //div[@class="pb-5"]/text()
       Tags:
         Name:
           selector: //a[@class="inline-block text-sm hover:text-white"]
