@@ -1,0 +1,51 @@
+name: vip4k
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - black4k.com
+      - daddy4k.com
+      - fist4k.com
+      - hunt4k.com
+      - mature4k.com
+      - old4k.com
+      - rim4k.com
+      - sis.porn
+      - stuck4k.com
+      - tutor4k.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="title_player" or @class="title"]| //h1[contains(@class,"player")][contains(@class,"title")]
+      Performers:
+        Name:
+          selector:
+            //a[@class="link_player"]|//div[@class="player-item__row"][contains(div,"Name:")]//span|
+            //div[contains(@class,"player-item")]//*[local-name()="svg"][@class="ico ico--star"]/../following-sibling::div
+      Details:
+        selector:
+          //div[@class="player-item__text"]|//span[@class="player-info__text-area"]|//span[@class="episode-about__text text"]|//div[@class='desc_frame']/p|
+          //div[@class='wrap_player_desc']/p|//div[@class='wrap_post']/p|//div[@class="player-item__text text text--sm"]
+      Image: //div[@class="player_watch"]/img[@src]/@src | //img[@class="player-item__inner"]/@data-src
+      Tags:
+        Name:
+          selector: //div[@class="tag_line"]//a
+      Studio:
+        Name:
+          selector: //head/title/text()
+          postProcess:
+            - replace:
+                - regex: ^([^:\s]+).*
+                  with: $1
+            - map:
+                Black4k.Com: Black4k
+                Daddy4k.Com: Daddy4k
+                Fist4k.Com: Fist4k
+                Hunt4k.Com: Hunt4k
+                Mature4k.Com: Mature4k
+                Old4k.Com: Old4k
+                Rim4k.Com: Rim4k
+                Sis.porn: Sis Porn
+                Stuck4k.Com: Struck4k
+                Tutor4k.Com: Tutor4k
+# Last Updated April 05, 2021
