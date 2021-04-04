@@ -25,5 +25,4 @@ xPathScrapers:
         Name:
           fixed: GloryHole Swallow
       URL: //link[@rel='canonical']/@href
-
-# Last Updated November 8, 2020
+# Last Updated April 4, 2021
