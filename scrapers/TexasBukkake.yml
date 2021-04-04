@@ -26,7 +26,4 @@ xPathScrapers:
              - regex: ^.+\("?(.+?)"?\).+$
                with: https:$1
 
-#driver:
-#  useCDP: true
-
 # Last Updated April 04, 2021
