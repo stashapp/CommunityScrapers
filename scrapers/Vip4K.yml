@@ -16,24 +16,24 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title: //div[@class="title_player" or @class="title"]| //h1[contains(@class,"player")][contains(@class,"title")]
-     Performers:
+      Title: //div[@class="title_player" or @class="title"]| //h1[contains(@class,"player")][contains(@class,"title")]
+      Performers:
         Name:
           selector:
             //a[@class="link_player"]|//div[@class="player-item__row"][contains(div,"Name:")]//span|
             //div[contains(@class,"player-item")]//*[local-name()="svg"][@class="ico ico--star"]/../following-sibling::div
-     Details:
+      Details:
         selector:
           //div[@class="player-item__text"]|//span[@class="player-info__text-area"]|//span[@class="episode-about__text text"]|//div[@class='desc_frame']/p|
           //div[@class='wrap_player_desc']/p|//div[@class='wrap_post']/p|//div[@class="player-item__text text text--sm"]
-     Image: //div[@class="player_watch"]/img[@src]/@src | //img[@class="player-item__inner"]/@data-src
-     Tags:
-       Name:
-         selector: //div[@class="tag_line"]//a
-     Studio:
-       Name:
-         selector: //head/title/text()
-         postProcess:
+      Image: //div[@class="player_watch"]/img[@src]/@src | //img[@class="player-item__inner"]/@data-src
+      Tags:
+        Name:
+          selector: //div[@class="tag_line"]//a
+      Studio:
+        Name:
+          selector: //head/title/text()
+          postProcess:
             - replace:
                 - regex: ^([^:\s]+).*
                   with: $1
