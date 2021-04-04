@@ -1,0 +1,32 @@
+name: Texas Bukkake
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - texasbukkake.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: TexasBukkake
+      Performers:
+        Name:
+          selector: //span/a[@class="text-yellow-300"]
+      Title:
+        selector: //div/h1[@class="text-white text-xl md:text-1xl lg:text-3xl"]
+      Details: //text()[following-sibling::hr[@class="my-3"]][1]
+      Tags:
+        Name:
+          selector: //a[@class="inline-block text-sm hover:text-white"]
+      Image:
+       selector: //div[@class="video-cover bg-center bg-no-repeat bg-cover"]/@style
+       postProcess:
+         - replace:
+             - regex: ^.+\("?(.+?)"?\).+$
+               with: https:$1
+
+#driver:
+#  useCDP: true
+
+# Last Updated April 04, 2021
