@@ -740,7 +740,7 @@ store.freeones.com|FreeonesStore.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:
 strapattackers.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Femdom
 straplezz.com|Straplezz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 streaming.iafd.com|IafdStreaming.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
-struck4k.com|vip4k.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+struck4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 studiofow.com|StudioFOW.yml|:heavy_check_mark:|:x:|:x:|:x:|-|3D Animation
 stunning18.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|stash>=v0.5.0-17|-
 submissived.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
