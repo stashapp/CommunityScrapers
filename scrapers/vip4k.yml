@@ -16,9 +16,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
-        selector: //div[@class="title_player"]/text() | //div[@class="title"]/text() | //h1[@class="player-item__title"]/text() |
-                  //h1[@class="player-info__title"]/text() | //h1[@class='player__title']/text()
+     Title: //div[@class="title_player" or @class="title"]| //h1[contains(@class,"player")][contains(@class,"title")]
      Performers:
       Name:
         selector: //a[@class="link_player"]/text()
