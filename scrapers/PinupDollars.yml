@@ -8,7 +8,6 @@ sceneByURL:
       - pinupfiles.com
       - rachelaldana.com
       - tessafowler.com
-
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -27,13 +26,11 @@ xPathScrapers:
       Tags:
         Name: //ul[@class="tags"]//a
       Image:
-        selector: //script[contains(text(),'poster')]/text()
+        selector: //script[contains(text(),'poster')]/text()|//div[@class="player-thumb"]/img/@src0_1x
         postProcess:
           - replace:
               - regex: .+(?:poster=")([^"]+).+
                 with: $1
-              - regex: ^
-                with:
       Studio:
         Name:
           selector: //meta[@name="author"]/@content
