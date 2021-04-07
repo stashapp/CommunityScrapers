@@ -1,4 +1,4 @@
-name: Pinup Dollars
+name: Pinupdollars
 sceneByURL:
   - action: scrapeXPath
     url:
