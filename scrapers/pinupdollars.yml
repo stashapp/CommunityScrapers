@@ -1,13 +1,13 @@
-name: PinupDollars
+name: Pinup Dollars
 sceneByURL:
   - action: scrapeXPath
     url:
+      - lanakendrick.com
+      - leannecrow.com
+      - monicamendez.com
       - pinupfiles.com
       - rachelaldana.com
       - tessafowler.com
-      - leannecrow.com
-      - monicamendez.com
-      - lanakendrick.com
 
     scraper: sceneScraper
 xPathScrapers:
