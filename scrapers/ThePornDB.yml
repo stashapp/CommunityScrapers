@@ -88,8 +88,8 @@ jsonScrapers:
         Name: $data.tags.#.tag
 driver:
   headers:
-    - key: User-Agent
-      value: Stash JSON Scraper
-    #- key: Authorization # Uncomment and add a valid API key after the `Bearer ` part
-      #value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
+    - Key: User-Agent
+      Value: Stash JSON Scraper
+    #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
+      #Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
 # Last Updated April 7, 2021

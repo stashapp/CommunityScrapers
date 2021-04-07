@@ -229,13 +229,13 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["key", "value"],
+            "required": ["Key", "Value"],
             "properties": {
-              "key": {
+              "Key": {
                 "title": "Key",
                 "type": "string"
               },
-              "value": {
+              "Value": {
                 "title": "Value",
                 "type": "string"
               }
