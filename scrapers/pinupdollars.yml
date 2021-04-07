@@ -1,8 +1,14 @@
-name: pinupfiles
+name: PinupDollars
 sceneByURL:
   - action: scrapeXPath
     url:
       - pinupfiles.com
+      - rachelaldana.com
+      - tessafowler.com
+      - leannecrow.com
+      - monicamendez.com
+      - lanakendrick.com
+
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -21,12 +27,14 @@ xPathScrapers:
       Tags:
         Name: //ul[@class="tags"]//a
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //script[contains(text(),'poster')]/text()
         postProcess:
           - replace:
-              - regex: "https://www.pinupfiles.com/"
+              - regex: .+(?:poster=")([^"]+).+
+                with: $1
+              - regex: ^
                 with:
       Studio:
         Name:
-          fixed: pinupfiles
-# Last Updated april 07, 2021
+          selector: //meta[@name="author"]/@content
+# Last Updated February 23, 2021
