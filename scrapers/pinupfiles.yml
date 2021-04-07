@@ -1,0 +1,32 @@
+name: pinupfiles
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pinupfiles.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='item-title']/h1
+      Date:
+        selector: //div[@class="update-info-row"]/strong[contains(.,"Added:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class="update-info-block models-list-thumbs"]//a
+      Details:
+        selector: //div[@class="update-info-block"]/h3[contains(.,"Description:")]/following-sibling::text()
+        concat: "\n\n"
+      Tags:
+        Name: //ul[@class="tags"]//a
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: "https://www.pinupfiles.com/"
+                with:
+      Studio:
+        Name:
+          fixed: pinupfiles
+# Last Updated april 07, 2021
