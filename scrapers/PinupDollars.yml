@@ -25,13 +25,8 @@ xPathScrapers:
         concat: "\n\n"
       Tags:
         Name: //ul[@class="tags"]//a
-      Image:
-        selector: //script[contains(text(),'poster')]/text()|//div[@class="player-thumb"]/img/@src0_1x
-        postProcess:
-          - replace:
-              - regex: .+(?:poster=")([^"]+).+
-                with: $1
+      Image: //div[@class="player-thumb"]/img/@src0_1x
       Studio:
         Name:
           selector: //meta[@name="author"]/@content
-# Last Updated February 23, 2021
+# Last Updated April 09, 2021
