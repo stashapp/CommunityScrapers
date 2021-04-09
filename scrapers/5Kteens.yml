@@ -10,7 +10,11 @@ xPathScrapers:
     scene:
       Studio:
         Name:
-          fixed: 5Kteens
+          selector: //span[starts-with(@class, "color-")]/@class
+          postProcess:
+            - map:
+                color-5KT: 5Kteens
+                color-5KP: 5Kporn
       Title: //p[@class="trailer-title"]
       Details: //p[@class=""]
       Performers:
