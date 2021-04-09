@@ -28,4 +28,16 @@ xPathScrapers:
                   with: $1
 
 driver:
-  useCDP: true
+  cookies:
+    - CookieURL: "https://www.5kteens.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".5kteens.com"
+          ValueRandom: 23
+          Path: "/"
+    - CookieURL: "https://www.5kporn.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".5kporn.com"
+          ValueRandom: 23
+          Path: "/"
