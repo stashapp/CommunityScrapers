@@ -26,6 +26,12 @@ xPathScrapers:
             - replace:
                 - regex: Published\:\s(\d{4}-\d{2}-\d{2})
                   with: $1
+      Image:
+        selector: //img[@class="imgres"]/@src
+        postProcess:
+          - replace:
+              - regex: (/episodes/\d+)/.+$
+                with: $1/poster_image/poster_5k.jpg
 
 driver:
   cookies:
