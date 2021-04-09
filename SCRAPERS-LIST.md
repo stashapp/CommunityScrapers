@@ -19,8 +19,8 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 21sextury.com|PureTaboo.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 40somethingmag.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 50plusmilfs.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-5kporn.com|5Kteens.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
-5kteens.com|5Kteens.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+5kporn.com|5Kteens.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+5kteens.com|5Kteens.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 60plusmilfs.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Granny
 abbywinters.com|AbbyWinters.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abuseme.com|AbuseMe.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
