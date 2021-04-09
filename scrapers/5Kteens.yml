@@ -1,0 +1,31 @@
+name: 5Kteens
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 5kteens.com/episodes
+      - 5kporn.com/episodes
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: 5Kteens
+      Title: //p[@class="trailer-title"]
+      Details: //p[@class=""]
+      Performers:
+        Name:
+          selector: //h5[text()[contains(.,'Starring')]]
+          postProcess:
+            - replace:
+                - regex: Starring:\s([\w\s]+)
+                  with: $1
+      Date:
+        selector: //h5[text()[contains(.,'Published')]]
+        postProcess:
+            - replace:
+                - regex: Published\:\s(\d{4}-\d{2}-\d{2})
+                  with: $1
+
+driver:
+  useCDP: true
