@@ -1,0 +1,30 @@
+name: BlowBangGirls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - blowbanggirls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //div[@class="videoDetails clear"]/h3
+     Date:
+        selector: //div[@class="videoInfo clear"]//span[contains(.,"Date Added:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 02, 2006
+     Performers:
+      Name: //span[@class="tour_update_models"]/a
+     Details: //div[@class="videoDetails clear"]/p
+     Tags:
+       Name: //span[@class="tour_update_tags"]/a
+     Image:
+        selector: //script[contains(text(),'/v3/content/')]/text()
+        postProcess:
+          - replace:
+              - regex: .+(?:poster=")([^"]*).+
+                with: https://www.blowbanggirls.com/$1
+     Studio:
+        Name:
+          fixed: BlowBangGirls
+# Last Updated April 10, 2021
