@@ -2,33 +2,35 @@ name: "NewSensationsNetworkSites"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - thetabutales.com/tour_tt/
-      - jizzbomb.com/tour_jb/
-      - freshouttahighschool.com/tour_fohs/
-      - newsensations.com/tour_rs/
-      - fourfingerclub.com/tour_ffc/
       - ashlynnbrooke.com/tour_ab/
-      - thelesbianexperience.com/tour_tle/
-      - unlimitedmilfs.com/tour_um/
-      - shanedieselsbanginbabes.com/tour_sdbb/
+      - fourfingerclub.com/tour_ffc/
+      - freshoutofhighschool.com/tour_fohs/
+      - jizzbomb.com/tour_jb/
+      - newsensations.com/tour_rs/
       - parodypass.com/tour_pp/
+      - shanedieselsbanginbabes.com/tour_sdbb/
+      - thelesbianexperience.com/tour_tle/
+      - thetabutales.com/tour_tt/
+      - unlimitedmilfs.com/tour_um/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="update_title"]/text()
+      Title: //div[@class="update_title"]/text() | //div[@class="indScene"]/h2
       Date:
-        selector: //div[@class="cell update_date"]/text()
+        selector: //div[@class="cell update_date"]/text() | //div[@class='sceneDateP']/span[1]
         postProcess:
           - replace:
               - regex: Released:\s
                 with:
+              - regex: ^(\d{2}/\d{2}/\d{4}).+
+                with: $1
           - parseDate: 01/02/2006
-      Details: //span[@class="update_description"]/text()
+      Details: //span[@class="update_description"]/text() | //div[@class='description']/p[contains(span,"Description:")]/text()
       Tags:
         Name: //span[@class="update_tags"]/a/text()
       Performers:
-        Name: //span[@class="update_models"]/a/text()
-      Image: //video/@poster
+        Name: //span[@class="update_models"]/a/text() | //div[@class="sceneTextLink"]/p/span[@class="tour_update_models"]/a
+      Image: //video[@id]/@poster
 
-# Last Updated November 8, 2020
+# Last Updated April 1, 2021
