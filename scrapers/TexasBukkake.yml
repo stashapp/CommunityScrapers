@@ -8,22 +8,20 @@ xPathScrapers:
   sceneScraper:
     scene:
       Studio:
-        Name:
-          fixed: TexasBukkake
+        Name: //div[contains(@class,"tags")]/a
       Performers:
         Name:
           selector: //span/a[@class="text-yellow-300"]
       Title:
-        selector: //div/h1[@class=" text-white text-xl md:text-1xl lg:text-3xl"]
+        selector: //div[contains(@class,"title")]/h1
       Details: //div[@class="pb-5"]/text()
       Tags:
         Name:
-          selector: //a[@class="inline-block text-sm hover:text-white"]
+          selector: //div[contains(@class,"categories")]/a/text()
       Image:
-       selector: //div[@class="video-cover bg-center bg-no-repeat bg-cover"]/@style
-       postProcess:
-         - replace:
-             - regex: ^.+\("?(.+?)"?\).+$
-               with: https:$1
-
-# Last Updated April 04, 2021
+        selector: //div[contains(@class,"video-cover")]/@style
+        postProcess:
+          - replace:
+              - regex: ^.+\("?(.+?)"?\).+$
+                with: https:$1
+# Last Updated April 07, 2021
