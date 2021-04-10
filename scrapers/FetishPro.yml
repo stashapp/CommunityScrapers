@@ -1,0 +1,30 @@
+name: FetishPros
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fetishpros.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //h2[@class="title"]
+     Date:
+        selector: //span[@class="update_date"]
+        postProcess:
+          - parseDate: 01/02/2006
+     Performers:
+      Name: //span[@class="tour_update_models"]/a
+     Details: //span[@class="latest_update_description"]
+     Tags:
+       Name: //span[@class="tour_update_tags"]/a
+     Image:
+        selector: //img[@class="stdimage thumbs"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.fetishpros.com/updates/"
+     Studio:
+        Name:
+          fixed: FetishPros
+# Last Updated April 09, 2021
