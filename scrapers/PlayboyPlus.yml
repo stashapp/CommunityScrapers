@@ -1,0 +1,24 @@
+name: PlayboyPlus
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - playboyplus.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //h1[@class="title"]
+     Date:
+        selector: //p[@class="date label"]
+        postProcess:
+          - parseDate: January 2, 2006
+     Performers:
+      Name: //p[@class="contributorName"]//a
+     Details: //p[@class="description-truncated"]//p
+     Image:
+        selector: //img[@data-src][1]/@data-src
+     Studio:
+        Name:
+          fixed: PlayboyPlus
+# Last Updated April 12, 2021
