@@ -7,20 +7,20 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //span[@class="title-links"]/strong
-     Performers:
-      Name:  //p[@class='featuring']/a
-     Details: //span[@class='reg-text3']
-     Tags:
-       Name: //p[@class='category']/a
-     Image:
+      Performers:
+        Name: //p[@class='featuring']/a
+      Details: //span[@class='reg-text3']
+      Tags:
+        Name: //p[@class='category']/a
+      Image:
         selector: //div[@id="endscreen"]/@style
         postProcess:
           - replace:
               - regex: .*?(https?:\/\/\S*\.jpg).*
                 with: $1
-     Studio:
+      Studio:
         Name:
           fixed: CatalinaCruz
 # Last Updated April 11, 2021
