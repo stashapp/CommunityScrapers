@@ -14,7 +14,8 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2 2006
      Performers:
-      Name: //span[@class='tour_update_models']//a
+      Name:
+        fixed: Lexi Dona
      Details: //div[@class="movie-description"]/p
      Image:
         selector: //video[@id="video"]/@poster
