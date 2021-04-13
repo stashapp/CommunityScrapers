@@ -4,21 +4,39 @@ sceneByURL:
     url:
       - playboyplus.com
     scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - playboyplus.com
+    scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title: &title
         selector: //h1[@class="title"]
-     Date:
+      Date: &date
         selector: //p[@class="date label"]
         postProcess:
           - parseDate: January 2, 2006
-     Performers:
-      Name: //p[@class="contributorName"]//a
-     Details: //p[@class="description-truncated"]//p
-     Image:
-        selector: //img[@data-src][1]/@data-src
-     Studio:
+      Performers: &performers
+        Name: //p[@class="contributorName"]//a
+      Details: &details
+        selector: //p[@class="description-truncated"]/text()|//span[@id="description-more"]/text()
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: \|
+                with: ""
+      Image:
+        selector: //div[@class="imageContainer"]//img/@data-src
+      Studio: &studio
         Name:
           fixed: PlayboyPlus
-# Last Updated April 12, 2021
+  galleryScraper:
+    gallery:
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Details: *details
+      Studio: *studio
+# Last Updated April 13, 2021
