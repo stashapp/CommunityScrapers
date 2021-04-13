@@ -7,24 +7,24 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //h2[@class="title"]
-     Date:
+      Date:
         selector: //span[@class="update_date"]
         postProcess:
           - parseDate: 01/02/2006
-     Performers:
-      Name: //span[@class="tour_update_models"]/a
-     Details: //span[@class="latest_update_description"]
-     Tags:
-       Name: //span[@class="tour_update_tags"]/a
-     Image:
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Details: //span[@class="latest_update_description"]
+      Tags:
+        Name: //span[@class="tour_update_tags"]/a
+      Image:
         selector: //img[@class="stdimage thumbs"]/@src
         postProcess:
           - replace:
               - regex: ^
                 with: "https://www.fetishpros.com/updates/"
-     Studio:
+      Studio:
         Name:
           fixed: FetishPros
 # Last Updated April 09, 2021
