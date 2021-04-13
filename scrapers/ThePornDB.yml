@@ -89,7 +89,7 @@ jsonScrapers:
 driver:
   headers:
     - Key: User-Agent
-      Value: Stash JSON Scraper
+      Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
       #Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated April 7, 2021
+# Last Updated April 14, 2021
