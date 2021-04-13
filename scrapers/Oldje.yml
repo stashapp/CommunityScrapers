@@ -21,6 +21,7 @@ xPathScrapers:
           selector: //a[contains(@href,'tag/')]
       Date:
           selector: //span[@id="updata"]/text()
+          postProcess:
           parseDate: 2006-01-02
       Performers:
         Name:
@@ -35,7 +36,7 @@ xPathScrapers:
          Name:
            fixed: Oldje-3some
       Title:
-        selector: //h1[1]
+        selector: //h2[@class="page-title"]
       Tags:
         Name:
           selector: //a[contains(@href,'/videos/tag/')]
