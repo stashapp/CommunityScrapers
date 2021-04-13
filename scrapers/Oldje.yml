@@ -1,0 +1,52 @@
+name: Oldje
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - oldje.com/video
+    scraper: oldjeScraper
+  - action: scrapeXPath
+    url:
+      - oldje-3some.com/videos
+    scraper: oldje3someScraper
+xPathScrapers:
+  oldjeScraper:
+    scene:
+      Studio:
+         Name:
+           fixed: Oldje
+      Title:
+        selector: //h1[@class='inlay_title']
+      Tags:
+        Name:
+          selector: //a[contains(@href,'tag/')]
+      Date:
+          selector: //span[@id="updata"]/text()
+          parseDate: 2006-01-02
+      Performers:
+        Name:
+          selector: //a[@class="act_name_h"]/text()
+      Details:
+        selector: //p[@class='text']
+      Image:
+         selector: //div[@id="content"]/a/img/@src
+  oldje3someScraper:
+    scene:
+      Studio:
+         Name:
+           fixed: Oldje-3some
+      Title:
+        selector: //h1[1]
+      Tags:
+        Name:
+          selector: //a[contains(@href,'/videos/tag/')]
+      Performers:
+        Name:
+          selector: //a[contains(@href,'/models/preview/')]
+      Details:
+        selector: //div[@class="measuringWrapper"]/p
+      Image:
+         selector: //img[@class="img-responsive" and contains(@src,"/view/")]/@src
+         postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.oldje-3some.com/"
