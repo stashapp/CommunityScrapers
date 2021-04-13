@@ -1,0 +1,30 @@
+name: Philavise
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - philavise.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //span[@class="update_title"]
+      Date:
+        selector: //span[@class="update_date"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Details: //span[@class="latest_update_description"]
+      Tags:
+        Name: //span[@class='tour_update_tags']/a
+      Image:
+        selector: //img[@class='large_update_thumb left thumbs']/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "http://philavise.com/"
+      Studio:
+        Name:
+          fixed: Philavise
+# Last Updated April 09, 2021
