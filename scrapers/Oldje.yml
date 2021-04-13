@@ -20,9 +20,9 @@ xPathScrapers:
         Name:
           selector: //a[contains(@href,'tag/')]
       Date:
-          selector: //span[@id="updata"]/text()
-          postProcess:
-          parseDate: 2006-01-02
+        selector: //span[@id="updata"]/text()
+        postProcess:
+          - parseDate: 2006-01-02
       Performers:
         Name:
           selector: //a[@class="act_name_h"]/text()
