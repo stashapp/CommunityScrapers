@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
      Title:
-        selector: //span[@class="title-links"]/strong[1]
+        selector: //span[@class="title-links"]/strong
      Performers:
       Name:  //p[@class='featuring']/a
      Details: //span[@class='reg-text3']
