@@ -7,19 +7,19 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //div[@class="col-md-6 picdetailheader"]/text()
-     Date:
+      Date:
         selector: //strong/em[1]
         postProcess:
           - parseDate: January 2 2006
-     Performers:
-      Name:
-        fixed: Lexi Dona
-     Details: //div[@class="movie-description"]/p
-     Image:
+      Performers:
+        Name:
+          fixed: Lexi Dona
+      Details: //div[@class="movie-description"]/p
+      Image:
         selector: //video[@id="video"]/@poster
-     Studio:
+      Studio:
         Name:
           fixed: Lexi Dona
 # Last Updated April 10, 2021
