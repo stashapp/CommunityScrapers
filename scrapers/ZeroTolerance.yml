@@ -2,6 +2,7 @@ name: "ZeroTolerance"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - thirdmovies.com/better/videos/
       - ztod.com/videos/
     scraper: sceneScraper
 xPathScrapers:
@@ -25,5 +26,14 @@ xPathScrapers:
       Movies:
         Name: //a[@class="btn-link dvd-title"]/text()
       Image: //img[@class="player-image"]/@src
-
-# Last Updated November 8, 2020
+      Studio:
+        Name:
+          selector: //p[@id="copy"]
+          postProcess:
+            - replace:
+                - regex: .+\s([[:alpha:]]+)\.com$
+                  with: $1
+            - map:
+                Thirdmovies: 3rd Degree Movies
+                Ztod: Zero Tolerance
+# Last Updated March 24, 2021

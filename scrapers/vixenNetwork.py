@@ -14,7 +14,7 @@ def log(*s):
 
 
 def get_from_url(url_to_parse):
-    m = re.match(r'(?:https?://)?(?:www\.)?((\w+)\.com)/([a-z0-9-]+)', url_to_parse)
+    m = re.match(r'(?:https?://)?(?:www\.)?((\w+)\.com)/(?:videos/)?([a-z0-9-]+)', url_to_parse)
     if m is None:
         return None, None, None
     return m.groups()
@@ -65,7 +65,7 @@ def main():
     if site is None:
         log('The URL could not be parsed')
         sys.exit(1)
-    response, err = make_request('https://%s/%s' % (site, slug), 'https://%s' % site)
+    response, err = make_request('https://%s/videos/%s' % (site, slug), 'https://%s' % site)
     if err is not None:
         log('Could not fetch page HTML', err)
         sys.exit(1)

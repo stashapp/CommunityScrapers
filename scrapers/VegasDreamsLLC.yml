@@ -1,0 +1,41 @@
+name: VegasDreamsLLC
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - asiansexdiary.com
+      - helloladyboy.com
+      - milftrip.com
+      - screwmetoo.com
+      - trikepatrol.com
+      - tuktukpatrol.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //h1[@class="amp-single-title"]
+     Date:
+        selector: //i[@class="fa fa-calendar-o"]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+     Performers:
+      Name: //div[@class="update-info"]/a
+     Details:
+        selector: //div[@class="cntn-wrp artl-cnt"]//p
+        concat: "\n\n"
+     Tags:
+       Name: //div[@class="amp-category"]//a
+     Image:
+        selector: //amp-img[@layout="fill"]/@src
+     Studio:
+       Name:
+         selector: //form[@role="search"]/@action
+         postProcess:
+           - map:
+               https://asiansexdiary.com: AsianSexDiary
+               https://helloladyboy.com: HelloLadyBoy
+               https://milftrip.com: MilfTrip
+               https://screwmetoo.com: ScrewMeToo
+               https://trikepatrol.com: TrikePatrol
+               https://tuktukpatrol.com: TukTukPatrol
+# Last Updated April 13, 2021
