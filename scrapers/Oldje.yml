@@ -15,7 +15,7 @@ xPathScrapers:
          Name:
            fixed: Oldje
       Title:
-        selector: //h1[@class='inlay_title']
+         selector: //h1
       Tags:
         Name:
           selector: //a[contains(@href,'tag/')]
@@ -25,18 +25,18 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name:
-          selector: //a[@class="act_name_h"]/text()
+          selector: //a[contains(@href,'/models/preview/')]
       Details:
-        selector: //p[@class='text']
+        selector: //p[@class='text']|//div[@class="preview_desc"]
       Image:
-         selector: //div[@id="content"]/a/img/@src
+         selector: (//div[@id="content" or @id="prev_m"]/a)[1]/img/@src
   oldje3someScraper:
     scene:
       Studio:
          Name:
            fixed: Oldje-3some
       Title:
-        selector: //h2[@class="page-title"]
+        selector: //h1
       Tags:
         Name:
           selector: //a[contains(@href,'/videos/tag/')]
@@ -51,3 +51,4 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https://www.oldje-3some.com/"
+# Last Updated April 15, 2021
