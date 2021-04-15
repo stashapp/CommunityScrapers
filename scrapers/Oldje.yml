@@ -15,7 +15,7 @@ xPathScrapers:
          Name:
            fixed: Oldje
       Title:
-         selector: //h1
+         selector: //span[@class="bold"]|//h1[@class="inlay_title"]
       Tags:
         Name:
           selector: //a[contains(@href,'tag/')]
