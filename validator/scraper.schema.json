@@ -486,7 +486,7 @@
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "DeathDate": {
-          "title": "Performer deathdate",
+          "title": "Performer death date",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Ethnicity": {
