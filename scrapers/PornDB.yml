@@ -48,4 +48,9 @@ xPathScrapers:
 driver:
   useCDP: true
   sleep: 5
-# Last Updated January 24, 2021
+  headers:
+    - Key: User-Agent
+      Value: stash/1.0.0
+    #- Key: Authorization  # Uncomment and provide a valid API Key instead of the  XXXXX
+    #  Value: Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXX
+# Last Updated April 16, 2021
