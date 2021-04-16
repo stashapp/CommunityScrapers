@@ -220,6 +220,27 @@
               }
             }
           }
+        },
+        "headers": {
+          "title": "Headers",
+          "description": "Headers to add to scraper requests.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["Key", "Value"],
+            "properties": {
+              "Key": {
+                "title": "Key",
+                "type": "string"
+              },
+              "Value": {
+                "title": "Value",
+                "type": "string"
+              }
+            }
+          }
         }
       }
     }
