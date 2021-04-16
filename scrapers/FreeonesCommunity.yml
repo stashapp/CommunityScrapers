@@ -32,8 +32,8 @@ xPathScrapers:
               - regex: \sBio\s*$
                 with: ""
       URL: //link[@rel="alternate" and @hreflang="x-default"]/@href
-      Twitter: //a[contains(@href,'twitter.com/')]/@href
-      Instagram: //a[contains(@href,'instagram.com/')]/@href
+      Twitter: //form//a[contains(@href,'twitter.com/')]/@href
+      Instagram: //form//a[contains(@href,'instagram.com/')]/@href
       Birthdate:
         selector: //span[contains(text(),'Born On')]
         postProcess:
