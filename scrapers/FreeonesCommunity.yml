@@ -98,9 +98,9 @@ xPathScrapers:
               - regex: Passed away on (.+) at the age of \d+
                 with: $1
           - parseDate: January 2, 2006
-      HairColor: //span[text()='Hair Color']/following-sibling::span/a
+      HairColor: //span[@data-test="link_span_hair_color"]
       Weight:
-        selector: //span[text()='Weight']/following-sibling::span/a
+        selector: //span[@data-test="link_span_weight"]
         postProcess:
         - replace:
             - regex: \D+[\s\S]+
