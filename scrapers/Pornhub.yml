@@ -64,9 +64,10 @@ xPathScrapers:
               - regex: \s+to\s+
                 with: "-"
       URL: //link[@rel="canonical"][1]/@href
+      Image: //img[@id="getAvatar"]/@src
   sceneScraper:
     common:
-      $performer: //div[@class="pornstarsWrapper"]/a[@data-mxptype="Pornstar"]
+      $performer: //div[@class="pornstarsWrapper js-pornstarsWrapper"]/a[@data-mxptype="Pornstar"]
       $studio: //div[@data-type="channel"]/a
     scene:
       Title: //h1[@class="title"]/span/text()

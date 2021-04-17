@@ -1,0 +1,45 @@
+name: Pornhub(Old)
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.pornhub.com/pornstars/search?search={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - pornhub.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
+      URL:
+        selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.pornhub.com"
+  performerScraper:
+    common:
+      $infoPiece: //div[@class="infoContainer"]
+    performer:
+      Name: $infoPiece/div[@class="nameSubscribe"]/div[@class="name"]/h1
+      Birthdate:
+        selector: $infoPiece/div[@class="bottomInfo"]/div[@class="detailedInfo js-infoText"]/div[@class="infoPiece"]/span[text() = 'Born:']/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Measurements: 
+        selector: $infoPiece/div[@class="bottomInfo"]/div[@class="detailedInfo js-infoText"]/div[@class="infoPiece"]/span[text() = 'Weight:']/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: .*\((\d+) kg\)
+                with: $1 kg
+      Height:
+        selector: $infoPiece/div[@class="bottomInfo"]/div[@class="detailedInfo js-infoText"]/div[@class="infoPiece"]/span[text() = 'Height:']/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: .*\((\d+) cm\)
+                with: $1
+      URL: //link[@rel="canonical"][1]/@href
+      Image: //div[@class="thumbImage"]/img/@src
+# Last Updated November 11, 2020
