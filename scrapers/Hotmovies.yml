@@ -24,11 +24,12 @@ xPathScrapers:
       Title:
         selector: //h1[@class="title"]
       Date:
-        selector: //script[@type="application/ld+json"]/text()
-        replace:
-          - regex: .*dateCreated\"\:\"(\d{4}-\d\d-\d\d).*
-            with: $1
-        parseDate: 2006-01-02
+         selector: //script[@type="application/ld+json"]/text()
+         postProcess:
+           - replace:
+             - regex: .*dateCreated\"\:\"(\d{4}-\d\d-\d\d).*
+               with: $1
+           - parseDate: 2006-01-02
       Details: //span[@class="video_description"]
       Tags:
         Name: //span[@class="list_attributes"][1]//a
