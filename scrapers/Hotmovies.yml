@@ -1,0 +1,151 @@
+name: Hotmovies
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hotmovies.com
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - hotmovies.com
+    scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - hotmovies.com/porn-star/
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.hotmovies.com/star_search.php?words={}&searchtype_value=star
+  scraper: performerSearch
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="title"]
+      Date:
+        selector: //script[@type="application/ld+json"]/text()
+        replace:
+          - regex: .*dateCreated\"\:\"(\d{4}-\d\d-\d\d).*
+            with: $1
+        parseDate: 2006-01-02
+      Details: //span[@class="video_description"]
+      Tags:
+        Name: //span[@class="list_attributes"][1]//a
+      Performers:
+        Name: //div[@class="stars section"]//a
+      URL: //meta[@property="og:url"]/@content
+      Movies:
+        Name:
+          selector: //h1[@class="title"]
+      Studio:
+        Name: //div[@class="small-4 medium-3 cell video_details"]/a[1]
+      Image:
+         selector: //div[@class="video_preview_wrapper show-for-medium"]/@style
+         postProcess:
+           - replace:
+               - regex: .*?(https?:\/\/\S*\.jpg).*
+                 with: $1
+  movieScraper:
+    movie:
+      Name: //h1[@class="title"]
+      Director:
+        selector: //a[contains(@href, "/director/")]/text()
+      Duration:
+        selector: //div[@class="small-4 medium-3 cell video_details"]/span[1]
+      Date:
+        selector: //script[@type="application/ld+json"]/text()
+        replace:
+          - regex: .*dateCreated\"\:\"(\d{4}-\d\d-\d\d).*
+            with: $1
+        parseDate: 2006-01-02
+      Studio:
+        Name: //a[contains(@href, "/studio/")]/text()
+      Synopsis: //span[@class="video_description"]
+      FrontImage: //div[@class="lg_inside_wrap"]/@data-front | //img[@id="cover"]/@src
+      BackImage: //div[@class="lg_inside_wrap"]/@data-back
+  performerSearch:
+    performer:
+      Name: //h3[@class="title"]/a/text()
+      URL:
+        selector: //h3[@class="title"]/a/@href
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.hotmovies.com/
+  performerScraper:
+    performer:
+      URL: //link[@rel="canonical"]/@href
+      Name: //h1[@class="title"]/text()
+      Gender:
+        selector: //strong[text()="Gender:"]/following-sibling::text()[1]
+        postProcess:
+          - map:
+              Trans: transgender_female
+      Birthdate:
+        selector: //strong[text()="Born:"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+            - regex: \s\/+.+
+              with: ""
+            - regex: st|nd|rd|th
+              with: ""
+            - regex: Sept\s
+              with: "September "
+            - regex: Oct\s
+              with: "October "
+            - regex: Nov\s
+              with: "November "
+            - regex: Dec\s
+              with: "December "
+            - regex: Jan\s
+              with: "January "
+            - regex: Feb\s
+              with: "February "
+            - regex: Mar\s
+              with: "March "
+            - regex: Apr\s
+              with: "April "
+            - regex: Aug\s
+              with: "August "
+          - parseDate: January 2 2006
+      Ethnicity: //strong[text()="Ethnicity:"]/following-sibling::text()[1]
+      Country: //strong[text()="Birth Place:"]/following-sibling::text()[1]
+      EyeColor: //strong[text()="Eye Color:"]/following-sibling::text()[1]
+      Height:
+        selector: //strong[text()="Height:"]/following-sibling::text()[1]
+        postProcess:
+          - feetToCm: true
+      Measurements: //strong[text()="Breast Size:"]/following-sibling::text()[1]
+      CareerLength: //strong[text()="Years Active:"]/following-sibling::text()[1]
+      FakeTits: //strong[text()="Implants:"]/following-sibling::text()[1]
+      Tattoos: //strong[text()="Tattoos:"]/following-sibling::text()[1]
+      Piercings: //strong[text()="Piercings:"]/following-sibling::text()[1]
+      Image: //img[@id='imgStarGalleryFocus']/@src
+      HairColor: //strong[text()="Typical Hair Color:"]/following-sibling::text()[1]
+      Details:
+        selector: //div[@id="bio_description"]//text()
+        concat: "|"
+        postProcess:
+          - replace:
+            - regex: Biography\|
+              with: "Biography:\n"
+            - regex: \|Early Life\|
+              with: "\n\nEarly Life:\n"
+            - regex: \|.*Career\|
+              with: "\n\nCareer:\n"
+            - regex: \|.*Facts\|
+              with: "\n\nFacts:\n"
+            - regex: \|.*Quotes\|
+              with: "\n\nQuotes:\n"
+            - regex: \|Turn\sOns\|
+              with: "\n\nTurn Ons:\n"
+            - regex: \|Awards\|
+              with: "\n\nAwards:\n"
+            - regex: \|(\d{4})
+              with: "\n$1"
+            - regex: \|
+              with: " "
+      Aliases: //strong[text()="Aliases:"]/following-sibling::text()[1]
+
+#Last Updated April 17, 2021
