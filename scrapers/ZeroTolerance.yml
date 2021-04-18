@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - thirdmovies.com/better/videos/
+      - thirdmovies.com/videos/
       - ztod.com/videos/
     scraper: sceneScraper
 xPathScrapers:
