@@ -1,0 +1,47 @@
+name: Jhdv
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - av69.tv/en/
+      - avanal.com/en/
+      - ferame.com/en/
+      - gangav.com/en/
+      - hairyav.com/en/
+      - heymilf.com/en/
+      - heyoutdoor.com/en/
+      - pussyav.com/en/
+      - schoolgirlshd.com/en/
+      - shiofuky.com/en/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //h1[@itemprop="name"]/text()
+     Performers:
+      Name: //div[@class="set-info__model"]/p[1]/a
+     Details: //div[@class="set-info__description"]/p
+     Tags:
+       Name: //div[@class="categories-links"]/a
+     Image:
+        selector: //div[@class="player-container"]/@style
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+     Studio:
+       Name:
+         selector: //div[@class="center"]/a/@href
+         postProcess:
+           - map:
+               https://av69.tv/en: av69
+               https://avanal.com/en: Avanal
+               https://ferame.com/en: Ferame
+               https://gangav.com/en: Gangav
+               https://hairyav.com/en: Hairyav
+               https://heymilf.com/en: Heymilf
+               https://heyoutdoor.com/en: Heyoutdoor
+               https://pussyav.com/en: Pussyav
+               https://schoolgirlshd.com/en: SchoolGirlsHD
+               https://shiofuky.com/en: Shiofuky
+# Last Updated April 18, 2021
