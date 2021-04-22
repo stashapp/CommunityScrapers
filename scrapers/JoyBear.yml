@@ -23,6 +23,12 @@ xPathScrapers:
       Movies:
         Name:
           selector: //span[@class="wide source"]/a
+      URL:
+          selector: //span[@class="wide source"]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.joybear.com    
       Details:
         selector: //span[@class="wide text"]
       Image:
