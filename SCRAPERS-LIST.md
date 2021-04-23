@@ -454,6 +454,7 @@ jizzbomb.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jodiwest.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
 joeperv.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jonnidarkkoxxx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+joybear.com|JoyBear.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 joymii.com|joymii.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jpmilfs.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 jpnurse.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
