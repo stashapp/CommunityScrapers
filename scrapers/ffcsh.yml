@@ -1,0 +1,41 @@
+name: ffcsh
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - balletflatsfetish.com/tour/
+      - barbarafeet.com/tour/
+      - blackph.com/tour/
+      - cosplayfeet.com/tour/
+      - dianafeet.com/tour/
+      - fantasyflipflop.com/tour/
+      - footfetishbeauties.com/tour/
+      - nylonfeetlove.com/tour/
+      - nylonup.com/tour/
+      - redpolishfeet.com/tour/
+      - sweetcarla.com/tour/
+      - transfeet.com/tour/
+      - valentina.passionepiedi.com/tour/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //div[@class="videoDetails clear"]/h3
+     Date:
+        selector: //div[@class="videoInfo clear"]//span[contains(.,"Date Added:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: "Date Added:"
+                with: ""
+          - parseDate: January 2, 2006
+     Performers:
+       Name: //li[@class="update_models"]/a
+     Tags:
+       Name: //li[contains(.,"Tags:")]/following-sibling::text()
+     Details: //div[@class="videoDetails clear"]/p
+     Image:
+        selector: //meta[@property="og:image"]/@content
+     Studio:
+       Name:
+         selector: //meta[@name="author"]/@content
+# Last Updated April 23, 2021
