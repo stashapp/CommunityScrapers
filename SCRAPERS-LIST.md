@@ -655,6 +655,7 @@ pornstarstroker.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornstartease.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornweekends.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornworld.com|pornworld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+portagloryhole.com|PortaGloryhole.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 povblowjobs.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 povd.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 povjp.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
