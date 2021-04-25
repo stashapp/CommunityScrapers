@@ -1,0 +1,24 @@
+name: Hitzefrei
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hitzefrei.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //div[@class="row-content-details"]/h1
+     Date:
+        selector: //span[@class="meta-value"][2]/text()
+        postProcess:
+          - parseDate: 02/01/2006
+     Performers:
+       Name: //div[@class="model-name"]
+     Details: //div[@class="content-description"]/p
+     Image:
+        selector: //video[@id="ypp-player"]/@poster
+     Studio:
+        Name:
+          fixed: Hitzefrei
+# Last Updated April 25, 2021
