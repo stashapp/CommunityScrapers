@@ -4,21 +4,53 @@ sceneByURL:
     url:
       - hitzefrei.com
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - hitzefrei.com/model
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //div[@class="row-content-details"]/h1
-     Date:
+      Date:
         selector: //span[@class="meta-value"][2]/text()
         postProcess:
           - parseDate: 02/01/2006
-     Performers:
-       Name: //div[@class="model-name"]
-     Details: //div[@class="content-description"]/p
-     Image:
+      Performers:
+        Name: //div[@class="model-name"]
+        URL: //div[@class="model-thumb"]/a/@href
+      Details: //div[@class="content-description"]/p
+      Image:
         selector: //video[@id="ypp-player"]/@poster
-     Studio:
+      Studio:
         Name:
           fixed: Hitzefrei
-# Last Updated April 25, 2021
+  performerScraper:
+    common:
+      $stat: p[@class="stat-value"]
+    performer:
+      Name: //h1[@class="model-name"]
+      Details: //div[@class="model-profile"]
+      Image: //div[contains(@class,"model-thumbnail")]/img/@src
+      Birthdate:
+        selector: //div[p[text()="Birthdate"]]/$stat
+        postProcess:
+          - parseDate: 2006-01-02
+      Measurements: //div[p[text()="Measurements"]]/$stat
+      #uncomment when on version 7.0 for weight, this will be updated when weight is available in stable version
+      #Weight:
+      #  selector: //div[p[text()="Weight"]]/$stat
+      #  postProcess:
+      #    - replace:
+      #        - regex: (\d+)\s.+
+      #          with: $1
+      #    - lbToKg: true
+      Height:
+        selector: //div[p[text()="Height"]]/$stat
+        postProcess:
+          - feetToCm: true
+      HairColor: //div[p[text()="Hair"]]/$stat
+      EyeColor: //div[p[text()="Eyes"]]/$stat
+  # Last Updated April 26, 2021
