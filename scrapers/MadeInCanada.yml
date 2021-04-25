@@ -1,0 +1,24 @@
+name: MadeInCanada
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - madeincanada.xxx
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //h2[@class="sec-tit"]/span
+     Date:
+        selector: //span[contains(text(),"Released:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+     Performers:
+       Name: //span/a
+     Details: //div[@class="preview-description"]/p
+     Image:
+        selector: //a[@id="fake-play"]/div/img/@src
+     Studio:
+        Name:
+          fixed: Made in Canda
+# Last Updated April 25, 2021
