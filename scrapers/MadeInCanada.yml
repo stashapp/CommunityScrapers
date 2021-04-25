@@ -20,5 +20,5 @@ xPathScrapers:
         selector: //a[@id="fake-play"]/div/img/@src
      Studio:
         Name:
-          fixed: Made in Canda
+          fixed: Made in Canada
 # Last Updated April 25, 2021
