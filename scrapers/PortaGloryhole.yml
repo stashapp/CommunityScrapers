@@ -10,7 +10,7 @@ xPathScrapers:
      Title:
         selector: //h2
      Performers:
-       Name: //h5[1]/a
+       Name: //h5[i[@class="icon-female"]]/a
      Tags:
        Name: //h5[@class="video_categories"]/a
      Details: //div[@class="desc"]/p
