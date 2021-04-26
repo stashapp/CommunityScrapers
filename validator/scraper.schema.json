@@ -751,7 +751,12 @@
                   },
                   "feetToCm": {
                     "title": "Feet to Centimetres",
-                    "description": "Convert measurement in feet and inches to centimetres.",
+                    "description": "Convert height measurement in feet and inches to centimetres.",
+                    "type": "boolean"
+                  },
+                  "lbToKg": {
+                    "title": "Pounds to Kilograms",
+                    "description": "Convert weight measurement in pounds to kilograms.",
                     "type": "boolean"
                   }
                 }
