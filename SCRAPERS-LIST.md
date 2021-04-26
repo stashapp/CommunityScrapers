@@ -404,7 +404,7 @@ hotcrazymess.com|Nubiles.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotguysfuck.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hothouse.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotlegsandfeet.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-hotmovies.com|Hotmovies.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|stash >= v0.6.0-49|-
+hotmovies.com|Hotmovies.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
 hottiemoms.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hotwifexxx.com|HotWifeXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 houseofgord.com|houseofgord.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
