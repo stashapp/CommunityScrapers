@@ -39,7 +39,7 @@ xPathScrapers:
         postProcess:
           - parseDate: 2006-01-02
       Measurements: //div[p[text()="Measurements"]]/$stat
-      #uncomment when on version 7.0 for weight, this will be updated when weight is available in stable version
+      #uncomment when on version stash >= v0.6.0-49 for weight, this will be updated when weight is available in stable version
       #Weight:
       #  selector: //div[p[text()="Weight"]]/$stat
       #  postProcess:
