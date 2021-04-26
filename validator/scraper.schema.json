@@ -784,6 +784,11 @@
               "title": "Split",
               "description": "Splits a string to more elements using the separator given.\nExecuted after `postProcess`.",
               "type": "string"
+            },
+            "distinct": {
+              "title": "Distinct",
+              "description": "If set to `true` makes sure that returned elements are unique.\nApplied after all other post-processing operations.",
+              "type": "boolean"
             }
           }
         }
