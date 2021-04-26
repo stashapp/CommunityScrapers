@@ -1,0 +1,26 @@
+name: Max-Hardcore
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - max-hardcore.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+     Title:
+        selector: //h1[@class="title"]
+        postProcess:
+          - replace:
+              - regex: "FREE PREVIEW -"
+                with: ""
+     Performers:
+       Name: //strong[contains(text(),"Performers:")]/following-sibling::a/text()
+     Tags:
+       Name: //strong[contains(text(),"Category:")]/following-sibling::a/text()
+     Details: //div[@class="description"]/p
+     Image:
+        selector: //a[@href="https://www.max-hardcore.com/signup"][1]/img/@src
+     Studio:
+        Name:
+          fixed: Max-Hardcore
+# Last Updated April 26, 2021
