@@ -7,16 +7,16 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //h2
-     Performers:
-       Name: //h5[i[@class="icon-female"]]/a
-     Tags:
-       Name: //h5[@class="video_categories"]/a
-     Details: //div[@class="desc"]/p
-     Image:
+      Performers:
+        Name: //h5[i[@class="icon-female"]]/a
+      Tags:
+        Name: //h5[@class="video_categories"]/a
+      Details: //div[@class="desc"]/p
+      Image:
         selector: //meta[@property="og:image"]/@content
-     Studio:
+      Studio:
         Name:
           fixed: PortaGloryhole
 # Last Updated April 25, 2021
