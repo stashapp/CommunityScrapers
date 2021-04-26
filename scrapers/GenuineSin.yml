@@ -1,0 +1,23 @@
+name: GenuineSin
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - genuinesin.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="videoDetails clear"]/h3
+      Performers:
+        Name: //li[@class="update_models"]//a
+      Tags:
+        Name: //li[contains(text(),"Tags:")]/following-sibling::text()
+      Details:
+        selector: //div[@class="videoDetails clear"]/p
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+         Name:
+           fixed: GenuineSin
+# Last Updated April 28, 2021
