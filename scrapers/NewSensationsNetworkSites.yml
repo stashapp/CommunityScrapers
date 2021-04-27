@@ -31,6 +31,6 @@ xPathScrapers:
         Name: //span[@class="update_tags"]/a/text()
       Performers:
         Name: //span[@class="update_models"]/a/text() | //div[@class="sceneTextLink"]/p/span[@class="tour_update_models"]/a
-      Image: //video[@id]/@poster
+      Image: //video/@poster | //img[@alt="Join Today!"]/@src
 
 # Last Updated April 1, 2021
