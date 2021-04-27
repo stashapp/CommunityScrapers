@@ -13,7 +13,7 @@ xPathScrapers:
         selector: //div[@class="info"]/p
         postProcess:
           - replace:
-              - regex: (^\S+\s+)(.+\d{4})(.+)
+              - regex: (^Added:\s+)(.+\d{4})(.+)
                 with: $2
           - parseDate: January 2, 2006
       Performers:
