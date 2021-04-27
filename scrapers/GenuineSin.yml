@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - genuinesin.com
+      - mixedx.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
