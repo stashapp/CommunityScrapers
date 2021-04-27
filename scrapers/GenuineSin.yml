@@ -12,12 +12,11 @@ xPathScrapers:
       Performers:
         Name: //li[@class="update_models"]//a
       Tags:
-        Name: //li[contains(text(),"Tags:")]/following-sibling::text()
+        Name: //ul[li[contains(text(),"Tags:")]]//a
       Details:
         selector: //div[@class="videoDetails clear"]/p
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
-         Name:
-           fixed: GenuineSin
+        Name: //div[@class="logo"]/a/img/@alt
 # Last Updated April 28, 2021
