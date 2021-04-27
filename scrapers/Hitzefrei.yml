@@ -39,18 +39,19 @@ xPathScrapers:
         postProcess:
           - parseDate: 2006-01-02
       Measurements: //div[p[text()="Measurements"]]/$stat
-      #uncomment when on version stash >= v0.6.0-49 for weight, this will be updated when weight is available in stable version
-      #Weight:
-      #  selector: //div[p[text()="Weight"]]/$stat
-      #  postProcess:
-      #    - replace:
-      #        - regex: (\d+)\s.+
-      #          with: $1
-      #    - lbToKg: true
+      #Below requires version stash >= v0.6.0-49 for weight conversion.
+      #Comment it out if needed
+      Weight:
+        selector: //div[p[text()="Weight"]]/$stat
+        postProcess:
+          - replace:
+              - regex: (\d+)\s.+
+                with: $1
+          - lbToKg: true
       Height:
         selector: //div[p[text()="Height"]]/$stat
         postProcess:
           - feetToCm: true
       HairColor: //div[p[text()="Hair"]]/$stat
       EyeColor: //div[p[text()="Eyes"]]/$stat
-  # Last Updated April 26, 2021
+  # Last Updated April 27, 2021
