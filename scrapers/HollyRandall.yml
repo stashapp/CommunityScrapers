@@ -29,6 +29,7 @@ xPathScrapers:
               - regex: ^
                 with: "https://hollyrandall.com"
       Studio:
-         Name:
-           fixed: HollyRandall
+        Name:
+          fixed: HollyRandall
 # Last Updated April 26, 2021
+
