@@ -2,13 +2,13 @@ name: Paco
 sceneByURL:
   - action: scrapeJson
     url:
-      - en.pacopacomama.com/movies/
+      - en.pacopacomama.com
     scraper: sceneScraper
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: .*en.pacopacomama.com/movies/([^/]+).*
-          with: https://en.pacopacomama.com/dyn/phpauto/movie_details/movie_id/$1.json
+        - regex: .*/movie(s|pages)/([^/]+).*
+          with: https://en.pacopacomama.com/dyn/phpauto/movie_details/movie_id/$2.json
 
 sceneByFragment:
   action: scrapeJson
@@ -30,7 +30,6 @@ jsonScrapers:
       Performers:
         Name: ActressesEn
       Image: ThumbHigh
-
       Tags:
         Name: UCNAMEEn
       Details: DescEn
