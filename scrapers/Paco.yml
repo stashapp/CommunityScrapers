@@ -22,7 +22,10 @@ sceneByFragment:
 jsonScrapers:
   sceneScraper:
     scene:
-      Title: TitleEn
+      Title:
+        selector: "[TitleEn,Title]"
+        concat: "|" # get rid of empty result
+        split: "|"
       Date:
         selector: Release
         postProcess:
