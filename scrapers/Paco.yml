@@ -41,5 +41,8 @@ jsonScrapers:
                 with: "https://en.pacopacomama.com/movies/"
               - regex: $
                 with: "/"
+      Studio:
+        Name:
+          fixed: PacoPacoMama
 # Last Updated April 30, 2021
 
