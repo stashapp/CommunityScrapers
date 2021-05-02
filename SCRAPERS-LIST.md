@@ -270,6 +270,7 @@ dorcelclub.com|DorcelClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 doubleteamedteens.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 downtofuckdating.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dpfanatics.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+dreamsofspanking.com|dreamsofspanking.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dreamteenshd.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dreamtranny.com|DreamTranny.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 drilledchicks.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
