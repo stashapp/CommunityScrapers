@@ -36,37 +36,50 @@ xPathScrapers:
                 with: "https://www.pornhub.com"
   performerScraper:
     common:
-      $infoPiece: //div[@class="infoPiece"]/span
+      $infoPiece: //div[@class="infoPiece"]
+      $infoContainer: //div[@class="infoContainer"]
+      $smallInfo: span[@class="smallInfo"]
+
     performer:
-      Name: //h1[@itemprop="name"]
+      Name: //h1[@itemprop="name"]|$infoContainer//h1
       Birthdate:
-        selector: //span[@itemprop="birthDate"]
+        selector: //span[@itemprop="birthDate"]|$infoPiece[contains(span,"Born:")]/text()
         postProcess:
           - parseDate: Jan 2, 2006
-      Gender: //span[@itemprop="gender"]
-      Twitter: //span[text() = 'Twitter']/../@href
-      Instagram: //span[text() = 'Instagram']/../@href
-      Measurements: $infoPiece[text() = 'Measurements:']/../span[@class="smallInfo"]
-      Height:
-        selector: $infoPiece[text() = 'Height:']/../span[@class="smallInfo"]
+          - parseDate: 2006-01-02
+      Gender: $infoPiece[contains(span,"Gender:")]/$smallInfo
+      Twitter: //ul[contains(@class,"socialList")]//a[contains(@href,"twitter.com/")]/@href
+      Instagram: //ul[contains(@class,"socialList")]//a[contains(@href,"instagram.com/")]/@href
+      Measurements: $infoPiece[contains(span,"Measurements:")]/$smallInfo|$infoPiece[contains(span,"Measurements:")]/text()
+      Weight:
+        selector: $infoPiece[contains(span,"Weight:")]/$smallInfo|$infoPiece[contains(span,"Weight:")]/text()
         postProcess:
           - replace:
-              - regex: .*\((\d+) cm\)
+              - regex: .*\((\d+)\s*kg\)
                 with: $1
-      Ethnicity: $infoPiece[text() = 'Ethnicity:']/../span[@class="smallInfo"]
-      FakeTits: $infoPiece[text() = 'Fake Boobs:']/../span[@class="smallInfo"]
-      Piercings: $infoPiece[text() = 'Piercings:']/../span[@class="smallInfo"]
-      Tattoos: $infoPiece[text() = 'Tattoos:']/../span[@class="smallInfo"]
+      Height:
+        selector: $infoPiece[contains(span,"Height:")]/$smallInfo|$infoPiece[contains(span,"Height:")]/text()
+        postProcess:
+          - replace:
+              - regex: .*\((\d+)\s*cm\)
+                with: $1
+      Details: //div[@itemprop="description" or starts-with(@class,"text longBio")]
+      Ethnicity: $infoPiece[contains(span,"Ethnicity:")]/$smallInfo|$infoPiece[contains(span,"Ethnicity:")]/text()
+      FakeTits: $infoPiece[contains(span,"Fake Boobs:")]/$smallInfo
+      Piercings: $infoPiece[contains(span,"Piercings:")]/$smallInfo
+      Tattoos: $infoPiece[contains(span,"Tattoos:")]/$smallInfo
+      HairColor: $infoPiece[contains(span,"Hair Color:")]/$smallInfo
       CareerLength:
-        selector: $infoPiece[text() = 'Career Start and End:']/../span[@class="smallInfo"]
+        selector: $infoPiece[contains(span,"Career Start and End:")]/$smallInfo
         postProcess:
           - replace:
               - regex: \s+to\s+
                 with: "-"
       URL: //link[@rel="canonical"][1]/@href
+      Image: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
   sceneScraper:
     common:
-      $performer: //div[@class="pornstarsWrapper"]/a[@data-mxptype="Pornstar"]
+      $performer: //div[@class="pornstarsWrapper js-pornstarsWrapper"]/a[@data-mxptype="Pornstar"]
       $studio: //div[@data-type="channel"]/a
     scene:
       Title: //h1[@class="title"]/span/text()
@@ -90,4 +103,4 @@ xPathScrapers:
       Studio:
         Name: $studio
         URL: $studio/@href
-# Last Updated November 11, 2020
+# Last Updated April 19, 2021
