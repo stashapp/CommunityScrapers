@@ -24,6 +24,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Bound Life 
+      # There are images that can be scraped, but quality is bad.
       #Image: //img[@border="1"]/@src
 
 # Last Updated May 2 2021
