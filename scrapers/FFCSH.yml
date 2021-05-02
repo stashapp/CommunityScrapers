@@ -1,4 +1,4 @@
-name: ffcsh
+name: FFCSH
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -19,23 +19,23 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //div[@class="videoDetails clear"]/h3
-     Date:
+      Date:
         selector: //div[@class="videoInfo clear"]//span[contains(.,"Date Added:")]/following-sibling::text()
         postProcess:
           - replace:
               - regex: "Date Added:"
                 with: ""
           - parseDate: January 2, 2006
-     Performers:
-       Name: //li[@class="update_models"]/a
-     Tags:
-       Name: //li[contains(.,"Tags:")]/following-sibling::text()
-     Details: //div[@class="videoDetails clear"]/p
-     Image:
+      Performers:
+        Name: //li[@class="update_models"]/a
+      Tags:
+        Name: //li[contains(.,"Tags:")]/following-sibling::text()
+      Details: //div[@class="videoDetails clear"]/p
+      Image:
         selector: //meta[@property="og:image"]/@content
-     Studio:
-       Name:
-         selector: //meta[@name="author"]/@content
+      Studio:
+        Name:
+          selector: //meta[@name="author"]/@content
 # Last Updated April 23, 2021
