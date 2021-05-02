@@ -220,6 +220,27 @@
               }
             }
           }
+        },
+        "headers": {
+          "title": "Headers",
+          "description": "Headers to add to scraper requests.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["Key", "Value"],
+            "properties": {
+              "Key": {
+                "title": "Key",
+                "type": "string"
+              },
+              "Value": {
+                "title": "Value",
+                "type": "string"
+              }
+            }
+          }
         }
       }
     }
@@ -439,6 +460,10 @@
           "title": "Performer name",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "Aliases": {
+          "title": "Performer aliases",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "Gender": {
           "title": "Performer gender",
           "description": "Must be one of (case insensitive): `male`, `female`, `transgender_male`, `transgender_female`, `intersex`, `non_binary`",
@@ -460,6 +485,10 @@
           "title": "Performer birthdate",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "DeathDate": {
+          "title": "Performer death date",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "Ethnicity": {
           "title": "Performer ethnicity",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
@@ -468,12 +497,20 @@
           "title": "Performer country",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "HairColor": {
+          "title": "Performer hair color",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "EyeColor": {
           "title": "Performer eye color",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Height": {
           "title": "Performer height",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "Weight": {
+          "title": "Performer weight",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Measurements": {
@@ -496,8 +533,8 @@
           "title": "Performer piercings",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
-        "Aliases": {
-          "title": "Performer aliases",
+        "Details": {
+          "title": "Performer details",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Tags": {
@@ -714,7 +751,12 @@
                   },
                   "feetToCm": {
                     "title": "Feet to Centimetres",
-                    "description": "Convert measurement in feet and inches to centimetres.",
+                    "description": "Convert height measurement in feet and inches to centimetres.",
+                    "type": "boolean"
+                  },
+                  "lbToKg": {
+                    "title": "Pounds to Kilograms",
+                    "description": "Convert weight measurement in pounds to kilograms.",
                     "type": "boolean"
                   }
                 }

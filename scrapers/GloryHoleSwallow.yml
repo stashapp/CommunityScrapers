@@ -10,7 +10,9 @@ xPathScrapers:
       $info: //div[@class='objectInfo']
     scene:
       Title: $info/h1/text()
-      Details: $info/div[@class='content']/p/text()
+      Details:
+        selector: $info/div[@class='content']/p/text()
+        concat: "\n\n"
       Tags:
         Name: $info//p[contains(text(),'Tags')]//a/text()
       Image:
@@ -23,5 +25,4 @@ xPathScrapers:
         Name:
           fixed: GloryHole Swallow
       URL: //link[@rel='canonical']/@href
-
-# Last Updated November 8, 2020
+# Last Updated April 4, 2021

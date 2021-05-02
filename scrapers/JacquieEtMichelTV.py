@@ -5,10 +5,9 @@ import string
 import sys
 from urllib.parse import urlparse
 # extra modules below need to be installed
-# Node.js >= 10 also may be needed by cfscrape
-import cfscrape
+import cloudscraper
 from lxml import html
-import requests
+
 
 
 def log(*s):
@@ -29,7 +28,7 @@ if not frag['url']:
     log('No URL entered.')
 
 url = frag["url"]
-scraper = cfscrape.create_scraper()
+scraper = cloudscraper.create_scraper()
 try:
     scraped = scraper.get(url)
 except:
@@ -63,3 +62,4 @@ ret = {
 }
 
 print(json.dumps(ret))
+#Last Updated May 2, 2021

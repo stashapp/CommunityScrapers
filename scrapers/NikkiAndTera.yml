@@ -1,0 +1,41 @@
+name: NikkiAndTera
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - nikkiphoenixxx.com
+      - terapatrick.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="centerwrap clear"]//h1
+      Date:
+        selector: //p[@class="date"]
+        postProcess:
+          - replace:
+              - regex: ^(\d{2}/\d{2}/\d{4}).+
+                with: $1
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Details:
+        selector: //div[@class="videocontent"]/p
+      Tags:
+        Name: //p[@class="date"]/a
+      Image:
+        selector: //base/@href|//img[@class="update_thumb thumbs stdimage"]/@src0_1x
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: (https://[^/]+)[^|]+\|(.+)
+                with: $1$2
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess:
+            - map: # Mapped some names so they fit in better than single names.
+                https://terapatrick.com/: Tera Patrick
+                https://www.nikkiphoenixxx.com/tour/: Nikki Phoenix
+# Last Updated April 15, 2021
+

@@ -32,8 +32,8 @@ xPathScrapers:
               - regex: \sBio\s*$
                 with: ""
       URL: //link[@rel="alternate" and @hreflang="x-default"]/@href
-      Twitter: //a[contains(@href,'twitter.com/')]/@href
-      Instagram: //a[contains(@href,'instagram.com/')]/@href
+      Twitter: //form//a[contains(@href,'twitter.com/')]/@href
+      Instagram: //form//a[contains(@href,'instagram.com/')]/@href
       Birthdate:
         selector: //span[contains(text(),'Born On')]
         postProcess:
@@ -90,4 +90,20 @@ xPathScrapers:
         selector: //div[contains(@class,'image-container')]//a/img/@src
       Gender:
         fixed: "Female"
-# Last updated March 24, 2021
+      Details: //div[@data-test="biography"]
+      DeathDate:
+        selector: //div[contains(text(),'Passed away on')]
+        postProcess:
+          - replace:
+              - regex: Passed away on (.+) at the age of \d+
+                with: $1
+          - parseDate: January 2, 2006
+      HairColor: //span[@data-test="link_span_hair_color"]
+      Weight:
+        selector: //span[@data-test="link_span_weight"]
+        postProcess:
+        - replace:
+            - regex: \D+[\s\S]+
+              with: ""
+
+# Last updated April 16, 2021

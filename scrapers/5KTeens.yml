@@ -1,0 +1,54 @@
+name: 5Kteens
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 5kteens.com/episodes
+      - 5kporn.com/episodes
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          selector: //span[starts-with(@class, "color-")]/@class
+          postProcess:
+            - map:
+                color-5KT: 5Kteens
+                color-5KP: 5Kporn
+      Title: //p[@class="trailer-title"]
+      Details: //p[@class=""]
+      Performers:
+        Name:
+          selector: //h5[text()[contains(.,'Starring')]]
+          postProcess:
+            - replace:
+                - regex: Starring:\s([\w\s]+)
+                  with: $1
+      Date:
+        selector: //h5[text()[contains(.,'Published')]]
+        postProcess:
+          - replace:
+              - regex: Published\:\s(\d{4}-\d{2}-\d{2})
+                with: $1
+      Image:
+        selector: //img[@class="trailer-poster"]/@src | //script[contains(., "videojs(")]
+        postProcess:
+          - replace:
+              - regex: '^.+poster: "(.+?)".+$'
+                with: $1
+
+driver:
+  cookies:
+    - CookieURL: "https://www.5kteens.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".5kteens.com"
+          ValueRandom: 23
+          Path: "/"
+    - CookieURL: "https://www.5kporn.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".5kporn.com"
+          ValueRandom: 23
+          Path: "/"
+# Last Updated April 9, 2021

@@ -148,12 +148,22 @@ xPathScrapers:
                 with:
               - regex: <\\\/br>|<br\s\\\/>|<br>|<br\\/>
                 with: "\n"
+              - regex: <strong>|<\\\/strong>
+                with:
       Tags:
         Name: $tags/a/text()|//div[@class="sceneCol categories"]/a/text()|//div[@class="sceneCol sceneColCategories"]//span[not(@class="categorySeparator")]/text()|//div[@class="sceneCategories"]/a/text()
       Performers:
         Name: $actors/a/text()|$actors//span[not(@class="actorSeparator")]/text()|//div[@class="sceneCol actors"]/a/text()|//span[@class="slide-title"]/text()|//a[@class="pornstarName"]/strong/text()|//p[@class="starringLinks"]/a/text()|//p[@class="p-actors"]/a/text()
       Movies:
-        Name: $info/a/img/@title|//a[@class="sceneLink  "]/@title|//a[@class="dvdLink  "]/@title
+        Name:
+          selector: $info/a/img/@title|//a[@class="sceneLink  "]/@title|//a[@class="dvdLink  "]/@title
+        URL:
+          selector: //link[@rel='canonical']/@href|$info/a/@href
+          concat: "|"
+          postProcess:
+            - replace:
+                - regex: \.com.*[|]
+                  with: ".com"
       Image:
         selector: //script[contains(text(), 'picPreview')]/text()
         postProcess:
@@ -294,4 +304,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated March 26, 2021
+# Last Updated April 22, 2021

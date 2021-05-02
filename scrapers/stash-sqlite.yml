@@ -1,10 +1,12 @@
-name: "stash sqlite"
+name: stash sqlite
+
 performerByFragment:
     action: script
     script:
       - python
       - stash-sqlite.py
       - fetch
+
 performerByName:
     action: script
     script:
@@ -12,4 +14,4 @@ performerByName:
       - stash-sqlite.py
       - query
 
-# Last Updated August 12, 2020
+# Last Updated March 31, 2021
