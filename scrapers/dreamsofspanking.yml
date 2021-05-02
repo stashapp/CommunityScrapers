@@ -15,12 +15,12 @@ xPathScrapers:
           - replace:
             - regex: .*pdated ([0-9]{1,2} [A-z]{3} [0-9]{4})
               with: $1
-          - parseDate: "2 Jan 2006"
+          - parseDate: 2 Jan 2006
       Details:
         selector: //div[@class="long-description"]/p/text()
         concat: "\n\n"
       Performers:
-        Name: //div[@class="performers"]/p/a/text()
+        Name: //div[@class="performers"][1]/p/a/text()
       Tags:
         Name:
           selector: //p[@class="tags"]/a/text()
