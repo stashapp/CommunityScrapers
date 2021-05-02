@@ -115,7 +115,9 @@ xPathScrapers:
       Tattoos: $label[text()='Tattoos:']]/text()
       Piercings: $label[text()='Piercings:']]/text()
       Image:
-        selector: //div[@id='profimg']//a/@href
+        selector: //div[@id='profimg']//a[@class='img']/@href
+        # Alternitive selector will use site logo as image if none is found
+        # selector: //div[@id='profimg']//a/@href
         postProcess:
           - replace:
               - regex: javascript\:alert.+;
@@ -133,4 +135,4 @@ xPathScrapers:
                 with: "$1 "
               - regex: '\n(,|\.|\))'
                 with: "$1"
-#Last Updated April 24, 2021
+#Last Updated April 28, 2021
