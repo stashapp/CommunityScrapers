@@ -1,0 +1,40 @@
+name: "watchingmydaughtergoblack"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - watchingmydaughtergoblack.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h3[@class="scene-title col-xs-12"]/text()
+      Date:
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - replace:
+              - regex: ([\d-]*).+
+                with: $1
+          - parseDate: 2006-01-02
+      Details:
+        selector: //p[@itemprop="description"]/text()
+      Tags:
+        Name: 
+          selector: //p[@class="categories"]/text()
+          postProcess:
+            - replace:
+              - regex: \,\s
+                with: ","
+          split: ","
+      Performers:
+        Name: //span[@class="starring-list"]/a/text()
+      Image:
+        selector: //meta[@itemprop="thumbnailUrl"]/@content
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+      Studio:
+        Name:
+          fixed: "WatchingMyDaughterGoBlack"
+      URL: //link[@rel='canonical']/@href
+# Last Updated May 03, 2021

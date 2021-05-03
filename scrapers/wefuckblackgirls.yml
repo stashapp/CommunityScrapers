@@ -1,0 +1,38 @@
+name: "wefuckblackgirls"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wefuckblackgirls.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="scene-title"]/h3/text()
+      Date:
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - replace:
+              - regex: ([\d-]*).+
+                with: $1
+          - parseDate: 2006-01-02
+      Details:
+        selector: //p[@itemprop="description"]/text()
+      Tags:
+        Name: //dl[@class="detail-list categories-list"]/dd/a/text()
+      Performers:
+        Name: 
+          selector: //div[@class="performers"]/span/text()
+          split: ", "
+      Image:
+        selector: //div[@class="player-join"]/@style
+        postProcess:
+          - replace:
+            - regex: .+\((.+)\).+
+              with: $1
+            - regex: ^
+              with: "https:"
+      Studio:
+        Name:
+          fixed: "We Fuck Black Girls"
+      URL: //link[@rel='canonical']/@href
+# Last Updated May 03, 2021
