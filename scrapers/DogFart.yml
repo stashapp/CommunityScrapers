@@ -3,8 +3,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - dogfartnetwork.com/
-      - watchingmydaughtergoblack.com/
-      - wefuckblackgirls.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
