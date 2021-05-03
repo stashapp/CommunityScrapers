@@ -404,8 +404,8 @@ xPathScrapers:
           - replace:
               - regex: .*\((\d+)\s+kg.*
                 with: $1
-      HairColor: //div/p[text()='Hair Colors']/following-sibling::p[1]/text()
-       
+      HairColor: //div/p[starts-with(.,'Hair Color')]/following-sibling::p[1]/text()
+
       Measurements: //div/p[text()='Measurements']/following-sibling::p[1]/text()
       CareerLength:
         selector: //div/p[@class='biodata'][contains(text(),"Started around")]/text()
@@ -446,4 +446,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated May 2, 2021
+# Last Updated May 3, 2021
