@@ -46,6 +46,8 @@ movieByURL:
       # - shemalestrokers.com/ # Scenes published as movies?
       - thirdworldxxx.com/
       - westcoastproductions.com/
+      - filthykings.com/
+      - filthypov.com/
 
 xPathScrapers:
   sceneScraper:
@@ -105,6 +107,7 @@ xPathScrapers:
                 - regex: \sClips$
                   with:
       FrontImage: //link[@rel="image_src"]/@href
+      BackImage: //div[@class="carousel-item"]/img/@data-src
 
   vrSceneScraper:
     common:
@@ -130,4 +133,4 @@ xPathScrapers:
       Studio:
         Name: //meta[@name="og:site_name"]/@content
 
-# Last Updated November 15, 2020
+# Last Updated May 3, 2021
