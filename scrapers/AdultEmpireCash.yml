@@ -39,6 +39,8 @@ movieByURL:
       # - blacktranswhackers.com/ # Scenes published as movies?
       - concoxxxion.com/
       - elegantangel.com/
+      - filthykings.com/
+      - filthypov.com/
       - forbiddenfruitsfilms.com/
       - lethalhardcore.com/
       - manipulativemedia.com/
@@ -46,8 +48,6 @@ movieByURL:
       # - shemalestrokers.com/ # Scenes published as movies?
       - thirdworldxxx.com/
       - westcoastproductions.com/
-      - filthykings.com/
-      - filthypov.com/
 
 xPathScrapers:
   sceneScraper:
@@ -94,10 +94,10 @@ xPathScrapers:
         selector: //div[@class="release-date"][2]/text()
         postProcess:
           - replace:
-            - regex: " hrs. "
-              with: ":"
-            - regex: " mins."
-              with: ":00"
+              - regex: " hrs. "
+                with: ":"
+              - regex: " mins."
+                with: ":00"
       Studio:
         Name:
           selector: //div[@class="studio"]/a
@@ -132,5 +132,4 @@ xPathScrapers:
                 with: https://imgs1cdn.adultempire.com/product/${1}_lg.jpg
       Studio:
         Name: //meta[@name="og:site_name"]/@content
-
 # Last Updated May 3, 2021
