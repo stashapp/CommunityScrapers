@@ -27,6 +27,6 @@ xPathScrapers:
       Studio:
         Name: 
           fixed: Dreams of Spanking
-      Image: //video/@poster
+      Image: //video/@poster|//img[@class="preview"]/@src
 
 # Last Updated May 2, 2021
