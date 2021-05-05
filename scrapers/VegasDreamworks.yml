@@ -2,8 +2,8 @@ name: VegasDreamworks
 sceneByURL:
   - action: scrapeXPath
     url:
-      - toticos.com
       - paradisegfs.com
+      - toticos.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -11,7 +11,7 @@ xPathScrapers:
       Title:
         selector: //h1[@class="post-title"]
       Performers:
-        Name: //div[@class="single-model-head"]/a | //div[@class="update_bb_info"]/a
+        Name: //div[@class="update_bb_info"]//a
       Tags:
         Name: //div[@class="cat_tag"]/a
       Details:
