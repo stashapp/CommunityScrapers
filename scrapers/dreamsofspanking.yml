@@ -32,7 +32,7 @@ xPathScrapers:
       Studio: &studio
         Name: 
           fixed: Dreams of Spanking
-      Image: //video/@poster
+      Image: //video/@poster|//img[@class="preview"]/@src
   galleryScraper:
     gallery:
       Title: *title
