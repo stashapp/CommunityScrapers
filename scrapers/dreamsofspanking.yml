@@ -4,29 +4,41 @@ sceneByURL:
     url:
       - dreamsofspanking.com/scene/item
     scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - dreamsofspanking.com/scene/item
+    scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
+      Title: &title
         selector: //div[@id="product"]/h3/text()
-      Date:
+      Date: &date
         selector: //div[@class="date"]/text()
         postProcess:
           - replace:
             - regex: .*pdated ([0-9]{1,2} [A-z]{3} [0-9]{4})
               with: $1
           - parseDate: 2 Jan 2006
-      Details:
+      Details: &details
         selector: //div[@class="long-description"]/p/text()
         concat: "\n\n"
-      Performers:
+      Performers: &performers
         Name: //div[@class="performers"][1]/p/a/text()
-      Tags:
+      Tags: &tags
         Name:
           selector: //p[@class="tags"]/a/text()
-      Studio:
+      Studio: &studio
         Name: 
           fixed: Dreams of Spanking
       Image: //video/@poster
-
-# Last Updated May 2, 2021
+  galleryScraper:
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio  
+# Last Updated May 5, 2021
