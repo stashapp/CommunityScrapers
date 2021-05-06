@@ -16,7 +16,7 @@ xPathScrapers:
         selector: //li[@class="update_posted"]/p
         postProcess:
           - replace:
-              - regex: "date:"
+              - regex: 'date:\s*'
                 with: ""
           - parseDate: Jan 02, 2006
       Performers:
