@@ -78,11 +78,14 @@ def main():
         log('Could not locate scene within JSON')
         sys.exit(1)
     scene = j[scene_id]
+    scene_url = url
+    if scene['absoluteUrl'] is not None:
+        scene_url = 'https:%s' %scene['absoluteUrl']
     scrape = {
         'title': scene['title'],
         'date': scene['releaseDate'][:10],
         'details': scene['description'],
-        'url': 'https:%s' % scene['absoluteUrl'],
+        'url':  scene_url,
         'studio': {
             'name': studio
         },
@@ -103,3 +106,4 @@ if __name__ == '__main__':
         main()
     except Exception as e:
         log(e)
+
