@@ -11,7 +11,7 @@ xPathScrapers:
       Details:
         selector: //li[@class="videoDescription"]/p
       Tags:
-       Name: //li[@class="videoCategories"]/p/a
+        Name: //li[@class="videoCategories"]/p/a
       Date:
         selector: //li[@class="update_posted"]/p
         postProcess:
@@ -25,10 +25,9 @@ xPathScrapers:
         selector: //video/@poster
         postProcess:
           - replace:
-            - regex: ^
-              with: "http://www.handdomination.com/"
+              - regex: ^
+                with: "http://www.handdomination.com/"
       Studio:
         Name:
           fixed: HandDomination
-
 # Last Updated May 6, 2021
