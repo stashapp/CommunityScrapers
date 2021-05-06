@@ -80,7 +80,7 @@ def main():
     scene = j[scene_id]
     scene_url = url
     if scene['absoluteUrl'] is not None:
-        scene_url = 'https:%s' %scene['absoluteUrl']
+        scene_url = 'https:%s' % scene['absoluteUrl']
     scrape = {
         'title': scene['title'],
         'date': scene['releaseDate'][:10],
