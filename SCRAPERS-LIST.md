@@ -652,6 +652,7 @@ paintoy.com|insexOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pandafuck.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pantyjobs.com|pantyjobs.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pantypops.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+paradisegfs.com|VegasDreamworks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 parodypass.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 passion-hd.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 passionxxx.com|Passionxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -870,6 +871,7 @@ tokyobang.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 tonightsgirlfriend.com|Tonightsgirlfriend.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 toomanytrannies.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Trans
 topgrl.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+toticos.com|VegasDreamworks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 touchmywife.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 toughlovex.com|toughlovex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tour.purgatoryx.com|purgatoryx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
