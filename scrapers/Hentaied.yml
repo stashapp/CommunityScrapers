@@ -1,0 +1,31 @@
+name: Hentaied
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hentaied.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="post-content"]/h1
+      Date:
+        selector: //div/h2
+        postProcess:
+          - replace:
+              - regex: 'PUBLISHED:\s*'
+                with: ""
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //div[@class="tagsmodels"]/a
+      Tags:
+        Name: //li/strong | //li[@class="li1"] | //ul[@class="post-categories"]//a
+      Details:
+        selector: //div[@class="column"]/p/span | //p[@class="p1"]/text() | //p/span | //div[@class="cont"]/p
+        concat: "\n"
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Hentaied
+# Last Updated May 7, 2021
