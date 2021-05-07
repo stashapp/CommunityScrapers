@@ -1,0 +1,27 @@
+name: BoppingBabes
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - boppingbabes.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="page_title"]
+      Performers:
+        Name: //span[@class="meta_modelcategory meta_category"]/a
+      Tags:
+        Name: //span[@class='meta_videotag meta_category']/a
+      Details:
+        selector: //div[@class="post_excerpt"]/p
+      Image:
+        selector: //script[contains(text(),"jwplayer")]/text()
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+      Studio:
+        Name:
+          fixed: BoppingBabes
+# Last Updated May 7, 2021
