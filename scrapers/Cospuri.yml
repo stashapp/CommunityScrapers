@@ -1,0 +1,32 @@
+name: Cospuri
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cospuri.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Date:
+        selector: //div[@class="date"]
+        postProcess:
+          - replace:
+              - regex: ^(\d+)\D*(\d+)\D*(\d\d)$
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //div[@class="sample-model"]/a
+      Tags:
+        Name: //a[@class="tag"]
+      Details:
+        selector: //div[@class="description"]
+      Image:
+        selector: //div[@class="player fp-slim fp-edgy fp-mute"]/@style
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+      Studio:
+        Name:
+          fixed: Cospuri
+# Last Updated May 8, 2021
