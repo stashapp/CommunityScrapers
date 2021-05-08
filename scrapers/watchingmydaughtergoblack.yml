@@ -28,13 +28,39 @@ xPathScrapers:
       Performers:
         Name: //span[@class="starring-list"]/a/text()
       Image:
-        selector: //meta[@itemprop="thumbnailUrl"]/@content
+        selector: //div[@class="trailer-container"]//@data-img|//meta[@itemprop="thumbnailUrl"]/@content 
         postProcess:
           - replace:
               - regex: ^
                 with: "https:"
       Studio:
         Name:
-          fixed: "WatchingMyDaughterGoBlack"
+          selector: //meta[@itemprop="thumbnailUrl"]/@content
+          postProcess:
+            - replace:
+                - regex: '.*/([^/]+)\.com/[^/]+$'
+                  with: $1
+            - map:
+                barbcummings: Barb Cummings
+                blackmeatwhitefeet: Black Meat White Feet #ok
+                blacksonblondes: Blacks On Blondes #ok
+                blacksoncougars: Blacks On Cougars #ok
+                candymonroe: Candy Monroe
+                cuckoldsessions: Cuckold Sessions #ok
+                cumbang: Cum Bang #ok
+                dogfartbehindthescenes: Dogfart Behind The Scenes #ok
+                gloryhole-initiations: Gloryhole-Initiations #ok
+                gloryhole: Glory Hole #ok
+                interracialblowbang: Interracial Blow Bang #ok
+                interracialpickups: Interracial Pickups #ok
+                katiethomas: Katie Thomas
+                ruthblackwell: Ruth Blackwell
+                springthomas: Spring Thomas
+                theminion: The Minion
+                watchingmydaughtergoblack: Watching My Daughter Go Black #ok
+                watchingmymomgoblack: Watching My Mom Go Black #ok
+                wefuckblackgirls: We Fuck Black Girls #ok
+                wifewriting: Wife Writing
+                zebragirls: Zebra Girls #ok
       URL: //link[@rel='canonical']/@href
 # Last Updated May 03, 2021
