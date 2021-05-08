@@ -39,26 +39,25 @@ xPathScrapers:
                 - regex: '^https://(?:[^\.]+\.)?([^\./]+).+'
                   with: $1
             - map:
+                barbcummings: Barb Cummings
                 blackmeatwhitefeet: Black Meat White Feet
                 blacksonblondes: Blacks On Blondes
+                blacksoncougars: Blacks On Cougars
+                candymonroe: Candy Monroe
+                dogfartbehindthescenes: Dogfart Behind The Scenes
                 cuckoldsessions: Cuckold Sessions
                 gloryhole-initiations: Gloryhole-Initiations
                 gloryhole: Glory Hole
                 interracialblowbang: Interracial Blow Bang
+                interracialpickups: Interracial Pickups
                 katiethomas: Katie Thomas
                 ruthblackwell: Ruth Blackwell
                 springthomas: Spring Thomas
+                theminion: The Minion
                 watchingmydaughtergoblack: Watching My Daughter Go Black
                 watchingmymomgoblack: Watching My Mom Go Black
                 wefuckblackgirls: We Fuck Black Girls
                 wifewriting: Wife Writing
-                zebragirls: Zebra Girls
-                #below not tested
-                barbcummings: Barb Cummings
-                blacksoncougars: Blacks On Cougars
-                candymonroe: Candy Monroe
-                dogfartbehindthescenes: Dogfart Behind The Scenes
-                interracialpickups: Interracial Pickups
-                theminion: The Minion
+                zebragirls: Zebra Gir
       URL: //link[@rel='canonical']/@href
 # Last Updated May 03, 2021
