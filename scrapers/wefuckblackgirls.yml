@@ -33,6 +33,32 @@ xPathScrapers:
               with: "https:"
       Studio:
         Name:
-          fixed: "We Fuck Black Girls"
+          selector: //meta[@itemprop="thumbnailUrl"]/@content
+          postProcess:
+            - replace:
+                - regex: '^https://(?:[^\.]+\.)?([^\./]+).+'
+                  with: $1
+            - map:
+                blackmeatwhitefeet: Black Meat White Feet
+                blacksonblondes: Blacks On Blondes
+                cuckoldsessions: Cuckold Sessions
+                gloryhole-initiations: Gloryhole-Initiations
+                gloryhole: Glory Hole
+                interracialblowbang: Interracial Blow Bang
+                katiethomas: Katie Thomas
+                ruthblackwell: Ruth Blackwell
+                springthomas: Spring Thomas
+                watchingmydaughtergoblack: Watching My Daughter Go Black
+                watchingmymomgoblack: Watching My Mom Go Black
+                wefuckblackgirls: We Fuck Black Girls
+                wifewriting: Wife Writing
+                zebragirls: Zebra Girls
+                #below not tested
+                barbcummings: Barb Cummings
+                blacksoncougars: Blacks On Cougars
+                candymonroe: Candy Monroe
+                dogfartbehindthescenes: Dogfart Behind The Scenes
+                interracialpickups: Interracial Pickups
+                theminion: The Minion
       URL: //link[@rel='canonical']/@href
 # Last Updated May 03, 2021
