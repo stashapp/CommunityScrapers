@@ -1,0 +1,34 @@
+name: NastyStepFamily
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - nastystepfamily.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2[@class="scene-h2-heading"]
+      Date:
+        selector: //div[@class="row individual-scenes-section"]/h5[1]
+        postProcess:
+          - replace:
+              - regex: 'Released: \s*'
+                with: ""
+          - parseDate: Jan 2, 2006
+      Performers:
+        Name: //div[@class="row individual-scenes-section"]/h4/a
+      Tags:
+        Name: //div[@class="row individual-scenes-section"]/h5/a
+      Details:
+        selector: //p[@class="indie-model-p"]
+      Image:
+        selector: //script[contains(text(),"videojs")]/text()
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+      Studio:
+        Name:
+          fixed: NastyStepFamily
+# Last Updated May 7, 2021
