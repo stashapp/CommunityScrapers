@@ -15,6 +15,9 @@ xPathScrapers:
             - parseDate: 01/02/2006
       Performers:
         Name: //div[contains(@class,"contentTitle")]/a[contains(@class,"model-name")]/text()
+      Tags:
+        Name:
+          selector: //div[contains(@class,"tags-container")]/a/text()
       Image: //div[@class="stream-video-container"]/stream/@poster
       Studio:
         Name: 
@@ -24,4 +27,4 @@ xPathScrapers:
               - regex: \sX\s.*
                 with: ""
 
-# Last Updated September 13, 2020
+# Last Updated May 08, 2021
