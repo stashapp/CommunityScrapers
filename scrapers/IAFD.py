@@ -448,13 +448,19 @@ def performer_from_tree(tree):
     p.birthdate = p.set_value(performer_birthdate)
     if p.birthdate:
         p.birthdate = re.sub(r'(\S+\s+\d+,\s+\d+).*', r'\1', p.birthdate)
-        p.birthdate = datetime.datetime.strptime(p.birthdate, iafd_date).strftime(stash_date)
+        try:
+            p.birthdate = datetime.datetime.strptime(p.birthdate, iafd_date).strftime(stash_date)
+        except:
+            pass
 
     performer_deathdate = tree.xpath('(//p[@class="bioheading"][text()="Date of Death"]/following-sibling::p)[1]//text()')
     p.death_date = p.set_value(performer_deathdate)
     if p.death_date:
         p.death_date = re.sub(r'(\S+\s+\d+,\s+\d+).*', r'\1', p.deathdate)
-        p.death_date = datetime.datetime.strptime(p.deathdate, iafd_date).strftime(stash_date)
+        try:
+            p.death_date = datetime.datetime.strptime(p.deathdate, iafd_date).strftime(stash_date)
+        except:
+            pass
 
     performer_ethnicity = tree.xpath('//div[p[text()="Ethnicity"]]/p[@class="biodata"][1]//text()')
     p.ethnicity = p.set_value(performer_ethnicity)
@@ -518,7 +524,10 @@ def scene_from_tree(tree):
     scene_date =  tree.xpath('//div[@class="col-xs-12 col-sm-3"]//p[text() = "Release Date"]/following-sibling::p[1]//text()')
     s.date = s.set_stripped_value(scene_date)
     if s.date:
-        s.date = datetime.datetime.strptime(s.date, iafd_date_scene).strftime(stash_date)
+        try:
+            s.date = datetime.datetime.strptime(s.date, iafd_date_scene).strftime(stash_date)
+        except:
+            pass
 
     scene_details = tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()')
     s.details = s.set_value(scene_details)
@@ -552,7 +561,10 @@ def movie_from_tree(tree):
     movie_date = tree.xpath('//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()') 
     m.date = m.set_stripped_value(movie_date)
     if m.date:
-        m.date = datetime.datetime.strptime(m.date, iafd_date_scene).strftime(stash_date)
+        try:
+            m.date = datetime.datetime.strptime(m.date, iafd_date_scene).strftime(stash_date)
+        except:
+            pass
 
     movie_aliases = tree.xpath('//div[@class="col-sm-12"]/dl/dd//text()')
     m.aliases = m.set_concat_value(", ", movie_aliases)
