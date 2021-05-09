@@ -1,0 +1,33 @@
+name: Plushies
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - plushies.tv
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $ub: //div[@class="update_block_info"]
+    scene:
+      Title:
+        selector: $ub/span[@class="update_title"]
+      Date:
+        selector: $ub/span[@class="update_date"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers:
+        Name: $ub/span[@class="tour_update_models"]/a
+      Tags:
+        Name: $ub/span[@class="tour_update_tags"]/a
+      Details:
+        selector: $ub/span[@class="latest_update_description"]
+      Image:
+        selector: //img[@class="stdimage large_update_thumb left thumbs"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://plushies.tv/tour/"
+      Studio:
+        Name:
+          fixed: Plushies
+# Last Updated May 7, 2021
