@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - thirdmovies.com/better/videos/
+      - thirdmovies.com/videos/
       - ztod.com/videos/
     scraper: sceneScraper
 xPathScrapers:
@@ -36,4 +37,4 @@ xPathScrapers:
             - map:
                 Thirdmovies: 3rd Degree Movies
                 Ztod: Zero Tolerance
-# Last Updated March 24, 2021
+# Last Updated April 19, 2021

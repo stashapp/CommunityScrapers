@@ -52,7 +52,12 @@ jsonScrapers:
       Tattoos: $extras.tattoos
       Piercings: $extras.piercings
       Aliases: data.aliases
-      Image: data.image
+      Image:
+        selector: data.image
+        postProcess:
+          - replace:
+              - regex: .+male\.png$
+                with:
 
   sceneScraper:
     common:
@@ -62,7 +67,12 @@ jsonScrapers:
       Details: data.description
       Date: data.date
       URL: data.url
-      Image: data.background.small
+      Image:
+        selector: data.background.small
+        postProcess:
+          - replace:
+              - regex: .+default\d+\.png$
+                with:
       Performers:
         Name: data.performers.#.name
       Studio:
@@ -85,11 +95,20 @@ jsonScrapers:
       Studio:
         Name: $data.site.name
       Tags:
-        Name: $data.tags.#.tag
+        Name:
+          selector: $data.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://api.metadataapi.net/scenes/"
+            - subScraper:
+                selector: data.tags.#.tag
+                concat: "|"
+          split: "|"
 driver:
   headers:
     - Key: User-Agent
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
       #Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated April 14, 2021
+# Last Updated April 28, 2021
