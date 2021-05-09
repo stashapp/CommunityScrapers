@@ -1,0 +1,43 @@
+name: JoyBear
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - joybear.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //span[@class="wide title"]
+      Date:
+        selector: //span[@class="wide source"]/a/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: "Published on"
+                with: ""
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
+          - parseDate: 2 January 2006
+      Performers:
+        Name: //span[@class="wide cast"]//a
+      Movies:
+        Name:
+          selector: //span[@class="wide source"]/a
+      URL:
+        selector: //span[@class="wide source"]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.joybear.com
+      Details:
+        selector: //span[@class="wide text"]
+      Image:
+        selector: //div[@class="wide membervideo"]/script/text()
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+      Studio:
+        Name:
+          fixed: Joy Bear
+# Last Updated April 20, 2021

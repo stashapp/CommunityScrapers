@@ -12,22 +12,25 @@ performerByURL:
 xPathScrapers:
   performerSearch:
     performer:
-      Name: 
+      Name:
         selector: //span[@class="results"]//a[contains(@href, '/babe/')]|//div[@id="bioarea"]/h1
         postProcess:
           - replace:
-            - regex: "aka(\\s+[A-Z]+)"
-              with: " aka $1"
+              - regex: "aka(\\s+[A-Z]+)"
+                with: " aka $1"
+
       URL:
         selector: //span[@class="results"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
         postProcess:
           - replace:
-            - regex: ^
-              with: https://www.babepedia.com
-            - regex: https:\/\/www\.babepedia\.comhttps:\/\/www\.babepedia\.com
-              with: https://www.babepedia.com
+              - regex: ^
+                with: https://www.babepedia.com
+              - regex: https:\/\/www\.babepedia\.comhttps:\/\/www\.babepedia\.com
+                with: https://www.babepedia.com
 
   performerScraper:
+    common:
+      $label: //div[@id='bioarea']//ul/li[span[@class='label']
     performer:
       Name: //div[@id="bioarea"]/h1
       Gender:
@@ -37,77 +40,99 @@ xPathScrapers:
         selector: //div[@id='socialicons']//a[img[@alt='Twitter account']]/@href
         postProcess:
           - replace:
-            - regex: https://twitter.com/
-              with: ""
+              - regex: https://twitter.com/
+                with: ""
       Instagram:
         selector: //div[@id='socialicons']//a[img[@alt='Instagram account']]/@href
         postProcess:
           - replace:
-            - regex: https://instagram.com/
-              with: ""
+              - regex: https://instagram.com/
+                with: ""
       Birthdate:
-        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Born:']]//text()
+        selector: $label[text()='Born:']]//text()
         concat: " "
         postProcess:
-            - replace:
-                - regex: (\w+:)(\s)(\w+)(\s)(\d+)(\w+)(\s)(\w+)(\s)(\w+)(\s)(\d+)
-                  with: $5 $10 $12
-            - parseDate: 2 January 2006
+          - replace:
+              - regex: (\w+:)(\s)(\w+)(\s)(\d+)(\w+)(\s)(\w+)(\s)(\w+)(\s)(\d+)
+                with: $5 $10 $12
+          - parseDate: 2 January 2006
       Ethnicity:
-        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Ethnicity:']]/text()
+        selector: $label[text()='Ethnicity:']]/text()
         postProcess:
           - map:
               Asian: asian
               Caucasian: white
               Black: black
               Latin: hispanic
-      Country: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Birthplace']]/a/text()
+      Country: $label[text()='Birthplace']]/a/text()
       EyeColor:
-        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Eye color:']]
+        selector: $label[text()='Eye color:']]
         postProcess:
           - replace:
-            - regex: "Eye color: "
-              with:
+              - regex: "Eye color: "
+                with:
+      HairColor:
+        selector: $label[text()='Hair color:']]
+        postProcess:
+          - replace:
+              - regex: "Hair color: "
+                with:
       Height:
-        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Height:']]/text()
+        selector: $label[text()='Height:']]/text()
         postProcess:
           - replace:
-            - regex: \d\D\d+\D \D+
-              with: ""
-            - regex:  c\D+
-              with: ""
+              - regex: ^.*\s(\d+)\scm.*$
+                with: $1
+      Weight:
+        selector: $label[text()='Weight:']]/text()
+        postProcess:
+          - replace:
+              - regex: ^.*\s(\d+)\skg.*$
+                with: $1
       Measurements:
-        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Measurements:']]/text()|//div[@id='bioarea']//ul/li[span[@class='label'][text()='Bra/cup size:']]/text()
+        selector: $label[text()='Measurements:']]/text()|$label[text()='Bra/cup size:']]/text()
         concat: "|"
         postProcess:
           - replace:
-            - regex: (\d*)([a-zA-Z-]*)(\d*-\d*)(.+?)([a-zA-Z]+)(.*)
-              with: $1$5-$3
+              - regex: (\d*)([a-zA-Z-]*)(\d*-\d*)(.+?)([a-zA-Z]+)(.*)
+                with: $1$5-$3
       FakeTits:
-        selector: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Boobs:']]
+        selector: $label[text()='Boobs:']]
         postProcess:
           - replace:
-            - regex: "Boobs: "
-              with: ""
+              - regex: "Boobs: "
+                with: ""
           - map:
               Real/Natural: "No"
               Fake/Enhanced: "Yes"
-      CareerLength: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Years active:']]/text()
+      CareerLength: $label[text()='Years active:']]/text()
       Aliases:
         selector: //div[@id='bioarea']//h2/text()
         postProcess:
           - replace:
-            - regex: aka
-              with: ""
-      Tattoos: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Tattoos:']]/text()
-      Piercings: //div[@id='bioarea']//ul/li[span[@class='label'][text()='Piercings:']]/text()
+              - regex: aka
+                with: ""
+      Tattoos: $label[text()='Tattoos:']]/text()
+      Piercings: $label[text()='Piercings:']]/text()
       Image:
-        selector: //div[@id='profimg']//a/@href
+        selector: //div[@id='profimg']//a[@class='img']/@href
+        # Alternitive selector will use site logo as image if none is found
+        # selector: //div[@id='profimg']//a/@href
         postProcess:
           - replace:
-            - regex: javascript\:alert.+;
-              with: /images/logo.png
-            - regex: ^
-              with: https://www.babepedia.com
-
-#Last Updated November 29, 2020
+              - regex: javascript\:alert.+;
+                with: /images/logo.png
+              - regex: ^
+                with: https://www.babepedia.com
+      Details:
+        selector: //div[@class="babebanner separate"]/p//text()
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: '\nPerformances'
+                with: "\n\nPerformances"
+              - regex: '(and|with|of|,)\n'
+                with: "$1 "
+              - regex: '\n(,|\.|\))'
+                with: "$1"
+#Last Updated April 28, 2021
