@@ -6,6 +6,8 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $desc: "*[local-name()='p' or local-name()='h3' or local-name()='ol' or local-name()='ul']"
     scene:
       Title:
         selector: //div[@class="post-content"]/h1
@@ -19,13 +21,13 @@ xPathScrapers:
       Performers:
         Name: //div[@class="tagsmodels"]/a
       Tags:
-        Name: //li/strong | //li[@class="li1"] | //ul[@class="post-categories"]//a
+        Name: //ul[@class="post-categories"]//a
       Details:
-        selector: //div[@class="column"]/p/span | //p[@class="p1"]/text() | //p/span | //div[@class="cont"]/p
-        concat: "\n"
+        selector: //div[@class="cont" or @class="column"]/$desc
+        concat: "\n\n"
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Hentaied
-# Last Updated May 7, 2021
+# Last Updated May 9, 2021
