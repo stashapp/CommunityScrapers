@@ -20,7 +20,10 @@ sceneByFragment:
 jsonScrapers:
   sceneScraper:
     scene:
-      Title: TitleEn
+      Title:
+        selector: "[TitleEn,Title]"
+        concat: "|" # get rid of empty result
+        split: "|"
       Details:
         selector: DescEn
         postProcess:
@@ -40,9 +43,11 @@ jsonScrapers:
       Tags:
         Name: UCNAMEEn
       URL:
-        selector: MovieThumb
+        selector: MovieID
         postProcess:
           - replace:
-              - regex: 'https://www\.1pondo\.tv/moviepages/([^/]+)/.+'
-                with: https://en.1pondo.tv/movies/$1/
-#Last Updated March 2, 2021
+              - regex: ^
+                with: "https://en.1pondo.tv/movies/"
+              - regex: $
+                with: "/"
+#Last Updated April 30, 2021

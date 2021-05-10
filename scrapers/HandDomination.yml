@@ -1,0 +1,33 @@
+name: HandDomination
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - handdomination.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h3[@class="videoTitle"]
+      Details:
+        selector: //li[@class="videoDescription"]/p
+      Tags:
+        Name: //li[@class="videoCategories"]/p/a
+      Date:
+        selector: //li[@class="update_posted"]/p
+        postProcess:
+          - replace:
+              - regex: 'date:\s*'
+                with: ""
+          - parseDate: Jan 02, 2006
+      Performers:
+        Name: //li[@class="modelsFeatured"]/p/a
+      Image:
+        selector: //video/@poster
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "http://www.handdomination.com/"
+      Studio:
+        Name:
+          fixed: HandDomination
+# Last Updated May 6, 2021

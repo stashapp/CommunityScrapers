@@ -1,0 +1,22 @@
+name: portagloryhole
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - portagloryhole.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2
+      Performers:
+        Name: //h5[i[@class="icon-female"]]/a
+      Tags:
+        Name: //h5[@class="video_categories"]/a
+      Details: //div[@class="desc"]/p
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: PortaGloryhole
+# Last Updated April 25, 2021

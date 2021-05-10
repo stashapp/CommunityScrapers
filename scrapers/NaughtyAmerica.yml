@@ -27,10 +27,9 @@ xPathScrapers:
       Studio:
         Name: $sceneinfo/a[@class="site-title grey-text link"]
       Image:
-        selector: //img[@class="start-card lazyload"]/@data-src|//img[@class="start-card"]/@src|//dl8-video[@id="vr_player"]/@poster
+        selector: //img[@class="start-card lazyload"]/@data-src|//img[@class="start-card"]/@src|//dl8-video[@id="vr_player"]/@poster|(//div[@class="overlays"]/a/picture)[1]/source[@type="image/jpeg"]/@data-srcset
         postProcess:
           - replace:
               - regex: ^
                 with: "https:"
-
-# Last Updated November 8, 2020
+# Last Updated April 16, 2021
