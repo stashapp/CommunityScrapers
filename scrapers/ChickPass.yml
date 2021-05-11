@@ -1,0 +1,85 @@
+name: Chickpass
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 1111customsxxx.com/tour1/
+      - addisonstreet.com/tour1/
+      - amazinganna.com/tour1/
+      - bouncychicks.com/tour1/
+      - chickpass.com/tour1/
+      - chickpassinternational.com/tour1/
+      - chickpasspornstars.com/tour1/
+      - chickpassteens.com/tour1/
+      - college-amateurs.com/tour1/
+      - fuckingparties.com/tour1/
+      - fuckthegeek.com/tour1/
+      - hongkongslut.com/tour1/
+      - lustylina.com/tour1/
+      - messyxxx.com/tour1/
+      - minimuff.com/tour1/
+      - petiteleeanna.com/tour1/
+      - redheadmariah.com/tour1/
+      - stuffintwats.com/tour1/
+      - tandaamateurs.com/tour1/
+      - tandaasians.com/tour1/
+      - tandablondes.com/tour1/
+      - tandabrunettes.com/tour1/
+      - tandaebony.com/tour1/
+      - tandahousewives.com/tour1/
+      - tandalatinas.com/tour1/
+      - tandaredheads.com/tour1/
+      - xxxnj.com/tour1/
+      - zoiestarr.com/tour1/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='title_bar']/span
+      Performers:
+        Name: //span[@class="update_models2"][1]/a | //a[@class="model_category_link"][1]//a
+      Details: //span[@class="highlighted-bg"] | //div[@class="gallery_description"]
+      Tags:
+        Name: //span[@class="update_tags show-sm"]/a[@class="category-tag"]//a
+      Image:
+        selector: //base/@href|//a[@class="gallery-info__thumbnail-link"]/img/@src0_2x | //a[@class="gallery-info__thumbnail-link"]/img/@src
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: (https://[^/]+)[^|]+\|(.+)
+                with: $1$2
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess:
+            - map:
+                https://www.1111customsxxx.com/tour1/: 111 Customs XXX
+                https://www.addisonstreet.com/tour1/: Addison Street
+                https://www.amazinganna.com/tour1/: Amazing Anna
+                https://www.bouncychicks.com/tour1/: Bouncy Chicks
+                https://www.chickpass.com/tour1/: Chickpass
+                https://www.chickpassinternational.com/tour1/: Chickpass International
+                https://www.chickpasspornstars.com/tour1/: Chickpass Pornstars
+                https://www.chickpassteens.com/tour1/: Chickpass Teens
+                https://www.college-amateurs.com/tour1/: College-Amateurs
+                https://www.fuckingparties.com/tour1/: Fucking Parties
+                https://www.fuckthegeek.com/tour1/: Fuck The Geek
+                https://www.hongkongslut.com/tour1/: Hong Kong Slut
+                https://www.lustylina.com/tour1/: Lusty Lina
+                https://www.messyxxx.com/tour1/: Messy XXX
+                https://www.minimuff.com/tour1/: Mini Muff
+                https://www.petiteleeanna.com/tour1/: Petite Leeanna
+                https://www.redheadmariah.com/tour1/: Redhead Mariah
+                https://www.stuffintwats.com/tour1/: Stuff In Twats
+                https://www.tandaamateurs.com/tour1/: T&A Amateurs
+                https://www.tandaasians.com/tour1/: T&A Asians
+                https://www.tandablondes.com/tour1/: T&A Blondes
+                https://www.tandabrunettes.com/tour1/: T&A Brunettes
+                https://www.tandaebony.com/tour1/: T&A Ebony
+                https://www.tandahousewives.com/tour1/: T&A Housewives
+                https://www.tandalatinas.com/tour1/: T&A Latinas
+                https://www.tandalesbians.com/tour1/: T&A Lesbians
+                https://www.tandaredheads.com/tour1/: T&A Redheads
+                https://www.xxxnj.com/tour1/: T&A NJ
+                https://www.zoiestarr.com/tour1/: Zoie Starr
+# Last Updated April 23, 2021

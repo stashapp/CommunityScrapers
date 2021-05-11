@@ -148,6 +148,8 @@ xPathScrapers:
                 with:
               - regex: <\\\/br>|<br\s\\\/>|<br>|<br\\/>
                 with: "\n"
+              - regex: <strong>|<\\\/strong>
+                with:
       Tags:
         Name: $tags/a/text()|//div[@class="sceneCol categories"]/a/text()|//div[@class="sceneCol sceneColCategories"]//span[not(@class="categorySeparator")]/text()|//div[@class="sceneCategories"]/a/text()
       Performers:
@@ -302,4 +304,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated March 26, 2021
+# Last Updated April 22, 2021
