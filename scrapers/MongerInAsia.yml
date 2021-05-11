@@ -1,0 +1,21 @@
+name: mongerinasia
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mongerinasia.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="scene-title-top"]
+      Performers:
+        Name: //div[@class=" model-info"]/h2
+      Details:
+        selector: //div[@class="description_content_more"] | //div[@class="description_content"]
+      Image:
+        selector: //video[@id="video"]/@poster
+      Studio:
+        Name:
+          fixed: Monger In Asia
+# Last Updated May 11, 2021
