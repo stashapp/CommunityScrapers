@@ -18,6 +18,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Performers:
         Name: //div[@class='user-details-card-name']/text()
+        URL: //a[@class="uk-flex"]/@href
       Tags:
         Name: //div[@class="abt-rw tgs"]/a
       Details:
