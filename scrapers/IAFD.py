@@ -456,9 +456,9 @@ def performer_from_tree(tree):
     performer_deathdate = tree.xpath('(//p[@class="bioheading"][text()="Date of Death"]/following-sibling::p)[1]//text()')
     p.death_date = p.set_value(performer_deathdate)
     if p.death_date:
-        p.death_date = re.sub(r'(\S+\s+\d+,\s+\d+).*', r'\1', p.deathdate)
+        p.death_date = re.sub(r'(\S+\s+\d+,\s+\d+).*', r'\1', p.death_date)
         try:
-            p.death_date = datetime.datetime.strptime(p.deathdate, iafd_date).strftime(stash_date)
+            p.death_date = datetime.datetime.strptime(p.death_date, iafd_date).strftime(stash_date)
         except:
             pass
 
