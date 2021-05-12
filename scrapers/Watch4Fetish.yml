@@ -1,0 +1,35 @@
+name: Watch4Fetish
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - watch4fetish.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="video-info-title"]/h1
+      Date:
+        selector: //div[@class="video-info-details"][1]
+        postProcess:
+          - replace:
+              - regex: 'Released:\s*'
+                with: ""
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class='user-details-card-name']/text()
+        URL: //a[@class="uk-flex"]/@href
+      Tags:
+        Name: //div[@class="abt-rw tgs"]/a
+      Details:
+        selector: //div[@class="video-info mt-3"]/p
+      Image:
+        selector: //img[@width="1280"]/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.watch4fetish.com/"
+      Studio:
+        Name:
+          fixed: Watch4Fetish
+# Last Updated May 7, 2021
