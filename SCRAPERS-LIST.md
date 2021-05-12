@@ -144,6 +144,7 @@ bossymilfs.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 boundhoneys.com|Boundhoneys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 bountyhunterporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 boxtrucksex.com|BoxTruckSex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+boyfriendsharing.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 boysdestroyed.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 boysfuckmilfs.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 brandibelle.com|brandibelle.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -367,6 +368,7 @@ girlsway.com|PureTaboo.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Lesbian
 givemepink.com|sapphix.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gloryholesecrets.com|GangBangCreampie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gloryholeswallow.com|GloryHoleSwallow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+gostuckyourself.net|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 grannyghetto.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Granny
 grooby-archives.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 groobygirls.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
@@ -542,6 +544,7 @@ modelhub.com|Modelhub.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 mofos.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 mofosnetwork.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 mommyblowsbest.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+mommysboy.net|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mommysgirl.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 momsbangteens.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 momslickteens.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
