@@ -350,7 +350,12 @@ xPathScrapers:
     movie:
       Name: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
       Director: //div[@id='video_director']/table/tbody/tr/td[@class="text"]/span/a/text()
-      Duration: //div[@id="video_length"]/table/tbody/tr/td/span[@class="text"]/text()
+      Duration: 
+        selector: //div[@id="video_length"]/table/tbody/tr/td/span[@class="text"]/text()
+        postProcess:
+          - replace:
+            - regex: $
+              with: ":00"
       Date: //div[@id="video_date"]/table/tbody/tr/td[@class="text"]/text()
       Synopsis:
         selector: //div[@id="video_title"]/h3/a/text()
@@ -379,4 +384,4 @@ driver:
   useCDP: true
   sleep: 5
 
-# Last Updated January 18, 2021
+# Last Updated May 13, 2021
