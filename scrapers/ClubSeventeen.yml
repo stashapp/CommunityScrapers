@@ -3,11 +3,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - clubseventeen.com/video.php
+      - clubsweethearts.com/video.php
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
     url:
       - clubseventeen.com/photo.php
+      - clubsweethearts.com/photo.php
     scraper: galleryScraper
 
 xPathScrapers:
@@ -39,7 +41,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: ClubSeventeen
-   
+
   galleryScraper:
     gallery:
       Title:
@@ -66,4 +68,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: ClubSeventeen
-# Last Updated October 30, 2020
+# Last Updated May 13, 2021
