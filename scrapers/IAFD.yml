@@ -1,0 +1,31 @@
+name: IAFD
+performerByName:
+    action: script
+    script:
+      - python3
+      - IAFD.py
+      - query
+performerByURL:
+  - url:
+     - iafd.com
+    action: script
+    script:
+      - python3
+      - IAFD.py
+sceneByURL:
+  - url:
+      - iafd.com/title.rme
+    action: script
+    script:
+      - python3
+      - IAFD.py
+      - scene
+movieByURL:
+  - url:
+      - iafd.com/title.rme/title=
+    action: script
+    script:
+      - python3
+      - IAFD.py
+      - movie
+#Last Updated May 8, 2021

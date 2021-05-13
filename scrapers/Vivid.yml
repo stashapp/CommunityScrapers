@@ -2,7 +2,16 @@ name: Vivid
 sceneByURL:
   - action: scrapeXPath
     url:
-      - vivid.com/
+      - 65inchhugeasses.com
+      - blackwhitefuckfest.com
+      - brandnewfaces.com
+      - girlswhofuckgirls.com
+      - momisamilf.com
+      - nastystepfamily.com
+      - orgytrain.com
+      - petited.com
+      - vivid.com
+      - vividclassic.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -28,5 +37,12 @@ xPathScrapers:
               - regex: "Released:"
                 with: ""
           - parseDate: Jan 2, 2006
+      Studio:
+        Name:
+          selector: //a[@class="navbar-brand"]/img/@alt
+          postProcess:
+            - replace:
+                - regex: (?:.*Presents\s)?(.*)\sLogo
+                  with: $1
 
-# Last Updated November 8, 2020
+# Last Updated May 09, 2021
