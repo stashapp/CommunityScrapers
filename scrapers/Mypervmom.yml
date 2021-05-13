@@ -3,7 +3,9 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - boyfriendsharing.com
+      - brattyfamily.com
       - gostuckyourself.net
+      - littlefromasia.com
       - mommysboy.net
       - mybadmilfs.com
       - mydaughterswap.com
@@ -34,4 +36,8 @@ xPathScrapers:
       Studio:
         Name:
           selector: //a[@title="Home"]/img/@alt
-# Last Updated May 12, 2021
+          postProcess:
+            - map:
+                BrattySis: Bratty Sis
+                PervMom: Perv Mom
+# Last Updated May 13, 2021
