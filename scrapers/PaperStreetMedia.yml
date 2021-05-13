@@ -2,6 +2,7 @@ name: "PaperStreetMedia"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - analmom.com/movies/
       - badmilfs.com/movies/
       - bbcparadise.com/movies/
       - bffs.com/movies/
@@ -12,6 +13,7 @@ sceneByURL:
       - exxxtrasmall.com/movies/
       - familystrokes.com/movies/
       - fostertapes.com/movies/
+      - freeusefantasy.com/movies/
       - innocenthigh.com/movies/
       - littleasians.com/movies/
       - mylfdom.com/movies/
@@ -43,6 +45,7 @@ xPathScrapers:
                 - regex: (.+www\.)(\w+)(.+)
                   with: $2
             - map:
+                analmom: AnalMom
                 badmilfs: BadMilfs
                 bbcparadise: "BBC Paradise"
                 bffs: BFFs
@@ -53,6 +56,7 @@ xPathScrapers:
                 exxxtrasmall: ExxxtraSmall
                 familystrokes: "Family Strokes"
                 fostertapes: "Foster Tapes"
+                freeusefantasy: "Freeuse Fantasy"
                 innocenthigh: "Innocent High"
                 littleasians: "Little Asians"
                 mylfdom: MYLFDom
@@ -68,4 +72,4 @@ xPathScrapers:
                 teensloveblackcocks: "Teens Love Black Cocks"
                 thickumz: Thickumz
                     
-# Last Updated October 20, 2020
+# Last Updated February 25, 2020

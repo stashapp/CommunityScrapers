@@ -1,0 +1,28 @@
+name: VegasDreamworks
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - paradisegfs.com
+      - toticos.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="post-title"]
+      Performers:
+        Name: //div[@class="update_bb_info"]//a
+      Tags:
+        Name: //div[@class="cat_tag"]/a
+      Details:
+        selector: //div[@class="update_image_description"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          selector: //link[@rel="pingback"]/@href
+          postProcess:
+            - map:
+                https://toticos.com/xmlrpc.php: Toticos
+                https://paradisegfs.com/xmlrpc.php: ParadiseGFS
+# Last Updated May 5, 2021

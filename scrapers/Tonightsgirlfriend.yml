@@ -2,7 +2,7 @@ name: tonightsgirlfriend
 sceneByURL:
   - action: scrapeXPath
     url:
-      - tonightsgirlfriend.com/scenes
+      - tonightsgirlfriend.com/scene
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -13,7 +13,7 @@ xPathScrapers:
         selector: //head/title/text()
         postProcess:
           - replace:
-              - regex: \sHD\sPorn\s\|\sTonightsGirlfriend\.com
+              - regex: \s-\sHD\sPorn\s\|\sTonightsGirlfriend\.com
                 with:
       Date:
         selector: $sceneinfo/p/span/text()
@@ -22,13 +22,17 @@ xPathScrapers:
               - regex: "Added: "
                 with:
           - parseDate: 01-02-06
-      Details: //div[@class="scenepage-description"]/p
+      Details: //div[@class="scenepage-description"]
       Performers:
         Name: $sceneinfo/p/a
-      Image: //img[@class="playcard"]/@src
+      Image:
+        selector: //img[@class="playcard"]/@src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: "https://"
       Studio:
         Name:
           fixed: "Tonight's Girlfriend"
       URL: //link[@rel='canonical']/@href
-
-# Last Updated November 8, 2020
+# Last Updated January 12, 2021

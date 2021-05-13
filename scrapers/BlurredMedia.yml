@@ -1,0 +1,50 @@
+name: "BlurredMedia"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - biguysfuck.com/video
+      - gayhoopla.com/video
+      - hotguysfuck.com/video
+      - sugardaddyporn.com/video
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $script: //script[@type="application/ld+json"]
+    scene:
+      Title:
+        selector: //h1
+      Studio:
+        Name:
+          selector: //meta[@property="og:site_name"]/@content
+          postProcess:
+            - map:
+                BiGuysFUCK: Bi Guys Fuck
+                GAYHOOPLA: Gay Hoopla
+                HotGuysFUCK: Hot Guys Fuck
+                SugarDaddyPORN: Sugar Daddy Porn
+      Date:
+        selector: //meta[@property="og:video:release_date"]/@content
+        postProcess:
+          - parseDate: 2006-01-02
+      Details:
+        selector: //div[@class="about-video" or @class="content" or @class="descriptionIntro" or @class="text"]/p
+      Tags:
+        Name:
+          selector: $script[contains(.,'"keywords":')]
+          postProcess:
+            - replace:
+                - regex: '.+keywords":\s*"([^"]+)".+'
+                  with: $1
+          split: ", "
+      Performers:
+        Name:
+          selector: //meta[@property="og:video:actor"]/@content
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      URL: //meta[@property="og:url"]/@content
+
+driver:
+  useCDP: true
+# Last Updated February 21, 2021

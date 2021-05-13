@@ -1,40 +1,51 @@
 name: Paco
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
-      - en.pacopacomama.com/eng/moviepages
+      - en.pacopacomama.com
     scraper: sceneScraper
-xPathScrapers:
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .*/movie(s|pages)/([^/]+).*
+          with: https://en.pacopacomama.com/dyn/phpauto/movie_details/movie_id/$2.json
+
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://en.pacopacomama.com/dyn/phpauto/movie_details/movie_id/{filename}.json
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: .*(\d{6}_\d{3}).* # paco uses ids with form like 062212_055
+        with: $1
+  scraper: sceneScraper
+jsonScrapers:
   sceneScraper:
-    common:
-      $script: //script[contains(translate(.,"DEIMOV","deimov"), "movie_id=")]
     scene:
-      Details: /html/head/title/text()
-      #Details: //div[@id="movie"]/h1
+      Title:
+        selector: "[TitleEn,Title]"
+        concat: "|" # get rid of empty result
+        split: "|"
       Date:
-        selector: //dt[@class="date"][contains(.,"Release Date")]
+        selector: Release
         postProcess:
-          - replace:
-              - regex: .*(Release\sDate:\s)(\d{4}-\d{2}-\d{2}).*
-                with: $2
           - parseDate: 2006-01-02
       Performers:
-        Name: //tr/td[span[contains(.,"Name:")]]/..//a/text()
-      Image:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .*((?i)movie_id=)(\d+_\d+).*
-                with: https://www.pacopacomama.com/moviepages/$2/images/l_hd.jpg
-      Title:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .*((?i)movie_id=)(\d+_\d+).*
-                with: Paco $2
+        Name: ActressesEn
+      Image: ThumbHigh
       Tags:
-        Name: //tr/td[span[contains(.,"Tags:")]]/..//a/text()
+        Name: UCNAMEEn
+      Details: DescEn
+      URL:
+        selector: MovieID
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://en.pacopacomama.com/movies/"
+              - regex: $
+                with: "/"
       Studio:
         Name:
           fixed: PacoPacoMama
-# Last Updated October 5, 2020
+# Last Updated April 30, 2021
+

@@ -1,0 +1,35 @@
+name: HollyRandall
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hollyrandall.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2
+      Date:
+        selector: //div[@class="info"]/p
+        postProcess:
+          - replace:
+              - regex: (^Added:\s+)(.+\d{4})(.+)
+                with: $2
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class="info"]/p/a
+      Tags:
+        Name: //ul[@class="tags"]/li/a
+      Details:
+        selector: //div[@class="description"]/p
+      Image:
+        selector: //img[@class="update_thumb thumbs stdimage"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://hollyrandall.com"
+      Studio:
+        Name:
+          fixed: HollyRandall
+# Last Updated April 26, 2021
+

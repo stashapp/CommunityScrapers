@@ -1,0 +1,70 @@
+name: FreeonesStore
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - store.freeones.com
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - store.freeones.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &h1Sel //h1[@class="description"]
+      Details: &synopsisSel
+        selector: //div[@class="synopsis"]/p
+        concat: "\n\n"
+      Date: &dateAttr
+        selector: //div[@class="release-date"][span[text()="Released:"]]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Image:
+        selector: //style[contains(.,"background:url")]/text()
+        postProcess:
+          - replace:
+              - regex: ^.+background:url\((http.+?\.jpg).+$
+                with: $1
+      Studio:
+        Name: &studioSel //div[@class="studio"]/a
+      Movies:
+        Name: //div[@id="purchase-options"]/div[@class="card m-2"][contains(.,"Full Movie")][1]//small[contains(text(), "Full Movie")]/em/text()
+        URL:
+          selector: //div[@id="purchase-options"]/div[@class="card m-2"][contains(.,"Full Movie")][1]/div[@class="card-footer"]/a/@onclick
+          postProcess:
+            - replace:
+                - regex: ^.+'(\d+?)'.+$
+                  with: https://store.freeones.com/$1
+      Performers:
+        Name: //div[@class="video-performer"]//span/text()
+      Tags:
+        Name: //div[@class="categories"]/a
+  movieScraper:
+    movie:
+      Name: *h1Sel
+      Date: *dateAttr
+      Duration:
+        selector: //div[@class="release-date"][span[text()="Length:"]]/text()
+        postProcess:
+          - replace:
+              - regex: \shrs\.\s
+                with: ":"
+              - regex: \s.+$
+                with:
+      Synopsis: *synopsisSel
+      Studio:
+        Name: *studioSel
+      Director: //div[@class="director"]/a
+      FrontImage:
+        selector: //div[@class="carousel-inner"]/div[1]/img/@src
+        postProcess: &image-transform
+          - replace:
+              - regex: product/(\d+?)/
+                with: product/500/
+      BackImage:
+        selector: //div[@class="carousel-inner"]/div[2]/img/@src
+        # Uses the same postProcess as the front image
+        postProcess: *image-transform
+# Last Updated January 21, 2021

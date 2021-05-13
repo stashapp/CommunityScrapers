@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - hegre.com/films
       - hegre.com/massage
+      - hegre.com/sexed
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
@@ -30,6 +31,7 @@ xPathScrapers:
         selector: |
           //div[@class="film-subtitle"]/text()
           |//div[@class="record-details-column"]//div[contains(@class, "massage-")]//text()
+          |//div[@class="film-header"]/div[@class="intro"]//text()
         concat: "\n\n"
       Date:
         selector: //span[@class="date"]/text()
@@ -111,5 +113,4 @@ xPathScrapers:
           - replace:
               - regex: \d{3}x
                 with: 640x
-
-# Last Updated December 14 2020
+# Last Updated February 7, 2021

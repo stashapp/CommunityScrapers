@@ -1,0 +1,28 @@
+name: Perfect Gonzo
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - perfectgonzo.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="row"]//h2
+      Date:
+        selector: //div[@class="row"]//span
+        postProcess:
+          - replace:
+              - regex: "Added "
+                with: ""
+          - parseDate: January 2, 2006
+      Details: //p[@class="mg-md"]
+      Tags:
+        Name: //div[contains(h4,"Tags:")]//a
+      Studio:
+        Name:
+          fixed: Perfect Gonzo
+      Image: //video[@id="video"]/@poster | //div[@id="video-hero"]//img/@src
+      Performers:
+        Name: //div[contains(h4,"Featured model")]//a
+# Last Updated March 2, 2021

@@ -1,0 +1,28 @@
+name: MyDirtyHobby
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mydirtyhobby.com/profil/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[contains(@class,"page-title")]
+      Details: //p[@class="well well-sm"]
+      Date:
+        selector: //dd[i[contains(@class,"fa-calendar")]]
+        postProcess:
+          - replace:
+            - regex: ^(today|yesterday).+
+              with: $1
+          - parseDate: 1/2/06
+      Performers:
+        Name: //dd[@class="right"]/a[starts-with(@href,"/profil/")]
+      Tags:
+        Name: //dd/a[starts-with(@href,"/videos/")]
+      Image:
+        selector: //img[@class="img-responsive" and contains(@src,"_orig.jpg")]/@src
+      Studio:
+        Name:
+          fixed: My Dirty Hobby
+# Last Updated April 2, 2021

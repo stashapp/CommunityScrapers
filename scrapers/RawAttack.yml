@@ -7,18 +7,22 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="title-scene"]/text()
-      Details: //p[@class="description-scene"]/text()
+      Title: 
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: \s*-\s*$
+                with: ""
+      Date:
+        selector: //h3[text()="Release Date:"]/following-sibling::p[@class="date"]/text()
+      Details: //h2[text()="Description:"]/following-sibling::p/text()
       Performers:
-        Name:
-          selector: //p[@class="featuring"]/a
-          postProcess:
-            - replace:
-                - regex: \.$
-                  with: ""
+        Name: //h3[text()="playmates:"]/following-sibling::a[contains(@href,'/models')]/@title
       Studio:
         Name: 
             fixed: RawAttack
       Image: //img[@class="update_thumb thumbs img-unlock"]/@src
-      
-# Last Updated August 03, 2020
+      Tags:
+        Name: //h3[text()="Categories:"]/following-sibling::a[contains(@href,'/categories/')]/@title
+
+# Last Updated December 17, 2020

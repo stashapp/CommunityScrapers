@@ -1,0 +1,31 @@
+name: SweetyX
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sweetyx.com/en/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $wrapper: //div[@class="video_description"]/div[@class="row"]/div[@class="col-sm-9"]
+    scene:
+      Title: //title/text()
+      Details:
+        selector: $wrapper/p
+        concat: "\n\n"
+      # Date field unreliable on sweetyx.com
+      # Date:
+      #   selector: $wrapper/div[@class="infos"]/span[@class="info"]/span[@class="data val"]/text()
+      #   postProcess:
+      #     - parseDate: 02/01/2006
+      Image: //meta[@property="og:image"]/@content
+      Performers:
+        Name:
+          selector: $wrapper/div[@class="infos"]/span[@class="info"]/span[@class="data-model val"]/text()
+          split: ', '
+      Tags:
+        Name:
+          selector: //meta[@name="keywords"]/@content
+          split: ', '
+
+# Last Updated December 26, 2020

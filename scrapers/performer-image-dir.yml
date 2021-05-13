@@ -1,0 +1,17 @@
+name: performer image
+
+performerByFragment:
+  action: script
+  script:
+    - python
+    - performer-image-dir.py
+    - fetch
+
+performerByName:
+  action: script
+  script:
+    - python
+    - performer-image-dir.py
+    - query
+
+# Last Updated March 28, 2021

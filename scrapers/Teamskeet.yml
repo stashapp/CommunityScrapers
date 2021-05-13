@@ -1,0 +1,10 @@
+name: "TeamskeetAPI"
+sceneByURL:
+  - url:
+      - teamskeet.com/movies/
+    action: script
+    script:
+      - python
+      - TeamskeetAPI.py
+      # - logJSON # Save the JSON from the API to a file
+# Last Updated February 23, 2021

@@ -1,12 +1,17 @@
+import base64
+import imghdr
 import json
+import mimetypes
 import sys
 import sqlite3
 from os import path
 
-''' This script uses the sqlite database from another stash database and allows you to parse performers
-    Copy stash-go.sqlite to the scrapers directory
-    This script needs python3 and sqlite3 
-   '''
+'''
+This script uses the sqlite database from another stash database and allows you to parse performers
+Copy stash-go.sqlite to the scrapers directory
+
+This script needs python3
+'''
 
 def query_performers(name):
     c = conn.cursor()
@@ -18,9 +23,16 @@ def query_performers(name):
         rec.append(res)
     return rec
 
+def make_image_data_url(image_data):
+    # type: (bytes,) -> str
+    img_type = imghdr.what(None, h=image_data) or 'jpeg'
+    mime = mimetypes.types_map.get('.' + img_type, 'image/jpeg')
+    encoded = base64.b64encode(image_data).decode()
+    return 'data:{0};base64,{1}'.format(mime, encoded)
+
 def fetch_performer_name(name):
     c = conn.cursor()
-    c.execute('SELECT name,gender,url,twitter,instagram,date(birthdate),ethnicity,country,eye_color,height,measurements,fake_tits,career_length,tattoos,piercings,aliases FROM performers WHERE lower(name) = lower(?)', (name,))
+    c.execute('SELECT name,gender,url,twitter,instagram,date(birthdate),ethnicity,country,eye_color,height,measurements,fake_tits,career_length,tattoos,piercings,aliases,id FROM performers WHERE lower(name) = lower(?)', (name,))
 
     row =c.fetchone()
     res={}
@@ -42,6 +54,16 @@ def fetch_performer_name(name):
     res['tattoos']=row[13]
     res['piercings']=row[14]
     res['aliases']=row[15]
+
+    performer_id=row[16]
+    c.execute('select image from performers_image where performer_id=?',(performer_id,))
+    row=c.fetchone()
+    if row == None:
+        return res
+
+    image = make_image_data_url(row[0])
+    res['image']=image
+
     return res
 
 
@@ -55,7 +77,7 @@ conn = sqlite3.connect('stash-go.sqlite',detect_types=sqlite3.PARSE_DECLTYPES|sq
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
-    print(json.dumps(fragment),file=sys.stderr)
+    print("input: " + json.dumps(fragment),file=sys.stderr)
     result = query_performers(fragment['name'])
     if not result:
         print(f"Could not determine details for performer: `{fragment['name']}`",file=sys.stderr)
@@ -66,7 +88,7 @@ if sys.argv[1] == "query":
 
 if sys.argv[1] == "fetch":
     fragment = json.loads(sys.stdin.read())
-    print(json.dumps(fragment),file=sys.stderr)
+    print("input: " + json.dumps(fragment),file=sys.stderr)
     result = fetch_performer_name(fragment['name'])
     if not result:
         print(f"Could not determine details for performer: `{fragment['name']}`",file=sys.stderr)
@@ -74,3 +96,5 @@ if sys.argv[1] == "fetch":
     else:
         print (json.dumps(result))
     conn.close()
+
+# Last Updated March 31, 2021

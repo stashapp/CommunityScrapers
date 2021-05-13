@@ -1,0 +1,29 @@
+name: ClassLesbians
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - class-lesbians.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="h1"]
+      Date:
+        selector: //span[@class="period"]
+        postProcess:
+          - parseDate: 02.01.2006
+      Performers:
+        Name: //div[@class="main-info"]/p[@class="cast"]/a
+      Details: //h3[@class="h3" and contains(text(), "DESCRIPTION")]/following-sibling::text()
+      Image:
+        selector: //div[@class="banner-video"]//@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "http://class-lesbians.com/"
+      Studio:
+        Name:
+          fixed: ClassLesbians
+# Last Updated April 08, 2021
+

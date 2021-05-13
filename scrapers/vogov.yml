@@ -1,0 +1,24 @@
+name: vogov
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vogov.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Date:
+        selector: //div[@class="video-page-description"]//li[contains(.,"Release Date")]/span
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: //meta[@property="og:description"]/@content
+      Performers:
+        Name: //div[@class="info-video-models"]//a
+      Tags:
+        Name: //div[@class="info-video-category"]//a
+      Studio:
+        Name:
+          fixed: vogov
+      Image: //meta[@property="og:image"]/@content
+# Last Updated March 5, 2021

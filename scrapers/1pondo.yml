@@ -1,0 +1,53 @@
+name: 1Pondo
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - en.1pondo.tv/movies/
+    scraper: sceneScraper
+    queryURL: "https://en.1pondo.tv/dyn/phpauto/movie_details/movie_id/{url}.json"
+    queryURLReplace:
+      url:
+        - regex: '.+/movies/(\d{6})_(\d{3}).+'
+          with: "${1}_${2}"
+sceneByFragment:
+  action: scrapeJson
+  queryURL: "https://en.1pondo.tv/dyn/phpauto/movie_details/movie_id/{filename}.json"
+  scraper: sceneScraper
+  queryURLReplace:
+    filename:
+      - regex: '.*(\d{6})[_.-](\d{3}).+'
+        with: "${1}_${2}"
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: "[TitleEn,Title]"
+        concat: "|" # get rid of empty result
+        split: "|"
+      Details:
+        selector: DescEn
+        postProcess:
+          - replace:
+              - regex: ^\s+(.+)\s+$
+                with: $1
+      Date:
+        selector: Release
+        postProcess:
+          - parseDate: 2006-01-02
+      Image: ThumbHigh
+      Performers:
+        Name: ActressesEn
+      Studio:
+        Name:
+          fixed: 1Pondo
+      Tags:
+        Name: UCNAMEEn
+      URL:
+        selector: MovieID
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://en.1pondo.tv/movies/"
+              - regex: $
+                with: "/"
+#Last Updated April 30, 2021

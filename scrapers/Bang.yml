@@ -6,6 +6,8 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $movie: //span[contains(., 'From the Movie:')]/following-sibling::a
     scene:
       Title: //meta[@name="og:title"]/@content
       Details: //meta[@name="description"]/@content
@@ -30,8 +32,15 @@ xPathScrapers:
           selector: //div/span[@class="fa-text-right" and contains(text(),"With:")]/../span[@class="comma-list-container"]/span/a/text()
       Studio:
         Name: //div/span[@class="fa-text-right" and contains(text(),"Studio:")]/a/text()
+      Movies:
+        Name: $movie
+        URL:
+          selector: $movie/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.bang.com"
 driver:
   useCDP: true
   sleep: 5
-
-# Last Updated November 8, 2020
+# Last Updated January 17, 2021

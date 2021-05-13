@@ -1,0 +1,22 @@
+name: LewRubens
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lewrubens.com/x-new/new-set.php?setid=
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@name="twitter:title"]/@content
+      Details:
+        selector: //div[@class="album-details"]/div//p[not(starts-with(text(), "Share")) and not(ends-with(text(), "video"))]/text() | //div[@class="album-details"]/div//span[not(starts-with(text(), "Share")) and not(ends-with(text(), "video"))]/text()
+        concat: " "
+        #alternative selector
+        #selector: //div[@class="album-details"]/div/p[@style="border:0px solid red;"]/following-sibling::p//text()
+      Image: //meta[@name="twitter:image"]/@content
+      Studio:
+        Name:
+          fixed: Lew Rubens
+# Last Updated February 18, 2021

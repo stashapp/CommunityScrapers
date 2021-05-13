@@ -1,0 +1,18 @@
+name: Validate Scrapers
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - run: cd ./validator && yarn install --frozen-lockfile
+    - run: node ./validate.js --ci

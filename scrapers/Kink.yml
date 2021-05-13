@@ -27,7 +27,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details:
-        selector: //span[@class="description-text"]/p
+        selector: //span[@class="description-text"]/*[self::p or self::ul]
         concat: "\n\n"
       Performers:
         Name:

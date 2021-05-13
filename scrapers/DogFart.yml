@@ -3,7 +3,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - dogfartnetwork.com/
-      - wefuckblackgirls.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -29,5 +28,11 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https:"
-
-# Last Updated November 8, 2020
+      Studio:
+        Name:
+          selector: //h3[@class="site-name"]
+          postProcess:
+            - replace:
+                - regex: (\.com)$
+                  with:
+# Last Updated May 03, 2021
