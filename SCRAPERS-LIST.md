@@ -158,10 +158,12 @@ boundhoneys.com|Boundhoneys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 boundlife.com|Boundlife.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bountyhunterporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 boxtrucksex.com|BoxTruckSex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+boyfriendsharing.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 boysdestroyed.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 boysfuckmilfs.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 brandibelle.com|brandibelle.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 brandnewfaces.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+brattyfamily.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 brattysis.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 brazzers.com|Brazzers.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|CDP|-
 brickyates.com|brickyates.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -400,6 +402,7 @@ givemepink.com|sapphix.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gloryholesecrets.com|GangBangCreampie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gloryholeswallow.com|GloryHoleSwallow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 glosstightsglamour.com|GlossTightsGlamour.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+gostuckyourself.net|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 grannyghetto.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Granny
 grooby-archives.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 groobygirls.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
@@ -544,6 +547,7 @@ lezcuties.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 lifeselector.com|21Roles.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 lilhumpers.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 littleasians.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+littlefromasia.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 littlecaprice-dreams.com|LittleCapriceDreams.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 littlehellcat.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lollyhardcore.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -595,6 +599,7 @@ mofos.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 mofosnetwork.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 momisamilf.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mommyblowsbest.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+mommysboy.net|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mommysgirl.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 momsbangteens.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 momslickteens.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
