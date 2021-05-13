@@ -1,0 +1,22 @@
+name: GASM
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - gasm.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="gqText"]/span[@class="gqTitle" and 2]
+      Performers:
+        Name: //div[@class="gqOwner"]/a
+      Tags:
+        Name: //div[@class="content tag"]/a
+      Details:
+        selector: //span[@class="gqDescription"]
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          selector: //span[@class="gqOwner"]//a
+# Last Updated May 13, 2021
