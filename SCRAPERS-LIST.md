@@ -562,6 +562,7 @@ lustery.com|Lustery.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Amateur
 lustylina.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 m45e.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
 madeincanada.xxx|MadeInCanada.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+madouqu.com|Madou.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 maggiegreenlive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maketeengape.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maledigital.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
