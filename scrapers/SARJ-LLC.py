@@ -50,7 +50,21 @@ def fetch(baseUrl, type, arguments):
     return data
 
 def scrape_model(baseUrl, name):
-    data = fetch(baseUrl, 'model', {'name': name})
+    transformed_name = str.join(
+      ' ',
+      list(
+        map(
+          lambda p:
+            re.sub(
+              '[_-]',
+              ' ',
+              re.sub('\w\S*', lambda m: m.group(0).lower().capitalize(), p),
+            ),
+          name.split('-')
+        )
+      )
+    )
+    data = fetch(baseUrl, 'model', {'name': transformed_name, 'order': 'DATE', 'direction': 'DESC'})
     if data == None:
         return None
 
@@ -144,4 +158,4 @@ elif sys.argv[1] == "query":
         ret = search(i, sys.argv[2])
 
 print(json.dumps(ret))
-# Last Updated March 06, 2021
+# Last Updated May 15, 2021
