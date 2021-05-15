@@ -54,4 +54,20 @@ performerByURL:
       - SARJ-LLC.py
       - scrape
       - performer
-# Last Updated March 06, 2021
+
+performerByFragment:
+  action: script
+  script:
+    - python3
+    - SARJ-LLC.py
+    - query
+    - performer
+
+performerByName:
+  action: script
+  script:
+    - python3
+    - SARJ-LLC.py
+    - search
+    - performer
+# Last Updated May 15, 2021

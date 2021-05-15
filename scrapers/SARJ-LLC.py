@@ -24,7 +24,7 @@ def scrape_url(url, type):
 
     return scraped
 
-def search(fragment, type):
+def query(fragment, type):
     if type == 'scene' or type == 'gallery':
       name = re.sub(r'\W', '_', fragment['title']).upper()
       date = fragment['date'].replace('-', '')
@@ -33,6 +33,50 @@ def search(fragment, type):
       res = scraper('https://metartnetwork.com', date, name)
       if res != None:
           return res
+
+def search(type, name):
+    searchType = {
+      'scene': 'MOVIE',
+      'gallery': 'GALLERY',
+      'performer': 'model'
+    }[type]
+    page = 1
+    pageSize = 30
+    args = {
+      'searchPhrase': name,
+      'pageSize': pageSize,
+      'sortBy': 'relevance'
+    }
+
+    def map_result(result):
+        item = result['item']
+        return {
+          'name': item['name'],
+          'url': f"https://www.metartnetwork.com{item['path']}"
+        }
+
+    results = []
+
+    while True:
+        args['page'] = page
+        response = fetch("https://metartnetwork.com", "search-results", args)
+
+        results += list(
+          map(
+            map_result,
+            filter(
+              lambda r: r['type'] == searchType,
+              response['items']
+            )
+          )
+        )
+
+        if page * pageSize > response['total'] or len(response['items']) == 0:
+            break
+
+        page += 1
+
+    return results
 
 def fetch(baseUrl, type, arguments):
     url =f"{baseUrl}/api/{type}?{urlencode(arguments)}"
@@ -154,8 +198,11 @@ if sys.argv[1] == "scrape":
 elif sys.argv[1] == "query":
     if 'url' in i and validate_url(i['url']):
         ret = scrape_url(i['url'], sys.argv[2])
-    else:
-        ret = search(i, sys.argv[2])
+
+    if ret is None:
+        ret = query(i, sys.argv[2])
+elif sys.argv[1] == 'search':
+    ret = search(sys.argv[2], i['title'] if 'title' in i else i['name'])
 
 print(json.dumps(ret))
 # Last Updated May 15, 2021
