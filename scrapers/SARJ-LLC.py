@@ -147,16 +147,34 @@ def scrape_gallery(baseUrl, date, name):
     return map_media(data, studio, baseUrl)
 
 def map_model(baseUrl, model):
+    tags = list(map(lambda t: {'Name'}, model['tags']))
+
+    def add_tag(key, format):
+        nonlocal tags
+        if key in model and model[key] != "":
+            tags.append({
+                'Name': format.format(model[key])
+            })
+
+    add_tag('hair', '{} hair')
+    add_tag('pubicHair', '{} pussy')
+    add_tag('eyes', '{} eyes')
+    add_tag('breasts', '{} breasts')
+
     return {
         'Name': model['name'],
         'Gender': model['gender'].upper(),
         'URL': f"{baseUrl}{model['path']}",
         'Ethnicity': model['ethnicity'],
         'Country': model['country']['name'],
-        'EyeColor': model['eyes'],
+        'hair_color': model['hair'].capitalize(),
+        'eye_color': model['eyes'].capitalize(),
         'Height': str(model['height']),
+        'Weight': str(model['weight']),
         'Measurements': model['size'],
-        'Image': f"{baseUrl}{model['headshotImagePath']}"
+        'Details': model['biography'],
+        'Image': f"https://cdn.metartnetwork.com/{model['siteUUID']}{model['headshotImagePath']}",
+        'Tags': tags
     }
 
 studios = {
