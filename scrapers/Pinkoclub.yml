@@ -1,0 +1,21 @@
+name: Pinkoclub
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pinkoclub.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="titolo-video"]/h2
+      Performers:
+        Name: //h4/a
+      Details:
+        selector: //div[@class="caption captionvideo"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Pink O Club
+# Last Updated May 15, 2021
