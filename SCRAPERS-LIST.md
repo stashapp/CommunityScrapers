@@ -348,6 +348,7 @@ fist4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fistertwister.com|Fistertwister.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fistflush.com|sapphix.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fistingcentral.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+fit18.com|Fit18.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fitting-room.com|FittingRoom.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 footsiebabes.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 forbiddenfruitsfilms.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
