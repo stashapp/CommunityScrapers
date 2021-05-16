@@ -1,8 +1,9 @@
 name: SARJ LLC
 sceneByURL:
-  - action: scrapeJson
+  - action: script
     url: &urls
       - alsscan.com
+      - eroticbeauty.com
       - errotica-archives.com
       - eternaldesire.com
       - lovehairy.com
@@ -14,80 +15,59 @@ sceneByURL:
       - stunning18.com
       - thelifeerotic.com
       - vivthomas.com
-    scraper: sceneScraper
-    queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: '^(?:.+\.)?([^.]+)\.com/.+movie/(\d+)/(\w+)/?$'
-          with: https://www.$1.com/api/movie?name=$3&date=$2
+    script:
+      - python3
+      - SARJ-LLC.py
+      - scrape
+      - scene
+
 sceneByFragment:
-  action: scrapeJson
-  queryURL: "{url}"
-  scraper: sceneScraper
-  queryURLReplace:
-    url:
-      - regex: '^(?:.+\.)?([^.]+)\.com/.+movie/(\d+)/(\w+)/?$'
-        with: https://www.$1.com/api/movie?name=$3&date=$2
+  action: script
+  script:
+    - python3
+    - SARJ-LLC.py
+    - query
+    - scene
 
 galleryByURL:
-  - action: scrapeJson
+  - action: script
     url: *urls
-    scraper: galleryScraper
-    queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: '^(?:.+\.)?([^.]+)\.com/.+gallery/(\d+)/(\w+)/?$'
-          with: https://www.$1.com/api/gallery?name=$3&date=$2&page=1&mediaFirst=42
+    script:
+      - python3
+      - SARJ-LLC.py
+      - scrape
+      - gallery
 
-jsonScrapers:
-  sceneScraper:
-    scene:
-      Title: name
-      Details: description
-      Date: &date
-        selector: publishedAt
-        postProcess:
-          - replace:
-              - regex: (\d{4}-\d{2}-\d{2})T.+
-                with: $1
-          - parseDate: 2006-01-02
-      Image:
-        selector: media|@join
-        postProcess:
-          - replace:
-              - regex: '.+siteUUID":"([^"]+)".+galleryUUID":"([^"]+)".+'
-                with: https://cdn.metartnetwork.com/$1/media/$2/wide_$2.jpg
-      Performers: &performers
-        Name: models.#.name
-      Studio:
-        Name:
-          selector: media.siteUUID
-          postProcess: &studioPP
-            - map:
-                2163551D11D0439686AD9D291C8DFD71: ALS Scan
-                15A9FFA04E3511DF98790800200C9A66: Errotica Archives
-                706DF46B88884F7BB226097952427754: Eternal Desire
-                5A68E1D7B6E69E7401226779D559A10A: Love Hairy
-                E6B595104E3411DF98790800200C9A66: Met Art
-                E7DFB70DF31C45B3B5E0BF10D733D349: Met Art X
-                D99236C04DD011E1B86C0800200C9A66: Rylsky Art
-                94DB3D0036FC11E1B86C0800200C9A66: Sex Art
-                18A2E47EAEFD45F29033A5FCAF1F5B91: Stunning 18
-                FDAFDF209DC311E0AA820800200C9A66: The Life Erotic
-                4F23028982B542FA9C6DAAA747E9B5B3: Viv Thomas
-      Tags:
-        Name: tags
+galleryByFragment:
+  action: script
+  script:
+    - python3
+    - SARJ-LLC.py
+    - query
+    - gallery
 
-  galleryScraper:
-    gallery:
-      Title: name
-      Details: description
-      Date: *date
-      Performers: *performers
-      Studio:
-        Name:
-          selector: siteUUID
-          postProcess: *studioPP
-      Tags:
-        Name: tags
-# Last Updated February 25, 2021
+performerByURL:
+  - action: script
+    url: *urls
+    script:
+      - python3
+      - SARJ-LLC.py
+      - scrape
+      - performer
+
+performerByFragment:
+  action: script
+  script:
+    - python3
+    - SARJ-LLC.py
+    - query
+    - performer
+
+performerByName:
+  action: script
+  script:
+    - python3
+    - SARJ-LLC.py
+    - search
+    - performer
+# Last Updated May 15, 2021
