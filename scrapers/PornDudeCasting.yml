@@ -39,7 +39,7 @@ xPathScrapers:
               with: ""
       # To get Performerimages Uncomment below and enable CDP at the end of the File
       #Image:
-        #selector: //div[@class="model__img-box small"]/img/@src
+        #selector: //div[@class="model__img-box small"]/img/@data-src
       Details:  //div[@class='model-desc']/text()
       Weight:
         selector: //ul[@class='model__info-list desctop']/li/span[text()='Weight:']/../span[2]/text()
@@ -79,4 +79,3 @@ xPathScrapers:
   #useCDP: true
 
 # Last Updated May 17, 2021
-
