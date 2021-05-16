@@ -11,50 +11,55 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   performerScraper:
+    common:
+      $sSpan: following-sibling::span/text()
+      $mHead: //div[@class='model__head desctop']
+      $mInfo: //ul[@class='model__info-list desctop']/li
     performer:
-      Name: //h5[@class="model__head-name"]/text()
+      Name: &pName //h5[@class="model__head-name"]/text()
       Gender:
         fixed: "Female"
-      URL: //head/meta[@property="og:url"]/@content
+      URL: &pURL //head/meta[@property="og:url"]/@content
       Twitter:
-        selector: //div[@class='model__head desctop']//a[@class='card__user-social-link twitter']/@href
+        selector: $mHead//a[@class='card__user-social-link twitter']/@href
         postProcess:
           - replace:
-            - regex: ([\s\S]+)twitter.com/
-              with: ""
+              - regex: ([\s\S]+)twitter.com/
+                with: ""
       Instagram:
-        selector: //div[@class='model__head desctop']//a[@class='card__user-social-link instagram']/@href
+        selector: $mHead//a[@class='card__user-social-link instagram']/@href
         postProcess:
           - replace:
-            - regex: ([\s\S]+)instagram.com/
-              with: ""
-      Country: //ul[@class='model__info-list desctop']/li/span[text()='From:']/../span[2]/text()
+              - regex: ([\s\S]+)instagram.com/
+                with: ""
+      Country:
+        fixed: "United States of America"
       Height:
-        selector: //ul[@class='model__info-list desctop']/li/span[text()='Height:']/../span[2]/text()
+        selector: $mInfo/span[text()='Height:']/$sSpan
         postProcess:
           - replace:
-            - regex: \d'\D\d+\D+
-              with: ""
-            - regex: \D
-              with: ""
+              - regex: \d'\D\d+\D+
+                with: ""
+              - regex: \D
+                with: ""
       Image:
         selector: //div[@class="model__img-box small"]/img/@data-src
-      Details:  //div[@class='model-desc']/text()
+      Details: //div[@class='model-desc']/text()
       Weight:
-        selector: //ul[@class='model__info-list desctop']/li/span[text()='Weight:']/../span[2]/text()
+        selector: $mInfo/span[text()='Weight:']/$sSpan
         postProcess:
           - replace:
-            - regex: \d+\Dlbs\D+
-              with: ""
-            - regex: \D
-              with: ""
+              - regex: \d+\Dlbs\D+
+                with: ""
+              - regex: \D
+                with: ""
   sceneScraper:
     scene:
       Title:
         selector: //div[@class="header__nav-user"]/h1
       Performers:
-        Name: //h5[@class="model__head-name"]/text()
-        URL:  //head/meta[@property="og:url"]/@content
+        Name: *pName
+        URL: *pURL
       Details:
         selector: //span[@class="desc icon"]/div/text()
         concat: "\n"
@@ -66,11 +71,10 @@ xPathScrapers:
         Name:
           fixed: "Porn Dude Casting"
       Date:
-        selector: //li/span[text()='Cast:']/../span[2]/text()
+        selector: //li/span[text()='Cast:']/following-sibling::span
         postProcess:
           - replace:
-            - regex: ^
-              with: "01 "
+              - regex: ^
+                with: "01 "
           - parseDate: 02 January 2006
-
-# Last Updated May 17, 2021
+# Last Updated May 16, 2021
