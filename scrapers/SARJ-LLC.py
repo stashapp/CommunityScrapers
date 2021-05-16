@@ -24,7 +24,7 @@ def scrape_url(url, type):
 
     return scraped
 
-def search(fragment, type):
+def query(fragment, type):
     if type == 'scene' or type == 'gallery':
       name = re.sub(r'\W', '_', fragment['title']).upper()
       date = fragment['date'].replace('-', '')
@@ -33,6 +33,50 @@ def search(fragment, type):
       res = scraper('https://metartnetwork.com', date, name)
       if res != None:
           return res
+
+def search(type, name):
+    searchType = {
+      'scene': 'MOVIE',
+      'gallery': 'GALLERY',
+      'performer': 'model'
+    }[type]
+    page = 1
+    pageSize = 30
+    args = {
+      'searchPhrase': name,
+      'pageSize': pageSize,
+      'sortBy': 'relevance'
+    }
+
+    def map_result(result):
+        item = result['item']
+        return {
+          'name': item['name'],
+          'url': f"https://www.metartnetwork.com{item['path']}"
+        }
+
+    results = []
+
+    while True:
+        args['page'] = page
+        response = fetch("https://metartnetwork.com", "search-results", args)
+
+        results += list(
+          map(
+            map_result,
+            filter(
+              lambda r: r['type'] == searchType,
+              response['items']
+            )
+          )
+        )
+
+        if page * pageSize > response['total'] or len(response['items']) == 0:
+            break
+
+        page += 1
+
+    return results
 
 def fetch(baseUrl, type, arguments):
     url =f"{baseUrl}/api/{type}?{urlencode(arguments)}"
@@ -50,7 +94,21 @@ def fetch(baseUrl, type, arguments):
     return data
 
 def scrape_model(baseUrl, name):
-    data = fetch(baseUrl, 'model', {'name': name})
+    transformed_name = str.join(
+      ' ',
+      list(
+        map(
+          lambda p:
+            re.sub(
+              '[_-]',
+              ' ',
+              re.sub('\w\S*', lambda m: m.group(0).lower().capitalize(), p),
+            ),
+          name.split('-')
+        )
+      )
+    )
+    data = fetch(baseUrl, 'model', {'name': transformed_name, 'order': 'DATE', 'direction': 'DESC'})
     if data == None:
         return None
 
@@ -89,16 +147,34 @@ def scrape_gallery(baseUrl, date, name):
     return map_media(data, studio, baseUrl)
 
 def map_model(baseUrl, model):
+    tags = list(map(lambda t: {'Name'}, model['tags']))
+
+    def add_tag(key, format):
+        nonlocal tags
+        if key in model and model[key] != "":
+            tags.append({
+                'Name': format.format(model[key])
+            })
+
+    add_tag('hair', '{} hair')
+    add_tag('pubicHair', '{} pussy')
+    add_tag('eyes', '{} eyes')
+    add_tag('breasts', '{} breasts')
+
     return {
         'Name': model['name'],
         'Gender': model['gender'].upper(),
         'URL': f"{baseUrl}{model['path']}",
         'Ethnicity': model['ethnicity'],
         'Country': model['country']['name'],
-        'EyeColor': model['eyes'],
+        'hair_color': model['hair'].capitalize(),
+        'eye_color': model['eyes'].capitalize(),
         'Height': str(model['height']),
+        'Weight': str(model['weight']),
         'Measurements': model['size'],
-        'Image': f"{baseUrl}{model['headshotImagePath']}"
+        'Details': model['biography'],
+        'Image': f"https://cdn.metartnetwork.com/{model['siteUUID']}{model['headshotImagePath']}",
+        'Tags': tags
     }
 
 studios = {
@@ -140,8 +216,11 @@ if sys.argv[1] == "scrape":
 elif sys.argv[1] == "query":
     if 'url' in i and validate_url(i['url']):
         ret = scrape_url(i['url'], sys.argv[2])
-    else:
-        ret = search(i, sys.argv[2])
+
+    if ret is None:
+        ret = query(i, sys.argv[2])
+elif sys.argv[1] == 'search':
+    ret = search(sys.argv[2], i['title'] if 'title' in i else i['name'])
 
 print(json.dumps(ret))
-# Last Updated March 06, 2021
+# Last Updated May 15, 2021
