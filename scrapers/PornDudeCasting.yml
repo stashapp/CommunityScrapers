@@ -37,9 +37,8 @@ xPathScrapers:
               with: ""
             - regex: \D
               with: ""
-      # To get Performerimages Uncomment below and enable CDP at the end of the File
-      #Image:
-        #selector: //div[@class="model__img-box small"]/img/@data-src
+      Image:
+        selector: //div[@class="model__img-box small"]/img/@data-src
       Details:  //div[@class='model-desc']/text()
       Weight:
         selector: //ul[@class='model__info-list desctop']/li/span[text()='Weight:']/../span[2]/text()
@@ -73,9 +72,5 @@ xPathScrapers:
             - regex: ^
               with: "01 "
           - parseDate: 02 January 2006
-
-# Uncomment below if you want to get Performerimages and Uncomment the Image: and selector: above
-#driver:
-  #useCDP: true
 
 # Last Updated May 17, 2021
