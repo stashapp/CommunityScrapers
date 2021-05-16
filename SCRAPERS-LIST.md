@@ -709,6 +709,7 @@ petitehdporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 petiteleeanna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 philavise.com|Philavise.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pickupfuck.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+pinkoclub.com|Pinkoclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pinupfiles.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pjgirls.com|pjgirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 playboy.tv|PlayboyTV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
