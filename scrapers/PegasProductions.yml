@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-# To access other scenes go to Scene and select model which will show all their scenes
+      # To access other scenes go to Scene and select model which will show all their scenes
       Title:
         selector: //span[@itemprop="name"]
       Date:
