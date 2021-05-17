@@ -2,8 +2,8 @@ name: DDFNetwork
 sceneByURL:
   - action: scrapeXPath
     url:
-      - ddfbusty.com/videos/
       - 1by-day.com/videos/
+      - ddfbusty.com/videos/
       - eurogirlsongirls.com/videos/
       - euroteenerotica.com/videos/
       - handsonhardcore.com/videos/
@@ -25,5 +25,4 @@ xPathScrapers:
       Performers:
         Name: //h5[@class="card-title mb-0"]/a/text()
       Image: //meta[@itemprop="thumbnailUrl"]/@content
-
 # Last Updated May 17, 2021
