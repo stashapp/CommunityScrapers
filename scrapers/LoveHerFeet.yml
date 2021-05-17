@@ -17,8 +17,8 @@ xPathScrapers:
         selector: //video/@poster
         postProcess:
           - replace:
-            - regex: ^
-              with: https://www.loveherfeet.com
+              - regex: ^
+                with: https://www.loveherfeet.com
       Studio:
         Name:
           fixed: LoveHerFeet
@@ -29,7 +29,6 @@ xPathScrapers:
           selector: //div[@class='featured']/a/text()
           postProcess:
             - replace:
-              - regex: ','
-                with:
-
+                - regex: ","
+                  with:
 # Last Updated May 16, 2021
