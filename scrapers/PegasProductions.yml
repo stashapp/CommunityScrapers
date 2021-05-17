@@ -15,15 +15,15 @@ xPathScrapers:
         postProcess:
           - parseDate: 02/01/2006
       Performers:
-        Name: //div[@class="span10"]/p[1]/a
+        Name: //div[@class="span10"]/p[contains(b,"Starring")]/a
       Tags:
         Name:
-          selector: //div[@class="span10"]/p[2]
+          selector: //div[@class="span10"]/p[contains(b,"Tags")]
           postProcess:
             - replace:
                 - regex: "Tags:"
                   with:
-          split: ","
+          split: ", "
       Details:
         selector: //h5[@itemprop="description"]/p
       Image:
@@ -43,4 +43,4 @@ driver:
           Domain: ".pegasproductions.com"
           Value: "en"
           Path: "/"
-# Last Updated May 16, 2021
+# Last Updated May 17, 2021
