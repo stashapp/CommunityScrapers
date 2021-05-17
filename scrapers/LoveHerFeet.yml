@@ -14,11 +14,11 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Image:
-        selector: //script[contains(.,'video_content')]/text()
+        selector: //video/@poster
         postProcess:
           - replace:
-            - regex: .+(?:poster=")([^"]+).+
-              with: https://www.loveherfeet.com$1
+            - regex: ^
+              with: https://www.loveherfeet.com
       Studio:
         Name:
           fixed: LoveHerFeet
@@ -32,4 +32,4 @@ xPathScrapers:
               - regex: ','
                 with:
 
-# Last Updated September 29, 2020
+# Last Updated May 16, 2021
