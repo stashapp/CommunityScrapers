@@ -1,0 +1,46 @@
+name: PegasProductions
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pegasproductions.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      # To access other scenes go to Scene and select model which will show all their scenes
+      Title:
+        selector: //span[@itemprop="name"]
+      Date:
+        selector: //div[@id="date-duree"]/div[1]/p[1]
+        postProcess:
+          - parseDate: 02/01/2006
+      Performers:
+        Name: //div[@class="span10"]/p[contains(b,"Starring")]/a
+      Tags:
+        Name:
+          selector: //div[@class="span10"]/p[contains(b,"Tags")]
+          postProcess:
+            - replace:
+                - regex: "Tags:"
+                  with:
+          split: ", "
+      Details:
+        selector: //h5[@itemprop="description"]/p
+      Image:
+        selector: //script[contains(text(),"flowplayer(container")]/text()
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+      Studio:
+        Name:
+          fixed: PegasProductions
+driver:
+  cookies:
+    - CookieURL: "https://www.pegasproductions.com/"
+      Cookies:
+        - Name: "langue"
+          Domain: ".pegasproductions.com"
+          Value: "en"
+          Path: "/"
+# Last Updated May 17, 2021
