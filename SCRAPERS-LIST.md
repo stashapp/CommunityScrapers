@@ -424,7 +424,7 @@ hd19.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hdmassageporn.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hdsex18.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hegre.com|Hegre.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|-
-helixstudios.com|HelixStudios.yml|:heavy_check_mark:|x|:x:|:heavy_check_mark:|-|gay
+helixstudios.com|HelixStudios.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|gay
 helloladyboy.com|YegasDreamsLLC.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hentai2read.com|hentai2read.yml|:x:|:heavy_check_mark:|:x:|:x:|-|Hentai
 hentaied.com|Hentaied.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
