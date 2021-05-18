@@ -1,0 +1,76 @@
+name: "HelixStudios"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.helixstudios.com/video/
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.helixstudios.com/model/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="text"]
+    scene:
+      Title: //title/text()
+      Date:
+        selector: //div[@class="info-items"]/span[@class="info-item date"]/text()
+        postProcess:
+          - replace:
+              - regex: th
+                with:
+              - regex: st
+                with:
+              - regex: rd
+                with:
+          - parseDate: Jan 02, 2006
+      Details:
+        selector: //div[@class="description-content less"]/p/text()
+      Tags:
+        Name: //div[@class="video-tags-wrapper"]/a/text()
+      Performers:
+        Name:
+                selector: //div[@class="thumbnail model-thumbnail circle-thumbnail"]/div/div/img/@alt
+      Image:
+        selector: //video/@poster
+      Studio:
+        Name:
+          fixed: Helix
+
+  performerScraper:
+    performer:
+      Name: //div[contains(@class, "top")]/h1/text()
+      Gender:
+        fixed: Male
+      Height:
+        selector: //span[text()="Height"]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Measurements:
+        selector: //span[text()="Cock"]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //span[text()="Weight"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: lbs
+                with: ""
+          - lbToKg: true
+      HairColor:
+        selector: //span[text()="Hair"]/following-sibling::text()
+      EyeColor:
+        selector: //span[text()="Eyes"]/following-sibling::text()
+      Image: //div[@class="model-headshot-image-wrapper"]/img/@src
+      Details:
+        selector: //div[@class="description"]//p
+        postProcess:
+          - replace:
+              - regex: $
+                with: " "
+
+# Last Updated May 18, 2021
