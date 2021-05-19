@@ -53,6 +53,12 @@ xPathScrapers:
       Measurements:
         selector: //span[text()="Cock"]/following-sibling::text()
         postProcess:
+          - replace:
+              - regex: ^
+                with: "0\'"
+          - replace:
+              - regex: inch*
+                with: "\'\'"
           - feetToCm: true
       Weight:
         selector: //span[text()="Weight"]/following-sibling::text()
