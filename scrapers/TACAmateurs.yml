@@ -7,22 +7,22 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //div[@id="update_wrapper"]/h1
-     Date:
+      Date:
         selector: //div[@class="date_wrapper"]
         postProcess:
           - parseDate: 02-January-2006
-     Performers:
-      Name: //div[@id="facepic_wrapper"]/h2
-     Details: 
-       selector: //div[@id="update_wrapper"]/p[not(@class) and not(@align)]
-       concat: "\n\n"
-     Tags:
-      Name: //p[@class="tags"]/a
-     Image:
+      Performers:
+        Name: //div[@id="facepic_wrapper"]/h2
+      Details:
+        selector: //div[@id="update_wrapper"]/p[not(@class) and not(@align)]
+        concat: "\n\n"
+      Tags:
+        Name: //p[@class="tags"]/a
+      Image:
         selector: //meta[@property="og:image"]/@content
-     Studio:
+      Studio:
         Name:
           fixed: TAC Amateurs
 # Last Updated May 19, 2021
