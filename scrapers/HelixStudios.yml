@@ -21,20 +21,17 @@ xPathScrapers:
         selector: //div[@class="info-items"]/span[@class="info-item date"]/text()
         postProcess:
           - replace:
-              - regex: th
+              - regex: "th|st|nd|rd"
                 with:
-              - regex: st
-                with:
-              - regex: rd
-                with:
-          - parseDate: Jan 02, 2006
+          - parseDate: Jan 2, 2006
       Details:
         selector: //div[@class="description-content less"]/p/text()
+        concat: "\n\n"
       Tags:
         Name: //div[@class="video-tags-wrapper"]/a/text()
       Performers:
         Name:
-                selector: //div[@class="thumbnail model-thumbnail circle-thumbnail"]/div/div/img/@alt
+                selector: //div[@class="video-cast"]//a/@title
       Image:
         selector: //video/@poster
       Studio:
@@ -55,10 +52,10 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: "0\'"
+                with: "0'"
           - replace:
               - regex: inch*
-                with: "\'\'"
+                with: "''"
           - feetToCm: true
       Weight:
         selector: //span[text()="Weight"]/following-sibling::text()
@@ -73,10 +70,10 @@ xPathScrapers:
         selector: //span[text()="Eyes"]/following-sibling::text()
       Image: //div[@class="model-headshot-image-wrapper"]/img/@src
       Details:
-        selector: //div[@class="description"]//p
+        selector: //div[@class="description"]//p[*]
+        concat: "\n\n"
         postProcess:
           - replace:
               - regex: $
                 with: " "
-
-# Last Updated May 18, 2021
+# Last Updated May 20, 2021
