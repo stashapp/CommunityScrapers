@@ -3,17 +3,18 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - amateurallure.com/tour/scenes/
-      - amateurallure.com/tour/search
+      - swallowsalon.com/scenes/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
       $sceneinfo: //div[@class="scene-info"]
       $title: //span[@class='title_bar_hilite']
+      $logo: //div[@id="logo"]//a/@href
     scene:
       Title: $title
       Date:
-        selector: //div[@class='cell update_date']
+        selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
         postProcess:
           - parseDate: 01/02/2006
       Details: //span[@class='update_description']
@@ -22,17 +23,31 @@ xPathScrapers:
       Performers:
         Name: //span[@class='update_models']//a
       Image:
-        selector: $title
+        selector: $logo|$title
+        concat: "|"
         postProcess:
           - replace:
               - regex: \s
                 with: "+"
-              - regex: ^
-                with: "https://www.amateurallure.com/tour/search.php?st=advanced&qall=&qany=&qex="
+              - regex: ^([^|]+)\|(.+)
+                with: "${1}/search.php?st=advanced&qall=&qany=&qex=$2"
           - subScraper:
-              selector: //img/@srcset
+              selector: //div[@id="logo"]//a/@href|//img/@srcset
+              concat: "|"
               postProcess:
                 - replace:
-                    - regex: .+(/tour/content/contentthumbs/\d+/\d+/[^/]+\.jpg) 1920w
-                      with: https://www.amateurallure.com$1
-# Last Updated November 8, 2020
+                    - regex: ^([^|]+amateurallure[^|]+)\|.+(/content/contentthumbs/\d+/\d+/[^/]+\.jpg) 1920w
+                      with: $1$2
+                    - regex: ^([^|]+swallowsalon[^|]+)\|.+360w,\s((?:/tour)?/content/contentthumbs/\d+/\d+/[^/]+\.jpg).*
+                      with: $1$2
+      Studio:
+        Name:
+          selector: $logo
+          postProcess:
+            - replace:
+                - regex: '[^.]+\.([^.]+)\.com/.*'
+                  with: $1
+            - map:
+                amateurallure: Amateur Allure
+                swallowsalon: Swallow Salon
+# Last Updated May 16, 2021
