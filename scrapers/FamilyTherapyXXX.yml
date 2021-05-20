@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - familytherapyxxx.com
+      - momcomesfirst.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -12,38 +13,35 @@ xPathScrapers:
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
-          - parseDate: 2006-01-02T15:04:05-07:00
+          - replace:
+              - regex: (?i)(T\d+.+)
+                with: ""
+          - parseDate: 2006-01-02
       Details:
         selector: //div[@class="entry-content"]/p/text()
         concat: "\n"
-        postProcess:
-          - replace:
-              - regex: "\n"
-                with: "\n"
       Tags:
         Name: //p[@class="post-meta"]//a/text()
       Performers:
         Name:
-          selector: //div[@class="entry-content"]/p[contains(text(),'***')]|
+          selector: //div[@class="entry-content"]/p[contains(text(),'***')]
           postProcess:
             - replace:
                 - regex: \*\*\*|Starring\s
                   with:
-          split: ' & '
+          split: " & "
       Studio:
         Name:
-          selector: //h1/text()
+          selector: //img[@id="logo"]/@alt
           postProcess:
-            - replace:
-                - regex: .+
-                  with: 'FamilyTherapyXXX'
+            - map:
+                Family Therapy: Family Therapy XXX
       Image:
         selector: //meta[@itemprop="contentUrl"]/@content
         postProcess:
           - replace:
-              - regex: .+(?:\d{4}\/\d{2}\/)([\w]+)(?:\.\w+)
-                with: https://familytherapyxxx.com/?s=$1
+              - regex: (https://[^/]+)/wp-content/uploads/\d{4}/\d{2}/(\w+)\.\w+
+                with: $1/?s=$2
           - subScraper:
               selector: //div[@id="left-area"]/article[1]//img/@src
-
-# Last Updated November 8, 2020
+# Last Updated May 16, 2021
