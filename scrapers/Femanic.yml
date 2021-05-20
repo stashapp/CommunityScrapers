@@ -14,7 +14,7 @@ xPathScrapers:
       Details:
         selector: //div[@class="disc-text"]/p
       Image:
-        selector: selector: //video[@style="max-width:100%;max-height:100%;"]/@poster|//img[@class="video-container-img"]/@src
+        selector: //video[@style="max-width:100%;max-height:100%;"]/@poster|//img[@class="video-container-img"]/@src
         postProcess:
           - replace:
               - regex: ^
