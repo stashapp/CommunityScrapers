@@ -1,0 +1,34 @@
+name: SissyPov
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sissypov.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="videoDetails clear"]/h3
+      Performers:
+        Name: //li[@class="update_models"]/a
+      Date:
+         selector: //div[@class="videoInfo clear"]/p[1]
+         postProcess:
+           - replace:
+               - regex: 'Date Added:\s*'
+                 with: ""
+           - parseDate: January 2, 2006
+      Tags:
+        Name: //div[@class="featuring clear"]//li/a
+      Details:
+        selector: //div[@class="videoDetails clear"]/p
+      Image:
+        selector: //a[@class="fake_trailer"]/img/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://sissypov.com"
+      Studio:
+         Name:
+           fixed: Sissy Pov
+# Last Updated May 21, 2021
