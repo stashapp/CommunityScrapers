@@ -1,0 +1,24 @@
+name: FFstockings
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ffstockings.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="trailerContent"]/h2
+      Performers:
+        Name: //li/a/span
+      Tags:
+        Name:
+          selector: //div[@class="tags"]/a
+      Details:
+        selector: //div[@class="trailerContent"]/p
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: FFstockings
+# Last Updated May 21, 2021
