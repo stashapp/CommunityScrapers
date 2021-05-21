@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - subbyhubby.com
+      - clubdom.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -27,5 +28,9 @@ xPathScrapers:
                 with: "https:"
       Studio:
         Name:
-          fixed: Subby Hubby
+          selector: //base/@href
+          postProcess:
+            - map:
+                //www.clubdom.com/tour/: Club Dom
+                //www.subbyhubby.com/tour/: Subby Hubby
 # Last Updated May 21, 2021
