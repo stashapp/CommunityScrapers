@@ -20,6 +20,6 @@ xPathScrapers:
               - regex: ^
                 with: "https://www.femanic.com/"
       Studio:
-         Name:
-           fixed: Femanic
+        Name:
+          fixed: Femanic
 # Last Updated May 20, 2021
