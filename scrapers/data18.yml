@@ -12,7 +12,7 @@ xPathScrapers:
     scene:
       Title: //h1/text()
       Date:
-        selector: //span[contains(text(),'Release date:')]
+        selector: //span[contains(text(),"Release date:") and not(contains(text(),"No date release yet"))]
         postProcess:
           - replace:
               - regex: "^Release date:|,"
