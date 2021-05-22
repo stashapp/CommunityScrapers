@@ -1,0 +1,25 @@
+name: Femanic
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - femanic.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="dis_main_heading"]
+      Performers:
+        Name: //div[@class="main-modals"]/p//a
+      Details:
+        selector: //div[@class="disc-text"]/p
+      Image:
+        selector: //video[@style="max-width:100%;max-height:100%;"]/@poster|//img[@class="video-container-img"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.femanic.com/"
+      Studio:
+        Name:
+          fixed: Femanic
+# Last Updated May 20, 2021
