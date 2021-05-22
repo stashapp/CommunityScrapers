@@ -12,14 +12,11 @@ xPathScrapers:
       Performers:
         Name: //li[@class="update_models"]/a
       Date:
-         selector: //div[@class="videoInfo clear"]/p[1]
+         selector: //p[contains(span,"Date Added:")]/text()
          postProcess:
-           - replace:
-               - regex: 'Date Added:\s*'
-                 with: ""
            - parseDate: January 2, 2006
       Tags:
-        Name: //div[@class="featuring clear"]//li/a
+        Name: //ul[contains(li,"Tags:")]//a
       Details:
         selector: //div[@class="videoDetails clear"]/p
       Image:
