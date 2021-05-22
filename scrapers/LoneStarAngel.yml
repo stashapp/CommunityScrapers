@@ -12,6 +12,8 @@ xPathScrapers:
       Performers:
         Name:
           fixed: Angel
+      URL:
+        fixed: https://www.lonestarangel.com/tour/models/lonestarangel.html
       Date:
          selector: //span[@class="availdate"]
          postProcess:
