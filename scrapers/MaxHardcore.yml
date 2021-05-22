@@ -23,4 +23,11 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Max-Hardcore
-# Last Updated April 26, 2021
+      Date:
+        selector: //strong[contains(text(),"Added:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: (\d+).+
+                with: $1
+          - subtractDays: true
+# Last Updated May 17, 2021
