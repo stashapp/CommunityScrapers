@@ -17,6 +17,8 @@ xPathScrapers:
           - replace:
               - regex: "^Release date:|,"
                 with:
+              # When day of month is not specified, the scraper defaults to <Month> 1st, <Year>.
+              # Comment the next two lines if you want to skip partial dates instead.
               - regex: ([A-Za-z]+) (\d{4})
                 with: "$1 1 $2"
           - parseDate: January 2 2006
