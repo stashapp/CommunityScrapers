@@ -1,0 +1,80 @@
+name: PornDudeCasting
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - porndudecasting.com/casting/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - porndudecasting.com/casting/
+    scraper: sceneScraper
+xPathScrapers:
+  performerScraper:
+    common:
+      $sSpan: following-sibling::span/text()
+      $mHead: //div[@class='model__head desctop']
+      $mInfo: //ul[@class='model__info-list desctop']/li
+    performer:
+      Name: &pName //h5[@class="model__head-name"]/text()
+      Gender:
+        fixed: "Female"
+      URL: &pURL //head/meta[@property="og:url"]/@content
+      Twitter:
+        selector: $mHead//a[@class='card__user-social-link twitter']/@href
+        postProcess:
+          - replace:
+              - regex: ([\s\S]+)twitter.com/
+                with: ""
+      Instagram:
+        selector: $mHead//a[@class='card__user-social-link instagram']/@href
+        postProcess:
+          - replace:
+              - regex: ([\s\S]+)instagram.com/
+                with: ""
+      Country:
+        fixed: "United States of America"
+      Height:
+        selector: $mInfo/span[text()='Height:']/$sSpan
+        postProcess:
+          - replace:
+              - regex: \d'\D\d+\D+
+                with: ""
+              - regex: \D
+                with: ""
+      Image:
+        selector: //div[@class="model__img-box small"]/img/@data-src
+      Details: //div[@class='model-desc']/text()
+      Weight:
+        selector: $mInfo/span[text()='Weight:']/$sSpan
+        postProcess:
+          - replace:
+              - regex: \d+\Dlbs\D+
+                with: ""
+              - regex: \D
+                with: ""
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="header__nav-user"]/h1
+      Performers:
+        Name: *pName
+        URL: *pURL
+      Details:
+        selector: //span[@class="desc icon"]/div/text()
+        concat: "\n"
+      Tags:
+        Name: //div[@class="mob-tag"]/div/text()
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: "Porn Dude Casting"
+      Date:
+        selector: //li/span[text()='Cast:']/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "01 "
+          - parseDate: 02 January 2006
+# Last Updated May 16, 2021
