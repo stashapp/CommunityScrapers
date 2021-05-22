@@ -15,10 +15,10 @@ xPathScrapers:
         selector: //span[contains(text(),'Release date:')]
         postProcess:
           - replace:
-              - regex: "^Release date:"
+              - regex: "^Release date:|,"
                 with:
-              - regex: ","
-                with:
+              - regex: ([A-Za-z]+) (\d{4})
+                with: "$1 1 $2"
           - parseDate: January 2 2006
       Details:
         selector: //p[b[text()='Story:']]
@@ -43,4 +43,4 @@ xPathScrapers:
           #- subScraper:
               #selector: //div[@id='post_view']/a/img/@src
 
-# Last Updated January 12, 2021
+# Last Updated May 22, 2021
