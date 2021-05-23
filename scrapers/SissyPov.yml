@@ -12,9 +12,9 @@ xPathScrapers:
       Performers:
         Name: //li[@class="update_models"]/a
       Date:
-         selector: //p[contains(span,"Date Added:")]/text()
-         postProcess:
-           - parseDate: January 2, 2006
+        selector: //p[contains(span,"Date Added:")]/text()
+        postProcess:
+          - parseDate: January 2, 2006
       Tags:
         Name: //ul[contains(li,"Tags:")]//a
       Details:
@@ -26,6 +26,6 @@ xPathScrapers:
               - regex: ^
                 with: "https://sissypov.com"
       Studio:
-         Name:
-           fixed: Sissy Pov
+        Name:
+          fixed: Sissy Pov
 # Last Updated May 21, 2021
