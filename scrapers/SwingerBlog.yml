@@ -18,7 +18,7 @@ xPathScrapers:
       Tags:
         Name: //span[@class="tour_update_tags"]/a
       Details:
-        selector: //div[@class="video-info mt-3"]/p
+        selector: //span[@class="latest_update_description"]
       Image:
         selector: //img[@class="stdimage large_update_thumb  thumbs"]/@src
       Studio:
