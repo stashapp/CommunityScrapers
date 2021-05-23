@@ -3,12 +3,12 @@ sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
     url:
-      - extrapackage.com
+      - extrapackage.com/video
 movieByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
-      - extrapackage.com
+      - extrapackage.com/dvd
 xPathScrapers:
   sceneScraper:
     scene:
@@ -30,12 +30,12 @@ xPathScrapers:
         selector: //div[@class="video-info mt-3"]/p
       Movies:
         Name: //div[@class="gblViewInfo"]//div[contains(.,"DVD :")]/a
-      URL:
-        selector: //div[@class="gblViewInfo"]//div[contains(.,"DVD :")]/a/@href
-        postProcess:
-          - replace:
-            - regex: ^
-              with: "http://www.extrapackage.com"
+        URL:
+          selector: //div[@class="gblViewInfo"]//div[contains(.,"DVD :")]/a/@href
+          postProcess:
+            - replace:
+              - regex: ^
+                with: "http://www.extrapackage.com"
       Image:
         selector: //script[contains(text(),"videoJsResolutionSwitcher")]/text()
         postProcess:
@@ -54,18 +54,18 @@ xPathScrapers:
               - regex: 'Information - \s*'
                 with: ""
       Date:
-        selector: //td[2]
+        selector: selector: //td[@align="right"]
         postProcess:
           - parseDate: 2006-01-02
       Duration:
-        selector: //td/div[1]
+        selector: //td/div
+        postProcess:
+          - replace:
+              - regex: $
+                with: ":00"
       Studio:
         Name:
-          selector: //li[contains(.,"Studio")]/a
-          postProcess:
-            - replace:
-                - regex: 'Studios\s*'
-                  with: ""
+          selector: //div[@class="gblViewInfo"]//li[contains(.,"Studio")]/a
       FrontImage: //div[@class="gblViewHighlight"]/img/@src
       BackImage:
           selector: //div[@class="gblViewHighlight"]/img/@onmouseover
