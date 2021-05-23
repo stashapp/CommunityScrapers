@@ -2,8 +2,8 @@ name: SubbyHubby
 sceneByURL:
   - action: scrapeXPath
     url:
-      - subbyhubby.com
       - clubdom.com
+      - subbyhubby.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
