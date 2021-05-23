@@ -54,7 +54,7 @@ xPathScrapers:
               - regex: 'Information - \s*'
                 with: ""
       Date:
-        selector: selector: //td[@align="right"]
+        selector: //td[@align="right"]
         postProcess:
           - parseDate: 2006-01-02
       Duration:
