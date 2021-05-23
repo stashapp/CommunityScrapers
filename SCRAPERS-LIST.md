@@ -193,6 +193,7 @@ chloelamour.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 chocolatebjs.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 class-lesbians.com|ClassLesbians.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clips4sale.com|Clips4Sale.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+clubdom.com|SubbyHubby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubinfernodungeon.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 clubseventeen.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 clubsweethearts.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -864,6 +865,7 @@ stuck4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 studiofow.com|StudioFOW.yml|:heavy_check_mark:|:x:|:x:|:x:|-|3D Animation
 stuffintwats.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 stunning18.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|python|-
+subbyhubby.com|SubbyHubby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 submissived.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sugarcookie.xxx|sugarcookie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sugardaddyporn.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
