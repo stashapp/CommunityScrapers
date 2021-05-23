@@ -12,9 +12,9 @@ xPathScrapers:
       Performers:
         Name: //h3[contains(.,"pornstars")]/following-sibling::a
       Date:
-         selector: //p[@class="date"]
-         postProcess:
-           - parseDate:  2006-01-02
+        selector: //p[@class="date"]
+        postProcess:
+          - parseDate: 2006-01-02
       Tags:
         Name: //h3[contains(.,"Categories")]/following-sibling::a
       Details:
@@ -22,6 +22,6 @@ xPathScrapers:
       Image:
         selector: //div[@id="noMore"]/img/@src
       Studio:
-         Name:
-           fixed: VlogXXX
+        Name:
+          fixed: VlogXXX
 # Last Updated May 21, 2021
