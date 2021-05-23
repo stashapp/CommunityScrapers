@@ -15,9 +15,9 @@ xPathScrapers:
       URL:
         fixed: https://www.lonestarangel.com/tour/models/lonestarangel.html
       Date:
-         selector: //span[@class="availdate"]
-         postProcess:
-           - parseDate:  01/02/2006
+        selector: //span[@class="availdate"]
+        postProcess:
+          - parseDate: 01/02/2006
       Tags:
         Name: //span/a
       Details:
@@ -25,6 +25,6 @@ xPathScrapers:
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
-         Name:
-           fixed: LoneStarAngel
+        Name:
+          fixed: LoneStarAngel
 # Last Updated May 21, 2021
