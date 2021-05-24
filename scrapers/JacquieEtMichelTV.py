@@ -9,6 +9,8 @@ import cloudscraper
 from lxml import html
 
 
+lang = 'en'
+
 
 def log(*s):
     print(*s, file=sys.stderr)
@@ -23,6 +25,10 @@ def strip_end(text, suffix):
     return text
 
 
+if len(sys.argv) > 1:
+    if sys.argv[1] == 'fr':
+        lang = 'fr'
+
 frag = json.loads(sys.stdin.read())
 if not frag['url']:
     log('No URL entered.')
@@ -30,14 +36,15 @@ if not frag['url']:
 url = frag["url"]
 scraper = cloudscraper.create_scraper()
 try:
-    scraped = scraper.get(url)
+    cookies = {'lang': lang}
+    scraped = scraper.get(url, cookies=cookies)
 except:
     log("scrape error")
 
 if scraped.status_code >= 400:
     log('HTTP Error: %s' % scraped.status_code)
 
-tree = html.fromstring(scraped.content)
+tree = html.fromstring(scraped.text)
 
 title = tree.xpath("//h1/text()")[0]
 date = tree.xpath("//span[@class='publication']/text()")[0]
@@ -48,12 +55,18 @@ img = scraper.get(imgurl).content
 b64img = base64.b64encode(img)
 datauri = "data:image/jpeg;base64,"
 
+if lang == 'fr':
+    date = datetime.datetime.strptime(date, "%d/%m/%Y").strftime("%Y-%m-%d")
+else:
+    # en
+    date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d")
+
 ret = {
     'title': title,
     'tags': [{
         'name': strip_end(x, ', ')
     } for x in tags],
-    'date': datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d"),
+    'date': date,
     'details': details.text_content(),
     'image': datauri + b64img.decode('utf-8'),
     'studio': {
