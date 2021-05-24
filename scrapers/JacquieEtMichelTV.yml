@@ -4,6 +4,7 @@ sceneByFragment:
     script:
       - python
       - JacquieEtMichelTV.py
+      #- fr # uncomment if you want to use the french description
 sceneByURL:
   - url:
      - jacquieetmicheltv.net/en/videos
@@ -11,4 +12,5 @@ sceneByURL:
     script:
       - python
       - JacquieEtMichelTV.py
+      #- fr # uncomment if you want to use the french description
 # Last Updated March 30, 2021
