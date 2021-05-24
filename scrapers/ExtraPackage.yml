@@ -34,8 +34,8 @@ xPathScrapers:
           selector: //div[@class="gblViewInfo"]//div[contains(.,"DVD :")]/a/@href
           postProcess:
             - replace:
-              - regex: ^
-                with: "http://www.extrapackage.com"
+                - regex: ^
+                  with: "http://www.extrapackage.com"
       Image:
         selector: //script[contains(text(),"videoJsResolutionSwitcher")]/text()
         postProcess:
@@ -68,9 +68,9 @@ xPathScrapers:
           selector: //div[@class="gblViewInfo"]//li[contains(.,"Studio")]/a
       FrontImage: //div[@class="gblViewHighlight"]/img/@src
       BackImage:
-          selector: //div[@class="gblViewHighlight"]/img/@onmouseover
-          postProcess:
-            - replace:
-                - regex: .*?(https?:\/\/\S*\.jpg).*
-                  with: $1
+        selector: //div[@class="gblViewHighlight"]/img/@onmouseover
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
 # Last Updated May 20, 2021
