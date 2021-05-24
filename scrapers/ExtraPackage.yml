@@ -1,0 +1,76 @@
+name: extrapackage
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - extrapackage.com/video
+movieByURL:
+  - action: scrapeXPath
+    scraper: movieScraper
+    url:
+      - extrapackage.com/dvd
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="boxGradientTop gradient section"]//p[contains(.,"Information")]
+        postProcess:
+          - replace:
+              - regex: 'Information - \s*'
+                with: ""
+      Date:
+        selector: //div[@class="wrpHighlightUpdated"]
+        postProcess:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //li[contains(.,"Pornstars:")]/a
+      Tags:
+        Name: //li[contains(.,"Categories :")]/a
+      Details:
+        selector: //div[@class="video-info mt-3"]/p
+      Movies:
+        Name: //div[@class="gblViewInfo"]//div[contains(.,"DVD :")]/a
+        URL:
+          selector: //div[@class="gblViewInfo"]//div[contains(.,"DVD :")]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "http://www.extrapackage.com"
+      Image:
+        selector: //script[contains(text(),"videoJsResolutionSwitcher")]/text()
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+      Studio:
+        Name:
+          selector: //div[@class="gblViewInfo"]//div[contains(.,"Studio:")]/a
+  movieScraper:
+    movie:
+      Name:
+        selector: //div[@class="boxGradientTop gradient section"]//p[contains(.,"Information")]
+        postProcess:
+          - replace:
+              - regex: 'Information - \s*'
+                with: ""
+      Date:
+        selector: //td[@align="right"]
+        postProcess:
+          - parseDate: 2006-01-02
+      Duration:
+        selector: //td/div
+        postProcess:
+          - replace:
+              - regex: $
+                with: ":00"
+      Studio:
+        Name:
+          selector: //div[@class="gblViewInfo"]//li[contains(.,"Studio")]/a
+      FrontImage: //div[@class="gblViewHighlight"]/img/@src
+      BackImage:
+        selector: //div[@class="gblViewHighlight"]/img/@onmouseover
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+# Last Updated May 20, 2021
