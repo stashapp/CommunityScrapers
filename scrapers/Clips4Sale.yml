@@ -6,40 +6,56 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $studio: //span[contains(text(),"From:")]/following-sibling::a
     scene:
-      Title: //div[@data-clipid]/following-sibling::h3
+      Title: 
+        selector: //div[@class="clip-info__title"]/h3/text()
+        postProcess:
+          - replace:
+              - regex: \s*MP4
+                with:
+              - regex: \s*Optimum
+                with:
+              - regex: \s*OPTIMUM
+                with:
+              - regex: \s*WMV
+                with:
+              - regex: \s*\(HD-1080p\)
+                with:
+              - regex: \s*\(HD-720p\)
+                with:
       Details:
-        selector: //div[@class="clip"]/div[1]/*|//div[@class="clip"]/div[1]/text()
+        selector: //div[@class="modal_clip_description"]//p//text()
         concat: "\n\n"
         postProcess:
           - replace:
               - regex: ^Description:\s*
                 with:
       Studio:
-        Name: $studio
+        Name: //span[contains(text(),"From:")]/following-sibling::a[2]/text()
         URL:
-          selector: $studio/@href
+          selector: //span[contains(text(),"From:")]/following-sibling::a[2]/@href
           postProcess:
             - replace:
-                - regex: ^
-                  with: https://www.clips4sale.com
+              - regex: ^
+                with: https://www.clips4sale.com
       Date:
-        selector: //span[contains(text(),"Added:")]/span
+        selector: //strong[contains(text(),"Added:")]/following-sibling::span[contains(@class,"hidden-lg")]/text()
         postProcess:
-          - parseDate: 1/2/06 03:04PM
-      Tags:
-        Name: //div/span[contains(text(),"Category:")]/../..//a
-        # Clips4Sale doesn't have an explict performer field, but performers are
-        # often included in the video tags. So we attempt to find matches there.
-      Performers:
-        Name: //div/span[contains(text(),"Keywords:")]/..//a
+          - replace:
+            - regex: \s.+
+              with: ""
+          - parseDate: 1/2/06
       Image:
-        selector: //div[contains(@class, "clipImage")]/img/@src
+        selector: //button[@id="single-add-to-cart-0"]/@data-src
         postProcess:
           - replace:
               - regex: ^//
                 with: https://
-      URL: //meta[@property="og:url"]/@content
-# Last Updated January 29, 2021
+      Tags:
+        Name: //span[contains(text(),"Related Categories:")]/following-sibling::a|//span[contains(text(),"Keywords:")]/following-sibling::a
+        # Clips4Sale doesn't have an explict performer field, but performers are
+        # often included in the video tags. So we attempt to find matches there.
+      Performers:
+        Name: //span[contains(text(),"Keywords:")]/following-sibling::a
+
+# Last Updated May 27, 2021
