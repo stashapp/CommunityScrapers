@@ -17,7 +17,7 @@ xPathScrapers:
         selector: //div[@data-clipid]/following-sibling::h3
         postProcess:
           - replace:
-              - regex: (?i)\s*\(?([SH]D[ -]?)?(MP4|OPTIMUM|WMV|AVI|([48]K|1080p|720p|480p))\)?
+              - regex: (?i)[ \t]*\(?([SH]D[ -]?)?(MP4|OPTIMUM|WMV|AVI|\[UHD\]|[48]K|1080p|720p|480p)\)?[ \t]*
                 with:
       Details:
         selector: //div[@class="clip"]/div[1]/*|//div[@class="clip"]/div[1]/text()
@@ -60,7 +60,7 @@ xPathScrapers:
         selector: //div[@class="clip-info__title"]/h3/text()
         postProcess:
           - replace:
-              - regex: (?i)\s*\(?([SH]D[ -]?)?(MP4|OPTIMUM|WMV|AVI|([48]K|1080p|720p|480p))\)?
+              - regex: (?i)[ \t]*\(?([SH]D[ -]?)?(MP4|OPTIMUM|WMV|AVI|\[UHD\]|[48]K|1080p|720p|480p)\)?[ \t]*
                 with:
       Details:
         selector: //div[@class="modal_clip_description"]//p//text()
