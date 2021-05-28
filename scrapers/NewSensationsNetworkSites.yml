@@ -9,6 +9,7 @@ sceneByURL:
       - newsensations.com/tour_rs/
       - parodypass.com/tour_pp/
       - shanedieselsbanginbabes.com/tour_sdbb/
+      - stretchedoutsnatch.com/tour_sos/
       - thelesbianexperience.com/tour_tle/
       - thetabutales.com/tour_tt/
       - unlimitedmilfs.com/tour_um/
@@ -32,5 +33,19 @@ xPathScrapers:
       Performers:
         Name: //span[@class="update_models"]/a/text() | //div[@class="sceneTextLink"]/p/span[@class="tour_update_models"]/a
       Image: //video[@id]/@poster | //img[@alt="Join Today!"]/@src
-
-# Last Updated April 27, 2021
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess:
+            - map:
+                https://ashlynnbrooke.com/tour_ab/: Ashynn Brooke
+                https://fourfingerclub.com/tour_ffc/: Four Finger Club
+                https://jizzbomb.com/tour_jb/: Jizz Bomb
+                https://newsensations.com/tour_rs/: New Sensations
+                https://parodypass.com/tour_pp/: Parody Pass
+                https://shanedieselsbanginbabes.com/tour_sdbb/: Shanedlesele Bangin Babes
+                https://stretchedoutsnatch.com/tour_sos/: Streched Out Snatch
+                http://thelesbianexperience.com/tour_tle/: The Lesbian Experience
+                https://thetabutales.com/tour_tt/: The Tabu Tales
+                https://unlimitedmilfs.com/tour_um/: Unlimited Milfs
+# Last Updated May 28, 2021
