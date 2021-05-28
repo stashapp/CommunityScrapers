@@ -1,19 +1,36 @@
-name: "Clips4Sale"
+name: Clips4Sale
+
 sceneByURL:
   - action: scrapeXPath
     url:
-      - clips4sale.com
-    scraper: sceneScraper
+      - clips4sale.com/studio/
+    scraper: c4sSceneScraper
+  - action: scrapeXPath
+    url:
+      - clips4sale.com/search/clip/
+    scraper: c4sClipsSceneScraper
+
 xPathScrapers:
-  sceneScraper:
+  c4sSceneScraper:
     common:
       $studio: //span[contains(text(),"From:")]/following-sibling::a
     scene:
-      Title: //div[@data-clipid]/following-sibling::h3
+      Title:
+        selector: //div[@data-clipid]/following-sibling::h3
+        postProcess: &ppStripTitle
+          - replace:
+              # https://regex101.com/r/CYLeuO/8
+              - regex: >-
+                  (?i)[ \t]*((Super )?[SH]D)?[ ,-]*(\b(MP4|OPTIMUM|WMV|MOV|AVI|UHD|[48]K)\b|1080p|720p|480p|(Standard|High) Def(inition)?)+[ \t]*
+                with:
+              # https://regex101.com/r/C3TgFG/2
+              - regex: >-
+                  [ \t]*[([][])][ \t]*|[ -]+$
+                with:
       Details:
         selector: //div[@class="clip"]/div[1]/*|//div[@class="clip"]/div[1]/text()
         concat: "\n\n"
-        postProcess:
+        postProcess: &ppStripDescription
           - replace:
               - regex: ^Description:\s*
                 with:
@@ -21,25 +38,55 @@ xPathScrapers:
         Name: $studio
         URL:
           selector: $studio/@href
-          postProcess:
+          postProcess: &ppPrependOrigin
             - replace:
                 - regex: ^
                   with: https://www.clips4sale.com
       Date:
         selector: //span[contains(text(),"Added:")]/span
-        postProcess:
-          - parseDate: 1/2/06 03:04PM
+        postProcess: &ppParseDate
+          - replace:
+              - regex: \s.+
+                with: ""
+          - parseDate: 1/2/06
       Tags:
         Name: //div/span[contains(text(),"Category:")]/../..//a
+      Performers:
         # Clips4Sale doesn't have an explict performer field, but performers are
         # often included in the video tags. So we attempt to find matches there.
-      Performers:
         Name: //div/span[contains(text(),"Keywords:")]/..//a
       Image:
         selector: //div[contains(@class, "clipImage")]/img/@src
-        postProcess:
+        postProcess: &ppPrependScheme
           - replace:
               - regex: ^//
                 with: https://
       URL: //meta[@property="og:url"]/@content
-# Last Updated January 29, 2021
+
+  c4sClipsSceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="clip-info__title"]/h3/text()
+        postProcess: *ppStripTitle
+      Details:
+        selector: //div[@class="modal_clip_description"]//p
+        concat: "\n\n"
+        postProcess: *ppStripDescription
+      Studio:
+        Name: //span[contains(text(),"From:")]/following-sibling::a[2]/text()
+        URL:
+          selector: //span[contains(text(),"From:")]/following-sibling::a[2]/@href
+          postProcess: *ppPrependOrigin
+      Date:
+        selector: //strong[contains(text(),"Added:")]/following-sibling::span[contains(@class,"hidden-lg")]/text()
+        postProcess: *ppParseDate
+      Image:
+        selector: //button[@id="single-add-to-cart-0"]/@data-src
+        postProcess: *ppPrependScheme
+      Tags:
+        Name: //span[contains(text(),"Related Categories:")]/following-sibling::a|//span[contains(text(),"Keywords:")]/following-sibling::a
+      Performers:
+        # Clips4Sale doesn't have an explict performer field, but performers are
+        # often included in the video tags. So we attempt to find matches there.
+        Name: //span[contains(text(),"Keywords:")]/following-sibling::a
+# Last Updated May 27, 2021
