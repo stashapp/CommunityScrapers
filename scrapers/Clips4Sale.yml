@@ -20,7 +20,12 @@ xPathScrapers:
         postProcess: &ppStripTitle
           - replace:
               # https://regex101.com/r/CYLeuO/8
-              - regex: (?i)[ \t]*((Super )?[SH]D)?[ ,-]*(\b(MP4|OPTIMUM|WMV|MOV|AVI|UHD|[48]K)\b|1080p|720p|480p|(Standard|High) Def(inition)?)+[ \t]*
+              - regex: >-
+                  (?i)[ \t]*((Super )?[SH]D)?[ ,-]*(\b(MP4|OPTIMUM|WMV|MOV|AVI|UHD|[48]K)\b|1080p|720p|480p|(Standard|High) Def(inition)?)+[ \t]*
+                with:
+              # https://regex101.com/r/C3TgFG/2
+              - regex: >-
+                  [ \t]*[([][])][ \t]*|[ -]+$
                 with:
       Details:
         selector: //div[@class="clip"]/div[1]/*|//div[@class="clip"]/div[1]/text()
