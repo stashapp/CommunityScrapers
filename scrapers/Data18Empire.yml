@@ -19,7 +19,7 @@ xPathScrapers:
           - parseDate: Jan 02, 2006
       Details: &details //div[@class="synopsis"]/p
       Tags:
-        Name: //div[@class="tags"]/a
+        Name: //div[@class="categories"]/a
       Image: &image //meta[@property="og:image"]/@content
       Movies:
         Name: //div[@class="container-fluid video-title"]//a[@class="boxcover"]
