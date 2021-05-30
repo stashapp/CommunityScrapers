@@ -264,6 +264,7 @@ damnthatsbig.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 danejones.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 darkx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 data18.com|data18.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+data18.empirestores.co|Data18Empire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 daughterswap.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ddfbusty.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 deauxmalive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

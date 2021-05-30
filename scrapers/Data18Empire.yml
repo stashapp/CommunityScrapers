@@ -1,0 +1,45 @@
+name: data18 Empire
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - data18.empirestores.co
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - data18.empirestores.co
+    scraper: movieScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title //h1[@class="description"]
+      Date: &date
+        selector: //div[@class="release-date"]/span[contains(.,"Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Details: &details //div[@class="synopsis"]/p
+      Tags:
+        Name: //div[@class="tags"]/a
+      Image: &image //meta[@property="og:image"]/@content
+      Movies:
+        Name: //div[@class="container-fluid video-title"]//a[@class="boxcover"]
+      Studio: &studio
+        Name: //div[@class="studio"]/a
+
+  movieScraper:
+    movie:
+      Name: *title
+      Director:
+        selector: //div[@class="director"]/a
+        concat: ", "
+      Duration:
+        selector: //div[@class="release-date"]/span[contains(.,"Length")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: (\d+)\D+(\d+)\D+
+                with: $1:$2:00
+      Date: *date
+      Synopsis: *details
+      Studio: *studio
+      FrontImage: *image
+# Last Updated May 30, 2021
