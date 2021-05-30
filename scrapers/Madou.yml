@@ -1,0 +1,32 @@
+name: Madou Media Unofficial
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://madouqu.com/?s={filename}
+  queryURLReplace:
+    filename:
+      - regex: '[^a-zA-z]*([a-zA-z]+(?:-)?(?:\d+-?\d+)).*' # eg MD0063 or MD-0063  or MD-0063-02
+        with: $1
+  scraper: sceneSearch
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - madouqu.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: Madou Media
+      Performers:
+        Name:
+          selector: //div[contains(@class, "entry-tags")]//*[(self::a or self::p)]/text()
+      Title:
+        selector: //h1[@class="entry-title"]/text()
+      Image:
+        selector: //img[contains(@class, "size-full")]/@src
+  sceneSearch:
+    scene:
+      Title: //article//h2[@class="entry-title"]/a/@title
+      URL: //article//h2[@class="entry-title"]/a/@href
+# Last Updated May 14, 2021
