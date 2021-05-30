@@ -13,12 +13,18 @@ xPathScrapers:
     scene:
       Title:
         selector: //div[@class='centerwrap container']/h1
-      Date:
-        selector: //div[@class="videodetails datetime"]/div[@class="date"]
+      Date: # the date from the scene page is not correct most of the time, we use the one from the search  instead
+        selector: //head/title
         postProcess:
           - replace:
-              - regex: ^(\d{1,2} [a-zA-Z]* \d{4}).+
-                with: $1
+              - regex: (Lesbiantribe|Pornlandvideos|Sologirlsmania)\.com$
+                with: "- $1"
+              - regex: ^(.*)\s*-\s*([^-]+)$
+                with: 'https://$2.com/search.php?x=0&y=0&query="$1"'
+              - regex: '\s'
+                with: "+"
+          - subScraper:
+              selector: //div[@class="modeldetails clear"][1]//div[@class="video_date col-xl-5 col-lg-5 col-md-5 col-sm-5 col-xs-5 col-5 text-right"]
           - parseDate: 2 January 2006
       Performers:
         Name: //span[@class="tour_update_models"]/a
