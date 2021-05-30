@@ -23,6 +23,7 @@ sceneByURL:
       - thirdworldxxx.com/
       - touchmywife.com/
       - westcoastproductions.com/
+      - data18.empirestores.co/
 
   # VR Sites
   - action: scrapeXPath
@@ -48,6 +49,8 @@ movieByURL:
       # - shemalestrokers.com/ # Scenes published as movies?
       - thirdworldxxx.com/
       - westcoastproductions.com/
+      - data18.empirestores.co/
+
 
 xPathScrapers:
   sceneScraper:
