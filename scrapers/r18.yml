@@ -76,8 +76,6 @@ xPathScrapers:
               with: "Kill"
             - regex: K\*{2}ling\b
               with: "Killing"
-            - regex: K\*{2}ler\b
-              with: "Killer"
             - regex: T\*{5}e\b
               with: "Torture"
             - regex: T\*{5}ed\b
@@ -186,6 +184,8 @@ xPathScrapers:
               with: "Submission"
             - regex: K\*{1}d\b
               with: "Kid"
+            - regex: K\*{1}ds\b
+              with: "Kids"
             - regex: D\*{6}e\b
               with: "Disgrace"
             - regex: Y\*{8}ls\b
@@ -232,6 +232,8 @@ xPathScrapers:
               with: "Unwilling"
             - regex: HumB\*{2}d\b
               with: "Humbled"
+            - regex: K\*{2}ler\b
+              with: "Killer" # Not Sure
             - regex: J\*{1}\b
               with: "Jo" # Not Sure
             - regex: J\*{1}s\b
@@ -250,6 +252,22 @@ xPathScrapers:
               with: "Unconsciously"
             - regex: Half-A\*{4}p\b
               with: "Half-Asleep" # ZMEN-037
+            - regex: A\*{4}p\b
+              with: "Asleep" # ZMEN-037
+            - regex: StepM\*{12}n\b
+              with: "Stepmother And Son" # GVG-299
+            - regex: C\*{3}dish\b
+              with: "Childish" # MMYM-045
+            - regex: F\*{5}g\b
+              with: "Fucking" # SSNI-391$
+            - regex: G\*{7}gers\b
+              with: "Gangbangers"
+            - regex: K\*{4}pper\b
+              with: "Kidnapper"
+            - regex: M\*{4}tor\b
+              with: "Molestor"
+            - regex: V\*{5}e\b
+              with: "Violate"
       Tags:
         Name: //div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a
       Performers:
