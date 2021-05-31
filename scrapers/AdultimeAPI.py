@@ -157,8 +157,12 @@ def check_local(q):
                 r_match = match_result(json_recreated, 30, False,False)
                 if r_match is not None:
                     if r_match == 2:
+                        # Trying to get better result
+                        remember_id = json_id
                         continue
                     return json_id
+            if remember_id:
+                return remember_id
             return None
     else:
         debug("No local JSON.")
