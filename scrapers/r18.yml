@@ -4,6 +4,11 @@ sceneByURL:
     url:
       - r18.com/videos
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - r18.com/videos
+    scraper: serieScraper
 sceneByFragment:
   action: scrapeXPath
   queryURL: https://www.r18.com/common/search/searchword={filename}
@@ -282,4 +287,20 @@ xPathScrapers:
         Name:
           selector: $sceneinfo/dl/dt[contains(.,"Studio")]/../dd[@itemprop="productionCompany"]/a/text()
       Image: $searchinfo/@data-original|//meta[@itemprop="thumbnailUrl"]/@content
+  serieScraper:
+    movie:
+      FrontImage: 
+        selector: //li[@class="item-list"][1]//img/@data-original
+        postProcess:
+         - replace:
+           - regex: ps\.jpg
+             with: "pl.jpg"
+      BackImage: 
+        selector: //li[@class="item-list"][2]//img/@data-original
+        postProcess:
+         - replace:
+           - regex: ps\.jpg
+             with: "pl.jpg"
+      Studio:
+        Name: //p[text()="TOP STUDIOS"]/following-sibling::ul//a/span[@class="item01"]/text()
 # Last Updated May 31, 2021
