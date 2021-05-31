@@ -19,12 +19,12 @@ JAV_HEADERS = {
 }
 # Print debug message
 DEBUG_MODE = True
-# We can't add image atm in same time as Scene
+# We can't add movie image atm in same time as Scene
 STASH_SUPPORTED = False
 # Tags you don't want to see appear in Scraper window
 IGNORE_TAGS = ["Features Actress","Digital Mosaic","Hi-Def","Risky Mosaic","Beautiful Girl","Blu-ray"]
 # Tag you always want in Scraper window
-FIXED_TAGS = "!1. JAV"
+FIXED_TAGS = ""
 
 def debug(q):
     if "[DEBUG]" in q and DEBUG_MODE == False:
@@ -161,9 +161,6 @@ def regexreplace(input):
     result_regex = re.sub(r"K\*{4}pper\b", "Kidnapper", result_regex)
     result_regex = re.sub(r"M\*{4}tor\b", "Molestor", result_regex)
     result_regex = re.sub(r"[\[\]\"]", "", result_regex)
-
-
-
     output = re.sub(r"F\*{5}g\b", "Fucking", result_regex)
     return output
 
