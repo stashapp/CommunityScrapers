@@ -15,7 +15,7 @@ DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Adultime")
 SERVER_IP = "http://localhost:9999"
 SERVER_URL = SERVER_IP + "/graphql"
 # STASH API (Settings > Configuration > Authentication)
-APIKEYS = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOiJmYXN0NjUiLCJpYXQiOjE2MTc4ODU4NDQsInN1YiI6IkFQSUtleSJ9.wAcjHE_ncn0jTE-vK5kcBEWKSOEDKlJf5JNR7aUE04E"
+APIKEYS = ""
 
 HEADERS = {
     "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
