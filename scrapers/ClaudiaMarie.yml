@@ -1,0 +1,27 @@
+name: ClaudiaMarie.com
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - claudiamarie.com/tour/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2
+      Date:
+        selector: //span[@class="update_date"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Tags:
+        Name: //span[@class="tour_update_tags"]/a
+      Details:
+        selector: //span[@class="latest_update_description"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: ClaudiaMarie
+# Last Updated June 1, 2021
