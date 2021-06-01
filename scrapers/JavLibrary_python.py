@@ -442,7 +442,7 @@ if jav_result.get('details'):
     scrape['details'] = regexreplace(jav_result['details'])
 if r18_result.get('details'):
     scrape['details'] = regexreplace(r18_result['details'])
-if r18_result.get('series'):
+if r18_result.get('series_name'):
     scrape['details'] = scrape['details'] + "\n\nFrom the series: " + regexreplace(r18_result['series_name'][0])
 
 # Studio - Javlibrary > R18
