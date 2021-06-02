@@ -1,0 +1,27 @@
+name: "InterracialPass"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - interracialpass.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="section-title"]/text()[1]
+      Date:
+        selector: //div[@class="update-info-row"][1]/text()
+        parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="update-info-block"]/text()
+      Tags:
+        Name: //ul[@class="tags"]/li/a/text()
+      Performers:
+        Name: //div[@class="update-info-block models-list-thumbs"]//span/text()
+      Image:
+        selector: //img[contains(@id, 'set-target')][1]/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://interracialpass.com"
+
+# Last Updated February 14, 2021
