@@ -26,7 +26,13 @@ xPathScrapers:
           - parseDate: Jan 2, 2006
       Details:
         selector: //div[@class="description-content less"]/p/text()
-        concat: "\n\n"
+        concat: "#LINEBREAK#"
+        postProcess:
+          - replace:
+              - regex: "___.*"
+                with:
+              - regex: "#LINEBREAK#"
+                with: "\n\n"
       Tags:
         Name: //div[@class="video-tags-wrapper"]/a/text()
       Performers:
@@ -76,4 +82,4 @@ xPathScrapers:
           - replace:
               - regex: $
                 with: " "
-# Last Updated May 20, 2021
+# Last Updated Jun 04, 2021
