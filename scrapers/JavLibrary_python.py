@@ -385,6 +385,7 @@ if jav_main_html:
         jav_result["details"] = re.sub(r"^(.*? ){1}", "", jav_result["details"][0])
     if jav_result.get("performers") and IGNORE_ALIASES == False:
         javlibrary_aliases_thread = threading.Thread(target=th_request_perfpage,args=(jav_result["performers_url"],))
+        javlibrary_aliases_thread.daemon = True
         javlibrary_aliases_thread.start()
     # R18
     if jav_result.get("r18"):
