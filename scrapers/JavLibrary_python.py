@@ -466,19 +466,19 @@ if jav_result.get('tags'):
 
 # Image - Javlibrary > R18
 try:
-    if imageBase64_jav_thread.is_alive() == True:
-        imageBase64_jav_thread.join()
+    if imageBase64_r18_thread.is_alive() == True:
+        imageBase64_r18_thread.join()
     if r18_result.get('image'):
         scrape['image'] = r18_result['image']
 except NameError:
-    debug("[DEBUG] No JAV Thread")
+    debug("[DEBUG] No R18 Thread")
 try:
-    if imageBase64_r18_thread.is_alive() == True:
-        imageBase64_r18_thread.join()
+    if imageBase64_jav_thread.is_alive() == True:
+        imageBase64_jav_thread.join()
     if jav_result.get('image'):
         scrape['image'] = jav_result['image']
 except NameError:
-    debug("[DEBUG] No R18 Thread")
+    debug("[DEBUG] No JAV Thread")
 
 # Movie - R18
 
