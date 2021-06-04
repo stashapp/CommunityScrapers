@@ -25,6 +25,10 @@ STASH_SUPPORTED = False
 IGNORE_TAGS = ["Features Actress","Digital Mosaic","Hi-Def","Risky Mosaic","Beautiful Girl","Blu-ray"]
 # Tag you always want in Scraper window
 FIXED_TAGS = ""
+# Don't care about getting the Aliases (Japanese Name)
+IGNORE_ALIASES = False
+# Always wait for the aliases or you are not sure to have it. (Depends if request are quick)
+WAIT_FOR_ALIASES = False
 
 def debug(q):
     if "[DEBUG]" in q and DEBUG_MODE == False:
@@ -220,7 +224,12 @@ def jav_search(html,xpath):
 
 def buildlist_tagperf(data,type_scrape=""):
     list_tmp = []
-    for y in data:
+    dict_jav = None
+    if type_scrape == "perf_jav":
+        dict_jav = data
+        data = data["performers"]
+    for i in range(0,len(data)):
+        y = data[i]
         if y == "":
             continue
         if type_scrape == "perf_jav":
@@ -228,14 +237,38 @@ def buildlist_tagperf(data,type_scrape=""):
             y = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", y)
         if type_scrape == "tags" and y in IGNORE_TAGS:
             continue
-        list_tmp.append({"name": y})
+        if type_scrape == "perf_jav" and dict_jav.get("performer_aliases"):
+            try:
+                list_tmp.append({"name": y, "aliases": dict_jav["performer_aliases"][i]})
+            except:
+                list_tmp.append({"name": y})
+        else:
+            list_tmp.append({"name": y})
     # Adding personal fixed tags
     if FIXED_TAGS and type_scrape == "tags":
         list_tmp.append({"name": FIXED_TAGS})
     return list_tmp
 
 
-def imagetoBase64(imageurl,typevar):
+def th_request_perfpage(perf_url):
+    #vl_star.php?s=afhvw
+    debug("[DEBUG] {}".format(perf_url))
+    list_tmp = []
+    try:
+        for i in range(0, len(perf_url)):
+            javlibrary_perf_ja_html = sendRequest("https://www.javlibrary.com/ja/" + perf_url[i],JAV_HEADERS)
+            if javlibrary_perf_ja_html is None:
+                continue
+            javlibrary_perf_ja = lxml.html.fromstring(javlibrary_perf_ja_html.content)
+            list_tmp.append(javlibrary_perf_ja.xpath('//div[@class="boxtitle"]/text()')[0].replace("のビデオ",""))
+        if list_tmp:
+            jav_result['performer_aliases'] = list_tmp
+            debug("[DEBUG] Got the aliases: {}".format(list_tmp))
+    except:
+        debug("[DEBUG] Error with the aliases")
+    return
+
+def th_imagetoBase64(imageurl,typevar):
     if type(imageurl) is list:
         for image_index in range(0,len(imageurl)):
             try:
@@ -289,6 +322,7 @@ else:
         # A error for javlibrary, trying a mirror
         debug("[JAV] Error with Javlibrary, trying the mirror f50q")
         jav_search_html = sendRequest("https://www.f50q.com/en/vl_searchbyid.php?keyword={}".format(scene_title),JAV_HEADERS)
+        
 # XPATH
 r18_xPath_search = {}
 r18_xPath_search['series'] = '//p[text()="TOP SERIES"]/following-sibling::ul//a/span[@class="item01"]/text()'
@@ -306,7 +340,6 @@ r18_xPath["studio"] = '//section[@class="clearfix"]/div[@class="product-details"
 r18_xPath["image"] = '//meta[@itemprop="thumbnailUrl"]/@content'
 r18_xPath["series_url"] = '//section[@class="clearfix"]/div[@class="product-details"]/dl/dt[contains(.,"Series:")]/following-sibling::dd[1]/a/@href'
 
-
 jav_xPath_search = {}
 jav_xPath_search['url'] = '//div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]/../@href'
 
@@ -317,6 +350,7 @@ jav_xPath["url"] = '//meta[@property="og:url"]/@content'
 jav_xPath["date"] = '//td[@class="header" and text()="Release Date:"]/following-sibling::td/text()'
 jav_xPath["tags"] = '//td[@class="header" and text()="Genre(s):"]/following::td/span[@class="genre"]/a/text()'
 jav_xPath["performers"] = '//td[@class="header" and text()="Cast:"]/following::td/span[@class="cast"]/span/a/text()'
+jav_xPath["performers_url"] = '//td[@class="header" and text()="Cast:"]/following::td/span[@class="cast"]/span/a/@href'
 jav_xPath["studio"] = '//td[@class="header" and text()="Maker:"]/following-sibling::td/span[@class="maker"]/a/text()'
 jav_xPath["image"] = '//div[@id="video_jacket"]/img/@src'
 jav_xPath["r18"] = '//a[text()="purchasing HERE"]/@href'
@@ -343,12 +377,15 @@ if jav_main_html:
     if jav_result.get("image"):
         tmp = re.sub(r"(http:|https:)", "", jav_result["image"][0])
         jav_result["image"] = "https:" + tmp
-        imageBase64_jav_thread = threading.Thread(target=imagetoBase64,args=(jav_result["image"],"JAV",))
+        imageBase64_jav_thread = threading.Thread(target=th_imagetoBase64,args=(jav_result["image"],"JAV",))
         imageBase64_jav_thread.start()
     if jav_result.get("url"):
         jav_result["url"] = "https:" + jav_result["url"][0]
     if jav_result.get("details"):
         jav_result["details"] = re.sub(r"^(.*? ){1}", "", jav_result["details"][0])
+    if jav_result.get("performers") and IGNORE_ALIASES == False:
+        javlibrary_aliases_thread = threading.Thread(target=th_request_perfpage,args=(jav_result["performers_url"],))
+        javlibrary_aliases_thread.start()
     # R18
     if jav_result.get("r18"):
         r18_search_url = re.sub(r"^redirect\.php\?url=\/\/", "https://", jav_result["r18"][0])
@@ -366,7 +403,7 @@ if r18_main_html:
     # We can get the full name during the r18 search
     if r18_result.get("image"):
         r18_result["image"] = r18_result["image"][0].replace("ps.jpg","pl.jpg")
-        imageBase64_r18_thread = threading.Thread(target=imagetoBase64,args=(r18_result["image"],"R18",))
+        imageBase64_r18_thread = threading.Thread(target=th_imagetoBase64,args=(r18_result["image"],"R18",))
         imageBase64_r18_thread.start()
     if r18_result.get("series_url"):
         r18_result['series_url'] = r18_result["series_url"][0]
@@ -385,7 +422,7 @@ if r18_main_html:
                     else:
                         # It's useless to try to get the image there is no scene card
                         r18_result['series_image'] = r18_series_search_tree.xpath('//li[@class="item-list"]//img/@data-original')
-                        imageBase64_serie_thread = threading.Thread(target=imagetoBase64,args=(r18_result["series_image"],"R18Series",))
+                        imageBase64_serie_thread = threading.Thread(target=th_imagetoBase64,args=(r18_result["series_image"],"R18Series",))
                         imageBase64_serie_thread.start()
     else:
         if r18_result.get("series_name"):
@@ -456,8 +493,13 @@ if jav_result.get('studio'):
 if r18_result.get('performers'):
     scrape['performers'] = buildlist_tagperf(r18_result['performers'])
 if jav_result.get('performers'):
-    scrape['performers'] = buildlist_tagperf(jav_result['performers'],"perf_jav")
-
+    if WAIT_FOR_ALIASES == True and IGNORE_ALIASES == False:
+        try:
+            if javlibrary_aliases_thread.is_alive() == True:
+                javlibrary_aliases_thread.join()
+        except NameError:
+            debug("[DEBUG] No Jav Aliases Thread")
+    scrape['performers'] = buildlist_tagperf(jav_result,"perf_jav")
 # Tags - Javlibrary > R18
 if r18_result.get('tags'):
     scrape['tags'] = buildlist_tagperf(r18_result['tags'],"tags")
