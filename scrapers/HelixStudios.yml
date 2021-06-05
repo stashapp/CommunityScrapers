@@ -42,7 +42,7 @@ xPathScrapers:
         Name: //div[@class="video-tags-wrapper"]/a/text()
       Performers:
         Name:
-                selector: //div[@class="video-cast"]//a/@title
+          selector: //div[@class="video-cast"]//a/@title
       Image:
         selector: //video/@poster
       Studio:
