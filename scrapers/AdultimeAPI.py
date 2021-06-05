@@ -12,12 +12,25 @@ import requests
 USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
 DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Adultime")
 
+SERVER_IP = "http://localhost:9999"
+SERVER_URL = SERVER_IP + "/graphql"
+# STASH API (Settings > Configuration > Authentication)
+APIKEYS = ""
+
 HEADERS = {
     "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
     "Origin": "https://members.adulttime.com",
     "Referer": "https://members.adulttime.com/"
 }
 
+STASH_HEADERS = {
+    "Accept-Encoding": "gzip, deflate, br",
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+    "Connection": "keep-alive",
+    "DNT": "1",
+    "ApiKey": APIKEYS
+}
 
 def debug(q):
     print(q, file=sys.stderr)
@@ -59,8 +72,7 @@ def match_result(json_scene, range_duration=10, single=False, debug_log=True):
             json_size = int(json_scene.get("index_size"))
         except:
             pass
-    match_ratio = difflib.SequenceMatcher(
-        None, scene_title, json_title).ratio()
+    match_ratio = difflib.SequenceMatcher(None, scene_title, json_title).ratio()
     match_duration = False
     match_size = False
     if db_duration is not None:
@@ -142,7 +154,7 @@ def check_local(q):
                     "index_size": json_size
                 }
                 json_recreated = json.loads(json.dumps(json_recreated))
-                r_match = match_result(json_recreated, 10, False,False)
+                r_match = match_result(json_recreated, 30, False,False)
                 if r_match is not None:
                     if r_match == 2:
                         # Trying to get better result
@@ -175,7 +187,7 @@ def request_api_query(title):
         api_result = r.json().get("results")[0].get("hits")
     except:
         debug("Error with Request Query")
-        exit(1)
+        sys.exit(1)
     for scene in api_result:
         r_match = match_result(scene)
         if r_match is not None:
@@ -203,7 +215,7 @@ def request_api_id(clip_id):
         api_result = r.json().get("results")[0].get("hits")[0]
     except:
         debug("Error with Request ID")
-        exit(1)
+        sys.exit(1)
     if api_result:
         r_match = match_result(api_result, 120, True)
         if r_match is not None:
@@ -232,7 +244,7 @@ def request_api_urltitle(url_title):
         api_result = r.json().get("results")[0].get("hits")
     except:
         debug("Error with Request url_title")
-        exit(1)
+        sys.exit(1)
     for scene in api_result:
         r_match = match_result(scene)
         if r_match is not None:
@@ -249,7 +261,7 @@ def get_apikey():
             r = requests.post(site_url, headers=HEADERS, timeout=5)
         except:
             debug("Error with request API Key")
-            exit(1)
+            sys.exit(1)
         html = r.text
         script_html = fetch_page_json(html)
         if script_html is not None:
@@ -261,7 +273,7 @@ def get_apikey():
             return application_id, api_key
         else:
             debug("Can't get API keys")
-            exit(1)
+            sys.exit(1)
     else:
         return application_id, api_key
 
@@ -370,12 +382,42 @@ def create_index(api_json):
     index_value = "{}|{}|{}|{}{}{}{}".format(json_id, json_title, json_length, json_size_4k, json_size_1080, json_size_720, json_size_480)
     return index_value
 
+def callGraphQL(query, variables=None):
+    json = {'query': query}
+    if variables is not None:
+        json['variables'] = variables
+    try:
+        response = requests.post(SERVER_URL, json=json, headers=STASH_HEADERS)
+        if response.status_code == 200:
+            result = response.json()
+            if result.get("error"):
+                for error in result["error"]["errors"]:
+                    raise Exception("GraphQL error: {}".format(error))
+            if result.get("data"):
+                return result.get("data")
+        elif response.status_code == 401:
+            sys.exit("HTTP Error 401, Unauthorised.")
+        else:
+            raise ConnectionError("GraphQL query failed:{} - {}. Query: {}. Variables: {}".format(
+                response.status_code, response.content, query, variables))
+    except Exception as err:
+        debug(err)
+        sys.exit(1)
+
+def getdbPath():
+    query = "query Configuration {  configuration {...ConfigData}}fragment ConfigData on ConfigResult {  general {...ConfigGeneralData}}fragment ConfigGeneralData on ConfigGeneralResult { databasePath }"
+    result = callGraphQL(query)
+    return result["configuration"]["general"]["databasePath"]
+
 
 fragment = json.loads(sys.stdin.read())
 
 # Get your database
 DB_PATH = None
 config_path = os.path.join(USERFOLDER_PATH, "config.yml")
+
+DB_PATH = getdbPath()
+debug("[DEBUG] DB PATH: {}".format(DB_PATH))
 if (os.path.isfile(config_path) == True and DB_PATH is None):
     with open(config_path) as f:
         for line in f:
@@ -470,7 +512,7 @@ if api_json is not None:
     print(json.dumps(scraped_json))
 else:
     debug("Can't find the scene")
-    exit(1)
+    sys.exit(1)
 
 
 # Last Updated February 18, 2021
