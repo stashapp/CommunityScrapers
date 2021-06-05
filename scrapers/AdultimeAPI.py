@@ -187,7 +187,7 @@ def request_api_query(title):
         api_result = r.json().get("results")[0].get("hits")
     except:
         debug("Error with Request Query")
-        exit(1)
+        sys.exit(1)
     for scene in api_result:
         r_match = match_result(scene)
         if r_match is not None:
@@ -215,7 +215,7 @@ def request_api_id(clip_id):
         api_result = r.json().get("results")[0].get("hits")[0]
     except:
         debug("Error with Request ID")
-        exit(1)
+        sys.exit(1)
     if api_result:
         r_match = match_result(api_result, 120, True)
         if r_match is not None:
@@ -244,7 +244,7 @@ def request_api_urltitle(url_title):
         api_result = r.json().get("results")[0].get("hits")
     except:
         debug("Error with Request url_title")
-        exit(1)
+        sys.exit(1)
     for scene in api_result:
         r_match = match_result(scene)
         if r_match is not None:
@@ -261,7 +261,7 @@ def get_apikey():
             r = requests.post(site_url, headers=HEADERS, timeout=5)
         except:
             debug("Error with request API Key")
-            exit(1)
+            sys.exit(1)
         html = r.text
         script_html = fetch_page_json(html)
         if script_html is not None:
@@ -273,7 +273,7 @@ def get_apikey():
             return application_id, api_key
         else:
             debug("Can't get API keys")
-            exit(1)
+            sys.exit(1)
     else:
         return application_id, api_key
 
@@ -402,7 +402,7 @@ def callGraphQL(query, variables=None):
                 response.status_code, response.content, query, variables))
     except Exception as err:
         debug(err)
-        exit(1)
+        sys.exit(1)
 
 def getdbPath():
     query = "query Configuration {  configuration {...ConfigData}}fragment ConfigData on ConfigResult {  general {...ConfigGeneralData}}fragment ConfigGeneralData on ConfigGeneralResult { databasePath }"
@@ -512,7 +512,7 @@ if api_json is not None:
     print(json.dumps(scraped_json))
 else:
     debug("Can't find the scene")
-    exit(1)
+    sys.exit(1)
 
 
 # Last Updated February 18, 2021
