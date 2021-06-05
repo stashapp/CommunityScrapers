@@ -386,19 +386,23 @@ def callGraphQL(query, variables=None):
     json = {'query': query}
     if variables is not None:
         json['variables'] = variables
-    response = requests.post(SERVER_URL, json=json, headers=STASH_HEADERS)
-    if response.status_code == 200:
-        result = response.json()
-        if result.get("error"):
-            for error in result["error"]["errors"]:
-                raise Exception("GraphQL error: {}".format(error))
-        if result.get("data"):
-            return result.get("data")
-    elif response.status_code == 401:
-        sys.exit("HTTP Error 401, Unauthorised.")
-    else:
-        raise ConnectionError("GraphQL query failed:{} - {}. Query: {}. Variables: {}".format(
-            response.status_code, response.content, query, variables))
+    try:
+        response = requests.post(SERVER_URL, json=json, headers=STASH_HEADERS)
+        if response.status_code == 200:
+            result = response.json()
+            if result.get("error"):
+                for error in result["error"]["errors"]:
+                    raise Exception("GraphQL error: {}".format(error))
+            if result.get("data"):
+                return result.get("data")
+        elif response.status_code == 401:
+            sys.exit("HTTP Error 401, Unauthorised.")
+        else:
+            raise ConnectionError("GraphQL query failed:{} - {}. Query: {}. Variables: {}".format(
+                response.status_code, response.content, query, variables))
+    except Exception as err:
+        debug(err)
+        exit(1)
 
 def getdbPath():
     query = "query Configuration {  configuration {...ConfigData}}fragment ConfigData on ConfigResult {  general {...ConfigGeneralData}}fragment ConfigGeneralData on ConfigGeneralResult { databasePath }"
