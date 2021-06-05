@@ -1,0 +1,27 @@
+name: SubmissiveX
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - submissivex.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="title clear"]/h2
+      Date:
+        selector: //span[@class="update_date"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Tags:
+        Name: //span[@class="update_tags"]/a
+      Details:
+        selector: //span[@class="latest_update_description"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: SubmissiveX
+# Last Updated May 27, 2021

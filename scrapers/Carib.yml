@@ -27,6 +27,12 @@ xPathScrapers:
       Title: /html/head/title/text()
       # //div[contains(@class,"heading")]/h1/text()
       Details: $movieinfo/p
+      URL:
+        selector: //link[@hreflang="ja-JP"]/@href
+        postProcess:
+          - replace:
+              - regex: "https://www.caribbeancom.com"
+                with: "https://en.caribbeancom.com/eng"
       Date:
         selector: //ul/li/span[contains(.,"Release Date")]/../span[@class="spec-content"]
         postProcess:
@@ -67,4 +73,4 @@ xPathScrapers:
             - map:
                 caribbeancompr: Caribbeancom Premium
                 caribbeancom: Caribbeancom
-# Last Updated November 8, 2020
+# Last Updated May 20, 2021

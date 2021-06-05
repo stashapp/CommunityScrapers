@@ -1,0 +1,27 @@
+name: PissyNetwork
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pissynetwork.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2[@class="video__headline"]
+      Performers:
+        Name: //strong[contains(.,"Models:")]/following-sibling::a[contains(@href,"/models/")]
+      Date:
+        selector: //strong[contains(.,"Published:")]/following-sibling::text()
+        postProcess:
+          - parseDate: 02 Jan 2006
+      Tags:
+        Name: //strong[contains(.,"Tags:")]/following-sibling::a[contains(@href,"/movies/")]
+      Details:
+        selector: //p[@class="video__text"]/text()[1]
+      Image:
+        selector: //div[@class="video__player"]/img/@src
+      Studio:
+        Name:
+          selector: //div[@class="video__top__item"]/a/img/@alt
+# Last Updated May 21, 2021

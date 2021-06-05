@@ -1,0 +1,28 @@
+name: TACAmateurs
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tacamateurs.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@id="update_wrapper"]/h1
+      Date:
+        selector: //div[@class="date_wrapper"]
+        postProcess:
+          - parseDate: 02-January-2006
+      Performers:
+        Name: //div[@id="facepic_wrapper"]/h2
+      Details:
+        selector: //div[@id="update_wrapper"]/p[not(@class) and not(@align)]
+        concat: "\n\n"
+      Tags:
+        Name: //p[@class="tags"]/a
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: TAC Amateurs
+# Last Updated May 19, 2021

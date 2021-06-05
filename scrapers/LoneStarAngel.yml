@@ -1,0 +1,30 @@
+name: LoneStarAngel
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lonestarangel.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //span[@class="update_title"]
+      Performers:
+        Name:
+          fixed: Angel
+      URL:
+        fixed: https://www.lonestarangel.com/tour/models/lonestarangel.html
+      Date:
+        selector: //span[@class="availdate"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Tags:
+        Name: //span/a
+      Details:
+        selector: //span[@class="latest_update_description"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: LoneStarAngel
+# Last Updated May 21, 2021
