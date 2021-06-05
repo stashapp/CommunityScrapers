@@ -1,0 +1,65 @@
+name: XConfessions
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - xconfessions.com
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - xconfessions.com
+    scraper: movieScraper
+xPathScrapers:
+  sceneScraper:
+    common: &com
+      $info: //div[@class="w-full tablet:w-1/3 text-base tablet:text-sm mr-6"]
+      $script: //script[contains(.,"window.__NUXT")]/text()
+    scene:
+      Title: &title //h1
+      Date: &date
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .*production_date."(\d+-\d+-\d+)T.*
+                with: $1
+          - parseDate: 2006-01-02
+      Details: &details
+        selector: //div[@class="my-2 tablet:my-0 w-full tablet:w-3/5"]/*[local-name()="h2" or local-name()="span"]
+        concat: "\n\n"
+      Performers:
+        Name:
+          selector: $info/p[contains(.,"Performers:")]//a
+          concat: " & "  # some performers are joined
+          split: " & "  # with &
+      Tags:
+        Name: $info/p[contains(.,"Tags:")]//a
+      Image:
+        selector: //div[@class="negativex"]//@data-srcset
+        postProcess: &pp
+          - replace:
+              - regex: ^([^?]+)\?.*
+                with: $1
+      Studio: &studio
+        Name:
+          fixed: XConfessions
+
+  movieScraper:
+    common: *com
+    movie:
+      Name: *title
+      Director:
+        selector: $info/p[contains(.,"Director:")]/a
+        concat: ", "
+      Duration:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .*w\.length."(\d{2}:\d{2}:\d{2})".*
+                with: $1
+      Date: *date
+      Synopsis: *details
+      Studio: *studio
+      FrontImage:
+        selector: //div[@class="w-1/3 hidden tablet:block"]//@data-srcset
+        postProcess: *pp
+# Last Updated May 31, 2021
