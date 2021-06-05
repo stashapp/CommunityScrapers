@@ -56,6 +56,7 @@ xPathScrapers:
         Name:
             selector: //strong[text()='Maker:']/../span/a/text()|//strong[text()='Publisher:']/../span/a/text()
       Image: //img[@class="video-cover"]/@src
+      URL: //link[@rel="canonical"]/@href
   movieScraper:
     movie:
       Name:
@@ -84,6 +85,7 @@ xPathScrapers:
             selector: //strong[text()='Maker:']/../span/a/text()|//strong[text()='Publisher:']/../span/a/text()
       FrontImage:
         selector: //img[@class="video-cover"]/@src
+      URL: //link[@rel="canonical"]/@href
 
 driver:
   cookies:
