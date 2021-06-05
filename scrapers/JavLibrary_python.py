@@ -36,7 +36,7 @@ def debug(q):
     print(q, file=sys.stderr)
 
 def sendRequest(url,head):
-    debug("[DEBUG] Request URL: {}".format(url))
+    debug("[DEBUG][{}] Request URL: {}".format(threading.get_ident(),url))
     for x in range(0,5):
         response = requests.get(url,headers=head,timeout=10)
         if response.content and response.status_code == 200:
@@ -250,25 +250,27 @@ def buildlist_tagperf(data,type_scrape=""):
     return list_tmp
 
 
-def th_request_perfpage(perf_url):
+def th_request_perfpage(page_url,perf_url):
     #vl_star.php?s=afhvw
-    debug("[DEBUG] {}".format(perf_url))
-    list_tmp = []
-    try:
-        for i in range(0, len(perf_url)):
-            javlibrary_perf_ja_html = sendRequest("https://www.javlibrary.com/ja/" + perf_url[i],JAV_HEADERS)
-            if javlibrary_perf_ja_html is None:
-                continue
-            javlibrary_perf_ja = lxml.html.fromstring(javlibrary_perf_ja_html.content)
-            list_tmp.append(javlibrary_perf_ja.xpath('//div[@class="boxtitle"]/text()')[0].replace("のビデオ",""))
-        if list_tmp:
-            jav_result['performer_aliases'] = list_tmp
-            debug("[DEBUG] Got the aliases: {}".format(list_tmp))
-    except:
-        debug("[DEBUG] Error with the aliases")
+    #debug("[DEBUG] Aliases Thread: {}".format(threading.get_ident()))
+    javlibrary_ja_html = sendRequest(page_url.replace("/en/","/ja/"),JAV_HEADERS)
+    if javlibrary_ja_html:
+        javlibrary_perf_ja = lxml.html.fromstring(javlibrary_ja_html.content)
+        list_tmp = []
+        try:
+            for i in range(0, len(perf_url)):
+                list_tmp.append(javlibrary_perf_ja.xpath('//a[@href="'+ perf_url[i] +'"]/text()')[0])
+            if list_tmp:
+                jav_result['performer_aliases'] = list_tmp
+                debug("[DEBUG] Got the aliases: {}".format(list_tmp))
+        except:
+            debug("[DEBUG] Error with the aliases")
+    else:
+        debug("[DEBUG] Can't get the Jap HTML")
     return
 
 def th_imagetoBase64(imageurl,typevar):
+    #debug("[DEBUG] {} thread: {}".format(typevar,threading.get_ident()))
     if type(imageurl) is list:
         for image_index in range(0,len(imageurl)):
             try:
@@ -291,6 +293,7 @@ def th_imagetoBase64(imageurl,typevar):
     return
 
 
+#debug("[DEBUG] Main Thread: {}".format(threading.get_ident()))
 fragment = json.loads(sys.stdin.read())
 if fragment["url"]:
     scene_url = fragment["url"]
@@ -368,7 +371,7 @@ if jav_search_html:
 
 
 if jav_main_html:
-    debug("[DEBUG] Javlibrary Page ({})".format(jav_main_html.url))
+    #debug("[DEBUG] Javlibrary Page ({})".format(jav_main_html.url))
     jav_tree = lxml.html.fromstring(jav_main_html.content)
     # Get data from javlibrary
     for key,value in jav_xPath.items():
@@ -383,8 +386,8 @@ if jav_main_html:
         jav_result["url"] = "https:" + jav_result["url"][0]
     if jav_result.get("details"):
         jav_result["details"] = re.sub(r"^(.*? ){1}", "", jav_result["details"][0])
-    if jav_result.get("performers") and IGNORE_ALIASES == False:
-        javlibrary_aliases_thread = threading.Thread(target=th_request_perfpage,args=(jav_result["performers_url"],))
+    if jav_result.get("performers_url") and IGNORE_ALIASES == False:
+        javlibrary_aliases_thread = threading.Thread(target=th_request_perfpage,args=(jav_main_html.url,jav_result["performers_url"],))
         javlibrary_aliases_thread.daemon = True
         javlibrary_aliases_thread.start()
     # R18
@@ -395,7 +398,7 @@ if jav_main_html:
 
 # MAIN PAGE
 if r18_main_html:
-    debug("[DEBUG] R18 Page ({})".format(r18_main_html.url))
+    #debug("[DEBUG] R18 Page ({})".format(r18_main_html.url))
     r18_tree = lxml.html.fromstring(r18_main_html.content)
     # Get data from data18
     for key,value in r18_xPath.items():
@@ -553,4 +556,4 @@ if r18_result.get('series_url'):
 
 print(json.dumps(scrape))
 
-# Last Updated May 29, 2021
+# Last Updated June 05, 2021
