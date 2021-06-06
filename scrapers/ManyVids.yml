@@ -130,6 +130,9 @@ xPathScrapers:
           - replace:
               - regex: '.*\.svg$'
                 with: ''
+      Tags:
+        Name:
+          selector: //li[@class="mv-top-tags__item"]
 
 # Required for parsing sceneScraper tags
 driver:
