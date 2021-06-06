@@ -2,24 +2,27 @@ name: insex
 sceneByURL:
   - action: scrapeXPath
     url:
-      - goddesssnow.com/updates
+      - goddesssnow.com/vod/scenes/
     scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
     scene:
       Title: 
-        selector: //h2[@class="update-title"]/text()
+        selector: //div[@class="title_bar"]/span/text()
       Date:
-        selector: //span[@class="update-date"]/text()
+        selector: //span[@class="release-date"]/text()
         postProcess:
+          - replace: 
+            - regex: 'Release Date: ([0-9]{2}/[0-9]{2}/[0-9]{4})'
+              with: $1
           - parseDate: 01/02/2006
       Details:
-        selector: //div[@class="update-description"]/text()
+        selector: //span[@class="update_description"]/text()
       Performers: 
-        Name: //div[@class="update-models"]//a/text()
+        Name: //span[@class="update_models"]/a/text()
       Tags: 
-        Name: //div[@class="update-tags"]/a/text()
+        Name: //span[@class="update_tags"]/a/text()
       Studio:
         Name: 
           fixed: Goddess Alexandra Snow
