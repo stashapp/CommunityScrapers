@@ -1,0 +1,28 @@
+name: insex
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - goddesssnow.com/updates
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //h2[@class="update-title"]/text()
+      Date:
+        selector: //span[@class="update-date"]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Details:
+        selector: //div[@class="update-description"]/text()
+      Performers: 
+        Name: //div[@class="update-models"]//a/text()
+      Tags: 
+        Name: //div[@class="update-tags"]/a/text()
+      Studio:
+        Name: 
+          fixed: Goddess Alexandra Snow
+      Image: //meta[@name="twitter:image"]/@content
+
+# Last Updated June 06, 2021
