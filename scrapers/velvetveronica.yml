@@ -23,6 +23,9 @@ xPathScrapers:
       Details:
         selector: //div[@id="x-legacy-panel-1"]/p or //div[@id="x-legacy-panel-1"]//li
         concat: "\n\n"
+      Performers: 
+        Name:
+          fixed: Veronica Dyer
       Tags:
         Name:
           selector: //span[@class="tagged_as"]/a/text()
