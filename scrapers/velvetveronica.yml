@@ -32,6 +32,6 @@ xPathScrapers:
       Studio:
         Name: 
           selector: //meta[@property="og:site_name"]/@content
-      Image: //meta[@property="og:image"]/@content
+      Image: //meta[@name="twitter:image"]/@content
 
 # Last Updated June 06, 2021
