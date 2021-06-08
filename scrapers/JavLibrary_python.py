@@ -392,8 +392,14 @@ if jav_main_html:
     if jav_result.get("image"):
         tmp = re.sub(r"(http:|https:)", "", jav_result["image"][0])
         jav_result["image"] = "https:" + tmp
-        imageBase64_jav_thread = threading.Thread(target=th_imagetoBase64, args=(jav_result["image"], "JAV",))
-        imageBase64_jav_thread.start()
+        if "now_printing.jpg" in jav_result["image"] or "noimage" in jav_result["image"]:
+            # https://pics.dmm.com/mono/movie/n/now_printing/now_printing.jpg
+            # https://pics.dmm.co.jp/mono/noimage/movie/adult_ps.jpg
+            debug("[Warning][Javlibrary] Image was deleted or fail to loaded ({})".format(jav_result["image"]))
+            jav_result["image"] = None
+        else:
+            imageBase64_jav_thread = threading.Thread(target=th_imagetoBase64, args=(jav_result["image"], "JAV",))
+            imageBase64_jav_thread.start()
     if jav_result.get("url"):
         jav_result["url"] = "https:" + jav_result["url"][0]
     if jav_result.get("details"):
@@ -420,8 +426,12 @@ if r18_main_html:
     # We can get the full name during the r18 search
     if r18_result.get("image"):
         r18_result["image"] = r18_result["image"][0].replace("ps.jpg", "pl.jpg")
-        imageBase64_r18_thread = threading.Thread(target=th_imagetoBase64, args=(r18_result["image"], "R18",))
-        imageBase64_r18_thread.start()
+        if "now_printing.jpg" in r18_result["image"] or "noimage" in r18_result["image"]:
+            debug("[Warning][R18] Image was deleted or fail to loaded ({})".format(r18_result["image"]))
+            r18_result["image"] = None
+        else:
+            imageBase64_r18_thread = threading.Thread(target=th_imagetoBase64, args=(r18_result["image"], "R18",))
+            imageBase64_r18_thread.start()
     if r18_result.get("series_url"):
         r18_result['series_url'] = r18_result["series_url"][0]
         if r18_result.get("series_name") is None:
