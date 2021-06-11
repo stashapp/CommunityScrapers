@@ -62,6 +62,7 @@ def regexreplace(input):
     result_regex = re.sub(r"R\*{2}es\b", "Rapes", result_regex)
     result_regex = re.sub(r"R\*{4}g\b", "Raping", result_regex)
     result_regex = re.sub(r"R\*{2}ed\b", "Raped", result_regex)
+    result_regex = re.sub(r"R\*{1}ped\b", "Raped", result_regex)
     result_regex = re.sub(r"G\*{6}g\b", "Gangbang", result_regex)
     result_regex = re.sub(r"G\*{7}g\b", "Gangbang", result_regex)
     result_regex = re.sub(r"G\*{7}gs\b", "Gangbangs", result_regex)
