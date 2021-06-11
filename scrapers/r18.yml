@@ -55,6 +55,8 @@ xPathScrapers:
               with: "Raping"
             - regex: R\*{2}ed\b
               with: "Raped"
+            - regex: R\*{1}ped\b
+              with: "Raped"
             - regex: G\*{6}g\b
               with: "Gangbang" # STAR-976
             - regex: G\*{7}g\b
