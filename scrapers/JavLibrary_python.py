@@ -290,7 +290,12 @@ def th_imagetoBase64(imageurl, typevar):
     if type(imageurl) is list:
         for image_index in range(0, len(imageurl)):
             try:
-                base64image = base64.b64encode(requests.get(imageurl[image_index].replace("ps.jpg", "pl.jpg"), timeout=10, headers=head).content)
+                img = requests.get(imageurl[image_index].replace("ps.jpg", "pl.jpg"), timeout=10, headers=head)
+                if img.status_code != 200:
+                    debug("[Image] Got a bad request (status: {}) for <{}>".format(img.status_code,imageurl[image_index]))
+                    imageurl[image_index] = None
+                    continue
+                base64image =  base64.b64encode(img.content)
                 imageurl[image_index] = "data:image/jpeg;base64," + base64image.decode('utf-8')
             except:
                 debug("[DEBUG][{}] Failed to get the base64 of the image".format(typevar))
@@ -298,7 +303,11 @@ def th_imagetoBase64(imageurl, typevar):
             r18_result["series_image"] = imageurl
     else:
         try:
-            base64image = base64.b64encode(requests.get(imageurl.replace("ps.jpg", "pl.jpg"), timeout=10, headers=head).content)
+            img = requests.get(imageurl.replace("ps.jpg", "pl.jpg"), timeout=10, headers=head)
+            if img.status_code != 200:
+                debug("[Image] Got a bad request (status: {}) for <{}>".format(img.status_code,imageurl))
+                return
+            base64image = base64.b64encode(img.content)
             if typevar == "JAV":
                 jav_result["image"] = "data:image/jpeg;base64," + base64image.decode('utf-8')
             if typevar == "R18":
