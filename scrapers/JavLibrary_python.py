@@ -284,10 +284,13 @@ def th_request_perfpage(page_url, perf_url):
 
 def th_imagetoBase64(imageurl, typevar):
     #debug("[DEBUG] {} thread: {}".format(typevar,threading.get_ident()))
+    head = JAV_HEADERS
+    if typevar == "R18Series" or typevar == "R18":
+        head = R18_HEADERS
     if type(imageurl) is list:
         for image_index in range(0, len(imageurl)):
             try:
-                base64image = base64.b64encode(requests.get(imageurl[image_index].replace("ps.jpg", "pl.jpg"), timeout=10).content)
+                base64image = base64.b64encode(requests.get(imageurl[image_index].replace("ps.jpg", "pl.jpg"), timeout=10, headers=head).content)
                 imageurl[image_index] = "data:image/jpeg;base64," + base64image.decode('utf-8')
             except:
                 debug("[DEBUG][{}] Failed to get the base64 of the image".format(typevar))
@@ -295,7 +298,7 @@ def th_imagetoBase64(imageurl, typevar):
             r18_result["series_image"] = imageurl
     else:
         try:
-            base64image = base64.b64encode(requests.get(imageurl.replace("ps.jpg", "pl.jpg"), timeout=10).content)
+            base64image = base64.b64encode(requests.get(imageurl.replace("ps.jpg", "pl.jpg"), timeout=10, headers=head).content)
             if typevar == "JAV":
                 jav_result["image"] = "data:image/jpeg;base64," + base64image.decode('utf-8')
             if typevar == "R18":
