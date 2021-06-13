@@ -13,9 +13,9 @@ xPathScrapers:
         selector: //p[contains(@class, 'player__date')]
         postProcess:
           - replace:
-              - regex: ^.{1,11}(.*)$
+              - regex: .*(\d+\s[a-zA-Z]+,\s\d+)$
                 with: $1
-          - parseDate: 02 January, 2006
+          - parseDate: 2 January, 2006
       Performers:
         Name: //a[@class="btn btn--eptenary btn--xsm"]
       Tags:
