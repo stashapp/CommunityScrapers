@@ -1,0 +1,30 @@
+name: POVR
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - povr.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //span[@class="video__quality video__quality--vr mr-3"]/following-sibling::text()
+      Date:
+        selector: //p[contains(@class, 'player__date')]
+        postProcess:
+          - replace:
+              - regex: ^.{1,11}(.*)$
+                with: $1
+          - parseDate: 02 January, 2006
+      Performers:
+        Name: //a[@class="btn btn--eptenary btn--xsm"]
+      Tags:
+        Name: //ul[@class="category-link mb-2"]//a
+      Details:
+        selector: //p[@style]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          selector: //a[@class="btn btn--secondary btn--xsm"]/text()
+# Last Updated June 13, 2021
