@@ -33,38 +33,38 @@ xPathScrapers:
   sceneQueryScraper:
     scene:
       Title: //div[@id="videos"]//div[@class="grid-item column"][1]//div[@class="uid"]/text()
-      URL: 
+      URL:
         selector: //div[@id="videos"]//div[@class="grid-item column"][1]/a[@class="box"]/@href
         postProcess:
-          - replace: 
-            - regex: ^
-              with: "https://javdb9.com"
+          - replace:
+              - regex: ^
+                with: "https://javdb9.com"
         # If you don't support cookie you can use this regex.
         #    - regex: $
         #      with: "?locale=en"
   sceneScraper:
     scene:
-      Title: 
+      Title:
         selector: //strong[text()='ID:']/../span
         concat: "|"
         postProcess:
           - replace:
-            - regex: \|
-              with: ""
+              - regex: \|
+                with: ""
       Date: //strong[text()='Released Date:']/../span/text()
-      Details: 
+      Details:
         selector: //h2[@class="title is-4"]/strong/text()
         postProcess:
           - replace:
-            - regex: (.*?\s)(.+)
-              with: $2
+              - regex: (.*?\s)(.+)
+                with: $2
       Tags:
         Name: //strong[text()='Tags:']/../span/a/text()
       Performers:
         Name: //strong[text()='Actor(s):']/../span/a/text()
       Studio:
         Name:
-            selector: //strong[text()='Maker:']/../span/a/text()|//strong[text()='Publisher:']/../span/a/text()
+          selector: //strong[text()='Maker:']/../span/a/text()|//strong[text()='Publisher:']/../span/a/text()
       Image: //img[@class="video-cover"]/@src
       URL: //link[@rel="canonical"]/@href
   movieScraper:
@@ -74,25 +74,25 @@ xPathScrapers:
         concat: "|"
         postProcess:
           - replace:
-            - regex: \|
-              with: ""
+              - regex: \|
+                with: ""
       Director: //strong[text()='Director:']/../span/a/text()
-      Duration: 
+      Duration:
         selector: //strong[text()='Duration:']/../span/text()
         postProcess:
           - replace:
-            - regex: \D
-              with: ""
+              - regex: \D
+                with: ""
       Date: //strong[text()='Released Date:']/../span/text()
-      Synopsis: 
+      Synopsis:
         selector: //h2[@class="title is-4"]/strong/text()
         postProcess:
           - replace:
-            - regex: (.*?\s)(.+)
-              with: $2
+              - regex: (.*?\s)(.+)
+                with: $2
       Studio:
         Name:
-            selector: //strong[text()='Maker:']/../span/a/text()|//strong[text()='Publisher:']/../span/a/text()
+          selector: //strong[text()='Maker:']/../span/a/text()|//strong[text()='Publisher:']/../span/a/text()
       FrontImage:
         selector: //img[@class="video-cover"]/@src
       URL: //link[@rel="canonical"]/@href
@@ -110,5 +110,5 @@ driver:
         - Name: "locale"
           Domain: "javdb9.com"
           Value: "en"
-          Path: "/"     
+          Path: "/"
 # Last Updated June 07, 2021
