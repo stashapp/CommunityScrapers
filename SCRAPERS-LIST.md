@@ -759,6 +759,7 @@ povjp.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 povmania.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 povperverts.net|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 povpornstars.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+povr.com|POVR.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 povthis.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 prettydirty.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 prettydirtyteens.com|devianteNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
