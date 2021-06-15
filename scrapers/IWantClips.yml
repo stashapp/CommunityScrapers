@@ -1,0 +1,27 @@
+name: IWantClips
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - iwantclips.com/store
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //span[@class="headline hidden-xs"]/text()
+      Date:
+        selector: //div[@class="col-xs-12 date fix"]/span/em/text()
+        postProcess:
+          - replace:
+            - regex: Published\s(.+)
+              with: $1
+          - parseDate: Jan 2, 2006
+      Details: //div[@class="col-xs-12 description fix"]/span
+      Tags:
+        Name: 
+          selector: //div[@class="col-xs-12 category fix"]/span/text()
+          split: ", "
+            # Bad way to get tags
+      Performers:
+        Name:
+          selector: //div[@class="modelName"]/a
+          split: ", "
