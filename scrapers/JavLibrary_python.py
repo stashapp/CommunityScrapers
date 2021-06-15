@@ -33,6 +33,123 @@ IGNORE_ALIASES = False
 # Always wait for the aliases or you are not sure to have it. (Depends if request are quick)
 WAIT_FOR_ALIASES = False
 
+BANNED_WORDS = {
+    "R**e": "Rape",
+    "R**es": "Rapes",
+    "R****g": "Raping",
+    "R**ed": "Raped",
+    "G******g": "Gangbang",
+    "G*******g": "Gangbang",
+    "G*******gs": "Gangbangs",
+    "G******ged": "Gangbanged",
+    "G*******ged": "Gangbanged",
+    "G*********d": "Gang-Banged",
+    "G*******ging": "Gangbanging",
+    "P*ssy": "Pussy",
+    "C*ck": "Cock",
+    "C*cks": "Cocks",
+    "Ma*ko": "Maiko",
+    "K**l": "Kill",
+    "K**ling": "Killing",
+    "T*****e": "Torture",
+    "T*****ed": "Tortured",
+    "V*****t": "Violent",
+    "S***e": "Slave",
+    "S***es": "Slaves",
+    "S***ery": "Slavery",
+    "EnS***ed": "Enslaved",
+    "D***king": "Drinking",
+    "D***ks": "Drinks",
+    "S*****t": "Student",
+    "S*****ts": "Students",
+    "SK**ls": "Skills",
+    "SK**lfully": "Skillfully",
+    "SK**lful": "Skillful",
+    "SK**led": "Skilled",
+    "P**hed": "Punished",
+    "D**gged": "Drugged",
+    "D**gs": "Drugs",
+    "F***ed": "Fucked",
+    "D***k": "Drunk",
+    "D***kest": "Drunkest",
+    "S********l": "Schoolgirl",
+    "S*********s": "Schoolgirls",
+    "S********ls": "Schoolgirls",
+    "Sch**lgirl": "Schoolgirl",
+    "Sch**lgirls": "Schoolgirls",
+    "S*********l": "School Girl",
+    "P****hment": "Punishment",
+    "P****h": "Punish",
+    "M****ter": "Molester",
+    "M****ters": "Molesters",
+    "M****ted": "Molested",
+    "M****t": "Molest",
+    "I****t": "Incest",
+    "I****tuous": "Incestuous",
+    "V*****e": "Violate",
+    "V*****ed": "Violated",
+    "StepB****************r": "StepBrother And Sister",
+    "StepK*ds ": "StepKids",
+    "C***dhood": "Childhood",
+    "V******e": "Violence",
+    "C***dcare": "Childcare",
+    "H*******m": "Hypnotism",
+    "M****tation": "Molestation",
+    "M****ting": "Molesting",
+    "F***e": "Force",
+    "A***es": "Abuses",
+    "A***e": "Abuse",
+    "S******g": "Sleeping",
+    "A***ed": "Abused",
+    "D**g": "Drug",
+    "A*****ted": "Assaulted",
+    "A*****t": "Assault",
+    "S********n": "Submission",
+    "K*d": "Kid",
+    "K*ds": "Kids",
+    "D******e": "Disgrace",
+    "Y********ls": "Young Girls",
+    "Y********l": "Young Girl",
+    "H**t": "Hurt",
+    "H**ts": "Hurts",
+    "C***dren": "Children",
+    "F***es": "Forces",
+    "Chai*saw": "Chainsaw",
+    "Lol*pop": "Lolipop",
+    "K****pped": "Kidnapped",
+    "K****pping": "Kidnapping",
+    "B*****p": "Bang Up",
+    "D***ken": "Drunken",
+    "Lo**ta": "Lolita",
+    "CrumB**d": "CrumBled",
+    "K*dding": "Kidding",
+    "C***d": "Child",
+    "C*****y": "Cruelty",
+    "H*********n": "Humiliation",
+    "D******eful": "Disgraceful",
+    "B***d": "Blood",
+    "U*******g": "Unwilling",
+    "HumB**d": "Humbled",
+    "K**ler": "Killer",
+    "J*": "Jo",
+    "J*s": "Jos",
+    "V*****es": "Violates",
+    "D******ed": "Disgraced",
+    "F***efully": "Forcefully",
+    "I****ts": "Insults",
+    "B***dy": "Bloody",
+    "U*********sly": "Unconsciously",
+    "Half-A****p": "Half-Asleep",
+    "A****p": "Asleep",
+    "StepM************n": "Stepmother And Son",
+    "C***dish": "Childish",
+    "G****gers": "Gangbangers",
+    "K****pper": "Kidnapper",
+    "M****tor": "Molestor",
+    "F*****g": "Fucking",
+    "B*****k": "Berserk"
+}
+
 
 def debug(q):
     if "[DEBUG]" in q and DEBUG_MODE == False:
@@ -57,123 +174,17 @@ def sendRequest(url, head):
     return response
 
 
+def replace_banned_words(matchobj):
+    word = matchobj.group(0)
+    if word in BANNED_WORDS:
+        return BANNED_WORDS[word]
+    else:
+        return word
+
 def regexreplace(input):
-    result_regex = re.sub(r"R\*{2}e\b", "Rape", input)
-    result_regex = re.sub(r"R\*{2}es\b", "Rapes", result_regex)
-    result_regex = re.sub(r"R\*{4}g\b", "Raping", result_regex)
-    result_regex = re.sub(r"R\*{2}ed\b", "Raped", result_regex)
-    result_regex = re.sub(r"R\*{1}ped\b", "Raped", result_regex)
-    result_regex = re.sub(r"G\*{6}g\b", "Gangbang", result_regex)
-    result_regex = re.sub(r"G\*{7}g\b", "Gangbang", result_regex)
-    result_regex = re.sub(r"G\*{7}gs\b", "Gangbangs", result_regex)
-    result_regex = re.sub(r"G\*{6}ged\b", "Gangbanged", result_regex)
-    result_regex = re.sub(r"G\*{7}ged\b", "Gangbanged", result_regex)
-    result_regex = re.sub(r"G\*{9}d\b", "Gang-Banged", result_regex)
-    result_regex = re.sub(r"G\*{7}ging\b", "Gangbanging", result_regex)
-    result_regex = re.sub(r"P\*{1}ssy\b", "Pussy", result_regex)
-    result_regex = re.sub(r"C\*{1}ck\b", "Cock", result_regex)
-    result_regex = re.sub(r"C\*{1}cks\b", "Cocks", result_regex)
-    result_regex = re.sub(r"Ma\*{1}ko\b", "Maiko", result_regex)
-    result_regex = re.sub(r"K\*{2}l\b", "Kill", result_regex)
-    result_regex = re.sub(r"K\*{2}ling\b", "Killing", result_regex)
-    result_regex = re.sub(r"T\*{5}e\b", "Torture", result_regex)
-    result_regex = re.sub(r"T\*{5}ed\b", "Tortured", result_regex)
-    result_regex = re.sub(r"V\*{5}t\b", "Violent", result_regex)
-    result_regex = re.sub(r"S\*{3}e\b", "Slave", result_regex)
-    result_regex = re.sub(r"S\*{3}es\b", "Slaves", result_regex)
-    result_regex = re.sub(r"S\*{3}ery\b", "Slavery", result_regex)
-    result_regex = re.sub(r"EnS\*{3}ed\b", "Enslaved", result_regex)
-    result_regex = re.sub(r"D\*{3}king\b", "Drinking", result_regex)
-    result_regex = re.sub(r"D\*{3}ks\b", "Drinks", result_regex)
-    result_regex = re.sub(r"S\*{5}t\b", "Student", result_regex)
-    result_regex = re.sub(r"S\*{5}ts\b", "Students", result_regex)
-    result_regex = re.sub(r"SK\*{2}ls\b", "Skills", result_regex)
-    result_regex = re.sub(r"SK\*{2}lfully\b", "Skillfully", result_regex)
-    result_regex = re.sub(r"SK\*{2}lful\b", "Skillful", result_regex)
-    result_regex = re.sub(r"SK\*{2}led\b", "Skilled", result_regex)
-    result_regex = re.sub(r"P\*{4}hed\b", "Punished", result_regex)
-    result_regex = re.sub(r"D\*{2}gged\b", "Drugged", result_regex)
-    result_regex = re.sub(r"D\*{2}gs\b", "Drugs", result_regex)
-    result_regex = re.sub(r"F\*{3}ed\b", "Fucked", result_regex)
-    result_regex = re.sub(r"D\*{3}k\b", "Drunk", result_regex)
-    result_regex = re.sub(r"D\*{3}kest\b", "Drunkest", result_regex)
-    result_regex = re.sub(r"S\*{8}l\b", "Schoolgirl", result_regex)
-    result_regex = re.sub(r"S\*{9}ls\b", "Schoolgirls", result_regex)
-    result_regex = re.sub(r"S\*{8}ls\b", "Schoolgirls", result_regex)
-    result_regex = re.sub(r"Sch\*{2}lgirl\b", "Schoolgirl", result_regex)
-    result_regex = re.sub(r"Sch\*{2}lgirls\b", "Schoolgirls", result_regex)
-    result_regex = re.sub(r"S\*{9}l\b", "School Girl", result_regex)
-    result_regex = re.sub(r"P\*{4}hment\b", "Punishment", result_regex)
-    result_regex = re.sub(r"P\*{4}h\b", "Punish", result_regex)
-    result_regex = re.sub(r"M\*{4}ter\b", "Molester", result_regex)
-    result_regex = re.sub(r"M\*{4}ters\b", "Molesters", result_regex)
-    result_regex = re.sub(r"M\*{4}ted\b", "Molested", result_regex)
-    result_regex = re.sub(r"M\*{4}t\b", "Molest", result_regex)
-    result_regex = re.sub(r"I\*{4}t\b", "Incest", result_regex)
-    result_regex = re.sub(r"I\*{4}tuous\b", "Incestuous", result_regex)
-    result_regex = re.sub(r"V\*{5}e\b", "Violate", result_regex)
-    result_regex = re.sub(r"V\*{5}ed\b", "Violated", result_regex)
-    result_regex = re.sub(r"StepB\*{16}r\b", "StepBrother And Sister", result_regex)
-    result_regex = re.sub(r"StepK\*{1}ds \b", "StepKids", result_regex)
-    result_regex = re.sub(r"C\*{3}dhood\b", "Childhood", result_regex)
-    result_regex = re.sub(r"V\*{6}e\b", "Violence", result_regex)
-    result_regex = re.sub(r"C\*{3}dcare\b", "Childcare", result_regex)
-    result_regex = re.sub(r"H\*{7}m\b", "Hypnotism", result_regex)
-    result_regex = re.sub(r"M\*{4}tation\b", "Molestation", result_regex)
-    result_regex = re.sub(r"M\*{4}ting\b", "Molesting", result_regex)
-    result_regex = re.sub(r"F\*{3}e\b", "Force", result_regex)
-    result_regex = re.sub(r"A\*{3}es\b", "Abuses", result_regex)
-    result_regex = re.sub(r"A\*{3}e\b", "Abuse", result_regex)
-    result_regex = re.sub(r"S\*{6}g\b", "Sleeping", result_regex)
-    result_regex = re.sub(r"A\*{3}ed\b", "Abused", result_regex)
-    result_regex = re.sub(r"D\*{2}g\b", "Drug", result_regex)
-    result_regex = re.sub(r"A\*{5}ted\b", "Assaulted", result_regex)
-    result_regex = re.sub(r"A\*{5}t", "Assault", result_regex)
-    result_regex = re.sub(r"S\*{8}n\b", "Submission", result_regex)
-    result_regex = re.sub(r"K\*{1}d\b", "Kid", result_regex)
-    result_regex = re.sub(r"K\*{1}ds\b", "Kids", result_regex)
-    result_regex = re.sub(r"D\*{6}e\b", "Disgrace", result_regex)
-    result_regex = re.sub(r"Y\*{8}ls\b", "Young Girls", result_regex)
-    result_regex = re.sub(r"Y\*{8}l\b", "Young Girl", result_regex)
-    result_regex = re.sub(r"H\*{2}t\b", "Hurt", result_regex)
-    result_regex = re.sub(r"H\*{2}ts\b", "Hurts", result_regex)
-    result_regex = re.sub(r"C\*{3}dren\b", "Children", result_regex)
-    result_regex = re.sub(r"F\*{3}es\b", "Forces", result_regex)
-    result_regex = re.sub(r"Chai\*{1}saw\b", "Chainsaw", result_regex)
-    result_regex = re.sub(r"Lol\*{1}pop\b", "Lolipop", result_regex)
-    result_regex = re.sub(r"K\*{4}pped\b", "Kidnapped", result_regex)
-    result_regex = re.sub(r"K\*{4}pping\b", "Kidnapping", result_regex)
-    result_regex = re.sub(r"B\*{5}p\b", "Bang Up", result_regex)
-    result_regex = re.sub(r"D\*{3}ken\b", "Drunken", result_regex)
-    result_regex = re.sub(r"Lo\*{2}ta\b", "Lolita", result_regex)
-    result_regex = re.sub(r"CrumB\*{2}d\b", "CrumBled", result_regex)
-    result_regex = re.sub(r"K\*{1}dding\b", "Kidding", result_regex)
-    result_regex = re.sub(r"C\*{3}d\b", "Child", result_regex)
-    result_regex = re.sub(r"C\*{5}y\b", "Cruelty", result_regex)
-    result_regex = re.sub(r"H\*{9}n\b", "Humiliation", result_regex)
-    result_regex = re.sub(r"D\*{6}eful\b", "Disgraceful", result_regex)
-    result_regex = re.sub(r"B\*{3}d\b", "Blood", result_regex)
-    result_regex = re.sub(r"U\*{7}g\b", "Unwilling", result_regex)
-    result_regex = re.sub(r"HumB\*{2}d\b", "Humbled", result_regex)
-    result_regex = re.sub(r"K\*{2}ler\b", "Killer", result_regex)
-    result_regex = re.sub(r"J\*{1}\b", "Jo", result_regex)
-    result_regex = re.sub(r"J\*{1}s\b", "Jos", result_regex)
-    result_regex = re.sub(r"V\*{5}es\b", "Violates", result_regex)
-    result_regex = re.sub(r"D\*{6}ed\b", "Disgraced", result_regex)
-    result_regex = re.sub(r"F\*{3}efully\b", "Forcefully", result_regex)
-    result_regex = re.sub(r"I\*{4}ts\b", "Insults", result_regex)
-    result_regex = re.sub(r"B\*{3}dy\b", "Bloody", result_regex)
-    result_regex = re.sub(r"U\*{9}sly\b", "Unconsciously", result_regex)
-    result_regex = re.sub(r"Half-A\*{4}p\b", "Half-Asleep", result_regex)
-    result_regex = re.sub(r"A\*{4}p\b", "Asleep", result_regex)
-    result_regex = re.sub(r"StepM\*{12}n\b", "Stepmother And Son", result_regex)
-    result_regex = re.sub(r"C\*{3}dish\b", "Childish", result_regex)
-    result_regex = re.sub(r"G\*{7}gers\b", "Gangbangers", result_regex)
-    result_regex = re.sub(r"K\*{4}pper\b", "Kidnapper", result_regex)
-    result_regex = re.sub(r"M\*{4}tor\b", "Molestor", result_regex)
-    result_regex = re.sub(r"[\[\]\"]", "", result_regex)
-    output = re.sub(r"F\*{5}g\b", "Fucking", result_regex)
-    return output
+    word_pattern = re.compile('(\w|\*)+')
+    output = word_pattern.sub(replace_banned_words, input)
+    return re.sub(r"[\[\]\"]", "", output)
 
 
 def getxpath(xpath, tree):
@@ -392,7 +403,7 @@ if jav_search_html:
         # If javlibrary don't have it, there is no way that R18 have it but why not trying...
         debug("Javlibrary don't give any result, trying search with R18...")
         r18_search_html = sendRequest("https://www.r18.com/common/search/searchword={}/?lg=en".format(scene_title), R18_HEADERS)
-        r18_main_html = r18_search(jav_search_html, jav_xPath_search)
+        r18_main_html = r18_search(r18_search_html, r18_xPath_search)
 
 
 if jav_main_html:
