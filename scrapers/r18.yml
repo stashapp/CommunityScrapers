@@ -275,6 +275,8 @@ xPathScrapers:
               with: "Molestor"
             - regex: V\*{5}e\b
               with: "Violate"
+            - regex: B\*{5}k\b # IPX-374
+              with: "Berserk"
       Tags:
         Name: //div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a
       Performers:
