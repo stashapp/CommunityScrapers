@@ -1,0 +1,57 @@
+name: GoddessSnow
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - goddesssnow.com/vod/scenes/
+    scraper: vodScraper
+  - action: scrapeXPath
+    url:
+      - goddesssnow.com/updates/
+    scraper: updateScraper
+
+xPathScrapers:
+  vodScraper:
+    scene:
+      Title:
+        selector: //div[@class="title_bar"]/span/text()
+      Date:
+        selector: //span[@class="release-date"]/text()
+        postProcess:
+          - replace:
+              - regex: 'Release Date: (\d{2}/\d{2}/\d{4})'
+                with: $1
+          - parseDate: 01/02/2006
+      Details: &details
+        selector: //span[@class="update_description"]/text()
+      Performers:
+        Name: //span[@class="update_models"]/a/text()
+      Tags:
+        Name: //span[@class="update_tags"]/a/text()
+      Studio: &studio
+        Name:
+          fixed: Goddess Alexandra Snow
+      Image: &image
+        selector: //meta[@name="twitter:image"]/@content
+
+  updateScraper:
+    scene:
+      Title:
+        selector: //h2[@class="update-title"]
+      Date:
+        selector: //span[@class="update-date"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Details:
+        selector: //div[@class="update-join"]/a[2]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.goddesssnow.com
+          - subScraper: *details
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Tags:
+        Name: //div[@class="update-tags"]/a
+      Studio: *studio
+      Image: *image
+# Last Updated June 07, 2021
