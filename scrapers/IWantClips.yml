@@ -17,11 +17,15 @@ xPathScrapers:
           - parseDate: Jan 2, 2006
       Details: //div[@class="col-xs-12 description fix"]/span
       Tags:
-        Name: 
-          selector: //div[@class="col-xs-12 category fix"]/span/text()
-          split: ", "
-            # Bad way to get tags
-      Performers:
         Name:
-          selector: //div[@class="modelName"]/a
-          split: ", "
+          selector: //div[@class="col-xs-12 hashtags fix"]/span/em | //div[@class="col-xs-12 category fix"]/span
+          split: ","
+      Image:
+        selector: //img[@class="videoPlayer show-flexible-picture"]/@src | //video[@class="video-js embed-responsive-item"]/@poster
+      Studio:
+        Name:
+          fixed: IwantClips
+      Performers:
+        Name: //a[@class="modelLink"]
+
+# Last Updated June 15, 2021
