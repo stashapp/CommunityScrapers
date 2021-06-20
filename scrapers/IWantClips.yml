@@ -19,6 +19,11 @@ xPathScrapers:
       Tags:
         Name:
           selector: //div[@class="col-xs-12 hashtags fix"]/span/em | //div[@class="col-xs-12 category fix"]/span
+          concat: ","
+          postProcess:
+            - replace:
+                - regex: ',\s+'
+                  with: ","
           split: ","
       Image:
         selector: //img[@class="videoPlayer show-flexible-picture"]/@src | //video[@class="video-js embed-responsive-item"]/@poster
