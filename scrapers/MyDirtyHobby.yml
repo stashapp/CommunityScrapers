@@ -6,23 +6,87 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $script: //script[contains(text(),"profile_page")]/text()
     scene:
-      Title: //h1[contains(@class,"page-title")]
-      Details: //p[@class="well well-sm"]
-      Date:
-        selector: //dd[i[contains(@class,"fa-calendar")]]
+      Title:
+        selector: $script
         postProcess:
           - replace:
-            - regex: ^(today|yesterday).+
-              with: $1
-          - parseDate: 1/2/06
+              - regex: '.*"title":{"text":"([^"]+)"},"subtitle".*'
+                with: $1
+              - regex: '\\u00df'
+                with: "ß"
+              - regex: '\\u00e4'
+                with: "ä"
+              - regex: '\\u00f6'
+                with: "ö"
+              - regex: '\\u00fc'
+                with: "ü"
+              - regex: '\\u00c4'
+                with: "Ä"
+              - regex: '\\u00d6'
+                with: "Ö"
+              - regex: '\\u00dc'
+                with: "Ü"
+
+      Details:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.*"description":{"text":"(.+)","moreText.*'
+                with: $1
+              - regex: "&#39;"
+                with: "'"
+              - regex: '<a[^>]+>([^<]+)<\\/a>' #anchors
+                with: "$1"
+              - regex: '\\u00df'
+                with: "ß"
+              - regex: '\\u00e4'
+                with: "ä"
+              - regex: '\\u00f6'
+                with: "ö"
+              - regex: '\\u00fc'
+                with: "ü"
+              - regex: '\\u00c4'
+                with: "Ä"
+              - regex: '\\u00d6'
+                with: "Ö"
+              - regex: '\\u00dc'
+                with: "Ü"
+      Date:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.*"subtitle":{"text":"([^"]+)"},"rating".*'
+                with: $1
+          - parseDate: 02 Jan 2006
       Performers:
-        Name: //dd[@class="right"]/a[starts-with(@href,"/profil/")]
+        Name:
+          selector: $script
+          postProcess:
+            - replace:
+                - regex: '.*"thumbImg":{"title":"([^"]+)".*'
+                  with: $1
       Tags:
-        Name: //dd/a[starts-with(@href,"/videos/")]
+        Name:
+          selector: $script
+          postProcess:
+            - replace:
+                - regex: '.*"Categories","items":\[([^]]+)\].*'
+                  with: $1
+                - regex: '{"text":"([^"]+)","href":"[^"]+"}'
+                  with: $1
+          split: ","
       Image:
-        selector: //img[@class="img-responsive" and contains(@src,"_orig.jpg")]/@src
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.*{"thumbnail":{[^}]+"src":"([^"]+)".*'
+                with: $1
+              - regex: '\\/'
+                with: "/"
       Studio:
         Name:
           fixed: My Dirty Hobby
-# Last Updated April 2, 2021
+# Last Updated June 20, 2021
