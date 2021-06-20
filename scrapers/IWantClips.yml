@@ -12,8 +12,8 @@ xPathScrapers:
         selector: //div[@class="col-xs-12 date fix"]/span/em/text()
         postProcess:
           - replace:
-            - regex: Published\s(.+)
-              with: $1
+              - regex: Published\s(.+)
+                with: $1
           - parseDate: Jan 2, 2006
       Details: //div[@class="col-xs-12 description fix"]/span
       Tags:
@@ -32,5 +32,4 @@ xPathScrapers:
           fixed: IwantClips
       Performers:
         Name: //a[@class="modelLink"]
-
-# Last Updated June 15, 2021
+# Last Updated June 20, 2021
