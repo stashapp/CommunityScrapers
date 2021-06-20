@@ -1,0 +1,40 @@
+name: ShylaJ
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - shylaj.com/shop/
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - shylaj.com/shop/
+    scraper: galleryScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title
+        selector: //div[@class="title_bar"]/span
+      Date: &date
+        selector: //div[@class="cell update_date"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers: &performers
+        Name: //span[@class="update_models"]/a
+      Tags: &tags
+        Name: //span[@class="update_tags"]/a
+      Details: &details
+        selector: //span[contains(@class, "update_description")]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio: &studio
+        Name:
+          fixed: ShylaJ
+  galleryScraper:
+    gallery:
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Details: *details
+      Studio: *studio
+# Last Updated June 20, 2021
