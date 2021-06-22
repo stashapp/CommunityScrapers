@@ -47,10 +47,13 @@ xPathScrapers:
         #      with: "1000x1000"
 driver:
   useCDP: true
-  sleep: 5
+  clicks:
+    - # Click through Age Verification
+      xpath: //form[@action="https://metadataapi.net/age-verification"]//button[@type="submit"]
+      sleep: 5
   headers:
     - Key: User-Agent
       Value: stash/1.0.0
     #- Key: Authorization  # Uncomment and provide a valid API Key instead of the  XXXXX
     #  Value: Bearer XXXXXXXXXXXXXXXXXXXXXXXXXXXX
-# Last Updated May 23, 2021
+# Last Updated June 22, 2021
