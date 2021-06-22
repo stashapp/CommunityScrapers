@@ -2,16 +2,16 @@ name: puretaboo
 sceneByURL:
   - action: scrapeXPath
     url:
-      - puretaboo.com/en/video
-      - girlsway.com/en/video
       - 21sextury.com/en/video
+      - girlsway.com/en/video
+      - puretaboo.com/en/video
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1
       Image: //video[@class="vjs-tech"]/@poster
-#             //meta[@name="twitter:image"]/@content # Can have a better image 720p to 4K
+      #             //meta[@name="twitter:image"]/@content # Can have a better image 720p to 4K
       Date:
         selector: //span[contains(@class, "ScenePlayer-ReleaseDate-Text")]
       Details:
@@ -27,5 +27,4 @@ xPathScrapers:
         Name: //a[contains(@class, "ScenePlayer-ChannelName-Link")]/@title
 driver:
   useCDP: true
-
 # Last Updated June 22, 2021
