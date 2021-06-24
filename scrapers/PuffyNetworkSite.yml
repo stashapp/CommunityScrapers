@@ -22,7 +22,7 @@ xPathScrapers:
           - parseDate: Jan 2, 2006
       Details: //div[@class="movie-description"]/text()[1]
       Tags:
-        Name: //div[@class='tags-box']//a/text()
+        Name: //div[@class="tags-box"]//a/text() | //div[@class="more-tags"]/a
       Performers:
         Name: //span[@class="model-movie"]//a/text()
       Studio:
@@ -38,4 +38,4 @@ xPathScrapers:
                 wetandpissy: Wet And Pissy
                 simplyanal: Simply Anal
       Image: //div[@id="videoplayer"]/video/@poster
-# Last Updated February 18, 2021
+# Last Updated June 23, 2021
