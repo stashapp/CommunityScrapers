@@ -24,6 +24,8 @@ STASH_SUPPORTED = False
 # Tags you don't want to see appear in Scraper window
 IGNORE_TAGS = ["Features Actress", "Digital Mosaic", "Hi-Def", "Risky Mosaic",
                "Beautiful Girl", "Blu-ray", "Featured Actress", "VR Exclusive", "MOODYZ SALE 4"]
+# Some performer don't need to be reversed
+IGNORE_PERF_REVERSE = ["Lily Heart"]
 # Tag you always want in Scraper window
 FIXED_TAGS = ""
 # Take Javlibrary and R18 tags
@@ -256,8 +258,9 @@ def buildlist_tagperf(data, type_scrape=""):
         if y == "":
             continue
         if type_scrape == "perf_jav":
-            # Invert name
-            y = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", y)
+            if y not in IGNORE_PERF_REVERSE:
+                # Invert name (Aoi Tsukasa -> Tsukasa Aoi)
+                y = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", y)
         if type_scrape == "tags" and y in IGNORE_TAGS:
             continue
         if type_scrape == "perf_jav" and dict_jav.get("performer_aliases"):
