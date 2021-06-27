@@ -17,6 +17,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Performers:
         Name: //h5/a
+      Details: //p[@class="description"]  
       Image:
         selector: //script[contains(text(),'(remaining)')]/text()
         postProcess:
