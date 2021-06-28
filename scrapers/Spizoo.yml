@@ -28,7 +28,7 @@ xPathScrapers:
                 - regex: \s\(.+
                   with:
       Tags:
-        Name: //section[@id="sceneInfo"]//a[contains(@href,"/categorie")]/text()
+        Name: //section[@id="sceneInfo"]//a[contains(@href,"/categorie")]/text() | //div[@class="categories-holder"]/a
       Image: //video[@id="trailervideo"]/@poster
 
 
