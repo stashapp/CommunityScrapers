@@ -32,4 +32,4 @@ xPathScrapers:
       Image: //video[@id="trailervideo"]/@poster
 
 
-# Last Updated February 26, 2021
+# Last Updated June 28, 2021
