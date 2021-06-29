@@ -160,7 +160,10 @@ def map_model(baseUrl, model):
     add_tag('pubicHair', '{} pussy')
     add_tag('eyes', '{} eyes')
     add_tag('breasts', '{} breasts')
-
+ 
+    if model.get("biography") is None:
+         model['biography'] = None
+            
     return {
         'Name': model['name'],
         'Gender': model['gender'].upper(),
