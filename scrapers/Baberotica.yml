@@ -1,0 +1,36 @@
+name: Baberotica
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - avidolz.com
+      - baberotica.com
+      - baberoticavr.com
+      - teenthais.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@itemprop="name"]
+      Performers:
+        Name: //p/span/a/span
+      Tags:
+        Name: //a[@itemprop="genre"]
+      Details:
+        selector: //div[@itemprop="description"]
+      Image:
+        selector: //meta[@itemprop="thumbnailUrl"]/@content
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+      Studio:
+        Name:
+          selector: //meta[@itemprop="url"]/@content
+          postProcess:
+            - map:
+                https://baberotica.com: Baberotica
+                https://baberoticavr.com: BaberoticaVR
+                https://avidolz.com: AvIdolz
+                https://teenthais.com: TeenThais
+# Last Updated June 29, 2021
