@@ -21,7 +21,7 @@ xPathScrapers:
       Tags:
         Name: //span[@class='update_tags']//a/text()
       Performers:
-        Name: //span[@class='update_models']//a
+        Name: //div[@class='backgroundcolor_info']//span[@class='update_models']//a
       Image:
         selector: $logo|$title
         concat: "|"
@@ -50,4 +50,4 @@ xPathScrapers:
             - map:
                 amateurallure: Amateur Allure
                 swallowsalon: Swallow Salon
-# Last Updated May 16, 2021
+# Last Updated June 8, 2021

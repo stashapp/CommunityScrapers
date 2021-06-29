@@ -22,6 +22,8 @@ xPathScrapers:
           - replace:
               - regex: (.+)(?:\s\|.+)
                 with: $1
+              - regex: (Exclusive\W+(\w+\W+)?Porn\W+Video)
+                with: $1
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
@@ -38,4 +40,4 @@ xPathScrapers:
         Name: $actors//a//text()
       Image: //picture[@class="poster"]/img/@src
 
-# Last Updated December 11, 2020
+# Last Updated June 15, 2021

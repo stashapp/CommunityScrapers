@@ -1,0 +1,31 @@
+name: "InterracialPass"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - erotiquetvlive.com
+      - interracialpass.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="video-player"]/div[@class="title-block"]/h2[@class="section-title"]
+      Date:
+        selector: //div[@class="update-info-row"]/strong[contains(.,"Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: //h3[contains(.,"Description:")]/following-sibling::text()
+      Tags:
+        Name: //ul[@class="tags"]//a
+      Performers:
+        Name: //div[@class="update-info-block models-list-thumbs"]//span
+      Image:
+        selector: //base/@href|//div[@class="player-thumb"]//img/@src0_1x
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: '/(tour|t1)/\|'
+                with: ""
+      Studio:
+        Name: //a[@class="navbar-brand"]
+# Last Updated June 6, 2021

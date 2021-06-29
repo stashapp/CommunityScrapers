@@ -3,6 +3,7 @@ import os
 import re
 import requests
 import sys
+import traceback
 
 
 MINIMUM_VERSION_MAJOR = 3
@@ -35,8 +36,19 @@ def make_request(request_url, origin_site):
 
 
 def fetch_page_json(page_html):
-    matches = re.findall(r'window\.__APOLLO_STATE__ = (.+);$', page_html, re.MULTILINE)
-    return None if len(matches) == 0 else json.loads(matches[0])
+    try:
+        tag = '<script id="__NEXT_DATA__" type="application/json">'
+        start = page_html.index(tag) + len(tag)
+    except ValueError:
+        # script tag not found
+        matches = re.findall(r'window\.__APOLLO_STATE__ = (.+);$', page_html, re.MULTILINE)
+        return json.loads(matches[0]) if matches else None
+
+    end = page_html.index('</script>', start)
+    content = page_html[start:end]
+    data = json.loads(content)
+
+    return data['props']['pageProps']['__APOLLO_STATE__']
 
 
 def save_json(scraped_json, video_id, save_location):
@@ -56,7 +68,7 @@ def main():
     stdin = sys.stdin.read()
     log(stdin)
     fragment = json.loads(stdin)
-    
+
     if not fragment['url']:
         log('No URL entered.')
         sys.exit(1)
@@ -105,5 +117,7 @@ if __name__ == '__main__':
     try:
         main()
     except Exception as e:
+        log(traceback.format_exc())
         log(e)
 
+# Last Updated June 9, 2021

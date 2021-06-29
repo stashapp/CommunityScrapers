@@ -10,16 +10,27 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $content: //section[@class="scene-content"]/header
+      $content: //main//div[contains(@class,"col")]
     scene:
       Title: $content/h1/text()
-      Details: $content/p[@itemprop="description"]/text()
+      Details: $content/p[2]/text()
       Performers:
-        Name: $content/h4/a/text()
+        Name: $content/h3/a/text()
       Tags:
         Name: $content/p/a/text()
-      Image: //video[@class="plyr"]/@poster
+      Image:
+        selector: //video/@poster
+        postProcess:
+          - replace:
+            - regex: (.+scenes\/)([a-z]+)(.+)
+              with: https://www.$2.com$1$2$3
       Studio:
-        Name: //span[@itemprop="primaryImageOfPage"]/img/@alt
+        Name: 
+          selector: $content/h2/text()
+          postProcess:
+            - replace:
+              - regex: "Presented By: "
+                with: ""
+      URL: //link[@rel='canonical']/@href
 
-# Last Updated October 3, 2020
+# Last Updated June 10, 2021

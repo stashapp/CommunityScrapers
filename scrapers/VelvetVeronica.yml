@@ -1,0 +1,36 @@
+name: VelvetVeronica
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - velvetveronica.com/product
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="product_title entry-title"]/text()
+        postProcess:
+          - replace:
+              - regex: Video \| (.*) (\[|\().*(\]|\))
+                with: $1
+      Date:
+        selector: //meta[@name="twitter:image"]/@content
+        postProcess:
+          - replace:
+              - regex: .*/uploads/([0-9]{4})/([0-9]{2})/.*
+                with: $1-$2-01
+          - parseDate: 2006-01-02
+      Details:
+        selector: //div[@id="x-legacy-panel-1"]/p or //div[@id="x-legacy-panel-1"]//li
+        concat: "\n\n"
+      Performers:
+        Name:
+          fixed: Veronica Dyer
+      Tags:
+        Name:
+          selector: //span[@class="tagged_as"]/a/text()
+      Studio:
+        Name:
+          selector: //meta[@property="og:site_name"]/@content
+      Image: //meta[@name="twitter:image"]/@content
+# Last Updated June 06, 2021
