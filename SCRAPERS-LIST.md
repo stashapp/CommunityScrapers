@@ -95,12 +95,15 @@ aussiepov.com|AussieAss.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 av69.tv|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avadawn.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 avanal.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
+avidolz.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avstockings.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avtits.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 aziani.com|GangBangCreampie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 b47w.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
 b49t.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
 babepedia.com|Babepedia.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Database
+baberotica.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+baberoticavr.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 babes.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 babesnetwork.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 babevr.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
@@ -939,6 +942,7 @@ teensloveblackcocks.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teenslovehugecocks.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 teensnaturalway.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teenstryblacks.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+teenthais.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Thai Uncensored
 terapatrick.com|NikkiAndTera.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tessafowler.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 texasbukkake.com|TexasBukkake.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
