@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - atkhairy.com/tour/
       - atkpremium.com/tour/
+      - atkpetites.com/tour/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
