@@ -87,9 +87,10 @@ else:
 # Time to scrape all data
 scrape = {}
 scrape['title'] = scene_api_json.get('title')
-date = datetime.strptime(scene_api_json.get(
-    'publishedDate'), '%Y-%m-%dT%H:%M:%S.%f%z')
-scrape['date'] = str(date.date())
+if scene_api_json.get('publishedDate'):
+    date_format = re.sub(r"T.*","",scene_api_json['publishedDate'])
+    date = datetime.strptime(date_format, '%Y-%m-%d')
+    scrape['date'] = str(date.date())
 scrape['details'] = scene_api_json.get('description')
 scrape['studio'] = {}
 scrape['studio']['name'] = scene_api_json['site'].get('name')
