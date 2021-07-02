@@ -165,21 +165,20 @@ def map_model(baseUrl, model):
          model['biography'] = None
             
     return {
-        'Name': model['name'],
-        'Gender': model['gender'].upper(),
-        'URL': f"{baseUrl}{model['path']}",
-        'Ethnicity': model['ethnicity'],
-        'Country': model['country']['name'],
-        'hair_color': model['hair'].capitalize(),
-        'eye_color': model['eyes'].capitalize(),
-        'Height': str(model['height']),
-        'Weight': str(model['weight']),
-        'Measurements': model['size'],
-        'Details': model['biography'],
-        'Image': f"https://cdn.metartnetwork.com/{model['siteUUID']}{model['headshotImagePath']}",
-        'Tags': tags
+        'Name': model.get("name"),
+        'Gender': model.get("gender" or "").upper(),
+        'URL': f"{baseUrl}{model.get('path')}",
+        'Ethnicity': model.get("ethnicity"),
+        'Country': model.get("country", {}).get("name"),
+        'Height': str(model.get("height")),
+        'Weight': str(model.get("weight")),
+        'Measurements': model.get("size"),
+        'Details': model.get("biography"),
+        'hair_color': model.get("hair" or "").capitalize(),
+        'eye_color': model.get("eyes" or "").capitalize(),
+        'Image': f"https://cdn.metartnetwork.com/{model.get('siteUUID')}{model.get('headshotImagePath')}",
+        'Tags': tags      
     }
-
 studios = {
         '2163551D11D0439686AD9D291C8DFD71': ('ALS Scan', 'alsscan.com'),
         '5592E33324211E3FF640800200C93111': ('Erotic Beauty', 'eroticbeauty.com'),
