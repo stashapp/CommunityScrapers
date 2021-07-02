@@ -103,4 +103,4 @@ if use_local == 0:
     save_json(scene_api_json, scene_url)
 print(json.dumps(scrape))
 
-# Last Updated February 23, 2021
+# Last Updated July 02, 2021
