@@ -1,0 +1,28 @@
+name: HugeCockBreak
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hugecockbreak.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //*[@id="breadcrumbs"]/h2
+      Date:
+        selector: //*[@id="title-single"]/span
+        postProcess:
+          - replace:
+              - regex: (\d+)(st|nd|rd|th)
+                with: $1
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //a[@rel="tag"]
+      Details:
+        selector: //*[@id="header-inside"]/p
+      Image:
+        selector: //p/video/@poster
+      Studio:
+        Name:
+          fixed: HugeCockBreak
+# Last Updated July 3, 2021
