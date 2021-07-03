@@ -115,6 +115,7 @@ movieByURL:
   - action: scrapeXPath
     url:
       - evilangel.com/en/movie/
+      - wicked.com/en/movie/
     scraper: movieScraper
 
 xPathScrapers:
