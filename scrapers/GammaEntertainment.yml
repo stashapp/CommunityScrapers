@@ -115,7 +115,6 @@ movieByURL:
   - action: scrapeXPath
     url:
       - evilangel.com/en/movie/
-      - wicked.com/en/movie/
     scraper: movieScraper
 
 xPathScrapers:
@@ -305,4 +304,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated July 03, 2021
+# Last Updated April 22, 2021
