@@ -52,4 +52,4 @@ xPathScrapers:
         selector: //div[@class='description']/p[contains(span,"Description:")]/text()
       URL: //link[@rel='canonical']/@href
       FrontImage: //span[@id='trailer_thumb']//img/@src
-# Last Updated April 01, 2021
+# Last Updated July 03, 2021
