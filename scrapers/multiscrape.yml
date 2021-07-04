@@ -1,0 +1,17 @@
+name: multiscrape
+
+performerByFragment:
+    action: script
+    script:
+      - python
+      - multiscrape.py
+      - fetch
+
+performerByName:
+    action: script
+    script:
+      - python
+      - multiscrape.py
+      - query
+
+# Last Updated June 9, 2021
