@@ -296,7 +296,7 @@ dirtycosplay.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dogfartnetwork.com|DogFart.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 doghousedigital.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 dollsporn.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-dorcelclub.com|DorcelClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+dorcelclub.com|DorcelClub.yml|:heavy_check_mark:|:x:|:heavy_ceck_mark:|:x:|-|-
 doubleteamedteens.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 downtofuckdating.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dpfanatics.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

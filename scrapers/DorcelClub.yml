@@ -5,7 +5,13 @@ sceneByURL:
       - dorcelclub.com/en/scene
       - dorcelclub.com/scene
     scraper: sceneScraper
-    
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - dorcelclub.com/en/porn-movie
+    scraper: movieScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -21,8 +27,39 @@ xPathScrapers:
       Studio:
         Name:
           fixed: DorcelClub
-      Movies:                                      
+      Movies:
         Name: //div[@class="left"]/span[@class="movie"]/a/text()
-        URL: //div[@class="left"]/span[@class="movie"]/a/@href
+        URL:
+          selector: //div[@class="left"]/span[@class="movie"]/a/@href
+          postProcess:
+            - replace:
+              - regex: (.*)
+                with: https://dorcelclub.com$1
 
-# Last Updated December 27, 2020
+  movieScraper:
+    movie:
+      Name: //img[contains(@class, "cover")]/@alt
+      Duration:
+        selector: //span[@class='duration']/text()
+        # postProcess:
+        #   - replace:
+        #     - regex: ([0-9]h)? ([0-9]m)? ([0-9])?
+        #     with: $1:$2:$3
+      Studio:
+        Name:
+          fixed: DorcelClub
+      Director:
+        selector: //span[@class='director']/text()
+        postProcess:
+          - replace:
+            - regex: Director\s:\s(.*)
+              with: $1
+      FrontImage:
+        selector: //img[contains(@class, "cover")]/@data-src
+        postProcess:
+          - replace:
+            - regex: ([^\s]*)\s1x
+              with: $1
+      Synopsis: //span[@class="full"]/p/text()
+
+# Last Updated July 19, 2021
