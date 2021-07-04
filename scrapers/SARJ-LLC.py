@@ -160,10 +160,7 @@ def map_model(baseUrl, model):
     add_tag('pubicHair', '{} pussy')
     add_tag('eyes', '{} eyes')
     add_tag('breasts', '{} breasts')
- 
-    if model.get("biography") is None:
-         model['biography'] = None
-            
+       
     return {
         'Name': model.get("name"),
         'Gender': model.get("gender" or "").upper(),
@@ -177,7 +174,7 @@ def map_model(baseUrl, model):
         'hair_color': model.get("hair" or "").capitalize(),
         'eye_color': model.get("eyes" or "").capitalize(),
         'Image': f"https://cdn.metartnetwork.com/{model.get('siteUUID')}{model.get('headshotImagePath')}",
-        'Tags': tags      
+        'Tags': tags
     }
 studios = {
         '2163551D11D0439686AD9D291C8DFD71': ('ALS Scan', 'alsscan.com'),
@@ -225,4 +222,4 @@ elif sys.argv[1] == 'search':
     ret = search(sys.argv[2], i['title'] if 'title' in i else i['name'])
 
 print(json.dumps(ret))
-# Last Updated May 15, 2021
+# Last Updated July 4, 2021
