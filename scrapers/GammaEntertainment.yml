@@ -115,6 +115,7 @@ movieByURL:
   - action: scrapeXPath
     url:
       - evilangel.com/en/movie/
+      - girlfriendsfilms.com/en/dvd/
     scraper: movieScraper
 
 xPathScrapers:
