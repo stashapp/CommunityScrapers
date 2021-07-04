@@ -3,8 +3,8 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - atkhairy.com/tour/
-      - atkpremium.com/tour/
       - atkpetites.com/tour/
+      - atkpremium.com/tour/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -14,11 +14,12 @@ xPathScrapers:
           selector: //span[@class='login']/a/@href
           postProcess:
             - replace:
-              - regex: .+join\.([^\.]+).+
-                with: $1
+                - regex: .+join\.([^\.]+).+
+                  with: $1
             - map:
-                atkhairy: 'ATK Natural & Hairy'
-                atkpremium: 'ATK Premium'
+                atkhairy: "ATK Natural & Hairy"
+                atkpetites: "ATK Petites"
+                atkpremium: "ATK Premium"
       Performers:
         Name: //div[@class='watchName']//text()
       Title: //title/text()
@@ -31,8 +32,8 @@ xPathScrapers:
         selector: //div[@id='movie-poster']/@style
         postProcess:
           - replace:
-            - regex: .+(?:url\(")(.+)(?:".+)
-              with: $1
+              - regex: .+(?:url\(")(.+)(?:".+)
+                with: $1
 driver:
   useCDP: true
-# Last Updated October 30, 2020
+# Last Updated July 4, 2021
