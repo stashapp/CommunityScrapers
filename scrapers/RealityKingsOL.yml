@@ -15,7 +15,7 @@ sceneByURL:
       - sexyhub.com/scene/
       - transangels.com/scene/
       - welivetogether.com/scene/
-      
+
     scraper: sceneScraper
 
 xPathScrapers:
@@ -41,5 +41,10 @@ xPathScrapers:
             - replace:
                 - regex: .*www\.(.+)\.com.*
                   with: $1
-      Image: //img[@alt=""][contains(@src,"poster")]/@src
-# Last Updated September 27, 2020
+      Image:
+        selector: //img[@alt=""][contains(@src,"poster")]/@src|//script[@type="application/ld+json"]/text()
+        postProcess:
+          - replace:
+              - regex: '.*"thumbnailUrl": "([^"]+)".*'
+                with: $1
+# Last Updated June 20, 2021

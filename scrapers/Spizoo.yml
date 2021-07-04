@@ -28,8 +28,8 @@ xPathScrapers:
                 - regex: \s\(.+
                   with:
       Tags:
-        Name: //section[@id="sceneInfo"]//a[contains(@href,"/categorie")]/text()
+        Name: //section[@id="sceneInfo"]//a[contains(@href,"/categorie")]/text() | //div[@class="categories-holder"]/a
       Image: //video[@id="trailervideo"]/@poster
 
 
-# Last Updated February 26, 2021
+# Last Updated June 28, 2021

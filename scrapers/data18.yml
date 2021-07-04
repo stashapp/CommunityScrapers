@@ -12,13 +12,15 @@ xPathScrapers:
     scene:
       Title: //h1/text()
       Date:
-        selector: //span[contains(text(),'Release date:')]
+        selector: //span[contains(text(),"Release date:") and not(contains(text(),"No date release yet"))]
         postProcess:
           - replace:
-              - regex: "^Release date:"
+              - regex: "^Release date:|,"
                 with:
-              - regex: ","
-                with:
+              # When day of month is not specified, the scraper defaults to <Month> 1st, <Year>.
+              # Comment the next two lines if you want to skip partial dates instead.
+              - regex: ([A-Za-z]+) (\d{4})
+                with: "$1 1 $2"
           - parseDate: January 2 2006
       Details:
         selector: //p[b[text()='Story:']]
@@ -43,4 +45,4 @@ xPathScrapers:
           #- subScraper:
               #selector: //div[@id='post_view']/a/img/@src
 
-# Last Updated January 12, 2021
+# Last Updated May 22, 2021

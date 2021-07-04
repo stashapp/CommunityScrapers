@@ -1,0 +1,47 @@
+name: MVG
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - italianshotclub.com
+      - lesbiantribe.com
+      - pornlandvideos.com
+      - sologirlsmania.com
+      - vangoren.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='centerwrap container']/h1
+      Date: # the date from the scene page is not correct most of the time, we use the one from the search  instead
+        selector: //head/title
+        postProcess:
+          - replace:
+              - regex: (Lesbiantribe|Pornlandvideos|Sologirlsmania)\.com$
+                with: "- $1"
+              - regex: ^(.*)\s*-\s*([^-]+)$
+                with: 'https://$2.com/search.php?x=0&y=0&query="$1"'
+              - regex: '\s'
+                with: "+"
+          - subScraper:
+              selector: //div[@class="modeldetails clear"][1]//div[@class="video_date col-xl-5 col-lg-5 col-md-5 col-sm-5 col-xs-5 col-5 text-right"]
+          - parseDate: 2 January 2006
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Tags:
+        Name: //div[@class="videodetails genre categories"]//a
+      Details:
+        selector: //div[@class="date"]//span[contains(.,"Description:")]/following-sibling::text()
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess:
+            - map: # Mapped some names so they fit in better than single names.
+                https://italianshotclub.com/: Italian Shot Club
+                https://sologirlsmania.com/: Solo Girl Mania
+                https://pornlandvideos.com/: Porn Land videos
+                https://vangoren.com/: Vangoren
+                https://lesbiantribe.com/: Lesbian Tribe
+# Last Updated May 20, 2021

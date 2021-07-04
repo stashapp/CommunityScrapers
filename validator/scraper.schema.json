@@ -758,6 +758,11 @@
                     "title": "Pounds to Kilograms",
                     "description": "Convert weight measurement in pounds to kilograms.",
                     "type": "boolean"
+                  },
+                  "subtractDays": {
+                    "title": "Subtract Days",
+                    "description": "Subtracts the value in days from the current date.",
+                    "type": "boolean"
                   }
                 }
               }

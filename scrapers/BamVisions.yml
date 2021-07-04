@@ -1,0 +1,30 @@
+name: BamVisions
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tour.bamvisions.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //a[@href="#"]
+      Date:
+        selector: //li[i[contains(@class,"fa fa-calendar")]]
+        postProcess:
+          - replace:
+              - regex: 'Release Date:\s*'
+                with: ""
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //h5/a
+      Details: //p[@class="description"]  
+      Image:
+        selector: //script[contains(text(),'(remaining)')]/text()
+        postProcess:
+          - replace:
+              - regex: .+(?:poster=")([^"]*).+
+                with: https://tour.bamvisions.com$1
+      Studio:
+        Name:
+          fixed: BamVisions
+# Last Updated June 23, 2021
