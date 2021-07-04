@@ -1,24 +1,53 @@
-name: pornworld
+name: "PornWorld"
 sceneByURL:
   - action: scrapeXPath
     url:
       - pornworld.com/watch/
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.pornworld.com
+    scraper: performerScraper
+sceneByFragment:
+    action: script
+    script:
+      - python
+      # use python3 instead if needed
+      - pornworld.py
+      - query
+
 xPathScrapers:
   sceneScraper:
+    common:
+      $description: //dl[@class="dl-horizontal scene-description__column"]
     scene:
-      Title: //meta[@name="twitter:title"]/@content
-      Date: //span[@title="Release date"]/a/text()
-      Details: //div[@class="scene-description__row"]/dt[contains(.,"Description")]/../dd/text()
-      Tags:
-        Name: //div[@class="scene-description__row"]/dt[contains(.,"Genre")]/../dd/a/text()
+      Title:
+        selector: //h1[@class="watchpage-title"]//text()
+        concat: " "
+      Date:
+        selector: //span[@title="Release date"]/a/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Details: $description/div[3]/dd/text()
       Performers:
-        Name: //div[@class="scene-description__row"]/dt[contains(.,"Talents")]/../dd/a/text()
-      Image: 
+        Name: $description/div[1]/dd/a[contains(@href,'pornworld.com/model')]/text()
+      Studio:
+        Name:
+          fixed: Porn World
+      Tags:
+        Name: $description/div[2]//a/text()
+      Image:
         selector: //div[@id="player"]/@style
         postProcess:
-            - replace: 
-                - regex: (background-image:url\()(.+)(\))
-                  with: $2
+          - replace:
+              - regex: .+(https[^"]+).+
+                with: $1
 
-# Last Updated August 01, 2020
+  performerScraper:
+    performer:
+      Name: //h2
+      Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
+      Image:
+        selector: //div[@class='model--avatar']//img/@src
+# Last Updated July 19, 2021
