@@ -107,14 +107,16 @@ sceneByURL:
 performerByURL:
   - action: scrapeXPath
     url:
-      - evilangel.com/en/pornstar/
       - assholefever.com/en/pornstar/
+      - evilangel.com/en/pornstar/
     scraper: performerScraper
 
 movieByURL:
   - action: scrapeXPath
     url:
       - evilangel.com/en/movie/
+      - girlfriendsfilms.com/en/dvd/
+      - wicked.com/en/movie/
     scraper: movieScraper
 
 xPathScrapers:
@@ -304,4 +306,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated April 22, 2021
+# Last Updated July 3, 2021

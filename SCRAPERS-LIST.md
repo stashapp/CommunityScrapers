@@ -87,6 +87,7 @@ asstraffic.com|AssTraffic.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 assylum.com|Assylum.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 atkexotics.com|ATKExotics.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 atkhairy.com|ATKHairy.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+atkpetites.com|ATKHairy.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 atkpremium.com|ATKHairy.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 auntykathy.com|auntykathy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 aussieass.com|AussieAss.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -101,6 +102,7 @@ avtits.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 aziani.com|GangBangCreampie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 b47w.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
 b49t.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
+babearchives.com|BabeArchives.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 babepedia.com|Babepedia.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Database
 baberotica.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 baberoticavr.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
@@ -307,6 +309,7 @@ dtfsluts.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dyked.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dylanryder.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 elegantangel.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
+ericjohnssexadventures|EricJohnsSexAdventures.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 erito.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 eroticax.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 eroticbeauty.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|python|-
@@ -402,7 +405,7 @@ genderx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 genuinesin.com|GenuineSin.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlcum.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlfaction.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-girlfriendsfilms.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
+girlfriendsfilms.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Lesbian
 girlgirl.com|JulesJordan.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 girlgirlmania.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlgrind.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Lesbian
@@ -744,6 +747,7 @@ pissynetwork.com|PissyNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pjgirls.com|pjgirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 playboy.tv|PlayboyTV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 playboyplus.com|PlayboyPlus.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
+playwithrae.com|PlayWithRae.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 plumperpass.com|PlumperPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 plushies.tv|Plushies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 porncz.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1037,6 +1041,7 @@ watch4fetish.com|Watch4Fetish.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 watchingmydaughtergoblack.com|WatchingMyDaughterGoBlack.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 watchmygf.me|WatchMyGF.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
 watchreal.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+watchyoujerk.com|WatchYouJerk.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 waybig.com|Waybig.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 wearehairy.com|wearehairy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 webyoung.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
@@ -1052,7 +1057,7 @@ whiteghetto.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 whiteteensblackcocks.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 whorecraftvr.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fantasy VR
 wicked.com (/movies)|WickedMovies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-wicked.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+wicked.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 wildoncam.com|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wowgirls.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wowporn.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1080,5 +1085,5 @@ youngthroats.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 youporn.com|YouPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
 yourmomdoesanal.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yourmomdoesporn.com|AnalizedNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-zoiestarr.com/|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+zoiestarr.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ztod.com|ZeroTolerance.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
