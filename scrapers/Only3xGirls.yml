@@ -17,11 +17,11 @@ xPathScrapers:
       Performers:
         Name: //ul[@class="dotsbetween"]//a
       Details:
-        selector: //div[@class='set-desc']
+        selector: //div[@class='set-desc']/*[local-name()="em" or local-name()="p"]
         concat: "\n\n"
       Tags:
         Name: //div[@class="content tag"]//a
-      Image: //img[@class="stdimage thumbs"]/@src0_2x | //img[@class="thumbs"]/@src
+      Image: //span[@class="update_thumb"]/img[@class="stdimage thumbs"]/@src0_2x | //span[@class="update_thumb"]/img[@class="thumbs"]/@src
       Studio:
         Name:
           selector: //base/@href
