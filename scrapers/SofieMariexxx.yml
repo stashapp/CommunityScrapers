@@ -27,5 +27,5 @@ xPathScrapers:
                 with: "https://sofiemariexxx.com/"
       Studio:
         Name:
-          selector: //meta[@name="author"]/@content
+          fixed: SofieMarie
 # Last Updated June 1, 2021
