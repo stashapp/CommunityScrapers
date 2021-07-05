@@ -14,7 +14,7 @@ xPathScrapers:
     scene:
       Title: //meta[@name="twitter:title"]/@content
       Date:
-        selector: //i[@class="far fa-calendar"]/following-sibling::text()
+        selector: //div/i[@class="far fa-calendar"]/../span
         postProcess:
           - replace:
               - regex: ^(\d{4}-\d{2}-\d{2}).+
@@ -23,15 +23,19 @@ xPathScrapers:
       Details:
         selector: //div[@class="expand-inner"]
       Tags:
-        Name: //div[contains(text(),"Tags:")]/following-sibling::a
+        Name: //div[@class="content-links -tags"]//a
       Performers:
-        Name:
-          selector: //div[@class="models-box"]/a
+        Name: //div[@class="models-box"]/a
+        URL: //div[@class="models-box"]/a/@href
       Image:
         selector: //video/@poster
       Studio:
         Name:
-          fixed: Waybig
+          selector: //a[@class="hoverLink"]
+          postProcess:
+            - replace:
+                - regex: '^Visit\s+'
+                  with: ""
   performerScraper:
     performer:
       Name: //div[@class="title-col -normal col"]/h2
@@ -39,6 +43,11 @@ xPathScrapers:
         fixed: Male
       Measurements:
         selector: //span[contains(text(),"Cock size:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0''"
+          - feetToCm: true
       Weight:
         selector: //span[contains(text(),"Weight:")]/following-sibling::text()
         postProcess:
