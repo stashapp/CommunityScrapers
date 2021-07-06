@@ -164,14 +164,16 @@ def debug(q):
 def sendRequest(url, head):
     global maintenance_javlibrary
     global flag_cloudflare
-    
-    if maintenance_javlibrary == True and ("javlibrary.com" in url or "n53i.com" in url):
+
+    if maintenance_javlibrary == True and ("javlibrary.com" in url or JAVLIBRARY_MIRROR in url):
         return None
     if flag_cloudflare == True and "javlibrary.com" in url:
         return None
     debug("[DEBUG][{}] Request URL: {}".format(threading.get_ident(), url))
     for x in range(0, 3):
         response = requests.get(url, headers=head, timeout=10)
+        #print(response.text, file=open("request.txt", "w", encoding='utf-8'))
+        #debug("[DEBUG][{}] Returned URL: {}".format(threading.get_ident(),response.url))
         if response.content and response.status_code == 200:
             break
         else:
@@ -251,7 +253,8 @@ def r18_search(html, xpath):
 
 
 def jav_search(html, xpath):
-    if "javlibrary.com/en/?v=" in html.url:
+    if "/en/?v=" in html.url:
+        debug("[DEBUG] No search page, directly the movie page ({})".format(html.url))
         return html
     jav_search_tree = lxml.html.fromstring(html.content)
     jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
@@ -371,19 +374,25 @@ r18_search_html = None
 jav_main_html = None
 r18_main_html = None
 
+JAVLIBRARY_MIRROR = "n53i.com"
+
 if scene_url:
+    debug("[DEBUG] Using search with URL: {}".format(scene_url))
     if "javlibrary.com" in scene_url:
         jav_main_html = sendRequest(scene_url, JAV_HEADERS)
-    if "n53i.com" in scene_url:
+        if jav_main_html is None:
+            scene_url = scene_url.replace("javlibrary.com", JAVLIBRARY_MIRROR)
+    if JAVLIBRARY_MIRROR in scene_url:
         jav_main_html = sendRequest(scene_url, JAV_HEADERS)
     if "r18.com" in scene_url:
         r18_main_html = sendRequest(scene_url, R18_HEADERS)
-else:
+if jav_main_html is None and r18_main_html is None:
+    debug("[DEBUG] Using search with Title: {}".format(scene_title))
     jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
     if jav_search_html is None:
         # A error for javlibrary, trying a mirror
         debug("[JAV] Error with Javlibrary, trying the mirror n53i")
-        jav_search_html = sendRequest("https://www.n53i.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
+        jav_search_html = sendRequest("https://www.{}/en/vl_searchbyid.php?keyword={}".format(JAVLIBRARY_MIRROR, scene_title), JAV_HEADERS)
 
 # XPATH
 r18_xPath_search = {}
@@ -427,7 +436,6 @@ if jav_main_html is None:
     debug("Javlibrary don't give any result, trying search with R18...")
     r18_search_html = sendRequest("https://www.r18.com/common/search/searchword={}/?lg=en".format(scene_title), R18_HEADERS)
     r18_main_html = r18_search(r18_search_html, r18_xPath_search)
-
 
 if jav_main_html:
     #debug("[DEBUG] Javlibrary Page ({})".format(jav_main_html.url))
@@ -626,7 +634,6 @@ if r18_result.get('series_url'):
             tmp['studio'] = {}
             tmp['studio']['name'] = scrape['studio']['name']
     scrape['movies'] = [tmp]
-
 print(json.dumps(scrape))
 
 # Last Updated July 06, 2021
