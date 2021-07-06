@@ -1,4 +1,4 @@
-name: VelvetVeronica
+name: SubspaceLand
 sceneByURL:
   - action: scrapeXPath
     url:
