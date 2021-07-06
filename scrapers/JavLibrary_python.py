@@ -162,12 +162,20 @@ def debug(q):
 
 
 def sendRequest(url, head):
+    global maintenance_javlibrary
+    
+    if maintenance_javlibrary == True and ("javlibrary.com" in url or "n53i.com" in url):
+        return None
     debug("[DEBUG][{}] Request URL: {}".format(threading.get_ident(), url))
-    for x in range(0, 5):
+    for x in range(0, 3):
         response = requests.get(url, headers=head, timeout=10)
         if response.content and response.status_code == 200:
             break
         else:
+            if response.url == "https://www.javlib.com/maintenance.html":
+                debug("Javlibrary is Under Maintenance.")
+                maintenance_javlibrary = True
+                return None
             debug("[{}] Bad page...".format(x))
             time.sleep(5)
     if response.status_code == 200:
@@ -347,6 +355,8 @@ scene_title = re.sub(r"\..{3}$", "", scene_title)
 scene_title = re.sub(r"-JG\d", "", scene_title)
 scene_title = re.sub(r"\s.+$", "", scene_title)
 scene_title = re.sub(r"[ABCDEFGH]$", "", scene_title)
+
+maintenance_javlibrary = False
 
 jav_search_html = None
 r18_search_html = None
