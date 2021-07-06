@@ -1,4 +1,4 @@
-name: SubspaceLand
+name: Subspaceland
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -24,7 +24,7 @@ xPathScrapers:
           selector: //div[@id="tagsInColums"]//li/a/text()
       Studio:
         Name:
-          fixed: Subspace Land
+          selector: //div[@id="header"]/a/@title
       Image: 
         selector: //div[@class="setEntertaiment"]/a/img/@src
         postProcess:
