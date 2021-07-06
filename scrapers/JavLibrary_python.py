@@ -611,4 +611,4 @@ if r18_result.get('series_url'):
 
 print(json.dumps(scrape))
 
-# Last Updated June 07, 2021
+# Last Updated July 06, 2021
