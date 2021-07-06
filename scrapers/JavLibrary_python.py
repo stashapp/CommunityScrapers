@@ -404,11 +404,11 @@ jav_result = {}
 
 if jav_search_html:
     jav_main_html = jav_search(jav_search_html, jav_xPath_search)
-    if jav_main_html is None:
-        # If javlibrary don't have it, there is no way that R18 have it but why not trying...
-        debug("Javlibrary don't give any result, trying search with R18...")
-        r18_search_html = sendRequest("https://www.r18.com/common/search/searchword={}/?lg=en".format(scene_title), R18_HEADERS)
-        r18_main_html = r18_search(r18_search_html, r18_xPath_search)
+if jav_main_html is None:
+    # If javlibrary don't have it, there is no way that R18 have it but why not trying...
+    debug("Javlibrary don't give any result, trying search with R18...")
+    r18_search_html = sendRequest("https://www.r18.com/common/search/searchword={}/?lg=en".format(scene_title), R18_HEADERS)
+    r18_main_html = r18_search(r18_search_html, r18_xPath_search)
 
 
 if jav_main_html:
