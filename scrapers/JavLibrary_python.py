@@ -391,7 +391,7 @@ if jav_main_html is None and r18_main_html is None:
     jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
     if jav_search_html is None:
         # A error for javlibrary, trying a mirror
-        debug("[JAV] Error with Javlibrary, trying the mirror n53i")
+        debug("[JAV] Error with Javlibrary, trying the mirror {}".format(JAVLIBRARY_MIRROR))
         jav_search_html = sendRequest("https://www.{}/en/vl_searchbyid.php?keyword={}".format(JAVLIBRARY_MIRROR, scene_title), JAV_HEADERS)
 
 # XPATH
