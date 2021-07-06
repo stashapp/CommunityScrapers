@@ -34,6 +34,8 @@ BOTH_TAGS = False
 IGNORE_ALIASES = False
 # Always wait for the aliases or you are not sure to have it. (Depends if request are quick)
 WAIT_FOR_ALIASES = False
+# Mirror to use
+JAVLIBRARY_MIRROR = "n53i.com"
 
 BANNED_WORDS = {
     "R**e": "Rape",
@@ -373,8 +375,6 @@ jav_search_html = None
 r18_search_html = None
 jav_main_html = None
 r18_main_html = None
-
-JAVLIBRARY_MIRROR = "n53i.com"
 
 if scene_url:
     debug("[DEBUG] Using search with URL: {}".format(scene_url))
