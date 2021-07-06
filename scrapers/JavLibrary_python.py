@@ -356,7 +356,7 @@ r18_main_html = None
 if scene_url:
     if "javlibrary.com" in scene_url:
         jav_main_html = sendRequest(scene_url, JAV_HEADERS)
-    if "f50q.com" in scene_url:
+    if "n53i.com" in scene_url:
         jav_main_html = sendRequest(scene_url, JAV_HEADERS)
     if "r18.com" in scene_url:
         r18_main_html = sendRequest(scene_url, R18_HEADERS)
@@ -364,8 +364,8 @@ else:
     jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
     if jav_search_html is None:
         # A error for javlibrary, trying a mirror
-        debug("[JAV] Error with Javlibrary, trying the mirror f50q")
-        jav_search_html = sendRequest("https://www.f50q.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
+        debug("[JAV] Error with Javlibrary, trying the mirror n53i")
+        jav_search_html = sendRequest("https://www.n53i.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
 
 # XPATH
 r18_xPath_search = {}
