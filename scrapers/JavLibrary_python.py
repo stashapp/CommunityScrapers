@@ -80,6 +80,7 @@ BANNED_WORDS = {
     "Sch**lgirl": "Schoolgirl",
     "Sch**lgirls": "Schoolgirls",
     "S*********l": "School Girl",
+    "S*********ls": "School Girls",
     "P****hment": "Punishment",
     "P****h": "Punish",
     "M****ter": "Molester",
@@ -149,7 +150,8 @@ BANNED_WORDS = {
     "K****pper": "Kidnapper",
     "M****tor": "Molestor",
     "F*****g": "Fucking",
-    "B*****k": "Berserk"
+    "B*****k": "Berserk",
+    "H*******ed": "Hypnotized"
 }
 
 
