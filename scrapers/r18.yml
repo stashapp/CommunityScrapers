@@ -137,6 +137,8 @@ xPathScrapers:
                 with: "Schoolgirls"
               - regex: S\*{9}l\b
                 with: "School Girl" # Not Sure
+              - regex: S\*{9}ls\b
+                with: "School Girls" # SSNI-296
               - regex: P\*{4}hment\b
                 with: "Punishment"
               - regex: P\*{4}h\b
@@ -266,7 +268,7 @@ xPathScrapers:
               - regex: C\*{3}dish\b
                 with: "Childish" # MMYM-045
               - regex: F\*{5}g\b
-                with: "Fucking" # SSNI-391$
+                with: "Fucking" # SSNI-391
               - regex: G\*{7}gers\b
                 with: "Gangbangers"
               - regex: K\*{4}pper\b
@@ -277,6 +279,8 @@ xPathScrapers:
                 with: "Violate"
               - regex: B\*{5}k\b # IPX-374
                 with: "Berserk"
+              - regex: H\*{7}ed\b
+                with: "Hypnotized" # PPPD-376
       Tags:
         Name: //div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a
       Performers:
