@@ -83,6 +83,10 @@ xPathScrapers:
                 with: "Kill"
               - regex: K\*{2}ling\b
                 with: "Killing"
+              - regex: K\*{2}ler\b
+                with: "Killer" # Not Sure
+              - regex: K\*{2}led\b
+                with: "Killed" # SNIS-036
               - regex: T\*{5}e\b
                 with: "Torture"
               - regex: T\*{5}ed\b
@@ -241,8 +245,6 @@ xPathScrapers:
                 with: "Unwilling"
               - regex: HumB\*{2}d\b
                 with: "Humbled"
-              - regex: K\*{2}ler\b
-                with: "Killer" # Not Sure
               - regex: J\*{1}\b
                 with: "Jo" # Not Sure
               - regex: J\*{1}s\b
