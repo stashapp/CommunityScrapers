@@ -5,6 +5,7 @@ import re
 import sys
 import threading
 import time
+from urllib.parse import urlparse
 
 import lxml.html    # https://pypi.org/project/lxml/         | pip install lxml
 import requests     # https://pypi.org/project/requests/     | pip install requests
@@ -261,7 +262,8 @@ def jav_search(html, xpath):
     jav_search_tree = lxml.html.fromstring(html.content)
     jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
     if jav_url:
-        jav_url = re.sub(r"^\.", "https://www.javlibrary.com/en", jav_url[0])
+        url_domain = urlparse(html.url).netloc
+        jav_url = re.sub(r"^\.", "https://{}/en".format(url_domain), jav_url[0])
         jav_main_html = sendRequest(jav_url, JAV_HEADERS)
         return jav_main_html
     else:
