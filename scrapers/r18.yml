@@ -261,10 +261,16 @@ xPathScrapers:
                 with: "Students"
               - regex: S\*{8}n\b
                 with: "Submission"
+              - regex: T\*{6}e\b
+                with: "Tentacle" #MIDD-648 
+              - regex: T\*{6}es\b
+                with: "Tentacles"
               - regex: T\*{5}e\b
                 with: "Torture"
               - regex: T\*{5}ed\b
                 with: "Tortured"
+              - regex: T\*{5}es\b
+                with: "Tortures" #MIDD-648 
               - regex: U\*{9}sly\b
                 with: "Unconsciously"
               - regex: U\*{7}g\b
