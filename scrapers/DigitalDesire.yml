@@ -7,23 +7,23 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-     Title:
+      Title:
         selector: //meta[@property="og:title"]/@content
-     Date:
+      Date:
         selector: //div[@class="set_date"]
         postProcess:
-          - parseDate:  January 2, 2006
-     Performers:
-      Name: //div[@class="title_bar gallery_model"]/span/a
-     Tags:
-      Name: //span[@class="update_tags"]/a
-     Image:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class="title_bar gallery_model"]/span/a
+      Tags:
+        Name: //span[@class="update_tags"]/a
+      Image:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-              - regex: '-2x'
+              - regex: "-2x"
                 with: "-1x"
-     Studio:
+      Studio:
         Name:
           fixed: DigitalDesire
 # Last Updated March 03, 2021
