@@ -1,0 +1,31 @@
+name: "freakmobmedia"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - freakmobmedia.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="bodywhite"]/div[@class="title"]//h3/text()
+      Details: //div[@class='description']/text()
+      URL: //link[@rel="canonical"]/@href
+      Date:
+        selector: //div[@class='views-single']/span/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+            - regex: .+(?:poster=")([^"]+).+
+              with: https://www.loveherfeet.com$1
+      Studio:
+        Name:
+          fixed: FreakMobMedia
+      Tags:
+        Name: //span[@class="meta-info" and text()="Category"]/following-sibling::a/text()|//span[@class="meta-info" and text()="Tag"]/following-sibling::a/text()
+      Performers:
+        Name: //span[@class="meta-info" and text()="Model"]/following-sibling::a/text()
+
+# Last Updated July 09, 2021
