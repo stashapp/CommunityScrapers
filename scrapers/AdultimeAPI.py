@@ -297,8 +297,11 @@ def scraping_json(api_json, url):
         if x.get('gender') == "female":
             perf.append({"name": x.get('name')})
     scrape['performers'] = perf
-    scrape['tags'] = [
-        {"name": x.get('name')} for x in api_json.get('categories')]
+    list_tag = []
+    for x in api_json.get('categories'):
+        if x.get('name'):
+            list_tag.append({"name": x.get('name')})
+    scrape['tags'] = list_tag
     try:
         scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(iter(api_json['pictures']['nsfw']['top'].values()))
     except:
