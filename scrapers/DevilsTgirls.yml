@@ -68,16 +68,12 @@ xPathScrapers:
   movieScraper:
     movie:
       Name: //div[@class="dvdDesc bioToRight"]/h2/text()
-      Director: //a[@label="Director"]/text()
       Duration:
         selector: //li[@class="length"]/text()
       Date:
         selector: //li[@class="updatedOn"]/text()
         postProcess:
           - parseDate: 2006-01-02
-      Synopsis:
-        selector: //div/span/p
-        concat: "\n"
       Studio:
         Name:
           fixed: Devil’s Film
