@@ -80,6 +80,7 @@ BANNED_WORDS = {
     "G*******g": "Gangbang",
     "G*******ged": "Gangbanged",
     "G*******ging": "Gangbanging",
+    "G******ging": "Gangbanging",
     "G*******gs": "Gangbangs",
     "G******g": "Gangbang",
     "G******ged": "Gangbanged",
