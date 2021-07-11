@@ -131,6 +131,8 @@ xPathScrapers:
                 with: "Gangbanged"
               - regex: G\*{7}gers\b
                 with: "Gangbangers"
+              - regex: G\*{6}ging\b
+                with: "Gangbanging"
               - regex: G\*{7}ging\b
                 with: "Gangbanging"
               - regex: G\*{7}gs\b
