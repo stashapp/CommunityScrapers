@@ -25,7 +25,6 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name: //div[@class="sceneCol sceneColActors"]/a
-        URL: //a[@class="uk-flex"]/@href
       Tags:
         Name: //div[@class="sceneCol sceneColCategories"]/a
       Details:
