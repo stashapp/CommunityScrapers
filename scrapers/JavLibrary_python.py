@@ -5,6 +5,7 @@ import re
 import sys
 import threading
 import time
+from urllib.parse import urlparse
 
 import lxml.html    # https://pypi.org/project/lxml/         | pip install lxml
 import requests     # https://pypi.org/project/requests/     | pip install requests
@@ -34,122 +35,131 @@ BOTH_TAGS = False
 IGNORE_ALIASES = False
 # Always wait for the aliases or you are not sure to have it. (Depends if request are quick)
 WAIT_FOR_ALIASES = False
+# Mirror to use
+JAVLIBRARY_MIRROR = "n53i.com"
 
 BANNED_WORDS = {
-    "R**e": "Rape",
-    "R**es": "Rapes",
-    "R****g": "Raping",
-    "R**ed": "Raped",
-    "G******g": "Gangbang",
-    "G*******g": "Gangbang",
-    "G*******gs": "Gangbangs",
-    "G******ged": "Gangbanged",
-    "G*******ged": "Gangbanged",
-    "G*********d": "Gang-Banged",
-    "G*******ging": "Gangbanging",
-    "P*ssy": "Pussy",
+    "A*****t": "Assault",
+    "A*****ted": "Assaulted",
+    "A****p": "Asleep",
+    "A***e": "Abuse",
+    "A***ed": "Abused",
+    "A***es": "Abuses",
+    "B*****k": "Berserk",
+    "B*****p": "Bang Up",
+    "B***d": "Blood",
+    "B***dy": "Bloody",
+    "C*****y": "Cruelty",
+    "C***d": "Child",
+    "C***dcare": "Childcare",
+    "C***dhood": "Childhood",
+    "C***dish": "Childish",
+    "C***dren": "Children",
     "C*ck": "Cock",
     "C*cks": "Cocks",
-    "Ma*ko": "Maiko",
-    "K**l": "Kill",
-    "K**ling": "Killing",
-    "T*****e": "Torture",
-    "T*****ed": "Tortured",
-    "V*****t": "Violent",
-    "S***e": "Slave",
-    "S***es": "Slaves",
-    "S***ery": "Slavery",
-    "EnS***ed": "Enslaved",
+    "Chai*saw": "Chainsaw",
+    "CrumB**d": "CrumBled",
+    "D******e": "Disgrace",
+    "D******ed": "Disgraced",
+    "D******eful": "Disgraceful",
+    "D***k": "Drunk",
+    "D***ken": "Drunken",
+    "D***kest": "Drunkest",
     "D***king": "Drinking",
     "D***ks": "Drinks",
-    "S*****t": "Student",
-    "S*****ts": "Students",
-    "SK**ls": "Skills",
-    "SK**lfully": "Skillfully",
-    "SK**lful": "Skillful",
-    "SK**led": "Skilled",
-    "P**hed": "Punished",
+    "D**g": "Drug",
     "D**gged": "Drugged",
     "D**gs": "Drugs",
-    "F***ed": "Fucked",
-    "D***k": "Drunk",
-    "D***kest": "Drunkest",
-    "S********l": "Schoolgirl",
-    "S*********s": "Schoolgirls",
-    "S********ls": "Schoolgirls",
-    "Sch**lgirl": "Schoolgirl",
-    "Sch**lgirls": "Schoolgirls",
-    "S*********l": "School Girl",
-    "P****hment": "Punishment",
-    "P****h": "Punish",
-    "M****ter": "Molester",
-    "M****ters": "Molesters",
-    "M****ted": "Molested",
-    "M****t": "Molest",
-    "I****t": "Incest",
-    "I****tuous": "Incestuous",
-    "V*****e": "Violate",
-    "V*****ed": "Violated",
-    "StepB****************r": "StepBrother And Sister",
-    "StepK*ds ": "StepKids",
-    "C***dhood": "Childhood",
-    "V******e": "Violence",
-    "C***dcare": "Childcare",
-    "H*******m": "Hypnotism",
-    "M****tation": "Molestation",
-    "M****ting": "Molesting",
+    "EnS***ed": "Enslaved",
+    "F*****g": "Fucking",
     "F***e": "Force",
-    "A***es": "Abuses",
-    "A***e": "Abuse",
-    "S******g": "Sleeping",
-    "A***ed": "Abused",
-    "D**g": "Drug",
-    "A*****ted": "Assaulted",
-    "A*****t": "Assault",
-    "S********n": "Submission",
-    "K*d": "Kid",
-    "K*ds": "Kids",
-    "D******e": "Disgrace",
-    "Y********ls": "Young Girls",
-    "Y********l": "Young Girl",
+    "F***ed": "Fucked",
+    "F***efully": "Forcefully",
+    "F***es": "Forces",
+    "G*********d": "Gang-Banged",
+    "G*******g": "Gangbang",
+    "G*******ged": "Gangbanged",
+    "G*******ging": "Gangbanging",
+    "G******ging": "Gangbanging",
+    "G*******gs": "Gangbangs",
+    "G******g": "Gangbang",
+    "G******ged": "Gangbanged",
+    "G****gers": "Gangbangers",
+    "H*********n": "Humiliation",
+    "H*******ed": "Hypnotized",
+    "H*******m": "Hypnotism",
     "H**t": "Hurt",
     "H**ts": "Hurts",
-    "C***dren": "Children",
-    "F***es": "Forces",
-    "Chai*saw": "Chainsaw",
-    "Lol*pop": "Lolipop",
-    "K****pped": "Kidnapped",
-    "K****pping": "Kidnapping",
-    "B*****p": "Bang Up",
-    "D***ken": "Drunken",
-    "Lo**ta": "Lolita",
-    "CrumB**d": "CrumBled",
-    "K*dding": "Kidding",
-    "C***d": "Child",
-    "C*****y": "Cruelty",
-    "H*********n": "Humiliation",
-    "D******eful": "Disgraceful",
-    "B***d": "Blood",
-    "U*******g": "Unwilling",
+    "Half-A****p": "Half-Asleep",
     "HumB**d": "Humbled",
-    "K**ler": "Killer",
+    "I****t": "Incest",
+    "I****ts": "Insults",
+    "I****tuous": "Incestuous",
     "J*": "Jo",
     "J*s": "Jos",
-    "V*****es": "Violates",
-    "D******ed": "Disgraced",
-    "F***efully": "Forcefully",
-    "I****ts": "Insults",
-    "B***dy": "Bloody",
-    "U*********sly": "Unconsciously",
-    "Half-A****p": "Half-Asleep",
-    "A****p": "Asleep",
-    "StepM************n": "Stepmother And Son",
-    "C***dish": "Childish",
-    "G****gers": "Gangbangers",
+    "K****pped": "Kidnapped",
     "K****pper": "Kidnapper",
+    "K****pping": "Kidnapping",
+    "K**l": "Kill",
+    "K**led": "Killed",
+    "K**ler": "Killer",
+    "K**ling": "Killing",
+    "K*d": "Kid",
+    "K*dding": "Kidding",
+    "K*ds": "Kids",
+    "Lo**ta": "Lolita",
+    "Lol*pop": "Lolipop",
+    "M****t": "Molest",
+    "M****tation": "Molestation",
+    "M****ted": "Molested",
+    "M****ter": "Molester",
+    "M****ters": "Molesters",
+    "M****ting": "Molesting",
     "M****tor": "Molestor",
-    "F*****g": "Fucking",
-    "B*****k": "Berserk"
+    "Ma*ko": "Maiko",
+    "P****h": "Punish",
+    "P****hment": "Punishment",
+    "P**hed": "Punished",
+    "P*ssy": "Pussy",
+    "R****g": "Raping",
+    "R**e": "Rape",
+    "R**ed": "Raped",
+    "R**es": "Rapes",
+    "S*********l": "School Girl",
+    "S*********ls": "School Girls",
+    "S*********s": "Schoolgirls",
+    "S********l": "Schoolgirl",
+    "S********ls": "Schoolgirls",
+    "S********n": "Submission",
+    "S******g": "Sleeping",
+    "S*****t": "Student",
+    "S*****ts": "Students",
+    "S***e": "Slave",
+    "S***ery": "Slavery",
+    "S***es": "Slaves",
+    "Sch**lgirl": "Schoolgirl",
+    "Sch**lgirls": "Schoolgirls",
+    "SK**led": "Skilled",
+    "SK**lful": "Skillful",
+    "SK**lfully": "Skillfully",
+    "SK**ls": "Skills",
+    "StepB****************r": "StepBrother And Sister",
+    "StepK*ds ": "StepKids",
+    "StepM************n": "Stepmother And Son",
+    "T******e": "Tentacle",
+    "T******es": "Tentacles",
+    "T*****e": "Torture",
+    "T*****ed": "Tortured",
+    "T*****es": "Tortures",
+    "U*********sly": "Unconsciously",
+    "U*******g": "Unwilling",
+    "V******e": "Violence",
+    "V*****e": "Violate",
+    "V*****ed": "Violated",
+    "V*****es": "Violates",
+    "V*****t": "Violent",
+    "Y********l": "Young Girl",
+    "Y********ls": "Young Girls"
 }
 
 
@@ -160,12 +170,29 @@ def debug(q):
 
 
 def sendRequest(url, head):
+    global maintenance_javlibrary
+    global flag_cloudflare
+
+    if maintenance_javlibrary == True and ("javlibrary.com" in url or JAVLIBRARY_MIRROR in url):
+        return None
+    if flag_cloudflare == True and "javlibrary.com" in url:
+        return None
     debug("[DEBUG][{}] Request URL: {}".format(threading.get_ident(), url))
-    for x in range(0, 5):
+    for x in range(0, 3):
         response = requests.get(url, headers=head, timeout=10)
+        #print(response.text, file=open("request.txt", "w", encoding='utf-8'))
+        #debug("[DEBUG][{}] Returned URL: {}".format(threading.get_ident(),response.url))
         if response.content and response.status_code == 200:
             break
         else:
+            if response.url == "https://www.javlib.com/maintenance.html":
+                debug("[WARN] Javlibrary is Under Maintenance.")
+                maintenance_javlibrary = True
+                return None
+            if "Why do I have to complete a CAPTCHA?" in response.text:
+                debug("[WARN] Cloudflare protection detected.")
+                flag_cloudflare = True
+                return None
             debug("[{}] Bad page...".format(x))
             time.sleep(5)
     if response.status_code == 200:
@@ -234,12 +261,14 @@ def r18_search(html, xpath):
 
 
 def jav_search(html, xpath):
-    if "javlibrary.com/en/?v=" in html.url:
+    if "/en/?v=" in html.url:
+        debug("[DEBUG] No search page, directly the movie page ({})".format(html.url))
         return html
     jav_search_tree = lxml.html.fromstring(html.content)
     jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
     if jav_url:
-        jav_url = re.sub(r"^\.", "https://www.javlibrary.com/en", jav_url[0])
+        url_domain = urlparse(html.url).netloc
+        jav_url = re.sub(r"^\.", "https://{}/en".format(url_domain), jav_url[0])
         jav_main_html = sendRequest(jav_url, JAV_HEADERS)
         return jav_main_html
     else:
@@ -346,24 +375,31 @@ scene_title = re.sub(r"-JG\d", "", scene_title)
 scene_title = re.sub(r"\s.+$", "", scene_title)
 scene_title = re.sub(r"[ABCDEFGH]$", "", scene_title)
 
+maintenance_javlibrary = False
+flag_cloudflare = False
+
 jav_search_html = None
 r18_search_html = None
 jav_main_html = None
 r18_main_html = None
 
 if scene_url:
+    debug("[DEBUG] Using search with URL: {}".format(scene_url))
     if "javlibrary.com" in scene_url:
         jav_main_html = sendRequest(scene_url, JAV_HEADERS)
-    if "f50q.com" in scene_url:
+        if jav_main_html is None:
+            scene_url = scene_url.replace("javlibrary.com", JAVLIBRARY_MIRROR)
+    if JAVLIBRARY_MIRROR in scene_url:
         jav_main_html = sendRequest(scene_url, JAV_HEADERS)
     if "r18.com" in scene_url:
         r18_main_html = sendRequest(scene_url, R18_HEADERS)
-else:
+if jav_main_html is None and r18_main_html is None:
+    debug("[DEBUG] Using search with Title: {}".format(scene_title))
     jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
     if jav_search_html is None:
         # A error for javlibrary, trying a mirror
-        debug("[JAV] Error with Javlibrary, trying the mirror f50q")
-        jav_search_html = sendRequest("https://www.f50q.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
+        debug("[JAV] Error with Javlibrary, trying the mirror {}".format(JAVLIBRARY_MIRROR))
+        jav_search_html = sendRequest("https://www.{}/en/vl_searchbyid.php?keyword={}".format(JAVLIBRARY_MIRROR, scene_title), JAV_HEADERS)
 
 # XPATH
 r18_xPath_search = {}
@@ -402,12 +438,11 @@ jav_result = {}
 
 if jav_search_html:
     jav_main_html = jav_search(jav_search_html, jav_xPath_search)
-    if jav_main_html is None:
-        # If javlibrary don't have it, there is no way that R18 have it but why not trying...
-        debug("Javlibrary don't give any result, trying search with R18...")
-        r18_search_html = sendRequest("https://www.r18.com/common/search/searchword={}/?lg=en".format(scene_title), R18_HEADERS)
-        r18_main_html = r18_search(r18_search_html, r18_xPath_search)
-
+if jav_main_html is None:
+    # If javlibrary don't have it, there is no way that R18 have it but why not trying...
+    debug("Javlibrary don't give any result, trying search with R18...")
+    r18_search_html = sendRequest("https://www.r18.com/common/search/searchword={}/?lg=en".format(scene_title), R18_HEADERS)
+    r18_main_html = r18_search(r18_search_html, r18_xPath_search)
 
 if jav_main_html:
     #debug("[DEBUG] Javlibrary Page ({})".format(jav_main_html.url))
@@ -606,7 +641,6 @@ if r18_result.get('series_url'):
             tmp['studio'] = {}
             tmp['studio']['name'] = scrape['studio']['name']
     scrape['movies'] = [tmp]
-
 print(json.dumps(scrape))
 
-# Last Updated June 07, 2021
+# Last Updated July 06, 2021
