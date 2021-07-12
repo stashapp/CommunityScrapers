@@ -25,10 +25,10 @@ xPathScrapers:
       Studio:
         Name:
           selector: //div[@id="header"]/a/@title
-      Image: 
+      Image:
         selector: //div[@class="setEntertaiment"]/a/img/@src
         postProcess:
           - replace:
-            - regex: ^
-              with: https://www.subspaceland.com
+              - regex: ^
+                with: https://www.subspaceland.com
 # Last Updated July 06, 2021
