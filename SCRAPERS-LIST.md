@@ -280,12 +280,13 @@ defiled18.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dellaitwins.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 desperateamateurs.com|DesperateAmateurs.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 detentiongirls.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
-deviante.com|deviante.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+deviante.com|Deviante.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devianthardcore.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 devilsfilm.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devilsfilmparodies.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devilsgangbangs.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devonlee.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+diabolic.com|Diabolic.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|-
 dianafeet.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dickdrainers.com|Dickdrainers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dickontrip.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
