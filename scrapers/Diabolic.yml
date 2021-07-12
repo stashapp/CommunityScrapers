@@ -24,7 +24,7 @@ xPathScrapers:
       Performers:
         Name: //div[@class="sceneCol sceneColActors"]/a
       Tags:
-        Name: //div[@class="sceneCol sceneColCategories"]/a
+        Name: //div[contains(@class,"ScenePlayerHeaderDesktop-CategoriesContainer")]//a/@title
       Image:
         selector: //a[@class="sceneLink  "]/img/@src
       Studio:
@@ -44,4 +44,6 @@ xPathScrapers:
         Name:
           fixed: Diabolic
       FrontImage: //a[@class="frontCoverImg"]/@href
-# Last Updated July 9, 2021
+driver:
+  useCDP: true      
+# Last Updated July 12, 2021
