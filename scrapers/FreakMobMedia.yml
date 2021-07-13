@@ -8,24 +8,26 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class="bodywhite"]/div[@class="title"]//h3/text()
-      Details: //div[@class='description']/text()
+      Details: 
+          selector: //meta[@name="description"]/@content
+          postProcess:
+            - replace:
+                - regex: "Join FreakMob Media Now For Full Access!"
+                  with: ""
+                - regex: "JOIN NOW or BUY JUST THIS CLIP"
+                  with: ""
       URL: //link[@rel="canonical"]/@href
       Date:
         selector: //div[@class='views-single']/span/text()
         postProcess:
           - parseDate: January 2, 2006
-      Image:
-        selector: //meta[@property="og:image"]/@content
-        postProcess:
-          - replace:
-            - regex: .+(?:poster=")([^"]+).+
-              with: https://www.loveherfeet.com$1
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: FreakMobMedia
       Tags:
-        Name: //span[@class="meta-info" and text()="Category"]/following-sibling::a/text()|//span[@class="meta-info" and text()="Tag"]/following-sibling::a/text()
+        Name: //span[@class="meta-info"][text()="Category" or text()="Tag"]/following-sibling::a/text()
       Performers:
         Name: //span[@class="meta-info" and text()="Model"]/following-sibling::a/text()
 
-# Last Updated July 09, 2021
+# Last Updated July 13, 2021
