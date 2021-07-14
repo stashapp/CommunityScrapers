@@ -57,3 +57,4 @@ if sys.argv[1] == "query":
         result=lookup_scene(scene_id)
         print(json.dumps(result))
     conn.close()
+# Last Updated November 08, 2020
