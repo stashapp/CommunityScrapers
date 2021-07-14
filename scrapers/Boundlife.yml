@@ -25,4 +25,4 @@ xPathScrapers:
         Name:
           fixed: Bound Life
       Image: //meta[@property="og:image"]/@content[not(contains(.,"blank.jpg"))]|(//a/img[@border="1"])[1]/@src
-# Last Updated May 2 2021
+# Last Updated May 02, 2021

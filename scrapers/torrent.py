@@ -57,3 +57,4 @@ if sys.argv[1] == "query":
     else:
         query(title)
     print(json.dumps(fragment))
+# Last Updated February 18, 2021
