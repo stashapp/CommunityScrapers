@@ -16,8 +16,13 @@ xPathScrapers:
       Details: //div[@class="col-md-9 col-sm-8 clearfix"]/p
       Performers:
         Name: //span[@class="feature title"]//a
-      Image: //video[@id="video"]/@poster
+      Image:
+        selector: //video[@id="video"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: "https://"
       Studio:
         Name:
           fixed: HeavyOnHotties
-# Last Updated July 12, 2021
+# Last Updated July 15, 2021
