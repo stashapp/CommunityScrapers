@@ -87,4 +87,4 @@ xPathScrapers:
           - replace:
               - regex: $
                 with: " "
-# Last Updated Jun 04, 2021
+# Last Updated June 04, 2021
