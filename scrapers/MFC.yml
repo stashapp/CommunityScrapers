@@ -26,4 +26,4 @@ xPathScrapers:
       Image:
         selector: //meta[@name="twitter:image"]/@content
 
-# Last updated November 01, 2020
+# Last Updated November 01, 2020
