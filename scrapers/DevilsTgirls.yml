@@ -53,8 +53,6 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name: //span[@class="actorsValue"]/a
-      Tags:
-        Name: //div[@class="player-info-row"]/span[@class="tags"]/a[contains(@href,"channel")]/text()
       Studio:
         Name:
           fixed: DevilsTgirls
