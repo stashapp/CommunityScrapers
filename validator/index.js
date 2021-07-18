@@ -108,7 +108,7 @@ class Validator {
         contents = fs.readFileSync(file, 'utf8');
         data = YAML.parse(contents, yamlLoadOptions);
       } catch (error) {
-        console.error(`\x1b[31mError\x1b[0m in: ${relPath}:`);
+        console.error(`${chalk.red(chalk.bold('ERROR'))} in: ${relPath}:`);
         error.stack = null;
         console.error(error);
         result = result && false;
@@ -162,8 +162,8 @@ class Validator {
       }
 
       if (this.verbose || !valid) {
-        const validColor = valid ? '\x1b[32m' : '\x1b[31m';
-        console.log(`${relPath} Valid: ${validColor}${valid}\x1b[0m`);
+        const validColor = valid ? chalk.green : chalk.red;
+        console.log(`${relPath} Valid: ${validColor(valid)}`);
       }
 
       result = result && valid;
@@ -172,7 +172,7 @@ class Validator {
     }
 
     if (!this.verbose && result) {
-      console.log('\x1b[32mValidation passed!\x1b[0m');
+      console.log(chalk.green('Validation passed!'));
     }
 
     return result;
