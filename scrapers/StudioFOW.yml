@@ -34,4 +34,4 @@ xPathScrapers:
         URL:
           fixed: https://studiofow.com
       URL: //link[@rel="canonical"]/@href
-# Last Updated December 1, 2020
+# Last Updated December 01, 2020

@@ -54,4 +54,4 @@ xPathScrapers:
           - feetToCm: true
       HairColor: //div[p[text()="Hair"]]/$stat
       EyeColor: //div[p[text()="Eyes"]]/$stat
-  # Last Updated April 27, 2021
+# Last Updated April 27, 2021

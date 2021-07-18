@@ -132,4 +132,4 @@ xPathScrapers:
                 with: https://imgs1cdn.adultempire.com/product/${1}_lg.jpg
       Studio:
         Name: //meta[@name="og:site_name"]/@content
-# Last Updated May 3, 2021
+# Last Updated May 03, 2021

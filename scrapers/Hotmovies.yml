@@ -118,4 +118,4 @@ xPathScrapers:
               - regex: \|
                 with: " "
       Aliases: //strong[text()="Aliases:"]/following-sibling::text()[1]
-#Last Updated April 29, 2021
+# Last Updated April 29, 2021
