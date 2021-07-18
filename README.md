@@ -36,7 +36,7 @@ Contributions are always welcome! Use the [Scraping Configuration](https://githu
 The last line of a scraper definition (`.yml` file) must be the last updated date, in the following format:  
 `# Last Updated Month Day, Year`  
 Month = Full month name (`October`)  
-Day = Day of month, with leading zeo (`04`, `16`)  
+Day = Day of month, with leading zero (`04`, `16`)  
 Year = Full year (`2020`)  
 Example: `# Last Updated October 04, 2020`
 
