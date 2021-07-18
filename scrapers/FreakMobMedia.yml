@@ -12,9 +12,7 @@ xPathScrapers:
           selector: //meta[@name="description"]/@content
           postProcess:
             - replace:
-                - regex: "Join FreakMob Media Now For Full Access!"
-                  with: ""
-                - regex: "JOIN NOW or BUY JUST THIS CLIP"
+                - regex: "(?i)(Join FreakMob Media Now For Full Access!)|(JOIN NOW or BUY JUST THIS CLIP)"
                   with: ""
       URL: //link[@rel="canonical"]/@href
       Date:
@@ -30,4 +28,4 @@ xPathScrapers:
       Performers:
         Name: //span[@class="meta-info" and text()="Model"]/following-sibling::a/text()
 
-# Last Updated July 13, 2021
+# Last Updated July 18, 2021
