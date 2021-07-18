@@ -112,4 +112,4 @@ xPathScrapers:
       Details: //p[@ class="videoDescription"]
       Performers:
         Name: //div[@class='videoAvatar']/div[1]/a[2]
-# Last Updated November 8, 2020
+# Last Updated November 08, 2020

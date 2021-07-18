@@ -22,4 +22,4 @@ xPathScrapers:
         Name: $info//span[@class="tour_update_models"]/a/text()
       Image: //span[@id="trailer_thumb"]/span[1]/img/@src
 
-# Last Updated November 8, 2020
+# Last Updated November 08, 2020

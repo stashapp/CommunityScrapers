@@ -18,4 +18,4 @@ xPathScrapers:
         Name: //div[@class='ent']/a[@href[contains(.,'pornstar')]]/text()|//div[@class='left']/h1/a/text()
       URL: //link[rel='canonical']/@href
 
-# Last Updated October 6, 2020
+# Last Updated October 06, 2020

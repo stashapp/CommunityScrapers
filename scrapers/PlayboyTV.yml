@@ -27,4 +27,4 @@ xPathScrapers:
         # When it has episode details, the date can be stripped out.
       Image: //video[@id="video"]/@poster
 
-# Last Updated November 8, 2020
+# Last Updated November 08, 2020
