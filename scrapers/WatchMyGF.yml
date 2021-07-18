@@ -19,4 +19,4 @@ xPathScrapers:
         Name: $middle//a[@href[contains(.,'girls/')]]//text()
       URL: //link[@rel='canonical']/@href
 
-# Last Updated October 8, 2020
+# Last Updated October 08, 2020

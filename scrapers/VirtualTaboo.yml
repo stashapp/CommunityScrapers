@@ -22,4 +22,4 @@ xPathScrapers:
       Performers:
         Name: $info//div[@class="info"]/a/text()
       Image: //meta[@property="og:image"]/@content
-# Last Updated November 8, 2020
+# Last Updated November 08, 2020
