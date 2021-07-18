@@ -3,7 +3,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - alexlegend.com
-      - allanalallthetime.com
       - angelinacastrolive.com
       - bestoftealconrad.com
       - blownbyrone.com
