@@ -73,4 +73,4 @@ xPathScrapers:
       Image: //div[@class="image"]//@src
       Details:
         selector: //div[@class="expand-inner"]
-# Last Updated July 2, 2021
+# Last Updated July 02, 2021

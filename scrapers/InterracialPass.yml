@@ -28,4 +28,4 @@ xPathScrapers:
                 with: ""
       Studio:
         Name: //a[@class="navbar-brand"]
-# Last Updated June 6, 2021
+# Last Updated June 06, 2021

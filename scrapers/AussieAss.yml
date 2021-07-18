@@ -22,4 +22,4 @@ xPathScrapers:
               with: $1/$2
       Details:
         selector: //div[contains(@class,'preview-description')]/text()[3]
-# Last Updated November 2, 2020
+# Last Updated November 02, 2020

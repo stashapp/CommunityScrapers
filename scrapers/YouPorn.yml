@@ -23,4 +23,4 @@ xPathScrapers:
         Name: $tags//a[@href[contains(.,'pornstar/')]]/text()
       URL: //meta[@property='og:url']/@content
 
-# Last Updated October 8, 2020
+# Last Updated October 08, 2020
