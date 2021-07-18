@@ -34,11 +34,11 @@ Some scrapers support the scrape with function so you can you use that instead o
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.  
 
 The last line of a scraper definition (`.yml` file) must be the last updated date, in the following format:  
-`# Last Updated: Month Day, Year`  
+`# Last Updated Month Day, Year`  
 Month = Full month name (`October`)  
 Day = Day of month, with leading zeo (`04`, `16`)  
 Year = Full year (`2020`)  
-Example: `# Last Updated: October 04, 2020`
+Example: `# Last Updated October 04, 2020`
 
 ### Validation
 The scrapers in this repository can be validated against a schema and checked for common errors.
