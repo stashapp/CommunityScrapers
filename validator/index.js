@@ -55,8 +55,8 @@ class Validator {
     });
 
     this.mappingPattern = /^([a-z]+)By(Fragment|Name|URL)$/;
-    this.commentPrefix = /^# *Last Updated/i;
-    this.commentPattern = /^# Last Updated ((?:Jan|Febr)uary|March|April|May|June|July|August|(?:Septem|Octo|Novem|Decem)ber) (0[1-9]|[1-3]\d), (\d{4})$/;
+    this.commentPrefix = /^ *# *Last Updated/i;
+    this.commentPattern = /^#( *)Last Updated ((?:Jan|Febr)uary|March|April|May|June|July|August|(?:Septem|Octo|Novem|Decem)ber) (0[1-9]|[1-3]\d), (\d{4})$/;
 
     if (!!this.ajv.getKeyword('deprecated')) {
       this.ajv.removeKeyword('deprecated');
@@ -153,9 +153,21 @@ class Validator {
           }
 
           const comment = lines[commentLine];
-          validComment = this.commentPattern.test(comment);
-          if (!validComment) {
-            console.error(chalk.red(`${chalk.bold('ERROR')} 'Last Updated' comment's format is invalid: ${comment}.`));
+          const match = comment.trim().match(this.commentPattern);
+          if (!match) {
+            console.error(chalk.red(`${chalk.bold('ERROR')} 'Last Updated' comment's format is invalid: ${comment}`));
+          } else {
+            // Validate leading spaces (trailing spaces are ignored)
+            const leadingSpaces = comment != comment.trimLeft();
+            if (leadingSpaces) {
+              console.error(chalk.red(`${chalk.bold('ERROR')} Remove leading spaces: '${comment}'`));
+            }
+            // Validate spacing between '#' and 'Last Updated'
+            if (match[1] !== ' ') {
+              console.error(chalk.red(`${chalk.bold('ERROR')} Missing single space between '#' and 'Last Updated': ${comment}`));
+            } else {
+              validComment = true;
+            }
           }
         }
         valid = valid && validComment;
