@@ -8,12 +8,12 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class="bodywhite"]/div[@class="title"]//h3/text()
-      Details: 
-          selector: //meta[@name="description"]/@content
-          postProcess:
-            - replace:
-                - regex: "(?i)(Join FreakMob Media Now For Full Access!)|(JOIN NOW or BUY JUST THIS CLIP)"
-                  with: ""
+      Details:
+        selector: //meta[@name="description"]/@content
+        postProcess:
+          - replace:
+              - regex: "(?i)(Join FreakMob Media Now For Full Access!)|(JOIN NOW or BUY JUST THIS CLIP)"
+                with: ""
       URL: //link[@rel="canonical"]/@href
       Date:
         selector: //div[@class='views-single']/span/text()
@@ -27,5 +27,4 @@ xPathScrapers:
         Name: //span[@class="meta-info"][text()="Category" or text()="Tag"]/following-sibling::a/text()
       Performers:
         Name: //span[@class="meta-info" and text()="Model"]/following-sibling::a/text()
-
 # Last Updated July 18, 2021
