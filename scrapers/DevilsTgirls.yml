@@ -56,12 +56,6 @@ xPathScrapers:
       Studio:
         Name:
           fixed: DevilsTgirls
-      URL:
-        selector: //span[@class="fromDvdValue"]/a/@href
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https://www.devilstgirls.com/"
   movieScraper:
     movie:
       Name: //div[@class="dvdDesc bioToRight"]/h2/text()
