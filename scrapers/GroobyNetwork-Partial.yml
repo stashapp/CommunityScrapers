@@ -18,11 +18,12 @@ sceneByURL:
       - tgirls.xxx
       - transexpov.com
       - transgasm.com
+      - tgirls.porn
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //p[@class="trailertitle"]/text()
+      Title: //div[@class="trailer_toptitle_left"]/text()
       Date:
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
@@ -38,5 +39,5 @@ xPathScrapers:
           - replace:
               - regex: ^// # bobstgirls
                 with: "https://"
-        
-# Last Updated November 08, 2020
+
+# Last Updated July 20, 2021
