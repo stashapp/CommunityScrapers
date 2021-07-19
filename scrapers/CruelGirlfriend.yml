@@ -1,0 +1,41 @@
+name: Cruel Girlfriend
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cruelgf.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='info-box-pink']/h7
+      Date:
+        selector: //div[@class='row'][5]//h3//following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: "Added:"
+                with:
+          - parseDate: 02 Jan 2006
+      Performers:
+        Name:
+          selector: //div[@class='row'][7]/div[@class='col']/div[@class='info-box-white']/h7
+          postProcess:
+            - replace:
+                - regex: \|*MORE CONTENT FROM\|*
+                  with:
+      Details:
+        selector: //div[@class='row'][4]//h3
+      Tags:
+        Name: //div[@class='row'][5]//h3//child::a
+      Image:
+        selector: //div[@class='col']//@poster
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://cruelgf.com/
+      Studio:
+        Name:
+          fixed: Cruel Girlfriend
+      URL: //link[@rel='canonical']/@href
+
+# Last Updated July 19, 2021
