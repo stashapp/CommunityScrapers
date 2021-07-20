@@ -65,6 +65,8 @@ xPathScrapers:
                 with: "Blood"
               - regex: B\*{3}dy\b
                 with: "Bloody" # Not Sure
+              - regex: B\*{6}y\b
+                with: "Brutally"
               - regex: Chai\*{1}saw\b
                 with: "Chainsaw"
               - regex: C\*{3}d\b
@@ -81,10 +83,14 @@ xPathScrapers:
                 with: "Cock"
               - regex: C\*{1}cks\b
                 with: "Cocks"
+              - regex: C\*{1}llegiate\b
+                with: "Collegiate"
               - regex: C\*{5}y\b
                 with: "Cruelty"
               - regex: CrumB\*{2}d\b
-                with: "CrumBled"
+                with: "Crumbled"
+              - regex: D\*{1}ck\b
+                with: "Dick"
               - regex: D\*{6}e\b
                 with: "Disgrace"
               - regex: D\*{6}ed\b
@@ -111,6 +117,8 @@ xPathScrapers:
                 with: "Enslaved"
               - regex: F\*{3}e\b
                 with: "Force"
+              - regex: F\*{3}eful\b
+                with: "Forceful"
               - regex: F\*{3}efully\b
                 with: "Forcefully"
               - regex: F\*{3}es\b
@@ -279,6 +287,8 @@ xPathScrapers:
                 with: "Unwilling"
               - regex: V\*{5}e\b
                 with: "Violate"
+              - regex: V\*{1}olated\b
+                with: "Violated"
               - regex: V\*{5}ed\b
                 with: "Violated"
               - regex: V\*{5}es\b
