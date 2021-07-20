@@ -43,7 +43,7 @@ xPathScrapers:
       Title:
         selector: //span[@class="title_bar_hilite"]
       Date:
-        selector: //div[@class="cell update_date"]
+        selector: //div[@class="gallery_info"]/div[1]//div[@class="cell update_date"]
         postProcess:
           - parseDate: 01/02/2006
       Performers:
@@ -69,4 +69,4 @@ xPathScrapers:
             - map:
                 clubdom: Club Dom
                 subbyhubby: Subby Hubby
-# Last Updated July 16, 2021
+# Last Updated July 20, 2021
