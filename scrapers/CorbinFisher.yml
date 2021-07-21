@@ -1,0 +1,28 @@
+name: corbinfisher
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - corbinfisher.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+      Date:
+        selector: //div[@class="added"]
+        postProcess:
+          - replace:
+              - regex: (^\S+\s+)(.+\d{4})(.+)
+                with: $2
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class="modelFeaturing"]/a | //div[@class="modelFeaturing"]//a
+      Details:
+        selector: //div[@class="description"]/p
+      Image:
+        selector: //img[@height="815"]/@src0_1x
+      Studio:
+        Name:
+          fixed: CorbinFisher
+# Last Updated July 21, 2021
