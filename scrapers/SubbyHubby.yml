@@ -57,15 +57,15 @@ xPathScrapers:
         concat: "|"
         postProcess:
           - replace:
-            - regex: '(.*)/vod/\|.*thumbnail:"(.*)",vtt_file:.*'
-              with: $1$2
+              - regex: '(.*)/vod/\|.*thumbnail:"(.*)",vtt_file:.*'
+                with: $1$2
       Studio:
         Name:
           selector: //base/@href
           postProcess:
             - replace:
-              - regex: https://(www.)?([^.]+)\..* 
-                with: $2
+                - regex: https://(www.)?([^.]+)\..*
+                  with: $2
             - map:
                 clubdom: Club Dom
                 subbyhubby: Subby Hubby
