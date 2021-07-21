@@ -1,0 +1,44 @@
+name: College-Uniform
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - college-uniform.com
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - college-uniform.com
+    scraper: galleryScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //span[@class="update_title"]
+      Date:
+        selector: //span[@class="update_date"]
+        postProcess:
+          - parseDate: 02/01/2006
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Details:
+        selector: //span[@class="latest_update_description"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: College-Uniform
+  galleryScraper:
+    gallery:
+      Title: //span[@class="update_title"]
+      Details:
+        selector: //span[@class="latest_update_description"]
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Studio:
+        Name:
+          fixed: College-Uniform
+      Date:
+        selector: //span[@class="update_date"]
+        postProcess:
+          - parseDate: 02/01/2006
+# Last Updated July 22, 2021
