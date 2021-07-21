@@ -1,0 +1,27 @@
+name: FilthFlix
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - filthflix.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2[@class="video__headline"]
+      Date:
+        selector: //strong[contains(text(),"Published:")]/following-sibling::text()
+        postProcess:
+          - parseDate: 02 Jan 2006
+      Performers:
+        Name: //strong[contains(text(),"Models:")]/following-sibling::a
+      Tags:
+        Name: //strong[contains(text(),"Tags:")]/following-sibling::a
+      Details:
+        selector: //p[@class="video__text"]/text()[1]
+      Image:
+        selector: //div[@class="video__player"]/img/@src
+      Studio:
+        Name:
+          selector: //div[@class="video__top__item"]/a/img/@alt
+# Last Updated July 22, 2021
