@@ -53,7 +53,12 @@ xPathScrapers:
           - replace:
               - regex: Trans
                 with: transgender_female
-      URL: //a[@data-tab='about']/@href
+      URL: 
+        selector: //a[@data-tab='about']/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.manyvids.com
       Twitter:
         selector: //*[@class='mv-about__banner-social']/a/i[@class='icon twitter-icon']/../@href
         postProcess:
