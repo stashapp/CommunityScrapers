@@ -1,0 +1,53 @@
+name: "Pornditos"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornditos.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="playerText-new fright"]
+      $title: //div[@class="playerText-new fright"]/h2/text()
+    scene:
+      Title: $title
+      Details: $info/p[4]/text()[last()]
+      Performers:
+        Name: $info/p[2]/a/text()
+      Studio:
+        Name: $info/p[1]/a/text()
+      Image: 
+        selector: //div[@id="js-small-thumb"]/img/@src
+        postProcess:
+            - replace:
+                - regex: \bhttp\:\/\/sm\.members\.khcdn\.com\/shoots\b
+                  with: http://x-images5.bangbros.com
+                - regex: \/bac
+                  with: /shoots/bac
+                - regex: \/bt
+                  with: /shoots/bt
+                - regex: \/ccb
+                  with: /shoots/ccb
+                - regex: \/cd
+                  with: /shoots/cd
+                - regex: \/mp
+                  with: /shoots/mp
+                - regex: \/zj
+                  with: /shoots/zj
+                - regex: \/zl
+                  with: /shoots/zl
+                - regex: \/zm
+                  with: /shoots/zm
+                - regex: \/zp
+                  with: /shoots/zp
+                - regex: rollover.*$
+                  with: members/450x340.jpg
+      Date:
+        selector: $info/p[1]/text()[last()]
+        postProcess:
+          - replace:
+              - regex: on\s
+                with:
+          - parseDate: Jan 2, 2006
+
+# Last Updated May 13, 2021
