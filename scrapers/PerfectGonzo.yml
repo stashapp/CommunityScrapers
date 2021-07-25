@@ -2,8 +2,8 @@ name: Perfect Gonzo
 sceneByURL:
   - action: scrapeXPath
     url:
-      - perfectgonzo.com
       - allinternal.com
+      - perfectgonzo.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
