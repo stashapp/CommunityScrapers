@@ -2,7 +2,7 @@ name: FamilySexMassage
 sceneByURL:
   - action: scrapeXPath
     url:
-      - familysexmassage/en/video.com
+      - familysexmassage.com/en/video
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -21,7 +21,7 @@ xPathScrapers:
         selector: //div[@class="sceneDesc bioToRight showMore"]
         postProcess:
           - replace:
-              - regex: "Video Description: "
+              - regex: 'Video Description:\s*'
                 with: ""
       Image:
         selector: //script[contains(text(),"showUnavailable")]/text()
@@ -34,4 +34,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: FamilySexMassage
-# Last Updated July 20, 2021
+# Last Updated July 25, 2021
