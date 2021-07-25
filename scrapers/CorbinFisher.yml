@@ -17,9 +17,11 @@ xPathScrapers:
                 with: $2
           - parseDate: January 2, 2006
       Performers:
-        Name: //div[@class="modelFeaturing"]/a | //div[@class="modelFeaturing"]//a
+        Name: //div[@class="modelFeaturing"]//a
+        URL: //div[@class="modelFeaturing"]//a/@href
       Details:
         selector: //div[@class="description"]/p
+        concat: "\n\n"
       Image:
         selector: //img[@height="815"]/@src0_1x
       Studio:
