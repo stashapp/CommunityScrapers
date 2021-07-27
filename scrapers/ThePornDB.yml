@@ -91,7 +91,7 @@ jsonScrapers:
       URL: $data.url
       Image: $data.background.small
       Performers:
-        Name: $data.performers.#.name
+        Name: $data.performers.#.parent.name
       Studio:
         Name: $data.site.name
       Tags:
