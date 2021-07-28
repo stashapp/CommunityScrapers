@@ -6,36 +6,48 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $script: //script[@type="application/ld+json"]
     scene:
       Title:
-        selector: //div[@class='info-box-pink']/h7
-      Date:
-        selector: //div[@class='row'][5]//h3//following-sibling::text()
+        selector: $script
         postProcess:
           - replace:
-              - regex: "Added:"
-                with:
-          - parseDate: 02 Jan 2006
+              - regex: '.+"name": "[^-]+-\s*([^"]+)".+'
+                with: $1
+      Date:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+"uploadDate": "([^T]+)T.+'
+                with: $1
+          - parseDate: 2006-01-02
       Performers:
         Name:
-          selector: //div[@class='row'][7]/div[@class='col']/div[@class='info-box-white']/h7
+          selector: //div[@class='info-box-white']/h7[contains(.,"MORE CONTENT FROM")]
           postProcess:
             - replace:
                 - regex: \|*MORE CONTENT FROM\|*
                   with:
       Details:
-        selector: //div[@class='row'][4]//h3
-      Tags:
-        Name: //div[@class='row'][5]//h3//child::a
-      Image:
-        selector: //div[@class='col']//@poster
+        selector: $script
         postProcess:
           - replace:
-              - regex: ^
-                with: https://cruelgf.com/
+              - regex: '.+"description": "([^"]+)".+'
+                with: $1
+              - regex: "<br?>|</br?>"
+                with:
+      Tags:
+        Name: //div[@class='info-box-white']/h3[contains(.,"Added:")]/a
+      Image:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+"thumbnailUrl": [([^\]]+)\]).+'
+                with: $1
+              - regex: '.+"([^"]+/Backgrounds/[^"]+)".+'
+                with: $1
       Studio:
         Name:
           fixed: Cruel Girlfriend
-      URL: //link[@rel='canonical']/@href
-
-# Last Updated July 19, 2021
+# Last Updated July 25, 2021
