@@ -49,6 +49,7 @@ BANNED_WORDS = {
     "B*****p": "Bang Up",
     "B***d": "Blood",
     "B***dy": "Bloody",
+    "B******y": "Brutally",
     "C*****y": "Cruelty",
     "C***d": "Child",
     "C***dcare": "Childcare",
@@ -57,8 +58,10 @@ BANNED_WORDS = {
     "C***dren": "Children",
     "C*ck": "Cock",
     "C*cks": "Cocks",
+    "C*llegiate": "Collegiate",
     "Chai*saw": "Chainsaw",
-    "CrumB**d": "CrumBled",
+    "CrumB**d": "Crumbled",
+    "D*ck": "Dick",
     "D******e": "Disgrace",
     "D******ed": "Disgraced",
     "D******eful": "Disgraceful",
@@ -74,6 +77,7 @@ BANNED_WORDS = {
     "F*****g": "Fucking",
     "F***e": "Force",
     "F***ed": "Fucked",
+    "F***eful": "Forceful",
     "F***efully": "Forcefully",
     "F***es": "Forces",
     "G*********d": "Gang-Banged",
@@ -155,6 +159,7 @@ BANNED_WORDS = {
     "U*******g": "Unwilling",
     "V******e": "Violence",
     "V*****e": "Violate",
+    "V*olated": "Violated",
     "V*****ed": "Violated",
     "V*****es": "Violates",
     "V*****t": "Violent",
@@ -189,7 +194,7 @@ def sendRequest(url, head):
                 debug("[WARN] Javlibrary is Under Maintenance.")
                 maintenance_javlibrary = True
                 return None
-            if "Why do I have to complete a CAPTCHA?" in response.text:
+            if "Why do I have to complete a CAPTCHA?" in response.text or "Checking your browser before accessing" in response.text:
                 debug("[WARN] Cloudflare protection detected.")
                 flag_cloudflare = True
                 return None
@@ -368,12 +373,15 @@ if fragment["url"]:
 else:
     scene_url = None
 
-scene_title = fragment["title"]
-# Remove extension
-scene_title = re.sub(r"\..{3}$", "", scene_title)
-scene_title = re.sub(r"-JG\d", "", scene_title)
-scene_title = re.sub(r"\s.+$", "", scene_title)
-scene_title = re.sub(r"[ABCDEFGH]$", "", scene_title)
+if fragment.get("title"):
+    scene_title = fragment["title"]
+    # Remove extension
+    scene_title = re.sub(r"\..{3}$", "", scene_title)
+    scene_title = re.sub(r"-JG\d", "", scene_title)
+    scene_title = re.sub(r"\s.+$", "", scene_title)
+    scene_title = re.sub(r"[ABCDEFGH]$", "", scene_title)
+else:
+    scene_title = None
 
 maintenance_javlibrary = False
 flag_cloudflare = False
@@ -642,5 +650,3 @@ if r18_result.get('series_url'):
             tmp['studio']['name'] = scrape['studio']['name']
     scrape['movies'] = [tmp]
 print(json.dumps(scrape))
-
-# Last Updated July 06, 2021
