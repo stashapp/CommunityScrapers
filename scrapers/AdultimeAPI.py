@@ -130,14 +130,11 @@ def check_db(DB_PATH, SCENE_ID):
 # General
 
 def sendRequest(url, head, json=""):
-    #debug("[DEBUG] Request URL: {}".format(url))
     response = requests.post(url, headers=head,json=json, timeout=10)
-    #debug("[DEBUG] Returned URL: {}".format(response.url))
     if response.content and response.status_code == 200:
         return response
     else:
         debug("[REQUEST] Error, Status Code: {}".format(response.status_code))
-        #print(response.text, file=open("request.html", "w", encoding='utf-8'))
     return None
 
 
@@ -331,11 +328,9 @@ def match_result(api_scene, range_duration=60, single=False):
     match_domain = False
     if url_domain:
         if api_scene.get("sitename"):
-            #debug("[DEBUG] API Sitename: {}".format(api_scene["sitename"]))
             if api_scene["sitename"] == url_domain:
                 match_domain = True
         if api_scene.get("network_name"):
-            #debug("[DEBUG] API Network: {}".format(api_scene["network_name"]))
             if api_scene["network_name"] == url_domain:
                 match_domain = True
 
@@ -433,7 +428,6 @@ def scraping_json(api_json, url):
                 scrape['url'] = 'https://members.adulttime.com/en/video/{}/{}/{}'.format(api_json['sitename'], api_json['url_title'], api_json['clip_id'])
             except:
                 pass
-    #debug("{}".format(scrape))
     return scrape
 
 
@@ -562,8 +556,6 @@ if SCENE_TITLE and api_json is None:
 # Scraping the JSON
 if api_json:
     debug("[INFO] Scene found: {}".format(api_json["title"]))
-    with open("adultime_scene.txt", 'w', encoding='utf-8') as f:
-        json.dump(api_json, f, ensure_ascii=False, indent=4)
     scraped_json = scraping_json(api_json, SCENE_URL)
     print(json.dumps(scraped_json))
 else:
