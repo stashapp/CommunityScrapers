@@ -14,9 +14,9 @@ xPathScrapers:
         postProcess:
           - parseDate: 02 Jan 2006
       Performers:
-        Name:  //p[@class="video__text"]//a[contains(@href,"/models/")]
+        Name: //p[@class="video__text"]//a[contains(@href,"/models/")]
       Tags:
-        Name:  //p[@class="video__text"]//a[contains(@href,"/movies/")]
+        Name: //p[@class="video__text"]//a[contains(@href,"/movies/")]
       Details:
         selector: //p[@class="video__text"]/text()[1]
       Image:
