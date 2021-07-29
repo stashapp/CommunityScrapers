@@ -9,6 +9,10 @@ performerByURL:
     url:
       - waybig.com/pornstars/
     scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.waybig.com/searchgate.php?type=models&q={}
+  scraper: performerSearch
 xPathScrapers:
   sceneScraper:
     scene:
@@ -36,6 +40,10 @@ xPathScrapers:
             - replace:
                 - regex: '^Visit\s+'
                   with: ""
+  performerSearch:
+    performer:
+      Name: //div[@class="item-col col -model"]/a/@title
+      URL: //div[@class="item-col col -model"]/a/@href
   performerScraper:
     performer:
       Name: //div[@class="title-col -normal col"]/h2
@@ -73,4 +81,4 @@ xPathScrapers:
       Image: //div[@class="image"]//@src
       Details:
         selector: //div[@class="expand-inner"]
-# Last Updated July 02, 2021
+# Last Updated July 30, 2021
