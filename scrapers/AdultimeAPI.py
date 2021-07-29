@@ -2,7 +2,6 @@ import datetime
 import difflib
 import json
 import os
-import pathlib
 import re
 import sqlite3
 import sys
@@ -10,210 +9,195 @@ from urllib.parse import urlparse
 
 import requests
 
-USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
-DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON", "Adultime")
-
+#
+# User variable
+#
 SERVER_IP = "http://localhost:9999"
-SERVER_URL = SERVER_IP + "/graphql"
 # STASH API (Settings > Configuration > Authentication)
-APIKEYS = ""
-
-HEADERS = {
-    "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
-    "Origin": "https://members.adulttime.com",
-    "Referer": "https://members.adulttime.com/"
-}
-
-STASH_HEADERS = {
-    "Accept-Encoding": "gzip, deflate, br",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Connection": "keep-alive",
-    "DNT": "1",
-    "ApiKey": APIKEYS
-}
+STASH_API = ""
+# Print debug message.
+PRINT_DEBUG = True
+# Print ratio message. (Show title find in search)
+PRINT_MATCH = True
+# File used to store key to connect the API.
+STOCKAGE_FILE_APIKEY = "Adultime_key.txt"
+# Tags you don't want to see appear in Scraper window.
+IGNORE_TAGS = ["Sex","Feature"]
+# Tag you always want in Scraper window.
+FIXED_TAGS = ""
 
 
 def debug(q):
+    if "[DEBUG]" in q and PRINT_DEBUG == False:
+        return
+    if "[MATCH]" in q and PRINT_MATCH == False:
+        return
     print(q, file=sys.stderr)
+
+# Setup
+
+def callGraphQL(query, variables=None):
+    headers = {
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Connection": "keep-alive",
+        "DNT": "1",
+        "ApiKey": STASH_API
+    }
+    json = {'query': query}
+    if variables is not None:
+        json['variables'] = variables
+    try:
+        response = requests.post(SERVER_URL, json=json, headers=headers)
+        if response.status_code == 200:
+            result = response.json()
+            if result.get("error"):
+                for error in result["error"]["errors"]:
+                    raise Exception("GraphQL error: {}".format(error))
+            if result.get("data"):
+                return result.get("data")
+        elif response.status_code == 401:
+            debug("[ERROR][GraphQL] HTTP Error 401, Unauthorised.")
+            return None
+        else:
+            raise ConnectionError("GraphQL query failed:{} - {}. Query: {}. Variables: {}".format(response.status_code, response.content, query, variables))
+    except Exception as err:
+        debug(err)
+        return None
+
+
+def graphql_configdb():
+    query = """
+    query Configuration {
+        configuration {
+            general {
+                databasePath
+            }
+        }
+    }
+    """
+    result = callGraphQL(query)
+    if result:
+        return result["configuration"]["general"]["databasePath"]
+    return None
+
+
+def graphql_getscene(scene_id):
+    query = """
+    query FindScene($id: ID!, $checksum: String) {
+        findScene(id: $id, checksum: $checksum) {
+            file {
+                size
+                duration
+                video_codec
+                audio_codec
+                width
+                height
+                framerate
+                bitrate
+            }
+        }
+    }
+    """
+    variables = {
+        "id": scene_id
+    }
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findScene')
+    return None
 
 
 def check_db(DB_PATH, SCENE_ID):
     try:
         sqliteConnection = sqlite3.connect("file:" + DB_PATH + "?mode=ro", uri=True)
-        cursor = sqliteConnection.cursor()
-        debug("Database successfully connected to SQLite")
-        cursor.execute("SELECT size,duration,height from scenes WHERE id=?;",[SCENE_ID])
-        record = cursor.fetchall()
-        db_size = int(record[0][0])
-        db_duration = int(record[0][1])
-        db_height = int(record[0][2])
-        cursor.close()
-        sqliteConnection.close()
-        debug("[Db] Size:{}, Duration:{}, Height:{}".format(db_size, db_duration, db_height))
-        return db_size, db_duration, db_height
+        debug("[DEBUG] Database successfully connected to SQLite")
     except:
-        debug("Error with the database")
-    return None, None, None
+        debug("[Error] Fail to connect to the database")
+        return None, None, None
+    cursor = sqliteConnection.cursor()
+    cursor.execute("SELECT size,duration,height from scenes WHERE id=?;",[SCENE_ID])
+    record = cursor.fetchall()
+    database = {}
+    database["size"] = int(record[0][0])
+    database["duration"] = int(record[0][1])
+    database["height"] = str(record[0][2])
+    cursor.close()
+    sqliteConnection.close()
+    return database
 
+# General
 
-def match_result(api_scene, range_duration=10, single=False, debug_log=True):
-    api_title = api_scene.get("title")
-    api_duration = int(api_scene.get("length"))
-    api_filesize = ""
-    try:
-        if str(db_height) == "2160":
-            api_filesize = int(api_scene["download_file_sizes"].get("4k"))
-        else:
-            api_filesize = int(api_scene["download_file_sizes"].get(str(db_height)+"p"))
-    except:
-        pass
-    if not api_filesize or api_filesize is None:
-        try:
-            api_filesize = int(api_scene.get("index_size"))
-        except:
-            pass
-    # Matching ratio
-    match_ratio_title = difflib.SequenceMatcher(None, SCENE_TITLE, api_title).ratio()
-    if url_title and api_scene.get("url_title"):
-        match_ratio_title_url = difflib.SequenceMatcher(None, url_title, api_scene["url_title"]).ratio()
+def sendRequest(url, head, json=""):
+    #debug("[DEBUG] Request URL: {}".format(url))
+    response = requests.post(url, headers=head,json=json, timeout=10)
+    #debug("[DEBUG] Returned URL: {}".format(response.url))
+    if response.content and response.status_code == 200:
+        return response
     else:
-        match_ratio_title_url = None
-    # Using db data
-    match_duration = False
-    match_size = False
-    if db_duration is not None:
-        if db_duration-range_duration <= api_duration <= db_duration+range_duration:
-            match_duration = True
-    if db_size is not None:
-        db_size_max = db_size + (db_size/100)
-        db_size_min = db_size - (db_size/100)
-        try:
-            if db_size_min <= api_filesize <= db_size_max:
-                match_size = True
-        except:
-            pass
-    if debug_log == True:
-        debug("Title: {}, Ratio title: {}, Ratio url: {}, Match Duration: {}, Match Size: {}".format(api_title, match_ratio_title, match_ratio_title_url, match_duration, match_size))
-    if single == True and match_duration == True:
-        debug("[Single] Confirmed scene")
-        return 1
-    if match_ratio_title > 0.4 and match_duration == True and match_size == True:
-        debug("[Best] Found scene: {}".format(api_title))
-        return 1
-    if match_ratio_title > 0.65 and match_duration == True:
-        debug("[Title & Duration] Found scene: {}".format(api_title))
-        return 1
-    if match_ratio_title > 0.8:
-        debug("[Title] Found scene: {}".format(api_title))
-        return 1
-    if match_ratio_title_url:
-        if match_ratio_title_url > 0.8:
-            debug("[Url_title] Found scene: {}".format(api_title))
-            return 1
-        if api_scene.get("sitename"):
-            if match_ratio_title_url > 0.6 and api_scene["sitename"] == url_domain:
-                debug("[Url_title + SiteName] Found scene: {}".format(api_title))
-                return 1
-        if api_scene.get("network_name"):
-            if match_ratio_title_url > 0.6 and api_scene["network_name"] == url_domain:
-                debug("[Url_title + NetworkName] Found scene: {}".format(api_title))
-                return 1
-    if match_duration == True and match_size == True:
-        debug("[Duration & Size] Found scene: {}".format(api_title))
-        return 2
+        debug("[REQUEST] Error, Status Code: {}".format(response.status_code))
+        #print(response.text, file=open("request.html", "w", encoding='utf-8'))
     return None
 
 
-def check_local(q):
-    if q.isdigit():
-        filename = os.path.join(DIR_JSON, q+".json")
-        if (os.path.isfile(filename) == True):
-            print("Using local JSON...", file=sys.stderr)
-            with open(filename, encoding="utf-8") as json_file:
-                api_json = json.load(json_file)
-            r_match = match_result(api_json, 120, True)
-            if r_match is not None:
-                return str(api_json['clip_id'])
+
+
+# API Authentification
+def apikey_check(time):
+    if (os.path.isfile(STOCKAGE_FILE_APIKEY) == True):
+        with open(STOCKAGE_FILE_APIKEY) as f:
+            list_f = f.read().split("|")
+        time_past = datetime.datetime.strptime(list_f[0], '%Y-%m-%d %H:%M:%S.%f')
+        if time_past.hour-1 < time.hour < time_past.hour+1 and (time - time_past).days == 0:
+            debug("[DEBUG] Using old api keys")
+            application_id = list_f[1]
+            api_key = list_f[2]
+            return application_id, api_key
         else:
-            return None
-    index = os.path.join(DIR_JSON, "index.txt")
-    if (os.path.isfile(index) == True):
-        with open(index) as f:
-            remember_id = ""
-            for line in f:
-                list_line = line.split("|")
-                json_id = list_line[0]
-                api_title = re.sub('_', ' ', list_line[1])
-                api_duration = int(list_line[2])
-                resolution = {}
-                try:
-                    if list_line[3]:
-                        tmp_reso = list_line[3].split(":")
-                        resolution[tmp_reso[0]] = tmp_reso[1]
-                    if list_line[4]:
-                        tmp_reso = list_line[4].split(":")
-                        resolution[tmp_reso[0]] = tmp_reso[1]
-                    if list_line[5]:
-                        tmp_reso = list_line[5].split(":")
-                        resolution[tmp_reso[0]] = tmp_reso[1]
-                except:
-                    pass
-                json_recreated = ""
-                api_filesize = ""
-                if db_height:
-                    try:
-                        api_filesize = resolution.get(str(db_height))
-                    except:
-                        pass
-                json_recreated = {
-                    "title": api_title,
-                    "length": api_duration,
-                    "index_size": api_filesize
-                }
-                json_recreated = json.loads(json.dumps(json_recreated))
-                r_match = match_result(json_recreated, 30, False, False)
-                if r_match is not None:
-                    if r_match == 2:
-                        # Trying to get better result
-                        remember_id = json_id
-                        continue
-                    return json_id
-            if remember_id:
-                return remember_id
-            return None
+            debug("[INFO] Need new api key: [{}|{}|{}]".format(time.hour,time_past.hour,(time - time_past).days))
+    return None, None
+
+
+def apikey_get(site_url,time):
+    r = sendRequest(site_url, ADULTIME_HEADERS)
+    if r is None:
+        return None, None
+    script_html = fetch_page_json(r.text)
+    if script_html is not None:
+        application_id = script_html['api']['algolia']['applicationID']
+        api_key = script_html['api']['algolia']['apiKey']
+        # Write key into a file
+        print("{}|{}|{}".format(time, application_id,api_key), file=open(STOCKAGE_FILE_APIKEY, "w"))
+        debug("[INFO] New API keys: {}".format(api_key))
+        return application_id, api_key
     else:
-        debug("No local JSON.")
-        return None
+        debug("[Error] Can't retrieve API keys from the html ({})".format(site_url))
+        return None, None
 
 
-def request_api_query(title):
-    request_api = {
-        "requests": [
-            {
-                "indexName": "all_scenes_latest_desc",
-                "params": "query="+title+"&hitsPerPage=20&page=0"
-            }
-        ]
-    }
-    app_id, api_key = get_apikey()
-    api_url = "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id={}&x-algolia-api-key={}".format(app_id, api_key)
-    try:
-        r = requests.post(api_url, headers=HEADERS,json=request_api, timeout=5)
-        api_result = r.json().get("results")[0].get("hits")
-    except:
-        debug("Error with Request Query")
-        sys.exit(1)
-    debug("Search give {} result(s)".format(len(api_result)))
-    for scene in api_result:
-        r_match = match_result(scene)
-        if r_match is not None:
-            return scene
+def fetch_page_json(page_html):
+    matches = re.findall(r'window.env\s+=\s(.+);', page_html, re.MULTILINE)
+    return None if len(matches) == 0 else json.loads(matches[0])
+
+
+# API Search Data
+
+def api_search_req(type_search,query,api_url):
+    api_request = None
+    if type_search == "query":
+        api_request = api_search_query(query,api_url)
+    if type_search == "id":
+        api_request = api_search_id(query,api_url)
+    if api_request:
+        api_search = api_request.json()["results"][0].get("hits")
+        if api_search:
+            return api_search
     return None
 
 
-def request_api_id(clip_id):
-    clip_id = ["clip_id:{}".format(clip_id)]
+def api_search_id(url_id,api_url):
+    clip_id = ["clip_id:{}".format(url_id)]
     request_api = {
         "requests": [
             {
@@ -223,92 +207,222 @@ def request_api_id(clip_id):
             }
         ]
     }
-    app_id, api_key = get_apikey()
-    api_url = "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id={}&x-algolia-api-key={}".format(app_id, api_key)
-    try:
-        r = requests.post(api_url, headers=HEADERS,json=request_api, timeout=5)
-        api_result = r.json().get("results")[0].get("hits")[0]
-    except:
-        debug("Error with Request ID")
-        sys.exit(1)
-    if api_result:
-        r_match = match_result(api_result, 120, True)
-        if r_match is not None:
-            return api_result
+    r = sendRequest(api_url, ADULTIME_HEADERS, request_api)
+    return r
+
+
+def api_search_query(query, api_url):
+    request_api = {
+        "requests": [
+            {
+                "indexName": "all_scenes_latest_desc",
+                "params": "query=" + query + "&hitsPerPage=20&page=0"
+            }
+        ]
+    }
+    r = sendRequest(api_url, ADULTIME_HEADERS, request_api)
+    return r
+
+
+# Searching Result
+
+def json_parser(search_json, range_duration=60, single=False):
+    result_dict = {}
+    # Just for not printing the full JSON in log...
+    debug_dict = {}
+    for scene in search_json:
+        r_match = match_result(scene, range_duration, single)
+        if r_match["info"]:
+            if result_dict.get(r_match["info"]):
+                # Url should be more accurate than the title
+                if r_match["url"] > result_dict[r_match["info"]]["url"]:
+                    result_dict[r_match["info"]] = {"title": r_match["title"],"url": r_match["url"],"json": scene}
+                    debug_dict[r_match["info"]] = {"title": r_match["title"],"url": r_match["url"],"scene": scene["title"]}
+                elif r_match["title"] > result_dict[r_match["info"]]["title"] and r_match["title"] > result_dict[r_match["info"]]["url"]:
+                    result_dict[r_match["info"]] = {"title": r_match["title"],"url": r_match["url"],"json": scene}
+                    debug_dict[r_match["info"]] = {"title": r_match["title"],"url": r_match["url"],"scene": scene["title"]}
+            else:
+                result_dict[r_match["info"]] = {"title": r_match["title"],"url": r_match["url"],"json": scene}
+                debug_dict[r_match["info"]] = {"title": r_match["title"],"url": r_match["url"],"scene": scene["title"]}
+    # Engine whoaaaaa
+    # A = ByID/Most likely | S = Size | D = Duration | N = Network | R = Only Ratio
+    debug("[INFO] --- BEST RESULT ---")
+    for key,item in debug_dict.items():
+        debug("[INFO][{}] Title: {}; Ratio Title: {} - URL: {}".format(key,item["scene"],round(item["title"],3),round(item["url"],3)))
+    debug("[INFO] --------------")
+    #
+    if result_dict.get("ASDN"):
+        return result_dict["ASDN"]["json"]
+    elif result_dict.get("ASD"):
+        return result_dict["ASD"]["json"]
+    elif result_dict.get("ASN"):
+        return result_dict["ASN"]["json"]
+    elif result_dict.get("ADN"):
+        return result_dict["ADN"]["json"]
+    elif result_dict.get("AS"):
+        return result_dict["AS"]["json"]
+    elif result_dict.get("AD"):
+        return result_dict["AD"]["json"]
+    elif result_dict.get("AN"):
+        if result_dict["AN"]["title"] > 0.5 or result_dict["AN"]["url"] > 0.5:
+            return result_dict["AN"]["json"]
+    elif result_dict.get("A"):
+        if result_dict["A"]["title"] > 0.7 or result_dict["A"]["url"] > 0.7:
+            return result_dict["A"]["json"]
+    # 
+    elif result_dict.get("SDN"):
+        if result_dict["SDN"]["title"] > 0.2 or result_dict["SDN"]["url"] > 0.2:
+            return result_dict["SDN"]["json"]
+    elif result_dict.get("SD"):
+        if result_dict["SD"]["title"] > 0.4 or result_dict["SD"]["url"] > 0.4:
+            return result_dict["SD"]["json"]
+    elif result_dict.get("SN"):
+        if result_dict["SN"]["title"] > 0.5 or result_dict["SN"]["url"] > 0.5:
+            return result_dict["SN"]["json"]
+    elif result_dict.get("DN"):
+        if result_dict["DN"]["title"] > 0.5 or result_dict["DN"]["url"] > 0.5:
+            return result_dict["DN"]["json"]
+    elif result_dict.get("S"):
+        if result_dict["S"]["title"] > 0.7 or result_dict["S"]["url"] > 0.7:
+            return result_dict["S"]["json"]
+    elif result_dict.get("D"):
+        if result_dict["D"]["title"] > 0.7 or result_dict["D"]["url"] > 0.7:
+            return result_dict["D"]["json"]
+    #
+    elif result_dict.get("N"):
+        if result_dict["N"]["title"] > 0.7 or result_dict["N"]["url"] > 0.7:
+            return result_dict["N"]["json"]
+    elif result_dict.get("R"):
+        if result_dict["R"]["title"] > 0.8 or result_dict["R"]["url"] > 0.8:
+            return result_dict["R"]["json"]
     return None
+    
 
+def match_result(api_scene, range_duration=60, single=False):
+    api_title = api_scene.get("title")
+    api_duration = int(api_scene.get("length"))
+    api_filesize = None
+    match_duration = False
+    match_size = False
+    # Using database
+    if database_dict:
+        db_duration = int(database_dict["duration"])
+        db_height = str(database_dict["height"])
+        db_size = int(database_dict["size"])
+        if api_scene.get("download_file_sizes"):
+            if db_height == "2160":
+                api_filesize = api_scene["download_file_sizes"].get("4k")
+            else:
+                api_filesize = api_scene["download_file_sizes"].get(db_height+"p")
+            if api_filesize:
+                api_filesize = int(api_filesize)
+        if api_filesize is None:
+            api_filesize = api_scene.get("index_size")
+            if api_filesize:
+                api_filesize = int(api_filesize)
+        if db_duration - range_duration <= api_duration <= db_duration + range_duration:
+            match_duration = True
+        db_size_max = db_size + (db_size/100)
+        db_size_min = db_size - (db_size/100)
+        if api_filesize:
+            if db_size_min <= api_filesize <= db_size_max:
+                match_size = True
+    # Post process things
+    match_domain = False
+    if url_domain:
+        if api_scene.get("sitename"):
+            #debug("[DEBUG] API Sitename: {}".format(api_scene["sitename"]))
+            if api_scene["sitename"] == url_domain:
+                match_domain = True
+        if api_scene.get("network_name"):
+            #debug("[DEBUG] API Network: {}".format(api_scene["network_name"]))
+            if api_scene["network_name"] == url_domain:
+                match_domain = True
 
-def get_apikey():
-    timenow = datetime.datetime.now()
-    site_url = "https://www.girlsway.com/en"
-    application_id, api_key = check_apikey(timenow)
-    if application_id is None:
-        try:
-            r = requests.post(site_url, headers=HEADERS, timeout=5)
-        except:
-            debug("Error with request API Key")
-            sys.exit(1)
-        html = r.text
-        script_html = fetch_page_json(html)
-        if script_html is not None:
-            application_id = script_html['api']['algolia']['applicationID']
-            api_key = script_html['api']['algolia']['apiKey']
-            print("{}|{}|{}".format(timenow, application_id,
-                                    api_key), file=open("Adultime_key.txt", "w"))
-            debug("New API keys:{}".format(api_key))
-            return application_id, api_key
-        else:
-            debug("Can't get API keys")
-            sys.exit(1)
+    # Matching ratio
+    if SCENE_TITLE:
+        match_ratio_title = difflib.SequenceMatcher(None, SCENE_TITLE.lower(), api_title.lower()).ratio()
     else:
-        return application_id, api_key
+        match_ratio_title = 0
+    if url_title and api_scene.get("url_title"):
+        match_ratio_title_url = difflib.SequenceMatcher(None, url_title.lower(), api_scene["url_title"].lower()).ratio()
+    else:
+        match_ratio_title_url = 0
+
+    # Rank search result
+
+    debug("[MATCH] Title: {} |-RATIO-| Title: {} / URL: {} |-MATCH-| Duration: {}, Size: {}, Domain: {}".format(api_title, round(match_ratio_title, 5), round(match_ratio_title_url, 5),match_duration, match_size, match_domain))
+    match_dict = {}
+    match_dict["title"] = match_ratio_title
+    match_dict["url"] = match_ratio_title_url
+    information_used = ""
+    if (single == True and match_duration == True) or match_ratio_title_url == 1:
+        information_used += "A"
+    if match_size == True:
+        information_used += "S"
+    if match_duration == True:
+        information_used += "D"
+    if match_domain == True:
+        information_used += "N"
+    if information_used == "":
+        information_used = "R"
+    match_dict["info"] = information_used
+    #debug("[MATCH] {} - {}".format(api_title,match_dict))
+    return match_dict
 
 
-def check_apikey(timenow):
-    if (os.path.isfile("Adultime_key.txt") == True):
-        f = open("Adultime_key.txt", "r")
-        list_f = f.read().split("|")
-        time_past = datetime.datetime.strptime(
-            list_f[0], '%Y-%m-%d %H:%M:%S.%f')
-        if time_past.hour-1 < timenow.hour < time_past.hour+1:
-            debug("Using old api keys")
-            application_id = list_f[1]
-            api_key = list_f[2]
-            return application_id, api_key
-        else:
-            debug("Need new api key")
-    return None, None
-
-
-def fetch_page_json(page_html):
-    matches = re.findall(r'window.env\s+=\s(.+);', page_html, re.MULTILINE)
-    return None if len(matches) == 0 else json.loads(matches[0])
-
+# Final
 
 def scraping_json(api_json, url):
     scrape = {}
+    # Title
     scrape['title'] = api_json.get('title')
+    # Date
     scrape['date'] = api_json.get('release_date')
+    # Details
     scrape['details'] = re.sub(r'</br>|<br\s/>|<br>|<br/>', '\n', api_json.get('description'))
+
+    # Studio
     scrape['studio'] = {}
-    scrape['studio']['name'] = api_json.get('network_name')
+    if api_json.get('serie_name'):
+        scrape['studio']['name'] = api_json.get('serie_name')
+    if api_json.get('sitename_pretty'):
+        scrape['studio']['name'] = api_json.get('sitename_pretty')
+    if api_json.get('network_name'):
+        scrape['studio']['name'] = api_json.get('network_name')
+    if api_json.get('mainChannelName'):
+        scrape['studio']['name'] = api_json.get('mainChannelName')
+    # Performer
     perf = []
     for x in api_json.get('actors'):
         if x.get('gender') == "female":
-            perf.append({"name": x.get('name')})
+            perf.append({"name": x.get('name'), "gender":x.get('gender')})
     scrape['performers'] = perf
+
+    # Tags
     list_tag = []
     for x in api_json.get('categories'):
-        if x.get('name'):
+        if x.get('name') is None:
+            continue
+        tag_name = x.get('name')
+        tag_name = " ".join(x.capitalize() for x in tag_name.split(" "))
+        if tag_name in IGNORE_TAGS:
+            continue
+        if tag_name:
             list_tag.append({"name": x.get('name')})
+    if FIXED_TAGS:
+        list_tag.append({"name": FIXED_TAGS})
     scrape['tags'] = list_tag
+
+    # Image
     try:
         scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(iter(api_json['pictures']['nsfw']['top'].values()))
     except:
         try:
             scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(iter(api_json['pictures']['sfw']['top'].values()))
         except:
-            debug("Can't manage to get the image... Sorry :c")
+            debug("[ERROR] Can't manage to get the image for some reason.")
+    # URL
     if url:
         scrape['url'] = url
     else:
@@ -319,189 +433,139 @@ def scraping_json(api_json, url):
                 scrape['url'] = 'https://members.adulttime.com/en/video/{}/{}/{}'.format(api_json['sitename'], api_json['url_title'], api_json['clip_id'])
             except:
                 pass
+    #debug("{}".format(scrape))
     return scrape
 
 
-def save_json(api_json, url):
-    if "logJSON" in sys.argv:
-        try:
-            os.makedirs(DIR_JSON)
-        except FileExistsError:
-            pass  # Dir already exist
-        if url:
-            api_json['url'] = url
-        filename = os.path.join(DIR_JSON, str(api_json['clip_id'])+".json")
-        if (os.path.isfile(filename) == False):
-            filename_index = os.path.join(DIR_JSON, "index.txt")
-            index_value = create_index(api_json)
-            print(index_value, file=open(filename_index, "a"))
-        with open(filename, 'w', encoding='utf-8') as f:
-            json.dump(api_json, f, ensure_ascii=False, indent=4)
-        debug("Saved to JSON")
+try:
+    USERFOLDER_PATH = re.match(r".+\.stash.",__file__).group(0)
+    CONFIG_PATH = USERFOLDER_PATH + "config.yml"
+    debug("[DEBUG] Config Path: {}".format(CONFIG_PATH))
+except:
+    USERFOLDER_PATH = None
+    CONFIG_PATH = None
 
-
-def create_index(api_json):
-    api_id = api_json["clip_id"]
-    api_title = api_json["url_title"]
-    api_length = api_json["length"]
-    api_filesize_4k = ""
-    api_filesize_1080 = ""
-    api_filesize_720 = ""
-    api_filesize_480 = ""
-    try:
-        if api_json.get("download_file_sizes") is not None:
-            if api_json["download_file_sizes"].get("4k") is not None:
-                api_filesize_4k = "4k:" + \
-                    str(api_json["download_file_sizes"].get("4k")) + "|"
-            if api_json["download_file_sizes"].get("1080p") is not None:
-                api_filesize_1080 = "1080:" + \
-                    str(api_json["download_file_sizes"].get("1080p")) + "|"
-            if api_json["download_file_sizes"].get("720p") is not None:
-                api_filesize_720 = "720:" + \
-                    str(api_json["download_file_sizes"].get("720p")) + "|"
-            if api_json["download_file_sizes"].get("480p") is not None:
-                api_filesize_480 = "480:" + \
-                    str(api_json["download_file_sizes"].get("480p")) + "|"
-    except:
-        print("[Index] Problem with filesize {}".format(api_id))
-    index_value = "{}|{}|{}|{}{}{}{}".format(api_id, api_title, api_length, api_filesize_4k, api_filesize_1080, api_filesize_720, api_filesize_480)
-    return index_value
-
-
-def callGraphQL(query, variables=None):
-    json = {'query': query}
-    if variables is not None:
-        json['variables'] = variables
-    try:
-        response = requests.post(SERVER_URL, json=json, headers=STASH_HEADERS)
-        if response.status_code == 200:
-            result = response.json()
-            if result.get("error"):
-                for error in result["error"]["errors"]:
-                    raise Exception("GraphQL error: {}".format(error))
-            if result.get("data"):
-                return result.get("data")
-        elif response.status_code == 401:
-            sys.exit("HTTP Error 401, Unauthorised.")
-        else:
-            raise ConnectionError("GraphQL query failed:{} - {}. Query: {}. Variables: {}".format(
-                response.status_code, response.content, query, variables))
-    except Exception as err:
-        debug(err)
-        sys.exit(1)
-
-
-def getdbPath():
-    query = "query Configuration {  configuration {...ConfigData}}fragment ConfigData on ConfigResult {  general {...ConfigGeneralData}}fragment ConfigGeneralData on ConfigGeneralResult { databasePath }"
-    result = callGraphQL(query)
-    return result["configuration"]["general"]["databasePath"]
-
+SERVER_URL = SERVER_IP + "/graphql"
+ADULTIME_HEADERS = {
+    "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+    "Origin": "https://members.adulttime.com",
+    "Referer": "https://members.adulttime.com/"
+}
 
 FRAGMENT = json.loads(sys.stdin.read())
+SCENE_ID = FRAGMENT.get("id")
+SCENE_TITLE = FRAGMENT.get("title")
+SCENE_URL = FRAGMENT["url"]
 
-# Get your database
-DB_PATH = None
-config_path = os.path.join(USERFOLDER_PATH, "config.yml")
-
-DB_PATH = getdbPath()
-debug("[DEBUG] DB PATH: {}".format(DB_PATH))
-if (os.path.isfile(config_path) == True and DB_PATH is None):
-    with open(config_path) as f:
+if SCENE_URL and SCENE_ID is None:
+    debug("[DEBUG] URL Scraping: {}".format(SCENE_URL))
+else:
+    debug("[DEBUG] Stash ID: {}".format(SCENE_ID))
+    debug("[DEBUG] Stash Title: {}".format(SCENE_TITLE))
+# Get your sqlite database
+DB_PATH = graphql_configdb()
+if (os.path.isfile(CONFIG_PATH) == True and DB_PATH is None):
+    with open(CONFIG_PATH) as f:
         for line in f:
             if "database: " in line:
                 DB_PATH = line.replace("database: ", "").rstrip('\n')
                 break
-
-SCENE_ID = FRAGMENT["id"]
-SCENE_TITLE = FRAGMENT["title"]
-SCENE_URL = FRAGMENT["url"]
+debug("[DEBUG] Database Path: {}".format(DB_PATH))
 if DB_PATH:
-    db_size, db_duration, db_height = check_db(DB_PATH, SCENE_ID)
+    if SCENE_ID:
+        # Get data by GraphQL
+        database_dict = graphql_getscene(SCENE_ID)
+        if database_dict is None:
+            # Get data by SQlite
+            debug("[WARN] Fail to use GraphQL, trying to read database directly.")
+            database_dict = check_db(DB_PATH, SCENE_ID)
+        else:
+            database_dict = database_dict["file"]
+        debug("[DATABASE] Info: {}".format(database_dict))
+    else:
+        database_dict = None
+        debug("[WARN] Can't connect to the database because URL Scraping.")
 else:
-    db_size = None
-    db_duration = None
-    db_height = None
-    debug("[Warn] Can't find the database")
+    database_dict = None
+    debug("[WARN] Can't find the database.")
 
-url_id = None
+# Extract things
 url_title = None
-
+url_id = None
+url_domain = None
 if SCENE_URL:
+    url_domain = re.sub(r"www\.|\.com","",urlparse(SCENE_URL).netloc)
+    debug("[INFO] URL Domain: {}".format(url_domain))
+    url_id_check = re.sub('.+/', '', SCENE_URL)
     # Gettings ID
-    url_domain = urlparse(SCENE_URL).netloc
-    url_domain = re.sub(r"www\.|\.com","",url_domain)
-    url_check = re.sub('.+/', '', SCENE_URL)
     try:
-        if url_check.isdigit():
-            url_id = url_check
+        if url_id_check.isdigit():
+            url_id = url_id_check
         else:
             url_id = re.search(r"/(\d+)/*", SCENE_URL).group(1)
-        debug("ID: {}".format(url_id))
+        debug("[INFO] ID: {}".format(url_id))
     except:
-        url_id = None
-        debug("Can't get ID from URL")
+        debug("[WARN] Can't get ID from URL")
     # Gettings url_title
     try:
         url_title = re.match(r".+/(.+)/\d+", SCENE_URL).group(1)
-        debug("URL_TITLE: {}".format(url_title))
+        debug("[INFO] URL_TITLE: {}".format(url_title))
     except:
-        url_title = None
-        debug("Can't get url_title from URL")
-
+        debug("[WARN] Can't get url_title from URL")
+        
+# Filter title
 if SCENE_TITLE:
     SCENE_TITLE = re.sub(r'[-._\']', ' ', os.path.splitext(SCENE_TITLE)[0])
     # Remove resolution
     SCENE_TITLE = re.sub(r'\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|]|\sHD|\sSD|', '', SCENE_TITLE)
     # Remove Date
     SCENE_TITLE = re.sub(r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}', '', SCENE_TITLE)
-    debug("Title: {}".format(SCENE_TITLE))
+    debug("[INFO] Title: {}".format(SCENE_TITLE))
 
-# Check local
-result = None
-api_json = None
-use_local = False
-if os.path.isdir(DIR_JSON):
-    debug("=============\nSearching with local JSON...")
-    if url_id is not None:
-        if url_id.isdigit():
-            debug("Using ID")
-            result = check_local(url_id)
-    if url_title is not None and result is None:
-        debug("Using URL_TITLE")
-        result = check_local(url_title)
 
-    if SCENE_TITLE is not None and result is None:
-        debug("Using TITLE")
-        result = check_local(SCENE_TITLE)
-
-    if result is not None:
-        with open(os.path.join(DIR_JSON, result+".json"), encoding="utf-8") as json_file:
-            api_json = json.load(json_file)
-            use_local = True
-
-# Time to search using different method (API)
-if api_json is None:
-    debug("=============\nUsing API...")
-    if url_id is not None:
-        if url_id.isdigit():
-            debug("Searching with ID...")
-            api_json = request_api_id(url_id)
-    if url_title is not None and api_json is None:
-        debug("Searching with URL_TITLE...")
-        api_json = request_api_query(url_title)
-    if SCENE_TITLE is not None and api_json is None:
-        debug("Searching with Title...")
-        api_json = request_api_query(SCENE_TITLE)
-
-if api_json is not None:
-    scraped_json = scraping_json(api_json, SCENE_URL)
-    # Save the json if not using local or if we get the URL.
-    if use_local is False or SCENE_URL:
-        save_json(api_json, SCENE_URL)
-    print(json.dumps(scraped_json))
-else:
-    debug("Can't find the scene")
+# ACCESS API
+# Check existing API keys
+CURRENT_TIME = datetime.datetime.now()
+application_id, api_key = apikey_check(CURRENT_TIME)
+# Getting new key
+if application_id is None:
+    application_id, api_key = apikey_get("https://www.girlsway.com/en", CURRENT_TIME)
+# Fail getting new key
+if application_id is None:
     sys.exit(1)
 
+# Time to search the API
+api_url = "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id={}&x-algolia-api-key={}".format(application_id, api_key)
+api_search = None
+api_json = None
+if url_id:
+    debug("[API] Searching using URL_ID")
+    api_search = api_search_req("id", url_id, api_url)
+    if api_search:
+        debug("[API] Search give {} result(s)".format(len(api_search)))
+        api_json = json_parser(api_search, 120, True)
+    else:
+        debug("[API] No result")
+if url_title and api_json is None:
+    debug("[API] Searching using URL_TITLE")
+    api_search = api_search_req("query", url_title, api_url)
+    if api_search:
+        debug("[API] Search give {} result(s)".format(len(api_search)))
+        api_json = json_parser(api_search)
+if SCENE_TITLE and api_json is None:
+    debug("[API] Searching using STASH_TITLE")
+    api_search = api_search_req("query", SCENE_TITLE, api_url)
+    if api_search:
+        debug("[API] Search give {} result(s)".format(len(api_search)))
+        api_json = json_parser(api_search)
 
-# Last Updated July 04, 2021
+# Scraping the JSON
+if api_json:
+    debug("[INFO] Scene found: {}".format(api_json["title"]))
+    with open("adultime_scene.txt", 'w', encoding='utf-8') as f:
+        json.dump(api_json, f, ensure_ascii=False, indent=4)
+    scraped_json = scraping_json(api_json, SCENE_URL)
+    print(json.dumps(scraped_json))
+else:
+    debug("[ERROR] Can't find the scene")
+    sys.exit(1)
