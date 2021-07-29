@@ -210,6 +210,7 @@ clubseventeen.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x
 clubsweethearts.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 colette.com|Colette.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 college-amateurs.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+college-uniform|CollegeUniform.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 collegefuckparties.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 combatzone.us|CombatZone.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 combatzonexxx.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
