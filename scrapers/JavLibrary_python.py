@@ -258,7 +258,14 @@ def r18_search(html, xpath):
         r18_result["series_name"] = r18_search_serie
     if r18_search_url:
         r18_search_url = r18_search_url[0]
-        r18_main_html = sendRequest(r18_search_url, R18_HEADERS)
+        r18_id = re.match(r".+id=(.+)\/.+", r18_search_url)
+        if r18_id:
+            scene_url = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
+            debug("[DEBUG] Using API URL: {}".format(scene_url))
+            r18_main_html = sendRequest(scene_url, R18_HEADERS)
+        else:
+            debug("[WARN] Can't find the 'id=' in the URL: {}".format(r18_search_url))
+            return None
         return r18_main_html
     else:
         debug("[R18] There is no result in search")
@@ -400,7 +407,13 @@ if scene_url:
     if JAVLIBRARY_MIRROR in scene_url:
         jav_main_html = sendRequest(scene_url, JAV_HEADERS)
     if "r18.com" in scene_url:
-        r18_main_html = sendRequest(scene_url, R18_HEADERS)
+        r18_id = re.match(r".+id=(.+)\/.+", scene_url)
+        if r18_id:
+            scene_url = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
+            debug("[DEBUG] Using API URL: {}".format(scene_url))
+            r18_main_html = sendRequest(scene_url, R18_HEADERS)
+        else:
+            debug("[WARN] Can't find the 'id=' in the URL: {}".format(scene_url))
 if jav_main_html is None and r18_main_html is None:
     debug("[DEBUG] Using search with Title: {}".format(scene_title))
     jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
@@ -487,61 +500,37 @@ if jav_main_html:
 
 # MAIN PAGE
 if r18_main_html:
-    #debug("[DEBUG] R18 Page ({})".format(r18_main_html.url))
-    r18_tree = lxml.html.fromstring(r18_main_html.content)
-    # Get data from data18
-    for key, value in r18_xPath.items():
-        r18_result[key] = getxpath(value, r18_tree)
-    # PostProcess
-    # We can get the full name during the r18 search
-    if r18_result.get("image"):
-        r18_result["image"] = r18_result["image"][0].replace("ps.jpg", "pl.jpg")
-        if "now_printing.jpg" in r18_result["image"] or "noimage" in r18_result["image"]:
-            debug("[Warning][R18] Image was deleted or fail to loaded ({})".format(r18_result["image"]))
-            r18_result["image"] = None
+    r18_main_api = r18_main_html.json()
+    if r18_main_api["status"] != "OK":
+        debug("[ERROR] API Status {}".format(r18_main_api.get("status")))
+    else:
+        r18_main_api = r18_main_api["data"]
+        if r18_main_api.get("title"):
+            r18_result['title'] = [r18_main_api["title"]]
+        if r18_main_api.get("release_date"):
+            r18_result['date'] = re.sub(r"\s.+", "", r18_main_api["release_date"])
+        if r18_main_api.get("detail_url"):
+            r18_result['url'] = r18_main_api["detail_url"]
+        if r18_main_api.get("comment"):
+            r18_result['details'] = "{}\n\n{}".format(r18_main_api["title"], r18_main_api["comment"])
         else:
+            r18_result['details'] = "{}".format(r18_main_api["title"])
+        if r18_main_api.get("series"):
+            r18_result['series_url'] = r18_main_api["series"].get("series_url")
+            r18_result['series_name'] = [r18_main_api["series"].get("name")]
+        if r18_main_api.get("maker"):
+            r18_result['studio'] = [r18_main_api["maker"]["name"]]
+        ### 
+        if r18_main_api.get("actresses"):
+            r18_result['performers'] = [x["name"] for x in r18_main_api["actresses"]]
+        if r18_main_api.get("categories"):
+            r18_result['tags'] = [x["name"] for x in r18_main_api["categories"]]
+        debug("DEBUG: {}".format(r18_result))
+        if r18_main_api.get("images"):
+            # Don't know if it's possible no image ??????
+            r18_result['image'] = r18_main_api["images"]["jacket_image"]["large"]
             imageBase64_r18_thread = threading.Thread(target=th_imagetoBase64, args=(r18_result["image"], "R18",))
             imageBase64_r18_thread.start()
-    if r18_result.get("series_url"):
-        r18_result['series_url'] = r18_result["series_url"][0]
-        if r18_result.get("series_name") is None:
-            r18_series_search = sendRequest(r18_result['series_url'], r18_tree)
-            if r18_series_search is None:
-                debug("[R18] Error getting to serie page")
-            else:
-                debug("[DEBUG] Access to series page")
-                r18_series_search_tree = lxml.html.fromstring(r18_series_search.content)
-                r18_result['series_name'] = r18_series_search_tree.xpath('//h1[@class="txt01"]/text()')
-                xPath_series_scene = r18_series_search_tree.xpath('//li[contains(@class,"item-list")]')
-                if STASH_SUPPORTED == True:
-                    if len(xPath_series_scene) == 0:
-                        debug("[DEBUG] Series have 0 scene")
-                    else:
-                        # It's useless to try to get the image there is no scene card
-                        r18_result['series_image'] = r18_series_search_tree.xpath('//li[@class="item-list"]//img/@data-original')
-                        imageBase64_serie_thread = threading.Thread(target=th_imagetoBase64, args=(r18_result["series_image"], "R18Series",))
-                        imageBase64_serie_thread.start()
-    else:
-        if r18_result.get("series_name"):
-            debug("[Warning] There is a serie but no URL ????")
-        else:
-            debug("[DEBUG] No series URL")
-    if r18_result.get("details"):
-        # Concat
-        r18_result["details"] = "\n\n".join(r18_result["details"])
-    if r18_result.get("date"):
-        r18_date = r18_result["date"][0]
-        tmp = re.sub(r"\.", "", r18_date)
-        tmp = re.sub(r"Sept", "Sep", tmp)
-        tmp = re.sub(r"July", "Jul", tmp)
-        tmp = re.sub(r"June", "Jun", tmp)
-        try:
-            r18_result["date"] = str(datetime.datetime.strptime(tmp, "%b %d, %Y").date())
-            pass
-        except ValueError:
-            r18_result["date"] = None
-            pass
-
 
 if r18_main_html is None and jav_main_html is None:
     debug("All request don't find anything")
@@ -634,17 +623,6 @@ if r18_result.get('series_url'):
             tmp['front_image'] = jav_result["image"]
         if r18_result.get('image'):
             tmp['front_image'] = r18_result["image"]
-        if r18_result.get('series_image'):
-            try:
-                if imageBase64_serie_thread.is_alive() == True:
-                    imageBase64_r18_thread.join()
-                try:
-                    tmp['front_image'] = r18_result["series_image"][0]
-                    tmp['back_image'] = r18_result["series_image"][1]
-                except:
-                    pass
-            except NameError:
-                debug("[DEBUG] No r18 series Thread")
         if scrape.get('studio'):
             tmp['studio'] = {}
             tmp['studio']['name'] = scrape['studio']['name']
