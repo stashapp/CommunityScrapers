@@ -514,7 +514,6 @@ if r18_main_html:
             r18_result['performers'] = [x["name"] for x in r18_main_api["actresses"]]
         if r18_main_api.get("categories"):
             r18_result['tags'] = [x["name"] for x in r18_main_api["categories"]]
-        debug("DEBUG: {}".format(r18_result))
         if r18_main_api.get("images"):
             # Don't know if it's possible no image ??????
             r18_result['image'] = r18_main_api["images"]["jacket_image"]["large"]
