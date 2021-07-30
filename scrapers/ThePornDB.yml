@@ -74,7 +74,7 @@ jsonScrapers:
               - regex: .+default\d+\.png$
                 with:
       Performers:
-        Name: data.performers.#.parent        Name: data.performers.#.name.name
+        Name: data.performers.#.parent
       Studio:
         Name: data.site.name
       Tags:
