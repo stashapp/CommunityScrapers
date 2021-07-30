@@ -428,17 +428,6 @@ r18_xPath_search['series'] = '//p[text()="TOP SERIES"]/following-sibling::ul//a/
 r18_xPath_search['url'] = '//li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]/ancestor::a/@href'
 r18_xPath_search['scene'] = '//li[contains(@class,"item-list")]'
 
-r18_xPath = {}
-r18_xPath["title"] = '//section[@class="clearfix"]/div[@class="product-details"]/dl/dt[contains(.,"DVD ID")]/following-sibling::dd[1]/text()'
-r18_xPath["details"] = '//div[@class="col01"]/h1/cite[@itemprop="name"]/text()|//div[contains(@class,"cmn-box-description")]/p'
-r18_xPath["url"] = '//link[@rel="canonical"]/@href'
-r18_xPath["date"] = '//section[@class="clearfix"]/div[@class="product-details"]/dl/dt[contains(.,"Release Date")]/../dd[@itemprop="dateCreated"]/text()'
-r18_xPath["tags"] = '//div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a'
-r18_xPath["performers"] = '//div[@data-type="actress-list"]/span/a/span/text()'
-r18_xPath["studio"] = '//section[@class="clearfix"]/div[@class="product-details"]/dl/dt[contains(.,"Studio")]/../dd[@itemprop="productionCompany"]/a/text()'
-r18_xPath["image"] = '//meta[@itemprop="thumbnailUrl"]/@content'
-r18_xPath["series_url"] = '//section[@class="clearfix"]/div[@class="product-details"]/dl/dt[contains(.,"Series:")]/following-sibling::dd[1]/a/@href'
-
 jav_xPath_search = {}
 jav_xPath_search['url'] = '//div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]/../@href'
 
