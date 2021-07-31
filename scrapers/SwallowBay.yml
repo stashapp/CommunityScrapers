@@ -1,0 +1,33 @@
+name: SwallowBay
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - swallowbay.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+      Date:
+        selector: //div[@class="content-date"]
+        postProcess:
+          - replace:
+              - regex: 'Date:\s*'
+                with: ""
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
+          - parseDate: 02 Jan 2006
+      Performers:
+        Name: //div[@class="content-models"]//a
+      Tags:
+        Name: //div[@class="box"]/a
+      Details:
+        selector: //div[@class="content-desc more-desc"]
+        concat: "\n"
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: SwallowBay
+# Last Updated July 31, 2021
