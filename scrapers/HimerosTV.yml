@@ -32,4 +32,4 @@ xPathScrapers:
                 with: https://himeros.tv$1
               - regex: "-1x.jpg"
                 with: "-3x.jpg"
-#Last Updated August 29, 2020
+# Last Updated August 29, 2020

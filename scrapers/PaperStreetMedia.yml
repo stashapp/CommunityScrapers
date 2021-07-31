@@ -14,6 +14,7 @@ sceneByURL:
       - familystrokes.com/movies/
       - fostertapes.com/movies/
       - freeusefantasy.com/movies/
+      - freeusemilf.com/movies/
       - innocenthigh.com/movies/
       - littleasians.com/movies/
       - mylfdom.com/movies/
@@ -41,7 +42,7 @@ xPathScrapers:
         Name:
           selector: //link[@rel="canonical"]/@href
           postProcess:
-            - replace: 
+            - replace:
                 - regex: (.+www\.)(\w+)(.+)
                   with: $2
             - map:
@@ -57,6 +58,7 @@ xPathScrapers:
                 familystrokes: "Family Strokes"
                 fostertapes: "Foster Tapes"
                 freeusefantasy: "Freeuse Fantasy"
+                freeusemilf: "Freeuse Milf"
                 innocenthigh: "Innocent High"
                 littleasians: "Little Asians"
                 mylfdom: MYLFDom
@@ -71,5 +73,5 @@ xPathScrapers:
                 teensloveanal: "Teens Love Anal"
                 teensloveblackcocks: "Teens Love Black Cocks"
                 thickumz: Thickumz
-                    
-# Last Updated February 25, 2020
+
+# Last Updated July 07, 2021

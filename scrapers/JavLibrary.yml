@@ -15,17 +15,17 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
-      - f50q.com/
       - k51r.com/
       - d52q.com/
+      - n53i.com/
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
-      - f50q.com/
       - k51r.com/
       - d52q.com/
+      - n53i.com/
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:

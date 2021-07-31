@@ -46,4 +46,4 @@ xPathScrapers:
       Image:
         selector: //video/@poster
 
-# Last Updated November 2, 2020
+# Last Updated November 02, 2020

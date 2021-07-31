@@ -2,6 +2,7 @@ name: Perfect Gonzo
 sceneByURL:
   - action: scrapeXPath
     url:
+      - allinternal.com
       - perfectgonzo.com
     scraper: sceneScraper
 xPathScrapers:
@@ -13,16 +14,20 @@ xPathScrapers:
         selector: //div[@class="row"]//span
         postProcess:
           - replace:
-              - regex: "Added "
+              - regex: 'Added\s*'
                 with: ""
           - parseDate: January 2, 2006
       Details: //p[@class="mg-md"]
       Tags:
         Name: //div[contains(h4,"Tags:")]//a
-      Studio:
-        Name:
-          fixed: Perfect Gonzo
       Image: //video[@id="video"]/@poster | //div[@id="video-hero"]//img/@src
       Performers:
         Name: //div[contains(h4,"Featured model")]//a
-# Last Updated March 2, 2021
+      Studio:
+        Name:
+          selector: //link[@type="image/ico"]/@href
+          postProcess:
+            - map:
+                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_perfectgonzo.com.ico: Perfect Gonzo
+                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_allinternal.com.ico: All Internal
+# Last Updated July 19, 2021

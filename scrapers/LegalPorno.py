@@ -49,3 +49,4 @@ if sys.argv[1] == "query":
       fragment["url"] = result["url"]
       fragment["title"] = result["name"]
   print(json.dumps(fragment))
+# Last Updated February 13, 2021

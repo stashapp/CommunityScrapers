@@ -1,0 +1,53 @@
+name: Cruel Girlfriend
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cruelgf.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $script: //script[@type="application/ld+json"]
+    scene:
+      Title:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+"name": "[^-]+-\s*([^"]+)".+'
+                with: $1
+      Date:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+"uploadDate": "([^T]+)T.+'
+                with: $1
+          - parseDate: 2006-01-02
+      Performers:
+        Name:
+          selector: //div[@class='info-box-white']/h7[contains(.,"MORE CONTENT FROM")]
+          postProcess:
+            - replace:
+                - regex: \|*MORE CONTENT FROM\|*
+                  with:
+      Details:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+"description": "([^"]+)".+'
+                with: $1
+              - regex: "<br?>|</br?>"
+                with:
+      Tags:
+        Name: //div[@class='info-box-white']/h3[contains(.,"Added:")]/a
+      Image:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+"thumbnailUrl": [([^\]]+)\]).+'
+                with: $1
+              - regex: '.+"([^"]+/Backgrounds/[^"]+)".+'
+                with: $1
+      Studio:
+        Name:
+          fixed: Cruel Girlfriend
+# Last Updated July 25, 2021
