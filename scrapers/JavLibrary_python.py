@@ -269,7 +269,7 @@ def r18_search(html, xpath):
         r18_result["series_name"] = r18_search_serie
     if r18_search_url:
         r18_search_url = r18_search_url[0]
-        r18_id = re.match(r".+id=(.+)\/.+", r18_search_url)
+        r18_id = re.match(r".+id=(.+)/.*", r18_search_url)
         if r18_id:
             scene_url = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
             debug("[DEBUG] Using API URL: {}".format(scene_url))
@@ -414,7 +414,7 @@ if scene_url:
         debug("[DEBUG] Using URL: {}".format(scene_url))
         jav_main_html = sendRequest(scene_url, JAV_HEADERS)
     elif "r18.com" in scene_url:
-        r18_id = re.match(r".+id=(.+)\/.+", scene_url)
+        r18_id = re.match(r".+id=(.+)/.*", scene_url)
         if r18_id:
             scene_url = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
             debug("[DEBUG] Using API URL: {}".format(scene_url))
@@ -501,11 +501,11 @@ if jav_main_html:
 if r18_main_html:
     r18_main_api = r18_main_html.json()
     if r18_main_api["status"] != "OK":
-        debug("[ERROR] API Status {}".format(r18_main_api.get("status")))
+        debug("[ERROR] R18 API Status {}".format(r18_main_api.get("status")))
     else:
         r18_main_api = r18_main_api["data"]
         if r18_main_api.get("title"):
-            r18_result['title'] = [r18_main_api["title"]]
+            r18_result['title'] = r18_main_api["title"]
         if r18_main_api.get("release_date"):
             r18_result['date'] = re.sub(r"\s.+", "", r18_main_api["release_date"])
         if r18_main_api.get("detail_url"):
@@ -516,9 +516,9 @@ if r18_main_html:
             r18_result['details'] = "{}".format(r18_main_api["title"])
         if r18_main_api.get("series"):
             r18_result['series_url'] = r18_main_api["series"].get("series_url")
-            r18_result['series_name'] = [r18_main_api["series"].get("name")]
+            r18_result['series_name'] = r18_main_api["series"].get("name")
         if r18_main_api.get("maker"):
-            r18_result['studio'] = [r18_main_api["maker"]["name"]]
+            r18_result['studio'] = r18_main_api["maker"]["name"]
         ### 
         if r18_main_api.get("actresses"):
             r18_result['performers'] = [x["name"] for x in r18_main_api["actresses"]]
@@ -541,7 +541,7 @@ scrape = {}
 
 # Title - Javlibrary > r18
 if r18_result.get('title'):
-    scrape['title'] = r18_result['title'][0]
+    scrape['title'] = r18_result['title']
 if jav_result.get('title'):
     scrape['title'] = jav_result['title'][0]
 
@@ -553,7 +553,7 @@ if r18_result.get('date'):
 
 # URL - Javlibrary > R18
 if r18_result.get('url'):
-    scrape['url'] = r18_result['url'][0]
+    scrape['url'] = r18_result['url']
 if jav_result.get('url'):
     scrape['url'] = jav_result['url']
 
@@ -563,12 +563,15 @@ if jav_result.get('details'):
 if r18_result.get('details'):
     scrape['details'] = regexreplace(r18_result['details'])
 if r18_result.get('series_name'):
-    scrape['details'] = scrape['details'] + "\n\nFrom the series: " + regexreplace(r18_result['series_name'][0])
+    if scrape.get('details'):
+        scrape['details'] = scrape['details'] + "\n\nFrom the series: " + regexreplace(r18_result['series_name'])
+    else:
+        scrape['details'] = "From the series: " + regexreplace(r18_result['series_name'])
 
 # Studio - Javlibrary > R18
 scrape['studio'] = {}
 if r18_result.get('studio'):
-    scrape['studio']['name'] = r18_result['studio'][0]
+    scrape['studio']['name'] = r18_result['studio']
 if jav_result.get('studio'):
     scrape['studio']['name'] = jav_result['studio'][0]
 
@@ -615,7 +618,7 @@ except NameError:
 
 if r18_result.get('series_url'):
     tmp = {}
-    tmp['name'] = regexreplace(r18_result['series_name'][0])
+    tmp['name'] = regexreplace(r18_result['series_name'])
     tmp['url'] = r18_result['series_url']
     if STASH_SUPPORTED == True:
         # If Stash support this part
