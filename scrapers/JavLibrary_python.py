@@ -457,7 +457,7 @@ if jav_search_html:
     jav_main_html = jav_search(jav_search_html, jav_xPath_search)
 
 
-if jav_main_html is None and scene_title:
+if jav_main_html is None and r18_main_html is None and scene_title:
     # If javlibrary don't have it, there is no way that R18 have it but why not trying...
     debug("Javlib don't give any result, trying search with R18...")
     r18_search_html = sendRequest("https://www.r18.com/common/search/searchword={}/?lg=en".format(scene_title), R18_HEADERS)
@@ -505,7 +505,7 @@ if r18_main_html:
     else:
         r18_main_api = r18_main_api["data"]
         if r18_main_api.get("title"):
-            r18_result['title'] = r18_main_api["title"]
+            r18_result['title'] = r18_main_api["dvd_id"]
         if r18_main_api.get("release_date"):
             r18_result['date'] = re.sub(r"\s.+", "", r18_main_api["release_date"])
         if r18_main_api.get("detail_url"):
@@ -605,14 +605,14 @@ try:
     if r18_result.get('image'):
         scrape['image'] = r18_result['image']
 except NameError:
-    debug("[DEBUG] No R18 Thread")
+    debug("[DEBUG] No image R18 Thread")
 try:
     if imageBase64_jav_thread.is_alive() == True:
         imageBase64_jav_thread.join()
     if jav_result.get('image'):
         scrape['image'] = jav_result['image']
 except NameError:
-    debug("[DEBUG] No JAV Thread")
+    debug("[DEBUG] No image JAV Thread")
 
 # Movie - R18
 
