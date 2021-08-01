@@ -25,14 +25,7 @@ xPathScrapers:
     scene:
       Studio:
         Name:
-          selector: //div[@class='container grey']/a[contains(@href,'2257')]/@href
-          postProcess:
-            - replace:
-                - regex: '(?:.+www\.)(.+)(?:\.com.+)'
-                  with: $1
-            - map:
-                atkgirlfriends: "ATK Girlfriends"
-                amkingdom: "ATK Girlfriends"
+            fixed: ATK Girlfriends
       Performers:
         Name:
           selector: //div[contains(@class,'model-profile-wrap')]
@@ -53,6 +46,10 @@ xPathScrapers:
           - replace:
               - regex: '.*Description\s?:\s?(\w.*)\s+Tags.*'
                 with: $1
+      Tags:
+        Name:
+          selector: //div[contains(@class,'movie-wrap')]/b[contains(text(),'Tags :')]//following-sibling::text()[1]
+          split: " , "
       Image:
         selector: //div[contains(@class,'flowplayer')]/@style
         postProcess:
@@ -96,75 +93,11 @@ driver:
   useCDP: true
   cookies:
     - Cookies:
-        - Name: __utma
-          Value: 230278988.1458701362.1627523645.1627523645.1627523645.1
-          Domain: .atkgirlfriends.com
-          Path: /
-        - Name: __utmb
-          Value: 230278988.2.10.1627523645
-          Domain: .atkgirlfriends.com
-          Path: /
-        - Name: __utmc
-          Value: 230278988
-          Domain: .atkgirlfriends.com
-          Path: /
-        - Name: __utmt
-          Value: 1
-          Domain: .atkgirlfriends.com
-          Path: /
-        - Name: __utmz
-          Value: 230278988.1627523645.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)
-          Domain: .atkgirlfriends.com
-          Path: /
-        - Name: _ga
-          Value: GA1.2.1458701362.1627523645
-          Domain: .atkgirlfriends.com
-          Path: /
-        - Name: _gid
-          Value: GA1.2.549033790.1627523645
-          Domain: .atkgirlfriends.com
-          Path: /
-        - Name: PHPSESSID
-          Value: dq39fqk32ufdemfokmbspjlqj6
-          Domain: join.atkgirlfriends.com
-          Path: /
-        - Name: RNLBSERVERID
-          Value: ded4027
-          Domain: join.atkgirlfriends.com
-          Path: /
-        - Name: nats
-          Value: MC4wLjcuMTEuMC4wLjAuMC4w
-          Domain: .join.atkgirlfriends.com
-          Path: /
-        - Name: nats_cookie
-          Value: No%2BReferring%2BURL
-          Domain: .join.atkgirlfriends.com
-          Path: /
-        - Name: nats_landing
-          Value: No%2BLanding%2BPage%2BURL
-          Domain: .join.atkgirlfriends.com
-          Path: /
-        - Name: nats_sess
-          Value: ce450bfbffb71218cda6cef475a5e2bc
-          Domain: .join.atkgirlfriends.com
-          Path: /
-        - Name: nats_unique
-          Value: MC4wLjcuMTEuMC4wLjAuMC4w
-          Domain: .join.atkgirlfriends.com
-          Path: /
-        - Name: RNLBSERVERID
-          Value: ded4032
-          Domain: www.atkgirlfriends.com
-          Path: /
         - Name: start_session_galleria
           Value: 8kr77qianal096uqkeh99mrop1
           Domain: www.atkgirlfriends.com
           Path: /
-        - Name: nats_unique
-          Value: MC4wLjcuMTEuMC4wLjAuMC4w
-          Domain: .join.atkgirlfriends.com
-          Path: /
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36
-# Last Updated March 15, 2021
+# Last Updated July 31, 2021
