@@ -31,7 +31,7 @@ xPathScrapers:
       Image: //div[@id="rmpPlayer"]/@data-video-screenshot
       Tags:
         Name: //div[@class="tags"]/a
-    
+
   performerSearch:
     performer:
       Name: //*[contains(concat(' ', normalize-space(@class), ' '), ' profile-pic-name ')]/a/text()
@@ -39,21 +39,21 @@ xPathScrapers:
         selector: //*[contains(concat(' ', normalize-space(@class), ' '), ' profile-pic-name ')]/a/@href
         postProcess:
           - replace:
-              - regex: '/(?:Store/Videos/)?$'
+              - regex: "/(?:Store/Videos/)?$"
                 with: /About/
 
   performerScraper:
     common:
       $aboutlabel: //*[@class='mv-about__container__details__list-unit']/span[@class='mv-about__container__details__list-label']
     performer:
-      Name: //*[@class='mv-about__banner-name ']/text()
+      Name: //*[contains(@class,'mv-about__banner-name ')]/text()
       Gender:
         selector: $aboutlabel[contains(text(), 'Gender')]/following-sibling::*
         postProcess:
           - replace:
               - regex: Trans
                 with: transgender_female
-      URL: 
+      URL:
         selector: //a[@data-tab='about']/@href
         postProcess:
           - replace:
@@ -76,7 +76,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ' \(.*\)$'
-                with: ''
+                with: ""
           - parseDate: 2006.01.02
       Ethnicity:
         selector: $aboutlabel[contains(text(), 'Ethnicity')]/following-sibling::*
@@ -101,10 +101,10 @@ xPathScrapers:
         selector: $aboutlabel[contains(text(), 'Height')]/following-sibling::*
         postProcess:
           - replace:
-              - regex: '.*?or '
-                with: ''
-              - regex: ' cm$'
-                with: ''
+              - regex: ".*?or "
+                with: ""
+              - regex: " cm$"
+                with: ""
               - regex: \D+[\s\S]+
                 with: ""
       Measurements:
@@ -113,18 +113,18 @@ xPathScrapers:
         selector: $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*[contains(text(), 'Natural') or contains(text(), 'Cohesive Gel') or contains(text(), 'Silicon') or contains(text(), 'Saline')]
         postProcess:
           - replace:
-              - regex: '^Natural.*$'
-                with: 'No'
+              - regex: "^Natural.*$"
+                with: "No"
               - regex: '\s+?[0-9]+.*'
-                with: ''
+                with: ""
       CareerLength:
         selector: //*[@class='mv-about__banner-info']/strong/text()
         postProcess:
           - replace:
-              - regex: '^Joined '
-                with: ''
+              - regex: "^Joined "
+                with: ""
               - regex: $
-                with: ' - today'
+                with: " - today"
       Tattoos:
         selector: $aboutlabel[contains(text(), 'Tattoos')]/following-sibling::*
       Piercings:
@@ -134,12 +134,15 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: '.*\.svg$'
-                with: ''
+                with: ""
       Tags:
         Name:
           selector: //li[@class="mv-top-tags__item"]
+      Details:
+        selector: //div[@class="mv-about__container__description"]/p
+        concat: "\n\n"
 
 # Required for parsing sceneScraper tags
 driver:
-    useCDP: true
-# Last Updated June 07, 2021
+  useCDP: true
+# Last Updated August 01, 2021
