@@ -15,6 +15,7 @@ sceneByURL:
       - fostertapes.com/movies/
       - freeusefantasy.com/movies/
       - freeusemilf.com/movies/
+      - hijabhookup.com/movies/
       - innocenthigh.com/movies/
       - littleasians.com/movies/
       - mylfdom.com/movies/
@@ -29,7 +30,6 @@ sceneByURL:
       - teensloveanal.com/movies/
       - teensloveblackcocks.com/movies/
       - thickumz.com/movies/
-      - hijabhookup.com/movies/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -60,6 +60,7 @@ xPathScrapers:
                 fostertapes: "Foster Tapes"
                 freeusefantasy: "Freeuse Fantasy"
                 freeusemilf: "Freeuse Milf"
+                hijabhookup: "Hijab Hookup"
                 innocenthigh: "Innocent High"
                 littleasians: "Little Asians"
                 mylfdom: MYLFDom
@@ -74,5 +75,4 @@ xPathScrapers:
                 teensloveanal: "Teens Love Anal"
                 teensloveblackcocks: "Teens Love Black Cocks"
                 thickumz: Thickumz
-
-# Last Updated July 07, 2021
+# Last Updated August 01, 2021
