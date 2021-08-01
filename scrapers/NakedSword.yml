@@ -1,0 +1,50 @@
+name: NakedSword
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - nakedsword.com
+movieByURL:
+  - action: scrapeXPath
+    scraper: movieScraper
+    url:
+      - nakedsword.com
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="MiMovieTitle"]/text() | //div[@class="MiSceneNumb"]/text()
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: "[|]"
+                with: ""
+      Performers:
+        Name: //div[@class="MIStarHolder"]/a
+      Details:
+        selector: //div[@class="MIDescriptHolder"]
+      Tags:
+        Name: //div[@class="MIThemeHolder"]/a
+      Image:
+        selector: //div[@id="playerContainer"]//@src
+      Movies:
+        Name: //div[@class="MiMovieTitle"]/text()
+      Studio:
+        Name: //div[@class="MIStudioHolder"]
+  movieScraper:
+    movie:
+      Name:
+        selector: //div[@class="MiMovieTitle"]/text()
+      Duration:
+        selector: //div[@class="MiHeaderDuration"]
+        postProcess:
+          - replace:
+              - regex: (\s+|\(|\))
+                with: ""
+      Director: //a[@class="MIDirector"]
+      Synopsis: //div[@class="MIDescriptHolder"]
+      Studio:
+        Name: //div[@class="MIStudioHolder"]
+      FrontImage: //img[contains(@src,"xlf.jpg")]/@src
+      BackImage: //img[@class="BoxCoverOverlay"]/@src
+# Last Updated July 22, 2021
