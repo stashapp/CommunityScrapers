@@ -1,0 +1,52 @@
+name: wikidata
+performerByName:
+  action: scrapeJson
+  queryURL: https://query.wikidata.org/sparql?query=SELECT%20%3Fpornographic_actor%20%3Fpornographic_actorLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%20%20%3Fpornographic_actor%20wdt%3AP106%20wd%3AQ488111%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20rdfs%3Alabel%20%3Flabel.%0A%20%20FILTER(LANG(%3Flabel)%20%3D%20%22en%22).%0A%20%20FILTER(STRSTARTS(%3Flabel%2C%20%22{}%22)).%0A%7D%0A&format=json
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeJson
+    url:
+      - https://www.wikidata.org/wiki/Special:EntityData/
+    scraper: performerScraper
+jsonScrapers:
+  performerSearch:
+    performer:
+      Name: results.bindings.#.pornographic_actorLabel.value
+      URL:
+        selector: results.bindings.#.pornographic_actor.value
+        postProcess:
+          - replace:
+              - regex: http:\/\/www.wikidata.org\/entity\/
+                with: https://www.wikidata.org/wiki/Special:EntityData/
+              - regex: $
+                with: .json
+  performerScraper:
+    performer:
+      Name: entities.*.labels.en.value
+#      Image:
+#        selector: entities.*.claims.P18.#.mainsnak.datavalue.value
+#        postProcess:
+#          - replace:
+#              - regex: ^
+#                with: "https://commons.wikimedia.org/wiki/File:"
+#      Weight:
+#        selector: entities.*.claims.P2067.#.mainsnak.datavalue.value.amount
+      Birthdate:
+        selector: entities.*.claims.P569.#.mainsnak.datavalue.value.time
+      Height:
+        selector: entities.*.claims.P2048.#.mainsnak.datavalue.value.amount
+      CareerLength:
+        selector: entities.*.claims.P2031.#.mainsnak.datavalue.value.time
+      Gender:
+        selector: entities.*.claims.P21.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - map:
+              6581072: "FEMALE"
+              6581097: "MALE"
+
+
+#driver:
+#  headers:
+#    - Key: User-Agent
+#      Value: stashjson/1.0.0
+# Last Updated August 1, 2021
