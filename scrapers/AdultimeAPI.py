@@ -25,7 +25,9 @@ STOCKAGE_FILE_APIKEY = "Adultime_key.txt"
 IGNORE_TAGS = ["Sex","Feature"]
 # Tag you always want in Scraper window.
 FIXED_TAGS = ""
-
+# Will make a request to be sure to have a real URL and on public site (Not adulttime.com). 
+# Will increase time to scrape a scene because of more request (+2sec max).
+MAKE_REAL_URL = False
 
 def debug(q):
     if "[DEBUG]" in q and PRINT_DEBUG == False:
@@ -418,16 +420,22 @@ def scraping_json(api_json, url):
         except:
             debug("[ERROR] Can't manage to get the image for some reason.")
     # URL
-    if url:
-        scrape['url'] = url
-    else:
-        if api_json.get('member_url') is not None:
-            scrape['url'] = api_json.get('member_url')
+    try:
+        if api_json.get('channels') and MAKE_REAL_URL:
+            # I guess these should be more site like girlsway
+            if api_json['network_name'] == 'Girlsway':
+                tmp_url = 'https://girlsway.com/en/video/{}/{}/{}'.format(api_json.get('sitename'), api_json.get('url_title'), api_json.get('clip_id'))
+                if requests.get(tmp_url,timeout=2).status_code == 200:
+                    scrape['url'] = tmp_url
+            else:
+                tmp_url = 'https://{}.com/en/video/{}/{}'.format(api_json["channels"][0].get("id"), api_json.get('url_title'), api_json.get('clip_id'))
+                if requests.get(tmp_url,timeout=2).status_code == 200:
+                    scrape['url'] = tmp_url
         else:
-            try:
-                scrape['url'] = 'https://members.adulttime.com/en/video/{}/{}/{}'.format(api_json['sitename'], api_json['url_title'], api_json['clip_id'])
-            except:
-                pass
+            scrape['url'] = 'https://members.adulttime.com/en/video/{}/{}/{}'.format(api_json.get('sitename'), api_json.get('url_title'), api_json.get('clip_id'))
+    except:
+        if url:
+            scrape['url'] = url
     return scrape
 
 
