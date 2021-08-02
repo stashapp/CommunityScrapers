@@ -351,7 +351,7 @@ def match_result(api_scene, range_duration=60, single=False):
     match_dict["title"] = match_ratio_title
     match_dict["url"] = match_ratio_title_url
     information_used = ""
-    if (single == True and match_duration == True) or match_ratio_title_url == 1:
+    if (single == True and (match_duration == True or (database_dict is None and match_ratio_title_url > 0.5))) or match_ratio_title_url == 1:
         information_used += "A"
     if match_size == True:
         information_used += "S"
