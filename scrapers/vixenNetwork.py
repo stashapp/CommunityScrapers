@@ -93,18 +93,23 @@ def main():
     scene_url = url
     if scene['absoluteUrl'] is not None:
         scene_url = 'https:%s' % scene['absoluteUrl']
-    scrape = {
-        'title': scene['title'],
-        'date': scene['releaseDate'][:10],
-        'details': scene['description'],
-        'url':  scene_url,
-        'studio': {
-            'name': studio
-        },
-        'performers': [{'name': x['name']} for x in scene['models']],
-        'tags': [{'name': x['name']} for x in scene['categories']],
-        'image': scene['images']['poster'][len(scene['images']['poster']) - 1]['src'],
-    }
+    scrape = {}
+    if scene.get('title'):
+        scrape['title'] = scene['title']
+    if scene.get('releaseDate'):
+        scrape['date'] = scene['releaseDate'][:10]
+    if scene.get('details'):
+        scrape['details'] = scene['description']
+    if scene_url:
+        scrape['url'] = scene_url
+    if studio:
+        scrape['studio'] = {'name': studio}
+    if scene.get('models'):
+        scrape['performers'] = [{'name': x['name']} for x in scene['models']]
+    if scene.get('categories'):
+        scrape['tags'] = [{'name': x['name']} for x in scene['categories']]
+    if scene.get('images'):
+        scrape['image'] = scene['images']['poster'][len(scene['images']['poster']) - 1]['src']
     if len(sys.argv) > 1:
         save_json(j, scene['videoId'], sys.argv[1])
     print(json.dumps(scrape))
@@ -119,5 +124,3 @@ if __name__ == '__main__':
     except Exception as e:
         log(traceback.format_exc())
         log(e)
-
-# Last Updated June 9, 2021
