@@ -98,7 +98,7 @@ def main():
         scrape['title'] = scene['title']
     if scene.get('releaseDate'):
         scrape['date'] = scene['releaseDate'][:10]
-    if scene.get('details'):
+    if scene.get('description'):
         scrape['details'] = scene['description']
     if scene_url:
         scrape['url'] = scene_url
