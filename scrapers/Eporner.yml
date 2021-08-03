@@ -1,0 +1,75 @@
+name: Eporner
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.eporner.com/search-pornstars/{}/
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - eporner.com
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - eporner.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //div[@class="mbprofile"]/a/@title
+      URL:
+        selector: //div[@class="mbprofile"]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.eporner.com"
+  performerScraper:
+    common:
+      $infoPiece: //div[@class="psbio ps2"]/ul/li/span
+    performer:
+      Name: //div[@class="psbio ps1"]/h1/text()
+      Twitter: //i[@class="fa fa-twitter-square"]/../a/@href
+      Instagram: //i[@class="fa fa-instagram"]/../a/@href
+      Measurements: $infoPiece[text() = "Measurements:"]/../div/text()
+      Height:
+        selector: $infoPiece[text() = "Height:"]/../div/text()
+        postProcess:
+          - replace:
+              - regex: (\d+).?cm.*
+                with: $1
+      Weight:
+        selector: $infoPiece[text() = "Weight:"]/../div/text()
+        postProcess:
+          - replace:
+              - regex: (\d+).?kg.*
+                with: $1
+      Ethnicity: $infoPiece[text() = "Ethnicity:"]/../div/text()
+      Country: $infoPiece[text() = "Country:"]/../div/text()
+      EyeColor: $infoPiece[text() = "Eye:"]/../div/text()
+      HairColor: $infoPiece[text() = "Hair:"]/../div/text()
+      Aliases: 
+        selector: //ul[@class="psbioaliases"]/li/text()
+        concat: ", "
+      Image:
+        selector: //div[@class='psImgOuter']/img/@src
+      URL: //link[@rel="canonical"][1]/@href
+  sceneScraper:
+    common:
+      $performer: //div[@class="video-info-tags"]/ul/li[@class="vit-pornstar starw"]/a
+    scene:
+      Title: //div[@id="video-info"]/h1/text()
+      Tags:
+        Name: //div[@class="video-info-tags"]/ul/li[@class="vit-category"]/a|//div[@class="video-info-tags"]/ul/li[@class="vit-tag"]/a
+      #Image:
+      #  selector: //div[@class="vjs-poster"]/@style
+      #  postProcess:
+      #    - replace:
+      #        - regex: style\=\"background\-image\:\ url\(\"
+      #          with: 
+      #        - regex: \"\)\;\"
+      #          with: 
+      Performers:
+        Name: $performer/text()
+        URL: $performer/@href
+# Last Updated August 3, 2021
