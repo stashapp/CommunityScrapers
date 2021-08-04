@@ -24,7 +24,8 @@ STOCKAGE_FILE_APIKEY = "MindGeekAPI.ini"
 IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
 # Tag you always want in Scraper window.
 FIXED_TAGS = ""
-
+# Check the SSL Certificate.
+CHECK_SSL_CERT = True
 
 def debug(q):
     if "[DEBUG]" in q and PRINT_DEBUG == False:
@@ -34,7 +35,11 @@ def debug(q):
     print(q, file=sys.stderr)
 
 def sendRequest(url, head):
-    response = requests.get(url, headers=head, timeout=10)
+    try:
+        response = requests.get(url, headers=head, timeout=10, verify=CHECK_SSL_CERT)
+    except requests.exceptions.SSLError:
+        debug("[ERROR] SSL Error on this site. You can ignore this error with the 'CHECK_SSL_CERT' param inside the python file.")
+        sys.exit()
     if response.content and response.status_code == 200:
         return response
     else:
