@@ -11,7 +11,7 @@ xPathScrapers:
     scene:
       Studio:
         Name:
-            fixed: FamilyXXX
+          fixed: FamilyXXX
       Title: $info//h2/text()
       Date:
         selector: $info//div[@class="sceneDateP"]/span/text()
@@ -24,5 +24,4 @@ xPathScrapers:
       Performers:
         Name: $info//span[@class="tour_update_models"]/a/text()
       Image: //span[@id="trailer_thumb"]/span[1]/img/@src
-
 # Last Updated August 04, 2021
