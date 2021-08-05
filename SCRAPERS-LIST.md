@@ -464,6 +464,7 @@ hersexdebut.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 heymilf.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 heyoutdoor.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 heyzo.com|Heyzo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
+hijabhookup.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 himeros.tv|HimerosTV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 hitzefrei.com|Hitzefrei.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 hobybuchanon.com|HobyBuchanon.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -677,6 +678,7 @@ myracequeens.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 mysislovesme.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 myteenoasis.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 myveryfirsttime.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+nakedsword.com|NakedSword.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 nannyspy.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nastystepfamily.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nataliastarr.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -924,6 +926,7 @@ sunnylanelive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sunnyleone.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 superbemodels.com|superbemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 susanayn.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+swallowbay.com|SwallowBay.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swallowed.com|nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swallowsalon.com|AmateurAllure.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sweetcarla.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

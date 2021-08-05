@@ -1,9 +1,14 @@
 name: "R18 (JAV)"
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - r18.com/videos
     scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .+id=(.+)/.*
+          with: https://www.r18.com/api/v4f/contents/$1?lang=en
 movieByURL:
   - action: scrapeXPath
     url:
@@ -19,29 +24,19 @@ sceneByFragment:
       - regex: ([a-zA-Z]+)(\d+)
         with: $1-$2
   scraper: sceneScraper
-xPathScrapers:
+jsonScrapers:
   sceneScraper:
-    common:
-      $sceneinfo: //section[@class="clearfix"]/div[@class="product-details"]
-      $searchinfo: //li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]
     scene:
-      Title: $searchinfo/@alt|$sceneinfo/dl/dt[contains(.,"DVD ID")]/following-sibling::dd[1]/text()
-      URL: $searchinfo/ancestor::a/@href|//link[@rel='canonical']/@href
+      Title: data.dvd_id
+      URL: data.detail_url
       Date:
-        selector: $sceneinfo/dl/dt[contains(.,"Release Date")]/../dd[@itemprop="dateCreated"]/text()
+        selector: data.release_date
         postProcess:
           - replace:
-              - regex: \.
+              - regex: \s.+
                 with: ""
-              - regex: Sept
-                with: Sep
-              - regex: July
-                with: Jul
-              - regex: June
-                with: Jun
-          - parseDate: Jan 02, 2006
       Details:
-        selector: //div[@class="col01"]/h1/cite[@itemprop="name"]/text()|//div[contains(@class,"cmn-box-description")]/p
+        selector: "[data.title,data.comment]"
         concat: "\n\n"
         postProcess: &ppUncensor
           - replace:
@@ -302,19 +297,25 @@ xPathScrapers:
               - regex: Y\*{8}ls\b
                 with: "Young Girls" # Not Sure
       Tags:
-        Name: //div[@class="product-categories-list product-box-list"]/div[@class="pop-list"]/a
+        Name: data.categories.#.name
       Performers:
         Name:
-          selector: //div[@data-type="actress-list"]/span/a/span/text()
+          selector: data.actresses.#.name
           #Uncomment below to convert to Surname Name (JavLibrary compatible)
           #postProcess:
           #  - replace:
           #      - regex: (.+)(\s)(.+)
           #        with: $3$2$1
       Studio:
-        Name:
-          selector: $sceneinfo/dl/dt[contains(.,"Studio")]/../dd[@itemprop="productionCompany"]/a/text()
-      Image: $searchinfo/@data-original|//meta[@itemprop="thumbnailUrl"]/@content
+        Name: data.maker.name
+      Image: data.images.jacket_image.large
+xPathScrapers:
+  sceneScraper:
+    common:
+      $searchinfo: //li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]
+    scene:
+      Title: $searchinfo/@alt
+      URL: $searchinfo/ancestor::a/@href
   serieScraper:
     movie:
       Name:
@@ -334,4 +335,4 @@ xPathScrapers:
                 with: "pl.jpg"
       Studio:
         Name: //p[text()="TOP STUDIOS"]/following-sibling::ul//a/span[@class="item01"]/text()
-# Last Updated July 20, 2021
+# Last Updated August 01, 2021
