@@ -6,25 +6,18 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $info: //div[@class="u-py--four desktop:u-ml--twn-one u-relative"]/div
     scene:
-      Title: //div[@class="u-bgc--ug u-pt--three u-px--four desktop:u-px--zero desktop:u-bgc--transparent desktop:u-relative desktop:u-mt--two desktop:u-pt--one"]//h1/text()
-      Date:
-        selector: //time/@datetime
-        postProcess:
-          - parseDate: 2006-01-02
-      Details:
-        selector: //div[@id="modalSceneAbout"]//comment()[contains(.,'description')]/following-sibling::div/a/following-sibling::text()
-        concat: " "
+      Title: //h1/text()
+      Date: //time/@datetime
+      Details: //div[@id="modalSceneAbout"]//comment()[contains(.,'description')]/following-sibling::div/text()
       Tags:
         Name: //meta[@property="video:tag"]/@content
       Performers:
         Name: //meta[@property="video:actor"]/@content
       Studio:
-        Name: //div[@class="u-inline-block u-align-y--m u-relative u-fw--bold"]//text()
+        Name: //a[contains(@href,"/studios/")]/div[last()]/text()
       Image:
-        selector: //div[@class="splash-screen fullscreen-message is-visible"]/@style
+        selector: //div[contains(@class,"splash-screen")]/@style
         postProcess:
           - replace:
               - regex: .+(http[^\)]+).+
