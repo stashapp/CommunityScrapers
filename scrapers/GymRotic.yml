@@ -31,11 +31,9 @@ xPathScrapers:
                 with: ""
       Studio:
         Name:
-          selector: //base/@href
+          selector: //meta[@name="author"]/@content
           postProcess:
-            - map:
-                https://www.dollrotic.com/: DollRotic
-                https://www.gymnastic.xxx/: GymnasticXXX
-                https://www.femlatex.com/: FemLatex
-                https://www.gymrotic.com/: GymRotic
-# Last Updated July 22, 2021
+            - replace:
+                - regex: '\.com$'
+                  with: ""
+# Last Updated August 06, 2021
