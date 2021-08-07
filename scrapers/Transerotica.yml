@@ -6,23 +6,29 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $update: //div[@class="centerwrap clear"]/div[@class="updateDetails"]
     scene:
-      Title: //h1[@class='title_bar']/text()
+      Title: //h1[@class='title_bar']
       Image: //div[@id="player"]/video/@poster
       Date:
-        selector: (//div[@class="updateDetails"])[1]/p[1]/span[1]/text()
+        selector: $update//span[@class="upddate"][1]
         postProcess:
           - parseDate: "01/02/2006"
       Details:
-        selector: (//div[@class="updateDetails"])[1]/p[2]/text()
+        selector: $update/p[starts-with(text(),"Description:")]
+        postProcess:
+          - replace:
+              - regex: '^Description:\s*'
+                with:
       Performers:
         Name:
-          selector: (//div[@class="updateDetails"])[1]/p[3]/span[@class="tour_update_models"]/a/text()
+          selector: $update//span[@class="tour_update_models"]/a
       Tags:
         Name:
           selector: //meta[@name="keywords"]/@content
-          split : ","
-driver:
-  useCDP: false
-
-# Last Updated July 19, 2021
+          split: ","
+      Studio:
+        Name:
+          fixed: Trans Erotica
+# Last Updated August 07, 2021
