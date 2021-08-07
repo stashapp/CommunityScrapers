@@ -15,6 +15,7 @@ sceneByURL:
       - ladyboy-ladyboy.com
       - ladyboy.xxx
       - tgirlsex.xxx
+      - tgirls.porn
       - tgirls.xxx
       - transexpov.com
       - transgasm.com
@@ -22,7 +23,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //p[@class="trailertitle"]/text()
+      Title: //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()
       Date:
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
@@ -38,5 +39,5 @@ xPathScrapers:
           - replace:
               - regex: ^// # bobstgirls
                 with: "https://"
-        
-# Last Updated November 08, 2020
+
+# Last Updated July 20, 2021
