@@ -17,7 +17,7 @@ xPathScrapers:
     scene:
       Title: //meta[@property="og:title"]/@content
       Details: //meta[@property="og:description"]/@content
-      Image: 	//img[@class="thumbnail lazyload"]/@data-src
+      Image: //img[@class="thumbnail lazyload"]/@data-src
       Date:
         selector: //span[@class="publish_date"]
         postProcess:
@@ -33,8 +33,8 @@ xPathScrapers:
           selector: //div[@class="left"]/span[@class="movie"]/a/@href
           postProcess:
             - replace:
-              - regex: (.*)
-                with: https://dorcelclub.com$1
+                - regex: (.*)
+                  with: https://dorcelclub.com$1
 
   movieScraper:
     movie:
@@ -60,14 +60,13 @@ xPathScrapers:
         selector: //span[@class='director']/text()
         postProcess:
           - replace:
-            - regex: Director\s:\s(.*)
-              with: $1
+              - regex: Director\s:\s(.*)
+                with: $1
       FrontImage:
         selector: //img[contains(@class, "cover")]/@data-src
         postProcess:
           - replace:
-            - regex: ([^\s]*)\s1x
-              with: $1
+              - regex: ([^\s]*)\s1x
+                with: $1
       Synopsis: //span[@class="full"]/p|/div[@class="content-text"]/p
-
 # Last Updated August 07, 2021
