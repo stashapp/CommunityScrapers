@@ -616,7 +616,7 @@ except NameError:
 
 # Movie - R18
 
-if r18_result.get('series_url'):
+if r18_result.get('series_url')  and r18_result.get('series_name'):
     tmp = {}
     tmp['name'] = regexreplace(r18_result['series_name'])
     tmp['url'] = r18_result['series_url']
