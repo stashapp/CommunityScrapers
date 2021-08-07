@@ -41,10 +41,18 @@ xPathScrapers:
       Name: //img[contains(@class, "cover")]/@alt
       Duration:
         selector: //span[@class='duration']/text()
-        # postProcess:
-        #   - replace:
-        #     - regex: ([0-9]h)? ([0-9]m)? ([0-9])?
-        #     with: $1:$2:$3
+        postProcess:
+          - replace:
+              - regex: ([0-9]+)h\s*([0-9]+)?
+                with: "$1:$2:00"
+              - regex: ([0-9]+)m\s*([0-9]+)?
+                with: "0:$1:$2"
+              - regex: "^:"
+                with: "0:"
+              - regex: ":$"
+                with: ":00"
+              - regex: "::"
+                with: ":00:"
       Studio:
         Name:
           fixed: DorcelClub
@@ -60,6 +68,6 @@ xPathScrapers:
           - replace:
             - regex: ([^\s]*)\s1x
               with: $1
-      Synopsis: //span[@class="full"]/p/text()
+      Synopsis: //span[@class="full"]/p|/div[@class="content-text"]/p
 
-# Last Updated July 19, 2021
+# Last Updated August 07, 2021
