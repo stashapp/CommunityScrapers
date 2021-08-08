@@ -1,0 +1,77 @@
+name: TukTukPatrol
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tuktukpatrol.com/
+    scraper: sceneScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://tuktukpatrol.com/?amp=1&s={}
+  scraper: performerSearch
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://tuktukpatrol.com/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class='amp-single-title']
+      Details:
+        selector: //div[@class='cntn-wrp artl-cnt']/div[3]
+      Performers:
+        Name:
+          selector: //div[@class='update-info']/a
+      Tags:
+        Name:
+          selector: //div[@class='amp-category']/span
+      Studio:
+        Name:
+          fixed: TukTukPatrol
+      Image:
+        selector: //div[@id='myOverlay']//amp-img/@src
+
+  performerSearch:
+    performer:
+      Name:
+        selector: //div[@class='by-left']/a
+      URL:
+        selector: //div[@class='by-left']/a/@href
+
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1[@class='amp-model-title']
+      Gender:
+        fixed: Female
+      Country:
+        fixed: Thailand
+      Ethnicity:
+        fixed: Asian
+      Image:
+        selector: //div[@class='model-contr-colone']//amp-img/@src
+      EyeColor:
+        selector: //span[contains(text(),'Eye Color:')]/following-sibling::text()
+      HairColor:
+        selector: //span[contains(text(),'Hair Color:')]/following-sibling::text()
+      Height:
+        selector: //span[contains(text(),'Height:')]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //span[contains(text(),'Weight:')]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: lbs
+                with: ""
+          - lbToKg: true
+      Measurements:
+        selector: //span[contains(text(),'Measurements:')]/following-sibling::text()
+      Details: //div[@class='model-desc']
+
+      URL: //link[@rel="canonical"]/@href
+
+# Last Updated July 21, 2021

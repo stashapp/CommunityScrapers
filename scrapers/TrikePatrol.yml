@@ -1,0 +1,90 @@
+name: TrikePatrol
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - trikepatrol.com/
+    scraper: sceneScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://trikepatrol.com/?amp=1&s={}
+  scraper: performerSearch
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://trikepatrol.com/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class='amp-single-title']
+      Details:
+        selector: //div[@class='cntn-wrp artl-cnt']/div[3]
+      Performers:
+        Name:
+          selector: //div[@class='update-info']/a
+      Tags:
+        Name:
+          selector: //div[@class='amp-category']/span
+      Studio:
+        Name:
+          fixed: TrikePatrol
+      Image:
+        selector: //div[@id='myOverlay']//amp-img/@src
+      Date:
+        selector: //h1[@class='amp-single-title']
+        postProcess:
+          - replace:
+              - regex: \s
+                with: "%20" # spaces cause 400 error
+              - regex: ^
+                with: 'https://trikepatrol.com/?amp=1&s="'
+              - regex: $
+                with: '"'
+          - subScraper:
+              selector: (//div[@class="fsdate absolute"])[1]/span/text()
+              postProcess:
+                - parseDate: Jan 2, 2006
+
+  performerSearch:
+    performer:
+      Name:
+        selector: //div[@class='by-left']/a
+      URL:
+        selector: //div[@class='by-left']/a/@href
+
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1[@class='amp-model-title']/text()
+      Gender:
+        fixed: Female
+      Country:
+        fixed: Philippines
+      Ethnicity:
+        fixed: Asian
+      Image:
+        selector: //div[@class='model-contr-colone']//amp-img/@src
+      EyeColor:
+        selector: //span[contains(text(),'Eye Color:')]/following-sibling::text()
+      HairColor:
+        selector: //span[contains(text(),'Hair Color:')]/following-sibling::text()
+      Height:
+        selector: //span[contains(text(),'Height:')]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //span[contains(text(),'Weight:')]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: lbs
+                with: ""
+          - lbToKg: true
+      Measurements:
+        selector: //span[contains(text(),'Measurements:')]/following-sibling::text()
+      Details: //div[@class='model-desc']
+
+      URL: //link[@rel="canonical"]/@href
+# Last Updated August 08, 2021
