@@ -16,14 +16,9 @@ xPathScrapers:
     common:
       $info: //div[@class="text"]
     scene:
-      Title:
-        selector: //title/text()
-        postProcess:
-          - replace:
-              - regex: 'Staxus Scene - '
-                with: ""
+      Title: //div[@class="video-descr__title"]//h2
       Date:
-        selector: //div[@class='video-details'][1]
+        selector: //div[@class='video-details'][strong='Added:']
         postProcess:
           - replace:
               - regex: "Added: "
@@ -38,14 +33,12 @@ xPathScrapers:
         selector: //div[@class="video-descr__content"]/p/text()
         concat: "\n"
       Image:
-        selector:  //script[@type="application/ld+json"][contains(.,'"thumbnailUrl":')][1]
+        selector: //script[@type="application/ld+json"][contains(.,'"thumbnailUrl":')]
         postProcess:
           - replace:
-              - regex: '^.*thumbnailUrl": "'
-                with: ""
-              - regex: '.jpg.*$'
-                with: ".jpg"
-              - regex: 'contentthumbs'
+              - regex: '^.*thumbnailUrl":\s"([^"]+)".*$'
+                with: "$1"
+              - regex: "contentthumbs"
                 with: "content/contentthumbs"
       Studio:
         Name:
@@ -60,22 +53,31 @@ xPathScrapers:
         selector: //p[@class="flex-item"]/b[text()="Height:"]/following-sibling::span[1]/text()
         postProcess:
           - replace:
-              - regex: 'cm.*/.*'
+              - regex: 'cm.*'
                 with: ""
-              - regex: '^.*/'
+              - regex: '^.*/(\s)?'
                 with: ""
       Measurements:
         selector: //p[@class="flex-item"]/b[text()="Cock size:"]/following-sibling::span[1]/text()
         postProcess:
           - replace:
-              - regex: 'cm.*/.*'
+              - regex: 'cm.*'
                 with: ""
-              - regex: '^.*/'
+              - regex: '^.*/(\s)?'
                 with: ""
+      Birthdate:
+        selector: //p[@class="flex-item"]/b[text()="Date of birth:"]/following-sibling::span[1]/text()
+        postProcess:
+          - replace:
+              - regex: '(\d+)\S+\s+([a-zA-Z]+)\D+(\d+)'
+                with: "$1 $2 $3"
+          - parseDate: 2 January 2006
+
       Country:
         selector: //p[@class="flex-item"]/b[text()="Ethnicity:"]/following-sibling::span[1]/text()
         postProcess:
           - map:
+              # https://en.wikipedia.org/wiki/List_of_adjectival_and_demonymic_forms_for_countries_and_nations
               "Abkhaz": "Abkhazia"
               "Abkhazian": "Abkhazia"
               "Afghan": "Afghanistan"
@@ -370,7 +372,7 @@ xPathScrapers:
               "Zambian": "Zambia"
               "Zimbabwean": "Zimbabwe"
               "Åland Island": "Åland Islands"
-      Image: 
+      Image:
         selector: //div[@class="item active"]/img/@src
         postProcess:
           - replace:
@@ -378,5 +380,4 @@ xPathScrapers:
                 with: "https:"
       Details:
         selector: //div[@class="video-descr__section col-md-12"]//p[2]/text()
-
-# Last Updated June 29, 2021
+# Last Updated August 08, 2021
