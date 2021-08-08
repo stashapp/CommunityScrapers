@@ -1,0 +1,46 @@
+name: IMDB
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.imdb.com/search/name-text/?bio={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.imdb.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name:
+        selector: //div[@class="lister-list"]/div[@class="lister-item mode-detail"]/div[@class="lister-item-content"]/h3/a/text()
+      URL:
+        selector: //div[@class="lister-list"]/div[@class="lister-item mode-detail"]/div[@class="lister-item-content"]/h3/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.imdb.com
+
+  performerScraper:
+    performer:
+      Name: //td[@id="overview-top"]/h1/span/text()
+      Birthdate:
+        selector: //time/@datetime
+        postProcess:
+          - parseDate: 2006-02-02
+      Image:
+        selector: //td[@id="img_primary"]/div/a/img/@src
+      Details:
+#        selector: //div[@class="name-trivia-bio-text"]/div/text()[1]
+        selector: //span[@class='see-more inline nobr-only']/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.imdb.com/"
+          - subScraper:
+              selector: //div[@class="soda odd"]/p/text()
+
+      URL: //div[@id='details-official-sites']/a[contains(text(),'Official Site')]/@href
+      Facebook:  //div[@id='details-official-sites']/a[contains(text(),'Facebook')]/@href
+
+#Last Updated August 8, 2021
