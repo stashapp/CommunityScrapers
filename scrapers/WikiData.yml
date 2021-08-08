@@ -23,14 +23,14 @@ jsonScrapers:
   performerScraper:
     performer:
       Name: entities.*.labels.en.value
-#      Image:
-#        selector: entities.*.claims.P18.#.mainsnak.datavalue.value
-#        postProcess:
-#          - replace:
-#              - regex: ^
-#                with: "https://commons.wikimedia.org/wiki/File:"
-#      Weight:
-#        selector: entities.*.claims.P2067.#.mainsnak.datavalue.value.amount
+      Image:
+        selector: entities.*.claims.P18.#.mainsnak.datavalue.value
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/"
+      Weight:
+        selector: entities.*.claims.P2067.#.mainsnak.datavalue.value.amount
       Birthdate:
         selector: entities.*.claims.P569.#.mainsnak.datavalue.value.time
       Height:
@@ -73,8 +73,4 @@ jsonScrapers:
 
 
 
-#driver:
-#  headers:
-#    - Key: User-Agent
-#      Value: stashjson/1.0.0
-# Last Updated August 03, 2021
+# Last Updated August 08, 2021
