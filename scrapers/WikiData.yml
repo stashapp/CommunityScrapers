@@ -1,4 +1,4 @@
-name: wikidata
+name: Wikidata
 performerByName:
   action: scrapeJson
   queryURL: https://query.wikidata.org/sparql?query=SELECT%20%3Fpornographic_actor%20%3Fpornographic_actorLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%20%20%3Fpornographic_actor%20wdt%3AP106%20wd%3AQ488111%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20rdfs%3Alabel%20%3Flabel.%0A%20%20FILTER(LANG(%3Flabel)%20%3D%20%22en%22).%0A%20%20FILTER(STRSTARTS(%3Flabel%2C%20%22{}%22)).%0A%7D%0A&format=json
@@ -40,9 +40,13 @@ jsonScrapers:
       Gender:
         selector: entities.*.claims.P21.#.mainsnak.datavalue.value.numeric-id
         postProcess:
-          - map:
-              6581072: "FEMALE"
-              6581097: "MALE"
+          - replace:
+              - regex: ^
+                with: "https://www.wikidata.org/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
       HairColor:
         selector: entities.*.claims.P1884.#.mainsnak.datavalue.value.numeric-id
         postProcess:
@@ -69,8 +73,18 @@ jsonScrapers:
           - replace:
               - regex: ^
                 with: "https://twitter.com/"
-
-
+      Details:
+        selector: entities.*.sitelinks.enwiki.title
+        postProcess:
+          - replace:
+              - regex: " "
+                with:  "_"
+              - regex: ^
+                with: "https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&explaintext&titles="
+              - regex: $
+                with: "&format=json"
+          - subScraper:
+              selector: query.pages.*.extract
 
 
 # Last Updated August 08, 2021
