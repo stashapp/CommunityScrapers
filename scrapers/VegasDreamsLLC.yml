@@ -6,8 +6,6 @@ sceneByURL:
       - helloladyboy.com
       - milftrip.com
       - screwmetoo.com
-      - trikepatrol.com
-      - tuktukpatrol.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -36,6 +34,5 @@ xPathScrapers:
                https://helloladyboy.com: HelloLadyBoy
                https://milftrip.com: MilfTrip
                https://screwmetoo.com: ScrewMeToo
-               https://trikepatrol.com: TrikePatrol
-               https://tuktukpatrol.com: TukTukPatrol
-# Last Updated April 13, 2021
+
+# Last Updated July 21, 2021
