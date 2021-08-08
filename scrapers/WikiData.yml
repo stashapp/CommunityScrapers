@@ -43,6 +43,34 @@ jsonScrapers:
           - map:
               6581072: "FEMALE"
               6581097: "MALE"
+      HairColor:
+        selector: entities.*.claims.P1884.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.wikidata.org/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      Country:
+        selector: entities.*.claims.P27.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.wikidata.org/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      Twitter:
+        selector: entities.*.claims.P2002.#.mainsnak.datavalue.value
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://twitter.com/"
+
+
 
 
 #driver:
