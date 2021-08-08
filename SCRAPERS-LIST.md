@@ -52,6 +52,7 @@ amateurboxxx.com|AmateurBoxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateureuro.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateursfrombohemia.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amazinganna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+amelielou.com|AmelieLou.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amkingdom.com|ATKExotics.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 anal-angels.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 anal-beauty.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
