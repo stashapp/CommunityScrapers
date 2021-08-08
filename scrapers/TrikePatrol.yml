@@ -33,6 +33,20 @@ xPathScrapers:
           fixed: TrikePatrol
       Image:
         selector: //div[@id='myOverlay']//amp-img/@src
+      Date:
+        selector: //h1[@class='amp-single-title']
+        postProcess:
+          - replace:
+              - regex: \s
+                with: "%20" # spaces cause 400 error
+              - regex: ^
+                with: 'https://trikepatrol.com/?amp=1&s="'
+              - regex: $
+                with: '"'
+          - subScraper:
+              selector: (//div[@class="fsdate absolute"])[1]/span/text()
+              postProcess:
+                - parseDate: Jan 2, 2006
 
   performerSearch:
     performer:
@@ -73,5 +87,4 @@ xPathScrapers:
       Details: //div[@class='model-desc']
 
       URL: //link[@rel="canonical"]/@href
-
-# Last Updated July 21, 2021
+# Last Updated August 08, 2021
