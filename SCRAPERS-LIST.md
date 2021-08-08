@@ -628,6 +628,7 @@ maxinex.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 meanawolf.com|MeanaWolf.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 meetsuckandfuck.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 men.com|Brazzers.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Gay
+menatplay.com|MenAtPlay.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 menpov.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 messyxxx.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 metadataapi.net (JSON API)|ThePornDB.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
