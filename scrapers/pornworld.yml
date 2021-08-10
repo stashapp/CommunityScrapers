@@ -1,4 +1,4 @@
-name: pornworld
+name: Pornworld
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -32,6 +32,9 @@ xPathScrapers:
         Name: //div[@class="watch"]//a[contains(@href,"genre")]/text()
       Performers:
         Name: //div[@class="watch"]//a[contains(@href,"model")]/text()
+      Studio:
+        Name:
+          fixed: Porn World
       Image: //video/@data-poster
 
 # Last Updated August 10, 2021
