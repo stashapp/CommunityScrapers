@@ -1,4 +1,11 @@
 name: "AdultimeAPI"
+sceneByURL:
+  - action: script
+    url:
+      - adulttime.com/en/video/
+    script:
+      - python
+      - AdultimeAPI.py
 sceneByFragment:
     action: script
     script:
