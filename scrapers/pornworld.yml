@@ -4,6 +4,19 @@ sceneByURL:
     url:
       - pornworld.com/watch/
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://pornworld.com/autocomplete?query={filename}
+  queryURLReplace:
+    filename:
+      - regex: .+(GP\d+).*
+        with: $1
+  scraper: sceneQueryScraper
+jsonScrapers:
+  sceneQueryScraper:
+    scene:
+      Title: terms.Scene.0.name
+      URL: terms.Scene.0.url
 xPathScrapers:
   sceneScraper:
     scene:
