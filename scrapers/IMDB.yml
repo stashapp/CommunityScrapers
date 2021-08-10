@@ -43,4 +43,4 @@ xPathScrapers:
       URL: //div[@id='details-official-sites']/a[contains(text(),'Official Site')]/@href
 #     Facebook:  //div[@id='details-official-sites']/a[contains(text(),'Facebook')]/@href
 
-#Last Updated August 10, 2021
+# Last Updated August 10, 2021
