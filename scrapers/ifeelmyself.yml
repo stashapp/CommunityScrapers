@@ -1,0 +1,10 @@
+name: ifeelmyself.com
+sceneByFragment:
+  action: script
+  script:
+    - python3
+    - ifeelmyself.py
+    - query
+
+#Last Updated August 11, 2021 
+
