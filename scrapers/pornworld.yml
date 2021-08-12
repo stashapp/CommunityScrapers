@@ -1,24 +1,45 @@
-name: pornworld
+name: Pornworld
 sceneByURL:
   - action: scrapeXPath
     url:
       - pornworld.com/watch/
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://pornworld.com/autocomplete?query={filename}
+  queryURLReplace:
+    filename:
+      - regex: .+(GP\d+).*
+        with: $1
+  scraper: sceneQueryScraper
+jsonScrapers:
+  sceneQueryScraper:
+    scene:
+      Title: terms.Scene.0.name
+      URL: terms.Scene.0.url
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //meta[@name="twitter:title"]/@content
-      Date: //span[@title="Release date"]/a/text()
-      Details: //div[@class="scene-description__row"]/dt[contains(.,"Description")]/../dd/text()
-      Tags:
-        Name: //div[@class="scene-description__row"]/dt[contains(.,"Genre")]/../dd/a/text()
-      Performers:
-        Name: //div[@class="scene-description__row"]/dt[contains(.,"Talents")]/../dd/a/text()
-      Image: 
-        selector: //div[@id="player"]/@style
+      Title: 
+        selector: //h1
         postProcess:
-            - replace: 
-                - regex: (background-image:url\()(.+)(\))
-                  with: $2
+          - replace:
+            - regex: featuring.+
+              with: ""
+      Date: //i[contains(@class,"calendar3")]/text()
+      Details:
+        selector: //meta[@name="description"]/@content
+        postProcess:
+          - replace:
+              - regex: '\x{0092}' # unicode char 0092 (looks like ')
+                with: "'"
+      Tags:
+        Name: //div[@class="watch"]//a[contains(@href,"genre")]/text()
+      Performers:
+        Name: //div[@class="watch"]//a[contains(@href,"model")]/text()
+      Studio:
+        Name:
+          fixed: Porn World
+      Image: //video/@data-poster
 
-# Last Updated August 01, 2020
+# Last Updated August 10, 2021
