@@ -371,7 +371,8 @@ def match_result(api_scene, range_duration=60, single=False):
 def scraping_json(api_json, url):
     scrape = {}
     # Title
-    scrape['title'] = api_json.get('title')
+    if api_json.get('title'):
+        scrape['title'] = api_json['title'].strip()
     # Date
     scrape['date'] = api_json.get('release_date')
     # Details
