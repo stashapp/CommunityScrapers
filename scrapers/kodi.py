@@ -31,8 +31,7 @@ def query_xml(path, title):
         else:
             res['tags'] = [{"name":x.text} for x in tree.findall('genre')]
 
-    print(json.dumps(res))
-    exit(0)
+    return res
 
 def debug(s):
     print(s, file=sys.stderr)
@@ -48,13 +47,6 @@ def get_file_path(scene_id):
         filepath = row[1]
     con.close()
     return filepath
-
-def lookup_xml(path, title):
-    # FEATURE: Add more path variantions here to allow for /metadata/ subfolder
-    if os.path.isfile(path):
-        query_xml(path, title)
-    else:
-        debug("No file found at" + path)
         
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
@@ -68,7 +60,10 @@ if sys.argv[1] == "query":
     temp[-1] = 'nfo'
     nfoFilePath = '.'.join(temp)
     
-    lookup_xml(nfoFilePath, fragment['title'])
-    print(json.dumps(fragment))
-    
-# Last Updated August 15, 2021
+    if os.path.isfile(nfoFilePath):
+        res = query_xml(nfoFilePath, fragment['title'])
+        print(json.dumps(res))
+    else:
+        debug("No file found at" + nfoFilePath)
+        
+    exit(0)
