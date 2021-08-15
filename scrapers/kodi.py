@@ -9,8 +9,9 @@ import xml.etree.ElementTree as ET
 This script parses kodi nfo files for metadata. The .nfo file must be in the same directory as the video file and must be named exactly alike.
 """
 
-# If you want to ingest image data from the nfo you may need to rewrite the path stored in the file. Especially when using a docker container.
-rewriteBasePath = True
+# If you want to ingest image data from the .nfo the path to these files may need to be rewritten. Especially when using a docker container.
+rewriteBasePath = False
+# Example: Z:\Videos\Studio_XXX\example_cover.jpg -> /data/Studio_XXX/example_cover.jpg
 basePathBefore = 'Z:'
 basePathAfter = "/data"
 
