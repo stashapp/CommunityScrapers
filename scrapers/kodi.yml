@@ -1,0 +1,10 @@
+name: "Kodi XML"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      # use python3 instead if needed
+      - kodi.py
+      - query
+
+# Last Updated February 04, 2021
