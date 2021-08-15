@@ -46,18 +46,20 @@ def query_xml(path, title):
     if tree.find("studio") != None:
         res["studio"] = {"name":tree.find("studio").text}
     
-    posterElem = tree.find("art").find("poster")
-    if posterElem.text != None:
-        if not rewriteBasePath and os.path.isfile(posterElem.text):
-            res["image"] = make_image_data_url(posterElem.text)
-        elif rewriteBasePath:
-            rewrittenPath = posterElem.text.replace(basePathBefore, basePathAfter).replace("\\", "/")
-            if os.path.isfile(rewrittenPath):
-                res["image"] = make_image_data_url(rewrittenPath)
-            else:
-                debug("Can't find image: " + posterElem.text.replace(basePathBefore, basePathAfter) + ". Is the base path correct?")
-        else:
-            debug("Can't find image: " + posterElem.text + ". Are you using a docker container? Maybe you need to change the base path in the script file.")
+    if tree.find("art") != None:
+        if tree.find("art").find("poster") != None:
+            posterElem = tree.find("art").find("poster")
+            if posterElem.text != None:
+                if not rewriteBasePath and os.path.isfile(posterElem.text):
+                    res["image"] = make_image_data_url(posterElem.text)
+                elif rewriteBasePath:
+                    rewrittenPath = posterElem.text.replace(basePathBefore, basePathAfter).replace("\\", "/")
+                    if os.path.isfile(rewrittenPath):
+                        res["image"] = make_image_data_url(rewrittenPath)
+                    else:
+                        debug("Can't find image: " + posterElem.text.replace(basePathBefore, basePathAfter) + ". Is the base path correct?")
+                else:
+                    debug("Can't find image: " + posterElem.text + ". Are you using a docker container? Maybe you need to change the base path in the script file.")
 
     return res
 
