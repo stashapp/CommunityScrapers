@@ -8,6 +8,8 @@ import xml.etree.ElementTree as ET
 """  
 This script parses kodi nfo files for metadata. The .nfo file must be in the same directory as the video file and must be named exactly alike.
 """
+debug = False
+
 
 # If you want to ingest image files from the .nfo the path to these files may need to be rewritten. Especially when using a docker container.
 rewriteBasePath = False
@@ -64,7 +66,7 @@ def query_xml(path, title):
     return res
 
 def debug(s):
-    print(s, file=sys.stderr)
+    if debug: print(s, file=sys.stderr)
 
 # Would be nicer with Stash API instead of direct SQlite access
 def get_file_path(scene_id):
