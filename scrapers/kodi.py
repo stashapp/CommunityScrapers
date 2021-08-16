@@ -87,7 +87,7 @@ def make_image_data_url(image_path):
         
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
-    
+    res = {"title": fragment["title"]}
     # Assume that .nfo is named exactly like the video file and is at the same location
     # WORKAROUND: Read file name from db until filename is given in the fragment
     videoFilePath = get_file_path(fragment["id"])
@@ -99,9 +99,8 @@ if sys.argv[1] == "query":
     
     if os.path.isfile(nfoFilePath):
         res = query_xml(nfoFilePath, fragment["title"])
-        debug(res)
-        print(json.dumps(res))
     else:
         debug("No file found at" + nfoFilePath)
-        
+    
+    print(json.dumps(res))
     exit(0)
