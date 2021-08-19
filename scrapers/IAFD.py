@@ -435,7 +435,7 @@ def performer_from_tree(tree):
     p.gender = p.set_value(performer_gender)
     p.gender = p.map_gender(p.gender)
 
-    performer_url = tree.xpath('//*[contains(@href,"person.rme")]/@href')
+    performer_url = tree.xpath('//div[@id="perfwith"]//*[contains(@href,"person.rme")]/@href')
     if performer_url:
         p.url = "https://www.iafd.com" + performer_url[0]
     performer_twitter = tree.xpath('//p[@class="biodata"]/a[contains(text(),"http://twitter.com/")]/@href')
@@ -606,4 +606,4 @@ if mode == "scene":
 #by default performer scraper
 performer_from_tree(tree)
 
-#Last Updated May 8, 2021
+#Last Updated August 19, 2021
