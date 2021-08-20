@@ -31,7 +31,7 @@ xPathScrapers:
               - regex: .*?(https?:\/\/\S*\.jpg).*
                 with: $1
       Date:
-        selector: //div[@class='stat'][3]/span[@class='value']
+        selector: //span[contains(text(),"Date")]/following-sibling::text()
         postProcess:
           - parseDate: 02/01/2006
 
