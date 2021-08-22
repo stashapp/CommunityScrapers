@@ -28,9 +28,9 @@ FIXED_TAGS = ""
 
 
 def debug(q):
-    if "[DEBUG]" in q and PRINT_DEBUG == False:
+    if "[DEBUG]" in str(q) and PRINT_DEBUG == False:
         return
-    if "[MATCH]" in q and PRINT_MATCH == False:
+    if "[MATCH]" in str(q) and PRINT_MATCH == False:
         return
     print(q, file=sys.stderr)
 
@@ -459,12 +459,13 @@ else:
     debug("[DEBUG] Stash Title: {}".format(SCENE_TITLE))
 # Get your sqlite database
 DB_PATH = graphql_configdb()
-if (os.path.isfile(CONFIG_PATH) == True and DB_PATH is None):
-    with open(CONFIG_PATH) as f:
-        for line in f:
-            if "database: " in line:
-                DB_PATH = line.replace("database: ", "").rstrip('\n')
-                break
+if (CONFIG_PATH and DB_PATH is None):
+    if (os.path.isfile(CONFIG_PATH)):
+        with open(CONFIG_PATH) as f:
+            for line in f:
+                if "database: " in line:
+                    DB_PATH = line.replace("database: ", "").rstrip('\n')
+                    break
 debug("[DEBUG] Database Path: {}".format(DB_PATH))
 if DB_PATH:
     if SCENE_ID:
