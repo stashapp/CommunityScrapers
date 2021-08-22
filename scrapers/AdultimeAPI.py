@@ -28,9 +28,9 @@ FIXED_TAGS = ""
 
 
 def debug(q):
-    if "[DEBUG]" in q and PRINT_DEBUG == False:
+    if "[DEBUG]" in str(q) and PRINT_DEBUG == False:
         return
-    if "[MATCH]" in q and PRINT_MATCH == False:
+    if "[MATCH]" in str(q) and PRINT_MATCH == False:
         return
     print(q, file=sys.stderr)
 
