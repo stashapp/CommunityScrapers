@@ -2,9 +2,33 @@ name: Perfect Gonzo
 sceneByURL:
   - action: scrapeXPath
     url:
-      - allinternal.com
-      - perfectgonzo.com
+      - allinternal.com/movies/
+      - asstraffic.com/movies/
+      - cumforcover.com/movies/
+      - fistflush.com/movies/
+      - milfthing.com/movies/
+      - perfectgonzo.com/movies/
+      - primecups.com/movies/
+      - purepov.com/movies/
+      - spermswap.com/movies/
+      - tamedteens.com/movies/
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - allinternal.com/models/
+      - asstraffic.com/models/
+      - cumforcover.com/models/
+      - fistflush.com/models/
+      - milfthing.com/models/
+      - perfectgonzo.com/models/
+      - primecups.com/models/
+      - purepov.com/models/
+      - spermswap.com/models/
+      - tamedteens.com/models/
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -25,9 +49,46 @@ xPathScrapers:
         Name: //div[contains(h4,"Featured model")]//a
       Studio:
         Name:
-          selector: //link[@type="image/ico"]/@href
+          selector: //link[@type="image/ico"]/@href | //link[@type="image/png"]/@href
           postProcess:
             - map:
                 https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_perfectgonzo.com.ico: Perfect Gonzo
                 https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_allinternal.com.ico: All Internal
-# Last Updated July 19, 2021
+                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_cumforcover.com.ico: Cum For Cover
+                https://static-cdn-sapphix.explicithd.com/assets/img/favicon_fistflush.com.png: Fist Flush
+                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_milfthing.com.ico: Milf Thing
+                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_primecups.com.ico: Prime Cups
+                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_purepov.com.ico: Pure POV
+                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_spermswap.com.ico: Sperm Swap
+                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_tamedteens.com.ico: Tamed Teens
+
+  performerScraper:
+    performer:
+      Name: //h3[@class="mg-md"]
+      Country:
+        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Nationality:']/following-sibling::text()[1]
+        postProcess:
+          - map:
+              Hungarian: Hungary
+              French: France
+              Czech: Czech Republic
+              Romanian: Romania
+              Swiss: Switzerland
+              Spanish: Spain
+              Russian: Russia
+              Austrian: Austria
+              Canadian: Canada
+              Colombian: Colombia
+              Polish: Poland
+              Slovakian: Slovakia
+              Ukrainian: Ukraine
+      Ethnicity:
+        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Ethnicity:']/following-sibling::text()[1]
+        postProcess:
+          - map:
+              caucasian: white
+      Gender:
+        fixed: Female
+      Image:
+        selector: //div[@class='col-md-8 bigmodelpic']/img/@src
+# Last Updated August 25, 2021
