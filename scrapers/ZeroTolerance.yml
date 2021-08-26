@@ -2,12 +2,15 @@ name: "ZeroTolerance"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - ztod.com/videos/
+    scraper: sceneScraperZtod
+  - action: scrapeXPath
+    url:
       - thirdmovies.com/better/videos/
       - thirdmovies.com/videos/
-      - ztod.com/videos/
-    scraper: sceneScraper
+    scraper: sceneScraperThird
 xPathScrapers:
-  sceneScraper:
+  sceneScraperZtod:
     common:
       $desc: //div[@class="row player-desc"]/div[1]
     scene:
@@ -27,7 +30,7 @@ xPathScrapers:
       Movies:
         Name: //a[@class="btn-link dvd-title"]/text()
       Image: //img[@class="player-image"]/@src
-      Studio:
+      Studio: &studioAttr
         Name:
           selector: //p[@id="copy"]
           postProcess:
@@ -37,4 +40,24 @@ xPathScrapers:
             - map:
                 Thirdmovies: 3rd Degree Movies
                 Ztod: Zero Tolerance
-# Last Updated April 19, 2021
+  sceneScraperThird:
+    scene:
+      Title: //h1[@class="section-title text-white"]/text()
+      Date:
+        selector: //span[contains(@class,"title-date")]/text()
+        postProcess:
+          - replace:
+              - regex: Released\s
+                with:
+          - parseDate: Jan 02, 2006
+      Details: //h5[text()="Description:"]/following-sibling::p/text()
+      Tags:
+        Name: //p[@class="box-niche"]//a/text()
+      Performers:
+        Name: //p[contains(text(),'Pornstars:')]//a/text()
+      Movies:
+        Name: //p[contains(text(),'DVD:')]//a/text()
+      Image: //div[@id="videoplayer"]/img[contains(@src,".jpg")]/@src
+      Studio: *studioAttr
+
+# Last Updated August 26, 2021
