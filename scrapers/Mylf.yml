@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[contains(@class,"sceneTitle")]/text()
+      Title: //h2[contains(@class,"sceneTitle")]/text()
       Details: //div[contains(@class,"sceneDesc")]/text()
       Date:
         selector: //div[contains(@class,"sceneDate")]/text()
@@ -38,4 +38,4 @@ xPathScrapers:
             - replace:
                 - regex: \sX\s.*
                   with: ""
-# Last Updated May 19, 2021
+# Last Updated August 27, 2021
