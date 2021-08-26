@@ -38,4 +38,4 @@ xPathScrapers:
             - replace:
                 - regex: \sX\s.*
                   with: ""
-# Last Updated May 19, 2021
+# Last Updated August 27, 2021
