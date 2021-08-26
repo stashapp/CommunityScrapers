@@ -42,13 +42,18 @@ xPathScrapers:
                 Ztod: Zero Tolerance
   sceneScraperThird:
     scene:
-      Title: //h1[@class="section-title text-white"]/text()
+      Title: 
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: Featuring.+
+                with: ""
       Date:
         selector: //span[contains(@class,"title-date")]/text()
         postProcess:
           - replace:
               - regex: Released\s
-                with:
+                with: ""
           - parseDate: Jan 02, 2006
       Details: //h5[text()="Description:"]/following-sibling::p/text()
       Tags:
@@ -57,7 +62,7 @@ xPathScrapers:
         Name: //p[contains(text(),'Pornstars:')]//a/text()
       Movies:
         Name: //p[contains(text(),'DVD:')]//a/text()
-      Image: //div[@id="videoplayer"]/img[contains(@src,".jpg")]/@src
+      Image: //div[@id="videoplayer"]/img[contains(@src,".jpg") and contains(@src,".com")]/@src
       Studio: *studioAttr
 
 # Last Updated August 26, 2021
