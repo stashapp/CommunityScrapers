@@ -3,10 +3,10 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - ztod.com/videos/
+      - thirdmovies.com/better/videos/
     scraper: sceneScraperZtod
   - action: scrapeXPath
     url:
-      - thirdmovies.com/better/videos/
       - thirdmovies.com/videos/
     scraper: sceneScraperThird
 xPathScrapers:
@@ -65,4 +65,4 @@ xPathScrapers:
       Image: //div[@id="videoplayer"]/img[contains(@src,".jpg") and contains(@src,".com")]/@src
       Studio: *studioAttr
 
-# Last Updated August 26, 2021
+# Last Updated August 29, 2021
