@@ -67,21 +67,21 @@ xPathScrapers:
     performer:
       Name: //h3[@class="mg-md"]
       Country:
-        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Nationality:']/following-sibling::text()[1]
+        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Nationality:' or text()= 'Country:']/following-sibling::text()[1]
         postProcess:
           - map:
-              Hungarian: Hungary
-              French: France
-              Czech: Czech Republic
-              Romanian: Romania
-              Swiss: Switzerland
-              Spanish: Spain
-              Russian: Russia
               Austrian: Austria
               Canadian: Canada
               Colombian: Colombia
+              Czech: Czech Republic
+              French: France
+              Hungarian: Hungary
               Polish: Poland
+              Romanian: Romania
+              Russian: Russia
               Slovakian: Slovakia
+              Spanish: Spain
+              Swiss: Switzerland
               Ukrainian: Ukraine
       Ethnicity:
         selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Ethnicity:']/following-sibling::text()[1]
@@ -92,4 +92,4 @@ xPathScrapers:
         fixed: Female
       Image:
         selector: //div[@class='col-md-8 bigmodelpic']/img/@src
-# Last Updated August 25, 2021
+# Last Updated August 29, 2021
