@@ -1,0 +1,32 @@
+name: "selfiesuck.com"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - selfiesuck.com/
+      - www.selfiesuck.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: /html/body/div[1]/div/div[3]/h3
+      Details: /html/body/div[1]/div/div[3]/p/text()
+      Image: 
+        selector: /html/body/div[1]/div/div[5]/a[1]/img/@src0_3x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.selfiesuck.com"
+      Date:
+        selector: /html/body/div[1]/div/div[4]/p[1]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Tags:
+        Name: /html/body/div[1]/div/div[7]/ul/li/a
+      Performers:
+        Name:
+          selector: /html/body/div[1]/div/div[6]/ul/li[2]/a
+      Studio:
+        Name: 
+          fixed: Selfie Suck
+# Last Updated August 30, 2021
