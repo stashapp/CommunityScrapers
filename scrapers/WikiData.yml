@@ -1,7 +1,7 @@
 name: Wikidata
 performerByName:
   action: scrapeJson
-  queryURL: https://query.wikidata.org/sparql?query=SELECT%20%3Fpornographic_actor%20%3Fpornographic_actorLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%20%20%3Fpornographic_actor%20wdt%3AP106%20wd%3AQ488111%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20rdfs%3Alabel%20%3Flabel.%0A%20%20FILTER(LANG(%3Flabel)%20%3D%20%22en%22).%0A%20%20FILTER(STRSTARTS(%3Flabel%2C%20%22{}%22)).%0A%7D%0A&format=json
+  queryURL: https://query.wikidata.org/sparql?query=SELECT%20%3Fpornographic_actor%20%3Fpornographic_actorLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%20%20VALUES%20%3Fprofessions%20%7Bwd%3AQ488111%20wd%3AQ3286043%20wd%3AQ728711%20wd%3AQ1079215%7D%0A%20%20%3Fpornographic_actor%20wdt%3AP106%20%20%3Fprofessions.%0A%20%20%3Fpornographic_actor%20%20%20%20%20%20%20rdfs%3Alabel%20%3Flabel.%0A%20%20FILTER(LANG(%3Flabel)%20%3D%20%22en%22).0A%20%20FILTER(STRSTARTS(%3Flabel%2C%20%22{}%22)).%0A%7D%0A&format=json
   scraper: performerSearch
 performerByURL:
   - action: scrapeJson
