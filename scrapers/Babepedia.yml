@@ -56,6 +56,17 @@ xPathScrapers:
               - regex: (\w+:)(\s)(\w+)(\s)(\d+)(\w+)(\s)(\w+)(\s)(\w+)(\s)(\d+)
                 with: $5 $10 $12
           - parseDate: 2 January 2006
+      DeathDate:
+        selector: $label[text()='Died:']]/text()
+        postProcess:
+          - replace:
+              - regex: st\s|nd\s|rd\s|th\s
+                with: " "
+              - regex: \sof\s
+                with: " "
+              - regex: \(age.+
+                with: ""
+          - parseDate: Monday 2 January 2006
       Ethnicity:
         selector: $label[text()='Ethnicity:']]/text()
         postProcess:
@@ -135,4 +146,4 @@ xPathScrapers:
                 with: "$1 "
               - regex: '\n(,|\.|\))'
                 with: "$1"
-# Last Updated April 28, 2021
+# Last Updated August 31, 2021
