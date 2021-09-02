@@ -1,32 +1,30 @@
-name: "selfiesuck.com"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - selfiesuck.com/
-      - www.selfiesuck.com/
+      - selfiesuck.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: /html/body/div[1]/div/div[3]/h3
-      Details: /html/body/div[1]/div/div[3]/p/text()
+        selector: //div[@class="videoDetails clear"]/h3
+      Details: //div[@class="videoDetails clear"]/p
       Image: 
-        selector: /html/body/div[1]/div/div[5]/a[1]/img/@src0_3x
+        selector: //img[@width="1160"]/@src0_1x
         postProcess:
           - replace:
               - regex: ^
                 with: "https://www.selfiesuck.com"
       Date:
-        selector: /html/body/div[1]/div/div[4]/p[1]/text()
+        selector: //span[contains(text(),"Date Added:")]/following-sibling::text()
         postProcess:
           - parseDate: January 2, 2006
       Tags:
-        Name: /html/body/div[1]/div/div[7]/ul/li/a
+        Name: //li[contains(text(),"Tags:")]/following-sibling::text()
       Performers:
         Name:
-          selector: /html/body/div[1]/div/div[6]/ul/li[2]/a
+          selector: //li[@class="update_models"]/a
       Studio:
         Name: 
           fixed: Selfie Suck
-# Last Updated August 30, 2021
+# Last Updated September 2, 2021
