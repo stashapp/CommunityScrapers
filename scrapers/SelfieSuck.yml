@@ -1,3 +1,4 @@
+name: SelfieSuck
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -9,7 +10,7 @@ xPathScrapers:
       Title:
         selector: //div[@class="videoDetails clear"]/h3
       Details: //div[@class="videoDetails clear"]/p
-      Image: 
+      Image:
         selector: //img[@width="1160"]/@src0_1x
         postProcess:
           - replace:
@@ -22,9 +23,9 @@ xPathScrapers:
       Tags:
         Name: //li[contains(text(),"Tags:")]/following-sibling::text()
       Performers:
-        Name:
-          selector: //li[@class="update_models"]/a
+        Name: //li[@class="update_models"]/a
+        URL: //li[@class="update_models"]/a/@href
       Studio:
-        Name: 
+        Name:
           fixed: Selfie Suck
-# Last Updated September 2, 2021
+# Last Updated September 5, 2021
