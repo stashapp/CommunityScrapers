@@ -60,12 +60,10 @@ xPathScrapers:
         selector: $label[text()='Died:']]/text()
         postProcess:
           - replace:
-              - regex: st\s|nd\s|rd\s|th\s
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
+              - regex: (\sof\s)|(\(age.+)
                 with: " "
-              - regex: \sof\s
-                with: " "
-              - regex: \(age.+
-                with: ""
           - parseDate: Monday 2 January 2006
       Ethnicity:
         selector: $label[text()='Ethnicity:']]/text()
