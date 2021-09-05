@@ -1,0 +1,73 @@
+name: MilfTugs
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - milftugs.com/
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.milftugs.com/milf-models/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='holder p-rel']/h2
+      Details:
+        selector: //div[@class='desc frame']
+      Performers:
+        Name: //span[@class='value']/a
+        URL: //span[@class='value']/a/@href
+      Studio:
+        Name:
+          fixed: MilfTugs
+      Image:
+        selector: //script[contains(text(),'fluidPlayer')]/text()
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+      Date:
+        selector: //span[contains(text(),"Date")]/following-sibling::text()
+        postProcess:
+          - parseDate: 01/02/2006
+
+  performerScraper:
+    performer:
+      Name:
+        selector: //h2[@class='title']/span
+      Gender:
+        fixed: Female
+      Country:
+        fixed: United States
+      Ethnicity:
+        fixed: White
+      Birthdate:
+        selector: //span[contains(text(),'Birthday:')]/following-sibling::span
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        selector: //div[@class='item-img frame']/img[@class='lazyload loaded']/@src
+      EyeColor:
+        selector: //span[contains(text(),'Eye Color:')]/following-sibling::span
+      HairColor:
+        selector: //span[contains(text(),'Hair Color:')]/following-sibling::span
+      Height:
+        selector: //span[contains(text(),'Height:')]/following-sibling::span
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //span[contains(text(),'Weight:')]/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: ^(\d+).*$
+                with: "$1"
+          - lbToKg: true
+      Measurements:
+        selector: //span[contains(text(),'Measurements:')]/following-sibling::span
+
+      URL: //link[@rel="canonical"]/@href
+# Last Updated September 05, 2021
