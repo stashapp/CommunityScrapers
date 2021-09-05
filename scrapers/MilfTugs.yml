@@ -19,8 +19,8 @@ xPathScrapers:
       Details:
         selector: //div[@class='desc frame']
       Performers:
-        Name:
-          selector: //span[@class='value']/a
+        Name: //span[@class='value']/a
+        URL: //span[@class='value']/a/@href
       Studio:
         Name:
           fixed: MilfTugs
@@ -33,8 +33,7 @@ xPathScrapers:
       Date:
         selector: //span[contains(text(),"Date")]/following-sibling::text()
         postProcess:
-          - parseDate: 02/01/2006
-
+          - parseDate: 01/02/2006
 
   performerScraper:
     performer:
@@ -45,11 +44,11 @@ xPathScrapers:
       Country:
         fixed: United States
       Ethnicity:
-          fixed: White
+        fixed: White
       Birthdate:
         selector: //span[contains(text(),'Birthday:')]/following-sibling::span
         postProcess:
-          - parseDate: Jan 2, 2006
+          - parseDate: January 2, 2006
       Image:
         selector: //div[@class='item-img frame']/img[@class='lazyload loaded']/@src
       EyeColor:
@@ -64,12 +63,11 @@ xPathScrapers:
         selector: //span[contains(text(),'Weight:')]/following-sibling::span
         postProcess:
           - replace:
-              - regex: lbs.
-                with: ""
+              - regex: ^(\d+).*$
+                with: "$1"
           - lbToKg: true
       Measurements:
         selector: //span[contains(text(),'Measurements:')]/following-sibling::span
 
       URL: //link[@rel="canonical"]/@href
-
-# Last Updated August 17, 2021
+# Last Updated September 05, 2021
