@@ -147,7 +147,7 @@ def scrape_gallery(baseUrl, date, name):
     return map_media(data, studio, baseUrl)
 
 def map_model(baseUrl, model):
-    tags = list(map(lambda t: {'Name'}, model['tags']))
+    tags = list(map(lambda t: {'Name': t}, model['tags']))
 
     def add_tag(key, format):
         nonlocal tags
@@ -222,4 +222,4 @@ elif sys.argv[1] == 'search':
     ret = search(sys.argv[2], i['title'] if 'title' in i else i['name'])
 
 print(json.dumps(ret))
-# Last Updated July 4, 2021
+# Last Updated September 9, 2021
