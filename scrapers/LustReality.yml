@@ -1,0 +1,31 @@
+name: LustReality
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lustreality.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+      Date:
+        selector: //span[@class="u-inline-block u-mr--nine"]
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Performers:
+        Name: //div[@class="u-mt--three u-mb--three"]/a
+      Tags:
+        Name: //ul[@class="u-list u-list--inline u-fs--th u-ff--alt"]/li/a
+      Details:
+        selector: //div[@class="u-mb--six u-fs--fo u-lh--normal"]
+      Image:
+        selector: //div[@class="splash-screen fullscreen-message is-visible"]/@style
+        postProcess:
+          - replace:
+              - regex: .*?(https?:\/\/\S*\.jpg).*
+                with: $1
+      Studio:
+        Name:
+          fixed: LustReality
+# Last Updated September 10, 2021
