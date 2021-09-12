@@ -609,6 +609,7 @@ loveherass.com|devianteNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 loveherfeet.com|LoveHerFeet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Foot Fetish
 lubed.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lustery.com|Lustery.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Amateur
+lustreality.com|LustReality.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 lustylina.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 madeincanada.xxx|MadeInCanada.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 madouqu.com|Madou.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
