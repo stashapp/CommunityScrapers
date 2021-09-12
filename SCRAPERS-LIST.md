@@ -1122,6 +1122,7 @@ xxxnj.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xxxpawn.com|XXXPawn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xxxpawn.xxx|XXXPawn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yanks.com|Yanks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+yngr.com|YNGR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 younganaltryouts.com|OldGoesYoung.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 youngthroats.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 youporn.com|YouPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
