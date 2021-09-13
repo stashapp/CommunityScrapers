@@ -2,7 +2,9 @@ name: backroomcastingcouch
 performerByURL:
   - action: scrapeXPath
     url: 
+    # Get Data either from model page or a video. Both provide same info
       - backroomcastingcouch.com/site/models
+      - backroomcastingcouch.com/site/trailers
       
     scraper: performerScraper
 xPathScrapers:
