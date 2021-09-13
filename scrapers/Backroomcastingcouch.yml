@@ -2,18 +2,19 @@ name: backroomcastingcouch
 performerByURL:
   - action: scrapeXPath
     url: 
-      - backroomcastingcouch.com/free/girl
+      - backroomcastingcouch.com/site/models
+      
     scraper: performerScraper
 xPathScrapers:
   performerScraper:
     performer:
-      Name: //title/text()
+      Name: //h2[@class="section-title"]/text()
       Image:
-        selector: //a[@id='Main_PicLink']/img/@src
+        selector: //img[@alt=//h2[@class="section-title"]/text()]/@src0_1x
         postProcess:
-          # URL is a partial url, add the first part
+          # URL is a CDN url with token auth, replace with orig url --> Works without token
           - replace:
-              - regex: ^
-                with: https://backroomcastingcouch.com
+              - regex: '[^\sw\.@/]([0-9a-zA-Z\-\.]*[0-9a-zA-Z\-]+\.)(com|org|net|DE|COM|ORG|NET)'
+                with: backroomcastingcouch.com
 
-# Last Updated February 19, 2021
+# Last Updated September 13, 2021
