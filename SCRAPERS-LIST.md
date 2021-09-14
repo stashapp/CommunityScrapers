@@ -897,6 +897,7 @@ siripornstar.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sis.porn|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sislovesme.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sissypov.com|SissyPov.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+slayed.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python >= 3.3|-
 smashpictures.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 smokingmina.com|SmokingMina.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 soapymassage.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
