@@ -18,8 +18,12 @@ SET_RATIO = 0.75
 PRINT_DEBUG = True
 # Print ratio message. (Show title find in search)
 PRINT_MATCH = True
-# File used to store key to connect the API.
+## File used to store key to connect the API.
 STOCKAGE_FILE_APIKEY = "MindGeekAPI.ini"
+# This file will be used for search by name. It can be useful if you only want to search on specific site. (Like only putting Parent studio and not Child)
+# Copy MindGeekAPI.ini to a other name (then put the name in the var below), then edit the file to remove site  you don't want to search.
+STOCKAGE_FILE_APIKEY_SEARCH = ""
+
 # Tags you don't want to see appear in Scraper window.
 IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
 # Tag you always want in Scraper window.
@@ -35,11 +39,13 @@ def debug(q):
     print(q, file=sys.stderr)
 
 def sendRequest(url, head):
+    #debug("[DEBUG] Request URL: {}".format(url))
     try:
         response = requests.get(url, headers=head, timeout=10, verify=CHECK_SSL_CERT)
     except requests.exceptions.SSLError:
         debug("[ERROR] SSL Error on this site. You can ignore this error with the 'CHECK_SSL_CERT' param inside the python file.")
-        sys.exit()
+        return None
+    #debug("[DEBUG] Returned URL: {}".format(response.url))
     if response.content and response.status_code == 200:
         return response
     else:
@@ -105,7 +111,7 @@ def api_token_get(url):
     api_headers = {
         'Instance': api_token,
         'User-Agent': USER_AGENT,
-        'Origin':	'https://' + urlparse(url).netloc,
+        'Origin':'https://' + urlparse(url).netloc,
         'Referer': url
     }
     return api_headers
@@ -183,10 +189,16 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 
 DATE_TODAY = datetime.today().strftime('%Y-%m-%d')
 
 FRAGMENT = json.loads(sys.stdin.read())
+SEARCH_TITLE = FRAGMENT.get("name")
 SCENE_ID = FRAGMENT.get("id")
 SCENE_TITLE = FRAGMENT.get("title")
-SCENE_URL = FRAGMENT["url"]
+SCENE_URL = FRAGMENT.get("url")
 scraped_json = None
+
+if "validName" in sys.argv and SCENE_URL is None:
+    debug("[DEBUG] Should not happend")
+    sys.exit(1)
+
 if SCENE_URL:
     # fixing old scene
     if 'brazzers.com/scenes/view/id/' in SCENE_URL:
@@ -212,6 +224,8 @@ if SCENE_URL:
         sys.exit()
     else:
         debug("[INFO] ID: {}".format(url_sceneid))
+
+
     # API ACCES
     api_headers = api_token_get(SCENE_URL)
     api_URL = 'https://site-api.project1service.com/v2/releases/{}'.format(url_sceneid)
@@ -228,7 +242,7 @@ if SCENE_URL:
         debug("[ERROR] Failed to get the JSON from API")
         sys.exit(1)
     if api_scene_json:
-        if api_scene_json.get('parent') is not None:
+        if api_scene_json.get('parent') is not None and api_scene_json['type'] != "scene":
             if api_scene_json['parent']['type'] == "scene":
                 api_scene_json = api_scene_json.get('parent')
         scraped_json = scraping_json(api_scene_json, SCENE_URL)
@@ -300,5 +314,101 @@ elif SCENE_TITLE:
     if scraped_json is None:
         debug("[ERROR] API Search don't give correct result")
         sys.exit(1)
+elif SEARCH_TITLE:
+    if not STOCKAGE_FILE_APIKEY_SEARCH:
+        config_file_used = STOCKAGE_FILE_APIKEY
+    else:
+        config_file_used = STOCKAGE_FILE_APIKEY_SEARCH
+    if os.path.isfile(config_file_used):
+        config = ConfigParser()
+        config.read(config_file_used)
+        dict_config = dict(config.items())
+    else:
+        debug("[ERROR] Can't search the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(config_file_used))
+        sys.exit(1)
+    # Loop the config
+    scraped_json = None
+    result_search = []
+    list_domain = []
+    for config_section in dict_config:
+        if config_section == "DEFAULT":
+            continue
+        config_url = config.get(config_section, 'url')
+        config_domain = re.sub(r"www\.|\.com", "", urlparse(config_url).netloc)
+        list_domain.append(config_domain)
+        match_filter = re.match(r"{.+}", SEARCH_TITLE)
+        if match_filter:
+            filter_domain = re.sub(r"[{}]","", match_filter.group(0))
+            filter_domain = filter_domain.split(",")
+            if config_domain not in filter_domain:
+                debug("[INFO] Ignore {} (Filter query)".format(config_domain))
+                continue
+        debug("[INFO] Searching on: {}".format(config_domain))
+        # API ACCESS
+        api_headers = api_token_get(config_url)
+        search_url = 'https://site-api.project1service.com/v2/releases?title={}&type=scene&limit=40'.format(re.sub(r"{.+}\s*", "", SEARCH_TITLE))
+        api_search_json = sendRequest(search_url, api_headers)
+        if api_search_json is None:
+            debug("[ERROR] Request fail")
+            continue
+        try:
+            if type(api_search_json.json()) == list:
+                api_search_error = api_search_json.json()[0]['message']
+                debug("[ERROR] API Error Message: {}".format(api_search_error))
+                continue
+            else:
+                api_search_json = api_search_json.json()['result']
+        except:
+            debug("[ERROR] Failed to get the JSON from API ({})".format(config_domain))
+            continue
+        
+        ratio_scene = None
+        making_url = None
+        for result in api_search_json:
+            search = {}
+            try:
+                result['collections'][0].get('name') # If this create a error it wont continue so no studio at all
+                search['studio'] = {}
+                search['studio']['name'] = result['collections'][0].get('name')
+            except:
+                debug("[WARN] No studio")
+            search['title'] = result.get('title')
+            title_filename = None
+            try:
+                api_filename = result['videos']['mediabook']['files']["320p"]['urls']['download']
+                title_filename = re.sub(r'^.+filename=', '', api_filename)
+                title_filename = re.sub(r'_.+$', '', title_filename)
+            except:
+                pass
+            if title_filename:
+                making_url = re.sub(r'/\d+/*.+', '/' + str(result.get("id")) + "/" + title_filename, config_url)
+            else:
+                making_url = re.sub(r'/\d+/*.+', '/' + str(result.get("id")) + "/", config_url)
+            try:
+                search['image'] = result['images']['poster']['0']["xl"]['url']
+            except:
+                pass
+            try:
+                search['performers'] = [{"name": x.get('name')} for x in result.get('actors')]
+            except:
+                pass
+            search['url'] = making_url
+            result_search.append(search)
+    if not result_search:
+        debug("[ERROR] API Search don't give any result")
+        scraped_json = {"title":"The search don't give any result. (Hover to see everything)"}
+        scraped_json["details"] = """
+        Be sure to have site(s) in the config file (.ini). To add site in the config, you need to scrape 1 url from the site.
+        Exemple: get a url from Brazzers -> use 'Scrape With...' -> now you can search on brazzers.
+        \nYou can also filter your search with '{site} query'. 
+        You can multiple site filter, just separate with comma.
+        (site = domain without www/com)
+        \nAvailable site are the tags.
+        """
+        scraped_json['tags'] = [{"name": x} for x in list_domain]
+        scraped_json = [scraped_json]
+    else:
+        scraped_json = result_search
+
 if scraped_json:
     print(json.dumps(scraped_json))
