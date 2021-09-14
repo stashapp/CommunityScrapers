@@ -37,7 +37,7 @@ IGNORE_ALIASES = False
 # Always wait for the aliases or you are not sure to have it. (Depends if request are quick)
 WAIT_FOR_ALIASES = False
 # All javlib site
-SITE_JAVLIB = ["javlibrary","d52q","k51r","n53i"]
+SITE_JAVLIB = ["javlibrary","d52q","p54u","n53i"]
 
 BANNED_WORDS = {
     "A*****t": "Assault",
@@ -164,6 +164,7 @@ BANNED_WORDS = {
     "V*****ed": "Violated",
     "V*****es": "Violates",
     "V*****t": "Violent",
+    "V*****tly": "Violently",
     "Y********l": "Young Girl",
     "Y********ls": "Young Girls"
 }
@@ -298,7 +299,17 @@ def jav_search(html, xpath):
         debug("[JAV] There is no result in search")
         return None
 
-
+def jav_search_byName(html, xpath):
+    jav_search_tree = lxml.html.fromstring(html.content)
+    jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
+    jav_title = getxpath(xpath['title'], jav_search_tree)  # ./?v=javme5it6a
+    jav_image = getxpath(xpath['image'], jav_search_tree)  # ./?v=javme5it6a
+    debug("There is {} scene(s)".format(len(jav_url)))
+    lst = []
+    for x in range(0,len(jav_url)):
+        lst.append({"title":jav_title[x],"url":jav_url[x],"image":jav_image[x]})
+    return lst
+    
 def buildlist_tagperf(data, type_scrape=""):
     list_tmp = []
     dict_jav = None
@@ -407,6 +418,9 @@ r18_search_html = None
 jav_main_html = None
 r18_main_html = None
 
+if "validName" in sys.argv and SCENE_URL is None:
+    sys.exit()
+
 if scene_url:
     scene_domain = re.sub(r"www\.|\.com", "", urlparse(scene_url).netloc)
     # Url from Javlib 
@@ -424,9 +438,13 @@ if scene_url:
     else:
         debug("[WARN] The URL is not from Javlib/R18 ({})".format(scene_url))
 
-if jav_main_html is None and r18_main_html is None and scene_title:
+if jav_main_html is None and r18_main_html is None and scene_title and "searchName" not in sys.argv:
     debug("[DEBUG] Using search with Title: {}".format(scene_title))
     jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
+
+if "searchName" in sys.argv:
+    debug("[DEBUG] Using search with Title: {}".format(SEARCH_TITLE))
+    jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(SEARCH_TITLE), JAV_HEADERS)
 
 # XPATH
 r18_xPath_search = {}
@@ -435,7 +453,9 @@ r18_xPath_search['url'] = '//li[contains(@class,"item-list")]/a//img[string-leng
 r18_xPath_search['scene'] = '//li[contains(@class,"item-list")]'
 
 jav_xPath_search = {}
-jav_xPath_search['url'] = '//div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]/../@href'
+jav_xPath_search['url'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@href'
+jav_xPath_search['title'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@title'
+jav_xPath_search['image'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]//img/@src'
 
 jav_xPath = {}
 jav_xPath["title"] = '//td[@class="header" and text()="ID:"]/following-sibling::td/text()'
@@ -454,7 +474,24 @@ jav_result = {}
 
 
 if jav_search_html:
-    jav_main_html = jav_search(jav_search_html, jav_xPath_search)
+    # sceneByName
+    if "searchName" in sys.argv:
+        if "/en/?v=" in jav_search_html.url:
+            debug("[DEBUG] Directly the movie page ({})".format(jav_search_html.url))
+            jav_tree = lxml.html.fromstring(jav_search_html.content)
+            jav_result["title"] = getxpath(jav_xPath["title"], jav_tree)
+            jav_result["url"] = getxpath(jav_xPath["url"], jav_tree)
+            jav_result["image"] = getxpath(jav_xPath["image"], jav_tree)
+            jav_result = [jav_result]
+        else:
+            jav_result = jav_search_byName(jav_search_html, jav_xPath_search)
+        if jav_result:
+            print(json.dumps(jav_result))
+        else:
+            print(json.dumps([{"title":"The search don't give any result."}]))
+        sys.exit()
+    else:
+        jav_main_html = jav_search(jav_search_html, jav_xPath_search)
 
 
 if jav_main_html is None and r18_main_html is None and scene_title:
