@@ -5,4 +5,16 @@ sceneByFragment:
       - python
       - MindGeekAPI.py
 #      - female_only # Only getting female performers
-# Last Updated July 29, 2021
+sceneByName:
+    action: script
+    script:
+      - python
+      - MindGeekAPI.py
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - MindGeekAPI.py
+      - validName
+# Last Updated September 14, 2021
