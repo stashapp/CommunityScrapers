@@ -458,8 +458,7 @@ SCENE_TITLE = FRAGMENT.get("title")
 SCENE_URL = FRAGMENT.get("url")
 
 if "validName" in sys.argv and SCENE_URL is None:
-    debug("[DEBUG] Should not happend")
-    sys.exit(1)
+    sys.exit()
 
 if SCENE_URL and SCENE_ID is None:
     debug("[DEBUG] URL Scraping: {}".format(SCENE_URL))
