@@ -18,6 +18,15 @@ sceneByURL:
       url:
         - regex: javdb\.com
           with: "javdb9.com"
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://javdb9.com/search?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 movieByURL:
   - action: scrapeXPath
     url:
@@ -30,6 +39,16 @@ movieByURL:
         - regex: javdb\.com
           with: "javdb9.com"
 xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //div[@class="grid-item column"]//div[@class="uid"]
+      URL:
+        selector: //div[@class="grid-item column"]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://javdb9.com
+      Image: //div[@class="grid-item column"]//img/@data-src
   sceneQueryScraper:
     scene:
       Title: //div[@id="videos"]//div[@class="grid-item column"][1]//div[@class="uid"]/text()
@@ -111,4 +130,4 @@ driver:
           Domain: "javdb9.com"
           Value: "en"
           Path: "/"
-# Last Updated June 07, 2021
+# Last Updated September 14, 2021
