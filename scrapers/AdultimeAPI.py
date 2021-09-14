@@ -26,11 +26,11 @@ IGNORE_TAGS = ["Sex","Feature"]
 # Tag you always want in Scraper window.
 FIXED_TAGS = ""
 
-
 def debug(q):
-    if "[DEBUG]" in str(q) and PRINT_DEBUG == False:
+    q = str(q)
+    if "[DEBUG]" in q and PRINT_DEBUG == False:
         return
-    if "[MATCH]" in str(q) and PRINT_MATCH == False:
+    if "[MATCH]" in q and PRINT_MATCH == False:
         return
     print(q, file=sys.stderr)
 
@@ -130,11 +130,14 @@ def check_db(DB_PATH, SCENE_ID):
 # General
 
 def sendRequest(url, head, json=""):
+    #debug("[DEBUG] Request URL: {}".format(url))
     response = requests.post(url, headers=head,json=json, timeout=10)
+    #debug("[DEBUG] Returned URL: {}".format(response.url))
     if response.content and response.status_code == 200:
         return response
     else:
         debug("[REQUEST] Error, Status Code: {}".format(response.status_code))
+        #print(response.text, file=open("request.html", "w", encoding='utf-8'))
     return None
 
 
@@ -213,7 +216,7 @@ def api_search_query(query, api_url):
         "requests": [
             {
                 "indexName": "all_scenes_latest_desc",
-                "params": "query=" + query + "&hitsPerPage=20&page=0"
+                "params": "query=" + query + "&hitsPerPage=40&page=0"
             }
         ]
     }
@@ -268,11 +271,9 @@ def json_parser(search_json, range_duration=60, single=False):
             return result_dict["A"]["json"]
     # 
     elif result_dict.get("SDN"):
-        if result_dict["SDN"]["title"] > 0.2 or result_dict["SDN"]["url"] > 0.2:
-            return result_dict["SDN"]["json"]
+        return result_dict["SDN"]["json"]
     elif result_dict.get("SD"):
-        if result_dict["SD"]["title"] > 0.4 or result_dict["SD"]["url"] > 0.4:
-            return result_dict["SD"]["json"]
+        return result_dict["SD"]["json"]
     elif result_dict.get("SN"):
         if result_dict["SN"]["title"] > 0.5 or result_dict["SN"]["url"] > 0.5:
             return result_dict["SN"]["json"]
@@ -328,9 +329,11 @@ def match_result(api_scene, range_duration=60, single=False):
     match_domain = False
     if url_domain:
         if api_scene.get("sitename"):
+            #debug("[DEBUG] API Sitename: {}".format(api_scene["sitename"]))
             if api_scene["sitename"] == url_domain:
                 match_domain = True
         if api_scene.get("network_name"):
+            #debug("[DEBUG] API Network: {}".format(api_scene["network_name"]))
             if api_scene["network_name"] == url_domain:
                 match_domain = True
 
@@ -368,7 +371,7 @@ def match_result(api_scene, range_duration=60, single=False):
 
 # Final
 
-def scraping_json(api_json, url):
+def scraping_json(api_json, url=None):
     scrape = {}
     # Title
     if api_json.get('title'):
@@ -382,17 +385,18 @@ def scraping_json(api_json, url):
     scrape['studio'] = {}
     if api_json.get('serie_name'):
         scrape['studio']['name'] = api_json.get('serie_name')
-    if api_json.get('sitename_pretty'):
-        scrape['studio']['name'] = api_json.get('sitename_pretty')
     if api_json.get('network_name'):
         scrape['studio']['name'] = api_json.get('network_name')
     if api_json.get('mainChannelName'):
         scrape['studio']['name'] = api_json.get('mainChannelName')
+    if api_json.get('sitename_pretty'):
+        scrape['studio']['name'] = api_json.get('sitename_pretty')
+    debug("[STUDIO] {} - {} - {} - {}".format(api_json.get('serie_name'),api_json.get('network_name'),api_json.get('mainChannelName'),api_json.get('sitename_pretty')))
     # Performer
     perf = []
     for x in api_json.get('actors'):
         if x.get('gender') == "female":
-            perf.append({"name": x.get('name'), "gender":x.get('gender')})
+            perf.append({"name": x.get('name').strip(), "gender":x.get('gender')})
     scrape['performers'] = perf
 
     # Tags
@@ -448,9 +452,14 @@ ADULTIME_HEADERS = {
 }
 
 FRAGMENT = json.loads(sys.stdin.read())
+SEARCH_TITLE = FRAGMENT.get("name")
 SCENE_ID = FRAGMENT.get("id")
 SCENE_TITLE = FRAGMENT.get("title")
-SCENE_URL = FRAGMENT["url"]
+SCENE_URL = FRAGMENT.get("url")
+
+if "validName" in sys.argv and SCENE_URL is None:
+    debug("[DEBUG] Should not happend")
+    sys.exit(1)
 
 if SCENE_URL and SCENE_ID is None:
     debug("[DEBUG] URL Scraping: {}".format(SCENE_URL))
@@ -534,6 +543,27 @@ if application_id is None:
 api_url = "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id={}&x-algolia-api-key={}".format(application_id, api_key)
 api_search = None
 api_json = None
+
+
+if SEARCH_TITLE:
+    debug("[API] Searching")
+    api_search = api_search_req("query", SEARCH_TITLE, api_url)
+    if api_search:
+        result_search = []
+        for scene in api_search:
+            scraped_json = scraping_json(scene)
+            if scraped_json.get("tags"):
+                scraped_json.pop("tags")
+            result_search.append(scraped_json)
+        if not result_search:
+            debug("[ERROR] API Search don't give any result")
+            scraped_json = {"title":"The search don't give any result."}
+            scraped_json = [scraped_json]
+        else:
+            scraped_json = result_search
+        print(json.dumps(scraped_json))
+        sys.exit()
+
 if url_id:
     debug("[API] Searching using URL_ID")
     api_search = api_search_req("id", url_id, api_url)
