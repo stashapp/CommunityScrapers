@@ -196,8 +196,7 @@ SCENE_URL = FRAGMENT.get("url")
 scraped_json = None
 
 if "validName" in sys.argv and SCENE_URL is None:
-    debug("[DEBUG] Should not happend")
-    sys.exit(1)
+    sys.exit()
 
 if SCENE_URL:
     # fixing old scene
