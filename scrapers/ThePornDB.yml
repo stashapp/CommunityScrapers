@@ -51,8 +51,6 @@ jsonScrapers:
               with: "https://api.metadataapi.net/scenes/"
       Image: data.#.background.full
       Details: data.#.description
-      Studio:
-        Name: data.#.site.name
   performerSearch:
     performer:
       Name: data.#.name
