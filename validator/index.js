@@ -192,9 +192,25 @@ class Validator {
 
   getMappingErrors(data) {
     return [].concat(
+      this._collectConfigMappingErrors(data),
       this._collectScraperDefinitionErrors(data),
       this._collectCookieErrors(data),
     );
+  }
+
+  _collectConfigMappingErrors(data) {
+    const errors = [];
+
+    if (data.sceneByName && !data.sceneByQueryFragment) {
+      errors.push({
+        keyword: 'sceneByName',
+        message: `a \`sceneByQueryFragment\` configuration is required for \`sceneByName\` to work`,
+        params: { keyword: 'sceneByName' },
+        dataPath: '/sceneByName',
+      });
+    }
+
+    return errors;
   }
 
   _collectScraperDefinitionErrors(data) {
