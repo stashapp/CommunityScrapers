@@ -532,7 +532,7 @@ janafox.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 japaneseflashers.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 japaneseslurp.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 japanhdv.com|JapanHDV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
-javdb.com|javdb.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|python<br>stash >= v0.9.0-21|Database
+javdb.com|javdb.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|stash >= v0.9.0-21|Database
 javdb9.com|javdb.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Database
 javhd.com|JavHD.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 javlibrary.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
