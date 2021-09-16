@@ -130,4 +130,14 @@ driver:
           Domain: "javdb9.com"
           Value: "en"
           Path: "/"
+        # Access to certain titles requires a javdb account
+        # Uncomment the below replacing the Value part
+        #- Name: "_jdb_session"
+        #  Value: "Add here the actual value from your cookies"
+        #  Path: "/"
+        #  Domain: "javdb9.com"
+        #- Name: "remember_me_token"
+        #  Value: "Add here the actual value from your cookies"
+        #  Path: "/"
+        #  Domain: "javdb9.com"
 # Last Updated September 14, 2021
