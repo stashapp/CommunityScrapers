@@ -1,0 +1,40 @@
+name: PornWorld
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornworld.com/watch/
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://pornworld.com/autocomplete?query={filename}
+  queryURLReplace:
+    filename:
+      - regex: .+(GP\d+).*
+        with: $1
+  scraper: sceneQueryScraper
+jsonScrapers:
+  sceneQueryScraper:
+    scene:
+      Title: terms.Scene.0.name
+      URL: terms.Scene.0.url
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="watch__title h2 mb-15"]
+      Date:
+        selector: //i[@class="bi bi-calendar3 me-5"]
+        postProcess:
+          - parseDate: 2006-01-02
+      Details:
+        selector: //div[@class="text-mob-more p-md"]
+      Tags:
+        Name: //div[@class="genres-list p-md text-primary"]/a
+      Performers:
+        Name: //span[@class="watch__featuring_models d-block mt-10 mt-lg-5"]/a
+      Studio:
+        Name:
+          fixed: Porn World
+      Image:
+        selector: //video[@controls="controls"]/@data-poster
+# Last Updated September 18, 2021
