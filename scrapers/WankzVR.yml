@@ -2,8 +2,13 @@ name: "WankzVR"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - wankzvr.com
+      - www.wankzvr.com
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - www.wankzvr.com
+    scraper: movieScraper
 xPathScrapers:
   sceneScraper:
     common:
@@ -22,5 +27,32 @@ xPathScrapers:
       Performers:
         Name: //div[@class="detail__inf detail__inf-align_right"]/div[@class="detail__models"]/a/text()
       Image: //meta[@property="og:image"]/@content
+  movieScraper:
+    common:
+      $info: //div[@class="detail"]
+    movie:
+      Name: 
+        selector: //div[@class="detail__header detail__header-lg"]/h1
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "WankzVR - "
+      Duration:
+        selector: $info//span[@class="time"]/text()
+        postProcess:
+          - replace:
+              - regex: \smin
+                with: ":00"
+      Date:
+        selector: $info//span[@class="detail__date"]/text()
+        postProcess:
+          - parseDate: 2 January, 2006
+      Studio:
+        Name:
+          fixed: WankzVR
+      Synopsis:
+        selector: //div[@class="detail__txt detail__txt-show_lg"]/text()|//span[@class="more__body"]/text()
+        concat: " "
+      FrontImage: //meta[@property="og:image"]/@content
 
-# Last Updated November 08, 2020
+# Last Updated September 18, 2021
