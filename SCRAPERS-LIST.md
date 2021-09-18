@@ -792,7 +792,7 @@ pornstarhardcore.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 pornstarstroker.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornstartease.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornweekends.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-pornworld.com|pornworld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+pornworld.com|PornWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 portagloryhole.com|PortaGloryhole.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 povav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 povblowjobs.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
