@@ -1,4 +1,4 @@
-name: pornworld
+name: PornWorld
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -19,4 +19,7 @@ xPathScrapers:
         Name: //span[@class="watch__featuring_models d-block mt-10 mt-lg-5"]/a
       Image:
         selector: //video[@controls="controls"]/@data-poster
+      Studio:
+        Name:
+          fixed: PornWorld  
 # Last Updated September 18, 2021
