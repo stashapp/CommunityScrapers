@@ -1064,7 +1064,7 @@ vinaskyxxx.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 vipissy.com|Vipissy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vipsexvault.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 virtualrealporn.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
-virtualtaboo.com|VirtualTaboo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+virtualtaboo.com|VirtualTaboo.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 vivid.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vividclassic.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vivthomas.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|python|-
