@@ -5,6 +5,40 @@ import requests
 from urllib.parse import urlparse, urlencode
 
 
+class Logger:
+    levels = {
+            "trace": b't'.decode(),
+            "debug": b'd'.decode(),
+            "info": b'i'.decode(),
+            "warning": b'w'.decode(),
+            "error": b'e'.decode(),
+        }
+
+    def __write(self, level: str, msg: str):
+        if level == "" or level not in self.levels:
+            return
+
+        print(f"\x01{self.levels[level]}\x02{msg}\n", file=sys.stderr, flush=True)
+
+    def trace(self, msg):
+        self.__write("trace", msg)
+
+    def debug(self, msg):
+        self.__write("debug", msg)
+
+    def info(self, msg):
+        self.__write("info", msg)
+
+    def warning(self, msg):
+        self.__write("warning", msg)
+
+    def error(self, msg):
+        self.__write("error", msg)
+
+
+log = Logger()
+
+
 def scrape_url(url, type):
     parsed = urlparse(url)
 
@@ -59,6 +93,7 @@ def search(type, name):
 
     results = []
 
+    log.info(f"Searching for {type} '{name}'")
     while True:
         args['page'] = page
         response = fetch("https://metartnetwork.com", "search-results", args)
@@ -83,14 +118,17 @@ def search(type, name):
 
 def fetch(base_url, type, arguments):
     url = f"{base_url}/api/{type}?{urlencode(arguments)}"
+    log.debug(f"Fetching URL {url}")
     try:
         response = requests.get(url, headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
         }, timeout=(3, 6))
     except requests.exceptions.RequestException as e:
+        log.error(f"Error fetching URL {url}: {e.strerror}")
         return None
 
     if response.status_code >= 400:
+        log.debug(f"Fetching URL {url} resulted in error status: {response.status_code}")
         return None
 
     data = response.json()
@@ -112,6 +150,7 @@ def scrape_model(base_url, name):
         )
       )
     )
+    log.info(f"Scraping model '{name}' as '{transformed_name}'")
     data = fetch(base_url, 'model', {'name': transformed_name, 'order': 'DATE', 'direction': 'DESC'})
     if data is None:
         return None
@@ -134,7 +173,8 @@ def map_media(data, studio, base_url):
 
 
 def scrape_movie(base_url, date, name):
-    data = fetch(base_url, 'movie', {'name':name, 'date': date})
+    log.info(f"Scraping movie '{name}' released on {date}")
+    data = fetch(base_url, 'movie', {'name': name, 'date': date})
     if data is None:
         return None
 
@@ -146,7 +186,8 @@ def scrape_movie(base_url, date, name):
 
 
 def scrape_gallery(base_url, date, name):
-    data = fetch(base_url, 'gallery', {'name':name, 'date': date})
+    log.info(f"Scraping gallery '{name}' released on {date}")
+    data = fetch(base_url, 'gallery', {'name': name, 'date': date})
     if data is None:
         return None
 
@@ -168,7 +209,7 @@ def map_model(base_url, model):
     add_tag('pubicHair', '{} pussy')
     add_tag('eyes', '{} eyes')
     add_tag('breasts', '{} breasts')
-       
+
     return {
         'Name': model.get("name"),
         'Gender': model.get("gender" or "").upper(),
@@ -220,7 +261,9 @@ def get_studio(siteUuid):
     return studios[siteUuid] if siteUuid in studios else None
 
 
-i = json.loads(sys.stdin.read())
+input = sys.stdin.read()
+i = json.loads(input)
+log.debug(f"Started with input: {input}")
 
 ret = {}
 if sys.argv[1] == "scrape":
@@ -229,10 +272,12 @@ elif sys.argv[1] == "query":
     if 'url' in i and validate_url(i['url']):
         ret = scrape_url(i['url'], sys.argv[2])
 
-    if ret is None:
+    if ret is None or ret == {}:
         ret = query(i, sys.argv[2])
 elif sys.argv[1] == 'search':
     ret = search(sys.argv[2], i['title'] if 'title' in i else i['name'])
 
-print(json.dumps(ret))
-# Last Updated September 09, 2021
+output = json.dumps(ret)
+print(output)
+log.debug(f"Send output: {output}")
+# Last Updated September 18, 2021
