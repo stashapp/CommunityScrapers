@@ -10,8 +10,6 @@ movieByURL:
   - action: scrapeXPath
     url:
       - vrbangers.com/video
-      - vrbgay.com
-      - vrbtrans.com
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
