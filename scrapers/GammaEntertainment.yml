@@ -117,6 +117,12 @@ movieByURL:
       - evilangel.com/en/movie/
       - girlfriendsfilms.com/en/dvd/
       - wicked.com/en/movie/
+      - xempire.com/en/movie/
+      - allbackx.com/en/movie/
+      - hardx.com/en/movie/
+      - eroticax.com/en/movie/
+      - darkx.com/en/movie/
+      - lesbianx.com/en/movie/
     scraper: movieScraper
 
 xPathScrapers:
@@ -306,4 +312,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated July 03, 2021
+# Last Updated September 19, 2021
