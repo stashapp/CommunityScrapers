@@ -4,22 +4,52 @@ sceneByURL:
     url:
       - virtualtaboo.com/videos/
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - virtualtaboo.com/videos/
+    scraper: movieScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $info: //div[@class="row video-detail"]
+      $info: &infoSel //div[@class="row video-detail"]
+      $genInfo: //div[@class="row video-detail"]//div[starts-with(@class,"info")]
     scene:
-      Title: $info/div[@class="col-md-4 col right-info"]/h1
-      Date:
-        selector: $info/div[@class="col-md-4 col right-info"]/div[@class="info"]/span[@class="bullet"]/following-sibling::text()
+      Title: &titleSel $info//h1
+      Date: &dateAttr
+        selector: $genInfo/span[@class="bullet"]/following-sibling::text()
         postProcess:
           - parseDate: 02 January, 2006
-      Details:
-        selector: $info//div[@class="description"]/span[@class="full hidden"]/text()
-        concat: " "
+      Details: &detailsSel $info//div[@class="description"]/text()
       Tags:
-        Name: $info//div[@class="tag-list"]/a/text()
+        Name: $info//div[starts-with( @class,"tag-list")]/a/text()
       Performers:
-        Name: $info//div[@class="info"]/a/text()
-      Image: //meta[@property="og:image"]/@content
-# Last Updated November 08, 2020
+        Name: $info//div[starts-with(@class,"info")]/a/text()
+      Image: &imageSel //meta[@property="og:image"]/@content
+  movieScraper:
+    common:
+      $info: *infoSel
+      $genInfo: //div[@class="row video-detail"]//div[@class="info mt-5"]
+    movie:
+      Name:
+        selector: *titleSel
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "VirtualTaboo - "
+      Duration:
+        selector: $genInfo/br/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: \shour
+                with: ":"
+              - regex: \smin
+                with: ":00"
+      Date: *dateAttr
+      Studio:
+        Name:
+          fixed: VirtualTaboo
+      Synopsis: *detailsSel
+      FrontImage: *imageSel
+# Last Updated September 17, 2021
+
