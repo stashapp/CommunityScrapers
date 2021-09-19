@@ -15,15 +15,23 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
-      - k51r.com/
+      - p54u.com/
       - d52q.com/
       - n53i.com/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}
+  scraper: sceneScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
-      - k51r.com/
+      - p54u.com/
       - d52q.com/
       - n53i.com/
     scraper: movieScraper
@@ -31,7 +39,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
+        selector: //div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]|//div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
       # Using URL to still get a URL with sceneByFragment if a duplicate exist.
       URL:
         selector: //div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]/../@href|//meta[@property="og:url"]/@content
@@ -54,7 +62,7 @@ xPathScrapers:
       Performers:
         Name: //div[@id="video_cast"]/table/tbody/tr/td[@class="text"]/span/span/a
       Image:
-        selector: //div[@id="video_jacket"]/img/@src
+        selector: //div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]//img/@src|//div[@id="video_jacket"]/img/@src
         postProcess:
           - replace:
             - regex: (http:|https:)
@@ -91,14 +99,4 @@ xPathScrapers:
             - regex: ^
               with: "https:"
 
-# Switched to CDP due to Cloudflare and Javascript errors.
-# The 5 second sleep in combination with the CDP driver should prevent
-# Standard Cloudflare errors in regards to their Javascript check.
-# There is still the possibility of getting a CAPTCHA block based on Cloudflare's
-# analysis of your traffic pattern. Nothing can be done about that besides
-# waiting it out or using one of the mirrors.
-driver:
-  useCDP: true
-  sleep: 5
-
-# Last Updated May 31, 2021
+# Last Updated September 14, 2021

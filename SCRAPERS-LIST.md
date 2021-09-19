@@ -268,7 +268,7 @@ czechvr.com|CzechVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 czechvrcasting.com|CzechVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 czechvrfetish.com|CzechVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 czechwifeswap.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-d52q.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
+d52q.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|stash >= v0.9.0-21|JAV
 dadcrush.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 daddy4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 daddygetslucky.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
@@ -535,7 +535,7 @@ japanhdv.com|JapanHDV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 javdb.com|javdb.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|stash >= v0.9.0-21|Database
 javdb9.com|javdb.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Database
 javhd.com|JavHD.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
-javlibrary.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
+javlibrary.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|stash >= v0.9.0-21|JAV
 jaysinxxx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jayspov.net|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jcosplay.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
@@ -556,7 +556,6 @@ jpteacher.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 jschoolgirls.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 julesjordan.com|JulesJordan.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
 juliaannlive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-k51r.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
 karissa-diamond.com|Karissa-Diamond.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 karups.com|Karups.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 katiebanks.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -690,7 +689,7 @@ myracequeens.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 mysislovesme.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 myteenoasis.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 myveryfirsttime.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-n53i.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|CDP|JAV
+n53i.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|stash >= v0.9.0-21|JAV
 nakedsword.com|NakedSword.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 nannyspy.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nastystepfamily.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -744,6 +743,7 @@ orgytrain.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 outdoorjp.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 outhim.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 outofthefamily.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+p54u.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|stash >= v0.9.0-21|JAV
 pacopacomama.com|Paco.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 paintoy.com|insexOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pandafuck.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
