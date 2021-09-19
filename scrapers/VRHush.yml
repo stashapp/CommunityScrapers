@@ -4,28 +4,49 @@ sceneByURL:
     url:
       - vrhush.com/scenes
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - vrhush.com/scenes
+    scraper: movieScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $info: //div[@class="container main-item"]
+      $info: &infoSel //div[@class="container main-item"]
     scene:
-      Title: $info//h1[@class="latest-scene-title"]/text()
-      Date:
+      Title: &titleSel $info//h1[@class="latest-scene-title"]/text()
+      Studio: &studioAttr
+        Name:
+          fixed: "VRHush"
+      Date: &dateAttr
         selector: $info//div[@class="row latest-scene-meta-1"]/div[@class="col-xs-6 text-left"]/text()
         postProcess:
           - parseDate: Jan 2, 2006
-      Details:
+      Details: &detailsAttr
         selector: $info//span[contains(@class, "full-description")]/text()
         concat: " "
       Tags:
         Name: $info//p[@class="tag-container"]//a[contains(@class, "label label-tag")]/text()
       Performers:
         Name: $info//h5[@class="latest-scene-subtitle"]//a/text()
-      Image: 
-        selector: $info//dl8-video/@poster
+      Image: &imageAttr
+        selector: $info//deo-video[1]/@cover-image
         postProcess:
           - replace:
               - regex: ^
                 with: "https:"
-
-# Last Updated November 08, 2020
+  movieScraper:
+    common:
+      $info: *infoSel
+    movie:
+      Name:
+        selector: *titleSel
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "VRHush - "
+      Studio: *studioAttr
+      Date: *dateAttr
+      Synopsis: *detailsAttr
+      FrontImage: *imageAttr
+# Last Updated September 18, 2021
