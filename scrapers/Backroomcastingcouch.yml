@@ -1,16 +1,16 @@
 name: backroomcastingcouch
 performerByURL:
   - action: scrapeXPath
-    url: 
-    # Get Data either from model page or a video. Both provide same info
+    url:
+      # Get Data either from model page or a video. Both provide same info
       - backroomcastingcouch.com/site/models
       - backroomcastingcouch.com/site/trailers
-      
+
     scraper: performerScraper
 xPathScrapers:
-  performerScraper:
+  performerScraper: 
     performer:
-      Name: //h2[@class="section-title"]/text()
+      Name: (//h2[@class="section-title"])[1]
       Image:
         selector: //img[@alt=//h2[@class="section-title"]/text()]/@src0_1x
         postProcess:
@@ -18,5 +18,4 @@ xPathScrapers:
           - replace:
               - regex: '[^\sw\.@/]([0-9a-zA-Z\-\.]*[0-9a-zA-Z\-]+\.)(com|org|net|DE|COM|ORG|NET)'
                 with: backroomcastingcouch.com
-
 # Last Updated September 13, 2021
