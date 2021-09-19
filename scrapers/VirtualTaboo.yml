@@ -12,44 +12,44 @@ movieByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $info: //div[@class="row video-detail"]
+      $info: &infoSel //div[@class="row video-detail"]
       $genInfo: //div[@class="row video-detail"]//div[starts-with(@class,"info")]
     scene:
-      Title: $info//h1
-      Date:
+      Title: &titleSel $info//h1
+      Date: &dateAttr
         selector: $genInfo/span[@class="bullet"]/following-sibling::text()
         postProcess:
           - parseDate: 02 January, 2006
-      Details: $info//div[@class="description"]/text()
+      Details: &detailsSel $info//div[@class="description"]/text()
       Tags:
         Name: $info//div[starts-with( @class,"tag-list")]/a/text()
       Performers:
         Name: $info//div[starts-with(@class,"info")]/a/text()
-      Image: //meta[@property="og:image"]/@content
+      Image: &imageSel //meta[@property="og:image"]/@content
   movieScraper:
     common:
-      $info: //div[@class="row video-detail"]
+      $info: *infoSel
       $genInfo: //div[@class="row video-detail"]//div[@class="info mt-5"]
     movie:
       Name:
-        selector: $info//h1
+        selector: *titleSel
         postProcess:
           - replace:
               - regex: ^
                 with: "VirtualTaboo - "
       Duration:
-        selector: $genInfo/br/following-sibling::text()
+        selector: $genInfo/br/following-sibling::text()[1]
         postProcess:
           - replace:
+              - regex: \shour
+                with: ":"
               - regex: \smin
                 with: ":00"
-      Date:
-        selector: $genInfo/span[@class="bullet"]/following-sibling::text()
-        postProcess:
-          - parseDate: 02 January, 2006
-      Studio: 
+      Date: *dateAttr
+      Studio:
         Name:
           fixed: VirtualTaboo
-      Synopsis: $info//div[@class="description"]/text()
-      FrontImage: //meta[@property="og:image"]/@content
+      Synopsis: *detailsSel
+      FrontImage: *imageSel
 # Last Updated September 17, 2021
+
