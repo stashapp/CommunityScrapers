@@ -171,6 +171,7 @@ BANNED_WORDS = {
 
 
 def debug(q):
+    q = str(q)
     if "[DEBUG]" in q and DEBUG_MODE == False:
         return
     print(q, file=sys.stderr)
@@ -431,7 +432,7 @@ if SCENE_URL:
     elif "r18.com" in SCENE_URL:
         r18_id = re.match(r".+id=(.+)/.*", SCENE_URL)
         if r18_id:
-            scene_url = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
+            SCENE_URL = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
             debug("[DEBUG] Using API URL: {}".format(SCENE_URL))
             r18_main_html = sendRequest(SCENE_URL, R18_HEADERS)
         else:
@@ -654,7 +655,7 @@ except NameError:
 
 # Movie - R18
 
-if r18_result.get('series_url')  and r18_result.get('series_name'):
+if r18_result.get('series_url') and r18_result.get('series_name'):
     tmp = {}
     tmp['name'] = regexreplace(r18_result['series_name'])
     tmp['url'] = r18_result['series_url']
