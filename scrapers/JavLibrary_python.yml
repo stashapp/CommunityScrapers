@@ -8,12 +8,12 @@ sceneByName:
     action: script
     script:
       - python
-      - JAV.py
+      - JavLibrary_python.py
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - JAV.py
+      - JavLibrary_python.py
       - validSearch
 # Last Updated September 14, 2021
