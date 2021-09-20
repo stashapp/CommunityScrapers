@@ -272,9 +272,9 @@ def r18_search(html, xpath):
         r18_search_url = r18_search_url[0]
         r18_id = re.match(r".+id=(.+)/.*", r18_search_url)
         if r18_id:
-            scene_url = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
-            debug("[DEBUG] Using API URL: {}".format(scene_url))
-            r18_main_html = sendRequest(scene_url, R18_HEADERS)
+            SCENE_URL = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
+            debug("[DEBUG] Using API URL: {}".format(SCENE_URL))
+            r18_main_html = sendRequest(SCENE_URL, R18_HEADERS)
         else:
             debug("[WARN] Can't find the 'id=' in the URL: {}".format(r18_search_url))
             return None
@@ -398,7 +398,8 @@ def th_imagetoBase64(imageurl, typevar):
 #debug("[DEBUG] Main Thread: {}".format(threading.get_ident()))
 FRAGMENT = json.loads(sys.stdin.read())
 
-scene_url = FRAGMENT["url"]
+SEARCH_TITLE = FRAGMENT.get("name")
+SCENE_URL = FRAGMENT.get("url")
 
 if FRAGMENT.get("title"):
     scene_title = FRAGMENT["title"]
@@ -421,22 +422,22 @@ r18_main_html = None
 if "validName" in sys.argv and SCENE_URL is None:
     sys.exit()
 
-if scene_url:
-    scene_domain = re.sub(r"www\.|\.com", "", urlparse(scene_url).netloc)
+if SCENE_URL:
+    scene_domain = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc)
     # Url from Javlib 
     if scene_domain in SITE_JAVLIB:
-        debug("[DEBUG] Using URL: {}".format(scene_url))
-        jav_main_html = sendRequest(scene_url, JAV_HEADERS)
-    elif "r18.com" in scene_url:
-        r18_id = re.match(r".+id=(.+)/.*", scene_url)
+        debug("[DEBUG] Using URL: {}".format(SCENE_URL))
+        jav_main_html = sendRequest(SCENE_URL, JAV_HEADERS)
+    elif "r18.com" in SCENE_URL:
+        r18_id = re.match(r".+id=(.+)/.*", SCENE_URL)
         if r18_id:
             scene_url = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
-            debug("[DEBUG] Using API URL: {}".format(scene_url))
-            r18_main_html = sendRequest(scene_url, R18_HEADERS)
+            debug("[DEBUG] Using API URL: {}".format(SCENE_URL))
+            r18_main_html = sendRequest(SCENE_URL, R18_HEADERS)
         else:
-            debug("[WARN] Can't find the 'id=' in the URL: {}".format(scene_url))
+            debug("[WARN] Can't find the 'id=' in the URL: {}".format(SCENE_URL))
     else:
-        debug("[WARN] The URL is not from Javlib/R18 ({})".format(scene_url))
+        debug("[WARN] The URL is not from Javlib/R18 ({})".format(SCENE_URL))
 
 if jav_main_html is None and r18_main_html is None and scene_title and "searchName" not in sys.argv:
     debug("[DEBUG] Using search with Title: {}".format(scene_title))
