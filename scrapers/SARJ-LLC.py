@@ -84,12 +84,28 @@ def search(type, name):
       'sortBy': 'relevance'
     }
 
-    def map_result(result):
-        item = result['item']
-        return {
-          'name': item['name'],
-          'url': f"https://www.metartnetwork.com{item['path']}"
-        }
+    if type == 'performer':
+        def map_result(result):
+            item = result['item']
+            return {
+                'name': item['name'],
+                'url': f"https://www.metartnetwork.com{item['path']}",
+            }
+    elif type == 'scene':
+        def map_result(result):
+            item = result['item']
+            studio = get_studio(item['siteUUID'])
+            if studio:
+                image = f"https://www.{studio[1]}{item['thumbnailCoverPath']}"
+            return {
+                'title': item['name'],
+                'url': f"https://www.metartnetwork.com{item['path']}",
+                'date': item['publishedAt'][0:item['publishedAt'].find('T')],
+                'performers': list(map(lambda m: {'name': m['name']}, item['models'])),
+                'image': image,
+            }
+    else:
+        return []
 
     results = []
 
@@ -280,4 +296,4 @@ elif sys.argv[1] == 'search':
 output = json.dumps(ret)
 print(output)
 log.debug(f"Send output: {output}")
-# Last Updated September 18, 2021
+# Last Updated September 20, 2021
