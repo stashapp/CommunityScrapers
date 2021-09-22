@@ -4,6 +4,14 @@ sceneByURL:
     url:
       - vipissy.com
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  scraper: sceneSearch
+  queryURL: "https://www.vipissy.com/updates?search={}"
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
@@ -29,4 +37,25 @@ xPathScrapers:
         Name:
           fixed: Vipissy
       Image: //div[@id="videoplayer"]/video/@poster
-# Last Updated August 06, 2020
+  sceneSearch:
+    common:
+      $scenerow: //article[@id="updates-list"]/div/ul/li
+    scene:
+      Title:
+        selector: $scenerow//a[@class="image-wrapper"]/@title
+      URL:
+        selector: $scenerow//a[@class="image-wrapper"]/@href
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.vipissy.com
+      Image: $scenerow//img[@class="thumb"]/@src
+      Date:
+        selector: $scenerow//span[@class="date"]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      # Needs support / fix on scrapers end to "group" them properly.
+      # Current selector results in all performers on the page being listed for every found scene
+      #Performers:
+      #  Name: $scenerow//span//strong//a/text()
+# Last Updated September 22, 2021
