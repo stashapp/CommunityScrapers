@@ -264,9 +264,9 @@ czechspy.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechstreets.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechsupermodels.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechtaxi.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-czechvr.com|CzechVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
-czechvrcasting.com|CzechVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
-czechvrfetish.com|CzechVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+czechvr.com|CzechVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
+czechvrcasting.com|CzechVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
+czechvrfetish.com|CzechVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 czechwifeswap.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 d52q.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|stash >= v0.9.0-21|JAV
 dadcrush.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
