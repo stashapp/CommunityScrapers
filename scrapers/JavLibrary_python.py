@@ -178,8 +178,11 @@ def debug(q):
 
 
 def checking_protection(url):
+    global protection_cloudflare
+    
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     debug("[DEBUG] === Checking Status of Javlib site ===")
+    protection_cloudflare = False
     for site in SITE_JAVLIB:
         url_n = url.replace(url_domain, site)
         response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
@@ -187,6 +190,7 @@ def checking_protection(url):
             debug("[{}] Maintenance".format(site))
         if "Why do I have to complete a CAPTCHA?" in response.text or "Checking your browser before accessing" in response.text:
             debug("[{}] Protected by Cloudflare".format(site))
+            protection_cloudflare = True
         elif response.status_code != 200:
             debug("[{}] Other issue ({})".format(site, response.status_code))
         else:
@@ -419,34 +423,34 @@ jav_search_html = None
 r18_search_html = None
 jav_main_html = None
 r18_main_html = None
+protection_cloudflare = False
 
-if "validName" in sys.argv and SCENE_URL is None:
+if "validSearch" in sys.argv and SCENE_URL is None:
     sys.exit()
-
-if SCENE_URL:
-    scene_domain = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc)
-    # Url from Javlib 
-    if scene_domain in SITE_JAVLIB:
-        debug("[DEBUG] Using URL: {}".format(SCENE_URL))
-        jav_main_html = sendRequest(SCENE_URL, JAV_HEADERS)
-    elif "r18.com" in SCENE_URL:
-        r18_id = re.match(r".+id=(.+)/.*", SCENE_URL)
-        if r18_id:
-            SCENE_URL = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
-            debug("[DEBUG] Using API URL: {}".format(SCENE_URL))
-            r18_main_html = sendRequest(SCENE_URL, R18_HEADERS)
-        else:
-            debug("[WARN] Can't find the 'id=' in the URL: {}".format(SCENE_URL))
-    else:
-        debug("[WARN] The URL is not from Javlib/R18 ({})".format(SCENE_URL))
-
-if jav_main_html is None and r18_main_html is None and scene_title and "searchName" not in sys.argv:
-    debug("[DEBUG] Using search with Title: {}".format(scene_title))
-    jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
 
 if "searchName" in sys.argv:
     debug("[DEBUG] Using search with Title: {}".format(SEARCH_TITLE))
     jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(SEARCH_TITLE), JAV_HEADERS)
+else:
+    if SCENE_URL:
+        scene_domain = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc)
+        # Url from Javlib 
+        if scene_domain in SITE_JAVLIB:
+            debug("[DEBUG] Using URL: {}".format(SCENE_URL))
+            jav_main_html = sendRequest(SCENE_URL, JAV_HEADERS)
+        elif "r18.com" in SCENE_URL:
+            r18_id = re.match(r".+id=(.+)/.*", SCENE_URL)
+            if r18_id:
+                SCENE_URL = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
+                debug("[DEBUG] Using API URL: {}".format(SCENE_URL))
+                r18_main_html = sendRequest(SCENE_URL, R18_HEADERS)
+            else:
+                debug("[WARN] Can't find the 'id=' in the URL: {}".format(SCENE_URL))
+        else:
+            debug("[WARN] The URL is not from Javlib/R18 ({})".format(SCENE_URL))
+    if jav_main_html is None and r18_main_html is None and scene_title:
+        debug("[DEBUG] Using search with Title: {}".format(scene_title))
+        jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
 
 # XPATH
 r18_xPath_search = {}
@@ -475,9 +479,8 @@ r18_result = {}
 jav_result = {}
 
 
-if jav_search_html:
-    # sceneByName
-    if "searchName" in sys.argv:
+if "searchName" in sys.argv:
+    if jav_search_html:
         if "/en/?v=" in jav_search_html.url:
             debug("[DEBUG] Directly the movie page ({})".format(jav_search_html.url))
             jav_tree = lxml.html.fromstring(jav_search_html.content)
@@ -491,9 +494,15 @@ if jav_search_html:
             print(json.dumps(jav_result))
         else:
             print(json.dumps([{"title":"The search don't give any result."}]))
-        sys.exit()
     else:
-        jav_main_html = jav_search(jav_search_html, jav_xPath_search)
+        if protection_cloudflare:
+            print(json.dumps([{"title":"Protected by Cloudflare, try later."}]))
+        else:
+            print(json.dumps([{"title":"The request has failed to give the page. Check log."}]))
+    sys.exit()
+
+if jav_search_html:
+    jav_main_html = jav_search(jav_search_html, jav_xPath_search)
 
 
 if jav_main_html is None and r18_main_html is None and scene_title:
