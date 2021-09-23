@@ -548,6 +548,7 @@ if SEARCH_TITLE:
     SEARCH_TITLE = SEARCH_TITLE.replace("."," ")
     debug("[API] Searching for: {}".format(SEARCH_TITLE))
     api_search = api_search_req("query", SEARCH_TITLE, api_url)
+    final_json = None
     if api_search:
         result_search = []
         for scene in api_search:
@@ -555,14 +556,14 @@ if SEARCH_TITLE:
             if scraped_json.get("tags"):
                 scraped_json.pop("tags")
             result_search.append(scraped_json)
-        if not result_search:
-            debug("[ERROR] API Search don't give any result")
-            scraped_json = {"title":"The search don't give any result."}
-            scraped_json = [scraped_json]
-        else:
-            scraped_json = result_search
-        print(json.dumps(scraped_json))
-        sys.exit()
+        if result_search:
+            final_json = result_search
+    if final_json is None:
+        debug("[ERROR] API Search don't give any result")
+        scraped_json = {"title":"The search don't give any result."}
+        final_json = [scraped_json]
+    print(json.dumps(final_json))
+    sys.exit()
 
 if url_id:
     debug("[API] Searching using URL_ID")
