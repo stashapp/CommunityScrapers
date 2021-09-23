@@ -1,0 +1,57 @@
+name: EvilAngel
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - evilangel.com/en/movie
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - evilangel.com/en/video
+    scraper: sceneScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: //h3[@class="dvdTitle"]/text()
+      Director: //ul[@class="directedBy"]/li/a/text()
+      Duration:
+        selector: //li[@class = "length"]/b/following-sibling::text()
+      Date:
+        selector: //li[@class = "updatedOn"]/b/following-sibling::text()
+      Synopsis:
+        selector: //div[@class ="description"]//text()
+        concat: " "
+      Studio:
+        Name: 
+          fixed: Evil Angel
+      FrontImage: //a[@class="frontCoverImg"]/@href
+      BackImage: //a[@class="backCoverImg"]/@href
+
+  sceneScraper:
+    scene:
+      Title: //h1[@class="sceneTitle"]/text()
+      Details:
+        selector: //p[contains(@class,'sceneDesc')]//text()
+        concat: " "
+      Date:
+        selector: //li[@class = "updatedDate"]/text()
+      Image: //div[@class= "playerDiv"]//video/@poster
+      Studio:
+        Name: 
+          fixed: Evil Angel
+      Movies:
+        Name: //a[contains(@class,'dvdLink')]/@title
+      Tags:
+        Name: 
+          selector: //div[contains(@class,'sceneColCategories')]]/a/text()
+          replace: 
+            - regex: "Categories"
+              with: ""
+          split: ", "
+      Performers:
+        Name: //div[contains(@class, 'sceneColActors')]//a[contains(@href, 'pornstar')]/text()
+      URL: //meta[@name='og:url']/@content
+
+# Last Updated September 22, 2021
