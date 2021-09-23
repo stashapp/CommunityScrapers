@@ -545,7 +545,8 @@ api_json = None
 
 
 if SEARCH_TITLE:
-    debug("[API] Searching")
+    SEARCH_TITLE = SEARCH_TITLE.replace("."," ")
+    debug("[API] Searching for: {}".format(SEARCH_TITLE))
     api_search = api_search_req("query", SEARCH_TITLE, api_url)
     if api_search:
         result_search = []
