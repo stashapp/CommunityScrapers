@@ -1072,6 +1072,8 @@ vixen.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python >= 3.3|-
 vlogxxx.com|VlogXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vogov.com|vogov.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vrbangers.com|VRBangers.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
+vrbgay.com|VRBangers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+vrbtrans.com|VRBangers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrconk.com|VRConk.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrcosplayx.com|BaDoink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 vrhush.com|VRHush.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
