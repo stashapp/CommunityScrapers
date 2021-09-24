@@ -2,7 +2,9 @@ name: "VRBangers"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - vrbangers.com/video
+      - vrbangers.com
+      - vrbgay.com
+      - vrbtrans.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
@@ -12,27 +14,32 @@ movieByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $info: &info //div[starts-with(@class,"video-item__info ")]
+      $info: //div[@class="video-content__download-info"]
     scene:
-      Title: &titleSel //h1[1]/text()
+      Title: &titleSel //h1[contains(@class,"video-content__title")]/text()
       Date: &dateAttr
-        selector: $info//span[text()="Release date:"]/following-sibling::text()
+        selector: $info//div[@class="section__item-title-download-space"][2]/text()[2]
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsAttr
-        selector: //div[@class="short-text"]//text()
+        selector: //div[@class="video-content__description"]//div[starts-with(@class, "more-text")]/p//text()
         concat: " "
       Tags:
-        Name: //div[starts-with(@class,"video-item__tags ")]//a/text()
+        Name: //div[@class="video-item__tags"]//a/text()
       Performers:
-        Name: //div[starts-with(@class, 'video-item__info-starring')]//div[starts-with(@class,"tooltip")]//a/text()
-      Studio: &studioSel
-        Name: 
-          fixed: "VRBangers"
-      Image: &imageSel //meta[@property="og:image"]/@content
+        Name: $info//div[contains(@class, 'video-item-info--starring-download')]//span[contains(@class,"tooltip")]/a/text()
+      Studio:
+        Name: &studioName //meta[@name="dl8-customization-brand-name"]/@content
+        URL: &studioURL
+          selector: //meta[@name="dl8-customization-brand-url"]/@content
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https:"
+      Image: &imageSel //meta[@property="og:image"][1]/@content
   movieScraper:
     common:
-      $info: *info
+      $info: //div[@class="video-content__wrap"]
     movie:
       Name:
         selector: *titleSel
@@ -41,13 +48,15 @@ xPathScrapers:
               - regex: ^
                 with: "VRBangers - "
       Duration:
-        selector: $info//span[contains(text(),"Duration:")]/following-sibling::text()
+        selector: $info//div[@class="section__item-title-download-space"][contains(span,"Duration")]/span/following-sibling::text()
         postProcess:
           - replace:
               - regex: \smin
                 with: ":00"
       Date: *dateAttr
       Synopsis: *detailsAttr
-      Studio: *studioSel
+      Studio:
+        Name: *studioName
+        URL: *studioURL
       FrontImage: *imageSel
-# Last Updated September 23, 2021
+# Last Updated September 18, 2021
