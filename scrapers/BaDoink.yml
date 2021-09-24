@@ -19,6 +19,16 @@ performerByURL:
       - realvr.com
       - kinkvr.com
     scraper: performerScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - badoinkvr.com
+      - vrcosplayx.com
+      - 18vr.com
+      - babevr.com
+      - realvr.com
+      - kinkvr.com
+    scraper: movieScraper
 # Uncomment this section to user Performer Search on this scraper
 # performerByName:
 #   action: scrapeXPath
@@ -27,24 +37,29 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $details: //div[@class="video-rating-and-details"]
+      $details: &detailsAttr //div[@class="video-rating-and-details"]
     scene:
-      Title: $details/h1/text()
-      Date:
+      Title: &titleSel $details/h1/text()
+      Date: &dateSel
         selector: $details//p[@class="video-upload-date"]/text()
         postProcess:
           - replace:
             - regex: Uploaded:\s
               with:
           - parseDate: January 02, 2006
-      Details: $details//p[@class="video-description"]/text()
+      Details: &detailsSel $details//p[@class="video-description"]/text()
       Tags:
         Name: $details//p[@class="video-tags"]//a/text()
       Performers:
         Name: $details//p[@class="video-actors"]/a/text()
       Studio:
-        Name: //meta[@name="dl8-customization-brand-name"]/@content
-      Image: //img[@class="video-image"]/@src
+        Name: &studioName //meta[@name="dl8-customization-brand-name"]/@content
+      Image: &imageSel
+        selector: //meta[@itemprop="thumbnailUrl"]/@content
+        postProcess:
+          - replace:
+            - regex: \?.+
+              with: ""
       URL: //link[@rel='canonical']/@href
 # Uncomment this section to user Performer Search on this scraper
   # performerSearch:
@@ -95,5 +110,27 @@ xPathScrapers:
       Measurements: $stats/li[span[contains(.,'Measure')]]/span[contains(@class,'value')]/text()
       Aliases: $stats/li[span[contains(.,'Aka')]]/span[contains(@class,'value')]/text()
       Image: //img[@id='girlImage']/@src
-
-# Last Updated November 17, 2020
+  movieScraper:
+    common:
+      $details: *detailsAttr
+    movie:
+      Name:
+        selector: *titleSel
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "BaDoinkVR - "
+      Duration:
+        selector: $details//p[@class="video-duration"]/text()
+        postProcess:
+          - replace:
+              - regex: Duration:\s
+                with: ""
+              - regex: \smin
+                with: ":00"
+      Date: *dateSel
+      Synopsis: *detailsSel
+      Studio:
+        Name: *studioName
+      FrontImage: *imageSel  
+# Last Updated September 24, 2021
