@@ -39,7 +39,7 @@ xPathScrapers:
     common:
       $details: &detailsAttr //div[@class="video-rating-and-details"]
     scene:
-      Title: &titleSel $details/h1/text()
+      Title: $details/h1/text()
       Date: &dateSel
         selector: $details//p[@class="video-upload-date"]/text()
         postProcess:
@@ -115,11 +115,8 @@ xPathScrapers:
       $details: *detailsAttr
     movie:
       Name:
-        selector: *titleSel
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "BaDoinkVR - "
+        selector: //meta[@name="dl8-customization-brand-name"]/@content|$details/h1/text()
+        concat: " - "
       Duration:
         selector: $details//p[@class="video-duration"]/text()
         postProcess:
