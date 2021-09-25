@@ -36,7 +36,7 @@ def query_xml(path, title):
     if tree.find("tag") != None:
         res["tags"]=[{"name":x.text} for x in tree.findall("tag")]
     if tree.find("genre") != None:
-        if res["tags"] is not None:
+        if "tags" in res:
             res["tags"] += [{"name":x.text} for x in tree.findall("genre")]
         else:
             res["tags"] = [{"name":x.text} for x in tree.findall("genre")]
