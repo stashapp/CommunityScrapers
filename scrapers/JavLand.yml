@@ -1,0 +1,54 @@
+name: "Jav.Land"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jav.land
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - jav.land
+    scraper: movieScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: &infoSel //table[starts-with(@class,"videotextlist ")]
+    scene:
+      Title: &titleSel $info/tbody/tr[2]/td[2]/text()
+      Date: &dateAttr $info/tbody/tr[3]/td[2]/text()
+      Details: &detailsSel //div[@class="col-xs-12"]/strong/text()
+      Tags:
+        Name: $info/tbody/tr[9]/td[2]//a/text()
+      Performers:
+        Name: $info/tbody/tr[10]/td[2]//a[1]/text()
+      Studio: 
+        Name: &studioName $info/tbody/tr[7]/td[2]//a[1]/text()
+      Image: &imageSel //img[@class="img-responsive"]/@src
+      Movies:
+        Name: *titleSel
+        Date: *dateAttr
+        Director: $info/tbody/tr[5]/td[2]//a[1]/text()
+        Studio:
+          Name: *studioName
+        Synopsis: *detailsSel
+        FrontImage: *imageSel
+  movieScraper:
+    common:
+      $info: *infoSel
+    movie:
+      Name: *titleSel
+      Duration:
+        selector: $info/tbody/tr[4]/td[2]
+        postProcess:
+          - replace:
+              - regex: \(.+\)
+                with: ""
+              - regex: min
+                with: ":00"
+      Date: *dateAttr
+      Director: $info/tbody/tr[5]/td[2]//a[1]/text()
+      Studio:
+        Name: *studioName
+      Synopsis: *detailsSel
+      FrontImage: *imageSel
+# Last Updated September 25, 2021
