@@ -22,7 +22,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsAttr
-        selector: //div[@class="short-text"]//text()
+        selector: //div[contains(@class,"second-text")]/div//text()
         concat: " "
       Tags:
         Name: //div[starts-with(@class,"video-item__tags ")]//a/text()
