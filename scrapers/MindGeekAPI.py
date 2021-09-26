@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 import requests
 
 #
-# User variable
+# User variables
 #
 # Ratio to consider the scene to scrape (Ratio between Title and API Title)
 SET_RATIO = 0.75
@@ -21,12 +21,12 @@ PRINT_MATCH = True
 ## File used to store key to connect the API.
 STOCKAGE_FILE_APIKEY = "MindGeekAPI.ini"
 # This file will be used for search by name. It can be useful if you only want to search on specific site. (Like only putting Parent studio and not Child)
-# Copy MindGeekAPI.ini to a other name (then put the name in the var below), then edit the file to remove site  you don't want to search.
+# Copy MindGeekAPI.ini to another name (then put the name in the var below), then edit the file to remove the site  you don't want to search.
 STOCKAGE_FILE_APIKEY_SEARCH = ""
 
-# Tags you don't want to see appear in Scraper window.
+# Tags you don't want to see in the Scraper window.
 IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
-# Tag you always want in Scraper window.
+# Tags you want to add in the Scraper window.
 FIXED_TAGS = ""
 # Check the SSL Certificate.
 CHECK_SSL_CERT = True
@@ -51,7 +51,7 @@ def sendRequest(url, head):
     else:
         debug("[REQUEST] Error, Status Code: {}".format(response.status_code))
         if response.status_code == 429:
-            debug("[REQUEST] 429 Too Many Requests, You have sent too many requests in a given amount of time.")
+            debug("[REQUEST] 429 Too Many Requests, You have made too many requests in a given amount of time.")
     return None
 
 # Config
@@ -129,7 +129,7 @@ def scraping_json(api_json, url=""):
         scrape['url'] = url
     # Studio
     try:
-        api_json['collections'][0].get('name') # If this create a error it wont continue so no studio at all
+        api_json['collections'][0].get('name') # If this creates an error it wont continue so no studio at all
         scrape['studio'] = {}
         scrape['studio']['name'] = api_json['collections'][0].get('name')
     except:
@@ -201,12 +201,12 @@ if "validName" in sys.argv and SCENE_URL is None:
 if SCENE_URL:
     # fixing old scene
     if 'brazzers.com/scenes/view/id/' in SCENE_URL:
-        debug("[INFO] Probably a old url, need to redirect")
+        debug("[INFO] Probably an old url, need to redirect")
         try:
             r = requests.get(SCENE_URL, headers={'User-Agent': USER_AGENT}, timeout=(3, 5))
             SCENE_URL = r.url
         except:
-            debug("[WARN] Redirect fail, could give incorrect result.")
+            debug("[WARN] Redirect failed, result may be inaccurate.")
     # extract thing
     url_domain = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc)
     debug("[DEBUG] Domain: {}".format(url_domain))
@@ -219,7 +219,7 @@ if SCENE_URL:
     except:
         url_sceneid = None
     if url_sceneid is None:
-        debug("[ERROR] Can't get the ID of Scene. Are you sure that URL is from Mindgeek Network?")
+        debug("[ERROR] Can't get the ID of the Scene. Are you sure that URL is from Mindgeek Network?")
         sys.exit()
     else:
         debug("[INFO] ID: {}".format(url_sceneid))
@@ -260,7 +260,7 @@ elif SCENE_TITLE:
         config.read(STOCKAGE_FILE_APIKEY)
         dict_config = dict(config.items())
     else:
-        debug("[ERROR] Can't search the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(STOCKAGE_FILE_APIKEY))
+        debug("[ERROR] Can't search for the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(STOCKAGE_FILE_APIKEY))
         sys.exit(1)
     # Loop the config
     scraped_json = None
@@ -311,7 +311,7 @@ elif SCENE_TITLE:
             scraped_json = scraping_json(ratio_scene, making_url)
             break
     if scraped_json is None:
-        debug("[ERROR] API Search don't give correct result")
+        debug("[ERROR] API Search Error. No scenes found")
         sys.exit(1)
 elif SEARCH_TITLE:
     if not STOCKAGE_FILE_APIKEY_SEARCH:
@@ -323,7 +323,7 @@ elif SEARCH_TITLE:
         config.read(config_file_used)
         dict_config = dict(config.items())
     else:
-        debug("[ERROR] Can't search the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(config_file_used))
+        debug("[ERROR] Can't search for the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(config_file_used))
         sys.exit(1)
     # Loop the config
     scraped_json = None
@@ -394,15 +394,15 @@ elif SEARCH_TITLE:
             search['url'] = making_url
             result_search.append(search)
     if not result_search:
-        debug("[ERROR] API Search don't give any result")
-        scraped_json = {"title":"The search don't give any result. (Hover to see everything)"}
+        debug("[ERROR] API Search Error. No scenes found")
+        scraped_json = {"title":"No scenes found. (Hover to see everything)"}
         scraped_json["details"] = """
-        Be sure to have site(s) in the config file (.ini). To add site in the config, you need to scrape 1 url from the site.
-        Exemple: get a url from Brazzers -> use 'Scrape With...' -> now you can search on brazzers.
+        Be sure to have site(s) in the config file (.ini). To add a site in the config, you need to scrape 1 url from the site.
+        Example: get a url from Brazzers -> use 'Scrape With...' -> now you can search on brazzers.
         \nYou can also filter your search with '{site} query'. 
-        You can multiple site filter, just separate with comma.
+        You can use a multiple site filter, just separate sites with a comma.
         (site = domain without www/com)
-        \nAvailable site are the tags.
+        \nAvailable sites are shown in the tags.
         """
         scraped_json['tags'] = [{"name": x} for x in list_domain]
         scraped_json = [scraped_json]
