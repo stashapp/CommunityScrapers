@@ -20,9 +20,7 @@ xPathScrapers:
       $info: &infoSel //div[@class="post"]
       $url: &urlSel //meta[@name="dl8-customization-brand-url"]/@content
     scene:
-      Title: &titleSel
-        selector: $info//div[@class="nazev"]/h2//text()
-        concat: " "
+      Title: &titleSel $info//div[@class="nazev"]/h2
       Date: &dateSel
         selector: $info//div[@class="datum"]/text()
         postProcess:
