@@ -33,6 +33,12 @@ xPathScrapers:
       Studio:
         Name:
           fixed: SINematica
+      URL:
+        selector: //meta[@property="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: '\.sinematica\.com/members'
+                with: ".com"
   sceneSearch:
     common:
       $post: //div[@class="post_new"]/a
