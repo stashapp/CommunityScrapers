@@ -3,20 +3,61 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - virtualrealporn.com
+      - virtualrealpassion.com
+      - virtualrealjapan.com
+      - virtualrealgay.com
+      - virtualrealtrans.com
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - virtualrealporn.com
+      - virtualrealpassion.com
+      - virtualrealjapan.com
+      - virtualrealgay.com
+      - virtualrealtrans.com
+    scraper: movieScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $info: //div[@class="three-quarters"]
+      $info: &infoSel //div[@class="three-quarters"]
     scene:
-      Title: //dl8-video/@title
-      Details:
-        selector: //div[@class="g-cols onlydesktop"]//text()
+      Title: $info//dl8-video/@title
+      Date: &dateAttr
+        selector: $info//div[@class="video-date"]/span
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: &detailsSel
+        selector: $info//div[@class="g-cols onlydesktop"]//text()
         concat: " "
       Tags:
-        Name: //meta[@property="article:tag"]/@content
+        Name: $info//div[@class="metaHolder"]/div[2]//a/span/text()
       Performers:
-        Name: //h2[@class="w-portfolio-item-title"]/text()
-      Image: //meta[@property="og:image"]/@content
-
-# Last Updated May 25, 2020
+        Name:
+          selector: //h1[@class="titleVideo"]/following-sibling::p
+          postProcess: 
+            - replace:
+                - regex: \s&\s
+                  with: ", "
+          split: ", "
+      Studio:
+        Name: &studioName
+          selector: //meta[@property="og:site_name"]/@content
+          postProcess:
+            - replace:
+                - regex: \.com
+                  with: ""
+      Image: &imageSel //meta[@property="og:image"]/@content
+  movieScraper:
+    common:
+      $info: *infoSel
+    movie:
+      Name:
+        selector: //meta[@property="og:site_name"]/@content|//dl8-video/@title
+        concat: " - "
+      Date: *dateAttr
+      Studio:
+        Name: *studioName
+      Synopsis: *detailsSel
+      FrontImage: *imageSel
+# Last Updated September 25, 2021
