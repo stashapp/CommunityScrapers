@@ -11,4 +11,16 @@ sceneByFragment:
     script:
       - python
       - AdultimeAPI.py
-# Last Updated August 22, 2021
+sceneByName:
+    action: script
+    script:
+      - python
+      - AdultimeAPI.py
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - AdultimeAPI.py
+      - validName
+# Last Updated September 14, 2021
