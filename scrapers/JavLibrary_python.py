@@ -37,7 +37,7 @@ IGNORE_ALIASES = False
 # Always wait for the aliases or you are not sure to have it. (Depends if request are quick)
 WAIT_FOR_ALIASES = False
 # All javlib site
-SITE_JAVLIB = ["javlibrary","d52q","k51r","n53i"]
+SITE_JAVLIB = ["javlibrary","d52q","p54u","n53i"]
 
 BANNED_WORDS = {
     "A*****t": "Assault",
@@ -164,20 +164,25 @@ BANNED_WORDS = {
     "V*****ed": "Violated",
     "V*****es": "Violates",
     "V*****t": "Violent",
+    "V*****tly": "Violently",
     "Y********l": "Young Girl",
     "Y********ls": "Young Girls"
 }
 
 
 def debug(q):
+    q = str(q)
     if "[DEBUG]" in q and DEBUG_MODE == False:
         return
     print(q, file=sys.stderr)
 
 
 def checking_protection(url):
+    global protection_cloudflare
+    
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     debug("[DEBUG] === Checking Status of Javlib site ===")
+    protection_cloudflare = False
     for site in SITE_JAVLIB:
         url_n = url.replace(url_domain, site)
         response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
@@ -185,6 +190,7 @@ def checking_protection(url):
             debug("[{}] Maintenance".format(site))
         if "Why do I have to complete a CAPTCHA?" in response.text or "Checking your browser before accessing" in response.text:
             debug("[{}] Protected by Cloudflare".format(site))
+            protection_cloudflare = True
         elif response.status_code != 200:
             debug("[{}] Other issue ({})".format(site, response.status_code))
         else:
@@ -271,9 +277,9 @@ def r18_search(html, xpath):
         r18_search_url = r18_search_url[0]
         r18_id = re.match(r".+id=(.+)/.*", r18_search_url)
         if r18_id:
-            scene_url = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
-            debug("[DEBUG] Using API URL: {}".format(scene_url))
-            r18_main_html = sendRequest(scene_url, R18_HEADERS)
+            SCENE_URL = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
+            debug("[DEBUG] Using API URL: {}".format(SCENE_URL))
+            r18_main_html = sendRequest(SCENE_URL, R18_HEADERS)
         else:
             debug("[WARN] Can't find the 'id=' in the URL: {}".format(r18_search_url))
             return None
@@ -298,7 +304,17 @@ def jav_search(html, xpath):
         debug("[JAV] There is no result in search")
         return None
 
-
+def jav_search_byName(html, xpath):
+    jav_search_tree = lxml.html.fromstring(html.content)
+    jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
+    jav_title = getxpath(xpath['title'], jav_search_tree)
+    jav_image = getxpath(xpath['image'], jav_search_tree)  # //pics.dmm.co.jp/mono/movie/adult/13gvh029/13gvh029ps.jpg
+    debug("There is {} scene(s)".format(len(jav_url)))
+    lst = []
+    for x in range(0,len(jav_url)):
+        lst.append({"title":jav_title[x],"url":"https://www.javlibrary.com/en/{}".format(jav_url[x].replace("./","")),"image":"https:{}".format(jav_image[x])})
+    return lst
+    
 def buildlist_tagperf(data, type_scrape=""):
     list_tmp = []
     dict_jav = None
@@ -387,7 +403,8 @@ def th_imagetoBase64(imageurl, typevar):
 #debug("[DEBUG] Main Thread: {}".format(threading.get_ident()))
 FRAGMENT = json.loads(sys.stdin.read())
 
-scene_url = FRAGMENT["url"]
+SEARCH_TITLE = FRAGMENT.get("name")
+SCENE_URL = FRAGMENT.get("url")
 
 if FRAGMENT.get("title"):
     scene_title = FRAGMENT["title"]
@@ -406,27 +423,34 @@ jav_search_html = None
 r18_search_html = None
 jav_main_html = None
 r18_main_html = None
+protection_cloudflare = False
 
-if scene_url:
-    scene_domain = re.sub(r"www\.|\.com", "", urlparse(scene_url).netloc)
-    # Url from Javlib 
-    if scene_domain in SITE_JAVLIB:
-        debug("[DEBUG] Using URL: {}".format(scene_url))
-        jav_main_html = sendRequest(scene_url, JAV_HEADERS)
-    elif "r18.com" in scene_url:
-        r18_id = re.match(r".+id=(.+)/.*", scene_url)
-        if r18_id:
-            scene_url = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
-            debug("[DEBUG] Using API URL: {}".format(scene_url))
-            r18_main_html = sendRequest(scene_url, R18_HEADERS)
+if "validSearch" in sys.argv and SCENE_URL is None:
+    sys.exit()
+
+if "searchName" in sys.argv:
+    debug("[DEBUG] Using search with Title: {}".format(SEARCH_TITLE))
+    jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(SEARCH_TITLE), JAV_HEADERS)
+else:
+    if SCENE_URL:
+        scene_domain = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc)
+        # Url from Javlib 
+        if scene_domain in SITE_JAVLIB:
+            debug("[DEBUG] Using URL: {}".format(SCENE_URL))
+            jav_main_html = sendRequest(SCENE_URL, JAV_HEADERS)
+        elif "r18.com" in SCENE_URL:
+            r18_id = re.match(r".+id=(.+)/.*", SCENE_URL)
+            if r18_id:
+                SCENE_URL = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
+                debug("[DEBUG] Using API URL: {}".format(SCENE_URL))
+                r18_main_html = sendRequest(SCENE_URL, R18_HEADERS)
+            else:
+                debug("[WARN] Can't find the 'id=' in the URL: {}".format(SCENE_URL))
         else:
-            debug("[WARN] Can't find the 'id=' in the URL: {}".format(scene_url))
-    else:
-        debug("[WARN] The URL is not from Javlib/R18 ({})".format(scene_url))
-
-if jav_main_html is None and r18_main_html is None and scene_title:
-    debug("[DEBUG] Using search with Title: {}".format(scene_title))
-    jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
+            debug("[WARN] The URL is not from Javlib/R18 ({})".format(SCENE_URL))
+    if jav_main_html is None and r18_main_html is None and scene_title:
+        debug("[DEBUG] Using search with Title: {}".format(scene_title))
+        jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
 
 # XPATH
 r18_xPath_search = {}
@@ -435,7 +459,9 @@ r18_xPath_search['url'] = '//li[contains(@class,"item-list")]/a//img[string-leng
 r18_xPath_search['scene'] = '//li[contains(@class,"item-list")]'
 
 jav_xPath_search = {}
-jav_xPath_search['url'] = '//div[@class="videos"]/div/a/@title[not(contains(.,"(Blu-ray"))]/../@href'
+jav_xPath_search['url'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@href'
+jav_xPath_search['title'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@title'
+jav_xPath_search['image'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]//img/@src'
 
 jav_xPath = {}
 jav_xPath["title"] = '//td[@class="header" and text()="ID:"]/following-sibling::td/text()'
@@ -452,6 +478,34 @@ jav_xPath["r18"] = '//a[text()="purchasing HERE"]/@href'
 r18_result = {}
 jav_result = {}
 
+
+if "searchName" in sys.argv:
+    if jav_search_html:
+        if "/en/?v=" in jav_search_html.url:
+            debug("[DEBUG] Directly the movie page ({})".format(jav_search_html.url))
+            jav_tree = lxml.html.fromstring(jav_search_html.content)
+            jav_result["title"] = getxpath(jav_xPath["title"], jav_tree)
+            jav_result["details"] = getxpath(jav_xPath["details"], jav_tree)
+            jav_result["url"] = getxpath(jav_xPath["url"], jav_tree)
+            jav_result["image"] = getxpath(jav_xPath["image"], jav_tree)
+            for key,value in jav_result.items():
+                if type(value) is list:
+                    jav_result[key] = value[0]
+                if key in ["image","url"]:
+                    jav_result[key] = "https:{}".format(jav_result[key])
+            jav_result = [jav_result]
+        else:
+            jav_result = jav_search_byName(jav_search_html, jav_xPath_search)
+        if jav_result:
+            print(json.dumps(jav_result))
+        else:
+            print(json.dumps([{"title":"The search don't give any result."}]))
+    else:
+        if protection_cloudflare:
+            print(json.dumps([{"title":"Protected by Cloudflare, try later."}]))
+        else:
+            print(json.dumps([{"title":"The request has failed to give the page. Check log."}]))
+    sys.exit()
 
 if jav_search_html:
     jav_main_html = jav_search(jav_search_html, jav_xPath_search)
@@ -616,7 +670,7 @@ except NameError:
 
 # Movie - R18
 
-if r18_result.get('series_url')  and r18_result.get('series_name'):
+if r18_result.get('series_url') and r18_result.get('series_name'):
     tmp = {}
     tmp['name'] = regexreplace(r18_result['series_name'])
     tmp['url'] = r18_result['series_url']
