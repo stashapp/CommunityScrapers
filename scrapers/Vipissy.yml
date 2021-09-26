@@ -21,8 +21,8 @@ xPathScrapers:
         selector: //section[@class="downloads"]/strong/text()
         postProcess:
           - replace:
-            - regex: ^(.*)[—]\s+
-              with:
+              - regex: ^(.*)[—]\s+
+                with:
       Date:
         # selector: //dl/dd[contains(text(),"Released on:")]/text()
         selector: //dt[i[@class="glyphicon glyphicon-calendar"]]/following-sibling::dd[1]/text()
@@ -47,8 +47,8 @@ xPathScrapers:
         selector: $scenerow//a[@class="image-wrapper"]/@href
         postProcess:
           - replace:
-            - regex: ^
-              with: https://www.vipissy.com
+              - regex: ^
+                with: https://www.vipissy.com
       Image: $scenerow//img[@class="thumb"]/@src
       Date:
         selector: $scenerow//span[@class="date"]/text()
