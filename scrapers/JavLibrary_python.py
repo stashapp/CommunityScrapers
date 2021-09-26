@@ -307,12 +307,12 @@ def jav_search(html, xpath):
 def jav_search_byName(html, xpath):
     jav_search_tree = lxml.html.fromstring(html.content)
     jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
-    jav_title = getxpath(xpath['title'], jav_search_tree)  # ./?v=javme5it6a
-    jav_image = getxpath(xpath['image'], jav_search_tree)  # ./?v=javme5it6a
+    jav_title = getxpath(xpath['title'], jav_search_tree)
+    jav_image = getxpath(xpath['image'], jav_search_tree)  # //pics.dmm.co.jp/mono/movie/adult/13gvh029/13gvh029ps.jpg
     debug("There is {} scene(s)".format(len(jav_url)))
     lst = []
     for x in range(0,len(jav_url)):
-        lst.append({"title":jav_title[x],"url":jav_url[x],"image":jav_image[x]})
+        lst.append({"title":jav_title[x],"url":"https://www.javlibrary.com/en/{}".format(jav_url[x].replace("./","")),"image":"https:{}".format(jav_image[x])})
     return lst
     
 def buildlist_tagperf(data, type_scrape=""):
@@ -484,10 +484,15 @@ if "searchName" in sys.argv:
         if "/en/?v=" in jav_search_html.url:
             debug("[DEBUG] Directly the movie page ({})".format(jav_search_html.url))
             jav_tree = lxml.html.fromstring(jav_search_html.content)
-            jav_result["title"] = getxpath(jav_xPath["title"], jav_tree)[0]
-            jav_result["details"] = getxpath(jav_xPath["details"], jav_tree)[0]
-            jav_result["url"] = getxpath(jav_xPath["url"], jav_tree)[0]
-            jav_result["image"] = getxpath(jav_xPath["image"], jav_tree)[0]
+            jav_result["title"] = getxpath(jav_xPath["title"], jav_tree)
+            jav_result["details"] = getxpath(jav_xPath["details"], jav_tree)
+            jav_result["url"] = getxpath(jav_xPath["url"], jav_tree)
+            jav_result["image"] = getxpath(jav_xPath["image"], jav_tree)
+            for key,value in jav_result.items():
+                if type(value) is list:
+                    jav_result[key] = value[0]
+                if key in ["image","url"]:
+                    jav_result[key] = "https:{}".format(jav_result[key])
             jav_result = [jav_result]
         else:
             jav_result = jav_search_byName(jav_search_html, jav_xPath_search)
