@@ -484,9 +484,10 @@ if "searchName" in sys.argv:
         if "/en/?v=" in jav_search_html.url:
             debug("[DEBUG] Directly the movie page ({})".format(jav_search_html.url))
             jav_tree = lxml.html.fromstring(jav_search_html.content)
-            jav_result["title"] = getxpath(jav_xPath["title"], jav_tree)
-            jav_result["url"] = getxpath(jav_xPath["url"], jav_tree)
-            jav_result["image"] = getxpath(jav_xPath["image"], jav_tree)
+            jav_result["title"] = getxpath(jav_xPath["title"], jav_tree)[0]
+            jav_result["details"] = getxpath(jav_xPath["details"], jav_tree)[0]
+            jav_result["url"] = getxpath(jav_xPath["url"], jav_tree)[0]
+            jav_result["image"] = getxpath(jav_xPath["image"], jav_tree)[0]
             jav_result = [jav_result]
         else:
             jav_result = jav_search_byName(jav_search_html, jav_xPath_search)
