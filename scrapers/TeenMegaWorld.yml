@@ -46,7 +46,7 @@ xPathScrapers:
     scene:
       Title: $content//h1
       Date:
-        selector:  $content//div[@class="date"]/time
+        selector: $content//div[@class="date"]/time
         postProcess:
           - parseDate: January 2, 2006
       Details:
@@ -69,4 +69,4 @@ xPathScrapers:
             - replace:
                 - regex: \.(com|net)$
                   with:
-# Last Updated September 26, 2020
+# Last Updated September 26, 2021
