@@ -28,9 +28,9 @@ xPathScrapers:
       Details: &detailsSel //div[@class="textDetail"]/text()
       Tags:
         Name: //div[@id="MoreTags"]/div[@class="tagsipka"]//a/text()
-      Performers: 
+      Performers:
         Name: $info//div[@class="featuring"]//a/text()
-      Studio: 
+      Studio:
         Name: &studioSel //meta[@name="dl8-customization-brand-name"]/@content
       Image: &imageSel
         selector: $url|//dl8-video/@poster
@@ -53,7 +53,7 @@ xPathScrapers:
       Name: *titleSel
       Duration: $info//div[@class="casDetail"]/span[@class="desktop"]/text()
       Date: *dateSel
-      Studio: 
+      Studio:
         Name: *studioSel
       Synopsis: *detailsSel
       FrontImage: *imageSel
