@@ -1,4 +1,4 @@
-name: Lesworship
+name: Arx
 sceneByURL:
   - action: script
     url:
@@ -15,4 +15,4 @@ sceneByURL:
       - Arx.py
       - scrapeByURL
 
-# Last Updated september 30, 2021
+# Last Updated october 01, 2021

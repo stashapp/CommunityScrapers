@@ -30,9 +30,33 @@ headers = {
     "Referer": "https://lesworship.com"
 }
 
+def __prefix(levelChar):
+    startLevelChar = b'\x01'
+    endLevelChar = b'\x02'
 
-def debugPrint(t):
-    sys.stderr.write(t + "\n")
+    ret = startLevelChar + levelChar + endLevelChar
+    return ret.decode()
+
+def __log(levelChar, s):
+    if levelChar == "":
+        return
+
+    print(__prefix(levelChar) + s + "\n", file=sys.stderr, flush=True)
+
+def LogTrace(s):
+    __log(b't', s)
+
+def LogDebug(s):
+    __log(b'd', s)
+
+def LogInfo(s):
+    __log(b'i', s)
+
+def LogWarning(s):
+    __log(b'w', s)
+
+def LogError(s):
+    __log(b'e', s)
 
 
 def readJSONInput():
@@ -120,17 +144,22 @@ def getScene(url):
 
     site_id = site_ids.get(urlparse(url).netloc)
     if site_id is None:
-        debugPrint(f"Could not determine id for site {urlparse(url).netloc}")
+        LogError(f"Could not determine id for site {urlparse(url).netloc}")
         return None
 
     scene_id = int(urlparse(url).path.split('/')[2])
-    debugPrint(f"Scraping scene {scene_id}")
+    LogInfo(f"Scraping scene {scene_id}")
 
     variables = {
         'id': int(scene_id),
         'siteId': int(site_id)
     }
-    result = callGraphQL(query, variables)
+
+    try:
+        result = callGraphQL(query, variables)
+    except ConnectionError as e:
+        LogError(e)
+        return None
 
     result = result.get('scene')
 
