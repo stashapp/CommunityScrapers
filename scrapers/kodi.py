@@ -43,8 +43,13 @@ def query_xml(path, title):
     if tree.find("actor") != None:
         res["performers"] = []
         for actor in tree.findall("actor"):
-            if actor.find("type").text == "Actor":
+            if actor.find("type") != None:
+                if actor.find("type").text == "Actor":
+                    res["performers"].append({"name": actor.find("name").text})
+            else if actor.find("name") != None:
                 res["performers"].append({"name": actor.find("name").text})
+            else:
+                res["performers"].append({"name": actor.text})
     if tree.find("studio") != None:
         res["studio"] = {"name":tree.find("studio").text}
     
