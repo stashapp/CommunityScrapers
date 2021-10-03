@@ -47,7 +47,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
           - parseDate: 2006-01-02
-    Country:
+      Country:
         selector: $infoPiece[contains(span,"Birthplace:")]/text()|$infoPiece[contains(span,"City and Country:")]/$smallInfo|$infoPiece[contains(span,"Birth Place:")]/$smallInfo
         postProcess:
           - replace:
