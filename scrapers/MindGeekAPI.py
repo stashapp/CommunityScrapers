@@ -106,6 +106,7 @@ def graphql_findTagbyName(name):
             allTags {
                 id
                 name
+                aliases
             }
         }
     """
@@ -113,6 +114,10 @@ def graphql_findTagbyName(name):
     for tag in result["allTags"]:
         if tag["name"] == name:
             return tag["id"]
+        if tag.get("aliases"):
+            for alias in tag["aliases"]:
+                if alias == name:
+                    return tag["id"]
     return None
 
 def graphql_createMarker(scene_id, title, main_tag, seconds, tags=[]):
@@ -165,6 +170,25 @@ def graphql_createMarker(scene_id, title, main_tag, seconds, tags=[]):
     }
     result = callGraphQL(query, variables)
     return result
+
+def graphql_getMarker(scene_id):
+    query = """
+    query FindScene($id: ID!, $checksum: String) {
+        findScene(id: $id, checksum: $checksum) {
+            scene_markers {
+                seconds
+            }
+        }
+    }
+    """
+    variables = {
+        "id": scene_id
+    }
+    result = callGraphQL(query, variables)
+    if result:
+        if result["findScene"].get("scene_markers"):
+            return [x.get("seconds") for x in result["findScene"]["scene_markers"]]
+    return None
 
 # Config
 
@@ -297,7 +321,12 @@ def scraping_json(api_json, url=""):
         scrape['image'] = backup_image
 
     if SCENE_ID and STASH_API and CREATE_MARKER and api_json.get("timeTags"):
+        scene_marker_list = graphql_getMarker(SCENE_ID)
         for marker in api_json["timeTags"]:
+            if scene_marker_list:
+                if marker.get("startTime") in scene_marker_list:
+                    debug("[DEBUG] Ignoring marker ({}) because already have with same time.".format(marker.get("startTime")))
+                    continue
             try:
                 debug("[DEBUG] Creating Marker: {}".format(marker.get("name")))
                 graphql_createMarker(SCENE_ID, marker.get("name"), marker.get("name"), marker.get("startTime"))
