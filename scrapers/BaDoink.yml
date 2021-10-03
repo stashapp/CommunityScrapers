@@ -1,35 +1,23 @@
 name: "BaDoink"
 sceneByURL:
   - action: scrapeXPath
-    url:
-      - badoinkvr.com
-      - vrcosplayx.com
+    url: &urls
       - 18vr.com
       - babevr.com
-      - realvr.com
+      - badoinkvr.com
       - kinkvr.com
+      - realvr.com
+      - vrcosplayx.com
     scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
-    url:
-      - badoinkvr.com
-      - vrcosplayx.com
-      - 18vr.com
-      - babevr.com
-      - realvr.com
-      - kinkvr.com
+    url: *urls
     scraper: performerScraper
 movieByURL:
   - action: scrapeXPath
-    url:
-      - badoinkvr.com
-      - vrcosplayx.com
-      - 18vr.com
-      - babevr.com
-      - realvr.com
-      - kinkvr.com
+    url: *urls
     scraper: movieScraper
-# Uncomment this section to user Performer Search on this scraper
+# Uncomment this section to enable Performer Search on this scraper
 # performerByName:
 #   action: scrapeXPath
 #   queryURL: https://kinkvr.com/bdsm-performers/search/{}?all=1
@@ -44,8 +32,8 @@ xPathScrapers:
         selector: $details//p[@class="video-upload-date"]/text()
         postProcess:
           - replace:
-            - regex: Uploaded:\s
-              with:
+              - regex: Uploaded:\s
+                with:
           - parseDate: January 02, 2006
       Details: &detailsSel $details//p[@class="video-description"]/text()
       Tags:
@@ -55,13 +43,13 @@ xPathScrapers:
       Studio:
         Name: &studioName //meta[@name="dl8-customization-brand-name"]/@content
       Image: &imageSel
-        selector: //meta[@itemprop="thumbnailUrl"]/@content
+        selector: //img[@class="video-image"]/@src
         postProcess:
           - replace:
-            - regex: \?.+
-              with: ""
+              - regex: \?.+
+                with: ""
       URL: //link[@rel='canonical']/@href
-# Uncomment this section to user Performer Search on this scraper
+  # Uncomment this section to user Performer Search on this scraper
   # performerSearch:
   #   common:
   #     $girlA: //div[@class="girl-card-info"]/a
@@ -129,5 +117,5 @@ xPathScrapers:
       Synopsis: *detailsSel
       Studio:
         Name: *studioName
-      FrontImage: *imageSel  
-# Last Updated September 24, 2021
+      FrontImage: *imageSel
+# Last Updated October 03, 2021
