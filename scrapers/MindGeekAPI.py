@@ -125,6 +125,7 @@ def graphql_createMarker(scene_id, title, main_tag, seconds, tags=[]):
     if main_tag_id is None:
         debug("The 'Primary Tag' don't exist ({}), marker won't be created.".format(main_tag))
         return None
+    debug("[DEBUG] Creating Marker: {}".format(title))
     query = """
     mutation SceneMarkerCreate($title: String!, $seconds: Float!, $scene_id: ID!, $primary_tag_id: ID!, $tag_ids: [ID!] = []) {
         sceneMarkerCreate(
@@ -328,7 +329,6 @@ def scraping_json(api_json, url=""):
                     debug("[DEBUG] Ignoring marker ({}) because already have with same time.".format(marker.get("startTime")))
                     continue
             try:
-                debug("[DEBUG] Creating Marker: {}".format(marker.get("name")))
                 graphql_createMarker(SCENE_ID, marker.get("name"), marker.get("name"), marker.get("startTime"))
             except:
                 debug("[ERROR] Marker failed to create")
