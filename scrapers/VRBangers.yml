@@ -16,7 +16,7 @@ xPathScrapers:
     common:
       $info: &info //div[starts-with(@class,"video-item__info ")]
     scene:
-      Title: &titleSel //h1[1]/text()
+      Title: &titleSel //h1
       Date: &dateAttr
         selector: $info//span[text()="Release date:"]/following-sibling::text()
         postProcess:
@@ -28,7 +28,7 @@ xPathScrapers:
         Name: //div[starts-with(@class,"video-item__tags ")]//a/text()
       Performers:
         Name: //div[starts-with(@class, 'video-item__info-starring')]//div[starts-with(@class,"tooltip")]//a/text()
-      Studio: 
+      Studio:
         Name: &studioName
           selector: //meta[@name="dl8-customization-brand-name"]/@content
           postProcess:
@@ -64,4 +64,4 @@ xPathScrapers:
         Name: *studioName
         URL: *studioURL
       FrontImage: *imageSel
-# Last Updated September 23, 2021
+# Last Updated October 03, 2021
