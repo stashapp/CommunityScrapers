@@ -23,8 +23,7 @@ STOCKAGE_FILE_APIKEY = "MindGeekAPI.ini"
 # This file will be used for search by name. It can be useful if you only want to search on specific site. (Like only putting Parent studio and not Child)
 # Copy MindGeekAPI.ini to another name (then put the name in the var below), then edit the file to remove the site  you don't want to search.
 STOCKAGE_FILE_APIKEY_SEARCH = ""
-# If you want to create marker in same time as Scraping.
-CREATE_MARKER = False
+
 
 # Tags you don't want to see in the Scraper window.
 IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
@@ -35,9 +34,12 @@ CHECK_SSL_CERT = True
 # Local folder with JSON inside (Only used if scene don't find in API)
 LOCAL_PATH = r""
 
-## STASH THINGS
+## Marker
+# If you want to create marker in same time as Scraping.
+CREATE_MARKER = False
+
 SERVER_IP = "http://localhost:9999"
-# STASH API (Settings > Configuration > Authentication)
+# API key (Settings > Configuration > Authentication)
 STASH_API = ""
 
 
