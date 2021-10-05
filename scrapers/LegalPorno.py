@@ -1,5 +1,6 @@
 import json
 import sys
+import re
 import requests
 from pathlib import Path
 
@@ -30,7 +31,7 @@ def find_scene_id(title):
   parts = title.split(delimiter)
   for part in parts:
     if len(part) > 3:
-      if part == part.upper():
+      if re.match(r'^(\w{2,3}\d{3,4})$', part):
         if not part[0].isdigit() and part[-1].isdigit():
           return part
 
@@ -49,4 +50,4 @@ if sys.argv[1] == "query":
       fragment["url"] = result["url"]
       fragment["title"] = result["name"]
   print(json.dumps(fragment))
-# Last Updated February 13, 2021
+# Last Updated October 10, 2021
