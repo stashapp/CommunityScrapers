@@ -321,17 +321,17 @@ def scraping_json(api_json, url=""):
         debug("[INFO] Using alternate image")
         scrape['image'] = backup_image
 
-    if SCENE_ID and STASH_API and CREATE_MARKER and api_json.get("timeTags"):
-        scene_marker_list = graphql_getMarker(SCENE_ID)
-        for marker in api_json["timeTags"]:
-            if scene_marker_list:
-                if marker.get("startTime") in scene_marker_list:
-                    debug("[DEBUG] Ignoring marker ({}) because already have with same time.".format(marker.get("startTime")))
-                    continue
-            try:
-                graphql_createMarker(SCENE_ID, marker.get("name"), marker.get("name"), marker.get("startTime"))
-            except:
-                debug("[ERROR] Marker failed to create")
+    if SCENE_ID and CREATE_MARKER and api_json.get("timeTags"):
+        try:
+            scene_marker_list = graphql_getMarker(SCENE_ID)
+            for marker in api_json["timeTags"]:
+                if scene_marker_list:
+                    if marker.get("startTime") in scene_marker_list:
+                        debug("[DEBUG] Ignoring marker ({}) because already have with same time.".format(marker.get("startTime")))
+                        continue
+                    graphql_createMarker(SCENE_ID, marker.get("name"), marker.get("name"), marker.get("startTime"))
+        except:
+            debug("[ERROR] Marker failed to create")
     return scrape
 
 
