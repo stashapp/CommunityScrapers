@@ -51,7 +51,7 @@ xPathScrapers:
         selector: $infoPiece[contains(span,"Birthplace:")]/text()|$infoPiece[contains(span,"City and Country:")]/$smallInfo|$infoPiece[contains(span,"Birth Place:")]/$smallInfo
         postProcess:
           - replace:
-              - regex: .+?\s?([^,]+$)
+              - regex: .+,\s?([^,]+$)
                 with: $1
           - map:
               US: "USA"
@@ -112,4 +112,4 @@ xPathScrapers:
       Studio:
         Name: $studio
         URL: $studio/@href
-# Last Updated April 19, 2021
+# Last Updated October 08, 2021
