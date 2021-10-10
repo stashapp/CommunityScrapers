@@ -322,8 +322,6 @@ elegantangel.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:
 ericjohnssexadventures.com|EricJohnsSexAdventures.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 erito.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 eroticax.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
-eroticbeauty.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|python|-
-eroticax.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 eroticbeauty.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|python<br />stash >= v0.9.0-21|-
 eroticspice.com|devianteNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 erotiquetvlive.com|InterracialPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
