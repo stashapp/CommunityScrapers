@@ -1,4 +1,21 @@
 name: SARJ LLC
+
+sceneByName:
+  action: script
+  script:
+    - python3
+    - SARJ-LLC.py
+    - search
+    - scene
+
+sceneByQueryFragment:
+  action: script
+  script:
+    - python3
+    - SARJ-LLC.py
+    - query
+    - scene
+
 sceneByURL:
   - action: script
     url: &urls
@@ -70,4 +87,4 @@ performerByName:
     - SARJ-LLC.py
     - search
     - performer
-# Last Updated September 09, 2021
+# Last Updated September 20, 2021
