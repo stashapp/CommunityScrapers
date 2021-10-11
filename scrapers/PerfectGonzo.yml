@@ -32,39 +32,6 @@ performerByURL:
     scraper: performerScraper
 
 xPathScrapers:
-  sceneScraper:
-    scene:
-      Title:
-        selector: //div[@class="row"]//h2
-      Date:
-        selector: //div[@class="row"]//span
-        postProcess:
-          - replace:
-              - regex: 'Added\s*'
-                with: ""
-          - parseDate: January 2, 2006
-      Details: //p[@class="mg-md"]
-      Tags:
-        Name: //div[contains(h4,"Tags:")]//a
-      Image: //video[@id="video"]/@poster | //div[@id="video-hero"]//img/@src
-      Performers:
-        Name: //div[contains(h4,"Featured model")]//a
-      Studio:
-        Name:
-          selector: //link[@type="image/ico"]/@href | //link[@type="image/png"]/@href
-          postProcess:
-            - map:
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_perfectgonzo.com.ico: Perfect Gonzo
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_allinternal.com.ico: All Internal
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_asstraffic.com.ico: Ass Traffic
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_cumforcover.com.ico: Cum For Cover
-                https://static-cdn-sapphix.explicithd.com/assets/img/favicon_fistflush.com.png: Fist Flush
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_milfthing.com.ico: Milf Thing
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_primecups.com.ico: Prime Cups
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_purepov.com.ico: Pure POV
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_spermswap.com.ico: Sperm Swap
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_tamedteens.com.ico: Tamed Teens
-
   performerScraper:
     performer:
       Name: //h3[@class="mg-md"]
