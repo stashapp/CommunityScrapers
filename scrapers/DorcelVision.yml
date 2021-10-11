@@ -1,0 +1,58 @@
+name: DorcelClub
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.dorcelvision.com/en/movies
+    scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.dorcelvision.com/en/movies
+    scraper: movieScraper
+
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Details: //meta[@property="og:description"]/@content
+      Image:
+        selector: //div[contains(@class, "covers")]/a[contains(@class, "cover")]/@href
+        postProcess:
+          - replace:
+              - regex: (.*)
+                with: https://dorcelvision.com$1
+      Date:
+        selector: //div[@class="informations"]//strong[contains(., "Production year")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 02, 2006
+      Performers:
+        Name: //div[contains(@class, "casting")]//div[contains(@class, "slider-xl")]//div[@class="col-xs-2"]//a/strong/text()
+      Studio:
+        Name: //div[@class="informations"]//strong[contains(., "Studio")]/following-sibling::a/text()
+      Movies:
+        Name: //meta[@property="og:title"]/@content
+        URL: //meta[@property="og:url"]/@content
+
+  movieScraper:
+    movie:
+      Name: //meta[@property="og:title"]/@content
+      Duration:
+        selector: //div[@class="informations"]//span[@class="duration"]/text()
+        postProcess:
+          - replace:
+              - regex: \smin
+                with: ":00"
+      Studio:
+        Name: //div[@class="informations"]//strong[contains(., "Studio")]/following-sibling::a/text()
+      Director:
+        selector: //div[@class="informations"]//strong[contains(., "Directed by")]/following-sibling::a/text()
+      FrontImage:
+        selector: //div[contains(@class, "covers")]/a[contains(@class, "cover")]/@href
+        postProcess:
+          - replace:
+              - regex: (.*)
+                with: https://dorcelvision.com$1
+      Synopsis: //div[@id="biography"]
+# Last Updated October 11, 2021
