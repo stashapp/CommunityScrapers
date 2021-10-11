@@ -1,6 +1,9 @@
 name: Perfect Gonzo
 sceneByURL:
-  - action: scrapeXPath
+  - action: script
+    script:
+      - python
+      - PerfectGonzo.py
     url:
       - allinternal.com/movies/
       - asstraffic.com/movies/
@@ -12,7 +15,6 @@ sceneByURL:
       - purepov.com/movies/
       - spermswap.com/movies/
       - tamedteens.com/movies/
-    scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
@@ -92,4 +94,4 @@ xPathScrapers:
         fixed: Female
       Image:
         selector: //div[@class='col-md-8 bigmodelpic']/img/@src
-# Last Updated August 29, 2021
+# Last Updated October 11, 2021
