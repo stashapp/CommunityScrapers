@@ -1,4 +1,4 @@
-name: DorcelClub
+name: DorcelVision
 sceneByURL:
   - action: scrapeXPath
     url:
