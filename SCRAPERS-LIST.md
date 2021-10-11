@@ -788,6 +788,7 @@ porndudecasting.com|PornDudeCasting.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_
 pornfidelity.com|KellyMadisonMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 porngoespro.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornhub.com|Pornhub.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+pornhubpremium.com|PornhubPremium.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 pornlandvideos.com|MVG.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornmegaload.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornpros.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
