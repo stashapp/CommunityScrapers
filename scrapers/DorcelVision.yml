@@ -55,4 +55,5 @@ xPathScrapers:
               - regex: (.*)
                 with: https://dorcelvision.com$1
       Synopsis: //div[@id="biography"]
+# Reference: https://github.com/PAhelper/PhoenixAdult.bundle/blob/master/Contents/Code/siteDorcelVision.py
 # Last Updated October 11, 2021
