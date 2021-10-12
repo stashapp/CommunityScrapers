@@ -66,16 +66,19 @@ studio = tree.xpath('//link[@type="image/ico"]/@href | //link[@type="image/png"]
 studio = STUDIO_MAP[studio]
 performers = tree.xpath('//div[contains(h4,"Featured model")]//a/text()')
 tags = []
-tag_nodes = tree.xpath("//div[contains(@class, 'tag-container')]/node()")
-tag_category = ''
-for node in tag_nodes:
-    if not type(node) is etree._ElementUnicodeResult:
-        tag_name = node.text_content().strip()
-        if tag_name == 'Tags:':
-            continue
-        tags.append(f'{tag_category} - {tag_name}')
-    elif node.strip():
-        tag_category = node.strip()
+if studio == 'Fist Flush':
+    tags = [x.replace('/movies?tag[]=', '').replace('&nats=', '') for x in tree.xpath('//div[contains(h4,"Tags:")]//a/@href')]
+else:
+    tag_nodes = tree.xpath("//div[contains(@class, 'tag-container')]/node()")
+    tag_category = ''
+    for node in tag_nodes:
+        if not type(node) is etree._ElementUnicodeResult:
+            tag_name = node.text_content().strip()
+            if tag_name == 'Tags:':
+                continue
+            tags.append(f'{tag_category} - {tag_name}')
+        elif node.strip():
+            tag_category = node.strip()
 
 ret = {
     'title': title,
