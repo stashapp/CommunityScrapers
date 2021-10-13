@@ -1,13 +1,21 @@
-name: "SLRoriginals"
+name: "SLROriginals"
 sceneByURL:
   - action: scrapeXPath
     url:
       - slroriginals.com
+      - vrfirsttimer.com
+      - allvr.porn
+      - lustreality.com
+      - hardonvr.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - slroriginals.com
+      - vrfirsttimer.com
+      - allvr.porn
+      - lustreality.com
+      - hardonvr.com
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
@@ -26,28 +34,34 @@ xPathScrapers:
       Performers:
         Name: $info//div[starts-with(@class,"u-mt--three")]//a/text()
       Studio: 
-        Name: &studioName
-          fixed: SLR Originals
+        Name: &studioName //meta[@name="application-name"]/@content
       Image: &imageSel
         selector: //div[starts-with(@style,"background-image:")]/@style
         postProcess:
           - replace:
-              - regex: .+url\(
-                with: ""
-              - regex: \);
-                with: ""
+              - regex: .+url\((.+)\).+
+                with: $1
+      Movies:
+        Name:
+          selector: //meta[@name="application-name"]/@content|//div[starts-with( @class,"c-page--video-right")]//h1[1]/text()
+          concat: " - "
+        Duration:
+          selector: $info//span[contains(text(),"Duration:")]
+          postProcess:
+            - replace:
+                - regex: Duration:\s
+                  with: ""
+        Date: *dateAttr
+        Synopsis: *detailsAttr
   movieScraper:
     common:
       $info: *info
     movie:
       Name:
-        selector: *titleSel
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "SLR Originals - "
+        selector: //meta[@name="application-name"]/@content|//div[starts-with( @class,"c-page--video-right")]//h1[1]/text()
+        concat: " - "
       Duration:
-        selector: $info//span[starts-with(@class,"u-inline-block")][2]/text()
+        selector: $info//span[contains(text(),"Duration:")]
         postProcess:
           - replace:
               - regex: Duration:\s
@@ -57,4 +71,4 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
-# Last Updated September 25, 2021
+# Last Updated October 13, 2021
