@@ -47,6 +47,15 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
           - parseDate: 2006-01-02
+      Country:
+        selector: $infoPiece[contains(span,"Birthplace:")]/text()|$infoPiece[contains(span,"City and Country:")]/$smallInfo|$infoPiece[contains(span,"Birth Place:")]/$smallInfo
+        postProcess:
+          - replace:
+              - regex: .+,\s?([^,]+$)
+                with: $1
+          - map:
+              US: "USA"
+              United States of America: "USA"
       Gender: $infoPiece[contains(span,"Gender:")]/$smallInfo
       Twitter: //ul[contains(@class,"socialList")]//a[contains(@href,"twitter.com/")]/@href
       Instagram: //ul[contains(@class,"socialList")]//a[contains(@href,"instagram.com/")]/@href
@@ -103,4 +112,4 @@ xPathScrapers:
       Studio:
         Name: $studio
         URL: $studio/@href
-# Last Updated April 19, 2021
+# Last Updated October 08, 2021

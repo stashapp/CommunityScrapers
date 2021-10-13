@@ -39,7 +39,7 @@ xPathScrapers:
       Director:
         selector: //li[@class='section-detail-list-item-director']//span//a
         concat: ", "
-      Duration: //li[@class='section-detail-list-item-duration']/text()
+      Duration: //li[@class='section-detail-list-item-duration'][contains(span,"Running Time")]/text()
       Date:
         selector: //li[@class="section-detail-list-item-release-date"]/text()
         postProcess:
@@ -63,4 +63,4 @@ xPathScrapers:
               - regex: ^([^?]+).*$
                 with: "https:$1"
 
-# Last Updated November 10, 2020
+# Last Updated October 11, 2021
