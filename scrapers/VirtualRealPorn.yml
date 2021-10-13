@@ -1,37 +1,30 @@
 name: "VirtualRealPorn"
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urlSel
       - virtualrealporn.com
       - virtualrealpassion.com
       - virtualrealjapan.com
       - virtualrealgay.com
       - virtualrealtrans.com
     scraper: sceneScraper
-movieByURL:
+movieByURL: 
   - action: scrapeXPath
-    url:
-      - virtualrealporn.com
-      - virtualrealpassion.com
-      - virtualrealjapan.com
-      - virtualrealgay.com
-      - virtualrealtrans.com
+    url: *urlSel
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $info: &infoSel //div[@class="three-quarters"]
     scene:
-      Title: $info//dl8-video/@title
+      Title: //h1[@class="titleVideo"]
       Date: &dateAttr
-        selector: $info//div[@class="video-date"]/span
+        selector: //div[@class="video-date"]/span
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsSel
-        selector: $info//div[@class="g-cols onlydesktop"]//text()
+        selector: //div[@class="g-cols onlydesktop"]//text()
         concat: " "
       Tags:
-        Name: $info//div[@class="metaHolder"]/div[2]//a/span/text()
+        Name: //div[@class="metaHolder"]//a/span/text()
       Performers:
         Name:
           selector: //h1[@class="titleVideo"]/following-sibling::p
@@ -48,16 +41,19 @@ xPathScrapers:
                 - regex: \.com
                   with: ""
       Image: &imageSel //meta[@property="og:image"]/@content
+      Movies:
+        Name: &movieName
+          selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
+          concat: " - "
+        Date: *dateAttr
+        Synopsis: *detailsSel
+        URL: //meta[@property="og:url"]/@content
   movieScraper:
-    common:
-      $info: *infoSel
     movie:
-      Name:
-        selector: //meta[@property="og:site_name"]/@content|//dl8-video/@title
-        concat: " - "
+      Name: *movieName
       Date: *dateAttr
       Studio:
         Name: *studioName
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated September 25, 2021
+# Last Updated October 13, 2021
