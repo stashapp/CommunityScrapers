@@ -1,0 +1,29 @@
+name: ShowyBeauty
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - showybeauty.com/cover
+    scraper: galleryScraper
+    
+xPathScrapers:
+  galleryScraper:
+    gallery:
+      Title: //div[@class="short"]//strong/text()
+      Studio:
+        Name:
+          selector: //title/text()
+          postProcess:
+            - replace:
+              - regex: (.*?) -.*
+                with: $1
+      Date:
+        selector: //div[@class="short"]//br[3]/following::text()[1]
+        postProcess:
+          - replace:
+            - regex: 'Added '
+              with: $1
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //div[@class='see-model-info']//tbody//tr//td[2]//a/text()
+        
+# Last Updated October 13, 2021

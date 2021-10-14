@@ -1,0 +1,48 @@
+name: CherryPimps
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - cherrypimps.com/trailers/
+    scraper: galleryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cherrypimps.com/trailers/
+    scraper: sceneScraper
+    
+xPathScrapers:
+  galleryScraper:
+    gallery:
+      Title: //div[@class='item-title']/h1/text()
+      Studio:
+        Name:
+          fixed: Cherry Pimps
+      Date:
+        selector: //i[@class='fa fa-calendar']/following-sibling::strong/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class='update-info-block models-list-thumbs']//span/text()
+      Details: //h4[normalize-space('Description:')]/following-sibling::p/text()
+      Tags:
+        Name:
+          selector: //ul[@class='tags']/li/a/text()
+          
+  sceneScraper:
+    scene:
+      Title: //div[@class='item-title']/h1/text()
+      Studio:
+        Name:
+          fixed: Cherry Pimps
+      Date:
+        selector: //i[@class='fa fa-calendar']/following-sibling::strong/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class='update-info-block models-list-thumbs']//span/text()
+      Details: //h4[normalize-space('Description:')]/following-sibling::p/text()
+      Tags:
+        Name:
+          selector: //ul[@class='tags']/li/a/text()
+        
+# Last Updated October 14, 2021

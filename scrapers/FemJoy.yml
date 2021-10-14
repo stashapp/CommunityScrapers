@@ -1,0 +1,26 @@
+name: FemJoy
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - femjoy.com/photos/
+    scraper: galleryScraper
+    
+xPathScrapers:
+  galleryScraper:
+    gallery:
+      Title: //div[@id='model-info']//span[normalize-space('in')]/following-sibling::text()
+      Studio:
+        Name:
+          fixed: Fem Joy
+      Date:
+        selector: //div[@id='model-info']//p[contains(text(),'Photos by')]/a/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: 'released on '
+              with: $1
+          - parseDate: Jan 2, 2006
+      Performers:
+        Name: //div[@class='container']//h3[1]/a/text()
+      Details: //div[@id='model-info']/div[2]/div[1]/text()
+        
+# Last Updated October 14, 2021

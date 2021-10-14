@@ -1,0 +1,29 @@
+name: AmourAngels
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - amourangels.com/z_cover
+    scraper: galleryScraper
+    
+xPathScrapers:
+  galleryScraper:
+    gallery:
+      Title: //tbody/tr/td[@class='blox-bg']/table[1]//b/text()
+      Studio:
+        Name:
+          selector: //title/text()
+          postProcess:
+            - replace:
+              - regex: (.*?) -.*
+                with: $1
+      Date:
+        selector: //tbody/tr/td[@class='blox-bg']/table[1]//br[3]/following::text()[1]
+        postProcess:
+          - replace:
+            - regex: 'Added '
+              with: $1
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //td[@class='modinfo']//p//table//a/b/text()
+        
+# Last Updated October 13, 2021
