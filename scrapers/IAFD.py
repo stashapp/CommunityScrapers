@@ -3,6 +3,7 @@ import datetime
 import json
 import string
 import sys
+import time
 import re
 from urllib.parse import urlparse
 # extra modules below need to be installed
@@ -402,17 +403,22 @@ def performer_query(query):
     sys.exit(0)
  
 
-def scrape(url):
+def scrape(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
         scraped = scraper.get(url, timeout=(3,7))
     except Exception as e:
         log("scrape error %s" % e)
     if scraped.status_code >= 400:
-        log('HTTP Error: %s' % scraped.status_code)
+        if retries < 10:
+            debug_print('HTTP Error: %s' % scraped.status_code)
+            time.sleep(2)
+            return scrape(url, retries+1)
+        else:
+            log('HTTP Error: %s' % scraped.status_code)
     return html.fromstring(scraped.content)
 
-def scrape_image(url):
+def scrape_image(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
         scraped = scraper.get(url, timeout=(3,7))
@@ -421,6 +427,9 @@ def scrape_image(url):
         return None
     if scraped.status_code >= 400:
         debug_print('HTTP Error: %s' % scraped.status_code)
+        if retries < 10:
+            time.sleep(2)
+            return scrape_image(url, retries+1)
         return None
     b64img = base64.b64encode(scraped.content)
     return "data:image/jpeg;base64," + b64img.decode('utf-8')
@@ -606,4 +615,4 @@ if mode == "scene":
 #by default performer scraper
 performer_from_tree(tree)
 
-#Last Updated August 19, 2021
+#Last Updated October 15, 2021
