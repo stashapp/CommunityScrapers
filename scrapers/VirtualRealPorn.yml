@@ -2,13 +2,13 @@ name: "VirtualRealPorn"
 sceneByURL:
   - action: scrapeXPath
     url: &urlSel
-      - virtualrealporn.com
-      - virtualrealpassion.com
-      - virtualrealjapan.com
       - virtualrealgay.com
+      - virtualrealjapan.com
+      - virtualrealpassion.com
+      - virtualrealporn.com
       - virtualrealtrans.com
     scraper: sceneScraper
-movieByURL: 
+movieByURL:
   - action: scrapeXPath
     url: *urlSel
     scraper: movieScraper
@@ -28,7 +28,7 @@ xPathScrapers:
       Performers:
         Name:
           selector: //h1[@class="titleVideo"]/following-sibling::p
-          postProcess: 
+          postProcess:
             - replace:
                 - regex: \s&\s
                   with: ", "
