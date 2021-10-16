@@ -5,6 +5,7 @@ import string
 import sys
 import time
 import re
+import random
 from urllib.parse import urlparse
 # extra modules below need to be installed
 import cloudscraper
@@ -412,7 +413,7 @@ def scrape(url, retries=0):
     if scraped.status_code >= 400:
         if retries < 10:
             debug_print('HTTP Error: %s' % scraped.status_code)
-            time.sleep(2)
+            time.sleep(random.randint(1, 4))
             return scrape(url, retries+1)
         else:
             log('HTTP Error: %s' % scraped.status_code)
@@ -428,7 +429,7 @@ def scrape_image(url, retries=0):
     if scraped.status_code >= 400:
         debug_print('HTTP Error: %s' % scraped.status_code)
         if retries < 10:
-            time.sleep(2)
+            time.sleep(random.randint(1, 4))
             return scrape_image(url, retries+1)
         return None
     b64img = base64.b64encode(scraped.content)
@@ -511,7 +512,7 @@ def performer_from_tree(tree):
     performer_piercings = tree.xpath('//div/p[text()="Piercings"]/following-sibling::p[1]//text()')
     p.piercings = p.set_value(performer_piercings)
 
-    performer_image_url = tree.xpath('//div[@id="headshot"]/img/@src')
+    performer_image_url = tree.xpath('//div[@id="headshot"]//img/@src')
     if performer_image_url:
         try:
             debug_print("downloading image from %s" % performer_image_url[0] )
@@ -615,4 +616,4 @@ if mode == "scene":
 #by default performer scraper
 performer_from_tree(tree)
 
-#Last Updated October 15, 2021
+#Last Updated October 16, 2021
