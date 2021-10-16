@@ -605,6 +605,7 @@ if not frag['url']:
 
 url = frag["url"]
 debug_print("scraping %s" % url)
+random.seed()
 tree = scrape(url)
 
 if mode == "movie":
