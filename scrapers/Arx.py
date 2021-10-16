@@ -146,8 +146,13 @@ def getScene(url):
     if site_id is None:
         LogError(f"Could not determine id for site {urlparse(url).netloc}")
         return None
-
-    scene_id = int(urlparse(url).path.split('/')[2])
+    
+    try:
+        scene_id = int(urlparse(url).path.split('/')[2])
+    except ValueError:
+        LogError(f"No scene id found in url {url}")
+        return None
+    
     LogInfo(f"Scraping scene {scene_id}")
 
     variables = {
