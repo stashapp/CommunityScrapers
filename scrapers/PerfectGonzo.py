@@ -8,8 +8,6 @@ from urllib.parse import urlparse
 # extra modules below need to be installed
 import cloudscraper
 from lxml import html, etree
-import ssl
-import urllib.request
 
 STUDIO_MAP = {
     'https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_perfectgonzo.com.ico': 'Perfect Gonzo',
@@ -52,14 +50,7 @@ date = tree.xpath('//div[@class="row"]//span/text()')[0]
 date = re.sub("Added\s*", "", date)
 details = tree.xpath('//p[@class="mg-md"]')[0]
 imgurl = tree.xpath('//video[@id="video"]/@poster | //div[@id="video-hero"]//img/@src')[0]
-
-# img = scraper.get(imgurl).content
-ctx = ssl.create_default_context()
-ctx.check_hostname = False
-ctx.verify_mode = ssl.CERT_NONE
-with urllib.request.urlopen(imgurl, context=ctx) as u:
-    img = u.read()
-
+img = scraper.get(imgurl).content
 b64img = base64.b64encode(img)
 datauri = "data:image/jpeg;base64,"
 studio = tree.xpath('//link[@type="image/ico"]/@href | //link[@type="image/png"]/@href')[0]
