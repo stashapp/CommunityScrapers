@@ -62,7 +62,7 @@ def fetch_performer_name(name):
         return res
 
     image = make_image_data_url(row[0])
-    res['image']=image
+    res['images']=[image]
 
     return res
 

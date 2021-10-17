@@ -57,13 +57,13 @@ def fetch():
         for f in candidates:
             if pattern in f:
                 # return first candiate that matches pattern, replace space with %20 for url encoding
-                fragment['image'] = make_image_data_url(f)
+                fragment['images'] = [make_image_data_url(f)]
                 print(json.dumps(fragment))
                 exit(0)
 
     # Just use the first image in the folder as a fall back
     if candidates:
-        fragment['image'] = make_image_data_url(candidates[0])
+        fragment['images'] = [make_image_data_url(candidates[0])]
 
     print(json.dumps(fragment))
 
