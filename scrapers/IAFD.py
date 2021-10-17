@@ -506,7 +506,7 @@ def performer_from_tree(tree):
     if performer_image_url:
         try:
             debug_print("downloading image from %s" % performer_image_url[0] )
-            p.image = scrape_image(performer_image_url[0])
+            p.images = [scrape_image(performer_image_url[0])]
         except Exception as e:
             debug_print("error downloading image %s" %e)
 
