@@ -11,10 +11,11 @@ def query_url(query):
   res = requests.get(f"https://www.analvids.com/api/autocomplete/search?q={query}")
   data = res.json()
   results = data['terms']
-  if len(results) > 1:
-    debug("Multiple results. Taking first.")
-  return results[0]
-
+  if len(results) > 0:
+    if len(results) > 1:
+      debug("Multiple results. Taking first.")
+    return results[0]
+  
 def detect_delimiter(title):
   delimiters = [" ", "_", "-", "."]
   for d in delimiters:
@@ -45,9 +46,11 @@ if sys.argv[1] == "query":
   else:
     debug(f"Found scene id: {scene_id}")
     result = query_url(scene_id)
-    if result["type"] == "scene":
-      debug(f"Found scene {result['name']}")
-      fragment["url"] = result["url"]
-      fragment["title"] = result["name"]
+    if result is not None:
+      if result["type"] == "scene":
+        debug(f"Found scene {result['name']}")
+        fragment["url"] = result["url"]
+        fragment["title"] = result["name"]
+    else:
+      debug("No scenes found")
   print(json.dumps(fragment))
-# Last Updated October 10, 2021
