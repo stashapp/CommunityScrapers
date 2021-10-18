@@ -5,6 +5,6 @@ sceneByURL:
     action: script
     script:
       - python
-      - premiumbukkake.py
+      - PremiumBukkake.py
       - query
 # Last Updated October 11, 2021
