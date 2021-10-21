@@ -49,4 +49,4 @@ xPathScrapers:
       Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
       Image:
         selector: //div[@class='model--avatar']//img/@src
-# Last Updated February 13, 2021
+# Last Updated October 17, 2021
