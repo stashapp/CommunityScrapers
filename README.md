@@ -33,6 +33,7 @@ Some scrapers support the `Scrape with...` function so you can you use that inst
 
 On newer stash versions there is a `Query` button for scrapers that support that. Clicking the button allows you to edit the text that the scraper will use for your queries.
 
+In case of errors/no results during scraping make sure to check stash's log section (Settings->Logs->Log Level Debug) for more info.
 
 ## Contributing
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.  
