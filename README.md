@@ -25,7 +25,7 @@ Scrapers with **useCDP** set to true require that you have properly configured t
 You can find a list of sites currently supported for by community scraping in [SCRAPERS-LIST.md](https://github.com/stashapp/CommunityScrapers/blob/master/SCRAPERS-LIST.md)
 
 For most scrapers you have to provide the scene/performer url. Once you populate the `URL` field with an approproate url a button will appear.  
-![](https://user-images.githubusercontent.com/48220860/85202637-698e3f00-b310-11ea-9c06-b2cfe931474a.png)
+![](https://user-images.githubusercontent.com/48220860/138297440-aeaf039a-2fd0-478c-9798-4253ec381022.png)
 
 Clicking on that button brings up a popup that lets you select which fields to update.
 
