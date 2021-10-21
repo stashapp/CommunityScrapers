@@ -27,7 +27,7 @@ For most scrapers you have to edit the url. Once you populate that field with a 
 Clicking on that button brings up a popup that lets you select which fields to update.
 
 
-Some scrapers support the scrape with function so you can you use that instead of adding a url.
+Some scrapers support the `Scrape with...` function so you can you use that instead of adding a url.
 
 
 ## Contributing
