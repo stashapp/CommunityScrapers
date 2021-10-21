@@ -2,11 +2,11 @@ name: "SLROriginals"
 sceneByURL:
   - action: scrapeXPath
     url: &urlAttr
+      - allvr.porn
+      - hardonvr.com
+      - lustreality.com
       - slroriginals.com
       - vrfirsttimer.com
-      - allvr.porn
-      - lustreality.com
-      - hardonvr.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
@@ -28,7 +28,7 @@ xPathScrapers:
         Name: $info//div[starts-with(@class,"u-mt--four")]//li/a/text()
       Performers:
         Name: $info//div[starts-with(@class,"u-mt--three")]//a/text()
-      Studio: 
+      Studio:
         Name: &studioName //meta[@name="application-name"]/@content
       Image: &imageSel
         selector: //div[starts-with(@style,"background-image:")]/@style
@@ -37,10 +37,10 @@ xPathScrapers:
               - regex: .+url\((.+)\).+
                 with: $1
       Movies:
-        Name:
+        Name: &movieNameAttr
           selector: //meta[@name="application-name"]/@content|//div[starts-with( @class,"c-page--video-right")]//h1[1]/text()
           concat: " - "
-        Duration:
+        Duration: &durationAttr
           selector: $info//span[contains(text(),"Duration:")]
           postProcess:
             - replace:
@@ -52,18 +52,11 @@ xPathScrapers:
     common:
       $info: *info
     movie:
-      Name:
-        selector: //meta[@name="application-name"]/@content|//div[starts-with( @class,"c-page--video-right")]//h1[1]/text()
-        concat: " - "
-      Duration:
-        selector: $info//span[contains(text(),"Duration:")]
-        postProcess:
-          - replace:
-              - regex: Duration:\s
-                with: ""
+      Name: *movieNameAttr
+      Duration: *durationAttr
       Date: *dateAttr
       Synopsis: *detailsAttr
       Studio:
         Name: *studioName
       FrontImage: *imageSel
-# Last Updated October 13, 2021
+# Last Updated October 21, 2021
