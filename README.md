@@ -1,7 +1,7 @@
 # CommunityScrapers
 This is a public repository containing scrapers created by the Stash Community.
 
-**!!! Make sure to read ALL of the instructions here before requesting any help in the discord channel !!!**
+**:exclamation: Make sure to read ALL of the instructions here before requesting any help in the discord channel  :exclamation:**
 
 To download the scrapers you can clone the git repo or download directly any of the scrapers.
 
