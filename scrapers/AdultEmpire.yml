@@ -12,8 +12,29 @@ sceneByURL:
       - adultdvdempire.com
       - adultempire.com
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.adultdvdempire.com/allsearch/search?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 
 xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //div[@id="content"]//div[@class="item-title"]/a/@title
+      URL:
+        selector: //div[@id="content"]//div[@class="item-title"]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.adultdvdempire.com"
+      Image:
+        selector: //div[@id="content"]//div[@class="boxcover-container"]//img/@data-src
+
   movieScraper:
     movie:
       Name: //h1/text()
@@ -60,10 +81,17 @@ xPathScrapers:
         Name: //a[@label="Studio"]/text()
       Movies:
         Name: //h1/text()
+        URL: //link[@rel="canonical"]/@href
       Tags:
         Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
       Performers:
         Name: //a[@label="Performer"]//text()
+        URL:
+          selector: //a[@label="Performer"]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.adultdvdempire.com"
       URL: //meta[@name='og:url']/@content
 
 # Last Updated November 21, 2020
