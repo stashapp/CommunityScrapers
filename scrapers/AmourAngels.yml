@@ -1,0 +1,47 @@
+name: AmourAngels
+galleryByURL:
+  - action: scrapeXPath
+    url: &urlAttr
+      - amourangels.com/z_cover
+    scraper: galleryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url: *urlAttr
+    scraper: sceneScraper
+
+xPathScrapers:
+  galleryScraper:
+    common: &commonSel
+      $table: //td[@class='blox-bg']/table
+      $performer: //td[@class='modinfo']//p//table//a
+    gallery:
+      Title: &titleSel $table//b/text()
+      Studio: &studioAttr
+        Name:
+          fixed: Amour Angels
+      Date: &dateAttr
+        selector: $table//p/br/following-sibling::text()[contains(.,"Added")]
+        postProcess:
+          - replace:
+              - regex: "Added "
+                with:
+          - parseDate: 2006-01-02
+      Performers: &performersAttr
+        Name: $performer/b/text()
+        URL:
+          selector: $performer/@href
+          postProcess: &domainAttr
+            - replace:
+                - regex: ^
+                  with: http://amourangels.com
+  sceneScraper:
+    common: *commonSel
+    scene:
+      Title: *titleSel
+      Studio: *studioAttr
+      Date: *dateAttr
+      Performers: *performersAttr
+      Image:
+        selector: //td[@class="noisebg"]//img/@src
+        postProcess: *domainAttr
+# Last Updated October 21, 2021
