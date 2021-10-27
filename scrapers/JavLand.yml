@@ -1,0 +1,61 @@
+name: "Jav.Land"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jav.land
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - jav.land
+    scraper: movieScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: &infoSel //table[starts-with(@class,"videotextlist ")]
+    scene:
+      Title: &titleSel $info//td[strong[text()="DVD ID:"]]/following-sibling::td/text()
+      Date: &dateAttr $info//td[strong[text()="Release Date:"]]/following-sibling::td/text()
+      Details: &detailsSel //div[@class="col-xs-12"]/strong/text()
+      Tags:
+        Name: $info//td[strong[text()="Genre(s):"]]/following-sibling::td//a/text()
+      Performers:
+        Name: $info//td[strong[text()="Cast:"]]/following-sibling::td//a/text()
+      Studio: 
+        Name: &studioName $info//td[strong[text()="Maker:"]]/following-sibling::td//a[1]/text()
+      Image: &imageSel //img[@class="img-responsive"]/@src
+      Movies:
+        # Automatically create a movie with the Title as the name.
+        # It will miss the Studio and FrontImage due to the limit of scraping.
+        # To add the missing Studio and FrontImage data, go to that movie and scrape with the URL again.
+        Name: *titleSel
+        Date: *dateAttr
+        Director: $info//td[strong[text()="Director:"]]/following-sibling::td//a[1]/text()
+        Duration: &durationAttr
+          selector: $info//td[strong[text()="Length:"]]/following-sibling::td/text()
+          postProcess:
+            - replace:
+                - regex: \(.+\)
+                  with: ""
+                - regex: min
+                  with: ":00"
+        URL:
+          selector: //script[contains(text(),"videoid")]/text()
+          postProcess:
+            - replace:
+                - regex: '.+videoid\s*=\s*"([^"]+).+'
+                  with: "https://jav.land/en/movie/$1.html"
+        Synopsis: *detailsSel
+  movieScraper:
+    common:
+      $info: *infoSel
+    movie:
+      Name: *titleSel
+      Duration: *durationAttr
+      Date: *dateAttr
+      Director: $info//td[strong[text()="Director:"]]/following-sibling::td//a[1]/text()
+      Studio:
+        Name: *studioName
+      Synopsis: *detailsSel
+      FrontImage: *imageSel
+# Last Updated October 07, 2021
