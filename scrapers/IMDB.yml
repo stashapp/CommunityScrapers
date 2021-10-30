@@ -85,9 +85,10 @@ xPathScrapers:
       Title: $scenerow//td[@class='result_text']
       URL:
         selector: $scenerow//td[@class='result_text']/a/@href
-        replace:
-          - regex: ^
-            with: https://imdb.com
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://imdb.com
       Image: $scenerow//td[@class='primary_photo']//img/@src
 
   sceneScraper:
@@ -95,10 +96,11 @@ xPathScrapers:
       Title: //section//h1
       Date:
         selector: //li[@data-testid='title-details-releasedate']/div/ul/li/a/text()
-        replace:
-          - regex: '\s*\(.+$'
-            with: ""
-        parseDate: January 2, 2006
+        postProcess:
+          - replace:
+              - regex: '\s*\(.+$'
+                with: ""
+          - parseDate: January 2, 2006
       Details: //span[@data-testid="plot-xl"]
       Tags:
         Name: //div[@data-testid="genres"]/a/span
