@@ -6,16 +6,32 @@ performerByName:
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://www.imdb.com
+      - imdb.com
     scraper: performerScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.imdb.com/find?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - imdb.com/title/
+    scraper: sceneScraper
 
 xPathScrapers:
   performerSearch:
+    common:
+      $listAnchor: //div[@class="lister-list"]/div[@class="lister-item mode-detail"]/div[@class="lister-item-content"]/h3/a
     performer:
       Name:
-        selector: //div[@class="lister-list"]/div[@class="lister-item mode-detail"]/div[@class="lister-item-content"]/h3/a/text()
+        selector: $listAnchor/text()
       URL:
-        selector: //div[@class="lister-list"]/div[@class="lister-item mode-detail"]/div[@class="lister-item-content"]/h3/a/@href
+        selector: $listAnchor/@href
         postProcess:
           - replace:
               - regex: ^
@@ -23,15 +39,19 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      Name: //td[@id="overview-top"]/h1/span/text()
+      Name: //td[@id="overview-top" or @class="name-overview-widget__section"]//h1/span[1]/text()
       Birthdate:
         selector: //time/@datetime
         postProcess:
-          - parseDate: 2006-02-02
-      Image:
-        selector: //td[@id="img_primary"]/div/a/img/@src
+          - parseDate: 2006-1-2
+      Image: &imageAttr
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: '.*/imdb[^/]*\.png'
+                with:
       Details:
-#        selector: //div[@class="name-trivia-bio-text"]/div/text()[1]
+        #        selector: //div[@class="name-trivia-bio-text"]/div/text()[1]
         selector: //span[@class='see-more inline nobr-only']/a/@href
         postProcess:
           - replace:
@@ -41,6 +61,50 @@ xPathScrapers:
               selector: //div[@class="soda odd"]/p/text()
 
       URL: //div[@id='details-official-sites']/a[contains(text(),'Official Site')]/@href
-#     Facebook:  //div[@id='details-official-sites']/a[contains(text(),'Facebook')]/@href
+      #     Facebook:  //div[@id='details-official-sites']/a[contains(text(),'Facebook')]/@href
+      Instagram: //div[@id='details-official-sites']/a[contains(@href,"instagram.com/")]/@href
+      Aliases:
+        selector: //div[@id="details-akas"]/h4/following-sibling::text()
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: '\|+'
+                with: ", "
+      Height:
+        selector: //div[@id="details-height"]/h4/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: (.+)\s*\(.+$
+                with: $1
+          - feetToCm: true
 
-# Last Updated August 10, 2021
+  sceneSearch:
+    common:
+      $scenerow: //h3[text() = "Titles"]/following-sibling::table//tr[contains(@class, 'findResult')]
+    scene:
+      Title: $scenerow//td[@class='result_text']
+      URL:
+        selector: $scenerow//td[@class='result_text']/a/@href
+        replace:
+          - regex: ^
+            with: https://imdb.com
+      Image: $scenerow//td[@class='primary_photo']//img/@src
+
+  sceneScraper:
+    scene:
+      Title: //section//h1
+      Date:
+        selector: //li[@data-testid='title-details-releasedate']/div/ul/li/a/text()
+        replace:
+          - regex: '\s*\(.+$'
+            with: ""
+        parseDate: January 2, 2006
+      Details: //span[@data-testid="plot-xl"]
+      Tags:
+        Name: //div[@data-testid="genres"]/a/span
+      Performers:
+        Name: //a[@data-testid="title-cast-item__actor"]
+      Image: *imageAttr
+      Studio:
+        Name: //li[@data-testid="title-details-companies"]/div//a
+# Last Updated October 30, 2021
