@@ -28,7 +28,7 @@ You can find a list of sites currently supported for by community scraping in [S
 
 |-| Stable (<=v0.10.0) | Dev |
 |:-:|:--:|:--:|
-|Once you populate the `URL` field with an appropriate url| The button will appear| The button will be active|
+|Once you populate the `URL` field with an appropriate url| The scrape URL button will appear| The scrape URL button will be active|
 |Image|![stable](https://user-images.githubusercontent.com/23707269/139531203-e63b3587-ba37-4927-9956-ef9373256a50.png)|![dev](https://user-images.githubusercontent.com/23707269/139529970-d2966ae0-ae51-4e73-8f7c-d14844b90691.png)|
 
 Clicking on that button brings up a popup that lets you select which fields to update.
