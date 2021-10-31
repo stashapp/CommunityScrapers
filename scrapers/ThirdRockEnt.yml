@@ -1,4 +1,4 @@
-name: ThirdRockEnt
+name: ThirdRock
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -35,12 +35,38 @@ xPathScrapers:
         selector: //label[contains(text(),"Date Added")]/following-sibling::p/text()
         postProcess:
           - parseDate: 2006-01-02
-      Studio:
-        Name: //meta[@property="og:title"]/@content
       Performers:
         Name: //p[@class="mb-1"]//a
       Tags:
         Name: //ul[@class="flex flex-wrap gap-2 text-white"]//a
       Image:
         selector: //img[@alt="trailer"]/@src0_1x | //div[@id="video_player"]//@poster
+      Studio:
+        Name:
+          selector: //meta[@property="og:url"]/@content
+          postProcess:
+            - map:
+                https://AbbieMaley.com: AbbieMaley
+                https://AnalBBC.com: AnalBBC
+                https://ANALIZED.com: Analized
+                https://analviolation.com: AnalViolation
+                https://BadDaddyPOV.com: BadDaddyPOV
+                https://BadFamilyPov.com: BadFamilyPov
+                https://DownToFuckDating.com: DownToFuckDating
+                https://DTFsluts.com: DTFsluts
+                https://Girlfaction.com: Girlfaction
+                https://HerGape.com: HerGape
+                https://HomemadeAnalWhores.com: HomemadeAnalWhores
+                https://JamesDeen.com: JamesDeen
+                https://OnlyPrince.com: OnlyPrince
+                https://PervertGallery.com: PervertGallery
+                https://PornForce.com: PornForce
+                https://POVPerverts.net: POVPerverts
+                https://publicsexdate.com: PublicSexDate
+                https://SlutInspection.com: SlutInspection
+                https://teenageanalsluts.com: TeenageAnalSluts
+                https://TeenageCorruption.com: TeenageCorruption
+                https://TwistedVisual.com: TwistedVisual
+                https://yourmomdoesanal.com: YourMomDoesAnal
+                https://YourMomDoesPorn.com: YourMomDoesPorn
 # Last Updated October 31, 2021
