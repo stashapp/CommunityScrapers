@@ -1,4 +1,4 @@
-name: ThirdRock
+name: ThirdRockEnt
 sceneByURL:
   - action: scrapeXPath
     url:
