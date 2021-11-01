@@ -1,0 +1,72 @@
+name: ThirdRockEnt
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - abbiemaley.com/trailers
+      - analbbc.com/trailers/
+      - analized.com/trailers/
+      - analviolation.com/trailers/
+      - baddaddypov.com/trailers/
+      - badfamilypov.com/trailers/
+      - downtofuckdating.com/trailers/
+      - dtfsluts.com/trailers/
+      - girlfaction.com/trailers/
+      - hergape.com/trailers/
+      - homemadeanalwhores.com/trailers/
+      - jamesdeen.com/trailers/
+      - onlyprince.com/trailers/
+      - pervertgallery.com/trailers/
+      - pornforce.com/trailers/
+      - povperverts.net/trailers/
+      - publicsexdate.com/trailers/
+      - slutinspection.com/trailers/
+      - teenageanalsluts.com/trailers/
+      - teenagecorruption.com/trailers/
+      - twistedvisual.com/trailers/
+      - yourmomdoesanal.com/trailers/
+      - yourmomdoesporn.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="title_bar trailer_title text-center text-3xl text-accent"]
+      Details: //p[@class="description-text"]
+      Date:
+        selector: //label[contains(text(),"Date Added")]/following-sibling::p/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //p[@class="mb-1"]//a
+      Tags:
+        Name: //ul[@class="flex flex-wrap gap-2 text-white"]//a
+      Image:
+        selector: //img[@alt="trailer"]/@src0_1x | //div[@id="video_player"]//@poster
+      Studio:
+        Name:
+          selector: //meta[@property="og:url"]/@content
+          postProcess:
+            - map:
+                https://AbbieMaley.com: AbbieMaley
+                https://AnalBBC.com: AnalBBC
+                https://ANALIZED.com: Analized
+                https://analviolation.com: AnalViolation
+                https://BadDaddyPOV.com: BadDaddyPOV
+                https://BadFamilyPov.com: BadFamilyPov
+                https://DownToFuckDating.com: DownToFuckDating
+                https://DTFsluts.com: DTFsluts
+                https://Girlfaction.com: Girlfaction
+                https://HerGape.com: HerGape
+                https://HomemadeAnalWhores.com: HomemadeAnalWhores
+                https://JamesDeen.com: JamesDeen
+                https://OnlyPrince.com: OnlyPrince
+                https://PervertGallery.com: PervertGallery
+                https://PornForce.com: PornForce
+                https://POVPerverts.net: POVPerverts
+                https://publicsexdate.com: PublicSexDate
+                https://SlutInspection.com: SlutInspection
+                https://teenageanalsluts.com: TeenageAnalSluts
+                https://TeenageCorruption.com: TeenageCorruption
+                https://TwistedVisual.com: TwistedVisual
+                https://yourmomdoesanal.com: YourMomDoesAnal
+                https://YourMomDoesPorn.com: YourMomDoesPorn
+# Last Updated October 31, 2021
