@@ -41,9 +41,6 @@ CHECK_SSL_CERT = True
 # Local folder with JSON inside (Only used if scene don't find in API)
 LOCAL_PATH = r""
 
-## Marker
-# If you want to create marker in same time as Scraping.
-CREATE_MARKER = False
 
 SERVER_IP = "http://localhost:9999"
 # API key (Settings > Configuration > Authentication)
