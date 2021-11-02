@@ -195,6 +195,33 @@ def graphql_getMarker(scene_id):
             return [x.get("seconds") for x in result["findScene"]["scene_markers"]]
     return None
 
+def graphql_getScene(scene_id):
+    query = """
+    query FindScene($id: ID!, $checksum: String) {
+        findScene(id: $id, checksum: $checksum) {
+            file {
+                duration
+            }
+            scene_markers {
+                seconds
+            }
+        }
+    }
+    """
+    variables = {
+        "id": scene_id
+    }
+    result = callGraphQL(query, variables)
+    if result:
+        return_dict = {}
+        return_dict["duration"] = result["findScene"]["file"]["duration"]
+        if result["findScene"].get("scene_markers"):
+            return_dict["marker"] = [x.get("seconds") for x in result["findScene"]["scene_markers"]]
+        else:
+            return_dict["marker"] = None
+        return return_dict
+    return None
+
 # Config
 
 def check_config(domain):
