@@ -70,7 +70,7 @@ def scrape_scene_url(url):
     r = requests.get(url)
 
     soup = BeautifulSoup(r.text, 'html.parser')
-    script_text = soup.find('script', attrs={'type': 'application/ld+json'}).text.replace("\n", '')
+    script_text = soup.find('script', attrs={'type': 'application/ld+json'}).string.replace("\n", '')
     json_script = json.loads(script_text)
 
     # Add Scene Details
