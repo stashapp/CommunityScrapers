@@ -24,6 +24,13 @@ STOCKAGE_FILE_APIKEY = "MindGeekAPI.ini"
 # Copy MindGeekAPI.ini to another name (then put the name in the var below), then edit the file to remove the site  you don't want to search.
 STOCKAGE_FILE_APIKEY_SEARCH = ""
 
+# If you want to create marker in same time as Scraping.
+CREATE_MARKER = False
+# Only create marker if the duration match (API vs Stash)
+MARKER_DURATION_MATCH = True
+# Sometime the API duration is 0/1, so we can't really know if this match. True if you want to create anyways
+MARKER_DURATION_UNSURE = True
+
 
 # Tags you don't want to see in the Scraper window.
 IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
@@ -321,17 +328,31 @@ def scraping_json(api_json, url=""):
         debug("[INFO] Using alternate image")
         scrape['image'] = backup_image
 
-    if SCENE_ID and CREATE_MARKER and api_json.get("timeTags"):
-        try:
-            scene_marker_list = graphql_getMarker(SCENE_ID)
-            for marker in api_json["timeTags"]:
-                if scene_marker_list:
-                    if marker.get("startTime") in scene_marker_list:
-                        debug("[DEBUG] Ignoring marker ({}) because already have with same time.".format(marker.get("startTime")))
-                        continue
-                    graphql_createMarker(SCENE_ID, marker.get("name"), marker.get("name"), marker.get("startTime"))
-        except:
-            debug("[ERROR] Marker failed to create")
+    if SCENE_ID and STASH_API and CREATE_MARKER:
+        if api_json.get("timeTags"):
+            stash_scene_info = graphql_getScene(SCENE_ID)
+            api_scene_duration = None
+            if api_json.get("videos"):
+                if api_json["videos"].get("mediabook"):
+                    api_scene_duration = api_json["videos"]["mediabook"].get("length")
+            if MARKER_DURATION_MATCH and api_scene_duration is None:
+                debug("[INFO] No duration given by the API.")
+            else:
+                debug("[DEBUG] Stash Len: {}| API Len: {}".format(stash_scene_info["duration"], api_scene_duration))
+                if (MARKER_DURATION_MATCH and api_scene_duration-11 <= stash_scene_info["duration"] <= api_scene_duration+11) or (api_scene_duration in [0,1] and MARKER_DURATION_UNSURE):
+                    for marker in api_json["timeTags"]:
+                        if stash_scene_info.get("marker"):
+                            if marker.get("startTime") in stash_scene_info["marker"]:
+                                debug("[DEBUG] Ignoring marker ({}) because already have with same time.".format(marker.get("startTime")))
+                                continue
+                        try:
+                            graphql_createMarker(SCENE_ID, marker.get("name"), marker.get("name"), marker.get("startTime"))
+                        except:
+                            debug("[ERROR] Marker failed to create")
+                else:
+                    debug("[INFO] The duration of this scene don't match the duration of stash scene.")
+        else:
+            debug("[INFO] No offical marker for this scene")
     return scrape
 
 
