@@ -10,10 +10,13 @@ xPathScrapers:
       $info: //div[@class="detail"]
     scene:
       Title: //div[@class="detail__header detail__header-lg"]/h1
+      Studio:
+        Name: 
+          fixed: MilfVR
       Date:
         selector: $info//span[@class="detail__date"]/text()
         postProcess:
-          - parseDate: 2 January, 2006
+          - parseDate: 2 November, 2020
       Details:
         selector: //div[@class="detail__txt detail__txt-show_lg"]/text()|//span[@class="more__body"]/text()
         concat: " "
