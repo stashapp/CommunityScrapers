@@ -24,13 +24,15 @@ STOCKAGE_FILE_APIKEY = "MindGeekAPI.ini"
 # Copy MindGeekAPI.ini to another name (then put the name in the var below), then edit the file to remove the site  you don't want to search.
 STOCKAGE_FILE_APIKEY_SEARCH = ""
 
+# Marker
 # If you want to create marker in same time as Scraping.
 CREATE_MARKER = False
 # Only create marker if the duration match (API vs Stash)
 MARKER_DURATION_MATCH = True
 # Sometime the API duration is 0/1, so we can't really know if this match. True if you want to create anyways
 MARKER_DURATION_UNSURE = True
-
+# The max difference between Stash Length & API Length.
+MARKER_SEC_DIFF = 10
 
 # Tags you don't want to see in the Scraper window.
 IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
@@ -363,7 +365,7 @@ def scraping_json(api_json, url=""):
                 debug("[INFO] No duration given by the API.")
             else:
                 debug("[DEBUG] Stash Len: {}| API Len: {}".format(stash_scene_info["duration"], api_scene_duration))
-                if (MARKER_DURATION_MATCH and api_scene_duration-11 <= stash_scene_info["duration"] <= api_scene_duration+11) or (api_scene_duration in [0,1] and MARKER_DURATION_UNSURE):
+                if (MARKER_DURATION_MATCH and api_scene_duration-MARKER_SEC_DIFF <= stash_scene_info["duration"] <= api_scene_duration+MARKER_SEC_DIFF) or (api_scene_duration in [0,1] and MARKER_DURATION_UNSURE):
                     for marker in api_json["timeTags"]:
                         if stash_scene_info.get("marker"):
                             if marker.get("startTime") in stash_scene_info["marker"]:
