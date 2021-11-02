@@ -1,0 +1,57 @@
+name: DorcelVision
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.dorcelvision.com/en/movies
+    scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.dorcelvision.com/en/movies
+    scraper: movieScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &titleSel //meta[@property="og:title"]/@content
+      Details: &detailsAttr
+        selector: //div[@id="biography"]/*/text()
+        concat: "\n\n"
+      Image: &imageAttr
+        selector: //div[contains(@class, "covers")]/a[contains(@class, "cover")]/@href
+        postProcess:
+          - replace:
+              - regex: (.*)
+                with: https://dorcelvision.com$1
+      Date: &dateAttr
+        selector: //div[@class="informations"]//strong[contains(., "Production year")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+)$
+                with: $1-01-01
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //div[contains(@class, "casting")]//div[contains(@class, "slider-xl")]//div[@class="col-xs-2"]//a/strong/text()
+      Studio: &studioAttr
+        Name: //div[@class="informations"]//strong[contains(., "Studio")]/following-sibling::a/text()
+      Movies:
+        Name: //meta[@property="og:title"]/@content
+        URL: //meta[@property="og:url"]/@content
+  movieScraper:
+    movie:
+      Name: *titleSel
+      Date: *dateAttr
+      Duration:
+        selector: //div[@class="informations"]//span[@class="duration"]/text()
+        postProcess:
+          - replace:
+              - regex: \smin
+                with: ":00"
+      Studio: *studioAttr
+      Director:
+        selector: //div[@class="informations"]//strong[contains(., "Directed by")]/following-sibling::a/text()
+      FrontImage: *imageAttr
+      Synopsis: *detailsAttr
+# Reference: https://github.com/PAhelper/PhoenixAdult.bundle/blob/master/Contents/Code/siteDorcelVision.py
+# Last Updated October 13, 2021

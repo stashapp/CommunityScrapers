@@ -537,7 +537,7 @@ elif SEARCH_TITLE:
         config_url = config.get(config_section, 'url')
         config_domain = re.sub(r"www\.|\.com", "", urlparse(config_url).netloc)
         list_domain.append(config_domain)
-        match_filter = re.match(r"{.+}", SEARCH_TITLE)
+        match_filter = re.match(r"{.+}", SEARCH_TITLE.lower())
         if match_filter:
             filter_domain = re.sub(r"[{}]","", match_filter.group(0))
             filter_domain = filter_domain.split(",")

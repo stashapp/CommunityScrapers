@@ -1,5 +1,6 @@
 import json
 import sys
+import re
 import requests
 from pathlib import Path
 
@@ -10,10 +11,11 @@ def query_url(query):
   res = requests.get(f"https://www.analvids.com/api/autocomplete/search?q={query}")
   data = res.json()
   results = data['terms']
-  if len(results) > 1:
-    debug("Multiple results. Taking first.")
-  return results[0]
-
+  if len(results) > 0:
+    if len(results) > 1:
+      debug("Multiple results. Taking first.")
+    return results[0]
+  
 def detect_delimiter(title):
   delimiters = [" ", "_", "-", "."]
   for d in delimiters:
@@ -30,7 +32,7 @@ def find_scene_id(title):
   parts = title.split(delimiter)
   for part in parts:
     if len(part) > 3:
-      if part == part.upper():
+      if re.match(r'^(\w{2,3}\d{3,4})$', part):
         if not part[0].isdigit() and part[-1].isdigit():
           return part
 
@@ -44,9 +46,11 @@ if sys.argv[1] == "query":
   else:
     debug(f"Found scene id: {scene_id}")
     result = query_url(scene_id)
-    if result["type"] == "scene":
-      debug(f"Found scene {result['name']}")
-      fragment["url"] = result["url"]
-      fragment["title"] = result["name"]
+    if result is not None:
+      if result["type"] == "scene":
+        debug(f"Found scene {result['name']}")
+        fragment["url"] = result["url"]
+        fragment["title"] = result["name"]
+    else:
+      debug("No scenes found")
   print(json.dumps(fragment))
-# Last Updated February 13, 2021

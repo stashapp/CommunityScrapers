@@ -1,0 +1,16 @@
+name: IFeelMyself
+sceneByFragment:
+  action: script
+  script:
+    - python3
+    - IFeelMyself.py
+    - query
+sceneByURL:
+  - url:
+      - https://ifeelmyself.com/public/main.php?page=
+    action: script
+    script:
+      - python3
+      - IFeelMyself.py
+      - url
+# Last Updated October 10, 2021 
