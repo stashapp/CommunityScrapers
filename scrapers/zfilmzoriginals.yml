@@ -1,0 +1,27 @@
+name: z-filmz-originals
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - z-filmz-originals.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="info-section--title"]/text()
+      Date:
+        selector: //span[@title="Published at"]
+        postProcess:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //span[@title="Models"]//a
+      Tags:
+        Name: //span[@title="Categories"]//a
+      Details:
+        selector: //div[@class="custom_text"]
+      Image:
+        selector: //meta[@name="twitter:image"]/@content
+      Studio:
+        Name:
+          fixed: z-filmz-originals
+# Last Updated November 02, 2021
