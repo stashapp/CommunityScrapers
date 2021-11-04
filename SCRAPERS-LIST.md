@@ -178,6 +178,7 @@ boysfuckmilfs.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 brandibelle.com|brandibelle.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 brandnewfaces.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 brattyfamily.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+brattymilf.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 brattysis.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 brazzers.com|Brazzers.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|CDP|-
 brickyates.com|brickyates.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
