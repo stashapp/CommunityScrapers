@@ -1,7 +1,7 @@
 import re, sys, copy, json
 import requests
 
-import stashutils.log as log
+import py_common.log as log
 from traxxx_interface import TraxxxInterface
 
 def main():

@@ -1,6 +1,6 @@
 import re, sys, copy, json, requests
 
-import stashutils.log as log
+import py_common.log as log
 from box import Box
 
 def parse_response(json_input):
