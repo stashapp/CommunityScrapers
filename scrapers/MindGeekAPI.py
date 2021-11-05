@@ -440,7 +440,7 @@ if SCENE_URL:
         local_tmp_path = os.path.join(LOCAL_PATH,url_sceneid + ".json")
         if os.path.exists(local_tmp_path):
             debug("[INFO] Using local file ({})".format(url_sceneid + ".json"))
-            with open(local_tmp_path) as file:
+            with open(local_tmp_path, "r", encoding="utf8") as file:
                 api_scene_json = json.load(file)
         else:
             sys.exit(1)
