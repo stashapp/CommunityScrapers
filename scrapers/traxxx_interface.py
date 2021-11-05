@@ -49,9 +49,9 @@ class TraxxxInterface:
     self.fragments.update(traxxx_gql_fragments)
 
   def __resolveFragments(self, query):
-    fragmentRefrences = list(set(re.findall(r'(?<=\.\.\.)\w+', query)))
+    fragmentReferences = list(set(re.findall(r'(?<=\.\.\.)\w+', query)))
     fragments = []
-    for ref in fragmentRefrences:
+    for ref in fragmentReferences:
       fragments.append({
         "fragment": ref,
         "defined": bool(re.search("fragment {}".format(ref), query))
@@ -89,7 +89,7 @@ class TraxxxInterface:
         boxed =  Box(data=data, default_box=True)
         return boxed.data
     elif response.status_code == 401:
-      sys.exit("HTTP Error 401, Unauthorised. Cookie authentication most likely failed")
+      sys.exit("HTTP Error 401, Unauthorized. Cookie authentication most likely failed")
     else:
       raise ConnectionError(
         "GraphQL query failed:{} - {}. Query: {}. Variables: {}".format(
@@ -366,7 +366,7 @@ class TraxxxInterface:
       # fragment["instagram"]
       pass
 
-    #  TODO: immplement this if traxxx ever adds career data to performers
+    #  TODO: implement this if traxxx ever adds career data to performers
     # if p.careerLength
     #   fragment["career_length"] = p.careerLength
 
