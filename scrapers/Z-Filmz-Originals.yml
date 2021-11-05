@@ -15,8 +15,18 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name: //span[@title="Models"]//a
+      URL:
+        selector: //span[@title="Models"]//a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.z-filmz-originals.com
       Tags:
-        Name: //span[@title="Categories"]//a
+        Name:
+          //span[@title="Categories"]//a
+          # Uncomment if you want all the tags and not just the catagories and comment out the above line.
+          #//span[@title="Categories"]//a|//div[@class="tags mt-3"]/a
+
       Details:
         selector: //div[@class="custom_text"]
       Image:
@@ -24,4 +34,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: z-filmz-originals
-# Last Updated November 02, 2021
+# Last Updated November 05, 2021
