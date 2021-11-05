@@ -1,4 +1,4 @@
-name: z-filmz-originals
+name: Z-Filmz-Originals
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -33,5 +33,5 @@ xPathScrapers:
         selector: //meta[@name="twitter:image"]/@content
       Studio:
         Name:
-          fixed: z-filmz-originals
+          fixed: Z-Filmz-Originals
 # Last Updated November 05, 2021
