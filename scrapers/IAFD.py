@@ -512,7 +512,7 @@ def performer_from_tree(tree):
     performer_piercings = tree.xpath('//div/p[text()="Piercings"]/following-sibling::p[1]//text()')
     p.piercings = p.set_value(performer_piercings)
 
-    performer_image_url = tree.xpath('//div[@id="headshot"]/img/@src')
+    performer_image_url = tree.xpath('//div[@id="headshot"]//img/@src')
     if performer_image_url:
         try:
             debug_print("downloading image from %s" % performer_image_url[0] )
@@ -617,4 +617,4 @@ if mode == "scene":
 #by default performer scraper
 performer_from_tree(tree)
 
-#Last Updated October 16, 2021
+#Last Updated November 5, 2021
