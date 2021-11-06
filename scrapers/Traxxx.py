@@ -39,9 +39,7 @@ def main():
 
 # Return a list of scenes from a search
 def scene_name(fragment):
-  title = None
-  if not title:
-    title = fragment.get("title")
+  title = fragment.get("title")
   if not title:
     title = fragment.get("name")
   if not title:

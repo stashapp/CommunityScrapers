@@ -1,7 +1,10 @@
 import re, sys, copy, json, requests
 
+# local modules
 import py_common.log as log
-from box import Box
+
+# requirements
+from box import Box # pip install python-box
 
 def parse_response(json_input):
   if isinstance(json_input, dict):
@@ -346,7 +349,6 @@ class TraxxxInterface:
       if profile.image:
         fragment["images"].append( profile.image )
 
-
     # descriptions = []
     # for profile in p.profiles:
     #   if profile.description:
@@ -420,7 +422,7 @@ traxxx_gql_fragments = {
           slug
         }
         entity { ...traxEntity }
-        avatar: avatarMedia {
+        image: avatarMedia {
           ...traxMedia
         }
         birthCountry: countryByBirthCountryAlpha2 {
@@ -435,14 +437,9 @@ traxxx_gql_fragments = {
     """,
     "traxActorProfile":"""
         fragment traxActorProfile on ActorsProfile {
-          image: avatarMedia {
-            ...traxMedia
-          }
+          image: avatarMedia { ...traxMedia }
           description
           entity { ...traxEntity }
-          image: avatarMedia {
-            ...traxMedia
-          }
         }
     """,
     "traxScene":"""
