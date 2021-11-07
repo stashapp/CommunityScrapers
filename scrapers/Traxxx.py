@@ -16,7 +16,7 @@ def main():
   log.info(mode)
 
   if mode == 'scene_name':
-    data = scene_name(fragment)
+    data = scene_by_name(fragment)
   if mode == 'scene_query_fragment':
     data = scene_query_fragment(fragment)
   if mode == 'scene_fragment':
@@ -37,25 +37,36 @@ def main():
   else:
     print("")
 
-# Return a list of scenes from a search
-def scene_name(fragment):
+def search_traxxx_for_scene(fragment):
   title = fragment.get("title")
   if not title:
     title = fragment.get("name")
   if not title:
     return
+  return traxxx.search_scenes(title)
 
-  scenes = traxxx.search_scenes(title)
-  return scenes
+# Return a list of scenes from a search
+def scene_by_name(fragment):
+  scenes = search_traxxx_for_scene(fragment)
+  return [traxxx.parse_to_stash_scene_search(s) for s in scenes]
 
 # extract TraxxxID from passed fragment and return new fragment
 def scene_query_fragment(fragment):
-  scene = traxxx.get_scene(fragment.get("remote_site_id"))
-  return scene
+  
+  traxxx_url = fragment.get("url", "")
+  m = re.search(r'traxxx.me/scene/(\d+)/', traxxx_url)
+  if not m:
+    log.warning(f'could not parse scene ID from URL: {traxxx_url}')
+    return
+  scene_id = m.group(1)
+  scene = traxxx.get_scene(scene_id)
+  return traxxx.parse_to_stash_scene(scene)
 
 # return first result from scene_name
 def scene_fragment(fragment):
-  return scene_name(fragment)[0]
+  scenes = search_traxxx_for_scene(fragment)
+  if scenes:
+    return traxxx.parse_to_stash_scene(scenes[0])
 
 # Return a list of possible performer matches
 def performer_lookup(fragment):
@@ -69,7 +80,7 @@ def performer_fragment(fragment):
 
 # Get PerformerID from URL and do a lookup on it
 def performer_url(fragment):
-  m = re.search(r'actor/(\d+)/', fragment['url'])
+  m = re.search(r'traxxx.me/actor/(\d+)/', fragment['url'])
   if not m:
     return
   performer_id = m.group(1)

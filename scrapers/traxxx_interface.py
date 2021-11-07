@@ -130,7 +130,7 @@ class TraxxxInterface:
     result = self.__callGraphQL(query, variables)
     log.info(f'scene search "{search}" returned {len(result.scenes)} results')
 
-    return [ self.parse_scene_to_stash(s.release) for s in result.scenes]
+    return [ s.release for s in result.scenes]
 
   def search_performers(self, search, numResults=20):
     query = """
@@ -154,7 +154,7 @@ class TraxxxInterface:
 
     results = self.__callGraphQL(query, variables).get("actors")
     log.info(f'performer search "{search}" returned {len(results)} results')
-    return [self.parse_performer_to_stash(p) for p in results]
+    return [p for p in results]
 
   # shootID refers to a media sources uniqueID e.x. a LegalPorno shootID might be "GIO0001"
   def get_scene_by_shootID(self, shootId):
@@ -175,7 +175,7 @@ class TraxxxInterface:
     log.info(f'scene shootID lookup "{shootId}" returned {len(response)} results')
 
     if len(response) > 0:
-      return self.parse_scene_to_stash(response[0])
+      return response[0]
     else:
       return None
 
@@ -199,7 +199,7 @@ class TraxxxInterface:
     log.info(f'scene traxxxID lookup "{traxxx_scene_id}" returned {len(response)} results')
 
     if len(response) > 0:
-      return self.parse_scene_to_stash(response[0])
+      return response[0]
     else:
       return None
 
@@ -223,14 +223,42 @@ class TraxxxInterface:
     log.info(f'performer traxxxID lookup "{traxxx_performer_id}" returned {len(response)} results')
 
     if len(response) > 0:
-      return self.parse_performer_to_stash(response[0])
+      return response[0]
     else:
       return None
 
-  def parse_scene_to_stash(self, s):
+  def parse_to_stash_scene_search(self, s):
     fragment = {}
 
-    fragment["remote_site_id"] = str(s.id)
+    if s.poster.image:
+      fragment["image"] = s.poster.image
+
+    # search returns url as traxxx url for later parsing by scene parser
+    if s.slug:
+      fragment["url"] = f'https://traxxx.me/scene/{s.id}/{s.slug}/'
+
+    if s.date:
+      fragment["date"] = s.date.split("T")[0]
+
+    if s.title:
+      fragment["title"] = s.title
+
+    if s.description:
+      fragment["details"] = s.description
+
+    if s.tags:
+      tags = []
+      for t in s.tags:
+        t = t["tag"]
+        tags.append({
+          "name": t["name"]
+        })
+      fragment["tags"] = tags
+
+    return fragment
+
+  def parse_to_stash_scene(self, s):
+    fragment = {}
 
     if s.title:
       fragment["title"] = s.title
@@ -289,7 +317,7 @@ class TraxxxInterface:
 
     return fragment
 
-  def parse_performer_to_stash(self, p):
+  def parse_to_stash_performer(self, p):
     fragment = {}
 
     if p.name:
