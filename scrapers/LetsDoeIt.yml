@@ -2,12 +2,12 @@ name: "LetsDoeIt"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - letsdoeit.com
       - amateureuro.com
-      - transbella.com
-      - mamacitaz.com
-      - forbondage.com
       - dirtycosplay.com
+      - forbondage.com
+      - letsdoeit.com
+      - mamacitaz.com
+      - transbella.com
       - vipsexvault.com
     scraper: sceneScraper
 xPathScrapers:
@@ -39,5 +39,4 @@ xPathScrapers:
       Studio:
         Name: $actors//a//text()
       Image: //picture[@class="poster"]/img/@src
-
 # Last Updated November 09, 2021
