@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@id="videoWrapper"]/div[4]/div[2]
+      Title: //h1
       Image: 
         selector: //script[contains(., "coverSlider.init(")] 
         postProcess:
