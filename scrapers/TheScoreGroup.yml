@@ -1,27 +1,19 @@
 name: TheScoreGroup
 sceneByURL:
   - action: scrapeXPath
-    url:
-      - scoreland.com/
-      - 60plusmilfs.com/
-      - 50plusmilfs.com/
-      - 40somethingmag.com/
-      - pornmegaload.com/
-      - xlgirls.com/
+    url: &urls
       - 18eighteen.com/
+      - 40somethingmag.com/
+      - 50plusmilfs.com/
+      - 60plusmilfs.com/
       - legsex.com/
+      - pornmegaload.com/
+      - scoreland.com/
+      - xlgirls.com/
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
-    url:
-      - scoreland.com/
-      - 60plusmilfs.com/
-      - 50plusmilfs.com/
-      - 40somethingmag.com/
-      - pornmegaload.com/
-      - xlgirls.com/
-      - 18eighteen.com/
-      - legsex.com/
+    url: *urls
     scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
@@ -29,13 +21,13 @@ xPathScrapers:
       Title: //section[@id="videos_page-page"]/div[@class="row"]/div/h2/text()
       Studio: &studioAttr
         Name:
-            selector: //meta[@property="og:site_name"]/@content
+          selector: //meta[@property="og:site_name"]/@content
       Date: &dateAttr
         selector: //div[@class="stat mb-2"]/span[contains(.,"Date:")]/../span[@class="value"]/text()
         postProcess:
           - replace:
-            - regex: ..,
-              with:
+              - regex: ..,
+                with:
           - parseDate: January 2 2006
       Details:
         selector: //div[@class="row"]/div/div[@class="p-desc"]/text()
@@ -46,13 +38,13 @@ xPathScrapers:
         Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
       Image:
         selector: //meta[@itemprop="image"]/@content
-# Enable this post process if you want better image quality but sometimes it can fail
-#        postProcess: 
-#          - replace:
-#            - regex: _lg
-#              with: _x_800
+  # Enable this post process if you want better image quality but sometimes it can fail
+  #        postProcess:
+  #          - replace:
+  #            - regex: _lg
+  #              with: _x_800
   galleryScraper:
-    common: &commonSel
+    common:
       $photopage: //section[@id='photos_page-page']
     gallery:
       Title: $photopage/div[@class="row"]/div/h2/text()
@@ -64,5 +56,4 @@ xPathScrapers:
       Tags:
         Name: $photopage//div[@class='mb-3']/a/text()
       Performers: *performersAttr
-          
 # Last Updated November 10, 2021
