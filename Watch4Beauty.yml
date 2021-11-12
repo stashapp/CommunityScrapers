@@ -1,0 +1,63 @@
+name: Watch4Beauty
+galleryByURL:
+  - action: scrapeXPath
+    url: &urls
+      - watch4beauty.com/updates/
+    scraper: galleryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: sceneScraper
+
+driver:
+  useCDP: true
+  
+xPathScrapers:
+  galleryScraper:
+    common: &commonSel
+      $issuedetail: //div[@class='issue-detail']
+      $modeldetail: //div[@class='issue-page-detail-model']
+    gallery:
+      Title: &titleSel $issuedetail/div[@id='gallcover']/preceding-sibling::h1/text()
+      Studio: &studioAttr
+        Name:
+          fixed: Watch 4 Beauty
+      Date: &dateAttr
+        selector: $issuedetail/p[contains(.,"Published ")]/text()
+        concat: ','
+        postProcess:
+          - replace:
+              - regex: '.*Published,'
+                with:
+          - parseDate: '2006.1.2'
+      Performers: &performersAttr
+        Name: 
+          selector: $issuedetail//a[contains(@title,'Starring')]/@title
+          postProcess:
+            - replace:
+              - regex: '.*Starring\s+'
+                with:
+        URL:
+          selector: $modeldetail//a[@class='cover']/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://watch4beauty.com
+      Details: &detailsSel $issuedetail/div[@class='gentext padding-bottom-8']/p/text()
+      
+  sceneScraper:
+    common: *commonSel
+    scene:
+      Title: *titleSel
+      Studio: *studioAttr
+      Date: *dateAttr
+      Performers: *performersAttr
+      Details: *detailsSel
+      
+      # Uncomment following line to use the video preview still (video/landscape orientation)
+      Image: $issuedetail//div[@class='video border']//video/@poster
+      
+      # Comment above line and uncomment following line to use the associated "gallery cover" image instead
+      #Image: //div[@class='issue-page-detail']//div[@id='gallcover']//div[@class='loadable-data']//img/@src
+      
+#Last Updated November 12, 2021
