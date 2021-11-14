@@ -25,13 +25,13 @@ STOCKAGE_FILE_APIKEY = "MindGeekAPI.ini"
 STOCKAGE_FILE_APIKEY_SEARCH = ""
 
 # Marker
-# If you want to create marker in same time as Scraping.
+# If you want to create a marker while Scraping.
 CREATE_MARKER = False
-# Only create marker if the duration match (API vs Stash)
+# Only create marker if the durations match (API vs Stash)
 MARKER_DURATION_MATCH = True
-# Sometime the API duration is 0/1, so we can't really know if this match. True if you want to create anyways
+# Sometimes the API duration is 0/1, so we can't really know if this matches. True if you want to create anyways
 MARKER_DURATION_UNSURE = True
-# The max difference between Stash Length & API Length.
+# Max allowed difference (seconds) in scene length between Stash & API.
 MARKER_SEC_DIFF = 10
 
 # Tags you don't want to see in the Scraper window.
@@ -40,7 +40,7 @@ IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
 FIXED_TAGS = ""
 # Check the SSL Certificate.
 CHECK_SSL_CERT = True
-# Local folder with JSON inside (Only used if scene don't find in API)
+# Local folder with JSON inside (Only used if scene isn't found from the API)
 LOCAL_PATH = r""
 
 
