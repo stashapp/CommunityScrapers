@@ -20,20 +20,20 @@ JAV_HEADERS = {
 }
 # Print debug message
 DEBUG_MODE = True
-# We can't add movie image atm in same time as Scene
+# We can't add movie image atm in the same time as Scene
 STASH_SUPPORTED = False
 # Tags you don't want to see appear in Scraper window
 IGNORE_TAGS = ["Features Actress", "Digital Mosaic", "Hi-Def", "Risky Mosaic",
                "Beautiful Girl", "Blu-ray", "Featured Actress", "VR Exclusive", "MOODYZ SALE 4",
                "Girl","Tits"]
-# Some performer don't need to be reversed
+# Some performers don't need to be reversed
 IGNORE_PERF_REVERSE = ["Lily Heart"]
 
 # Tag you always want in Scraper window
 FIXED_TAGS = ""
 # Take Javlibrary and R18 tags
 BOTH_TAGS = False
-# Split tag if they contains [,·] ('Best, Omnibus' -> 'Best','Omnibus')
+# Split tags if they contain [,·] ('Best, Omnibus' -> 'Best','Omnibus')
 SPLIT_TAGS = False
 
 # Don't care about getting the Aliases (Japanese Name)
