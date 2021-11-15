@@ -27,20 +27,14 @@ xPathScrapers:
         selector: $metainfo/small[contains(span,"Posted")]/text()
         postProcess:
           - parseDate: 01/02/2006
-      Performers:
+      Performers: &studioAttr
         Name:
           selector: $details//h4[@class="studio-header-name"]/text()
           postProcess:
             - replace:
-                - regex: .com
+                - regex: \.com
                   with: ""
-      Studio:
-        Name:
-          selector: $details//h4[@class="studio-header-name"]/text()
-          postProcess:
-            - replace:
-                - regex: .com
-                  with: ""
+      Studio: *studioAttr
       URL: //link[@rel="canonical"]/@href
       Tags:
         Name:
