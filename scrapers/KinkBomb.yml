@@ -24,7 +24,7 @@ xPathScrapers:
         selector: //div[@class="description-inner"]/p
         concat: "\n\n"
       Date:
-        selector: $metainfo/small[2]/text()
+        selector: $metainfo/small[contains(span,"Posted")]/text()
         postProcess:
           - parseDate: 01/02/2006
       Performers:
