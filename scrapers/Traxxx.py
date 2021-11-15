@@ -17,6 +17,8 @@ def main():
 
   if mode == 'scene_name':
     data = scene_by_name(fragment)
+  if mode == 'scene_url':
+    data = scene_query_fragment(fragment)
   if mode == 'scene_query_fragment':
     data = scene_query_fragment(fragment)
   if mode == 'scene_fragment':

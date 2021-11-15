@@ -1,7 +1,7 @@
 name: "Traxxx"
 sceneByURL:
   - url:
-     - traxxx.me/actor/
+     - traxxx.me/scene/
     action: script
     script:
       - python
