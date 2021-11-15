@@ -73,10 +73,16 @@ def scene_fragment(fragment):
 # Return a list of possible performer matches
 def performer_lookup(fragment):
   performers = traxxx.search_performers(fragment["name"])
-  return performers
+  return [traxxx.parse_to_stash_performer_search(p) for p in performers]
 
 # Return a single best guess for performer based on fragment
 def performer_fragment(fragment):
+  # check if fragment has Traxxx URL
+  performer = performer_url(fragment)
+  if performer:
+    return performer
+
+  # search and take first result from lookup
   performer = performer_lookup(fragment)[0]
   return performer
 
@@ -87,7 +93,7 @@ def performer_url(fragment):
     return
   performer_id = m.group(1)
   performer = traxxx.get_performer(performer_id)
-  return performer
+  return traxxx.parse_to_stash_performer(performer)
 
 
 if __name__ == '__main__':

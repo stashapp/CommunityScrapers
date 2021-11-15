@@ -317,6 +317,26 @@ class TraxxxInterface:
 
     return fragment
 
+  def parse_to_stash_performer_search(self, p):
+    fragment = {}
+
+    if p.name:
+      fragment["name"] = p.name
+
+    if p.slug:
+      fragment["url"] = f'https://traxxx.me/actor/{p.id}/{p.slug}/'
+
+    fragment["images"] = []
+
+    if p.image:
+      fragment["images"].append( p.image )
+
+    for profile in p.profiles:
+      if profile.image:
+        fragment["images"].append( profile.image )
+
+    return fragment
+
   def parse_to_stash_performer(self, p):
     fragment = {}
 
