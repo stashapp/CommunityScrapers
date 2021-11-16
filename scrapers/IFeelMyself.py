@@ -1,16 +1,14 @@
 import json
-from base64 import b64encode
-import sys
-import string
-import mechanicalsoup
-from requests.sessions import session
 import re
-import requests
+import sys
 from datetime import datetime
 
+from mechanicalsoup import StatefulBrowser
+from requests.cookies import create_cookie
+
 def readJSONInput():
-	input = sys.stdin.read()
-	return json.loads(input)
+    input = sys.stdin.read()
+    return json.loads(input)
 
 def extract_info(table):
     description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True).replace("\x92","'")
@@ -36,9 +34,9 @@ def debugPrint(t):
 
 def scrapeScene(filename,date,url):
     ret = []
-    browser = mechanicalsoup.StatefulBrowser(session=None)
+    browser = StatefulBrowser(session=None)
     browser.open("https://ifeelmyself.com/public/main.php")
-    cookie_obj = requests.cookies.create_cookie(name='tags_popup_shown', value='true', domain='ifeelmyself.com')
+    cookie_obj = create_cookie(name='tags_popup_shown', value='true', domain='ifeelmyself.com')
     browser.session.cookies.set_cookie(cookie_obj)
     if url:
       debugPrint("Url found, using that to scrape")
@@ -47,7 +45,7 @@ def scrapeScene(filename,date,url):
       table = response.find(class_ = ["blog_wide_news_tbl entry ppss-scene","entry ppss-scene"])
       if table:
         ret = extract_info(table)
-    else: 
+    else:
         debugPrint("Analyzing filename...")
         artist_id_match=re.search(r"(f\d{3,5})",filename,re.I)
         if artist_id_match:
@@ -133,14 +131,14 @@ def scrapeScene(filename,date,url):
                 exit
     return ret
 
-# read the input 
+# read the input
 i = readJSONInput()
 sys.stderr.write(json.dumps(i))
 
-if sys.argv[1] == "query":    
+if sys.argv[1] == "query":
     ret = scrapeScene(i['title'],i['date'],i['url'])
     print(json.dumps(ret))
 
-if sys.argv[1] == "url":    
+if sys.argv[1] == "url":
     ret = scrapeScene(filename=None,date=None,url=i['url'])
     print(json.dumps(ret))
