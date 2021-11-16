@@ -1,0 +1,35 @@
+name: "BrookelynneBriar.com"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - brookelynnebriar.com/scene
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="left global-title text-color-2"]/span/text()
+
+      Performers:
+        Name:
+          fixed: "Brookelynne Briar"
+
+      Date:
+        selector: //span[@class="text-color-3 date"]/@content
+        postProcess:
+          - replace:
+              - regex: ( .*)
+                with: ""
+      Details:
+        selector: //h3[@class="full-desc"]/span/text()
+
+      URL: //link[@rel="canonical"]/@href
+
+      Tags:
+        Name:
+          selector: //a[contains(@href,"/videos/tags=")]/span/text()
+
+driver:
+  useCDP: true
+
+# Last Updated November 16, 2021
