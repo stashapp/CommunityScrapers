@@ -6,5 +6,10 @@ sceneByFragment:
       # use python3 instead if needed
       - xbvrdb.py
       - query
-
+galleryByFragment:
+  action: script
+  script:
+    - python3
+    - xbvrdb.py
+    - gallery_query
 # Last Updated August 12, 2020
