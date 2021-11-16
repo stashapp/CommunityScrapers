@@ -4,7 +4,7 @@ import sys
 import string
 import mechanicalsoup
 from requests.sessions import session
-import regex as re
+import re
 import requests
 from datetime import datetime
 
@@ -21,9 +21,8 @@ def extract_info(table):
     date = datetime.strptime(date, '%d %b %Y').date().strftime('%Y-%m-%d') #Convert date to ISO format
     cover_url=str(table.find("img")['src'])
     title = table.find(class_= ["entryHeadingFlash","entryHeading"]).find('a').get_text()
-    media_id = re.search("\/(\d{4,5})\/",cover_url)
-    media_id = media_id[0].replace("/","")
-    artist_id = re.search("(f\d{3,5})",cover_url).group(0)
+    media_id = re.search(r"/(\d{4,5})/",cover_url).group(1)
+    artist_id = re.search(r"(f\d{3,5})",cover_url).group(0)
     tags = table.find_all(class_="tags-list-item-tag")
     tag_list = []
     for tag in tags:
@@ -50,10 +49,10 @@ def scrapeScene(filename,date,url):
         ret = extract_info(table)
     else: 
         debugPrint("Analyzing filename...")
-        artist_id_match=re.search("(f\d{3,5})",filename.lower())
+        artist_id_match=re.search(r"(f\d{3,5})",filename,re.I)
         if artist_id_match:
             artist_id = artist_id_match.group(0)
-            video_id = re.search("\-(\d{1,})",filename.lower()).group(0).replace("-","")
+            video_id = re.search(r"-(\d+)",filename,re.I).group(1)
             browser.open("https://ifeelmyself.com/public/main.php?page=search")
             browser.select_form()
             browser['keyword']=artist_id
@@ -91,7 +90,7 @@ def scrapeScene(filename,date,url):
         else:
             debugPrint("Name changed after downloading")
             filename = filename.lower()
-            extract_from_filename = re.match(r"^([0-9\.]{6,10}|)(?<title>.+)\s(?<artist>\w+)(\.mp4|)$",filename)
+            extract_from_filename = re.match(r"^([0-9\.]{6,10})?(?<title>.+)\s(?<artist>\w+)(\.mp4)?$",filename)
             if extract_from_filename:
                 title = extract_from_filename.group('title')
             #if date:
