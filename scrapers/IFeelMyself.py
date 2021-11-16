@@ -63,7 +63,7 @@ def scrapeScene(filename,date,url):
             for table in tables:
                 img=str(table.find("img")['src'])
                 debugPrint(f"Image:{str(img)}")
-                if (artist_id+"-"+video_id+"vg.jpg" in img)|(artist_id+"-"+video_id+"hs.jpg" in img):
+                if (f"/{video_id}/{artist_id}-" in img) and img.endswith(("vg.jpg","hs.jpg")):
                     debugPrint("Found a single match video!")
                     # Extract data from this single result
                     ret = extract_info(table)
@@ -79,7 +79,7 @@ def scrapeScene(filename,date,url):
                         for table in tables:
                             img=str(table.find("img"))
                             debugPrint(f"Image:{img}")
-                            if (artist_id+"-"+video_id+"vg.jpg" in img)|(artist_id+"-"+video_id+"hs.jpg" in img):
+                            if (f"/{video_id}/{artist_id}-" in img) and img.endswith(("vg.jpg","hs.jpg")):
                                 ret = extract_info(table)
                                 break
                 else:
