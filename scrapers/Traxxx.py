@@ -24,7 +24,6 @@ def main():
   if mode == 'scene_fragment':
     data = scene_fragment(fragment)
 
-
   if mode == 'performer_lookup':
     data = performer_lookup(fragment)
   if mode == 'performer_fragment':
@@ -32,12 +31,8 @@ def main():
   if mode == 'performer_url':
     data = performer_url(fragment)
 
-
-  if data:
-    # log.info(json.dumps(data))
-    print(json.dumps(data))
-  else:
-    print("")
+  # log.info(json.dumps(data))
+  print(json.dumps(data))
 
 def search_traxxx_for_scene(fragment):
   title = fragment.get("title")
@@ -50,11 +45,14 @@ def search_traxxx_for_scene(fragment):
 # Return a list of scenes from a search
 def scene_by_name(fragment):
   scenes = search_traxxx_for_scene(fragment)
-  return [traxxx.parse_to_stash_scene_search(s) for s in scenes]
+  if scenes:
+    return [traxxx.parse_to_stash_scene_search(s) for s in scenes]
+  else:
+    log.warning("No scene results from Traxxx")
+    return []
 
 # extract TraxxxID from passed fragment and return new fragment
 def scene_query_fragment(fragment):
-  
   traxxx_url = fragment.get("url", "")
   m = re.search(r'traxxx.me/scene/(\d+)/', traxxx_url)
   if not m:
@@ -73,7 +71,11 @@ def scene_fragment(fragment):
 # Return a list of possible performer matches
 def performer_lookup(fragment):
   performers = traxxx.search_performers(fragment["name"])
-  return [traxxx.parse_to_stash_performer_search(p) for p in performers]
+  if performers:
+    return [traxxx.parse_to_stash_performer_search(p) for p in performers]
+  else:
+    log.warning("No performer results from Traxxx")
+    return []
 
 # Return a single best guess for performer based on fragment
 def performer_fragment(fragment):

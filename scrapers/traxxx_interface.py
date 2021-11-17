@@ -130,7 +130,7 @@ class TraxxxInterface:
     result = self.__callGraphQL(query, variables)
     log.info(f'scene search "{search}" returned {len(result.scenes)} results')
 
-    return [ s.release for s in result.scenes]
+    return [s.release for s in result.scenes]
 
   def search_performers(self, search, numResults=20):
     query = """
