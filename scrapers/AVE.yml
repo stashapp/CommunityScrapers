@@ -35,7 +35,6 @@ xPathScrapers:
       Title: $searchTitle/a
       URL: $searchTitle/a/@href
       Image: $searchRes/div[@class="single-slider-product__image"]/a/img/@src
- 
   sceneScraper:
     common:
       $singleInfo: //div[@class="single-info"]
