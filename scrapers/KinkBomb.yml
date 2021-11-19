@@ -1,0 +1,42 @@
+name: "KinkBomb"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - kinkbomb.com/p
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[@class="content-section"]
+      $metainfo: //div[@class="metainfo"]
+      $image: //div[@class="clip-preview-inner"]
+    scene:
+      Title: $details//h1/text()
+      Image:
+        selector: $image/img/@src|$image/video/@poster
+        postProcess:
+          - replace:
+              - regex: //
+                with: https://
+
+      Details:
+        selector: //div[@class="description-inner"]/p
+        concat: "\n\n"
+      Date:
+        selector: $metainfo/small[contains(span,"Posted")]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers: &studioAttr
+        Name:
+          selector: $details//h4[@class="studio-header-name"]/text()
+          postProcess:
+            - replace:
+                - regex: \.com
+                  with: ""
+      Studio: *studioAttr
+      URL: //link[@rel="canonical"]/@href
+      Tags:
+        Name:
+          selector: //a[contains(@href,"/c/")]/text()
+# Last Updated November 14, 2021
