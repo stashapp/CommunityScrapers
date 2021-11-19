@@ -90,6 +90,3 @@ elif sys.argv[1] == "gallery_query":
         result.pop("image",None)
         print(json.dumps(result))
     conn.close()
-
-
-# Last Updated November 08, 2020
