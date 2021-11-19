@@ -1,0 +1,8 @@
+name: "Copy from Scene"
+galleryByFragment:
+  action: script
+  script:
+    - python3
+    - CopyFromScene.py
+    - gallery_query
+# Last Updated November 19, 2021
