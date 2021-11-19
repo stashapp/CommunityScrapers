@@ -81,5 +81,5 @@ xPathScrapers:
           postProcess:
             - replace:
                 - regex: ^
-                  with: "Cup $0"
+                  with: "Cup "
 # Last Updated November 19, 2021
