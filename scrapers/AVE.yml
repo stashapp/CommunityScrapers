@@ -35,13 +35,14 @@ xPathScrapers:
       Title: $searchTitle/a
       URL: $searchTitle/a/@href
       Image: $searchRes/div[@class="single-slider-product__image"]/a/img/@src
+ 
   sceneScraper:
     common:
       $singleInfo: //div[@class="single-info"]
       $performer: //div[@class="single-info"][contains(span,"Starring")]/span[@class="value"]/a
     scene:
       Title:
-        selector: $singleInfo[contains(span,"Item#")]/span[@class="tag-title"]
+        selector: $singleInfo[starts-with(span,"Item")]/span[@class="tag-title"]
       Date:
         selector: $singleInfo[contains(span,"Date")]/span[@class="value"]/text()
         postProcess:
@@ -65,4 +66,4 @@ xPathScrapers:
       Studio:
         Name: $singleInfo[contains(span,"Studio")]/span[@class="value"]/a
       URL: //link[@rel="canonical"]/@href
-# Last Updated November 17, 2021
+# Last Updated November 19, 2021
