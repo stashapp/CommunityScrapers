@@ -1,16 +1,14 @@
 import json
-from base64 import b64encode
+import re
 import sys
-import string
-import mechanicalsoup
-from requests.sessions import session
-import regex as re
-import requests
 from datetime import datetime
 
+from mechanicalsoup import StatefulBrowser
+from requests.cookies import create_cookie
+
 def readJSONInput():
-	input = sys.stdin.read()
-	return json.loads(input)
+    input = sys.stdin.read()
+    return json.loads(input)
 
 def extract_info(table):
     description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True).replace("\x92","'")
@@ -21,9 +19,8 @@ def extract_info(table):
     date = datetime.strptime(date, '%d %b %Y').date().strftime('%Y-%m-%d') #Convert date to ISO format
     cover_url=str(table.find("img")['src'])
     title = table.find(class_= ["entryHeadingFlash","entryHeading"]).find('a').get_text()
-    media_id = re.search("\/(\d{4,5})\/",cover_url)
-    media_id = media_id[0].replace("/","")
-    artist_id = re.search("(f\d{3,5})",cover_url).group(0)
+    media_id = re.search(r"/(\d{4,5})/",cover_url).group(1)
+    artist_id = re.search(r"(f\d{3,5})",cover_url).group(0)
     tags = table.find_all(class_="tags-list-item-tag")
     tag_list = []
     for tag in tags:
@@ -37,9 +34,9 @@ def debugPrint(t):
 
 def scrapeScene(filename,date,url):
     ret = []
-    browser = mechanicalsoup.StatefulBrowser(session=None)
+    browser = StatefulBrowser(session=None)
     browser.open("https://ifeelmyself.com/public/main.php")
-    cookie_obj = requests.cookies.create_cookie(name='tags_popup_shown', value='true', domain='ifeelmyself.com')
+    cookie_obj = create_cookie(name='tags_popup_shown', value='true', domain='ifeelmyself.com')
     browser.session.cookies.set_cookie(cookie_obj)
     if url:
       debugPrint("Url found, using that to scrape")
@@ -48,12 +45,12 @@ def scrapeScene(filename,date,url):
       table = response.find(class_ = ["blog_wide_news_tbl entry ppss-scene","entry ppss-scene"])
       if table:
         ret = extract_info(table)
-    else: 
+    else:
         debugPrint("Analyzing filename...")
-        artist_id_match=re.search("(f\d{3,5})",filename.lower())
+        artist_id_match=re.search(r"(f\d{3,5})",filename,re.I)
         if artist_id_match:
             artist_id = artist_id_match.group(0)
-            video_id = re.search("\-(\d{1,})",filename.lower()).group(0).replace("-","")
+            video_id = re.search(r"-(\d+)",filename,re.I).group(1)
             browser.open("https://ifeelmyself.com/public/main.php?page=search")
             browser.select_form()
             browser['keyword']=artist_id
@@ -66,7 +63,7 @@ def scrapeScene(filename,date,url):
             for table in tables:
                 img=str(table.find("img")['src'])
                 debugPrint(f"Image:{str(img)}")
-                if (artist_id+"-"+video_id+"vg.jpg" in img)|(artist_id+"-"+video_id+"hs.jpg" in img):
+                if (f"/{video_id}/{artist_id}-" in img) and img.endswith(("vg.jpg","hs.jpg")):
                     debugPrint("Found a single match video!")
                     # Extract data from this single result
                     ret = extract_info(table)
@@ -82,7 +79,7 @@ def scrapeScene(filename,date,url):
                         for table in tables:
                             img=str(table.find("img"))
                             debugPrint(f"Image:{img}")
-                            if (artist_id+"-"+video_id+"vg.jpg" in img)|(artist_id+"-"+video_id+"hs.jpg" in img):
+                            if (f"/{video_id}/{artist_id}-" in img) and img.endswith(("vg.jpg","hs.jpg")):
                                 ret = extract_info(table)
                                 break
                 else:
@@ -91,7 +88,7 @@ def scrapeScene(filename,date,url):
         else:
             debugPrint("Name changed after downloading")
             filename = filename.lower()
-            extract_from_filename = re.match(r"^([0-9\.]{6,10}|)(?<title>.+)\s(?<artist>\w+)(\.mp4|)$",filename)
+            extract_from_filename = re.match(r"^([0-9\.]{6,10})?(?<title>.+)\s(?<artist>\w+)(\.mp4)?$",filename)
             if extract_from_filename:
                 title = extract_from_filename.group('title')
             #if date:
@@ -134,14 +131,14 @@ def scrapeScene(filename,date,url):
                 exit
     return ret
 
-# read the input 
+# read the input
 i = readJSONInput()
 sys.stderr.write(json.dumps(i))
 
-if sys.argv[1] == "query":    
+if sys.argv[1] == "query":
     ret = scrapeScene(i['title'],i['date'],i['url'])
     print(json.dumps(ret))
 
-if sys.argv[1] == "url":    
+if sys.argv[1] == "url":
     ret = scrapeScene(filename=None,date=None,url=i['url'])
     print(json.dumps(ret))
