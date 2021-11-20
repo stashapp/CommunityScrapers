@@ -25,7 +25,18 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneSearch:
     scene:
-      Title: //div[@id="content"]//div[@class="item-title"]/a/@title
+      Title:
+        selector: //div[@id="content"]//div[@class="item-title"]/a/@href
+        postProcess:
+          - replace:
+            - regex: .+?(\d+)/(.+)
+              with: $2 ($1)
+            - regex: "-"
+              with: " "
+            - regex: "/"
+              with: ""
+            - regex: ".html"
+              with: ""
       URL:
         selector: //div[@id="content"]//div[@class="item-title"]/a/@href
         postProcess:
@@ -94,4 +105,4 @@ xPathScrapers:
                   with: "https://www.adultdvdempire.com"
       URL: //meta[@name='og:url']/@content
 
-# Last Updated November 21, 2020
+# Last Updated November 20, 2021
