@@ -6,7 +6,7 @@ performerByName:
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://www.babesandstars.com/t/
+      - https://www.babesandstars.com
     scraper: performerScraper
     
 xPathScrapers:
