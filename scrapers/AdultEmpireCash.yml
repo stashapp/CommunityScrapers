@@ -6,8 +6,6 @@ sceneByURL:
     url:
       - concoxxxion.com/
       - elegantangel.com/
-      - filthykings.com/
-      - filthypov.com/
       - forbiddenfruitsfilms.com/
       - hornyhousehold.com/
       - jayspov.net/
@@ -15,13 +13,10 @@ sceneByURL:
       - kingsoffetish.com/
       - latinoguysporn.com/
       - lethalhardcore.com/
-      - manipulativemedia.com/
-      - mypervyfamily.com/
       - pornstarstroker.com/ # aggregator site?
       - reaganfoxx.com/
       - severesexfilms.com/
       - thirdworldxxx.com/
-      - touchmywife.com/
       - westcoastproductions.com/
 
   # VR Sites
@@ -40,10 +35,8 @@ movieByURL:
       - concoxxxion.com/
       - elegantangel.com/
       - filthykings.com/
-      - filthypov.com/
       - forbiddenfruitsfilms.com/
       - lethalhardcore.com/
-      - manipulativemedia.com/
       - severesexfilms.com/
       # - shemalestrokers.com/ # Scenes published as movies?
       - thirdworldxxx.com/
@@ -132,4 +125,4 @@ xPathScrapers:
                 with: https://imgs1cdn.adultempire.com/product/${1}_lg.jpg
       Studio:
         Name: //meta[@name="og:site_name"]/@content
-# Last Updated May 03, 2021
+# Last Updated November 20, 2021
