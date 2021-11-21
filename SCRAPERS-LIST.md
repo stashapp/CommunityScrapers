@@ -376,7 +376,7 @@ filf.com|FILF.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fillyfilms.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 filthflix.com|FilthFlix.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 filthyfamily.com|FilthyFamily.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-filthykings.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|-|CDP
+filthykings.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 finishesthejob.com|FinishesTheJob.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 firstanalquest.com|Firstanalquest.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 firstbgg.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -703,7 +703,7 @@ mylfdom.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mylifeinmiami.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 mylked.com|Mylked.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mypervmom.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-mypervyfamily.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|-|CDP
+mypervyfamily.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 myracequeens.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 mysislovesme.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 myteenoasis.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1055,7 +1055,7 @@ tonightsgirlfriend.com|Tonightsgirlfriend.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 toomanytrannies.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Trans
 topgrl.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 toticos.com|VegasDreamworks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-touchmywife.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|-|CDP
+touchmywife.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 toughlovex.com|toughlovex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tour.purgatoryx.com|purgatoryx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trans500.com/tour/|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
