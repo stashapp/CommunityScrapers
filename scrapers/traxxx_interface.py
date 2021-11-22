@@ -520,7 +520,7 @@ traxxx_gql_fragments = {
           tags: chaptersTags{ tag { id, name, slug } }
           __typename
         }
-        poster: releasesPosterByReleaseId {
+        poster: releasesPoster {
           image: media{ ...traxMedia }
         }
         covers: releasesCovers(orderBy: MEDIA_BY_MEDIA_ID__INDEX_ASC) {
