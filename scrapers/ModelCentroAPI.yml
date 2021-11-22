@@ -1,6 +1,7 @@
 name: "ModelCentroAPI"
 sceneByURL:
   - url:
+      - brookelynnebriar.com/scene/
       - fallinlovia.com/scene/
       - mylifeinmiami.com/scene/
       - spankmonster.com/scene/
@@ -9,4 +10,4 @@ sceneByURL:
     script:
       - python
       - ModelCentroAPI.py
-# Last Updated March 01, 2021
+# Last Updated November 22, 2021
