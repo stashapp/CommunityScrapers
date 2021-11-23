@@ -43,6 +43,7 @@ jsonScrapers:
               with: ""
             - regex: \,
               with: " ["
+      Date: data.#.date
       URL:
         selector: data.#.id
         postProcess:
