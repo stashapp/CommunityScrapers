@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
     url:
+      - disruptivefilms.com/
       - filthykings.com/
       - mypervyfamily.com/
       - touchmywife.com/
@@ -25,4 +26,4 @@ xPathScrapers:
           selector: //div[contains(@class,"Header-Freetour-Logo-Wrapper")]/a/@title
 driver:
   useCDP: true
-# Last Updated November 20, 2021
+# Last Updated November 23, 2021
