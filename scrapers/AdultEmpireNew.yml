@@ -3,10 +3,10 @@ sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
     url:
+      - disruptivefilms.com/
       - filthykings.com/
       - mypervyfamily.com/
       - touchmywife.com/
-      - disruptivefilms.com/
 xPathScrapers:
   sceneScraper:
     scene:
