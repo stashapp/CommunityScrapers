@@ -1,0 +1,24 @@
+name: Faphouse
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - faphouse.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Date:
+        selector: //span[@class="video-info-details__video-publish-date"]
+        postProcess:
+          - parseDate: "02.01.2006"
+      Details:
+        selector: //div[contains(@class,"video-info-details__description")]/span
+        concat: " "
+      Tags:
+        Name: //div[@class="video-info-details__categories"]/a
+      Studio:
+        Name: //a[@class="video-info-details__studio-link"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+# Last Updated November 24, 2021
