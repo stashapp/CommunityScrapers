@@ -19,6 +19,5 @@ xPathScrapers:
         Name: //div[@class="video-info-details__categories"]/a
       Studio:
         Name: //a[@class="video-info-details__studio-link"]
-      Image:
-        selector: //meta[@property="og:image"]/@content
+      Image: //meta[@property="og:image"]/@content
 # Last Updated November 24, 2021
