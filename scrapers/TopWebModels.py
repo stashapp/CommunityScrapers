@@ -4,7 +4,7 @@ import re
 import sys
 
 import py_common.log as log
-
+# make sure to install below modules if needed
 import requests
 from bs4 import BeautifulSoup
 
