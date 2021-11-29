@@ -371,6 +371,7 @@ familyxxx.com|FamilyXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fantasyflipflop.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fantasyhd.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fantasymassage.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+faphouse.com|Faphouse.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 femanic.com|Femanic.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 femdomempire.com|FemdomEmpire.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 feminized.com|FemdomEmpire.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Trans
