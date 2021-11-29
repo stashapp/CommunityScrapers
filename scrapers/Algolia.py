@@ -23,8 +23,6 @@ PRINT_DEBUG = True
 PRINT_MATCH = True
 # File used to store key to connect the API.
 STOCKAGE_FILE_APIKEY = "Algolia.ini"
-# Tags you don't want to see appear in Scraper window.
-IGNORE_TAGS = []
 # Tag you always want in Scraper window.
 FIXED_TAGS = ""
 
@@ -51,7 +49,7 @@ def check_db(DB_PATH, SCENE_ID):
 # General
 
 def sendRequest(url, head, json=""):
-    log.debug("Request URL: {}".format(url))
+    #log.debug("Request URL: {}".format(url))
     response = requests.post(url, headers=head,json=json, timeout=10)
     #log.debug("Returned URL: {}".format(response.url))
     if response.content and response.status_code == 200:
@@ -339,8 +337,6 @@ def scraping_json(api_json, url=None):
             continue
         tag_name = x.get('name')
         tag_name = " ".join(x.capitalize() for x in tag_name.split(" "))
-        if tag_name in IGNORE_TAGS:
-            continue
         if tag_name:
             list_tag.append({"name": x.get('name')})
     if FIXED_TAGS:
