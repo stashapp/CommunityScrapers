@@ -108,7 +108,7 @@ def write_config(date,app_id,api_key):
     config = ConfigParser()
     config.read(STOCKAGE_FILE_APIKEY)
     try:
-        config.get(SITE, 'url')
+        config.get(SITE, 'date')
     except NoSectionError:
         config.add_section(SITE)
     config.set(SITE, 'date', date.strftime("%Y-%m-%d %H:%M:%S.%f"))
@@ -530,4 +530,4 @@ if api_json:
     print(json.dumps(scraped_json))
 else:
     log.error("Can't find the scene")
-    sys.exit(1)
+    print(json.dumps(None))
