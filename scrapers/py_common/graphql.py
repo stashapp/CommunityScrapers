@@ -292,6 +292,27 @@ def getScene(scene_id):
             stash_id
         }
     }
+    fragment SceneMarkerData on SceneMarker {
+        id
+        title
+        seconds
+        stream
+        preview
+        screenshot
+        scene {
+            id
+        }
+        primary_tag {
+            id
+            name
+            aliases
+        }
+        tags {
+            id
+            name
+            aliases
+        }
+    }
     fragment SlimGalleryData on Gallery {
         id
         checksum
