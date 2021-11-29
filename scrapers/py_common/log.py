@@ -14,7 +14,8 @@ import sys
 def __log(level_char: bytes, s):
     if level_char:
         lvl_char = "\x01{}\x02".format(level_char.decode())
-        for x in str(s).split("\n"):
+        s = re.sub(r"data:image.+?;base64(.+?')","[...]",str(s))
+        for x in s.split("\n"):
             print(lvl_char, x, file=sys.stderr, flush=True)
 
 
