@@ -5,22 +5,26 @@ sceneByURL:
       - adulttime.com/en/video/
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - girlsway
 sceneByFragment:
     action: script
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - girlsway
 sceneByName:
     action: script
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - girlsway
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - girlsway
       - validName
-# Last Updated September 14, 2021
+# Last Updated November 29, 2021
