@@ -1,0 +1,14 @@
+name: "FemdomCult"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - femdomcult.py
+sceneByURL:
+  - url:
+     - femdomcult.org/torrents.php
+    action: script
+    script:
+      - python
+      - femdomcult.py
+# Last Updated February 4, 2021

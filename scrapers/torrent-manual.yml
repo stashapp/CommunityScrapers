@@ -1,0 +1,9 @@
+name: "Torrent Manual"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      # use python3 instead if needed
+      - torrent-manual.py
+
+# Last Updated February 4, 2021

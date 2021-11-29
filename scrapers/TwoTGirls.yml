@@ -1,0 +1,24 @@
+name: "Two TGirls"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - twotgirls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[contains(@class,"video-details")]
+    scene:
+      Title: $info/h1/text()
+      Details:
+        selector: $info/p[1]/text()
+      Tags:
+        Name: $info/p[@class="video-tags"]/a/text()
+      Performers:
+        Name: $info/p[@class="video-date"]/a/text()
+      Image:
+        selector: //video[@id="videojs-player"]/@poster
+      Studio:
+        Name:
+          fixed: Two TGirls
+# Last Updated May 15, 2021

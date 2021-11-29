@@ -1,0 +1,28 @@
+name: "TSVirtualLovers"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tsvirtuallovers.com/vd
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="video-detail-name"]/text()
+      Date:
+        selector: //span[@class="videoClip__Details-infoValue"]/text()
+        postProcess:
+          - replace:
+            - regex: th|st|rd|nd
+              with: ""
+          - parseDate: Jan 02 2006
+      Details:
+        selector: //p[@itemprop="description"]/text()
+        concat: " "
+      Tags:
+        Name: //span[@itemprop="keywords"]/a/text()
+      Performers:
+        Name: //span[@itemprop="actors"]/a/text()
+      Studio:
+        Name:
+          fixed: TS Virtual Lovers
+# Last Updated November 8, 2020

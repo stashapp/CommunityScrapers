@@ -1,0 +1,29 @@
+name: Wank It Now VR
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wankitnowvr.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //section[@class="page-content"]//p[@class="text-muted"]
+    scene:
+     Title:
+        selector: (//section[@class="page-content"]//h2)[1]/text()
+     Date:
+       selector: $info/text()[2]
+       postProcess:
+         - replace:
+             - regex: .*Released on ([A-Za-z]+) ([0-9]+), ([0-9]+).*
+               with: $1/$2/$3
+         - parseDate: Jan/2/2006
+     Performers:
+      Name: $info/a[1]/text()
+     Details: //meta[@name="description"]/@content
+     Image:
+        selector: //deo-video/@cover-image
+     Studio:
+        Name:
+          fixed: Wank It Now VR
+# Last Updated March 04, 2021

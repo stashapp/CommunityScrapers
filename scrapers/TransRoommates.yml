@@ -1,0 +1,31 @@
+name: "Trans Roommates"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - transroommates.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[1]/text()
+      Date:
+        selector: //span[@class="PlainText-PlainText__content--q58An3GL"]/text()
+        postProcess:
+          - replace:
+            - regex: "added on "
+              with: ""
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: //div[@class="ListDefinition-ListDefinition__main--1rBRCQSu"][1]/text()
+      Tags:
+        Name: //div[@class="ListDefinition-ListDefinition__main--1rBRCQSu"][3]//button/span/text()
+      Performers:
+        Name: //div[@class="ListDefinition-ListDefinition__main--1rBRCQSu"][2]//button/span/text()
+      Image:
+        selector: //div[@class="plyr__video-wrapper"]/video/@poster
+      Studio:
+        Name:
+          fixed: Trans Roommates
+driver:
+  useCDP: true
+# Last Updated November 8, 2020

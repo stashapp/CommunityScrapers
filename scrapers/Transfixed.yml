@@ -1,0 +1,30 @@
+name: Transfixed
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.transfixed.com/en/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2[@class="Title ScenePlayerHeaderDesktop-PlayerTitle-Title styles_1lMi0i-fDJ styles_1SIU5KmKWb"]/text()
+      Date:
+        selector: //span[@class="Text ScenePlayerHeaderDesktop-Date-Text undefined-Text"]/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //a[@class=" Link ActorThumb-Name-Link styles_n3kC7vkPpD Link ActorThumb-Name-Link styles_n3kC7vkPpD"]/text()
+      Tags:
+        Name: //div[@class="ScenePlayerHeaderDesktop-CategoriesContainer styles_3dWIRRdLyJ"]/a
+      Details:
+        selector: //div[@class="Raw Paragraph ScenePlayerHeaderDesktop-DescriptionText-Paragraph styles_2K-e-OVNie styles_1y8nHtPCCl"]
+        # concat: "\n\n"
+      Image:
+        selector: //div[@class="ScenePlayerHeaderDesktop-VideoBackground undefined"]/img/@src
+      Studio:
+        Name:
+          fixed: Transfixed
+driver:
+  useCDP: true
+# Last Updated May 7, 2021

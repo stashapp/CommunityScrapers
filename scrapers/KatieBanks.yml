@@ -1,0 +1,28 @@
+name: "KatieBanks"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - katiebanks.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="videoDetails clear"]
+    scene:
+      Title: $info/h3/text()
+      Details:
+        selector: $info/p/text()
+      Tags:
+        Name: //div[@class="featuring clear"][2]//a/text()
+      Performers:
+        Name: //li[@class="update_models"]/a/text()
+      Image:
+        selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://katiebanks.com
+      Studio:
+        Name:
+          fixed: KatieBanks.com
+# Last Updated May 25, 2020

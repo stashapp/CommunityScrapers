@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - wankitnow.com/videoentry/
+      - www.upskirtjerk.com/videoentry/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:

@@ -1,0 +1,27 @@
+name: TranzVR
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.tranzvr.com
+      - tranzvr.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="detail__title"]/text()
+      Date:
+        selector: //span[@class="detail__date"]/text()
+        postProcess:
+          - parseDate: 06 January, 2006
+      Performers:
+        Name: //div[@class="detail__inf detail__inf-align_right"]/div[@class="detail__models"]/a/text()
+      Details: 
+        selector: //div[@class="detail__txt detail__txt-show_lg"]/text()|//span[@class="more__body"]/text()
+        concat: " "
+      Tags:
+        Name: //div[@class="tag-list__body"]//a/text()
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+          Name:
+            fixed: TranzVR
+# Last Updated May 09, 2021

@@ -1,0 +1,31 @@
+name: "HumiliationPOV"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.humiliationpov.com
+      - humiliationpov.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //td[@id="box_2_inner"]
+    scene:
+      Title: //div[@id="title"]/a/text()
+      Details:
+        selector: $info/p[preceding::p]/text()
+        concat: "\n"
+      Date:
+        selector: $info/table/tbody/tr[1]/td[1]/span[2]/text()
+        postProcess:
+          - replace:
+            - regex: th|st|rd|nd
+              with: ""
+          - parseDate: January 2, 2006
+      Tags:
+        Name:
+          selector: //a[@rel="tag"]/text()  
+      Image:
+        selector: $info/p[1]//img/@src
+      Studio:
+        Name:
+          fixed: HumiliationPOV

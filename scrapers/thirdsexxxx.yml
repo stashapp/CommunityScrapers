@@ -1,0 +1,33 @@
+name: "Third Sex XXX"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - thirdsexxxx.com/trailers
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="memberPicV"]/h2/text()
+      Details:
+        selector: //div[@class="description"]/p/text()
+      Performers:
+        Name: //div[@class="info"]/p[2]/a/text()
+      Date:
+        selector: //div[@class="info"]/p[1]text()
+        postProcess:
+          - replace:
+              - regex: (?:Added:\s)(\d\d\/\d\d\/\d\d\d\d).+
+                with: $1
+          - parseDate: 02/01/2006
+      Image:
+        selector: //div[@class="player-thumb"]/img/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://thirdsexxxx.com
+      Tags:
+        Name: //div[@class="tags clear"]/ul/li/a
+      Studio:
+        Name:
+          fixed: Third Sex XXX
+# Last Updated September 11, 2021

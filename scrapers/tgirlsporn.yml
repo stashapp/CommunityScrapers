@@ -1,0 +1,31 @@
+name: "Tgirls.porn"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.tgirls.porn
+      - tgirls.porn
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="trailerpage_meta"]/div[@class="trailerpage_info"]
+    scene:
+      Title: //div[@class="trailer_toptitle_left"]/text()
+      Details:
+        selector: $info/p/text()
+      Performers:
+        Name: $info/div[@class="setdesc"]/a/text()
+      Date:
+        selector: $info/div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        selector: //img[@class="update_thumb thumbs stdimage"]/@src0
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.tgirls.porn
+      Studio:
+        Name:
+          fixed: tgirls.porn
+# Last Updated May 25, 2020
