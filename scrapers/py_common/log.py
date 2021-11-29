@@ -1,5 +1,5 @@
 import sys
-
+import re
 # Log messages sent from a plugin instance are transmitted via stderr and are
 # encoded with a prefix consisting of special character SOH, then the log
 # level (one of t, d, i, w or e - corresponding to trace, debug, info,
