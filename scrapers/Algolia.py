@@ -22,7 +22,7 @@ PRINT_DEBUG = True
 # Print ratio message. (Show title find in search)
 PRINT_MATCH = True
 # File used to store key to connect the API.
-STOCKAGE_FILE_APIKEY = "Adultime_key.ini"
+STOCKAGE_FILE_APIKEY = "Algolia.ini"
 # Tags you don't want to see appear in Scraper window.
 IGNORE_TAGS = []
 # Tag you always want in Scraper window.
