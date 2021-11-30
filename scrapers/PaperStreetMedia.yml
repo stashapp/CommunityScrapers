@@ -53,4 +53,8 @@ xPathScrapers:
             - replace:
                 - regex: '.+\"name\": \"([^"]+?)\".+'
                   with: $1
+            # Override studio name only when needed
+            - map:
+                Bffs: BFFs
+                Notmygrandpa: Not My Grandpa
 # Last Updated November 30, 2021
