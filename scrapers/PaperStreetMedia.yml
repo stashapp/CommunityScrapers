@@ -48,13 +48,45 @@ xPathScrapers:
       Image: //div[@class="video-area"]//stream/@poster
       Studio:
         Name:
-          selector: //head/script[@type="application/ld+json"]
+          selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace:
-                - regex: '.+\"name\": \"([^"]+?)\".+'
-                  with: $1
-            # Override studio name only when needed
+                - regex: (.+www\.)(\w+)(.+)
+                  with: $2
             - map:
-                Bffs: BFFs
-                Notmygrandpa: Not My Grandpa
+                analmom: AnalMom
+                badmilfs: BadMilfs
+                bbcparadise: "BBC Paradise"
+                bffs: BFFs
+                blackvalleygirls: "Black Valley Girls"
+                dadcrush: DadCrush
+                daughterswap: "Daughter Swap"
+                dyked: Dyked
+                exxxtrasmall: ExxxtraSmall
+                familystrokes: "Family Strokes"
+                fostertapes: "Foster Tapes"
+                freeusefantasy: "Freeuse Fantasy"
+                freeusemilf: "Freeuse Milf"
+                hijabhookup: "Hijab Hookup"
+                innocenthigh: "Innocent High"
+                littleasians: "Little Asians"
+                momswap: "Mom Swap"
+                mybabysittersclub: My Babysitters Club
+                mylfdom: MYLFDom
+                notmygrandpa: Not My Grandpa
+                pervdoctor: PervDoctor
+                pervmom: PervMom
+                pervnana: PervNana
+                pervtherapy: PervTherapy
+                shoplyfter: Shoplyfter
+                shoplyftermylf: "Shoplyfter MYLF"
+                sislovesme: SisLoveMe
+                sisswap: "Sis Swap"
+                stayhomepov: StayHomePOV
+                stepsiblings: StepSiblings
+                teencurves: Teen Curves
+                teenpies: "Teen Pies"
+                teensloveanal: "Teens Love Anal"
+                teensloveblackcocks: "Teens Love Black Cocks"
+                thickumz: Thickumz
 # Last Updated November 30, 2021
