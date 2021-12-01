@@ -1,13 +1,13 @@
 import sys
 import re
-# Log messages sent from a plugin instance are transmitted via stderr and are
+# Log messages sent from a script scraper instance are transmitted via stderr and are
 # encoded with a prefix consisting of special character SOH, then the log
 # level (one of t, d, i, w or e - corresponding to trace, debug, info,
-# warning, error levels respectively), then special character
+# warning and error levels respectively), then special character
 # STX.
 #
-# The LogTrace, LogDebug, LogInfo, LogWarning, and LogError methods, and their equivalent
-# formatted methods are intended for use by plugin instances to transmit log
+# The log.trace, log.debug, log.info, log.warning, and log.error methods, and their equivalent
+# formatted methods are intended for use by script scraper instances to transmit log
 # messages.
 #
 
