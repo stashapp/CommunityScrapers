@@ -71,10 +71,10 @@ xPathScrapers:
               - regex: ([?&]img[wh]=\d+)+$
                 with:
       Studio:
-        Name: //title/text()
+        Name: //div[@id="navigation"]/h5/a/@alt
       Date:
         selector: //div[contains(text(), 'RELEASED')]/span/text()
         postProcess:
           - parseDate: January 02, 2006
 
-# Last Updated April 18, 2021
+# Last Updated December 03, 2021
