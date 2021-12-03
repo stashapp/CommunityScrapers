@@ -461,6 +461,7 @@ def performer_from_tree(tree):
         try:
             p.birthdate = datetime.datetime.strptime(p.birthdate, iafd_date).strftime(stash_date)
         except:
+            p.birthdate = None
             pass
 
     performer_deathdate = tree.xpath('(//p[@class="bioheading"][text()="Date of Death"]/following-sibling::p)[1]//text()')
