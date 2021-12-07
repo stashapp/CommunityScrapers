@@ -1,0 +1,27 @@
+name: "ModelMediaUS"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - modelmediaus.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h3/text()
+      Date:
+        selector: //td[contains(.,"Released:")]/following-sibling::td/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: //h3/following-sibling::p/text()
+      Performers:
+        Name: //a[contains(@href,"models/")]/text()
+      Tags:
+        Name: //a[contains(@href,"videos?tag")]/text()
+      Image: 
+        selector: //iframe[@id="video-player"]/@src
+        postProcess:
+          - subScraper:
+              selector: //stream/@poster
+
+# Last Updated December 07, 2021
