@@ -40,7 +40,7 @@ alettaoceanempire.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 alexismonroe.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 alexlegend.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 aliciasgoddesses.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-allanal.com|nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+allanal.com|Nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 allanalallthetime.com|AllAnalAllTheTime.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 allblackx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 allfinegirls.net|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -70,7 +70,7 @@ analhookers.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 analized.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analmom.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analnippon.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
-analonly.com|nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+analonly.com|Nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analoverdose.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analteenangels.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analvids.com|LegalPorno.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
@@ -757,7 +757,7 @@ nylonfeetlove.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nylonspunkjunkies.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nylonsweeties.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nylonup.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-nympho.com|nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+nympho.com|Nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ocreampies.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 officecock.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 officesexjp.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -997,7 +997,7 @@ sunnyleone.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 superbemodels.com|superbemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 susanayn.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swallowbay.com|SwallowBay.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-swallowed.com|nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+swallowed.com|Nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swallowsalon.com|AmateurAllure.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sweetcarla.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sweetfemdom.com|SweetFemdom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1094,7 +1094,7 @@ trickyoldteacher.com|OldGoesYoung.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trickyspa.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trikepatrol.com|TrikePatrol.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 trueamateurs.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-trueanal.com|nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+trueanal.com|Nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tryteens.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tsfactor.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tsplayground.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
