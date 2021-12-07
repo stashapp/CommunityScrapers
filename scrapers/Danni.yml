@@ -17,7 +17,7 @@ xPathScrapers:
         selector: //script[contains(text(),"let sources")]/text()
         postProcess:
           - replace:
-              - regex: .*?(https?:\/\/\S*\.jpg).*
+              - regex: .(https:\/\/\S*\.jpg)*
                 with: $1
       Studio:
         Name:
