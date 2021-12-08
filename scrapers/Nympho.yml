@@ -3,11 +3,11 @@ name: Nympho
 sceneByURL:
   - action: scrapeXPath
     url:
-      - allanal.com/view/
-      - analonly.com/view/
-      - nympho.com/view/
-      - swallowed.com/view/
-      - trueanal.com/scenes/
+      - allanal.com/
+      - analonly.com/
+      - nympho.com/
+      - swallowed.com/
+      - trueanal.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
