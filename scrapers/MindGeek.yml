@@ -34,6 +34,7 @@ sceneByURL:
       - mofos.com/scene/
       - publicagent.com/scene/
       - seancody.com/scene/
+      - transangels.com/scene/
       - transsensual.com/scene
       - trueamateurs.com/scene/
     scraper: scriptScraper
@@ -285,4 +286,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated March 16, 2021
+# Last Updated December 08, 2021
