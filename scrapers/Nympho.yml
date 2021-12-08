@@ -20,16 +20,7 @@ xPathScrapers:
         Name: $info//h4[@class="models"]/a
       Studio:
         Name:
-          selector: //a[contains(@class,"navbar-brand")]/@href
-          postProcess:
-            - replace:
-                - regex: .*tour\.(\w+).*
-                  with: $1
-            - map:
-                nympho: Nympho
-                /: TrueAnal
-                swallowed: Swallowed
-                allanal: AllAnal
+          selector: //a[contains(@class,"navbar-brand")]/img/@title
       Date:
         selector: $info//span[contains(@class,"date") and not(contains(@class,"mobile"))]
         postProcess:
@@ -40,4 +31,4 @@ xPathScrapers:
       Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot|//meta[@property="og:image"]/@content
 driver:
   useCDP: true                     
-# Last Updated December 08, 2021
+# Last Updated December 09, 2021
