@@ -28,7 +28,5 @@ xPathScrapers:
               - regex: (\d+)(?:[dhnrst]+)\s+(.+)
                 with: "$1 $2"
           - parseDate: 2 Jan 2006
-      Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot|//meta[@property="og:image"]/@content
-driver:
-  useCDP: true                     
+      Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot|//meta[@property="og:image"]/@content                    
 # Last Updated December 09, 2021
