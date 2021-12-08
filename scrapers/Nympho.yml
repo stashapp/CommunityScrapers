@@ -7,7 +7,7 @@ sceneByURL:
       - analonly.com/view/
       - nympho.com/view/
       - swallowed.com/view/
-      - trueanal.com/view/
+      - trueanal.com/scenes/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -27,7 +27,7 @@ xPathScrapers:
                   with: $1
             - map:
                 nympho: Nympho
-                trueanal: TrueAnal
+                /: TrueAnal
                 swallowed: Swallowed
                 allanal: AllAnal
       Date:
@@ -37,5 +37,7 @@ xPathScrapers:
               - regex: (\d+)(?:[dhnrst]+)\s+(.+)
                 with: "$1 $2"
           - parseDate: 2 Jan 2006
-      Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot
-# Last Updated December 06, 2021
+      Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot|//meta[@property="og:image"]/@content
+driver:
+  useCDP: true                     
+# Last Updated December 08, 2021
