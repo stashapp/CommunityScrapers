@@ -32,11 +32,11 @@ xPathScrapers:
         concat: "\n\n"
         postProcess:
           - replace:
-            - regex: 'Description|\(Read Less\)|\(Read more\)'
+            - regex: '^Description\n+|\(Read Less\)|\(Read more\)'
               with: ""
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Hentaied
-# Last Updated December 07, 2021
+# Last Updated December 10, 2021
