@@ -28,7 +28,7 @@ xPathScrapers:
               - regex: "April"
                 with: "Apr"
               - regex: "Xmas Day"
-                with: "12 Dec"
+                with: "25 Dec"
               - regex: "  "
                 with: " "
           - parseDate: 2 Jan 06
