@@ -13,7 +13,6 @@ sceneByURL:
       - propertysex.com/scene/
       - shewillcheat.com/scene/
       - sexyhub.com/scene/
-      - transangels.com/scene/
       - welivetogether.com/scene/
 
     scraper: sceneScraper
@@ -47,4 +46,4 @@ xPathScrapers:
           - replace:
               - regex: '.*"thumbnailUrl": "([^"]+)".*'
                 with: $1
-# Last Updated June 20, 2021
+# Last Updated December 08, 2021
