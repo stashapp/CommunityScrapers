@@ -14,9 +14,6 @@ xPathScrapers:
       Date:
         selector: //div[contains(@class, "datesingle")]
         postProcess:
-          # - replace:
-              # - regex: 'PUBLISHED:\s*'
-              #   with: ""
           - parseDate: January 2, 2006
       Performers:
         Name: //div[@class="innerflex"]//div[contains(@class,"tagsmodels")]/a
@@ -25,15 +22,15 @@ xPathScrapers:
           selector: //ul[@class="post-categories"]//a
           postProcess:
             - replace:
-                - regex: 'Exclude'
-                  with: ''
+                - regex: "Exclude"
+                  with: ""
       Details:
         selector: //div[@class="cont" or @class="column"]/$desc
         concat: "\n\n"
         postProcess:
           - replace:
-            - regex: '^Description\n+|\(Read Less\)|\(Read more\)'
-              with: ""
+              - regex: '^Description\n+|\(Read Less\)|\(Read more\)'
+                with: ""
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
