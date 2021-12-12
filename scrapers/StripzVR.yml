@@ -1,0 +1,54 @@
+name: "StripzVR"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - stripzvr.com
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - stripzvr.com
+    scraper: movieScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &titleSel //meta[@property="og:title"]/@content
+      Date: &dateAttr
+        selector: //div[@class="elementor-text-editor elementor-clearfix"]/p[contains(@style,"right;")]
+        postProcess:
+          - replace:
+              - regex: "’"
+                with: " "
+              - regex: "June"
+                with: "Jun"
+              - regex: "July"
+                with: "Jul"
+              - regex: "March"
+                with: "Mar"
+              - regex: "April"
+                with: "Apr"
+              - regex: "Xmas Day"
+                with: "25 Dec"
+              - regex: "  "
+                with: " "
+          - parseDate: 2 Jan 06
+      Details: &detailsSel //meta[@property="og:description"]/@content
+      Studio:
+        Name: &studioName //meta[@property="og:site_name"]/@content
+      Performers:
+        Name: //p[contains(text(), "MODEL :")]/a
+      Image: &imageSel //meta[@property="og:image"]/@content
+      Movies:
+        Name: *titleSel
+        Date: *dateAttr
+        URL: //meta[@property="og:url"]/@content
+  movieScraper:
+    movie:
+      Name: *titleSel
+      Date: *dateAttr
+      Studio:
+        Name: *studioName
+      Synopsis: *detailsSel
+      FrontImage: *imageSel
+# Last Updated December 11, 2021
+
