@@ -817,6 +817,7 @@ playboyplus.com|PlayboyPlus.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|
 playwithrae.com|PlayWithRae.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 plumperpass.com|PlumperPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 plushies.tv|Plushies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+pornbox.com|Pornbox.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 porncz.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornditos.com|Pornditos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 porndudecasting.com|PornDudeCasting.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
