@@ -1,4 +1,10 @@
 name: AmateurAllure
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - amateurallure.com/tour/scenes/
+      - swallowsalon.com/scenes/
+    scraper: galleryScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -6,6 +12,32 @@ sceneByURL:
       - swallowsalon.com/scenes/
     scraper: sceneScraper
 xPathScrapers:
+  galleryScraper:
+    common:
+      $sceneinfo: //div[@class="scene-info"]
+      $title: //span[@class='title_bar_hilite']
+      $logo: //div[@id="logo"]//a/@href
+    gallery:
+      Title: $title
+      Date:
+        selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: //span[@class='update_description']
+      Tags:
+        Name: //span[@class='update_tags']//a/text()
+      Performers:
+        Name: //div[@class='backgroundcolor_info']//span[@class='update_models']//a
+      Studio:
+        Name:
+          selector: $logo
+          postProcess:
+            - replace:
+                - regex: '[^.]+\.([^.]+)\.com/.*'
+                  with: $1
+            - map:
+                amateurallure: Amateur Allure
+                swallowsalon: Swallow Salon
   sceneScraper:
     common:
       $sceneinfo: //div[@class="scene-info"]
@@ -50,4 +82,4 @@ xPathScrapers:
             - map:
                 amateurallure: Amateur Allure
                 swallowsalon: Swallow Salon
-# Last Updated June 08, 2021
+# Last Updated December 12, 2021
