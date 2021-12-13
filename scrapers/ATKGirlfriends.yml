@@ -1,0 +1,49 @@
+name: ATK Girlfriends
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.atkgirlfriends.com/tour/model/
+    scraper: performerScraper
+xPathScrapers:
+  performerScraper:
+    common:
+      $profile: //div[contains(@class, "model-profile-wrap")]
+    performer:
+      Name: //h1[contains(@class, "page-title")]
+      Gender:
+        fixed: female
+      Ethnicity:
+        selector: $profile/b[contains(text(), "Ethnicity")]/following-sibling::text()
+      HairColor:
+        selector: $profile/b[contains(text(), "Hair Color")]/following-sibling::text()
+        postProcess:
+          - map:
+              black: Black
+              blond: Blonde
+              brown: Brown
+              red: Red
+              white: White
+      Height:
+        selector: $profile/b[contains(text(), "Height")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: $profile/b[contains(text(), "Weight")]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: (\d+).*
+              with: $1
+          - lbToKg: true
+      Measurements:
+        selector: $profile/b[contains(text(), "Bust Size")]/following-sibling::text()
+      Image:
+        selector: $profile/img/@src
+driver:
+  cookies:
+    - CookieURL: https://www.atkgirlfriends.com
+      Cookies:
+        - Name: start_session_galleria
+          Domain: www.atkgirlfriends.com
+          Value: stash # Rotate this value if the scraper is blocked. The first request with the new value should fail.
+          Path: /
+# Last Updated December 13, 2021
