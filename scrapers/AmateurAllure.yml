@@ -1,34 +1,32 @@
 name: AmateurAllure
 galleryByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - amateurallure.com/tour/scenes/
       - swallowsalon.com/scenes/
     scraper: galleryScraper
 sceneByURL:
   - action: scrapeXPath
-    url:
-      - amateurallure.com/tour/scenes/
-      - swallowsalon.com/scenes/
+    url: *urls
     scraper: sceneScraper
 xPathScrapers:
   galleryScraper:
-    common:
+    common: &commonAttr
       $sceneinfo: //div[@class="scene-info"]
       $title: //span[@class='title_bar_hilite']
       $logo: //div[@id="logo"]//a/@href
     gallery:
-      Title: $title
-      Date:
+      Title: &titleSel $title
+      Date: &dateAttr
         selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
         postProcess:
           - parseDate: 01/02/2006
-      Details: //span[@class='update_description']
-      Tags:
+      Details: &detailsSel //span[@class='update_description']
+      Tags: &tagsAttr
         Name: //span[@class='update_tags']//a/text()
-      Performers:
+      Performers: &performersAttr
         Name: //div[@class='backgroundcolor_info']//span[@class='update_models']//a
-      Studio:
+      Studio: &studioAttr
         Name:
           selector: $logo
           postProcess:
@@ -39,21 +37,13 @@ xPathScrapers:
                 amateurallure: Amateur Allure
                 swallowsalon: Swallow Salon
   sceneScraper:
-    common:
-      $sceneinfo: //div[@class="scene-info"]
-      $title: //span[@class='title_bar_hilite']
-      $logo: //div[@id="logo"]//a/@href
+    common: *commonAttr
     scene:
-      Title: $title
-      Date:
-        selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
-        postProcess:
-          - parseDate: 01/02/2006
-      Details: //span[@class='update_description']
-      Tags:
-        Name: //span[@class='update_tags']//a/text()
-      Performers:
-        Name: //div[@class='backgroundcolor_info']//span[@class='update_models']//a
+      Title: *titleSel
+      Date: *dateAttr
+      Details: *detailsSel
+      Tags: *tagsAttr
+      Performers: *performersAttr
       Image:
         selector: $logo|$title
         concat: "|"
@@ -72,14 +62,5 @@ xPathScrapers:
                       with: $1$2
                     - regex: ^([^|]+swallowsalon[^|]+)\|.+360w,\s((?:/tour)?/content/contentthumbs/\d+/\d+/[^/]+\.jpg).*
                       with: $1$2
-      Studio:
-        Name:
-          selector: $logo
-          postProcess:
-            - replace:
-                - regex: '[^.]+\.([^.]+)\.com/.*'
-                  with: $1
-            - map:
-                amateurallure: Amateur Allure
-                swallowsalon: Swallow Salon
-# Last Updated December 12, 2021
+      Studio: &studioAttr
+# Last Updated December 13, 2021
