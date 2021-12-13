@@ -4,6 +4,11 @@ performerByURL:
     url:
       - https://www.atkgirlfriends.com/tour/model/
     scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.atkgirlfriends.com/tour/movie/
+    scraper: sceneScraper
 xPathScrapers:
   performerScraper:
     common:
@@ -38,6 +43,24 @@ xPathScrapers:
         selector: $profile/b[contains(text(), "Bust Size")]/following-sibling::text()
       Image:
         selector: $profile/img/@src
+  sceneScraper:
+    common:
+      $wrap: //div[contains(@class, "movie-wrap")]
+    scene:
+      Title: //title
+      Details: $wrap/b[contains(text(), "Description")]/following-sibling::text()
+      Image: //video/@poster
+      Studio:
+        Name:
+          fixed: ATK Girlfriends
+        URL:
+          fixed: https://www.atkgirlfriends.com/
+      Tags:
+        Name:
+          selector: $wrap/b[contains(text(), "Tags")]/following-sibling::text()
+          split: ','
+      Performers:
+        Name: //div[contains(@class, "model-profile-wrap")]/text()[1]
 driver:
   cookies:
     - CookieURL: https://www.atkgirlfriends.com
