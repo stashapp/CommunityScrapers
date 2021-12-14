@@ -427,7 +427,7 @@ class TraxxxInterface:
     # for profile in p["profiles"]:
     #   if profile.get("description"):
     #      if profile.get("entity"):
-    #          if profile.get("name"):
+    #          if profile["entity"].get("name"):
     #             descriptions.append(f'{profile["entity"]["name"]}:\n{profile["description"]}')
 
     # if descriptions != []:
