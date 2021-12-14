@@ -64,6 +64,12 @@ xPathScrapers:
     scene:
       Title: //title
       Details: $movieWrap/b[contains(text(), "Description")]/following-sibling::text()
+      URL:
+        selector: //video/source/@src
+        postProcess:
+          - replace:
+            - regex: *filenameRegex
+              with: https://www.atkgirlfriends.com/tour/movie/$2
       Image: //video/@poster
       Studio:
         Name:
