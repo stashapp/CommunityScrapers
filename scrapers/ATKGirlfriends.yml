@@ -4,6 +4,20 @@ performerByURL:
     url:
       - https://www.atkgirlfriends.com/tour/model/
     scraper: performerScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.atkgirlfriends.com/tour/movie/{filename}
+  queryURLReplace:
+    filename:
+      # E.g: ale138ATK_290698001_hd.mp4
+      # 1: Model (ale138)
+      # 2: Movie (290698)
+      # 3: Scene (001)
+      # 4: Resolution (hd)
+      # 5: Extension (mp4)
+      - regex: &filenameRegex ^.*([a-z]{3}\d{3})ATK_(\d+)(\d{3})_(\w*)\.(\w+).*$
+        with: $2
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
