@@ -7,27 +7,33 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $desc: "*[local-name()='p' or local-name()='h3' or local-name()='ol' or local-name()='ul']"
+      $desc: "*[local-name()='p' or local-name()='h3' or local-name()='ol' or local-name()='ul' or (local-name()='div' and @class='excerpt')]"
     scene:
       Title:
-        selector: //div[@class="post-content"]/h1
+        selector: //div[@class="innerflex"]//h1
       Date:
-        selector: //div/h2
+        selector: //div[contains(@class, "datesingle")]
         postProcess:
-          - replace:
-              - regex: 'PUBLISHED:\s*'
-                with: ""
-          - parseDate: 2006-01-02
+          - parseDate: January 2, 2006
       Performers:
-        Name: //div[@class="tagsmodels"]/a
+        Name: //div[@class="innerflex"]//div[contains(@class,"tagsmodels")]/a
       Tags:
-        Name: //ul[@class="post-categories"]//a
+        Name:
+          selector: //ul[@class="post-categories"]//a
+          postProcess:
+            - replace:
+                - regex: "Exclude"
+                  with: ""
       Details:
         selector: //div[@class="cont" or @class="column"]/$desc
         concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: '^Description\n+|\(Read Less\)|\(Read more\)'
+                with: ""
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Hentaied
-# Last Updated May 09, 2021
+# Last Updated December 10, 2021

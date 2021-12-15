@@ -38,7 +38,7 @@ sceneByURL:
       - fistingcentral.com/
       - footsiebabes.com/en/video/
       - gapingangels.com/
-      - genderx.com/en/video/
+      - genderxfilms.com/en/video/
       - girlfriendsfilms.com/en/video/
       - girlsandstuds.com/
       - girlstryanal.com/en/video/
@@ -310,4 +310,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated October 10, 2021
+# Last Updated December 07, 2021

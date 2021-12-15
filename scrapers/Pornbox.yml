@@ -1,0 +1,77 @@
+name: Pornbox
+
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - pornbox.com/application/watch-page
+    scraper: sceneScraper
+    queryURL: "https://pornbox.com/contents/{url}"
+    queryURLReplace:
+      url:
+        - regex: '.+/(\d+)$'
+          with: "$1"
+
+sceneByName:
+  action: scrapeJson
+  scraper: sceneSearch
+  queryURL: "https://www.pornbox.com/store/search?q={}&skip=0"
+
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  queryURLReplace:
+    url:
+      - regex: '^.*\/([0-9]*)$'
+        with: https://pornbox.com/contents/$1/
+  scraper: sceneScraper
+
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: scene_name
+      Date:
+        selector: publish_date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05.999999Z
+      Tags:
+        Name:
+          selector: niches.#.niche
+      Performers:
+        Name: models.#.model_name
+      Image:
+        selector: player_poster
+      Details:
+        selector: small_description
+        postProcess:
+          - replace:
+              - regex: ^none$
+                with: ""
+      Studio:
+        Name: studio
+      URL:
+        selector: id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://pornbox.com/application/watch-page/
+
+  sceneSearch:
+    common:
+      $contents: content.contents.#
+    scene:
+      Title:
+        selector: $contents.scene_name
+      Image:
+        selector: $contents.thumbnail.large
+      Date:
+        selector: $contents.publish_date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05.999999Z
+      URL:
+        selector: $contents.id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://pornbox.com/contents/$1
+# Last Updated December 10, 2021
