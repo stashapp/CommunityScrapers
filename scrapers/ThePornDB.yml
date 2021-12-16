@@ -43,6 +43,7 @@ jsonScrapers:
               with: ""
             - regex: \,
               with: " ["
+      Date: data.#.date
       URL:
         selector: data.#.id
         postProcess:
@@ -138,4 +139,4 @@ driver:
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
       #Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated September 14, 2021
+# Last Updated December 16, 2021
