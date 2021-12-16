@@ -203,7 +203,7 @@ class multiscrape:
                     if spl is not None:
                         for spli in spl:
                             if spli["name"].lower()==name.lower():
-                                r=self.scrape_performer(s, {"name":spli["name"]})
+                                r=self.scrape_performer(s, {"name":spli["name"], "url":spli["url"]})
                                 if r is not None:
                                     scraper_cache[s]=r
                                     found=True
