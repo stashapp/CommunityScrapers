@@ -2,34 +2,24 @@ name: data18
 sceneByURL:
   - action: scrapeXPath
     url:
-      - data18.com/content
+      - data18.com/scenes
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $performer: //p[b[text()='Starring:']]/a
-      $studio: //p[b[text()='Site:' or text()='Studio:']]/a
+      $performer: //b[text()='Pornstars / Cast']/../..//a[@class='bold gen']
+      $studio: (//b[text()="Studio"] | //b[text()="Network"])/../a[last()]
     scene:
-      Title: //h1/text()
+      Title: //span/following-sibling::h1/a/text()
       Date:
-        selector: //span[contains(text(),"Release date:") and not(contains(text(),"No date release yet"))]
-        postProcess:
-          - replace:
-              - regex: "^Release date:|,"
-                with:
-              # When day of month is not specified, the scraper defaults to <Month> 1st, <Year>.
-              # Comment the next two lines if you want to skip partial dates instead.
-              - regex: ([A-Za-z]+) (\d{4})
-                with: "$1 1 $2"
-          - parseDate: January 2 2006
+        selector: //time/@datetime
       Details:
-        selector: //p[b[text()='Story:']]
+        selector: //div[b[text()="Story"]]/text() |  //div[b[text()="Story"]]/a/text()
+        concat: ' '
         postProcess:
           - replace:
-              - regex: "^Story:"
-                with:
-              - regex: �
-                with: "'"
+            - regex: "^- "
+              with:
       Tags:
         Name: //div[b[text()='Categories:']]/a/text()
       Performers:
@@ -38,11 +28,6 @@ xPathScrapers:
       Studio:
         Name: $studio/text()
         URL: $studio/@href
-      Image: //div[@id="moviewrap"]/img/@src
-        # uncomment the below instead if you want to use the first image from the Photo Set (not available in all scenes)
-        #selector: //div[p[span[b[text()='Photo Set']]]]//div[1]/a/@href
-        #postProcess:
-          #- subScraper:
-              #selector: //div[@id='post_view']/a/img/@src
+      Image: //img[@id="playpriimage"]/@src
 
-# Last Updated May 22, 2021
+# Last Updated Dec 15, 2021
