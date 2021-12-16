@@ -1,0 +1,25 @@
+name: Danni
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - danni.com/scenes/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="scene-title"]
+      Performers:
+        Name: //div[@class='danni-card-model-list-container']/a
+      Tags:
+        Name: //div[@class="scene-tags"]/a
+      Image:
+        selector: //script[contains(text(),"let sources")]/text()
+        postProcess:
+          - replace:
+              - regex: .(https:\/\/\S*\.jpg)*
+                with: $1
+      Studio:
+        Name:
+          fixed: Danni.com
+# Last Updated December 07, 2021

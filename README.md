@@ -26,10 +26,10 @@ You can find a list of sites currently supported for by community scraping in [S
 
 :boom: For **most scrapers** you have to provide the scene/performer url.
 
-|-| Stable (<=v0.10.0) | Development build |
-|:-:|:--:|:--:|
-|Once you populate the `URL` field with an appropriate url| The scrape URL button will appear.| The scrape URL button will be active.|
-|Image|![stable](https://user-images.githubusercontent.com/23707269/139531203-e63b3587-ba37-4927-9956-ef9373256a50.png)|![dev](https://user-images.githubusercontent.com/23707269/139529970-d2966ae0-ae51-4e73-8f7c-d14844b90691.png)|
+|Stable build (>=v0.11.0) |
+|:--:|
+|Once you populate the `URL` field with an appropriate url, the scrape URL button will be active.|
+|![stable](https://user-images.githubusercontent.com/23707269/139529970-d2966ae0-ae51-4e73-8f7c-d14844b90691.png)|
 
 Clicking on that button brings up a popup that lets you select which fields to update.
 
@@ -39,8 +39,10 @@ On newer stash versions there is a `Query` button for scrapers that support that
 
 In case of errors/no results during scraping make sure to check stash's log section (Settings->Logs->Log Level Debug) for more info.
 
+For more info please check the scraping help [section](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md)
+
 ## Contributing
-Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md) wiki entry to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.  
+Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/ScraperDevelopment.md) help section to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
 
 The last line of a scraper definition (`.yml` file) must be the last updated date, in the following format:  
 `# Last Updated Month Day, Year`  

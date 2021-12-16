@@ -1,0 +1,21 @@
+name: StraponDreamer
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - strapondreamer.com/videos
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Image:
+        selector: //script[contains(., "coverSlider.init(")]
+        postProcess:
+          - replace:
+              - regex: '.+coverSlider\.init\(\"(.+?)\"\,.+$'
+                with: $1/slide_1.jpg
+      Details: //span[@id="movieDescription"]
+      Studio:
+        Name:
+          fixed: Strapon Dreamer
+# Last Updated November 09, 2021

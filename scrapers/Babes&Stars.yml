@@ -1,0 +1,85 @@
+name: Babes&Stars
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.babesandstars.com/search/?t=models&q={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.babesandstars.com
+    scraper: performerScraper
+    
+xPathScrapers:
+  performerSearch:
+    common:
+      $result: //div[@class="search models"]//div[@class="item"]/div[@class="thumb"]/a
+    performer:
+      Name: $result//div[@class="name"]/text()
+      URL:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.babesandstars.com
+
+  performerScraper:
+    common:
+      $result: //div[@class="features"]
+    performer:
+      Name: //div[@class="profile"]//h1/text()
+      URL:
+        selector: //link[@rel="canonical"]/@content
+        postProcess:
+          - replace:
+              - regex: "^http://"
+                with: "https://"
+      Twitter: //a[@class="twitter"]/@href
+      Birthdate:
+        selector: $result//span[contains(text(),'Birthday:')]/em/a/text()
+        concat: " "
+        postProcess:
+          - parseDate: 02 Jan 2006
+      Ethnicity:
+        selector: $result//span[contains(text(),'Ethnicity:')]/em/a/text()
+      Country: 
+        selector: $result//span[contains(text(),'Country:')]/em/a/text()
+      HairColor:
+        selector: $result//span[contains(text(),'Hair:')]/em/a/text()
+      EyeColor:
+        selector: $result//span[contains(text(),'Eyes:')]/em/a/text()
+      Height:
+        selector: $result//span[contains(text(),'Height:')]/em/a/text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+).+$
+                with: "$1"
+      Weight:
+        selector: $result//span[contains(text(),'Weight:')]/em/a/text()
+        postProcess:
+          - replace:
+              - regex: " kg"
+                with: 
+      Measurements:
+        selector: $result//span[contains(text(),'Measurements:')]/em/a/text()|$result//span[contains(text(),'Cup:')]/em/a/text()
+        concat: "-"
+        postProcess:
+          - replace:
+              - regex: ^([0-9]{2})-([0-9]{2})-([0-9]{2})-(AA?|[BC]|D{1,4}|[E-I])$
+                with: $1$4-$2-$3
+      Aliases: 
+        selector: //div[@class="aliases"]/em/text()
+      Image:
+        selector: //div[@class="profile"]//div[@class="thumb"]/img/@src
+      Gender:
+        fixed: Female
+      Details:
+        selector: //div[@class="bio read_more"]//p/text()
+        concat: "\n\n"
+      Tags:
+        Name:
+          selector: $result//span[contains(text(),'Cup:')]/em/a/text()
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "Cup "
+# Last Updated November 19, 2021
