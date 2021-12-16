@@ -30,4 +30,4 @@ xPathScrapers:
         URL: $studio/@href
       Image: //img[@id="playpriimage"]/@src
 
-# Last Updated Dec 15, 2021
+# Last Updated December 15, 2021
