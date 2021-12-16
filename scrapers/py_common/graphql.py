@@ -6,8 +6,8 @@ import py_common.log as log
 
 def callGraphQL(query, variables=None):
     api_key = ""
-    if config.STASH.get("api"):
-        api_key = config.STASH["api"]
+    if config.STASH.get("api_key"):
+        api_key = config.STASH["api_key"]
 
     if config.STASH.get("url") is None:
         log.error("You need to set the URL in 'config.py'")
@@ -22,7 +22,9 @@ def callGraphQL(query, variables=None):
         "DNT": "1",
         "ApiKey": api_key
     }
-    json = {'query': query}
+    json = {
+        'query': query
+    }
     if variables is not None:
         json['variables'] = variables
     try:
