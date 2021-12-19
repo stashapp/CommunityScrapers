@@ -1,26 +1,30 @@
-name: "AdultimeAPI"
+name: "MyPervyFamily"
 sceneByURL:
   - action: script
     url:
-      - adulttime.com/en/video/
+      - mypervyfamily.com/en/video
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - mypervyfamily
 sceneByFragment:
     action: script
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - mypervyfamily
 sceneByName:
     action: script
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - mypervyfamily
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - mypervyfamily
       - validName
-# Last Updated September 14, 2021
+# Last Updated November 29, 2021
