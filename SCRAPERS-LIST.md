@@ -875,6 +875,7 @@ r18.com|r18.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|JAV
 rachelaldana.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rachelstormsxxx.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ragingstallion.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+randyblue.com|RandyBlue.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 ravenswallowzxxx.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rawattack.com|RawAttack.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rawcouples.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
