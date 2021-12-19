@@ -3,9 +3,6 @@ import re, sys, copy, json, requests
 # local modules
 import py_common.log as log
 
-# requirements
-from box import Box # pip install python-box
-
 def parse_response(json_input):
   if isinstance(json_input, dict):
     for key, value in json_input.items():
@@ -89,8 +86,7 @@ class TraxxxInterface:
       if result.get("data"):
         data = result['data']
         parse_response(data)
-        boxed =  Box(data=data, default_box=True)
-        return boxed.data
+        return data
     elif response.status_code == 401:
       sys.exit("HTTP Error 401, Unauthorized. Cookie authentication most likely failed")
     else:
@@ -128,9 +124,9 @@ class TraxxxInterface:
       'limit': int(numResults)
     }
     result = self.__callGraphQL(query, variables)
-    log.info(f'scene search "{search}" returned {len(result.scenes)} results')
+    log.info(f'scene search "{search}" returned {len(result["scenes"])} results')
 
-    return [s.release for s in result.scenes]
+    return [s["release"] for s in result["scenes"]]
 
   def search_performers(self, search, numResults=20):
     query = """
@@ -230,195 +226,227 @@ class TraxxxInterface:
   def parse_to_stash_scene_search(self, s):
     fragment = {}
 
-    if s.poster.image:
-      fragment["image"] = s.poster.image
+    if s.get("poster"):
+      if s["poster"].get("image"):
+        fragment["image"] = s["poster"]["image"]
 
     # search returns url as traxxx url for later parsing by scene parser
-    if s.slug:
-      fragment["url"] = f'https://traxxx.me/scene/{s.id}/{s.slug}/'
+    if s.get("slug"):
+      fragment["url"] = f'https://traxxx.me/scene/{s["id"]}/{s["slug"]}/'
 
-    if s.date:
-      fragment["date"] = s.date.split("T")[0]
+    if s.get("date"):
+      fragment["date"] = s["date"].split("T")[0]
 
-    if s.title:
-      fragment["title"] = s.title
+    if s.get("title"):
+      fragment["title"] = s["title"]
 
-    if s.description:
-      fragment["details"] = s.description
+    if s.get("entity"):
+        if s["entity"].get("name"):
+          fragment["studio"] = { "name": s["entity"]["name"] }
 
-    if s.tags:
-      tags = []
-      for t in s.tags:
-        t = t["tag"]
-        tags.append({
-          "name": t["name"]
-        })
-      fragment["tags"] = tags
+    if s.get("description"):
+      fragment["details"] = s["description"]
 
+    # #tags take too much space in the results page
+    #if s.get("tags"):
+    #  tags = []
+    #  for t in s["tags"]:
+    #    if t.get("tag"):
+    #      if t["tag"].get("name"):
+    #        tags.append({
+    #          "name": t["tag"]["name"]
+    #        })
+    #  fragment["tags"] = tags
+    
+    if s.get("actors"):
+      performers = []
+      for a in s["actors"]:
+        if a["actor"].get("name"):
+          performers.append({
+            "name": a["actor"]["name"]
+          })
+      fragment["performers"] = performers
+    
     return fragment
 
   def parse_to_stash_scene(self, s):
     fragment = {}
 
-    if s.title:
-      fragment["title"] = s.title
+    if s.get("title"):
+      fragment["title"] = s["title"]
 
-    if s.description:
-      fragment["details"] = s.description
+    if s.get("description"):
+      fragment["details"] = s["description"]
 
-    if s.url:
-      fragment["url"] = s.url
+    if s.get("url"):
+      fragment["url"] = s.get("url")
 
-    if s.date:
-      fragment["date"] = s.date.split("T")[0]
+    if s.get("date"):
+      fragment["date"] = s["date"].split("T")[0]
 
-    if s.poster.image:
-      fragment["image"] = s.poster.image
+    if s.get("poster"):
+      if s["poster"].get("image"):
+        fragment["image"] = s["poster"]["image"]
 
-    if s.tags:
+
+    if s.get("tags"):
       tags = []
-      for t in s.tags:
-        t = t["tag"]
-        tags.append({
-          "name": t["name"]
-        })
+      for t in s["tags"]:
+        if t.get("tag"):
+          if t["tag"].get("name"):
+            tags.append({
+              "name": t["tag"]["name"]
+            })
       fragment["tags"] = tags
     
-    if s.movies:
+    if s.get("actors"):
+      performers = []
+      for a in s["actors"]:
+        if a["actor"].get("name"):
+          performers.append({
+            "name": a["actor"]["name"]
+          })
+      fragment["performers"] = performers
+    
+    if s.get("movies"):
       movies = []
-      for m in s.movies:
+      for m in s["movies"]:
         m = m.movie
 
+        if m.get("title"):
+          movie = {
+            "name": m["title"]
+          }
+          if m.get["date"]:
+            movie["date"] = m["date"]
+          if m.get("url"):
+            movie["url"] = m["url"]
+          if m.get("description"):
+            movie["synopsis"] = m["description"]
 
-        movie = {
-          "name": m.title
-        }
-        if m.date:
-          movie["date"] = m.date
-        if m.url:
-          movie["url"] = m.url
-        if m.description:
-          movie["synopsis"] = m.description
+          if m.get["covers"]:
+            if len(m.covers) >= 1:
+              movie["frontImage"] = m["covers"][0]
+            if len(m.covers) >= 2:
+              movie["backImage"] = m["covers"][1]
 
-        if m.covers:
-          if len(m.covers) >= 1:
-            movie["frontImage"] = m.covers[0]
-          if len(m.covers) >= 2:
-            movie["backImage"] = m.covers[1]
-
-        movies.append(movie)
+          movies.append(movie)
       fragment["movies"] = movies
 
-    if s.entity.name:
-      studio = {'name':s.entity.name}
-      if s.entity.url:
-        studio['url'] = s.entity.url
-      fragment["studio"] = studio
+    if s.get("entity"):
+      if s["entity"].get("name"):
+        studio = {'name':s["entity"]["name"]}
+        if s["entity"].get("url"):
+          studio['url'] = s["entity"]["url"]
+        fragment["studio"] = studio
 
     return fragment
 
   def parse_to_stash_performer_search(self, p):
     fragment = {}
 
-    if p.name:
-      fragment["name"] = p.name
+    if p.get("name"):
+      fragment["name"] = p["name"]
 
-    if p.slug:
-      fragment["url"] = f'https://traxxx.me/actor/{p.id}/{p.slug}/'
+    if p.get("slug"):
+      fragment["url"] = f'https://traxxx.me/actor/{p["id"]}/{p["slug"]}/'
 
     fragment["images"] = []
 
-    if p.image:
-      fragment["images"].append( p.image )
+    if p.get("image"):
+      fragment["images"].append( p["image"] )
 
-    for profile in p.profiles:
-      if profile.image:
-        fragment["images"].append( profile.image )
+    for profile in p["profiles"]:
+      if profile.get("image"):
+        fragment["images"].append( profile["image"] )
 
     return fragment
 
   def parse_to_stash_performer(self, p):
     fragment = {}
 
-    if p.name:
-      fragment["name"] = p.name
+    if p.get("name"):
+      fragment["name"] = p["name"]
 
-    if p.slug:
-      fragment["url"] = f'https://traxxx.me/actor/{p.id}/{p.slug}/'
+    if p.get("slug"):
+      fragment["url"] = f'https://traxxx.me/actor/{p["id"]}/{p["slug"]}/'
 
-    if p.gender:
-      fragment["gender"] = p.gender
+    if p.get("gender"):
+      fragment["gender"] = p["gender"]
 
-    if p.birthdate:
-      fragment["birthdate"] = p.birthdate
+    if p.get("birthdate"):
+      fragment["birthdate"] = p["birthdate"]
 
-    if p.dateOfDeath:
-      fragment["death_date"] = p.dateOfDeath
+    if p.get("dateOfDeath"):
+      fragment["death_date"] = p["dateOfDeath"]
 
-    if p.eyes:
-      fragment["eye_color"] = p.eyes
+    if p.get("eyes"):
+      fragment["eye_color"] = p["eyes"]
 
-    if p.hairColor:
-      fragment["hair_color"] = p.hairColor
+    if p.get("hairColor"):
+      fragment["hair_color"] = p["hairColor"]
 
-    if p.heightMetric:
-      fragment["height"] = p.heightMetric
+    if p.get("heightMetric"):
+      fragment["height"] = p["heightMetric"]
 
-    if p.weightMetric:
-      fragment["weight"] = p.weightMetric
+    if p.get("weightMetric"):
+      fragment["weight"] = p["weightMetric"]
 
-    if p.tattoos:
-      fragment["tattoos"] = p.tattoos
+    if p.get("tattoos"):
+      fragment["tattoos"] = p["tattoos"]
 
-    if p.piercings:
-      fragment["piercings"] = p.piercings
+    if p.get("piercings"):
+      fragment["piercings"] = p["piercings"]
 
-    if p.naturalBoobs == False:
+    if p["naturalBoobs"] == False:
       fragment["fake_tits"] = "Augmented"
-    if p.naturalBoobs == True:
+    if p["naturalBoobs"] == True:
       fragment["fake_tits"] = "Natural"
 
     if all( k in p for k in ['cup','bust','waist','hip'] ):
       fragment['measurements'] = f"{p['bust']}{p['cup']}-{p['waist']}-{p['hip']}"
 
-    if p.ethnicity:
-      fragment["ethnicity"] = p.ethnicity
+    if p.get("ethnicity"):
+      fragment["ethnicity"] = p["ethnicity"]
 
-    country = p.birthCountry.alpha2
-    if country:
-      fragment["country"] = country
+    if p.get("birthCountry"):
+        if p["birthCountry"].get("alpha2"):
+          country = p["birthCountry"]["alpha2"]
+          fragment["country"] = country
 
     fragment["images"] = []
 
-    if p.image:
-      fragment["images"].append( p.image )
+    if p.get("image"):
+      fragment["images"].append( p["image"] )
 
-    for profile in p.profiles:
-      if profile.image:
-        fragment["images"].append( profile.image )
+    for profile in p["profiles"]:
+      if profile.get("image"):
+        fragment["images"].append( profile["image"] )
 
     # descriptions = []
-    # for profile in p.profiles:
-    #   if profile.description:
-    #     descriptions.append(f'{profile.entity.name}:\n{profile.description}')
+    # for profile in p["profiles"]:
+    #   if profile.get("description"):
+    #      if profile.get("entity"):
+    #          if profile["entity"].get("name"):
+    #             descriptions.append(f'{profile["entity"]["name"]}:\n{profile["description"]}')
 
     # if descriptions != []:
     #   fragment["description"] = "\n\n".join(descriptions)
 
-    if p.aliasFor:
+    if p.get("aliasFor"):
       # TODO: when traxxx has any performers with an alias
       # fragment["aliases"]
       pass
 
-    if p.socials:
+    if p.get("socials"):
       # TODO: when traxxx has more data to work with
       # fragment["twitter"]
       # fragment["instagram"]
       pass
 
     #  TODO: implement this if traxxx ever adds career data to performers
-    # if p.careerLength
-    #   fragment["career_length"] = p.careerLength
+    # if p.get("careerLength")
+    #   fragment["career_length"] = p["careerLength"]
 
     return fragment
 
