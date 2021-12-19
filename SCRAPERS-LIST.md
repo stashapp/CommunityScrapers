@@ -34,7 +34,7 @@ addisonstreet.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 adultdvdempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 adultdvdmarketplace.com|AdultDvdMarketPlace.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 adultempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
-adulttime.com|AdultimeAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+adulttime.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 aebn.com|AEBN.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Straight + Gay
 alettaoceanempire.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 alexismonroe.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -317,7 +317,7 @@ digitalplayground.com|MindGeek.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:he
 dirty-coach.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dirty-doctor.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dirtycosplay.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-disruptivefilms.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+disruptivefilms.com|Algolia_disruptivefilms.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
 dogfartnetwork.com|DogFart.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 doghousedigital.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 dollrotic.com|GymRotic.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -387,7 +387,7 @@ filf.com|FILF.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fillyfilms.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 filthflix.com|FilthFlix.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 filthyfamily.com|FilthyFamily.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-filthykings.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+filthykings.com|Algolia_filthykings.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 finishesthejob.com|FinishesTheJob.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 firstanalquest.com|Firstanalquest.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 firstbgg.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -717,7 +717,7 @@ mylfdom.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mylifeinmiami.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 mylked.com|Mylked.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mypervmom.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-mypervyfamily.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+mypervyfamily.com|Algolia_mypervyfamily.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 myracequeens.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 mysislovesme.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 myteenoasis.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1063,7 +1063,6 @@ thestripperexperience.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thetabutales.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thickandbig.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thickumz.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-thirdmovies.com|ZeroTolerance.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thirdworldxxx.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Asian + Latin + Trans
 throated.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 timtales.com|TimTales.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
@@ -1078,7 +1077,7 @@ toomanytrannies.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Trans
 topgrl.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 topwebmodels.com|TopWebModels.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 toticos.com|VegasDreamworks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-touchmywife.com|AdultEmpireNew.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+touchmywife.com|Algolia_touchmywife.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 toughlovex.com|toughlovex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tour.purgatoryx.com|purgatoryx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trans500.com/tour/|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
@@ -1197,5 +1196,5 @@ youporn.com|YouPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
 yourmomdoesanal.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yourmomdoesporn.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 z-filmz-originals.com|Z-Filmz-Originals.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+zerotolerancefilms.com|Algolia_zerotolerancefilms.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 zoiestarr.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-ztod.com|ZeroTolerance.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

@@ -1,0 +1,30 @@
+name: "TouchMyWife"
+sceneByURL:
+  - action: script
+    url:
+      - touchmywife.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - touchmywife
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - touchmywife
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - touchmywife
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - touchmywife
+      - validName
+# Last Updated November 29, 2021
