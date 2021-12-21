@@ -20,53 +20,56 @@ performerByURL:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $performer: //strong[text() = "Performers:"]/following-sibling::a
     scene:
-      Title: //h2/text()
+      Title: &titleSel //h2/text()
       Date:
-        selector: //strong[text() = "Release Date:"]/following-sibling::text()[1]
+        selector: &dateSel //strong[text() = "Release Date:"]/following-sibling::text()[1]
         postProcess:
           - replace:
-            - regex: (^[a-zA-Z]+\s[0-9]+)[a-z]+(\s[0-9]+$)
-              with: $1$2
+              - regex: (^[a-zA-Z]+\s[0-9]+)[a-z]+(\s[0-9]+$)
+                with: $1$2
           - parseDate: January 2 2006
       Performers:
-        Name: //strong[text() = "Performers:"]/following-sibling::a/text()
-      Details: //div[@class="col-md-12 padd-top-18"]/p[not(@class)]/text()
+        Name: $performer/text()
+        URL: $performer/@href
+      Details: &detailsAttr
+        selector: //div[@class="container"]//p[@class="plain-link"]/following-sibling::p/text()
+        concat: "\n\n"
       Image:
         selector: //script[contains(text(), "image:")]/text()
         postProcess:
           - replace:
             - regex: "^.*image: '([^']+)'.*$"
               with: $1
-      Studio:
+      Studio: &studioAttr
         Name:
           fixed: Lucas Entertainment
       Movies:
         Name: //strong[text() = "From:"]/following-sibling::a[1]/text()
   movieScraper:
     movie:
-      Name: //h2/text()
+      Name: *titleSel
       Date:
-        selector: //strong[text() = "Release Date:"]/following-sibling::text()[1]
+        selector: *dateSel
         postProcess:
           - parseDate: Jan 02, 2006
       Duration:
         selector: //strong[text() = "Runtime:"]/following-sibling::text()[1]
         postProcess:
           - replace:
-            - regex: "^[^0-9]*([0-9]+)\\s+minutes"
-              with: "0:$1:00"
+              - regex: "^[^0-9]*([0-9]+)\\s+minutes"
+                with: "0:$1:00"
           - replace:
-            - regex: "^.*N/A.*$"
-              with:
-      Synopsis: //div[@class="ui-box large-text padd-top-18"]/div/p[not(@class)]/text()
-      Studio:
-        Name:
-          fixed: Lucas Entertainment
+              - regex: "^.*N/A.*$"
+                with:
+      Synopsis: *detailsAttr
+      Studio: *studioAttr
       FrontImage: //img[@class="movie-front-cover main-photo"]/@src
   performerScraper:
     performer:
-      Name: //h2/text()
+      Name: *titleSel
       Gender:
         fixed: Male
       Measurements:
@@ -81,4 +84,4 @@ xPathScrapers:
         postProcess:
           - feetToCm: true
       Image: //div[@class="col-sm-5 col-md-5 col-lg-4 model-main-photo"]/img/@data-original
-# Last Updated December 19, 2021
+# Last Updated December 21, 2021
