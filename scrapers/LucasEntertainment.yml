@@ -1,0 +1,87 @@
+name: LucasEntertainment
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lucasentertainment.com/scenes/
+      - lucasentertainment.com/tour/scenes/
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - lucasentertainment.com/movies/
+      - lucasentertainment.com/tour/movies/
+    scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - lucasentertainment.com/models/
+      - lucasentertainment.com/tour/models/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //strong[text() = "Performers:"]/following-sibling::a
+    scene:
+      Title: &titleSel //h2/text()
+      Date:
+        selector: &dateSel //strong[text() = "Release Date:"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: (^[a-zA-Z]+\s[0-9]+)[a-z]+(\s[0-9]+$)
+                with: $1$2
+          - parseDate: January 2 2006
+      Performers:
+        Name: $performer/text()
+        URL: $performer/@href
+      Details: &detailsAttr
+        selector: //div[@class="container"]//p[@class="plain-link"]/following-sibling::p/text()
+        concat: "\n\n"
+      Image:
+        selector: //script[contains(text(), "image:")]/text()
+        postProcess:
+          - replace:
+              - regex: "^.*image: '([^']+)'.*$"
+                with: $1
+      Studio: &studioAttr
+        Name:
+          fixed: Lucas Entertainment
+      Movies:
+        Name: //strong[text() = "From:"]/following-sibling::a[1]/text()
+  movieScraper:
+    movie:
+      Name: *titleSel
+      Date:
+        selector: *dateSel
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Duration:
+        selector: //strong[text() = "Runtime:"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: "^[^0-9]*([0-9]+)\\s+minutes"
+                with: "0:$1:00"
+          - replace:
+              - regex: "^.*N/A.*$"
+                with:
+      Synopsis: *detailsAttr
+      Studio: *studioAttr
+      FrontImage: //img[@class="movie-front-cover main-photo"]/@src
+  performerScraper:
+    performer:
+      Name: *titleSel
+      Gender:
+        fixed: Male
+      Measurements:
+        selector: //strong[text() = "Dick Size:"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: (^.*$)
+                with: 0'$1
+          - feetToCm: true
+      Height:
+        selector: //strong[text() = "Height:"]/following-sibling::text()[1]
+        postProcess:
+          - feetToCm: true
+      Image: //div[@class="col-sm-5 col-md-5 col-lg-4 model-main-photo"]/img/@data-original
+# Last Updated December 21, 2021
