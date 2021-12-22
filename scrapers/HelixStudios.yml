@@ -41,7 +41,7 @@ xPathScrapers:
             - regex: ^
               with: "https://helixstudios.com"
       Image:
-        selector: $searchItem//div[contains(@class, "image-wrapper img-poster")]//img/@src
+        selector: $searchItem//div[contains(@class, "image-wrapper img-poster")]//img/@data-src
         
   sceneScraper:
     common:
