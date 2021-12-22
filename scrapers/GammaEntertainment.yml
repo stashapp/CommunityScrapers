@@ -121,6 +121,7 @@ movieByURL:
       - hardx.com/en/movie/
       - wicked.com/en/movie/
       - xempire.com/en/movie/
+      - famedigital.com/en/
     scraper: movieScraper
 
 xPathScrapers:
