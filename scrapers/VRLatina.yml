@@ -11,7 +11,7 @@ movieByURL:
 performerByURL:
   - action: scrapeXPath
     url:
-      - vrlatina.com/pornstars
+      - vrlatina.com
     scraper: performerScraper
 xPathScrapers:
   sceneScraper:
