@@ -2,12 +2,17 @@ name: "VRLatina"
 sceneByURL:
   - action: scrapeXPath
     url: &urlSel 
-      - vrlatina.com
+      - vrlatina.com/video
     scraper: sceneScraper
 movieByURL: 
   - action: scrapeXPath
     url: *urlSel
     scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - vrlatina.com/pornstars
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -22,6 +27,7 @@ xPathScrapers:
         Name: //a[@class="tag"]/@title
       Performers:
         Name: //div[@class="content-links -models"]//a/span
+        URL: //div[@class="content-links -models"]//a/@href
       Studio:
         Name: &studioName
           fixed: VRLatina
@@ -46,4 +52,32 @@ xPathScrapers:
         Name: *studioName
       Synopsis: *detailsSel
       FrontImage: *imageSel
+  performerScraper:
+    performer:
+      Name: //span[text()="Name:"]/following-sibling::span
+      Gender:
+        fixed: Female
+      Aliases: //span[text()="Aka:"]/following-sibling::span
+      Birthdate:
+        selector: //span[text()="Dob:"]/following-sibling::span
+        postProcess:
+          - parseDate: "2006-01-02"
+      Height: 
+        selector: //span[text()="Height:"]/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: " cm"
+                with: ""
+      Weight: 
+        selector: //span[text()="Weight:"]/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: " Kg"
+                with: ""
+      Measurements: //span[text()="Measurements:"]/following-sibling::span
+      HairColor: //span[text()="Hair:"]/following-sibling::span
+      EyeColor: //span[text()="Eyes:"]/following-sibling::span
+      Ethnicity: //span[text()="Ethnicity:"]/following-sibling::span
+      Image: //div[@class="model-avatar"]/div[@class="image"]/img/@src
+      Details: //span[text()="Biography:"]/following-sibling::span
 # Last Updated December 22, 2021
