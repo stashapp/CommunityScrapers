@@ -117,11 +117,11 @@ movieByURL:
       - darkx.com/en/movie/
       - eroticax.com/en/movie/
       - evilangel.com/en/movie/
+      - famedigital.com/en/
       - girlfriendsfilms.com/en/dvd/
       - hardx.com/en/movie/
       - wicked.com/en/movie/
       - xempire.com/en/movie/
-      - famedigital.com/en/
     scraper: movieScraper
 
 xPathScrapers:
@@ -311,4 +311,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated December 07, 2021
+# Last Updated December 24, 2021
