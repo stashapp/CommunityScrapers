@@ -1,4 +1,9 @@
 name: data18
+movieByURL:
+  - action: scrapeXPath
+    url:
+    - data18.com/movies
+    scraper: movieScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -9,16 +14,17 @@ xPathScrapers:
     common:
       $performer: //b[text()='Pornstars / Cast']/../..//a[@class='bold gen']
       $studio: (//b[text()="Studio"] | //b[text()="Network"])/../a[last()]
+      $movie: //b[text()="Movie:"]/following-sibling::a[1]
     scene:
       Title: //span/following-sibling::h1/a/text()
       Date:
         selector: //time/@datetime
       Details:
-        selector: //div[b[text()="Story"]]/text() |  //div[b[text()="Story"]]/a/text()
+        selector: //div[b[text()="Story"]] |  //div[b[text()="Story"]]/a | //b[contains(text(),"Movie Description")]/../text()
         concat: ' '
         postProcess:
           - replace:
-            - regex: "^- "
+            - regex: "Story - "
               with:
       Tags:
         Name: //div[b[text()='Categories:']]/a/text()
@@ -28,6 +34,40 @@ xPathScrapers:
       Studio:
         Name: $studio/text()
         URL: $studio/@href
+      Movies:
+        Name: $movie/text()
+        URL: $movie/@href
       Image: //img[@id="playpriimage"]/@src
-
+  movieScraper:
+    common:
+      $movieInfo: //p[text()="Porn Movie Information"]/..
+      $studio: //b[text()='Studio']/following-sibling::b/a
+    movie:
+      Name: //div[@id="topmedia"]//a/text()
+      Duration:
+        selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::span/text()
+        postProcess:
+          - replace:
+            - regex: "^.(.+).$"
+              with: $1
+      Date:
+        selector: $movieInfo//time/text() | $movieInfo//span[contains(text(), "Release date")]/text()
+        postProcess:
+          - replace:
+            - regex: "Release date: "
+              with:
+          - parseDate: January, 2006
+      Studio:
+        Name: $studio
+        URL: $studio/@href
+      Synopsis:
+        selector: //b[text()="Description"]/..
+        concat: ' '
+        postProcess:
+          - replace:
+            - regex: "^Description - "
+              with:
+      FrontImage: //a[@id='enlargecover']/@href
+      BackImage: //a[text()='+Back']/@href
+      
 # Last Updated December 15, 2021
