@@ -38,11 +38,11 @@ xPathScrapers:
         selector: $searchItem//div[contains(@class, "grid-item-wrapper")]/a/@href
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://helixstudios.com"
+              - regex: ^
+                with: "https://helixstudios.com"
       Image:
         selector: $searchItem//div[contains(@class, "image-wrapper img-poster")]//img/@data-src
-        
+
   sceneScraper:
     common:
       $info: //div[@class="text"]
@@ -90,8 +90,8 @@ xPathScrapers:
         selector: $result/@href
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://helixstudios.com"
+              - regex: ^
+                with: "https://helixstudios.com"
 
   performerScraper:
     performer:
