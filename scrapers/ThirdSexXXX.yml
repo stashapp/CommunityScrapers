@@ -1,0 +1,9 @@
+name: ThirdSexXXX
+sceneByURL:
+  - url:
+      - thirdsexxxx.com/trailers
+    action: script
+    script:
+      - python3
+      - ThirdSexXXX.py
+# Last Updated December 25, 2021
