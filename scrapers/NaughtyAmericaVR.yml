@@ -1,0 +1,36 @@
+name: NaughtyAmericaVR
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - naughtyamericavr.com/scene/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $sceneinfo: //div[@class="scene-info"]/div/div
+    scene:
+      Title:
+        selector: //title
+        postProcess:
+          - replace:
+            - regex: ^[^|]+|[ \t]*
+            with:
+      Date:
+        selector: $sceneinfo/p[@class="scene_date"]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: $sceneinfo/div/p[@class="scene-description"]
+      Tags:
+        Name: $sceneinfo/div/p[@class="details categories"]/a
+      Performers:
+        Name: $sceneinfo/div/p[@class="details"][1]/a
+      Studio:
+        Name:
+          fixed: NaughtyAmericaVR
+      Image:
+        selector: $sceneinfo/a/img[@class="box-img"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+# Last Updated December 26, 2021
