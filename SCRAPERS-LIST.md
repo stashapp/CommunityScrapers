@@ -225,7 +225,6 @@ college-uniform.com|CollegeUniform.yml|:heavy_check_mark:|:heavy_check_mark:|:x:
 collegefuckparties.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 combatzone.us|CombatZone.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 combatzonexxx.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-comicinfo.xml|ComicInfoXML.yml|:x:|:heavy_check_mark:|:x:|:x:|Python|Local XML
 concoxxxion.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 corbinfisher.com|CorbinFisher.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 cosplayfeet.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
