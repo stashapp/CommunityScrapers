@@ -1,9 +1,29 @@
 name: ThirdSexXXX
+
 sceneByURL:
-  - url:
+  - action: scrapeXPath
+    url:
       - thirdsexxxx.com/trailers
-    action: script
-    script:
-      - python3
-      - ThirdSexXXX.py
-# Last Updated December 25, 2021
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="memberPicV"]/h2
+      Image: //meta[@property="og:image"]/@content
+      Date:
+        selector: //div[@class="info"]/p[contains(., "Added")]
+        postProcess:
+          - replace:
+              - regex: "^Added: +(\\d+)/(\\d+)/(\\d+) .+$"
+                with: $3-$1-$2
+      Performers:
+        Name: //div[@class="info"]/p[contains(., "Starring")]/a
+      Details: //div[@class="description"]/p
+      Tags:
+        Name: //div[contains(@class, "tags")]//a
+      Studio:
+        Name:
+          fixed: ThirdSexXXX
+
+# Last Updated December 26, 2021
