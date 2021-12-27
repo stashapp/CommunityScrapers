@@ -10,11 +10,7 @@ xPathScrapers:
       $sceneinfo: //div[@class="scene-info"]/div/div
     scene:
       Title:
-        selector: //title
-        postProcess:
-          - replace:
-            - regex: ^[^|]+|[ \t]*
-            with:
+        selector: $sceneinfo/div/p[@class="scene-title"]
       Date:
         selector: $sceneinfo/p[@class="scene_date"]/text()
         postProcess:
