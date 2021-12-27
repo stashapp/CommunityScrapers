@@ -448,3 +448,241 @@ def getScene(scene_id):
     if result:
         return result.get('findScene')
     return None
+
+def getGallery(gallery_id):
+    query = """
+    query FindGallery($id: ID!) {
+        findGallery(id: $id) {
+            ...GalleryData
+        }
+    }
+    fragment GalleryData on Gallery {
+        id
+        checksum
+        path
+        created_at
+        updated_at
+        title
+        date
+        url
+        details
+        rating
+        organized
+        images {
+            ...SlimImageData
+        }
+        cover {
+            ...SlimImageData
+        }
+        studio {
+            ...SlimStudioData
+        }
+        tags {
+            ...SlimTagData
+        }
+
+        performers {
+            ...PerformerData
+        }
+        scenes {
+            ...SlimSceneData
+        }
+    }
+    fragment SlimImageData on Image {
+        id
+        checksum
+        title
+        rating
+        organized
+        o_counter
+        path
+
+        file {
+            size
+            width
+            height
+            }
+
+        paths {
+            thumbnail
+            image
+            }
+
+        galleries {
+            id
+            path
+            title
+            }
+
+        studio {
+            id
+            name
+            image_path
+            }
+
+        tags {
+            id
+            name
+            }
+
+        performers {
+            id
+            name
+            gender
+            favorite
+            image_path
+            }
+    }
+    fragment SlimStudioData on Studio {
+        id
+        name
+        image_path
+        stash_ids {
+        endpoint
+        stash_id
+        }
+        parent_studio {
+            id
+        }
+        details
+        rating
+        aliases
+    }
+    fragment SlimTagData on Tag {
+        id
+        name
+        aliases
+        image_path
+        }
+    fragment PerformerData on Performer {
+        id
+        checksum
+        name
+        url
+        gender
+        twitter
+        instagram
+        birthdate
+        ethnicity
+        country
+        eye_color
+        height
+        measurements
+        fake_tits
+        career_length
+        tattoos
+        piercings
+        aliases
+        favorite
+        image_path
+        scene_count
+        image_count
+        gallery_count
+        movie_count
+
+        tags {
+        ...SlimTagData
+        }
+
+        stash_ids {
+        stash_id
+        endpoint
+        }
+        rating
+        details
+        death_date
+        hair_color
+        weight
+    }
+    fragment SlimSceneData on Scene {
+        id
+        checksum
+        oshash
+        title
+        details
+        url
+        date
+        rating
+        o_counter
+        organized
+        path
+        phash
+        interactive
+
+        file {
+            size
+            duration
+            video_codec
+            audio_codec
+            width
+            height
+            framerate
+            bitrate
+        }
+
+        paths {
+            screenshot
+            preview
+            stream
+            webp
+            vtt
+            chapters_vtt
+            sprite
+            funscript
+        }
+
+        scene_markers {
+            id
+            title
+            seconds
+            }
+
+        galleries {
+            id
+            path
+            title
+        }
+
+        studio {
+            id
+            name
+            image_path
+        }
+
+        movies {
+            movie {
+            id
+            name
+            front_image_path
+            }
+            scene_index
+        }
+
+        tags {
+            id
+            name
+            }
+
+        performers {
+            id
+            name
+            gender
+            favorite
+            image_path
+        }
+
+        stash_ids {
+            endpoint
+            stash_id
+        }
+    }
+
+
+    """
+    variables = {
+        "id": gallery_id
+    }
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findGallery')
+    return None 
