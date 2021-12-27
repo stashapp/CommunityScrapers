@@ -20,7 +20,6 @@ xPathScrapers:
       Date:
         selector: //time/@datetime
       Details:
-        #selector: //div[b[text()="Story"]] |  //div[b[text()="Story"]]/a | //b[contains(text(),"Movie Description")]/../text()
         selector: //div[b[text()="Story"]] | //b[contains(text(),"Movie Description")]/../text()
         concat: ' '
         postProcess:
