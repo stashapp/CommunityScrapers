@@ -37,9 +37,22 @@ def query_xml(gallery_path, title):
         if tree.find("Genre").text:
             new_tags = [t for x in tree.findall("Genre") for t in x.text.split(", ")]
             if "tags" in res:
-                res["tags"] += [{"name":x} for x in new_tags]
+                res["tags"] += [{"name":x.title()} for x in new_tags]
             else:
-                res["tags"] = [{"name":x} for x in new_tags]
+                res["tags"] = [{"name":x.title()} for x in new_tags]
+    
+    if tree.find("Characters") != None:
+        if tree.find("Characters").text:
+            new_performers = [t for x in tree.findall("Characters") for t in x.text.split(", ")]
+            if "performers" in res:
+                res["performers"] += [{"name":x.title()} for x in new_performers]
+            else:
+                res["performers"] = [{"name":x.title()} for x in new_performers]
+
+    # Need to find a suitable spot for this, maybe convert it to and append it as a Tag as something like "Parody: Series Name"
+    # Unless galleries get some kind of "Collection" functionality?
+    # if tree.find("Series") != None:
+    #     res["movie"] = tree.find("Series").text
 
     if tree.find("Writer") != None:
         if tree.find("Writer").text:
@@ -54,7 +67,7 @@ if sys.argv[1] == "query":
         log.error(f"No ID found")
         sys.exit(1)
 
-    gallery = graphql.getGallery(g_id)
+    gallery = graphql.getGalleryPath(g_id)
     if gallery:
         gallery_path = gallery.get("path")
         if gallery_path:
