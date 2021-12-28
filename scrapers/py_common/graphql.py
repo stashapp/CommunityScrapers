@@ -686,3 +686,19 @@ def getGallery(gallery_id):
     if result:
         return result.get('findGallery')
     return None 
+
+def getGalleryPath(gallery_id):
+    query = """
+    query FindGallery($id: ID!) {
+        findGallery(id: $id) {
+            path
+        }
+    }
+        """
+    variables = {
+        "id": gallery_id
+    }
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findGallery')
+    return None 
