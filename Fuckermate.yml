@@ -1,0 +1,35 @@
+name: Fuckermate
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fuckermate.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="post-header font-alt"][1]/h1()
+      Details: 
+        selector: //*[@id="video-section"]/div/div/div/div/div[3]/div/div[1]/p[2]
+      Image:
+        selector: //div[@class="vjs-poster"]/@style
+        postProcess:
+          - replace:
+              - regex: .+(?:url\(")(.+)(?:"\)\;)
+                with: $1
+      Date:
+        selector: //div[@class="post-meta"]/text()
+        postProcess:
+          - parseDate: 2006-01-02 |
+      Studio:
+        Name:
+          fixed: FuckerMate
+      Tags:
+        Name:
+          selector: //div[@class="post-meta"]/a()
+      Performers: 
+        Name: //h1[@class="post-title"]/a()
+driver:
+  useCDP: true
+
+# Last Updated December 29, 2021
+

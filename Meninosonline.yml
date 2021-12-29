@@ -1,0 +1,38 @@
+name: "MeninosOnline"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - meninosonline.net
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //div[@class="col-sm-12"]/h3
+        postProcess:
+          - replace:
+              - regex: .* \(
+                with: ""
+              - regex: \) .*
+                with: ""
+      Date:
+        selector: //div[@class="col-sm-12"]/h3
+        postProcess:
+          - replace:
+              - regex: .* -.
+                with: ""
+          - parseDate: 2006-01-02
+      Image:
+        selector: //img[@class="play-image"]/@src
+      Studio:
+        Name:
+          fixed: meninosonline
+      Performers:
+        Name: 
+          selector: //h4[@class="d-1"]
+          postProcess:
+            - replace:
+              - regex: "[^a-zA-Z-._~]" # clean filename so that it can construct a valid url
+                with: " " # "%20"
+
+# Last Updated December 29, 2021
