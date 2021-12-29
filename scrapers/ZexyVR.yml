@@ -27,7 +27,7 @@ xPathScrapers:
       Performers:
         Name: $textBlob/a[1]/text()
       Image:
-        selector: //div[@class="videoPlayerContainer"]/deo-video/@cover-image
+        selector: //div[@class="videoPlayerContainer"]/deo-video/@cover-image|//div[@class="col-12 col-lg-8"]/img/@src
         postProcess:
           - replace:
             - regex: ^.*url\(
