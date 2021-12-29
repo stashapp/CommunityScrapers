@@ -1,0 +1,37 @@
+name: "ZexyVR"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - zexyvr.com/videos
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="row pt-3"]
+      $textBlob: //div[@class="row pt-3"]//p[@class="text-muted"]
+    scene:
+      Title: $info//h2/text()
+      Details: $info//p[2]/text()
+      Date: 
+        selector: $textBlob/text()[2]
+        postProcess:
+          - replace:
+            - regex: ^.*Released on 
+              with: ""
+          - parseDate: Jan 2, 2006
+      Studio:
+        Name:
+          fixed: ZexyVR
+      Tags: 
+        Name: $textBlob/a[@class="btn-link font-weight-light"]/text()
+      Performers:
+        Name: $textBlob/a[1]/text()
+      Image:
+        selector: //div[@class="videoPlayerContainer"]/deo-video/@cover-image
+        postProcess:
+          - replace:
+            - regex: ^.*url\(
+              with: ""
+            - regex: \?.*$
+              with: ""
+# Last Updated December 29, 2021
