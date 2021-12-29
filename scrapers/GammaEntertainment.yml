@@ -28,17 +28,19 @@ sceneByURL:
       - devilsfilmparodies.com/
       - devilsgangbangs.com/
       - devonlee.com/
+      - disruptivefilms.com
       - dpfanatics.com/en/video/
       - dylanryder.com/
       - eroticax.com/en/video/
       - evilangel.com/en/video/
       - falconstudios.com/en/video/
       - famedigital.com/
+      - familycreep.com/
       - fantasymassage.com/en/video/
       - fistingcentral.com/
       - footsiebabes.com/en/video/
       - gapingangels.com/
-      - genderxfilms.com/en/video/
+      - genderx.com/en/video/
       - girlfriendsfilms.com/en/video/
       - girlsandstuds.com/
       - girlstryanal.com/en/video/
@@ -69,6 +71,7 @@ sceneByURL:
       - nextdoormale.com/
       - nextdoorraw.com/en/video/
       - nextdoorstudios.com/en/video/
+      - nextdoortaboo.com/en/video/
       - nextdoortwink.com/en/video/
       - nudefightclub.com/en/video/
       - nurumassage.com/en/video/
@@ -90,6 +93,7 @@ sceneByURL:
       - squirtinglesbian.com/en/video/
       - squirtingorgies.com/en/scene/
       - strapattackers.com/
+      - stagcollective.com/
       - sunnyleone.com/
       - throated.com/en/video/
       - tittycreampies.com/
@@ -117,7 +121,6 @@ movieByURL:
       - darkx.com/en/movie/
       - eroticax.com/en/movie/
       - evilangel.com/en/movie/
-      - famedigital.com/en/
       - girlfriendsfilms.com/en/dvd/
       - hardx.com/en/movie/
       - wicked.com/en/movie/
@@ -258,6 +261,7 @@ xPathScrapers:
                 nextdoormale: Next Door Male
                 nextdoorraw: Next Door Raw
                 nextdoorstudios: Next Door Studios
+                nextdoortaboo: Next Door Taboo
                 nextdoortwink: Next Door Twink
                 nudefightclub: Nude Fight Club
                 nurumassage: Nuru Massage
@@ -278,6 +282,7 @@ xPathScrapers:
                 squirtalicious: Squirtalicious
                 squirtinglesbian: Squirting Lesbian
                 squirtingorgies: Squirting Orgies
+                stagcollective: Stag Collective
                 strapattackers: Strap Attackers
                 sunnyleone: Sunny Leone
                 throated: Throated
@@ -311,4 +316,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated December 24, 2021
+# Last Updated October 10, 2021
