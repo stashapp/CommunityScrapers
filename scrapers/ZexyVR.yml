@@ -30,8 +30,6 @@ xPathScrapers:
         selector: //div[@class="videoPlayerContainer"]/deo-video/@cover-image|//div[@class="col-12 col-lg-8"]/img/@src
         postProcess:
           - replace:
-            - regex: ^.*url\(
-              with: ""
             - regex: \?.*$
               with: ""
 # Last Updated December 29, 2021
