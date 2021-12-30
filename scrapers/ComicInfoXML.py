@@ -8,7 +8,7 @@ import py_common.log as log
 
 """
 This script parses xml files for metadata. 
-The .xml file must be in the same directory as the gallery files and named either ComicInfo.xml for loose files (folder full oj jpg/png's) 
+The .xml file must be in the same directory as the gallery files and named either ComicInfo.xml for loose files (folder full of jpg/png's) 
 or the same name as the .cbz/.zip file
 """
 
@@ -40,8 +40,6 @@ def query_xml(gallery_path, title):
         if tree.find("Genre").text:
 
             # Need a more suitable spot for this but one doesn't really exist yet
-            # Didn't want to use tags but it's the best option right now
-            # At least this way, user can bulk delete the "Series/Parody: x" tags if https://github.com/stashapp/stash/issues/2168 is approved
             if tree.find("Series").text:
                 split_tags = [t for x in tree.findall("Genre") for t in x.text.split(", ")]+[str("Series/Parody: " + tree.find("Series").text)]
             else:
