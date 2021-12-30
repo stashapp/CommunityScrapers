@@ -7,17 +7,15 @@ sceneByURL:
 
 driver:
   cookies:
-      Cookies:
+    - Cookies:
         - Name: "adult"
           Domain: ".str8hell.com"
           Value: "1"
           Path: "/"
-
   useCDP: true
   clicks:
     - xpath: //a[@class="cc-btn cc-dismiss"]
-    - xpath: //span[@class="more_info_field_video"] 
-      sleep: 3
+    - xpath: //span[@class="more_info_field_video"]
 
 xPathScrapers:
   sceneScraper:
@@ -36,4 +34,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: STR8HELL
-# Last Updated December 30, 2021
+# Last Updated December 29, 2021
