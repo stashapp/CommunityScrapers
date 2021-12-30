@@ -7,7 +7,7 @@ sceneByURL:
 
 driver:
   cookies:
-      Cookies:
+    - Cookies:
         - Name: "adult"
           Domain: ".williamhiggins.com"
           Value: "1"
@@ -15,7 +15,7 @@ driver:
   useCDP: true
   clicks:
     - xpath: //a[@class="cc-btn cc-dismiss"]
-    - xpath: //span[@class="more_info_field_video"] 
+    - xpath: //span[@class="more_info_field_video"]
       sleep: 3
 
 xPathScrapers:
@@ -35,5 +35,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: William Higgins
-
 # Last Updated December 30, 2021
