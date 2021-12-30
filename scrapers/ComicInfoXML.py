@@ -22,37 +22,43 @@ def query_xml(gallery_path, title):
         exit(1)
     
     if tree.find("Title") != None:
-        res["title"] = tree.find("Title").text
+        res["title"] = (tree.find("Title").text).title()
 
     if tree.find("Web") != None:
         res["url"] = tree.find("Web").text
+
+    # if tree.find("Series") != None:
+    #     Collection = tree.find("Series").text
 
     if tree.find("Summary") != None:
         res["details"] = tree.find("Summary").text
 
     if tree.find("Released") != None:
         res["date"] = tree.find("Released").text
-    
+  
     if tree.find("Genre") != None:
         if tree.find("Genre").text:
-            new_tags = [t for x in tree.findall("Genre") for t in x.text.split(", ")]
-            if "tags" in res:
-                res["tags"] += [{"name":x.title()} for x in new_tags]
+
+            # Need a more suitable spot for this but one doesn't really exist yet
+            # Didn't want to use tags but it's the best option right now
+            # At least this way, user can bulk delete the "Series/Parody: x" tags if https://github.com/stashapp/stash/issues/2168 is approved
+            if tree.find("Series").text:
+                split_tags = [t for x in tree.findall("Genre") for t in x.text.split(", ")]+[str("Series/Parody: " + tree.find("Series").text)]
             else:
-                res["tags"] = [{"name":x.title()} for x in new_tags]
+                split_tags = [t for x in tree.findall("Genre") for t in x.text.split(", ")]
+
+            if "tags" in res:
+                res["tags"] += [{"name":x.title()} for x in split_tags]
+            else:
+                res["tags"] = [{"name":x.title()} for x in split_tags]
     
     if tree.find("Characters") != None:
         if tree.find("Characters").text:
-            new_performers = [t for x in tree.findall("Characters") for t in x.text.split(", ")]
+            split_performers = [t for x in tree.findall("Characters") for t in x.text.split(", ")]
             if "performers" in res:
-                res["performers"] += [{"name":x.title()} for x in new_performers]
+                res["performers"] += [{"name":x.title()} for x in split_performers]
             else:
-                res["performers"] = [{"name":x.title()} for x in new_performers]
-
-    # Need to find a suitable spot for this, maybe convert it to and append it as a Tag as something like "Parody: Series Name"
-    # Unless galleries get some kind of "Collection" functionality?
-    # if tree.find("Series") != None:
-    #     res["movie"] = tree.find("Series").text
+                res["performers"] = [{"name":x.title()} for x in split_performers]
 
     if tree.find("Writer") != None:
         if tree.find("Writer").text:
