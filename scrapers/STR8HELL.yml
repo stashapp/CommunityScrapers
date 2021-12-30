@@ -7,11 +7,11 @@ sceneByURL:
 
 driver:
   cookies:
-    Cookies:
-    - Name: "adult"
-      Domain: ".str8hell.com"
-      Value: "1"
-      Path: "/"
+      Cookies:
+        - Name: "adult"
+          Domain: ".str8hell.com"
+          Value: "1"
+          Path: "/"
   useCDP: true
   clicks: 
     - xpath: //a[@class="cc-btn cc-dismiss"]
