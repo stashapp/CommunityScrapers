@@ -16,7 +16,6 @@ driver:
   clicks:
     - xpath: //a[@class="cc-btn cc-dismiss"]
     - xpath: //span[@class="more_info_field_video"]
-      sleep: 3
 
 xPathScrapers:
   sceneScraper:
