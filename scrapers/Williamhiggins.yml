@@ -7,7 +7,6 @@ sceneByURL:
 
 driver:
   cookies:
-    - CookieURL: "https://williamhiggins.com"
       Cookies:
         - Name: "adult"
           Domain: ".williamhiggins.com"
@@ -16,13 +15,14 @@ driver:
   useCDP: true
   clicks:
     - xpath: //a[@class="cc-btn cc-dismiss"]
-    - xpath: //a[@class="more-info"]
+    - xpath: //span[@class="more_info_field_video"] 
+      sleep: 3
 
 xPathScrapers:
   sceneScraper:
     scene:
       Performers:
-        Name: //span[@class="model-info-label"]/following-sibling::a()
+        Name: //td[contains(text(),"Model Name")]/a
       Title:  //p[@class="video-detailinfo"]/span
       Date:
         selector: //span[@class="date_field_video"]/text()
@@ -36,4 +36,4 @@ xPathScrapers:
         Name:
           fixed: William Higgins
 
-# Last Updated December 30, 2021
+# Last Updated December 29, 2021
