@@ -12,12 +12,10 @@ driver:
           Domain: ".str8hell.com"
           Value: "1"
           Path: "/"
-
   useCDP: true
   clicks: 
     - xpath: //a[@class="cc-btn cc-dismiss"]
-    - xpath: //span[@class="more_info_field_video"] 
-      sleep: 3
+    - xpath: //span[@class="more_info_field_video"]
 
 xPathScrapers:
   sceneScraper:
