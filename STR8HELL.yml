@@ -1,19 +1,21 @@
-name: William Higgins
+name: str8hell.com
 sceneByURL:
   - action: scrapeXPath
     url:
-      - williamhiggins.com
+      - str8hell.com
     scraper: sceneScraper
 
 driver:
   cookies:
+    - CookieURL: "https://str8hell.com"
       Cookies:
         - Name: "adult"
-          Domain: ".williamhiggins.com"
+          Domain: ".str8hell.com"
           Value: "1"
           Path: "/"
+
   useCDP: true
-  clicks:
+  clicks: 
     - xpath: //a[@class="cc-btn cc-dismiss"]
     - xpath: //span[@class="more_info_field_video"] 
       sleep: 3
@@ -34,6 +36,6 @@ xPathScrapers:
         selector: //video/@data-poster
       Studio:
         Name:
-          fixed: William Higgins
+          fixed: STR8HELL
 
-# Last Updated December 30, 2021
+# Last Updated December 29, 2021
