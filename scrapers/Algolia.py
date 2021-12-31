@@ -14,7 +14,7 @@ try:
     import py_common.graphql as graphql
     import py_common.log as log
 except ModuleNotFoundError:
-    print("You need to take the folder 'py_common' in the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
     sys.exit()
 
 #
