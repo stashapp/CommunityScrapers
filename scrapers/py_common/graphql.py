@@ -37,13 +37,13 @@ def callGraphQL(query, variables=None):
             if result.get("data"):
                 return result.get("data")
         elif response.status_code == 401:
-            log.debug("[ERROR][GraphQL] HTTP Error 401, Unauthorised.")
+            log.error("[ERROR][GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.py' in the 'py_common' folder")
             return None
         else:
             raise ConnectionError(
                 "GraphQL query failed:{} - {}".format(response.status_code, response.content))
     except Exception as err:
-        log.debug(err)
+        log.error(err)
         return None
 
 
