@@ -1,4 +1,4 @@
-name: japanhdv
+name: JapanHDV
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -14,24 +14,26 @@ xPathScrapers:
     common:
       $movieinfo: //div[@class="pure-u-1-5 hidden-sm hidden-xs"]/div[@class="video-info"]
     scene:
-      Title: $movieinfo/p[1]/text()
+      Title: $movieinfo/p[starts-with(strong,"Title")]/text()
       Details: //meta[@property="og:description"]/@content
       Date:
         selector: //meta[@itemprop="datePublished"]/@content
         postProcess:
           - parseDate: 2006-01-02T15:04:05-07:00
       Performers:
-        Name: $movieinfo/p[2]/a/text()
-        URL: $movieinfo/p[2]/a/@href
-
+        Name: $movieinfo/p[starts-with(strong,"Actress")]/a
+        URL: $movieinfo/p[starts-with(strong,"Actress")]/a/@href
       Tags:
-        Name: $movieinfo/p[5]/a
+        Name: $movieinfo/p[starts-with(strong,"Categories")]/a
       Image:
         selector: //video[@id="videohtml5tour"]/@poster
         postProcess:
           - replace:
-              - regex: ^
-                with: "https:"
+              - regex: ^//
+                with: "https://"
+      Studio:
+        Name:
+          fixed: Japan HDV
   performerScraper:
     performer:
       Name: //div[@class="video-info"]//h2
@@ -83,4 +85,4 @@ xPathScrapers:
         postProcess:
           - map:
               N/A: ""
-# Last Updated December 31, 2021
+# Last Updated January 01, 2022
