@@ -2,9 +2,9 @@ import json
 import sys
 import sqlite3
 import requests
-from os import path
 from pathlib import Path
-
+import base64
+import mimetypes
 
 ''' This script is a companion to the onlyfans data scraper by DIGITALCRIMINAL
     https://github.com/DIGITALCRIMINAL/OnlyFans
@@ -36,7 +36,8 @@ def lookup_scene(file,db,parent):
     res={}
     res['title']=str(parent.name)+ ' - '+row[3].strftime('%Y-%m-%d')
     res['details']=row[1]
-    res['url']=row[2]
+    res['studio']={'name':'OnlyFans','url':'https://www.onlyfans.com/'}
+    res['url']='https://www.onlyfans.com/'+str(row[0])+'/'+parent.name
     res['date']=row[3].strftime('%Y-%m-%d')
     res['performers']=[{"name":parent.name}]
     return res
@@ -68,6 +69,14 @@ def findFilePath(id):
     print(f"Error connecting to api",file=sys.stderr)
     print("{}")
     sys.exit()
+
+def make_image_data_url(image_path):
+    # type: (str,) -> str
+    mime, _ = mimetypes.guess_type(image_path)
+    with open(image_path, 'rb') as img:
+        encoded = base64.b64encode(img.read()).decode()
+    return 'data:{0};base64,{1}'.format(mime, encoded)
+
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
