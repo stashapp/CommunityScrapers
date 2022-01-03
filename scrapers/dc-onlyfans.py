@@ -39,7 +39,13 @@ def lookup_scene(file,db,parent):
     res['studio']={'name':'OnlyFans','url':'https://www.onlyfans.com/'}
     res['url']='https://www.onlyfans.com/'+str(row[0])+'/'+parent.name
     res['date']=row[3].strftime('%Y-%m-%d')
-    res['performers']=[{"name":parent.name}]
+    performer={"name":parent.name}
+    image=findPerformerImage(parent)
+    if image is not None:
+        performer['images']=make_image_data_url(image)
+    res['performers']=[performer]
+
+
     return res
 
 def findFilePath(id):
@@ -69,6 +75,16 @@ def findFilePath(id):
     print(f"Error connecting to api",file=sys.stderr)
     print("{}")
     sys.exit()
+
+def findPerformerImage(path):
+    for c in path.iterdir():
+        if c.is_file() and c.name.endswith('.jpg'):
+            return c
+        elif c.is_dir():
+            r=findPerformerImage(c)
+            if r is not None:
+                return r
+    return None
 
 def make_image_data_url(image_path):
     # type: (str,) -> str
