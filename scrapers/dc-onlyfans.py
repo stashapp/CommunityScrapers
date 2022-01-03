@@ -42,7 +42,7 @@ def lookup_scene(file,db,parent):
     performer={"name":parent.name}
     image=findPerformerImage(parent)
     if image is not None:
-        performer['images']=make_image_data_url(image)
+        performer['image']=make_image_data_url(image)
     res['performers']=[performer]
 
 
