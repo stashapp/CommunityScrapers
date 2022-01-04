@@ -1,0 +1,28 @@
+name: Sayuncle
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sayuncle.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2[@class="sceneTitle"]
+      Date:
+        selector: //div[@class="col-6 sceneDate"]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //a[@class="model-name-link"]
+      Tags:
+        Name: //div[@class="sceneCol sceneColCategories"]/a
+      Details:
+        selector: //div[@class="col sceneDesc hide"]/text()
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          selector: //div[@class="siteName float-right px-3 rounded"]/a
+
+# Last Updated December 29, 2021
