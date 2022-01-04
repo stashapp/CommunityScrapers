@@ -2,7 +2,7 @@ name: data18
 movieByURL:
   - action: scrapeXPath
     url:
-    - data18.com/movies
+      - data18.com/movies
     scraper: movieScraper
 sceneByURL:
   - action: scrapeXPath
@@ -21,11 +21,11 @@ xPathScrapers:
         selector: //time/@datetime
       Details:
         selector: //div[b[text()="Story"]] | //b[contains(text(),"Movie Description")]/../text()
-        concat: ' '
+        concat: " "
         postProcess:
           - replace:
-            - regex: "Story - "
-              with:
+              - regex: "Story - "
+                with:
       Tags:
         Name: //div[b[text()='Categories:']]/a/text()
       Performers:
@@ -48,26 +48,26 @@ xPathScrapers:
         selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::span/text()
         postProcess:
           - replace:
-            - regex: "^.(.+).$"
-              with: $1
+              - regex: "^.(.+).$"
+                with: $1
       Date:
         selector: $movieInfo//time/text() | $movieInfo//span[contains(text(), "Release date")]/text()
         postProcess:
           - replace:
-            - regex: "Release date: "
-              with:
+              - regex: "Release date: "
+                with:
           - parseDate: January, 2006
       Studio:
         Name: $studio
         URL: $studio/@href
       Synopsis:
         selector: //b[text()="Description"]/..
-        concat: ' '
+        concat: " "
         postProcess:
           - replace:
-            - regex: "^Description - "
-              with:
+              - regex: "^Description - "
+                with:
       FrontImage: //a[@id='enlargecover']/@href
       BackImage: //a[text()='+Back']/@href
-      
 # Last Updated December 15, 2021
+
