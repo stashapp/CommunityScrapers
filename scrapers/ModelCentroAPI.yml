@@ -4,10 +4,9 @@ sceneByURL:
       - brookelynnebriar.com/scene/
       - fallinlovia.com/scene/
       - mylifeinmiami.com/scene/
-      - spankmonster.com/scene/
       - vinaskyxxx.com/scene/
     action: script
     script:
       - python
       - ModelCentroAPI.py
-# Last Updated November 22, 2021
+# Last Updated January 01, 2022
