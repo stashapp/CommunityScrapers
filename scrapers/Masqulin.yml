@@ -1,0 +1,24 @@
+name: Masqulin
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - masqulin.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="titlePlayer"]
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Tags:
+        Name: //p[@class="sceneInfo"]/span/a
+      Details:
+        selector: //p[@class="col-lg-6 textDescription"]
+      Image:
+        selector: //*[@class="hiddenImg stdimage"]/@src
+      Studio:
+        Name:
+          fixed: Masqulin
+
+# Last Updated December 29, 2021
