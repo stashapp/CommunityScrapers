@@ -1,28 +1,88 @@
-name: japanhdv
+name: JapanHDV
 sceneByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - japanhdv.com
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - japanhdv.com/model
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     common:
       $movieinfo: //div[@class="pure-u-1-5 hidden-sm hidden-xs"]/div[@class="video-info"]
     scene:
-      Title: $movieinfo/p[1]/text()
+      Title: $movieinfo/p[starts-with(strong,"Title")]/text()
       Details: //meta[@property="og:description"]/@content
-      Date: 
+      Date:
         selector: //meta[@itemprop="datePublished"]/@content
         postProcess:
           - parseDate: 2006-01-02T15:04:05-07:00
-      Performers: 
-        Name: $movieinfo/p[2]/a/text()
+      Performers:
+        Name: $movieinfo/p[starts-with(strong,"Actress")]/a
+        URL: $movieinfo/p[starts-with(strong,"Actress")]/a/@href
       Tags:
-        Name: $movieinfo/p[5]/a
+        Name: $movieinfo/p[starts-with(strong,"Categories")]/a
       Image:
         selector: //video[@id="videohtml5tour"]/@poster
         postProcess:
           - replace:
-              - regex: ^
-                with:  "https:"
-# Last Updated March 05, 2021
+              - regex: ^//
+                with: "https://"
+      Studio:
+        Name:
+          fixed: Japan HDV
+  performerScraper:
+    performer:
+      Name: //div[@class="video-info"]//h2
+      Aliases: //div[contains(strong,"Japanese Name")]/following-sibling::div[1]/text()
+      Birthdate:
+        selector: //div[contains(strong,"Birth date")]/following-sibling::div[1]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Ethnicity:
+        selector: //div[contains(strong,"Ethnicity")]/following-sibling::div[1]/text()
+        postProcess:
+          - map:
+              Japanese: Asian
+      Country:
+        selector: //div[contains(strong,"Ethnicity")]/following-sibling::div[1]/text()
+        postProcess:
+          - map:
+              Japanese: Japan
+      Height:
+        selector: //div[contains(strong,"Height")]/following-sibling::div[1]/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)cm.+
+                with: $1
+              - regex: ^cm.+ # no values
+                with:
+      Measurements:
+        selector: //div[contains(strong,"Body") or contains(strong,"Breasts Cup")]/following-sibling::div[1]/text()
+        concat: "-"
+        postProcess:
+          - replace:
+              - regex: 'B(\d+)-W(\d+)-H(\d+)-(\D+)'
+                with: "$1$4-$2-$3"
+              - regex: "N/A"
+                with:
+              - regex: '^\D.+'
+                with:
+      Image:
+        selector: //div[@class="thumb"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: "https://"
+      Gender:
+        fixed: "Female"
+      Details: //div[@id="model"]//p
+      HairColor:
+        selector: //div[contains(strong,"Hair color")]/following-sibling::div[1]/text()
+        postProcess:
+          - map:
+              N/A: ""
+# Last Updated January 01, 2022
