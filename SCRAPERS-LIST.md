@@ -1201,3 +1201,21 @@ yourmomdoesporn.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 z-filmz-originals.com|Z-Filmz-Originals.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 zerotolerancefilms.com|Algolia_zerotolerancefilms.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 zoiestarr.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+
+
+
+## Non url scrapers
+
+The following scrapers do not support xxxByURL scraping and are not included to the above list. To keep the below list tidy please add scrapers keeping the list in alphabetical order by the .yml filename.
+ For each scraper a short description, an optional comment with the usage and the related PR(s) with usage details would be appreciated.
+
+Scraper | Description | Comments | PR
+--------|-------------|----------|:--:
+ComicInfoXML.yml| A ComixInfo XML gallery scraper | A python scraper that looks for ComicInfo xml compatible  files in the gallery's folder/filename and parses them | [#827](https://github.com/stashapp/CommunityScrapers/pull/827)
+MindGeekAPI.yml| A sceneBy(Name\|Fragment) scraper for MindGeek network| A python scraper that queries directly the MindGeek API. For further **needed** instructions refer to the relevant PRs and have a look in the `MindGeekApi.py` file | [#711](https://github.com/stashapp/CommunityScrapers/pull/711) [#738](https://github.com/stashapp/CommunityScrapers/pull/738) [#411](https://github.com/stashapp/CommunityScrapers/pull/411)
+multiscrape.yml| A performer scraper that can utilize multiple stash Performer scrapers| A python scraper that can use multiple existing performer scrapers in order to get performer meta. To configure it edit the `multiscrape.py` file|[#594](https://github.com/stashapp/CommunityScrapers/pull/594)
+performer-image-dir.yml| A performer image scraper compatible with the actress-pics repo | A python scraper that searches in a cloned actress-pics repo for performer images. Configuration and more info in `performer-image-dir.py`|[#453](https://github.com/stashapp/CommunityScrapers/pull/453)
+ShokoAPI.yml| A sceneByFragment scraper for [Shoko Server](https://shokoanime.com) | A sceneByFragment scraper that queries a local Shoko Server instance using the filename for scene meta. To configure it edit the `ShokoAPI.py` file| [#586](https://github.com/stashapp/CommunityScrapers/issues/586) [#628](https://github.com/stashapp/CommunityScrapers/pull/628)
+stash-sqlite.yml| A performer scraper that searches a stash db file | This python scraper uses the sqlite database from another stash instance and allows you to parse performers |[#230](https://github.com/stashapp/CommunityScrapers/pull/230) [#460](https://github.com/stashapp/CommunityScrapers/pull/460)
+torrent.yml| A torrent scene scraper | This python scraper parses all torrent files in the specified directory (edit `torrent.py`) for embedded metadata using the scene's title.The title can either be a file from the torrent or the filename of the .torrent file | [#358](https://github.com/stashapp/CommunityScrapers/pull/358)
+xbvrdb.yml|  A scene/gallery scraper for XBVR db files| This python scraper uses the title from stash  to search the sqlite database from XBVR for metadata. You would need to  copy `main.db` from your xbvr configuration and move this to `scrapers/xbvr.db` | [#190](https://github.com/stashapp/CommunityScrapers/pull/190)
