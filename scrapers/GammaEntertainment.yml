@@ -32,15 +32,13 @@ sceneByURL:
       - dylanryder.com/
       - eroticax.com/en/video/
       - evilangel.com/en/video/
-      - famedigital.com/en/
       - falconstudios.com/en/video/
       - famedigital.com/
-      - familycreep.com/
       - fantasymassage.com/en/video/
       - fistingcentral.com/
       - footsiebabes.com/en/video/
       - gapingangels.com/
-      - genderx.com/en/video/
+      - genderxfilms.com/en/video/
       - girlfriendsfilms.com/en/video/
       - girlsandstuds.com/
       - girlstryanal.com/en/video/
@@ -71,7 +69,6 @@ sceneByURL:
       - nextdoormale.com/
       - nextdoorraw.com/en/video/
       - nextdoorstudios.com/en/video/
-      - nextdoortaboo.com/en/video/
       - nextdoortwink.com/en/video/
       - nudefightclub.com/en/video/
       - nurumassage.com/en/video/
@@ -261,7 +258,6 @@ xPathScrapers:
                 nextdoormale: Next Door Male
                 nextdoorraw: Next Door Raw
                 nextdoorstudios: Next Door Studios
-                nextdoortaboo: Next Door Taboo
                 nextdoortwink: Next Door Twink
                 nudefightclub: Nude Fight Club
                 nurumassage: Nuru Massage
@@ -315,5 +311,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-      
-# Last Updated December 29, 2021
+# Last Updated December 24, 2021
