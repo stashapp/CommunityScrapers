@@ -1,0 +1,52 @@
+name: William Higgins
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - williamhiggins.com
+      - str8hell.com
+    scraper: sceneScraper
+
+driver:
+  cookies:
+    - Cookies:
+        - Name: "adult"
+          Domain: ".williamhiggins.com"
+          Value: "1"
+          Path: "/"
+        - Name: "adult"
+          Domain: ".str8hell.com"
+          Value: "1"
+          Path: "/"          
+          
+  useCDP: true
+  clicks:
+    - xpath: //a[@class="cc-btn cc-dismiss"]
+    - xpath: //span[@class="more_info_field_video"]
+      sleep: 3
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Performers:
+        Name: //span[@class="model-info-label"]/following-sibling::a()
+      Title: //p[@class="video-detailinfo"]/span
+      Date:
+        selector: //span[@class="date_field_video"]/text()
+        postProcess:
+          - parseDate: 02/01/2006
+      Details:
+        selector: //div[@class="set_text"]
+      Image:
+        selector: //video/@data-poster
+      Studio:
+        Name:
+          selector: /html/head/title
+          postProcess:
+            - replace:
+                - regex: \.com.*
+                  with: ""
+            - map:
+                WilliamHiggins: "William Higgins"
+                STR8HELL: "STR8HELL"
+
+# Last Updated December 30, 2021
