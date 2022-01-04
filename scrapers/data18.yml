@@ -1,35 +1,31 @@
 name: data18
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - data18.com/movies
+    scraper: movieScraper
 sceneByURL:
   - action: scrapeXPath
     url:
-      - data18.com/content
+      - data18.com/scenes
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $performer: //p[b[text()='Starring:']]/a
-      $studio: //p[b[text()='Site:' or text()='Studio:']]/a
+      $performer: //b[text()='Pornstars / Cast']/../..//a[@class='bold gen']
+      $studio: (//b[text()="Studio"] | //b[text()="Network"])/../a[last()]
+      $movie: //b[text()="Movie:"]/following-sibling::a[1]
     scene:
-      Title: //h1/text()
+      Title: //span/following-sibling::h1/a/text()
       Date:
-        selector: //span[contains(text(),"Release date:") and not(contains(text(),"No date release yet"))]
-        postProcess:
-          - replace:
-              - regex: "^Release date:|,"
-                with:
-              # When day of month is not specified, the scraper defaults to <Month> 1st, <Year>.
-              # Comment the next two lines if you want to skip partial dates instead.
-              - regex: ([A-Za-z]+) (\d{4})
-                with: "$1 1 $2"
-          - parseDate: January 2 2006
+        selector: //time/@datetime
       Details:
-        selector: //p[b[text()='Story:']]
+        selector: //div[b[text()="Story"]] | //b[contains(text(),"Movie Description")]/../text()
+        concat: " "
         postProcess:
           - replace:
-              - regex: "^Story:"
+              - regex: "Story - "
                 with:
-              - regex: �
-                with: "'"
       Tags:
         Name: //div[b[text()='Categories:']]/a/text()
       Performers:
@@ -38,11 +34,40 @@ xPathScrapers:
       Studio:
         Name: $studio/text()
         URL: $studio/@href
-      Image: //div[@id="moviewrap"]/img/@src
-        # uncomment the below instead if you want to use the first image from the Photo Set (not available in all scenes)
-        #selector: //div[p[span[b[text()='Photo Set']]]]//div[1]/a/@href
-        #postProcess:
-          #- subScraper:
-              #selector: //div[@id='post_view']/a/img/@src
+      Movies:
+        Name: $movie/text()
+        URL: $movie/@href
+      Image: //img[@id="playpriimage"]/@src
+  movieScraper:
+    common:
+      $movieInfo: //p[text()="Porn Movie Information"]/..
+      $studio: //b[text()='Studio']/following-sibling::b/a
+    movie:
+      Name: //div[@id="topmedia"]//a/text()
+      Duration:
+        selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: "^.(.+).$"
+                with: $1
+      Date:
+        selector: $movieInfo//time/text() | $movieInfo//span[contains(text(), "Release date")]/text()
+        postProcess:
+          - replace:
+              - regex: "Release date: "
+                with:
+          - parseDate: January, 2006
+      Studio:
+        Name: $studio
+        URL: $studio/@href
+      Synopsis:
+        selector: //b[text()="Description"]/..
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: "^Description - "
+                with:
+      FrontImage: //a[@id='enlargecover']/@href
+      BackImage: //a[text()='+Back']/@href
+# Last Updated December 15, 2021
 
-# Last Updated May 22, 2021
