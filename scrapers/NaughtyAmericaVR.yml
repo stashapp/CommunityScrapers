@@ -11,6 +11,12 @@ xPathScrapers:
     scene:
       Title:
         selector: $sceneinfo/div/p[@class="scene-title"]
+        # # alternative selector
+        #selector: //div[@class="grey-title"]
+        #postProcess:
+        #  - replace:
+        #      - regex:  \s*VR\sPorn\sVideos\s*$
+        #        with:
       Date:
         selector: $sceneinfo/p[@class="scene_date"]/text()
         postProcess:
@@ -29,4 +35,4 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https:"
-# Last Updated December 26, 2021
+# Last Updated January 04, 2022
