@@ -9,12 +9,9 @@ xPathScrapers:
     scene:
       Title: //h1[@class='highlight']/text()
       Date:
-        selector: //div[@class='update-info-row text-gray']
+        selector: //div[@class='update-info-row text-gray']/text()
         postProcess:
-          - replace:
-              - regex: (Added:\s)(.+)(\s\|.+)
-                with: $2
-          - parseDate: January 2, 2006
+          - parseDate: January 2, 2006 |
       Details:
         selector: //div[@class='update-info-block']/div[@class='update-info-block'][1]//text()
         concat: "\n\n"
@@ -32,4 +29,4 @@ xPathScrapers:
                 with: https://himeros.tv$1
               - regex: "-1x.jpg"
                 with: "-3x.jpg"
-# Last Updated August 29, 2020
+# Last Updated September 14, 2021
