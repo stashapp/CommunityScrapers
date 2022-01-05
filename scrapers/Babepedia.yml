@@ -144,4 +144,4 @@ xPathScrapers:
                 with: "$1 "
               - regex: '\n(,|\.|\))'
                 with: "$1"
-# Last Updated August 31, 2021
+# Last Updated January 05, 2022
