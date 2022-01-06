@@ -1,126 +1,150 @@
 import json
-import os
-import re
-import requests
 import sys
-import traceback
+from urllib.parse import urlparse
 
+import requests
 
-MINIMUM_VERSION_MAJOR = 3
-MINIMUM_VERSION_MINOR = 3
+import py_common.log as log
 
+class Site:
+  def __init__(self, name):
+    self.name = name
+    self.id = name.replace(' ', '').upper()
+    self.api = "https://www." + self.id.lower() + ".com/graphql"
 
-def log(*s):
-    print(*s, file=sys.stderr)
+  def isValidURL(self, url):
+    u = url.lower().rstrip("/")
+    up = urlparse(u)
+    if up.hostname is None:
+      return False
+    if up.hostname.lstrip("www.").rstrip(".com") == self.id.lower():
+      splits = u.split("/")
+      if len(splits) < 4:
+        return False
+      if splits[-2] == "videos":
+           return True
+    return False
 
+  def getSlug(self, url):
+    u = url.lower().rstrip("/")
+    slug = u.split("/")[-1]
+    return slug
 
-def get_from_url(url_to_parse):
-    m = re.match(r'(?:https?://)?(?:www\.)?((\w+)\.com)/(?:videos/)?([a-z0-9-]+)', url_to_parse)
-    if m is None:
-        return None, None, None
-    return m.groups()
+  def getScene(self, url):
+    log.debug(f"Scraping using {self.name} graphql API")
+    v = {
+      "site": self.id,
+      "videoSlug": self.getSlug(url)
+    }
+    r = self.callGraphQL(v)
+    return self.parse_scene(r)
 
+  def callGraphQL(self, variables):
+    headers = {
+        "Accept-Encoding": "gzip, deflate",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Referer": url,
+        "DNT": "1",
+    }
 
-def make_request(request_url, origin_site):
+    j = { 'query': self.getVideoQuery,
+        'operationName': "getVideo"
+    }
+    if variables is None:
+        return None
+    j["variables"] = variables
+
     try:
-        r = requests.get(request_url, headers={
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
-            'Origin': origin_site,
-            'Referer': request_url
-        }, timeout=(3, 6))
-    except requests.exceptions.RequestException as e:
-        return None, e
-    if r.status_code == 200:
-        return r.text, None
-    return None, 'HTTP Error: %s' % r.status_code
+        response = requests.post(self.api, json=j, headers=headers)
+        if response.status_code == 200:
+            result = response.json()
+            if result.get("error"):
+                for error in result["error"]["errors"]:
+                    raise Exception(f"GraphQL error: {error}")
+            return result
+        else:
+           raise ConnectionError(f"GraphQL query failed:{response.status_code} - {response.content}")
+    except Exception as err:
+        log.error(f"GraphqQL query failed {err}")
+        return None
 
+  def parse_scene(self,response):
+        scene = {}
+        if response is None or response.get('data') is None:
+          return scene
 
-def fetch_page_json(page_html):
-    try:
-        tag = '<script id="__NEXT_DATA__" type="application/json">'
-        start = page_html.index(tag) + len(tag)
-    except ValueError:
-        # script tag not found
-        matches = re.findall(r'window\.__APOLLO_STATE__ = (.+);$', page_html, re.MULTILINE)
-        return json.loads(matches[0]) if matches else None
+        data = response['data'].get('findOneVideo')
+        if data:
+          scene['title'] = data.get('title')
+          scene['details'] = data.get('description')
+          scene['studio'] = {"name": self.name}
 
-    end = page_html.index('</script>', start)
-    content = page_html[start:end]
-    data = json.loads(content)
+          date = data.get('releaseDate')
+          if date:
+            scene['date']=date.split("T")[0]
+          scene['performers'] = []
+          if data.get('models'):
+            for model in data['models']:
+              scene['performers'].append({"name": model['name']})
 
-    return data['props']['pageProps']['__APOLLO_STATE__']
+          scene['tags'] = []
+          if data.get('tags'):
+            for tag in data['tags']:
+                scene['tags'].append({"name": tag})
 
+          if data.get('images') and data['images'].get('poster'):
+            maxWidth = 0
+            for image in data['images']['poster']:
+              if image['width'] > maxWidth:
+                scene['image'] = image['src']
+              maxWidth = image['width']
 
-def save_json(scraped_json, video_id, save_location):
-    location = os.path.join('..', 'scraperJSON', 'VixenNetwork')
-    if save_location != 'save':
-        location = save_location
-    try:
-        os.makedirs(location)
-    except FileExistsError:
-        pass
-    filename = os.path.join(location, '%s.json' % video_id)
-    with open(filename, 'w', encoding='utf-8') as f:
-        json.dump(scraped_json, f, ensure_ascii=False, indent=4)
+          return scene
 
+  getVideoQuery = """query getVideo($videoSlug: String, $site: Site) {
+    findOneVideo(input: {slug: $videoSlug, site: $site}) {
+      title
+      description
+      releaseDate
+      models {
+        name
+      }
+      images {
+        poster {
+          src
+          width
+        }
+      }
+      tags
+  }
+  }
+  """
 
-def main():
-    stdin = sys.stdin.read()
-    log(stdin)
-    fragment = json.loads(stdin)
+studios = {
+        Site('Blacked'),
+        Site('Blacked Raw'),
+        Site('Deeper'),
+        Site('Tushy'),
+        Site('Tushy Raw'),
+        Site('Slayed'),
+        Site('Vixen')
+}
 
-    if not fragment['url']:
-        log('No URL entered.')
-        sys.exit(1)
-    url = fragment['url'].strip()
-    site, studio, slug = get_from_url(url)
-    if site is None:
-        log('The URL could not be parsed')
-        sys.exit(1)
-    response, err = make_request('https://%s/videos/%s' % (site, slug), 'https://%s' % site)
-    if err is not None:
-        log('Could not fetch page HTML', err)
-        sys.exit(1)
-    j = fetch_page_json(response)
-    if j is None:
-        log('Could not find JSON on page')
-        sys.exit(1)
-    scene_id = 'Video:%s:%s' % (studio, slug)
-    if scene_id not in j:
-        log('Could not locate scene within JSON')
-        sys.exit(1)
-    scene = j[scene_id]
-    scene_url = url
-    if scene['absoluteUrl'] is not None:
-        scene_url = 'https:%s' % scene['absoluteUrl']
-    scrape = {}
-    if scene.get('title'):
-        scrape['title'] = scene['title']
-    if scene.get('releaseDate'):
-        scrape['date'] = scene['releaseDate'][:10]
-    if scene.get('description'):
-        scrape['details'] = scene['description']
-    if scene_url:
-        scrape['url'] = scene_url
-    if studio:
-        scrape['studio'] = {'name': studio}
-    if scene.get('models'):
-        scrape['performers'] = [{'name': x['name']} for x in scene['models']]
-    if scene.get('categories'):
-        scrape['tags'] = [{'name': x['name']} for x in scene['categories']]
-    if scene.get('images'):
-        scrape['image'] = scene['images']['poster'][len(scene['images']['poster']) - 1]['src']
-    if len(sys.argv) > 1:
-        save_json(j, scene['videoId'], sys.argv[1])
-    print(json.dumps(scrape))
+frag = json.loads(sys.stdin.read())
+url = frag.get("url")
+if url is None:
+  log.error(f"No URL given")
+  print("{}")
+  sys.exit(1)
 
+for x in studios:
+  if x.isValidURL(url):
+    s = x.getScene(url)
+    #log.debug(f"{json.dumps(s)}")
+    print(json.dumps(s))
+    sys.exit(0)
 
-if __name__ == '__main__':
-    if sys.version_info.major != MINIMUM_VERSION_MAJOR or sys.version_info.minor < MINIMUM_VERSION_MINOR:
-        log('Invalid Python version. Version %s.%s or later required.' % (MINIMUM_VERSION_MAJOR, MINIMUM_VERSION_MINOR))
-        sys.exit(1)
-    try:
-        main()
-    except Exception as e:
-        log(traceback.format_exc())
-        log(e)
+log.error(f"URL: {url} is not supported")
+print("{}")
+sys.exit(1)

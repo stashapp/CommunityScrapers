@@ -1,16 +1,15 @@
 name: "Vixen Media Group"
 sceneByURL:
   - url:
-      - blacked.com/
-      - blackedraw.com/
-      - deeper.com/
-      - slayed.com/
-      - tushy.com/
-      - tushyraw.com/
-      - vixen.com/
+      - blacked.com/videos
+      - blackedraw.com/videos
+      - deeper.com/videos
+      - slayed.com/videos
+      - tushy.com/videos
+      - tushyraw.com/videos
+      - vixen.com/videos
     action: script
     script:
       - python
       - vixenNetwork.py
-      # - "save" # replace "save" with absolute file path of a directory to change default location
-# Last Updated September 14, 2021
+# Last Updated January 06, 2022
