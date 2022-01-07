@@ -276,17 +276,20 @@ if search_query and "search" in sys.argv:
                 continue
             # remove the studio from the search result
             search_query = search_query.replace(x.id.lower(), "")
+    else:
+        search_query = search_query[1:]
+
     if filter:
         log.info(f"Filter: {filter} applied")
 
-    log.debug(f"Query: '{search_query[1:]}'")
+    log.debug(f"Query: '{search_query}'")
 
     for x in studios:
         if filter:
             if x.id.lower() in filter:
                 #log.debug(f"[Filter] {x.id} ignored")
                 continue
-        s = x.getSearchResult(search_query[1:])
+        s = x.getSearchResult(search_query)
         # merge all list into one
         if s:
             lst.extend(s)
