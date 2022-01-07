@@ -733,14 +733,14 @@ naughtyamerica.com|NaughtyAmerica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 naughtyamericavr.com|NaughtyAmericaVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 newsensations.com/tour_ns/|NewSensationsMain.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 newsensations.com/tour_rs/|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-nextdoorbuddies.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-nextdoorcasting.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-nextdoorebony.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-nextdoorhookups.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+nextdoorbuddies.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+nextdoorcasting.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+nextdoorebony.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+nextdoorhookups.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 nextdoormale.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
-nextdoorraw.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-nextdoorstudios.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-nextdoortwink.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+nextdoorraw.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+nextdoorstudios.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+nextdoortwink.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 nfbusty.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 nhentai.net|nhentai.yml|:x:|:heavy_check_mark:|:x:|:x:|-|Hentai
 nikkibenz.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -991,6 +991,7 @@ strapondreamer.com|StrapDreamer.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 streaming.iafd.com|IafdStreaming.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 stretchedoutsnatch.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 stripzvr.com|StripzVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
+str8hell.com|Williamhiggins.yml.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 stuck4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 studiofow.com|StudioFOW.yml|:heavy_check_mark:|:x:|:x:|:x:|-|3D Animation
 stuffintwats.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1174,6 +1175,7 @@ wicked.com (/movies)|GammaEntertainment.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 wicked.com (/movies)|WickedMovies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wicked.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wildoncam.com|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+williamhiggins.com|Williamhiggins.yml.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 wowgirls.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wowporn.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wtfpass.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1209,7 +1211,7 @@ zoiestarr.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ## Non url scrapers
 
 The following scrapers do not support xxxByURL scraping and are not included to the above list. To keep the below list tidy please add scrapers keeping the list in alphabetical order by the .yml filename.
- For each scraper a short description, an optional comment with the usage and the related PR(s) with usage details would be appreciated.
+For each scraper a short description, an optional comment with the usage and the related PR(s) with usage details would be appreciated.
 
 Scraper | Description | Comments | PR
 --------|-------------|----------|:--:
