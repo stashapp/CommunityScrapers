@@ -9,9 +9,12 @@ xPathScrapers:
     scene:
       Title: //h1[@class='highlight']/text()
       Date:
-        selector: //div[@class='update-info-row text-gray']/text()
+        selector: //div[@class='update-info-row text-gray']/text()[1]
         postProcess:
-          - parseDate: January 2, 2006 |
+          - replace:
+            - regex:  \|.*
+              with: $1
+          - parseDate: January 2, 2006
       Details:
         selector: //div[@class='update-info-block']/div[@class='update-info-block'][1]//text()
         concat: "\n\n"
