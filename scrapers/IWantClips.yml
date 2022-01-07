@@ -4,7 +4,20 @@ sceneByURL:
     url:
       - iwantclips.com/store
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://iwantclips.com/search/advsearch?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //span[@class='clip-title']/a/text()
+      URL: //span[@class='clip-title']/a/@href
+      Image: //div[@class='clip-thumb-16-9']/a/img/@src
   sceneScraper:
     scene:
       Title: //span[@class="headline hidden-xs"]/text()
@@ -32,4 +45,6 @@ xPathScrapers:
           fixed: IwantClips
       Performers:
         Name: //a[@class="modelLink"]
-# Last Updated June 20, 2021
+driver:
+  useCDP: true
+# Last Updated January 06, 2022
