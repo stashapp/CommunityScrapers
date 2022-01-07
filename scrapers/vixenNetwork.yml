@@ -14,7 +14,7 @@ sceneByURL:
       - vixenNetwork.py
 
 # If your search query contains the studio name, the scraper will only search on that site.
-# # 'Ariana Vixen Cecilia' will only search on Vixen for 'Ariana Cecilia`
+# 'Ariana Vixen Cecilia' will only search on Vixen for 'Ariana Cecilia`
 # If your search query starts with a '$' all sites will be searched
 # '$Ariana Vixen Cecilia' will search in all sites for 'Ariana Vixen Cecilia'
 sceneByName:
