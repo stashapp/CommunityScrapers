@@ -49,21 +49,21 @@ xPathScrapers:
         selector: //span[text()="Release Date:"]/following-sibling::text()
         postProcess:
           - replace:
-              - regex: /19([0-9])
-                with: /$1
               - regex: /20([0-9])
                 with: /$1
+              - regex: ^(\d/\d\d/\d\d)$
+                with: 0$1
           - parseDate: 01/02/06
       Duration:
         selector: //span[text() = "Running Time:"]/following-sibling::text()
         postProcess:
-          - replace:
-              - regex: \sh(ou)?rs?\s?
-                with: ':'
-              - regex: \smin(ute)?s?
-                with: ':00'
-              - regex: :$
-                with: :00:00
+           - replace:
+              - regex: ^(\d+)\s*(?i:h)\D+$ # movies with only hours
+                with: $1:00:00
+              - regex: ^(\d+)\s*(?i:m)\D+$ # movies with only minutes
+                with: '$1:00'
+              - regex: ^(\d+)\s*(?i:h)\D+(\d+)\s*(?i:m)\D+$ # movies with hours and minutes
+                with: '$1:$2:00'
       Synopsis: //div[@class="more"]
       Director: //span[text()="Director:"]/following-sibling::text()
       Studio:
