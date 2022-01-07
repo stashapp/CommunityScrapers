@@ -6,7 +6,13 @@ from urllib.parse import urlparse
 
 import requests
 
-import py_common.log as log
+try:
+    import py_common.log as log
+except ModuleNotFoundError:
+    print(
+        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
+        file=sys.stderr)
+    sys.exit(1)
 
 
 class Site:
@@ -37,16 +43,17 @@ class Site:
 
     def getScene(self, url: str):
         log.debug(f"Scraping using {self.name} graphql API")
-        q = {
-            "variables": {"videoId": self.id},
-            "query": self.getVideoQuery
-        }
+        q = {"variables": {"videoId": self.id}, "query": self.getVideoQuery}
         r = self.callGraphQL(q)
         return self.parse_scene(r)
 
     def getImage(self, talentId: str):
         q = {
-            "variables": {"paths": [f"/members/models/{talentId}/scenes/{self.number}/videothumb.jpg"]},
+            "variables": {
+                "paths": [
+                    f"/members/models/{talentId}/scenes/{self.number}/videothumb.jpg"
+                ]
+            },
             "query": self.getAssetQuery
         }
         r = self.callGraphQL(q)
@@ -58,20 +65,19 @@ class Site:
 
     def callGraphQL(self, query: dict):
         headers = {
-            "Content-type":
-                "application/json",
-            "argonath-api-key":
-                self.api_key,
+            "Content-type": "application/json",
+            "argonath-api-key": self.api_key,
             "User-Agent":
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0",
-            "Origin":
-                self.homepage,
-            "Referer":
-                self.homepage
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0",
+            "Origin": self.homepage,
+            "Referer": self.homepage
         }
-        
+
         try:
-            response = requests.post(self.api, json=query, headers=headers, timeout=10)
+            response = requests.post(self.api,
+                                     json=query,
+                                     headers=headers,
+                                     timeout=10)
             if response.status_code == 200:
                 result = response.json()
                 if result.get("error"):
@@ -80,10 +86,11 @@ class Site:
                 if result.get("data"):
                     return result.get("data")
             elif response.status_code >= 400:
-                sys.exit("HTTP Error {}, {}".format(response.status_code, response.text))
+                sys.exit("HTTP Error {}, {}".format(response.status_code,
+                                                    response.text))
             else:
-                raise ConnectionError(
-                    "GraphQL query failed:{} - {}".format(response.status_code, response.text))
+                raise ConnectionError("GraphQL query failed:{} - {}".format(
+                    response.status_code, response.text))
         except Exception as err:
             log.error(f"GraphqQL query failed {err}")
             return None
@@ -113,23 +120,17 @@ class Site:
                 perf = None
 
                 # There are no 2 performers in a scene so useless to deal with lists
-                #performers = [x["talent"].get("name") for x in scene_info["talent"]]
+                # performers = [x["talent"].get("name") for x in scene_info["talent"]]
                 perf = data["talent"][0]["talent"].get("name")
                 # Performer ID for getting the image
                 perf_id = data["talent"][0]["talent"].get("talentId")
                 if perf:
-                    scene['performers'] = [{
-                        "name": perf
-                    }]
+                    scene['performers'] = [{"name": perf}]
 
-            scene['studio'] = {
-                'name': self.name
-            }
+            scene['studio'] = {'name': self.name}
             if perf_id:
                 scene['image'] = self.getImage(perf_id)
 
-            if URL:
-                scene["url"] = URL
             return scene
         return None
 
@@ -179,16 +180,16 @@ class Site:
 
 studios = {Site('Fit18'), Site('Thicc18')}
 fragment = json.loads(sys.stdin.read())
-URL = fragment.get("url")
+url = fragment.get("url")
 
-if URL:
+if url:
     for x in studios:
-        if x.isValidURL(URL):
-            s = x.getScene(URL)
+        if x.isValidURL(url):
+            s = x.getScene(url)
             #log.debug(f"{json.dumps(s)}")
             print(json.dumps(s))
             sys.exit(0)
 
-log.error(f"URL: {URL} is not supported")
+log.error(f"URL: {url} is not supported")
 print("{}")
 sys.exit(1)
