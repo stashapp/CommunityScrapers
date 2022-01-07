@@ -57,13 +57,13 @@ xPathScrapers:
       Duration:
         selector: //span[text() = "Running Time:"]/following-sibling::text()
         postProcess:
-           - replace:
+          - replace:
               - regex: ^(\d+)\s*(?i:h)\D+$ # movies with only hours
                 with: $1:00:00
               - regex: ^(\d+)\s*(?i:m)\D+$ # movies with only minutes
-                with: '$1:00'
+                with: "$1:00"
               - regex: ^(\d+)\s*(?i:h)\D+(\d+)\s*(?i:m)\D+$ # movies with hours and minutes
-                with: '$1:$2:00'
+                with: "$1:$2:00"
       Synopsis: //div[@class="more"]
       Director: //span[text()="Director:"]/following-sibling::text()
       Studio:
@@ -80,7 +80,7 @@ xPathScrapers:
         selector: //h1/text()
         postProcess:
           - replace:
-              - regex: '^Gay Porn Star: (.*)$'
+              - regex: "^Gay Porn Star: (.*)$"
                 with: $1
       Gender:
         fixed: Male
@@ -88,20 +88,20 @@ xPathScrapers:
         selector: //h3[contains(text(), "Nationality:")]/text()
         postProcess:
           - replace:
-              - regex: '^Nationality: (.*)$'
+              - regex: "^Nationality: (.*)$"
                 with: $1
       Height:
         selector: //h3[contains(text(), "Height:")]/text()
         postProcess:
           - replace:
-              - regex: '^Height: (.*)$'
+              - regex: "^Height: (.*)$"
                 with: $1
           - feetToCm: true
       Weight:
         selector: //h3[contains(text(), "Weight:")]/text()
         postProcess:
           - replace:
-              - regex: '^Weight: (.*) lbs$'
+              - regex: "^Weight: (.*) lbs$"
                 with: $1
           - lbToKg: true
       Measurements:
