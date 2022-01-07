@@ -279,14 +279,14 @@ if search_query and "search" in sys.argv:
     if filter:
         log.info(f"Filter: {filter} applied")
 
-    log.debug(f"Query: '{search_query}'")
+    log.debug(f"Query: '{search_query[1:]}'")
 
     for x in studios:
         if filter:
             if x.id.lower() in filter:
                 #log.debug(f"[Filter] {x.id} ignored")
                 continue
-        s = x.getSearchResult(search_query)
+        s = x.getSearchResult(search_query[1:])
         # merge all list into one
         if s:
             lst.extend(s)
