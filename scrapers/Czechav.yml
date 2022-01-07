@@ -2,43 +2,43 @@ name: czechav
 sceneByURL:
   - action: scrapeXPath
     url:
-      - czechstreets.com/
-      - czechfantasy.com/
-      - czechwifeswap.com/
+      - creativeporn.com/
       - czechamateurs.com/
-      - czechcouples.com/
-      - czechmassage.com/
-      - czechharem.com/
+      - czechbangbus.com/
       - czechbitch.com/
+      - czechcouples.com/
+      - czechdungeon.com/
+      - czechestrogenolit.com/
+      - czechfantasy.com/
+      - czechfirstvideo.com/
+      - czechgame.com/
       - czechgangbang.com/
+      - czechgardenparty.com/
       - czechgayamateurs.com/
-      - czechgaycouples.com/
       - czechgaycasting.com/
+      - czechgaycouples.com/
       - czechgayfantasy.com/
       - czechgaymassage.com/
       - czechgaysolarium.com/
       - czechgaytoilets.com/
+      - czechharem.com/
       - czechhomeorgy.com/
-      - czechorgasm.com/
-      - czechtaxi.com/
-      - czechparties.com/
       - czechlesbians.com/
-      - czechestrogenolit.com/
-      - czechdungeon.com/
-      - czechgardenparty.com/
-      - czechsolarium.com/
-      - czechsupermodels.com/
-      - czechgame.com/
-      - czechfirstvideo.com/
-      - czechbangbus.com/
-      - czechspy.com/
+      - czechmassage.com/
       - czechmegaswingers.com/
+      - czechorgasm.com/
+      - czechparties.com/
+      - czechsolarium.com/
+      - czechspy.com/
+      - czechstreets.com/
+      - czechsupermodels.com/
+      - czechtaxi.com/
+      - czechwifeswap.com/
       - gayhorrorporn.com/
-      - movieporn.com/
-      - unrealporn.com/
-      - creativeporn.com/
       - horrorporn.com/
-      - perversefamily.com/  
+      - movieporn.com/
+      - perversefamily.com/
+      - unrealporn.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -53,5 +53,4 @@ xPathScrapers:
         Name: $studio
       Image:
         selector: //video/@poster
-
-# Last Updated November 02, 2020
+# Last Updated January 08, 2022
