@@ -69,11 +69,11 @@ def query_xml(path, title):
         if tree.find("art").find("poster") != None:
             posterElem = tree.find("art").find("poster")
             if posterElem.text != None:
-                if not rewriteBasePath and os.path.isfile(posterElem.text):
+                if not rewriteBasePath and pathlib.Path(posterElem.text).is_file():
                     res["image"] = make_image_data_url(posterElem.text)
                 elif rewriteBasePath:
                     rewrittenPath = posterElem.text.replace(basePathBefore, basePathAfter).replace("\\", "/")
-                    if os.path.isfile(rewrittenPath):
+                    if pathlib.Path(rewrittenPath).is_file():
                         res["image"] = make_image_data_url(rewrittenPath)
                     else:
                         log.warning("Can't find image: " + posterElem.text.replace(basePathBefore, basePathAfter) + ". Is the base path correct?")
