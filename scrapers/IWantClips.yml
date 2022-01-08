@@ -21,6 +21,12 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //span[@class="headline hidden-xs"]/text()
+      URL: 
+        selector: //button[@class='btn btn-default cart addToCart']/@data-id
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://iwantclips.com/store/item/
       Date:
         selector: //div[@class="col-xs-12 date fix"]/span/em/text()
         postProcess:
