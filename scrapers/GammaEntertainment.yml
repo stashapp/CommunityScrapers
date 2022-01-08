@@ -32,7 +32,6 @@ sceneByURL:
       - dylanryder.com/
       - eroticax.com/en/video/
       - evilangel.com/en/video/
-      - famedigital.com/en/
       - falconstudios.com/en/video/
       - famedigital.com/
       - familycreep.com/
@@ -318,5 +317,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-
 # Last Updated January 05, 2022
