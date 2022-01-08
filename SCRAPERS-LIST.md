@@ -258,7 +258,14 @@ czechfirstvideo.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechgame.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechgangbang.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechgardenparty.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechgayamateurs.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 czechgaycity.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechgaycouples.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+czechgaycasting.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+czechgayfantasy.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+czechgaymassage.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+czechgaysolarium.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+czechgaytoilets.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 czechgypsies.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechharem.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechhitchhikers.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -436,6 +443,7 @@ gasm.com|GASM.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gaycastings.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 gaycreeps.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 gayhoopla.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Gay
+gayhorrorporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 gayroom.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 gayviolations.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 genderxfilms.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
@@ -601,6 +609,7 @@ kinkvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_ma
 kinkyfamily.com|kinkyfamily.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kinkymistresses.com|KinkyMistresses.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kinkyspa.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+kristenbjorn.com|KristenBjorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|Gay
 ladyboy-ladyboy.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 ladyboy.xxx|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 ladydee.xxx|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -992,6 +1001,7 @@ strapondreamer.com|StrapDreamer.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 streaming.iafd.com|IafdStreaming.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 stretchedoutsnatch.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 stripzvr.com|StripzVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
+str8hell.com|Williamhiggins.yml.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 stuck4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 studiofow.com|StudioFOW.yml|:heavy_check_mark:|:x:|:x:|:x:|-|3D Animation
 stuffintwats.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1175,6 +1185,7 @@ wicked.com (/movies)|GammaEntertainment.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 wicked.com (/movies)|WickedMovies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wicked.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wildoncam.com|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+williamhiggins.com|Williamhiggins.yml.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 wowgirls.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wowporn.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wtfpass.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
