@@ -9,22 +9,40 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1
-      Image: //video[@class="vjs-tech"]/@poster
-      #             //meta[@name="twitter:image"]/@content # Can have a better image 720p to 4K
+      Title: //h2[contains(@class, "PlayerTitle-Title")]/text()
+      Image: //div[contains(@class, "ScenePlayerHeaderDesktop-VideoBackground")]/img/@src
       Date:
-        selector: //span[contains(@class, "ScenePlayer-ReleaseDate-Text")]
+        selector: //span[contains(@class, "ScenePlayerHeaderDesktop-Date-Text")]
       Details:
-        selector: //div[contains(@class, "SceneDescription-Paragraph")]/text()
+        selector: //div[contains(@class, "DescriptionText-Paragraph")]/text()
         concat: "\n\n"
       Tags:
         Name:
-          selector: //a[contains(@class, "ScenePlayer-SceneCategories-Link")]
+          selector: //a[contains(@class, "Categories-Link")]
       Performers:
         Name:
-          selector: //div[@class="component-ActorThumb-List"]/a/@title
+          selector: //script[@type="application/ld+json"]
+          postProcess:
+            - replace:
+                - regex: .+actor":(.+)
+                  with: "$1"
+                - regex: '.+?"name":"([^"].+?",).+?'
+                  with: $1
+                - regex: '(.+)gender":.+'
+                  with: $1
+          split: '",'
       Studio:
-        Name: //a[contains(@class, "ScenePlayer-ChannelName-Link")]/@title
+        Name:
+          selector: //meta[@name="twitter:domain"]/@content
+          postProcess:
+            - replace:
+                - regex: ([^\.]+)\.com
+                  with: $1
+            - map:
+                twentyonesextury: 21Sextury
+                girlsway: GirlsWay
+                puretaboo: PureTaboo
 driver:
   useCDP: true
-# Last Updated June 22, 2021
+  sleep: 6
+# Last Updated December 26, 2021

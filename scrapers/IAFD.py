@@ -3,7 +3,9 @@ import datetime
 import json
 import string
 import sys
+import time
 import re
+import random
 from urllib.parse import urlparse
 # extra modules below need to be installed
 import cloudscraper
@@ -402,17 +404,22 @@ def performer_query(query):
     sys.exit(0)
  
 
-def scrape(url):
+def scrape(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
         scraped = scraper.get(url, timeout=(3,7))
     except Exception as e:
         log("scrape error %s" % e)
     if scraped.status_code >= 400:
-        log('HTTP Error: %s' % scraped.status_code)
+        if retries < 10:
+            debug_print('HTTP Error: %s' % scraped.status_code)
+            time.sleep(random.randint(1, 4))
+            return scrape(url, retries+1)
+        else:
+            log('HTTP Error: %s' % scraped.status_code)
     return html.fromstring(scraped.content)
 
-def scrape_image(url):
+def scrape_image(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
         scraped = scraper.get(url, timeout=(3,7))
@@ -421,6 +428,9 @@ def scrape_image(url):
         return None
     if scraped.status_code >= 400:
         debug_print('HTTP Error: %s' % scraped.status_code)
+        if retries < 10:
+            time.sleep(random.randint(1, 4))
+            return scrape_image(url, retries+1)
         return None
     b64img = base64.b64encode(scraped.content)
     return "data:image/jpeg;base64," + b64img.decode('utf-8')
@@ -435,7 +445,7 @@ def performer_from_tree(tree):
     p.gender = p.set_value(performer_gender)
     p.gender = p.map_gender(p.gender)
 
-    performer_url = tree.xpath('//*[contains(@href,"person.rme")]/@href')
+    performer_url = tree.xpath('//div[@id="perfwith"]//*[contains(@href,"person.rme")]/@href')
     if performer_url:
         p.url = "https://www.iafd.com" + performer_url[0]
     performer_twitter = tree.xpath('//p[@class="biodata"]/a[contains(text(),"http://twitter.com/")]/@href')
@@ -451,6 +461,13 @@ def performer_from_tree(tree):
         try:
             p.birthdate = datetime.datetime.strptime(p.birthdate, iafd_date).strftime(stash_date)
         except:
+            p.birthdate = None
+            if performer_birthdate[0].lower() != "no data":
+                dob =  f'D.O.B. : {performer_birthdate[0]}\n'
+                try:
+                    p.details = p.details + dob
+                except:
+                    p.details = dob
             pass
 
     performer_deathdate = tree.xpath('(//p[@class="bioheading"][text()="Date of Death"]/following-sibling::p)[1]//text()')
@@ -460,6 +477,13 @@ def performer_from_tree(tree):
         try:
             p.death_date = datetime.datetime.strptime(p.death_date, iafd_date).strftime(stash_date)
         except:
+            p.death_date = None
+            if performer_deathdate[0].lower() != "no data":
+                dod = f'D.O.D. : {performer_deathdate[0]}\n'
+                try:
+                    p.details = p.details + dod
+                except:
+                    p.details = dod
             pass
 
     performer_ethnicity = tree.xpath('//div[p[text()="Ethnicity"]]/p[@class="biodata"][1]//text()')
@@ -502,11 +526,11 @@ def performer_from_tree(tree):
     performer_piercings = tree.xpath('//div/p[text()="Piercings"]/following-sibling::p[1]//text()')
     p.piercings = p.set_value(performer_piercings)
 
-    performer_image_url = tree.xpath('//div[@id="headshot"]/img/@src')
+    performer_image_url = tree.xpath('//div[@id="headshot"]//img/@src')
     if performer_image_url:
         try:
             debug_print("downloading image from %s" % performer_image_url[0] )
-            p.image = scrape_image(performer_image_url[0])
+            p.images = [scrape_image(performer_image_url[0])]
         except Exception as e:
             debug_print("error downloading image %s" %e)
 
@@ -595,6 +619,7 @@ if not frag['url']:
 
 url = frag["url"]
 debug_print("scraping %s" % url)
+random.seed()
 tree = scrape(url)
 
 if mode == "movie":
@@ -605,5 +630,3 @@ if mode == "scene":
 
 #by default performer scraper
 performer_from_tree(tree)
-
-#Last Updated May 8, 2021

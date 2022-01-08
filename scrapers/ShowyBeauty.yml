@@ -1,0 +1,46 @@
+name: ShowyBeauty
+galleryByURL:
+  - action: scrapeXPath
+    url: &urlAttr
+      - showybeauty.com/cover
+    scraper: galleryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url: *urlAttr
+    scraper: sceneScraper
+
+xPathScrapers:
+  galleryScraper:
+    common: &commonSel
+      $performer: //div[@class='see-model-info']//a
+    gallery:
+      Title: &titleSel //div[@class="short"]//strong/text()
+      Studio: &studioAttr
+        Name:
+          fixed: Showy Beauty
+      Date: &dateAttr
+        selector: //div[@class="short"]//br/following-sibling::text()[contains(.,"Added")]
+        postProcess:
+          - replace:
+              - regex: Added\s+
+                with:
+          - parseDate: 2006-01-02
+      Performers: &performersAttr
+        Name: $performer
+        URL:
+          selector: $performer/@href
+          postProcess: &domainAttr
+            - replace:
+                - regex: ^
+                  with: http://showybeauty.com
+  sceneScraper:
+    common: *commonSel
+    scene:
+      Title: *titleSel
+      Studio: *studioAttr
+      Date: *dateAttr
+      Performers: *performersAttr
+      Image:
+        selector: //div[contains(@class,"cover")]/div[@class="view"]/img/@src
+        postProcess: *domainAttr
+# Last Updated October 24, 2021

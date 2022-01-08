@@ -34,6 +34,23 @@
       "description": "An array of one or more configurations for scraping gallery info by URL(s).",
       "allOf": [{ "$ref": "#/definitions/anyByURL" }]
     },
+    "sceneByName": {
+      "title": "Scene by name",
+      "description": "A single configuration for scraping scene info by the scene name.",
+      "allOf": [
+        { "$ref": "#/definitions/anyByFragment" },
+        {
+          "propertyNames": {
+            "not": { "enum": ["queryURLReplace"] }
+          }
+        }
+      ]
+    },
+    "sceneByQueryFragment": {
+      "title": "Scene by query fragment",
+      "description": "A single configuration for scraping scene info by query fragment.",
+      "allOf": [{ "$ref": "#/definitions/anyByFragment" }]
+    },
     "performerByName": {
       "title": "Performer by name",
       "description": "A single configuration for scraping performer info by their name.",

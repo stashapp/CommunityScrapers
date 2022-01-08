@@ -32,10 +32,29 @@ def find_scene_id(title):
     c.execute('SELECT scene_id FROM files WHERE filename=?', (title,))
     id=c.fetchone()
     if id == None:
-        c.execute('select id from scenes where title=?',(title,))
+        c.execute('SELECT id FROM scenes WHERE scene_id=?', (title,))
+        id = c.fetchone()
+        if id is not None:
+            return id[0]
+        if title.endswith(".zip"):
+            title=title[:-4]
+        if title.startswith("wankzvr-") or title.startswith("milfvr-") or title.startswith("povr-originals-"):
+            # file names are in the format wankzvr-choosy-dads-choose-chu-46-hr-2400.zip  split on - and discard the first token and last 3
+            t=title.split('-')[1:-3]
+            if 's' in t:
+                t.remove('s')
+            if 't' in t:
+                t.remove('t')
+            if 'originals' in t:
+                t.remove('originals')
+            title='%'.join(t)+'%'
+        c.execute('select id from scenes where title like ?',(title+'%',))
         id=c.fetchone()
+        if id is not None:
+            return id[0]
+    else:
         return id[0]
-    return id[0]
+    return None
 
 if not path.exists("xbvr.db"):
     print("Error, the sqlite database xbvr.db does not exist in the scrapers directory.",file=sys.stderr)
@@ -52,9 +71,22 @@ if sys.argv[1] == "query":
     scene_id = find_scene_id(fragment['title'])
     if not scene_id:
         print(f"Could not determine scene id in title: `{fragment['title']}`",file=sys.stderr)
+        print("{}")
     else:
         print(f"Found scene id: {scene_id}",file=sys.stderr)
         result=lookup_scene(scene_id)
         print(json.dumps(result))
     conn.close()
-# Last Updated November 08, 2020
+elif sys.argv[1] == "gallery_query":
+    fragment= json.loads(sys.stdin.read())
+    print(json.dumps(fragment),file=sys.stderr)
+    scene_id = find_scene_id(fragment['title'])
+    if not scene_id:
+        print(f"Could not determine scene id in title: `{fragment['title']}`",file=sys.stderr)
+        print("{}")
+    else:
+        print(f"Found scene id: {scene_id}",file=sys.stderr)
+        result=lookup_scene(scene_id)
+        result.pop("image",None)
+        print(json.dumps(result))
+    conn.close()

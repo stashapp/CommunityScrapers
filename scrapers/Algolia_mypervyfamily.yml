@@ -1,0 +1,30 @@
+name: "MyPervyFamily"
+sceneByURL:
+  - action: script
+    url:
+      - mypervyfamily.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - mypervyfamily
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - mypervyfamily
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - mypervyfamily
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - mypervyfamily
+      - validName
+# Last Updated December 31, 2021

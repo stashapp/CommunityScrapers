@@ -4,4 +4,16 @@ sceneByFragment:
     script:
       - python
       - JavLibrary_python.py
-# Last Updated July 24, 2021
+sceneByName:
+    action: script
+    script:
+      - python
+      - JavLibrary_python.py
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - JavLibrary_python.py
+      - validSearch
+# Last Updated November 13, 2021
