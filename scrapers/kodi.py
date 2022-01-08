@@ -46,7 +46,7 @@ def query_xml(path, title):
             if actor.find("type") != None:
                 if actor.find("type").text == "Actor":
                     res["performers"].append({"name": actor.find("name").text})
-            else if actor.find("name") != None:
+            elif actor.find("name") != None:
                 res["performers"].append({"name": actor.find("name").text})
             else:
                 res["performers"].append({"name": actor.text})
