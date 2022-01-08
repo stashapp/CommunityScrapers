@@ -1,0 +1,30 @@
+name: "ZeroToleranceFilms"
+sceneByURL:
+  - action: script
+    url:
+      - zerotolerancefilms.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - zerotolerancefilms
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - zerotolerancefilms
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - zerotolerancefilms
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - zerotolerancefilms
+      - validName
+# Last Updated December 31, 2021

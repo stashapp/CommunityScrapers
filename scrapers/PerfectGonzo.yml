@@ -1,33 +1,64 @@
 name: Perfect Gonzo
 sceneByURL:
+  - action: script
+    script:
+      - python
+      - PerfectGonzo.py
+    url:
+      - allinternal.com/movies/
+      - asstraffic.com/movies/
+      - cumforcover.com/movies/
+      - fistflush.com/movies/
+      - milfthing.com/movies/
+      - perfectgonzo.com/movies/
+      - primecups.com/movies/
+      - purepov.com/movies/
+      - spermswap.com/movies/
+      - tamedteens.com/movies/
+
+performerByURL:
   - action: scrapeXPath
     url:
-      - allinternal.com
-      - perfectgonzo.com
-    scraper: sceneScraper
+      - allinternal.com/models/
+      - asstraffic.com/models/
+      - cumforcover.com/models/
+      - fistflush.com/models/
+      - milfthing.com/models/
+      - perfectgonzo.com/models/
+      - primecups.com/models/
+      - purepov.com/models/
+      - spermswap.com/models/
+      - tamedteens.com/models/
+    scraper: performerScraper
+
 xPathScrapers:
-  sceneScraper:
-    scene:
-      Title:
-        selector: //div[@class="row"]//h2
-      Date:
-        selector: //div[@class="row"]//span
+  performerScraper:
+    performer:
+      Name: //h3[@class="mg-md"]
+      Country:
+        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Nationality:' or text()= 'Country:']/following-sibling::text()[1]
         postProcess:
-          - replace:
-              - regex: 'Added\s*'
-                with: ""
-          - parseDate: January 2, 2006
-      Details: //p[@class="mg-md"]
-      Tags:
-        Name: //div[contains(h4,"Tags:")]//a
-      Image: //video[@id="video"]/@poster | //div[@id="video-hero"]//img/@src
-      Performers:
-        Name: //div[contains(h4,"Featured model")]//a
-      Studio:
-        Name:
-          selector: //link[@type="image/ico"]/@href
-          postProcess:
-            - map:
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_perfectgonzo.com.ico: Perfect Gonzo
-                https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_allinternal.com.ico: All Internal
-# Last Updated July 19, 2021
+          - map:
+              Austrian: Austria
+              Canadian: Canada
+              Colombian: Colombia
+              Czech: Czech Republic
+              French: France
+              Hungarian: Hungary
+              Polish: Poland
+              Romanian: Romania
+              Russian: Russia
+              Slovakian: Slovakia
+              Spanish: Spain
+              Swiss: Switzerland
+              Ukrainian: Ukraine
+      Ethnicity:
+        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Ethnicity:']/following-sibling::text()[1]
+        postProcess:
+          - map:
+              caucasian: white
+      Gender:
+        fixed: Female
+      Image:
+        selector: //div[@class='col-md-8 bigmodelpic']/img/@src
+# Last Updated October 11, 2021

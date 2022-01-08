@@ -6,20 +6,18 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $h3: //div[@class="titlerow2"]//h3[@class="releases"]
     scene:
-      Title: 
-        selector: //div[@class="clearfix"]/h1/span/text()
-        postProcess:
-          - replace:
-              - regex: \"
-                with:
-      Details: //div[@class="movie-desc"]/text()
+      Title:
+        selector: //div[h2[@class="vidtitle"]]/p
+      Details: //div[@class="vidinfo col-sm-12 col-md-12 col-lg-12 col-xl-3"]/p
       Tags:
         Name:
-          selector: //div[@class="tags clearfix"]/a/text()
+          selector: //p[@class="tags clearfix"]/a
       # Note about performers: The site only list 1 model even there is 2 in the video.
       Performers:
-        Name: //div[@class="clearfix"]/h1/a[1]/text()
+        Name: $h3/a
       Image:
         selector: //script[contains(.,'jwplayer("videoplayer").setup')]/text()
         postProcess:
@@ -32,8 +30,7 @@ xPathScrapers:
         Name:
           fixed: "Plumperpass"
       Date:
-        selector: //div[@class="movie-date"]/text()
+        selector: $h3/text()
         postProcess:
           - parseDate: January 2, 2006
-
-# Last Updated November 08, 2020
+# Last Updated December 22, 2021

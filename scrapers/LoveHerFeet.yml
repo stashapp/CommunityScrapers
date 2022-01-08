@@ -1,9 +1,13 @@
-name: "LoveHerFeet"
+name: LoveHerFeet
+
 sceneByURL:
   - action: scrapeXPath
     url:
-      - loveherfeet.com
+      - loveherboobs.com/tour/trailers/
+      - loveherfeet.com/tour/trailers/
+      - shelovesblack.com/tour/trailers/
     scraper: sceneScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -14,21 +18,18 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Image:
-        selector: //video/@poster
+        selector: //base/@href|//video/@poster
+        concat: /
         postProcess:
           - replace:
-              - regex: ^
-                with: https://www.loveherfeet.com
+              - regex: ///tour
+                with:
       Studio:
-        Name:
-          fixed: LoveHerFeet
+        Name: //meta[@name='author']/@content
       Tags:
         Name: //div[@class='video-tags']/a/text()
       Performers:
         Name:
           selector: //div[@class='featured']/a/text()
-          postProcess:
-            - replace:
-                - regex: ","
-                  with:
-# Last Updated May 16, 2021
+
+# Last Updated October 31, 2021

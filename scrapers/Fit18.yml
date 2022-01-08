@@ -1,23 +1,9 @@
 name: Fit18
 sceneByURL:
-  #for URLs either search through google or use something like `https://www.fit18.com/models/performer-name/scene1`
-  - action: scrapeXPath
-    url:
-      - fit18.com/models
-    scraper: sceneScraper
-xPathScrapers:
-  sceneScraper:
-    common:
-      $info: //div[contains(@class,"scene-info")]
-    scene:
-      Title: $info/h1
-      Details: $info/p
-      Performers:
-        Name:
-          selector: $info/h2/a
-      Image:
-        selector: //div[@class="video-box"]//a/img[@style]/@src
-      Studio:
-        Name:
-          fixed: Fit18
-# Last Updated May 16, 2021
+  - url:
+      - fit18.com
+    action: script
+    script:
+      - python3
+      - Fit18.py
+# Last Updated September 08, 2021

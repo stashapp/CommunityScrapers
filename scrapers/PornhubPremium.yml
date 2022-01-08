@@ -1,0 +1,124 @@
+name: PornhubPremium
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.pornhubpremium.com/pornstars/search?search={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - pornhubpremium.com
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornhubpremium.com/view_video.php?viewkey=
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.pornhubpremium.com/view_video.php?viewkey={filename}
+  queryURLReplace:
+    filename:
+      - regex: (?:.*[^a-zA-Z\d])+(ph(?:[a-zA-Z\d]+)).+
+        with: $1
+      - regex: .*\.[^\.]+$ # if no ph id is found in the filename
+        with: # clear the filename so that it doesn't leak to ph
+  scraper: sceneScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
+      URL:
+        selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.pornhubpremium.com"
+  performerScraper:
+    common:
+      $infoPiece: //div[@class="infoPiece"]
+      $infoContainer: //div[@class="infoContainer"]
+      $smallInfo: span[@class="smallInfo"]
+
+    performer:
+      Name: //h1[@itemprop="name"]|$infoContainer//h1
+      Birthdate:
+        selector: //span[@itemprop="birthDate"]|$infoPiece[contains(span,"Born:")]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+          - parseDate: 2006-01-02
+      Country:
+        selector: $infoPiece[contains(span,"Birthplace:")]/text()|$infoPiece[contains(span,"City and Country:")]/$smallInfo|$infoPiece[contains(span,"Birth Place:")]/$smallInfo
+        postProcess:
+          - replace:
+              - regex: .+,\s?([^,]+$)
+                with: $1
+          - map:
+              US: "USA"
+              United States of America: "USA"
+      Gender: $infoPiece[contains(span,"Gender:")]/$smallInfo
+      Twitter: //ul[contains(@class,"socialList")]//a[contains(@href,"twitter.com/")]/@href
+      Instagram: //ul[contains(@class,"socialList")]//a[contains(@href,"instagram.com/")]/@href
+      Measurements: $infoPiece[contains(span,"Measurements:")]/$smallInfo|$infoPiece[contains(span,"Measurements:")]/text()
+      Weight:
+        selector: $infoPiece[contains(span,"Weight:")]/$smallInfo|$infoPiece[contains(span,"Weight:")]/text()
+        postProcess:
+          - replace:
+              - regex: .*\((\d+)\s*kg\)
+                with: $1
+      Height:
+        selector: $infoPiece[contains(span,"Height:")]/$smallInfo|$infoPiece[contains(span,"Height:")]/text()
+        postProcess:
+          - replace:
+              - regex: .*\((\d+)\s*cm\)
+                with: $1
+      Details: //div[@itemprop="description" or starts-with(@class,"text longBio")]
+      Ethnicity: $infoPiece[contains(span,"Ethnicity:")]/$smallInfo|$infoPiece[contains(span,"Ethnicity:")]/text()
+      FakeTits: $infoPiece[contains(span,"Fake Boobs:")]/$smallInfo
+      Piercings: $infoPiece[contains(span,"Piercings:")]/$smallInfo
+      Tattoos: $infoPiece[contains(span,"Tattoos:")]/$smallInfo
+      HairColor: $infoPiece[contains(span,"Hair Color:")]/$smallInfo
+      CareerLength:
+        selector: $infoPiece[contains(span,"Career Start and End:")]/$smallInfo
+        postProcess:
+          - replace:
+              - regex: \s+to\s+
+                with: "-"
+      URL: //link[@rel="canonical"][1]/@href
+      Image: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
+  sceneScraper:
+    common:
+      $performer: //div[@class="pornstarsWrapper js-pornstarsWrapper"]/a[@data-mxptype="Pornstar"]
+      $studio: //div[@data-type="channel"]/a
+    scene:
+      Title: //h1[@class="title"]/span/text()
+      Details: //meta[@property="og:description"][1]/@content
+      Date:
+        selector: //script[contains(., 'uploadDate')]/text()
+        postProcess:
+          - replace:
+              - regex: .+(?:"uploadDate":\s")([^"]+).+
+                with: $1
+              - regex: (.+)T.+
+                with: $1
+          - parseDate: 2006-01-02
+      Tags:
+        Name: //div[@class="categoriesWrapper"]//a[not(@class="add-btn-small ")]|//div[@class="tagsWrapper"]//a[not(@class="add-btn-small")]
+      Image:
+        selector: //meta[@property="og:image"][1]/@content
+      Performers:
+        Name: $performer/@data-mxptext
+        URL: $performer/@href
+      Studio:
+        Name: $studio
+        URL: $studio/@href
+driver:
+  cookies:
+    - CookieURL: "https://pornhubpremium.com"
+      Cookies:
+        - Name: "il"
+          Domain: ".pornhubpremium.com"
+          Value: "<'il' cookie value>"
+          Path: "/"
+# Reference: https://github.com/stashapp/CommunityScrapers/blob/master/scrapers/Pornhub.yml
+# Last Updated October 11, 2021

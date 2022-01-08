@@ -13,6 +13,14 @@ sceneByURL:
     url:
       - https://api.metadataapi.net/scenes/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeJson
+  queryURL: https://api.metadataapi.net/scenes?parse={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  scraper: sceneScraper
 sceneByFragment:
   action: scrapeJson
   queryURL: https://api.metadataapi.net/scenes?parse={filename}&hash={oshash}&limit=1
@@ -24,6 +32,26 @@ sceneByFragment:
       - regex: \.+
         with: "."
 jsonScrapers:
+  sceneSearch:
+    scene:
+      Title: 
+        # Prevent having duplicated title so it don't get ignored by stash
+        selector: data.#.[title,_id]
+        postProcess:
+          - replace:
+            - regex: \[|\"
+              with: ""
+            - regex: \,
+              with: " ["
+      Date: data.#.date
+      URL:
+        selector: data.#.id
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https://api.metadataapi.net/scenes/"
+      Image: data.#.background.full
+      Details: data.#.description
   performerSearch:
     performer:
       Name: data.#.name
@@ -74,7 +102,7 @@ jsonScrapers:
               - regex: .+default\d+\.png$
                 with:
       Performers:
-        Name: data.performers.#.parent
+        Name: data.performers.#.parent.name
       Studio:
         Name: data.site.name
       Tags:
@@ -111,4 +139,4 @@ driver:
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
       #Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated July 30, 2021
+# Last Updated December 16, 2021

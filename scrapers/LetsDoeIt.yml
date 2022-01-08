@@ -2,12 +2,12 @@ name: "LetsDoeIt"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - letsdoeit.com
       - amateureuro.com
-      - transbella.com
-      - mamacitaz.com
-      - forbondage.com
       - dirtycosplay.com
+      - forbondage.com
+      - letsdoeit.com
+      - mamacitaz.com
+      - transbella.com
       - vipsexvault.com
     scraper: sceneScraper
 xPathScrapers:
@@ -22,8 +22,8 @@ xPathScrapers:
           - replace:
               - regex: (.+)(?:\s\|.+)
                 with: $1
-              - regex: (Exclusive\W+(\w+\W+)?Porn\W+Video)
-                with: $1
+              - regex: (\sExclusive\W+(\w+\W+)?Porn\W+Video)
+                with: ""
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
@@ -31,7 +31,12 @@ xPathScrapers:
               - regex: (\d{4})-(\d{2})-(\d{2}).+
                 with: $1-$2-$3
           - parseDate: 2006-01-02
-      Details: //meta[@name="description"]/@content
+      Details:
+        selector: //meta[@name="description"]/@content
+        postProcess:
+          - replace:
+              - regex: "&#039;"
+                with: "'"
       Tags:
         Name: $details//div[@class="col"][4]//a/text()|$details//div[@class="col"][6]//a/text()
       Performers:
@@ -39,5 +44,4 @@ xPathScrapers:
       Studio:
         Name: $actors//a//text()
       Image: //picture[@class="poster"]/img/@src
-
-# Last Updated June 15, 2021
+# Last Updated November 14, 2021
