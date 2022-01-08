@@ -1,9 +1,12 @@
-import os
 import sys
-import json
+import pathlib
+
 import mimetypes
 import base64
+
+import json
 import xml.etree.ElementTree as ET
+
 import py_common.graphql as graphql
 import py_common.log as log
 """  
@@ -17,21 +20,29 @@ basePathBefore = 'Z:\Videos'
 basePathAfter = "/data"
 
 def query_xml(path, title):
-    tree=ET.parse(path)
-    # print(tree.find("title").text, file=sys.stderr)
+    res = {"title": title}
+    try:        
+        tree = ET.parse(path)
+    except Exception as e:
+        log.error(f'xml parsing failed:{e}')
+        print(json.dumps(res))
+        exit(1)
+    
     if title == tree.find("title").text:
         log.info("Exact match found for " + title)
     else:
         log.info("No exact match found for " + title + ". Matching with " + tree.find("title").text + "!")
     
     # Extract matadata from xml
-    res={"title":title}
     if tree.find("title") != None:
         res["title"] = tree.find("title").text
+    
     if tree.find("plot") != None:
         res["details"] = tree.find("plot").text
+    
     if tree.find("releasedate") != None:
         res["date"] = tree.find("releasedate").text
+    
     if tree.find("tag") != None:
         res["tags"]=[{"name":x.text} for x in tree.findall("tag")]
     if tree.find("genre") != None:
@@ -39,6 +50,7 @@ def query_xml(path, title):
             res["tags"] += [{"name":x.text} for x in tree.findall("genre")]
         else:
             res["tags"] = [{"name":x.text} for x in tree.findall("genre")]
+    
     if tree.find("actor") != None:
         res["performers"] = []
         for actor in tree.findall("actor"):
@@ -49,6 +61,7 @@ def query_xml(path, title):
                 res["performers"].append({"name": actor.find("name").text})
             else:
                 res["performers"].append({"name": actor.text})
+    
     if tree.find("studio") != None:
         res["studio"] = {"name":tree.find("studio").text}
     
@@ -66,7 +79,6 @@ def query_xml(path, title):
                         log.warning("Can't find image: " + posterElem.text.replace(basePathBefore, basePathAfter) + ". Is the base path correct?")
                 else:
                     log.warning("Can't find image: " + posterElem.text + ". Are you using a docker container? Maybe you need to change the base path in the script file.")
-
     return res
 
 def make_image_data_url(image_path):
@@ -78,25 +90,26 @@ def make_image_data_url(image_path):
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
-    res = {"title": fragment["title"]}
+    s_id = fragment.get("id")
+    if not s_id:
+        log.error(f"No ID found")
+        sys.exit(1)
     
     # Assume that .nfo/.xml is named exactly alike the video file and is at the same location
     # Query graphQL for the file path
-    graphqlResponse = graphql.getScene(fragment["id"])
-    if graphqlResponse:
-        videoFilePath = graphqlResponse["path"]
-    else:
-        exit(0)  
-    
-    # Reconstruct file name for .nfo
-    temp = videoFilePath.split(".")
-    temp[-1] = "nfo"
-    nfoFilePath = ".".join(temp)
-    
-    if os.path.isfile(nfoFilePath):
-        res = query_xml(nfoFilePath, fragment["title"])
-    else:
-        log.info("No file found at" + nfoFilePath)
-    
-    print(json.dumps(res))
-    exit(0)
+    scene = graphql.getScene(s_id)
+    if scene:
+        scene_path = scene.get("path")
+        if scene_path:
+            p = pathlib.Path(scene_path)
+            
+            res = {"title": fragment["title"]}
+            
+            f = p.with_suffix(".nfo")
+            if f.is_file():
+                res = query_xml(f, fragment["title"])
+            else:
+                log.info(f"No nfo/xml files found for the scene: {p}")
+            
+            print(json.dumps(res))
+            exit(0)
