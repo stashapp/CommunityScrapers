@@ -1,15 +1,14 @@
 import os
 import sys
 import json
-import sqlite3
 import mimetypes
 import base64
 import xml.etree.ElementTree as ET
+import py_common.graphql as graphql
+import py_common.log as log
 """  
 This script parses kodi nfo files for metadata. The .nfo file must be in the same directory as the video file and must be named exactly alike.
 """
-debug = False
-
 
 # If you want to ingest image files from the .nfo the path to these files may need to be rewritten. Especially when using a docker container.
 rewriteBasePath = False
@@ -21,9 +20,9 @@ def query_xml(path, title):
     tree=ET.parse(path)
     # print(tree.find("title").text, file=sys.stderr)
     if title == tree.find("title").text:
-        debug("Exact match found for " + title)
+        log.info("Exact match found for " + title)
     else:
-        debug("No exact match found for " + title + ". Matching with " + tree.find("title").text + "!")
+        log.info("No exact match found for " + title + ". Matching with " + tree.find("title").text + "!")
     
     # Extract matadata from xml
     res={"title":title}
@@ -64,40 +63,30 @@ def query_xml(path, title):
                     if os.path.isfile(rewrittenPath):
                         res["image"] = make_image_data_url(rewrittenPath)
                     else:
-                        debug("Can't find image: " + posterElem.text.replace(basePathBefore, basePathAfter) + ". Is the base path correct?")
+                        log.warning("Can't find image: " + posterElem.text.replace(basePathBefore, basePathAfter) + ". Is the base path correct?")
                 else:
-                    debug("Can't find image: " + posterElem.text + ". Are you using a docker container? Maybe you need to change the base path in the script file.")
+                    log.warning("Can't find image: " + posterElem.text + ". Are you using a docker container? Maybe you need to change the base path in the script file.")
 
     return res
 
-def debug(s):
-    if debug: print(s, file=sys.stderr)
-
-# Would be nicer with Stash API instead of direct SQlite access
-def get_file_path(scene_id):
-    db_file = "../stash-go.sqlite"
-
-    con = sqlite3.connect(db_file)
-    cur = con.cursor()
-    for row in cur.execute("SELECT * FROM scenes where id = " + str(scene_id) + ";"):
-        #debug_print(row)
-        filepath = row[1]
-    con.close()
-    return filepath
-    
 def make_image_data_url(image_path):
     # type: (str,) -> str
     mime, _ = mimetypes.guess_type(image_path)
     with open(image_path, 'rb') as img:
         encoded = base64.b64encode(img.read()).decode()
     return 'data:{0};base64,{1}'.format(mime, encoded)
-        
+
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
     res = {"title": fragment["title"]}
-    # Assume that .nfo is named exactly like the video file and is at the same location
-    # WORKAROUND: Read file name from db until filename is given in the fragment
-    videoFilePath = get_file_path(fragment["id"])
+    
+    # Assume that .nfo/.xml is named exactly alike the video file and is at the same location
+    # Query graphQL for the file path
+    graphqlResponse = graphql.getScene(fragment["id"])
+    if graphqlResponse:
+        videoFilePath = graphqlResponse["path"]
+    else:
+        exit(0)  
     
     # Reconstruct file name for .nfo
     temp = videoFilePath.split(".")
@@ -107,7 +96,7 @@ if sys.argv[1] == "query":
     if os.path.isfile(nfoFilePath):
         res = query_xml(nfoFilePath, fragment["title"])
     else:
-        debug("No file found at" + nfoFilePath)
+        log.info("No file found at" + nfoFilePath)
     
     print(json.dumps(res))
     exit(0)
