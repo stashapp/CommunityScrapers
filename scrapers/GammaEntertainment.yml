@@ -34,6 +34,7 @@ sceneByURL:
       - evilangel.com/en/video/
       - falconstudios.com/en/video/
       - famedigital.com/
+      - familycreep.com/
       - fantasymassage.com/en/video/
       - fistingcentral.com/
       - footsiebabes.com/en/video/
@@ -69,6 +70,7 @@ sceneByURL:
       - nextdoormale.com/
       - nextdoorraw.com/en/video/
       - nextdoorstudios.com/en/video/
+      - nextdoortaboo.com/en/video/
       - nextdoortwink.com/en/video/
       - nudefightclub.com/en/video/
       - nurumassage.com/en/video/
@@ -89,6 +91,7 @@ sceneByURL:
       - squirtalicious.com/
       - squirtinglesbian.com/en/video/
       - squirtingorgies.com/en/scene/
+      - stagcollective.com/
       - strapattackers.com/
       - sunnyleone.com/
       - throated.com/en/video/
@@ -224,6 +227,7 @@ xPathScrapers:
                 falconstudios: Falcon Studios
                 famedigital: Fame Digital
                 fantasymassage: Fantasy Massage
+                familycreep: Family Creep
                 fistingcentral: Fisting Central
                 footsiebabes: Footsie Babes
                 gapingangels: Gaping Angels
@@ -258,6 +262,7 @@ xPathScrapers:
                 nextdoormale: Next Door Male
                 nextdoorraw: Next Door Raw
                 nextdoorstudios: Next Door Studios
+                nextdoortaboo: Next Door Taboo
                 nextdoortwink: Next Door Twink
                 nudefightclub: Nude Fight Club
                 nurumassage: Nuru Massage
@@ -278,6 +283,7 @@ xPathScrapers:
                 squirtalicious: Squirtalicious
                 squirtinglesbian: Squirting Lesbian
                 squirtingorgies: Squirting Orgies
+                stagcollective: Stag Collective
                 strapattackers: Strap Attackers
                 sunnyleone: Sunny Leone
                 throated: Throated
@@ -311,4 +317,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated December 24, 2021
+# Last Updated January 05, 2022
