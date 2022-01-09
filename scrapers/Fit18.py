@@ -23,7 +23,7 @@ class Site:
         self.api = "https://" + self.name.lower() + ".team18.app/graphql"
         if name == "Fit18":
             self.api_key = "77cd9282-9d81-4ba8-8868-ca9125c76991"
-        if name == "Thicc18":
+        elif name == "Thicc18":
             self.api_key = "0e36c7e9-8cb7-4fa1-9454-adbc2bad15f0"
 
     def isValidURL(self, url: str):
@@ -37,7 +37,10 @@ class Site:
                 return False
             if splits[-2] == "videos":
                 self.id = urllib.parse.unquote(url).split("/")[-1]
-                self.number = self.id.split(":")[-1]
+                ns = self.id.split(":")
+                if len(ns) < 2:
+                    return False
+                self.number = ns[-1]
                 return True
         return False
 
@@ -58,7 +61,7 @@ class Site:
         }
         r = self.callGraphQL(q)
         if r:
-            if r["asset"]["batch"]["result"]:
+            if r["asset"]["batch"].get("result"):
                 if r["asset"]["batch"]["result"][0].get("serve"):
                     return r["asset"]["batch"]["result"][0]["serve"].get("uri")
         return None
@@ -82,15 +85,15 @@ class Site:
                 result = response.json()
                 if result.get("error"):
                     for error in result["error"]["errors"]:
-                        raise Exception("GraphQL error: {}".format(error))
+                        raise Exception(f"GraphQL error: {error}")
                 if result.get("data"):
                     return result.get("data")
             elif response.status_code >= 400:
-                sys.exit("HTTP Error {}, {}".format(response.status_code,
-                                                    response.text))
+                sys.exit(f"HTTP Error {response.status_code}, {response.text}")
             else:
-                raise ConnectionError("GraphQL query failed:{} - {}".format(
-                    response.status_code, response.text))
+                raise ConnectionError(
+                    f"GraphQL query failed:{response.status_code} - {response.text}"
+                )
         except Exception as err:
             log.error(f"GraphqQL query failed {err}")
             return None
@@ -142,7 +145,6 @@ class Site:
                     videoId
                     title
                     duration
-                    galleryCount
                     description {
                         short
                         long
