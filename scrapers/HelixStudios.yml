@@ -51,8 +51,8 @@ xPathScrapers:
         selector: //title/text()
         postProcess:
           - replace:
-            - regex:  \- Helix Studios.*
-              with: $1
+              - regex: \s*- Helix Studios.*$
+                with:
       Date:
         selector: //div[@class="info-items"]/span[@class="info-item date"]/text()
         postProcess:
