@@ -12,8 +12,8 @@ xPathScrapers:
         selector: //div[@class='update-info-row text-gray']/text()[1]
         postProcess:
           - replace:
-            - regex:  \|.*
-              with: $1
+              - regex: \s*\|.*
+                with:
           - parseDate: January 2, 2006
       Details:
         selector: //div[@class='update-info-block']/div[@class='update-info-block'][1]//text()
@@ -32,4 +32,4 @@ xPathScrapers:
                 with: https://himeros.tv$1
               - regex: "-1x.jpg"
                 with: "-3x.jpg"
-# Last Updated September 14, 2021
+# Last Updated January 09, 2022
