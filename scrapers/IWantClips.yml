@@ -4,10 +4,29 @@ sceneByURL:
     url:
       - iwantclips.com/store
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://iwantclips.com/search/advsearch?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //span[@class='clip-title']/a/text()
+      URL: //span[@class='clip-title']/a/@href
+      Image: //div[@class='clip-thumb-16-9']/a/img/@src
   sceneScraper:
     scene:
       Title: //span[@class="headline hidden-xs"]/text()
+      URL:
+        selector: //button[@class='btn btn-default cart addToCart']/@data-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://iwantclips.com/store/item/
       Date:
         selector: //div[@class="col-xs-12 date fix"]/span/em/text()
         postProcess:
@@ -29,7 +48,9 @@ xPathScrapers:
         selector: //img[@class="videoPlayer show-flexible-picture"]/@src | //video[@class="video-js embed-responsive-item"]/@poster
       Studio:
         Name:
-          fixed: IwantClips
+          fixed: IWantClips
       Performers:
         Name: //a[@class="modelLink"]
-# Last Updated June 20, 2021
+driver:
+  useCDP: true
+# Last Updated January 06, 2022
