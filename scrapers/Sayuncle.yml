@@ -15,8 +15,6 @@ xPathScrapers:
           - parseDate: 01/02/2006
       Performers:
         Name: //a[@class="model-name-link"]
-      Tags:
-        Name: //div[@class="sceneCol sceneColCategories"]/a
       Details:
         selector: //div[@class="col sceneDesc hide"]/text()
       Image:
