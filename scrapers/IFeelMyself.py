@@ -40,6 +40,13 @@ def scrapeScene(filename,date,url):
     browser.session.cookies.set_cookie(cookie_obj)
     if url:
       debugPrint("Url found, using that to scrape")
+      if url.endswith(".jpg"):
+      #use the image url to extract the metadeta. This is the easiest way to scrape, as this site doesn't have individual pages for scenes (only pop-ups) 
+        media_id = re.search(r"\/(\d{3-5})\/",url,re.I).group(1)
+        artist_id = re.search(r"\/(f\d{4,5})",url,re.I).group(1)
+        debugPrint(f"Artist id found: {artist_id}")
+        debugPrint(f"Media id found: {media_id}")
+        url = "https://ifeelmyself.com/public/main.php?page=flash_player&out=bkg&media_id="+str(media_id)+"&artist_id="+str(artist_id)
       browser.open(url)
       response = browser.page
       table = response.find(class_ = ["blog_wide_news_tbl entry ppss-scene","entry ppss-scene"])
