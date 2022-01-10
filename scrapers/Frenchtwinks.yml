@@ -19,11 +19,9 @@ xPathScrapers:
       Studio:
         Name:
           fixed: French Twinks
-      Movies:
-        Name:
       Tags:
         Name: //li[@class="vid_keywords"]/a()
       Performers: 
         Name: //li[@class="small_act_pic small_act_picvidpage"]/a()
 
-# Last Updated December 29, 2021
+# Last Updated January 10, 2022
