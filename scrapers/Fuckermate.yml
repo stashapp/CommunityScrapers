@@ -12,7 +12,7 @@ xPathScrapers:
         selector: //div[@class="post-entry"]//p[@class="text-justify"]
       Image: //videoplayer/@poster
       Date:
-        selector: //div[@class="post-meta"]/text()
+        selector: //div[@id="video-frame"]/following-sibling::div//div[@class="post-meta"]/text()[1]
         postProcess:
           - parseDate: 2006-01-02 |
       Studio:
