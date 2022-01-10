@@ -9,7 +9,7 @@ xPathScrapers:
     scene:
       Title: //h1[@class="big_title2017"]
       Details: 
-        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]
+        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article
       Date:
         selector: //time[@datetime]
         postProcess:
