@@ -15,6 +15,12 @@ xPathScrapers:
         Name: //p[@class="sceneInfo"]/span/a
       Details:
         selector: //p[@class="col-lg-6 textDescription"]
+        postProcess:
+          - replace:
+              - regex: \.\.\.
+                with:
+              - regex: \s*Read\smore\s*$
+                with:
       Image:
         selector: //*[@class="hiddenImg stdimage"]/@src
       Studio:
