@@ -2,7 +2,7 @@ name: "MeninosOnline"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - meninosonline.net
+      - meninosonline.net/en/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
