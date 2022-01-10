@@ -23,4 +23,4 @@ xPathScrapers:
         Name:
           selector: //div[@class="siteName float-right px-3 rounded"]/a
 
-# Last Updated December 29, 2021
+# Last Updated January 10, 2022
