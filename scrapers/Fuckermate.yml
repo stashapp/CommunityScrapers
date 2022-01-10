@@ -10,12 +10,7 @@ xPathScrapers:
       Title: //div[@class="post-header font-alt"][1]/h1()
       Details: 
         selector: //*[@id="video-section"]/div/div/div/div/div[3]/div/div[1]/p[2]
-      Image:
-        selector: //div[@class="vjs-poster"]/@style
-        postProcess:
-          - replace:
-              - regex: .+(?:url\(")(.+)(?:"\)\;)
-                with: $1
+      Image: //videoplayer/@poster
       Date:
         selector: //div[@class="post-meta"]/text()
         postProcess:
