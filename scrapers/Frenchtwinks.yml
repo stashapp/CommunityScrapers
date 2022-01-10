@@ -13,7 +13,7 @@ xPathScrapers:
       Date:
         selector: //time[@datetime]
         postProcess:
-          - parseDate: 2021-01-02
+          - parseDate: 2006-01-02
       Image: 
         selector: //meta[@property="og:image"]/@content
       Studio:
