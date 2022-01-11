@@ -669,6 +669,7 @@ manyvids.com|ManyVids.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|CDP|-
 maskurbate.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 massage-parlor.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 massagebait.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+masqulin.com.com|Masqulin.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 mature4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 max-hardcore.com|MaxHardcore.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maxinex.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
