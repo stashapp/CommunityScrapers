@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //section[@id="video-section"]//div[@class="post-header font-alt"]/h1[1]
-      Details: 
+      Details:
         selector: //div[@class="post-entry"]//p[@class="text-justify"]
       Image: //videoplayer/@poster
       Date:
@@ -21,7 +21,6 @@ xPathScrapers:
       Tags:
         Name:
           selector: //section[@id="video-section"]//div[@class="post-meta"]/a
-      Performers: 
+      Performers:
         Name: //h1[@class="post-title"]/a()
-
 # Last Updated January 10, 2021
