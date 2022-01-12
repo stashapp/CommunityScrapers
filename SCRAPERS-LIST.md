@@ -1165,6 +1165,7 @@ vrporncz.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wankitnow.com|wankitnow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 wankz.com|wankz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wankzvr.com|WankzVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
+warashi-asian-pornstars.fr|WAPdB.yml|:x:|:x:|:x:|:heavy_check_mark:|Python|JAV
 watch4beauty.com|Watch4Beauty.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 watch4fetish.com|Watch4Fetish.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 watchingmydaughtergoblack.com|WatchingMyDaughterGoBlack.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
