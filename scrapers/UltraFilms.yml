@@ -14,8 +14,8 @@ xPathScrapers:
         selector: //*[@id="video-date"]/text()
         postProcess:
           - replace:
-            - regex: ".*Date: "
-              with: ""
+              - regex: ".*Date: "
+                with: ""
           - parseDate: January 2, 2006
       Performers:
         Name: //*[@id="video-actors"]/a/text()
@@ -24,8 +24,8 @@ xPathScrapers:
           selector: //*[@id="video-about"]/div[@class="tags"]/div/a/text()
           postProcess:
             - replace:
-              - regex: " Movies"
-                with: ""
+                - regex: " Movies"
+                  with: ""
       URL: //meta[@property="og:url"]/@content
       Studio:
         Name:
