@@ -64,10 +64,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-  cookies:
-    - Cookies:
-      - Name: gotfilled_warning_ok
-        Domain: gotfilled.com
-        Value: "1"
-        Path: /
-# Last Updated January 12, 2022
+# Last Updated January 14, 2022
