@@ -3,12 +3,14 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - gotfilled.com/tour/videos/
+      - bjraw.com/tour/videos/
     scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
     url:
       - gotfilled.com/tour/models/
+      - bjraw.com/tour/models/
     scraper: performerScraper
 
 xPathScrapers:
@@ -35,7 +37,13 @@ xPathScrapers:
               with: ""
       Studio:
         Name:
-          fixed: GotFilled
+        # The scene page titles are in the format:
+        # `{SCENE_TITLE} | {STUDIO_NAME}`
+          selector: /html/head/title/text()
+          postProcess:
+            - replace:
+              - regex: ".*\\| "
+                with: ""
 
   performerScraper:
     common:
