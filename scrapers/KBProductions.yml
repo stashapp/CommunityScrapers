@@ -18,19 +18,16 @@ xPathScrapers:
     scene:
       Title: //*[@id="info"]/h2/text()
       Date:
-        selector: //*[@id="info"]/div[4]/div[3]/h5/text()
+        selector: //*[@id="info"]//div[starts-with(h4, "Publish")]/h5
         postProcess:
           - parseDate: Jan 2, 2006
-      Details: //*[@id="info"]/div[1]/text()
+      Details: //*[@id="info"]/div[@class="desc"]/text()
       Performers:
-        Name: //*[@id="info"]/div[2]/h3/a/text()
+        Name: //*[@id="info"]/div[@class="video-model"]/h3/a/text()
       Tags:
         Name: //*[@id="info"]/div[5]/div[2]/p/a/text()
       Image:
-      # Images are a div with an inline style containing a background-image with
-      # a url
-      # Inline style exemple: `background-image: url("{IMAGE_URL}");`
-        selector: //*[@id="vjs_video_3"]/div[3]/@style
+        selector: //*[@id="vjs_video_3"]/div[@class="vjs-poster"]/@style
         postProcess:
           - replace:
             - regex: .*url\("|"\);
@@ -47,7 +44,7 @@ xPathScrapers:
 
   performerScraper:
     common:
-      $details: //*[@id="root"]/main/div/div[2]/div[2]
+      $details: //*[@id="root"]/main/div/div[contains(@class, "model-info")]/div[contains(@class, "details")]
     performer:
       Name: $details/h2/text()
       Birthdate: $details/div/ul/li[1]/p/text()
@@ -66,10 +63,10 @@ xPathScrapers:
           - lbToKg: true
       Measurements: $details/div/ul/li[4]/p/text()
       Details: $details/p
-      Image: //*[@id="root"]/main/div/div[2]/div[1]/img/@src
+      Image: //*[@id="root"]/main/div/div[contains(@class, "model-info")]/div[contains(@class, "thumbnail")]/img/@src
       Gender:
         fixed: female
 
 driver:
   useCDP: true
-# Last Updated January 14, 2022
+# Last Updated January 15, 2022
