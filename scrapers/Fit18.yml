@@ -1,9 +1,10 @@
 name: Fit18
 sceneByURL:
   - url:
-      - fit18.com
+      - fit18.com/videos/
+      - thicc18.com/videos/
     action: script
     script:
-      - python3
+      - python
       - Fit18.py
-# Last Updated September 08, 2021
+# Last Updated January 07, 2022
