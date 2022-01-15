@@ -271,7 +271,7 @@ if search_query and "search" in sys.argv:
         # make sure longer matches are filtered first
         studios_sorted = sortByLength(studios)
         for x in studios_sorted:
-            if x.id.lower() not in search_query:
+            if x.id.lower() in search_query:
                 filter.append(x.id.lower())
                 continue
             # remove the studio from the search result
@@ -286,7 +286,7 @@ if search_query and "search" in sys.argv:
 
     for x in studios:
         if filter:
-            if x.id.lower() in filter:
+            if x.id.lower() not in filter:
                 #log.debug(f"[Filter] {x.id} ignored")
                 continue
         s = x.getSearchResult(search_query)
