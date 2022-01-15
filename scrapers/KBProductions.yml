@@ -69,4 +69,15 @@ xPathScrapers:
 
 driver:
   useCDP: true
+  cookies:
+    - Cookies:
+      - Name: gotfilled_warning_ok
+        Domain: gotfilled.com
+        Value: "1"
+        Path: /
+    - Cookies:
+      - Name: gbj-raw_warning_ok
+        Domain: bjraw.com
+        Value: "1"
+        Path: /
 # Last Updated January 15, 2022
