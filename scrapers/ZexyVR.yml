@@ -11,37 +11,37 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   performerScraper:
-    common: 
+    common:
       $data: //div[@class="col-12 col-lg-7"]
     performer:
       Name: $data/h1/text()
-      Gender: 
+      Gender:
         fixed: female
-      Birthdate: 
+      Birthdate:
         selector: $data//li[normalize-space(text())="Birth date:"]/b[1]/text()
         postProcess:
           - parseDate: Jan 2, 2006
       HairColor: $data//li[normalize-space(text())="Hair color:"]/b[1]/text()
       EyeColor: $data//li[normalize-space(text())="Eye color:"]/b[1]/text()
-      Height: 
+      Height:
         selector: $data//li[normalize-space(text())="Height:"]/b[1]/text()
         postProcess:
-          - replace: 
-            - regex: " cm$"
-              with: ""
-      Weight: 
+          - replace:
+              - regex: " cm$"
+                with: ""
+      Weight:
         selector: $data//li[normalize-space(text())="Weight:"]/b[1]/text()
         postProcess:
-          - replace: 
-            - regex: " kg$"
-              with: ""
+          - replace:
+              - regex: " kg$"
+                with: ""
       Measurements: $data//li[normalize-space(text())="Bra size:"]/b[2]/text()
-      Image: 
+      Image:
         selector: //img[@class="m-auto img-fluid"]/@src
         postProcess:
           - replace:
-            - regex: \?.*$
-              with: ""
+              - regex: \?.*$
+                with: ""
   sceneScraper:
     common:
       $info: //div[@class="row pt-3"]
@@ -49,17 +49,17 @@ xPathScrapers:
     scene:
       Title: $info//h2/text()
       Details: $info//h2/following-sibling::p
-      Date: 
+      Date:
         selector: $textBlob/text()[contains(.,"Released on")]
         postProcess:
           - replace:
-            - regex: ^.*Released on 
-              with: ""
+              - regex: ^.*Released on
+                with: ""
           - parseDate: Jan 2, 2006
       Studio:
         Name:
           fixed: ZexyVR
-      Tags: 
+      Tags:
         Name: $textBlob/a[@class="btn-link font-weight-light"]/text()
       Performers:
         Name: $textBlob/a[contains(@href,"/models/")]/text()
@@ -67,6 +67,6 @@ xPathScrapers:
         selector: //div[@class="videoPlayerContainer"]/deo-video/@cover-image|//div[@class="col-12 col-lg-8"]/img/@src
         postProcess:
           - replace:
-            - regex: \?.*$
-              with: ""
+              - regex: \?.*$
+                with: ""
 # Last Updated December 29, 2021
