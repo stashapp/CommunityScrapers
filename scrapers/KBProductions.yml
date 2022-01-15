@@ -47,21 +47,21 @@ xPathScrapers:
       $details: //*[@id="root"]/main/div/div[contains(@class, "model-info")]/div[contains(@class, "details")]
     performer:
       Name: $details/h2/text()
-      Birthdate: $details/div/ul/li[1]/p/text()
-      HairColor: $details/div/ul/li[6]/p/text()
-      EyeColor: $details/div/ul/li[5]/p/text()
+      Birthdate: $details/div/ul/li[h3[text()="Birthdate"]]/p/text()
+      HairColor: $details/div/ul/li[h3[text()="Hair"]]/p/text()
+      EyeColor: $details/div/ul/li[h3[text()="Eyes"]]/p/text()
       Height:
-        selector: $details/div/ul/li[8]/p/text()
+        selector: $details/div/ul/li[h3[text()="Height"]]/p/text()
         postProcess:
           - feetToCm: true
       Weight:
-        selector: $details/div/ul/li[7]/p/text()
+        selector: $details/div/ul/li[h3[text()="Weight"]]/p/text()
         postProcess:
           - replace:
             - regex: " lbs"
               with: ""
           - lbToKg: true
-      Measurements: $details/div/ul/li[4]/p/text()
+      Measurements: $details/div/ul/li[h3[text()="Measurements"]]/p/text()
       Details: $details/p
       Image: //*[@id="root"]/main/div/div[contains(@class, "model-info")]/div[contains(@class, "thumbnail")]/img/@src
       Gender:
