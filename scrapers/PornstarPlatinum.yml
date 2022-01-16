@@ -1,0 +1,36 @@
+name: "PornstarPlatinum"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornstarplatinum.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $panel: //div[@class="panel-content"]
+    scene:
+      Title: //div[contains(@class,"video-slider-meta")]/h3/text()
+      Date: $panel/div[@class="video-author"]/span[2]/text()
+      Details: $panel/p/text()
+      Performers:
+        Name: 
+          selector: //div[contains(@class,"video-slider-meta")]/h3/text()
+          postProcess:
+            - replace:
+              - regex: ([a-zA-Z]+\s[a-zA-Z]+)*.+[Ii][Nn]+.+
+                with: "$1"
+      Tags:
+        Name: 
+          selector: $panel//div[@class="tagcloud"]/a/text()
+          concat: "|"
+          postProcess:
+            - replace:
+              - regex: ^
+                with: "!1. Western|"
+          split: "|"
+      Studio:
+        Name: 
+            fixed: "Pornstar Platinum"
+      Image: //video[@id="myVideo"]/@poster
+
+# Last Updated January 08, 2021
