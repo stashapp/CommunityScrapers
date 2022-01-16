@@ -1,0 +1,25 @@
+name: "WAPdB"
+performerByName:
+    action: script
+    script:
+      - python
+      - WAPdB.py
+      - performerByName
+performerByFragment:
+    action: script
+    script:
+      - python
+      - WAPdB.py
+      - performerByFragment
+performerByURL:
+    - action: script
+      url:
+        - http://warashi-asian-pornstars.fr/en/
+        - http://warashi-asian-pornstars.fr/fr/
+        - http://warashi-asian-pornstars.fr/ja/
+      script:
+        - python
+        - WAPdB.py
+        - performerByURL
+
+# Last Updated January 11, 2022
