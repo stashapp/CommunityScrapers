@@ -22,12 +22,6 @@ xPathScrapers:
       Tags:
         Name: 
           selector: $panel//div[@class="tagcloud"]/a/text()
-          concat: "|"
-          postProcess:
-            - replace:
-              - regex: ^
-                with: "!1. Western|"
-          split: "|"
       Studio:
         Name: 
             fixed: "Pornstar Platinum"
