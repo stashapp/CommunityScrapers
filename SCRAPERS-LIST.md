@@ -847,6 +847,7 @@ pornmegaload.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:
 pornperverts.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornpros.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornstarhardcore.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+pornstarplatinum.com|PornstarPlatinum.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornstarstroker.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornstartease.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornweekends.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
