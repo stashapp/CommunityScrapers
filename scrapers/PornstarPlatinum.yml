@@ -2,7 +2,7 @@ name: "PornstarPlatinum"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - pornstarplatinum.com
+      - pornstarplatinum.com/tour/model/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
