@@ -1,83 +1,13 @@
-name: KB Productions
+name: "KB Productions"
 sceneByURL:
-  - action: scrapeXPath
-    url:
-      - gotfilled.com/tour/videos/
+  - url:
+      - bjraw.com/tour/upcoming/
       - bjraw.com/tour/videos/
-    scraper: sceneScraper
+      - gotfilled.com/tour/upcoming/
+      - gotfilled.com/tour/videos/
 
-performerByURL:
-  - action: scrapeXPath
-    url:
-      - gotfilled.com/tour/models/
-      - bjraw.com/tour/models/
-    scraper: performerScraper
-
-xPathScrapers:
-  sceneScraper:
-    scene:
-      Title: //*[@id="info"]/h2/text()
-      Date:
-        selector: //*[@id="info"]//div[starts-with(h4, "Publish")]/h5
-        postProcess:
-          - parseDate: Jan 2, 2006
-      Details: //*[@id="info"]/div[@class="desc"]/text()
-      Performers:
-        Name: //*[@id="info"]/div[@class="video-model"]/h3/a/text()
-      Tags:
-        Name: //*[@id="info"]/div[5]/div[2]/p/a/text()
-      Image:
-        selector: //*[@id="vjs_video_3"]/div[@class="vjs-poster"]/@style
-        postProcess:
-          - replace:
-            - regex: .*url\("|"\);
-              with: ""
-      Studio:
-        Name:
-        # The scene page titles are in the format:
-        # `{SCENE_TITLE} | {STUDIO_NAME}`
-          selector: /html/head/title/text()
-          postProcess:
-            - replace:
-              - regex: ".*\\| "
-                with: ""
-
-  performerScraper:
-    common:
-      $details: //*[@id="root"]/main/div/div[contains(@class, "model-info")]/div[contains(@class, "details")]
-    performer:
-      Name: $details/h2/text()
-      Birthdate: $details/div/ul/li[h3[text()="Birthdate"]]/p/text()
-      HairColor: $details/div/ul/li[h3[text()="Hair"]]/p/text()
-      EyeColor: $details/div/ul/li[h3[text()="Eyes"]]/p/text()
-      Height:
-        selector: $details/div/ul/li[h3[text()="Height"]]/p/text()
-        postProcess:
-          - feetToCm: true
-      Weight:
-        selector: $details/div/ul/li[h3[text()="Weight"]]/p/text()
-        postProcess:
-          - replace:
-            - regex: " lbs"
-              with: ""
-          - lbToKg: true
-      Measurements: $details/div/ul/li[h3[text()="Measurements"]]/p/text()
-      Details: $details/p
-      Image: //*[@id="root"]/main/div/div[contains(@class, "model-info")]/div[contains(@class, "thumbnail")]/img/@src
-      Gender:
-        fixed: female
-
-driver:
-  useCDP: true
-  cookies:
-    - Cookies:
-      - Name: gotfilled_warning_ok
-        Domain: gotfilled.com
-        Value: "1"
-        Path: /
-    - Cookies:
-      - Name: gbj-raw_warning_ok
-        Domain: bjraw.com
-        Value: "1"
-        Path: /
-# Last Updated January 15, 2022
+    action: script
+    script:
+      - python3
+      - KBProductions.py
+# Last Updated January 16, 2022
