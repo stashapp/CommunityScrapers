@@ -3,7 +3,16 @@ import io
 import sys
 import requests
 from datetime import datetime
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup  # requires v4.10.0 and above
+
+
+def check_compat():
+    from bs4 import __version__ as ver
+    major, minor, _ = ver.split('.')
+    if (int(major) == 4 and int(minor) >= 10) or (int(major) > 4):
+        return
+    print(f'This scraper requires BeautifulSoup 4.10.0 and above. Your version: {ver}', file=sys.stderr)
+    sys.exit(1)
 
 
 def process_name(name):
@@ -74,7 +83,7 @@ def scrape_mini_profile(soup, url):
             if birthplace != 'unknown':
                 performer['country'] = birthplace
             if birthplace == 'Japan':
-                performer['Ethnicity'] = 'Japanese'
+                performer['ethnicity'] = 'asian'
         if measurements_node := details_node.find('p', text=lambda t: measurements_prefix in str(t)):
             measurements = measurements_node.text.split(measurements_prefix)[1]
             if measurements != 'unknown':
@@ -134,7 +143,7 @@ def scrape_full_profile(soup, url):
         country = country_nodes[1].text
         performer['country'] = country
         if country == 'Japan':
-            performer['ethnicity'] = 'Japanese'
+            performer['ethnicity'] = 'asian'
 
     aliases = []
     if japanese_name:
@@ -204,6 +213,7 @@ def search_performer(frag):
 
 
 def main():
+    check_compat()
     # workaround for cp1252
     sys.stdin = io.TextIOWrapper(sys.stdin.detach(), encoding='utf-8')
     frag = json.loads(sys.stdin.read())
