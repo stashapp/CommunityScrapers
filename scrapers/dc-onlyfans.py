@@ -1,31 +1,24 @@
 import json
 import sys
 import sqlite3
-import requests
 from pathlib import Path
 import base64
 import mimetypes
+try:
+    import py_common.graphql as graphql
+    import py_common.log as log
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
+
 
 ''' This script is a companion to the onlyfans data scraper by DIGITALCRIMINAL
     https://github.com/DIGITALCRIMINAL/OnlyFans
     This tool allows you to download data from onlyfans and saves some metadata on what it downloads.
     
     This script needs python3 and requests and sqlite3 
-    If you have a password on your instance you need to specify the api key below by removing the # and adding the key.
+    If you have a password on your instance you need to specify the api key by adding it to py_common/config.py
    '''
-
-
-headers = {
-    "Accept-Encoding": "gzip, deflate, br",
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-    "Connection": "keep-alive",
-#   "ApiKey":"xxxxxxxxxx",
-    "DNT": "1"
-}
-graphql_api='http://localhost:9999/graphql'
-
-
 
 def lookup_scene(file,db,parent):
     print(f"using database: {db.name}  {file.name}", file=sys.stderr)
@@ -49,29 +42,9 @@ def lookup_scene(file,db,parent):
     return res
 
 def findFilePath(id):
-    json = {}
-    json['query'] = """query FindScene($id: ID!, $checksum: String) {
-  findScene(id: $id, checksum: $checksum) {
-      id
-      path
-  }
-}"""
-    json['variables'] = {"id":id}
-
-    # handle cookies
-    response = requests.post(graphql_api, json=json, headers=headers)
-
-    if response.status_code == 200:
-        result = response.json()
-        if result.get("error", None):
-            for error in result["error"]["errors"]:
-                print("GraphQL error: {}".format(error),file=sys.stderr)
-                print("{}")
-                sys.exit()
-        if result.get("data", None):
-            data=result.get("data")
-            if "findScene" in data:
-                return data["findScene"]["path"]
+    scene=graphql.getScene(id)
+    if scene:
+        return scene["path"]
     print(f"Error connecting to api",file=sys.stderr)
     print("{}")
     sys.exit()
