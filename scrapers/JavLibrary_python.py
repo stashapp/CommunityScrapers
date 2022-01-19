@@ -552,6 +552,7 @@ if jav_main_html:
         # R18
         if jav_result.get("r18"):
             r18_search_url = re.sub(r".+\/\/", "https://", jav_result["r18"][0])
+            r18_search_url += '/'
             r18_search_html = sendRequest(r18_search_url, R18_HEADERS)
             r18_main_html = r18_search(r18_search_html, r18_xPath_search)
 
