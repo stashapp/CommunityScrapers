@@ -13,6 +13,8 @@ xPathScrapers:
         selector: //div[@class="d-flex small movie-status"]/p
         postProcess:
           - replace:
+              - regex: (\d),(\d)
+                with: $1$2
               - regex: (\d+).+
                 with: $1
           - subtractDays: true
