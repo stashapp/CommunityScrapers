@@ -2,12 +2,18 @@ name: William Higgins
 sceneByURL:
   - action: scrapeXPath
     url:
+      - ambushmassage.com
+      - cfnmeu.com
+      - malefeet4u.com
       - str8hell.com
+      - swnude.com
       - williamhiggins.com
     scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $url: //link[@rel="canonical"]/@href
     scene:
       Performers:
         Name: //span[@class="model-info-label"]/following-sibling::a
@@ -19,7 +25,14 @@ xPathScrapers:
       Details:
         selector: //div[@class="set_text"]
       Image:
-        selector: //video/@data-poster
+        selector: //video/@data-poster|$url
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: ^(/[^|]+)\|(https://[^/]+)/.+ # for sites that miss the hostname
+                with: $2$1
+              - regex: \|.+$ #for the rest
+                with:
       Studio:
         Name:
           selector: /html/head/title
@@ -28,8 +41,12 @@ xPathScrapers:
                 - regex: \.com.*
                   with: ""
             - map:
-                WilliamHiggins: "William Higgins"
+                AmbushMassage: "Ambush Massage"
+                CFNMEU: "CFNMEU"
+                MaleFeet4U: "MaleFeet4U"
                 STR8HELL: "STR8HELL"
+                SWNUDE: "SW NUDE"
+                WilliamHiggins: "William Higgins"
 driver:
   cookies:
     - Cookies:
@@ -42,9 +59,29 @@ driver:
           Domain: ".str8hell.com"
           Value: "1"
           Path: "/"
+    - Cookies:
+        - Name: "adult"
+          Domain: ".cfnmeu.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "adult"
+          Domain: ".malefeet4u.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "adult"
+          Domain: ".ambushmassage.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "adult"
+          Domain: ".swnude.com"
+          Value: "1"
+          Path: "/"
   useCDP: true
   clicks:
     - xpath: //a[@class="cc-btn cc-dismiss"]
     - xpath: //span[@class="more_info_field_video"]
       sleep: 5
-# Last Updated December 30, 2021
+# Last Updated January 16, 2022
