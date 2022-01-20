@@ -57,6 +57,7 @@ amateurboxxx.com|AmateurBoxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateureuro.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateursfrombohemia.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amazinganna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+ambushmassage.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 amelielou.com|AmelieLou.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amkingdom.com|ATKExotics.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 amourangels.com|AmourAngels.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -203,6 +204,7 @@ caribbeancompr.com|Carib.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 carmenvalentina.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 castingcouch-x.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 catalinacruz.com|Catalina Cruz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+cfnmeu.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 charleechaselive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 chastitybabes.com|chastitybabes.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cherrypimps.com|CherryPimps.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -661,6 +663,7 @@ madouqu.com|Madou.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maggiegreenlive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maketeengape.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maledigital.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+malefeet4u.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 mamacitaz.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mandyflores.com|Mandyflores.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 manojob.com|FinishesTheJob.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1006,7 +1009,7 @@ strapondreamer.com|StrapDreamer.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 streaming.iafd.com|IafdStreaming.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 stretchedoutsnatch.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 stripzvr.com|StripzVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-str8hell.com|Williamhiggins.yml.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+str8hell.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 stuck4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 studiofow.com|StudioFOW.yml|:heavy_check_mark:|:x:|:x:|:x:|-|3D Animation
 stuffintwats.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1029,6 +1032,7 @@ sweetheartvideo.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 sweetsinner.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 sweetyx.com|SweetyX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swinger-blog.xxx|SwingerBlog.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+swnude.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 tabooheat.com|TabooHeat.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 taboopov.com|taboopov.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tacamateurs.com|TACAmateurs.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1193,7 +1197,7 @@ wicked.com (/movies)|GammaEntertainment.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 wicked.com (/movies)|WickedMovies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wicked.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wildoncam.com|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-williamhiggins.com|Williamhiggins.yml.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+williamhiggins.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 wowgirls.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wowporn.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wtfpass.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
