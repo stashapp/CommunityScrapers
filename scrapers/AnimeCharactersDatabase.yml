@@ -1,0 +1,19 @@
+name: AnimeCharactersDatabase
+
+performerByURL:
+- action: script
+  url:
+    - animecharactersdatabase.com
+  script:
+    - python
+    - AnimeCharactersDatabase.py
+    - performerByURL
+
+performerByName:
+  action: script
+  script:
+    - python
+    - AnimeCharactersDatabase.py
+    - performerByName
+
+# Last Updated January 20, 2022
