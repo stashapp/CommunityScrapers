@@ -17,7 +17,6 @@ from lxml import html
 # These fields will be populated if available:
 # Name, Gender, Birthdate, Country, Hair Color, Eye Color, Height, Measurements, URL, Details, Tags, Image
 #
-# Tags mostly include appearance indicators like: ahoge, dress, hat, twintails, etc.
 # A number of additional tags can be configured below.
 
 # ---------------------------------------
@@ -37,6 +36,10 @@ prefix = "performer:"
 # List of additional tags.
 additional_tags = [{"name": "fictional"}]  # []
 
+# Tags mostly include appearance indicators like: ahoge, dress, hat, twintails, etc.
+include_tag = True
+tag_prefix = prefix
+
 # Scrape the source material as tag (name of anime/game): Kantai Collection, Idolmaster: Cinderella Girls, etc.
 include_parody = True
 parody_prefix = "parody:"
@@ -49,7 +52,7 @@ sign_prefix = prefix + "sign:"
 include_race = True
 race_prefix = prefix + "race:"
 
-# Scrape ship class of ship girls as tag (kancolle, etc.): Battleship, etc.
+# Scrape ship class of ship girls as tag (kancolle, etc.): Destroyer, etc.
 include_ship_class = True
 ship_class_prefix = prefix + "ship:"
 
@@ -172,7 +175,8 @@ def performerByURL(url, result={}):
         return tree.xpath(template.format(field))
 
     result["tags"] = additional_tags
-    result["tags"] += [{"name": prefix + tag.strip()} for tag in parse_left("Tags ")]
+    if include_tag:
+        result["tags"] += [{"name": tag_prefix + tag.strip()} for tag in parse_left("Tags ")]
     if include_parody:
         result["tags"] += [{"name": parody_prefix + tag.strip()} for tag in parse_left("From")]
     if include_blood_type:
@@ -230,6 +234,6 @@ if sys.argv[1] == "performerByURL":
 elif sys.argv[1] == "performerByName":
     name = i["name"]
     debug(f"Searching for name: {name}")
-    results = performerByName(name, )[:limit]
+    results = performerByName(name)[:limit]
     results = addFranchise(name, results)
     print(json.dumps(results))

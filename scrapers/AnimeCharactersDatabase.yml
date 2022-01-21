@@ -3,7 +3,7 @@ name: AnimeCharactersDatabase
 performerByURL:
 - action: script
   url:
-    - animecharactersdatabase.com
+    - animecharactersdatabase.com/characters.php
   script:
     - python
     - AnimeCharactersDatabase.py
@@ -16,4 +16,4 @@ performerByName:
     - AnimeCharactersDatabase.py
     - performerByName
 
-# Last Updated January 20, 2022
+# Last Updated January 21, 2022
