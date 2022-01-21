@@ -14,7 +14,7 @@ and then save page as file from the browser to preserve the correct format for t
 
 Any scraper file has to be stored in the `~/.stash/scrapers` ( ~/.stash is where the config and database file are located) directory. If the `scrapers` directory is not there it needs to be created.
 
-After updating the scrapers directory contents or editing a scraper file a restart of stash is needed and a refresh of the edit scene/performer page.(In recent stash builds instead of restarting __scrape with -> reload scrapers__ is enough)
+After updating the scrapers directory contents or editing a scraper file a reload of the scrapers is needed and a refresh of the edit scene/performer page.( __scrape with -> reload scrapers__ )
 
 Some sites block content if the user agent is not valid. If you get some kind of blocked or denied message make sure to configure the `Scraping ->
 Scraper User Agent` setting in stash. Valid strings e.g. for firefox can be found here https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox . Scrapers for those sites should have a comment mentioning this along with a tested and working user agent string
@@ -35,7 +35,7 @@ Clicking on that button brings up a popup that lets you select which fields to u
 
 Some scrapers support the `Scrape with...` function so you can you use that instead of adding a url. `Scrape with...` usually works with either the `Title` field or the filename so make sure that they provide enough data for the scraper to work with.
 
-On newer stash versions there is a `Query` button for scrapers that support that. Clicking the button allows you to edit the text that the scraper will use for your queries.
+A `Query` button is also available for scrapers that support that. Clicking the button allows you to edit the text that the scraper will use for your queries.
 
 In case of errors/no results during scraping make sure to check stash's log section (Settings->Logs->Log Level Debug) for more info.
 
