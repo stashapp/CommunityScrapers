@@ -57,6 +57,7 @@ amateurboxxx.com|AmateurBoxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateureuro.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateursfrombohemia.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amazinganna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+ambushmassage.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 amelielou.com|AmelieLou.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amkingdom.com|ATKExotics.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 amourangels.com|AmourAngels.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -203,6 +204,7 @@ caribbeancompr.com|Carib.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 carmenvalentina.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 castingcouch-x.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 catalinacruz.com|Catalina Cruz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+cfnmeu.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 charleechaselive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 chastitybabes.com|chastitybabes.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cherrypimps.com|CherryPimps.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -661,6 +663,7 @@ madouqu.com|Madou.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maggiegreenlive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maketeengape.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maledigital.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+malefeet4u.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 mamacitaz.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mandyflores.com|Mandyflores.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 manojob.com|FinishesTheJob.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1006,7 +1009,7 @@ strapondreamer.com|StrapDreamer.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 streaming.iafd.com|IafdStreaming.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 stretchedoutsnatch.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 stripzvr.com|StripzVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-str8hell.com|Williamhiggins.yml.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+str8hell.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 stuck4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 studiofow.com|StudioFOW.yml|:heavy_check_mark:|:x:|:x:|:x:|-|3D Animation
 stuffintwats.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1029,6 +1032,7 @@ sweetheartvideo.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 sweetsinner.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 sweetyx.com|SweetyX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swinger-blog.xxx|SwingerBlog.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+swnude.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 tabooheat.com|TabooHeat.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 taboopov.com|taboopov.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tacamateurs.com|TACAmateurs.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1118,6 +1122,7 @@ trickymasseur.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trickyoldteacher.com|OldGoesYoung.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trickyspa.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trikepatrol.com|TrikePatrol.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+tripforfuck.com|TripForFuck.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 trueamateurs.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trueanal.com|Nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tryteens.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1193,7 +1198,7 @@ wicked.com (/movies)|GammaEntertainment.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 wicked.com (/movies)|WickedMovies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wicked.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wildoncam.com|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-williamhiggins.com|Williamhiggins.yml.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+williamhiggins.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 wowgirls.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wowporn.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wtfpass.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1236,6 +1241,7 @@ Scraper | Description | Comments | PR
 --------|-------------|----------|:--:
 ComicInfoXML.yml| A ComixInfo XML gallery scraper | A python scraper that looks for ComicInfo xml compatible  files in the gallery's folder/filename and parses them | [#827](https://github.com/stashapp/CommunityScrapers/pull/827)
 CopyFromScene.yml| A gallery scraper that returns metadata from the first linked scene | A python scraper that returns metadata from copied scenes, first link the scene to the gallery then run the scraper on the gallery | 
+dc-onlyfans.yml| An Onlyfans DB scene scraper | A python scraper that scrapes Only Fans scenes using the DB file (user_data.db) created from DIGITALCRIMINAL's tool | [#847](https://github.com/stashapp/CommunityScrapers/pull/847)
 MindGeekAPI.yml| A sceneBy(Name\|Fragment) scraper for MindGeek network| A python scraper that queries directly the MindGeek API. For further **needed** instructions refer to the relevant PRs and have a look in the `MindGeekApi.py` file | [#711](https://github.com/stashapp/CommunityScrapers/pull/711) [#738](https://github.com/stashapp/CommunityScrapers/pull/738) [#411](https://github.com/stashapp/CommunityScrapers/pull/411)
 multiscrape.yml| A performer scraper that can utilize multiple stash Performer scrapers| A python scraper that can use multiple existing performer scrapers in order to get performer meta. To configure it edit the `multiscrape.py` file|[#594](https://github.com/stashapp/CommunityScrapers/pull/594)
 performer-image-dir.yml| A performer image scraper compatible with the actress-pics repo | A python scraper that searches in a cloned actress-pics repo for performer images. Configuration and more info in `performer-image-dir.py`|[#453](https://github.com/stashapp/CommunityScrapers/pull/453)
