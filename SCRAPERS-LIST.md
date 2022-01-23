@@ -18,7 +18,7 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 2girls1camera.com|TopWebModels.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 21naturals.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 21roles.com|21Roles.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
-21sextreme.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+21sextreme.com|Algolia_21Sextreme.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 21sextury.com|PureTaboo.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 40somethingmag.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 50plusmilfs.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -29,6 +29,7 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 abbiemaley.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abbywinters.com|AbbyWinters.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abuseme.com|AbuseMe.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+addicted2girls.com|Algolia_Addicted2Girls.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 activeduty.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 addisonstreet.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 adultdvdempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
