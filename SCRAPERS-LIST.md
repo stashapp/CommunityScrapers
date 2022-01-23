@@ -156,7 +156,7 @@ biggulpgirls.com|TopWebModels.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 bigfatcreampie.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bigtitstokyo.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 biguysfuck.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
-biphoria.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+biphoria.com|Algolia_Biphoria.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 bjraw.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 black-tgirls.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 black4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -197,7 +197,7 @@ brutalinvasion.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bryci.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bskow.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bukkakenow.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
-burningangel.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+burningangel.com|Algolia_BurningAngel.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 bushybushy.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bustybeauties.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 buttman.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
