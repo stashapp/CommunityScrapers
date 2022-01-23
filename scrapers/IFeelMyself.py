@@ -11,9 +11,9 @@ def readJSONInput():
     return json.loads(input)
 
 def extract_info(table,cover_url=None):
+    description = None
     if table.find(class_= ["blog_wide_new_text","entryBlurb"]):
         description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True).replace("\x92","'")
-    description = None
     date = table.find(class_="entryDatestamp").get_text(strip=True) #This is a BeautifulSoup element
     performer = table.find(class_= ["entryHeadingFlash","entryHeading"]).find_all("a")[1].get_text().replace("_"," ")
     performer = str(performer)
