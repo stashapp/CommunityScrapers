@@ -15,7 +15,7 @@ if sys.argv[1] == "gallery_query":
     log.debug("input: " + json.dumps(fragment))
     result=graphql.getGallery(fragment['id'])
     if not result:
-        log.info(f"Could not determine details for gallery: `{fragment['id']}`",file=sys.stderr)
+        log.info(f"Could not determine details for gallery: `{fragment['id']}`")
         print("{}")
     else:
         if len(result["scenes"])  > 0:
