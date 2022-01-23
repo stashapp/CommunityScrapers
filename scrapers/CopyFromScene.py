@@ -12,7 +12,7 @@ except ModuleNotFoundError:
 
 if sys.argv[1] == "gallery_query":
     fragment = json.loads(sys.stdin.read())
-    log.debug("input: " + json.dumps(fragment),file=sys.stderr)
+    log.debug("input: " + json.dumps(fragment))
     result=graphql.getGallery(fragment['id'])
     if not result:
         log.info(f"Could not determine details for gallery: `{fragment['id']}`",file=sys.stderr)
