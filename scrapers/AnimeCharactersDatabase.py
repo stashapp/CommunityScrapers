@@ -7,6 +7,14 @@ import cloudscraper
 import requests
 from lxml import html
 
+try:
+    import py_common.log as log
+except ModuleNotFoundError:
+    print(
+        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
+        file=sys.stderr)
+    sys.exit(1)
+
 #  --------------------------------------
 
 # This is a scraper for: animecharactersdatabase.com
@@ -76,11 +84,6 @@ hair_length_prefix = prefix + "Hair "
 # ---------------------------------------
 # ---------------------------------------
 
-
-def debug(t):
-    sys.stderr.write(str(t) + "\n")
-
-
 def readJSONInput():
     input = sys.stdin.read()
     return json.loads(input)
@@ -95,11 +98,11 @@ def scrapeUrlToString(url):
     try:
         scraped = scraper.get(url)
     except:
-        debug("scrape error")
+        log.error("scrape error")
         sys.exit(1)
 
     if scraped.status_code >= 400:
-        debug('HTTP Error: %s' % scraped.status_code)
+        log.error('HTTP Error: %s' % scraped.status_code)
         sys.exit(1)
 
     return scraped.content
@@ -119,7 +122,7 @@ def performerByName(query):
             "id": id.replace("characters.php?id=", ""),
             "url": "https://www.animecharactersdatabase.com/" + id
         })
-    debug(f"scraped {len(results)} results on: {url}")
+    log.info(f"scraped {len(results)} results on: {url}")
     return results
 
 
@@ -145,8 +148,8 @@ def addFranchise(query, results):
         # Append franchise to character name for easier differentiation.
         result["name"] = f"{result['name']} ({franchise})"
         result.pop("id")
-    debug(f"scraped {count1} franchises by single API call")
-    debug(f"scraped {count2} franchises by separate API calls")
+    log.debug(f"scraped {count1} franchises by single API call")
+    log.debug(f"scraped {count2} franchises by separate API calls")
     return results
 
 
@@ -156,7 +159,7 @@ def apiGetCharacter(id):
 
 
 def performerByURL(url, result={}):
-    debug("performerByURL: " + url)
+    log.debug("performerByURL: " + url)
     tree = scrapeURL(url)
     result["url"] = url
     result["name"] = next(iter(tree.xpath(
@@ -233,7 +236,7 @@ if sys.argv[1] == "performerByURL":
     print(json.dumps(result))
 elif sys.argv[1] == "performerByName":
     name = i["name"]
-    debug(f"Searching for name: {name}")
+    log.info(f"Searching for name: {name}")
     results = performerByName(name)[:limit]
     results = addFranchise(name, results)
     print(json.dumps(results))
