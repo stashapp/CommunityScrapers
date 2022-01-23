@@ -17,7 +17,7 @@ from bs4 import BeautifulSoup
 
 def get_from_url(url_to_parse):
     m = re.match(
-        r'https?://(?:www\.)?((\w+)\.com)/tour/(?:videos|upcoming)/(\d+)/([a-z0-9-]+)',
+        r'https?://(?:www\.)?((\w+)\.com)/tour/(?:videos|upcoming|models)/(\d+)/([a-z0-9-]+)',
         url_to_parse)
     if m is None:
         return None, None, None, None
@@ -57,32 +57,12 @@ def fetch_page_json(page_html):
     return json.loads(matches[0]) if matches else None
 
 
-def main():
-    stdin = sys.stdin.read()
-    log.debug(stdin)
-    fragment = json.loads(stdin)
-
-    if not fragment['url']:
-        log.error('No URL entered.')
-        sys.exit(1)
-    url = fragment['url'].strip()
-    site, studio, sid, slug = get_from_url(url)
-    if site is None:
-        log.error('The URL could not be parsed')
-        sys.exit(1)
-    response, err = make_request(url, f"https://{site}")
-    if err is not None:
-        log.error('Could not fetch page HTML', err)
-        sys.exit(1)
-    j = fetch_page_json(response)
-    # log.debug(response)
-    # log.debug(j)
-    if j is None or j.get("video") is None:
-        log.error('Could not find JSON on page')
+def scrape_scene(page_json, studio):
+    if page_json.get("video") is None:
+        log.error('Could not find  scene in JSON data')
         sys.exit(1)
 
-    scene = j["video"]
-    # log.debug(scene)
+    scene = page_json["video"]
 
     scrape = {}
     scrape['studio'] = {'name': studio}
@@ -108,12 +88,12 @@ def main():
     if scene.get('extra_thumbs'):
         # available image endings
         # ================
-        # _player.jpg
-        # _playermobile.jpg
-        # _portrait1.jpg
-        # _portrait2.jpg
-        # _scene.jpg
-        # _scenemobile.jpg
+        #_player.jpg
+        #_playermobile.jpg
+        #_portrait1.jpg
+        #_portrait2.jpg
+        #_scene.jpg
+        #_scenemobile.jpg
         img = None
         for i in scene['extra_thumbs']:
             if i.endswith("_player.jpg"):
@@ -123,6 +103,87 @@ def main():
             img = scene['extra_thumbs'][0]
         scrape['image'] = img
     print(json.dumps(scrape))
+
+
+def get_dict_value(d: dict, v: str):
+    if d.get(v):
+        return d[v]
+    return None
+
+
+def scrape_performer(page_json):
+    if page_json.get("model") is None:
+        log.error('Could not find performer in JSON data')
+        sys.exit(1)
+
+    performer = page_json["model"]
+    scrape = {}
+
+    scrape['name'] = get_dict_value(performer, 'name')
+    scrape['gender'] = get_dict_value(performer, 'gender')
+    scrape['image'] = get_dict_value(performer, 'thumb')
+
+    if performer.get('attributes'):
+        pa = performer['attributes']
+        if pa.get('bio'):
+            scrape['details'] = get_dict_value(pa['bio'], 'value')
+        if pa.get('birthdate'):
+            scrape['birthdate'] = get_dict_value(pa['birthdate'], 'value')
+        if pa.get('measurements'):
+            scrape['measurements'] = get_dict_value(pa['measurements'],
+                                                    'value')
+        if pa.get('eyes'):
+            scrape['eye_color'] = get_dict_value(pa['eyes'], 'value')
+        if pa.get('height'):
+            height_ft = get_dict_value(pa['height'], 'value')
+            if height_ft:
+                h = re.match(r'(\d+)\D(\d+).+', height_ft)
+                if h:
+                    h_int = int(
+                        round((float(h.group(1)) * 12 + float(h.group(2))) *
+                              2.54))  # ft'inches to cm
+                    scrape['height'] = f"{h_int}"
+        if pa.get('weight'):
+            weight_lb = get_dict_value(pa['weight'], 'value')
+            if weight_lb:
+                w = re.match(r'(\d+)\slbs', weight_lb)
+                if w:
+                    w_int = int(round(float(w.group(1)) / 2.2046))  # lbs to kg
+                    scrape['weight'] = f"{w_int}"
+        if pa.get('hair'):
+            scrape['hair_color'] = get_dict_value(pa['hair'], 'value')
+    print(json.dumps(scrape))
+
+
+def main():
+    stdin = sys.stdin.read()
+    log.debug(stdin)
+    fragment = json.loads(stdin)
+
+    if not fragment['url']:
+        log.error('No URL entered.')
+        sys.exit(1)
+    url = fragment['url'].strip()
+
+    site, studio, el_id, slug = get_from_url(url)
+    if site is None:
+        log.error('The URL could not be parsed')
+        sys.exit(1)
+
+    response, err = make_request(url, f"https://{site}")
+    if err is not None:
+        log.error(f"Could not fetch page HTML: {err}")
+        sys.exit(1)
+
+    j = fetch_page_json(response)
+    if j is None:
+        log.error('Could not find JSON on page')
+        sys.exit(1)
+
+    if len(sys.argv) == 0 or sys.argv[1] == "scene":
+        scrape_scene(page_json=j, studio=studio)
+    elif sys.argv[1] == "performer":
+        scrape_performer(j)
 
 
 if __name__ == '__main__':
