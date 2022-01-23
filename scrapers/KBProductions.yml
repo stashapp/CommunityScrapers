@@ -10,4 +10,14 @@ sceneByURL:
     script:
       - python3
       - KBProductions.py
-# Last Updated January 16, 2022
+      - scene
+performerByURL:
+  - url:
+      - bjraw.com/tour/models/
+      - gotfilled.com/tour/models/
+    action: script
+    script:
+      - python3
+      - KBProductions.py
+      - performer
+# Last Updated January 23, 2022
