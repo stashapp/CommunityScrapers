@@ -10,17 +10,20 @@ def readJSONInput():
     input = sys.stdin.read()
     return json.loads(input)
 
-def extract_info(table):
-    description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True).replace("\x92","'")
+def extract_info(table,cover_url=None):
+    description = None
+    if table.find(class_= ["blog_wide_new_text","entryBlurb"]):
+        description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True).replace("\x92","'")
     date = table.find(class_="entryDatestamp").get_text(strip=True) #This is a BeautifulSoup element
     performer = table.find(class_= ["entryHeadingFlash","entryHeading"]).find_all("a")[1].get_text().replace("_"," ")
     performer = str(performer)
     debugPrint(f"performer:{performer}")
     date = datetime.strptime(date, '%d %b %Y').date().strftime('%Y-%m-%d') #Convert date to ISO format
-    cover_url=str(table.find("img")['src'])
+    if cover_url == None:
+        cover_url=str(table.find("img")['src'])
     title = table.find(class_= ["entryHeadingFlash","entryHeading"]).find('a').get_text()
-    media_id = re.search(r"/(\d{4,5})/",cover_url).group(1)
-    artist_id = re.search(r"(f\d{3,5})",cover_url).group(0)
+    media_id = re.search(r"\/(\d{3,5})\/",cover_url,re.I).group(1)
+    artist_id = re.search(r"\/(f\d{4,5})",cover_url,re.I).group(1)
     tags = table.find_all(class_="tags-list-item-tag")
     tag_list = []
     for tag in tags:
@@ -38,13 +41,22 @@ def scrapeScene(filename,date,url):
     browser.open("https://ifeelmyself.com/public/main.php")
     cookie_obj = create_cookie(name='tags_popup_shown', value='true', domain='ifeelmyself.com')
     browser.session.cookies.set_cookie(cookie_obj)
+    cover_url = None
     if url:
       debugPrint("Url found, using that to scrape")
+      if url.endswith(".jpg"):
+      #use the image url to extract the metadeta
+          media_id = re.search(r"\/(\d{3,5})\/",url,re.I).group(1)
+          artist_id = re.search(r"\/(f\d{4,5})",url,re.I).group(1)
+          debugPrint(f"Artist id found: {artist_id}")
+          debugPrint(f"Media id found: {media_id}")        
+          cover_url = url
+          url = "https://ifeelmyself.com/public/main.php?page=flash_player&out=bkg&media_id="+str(media_id)+"&artist_id="+str(artist_id)
       browser.open(url)
       response = browser.page
       table = response.find(class_ = ["blog_wide_news_tbl entry ppss-scene","entry ppss-scene"])
       if table:
-        ret = extract_info(table)
+        ret = extract_info(table,cover_url)
     else:
         debugPrint("Analyzing filename...")
         artist_id_match=re.search(r"(f\d{3,5})",filename,re.I)
@@ -63,7 +75,7 @@ def scrapeScene(filename,date,url):
             for table in tables:
                 img=str(table.find("img")['src'])
                 debugPrint(f"Image:{str(img)}")
-                if (f"/{video_id}/{artist_id}-" in img) and img.endswith(("vg.jpg","hs.jpg")):
+                if (f"/{artist_id}-{video_id}" in img) and img.endswith(("vg.jpg","hs.jpg")):
                     debugPrint("Found a single match video!")
                     # Extract data from this single result
                     ret = extract_info(table)
