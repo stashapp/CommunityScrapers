@@ -21,7 +21,7 @@ sceneByFragment:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="shoot-title"]/text()
+      Title: //meta[@name="twitter:title"]/@content
       Date:
         selector: //span[@class="shoot-date"]/text()
         postProcess:
@@ -43,8 +43,7 @@ xPathScrapers:
             - replace:
                 - regex: \,
                   with: ""
-      Image:
-        selector: //video[@class="video-js vjs-fluid video-player"]/@poster
+      Image: //meta[@name="twitter:image"]/@content
       Studio:
         Name:
           selector: //div[@class="column shoot-logo"]/a/@href
@@ -53,4 +52,6 @@ xPathScrapers:
                 - regex: /channel/
                   with: ""
       URL: //link[@rel="canonical"]/@href
-# Last Updated November 08, 2020
+driver:
+  useCDP: true
+# Last Updated January 25, 2022
