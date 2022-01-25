@@ -45,7 +45,7 @@ allanal.com|Nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 allanalallthetime.com|AllAnalAllTheTime.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 allblackx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 allfinegirls.net|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-allgirlmassage.com|Algolia_AllGirlMassage.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+allgirlmassage.com|Algolia_AllGirlMassage.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Lesbian
 allherluv.com|AllHerLuv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 allinternal.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 alljapanesepass.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
@@ -221,7 +221,7 @@ class-lesbians.com|ClassLesbians.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 claudiamarie.com|ClaudiaMarie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clips4sale.com|Clips4Sale.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubdom.com|SubbyHubby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-clubinfernodungeon.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+clubinfernodungeon.com|Algolia_ClubInfernoDungeon.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 clubseventeen.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 clubsweethearts.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 colette.com|Colette.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -316,7 +316,7 @@ desperateamateurs.com|DesperateAmateurs.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 detentiongirls.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 deviante.com|Deviante.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devianthardcore.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
-devilsfilm.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+devilsfilm.com|Algolia_DevilsFilm.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 devilsfilmparodies.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devilsgangbangs.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devilstgirls.com|DevilsTgirls.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|-|Trans
@@ -385,7 +385,7 @@ familytherapyxxx.com|FamilyTherapyXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 familyxxx.com|FamilyXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fantasyflipflop.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fantasyhd.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-fantasymassage.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+fantasymassage.com|Algolia_FantasyMassage.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 faphouse.com|Faphouse.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 femanic.com|Femanic.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 femdomempire.com|FemdomEmpire.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-

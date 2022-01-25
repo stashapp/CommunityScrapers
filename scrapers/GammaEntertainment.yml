@@ -15,11 +15,9 @@ sceneByURL:
       - bskow.com/en/video/
       - bushybushy.com/
       - buttman.com/
-      - clubinfernodungeon.com/en/video/
       - cumshotoasis.com/
       - currycreampie.com/
       - darkx.com/en/video/
-      - devilsfilm.com/en/scene/
       - devilsfilmparodies.com/
       - devilsgangbangs.com/
       - devonlee.com/
@@ -30,7 +28,6 @@ sceneByURL:
       - falconstudios.com/en/video/
       - famedigital.com/
       - familycreep.com/
-      - fantasymassage.com/en/video/
       - fistingcentral.com/
       - footsiebabes.com/en/video/
       - gapingangels.com/
@@ -201,11 +198,9 @@ xPathScrapers:
                 bskow: BsKow
                 bushybushy: Bushy Bushy
                 buttman: Buttman
-                clubinfernodungeon: Club Inferno Dungeon
                 cumshotoasis: Cumshot Oasis
                 currycreampie: Curry Creampie
                 darkx: DarkX
-                devilsfilm: Devil's Film
                 devilsfilmparodies: Devil's Film Parodies
                 devilsgangbangs: Devil's Gangbangs
                 devonlee: Devon Lee
@@ -215,7 +210,6 @@ xPathScrapers:
                 evilangel: Evil Angel
                 falconstudios: Falcon Studios
                 famedigital: Fame Digital
-                fantasymassage: Fantasy Massage
                 familycreep: Family Creep
                 fistingcentral: Fisting Central
                 footsiebabes: Footsie Babes
@@ -305,4 +299,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated January 05, 2022
+# Last Updated January 25, 2022
