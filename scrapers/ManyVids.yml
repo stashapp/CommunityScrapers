@@ -19,7 +19,7 @@ xPathScrapers:
     common:
       $details: //div[@class="video-details"]
     scene:
-      Title: $details//h2/text()
+      Title: //h2/@title
       Details: //meta[@name="description"]/@content
       # Only partial dates provides, which would currently be made as 0000-01-01
       # Date:
