@@ -1,0 +1,30 @@
+name: "AllGirlMassage"
+sceneByURL:
+  - action: script
+    url:
+      - allgirlmassage.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - allgirlmassage
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - allgirlmassage
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - allgirlmassage
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - allgirlmassage
+      - validName
+# Last Updated January 23, 2022
