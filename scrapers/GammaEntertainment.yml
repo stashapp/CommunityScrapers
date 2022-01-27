@@ -3,28 +3,21 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - 1000facials.com/en/scene/
-      - 21naturals.com/en/video/
-      - 21sextreme.com/en/video/
       - activeduty.com/en/video/
       - alettaoceanempire.com/en/video/
       - allblackx.com/en/video/
-      - allgirlmassage.com/en/video/
       - analacrobats.com/en/video/
       - analteenangels.com/en/video/
       - ashleyfires.com/
       - assholefever.com/en/video/
       - bigfatcreampie.com/
-      - biphoria.com/en/video/
       - blowpass.com/en/video/
       - bskow.com/en/video/
-      - burningangel.com/en/video/
       - bushybushy.com/
       - buttman.com/
-      - clubinfernodungeon.com/en/video/
       - cumshotoasis.com/
       - currycreampie.com/
       - darkx.com/en/video/
-      - devilsfilm.com/en/scene/
       - devilsfilmparodies.com/
       - devilsgangbangs.com/
       - devonlee.com/
@@ -35,7 +28,6 @@ sceneByURL:
       - falconstudios.com/en/video/
       - famedigital.com/
       - familycreep.com/
-      - fantasymassage.com/en/video/
       - fistingcentral.com/
       - footsiebabes.com/en/video/
       - gapingangels.com/
@@ -84,7 +76,6 @@ sceneByURL:
       - prettydirty.com/en/video/
       - pridestudios.com/en/video/
       - ragingstallion.com/en/scene/
-      - roccosiffredi.com/
       - silverstonedvd.com/
       - silviasaint.com/
       - soapymassage.com/en/video/
@@ -195,28 +186,21 @@ xPathScrapers:
                   with: ""
             - map:
                 1000facials: 1000 Facials
-                21naturals: 21 Natural
-                21sextreme: 21 Sextreme
                 activeduty: Active Duty
                 alettaoceanempire: Aletta Ocean Empire
                 allblackx: All Black X
-                allgirlmassage: All Girl Massage
                 analacrobats: Anal Acrobats
                 analteenangels: Anal Teen Angels
                 ashleyfires: Ashley Fires
                 assholefever: Asshole Fever
                 bigfatcreampie: Big Fat Cream Pie
-                biphoria: BiPhoria
                 blowpass: Blowpass
                 bskow: BsKow
-                burningangel: Burning Angel
                 bushybushy: Bushy Bushy
                 buttman: Buttman
-                clubinfernodungeon: Club Inferno Dungeon
                 cumshotoasis: Cumshot Oasis
                 currycreampie: Curry Creampie
                 darkx: DarkX
-                devilsfilm: Devil's Film
                 devilsfilmparodies: Devil's Film Parodies
                 devilsgangbangs: Devil's Gangbangs
                 devonlee: Devon Lee
@@ -226,7 +210,6 @@ xPathScrapers:
                 evilangel: Evil Angel
                 falconstudios: Falcon Studios
                 famedigital: Fame Digital
-                fantasymassage: Fantasy Massage
                 familycreep: Family Creep
                 fistingcentral: Fisting Central
                 footsiebabes: Footsie Babes
@@ -276,7 +259,6 @@ xPathScrapers:
                 prettydirty: Pretty Dirty
                 pridestudios: Pride Studios
                 ragingstallion: Raging Stallion
-                roccosiffredi: Rocco Siffredi
                 silverstonedvd: Silverstone DVD
                 silviasaint: Silvia Saint
                 soapymassage: Soapy Massage
@@ -317,4 +299,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated January 05, 2022
+# Last Updated January 25, 2022
