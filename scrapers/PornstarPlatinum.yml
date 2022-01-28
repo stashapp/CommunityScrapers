@@ -16,9 +16,12 @@ xPathScrapers:
         Name: 
           selector: //div[contains(@class,"video-slider-meta")]/h3/text()
           postProcess:
-            - replace:
-              - regex: ([a-zA-Z]+\s[a-zA-Z]+)*.+[Ii][Nn]+.+
-                with: "$1"
+             - replace:
+                - regex: ^
+                  with: "https://www.pornstarplatinum.com/tour/index.php?search="
+                - regex: \s
+                  with: "+"
+             - subScraper: //div[@id="videos-list"]//span[@class="marker left"]
       Tags:
         Name: 
           selector: $panel//div[@class="tagcloud"]/a/text()
