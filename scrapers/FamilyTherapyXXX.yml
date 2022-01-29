@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - familytherapyxxx.com
       - momcomesfirst.com
+      - perfectgirlfriend.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
