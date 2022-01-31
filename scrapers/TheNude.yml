@@ -36,13 +36,13 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: Asian
-                with: "Asian"
+                with: "asian"
               - regex: Caucasian
-                with: "Caucasian"
+                with: "white"
               - regex: Black
-                with: "Black"
-              - regex: Latina
-                with: "Latin"
+                with: "black"
+              - regex: Latin
+                with: "hispanic"
       Country: 
         selector: //span[@itemprop="nationality"]/text()
         postProcess:
