@@ -39,6 +39,7 @@ except:
 
 if scraped.status_code >= 400:
     log.error(f'HTTP Error: {scraped.status_code}')
+    sys.exit(1)
 
 tree = html.fromstring(scraped.text)
 
