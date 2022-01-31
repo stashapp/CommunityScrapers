@@ -19,7 +19,8 @@ xPathScrapers:
       Tags:
         Name: //div[@id="video_tags"]/a
       Details:
-        selector: //div[@id="video_description"]/text()
+        selector: selector: //div[@id="video_description"]/p
+        concat: "\n\n"
       Image:
         selector: //div[@class="video_section_player"]//@src
         postProcess:
