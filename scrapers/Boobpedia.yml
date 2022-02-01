@@ -28,7 +28,8 @@ xPathScrapers:
       Birthdate:
         selector: //table//tr/td//b[text()='Born:']/../following-sibling::td/a
         concat: " "
-        parseDate: January 2 2006
+        postProcess:
+          - parseDate: January 2 2006
       Ethnicity: //table//tr/td/b[text()='Ethnicity:']/../following-sibling::td/a
       Country: //table//tr/td/b[text()='Nationality:']/../following-sibling::td/a
       EyeColor: //table//tr/td/b[text()='Eye color:']/../following-sibling::td
@@ -82,4 +83,4 @@ xPathScrapers:
       Details:
         selector: //div[@class="mw-parser-output"]/p
         concat: "\n\n"
-# Last Updated 01 February, 2022
+# Last Updated February 01, 2022
