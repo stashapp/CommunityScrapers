@@ -101,9 +101,9 @@ sceneByURL:
 performerByURL:
   - action: scrapeXPath
     url:
+      - activeduty.com/en/pornstar/
       - assholefever.com/en/pornstar/
       - evilangel.com/en/pornstar/
-      - activeduty.com/en/pornstar/
     scraper: performerScraper
 
 movieByURL:
