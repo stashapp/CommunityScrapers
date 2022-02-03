@@ -101,6 +101,7 @@ sceneByURL:
 performerByURL:
   - action: scrapeXPath
     url:
+      - activeduty.com/en/pornstar/
       - assholefever.com/en/pornstar/
       - evilangel.com/en/pornstar/
     scraper: performerScraper
@@ -299,4 +300,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated January 25, 2022
+# Last Updated February 01, 2022
