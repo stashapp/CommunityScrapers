@@ -43,6 +43,9 @@ jsonScrapers:
       Date:
         selector: data.movie.release_date
         postProcess:
+          - replace:
+              - regex: T.*$
+                with: ""
           - parseDate: 2006-01-02
       Movies:
         Name: data.movie.title
