@@ -64,6 +64,9 @@ jsonScrapers:
       Date:
         selector: data.release_date
         postProcess:
+          - replace:
+              - regex: T.*$
+                with: ""
           - parseDate: 2006-01-02
       Studio:
         Name: data.studio.name
