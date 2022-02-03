@@ -30,7 +30,7 @@ jsonScrapers:
   sceneSearch:
     scene:
       Title: data.#.title
-      date: data.#.release_date
+      Date: data.#.release_date
       Image: data.#.thumbnail
       URL: data.#.url
       Details: data.#.description
