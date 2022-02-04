@@ -24,7 +24,7 @@ movieByURL:
     queryURL: https://adultfilmindex.com/api/v1/stash/movie/{url}
     queryURLReplace:
       url:
-        - regex: '.+/movie/(.*)/(.*).+'
+        - regex: '.+/movie/([^/]+)/.+$'
           with: "${1}"
 jsonScrapers:
   sceneSearch:
@@ -78,4 +78,4 @@ driver:
       Value: stashjson/1.0.0
     - Key: Authorization # Beta key, enabled and active for now
       Value: Bearer 4vY0iwSUVPH5cGAX1AUZarJ8pbuDUK53
-# Last Updated February 03, 2022
+# Last Updated February 04, 2022
