@@ -245,9 +245,11 @@ def map_model(base_url, model):
 
 studios = {
         '2163551D11D0439686AD9D291C8DFD71': ('ALS Scan', 'alsscan.com'),
-        '5592E33324211E3FF640800200C93111': ('Erotic Beauty', 'eroticbeauty.com'),
+        'D0E7E33329311E3BB6E0800200C93255': ('Domai', 'domai.com'),
+        'FDA021004E3411DF98790800200C9A66': ('Erotic Beauty', 'eroticbeauty.com'),
         '15A9FFA04E3511DF98790800200C9A66': ('Errotica Archives', 'errotica-archives.com'),
         '706DF46B88884F7BB226097952427754': ('Eternal Desire', 'eternaldesire.com'),
+        '5592E33324211E3FF640800200C93111': ('Goddess Nudes', 'goddessnudes.com'),
         '5A68E1D7B6E69E7401226779D559A10A': ('Love Hairy', 'lovehairy.com'),
         'E6B595104E3411DF98790800200C9A66': ('Met Art', 'metart.com'),
         'E7DFB70DF31C45B3B5E0BF10D733D349': ('Met Art X', 'metartx.com'),
@@ -296,4 +298,4 @@ elif sys.argv[1] == 'search':
 output = json.dumps(ret)
 print(output)
 log.debug(f"Send output: {output}")
-# Last Updated September 20, 2021
+# Last Updated February 4, 2022
