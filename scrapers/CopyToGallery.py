@@ -134,12 +134,15 @@ if scene:
     log.debug("gallery_ids " + str(gallery_ids))
 
     for gallery_id in gallery_ids:
+        studio = None
+        if scene['studio']:
+            studio = scene['studio']['id']
         gallery_input = {'id': gallery_id,
                          'url': scene['url'],
                          'title': scene['title'],
                          'date': scene["date"],
                          'details': scene['details'],
-                         'studio_id': scene['studio']['id'],
+                         'studio_id': studio,
                          'tag_ids': get_id(scene['tags']),
                          'performer_ids': get_id(scene['performers'])}
         update_gallery(gallery_input)
