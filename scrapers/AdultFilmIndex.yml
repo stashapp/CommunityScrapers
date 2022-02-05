@@ -2,8 +2,13 @@ name: AdultFilmIndex
 sceneByURL:
   - action: scrapeJson
     url:
-      - https://adultfilmindex.com/api/v1/stash/scene/
+      - https://adultfilmindex.com/movie/
     scraper: sceneScraper
+    queryURL: https://adultfilmindex.com/api/v1/stash/scene/{url}
+    queryURLReplace:
+      url:
+        - regex: '.+/movie/([^/]+)/([^/]+)/scene/([^/]+)$'
+          with: "${3}"
 sceneByName:
   action: scrapeJson
   queryURL: https://adultfilmindex.com/api/v1/stash/scene_search/{}
