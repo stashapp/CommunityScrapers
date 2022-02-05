@@ -11,6 +11,8 @@ SERVER_IP = "http://localhost:9999"
 STASH_API = ""
 SERVER_URL = SERVER_IP + "/graphql"
 
+find_gallery = False
+
 def call_graphql(query, variables=None):
     headers = {
         "Accept-Encoding": "gzip, deflate, br",
@@ -126,7 +128,7 @@ if scene:
     if len(scene_galleries) > 0:
         for gallery_obj in scene_galleries:
             gallery_ids.append(gallery_obj['id'])
-    else:
+    elif find_gallery:
         # if no galleries are associated see if any gallery zips exist in directory
         gallery_ids = find_galleries(SCENE_ID, scene["path"])
     log.debug("gallery_ids " + str(gallery_ids))
