@@ -36,7 +36,7 @@ xPathScrapers:
         selector: //div[contains(@class,'video-wrap')]/div/@style
         postProcess:
           - replace:
-              - regex: (?:background-image:url\(')(.+)(?:'\))
+              - regex: (?:background-image:url\(')(.+)(?:'\));?
                 with: $1
 
 driver:
@@ -52,4 +52,4 @@ driver:
           ValueRandom: 43
           Domain: .atkexotics.com
           Path: /
-# Last Updated March 15, 2021
+# Last Updated January 27, 2022

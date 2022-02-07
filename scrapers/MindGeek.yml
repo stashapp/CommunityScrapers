@@ -81,7 +81,12 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Details: //div[text()="Description:"]/../div[not(@class)]/text()
       Tags:
-        Name: //a[contains(@href,"/scenes?tags")]/text()[1]
+        Name:
+          selector: //a[contains(@href,"/scenes?tags")]/text()[1]
+          postProcess:
+            - replace:
+                - regex: ',\s*$'
+                  with:
       Performers:
         Name: $section//a[@href and @title]/text()
       Studio:
@@ -286,4 +291,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated December 08, 2021
+# Last Updated January 27, 2022
