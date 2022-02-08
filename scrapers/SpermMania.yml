@@ -1,0 +1,32 @@
+name: SpermMania
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - spermmania.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[contains(@class,"sample-title")]
+
+#      <div class="player fp-slim fp-edgy fp-mute central is-splash flowplayer fp-default-playlist is-paused is-mouseout" style="background:url(https://cdn.spermmania.com/preview/133_LinkTera_M678/scene-lg.jpg) 0 0 no-repeat;background-size:cover;" data-flowplayer-instance-id="0">
+      Performers:
+        Name: //div[contains(@class,"sample-info")]//a[contains(@href,"actress")]/text()
+      Tags:
+        Name: //div[contains(@class,"sample-info")]//a[contains(@href,"type")]/text()
+      Image:
+        selector: //div[contains(@class,"player")]/@style
+        postProcess:
+          - replace:
+              - regex: '.*background:url\((.*)\).*'
+                with: $1
+      Details:
+        selector: //div[contains(@class,"sample-info")]//div[contains(.,"Cumshots")]/strong
+        postProcess:
+          - replace:
+              - regex: '(.+)$'
+                with: $1 cumshots
+      Studio:
+        Name:
+          fixed: Sperm Mania
+# Last Updated February 09, 2022
