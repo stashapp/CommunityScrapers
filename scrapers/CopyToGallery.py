@@ -1,7 +1,6 @@
 import json
 import sys
 import os
-import requests
 
 import py_common.graphql as graphql
 import py_common.log as log
