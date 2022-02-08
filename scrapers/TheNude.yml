@@ -11,8 +11,8 @@ performerByURL:
 xPathScrapers:
   performerSearch:
     performer:
-#      Name: //a[@class="model-name"]/text()               Version to get only the name
-#      Name: //a[@class="model-name"]/../../a/@title       Version to get a little info on label/studio as well
+      #      Name: //a[@class="model-name"]/text()               Version to get only the name
+      #      Name: //a[@class="model-name"]/../../a/@title       Version to get a little info on label/studio as well
       Name:
         selector: //figcaption/span
         postProcess:
@@ -43,7 +43,7 @@ xPathScrapers:
                 with: "black"
               - regex: Latin
                 with: "hispanic"
-      Country: 
+      Country:
         selector: //span[@itemprop="nationality"]/text()
         postProcess:
           - replace:
@@ -71,12 +71,12 @@ xPathScrapers:
       CareerLength:
         selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/../text()
         concat: "-"
-      Aliases: 
+      Aliases:
         selector: //meta[@itemprop="additionalName"]/@content
         concat: ", "
-      Tattoos: 
+      Tattoos:
         selector: //li/span[@class="list-quest"][contains(text(),'Tattoos')]/../text()
-      Piercings: 
+      Piercings:
         selector: //li/span[@class="list-quest"][contains(text(),'Piercings')]/../text()
       Image:
         selector: //meta[@itemprop="url"]/@content
@@ -88,4 +88,4 @@ xPathScrapers:
                 with: "/medhead.jpg"
       Gender:
         selector: //meta[@itemprop="gender"]/@content
-# Last Updated November 08, 2020
+# Last Updated Februaty 08, 2022
