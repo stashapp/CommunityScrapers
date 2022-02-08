@@ -50,7 +50,13 @@ xPathScrapers:
         selector: //span[contains(text(),"HEIGHT:")]/following-sibling::text()
         postProcess:
           - feetToCm: true
-      Measurements: //span[contains(text(),"COCK SIZE:")]/following-sibling::text()
+      Measurements: 
+        selector: //span[contains(text(),"COCK SIZE:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0'"
+          - feetToCm: true
       Image: //div[@class="modelBioPic"]/img/@src0_1x
 
-# Last Updated February 07, 2022
+# Last Updated February 08, 2022
