@@ -14,36 +14,7 @@ SERVER_URL = SERVER_IP + "/graphql"
 find_gallery = False
 
 def call_graphql(query, variables=None):
-    headers = {
-        "Accept-Encoding": "gzip, deflate, br",
-        "Content-Type": "application/json",
-        "Accept": "application/json",
-        "Connection": "keep-alive",
-        "DNT": "1",
-        "ApiKey": STASH_API
-    }
-    json = {'query': query}
-    if variables is not None:
-        json['variables'] = variables
-    try:
-        response = requests.post(SERVER_URL, json=json, headers=headers)
-        if response.status_code == 200:
-            result = response.json()
-            if result.get("error"):
-                for error in result["error"]["errors"]:
-                    raise Exception("GraphQL error: {}".format(error))
-            if result.get("data"):
-                return result.get("data")
-        elif response.status_code == 401:
-            log.debug("401 returned from callGraphQL")
-            # debug("[ERROR][GraphQL] HTTP Error 401, Unauthorised.")
-            return None
-        else:
-            raise ConnectionError("GraphQL query failed:{} - {}".format(response.status_code, response.content))
-    except Exception as err:
-        log.error(err)
-        # debug(err)
-        return None
+    return graphql.callGraphQL(query, variables)
 
 def get_gallery_id_by_path(gallery_path):
     log.debug("get_gallery_by_path gallery_path " + str(gallery_path))
@@ -76,7 +47,10 @@ def update_gallery(input):
         "input": input
     }
     result = call_graphql(query, variables)
-    log.debug("updateGallery callGraphQL result " + str(result))
+    if result:
+        g_id = result['galleryUpdate'].get('id')
+        g_title = result['galleryUpdate'].get('title')
+        log.info(f"updated Gallery ({g_id}): {g_title}")
     return result
 
 def get_id(obj):
