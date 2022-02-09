@@ -2,8 +2,13 @@ name: AdultFilmIndex
 sceneByURL:
   - action: scrapeJson
     url:
-      - https://adultfilmindex.com/api/v1/stash/scene/
+      - https://adultfilmindex.com/movie/
     scraper: sceneScraper
+    queryURL: https://adultfilmindex.com/api/v1/stash/scene/{url}
+    queryURLReplace:
+      url:
+        - regex: '.+/movie/([^/]+)/([^/]+)/scene/([^/]+)$'
+          with: "${3}"
 sceneByName:
   action: scrapeJson
   queryURL: https://adultfilmindex.com/api/v1/stash/scene_search/{}
@@ -78,4 +83,4 @@ driver:
       Value: stashjson/1.0.0
     - Key: Authorization # Beta key, enabled and active for now
       Value: Bearer 4vY0iwSUVPH5cGAX1AUZarJ8pbuDUK53
-# Last Updated February 04, 2022
+# Last Updated February 05, 2022
