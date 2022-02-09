@@ -1,0 +1,26 @@
+name: French Twinks
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - french-twinks.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="big_title2017"]
+      Details:
+        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article
+      Date:
+        selector: //time[@datetime]
+        postProcess:
+          - parseDate: 2006-01-02
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: French Twinks
+      Tags:
+        Name: //li[@class="vid_keywords"]/a
+      Performers:
+        Name: //li[@class="small_act_pic small_act_picvidpage"]/a
+# Last Updated January 10, 2022

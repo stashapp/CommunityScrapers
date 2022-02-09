@@ -2,21 +2,57 @@ name: "HelixStudios"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.helixstudios.com/video/
+      - helixstudios.com/video/
     scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.helixstudios.com/videos?q={}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://www.helixstudios.com/model/
+      - helixstudios.com/model/
     scraper: performerScraper
 
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.helixstudios.com/models/?q={}
+  scraper: performerSearch
+
 xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[contains(@class, "browse-results-grid thumbnail-grid pure-g")]
+      $searchThumb: //div[contains(@class, "browse-results-grid thumbnail-grid pure-g")]//div[contains(@class, "grid-item-wrapper")]/a
+
+    scene:
+      Title: $searchThumb//h4/text()
+      URL:
+        selector: $searchItem//div[contains(@class, "grid-item-wrapper")]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://helixstudios.com"
+      Image:
+        selector: $searchItem//div[contains(@class, "image-wrapper img-poster")]//img/@data-src
+
   sceneScraper:
     common:
       $info: //div[@class="text"]
     scene:
-      Title: //title/text()
+      Title:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: \s*- Helix Studios.*$
+                with:
       Date:
         selector: //div[@class="info-items"]/span[@class="info-item date"]/text()
         postProcess:
@@ -30,7 +66,7 @@ xPathScrapers:
           - subtractDays: true
           - parseDate: Jan 2, 2006
       Details:
-        selector: //div[@class="description-content less"]/p/text()
+        selector: //div[contains(@class, "description-content")]/p/text()
         concat: "#LINEBREAK#"
         postProcess:
           - replace:
@@ -43,11 +79,24 @@ xPathScrapers:
       Performers:
         Name:
           selector: //div[@class="video-cast"]//a/@title
+      URL: //link[@rel="canonical"][1]/@href
       Image:
         selector: //video/@poster
       Studio:
         Name:
           fixed: Helix
+
+  performerSearch:
+    common:
+      $result: //div[@class="grid-item-wrapper"]/a[@class="thumbnail-link"]
+    performer:
+      Name: $result/div[@class="thumbnail model-thumbnail"]/div[@class="thumbnail-meta"]/h4/text()
+      URL:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://helixstudios.com"
 
   performerScraper:
     performer:
@@ -79,6 +128,7 @@ xPathScrapers:
         selector: //span[text()="Hair"]/following-sibling::text()
       EyeColor:
         selector: //span[text()="Eyes"]/following-sibling::text()
+      URL: //link[@rel="canonical"][1]/@href
       Image: //div[@class="model-headshot-image-wrapper"]/img/@src
       Details:
         selector: //div[@class="description"]//p[*]
@@ -87,4 +137,4 @@ xPathScrapers:
           - replace:
               - regex: $
                 with: " "
-# Last Updated June 04, 2021
+# Last Updated December 29, 2021

@@ -3,28 +3,21 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - 1000facials.com/en/scene/
-      - 21naturals.com/en/video/
-      - 21sextreme.com/en/video/
       - activeduty.com/en/video/
       - alettaoceanempire.com/en/video/
       - allblackx.com/en/video/
-      - allgirlmassage.com/en/video/
       - analacrobats.com/en/video/
       - analteenangels.com/en/video/
       - ashleyfires.com/
       - assholefever.com/en/video/
       - bigfatcreampie.com/
-      - biphoria.com/en/video/
       - blowpass.com/en/video/
       - bskow.com/en/video/
-      - burningangel.com/en/video/
       - bushybushy.com/
       - buttman.com/
-      - clubinfernodungeon.com/en/video/
       - cumshotoasis.com/
       - currycreampie.com/
       - darkx.com/en/video/
-      - devilsfilm.com/en/scene/
       - devilsfilmparodies.com/
       - devilsgangbangs.com/
       - devonlee.com/
@@ -34,7 +27,7 @@ sceneByURL:
       - evilangel.com/en/video/
       - falconstudios.com/en/video/
       - famedigital.com/
-      - fantasymassage.com/en/video/
+      - familycreep.com/
       - fistingcentral.com/
       - footsiebabes.com/en/video/
       - gapingangels.com/
@@ -69,6 +62,7 @@ sceneByURL:
       - nextdoormale.com/
       - nextdoorraw.com/en/video/
       - nextdoorstudios.com/en/video/
+      - nextdoortaboo.com/en/video/
       - nextdoortwink.com/en/video/
       - nudefightclub.com/en/video/
       - nurumassage.com/en/video/
@@ -82,13 +76,13 @@ sceneByURL:
       - prettydirty.com/en/video/
       - pridestudios.com/en/video/
       - ragingstallion.com/en/scene/
-      - roccosiffredi.com/
       - silverstonedvd.com/
       - silviasaint.com/
       - soapymassage.com/en/video/
       - squirtalicious.com/
       - squirtinglesbian.com/en/video/
       - squirtingorgies.com/en/scene/
+      - stagcollective.com/
       - strapattackers.com/
       - sunnyleone.com/
       - throated.com/en/video/
@@ -107,6 +101,7 @@ sceneByURL:
 performerByURL:
   - action: scrapeXPath
     url:
+      - activeduty.com/en/pornstar/
       - assholefever.com/en/pornstar/
       - evilangel.com/en/pornstar/
     scraper: performerScraper
@@ -117,6 +112,7 @@ movieByURL:
       - darkx.com/en/movie/
       - eroticax.com/en/movie/
       - evilangel.com/en/movie/
+      - famedigital.com/en/
       - girlfriendsfilms.com/en/dvd/
       - hardx.com/en/movie/
       - wicked.com/en/movie/
@@ -191,28 +187,21 @@ xPathScrapers:
                   with: ""
             - map:
                 1000facials: 1000 Facials
-                21naturals: 21 Natural
-                21sextreme: 21 Sextreme
                 activeduty: Active Duty
                 alettaoceanempire: Aletta Ocean Empire
                 allblackx: All Black X
-                allgirlmassage: All Girl Massage
                 analacrobats: Anal Acrobats
                 analteenangels: Anal Teen Angels
                 ashleyfires: Ashley Fires
                 assholefever: Asshole Fever
                 bigfatcreampie: Big Fat Cream Pie
-                biphoria: BiPhoria
                 blowpass: Blowpass
                 bskow: BsKow
-                burningangel: Burning Angel
                 bushybushy: Bushy Bushy
                 buttman: Buttman
-                clubinfernodungeon: Club Inferno Dungeon
                 cumshotoasis: Cumshot Oasis
                 currycreampie: Curry Creampie
                 darkx: DarkX
-                devilsfilm: Devil's Film
                 devilsfilmparodies: Devil's Film Parodies
                 devilsgangbangs: Devil's Gangbangs
                 devonlee: Devon Lee
@@ -222,7 +211,7 @@ xPathScrapers:
                 evilangel: Evil Angel
                 falconstudios: Falcon Studios
                 famedigital: Fame Digital
-                fantasymassage: Fantasy Massage
+                familycreep: Family Creep
                 fistingcentral: Fisting Central
                 footsiebabes: Footsie Babes
                 gapingangels: Gaping Angels
@@ -257,6 +246,7 @@ xPathScrapers:
                 nextdoormale: Next Door Male
                 nextdoorraw: Next Door Raw
                 nextdoorstudios: Next Door Studios
+                nextdoortaboo: Next Door Taboo
                 nextdoortwink: Next Door Twink
                 nudefightclub: Nude Fight Club
                 nurumassage: Nuru Massage
@@ -270,13 +260,13 @@ xPathScrapers:
                 prettydirty: Pretty Dirty
                 pridestudios: Pride Studios
                 ragingstallion: Raging Stallion
-                roccosiffredi: Rocco Siffredi
                 silverstonedvd: Silverstone DVD
                 silviasaint: Silvia Saint
                 soapymassage: Soapy Massage
                 squirtalicious: Squirtalicious
                 squirtinglesbian: Squirting Lesbian
                 squirtingorgies: Squirting Orgies
+                stagcollective: Stag Collective
                 strapattackers: Strap Attackers
                 sunnyleone: Sunny Leone
                 throated: Throated
@@ -310,4 +300,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated December 07, 2021
+# Last Updated February 01, 2022

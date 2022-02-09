@@ -1,0 +1,36 @@
+name: TripForFuck
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tripforfuck.com/member/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="h3 mb-0"]/text()
+      Date:
+        selector: //div[@class="d-flex small movie-status"]/p
+        postProcess:
+          - replace:
+              - regex: (\d),(\d)
+                with: $1$2
+              - regex: (\d+).+
+                with: $1
+          - subtractDays: true
+      Performers:
+        Name: //p[@class="mb-0"]/a
+      Tags:
+        Name: //div[@class="search-tags mb-5 d-flex flex-wrap"]/a
+      Details:
+        selector: //div[@class="container"]/p
+      Image:
+        selector: //img[@class="mh-100 mw-100 lazyload"]/@data-src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.tripforfuck.com"
+      Studio:
+        Name:
+          fixed: TripForFuck
+# Last Updated January 20, 2022

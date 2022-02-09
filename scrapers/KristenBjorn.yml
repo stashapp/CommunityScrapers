@@ -1,0 +1,114 @@
+name: "KristenBjorn"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - kristenbjorn.com/video
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - kristenbjorn.com/web/model/store/
+    scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - kristenbjorn.com/gay-porn-star/
+      - kristenbjorn.com/web/model/gay-porn-star/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //div[@class="scene-item"]/a[@class="scene-box"]
+    scene:
+      Title: //article/div[@class="StoreHeaderNewContainer"][1]//h2/text()
+      Details: //div[@class="med-text"]/p
+      Tags:
+        Name: //a[@role="button"]/text()
+      Performers:
+        Name: $performer//h5/text()
+        URL:
+          selector: $performer/@href
+          postProcess: &appendDomain
+            - replace:
+                - regex: ^
+                  with: http://kristenbjorn.com
+      Image: &imageAttr //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Kristen Bjorn
+      Movies:
+        Name: //article/div[@class="StoreHeaderNewContainer"][2]//h2/text()
+        URL:
+          selector: '//table[@style="width: 90%;margin-top: 20px;"]//img/parent::a/@href'
+          postProcess: *appendDomain
+  movieScraper:
+    movie:
+      Name: //article/div[1]/span/text()
+      Date:
+        selector: //span[text()="Release Date:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: /20([0-9])
+                with: /$1
+              - regex: ^(\d/\d\d/\d\d)$
+                with: 0$1
+          - parseDate: 01/02/06
+      Duration:
+        selector: //span[text() = "Running Time:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+)\s*(?i:h)\D+$ # movies with only hours
+                with: $1:00:00
+              - regex: ^(\d+)\s*(?i:m)\D+$ # movies with only minutes
+                with: "$1:00"
+              - regex: ^(\d+)\s*(?i:h)\D+(\d+)\s*(?i:m)\D+$ # movies with hours and minutes
+                with: "$1:$2:00"
+      Synopsis: //div[@class="more"]
+      Director: //span[text()="Director:"]/following-sibling::text()
+      Studio:
+        Name: //span[text()="Studio:"]/following-sibling::text()
+      FrontImage:
+        selector: //div[@id="imagen0"]//img/@src
+        postProcess: *appendDomain
+      BackImage:
+        selector: //div[@id="imagen1"]//img/@src
+        postProcess: *appendDomain
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1/text()
+        postProcess:
+          - replace:
+              - regex: "^Gay Porn Star: (.*)$"
+                with: $1
+      Gender:
+        fixed: Male
+      Country:
+        selector: //h3[contains(text(), "Nationality:")]/text()
+        postProcess:
+          - replace:
+              - regex: "^Nationality: (.*)$"
+                with: $1
+      Height:
+        selector: //h3[contains(text(), "Height:")]/text()
+        postProcess:
+          - replace:
+              - regex: "^Height: (.*)$"
+                with: $1
+          - feetToCm: true
+      Weight:
+        selector: //h3[contains(text(), "Weight:")]/text()
+        postProcess:
+          - replace:
+              - regex: "^Weight: (.*) lbs$"
+                with: $1
+          - lbToKg: true
+      Measurements:
+        selector: //h3[contains(text(), "Dick:")]/text()
+        postProcess:
+          - replace:
+              - regex: '^Dick: [^\s]+ \((.*) cms\).*$'
+                with: $1
+      Image: *imageAttr
+# Last Updated December 26, 2021

@@ -1,0 +1,33 @@
+name: UltraFilms
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ultrafilms.xxx
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Image: //meta[@property="og:image"]/@content
+      Date:
+        selector: //*[@id="video-date"]/text()
+        postProcess:
+          - replace:
+              - regex: ".*Date: "
+                with: ""
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //*[@id="video-actors"]/a/text()
+      Tags:
+        Name:
+          selector: //*[@id="video-about"]/div[@class="tags"]/div/a/text()
+          postProcess:
+            - replace:
+                - regex: " Movies"
+                  with: ""
+      URL: //meta[@property="og:url"]/@content
+      Studio:
+        Name:
+          fixed: UltraFilms
+# Last Updated January 12, 2022

@@ -1,0 +1,30 @@
+name: "RandyBlue"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - randyblue.com/video/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="content-item-name"]
+      Date:
+        selector: //div[@id="info"]//li[@class="added"]/span
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: //div[@class="short-description"]
+      Tags:
+        Name: //div[@class="tagcloud"]/a/text()
+      Performers:
+        Name: //a[@itemprop="actor"]
+      Image:
+        selector: "//script[contains(text(), 'image: ')]"
+        postProcess:
+          - replace:
+              - regex: '^.*image: "([^"]+)",.*$'
+                with: $1
+      Studio:
+        Name:
+          fixed: Randy Blue
+# Last Updated December 17, 2021

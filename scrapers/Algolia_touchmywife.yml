@@ -1,26 +1,30 @@
-name: "AdultimeAPI"
+name: "TouchMyWife"
 sceneByURL:
   - action: script
     url:
-      - adulttime.com/en/video/
+      - touchmywife.com/en/video
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - touchmywife
 sceneByFragment:
     action: script
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - touchmywife
 sceneByName:
     action: script
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - touchmywife
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - AdultimeAPI.py
+      - Algolia.py
+      - touchmywife
       - validName
-# Last Updated September 14, 2021
+# Last Updated December 31, 2021

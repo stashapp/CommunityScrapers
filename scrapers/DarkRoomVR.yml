@@ -1,0 +1,29 @@
+name: "DarkRoomVR"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - darkroomvr.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="container"]
+    scene:
+      Title: $info//h1[@class="video-detail__title"]
+      Studio:
+        Name:
+          fixed: DarkRoomVR
+      Date:
+        selector: $info//div[@class="video-info__text"]/div[@class="video-info__time"]/text()
+        postProcess:
+          - replace:
+              - regex: ".+ • (.*)"
+                with: $1
+          - parseDate: 2 January, 2006
+      Details: $info//div[@data-id="description"][span[text()="Read less"]]/text()
+      Tags:
+        Name: $info//div[@class="tags__container"]//a/text()
+      Performers:
+        Name: $info//div[@class="video-info__text"]//a/text()
+      Image: $info//div[@class="image-container"]//dl8-video/@poster
+# Last Updated January 15, 2022

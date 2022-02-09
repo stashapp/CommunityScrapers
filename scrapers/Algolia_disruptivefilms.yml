@@ -1,0 +1,30 @@
+name: "DisruptiveFilms"
+sceneByURL:
+  - action: script
+    url:
+      - disruptivefilms.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - disruptivefilms
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - disruptivefilms
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - disruptivefilms
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - disruptivefilms
+      - validName
+# Last Updated December 31, 2021

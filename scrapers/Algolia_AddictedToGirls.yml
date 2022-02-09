@@ -1,0 +1,30 @@
+name: "addicted 2 Girls"
+sceneByURL:
+  - action: script
+    url:
+      - addicted2girls.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - addicted2girls
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - addicted2girls
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - addicted2girls
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - addicted2girls
+      - validName
+# Last Updated January 23, 2022

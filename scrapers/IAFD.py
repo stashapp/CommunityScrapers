@@ -461,6 +461,13 @@ def performer_from_tree(tree):
         try:
             p.birthdate = datetime.datetime.strptime(p.birthdate, iafd_date).strftime(stash_date)
         except:
+            p.birthdate = None
+            if performer_birthdate[0].lower() != "no data":
+                dob =  f'D.O.B. : {performer_birthdate[0]}\n'
+                try:
+                    p.details = p.details + dob
+                except:
+                    p.details = dob
             pass
 
     performer_deathdate = tree.xpath('(//p[@class="bioheading"][text()="Date of Death"]/following-sibling::p)[1]//text()')
@@ -470,6 +477,13 @@ def performer_from_tree(tree):
         try:
             p.death_date = datetime.datetime.strptime(p.death_date, iafd_date).strftime(stash_date)
         except:
+            p.death_date = None
+            if performer_deathdate[0].lower() != "no data":
+                dod = f'D.O.D. : {performer_deathdate[0]}\n'
+                try:
+                    p.details = p.details + dod
+                except:
+                    p.details = dod
             pass
 
     performer_ethnicity = tree.xpath('//div[p[text()="Ethnicity"]]/p[@class="biodata"][1]//text()')
@@ -616,5 +630,3 @@ if mode == "scene":
 
 #by default performer scraper
 performer_from_tree(tree)
-
-#Last Updated November 5, 2021
