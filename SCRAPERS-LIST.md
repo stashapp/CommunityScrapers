@@ -1243,6 +1243,7 @@ For each scraper a short description, an optional comment with the usage and the
 
 Scraper | Description | Comments | PR
 --------|-------------|----------|:--:
+CopyToGallery.yml| A scene to gallery scraper | A python scene scraper that copies metadata from a scene to the associated galleries. Can optionally (check .py file) associate and copy meta to all galleries in the same folder as the scene| [#895](https://github.com/stashapp/CommunityScrapers/pull/895)
 ComicInfoXML.yml| A ComixInfo XML gallery scraper | A python scraper that looks for ComicInfo xml compatible  files in the gallery's folder/filename and parses them | [#827](https://github.com/stashapp/CommunityScrapers/pull/827)
 dc-onlyfans.yml| An Onlyfans DB scene scraper | A python scraper that scrapes Only Fans scenes using the DB file (user_data.db) created from DIGITALCRIMINAL's tool | [#847](https://github.com/stashapp/CommunityScrapers/pull/847)
 jellyfin.yml| A Jellyfin/Emby scraper | A python scraper that uses the Jellyfin/Emby API to look for Scenes, Performers and Movies via URL, Query or Fragments. Needs the URL, API-Key and User from Jellyfin set in jellyfin.py and the URLs in jellyfin.yml adopted to your local Jelly/Emby Instance | 
