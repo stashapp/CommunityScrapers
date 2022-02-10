@@ -22,8 +22,8 @@ xPathScrapers:
         selector: //div[contains(@class,"sample-info")]//div[contains(.,"Cumshots")]/strong
         postProcess:
           - replace:
-              - regex: '(.+)$'
-                with: $1 cumshots
+              - regex: $
+                with: " cumshots"
       Studio:
         Name:
           fixed: Sperm Mania
