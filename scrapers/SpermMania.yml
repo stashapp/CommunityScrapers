@@ -8,8 +8,6 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[contains(@class,"sample-title")]
-
-#      <div class="player fp-slim fp-edgy fp-mute central is-splash flowplayer fp-default-playlist is-paused is-mouseout" style="background:url(https://cdn.spermmania.com/preview/133_LinkTera_M678/scene-lg.jpg) 0 0 no-repeat;background-size:cover;" data-flowplayer-instance-id="0">
       Performers:
         Name: //div[contains(@class,"sample-info")]//a[contains(@href,"actress")]/text()
       Tags:
