@@ -4,6 +4,13 @@ sceneByURL:
     url:
       - corbinfisher.com
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - corbinfisher.com/tour/models
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -27,4 +34,29 @@ xPathScrapers:
       Studio:
         Name:
           fixed: CorbinFisher
-# Last Updated July 21, 2021
+
+  performerScraper:
+    performer:
+      Name: //div[@class="modelBioDetails"]//h2/text()
+      Gender:
+        fixed: Male
+      HairColor: //span[contains(text(),"HAIR COLOR:")]/following-sibling::text()
+      EyeColor: //span[contains(text(),"EYES:")]/following-sibling::text()
+      Weight:
+        selector: //span[contains(text(),"WEIGHT:")]/following-sibling::text()
+        postProcess:
+          - lbToKg: true
+      Height:
+        selector: //span[contains(text(),"HEIGHT:")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Measurements: 
+        selector: //span[contains(text(),"COCK SIZE:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0'"
+          - feetToCm: true
+      Image: //div[@class="modelBioPic"]/img/@src0_1x
+
+# Last Updated February 08, 2022
