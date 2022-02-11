@@ -196,7 +196,23 @@ def scrape_movie(base_url, date, name):
 
     studio = get_studio(data['media']['siteUUID'])
     res = map_media(data, studio, base_url)
-    res['Image'] = f"https://www.{studio[1]}{data['splashImagePath'] if 'splashImagePath' in data else data['coverCleanImagePath'] if 'coverCleanImagePath' in data else data['coverImagePath']}"
+    image_types = ['splashImagePath', 'coverCleanImagePath', 'coverImagePath']
+    for image_type in image_types:
+    	if image_type in data:
+            image_part = data[image_type]
+            res['Image'] = f"https://www.{studio[1]}{image_part}"
+            try:
+                response = requests.get(res['Image'], headers={
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
+                }, timeout=(3, 6))
+            except requests.exceptions.RequestException as e:
+                log.error(f"Error fetching URL {res['Image']}: {e.strerror}")
+
+            if response.status_code < 400:
+                break
+
+            log.debug(f"Fetching URL {res['Image']} resulted in error status: {response.status_code}")
+            res['Image'] = None
 
     return res
 
@@ -298,4 +314,4 @@ elif sys.argv[1] == 'search':
 output = json.dumps(ret)
 print(output)
 log.debug(f"Send output: {output}")
-# Last Updated February 04, 2022
+# Last Updated February 11, 2022
