@@ -4,11 +4,6 @@ import sys
 import py_common.graphql as graphql
 import py_common.log as log
 
-SERVER_IP = "http://localhost:9999"
-# API key (Settings > Configuration > Authentication)
-STASH_API = ""
-SERVER_URL = SERVER_IP + "/graphql"
-
 def call_graphql(query, variables=None):
     return graphql.callGraphQL(query, variables)
 
