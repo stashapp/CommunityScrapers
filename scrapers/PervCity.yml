@@ -52,4 +52,6 @@ xPathScrapers:
                 oraloverdose: OralOverdose
                 pervcity: PervCity
                 upherasshole: UpHerAsshole
-# Last Updated October 14, 2020
+      Tags:
+        Name: $sceneinfo//div[@class="tagcats"]/a/text()
+# Last Updated February 13, 2022
