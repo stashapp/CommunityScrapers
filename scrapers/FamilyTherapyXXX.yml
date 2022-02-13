@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - familytherapyxxx.com
       - momcomesfirst.com
+      - perfectgirlfriend.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -27,7 +28,7 @@ xPathScrapers:
           selector: //div[@class="entry-content"]/p[contains(text(),'***')]
           postProcess:
             - replace:
-                - regex: \*\*\*|Starring\s
+                - regex: \*+|Starring\s+
                   with:
           split: " & "
       Studio:
@@ -44,4 +45,4 @@ xPathScrapers:
                 with: $1/?s=$2
           - subScraper:
               selector: //div[@id="left-area"]/article[1]//img/@src
-# Last Updated May 16, 2021
+# Last Updated January 29, 2022

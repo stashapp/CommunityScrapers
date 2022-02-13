@@ -410,9 +410,11 @@ def scraping_json(api_json, url=None):
             log.warning("Can't locate image.")
     # URL
     try:
-        scrape['url'] = 'https://{}.com/en/video/{}/{}/{}'.format(
-            api_json["sitename"], api_json["sitename"], api_json["url_title"],
-            api_json["clip_id"])
+        hostname = api_json['sitename']
+        nn = api_json['network_name']
+        if nn.lower() == "21 sextury":
+            hostname = "21sextury"
+        scrape['url'] = f"https://{hostname}.com/en/video/{api_json['sitename']}/{api_json['url_title']}/{api_json['clip_id']}"
     except:
         if url:
             scrape['url'] = url
