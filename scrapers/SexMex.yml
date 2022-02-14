@@ -27,25 +27,12 @@ xPathScrapers:
           - replace:
               - regex: cover.jpg$
                 with: 1.jpg
-      Date: &date
-        selector: *title
-        postProcess:
-          - replace:
-              - regex: "[^a-zA-Z\\d\\-._~]" # clean title so that it can construct a valid url
-                with: "+" # "%20"
-              - regex: \.+
-                with: "+"
-              - regex: (.*)
-                with: https://sexmex.xxx/tour/search.php?query=$1
-          - subScraper:
-              selector: //p[@class="scene-date"][1]/text()
-          - parseDate: Jan 2 2006
+      
     gallery:
       Title: *title
       Details: *details
       Tags: *tags
       Performers: *performers
       Studio: *studio
-      Date: *date
 
 # Last Updated February 14, 2022
