@@ -1,3 +1,4 @@
+import base64
 import json
 import sys
 import re
@@ -7,12 +8,12 @@ from urllib.parse import urlparse, urlencode
 
 class Logger:
     levels = {
-            "trace": b't'.decode(),
-            "debug": b'd'.decode(),
-            "info": b'i'.decode(),
-            "warning": b'w'.decode(),
-            "error": b'e'.decode(),
-        }
+        "trace": b't'.decode(),
+        "debug": b'd'.decode(),
+        "info": b'i'.decode(),
+        "warning": b'w'.decode(),
+        "error": b'e'.decode(),
+    }
 
     def __write(self, level: str, msg: str):
         if level == "" or level not in self.levels:
@@ -46,13 +47,13 @@ def scrape_url(url, type):
     base_url = f"{parsed.scheme}://{parsed.netloc}"
     if type == 'scene':
         index = path.index('movie')
-        scraped = scrape_movie(base_url, path[index+1], path[index+2])
+        scraped = scrape_movie(base_url, path[index + 1], path[index + 2])
     elif type == 'gallery':
         index = path.index('gallery')
-        scraped = scrape_gallery(base_url, path[index+1], path[index+2])
+        scraped = scrape_gallery(base_url, path[index + 1], path[index + 2])
     elif type == 'performer':
         index = path.index('model')
-        scraped = scrape_model(base_url, path[index+1])
+        scraped = scrape_model(base_url, path[index + 1])
     else:
         return None
 
@@ -72,16 +73,16 @@ def query(fragment, type):
 
 def search(type, name):
     search_type = {
-      'scene': 'MOVIE',
-      'gallery': 'GALLERY',
-      'performer': 'model'
+        'scene': 'MOVIE',
+        'gallery': 'GALLERY',
+        'performer': 'model'
     }[type]
     page = 1
     page_size = 30
     args = {
-      'searchPhrase': name,
-      'pageSize': page_size,
-      'sortBy': 'relevance'
+        'searchPhrase': name,
+        'pageSize': page_size,
+        'sortBy': 'relevance'
     }
 
     if type == 'performer':
@@ -115,13 +116,13 @@ def search(type, name):
         response = fetch("https://metartnetwork.com", "search-results", args)
 
         results += list(
-          map(
-            map_result,
-            filter(
-              lambda r: r['type'] == search_type,
-              response['items']
+            map(
+                map_result,
+                filter(
+                    lambda r: r['type'] == search_type,
+                    response['items']
+                )
             )
-          )
         )
 
         if page * page_size > response['total'] or len(response['items']) == 0:
@@ -153,18 +154,18 @@ def fetch(base_url, type, arguments):
 
 def scrape_model(base_url, name):
     transformed_name = str.join(
-      ' ',
-      list(
-        map(
-          lambda p:
-            re.sub(
-              '[_-]',
-              ' ',
-              re.sub('\w\S*', lambda m: m.group(0).lower().capitalize(), p),
-            ),
-          name.split('-')
+        ' ',
+        list(
+            map(
+                lambda p:
+                re.sub(
+                    '[_-]',
+                    ' ',
+                    re.sub('\w\S*', lambda m: m.group(0).lower().capitalize(), p),
+                ),
+                name.split('-')
+            )
         )
-      )
     )
     log.info(f"Scraping model '{name}' as '{transformed_name}'")
     data = fetch(base_url, 'model', {'name': transformed_name, 'order': 'DATE', 'direction': 'DESC'})
@@ -196,7 +197,26 @@ def scrape_movie(base_url, date, name):
 
     studio = get_studio(data['media']['siteUUID'])
     res = map_media(data, studio, base_url)
-    res['Image'] = f"https://www.{studio[1]}{data['splashImagePath'] if 'splashImagePath' in data else data['coverCleanImagePath'] if 'coverCleanImagePath' in data else data['coverImagePath']}"
+    image_types = ['splashImagePath', 'coverCleanImagePath', 'coverImagePath']
+    for image_type in image_types:
+        if image_type in data:
+            image_part = data[image_type]
+            res['Image'] = f"https://www.{studio[1]}{image_part}"
+            try:
+                response = requests.get(res['Image'], headers={
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
+                }, timeout=(3, 6))
+            except requests.exceptions.RequestException as e:
+                log.error(f"Error fetching URL {res['Image']}: {e.strerror}")
+
+            if response.status_code < 400:
+                mime = 'image/jpeg'
+                encoded = base64.b64encode(response.content).decode('utf-8')
+                res['Image'] = 'data:{0};base64,{1}'.format(mime, encoded)
+                break
+
+            log.debug(f"Fetching URL {res['Image']} resulted in error status: {response.status_code}")
+            res['Image'] = None
 
     return res
 
@@ -244,20 +264,20 @@ def map_model(base_url, model):
 
 
 studios = {
-        '2163551D11D0439686AD9D291C8DFD71': ('ALS Scan', 'alsscan.com'),
-        'D0E7E33329311E3BB6E0800200C93255': ('Domai', 'domai.com'),
-        'FDA021004E3411DF98790800200C9A66': ('Erotic Beauty', 'eroticbeauty.com'),
-        '15A9FFA04E3511DF98790800200C9A66': ('Errotica Archives', 'errotica-archives.com'),
-        '706DF46B88884F7BB226097952427754': ('Eternal Desire', 'eternaldesire.com'),
-        '5592E33324211E3FF640800200C93111': ('Goddess Nudes', 'goddessnudes.com'),
-        '5A68E1D7B6E69E7401226779D559A10A': ('Love Hairy', 'lovehairy.com'),
-        'E6B595104E3411DF98790800200C9A66': ('Met Art', 'metart.com'),
-        'E7DFB70DF31C45B3B5E0BF10D733D349': ('Met Art X', 'metartx.com'),
-        'D99236C04DD011E1B86C0800200C9A66': ('Rylsky Art', 'rylskyart.com'),
-        '94DB3D0036FC11E1B86C0800200C9A66': ('Sex Art', 'sexart.com'),
-        '18A2E47EAEFD45F29033A5FCAF1F5B91': ('Stunning 18', 'stunning18.com'),
-        'FDAFDF209DC311E0AA820800200C9A66': ('The Life Erotic', 'thelifeerotic.com'),
-        '4F23028982B542FA9C6DAAA747E9B5B3': ('Viv Thomas', 'vivthomas.com'),
+    '2163551D11D0439686AD9D291C8DFD71': ('ALS Scan', 'alsscan.com'),
+    'D0E7E33329311E3BB6E0800200C93255': ('Domai', 'domai.com'),
+    'FDA021004E3411DF98790800200C9A66': ('Erotic Beauty', 'eroticbeauty.com'),
+    '15A9FFA04E3511DF98790800200C9A66': ('Errotica Archives', 'errotica-archives.com'),
+    '706DF46B88884F7BB226097952427754': ('Eternal Desire', 'eternaldesire.com'),
+    '5592E33324211E3FF640800200C93111': ('Goddess Nudes', 'goddessnudes.com'),
+    '5A68E1D7B6E69E7401226779D559A10A': ('Love Hairy', 'lovehairy.com'),
+    'E6B595104E3411DF98790800200C9A66': ('Met Art', 'metart.com'),
+    'E7DFB70DF31C45B3B5E0BF10D733D349': ('Met Art X', 'metartx.com'),
+    'D99236C04DD011E1B86C0800200C9A66': ('Rylsky Art', 'rylskyart.com'),
+    '94DB3D0036FC11E1B86C0800200C9A66': ('Sex Art', 'sexart.com'),
+    '18A2E47EAEFD45F29033A5FCAF1F5B91': ('Stunning 18', 'stunning18.com'),
+    'FDAFDF209DC311E0AA820800200C9A66': ('The Life Erotic', 'thelifeerotic.com'),
+    '4F23028982B542FA9C6DAAA747E9B5B3': ('Viv Thomas', 'vivthomas.com'),
 }
 
 
@@ -297,5 +317,5 @@ elif sys.argv[1] == 'search':
 
 output = json.dumps(ret)
 print(output)
-log.debug(f"Send output: {output}")
-# Last Updated February 04, 2022
+# don't log the output since it has an image
+# log.debug(f"Send output: {output}")
