@@ -319,4 +319,3 @@ output = json.dumps(ret)
 print(output)
 # don't log the output since it has an image
 # log.debug(f"Send output: {output}")
-# Last Updated February 13, 2022
