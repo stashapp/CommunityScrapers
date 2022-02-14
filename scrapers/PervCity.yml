@@ -18,7 +18,7 @@ xPathScrapers:
       Title: $sceneinfo/div[@class="infoHeader"]
       Performers:
         Name: $sceneinfo//span[@class="tour_update_models"]/a
-      Details: $sceneinfo//p/text()
+      Details: $sceneinfo//p/text()|$sceneinfo//h3[@class="description"]
       Image:
         selector: //head/base/@href|//img[@class="posterimg stdimage thumbs"]/@src
         concat: "|"
