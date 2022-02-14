@@ -11,7 +11,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: &title //div[@class="panel-body"]/h4//text()
-      Details: &details //meta[@name="description"]/@content
+      Details: &details //div[@class="panel-body"]/p[not(@class)]
       Tags: &tags
         Name: 
           selector: //meta[@name="keywords"]/@content
