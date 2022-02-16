@@ -1,0 +1,33 @@
+name: PissPlay
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pissplay.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@id="video_title"]/text()
+      Date:
+        selector: //div[contains(@class, 'video_date')]
+        postProcess:
+          - parseDate: 2 Jan 2006
+      Performers:
+        Name:
+          fixed: Bruce and Morgan
+      Tags:
+        Name: //div[@id="video_tags"]/a
+      Details:
+        selector: //div[@id="video_description"]/p
+        concat: "\n\n"
+      Image:
+        selector: //div[@class="video_section_player"]//@src
+        postProcess:
+          - replace:
+              - regex: .+(?:poster=)([^"]*)
+                with: $1
+      Studio:
+        Name:
+          fixed: PissPlay
+# Last Updated February 01, 2022
