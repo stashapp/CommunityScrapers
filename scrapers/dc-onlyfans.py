@@ -24,7 +24,9 @@ def lookup_scene(file,db,parent):
     print(f"using database: {db.name}  {file.name}", file=sys.stderr)
     conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
     c=conn.cursor()
-    c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
+    c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from posts,medias where posts.post_id=medias.post_id and medias.filename=?\
+    union all \
+    select posts.post_id,posts.text,medias.link,posts.created_at from messages as posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,file.name,))
     row=c.fetchone()
     res={}
     res['title']=str(parent.name)+ ' - '+row[3].strftime('%Y-%m-%d')
