@@ -2,12 +2,12 @@ name: Cospuri
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.cospuri.com/sample
+      - cospuri.com/sample
     scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://www.cospuri.com/model/
+      - cospuri.com/model/
     scraper: performerScraper
 xPathScrapers:
   sceneScraper:
@@ -50,4 +50,4 @@ xPathScrapers:
                 with: $2
       Gender:
         fixed: Female
-# Last Updated Februaru 18, 2022
+# Last Updated February 18, 2022
