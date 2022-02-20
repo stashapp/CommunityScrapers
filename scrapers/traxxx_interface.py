@@ -1,7 +1,11 @@
 import re, sys, copy, json, requests
 
 # local modules
-import py_common.log as log
+try:
+    import py_common.log as log
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
 
 def parse_response(json_input):
   if isinstance(json_input, dict):
