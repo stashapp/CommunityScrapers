@@ -1,7 +1,13 @@
 import os
 import sys
 import json
-import torrent_parser as tp
+
+try:
+    import torrent_parser as tp
+except ModuleNotFoundError:
+    print("You need to download the file 'torrent_parser.py' from the community repo! (CommunityScrapers/tree/master/scrapers/torrent_parser.py)", file=sys.stderr)
+    sys.exit()
+
 '''  This script parses all torrent files in the specified directory for embedded metadata.
      The title can either be a filename or the filename of the .torrent file
      
