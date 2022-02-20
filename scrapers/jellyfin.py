@@ -1,7 +1,14 @@
-import requests, os, urllib.parse, datetime
+import os, urllib.parse, datetime
 import sys
 import json
 import base64
+
+try:
+    import requests
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
 
 # Fill in your jellyfin API-Key
 api_key = "xxxxxxxxxxxxxxxxxxxxxxxxxx"
