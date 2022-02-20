@@ -80,7 +80,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: //div[text()="Description:"]/../div[not(@class)]/text()
-      Tags:
+      Tags: &tags
         Name:
           selector: //a[contains(@href,"/scenes?tags")]/text()[1]
           postProcess:
@@ -124,8 +124,7 @@ xPathScrapers:
                 with: $1
       Studio:
         Name: //meta[@name="dti.network"]/@content
-      Tags:
-        Name: //a[contains(@href,"/scenes?tag")]/text()[1]
+      Tags: *tags
       Details:
         selector: $script
         postProcess:
@@ -291,4 +290,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated January 27, 2022
+# Last Updated February 20, 2022
