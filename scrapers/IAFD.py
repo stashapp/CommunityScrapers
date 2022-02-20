@@ -8,8 +8,19 @@ import re
 import random
 from urllib.parse import urlparse
 # extra modules below need to be installed
-import cloudscraper
-from lxml import html
+try:
+    import cloudscraper
+except ModuleNotFoundError:
+    print("You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper", file=sys.stderr)
+    sys.exit()
+    
+try:
+    from lxml import html
+except ModuleNotFoundError:
+    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml", file=sys.stderr)
+    sys.exit()
 
 class Scraper:
     def set_value(self,value):
