@@ -1,10 +1,18 @@
 from urllib.request import Request, urlopen
-import requests
 import sys
-from requests.structures import CaseInsensitiveDict
 import json
 import re
 import urllib.request, urllib.error
+
+try:
+    import requests
+    from requests.structures import CaseInsensitiveDict
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
+
+
 Apikey = '' #it gets Shoko apikey with get_apikey
 StashAPIKEY = "" #your Stash apikey
 Stashurl = "http://localhost:9999/graphql" #your stash playground url
