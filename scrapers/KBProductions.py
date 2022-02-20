@@ -6,14 +6,22 @@ import sys
 try:
     import py_common.log as log
 except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr)
-    sys.exit(1)
+    print("You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
 
-import requests
-from bs4 import BeautifulSoup
+try:
+    import requests
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
 
+try:
+    from bs4 import BeautifulSoup
+except ModuleNotFoundError:
+    print("You need to install the BeautifulSoup module. (https://pypi.org/project/beautifulsoup4/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install beautifulsoup4", file=sys.stderr)
+    sys.exit()
 
 def get_from_url(url_to_parse):
     m = re.match(
