@@ -2,7 +2,7 @@ name: TeasePOV
 sceneByURL:
   - action: scrapeXPath
     url:
-      - teasepov.com/videos/
+      - teasepov.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -12,14 +12,14 @@ xPathScrapers:
         selector: //div[@class="slideDate"]
         postProcess:
           - replace:
-              - regex: (?:[^A-Z]+)(\w+)(?:.)(\d+)(?:\D+)(\d+)
-                with: $3-$1-$2
-          - parseDate: 2006-January-02
-          - parseDate: 2006-Jan-02
-          - parseDate: 2006-January-2
+              - regex: "/"
+                with: ""
+          - parseDate: January 2, 2006
       Details:
         selector: //div[@class="videoDescription"]
       Studio:
         Name:
           fixed: TeasePOV
-# Last Updated Februaru 19, 2022
+      Image:
+        selector: //div[@id="player"]/img/@src    
+# Last Updated February 20, 2022
