@@ -8,10 +8,10 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //h2[@class="video_title"]/text()
+        selector: //h2[@class="video_title"]/text()[1]
         postProcess:
           - replace:
-              - regex: "with"
+              - regex: '\swith.*$'
                 with: ""
       Performers:
         Name: //h2[@class="video_title"]/strong/a
