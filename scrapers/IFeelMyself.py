@@ -3,8 +3,20 @@ import re
 import sys
 from datetime import datetime
 
-from mechanicalsoup import StatefulBrowser
-from requests.cookies import create_cookie
+try:
+    from mechanicalsoup import StatefulBrowser
+except ModuleNotFoundError:
+    print("You need to install the mechanicalsoup module. (https://mechanicalsoup.readthedocs.io/en/stable/introduction.html#installation)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install MechanicalSoup", file=sys.stderr)
+    sys.exit()
+
+try:
+    from requests.cookies import create_cookie
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
+
 
 def readJSONInput():
     input = sys.stdin.read()
