@@ -1,0 +1,28 @@
+name: SeeMomSuck
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - seemomsuck.com/videos
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="videoblock"]/h2
+      Performers: 
+        Name: //div[@class="featuringWrapper"]/a
+      Details:
+        selector: //div[@class="epDescription"]/text()
+        postProcess:
+          - replace:
+              - regex: ": "
+              - with: ""
+      Studio:
+        Name:
+          fixed: SeeMomSuck
+      Image:
+        selector: //div[@class="video_here"]/img/@src
+        postProcess:
+          - replace:
+              - regex: "/content/"
+                with: "https://www.seemomsuck.com/content/"
+# Last Updated February 20, 2022
