@@ -9,6 +9,7 @@ sceneByURL:
       - mamacitaz.com
       - transbella.com
       - vipsexvault.com
+      - doegirls.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -44,4 +45,4 @@ xPathScrapers:
       Studio:
         Name: $actors//a//text()
       Image: //picture[@class="poster"]/img/@src
-# Last Updated November 14, 2021
+# Last Updated February 21, 2022
