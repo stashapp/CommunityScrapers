@@ -8,13 +8,13 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class="videoblock"]/h2
-      Performers: 
+      Performers:
         Name: //div[@class="featuringWrapper"]/a
       Details:
         selector: //div[@class="epDescription"]/text()
         postProcess:
           - replace:
-              - regex: ": "
+              - regex: '^\s*:\s*'
               - with: ""
       Studio:
         Name:
@@ -23,9 +23,9 @@ xPathScrapers:
         selector: //div[@class="video_here"]/img/@src|//div[@class="video_here"]//div[@class="fluid_pseudo_poster"]/@style
         postProcess:
           - replace:
-              - regex: (?:.+)(\/content\/.+.jpg)(?:.+)
+              - regex: (?:.+)(\/content\/.+\.jpg)(?:.+)
                 with: $1
-              - regex: "/content/"
+              - regex: "^/content/"
                 with: "https://www.seemomsuck.com/content/"
 driver:
   useCDP: true
