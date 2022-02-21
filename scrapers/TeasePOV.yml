@@ -15,8 +15,7 @@ xPathScrapers:
               - regex: '\s*/\s*'
                 with: ""
           - parseDate: January 2, 2006
-      Details:
-        selector: //div[@class="videoDescription"]
+      Details: //div[@class="videoDescription"]
       Studio:
         Name:
           fixed: TeasePOV
