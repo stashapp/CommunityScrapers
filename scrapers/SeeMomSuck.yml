@@ -15,7 +15,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: '^\s*:\s*'
-              - with: ""
+                with: ""
       Studio:
         Name:
           fixed: SeeMomSuck
