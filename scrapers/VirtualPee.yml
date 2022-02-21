@@ -1,0 +1,31 @@
+name: virtualpee
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - virtualpee.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h2[@class="video_title"]/text()[1]
+        postProcess:
+          - replace:
+              - regex: '\swith.*$'
+                with: ""
+      Performers:
+        Name: //h2[@class="video_title"]/strong/a
+      Date:
+        selector: //li/strong/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Tags:
+        Name: //h5[@class="tags"]/a
+      Details:
+        selector: //div[@class="col-md-12 right"]/p
+      Image:
+        selector: //span[@class="vid_wrap"]/img/@src
+      Studio:
+        Name:
+          fixed: virtualpee
+# Last Updated February 17, 2022
