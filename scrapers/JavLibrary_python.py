@@ -7,8 +7,19 @@ import threading
 import time
 from urllib.parse import urlparse
 
-import lxml.html    # https://pypi.org/project/lxml/         | pip install lxml
-import requests     # https://pypi.org/project/requests/     | pip install requests
+try:
+    import lxml.html 
+except ModuleNotFoundError:
+    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml", file=sys.stderr)
+    sys.exit()
+
+try:
+    import requests
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
 
 R18_HEADERS = {
     "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',

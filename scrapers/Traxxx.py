@@ -1,8 +1,23 @@
 import re, sys, copy, json
-import requests
 
-import py_common.log as log
-from traxxx_interface import TraxxxInterface
+try:
+    import requests
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
+
+try:
+    import py_common.log as log
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
+    
+try:
+    from traxxx_interface import TraxxxInterface
+except ModuleNotFoundError:
+    print("You need to download the file 'traxxx_interface.py' from the community repo! (CommunityScrapers/tree/master/scrapers/traxxx_interface.py)", file=sys.stderr)
+    sys.exit()
 
 def main():
   global traxxx

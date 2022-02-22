@@ -2,9 +2,15 @@ import json
 import os
 import pathlib
 import re
-import requests
 import sys
 from datetime import datetime
+
+try:
+    import requests
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
 
 USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
 DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
