@@ -3,7 +3,8 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - amateureuro.com
-      - dirtycosplay.com
+      - dirtycosplay.com      
+      - doegirls.com
       - forbondage.com
       - letsdoeit.com
       - mamacitaz.com
@@ -44,4 +45,4 @@ xPathScrapers:
       Studio:
         Name: $actors//a//text()
       Image: //picture[@class="poster"]/img/@src
-# Last Updated November 14, 2021
+# Last Updated February 21, 2022
