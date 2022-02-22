@@ -3,13 +3,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - amateureuro.com
-      - dirtycosplay.com
+      - dirtycosplay.com      
+      - doegirls.com
       - forbondage.com
       - letsdoeit.com
       - mamacitaz.com
       - transbella.com
       - vipsexvault.com
-      - doegirls.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
