@@ -48,7 +48,7 @@ xPathScrapers:
       Date:
         selector: //div[@class="content-item"]//span[@class="pub-date"]/text()
         postProcess: *ppDate
-      # use show duration instead to avoid false matches 
+      # show duration to avoid false matches
       # there are duplicate scenes and scenes with identical titles
       Details:
         selector: //div[@class="content-item"]//span[@class="video-duration"]/text()
