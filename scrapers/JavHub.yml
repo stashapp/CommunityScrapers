@@ -33,7 +33,7 @@ xPathScrapers:
       URL: //input[starts-with(@id,"copy-url")]/@value
   sceneSearch:
     common:
-      $content: //div[@class="content-item"]
+      $content: //div[@class="content-item"][div[a[not(@href="https://tour.javhub.com/join")]]]
     scene:
       Image:
         selector: $content//a/@data-images
@@ -46,14 +46,14 @@ xPathScrapers:
       Title: $content//h3[@class="title"]
       URL: $content//h3[@class="title"]/a/@href
       Date:
-        selector: //div[@class="content-item"]//span[@class="pub-date"]/text()
+        selector: $content//span[@class="pub-date"]/text()
         postProcess: *ppDate
       # show duration to avoid false matches
       # there are duplicate scenes and scenes with identical titles
       Details:
-        selector: //div[@class="content-item"]//span[@class="video-duration"]/text()
+        selector: $content//span[@class="video-duration"]/text()
         postProcess:
           - replace:
               - regex: ^
                 with: "Duration "
-# Last Updated February 24, 2022
+# Last Updated February 26, 2022
