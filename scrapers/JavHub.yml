@@ -33,6 +33,7 @@ xPathScrapers:
       URL: //input[starts-with(@id,"copy-url")]/@value
   sceneSearch:
     common:
+      # ignore search results that have join links (https://tour.javhub.com/join)
       $content: //div[@class="content-item"][div[a[not(@href="https://tour.javhub.com/join")]]]
     scene:
       Image:
