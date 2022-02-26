@@ -54,6 +54,6 @@ driver:
   headers:
     - Key: User-Agent
       Value: stash/1.0.0
-    - Key: Authorization
+#   - Key: Authorization
 #     Value: Basic Key
 # Last Updated February 24, 2022
