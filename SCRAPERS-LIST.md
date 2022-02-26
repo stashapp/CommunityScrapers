@@ -237,6 +237,7 @@ corbinfisher.com|CorbinFisher.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|
 cosplayfeet.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cospuri.com|Cospuri.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 cougarseason.com|TopWebModels.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+crashpadseries.com|CrashpadSeries.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 creampie-angels.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 creativeporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cruelgf.com|CruelGirlfriend.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
