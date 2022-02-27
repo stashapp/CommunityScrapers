@@ -18,6 +18,21 @@ except ModuleNotFoundError:
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper", file=sys.stderr)
     sys.exit()
 
+def save_json(api_json, url):
+    try:
+        if sys.argv[1] == "logJSON":
+            try:
+                os.makedirs(DIR_JSON)
+            except FileExistsError:
+                pass  # Dir already exist
+            api_json['url'] = url
+            filename = os.path.join(DIR_JSON, str(api_json['id'])+".json")
+            with open(filename, 'w', encoding='utf-8') as file:
+                json.dump(api_json, file, ensure_ascii=False, indent=4)
+    except IndexError:
+        pass
+
+
 USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
 DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
 
