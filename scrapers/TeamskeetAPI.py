@@ -77,8 +77,8 @@ else:
     r = ""
     try:
         r = scraper.get(api_url, headers=headers, timeout=(3, 5))
-    except requests.exceptions.RequestException:
-        log.error("An error has occurred with Requests")
+    except:
+        log.error("An error has occurred with the page request")
         log.error(f"Request status: `{r.status_code}`")
         log.error("Check your TeamskeetJSON.log for more details")
         with open("TeamskeetAPI.log", 'w', encoding='utf-8') as f:
@@ -94,7 +94,10 @@ else:
             sys.exit(1)
 
     except:
-        log.debug(f"invalid input {r.content}")
+        if "Please Wait... | Cloudflare" in r.text:
+            log.error("Protected by Cloudflare. Retry later...")
+        else:
+            log.error("Invalid page content")
         sys.exit(1)
 
 # Time to scrape all data
