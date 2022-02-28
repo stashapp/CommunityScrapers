@@ -80,7 +80,7 @@ else:
     except requests.exceptions.RequestException:
         log.error("An error has occurred with Requests")
         log.error(f"Request status: `{r.status_code}`")
-        log.error(f"Check your TeamskeetJSON.log for more details")
+        log.error("Check your TeamskeetJSON.log for more details")
         with open("TeamskeetAPI.log", 'w', encoding='utf-8') as f:
             f.write("Scene ID: {}\n".format(scene_id))
             f.write("Request:\n{}".format(r.text))
