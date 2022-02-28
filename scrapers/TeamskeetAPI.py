@@ -65,8 +65,7 @@ if os.path.isfile(json_file):
         scene_api_json = json.load(json_file)
 else:
     log.debug("Asking the API...")
-    api_url = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{}'.format(
-        scene_id)
+    api_url = f"https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{scene_id}"
     headers = {
         'User-Agent': USER_AGENT,
         'Origin': 'https://www.teamskeet.com',
@@ -80,10 +79,10 @@ else:
     except:
         log.error("An error has occurred with the page request")
         log.error(f"Request status: `{r.status_code}`")
-        log.error("Check your TeamskeetJSON.log for more details")
+        log.error("Check your TeamskeetAPI.log for more details")
         with open("TeamskeetAPI.log", 'w', encoding='utf-8') as f:
-            f.write("Scene ID: {}\n".format(scene_id))
-            f.write("Request:\n{}".format(r.text))
+            f.write(f"Scene ID: {scene_id}\n")
+            f.write(f"Request:\n{r.text}")
         sys.exit(1)
     try:
         scene_api_json_check = r.json().get('found')
