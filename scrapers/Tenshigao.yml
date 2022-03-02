@@ -19,7 +19,6 @@ xPathScrapers:
       Performers:
         Name:
           selector: //h5/a
-          postProcess:
       Tags:
         Name: //div[@class="cat"]/a
       Details:
