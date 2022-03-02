@@ -17,8 +17,8 @@ xPathScrapers:
                 with: "$1"
           - parseDate: January 02, 2006
       Performers:
-        Name:
-          selector: //h5/a
+        Name: //h5/a
+        URL: //h5/a/@href 
       Tags:
         Name: //div[@class="cat"]/a
       Details:
@@ -27,8 +27,8 @@ xPathScrapers:
         selector: //video[@id="videohtml5tour"]/@poster
         postProcess:
           - replace:
-              - regex: ^
-                with: "https:"
+              - regex: ^//
+                with: "https://"
       Studio:
         Name:
           fixed: Tenshigao
