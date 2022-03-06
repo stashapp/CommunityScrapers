@@ -6,5 +6,5 @@ sceneByURL:
     script:
       - python
       - TeamskeetAPI.py
-      # - logJSON # Save the JSON from the API to a file
-# Last Updated February 23, 2021
+      #- logJSON # Save the JSON from the API to a file
+# Last Updated February 28, 2022
