@@ -17,7 +17,13 @@ xPathScrapers:
       Title: //h2[@class="title"]/text()|//h1[@class="title"]/text()
       Details: $info/div[starts-with(@class,"desc")]
       Performers:
-        Name: $info//h4[@class="models"]/a
+        Name:
+          selector: $info//h4[@class="models"]/a
+          postProcess:
+            - replace:
+                - regex: '\s*,\s*$'
+                  with: ""
+
       Studio:
         Name:
           selector: //a[contains(@class,"navbar-brand")]/img/@title
@@ -29,4 +35,4 @@ xPathScrapers:
                 with: "$1 $2"
           - parseDate: 2 Jan 2006
       Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot|//meta[@property="og:image"]/@content                    
-# Last Updated December 09, 2021
+# Last Updated March 02, 2022
