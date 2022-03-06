@@ -1,4 +1,4 @@
-name: CrashpadSeries 
+name: CrashpadSeries
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -13,8 +13,8 @@ xPathScrapers:
         selector: //script[@type="application/ld+json"]
         postProcess:
           - replace:
-            - regex: .+(?:"datePublished":")([^T]+).+
-              with: $1
+              - regex: .+(?:"datePublished":")([^T]+).+
+                with: $1
           - parseDate: 2006-01-02
       Performers:
         Name: //div[@id="primary-container"]//div[contains(@class,"model-thumb")]//h4
@@ -28,4 +28,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: CrashPad Series
-# Last Updated March 5, 2022
+# Last Updated March 05, 2022
