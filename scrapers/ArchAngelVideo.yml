@@ -7,34 +7,28 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $videoContent: //div[@class="content"][1]
+      $videoContent: //div[@class="midwrap clear"]
     scene:
-      Title: $videoContent//h4/a/text()
-      Details: //div[@class="item-info"]/p[@class="description"]
+      Title: $videoContent//div[@class='title clear']/h2
+      Details: //div[@class='description']/p
       Date:
-        selector: $videoContent//ul[@class="item-meta"]//li[1]/text()
-        concat: " "
+        selector: $videoContent//div[@class='info']/p/text()[contains(.,"Added:")]
         postProcess:
           - replace:
-              - regex: " "
-                with:
-          - parseDate: January2,2006
+              - regex: "Added: "
+                with: ""
+          - parseDate: January 2, 2006
+      Tags:
+        Name: //ul[@class='tags']/li/a
       Studio:
         Name:
-          selector: //div[@id="logo"]/h1/a/img/@alt
-          postProcess:
-            - replace:
-                - regex: \ Productions$
-                  with:
+          fixed: ArchAngel
       Image:
-        selector: //div[@class="player-thumb"]/img/@src0_1x|//script[contains(.,"poster=")]
+        selector: $videoContent//img/@src
         postProcess:
           - replace:
-              - regex: .+poster="([^"]+)".+
-                with: $1
               - regex: ^
-                with: "https://www.archangelvideo.com"
+                with: "https://archangelvideo.com"
       Performers:
-        Name: $videoContent//a[contains(@href, "/models/")]/text()
-
-# Last Updated November 08, 2020
+        Name: $videoContent//div[@class='info']/p[1]/a
+# Last Updated March 07, 2022
