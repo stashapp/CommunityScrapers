@@ -12,7 +12,7 @@ xPathScrapers:
       Title: $videoContent//div[@class='title clear']/h2
       Details: //div[@class='description']/p
       Date:
-        selector: $videoContent//div[@class='info']/p/text()[1]
+        selector: $videoContent//div[@class='info']/p/text()[contains(.,"Added:")]
         postProcess:
           - replace:
               - regex: "Added: "
@@ -32,4 +32,4 @@ xPathScrapers:
       Performers:
         Name: $videoContent//div[@class='info']/p[1]/a
 
-# Last Updated February 27, 2022
+# Last Updated March 7, 2022
