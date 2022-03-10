@@ -42,4 +42,4 @@ xPathScrapers:
       Details: *detailsSel
       Tags: *tagsAttr
       Image: //div[@class="player-thumb"]/img/@src0_1x
-# Last Updated March 3, 2022
+# Last Updated March 03, 2022
