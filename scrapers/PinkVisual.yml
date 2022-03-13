@@ -9,7 +9,7 @@ xPathScrapers:
     scene:
       Title: 
         selector: //div[@class="summary"]/h3[@itemprop="name"]/text()
-      Details: //span[@itemprop="description"]/text()
+      Details: //p[@class="description"]/span[@itemprop="description"]/text()
       Performers:
         Name: //p[@class="actors"]/span/a/span/text()
       Image:
