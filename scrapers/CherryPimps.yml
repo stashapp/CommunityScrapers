@@ -15,7 +15,13 @@ xPathScrapers:
       Title: &titleSel //div[@class='item-title']/h1/text()
       Studio: &studioAttr
         Name:
-          fixed: Cherry Pimps
+          selector: //a[contains(@href, 'cherrypimps.com/series/')]/@title
+          postProcess:
+            - replace:
+                - regex: "^"
+                  with: "CherryPimps - "
+            - map:
+                CherryPimps - Cherry Pimps: "Cherry Pimps"
       Date: &dateAttr
         selector: //i[@class='fa fa-calendar']/following-sibling::strong/following-sibling::text()
         postProcess:
@@ -36,4 +42,4 @@ xPathScrapers:
       Details: *detailsSel
       Tags: *tagsAttr
       Image: //div[@class="player-thumb"]/img/@src0_1x
-# Last Updated October 22, 2021
+# Last Updated March 03, 2022
