@@ -1,0 +1,29 @@
+name: RestrictedSenses
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - restrictedsenses.com/main/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="title"]/a/text()
+      Date:
+        selector: //span[@class="entry-date"]//text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name:
+          fixed: Mina
+      Details:
+        selector: //div[@class="gallery"]/following-sibling::p[1]
+      Image:
+        selector: //a[contains(text(),"Click")]/@href
+      Studio:
+        Name:
+          fixed: RestrictedSenses
+      Tags:
+        Name:
+          selector: //span[@class="tags"]/a/text()
+# Last Updated March 13, 2022
