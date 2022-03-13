@@ -17,7 +17,7 @@ xPathScrapers:
         Name:
           fixed: Mina
       Details:
-        selector: //div[@class="gallery"]/following-sibling::p/text()
+        selector: //div[@class="gallery"]/following-sibling::p[1]
       Image:
         selector: //a[contains(text(),"Click")]/@href
       Studio:
