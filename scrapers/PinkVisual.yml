@@ -13,7 +13,7 @@ xPathScrapers:
       Performers:
         Name: //p[@class="actors"]/span/a/span/text()
       Image:
-        selector: //div[@class="collage"]/img[@itemprop="image"]/@src
+        selector: //div[@class="collage"]/img[@itemprop="image"][contains(@src,"-01.jpg")]/@src
         postProcess:
           - replace:
               - regex: -01.jpg
