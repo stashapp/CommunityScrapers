@@ -29,13 +29,12 @@ xPathScrapers:
               - regex: .*<img.*src0_1x="(.*)".*
                 with: $1
       Studio:
-        Name: 
+        Name:
           fixed: Fragile Slave
       Tags:
-        Name: 
+        Name:
           selector: $details/a/text()
       Performers:
-        Name: 
+        Name:
           selector: //span[@class="tour_update_models"]/a/text()
-
 # Last Updated March 14, 2022
