@@ -22,6 +22,8 @@ xPathScrapers:
           - replace:
               - regex: ','
                 with: ""
+      Tags:
+        Name: //div[@class="categories_detail text-light"]/following-sibling::a
 #      URL: //link[@rel="canonical"][1]/@href
       Image:
         selector: //div[@class="col-lg-2 col-6 pt-1 pr-1 pl-0 pb-0"]/img[@class="img_detail_thumb"]/@src
@@ -33,4 +35,4 @@ xPathScrapers:
         Name:
           fixed: EastBoys
 
-# Last Updated March 14, 2022
+# Last Updated March 16, 2022
