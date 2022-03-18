@@ -3,8 +3,8 @@ name: "TeamskeetAPI"
 
 sceneByURL:
   - url:
-      - teamskeet.com/movies/
       - sayuncle.com/movies/
+      - teamskeet.com/movies/
     action: script
     script:
       - python
