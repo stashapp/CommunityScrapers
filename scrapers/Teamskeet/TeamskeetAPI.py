@@ -47,7 +47,7 @@ DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
 
 # Not necessary but why not ?
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
-
+ORIGIN = "https://www.teamskeet.com"
 
 fragment = json.loads(sys.stdin.read())
 if fragment["url"]:
@@ -70,6 +70,7 @@ api_url = f"https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{
 if "sayuncle.com/movies/" in scene_url:
     api_url = f"https://store2.psmcdn.net/sau-elastic-00gy5fg5ra-videoscontent/_doc/{scene_id}"
     DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","SayUncle")
+    ORIGIN = "https://www.sayuncle.com"
 
 use_local = 0
 json_file = os.path.join(DIR_JSON, scene_id+".json")
@@ -78,12 +79,12 @@ if os.path.isfile(json_file):
     use_local = 1
     with open(json_file, encoding="utf-8") as json_file:
         scene_api_json = json.load(json_file)
-else:    
+else:
     log.debug("Asking the API...")
     headers = {
         'User-Agent': USER_AGENT,
-        'Origin': 'https://www.teamskeet.com',
-        'Referer': 'https://www.teamskeet.com/'
+        'Origin': ORIGIN,
+        'Referer': ORIGIN
     }
     scraper = cloudscraper.create_scraper()
     # Send to the API
