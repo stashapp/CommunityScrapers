@@ -12,6 +12,7 @@ sceneByURL:
       - badteenspunished.com/video/watch/
       - bountyhunterporn.com/video/watch/
       - brattymilf.com/video/watch/
+      - cumswappingsis.com/video/watch/
       - daddyslilangel.com/video/watch/
       - detentiongirls.com/video/watch/
       - driverxxx.com/video/watch/
@@ -28,6 +29,7 @@ sceneByURL:
       - princesscum.com/video/watch/
       - stepsiblingscaught.com/video/watch/
       - teacherfucksteens.com/video/watch/
+      - youngermommy.com/video/watch
 
   # Nubile Films sites
   - action: scrapeXPath
@@ -206,4 +208,4 @@ xPathScrapers:
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
 
-# Last Updated November 04, 2021
+# Last Updated March 18, 2022
