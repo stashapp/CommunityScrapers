@@ -56,8 +56,8 @@ else:
     log.error('You need to set the URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
-if "teamskeet.com/movies/" not in scene_url:
-    log.error('The URL is not from a Teamskeet URL (e.g. teamskeet.com/movies/*****)')
+if "teamskeet.com/movies/" not in scene_url and "sayuncle.com/movies/" not in scene_url:
+    log.error('The URL is not from a Teamskeet or Sayuncle URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
 scene_id = re.sub('.+/', '', scene_url)
@@ -71,9 +71,12 @@ if os.path.isfile(json_file):
     use_local = 1
     with open(json_file, encoding="utf-8") as json_file:
         scene_api_json = json.load(json_file)
-else:
+else:    
+    if "sayuncle.com/movies/" in scene_url:
+        api_url = f"https://store2.psmcdn.net/sau-elastic-00gy5fg5ra-videoscontent/_doc/{scene_id}"
     log.debug("Asking the API...")
-    api_url = f"https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{scene_id}"
+    if "teamskeet.com/movies/" in scene_url:
+        api_url = f"https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{scene_id}"
     headers = {
         'User-Agent': USER_AGENT,
         'Origin': 'https://www.teamskeet.com',
