@@ -6,6 +6,8 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $perf: //strong[contains(text(),"Featuring:")]/following-sibling::a
     scene:
       Title:
         selector: //li[@class="active"]
@@ -14,7 +16,8 @@ xPathScrapers:
         postProcess:
           - parseDate: January 02, 2006
       Performers:
-        Name: //strong[contains(text(),"Featuring:")]/following-sibling::a
+        Name: $perf
+        URL: $perf/@href
       Tags:
         Name: //strong[contains(text(),"Tags:")]/following-sibling::a
       Details:
