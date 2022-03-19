@@ -1,0 +1,34 @@
+name: ZentaiDolls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - zentaidolls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $perf: //strong[contains(text(),"Featuring:")]/following-sibling::a
+    scene:
+      Title:
+        selector: //li[@class="active"]
+      Date:
+        selector: //strong[contains(text(),"Released:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 02, 2006
+      Performers:
+        Name: $perf
+        URL: $perf/@href
+      Tags:
+        Name: //strong[contains(text(),"Tags:")]/following-sibling::a
+      Details:
+        selector: //div[contains(@class,"col-md-7 mb-4 mb-md-0")]//p/text()
+      Image:
+        selector: //img[@class="update_thumb thumbs stdimage"]/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.zentaidolls.com/"
+      Studio:
+        Name:
+          fixed: ZentaiDolls
+# Last Updated March 18, 2022
