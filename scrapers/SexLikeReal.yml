@@ -16,11 +16,6 @@ xPathScrapers:
         Name: //meta[@property="video:actor"]/@content
       Studio:
         Name: //a[contains(@href,"/studios/")]/div[last()]/text()
-      Image:
-        selector: //div[contains(@class,"splash-screen")]/@style
-        postProcess:
-          - replace:
-              - regex: .+(http[^\)]+).+
-                with: $1
+      Image: //div[contains(@class,"splash-screen")]/img/@src
 
-# Last Updated August 06, 2021
+# Last Updated March 21, 2021
