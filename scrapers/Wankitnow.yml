@@ -1,0 +1,29 @@
+name: Wank It Now
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wankitnow.com/videoentry/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class='page_title']/text()
+      Performers:
+        Name: //span[@class="meta_modelcategory meta_category"]//a
+      Details: //div[@class="post_excerpt"]/p
+      Tags:
+        Name: //span[@class="meta_videotag meta_category"]//a
+      Image: //meta[@property="og:image:secure_url"]/@content
+      Studio:
+        Name:
+          fixed: Wank It Now
+      Date:
+        selector: //span[@class="day"]/span/text()|//span[@class="day"]/text()
+        concat: "/"
+        postProcess:
+          - replace:
+              - regex: ^(\w+)/(\d+)$
+                with: $1/22/$2 # Needs to be updated every year
+          - parseDate: Jan/06/02
+# Last Updated March 21, 2022
