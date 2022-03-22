@@ -13,12 +13,14 @@ xPathScrapers:
   sceneScraper:
     common:
       $performer: //b[text()='Pornstars / Cast']/../..//a[@class='bold gen']
-      $studio: (//b[text()="Studio"] | //b[text()="Network"])/../a[last()]
+      $studio: (//b[text()="Studio"] | //b[text()="Network"])/following-sibling::a[last()]
       $movie: //b[text()="Movie:"]/following-sibling::a[1]
     scene:
       Title: //span/following-sibling::h1/a/text()
       Date:
-        selector: //time/@datetime
+        selector: //span[b[text()="Release date"]]/a/b/text()
+        postProcess:
+          - parseDate: January 02, 2006
       Details:
         selector: //div[b[text()="Story"]] | //b[contains(text(),"Movie Description")]/../text()
         concat: " "
@@ -27,7 +29,7 @@ xPathScrapers:
               - regex: "Story - "
                 with:
       Tags:
-        Name: //div[b[text()='Categories:']]/a/text()
+        Name: //b[text()='Categories:']/following-sibling::a
       Performers:
         Name: $performer
         URL: $performer/@href
@@ -69,5 +71,4 @@ xPathScrapers:
                 with:
       FrontImage: //a[@id='enlargecover']/@href
       BackImage: //a[text()='+Back']/@href
-# Last Updated December 15, 2021
-
+# Last Updated March 19, 2022

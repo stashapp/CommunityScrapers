@@ -2,8 +2,13 @@ name: Cospuri
 sceneByURL:
   - action: scrapeXPath
     url:
-      - cospuri.com
+      - cospuri.com/sample
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - cospuri.com/model/
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -30,4 +35,24 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Cospuri
-# Last Updated May 08, 2021
+  performerScraper:
+    performer:
+      Name: //div[@class="name-en"]
+      Country: //div[@class='item country']//span
+      Height:
+        selector: //div[@class='item height']//span
+        postProcess:
+          - replace:
+              - regex: (\d+)(\D+)?
+                with: $1
+      Measurements: //div[@class='item measurements']//span
+      Details: //div[@class="model-detail"]//p
+      Image:
+        selector: //div[@class='model-costume']/@style
+        postProcess:
+          - replace:
+              - regex: (background:url\()(.+)(?:\).+)
+                with: $2
+      Gender:
+        fixed: Female
+# Last Updated February 18, 2022

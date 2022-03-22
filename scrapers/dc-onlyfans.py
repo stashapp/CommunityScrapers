@@ -4,6 +4,7 @@ import sqlite3
 from pathlib import Path
 import base64
 import mimetypes
+
 try:
     import py_common.graphql as graphql
     import py_common.log as log
@@ -24,7 +25,21 @@ def lookup_scene(file,db,parent):
     print(f"using database: {db.name}  {file.name}", file=sys.stderr)
     conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
     c=conn.cursor()
-    c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
+    # which media type should we look up for our file?
+    c.execute('select api_type from medias where medias.filename=?',(file.name,))
+    row=c.fetchone()
+    #check for each api_type the right tables
+    api_type = str(row[0])
+    if api_type == 'Posts':
+        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
+    elif api_type == "Stories":
+        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from stories as posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
+    elif api_type == "Messages":
+        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from messages as posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
+    elif api_type == "Products":
+        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from products as posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
+    else: # api_type == "Others"
+        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from others as posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
     row=c.fetchone()
     res={}
     res['title']=str(parent.name)+ ' - '+row[3].strftime('%Y-%m-%d')
