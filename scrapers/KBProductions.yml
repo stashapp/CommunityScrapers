@@ -5,6 +5,8 @@ sceneByURL:
       - bjraw.com/tour/videos/
       - gotfilled.com/tour/upcoming/
       - gotfilled.com/tour/videos/
+      - inserted.com/tour/upcoming/
+      - inserted.com/tour/videos/
 
     action: script
     script:
@@ -15,6 +17,7 @@ performerByURL:
   - url:
       - bjraw.com/tour/models/
       - gotfilled.com/tour/models/
+      - inserted.com/tour/models/
     action: script
     script:
       - python3
