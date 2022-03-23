@@ -385,11 +385,10 @@ def scraping_json(api_json, url=None):
     # Performer
     perf = []
     for x in api_json.get('actors'):
-        if x.get('gender') == "female":
-            perf.append({
-                "name": x.get('name').strip(),
-                "gender": x.get('gender')
-            })
+        perf.append({
+            "name": x.get('name').strip(),
+            "gender": x.get('gender')
+        })
     scrape['performers'] = perf
 
     # Tags
