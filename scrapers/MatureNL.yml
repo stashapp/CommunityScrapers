@@ -23,7 +23,7 @@ xPathScrapers:
       Image:
         selector: //span[@id="spnPageUpdateTrailer"]/a/img/@data-src
       Date: &date
-        selector: //div[@class="box-cnt"]/div[@class="mar-t"]/text()
+        selector: //div[@class="box-cnt"]/div[@class="mar-t"][not (contains(a, "the full"))]/text()[1]
         postProcess:
           - replace:
               - regex: ^(\d{1,2}-\d{1,2}-\d{4}).*$
