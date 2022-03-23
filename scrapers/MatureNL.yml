@@ -14,12 +14,12 @@ xPathScrapers:
       Tags: &tags
         Name: //div[@class="box-cnt"]/div[@class="mar-t"]/a[not(@class)]/text()
       Performers: &performers
-        Name: 
+        Name:
           selector: //div[@class="name"]/span[@class="col-accent"]/text()
           postProcess:
-          - replace: 
-            - regex: ( \(EU\))$
-              with: 
+            - replace:
+                - regex: ( \(EU\))$
+                  with:
       Image:
         selector: //span[@id="spnPageUpdateTrailer"]/a/img/@data-src
       Date: &date
@@ -39,5 +39,4 @@ xPathScrapers:
       Performers: *performers
       Date: *date
       Studio: *studio
-
 # Last Updated March 21, 2022
