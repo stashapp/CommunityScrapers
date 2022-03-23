@@ -10,7 +10,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: &title //div[@class="box"]/h1/text()
-      Details: &details //meta[@name="description"]/@content
+      Details: &details //div/span[text()="Synopsis:"]/following-sibling::text() | //meta[@name="description"]/@content
       Tags: &tags
         Name: //div[@class="box-cnt"]/div[@class="mar-t"]/a[not(@class)]/text()
       Performers: &performers
