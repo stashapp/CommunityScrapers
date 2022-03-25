@@ -53,7 +53,7 @@ xPathScrapers:
       Tags:
         Name:
           selector: //div[@class='customcontent']/h4/text()
-          split: ", "
+          split: ","
       Studio:
         Name:
           selector: //p[@class="copyright"]
@@ -75,4 +75,4 @@ xPathScrapers:
               - regex: (\d+)(st|nd|rd|th)
                 with: "$1"
           - parseDate: January 2 2006
-# Last Updated July 18, 2021
+# Last Updated March 25, 2021
