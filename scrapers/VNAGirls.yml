@@ -45,13 +45,13 @@ xPathScrapers:
       Performers:
         Name:
           selector: //div[@class='customcontent']/h3/text()
-          split: ","
-          postProcess:
+          postProcess: &pp
             - replace:
                 - regex: \x{0020}|\x{00A0} # unicode SP, NBSP
                   with: " "
                 - regex: '\s*,\s*'
                   with: ","
+          split: ","
       Title:
         selector: //div[@class='customcontent']/h1/text()
       Details:
@@ -59,13 +59,8 @@ xPathScrapers:
       Tags:
         Name:
           selector: //div[@class='customcontent']/h4/text()
+          postProcess: *pp
           split: ","
-          postProcess:
-            - replace:
-                - regex: \x{0020}|\x{00A0} # unicode SP, NBSP
-                  with: " "
-                - regex: '\s*,\s*'
-                  with: ","
       Studio:
         Name:
           selector: //p[@class="copyright"]
