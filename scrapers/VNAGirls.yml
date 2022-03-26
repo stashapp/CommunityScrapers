@@ -45,6 +45,12 @@ xPathScrapers:
       Performers:
         Name:
           selector: //div[@class='customcontent']/h3/text()
+          postProcess: &pp
+            - replace:
+                - regex: \x{0020}|\x{00A0} # unicode SP, NBSP
+                  with: " "
+                - regex: '\s*,\s*'
+                  with: ","
           split: ","
       Title:
         selector: //div[@class='customcontent']/h1/text()
@@ -53,7 +59,8 @@ xPathScrapers:
       Tags:
         Name:
           selector: //div[@class='customcontent']/h4/text()
-          split: ", "
+          postProcess: *pp
+          split: ","
       Studio:
         Name:
           selector: //p[@class="copyright"]
@@ -75,4 +82,4 @@ xPathScrapers:
               - regex: (\d+)(st|nd|rd|th)
                 with: "$1"
           - parseDate: January 2 2006
-# Last Updated July 18, 2021
+# Last Updated March 25, 2022
