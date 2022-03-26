@@ -82,4 +82,4 @@ xPathScrapers:
               - regex: (\d+)(st|nd|rd|th)
                 with: "$1"
           - parseDate: January 2 2006
-# Last Updated March 25, 2021
+# Last Updated March 25, 2022
