@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - modelmediaus.com/videos/
+      - modelmediaus.com/trailers/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -24,4 +25,4 @@ xPathScrapers:
           - subScraper:
               selector: //stream/@poster
 
-# Last Updated December 07, 2021
+# Last Updated March 27, 2022
