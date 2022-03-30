@@ -12,15 +12,19 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $performer: //b[text()='Pornstars / Cast']/../..//a[@class='bold gen']
-      $studio: (//b[text()="Studio"] | //b[text()="Network"])/following-sibling::a[last()]
+      $performer: //div[h3[text()='Pornstars / Cast']]//a[@class='bold gen']
+      $studio: //div[@id="body2div_b"]//a[contains(@href,"/studios/")]
       $movie: //b[text()="Movie:"]/following-sibling::a[1]
     scene:
       Title: //span/following-sibling::h1/a/text()
       Date:
-        selector: //span[b[text()="Release date"]]/a/b/text()
+        selector: //span[b[text()="Release date"]]
         postProcess:
+          - replace:
+              - regex: '^Release date: ([a-zA-Z]+)(\s*\d\d)?,\s*(\d{4}).+'
+                with: "$1$2, $3"
           - parseDate: January 02, 2006
+          - parseDate: January, 2006
       Details:
         selector: //div[b[text()="Story"]] | //b[contains(text(),"Movie Description")]/../text()
         concat: " "
@@ -34,7 +38,7 @@ xPathScrapers:
         Name: $performer
         URL: $performer/@href
       Studio:
-        Name: $studio/text()
+        Name: $studio
         URL: $studio/@href
       Movies:
         Name: $movie/text()
@@ -42,33 +46,34 @@ xPathScrapers:
       Image: //img[@id="playpriimage"]/@src
   movieScraper:
     common:
-      $movieInfo: //p[text()="Porn Movie Information"]/..
+      $movieInfo: //div[@id="body2div_b"]
       $studio: //b[text()='Studio']/following-sibling::b/a
     movie:
       Name: //div[@id="topmedia"]//a/text()
       Duration:
-        selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::span/text()
+        selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::text()
         postProcess:
           - replace:
-              - regex: "^.(.+).$"
-                with: $1
+              - regex: '.+\s(\d+)\s?min.+$'
+                with: $1:00
       Date:
-        selector: $movieInfo//time/text() | $movieInfo//span[contains(text(), "Release date")]/text()
+        selector: $movieInfo//span[contains(text(), "Release date")]/text()
         postProcess:
           - replace:
-              - regex: "Release date: "
+              - regex: 'Release date:\s*'
                 with:
           - parseDate: January, 2006
       Studio:
-        Name: $studio
+        Name: $studio/text()
         URL: $studio/@href
+      Director: //p[b[contains(text(),'Director')]]//a[@class='bold']
       Synopsis:
         selector: //b[text()="Description"]/..
         concat: " "
         postProcess:
           - replace:
-              - regex: "^Description - "
+              - regex: '^Description -\s*"'
                 with:
       FrontImage: //a[@id='enlargecover']/@href
       BackImage: //a[text()='+Back']/@href
-# Last Updated March 19, 2022
+# Last Updated March 23, 2022
