@@ -34,6 +34,8 @@ PRINT_MATCH = True
 STOCKAGE_FILE_APIKEY = "Algolia.ini"
 # Tag you always want in Scraper window.
 FIXED_TAGS = ""
+# Include non female performers
+NON_FEMALE = True
 
 # Setup
 
@@ -385,7 +387,7 @@ def scraping_json(api_json, url=None):
     # Performer
     perf = []
     for x in api_json.get('actors'):
-        if x.get('gender') == "female":
+        if x.get('gender') == "female" or NON_FEMALE:
             perf.append({
                 "name": x.get('name').strip(),
                 "gender": x.get('gender')
