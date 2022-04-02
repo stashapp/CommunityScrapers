@@ -2,7 +2,7 @@ name: Hegre
 sceneByURL:
   - action: scrapeXPath
     url:
-      - hegre.com/films
+      - hegre.com/movies
       - hegre.com/massage
       - hegre.com/sexed
     scraper: sceneScraper
