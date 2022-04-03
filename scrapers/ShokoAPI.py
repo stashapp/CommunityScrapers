@@ -19,8 +19,10 @@ Stashurl = "http://localhost:9999/graphql" #your stash playground url
 Shokourl = "http://localhost:8111" #your shoko server url
 Shoko_user = "" #your shoko server username
 Shoko_pass = "" #your shoko server password
+set_debug = False
 
 def debug(q):
+  if set_debug == True:
     print(q, file=sys.stderr)
 
 def get_filename(scene_id):
@@ -48,11 +50,7 @@ def find_scene_id(scene_id):
     apikey = Apikey
   filename = get_filename(scene_id)
   debug(filename)
-  findscene_scene_id, findscene_epnumber, find_date = find_scene(apikey, filename)
-  scene_id = str(findscene_scene_id)
-  epnumber = str(findscene_epnumber)
-  date = str(find_date)
-  return scene_id, epnumber, apikey, date
+  return filename, apikey
 
 def lookup_scene(scene_id, epnumber, apikey, date):
   apikey = apikey
@@ -97,8 +95,8 @@ def find_scene(apikey, filename):
   except urllib.error.HTTPError as e:
     if e.code == 404:
       debug("the file: " + filename + " is not matched on shoko")
-      error = ["Shoko_not_found"]
-      not_found(error)
+      #error = ["Shoko_not_found"]
+      not_found()
     debug('HTTPError: {}'.format(e.code))
   except urllib.error.URLError as e:
     # Not an HTTP-specific error (e.g. connection refused)
@@ -115,12 +113,15 @@ def find_scene(apikey, filename):
     date = JSON_object['air']
     return scene_id, epnumber, date
 
-def not_found(error):
-  tags = error + ["Shoko_error"]
-  res={}
-  res['tags'] = [{"name":i} for i in tags]
-  print(json.dumps(res))
-  error_exit()
+def not_found():
+  #tags = ["Shoko_error"]
+  #res={}
+  
+  debug("not found")
+  return
+  #res['tags'] = [{"name":i} for i in tags]
+  #print(json.dumps(res))
+  #error_exit()
 
 def error_exit():
   sys.exit()
@@ -146,17 +147,38 @@ def get_series(apikey, scene_id):
   #debug("staff: " + staff + "\tImage: " + staff_image)
   return title, details, cover, tags, #staff, staff_image, character
 
-if sys.argv[1] == "query":
-    fragment = json.loads(sys.stdin.read())
-    print(json.dumps(fragment),file=sys.stderr)
-    fscene_id, fepnumber, fapikey, fdate = find_scene_id(fragment['id'])
-    scene_id = str(fscene_id)
-    epnumber = str(fepnumber)
-    apikey = str(fapikey)
-    date = str(fdate)
-    if not scene_id:
-      print(f"Could not determine scene id in filename: `{fragment['id']}`",file=sys.stderr)
+
+
+#if sys.argv[1] == "query":
+def query(fragment):
+    #print(json.dumps(fragment),file=sys.stderr)
+    filename, apikey = find_scene_id(fragment['id'])
+    try:
+      findscene_scene_id, findscene_epnumber, find_date = find_scene(apikey, filename)
+    except:
+      #print(f"Could not determine scene id in filename: `{fragment['id']}`",file=sys.stderr)
+      return
     else:
-      print(f"Found scene id: {scene_id}",file=sys.stderr)
+      scene_id = str(findscene_scene_id)
+      epnumber = str(findscene_epnumber)
+      date = str(find_date)
+      apikey = str(apikey)
+      if set_debug == True:
+        print(f"Found scene id: {scene_id}",file=sys.stderr)
       result = lookup_scene(scene_id, epnumber, apikey, date)
-      print(json.dumps(result))
+      return(result)
+
+def main():
+
+  mode = sys.argv[1]
+  fragment = json.loads(sys.stdin.read())
+
+  data = None
+
+  if mode == 'query':
+    data = query(fragment)
+
+  print(json.dumps(data))
+
+if __name__ == '__main__':
+  main()
