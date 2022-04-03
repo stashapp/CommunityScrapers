@@ -31,3 +31,4 @@ xPathScrapers:
               - regex: $
                 with: ' and Julia Rose'
           split: ' and '
+# Last Updated November 30, 2020

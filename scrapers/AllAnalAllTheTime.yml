@@ -1,0 +1,38 @@
+name: allanalallthetime
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - allanalallthetime.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Performers:
+        Name:
+          selector: //div[@class='customcontent']/h3/text()
+          split: ","
+      Title:
+        selector: //div[@class='customcontent']/h1/text()
+      Details:
+        selector: //div[@class='customcontent']/div[1]/text()|//div[@class='customcontent']/h2/text()
+      Tags:
+        Name:
+          selector: //div[@class='customcontent']/h4/text()
+          split: ","
+      Studio:
+        Name:
+          fixed: AllAnalAllTheTime
+      Image:
+        selector: //div[@class="content"]//@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.allanalallthetime.com/"
+      Date:
+        selector: //div[@class='date-and-covers']/div[@class='date']/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
+          - parseDate: January 2 2006
+# Last Updated July 18, 2021

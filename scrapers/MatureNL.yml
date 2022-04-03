@@ -1,0 +1,42 @@
+name: "Mature.nl"
+sceneByURL: &byUrl
+  - action: scrapeXPath
+    url:
+      - mature.nl/
+    scraper: sceneScraper
+galleryByURL: *byUrl
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title //div[@class="box"]/h1/text()
+      Details: &details //div/span[text()="Synopsis:"]/following-sibling::text() | //meta[@name="description"]/@content
+      Tags: &tags
+        Name: //div[@class="box-cnt"]/div[@class="mar-t"]/a[not(@class)]/text()
+      Performers: &performers
+        Name:
+          selector: //div[@class="name"]/span[@class="col-accent"]/text()
+          postProcess:
+            - replace:
+                - regex: ( \(EU\))$
+                  with:
+      Image:
+        selector: //span[@id="spnPageUpdateTrailer"]/a/img/@data-src
+      Date: &date
+        selector: //div[@class="box-cnt"]/div[@class="mar-t"][not (contains(a, "the full"))]/text()[1]
+        postProcess:
+          - replace:
+              - regex: ^(\d{1,2}-\d{1,2}-\d{4}).*$
+                with: $1
+          - parseDate: 2-1-2006
+      Studio: &studio
+        Name:
+          fixed: "Mature.nl"
+    gallery:
+      Title: *title
+      Details: *details
+      Tags: *tags
+      Performers: *performers
+      Date: *date
+      Studio: *studio
+# Last Updated March 21, 2022

@@ -6,28 +6,16 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $info: //div[@class="u-py--four desktop:u-ml--twn-one u-relative"]/div
     scene:
-      Title: //div[@class="u-relative u-z--zero"]//h1/text()
-      Date:
-        selector: $info//time/@datetime
-        postProcess:
-          - parseDate: 2006-01-02
-      Details:
-        selector: $info//div[@class="u-mb--four u-lh--opt u-fs--fo u-fw--medium u-lw"]//text()
-        concat: " "
+      Title: //h1/text()
+      Date: //time/@datetime
+      Details: //div[@id="modalSceneAbout"]//comment()[contains(.,'description')]/following-sibling::div
       Tags:
-        Name: $info//ul[@class="c-meta--scene-tags c-meta--scene-list u-list u-list--inline u-inline-block u-align-y--m u-fw--medium u-lh--base u-max-width--tablet"]//a/text()
+        Name: //meta[@property="video:tag"]/@content
       Performers:
-        Name: $info//ul[@class="c-meta--scene-models c-meta--scene-list u-list u-list--inline u-inline-block u-align-y--m u-fw--medium u-lh--opt"]//a/text()
+        Name: //meta[@property="video:actor"]/@content
       Studio:
-        Name: $info//div[@class="u-mt--three"]/div[@class="u-mb--three"]/a/text()
-      Image:
-        selector: //div[@class="splash-screen fullscreen-message is-visible"]/@style
-        postProcess:
-          - replace:
-              - regex: .+(http[^\)]+).+
-                with: $1
+        Name: //a[contains(@href,"/studios/")]/div[last()]/text()
+      Image: //div[contains(@class,"splash-screen")]/img/@src
 
-# Last Updated November 8, 2020
+# Last Updated March 21, 2021

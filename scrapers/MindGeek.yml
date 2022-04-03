@@ -34,6 +34,7 @@ sceneByURL:
       - mofos.com/scene/
       - publicagent.com/scene/
       - seancody.com/scene/
+      - transangels.com/scene/
       - transsensual.com/scene
       - trueamateurs.com/scene/
     scraper: scriptScraper
@@ -79,8 +80,13 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: //div[text()="Description:"]/../div[not(@class)]/text()
-      Tags:
-        Name: //a[contains(@href,"/scenes?tags")]/text()[1]
+      Tags: &tags
+        Name:
+          selector: //a[contains(@href,"/scenes?tags")]/text()[1]
+          postProcess:
+            - replace:
+                - regex: ',\s*$'
+                  with:
       Performers:
         Name: $section//a[@href and @title]/text()
       Studio:
@@ -118,8 +124,7 @@ xPathScrapers:
                 with: $1
       Studio:
         Name: //meta[@name="dti.network"]/@content
-      Tags:
-        Name: //a[contains(@href,"/scenes?tag")]/text()[1]
+      Tags: *tags
       Details:
         selector: $script
         postProcess:
@@ -285,4 +290,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated March 16, 2021
+# Last Updated February 20, 2022

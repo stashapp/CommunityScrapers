@@ -1,0 +1,35 @@
+name: Tenshigao
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tenshigao.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //span[@class="mroundedthumbs"]//@alt
+      Date:
+        selector: //div[@class="video-date"]/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
+          - parseDate: January 02, 2006
+      Performers:
+        Name: //h5/a
+        URL: //h5/a/@href 
+      Tags:
+        Name: //div[@class="cat"]/a
+      Details:
+        selector: //h1[@class="none"]
+      Image:
+        selector: //video[@id="videohtml5tour"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: "https://"
+      Studio:
+        Name:
+          fixed: Tenshigao
+# Last Updated March 02, 2022

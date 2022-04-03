@@ -1,0 +1,43 @@
+name: HouseOfGord
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - houseofgord.com/d
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@id="detail_title"]/text()
+      Date:
+        selector: //div[@class="preview_feature_date"][contains(text(),"Video")]/text()|//div[@class="preview_feature_date"][1]/text()
+        postProcess:
+          - replace:
+              - regex: .*\s+added\s+(.*)
+                with: $1
+          - parseDate: 02 Jan 2006
+      Details:
+        selector: //p[@class="preview_description"]/text()
+        concat: "\n\n"
+      Performers:
+        Name:
+          selector: //div[@class="preview_facets_listing"]/a[not(preceding-sibling::br)]/text()
+      Tags:
+        Name:
+          selector: //div[@class="preview_facets_listing"]/a[preceding-sibling::br]/text()
+      Studio:
+        Name:
+          fixed: House of Gord
+      Image:
+        selector: //video[@id="0"]/@poster|//td[@class="previewpic_item" and @style="width:53%"][1]/img/@src|//td[@class="previewpic_item"][1]/img/@src
+
+driver:
+  useCDP: true
+  cookies:
+    - Cookies:
+        - Name: legal_accepted2
+          Domain: .houseofgord.com
+          Value: yes
+          Path: /
+# Last Updated July 09, 2021

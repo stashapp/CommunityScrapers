@@ -1,0 +1,60 @@
+name: JavHub
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - javhub.com
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://tour.javhub.com/search?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Details: //p[@class="MsoNormal"]
+      Performers:
+        Name: //div[@class="model-wrap"]//h5
+      Image: //video/@poster
+      Title: //h1[@class="title"]
+      Date:
+        selector: //div[@class="container content-details-wrap"]//span[@class="pub-date"]/text()
+        postProcess: &ppDate
+          - replace:
+              - regex: .+\s+([a-zA-Z]+\s+\d+,\s\d+)
+                with: $1
+          - parseDate: January 02, 2006
+      Studio:
+        Name:
+          fixed: JavHub
+      URL: //input[starts-with(@id,"copy-url")]/@value
+  sceneSearch:
+    common:
+      # ignore search results that have join links (https://tour.javhub.com/join)
+      $content: //div[@class="content-item"][div[a[not(@href="https://tour.javhub.com/join")]]]
+    scene:
+      Image:
+        selector: $content//a/@data-images
+        postProcess:
+          - replace:
+              - regex: '^.+(https:[^&]+01\.jpg).*'
+                with: $1
+              - regex: '\\/'
+                with: "/"
+      Title: $content//h3[@class="title"]
+      URL: $content//h3[@class="title"]/a/@href
+      Date:
+        selector: $content//span[@class="pub-date"]/text()
+        postProcess: *ppDate
+      # show duration to avoid false matches
+      # there are duplicate scenes and scenes with identical titles
+      Details:
+        selector: $content//span[@class="video-duration"]/text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "Duration "
+# Last Updated February 26, 2022

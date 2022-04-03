@@ -6,31 +6,62 @@ sceneByURL:
       - vrbgay.com
       - vrbtrans.com
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - vrbangers.com
+    scraper: movieScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $info: //div[@class="video-content__download-info"]
+      $info: &info //div[starts-with(@class,"video-item__info ")]
     scene:
-      Title: //h1[@class="video-content__title d-block"]/text()
-      Date:
-        selector: $info//div[@class="section__item-title-download-space"][2]/text()[2]
+      Title: &titleSel //h1
+      Date: &dateAttr
+        selector: $info//span[text()="Release date:"]/following-sibling::text()
         postProcess:
           - parseDate: Jan 2, 2006
-      Details:
-        selector: //div[@class="video-content__description"]//p//text()
+      Details: &detailsAttr
+        selector: //div[contains(@class,"second-text")]/div//text()
         concat: " "
       Tags:
-        Name: $info//div[@class="section__item-title-download-space video-item-info-tags"]//a/text()
+        Name: //div[starts-with(@class,"video-item__tags ")]//a/text()
       Performers:
-        Name: $info//div[contains(@class, 'video-item-info--starring-download')]//a/text()
+        Name: //div[starts-with(@class, 'video-item__info-starring')]//div[starts-with(@class,"tooltip")]//a/text()
       Studio:
-        Name: //meta[@name="dl8-customization-brand-name"]/@content
-        URL:
+        Name: &studioName
+          selector: //meta[@name="dl8-customization-brand-name"]/@content
+          postProcess:
+            - replace:
+                - regex: \#
+                  with: ""
+        URL: &studioURL
           selector: //meta[@name="dl8-customization-brand-url"]/@content
           postProcess:
             - replace:
                 - regex: ^
                   with: "https:"
-      Image: //meta[@property="og:image"][1]/@content
-
-# Last Updated November 8, 2020
+      Image: &imageSel //meta[@property="og:image"]/@content
+  movieScraper:
+    common:
+      $info: *info
+    movie:
+      Name:
+        selector: *titleSel
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "VRBangers - "
+      Duration:
+        selector: $info//span[contains(text(),"Duration:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: \smin
+                with: ":00"
+      Date: *dateAttr
+      Synopsis: *detailsAttr
+      Studio:
+        Name: *studioName
+        URL: *studioURL
+      FrontImage: *imageSel
+# Last Updated October 03, 2021

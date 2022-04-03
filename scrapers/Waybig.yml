@@ -1,0 +1,84 @@
+name: Waybig
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - waybig.com/video/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - waybig.com/pornstars/
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.waybig.com/searchgate.php?type=models&q={}
+  scraper: performerSearch
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@name="twitter:title"]/@content
+      Date:
+        selector: //div/i[@class="far fa-calendar"]/../span
+        postProcess:
+          - replace:
+              - regex: ^(\d{4}-\d{2}-\d{2}).+
+                with: $1
+          - parseDate: 2006-01-02
+      Details:
+        selector: //div[@class="expand-inner"]
+      Tags:
+        Name: //div[@class="content-links -tags"]//a
+      Performers:
+        Name: //div[@class="models-box"]/a
+        URL: //div[@class="models-box"]/a/@href
+      Image:
+        selector: //video/@poster
+      Studio:
+        Name:
+          selector: //a[@class="hoverLink"]
+          postProcess:
+            - replace:
+                - regex: '^Visit\s+'
+                  with: ""
+  performerSearch:
+    performer:
+      Name: //div[@class="item-col col -model"]/a/@title
+      URL: //div[@class="item-col col -model"]/a/@href
+  performerScraper:
+    performer:
+      Name: //div[@class="title-col -normal col"]/h2
+      Gender:
+        fixed: Male
+      Measurements:
+        selector: //span[contains(text(),"Cock size:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0''"
+          - feetToCm: true
+      Weight:
+        selector: //span[contains(text(),"Weight:")]/following-sibling::text()
+        postProcess:
+          - lbToKg: true
+      Height:
+        selector: //span[contains(text(),"Height:")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Aliases: //span[contains(text(),"a.k.a.:")]/following-sibling::text()
+      Ethnicity: //span[contains(text(),"Ethnicity:")]/following-sibling::text()
+      HairColor:
+        selector: //span[contains(text(),"Hair:")]/following-sibling::text()
+      EyeColor:
+        selector: //span[contains(text(),"Eyes:")]/following-sibling::text()
+      Country:
+        selector: //span[contains(text(),"State")]/following-sibling::text()
+      Birthdate:
+        selector: //span[contains(text(),"Dob:")]/following-sibling::text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Twitter: //a[contains(@href,"https://twitter.com")]/@href
+      Instagram: //a[contains(@href,"https://www.instagram.com/")]/@href
+      Image: //div[@class="image"]//@src
+      Details:
+        selector: //div[@class="expand-inner"]
+# Last Updated July 30, 2021

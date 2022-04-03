@@ -1,0 +1,69 @@
+name: AVEntertainments
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - aventertainments.com
+    scraper: sceneScraper
+
+#search by id is very picky, make sure to search using the full id eg XXX-014
+
+#choose one of the below URLs and replace in the 'queryURL:' line
+#search JAV DVD
+#https://www.aventertainments.com/search_Products.aspx?languageID=1&dept_id=29&searchby=keyword&keyword={}
+#search JAV PPV
+#https://www.aventertainments.com/ppv/ppv_searchproducts.aspx?languageID=1&vodtypeid=1&keyword={}
+#search Western DVD
+#https://www.aventertainments.com/search_Products.aspx?languageID=1&dept_id=43&searchby=keyword&keyword={}}
+#search Western PPV
+#https://www.aventertainments.com/ppv/ppv_searchproducts.aspx?languageID=1&vodtypeid=2&keyword={}
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.aventertainments.com/search_Products.aspx?languageID=1&dept_id=29&searchby=keyword&keyword={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $searchRes: //div[@class="single-slider-product grid-view-product"]
+      $searchTitle: //div[@class="single-slider-product grid-view-product"]//p[@class="product-title"]
+    scene:
+      Title: $searchTitle/a
+      URL: $searchTitle/a/@href
+      Image: $searchRes/div[@class="single-slider-product__image"]/a/img/@src
+ 
+  sceneScraper:
+    common:
+      $singleInfo: //div[@class="single-info"]
+      $performer: //div[@class="single-info"][contains(span,"Starring")]/span[@class="value"]/a
+    scene:
+      Title:
+        selector: $singleInfo[starts-with(span,"Item")]/span[@class="tag-title"]
+      Date:
+        selector: $singleInfo[contains(span,"Date")]/span[@class="value"]/text()
+        postProcess:
+          - parseDate: 1/2/2006
+      Performers:
+        Name: $performer
+        URL: $performer/@href
+      Tags:
+        Name: $singleInfo[contains(span,"Category")]/span[@class="value-category"]/a
+      Details:
+        selector: //div[@class="section-title"]/h3|//div[contains(@class,"product-description")]//text()
+        concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: '\s*(?:\(Blu-.ay[^)]*\))|(?:\((?:Full|FULL)\s?HD\))\s*(\n\n|$)'
+                with: $1
+              - regex: \.\.\.Read More(\n\n)?
+                with:
+      Image:
+        selector: //span[@class="grid-gallery"]/a/@href|//div[@id="PlayerCover"]/img/@src
+      Studio:
+        Name: $singleInfo[contains(span,"Studio")]/span[@class="value"]/a
+      URL: //link[@rel="canonical"]/@href
+# Last Updated November 19, 2021

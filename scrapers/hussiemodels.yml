@@ -5,6 +5,7 @@ sceneByURL:
       - hussiepass.com/trailers/
       - hookuphotshot.com/trailers
       - seehimfuck.com/trailers
+      - seehimsolo.com/trailers
       - povpornstars.com
       # Removes all emoticons from Title, Description, Performers and Tags.
     scraper: sceneScraper
@@ -49,5 +50,6 @@ xPathScrapers:
                 hookuphotshot: HookUp Hotshot
                 hussiepass: Hussie Pass
                 seehimfuck: See HIM Fuck
+                seehimsolo: See HIM Solo
                 povpornstars: POV Pornstars
-# Last Updated March 29, 2021
+# Last Updated February 02, 2022

@@ -1,0 +1,31 @@
+name: CrashpadSeries
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - crashpadseries.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //*[@id="primary-container"]//h2
+      Date:
+        selector: //script[@type="application/ld+json"]
+        postProcess:
+          - replace:
+              - regex: .+(?:"datePublished":")([^T]+).+
+                with: $1
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //div[@id="primary-container"]//div[contains(@class,"model-thumb")]//h4
+      Tags:
+        Name: //div[@id="primary-container"]//a[contains(@class,"content-icon")]/@data-original-title
+      Details:
+        selector: //div[@id="primary-container"]//div[@class="ep-description"]/p
+        concat: "\n\n"
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: CrashPad Series
+# Last Updated March 05, 2022

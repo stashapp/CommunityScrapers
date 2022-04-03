@@ -39,4 +39,4 @@ xPathScrapers:
       Image: //meta[@property="og:image"]/@content
       URL: //link[@rel='canonical']/@href
 
-# Last Updated October 9, 2020
+# Last Updated October 09, 2020

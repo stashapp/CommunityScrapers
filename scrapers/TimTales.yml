@@ -69,4 +69,4 @@ xPathScrapers:
                 with: $1
       Image: //div[@class="model-details"]/img/@src
 
-# Last Updated November 8, 2020
+# Last Updated November 08, 2020

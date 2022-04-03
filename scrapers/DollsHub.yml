@@ -1,0 +1,42 @@
+name: DollsHub
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - filthygapers.com
+      - gynoexclusive.com
+      - ihuntmycunt.com
+      - maturegapers.com
+      - maturegynoexam.com
+      - maturegynospy.com
+      - nastypublicsex.com
+      - oldsfuckdolls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="col-sm-12 col-lg-12 col-md-12 scence-title-name"]/h2
+      Performers:
+        Name: //li/span/a
+        URL: //li/span/a/@href
+      Details:
+        selector: //h4[contains(text(),"Description")]/following-sibling::p
+      Image:
+        selector: //video[@class="thevideo2"]/@data-poster
+      Studio:
+        Name:
+          selector: //video[@class="thevideo2"]/@data-poster
+          postProcess:
+            - replace:
+                - regex: (https://www.)(\w+).*
+                  with: $2
+            - map:
+                filthygapers: Filthy Gapers
+                gynoexclusive: Gyno Exclusive
+                ihuntmycunt: I Hunt My Cunt
+                maturegapers: Mature Gapers
+                maturegynoexam: Mature Gyno Exam
+                maturegynospy: Mature Gyno Spy
+                nastypublicsex: Nasty Public Sex
+                oldsfuckdolls: Old Fuck Dolls
+# Last Updated March 10, 2022

@@ -26,10 +26,12 @@ sceneByURL:
       - castingcouch-x.com/video/
       - cum4k.com/video/
       - exotic4k.com/video/
+      - facials4k.com/video/
       - fantasyhd.com/video/
       - girlcum.com/video/
       - holed.com/video/
       - lubed.com/video/
+      - mom4k.com/video/
       - myveryfirsttime.com/video/
       - nannyspy.com/video/
       - passion-hd.com/video/
@@ -71,10 +73,10 @@ xPathScrapers:
               - regex: ([?&]img[wh]=\d+)+$
                 with:
       Studio:
-        Name: //title/text()
+        Name: //div[@id="navigation"]/h5/a/@alt
       Date:
         selector: //div[contains(text(), 'RELEASED')]/span/text()
         postProcess:
           - parseDate: January 02, 2006
 
-# Last Updated April 18, 2021
+# Last Updated March 26, 2022

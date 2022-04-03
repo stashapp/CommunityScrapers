@@ -1,0 +1,40 @@
+name: "Fragile Slave"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fragileslave.com/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[@class="videodetails"]/p[@class="date"]
+      $thumb: //div[@class='trailerblock'][1]
+    scene:
+      Title:
+        selector: //div[@class="pagetitle"]//h1/text()
+      Details:
+        selector: //div[@class="videocontent"]/p/text()
+      Date:
+        selector: $details/text()[1]
+        postProcess:
+          - replace:
+              - regex: (\s*\|.*)
+                with:
+          - parseDate: 01/02/2006
+      Image:
+        selector: $thumb/script|$thumb//img[contains(@class,"thumbs")]
+        postProcess:
+          - replace:
+              - regex: .*<img.*src0_1x="(.*)".*
+                with: $1
+      Studio:
+        Name:
+          fixed: Fragile Slave
+      Tags:
+        Name:
+          selector: $details/a/text()
+      Performers:
+        Name:
+          selector: //span[@class="tour_update_models"]/a/text()
+# Last Updated March 14, 2022

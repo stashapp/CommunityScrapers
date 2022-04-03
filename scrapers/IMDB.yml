@@ -1,0 +1,137 @@
+name: IMDB
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.imdb.com/search/name-text/?bio={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - imdb.com
+    scraper: performerScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.imdb.com/find?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - imdb.com/title/
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - imdb.com/title/
+    scraper: movieScraper
+
+xPathScrapers:
+  performerSearch:
+    common:
+      $listAnchor: //div[@class="lister-list"]/div[@class="lister-item mode-detail"]/div[@class="lister-item-content"]/h3/a
+    performer:
+      Name:
+        selector: $listAnchor/text()
+      URL:
+        selector: $listAnchor/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.imdb.com
+
+  performerScraper:
+    performer:
+      Name: //td[@id="overview-top" or @class="name-overview-widget__section"]//h1/span[1]/text()
+      Birthdate:
+        selector: //time/@datetime
+        postProcess:
+          - parseDate: 2006-1-2
+      Image: &imageAttr
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: '.*/imdb[^/]*\.png'
+                with:
+      Details:
+        #        selector: //div[@class="name-trivia-bio-text"]/div/text()[1]
+        selector: //span[@class='see-more inline nobr-only']/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.imdb.com/"
+          - subScraper:
+              selector: //div[@class="soda odd"]/p/text()
+
+      URL: //div[@id='details-official-sites']/a[contains(text(),'Official Site')]/@href
+      #     Facebook:  //div[@id='details-official-sites']/a[contains(text(),'Facebook')]/@href
+      Instagram: //div[@id='details-official-sites']/a[contains(@href,"instagram.com/")]/@href
+      Aliases:
+        selector: //div[@id="details-akas"]/h4/following-sibling::text()
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: '\|+'
+                with: ", "
+      Height:
+        selector: //div[@id="details-height"]/h4/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: (.+)\s*\(.+$
+                with: $1
+          - feetToCm: true
+
+  sceneSearch:
+    common:
+      $scenerow: //h3[text() = "Titles"]/following-sibling::table//tr[contains(@class, 'findResult')]
+    scene:
+      Title: $scenerow//td[@class='result_text']
+      URL:
+        selector: $scenerow//td[@class='result_text']/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://imdb.com
+      Image: $scenerow//td[@class='primary_photo']//img/@src
+
+  sceneScraper:
+    scene:
+      Title: &title //section//h1
+      Date: &date
+        selector: //li[@data-testid='title-details-releasedate']/div/ul/li/a/text()
+        postProcess:
+          - replace:
+              - regex: '\s*\(.+$'
+                with: ""
+          - parseDate: January 2, 2006
+      Details: &desc //span[@data-testid="plot-xl"]
+      Tags:
+        Name: //div[@data-testid="genres"]/a/span
+      Performers:
+        Name: //a[@data-testid="title-cast-item__actor"]
+      Image: *imageAttr
+      Studio: &studio
+        Name: (//li[@data-testid="title-details-companies"]/div//a)[1]
+  movieScraper:
+    movie:
+      Name: *title
+      Date: *date
+      Director: //section[@data-testid="title-cast"]//li[span[text()="Director"]]//a
+      Duration:
+        selector: //ul[@data-testid="hero-title-block__metadata"]/li[last()]
+        postProcess:
+          - replace:
+              - regex: (\d+)h\s*
+                with: "$1:"
+              - regex: (\d+)m
+                with: "$1:00"
+              - regex: ":$" # only h
+                with: ":00:00"
+              - regex: ^(\d+:\d+)$ # only m
+                with: "00:$1"
+      Studio: *studio
+      Synopsis: *desc
+      FrontImage: *imageAttr
+# Last Updated March 23, 2022

@@ -1,0 +1,34 @@
+name: Subspaceland
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - subspaceland.com/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1/text()
+      Date:
+        selector: //p[@class="date"]/text()
+        postProcess:
+          - replace:
+              - regex: Released on (.*)
+                with: $1
+          - parseDate: 02 Jan 2006
+      Performers:
+        Name:
+          selector: //h2[@class="ml20"]/a/@title
+      Tags:
+        Name:
+          selector: //div[@id="tagsInColums"]//li/a/text()
+      Studio:
+        Name:
+          selector: //div[@id="header"]/a/@title
+      Image:
+        selector: //div[@class="setEntertaiment"]/a/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.subspaceland.com
+# Last Updated July 06, 2021

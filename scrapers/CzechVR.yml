@@ -6,31 +6,55 @@ sceneByURL:
       - czechvrcasting.com
       - czechvrfetish.com
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - czechvr.com
+      - czechvrcasting.com
+      - czechvrfetish.com
+    scraper: movieScraper
+
 xPathScrapers:
   sceneScraper:
     common:
-      $info: //div[@class="post"]
-      $url: //meta[@name="dl8-customization-brand-url"]/@content
+      $info: &infoSel //div[@class="post"]
+      $url: &urlSel //meta[@name="dl8-customization-brand-url"]/@content
     scene:
-      Title: $info//div[@class="nazev"]/h2/text()
-      Date:
+      Title: &titleSel $info//div[@class="nazev"]/h2
+      Date: &dateSel
         selector: $info//div[@class="datum"]/text()
         postProcess:
           - parseDate: Jan 2, 2006
-      Details:
-        selector: //div[@class="textDetail"]/text()
-        concat: " "
+      Details: &detailsSel //div[@class="textDetail"]/text()
       Tags:
-        Name: $info//div[@id="MoreTags"]//a/text()
+        Name: //div[@id="MoreTags"]/div[@class="tagsipka"]//a/text()
       Performers:
-        Name: $info//div[@class="featuring"]/a/text()
+        Name: $info//div[@class="featuring"]//a/text()
       Studio:
-        Name: //meta[@name="dl8-customization-brand-name"]/@content
-      Image: 
+        Name: &studioSel //meta[@name="dl8-customization-brand-name"]/@content
+      Image: &imageSel
         selector: $url|//dl8-video/@poster
         concat: " "
         postProcess:
           - replace:
               - regex: \s\./category
-                with: /category 
-# Last Updated November 8, 2020
+                with: /category
+          - replace:
+              - regex: \/\/
+                with: "/"
+          - replace:
+              - regex: :\/
+                with: "://"
+  movieScraper:
+    common:
+      $info: *infoSel
+      $url: *urlSel
+    movie:
+      Name: *titleSel
+      Duration: $info//div[@class="casDetail"]/span[@class="desktop"]/text()
+      Date: *dateSel
+      Studio:
+        Name: *studioSel
+      Synopsis: *detailsSel
+      FrontImage: *imageSel
+# Last Updated September 22, 2021
