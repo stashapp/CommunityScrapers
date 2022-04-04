@@ -61,7 +61,7 @@ xPathScrapers:
         Name: //div[@class="video-performer"]/a//text()
       Studio:
         Name:
-          selector: //div[@class="studio"]/span[2]
+          selector: //div[@class="studio"]/span[contains(text(),"Studio:")]/following-sibling::*
           postProcess:
             # Override studio name only when needed
             - map:
@@ -127,4 +127,4 @@ xPathScrapers:
                 with: https://imgs1cdn.adultempire.com/product/${1}_lg.jpg
       Studio:
         Name: //meta[@name="og:site_name"]/@content
-# Last Updated March 18, 2022
+# Last Updated April 05, 2022
