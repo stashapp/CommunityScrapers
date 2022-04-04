@@ -2,7 +2,7 @@ name: Hegre
 sceneByURL:
   - action: scrapeXPath
     url:
-      - hegre.com/films
+      - hegre.com/movies
       - hegre.com/massage
       - hegre.com/sexed
     scraper: sceneScraper
@@ -113,4 +113,4 @@ xPathScrapers:
           - replace:
               - regex: \d{3}x
                 with: 640x
-# Last Updated February 07, 2021
+# Last Updated April 05, 2022
