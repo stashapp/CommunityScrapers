@@ -16,8 +16,8 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02, 2006
       Details: &details
-        selector: //li/div[@class="small"]/p/text()
-        concat: " "
+        selector: //li/div[@class="small"]//p
+        concat: "\n\n"
       Tags: &tags
         Name: 
           selector: //div[@class="tags-item"]/a/text()
