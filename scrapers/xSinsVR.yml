@@ -2,8 +2,8 @@ name: "xSinsVR"
 sceneByURL: &byUrl
   - action: scrapeXPath
     url:
-      - xsinsvr.com/video
       - billiestar.com/video
+      - xsinsvr.com/video
     scraper: sceneScraper
 galleryByURL: *byUrl
 
@@ -19,7 +19,7 @@ xPathScrapers:
         selector: //li/div[@class="small"]//p
         concat: "\n\n"
       Tags: &tags
-        Name: 
+        Name:
           selector: //div[@class="tags-item"]/a/text()
       Performers: &performers
         Name: //span/a[contains(@href,'/model/')]/text()
@@ -33,5 +33,4 @@ xPathScrapers:
       Tags: *tags
       Performers: *performers
       Studio: *studio
-
 # Last Updated April 04, 2022
