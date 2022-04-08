@@ -1,0 +1,27 @@
+name: VrxDB
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vrxdb.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="elementor-widget-container"]//@title
+      Date:
+        selector: //span[contains(text(),"Released:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //span[contains(text(),"Starring:")]/following-sibling::a
+      Tags:
+        Name: //div[@class="jet-listing jet-listing-dynamic-terms"]/a
+      Details:
+        selector: //div[@class="jet-listing-dynamic-field__content"]/text()
+      Image:
+        selector: //div[@class="elementor-widget-container"]//@poster
+      Studio:
+        Name:
+          selector: //span[contains(text(),"Studio:")]/following-sibling::a
+# Last Updated April 08, 2022
