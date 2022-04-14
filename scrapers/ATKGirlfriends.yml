@@ -1,0 +1,7 @@
+name: ATK Girlfriends
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ATKGirlfriends.py
+# Last Updated April 14, 2022
