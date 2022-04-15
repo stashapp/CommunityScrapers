@@ -1,0 +1,66 @@
+name: Eporner
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.eporner.com
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  # https://www.whoreshub.com/search/Autumn Falls RAW/
+  queryURL: https://www.eporner.com/search/{}/
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[@id="vidresults"]
+      $searchThumb:  //div[@id="vidresults"]//p[contains(@class, "mbtit")]//a
+    scene:
+      Title: $searchThumb/text()
+      URL:
+        selector:   $searchItem//div[contains(@class, "mbcontent")]//a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.eporner.com"
+      Image:
+        selector: $searchItem//div[contains(@class, "mbcontent")]//a//img/@src
+
+  sceneScraper:
+    common:
+      $performer: //div[@class="video-info-tags"]//li[contains(@class, "vit-pornstar") and not(@class="vit-category") and not(@class="vit-more") and not(@class="vit-less") and not(@class="vit-less")]
+      $studio: //li[@class="vit-uploader"]//a
+    scene:
+      Title: //div[@id="video-info"]//h1/text()
+      Details: //div[@id="video-info"]//h1/text()
+      URL: //link[@rel="canonical"]/@href
+      # Date:
+      #   selector: //script[contains(., 'uploadDate')]/text()
+      #   postProcess:
+      #     - replace:
+      #         - regex: .+(?:"uploadDate":\s")([^"]+).+
+      #           with: $1
+      #         - regex: (.+)T.+
+      #           with: $1
+      #     - parseDate: 2006-01-02
+      Tags:
+        Name: //div[@class="video-info-tags"]//li[contains(@class, "vit-category") and not(@class="vit-pornstar") and not(@class="vit-more") and not(@class="vit-less") and not(@class="vit-less")]
+      Studio:
+        Name: $studio
+        URL: $studio/@href
+      Performers:
+        Name: $performer//a/text()
+        URL: $performer//a/@href
+      Image:
+        selector: //div[@class="vjs-poster"]/@style
+        postProcess:
+          - replace:
+              - regex: /[^"]*/i
+                with: ""
