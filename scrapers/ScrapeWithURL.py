@@ -27,6 +27,7 @@ def scrape_scene(url):
                         performers {
                             name
                         }
+                        url
                     }
                 }"""
 
