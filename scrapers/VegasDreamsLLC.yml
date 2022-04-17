@@ -51,7 +51,7 @@ xPathScrapers:
         selector: //*/span[@class="model-details" and text()="Weight:"]/../text()
         postProcess:
           - replace:
-              - regex: .*([0-9]{2,3}).*
+              - regex: ([0-9]{2,3}).*
                 with: $1
           - lbToKg: true
       HairColor: //*/span[@class="model-details" and text()="Eye Color:"]/../text()
