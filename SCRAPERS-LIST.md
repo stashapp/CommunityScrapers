@@ -517,7 +517,7 @@ hdsex18.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 heavyonhotties.com|HeavyOnHotties.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hegre.com|Hegre.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|-
 helixstudios.com|HelixStudios.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|gay
-helloladyboy.com|VegasDreamsLLC.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+helloladyboy.com|VegasDreamsLLC.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 hentai2read.com|hentai2read.yml|:x:|:heavy_check_mark:|:x:|:x:|-|Hentai
 hentaied.com|Hentaied.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hergape.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
