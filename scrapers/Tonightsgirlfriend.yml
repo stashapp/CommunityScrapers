@@ -10,7 +10,12 @@ xPathScrapers:
       Title: //h1
       Details: //p[@class="scene-description"]
       Performers:
-        Name: //p[@class="grey-performers"]/a
+        Name:
+          selector: //p[@class="grey-performers"]//text()
+          postProcess:
+            - replace:
+                - regex: \s*,
+                  with:
       Image:
         selector: //img[@class="playcard"]/@src
         postProcess:
