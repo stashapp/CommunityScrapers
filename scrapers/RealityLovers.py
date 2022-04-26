@@ -35,8 +35,48 @@ except ModuleNotFoundError:
 # This is a scraper for: RealityLovers sites
 #
 # These fields will be populated if available:
-# Title, URL, Image, Date
+# Title, URL, Image, Date, Tags, Performers
 #
+
+
+def sceneByURL():
+    # read the input.  A URL must be passed in for the sceneByURL call
+    inp = json.loads(sys.stdin.read())
+    if not inp['url']:
+        log.error('No URL Entered')
+
+    # get the url specified in the input and validate the response code
+    scraped = session.get(inp['url'])
+    if scraped.status_code >= 400:
+        log.error('HTTP Error: %s' % scraped.status_code)
+    log.trace('Scraped the url: ' + inp["url"])
+
+    # get the data we can scrape directly from the page
+    tree = html.fromstring(scraped.content)
+    title = "".join(tree.xpath('//*[@class="video-detail-name"]/text()')).strip()
+    details = re.sub(r'\n\s*\n', '\n\n', "\n\n".join(tree.xpath('//*[@itemprop="description"]//text()')).strip())
+    images = tree.xpath('//*[@itemprop="thumbnail"]/@data-big')
+    image_url = ""
+    if len(images) > 0:
+        image_url = re.sub(r' .*', r'', images[0])
+    tags = tree.xpath('//a[@itemprop="keyword"]/text()')
+    actors = tree.xpath('//a[@itemprop="actor"]/text()')
+
+    # create our output
+    return {
+        'title': title,
+        'tags': [{
+            'name': x
+        } for x in tags],
+        'details': details,
+        'image': image_url,
+        'studio': {
+            'name': "Reality Lovers"
+        },
+        'performers': [{
+            'name': x
+        } for x in actors]
+    }
 
 
 # Get the scene by the fragment.  The title is used as the search field.  Should return the JSON response.
@@ -88,12 +128,11 @@ def sceneByName():
 
 # Figure out what was invoked by Stash and call the correct thing
 if sys.argv[1] == "sceneByURL":
-    # print(json.dumps(sceneByURL()))
-    log.error("Scene by url not supported yet")
+    print(json.dumps(sceneByURL()))
 elif sys.argv[1] == "sceneByName":
     scenes = sceneByName()
     print(json.dumps(scenes))
-elif sys.argv[1] == "sceneByQueryFragment":
+elif sys.argv[1] == "sceneByQueryFragment" or sys.argv[1] == "sceneByFragment":
     scenes = sceneByName()
     if len(scenes) > 0:
         # return the first query result

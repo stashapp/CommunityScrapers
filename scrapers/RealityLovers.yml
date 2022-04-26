@@ -1,4 +1,13 @@
 name: RealityLovers
+sceneByURL:
+  - action: script
+    url:
+      - https://realitylovers.com/vd/
+      - https://tsvirtuallovers.com/vd/
+    script:
+      - python
+      - RealityLovers.py
+      - sceneByURL
 sceneByName:
   action: script
   script:
@@ -11,5 +20,11 @@ sceneByQueryFragment:
     - python
     - RealityLovers.py
     - sceneByQueryFragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - RealityLovers.py
+    - sceneByFragment
 
 # Last Updated April 26, 2022
