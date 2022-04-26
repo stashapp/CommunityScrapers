@@ -1,0 +1,15 @@
+name: RealityLovers
+sceneByName:
+  action: script
+  script:
+    - python
+    - RealityLovers.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - RealityLovers.py
+    - sceneByQueryFragment
+
+# Last Updated April 26, 2022
