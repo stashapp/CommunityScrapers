@@ -1,4 +1,13 @@
 name: RealityLovers
+performerByURL:
+  - action: script
+    url:
+      - https://realitylovers.com/girl
+      - https://tsvirtuallovers.com/girl
+    script:
+      - python
+      - RealityLovers.py
+      - performerByURL
 sceneByURL:
   - action: script
     url:

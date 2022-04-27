@@ -31,12 +31,59 @@ except ModuleNotFoundError:
 
 
 #  --------------------------------------------
-
 # This is a scraper for: RealityLovers sites
 #
-# These fields will be populated if available:
-# Title, URL, Image, Date, Tags, Performers
-#
+
+
+def performerByURL():
+    # read the input.  A URL must be passed in for the sceneByURL call
+    inp = json.loads(sys.stdin.read())
+    if not inp['url']:
+        log.error('No URL Entered')
+
+    # get the url specified in the input and validate the response code
+    scraped = session.get(inp['url'])
+    if scraped.status_code >= 400:
+        log.error('HTTP Error: %s' % scraped.status_code)
+    log.trace('Scraped the url: ' + inp["url"])
+
+    # get the data we can scrape directly from the page
+    tree = html.fromstring(scraped.content)
+    name = "".join(tree.xpath('//div[@class="girlDetails-details"]/h1/text()')).strip()
+    main_image_src = re.sub(r'.*1x,(.*) 2x', r'\1', tree.xpath('//img[@class="girlDetails-posterImage"]/@srcset')[0])
+    birthdate = time.strptime(
+        re.sub(r"(st|nd|rd|th)", r"", tree.xpath('//*[text()="Birthday:"]/../following-sibling::dd/text()')[0].strip()),
+        '%b %d %Y')
+    country = tree.xpath('//*[text()="Country:"]/../following-sibling::dd/text()')[0].strip()
+    measurements = tree.xpath('//*[text()="Cup:"]/../following-sibling::dd/text()')[0].strip()
+    height = re.sub(r".*\(([0-9]*) cm\)",
+                    r"\1",
+                    tree.xpath('//*[text()="Height:"]/../following-sibling::dd/text()')[0].strip())
+    weight = re.sub(r".*\(([0-9]*) kg\)",
+                    r"\1",
+                    tree.xpath('//*[text()="Weight:"]/../following-sibling::dd/text()')[0].strip())
+    socials = tree.xpath('//*/a[@class="girlDetails-socialIcon"]/@href')
+    tags = tree.xpath('//*/a[@itemprop="keyword"]/text()')
+    details = tree.xpath('//*/p[@class="girlDetails-bioText"]/text()')[0].strip()
+
+    return {
+        "Name": name,
+        # making some assumptions here
+        "Gender": "transgender_female" if re.match(r'.*tsvirtuallovers.*', inp['url'], re.IGNORECASE) else "female",
+        "URL": inp['url'],
+        "Twitter": next(social for social in socials if re.match(r'.*twitter.*', social, re.IGNORECASE)),
+        "Instagram": next(social for social in socials if re.match(r'.*instagram.*', social, re.IGNORECASE)),
+        "Birthdate": time.strftime("%Y-%m-%d", birthdate),
+        "Country": country,
+        "Height": height,
+        "Weight": weight,
+        "Measurements": measurements,
+        "Tags": [{
+            'name': x
+        } for x in tags],
+        "Image": main_image_src,
+        "Details": details,
+    }
 
 
 def sceneByURL():
@@ -127,7 +174,9 @@ def sceneByName():
 
 
 # Figure out what was invoked by Stash and call the correct thing
-if sys.argv[1] == "sceneByURL":
+if sys.argv[1] == "performerByURL":
+    print(json.dumps(performerByURL()))
+elif sys.argv[1] == "sceneByURL":
     print(json.dumps(sceneByURL()))
 elif sys.argv[1] == "sceneByName":
     scenes = sceneByName()
