@@ -22,7 +22,7 @@ except ModuleNotFoundError:
    '''
 
 def lookup_scene(file,db,parent):
-    print(f"using database: {db.name}  {file.name}", file=sys.stderr)
+    log.info(f"using database: {db.name}  {file.name}")
     conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
     c=conn.cursor()
     # which media type should we look up for our file?
@@ -60,7 +60,7 @@ def findFilePath(id):
     scene=graphql.getScene(id)
     if scene:
         return scene["path"]
-    print(f"Error connecting to api",file=sys.stderr)
+    log.error(f"Error connecting to api")
     print("{}")
     sys.exit()
 
@@ -84,7 +84,7 @@ def make_image_data_url(image_path):
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
-    print(json.dumps(fragment),file=sys.stderr)
+    log.debug(json.dumps(fragment))
     id=fragment['id']
     file=Path(findFilePath(id))
 
