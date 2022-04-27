@@ -1,0 +1,42 @@
+name: "MariskaX"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mariskax.com
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - mariskax.com/model
+    scraper: performerScraper  
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="title"]
+      Date:
+        selector: //span[@class="post-date"]
+        postProcess:
+          - replace:
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
+          - parseDate: 2 Jan 2006
+      Image: 
+        selector: //video[@id="ypp-player"]/@poster
+        postProcess:
+          - replace:
+            - regex: (?:background-image:url\(\")(.+)(?:\"\));?
+              with: $1
+      Studio:
+        Name: 
+          fixed: MariskaX
+      Performers:
+        Name:
+          selector: //div[@class="content-meta"]/h4[@class="models"]/a
+
+  performerScraper:
+    performer:
+      Name: //h1[@class="model-name"]
+      Image: //div[@class="model-photo"]/img/@data-src
+# Last Updated April 27, 2022
