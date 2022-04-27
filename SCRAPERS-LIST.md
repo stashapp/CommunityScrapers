@@ -1174,6 +1174,7 @@ tryteens.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tsfactor.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tsplayground.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tspov.com|ChristianXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+tsvirtuallovers.com|RealityLovers.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 tuktukpatrol.com|TukTukPatrol.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 tushy.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 tushyraw.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
