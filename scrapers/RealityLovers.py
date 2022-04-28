@@ -101,13 +101,15 @@ def sceneByURL():
     # get the data we can scrape directly from the page
     tree = html.fromstring(scraped.content)
     title = "".join(tree.xpath('//*[@class="video-detail-name"]/text()')).strip()
-    details = re.sub(r'\n\s*\n', '\n\n', "\n\n".join(tree.xpath('//*[@itemprop="description"]//text()')).strip())
+    details = tree.xpath('//*[@itemprop="description"]/text()[1]')[0].strip()
+    details = details + " " + tree.xpath('//*[@itemprop="description"]/span/text()')[0].strip()
     images = tree.xpath('//*[@itemprop="thumbnail"]/@data-big')
     image_url = ""
     if len(images) > 0:
         image_url = re.sub(r' .*', r'', images[0])
     tags = tree.xpath('//a[@itemprop="keyword"]/text()')
     actors = tree.xpath('//a[@itemprop="actor"]/text()')
+    studio = tree.xpath('//span[@class="icon header-logo"]/text()')[0]
 
     # create our output
     return {
@@ -118,7 +120,7 @@ def sceneByURL():
         'details': details,
         'image': image_url,
         'studio': {
-            'name': "Reality Lovers"
+            'name': studio
         },
         'performers': [{
             'name': x
