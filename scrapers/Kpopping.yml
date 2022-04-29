@@ -1,4 +1,8 @@
 name: Kpopping
+performerByName:
+  action: scrapeXPath
+  queryURL: https://kpopping.com/profiles/idol/{}
+  scraper: performerScraper
 performerByURL:
   - action: scrapeXPath
     url:
