@@ -51,4 +51,4 @@ xPathScrapers:
           - replace:
               - regex: '.*"thumbnailUrl": "([^"]+)".*'
                 with: $1
-# Last Updated December 08, 2021
+# Last Updated April 29, 2022
