@@ -18,6 +18,11 @@ sceneByURL:
     url:
       - https://mrdeepfakes.com/video/
     scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - https://mrdeepfakes.com/photo/
+    scraper: galleryScraper
 xPathScrapers:
   performerScraper:
     performer:
@@ -84,6 +89,26 @@ xPathScrapers:
       Studio: # Only count verified uploaders as studios
         Name: $avatar/@title
         URL: $avatar/@href
+      Tags:
+        Name: >
+          //div[@class="item"][contains(text(), "Categories:")]/a/text()
+          | //div[@class="item"][contains(text(), "Tags:")]/a/text()
+      Performers:
+        Name:
+          selector: >
+            //div[@class="item"][contains(text(), "Celebrities:")]/a/text()
+            | //div[@class="item"][contains(text(), "Original Pornstar:")]//a/text()
+          postProcess:
+            - replace:
+                - regex: ".*Not Added Yet.*"
+                  with: ""
+  galleryScraper:
+    gallery:
+      Title: //div[@class="headline"]/h1/text()
+      Details:
+        selector: //div[@class="item"][contains(text(), "Description:")]/em/text()
+        concat: "\r\n\r\n"
+      URL: //link[@rel="canonical"]/@href
       Tags:
         Name: >
           //div[@class="item"][contains(text(), "Categories:")]/a/text()
