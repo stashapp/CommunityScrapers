@@ -10,9 +10,11 @@ performerByURL:
     scraper: performerScraper
 xPathScrapers:
   performerScraper:
+    common:
+      $summary: //div[contains(@class, "summary-only-one")]
     performer:
       Name:
-        selector: //div[contains(@class, "summary-only-one")]/section/h1/text()
+        selector: $summary/section/h1/text()
         postProcess:
           - replace:
               - regex: " †"
@@ -37,22 +39,22 @@ xPathScrapers:
               - regex: https://www.instagram.com/(\w+)/\?hl=en
                 with: $1
       Birthdate:
-        selector: //div[contains(@class, "summary-only-one")]//div[@class="equal"][contains(., "Birthday:")]/following-sibling::div[1]/a/text()
+        selector: $summary//div[@class="equal"][contains(., "Birthday:")]/following-sibling::div[1]/a/text()
         postProcess:
           - parseDate: Jan 2, 2006
       DeathDate:
-        selector: //div[contains(@class, "summary-only-one")]//div[@class="equal"][contains(., "Passed away:")]/following-sibling::div[1]/text()
+        selector: $summary//div[@class="equal"][contains(., "Passed away:")]/following-sibling::div[1]/text()
         postProcess:
           - parseDate: Jan 2, 2006
-      Country: //div[contains(@class, "summary-only-one")]//strong[contains(., "Country:")]/following-sibling::p/text()
+      Country: $summary//strong[contains(., "Country:")]/following-sibling::p/text()
       Height:
-        selector: //div[contains(@class, "summary-only-one")]//div[@class="equal"][contains(., "Height:")]/following-sibling::div[1]/text()
+        selector: $summary//div[@class="equal"][contains(., "Height:")]/following-sibling::div[1]/text()
         postProcess:
           - replace:
               - regex: '\d''\d"[\s\xA0]*\((\d+)[\s\xA0]*cm\)'
                 with: $1
       Weight:
-        selector: //div[contains(@class, "summary-only-one")]//div[@class="equal"][contains(., "Weight:")]/following-sibling::div[1]/text()
+        selector: $summary//div[@class="equal"][contains(., "Weight:")]/following-sibling::div[1]/text()
         postProcess:
           - replace:
               - regex: '\d+(?:\.\d+)?[\s\xA0]*lbs[\s\xA0]*\((\d+)[\s\xA0]*kg\)'
@@ -64,10 +66,10 @@ xPathScrapers:
               - regex: -present
                 with: " -"
       Aliases:
-        selector: //div[contains(@class, "summary-only-one")]//dfn[contains(text(), "Korean")]/following-sibling::text()|//div[contains(@class, "summary-only-one")]//div[@class="equal"][contains(., "Full name:")]/following-sibling::div[1]/text()|//div[contains(@class, "summary-only-one")]//div[@class="equal"][contains(., "Native name:")]/following-sibling::div[1]/text()
+        selector: $summary//dfn[contains(text(), "Korean")]/following-sibling::text()|$summary//div[@class="equal"][contains(., "Full name:")]/following-sibling::div[1]/text()|$summary//div[@class="equal"][contains(., "Native name:")]/following-sibling::div[1]/text()
         concat: ", "
       Image:
-        selector: //div[contains(@class, "summary-only-one")]//div[contains(@class, "whole-body")]/@data-bg
+        selector: $summary//div[contains(@class, "whole-body")]/@data-bg
         postProcess:
           - replace:
               - regex: ^
