@@ -25,6 +25,8 @@ xPathScrapers:
           - map:
               Girl groups: female
               Boy groups: male
+              Female idols: female
+              Male idols: male
       URL: //link[@rel="canonical"]/@href
       Twitter:
         selector: //a[contains(@class, "fa-twitter")]/@href
