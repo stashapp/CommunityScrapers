@@ -29,7 +29,7 @@ xPathScrapers:
               - regex: ^-
                 with: ""
           - parseDate: Jan 2, 2006
-      Details: //div[@class="trailer_videoinfo"]/p[not(b)]/text()
+      Details: //div[@class="trailer_videoinfo"]/p[not(b)]
       Performers:
         Name: //div[@class="trailer_videoinfo"]//b[contains(.,"Featuring")]/following-sibling::a/text()[1]
       Studio:
