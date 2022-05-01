@@ -29,15 +29,17 @@ xPathScrapers:
               - regex: ^-
                 with: ""
           - parseDate: Jan 2, 2006
-      Details: //div[@class="trailer_videoinfo"]/p[4]/text()
+      Details: //div[@class="trailer_videoinfo"]/p[not(b)]/text()
       Performers:
         Name: //div[@class="trailer_videoinfo"]//b[contains(.,"Featuring")]/following-sibling::a/text()[1]
       Studio:
         Name: //meta[@name="author"]/@content
       Image:
-        selector: //div[@class="videohere"]/img[@class="thumbs stdimage"]/@src
+        selector: //div[@class="videohere"]/img[@class="thumbs stdimage"]/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
         postProcess:
           - replace:
+              - regex: (.+image:\s+")(.+jpg)(.+)
+                with: $2
               - regex: ^
                 with: "https://grooby.club/"
-# Last Updated Apr 20, 2022
+# Last Updated May 01, 2022
