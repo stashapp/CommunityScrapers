@@ -51,13 +51,13 @@ xPathScrapers:
         selector: $summary//div[@class="equal"][contains(., "Height:")]/following-sibling::div[1]/text()
         postProcess:
           - replace:
-              - regex: '\d''\d"[\s\xA0]*\((\d+)[\s\xA0]*cm\)'
+              - regex: '.*?(\d+)[\s\xA0]*cm.*'
                 with: $1
       Weight:
         selector: $summary//div[@class="equal"][contains(., "Weight:")]/following-sibling::div[1]/text()
         postProcess:
           - replace:
-              - regex: '\d+(?:\.\d+)?[\s\xA0]*lbs[\s\xA0]*\((\d+)[\s\xA0]*kg\)'
+              - regex: '.*?(\d+)[\s\xA0]*kg.*'
                 with: $1
       CareerLength:
         selector: //div[contains(@class, "data-grid")]/section[@class="cell"]/div[@class="name"][contains(text(), "Active years:")]/following-sibling::div[1]/text()
