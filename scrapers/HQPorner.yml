@@ -7,8 +7,8 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-    #Title: //h1[@class='main-h1']/text()
-      Title: 
+      #Title: //h1[@class='main-h1']/text()
+      Title:
         selector: //title
         postProcess:
           - replace:
@@ -25,5 +25,17 @@ xPathScrapers:
           postProcess:
             - map:
                 HQPORNER: HQPorner
-        
-# Last Updated May 5, 2022
+      Image:
+        selector: //iframe[@width="560"]/@src
+        postProcess:
+          - replace: &https
+              - regex: ^//
+                with: "https://"
+          - subScraper:
+              selector: //script[contains(.,"poster=")]
+              postProcess:
+                - replace:
+                    - regex: '.*poster=\\"([^\\]+).+'
+                      with: $1
+                - replace: *https
+# Last Updated May 05, 2022
