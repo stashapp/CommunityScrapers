@@ -3,15 +3,9 @@ import sys
 import re
 import requests
 import time
-import base64
 
-# Set these cookies to the values from your RealityLovers browser session
-cookies = []
-
-# create our session with cookies
+# initialize the session for making requests
 session = requests.session()
-for cookie in cookies:
-    session.cookies.set_cookie(cookie)
 
 try:
     import py_common.log as log
@@ -34,18 +28,25 @@ except ModuleNotFoundError:
 # This is a scraper for: RealityLovers sites
 #
 
-
-def performerByURL():
-    # read the input.  A URL must be passed in for the sceneByURL call
-    inp = json.loads(sys.stdin.read())
+def get_scraped(inp):
     if not inp['url']:
         log.error('No URL Entered')
+        return None
 
     # get the url specified in the input and validate the response code
     scraped = session.get(inp['url'])
     if scraped.status_code >= 400:
         log.error('HTTP Error: %s' % scraped.status_code)
+        return None
     log.trace('Scraped the url: ' + inp["url"])
+    return scraped
+
+def performerByURL():
+    # read the input.  A URL must be passed in for the sceneByURL call
+    inp = json.loads(sys.stdin.read())
+    scraped = get_scraped(inp)
+    if not scraped:
+        return {}
 
     # get the data we can scrape directly from the page
     tree = html.fromstring(scraped.content)
@@ -71,8 +72,8 @@ def performerByURL():
         # making some assumptions here
         "Gender": "transgender_female" if re.match(r'.*tsvirtuallovers.*', inp['url'], re.IGNORECASE) else "female",
         "URL": inp['url'],
-        "Twitter": next(social for social in socials if re.match(r'.*twitter.*', social, re.IGNORECASE)),
-        "Instagram": next(social for social in socials if re.match(r'.*instagram.*', social, re.IGNORECASE)),
+        "Twitter": next((social for social in socials if re.match(r'.*twitter.*', social, re.IGNORECASE)), ""),
+        "Instagram": next((social for social in socials if re.match(r'.*instagram.*', social, re.IGNORECASE)), ""),
         "Birthdate": time.strftime("%Y-%m-%d", birthdate),
         "Country": country,
         "Height": height,
@@ -89,14 +90,9 @@ def performerByURL():
 def sceneByURL():
     # read the input.  A URL must be passed in for the sceneByURL call
     inp = json.loads(sys.stdin.read())
-    if not inp['url']:
-        log.error('No URL Entered')
-
-    # get the url specified in the input and validate the response code
-    scraped = session.get(inp['url'])
-    if scraped.status_code >= 400:
-        log.error('HTTP Error: %s' % scraped.status_code)
-    log.trace('Scraped the url: ' + inp["url"])
+    scraped = get_scraped(inp)
+    if not scraped:
+        return {}
 
     # get the data we can scrape directly from the page
     tree = html.fromstring(scraped.content)
@@ -137,6 +133,7 @@ def sceneByName():
     query_value = inp['title'] if 'title' in inp else inp['name']
     if not query_value:
         log.error('No title or name Entered')
+        return []
     log.trace("Query Value: " + query_value)
 
     # call the query url based on the input and validate the response code
@@ -153,6 +150,7 @@ def sceneByName():
     log.debug("Called: " + scraped_scenes.url + " with body: " + json.dumps(data))
     if scraped_scenes.status_code >= 400:
         log.error('HTTP Error: %s' % scraped_scenes.status_code)
+        return []
 
     # get the data we can scrape directly from the page
     scenes = json.loads(scraped_scenes.content)
