@@ -1,0 +1,45 @@
+name: "GroobyClub"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      # checked for all sites https://www.grooby.club/tour/
+      - asianamericantgirls.com
+      - canada-tgirl.com
+      - euro-tgirls.com
+      - grooby.club
+      - hazel-tucker.com
+      - krissy4u.com
+      - russian-tgirls.com
+      - tgirl40.com
+      - tgirlbbw.com
+      - tgirlpornstar.com
+      - tgirlpostop.com
+      - transexdomination.com
+      - ts-castingcouch.com
+      - uk-tgirls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="trailer_videoinfo"]//h3/text()
+      Date:
+        selector: //div[@class="trailer_videoinfo"]//b[contains(.,"Added")]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: ^-
+                with: ""
+          - parseDate: Jan 2, 2006
+      Details: //div[@class="trailer_videoinfo"]/p[not(b)]
+      Performers:
+        Name: //div[@class="trailer_videoinfo"]//b[contains(.,"Featuring")]/following-sibling::a/text()[1]
+      Studio:
+        Name: //meta[@name="author"]/@content
+      Image:
+        selector: //div[@class="videohere"]/img[@class="thumbs stdimage"]/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
+        postProcess:
+          - replace:
+              - regex: (.+image:\s+")(.+jpg)(.+)
+                with: $2
+              - regex: ^
+                with: "https://grooby.club/"
+# Last Updated May 01, 2022

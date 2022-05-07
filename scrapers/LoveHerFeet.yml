@@ -7,6 +7,10 @@ sceneByURL:
       - loveherfeet.com/tour/trailers/
       - shelovesblack.com/tour/trailers/
     scraper: sceneScraper
+sceneByFragment:
+    action: scrapeXPath
+    queryURL: "{url}"
+    scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
@@ -32,4 +36,4 @@ xPathScrapers:
         Name:
           selector: //div[@class='featured']/a/text()
 
-# Last Updated October 31, 2021
+# Last Updated April 30, 2022
