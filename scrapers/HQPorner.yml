@@ -32,7 +32,7 @@ xPathScrapers:
               - regex: ^//
                 with: "https://"
           - subScraper:
-              selector: //script[contains(.,"poster=")]
+              selector: //video/@poster|//script[contains(.,"poster=")]
               postProcess:
                 - replace:
                     - regex: '.*poster=\\"([^\\]+).+'
