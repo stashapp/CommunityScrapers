@@ -2,12 +2,12 @@ name: AShemaleTube
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://www.ashemaletube.com/model/
+      - ashemaletube.com/model/
     scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.ashemaletube.com/videos
+      - ashemaletube.com/videos
     scraper: sceneScraper
 xPathScrapers:
   performerScraper:
