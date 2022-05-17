@@ -30,7 +30,12 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Details: //span/div[text()="Description:"]/following-sibling::text()
       Tags:
-        Name: //span[div[text()='Categories:']]/a/text()[1]
+        Name:
+          selector: //span[div[text()='Categories:']]/a/text()[1]
+          postProcess:
+            - replace:
+                - regex: ^\s*\,|\,\s*$
+                  with: ""
       Performers:
         Name: //h1/following-sibling::div//a[contains(@href,"/model")]/text()
       Studio:
@@ -46,4 +51,4 @@ xPathScrapers:
           - replace:
               - regex: '.*"thumbnailUrl": "([^"]+)".*'
                 with: $1
-# Last Updated December 08, 2021
+# Last Updated May 07, 2022
