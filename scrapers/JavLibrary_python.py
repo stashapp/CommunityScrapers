@@ -52,7 +52,7 @@ IGNORE_ALIASES = False
 # Always wait for the aliases or you are not sure to have it. (Depends if request are quick)
 WAIT_FOR_ALIASES = False
 # All javlib site
-SITE_JAVLIB = ["javlibrary","d52q","p54u","n53i"]
+SITE_JAVLIB = ["javlibrary", "o58c", "e59f"]
 
 BANNED_WORDS = {
     "A******ation": "Asphyxiation",
