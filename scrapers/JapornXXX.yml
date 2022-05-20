@@ -1,0 +1,31 @@
+name: "JapornXXX"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - japornxxx.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //*[@id="player-content"]/div/div[1]/div[3]/h2
+      Details: //*[@id="player-content"]/div/div[1]/div[3]/div[1]/div/div[2]/p/span
+      Date:
+        selector: //*[@id="player-content"]/div/div[1]/div[3]/div[1]/div/div[2]
+        postProcess:
+          - replace: 
+            - regex: '^(?:Length:)\s+(?:[0-9]\d{1}):(?:[0-9]\d{1})\s+(?:Publish Date:)\s+([0-9]\d{0,1})\s+(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|(Nov|Dec)(?:ember)?)\s+(19\d{2}|20\d{2}).*'
+              with: "$1 $2, $4"
+          - parseDate: 2 January, 2006
+      Performers:
+        Name: //a[@class="name"]
+      Image: &imageSel
+        selector: //div[starts-with(@style,"background-image:")]/@style
+        postProcess:
+          - replace:
+              - regex: .+url\((.+)\).+
+                with: $1
+      Studio:
+        Name:
+          fixed: Japornxxx
+# Last Updated May 20, 2022
