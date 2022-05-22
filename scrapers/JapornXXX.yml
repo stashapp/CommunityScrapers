@@ -15,7 +15,7 @@ xPathScrapers:
         postProcess:
           - parseDate: 2 January 2006
       Performers:
-          Name: //a[@class="name"]
+        Name: //a[@class="name"]
       Image:
         selector: //script[not(@type)][contains(.,"VodPlayer(")]
         postProcess:
