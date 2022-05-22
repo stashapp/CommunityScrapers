@@ -335,4 +335,4 @@ xPathScrapers:
                 with: "pl.jpg"
       Studio:
         Name: //p[text()="TOP STUDIOS"]/following-sibling::ul//a/span[@class="item01"]/text()
-# Last Updated August 01, 2021
+# Last Updated May 22, 2022
