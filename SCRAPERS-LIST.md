@@ -601,6 +601,7 @@ japaneseflashers.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 japaneseslurp.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 japanhdv.com|JapanHDV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 japanlust.com|Arx.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+japornxxx.com|JapornXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jav.land|JavLand.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|JAV
 javdb.com|javdb.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Database
 javdb36.com|javdb.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Database

@@ -1,0 +1,30 @@
+name: "JapornXXX"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - japornxxx.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //*[@id="player-content"]//h2
+      Details: //*[@id="player-content"]//div[@class="description"]/p/span
+      Date:
+        selector: //*[@id="player-content"]//strong[text()="Publish Date:"]/following-sibling::text()[1]
+        postProcess:
+          - parseDate: 2 January 2006
+      Performers:
+        Name: //a[@class="name"]
+      Image:
+        selector: //script[not(@type)][contains(.,"VodPlayer(")]
+        postProcess:
+          - replace:
+              - regex: '.+image: "([^"]+).+'
+                with: $1
+      Studio:
+        Name:
+          fixed: Japornxxx
+      Tags:
+        Name: //*[@id="player-content"]//div[@class="tags"]//a
+# Last Updated May 21, 2022
