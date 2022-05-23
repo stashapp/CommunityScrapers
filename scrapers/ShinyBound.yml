@@ -36,3 +36,5 @@ xPathScrapers:
       Image:
         selector: $logo|//img[@class='stdimage promo_thumb left thumbs']/@src
         concat: "/"
+
+# Last Updated May 23, 2022
