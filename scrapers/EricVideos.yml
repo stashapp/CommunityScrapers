@@ -20,6 +20,12 @@ xPathScrapers:
       Performers:
         Name:
           selector: //a/div[@class='acteur']/div[@class='nom']/text()
+        URL:
+          selector:  //a[div[@class='acteur']]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.ericvideos.com  
       Studio:
         Name:
           fixed: EricVideos
@@ -27,8 +33,8 @@ xPathScrapers:
         selector: //div[@class='preview'][1]/a/img[@class='preview']/@src
         postProcess:
           - replace:
-              - regex: (.*)
-                with: https://www.ericvideos.com/$1
+              - regex: ^
+                with: https://www.ericvideos.com/
                 
 
   performerScraper:
@@ -44,8 +50,8 @@ xPathScrapers:
         selector: //div[@class='photo_acteur']/img[@class='thumbnail']/@src
         postProcess:
           - replace:
-              - regex: (.*)
-                with: https://www.ericvideos.com/$1
+              - regex: ^
+                with: https://www.ericvideos.com/
         
 driver:
   cookies:
