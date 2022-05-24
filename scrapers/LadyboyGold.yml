@@ -39,8 +39,8 @@ xPathScrapers:
         selector: //div[@class="photoUpdate-image col-lg-3 col-md-3 col-sm-6"]/a/img[@class="img-responsive"]/@src
         postProcess:
           - replace:
-            - regex: (.*)
-              with: https://www.ladyboygold.com$1
+            - regex: ^
+              with: https://www.ladyboygold.com
       Details: //div[@class="profileBio"]/text()
 
 # Last Updated May 17, 2022
