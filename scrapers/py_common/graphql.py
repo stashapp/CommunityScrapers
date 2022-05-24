@@ -711,3 +711,103 @@ def getGalleryPath(gallery_id):
     if result:
         return result.get('findGallery')
     return None 
+
+def reloadScrapers():
+    query = """
+    mutation ReloadScrapers {
+        reloadScrapers
+    }
+    """
+    result = callGraphQL(query)
+    return result
+
+
+def scrape_SceneURL(url: str) -> dict:
+    query = """
+    query scrapeSceneURL($url: String!) {
+        scrapeSceneURL(url: $url) {
+            ...ScrapedSceneData
+        }
+    }
+    fragment ScrapedSceneData on ScrapedScene {
+        title
+        details
+        url
+        date
+        image
+        file {
+            size
+            duration
+            video_codec
+            audio_codec
+            width
+            height
+            framerate
+            bitrate
+        }
+        studio {
+            ...ScrapedSceneStudioData
+        }
+        tags {
+            ...ScrapedSceneTagData
+        }
+        performers {
+            ...ScrapedScenePerformerData
+        }
+        movies {
+            ...ScrapedSceneMovieData
+        }
+    }
+    fragment ScrapedSceneStudioData on ScrapedStudio {
+        stored_id
+        name
+        url
+        remote_site_id
+    }
+    fragment ScrapedSceneTagData on ScrapedTag {
+        stored_id
+        name
+    }
+    fragment ScrapedScenePerformerData on ScrapedPerformer {
+        stored_id
+        name
+        gender
+        url
+        twitter
+        instagram
+        birthdate
+        ethnicity
+        country
+        eye_color
+        height
+        measurements
+        fake_tits
+        career_length
+        tattoos
+        piercings
+        aliases
+        tags {
+            ...ScrapedSceneTagData
+        }
+        remote_site_id
+        images
+        details
+        death_date
+        hair_color
+        weight
+    }
+    fragment ScrapedSceneMovieData on ScrapedMovie {
+        stored_id
+        name
+        aliases
+        duration
+        date
+        rating
+        director
+        url
+        synopsis
+    }
+    """
+    variables = {"url": url}
+    result = callGraphQL(query, variables)
+    return result.get('scrapeSceneURL')
