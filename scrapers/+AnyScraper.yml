@@ -1,0 +1,11 @@
+name: +AnyScraper
+sceneByURL:
+  - action: script
+    url:
+      - .
+    script:
+      - python
+      - +AnyScraper.py
+      - url
+
+# Last Updated May 23, 2022
