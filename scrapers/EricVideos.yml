@@ -6,7 +6,7 @@ sceneByURL:
     scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - ericvideos.com
     scraper: performerScraper
 xPathScrapers:
@@ -21,11 +21,11 @@ xPathScrapers:
         Name:
           selector: //a/div[@class='acteur']/div[@class='nom']/text()
         URL:
-          selector:  //a[div[@class='acteur']]/@href
+          selector: //a[div[@class='acteur']]/@href
           postProcess:
             - replace:
                 - regex: ^
-                  with: https://www.ericvideos.com  
+                  with: https://www.ericvideos.com
       Studio:
         Name:
           fixed: EricVideos
@@ -35,12 +35,11 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://www.ericvideos.com/
-                
 
   performerScraper:
     performer:
       Name: //div[@class='col']/h1/text()
-      Height: 
+      Height:
         selector: //li[@class='list-group-item'][2]/text()
         postProcess:
           - feetToCm: true
@@ -52,7 +51,7 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://www.ericvideos.com/
-        
+
 driver:
   cookies:
     - CookieURL: "http://www.ericvideos.com"
@@ -64,6 +63,5 @@ driver:
         - Name: "trailerViews"
           Domain: "www.ericvideos.com"
           Value: "1"
-          Path: "/"  
-          
+          Path: "/"
 # Last Updated May 23, 2022
