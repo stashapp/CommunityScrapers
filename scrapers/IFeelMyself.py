@@ -2,6 +2,7 @@ import json
 import re
 import sys
 from datetime import datetime
+import unicodedata
 
 try:
     from mechanicalsoup import StatefulBrowser
@@ -25,7 +26,8 @@ def readJSONInput():
 def extract_info(table,cover_url=None):
     description = None
     if table.find(class_= ["blog_wide_new_text","entryBlurb"]):
-        description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True).replace("\x92","'")
+        description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True)
+        description=unicodedata.normalize('NFKC', description).encode('ascii','ignore').decode('ascii')
     date = table.find(class_="blog-title-right").get_text(strip=True) #This is a BeautifulSoup element
     performer = table.find(class_= ["entryHeadingFlash","entryHeading"]).find_all("a")[1].get_text().replace("_"," ")
     performer = str(performer)
