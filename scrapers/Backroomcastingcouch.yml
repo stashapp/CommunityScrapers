@@ -1,21 +1,27 @@
-name: backroomcastingcouch
-performerByURL:
+name: BackRoomCastingCouch
+sceneByURL:
   - action: scrapeXPath
     url:
-      # Get Data either from model page or a video. Both provide same info
-      - backroomcastingcouch.com/site/models
-      - backroomcastingcouch.com/site/trailers
-
-    scraper: performerScraper
+      - backroomcastingcouch.com
+    scraper: sceneScraper
 xPathScrapers:
-  performerScraper: 
-    performer:
-      Name: (//h2[@class="section-title"])[1]
-      Image:
-        selector: //img[@alt=//h2[@class="section-title"]/text()]/@src0_1x
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="title-block"]//text()
+      Date:
+        selector: //strong[contains(text(),"Released")]/following-sibling::text()
         postProcess:
-          # URL is a CDN url with token auth, replace with orig url --> Works without token
-          - replace:
-              - regex: '[^\sw\.@/]([0-9a-zA-Z\-\.]*[0-9a-zA-Z\-]+\.)(com|org|net|DE|COM|ORG|NET)'
-                with: backroomcastingcouch.com
-# Last Updated September 13, 2021
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class="container container-default"]/h2
+      Tags:
+        Name: //ul[@class="tags"]//a
+      Details:
+        selector: //h3[contains(text(),"Description")]/following-sibling::text()
+      Image:
+        selector: //img[@class="model_bio_thumb img-fluid  stdimage thumbs target"]/@src0_1x
+      Studio:
+        Name:
+          fixed: BackRoomCastingCouch
+# Last Updated June 02, 2022
