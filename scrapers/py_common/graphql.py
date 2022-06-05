@@ -1,3 +1,5 @@
+import sys
+
 try:
     import requests
 except ModuleNotFoundError:
@@ -89,6 +91,7 @@ def configuration():
         databasePath
         generatedPath
         metadataPath
+        scrapersPath
         cachePath
         calculateMD5
         videoFileNamingAlgorithm
@@ -712,6 +715,7 @@ def getGalleryPath(gallery_id):
         return result.get('findGallery')
     return None 
 
+
 def reloadScrapers():
     query = """
     mutation ReloadScrapers {
@@ -720,6 +724,23 @@ def reloadScrapers():
     """
     result = callGraphQL(query)
     return result
+
+
+def listSceneScrapers():
+    query = """
+    query ListSceneScrapers {
+    listSceneScrapers {
+            id
+            name
+            scene {
+                urls
+                supported_scrapes
+            }
+        }
+    }
+    """
+    result = callGraphQL(query)
+    return result.get("listSceneScrapers")
 
 
 def scrape_SceneURL(url: str) -> dict:
