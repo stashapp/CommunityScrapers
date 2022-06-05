@@ -26,7 +26,6 @@ def check_datelist(file: str, days=7):
     filetime = datetime.fromtimestamp(os.path.getmtime(file))
     if filetime < days_ago:
         log.debug(f"{file} is older than {days} day(s) ({filetime})")
-        # file older than
         return True
     return False
 
