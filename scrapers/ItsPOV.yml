@@ -2,10 +2,10 @@ name: It's POV
 sceneByURL:
   - action: scrapeXPath
     url:
-      - itspov.com/en/videos
       - backdoorpov.com/en/videos
       - feetishpov.com/en/videos
       - intimatepov.com/en/videos
+      - itspov.com/en/videos
       - officepov.com/en/videos
       - petitepov.com/en/videos
       - schoolpov.com/en/videos
@@ -17,22 +17,21 @@ xPathScrapers:
       Title: //div[@id="freetour-video-view"]/h1/text()
       Details: //div[@id="story"]
       Tags:
-        Name: //div[@id="freetour-video-view-details"]/div[1]/p[3]/a/text()
+        Name: //p[@class="categories"]//a/text()
       Performers:
-        Name: //div[@id="freetour-video-view-details"]/div[1]/p[2]/a/text()
+        Name: //p[@class="starring"]//a/text()
       Studio:
         Name:
-          selector: /html/head/title/text()
+          selector: //img[contains(@class,"FreeTourHeader_site-logo")]/@alt
           postProcess:
             - replace:
-              - regex: ^.+ - (.+)\.com$
+              - regex: \.com$
                 with: $1
-      Image: //div[@id="freetour-video-view-video"]/div/div[2]/picture/source/@srcset
+      Image: //div[@id="freetour-video-view-video"]//picture/source[1]/@srcset
 driver:
   useCDP: true
   cookies:
-    - CookieURL: "https://itspov.com"
-      Cookies:
+    - Cookies:
         - Name: "gen_disclaimer"
           Domain: ".itspov.com"
           Value: "1"
@@ -41,8 +40,7 @@ driver:
           Domain: ".itspov.com"
           Value: "1"
           Path: "/"
-    - CookieURL: "https://backdoorpov.com"
-      Cookies:
+    - Cookies:
         - Name: "gen_disclaimer"
           Domain: ".backdoorpov.com"
           Value: "1"
@@ -51,8 +49,7 @@ driver:
           Domain: ".backdoorpov.com"
           Value: "1"
           Path: "/"
-    - CookieURL: "https://feetishpov.com"
-      Cookies:
+    - Cookies:
         - Name: "gen_disclaimer"
           Domain: ".feetishpov.com"
           Value: "1"
@@ -61,8 +58,7 @@ driver:
           Domain: ".feetishpov.com"
           Value: "1"
           Path: "/"
-    - CookieURL: "https://intimatepov.com"
-      Cookies:
+    - Cookies:
         - Name: "gen_disclaimer"
           Domain: ".intimatepov.com"
           Value: "1"
@@ -71,8 +67,7 @@ driver:
           Domain: ".intimatepov.com"
           Value: "1"
           Path: "/"
-    - CookieURL: "https://officepov.com"
-      Cookies:
+    - Cookies:
         - Name: "gen_disclaimer"
           Domain: ".officepov.com"
           Value: "1"
@@ -81,8 +76,7 @@ driver:
           Domain: ".officepov.com"
           Value: "1"
           Path: "/"
-    - CookieURL: "https://petitepov.com"
-      Cookies:
+    - Cookies:
         - Name: "gen_disclaimer"
           Domain: ".petitepov.com"
           Value: "1"
@@ -91,8 +85,7 @@ driver:
           Domain: ".petitepov.com"
           Value: "1"
           Path: "/"
-    - CookieURL: "https://schoolpov.com"
-      Cookies:
+    - Cookies:
         - Name: "gen_disclaimer"
           Domain: ".schoolpov.com"
           Value: "1"
@@ -101,8 +94,7 @@ driver:
           Domain: ".schoolpov.com"
           Value: "1"
           Path: "/"
-    - CookieURL: "https://steppov.com"
-      Cookies:
+    - Cookies:
         - Name: "gen_disclaimer"
           Domain: ".steppov.com"
           Value: "1"
@@ -111,4 +103,4 @@ driver:
           Domain: ".steppov.com"
           Value: "1"
           Path: "/"
-# Last Updated June 01, 2022
+# Last Updated June 05, 2022
