@@ -1,11 +1,16 @@
-name: +AnyScraper
+name: +FindScraper
 sceneByURL:
   - action: script
     url:
       - .
     script:
       - python
-      - +AnyScraper.py
+      - +FindScraper.py
       - url
-
+#sceneByFragment:
+#    action: script
+#    script:
+#      - python
+#      - +FindScraper.py
+#      - url
 # Last Updated May 23, 2022
