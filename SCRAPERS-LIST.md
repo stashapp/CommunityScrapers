@@ -1001,6 +1001,7 @@ sexlikereal.com|SexLikeReal.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexmex.xxx|SexMex.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 sexmywife.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexsee.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+sexselector.com|SexSelector.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexuallybroken.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexvr.com|SexVR.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 sexwithmuslims.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
