@@ -143,6 +143,11 @@ xPathScrapers:
             # Fix special cases
             - map:
                 Daddys Lil Angel: Daddy's Lil Angel
+                Im Not Your Mommy: I'm Not Your Mommy
+                Moms Boy Toy: Mom's Boy Toy
+                Moms Family Secrets: Mom's Family Secrets
+                Moms Tight: Mom's Tight
+                
                 Nubiles ET: NubilesET
       Tags: &tagsAttr
         Name: //div[@class="categories"]/a/text()
@@ -226,4 +231,4 @@ xPathScrapers:
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
 
-# Last Updated March 18, 2022
+# Last Updated June 06, 2022
