@@ -22,9 +22,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .+(pg\d+)
-                with: $1/poster/${1}_01_2160.jpg
-              - regex: ^
-                with: "https://sm-members.bangbros.com/shoots/sexselector/"
+                with: https://sm-members.bangbros.com/shoots/sexselector/$1/poster/${1}_01_2160.jpg
       Studio:
         Name:
             fixed: Sex Selector
