@@ -6,6 +6,7 @@ import sys
 import time
 import re
 import random
+import requests
 from urllib.parse import urlparse
 # extra modules below need to be installed
 try:
@@ -418,7 +419,10 @@ def performer_query(query):
 def scrape(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
-        scraped = scraper.get(url, timeout=(3,7))
+        scraped = scraper.get(url, timeout=(3,3))
+    except requests.exceptions.Timeout as exc_time:
+        log.debug(f"Timeout: {exc_time}")
+        return scrape(url, retries+1)
     except Exception as e:
         log.error(f"scrape error {e}")
         sys.exit(1)
@@ -435,7 +439,10 @@ def scrape(url, retries=0):
 def scrape_image(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
-        scraped = scraper.get(url, timeout=(3,7))
+        scraped = scraper.get(url, timeout=(3,3))
+    except requests.exceptions.Timeout as exc_time:
+        log.debug(f"Timeout: {exc_time}")
+        return scrape_image(url, retries+1)
     except Exception as e:
         log.debug(f"scrape error {e}")
         return None
