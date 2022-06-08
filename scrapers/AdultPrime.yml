@@ -1,0 +1,30 @@
+name: "AdultPrime"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - adultprime.com/studios/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[contains(@class,"update-info-title")]/text()
+      Details: //p[contains(@class,"ap-limited-description-text")]/text()
+      Date:
+        selector: //p[@class="update-info-line regular"][position()=1]/b[position()=1]/text()
+        postProcess:
+          - parseDate: 02.01.2006
+      Image:
+        selector: //div[starts-with(@style,"background-image:")]/@style
+        postProcess:
+          - replace:
+              - regex: .+url\((.+)\).+
+                with: $1
+      Studio: 
+        Name: //p[contains(@class,"update-info-line")]/b/a[contains(@href,"/studio/")]/text()
+      Tags:
+        Name:
+          selector: //p[@class="update-info-line regular hidden-xs"]/text()
+          split: ", "
+      Performers:
+        Name: //p[@class="update-info-line regular"]/a[contains(@href, "/signup?")]/text()
+# Last Updated 2022-06-08
