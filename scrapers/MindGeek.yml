@@ -69,7 +69,6 @@ xPathScrapers:
   sceneScraper:
     common:
       $section: //div[contains(@class,"tg5e7m")]/ancestor::section
-      #Not working: twistys
     scene:
       Title: $section//h1/text()|$section//h2/text()
       Date:
