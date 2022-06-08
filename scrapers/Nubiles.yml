@@ -17,7 +17,15 @@ sceneByURL:
       - detentiongirls.com/video/watch/
       - driverxxx.com/video/watch/
       - familyswap.xxx/video/watch/
+      - imnotyourmommy.com/video/watch/
+      - momlover.com/video/watch/
+      - momsboytoy.com/video/watch/
+      - momsfamilysecrets.com/video/watch/
       - momsteachsex.com/video/watch/
+      - momstight.com/video/watch/
+      - momswapped.com/video/watch/
+      - momwantscreampie.com/video/watch/
+      - momwantstobreed.com/video/watch/
       - myfamilypies.com/video/watch/
       - nubiles-casting.com/video/watch/
       - nubiles-porn.com/video/watch/
@@ -57,11 +65,20 @@ galleryByURL:
     url:
       - badteenspunished.com/photo/gallery/
       - bountyhunterporn.com/photo/gallery/
+      - brattymilf.com/photo/gallery/
       - daddyslilangel.com/photo/gallery/
       - detentiongirls.com/photo/gallery/
       - driverxxx.com/photo/gallery/
       - familyswap.xxx/photo/gallery/
+      - imnotyourmommy.com/photo/gallery/
+      - momlover.com/photo/gallery/
+      - momsboytoy.com/photo/gallery/
+      - momsfamilysecrets.com/photo/gallery/
       - momsteachsex.com/photo/gallery/
+      - momstight.com/photo/gallery/
+      - momswapped.com/photo/gallery/
+      - momwantscreampie.com/photo/gallery/
+      - momwantstobreed.com/photo/gallery/
       - myfamilypies.com/photo/gallery/
       - nubiles-casting.com/photo/gallery/
       - nubiles-porn.com/photo/gallery/
@@ -73,6 +90,7 @@ galleryByURL:
       - princesscum.com/photo/gallery/
       - stepsiblingscaught.com/photo/gallery/
       - teacherfucksteens.com/photo/gallery/
+      - youngermommy.com/photo/gallery/
 
   # Nubile Films sites
   - action: scrapeXPath
@@ -125,6 +143,11 @@ xPathScrapers:
             # Fix special cases
             - map:
                 Daddys Lil Angel: Daddy's Lil Angel
+                Im Not Your Mommy: I'm Not Your Mommy
+                Moms Boy Toy: Mom's Boy Toy
+                Moms Family Secrets: Mom's Family Secrets
+                Moms Tight: Mom's Tight
+                
                 Nubiles ET: NubilesET
       Tags: &tagsAttr
         Name: //div[@class="categories"]/a/text()
@@ -208,4 +231,4 @@ xPathScrapers:
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
 
-# Last Updated March 18, 2022
+# Last Updated June 06, 2022
