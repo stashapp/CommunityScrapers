@@ -109,4 +109,4 @@ xPathScrapers:
 driver:
   useCDP: true
   sleep: 5
-# Last Updated January 17, 2021
+# Last Updated June 08, 2022
