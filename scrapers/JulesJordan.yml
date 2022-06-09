@@ -9,6 +9,16 @@ sceneByURL:
       - spermswallowers.com/
     scraper: sceneScraper
 
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/
+      - girlgirl.com/
+      - manuelferrara.com/
+      - theassfactory.com/
+      - spermswallowers.com/
+    scraper: sceneScraper
+
 performerByURL:
   - action: scrapeXPath
     url:
@@ -26,20 +36,35 @@ xPathScrapers:
     common:
       $details: //div[@class="backgroundcolor_info"]
       $galinfo: //div[@class="gallery_info"]
+
     scene:
-      Title: //div[@class="title_bar"]/span/text()
-      Date:
+      Title: &titleAttr
+        selector: //div[@class="title_bar"]/span/text()
+      Date: &dateAttr
         selector: $details//div[@class="cell update_date"]/text()
         postProcess:
           - parseDate: 01/02/2006
-      Details:
+      Details: &detailsAttr
         selector: $details//span[@class="update_description"]/text()
         concat: " "
-      Tags:
+      Tags: &tagsAttr
         Name: //span[@class="update_tags"]/a/text()
-      Performers:
+      Performers: &performersAttr
         Name: $details//span[@class="update_models"]/a/text()|$galinfo//span[@class="update_models"]/div/a/text()
         URL: $details//span[@class="update_models"]/a/@href|$galinfo//span[@class="update_models"]/div/a/@href
+      Studio: &studioAttr
+        Name:
+          selector: //base/@href
+          postProcess:
+            - replace:
+               - regex: (.+\/\/|www.|\..+)
+                 with: 
+            - map:
+               julesjordan: Jules Jordan
+               girlgirl: Girl Girl
+               manuelferrara: Manuel Ferrara
+               theassfactory: The Ass Factory
+               spermswallowers: Sperm Swallowers
       Movies:
         Name: $details//span[@class="update_dvds"]/a/text()
         URL: $details//span[@class="update_dvds"]/a/@href
@@ -51,6 +76,14 @@ xPathScrapers:
               with: $1
             - regex: (^\/)
               with: https://www.julesjordan.com/
+
+    gallery:
+      Title: *titleAttr
+      Date: *dateAttr
+      Details: *detailsAttr
+      Tags: *tagsAttr
+      Performers: *performersAttr
+      Studio: *studioAttr
 
   performerScraper:
     performer:
@@ -95,4 +128,4 @@ xPathScrapers:
       FrontImage: //div[@class="front"]/a/img/@src0_3x
       BackImage: //div[@class="back"]/a/img/@src0_3x
 
-# Last Updated November 21, 2020
+# Last Updated June 09, 2022
