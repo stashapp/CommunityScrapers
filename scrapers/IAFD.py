@@ -6,8 +6,15 @@ import sys
 import time
 import re
 import random
+import requests
 from urllib.parse import urlparse
 # extra modules below need to be installed
+try:
+    import py_common.log as log
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
+
 try:
     import cloudscraper
 except ModuleNotFoundError:
@@ -386,12 +393,6 @@ stash_date = '%Y-%m-%d'
 iafd_date = '%B %d, %Y'
 iafd_date_scene = '%b %d, %Y'
 
-def log(*s):
-    print(*s, file=sys.stderr)
-    sys.exit(1)
-
-def debug_print(*s):
-    print(*s, file=sys.stderr)
 
 def strip_end(text, suffix):
     if suffix and text.endswith(suffix):
@@ -411,7 +412,7 @@ def performer_query(query):
         performers.append(p)
     print(json.dumps(performers))
     if not performers:
-        log("<no performers> found")
+        log.warning("<no performers> found")
     sys.exit(0)
  
 
@@ -419,26 +420,34 @@ def scrape(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
         scraped = scraper.get(url, timeout=(3,7))
+    except requests.exceptions.Timeout as exc_time:
+        log.debug(f"Timeout: {exc_time}")
+        return scrape(url, retries+1)
     except Exception as e:
-        log("scrape error %s" % e)
+        log.error(f"scrape error {e}")
+        sys.exit(1)
     if scraped.status_code >= 400:
         if retries < 10:
-            debug_print('HTTP Error: %s' % scraped.status_code)
+            log.debug(f'HTTP Error: {scraped.status_code}')
             time.sleep(random.randint(1, 4))
             return scrape(url, retries+1)
         else:
-            log('HTTP Error: %s' % scraped.status_code)
+            log.error(f'HTTP Error: {scraped.status_code}')
+            sys.exit(1)
     return html.fromstring(scraped.content)
 
 def scrape_image(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
-        scraped = scraper.get(url, timeout=(3,7))
+        scraped = scraper.get(url, timeout=(3,5))
+    except requests.exceptions.Timeout as exc_time:
+        log.debug(f"Timeout: {exc_time}")
+        return scrape_image(url, retries+1)
     except Exception as e:
-        debug_print("scrape error %s" %e )
+        log.debug(f"scrape error {e}")
         return None
     if scraped.status_code >= 400:
-        debug_print('HTTP Error: %s' % scraped.status_code)
+        log.debug(f'HTTP Error: {scraped.status_code}')
         if retries < 10:
             time.sleep(random.randint(1, 4))
             return scrape_image(url, retries+1)
@@ -540,13 +549,13 @@ def performer_from_tree(tree):
     performer_image_url = tree.xpath('//div[@id="headshot"]//img/@src')
     if performer_image_url:
         try:
-            debug_print("downloading image from %s" % performer_image_url[0] )
+            log.debug(f"downloading image from {performer_image_url[0]}")
             p.images = [scrape_image(performer_image_url[0])]
         except Exception as e:
-            debug_print("error downloading image %s" %e)
+            log.debug(f"error downloading image {e}")
 
     res = p.to_json()
-    #debug_print(res)
+    #log.debug(res)
     print(res)
     sys.exit(0)
 
@@ -609,16 +618,16 @@ def movie_from_tree(tree):
 
     res = m.to_json()
     print(res)
-    #debug_print(res)
+    #log.debug(res)
     sys.exit(0)
 
 frag = json.loads(sys.stdin.read())
-#debug_print(json.dumps(frag))
+#log.debug(json.dumps(frag))
 mode = "performer"
 
 if len(sys.argv)>1:
    if sys.argv[1] == "query":
-        debug_print("searching for <%s>" % frag['name'] )
+        log.debug(f"searching for <{frag['name']}>")
         performer_query(frag['name'])
    if sys.argv[1] == "movie":
         mode = "movie"
@@ -626,10 +635,11 @@ if len(sys.argv)>1:
         mode = "scene"
 
 if not frag['url']:
-    log('No URL entered.')
+    log.error('No URL entered.')
+    sys.exit(1)
 
 url = frag["url"]
-debug_print("scraping %s" % url)
+log.debug(f"scraping {url}")
 random.seed()
 tree = scrape(url)
 
