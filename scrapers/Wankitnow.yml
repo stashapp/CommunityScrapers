@@ -13,6 +13,7 @@ xPathScrapers:
           - replace:
               - regex: .*\x{201C}(.*).
                 with: $1
+      URL: //link[@rel="canonical"]/@href
       Performers:
         Name: //span[@class="meta_modelcategory meta_category"]//a
       Details: //div[@class="post_excerpt"]/p
