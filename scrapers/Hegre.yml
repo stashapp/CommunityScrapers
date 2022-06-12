@@ -30,7 +30,7 @@ xPathScrapers:
       Title: //meta[@property="og:title"]/@content
       Details:
         selector: |
-          //div[@class="film-subtitle translated-text"]/text()
+          //div[contains(@class,"film-subtitle")]/text()
           |//div[@class="record-details-column"]//div[contains(@class, "massage-")]//text()
           |//div[@class="film-header"]/div[@class="intro"]//text()
         concat: "\n\n"
