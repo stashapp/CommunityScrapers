@@ -1,0 +1,54 @@
+name: "MomLover"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - momlover.com/video/watch/
+      - momstight.com/video/watch/
+      - brattymilf.com/video/watch/
+      - imnotyourmommy.com/video/watch/
+      - momswapped.com/video/watch/
+      - momwantscreampie.com/video/watch/
+      - momsboytoy.com/video/watch/
+      - momsfamilysecrets.com/video/watch/
+      - momwantstobreed.com/video/watch/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="col-12 col-md-7 col-lg-5 content-pane-title"]/h2/text()
+      Date:
+        selector: //span[@class="date"]/text()[1]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: //div[@class="collapse content-pane-description"]/p/text()[1]
+      Tags:
+        Name: //div[@class="categories"]/a/text()
+      Performers:
+        Name: //div[@class="content-pane-performers"]/a/text()
+      Studio:
+        Name:
+          selector: //a[@class="site-link"]/text()
+          postProcess:
+            - replace:
+                - regex: (.+?)\.(com|xxx)
+                  with: $1
+                # 'StepSiblingsCaught' => 'Step Siblings Caught'
+                - regex: ([a-z])-?([A-Z])
+                  with: $1 $2
+                # 'Petite HDPorn' => 'Petite HD Porn'
+                - regex: ([A-Z]+)(Porn)
+                  with: $1 $2
+            - map:
+                Moms Tight: Mom's Tight
+                Im Not Your Mommy: I'm Not Your Mommy
+                Moms Boy Toy: Mom's Boy Toy
+                Moms Family Secrets: Mom's Family Secrets
+
+      Image:
+        selector: //img[@class="fake-video-player-cover"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+
+# Last Updated June 12, 2022
