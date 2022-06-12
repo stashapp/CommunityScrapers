@@ -419,7 +419,7 @@ def performer_query(query):
 def scrape(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
-        scraped = scraper.get(url, timeout=(3,3))
+        scraped = scraper.get(url, timeout=(3,7))
     except requests.exceptions.Timeout as exc_time:
         log.debug(f"Timeout: {exc_time}")
         return scrape(url, retries+1)
@@ -439,7 +439,7 @@ def scrape(url, retries=0):
 def scrape_image(url, retries=0):
     scraper = cloudscraper.create_scraper()
     try:
-        scraped = scraper.get(url, timeout=(3,3))
+        scraped = scraper.get(url, timeout=(3,5))
     except requests.exceptions.Timeout as exc_time:
         log.debug(f"Timeout: {exc_time}")
         return scrape_image(url, retries+1)
