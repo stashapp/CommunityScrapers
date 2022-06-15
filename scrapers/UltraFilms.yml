@@ -8,7 +8,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //meta[@property="og:title"]/@content
+      Title: //div[@class="title-block box-shadow"]//text()
       Image: //meta[@property="og:image"]/@content
       Date:
         selector: //*[@id="video-date"]/text()
@@ -29,5 +29,5 @@ xPathScrapers:
       URL: //meta[@property="og:url"]/@content
       Studio:
         Name:
-          fixed: UltraFilms
-# Last Updated January 12, 2022
+          fixed: Ultra Films
+# Last Updated June 11, 2022
