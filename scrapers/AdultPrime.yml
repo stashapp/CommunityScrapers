@@ -8,9 +8,8 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h2[contains(@class,"update-info-title")]/text()
-      Details: //p[contains(@class,"ap-limited-description-text")]/text()
       Date:
-        selector: //p[@class="update-info-line regular"][position()=1]/b[position()=1]/text()
+        selector: //p[@class="update-info-line regular"][1]/b/text()
         postProcess:
           - parseDate: 02.01.2006
       Image:
@@ -23,7 +22,7 @@ xPathScrapers:
         Name: //p[contains(@class,"update-info-line")]/b/a[contains(@href,"/studio/")]/text()
       Tags:
         Name:
-          selector: //p[@class="update-info-line regular hidden-xs"]/text()
+          selector: //p[contains(@class,"update-info-line regular")][contains(b,"Niches:")]/text()
           split: ", "
       Performers:
         Name: //p[@class="update-info-line regular"]/a[contains(@href, "/signup?")]/text()
