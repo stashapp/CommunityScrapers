@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - hegre.com/movies
+      - hegre.com/films
       - hegre.com/massage
       - hegre.com/sexed
     scraper: sceneScraper
@@ -29,7 +30,7 @@ xPathScrapers:
       Title: //meta[@property="og:title"]/@content
       Details:
         selector: |
-          //div[@class="film-subtitle"]/text()
+          //div[contains(@class,"film-subtitle")]/text()
           |//div[@class="record-details-column"]//div[contains(@class, "massage-")]//text()
           |//div[@class="film-header"]/div[@class="intro"]//text()
         concat: "\n\n"
@@ -113,4 +114,7 @@ xPathScrapers:
           - replace:
               - regex: \d{3}x
                 with: 640x
-# Last Updated April 05, 2022
+      Details:
+        selector: //div[@class="description translated-text"]//child::text()
+        concat: "\n\n"
+# Last Updated June 11, 2022
