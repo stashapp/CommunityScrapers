@@ -1,57 +1,80 @@
+"""JAVLibrary/R18 python scraper"""
 import base64
-import datetime
 import json
 import re
 import sys
 import threading
-import time
 from urllib.parse import urlparse
 
 try:
-    import lxml.html 
+    from py_common import log
 except ModuleNotFoundError:
-    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml", file=sys.stderr)
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
+
+try:
+    import lxml.html
+except ModuleNotFoundError:
+    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)",
+     file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml",
+     file=sys.stderr)
     sys.exit()
 
 try:
     import requests
 except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)",
+     file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests",
+     file=sys.stderr)
     sys.exit()
 
+
+# GLOBAL VAR ######
+JAV_DOMAIN = "Check"
+###################
+
+JAV_SEARCH_HTML = None
+R18_SEARCH_HTML = None
+JAV_MAIN_HTML = None
+R18_MAIN_HTML = None
+PROTECTION_CLOUDFLARE = False
+
 R18_HEADERS = {
-    "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+    "User-Agent":
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
     "Referer": "https://www.r18.com/"
 }
 JAV_HEADERS = {
-    "User-Agent": 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+    "User-Agent":
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
     "Referer": "http://www.javlibrary.com/"
 }
-# Print debug message
-DEBUG_MODE = True
+# Print extra debug messages
+DEBUG_MODE = False
 # We can't add movie image atm in the same time as Scene
 STASH_SUPPORTED = False
-# Tags you don't want to see appear in Scraper window
-IGNORE_TAGS = ["Features Actress", "Digital Mosaic", "Hi-Def", "Risky Mosaic",
-               "Beautiful Girl", "Blu-ray", "Featured Actress", "VR Exclusive", "MOODYZ SALE 4",
-               "Girl","Tits"]
+# Tags you don't want to scrape
+IGNORE_TAGS = [
+    "Features Actress", "Hi-Def", "Beautiful Girl", "Blu-ray",
+    "Featured Actress", "VR Exclusive", "MOODYZ SALE 4", "Girl", "Tits"
+]
 # Some performers don't need to be reversed
 IGNORE_PERF_REVERSE = ["Lily Heart"]
 
-# Tag you always want in Scraper window
+# Tags you want to be added in every scrape
 FIXED_TAGS = ""
-# Take Javlibrary and R18 tags
+# Get both Javlibrary and R18 tags
 BOTH_TAGS = False
 # Split tags if they contain [,·] ('Best, Omnibus' -> 'Best','Omnibus')
 SPLIT_TAGS = False
 
-# Don't care about getting the Aliases (Japanese Name)
+# Don't fetch the Aliases (Japanese Name)
 IGNORE_ALIASES = False
-# Always wait for the aliases or you are not sure to have it. (Depends if request are quick)
+# Always wait for the aliases to load. (Depends on network response)
 WAIT_FOR_ALIASES = False
-# All javlib site
+# All javlib sites
 SITE_JAVLIB = ["javlibrary", "o58c", "e59f"]
 
 BANNED_WORDS = {
@@ -207,55 +230,72 @@ BANNED_WORDS = {
 }
 
 
-def debug(q):
-    q = str(q)
-    if "[DEBUG]" in q and DEBUG_MODE == False:
+def debug(to_print):
+    """debug only prints using log.debug if DEBUG_MODE is set to True"""
+    if DEBUG_MODE is False:
         return
-    print(q, file=sys.stderr)
+    log.debug(to_print)
 
 
 def checking_protection(url):
-    global protection_cloudflare
-    
+    global PROTECTION_CLOUDFLARE
+
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
-    debug("[DEBUG] === Checking Status of Javlib site ===")
-    protection_cloudflare = False
+    debug("=== Checking Status of Javlib site ===")
+    PROTECTION_CLOUDFLARE = False
     for site in SITE_JAVLIB:
         url_n = url.replace(url_domain, site)
-        response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
+        try:
+            response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
+        except Exception as exc_req:
+            log.warning(f"Exception error {exc_req} while checking protection for {site}")
+            return None, None
         if response.url == "https://www.javlib.com/maintenance.html":
-            debug("[{}] Maintenance".format(site))
-        if "Why do I have to complete a CAPTCHA?" in response.text or "Checking your browser before accessing" in response.text:
-            debug("[{}] Protected by Cloudflare".format(site))
-            protection_cloudflare = True
+            log.error(f"[{site}] Maintenance")
+        if "Why do I have to complete a CAPTCHA?" in response.text \
+            or "Checking your browser before accessing" in response.text:
+            log.error(f"[{site}] Protected by Cloudflare")
+            PROTECTION_CLOUDFLARE = True
         elif response.status_code != 200:
-            debug("[{}] Other issue ({})".format(site, response.status_code))
+            log.error(f"[{site}] Other issue ({response.status_code})")
         else:
-            debug("[{}] Using this site for scraping ({})".format(site, response.status_code))
-            debug("[DEBUG] ======================================")
+            log.info(
+                    f"[{site}] Using this site for scraping ({response.status_code})"
+                )
+            debug("======================================")
             return site, response
-    debug("[DEBUG] ======================================")
+    debug("======================================")
     return None, None
 
 
-def sendRequest(url, head):
-    global jav_domain
+def send_request(url, head, retries=0):
+    if retries > 10:
+        log.warning(f"Scrape for {url} failed after retrying")
+        return None
+
+    global JAV_DOMAIN
 
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     response = None
     if url_domain in SITE_JAVLIB:
         # Javlib
-        if jav_domain == "Check":
-            jav_domain, response = checking_protection(url)
+        if JAV_DOMAIN == "Check":
+            JAV_DOMAIN, response = checking_protection(url)
             if response:
                 return response
-        if jav_domain is None:
+        if JAV_DOMAIN is None:
             return None
-        url = url.replace(url_domain,jav_domain)
-    debug("[DEBUG][{}] Request URL: {}".format(threading.get_ident(), url))
-    response = requests.get(url, headers=head, timeout=10)
+        url = url.replace(url_domain, JAV_DOMAIN)
+    debug(f"[{threading.get_ident()}] Request URL: {url}")
+    try:
+        response = requests.get(url, headers=head, timeout=10)
+    except requests.exceptions.Timeout as exc_timeout:
+        log.warning(f"Timed out {exc_timeout}")
+        return send_request(url, head, retries+1)
+    except Exception as exc_req:
+        log.error(f"scrape error exception {exc_req}")
     if response.status_code != 200:
-        debug("[Request] Error, Status Code: {}".format(response.status_code))
+        debug(f"[Request] Error, Status Code: {response.status_code}")
         response = None
     return response
 
@@ -264,117 +304,130 @@ def replace_banned_words(matchobj):
     word = matchobj.group(0)
     if word in BANNED_WORDS:
         return BANNED_WORDS[word]
-    else:
-        return word
+    return word
 
 
-def regexreplace(input):
-    word_pattern = re.compile('(\w|\*)+')
-    output = word_pattern.sub(replace_banned_words, input)
+def regexreplace(input_replace):
+    word_pattern = re.compile(r'(\w|\*)+')
+    output = word_pattern.sub(replace_banned_words, input_replace)
     return re.sub(r"[\[\]\"]", "", output)
 
 
 def getxpath(xpath, tree):
-    xPath_result = []
-    # It handle the union strangely so it better to split and do one by one
+    xpath_result = []
+    # It handles the union strangely so it is better to split and get one by one
     if "|" in xpath:
         for xpath_tmp in xpath.split("|"):
-            xPath_result.append(tree.xpath(xpath_tmp))
-        xPath_result = [val for sublist in xPath_result for val in sublist]
+            xpath_result.append(tree.xpath(xpath_tmp))
+        xpath_result = [val for sublist in xpath_result for val in sublist]
     else:
-        xPath_result = tree.xpath(xpath)
-    #debug("xPATH: {}".format(xpath))
-    #debug("raw xPATH result: {}".format(xPath_result))
+        xpath_result = tree.xpath(xpath)
+    #debug(f"xPATH: {xpath}")
+    #debug(f"raw xPATH result: {xpath_result}")
     list_tmp = []
-    for a in xPath_result:
-        # for xpath that don't end with /text()
-        if type(a) is lxml.html.HtmlElement:
-            list_tmp.append(a.text_content().strip())
+    for x_res in xpath_result:
+        # for xpaths that don't end with /text()
+        if isinstance(x_res,lxml.html.HtmlElement):
+            list_tmp.append(x_res.text_content().strip())
         else:
-            list_tmp.append(a.strip())
+            list_tmp.append(x_res.strip())
     if list_tmp:
-        xPath_result = list_tmp
-    xPath_result = list(filter(None, xPath_result))
-    return xPath_result
+        xpath_result = list_tmp
+    xpath_result = list(filter(None, xpath_result))
+    return xpath_result
 
 
 # SEARCH PAGE
 
 
 def r18_search(html, xpath):
-    r18_search_tree = lxml.html.fromstring(html.content)
-    r18_search_url = getxpath(xpath['url'], r18_search_tree)
-    r18_search_serie = getxpath(xpath['series'], r18_search_tree)
-    r18_search_scene = getxpath(xpath['scene'], r18_search_tree)
-    # There is only 1 scene, with serie.
-    # Could be useful is the movie already exist in Stash because you only need the name.
-    if len(r18_search_scene) == 1 and len(r18_search_serie) == 1 and len(r18_search_url) == 1:
-        r18_result["series_name"] = r18_search_serie
-    if r18_search_url:
-        r18_search_url = r18_search_url[0]
-        r18_id = re.match(r".+id=(.+)/.*", r18_search_url)
-        if r18_id:
-            SCENE_URL = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
-            debug("[DEBUG] Using API URL: {}".format(SCENE_URL))
-            r18_main_html = sendRequest(SCENE_URL, R18_HEADERS)
-        else:
-            debug("[WARN] Can't find the 'id=' in the URL: {}".format(r18_search_url))
-            return None
-        return r18_main_html
-    else:
-        debug("[R18] There is no result in search")
+    if html is None:
         return None
+    search_tree = lxml.html.fromstring(html.content)
+    search_url = getxpath(xpath['url'], search_tree)
+    search_serie = getxpath(xpath['series'], search_tree)
+    search_scene = getxpath(xpath['scene'], search_tree)
+    # There is only 1 scene, with serie.
+    # Could be useful if the movie already exists in Stash because you only need the name.
+    if len(search_scene) == 1 and len(search_serie) == 1 and len(
+            search_url) == 1:
+        r18_result["series_name"] = search_serie
+    if search_url:
+        search_url = search_url[0]
+        search_id = re.match(r".+id=(.+)/.*", search_url)
+        if search_id:
+            scene_url = f"https://www.r18.com/api/v4f/contents/{search_id.group(1)}?lang=en"
+            log.debug(f"Using API URL: {scene_url}")
+            main_html = send_request(scene_url, R18_HEADERS)
+            return main_html
+        log.warning(f"Can't find the 'id=' in the URL: {search_url}")
+        return None
+    debug("[R18] There is no result in search")
+    return None
 
 
 def jav_search(html, xpath):
     if "/en/?v=" in html.url:
-        debug("[DEBUG] Directly the movie page ({})".format(html.url))
+        debug(f"Using the provided movie page ({html.url})")
         return html
     jav_search_tree = lxml.html.fromstring(html.content)
     jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
     if jav_url:
         url_domain = urlparse(html.url).netloc
-        jav_url = re.sub(r"^\.", "https://{}/en".format(url_domain), jav_url[0])
-        jav_main_html = sendRequest(jav_url, JAV_HEADERS)
-        return jav_main_html
-    else:
-        debug("[JAV] There is no result in search")
-        return None
+        jav_url = re.sub(r"^\.", f"https://{url_domain}/en", jav_url[0])
+        log.debug(f"Using API URL: {jav_url}")
+        main_html = send_request(jav_url, JAV_HEADERS)
+        return main_html
+    log.debug("[JAV] There is no result in search")
+    return None
 
-def jav_search_byName(html, xpath):
+
+def jav_search_by_name(html, xpath):
     jav_search_tree = lxml.html.fromstring(html.content)
     jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
     jav_title = getxpath(xpath['title'], jav_search_tree)
-    jav_image = getxpath(xpath['image'], jav_search_tree)  # //pics.dmm.co.jp/mono/movie/adult/13gvh029/13gvh029ps.jpg
-    debug("There is {} scene(s)".format(len(jav_url)))
+    jav_image = getxpath(
+        xpath['image'], jav_search_tree
+    )  # //pics.dmm.co.jp/mono/movie/adult/13gvh029/13gvh029ps.jpg
+    log.debug(f"There is/are {len(jav_url)} scene(s)")
     lst = []
-    for x in range(0,len(jav_url)):
-        lst.append({"title":jav_title[x],"url":"https://www.javlibrary.com/en/{}".format(jav_url[x].replace("./","")),"image":"https:{}".format(jav_image[x])})
+    for count, _ in enumerate(jav_url):
+        lst.append({
+            "title": jav_title[count],
+            "url":
+            f"https://www.javlibrary.com/en/{jav_url[count].replace('./', '')}",
+            "image": f"https:{jav_image[count]}"
+        })
     return lst
-    
+
+
 def buildlist_tagperf(data, type_scrape=""):
     list_tmp = []
     dict_jav = None
     if type_scrape == "perf_jav":
         dict_jav = data
         data = data["performers"]
-    for i in range(0, len(data)):
-        y = data[i]
-        if y == "":
+    for idx, data_value in enumerate(data):
+        p_name = data_value
+        if p_name == "":
             continue
         if type_scrape == "perf_jav":
-            if y not in IGNORE_PERF_REVERSE:
+            if p_name not in IGNORE_PERF_REVERSE:
                 # Invert name (Aoi Tsukasa -> Tsukasa Aoi)
-                y = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", y)
-        if type_scrape == "tags" and y in IGNORE_TAGS:
+                p_name = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", p_name)
+        if type_scrape == "tags" and p_name in IGNORE_TAGS:
             continue
         if type_scrape == "perf_jav" and dict_jav.get("performer_aliases"):
             try:
-                list_tmp.append({"name": y, "aliases": dict_jav["performer_aliases"][i], "gender":"FEMALE"})
+                list_tmp.append({
+                    "name": p_name,
+                    "aliases": dict_jav["performer_aliases"][idx],
+                    "gender": "FEMALE"
+                })
             except:
-                list_tmp.append({"name": y, "gender":"FEMALE"})
+                list_tmp.append({"name": p_name, "gender": "FEMALE"})
         else:
-            list_tmp.append({"name": y})
+            list_tmp.append({"name": p_name})
     # Adding personal fixed tags
     if FIXED_TAGS and type_scrape == "tags":
         list_tmp.append({"name": FIXED_TAGS})
@@ -384,179 +437,217 @@ def buildlist_tagperf(data, type_scrape=""):
 def th_request_perfpage(page_url, perf_url):
     # vl_star.php?s=afhvw
     #debug("[DEBUG] Aliases Thread: {}".format(threading.get_ident()))
-    javlibrary_ja_html = sendRequest(page_url.replace("/en/", "/ja/"), JAV_HEADERS)
+    javlibrary_ja_html = send_request(page_url.replace("/en/", "/ja/"),
+                                      JAV_HEADERS)
     if javlibrary_ja_html:
         javlibrary_perf_ja = lxml.html.fromstring(javlibrary_ja_html.content)
         list_tmp = []
         try:
-            for i in range(0, len(perf_url)):
-                list_tmp.append(javlibrary_perf_ja.xpath('//a[@href="' + perf_url[i] + '"]/text()')[0])
+            for p_v in perf_url:
+                list_tmp.append(
+                    javlibrary_perf_ja.xpath('//a[@href="' + p_v +
+                                             '"]/text()')[0])
             if list_tmp:
                 jav_result['performer_aliases'] = list_tmp
-                debug("[DEBUG] Got the aliases: {}".format(list_tmp))
+                debug(f"Got the aliases: {list_tmp}")
         except:
-            debug("[DEBUG] Error with the aliases")
+            debug("Error with the aliases")
     else:
-        debug("[DEBUG] Can't get the Jap HTML")
-    return
+        debug("Can't get the Jap HTML")
 
 
-def th_imagetoBase64(imageurl, typevar):
+def th_imageto_base64(imageurl, typevar):
     #debug("[DEBUG] {} thread: {}".format(typevar,threading.get_ident()))
     head = JAV_HEADERS
-    if typevar == "R18Series" or typevar == "R18":
+    if typevar in ("R18Series", "R18"):
         head = R18_HEADERS
-    if type(imageurl) is list:
-        for image_index in range(0, len(imageurl)):
+    if isinstance(imageurl,list):
+        for image_index, image_url in enumerate(imageurl):
             try:
-                img = requests.get(imageurl[image_index].replace("ps.jpg", "pl.jpg"), timeout=10, headers=head)
+                img = requests.get(image_url.replace(
+                    "ps.jpg", "pl.jpg"),
+                                   timeout=10,
+                                   headers=head)
                 if img.status_code != 200:
-                    debug("[Image] Got a bad request (status: {}) for <{}>".format(img.status_code,imageurl[image_index]))
+                    log.debug(
+                        "[Image] Got a bad request (status: "\
+                        f"{img.status_code}) for <{image_url}>"
+                    )
                     imageurl[image_index] = None
                     continue
-                base64image =  base64.b64encode(img.content)
-                imageurl[image_index] = "data:image/jpeg;base64," + base64image.decode('utf-8')
+                base64image = base64.b64encode(img.content)
+                imageurl[
+                    image_index] = "data:image/jpeg;base64," + base64image.decode(
+                        'utf-8')
             except:
-                debug("[DEBUG][{}] Failed to get the base64 of the image".format(typevar))
+                debug(
+                    f"[{typevar}] Failed to get the base64 of the image"
+                )
         if typevar == "R18Series":
             r18_result["series_image"] = imageurl
     else:
         try:
-            img = requests.get(imageurl.replace("ps.jpg", "pl.jpg"), timeout=10, headers=head)
+            img = requests.get(imageurl.replace("ps.jpg", "pl.jpg"),
+                               timeout=10,
+                               headers=head)
             if img.status_code != 200:
-                debug("[Image] Got a bad request (status: {}) for <{}>".format(img.status_code,imageurl))
+                log.debug(
+                    f"[Image] Got a bad request (status: {img.status_code}) for <{imageurl}>"
+                )
                 return
             base64image = base64.b64encode(img.content)
             if typevar == "JAV":
-                jav_result["image"] = "data:image/jpeg;base64," + base64image.decode('utf-8')
+                jav_result[
+                    "image"] = "data:image/jpeg;base64," + base64image.decode(
+                        'utf-8')
             if typevar == "R18":
-                r18_result["image"] = "data:image/jpeg;base64," + base64image.decode('utf-8')
-            debug("[DEBUG][{}] Converted the image to base64!".format(typevar))
+                r18_result[
+                    "image"] = "data:image/jpeg;base64," + base64image.decode(
+                        'utf-8')
+            debug(f"[{typevar}] Converted the image to base64!")
         except:
-            debug("[DEBUG][{}] Failed to get the base64 of the image".format(typevar))
+            debug(f"[{typevar}] Failed to get the base64 of the image")
     return
 
 
-#debug("[DEBUG] Main Thread: {}".format(threading.get_ident()))
+#debug(f"[DEBUG] Main Thread: {threading.get_ident()}")
 FRAGMENT = json.loads(sys.stdin.read())
 
 SEARCH_TITLE = FRAGMENT.get("name")
 SCENE_URL = FRAGMENT.get("url")
 
 if FRAGMENT.get("title"):
-    scene_title = FRAGMENT["title"]
+    SCENE_TITLE = FRAGMENT["title"]
     # Remove extension
-    scene_title = re.sub(r"\..{3}$", "", scene_title)
-    scene_title = re.sub(r"-JG\d", "", scene_title)
-    scene_title = re.sub(r"\s.+$", "", scene_title)
-    scene_title = re.sub(r"[ABCDEFGH]$", "", scene_title)
+    SCENE_TITLE = re.sub(r"\..{3}$", "", SCENE_TITLE)
+    SCENE_TITLE = re.sub(r"-JG\d", "", SCENE_TITLE)
+    SCENE_TITLE = re.sub(r"\s.+$", "", SCENE_TITLE)
+    SCENE_TITLE = re.sub(r"[ABCDEFGH]$", "", SCENE_TITLE)
 else:
-    scene_title = None
-# GLOBAL VAR ######
-jav_domain = "Check"
-###################
-
-jav_search_html = None
-r18_search_html = None
-jav_main_html = None
-r18_main_html = None
-protection_cloudflare = False
+    SCENE_TITLE = None
 
 if "validSearch" in sys.argv and SCENE_URL is None:
     sys.exit()
 
 if "searchName" in sys.argv:
-    debug("[DEBUG] Using search with Title: {}".format(SEARCH_TITLE))
-    jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(SEARCH_TITLE), JAV_HEADERS)
+    debug(f"Using search with Title: {SEARCH_TITLE}")
+    JAV_SEARCH_HTML = send_request(
+        f"https://www.javlibrary.com/en/vl_searchbyid.php?keyword={SEARCH_TITLE}",
+        JAV_HEADERS)
 else:
     if SCENE_URL:
         scene_domain = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc)
-        # Url from Javlib 
+        # Url from Javlib
         if scene_domain in SITE_JAVLIB:
-            debug("[DEBUG] Using URL: {}".format(SCENE_URL))
-            jav_main_html = sendRequest(SCENE_URL, JAV_HEADERS)
+            debug(f"Using URL: {SCENE_URL}")
+            JAV_MAIN_HTML = send_request(SCENE_URL, JAV_HEADERS)
         elif "r18.com" in SCENE_URL:
             r18_id = re.match(r".+id=(.+)/.*", SCENE_URL)
             if r18_id:
-                SCENE_URL = "https://www.r18.com/api/v4f/contents/{}?lang=en".format(r18_id.group(1))
-                debug("[DEBUG] Using API URL: {}".format(SCENE_URL))
-                r18_main_html = sendRequest(SCENE_URL, R18_HEADERS)
+                SCENE_URL = f"https://www.r18.com/api/v4f/contents/{r18_id.group(1)}?lang=en"
+                debug(f"Using API URL: {SCENE_URL}")
+                R18_MAIN_HTML = send_request(SCENE_URL, R18_HEADERS)
             else:
-                debug("[WARN] Can't find the 'id=' in the URL: {}".format(SCENE_URL))
+                log.warning(f"Can't find the 'id=' in the URL: {SCENE_URL}")
         else:
-            debug("[WARN] The URL is not from Javlib/R18 ({})".format(SCENE_URL))
-    if jav_main_html is None and r18_main_html is None and scene_title:
-        debug("[DEBUG] Using search with Title: {}".format(scene_title))
-        jav_search_html = sendRequest("https://www.javlibrary.com/en/vl_searchbyid.php?keyword={}".format(scene_title), JAV_HEADERS)
+            log.warning(f"The URL is not from Javlib/R18 ({SCENE_URL})")
+    if JAV_MAIN_HTML is None and R18_MAIN_HTML is None and SCENE_TITLE:
+        debug(f"Using search with Title: {SCENE_TITLE}")
+        JAV_SEARCH_HTML = send_request(
+            f"https://www.javlibrary.com/en/vl_searchbyid.php?keyword={SCENE_TITLE}",
+            JAV_HEADERS)
 
 # XPATH
 r18_xPath_search = {}
-r18_xPath_search['series'] = '//p[text()="TOP SERIES"]/following-sibling::ul//a/span[@class="item01"]/text()'
-r18_xPath_search['url'] = '//li[contains(@class,"item-list")]/a//img[string-length(@alt)=string-length(preceding::div[@class="genre01"]/span/text())]/ancestor::a/@href'
+r18_xPath_search[
+    'series'] = '//p[text()="TOP SERIES"]/following-sibling::ul//a/span[@class="item01"]/text()'
+r18_xPath_search[
+    'url'] = '//li[contains(@class,"item-list")]/a//img[string-length(@alt)'\
+        '=string-length(preceding::div[@class="genre01"]/span/text())]/ancestor::a/@href'
 r18_xPath_search['scene'] = '//li[contains(@class,"item-list")]'
 
 jav_xPath_search = {}
-jav_xPath_search['url'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@href'
-jav_xPath_search['title'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@title'
-jav_xPath_search['image'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]//img/@src'
+jav_xPath_search[
+    'url'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@href'
+jav_xPath_search[
+    'title'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]/@title'
+jav_xPath_search[
+    'image'] = '//div[@class="videos"]/div/a[not(contains(@title,"(Blu-ray"))]//img/@src'
 
 jav_xPath = {}
-jav_xPath["title"] = '//td[@class="header" and text()="ID:"]/following-sibling::td/text()'
+jav_xPath[
+    "title"] = '//td[@class="header" and text()="ID:"]/following-sibling::td/text()'
 jav_xPath["details"] = '//div[@id="video_title"]/h3/a/text()'
 jav_xPath["url"] = '//meta[@property="og:url"]/@content'
-jav_xPath["date"] = '//td[@class="header" and text()="Release Date:"]/following-sibling::td/text()'
-jav_xPath["tags"] = '//td[@class="header" and text()="Genre(s):"]/following::td/span[@class="genre"]/a/text()'
-jav_xPath["performers"] = '//td[@class="header" and text()="Cast:"]/following::td/span[@class="cast"]/span/a/text()'
-jav_xPath["performers_url"] = '//td[@class="header" and text()="Cast:"]/following::td/span[@class="cast"]/span/a/@href'
-jav_xPath["studio"] = '//td[@class="header" and text()="Maker:"]/following-sibling::td/span[@class="maker"]/a/text()'
+jav_xPath[
+    "date"] = '//td[@class="header" and text()="Release Date:"]/following-sibling::td/text()'
+jav_xPath[
+    "tags"] = '//td[@class="header" and text()="Genre(s):"]'\
+            '/following::td/span[@class="genre"]/a/text()'
+jav_xPath[
+    "performers"] = '//td[@class="header" and text()="Cast:"]'\
+                '/following::td/span[@class="cast"]/span/a/text()'
+jav_xPath[
+    "performers_url"] = '//td[@class="header" and text()="Cast:"]'\
+                        '/following::td/span[@class="cast"]/span/a/@href'
+jav_xPath[
+    "studio"] = '//td[@class="header" and text()="Maker:"]'\
+                '/following-sibling::td/span[@class="maker"]/a/text()'
 jav_xPath["image"] = '//div[@id="video_jacket"]/img/@src'
 jav_xPath["r18"] = '//a[text()="purchasing HERE"]/@href'
 
 r18_result = {}
 jav_result = {}
 
-
 if "searchName" in sys.argv:
-    if jav_search_html:
-        if "/en/?v=" in jav_search_html.url:
-            debug("[DEBUG] Directly the movie page ({})".format(jav_search_html.url))
-            jav_tree = lxml.html.fromstring(jav_search_html.content)
+    if JAV_SEARCH_HTML:
+        if "/en/?v=" in JAV_SEARCH_HTML.url:
+            debug(f"Scraping the movie page directly ({JAV_SEARCH_HTML.url})")
+            jav_tree = lxml.html.fromstring(JAV_SEARCH_HTML.content)
             jav_result["title"] = getxpath(jav_xPath["title"], jav_tree)
             jav_result["details"] = getxpath(jav_xPath["details"], jav_tree)
             jav_result["url"] = getxpath(jav_xPath["url"], jav_tree)
             jav_result["image"] = getxpath(jav_xPath["image"], jav_tree)
-            for key,value in jav_result.items():
-                if type(value) is list:
+            for key, value in jav_result.items():
+                if isinstance(value,list):
                     jav_result[key] = value[0]
-                if key in ["image","url"]:
-                    jav_result[key] = "https:{}".format(jav_result[key])
+                if key in ["image", "url"]:
+                    jav_result[key] = f"https:{jav_result[key]}"
             jav_result = [jav_result]
         else:
-            jav_result = jav_search_byName(jav_search_html, jav_xPath_search)
+            jav_result = jav_search_by_name(JAV_SEARCH_HTML, jav_xPath_search)
         if jav_result:
             print(json.dumps(jav_result))
         else:
-            print(json.dumps([{"title":"The search don't give any result."}]))
+            print(json.dumps([{"title": "The search doesn't return any result."}]))
     else:
-        if protection_cloudflare:
-            print(json.dumps([{"title":"Protected by Cloudflare, try later."}]))
+        if PROTECTION_CLOUDFLARE:
+            print(
+                json.dumps([{
+                    "title": "Protected by Cloudflare, try later."
+                }]))
         else:
-            print(json.dumps([{"title":"The request has failed to give the page. Check log."}]))
+            print(
+                json.dumps([{
+                    "title":
+                    "The request has failed to get the page. Check log."
+                }]))
     sys.exit()
 
-if jav_search_html:
-    jav_main_html = jav_search(jav_search_html, jav_xPath_search)
+if JAV_SEARCH_HTML:
+    JAV_MAIN_HTML = jav_search(JAV_SEARCH_HTML, jav_xPath_search)
 
-
-if jav_main_html is None and r18_main_html is None and scene_title:
+if JAV_MAIN_HTML is None and R18_MAIN_HTML is None and SCENE_TITLE:
     # If javlibrary don't have it, there is no way that R18 have it but why not trying...
-    debug("Javlib don't give any result, trying search with R18...")
-    r18_search_html = sendRequest("https://www.r18.com/common/search/searchword={}/?lg=en".format(scene_title), R18_HEADERS)
-    r18_main_html = r18_search(r18_search_html, r18_xPath_search)
+    log.info("Javlib doesn't give any result, trying search with R18...")
+    R18_SEARCH_HTML = send_request(
+        f"https://www.r18.com/common/search/searchword={SCENE_TITLE}/?lg=en",
+        R18_HEADERS)
+    R18_MAIN_HTML = r18_search(R18_SEARCH_HTML, r18_xPath_search)
 
-if jav_main_html:
-    #debug("[DEBUG] Javlibrary Page ({})".format(jav_main_html.url))
-    jav_tree = lxml.html.fromstring(jav_main_html.content)
+if JAV_MAIN_HTML:
+    #debug("[DEBUG] Javlibrary Page ({})".format(JAV_MAIN_HTML.url))
+    jav_tree = lxml.html.fromstring(JAV_MAIN_HTML.content)
     # is not None for removing the FutureWarning...
     if jav_tree is not None:
         # Get data from javlibrary
@@ -566,64 +657,91 @@ if jav_main_html:
         if jav_result.get("image"):
             tmp = re.sub(r"(http:|https:)", "", jav_result["image"][0])
             jav_result["image"] = "https:" + tmp
-            if "now_printing.jpg" in jav_result["image"] or "noimage" in jav_result["image"]:
+            if "now_printing.jpg" in jav_result[
+                    "image"] or "noimage" in jav_result["image"]:
                 # https://pics.dmm.com/mono/movie/n/now_printing/now_printing.jpg
                 # https://pics.dmm.co.jp/mono/noimage/movie/adult_ps.jpg
-                debug("[Warning][Javlibrary] Image was deleted or fail to loaded ({})".format(jav_result["image"]))
+                debug(
+                    "[Warning][Javlibrary] Image was deleted or failed to load "\
+                    f"({jav_result['image']})"
+                )
                 jav_result["image"] = None
             else:
-                imageBase64_jav_thread = threading.Thread(target=th_imagetoBase64, args=(jav_result["image"], "JAV",))
+                imageBase64_jav_thread = threading.Thread(
+                    target=th_imageto_base64,
+                    args=(
+                        jav_result["image"],
+                        "JAV",
+                    ))
                 imageBase64_jav_thread.start()
         if jav_result.get("url"):
             jav_result["url"] = "https:" + jav_result["url"][0]
         if jav_result.get("details"):
-            jav_result["details"] = re.sub(r"^(.*? ){1}", "", jav_result["details"][0])
-        if jav_result.get("performers_url") and IGNORE_ALIASES == False:
-            javlibrary_aliases_thread = threading.Thread(target=th_request_perfpage, args=(jav_main_html.url, jav_result["performers_url"],))
+            jav_result["details"] = re.sub(r"^(.*? ){1}", "",
+                                           jav_result["details"][0])
+        if jav_result.get("performers_url") and IGNORE_ALIASES is False:
+            javlibrary_aliases_thread = threading.Thread(
+                target=th_request_perfpage,
+                args=(
+                    JAV_MAIN_HTML.url,
+                    jav_result["performers_url"],
+                ))
             javlibrary_aliases_thread.daemon = True
             javlibrary_aliases_thread.start()
         # R18
         if jav_result.get("r18"):
-            r18_search_url = re.sub(r".+\/\/", "https://", jav_result["r18"][0])
+            r18_search_url = re.sub(r".+\/\/", "https://",
+                                    jav_result["r18"][0])
             r18_search_url += '/'
-            r18_search_html = sendRequest(r18_search_url, R18_HEADERS)
-            r18_main_html = r18_search(r18_search_html, r18_xPath_search)
+            R18_SEARCH_HTML = send_request(r18_search_url, R18_HEADERS)
+            R18_MAIN_HTML = r18_search(R18_SEARCH_HTML, r18_xPath_search)
 
 # MAIN PAGE
-if r18_main_html:
-    r18_main_api = r18_main_html.json()
+if R18_MAIN_HTML:
+    r18_main_api = R18_MAIN_HTML.json()
     if r18_main_api["status"] != "OK":
-        debug("[ERROR] R18 API Status {}".format(r18_main_api.get("status")))
+        log.error(f"R18 API Status {r18_main_api.get('status')}")
     else:
         r18_main_api = r18_main_api["data"]
         if r18_main_api.get("title"):
             r18_result['title'] = r18_main_api["dvd_id"]
         if r18_main_api.get("release_date"):
-            r18_result['date'] = re.sub(r"\s.+", "", r18_main_api["release_date"])
+            r18_result['date'] = re.sub(r"\s.+", "",
+                                        r18_main_api["release_date"])
         if r18_main_api.get("detail_url"):
             r18_result['url'] = r18_main_api["detail_url"]
         if r18_main_api.get("comment"):
-            r18_result['details'] = "{}\n\n{}".format(r18_main_api["title"], r18_main_api["comment"])
+            r18_result[
+                'details'] = f"{r18_main_api['title']}\n\n{r18_main_api['comment']}"
         else:
-            r18_result['details'] = "{}".format(r18_main_api["title"])
+            r18_result['details'] = f"{r18_main_api['title']}"
         if r18_main_api.get("series"):
             r18_result['series_url'] = r18_main_api["series"].get("series_url")
             r18_result['series_name'] = r18_main_api["series"].get("name")
         if r18_main_api.get("maker"):
             r18_result['studio'] = r18_main_api["maker"]["name"]
-        ### 
         if r18_main_api.get("actresses"):
-            r18_result['performers'] = [x["name"] for x in r18_main_api["actresses"]]
+            r18_result['performers'] = [
+                x["name"] for x in r18_main_api["actresses"]
+            ]
         if r18_main_api.get("categories"):
-            r18_result['tags'] = [x["name"] for x in r18_main_api["categories"]]
+            r18_result['tags'] = [
+                x["name"] for x in r18_main_api["categories"]
+            ]
         if r18_main_api.get("images"):
             # Don't know if it's possible no image ??????
-            r18_result['image'] = r18_main_api["images"]["jacket_image"]["large"]
-            imageBase64_r18_thread = threading.Thread(target=th_imagetoBase64, args=(r18_result["image"], "R18",))
+            r18_result['image'] = r18_main_api["images"]["jacket_image"][
+                "large"]
+            imageBase64_r18_thread = threading.Thread(target=th_imageto_base64,
+                                                      args=(
+                                                          r18_result["image"],
+                                                          "R18",
+                                                      ))
             imageBase64_r18_thread.start()
 
-if r18_main_html is None and jav_main_html is None:
-    sys.exit("All request don't find anything")
+if R18_MAIN_HTML is None and JAV_MAIN_HTML is None:
+    log.info("No results found")
+    sys.exit()
 
 #debug('[DEBUG][JAV] {}'.format(jav_result))
 #debug('[DEBUG][R18] {}'.format(r18_result))
@@ -656,9 +774,12 @@ if r18_result.get('details'):
     scrape['details'] = regexreplace(r18_result['details'])
 if r18_result.get('series_name'):
     if scrape.get('details'):
-        scrape['details'] = scrape['details'] + "\n\nFrom the series: " + regexreplace(r18_result['series_name'])
+        scrape['details'] = scrape[
+            'details'] + "\n\nFrom the series: " + regexreplace(
+                r18_result['series_name'])
     else:
-        scrape['details'] = "From the series: " + regexreplace(r18_result['series_name'])
+        scrape['details'] = "From the series: " + regexreplace(
+            r18_result['series_name'])
 
 # Studio - Javlibrary > R18
 scrape['studio'] = {}
@@ -671,17 +792,19 @@ if jav_result.get('studio'):
 if r18_result.get('performers'):
     scrape['performers'] = buildlist_tagperf(r18_result['performers'])
 if jav_result.get('performers'):
-    if WAIT_FOR_ALIASES == True and IGNORE_ALIASES == False:
+    if WAIT_FOR_ALIASES is True and IGNORE_ALIASES is False:
         try:
-            if javlibrary_aliases_thread.is_alive() == True:
+            if javlibrary_aliases_thread.is_alive() is True:
                 javlibrary_aliases_thread.join()
         except NameError:
-            debug("[DEBUG] No Jav Aliases Thread")
+            debug("No Jav Aliases Thread")
     scrape['performers'] = buildlist_tagperf(jav_result, "perf_jav")
 
 # Tags - Javlibrary > R18
-if r18_result.get('tags') and jav_result.get('tags') and BOTH_TAGS == True:
-    scrape['tags'] = buildlist_tagperf(r18_result['tags'], "tags") + buildlist_tagperf(jav_result['tags'], "tags")
+if r18_result.get('tags') and jav_result.get('tags') and BOTH_TAGS is True:
+    scrape['tags'] = buildlist_tagperf(r18_result['tags'],
+                                       "tags") + buildlist_tagperf(
+                                           jav_result['tags'], "tags")
 else:
     if r18_result.get('tags'):
         scrape['tags'] = buildlist_tagperf(r18_result['tags'], "tags")
@@ -689,31 +812,35 @@ else:
         scrape['tags'] = buildlist_tagperf(jav_result['tags'], "tags")
 
 if scrape.get("tags") and SPLIT_TAGS:
-    scrape['tags'] = [{"name": tag_name.strip()} for tag_dict in scrape['tags'] for tag_name in tag_dict["name"].replace('·',',').split(",")]
+    scrape['tags'] = [
+        {
+            "name": tag_name.strip()
+        } for tag_dict in scrape['tags']
+        for tag_name in tag_dict["name"].replace('·', ',').split(",")
+    ]
 
 # Image - Javlibrary > R18
 try:
-    if imageBase64_r18_thread.is_alive() == True:
+    if imageBase64_r18_thread.is_alive() is True:
         imageBase64_r18_thread.join()
     if r18_result.get('image'):
         scrape['image'] = r18_result['image']
 except NameError:
-    debug("[DEBUG] No image R18 Thread")
+    debug("No image R18 Thread")
 try:
-    if imageBase64_jav_thread.is_alive() == True:
+    if imageBase64_jav_thread.is_alive() is True:
         imageBase64_jav_thread.join()
     if jav_result.get('image'):
         scrape['image'] = jav_result['image']
 except NameError:
-    debug("[DEBUG] No image JAV Thread")
+    debug("No image JAV Thread")
 
 # Movie - R18
-
 if r18_result.get('series_url') and r18_result.get('series_name'):
     tmp = {}
     tmp['name'] = regexreplace(r18_result['series_name'])
     tmp['url'] = r18_result['series_url']
-    if STASH_SUPPORTED == True:
+    if STASH_SUPPORTED is True:
         # If Stash support this part
         if jav_result.get('image'):
             tmp['front_image'] = jav_result["image"]
