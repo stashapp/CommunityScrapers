@@ -27,7 +27,7 @@ galleryByFragment:
   action: scrapeXPath
   queryURL: https://www.dlsite.com/maniax/work/=/product_id/{title}.html
   #queryURL: https://www.dlsite.com/maniax/work/=/product_id/{title}.html/?locale=en_US
-  scraper: galleryScraper
+  scraper: galleryManiaxScraper
 galleryByURL:
   - action: scrapeXPath
     url:
