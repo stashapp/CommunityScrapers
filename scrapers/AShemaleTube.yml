@@ -19,11 +19,16 @@ xPathScrapers:
       Birthdate:
         selector: $infoPiece/ul/li/span[text()="Date of Birth:"]/../text()[2]
         postProcess:
+          - parseDate: "2 January 2006"
+      DeathDate:
+        selector: $infoPiece/ul/li/span[text()="Status:"]/../text()[2]
+        postProcess:
           - replace:
-              # " 6 April 1998 "
-              - regex: \s*(.*)\s([A-Za-z]{3})[a-z]*\s(.*)\s*
-                with: $2 $1, $3
-          - parseDate: Jan 2, 2006
+              - regex: '^.*\son\s'
+                with: ""
+              - regex: (\d)(?:st|nd|rd|th)
+                with: $1
+          - parseDate: 2 January 2006
       Country: $infoPiece/ul/li/span[text()="Country:"]/../text()[2]
       EyeColor: $infoPiece/ul/li/span[text()="Eye Color:"]/../text()[2]
       HairColor: $infoPiece/ul/li/span[text()="Hair Color:"]/../text()[2]
@@ -41,8 +46,8 @@ xPathScrapers:
         selector: //a[@class=" social-twitter"]/@href
         postProcess:
           - replace:
-            - regex: (.*)
-              with: https://www.ashemaletube.com$1
+              - regex: ^/
+                with: https://www.ashemaletube.com/
           - subScraper: //link[@rel="alternate"][1]/@href
   sceneScraper:
     common:
@@ -69,8 +74,7 @@ xPathScrapers:
           selector: //a[@class="model-card"]/@href
           postProcess:
             - replace:
-              - regex: (.*)
-                with: https://www.ashemaletube.com$1
-
-
+                - regex: ^/
+                  with: https://www.ashemaletube.com/
+      Image: //meta[@property="og:image"]/@content
 # Last Updated May 08, 2022
