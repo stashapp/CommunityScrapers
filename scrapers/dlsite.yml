@@ -1,6 +1,7 @@
 name: DLsite
 sceneByFragment:
   action: scrapeXPath
+  # expects RJ code as the title
   queryURL: https://www.dlsite.com/maniax/work/=/product_id/{title}.html
   #queryURL: https://www.dlsite.com/maniax/work/=/product_id/{title}.html/?locale=en_US
   scraper: sceneScraper
@@ -17,6 +18,10 @@ sceneByName:
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
+  #queryURLReplace:
+  #  url:
+  #    - regex: $
+  #      with: "/?locale=en_US"
   scraper: sceneScraper
 galleryByFragment:
   action: scrapeXPath
@@ -27,7 +32,12 @@ galleryByURL:
   - action: scrapeXPath
     url:
       - dlsite.com/maniax/work/
-    scraper: galleryScraper
+    scraper: galleryManiaxScraper
+    queryURL: "{url}"
+  - action: scrapeXPath
+    url:
+      - dlsite.com/books/work/
+    scraper: galleryBookScraper
     queryURL: "{url}"
 
 xPathScrapers:
@@ -40,7 +50,7 @@ xPathScrapers:
     scene:
       Title: &titleSel //h1[@id='work_name']/text()
       Date: &dateSel
-        selector: "//th[text() = '販売日']/following-sibling::td/a/text()|//th[text() = 'Release date']/following-sibling::td/a/text()"
+        selector: "//th[text() = '販売日']/following-sibling::td//text()|//th[text() = 'Release date']/following-sibling::td//text()"
         postProcess:
           - replace:
               - regex: "Jan"
@@ -67,10 +77,14 @@ xPathScrapers:
                 with: "11"
               - regex: "Dec"
                 with: "12"
+              - regex: \s.+$
+                with: ""
               - regex: (\d{2})/(\d{2})/(\d{4})
                 with: "${3}年${1}月${2}日"
           - parseDate: 2006年01月02日
-      Details: &detailsSel //div[@class='work_parts_area']/descendant-or-self::*
+      Details: &detailsSel
+        selector: //div[contains(@class,"work_parts_area")]
+        concat: "\n\n"
       Tags: &tagsSel
         Name: //div[@class='main_genre']/a/text()
       Performers:
@@ -85,7 +99,7 @@ xPathScrapers:
             - regex: ^
               with: "https:"
       URL: &urlSel //meta[@property='og:url']/@content
-  galleryScraper:
+  galleryManiaxScraper:
     gallery:
       Title: *titleSel
       Date: *dateSel
@@ -96,5 +110,16 @@ xPathScrapers:
         Name: "//th[text() = 'イラスト']/following-sibling::td/a/text()|//th[text() = 'Illustration']/following-sibling::td/a/text()"
       Studio: *studioSel
       URL: *urlSel
+  galleryBookScraper:
+    gallery:
+      Title: *titleSel
+      Date: *dateSel
+      Details: *detailsSel
+      Tags: *tagsSel
+      Performers:
+        # for maxiax author is the writer, for books this is illustrators
+        Name: "//th[text() = '著者']/following-sibling::td/a/text()|//th[text() = 'Author']/following-sibling::td/a/text()"
+      Studio: *studioSel
+      URL: *urlSel
 
-# Last Updated May 17, 2022
+# Last Updated June 19, 2022
