@@ -22,7 +22,7 @@ xPathScrapers:
               - regex: ^
                 with: https://tour.theflourishxxx.com
       Date:
-        selector: $details//p[1]/text()
+        selector: $details//p[1]/text()[contains(.,"Added:")]
         postProcess:
           - replace:
               - regex: 'Added: (\w+)\s(\d{1,2}),\s(\d{4})'
