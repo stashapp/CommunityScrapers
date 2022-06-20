@@ -281,6 +281,7 @@ studios = {
     'E7DFB70DF31C45B3B5E0BF10D733D349': ('Met Art X', 'metartx.com'),
     'D99236C04DD011E1B86C0800200C9A66': ('Rylsky Art', 'rylskyart.com'),
     '94DB3D0036FC11E1B86C0800200C9A66': ('Sex Art', 'sexart.com'),
+    '3D345D1E156910B44DB5A80CDD746318': ('Straplez', 'straplez.com'),
     '18A2E47EAEFD45F29033A5FCAF1F5B91': ('Stunning 18', 'stunning18.com'),
     'FDAFDF209DC311E0AA820800200C9A66': ('The Life Erotic', 'thelifeerotic.com'),
     '4F23028982B542FA9C6DAAA747E9B5B3': ('Viv Thomas', 'vivthomas.com'),
