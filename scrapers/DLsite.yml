@@ -1,0 +1,124 @@
+name: DLsite
+sceneByFragment:
+  action: scrapeXPath
+  # expects RJ code as the title
+  queryURL: https://www.dlsite.com/maniax/work/=/product_id/{title}.html
+  #queryURL: https://www.dlsite.com/maniax/work/=/product_id/{title}.html/?locale=en_US
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - dlsite.com/maniax/work/
+    scraper: sceneScraper
+    queryURL: "{url}"
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.dlsite.com/maniax/fsr/=/language/jp/sex_category%5B0%5D/male/keyword/{}/order%5B0%5D/trend/per_page/30/from/fs.header
+  scraper: sceneQueryScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  #queryURLReplace:
+  #  url:
+  #    - regex: $
+  #      with: "/?locale=en_US"
+  scraper: sceneScraper
+galleryByFragment:
+  action: scrapeXPath
+  queryURL: https://www.dlsite.com/maniax/work/=/product_id/{title}.html
+  #queryURL: https://www.dlsite.com/maniax/work/=/product_id/{title}.html/?locale=en_US
+  scraper: galleryManiaxScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - dlsite.com/maniax/work/
+    scraper: galleryManiaxScraper
+    queryURL: "{url}"
+  - action: scrapeXPath
+    url:
+      - dlsite.com/books/work/
+    scraper: galleryBookScraper
+    queryURL: "{url}"
+
+xPathScrapers:
+  sceneQueryScraper:
+    scene:
+      Title: //dd[@class='work_name']/div[@class='multiline_truncate']/a/text()
+      URL: //dd[@class='work_name']/div[@class='multiline_truncate']/a/@href
+      Image: //a[@class='work_thumb_inner']/img/@src
+  sceneScraper:
+    scene:
+      Title: &titleSel //h1[@id='work_name']/text()
+      Date: &dateSel
+        selector: "//th[text() = '販売日']/following-sibling::td//text()|//th[text() = 'Release date']/following-sibling::td//text()"
+        postProcess:
+          - replace:
+              - regex: "Jan"
+                with: "01"
+              - regex: "Feb"
+                with: "02"
+              - regex: "Mar"
+                with: "03"
+              - regex: "Apr"
+                with: "04"
+              - regex: "May"
+                with: "05"
+              - regex: "Jun"
+                with: "06"
+              - regex: "Jul"
+                with: "07"
+              - regex: "Aug"
+                with: "08"
+              - regex: "Sep"
+                with: "09"
+              - regex: "Oct"
+                with: "10"
+              - regex: "Nov"
+                with: "11"
+              - regex: "Dec"
+                with: "12"
+              - regex: \s.+$
+                with: ""
+              - regex: (\d{2})/(\d{2})/(\d{4})
+                with: "${3}年${1}月${2}日"
+          - parseDate: 2006年01月02日
+      Details: &detailsSel
+        selector: //div[contains(@class,"work_parts_area")]
+        concat: "\n\n"
+      Tags: &tagsSel
+        Name: //div[@class='main_genre']/a/text()
+      Performers:
+        # only illustrators and voice actors, writers and musicians are not included
+        Name: "//th[text() = '声優']/following-sibling::td/a/text()|//th[text() = 'Voice Actor']/following-sibling::td/a/text()|//th[text() = 'イラスト']/following-sibling::td/a/text()|//th[text() = 'Illustration']/following-sibling::td/a/text()"
+      Studio: &studioSel
+        Name: //span[@class='maker_name']/a/text()
+      Image:
+        selector: //li[@class='slider_item active']/picture/img/@srcset
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+      URL: &urlSel //meta[@property='og:url']/@content
+  galleryManiaxScraper:
+    gallery:
+      Title: *titleSel
+      Date: *dateSel
+      Details: *detailsSel
+      Tags: *tagsSel
+      # only illustrators
+      Performers:
+        Name: "//th[text() = 'イラスト']/following-sibling::td/a/text()|//th[text() = 'Illustration']/following-sibling::td/a/text()"
+      Studio: *studioSel
+      URL: *urlSel
+  galleryBookScraper:
+    gallery:
+      Title: *titleSel
+      Date: *dateSel
+      Details: *detailsSel
+      Tags: *tagsSel
+      Performers:
+        # for maniax author is the writer, for books this is illustrators
+        Name: "//th[text() = '著者']/following-sibling::td/a/text()|//th[text() = 'Author']/following-sibling::td/a/text()"
+      Studio: *studioSel
+      URL: *urlSel
+# Last Updated June 19, 2022
