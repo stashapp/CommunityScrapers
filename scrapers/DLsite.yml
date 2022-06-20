@@ -96,8 +96,8 @@ xPathScrapers:
         selector: //li[@class='slider_item active']/picture/img/@srcset
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
+              - regex: ^
+                with: "https:"
       URL: &urlSel //meta[@property='og:url']/@content
   galleryManiaxScraper:
     gallery:
@@ -117,9 +117,8 @@ xPathScrapers:
       Details: *detailsSel
       Tags: *tagsSel
       Performers:
-        # for maxiax author is the writer, for books this is illustrators
+        # for maniax author is the writer, for books this is illustrators
         Name: "//th[text() = '著者']/following-sibling::td/a/text()|//th[text() = 'Author']/following-sibling::td/a/text()"
       Studio: *studioSel
       URL: *urlSel
-
 # Last Updated June 19, 2022
