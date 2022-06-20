@@ -14,7 +14,7 @@ xPathScrapers:
     scene:
       Title: //div[contains(@class,'title')]/h2/text()
       URL: //link[@rel="canonical"]/@href
-      Details: $details/div[@class='description']/p/text()
+      Details: $details/div[@class='description']/p
       Image:
         selector: //div[@class='player-thumb']/img/@src
         postProcess:
