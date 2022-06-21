@@ -207,7 +207,7 @@ def scrape_movie(base_url, date, name):
     for image_type in image_types:
         if image_type in data:
             image_part = data[image_type]
-            res['Image'] = f"https://www.{studio[1]}{image_part}"
+            res['Image'] = f"https://cdn.metartnetwork.com/{data['media']['siteUUID']}/{image_part}"
             try:
                 response = requests.get(res['Image'], headers={
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
