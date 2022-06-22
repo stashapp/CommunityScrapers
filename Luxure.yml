@@ -1,0 +1,43 @@
+name: "Luxure"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - luxure.com/en/videos
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class='dorcelBoldFont']/text()
+      Details:
+        selector: //div[@id='story']/p/text()
+      Image:
+        selector: //picture/img[@class='ImageSourceSet_ImageSourceSet__3BDCX']/@src
+        postProcess:
+          - replace:
+              - regex: ^([^?]+).+
+                with: $1
+      Studio: 
+        Name:
+          fixed: Luxure
+        URL: 
+          fixed: https://luxure.com
+      Tags:
+        Name:
+          selector: //p[@class='categories']/a
+      Performers:
+        Name:
+          selector: //p[@class='starring']/a
+
+driver:
+  cookies:
+    - Cookies:
+        - Name: "gen_disclaimer"
+          Domain: "luxure.com"
+          ValueRandom: 1
+          Path: "/"
+        - Name: "gen_stored"
+          Domain: "luxure.com"
+          ValueRandom: 1
+          Path: "/"
+  useCDP: yes
+# Last Updated June 22, 2022
