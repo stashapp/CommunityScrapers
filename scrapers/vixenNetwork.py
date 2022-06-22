@@ -1,4 +1,6 @@
 import json
+import os
+import re
 import sys
 from urllib.parse import urlparse
 
@@ -59,7 +61,7 @@ class Site:
         r = self.callGraphQL(query=q, referer=url)
         return self.parse_scene(r)
 
-    def getSearchResult(self, query: str):
+    def getSearchResult(self, query: str, strict_result: bool):
         log.debug(f"Searching using {self.name} graphql API")
         q = {
             'query': self.getSearchQuery,
@@ -71,7 +73,44 @@ class Site:
             }
         }
         r = self.callGraphQL(query=q, referer=self.home)
-        return self.parse_search(r)
+        p = self.parse_search(r)
+        # Here we will check if there's scene date in query, like: 20150125 which is 2015/01/15 actually.
+        match = re.search(r"[\d]{8}", query)
+        if match:
+            query_scene_date = match.group()
+        else:
+            query_scene_date = None
+        if query_scene_date is None:
+            # There were no scene date with yyyymmdd format in the query, let's try the yyyy/mm/dd or yyyy-mm-dd or yyyy.mm.dd format
+            match = re.search(
+                r"[\d]{4}(-|\.|\/)[\d]{2}(-|\.|\/)[\d]{2}", query)
+            if match:
+                # There's a match to the format above but we need to remove the separator chars from the match.
+                query_scene_date = str(match.group()).replace(
+                    '.', '').replace('-', '').replace('/', '')
+            else:
+                query_scene_date = None
+        if query_scene_date is None:
+            # query doesn't have the scene date within it then we cannot have a more accurate search
+            # If we 'NEED' an accurate result then we return None as we not sure if result is accurate or not.
+            if strict_result is True:
+                return []
+            else:
+                return p
+        # we can have an accurate search as we there's scene date in query
+        parsed_scene_date = f'{query_scene_date[:4]}-{query_scene_date[4:6]}-{query_scene_date[6:8]}'
+        r = []
+        for element in p:
+            if 'date' in element and element['date'] is not None and element['date'] == parsed_scene_date:
+                # If strict_result is true then we gonna make sure that the title exists in our query
+                if strict_result is True:
+                    if 'title' in element and element['title'] is not None and len(element['title']) > 0 and str(element['title']).lower() in query.lower():
+                        r.append(element)
+                else:
+                    r.append(element)
+
+        # we will return the non-accurate results if we do not need an accurate result because no scene found with the date provided in query
+        return p if len(r) == 0 and strict_result is False else r
 
     def callGraphQL(self, query: dict, referer: str):
         headers = {
@@ -244,24 +283,47 @@ studios = {
     Site('Vixen')
 }
 
-frag = json.loads(sys.stdin.read())
+# Allows us to simply debug the script via CLI args
+if len(sys.argv) > 2 and '-d' in sys.argv:
+    stdin = sys.argv[sys.argv.index('-d') + 1]
+else:
+    stdin = sys.stdin.read()
+
+frag = json.loads(stdin)
 search_query = frag.get("name")
 url = frag.get("url")
+filename = frag.get("path")
+# path is available in my fork and might be available in future stash versions.
+if filename is not None:
+    filename = os.path.basename(filename)
+else:
+    # If path isn't available, then use the title
+    # However, if you sete incorrect 'Identify' settings (e.g Merge date) then you cannot scrape the scene by 'sceneByFragment' anymore.
+    # sceneByFragment works with filename which is title at first and it will find nothing if title get's changed to anything than filename
+    # All these if 'path' is not available in the JSON-encoded scene fragment.
+    filename = frag.get("title")
 
-#sceneByURL
+# sceneByURL
 if url:
     for x in studios:
         if x.isValidURL(url):
             s = x.getScene(url)
-            #log.debug(f"{json.dumps(s)}")
+            # log.debug(f"{json.dumps(s)}")
             print(json.dumps(s))
             sys.exit(0)
-    log.error(f"URL: {url} is not supported")
-    print("{}")
-    sys.exit(1)
+    if not filename:
+        log.error(f"URL: {url} is not supported")
+        print("{}")
+        sys.exit(1)
 
-#sceneByName
-if search_query and "search" in sys.argv:
+return_scene = False
+strict_result = False
+if filename:
+    return_scene = strict_result = True
+    search_query = os.path.splitext(filename)[0]
+
+# sceneByName
+if search_query and any(x in sys.argv for x in ["search", "sceneByFragment"]):
     search_query = search_query.lower()
     lst = []
     filter = []
@@ -292,10 +354,29 @@ if search_query and "search" in sys.argv:
             if x.id.lower() not in filter:
                 #log.debug(f"[Filter] {x.id} ignored")
                 continue
-        s = x.getSearchResult(search_query)
+        s = x.getSearchResult(search_query, strict_result)
+        if strict_result is True and return_scene is True and s is not None and len(s) > 0 and 'url' in s[0]:
+            res = s[0]
+            for studio in studios:
+                if studio.isValidURL(res['url']):
+                    s = studio.getScene(res['url'])
+                    if 'url' not in s:
+                        s['url'] = res['url']
+                    print(json.dumps(s))
+                    sys.exit(0)
+
+        if strict_result is True and return_scene is False and s is not None and len(s) > 0:
+            print(json.dumps([s]))
+            sys.exit(0)
+
         # merge all list into one
         if s:
             lst.extend(s)
-    #log.debug(f"{json.dumps(lst)}")
+if return_scene is True:
+    print('{}')
+    sys.exit(0)
+else:
     print(json.dumps(lst))
     sys.exit(0)
+
+# Last Updated June 22, 2022
