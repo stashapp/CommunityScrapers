@@ -39,5 +39,5 @@ driver:
           Domain: "luxure.com"
           ValueRandom: 1
           Path: "/"
-  useCDP: yes
+  useCDP: true
 # Last Updated June 22, 2022
