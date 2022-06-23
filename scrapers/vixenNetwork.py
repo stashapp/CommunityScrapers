@@ -13,6 +13,7 @@ except ModuleNotFoundError:
 
 try:
     import py_common.log as log
+    import py_common.graphql as graphql
 except ModuleNotFoundError:
     print("You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
     sys.exit()
@@ -290,17 +291,13 @@ else:
     stdin = sys.stdin.read()
 
 frag = json.loads(stdin)
+scene_id = frag.get("id")
 search_query = frag.get("name")
 url = frag.get("url")
-filename = frag.get("path")
-# path is available in my fork and might be available in future stash versions.
-if filename is not None:
-    filename = os.path.basename(filename)
-else:
-    # If path isn't available, then use the title
-    # However, if you sete incorrect 'Identify' settings (e.g Merge date) then you cannot scrape the scene by 'sceneByFragment' anymore.
-    # sceneByFragment works with filename which is title at first and it will find nothing if title get's changed to anything than filename
-    # All these if 'path' is not available in the JSON-encoded scene fragment.
+try:
+    scene_data = graphql.getScene(scene_id)
+    filename = scene_data.get("path")
+except:
     filename = frag.get("title")
 
 # sceneByURL
