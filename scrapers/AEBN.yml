@@ -8,7 +8,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - aebn.com
-    scraper: sceneScraper  
+    scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
@@ -64,7 +64,7 @@ xPathScrapers:
                 with: "https:$1"
   sceneScraper:
     scene:
-      Title: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1 
+      Title: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
       Date:
         selector: //li[@class="section-detail-list-item-release-date"]/text()
         postProcess:
