@@ -36,18 +36,16 @@ xPathScrapers:
           selector: //div[contains(@class,"siteName")]/a[@href]/text()[2]
           postProcess:
             - map:
-              - GotMylf: Got Mylf #
+              - GotMylf: Got Mylf
               - FullOfJoi: Full Of JOI
-              - LoneMilf: Lone MILF #
+              - LoneMilf: Lone MILF
               - MilfBody: MILF Body
-              - MomDrips: Mom Drips #
+              - MomDrips: Mom Drips
               - MomShoot: Mom Shoot
               - Mylf Of The Month: Mylf of the Month
-              - MylfBlows: Mylf Blows #
+              - MylfBlows: Mylf Blows
               - MylfBoss: Mylf Boss
               - MylfSelects: Mylf Selects
               - StayHomeMilf: Stay Home Milf
-              teamskeet #
-              hussiepass #
               
 # Last Updated June 27, 2022
