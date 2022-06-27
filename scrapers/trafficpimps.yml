@@ -29,7 +29,8 @@ xPathScrapers:
       Performers:
         Name: $infodata/p[contains(text(), 'Featuring:')]/a
       Studio:
-        fixed: Wild on Cam
+        Name:
+          fixed: Wild on Cam
       Image:
         selector: //script[contains(., "contentthumbs")]/text()|//img[@class="lazyload update_thumb thumbs stdimage"]/@src
         postProcess:
