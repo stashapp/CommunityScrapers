@@ -41,7 +41,7 @@ xPathScrapers:
           postProcess:
             - replace:
               - regex: " Series"
-              - with: ""
+                with: ""
       # URL need to have "?trilogy=" to get the name of the Trilogy
       Movies:
         Name: //span[contains(text(),"Part of")]/following-sibling::text()
