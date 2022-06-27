@@ -30,7 +30,6 @@ xPathScrapers:
         Name:
           selector: //div[@class="tags"]//a
       Performers:
-        Name:
         Name: //div[@class="starring"]//p/text() #female only
         #Name: # male + female (fails with older scenes)
         #  selector: //meta[@name="description"]/@content
