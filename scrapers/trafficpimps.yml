@@ -29,7 +29,7 @@ xPathScrapers:
       Performers:
         Name: $infodata/p[contains(text(), 'Featuring:')]/a
       Studio:
-        Name: //div[@class="container"]/a[@class="logo"]/@title
+        fixed: Wild on Cam
       Image:
         selector: //script[contains(., "contentthumbs")]/text()|//img[@class="lazyload update_thumb thumbs stdimage"]/@src
         postProcess:
@@ -37,4 +37,4 @@ xPathScrapers:
             - regex: (.+)(https.+contentthumbs.+)(" width="100%)(.+)
               with: $2
 
-# Last Updated October 19, 2021
+# Last Updated June 27, 2022

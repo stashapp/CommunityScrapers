@@ -8,6 +8,7 @@ sceneByURL:
       - brazzers.com/video
       - men.com/sceneid/
       - realitykings.com/scene/
+      - babes.com/scene/
     scraper: sceneScraper
 
 performerByURL:
@@ -256,4 +257,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated March 10, 2021
+# Last Updated June 23, 2022

@@ -1,31 +1,30 @@
-name: "Adultime"
+name: "TabooHeat"
 sceneByURL:
   - action: script
     url:
-      - adulttime.com/en/video/
-      - outofthefamily.com/en/video/
+      - tabooheat.com/en/video
     script:
       - python
       - Algolia.py
-      - girlsway
+      - tabooheat
 sceneByFragment:
     action: script
     script:
       - python
       - Algolia.py
-      - girlsway
+      - tabooheat
 sceneByName:
     action: script
     script:
       - python
       - Algolia.py
-      - girlsway
+      - tabooheat
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
       - Algolia.py
-      - girlsway
+      - tabooheat
       - validName
-# Last Updated June 23, 2022
+# Last Updated June 22, 2022
