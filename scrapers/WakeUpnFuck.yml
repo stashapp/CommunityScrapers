@@ -31,6 +31,8 @@ xPathScrapers:
           selector: //div[@class="tags"]//a
       Performers:
         Name:
-          selector: //meta[@name="description"]/@content
-          split: " - "
+        Name: //div[@class="starring"]//p/text() #female only
+        #Name: # male + female (fails with older scenes)
+        #  selector: //meta[@name="description"]/@content
+        #  split: " - "
 # Last Updated June 22, 2022
