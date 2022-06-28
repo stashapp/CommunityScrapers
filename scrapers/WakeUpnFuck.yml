@@ -21,17 +21,15 @@ xPathScrapers:
           - replace:
               - regex: '.+image:\s"([^"]+)".*'
                 with: $1
-      Studio: 
+      Studio:
         Name:
           fixed: Wake Up n Fuck
-        URL: 
+        URL:
           fixed: https://www.wakeupnfuck.com
       Tags:
         Name:
           selector: //div[@class="tags"]//a
       Performers:
-        Name: //div[@class="starring"]//p/text() #female only
-        #Name: # male + female (fails with older scenes)
-        #  selector: //meta[@name="description"]/@content
-        #  split: " - "
-# Last Updated June 22, 2022
+        Name: //div[@class="starring"]//p/text()
+      Details: //meta[@name="description"]/@content
+# Last Updated June 29, 2022
