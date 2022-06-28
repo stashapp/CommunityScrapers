@@ -1265,6 +1265,7 @@ vrhush.com|VRHush.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 vrlatina.com|VRLatina.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
 vrporncz.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vrxdb.com|VrxDB.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+wakeupnfuck.com|WakeUpnFuck.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wankitnow.com|Wankitnow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 wankz.com|wankz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wankzvr.com|WankzVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
