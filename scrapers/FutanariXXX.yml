@@ -8,7 +8,12 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //meta[@property="og:title"]/@content
+      Title:
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: \s-\sFutanari XXX$
+                with: 
       Details: //meta[@property="og:description"]/@content
       Date:
         selector: //meta[@property="article:published_time"]/@content
