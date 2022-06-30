@@ -12,18 +12,18 @@ xPathScrapers:
         selector: //div[@class='col-xs-12']/div[@class='text-justify']/text()
         concat: " "
       Studio:
-        Name: 
+        Name:
           fixed: "Blake Mason"
       Tags:
         Name:
           selector: //div[@class='tags']/a
       Performers:
-        Name: 
+        Name:
           selector: //div[@class='col-xs-6 col-sm-6 item']/a
       Image:
         selector: //*[@id="trailer"]/@poster
         postProcess:
           - replace:
-            - regex: ^
-              with: https:$1
+              - regex: ^//
+                with: https://
 # Last Updated June 27, 2022
