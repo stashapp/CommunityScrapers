@@ -2,8 +2,8 @@ name: Hentaied
 sceneByURL:
   - action: scrapeXPath
     url:
-      - hentaied.com
       - futanari.xxx
+      - hentaied.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -40,5 +40,4 @@ xPathScrapers:
           postProcess:
             - map:
                 Real Life Hentai: Hentaied
-
 # Last Updated June 29, 2022
