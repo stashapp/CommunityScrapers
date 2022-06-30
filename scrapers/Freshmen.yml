@@ -7,12 +7,12 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: 
+      Title:
         selector: //h1/span/text()
         concat: " "
-      Details: 
-        selector: //div[@class='contentTab']/div[@class='top']//p/text()
-        concat: " "
+      Details:
+        selector: //div[@class='contentTab']/div[@class='top']//p
+        concat: "\n\n"
       Performers:
         Name: //div[@class='actor']/div[@class='name']
       Image:
