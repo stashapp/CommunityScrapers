@@ -699,6 +699,7 @@ lovehairy.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_chec
 loveherass.com|devianteNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 loveherboobs.com|LoveHerFeet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Boob Fetish
 loveherfeet.com|LoveHerFeet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Foot Fetish
+loveherfilms.com|LoveHerFeet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lubed.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lucasentertainment.com|LucasEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 lustery.com|Lustery.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Amateur

@@ -5,6 +5,7 @@ sceneByURL:
     url:
       - loveherboobs.com/tour/trailers/
       - loveherfeet.com/tour/trailers/
+      - loveherfilms.com/tour/trailers/
       - shelovesblack.com/tour/trailers/
     scraper: sceneScraper
 sceneByFragment:
@@ -22,7 +23,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Image:
-        selector: //base/@href|//video/@poster
+        selector: //div[@class='video']//img[@class='mainThumb']/@src0_3x or (//base/@href|//video/@poster)
         concat: /
         postProcess:
           - replace:
@@ -36,4 +37,4 @@ xPathScrapers:
         Name:
           selector: //div[@class='featured']/a/text()
 
-# Last Updated April 30, 2022
+# Last Updated June 30, 2022
