@@ -23,13 +23,13 @@ xPathScrapers:
       Tags:
         Name: //div[@class="categories grey-text"]/a
       Performers:
-        Name: $sceneinfo/div[@class="performer-list"]/a
+        Name: $sceneinfo/h2/div[@class="performer-list"]/a
       Studio:
-        Name: $sceneinfo/a[@class="site-title grey-text link"]
+        Name: $sceneinfo/h2/a[@class="site-title grey-text link"]
       Image:
         selector: //img[@class="start-card lazyload"]/@data-src|//img[@class="start-card"]/@src|//dl8-video[@id="vr_player"]/@poster|(//div[@class="overlays"]/a/picture)[1]/source[@type="image/jpeg"]/@data-srcset|//img[contains(@class,"start-card desktop-only")]/@data-srcset
         postProcess:
           - replace:
               - regex: ^
                 with: "https:"
-# Last Updated November 04, 2021
+# Last Updated July 02, 2022
