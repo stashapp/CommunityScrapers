@@ -33,7 +33,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Studio:
-        Name: //a[@data-original-title="Label"]/text()
+        Name: //a[@data-original-title="Label" or @title="Label"]/text()
       Synopsis: //meta[@property="og:description"]/@content
       FrontImage: //img[contains(@class,"mainimage")][@rel="1"]/@src
       BackImage: //img[contains(@class,"mainimage")][@rel="2"]/@src
@@ -76,7 +76,7 @@ xPathScrapers:
         selector: $searchItem/@href
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://www.jeedoo.com"
+              - regex: ^
+                with: "https://www.jeedoo.com"
       Image: $searchItem/img/@data-src
 # Last Updated June 14, 2022
