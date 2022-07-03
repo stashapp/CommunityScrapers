@@ -96,16 +96,11 @@ xPathScrapers:
       HairColor:
         selector: $overlay//span[contains(text(),"Hair Color")]/../a/span/text()
       EyeColor:
-        selector: $overlay//span[contains(text(),"Eyes Color")]/../a/span/text()
+        selector: $overlay//span[contains(text(),"Eye Color")]/../a/span/text()
       Aliases:
         selector: $overlay//small[@class="comma-list-container"]//span/text()
         concat: " / "
-      Image:
-        selector: $overlay//div[contains(@class,"actorImage")]/img/@src
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https:"
+      Image: //meta[@name="og:image"]/@content
 driver:
   useCDP: true
   sleep: 5
