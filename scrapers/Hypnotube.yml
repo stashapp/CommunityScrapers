@@ -1,0 +1,28 @@
+name: "Hypnotube"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hypnotube.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $studio: //a[starts-with(@href,'https://hypnotube.com/user/')]
+    scene:
+      Title: //div[@class='item-tr-inner-col inner-col']/h1/text()
+      Details: //meta[@name='description']/@content
+      Image: //meta[@property='og:image']/@content
+      Studio:
+        Name: $studio/@title
+        URL: $studio/@href
+      Date:
+        selector: //div[@class='stats-container']/ul/li[3]/span[@class='sub-label']/text()
+        postProcess:
+          - replace:
+            - regex: \s\d{2}:\d{2}:\d{2}
+              with: ""
+      Tags:
+        Name: //div[@class='tags-block']/a/text()
+      URL: //link[rel='canonical']/@href
+
+# Last Updated July 03, 2022
