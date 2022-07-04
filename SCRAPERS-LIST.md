@@ -135,7 +135,7 @@ badteenspunished.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-
 baeb.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 balletflatsfetish.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bamvisions.com|BamVisions.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-bang.com|Bang.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+bang.com|Bang.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|CDP|-
 bangbros.com|BangBros.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bangingbeauties.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bangteenpussy.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -220,6 +220,7 @@ carmenvalentina.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 castingcouch-x.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 catalinacruz.com|Catalina Cruz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cfnmeu.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+chaosmen.com|ChaosMen.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 charleechaselive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 chastitybabes.com|chastitybabes.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cherrypimps.com|CherryPimps.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -626,6 +627,7 @@ javlibrary.com|JavLibrary_python.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|JAV
 jaysinxxx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jayspov.net|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jcosplay.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
+jeedoo.com|Jeedoo.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 jeffsmodels.com|JeffsModels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jelenajensen.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jerkaoke.com|ModelMediaUS.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1159,6 +1161,8 @@ tessafowler.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 texasbukkake.com|TexasBukkake.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tgirl40.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tgirlbbw.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+tgirljapan.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+tgirljapanhardcore.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tgirlpornstar.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tgirlpostop.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tgirls.porn|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
