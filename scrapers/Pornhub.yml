@@ -116,8 +116,7 @@ xPathScrapers:
       $studio: //div[@data-type="channel"]/a
     scene:
       Title: //h1[@class="title"]/span/text()
-      Details: //meta[@property="og:description"][1]/@content
-      URL: //meta[@name='og:url']/@content
+      URL: //meta[@property="og:url"]/@content
       Date:
         selector: //script[contains(., 'uploadDate')]/text()
         postProcess:
@@ -137,4 +136,4 @@ xPathScrapers:
       Studio:
         Name: $studio
         URL: $studio/@href
-# Last Updated December 24, 2021
+# Last Updated July 04, 2022
