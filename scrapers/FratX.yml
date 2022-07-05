@@ -1,0 +1,16 @@
+name: FratX
+sceneByURL:
+  - action: script
+    script:
+      - python
+      - FratX.py
+      - scene_from_url
+    url:
+      - fratx.com/episode/
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - FratX.py
+      - scene_query
+# Last Updated June 07, 2022
