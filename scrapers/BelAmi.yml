@@ -9,12 +9,12 @@ xPathScrapers:
     scene:
       Title: //*[@id="ContentPlaceHolder1_LabelTitle"]
       Details:
-        selector: //*[@id="ContentPlaceHolder1_LabelDescription"]|//div[@class='bottom']/p[2]
-        concat: " "
+        selector: //p[span[@id="ContentPlaceHolder1_LabelDescription"]]|//p[span[@id="ContentPlaceHolder1_LabelDescription"]]/following-sibling::p
+        concat: "\n\n"
       Date:
         selector: //*[@id="ContentPlaceHolder1_LabelReleased"]
         postProcess:
-          - parseDate: 1/02/2006
+          - parseDate: 1/2/2006
       Studio:
         Name: 
           fixed: BelAmi
