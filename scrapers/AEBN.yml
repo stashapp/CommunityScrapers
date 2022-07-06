@@ -37,13 +37,13 @@ xPathScrapers:
         selector: //li[@class='section-detail-list-item-height']/text()
         postProcess:
           - replace:
-              - regex: .+\((.+)\)
+              - regex: .+\((\d+).+\)
                 with: $1
       Weight:
         selector: //li[@class='section-detail-list-item-weight']/text()
         postProcess:
           - replace:
-              - regex: .+\((.+)\)
+              - regex: .+\((\d+).+\)
                 with: $1
       EyeColor: 
         selector: //li[@class='section-detail-list-item-eye-color']/text()
