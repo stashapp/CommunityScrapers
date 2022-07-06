@@ -22,7 +22,7 @@ xPathScrapers:
         Name: 
           selector: //div[@class="actors_list"]//text()
       Image:
-          selector: //div[@class="video_player"]//a/@href
+          selector: //div[@class="video_player"]//a[contains(@href,"Screen-")]/@href
           postProcess: 
             - replace:
               - regex: .*?Screen-([1-9].*)
