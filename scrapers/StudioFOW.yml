@@ -1,3 +1,7 @@
+# History:
+# Dec 2020: created by bnkai
+# July 2022: updated by erri120
+
 name: StudioFOW
 sceneByURL:
   - action: scrapeXPath
@@ -9,29 +13,31 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //img[@class="rev-slidebg"]/@title
+      Title: //h2[contains(@class,"woodmart-title-container") and not(contains(text(),"DOWNLOADS"))]/text()
       Details:
-        selector: //div[contains(@class,"woodmart-title-container")]//p
+        selector: //div[contains(@class,"woodmart-title-container")]//text()
+        postProcess:
+          - replace:
+            - regex: ^\s+$
+              with: ""
         concat: "\n\n"
       Image:
-        selector: //img[@class="rev-slidebg"]/@src
+        selector: //img[contains(@class,"rev-slidebg")]/@data-lazyload
         postProcess:
           - replace:
-              - regex: ^
-                with: "https:"
+            - regex: ^\/\/
+              with: "https://"
       Date:
-        selector: //div[@class="title-after_title"]/text()
+        selector: //div[contains(@class,"title-after_title")]/text()
         postProcess:
           - replace:
-              - regex: "\\sFEB\\s" # in one movie date has FEB instead of FEBRUARY
-                with: " FEBRUARY "
-              - regex: "[^:]+:\\s+(\\w+)\\s+(\\d+)[^\\d]+(\\d+).*"
-                with: $1 $2 $3
+            - regex: \sFEB\s
+              with: " FEBRUARY "
+            - regex: ^[^:]+:\s+(\w+)\s(\d+)[^\d]+(\d+).*$
+              with: $1 $2 $3
           - parseDate: January 2 2006
       Studio:
         Name:
           fixed: Studio FOW
         URL:
           fixed: https://studiofow.com
-      URL: //link[@rel="canonical"]/@href
-# Last Updated December 01, 2020
