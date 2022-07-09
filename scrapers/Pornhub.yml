@@ -136,4 +136,5 @@ xPathScrapers:
       Studio:
         Name: $studio
         URL: $studio/@href
-# Last Updated July 04, 2022
+      Details: //div[@class="video-info-row"][1]/text()
+# Last Updated July 08, 2022
