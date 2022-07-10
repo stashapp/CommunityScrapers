@@ -6,4 +6,11 @@ sceneByFragment:
       # use python3 instead if needed
       - dc-onlyfans.py
       - query
-# Last Updated April 26, 2022
+galleryByFragment:
+    action: script
+    script:
+      - python
+      # use python3 instead if needed
+      - dc-onlyfans.py
+      - querygallery
+# Last Updated July 10, 2022
