@@ -20,7 +20,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: "http://sm.members.khcdn.com/shoots/([^/]+)/([^/]+)/rollover.*"
-                with: "http://x-images5.bangbros.com/$1/shoots/$2/members/450x340.jpg"
+                with: "http://x-images5.bangbros.com/$1/shoots/$2/big_trailer.jpg"
       Date:
         selector: $info/p[starts-with(text(),"Added to")]/text()[last()]
         postProcess:
