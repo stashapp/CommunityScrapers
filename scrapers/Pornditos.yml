@@ -44,7 +44,7 @@ xPathScrapers:
       Details: 
         selector: //p[@class="para-class t-para"]/text() 
         postProcess:
-          - replace: # no idea why its not processing the \n chars
+          - replace:
               - regex: \n
                 with: " "
       Performers:
@@ -52,7 +52,7 @@ xPathScrapers:
       Studio:
         Name: $info//a[contains(@href, "/latest-videos/")]/text()
       Image:
-        selector: //img[contains(@src, "/shoots/")]/@src
+        selector: //img[contains(@src, "/shoots/")][1]/@src # unsure why index 0 is not working
         postProcess:
           - replace:
               - regex: '(http://x-images\d\.bangbros\.com/[^/]+/shoots/[^/]+).*'
