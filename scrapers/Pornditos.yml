@@ -43,6 +43,7 @@ xPathScrapers:
       Title: $info//span[@class="h2-trailer-style"]/text()
       Details: 
         selector: //p[@class="para-class t-para"]/text() 
+        postProcess:
           - replace: # no idea why its not processing the \n chars
               - regex: \n
                 with: " "
