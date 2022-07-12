@@ -1,11 +1,16 @@
 name: "Pornditos"
 sceneByURL:
   - action: scrapeXPath
+    scraper: pornditosScraper
     url:
       - pornditos.com/
-    scraper: sceneScraper
+
+  - action: scrapeXPath
+    scraper: culionerosScraper
+    url:
+      - en.culioneros.com/videos/
 xPathScrapers:
-  sceneScraper:
+  pornditosScraper:
     common:
       $info: //div[@class="playerText-new fright"]
     scene:
@@ -30,4 +35,32 @@ xPathScrapers:
               - regex: on\s
                 with:
           - parseDate: Jan 2, 2006
+
+  culionerosScraper:
+    common:
+      $info: //h2[@class="h2-trailer-block"]
+    scene:
+      Title: $info//span[@class="h2-trailer-style"]/text()
+      Details: 
+        selector: //p[@class="para-class t-para"]/text() 
+          - replace: # no idea why its not processing the \n chars
+              - regex: \n
+                with: " "
+      Performers:
+        Name: $info//a[contains(@href, "/models/")]/text()
+      Studio:
+        Name: $info//a[contains(@href, "/latest-videos/")]/text()
+      Image:
+        selector: //img[contains(@src, "/shoots/")]/@src
+        postProcess:
+          - replace:
+              - regex: '(http://x-images\d\.bangbros\.com/[^/]+/shoots/[^/]+).*'
+                with: "$1/big_trailer.jpg"
+      Date:
+        selector: $info//b[@class="t-font"]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Tags:
+        Name:
+          selector: //b[@class="t-font"]/a[contains(@href, "/videos-search/")]/text()
 # Last Updated July 07, 2022
