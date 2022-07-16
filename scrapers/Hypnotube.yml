@@ -10,19 +10,24 @@ xPathScrapers:
       $studio: //a[starts-with(@href,'https://hypnotube.com/user/')]
     scene:
       Title: //div[@class='item-tr-inner-col inner-col']/h1/text()
-      Details: //meta[@name='description']/@content
-      Image: //meta[@property='og:image']/@content
+      Details: //div[@class='main-description']/text()
+      Image:
+        selector: //script[@type="text/javascript" and contains(text(),"og:image")]/text()
+        postProcess:
+          - replace:
+              - regex: '.+"og:image" content="([^"]+)".+'
+                with: $1
       Studio:
         Name: $studio/@title
         URL: $studio/@href
       Date:
-        selector: //div[@class='stats-container']/ul/li[3]/span[@class='sub-label']/text()
+        selector: //li/span[@class="icon i-calendar"]/following-sibling::span
         postProcess:
           - replace:
-            - regex: \s\d{2}:\d{2}:\d{2}
-              with: ""
+              - regex: \s.*$
+                with: ""
       Tags:
         Name: //div[@class='tags-block']/a/text()
       URL: //link[rel='canonical']/@href
 
-# Last Updated July 03, 2022
+# Last Updated July 16, 2022
