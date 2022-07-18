@@ -134,4 +134,4 @@ xPathScrapers:
         selector: //div[@class='cell td_title']/h3[@class='title show-for-medium']/a/@href
       Image:
         selector: //img[@class="boxcover"]/@src
-# Last Updated April 29, 2021
+# Last Updated July 17, 2022
