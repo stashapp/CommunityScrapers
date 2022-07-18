@@ -16,11 +16,10 @@ performerByName:
 xPathScrapers:
   sceneScraper:
     common:
-      $seo: //div[@class='seo-text']
       $script: //script[contains(.,'VideoObject')]/text()
     scene:
       Title: //h1/text()
-      Details: $seo/p/text()
+      Details: //div[@class="about-section__text"]
       Date:
         selector: $script
         postProcess:
@@ -42,19 +41,15 @@ xPathScrapers:
         Name:
           fixed: StasyQ
       Tags:
-        Name: $seo//a/text()
+        Name: //a[@href[contains(.,'/search/')]]//text()
       Performers:
-        Name: //a[@href[contains(.,'/m/')]]//text()
+        Name: //div[@class="release-card"]//a[@class="custom-link"]//text()
       URL: //link[@rel='canonical']/@href
   performerSearch:
     performer:
-      Name: //a[@href[contains(.,'/m/')]]/@alt
+      Name: //div[@class="model-preview-card__info"]//a[@href[contains(.,'/m/')]]/text()
       URL:
-        selector: //a[@href[contains(.,'/m/')]]/@href
-        postProcess:
-          - replace:
-            - regex: ^
-              with: https://www.stasyq.com
+        selector: //div[@class="model-preview-card__info"]//a[@href[contains(.,'/m/')]]/@href
   performerScraper:
     common:
       $script: //script[contains(.,'schema')]/text()
@@ -64,6 +59,14 @@ xPathScrapers:
         postProcess:
           - replace:
             - regex: .+(?:name":\s")([^"]+).+
+              with: $1
+            - regex: .+schema\.org.+
+              with:
+      Aliases:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:alternateName":.")([^"]+).+
               with: $1
             - regex: .+schema\.org.+
               with:
@@ -79,11 +82,10 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:address":\s")([^"]+).+
+            - regex: .+(?:birthPlace":\s")([^"]+).+
               with: $1
             - regex: .+schema\.org.+
               with:
-      EyeColor:
       Height:
         selector: $script
         postProcess:
@@ -92,14 +94,34 @@ xPathScrapers:
               with: $1
             - regex: .+schema\.org.+
               with:
+      Weight:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .+(?:weight":\s")(\d+).+
+              with: $1
+            - regex: .+schema\.org.+
+              with:
       Image:
         selector: $script
         postProcess:
           - replace:
             - regex: .+(?:image":\s")([^"]+).+
-              with: https://www.stasyq.com$1
+              with: $1
+            - regex: .+schema\.org.+
+              with:
+      Details:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: (\\u2019|&#39;|&rsquo;)
+              with: "'"
+            - regex: \\
+              with: 
+            - regex: .+(?:description":")(.+)",".+
+              with: $1
             - regex: .+schema\.org.+
               with:
       URL: //link[@rel='canonical']/@href
 
-# Last Updated October 10, 2020
+# Last Updated July 17, 2022
