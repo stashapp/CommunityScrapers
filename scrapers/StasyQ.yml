@@ -17,6 +17,7 @@ xPathScrapers:
   sceneScraper:
     common:
       $script: //script[contains(.,'VideoObject')]/text()
+      $performer: //div[@class="release-card"]//a[@class="custom-link"]
     scene:
       Title: //h1/text()
       Details: //div[@class="about-section__text"]
@@ -24,32 +25,34 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:uploadDate":\s")([^"]+).+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: .+(?:uploadDate":\s")([^"]+).+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
           - parseDate: 2006-01-02
       Image:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:thumbnailUrl":\s")([^"]+).+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: .+(?:thumbnailUrl":\s")([^"]+).+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
       Studio:
         Name:
           fixed: StasyQ
       Tags:
-        Name: //a[@href[contains(.,'/search/')]]//text()
+        Name: //a[contains(@href,'/search/')]//text()
+
       Performers:
-        Name: //div[@class="release-card"]//a[@class="custom-link"]//text()
+        Name: $performer//text()
+        URL: $performer/@href
       URL: //link[@rel='canonical']/@href
   performerSearch:
     performer:
-      Name: //div[@class="model-preview-card__info"]//a[@href[contains(.,'/m/')]]/text()
+      Name: //div[@class="model-preview-card__info"]//a[contains(@href,'/m/')]/text()
       URL:
-        selector: //div[@class="model-preview-card__info"]//a[@href[contains(.,'/m/')]]/@href
+        selector: //div[@class="model-preview-card__info"]//a[contains(@href,'/m/')]/@href
   performerScraper:
     common:
       $script: //script[contains(.,'schema')]/text()
@@ -58,70 +61,69 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:name":\s")([^"]+).+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: .+(?:name":\s")([^"]+).+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
       Aliases:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:alternateName":.")([^"]+).+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: .+(?:alternateName":.")([^"]+).+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
       Gender:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:gender"\s:\s")([^"]+).+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: .+(?:gender"\s:\s")([^"]+).+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
       Country:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:birthPlace":\s")([^"]+).+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: .+(?:birthPlace":\s")([^"]+).+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
       Height:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:height":\s")(\d+).+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: .+(?:height":\s")(\d+).+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
       Weight:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:weight":\s")(\d+).+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: .+(?:weight":\s")(\d+).+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
       Image:
         selector: $script
         postProcess:
           - replace:
-            - regex: .+(?:image":\s")([^"]+).+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: .+(?:image":\s")([^"]+).+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
       Details:
         selector: $script
         postProcess:
           - replace:
-            - regex: (\\u2019|&#39;|&rsquo;)
-              with: "'"
-            - regex: \\
-              with: 
-            - regex: .+(?:description":")(.+)",".+
-              with: $1
-            - regex: .+schema\.org.+
-              with:
+              - regex: (\\u2019|&#39;|&rsquo;)
+                with: "'"
+              - regex: \\
+                with:
+              - regex: .+(?:description":")(.+)",".+
+                with: $1
+              - regex: .+schema\.org.+
+                with:
       URL: //link[@rel='canonical']/@href
-
 # Last Updated July 17, 2022
