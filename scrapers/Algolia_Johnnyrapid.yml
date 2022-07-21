@@ -1,0 +1,30 @@
+name: "Johnny Rapid"
+sceneByURL:
+  - action: script
+    url:
+      - johnnyrapid.com/en/video/
+    script:
+      - python
+      - Algolia.py
+      - johnnyrapid
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - johnnyrapid
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - johnnyrapid
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - johnnyrapid
+      - validName
+# Last Updated June 20, 2022
