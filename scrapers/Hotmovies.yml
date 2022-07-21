@@ -1,4 +1,12 @@
 name: Hotmovies
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.hotmovies.com/search.php?view_style=classic&page=1&num_per_page=24&find_with=all&search_in=video_title%2Ctitle&page_sort=relevance&search_string={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -118,4 +126,12 @@ xPathScrapers:
               - regex: \|
                 with: " "
       Aliases: //strong[text()="Aliases:"]/following-sibling::text()[1]
-# Last Updated April 29, 2021
+  sceneSearch:
+    scene:
+      Title:
+        selector: //div[@class='cell td_title']/h3[@class='title show-for-medium']/a/@title
+      URL:
+        selector: //div[@class='cell td_title']/h3[@class='title show-for-medium']/a/@href
+      Image:
+        selector: //img[@class="boxcover"]/@src
+# Last Updated July 17, 2022

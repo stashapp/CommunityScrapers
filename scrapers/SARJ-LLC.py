@@ -52,14 +52,26 @@ def scrape_url(url, type):
     path = parsed.path.split('/')
     base_url = f"{parsed.scheme}://{parsed.netloc}"
     if type == 'scene':
-        index = path.index('movie')
-        scraped = scrape_movie(base_url, path[index + 1], path[index + 2])
+        try:
+            index = path.index('movie')
+            scraped = scrape_movie(base_url, path[index + 1], path[index + 2])
+        except ValueError:
+            log.error(f"scene scraping not supported for {url}")
+            return None
     elif type == 'gallery':
-        index = path.index('gallery')
-        scraped = scrape_gallery(base_url, path[index + 1], path[index + 2])
+        try:
+            index = path.index('gallery')
+            scraped = scrape_gallery(base_url, path[index + 1], path[index + 2])
+        except ValueError:
+            log.error(f"gallery scraping not supported for {url}")
+            return None
     elif type == 'performer':
-        index = path.index('model')
-        scraped = scrape_model(base_url, path[index + 1])
+        try:
+            index = path.index('model')
+            scraped = scrape_model(base_url, path[index + 1])
+        except ValueError:
+            log.error(f"performer scraping not supported for {url}")
+            return None
     else:
         return None
 
@@ -182,16 +194,21 @@ def scrape_model(base_url, name):
 
 
 def map_media(data, studio, base_url):
-    studio_url = studio[1]
+    url = ""
+    studio_name = {'Name': ""}
+    if studio is not None:
+        studio_url = studio[1]
+        url = f"https://www.{studio_url}{data['path']}"
+        studio_name = {'Name': studio[0]}
 
     return {
         'Title': data['name'],
         'Details': data['description'],
-        'URL': f"https://www.{studio_url}{data['path']}",
+        'URL': url,
         'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
         'Tags': list(map(lambda t: {'Name': t}, data['tags'])),
         'Performers': list(map(lambda m: map_model(base_url, m), data['models'])),
-        'Studio': {'Name': studio[0]}
+        'Studio': studio_name
     }
 
 
@@ -207,7 +224,7 @@ def scrape_movie(base_url, date, name):
     for image_type in image_types:
         if image_type in data:
             image_part = data[image_type]
-            res['Image'] = f"https://www.{studio[1]}{image_part}"
+            res['Image'] = f"https://cdn.metartnetwork.com/{data['media']['siteUUID']}/{image_part}"
             try:
                 response = requests.get(res['Image'], headers={
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
@@ -278,9 +295,11 @@ studios = {
     '5592E33324211E3FF640800200C93111': ('Goddess Nudes', 'goddessnudes.com'),
     '5A68E1D7B6E69E7401226779D559A10A': ('Love Hairy', 'lovehairy.com'),
     'E6B595104E3411DF98790800200C9A66': ('Met Art', 'metart.com'),
+    '5C38C84F55841824817C19987F5447B0': ('Met Art Intimate', 'metart.com'),
     'E7DFB70DF31C45B3B5E0BF10D733D349': ('Met Art X', 'metartx.com'),
     'D99236C04DD011E1B86C0800200C9A66': ('Rylsky Art', 'rylskyart.com'),
     '94DB3D0036FC11E1B86C0800200C9A66': ('Sex Art', 'sexart.com'),
+    '3D345D1E156910B44DB5A80CDD746318': ('Straplez', 'straplez.com'),
     '18A2E47EAEFD45F29033A5FCAF1F5B91': ('Stunning 18', 'stunning18.com'),
     'FDAFDF209DC311E0AA820800200C9A66': ('The Life Erotic', 'thelifeerotic.com'),
     '4F23028982B542FA9C6DAAA747E9B5B3': ('Viv Thomas', 'vivthomas.com'),
@@ -321,7 +340,8 @@ elif sys.argv[1] == "query":
 elif sys.argv[1] == 'search':
     ret = search(sys.argv[2], i['title'] if 'title' in i else i['name'])
 
-output = json.dumps(ret)
-print(output)
-# don't log the output since it has an image
-# log.debug(f"Send output: {output}")
+if ret is not None:
+    output = json.dumps(ret)
+    print(output)
+    # don't log the output since it has an image
+    # log.debug(f"Send output: {output}")

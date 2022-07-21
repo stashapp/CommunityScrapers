@@ -51,11 +51,13 @@ xPathScrapers:
     movie:
       Name: //div[@id="topmedia"]//a/text()
       Duration:
-        selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::text()
+        selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::span|$movieInfo//b[contains(text(),"Length")]/following-sibling::text()
         postProcess:
           - replace:
-              - regex: '.+\s(\d+)\s?min.+$'
-                with: $1:00
+              - regex: ^\[(.+)\]$ # handle movies with proper [xx:xx:xx] duration
+                with: $1
+              - regex: ^[^\d]*(\d+)\s*min.* # handle movies with only xx mins duration
+                with: "$1:00"
       Date:
         selector: $movieInfo//span[contains(text(), "Release date")]/text()
         postProcess:
@@ -72,8 +74,8 @@ xPathScrapers:
         concat: " "
         postProcess:
           - replace:
-              - regex: '^Description -\s*"'
+              - regex: '^Description\s*-\s*'
                 with:
       FrontImage: //a[@id='enlargecover']/@href
       BackImage: //a[text()='+Back']/@href
-# Last Updated March 23, 2022
+# Last Updated June 30, 2022

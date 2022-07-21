@@ -10,6 +10,12 @@ except ModuleNotFoundError:
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
     sys.exit()
 
+try:
+    import py_common.log as log
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
+
 # Fill in your jellyfin API-Key
 api_key = "xxxxxxxxxxxxxxxxxxxxxxxxxx"
 # Fill in the jellyfin user-id (extract from Jellyfin->Admin->User from the URL of the User)
@@ -17,40 +23,6 @@ userid = "xxxxxxxxxxxxxxxxxxxxxxxx"
 # Fill in the Jellyfin Endpoint
 host = "http://xxxxxxxxxxx:8096/"
 stash_date = '%Y-%m-%d'
-
-class Logger:
-    levels = {
-            "trace": b't'.decode(),
-            "debug": b'd'.decode(),
-            "info": b'i'.decode(),
-            "warning": b'w'.decode(),
-            "error": b'e'.decode(),
-        }
-
-    def __write(self, level: str, msg: str):
-        if level == "" or level not in self.levels:
-            return
-
-        print(f"\x01{self.levels[level]}\x02{msg}\n", file=sys.stderr, flush=True)
-
-    def trace(self, msg):
-        self.__write("trace", msg)
-
-    def debug(self, msg):
-        self.__write("debug", msg)
-
-    def info(self, msg):
-        self.__write("info", msg)
-
-    def warning(self, msg):
-        self.__write("warning", msg)
-
-    def error(self, msg):
-        self.__write("error", msg)
-
-
-log = Logger()
-
 
 def get_image(url):
     dlimage = requests.request("GET", url)
@@ -109,7 +81,7 @@ def performer_fragment(query):
         actorimage=get_image(host + 'Items/' + list_actor['Id'] + '/Images/Primary/0?api_key=' + api_key)
         if actorimage:
             perf["images"]= []
-            perf["images"].append(actorimage)           
+            perf["images"].append(actorimage)
     else:
         log.debug(f"Didn't find {query} in Fragment Mode")
         return None
@@ -140,7 +112,7 @@ def performer_url(query):
         actorimage=host + 'Items/' + list_actor['Id'] + '/Images/Primary/0?api_key=' + api_key
         if actorimage:
             perf["images"]= []
-            perf["images"].append(actorimage)           
+            perf["images"].append(actorimage)
     else:
         log.debug(f"Didn't find URL {query} in Performer URL Mode")
         return None
@@ -194,7 +166,7 @@ def scene_fragment(query):
                scene['studio']=studio
             except IndexError:
                scene['studio']= None
-#Uncomment if you want to set the Cover Image from Jellyfin for the Scene        
+#Uncomment if you want to set the Cover Image from Jellyfin for the Scene
         #sceneimage=get_image(host + 'Items/' + list_scenes['Items'][0]['Id'] + '/Images/Primary/0?api_key=' + api_key)
         #if sceneimage:
         #     scene["image"]= sceneimage
@@ -275,7 +247,7 @@ def scene_query(query):
     else:
         log.debug(f"Didn't find Scene {query} in Query Mode")
         return None
-    
+
     return scenes
 
 def movie_url(query):

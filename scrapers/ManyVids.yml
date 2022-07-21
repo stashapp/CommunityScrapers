@@ -28,7 +28,7 @@ xPathScrapers:
       #     - parseDate: Jan 02
       Performers:
         Name: $details//h4/a/text()
-      Image: //div[@id="rmpPlayer"]/@data-video-screenshot
+      Image: //meta[@name="twitter:image"]/@content
       Tags:
         Name: //div[@class="tags"]/a
 
@@ -145,4 +145,4 @@ xPathScrapers:
 # Required for parsing sceneScraper tags
 driver:
   useCDP: true
-# Last Updated January 27, 2022
+# Last Updated July 06, 2022

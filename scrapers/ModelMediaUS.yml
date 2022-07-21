@@ -2,9 +2,15 @@ name: "ModelMediaUS"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - modelmediaasia.com/trailers/
       - modelmediaus.com/videos/
       - modelmediaus.com/trailers/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - delphinefilms.com/trailers/
+      - jerkaoke.com/trailers/
+    scraper: altSceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -19,10 +25,26 @@ xPathScrapers:
         Name: //a[contains(@href,"models/")]/text()
       Tags:
         Name: //a[contains(@href,"videos?tag")]/text()
-      Image: 
+      Image:
         selector: //iframe[@id="video-player"]/@src
         postProcess:
           - subScraper:
               selector: //stream/@poster
-
-# Last Updated March 27, 2022
+  altSceneScraper:
+    common:
+      $container: //main[@id='MusContainer']
+    scene:
+      Title: $container//h1
+      Date:
+        selector: //div[contains(.,"Released")]/following-sibling::div/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: $container//h1/following-sibling::p/text()
+      Performers:
+        Name:
+          selector: //div[contains(.,"Cast")]/following-sibling::div//a/text()
+      Tags:
+        Name: $container//h1/following-sibling::div//a[contains(@href,"videos?tag")]/span/text()
+      Image: //div[contains(@class,"mus-z-index-2")]/img[contains(@class,"mus-img-cover")]/@src
+# Last Updated June 29, 2022

@@ -1,11 +1,16 @@
 name: "Pornditos"
 sceneByURL:
   - action: scrapeXPath
+    scraper: pornditosScraper
     url:
       - pornditos.com/
-    scraper: sceneScraper
+
+  - action: scrapeXPath
+    scraper: culionerosScraper
+    url:
+      - en.culioneros.com/videos/
 xPathScrapers:
-  sceneScraper:
+  pornditosScraper:
     common:
       $info: //div[@class="playerText-new fright"]
     scene:
@@ -19,8 +24,10 @@ xPathScrapers:
         selector: //div[@id="js-small-thumb"]/img/@src
         postProcess:
           - replace:
-              - regex: "http://sm.members.khcdn.com/shoots/([^/]+)/([^/]+)/rollover.*"
-                with: "http://x-images5.bangbros.com/$1/shoots/$2/members/450x340.jpg"
+              - regex: 'http://sm\.members\.khcdn\.com/shoots/([^/]+)/([^/]+)/rollover.*'
+                with: "http://x-images5.bangbros.com/$1/shoots/$2/big_trailer.jpg"
+              - regex: '5\.bangbros\.com/cuchimami'
+                with: "4.bangbros.com/cuchimami"
       Date:
         selector: $info/p[starts-with(text(),"Added to")]/text()[last()]
         postProcess:
@@ -28,4 +35,29 @@ xPathScrapers:
               - regex: on\s
                 with:
           - parseDate: Jan 2, 2006
-# Last Updated August 08, 2021
+
+  culionerosScraper:
+    common:
+      $info: //h2[@class="h2-trailer-block"]
+    scene:
+      Title: $info//span[@class="h2-trailer-style"]/text()
+      Details: 
+        selector: //p[@class="para-class t-para"]/text()
+      Performers:
+        Name: $info//a[contains(@href, "/models/")]/text()
+      Studio:
+        Name: $info//a[contains(@href, "/latest-videos/")]/text()
+      Image:
+        selector: //img[contains(@src, "/shoots/")][1]/@src
+        postProcess:
+          - replace:
+              - regex: '(http://x-images\d\.bangbros\.com/[^/]+/shoots/[^/]+).*'
+                with: "$1/big_trailer.jpg"
+      Date:
+        selector: $info//b[@class="t-font"][not(a)]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Tags:
+        Name:
+          selector: //b[@class="t-font"]/a[contains(@href, "/videos-search/")]/text()
+# Last Updated July 07, 2022
