@@ -1,0 +1,19 @@
+name: MeanBitches
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.meanbitches.com/tour/models/
+    scraper: performerScraper
+
+
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //div[contains(@class,'title_bar')][1]/text()            
+      Image:
+        selector: //tr/td/img[@class="thumbs"]/@src
+        postProcess:
+          - replace:
+            - regex: (.*)
+              with: http://meanbitches.com/$1
