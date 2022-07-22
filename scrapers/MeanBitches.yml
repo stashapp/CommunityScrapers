@@ -53,3 +53,4 @@ xPathScrapers:
             - regex: "Added(.*)"
               with: $1
           - parseDate: 01/02/2006
+# Last Updated July 22, 2022
