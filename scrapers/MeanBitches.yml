@@ -1,10 +1,15 @@
-name: MeanBitches
+name: MeanBitches-develop
 
 performerByURL:
   - action: scrapeXPath
     url:
       - https://www.meanbitches.com/tour/models/
     scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.meanbitches.com/tour/updates/
+    scraper: sceneScraper
 
 
 xPathScrapers:
@@ -17,3 +22,34 @@ xPathScrapers:
           - replace:
             - regex: (.*)
               with: http://meanbitches.com/$1
+  sceneScraper:
+    common:
+      $titlebar: //table[@id="episode_title"]/tbody/tr/
+    scene:
+      Title: //table[@id="episode_title"]/tbody/tr/td[1]/text()
+      Details: //div[@class="episode_description"]/text()
+      Studio:
+        Name: 
+          fixed: Mean Bitches
+        URL:
+          fixed: https://www.meanbitches.com/
+      Performers:
+        Name: 
+          selector: $titlebar/td[2]/text()
+          postProcess:
+            - replace:
+                - regex: "Featuring:(.*)"
+                  with: $1
+      Image: 
+        selector: //a[@class='trailer_link']/img/@src
+        postProcess:
+          - replace:
+            - regex: (.*)
+              with: http://meanbitches.com/$1
+      Date: 
+        selector: $titlebar/td[3]/text()
+        postProcess: 
+          - replace:
+            - regex: "Added(.*)"
+              with: $1
+          - parseDate: 01/02/2006
