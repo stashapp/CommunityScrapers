@@ -147,4 +147,4 @@ xPathScrapers:
 # Required for parsing sceneScraper tags
 driver:
   useCDP: true
-# Last Updated January 27, 2022
+# Last Updated July 23, 2022
