@@ -396,7 +396,7 @@ def jav_search_by_name(html, xpath):
             "title": jav_title[count],
             "url":
             f"https://www.javlibrary.com/en/{jav_url[count].replace('./', '')}",
-            "image": f"https:{jav_image[count]}"
+            "image": re.sub("^//","https://",jav_image[count])
         })
     return lst
 
