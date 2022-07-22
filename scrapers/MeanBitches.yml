@@ -1,4 +1,4 @@
-name: MeanBitches-develop
+name: MeanBitches
 
 performerByURL:
   - action: scrapeXPath
