@@ -20,7 +20,9 @@ xPathScrapers:
       $details: //div[@class="video-details"]
     scene:
       Title: //h2/@title
-      Details: //meta[@name="description"]/@content
+      Details:
+        selector: //div[@class="desc-text"]/span/text()
+        concat: "\n\n"
       # Only partial dates provides, which would currently be made as 0000-01-01
       # Date:
       #   selector: //div[@class="mb-1"]/span[2]/text()
@@ -145,4 +147,4 @@ xPathScrapers:
 # Required for parsing sceneScraper tags
 driver:
   useCDP: true
-# Last Updated July 06, 2022
+# Last Updated July 23, 2022
