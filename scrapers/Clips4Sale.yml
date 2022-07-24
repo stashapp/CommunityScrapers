@@ -27,7 +27,7 @@ xPathScrapers:
       Title:
         selector: $card/@aria-label
       URL:
-        selector: $card//a[contains(@class, "search-clip__title")]
+        selector: $card//a[contains(@class, "search-clip__title")]/@href
       Image:
         selector: $card//img/@data-src
         postProcess:
