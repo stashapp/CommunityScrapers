@@ -12,6 +12,7 @@ xPathScrapers:
       Title: //span[@class="update_title"]/text()
       Date:
         selector: //span[@class="availdate"]/text()
+        concat: " "
         postProcess:
           - replace:
               - regex: (\d{2}\/\d{2}\/\d{4}).*
