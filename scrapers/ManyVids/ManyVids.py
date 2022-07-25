@@ -5,9 +5,12 @@ import sys
 from urllib.parse import quote_plus
 
 # to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__)) # get current script directory
-parent = os.path.dirname(csd) #  parent directory (should be the scrapers one)
-sys.path.append(parent) # add parent dir to sys path so that we can import py_common from there
+csd = os.path.dirname(
+    os.path.realpath(__file__))  # get current script directory
+parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
+sys.path.append(
+    parent
+)  # add parent dir to sys path so that we can import py_common from there
 
 try:
     from py_common import log
@@ -79,6 +82,7 @@ def get_model_name(model_id: str) -> str:
         log.debug(f"Failed to get name for {model_id}")
         return None
 
+
 def clean_text(details: str) -> dict:
     """
     remove escaped \ and html parse the details text
@@ -87,6 +91,30 @@ def clean_text(details: str) -> dict:
         details = re.sub(r"\\", "", details)
         details = bs(details, features='lxml').get_text()
     return details
+
+
+def map_ethnicity(ethnicity: str) -> str:
+    if ethnicity is None:
+        return None
+
+    ethnicities = {
+            "Alaskan": "alaskan",
+            "Asian": "asian",
+            "Black / Ebony": "black",
+            "East Indian": "east indian",
+            "Latino / Hispanic": "hispanic",
+            "Middle Eastern": "middle eastern",
+            "Mixed": "mixed",
+            "Native American": "native american",
+            "Pacific Islander": "pacific islander",
+            "White / Caucasian": "white",
+            "Other": "other"
+    }
+
+    found = ethnicities.get(ethnicity)
+    if found:
+        return found
+    return ethnicity
 
 def get_scene(scene_id: str) -> dict:
     """
@@ -120,7 +148,7 @@ def get_scene(scene_id: str) -> dict:
     return scrape
 
 
-def get_model_bio(url_handle: str) -> dict:
+def get_model_bio(url_handle: str, performer_url: str) -> dict:
     """
     Get and parse model profile from manyvid's json endpoint
     """
@@ -132,10 +160,11 @@ def get_model_bio(url_handle: str) -> dict:
         log.error(f"Error {api_error} while requesting data from manyvids api")
         return None
     model_meta = response.json()
-    #log.debug(json.dumps(model_meta)) # useful to get all json entries 
+    log.debug(json.dumps(model_meta)) # useful to get all json entries
     scrape = {}
     scrape['name'] = model_meta.get('displayName')
     scrape['image'] = model_meta.get('portrait')
+    log.debug(f"image {scrape['image']}")
     date = model_meta.get('dob')
     if date:
         date = re.sub(r"T.*", "", date)
@@ -145,8 +174,90 @@ def get_model_bio(url_handle: str) -> dict:
     scrape['details'] = clean_text(description)
 
     scrape['gender'] = model_meta.get('identification')
+    if scrape['gender'] and scrape['gender'] == "Trans":
+        scrape['gender'] = "transgender_female"
+
     scrape['twitter'] = model_meta.get('socLnkTwitter')
     scrape['instagram'] = model_meta.get('socLnkInstagram')
+    """
+    Get the rest meta from the model about page
+      $aboutlabel: //*[@class='mv-about__container__details__list-unit']/span[@class='mv-about__container__details__list-label']
+    """
+    try:
+        response = get_request(performer_url)
+        page_tree = html.fromstring(response.content)
+        
+        # top scene tags for performer
+        tags = page_tree.xpath('//li[@class="mv-top-tags__item"]//text()')
+        scrape['tags'] = [{"name": x.strip()} for x in tags if x.strip() != ""]
+        
+        ethnicity = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Ethnicity')]/following-sibling::span/text()")
+        if ethnicity:
+            scrape['ethnicity'] = map_ethnicity(ethnicity[0])
+        
+        country = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Nationality')]/following-sibling::span/img/@alt")
+        if  country:
+            scrape['country'] = country[0]
+
+        eye_color = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Eye Color')]/following-sibling::span/text()")
+        if eye_color:
+            scrape["eye_color"] = eye_color[0]
+        
+        hair_color = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Hair Color')]/following-sibling::span/text()")
+        if hair_color:
+            scrape["hair_color"] = hair_color[0]
+
+        tattoos = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Tattoos')]/following-sibling::span/text()")
+        if tattoos:
+            scrape["tattoos"] = tattoos[0]
+
+        piercings = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Piercings')]/following-sibling::span/text()")
+        if piercings:
+            scrape["piercings"] = piercings[0]
+        
+        measurements = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Measurements')]/following-sibling::span/text()")
+        if piercings:
+            scrape["measurements"] = measurements[0]
+        
+        height = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Height')]/following-sibling::span/text()")
+        if height:
+            scrape["height"] = height[0]
+            match = re.match(".*\s(\d+)\s*cm.*", height[0])
+            if match:
+                scrape["height"] = match.group(1)
+
+        weight = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Weight')]/following-sibling::span/text()")
+        if weight:
+            scrape["weight"] = weight[0]
+            match = re.match("(\d+)\s*Lbs.*", weight[0])
+            if match:
+                scrape["weight"] = f"{round(float(match.group(1))*0.45359237)}"
+        
+
+        
+    except requests.exceptions.RequestException as url_error:
+        log.error(f"Error {url_error} while requesting data from profile page")
+    """
+      Measurements:
+        selector: $aboutlabel[contains(text(), 'Measurements')]/following-sibling::* | $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*
+      FakeTits:
+        selector: $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*[contains(text(), 'Natural') or contains(text(), 'Cohesive Gel') or contains(text(), 'Silicon') or contains(text(), 'Saline')]
+        postProcess:
+          - replace:
+              - regex: "^Natural.*$"
+                with: "No"
+              - regex: '\s+?[0-9]+.*'
+                with: ""
+      CareerLength:
+        selector: //*[@class='mv-about__banner-info']/strong/text()
+        postProcess:
+          - replace:
+              - regex: "^Joined "
+                with: ""
+              - regex: $
+                with: " - today"
+
+    """
     return scrape
 
 
@@ -162,11 +273,12 @@ def scrape_scene(scene_url: str) -> None:
 
 
 def scrape_performer(performer_url: str) -> None:
-    handler_match = re.search(r".+/Profile/\d+/([^/]+)/.+", performer_url)
+    handler_match = re.search(r".+/Profile/(\d+)/([^/]+)/.+", performer_url)
     if handler_match:
-        url_handler = handler_match.group(1)
-        scraped = get_model_bio(
-            url_handler.lower())  # url handler needs to be lower case
+        performer_id = handler_match.group(1)
+        url_handler = handler_match.group(2).lower()
+        performer_about_url = f"https://www.manyvids.com/Profile/{performer_id}/{url_handler}/About/"
+        scraped = get_model_bio(url_handler, performer_about_url)
         if scraped:
             scraped["url"] = performer_url
             print(json.dumps(scraped))
