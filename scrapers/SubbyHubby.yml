@@ -70,11 +70,11 @@ xPathScrapers:
       $update-details: //div[@class="update_details"]
     scene:
       Title:
-        selector: //div[@class="update_details"]/a[2]/text()
+        selector: $update-details/a[2]/text()
       URL:
-        selector: //div[@class="update_details"]/a[2]/@href
+        selector: $update-details/a[2]/@href
       Image:
-        selector: //div[@class="update_details"]/a[1]/img/@src
+        selector: $update-details/a[1]/img/@src
         postProcess:
           - replace:
               - regex: ^
