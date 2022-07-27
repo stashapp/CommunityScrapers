@@ -20,42 +20,40 @@ sceneByQueryFragment:
 xPathScrapers:
   movieScraper:
     movie:
-      Name:
+      Name: &title
         selector: //meta[@property='og:title']/@content
         postProcess:
           - replace:
-            - regex: '\s- PinkLabel.*$'
-              with: ""      
+              - regex: '\s- PinkLabel.*$'
+                with: ""
       Duration:
-        selector: //div[@class='col-md-12 col-sm-8']/h5[2]
+        selector: //div[@class='col-md-12 col-sm-8']/h5[contains(text(),"Runtime:")]/text()
         postProcess:
           - replace:
-            - regex: "Runtime: "
-              with: ""
-            - regex: "Closed Captions Available$"
-              with: ""
-            - regex: "(.*) mins?. ?"
-              with: 00:$1:00
-      Director: 
-        selector: //div[@class='col-md-12 col-sm-8']/h5[1]
+              - regex: "Runtime: "
+                with: ""
+              - regex: "(.*) mins?. ?"
+                with: 00:$1:00
+      Director:
+        selector: //div[@class='col-md-12 col-sm-8']/h5[contains(text(),"Directed")]/text()
         postProcess:
           - replace:
-            - regex: '^.*Directed by (.*)$'
-              with: $1
-      Date:
-        selector: //div[@class='col-md-12 col-sm-8']/h5[1]
+              - regex: "^.*Directed by (.*)$"
+                with: $1
+      Date: &date
+        selector: //div[@class='col-md-12 col-sm-8']/h5[contains(text(),"Directed")]/text()
         postProcess:
           - replace:
-            - regex: '^(\d+).*$'
-              with: $1-01-01
+              - regex: '^(\d+).*$'
+                with: $1-01-01
           - parseDate: 2006-01-02
-      Synopsis:
+      Synopsis: &details
         selector: //div[@class='ep-description']/span[@class='dark-copy']/p
         concat: "\n\n"
-      URL: //meta[@property='og:url']/@content
-      FrontImage: //meta[@property='og:image']/@content
-      Studio:
-        Name: //div[@class='col-md-12 col-sm-8']/h4     
+      URL: &url //meta[@property='og:url']/@content
+      FrontImage: &image //meta[@property='og:image']/@content
+      Studio: &studio
+        Name: //div[@class='col-md-12 col-sm-8']/h4
   sceneSearch:
     common:
       $post: //li[@class="list-group-item media plEpisode search-result shameless_film"]
@@ -64,39 +62,19 @@ xPathScrapers:
         selector: $post/a/@title
       URL:
         selector: $post/a/@href
-      Image: $post/a/img
   sceneScraper:
     scene:
-      Title:
-        selector: //meta[@property='og:title']/@content
-        postProcess:
-          - replace:
-            - regex: '\s- PinkLabel.*$'
-              with: ""
-      Details: 
-        selector: //div[@class='ep-description']/span[@class='dark-copy']/p
-        concat: "\n\n"
-      Date:
-        selector: //div[@class='col-md-12 col-sm-8']/h5[1]
-        postProcess:
-          - replace:
-            - regex: '^(\d+).*$'
-              with: $1-01-01
-          - parseDate: 2006-01-02
-      URL: //meta[@property='og:url']/@content
-      Image: //meta[@property='og:image']/@content
-      Studio: 
-        Name: //div[@class='col-md-12 col-sm-8']/h4
+      Title: *title
+      Details: *details
+      Date: *date
+      URL: *url
+      Image: *image
+      Studio: *studio
       Movies:
         URL: //meta[@property='og:url']/@content
-        Name:
-          selector: //meta[@property='og:title']/@content
-          postProcess:
-            - replace:
-              - regex: '\s- PinkLabel.*$'
-                with: ""
+        Name: *title
       Tags:
-        Name:  //div[@class='col-md-8']/div[@class='ep-description']/div[3]/a
+        Name: //div[@class='col-md-8']/div[@class='ep-description']/div[contains(text(),"Tags:")]/a
       Performers:
-        Name:  //div[@class='col-md-8']/div[@class='ep-description']/div[2]/a
-# Last Updated July 17, 2022
+        Name: //div[@class='col-md-8']/div[@class='ep-description']/div[contains(text(),"Starring:")]/a
+# Last Updated July 27, 2022
