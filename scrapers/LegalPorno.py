@@ -30,7 +30,8 @@ def detect_delimiter(title):
 
   debug(f"Could not determine delimiter of `{title}`")
 
-def find_scene_id(title):
+
+def find_scene_id(title, strict):
   # Remove file extension
   title = Path(title).stem
   title = title.replace("'", "")
@@ -42,21 +43,51 @@ def find_scene_id(title):
         if not part[0].isdigit() and part[-1].isdigit():
           return part
 
+  # if we're here, the previous method didn't work. Let's try to remove whitespaces and match the most common IDs
+  title = title.replace(" ","");
+  if (strict):
+    id = re.search("(GL|GIO|XF|SZ|GP|AA|RS|OB|BTG|EKS)\d{3}", title)
+  else:
+    id = re.search("(GL|GIO|XF|SZ|GP|AA|RS|OB|BTG|EKS)\d{3,4}", title)
+
+  if id:
+    return id.group()
+
+def search_scene(fragment):
+  title = fragment['title']
+
+  scene_id = find_scene_id(title, False)
+  if not scene_id:
+    debug(f"Could not determine scene id in title: `{title}`")
+    return
+
+  strict_scene_id = find_scene_id(title, True)
+
+  debug(f"Found scene id: {scene_id}")
+
+  result = query_url(scene_id)
+  if result is None:
+    if strict_scene_id is None:
+      debug("No scenes found")
+      return
+
+    result = query_url(strict_scene_id)
+    if result is None:
+      debug("No scenes found")
+      return
+
+  if result["type"] == "scene":
+    debug(f"Found scene {result['name']}")
+    fragment["url"] = result["url"]
+    fragment["title"] = result["name"]
+
+    
+
+
 if sys.argv[1] == "query":
   fragment = json.loads(sys.stdin.read())
   debug(json.dumps(fragment))
 
-  scene_id = find_scene_id(fragment['title'])
-  if not scene_id:
-    debug(f"Could not determine scene id in title: `{fragment['title']}`")
-  else:
-    debug(f"Found scene id: {scene_id}")
-    result = query_url(scene_id)
-    if result is not None:
-      if result["type"] == "scene":
-        debug(f"Found scene {result['name']}")
-        fragment["url"] = result["url"]
-        fragment["title"] = result["name"]
-    else:
-      debug("No scenes found")
+  search_scene(fragment)
+
   print(json.dumps(fragment))
