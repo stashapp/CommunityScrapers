@@ -10,6 +10,7 @@ sceneByURL:
     url:
       - delphinefilms.com/trailers/
       - jerkaoke.com/trailers/
+      - povadventure.com/trailers
     scraper: altSceneScraper
 xPathScrapers:
   sceneScraper:
@@ -47,4 +48,4 @@ xPathScrapers:
       Tags:
         Name: $container//h1/following-sibling::div//a[contains(@href,"videos?tag")]/span/text()
       Image: //div[contains(@class,"mus-z-index-2")]/img[contains(@class,"mus-img-cover")]/@src
-# Last Updated June 29, 2022
+# Last Updated July 29, 2022
