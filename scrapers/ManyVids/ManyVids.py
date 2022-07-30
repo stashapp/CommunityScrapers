@@ -196,7 +196,7 @@ def get_model_bio(url_handle: str, performer_url: str) -> dict:
             scrape['ethnicity'] = map_ethnicity(ethnicity[0])
         
         country = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Nationality')]/following-sibling::span/img/@alt")
-        if  country:
+        if country:
             scrape['country'] = country[0]
 
         eye_color = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Eye Color')]/following-sibling::span/text()")
@@ -216,7 +216,7 @@ def get_model_bio(url_handle: str, performer_url: str) -> dict:
             scrape["piercings"] = piercings[0]
         
         measurements = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Measurements')]/following-sibling::span/text()")
-        if piercings:
+        if measurements:
             scrape["measurements"] = measurements[0]
         
         height = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Height')]/following-sibling::span/text()")
