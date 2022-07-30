@@ -22,36 +22,16 @@ except ModuleNotFoundError:
 
 try:
     from lxml import html
-except ModuleNotFoundError:
-    log.error(
-        "You need to install the lxml module. (https://lxml.de/installation.html#installation)"
-    )
-    log.error(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml"
-    )
-    sys.exit()
-
-try:
     import requests
-except ModuleNotFoundError:
-    log.error(
-        "You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)"
-    )
-    log.error(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests"
-    )
-    sys.exit()
-try:
     from bs4 import BeautifulSoup as bs
 except ModuleNotFoundError:
     log.error(
-        "You need to install the BeautifulSoup module. (https://www.crummy.com/software/BeautifulSoup/bs4/doc/)"
+        "You need to install the python modules mentioned in requirements.txt"
     )
     log.error(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install beautifulsoup4"
+        "If you have pip (normally installed with python), run this command in a terminal from the directory the scraper is located: pip install -r requirements.txt"
     )
     sys.exit()
-
 
 def get_request(url: str) -> requests.Response():
     """
@@ -85,7 +65,7 @@ def get_model_name(model_id: str) -> str:
 
 def clean_text(details: str) -> dict:
     """
-    remove escaped \ and html parse the details text
+    remove escaped backslashes and html parse the details text
     """
     if details:
         details = re.sub(r"\\", "", details)
@@ -174,27 +154,25 @@ def get_model_bio(url_handle: str, performer_url: str) -> dict:
     scrape['details'] = clean_text(description)
 
     scrape['gender'] = model_meta.get('identification')
-    if scrape['gender'] and scrape['gender'] == "Trans":
+    if scrape['gender'] == "Trans":
         scrape['gender'] = "transgender_female"
 
     scrape['twitter'] = model_meta.get('socLnkTwitter')
     scrape['instagram'] = model_meta.get('socLnkInstagram')
-    """
-    Get the rest meta from the model about page
-      $aboutlabel: //*[@class='mv-about__container__details__list-unit']/span[@class='mv-about__container__details__list-label']
-    """
+    
+    ### Get the rest meta from the model about page
     try:
         response = get_request(performer_url)
         page_tree = html.fromstring(response.content)
-        
+
         # top scene tags for performer
         tags = page_tree.xpath('//li[@class="mv-top-tags__item"]//text()')
         scrape['tags'] = [{"name": x.strip()} for x in tags if x.strip() != ""]
-        
+
         ethnicity = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Ethnicity')]/following-sibling::span/text()")
         if ethnicity:
             scrape['ethnicity'] = map_ethnicity(ethnicity[0])
-        
+
         country = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Nationality')]/following-sibling::span/img/@alt")
         if country:
             scrape['country'] = country[0]
@@ -202,7 +180,7 @@ def get_model_bio(url_handle: str, performer_url: str) -> dict:
         eye_color = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Eye Color')]/following-sibling::span/text()")
         if eye_color:
             scrape["eye_color"] = eye_color[0]
-        
+
         hair_color = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Hair Color')]/following-sibling::span/text()")
         if hair_color:
             scrape["hair_color"] = hair_color[0]
@@ -214,50 +192,37 @@ def get_model_bio(url_handle: str, performer_url: str) -> dict:
         piercings = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Piercings')]/following-sibling::span/text()")
         if piercings:
             scrape["piercings"] = piercings[0]
-        
+
         measurements = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Measurements')]/following-sibling::span/text()")
         if measurements:
             scrape["measurements"] = measurements[0]
-        
+
         height = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Height')]/following-sibling::span/text()")
         if height:
             scrape["height"] = height[0]
-            match = re.match(".*\s(\d+)\s*cm.*", height[0])
+            match = re.match(r".*\s(\d+)\s*cm.*", height[0])
             if match:
                 scrape["height"] = match.group(1)
 
         weight = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Weight')]/following-sibling::span/text()")
         if weight:
             scrape["weight"] = weight[0]
-            match = re.match("(\d+)\s*Lbs.*", weight[0])
+            match = re.match(r"(\d+)\s*Lbs.*", weight[0])
             if match:
                 scrape["weight"] = f"{round(float(match.group(1))*0.45359237)}"
-        
 
-        
+        fake_tits = page_tree.xpath("//span[@class='mv-about__container__details__list-label'][contains(text(), 'Breast Size')]/following-sibling::*[contains(text(), 'Natural') or contains(text(), 'Cohesive Gel') or contains(text(), 'Silicon') or contains(text(), 'Saline')]/text()")
+        if fake_tits:
+            natural_match = re.match(r"^Natural.*$", fake_tits[0])
+            if natural_match:
+                scrape["fake_tits"] = "No"
+            else:
+                scrape["fake_tits"] = re.sub(r"\s+?[0-9]+.*", "", fake_tits[0])
+        career_length = page_tree.xpath("//*[@class='mv-about__banner-info']/strong/text()")
+        if career_length:
+            scrape["career_length"] = re.sub(r"^Joined\s+", "", career_length[0]) + " - today"
     except requests.exceptions.RequestException as url_error:
         log.error(f"Error {url_error} while requesting data from profile page")
-    """
-      Measurements:
-        selector: $aboutlabel[contains(text(), 'Measurements')]/following-sibling::* | $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*
-      FakeTits:
-        selector: $aboutlabel[contains(text(), 'Breast Size')]/following-sibling::*[contains(text(), 'Natural') or contains(text(), 'Cohesive Gel') or contains(text(), 'Silicon') or contains(text(), 'Saline')]
-        postProcess:
-          - replace:
-              - regex: "^Natural.*$"
-                with: "No"
-              - regex: '\s+?[0-9]+.*'
-                with: ""
-      CareerLength:
-        selector: //*[@class='mv-about__banner-info']/strong/text()
-        postProcess:
-          - replace:
-              - regex: "^Joined "
-                with: ""
-              - regex: $
-                with: " - today"
-
-    """
     return scrape
 
 
