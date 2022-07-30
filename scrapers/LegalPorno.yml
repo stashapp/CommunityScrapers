@@ -4,18 +4,38 @@ sceneByURL:
     url:
       - analvids.com/watch/
     scraper: sceneScraper
+
 performerByURL:
   - action: scrapeXPath
     url:
       - https://www.analvids.com
     scraper: performerScraper
+
 sceneByFragment:
-    action: script
-    script:
-      - python
-      # use python3 instead if needed
-      - LegalPorno.py
-      - query
+  action: script
+  script:
+    - python
+    - LegalPorno.py
+    - scene
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+sceneByName:
+  action: script
+  script:
+    - python
+    - LegalPorno.py
+    - sceneName
+
+performerByFragment:
+  action: script
+  script:
+    - python
+    - LegalPorno.py
+    - performer
 
 xPathScrapers:
   sceneScraper:
@@ -49,4 +69,4 @@ xPathScrapers:
       Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
       Image:
         selector: //div[@class='model--avatar']//img/@src
-# Last Updated October 17, 2021
+# Last Updated July 30, 2022

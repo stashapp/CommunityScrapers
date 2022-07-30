@@ -1,3 +1,4 @@
+import py_common.log as Log
 import json
 import sys
 import re
@@ -10,84 +11,145 @@ except ModuleNotFoundError:
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
     sys.exit()
 
-def debug(t):
-  sys.stderr.write(t + "\n")
-
-def query_url(query):
-  res = requests.get(f"https://www.analvids.com/api/autocomplete/search?q={query}")
-  data = res.json()
-  results = data['terms']
-  if len(results) > 0:
-    if len(results) > 1:
-      debug("Multiple results. Taking first.")
-    return results[0]
-  
-def detect_delimiter(title):
-  delimiters = [" ", "_", "-", "."]
-  for d in delimiters:
-    if d in title:
-      return d
-
-  debug(f"Could not determine delimiter of `{title}`")
+API_URL = "https://www.analvids.com/api/autocomplete/search"
 
 
-def find_scene_id(title, strict):
-  # Remove file extension
-  title = Path(title).stem
-  title = title.replace("'", "")
-  delimiter = detect_delimiter(title)
-  parts = title.split(delimiter)
-  for part in parts:
-    if len(part) > 3:
-      if re.match(r'^(\w{2,3}\d{3,4})$', part):
-        if not part[0].isdigit() and part[-1].isdigit():
-          return part
+def apiQuery(query):
+    res = requests.get(
+        f"{API_URL}?q={query}")
+    data = res.json()
+    results = data['terms']
 
-  # if we're here, the previous method didn't work. Let's try to remove whitespaces and match the most common IDs
-  title = title.replace(" ","");
-  if (strict):
-    id = re.search("(GL|GIO|XF|SZ|GP|AA|RS|OB|BTG|EKS)\d{3}", title)
-  else:
-    id = re.search("(GL|GIO|XF|SZ|GP|AA|RS|OB|BTG|EKS)\d{3,4}", title)
-
-  if id:
-    return id.group()
-
-def search_scene(fragment):
-  title = fragment['title']
-
-  scene_id = find_scene_id(title, False)
-  if not scene_id:
-    debug(f"Could not determine scene id in title: `{title}`")
-    return
-
-  strict_scene_id = find_scene_id(title, True)
-
-  debug(f"Found scene id: {scene_id}")
-
-  result = query_url(scene_id)
-  if result is None:
-    if strict_scene_id is None:
-      debug("No scenes found")
-      return
-
-    result = query_url(strict_scene_id)
-    if result is None:
-      debug("No scenes found")
-      return
-
-  if result["type"] == "scene":
-    debug(f"Found scene {result['name']}")
-    fragment["url"] = result["url"]
-    fragment["title"] = result["name"]
-
-    
+    return results
 
 
-if sys.argv[1] == "query":
-  fragment = json.loads(sys.stdin.read())
-  debug(json.dumps(fragment))
+def detectDelimiter(title):
+    delimiters = [" ", "_", "-", "."]
+    for d in delimiters:
+        if d in title:
+            return d
 
-  search_scene(fragment)
+    Log.debug(f"Could not determine delimiter of `{title}`")
 
-  print(json.dumps(fragment))
+
+def parseSceneId(title, strict):
+    # Remove file extension
+    title = Path(title).stem
+    title = title.replace("'", "")
+    delimiter = detectDelimiter(title)
+    parts = title.split(delimiter)
+    for part in parts:
+        if len(part) > 3:
+            if re.match(r'^(\w{2,3}\d{3,4})$', part):
+                if not part[0].isdigit() and part[-1].isdigit():
+                    return part
+
+    # if we're here, the previous method didn't work. Let's try to remove whitespaces and match the most common IDs
+    title = title.replace(" ", "")
+    if (strict):
+        id = re.search("(GL|GIO|XF|SZ|GP|AA|RS|OB|BTG|EKS)\d{3}", title)
+    else:
+        id = re.search("(GL|GIO|XF|SZ|GP|AA|RS|OB|BTG|EKS)\d{3,4}", title)
+
+    if id:
+        return id.group()
+
+    Log.debug(f"Could not determine scene id in title: `{title}`")
+
+
+def scrapeScene(title):
+    results = apiQuery(title)
+
+    scenes = []
+
+    for result in results:
+        if result["type"] == "scene":
+            Log.debug(f"Found scene {result['name']}")
+
+            scene = {
+                "url": result["url"],
+                "title": result["name"]
+            }
+            scenes.append(scene)
+
+    return scenes
+
+
+def scrapePerformer(name):
+    results = apiQuery(name)
+
+    performers = []
+
+    for result in results:
+        if result["type"] != "model":
+            continue
+
+        performer = {
+            "name": result['name'],
+            "url": result['url']
+        }
+        performers.append(performer)
+
+    return performers
+
+
+def scrapeSceneByFragment(title):
+    sceneId = parseSceneId(title, False)
+    if sceneId is None:
+        return
+
+    scenes = scrapeScene(sceneId)
+    if len(scenes) > 1:
+        Log.debug("Found more than one scenes, returning the first")
+
+    if len(scenes) >= 1:
+        return scenes[0]
+
+# We couldn't find a scene so let's try again with strict mode
+    sceneId = parseSceneId(title, True)
+    if sceneId is None:
+        return
+
+    scenes = scrapeScene(sceneId)
+    if len(scenes) >= 1:
+        return scenes[0]
+
+
+###
+### MAIN ###
+###
+
+
+query = sys.stdin.read()
+fragment = json.loads(query)
+
+Log.debug(fragment)
+
+argument = sys.argv[1]
+
+if argument == "scene":
+    Log.debug("Scraping scene by fragment")
+
+    scene = scrapeSceneByFragment(fragment["title"])
+
+    Log.debug(scene)
+    print(json.dumps(scene))
+
+elif argument == "performer":
+    Log.debug("Scraping performer")
+
+    performers = scrapePerformer(fragment['name'])
+
+    Log.info(performers)
+    print(json.dumps(performers))
+
+elif argument == "sceneName":
+    Log.debug("Scraping scene by name")
+
+    scene = scrapeScene(fragment["name"])
+
+    Log.debug(scene)
+    print(json.dumps(scene))
+
+else:
+    Log.warning(f"Script called with unknown argument {argument}")
