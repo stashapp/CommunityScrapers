@@ -1,8 +1,19 @@
-import py_common.log as Log
+
+
+import datetime
+import difflib
 import json
 import sys
 import re
 from pathlib import Path
+
+try:
+    import py_common.log as Log
+    import py_common.graphql as Stash
+    import py_common.config as Config
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
 
 try:
     import requests
@@ -11,16 +22,115 @@ except ModuleNotFoundError:
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
     sys.exit()
 
+try:
+    from bs4 import BeautifulSoup
+except ModuleNotFoundError:
+    print("You need to install the BS4 module", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install bs4", file=sys.stderr)
+    sys.exit()
+
 API_URL = "https://www.analvids.com/api/autocomplete/search"
 
 
+def getStashScenePerformers(sceneId):
+    scene = Stash.getScene(sceneId)
+    if scene is None:
+        return
+
+    performers = []
+
+    for performer in scene["performers"]:
+        performers.append(performer["name"])
+
+    # filter duplicate names (sometimes Stash adds a performer twice on a scene)
+    return list(dict.fromkeys(performers))
+
+
 def apiQuery(query):
-    res = requests.get(
-        f"{API_URL}?q={query}")
-    data = res.json()
+    response = requests.get(f"{API_URL}?q={query}")
+    if response is None:
+        return
+
+    data = response.json()
     results = data['terms']
 
     return results
+
+
+def getScenesFromPerformerPage(url):
+    page = requests.get(url)
+    if page is None:
+        return
+
+    soup = BeautifulSoup(page.text, "html.parser")
+    scenesHTML = soup.find_all("div", {"class": "thumbnail-title gradient"})
+
+    scenes = []
+
+    for html in scenesHTML:
+        scene = {
+            "title": html.a.text,
+            "url": html.a['href']
+        }
+        scenes.append(scene)
+
+    return scenes
+
+
+def getSceneFromPage(url):
+    page = requests.get(url)
+    if page is None:
+        return
+
+    soup = BeautifulSoup(page.text, "html.parser")
+
+    descriptionHTML = soup.find(
+        "dl", {"class": "dl-horizontal scene-description__column"}).find_all("div")
+
+    performers = []
+    for performerHTML in descriptionHTML[0].find_all("a"):
+        text = performerHTML.text.strip()
+
+        if "(" not in text:
+            performer = {
+                "name": performerHTML.text
+            }
+            performers.append(performer)
+
+    tags = []
+    for tag in descriptionHTML[1].find_all("a"):
+        tags.append({"name": tag.text.strip()})
+
+    details = descriptionHTML[2].find("dd")
+    if details is not None:
+        details = details.text.strip()
+
+    title = soup.find("h1", {"class": 'watchpage-title'}).text.strip()
+
+    studio = {
+        "name": soup.find("a", {"class": "watchpage-studioname"}).text.strip()
+    }
+
+    image = soup.find("div", {"id": "player"})["style"]
+    image = re.search('.+(https[^"]+).+', image)
+    if image is not None:
+        image = image.group(1)
+
+    rawDate = soup.find("span", {"title": "Release date"}).text.strip()
+    date = datetime.datetime.strptime(rawDate, "%Y-%m-%d").strftime("%Y-%m-%d")
+
+    scene = {
+        "url": url,
+        "title": title,
+        "date": date,
+        "performers": performers,
+        "details": details,
+        "studio": studio,
+        "image": image,
+        "tags": tags
+    }
+
+    return scene
 
 
 def detectDelimiter(title):
@@ -66,10 +176,13 @@ def scrapeScene(title):
         if result["type"] == "scene":
             Log.debug(f"Found scene {result['name']}")
 
-            scene = {
-                "url": result["url"],
-                "title": result["name"]
-            }
+            scene = getSceneFromPage(result['url'])
+            if scene is None:
+                scene = {
+                    "url": result["url"],
+                    "title": result["name"]
+                }
+
             scenes.append(scene)
 
     return scenes
@@ -93,7 +206,7 @@ def scrapePerformer(name):
     return performers
 
 
-def scrapeSceneByFragment(title):
+def scrapeSceneById(title):
     sceneId = parseSceneId(title, False)
     if sceneId is None:
         return
@@ -111,15 +224,33 @@ def scrapeSceneByFragment(title):
         return
 
     scenes = scrapeScene(sceneId)
+    if len(scenes) > 1:
+        Log.debug("Found more than one scenes, returning the first")
+
     if len(scenes) >= 1:
         return scenes[0]
 
 
-###
-### MAIN ###
-###
+def doScrapeSceneFragment(fragment):
+    scene = scrapeSceneById(fragment["title"])
+    if scene is not None:
+        return scene
+
+    performers = getStashScenePerformers(fragment["id"])
+    if len(performers) == 0:
+        return
+
+    lpPerformer = scrapePerformer(performers[0])
+    if len(lpPerformer) == 0:
+        return
+
+    performerUrl = lpPerformer[0]['url']
+    getScenesFromPerformerPage(performerUrl)
 
 
+#----------------------------------#
+#               MAIN               #
+#----------------------------------#
 query = sys.stdin.read()
 fragment = json.loads(query)
 
@@ -130,7 +261,7 @@ argument = sys.argv[1]
 if argument == "scene":
     Log.debug("Scraping scene by fragment")
 
-    scene = scrapeSceneByFragment(fragment["title"])
+    scene = doScrapeSceneFragment(fragment)
 
     Log.debug(scene)
     print(json.dumps(scene))
