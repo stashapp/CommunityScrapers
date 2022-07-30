@@ -1,0 +1,80 @@
+name: "PinkLabelTV"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pinklabel.tv
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - pinklabel.tv
+    scraper: movieScraper
+sceneByName:
+  action: scrapeXPath
+  scraper: sceneSearch
+  queryURL: "https://pinklabel.tv/on-demand/?s={}"
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: &title
+        selector: //meta[@property='og:title']/@content
+        postProcess:
+          - replace:
+              - regex: '\s- PinkLabel.*$'
+                with: ""
+      Duration:
+        selector: //div[@class='col-md-12 col-sm-8']/h5[contains(text(),"Runtime:")]/text()
+        postProcess:
+          - replace:
+              - regex: "Runtime: "
+                with: ""
+              - regex: "(.*) mins?. ?"
+                with: 00:$1:00
+      Director:
+        selector: //div[@class='col-md-12 col-sm-8']/h5[contains(text(),"Directed")]/text()
+        postProcess:
+          - replace:
+              - regex: "^.*Directed by (.*)$"
+                with: $1
+      Date: &date
+        selector: //div[@class='col-md-12 col-sm-8']/h5[contains(text(),"Directed")]/text()
+        postProcess:
+          - replace:
+              - regex: '^(\d+).*$'
+                with: $1-01-01
+          - parseDate: 2006-01-02
+      Synopsis: &details
+        selector: //div[@class='ep-description']/span[@class='dark-copy']/p
+        concat: "\n\n"
+      URL: &url //meta[@property='og:url']/@content
+      FrontImage: &image //meta[@property='og:image']/@content
+      Studio: &studio
+        Name: //div[@class='col-md-12 col-sm-8']/h4
+  sceneSearch:
+    common:
+      $post: //li[@class="list-group-item media plEpisode search-result shameless_film"]
+    scene:
+      Title:
+        selector: $post/a/@title
+      URL:
+        selector: $post/a/@href
+  sceneScraper:
+    scene:
+      Title: *title
+      Details: *details
+      Date: *date
+      URL: *url
+      Image: *image
+      Studio: *studio
+      Movies:
+        URL: //meta[@property='og:url']/@content
+        Name: *title
+      Tags:
+        Name: //div[@class='col-md-8']/div[@class='ep-description']/div[contains(text(),"Tags:")]/a
+      Performers:
+        Name: //div[@class='col-md-8']/div[@class='ep-description']/div[contains(text(),"Starring:")]/a
+# Last Updated July 27, 2022

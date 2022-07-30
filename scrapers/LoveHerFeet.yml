@@ -5,6 +5,7 @@ sceneByURL:
     url:
       - loveherboobs.com/tour/trailers/
       - loveherfeet.com/tour/trailers/
+      - loveherfilms.com/tour/trailers/
       - shelovesblack.com/tour/trailers/
     scraper: sceneScraper
 sceneByFragment:
@@ -22,12 +23,14 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Image:
-        selector: //base/@href|//video/@poster
-        concat: /
+        selector: //div[@class='video']//img[contains(@class,'mainThumb')]/@src0_3x|//video/@poster|//base/@href
+        concat: "|"
         postProcess:
           - replace:
-              - regex: ///tour
-                with:
+              - regex: ^(https[^|]+)\|.+ # mainThumb urls do not need anything
+                with: $1
+              - regex: ^/tour([^|]+)\|(.+) # video/@poster urls need a domain
+                with: $2$1
       Studio:
         Name: //meta[@name='author']/@content
       Tags:
@@ -36,4 +39,4 @@ xPathScrapers:
         Name:
           selector: //div[@class='featured']/a/text()
 
-# Last Updated April 30, 2022
+# Last Updated July 22, 2022

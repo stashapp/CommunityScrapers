@@ -136,4 +136,10 @@ xPathScrapers:
       Studio:
         Name: $studio
         URL: $studio/@href
-# Last Updated July 04, 2022
+      Details:
+        selector: //div[@class="video-info-row"][1]/text()[starts-with(normalize-space(.),"Description:")]
+        postProcess:
+          - replace:
+              - regex: "Description: (.*)"
+                with: $1
+# Last Updated July 08, 2022
