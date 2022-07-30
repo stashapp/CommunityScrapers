@@ -31,8 +31,6 @@ xPathScrapers:
     scene:
       Title: &title
         selector: //div[@class='video-info-top']/p[@class='title']/a[@class='link-blue link-no-border']
-      #Details: &desc
-      #  selector: //span[@class="video_description"]
       Tags:
         Name: //p[@class='data-row data-categories']/a[@class='tag-button']
       Performers:
@@ -46,8 +44,6 @@ xPathScrapers:
       Movies:
         Name: *title
         URL: *url
-      #Studio:
-      #  Name: //div[@class="small-4 medium-3 cell video_details"]/a[1]
       Date: &date
         selector: //div[@class='video-info-top']/ul[@class='info-bar']/li[1]/a[@class='link-yellow']
         postProcess:
@@ -69,11 +65,7 @@ xPathScrapers:
           - replace:
             - regex: ^(.* (\d+) min)$
               with: 00:$2:00
-      #Studio:
-      #  Name: //a[contains(@href, "/studio/")]/text()
-      #Synopsis: *desc
       FrontImage: //div[@class='video-list-item inner']/div[@class='thumb-container']/a[@class='thumb-video-link']/img/@src
-      #BackImage: //div[@class="lg_inside_wrap"]/@data-back
   performerSearch:
     performer:
       Name: //p[@class='title']/a[@class='link-blue link-no-border']/text()
@@ -100,22 +92,6 @@ xPathScrapers:
               Actress: female
               Actor: male
       Aliases: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"AKA:")]/following-sibling::text()
-#      Details:
-#         fixed: "TBD"
-#         selector: //div[contains(@class,"jsVideoDesc")]/@text
-#        concat: "|"
-#        postProcess:
-#          - replace:
-#              - regex: Biography\|
-#                with: "Biography:\n"
-#              - regex: \|(Early\sLife|Turn\sOns|Awards)\|
-#                with: "\n\n$1:\n"
-#              - regex: \|[^\|]*(Career|Facts|Quotes)\|
-#                with: "\n\n$1:\n"
-#              - regex: \|(\d{4})
-#                with: "\n$1"
-#              - regex: \|
-#                with: " "
       Birthdate:
         selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Birthday:")]/following-sibling::text()
         concat: " "
@@ -208,5 +184,3 @@ xPathScrapers:
               - regex: ^/
                 with: https://theclassicporn.com/
 # Last Updated July 29, 2022
-debug:
-   printHTML: true
