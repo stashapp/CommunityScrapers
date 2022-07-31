@@ -73,7 +73,7 @@ xPathScrapers:
               - regex: /store/
                 with: "/home/aboutMe/"
           - subScraper: //p
-            concat: "\n\n"
+        concat: "\n\n"
       Image: //div[@class="sideBar"]//img[contains(@class,'avatar')]/@src
   performerSearch:
     performer:
