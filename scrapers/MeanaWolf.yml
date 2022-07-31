@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h3/text()
+      Title: //h1/text()
       Date:
         selector: //span[text()="ADDED:"]/following-sibling::text()
         postProcess:
