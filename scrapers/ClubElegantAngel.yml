@@ -1,0 +1,76 @@
+name: "ClubElegantAngel"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - clubelegantangel.com/video/
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - clubelegantangel.com/dvd/
+    scraper: movieScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name: 
+          fixed: Elegant Angel
+        URL: 
+          fixed: https://www.clubelegantangel.com
+      URL: //head/link[@rel="canonical"]/@href
+      Movies:
+        Name: //div[contains(.,"DVD :")]/a/text()
+        URL: 
+          selector: //div[contains(.,"DVD :")]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.clubelegantangel.com"
+      Title: //head/title/text()
+      Date:
+        selector: //div[@class="wrpHighlightUpdated"]/text()
+        postProcess:
+          - parseDate: 2006-01-02 #2012-02-18
+      #Details:
+        #selector: 
+      Performers:
+        Name: //li[contains(.,"Pornstars:")]/a/text()
+        URL:
+          selector: //li[contains(.,"Pornstars:")]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.clubelegantangel.com" 
+      Tags:
+        Name: //li[contains(.,"Categories :")]/a/text()
+      Image: //div[@class="gblViewHighlight"]/img/@src
+        #selector: //div[@class="gblViewHighlight"]/img/@src
+        #postProcess:
+          #- replace:
+              #- regex: ^([^?]+).*$
+                #with: "https:$1"
+  movieScraper:
+    movie:
+      Name: //head/title/text()
+      #Director:
+        #selector: 
+        #concat: ", "
+      Duration: //td/div/text()
+      Date:
+        selector: //tr/td[@align="right"]/text()
+        postProcess:
+          - parseDate: 2006-01-02 #2012-02-18
+      #Synopsis: 
+      Studio:
+        Name: 
+          fixed: Elegant Angel
+        URL: 
+          fixed: https://www.clubelegantangel.com
+      FrontImage: //div[@class="gblViewHighlight"]/img/@src
+      BackImage:
+        selector: //div[@class="gblViewHighlight"]/img/@src
+        postProcess:
+          - replace:
+              - regex: "front"
+                with: "back"
+# Last Updated July 30, 2022
