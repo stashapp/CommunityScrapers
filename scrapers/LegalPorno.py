@@ -1,5 +1,3 @@
-
-
 import datetime
 import difflib
 import json
