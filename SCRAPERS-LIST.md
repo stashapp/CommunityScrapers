@@ -1351,6 +1351,7 @@ zentaidolls.com|ZentaiDolls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 zerotolerancefilms.com|Algolia_zerotolerancefilms.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 zexyvr.com|ZexyVR.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 zoiestarr.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+clubelegantangel.com|ClubElegantAngel.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 
 
 ## Non url scrapers
