@@ -1,0 +1,39 @@
+name: LustCinema
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lustcinema.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[contains(@class,"my-3")]/img/@name
+      Date:
+        selector: //script[@type='application/ld+json' and contains(., 'dateCreated')]/text()
+        postProcess:
+          - replace:
+              - regex: .*dateCreated(?:[\"\s:])+(\d+-\d+-\d+) .*
+                with: $1
+          - parseDate: 2006-01-02
+      Details:
+        selector: //script[contains(.,"window.__NUXT")]/text()
+        postProcess:
+          - replace:
+              - regex: .*,synopsis_clean(?:[\s:])+\"(.*)\",short_synopsis.*
+                with: $1
+              - regex: \\
+                with:
+      Performers:
+        Name: //div[@id="contributorImage"]//a[contains(@href,"/cast/")]/@title
+      Image:
+        selector: //div[contains(@class,'lc__negativex')]//img[contains(@class,'top-0 left-0')]/@src
+        postProcess:
+          - replace:
+              - regex: ^([^?]+)\?.*
+                with: $1?ar=16:9&fit=crop&crop=edges
+      Studio:
+        Name:
+          fixed: LustCinema
+
+# Last Updated June 27, 2022

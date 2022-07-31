@@ -8,6 +8,7 @@ sceneByURL:
       - analviolation.com/trailers/
       - baddaddypov.com/trailers/
       - badfamilypov.com/trailers/
+      - badmommypov.com/trailers/
       - downtofuckdating.com/trailers/
       - dtfsluts.com/trailers/
       - girlfaction.com/trailers/
@@ -40,7 +41,7 @@ xPathScrapers:
       Tags:
         Name: //ul[@class="flex flex-wrap gap-2 text-white"]//a
       Image:
-        selector: //img[@alt="trailer"]/@src0_1x | //div[@id="video_player"]//@poster
+        selector: //img[@alt="trailer"]/@src0_1x | //div[@id="video_player"]//@poster | //video[@id="my-player"]/@poster
       Studio:
         Name:
           selector: //meta[@property="og:url"]/@content
@@ -52,6 +53,8 @@ xPathScrapers:
                 https://analviolation.com: AnalViolation
                 https://BadDaddyPOV.com: BadDaddyPOV
                 https://BadFamilyPov.com: BadFamilyPov
+                https://BadMommyPov.com: BadMommyPov
+                https://BadMommyPOV.com: BadMommyPov
                 https://DownToFuckDating.com: DownToFuckDating
                 https://DTFsluts.com: DTFsluts
                 https://Girlfaction.com: Girlfaction
@@ -69,4 +72,4 @@ xPathScrapers:
                 https://TwistedVisual.com: TwistedVisual
                 https://yourmomdoesanal.com: YourMomDoesAnal
                 https://YourMomDoesPorn.com: YourMomDoesPorn
-# Last Updated October 31, 2021
+# Last Updated June 05, 2022

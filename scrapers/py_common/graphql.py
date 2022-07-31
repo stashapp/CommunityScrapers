@@ -1,3 +1,5 @@
+import sys
+
 try:
     import requests
 except ModuleNotFoundError:

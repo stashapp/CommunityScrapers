@@ -2,7 +2,7 @@ name: WillTileXXX
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.willtilexxx.com/updates
+      - willtilexxx.com/updates
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -26,5 +26,5 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: https://www.willtilexxx.com/
-# Last Updated March 23, 2022
+                with: https://willtilexxx.com/
+# Last Updated July 29, 2022

@@ -1,0 +1,39 @@
+name: RealityLovers
+performerByURL:
+  - action: script
+    url:
+      - https://realitylovers.com/girl
+      - https://tsvirtuallovers.com/girl
+    script:
+      - python
+      - RealityLovers.py
+      - performerByURL
+sceneByURL:
+  - action: script
+    url:
+      - https://realitylovers.com/vd/
+      - https://tsvirtuallovers.com/vd/
+    script:
+      - python
+      - RealityLovers.py
+      - sceneByURL
+sceneByName:
+  action: script
+  script:
+    - python
+    - RealityLovers.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - RealityLovers.py
+    - sceneByQueryFragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - RealityLovers.py
+    - sceneByFragment
+
+# Last Updated April 26, 2022

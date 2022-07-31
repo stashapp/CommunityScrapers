@@ -4,6 +4,16 @@ sceneByURL:
     url:
       - bang.com/video
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - bang.com/dvd
+    scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - bang.com/pornstar
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     common:
@@ -19,9 +29,9 @@ xPathScrapers:
                 with: $1
       Date:
         selector: //span[@class="hidden-xs fa-text-right fa-text-left"]/text()
-        postProcess:
+        postProcess: &dateProcessor
           - replace:
-              - regex: (\w+\s)(\d+)\w+,(\s\d{4})
+              - regex: (\w+\s)(\d+)\w+,(\s\d{4}).*
                 with: $1$2$3
           - parseDate: Jan 2 2006
       Tags:
@@ -40,7 +50,58 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "https://www.bang.com"
+  movieScraper:
+    common:
+      $details: //section[@id="dvd-page2"]//div[@class="row"]
+    movie:
+      Name:
+        selector: $details//h1[@class="primary-heading"]/text()
+      Duration:
+        selector: $details//span[contains(@class, "duration")]/@data-line
+      Date:
+        selector: $details//span[contains(@class, "release-date")]/text()
+        postProcess: *dateProcessor
+      Synopsis: $details//div[@class="overview"]//span/text()
+      Studio:
+        Name: $details//div[contains(text(), "From")]/a/text()
+      FrontImage:
+        selector: $details//div[@class="front-cover"]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+      BackImage:
+        selector: $details//div[@class="front-cover"]//img/@src
+        postProcess:
+          - replace:
+              - regex: front\.jpg
+                with: "back.jpg"
+              - regex: ^
+                with: "https:"
+  performerScraper:
+    common:
+      $overlay: //div[@id="pornstar-metadata"]
+    performer:
+      Name: $overlay//h3
+      URL:
+        selector: //link[@rel="canonical"]/@href
+      Twitter: $overlay//a[contains(@class, "btn-twitter")]/@href
+      Birthdate:
+        selector: $overlay//span[contains(text(),"Birthdate")]/../span[@class="profile-description"]
+        postProcess: *dateProcessor
+      Country:
+        selector: $overlay//span[contains(text(),'Birth Place:')]/..//span[@class="profile-description"]/text()
+      Ethnicity:
+        selector: $overlay//span[contains(text(),"Ethnicity")]/../a/span/text()
+      HairColor:
+        selector: $overlay//span[contains(text(),"Hair Color")]/../a/span/text()
+      EyeColor:
+        selector: $overlay//span[contains(text(),"Eye Color")]/../a/span/text()
+      Aliases:
+        selector: $overlay//small[@class="comma-list-container"]//span/text()
+        concat: " / "
+      Image: //meta[@name="og:image"]/@content
 driver:
   useCDP: true
   sleep: 5
-# Last Updated January 17, 2021
+# Last Updated June 08, 2022

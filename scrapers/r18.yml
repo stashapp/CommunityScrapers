@@ -322,17 +322,17 @@ xPathScrapers:
         selector: //h1[@class="txt01"]/text()
         postProcess: *ppUncensor
       FrontImage:
-        selector: //li[@class="item-list"][1]//img/@data-original
+        selector: //li[contains(@class,"item-list")][1]//img/@data-original
         postProcess:
           - replace:
               - regex: ps\.jpg
                 with: "pl.jpg"
       BackImage:
-        selector: //li[@class="item-list"][2]//img/@data-original
+        selector: //li[contains(@class,"item-list")][2]//img/@data-original
         postProcess:
           - replace:
               - regex: ps\.jpg
                 with: "pl.jpg"
       Studio:
         Name: //p[text()="TOP STUDIOS"]/following-sibling::ul//a/span[@class="item01"]/text()
-# Last Updated August 01, 2021
+# Last Updated May 22, 2022

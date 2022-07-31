@@ -7,6 +7,11 @@ sceneByURL:
       - milftrip.com
       - screwmetoo.com
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - helloladyboy.com
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -34,5 +39,26 @@ xPathScrapers:
                https://helloladyboy.com: HelloLadyBoy
                https://milftrip.com: MilfTrip
                https://screwmetoo.com: ScrewMeToo
+  performerScraper:
+    performer:
+      Name: //*/h1[@class="amp-model-title"]/text()
+      Measurements: //*/span[@class="model-details" and text()="Measurements:"]/../text()
+      Height:
+        selector: //*/span[@class="model-details" and text()="Height:"]/../text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //*/span[@class="model-details" and text()="Weight:"]/../text()
+        postProcess:
+          - replace:
+              - regex: ([0-9]{2,3}).*
+                with: $1
+          - lbToKg: true
+      HairColor: //*/span[@class="model-details" and text()="Eye Color:"]/../text()
+      EyeColor: //*/span[@class="model-details" and text()="Hair Color:"]/../text()
+      Details:
+        selector: //*/div[@class="model-desc"]//text()
+        concat: "\n\n"
+      Image: //*/div/amp-img/@src
 
-# Last Updated July 21, 2021
+# Last Updated April 11, 2022

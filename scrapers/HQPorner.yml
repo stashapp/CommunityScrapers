@@ -1,0 +1,41 @@
+name: "HQPorner"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hqporner.com/hdporn
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      #Title: //h1[@class='main-h1']/text()
+      Title:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: (.*)-.*
+                with: $1
+      Tags:
+        Name: //a[@class='tag-link click-trigger']/text()
+      Performers:
+        Name:
+          selector: //li[@class='icon fa-star-o']/a[@class='click-trigger']/text()
+      Studio:
+        Name:
+          selector: //section[@class='hq-logo']/h3/a[@class='click-trigger']
+          postProcess:
+            - map:
+                HQPORNER: HQPorner
+      Image:
+        selector: //iframe[@width="560"]/@src
+        postProcess:
+          - replace: &https
+              - regex: ^//
+                with: "https://"
+          - subScraper:
+              selector: //video/@poster|//script[contains(.,"poster=")]
+              postProcess:
+                - replace:
+                    - regex: '.*poster=\\"([^\\]+).+'
+                      with: $1
+                - replace: *https
+# Last Updated May 05, 2022

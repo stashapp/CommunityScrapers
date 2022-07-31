@@ -1,0 +1,45 @@
+name: LadyboyGold
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - ladyboygold.com/index.php
+    scraper: performerScraper
+xPathScrapers:
+  performerScraper:
+    common:
+      $infoPiece: //div[@class="info-box info"]
+    performer:
+      Name:
+        selector: //div[contains(@class, "modelInfo")]/div[@class="profileModel"]/text()
+        postProcess:
+          - replace:
+              - regex: .*Ladyboy (.*)
+                with: $1
+      Gender:
+        fixed: transgender_female
+      Weight:
+        selector: //div[@class="modelStats"]/ul/li[contains(text(), "Weight:")]/text()
+        postProcess:
+          - replace:
+              - regex: .* \(([0-9]*)kg\)
+                with: $1
+      Height:
+        selector: //div[@class="modelStats"]/ul/li[contains(text(), "Height:")]/text()
+        postProcess:
+          - replace:
+              - regex: .* \(([0-9]*)cm\)
+                with: $1
+      Measurements:
+        selector: //div[@class="modelStats"]/ul/li[contains(text(), "Measurements:")]/text()
+        postProcess:
+          - replace:
+              - regex: Measurements. (.*)
+                with: $1
+      Image:
+        selector: //div[@class="photoUpdate-image col-lg-3 col-md-3 col-sm-6"]/a/img[@class="img-responsive"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.ladyboygold.com
+      Details: //div[@class="profileBio"]/text()
+# Last Updated May 17, 2022

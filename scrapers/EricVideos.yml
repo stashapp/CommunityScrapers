@@ -1,0 +1,67 @@
+name: "EricVideos"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ericvideos.com
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - ericvideos.com
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Details:
+        selector: //div[@class="texte"]/text()
+      Tags:
+        Name: //a[@class='badge badge-dark']/text()
+      Performers:
+        Name:
+          selector: //a/div[@class='acteur']/div[@class='nom']/text()
+        URL:
+          selector: //a[div[@class='acteur']]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.ericvideos.com
+      Studio:
+        Name:
+          fixed: EricVideos
+      Image:
+        selector: //div[@class='preview'][1]/a/img[@class='preview']/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.ericvideos.com/
+
+  performerScraper:
+    performer:
+      Name: //div[@class='col']/h1/text()
+      Height:
+        selector: //li[@class='list-group-item'][2]/text()
+        postProcess:
+          - feetToCm: true
+      Gender:
+        fixed: male
+      Image:
+        selector: //div[@class='photo_acteur']/img[@class='thumbnail']/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.ericvideos.com/
+
+driver:
+  cookies:
+    - CookieURL: "http://www.ericvideos.com"
+      Cookies:
+        - Name: "warning"
+          Domain: "www.ericvideos.com"
+          Value: "1"
+          Path: "/"
+        - Name: "trailerViews"
+          Domain: "www.ericvideos.com"
+          Value: "1"
+          Path: "/"
+# Last Updated May 23, 2022

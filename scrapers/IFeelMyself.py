@@ -2,6 +2,7 @@ import json
 import re
 import sys
 from datetime import datetime
+import unicodedata
 
 try:
     from mechanicalsoup import StatefulBrowser
@@ -25,7 +26,8 @@ def readJSONInput():
 def extract_info(table,cover_url=None):
     description = None
     if table.find(class_= ["blog_wide_new_text","entryBlurb"]):
-        description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True).replace("\x92","'")
+        description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True)
+        description=unicodedata.normalize('NFKC', description).encode('ascii','ignore').decode('ascii')
     date = table.find(class_="blog-title-right").get_text(strip=True) #This is a BeautifulSoup element
     performer = table.find(class_= ["entryHeadingFlash","entryHeading"]).find_all("a")[1].get_text().replace("_"," ")
     performer = str(performer)
@@ -33,7 +35,7 @@ def extract_info(table,cover_url=None):
     date = datetime.strptime(date, '%d %b %Y').date().strftime('%Y-%m-%d') #Convert date to ISO format
     if cover_url == None:
         cover_url=str(table.find("img")['src'])
-    title = table.find(class_= ["entryHeadingFlash","entryHeading"]).find('a').get_text()
+    title = table.find(class_= ["entryHeadingFlash","entryHeading"]).find('a').get_text().replace("\x92","'")
     media_id = re.search(r"\/(\d{3,5})\/",cover_url,re.I).group(1)
     artist_id = re.search(r"\/(f\d{4,5})",cover_url,re.I).group(1)
     tags = table.find_all(class_="tags-list-item-tag")

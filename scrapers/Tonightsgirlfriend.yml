@@ -6,25 +6,16 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $sceneinfo: //div[@class="scenepage-info"]
     scene:
-      Title:
-        selector: //head/title/text()
-        postProcess:
-          - replace:
-              - regex: \s-\sHD\sPorn\s\|\sTonightsGirlfriend\.com
-                with:
-      Date:
-        selector: $sceneinfo/p/span/text()
-        postProcess:
-          - replace:
-              - regex: "Added: "
-                with:
-          - parseDate: 01-02-06
-      Details: //div[@class="scenepage-description"]
+      Title: //h1
+      Details: //p[@class="scene-description"]
       Performers:
-        Name: $sceneinfo/p/a
+        Name:
+          selector: //p[@class="grey-performers"]//text()
+          postProcess:
+            - replace:
+                - regex: \s*,
+                  with:
       Image:
         selector: //img[@class="playcard"]/@src
         postProcess:
@@ -35,4 +26,6 @@ xPathScrapers:
         Name:
           fixed: "Tonight's Girlfriend"
       URL: //link[@rel='canonical']/@href
-# Last Updated January 12, 2021
+      Tags:
+        Name: //a[@class="cat-tag"]
+# Last Updated April 22, 2022
