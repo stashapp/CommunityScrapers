@@ -61,16 +61,25 @@ xPathScrapers:
       Performers:
         Name: //a[@class="modelLink"]
   performerScraper:
+    common:
+      $author: //li[@class="ais-Hits-item"][1]//span[contains(@class,'clip-author')]
     performer:
-      Name: //span[contains(@class,'clip-author')]/a/text()
-      URL: //span[contains(@class,'clip-author')]/a/@href
-      Image: //img[contains(@class,'avatar')]/@src
+      Name: $author
+      URL: $author/a/@href
+      Details:
+        selector: $author/a/@href
+        postProcess:
+          - replace:
+              - regex: /store/
+                with: "/home/aboutMe/"
+          - subScraper: //p
+            concat: "\n\n"
+      Image: //div[@class="sideBar"]//img[contains(@class,'avatar')]/@src
   performerSearch:
     performer:
       Name: //h5[contains(@class,'featured-store-name')]/a/text()
       URL:
         selector: //h5[contains(@class,'featured-store-name')]/a/@href
-
 
 driver:
   useCDP: true
