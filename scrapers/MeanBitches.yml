@@ -20,8 +20,8 @@ xPathScrapers:
         selector: //tr/td/img[@class="thumbs"]/@src
         postProcess:
           - replace:
-            - regex: (.*)
-              with: http://meanbitches.com/$1
+            - regex: ^/
+              with: http://meanbitches.com/
   sceneScraper:
     common:
       $titlebar: //table[@id="episode_title"]/tbody/tr/
