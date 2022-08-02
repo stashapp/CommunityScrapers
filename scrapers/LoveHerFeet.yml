@@ -12,6 +12,15 @@ sceneByFragment:
     action: scrapeXPath
     queryURL: "{url}"
     scraper: sceneScraper
+performerByName:
+    action: scrapeXPath
+    queryURL: "https://www.loveherfilms.com/tour/search.php?model_name={}"
+    scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url: 
+      - loveherfilms.com/tour/models/
+    scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
@@ -23,7 +32,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Image:
-        selector: //div[@class='video']//img[contains(@class,'mainThumb')]/@src0_3x|//video/@poster|//base/@href
+        selector: //div[@class='video']//img[contains(@class,'mainThumb') or contains(@class,'update_thumb')]/@src0_3x|//video/@poster|//base/@href
         concat: "|"
         postProcess:
           - replace:
@@ -38,5 +47,104 @@ xPathScrapers:
       Performers:
         Name:
           selector: //div[@class='featured']/a/text()
+  performerSearch:
+    performer:
+      Name: //h3/../a/@title
+      URL: //h3/../a/@href
+  performerScraper:
+    performer:
+      Name: //div[@class="bio"]//h2/text()
+      Details: //div[@class="description"]/div[@class="about"]/p/text()
+      Image:
+        selector: //div[@class="bio"]//img/@src0_3x
+      Ethnicity: 
+        selector: &bio //script[contains(text(),'totalStats')]/text()
+        postProcess: 
+          - replace:
+            - regex: .*totalStats\.push..[<span>]+Ethnicity:\s..span.\s([\d\w\s-]+)</p>.*
+              with: $1
+            # if not found make it empty
+            - regex: (^..document..ready.*)
+              with: ''
+      EyeColor: 
+        selector: *bio
+        postProcess: 
+          - replace:
+            - regex: .*totalStats\.push.[`<span>]+Eye Color:\s..span.\s([\d\w\s-]+)</p>.*
+              with: $1
+            - regex: (^..document..ready.*)
+              with: ''
+      Birthdate:
+        selector: *bio
+        postProcess:
+          - replace:
+            - regex: .*totalStats\.push.[`<span>]+Date of Birth:\s..span.\s([\d\w\s-,]+)</p>.*
+              with: $1
+            - regex: (^..document..ready.*)
+              with: ''
+          - parseDate: January 2, 2006
+      Measurements:
+        selector: *bio
+        postProcess: 
+          - replace:
+            - regex: .*totalStats\.push.[`<span>]+Measurements:\s..span.\s([\d\w\s-]+)</p>.*
+              with: $1
+            - regex: (^..document..ready.*)
+              with: ''
+      HairColor: 
+        selector: *bio
+        postProcess: 
+          - replace:
+            - regex: .*totalStats\.push.[`<span>]+Hair Color:\s..span.\s([\d\w\s-]+)</p>.*
+              with: $1
+            - regex: (^..document..ready.*)
+              with: ''
+      Height: 
+        selector: *bio
+        postProcess: 
+          - replace:
+            - regex: .*totalStats\.push.[`<span>]+Height:\s..span.\s[\d\s\w]+\((\d+)\scm.*
+              with: $1
+            - regex: (^..document..ready.*)
+              with: ''
+      Weight:
+        selector: *bio
+        postProcess: 
+          - replace:
+            - regex: .*totalStats\.push.[`<span>]+Weight:\s..span.\s([\d\w\s-]+)</p>.*
+              with: $1
+            - regex: (^..document..ready.*)
+              with: ''
+          - lbToKg: true
+      FakeTits:
+        selector: *bio
+        postProcess: 
+          - replace:
+            - regex: .*totalStats\.push.[`<span>]+Tits Type:\s..span.\s([\d\w\s-]+)</p>.*
+              with: $1
+            - regex: (^..document..ready.*)
+              with: ''
+          - map:
+              Unknown: ""
+              Enhanced: "Yes"
+              Natural: "No"
+      Tattoos:
+        selector: *bio
+        postProcess:
+          - replace:
+            - regex: .*totalStats\.push.[`<span>]+Tattoos:\s..span.\s([\d\w\s-]+)</p>.*
+              with: $1
+            - regex: (^..document..ready.*)
+              with: ''
+      Piercings:
+        selector: *bio
+        postProcess:
+          - replace:
+            - regex: .*totalStats\.push.[`<span>]+Piercings:\s..span.\s([\d\w\s-,]+)</p>.*
+              with: $1
+            - regex: (^..document..ready.*)
+              with: ''
+      Gender:
+        fixed: "Female"
 
-# Last Updated July 22, 2022
+# Last Updated August 2, 2022
