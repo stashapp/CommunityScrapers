@@ -1,0 +1,80 @@
+name: AShemaleTube
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - ashemaletube.com/model/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ashemaletube.com/videos
+    scraper: sceneScraper
+xPathScrapers:
+  performerScraper:
+    common:
+      $infoPiece: //div[@class="info-box info"]
+    performer:
+      Name: //h1[@class="username "]
+      Aliases: $infoPiece/ul/li/span[text()="AKA:"]/../text()[2]
+      Birthdate:
+        selector: $infoPiece/ul/li/span[text()="Date of Birth:"]/../text()[2]
+        postProcess:
+          - parseDate: "2 January 2006"
+      DeathDate:
+        selector: $infoPiece/ul/li/span[text()="Status:"]/../text()[2]
+        postProcess:
+          - replace:
+              - regex: '^.*\son\s'
+                with: ""
+              - regex: (\d)(?:st|nd|rd|th)
+                with: $1
+          - parseDate: 2 January 2006
+      Country: $infoPiece/ul/li/span[text()="Country:"]/../text()[2]
+      EyeColor: $infoPiece/ul/li/span[text()="Eye Color:"]/../text()[2]
+      HairColor: $infoPiece/ul/li/span[text()="Hair Color:"]/../text()[2]
+      Ethnicity: $infoPiece/ul/li/span[text()="Ethnicity:"]/../text()[2]
+      Height:
+        selector: $infoPiece/ul/li/span[text()="Height:"]/../text()[2]
+        postProcess:
+          - replace:
+              - regex: (\d+) cm.*
+                with: $1
+      Tags:
+        Name: //a[@class="tag-item"]/text()
+      Image: //div[@class="user-photo"]/img/@src
+      Twitter:
+        selector: //a[@class=" social-twitter"]/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://www.ashemaletube.com/
+          - subScraper: //link[@rel="alternate"][1]/@href
+  sceneScraper:
+    common:
+      $infoPiece: //div[@id="item-info"]
+    scene:
+      Title: $infoPiece//h1/text()
+      Date:
+        selector: $infoPiece//div[contains(@class, "views-count-add")]/text()
+        postProcess:
+          - replace:
+              - regex: Added\s(.*)
+                with: $1
+          - parseDate: 2006-01-02
+      Tags:
+        Name: //a[@class="tag-item"]/@title
+      Performers:
+        Name:
+          selector: //a[@class="model-card"]/text()[2]
+          postProcess:
+            - replace:
+                - regex: \n\t(.*)\n
+                  with: $1
+        URL:
+          selector: //a[@class="model-card"]/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://www.ashemaletube.com/
+      Image: //meta[@property="og:image"]/@content
+# Last Updated May 08, 2022

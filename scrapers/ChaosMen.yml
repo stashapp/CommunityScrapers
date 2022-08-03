@@ -1,0 +1,44 @@
+name: "ChaosMen"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - chaosmen.com/showgal.php?g=content/CM/video
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class='content']/div[@class='cblock'][1]/div[@class='chead clearfix']/h3
+      Date:
+        selector: //div[@class='summary_container']/p[contains(span,"Release date")]
+        postProcess:
+          - replace:
+              - regex: Release date.\s(.*)
+                with: $1
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class='summary_container']/p[not(@class='hbl')]/text()
+        concat: "\n\n"
+      Performers:
+        Name: //div[contains(@class,'video_star_stats')]/h4
+        URL:
+          selector: //div[contains(@class,'video_star_stats')]/a/@href
+          postProcess: &pp
+            - replace:
+                - regex: ^
+                  with: https://www.chaosmen.com/
+      Image:
+        selector: //div[@class='videoimg']/img/@src
+        postProcess: *pp
+      Tags:
+        Name:
+          selector: //div[@class='cblock'][2]/p/a
+          postProcess:
+            - replace:
+                - regex: ([\w\s]+)\s-\s([\w\s]+)
+                  with: $2
+      Studio:
+        Name:
+          fixed: ChaosMen
+# Last Updated June 20, 2022

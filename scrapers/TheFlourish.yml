@@ -1,0 +1,41 @@
+name: The Flourish
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - theflourishxxx.com/trailers/
+      - theflourishamateurs.com/trailers/
+      - theflourishfetish.com/trailers/
+      - theflourishpov.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[contains(@class, 'modelDetails')]
+    scene:
+      Title: //div[contains(@class,'title')]/h2/text()
+      URL: //link[@rel="canonical"]/@href
+      Details: $details/div[@class='description']/p
+      Image:
+        selector: //div[@class='player-thumb']/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://tour.theflourishxxx.com
+      Date:
+        selector: $details//p[1]/text()[contains(.,"Added:")]
+        postProcess:
+          - replace:
+              - regex: 'Added: (\w+)\s(\d{1,2}),\s(\d{4})'
+                with: $1 $2 $3
+          - parseDate: January 2 2006
+      Tags:
+        Name:
+          selector: $details//ul[@class='tags']/li/a/text()
+      Performers:
+        Name:
+          selector: $details//a[contains(@href,'/models/')]/text()
+      Studio:
+        Name: //meta[@name="author"]/@content
+        URL: //base/@href
+
+# Last Updated June 08, 2022

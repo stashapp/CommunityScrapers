@@ -17,6 +17,9 @@ sceneByURL:
       - transexdomination.com
       - ts-castingcouch.com
       - uk-tgirls.com
+      # other grooby sites which work
+      - tgirljapan.com
+      - tgirljapanhardcore.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -35,11 +38,10 @@ xPathScrapers:
       Studio:
         Name: //meta[@name="author"]/@content
       Image:
-        selector: //div[@class="videohere"]/img[@class="thumbs stdimage"]/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
+        selector: //base/@href|//div[@class="videohere"]/img[@class="thumbs stdimage"]/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
+        concat: "|"
         postProcess:
           - replace:
-              - regex: (.+image:\s+")(.+jpg)(.+)
-                with: $2
-              - regex: ^
-                with: "https://grooby.club/"
-# Last Updated May 01, 2022
+              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
+                with: $1$2
+# Last Updated June 26, 2022

@@ -1,0 +1,35 @@
+name: "Wake Up n Fuck"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wakeupnfuck.com/scene
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='block']/h2
+      Date:
+        selector: //div[@class="description"]/text()[contains(.,"Publish Date")]
+        postProcess:
+          - replace:
+              - regex: ^[^\d]+
+                with: ""
+          - parseDate: 2 January 2006
+      Image:
+        selector: //script[contains(.,"the_player")]
+        postProcess:
+          - replace:
+              - regex: '.+image:\s"([^"]+)".*'
+                with: $1
+      Studio:
+        Name:
+          fixed: Wake Up n Fuck
+        URL:
+          fixed: https://www.wakeupnfuck.com
+      Tags:
+        Name:
+          selector: //div[@class="tags"]//a
+      Performers:
+        Name: //div[@class="starring"]//p/text()
+      Details: //meta[@name="description"]/@content
+# Last Updated June 29, 2022

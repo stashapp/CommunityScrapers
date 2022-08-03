@@ -1,0 +1,29 @@
+name: "Blake Mason"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - blakemason.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='col-xs-12 col-md-6']/h1
+      Details:
+        selector: //div[@class='col-xs-12']/div[@class='text-justify']/text()
+        concat: " "
+      Studio:
+        Name:
+          fixed: "Blake Mason"
+      Tags:
+        Name:
+          selector: //div[@class='tags']/a
+      Performers:
+        Name:
+          selector: //div[@class='col-xs-6 col-sm-6 item']/a
+      Image:
+        selector: //*[@id="trailer"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: https://
+# Last Updated June 27, 2022

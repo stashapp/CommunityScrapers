@@ -8,6 +8,12 @@ from datetime import datetime
 from urllib.parse import urlparse
 
 try:
+    import py_common.log as log
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
+
+try:
     import requests
 except ModuleNotFoundError:
     print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
@@ -19,10 +25,6 @@ except ModuleNotFoundError:
 #
 # Ratio to consider the scene to scrape (Ratio between Title and API Title)
 SET_RATIO = 0.75
-# Print debug message.
-PRINT_DEBUG = True
-# Print ratio message. (Show title find in search)
-PRINT_MATCH = True
 ## File used to store key to connect the API.
 STOCKAGE_FILE_APIKEY = "MindGeekAPI.ini"
 # This file will be used for search by name. It can be useful if you only want to search on specific site. (Like only putting Parent studio and not Child)
@@ -53,30 +55,20 @@ SERVER_IP = "http://localhost:9999"
 # API key (Settings > Configuration > Authentication)
 STASH_API = ""
 
-
-def debug(q):
-    q = str(q)
-    if "[DEBUG]" in q and PRINT_DEBUG == False:
-        return
-    if "[MATCH]" in q and PRINT_MATCH == False:
-        return
-    print(q, file=sys.stderr)
-
-
 def sendRequest(url, head):
-    #debug("[DEBUG] Request URL: {}".format(url))
+    #log.debug("Request URL: {}".format(url))
     try:
         response = requests.get(url, headers=head, timeout=10, verify=CHECK_SSL_CERT)
     except requests.exceptions.SSLError:
-        debug("[ERROR] SSL Error on this site. You can ignore this error with the 'CHECK_SSL_CERT' param inside the python file.")
+        log.error("SSL Error on this site. You can ignore this error with the 'CHECK_SSL_CERT' param inside the python file.")
         return None
-    #debug("[DEBUG] Returned URL: {}".format(response.url))
+    #log.debug("Returned URL: {}".format(response.url))
     if response.content and response.status_code == 200:
         return response
     else:
-        debug("[REQUEST] Error, Status Code: {}".format(response.status_code))
+        log.error("[REQUEST] Error, Status Code: {}".format(response.status_code))
         if response.status_code == 429:
-            debug("[REQUEST] 429 Too Many Requests, You have sent too many requests in a given amount of time.")
+            log.error("[REQUEST] 429 Too Many Requests, You have sent too many requests in a given amount of time.")
     return None
 
 # graphql
@@ -103,12 +95,12 @@ def callGraphQL(query, variables=None):
             if result.get("data"):
                 return result.get("data")
         elif response.status_code == 401:
-            debug("[ERROR][GraphQL] HTTP Error 401, Unauthorised.")
+            log.error("[GraphQL] HTTP Error 401, Unauthorised.")
             return None
         else:
             raise ConnectionError("GraphQL query failed:{} - {}".format(response.status_code, response.content))
     except Exception as err:
-        debug(err)
+        log.error(err)
         return None
 
 def graphql_findTagbyName(name):
@@ -134,9 +126,9 @@ def graphql_findTagbyName(name):
 def graphql_createMarker(scene_id, title, main_tag, seconds, tags=[]):
     main_tag_id = graphql_findTagbyName(main_tag)
     if main_tag_id is None:
-        debug("The 'Primary Tag' don't exist ({}), marker won't be created.".format(main_tag))
+        log.warning("The 'Primary Tag' don't exist ({}), marker won't be created.".format(main_tag))
         return None
-    debug("[DEBUG] Creating Marker: {}".format(title))
+    log.info("Creating Marker: {}".format(title))
     query = """
     mutation SceneMarkerCreate($title: String!, $seconds: Float!, $scene_id: ID!, $primary_tag_id: ID!, $tag_ids: [ID!] = []) {
         sceneMarkerCreate(
@@ -243,7 +235,7 @@ def check_config(domain):
                 token = config.get(domain, 'instance')
                 return token
             else:
-                debug("[DEBUG] Old Config date: {}".format(config_date))
+                log.debug("Old Config date: {}".format(config_date))
                 pass
         except NoSectionError:
             pass
@@ -251,7 +243,7 @@ def check_config(domain):
 
 
 def write_config(url, token):
-    debug("[DEBUG] Writing config!")
+    log.debug("Writing config!")
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     config = ConfigParser()
     config.read(STOCKAGE_FILE_APIKEY)
@@ -273,16 +265,16 @@ def api_token_get(url):
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     api_token = check_config(url_domain)
     if api_token is None:
-        debug("[INFO] Need to get API Token")
+        log.info("Need to get API Token")
         r = sendRequest(url,{'User-Agent': USER_AGENT})
         if r:
             api_token = r.cookies.get_dict().get("instance_token")
             if api_token is None:
-                debug("[ERROR] Can't get the instance_token from the cookie.")
+                log.error("Can't get the instance_token from the cookie.")
                 sys.exit(1)
             # Writing new token in the config file
             write_config(url, api_token)
-    debug("[DEBUG] Token: {}".format(api_token))
+    log.debug("Token: {}".format(api_token))
     api_headers = {
         'Instance': api_token,
         'User-Agent': USER_AGENT,
@@ -291,7 +283,7 @@ def api_token_get(url):
     }
     return api_headers
 
-# Final scraping 
+# Final scraping
 
 def scraping_json(api_json, url=""):
     scrape = {}
@@ -308,7 +300,7 @@ def scraping_json(api_json, url=""):
         scrape['studio'] = {}
         scrape['studio']['name'] = api_json['collections'][0].get('name')
     except:
-        debug("[WARN] No studio")
+        log.warning("No studio")
     # Perf
     if 'female_only' in sys.argv:
         perf = []
@@ -356,7 +348,7 @@ def scraping_json(api_json, url=""):
                 except TypeError:
                     pass
     if scrape.get('image') is None and backup_image:
-        debug("[INFO] Using alternate image")
+        log.info("Using alternate image")
         scrape['image'] = backup_image
 
     if SCENE_ID and STASH_API and CREATE_MARKER:
@@ -367,23 +359,23 @@ def scraping_json(api_json, url=""):
                 if api_json["videos"].get("mediabook"):
                     api_scene_duration = api_json["videos"]["mediabook"].get("length")
             if MARKER_DURATION_MATCH and api_scene_duration is None:
-                debug("[INFO] No duration given by the API.")
+                log.info("No duration given by the API.")
             else:
-                debug("[DEBUG] Stash Len: {}| API Len: {}".format(stash_scene_info["duration"], api_scene_duration))
+                log.debug("Stash Len: {}| API Len: {}".format(stash_scene_info["duration"], api_scene_duration))
                 if (MARKER_DURATION_MATCH and api_scene_duration-MARKER_SEC_DIFF <= stash_scene_info["duration"] <= api_scene_duration+MARKER_SEC_DIFF) or (api_scene_duration in [0,1] and MARKER_DURATION_UNSURE):
                     for marker in api_json["timeTags"]:
                         if stash_scene_info.get("marker"):
                             if marker.get("startTime") in stash_scene_info["marker"]:
-                                debug("[DEBUG] Ignoring marker ({}) because already have with same time.".format(marker.get("startTime")))
+                                log.debug("Ignoring marker ({}) because already have with same time.".format(marker.get("startTime")))
                                 continue
                         try:
                             graphql_createMarker(SCENE_ID, marker.get("name"), marker.get("name"), marker.get("startTime"))
                         except:
-                            debug("[ERROR] Marker failed to create")
+                            log.error("Marker failed to create")
                 else:
-                    debug("[INFO] The duration of this scene don't match the duration of stash scene.")
+                    log.info("The duration of this scene don't match the duration of stash scene.")
         else:
-            debug("[INFO] No offical marker for this scene")
+            log.info("No offical marker for this scene")
     return scrape
 
 
@@ -404,15 +396,15 @@ if "validName" in sys.argv and SCENE_URL is None:
 if SCENE_URL:
     # fixing old scene
     if 'brazzers.com/scenes/view/id/' in SCENE_URL:
-        debug("[INFO] Probably an old url, need to redirect")
+        log.info("Probably an old url, need to redirect")
         try:
             r = requests.get(SCENE_URL, headers={'User-Agent': USER_AGENT}, timeout=(3, 5))
             SCENE_URL = r.url
         except:
-            debug("[WARN] Redirect failed, result may be inaccurate.")
+            log.warning("Redirect failed, result may be inaccurate.")
     # extract thing
     url_domain = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc)
-    debug("[DEBUG] Domain: {}".format(url_domain))
+    log.debug("Domain: {}".format(url_domain))
     url_check = re.sub('.+/', '', SCENE_URL)
     try:
         if url_check.isdigit():
@@ -422,10 +414,10 @@ if SCENE_URL:
     except:
         url_sceneid = None
     if url_sceneid is None:
-        debug("[ERROR] Can't get the ID of the Scene. Are you sure that URL is from Mindgeek Network?")
+        log.error("Can't get the ID of the Scene. Are you sure that URL is from Mindgeek Network?")
         sys.exit()
     else:
-        debug("[INFO] ID: {}".format(url_sceneid))
+        log.debug("ID: {}".format(url_sceneid))
 
 
     # API ACCES
@@ -436,15 +428,15 @@ if SCENE_URL:
     try:
         if type(api_scene_json.json()) == list:
             api_scene_json = api_scene_json.json()[0].get('message')
-            debug("[ERROR] API Error Message: {}".format(api_scene_json))
+            log.error("API Error Message: {}".format(api_scene_json))
             sys.exit(1)
         else:
             api_scene_json = api_scene_json.json().get('result')
     except:
-        debug("[ERROR] Failed to get the JSON from API")
+        log.error("Failed to get the JSON from API")
         local_tmp_path = os.path.join(LOCAL_PATH,url_sceneid + ".json")
         if os.path.exists(local_tmp_path):
-            debug("[INFO] Using local file ({})".format(url_sceneid + ".json"))
+            log.info("Using local file ({})".format(url_sceneid + ".json"))
             with open(local_tmp_path, "r", encoding="utf8") as file:
                 api_scene_json = json.load(file)
         else:
@@ -462,14 +454,14 @@ elif SCENE_TITLE:
     SCENE_TITLE = re.sub(r'\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|]|\sHD|\sSD|', '', SCENE_TITLE)
     # Remove Date
     SCENE_TITLE = re.sub(r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}', '', SCENE_TITLE)
-    debug("[INFO] Title: {}".format(SCENE_TITLE))
+    log.debug("Title: {}".format(SCENE_TITLE))
     # Reading config
     if os.path.isfile(STOCKAGE_FILE_APIKEY):
         config = ConfigParser()
         config.read(STOCKAGE_FILE_APIKEY)
         dict_config = dict(config.items())
     else:
-        debug("[ERROR] Can't search for the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(STOCKAGE_FILE_APIKEY))
+        log.error("Can't search for the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(STOCKAGE_FILE_APIKEY))
         sys.exit(1)
     # Loop the config
     scraped_json = None
@@ -479,7 +471,7 @@ elif SCENE_TITLE:
             continue
         config_url = config.get(config_section, 'url')
         config_domain = re.sub(r"www\.|\.com", "", urlparse(config_url).netloc)
-        debug("[INFO] Searching on: {}".format(config_domain))
+        log.info("Searching on: {}".format(config_domain))
 
         # API ACCESS
         api_headers = api_token_get(config_url)
@@ -488,14 +480,14 @@ elif SCENE_TITLE:
         try:
             if type(api_search_json.json()) == list:
                 api_search_error = api_search_json.json()[0]['message']
-                debug("[ERROR] API Error Message: {}".format(api_search_error))
+                log.error("API Error Message: {}".format(api_search_error))
                 sys.exit(1)
             else:
                 api_search_json = api_search_json.json()['result']
         except:
-            debug("[ERROR] Failed to get the JSON from API")
+            log.error("Failed to get the JSON from API")
             sys.exit(1)
-        
+
         ratio_scene = None
         making_url = None
         for result in api_search_json:
@@ -511,16 +503,16 @@ elif SCENE_TITLE:
             else:
                 making_url = re.sub(r'/\d+/*.+', '/' + str(result.get("id")) + "/", config_url)
             ratio = round(difflib.SequenceMatcher(None, SCENE_TITLE.lower(), result["title"].lower()).ratio(), 3)
-            debug("[MATCH] Title: {} | Ratio: {}".format(result.get('title'), ratio))
+            log.debug("[MATCH] Title: {} | Ratio: {}".format(result.get('title'), ratio))
             if ratio > ratio_record:
                 ratio_record = ratio
                 ratio_scene = result
         if ratio_record > SET_RATIO:
-            debug("[INFO] Found scene {}".format(ratio_scene["title"]))
+            log.info("Found scene {}".format(ratio_scene["title"]))
             scraped_json = scraping_json(ratio_scene, making_url)
             break
     if scraped_json is None:
-        debug("[ERROR] API Search Error. No scenes found")
+        log.error("API Search Error. No scenes found")
         sys.exit(1)
 elif SEARCH_TITLE:
     if not STOCKAGE_FILE_APIKEY_SEARCH:
@@ -532,7 +524,7 @@ elif SEARCH_TITLE:
         config.read(config_file_used)
         dict_config = dict(config.items())
     else:
-        debug("[ERROR] Can't search for the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(config_file_used))
+        log.error("Can't search for the scene ({} is missing)\nYou need to scrape 1 URL from the network, to be enable to search with your title on this network.".format(config_file_used))
         sys.exit(1)
     # Loop the config
     scraped_json = None
@@ -549,27 +541,27 @@ elif SEARCH_TITLE:
             filter_domain = re.sub(r"[{}]","", match_filter.group(0))
             filter_domain = filter_domain.split(",")
             if config_domain not in filter_domain:
-                debug("[INFO] Ignore {} (Filter query)".format(config_domain))
+                log.info("Ignore {} (Filter query)".format(config_domain))
                 continue
-        debug("[INFO] Searching on: {}".format(config_domain))
+        log.info("Searching on: {}".format(config_domain))
         # API ACCESS
         api_headers = api_token_get(config_url)
         search_url = 'https://site-api.project1service.com/v2/releases?title={}&type=scene&limit=40'.format(re.sub(r"{.+}\s*", "", SEARCH_TITLE))
         api_search_json = sendRequest(search_url, api_headers)
         if api_search_json is None:
-            debug("[ERROR] Request fail")
+            log.error("Request fail")
             continue
         try:
             if type(api_search_json.json()) == list:
                 api_search_error = api_search_json.json()[0]['message']
-                debug("[ERROR] API Error Message: {}".format(api_search_error))
+                log.error("API Error Message: {}".format(api_search_error))
                 continue
             else:
                 api_search_json = api_search_json.json()['result']
         except:
-            debug("[ERROR] Failed to get the JSON from API ({})".format(config_domain))
+            log.error("Failed to get the JSON from API ({})".format(config_domain))
             continue
-        
+
         ratio_scene = None
         making_url = None
         for result in api_search_json:
@@ -579,7 +571,7 @@ elif SEARCH_TITLE:
                 search['studio'] = {}
                 search['studio']['name'] = result['collections'][0].get('name')
             except:
-                debug("[WARN] No studio")
+                log.warning("No studio")
             search['title'] = result.get('title')
             title_filename = None
             try:
@@ -603,12 +595,12 @@ elif SEARCH_TITLE:
             search['url'] = making_url
             result_search.append(search)
     if not result_search:
-        debug("[ERROR] API Search Error. No scenes found")
+        log.error("API Search Error. No scenes found")
         scraped_json = {"title":"No scenes found. (Hover to see everything)"}
         scraped_json["details"] = """
         Be sure to have site(s) in the config file (.ini). To add a site in the config, you need to scrape 1 url from the site.
         Example: get a url from Brazzers -> use 'Scrape With...' -> now you can search on brazzers.
-        \nYou can also filter your search with '{site} query'. 
+        \nYou can also filter your search with '{site} query'.
         You can use a multiple site filter, just separate sites with a comma.
         (site = domain without www/com)
         \nAvailable sites are shown in the tags.

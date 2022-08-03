@@ -13,7 +13,7 @@ xPathScrapers:
             - replace:
                 - regex: ^Video\s-\s
                   with: ""
-      Details: //div[contains(@class,"col-md-8")]/text()[3]
+      Details: //meta[@itemprop="description"]/@content
       Date: 
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
@@ -27,4 +27,4 @@ xPathScrapers:
         Name: //ul[@class="scene-tags"]/li/a/text()
       Image: //meta[@itemprop="thumbnailUrl"]/@content[not(contains(., "/no_video_preview_"))]
 
-# Last Updated June 08, 2022
+# Last Updated July 30, 2022
