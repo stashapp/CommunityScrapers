@@ -4,8 +4,6 @@ sceneByURL:
     url:
       - xevunleashed.com/updates/
     scraper: sceneScraper
-
-
 xPathScrapers:
   sceneScraper:
     scene:
@@ -24,7 +22,5 @@ xPathScrapers:
       Performers:
         Name:
           selector: //meta[@name="keywords"]/@content
-          split: ','
-
-
+          split: ","
 # Last Updated July 18, 2022
