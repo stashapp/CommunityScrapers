@@ -54,7 +54,12 @@ xPathScrapers:
                 with: /presentation/640x480/
   movieScraper:
     movie:
-      Name: //head/title/text()
+      Name: 
+        selector: //head/title/text()
+        postProcess:
+          - replace:
+              - regex: DVD - 
+                with: ""      
       Duration:
         selector: //td/div/text()
         postProcess:
