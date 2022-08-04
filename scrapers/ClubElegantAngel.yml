@@ -55,7 +55,12 @@ xPathScrapers:
   movieScraper:
     movie:
       Name: //head/title/text()
-      Duration: //td/div/text()
+      Duration:
+        selector: //td/div/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)\s.*
+                with: "$1:00"
       Date:
         selector: //tr/td[@align="right"]/text()
         postProcess:
@@ -65,13 +70,18 @@ xPathScrapers:
           fixed: Elegant Angel
         URL: 
           fixed: https://www.clubelegantangel.com
-      FrontImage: //div[@class="gblViewHighlight"]/img/@src
+      FrontImage:
+        selector: //div[@class="gblViewHighlight"]/img/@src
+        postProcess:
+          - replace:
+              - regex: /volume/(\d+)/\d+x\d+/
+                with: /volume/$1/640x960/
       BackImage:
         selector: //div[@class="gblViewHighlight"]/img/@src
         postProcess:
           - replace:
               - regex: "front"
                 with: "back"
-              #- regex: /volume/(\d+)/\d+x\d+/
-                #with: /volume/$1/640x480/
-# Last Updated August 02, 2022
+              - regex: /volume/(\d+)/\d+x\d+/
+                with: /volume/$1/640x960/
+# Last Updated August 04, 2022
