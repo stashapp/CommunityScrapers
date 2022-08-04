@@ -1,0 +1,23 @@
+name: ManyVids
+sceneByURL:
+  - url:
+      - manyvids.com/Video
+    action: script
+    script:
+      - python3
+      - ManyVids.py
+performerByURL:
+  - url:
+      - manyvids.com/Profile
+    action: script
+    script:
+      - python3
+      - ManyVids.py
+      - performer_by_url
+performerByName:
+  action: script
+  script:
+      - python3
+      - ManyVids.py
+      - performer_by_name
+# Last Updated July 22, 2022
