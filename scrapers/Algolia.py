@@ -10,9 +10,10 @@ from urllib.parse import urlparse
 
 try:
     import requests
+    from bs4 import BeautifulSoup as bs
+    from lxml import html
 except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    print("You need to install the following modules 'requests', 'bs4', 'lxml'.")
     sys.exit()
 
 try:
@@ -37,10 +38,21 @@ FIXED_TAGS = ""
 # Include non female performers
 NON_FEMALE = True
 
-# Setup
+
+def clean_text(details: str) -> dict:
+    """
+    remove escaped backslashes and html parse the details text
+    """
+    if details:
+        details = re.sub(r"\\", "", details)
+        details = bs(details, features='lxml').get_text()
+    return details
 
 
-def check_db(DB_PATH, SCENE_ID):
+def check_db(DB_PATH:str , SCENE_ID:str) -> dict:
+    """
+    get scene data (size, duration, height) directly from the database file
+    """
     try:
         sqliteConnection = sqlite3.connect("file:" + DB_PATH + "?mode=ro", uri=True)
         log.debug("Connected to SQLite database")
@@ -59,17 +71,22 @@ def check_db(DB_PATH, SCENE_ID):
     return database
 
 
-# General
 
-
-def sendRequest(url, head, json=""):
-    log.debug("Request URL: {}".format(url))
-    response = requests.post(url, headers=head, json=json, timeout=10)
-    #log.debug("Returned URL: {}".format(response.url))
+def sendRequest(url: str, head:str, json="") -> requests.Response:
+    """
+    get post response from url
+    """
+    log.debug(f"Request URL: {url}")
+    try:
+        response = requests.post(url, headers=head, json=json, timeout=10)
+    except requests.RequestException as req_error:
+        log.warning(f"Requests failed: {req_error}")
+        return None
+    #log.debug(f"Returned URL: {response.url}")
     if response.content and response.status_code == 200:
         return response
     else:
-        log.warning("[REQUEST] Error, Status Code: {}".format(response.status_code))
+        log.warning(f"[REQUEST] Error, Status Code: {response.status_code}")
         #print(response.text, file=open("algolia_request.html", "w", encoding='utf-8'))
     return None
 
@@ -151,8 +168,8 @@ def api_search_req(type_search, query, api_url):
     return None
 
 
-def api_search_id(url_id, api_url):
-    clip_id = ["clip_id:{}".format(url_id)]
+def api_search_id(scene_id, api_url):
+    clip_id = [f"clip_id:{scene_id}"]
     request_api = {
         "requests":
             [
@@ -166,6 +183,20 @@ def api_search_id(url_id, api_url):
     r = sendRequest(api_url, HEADERS, request_api)
     return r
 
+def api_search_movie_id(m_id, api_url):
+    movie_id = [f"movie_id:{m_id}"]
+    request_api = {
+        "requests":
+            [
+                {
+                    "indexName": "all_movies",
+                    "params": "query=&hitsPerPage=20&page=0",
+                    "facetFilters": movie_id
+                }
+            ]
+    }
+    r = sendRequest(api_url, HEADERS, request_api)
+    return r
 
 def api_search_query(query, api_url):
     request_api = {
@@ -234,8 +265,8 @@ def json_parser(search_json, range_duration=60, single=False):
     log.info("--- BEST RESULT ---")
     for key, item in debug_dict.items():
         log.info(
-            "[{}] Title: {}; Ratio Title: {} - URL: {}".format(
-                key, item["scene"], round(item["title"], 3), round(item["url"], 3)))
+            f'[{key}] Title: {item["scene"]}; Ratio Title: {round(item["title"], 3)} - URL: {round(item["url"], 3)}'
+            )
     log.info("--------------")
     #
     if result_dict.get("ASDN"):
@@ -314,14 +345,14 @@ def match_result(api_scene, range_duration=60, single=False):
                 match_size = True
     # Post process things
     match_domain = False
-    if url_domain:
+    if URL_DOMAIN:
         if api_scene.get("sitename"):
             #log.debug("API Sitename: {}".format(api_scene["sitename"]))
-            if api_scene["sitename"] == url_domain:
+            if api_scene["sitename"].lower() == URL_DOMAIN:
                 match_domain = True
         if api_scene.get("network_name"):
             #log.debug("API Network: {}".format(api_scene["network_name"]))
-            if api_scene["network_name"] == url_domain:
+            if api_scene["network_name"].lower() == URL_DOMAIN:
                 match_domain = True
 
     # Matching ratio
@@ -339,10 +370,8 @@ def match_result(api_scene, range_duration=60, single=False):
     # Rank search result
 
     log.debug(
-        "[MATCH] Title: {} |-RATIO-| Title: {} / URL: {} |-MATCH-| Duration: {}, Size: {}, Domain: {}"
-        .format(
-            api_title, round(match_ratio_title, 5), round(match_ratio_title_url, 5),
-            match_duration, match_size, match_domain))
+        f"[MATCH] Title: {api_title} |-RATIO-| Ratio: {round(match_ratio_title, 5)} / URL: {round(match_ratio_title_url, 5)} |-MATCH-| Duration: {match_duration}, Size: {match_size}, Domain: {match_domain}"
+        )
     match_dict = {}
     match_dict["title"] = match_ratio_title
     match_dict["url"] = match_ratio_title_url
@@ -361,32 +390,73 @@ def match_result(api_scene, range_duration=60, single=False):
     #debug("[MATCH] {} - {}".format(api_title,match_dict))
     return match_dict
 
+def get_id_from_url(url: str) -> str:
+    '''
+    gets  the id from a valid url
+    expects urls of the form www.example.com/.../title/id
+    '''
+    if url is None or url == "":
+        return None
 
-# Final
+    id_check = re.sub('.+/', '', url)
+    id_from_url = None
+    try:
+        if id_check.isdigit():
+            id_from_url = id_check
+        else:
+            id_from_url = re.search(r"/(\d+)/*", url).group(1)
+            log.info(f"ID: {id_from_url}")
+    except:
+        log.warning("Can't get ID from URL")
+    return id_from_url
 
+def parse_movie_json(movie_json: dict) -> dict:
+    """
+    process an api movie dictionary and return a scraped one
+    """
+    scrape = {}
+    scrape["synopsis"] = clean_text(movie[0].get("description"))
+    scrape["name"] = movie[0].get("title")
+    scrape["studio"] = {"name": movie[0].get("sitename_pretty")}
+    scrape["duration"] = movie[0].get("total_length")
 
-def scraping_json(api_json, url=None):
+    scrape["date"] = movie[0].get("date_created") # available options are "date_created", "upcoming", "last_modified"
+                                                  # dates don't seem to be accurate (modifed by studio) at least for evilangel
+
+    scrape["front_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg"
+    scrape["back_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg"
+
+    directors = []
+    for x in movie[0].get('directors'):
+        directors.append(x.get('name').strip())
+    scrape["director"] = ", ".join(directors)
+    return scrape
+
+def parse_scene_json(scene_json, url=None):
+    """
+    process an api scene dictionary and return a scraped one
+    """
     scrape = {}
     # Title
-    if api_json.get('title'):
-        scrape['title'] = api_json['title'].strip()
+    if scene_json.get('title'):
+        scrape['title'] = scene_json['title'].strip()
     # Date
-    scrape['date'] = api_json.get('release_date')
+    scrape['date'] = scene_json.get('release_date')
     # Details
-    scrape['details'] = re.sub(r'</br>|<br\s/>|<br>|<br/>', '\n', api_json.get('description'))
+    #scrape['details'] = re.sub(r'</br>|<br\s/>|<br>|<br/>', '\n', scene_json.get('description'))
+    scrape['details'] = clean_text(scene_json.get('description'))
 
     # Studio
     scrape['studio'] = {}
-    if api_json.get('serie_name'):
-        scrape['studio']['name'] = api_json.get('serie_name')
+    if scene_json.get('serie_name'):
+        scrape['studio']['name'] = scene_json.get('serie_name')
 
     log.debug(
-        "[STUDIO] {} - {} - {} - {}".format(
-            api_json.get('serie_name'), api_json.get('network_name'),
-            api_json.get('mainChannelName'), api_json.get('sitename_pretty')))
+        f"[STUDIO] {scene_json.get('serie_name')} - {scene_json.get('network_name')} - {scene_json.get('mainChannelName')} - {scene_json.get('sitename_pretty')}"
+        )
     # Performer
     perf = []
-    for x in api_json.get('actors'):
+    for x in scene_json.get('actors'):
         if x.get('gender') == "female" or NON_FEMALE:
             perf.append({
                 "name": x.get('name').strip(),
@@ -396,7 +466,7 @@ def scraping_json(api_json, url=None):
 
     # Tags
     list_tag = []
-    for x in api_json.get('categories'):
+    for x in scene_json.get('categories'):
         if x.get('name') is None:
             continue
         tag_name = x.get('name')
@@ -409,43 +479,49 @@ def scraping_json(api_json, url=None):
 
     # Image
     try:
-        scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(iter(api_json['pictures']['nsfw']['top'].values()))
+        scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(iter(scene_json['pictures']['nsfw']['top'].values()))
     except:
         try:
-            scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(iter(api_json['pictures']['sfw']['top'].values()))
+            scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(iter(scene_json['pictures']['sfw']['top'].values()))
         except:
             log.warning("Can't locate image.")
     # URL
     try:
-        hostname = api_json['sitename']
-        nn = api_json['network_name']
-        if nn.lower() == "21 sextury":
+        hostname = scene_json['sitename']
+        net_name = scene_json['network_name']
+        if net_name.lower() == "21 sextury":
             hostname = "21sextury"
-        scrape['url'] = f"https://{hostname}.com/en/video/{api_json['sitename']}/{api_json['url_title']}/{api_json['clip_id']}"
+        elif net_name.lower() == "21 naturals":
+            hostname = "21naturals"
+        scrape['url'] = f"https://{hostname}.com/en/video/{scene_json['sitename']}/{scene_json['url_title']}/{scene_json['clip_id']}"
     except:
         if url:
             scrape['url'] = url
-    #debug("{}".format(scrape))
+    #debug(f"{scrape}")
     return scrape
 
 
-SITE = sys.argv[1]
+
+#
+# Start processing
+#
 
 try:
     USERFOLDER_PATH = re.match(r".+\.stash.", __file__).group(0)
     CONFIG_PATH = USERFOLDER_PATH + "config.yml"
-    log.debug("Config Path: {}".format(CONFIG_PATH))
+    log.debug(f"Config Path: {CONFIG_PATH}")
 except:
     USERFOLDER_PATH = None
     CONFIG_PATH = None
 
+SITE = sys.argv[1]
 HEADERS = {
     "User-Agent":
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
     "Origin":
-        "https://www.{}.com".format(SITE),
+        f"https://www.{SITE}.com",
     "Referer":
-        "https://www.{}.com".format(SITE)
+        f"https://www.{SITE}.com"
 }
 
 FRAGMENT = json.loads(sys.stdin.read())
@@ -454,148 +530,149 @@ SCENE_ID = FRAGMENT.get("id")
 SCENE_TITLE = FRAGMENT.get("title")
 SCENE_URL = FRAGMENT.get("url")
 
+# ACCESS API
+# Check existing API keys
+CURRENT_TIME = datetime.datetime.now()
+application_id, api_key = check_config(SITE, CURRENT_TIME)
+# Getting new key
+if application_id is None:
+    application_id, api_key = apikey_get(f"https://www.{SITE}.com/en", CURRENT_TIME)
+# Failed to get new key
+if application_id is None:
+        sys.exit(1)
+api_url = f"https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id={application_id}&x-algolia-api-key={api_key}"
+
 #log.debug(HEADERS)
-#log.debug('{}'.format(FRAGMENT))
+#log.debug(FRAGMENT)
+URL_DOMAIN = None
+if SCENE_URL:
+    URL_DOMAIN = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc).lower()
+    log.info(f"URL Domain: {URL_DOMAIN}")
 
 if "validName" in sys.argv and SCENE_URL is None:
     sys.exit(1)
 
 if SCENE_URL and SCENE_ID is None:
-    log.debug("URL Scraping: {}".format(SCENE_URL))
+    log.debug(f"URL Scraping: {SCENE_URL}")
 else:
-    log.debug("Stash ID: {}".format(SCENE_ID))
-    log.debug("Stash Title: {}".format(SCENE_TITLE))
+    log.debug(f"Stash ID: {SCENE_ID}")
+    log.debug(f"Stash Title: {SCENE_TITLE}")
 
-# Get your sqlite database
-stash_config = graphql.configuration()
-DB_PATH = None
-if stash_config:
-    DB_PATH = stash_config["general"]["databasePath"]
-if (CONFIG_PATH and DB_PATH is None):
-    # getting your database from the config.yml
-    if (os.path.isfile(CONFIG_PATH)):
-        with open(CONFIG_PATH) as f:
-            for line in f:
-                if "database: " in line:
-                    DB_PATH = line.replace("database: ", "").rstrip('\n')
-                    break
-log.debug("Database Path: {}".format(DB_PATH))
-if DB_PATH:
-    if SCENE_ID:
-        # Get data by GraphQL
-        database_dict = graphql.getScene(SCENE_ID)
-        if database_dict is None:
-            # Get data by SQlite
-            log.warning("GraphQL request failed, accessing database directly...")
-            database_dict = check_db(DB_PATH, SCENE_ID)
+if "movie" not in sys.argv:
+    # Get your sqlite database
+    stash_config = graphql.configuration()
+    DB_PATH = None
+    if stash_config:
+        DB_PATH = stash_config["general"]["databasePath"]
+           
+    if (CONFIG_PATH and DB_PATH is None):
+        # getting your database from the config.yml
+        if os.path.isfile(CONFIG_PATH):
+            with open(CONFIG_PATH) as f:
+                for line in f:
+                    if "database: " in line:
+                        DB_PATH = line.replace("database: ", "").rstrip('\n')
+                        break
+    log.debug(f"Database Path: {DB_PATH}")
+    if DB_PATH:
+        if SCENE_ID:
+            # Get data by GraphQL
+            database_dict = graphql.getScene(SCENE_ID)
+            if database_dict is None:
+                # Get data by SQlite
+                log.warning("GraphQL request failed, accessing database directly...")
+                database_dict = check_db(DB_PATH, SCENE_ID)
+            else:
+                database_dict = database_dict["file"]
+            log.debug(f"[DATABASE] Info: {database_dict}")
         else:
-            database_dict = database_dict["file"]
-        log.debug("[DATABASE] Info: {}".format(database_dict))
+            database_dict = None
+            log.debug("URL scraping... Ignoring database...")
     else:
         database_dict = None
-        log.debug("URL scraping... Ignoring database...")
-else:
-    database_dict = None
-    log.warning("Database path missing.")
+        log.warning("Database path missing.")
 
-# Extract things
-url_title = None
-url_id = None
-url_domain = None
-if SCENE_URL:
-    url_domain = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc)
-    log.info("URL Domain: {}".format(url_domain))
-    url_id_check = re.sub('.+/', '', SCENE_URL)
-    # Gettings ID
-    try:
-        if url_id_check.isdigit():
-            url_id = url_id_check
+    # Extract things
+    url_title = None
+    url_id = None
+    url_domain = None
+    if SCENE_URL:
+        url_id = get_id_from_url(SCENE_URL)
+        try:
+            url_title = re.match(r".+/(.+)/\d+", SCENE_URL).group(1)
+            log.info(f"URL_TITLE: {url_title}")
+        except:
+            log.warning("Can't get url_title from URL")
+
+    # Filter title
+    if SCENE_TITLE:
+        SCENE_TITLE = re.sub(r'[-._\']', ' ', os.path.splitext(SCENE_TITLE)[0])
+        # Remove resolution
+        SCENE_TITLE = re.sub(r'\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|]|\sHD|\sSD|', '', SCENE_TITLE)
+        # Remove Date
+        SCENE_TITLE = re.sub(r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}', '', SCENE_TITLE)
+        log.debug(f"Title: {SCENE_TITLE}")
+
+    # Time to search the API
+    api_search = None
+    api_json = None
+
+    # sceneByName
+    if SEARCH_TITLE:
+        SEARCH_TITLE = SEARCH_TITLE.replace(".", " ")
+        log.debug(f"[API] Searching for: {SEARCH_TITLE}")
+        api_search = api_search_req("query", SEARCH_TITLE, api_url)
+        final_json = None
+        if api_search:
+            result_search = []
+            for scene in api_search:
+                scraped_json = parse_scene_json(scene)
+                if scraped_json.get("tags"):
+                    scraped_json.pop("tags")
+                result_search.append(scraped_json)
+            if result_search:
+                final_json = result_search
+        if final_json is None:
+            log.error("API Search finished. No results!")
+        print(json.dumps(final_json))
+        sys.exit()
+
+    if url_id:
+        log.debug(f"[API] Searching using URL_ID {url_id}")
+        api_search = api_search_req("id", url_id, api_url)
+        if api_search:
+            log.info(f"[API] Search gives {len(api_search)} result(s)")
+            api_json = json_parser(api_search, 120, True)
         else:
-            url_id = re.search(r"/(\d+)/*", SCENE_URL).group(1)
-        log.info("ID: {}".format(url_id))
-    except:
-        log.warning("Can't get ID from URL")
-    # Gettings url_title
-    try:
-        url_title = re.match(r".+/(.+)/\d+", SCENE_URL).group(1)
-        log.info("URL_TITLE: {}".format(url_title))
-    except:
-        log.warning("Can't get url_title from URL")
+            log.warning("[API] No result")
+    if url_title and api_json is None:
+        log.debug("[API] Searching using URL_TITLE")
+        api_search = api_search_req("query", url_title, api_url)
+        if api_search:
+            log.info("[API] Search give {} result(s)".format(len(api_search)))
+            api_json = json_parser(api_search)
+    if SCENE_TITLE and api_json is None:
+        log.debug("[API] Searching using STASH_TITLE")
+        api_search = api_search_req("query", SCENE_TITLE, api_url)
+        if api_search:
+            log.info("[API] Search give {} result(s)".format(len(api_search)))
+            api_json = json_parser(api_search)
 
-# Filter title
-if SCENE_TITLE:
-    SCENE_TITLE = re.sub(r'[-._\']', ' ', os.path.splitext(SCENE_TITLE)[0])
-    # Remove resolution
-    SCENE_TITLE = re.sub(r'\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|]|\sHD|\sSD|', '', SCENE_TITLE)
-    # Remove Date
-    SCENE_TITLE = re.sub(r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}', '', SCENE_TITLE)
-    log.debug("Title: {}".format(SCENE_TITLE))
-
-# ACCESS API
-# Check existing API keys
-CURRENT_TIME = datetime.datetime.now()
-application_id, api_key = check_config(SITE, CURRENT_TIME)
-
-# Getting new key
-if application_id is None:
-    application_id, api_key = apikey_get("https://www.{}.com/en".format(SITE), CURRENT_TIME)
-# Fail getting new key
-if application_id is None:
-    sys.exit(1)
-
-# Time to search the API
-api_url = "https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id={}&x-algolia-api-key={}".format(
-    application_id, api_key)
-api_search = None
-api_json = None
-
-# sceneByName
-if SEARCH_TITLE:
-    SEARCH_TITLE = SEARCH_TITLE.replace(".", " ")
-    log.debug("[API] Searching for: {}".format(SEARCH_TITLE))
-    api_search = api_search_req("query", SEARCH_TITLE, api_url)
-    final_json = None
-    if api_search:
-        result_search = []
-        for scene in api_search:
-            scraped_json = scraping_json(scene)
-            if scraped_json.get("tags"):
-                scraped_json.pop("tags")
-            result_search.append(scraped_json)
-        if result_search:
-            final_json = result_search
-    if final_json is None:
-        log.error("API Search finished. No results!")
-    print(json.dumps(final_json))
-    sys.exit()
-
-if url_id:
-    log.debug("[API] Searching using URL_ID")
-    api_search = api_search_req("id", url_id, api_url)
-    if api_search:
-        log.info("[API] Search give {} result(s)".format(len(api_search)))
-        api_json = json_parser(api_search, 120, True)
+    # Scraping the JSON
+    if api_json:
+        log.info(f"Scene found: {api_json['title']}")
+        scraped_json = parse_scene_json(api_json, SCENE_URL)
+        print(json.dumps(scraped_json))
     else:
-        log.warning("[API] No result")
-if url_title and api_json is None:
-    log.debug("[API] Searching using URL_TITLE")
-    api_search = api_search_req("query", url_title, api_url)
-    if api_search:
-        log.info("[API] Search give {} result(s)".format(len(api_search)))
-        api_json = json_parser(api_search)
-if SCENE_TITLE and api_json is None:
-    log.debug("[API] Searching using STASH_TITLE")
-    api_search = api_search_req("query", SCENE_TITLE, api_url)
-    if api_search:
-        log.info("[API] Search give {} result(s)".format(len(api_search)))
-        api_json = json_parser(api_search)
-
-# Scraping the JSON
-if api_json:
-    log.info("Scene found: {}".format(api_json["title"]))
-    scraped_json = scraping_json(api_json, SCENE_URL)
-    print(json.dumps(scraped_json))
+        log.error("Can't find the scene")
+        print(json.dumps({}))
+        sys.exit()
 else:
-    log.error("Can't find the scene")
-    print(json.dumps(None))
-    sys.exit()
+    log.debug("Scraping movie")
+    movie_id = get_id_from_url(SCENE_URL)
+    if movie_id:
+        movie_results = api_search_movie_id(movie_id, api_url)
+        movie = movie_results.json()["results"][0].get("hits")
+        scraped_movie = parse_movie_json(movie)
+        log.debug(scraped_movie)
+        print(json.dumps(scraped_movie))

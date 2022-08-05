@@ -383,7 +383,8 @@ eternaldesire.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_
 euro-tgirls.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 eurogirlsongirls.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 euroteenerotica.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-evilangel.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
+evilangel.com|Algolia_EvilAngel|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
+evilangel.com|GammaEntertainment.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
 evolvedfights.com|evolvedfightslez.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 evolvedfightslez.com|evolvedfightslez.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 exotic4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1311,9 +1312,8 @@ wetvr.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 whiteghetto.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 whiteteensblackcocks.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 whorecraftvr.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fantasy VR
-wicked.com (/movies)|GammaEntertainment.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
+wicked.com|Algolia_Wicked.yml|:heavy_checkmark:|:x:|:heavy_check_mark:|:x:|-|-
 wicked.com (/movies)|WickedMovies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-wicked.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wildoncam.com|trafficpimps.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 williamhiggins.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 willtilexxx.com|WillTileXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

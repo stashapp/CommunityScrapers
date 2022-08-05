@@ -24,7 +24,6 @@ sceneByURL:
       - dpfanatics.com/en/video/
       - dylanryder.com/
       - eroticax.com/en/video/
-      - evilangel.com/en/video/
       - falconstudios.com/en/video/
       - famedigital.com/
       - familycreep.com/
@@ -94,7 +93,6 @@ sceneByURL:
       - tsplayground.com/en/video/
       - webyoung.com/en/video/
       - whiteghetto.com/
-      - wicked.com/en/video/
       - xempire.com/en/video/
     scraper: sceneScraper
 
@@ -111,11 +109,9 @@ movieByURL:
     url:
       - darkx.com/en/movie/
       - eroticax.com/en/movie/
-      - evilangel.com/en/movie/
       - famedigital.com/en/
       - girlfriendsfilms.com/en/dvd/
       - hardx.com/en/movie/
-      - wicked.com/en/movie/
       - xempire.com/en/movie/
     scraper: movieScraper
 
@@ -278,7 +274,6 @@ xPathScrapers:
                 tsplayground: TS Playground
                 webyoung: Web Young
                 whiteghetto: White Ghetto
-                wicked: Wicked
                 xempire: XEmpire
 
   performerScraper:
