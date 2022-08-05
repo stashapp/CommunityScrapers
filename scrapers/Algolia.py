@@ -9,16 +9,16 @@ from configparser import ConfigParser, NoSectionError
 from urllib.parse import urlparse
 
 try:
-    import requests
     from bs4 import BeautifulSoup as bs
-    from lxml import html
+    import requests
+    import lxml
 except ModuleNotFoundError:
     print("You need to install the following modules 'requests', 'bs4', 'lxml'.")
     sys.exit()
 
 try:
-    import py_common.graphql as graphql
-    import py_common.log as log
+    from py_common import graphql
+    from py_common import log
 except ModuleNotFoundError:
     print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
     sys.exit()
@@ -54,12 +54,12 @@ def check_db(DB_PATH:str , SCENE_ID:str) -> dict:
     get scene data (size, duration, height) directly from the database file
     """
     try:
-        sqliteConnection = sqlite3.connect("file:" + DB_PATH + "?mode=ro", uri=True)
+        sqlite_connection = sqlite3.connect("file:" + DB_PATH + "?mode=ro", uri=True)
         log.debug("Connected to SQLite database")
     except:
         log.warning("Fail to connect to the database")
         return None, None, None
-    cursor = sqliteConnection.cursor()
+    cursor = sqlite_connection.cursor()
     cursor.execute("SELECT size,duration,height from scenes WHERE id=?;", [SCENE_ID])
     record = cursor.fetchall()
     database = {}
@@ -67,33 +67,32 @@ def check_db(DB_PATH:str , SCENE_ID:str) -> dict:
     database["duration"] = int(record[0][1])
     database["height"] = str(record[0][2])
     cursor.close()
-    sqliteConnection.close()
+    sqlite_connection.close()
     return database
 
 
 
-def sendRequest(url: str, head:str, json="") -> requests.Response:
+def send_request(url: str, head:str, send_json="") -> requests.Response:
     """
     get post response from url
     """
     log.debug(f"Request URL: {url}")
     try:
-        response = requests.post(url, headers=head, json=json, timeout=10)
+        response = requests.post(url, headers=head, json=send_json, timeout=10)
     except requests.RequestException as req_error:
         log.warning(f"Requests failed: {req_error}")
         return None
     #log.debug(f"Returned URL: {response.url}")
     if response.content and response.status_code == 200:
         return response
-    else:
-        log.warning(f"[REQUEST] Error, Status Code: {response.status_code}")
-        #print(response.text, file=open("algolia_request.html", "w", encoding='utf-8'))
+    log.warning(f"[REQUEST] Error, Status Code: {response.status_code}")
+    #print(response.text, file=open("algolia_request.html", "w", encoding='utf-8'))
     return None
 
 
 # API Authentification
 def apikey_get(site_url, time):
-    r = sendRequest(site_url, HEADERS)
+    r = send_request(site_url, HEADERS)
     if r is None:
         return None, None
     script_html = fetch_page_json(r.text)
@@ -102,11 +101,10 @@ def apikey_get(site_url, time):
         api_key = script_html['api']['algolia']['apiKey']
         # Write key into a file
         write_config(time, application_id, api_key)
-        log.info("New API keys: {}".format(api_key))
+        log.info(f"New API keys: {api_key}")
         return application_id, api_key
-    else:
-        log.error("Can't retrieve API keys from page ({})".format(site_url))
-        return None, None
+    log.error(f"Can't retrieve API keys from page ({site_url})")
+    return None, None
 
 
 def fetch_page_json(page_html):
@@ -127,10 +125,9 @@ def check_config(domain, time):
                 application_id = config.get(domain, 'app_id')
                 api_key = config.get(domain, 'api_key')
                 return application_id, api_key
-            else:
-                log.info(
-                    "Need new api key: [{}|{}|{}]".format(
-                        time.hour, time_past.hour, (time - time_past).days))
+            log.info(
+                    f"Need new api key: [{time.hour}|{time_past.hour}|{(time-time_past).days}]"
+                        )
         except NoSectionError:
             pass
     return None, None
@@ -147,14 +144,11 @@ def write_config(date, app_id, api_key):
     config.set(SITE, 'date', date.strftime("%Y-%m-%d %H:%M:%S.%f"))
     config.set(SITE, 'app_id', app_id)
     config.set(SITE, 'api_key', api_key)
-    with open(STOCKAGE_FILE_APIKEY, 'w') as configfile:
+    with open(STOCKAGE_FILE_APIKEY, 'w', encoding= 'utf-8') as configfile:
         config.write(configfile)
-    return
-
+    
 
 # API Search Data
-
-
 def api_search_req(type_search, query, api_url):
     api_request = None
     if type_search == "query":
@@ -180,7 +174,7 @@ def api_search_id(scene_id, api_url):
                 }
             ]
     }
-    r = sendRequest(api_url, HEADERS, request_api)
+    r = send_request(api_url, HEADERS, request_api)
     return r
 
 def api_search_movie_id(m_id, api_url):
@@ -195,7 +189,7 @@ def api_search_movie_id(m_id, api_url):
                 }
             ]
     }
-    r = sendRequest(api_url, HEADERS, request_api)
+    r = send_request(api_url, HEADERS, request_api)
     return r
 
 def api_search_query(query, api_url):
@@ -208,7 +202,7 @@ def api_search_query(query, api_url):
                 }
             ]
     }
-    r = sendRequest(api_url, HEADERS, request_api)
+    r = send_request(api_url, HEADERS, request_api)
     return r
 
 
@@ -271,44 +265,42 @@ def json_parser(search_json, range_duration=60, single=False):
     #
     if result_dict.get("ASDN"):
         return result_dict["ASDN"]["json"]
-    elif result_dict.get("ASD"):
+    if result_dict.get("ASD"):
         return result_dict["ASD"]["json"]
-    elif result_dict.get("ASN"):
+    if result_dict.get("ASN"):
         return result_dict["ASN"]["json"]
-    elif result_dict.get("ADN"):
+    if result_dict.get("ADN"):
         return result_dict["ADN"]["json"]
-    elif result_dict.get("AS"):
+    if result_dict.get("AS"):
         return result_dict["AS"]["json"]
-    elif result_dict.get("AD"):
+    if result_dict.get("AD"):
         return result_dict["AD"]["json"]
-    elif result_dict.get("AN"):
+    if result_dict.get("AN"):
         if result_dict["AN"]["title"] > 0.5 or result_dict["AN"]["url"] > 0.5:
             return result_dict["AN"]["json"]
-    elif result_dict.get("A"):
+    if result_dict.get("A"):
         if result_dict["A"]["title"] > 0.7 or result_dict["A"]["url"] > 0.7:
             return result_dict["A"]["json"]
-    #
-    elif result_dict.get("SDN"):
+    if result_dict.get("SDN"):
         return result_dict["SDN"]["json"]
-    elif result_dict.get("SD"):
+    if result_dict.get("SD"):
         return result_dict["SD"]["json"]
-    elif result_dict.get("SN"):
+    if result_dict.get("SN"):
         if result_dict["SN"]["title"] > 0.5 or result_dict["SN"]["url"] > 0.5:
             return result_dict["SN"]["json"]
-    elif result_dict.get("DN"):
+    if result_dict.get("DN"):
         if result_dict["DN"]["title"] > 0.5 or result_dict["DN"]["url"] > 0.5:
             return result_dict["DN"]["json"]
-    elif result_dict.get("S"):
+    if result_dict.get("S"):
         if result_dict["S"]["title"] > 0.7 or result_dict["S"]["url"] > 0.7:
             return result_dict["S"]["json"]
-    elif result_dict.get("D"):
+    if result_dict.get("D"):
         if result_dict["D"]["title"] > 0.7 or result_dict["D"]["url"] > 0.7:
             return result_dict["D"]["json"]
-    #
-    elif result_dict.get("N"):
+    if result_dict.get("N"):
         if result_dict["N"]["title"] > 0.7 or result_dict["N"]["url"] > 0.7:
             return result_dict["N"]["json"]
-    elif result_dict.get("R"):
+    if result_dict.get("R"):
         if result_dict["R"]["title"] > 0.8 or result_dict["R"]["url"] > 0.8:
             return result_dict["R"]["json"]
     return None
@@ -415,19 +407,19 @@ def parse_movie_json(movie_json: dict) -> dict:
     process an api movie dictionary and return a scraped one
     """
     scrape = {}
-    scrape["synopsis"] = clean_text(movie[0].get("description"))
-    scrape["name"] = movie[0].get("title")
-    scrape["studio"] = {"name": movie[0].get("sitename_pretty")}
-    scrape["duration"] = movie[0].get("total_length")
+    scrape["synopsis"] = clean_text(movie_json[0].get("description"))
+    scrape["name"] = movie_json[0].get("title")
+    scrape["studio"] = {"name": movie_json[0].get("sitename_pretty")}
+    scrape["duration"] = movie_json[0].get("total_length")
 
-    scrape["date"] = movie[0].get("date_created") # available options are "date_created", "upcoming", "last_modified"
+    scrape["date"] = movie_json[0].get("date_created") # available options are "date_created", "upcoming", "last_modified"
                                                   # dates don't seem to be accurate (modifed by studio) at least for evilangel
 
     scrape["front_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg"
     scrape["back_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg"
 
     directors = []
-    for x in movie[0].get('directors'):
+    for x in movie_json[0].get('directors'):
         directors.append(x.get('name').strip())
     scrape["director"] = ", ".join(directors)
     return scrape
@@ -539,7 +531,7 @@ if application_id is None:
     application_id, api_key = apikey_get(f"https://www.{SITE}.com/en", CURRENT_TIME)
 # Failed to get new key
 if application_id is None:
-        sys.exit(1)
+    sys.exit(1)
 api_url = f"https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id={application_id}&x-algolia-api-key={api_key}"
 
 #log.debug(HEADERS)
@@ -564,11 +556,11 @@ if "movie" not in sys.argv:
     DB_PATH = None
     if stash_config:
         DB_PATH = stash_config["general"]["databasePath"]
-           
+
     if (CONFIG_PATH and DB_PATH is None):
         # getting your database from the config.yml
         if os.path.isfile(CONFIG_PATH):
-            with open(CONFIG_PATH) as f:
+            with open(CONFIG_PATH, encoding='utf-8') as f:
                 for line in f:
                     if "database: " in line:
                         DB_PATH = line.replace("database: ", "").rstrip('\n')
@@ -674,5 +666,5 @@ else:
         movie_results = api_search_movie_id(movie_id, api_url)
         movie = movie_results.json()["results"][0].get("hits")
         scraped_movie = parse_movie_json(movie)
-        log.debug(scraped_movie)
+        #log.debug(scraped_movie)
         print(json.dumps(scraped_movie))
