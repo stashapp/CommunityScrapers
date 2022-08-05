@@ -3,7 +3,6 @@ import sys
 import json
 import re
 import urllib.request, urllib.error
-from xmlrpc.client import boolean
 
 try:
     import requests
