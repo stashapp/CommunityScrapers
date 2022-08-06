@@ -1,3 +1,5 @@
+
+
 import datetime
 import difflib
 import json
@@ -31,7 +33,7 @@ except ModuleNotFoundError:
 API_URL = "https://www.analvids.com/api/autocomplete/search"
 SCENE_NAME_MATCH_THRESHOLD = 90
 
-SCENE_ID_TAGS = "(GL|GIO|XF|SZ|GP|AA|RS|OB|BTG|EKS|VG)"
+SCENE_ID_TAGS = "(GL|GIO|XF|SZ|GP|AA|RS|OB|BTG|EKS|VG|IV)"
 DATE_FORMAT = "%Y-%m-%d"
 
 
@@ -236,11 +238,16 @@ def scrapeSceneById(title):
 
 
 def parseDateFromTitle(title):
+    if title is None:
+        return
+
     date = re.search(
         "((19\d|20\d\d)|([0-3]\d))( |-|\.)(([0-3]\d)|[1-9])( |-|\.)(((19|20)\d\d)|([0-3]\d))", title)
 
-    if date is not None:
-        date = date.group()
+    if date is None:
+        return
+
+    date = date.group()
 
     date = re.split("( |-|\.)", date)
     date = list(filter(lambda d: d.isdigit(), date))
@@ -312,6 +319,9 @@ def doScrapeSceneFragment(fragment):
 
 # Let's try to parse the scene date if it's on the title
     dates = parseDateFromTitle(title)
+    if dates is None:
+        return
+
     if len(dates) == 0:
         return
 
