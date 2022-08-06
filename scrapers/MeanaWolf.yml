@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h3/text()
+      Title: //h1/text()
       Date:
         selector: //span[text()="ADDED:"]/following-sibling::text()
         postProcess:
@@ -29,4 +29,4 @@ xPathScrapers:
                 - regex: (.+useimage\s=\s")(.*)(";function\sdownload\(f\).+)
                   with: $2
 
-# Last Updated September 23, 2020
+# Last Updated July 31, 2022
