@@ -103,6 +103,30 @@ jsonScrapers:
                 with:
       Performers:
         Name: data.performers.#.parent.name
+        URL: 
+          selector: data.performers.#.parent.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://api.metadataapi.net/performers/"
+        Gender: data.performers.#.parent.extras.gender
+        Birthdate: data.performers.#.parent.extras.birthday
+        Ethnicity: data.performers.#.parent.extras.ethnicity
+        Height:
+          selector: data.performers.#.parent.extras.height
+          postProcess:
+            - replace:
+                - regex: cm
+                  with:
+        Measurements: data.performers.#.parent.extras.measurements
+        Tattoos: data.performers.#.parent.extras.tattoos
+        Piercings: data.performers.#.parent.extras.piercings
+        Image:
+          selector: data.performers.#.image
+          postProcess:
+            - replace:
+                - regex: .+male\.png$
+                  with:
       Studio:
         Name: data.site.name
       Tags:
@@ -120,6 +144,30 @@ jsonScrapers:
       Image: $data.background.small
       Performers:
         Name: $data.performers.#.parent.name
+        URL: 
+          selector: $data.performers.#.parent.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://api.metadataapi.net/performers/"
+        Gender: $data.performers.#.parent.extras.gender
+        Birthdate: $data.performers.#.parent.extras.birthday
+        Ethnicity: $data.performers.#.parent.extras.ethnicity
+        Height:
+          selector: $data.performers.#.parent.extras.height
+          postProcess:
+            - replace:
+                - regex: cm
+                  with:
+        Measurements: $data.performers.#.parent.extras.measurements
+        Tattoos: $data.performers.#.parent.extras.tattoos
+        Piercings: $data.performers.#.parent.extras.piercings
+        Image:
+          selector: $data.performers.#.image
+          postProcess:
+            - replace:
+                - regex: .+male\.png$
+                  with:
       Studio:
         Name: $data.site.name
       Tags:
@@ -139,4 +187,4 @@ driver:
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
       #Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated December 16, 2021
+# Last Updated August 07, 2022
