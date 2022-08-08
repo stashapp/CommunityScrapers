@@ -7,8 +7,6 @@ sceneByURL:
       # if you only have the  id add an extra part after it eg for https://www.brazzers.com/video/123456/ use https://www.brazzers.com/video/123456/a
       - brazzers.com/video
       - men.com/sceneid/
-      - realitykings.com/scene/
-      - babes.com/scene/
     scraper: sceneScraper
 
 performerByURL:
