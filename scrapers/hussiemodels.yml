@@ -2,8 +2,9 @@ name: hussiemodels
 sceneByURL:
   - action: scrapeXPath
     url:
-      - hussiepass.com/trailers/
       - hookuphotshot.com/trailers
+      - hotandtatted.com/trailers
+      - hussiepass.com/trailers/
       - seehimfuck.com/trailers
       - seehimsolo.com/trailers
       - povpornstars.com
@@ -48,8 +49,9 @@ xPathScrapers:
                   with: $1
             - map:
                 hookuphotshot: HookUp Hotshot
+                hotandtatted: Hot and Tatted
                 hussiepass: Hussie Pass
                 seehimfuck: See HIM Fuck
                 seehimsolo: See HIM Solo
                 povpornstars: POV Pornstars
-# Last Updated February 02, 2022
+# Last Updated July 13, 2022
