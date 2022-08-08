@@ -13,14 +13,14 @@ xPathScrapers:
   sceneScraper:
     scene:
       Studio:
-        Name: 
+        Name:
           fixed: Elegant Angel
-        URL: 
+        URL:
           fixed: https://www.clubelegantangel.com
       URL: //head/link[@rel="canonical"]/@href
       Movies:
         Name: //div[contains(.,"DVD :")]/a/text()
-        URL: 
+        URL:
           selector: //div[contains(.,"DVD :")]/a/@href
           postProcess:
             - replace:
@@ -30,12 +30,12 @@ xPathScrapers:
         selector: //head/title/text()
         postProcess:
           - replace:
-             - regex: '^Video\s*-\s*'
-               with: ""
+              - regex: '^Video\s*-\s*'
+                with: ""
       Date:
         selector: //div[@class="wrpHighlightUpdated"]/text()
         postProcess:
-          - parseDate: 2006-01-02 #2012-02-18 
+          - parseDate: 2006-01-02 #2012-02-18
       Performers:
         Name: //li[contains(.,"Pornstars:")]/a/text()
         URL:
@@ -43,7 +43,7 @@ xPathScrapers:
           postProcess:
             - replace:
                 - regex: ^
-                  with: "https://www.clubelegantangel.com" 
+                  with: "https://www.clubelegantangel.com"
       Tags:
         Name: //li[contains(.,"Categories :")]/a/text()
       Image:
@@ -54,12 +54,12 @@ xPathScrapers:
                 with: /presentation/640x480/
   movieScraper:
     movie:
-      Name: 
+      Name:
         selector: //head/title/text()
         postProcess:
           - replace:
-              - regex: DVD - 
-                with: ""      
+              - regex: DVD -
+                with: ""
       Duration:
         selector: //td/div/text()
         postProcess:
@@ -71,9 +71,9 @@ xPathScrapers:
         postProcess:
           - parseDate: 2006-01-02 #2012-02-18
       Studio:
-        Name: 
+        Name:
           fixed: Elegant Angel
-        URL: 
+        URL:
           fixed: https://www.clubelegantangel.com
       FrontImage:
         selector: //div[@class="gblViewHighlight"]/img/@src
