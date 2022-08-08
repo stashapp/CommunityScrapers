@@ -564,6 +564,7 @@ hornydoctor.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornygirlscz.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornyhousehold.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 horrorporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hotandtatted.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotcrazymess.com|Nubiles.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotguysfuck.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hothouse.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
