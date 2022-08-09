@@ -24,22 +24,18 @@ except ModuleNotFoundError:
     sys.exit()
 
 #
-# User variable
+# User variables
 #
 
-# Print debug message.
-PRINT_DEBUG = True
-# Print ratio message. (Show title in search results)
-PRINT_MATCH = True
 # File to store the Algolia API key.
 STOCKAGE_FILE_APIKEY = "Algolia.ini"
-# Tag you always want in Scraper window.
-FIXED_TAGS = ""
+# Extra tag that will be added to the scene
+FIXED_TAG = ""
 # Include non female performers
 NON_FEMALE = True
 
 
-def clean_text(details: str) -> dict:
+def clean_text(details: str) -> str:
     """
     remove escaped backslashes and html parse the details text
     """
@@ -49,18 +45,18 @@ def clean_text(details: str) -> dict:
     return details
 
 
-def check_db(DB_PATH:str , SCENE_ID:str) -> dict:
+def check_db(database_path:str , scn_id:str) -> dict:
     """
     get scene data (size, duration, height) directly from the database file
     """
     try:
-        sqlite_connection = sqlite3.connect("file:" + DB_PATH + "?mode=ro", uri=True)
+        sqlite_connection = sqlite3.connect("file:" + database_path + "?mode=ro", uri=True)
         log.debug("Connected to SQLite database")
     except:
         log.warning("Fail to connect to the database")
         return None, None, None
     cursor = sqlite_connection.cursor()
-    cursor.execute("SELECT size,duration,height from scenes WHERE id=?;", [SCENE_ID])
+    cursor.execute("SELECT size,duration,height from scenes WHERE id=?;", [scn_id])
     record = cursor.fetchall()
     database = {}
     database["size"] = int(record[0][0])
@@ -92,18 +88,18 @@ def send_request(url: str, head:str, send_json="") -> requests.Response:
 
 # API Authentification
 def apikey_get(site_url, time):
-    r = send_request(site_url, HEADERS)
-    if r is None:
+    req = send_request(site_url, HEADERS)
+    if req is None:
         return None, None
-    script_html = fetch_page_json(r.text)
+    script_html = fetch_page_json(req.text)
     if script_html is not None:
-        application_id = script_html['api']['algolia']['applicationID']
-        api_key = script_html['api']['algolia']['apiKey']
+        app_id = script_html['api']['algolia']['applicationID']
+        algolia_api_key = script_html['api']['algolia']['apiKey']
         # Write key into a file
-        write_config(time, application_id, api_key)
-        log.info(f"New API keys: {api_key}")
-        return application_id, api_key
-    log.error(f"Can't retrieve API keys from page ({site_url})")
+        write_config(time, app_id, algolia_api_key)
+        log.info(f"New API keys: {algolia_api_key}")
+        return app_id, algolia_api_key
+    log.error(f"Can't retrieve Algolia API keys from page ({site_url})")
     return None, None
 
 
@@ -149,12 +145,12 @@ def write_config(date, app_id, api_key):
     
 
 # API Search Data
-def api_search_req(type_search, query, api_url):
+def api_search_req(type_search, query, url):
     api_request = None
     if type_search == "query":
-        api_request = api_search_query(query, api_url)
+        api_request = api_search_query(query, url)
     if type_search == "id":
-        api_request = api_search_id(query, api_url)
+        api_request = api_search_id(query, url)
     if api_request:
         api_search = api_request.json()["results"][0].get("hits")
         if api_search:
@@ -162,7 +158,7 @@ def api_search_req(type_search, query, api_url):
     return None
 
 
-def api_search_id(scene_id, api_url):
+def api_search_id(scene_id, url):
     clip_id = [f"clip_id:{scene_id}"]
     request_api = {
         "requests":
@@ -174,10 +170,10 @@ def api_search_id(scene_id, api_url):
                 }
             ]
     }
-    r = send_request(api_url, HEADERS, request_api)
-    return r
+    req = send_request(url, HEADERS, request_api)
+    return req
 
-def api_search_movie_id(m_id, api_url):
+def api_search_movie_id(m_id, url):
     movie_id = [f"movie_id:{m_id}"]
     request_api = {
         "requests":
@@ -189,10 +185,10 @@ def api_search_movie_id(m_id, api_url):
                 }
             ]
     }
-    r = send_request(api_url, HEADERS, request_api)
-    return r
+    req = send_request(url, HEADERS, request_api)
+    return req
 
-def api_search_query(query, api_url):
+def api_search_query(query, url):
     request_api = {
         "requests":
             [
@@ -202,8 +198,8 @@ def api_search_query(query, api_url):
                 }
             ]
     }
-    r = send_request(api_url, HEADERS, request_api)
-    return r
+    req = send_request(url, HEADERS, request_api)
+    return req
 
 
 # Searching Result
@@ -213,8 +209,8 @@ def json_parser(search_json, range_duration=60, single=False):
     result_dict = {}
     # Just for not printing the full JSON in log...
     debug_dict = {}
-    with open("adultime_scene_search.json", 'w', encoding='utf-8') as f:
-        json.dump(search_json, f, ensure_ascii=False, indent=4)
+    with open("adultime_scene_search.json", 'w', encoding='utf-8') as search_file:
+        json.dump(search_json, search_file, ensure_ascii=False, indent=4)
     for scene in search_json:
         r_match = match_result(scene, range_duration, single)
         if r_match["info"]:
@@ -419,8 +415,8 @@ def parse_movie_json(movie_json: dict) -> dict:
     scrape["back_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg"
 
     directors = []
-    for x in movie_json[0].get('directors'):
-        directors.append(x.get('name').strip())
+    for director in movie_json[0].get('directors'):
+        directors.append(director.get('name').strip())
     scrape["director"] = ", ".join(directors)
     return scrape
 
@@ -448,25 +444,25 @@ def parse_scene_json(scene_json, url=None):
         )
     # Performer
     perf = []
-    for x in scene_json.get('actors'):
-        if x.get('gender') == "female" or NON_FEMALE:
+    for actor in scene_json.get('actors'):
+        if actor.get('gender') == "female" or NON_FEMALE:
             perf.append({
-                "name": x.get('name').strip(),
-                "gender": x.get('gender')
+                "name": actor.get('name').strip(),
+                "gender": actor.get('gender')
             })
     scrape['performers'] = perf
 
     # Tags
     list_tag = []
-    for x in scene_json.get('categories'):
-        if x.get('name') is None:
+    for tag in scene_json.get('categories'):
+        if tag.get('name') is None:
             continue
-        tag_name = x.get('name')
-        tag_name = " ".join(x.capitalize() for x in tag_name.split(" "))
+        tag_name = tag.get('name')
+        tag_name = " ".join(tag.capitalize() for tag in tag_name.split(" "))
         if tag_name:
-            list_tag.append({"name": x.get('name')})
-    if FIXED_TAGS:
-        list_tag.append({"name": FIXED_TAGS})
+            list_tag.append({"name": tag.get('name')})
+    if FIXED_TAG:
+        list_tag.append({"name": FIXED_TAG})
     scrape['tags'] = list_tag
 
     # Image
@@ -641,13 +637,13 @@ if "movie" not in sys.argv:
         log.debug("[API] Searching using URL_TITLE")
         api_search = api_search_req("query", url_title, api_url)
         if api_search:
-            log.info("[API] Search give {} result(s)".format(len(api_search)))
+            log.info(f"[API] Search gives {len(api_search)} result(s)")
             api_json = json_parser(api_search)
     if SCENE_TITLE and api_json is None:
         log.debug("[API] Searching using STASH_TITLE")
         api_search = api_search_req("query", SCENE_TITLE, api_url)
         if api_search:
-            log.info("[API] Search give {} result(s)".format(len(api_search)))
+            log.info(f"[API] Search gives {len(api_search)} result(s)")
             api_json = json_parser(api_search)
 
     # Scraping the JSON
