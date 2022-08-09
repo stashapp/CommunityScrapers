@@ -235,6 +235,7 @@ class-lesbians.com|ClassLesbians.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 claudiamarie.com|ClaudiaMarie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clips4sale.com|Clips4Sale.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubdom.com|SubbyHubby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+clubelegantangel.com|ClubElegantAngel.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 clubinfernodungeon.com|Algolia_ClubInfernoDungeon.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 clubseventeen.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 clubsweethearts.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -564,6 +565,7 @@ hornydoctor.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornygirlscz.com|porncz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornyhousehold.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 horrorporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hotandtatted.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotcrazymess.com|Nubiles.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotguysfuck.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hothouse.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -636,8 +638,8 @@ jcosplay.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 jeedoo.com|Jeedoo.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 jeffsmodels.com|JeffsModels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jelenajensen.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-jerkaoke.com|ModelMediaUS.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jerk-offpass.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+jerkaoke.com|ModelMediaUS.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jessicajaymesxxx.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jizzbomb.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jodiwest.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
