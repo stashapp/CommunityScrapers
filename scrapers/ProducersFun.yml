@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class="shadow video-details"]/h1/text()
-      Details: (//div[@class="shadow video-details"]/p[not(@class)])[1]/text()[3]
+      Details: //div[@class="shadow video-details"]/p[not(@class)][1]
       Date:
         selector: //p[@class="video-date"]/text()[2]
         postProcess:
