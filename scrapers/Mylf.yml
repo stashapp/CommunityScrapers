@@ -33,7 +33,7 @@ xPathScrapers:
                 with: "hi.jpg"
       Studio:
         Name:
-          selector: //div[contains(@class,"siteName")]/a[@href]/text()[2]
+          selector: //div[contains(@class,"siteName")]/a[@href]
           postProcess:
             - map:
                 GotMylf: Got Mylf
