@@ -15,9 +15,6 @@ performerByURL:
 
 xPathScrapers:
   sceneScraper:
-    common:
-      $section: //div[contains(@class,"tg5e7m")]/ancestor::section
-      #Not working: twistys
     scene:
       Title: //h2[contains(@class,"edmOvr")]/text()
       Date:
@@ -39,22 +36,25 @@ xPathScrapers:
           selector: //div[contains(@class,"fRnfXb")]//a/text()
           postProcess:
             - map:
+                anettedawn: Anette Dawn
                 twistys: Twistys
+                TwistysHard: Twistys Hard
+                whengirlsplay: When Girls Play
       Image: //div[contains(@class,"eIJfvU")]//img/@src
 
   performerScraper:
     performer:
       Name: //div[contains(@class,"kpSMJE")]/text()
       Birthdate:
-        selector: //li[contains(.,"Date of Birth")]/span/text()[not(contains(.,"Date"))]
+        selector: //li[contains(.,"Date of Birth")]/span[not(contains(text(),"Date"))]/text()
         postProcess:
           - replace:
               - regex: th,|st,|rd,|nd,
                 with: ","
           - parseDate: January 2, 2006
-      Measurements: //li[contains(.,"Measurements")]/span/text()[not(contains(.,"Measurements"))]
+      Measurements: //li[contains(.,"Measurements")]/span[not(contains(text(),"Measurements"))]/text()
       Height:
-        selector: //li[contains(.,"Height")]/span/text()[not(contains(.,"Height"))]
+        selector: //li[contains(.,"Height")]/span[not(contains(text(),"Height"))]/text()
         postProcess:
           - feetToCm: true
       HairColor: //span[contains(.,"Hair Color")]/ancestor::li//a/text()
@@ -71,12 +71,13 @@ xPathScrapers:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
       Country:
-        selector: //li[contains(.,"Birth Place")]/span/text()[not(contains(.,"Birth"))]
+        selector: //li[contains(.,"Birth Place")]/span[not(contains(text(),"Birth"))]/text()
         postProcess:
           - replace:
               - regex: .*?,\s
                 with: ""
           - map:
+              N/A: ""
               AK: "USA"
               AL: "USA"
               AR: "USA"
