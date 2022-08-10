@@ -26,7 +26,7 @@ xPathScrapers:
         Name: //div[@class="actress"]/a
       Studio:
         Name:
-          fixed: DorcelClub
+          fixed: Dorcel Club
       Movies:
         Name: //div[@class="left"]/span[@class="movie"]/a/text()
         URL:
@@ -55,7 +55,7 @@ xPathScrapers:
                 with: ":00:"
       Studio:
         Name:
-          fixed: DorcelClub
+          fixed: Dorcel Club
       Director:
         selector: //span[@class='director']/text()
         postProcess:
@@ -69,4 +69,4 @@ xPathScrapers:
               - regex: ([^\s]*)\s1x
                 with: $1
       Synopsis: //span[@class="full"]/p|/div[@class="content-text"]/p
-# Last Updated August 07, 2021
+# Last Updated June 27, 2022

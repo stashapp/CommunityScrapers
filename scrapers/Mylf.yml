@@ -33,9 +33,18 @@ xPathScrapers:
                 with: "hi.jpg"
       Studio:
         Name:
-          selector: //div[contains(@class,"siteName")]/a[@href]/text()
+          selector: //div[contains(@class,"siteName")]/a[@href]
           postProcess:
-            - replace:
-                - regex: \sX\s.*
-                  with: ""
-# Last Updated August 27, 2021
+            - map:
+                GotMylf: Got Mylf
+                FullOfJoi: Full Of JOI
+                LoneMilf: Lone MILF
+                MilfBody: MILF Body
+                MomDrips: Mom Drips
+                MomShoot: Mom Shoot
+                Mylf Of The Month: Mylf of the Month
+                MylfBlows: Mylf Blows
+                MylfBoss: Mylf Boss
+                MylfSelects: Mylf Selects
+                StayHomeMilf: Stay Home Milf
+# Last Updated June 27, 2022

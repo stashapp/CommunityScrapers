@@ -17,8 +17,6 @@ sceneByURL:
       - sweetheartvideo.com/scene/
       - sweetsinner.com/scene/
       - teenslovehugecocks.com/scene/
-      - twistys.com/scene/
-      - twistysnetwork.com/scene/
     scraper: sceneScraper
   - action: scrapeXPath
     url:
@@ -65,14 +63,12 @@ performerByURL:
       - sweetsinner.com/model/
       - teenslovehugecocks.com/model/
       - transsensual.com/model/
-      - twistys.com/model/
-      - twistysnetwork.com/model/
     scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
     common:
-      $section: //img[@alt=""][contains(@src,"poster")]/ancestor::section
+      $section: //div[contains(@class,"tg5e7m")]/ancestor::section
     scene:
       Title: $section//h1/text()|$section//h2/text()
       Date:
@@ -94,11 +90,25 @@ xPathScrapers:
           selector: $section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
           postProcess:
             - replace:
-                - regex: .*www\.
-                  with: ""
-                - regex: \.com.+
-                  with: ""
-      Image: //img[@alt=""][contains(@src,"poster")]/@src
+                - regex: (.+www\.)(\w+)(.+)
+                  with: $2
+            - map:
+                babesnetwork: Babes
+                devianthardcore: Deviant Hardcore
+                doghousedigital: Doghouse Digital
+                familyhookups: Family Hookups
+                girlgrind: Girl Grind
+                kinkyspa: Kinky Spa
+                Lets Try Anal: Let's Try Anal
+                lookathernow: Look At Her Now
+                mofosnetwork: Mofos
+                realityjunkies: Reality Junkies
+                squirted: Squirted
+                sweetheartvideo: Sweetheart Video
+                SweetSinner: Sweet Sinner
+                sweetsinner: Sweet Sinner
+                teenslovehugecocks: Teens Love Huge Cocks
+      Image: $section//img[contains(@src,"poster")]/@src
   scriptScraper:
     common:
       $script: //script[@type="application/ld+json"]
@@ -123,7 +133,26 @@ xPathScrapers:
               - regex: '.+"thumbnailUrl": "([^"]+)".+'
                 with: $1
       Studio:
-        Name: //meta[@name="dti.network"]/@content
+        Name:
+          selector: //div[contains(@class,"tg5e7m")]/ancestor::section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: (.+www\.)(\w+)(.+)
+                  with: $2
+            - map:
+                digitalplayground: Digital Playground
+                fakehostel: Fake Hostel
+                faketaxi: Fake Taxi
+                familysinners: Family Sinners
+                iconmale: Icon Male
+                iknowthatgirl: I Know That Girl
+                lilhumpers: Lil Humpers
+                milfed: Milfed
+                publicagent: Public Agent
+                seancody: Sean Cody
+                transangels: Trans Angels
+                transsensual: TransSensual
+                trueamateurs: True Amateurs
       Tags: *tags
       Details:
         selector: $script
@@ -153,15 +182,13 @@ xPathScrapers:
           selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace:
-                - regex: .*www\.
-                  with: ""
-                - regex: \.com.+
-                  with: ""
-                - regex: " "
-                  with: ""
+                - regex: (.+www\.)(\w+)(.+)
+                  with: $2
             - map:
                 digitalplayground: "Digital Playground"
                 transsensual: TransSensual
+                kinkyspa: Kinky Spa
+
       FrontImage: $section//picture/img[@alt]/@src
 
   performerScraper:
@@ -290,4 +317,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated February 20, 2022
+# Last Updated June 08, 2022
