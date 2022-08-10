@@ -8,23 +8,23 @@ sceneByURL:
       - Algolia.py
       - tabooheat
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - tabooheat
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - tabooheat
 sceneByName:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - tabooheat
-      - searchName
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - tabooheat
+    - searchName
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - tabooheat
-      - validName
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - tabooheat
+    - validName
 # Last Updated June 22, 2022
