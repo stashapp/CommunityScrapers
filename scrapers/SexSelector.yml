@@ -9,7 +9,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class="player__info__top"]/h3/text()
-      Details: //p[@class="player__description"]/text() 
+      Details: //p[@class="player__description"]/text()
       Date:
         selector: //div[@class="player"]/p[starts-with(., "Released:")]
         postProcess:
@@ -25,7 +25,7 @@ xPathScrapers:
                 with: https://sm-members.bangbros.com/shoots/sexselector/$1/poster/${1}_01_2160.jpg
       Studio:
         Name:
-            fixed: Sex Selector
+          fixed: Sex Selector
       Performers:
         Name: //div[@class="player__stats"]//a/text()
       Tags:
