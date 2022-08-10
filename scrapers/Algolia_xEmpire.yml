@@ -13,23 +13,23 @@ sceneByURL:
       - Algolia.py
       - xempire
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - xempire
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - xempire
 sceneByName:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - xempire
-      - searchName
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - xempire
+    - searchName
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - xempire
-      - validName
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - xempire
+    - validName
 # Last Updated June 22, 2022
