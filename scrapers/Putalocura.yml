@@ -20,7 +20,6 @@ xPathScrapers:
           - parseDate: 02/01/2006
       Details:
         selector: //p[@class="desc"]/following-sibling::p/text()
-        concat: "\n\n"
       # look like it's the same trashy tag everytime so don't think there are useful
       #Tags:
       #  Name: 
