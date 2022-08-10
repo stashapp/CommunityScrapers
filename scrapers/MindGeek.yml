@@ -133,7 +133,7 @@ xPathScrapers:
               - regex: '.+"thumbnailUrl": "([^"]+)".+'
                 with: $1
       Studio:
-        Name: 
+        Name:
           selector: //div[contains(@class,"tg5e7m")]/ancestor::section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
           postProcess:
             - replace:
@@ -188,7 +188,7 @@ xPathScrapers:
                 digitalplayground: "Digital Playground"
                 transsensual: TransSensual
                 kinkyspa: Kinky Spa
-                
+
       FrontImage: $section//picture/img[@alt]/@src
 
   performerScraper:
