@@ -22,7 +22,7 @@ xPathScrapers:
               - regex: ^
                 with: "https:"
       Studio:
-        Name: 
+        Name:
           selector: //div[@class="vdoCast"]/a[1]/text()
           postProcess:
             # Fix special cases
@@ -37,5 +37,4 @@ xPathScrapers:
           - subScraper:
               selector: //span[@class="thmb_mr_cmn thmb_mr_2 clearfix"]/span[@class="faTxt"]
           - parseDate: Jan 2, 2006
-
 # Last Updated June 08, 2022
