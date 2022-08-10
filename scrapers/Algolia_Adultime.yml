@@ -3,6 +3,7 @@ sceneByURL:
   - action: script
     url:
       - adulttime.com/en/video/
+      - outofthefamily.com/en/video/
     script:
       - python
       - Algolia.py
@@ -27,4 +28,4 @@ sceneByQueryFragment:
       - Algolia.py
       - girlsway
       - validName
-# Last Updated March 23, 2022
+# Last Updated June 23, 2022

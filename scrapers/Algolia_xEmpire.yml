@@ -1,0 +1,35 @@
+name: "xEmpire"
+sceneByURL:
+  - action: script
+    url:
+      - allblackx.com/en/video/
+      - darkx.com/en/video/
+      - eroticax.com/en/video/
+      - hardx.com/en/video/
+      - lesbianx.com/en/video/
+      - xempire.com/en/video/
+    script:
+      - python
+      - Algolia.py
+      - xempire
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - xempire
+sceneByName:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - xempire
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - xempire
+    - validName
+# Last Updated June 22, 2022
