@@ -57,14 +57,14 @@ xPathScrapers:
           selector: //base/@href
           postProcess:
             - replace:
-               - regex: (.+\/\/|www.|\..+)
-                 with: 
+                - regex: (.+\/\/|www.|\..+)
+                  with:
             - map:
-               julesjordan: Jules Jordan
-               girlgirl: Girl Girl
-               manuelferrara: Manuel Ferrara
-               theassfactory: The Ass Factory
-               spermswallowers: Sperm Swallowers
+                julesjordan: Jules Jordan
+                girlgirl: Girl Girl
+                manuelferrara: Manuel Ferrara
+                theassfactory: The Ass Factory
+                spermswallowers: Sperm Swallowers
       Movies:
         Name: $details//span[@class="update_dvds"]/a/text()
         URL: $details//span[@class="update_dvds"]/a/@href
@@ -72,10 +72,10 @@ xPathScrapers:
         selector: //script[contains(text(),'useimage')]/text()
         postProcess:
           - replace:
-            - regex: (?:.+useimage = "([^"]+).+)
-              with: $1
-            - regex: (^\/)
-              with: https://www.julesjordan.com/
+              - regex: (?:.+useimage = "([^"]+).+)
+                with: $1
+              - regex: (^\/)
+                with: https://www.julesjordan.com/
 
     gallery:
       Title: *titleAttr
@@ -92,23 +92,23 @@ xPathScrapers:
         selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Age')]
         postProcess:
           - replace:
-            - regex: "Age:"
-              with:
+              - regex: "Age:"
+                with:
           - parseDate: January 2, 2006
       Measurements:
         selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Measurements')]
         postProcess:
           - replace:
-            - regex: "Measurements:"
-              with:
-            - regex: " "
-              with:
+              - regex: "Measurements:"
+                with:
+              - regex: " "
+                with:
       Height:
         selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Height')]
         postProcess:
           - replace:
-            - regex: "Height:"
-              with:
+              - regex: "Height:"
+                with:
           - feetToCm: true
       Image:
         selector: //img[contains(@class,'model_bio_thumb')]/@src0_3x
@@ -121,11 +121,10 @@ xPathScrapers:
         concat: " "
         postProcess:
           - replace:
-            - regex: "Description:"
-              with:
+              - regex: "Description:"
+                with:
       Studio:
         Name: //span[@class="update_date"]/text()[contains(.,"Studio")]/following-sibling::a/text()
       FrontImage: //div[@class="front"]/a/img/@src0_3x
       BackImage: //div[@class="back"]/a/img/@src0_3x
-
 # Last Updated June 09, 2022
