@@ -609,7 +609,6 @@ def movie_from_tree(tree):
             m.date = datetime.datetime.strptime(m.date, iafd_date_scene).strftime(stash_date)
         except:
             m.date = None
-            pass
 
     movie_aliases = tree.xpath('//div[@class="col-sm-12"]/dl/dd//text()')
     m.aliases = m.set_concat_value(", ", movie_aliases)
