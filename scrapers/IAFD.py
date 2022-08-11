@@ -572,7 +572,6 @@ def scene_from_tree(tree):
             s.date = datetime.datetime.strptime(s.date, iafd_date_scene).strftime(stash_date)
         except:
             s.date = None
-            pass
 
     scene_details = tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()')
     s.details = s.set_value(scene_details)
