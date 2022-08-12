@@ -37,8 +37,12 @@ xPathScrapers:
       #    split: ","
       Studio:
         Name:
-          fixed: PurgatoryX
+          selector: //p[@class="series"]//span/text()
+          postProcess:
+            - replace:
+              - regex: " Series"
+                with: ""
       # URL need to have "?trilogy=" to get the name of the Trilogy
       Movies:
         Name: //span[contains(text(),"Part of")]/following-sibling::text()
-# Last Updated December 03, 2020
+# Last Updated June 27, 2022

@@ -7,7 +7,6 @@ sceneByURL:
       # if you only have the  id add an extra part after it eg for https://www.brazzers.com/video/123456/ use https://www.brazzers.com/video/123456/a
       - brazzers.com/video
       - men.com/sceneid/
-      - realitykings.com/scene/
     scraper: sceneScraper
 
 performerByURL:
@@ -256,4 +255,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated March 10, 2021
+# Last Updated June 23, 2022
