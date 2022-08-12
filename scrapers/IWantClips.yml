@@ -1,4 +1,13 @@
 name: IWantClips
+performerByName:
+  action: scrapeXPath
+  queryURL: https://iwantclips.com/artists?query={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - iwantclips.com/store
+    scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -51,6 +60,27 @@ xPathScrapers:
           fixed: IWantClips
       Performers:
         Name: //a[@class="modelLink"]
+  performerScraper:
+    common:
+      $author: //li[@class="ais-Hits-item"][1]//span[contains(@class,'clip-author')]
+    performer:
+      Name: $author
+      URL: $author/a/@href
+      Details:
+        selector: $author/a/@href
+        postProcess:
+          - replace:
+              - regex: /store/
+                with: "/home/aboutMe/"
+          - subScraper: //p
+        concat: "\n\n"
+      Image: //div[@class="sideBar"]//img[contains(@class,'avatar')]/@src
+  performerSearch:
+    performer:
+      Name: //h5[contains(@class,'featured-store-name')]/a/text()
+      URL:
+        selector: //h5[contains(@class,'featured-store-name')]/a/@href
+
 driver:
   useCDP: true
-# Last Updated January 06, 2022
+# Last Updated July 22, 2022

@@ -33,6 +33,12 @@ xPathScrapers:
           selector: //h3[@class="site-name"]
           postProcess:
             - replace:
-                - regex: (\.com)$
-                  with:
-# Last Updated May 03, 2021
+                - regex: (.+?)(\.com)$
+                  with: $1
+                # 'BlacksOnBlondes' => 'Blacks On Blondes'
+                - regex: ([a-z])-?([A-Z])
+                  with: $1 $2
+            # Fix special cases
+            - map:
+                Glory Hole: Gloryhole
+# Last Updated June 08, 2022
