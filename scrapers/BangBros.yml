@@ -22,7 +22,12 @@ xPathScrapers:
               - regex: ^
                 with: "https:"
       Studio:
-        Name: //div[@class="vdoCast"]/a[1]/text()
+        Name:
+          selector: //div[@class="vdoCast"]/a[1]/text()
+          postProcess:
+            # Fix special cases
+            - map:
+                MomIsHorny: Mom is Horny
       Date:
         selector: //div[@class="vdoCast" and contains(text(), "Release:")]
         postProcess:
@@ -32,5 +37,4 @@ xPathScrapers:
           - subScraper:
               selector: //span[@class="thmb_mr_cmn thmb_mr_2 clearfix"]/span[@class="faTxt"]
           - parseDate: Jan 2, 2006
-
-# Last Updated November 08, 2020
+# Last Updated June 08, 2022

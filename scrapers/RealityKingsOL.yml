@@ -2,7 +2,6 @@ name: "RealityKingsOL"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - babes.com/scene/
       - bellesafilms.com/scene/
       - bellesahouse.com/scene/
       - danejones.com/scene/
@@ -45,10 +44,21 @@ xPathScrapers:
             - replace:
                 - regex: .*www\.(.+)\.com.*
                   with: $1
+            - map:
+                bellesafilms: Bellesa Films
+                bellesahouse: Bellesa House
+                danejones: Dane Jones
+                erito: Erito
+                lesbea: Lesbea
+                propertysex: Property Sex
+                shewillcheat: She Will Cheat
+                sexyhub: Sexy Hub
+                welivetogether: We Live Together
+
       Image:
         selector: //img[@alt=""][contains(@src,"poster")]/@src|//script[@type="application/ld+json"]/text()
         postProcess:
           - replace:
               - regex: '.*"thumbnailUrl": "([^"]+)".*'
                 with: $1
-# Last Updated May 07, 2022
+# Last Updated June 23, 2022
