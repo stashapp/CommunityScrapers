@@ -54,11 +54,11 @@ xPathScrapers:
               - regex: ([0-9]{2,3}).*
                 with: $1
           - lbToKg: true
-      HairColor: //*/span[@class="model-details" and text()="Eye Color:"]/../text()
-      EyeColor: //*/span[@class="model-details" and text()="Hair Color:"]/../text()
+      HairColor: //*/span[@class="model-details" and text()="Hair Color:"]/../text()
+      EyeColor: //*/span[@class="model-details" and text()="Eye Color:"]/../text()
       Details:
         selector: //*/div[@class="model-desc"]//text()
         concat: "\n\n"
       Image: //*/div/amp-img/@src
 
-# Last Updated April 11, 2022
+# Last Updated August 09, 2022

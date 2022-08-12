@@ -5,7 +5,6 @@ sceneByURL:
       - 1000facials.com/en/scene/
       - activeduty.com/en/video/
       - alettaoceanempire.com/en/video/
-      - allblackx.com/en/video/
       - analacrobats.com/en/video/
       - analteenangels.com/en/video/
       - ashleyfires.com/
@@ -17,13 +16,11 @@ sceneByURL:
       - buttman.com/
       - cumshotoasis.com/
       - currycreampie.com/
-      - darkx.com/en/video/
       - devilsfilmparodies.com/
       - devilsgangbangs.com/
       - devonlee.com/
       - dpfanatics.com/en/video/
       - dylanryder.com/
-      - eroticax.com/en/video/
       - evilangel.com/en/video/
       - falconstudios.com/en/video/
       - famedigital.com/
@@ -37,14 +34,12 @@ sceneByURL:
       - girlstryanal.com/en/video/
       - grannyghetto.com/
       - hairyundies.com/
-      - hardx.com/en/video/
       - hothouse.com/en/video/
       - immorallive.com/en/video/
       - jaysinxxx.com/
       - jonnidarkkoxxx.com/
       - lanesisters.com/
       - lesbianfactor.com/
-      - lesbianx.com/en/video/
       - lexingtonsteele.com/
       - lezcuties.com/en/video/
       - maledigital.com/en/video/
@@ -95,7 +90,6 @@ sceneByURL:
       - webyoung.com/en/video/
       - whiteghetto.com/
       - wicked.com/en/video/
-      - xempire.com/en/video/
     scraper: sceneScraper
 
 performerByURL:
@@ -300,4 +294,5 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated February 01, 2022
+
+# Last Updated June 22, 2022

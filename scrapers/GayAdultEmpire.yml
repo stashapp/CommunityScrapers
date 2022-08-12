@@ -1,0 +1,104 @@
+name: GayAdultEmpire
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - gaydvdempire.com
+      - gayempire.com
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - gaydvdempire.com
+      - gayempire.com
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  # if needed replace `dvd` with `vod`
+  queryURL: https://www.gaydvdempire.com/dvd/search?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+
+xPathScrapers:
+  sceneSearch:
+    scene:
+      Title:
+        selector: //div[@class="item-title"]/a/@*[local-name()="href" or local-name()="title"]
+        concat: "|"
+        postProcess:
+          - replace:
+            - regex: '/(\d+)/[^|]+\|([^|]+)'
+              with: "$2 ($1)"
+        split: "|"
+      URL:
+        selector: //div[@id="content"]//div[@class="item-title"]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.gaydvdempire.com"
+      Image:
+        selector: //a[@class="boxcover"]/img/@data-src
+
+  movieScraper:
+    movie:
+      Name: //h1/text()
+      Director: //a[@label="Director"]/text()
+      Duration:
+        selector: //small[contains(text(), "Length")]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: " hrs. "
+              with: ":"
+            - regex: " mins."
+              with: ":00"
+      Date:
+        selector: //small[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Synopsis:
+        selector: //h4[contains(@class,"synopsis")]//text()
+        concat: " "
+      Studio:
+        Name: //a[@label="Studio"]/text()
+      FrontImage: //a[@id="front-cover"]/@data-href
+      BackImage: //a[@id="back-cover"]/@href
+      # Rating is not yet implemented in the UX
+      # Rating:
+      #   selector: //span[@class='rating-stars-avg']/text()
+      #   postProcess:
+      #     - replace:
+      #       - regex: (\d).+
+      #         with: $1
+      URL: //meta[@name='og:url']/@content
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Details:
+        selector: //h4[contains(@class,"synopsis")]//text()
+        concat: " "
+      Date:
+        selector: //small[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Image: //a[@id="front-cover"]/@data-href
+      Studio:
+        Name: //a[@label="Studio"]/text()
+      Movies:
+        Name: //h1/text()
+        URL: //link[@rel="canonical"]/@href
+      Tags:
+        Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
+      Performers:
+        Name: //a[@label="Performer"]//text()
+        URL:
+          selector: //a[@label="Performer"]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.gaydvdempire.com"
+      URL: //meta[@name='og:url']/@content
+# Last Updated July 17, 2022
