@@ -8,7 +8,6 @@ performerByURL:
     url:
       - imdb.com
     scraper: performerScraper
-
 sceneByName:
   action: scrapeXPath
   queryURL: https://www.imdb.com/find?q={}
@@ -27,7 +26,6 @@ movieByURL:
     url:
       - imdb.com/title/
     scraper: movieScraper
-
 xPathScrapers:
   performerSearch:
     common:
@@ -41,7 +39,6 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://www.imdb.com
-
   performerScraper:
     performer:
       Name: //td[@id="overview-top" or @class="name-overview-widget__section"]//h1/span[1]/text()
@@ -141,4 +138,4 @@ xPathScrapers:
       Studio: *studio
       Synopsis: *desc
       FrontImage: *imageAttr
-# Last Updated July 30, 2022
+# Last Updated August 13, 2022
