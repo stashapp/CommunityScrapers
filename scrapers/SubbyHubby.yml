@@ -2,12 +2,10 @@ name: SubbyHubby
 sceneByURL:
   - action: scrapeXPath
     url:
-      - clubdom.com/tour
       - subbyhubby.com/tour
     scraper: sceneScraper
   - action: scrapeXPath
     url:
-      - clubdom.com/vod
       - subbyhubby.com/vod
     scraper: vodScraper
 sceneByName:
@@ -52,7 +50,6 @@ xPathScrapers:
           selector: //base/@href
           postProcess:
             - map:
-                //www.clubdom.com/tour/: Club Dom
                 //www.subbyhubby.com/tour/: Subby Hubby
   vodScraper:
     scene:
@@ -84,7 +81,6 @@ xPathScrapers:
                 - regex: https://(www.)?([^.]+)\..*
                   with: $2
             - map:
-                clubdom: Club Dom
                 subbyhubby: Subby Hubby
   sceneSearch:
     scene:
