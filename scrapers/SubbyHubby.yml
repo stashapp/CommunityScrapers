@@ -10,6 +10,22 @@ sceneByURL:
       - clubdom.com/vod
       - subbyhubby.com/vod
     scraper: vodScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.subbyhubby.com/vod/search.php?st=advanced&page=1&qany=&qex=&none=&tadded=0&cat%5B%5D=17&qall={}
+  scraper: sceneSearch
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneSearch
+  queryURL: https://www.subbyhubby.com/vod/search.php?st=advanced&page=1&qany=&none=&tadded=0&cat%5B%5D=17&qex={title}
+  queryURLReplace:
+     title:
+       - regex: " "
+         with: "+"
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: vodScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -40,6 +56,7 @@ xPathScrapers:
                 //www.subbyhubby.com/tour/: Subby Hubby
   vodScraper:
     scene:
+      URL: //div[@class='cell content_tab_current']/a/@href
       Title:
         selector: //span[@class="title_bar_hilite"]
       Date:
@@ -69,4 +86,19 @@ xPathScrapers:
             - map:
                 clubdom: Club Dom
                 subbyhubby: Subby Hubby
-# Last Updated July 20, 2021
+  sceneSearch:
+    scene:
+      Title:
+        selector: //div[@class='update_details']/a[2]/text()
+      URL: //div[@class='update_details']/a[2]/@href
+      Image: 
+        selector: //div[@class='update_details']/a[2]/@href
+        # the main scene image isn't the same as //div[@class='category_listing_wrapper_updates']/div/a/img/@src
+        subScraper:
+           selector: //base/@href|//div[@id="download_form"]/following-sibling::script
+           concat: "|"
+           postProcess:
+            - replace:
+              - regex: '(.*)/vod/\|.*thumbnail:"(.*)",vtt_file:.*'
+                with: $1$2
+# Last Updated August 13, 2022
