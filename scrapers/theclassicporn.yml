@@ -125,7 +125,6 @@ xPathScrapers:
                 with: $1
               - regex: ^n/a$
                 with: ""
-      #EyeColor: //strong[text()="Eye Color:"]/following-sibling::text()[1]
       HairColor: 
         selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Hair Color:")]/following-sibling::text()
         postProcess:
@@ -146,7 +145,6 @@ xPathScrapers:
                 with: ""
               - regex: Height:\s\/+.+
                 with: ""
-      #FakeTits: //strong[text()="Implants:"]/following-sibling::text()[1]
       Tattoos: 
         selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Tattoo:")]/following-sibling::text()
         postProcess:
@@ -170,7 +168,7 @@ xPathScrapers:
           - replace:
               - regex: ^/
                 with: https://theclassicporn.com/
-      #Details: //div[@class='description show-for-medium']//a/@title
+      #Details: TBD
       Date: 
         selector: //div[@class='video-info-top']/ul[@class='info-bar']/li[1]/a[@class='link-yellow']
         postProcess:
@@ -183,4 +181,4 @@ xPathScrapers:
           - replace:
               - regex: ^/
                 with: https://theclassicporn.com/
-# Last Updated July 29, 2022
+# Last Updated August 13, 2022
