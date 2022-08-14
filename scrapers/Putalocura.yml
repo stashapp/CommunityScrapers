@@ -1,0 +1,46 @@
+name: Putalocura
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - putalocura.com/en/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: \s*\|.+
+                with: ""
+      Date: 
+        selector: //div[@class="released-views"]/span[1]/text()
+        postProcess:
+          - parseDate: 02/01/2006
+      Details:
+        selector: //p[@class="desc"]/following-sibling::p/text()
+      # look like it's the same trashy tag everytime so don't think there are useful
+      #Tags:
+      #  Name: 
+      #    selector: //div[@class="categories"]/a/text()
+      Performers:
+        Name: 
+          selector: //span[@class="site-name"]/text()
+          postProcess:
+            - replace:
+                - regex: \s*[-&,]\s*
+                  with: " and "
+          split: " and "
+      Studio:
+        Name:
+          fixed: "Putalocura"
+      Image: 
+        selector: //div[@class="top-area-content"]/script
+        postProcess:
+          - replace:
+              - regex: .+posterImage.*"(.+)".*
+                with: "$1"
+      URL: //link[@rel="canonical"]/@href
+
+# Last Updated August 10, 2022
