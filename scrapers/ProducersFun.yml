@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class="shadow video-details"]/h1/text()
-      Details: (//div[@class="shadow video-details"]/p[not(@class)])[1]/text()
+      Details: //div[@class="shadow video-details"]/p[not(@class)][1]
       Date:
         selector: //p[@class="video-date"]/text()[2]
         postProcess:
@@ -17,8 +17,11 @@ xPathScrapers:
                 with: ","
           - parseDate: January 2, 2006
       Image: //section[@class="top-wrapper"]/div//video/@poster
+      Studio:
+        Name:
+          fixed: Producers Fun
       Tags:
         Name:
           selector: //p[@class="video-tags"]/a/text()
 
-# Last Updated November 08, 2020
+# Last Updated June 23, 2022

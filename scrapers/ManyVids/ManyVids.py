@@ -227,7 +227,7 @@ def get_model_bio(url_handle: str, performer_url: str) -> dict:
 
 
 def scrape_scene(scene_url: str) -> None:
-    id_match = re.search(r".+/Video/(\d+)/.+", scene_url)
+    id_match = re.search(r".+/Video/(\d+)(/.+)?", scene_url)
     if id_match:
         scene_id = id_match.group(1)
         scraped = get_scene(scene_id)
@@ -263,7 +263,7 @@ def performer_by_name(name: str, max_results: int = 25) -> None:
         names = root.xpath(xpath_name)
         urls = root.xpath(xpath_url)
         if len(names) != len(urls):
-            log.warning("Different number of search results! Aborting")
+            log.warning("Names/URL mismatch! Aborting")
         else:
             if max_results > len(names):
                 max_results = len(names)
