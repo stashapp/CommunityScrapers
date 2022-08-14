@@ -27,7 +27,7 @@ xPathScrapers:
       Tags:
         Name: //div[starts-with(@class,"video-item__tags ")]//a/text()
       Performers:
-        Name: //div[starts-with(@class, 'video-item__info-starring')]//div[starts-with(@class,"tooltip")]//a/text()
+        Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()
       Studio:
         Name: &studioName
           selector: //meta[@name="dl8-customization-brand-name"]/@content
@@ -35,6 +35,9 @@ xPathScrapers:
             - replace:
                 - regex: \#
                   with: ""
+            - replace:
+                - regex: ^VR Bangers$
+                  with: "VRBangers"       
         URL: &studioURL
           selector: //meta[@name="dl8-customization-brand-url"]/@content
           postProcess:
@@ -64,4 +67,4 @@ xPathScrapers:
         Name: *studioName
         URL: *studioURL
       FrontImage: *imageSel
-# Last Updated October 03, 2021
+# Last Updated August 14, 2022
