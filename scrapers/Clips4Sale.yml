@@ -10,7 +10,30 @@ sceneByURL:
       - clips4sale.com/search/clip/
     scraper: c4sClipsSceneScraper
 
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.clips4sale.com/clips/search/{}
+  scraper: c4sSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: c4sSceneScraper
+
 xPathScrapers:
+  c4sSearch:
+    common:
+      $card: //figure[contains(@class, "splide__slide")]
+    scene:
+      Title:
+        selector: $card/@aria-label
+      URL:
+        selector: $card//a[contains(@class, "search-clip__title")]/@href
+      Image:
+        selector: $card//img[@draggable="false"]/@data-src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: https://
   c4sSceneScraper:
     common:
       $studio: //span[contains(text(),"From:")]/following-sibling::a
@@ -89,4 +112,4 @@ xPathScrapers:
         # Clips4Sale doesn't have an explict performer field, but performers are
         # often included in the video tags. So we attempt to find matches there.
         Name: //span[contains(text(),"Keywords:")]/following-sibling::a
-# Last Updated May 27, 2021
+# Last Updated July 24, 2022
