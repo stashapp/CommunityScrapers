@@ -42,8 +42,8 @@ def clean_text(details: str) -> str:
     if details:
         details = re.sub(r"\\", "", details)
         details = re.sub(r"<\s*/?br\s*/?\s*>", "\n", details) # bs.get_text doesnt replace br's with \n
-        details = bs(details, features='lxml')
-    return details.get_text()
+        details = bs(details, features='lxml').get_text()
+    return details
 
 
 def check_db(database_path:str , scn_id:str) -> dict:
