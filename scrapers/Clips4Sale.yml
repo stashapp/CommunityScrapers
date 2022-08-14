@@ -29,7 +29,7 @@ xPathScrapers:
       URL:
         selector: $card//a[contains(@class, "search-clip__title")]/@href
       Image:
-        selector: $card//img/@data-src
+        selector: $card//img[@draggable="false"]/@data-src
         postProcess:
           - replace:
               - regex: ^//
@@ -112,5 +112,4 @@ xPathScrapers:
         # Clips4Sale doesn't have an explict performer field, but performers are
         # often included in the video tags. So we attempt to find matches there.
         Name: //span[contains(text(),"Keywords:")]/following-sibling::a
-
 # Last Updated July 24, 2022
