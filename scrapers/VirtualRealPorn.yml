@@ -7,6 +7,8 @@ sceneByURL:
       - virtualrealpassion.com
       - virtualrealporn.com
       - virtualrealtrans.com
+      - virtualrealamateurporn.com
+
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
@@ -15,7 +17,27 @@ movieByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="titleVideo"]
+      Title: &titleDef
+        selector: //h1[@class="titleVideo"]/text()
+        postProcess:
+          - replace:
+              - regex:  VR Porn video$
+                with: ""
+          - replace:
+              - regex:  VR Trans Porn video$
+                with: ""
+          - replace:
+              - regex:  VR Gay Porn video$
+                with: ""
+          - replace:
+              - regex:  VR Japanese video$
+                with: ""
+          - replace:
+              - regex:  VR Female POV Porn video$
+                with: ""
+          - replace:
+              - regex:  VR Amateur Porn video$
+                with: ""
       Date: &dateAttr
         selector: //div[@class="video-date"]/span
         postProcess:
@@ -40,6 +62,10 @@ xPathScrapers:
             - replace:
                 - regex: \.com
                   with: ""
+            - replace:
+                - regex: "^VirtualRealAmateurPorn$"
+                  with: "VirtualRealAmateur"
+
       Image: &imageSel //meta[@property="og:image"]/@content
       Movies:
         Name: &movieName
@@ -56,4 +82,4 @@ xPathScrapers:
         Name: *studioName
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated October 13, 2021
+# Last Updated August 14, 2022
