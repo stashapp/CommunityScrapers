@@ -7,27 +7,30 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $info: //div[@class="box-container"]/div[@class="inner-box-container"]/div[@class="row"]
+      $info: //main[@class="app-content flex-grow-1 d-flex flex-column header-margin"]
     scene:
-      Title: $info//div[contains(@class, 'video-details')]//h1/text()
+      Title: $info//h1/text()
       Date:
-        selector: $info//div[@class="stats-container"]/ul/li[3]/span[@class="sub-label"]/text()
+        selector: $info//div[@class="video-item__info-item"]/span[text() = 'Release date:']/../text()
         postProcess:
           - replace:
-              - regex: (\d{4}-\d{2}-\d{2})\s.+
+              - regex: (^\s|\s$)
                 with: $1
-          - parseDate: 2006-01-02
+          - parseDate: Jan 2, 2006
       Details:
-        selector: $info//div[@class="expand-block-more"]/div[@class="d-container"][3]/text()
+        selector: $info//div[@class="container-fluid container-lg video-item__description px-0 mt-3"]//span/text()
         concat: " "
       Tags:
-        Name: $info//div[@class="tags-block"]//a/text()
+        Name: $info//div[@data-testid="video-categories-list"]/a/text()
       Performers:
-        Name: $info//ul[@class="models-list"]//li/a/@title
+        Name: $info//div[@class="video-item__info-starring"]//div[@class="video-item__info-starring"]//a/text()
       Image: 
-        selector: //div[@class="splash-screen fullscreen-message is-visible"]/@style
+        selector: //meta[@data-hid="og:image"]/@content
         postProcess:
           - replace:
               - regex: ^.*url.([^\)]+).*$
                 with: "$1"
-# Last Updated November 08, 2020
+      Studio:
+        Name:
+          fixed: "VR Conk"
+# Last Updated August 14, 2022
