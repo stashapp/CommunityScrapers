@@ -2,29 +2,40 @@ name: "ZeroToleranceFilms"
 sceneByURL:
   - action: script
     url:
+      - diabolic.com/en/video
       - zerotolerancefilms.com/en/video
     script:
       - python
       - Algolia.py
       - zerotolerancefilms
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - zerotolerancefilms
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - zerotolerancefilms
 sceneByName:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - zerotolerancefilms
-      - searchName
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - zerotolerancefilms
+    - searchName
 sceneByQueryFragment:
-    action: script
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - zerotolerancefilms
+    - validName
+movieByURL:
+  - action: script
+    url:
+      - diabolic.com/en/movie/
+      - zerotolerancefilms.com/en/movie
     script:
       - python
       - Algolia.py
       - zerotolerancefilms
-      - validName
-# Last Updated March 23, 2022
+      - movie
+# Last Updated August 15, 2022

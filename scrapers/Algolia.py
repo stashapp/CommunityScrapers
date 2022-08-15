@@ -13,14 +13,17 @@ try:
     import requests
     import lxml
 except ModuleNotFoundError:
-    print("You need to install the following modules 'requests', 'bs4', 'lxml'.")
+    print(
+        "You need to install the following modules 'requests', 'bs4', 'lxml'.")
     sys.exit()
 
 try:
     from py_common import graphql
     from py_common import log
 except ModuleNotFoundError:
-    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    print(
+        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
+        file=sys.stderr)
     sys.exit()
 
 #
@@ -41,23 +44,27 @@ def clean_text(details: str) -> str:
     """
     if details:
         details = re.sub(r"\\", "", details)
-        details = re.sub(r"<\s*/?br\s*/?\s*>", "\n", details) # bs.get_text doesnt replace br's with \n
+        details = re.sub(r"<\s*/?br\s*/?\s*>", "\n",
+                         details)  # bs.get_text doesnt replace br's with \n
         details = bs(details, features='lxml').get_text()
     return details
 
 
-def check_db(database_path:str , scn_id:str) -> dict:
+def check_db(database_path: str, scn_id: str) -> dict:
     """
     get scene data (size, duration, height) directly from the database file
     """
     try:
-        sqlite_connection = sqlite3.connect("file:" + database_path + "?mode=ro", uri=True)
+        sqlite_connection = sqlite3.connect("file:" + database_path +
+                                            "?mode=ro",
+                                            uri=True)
         log.debug("Connected to SQLite database")
     except:
         log.warning("Fail to connect to the database")
         return None, None, None
     cursor = sqlite_connection.cursor()
-    cursor.execute("SELECT size,duration,height from scenes WHERE id=?;", [scn_id])
+    cursor.execute("SELECT size,duration,height from scenes WHERE id=?;",
+                   [scn_id])
     record = cursor.fetchall()
     database = {}
     database["size"] = int(record[0][0])
@@ -68,8 +75,7 @@ def check_db(database_path:str , scn_id:str) -> dict:
     return database
 
 
-
-def send_request(url: str, head:str, send_json="") -> requests.Response:
+def send_request(url: str, head: str, send_json="") -> requests.Response:
     """
     get post response from url
     """
@@ -114,17 +120,18 @@ def check_config(domain, time):
         config = ConfigParser()
         config.read(STOCKAGE_FILE_APIKEY)
         try:
-            time_past = datetime.datetime.strptime(
-                config.get(domain, 'date'), '%Y-%m-%d %H:%M:%S.%f')
+            time_past = datetime.datetime.strptime(config.get(domain, 'date'),
+                                                   '%Y-%m-%d %H:%M:%S.%f')
 
-            if time_past.hour - 1 < time.hour < time_past.hour + 1 and (time - time_past).days == 0:
+            if time_past.hour - 1 < time.hour < time_past.hour + 1 and (
+                    time - time_past).days == 0:
                 log.debug("Using old key")
                 application_id = config.get(domain, 'app_id')
                 api_key = config.get(domain, 'api_key')
                 return application_id, api_key
             log.info(
-                    f"Need new api key: [{time.hour}|{time_past.hour}|{(time-time_past).days}]"
-                        )
+                f"Need new api key: [{time.hour}|{time_past.hour}|{(time-time_past).days}]"
+            )
         except NoSectionError:
             pass
     return None, None
@@ -141,9 +148,9 @@ def write_config(date, app_id, api_key):
     config.set(SITE, 'date', date.strftime("%Y-%m-%d %H:%M:%S.%f"))
     config.set(SITE, 'app_id', app_id)
     config.set(SITE, 'api_key', api_key)
-    with open(STOCKAGE_FILE_APIKEY, 'w', encoding= 'utf-8') as configfile:
+    with open(STOCKAGE_FILE_APIKEY, 'w', encoding='utf-8') as configfile:
         config.write(configfile)
-    
+
 
 # API Search Data
 def api_search_req(type_search, query, url):
@@ -162,42 +169,35 @@ def api_search_req(type_search, query, url):
 def api_search_id(scene_id, url):
     clip_id = [f"clip_id:{scene_id}"]
     request_api = {
-        "requests":
-            [
-                {
-                    "indexName": "all_scenes",
-                    "params": "query=&hitsPerPage=20&page=0",
-                    "facetFilters": clip_id
-                }
-            ]
+        "requests": [{
+            "indexName": "all_scenes",
+            "params": "query=&hitsPerPage=20&page=0",
+            "facetFilters": clip_id
+        }]
     }
     req = send_request(url, HEADERS, request_api)
     return req
+
 
 def api_search_movie_id(m_id, url):
     movie_id = [f"movie_id:{m_id}"]
     request_api = {
-        "requests":
-            [
-                {
-                    "indexName": "all_movies",
-                    "params": "query=&hitsPerPage=20&page=0",
-                    "facetFilters": movie_id
-                }
-            ]
+        "requests": [{
+            "indexName": "all_movies",
+            "params": "query=&hitsPerPage=20&page=0",
+            "facetFilters": movie_id
+        }]
     }
     req = send_request(url, HEADERS, request_api)
     return req
 
+
 def api_search_query(query, url):
     request_api = {
-        "requests":
-            [
-                {
-                    "indexName": "all_scenes",
-                    "params": "query=" + query + "&hitsPerPage=40&page=0"
-                }
-            ]
+        "requests": [{
+            "indexName": "all_scenes",
+            "params": "query=" + query + "&hitsPerPage=40&page=0"
+        }]
     }
     req = send_request(url, HEADERS, request_api)
     return req
@@ -210,7 +210,8 @@ def json_parser(search_json, range_duration=60, single=False):
     result_dict = {}
     # Just for not printing the full JSON in log...
     debug_dict = {}
-    with open("adultime_scene_search.json", 'w', encoding='utf-8') as search_file:
+    with open("adultime_scene_search.json", 'w',
+              encoding='utf-8') as search_file:
         json.dump(search_json, search_file, ensure_ascii=False, indent=4)
     for scene in search_json:
         r_match = match_result(scene, range_duration, single)
@@ -228,8 +229,9 @@ def json_parser(search_json, range_duration=60, single=False):
                         "url": r_match["url"],
                         "scene": scene["title"]
                     }
-                elif r_match["title"] > result_dict[r_match["info"]]["title"] and r_match[
-                        "title"] > result_dict[r_match["info"]]["url"]:
+                elif r_match["title"] > result_dict[r_match["info"]][
+                        "title"] and r_match["title"] > result_dict[
+                            r_match["info"]]["url"]:
                     result_dict[r_match["info"]] = {
                         "title": r_match["title"],
                         "url": r_match["url"],
@@ -257,7 +259,7 @@ def json_parser(search_json, range_duration=60, single=False):
     for key, item in debug_dict.items():
         log.info(
             f'[{key}] Title: {item["scene"]}; Ratio Title: {round(item["title"], 3)} - URL: {round(item["url"], 3)}'
-            )
+        )
     log.info("--------------")
     #
     if result_dict.get("ASDN"):
@@ -318,7 +320,8 @@ def match_result(api_scene, range_duration=60, single=False):
             if db_height == "2160":
                 api_filesize = api_scene["download_file_sizes"].get("4k")
             else:
-                api_filesize = api_scene["download_file_sizes"].get(db_height + "p")
+                api_filesize = api_scene["download_file_sizes"].get(db_height +
+                                                                    "p")
             if api_filesize:
                 api_filesize = int(api_filesize)
         if api_filesize is None:
@@ -346,8 +349,8 @@ def match_result(api_scene, range_duration=60, single=False):
 
     # Matching ratio
     if SCENE_TITLE:
-        match_ratio_title = difflib.SequenceMatcher(
-            None, SCENE_TITLE.lower(), api_title.lower()).ratio()
+        match_ratio_title = difflib.SequenceMatcher(None, SCENE_TITLE.lower(),
+                                                    api_title.lower()).ratio()
     else:
         match_ratio_title = 0
     if url_title and api_scene.get("url_title"):
@@ -360,12 +363,14 @@ def match_result(api_scene, range_duration=60, single=False):
 
     log.debug(
         f"[MATCH] Title: {api_title} |-RATIO-| Ratio: {round(match_ratio_title, 5)} / URL: {round(match_ratio_title_url, 5)} |-MATCH-| Duration: {match_duration}, Size: {match_size}, Domain: {match_domain}"
-        )
+    )
     match_dict = {}
     match_dict["title"] = match_ratio_title
     match_dict["url"] = match_ratio_title_url
     information_used = ""
-    if (single and (match_duration or (database_dict is None and match_ratio_title_url > 0.5))) or match_ratio_title_url == 1:
+    if (single and (match_duration or
+                    (database_dict is None and match_ratio_title_url > 0.5))
+        ) or match_ratio_title_url == 1:
         information_used += "A"
     if match_size:
         information_used += "S"
@@ -378,6 +383,7 @@ def match_result(api_scene, range_duration=60, single=False):
     match_dict["info"] = information_used
     #debug("[MATCH] {} - {}".format(api_title,match_dict))
     return match_dict
+
 
 def get_id_from_url(url: str) -> str:
     '''
@@ -399,27 +405,47 @@ def get_id_from_url(url: str) -> str:
         log.warning("Can't get ID from URL")
     return id_from_url
 
+
 def parse_movie_json(movie_json: dict) -> dict:
     """
     process an api movie dictionary and return a scraped one
     """
     scrape = {}
+    studio_name = movie_json[0].get("sitename_pretty")
     scrape["synopsis"] = clean_text(movie_json[0].get("description"))
     scrape["name"] = movie_json[0].get("title")
-    scrape["studio"] = {"name": movie_json[0].get("sitename_pretty")}
+    scrape["studio"] = {"name": studio_name}
     scrape["duration"] = movie_json[0].get("total_length")
 
-    scrape["date"] = movie_json[0].get("date_created") # available options are "date_created", "upcoming", "last_modified"
-                                                  # dates don't seem to be accurate (modifed by studio) at least for evilangel
+    date_by_studio = "date_created" # options are "date_created", "upcoming"(not always avaialble), "last_modified"
+                                    # dates don't seem to be accurate (modifed multiple times by studio)
+                                    # using date_created as default and we later override for each site when needed
 
-    scrape["front_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg"
-    scrape["back_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg"
+    log.debug(
+        f"Dates available: upcoming {movie_json[0].get('upcoming')} - created {movie_json[0].get('date_created')} - last modified {movie_json[0].get('last_modified')}"
+    )
+    studios_movie_dates = {
+        "Diabolic":
+        "last_modified",  # last modified in Diabolic seems to be what is displayed in the movie page
+        "Evil Angel": "date_created",
+        "Wicked": "date_created",
+        "Zerotolerance": "last_modified"
+    }
+    if studios_movie_dates.get(studio_name):
+        date_by_studio = studios_movie_dates[studio_name]
+    scrape["date"] = movie_json[0].get(date_by_studio)
+
+    scrape[
+        "front_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg"
+    scrape[
+        "back_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg"
 
     directors = []
     for director in movie_json[0].get('directors'):
         directors.append(director.get('name').strip())
     scrape["director"] = ", ".join(directors)
     return scrape
+
 
 def parse_scene_json(scene_json, url=None):
     """
@@ -442,7 +468,7 @@ def parse_scene_json(scene_json, url=None):
 
     log.debug(
         f"[STUDIO] {scene_json.get('serie_name')} - {scene_json.get('network_name')} - {scene_json.get('mainChannelName')} - {scene_json.get('sitename_pretty')}"
-        )
+    )
     # Performer
     perf = []
     for actor in scene_json.get('actors'):
@@ -468,10 +494,13 @@ def parse_scene_json(scene_json, url=None):
 
     # Image
     try:
-        scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(iter(scene_json['pictures']['nsfw']['top'].values()))
+        scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(
+            iter(scene_json['pictures']['nsfw']['top'].values()))
     except:
         try:
-            scrape['image'] = 'https://images03-fame.gammacdn.com/movies' + next(iter(scene_json['pictures']['sfw']['top'].values()))
+            scrape[
+                'image'] = 'https://images03-fame.gammacdn.com/movies' + next(
+                    iter(scene_json['pictures']['sfw']['top'].values()))
         except:
             log.warning("Can't locate image.")
     # URL
@@ -482,13 +511,19 @@ def parse_scene_json(scene_json, url=None):
             hostname = "21sextury"
         elif net_name.lower() == "21 naturals":
             hostname = "21naturals"
-        scrape['url'] = f"https://{hostname}.com/en/video/{scene_json['sitename']}/{scene_json['url_title']}/{scene_json['clip_id']}"
+        scrape[
+            'url'] = f"https://{hostname}.com/en/video/{scene_json['sitename']}/{scene_json['url_title']}/{scene_json['clip_id']}"
+        if scene_json.get('movie_title'):
+            scrape['movies'] = [{"name": scene_json["movie_title"]}]
+            if scene_json.get("url_movie_title") and scene_json.get(
+                    "movie_id"):
+                scrape['movies'][0][
+                    'url'] = f"https://{hostname}.com/en/movie/{scene_json['url_movie_title']}/{scene_json['movie_id']}"
     except:
         if url:
             scrape['url'] = url
     #debug(f"{scrape}")
     return scrape
-
 
 
 #
@@ -506,11 +541,9 @@ except:
 SITE = sys.argv[1]
 HEADERS = {
     "User-Agent":
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
-    "Origin":
-        f"https://www.{SITE}.com",
-    "Referer":
-        f"https://www.{SITE}.com"
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+    "Origin": f"https://www.{SITE}.com",
+    "Referer": f"https://www.{SITE}.com"
 }
 
 FRAGMENT = json.loads(sys.stdin.read())
@@ -525,7 +558,8 @@ CURRENT_TIME = datetime.datetime.now()
 application_id, api_key = check_config(SITE, CURRENT_TIME)
 # Getting new key
 if application_id is None:
-    application_id, api_key = apikey_get(f"https://www.{SITE}.com/en", CURRENT_TIME)
+    application_id, api_key = apikey_get(f"https://www.{SITE}.com/en",
+                                         CURRENT_TIME)
 # Failed to get new key
 if application_id is None:
     sys.exit(1)
@@ -569,7 +603,8 @@ if "movie" not in sys.argv:
             database_dict = graphql.getScene(SCENE_ID)
             if database_dict is None:
                 # Get data by SQlite
-                log.warning("GraphQL request failed, accessing database directly...")
+                log.warning(
+                    "GraphQL request failed, accessing database directly...")
                 database_dict = check_db(DB_PATH, SCENE_ID)
             else:
                 database_dict = database_dict["file"]
@@ -597,9 +632,12 @@ if "movie" not in sys.argv:
     if SCENE_TITLE:
         SCENE_TITLE = re.sub(r'[-._\']', ' ', os.path.splitext(SCENE_TITLE)[0])
         # Remove resolution
-        SCENE_TITLE = re.sub(r'\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|]|\sHD|\sSD|', '', SCENE_TITLE)
+        SCENE_TITLE = re.sub(
+            r'\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|]|\sHD|\sSD|', '',
+            SCENE_TITLE)
         # Remove Date
-        SCENE_TITLE = re.sub(r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}', '', SCENE_TITLE)
+        SCENE_TITLE = re.sub(r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}',
+                             '', SCENE_TITLE)
         log.debug(f"Title: {SCENE_TITLE}")
 
     # Time to search the API
