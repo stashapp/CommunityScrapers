@@ -5,6 +5,7 @@ sceneByURL:
       - vrbangers.com
       - vrbgay.com
       - vrbtrans.com
+      - vrconk.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
