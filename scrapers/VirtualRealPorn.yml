@@ -57,7 +57,6 @@ xPathScrapers:
             - replace:
                 - regex: \.com
                   with: ""
-            - replace:
                 - regex: "^VirtualRealAmateurPorn$"
                   with: "VirtualRealAmateur"
 
