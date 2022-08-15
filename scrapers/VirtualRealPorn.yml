@@ -23,19 +23,14 @@ xPathScrapers:
           - replace:
               - regex:  VR Porn video$
                 with: ""
-          - replace:
               - regex:  VR Trans Porn video$
                 with: ""
-          - replace:
               - regex:  VR Gay Porn video$
                 with: ""
-          - replace:
               - regex:  VR Japanese video$
                 with: ""
-          - replace:
               - regex:  VR Female POV Porn video$
                 with: ""
-          - replace:
               - regex:  VR Amateur Porn video$
                 with: ""
       Date: &dateAttr
