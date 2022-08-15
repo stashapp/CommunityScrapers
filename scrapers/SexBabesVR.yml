@@ -18,7 +18,7 @@ xPathScrapers:
                 with: $1
           - parseDate: 2006-01-02
       Details:
-        selector: $info//div[@class="video-group-bottom u-mb--five"]//text()
+        selector: $info//p/text()
         concat: " "
       Tags:
         Name: $info//div[@class="video-group-left"]/div[@class="video-tags"]//a/text()
