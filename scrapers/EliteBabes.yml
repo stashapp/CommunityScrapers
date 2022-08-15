@@ -46,3 +46,4 @@ xPathScrapers:
         selector: $infoPiece[text() = 'Hair Color:']/../text()
       Details:
         selector: //div/p[@class='read-more-wrap']
+# Last Updated August 15, 2022
