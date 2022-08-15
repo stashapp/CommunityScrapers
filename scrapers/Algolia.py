@@ -411,7 +411,11 @@ def parse_movie_json(movie_json: dict) -> dict:
     process an api movie dictionary and return a scraped one
     """
     scrape = {}
-    studio_name = movie_json[0].get("sitename_pretty")
+    try:
+        studio_name = movie_json[0].get("sitename_pretty")
+    except IndexError:
+        log.debug("No movie found")
+        return scrape
     scrape["synopsis"] = clean_text(movie_json[0].get("description"))
     scrape["name"] = movie_json[0].get("title")
     scrape["studio"] = {"name": studio_name}
@@ -506,6 +510,12 @@ def parse_scene_json(scene_json, url=None):
     # URL
     try:
         hostname = scene_json['sitename']
+        if scene_json.get('movie_title'):
+            scrape['movies'] = [{"name": scene_json["movie_title"]}]
+            if scene_json.get("url_movie_title") and scene_json.get(
+                    "movie_id"):
+                scrape['movies'][0][
+                    'url'] = f"https://{hostname}.com/en/movie/{scene_json['url_movie_title']}/{scene_json['movie_id']}"
         net_name = scene_json['network_name']
         if net_name.lower() == "21 sextury":
             hostname = "21sextury"
@@ -513,12 +523,6 @@ def parse_scene_json(scene_json, url=None):
             hostname = "21naturals"
         scrape[
             'url'] = f"https://{hostname}.com/en/video/{scene_json['sitename']}/{scene_json['url_title']}/{scene_json['clip_id']}"
-        if scene_json.get('movie_title'):
-            scrape['movies'] = [{"name": scene_json["movie_title"]}]
-            if scene_json.get("url_movie_title") and scene_json.get(
-                    "movie_id"):
-                scrape['movies'][0][
-                    'url'] = f"https://{hostname}.com/en/movie/{scene_json['url_movie_title']}/{scene_json['movie_id']}"
     except:
         if url:
             scrape['url'] = url
