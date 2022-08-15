@@ -24,7 +24,8 @@ xPathScrapers:
       Name: //div/h2[@class='fn']/text()
       Birthdate:
         selector: $infoPiece[text() = 'Born:']/../text()
-      Gender: "Female"
+      Gender:
+        fixed: "Female"
       Height:
         selector: $infoPiece[text() = 'Height:']/../text()
         postProcess:
