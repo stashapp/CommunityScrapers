@@ -57,9 +57,8 @@ xPathScrapers:
             - replace:
                 - regex: \.com
                   with: ""
-                - regex: "^VirtualRealAmateurPorn$"
-                  with: "VirtualRealAmateur"
-
+            - map:
+                VirtualRealAmateurPorn: "VirtualRealAmateur"
       Image: &imageSel //meta[@property="og:image"]/@content
       Movies:
         Name: &movieName
