@@ -35,9 +35,7 @@ xPathScrapers:
           postProcess:
             - replace:
                 - regex: \#
-                  with: ""
-            - map:
-                VR Bangers: "VRBangers"    
+                  with: "" 
         URL: &studioURL
           selector: //meta[@name="dl8-customization-brand-url"]/@content
           postProcess:
