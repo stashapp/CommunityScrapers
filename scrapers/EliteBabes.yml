@@ -29,7 +29,7 @@ xPathScrapers:
         selector: $infoPiece[text() = 'Height:']/../text()
         postProcess:
           - replace:
-              - regex: .^(\d+).*
+              - regex: ^(\d+).*
                 with: $1
       Image: //div/figure/img/@src
       Country:
