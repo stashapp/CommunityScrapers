@@ -21,17 +21,7 @@ xPathScrapers:
         selector: //h1[@class="titleVideo"]/text()
         postProcess:
           - replace:
-              - regex:  VR Porn video$
-                with: ""
-              - regex:  VR Trans Porn video$
-                with: ""
-              - regex:  VR Gay Porn video$
-                with: ""
-              - regex:  VR Japanese video$
-                with: ""
-              - regex:  VR Female POV Porn video$
-                with: ""
-              - regex:  VR Amateur Porn video$
+              - regex:  VR [\s\w]+? video$
                 with: ""
       Date: &dateAttr
         selector: //div[@class="video-date"]/span
