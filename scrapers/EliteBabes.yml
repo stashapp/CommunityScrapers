@@ -14,7 +14,7 @@ xPathScrapers:
     performer:
       Name: //article[@id='content']/ul[@class='gallery-a b d']/li/a[contains(@href,"model/")]/span/text()
       URL:
-        selector: //article[@id='content']/ul[@class='gallery-a b d']/li/a[contains(@href,"model/")]/@href
+        selector: //ul//a[contains(@href,"model/")]/@href
 
   performerScraper:
     common:
