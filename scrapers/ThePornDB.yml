@@ -121,12 +121,6 @@ jsonScrapers:
         Measurements: data.performers.#.parent.extras.measurements
         Tattoos: data.performers.#.parent.extras.tattoos
         Piercings: data.performers.#.parent.extras.piercings
-        Image:
-          selector: data.performers.#.image
-          postProcess:
-            - replace:
-                - regex: .+male\.png$
-                  with:
       Studio:
         Name: data.site.name
       Tags:
@@ -162,12 +156,6 @@ jsonScrapers:
         Measurements: $data.performers.#.parent.extras.measurements
         Tattoos: $data.performers.#.parent.extras.tattoos
         Piercings: $data.performers.#.parent.extras.piercings
-        Image:
-          selector: $data.performers.#.image
-          postProcess:
-            - replace:
-                - regex: .+male\.png$
-                  with:
       Studio:
         Name: $data.site.name
       Tags:
