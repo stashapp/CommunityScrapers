@@ -34,22 +34,22 @@ sceneByFragment:
 jsonScrapers:
   sceneSearch:
     scene:
-      Title: 
+      Title:
         # Prevent having duplicated title so it don't get ignored by stash
         selector: data.#.[title,_id]
         postProcess:
           - replace:
-            - regex: \[|\"
-              with: ""
-            - regex: \,
-              with: " ["
+              - regex: \[|\"
+                with: ""
+              - regex: \,
+                with: " ["
       Date: data.#.date
       URL:
         selector: data.#.id
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://api.metadataapi.net/scenes/"
+              - regex: ^
+                with: "https://api.metadataapi.net/scenes/"
       Image: data.#.background.full
       Details: data.#.description
   performerSearch:
@@ -103,7 +103,7 @@ jsonScrapers:
                 with:
       Performers:
         Name: data.performers.#.parent.name
-        URL: 
+        URL:
           selector: data.performers.#.parent.id
           postProcess:
             - replace:
@@ -138,7 +138,7 @@ jsonScrapers:
       Image: $data.background.small
       Performers:
         Name: $data.performers.#.parent.name
-        URL: 
+        URL:
           selector: $data.performers.#.parent.id
           postProcess:
             - replace:
@@ -174,5 +174,5 @@ driver:
     - Key: User-Agent
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
-      #Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
+    #  Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
 # Last Updated August 07, 2022
