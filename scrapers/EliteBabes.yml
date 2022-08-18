@@ -12,7 +12,7 @@ performerByURL:
 xPathScrapers:
   performerSearch:
     performer:
-      Name: //article[@id='content']/ul[@class='gallery-a b d']/li/a[contains(@href,"model/")]/span/text()
+      Name: //ul//a[contains(@href,"model/")]//text()
       URL:
         selector: //ul//a[contains(@href,"model/")]/@href
 
