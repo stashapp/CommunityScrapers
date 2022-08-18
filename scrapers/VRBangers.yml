@@ -26,7 +26,7 @@ xPathScrapers:
         selector: //div[contains(@class,"second-text")]/div//text()
         concat: " "
       Tags:
-        Name: //a[contains(@href,"category/")]/text()
+        Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]/text()
       Performers:
         Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()
       Studio:
