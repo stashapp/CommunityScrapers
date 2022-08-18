@@ -2,13 +2,12 @@ name: "VirtualRealPorn"
 sceneByURL:
   - action: scrapeXPath
     url: &urlSel
+      - virtualrealamateurporn.com
       - virtualrealgay.com
       - virtualrealjapan.com
       - virtualrealpassion.com
       - virtualrealporn.com
       - virtualrealtrans.com
-      - virtualrealamateurporn.com
-
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
@@ -21,7 +20,7 @@ xPathScrapers:
         selector: //h1[@class="titleVideo"]/text()
         postProcess:
           - replace:
-              - regex:  VR [\s\w]+? video$
+              - regex: VR [\s\w]+? video$
                 with: ""
       Date: &dateAttr
         selector: //div[@class="video-date"]/span
