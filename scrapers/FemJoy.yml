@@ -71,7 +71,7 @@ xPathScrapers:
     performer:
       Name: //div[@class='col-lg-12 col-md-12 col-sm-7 col-xs-6']/h4/text()
       Birthdate:
-        selector: $infoPiece[text() = 'Age']/../b/text()
+        selector: $infoPiece[text() = 'Age']/..//b/text()
         postProcess:
           - map:
               18: 6570
