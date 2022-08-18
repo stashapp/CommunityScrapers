@@ -112,6 +112,9 @@ xPathScrapers:
               54: 20075
               55: 20440
           - subtractDays: true
+          - replace:
+            - regex: '(-\w{2}){2}' #This is a hack where i replace the result day and month to 12 and day to 31 to show its aproximated
+              with: '-12-31'
       Weight:
         selector: $infoPiece[text() = 'Weight']/../b/text()
         postProcess:
