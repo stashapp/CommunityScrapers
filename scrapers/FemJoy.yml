@@ -130,5 +130,10 @@ xPathScrapers:
         selector: $infoPiece[text() = 'Hair Color']/../small[1]/b/text()
       EyeColor:
         selector: $infoPiece[text() = 'Eye Color']/../small[1]/b/text()
-      URL: //link[@rel='canonical']/@href
+      URL:
+        selector: //div[@id="photos"]//button/@data-content-id
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https://femjoy.com/models/"
 # Last Updated August 18, 2022
