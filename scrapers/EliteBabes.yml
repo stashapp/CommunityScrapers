@@ -42,6 +42,7 @@ xPathScrapers:
         selector: $infoPiece[text() = 'First Seen:']/../text()
       Aliases:
         selector: //div/p[@class='read-more']/strong
+        concat: ", "
       HairColor:
         selector: $infoPiece[text() = 'Hair Color:']/../text()
       Details:
