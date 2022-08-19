@@ -89,4 +89,4 @@ xPathScrapers:
                 with: "/medhead.jpg"
       Gender:
         selector: //meta[@itemprop="gender"]/@content
-# Last Updated February 08, 2022
+# Last Updated August 19, 2022
