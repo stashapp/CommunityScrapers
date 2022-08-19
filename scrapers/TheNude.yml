@@ -30,7 +30,7 @@ xPathScrapers:
       Birthdate:
         selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
         postProcess:
-          - parseDate: 02-01-2006
+          - parseDate: January 2006
       Ethnicity:
         selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/../text()
         postProcess:
