@@ -22,7 +22,7 @@ xPathScrapers:
       URL: //a[@class="model-name"]/@href
   performerScraper:
     performer:
-      Name: (//meta[@itemprop="name"])[1]/@content
+      Name: //span[@class="model-name"]/text()
       URL:
         selector: //meta[@itemprop="url"]/@content
       Twitter: //a[text()="TWITTER"]/@href
