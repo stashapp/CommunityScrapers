@@ -10,14 +10,19 @@ sceneByURL:
       - femjoy.com/videos/
     scraper: sceneScraper
 performerByName:
-  action: scrapeXPath
-  queryURL: https://femjoy.com/search?query={}
+  action: scrapeJson
+  queryURL: https://femjoy.com/api/v2/actors?query={}&limit=20
   scraper: performerSearch
 performerByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - https://femjoy.com/models/
     scraper: performerScraper
+    queryURL: "https://femjoy.com/api/v2/actors/{url}?thumb_size=355x475"
+    queryURLReplace:
+      url:
+        - regex: ".+/models/(.+)"
+          with: "${1}"
 
 xPathScrapers:
   galleryScraper:
@@ -44,7 +49,6 @@ xPathScrapers:
                 - regex: ^
                   with: https://femjoy.com
       Details: &detailsSel //div[@id='model-info']//div[@class="col-md-12"]
-      
   sceneScraper:
     common: *commonSel
     scene:
@@ -54,89 +58,46 @@ xPathScrapers:
       Performers: *performersAttr
       Image: //img[@class="lazy comment-photo"]/@data-original
       Details: *detailsSel
-
+jsonScrapers:
   performerSearch:
     performer:
-      Name: //div[@class='grid-item item-model col-lg-2 col-md-2 col-sm-3']/div[@class='thumbnail']/div[@class='caption']/a[@class='caption-title']
+      Name: results.#.name
       URL:
-        selector: //a[contains(@href,"models/")]/@href
-        postProcess:
+        selector: results.#.url
+        postProcess: &site
           - replace:
               - regex: ^
                 with: "https://femjoy.com"
-
   performerScraper:
-    common:
-      $infoPiece: //div[@id='model-characteristics']/table/tbody/tr/td/small
     performer:
-      Name: //div[@class='col-lg-12 col-md-12 col-sm-7 col-xs-6']/h4/text()
-      Birthdate:
-        selector: $infoPiece[text() = 'Age']/..//b/text()
-        postProcess:
-          - map:
-              18: 6570
-              19: 6935
-              20: 7665
-              21: 8030
-              22: 8395
-              23: 8760
-              24: 9125
-              25: 9490
-              26: 9855
-              27: 10220
-              28: 10585
-              29: 10950
-              30: 11315
-              31: 11680
-              32: 12045
-              33: 12410
-              34: 12775
-              35: 13140
-              36: 13505
-              37: 14235
-              39: 14600
-              40: 14965
-              41: 15330
-              42: 15696
-              43: 16060
-              44: 16425
-              45: 16790
-              46: 17155
-              47: 17520
-              48: 17885
-              49: 18250
-              50: 18615
-              51: 18980
-              52: 19345
-              53: 19710
-              54: 20075
-              55: 20440
-          - subtractDays: true
-          - replace:
-            - regex: '-\w{2}'
-              with: 
-      Weight:
-        selector: $infoPiece[text() = 'Weight']/../b/text()
-        postProcess:
-          - replace:
-            - regex: ' lbs'
-              with:
-          - lbToKg: true
-      Gender:
-        fixed: "Female"
+      Name: item.name
+      Gender: #item.gender # api seems to have wrong male genders
+        fixed: female # use a fixed one instead
+      Birthdate: item.birth_date
+      Ethnicity: item.ethnicity
       Height:
-        selector: $infoPiece[text() = 'Height']/../b/text()
-        postProcess:
-          - feetToCm: true
-      Image: //div[@class='row row-model-summary']/div[@class='col-lg-12 col-md-12 col-sm-5 col-xs-6']/img[@class='lazy']/@src
-      HairColor:
-        selector: $infoPiece[text() = 'Hair Color']/../small[1]/b/text()
-      EyeColor:
-        selector: $infoPiece[text() = 'Eye Color']/../small[1]/b/text()
-      URL:
-        selector: //div[@id="photos"]//button/@data-content-id
+        selector: item.height
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://femjoy.com/models/"
-# Last Updated August 18, 2022
+              - regex: \\
+                with:
+          - feetToCm: true
+      Weight:
+        selector: item.weight
+        postProcess:
+          - replace:
+              - regex: \slbs
+                with:
+          - lbToKg: true
+      Measurements: item.cup_size
+      Image:
+        selector: item.thumb.image
+      Country: item.birth_place.country
+      Tags:
+        Name: item.tags.#.name
+      EyeColor: item.eye_color
+      HairColor: item.hair_color
+      URL:
+        selector: item.url
+        postProcess: *site
+# Last Updated August 21, 2022
