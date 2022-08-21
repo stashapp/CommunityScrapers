@@ -79,7 +79,7 @@ xPathScrapers:
         # often included in the video tags. So we attempt to find matches there.
         Name: //div/span[contains(text(),"Keywords:")]/..//a
       Image:
-        selector: //div[contains(@class, "clipImage")]/img/@src
+        selector: //div[contains(@class, "clipImage")]/img/@data-src
         postProcess: &ppPrependScheme
           - replace:
               - regex: ^//
@@ -112,4 +112,4 @@ xPathScrapers:
         # Clips4Sale doesn't have an explict performer field, but performers are
         # often included in the video tags. So we attempt to find matches there.
         Name: //span[contains(text(),"Keywords:")]/following-sibling::a
-# Last Updated July 24, 2022
+# Last Updated August 21, 2022
