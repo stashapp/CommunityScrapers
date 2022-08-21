@@ -33,16 +33,18 @@ xPathScrapers:
                 with: $1-$2-$3
           - parseDate: 2006-01-02
       Details:
-        selector: //meta[@name="description"]/@content
+        selector: //meta[@itemprop="description"]/@content
         postProcess:
           - replace:
               - regex: "&#039;"
                 with: "'"
+              - regex: (.*\.?\!?)(?:\s-\s\w.*-.*)$ # remove Studio name at the end of a description
+                with: $1
       Tags:
         Name: $details//div[@class="col"][4]//a/text()|$details//div[@class="col"][6]//a/text()
       Performers:
-        Name: $actors//span/a//text()
+        Name: $actors//span/a[contains(@href,"/models/")]
       Studio:
         Name: $actors//a//text()
-      Image: //picture[@class="poster"]/img/@src
-# Last Updated February 21, 2022
+      Image: //source[@type="image/webp"]/@srcset
+# Last Updated August 19, 2022
