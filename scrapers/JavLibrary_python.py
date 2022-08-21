@@ -741,6 +741,8 @@ if R18_MAIN_HTML:
 
 if R18_MAIN_HTML is None and JAV_MAIN_HTML is None:
     log.info("No results found")
+    scrape = None
+    print(json.dumps(scrape))
     sys.exit()
 
 #debug('[DEBUG][JAV] {}'.format(jav_result))
