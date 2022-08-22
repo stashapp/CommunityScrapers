@@ -16,9 +16,11 @@ xPathScrapers:
             fixed: Tara Tainton
       Date: 
         selector: //div[@id="leftColumn"]/article/div[@class="theDate"]
-        parseDate: 02 January 2006
+        postProcess:
+          - parseDate: 02 January 2006
       Tags:
         Name: //div[@id="leftColumn"]/article/div[@class="tags"]/a
+      #Image: //div[@id="leftColumn"]/article/div[@clas="videoShow"]/hana-ampersand[2]/img
 
 # Last Updated August 22, 2022
 
