@@ -1145,6 +1145,7 @@ tandaebony.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tandahousewives.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tandalatinas.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tandaredheads.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+taratainton.com|TaraTainton.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teacherfucksteens.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 teachmyass.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teamskeet.com|Teamskeet.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
