@@ -13,16 +13,14 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //ul//a[contains(@href,"model/")]//text()
-      URL:
-        selector: //ul//a[contains(@href,"model/")]/@href
+      URL: //ul//a[contains(@href,"model/")]/@href
 
   performerScraper:
     common:
       $infoPiece: //div/ul[@class='list-aside hidden']/li/span
     performer:
       Name: //div/h2[@class='fn']/text()
-      Birthdate:
-        selector: $infoPiece[text() = 'Born:']/../text()
+      Birthdate: $infoPiece[text() = 'Born:']/../text()
       Gender:
         fixed: "Female"
       Height:
@@ -32,20 +30,15 @@ xPathScrapers:
               - regex: ^(\d+).*
                 with: $1
       Image: //div/figure/img/@src
-      Country:
-        selector: $infoPiece[text() = 'Birthplace:']/../text()
+      Country: $infoPiece[text() = 'Birthplace:']/../text()
       Tags:
-        Name:
-          selector: //div/div[@class='link-btn']/h2/a
+        Name: //div/div[@class='link-btn']/h2/a
       Measurements: $infoPiece[text() = 'Measurements:']/../text()
-      CareerLength: 
-        selector: $infoPiece[text() = 'First Seen:']/../text()
+      CareerLength: $infoPiece[text() = 'First Seen:']/../text()
       Aliases:
         selector: //div/p[@class='read-more']/strong
         concat: ", "
-      HairColor:
-        selector: $infoPiece[text() = 'Hair Color:']/../text()
-      Details:
-        selector: //div/p[@class='read-more-wrap']
+      HairColor: $infoPiece[text() = 'Hair Color:']/../text()
+      Details: //div/p[@class='read-more-wrap']
       URL: //link[@rel='canonical']/@href
 # Last Updated August 15, 2022
