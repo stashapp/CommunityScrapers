@@ -58,3 +58,24 @@ First, install the validator's dependencies - inside the [`./validator`](./valid
 
 Then, to run the validator, use `node validate.js` in the root of the repository.  
 Specific scrapers can be checked using: `node validate.js scrapers/foo.yml scrapers/bar.yml`
+
+
+#### Docker option
+To not have to install node.js on your system you can validate using docker:
+
+Build with:
+
+```bash
+docker build -t stash_scrapper_validate . && docker run --name stash_scrapper_validator stash_scrapper_validate
+```
+
+Cleanup:
+```bash
+docker rm stash_scrapper_validator && docker rmi stash_scrapper_validate
+```
+
+Oneliner: 
+
+```bash
+docker build -t stash_scrapper_validate . && printf "\n\n" && docker run --name stash_scrapper_validator stash_scrapper_validate && printf "\n\n" && docker rm stash_scrapper_validator && docker rmi stash_scrapper_validate
+```
