@@ -1,0 +1,24 @@
+name: TaraTainton.com
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.taratainton.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@id="leftColumn"]/article/h1
+      Details:
+        selector: //div[@id="leftColumn"]/article/p
+        concat: "\n\n"
+      Studio:
+        Name:
+            fixed: Tara Tainton
+      Date: 
+        selector: //div[@id="leftColumn"]/article/div[@class="theDate"]
+        parseDate: 02 January 2006
+      Tags:
+        Name: //div[@id="leftColumn"]/article/div[@class="tags"]/a
+
+# Last Updated August 22, 2022
+
