@@ -17,7 +17,7 @@ xPathScrapers:
       Date: 
         selector: //div[@id="leftColumn"]/article/div[@class="theDate"]
         postProcess:
-          - parseDate: 02 January 2006
+          - parseDate: 2 January 2006
       Tags:
         Name: //div[@id="leftColumn"]/article/div[@class="tags"]/a
       Image: //meta[@property="og:image"]/@content
