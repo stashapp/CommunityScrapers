@@ -1,0 +1,27 @@
+name: "wowgirlsblog"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wowgirlsblog.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="entry-title"]
+      Date:
+        selector: //div[@id="video-date"]/text()
+        postProcess:
+          - replace:
+              - regex: .*Date:\s(.*)
+                with: "$1"
+          - parseDate: Jan 02, 2006
+      Tags:
+        Name: //div[@class="tags-list"]/a/text()
+      Performers:
+        Name: //*[@id="video-actors"]/a/text()
+      Image: //meta[@property="og:image"][1]/@content
+      Studio:
+        Name:
+          -fixed: WowGirls
+
+# Last Updated August 25, 2022
