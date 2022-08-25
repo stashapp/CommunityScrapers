@@ -1,14 +1,15 @@
-name: UltraFilms
+name: UltraFilms/WowGirls
 sceneByURL:
   - action: scrapeXPath
     url:
+      - wowgirlsblog.com
       - ultrafilms.xxx
     scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="title-block box-shadow"]//text()
+      Title: //meta[@itemprop="name"]/@content
       Image: //meta[@property="og:image"]/@content
       Date:
         selector: //*[@id="video-date"]/text()
@@ -26,8 +27,16 @@ xPathScrapers:
             - replace:
                 - regex: " Movies"
                   with: ""
-      URL: //meta[@property="og:url"]/@content
       Studio:
         Name:
-          fixed: Ultra Films
-# Last Updated June 11, 2022
+          selector: //*[@rel="preload"]/@href
+          postProcess:
+            - replace:
+                - regex: https://(www.)?([^.]+)\..*
+                  with: $2
+            - map:
+                ultrafilms: Ultra Films
+                wowgirlsblog: WowGirls
+
+                  
+# Last Updated August 25, 2022
