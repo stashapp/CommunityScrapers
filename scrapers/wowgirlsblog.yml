@@ -22,6 +22,6 @@ xPathScrapers:
       Image: //meta[@property="og:image"][1]/@content
       Studio:
         Name:
-          -fixed: WowGirls
+          - fixed: WowGirls
 
 # Last Updated August 25, 2022
