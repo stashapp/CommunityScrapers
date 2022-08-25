@@ -13,14 +13,13 @@ xPathScrapers:
         concat: "\n\n"
       Studio:
         Name:
-            fixed: Tara Tainton
-      Date: 
+          fixed: Tara Tainton
+      Date:
         selector: //div[@id="leftColumn"]/article/div[@class="theDate"]
         postProcess:
           - parseDate: 2 January 2006
       Tags:
         Name: //div[@id="leftColumn"]/article/div[@class="tags"]/a
       Image: //meta[@property="og:image"]/@content
-
 # Last Updated August 22, 2022
 
