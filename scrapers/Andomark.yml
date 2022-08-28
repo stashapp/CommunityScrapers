@@ -36,7 +36,12 @@ xPathScrapers:
                 - replace:
                     - regex: (.+\/\/)(.+?)(\..+)
                       with: $2
-      Image: //meta[@property="og:image"]/@content
+      Image: 
+        selector: //meta[@property="og:image"]/@content
+          postProcess:
+            - replace:
+                - regex: (.*)
+                  with: "https://venus.wowgirls.com/search/?query=$1"
       URL: //link[@rel='canonical']/@href
 
 # Last Updated October 09, 2020
