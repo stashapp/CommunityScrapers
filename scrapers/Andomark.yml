@@ -40,8 +40,8 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
         postProcess:
             - replace:
-                - regex: "0\."
-                  with: "0-2x\."
+                - regex: 0\.
+                  with: 0-2x\.
       URL: //link[@rel='canonical']/@href
 
 # Last Updated October 09, 2020
