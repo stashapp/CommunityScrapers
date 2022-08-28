@@ -38,10 +38,10 @@ xPathScrapers:
                       with: $2
       Image: 
         selector: //meta[@property="og:image"]/@content
-          postProcess:
+        postProcess:
             - replace:
-                - regex: (.*)
-                  with: "https://venus.wowgirls.com/search/?query=$1"
+                - regex: "0\."
+                  with: "0-2x\."
       URL: //link[@rel='canonical']/@href
 
 # Last Updated October 09, 2020
