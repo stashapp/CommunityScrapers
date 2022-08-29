@@ -43,8 +43,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: 
-      selector: //span[@class="update_title"]/text()|//title/text()
+      Title: //span[@class="update_title"]/text()|//title/text()
       postProcess:
         - replace:
           - regex: (.*)\s-
