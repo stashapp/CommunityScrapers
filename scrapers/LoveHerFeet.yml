@@ -9,9 +9,21 @@ sceneByURL:
       - shelovesblack.com/tour/trailers/
     scraper: sceneScraper
 sceneByFragment:
-    action: scrapeXPath
-    queryURL: "{url}"
-    scraper: sceneScraper
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: "https://www.loveherfilms.com/tour/search.php?model_name={}"
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - loveherboobs.com/tour/models/
+      - loveherfeet.com/tour/models/
+      - loveherfilms.com/tour/models/
+      - shelovesblack.com/tour/models/
+    scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
@@ -23,7 +35,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Image:
-        selector: //div[@class='video']//img[contains(@class,'mainThumb')]/@src0_3x|//video/@poster|//base/@href
+        selector: //div[@class='video']//img[contains(@class,'mainThumb') or contains(@class,'update_thumb')]/@src0_3x|//video/@poster|//base/@href
         concat: "|"
         postProcess:
           - replace:
@@ -36,7 +48,112 @@ xPathScrapers:
       Tags:
         Name: //div[@class='video-tags']/a/text()
       Performers:
-        Name:
-          selector: //div[@class='featured']/a/text()
-
-# Last Updated July 22, 2022
+        Name: //div[@class='featured']/a/text()
+        URL: //div[@class='featured']/a/@href
+  performerSearch:
+    performer:
+      Name: //h3/../a/@title
+      URL: //h3/../a/@href
+  performerScraper:
+    performer:
+      Name: //div[@class="bio"]//h2/text()
+      Details:
+        selector: //div[@class="description"]/div[@class="about"]/p/text()
+        postProcess:
+          - replace:
+              - regex: (?i)^This\smodel\shas\sno\sbio.*
+                with:
+      Image:
+        selector: //div[@class="bio"]//img/@src0_3x
+      Ethnicity:
+        selector: &bio //script[contains(text(),'totalStats')]/text()
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push\(.<p><span>Ethnicity:\s</span>\s([^)]+)</p>.+
+                with: $1
+              - regex: (^..document..ready.*) # if above is not matched clear everything
+                with: ""
+      EyeColor:
+        selector: *bio
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push\(.<p><span>Eye\sColor:\s</span>\s([^)]+)</p>.+
+                with: $1
+              - regex: (^..document..ready.*)
+                with: ""
+      Birthdate:
+        selector: *bio
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push\(.<p><span>Date\sof\sBirth:\s</span>\s([^)]+)</p>.+
+                with: $1
+              - regex: (^..document..ready.*)
+                with: ""
+          - parseDate: January 2, 2006
+      Measurements:
+        selector: *bio
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push\(.<p><span>Measurements:\s</span>\s([^)]+)</p>.+
+                with: $1
+              - regex: (^..document..ready.*)
+                with: ""
+      HairColor:
+        selector: *bio
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push\(.<p><span>Hair\sColor:\s</span>\s([^)]+)</p>.+
+                with: $1
+              - regex: (^..document..ready.*)
+                with: ""
+      Height:
+        selector: *bio
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push\(.+<p><span>Height:\s</span>\s(\d+[^(<]+).*
+                with: $1
+              - regex: (^..document..ready.*)
+                with: ""
+          - feetToCm: true
+      Weight:
+        selector: *bio
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push.+<p><span>Weight:\s</span>\s(\d+)\D[^<]+</p>.+
+                with: $1
+              - regex: (^..document..ready.*)
+                with: ""
+          - lbToKg: true
+      FakeTits:
+        selector: *bio
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push\(.<p><span>(?:Tits|Boob)\sType:\s</span>\s([^)]+)</p>.+
+                with: $1
+              - regex: (^..document..ready.*)
+                with: ""
+              - regex: (?i).*(enhanced|fake).* # comment out the below regexes if you want to keep more info
+                with: "Yes"
+              - regex: (?i).*natural.*
+                with: "No"
+              - regex: (?i)unknown
+                with: ""
+      Tattoos:
+        selector: *bio
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push\(.<p><span>Tattoos:\s</span>([^)]+)</p>.+
+                with: $1
+              - regex: (^..document..ready.*)
+                with: ""
+      Piercings:
+        selector: *bio
+        postProcess:
+          - replace:
+              - regex: .*totalStats\.push\(.<p><span>Piercings:\s</span>\s([^)]+)</p>.+
+                with: $1
+              - regex: (^..document..ready.*)
+                with: ""
+      Gender:
+        fixed: "Female"
+# Last Updated August 28, 2022

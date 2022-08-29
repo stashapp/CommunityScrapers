@@ -5,6 +5,7 @@ sceneByURL:
       - vrbangers.com
       - vrbgay.com
       - vrbtrans.com
+      - vrconk.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
@@ -25,9 +26,9 @@ xPathScrapers:
         selector: //div[contains(@class,"second-text")]/div//text()
         concat: " "
       Tags:
-        Name: //div[starts-with(@class,"video-item__tags ")]//a/text()
+        Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]/text()
       Performers:
-        Name: //div[starts-with(@class, 'video-item__info-starring')]//div[starts-with(@class,"tooltip")]//a/text()
+        Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()
       Studio:
         Name: &studioName
           selector: //meta[@name="dl8-customization-brand-name"]/@content
@@ -64,4 +65,4 @@ xPathScrapers:
         Name: *studioName
         URL: *studioURL
       FrontImage: *imageSel
-# Last Updated October 03, 2021
+# Last Updated August 14, 2022

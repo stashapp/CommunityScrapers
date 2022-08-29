@@ -21,7 +21,7 @@ sceneByURL:
       - pridestudios.com/en/video/
       - soapymassage.com/en/video/
       - trickyspa.com/en/video/
-      - webyoung.com/en/video/      
+      - webyoung.com/en/video/
     script:
       - python
       - Algolia.py

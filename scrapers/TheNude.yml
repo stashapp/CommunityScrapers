@@ -22,7 +22,7 @@ xPathScrapers:
       URL: //a[@class="model-name"]/@href
   performerScraper:
     performer:
-      Name: (//meta[@itemprop="name"])[1]/@content
+      Name: //span[@class="model-name"]/text()
       URL:
         selector: //meta[@itemprop="url"]/@content
       Twitter: //a[text()="TWITTER"]/@href
@@ -30,7 +30,8 @@ xPathScrapers:
       Birthdate:
         selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
         postProcess:
-          - parseDate: 02-01-2006
+          - parseDate: January 2006
+          - parseDate: ??-??-2006
       Ethnicity:
         selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/../text()
         postProcess:
@@ -88,4 +89,11 @@ xPathScrapers:
                 with: "/medhead.jpg"
       Gender:
         selector: //meta[@itemprop="gender"]/@content
-# Last Updated February 08, 2022
+      Details:
+        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "Actual scraped Birthdate:"
+
+# Last Updated August 25, 2022
