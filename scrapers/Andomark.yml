@@ -45,10 +45,10 @@ xPathScrapers:
     scene:
       Title: 
       selector: //span[@class="update_title"]/text()|//title/text()
-        postProcess:
-          - replace:
-            - regex: (.*)\s-
-              with: $1
+      postProcess:
+        - replace:
+          - regex: (.*)\s-
+          with: $1
       Date:
         selector: //span[@class="availdate"]/text()[1]|//span[@class="update_date"]/text()|//*[@class="gallery_info"]//*[@class="cell update_date"]/text()
         postProcess:
