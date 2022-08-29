@@ -3,45 +3,80 @@ name: "Andomark"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - reidmylips.elxcomplete.com/updates/
-      - reidmylips.com/updates/
+      - elxcomplete
+      - behindtheporno.com/updates
+      - bigboobiesclub.com/access/scenes
+      - sofiemariexxx.com/updates
+      - bigtoyxxx.com/access/scenes
+      - brittanysbubbles.com/access/scenes
+      - chocolatepov.com/updates
+      - irtroadwarriors.com/access/scenes
+      - internationalnudes.com/access/scenes
+      - oldsexygrannies.com/access/scenes
+      - sofiemariexxx.com/access/scenes
+      - rionkingxxx.com/access/scenes
+      - yummysexclub.com/access/scenes
+      - tabooadventures.com/access/scenes
+      - thejoshualewis.com/access/scenes
+      - vanillapov.com/access/scenes
+      - willtilexxx.com/access/scenes
+      - younggunsxxx.com/access/scenes
+      - yummybikinimodel.com/access/scenes
+      - yummygirlz.com/access/scenes
+      - yummygirl.com/access/scenes
+      - yummypornclub.com/access/scenes
+      - yummywomen.com/access/scenes
+      - bradsterling.com/updates
+      - hollyhotwife.com/updates
+      - xxxcellentadventures.com/updates
+      - seanmichaelsxxx.com/updates
+      - johnnygoodluck.com/updates
+      - reidmylips.com/updates
       - sheseducedme.com/updates
+      - sheseducedme.com/vod/scenes
       - aliciasgoddesses.com/updates
-      - ariellynn.com/tour/
-      - ravenswallowzxxx.com/updates/
+      - ariellynn.com/tour
+      - ravenswallowzxxx.com/updates
+      - yummygirl.com/updates
     scraper: sceneScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //span[@class="update_title"]/text()|//title/text()
-      Date:
-        selector: //span[@class="availdate"]/text()[1]|//span[@class="update_date"]/text()
+      Title: 
+      selector: //span[@class="update_title"]/text()|//title/text()
         postProcess:
-            - parseDate: 01/02/2006
-      Details: //span[@class="latest_update_description"]
+          - replace:
+            - regex: (.*)\s-
+              with: $1
+      Date:
+        selector: //span[@class="availdate"]/text()[1]|//span[@class="update_date"]/text()|//*[@class="gallery_info"]//*[@class="cell update_date"]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: //span[@class="latest_update_description"]|//span[@class="update_description"]/text()
       Performers:
-        Name:
-          selector: //span[@class="tour_update_models"]
-          postProcess:
-            - replace:
-                - regex: "[\\s]*(,)[\\s]*"
-                  with: "$1"
-          split: ","
+        Name: (//span[contains(@class, 'models')])[1]/a/text()
       Tags:
         Name: //span[@class="update_tags"]/a/text()|//span[@class="tour_update_tags"]/a/text()
       Studio:
         Name:
-            selector: //link[@rel="canonical"]/@href
-            postProcess:
-                - replace:
-                    - regex: (.+\/\/)(.+?)(\..+)
-                      with: $2
+          selector: //meta[@property="og:image"]/@content
+          postProcess:
+              - replace:
+                  - regex: (.+\/\/)(.+?)(\..+)
+                    with: $2
+              - map:
+                  sheseducedme: She Seduced Me
+                  reidmylips: Reid My Lips
+                  ariellynn: Ariel Lynn
+                  ravenswallowzxxx: Raven Swallowz XXX
+                  sofiemariexxx: Sofie Marie XXX
       Image: 
         selector: //meta[@property="og:image"]/@content
         postProcess:
-            - replace:
+            - replace: # add '2x' to get a bigger pic
                 - regex: 0\.
-                  with: 0-2x\.
+                  with: 0-2x.
       URL: //link[@rel='canonical']/@href
 
-# Last Updated October 09, 2020
+# Last Updated August 29, 2022
