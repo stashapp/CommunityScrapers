@@ -7,9 +7,16 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1/text()
+      Title: &titleDef
+        selector: //div[@id="tabs-photos"]//a/img/@alt
+        postProcess:
+            - replace:
+                - regex:  " VR porn$"
+                  with: ""
       Date: //time/@datetime
-      Details: //div[@id="modalSceneAbout"]//comment()[contains(.,'description')]/following-sibling::div
+      Details: &detailsSel
+        selector: //div[@data-qa="scene-about-tab-text"]//text()
+        concat: " "
       Tags:
         Name: //meta[@property="video:tag"]/@content
       Performers:
@@ -17,5 +24,4 @@ xPathScrapers:
       Studio:
         Name: //a[contains(@href,"/studios/")]/div[last()]/text()
       Image: //div[contains(@class,"splash-screen")]/img/@src
-
-# Last Updated March 21, 2021
+# Last Updated August 29, 2022
