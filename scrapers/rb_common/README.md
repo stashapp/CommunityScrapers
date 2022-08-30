@@ -23,7 +23,7 @@ The `logger.rb` file defines a shared class that Ruby scrapers can leverage to o
 Once required it is suggested to assign the logger to a variable so that you can call it in short form like:
 
 ```Ruby
-logger = Stash::Logger.new
+logger = Stash::Logger
 logger.info("This log will be output as an 'INFO' level log")
 ```
 

@@ -15,7 +15,7 @@ rescue LoadError => error
     exit
   end
 
-  logger = Stash::Logger.new
+  logger = Stash::Logger
   if error.message.match?(/faraday$/)
     logger.error("[GraphQL] Faraday gem is not installed, please install it with 'gem install faraday'")
   else
@@ -58,7 +58,7 @@ class GraphQLBase
   private
 
   def logger
-    Stash::Logger.new
+    Stash::Logger
   end
 
   def standard_api_headers

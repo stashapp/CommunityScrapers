@@ -5,7 +5,7 @@ begin
   require_relative "graphql_base"
   require_relative "../configs/stash_config"
 rescue LoadError => error
-  logger = Stash::Logger.new
+  logger = Stash::Logger
   if error.message.match?(/graphql_base$/)
     logger.error("[GraphQL] Missing 'graphql/graphql_base.rb' file in the rb_common folder.")
   elsif error.message.match?(/configs\/stash_config$/)

@@ -4,7 +4,7 @@
 
 The base class is currently very basic, it requires the `faraday` gem and the logger for you. From there it defines a `query` method that can take up to two arguments. The first argument is your GraphQL query, and the second argument that defaults to nil if not provided is any variables that you would like to be passed with your query.
 
-It defines a private `logger` method that is just a new instance of the shared stash logger `Stash::Logger.new`.
+It defines a private `logger` method that is just a shorthand of the shared stash logger class `Stash::Logger`.
 
 It defines a `standard_headers` method with:
 
