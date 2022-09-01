@@ -3,6 +3,7 @@ sceneByURL:
   - action: script
     url:
       - evilangel.com/en/video/
+      - tsfactor.com/en/video/
     script:
       - python
       - Algolia.py
@@ -11,6 +12,7 @@ movieByURL:
   - action: script
     url:
       - evilangel.com/en/movie/
+      - tsfactor.com/en/movie/
     script:
       - python
       - Algolia.py
