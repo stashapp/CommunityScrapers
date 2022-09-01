@@ -770,6 +770,7 @@ mixedx.com|GenuineSin.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 modelhub.com|Modelhub.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 modelmediaasia.com|ModelMediaUS.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 modelmediaus.com|ModelMediaUS.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+moderndaysins.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 mofos.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 mofosnetwork.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 mom4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
