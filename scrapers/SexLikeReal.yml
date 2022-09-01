@@ -14,9 +14,7 @@ xPathScrapers:
                 - regex:  " VR porn$"
                   with: ""
       Date: //time/@datetime
-      Details: &detailsSel
-        selector: //div[@data-qa="scene-about-tab-text"]//text()
-        concat: " "
+      Details: //div[@data-qa="scene-about-tab-text"]
       Tags:
         Name: //meta[@property="video:tag"]/@content
       Performers:
