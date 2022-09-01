@@ -16,7 +16,7 @@ xPathScrapers:
               - regex:  "^Added "
                 with: ""
           - parseDate: January 2, 2006
-      Details: &detailsSel //div[@class="videoDescription"]/text()
+      Details: //div[@Class="videoDescription"]
       Tags:
         Name: //div[@class="videoTags"]/a/text()
       #Performers:
