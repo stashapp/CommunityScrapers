@@ -37,6 +37,16 @@ FIXED_TAG = ""
 # Include non female performers
 NON_FEMALE = True
 
+# a dict with sites having movie sections
+# used when populating movie urls from the scene scraper
+MOVIE_SITES = {
+    "devilsfilm": "https://www.devilsfilm.com/en/dvd",
+    "diabolic": "https://www.diabolic.com/en/movie",
+    "evilangel": "https://www.evilangel.com/en/movie",
+    "wicked": "https://www.wicked.com/en/movie",
+    "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie"
+}
+
 
 def clean_text(details: str) -> str:
     """
@@ -206,7 +216,7 @@ def api_search_query(query, url):
 # Searching Result
 
 
-def json_parser(search_json, range_duration=60, single=False):
+def json_parser(search_json, range_duration=60, single=False, scene_id=None):
     result_dict = {}
     # Just for not printing the full JSON in log...
     debug_dict = {}
@@ -214,7 +224,7 @@ def json_parser(search_json, range_duration=60, single=False):
               encoding='utf-8') as search_file:
         json.dump(search_json, search_file, ensure_ascii=False, indent=4)
     for scene in search_json:
-        r_match = match_result(scene, range_duration, single)
+        r_match = match_result(scene, range_duration, single, clip_id=url_id)
         if r_match["info"]:
             if result_dict.get(r_match["info"]):
                 # Url should be more accurate than the title
@@ -222,6 +232,7 @@ def json_parser(search_json, range_duration=60, single=False):
                     result_dict[r_match["info"]] = {
                         "title": r_match["title"],
                         "url": r_match["url"],
+                        "clip_id": r_match["clip_id"],
                         "json": scene
                     }
                     debug_dict[r_match["info"]] = {
@@ -235,6 +246,7 @@ def json_parser(search_json, range_duration=60, single=False):
                     result_dict[r_match["info"]] = {
                         "title": r_match["title"],
                         "url": r_match["url"],
+                        "clip_id": r_match["clip_id"],
                         "json": scene
                     }
                     debug_dict[r_match["info"]] = {
@@ -246,6 +258,7 @@ def json_parser(search_json, range_duration=60, single=False):
                 result_dict[r_match["info"]] = {
                     "title": r_match["title"],
                     "url": r_match["url"],
+                    "clip_id": r_match["clip_id"],
                     "json": scene
                 }
                 debug_dict[r_match["info"]] = {
@@ -275,7 +288,7 @@ def json_parser(search_json, range_duration=60, single=False):
     if result_dict.get("AD"):
         return result_dict["AD"]["json"]
     if result_dict.get("AN"):
-        if result_dict["AN"]["title"] > 0.5 or result_dict["AN"]["url"] > 0.5:
+        if result_dict["AN"]["clip_id"] or result_dict["AN"]["title"] > 0.5 or result_dict["AN"]["url"] > 0.5:
             return result_dict["AN"]["json"]
     if result_dict.get("A"):
         if result_dict["A"]["title"] > 0.7 or result_dict["A"]["url"] > 0.7:
@@ -305,12 +318,14 @@ def json_parser(search_json, range_duration=60, single=False):
     return None
 
 
-def match_result(api_scene, range_duration=60, single=False):
+def match_result(api_scene, range_duration=60, single=False, clip_id: str=None):
     api_title = api_scene.get("title")
     api_duration = int(api_scene.get("length"))
+    api_clip_id = str(api_scene["clip_id"])
     api_filesize = None
     match_duration = False
     match_size = False
+    match_clip_id = False
     # Using database
     if database_dict:
         db_duration = int(database_dict["duration"])
@@ -367,6 +382,7 @@ def match_result(api_scene, range_duration=60, single=False):
     match_dict = {}
     match_dict["title"] = match_ratio_title
     match_dict["url"] = match_ratio_title_url
+
     information_used = ""
     if (single and (match_duration or
                     (database_dict is None and match_ratio_title_url > 0.5))
@@ -378,9 +394,13 @@ def match_result(api_scene, range_duration=60, single=False):
         information_used += "D"
     if match_domain:
         information_used += "N"
+    if clip_id:
+        if clip_id == api_clip_id:
+            match_clip_id = True
     if information_used == "":
         information_used = "R"
     match_dict["info"] = information_used
+    match_dict["clip_id"] = match_clip_id
     #debug("[MATCH] {} - {}".format(api_title,match_dict))
     return match_dict
 
@@ -421,7 +441,7 @@ def parse_movie_json(movie_json: dict) -> dict:
     scrape["studio"] = {"name": studio_name}
     scrape["duration"] = movie_json[0].get("total_length")
 
-    date_by_studio = "date_created" # options are "date_created", "upcoming"(not always avaialble), "last_modified"
+    date_by_studio = "date_created" # options are "date_created", "upcoming" (not always avaialble), "last_modified"
                                     # dates don't seem to be accurate (modifed multiple times by studio)
                                     # using date_created as default and we later override for each site when needed
 
@@ -429,8 +449,7 @@ def parse_movie_json(movie_json: dict) -> dict:
         f"Dates available: upcoming {movie_json[0].get('upcoming')} - created {movie_json[0].get('date_created')} - last modified {movie_json[0].get('last_modified')}"
     )
     studios_movie_dates = {
-        "Diabolic":
-        "last_modified",  # last modified in Diabolic seems to be what is displayed in the movie page
+        "Diabolic": "last_modified",
         "Evil Angel": "date_created",
         "Wicked": "date_created",
         "Zerotolerance": "last_modified"
@@ -510,12 +529,19 @@ def parse_scene_json(scene_json, url=None):
     # URL
     try:
         hostname = scene_json['sitename']
+        # Movie
         if scene_json.get('movie_title'):
-            scrape['movies'] = [{"name": scene_json["movie_title"]}]
+            scrape['movies'] = [{
+                "name": scene_json["movie_title"],
+                "synopsis": clean_text(scene_json.get("movie_desc")),
+                "date": scene_json.get("movie_date_created")
+                }]
+            log.debug(f"domain to use for movie url: {URL_DOMAIN}")
             if scene_json.get("url_movie_title") and scene_json.get(
                     "movie_id"):
-                scrape['movies'][0][
-                    'url'] = f"https://{hostname}.com/en/movie/{scene_json['url_movie_title']}/{scene_json['movie_id']}"
+                if URL_DOMAIN and MOVIE_SITES.get(URL_DOMAIN):
+                    scrape['movies'][0][
+                        'url'] = f"{MOVIE_SITES[URL_DOMAIN]}/{scene_json['url_movie_title']}/{scene_json['movie_id']}"
         net_name = scene_json['network_name']
         if net_name.lower() == "21 sextury":
             hostname = "21sextury"
