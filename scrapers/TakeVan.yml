@@ -19,10 +19,12 @@ xPathScrapers:
       Details: //div[@Class="videoDescription"]
       Tags:
         Name: //div[@class="videoTags"]/a/text()
-      #Performers:
-      #  Name: $info//div[starts-with(@class,"info")]/a/text()
+      Performers:
+        Name:
+          selector: //div[@class="videoFeaturedModels"]/text()
+          split: ", "
       Image: &imageSel //div[@class="player"]/img/@src
       Studio:
         Name:
           fixed: "TakeVan"
-# Last Updated August 29, 2022
+# Last Updated September 2, 2022
