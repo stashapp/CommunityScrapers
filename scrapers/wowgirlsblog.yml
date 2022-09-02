@@ -1,4 +1,4 @@
-name: "WOW Girls"
+name: "WOW Girls Blog"
 sceneByURL:
   - action: scrapeXPath
     url:
