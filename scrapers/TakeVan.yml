@@ -9,11 +9,11 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="videoTitle"]
-      Date: &dateAttr
+      Date:
         selector: //div[@id="videoDate"]
         postProcess:
           - replace:
-              - regex:  "^Added "
+              - regex: "^Added "
                 with: ""
           - parseDate: January 2, 2006
       Details: //div[@Class="videoDescription"]
@@ -23,7 +23,7 @@ xPathScrapers:
         Name:
           selector: //div[@class="videoFeaturedModels"]/text()
           split: ", "
-      Image: &imageSel //div[@class="player"]/img/@src
+      Image: //div[@class="player"]/img/@src
       Studio:
         Name:
           fixed: "TakeVan"
