@@ -6,7 +6,7 @@ sceneByURL:
       - melonechallenge.com/video
       - mmpnetwork.com/video
       - povbitch.com/video
-      - takevan.com/video
+#      - takevan.com/video
 
     scraper: sceneScraper
 
