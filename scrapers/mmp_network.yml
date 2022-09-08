@@ -21,7 +21,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: "^Added "
-              - with: ""
+                with: ""
           - replace:
               - regex: " • .*"
                 with: ""
@@ -50,4 +50,4 @@ xPathScrapers:
       Image:
         selector: //div[@class="player"]/img/@src | //video/@poster
 
-# Last August 30, 2022
+# Last Updated August 30, 2022
