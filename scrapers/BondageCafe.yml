@@ -9,10 +9,8 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //span[@class='update_title']
-      Details:
-        selector: //span[@class='latest_update_description']
-      URL:
-        selector: //link[@rel="canonical"]/@href
+      Details: //span[@class='latest_update_description']
+      URL: //link[@rel="canonical"]/@href
       Date:
         selector: //span[@class='availdate']
         postProcess:
@@ -20,8 +18,7 @@ xPathScrapers:
       Tags:
         Name: //span[@class='update_tags']/a
       Performers:
-        Name:
-          selector: //span[@class='tour_update_models']/a
+        Name: //span[@class='tour_update_models']/a
       Studio:
         Name:
           fixed: BondageCafe
@@ -30,6 +27,5 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: https://www.bondagecafe.com/$1
-                         
+                with: https://www.bondagecafe.com/
 # Last Updated August 30, 2022
