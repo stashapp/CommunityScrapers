@@ -29,4 +29,4 @@ xPathScrapers:
           - replace:
               - regex: .+image":\["(.+)\?.+
                 with: $1
-# Last Updated August 11, 2022
+# Last Updated September 11, 2022
