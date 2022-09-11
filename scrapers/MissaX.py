@@ -85,7 +85,10 @@ def scrape_cover(scraper, studio, title, bad_cover_url):
                 # log.trace('Cover found!')
                 return b64img
             except:
-                p+=1
+                if tree.xpath('//li[@class="active"]/following-sibling::li'): #if there is a next page
+                    p+=1
+                else:
+                    break
         else:
             break
     #just a failsafe
