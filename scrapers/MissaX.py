@@ -82,7 +82,7 @@ def scrape_cover(scraper, studio, title, bad_cover_url):
                 imgurl = tree.xpath(f'//img[@alt="{title}"]/@src0_4x')[0]
                 img = scraper.get(imgurl, timeout=timeout,).content
                 b64img = base64.b64encode(img)
-                # log.trace('Cover found!')
+                log.trace('Cover found!')
                 return b64img
             except:
                 if tree.xpath('//li[@class="active"]/following-sibling::li'): #if there is a next page
