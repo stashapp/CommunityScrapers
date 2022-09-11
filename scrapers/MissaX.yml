@@ -7,10 +7,5 @@ sceneByURL:
     url:
       - allherluv.com/tour
       - missax.com/tour
-sceneByFragment:
-    action: script
-    script:
-      - python
-      - MissaX.py
 
 # Last Updated September 11, 2022
