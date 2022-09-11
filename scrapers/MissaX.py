@@ -77,15 +77,17 @@ def scrape_cover(scraper, studio, title, bad_cover_url):
         log.trace(f'Searching page {p} for cover')
         url = 'https://'+studio.replace(" ", "")+'.com/tour/search.php?query='+urllib.parse.quote(title)+f'&page={p}'
         tree = scrape_url(scraper, url)
-        if tree.xpath('//li[@class="active"]'): #if page list has an active element
+        if tree.xpath('//*[@class="photo-thumb video-thumb"]'): #if any search results present
             try:
                 imgurl = tree.xpath(f'//img[@alt="{title}"]/@src0_4x')[0]
                 img = scraper.get(imgurl, timeout=timeout,).content
                 b64img = base64.b64encode(img)
-                log.trace('Cover found!')
+                # log.trace('Cover found!')
                 return b64img
             except:
                 p+=1
+        else:
+            break
     #just a failsafe
     log.warning('better cover not found, returning the bad one')
     img = scraper.get(bad_cover_url, timeout=timeout,).content
