@@ -6,6 +6,11 @@ import re
 import sys
 import urllib.parse
 # extra modules below need to be installed
+try:
+    import py_common.log as log
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
 
 try:
     import cloudscraper
@@ -28,17 +33,11 @@ STUDIO_MAP = {
 
 proxy_list = {
     }
-
-
-def log(*s):
-    print(*s, file=sys.stderr)
-    ret_null = {}
-    print(json.dumps(ret_null))
-    sys.exit(1)
+timeout = 10
 
 def scrape_url(scraper, url):
     try:
-        scraped = scraper.get(url, proxies=proxy_list)
+        scraped = scraper.get(url, timeout=timeout, proxies=proxy_list)
     except:
         log("scrape error")
     if scraped.status_code >= 400:
@@ -48,38 +47,52 @@ def scrape_url(scraper, url):
 def scrape_scene_page(url): #scrape the main url
     tree = scrape_url(scraper, url) #get the page
     title = tree.xpath('//p[@class="raiting-section__title"]/text()')[0].strip() #title scrape
+    log.trace(f'Title:{title}')
     date = tree.xpath('//p[@class="dvd-scenes__data"][1]/text()[1]')[0] #get date
     date = re.sub("(?:.+Added:\s)([\d\/]*).+", r'\g<1>', date).strip() #date cleanup
     date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d") #date parse
+    log.trace(f'Date:{date}')
     studio = tree.xpath('//base/@href')[0].strip() #studio scrape
     studio = STUDIO_MAP[studio] # studio map
+    log.trace(f'Studio:{studio}')
     performers = tree.xpath('//p[@class="dvd-scenes__data"][1]/a/text()') #performers scrape
+    log.trace(f'Performers:{performers}')
     tags = tree.xpath('//p[@class="dvd-scenes__data"][2]/a/text()') #tags scrape
+    log.trace(f'Tags:{tags}')
     details = tree.xpath('//p[count(preceding-sibling::p[@class="dvd-scenes__title"])=1]/text()|//p[@class="text text--marg"]/strong/text()|//p/em/text()') #details scrape
     details = ''.join(details) #join details
     details = '\n'.join(' '.join(line.split()) for line in details.split('\n')) #get rid of double spaces
     details = re.sub("\r?\n\n?", r'\n', details) #get rid of double newlines
+    log.trace(f'Details:{details}')
+    bad_cover_url = tree.xpath("//img[@src0_4x]/@src0_4x") #cover from scene's page if better one is not found (it will be)
     datauri = "data:image/jpeg;base64,"
-    b64img = scrape_cover(scraper, studio, title)
+    b64img = scrape_cover(scraper, studio, title, bad_cover_url)
     return output_json(title,tags,date,details,datauri,b64img,studio,performers)
 
 
-def scrape_cover(scraper, studio, title):
+def scrape_cover(scraper, studio, title, bad_cover_url):
     p = 1
     # loop throught search result pages until img found
-    while True:
+    while p<20:
+        log.trace(f'Searching page {p} for cover')
         url = 'https://'+studio.replace(" ", "")+'.com/tour/search.php?query='+urllib.parse.quote(title)+f'&page={p}'
         tree = scrape_url(scraper, url)
-        if tree.xpath('//*[@class="errorMsg"]'):
-            print("cover not found")
-        else:
+        if tree.xpath('//li[@class="active"]'): #if page list has an active element
             try:
                 imgurl = tree.xpath(f'//img[@alt="{title}"]/@src0_4x')[0]
-                img = scraper.get(imgurl).content
+                img = scraper.get(imgurl, timeout=timeout,).content
                 b64img = base64.b64encode(img)
+                log.trace('Cover found!')
                 return b64img
             except:
                 p+=1
+    #just a failsafe
+    log.warning('better cover not found, returning the bad one')
+    img = scraper.get(bad_cover_url, timeout=timeout,).content
+    b64img = base64.b64encode(img)
+    return b64img
+    
+
 
 def output_json(title,tags,date,details,datauri,b64img,studio,performers):
     return {
@@ -112,5 +125,5 @@ ret = scrape_scene_page(url)
 print(json.dumps(ret))
 
 
-# Based on PerfectGonzo scraper
+# Based on the PerfectGonzo scraper
 # Last Updated September 11, 2022
