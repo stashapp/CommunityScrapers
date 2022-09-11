@@ -15,15 +15,15 @@ except ModuleNotFoundError:
 try:
     import cloudscraper
 except ModuleNotFoundError:
-    print("You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper", file=sys.stderr)
+    log.error("You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)")
+    log.error("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper")
     sys.exit()
     
 try:
     from lxml import html, etree
 except ModuleNotFoundError:
-    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml", file=sys.stderr)
+    log.error("You need to install the lxml module. (https://lxml.de/installation.html#installation)")
+    log.error("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml")
     sys.exit()
 
 STUDIO_MAP = {
@@ -35,17 +35,18 @@ proxy_list = {
     }
 timeout = 10
 
-def scrape_url(scraper, url):
+def scraped_content(scraper, url):
     try:
         scraped = scraper.get(url, timeout=timeout, proxies=proxy_list)
     except:
-        log("scrape error")
+        log.error("scrape error")
     if scraped.status_code >= 400:
-        log('HTTP Error: %s' % scraped.status_code)
-    return html.fromstring(scraped.content)
+        log.error('HTTP Error: %s' % scraped.status_code)
+    return scraped.content
 
 def scrape_scene_page(url): #scrape the main url
-    tree = scrape_url(scraper, url) #get the page
+    tree = scraped_content(scraper, url) #get page content
+    tree = html.fromstring(tree) #parse html
     title = tree.xpath('//p[@class="raiting-section__title"]/text()')[0].strip() #title scrape
     log.trace(f'Title:{title}')
     date = tree.xpath('//p[@class="dvd-scenes__data"][1]/text()[1]')[0] #get date
@@ -76,11 +77,12 @@ def scrape_cover(scraper, studio, title, bad_cover_url):
     while p<20:
         log.trace(f'Searching page {p} for cover')
         url = 'https://'+studio.replace(" ", "")+'.com/tour/search.php?query='+urllib.parse.quote(title)+f'&page={p}'
-        tree = scrape_url(scraper, url)
+        tree = scraped_content(scraper, url) #get page content
+        tree = html.fromstring(tree) #parse html
         if tree.xpath('//*[@class="photo-thumb video-thumb"]'): #if any search results present
             try:
                 imgurl = tree.xpath(f'//img[@alt="{title}"]/@src0_4x')[0]
-                img = scraper.get(imgurl, timeout=timeout,).content
+                img = scraped_content(scraper, imgurl)
                 b64img = base64.b64encode(img)
                 log.trace('Cover found!')
                 return b64img
@@ -93,7 +95,7 @@ def scrape_cover(scraper, studio, title, bad_cover_url):
             break
     #just a failsafe
     log.warning('better cover not found, returning the bad one')
-    img = scraper.get(bad_cover_url, timeout=timeout,).content
+    img = scraped_content(scraper, bad_cover_url)
     b64img = base64.b64encode(img)
     return b64img
     
