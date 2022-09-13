@@ -31,40 +31,41 @@ STUDIO_MAP = {
     'https://allherluv.com/tour/': 'All Her Luv',
 }
 
-proxy_list = {
+PROXIES = {
     }
-timeout = 10
+TIMEOUT = 10
+MAX_PAGES_TO_SEARCH = 20
 
 def scraped_content(scraper, url):
     try:
-        scraped = scraper.get(url, timeout=timeout, proxies=proxy_list)
+        scraped = scraper.get(url, timeout=TIMEOUT, proxies=PROXIES)
     except:
         log.error("scrape error")
     if scraped.status_code >= 400:
-        log.error('HTTP Error: %s' % scraped.status_code)
+        log.error(f"HTTP Error: {scraped.status_code}")
     return scraped.content
 
 def scrape_scene_page(url): #scrape the main url
     tree = scraped_content(scraper, url) #get page content
     tree = html.fromstring(tree) #parse html
     title = tree.xpath('//p[@class="raiting-section__title"]/text()')[0].strip() #title scrape
-    log.trace(f'Title:{title}')
+    log.debug(f'Title:{title}')
     date = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), " Added:")]/text()[1]')[0] #get date
     date = re.sub("(?:.+Added:\s)([\d\/]*).+", r'\g<1>', date).strip() #date cleanup
     date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d") #date parse
-    log.trace(f'Date:{date}')
+    log.debug(f'Date:{date}')
     studio = tree.xpath('//base/@href')[0].strip() #studio scrape
-    studio = STUDIO_MAP[studio] # studio map
-    log.trace(f'Studio:{studio}')
+    studio = STUDIO_MAP.get(studio)  # studio map
+    log.debug(f'Studio:{studio}')
     performers = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), "Featuring:")]//a/text()') #performers scrape
-    log.trace(f'Performers:{performers}')
+    log.debug(f'Performers:{performers}')
     tags = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), "Categories:")]//a/text()') #tags scrape
-    log.trace(f'Tags:{tags}')
+    log.debug(f'Tags:{tags}')
     details = tree.xpath('//p[count(preceding-sibling::p[@class="dvd-scenes__title"])=1]/text()|//p[@class="text text--marg"]/strong/text()|//p/em/text()') #details scrape
     details = ''.join(details) #join details
     details = '\n'.join(' '.join(line.split()) for line in details.split('\n')) #get rid of double spaces
     details = re.sub("\r?\n\n?", r'\n', details) #get rid of double newlines
-    log.trace(f'Details:{details}')
+    log.debug(f'Details:{details}')
     bad_cover_url = tree.xpath("//img[@src0_4x]/@src0_4x") #cover from scene's page if better one is not found (it will be)
     datauri = "data:image/jpeg;base64,"
     b64img = scrape_cover(scraper, studio, title, bad_cover_url)
@@ -74,9 +75,9 @@ def scrape_scene_page(url): #scrape the main url
 def scrape_cover(scraper, studio, title, bad_cover_url):
     p = 1
     # loop throught search result pages until img found
-    while p<20:
-        log.trace(f'Searching page {p} for cover')
-        url = 'https://'+studio.replace(" ", "")+'.com/tour/search.php?query='+urllib.parse.quote(title)+f'&page={p}'
+    while p<MAX_PAGES_TO_SEARCH:
+        log.debug(f'Searching page {p} for cover')
+        url = f'https://{studio.replace(" ", "")}.com/tour/search.php?st=advanced&qall=&qany=&qex={urllib.parse.quote(title)}&none=&tadded=0&cat%5B%5D=5&page={p}'
         tree = scraped_content(scraper, url) #get page content
         tree = html.fromstring(tree) #parse html
         if tree.xpath('//*[@class="photo-thumb video-thumb"]'): #if any search results present
@@ -84,7 +85,7 @@ def scrape_cover(scraper, studio, title, bad_cover_url):
                 imgurl = tree.xpath(f'//img[@alt="{title}"]/@src0_4x')[0]
                 img = scraped_content(scraper, imgurl)
                 b64img = base64.b64encode(img)
-                log.trace('Cover found!')
+                log.debug('Cover found!')
                 return b64img
             except:
                 if tree.xpath('//li[@class="active"]/following-sibling::li'): #if there is a next page
@@ -124,7 +125,8 @@ def output_json(title,tags,date,details,datauri,b64img,studio,performers):
 
 frag = json.loads(sys.stdin.read())
 if not frag['url']:
-    log('No URL entered.')
+    log.error('No URL entered.')
+    sys.exit()
 url = frag["url"]
 
 scraper = cloudscraper.create_scraper()
