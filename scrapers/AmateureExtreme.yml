@@ -16,7 +16,7 @@ xPathScrapers:
               - regex: $
                 with: -01-01
       Tags:
-        Name: //div[@class='tags mt-3']/a | //div[@class='posted-info meta-description small']/div[@class='float-left']/span[2]/span[@class='fa5-text']/a
+        Name: //a[contains(@href,'collections?')]
       Performers:
         Name:
           selector: //span[@class='models']/span[@class='fa5-text']/a
