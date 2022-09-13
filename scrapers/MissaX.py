@@ -49,16 +49,16 @@ def scrape_scene_page(url): #scrape the main url
     tree = html.fromstring(tree) #parse html
     title = tree.xpath('//p[@class="raiting-section__title"]/text()')[0].strip() #title scrape
     log.trace(f'Title:{title}')
-    date = tree.xpath('//p[@class="dvd-scenes__data"][1]/text()[1]')[0] #get date
+    date = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), " Added:")]/text()[1]')[0] #get date
     date = re.sub("(?:.+Added:\s)([\d\/]*).+", r'\g<1>', date).strip() #date cleanup
     date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d") #date parse
     log.trace(f'Date:{date}')
     studio = tree.xpath('//base/@href')[0].strip() #studio scrape
     studio = STUDIO_MAP[studio] # studio map
     log.trace(f'Studio:{studio}')
-    performers = tree.xpath('//p[@class="dvd-scenes__data"][1]/a/text()') #performers scrape
+    performers = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), "Featuring:")]//a/text()') #performers scrape
     log.trace(f'Performers:{performers}')
-    tags = tree.xpath('//p[@class="dvd-scenes__data"][2]/a/text()') #tags scrape
+    tags = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), "Categories:")]//a/text()') #tags scrape
     log.trace(f'Tags:{tags}')
     details = tree.xpath('//p[count(preceding-sibling::p[@class="dvd-scenes__title"])=1]/text()|//p[@class="text text--marg"]/strong/text()|//p/em/text()') #details scrape
     details = ''.join(details) #join details
@@ -130,7 +130,3 @@ url = frag["url"]
 scraper = cloudscraper.create_scraper()
 ret = scrape_scene_page(url)
 print(json.dumps(ret))
-
-
-# Based on the PerfectGonzo scraper
-# Last Updated September 11, 2022
