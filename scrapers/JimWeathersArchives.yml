@@ -46,7 +46,7 @@ xPathScrapers:
       Gender:
         fixed: female     
       Image:
-        selector: //img[@id='set-target-13']/@src0_3x
+        selector: //img[contains(@class,'model_bio_thumb')]/@src0_3x
         postProcess:
           - replace:
               - regex: ^
