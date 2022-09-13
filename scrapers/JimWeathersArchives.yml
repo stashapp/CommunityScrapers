@@ -51,4 +51,4 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://jimweathersarchives.com$1
-# Last Updated September 11, 2022
+# Last Updated September 13, 2022
