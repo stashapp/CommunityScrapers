@@ -55,13 +55,14 @@ def scrape_scene_page(url): #scrape the main url
     date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d") #date parse
     log.debug(f'Date:{date}')
     studio = tree.xpath('//base/@href')[0].strip() #studio scrape
+    studio = studio.replace("www.", "")
     studio = STUDIO_MAP.get(studio)  # studio map
     log.debug(f'Studio:{studio}')
     performers = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), "Featuring:")]//a/text()') #performers scrape
     log.debug(f'Performers:{performers}')
     tags = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), "Categories:")]//a/text()') #tags scrape
     log.debug(f'Tags:{tags}')
-    details = tree.xpath('//p[count(preceding-sibling::p[@class="dvd-scenes__title"])=1]/text()|//p[@class="text text--marg"]/strong/text()|//p/em/text()') #details scrape
+    details = tree.xpath('//p[@class="dvd-scenes__title"]/following-sibling::p//text()') #details scrape
     details = ''.join(details) #join details
     details = '\n'.join(' '.join(line.split()) for line in details.split('\n')) #get rid of double spaces
     details = re.sub("\r?\n\n?", r'\n', details) #get rid of double newlines
@@ -121,13 +122,13 @@ def output_json(title,tags,date,details,datauri,b64img,studio,performers):
 
 
 
-# frag = {"url": "https://allherluv.com/tour/trailers/Like-I-Do.html"}
+# FRAGNEMT = {"url": "https://allherluv.com/tour/trailers/Like-I-Do.html"}
 
-frag = json.loads(sys.stdin.read())
-if not frag['url']:
+FRAGNEMT = json.loads(sys.stdin.read())
+if not FRAGNEMT['url']:
     log.error('No URL entered.')
     sys.exit()
-url = frag["url"]
+url = FRAGNEMT["url"]
 
 scraper = cloudscraper.create_scraper()
 ret = scrape_scene_page(url)
