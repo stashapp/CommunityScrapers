@@ -1,0 +1,31 @@
+name: "MenOver30"
+sceneByURL:
+  - action: script
+    url:
+      - menover30.com/en/video
+      - pridestudios.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - menover30
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - menover30
+sceneByName:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - menover30
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - menover30
+    - validName
+# Last Updated September 16, 2022
