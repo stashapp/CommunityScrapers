@@ -39,7 +39,7 @@ A `Query` button is also available for scrapers that support that. Clicking the 
 
 In case of errors/no results during scraping make sure to check stash's log section (Settings->Logs->Log Level Debug) for more info.
 
-For more info please check the scraping help [section](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Scraping.md)
+For more info please check the scraping help [section](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Manual/Scraping.md)
 
 ## Contributing
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Manual/ScraperDevelopment.md) help section to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #the-scraping-initiative channel with any questions.
