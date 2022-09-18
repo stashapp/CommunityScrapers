@@ -1,6 +1,6 @@
 # Thumbnail Frame Matcher
 
-**NOTE:** _This scrip currently requires `wget` to work. In the future work will be done to remove this requirement._
+**NOTE:** _This author of this scraper has not tested this on the Windows/macOS versions of stash. Just Docker on UnRaid_
 
 This scraper was mainly designed with Clips4Sale in mind but I'm sure there are plenty of other studios with similar issues. This scraper takes uses an existing thumbnail for a scene to find the matching frame in the scene and extract that frame.
 

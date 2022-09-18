@@ -9,15 +9,15 @@ require_relative "../rb_common/rb_common"
 class ThumbnailFrameMatcher
   PTS_TIME_REGEX = /pts_time:([\d\.]+)/
 
-  def initialize(video_path:, image_path:)
-    @temporary_directory = "#{generated_path}tmp"
+  def initialize(video_path:, image_path:, fingerprints:)
+    @temporary_directory = "#{configuration[:generated_path]}tmp"
     @logger = Stash::Logger
     @logger.trace("Initializing ThumbnailFrameMatcher class")
     @config = Config::Stash
     @temporary_image = temporary_image_path
     @extracted_frame = temporary_image_path(extracted: true)
     @video = video_path.strip
-    @image = image_path.strip
+    @image = screenshot_location(fingerprints)
     @video_resolution = get_resolution(file: @video)
     @image_resolution = get_resolution(file: @image)
     @video_duration = get_video_duration
@@ -44,8 +44,20 @@ class ThumbnailFrameMatcher
 
   private
 
-  def generated_path
-    @generated_path ||= GraphQL::Stash.new.configuration["general"]["generatedPath"]
+  def configuration
+    @configuration ||= GraphQL::Stash.new.configuration["general"]
+    {
+      generated_path: @configuration["generatedPath"],
+      generated_hash_type: @configuration["videoFileNamingAlgorithm"]
+    }
+  end
+
+  def screenshot_location(fingerprints)
+    selected_hash = fingerprints.select do |fingerprint|
+      fingerprint["type"] == configuration[:generated_hash_type].downcase
+    end
+
+    "#{configuration[:generated_path]}screenshots/#{selected_hash.first["value"]}.jpg"
   end
 
   def temporary_image_path(extracted: false)
@@ -59,20 +71,11 @@ class ThumbnailFrameMatcher
     end
   end
 
-  def wget_file(file:)
-    @logger.trace("Getting current screenshot image from Stash")
-    "wget --header=\"ApiKey: #{@config.api_key}\" -O- #{file} | "
-  end
-
   def get_resolution(file:)
     @logger.trace("Getting resolution of #{file}")
     command = "ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 -i"
 
-    if file.match?(/^http/)
-      output = Open3.capture3("#{wget_file(file: file)} #{command} -")
-    else
-      output = Open3.capture3("#{command} \"#{file}\"")
-    end
+    output = Open3.capture3("#{command} \"#{file}\"")
     resolution = output.first.chomp
 
     return @logger.error("Invalid resolution for #{file}") unless valid_resolution?(resolution)
@@ -105,7 +108,7 @@ class ThumbnailFrameMatcher
 
     @logger.debug("Changing image to matching resolution")
 
-    Open3.capture3("#{wget_file(file: @image)} ffmpeg -y -i - -vf scale=#{@video_resolution} #{@temporary_image}")
+    Open3.capture3("ffmpeg -y -i #{@image} -vf scale=#{@video_resolution} #{@temporary_image}")
     return @logger.error("Temporary image not created") unless File.exist?(@temporary_image)
 
     @image = @temporary_image
@@ -167,6 +170,7 @@ scene_fragment = JSON.parse(STDIN.read)
 scene_details = GraphQL::Stash.new.get_scene(scene_fragment["id"])
 video_path = scene_details["path"]
 image_path = scene_details["paths"]["screenshot"]
-matcher = ThumbnailFrameMatcher.new(video_path: video_path, image_path: image_path)
+fingerprints = scene_details["files"].first["fingerprints"]
+matcher = ThumbnailFrameMatcher.new(video_path: video_path, image_path: image_path, fingerprints: fingerprints)
 
 matcher.run_matcher
