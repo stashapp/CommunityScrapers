@@ -43,6 +43,8 @@ MOVIE_SITES = {
     "devilsfilm": "https://www.devilsfilm.com/en/dvd",
     "diabolic": "https://www.diabolic.com/en/movie",
     "evilangel": "https://www.evilangel.com/en/movie",
+    "outofthefamily": "https://www.outofthefamily.com/en/dvd",
+    "peternorth": "https://www.peternorth.com/en/dvd",
     "tsfactor": "https://www.tsfactor.com/en/movie/",
     "wicked": "https://www.wicked.com/en/movie",
     "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie"
