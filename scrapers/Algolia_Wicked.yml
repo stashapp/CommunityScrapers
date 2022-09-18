@@ -1,0 +1,39 @@
+name: "Wicked"
+sceneByURL:
+  - action: script
+    url:
+      - wicked.com/en/video/
+    script:
+      - python
+      - Algolia.py
+      - wicked
+movieByURL:
+  - action: script
+    url:
+      - wicked.com/en/movie/
+    script:
+      - python
+      - Algolia.py
+      - wicked
+      - movie
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - wicked
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - wicked
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - wicked
+      - validName
+# Last Updated August 05, 2022
