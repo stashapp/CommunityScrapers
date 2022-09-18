@@ -3,7 +3,26 @@ sceneByURL:
   - action: script
     url:
       - adulttime.com/en/video/
+      - analteenangels.com/en/video/
+      - assholefever.com/en/video/
+      - dpfanatics.com/en/video/
+      - footsiebabes.com/en/video/
+      - girlstryanal.com/en/video/
+      - lezcuties.com/en/video/
+      - massage-parlor.com/en/video/
+      - milkingtable.com/en/video/
+      - moderndaysins.com/en/video/
+      - mommysboy.com/en/video/
+      - mommysgirl.com/en/video/
+      - nudefightclub.com/en/video/
+      - nurumassage.com/en/video/
+      - oopsie.com/en/video/
       - outofthefamily.com/en/video/
+      - peternorth.com/en/video/
+      - prettydirty.com/en/video/
+      - soapymassage.com/en/video/
+      - trickyspa.com/en/video/
+      - webyoung.com/en/video/
     script:
       - python
       - Algolia.py
@@ -28,4 +47,4 @@ sceneByQueryFragment:
       - Algolia.py
       - girlsway
       - validName
-# Last Updated June 23, 2022
+# Last Updated September 01, 2022

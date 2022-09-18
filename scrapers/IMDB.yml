@@ -8,7 +8,6 @@ performerByURL:
     url:
       - imdb.com
     scraper: performerScraper
-
 sceneByName:
   action: scrapeXPath
   queryURL: https://www.imdb.com/find?q={}
@@ -27,7 +26,6 @@ movieByURL:
     url:
       - imdb.com/title/
     scraper: movieScraper
-
 xPathScrapers:
   performerSearch:
     common:
@@ -41,7 +39,6 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://www.imdb.com
-
   performerScraper:
     performer:
       Name: //td[@id="overview-top" or @class="name-overview-widget__section"]//h1/span[1]/text()
@@ -99,12 +96,18 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: &title //section//h1
+      URL: &url //meta[@property="og:url"]/@content
+      Movies:
+        Name: *title
+        URL: *url
       Date: &date
         selector: //li[@data-testid='title-details-releasedate']/div/ul/li/a/text()
         postProcess:
           - replace:
               - regex: '\s*\(.+$'
                 with: ""
+              - regex: '^(\d\d\d\d)$'
+                with: $1-01-01
           - parseDate: January 2, 2006
       Details: &desc //span[@data-testid="plot-xl"]
       Tags:
@@ -117,6 +120,7 @@ xPathScrapers:
   movieScraper:
     movie:
       Name: *title
+      URL: *url
       Date: *date
       Director: //section[@data-testid="title-cast"]//li[span[text()="Director"]]//a
       Duration:
@@ -134,4 +138,4 @@ xPathScrapers:
       Studio: *studio
       Synopsis: *desc
       FrontImage: *imageAttr
-# Last Updated March 23, 2022
+# Last Updated August 13, 2022

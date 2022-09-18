@@ -53,6 +53,7 @@ xPathScrapers:
   movieScraper:
     movie:
       Name: *title
+      URL: *url
       Director:
         selector: //a[contains(@href, "/director/")]/text()
       Duration:
@@ -132,6 +133,9 @@ xPathScrapers:
         selector: //div[@class='cell td_title']/h3[@class='title show-for-medium']/a/@title
       URL:
         selector: //div[@class='cell td_title']/h3[@class='title show-for-medium']/a/@href
+      Details: //div[@class='description show-for-medium']//a/@title
+      Date: 
+         selector: //div[@class='video_dates']/span/a
       Image:
         selector: //img[@class="boxcover"]/@src
-# Last Updated July 17, 2022
+# Last Updated August 13, 2022
