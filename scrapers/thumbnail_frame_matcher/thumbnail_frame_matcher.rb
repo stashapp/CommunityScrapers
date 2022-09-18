@@ -8,9 +8,9 @@ require_relative "../rb_common/rb_common"
 
 class ThumbnailFrameMatcher
   PTS_TIME_REGEX = /pts_time:([\d\.]+)/
-  TEMPORARY_DIRECTORY = "/generated/tmp/"
 
   def initialize(video_path:, image_path:)
+    @temporary_directory = "#{generated_path}tmp"
     @logger = Stash::Logger
     @logger.trace("Initializing ThumbnailFrameMatcher class")
     @config = Config::Stash
@@ -44,14 +44,18 @@ class ThumbnailFrameMatcher
 
   private
 
+  def generated_path
+    @generated_path ||= GraphQL::Stash.new.configuration["general"]["generatedPath"]
+  end
+
   def temporary_image_path(extracted: false)
     uuid = SecureRandom.uuid
     unless extracted
       @logger.trace("Generating random temporary path for temporary image storage")
-      "#{TEMPORARY_DIRECTORY}tmp_image_#{uuid}.jpg"
+      "#{@temporary_directory}tmp_image_#{uuid}.jpg"
     else
       @logger.trace("Generating random temporary path for extracted frame storage")
-      "#{TEMPORARY_DIRECTORY}extracted_frame_#{uuid}.jpg"
+      "#{@temporary_directory}extracted_frame_#{uuid}.jpg"
     end
   end
 
