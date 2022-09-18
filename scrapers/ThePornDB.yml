@@ -50,7 +50,7 @@ jsonScrapers:
           - replace:
               - regex: ^
                 with: "https://api.metadataapi.net/scenes/"
-      Image: data.#.background.full
+      Image: data.#.background.small
       Details: data.#.description
   performerSearch:
     performer:
@@ -96,7 +96,7 @@ jsonScrapers:
       Date: data.date
       URL: data.url
       Image:
-        selector: data.background.small
+        selector: data.background.full
         postProcess:
           - replace:
               - regex: .+default\d+\.png$
@@ -135,7 +135,7 @@ jsonScrapers:
       Details: $data.description
       Date: $data.date
       URL: $data.url
-      Image: $data.background.small
+      Image: $data.background.full
       Performers:
         Name: $data.performers.#.parent.name
         URL:
@@ -175,4 +175,4 @@ driver:
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
     #  Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated August 07, 2022
+# Last Updated September 18, 2022
