@@ -21,13 +21,14 @@ xPathScrapers:
         Name: //a[contains(@href,"actor")]/text()
       Studio:
         Name:
-          selector: //meta[@property="og:site_name"]/@content
+          fixed: WowGirls
+      Tags:
+        Name:
+          selector: //a[contains(@href,"category")]/@title
           postProcess:
             - replace:
-              - regex: '([^ ]+) .*'
-                with: $1
-      Tags:
-        Name: //a[contains(@href,"category")]/@title
+                - regex: \s+Movies\s*$
+                  with: ""
       Image:
         selector: //meta[@property="og:image"]/@content
 # Last Updated August 30, 2022
