@@ -200,7 +200,6 @@ TIMEOUT = 10
 FRAGMENT = json.loads(sys.stdin.read())
 NAME = FRAGMENT.get("name")
 URL = FRAGMENT.get("url")
-TITLE = FRAGMENT.get("title")
 
 
 search_results = {}
