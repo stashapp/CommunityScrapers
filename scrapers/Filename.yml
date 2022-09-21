@@ -1,0 +1,7 @@
+name: Filename
+sceneByFragment:
+  action: script
+  script:
+      - python3
+      - Filename.py
+      - title_from_filename
