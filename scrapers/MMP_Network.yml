@@ -1,11 +1,10 @@
-name: "PovBitch"
+name: "MMP Network"
 sceneByURL:
   - action: scrapeXPath
     url:
       - fakeshooting.com/video
       - mmpnetwork.com/video
       - povbitch.com/video
-#      - takevan.com/video
 
     scraper: sceneScraper
 
@@ -48,5 +47,4 @@ xPathScrapers:
         Name: //a[contains(@href,"tag")]/text()
       Image:
         selector: //div[@class="player"]/img/@src | //video/@poster
-
 # Last Updated August 30, 2022
