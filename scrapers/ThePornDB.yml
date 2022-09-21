@@ -6,33 +6,23 @@ performerByName:
 performerByURL:
   - action: scrapeJson
     url:
-      - https://api.metadataapi.net/performers/
-      - https://metadataapi.net/performers/
+      - metadataapi.net/performers/
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: 'https://(metadataapi.net/performers/.+)'
-          with: https://api.$1
+        - regex: ^(.+metadataapi.net)/
+          with: https://api.metadataapi.net/
     scraper: performerScraper
 sceneByURL:
   - action: scrapeJson
     url:
-      - https://api.metadataapi.net/scenes/
-      - https://metadataapi.net/scenes/
+      - metadataapi.net/scenes/
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: 'https://(metadataapi.net/scenes/.+)'
-          with: https://api.$1
+        - regex: ^(.+metadataapi.net)/
+          with: https://api.metadataapi.net/
     scraper: sceneScraper
-sceneByName:
-  action: scrapeJson
-  queryURL: https://api.metadataapi.net/scenes?parse={}
-  scraper: sceneSearch
-sceneByQueryFragment:
-  action: scrapeJson
-  queryURL: "{url}"
-  scraper: sceneScraper
 sceneByFragment:
   action: scrapeJson
   queryURL: https://api.metadataapi.net/scenes?parse={filename}&hash={oshash}&limit=1
@@ -94,7 +84,7 @@ jsonScrapers:
       Aliases: data.aliases
       Image:
         selector: data.image
-        postProcess:
+        postProcess: 
           - replace:
               - regex: .+male\.png$
                 with:
