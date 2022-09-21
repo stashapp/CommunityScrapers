@@ -1,0 +1,34 @@
+name: "WOW Girls Blog"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wowgirlsblog.com
+
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - replace:
+              - regex: "([^ ]+)T.*"
+                with: $1
+      Details: //meta[@property="og:description"]/@content
+      Performers:
+        Name: //a[contains(@href,"actor")]/text()
+      Studio:
+        Name:
+          fixed: WowGirls
+      Tags:
+        Name:
+          selector: //a[contains(@href,"category")]/@title
+          postProcess:
+            - replace:
+                - regex: \s+Movies\s*$
+                  with: ""
+      Image:
+        selector: //meta[@property="og:image"]/@content
+# Last Updated August 30, 2022

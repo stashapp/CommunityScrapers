@@ -1,0 +1,50 @@
+name: "MMP Network"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fakeshooting.com/video
+      - mmpnetwork.com/video
+      - povbitch.com/video
+
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //*[@class="videoTitle"]
+      Details:
+        selector: //div[@class="videoDescription"]
+      Date:
+        selector: //div[@class="videoDate" or @id="videoDate"]/text()
+        postProcess:
+          - replace:
+              - regex: "^Added "
+                with: ""
+          - replace:
+              - regex: " • .*"
+                with: ""
+          - parseDate: January 2, 2006
+      Performers:
+        Name:
+          selector: //div[@class="videoDate"]/a | //div[@class="videoFeaturedModels"]/text()
+          concat: ", "
+          split: ", "
+      Studio:
+        Name:
+          selector: //a[@id="headerNavJoinNow"]/@href
+          postProcess:
+            - replace:
+                - regex: .*signup\.(.+)\.com.*
+                  with: $1
+            - map:
+                fakeshooting: Fake Shooting
+                melonechallenge: Molone Challenge
+                mmpnetwork: MMP Network
+                povbitch: POV Bitch
+                takevan: Take Van
+
+      Tags:
+        Name: //a[contains(@href,"tag")]/text()
+      Image:
+        selector: //div[@class="player"]/img/@src | //video/@poster
+# Last Updated August 30, 2022
