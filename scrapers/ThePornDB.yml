@@ -23,6 +23,14 @@ sceneByURL:
         - regex: ^(.+metadataapi.net)/
           with: https://api.metadataapi.net/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeJson
+  queryURL: https://api.metadataapi.net/scenes?parse={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  scraper: sceneScraper
 sceneByFragment:
   action: scrapeJson
   queryURL: https://api.metadataapi.net/scenes?parse={filename}&hash={oshash}&limit=1
@@ -84,7 +92,7 @@ jsonScrapers:
       Aliases: data.aliases
       Image:
         selector: data.image
-        postProcess: 
+        postProcess:
           - replace:
               - regex: .+male\.png$
                 with:
