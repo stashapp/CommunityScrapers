@@ -6,12 +6,22 @@ performerByName:
 performerByURL:
   - action: scrapeJson
     url:
-      - https://api.metadataapi.net/performers/
+      - metadataapi.net/performers/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(.+metadataapi.net)/
+          with: https://api.metadataapi.net/
     scraper: performerScraper
 sceneByURL:
   - action: scrapeJson
     url:
-      - https://api.metadataapi.net/scenes/
+      - metadataapi.net/scenes/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(.+metadataapi.net)/
+          with: https://api.metadataapi.net/
     scraper: sceneScraper
 sceneByName:
   action: scrapeJson
@@ -175,4 +185,4 @@ driver:
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
     #  Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated September 18, 2022
+# Last Updated September 21, 2022
