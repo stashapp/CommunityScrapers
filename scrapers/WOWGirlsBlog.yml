@@ -14,8 +14,8 @@ xPathScrapers:
         selector: //meta[@property="article:published_time"]/@content
         postProcess:
           - replace:
-            - regex: '([^ ]+)T.*'
-              with: $1
+              - regex: "([^ ]+)T.*"
+                with: $1
       Details: //meta[@property="og:description"]/@content
       Performers:
         Name: //a[contains(@href,"actor")]/text()
