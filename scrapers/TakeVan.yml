@@ -1,0 +1,30 @@
+name: "TakeVan"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - takevan.com/video/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="videoTitle"]
+      Date:
+        selector: //div[@id="videoDate"]
+        postProcess:
+          - replace:
+              - regex: "^Added "
+                with: ""
+          - parseDate: January 2, 2006
+      Details: //div[@Class="videoDescription"]
+      Tags:
+        Name: //div[@class="videoTags"]/a/text()
+      Performers:
+        Name:
+          selector: //div[@class="videoFeaturedModels"]/text()
+          split: ", "
+      Image: //div[@class="player"]/img/@src
+      Studio:
+        Name:
+          fixed: "TakeVan"
+# Last Updated September 02, 2022

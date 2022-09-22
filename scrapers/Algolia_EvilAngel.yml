@@ -1,0 +1,41 @@
+name: "EvilAngel"
+sceneByURL:
+  - action: script
+    url:
+      - evilangel.com/en/video/
+      - tsfactor.com/en/video/
+    script:
+      - python
+      - Algolia.py
+      - evilangel
+movieByURL:
+  - action: script
+    url:
+      - evilangel.com/en/movie/
+      - tsfactor.com/en/movie/
+    script:
+      - python
+      - Algolia.py
+      - evilangel
+      - movie
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - evilangel
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - evilangel
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - evilangel
+      - validName
+# Last Updated August 05, 2022
