@@ -7,12 +7,14 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: &titleDef
-        selector: //div[@id="tabs-photos"]//a/img/@alt
+      Title: 
+        selector: //script[@type="text/javascript"][contains(.,"videoData:")]/text()
         postProcess:
             - replace:
-                - regex:  " VR porn$"
-                  with: ""
+                - regex:  '.+videoData:\s{[^{]+title":"([^"]+)",.+'
+                  with: $1
+                - regex: '\\u2019'
+                  with: "’"
       Date: //time/@datetime
       Details: //div[@data-qa="scene-about-tab-text"]
       Tags:
