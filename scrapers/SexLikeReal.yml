@@ -22,6 +22,17 @@ xPathScrapers:
       Performers:
         Name: //meta[@property="video:actor"]/@content
       Studio:
-        Name: //a[contains(@href,"/studios/")]/div[last()]/text()
+        Name: 
+          selector: //a[contains(@href,"/studios/")]/div[last()]/text()
+          postProcess:
+              - map:
+                  LustReality: "Lust Reality"
+                  DDFNetworkVR: "DDF Network VR"
+                  POVcentralVR: "POV Central"
+                  RealHotVR: "Real Hot VR"
+                  WankitnowVR: "Wank It Now VR"
+                  VirtualXPorn: "Virtual X Porn"
+                  SinsVR: "XSinsVR"
+                  LethalHardcoreVR: "Lethal Hardcore VR"
       Image: //div[contains(@class,"splash-screen")]/img/@src
 # Last Updated August 29, 2022
