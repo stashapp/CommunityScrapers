@@ -2,8 +2,14 @@ import json
 import os
 import sys
 
-from py_common import graphql
-from py_common import log
+try:
+    from py_common import graphql
+    from py_common import log
+except ModuleNotFoundError:
+    print(
+        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
+        file=sys.stderr)
+    sys.exit()
 
 
 def title_from_filename(js):
