@@ -11,6 +11,8 @@ except ModuleNotFoundError:
         file=sys.stderr)
     sys.exit()
 
+REMOVE_EXT = False  # remove file extension from title
+
 
 def title_from_filename(js):
     scene_id = js['id']
@@ -23,6 +25,8 @@ def title_from_filename(js):
     }""", {"id": scene_id})
     path = response["findScene"]["path"]
     filename = os.path.basename(path)
+    if REMOVE_EXT:
+        filename = os.path.splitext(filename)[0]
     if scene_title != filename:
         log.info(f"Scene {scene_id}: Title differs from filename: '{scene_title}' => '{filename}'")
         return {"title": filename}
