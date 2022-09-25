@@ -1,0 +1,44 @@
+name: bondageliberation
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bondageliberation.com/videos
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common: &commonSelectors
+      $dtBase: //div[@class="flex justify-between mt-2 cursor-pointer"]/div[1]
+      $dptBase: //div[@class="mt-5 info-content "]
+    scene:
+      Studio: 
+        Name: //title/text()
+      Title: 
+        selector: $dtBase/span[1]/text()
+      Date:
+        selector: $dtBase/span[2]/text()
+        postProcess:
+          - parseDate: 2006-01-02 15:04:05
+      Details:
+        selector: $dptBase/div[2]/pre/text()
+        concat: "\n\n"
+      Performers: 
+        Name: 
+          selector: $dptBase/div[4]//a/text()
+          postProcess:
+            - replace:
+              - regex: ",$"
+                with: ""
+      Tags:
+        Name: $dptBase/div[3]//span/text()
+      Image: 
+        selector: //div[@class="w-full h-full flex items-center absolute justify-center top-0 "]/@style
+        postProcess:
+          - replace:
+            - regex: "background-image: url\\(\"(.*)\"\\); filter: blur\\(80px\\);"
+              with: $1     
+
+driver:
+  useCDP: true
+
+# Last Updated September 24, 2022
