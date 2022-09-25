@@ -25,6 +25,7 @@ xPathScrapers:
       $script: //script[contains(.,"window.__NUXT")]/text()
     scene:
       Title: &title //h1
+      URL: //link[@data-n-head='ssr' and @rel='canonical']/@href
       Date: &date
         selector: $script
         postProcess:
