@@ -49,7 +49,8 @@ def callGraphQL(query, variables=None):
             if result.get("data"):
                 return result.get("data")
         elif response.status_code == 401:
-            log.error("[ERROR][GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.py' in the 'py_common' folder")
+            log.error(
+                "[ERROR][GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.py' in the 'py_common' folder")
             return None
         else:
             raise ConnectionError(
@@ -462,6 +463,27 @@ def getScene(scene_id):
         return result.get('findScene')
     return None
 
+
+def getSceneScreenshot(scene_id):
+    query = """
+    query FindScene($id: ID!, $checksum: String) {
+        findScene(id: $id, checksum: $checksum) {
+        id
+        paths {
+            screenshot
+            }
+        }
+    }
+    """
+    variables = {
+        "id": scene_id
+    }
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findScene')
+    return None
+
+
 def getSceneByPerformerId(performer_id):
     query = """
         query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene_ids: [Int!]) {
@@ -759,8 +781,43 @@ def getSceneByPerformerId(performer_id):
     if result:
         return result.get('findScenes')
     return None
-    # scene = getScene(None, variables=variables)
-    # return scene
+
+
+def getSceneIdByPerformerId(performer_id):
+    query = """
+        query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene_ids: [Int!]) {
+          findScenes(filter: $filter, scene_filter: $scene_filter, scene_ids: $scene_ids) {
+            scenes {
+                id
+                title
+                path
+                paths {
+                    screenshot
+                    }
+                }
+          }
+        }
+    """
+    variables = {
+        "filter": {
+            "page": 1,
+            "per_page": 20,
+            "sort": "id",
+            "direction": "DESC"
+        },
+        "scene_filter": {
+            "performers": {
+                "value": [str(performer_id)],
+                "modifier": "INCLUDES_ALL"
+            }
+        }
+    }
+
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findScenes')
+    return None
+
 
 def getPerformersByName(performer_name):
     query = """
@@ -842,6 +899,42 @@ def getPerformersByName(performer_name):
     if result:
         return result.get('findPerformers')
     return None
+
+
+def getPerformersIdByName(performer_name):
+    query = """
+        query FindPerformers($filter: FindFilterType, $performer_filter: PerformerFilterType) {
+          findPerformers(filter: $filter, performer_filter: $performer_filter) {
+            count
+            performers {
+              ...PerformerData
+            }
+          }
+        }
+        
+        fragment PerformerData on Performer {
+          id
+          name
+          aliases          
+          }
+    """
+
+    variables = {
+        "filter": {
+            "q": performer_name,
+            "page": 1,
+            "per_page": 20,
+            "sort": "name",
+            "direction": "ASC"
+        },
+        "performer_filter": {}
+    }
+
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findPerformers')
+    return None
+
 
 def getGallery(gallery_id):
     query = """
@@ -1079,7 +1172,8 @@ def getGallery(gallery_id):
     result = callGraphQL(query, variables)
     if result:
         return result.get('findGallery')
-    return None 
+    return None
+
 
 def getGalleryPath(gallery_id):
     query = """
@@ -1095,4 +1189,4 @@ def getGalleryPath(gallery_id):
     result = callGraphQL(query, variables)
     if result:
         return result.get('findGallery')
-    return None 
+    return None
