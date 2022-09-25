@@ -18,6 +18,11 @@ movieByURL:
     url:
       - xconfessions.com
     scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://xconfessions.com/performers/
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     common: &com
@@ -78,4 +83,30 @@ xPathScrapers:
       FrontImage:
         selector: //div[@class="w-1/3 hidden tablet:block"]//@data-srcset
         postProcess: *pp
+
+  performerScraper:
+    common:
+      $data: //main
+    performer:
+      Name: $data//h1[contains(@class, "leading-none")]/span/../text()
+      URL: //link[@data-n-head='ssr' and @rel='canonical']/@href
+      Birthdate: 
+        selector: $data//span[text()="Birth"]/following-sibling::div
+        postProcess:
+          - parseDate: 2006
+      Country: 
+        selector: $data//span[text()="Birthplace"]/following-sibling::div
+        postProcess:    
+          - replace:
+              - regex: ^(.*?),\s
+                with: ""
+      Details: $data//div[contains(@class, "description-block")]/p
+      Image:
+        selector: $data//img[contains(@class, "image") and contains(@class, "absolute") and contains(@class, "w-full")]/@srcset
+        postProcess:
+          - replace:
+              - regex: ^([^?]+)\?.*
+                with: $1
+      Instagram: //div[contains(@class, "flex items-center")]/ul/li/a[contains(@href, "https://www.instagram.com/")]/@href
+      Twitter: //div[contains(@class, "flex items-center")]/ul/li/a[contains(@href, "https://twitter.com/")]/@href
 # Last Updated September 25, 2022
