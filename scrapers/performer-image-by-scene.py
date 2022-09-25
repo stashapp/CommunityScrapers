@@ -106,6 +106,7 @@ else:
                 image_candidates.append(
                     {
                         'Name': f'{performer_name} - Scene {scene["id"]}. {scene_title[0:MAX_TITLE_LENGTH]}',
+                        'Image': scene['paths']['screenshot'],
                         'Images': [scene['paths']['screenshot']]
                     }
                 )
