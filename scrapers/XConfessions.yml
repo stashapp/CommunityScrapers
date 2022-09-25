@@ -4,6 +4,15 @@ sceneByURL:
     url:
       - xconfessions.com
     scraper: sceneScraper
+sceneByName:
+    action: script
+    script:
+      - python
+      - XConfessions.py
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
