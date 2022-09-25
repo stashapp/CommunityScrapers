@@ -1,0 +1,13 @@
+name: "YouTube API"
+sceneByURL:
+  - url:
+      - youtube.com
+      - youtu.be
+      - youtube-nocookie.com
+      - m.youtube.com
+    action: script
+    script:
+      - python
+      - YouTube.py
+      - video_url_lookup
+# Last Updated September 25, 2022
