@@ -57,9 +57,10 @@ def scrape_video_metadata(videoID):
         "date": datetime.strptime(details['publishedAt'], '%Y-%m-%dT%H:%M:%SZ').strftime('%Y-%m-%d'),
         'details': details['description'],
         'image' : "https://img.youtube.com/vi/" + videoID + "/maxresdefault.jpg",
-        'tags': [{'name': t} for t in details['tags']],
         'studio': {'name': HARDCODED_STUDIO_NAME}
     }
+    if "tags" in details:  # Some videos have no tags
+        scene_dict['tags'] = [{'name': t} for t in details['tags']]
     if channels_are_studios:
         scene_dict['studio']['name'] = details['channelTitle']
     return scene_dict
