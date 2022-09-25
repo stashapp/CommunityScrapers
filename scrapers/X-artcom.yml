@@ -1,4 +1,4 @@
-name: xart
+name: X-Art
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -23,5 +23,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: X-Art
-
 # Last Updated September 22, 2022
