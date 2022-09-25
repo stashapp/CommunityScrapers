@@ -41,6 +41,12 @@ xPathScrapers:
           selector: $info/p[contains(.,"Performers:")]//a
           concat: " & "  # some performers are joined
           split: " & "  # with &
+        URL: 
+          selector: $info/p[contains(.,"Performers:")]//a/@href
+          postProcess:
+            - replace:
+              - regex: ^
+                with: https://xconfessions.com
       Tags:
         Name: $info/p[contains(.,"Tags:")]//a
       Image:
