@@ -109,13 +109,13 @@ xPathScrapers:
                 with: ""
       Details: $data//div[contains(@class, "description-block")]/p
       Images:
-        selector: $data//img[contains(@class, "image") and contains(@class, "absolute") and contains(@class, "w-full")]/@srcset
+        selector: $data//div[contains(@class, "slider-wrapper")]//img[contains(@class, "image") and contains(@class, "absolute") and contains(@class, "w-full")]/@srcset
         postProcess:
           - replace:
               - regex: ^([^?]+)\?.*
                 with: $1
       Image:
-        selector: $data//img[contains(@class, "image") and contains(@class, "absolute") and contains(@class, "w-full")]/@srcset
+        selector: $data//div[contains(@class, "slider-wrapper")]//img[contains(@class, "image") and contains(@class, "absolute") and contains(@class, "w-full")]/@srcset
         postProcess:
           - replace:
               - regex: ^([^?]+)\?.*
