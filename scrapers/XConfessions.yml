@@ -93,6 +93,7 @@ xPathScrapers:
   performerScraper:
     common:
       $data: //main
+      $script: //script[contains(.,"window.__NUXT")]/text()
     performer:
       Name: $data//h1[contains(@class, "leading-none")]/span/../text()
       URL: //link[@data-n-head='ssr' and @rel='canonical']/@href
@@ -107,12 +108,32 @@ xPathScrapers:
               - regex: ^(.*?),\s
                 with: ""
       Details: $data//div[contains(@class, "description-block")]/p
+      Images:
+        selector: $data//img[contains(@class, "image") and contains(@class, "absolute") and contains(@class, "w-full")]/@srcset
+        postProcess:
+          - replace:
+              - regex: ^([^?]+)\?.*
+                with: $1
       Image:
         selector: $data//img[contains(@class, "image") and contains(@class, "absolute") and contains(@class, "w-full")]/@srcset
         postProcess:
           - replace:
               - regex: ^([^?]+)\?.*
                 with: $1
-      Instagram: //div[contains(@class, "flex items-center")]/ul/li/a[contains(@href, "https://www.instagram.com/")]/@href
-      Twitter: //div[contains(@class, "flex items-center")]/ul/li/a[contains(@href, "https://twitter.com/")]/@href
+      Instagram:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .*((https:\\u002F\\u002Fwww\.instagram\.com\\u002F)(.*?))(\?|").*
+              with: $1
+            - regex: \\u002F
+              with: /
+      Twitter:
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: .*((https:\\u002F\\u002Ftwitter\.com\\u002F)(.*?))(\?|").*
+              with: $1
+            - regex: \\u002F
+              with: /
 # Last Updated September 25, 2022
