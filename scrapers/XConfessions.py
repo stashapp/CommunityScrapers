@@ -31,6 +31,7 @@ except ModuleNotFoundError:
 
 # Max number of scenes that a site can return for the search.
 MAX_SCENES = 6
+MAX_PERFORMERS = 6
 
 # Allows us to simply debug the script via CLI args
 if len(sys.argv) > 2 and '-d' in sys.argv:
@@ -41,6 +42,8 @@ else:
 frag = json.loads(stdin)
 search_query = frag.get("name", frag.get('title'))
 url = frag.get("url")
+
+performerByName = 'performerByName' in sys.argv
 
 
 def return_result(result):
@@ -93,7 +96,8 @@ class Site:
             'query': query,
         }
         r = self.postAPI('/search', json=reqBody)
-        p = self.parse_search(r)
+        p = self.parse_search_movie(
+            r) if performerByName == False else self.parse_search_performer(r)
         return p
 
     def getAPI(self, route: str, params: dict = None, attempt: int = 1):
@@ -167,7 +171,7 @@ class Site:
             log.error(f"API POST query failed {err}")
             return None
 
-    def parse_search(self, response: dict):
+    def parse_search_movie(self, response: dict):
         search_result = []
 
         if response is None:
@@ -202,6 +206,40 @@ class Site:
                         #         )
 
                         sc['image'] = item.get('poster_picture')
+                    search_result.append(sc)
+            return search_result
+        return None
+
+    def parse_search_performer(self, response: dict):
+        search_result = []
+
+        if response is None:
+            return search_result
+
+        data = response if isinstance(response, list) else [response]
+        if data:
+            for item in data:
+                if len(search_result) >= MAX_PERFORMERS:
+                    break
+                model_type = item.get("model_type")
+                if model_type != 'App\Models\Person':
+                    # Only Iterate over Movies, No Confession or Pereson
+                    continue
+
+                if item:
+                    slug = item.get('slug')
+                    # search results without a url are useless
+                    # only add results with a slug present
+                    if slug:
+                        sc = {}
+                        sc['name'] = item.get('name') + \
+                            " " + item.get('last_name')
+                        sc['url'] = f"https://{self.id.lower()}.com/performers/{slug}"
+                        sc['Gender'] = 'Female' if str(item.get(
+                            'gender', 0)) == "1" else 'Male'
+
+                        sc['image'] = item.get('poster_image')
+                        sc['images'] = [item.get('poster_image')]
                     search_result.append(sc)
             return search_result
         return None
@@ -302,6 +340,8 @@ def search_method_1(query: str):
                     search_result['title']
                 ).lower()) in cleanup_str_for_title_match(str_input=query.lower()):
             # Title in search result's scene exists in the filename.
+            end_results.append(search_result)
+        elif performerByName:
             end_results.append(search_result)
 
     return end_results

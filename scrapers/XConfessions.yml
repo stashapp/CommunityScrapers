@@ -18,6 +18,12 @@ movieByURL:
     url:
       - xconfessions.com
     scraper: movieScraper
+performerByName:
+    action: script
+    script:
+      - python
+      - XConfessions.py
+      - performerByName
 performerByURL:
   - action: scrapeXPath
     url:
