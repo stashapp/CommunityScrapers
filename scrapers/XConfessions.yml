@@ -128,6 +128,8 @@ xPathScrapers:
               with: $1
             - regex: \\u002F
               with: /
+            - regex: .*window.__NUXT.*
+              with: ""
       Twitter:
         selector: $script
         postProcess:
@@ -136,4 +138,6 @@ xPathScrapers:
               with: $1
             - regex: \\u002F
               with: /
+            - regex: .*window.__NUXT.*
+              with: ""
 # Last Updated September 25, 2022
