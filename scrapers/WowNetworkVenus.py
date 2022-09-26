@@ -47,7 +47,7 @@ def search(title):
         else: # filter results by wowgirls substudios
             for studio_key, studio in WOW_SUB_STUDIO_MAP.items():
                 scraped = wow_sub_studio_filter_toggle(studio_key, query_studio)
-                page_content = html.fromstring(scraped.content)
+                page_content = html.fromstring(scraped)
                 scrape_all_results_pages(page_content, studio)
                 wow_sub_studio_filter_toggle(studio_key, query_studio)
                 log.debug(f'Searched {studio}, found {count_results_pages(studio)} pages')
@@ -67,6 +67,7 @@ def wow_sub_studio_filter_toggle(studio_key, studio):
         log.error("scrape error")
     if scraped.status_code >= 400:
         log.error(f"HTTP Error: {scraped.status_code}")
+    scraped = scraped.content.decode('utf-8')
     return scraped
 
 def scrape_all_results_pages(page_content, studio):
@@ -98,7 +99,8 @@ def set_video_filter(studio):
         log.error("scrape error")
     if scraped.status_code >= 400:
         log.error(f"HTTP Error: {scraped.status_code}")
-    return scraped.content
+    scraped = scraped.content.decode('utf-8')
+    return scraped
 
 def pageNu_scrape(studio,pageNu):
     query_studio = studio.replace(" ", "").lower()
@@ -110,7 +112,8 @@ def pageNu_scrape(studio,pageNu):
         log.error("scrape error")
     if scraped.status_code >= 400:
         log.error(f"HTTP Error: {scraped.status_code}")
-    return scraped.content
+    scraped = scraped.content.decode("utf-8")
+    return scraped
 
 def output_json(title,tags,url,b64img,studio,performers):
     return {
@@ -184,9 +187,6 @@ def interleave_results(parsed_scenes): #interleave search results by studio
             wowp.append(result)
     return interleave(ultra,wowg,afg,wowp)
 
-
-
-
 MAIN_STUDIOS = ['WowGirls','Ultra Films']
 WOW_SUB_STUDIO_MAP = {
     24 : 'All Fine Girls',
@@ -195,6 +195,7 @@ WOW_SUB_STUDIO_MAP = {
     }
 PROXIES = {}
 TIMEOUT = 10
+
 
 FRAGMENT = json.loads(sys.stdin.read())
 NAME = FRAGMENT.get("name")
@@ -206,12 +207,14 @@ s = requests.Session()
 s.headers.update({'content-type': 'application/x-www-form-urlencoded; charset=UTF-8'})
 s.proxies.update(PROXIES)
 
+
 if NAME:
     search(NAME)
     parsed_scenes = get_all_results()
     ret = interleave_results(parsed_scenes)
 elif URL:
     query_title = URL.split("/")[-1].replace('-',' ')
+    query_title = urllib.parse.unquote(query_title)
     sceneID = URL.split("/")[4]
     search(query_title)
     ret = get_scene_with_id(sceneID)
