@@ -157,6 +157,7 @@ class Scene:
     def ToDict(self):
         return {
             # 'id': self.id, # We not going to change id and it isn't needed anyway
+            'url': self.url,
             'title': self.title,
             'details': self.details,
             'date': self.date,
@@ -312,6 +313,8 @@ class NFO:
             type: str = unique_id.get('type').lower()
             if type == 'stash':
                 self.scene.id = unique_id.text
+
+        self.scene.url = movie.findtext('url')
 
         self.scene.title = movie.findtext('title')
 
