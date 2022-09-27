@@ -343,18 +343,19 @@ class NFO:
             if type == 'stash':
                 SceneObject.id = unique_id.text
 
-        SceneObject.url = movie.findtext('url')
+        SceneObject.url = movie.findtext('url') or SceneObject.url
 
-        SceneObject.title = movie.findtext('title')
+        SceneObject.title = movie.findtext('title') or SceneObject.title
 
         self.__parse_actors(movie.findall('actor'))
 
-        SceneObject.details = movie.findtext('plot')
+        SceneObject.details = movie.findtext('plot') or SceneObject.details
 
-        SceneObject.date = movie.findtext('premiered')
+        SceneObject.date = movie.findtext('premiered') or SceneObject.date
 
         # Kodi backward compatibility
-        SceneObject.studio = Studio(movie.findtext('studio'))
+        SceneObject.studio = Studio(
+            movie.findtext('studio')) or SceneObject.studio
 
         # A full Studio model which can have name, url, and logo child elements
         studio_with_childs = movie.find('studiomodel')
@@ -364,14 +365,18 @@ class NFO:
         for thumb in thumbs:
             aspect: str = thumb.get('aspect').lower()
             if aspect == 'poster':
-                SceneObject.image = thumb.text
+                SceneObject.image = thumb.text or SceneObject.image
             elif aspect == 'clearlogo':
-                SceneObject.studio.logo = thumb.text
+                SceneObject.studio.logo = thumb.text or SceneObject.studio.logo
 
-        SceneObject.rating = movie.findtext('userrating')
+        SceneObject.rating = movie.findtext('userrating') or SceneObject.rating
 
         tags = movie.findall('tag')
-        SceneObject.tags = [Tag(tag.text) for tag in tags]
+        tag_list = [Tag(tag.text) for tag in tags]
+        if SceneObject.tags is not None and len(tag_list) > 0:
+            SceneObject.tags.extend(tag_list)
+        else:
+            SceneObject.tags = tag_list
 
         return True
 
