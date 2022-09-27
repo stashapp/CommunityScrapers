@@ -79,7 +79,16 @@ jsonScrapers:
       Name: data.name
       Gender: $extras.gender
       Birthdate: $extras.birthday
+      Birthdate: $extras.birthday
+      Country: $extras.nationality
       Ethnicity: $extras.ethnicity
+      HairColor: $extras.hair_colour
+      Weight:
+        selector: $extras.weight
+        postProcess:
+          - replace:
+              - regex: kg
+                with:
       Height:
         selector: $extras.height
         postProcess:
