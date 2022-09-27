@@ -1,4 +1,5 @@
 import sys
+from typing import Union
 
 try:
     import requests
@@ -48,7 +49,8 @@ def callGraphQL(query, variables=None):
             if result.get("data"):
                 return result.get("data")
         elif response.status_code == 401:
-            log.error("[ERROR][GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.py' in the 'py_common' folder")
+            log.error(
+                "[ERROR][GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.py' in the 'py_common' folder")
             return None
         else:
             raise ConnectionError(
@@ -452,6 +454,7 @@ def getScene(scene_id):
         weight
     }
     """
+
     variables = {
         "id": scene_id
     }
@@ -459,6 +462,479 @@ def getScene(scene_id):
     if result:
         return result.get('findScene')
     return None
+
+
+def getSceneScreenshot(scene_id):
+    query = """
+    query FindScene($id: ID!, $checksum: String) {
+        findScene(id: $id, checksum: $checksum) {
+        id
+        paths {
+            screenshot
+            }
+        }
+    }
+    """
+    variables = {
+        "id": scene_id
+    }
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findScene')
+    return None
+
+
+def getSceneByPerformerId(performer_id):
+    query = """
+        query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene_ids: [Int!]) {
+          findScenes(filter: $filter, scene_filter: $scene_filter, scene_ids: $scene_ids) {
+            count
+            filesize
+            duration
+            scenes {
+              ...SceneData
+              __typename
+            }
+            __typename
+          }
+        }
+        
+        fragment SceneData on Scene {
+          id
+          checksum
+          oshash
+          title
+          details
+          url
+          date
+          rating
+          o_counter
+          organized
+          path
+          phash
+          interactive
+          interactive_speed
+          captions {
+            language_code
+            caption_type
+            __typename
+          }
+          created_at
+          updated_at
+          file {
+            size
+            duration
+            video_codec
+            audio_codec
+            width
+            height
+            framerate
+            bitrate
+            __typename
+          }
+          paths {
+            screenshot
+            preview
+            stream
+            webp
+            vtt
+            chapters_vtt
+            sprite
+            funscript
+            interactive_heatmap
+            caption
+            __typename
+          }
+          scene_markers {
+            ...SceneMarkerData
+            __typename
+          }
+          galleries {
+            ...SlimGalleryData
+            __typename
+          }
+          studio {
+            ...SlimStudioData
+            __typename
+          }
+          movies {
+            movie {
+              ...MovieData
+              __typename
+            }
+            scene_index
+            __typename
+          }
+          tags {
+            ...SlimTagData
+            __typename
+          }
+          performers {
+            ...PerformerData
+            __typename
+          }
+          stash_ids {
+            endpoint
+            stash_id
+            __typename
+          }
+          sceneStreams {
+            url
+            mime_type
+            label
+            __typename
+          }
+          __typename
+        }
+        
+        fragment SceneMarkerData on SceneMarker {
+          id
+          title
+          seconds
+          stream
+          preview
+          screenshot
+          scene {
+            id
+            __typename
+          }
+          primary_tag {
+            id
+            name
+            aliases
+            __typename
+          }
+          tags {
+            id
+            name
+            aliases
+            __typename
+          }
+          __typename
+        }
+        
+        fragment SlimGalleryData on Gallery {
+          id
+          checksum
+          path
+          title
+          date
+          url
+          details
+          rating
+          organized
+          image_count
+          cover {
+            file {
+              size
+              width
+              height
+              __typename
+            }
+            paths {
+              thumbnail
+              __typename
+            }
+            __typename
+          }
+          studio {
+            id
+            name
+            image_path
+            __typename
+          }
+          tags {
+            id
+            name
+            __typename
+          }
+          performers {
+            id
+            name
+            gender
+            favorite
+            image_path
+            __typename
+          }
+          scenes {
+            id
+            title
+            path
+            __typename
+          }
+          __typename
+        }
+        
+        fragment SlimStudioData on Studio {
+          id
+          name
+          image_path
+          stash_ids {
+            endpoint
+            stash_id
+            __typename
+          }
+          parent_studio {
+            id
+            __typename
+          }
+          details
+          rating
+          aliases
+          __typename
+        }
+        
+        fragment MovieData on Movie {
+          id
+          checksum
+          name
+          aliases
+          duration
+          date
+          rating
+          director
+          studio {
+            ...SlimStudioData
+            __typename
+          }
+          synopsis
+          url
+          front_image_path
+          back_image_path
+          scene_count
+          scenes {
+            id
+            title
+            path
+            __typename
+          }
+          __typename
+        }
+        
+        fragment SlimTagData on Tag {
+          id
+          name
+          aliases
+          image_path
+          __typename
+        }
+        
+        fragment PerformerData on Performer {
+          id
+          checksum
+          name
+          url
+          gender
+          twitter
+          instagram
+          birthdate
+          ethnicity
+          country
+          eye_color
+          height
+          measurements
+          fake_tits
+          career_length
+          tattoos
+          piercings
+          aliases
+          favorite
+          ignore_auto_tag
+          image_path
+          scene_count
+          image_count
+          gallery_count
+          movie_count
+          tags {
+            ...SlimTagData
+            __typename
+          }
+          stash_ids {
+            stash_id
+            endpoint
+            __typename
+          }
+          rating
+          details
+          death_date
+          hair_color
+          weight
+          __typename
+        }
+    """
+    variables = {
+        "filter": {
+            "page": 1,
+            "per_page": 20,
+            "sort": "title",
+            "direction": "ASC"
+        },
+        "scene_filter": {
+            "performers": {
+                "value": [str(performer_id)],
+                "modifier": "INCLUDES_ALL"
+            }
+        }
+    }
+
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findScenes')
+    return None
+
+
+def getSceneIdByPerformerId(performer_id):
+    query = """
+        query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene_ids: [Int!]) {
+          findScenes(filter: $filter, scene_filter: $scene_filter, scene_ids: $scene_ids) {
+            scenes {
+                id
+                title
+                path
+                paths {
+                    screenshot
+                    }
+                }
+          }
+        }
+    """
+    variables = {
+        "filter": {
+            "page": 1,
+            "per_page": 20,
+            "sort": "id",
+            "direction": "DESC"
+        },
+        "scene_filter": {
+            "performers": {
+                "value": [str(performer_id)],
+                "modifier": "INCLUDES_ALL"
+            }
+        }
+    }
+
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findScenes')
+    return None
+
+
+def getPerformersByName(performer_name):
+    query = """
+        query FindPerformers($filter: FindFilterType, $performer_filter: PerformerFilterType) {
+          findPerformers(filter: $filter, performer_filter: $performer_filter) {
+            count
+            performers {
+              ...PerformerData
+              __typename
+            }
+            __typename
+          }
+        }
+        
+        fragment PerformerData on Performer {
+          id
+          checksum
+          name
+          url
+          gender
+          twitter
+          instagram
+          birthdate
+          ethnicity
+          country
+          eye_color
+          height
+          measurements
+          fake_tits
+          career_length
+          tattoos
+          piercings
+          aliases
+          favorite
+          ignore_auto_tag
+          image_path
+          scene_count
+          image_count
+          gallery_count
+          movie_count
+          tags {
+            ...SlimTagData
+            __typename
+          }
+          stash_ids {
+            stash_id
+            endpoint
+            __typename
+          }
+          rating
+          details
+          death_date
+          hair_color
+          weight
+          __typename
+        }
+        
+        fragment SlimTagData on Tag {
+          id
+          name
+          aliases
+          image_path
+          __typename
+        }
+    """
+
+    variables = {
+        "filter": {
+            "q": performer_name,
+            "page": 1,
+            "per_page": 20,
+            "sort": "name",
+            "direction": "ASC"
+        },
+        "performer_filter": {}
+    }
+
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findPerformers')
+    return None
+
+
+def getPerformersIdByName(performer_name):
+    query = """
+        query FindPerformers($filter: FindFilterType, $performer_filter: PerformerFilterType) {
+          findPerformers(filter: $filter, performer_filter: $performer_filter) {
+            count
+            performers {
+              ...PerformerData
+            }
+          }
+        }
+        
+        fragment PerformerData on Performer {
+          id
+          name
+          aliases          
+          }
+    """
+
+    variables = {
+        "filter": {
+            "q": performer_name,
+            "page": 1,
+            "per_page": 20,
+            "sort": "name",
+            "direction": "ASC"
+        },
+        "performer_filter": {}
+    }
+
+    result = callGraphQL(query, variables)
+    if result:
+        return result.get('findPerformers')
+    return None
+
 
 def getGallery(gallery_id):
     query = """
@@ -696,7 +1172,8 @@ def getGallery(gallery_id):
     result = callGraphQL(query, variables)
     if result:
         return result.get('findGallery')
-    return None 
+    return None
+
 
 def getGalleryPath(gallery_id):
     query = """
@@ -712,4 +1189,4 @@ def getGalleryPath(gallery_id):
     result = callGraphQL(query, variables)
     if result:
         return result.get('findGallery')
-    return None 
+    return None
