@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import sys
 from typing import List, Union
 import xml.etree.ElementTree
@@ -32,16 +33,24 @@ scene_path: str = scene.get('path')
 sceneByFragment = 'sceneByFragment' in sys.argv
 
 
-def CreateNfoPathByScenePath():
+def CreateNfoPathByScenePath(folder_nfo: bool = False) -> str:
+    """Creates a path to the nfo file of the specific scene
+
+    Args:
+        folder_nfo (bool, optional): Whether to create path for the folder's nfo file or the scene itself. Defaults to False.
+
+    Returns:
+        string: Path to nfo file
+    """
     dir: str = os.path.dirname(scene_path)
-    nfo_path: str = os.path.join(dir, os.path.splitext(
-        os.path.basename(scene_path))[0] + ".nfo")
+    nfo_filename = "folder" if folder_nfo == True else os.path.splitext(
+        os.path.basename(scene_path))[0]
+    nfo_path: str = os.path.join(dir, nfo_filename + ".nfo")
     if os.path.isfile(nfo_path):
         return nfo_path
 
     nfo_path: str = os.path.join(
-        dir, ".nfo" + os.path.sep, os.path.splitext(os.path.basename(scene_path))[0] + ".nfo")
-    log.debug(nfo_path)
+        dir, ".nfo" + os.path.sep, nfo_filename + ".nfo")
     return nfo_path
 
 
@@ -82,28 +91,28 @@ class Performer:
 
     def ToDict(self):
         return {
-            'name': self.name,
-            'url': self.url,
-            'image': self.image,
-            'gender': self.gender,
-            'twitter': self.twitter,
-            'instagram': self.instagram,
-            'birthdate': self.birthdate,
-            'deathdate': self.deathdate,
-            'ethnicity': self.ethnicity,
-            'country': self.country,
-            'haircolor': self.haircolor,
-            'eyecolor': self.eyecolor,
-            'height': self.height,
-            'weight': self.weight,
-            'measurements': self.measurements,
-            'faketits': self.faketits,
-            'careerlength': self.careerlength,
-            'tattoos': self.tattoos,
-            'piercings': self.piercings,
-            'aliases': self.aliases,
+            'name': PostProcess(self.name),
+            'url': PostProcess(self.url),
+            'image': PostProcess(self.image),
+            'gender': PostProcess(self.gender),
+            'twitter': PostProcess(self.twitter),
+            'instagram': PostProcess(self.instagram),
+            'birthdate': PostProcess(self.birthdate),
+            'deathdate': PostProcess(self.deathdate),
+            'ethnicity': PostProcess(self.ethnicity),
+            'country': PostProcess(self.country),
+            'haircolor': PostProcess(self.haircolor),
+            'eyecolor': PostProcess(self.eyecolor),
+            'height': PostProcess(self.height),
+            'weight': PostProcess(self.weight),
+            'measurements': PostProcess(self.measurements),
+            'faketits': PostProcess(self.faketits),
+            'careerlength': PostProcess(self.careerlength),
+            'tattoos': PostProcess(self.tattoos),
+            'piercings': PostProcess(self.piercings),
+            'aliases': PostProcess(self.aliases),
             'tags': [tag.ToDict() for tag in self.tags],
-            'details': self.details,
+            'details': PostProcess(self.details),
         }
 
 
@@ -125,11 +134,11 @@ class Studio:
 
     def ToDict(self):
         return {
-            'name': self.name,
-            'details': self.details,
-            'url': self.url,
-            'logo': self.logo,
-            'aliases': self.aliases,
+            'name': PostProcess(self.name),
+            'details': PostProcess(self.details),
+            'url': PostProcess(self.url),
+            'logo': PostProcess(self.logo),
+            'aliases': PostProcess(self.aliases),
         }
 
 
@@ -138,7 +147,7 @@ class Tag:
         self.name = name
 
     def ToDict(self):
-        return {'name': self.name}
+        return {'name': PostProcess(self.name)}
 
 
 class Scene:
@@ -157,16 +166,38 @@ class Scene:
     def ToDict(self):
         return {
             # 'id': self.id, # We not going to change id and it isn't needed anyway
-            'url': self.url,
-            'title': self.title,
-            'details': self.details,
-            'date': self.date,
-            'image': self.image,
+            'url': PostProcess(self.url),
+            'title': PostProcess(self.title),
+            'details': PostProcess(self.details),
+            'date': PostProcess(self.date),
+            'image': PostProcess(self.image),
             # 'rating': self.rating, # Well well, this is a personal thing i guess, so we wont set it because nfo files might be shared
             'studio': None if self.studio is None else self.studio.ToDict(),
             'performers': [performer.ToDict() for performer in self.performers],
             'tags': [tag.ToDict() for tag in self.tags],
         }
+
+
+SceneObject: Scene = Scene()
+
+
+def PostProcess(value: str) -> str:
+    if value is None or '%' not in value:
+        # Performance reasons...
+        return value
+    pp_dict = {
+        'title': SceneObject.title if SceneObject.title is not None and len(SceneObject.title) > 0 else scene.get('title', ''),
+        'filename': os.path.splitext(os.path.basename(scene_path))[0],
+        'fileextension': os.path.splitext(os.path.basename(scene_path))[1],
+        'studio_name': (SceneObject.studio.name if SceneObject.studio is not None else '') if SceneObject.studio is not None else scene.get('studio', ''),
+        'date': SceneObject.date if SceneObject.date is not None and len(SceneObject.date) > 0 else scene.get('date', ''),
+    }
+
+    for variable in pp_dict:
+        variable_value: str = pp_dict.get(variable) or ''
+        value = re.sub(f'%{variable}%', variable_value, value)
+
+    return value
 
 
 def return_result(result: Scene):
@@ -181,7 +212,6 @@ def return_result(result: Scene):
             print(json.dumps({}))
         else:
             str_result = json.dumps(result.ToDict())
-            log.debug(str_result)
             print(str_result)
         sys.exit(0)
     except Exception as err:
@@ -192,7 +222,6 @@ class NFO:
     def __init__(self, nfo_path: str) -> None:
         self.nfo_path = nfo_path
         self.nfo = None
-        self.scene: Scene = Scene()
         self.nfo_path = self.nfo_path if self.__fix_file() else None
 
     def __fix_file(self) -> bool:
@@ -260,7 +289,7 @@ class NFO:
                     setattr(performer, key, " / ".join(result_list)
                             if isinstance(value, list) == False else result_list)
 
-            self.scene.performers.append(performer)
+            SceneObject.performers.append(performer)
 
     def __parse_studio(self, studio: xml.etree.ElementTree.Element):
         if studio is None:
@@ -268,9 +297,9 @@ class NFO:
         studio_has_child: bool = studio.__len__() > 0
         if studio_has_child == False:
             return
-        if self.scene.studio is None:
-            self.scene.studio = Studio('')
-        studio_dict = self.scene.studio.ToDict()
+        if SceneObject.studio is None:
+            SceneObject.studio = Studio('')
+        studio_dict = SceneObject.studio.ToDict()
         for key in studio_dict:
             value: Union[str, list] = studio_dict[key]
             if isinstance(value, str):
@@ -284,10 +313,10 @@ class NFO:
                 # so we check for <alias> too.
                 keys_to_check: List[str] = []
                 keys_to_check.append(key)
-                if key in self.scene.singulars:
-                    keys_to_check.append(self.scene.studio.singulars.get(key))
-                if key in self.scene.studio.plurals:
-                    keys_to_check.append(self.scene.studio.plurals.get(key))
+                if key in SceneObject.studio.singulars:
+                    keys_to_check.append(SceneObject.studio.singulars.get(key))
+                if key in SceneObject.studio.plurals:
+                    keys_to_check.append(SceneObject.studio.plurals.get(key))
                 result_list: List[str] = []
                 for key_to_check in keys_to_check:
                     results = studio.findall(key_to_check)
@@ -295,7 +324,7 @@ class NFO:
                         result_list.extend(
                             [result.text for result in results])
                 # Set the Performer's attribute value.
-                setattr(self.scene.studio, key, " / ".join(result_list)
+                setattr(SceneObject.studio, key, " / ".join(result_list)
                         if isinstance(value, list) == False else result_list)
 
     def parse(self) -> bool:
@@ -312,20 +341,20 @@ class NFO:
         for unique_id in unique_ids:
             type: str = unique_id.get('type').lower()
             if type == 'stash':
-                self.scene.id = unique_id.text
+                SceneObject.id = unique_id.text
 
-        self.scene.url = movie.findtext('url')
+        SceneObject.url = movie.findtext('url')
 
-        self.scene.title = movie.findtext('title')
+        SceneObject.title = movie.findtext('title')
 
         self.__parse_actors(movie.findall('actor'))
 
-        self.scene.details = movie.findtext('plot')
+        SceneObject.details = movie.findtext('plot')
 
-        self.scene.date = movie.findtext('premiered')
+        SceneObject.date = movie.findtext('premiered')
 
         # Kodi backward compatibility
-        self.scene.studio = Studio(movie.findtext('studio'))
+        SceneObject.studio = Studio(movie.findtext('studio'))
 
         # A full Studio model which can have name, url, and logo child elements
         studio_with_childs = movie.find('studiomodel')
@@ -335,23 +364,30 @@ class NFO:
         for thumb in thumbs:
             aspect: str = thumb.get('aspect').lower()
             if aspect == 'poster':
-                self.scene.image = thumb.text
+                SceneObject.image = thumb.text
             elif aspect == 'clearlogo':
-                self.scene.studio.logo = thumb.text
+                SceneObject.studio.logo = thumb.text
 
-        self.scene.rating = movie.findtext('userrating')
+        SceneObject.rating = movie.findtext('userrating')
 
         tags = movie.findall('tag')
-        self.scene.tags = [Tag(tag.text) for tag in tags]
+        SceneObject.tags = [Tag(tag.text) for tag in tags]
 
         return True
 
 
+# First, we parse the folder.nfo if exists, For example, a folder might be for an specific studio so it can be set by that
+# Or the folder might be the scenes of a movie, so they have equal dates and can be used for the scenes.
+# folder.nfo can be created manually, making it easy if you want to set metadata for scenes in an specific folder.
+folderNfo: NFO = NFO(CreateNfoPathByScenePath(folder_nfo=True))
+foldernfo_parse_result = folderNfo.parse()
+
 nfo: NFO = NFO(CreateNfoPathByScenePath())
 parse_result = nfo.parse()
-if parse_result == False:
-    nfo.scene = None
 
-return_result(nfo.scene)
+if parse_result == False and foldernfo_parse_result == False:
+    SceneObject = None
+
+return_result(SceneObject)
 
 # Last Updated September 26, 2022
