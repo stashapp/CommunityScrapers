@@ -77,9 +77,18 @@ jsonScrapers:
       $extras: data.extras
     performer:
       Name: data.name
+      Details: data.bio
       Gender: $extras.gender
       Birthdate: $extras.birthday
+      Country: $extras.nationality
       Ethnicity: $extras.ethnicity
+      HairColor: $extras.hair_colour
+      Weight:
+        selector: $extras.weight
+        postProcess:
+          - replace:
+              - regex: kg
+                with:
       Height:
         selector: $extras.height
         postProcess:
@@ -119,18 +128,6 @@ jsonScrapers:
             - replace:
                 - regex: ^
                   with: "https://api.metadataapi.net/performers/"
-        Gender: data.performers.#.parent.extras.gender
-        Birthdate: data.performers.#.parent.extras.birthday
-        Ethnicity: data.performers.#.parent.extras.ethnicity
-        Height:
-          selector: data.performers.#.parent.extras.height
-          postProcess:
-            - replace:
-                - regex: cm
-                  with:
-        Measurements: data.performers.#.parent.extras.measurements
-        Tattoos: data.performers.#.parent.extras.tattoos
-        Piercings: data.performers.#.parent.extras.piercings
       Studio:
         Name: data.site.name
       Tags:
@@ -154,18 +151,6 @@ jsonScrapers:
             - replace:
                 - regex: ^
                   with: "https://api.metadataapi.net/performers/"
-        Gender: $data.performers.#.parent.extras.gender
-        Birthdate: $data.performers.#.parent.extras.birthday
-        Ethnicity: $data.performers.#.parent.extras.ethnicity
-        Height:
-          selector: $data.performers.#.parent.extras.height
-          postProcess:
-            - replace:
-                - regex: cm
-                  with:
-        Measurements: $data.performers.#.parent.extras.measurements
-        Tattoos: $data.performers.#.parent.extras.tattoos
-        Piercings: $data.performers.#.parent.extras.piercings
       Studio:
         Name: $data.site.name
       Tags:
@@ -185,4 +170,4 @@ driver:
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
     #  Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated September 21, 2022
+# Last Updated September 28, 2022
