@@ -1,0 +1,33 @@
+name: "Woodmancasting X"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - woodmancastingx.com
+
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Details:
+        selector: //p[@class="description"]
+      Date:
+        selector: //p[span="Published"]/text()
+        postProcess:
+          - replace:
+              - regex: ".*: "
+                with: ""
+          - parseDate: 2006-01-02
+      Performers:
+        Name:
+          selector: //span[@class="girl_item"]/span[@class="name"]
+      Studio:
+        Name:
+          selector: //meta[@property="og:site_name"]/@content
+      Tags:
+        Name: //a[@class="tag"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+
+# Last Updated September 28, 2022
