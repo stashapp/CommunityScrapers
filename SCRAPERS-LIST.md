@@ -655,7 +655,7 @@ johnnyrapid.com|Algolia_Johnnyrapid.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Ga
 joibabes.com|Arx.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 jonnidarkkoxxx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 joybear.com|JoyBear.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-joymii.com|joymii.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+joymii.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 jpmilfs.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 jpnurse.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 jpshavers.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
