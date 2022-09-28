@@ -3,6 +3,7 @@ import json
 import re
 import sys
 import urllib.parse
+import html as htmlparser
 from itertools import chain, zip_longest
 # extra modules below need to be installed
 
@@ -44,13 +45,24 @@ def search(title):
             page_content = html.fromstring(scraped)
             scrape_all_results_pages(page_content, studio)
             log.debug(f'Searched {studio}, found {count_results_pages(studio)} pages')
-        else: # filter results by wowgirls substudios
+            if URL: #when searching by url, check for scene with id after scraping each studio
+                ret = get_scene_with_id(sceneID)
+                if ret:
+                    log.debug('scene found!')
+                    return ret
+        else: # search WowGirls substudios one by one
             for studio_key, studio in WOW_SUB_STUDIO_MAP.items():
                 scraped = wow_sub_studio_filter_toggle(studio_key, query_studio)
                 page_content = html.fromstring(scraped)
                 scrape_all_results_pages(page_content, studio)
                 wow_sub_studio_filter_toggle(studio_key, query_studio)
                 log.debug(f'Searched {studio}, found {count_results_pages(studio)} pages')
+                parse_results()
+                if URL: #when searching by url, check for scene with id after scraping each studio
+                    ret = get_scene_with_id(sceneID)
+                    if ret:
+                        log.debug('scene found!')
+                        return ret
 
 def count_results_pages(studio):
     try:
@@ -141,7 +153,7 @@ def scene_card_parse(scene_card):
     tags = scene_card.xpath('.//span[@class="genres"]/a/text()')
     return title, b64img, performers, tags
 
-def get_all_results(): #parse all scene elements, return all
+def parse_results(): #parse all scene elements, return all
     parsed_scenes = []
     for studio, pages in search_results.items():
         query_studio = studio.replace(" ", "").lower()
@@ -163,8 +175,7 @@ def get_scene_with_id(sceneID): #parse all scene elements, return single with ma
                 url = f'https://venus.{query_studio}.com' + scene_card.xpath('./a/@href')[0]
                 title, b64img, performers, tags = scene_card_parse(scene_card)
                 return output_json(title,tags,url,b64img,studio,performers)
-    log.error('Scene not found!\nSome scenes does not appear is search results unless you are logged in!')
-    sys.exit()
+
 
 def interleave_results(parsed_scenes): #interleave search results by studio
     def interleave(*args):
@@ -196,7 +207,6 @@ WOW_SUB_STUDIO_MAP = {
 PROXIES = {}
 TIMEOUT = 10
 
-
 FRAGMENT = json.loads(sys.stdin.read())
 NAME = FRAGMENT.get("name")
 URL = FRAGMENT.get("url")
@@ -210,12 +220,14 @@ s.proxies.update(PROXIES)
 
 if NAME:
     search(NAME)
-    parsed_scenes = get_all_results()
+    parsed_scenes = parse_results()
     ret = interleave_results(parsed_scenes)
 elif URL:
     query_title = URL.split("/")[-1].replace('-',' ')
     query_title = urllib.parse.unquote(query_title)
     sceneID = URL.split("/")[4]
-    search(query_title)
-    ret = get_scene_with_id(sceneID)
+    ret = search(query_title)
+    if not ret:
+        log.error('Scene not found!\nSome scenes does not appear is search results unless you are logged in!')
+        sys.exit()
 print(json.dumps(ret))
