@@ -1,4 +1,4 @@
-name: porncz
+name: PornCZ
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -56,7 +56,7 @@ xPathScrapers:
       Date:
         selector: //meta[@property="video:release_date"]/@content
         postProcess:
-          - parseDate: 2.1.2006
+          - parseDate: 2.01.2006
       Studio:
         Name:
           selector: //a[@class="video-detail-logo"]//@alt
