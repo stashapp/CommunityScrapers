@@ -7,15 +7,32 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1/text()
+      Title:
+        selector: //script[@type="text/javascript"][contains(.,"videoData:")]/text()
+        postProcess:
+          - replace:
+              - regex: '.+videoData:\s{[^{]+title":"([^"]+)",.+'
+                with: $1
+              - regex: '\\u2019'
+                with: "’"
       Date: //time/@datetime
-      Details: //div[@id="modalSceneAbout"]//comment()[contains(.,'description')]/following-sibling::div
+      Details: //div[@data-qa="scene-about-tab-text"]
       Tags:
         Name: //meta[@property="video:tag"]/@content
       Performers:
         Name: //meta[@property="video:actor"]/@content
       Studio:
-        Name: //a[contains(@href,"/studios/")]/div[last()]/text()
+        Name:
+          selector: //a[contains(@href,"/studios/")]/div[last()]/text()
+          postProcess:
+            - map:
+                DDFNetworkVR: "DDF Network VR"
+                LethalHardcoreVR: "Lethal Hardcore VR"
+                LustReality: "Lust Reality"
+                POVcentralVR: "POV Central"
+                RealHotVR: "Real Hot VR"
+                SinsVR: "XSinsVR"
+                VirtualXPorn: "Virtual X Porn"
+                WankitnowVR: "Wank It Now VR"
       Image: //div[contains(@class,"splash-screen")]/img/@src
-
-# Last Updated March 21, 2021
+# Last Updated August 29, 2022
