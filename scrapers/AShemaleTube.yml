@@ -119,6 +119,4 @@ xPathScrapers:
                   with: https://www.ashemaletube.com/
       Image: //meta[@property="og:image"]/@content
 
-debug:
-  printHTML: true
 # Last Updated September 29, 2022
