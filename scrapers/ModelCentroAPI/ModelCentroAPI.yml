@@ -1,12 +1,18 @@
 name: "ModelCentroAPI"
 sceneByURL:
   - url:
+      - beingphoenixmarie.com/scene/
       - brookelynnebriar.com/scene/
+      - danidaniels.com/scene/
+      - dillionation.com/scene/
       - fallinlovia.com/scene/
+      - modelcentro.net/scene
       - mylifeinmiami.com/scene/
+      - natashanice.com/scene/
+      - tanyatate.xxx/scene/
       - vinaskyxxx.com/scene/
     action: script
     script:
       - python
       - ModelCentroAPI.py
-# Last Updated January 01, 2022
+# Last Updated September 29, 2022
