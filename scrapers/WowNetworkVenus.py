@@ -46,7 +46,6 @@ def search(title):
             scrape_all_results_pages(page_content, studio)
             log.debug(f'Searched {studio}, found {count_results_pages(studio)} pages')
             if URL: #when searching by url, check for scene with id after scraping each studio
-                parse_results()
                 ret = get_scene_with_id(sceneID)
                 if ret:
                     log.debug('scene found!')
@@ -59,7 +58,6 @@ def search(title):
                 wow_sub_studio_filter_toggle(studio_key, query_studio)
                 log.debug(f'Searched {studio}, found {count_results_pages(studio)} pages')
                 if URL: #when searching by url, check for scene with id after scraping each studio
-                    parse_results()
                     ret = get_scene_with_id(sceneID)
                     if ret:
                         log.debug('scene found!')
