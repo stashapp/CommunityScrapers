@@ -46,6 +46,7 @@ def search(title):
             scrape_all_results_pages(page_content, studio)
             log.debug(f'Searched {studio}, found {count_results_pages(studio)} pages')
             if URL: #when searching by url, check for scene with id after scraping each studio
+                parse_results()
                 ret = get_scene_with_id(sceneID)
                 if ret:
                     log.debug('scene found!')
@@ -57,8 +58,8 @@ def search(title):
                 scrape_all_results_pages(page_content, studio)
                 wow_sub_studio_filter_toggle(studio_key, query_studio)
                 log.debug(f'Searched {studio}, found {count_results_pages(studio)} pages')
-                parse_results()
                 if URL: #when searching by url, check for scene with id after scraping each studio
+                    parse_results()
                     ret = get_scene_with_id(sceneID)
                     if ret:
                         log.debug('scene found!')
@@ -228,6 +229,6 @@ elif URL:
     sceneID = URL.split("/")[4]
     ret = search(query_title)
     if not ret:
-        log.error('Scene not found!\nSome scenes does not appear is search results unless you are logged in!')
+        log.error('Scene not found!\nSome scenes do not appear in search results unless you are logged in!')
         sys.exit()
 print(json.dumps(ret))
