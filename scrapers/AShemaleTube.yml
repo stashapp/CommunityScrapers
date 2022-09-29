@@ -1,4 +1,5 @@
 name: AShemaleTube
+
 performerByName:
   action: scrapeXPath
   queryURL: "https://www.ashemaletube.com/models/?modelsearchSubmitCheck=FORM_SENDED&key=models&mode=model-search&searchName={}&submitModelSearch=Search&filterCountry=&filterHair=&filterEthnicity=&filterEyes=&filterPenis=&filterBreast=&mode=model-search"
@@ -8,11 +9,20 @@ performerByURL:
     url:
       - ashemaletube.com/model/
     scraper: performerScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://www.ashemaletube.com/search/{}/?sort=re"
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - ashemaletube.com/videos
     scraper: sceneScraper
+
 xPathScrapers:
   performerSearch:
     common:
@@ -26,6 +36,7 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://www.ashemaletube.com
+
   performerScraper:
     common:
       $infoPiece: //div[@class="info-box info"]
@@ -65,6 +76,20 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.ashemaletube.com/
           - subScraper: //link[@rel="alternate"][1]/@href
+
+  sceneSearch:
+    common:
+      $scenerow: //div[@id="maincolumn"]/ul/li
+    scene:
+      Title: $scenerow//p/a/@title
+      URL:
+        selector: $scenerow//p/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.ashemaletube.com
+      Image: $scenerow/div/span/a/img/@src
+
   sceneScraper:
     common:
       $infoPiece: //div[@id="item-info"]
@@ -93,6 +118,7 @@ xPathScrapers:
                 - regex: ^/
                   with: https://www.ashemaletube.com/
       Image: //meta[@property="og:image"]/@content
+
 debug:
   printHTML: true
-# Last Updated Sept 29, 2022
+# Last Updated September 29, 2022
