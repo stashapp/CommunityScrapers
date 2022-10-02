@@ -41,6 +41,16 @@ sceneByFragment:
         with: "." # "%20"
       - regex: \.+
         with: "."
+movieByURL:
+  - action: scrapeJson
+    url:
+      - metadataapi.net/movies/
+    scraper: movieScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(.+metadataapi.net)/
+          with: https://api.metadataapi.net/
 jsonScrapers:
   sceneSearch:
     scene:
@@ -164,10 +174,20 @@ jsonScrapers:
                 selector: data.tags.#.tag
                 concat: "|"
           split: "|"
+  movieScraper:
+    movie:
+      Name: data.title
+      Studio:
+        Name: data.site.name
+      FrontImage: data.background.full
+      Synopsis: data.description
+      Date: data.date
+      Duration: data.duration
+      Director: data.director.name
 driver:
   headers:
     - Key: User-Agent
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
     #  Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated September 28, 2022
+# Last Updated October 02, 2022
