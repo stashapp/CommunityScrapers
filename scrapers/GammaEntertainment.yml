@@ -24,7 +24,6 @@ sceneByURL:
       - fistingcentral.com/
       - gapingangels.com/
       - genderxfilms.com/en/video/
-      - girlfriendsfilms.com/en/video/
       - girlsandstuds.com/
       - grannyghetto.com/
       - hairyundies.com/
@@ -86,7 +85,6 @@ movieByURL:
       - darkx.com/en/movie/
       - eroticax.com/en/movie/
       - famedigital.com/en/
-      - girlfriendsfilms.com/en/dvd/
       - hardx.com/en/movie/
       - xempire.com/en/movie/
     scraper: movieScraper
@@ -254,4 +252,4 @@ xPathScrapers:
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
 
-# Last Updated September 18, 2022
+# Last Updated October 02, 2022
