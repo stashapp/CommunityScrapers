@@ -3,7 +3,6 @@ import json
 import re
 import sys
 from urllib.parse import quote, unquote
-import html as htmlparser
 from itertools import chain, zip_longest
 
 # extra modules below need to be installed
