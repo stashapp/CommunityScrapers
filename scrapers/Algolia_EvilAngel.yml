@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - evilangel.com/en/video/
       - tsfactor.com/en/video/
+      - lewood.com/en/video/
     script:
       - python
       - Algolia.py
@@ -38,4 +39,4 @@ sceneByQueryFragment:
       - Algolia.py
       - evilangel
       - validName
-# Last Updated August 05, 2022
+# Last Updated October 04, 2022
