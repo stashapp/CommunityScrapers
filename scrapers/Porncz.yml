@@ -1,4 +1,4 @@
-name: porncz
+name: PornCZ
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -48,14 +48,17 @@ xPathScrapers:
       Tags:
         Name: //div[@class="video-info-item color_05-text" and contains(text(), "Genres:")]//a
       Image:
-        selector: //meta[@property="og:url"]/@content|//meta[@property="og:image"]/@content
-        concat: "|"
+        selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-              - regex: (https://[^/]+)[^|]+\|(.+)
-                with: $1$2
+              - regex: "^/"
+                with: "https://www.porncz.com/"
+      Date:
+        selector: //meta[@property="video:release_date"]/@content
+        postProcess:
+          - parseDate: 2.01.2006
       Studio:
         Name:
           selector: //a[@class="video-detail-logo"]//@alt
-# Last Updated March 16, 2021
+# Last Updated September 27, 2022
 
