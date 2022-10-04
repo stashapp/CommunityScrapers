@@ -1,10 +1,6 @@
 name: "KB Productions"
 sceneByURL:
   - url:
-      - bjraw.com/tour/upcoming/
-      - bjraw.com/tour/videos/
-      - gotfilled.com/tour/upcoming/
-      - gotfilled.com/tour/videos/
       - inserted.com/tour/upcoming/
       - inserted.com/tour/videos/
 
@@ -15,12 +11,10 @@ sceneByURL:
       - scene
 performerByURL:
   - url:
-      - bjraw.com/tour/models/
-      - gotfilled.com/tour/models/
       - inserted.com/tour/models/
     action: script
     script:
       - python3
       - KBProductions.py
       - performer
-# Last Updated March 22, 2022
+# Last Updated September 18, 2022
