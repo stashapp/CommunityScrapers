@@ -12,6 +12,8 @@ xPathScrapers:
         selector: //p[@class="update-info-line regular"][1]/b/text()
         postProcess:
           - parseDate: 02.01.2006
+      Details: 
+        selector: //p[contains(@class,"ap-limited-description-text")]
       Image:
         selector: //div[starts-with(@style,"background-image:")]/@style
         postProcess:
