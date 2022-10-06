@@ -28,4 +28,4 @@ xPathScrapers:
           split: ", "
       Performers:
         Name: //p[@class="update-info-line regular"]/a[contains(@href, "/signup?")]/text()
-# Last Updated June 08, 2022
+# Last Updated October 6, 2022
