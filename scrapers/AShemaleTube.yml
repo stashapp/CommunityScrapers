@@ -76,6 +76,7 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.ashemaletube.com/
           - subScraper: //link[@rel="alternate"][1]/@href
+      URL: //link[@rel="canonical"]/@href
 
   sceneSearch:
     common:
@@ -118,5 +119,5 @@ xPathScrapers:
                 - regex: ^/
                   with: https://www.ashemaletube.com/
       Image: //meta[@property="og:image"]/@content
-
+      URL: //meta[@property="og:url"]/@content
 # Last Updated September 29, 2022
