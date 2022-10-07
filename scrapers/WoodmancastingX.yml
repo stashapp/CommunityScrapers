@@ -1,0 +1,55 @@
+name: "Woodman Casting X"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - woodmancastingx.com
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.woodmancastingx.com/search?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Details: //p[@class="description"]
+      Date:
+        selector: //p[span="Published"]/text()
+        postProcess:
+          - replace:
+              - regex: "^.*: "
+                with: ""
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //a[@class="girl_item"]/span[@class="name"]
+        URL:
+          selector: //a[@class="girl_item"]/@href
+          postProcess: &pp
+            - replace:
+                - regex: ^/
+                  with: "https://www.woodmancastingx.com/"
+      Studio:
+        Name:
+          fixed: Woodman Casting X
+      Tags:
+        Name: //a[@class="tag"]
+      Image: //meta[@property="og:image"]/@content
+      URL:
+        selector: //meta[@property="og:url"]/@content
+        postProcess: *pp
+
+  sceneSearch:
+    common:
+      $res: //div[contains(@class,("items container"))]/a[@class="item scene"]
+    scene:
+      Title: $res/img/@alt
+      Image: $res/img/@src
+      URL:
+        selector: $res/@href
+        postProcess: *pp
+# Last Updated September 28, 2022
