@@ -9,16 +9,18 @@ xPathScrapers:
     scene:
       Title: //h2[contains(@class,"update-info-title")]/text()
       Date:
-        selector: //p[@class="update-info-line regular"][1]/b/text()
+        selector: //p[@class="update-info-line regular"][i[contains(@class,"fa-calendar")]]/b[1]/text()
         postProcess:
           - parseDate: 02.01.2006
+      Details:
+        selector: //p[contains(@class,"ap-limited-description-text")]
       Image:
-        selector: //div[starts-with(@style,"background-image:")]/@style
+        selector: //div[contains(@class, "video-wrapper")]//div[starts-with(@style,"background-image:")]/@style
         postProcess:
           - replace:
               - regex: .+url\((.+)\).+
                 with: $1
-      Studio: 
+      Studio:
         Name: //p[contains(@class,"update-info-line")]/b/a[contains(@href,"/studio/")]/text()
       Tags:
         Name:
@@ -26,4 +28,4 @@ xPathScrapers:
           split: ", "
       Performers:
         Name: //p[@class="update-info-line regular"]/a[contains(@href, "/signup?")]/text()
-# Last Updated June 08, 2022
+# Last Updated October 06, 2022
