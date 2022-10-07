@@ -43,6 +43,7 @@ MOVIE_SITES = {
     "devilsfilm": "https://www.devilsfilm.com/en/dvd",
     "diabolic": "https://www.diabolic.com/en/movie",
     "evilangel": "https://www.evilangel.com/en/movie",
+    "girlfriendsfilms": "https://www.girlfriendsfilms.com/en/movie",
     "lewood": "https://www.lewood.com/en/movie",
     "outofthefamily": "https://www.outofthefamily.com/en/dvd",
     "peternorth": "https://www.peternorth.com/en/dvd",
@@ -571,6 +572,7 @@ try:
 except:
     USERFOLDER_PATH = None
     CONFIG_PATH = None
+    log.debug("No config")
 
 SITE = sys.argv[1]
 HEADERS = {
