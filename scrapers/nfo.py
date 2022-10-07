@@ -345,13 +345,16 @@ class NFO:
 
         SceneObject.url = movie.findtext('url') or SceneObject.url
 
-        SceneObject.title = movie.findtext('title') or SceneObject.title
+        SceneObject.title = movie.findtext('title') or movie.findtext(
+            'originaltitle') or movie.findtext('sorttitle') or SceneObject.title
 
         self.__parse_actors(movie.findall('actor'))
 
-        SceneObject.details = movie.findtext('plot') or SceneObject.details
+        SceneObject.details = movie.findtext('plot') or movie.findtext(
+            'outline') or movie.findtext('tagline') or SceneObject.details
 
-        SceneObject.date = movie.findtext('premiered') or SceneObject.date
+        SceneObject.date = movie.findtext('premiered') or movie.findtext(
+            'year') or movie.findtext('releasedate') or SceneObject.date
 
         # Kodi backward compatibility
         SceneObject.studio = Studio(
@@ -369,7 +372,8 @@ class NFO:
             elif aspect == 'clearlogo':
                 SceneObject.studio.logo = thumb.text or SceneObject.studio.logo
 
-        SceneObject.rating = movie.findtext('userrating') or SceneObject.rating
+        SceneObject.rating = movie.findtext('userrating') or movie.findtext(
+            'rating') or movie.findtext('ratings') or SceneObject.rating
 
         tags = movie.findall('tag')
         tag_list = [Tag(tag.text) for tag in tags]
@@ -395,4 +399,4 @@ if parse_result == False and foldernfo_parse_result == False:
 
 return_result(SceneObject)
 
-# Last Updated September 26, 2022
+# Last Updated October 7, 2022
