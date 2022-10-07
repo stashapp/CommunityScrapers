@@ -100,7 +100,7 @@ xPathScrapers:
       Birthdate: 
         selector: $data//span[text()="Birth"]/following-sibling::div
         postProcess:
-          - parseDate: 2006
+          - parseDate: "2006"
       Country: 
         selector: $data//span[text()="Birthplace"]/following-sibling::div
         postProcess:    
