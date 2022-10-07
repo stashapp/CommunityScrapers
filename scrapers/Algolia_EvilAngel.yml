@@ -3,6 +3,7 @@ sceneByURL:
   - action: script
     url:
       - evilangel.com/en/video/
+      - lewood.com/en/video/
       - tsfactor.com/en/video/
     script:
       - python
@@ -12,6 +13,7 @@ movieByURL:
   - action: script
     url:
       - evilangel.com/en/movie/
+      - lewood.com/en/movie/
       - tsfactor.com/en/movie/
     script:
       - python
@@ -19,23 +21,23 @@ movieByURL:
       - evilangel
       - movie
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - evilangel
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - evilangel
 sceneByName:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - evilangel
-      - searchName
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - evilangel
+    - searchName
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - evilangel
-      - validName
-# Last Updated August 05, 2022
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - evilangel
+    - validName
+# Last Updated October 04, 2022
