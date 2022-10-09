@@ -2,10 +2,12 @@ import base64
 import json
 import re
 import sys
-from urllib.parse import quote, unquote
+import urllib.parse
 from itertools import chain, zip_longest
 
 # extra modules below need to be installed
+
+
 
 try:
     import py_common.log as log
@@ -37,8 +39,8 @@ except ModuleNotFoundError:
     )
     sys.exit()
 
-MAIN_STUDIOS = ["WowGirls", "Ultra Films"]
-WOW_SUB_STUDIO_MAP = {24: "All Fine Girls", 32: "WowGirls", 36: "WowPorn"}
+
+STUDIOS = {"Ultra Films" : None, "All Fine Girls": 24, "WowGirls" : 32, "WowPorn" : 36}
 PROXIES = {}
 TIMEOUT = 10
 
@@ -52,57 +54,6 @@ class WowVenus:
         self.session.proxies.update(PROXIES)
         self.search_results = {}
 
-    def search_query_prep(self, string: str):
-        string = string.replace("’", "'")
-        a = [s for s in string if s.isalnum() or s.isspace() or s == "-" or s == "'"]
-        string = "".join(a)
-        return quote(string)
-
-    def search(self, title):
-        query_title = self.search_query_prep(title)
-        for studio in MAIN_STUDIOS:
-            query_studio = studio.replace(" ", "").lower()
-            url = f"https://venus.{query_studio}.com/search/?query={query_title}"
-            self.rGET(url)  # send search request, needed for session data
-            scraped = self.set_video_filter(
-                query_studio
-            )  # set 'video only' filter for results
-            if scraped is None:
-                continue
-            if studio == "Ultra Films":
-                page_content = html.fromstring(scraped)
-                self.scrape_all_results_pages(page_content, studio)
-                log.debug(
-                    f"Searched {studio}, found {self.count_results_pages(studio)} pages"
-                )
-                if (
-                    URL
-                ):  # when searching by url, check for scene with id after scraping each studio
-                    ret = self.get_scene_with_id(sceneID)
-                    if ret:
-                        log.debug("scene found!")
-                        return ret
-            else:  # search WowGirls substudios one by one
-                for studio_key, studio in WOW_SUB_STUDIO_MAP.items():
-                    scraped = self.wow_sub_studio_filter_toggle(
-                        studio_key, query_studio
-                    )
-                    if scraped is None:
-                        continue
-                    page_content = html.fromstring(scraped)
-                    self.scrape_all_results_pages(page_content, studio)
-                    self.wow_sub_studio_filter_toggle(studio_key, query_studio)
-                    log.debug(
-                        f"Searched {studio}, found {self.count_results_pages(studio)} pages"
-                    )
-                    if (
-                        URL
-                    ):  # when searching by url, check for scene with id after scraping each studio
-                        ret = self.get_scene_with_id(sceneID)
-                        if ret:
-                            log.debug("scene found!")
-                            return ret
-        return None
 
     def count_results_pages(self, studio):
         try:
@@ -110,13 +61,13 @@ class WowVenus:
         except:
             return 0
 
-    def wow_sub_studio_filter_toggle(self, studio_key, studio):
-        query_studio = studio.replace(" ", "").lower()
+    def wow_sub_studio_filter_toggle(self, studio_key, studio_name):
+        query_studio_name = studio_name.replace(" ", "").lower()
         data = f"__operation=toggle&__state=sites%3D{studio_key}"
         scraped = None
         try:
             scraped = self.session.post(
-                f"https://venus.{query_studio}.com/search/cf", data=data
+                f"https://venus.{query_studio_name}.com/search/cf", data=data
             )
         except:
             log.error("scrape error")
@@ -138,7 +89,7 @@ class WowVenus:
                 page_content = html.fromstring(self.pageNu_scrape(studio, pageNu))
                 self.search_results[studio].append(page_content)
 
-    def rGET(self, url):
+    def GET_req(self, url):
         scraped = None
         try:
             scraped = self.session.get(url, timeout=TIMEOUT)
@@ -150,9 +101,9 @@ class WowVenus:
             return None
         return scraped.content
 
-    def set_video_filter(self, studio):
-        query_studio = studio.replace(" ", "").lower()
-        url = f"https://venus.{query_studio}.com/search/cf"
+    def set_video_filter(self, studio_name):
+        query_studio_name = studio_name.replace(" ", "").lower()
+        url = f"https://venus.{query_studio_name}.com/search/cf"
         data = "__state=contentTypes%3D%5Bvideo%5D"
         scraped = None
         try:
@@ -166,9 +117,9 @@ class WowVenus:
         scraped = scraped.content.decode("utf-8")
         return scraped
 
-    def pageNu_scrape(self, studio, pageNu):
-        query_studio = studio.replace(" ", "").lower()
-        url = f"https://venus.{query_studio}.com/search/cf"
+    def pageNu_scrape(self, studio_name, pageNu):
+        query_studio_name = studio_name.replace(" ", "").lower()
+        url = f"https://venus.{query_studio_name}.com/search/cf"
         data = f"__state=paginator.page%3D{pageNu}"
         try:
             scraped = self.session.post(url, data=data, timeout=TIMEOUT)
@@ -192,8 +143,9 @@ class WowVenus:
     def scene_card_parse(self, scene_card):
         title = scene_card.xpath('./a[@class="title"]/text()')[0].strip()
         imgurl = scene_card.xpath(".//img[@title]/@src")[0]
-        imgurl = re.sub("_\w*", "_1280x720", imgurl)
-        img = self.rGET(imgurl)
+        if URL:
+            imgurl = re.sub("_\w*", "_1280x720", imgurl)
+        img = self.GET_req(imgurl)
         b64img = base64.b64encode(img)
         performers = scene_card.xpath('.//*[@class="models"]/a/text()')
         tags = scene_card.xpath('.//span[@class="genres"]/a/text()')
@@ -201,45 +153,59 @@ class WowVenus:
 
     def parse_results(self):  # parse all scene elements, return all
         parsed_scenes = {}
-        for studio, pages in self.search_results.items():
-            query_studio = studio.replace(" ", "").lower()
+        for studio_name, pages in self.search_results.items():
+            query_studio_name = studio_name.replace(" ", "").lower()
             for page in pages:
                 scene_cards = page.xpath(
                     '//div[contains(@class, "ct_video")]//img[@title]/ancestor::div'
                 )
                 for scene_card in scene_cards:
                     url = (
-                        f"https://venus.{query_studio}.com"
+                        f"https://venus.{query_studio_name}.com"
                         + scene_card.xpath("./a/@href")[0]
                     )
                     title, b64img, performers, tags = self.scene_card_parse(scene_card)
-                    if not parsed_scenes.get(query_studio):
-                        parsed_scenes[query_studio] = []
-                    parsed_scenes[query_studio].append(
-                        self.output_json(title, tags, url, b64img, studio, performers)
+                    if not parsed_scenes.get(query_studio_name):
+                        parsed_scenes[query_studio_name] = []
+                    parsed_scenes[query_studio_name].append(
+                        self.output_json(title, tags, url, b64img, studio_name, performers)
                     )
         return parsed_scenes
 
     def get_scene_with_id(
-        self, sceneID
+        self, scene_ID
     ):  # parse all scene elements, return single with matched id
-        for studio, pages in self.search_results.items():
-            query_studio = studio.replace(" ", "").lower()
+        for studio_name, pages in self.search_results.items():
+            query_studio_name = studio_name.replace(" ", "").lower()
             for page in pages:
                 scene_cards_with_ID = page.xpath(
-                    f'//div[contains(@class, "ct_video")]//a[contains(@href,"{sceneID}")]/ancestor::div'
+                    f'//div[contains(@class, "ct_video")]//a[contains(@href,"{scene_ID}")]/ancestor::div'
                 )
                 if scene_cards_with_ID:
                     scene_card = scene_cards_with_ID[0]
                     url = (
-                        f"https://venus.{query_studio}.com"
+                        f"https://venus.{query_studio_name}.com"
                         + scene_card.xpath("./a/@href")[0]
                     )
                     title, b64img, performers, tags = self.scene_card_parse(scene_card)
                     return self.output_json(
-                        title, tags, url, b64img, studio, performers
+                        title, tags, url, b64img, studio_name, performers
                     )
-
+    def search(self, query_title, studio_name, studio_key):
+        query_studio_name = studio_name.replace(" ", "").lower()
+        url = f"https://venus.{query_studio_name}.com/search/?query={query_title}"
+        self.GET_req(url)  # send search request, needed for session data
+        scraped = self.set_video_filter(query_studio_name)  # set 'video only' filter for results
+        page_content = html.fromstring(scraped)
+        if studio_key: #use studio_key to filter search results by sub studio
+            scraped = self.wow_sub_studio_filter_toggle(studio_key, query_studio_name) #toggle on
+            page_content = html.fromstring(scraped)
+        self.scrape_all_results_pages(page_content, studio_name)
+        if studio_key:
+            self.wow_sub_studio_filter_toggle(studio_key, query_studio_name) #toggle off
+        log.debug(
+            f"Searched {studio_name}, found {self.count_results_pages(studio_name)} pages"
+        )
 
 def interleave_results(parsed_scenes):  # interleave search results by studio
     interleaved = [
@@ -249,22 +215,39 @@ def interleave_results(parsed_scenes):  # interleave search results by studio
     ]
     return interleaved
 
+def search_query_prep(string: str):
+    string = string.replace("’", "'")
+    a = [s for s in string if s.isalnum() or s.isspace() or s == "-" or s == "'"]
+    string = "".join(a)
+    return urllib.parse.quote(string)
+
 FRAGMENT = json.loads(sys.stdin.read())
+
 NAME = FRAGMENT.get("name")
 URL = FRAGMENT.get("url")
-
 scraper = WowVenus()
 ret = {}
 
+
 if NAME:
-    scraper.search(NAME)
+    log.debug(f'Searching for "{NAME}"')
+    query_title = search_query_prep(NAME)
+    for studio_name, studio_key in STUDIOS.items():
+        scraper.search(query_title, studio_name, studio_key)
     parsed_scenes = scraper.parse_results()
     ret = interleave_results(parsed_scenes)
 elif URL:
     query_title = URL.split("/")[-1].replace("-", " ")
-    query_title = unquote(query_title)
-    sceneID = URL.split("/")[4]
-    ret = scraper.search(query_title)
+    query_title = urllib.parse.unquote(query_title)
+    scene_ID = URL.split("/")[4]
+    log.debug(f'Searching for "{query_title}"')
+    ret = None
+    for studio_name, studio_key in STUDIOS.items():
+        scraper.search(query_title, studio_name, studio_key)
+        ret = WowVenus.get_scene_with_id(scraper, scene_ID)
+        if ret:
+            log.debug("Scene found!")
+            break
     if not ret:
         log.error(
             "Scene not found!\nSome scenes do not appear in search results unless you are logged in!"
