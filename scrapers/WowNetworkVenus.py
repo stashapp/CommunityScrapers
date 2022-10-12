@@ -8,7 +8,6 @@ from itertools import chain, zip_longest
 # extra modules below need to be installed
 
 
-
 try:
     import py_common.log as log
 except ModuleNotFoundError:
@@ -29,7 +28,7 @@ except ModuleNotFoundError:
     sys.exit()
 
 try:
-    from lxml import html, etree
+    from lxml import etree, html
 except ModuleNotFoundError:
     log.error(
         "You need to install the lxml module. (https://lxml.de/installation.html#installation)"
@@ -40,7 +39,8 @@ except ModuleNotFoundError:
     sys.exit()
 
 
-STUDIOS = {"Ultra Films" : None, "All Fine Girls": 24, "WowGirls" : 32, "WowPorn" : 36}
+STUDIOS = {"Ultra Films": None, "All Fine Girls": 24,
+           "WowGirls": 32, "WowPorn": 36}
 PROXIES = {}
 TIMEOUT = 10
 
@@ -54,10 +54,9 @@ class WowVenus:
         self.session.proxies.update(PROXIES)
         self.search_results = {}
 
-
-    def count_results_pages(self, studio):
+    def count_results_pages(self, studio_name):
         try:
-            return len(self.search_results.get(studio))
+            return len(self.search_results.get(studio_name))
         except:
             return 0
 
@@ -77,17 +76,18 @@ class WowVenus:
         scraped = scraped.content.decode("utf-8")
         return scraped
 
-    def scrape_all_results_pages(self, page_content, studio):
+    def scrape_all_results_pages(self, page_content, studio_name):
         if not page_content.xpath('//div[@class="no_results"]'):
-            if not self.search_results.get(studio):
-                self.search_results[studio] = []
-            self.search_results[studio].append(page_content)
+            if not self.search_results.get(studio_name):
+                self.search_results[studio_name] = []
+            self.search_results[studio_name].append(page_content)
             pagignator = page_content.xpath(
                 "//div[@class='paginator']/div[@class='pages']//text()"
             )
             for pageNu in pagignator[1:]:
-                page_content = html.fromstring(self.pageNu_scrape(studio, pageNu))
-                self.search_results[studio].append(page_content)
+                page_content = html.fromstring(
+                    self.pageNu_scrape(studio_name, pageNu))
+                self.search_results[studio_name].append(page_content)
 
     def GET_req(self, url):
         scraped = None
@@ -164,11 +164,13 @@ class WowVenus:
                         f"https://venus.{query_studio_name}.com"
                         + scene_card.xpath("./a/@href")[0]
                     )
-                    title, b64img, performers, tags = self.scene_card_parse(scene_card)
+                    title, b64img, performers, tags = self.scene_card_parse(
+                        scene_card)
                     if not parsed_scenes.get(query_studio_name):
                         parsed_scenes[query_studio_name] = []
                     parsed_scenes[query_studio_name].append(
-                        self.output_json(title, tags, url, b64img, studio_name, performers)
+                        self.output_json(title, tags, url,
+                                         b64img, studio_name, performers)
                     )
         return parsed_scenes
 
@@ -187,25 +189,31 @@ class WowVenus:
                         f"https://venus.{query_studio_name}.com"
                         + scene_card.xpath("./a/@href")[0]
                     )
-                    title, b64img, performers, tags = self.scene_card_parse(scene_card)
+                    title, b64img, performers, tags = self.scene_card_parse(
+                        scene_card)
                     return self.output_json(
                         title, tags, url, b64img, studio_name, performers
                     )
+
     def search(self, query_title, studio_name, studio_key):
         query_studio_name = studio_name.replace(" ", "").lower()
         url = f"https://venus.{query_studio_name}.com/search/?query={query_title}"
-        self.GET_req(url)  # send search request, needed for session data
-        scraped = self.set_video_filter(query_studio_name)  # set 'video only' filter for results
+        self.GET_req(url)   # send search request, needed for session data
+        # set 'video only' filter for results
+        scraped = self.set_video_filter(query_studio_name)
         page_content = html.fromstring(scraped)
-        if studio_key: #use studio_key to filter search results by sub studio
-            scraped = self.wow_sub_studio_filter_toggle(studio_key, query_studio_name) #toggle on
+        if studio_key:  # use studio_key to filter search results by sub studio
+            scraped = self.wow_sub_studio_filter_toggle(
+                studio_key, query_studio_name)  # toggle on
             page_content = html.fromstring(scraped)
         self.scrape_all_results_pages(page_content, studio_name)
         if studio_key:
-            self.wow_sub_studio_filter_toggle(studio_key, query_studio_name) #toggle off
+            self.wow_sub_studio_filter_toggle(
+                studio_key, query_studio_name)  # toggle off
         log.debug(
             f"Searched {studio_name}, found {self.count_results_pages(studio_name)} pages"
         )
+
 
 def interleave_results(parsed_scenes):  # interleave search results by studio
     interleaved = [
@@ -215,11 +223,13 @@ def interleave_results(parsed_scenes):  # interleave search results by studio
     ]
     return interleaved
 
+
 def search_query_prep(string: str):
     string = string.replace("’", "'")
     a = [s for s in string if s.isalnum() or s.isspace() or s == "-" or s == "'"]
     string = "".join(a)
     return urllib.parse.quote(string)
+
 
 FRAGMENT = json.loads(sys.stdin.read())
 
@@ -241,11 +251,9 @@ elif URL:
     query_title = urllib.parse.unquote(query_title)
     scene_ID = URL.split("/")[4]
     log.debug(f'Searching for "{query_title}"')
-    ret = None
     for studio_name, studio_key in STUDIOS.items():
         scraper.search(query_title, studio_name, studio_key)
-        ret = WowVenus.get_scene_with_id(scraper, scene_ID)
-        if ret:
+        if ret := WowVenus.get_scene_with_id(scraper, scene_ID):
             log.debug("Scene found!")
             break
     if not ret:
