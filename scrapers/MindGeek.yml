@@ -31,6 +31,7 @@ sceneByURL:
       - milfed.com/scene/
       - mofos.com/scene/
       - publicagent.com/scene/
+      - realitykings.com/scene/
       - seancody.com/scene/
       - transangels.com/scene/
       - transsensual.com/scene
@@ -58,6 +59,7 @@ performerByURL:
       - lookathernow.com/model/
       - mofos.com/model/
       - mofosnetwork.com/model/
+      - realitykings.com/scene/
       - rk.com/model/
       - seancody.com/model/
       - sweetsinner.com/model/
@@ -102,7 +104,9 @@ xPathScrapers:
                 Lets Try Anal: Let's Try Anal
                 lookathernow: Look At Her Now
                 mofosnetwork: Mofos
+                realitykings: Reality Kings
                 realityjunkies: Reality Junkies
+                rk: Reality Kings
                 squirted: Squirted
                 sweetheartvideo: Sweetheart Video
                 SweetSinner: Sweet Sinner
@@ -149,6 +153,8 @@ xPathScrapers:
                 lilhumpers: Lil Humpers
                 milfed: Milfed
                 publicagent: Public Agent
+                realitykings: Reality Kings
+                rk: Reality Kings
                 seancody: Sean Cody
                 transangels: Trans Angels
                 transsensual: TransSensual
@@ -317,4 +323,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated June 08, 2022
+# Last Updated October 14, 2022
