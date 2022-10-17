@@ -1,0 +1,125 @@
+name: MrDeepFakes
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://mrdeepfakes.com/celebrities/
+      - https://mrdeepfakes.com/pornstars/
+    scraper: performerScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://mrdeepfakes.com/search/{}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://mrdeepfakes.com/video/
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - https://mrdeepfakes.com/photo/
+    scraper: galleryScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name:
+        selector: //div[@class="headline"]/h2[contains(text(), " Porn")]
+        postProcess:
+          - replace:
+              - regex: " Porn$"
+                with: ""
+      URL: //link[@rel="canonical"]/@href
+      Country:
+        selector: //li[contains(text(), "Birthplace:")]/span/text()
+        postProcess:
+          - replace:
+              - regex: N/A
+                with: ""
+              - regex: ^.*,\s*
+                with: ""
+      Height:
+        selector: //li[contains(text(), "Height:")]/span/text()
+        postProcess:
+          - replace: # Some have height in ft/in and cm with units, some with unitless cm
+              - regex: N/A
+                with: ""
+              - regex: .*?(\d+)\s*cm.*
+                with: $1
+              - regex: ^0+
+                with: ""
+      Weight:
+        selector: //li[contains(text(), "Weight:")]/span/text()
+        postProcess:
+          - replace: # Some have weight in lbs and kg with units, some with unitless kg
+              - regex: N/A
+                with: ""
+              - regex: .*?(\d+)\s*kg.*
+                with: $1
+              - regex: ^0+
+                with: ""
+      Image: //img[@class="thumb"]/@src
+      Details:
+        selector: //div[contains(@class, "desc")]/text()
+        postProcess:
+          - replace:
+              - regex: No description
+                with: ""
+        concat: "\r\n\r\n"
+  sceneSearch:
+    common:
+      $title: //div[@class="list-videos"]//strong[@class="title"]
+    scene:
+      Title: $title/text()
+      URL: $title/parent::a/@href
+      Image: $title/preceding-sibling::div[@class="img"]/img/@data-original
+  sceneScraper:
+    common:
+      $avatar: //img[@src="/static/images/dpfksverified.png"]/following-sibling::a
+    scene:
+      Title: //div[@class="headline"]/h1/text()
+      Details:
+        selector: //div[@class="item"][contains(text(), "Description:")]/em/text()
+        concat: "\r\n\r\n"
+      URL: //link[@rel="canonical"]/@href
+      Image: //meta[@property="og:image"]/@content
+      Studio: # Only count verified uploaders as studios
+        Name: $avatar/@title
+        URL: $avatar/@href
+      Tags:
+        Name: >
+          //div[@class="item"][contains(text(), "Categories:")]/a/text()
+          | //div[@class="item"][contains(text(), "Tags:")]/a/text()
+      Performers:
+        Name:
+          selector: >
+            //div[@class="item"][contains(text(), "Celebrities:")]/a/text()
+            | //div[@class="item"][contains(text(), "Original Pornstar:")]//a/text()
+          postProcess:
+            - replace:
+                - regex: ".*Not Added Yet.*"
+                  with: ""
+  galleryScraper:
+    gallery:
+      Title: //div[@class="headline"]/h1/text()
+      Details:
+        selector: //div[@class="item"][contains(text(), "Description:")]/em/text()
+        concat: "\r\n\r\n"
+      URL: //link[@rel="canonical"]/@href
+      Tags:
+        Name: >
+          //div[@class="item"][contains(text(), "Categories:")]/a/text()
+          | //div[@class="item"][contains(text(), "Tags:")]/a/text()
+      Performers:
+        Name:
+          selector: >
+            //div[@class="item"][contains(text(), "Celebrities:")]/a/text()
+            | //div[@class="item"][contains(text(), "Original Pornstar:")]//a/text()
+          postProcess:
+            - replace:
+                - regex: ".*Not Added Yet.*"
+                  with: ""
+# Last Updated May 01, 2022
