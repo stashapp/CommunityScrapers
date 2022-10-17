@@ -199,7 +199,7 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      Name: //section/div/h1/text()|//section/div/h2[not(following-sibling::a)]/text()
+      Name: //section//div/h1/text()|//section/div/h2[not(following-sibling::a)]/text()|//section//div[contains(@class, "font-secondary")]/text()
       Birthdate:
         selector: //li[contains(.,"Date of Birth")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
