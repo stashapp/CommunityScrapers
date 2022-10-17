@@ -17,7 +17,8 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $movie: //span[contains(., 'From the Movie:')]/following-sibling::a
+      $movie: //p[contains(text(),"From the Movie:")]//a[contains(@href,"/dvd/")]
+      $performer:  //p[@class="capitalize" and contains(text(),"With:")]/a[contains(@href,"/pornstar/")]
     scene:
       Title: //meta[@name="og:title"]/@content
       Details: //meta[@name="description"]/@content
@@ -28,80 +29,99 @@ xPathScrapers:
               - regex: (.+)(\?.+)
                 with: $1
       Date:
-        selector: //span[@class="hidden-xs fa-text-right fa-text-left"]/text()
-        postProcess: &dateProcessor
+        selector: //div[@data-controller="login"]//p[contains(text(),"Date:")]/text()
+        postProcess:
           - replace:
-              - regex: (\w+\s)(\d+)\w+,(\s\d{4}).*
+              - regex: \w+:\s*(\w+\s)(\d+),(\s\d{4}).*
                 with: $1$2$3
-          - parseDate: Jan 2 2006
+          - parseDate: Jan 02 2006
       Tags:
         Name:
-          selector: //div[@class="genres bottom-buffer10"]/a
+          selector: //div[@class="actions"]/a
       Performers:
-        Name:
-          selector: //div/span[@class="fa-text-right" and contains(text(),"With:")]/../span[@class="comma-list-container"]/span/a/text()
+        Name: $performer
+        URL:
+          selector: $performer/@href
+          postProcess: &addhost
+            - replace:
+                - regex: ^/
+                  with: "https://www.bang.com/"
       Studio:
-        Name: //div/span[@class="fa-text-right" and contains(text(),"Studio:")]/a/text()
+        Name:  //p[contains(text(),"Studio:")]//a[contains(@href,"from=")]
       Movies:
         Name: $movie
         URL:
           selector: $movie/@href
-          postProcess:
-            - replace:
-                - regex: ^
-                  with: "https://www.bang.com"
+          postProcess: *addhost
   movieScraper:
     common:
-      $details: //section[@id="dvd-page2"]//div[@class="row"]
+      $details: //div[@data-controller="login"]
+      $image: //div[contains(@class,"justify-start")]/div/img[contains(@src,"/front")]/@src
     movie:
       Name:
-        selector: $details//h1[@class="primary-heading"]/text()
+        selector: //div[@class="w-full"]/h1
       Duration:
-        selector: $details//span[contains(@class, "duration")]/@data-line
+        selector: //div[@class="w-full"]//div[contains(comment(),"fa-clock")]/span
       Date:
-        selector: $details//span[contains(@class, "release-date")]/text()
-        postProcess: *dateProcessor
-      Synopsis: $details//div[@class="overview"]//span/text()
+        selector: $details//p[contains(text(), "Released:")]/span
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Synopsis: $details//p[contains(@class,"clear-both")]
       Studio:
-        Name: $details//div[contains(text(), "From")]/a/text()
+        Name: $details//p[contains(text(),"Studio")]/a
       FrontImage:
-        selector: $details//div[@class="front-cover"]//img/@src
+        selector: $image
         postProcess:
           - replace:
-              - regex: ^
-                with: "https:"
+              - regex: \?.*$
+                with: ""
       BackImage:
-        selector: $details//div[@class="front-cover"]//img/@src
+        selector: $image
         postProcess:
           - replace:
-              - regex: front\.jpg
-                with: "back.jpg"
-              - regex: ^
-                with: "https:"
+              - regex: /front\.jpg?.*$
+                with: "/back.jpg"
   performerScraper:
     common:
-      $overlay: //div[@id="pornstar-metadata"]
+      $overlay: //div[@class="hider z-10"]
     performer:
-      Name: $overlay//h3
+      Name: $overlay//h1
       URL:
         selector: //link[@rel="canonical"]/@href
-      Twitter: $overlay//a[contains(@class, "btn-twitter")]/@href
+      Twitter:
+        selector: "//script[@type=\"application/ld+json\"][contains(.,'\"@type\": \"Person\"')][contains(.,'https://twitter.com/')]/text()"
+        postProcess:
+          - replace:
+              - regex: .+https://twitter.com/([^"]+).+
+                with: $1
       Birthdate:
-        selector: $overlay//span[contains(text(),"Birthdate")]/../span[@class="profile-description"]
-        postProcess: *dateProcessor
+        selector: $overlay//div[contains(text(),"Born")]/span[contains(text(),"old")]
+        postProcess:
+          - replace:
+              - regex: \s*(\w+\s)(\d+),(\s\d{4}).*
+                with: $1$2$3
+          - parseDate: January 2 2006
       Country:
-        selector: $overlay//span[contains(text(),'Birth Place:')]/..//span[@class="profile-description"]/text()
-      Ethnicity:
-        selector: $overlay//span[contains(text(),"Ethnicity")]/../a/span/text()
+        selector: $overlay//div[contains(text(),"Born")]/text()[contains(.,"in")]/following-sibling::span[not(@class="mx-1")]
+        postProcess:
+          - replace:
+              - regex: (?:.+\s)?(\w+)$
+                with: $1
       HairColor:
-        selector: $overlay//span[contains(text(),"Hair Color")]/../a/span/text()
+        selector: $overlay//div[contains(@class,"md:text-left")]/text()[contains(.,"Hair Color")]/following-sibling::span[1]
+      Ethnicity:
+        selector: $overlay//div[contains(@class,"md:text-left")]/text()[contains(.,"Ethnicity")]/following-sibling::span[1]
       EyeColor:
-        selector: $overlay//span[contains(text(),"Eye Color")]/../a/span/text()
+        selector: $overlay//div[contains(@class,"md:text-left")]/text()[contains(.,"Eye Color")]/following-sibling::span[1]
       Aliases:
-        selector: $overlay//small[@class="comma-list-container"]//span/text()
-        concat: " / "
-      Image: //meta[@name="og:image"]/@content
+        selector: $overlay//h1/following-sibling::span
+      Image:
+        selector: //meta[@name="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: \?.+$
+                with: ""
 driver:
   useCDP: true
   sleep: 5
-# Last Updated June 08, 2022
+# Last Updated October 12, 2022
