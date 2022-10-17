@@ -59,7 +59,7 @@ performerByURL:
       - lookathernow.com/model/
       - mofos.com/model/
       - mofosnetwork.com/model/
-      - realitykings.com/scene/
+      - realitykings.com/model/
       - rk.com/model/
       - seancody.com/model/
       - sweetsinner.com/model/
@@ -201,15 +201,15 @@ xPathScrapers:
     performer:
       Name: //section/div/h1/text()|//section/div/h2[not(following-sibling::a)]/text()
       Birthdate:
-        selector: //li[contains(.,"Date of Birth")]/span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Date of Birth")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
               - regex: th,|st,|rd,|nd,
                 with: ","
           - parseDate: January 2, 2006
-      Measurements: //li[contains(.,"Measurements")]/span/text()[not(contains(.,"N/A"))]
+      Measurements: //li[contains(.,"Measurements")]/span[last()]/text()[not(contains(.,"N/A"))]
       Country:
-        selector: //li[contains(.,"Birth Place")]/span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Birth Place")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
               - regex: .*?,\s
@@ -317,7 +317,7 @@ xPathScrapers:
               Wisconsin: "USA"
               Wyoming: "USA"
       Height:
-        selector: //li[contains(.,"Height")]/span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Height")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
           - feetToCm: true
       Image:
