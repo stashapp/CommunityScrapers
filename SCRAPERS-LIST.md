@@ -1006,7 +1006,7 @@ rawattack.com|RawAttack.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rawcouples.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 reaganfoxx.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
 realityjunkies.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-realitykings.com|Brazzers.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+realitykings.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 realitylovers.com|RealityLovers.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 realjamvr.com|RealJamVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 realsensual.com|RealSensual.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

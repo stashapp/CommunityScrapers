@@ -31,6 +31,7 @@ sceneByURL:
       - milfed.com/scene/
       - mofos.com/scene/
       - publicagent.com/scene/
+      - realitykings.com/scene/
       - seancody.com/scene/
       - transangels.com/scene/
       - transsensual.com/scene
@@ -50,7 +51,7 @@ performerByURL:
       - babesnetwork.com/model/
       - devianthardcore.com/model/
       - digitalplayground.com/modelprofile/
-      - doghousedigital.com/
+      - doghousedigital.com/model/
       - familyhookups.com/model
       - girlgrind.com/model
       - iknowthatgirl.com/model/
@@ -58,6 +59,7 @@ performerByURL:
       - lookathernow.com/model/
       - mofos.com/model/
       - mofosnetwork.com/model/
+      - realitykings.com/model/
       - rk.com/model/
       - seancody.com/model/
       - sweetsinner.com/model/
@@ -102,7 +104,9 @@ xPathScrapers:
                 Lets Try Anal: Let's Try Anal
                 lookathernow: Look At Her Now
                 mofosnetwork: Mofos
+                realitykings: Reality Kings
                 realityjunkies: Reality Junkies
+                rk: Reality Kings
                 squirted: Squirted
                 sweetheartvideo: Sweetheart Video
                 SweetSinner: Sweet Sinner
@@ -149,6 +153,8 @@ xPathScrapers:
                 lilhumpers: Lil Humpers
                 milfed: Milfed
                 publicagent: Public Agent
+                realitykings: Reality Kings
+                rk: Reality Kings
                 seancody: Sean Cody
                 transangels: Trans Angels
                 transsensual: TransSensual
@@ -193,17 +199,17 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      Name: //section/div/h1/text()|//section/div/h2[not(following-sibling::a)]/text()
+      Name: //section//div/h1/text()|//section/div/h2[not(following-sibling::a)]/text()|//section//div[contains(@class, "font-secondary")]/text()
       Birthdate:
-        selector: //li[contains(.,"Date of Birth")]/span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Date of Birth")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
               - regex: th,|st,|rd,|nd,
                 with: ","
           - parseDate: January 2, 2006
-      Measurements: //li[contains(.,"Measurements")]/span/text()[not(contains(.,"N/A"))]
+      Measurements: //li[contains(.,"Measurements")]/span[last()]/text()[not(contains(.,"N/A"))]
       Country:
-        selector: //li[contains(.,"Birth Place")]/span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Birth Place")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
               - regex: .*?,\s
@@ -311,10 +317,10 @@ xPathScrapers:
               Wisconsin: "USA"
               Wyoming: "USA"
       Height:
-        selector: //li[contains(.,"Height")]/span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Height")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
           - feetToCm: true
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated June 08, 2022
+# Last Updated October 14, 2022
