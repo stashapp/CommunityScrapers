@@ -1,0 +1,27 @@
+name: Milovana
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - milovana.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //wearenotreallyinterestedinscrapingatitleherebutbuildfailsifwedontmakeanattempt
+      Date:
+        selector: //div[@class="postbody"]//h3[@class="first"]/..//p[@class="author"]//time/@datetime
+        postProcess:
+          - replace:
+              - regex: (.+)(T.*)
+                with: $1
+          - parseDate: 2006-01-02 #2021-07-25T14:36:40+00:00
+      Image:
+        selector: //div[@class="postbody"]//h3[@class="first"]/..//img[@class="postimage"]/@src
+        postProcess:
+          - replace:
+              - regex: \.\/
+                with: https://milovana.com/forum/
+      Studio:
+        Name: //div[@class="postbody"]//h3[@class="first"]/..//p[@class="author"]//a[@class="username"]
+# Last Updated September 29, 2022
