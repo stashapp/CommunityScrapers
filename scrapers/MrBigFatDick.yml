@@ -1,0 +1,41 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
+name: MrBigFatDick
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - mrbigfatdick.com/videos/
+    scraper: sceneScraper2
+    queryURL:  https://backend.mrbigfatdick.com/api/public/updates/{url}
+    queryURLReplace:
+      url:
+        - regex: '.+/videos/([^/]+?)/?$'
+          with: $1
+
+debug:
+  printHTML: false
+
+jsonScrapers:
+  sceneScraper2:
+    scene:
+      Title:
+        selector: fullName
+      Date:
+        selector: publishDate
+        postProcess:
+          - parseDate: 2006-01-02 15:04:05
+      Tags:
+        Name:
+          selector: tags.#.fullName
+      Performers:
+        Name:
+          selector: models.#.fullName
+          postProcess:
+            - map:
+                Mrbigfatdick: "Mr. Big Fat Dick"
+      Image:
+        selector: image3840
+      Details:
+        selector: description
+
+# Last Updated October 23, 2022
