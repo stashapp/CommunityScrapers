@@ -6,22 +6,30 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $script: //script[@type="application/ld+json"]/text()
     scene:
-      Details: //p[@class="js-description-text"]
+      Details: //h2[@class="content__desc"]
       Performers:
-        Name: //div[@class="model-link"]/a
+        Name: //div[@class="content-info"]/a
       Image:
-        selector: //div[@class="player-container"]/@style
+        selector: $script
         postProcess:
           - replace:
-              - regex: .*url\(\'(.+)\'\).*
+              - regex: .+thumbnail":"([^"]+)",.+
+                with: $1
+      Date: # not to be trusted, they update the dates
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+datePublished":"([^"]+)",.+
                 with: $1
       Title:
-        selector: //h1[@class="info-title"]
+        selector: //h1[@class="content__title"]
       Tags:
-        Name: //div[@class="tag-links"]/a/text()
+        Name: //div[@class="content-desc"]//a
       Studio:
         Name:
           fixed: JavHD
       URL: //link[@rel="canonical"]/@href
-# Last Updated September 22, 2020
+# Last Updated October 28, 2022
