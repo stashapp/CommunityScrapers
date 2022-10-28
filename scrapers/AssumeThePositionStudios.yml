@@ -23,9 +23,9 @@ jsonScrapers:
       Image:
         selector: data.image
         postProcess:
-          -  replace:
-                - regex: ^/
-                  with: https://assumethepositionstudios.com/
+          - replace:
+              - regex: ^/
+                with: https://assumethepositionstudios.com/
       Performers:
         Name: data.models.#.name
       Studio:
@@ -35,9 +35,9 @@ jsonScrapers:
           selector: data.scene.description
           postProcess:
             - replace:
-              - regex: (.*?)([A-Z,'\s]+)\.?$
-                with: $2
-              - regex: ',\s+'
-                with: ","
+                - regex: (.*?)([A-Z,'\s]+)\.?$
+                  with: $2
+                - regex: ',\s+'
+                  with: ","
           split: ","
 # Last Updated October 13, 2022
