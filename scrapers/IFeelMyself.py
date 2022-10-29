@@ -108,9 +108,7 @@ def scrapeScene(filename,date,url):
                 pages=int(response.find_all("a", class_="pagging_nonsel")[-1].get_text())
                 debugPrint("Pages:  "+str(pages))
                 if pages:
-                    debugPrint("Test1")
                     for offset in range(0,pages*10,10):
-                        debugPrint("Test2-offset: " + str(offset))
                         browser.open("https://ifeelmyself.com/public/main.php?page=search_results&offset="+str(offset))
                         response = browser.page
                         tables = response.find_all(class_= ["blog_wide_news_tbl entry ppss-scene","entry ppss-scene"])
@@ -122,7 +120,6 @@ def scrapeScene(filename,date,url):
                                 ret = extract_SceneInfo(table)
                                 break
                         else:
-                            debugPrint("Test3")
                 else:
                     sys.stderr.write("0 matches found!, check your filename")
 
