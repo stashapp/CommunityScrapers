@@ -59,6 +59,7 @@ xPathScrapers:
       $actor: //a[@class="record-model"]
     scene:
       Title: //meta[@property="og:title"]/@content
+      URL: //link[@hreflang="x-default"]/@href
       Details:
         selector: |
           //div[contains(@class,"film-subtitle")]/text()
