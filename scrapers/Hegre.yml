@@ -148,4 +148,5 @@ xPathScrapers:
       Details:
         selector: //div[@class="description translated-text"]//child::text()
         concat: "\n\n"
-# Last Updated November 3, 2022
+
+# Last Updated November 03, 2022
