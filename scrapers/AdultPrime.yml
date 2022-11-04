@@ -62,8 +62,6 @@ xPathScrapers:
           - replace:
             - regex: .*=
               with: "https://adultprime.com/studios/video/"
-      Details:
-        selector: //p[contains(@class, 'ap-limited-description-text')]/text()
       Studio: 
         Name: //p[contains(@class,"update-info-line")]/b/a[contains(@href,"/studio/")]/text()
       Tags:
