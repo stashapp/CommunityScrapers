@@ -7,16 +7,16 @@ sceneByURL:
     url:
       - mrbigfatdick.com/videos/
     scraper: sceneScraper
-    queryURL:  https://backend.mrbigfatdick.com/api/public/updates/{url}
+    queryURL: https://backend.mrbigfatdick.com/api/public/updates/{url}
     queryURLReplace:
       url:
-        - regex: '.+/videos/([^/]+?)/?$'
+        - regex: ".+/videos/([^/]+?)/?$"
           with: $1
 
 sceneByName:
   action: scrapeJson
   queryURL: https://backend.mrbigfatdick.com/api/search/{} # search doesnt like spaces, use _ instead when quering
-  scraper: sceneSearch  
+  scraper: sceneSearch
 
 sceneByQueryFragment:
   action: scrapeJson
@@ -34,40 +34,35 @@ jsonScrapers:
               - regex: ^
                 with: "https://backend.mrbigfatdick.com/api/public/updates/"
       Image: updates.#.image620
-      Date:       
+      Date:
         selector: updates.#.publishDate
         postProcess:
           - parseDate: 2006-01-02 15:04:05
 
   sceneScraper:
     scene:
-      Title:
-        selector: fullName
+      Title: fullName
       Date:
         selector: publishDate
         postProcess:
           - parseDate: 2006-01-02 15:04:05
       Tags:
-        Name:
-          selector: tags.#.fullName
+        Name: tags.#.fullName
       Performers:
         Name:
           selector: models.#.fullName
           postProcess:
             - map:
                 Mrbigfatdick: "Mr. Big Fat Dick"
-      Image:
-        selector: image1920
-      Details:
-        selector: description
+      Image: image1920
+      Details: description
       Studio:
         Name:
           fixed: MrBigfatdick # Match the stash.db name
       URL:
         selector: permaLink
         postProcess:
-            - replace:
+          - replace:
               - regex: ^
                 with: "https://www.mrbigfatdick.com/videos/"
-
 # Last Updated November 04, 2022
