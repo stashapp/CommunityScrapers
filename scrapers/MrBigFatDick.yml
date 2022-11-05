@@ -1,22 +1,45 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 
 name: MrBigFatDick
+
 sceneByURL:
   - action: scrapeJson
     url:
       - mrbigfatdick.com/videos/
-    scraper: sceneScraper2
+    scraper: sceneScraper
     queryURL:  https://backend.mrbigfatdick.com/api/public/updates/{url}
     queryURLReplace:
       url:
         - regex: '.+/videos/([^/]+?)/?$'
           with: $1
 
-debug:
-  printHTML: false
+sceneByName:
+  action: scrapeJson
+  queryURL: https://backend.mrbigfatdick.com/api/search/{} # search doesnt like spaces, use _ instead when quering
+  scraper: sceneSearch  
+
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  scraper: sceneScraper
 
 jsonScrapers:
-  sceneScraper2:
+  sceneSearch:
+    scene:
+      Title: updates.#.fullName
+      URL:
+        selector: updates.#.permaLink
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://backend.mrbigfatdick.com/api/public/updates/"
+      Image: updates.#.image620
+      Date:       
+        selector: updates.#.publishDate
+        postProcess:
+          - parseDate: 2006-01-02 15:04:05
+
+  sceneScraper:
     scene:
       Title:
         selector: fullName
@@ -34,8 +57,17 @@ jsonScrapers:
             - map:
                 Mrbigfatdick: "Mr. Big Fat Dick"
       Image:
-        selector: image3840
+        selector: image1920
       Details:
         selector: description
+      Studio:
+        Name:
+          fixed: MrBigfatdick # Match the stash.db name
+      URL:
+        selector: permaLink
+        postProcess:
+            - replace:
+              - regex: ^
+                with: "https://www.mrbigfatdick.com/videos/"
 
-# Last Updated October 23, 2022
+# Last Updated November 04, 2022
