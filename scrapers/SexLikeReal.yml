@@ -17,6 +17,8 @@ xPathScrapers:
                 with: $1
               - regex: '\\u2019'
                 with: "’"
+              - regex: '\\u2013'
+                with: "–"
       Date: //time/@datetime
       Details:
         selector: //div[@data-qa="scene-about-tab-text"]/text()[last()]
@@ -43,5 +45,5 @@ xPathScrapers:
                 WankitnowVR: "Wank It Now VR"
       Image: //div[contains(@class,"splash-screen")]/img/@src
       URL: //link[@rel="canonical"]/@href
-      
-# Last Updated October 27, 2022
+
+# Last Updated November 04, 2022
