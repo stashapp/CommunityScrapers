@@ -27,7 +27,7 @@ xPathScrapers:
     common:
       $details: &detailsAttr //div[@class="video-rating-and-details"]
     scene:
-      Title: $details/h1/text()
+      Title: //h1[contains(@class, "video-title")]/text()
       Date: &dateSel
         selector: $details//p[@class="video-upload-date"]/text()
         postProcess:
