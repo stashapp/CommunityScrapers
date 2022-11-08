@@ -7,7 +7,36 @@ sceneByURL:
       - xvirtual.com
     scraper: sceneScraper
 
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://xvirtual.com/tour/search/?q={}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 xPathScrapers:
+  sceneSearch:
+    common:
+      $ep: //div[contains(concat(' ', normalize-space(@class), ' '), ' episode ')]
+    scene:
+      Title:
+        selector: $ep//a[@class="title"]/h2[@class="nice-title"]/text()
+        postProcess:
+          - replace:
+              - regex: \s*in\s+180°$
+                with:
+      Image:
+        selector: $ep//img[contains(concat(' ', normalize-space(@class), ' '), ' poster ')]/@src
+      URL:
+        selector: $ep//a[@class="title"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://xvirtual.com
+
   sceneScraper:
     common:
       $info: //div[@id="content"]
