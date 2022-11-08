@@ -1,0 +1,29 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
+name: "xVirtual"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - xvirtual.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@id="content"]
+    scene:
+      Title:
+        selector: $info//h2[@class="nice-title"]/text()
+        postProcess:
+          - replace:
+              - regex: \s*in\s+180°$
+                with:
+      Details: $info//div[@class="desc-text"]/p
+      Studio:
+        Name:
+          fixed: xVirtual
+      Tags:
+        Name: $info//ul[@class="tags"]/li/a[@class="tag"]/text()
+      Image:
+        selector: //div[@id="video-container"]//dl8-video/@poster
+# Last Updated November 07, 2022
