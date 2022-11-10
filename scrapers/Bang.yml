@@ -95,14 +95,14 @@ xPathScrapers:
               - regex: .+https://twitter.com/([^"]+).+
                 with: $1
       Birthdate:
-        selector: //div[@class="text-sm mb-4 text-center md:text-left"]/span[contains(text(),"old")]
+        selector: $overlay//div[contains(text(),"Born")]/span[contains(text(),"old")]
         postProcess:
           - replace:
               - regex: \s*(\w+\s)(\d+),(\s\d{4}).*
                 with: $1$2$3
           - parseDate: January 2 2006
       Country:
-        selector: //div[@class="text-sm mb-4 text-center md:text-left"]/text()[contains(.,"in")]/following-sibling::span[not(@class="mx-1")]
+        selector: $overlay//div[contains(text(),"Born")]/text()[contains(.,"in")]/following-sibling::span[not(@class="mx-1")]
         postProcess:
           - replace:
               - regex: (?:.+\s)?(\w+)$
