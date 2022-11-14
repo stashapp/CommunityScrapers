@@ -277,7 +277,6 @@ def getScene(scene_id):
             stream
             webp
             vtt
-            chapters_vtt
             sprite
             funscript
         }
@@ -538,7 +537,6 @@ def getSceneByPerformerId(performer_id):
             stream
             webp
             vtt
-            chapters_vtt
             sprite
             funscript
             interactive_heatmap
