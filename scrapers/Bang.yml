@@ -61,7 +61,7 @@ xPathScrapers:
       Name:
         selector: //div[@class="w-full"]/h1
       Duration:
-        selector: //div[@class="w-full"]//div[contains(comment(),"fa-clock")]/span
+        selector: (//div[@class="w-full"]//span[*[name()='svg']])[2]
       Date:
         selector: $details//p[contains(text(), "Released:")]/span
         postProcess:
@@ -83,11 +83,11 @@ xPathScrapers:
                 with: "/back.jpg"
   performerScraper:
     common:
-      $overlay: //div[@class="hider z-10"]
+      $overlay: //div[@class="flex flex-col md:items-start items-center"]
     performer:
-      Name: $overlay//h1
+      Name: $overlay/h1
       URL:
-        selector: //link[@rel="canonical"]/@href
+        selector: //link[@rel="canonical"][1]/@href
       Twitter:
         selector: "//script[@type=\"application/ld+json\"][contains(.,'\"@type\": \"Person\"')][contains(.,'https://twitter.com/')]/text()"
         postProcess:
@@ -116,12 +116,9 @@ xPathScrapers:
       Aliases:
         selector: $overlay//h1/following-sibling::span
       Image:
-        selector: //meta[@name="og:image"]/@content
+        selector: //div[@class="relative"]/img/@src
         postProcess:
           - replace:
               - regex: \?.+$
                 with: ""
-driver:
-  useCDP: true
-  sleep: 5
-# Last Updated October 12, 2022
+# Last Updated November 10, 2022
