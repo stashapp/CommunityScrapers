@@ -1,0 +1,30 @@
+name: "GangbangCreampie"
+sceneByURL:
+  - action: script
+    url:
+      - gangbangcreampie.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - gangbangcreampie
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - gangbangcreampie
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - gangbangcreampie
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - gangbangcreampie
+      - validName
+# Last Updated November 10, 2022

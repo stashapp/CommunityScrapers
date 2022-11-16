@@ -117,7 +117,7 @@ aventertainments.com|AVE.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Database
 avidolz.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avstockings.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avtits.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
-aziani.com|GangBangCreampie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+aziani.com|Aziani.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 babearchives.com|BabeArchives.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 babepedia.com|Babepedia.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Database
 baberotica.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -487,7 +487,7 @@ funbags.com|Voyeurweb.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 futanari.xxx|Hentaied.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gag-n-gape.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gangav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
-gangbangcreampie.com|GangBangCreampie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+gangbangcreampie.com|Algolia_GangBangCreampie.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 gapingangels.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gasm.com|GASM.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gaycastings.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -517,7 +517,7 @@ girlsunderarrest.com|GirlsUnderArrest.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlsway.com|Algolia_GirlsWay.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Lesbian
 girlswhofuckgirls.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 givemepink.com|sapphix.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-gloryholesecrets.com|GangBangCreampie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+gloryholesecrets.com|Aziani.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gloryholeswallow.com|GloryHoleSwallow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 glosstightsglamour.com|GlossTightsGlamour.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 goddessnudes.com|SARJ-LLC.yml|:x:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-

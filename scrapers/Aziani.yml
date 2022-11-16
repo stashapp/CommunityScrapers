@@ -2,7 +2,6 @@ name: Aziani
 sceneByURL:
   - action: scrapeXPath
     url:
-      - gangbangcreampie.com
       - gloryholesecrets.com
     scraper: sceneScraper
   - action: scrapeXPath
@@ -24,7 +23,6 @@ xPathScrapers:
                   with: $1
             - map:
                 gloryholesecrets: Gloryhole Secrets
-                gangbangcreampie: Gangbang Creampie
                 aziani: Aziani
       Performers: &performers
         Name: //div[@class="video_details mb mt0"]/h5[i[@class="icon-female"]]/a
@@ -58,4 +56,4 @@ xPathScrapers:
               - regex: ^
                 with: https://www.aziani.com
       Date: *date
-# Last Updated December 13, 2020
+# Last Updated November 10, 2022
