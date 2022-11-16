@@ -14,7 +14,7 @@ try:
     import lxml
 except ModuleNotFoundError:
     print(
-        "You need to install the following modules 'requests', 'bs4', 'lxml'.")
+        "You need to install the following modules 'requests', 'bs4', 'lxml'.", file=sys.stderr)
     sys.exit()
 
 try:
