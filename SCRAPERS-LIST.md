@@ -57,8 +57,8 @@ amateripremium.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateurallure.com|AmateurAllure.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 amateurav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 amateurboxxx.com|AmateurBoxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-amateureuro.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateure-xtreme.com|AmateureExtreme.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+amateureuro.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateursfrombohemia.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amazinganna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ambushmassage.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -100,8 +100,8 @@ assholefever.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 assmeat.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 assteenmouth.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 asstraffic.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
-assylum.com|Assylum.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 assumethepositionstudios.com|AssumeThePositionStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+assylum.com|Assylum.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 atkexotics.com|ATKExotics.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 atkhairy.com|ATKHairy.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 atkpetites.com|ATKHairy.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
@@ -640,8 +640,8 @@ javdb.com|javdb.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Database
 javdb36.com|javdb.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Database
 javhd.com|JavHD.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 javhub.com|JavHub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
-javlibrary.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|JAV
 javlibrary.com|JavLibrary_python.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|JAV
+javlibrary.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|JAV
 jaysinxxx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jayspov.net|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jcosplay.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
@@ -1372,6 +1372,7 @@ xslist.org|Xslist.yml|:x:|:x:|:x:|:heavy_check_mark:|-|JAV Database
 xtube.com|Xtube.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvideos.com|Xvideos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvideos.red|Xvideos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+xvirtual.com|XVirtual.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xxxnj.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xxxpawn.com|XXXPawn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yanks.com|Yanks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
