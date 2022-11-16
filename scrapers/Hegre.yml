@@ -17,7 +17,7 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-  
+
 galleryByURL:
   - action: scrapeXPath
     url:
@@ -40,11 +40,11 @@ xPathScrapers:
         selector: //a[@class='open-in-content-overlay']/@title
       Date:
         selector: //a[@class='open-in-content-overlay']//div[@class='details']/span[last()]/text()
-        postProcess: 
+        postProcess:
           - replace:
               - regex: (st|nd|rd|th)
-                with: ''
-          - parseDate: Jan 2, 2006             
+                with: ""
+          - parseDate: Jan 2, 2006
       URL:
         selector: //a[@class='open-in-content-overlay']/@href
         postProcess:
@@ -149,5 +149,4 @@ xPathScrapers:
       Details:
         selector: //div[@class="description translated-text"]//child::text()
         concat: "\n\n"
-
 # Last Updated November 03, 2022
