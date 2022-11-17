@@ -62,6 +62,12 @@ xPathScrapers:
           - replace:
             - regex: .*=
               with: "https://adultprime.com/studios/video/"
+      Code:
+        selector: //div[@class="keys"]/@title
+        postProcess:
+          - replace:
+            - regex: .+/(\d+)$
+              with: $1
       Studio: 
         Name: //p[contains(@class,"update-info-line")]/b/a[contains(@href,"/studio/")]/text()
       Tags:
@@ -81,4 +87,4 @@ xPathScrapers:
 #    - xpath: //ul[@id='studio-videos-container']/following-sibling::div[1]/a[@class="lSNext"]
 #      sleep: 1
 
-# Last Updated November 03, 2022
+# Last Updated November 17, 2022
