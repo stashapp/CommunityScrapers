@@ -489,6 +489,17 @@ def parse_scene_json(scene_json, url=None):
     #scrape['details'] = re.sub(r'</br>|<br\s/>|<br>|<br/>', '\n', scene_json.get('description'))
     scrape['details'] = clean_text(scene_json.get('description'))
 
+    # Studio Code
+    if scene_json.get('clip_id'):
+        scrape['code'] = str(scene_json['clip_id'])
+
+    # Director
+    directors = []
+    for director in scene_json.get('directors'):
+        directors.append(director.get('name').strip())
+    scrape["director"] = ", ".join(directors)
+    return scrape
+
     # Studio
     scrape['studio'] = {}
     if scene_json.get('serie_name'):
