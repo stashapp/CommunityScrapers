@@ -8,14 +8,19 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class='left']/h1/@title
-      Details: //meta[@name='description']/@content
+      Details: //section[@class="details"]/div/p[2]/text()
       Image: //div[@class='play_cover']/img/@src
       Studio:
         Name: //li[@class='us']/a[@class='ul'][contains(@href,'channel')]/text()
       Tags:
-        Name: //div[@class='ent']/a[@href[contains(.,'tag')]]/text()|//li[@class='p']/text()
-      Performers:
-        Name: //div[@class='ent']/a[@href[contains(.,'pornstar')]]/text()|//div[@class='left']/h1/a/text()
-      URL: //link[rel='canonical']/@href
+        Name: //li[@class='p']/text()|//div[@class='searches']//a[not(@class='expand')]/text()
+      URL: //link[rel='canonical']/@href|//meta[@property='og:url']/@content
+      Date:
+        selector: //script[@type='application/ld+json'][contains(text(),'uploadDate')]/text()
+        postProcess:
+          - replace:
+              - regex: '.+\"uploadDate\"\: \"([0-9\-:T]+)\".+'
+                with: $1
+          - parseDate: '2006-01-02T15:04:05'
 
-# Last Updated October 06, 2020
+# Last Updated November 20, 2022
