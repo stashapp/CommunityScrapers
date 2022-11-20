@@ -469,8 +469,9 @@ def parse_movie_json(movie_json: dict) -> dict:
         "back_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg"
 
     directors = []
-    for director in movie_json[0].get('directors'):
-        directors.append(director.get('name').strip())
+    if movie_json[0].get('directors') is not None:
+        for director in movie_json[0].get('directors'):
+            directors.append(director.get('name').strip())
     scrape["director"] = ", ".join(directors)
     return scrape
 
@@ -495,8 +496,9 @@ def parse_scene_json(scene_json, url=None):
 
     # Director
     directors = []
-    for director in scene_json.get('directors'):
-        directors.append(director.get('name').strip())
+    if scene_json.get('directors') is not None:
+        for director in scene_json.get('directors'):
+            directors.append(director.get('name').strip())
     scrape["director"] = ", ".join(directors)
 
     # Studio
