@@ -1,26 +1,74 @@
+# The search by name does not return images by default. To get images you will need to uncomment the driver section at the end of this file.
+# Each click you uncomment will load another 4 images, however the search will be much slower, so it's disabled by default.
 name: "AdultPrime"
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://adultprime.com/studios/search?q={}"
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 sceneByURL:
   - action: scrapeXPath
     url:
       - adultprime.com/studios/video/
     scraper: sceneScraper
+
 xPathScrapers:
+  sceneSearch:
+    common:
+      $scenes: //ul[@id='studio-videos-container']
+    scene:
+      Title:
+        selector: $scenes//span[contains(@class, 'description-title')]/text()
+      Date:
+        selector: $scenes//span[@class='description-releasedate']/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      URL:
+        selector: $scenes//a[@class='absolute']/@href
+        postProcess:
+          - replace:
+            - regex: "^.signup.galleryId."
+              with: "https://adultprime.com/studios/video/"
+      Image:
+        selector: $scenes//div[contains(@class, 'ap-slider-img')]/@style
+        postProcess:
+          - replace:
+              - regex: .+url\("(.+)"\).+
+                with: $1
+
   sceneScraper:
     scene:
       Title: //h2[contains(@class,"update-info-title")]/text()
       Date:
-        selector: //p[@class="update-info-line regular"][i[contains(@class,"fa-calendar")]]/b[1]/text()
+        selector: //p[@class="update-info-line regular"][1]/b[1]/text()
         postProcess:
           - parseDate: 02.01.2006
       Details:
         selector: //p[contains(@class,"ap-limited-description-text")]
       Image:
-        selector: //div[contains(@class, "video-wrapper")]//div[starts-with(@style,"background-image:")]/@style
+        selector: //div[contains(@class, "video-wrapper")]//div[starts-with(@style,"background-image:") and not(contains(@style,"player-placeholder.gif"))]/@style
         postProcess:
           - replace:
               - regex: .+url\((.+)\).+
                 with: $1
-      Studio:
+      URL:
+        selector: //a[contains(@href, "/signup?galleryId")][1]/@href
+        postProcess:
+          - replace:
+            - regex: .*=
+              with: "https://adultprime.com/studios/video/"
+      Code:
+        selector: //div[@class="keys"]/@title
+        postProcess:
+          - replace:
+            - regex: .+/(\d+)$
+              with: $1
+      Studio: 
         Name: //p[contains(@class,"update-info-line")]/b/a[contains(@href,"/studio/")]/text()
       Tags:
         Name:
@@ -28,4 +76,15 @@ xPathScrapers:
           split: ", "
       Performers:
         Name: //p[@class="update-info-line regular"]/a[contains(@href, "/signup?")]/text()
-# Last Updated October 06, 2022
+#driver:
+#  useCDP: true
+#  headers:
+#    - Key: User-Agent
+#      Value: stash/1.0.0
+#  clicks:
+#    - xpath: //ul[@id='studio-videos-container']/following-sibling::div[1]/a[@class="lSNext"]
+#      sleep: 1
+#    - xpath: //ul[@id='studio-videos-container']/following-sibling::div[1]/a[@class="lSNext"]
+#      sleep: 1
+
+# Last Updated November 17, 2022
