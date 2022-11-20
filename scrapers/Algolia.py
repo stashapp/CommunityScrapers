@@ -498,7 +498,6 @@ def parse_scene_json(scene_json, url=None):
     for director in scene_json.get('directors'):
         directors.append(director.get('name').strip())
     scrape["director"] = ", ".join(directors)
-    return scrape
 
     # Studio
     scrape['studio'] = {}
