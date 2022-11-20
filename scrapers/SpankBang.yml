@@ -4,6 +4,18 @@ sceneByURL:
     url:
       - spankbang.com
     scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://spankbang.com/{filename}/video/
+  queryURLReplace:
+    filename: # expects an id in square brackets before extension, as saved by yt-dlp by default
+      - regex: '.*\[([0-9a-z]{4,})\]\.[^\.]+$'
+        with: $1
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
+        with: # clear the filename so that it doesn't leak
+
 xPathScrapers:
   sceneScraper:
     scene:
