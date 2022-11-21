@@ -13,7 +13,9 @@ xPathScrapers:
           - replace:
             - regex: (.*) \| NoodleDude PMVs$
               with: $1
-      Details: //meta[@name='description']/@content
+      Details:
+        selector: //div[@class="description padding-medium"]/div[contains(@class, "rich-text-block-2") and not(contains(@class, "w-condition-invisible"))]//p
+        concat: "\n\n"
       Image: //meta[@property='twitter:image']/@content
       Studio:
         Name:
@@ -32,5 +34,9 @@ xPathScrapers:
           selector: //div[@class='tags-wrapper']//div[contains(@class, 'tag-list') or @class='other-tag-items']//text()
           concat: ","
           split: ","
+          postProcess:
+            - replace:
+              - regex: \s
+                with:
 
-# Last Updated November 10, 2022
+# Last Updated November 21, 2022
