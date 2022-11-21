@@ -607,7 +607,7 @@ hypnotube.com|Hypnotube.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 iafd.com|IAFD.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|Python|Database
 iconmale.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 idols69.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
-ifeelmyself.com|IFeelMyself.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+ifeelmyself.com|IFeelMyself.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 ihuntmycunt.com|DollsHub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ikissgirls.com|IKissGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 iknowthatgirl.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
