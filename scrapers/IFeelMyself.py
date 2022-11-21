@@ -119,7 +119,6 @@ def scrapeScene(filename,date,url):
                                 sys.stderr.write("FOUND")
                                 ret = extract_SceneInfo(table)
                                 break
-                        else:
                 else:
                     sys.stderr.write("0 matches found!, check your filename")
 
