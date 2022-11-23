@@ -24,8 +24,8 @@ xPathScrapers:
         selector: //div[@data-qa="scene-about-tab-text"]/text()[last()]
         postProcess:
           - replace:
-              - regex: '^\.\w*'
-                with: ''
+              - regex: '^\.\s*'
+                with:
       Tags:
         Name: //meta[@property="video:tag"]/@content
       Performers:
@@ -44,6 +44,12 @@ xPathScrapers:
                 VirtualXPorn: "Virtual X Porn"
                 WankitnowVR: "Wank It Now VR"
       Image: //div[contains(@class,"splash-screen")]/img/@src
-      URL: //link[@rel="canonical"]/@href
-
-# Last Updated November 04, 2022
+      URL: &sceneUrl //link[@rel="canonical"]/@href
+      Code:
+        selector: *sceneUrl
+        postProcess:
+          - replace:
+              - regex: '^(.+)-(\d+)/?$'
+                with: $2
+#
+# Last Updated November 23, 2022
