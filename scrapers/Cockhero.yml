@@ -18,25 +18,22 @@ xPathScrapers:
     common:
       $card: //*[@id="main-content"]//article[contains(@class, "item-list")]
     scene:
-      Title:
-        selector: $card/h2[@class="post-title"]/a
-      URL:
-        selector: $card/h2[@class="post-title"]/a/@href
-      Image:
-        selector: $card//div[@class="mlib-list-image"]/img/@src
+      Title: $card/h2[@class="post-title"]/a
+      URL: $card/h2[@class="post-title"]/a/@href
+      Image: $card//div[@class="mlib-list-image"]/img/@src
 
   sceneScraper:
+    common:
+      $id: //*[@id="the-post"]
     scene:
-      Title:
-        selector: //*[@id="the-post"]/div/h1/span
+      Title: $id/div/h1/span
       Date:
-        selector: //*[@id="the-post"]/div/p/span[@class="tie-date"]
+        selector: $id/div/p/span[@class="tie-date"]
         postProcess:
           - parseDate: January _2, 2006
-      Image:
-        selector: //*[@id="the-post"]//div[@class="mlib-list-image"]/img/@src
+      Image: $id//div[@class="mlib-list-image"]/img/@src
       Studio:
-        Name: //*[@id="the-post"]//li[div="Author"]/div[contains(@class,"value")]/a
+        Name: $id//li[div="Author"]/div[contains(@class,"value")]/a
       Tags:
         Name: //*[@id="main-content"]//p[@class="post-tag"]/a
 # Last Updated November 11, 2022
