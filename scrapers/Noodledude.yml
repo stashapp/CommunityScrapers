@@ -1,0 +1,41 @@
+name: "NoodleDude"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - noodledude.io
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //meta[@property='og:title']/@content
+        postProcess:
+          - replace:
+              - regex: (.*) \| NoodleDude PMVs$
+                with: $1
+      Details:
+        selector: //div[@class="description padding-medium"]/div[contains(@class, "rich-text-block-2") and not(contains(@class, "w-condition-invisible"))]//p
+        concat: "\n\n"
+      Image: //meta[@property='twitter:image']/@content
+      Studio:
+        Name:
+          fixed: NoodleDudePMV
+      Date:
+        selector: //script[contains(., 'ownerEmail')]/text()
+        postProcess:
+          - replace:
+              - regex: .+(?:"created_at":\s")([^"]+).+
+                with: $1
+              - regex: (.+)T.+
+                with: $1
+          - parseDate: 2006-01-02
+      Tags:
+        Name:
+          selector: //div[@class='tags-wrapper']//div[contains(@class, 'tag-list') or @class='other-tag-items']//text()
+          concat: ","
+          split: ","
+          postProcess:
+            - replace:
+                - regex: \s
+                  with:
+# Last Updated November 21, 2022
