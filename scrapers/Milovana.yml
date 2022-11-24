@@ -15,30 +15,33 @@ sceneByQueryFragment:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $pagebody: //*[@id="page-body"]/h2[@class="topic-title"]/a
+      $postbody: //div[@class="postbody"]//h3[@class="first"]/..
     scene:
       Title:
-        selector: //*[@id="page-body"]/h2[@class="topic-title"]/a
+        selector: $pagebody
         postProcess:
           - replace:
               - regex: (\s*[\[\(].*?[\]\)]\s*)
                 with: ""
       Date:
-        selector: //div[@class="postbody"]//h3[@class="first"]/..//p[@class="author"]//time/@datetime
+        selector: $postbody//p[@class="author"]//time/@datetime
         postProcess:
           - replace:
               - regex: (.+)(T.*)
                 with: $1
           - parseDate: 2006-01-02 #2021-07-25T14:36:40+00:00
       Image:
-        selector: //div[@class="postbody"]//h3[@class="first"]/..//img[@class="postimage"]/@src
+        selector: $postbody//img[@class="postimage"]/@src
         postProcess:
           - replace:
               - regex: ^./
                 with: https://milovana.com/forum/
       Studio:
-        Name: //div[@class="postbody"]//h3[@class="first"]/..//p[@class="author"]//a[@class="username"]
+        Name: $postbody//p[@class="author"]//a[@class="username"]
       URL:
-        selector: //*[@id="page-body"]/h2[@class="topic-title"]/a/@href
+        selector: $pagebody/@href
         postProcess:
           - replace:
               - regex: ^./
@@ -47,12 +50,11 @@ xPathScrapers:
                 with: $1$2
   search:
     common:
-      $card: //ul[@class="topiclist topics"]/li/dl
+      $card: //ul[@class="topiclist topics"]/li/dl/dt/div/a
     scene:
-      Title:
-        selector: $card/dt/div/a
+      Title: $card
       URL:
-        selector: $card/dt/div/a/@href
+        selector: $card/@href
         postProcess:
           - replace:
               - regex: ^./
