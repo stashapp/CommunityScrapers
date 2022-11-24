@@ -4,24 +4,35 @@ sceneByURL:
     url:
       - spankbang.com
     scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://spankbang.com/{filename}/video/
+  queryURLReplace:
+    filename: # expects an id in square brackets before extension, as saved by yt-dlp by default
+      - regex: '.*\[([0-9a-z]{4,})\]\.[^\.]+$'
+        with: $1
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
+        with: # clear the filename so that it doesn't leak
+
 xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class='left']/h1/@title
-      Details: //meta[@name='description']/@content
+      Details: //section[@class="details"]/div/p[2]/text()
       Image: //div[@class='play_cover']/img/@src
       Studio:
         Name: //li[@class='us']/a[@class='ul']/text()
       Tags:
-        Name: //div[@class='ent']/a[@href[contains(.,'tag')]]/text()|//li[@class='p']/text()
-      Performers:
-        Name: //div[@class='ent']/a[@href[contains(.,'pornstar')]]/text()|//div[@class='left']/h1/a/text()
-      URL: //link[rel='canonical']/@href
+        Name: //li[@class='p']/text()|//div[@class='searches']//a[not(@class='expand')]/text()
+      URL: //link[rel='canonical']/@href|//meta[@property='og:url']/@content
       Date:
-        selector: //script[contains(text(),'uploadDate')]/text()
+        selector: //script[@type='application/ld+json'][contains(text(),'uploadDate')]/text()
         postProcess:
           - replace:
               - regex: .*uploadDate":\s"(\d{4}-\d{2}-\d{2}).*
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated October 09, 2022
+
+# Last Updated November 20, 2022
