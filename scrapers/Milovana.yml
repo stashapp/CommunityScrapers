@@ -4,24 +4,59 @@ sceneByURL:
     url:
       - milovana.com
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://milovana.com/forum/search.php?keywords={}&terms=all&author=&fid%5B%5D=25&sc=1&sf=titleonly&sr=topics&sk=t&sd=d&st=0&ch=300&t=0&submit=Search
+  scraper: search
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 xPathScrapers:
   sceneScraper:
+    common:
+      $pagebody: //*[@id="page-body"]/h2[@class="topic-title"]/a
+      $postbody: //div[@class="postbody"]//h3[@class="first"]/..
     scene:
       Title:
-        selector: //wearenotreallyinterestedinscrapingatitleherebutbuildfailsifwedontmakeanattempt
+        selector: $pagebody
+        postProcess:
+          - replace:
+              - regex: (\s*[\[\(].*?[\]\)]\s*)
+                with: ""
       Date:
-        selector: //div[@class="postbody"]//h3[@class="first"]/..//p[@class="author"]//time/@datetime
+        selector: $postbody//p[@class="author"]//time/@datetime
         postProcess:
           - replace:
               - regex: (.+)(T.*)
                 with: $1
           - parseDate: 2006-01-02 #2021-07-25T14:36:40+00:00
       Image:
-        selector: //div[@class="postbody"]//h3[@class="first"]/..//img[@class="postimage"]/@src
+        selector: $postbody//img[@class="postimage"]/@src
         postProcess:
           - replace:
-              - regex: \.\/
+              - regex: ^./
                 with: https://milovana.com/forum/
       Studio:
-        Name: //div[@class="postbody"]//h3[@class="first"]/..//p[@class="author"]//a[@class="username"]
-# Last Updated September 29, 2022
+        Name: $postbody//p[@class="author"]//a[@class="username"]
+      URL:
+        selector: $pagebody/@href
+        postProcess:
+          - replace:
+              - regex: ^./
+                with: https://milovana.com/forum/
+              - regex: (http.+)&sid=\w*(.*)
+                with: $1$2
+  search:
+    common:
+      $card: //ul[@class="topiclist topics"]/li/dl/dt/div/a
+    scene:
+      Title: $card
+      URL:
+        selector: $card/@href
+        postProcess:
+          - replace:
+              - regex: ^./
+                with: https://milovana.com/forum/
+# Last Updated November 12, 2022
