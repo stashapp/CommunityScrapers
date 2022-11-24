@@ -11,6 +11,7 @@ xPathScrapers:
     scene:
       Title: $player/h1
       Details: //div[@class="ab-info controls-info__item xh-helper-hidden"]/p
+      URL: //meta[@property='og:url']/@content|//meta[@name='twitter:url']/@content
       Date:
         selector: //div[@class="entity-info-container__date tooltip-nocache"]/@data-tooltip
         postProcess:
