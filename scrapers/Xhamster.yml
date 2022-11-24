@@ -4,6 +4,18 @@ sceneByURL:
     url:
       - xhamster.com
     scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://xhamster.com/videos/{filename}
+  queryURLReplace:
+    filename: # expects an id in square brackets before extension, as saved by yt-dlp by default
+      - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
+        with: $1
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
+        with: # clear the filename so that it doesn't leak
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -11,6 +23,7 @@ xPathScrapers:
     scene:
       Title: $player/h1
       Details: //div[@class="ab-info controls-info__item xh-helper-hidden"]/p
+      URL: //meta[@property='og:url']/@content|//meta[@name='twitter:url']/@content
       Date:
         selector: //div[@class="entity-info-container__date tooltip-nocache"]/@data-tooltip
         postProcess:
@@ -29,4 +42,4 @@ xPathScrapers:
         Name:
           selector: $player/nav/ul/li/a[contains(@href,"/pornstars/")]
 
-# Last Updated June 28, 2022
+# Last Updated November 24, 2022
