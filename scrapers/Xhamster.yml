@@ -4,6 +4,18 @@ sceneByURL:
     url:
       - xhamster.com
     scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://xhamster.com/videos/{filename}
+  queryURLReplace:
+    filename: # expects an id in square brackets before extension, as saved by yt-dlp by default
+      - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
+        with: $1
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
+        with: # clear the filename so that it doesn't leak
+
 xPathScrapers:
   sceneScraper:
     common:
