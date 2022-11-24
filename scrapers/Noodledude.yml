@@ -11,15 +11,15 @@ xPathScrapers:
         selector: //meta[@property='og:title']/@content
         postProcess:
           - replace:
-            - regex: (.*) \| NoodleDude PMVs$
-              with: $1
+              - regex: (.*) \| NoodleDude PMVs$
+                with: $1
       Details:
         selector: //div[@class="description padding-medium"]/div[contains(@class, "rich-text-block-2") and not(contains(@class, "w-condition-invisible"))]//p
         concat: "\n\n"
       Image: //meta[@property='twitter:image']/@content
       Studio:
         Name:
-            fixed: NoodleDudePMV
+          fixed: NoodleDudePMV
       Date:
         selector: //script[contains(., 'ownerEmail')]/text()
         postProcess:
@@ -36,7 +36,6 @@ xPathScrapers:
           split: ","
           postProcess:
             - replace:
-              - regex: \s
-                with:
-
+                - regex: \s
+                  with:
 # Last Updated November 21, 2022
