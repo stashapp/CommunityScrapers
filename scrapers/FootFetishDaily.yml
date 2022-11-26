@@ -60,8 +60,13 @@ xPathScrapers:
       Studio: &studio
         Name: //nav//h1
       Performers: &performers
-        Name: //h2/a/text()
-        URL: //h2/a/@src
+        Name: //h2/a
+        URL:
+          selector: //h2/a/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: "https://footfetishdaily.com/"
       Image: &image //video/@poster | //video-js/@poster | //img[@class="img-fluid"]/@src
       URL: &url
         selector: //link[contains(@rel,'canonical')]/@href
@@ -84,10 +89,12 @@ xPathScrapers:
       Measurements: //label[contains(text(),"Bra Size")]/../..//p/text()
       Image: 
         selector: //img[@class="rounded-circle"]/@src
-      Height: 
-        selector: //label[contains(text(),"Height")]/../..//p/text()
-        postProcess:
-          - feetToCm: true
+      ## * the studio is inconsistent w/ imperial & metric, 
+      ## REF: https://github.com/stashapp/CommunityScrapers/pull/1168
+      # Height: 
+      #   selector: //label[contains(text(),"Height")]/../..//p/text()
+      #   postProcess:
+      #     - feetToCm: true
       Country: 
         selector: //label[contains(text(),"Home State")]/../..//p/text()
         postProcess:
