@@ -6,6 +6,25 @@ sceneByURL:
     url:
       - sexlikereal.com
     scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  # url format: https://www.sexlikereal.com/scenes/{title}-{code}
+  # However, the url:
+  #     https://www.sexlikereal.com/{code}
+  # will redirect to the full url so that is what we will use for scrapping
+  queryURL: https://www.sexlikereal.com/{filename}
+  queryURLReplace:
+    # filename format:
+    #   SLR_{stufio:[^_]+}_{title:[^_]+}_{res:\d+p}_{code:\d+}_{vrtype}.{ext}
+    #     vrtype: stuff we do not care about but could contain '_'
+    filename:
+      - regex: (?i)^SLR_.+_\d+p_(\d+)_.*$
+        with: $1
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
+        with: # clear the filename so that it doesn't leak
+  scraper: sceneScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -52,4 +71,4 @@ xPathScrapers:
               - regex: '^(.+)-(\d+)/?$'
                 with: $2
 #
-# Last Updated November 23, 2022
+# Last Updated November 27, 2022
