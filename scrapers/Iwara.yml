@@ -18,7 +18,7 @@ sceneByFragment:
 
 sceneByName:
   action: scrapeXPath
-  queryURL: https://ecchi.iwara.tv/search?query={}
+  queryURL: https://ecchi.iwara.tv/search?f%5B0%5D=type%3Avideo&query={}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
