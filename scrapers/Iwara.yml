@@ -64,7 +64,7 @@ xPathScrapers:
     scene:
       URL: //link[@rel="canonical"][contains(@href,"http")]/@href
       Title: $infoNode//h1/text()
-      Details: $infoNode/div[contains(@class,"field-name-body")]//p
+      Details: $infoNode/div[contains(@class,"field-name-body")]/div/div
       Image:
         selector: //video/@poster
         postProcess:
