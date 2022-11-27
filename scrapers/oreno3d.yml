@@ -36,7 +36,9 @@ xPathScrapers:
     scene:
       URL: //link[rel='canonical']/@href|//meta[@property='og:url']/@content
       Title: $article//h1[@class="video-h1"]/text()
-      Details: $article//blockquote[@class="video-information-comment"]
+      Details:
+        selector: $article//blockquote[@class="video-information-comment"]/text()
+        concat: "\n"
       Image:
         selector: $article//img[@class="video-img"]/@src
         postProcess:
