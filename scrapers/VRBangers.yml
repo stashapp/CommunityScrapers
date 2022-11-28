@@ -63,6 +63,8 @@ xPathScrapers:
                 - regex: ^
                   with: "https:"
       Image: &imageSel //meta[@property="og:image"]/@content
+      URL: //link[@rel="canonical"]/@href
+
   movieScraper:
     common:
       $info: *info
