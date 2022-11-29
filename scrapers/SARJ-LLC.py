@@ -5,67 +5,38 @@ import re
 from urllib.parse import urlparse, urlencode
 
 try:
+    from py_common import log
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
+
+try:
     import requests
 except ModuleNotFoundError:
     print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
     sys.exit()
 
-
-class Logger:
-    levels = {
-        "trace": b't'.decode(),
-        "debug": b'd'.decode(),
-        "info": b'i'.decode(),
-        "warning": b'w'.decode(),
-        "error": b'e'.decode(),
-    }
-
-    def __write(self, level: str, msg: str):
-        if level == "" or level not in self.levels:
-            return
-
-        print(f"\x01{self.levels[level]}\x02{msg}\n", file=sys.stderr, flush=True)
-
-    def trace(self, msg):
-        self.__write("trace", msg)
-
-    def debug(self, msg):
-        self.__write("debug", msg)
-
-    def info(self, msg):
-        self.__write("info", msg)
-
-    def warning(self, msg):
-        self.__write("warning", msg)
-
-    def error(self, msg):
-        self.__write("error", msg)
-
-
-log = Logger()
-
-
-def scrape_url(url, type):
+def scrape_url(url, scrape_type):
     parsed = urlparse(url)
 
     path = parsed.path.split('/')
     base_url = f"{parsed.scheme}://{parsed.netloc}"
-    if type == 'scene':
+    if scrape_type == 'scene':
         try:
             index = path.index('movie')
             scraped = scrape_movie(base_url, path[index + 1], path[index + 2])
         except ValueError:
             log.error(f"scene scraping not supported for {url}")
             return None
-    elif type == 'gallery':
+    elif scrape_type == 'gallery':
         try:
             index = path.index('gallery')
             scraped = scrape_gallery(base_url, path[index + 1], path[index + 2])
         except ValueError:
             log.error(f"gallery scraping not supported for {url}")
             return None
-    elif type == 'performer':
+    elif scrape_type == 'performer':
         try:
             index = path.index('model')
             scraped = scrape_model(base_url, path[index + 1])
@@ -78,23 +49,25 @@ def scrape_url(url, type):
     return scraped
 
 
-def query(fragment, type):
-    if type == 'scene' or type == 'gallery':
+def query(fragment, query_type):
+    res = None
+    if query_type in ('scene', 'gallery'):
         name = re.sub(r'\W', '_', fragment['title']).upper()
+        if fragment.get('date') is None:
+            log.error("Date is a required field when scraping by fragment")
+            return None
         date = fragment['date'].replace('-', '')
 
-        scraper = globals()['scrape_' + ('movie' if type == 'scene' else type)]
+        scraper = globals()['scrape_' + ('movie' if query_type == 'scene' else query_type)]
         res = scraper('https://metartnetwork.com', date, name)
-        if res is not None:
-            return res
+    return res
 
-
-def search(type, name):
+def search(s_type, name):
     search_type = {
         'scene': 'MOVIE',
         'gallery': 'GALLERY',
         'performer': 'model'
-    }[type]
+    }[s_type]
     page = 1
     page_size = 30
     args = {
@@ -103,14 +76,14 @@ def search(type, name):
         'sortBy': 'relevance'
     }
 
-    if type == 'performer':
+    if s_type == 'performer':
         def map_result(result):
             item = result['item']
             return {
                 'name': item['name'],
                 'url': f"https://www.metartnetwork.com{item['path']}",
             }
-    elif type == 'scene':
+    elif s_type == 'scene':
         def map_result(result):
             item = result['item']
             studio = get_studio(item['siteUUID'])
@@ -128,7 +101,7 @@ def search(type, name):
 
     results = []
 
-    log.info(f"Searching for {type} '{name}'")
+    log.info(f"Searching for {s_type} '{name}'")
     while True:
         args['page'] = page
         response = fetch("https://metartnetwork.com", "search-results", args)
@@ -151,19 +124,19 @@ def search(type, name):
     return results
 
 
-def fetch(base_url, type, arguments):
-    url = f"{base_url}/api/{type}?{urlencode(arguments)}"
+def fetch(base_url, fetch_type, arguments):
+    url = f"{base_url}/api/{fetch_type}?{urlencode(arguments)}"
     log.debug(f"Fetching URL {url}")
     try:
         response = requests.get(url, headers={
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
         }, timeout=(3, 6))
-    except requests.exceptions.RequestException as e:
-        log.error(f"Error fetching URL {url}: {e.strerror}")
+    except requests.exceptions.RequestException as req_ex:
+        log.error(f"Error fetching URL {url}: {req_ex}")
         return None
 
     if response.status_code >= 400:
-        log.debug(f"Fetching URL {url} resulted in error status: {response.status_code}")
+        log.info(f"Fetching URL {url} resulted in error status: {response.status_code}")
         return None
 
     data = response.json()
@@ -179,7 +152,7 @@ def scrape_model(base_url, name):
                 re.sub(
                     '[_-]',
                     ' ',
-                    re.sub('\w\S*', lambda m: m.group(0).lower().capitalize(), p),
+                    re.sub(r'\w\S*', lambda m: m.group(0).lower().capitalize(), p),
                 ),
                 name.split('-')
             )
@@ -201,6 +174,23 @@ def map_media(data, studio, base_url):
         url = f"https://www.{studio_url}{data['path']}"
         studio_name = {'Name': studio[0]}
 
+    director = None
+    directors = []
+
+    # director seems to be included in `photographers` and `crew` section
+    if data.get("photographers"):
+        for director in data['photographers']:
+            directors.append(director.get('name').strip())
+    if data.get('crew') and studio_name["Name"] not in ("Sex Art", "ALS Scan"):
+                                # some sites only use the `photograpers`` section for director
+        for crew in data['crew']:
+            if crew.get('role') == "Still Photographer":
+                for crew_name in crew.get('names'):
+                    name = crew_name.strip()
+                    if name not in directors:
+                        directors.append(name)
+    director = ", ".join(directors)
+
     return {
         'Title': data['name'],
         'Details': data['description'],
@@ -208,7 +198,8 @@ def map_media(data, studio, base_url):
         'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
         'Tags': list(map(lambda t: {'Name': t}, data['tags'])),
         'Performers': list(map(lambda m: map_model(base_url, m), data['models'])),
-        'Studio': studio_name
+        'Studio': studio_name,
+        "Director": director
     }
 
 
@@ -229,16 +220,16 @@ def scrape_movie(base_url, date, name):
                 response = requests.get(res['Image'], headers={
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
                 }, timeout=(3, 6))
-            except requests.exceptions.RequestException as e:
-                log.error(f"Error fetching URL {res['Image']}: {e.strerror}")
+            except requests.exceptions.RequestException as req_ex:
+                log.error(f"Error fetching URL {res['Image']}: {req_ex}")
 
             if response.status_code < 400:
                 mime = 'image/jpeg'
                 encoded = base64.b64encode(response.content).decode('utf-8')
-                res['Image'] = 'data:{0};base64,{1}'.format(mime, encoded)
+                res['Image'] = f'data:{mime};base64,{encoded}'
                 break
 
-            log.debug(f"Fetching URL {res['Image']} resulted in error status: {response.status_code}")
+            log.info(f"Fetching URL {res['Image']} resulted in error status: {response.status_code}")
             res['Image'] = None
 
     return res
@@ -257,11 +248,11 @@ def scrape_gallery(base_url, date, name):
 def map_model(base_url, model):
     tags = list(map(lambda t: {'Name': t}, model['tags']))
 
-    def add_tag(key, format):
+    def add_tag(key, tag_format):
         nonlocal tags
         if key in model and model[key] != "":
             tags.append({
-                'Name': format.format(model[key])
+                'Name': tag_format.format(model[key])
             })
 
     add_tag('hair', '{} hair')
@@ -269,12 +260,17 @@ def map_model(base_url, model):
     add_tag('eyes', '{} eyes')
     add_tag('breasts', '{} breasts')
 
+    country_name = model.get("country", {}).get("name")
+    # Unknown is not parsable by stash, convert to None
+    if country_name and country_name == "Unknown":
+        country_name = None
+
     return {
         'Name': model.get("name"),
         'Gender': model.get("gender" or "").upper(),
         'URL': f"{base_url}{model.get('path')}",
         'Ethnicity': model.get("ethnicity"),
-        'Country': model.get("country", {}).get("name"),
+        'Country': country_name,
         'Height': str(model.get("height")),
         'Weight': str(model.get("weight")),
         'Measurements': model.get("size"),
@@ -310,7 +306,7 @@ def validate_url(url):
     if url is None or not re.match('^https?://', url):
         return False
 
-    for (name, domain) in studios.values():
+    for (_, domain) in studios.values():
         if domain in url:
             return True
 
@@ -320,13 +316,13 @@ def validate_url(url):
     return False
 
 
-def get_studio(siteUuid):
-    return studios[siteUuid] if siteUuid in studios else None
+def get_studio(site_uuid):
+    return studios[site_uuid] if site_uuid in studios else None
 
 
-input = sys.stdin.read()
-i = json.loads(input)
-log.debug(f"Started with input: {input}")
+scraper_input = sys.stdin.read()
+i = json.loads(scraper_input)
+log.debug(f"Started with input: {scraper_input}")
 
 ret = {}
 if sys.argv[1] == "scrape":
@@ -338,10 +334,12 @@ elif sys.argv[1] == "query":
     if ret is None or ret == {}:
         ret = query(i, sys.argv[2])
 elif sys.argv[1] == 'search':
-    ret = search(sys.argv[2], i['title'] if 'title' in i else i['name'])
+    if i.get('title') is not None or i.get('name') is not None:
+        ret = search(sys.argv[2], i['title'] if 'title' in i else i['name'])
 
 if ret is not None:
     output = json.dumps(ret)
     print(output)
-    # don't log the output since it has an image
+else:
+    print("{}")
     # log.debug(f"Send output: {output}")
