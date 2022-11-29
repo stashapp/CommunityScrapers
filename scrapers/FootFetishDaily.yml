@@ -45,6 +45,12 @@ xPathScrapers:
           - replace:
               - regex: "( Remastered| Photoset)"
                 with: ""
+      Code:
+        selector: //link[contains(@rel,'canonical')]/@href
+        postProcess:
+          - replace:
+              - regex: .*\/(\d+)\/.*
+                with: $1
       Details: &details
         selector: //main//p
         postProcess:
