@@ -29,6 +29,8 @@ xPathScrapers:
       Details:
         selector: //span[@class="description-text"]/*[self::p or self::ul]
         concat: "\n\n"
+      Code: //div[@class="shoot-page"]/@data-shootid
+      Director: //span[@class="director-name"]
       Performers:
         Name:
           selector: //p[@class="starring"]/span[@class="names h5"]/a/text()
@@ -54,4 +56,4 @@ xPathScrapers:
       URL: //link[@rel="canonical"]/@href
 driver:
   useCDP: true
-# Last Updated January 25, 2022
+# Last Updated December 04, 2022
