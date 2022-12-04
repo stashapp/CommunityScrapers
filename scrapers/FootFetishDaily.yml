@@ -5,30 +5,30 @@ sceneByURL:
       - footfetishdaily.com/update/
     scraper: sceneScraper
 sceneByFragment:
-    # this works if the fileNames are "as-is" f/ the studio
-    # or at least if you keep the sceneID at the front. ex: 234_sceneName.mp4
-    action: scrapeXPath
-    scraper: sceneScraper
-    queryURL: "https://footfetishdaily.com/update/{filename}/"
-    queryURLReplace:
-      filename:
-        - regex: "^(\\d+).*$"
-          with: $1
+  # this works if the fileNames are "as-is" f/ the studio
+  # or at least if you keep the sceneID at the front. ex: 234_sceneName.mp4
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: "https://footfetishdaily.com/update/{filename}/"
+  queryURLReplace:
+    filename:
+      - regex: "^(\\d+).*$"
+        with: $1
 galleryByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - footfetishdaily.com/update/
     scraper: galleryScraper
 galleryByFragment:
-    # galleryIDs (until ~2020) are the same as sceneId, after: they are sceneId+1. 
-    # either way (like scenes) galleryID must be @start of filename. ex: 234_someName.zip
-    action: scrapeXPath
-    scraper: galleryScraper
-    queryURL: "https://footfetishdaily.com/update/{filename}/"
-    queryURLReplace:
-      filename:
-        - regex: "^(\\d+).*$"
-          with: $1
+  # galleryIDs (until ~2020) are the same as sceneId, after: they are sceneId+1.
+  # either way (like scenes) galleryID must be @start of filename. ex: 234_someName.zip
+  action: scrapeXPath
+  scraper: galleryScraper
+  queryURL: "https://footfetishdaily.com/update/{filename}/"
+  queryURLReplace:
+    filename:
+      - regex: "^(\\d+).*$"
+        with: $1
 performerByURL:
   - action: scrapeXPath
     url:
@@ -93,15 +93,15 @@ xPathScrapers:
       Name: //main//h1/text()
       Ethnicity: //label[contains(text(),"Ethnicity")]/../..//p/text()
       Measurements: //label[contains(text(),"Bra Size")]/../..//p/text()
-      Image: 
+      Image:
         selector: //img[@class="rounded-circle"]/@src
-      ## * the studio is inconsistent w/ imperial & metric, 
+      ## * the studio is inconsistent w/ imperial & metric,
       ## REF: https://github.com/stashapp/CommunityScrapers/pull/1168
-      # Height: 
+      # Height:
       #   selector: //label[contains(text(),"Height")]/../..//p/text()
       #   postProcess:
       #     - feetToCm: true
-      Country: 
+      Country:
         selector: //label[contains(text(),"Home State")]/../..//p/text()
         postProcess:
           - map: # props to brazzers.yml
@@ -156,5 +156,4 @@ xPathScrapers:
               WI: "USA"
               WV: "USA"
               WY: "USA"
-
 # Last Updated November 10, 2022
