@@ -454,6 +454,7 @@ fistingcentral.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fit18.com|Fit18.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 fitting-room.com|FittingRoom.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 footfetishbeauties.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+footfetishdaily.com|FootFetishDaily.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|foot fetish
 footsiebabes.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 forbiddenfruitsfilms.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 forbondage.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

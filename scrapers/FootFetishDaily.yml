@@ -1,0 +1,159 @@
+name: "Foot Fetish Daily"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - footfetishdaily.com/update/
+    scraper: sceneScraper
+sceneByFragment:
+  # this works if the fileNames are "as-is" f/ the studio
+  # or at least if you keep the sceneID at the front. ex: 234_sceneName.mp4
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: "https://footfetishdaily.com/update/{filename}/"
+  queryURLReplace:
+    filename:
+      - regex: "^(\\d+).*$"
+        with: $1
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - footfetishdaily.com/update/
+    scraper: galleryScraper
+galleryByFragment:
+  # galleryIDs (until ~2020) are the same as sceneId, after: they are sceneId+1.
+  # either way (like scenes) galleryID must be @start of filename. ex: 234_someName.zip
+  action: scrapeXPath
+  scraper: galleryScraper
+  queryURL: "https://footfetishdaily.com/update/{filename}/"
+  queryURLReplace:
+    filename:
+      - regex: "^(\\d+).*$"
+        with: $1
+performerByURL:
+  - action: scrapeXPath
+    url:
+      # REQ: (/ID/)[name:optional] # ex /230/Dahlia_Denyle
+      - footfetishdaily.com/model/
+      - footfetishdaily.com/guest/models/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title
+        selector: //main//h1
+        postProcess:
+          - replace:
+              - regex: "( Remastered| Photoset)"
+                with: ""
+      Code:
+        selector: //link[contains(@rel,'canonical')]/@href
+        postProcess:
+          - replace:
+              - regex: .*\/(\d+)\/.*
+                with: $1
+      Details: &details
+        selector: //main//p
+        postProcess:
+          - replace:
+              - regex: "(\\*Trailer not available for this update.|Join Now!)"
+                with: ""
+      Date: &date
+        selector: //main//h3
+        postProcess:
+          - replace:
+              - regex: "Release Date:"
+                with: ""
+      Studio: &studio
+        Name: //nav//h1
+      Performers: &performers
+        Name: //h2/a
+        URL:
+          selector: //h2/a/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: "https://footfetishdaily.com/"
+      Image: &image //video/@poster | //video-js/@poster | //img[@class="img-fluid"]/@src
+      URL: &url
+        selector: //link[contains(@rel,'canonical')]/@href
+        postProcess:
+          - replace:
+              - regex: ^.(.*).$
+                with: $1
+  galleryScraper:
+    gallery:
+      Title: *title
+      Details: *details
+      Date: *date
+      Studio: *studio
+      Performers: *performers
+      URL: *url
+  performerScraper:
+    performer:
+      Name: //main//h1/text()
+      Ethnicity: //label[contains(text(),"Ethnicity")]/../..//p/text()
+      Measurements: //label[contains(text(),"Bra Size")]/../..//p/text()
+      Image:
+        selector: //img[@class="rounded-circle"]/@src
+      ## * the studio is inconsistent w/ imperial & metric,
+      ## REF: https://github.com/stashapp/CommunityScrapers/pull/1168
+      # Height:
+      #   selector: //label[contains(text(),"Height")]/../..//p/text()
+      #   postProcess:
+      #     - feetToCm: true
+      Country:
+        selector: //label[contains(text(),"Home State")]/../..//p/text()
+        postProcess:
+          - map: # props to brazzers.yml
+              AK: "USA"
+              AL: "USA"
+              AR: "USA"
+              AZ: "USA"
+              CA: "USA"
+              CO: "USA"
+              CT: "USA"
+              DC: "USA"
+              DE: "USA"
+              FL: "USA"
+              GA: "USA"
+              HI: "USA"
+              IA: "USA"
+              ID: "USA"
+              IL: "USA"
+              IN: "USA"
+              KS: "USA"
+              KY: "USA"
+              LA: "USA"
+              MA: "USA"
+              MD: "USA"
+              ME: "USA"
+              MI: "USA"
+              MN: "USA"
+              MO: "USA"
+              MS: "USA"
+              MT: "USA"
+              NC: "USA"
+              ND: "USA"
+              NE: "USA"
+              NH: "USA"
+              NJ: "USA"
+              NM: "USA"
+              NV: "USA"
+              NY: "USA"
+              OH: "USA"
+              OK: "USA"
+              OR: "USA"
+              PA: "USA"
+              RI: "USA"
+              SC: "USA"
+              SD: "USA"
+              TN: "USA"
+              TX: "USA"
+              UT: "USA"
+              VA: "USA"
+              VT: "USA"
+              WA: "USA"
+              WI: "USA"
+              WV: "USA"
+              WY: "USA"
+# Last Updated November 10, 2022
