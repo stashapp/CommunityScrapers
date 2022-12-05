@@ -63,6 +63,13 @@ IGNORE_TAGS = [
 # Some performers don't need to be reversed
 IGNORE_PERF_REVERSE = ["Lily Heart"]
 
+# Keep the legacy field scheme:
+# Actual Code -> Title, actual Title ->> Details, actual Details -> /dev/null
+LEGACY_FIELDS = True
+# Studio Code now in a separate field, so it may (or may not) be stripped from title
+# Makes sense only if not LEGACY_FIELDS
+KEEP_CODE_IN_TITLE = True
+
 # Tags you want to be added in every scrape
 FIXED_TAGS = ""
 # Get both Javlibrary and R18 tags
@@ -314,6 +321,8 @@ def regexreplace(input_replace):
 
 
 def getxpath(xpath, tree):
+    if not xpath:
+        return None
     xpath_result = []
     # It handles the union strangely so it is better to split and get one by one
     if "|" in xpath:
@@ -576,11 +585,19 @@ jav_xPath_search[
 
 jav_xPath = {}
 jav_xPath[
-    "title"] = '//td[@class="header" and text()="ID:"]/following-sibling::td/text()'
-jav_xPath["details"] = '//div[@id="video_title"]/h3/a/text()'
+    "code"] = '//td[@class="header" and text()="ID:"]/following-sibling::td/text()'
+# or '//div[@id="video_id"]//td[2][@class="text"]/text()'
+jav_xPath[
+    "title"] = jav_xPath["code"] if LEGACY_FIELDS else '//div[@id="video_title"]/h3/a/text()'
+#There are no actual Details in JavLibrary,
+#but for legacy reasons you have to put Title in Details by default
+jav_xPath[
+    "details"] = None if not LEGACY_FIELDS else '//div[@id="video_title"]/h3/a/text()'
 jav_xPath["url"] = '//meta[@property="og:url"]/@content'
 jav_xPath[
     "date"] = '//td[@class="header" and text()="Release Date:"]/following-sibling::td/text()'
+jav_xPath[
+    "director"] = '//div[@id="video_director"]//td[@class="text"]/span[@class="director"]/a/text()'
 jav_xPath[
     "tags"] = '//td[@class="header" and text()="Genre(s):"]'\
             '/following::td/span[@class="genre"]/a/text()'
@@ -676,9 +693,17 @@ if JAV_MAIN_HTML:
                 imageBase64_jav_thread.start()
         if jav_result.get("url"):
             jav_result["url"] = "https:" + jav_result["url"][0]
-        if jav_result.get("details"):
+        if jav_result.get("details") and LEGACY_FIELDS:
             jav_result["details"] = re.sub(r"^(.*? ){1}", "",
                                            jav_result["details"][0])
+        if jav_result.get("title"):
+            if LEGACY_FIELDS or KEEP_CODE_IN_TITLE:
+                jav_result["title"] = jav_result["title"][0]
+            elif not KEEP_CODE_IN_TITLE:
+                jav_result["title"] = (re.sub(jav_result['code'][0], "",
+                                            jav_result["title"][0])).lstrip()
+        if jav_result.get("director"):
+            jav_result["director"] = jav_result["director"][0]
         if jav_result.get("performers_url") and IGNORE_ALIASES is False:
             javlibrary_aliases_thread = threading.Thread(
                 target=th_request_perfpage,
@@ -751,17 +776,24 @@ if R18_MAIN_HTML is None and JAV_MAIN_HTML is None:
 # Time to scrape all data
 scrape = {}
 
+# DVD code
+if jav_result.get('code'):
+    scrape['code'] = jav_result['code'][0]
 # Title - Javlibrary > r18
 if r18_result.get('title'):
     scrape['title'] = r18_result['title']
 if jav_result.get('title'):
-    scrape['title'] = jav_result['title'][0]
+    scrape['title'] = jav_result['title']
 
 # Date - R18 > Javlibrary
 if jav_result.get('date'):
     scrape['date'] = jav_result['date'][0]
 if r18_result.get('date'):
     scrape['date'] = r18_result['date']
+
+# Director
+if jav_result.get('director'):
+    scrape['director'] = jav_result['director']
 
 # URL - Javlibrary > R18
 if r18_result.get('url'):
