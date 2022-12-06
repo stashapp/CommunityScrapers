@@ -11,8 +11,8 @@ sceneByFragment:
   # constructs the scene URL from the filename, provided that the filename includes the scene id
   queryURLReplace:
     filename:
-        # the id in kink.com is a 1-6 digit number
-      - regex: ^(\d+)[^\d].*  # support filenames in the form 12345_performer_other_data.mp4
+      # the id in kink.com is a 1-6 digit number
+      - regex: ^(\d+)[^\d].* # support filenames in the form 12345_performer_other_data.mp4
         with: $1
       - regex: .*\((\d+)\)\.[a-zA-Z\d]+$ #support filenames in the form scene - date - performer (12345).mp4
         with: $1
@@ -29,6 +29,8 @@ xPathScrapers:
       Details:
         selector: //span[@class="description-text"]/*[self::p or self::ul]
         concat: "\n\n"
+      Code: //div[@class="shoot-page"]/@data-shootid
+      Director: //span[@class="director-name"]
       Performers:
         Name:
           selector: //p[@class="starring"]/span[@class="names h5"]/a/text()
@@ -54,4 +56,4 @@ xPathScrapers:
       URL: //link[@rel="canonical"]/@href
 driver:
   useCDP: true
-# Last Updated January 25, 2022
+# Last Updated December 04, 2022
