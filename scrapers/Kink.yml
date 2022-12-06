@@ -11,8 +11,8 @@ sceneByFragment:
   # constructs the scene URL from the filename, provided that the filename includes the scene id
   queryURLReplace:
     filename:
-        # the id in kink.com is a 1-6 digit number
-      - regex: ^(\d+)[^\d].*  # support filenames in the form 12345_performer_other_data.mp4
+      # the id in kink.com is a 1-6 digit number
+      - regex: ^(\d+)[^\d].* # support filenames in the form 12345_performer_other_data.mp4
         with: $1
       - regex: .*\((\d+)\)\.[a-zA-Z\d]+$ #support filenames in the form scene - date - performer (12345).mp4
         with: $1
