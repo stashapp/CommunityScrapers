@@ -57,6 +57,8 @@ DEBUG_MODE = False
 STASH_SUPPORTED = False
 # Stash isn't support Labels yet
 STASH_SUPPORT_LABELS = False
+# ...and name order too...
+STASH_SUPPORT_NAME_ORDER = False
 # Tags you don't want to scrape
 IGNORE_TAGS = [
     "Features Actress", "Hi-Def", "Beautiful Girl", "Blu-ray",
@@ -428,6 +430,18 @@ def buildlist_tagperf(data, type_scrape=""):
             if p_name not in IGNORE_PERF_REVERSE and not NAME_ORDER_JAPANESE:
                 # Invert name (Aoi Tsukasa -> Tsukasa Aoi)
                 p_name = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", p_name)
+            if STASH_SUPPORT_NAME_ORDER:
+                # There is such names as "Aoi." and even "@you". Indeed, JAV is fun!
+                parsed_name = re.search("([a-zA-Z\.@]+)(\s)?([a-zA-Z]+)?", p_name)
+                p_name = {}
+                if parsed_name[2] == ' ' and parsed_name[3]:
+                    p_name[
+                        "surname"] = parsed_name[1]
+                    p_name[
+                        "first_name"] = parsed_name[3]
+                else:
+                    p_name[
+                        "nickname"] = parsed_name[0]
         if type_scrape == "tags" and p_name in IGNORE_TAGS:
             continue
         if type_scrape == "perf_jav" and dict_jav.get("performer_aliases"):
