@@ -464,7 +464,7 @@ def parse_movie_json(movie_json: dict) -> dict:
     scrape["date"] = movie_json[0].get(date_by_studio)
 
     scrape[
-        "front_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg"
+        "front_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg?format=webp"
     scrape[
         "back_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg"
 
