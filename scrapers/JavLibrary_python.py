@@ -60,6 +60,8 @@ IGNORE_TAGS = [
     "Features Actress", "Hi-Def", "Beautiful Girl", "Blu-ray",
     "Featured Actress", "VR Exclusive", "MOODYZ SALE 4", "Girl", "Tits"
 ]
+# Select preferable name order
+NAME_ORDER_JAPANESE = False
 # Some performers don't need to be reversed
 IGNORE_PERF_REVERSE = ["Lily Heart"]
 
@@ -421,7 +423,7 @@ def buildlist_tagperf(data, type_scrape=""):
         if p_name == "":
             continue
         if type_scrape == "perf_jav":
-            if p_name not in IGNORE_PERF_REVERSE:
+            if p_name not in IGNORE_PERF_REVERSE and not NAME_ORDER_JAPANESE:
                 # Invert name (Aoi Tsukasa -> Tsukasa Aoi)
                 p_name = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", p_name)
         if type_scrape == "tags" and p_name in IGNORE_TAGS:
