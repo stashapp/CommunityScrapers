@@ -55,6 +55,8 @@ JAV_HEADERS = {
 DEBUG_MODE = False
 # We can't add movie image atm in the same time as Scene
 STASH_SUPPORTED = False
+# Stash isn't support Labels yet
+STASH_SUPPORT_LABELS = False
 # Tags you don't want to scrape
 IGNORE_TAGS = [
     "Features Actress", "Hi-Def", "Beautiful Girl", "Blu-ray",
@@ -612,6 +614,9 @@ jav_xPath[
 jav_xPath[
     "studio"] = '//td[@class="header" and text()="Maker:"]'\
                 '/following-sibling::td/span[@class="maker"]/a/text()'
+jav_xPath[
+    "label"] = '//td[@class="header" and text()="Label:"]'\
+                '/following-sibling::td/span[@class="label"]/a/text()'
 jav_xPath["image"] = '//div[@id="video_jacket"]/img/@src'
 jav_xPath["r18"] = '//a[text()="purchasing HERE"]/@href'
 
@@ -706,6 +711,8 @@ if JAV_MAIN_HTML:
                                             jav_result["title"][0])).lstrip()
         if jav_result.get("director"):
             jav_result["director"] = jav_result["director"][0]
+        if jav_result.get("label"):
+            jav_result["label"] = jav_result["label"][0]
         if jav_result.get("performers_url") and IGNORE_ALIASES is False:
             javlibrary_aliases_thread = threading.Thread(
                 target=th_request_perfpage,
@@ -823,6 +830,10 @@ if r18_result.get('studio'):
     scrape['studio']['name'] = r18_result['studio']
 if jav_result.get('studio'):
     scrape['studio']['name'] = jav_result['studio'][0]
+
+# Not supported by Stash yet
+if jav_result.get('label') and STASH_SUPPORT_LABELS:
+    scrape['label']['name'] = jav_result['label']
 
 # Performer - Javlibrary > R18
 if r18_result.get('performers'):
