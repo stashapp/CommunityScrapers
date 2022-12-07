@@ -1,10 +1,9 @@
-name: "Torrent"
+name: Torrent
 sceneByFragment:
     action: script
     script:
-      - python
-      # use python3 instead if needed
+      - python3
       - torrent.py
       - query
 
-# Last Updated February 04, 2021
+# Last Updated December 07, 2022
