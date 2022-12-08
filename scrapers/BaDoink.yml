@@ -84,7 +84,7 @@ xPathScrapers:
               - regex: '^(.+)-(\d+)/?$'
                 with: $2
               - regex: '^.*[^\d].*$' # if no code is found in the url
-                with: # clear the filename so that it doesn't leak
+                with: # return an empty string
   # Uncomment this section to user Performer Search on this scraper
   # performerSearch:
   #   common:
@@ -154,5 +154,4 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
-#
 # Last Updated November 25, 2022
