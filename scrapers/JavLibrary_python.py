@@ -55,13 +55,26 @@ JAV_HEADERS = {
 DEBUG_MODE = False
 # We can't add movie image atm in the same time as Scene
 STASH_SUPPORTED = False
+# Stash doesn't support Labels yet
+STASH_SUPPORT_LABELS = False
+# ...and name order too...
+STASH_SUPPORT_NAME_ORDER = False
 # Tags you don't want to scrape
 IGNORE_TAGS = [
     "Features Actress", "Hi-Def", "Beautiful Girl", "Blu-ray",
     "Featured Actress", "VR Exclusive", "MOODYZ SALE 4", "Girl", "Tits"
 ]
+# Select preferable name order
+NAME_ORDER_JAPANESE = False
 # Some performers don't need to be reversed
 IGNORE_PERF_REVERSE = ["Lily Heart"]
+
+# Keep the legacy field scheme:
+# Actual Code -> Title, actual Title -> Details, actual Details -> /dev/null
+LEGACY_FIELDS = True
+# Studio Code now in a separate field, so it may (or may not) be stripped from title
+# Makes sense only if not LEGACY_FIELDS
+KEEP_CODE_IN_TITLE = True
 
 # Tags you want to be added in every scrape
 FIXED_TAGS = ""
@@ -314,6 +327,8 @@ def regexreplace(input_replace):
 
 
 def getxpath(xpath, tree):
+    if not xpath:
+        return None
     xpath_result = []
     # It handles the union strangely so it is better to split and get one by one
     if "|" in xpath:
@@ -412,9 +427,21 @@ def buildlist_tagperf(data, type_scrape=""):
         if p_name == "":
             continue
         if type_scrape == "perf_jav":
-            if p_name not in IGNORE_PERF_REVERSE:
+            if p_name not in IGNORE_PERF_REVERSE and not NAME_ORDER_JAPANESE:
                 # Invert name (Aoi Tsukasa -> Tsukasa Aoi)
                 p_name = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", p_name)
+            if STASH_SUPPORT_NAME_ORDER:
+                # There is such names as "Aoi." and even "@you". Indeed, JAV is fun!
+                parsed_name = re.search("([a-zA-Z\.@]+)(\s)?([a-zA-Z]+)?", p_name)
+                p_name = {}
+                if parsed_name[2] == ' ' and parsed_name[3]:
+                    p_name[
+                        "surname"] = parsed_name[1]
+                    p_name[
+                        "first_name"] = parsed_name[3]
+                else:
+                    p_name[
+                        "nickname"] = parsed_name[0]
         if type_scrape == "tags" and p_name in IGNORE_TAGS:
             continue
         if type_scrape == "perf_jav" and dict_jav.get("performer_aliases"):
@@ -576,11 +603,19 @@ jav_xPath_search[
 
 jav_xPath = {}
 jav_xPath[
-    "title"] = '//td[@class="header" and text()="ID:"]/following-sibling::td/text()'
-jav_xPath["details"] = '//div[@id="video_title"]/h3/a/text()'
+    "code"] = '//td[@class="header" and text()="ID:"]/following-sibling::td/text()'
+# or '//div[@id="video_id"]//td[2][@class="text"]/text()'
+jav_xPath[
+    "title"] = jav_xPath["code"] if LEGACY_FIELDS else '//div[@id="video_title"]/h3/a/text()'
+#There are no actual Details in JavLibrary
+#For legacy reasons we add the Title in Details by default
+jav_xPath[
+    "details"] = None if not LEGACY_FIELDS else '//div[@id="video_title"]/h3/a/text()'
 jav_xPath["url"] = '//meta[@property="og:url"]/@content'
 jav_xPath[
     "date"] = '//td[@class="header" and text()="Release Date:"]/following-sibling::td/text()'
+jav_xPath[
+    "director"] = '//div[@id="video_director"]//td[@class="text"]/span[@class="director"]/a/text()'
 jav_xPath[
     "tags"] = '//td[@class="header" and text()="Genre(s):"]'\
             '/following::td/span[@class="genre"]/a/text()'
@@ -593,6 +628,9 @@ jav_xPath[
 jav_xPath[
     "studio"] = '//td[@class="header" and text()="Maker:"]'\
                 '/following-sibling::td/span[@class="maker"]/a/text()'
+jav_xPath[
+    "label"] = '//td[@class="header" and text()="Label:"]'\
+                '/following-sibling::td/span[@class="label"]/a/text()'
 jav_xPath["image"] = '//div[@id="video_jacket"]/img/@src'
 jav_xPath["r18"] = '//a[text()="purchasing HERE"]/@href'
 
@@ -638,7 +676,7 @@ if JAV_SEARCH_HTML:
     JAV_MAIN_HTML = jav_search(JAV_SEARCH_HTML, jav_xPath_search)
 
 if JAV_MAIN_HTML is None and R18_MAIN_HTML is None and SCENE_TITLE:
-    # If javlibrary don't have it, there is no way that R18 have it but why not trying...
+    # If javlibrary doesn't have it, there is no way that R18 while have it but why not try...
     log.info("Javlib doesn't give any result, trying search with R18...")
     R18_SEARCH_HTML = send_request(
         f"https://www.r18.com/common/search/searchword={SCENE_TITLE}/?lg=en",
@@ -676,9 +714,19 @@ if JAV_MAIN_HTML:
                 imageBase64_jav_thread.start()
         if jav_result.get("url"):
             jav_result["url"] = "https:" + jav_result["url"][0]
-        if jav_result.get("details"):
+        if jav_result.get("details") and LEGACY_FIELDS:
             jav_result["details"] = re.sub(r"^(.*? ){1}", "",
                                            jav_result["details"][0])
+        if jav_result.get("title"):
+            if LEGACY_FIELDS or KEEP_CODE_IN_TITLE:
+                jav_result["title"] = jav_result["title"][0]
+            elif not KEEP_CODE_IN_TITLE:
+                jav_result["title"] = (re.sub(jav_result['code'][0], "",
+                                            jav_result["title"][0])).lstrip()
+        if jav_result.get("director"):
+            jav_result["director"] = jav_result["director"][0]
+        if jav_result.get("label"):
+            jav_result["label"] = jav_result["label"][0]
         if jav_result.get("performers_url") and IGNORE_ALIASES is False:
             javlibrary_aliases_thread = threading.Thread(
                 target=th_request_perfpage,
@@ -751,17 +799,24 @@ if R18_MAIN_HTML is None and JAV_MAIN_HTML is None:
 # Time to scrape all data
 scrape = {}
 
+# DVD code
+if jav_result.get('code'):
+    scrape['code'] = jav_result['code'][0]
 # Title - Javlibrary > r18
 if r18_result.get('title'):
     scrape['title'] = r18_result['title']
 if jav_result.get('title'):
-    scrape['title'] = jav_result['title'][0]
+    scrape['title'] = jav_result['title']
 
 # Date - R18 > Javlibrary
 if jav_result.get('date'):
     scrape['date'] = jav_result['date'][0]
 if r18_result.get('date'):
     scrape['date'] = r18_result['date']
+
+# Director
+if jav_result.get('director'):
+    scrape['director'] = jav_result['director']
 
 # URL - Javlibrary > R18
 if r18_result.get('url'):
@@ -789,6 +844,10 @@ if r18_result.get('studio'):
     scrape['studio']['name'] = r18_result['studio']
 if jav_result.get('studio'):
     scrape['studio']['name'] = jav_result['studio'][0]
+
+# Not supported by Stash yet
+if jav_result.get('label') and STASH_SUPPORT_LABELS:
+    scrape['label']['name'] = jav_result['label']
 
 # Performer - Javlibrary > R18
 if r18_result.get('performers'):
