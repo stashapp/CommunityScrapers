@@ -55,7 +55,7 @@ JAV_HEADERS = {
 DEBUG_MODE = False
 # We can't add movie image atm in the same time as Scene
 STASH_SUPPORTED = False
-# Stash isn't support Labels yet
+# Stash doesn't support Labels yet
 STASH_SUPPORT_LABELS = False
 # ...and name order too...
 STASH_SUPPORT_NAME_ORDER = False
@@ -70,7 +70,7 @@ NAME_ORDER_JAPANESE = False
 IGNORE_PERF_REVERSE = ["Lily Heart"]
 
 # Keep the legacy field scheme:
-# Actual Code -> Title, actual Title ->> Details, actual Details -> /dev/null
+# Actual Code -> Title, actual Title -> Details, actual Details -> /dev/null
 LEGACY_FIELDS = True
 # Studio Code now in a separate field, so it may (or may not) be stripped from title
 # Makes sense only if not LEGACY_FIELDS
@@ -607,8 +607,8 @@ jav_xPath[
 # or '//div[@id="video_id"]//td[2][@class="text"]/text()'
 jav_xPath[
     "title"] = jav_xPath["code"] if LEGACY_FIELDS else '//div[@id="video_title"]/h3/a/text()'
-#There are no actual Details in JavLibrary,
-#but for legacy reasons you have to put Title in Details by default
+#There are no actual Details in JavLibrary
+#For legacy reasons we add the Title in Details by default
 jav_xPath[
     "details"] = None if not LEGACY_FIELDS else '//div[@id="video_title"]/h3/a/text()'
 jav_xPath["url"] = '//meta[@property="og:url"]/@content'
@@ -676,7 +676,7 @@ if JAV_SEARCH_HTML:
     JAV_MAIN_HTML = jav_search(JAV_SEARCH_HTML, jav_xPath_search)
 
 if JAV_MAIN_HTML is None and R18_MAIN_HTML is None and SCENE_TITLE:
-    # If javlibrary don't have it, there is no way that R18 have it but why not trying...
+    # If javlibrary doesn't have it, there is no way that R18 while have it but why not try...
     log.info("Javlib doesn't give any result, trying search with R18...")
     R18_SEARCH_HTML = send_request(
         f"https://www.r18.com/common/search/searchword={SCENE_TITLE}/?lg=en",
