@@ -6,9 +6,12 @@ sceneByURL:
       - analteenangels.com/en/video/
       - assholefever.com/en/video/
       - dpfanatics.com/en/video/
+      - famedigital.com/en/video/
       - footsiebabes.com/en/video/
       - girlstryanal.com/en/video/
-      - joymii.com/en/video
+      - hairyundies.com/en/video/
+      - joymii.com/en/video/
+      - kissmefuckme.com/en/video/
       - lezcuties.com/en/video/
       - massage-parlor.com/en/video/
       - milkingtable.com/en/video/
@@ -22,7 +25,9 @@ sceneByURL:
       - peternorth.com/en/video/
       - prettydirty.com/en/video/
       - soapymassage.com/en/video/
+      - teensneaks.com/en/video/
       - trickyspa.com/en/video/
+      - truelesbian.com/en/video/
       - webyoung.com/en/video/
     script:
       - python
@@ -48,4 +53,13 @@ sceneByQueryFragment:
       - Algolia.py
       - girlsway
       - validName
-# Last Updated September 25, 2022
+movieByURL:
+  - action: script
+    url:
+      - adulttime.com/en/dvd/
+    script:
+      - python
+      - Algolia.py
+      - puretaboo
+      - movie
+# Last Updated December 07, 2022

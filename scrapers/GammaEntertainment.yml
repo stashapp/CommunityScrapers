@@ -19,14 +19,12 @@ sceneByURL:
       - devonlee.com/
       - dylanryder.com/
       - falconstudios.com/en/video/
-      - famedigital.com/
       - familycreep.com/
       - fistingcentral.com/
       - gapingangels.com/
       - genderxfilms.com/en/video/
       - girlsandstuds.com/
       - grannyghetto.com/
-      - hairyundies.com/
       - hothouse.com/en/video/
       - immorallive.com/en/video/
       - jaysinxxx.com/
@@ -68,7 +66,6 @@ sceneByURL:
       - transsexualroadtrip.com/
       - tsplayground.com/en/video/
       - whiteghetto.com/
-      - wicked.com/en/video/
     scraper: sceneScraper
 
 performerByURL:
@@ -83,8 +80,6 @@ movieByURL:
   - action: scrapeXPath
     url:
       - darkx.com/en/movie/
-      - eroticax.com/en/movie/
-      - famedigital.com/en/
       - hardx.com/en/movie/
       - xempire.com/en/movie/
     scraper: movieScraper
@@ -177,16 +172,12 @@ xPathScrapers:
                 eroticax: EroticaX
                 evilangel: Evil Angel
                 falconstudios: Falcon Studios
-                famedigital: Fame Digital
                 familycreep: Family Creep
                 fistingcentral: Fisting Central
                 gapingangels: Gaping Angels
                 genderx: Gender X
-                girlfriendsfilms: Girlfriends Films
                 girlsandstuds: Girls And Studs
                 grannyghetto: Granny Ghetto
-                hairyundies: Hairy Undies
-                hardx: HardX
                 hothouse: Hot House
                 immorallive: Immoral Live
                 jaysinxxx: Jay Sin XXX
@@ -251,5 +242,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-
-# Last Updated October 02, 2022
+# Last Updated December 11, 2022
