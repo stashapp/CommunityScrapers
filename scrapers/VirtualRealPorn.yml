@@ -37,6 +37,11 @@ sceneByFragment:
         with: "-"
   scraper: sceneScraper
 
+movieByURL:
+  - action: scrapeXPath
+    url: *urlSel
+    scraper: movieScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -74,5 +79,21 @@ xPathScrapers:
                 VirtualRealAmateurPorn: "VirtualRealAmateur"
       Image: &imageSel //meta[@property="og:image"]/@content
       URL: //link[@rel="canonical"]/@href
-#
+      # Movies:
+      #   Name:
+      #     selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
+      #     concat: " - "
+      #   Date: *dateAttr
+      #   Synopsis: *detailsSel
+      #   URL: //meta[@property="og:url"]/@content
+  movieScraper:
+    movie:
+      Name:
+        selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
+        concat: " - "
+      Date: *dateAttr
+      Studio:
+        Name: *studioName
+      Synopsis: *detailsSel
+      FrontImage: *imageSel
 # Last Updated November 25, 2022
