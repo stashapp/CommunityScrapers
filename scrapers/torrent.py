@@ -4,19 +4,17 @@ from os import walk
 from os.path import join, dirname, realpath, basename
 
 try:
-    from py_common import graphql
-    from torrent_parser import parse_torrent_file
+    from bencoder import bdecode
 except ModuleNotFoundError:
-    print("You need to download the file 'torrent_parser.py' from the community repo! "
-          "(CommunityScrapers/tree/master/scrapers/torrent_parser.py)", file=sys.stderr)
+    print("You need to install the 'bencoder.pyx' module. (https://pypi.org/project/bencoder.pyx/)", file=sys.stderr)
     sys.exit()
-'''  This script parses all torrent files in the specified directory for embedded metadata.
-     The title can either be a filename or the filename of the .torrent file
-     
-     This requires python3.
-     This uses the torrent_parser library to parse torrent files from: https://github.com/7sDream/torrent_parser
-     This library is under the MIT Licence.
-'''
+
+try:
+    from py_common import graphql
+except ModuleNotFoundError:
+    print("You need to download the folder 'py_common' from the community repo! "
+          "(CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
 
 TORRENTS_PATH = join(dirname(dirname(realpath(__file__))), "torrents")
 
@@ -44,16 +42,16 @@ def get_scene_data(fragment_data):
 
 
 def get_torrent_metadata(scene_data, torrent_data):
-    res = {"title": scene_data["title"], "url": torrent_data["comment"]}
-    if "metadata" in torrent_data:
-        if "title" in torrent_data["metadata"]:
-            res["title"] = torrent_data["metadata"]["title"]
-        if "cover url" in torrent_data["metadata"]:
-            res["image"] = torrent_data["metadata"]["cover url"]
-        if "description" in torrent_data["metadata"]:
-            res["details"] = torrent_data["metadata"]["description"]
-        if "taglist" in torrent_data["metadata"]:
-            res["tags"] = [{"name": t} for t in torrent_data["metadata"]["taglist"]]
+    res = {"title": scene_data["title"], "url": decode_bytes(torrent_data[b"comment"])}
+    if b"metadata" in torrent_data:
+        if b"title" in torrent_data[b"metadata"]:
+            res["title"] = decode_bytes(torrent_data[b"metadata"][b"title"])
+        if b"cover url" in torrent_data[b"metadata"]:
+            res["image"] = decode_bytes(torrent_data[b"metadata"][b"cover url"])
+        if b"description" in torrent_data[b"metadata"]:
+            res["details"] = decode_bytes(torrent_data[b"metadata"][b"description"])
+        if b"taglist" in torrent_data[b"metadata"]:
+            res["tags"] = [{"name": decode_bytes(t)} for t in torrent_data[b"metadata"][b"taglist"]]
     return res
 
 
@@ -68,15 +66,12 @@ def decode_bytes(s, encodings=("utf-8", "latin-1")):
 
 def scene_in_torrent(scene_data, torrent_data):
     for scene in scene_data["files"]:
-        if "length" in torrent_data["info"]:
-            if scene["filename"] in torrent_data["info"]["name"] and torrent_data["info"]["length"] == scene["size"]:
+        if b"length" in torrent_data[b"info"]:
+            if scene["filename"] in decode_bytes(torrent_data[b"info"][b"name"]) and torrent_data[b"info"][b"length"] == scene["size"]:
                 return True
-        elif "files" in torrent_data["info"]:
-            for file in torrent_data["info"]["files"]:
-                file_name = file["path"][-1]
-                if type(file_name) is bytes:
-                    file_name = decode_bytes(file_name)
-                if scene["filename"] in file_name and file["length"] == scene["size"]:
+        elif b"files" in torrent_data[b"info"]:
+            for file in torrent_data[b"info"][b"files"]:
+                if scene["filename"] in decode_bytes(file[b"path"][-1]) and file[b"length"] == scene["size"]:
                     return True
 
 
@@ -84,13 +79,14 @@ def process_torrents(scene_data):
     for root, dirs, files in walk(TORRENTS_PATH):
         for name in files:
             if name.endswith(".torrent"):
-                torrent_data = parse_torrent_file(join(root, name))
-                if scene_in_torrent(scene_data, torrent_data):
-                    return get_torrent_metadata(scene_data, torrent_data)
+                with open(join(root, name), "rb") as f:
+                    torrent_data = bdecode(f.read())
+                    if scene_in_torrent(scene_data, torrent_data):
+                        return get_torrent_metadata(scene_data, torrent_data)
     return {}
 
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
     print(json.dumps(process_torrents(get_scene_data(fragment))))
-# Last Updated December 07, 2022
+# Last Updated December 12, 2022
