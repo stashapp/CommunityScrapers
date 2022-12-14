@@ -71,14 +71,6 @@ SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "GenderXFilms"
 ]
 
-# a list of networks (`network_name` from the API) which should pick out the
-# `sitename_pretty` for the studio name for a scene
-# this is because the `serie_name` is the Movie (series) title on these sites,
-# not the studio
-NETWORKS_USING_NETWORK_AS_STUDIO_FOR_SCENE = [
-    "Devil's Film"
-]
-
 
 def clean_text(details: str) -> str:
     """
