@@ -41,6 +41,7 @@ NON_FEMALE = True
 # used when populating movie urls from the scene scraper
 MOVIE_SITES = {
     "devilsfilm": "https://www.devilsfilm.com/en/dvd",
+    "devilstgirls": "https://www.devilstgirls.com/en/dvd",
     "diabolic": "https://www.diabolic.com/en/movie",
     "evilangel": "https://www.evilangel.com/en/movie",
     "genderx": "https://www.genderxfilms.com/en/movies",
@@ -55,10 +56,18 @@ MOVIE_SITES = {
 
 # a list of networks (`network_name` from the API) which should pick out the
 # `sitename_pretty` for the studio name for a scene
-# this is because the `serie_name` is the Movie title on these sites, not the
-# studio
-NETWORKS_USING_SITENAME_PRETTY_FOR_SCENE = [
+# this is because the `serie_name` is the Movie (series) title on these sites,
+# not the studio
+NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "genderx"
+]
+
+# a list of networks (`network_name` from the API) which should pick out the
+# `sitename_pretty` for the studio name for a scene
+# this is because the `serie_name` is the Movie (series) title on these sites,
+# not the studio
+NETWORKS_USING_NETWORK_AS_STUDIO_FOR_SCENE = [
+    "Devil's Film"
 ]
 
 
@@ -512,8 +521,10 @@ def parse_scene_json(scene_json, url=None):
 
     # Studio
     scrape['studio'] = {}
-    if scene_json.get('network_name') in NETWORKS_USING_SITENAME_PRETTY_FOR_SCENE:
+    if scene_json.get('sitename_pretty') and scene_json.get('network_name') in NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE:
         scrape['studio']['name'] = scene_json.get('sitename_pretty')
+    elif scene_json.get('network_name') and scene_json.get('network_name') in NETWORKS_USING_NETWORK_AS_STUDIO_FOR_SCENE:
+        scrape['studio']['name'] = scene_json.get('network_name')
     elif scene_json.get('serie_name'):
         scrape['studio']['name'] = scene_json.get('serie_name')
 

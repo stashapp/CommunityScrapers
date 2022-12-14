@@ -5,6 +5,8 @@ sceneByURL:
       - adulttime.com/en/video/
       - analteenangels.com/en/video/
       - assholefever.com/en/video/
+      - devilsfilm.com/en/video/
+      - devilstgirls.com/en/video/
       - dpfanatics.com/en/video/
       - footsiebabes.com/en/video/
       - girlstryanal.com/en/video/
@@ -51,4 +53,25 @@ sceneByQueryFragment:
       - Algolia.py
       - girlsway
       - validName
+galleryByURL:
+  - action: script
+    url:
+      - devilsfilm.com/en/photo
+      - devilsfilm.com/en/video
+      - devilstgirls.com/en/photo
+      - devilstgirls.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - devilsfilm
+movieByURL:
+  - action: script
+    url:
+      - devilsfilm.com/en/dvd
+      - devilstgirls.com/en/dvd
+    script:
+      - python
+      - Algolia.py
+      - devilsfilm
+      - movie
 # Last Updated December 14, 2022
