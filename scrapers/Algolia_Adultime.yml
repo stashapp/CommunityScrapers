@@ -60,6 +60,17 @@ sceneByQueryFragment:
       - Algolia.py
       - girlsway
       - validName
+galleryByURL:
+  - action: script
+    url:
+      - devilsfilm.com/en/photo
+      - devilsfilm.com/en/video
+      - devilstgirls.com/en/photo
+      - devilstgirls.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - devilsfilm
 movieByURL:
   - action: script
     url:
