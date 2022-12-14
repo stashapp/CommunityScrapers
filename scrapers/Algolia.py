@@ -71,6 +71,14 @@ SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "GenderXFilms"
 ]
 
+# a list of sites (`sitename_pretty` from the API) which should pick out the
+# `network_name` for the studio name for a scene
+# this is because the `serie_name` is the Movie (series) title on these sites,
+# not the studio
+SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE = [
+    "Muses",
+]
+
 
 def clean_text(details: str) -> str:
     """
@@ -522,11 +530,13 @@ def parse_scene_json(scene_json, url=None):
 
     # Studio
     scrape['studio'] = {}
-    if scene_json.get('sitename_pretty'):
-        if scene_json.get('sitename_pretty') in SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
-            scrape['studio']['name'] = SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(scene_json.get('sitename_pretty'))
-        elif scene_json.get('sitename_pretty') in SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE:
-            scrape['studio']['name'] = scene_json.get('sitename_pretty')
+    if scene_json.get('sitename_pretty') and scene_json.get('sitename_pretty') in SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
+        scrape['studio']['name'] = SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(scene_json.get('sitename_pretty'))
+    elif scene_json.get('sitename_pretty') and scene_json.get('sitename_pretty') in SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE:
+        scrape['studio']['name'] = scene_json.get('sitename_pretty')
+    elif scene_json.get('sitename_pretty') and scene_json.get('sitename_pretty') in SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE \
+            and scene_json.get('network_name'):
+        scrape['studio']['name'] = scene_json.get('network_name')
     elif scene_json.get('serie_name'):
         scrape['studio']['name'] = scene_json.get('serie_name')
 
