@@ -31,8 +31,6 @@ sceneByURL:
       - transfixed.com/en/video/
       - TransgressiveFilms.com/en/video/
       - transgressivefilms.com/en/video/
-      - TransgressiveFilms.com/en/video/
-      - transgressivefilms.com/en/video/
       - trickyspa.com/en/video/
       - truelesbian.com/en/video/
       - webyoung.com/en/video/
@@ -70,7 +68,7 @@ galleryByURL:
     script:
       - python
       - Algolia.py
-      - devilsfilm
+      - puretaboo
 movieByURL:
   - action: script
     url:
