@@ -43,6 +43,7 @@ MOVIE_SITES = {
     "devilsfilm": "https://www.devilsfilm.com/en/dvd",
     "diabolic": "https://www.diabolic.com/en/movie",
     "evilangel": "https://www.evilangel.com/en/movie",
+    "genderx": "https://www.genderxfilms.com/en/movies",
     "girlfriendsfilms": "https://www.girlfriendsfilms.com/en/movie",
     "lewood": "https://www.lewood.com/en/movie",
     "outofthefamily": "https://www.outofthefamily.com/en/dvd",
@@ -51,6 +52,14 @@ MOVIE_SITES = {
     "wicked": "https://www.wicked.com/en/movie",
     "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie"
 }
+
+# a list of networks (`network_name` from the API) which should pick out the
+# `sitename_pretty` for the studio name for a scene
+# this is because the `serie_name` is the Movie title on these sites, not the
+# studio
+NETWORKS_USING_SITENAME_PRETTY_FOR_SCENE = [
+    "genderx"
+]
 
 
 def clean_text(details: str) -> str:
@@ -503,7 +512,9 @@ def parse_scene_json(scene_json, url=None):
 
     # Studio
     scrape['studio'] = {}
-    if scene_json.get('serie_name'):
+    if scene_json.get('network_name') in NETWORKS_USING_SITENAME_PRETTY_FOR_SCENE:
+        scrape['studio']['name'] = scene_json.get('sitename_pretty')
+    elif scene_json.get('serie_name'):
         scrape['studio']['name'] = scene_json.get('serie_name')
 
     log.debug(
