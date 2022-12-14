@@ -54,20 +54,21 @@ MOVIE_SITES = {
     "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie"
 }
 
-# a list of networks (`network_name` from the API) which should pick out the
-# `sitename_pretty` for the studio name for a scene
+# a dict of sites (`sitename_pretty` from the API) which should set the value
+# for the studio name for a scene
 # this is because the `serie_name` is the Movie (series) title on these sites,
 # not the studio
-NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
-    "genderx"
-]
+SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
+    "Devilstgirls": "Devil's Tgirls"
+}
 
-# a list of networks (`network_name` from the API) which should pick out the
+# a list of sites (`sitename_pretty` from the API) which should pick out the
 # `sitename_pretty` for the studio name for a scene
 # this is because the `serie_name` is the Movie (series) title on these sites,
 # not the studio
-NETWORKS_USING_NETWORK_AS_STUDIO_FOR_SCENE = [
-    "Devil's Film"
+SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
+    "Devil's Film",
+    "GenderXFilms"
 ]
 
 
@@ -521,10 +522,11 @@ def parse_scene_json(scene_json, url=None):
 
     # Studio
     scrape['studio'] = {}
-    if scene_json.get('sitename_pretty') and scene_json.get('network_name') in NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE:
-        scrape['studio']['name'] = scene_json.get('sitename_pretty')
-    elif scene_json.get('network_name') and scene_json.get('network_name') in NETWORKS_USING_NETWORK_AS_STUDIO_FOR_SCENE:
-        scrape['studio']['name'] = scene_json.get('network_name')
+    if scene_json.get('sitename_pretty'):
+        if scene_json.get('sitename_pretty') in SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
+            scrape['studio']['name'] = SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(scene_json.get('sitename_pretty'))
+        elif scene_json.get('sitename_pretty') in SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE:
+            scrape['studio']['name'] = scene_json.get('sitename_pretty')
     elif scene_json.get('serie_name'):
         scrape['studio']['name'] = scene_json.get('serie_name')
 
