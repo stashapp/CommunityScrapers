@@ -8,9 +8,12 @@ sceneByURL:
       - devilsfilm.com/en/video/
       - devilstgirls.com/en/video/
       - dpfanatics.com/en/video/
+      - famedigital.com/en/video/
       - footsiebabes.com/en/video/
       - girlstryanal.com/en/video/
-      - joymii.com/en/video
+      - hairyundies.com/en/video/
+      - joymii.com/en/video/
+      - kissmefuckme.com/en/video/
       - lezcuties.com/en/video/
       - massage-parlor.com/en/video/
       - milkingtable.com/en/video/
@@ -24,10 +27,12 @@ sceneByURL:
       - peternorth.com/en/video/
       - prettydirty.com/en/video/
       - soapymassage.com/en/video/
+      - teensneaks.com/en/video/
       - transfixed.com/en/video/
       - TransgressiveFilms.com/en/video/
       - transgressivefilms.com/en/video/
       - trickyspa.com/en/video/
+      - truelesbian.com/en/video/
       - webyoung.com/en/video/
     script:
       - python
@@ -53,25 +58,13 @@ sceneByQueryFragment:
       - Algolia.py
       - girlsway
       - validName
-galleryByURL:
-  - action: script
-    url:
-      - devilsfilm.com/en/photo
-      - devilsfilm.com/en/video
-      - devilstgirls.com/en/photo
-      - devilstgirls.com/en/video
-    script:
-      - python
-      - Algolia.py
-      - devilsfilm
 movieByURL:
   - action: script
     url:
-      - devilsfilm.com/en/dvd
-      - devilstgirls.com/en/dvd
+      - adulttime.com/en/dvd/
     script:
       - python
       - Algolia.py
-      - devilsfilm
+      - puretaboo
       - movie
-# Last Updated December 14, 2022
+# Last Updated December 07, 2022
