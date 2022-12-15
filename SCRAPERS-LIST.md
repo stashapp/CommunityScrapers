@@ -29,6 +29,7 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 abbiemaley.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abbywinters.com|AbbyWinters.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abuseme.com|AbuseMe.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+accidentalgangbang.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 activeduty.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 addicted2girls.com|Algolia_Addicted2Girls.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 addisonstreet.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -38,6 +39,7 @@ adultempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|
 adultfilmindex.com|AdultFilmIndex.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 adultprime.com|AdultPrime.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 adulttime.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|Python|-
+adulttimepilots.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 aebn.com|AEBN.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|Straight + Gay
 alettaoceanempire.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 alexismonroe.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -346,7 +348,7 @@ devianthardcore.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-
 devilsfilm.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 devilsfilmparodies.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devilsgangbangs.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-devilstgirls.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|-|Trans
+devilstgirls.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|Trans
 devonlee.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 diabolic.com|Algolia_zerotolerancefilms.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|python|-
 dianafeet.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -457,6 +459,7 @@ footfetishbeauties.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 footfetishdaily.com|FootFetishDaily.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|foot fetish
 footsiebabes.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 forbiddenfruitsfilms.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
+forbiddenseductions.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 forbondage.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 forgivemefather.com|devianteNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 fostertapes.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -887,6 +890,7 @@ nylonup.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nympho.com|Nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ocreampies.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 officecock.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+officemsconduct.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 officepov.com|ItsPOV.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 officesexjp.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 old-n-young.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1007,7 +1011,7 @@ pure-ts.com|ChristianXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 purebj.com|Only3xGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 puremature.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 purepov.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
-puretaboo.com|Algolia_PureTaboo.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+puretaboo.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 pussyav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 putalocura.com|Putalocura.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 r18.com|JavLibrary_python.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|JAV
@@ -1351,6 +1355,7 @@ waybig.com|Waybig.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 wearehairy.com|wearehairy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 webyoung.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Lesbian
 wefuckblackgirls.com|WeFuckBlackGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+welikegirls.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 weliketosuck.com|PuffyNetworkSite.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 welivetogether.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 weneednewtalents.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
