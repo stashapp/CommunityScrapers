@@ -7,15 +7,15 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="updateInfo"]/h2/text()
+      Title: //div[@class="section-title"]/h4/text()
       Details:
-        selector: //div[@class="updateDescription"]/p/text()
+        selector: //p[@class="read-more"]/text()
       Date:
-        selector: //span[@class="updateDate"]/text()
+        selector: //small[@class="updated-at"]/text()
         postProcess:
           - parseDate: Jan 2, 2006
       Performers:
-        Name: //div[@class="updateModels"]/a/text()
+        Name: //a[@class="model-name no-text-decoration"]
       Image:
         selector: //img[contains(@src, "01.jpg")]/@src
         postProcess:
@@ -25,5 +25,7 @@ xPathScrapers:
       Studio: 
         Name:
           fixed: "Dream Tranny"
+      Tags:
+        Name: //div[@class="model-categories"]/a/text()
 
-# Last Updated September 14, 2020
+# Last Updated December 14, 2022
