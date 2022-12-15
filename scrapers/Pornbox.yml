@@ -47,6 +47,8 @@ jsonScrapers:
           - replace:
               - regex: ^none$
                 with: ""
+      Code: 
+        selector: id
       Studio:
         Name: studio
       URL:
@@ -74,4 +76,4 @@ jsonScrapers:
           - replace:
               - regex: ^
                 with: https://pornbox.com/contents/$1
-# Last Updated December 10, 2021
+# Last Updated December 15, 2022
