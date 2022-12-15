@@ -36,6 +36,7 @@ sceneByURL:
       - trickyspa.com/en/video/
       - truelesbian.com/en/video/
       - webyoung.com/en/video/
+      - welikegirls.com/en/video/
     script:
       - python
       - Algolia.py
