@@ -17,9 +17,9 @@ xPathScrapers:
       Performers:
         Name: //a[@class="model-name no-text-decoration"]
       Image:
-        selector: //img[contains(@src, "01.jpg")]/@src
+        selector: //video[contains(@class,'video-js')]/@poster
         postProcess:
-          - replace: 
+          - replace:
             - regex: ^
               with: "https://dreamtranny.com"
       Studio: 
