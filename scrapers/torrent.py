@@ -135,7 +135,6 @@ elif sys.argv[1] == "search":
         ratios = ratios_sorted[5:]
 
     res = list(map(lambda i: {'title': ratios_sorted[i] + ".torrent"}, ratios_sorted))
-    log.debug(ratios_sorted)
     print(json.dumps(res))
 
 # Last Updated December 16, 2022
