@@ -2,6 +2,7 @@ import sys
 import json
 from os import walk
 from os.path import join, dirname, realpath, basename
+from pathlib import Path
 
 try:
     from bencoder import bdecode
@@ -10,13 +11,13 @@ except ModuleNotFoundError:
     sys.exit()
 
 try:
-    from py_common import graphql
+    from py_common import graphql, log
 except ModuleNotFoundError:
     print("You need to download the folder 'py_common' from the community repo! "
           "(CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
     sys.exit()
 
-TORRENTS_PATH = join(dirname(dirname(realpath(__file__))), "torrents")
+TORRENTS_PATH = Path("torrents")
 
 
 def get_scene_data(fragment_data):
@@ -34,7 +35,7 @@ def get_scene_data(fragment_data):
       }
     }""", {"id": scene_id})
 
-    if response:
+    if response and response["findScene"]:
         for f in response["findScene"]["files"]:
             scene_files.append({"filename": basename(f["path"]), "size": f["size"]})
         return {"id": scene_id, "title": scene_title, "files": scene_files}
@@ -76,17 +77,18 @@ def scene_in_torrent(scene_data, torrent_data):
 
 
 def process_torrents(scene_data):
-    for root, dirs, files in walk(TORRENTS_PATH):
-        for name in files:
-            if name.endswith(".torrent"):
-                with open(join(root, name), "rb") as f:
-                    torrent_data = bdecode(f.read())
-                    if scene_in_torrent(scene_data, torrent_data):
-                        return get_torrent_metadata(scene_data, torrent_data)
+    if scene_data:
+        for name in TORRENTS_PATH.glob("*.torrent"):
+            with open(name, "rb") as f:
+                torrent_data = bdecode(f.read())
+                if scene_in_torrent(scene_data, torrent_data):
+                    return get_torrent_metadata(scene_data, torrent_data)
     return {}
 
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
     print(json.dumps(process_torrents(get_scene_data(fragment))))
-# Last Updated December 12, 2022
+
+
+# Last Updated December 16, 2022
