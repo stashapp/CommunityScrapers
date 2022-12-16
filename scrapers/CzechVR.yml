@@ -5,6 +5,7 @@ sceneByURL:
       - czechvr.com
       - czechvrcasting.com
       - czechvrfetish.com
+      - czechvrnetwork.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
@@ -12,6 +13,7 @@ movieByURL:
       - czechvr.com
       - czechvrcasting.com
       - czechvrfetish.com
+      - czechvrnetwork.com
     scraper: movieScraper
 
 xPathScrapers:
