@@ -54,6 +54,7 @@ xPathScrapers:
                 - regex: /channel/
                   with: ""
             - map:
+                kink-classics: Kink Classics
                 ts-seduction: TS Seduction
       URL: //link[@rel="canonical"]/@href
 driver:
