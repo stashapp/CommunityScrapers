@@ -5,5 +5,19 @@ sceneByFragment:
       - python3
       - torrent.py
       - query
+  
+sceneByName:
+  action: script
+  script:
+    - python3
+    - torrent.py
+    - search
 
-# Last Updated December 07, 2022
+sceneByQueryFragment:
+  action: script
+  script:
+    - python3
+    - torrent.py
+    - fragment
+
+# Last Updated December 16, 2022
