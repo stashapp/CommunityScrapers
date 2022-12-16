@@ -3,6 +3,8 @@ import json
 from os import walk
 from os.path import join, dirname, realpath, basename
 from pathlib import Path
+import re
+from datetime import datetime
 
 try:
     from bencoder import bdecode
@@ -41,6 +43,20 @@ def get_scene_data(fragment_data):
         return {"id": scene_id, "title": scene_title, "files": scene_files}
     return {}
 
+def readJSONInput():
+    input = sys.stdin.read()
+    log.debug(input)
+    return json.loads(input)
+
+def process_tags_performers(tagList):
+    return map(lambda tag: decode_bytes(tag).replace('.', ' '), tagList)
+
+def procress_description_bbcode(description):
+    res = re.sub('\[.*?\].*?\[\/.*?\]','',description)
+    res = re.sub('\[.*?\]','',res)
+    return res.rstrip()
+
+
 
 def get_torrent_metadata(scene_data, torrent_data):
     res = {"title": scene_data["title"], "url": decode_bytes(torrent_data[b"comment"])}
@@ -50,9 +66,15 @@ def get_torrent_metadata(scene_data, torrent_data):
         if b"cover url" in torrent_data[b"metadata"]:
             res["image"] = decode_bytes(torrent_data[b"metadata"][b"cover url"])
         if b"description" in torrent_data[b"metadata"]:
-            res["details"] = decode_bytes(torrent_data[b"metadata"][b"description"])
+            res["details"] = procress_description_bbcode(decode_bytes(torrent_data[b"metadata"][b"description"]))
         if b"taglist" in torrent_data[b"metadata"]:
             res["tags"] = [{"name": decode_bytes(t)} for t in torrent_data[b"metadata"][b"taglist"]]
+        if b"taglist" in torrent_data[b"metadata"]:
+            res["performers"]=[{"name":x} for x in process_tags_performers(torrent_data[b"metadata"][b"taglist"])]
+        if b"comment" in torrent_data:
+            res["url"] = decode_bytes(torrent_data[b"comment"])
+        if b"creation date" in torrent_data:
+            res["date"] = datetime.fromtimestamp(torrent_data[b"creation date"]).strftime("%Y-%m-%d")
     return res
 
 
