@@ -53,7 +53,9 @@ xPathScrapers:
             - replace:
                 - regex: /channel/
                   with: ""
+            - map:
+                ts-seduction: TS Seduction
       URL: //link[@rel="canonical"]/@href
 driver:
   useCDP: true
-# Last Updated December 04, 2022
+# Last Updated December 16, 2022
