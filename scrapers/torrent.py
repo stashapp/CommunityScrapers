@@ -115,8 +115,8 @@ if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
     print(json.dumps(process_torrents(get_scene_data(fragment))))
 elif sys.argv[1] == "fragment":
-    filename = json.loads(sys.stdin.read()).get('title')
-    with open(TORRENTS_PATH / filename, 'rb') as f:
+    filename = json.loads(sys.stdin.read()).get('url')
+    with open(filename, 'rb') as f:
         torrent_data = bdecode(f.read())
         print(json.dumps(get_torrent_metadata(torrent_data)))
 elif sys.argv[1] == "search":
@@ -125,7 +125,7 @@ elif sys.argv[1] == "search":
     ratios = {}
     for t in torrents:
         clean_t = cleanup_name(t)
-        ratios[round(10000*(1-similarity_file_name(search, clean_t)))] = clean_t
+        ratios[round(10000*(1-similarity_file_name(search, clean_t)))] = {'url': str(t.absolute()), 'title': clean_t}
 
     # Order ratios
     ratios_sorted = dict(sorted(ratios.items()))
@@ -133,7 +133,6 @@ elif sys.argv[1] == "search":
     if len(ratios) > 5:
         ratios = ratios_sorted[5:]
 
-    res = list(map(lambda i: {'title': ratios_sorted[i] + ".torrent"}, ratios_sorted))
-    print(json.dumps(res))
+    print(json.dumps(list(ratios_sorted.values())))
 
 # Last Updated December 16, 2022
