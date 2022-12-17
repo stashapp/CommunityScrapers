@@ -1,7 +1,6 @@
 import sys
 import json
-from os import walk
-from os.path import join, dirname, realpath, basename
+from os.path import basename
 from pathlib import Path
 import re
 from datetime import datetime
@@ -14,7 +13,7 @@ except ModuleNotFoundError:
     sys.exit()
 
 try:
-    from py_common import graphql, log
+    from py_common import graphql
 except ModuleNotFoundError:
     print("You need to download the folder 'py_common' from the community repo! "
           "(CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
@@ -122,7 +121,7 @@ elif sys.argv[1] == "fragment":
         print(json.dumps(get_torrent_metadata(torrent_data)))
 elif sys.argv[1] == "search":
     search = json.loads(sys.stdin.read()).get('name')
-    torrents = list(TORRENTS_PATH.glob('*.torrent'))
+    torrents = list(TORRENTS_PATH.rglob('*.torrent'))
     ratios = {}
     for t in torrents:
         clean_t = cleanup_name(t)
