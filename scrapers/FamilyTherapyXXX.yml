@@ -2,6 +2,7 @@ name: "FamilyTherapyXXX"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - analtherapyxxx.com
       - familytherapyxxx.com
       - momcomesfirst.com
       - perfectgirlfriend.com
@@ -45,4 +46,4 @@ xPathScrapers:
                 with: $1/?s=$2
           - subScraper:
               selector: //div[@id="left-area"]/article[1]//img/@src
-# Last Updated January 29, 2022
+# Last Updated December 19, 2022
