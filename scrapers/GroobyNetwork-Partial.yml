@@ -55,12 +55,7 @@ xPathScrapers:
       Studio: *studio
   sceneScraperGroobyVR:
     scene:
-      Title:
-        selector: *title
-        postProcess:
-          - replace:
-              - regex: '!$'
-                with: ''
+      Title: *title
       Date:
         selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
