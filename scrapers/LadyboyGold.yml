@@ -4,6 +4,11 @@ performerByURL:
     url:
       - ladyboygold.com/index.php
     scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ladyboygold.com/tour
+    scraper: sceneScraper
 xPathScrapers:
   performerScraper:
     common:
@@ -42,4 +47,33 @@ xPathScrapers:
               - regex: ^
                 with: https://www.ladyboygold.com
       Details: //div[@class="profileBio"]/text()
-# Last Updated May 17, 2022
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[contains(@class, "show_video")]//h2/text()
+        postProcess:
+          - replace:
+            - regex: \ 4k$
+              with: ''
+      Details:
+        selector: //div[contains(@class, "setDescription")]/p[contains(@class, "d-none")]/text()
+        concat: "\n\n"
+      Tags:
+        Name: //div[contains(@class, "tags")]//a/text()
+      Performers:
+        Name:
+          selector: //div[contains(@class, "show_video")]//h3/text()
+          postProcess:
+            - replace:
+              - regex: .*Ladyboy (.*)
+                with: $1
+      Studio:
+        Name:
+          fixed: LadyboyGold
+      Image:
+        selector: //div[contains(@class, "show_video")]//img/@style
+        postProcess:
+          - replace:
+            - regex: (background:url\()(.+)(?:\).+)
+              with: https://ladyboygold.com/$2
+# Last Updated December 19, 2022
