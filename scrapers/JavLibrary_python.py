@@ -62,7 +62,7 @@ STASH_SUPPORT_NAME_ORDER = False
 # Tags you don't want to scrape
 IGNORE_TAGS = [
     "Features Actress", "Hi-Def", "Beautiful Girl", "Blu-ray",
-    "Featured Actress", "VR Exclusive", "MOODYZ SALE 4", "Girl", "Tits"
+    "Featured Actress", "VR Exclusive", "MOODYZ SALE 4"
 ]
 # Select preferable name order
 NAME_ORDER_JAPANESE = False
@@ -242,6 +242,10 @@ BANNED_WORDS = {
     "Y********ls": "Young Girls"
 }
 
+OBFUSCATED_TAGS = {
+    "Girl": "Young Girl", # ロリ系 in Japanese
+    "Tits": "Small Tits" # 微乳 in Japanese
+}
 
 def debug(to_print):
     """debug only prints using log.debug if DEBUG_MODE is set to True"""
@@ -444,6 +448,8 @@ def buildlist_tagperf(data, type_scrape=""):
                         "nickname"] = parsed_name[0]
         if type_scrape == "tags" and p_name in IGNORE_TAGS:
             continue
+        if type_scrape == "tags" and p_name in OBFUSCATED_TAGS:
+            p_name = OBFUSCATED_TAGS[p_name]
         if type_scrape == "perf_jav" and dict_jav.get("performer_aliases"):
             try:
                 list_tmp.append({
