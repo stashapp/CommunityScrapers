@@ -1,4 +1,4 @@
-name: "Rule34"
+name: "Rule34Video"
 sceneByURL:
   - action: scrapeXPath
     url:
