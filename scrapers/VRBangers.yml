@@ -1,4 +1,7 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: "VRBangers"
+
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -12,6 +15,23 @@ movieByURL:
     url:
       - vrbangers.com
     scraper: movieScraper
+sceneByFragment:
+  action: scrapeXPath
+  # url format: https://{studio}.com/video/{title}
+  queryURL: "{filename}"
+  queryURLReplace:
+    # filename format:
+    #   {studio}_{title}_{res}_{vrtype}.{ext}
+    #     res: oculus|\d+k
+    #     vrtype: stuff we do not care about but could contain '_'
+    filename:
+      - regex: (?i)^(vrbangers|vrbgay|vrbtrans|vrconk)_(.+)_(?:oculus|\dk)_.+$
+        with: https://$1.com/video/$2
+      # Titles have spaces replaced with '_' and the url expects '-' instead of spaces
+      - regex: _
+        with: "-"
+  scraper: sceneScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -43,6 +63,8 @@ xPathScrapers:
                 - regex: ^
                   with: "https:"
       Image: &imageSel //meta[@property="og:image"]/@content
+      URL: //link[@rel="canonical"]/@href
+
   movieScraper:
     common:
       $info: *info
@@ -65,4 +87,4 @@ xPathScrapers:
         Name: *studioName
         URL: *studioURL
       FrontImage: *imageSel
-# Last Updated August 14, 2022
+# Last Updated November 27, 2022

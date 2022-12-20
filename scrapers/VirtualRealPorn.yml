@@ -1,4 +1,7 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: "VirtualRealPorn"
+
 sceneByURL:
   - action: scrapeXPath
     url: &urlSel
@@ -9,10 +12,36 @@ sceneByURL:
       - virtualrealporn.com
       - virtualrealtrans.com
     scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  # url format: https://virtualrealporn.com/vr-porn-video/{title}
+  # title is part of the official filename for more recent scenes
+  # however, title will have spaces replaced with '_' in the file name
+  queryURL: https://virtualrealporn.com/vr-porn-video/{filename}/
+  queryURLReplace:
+    # filename format:
+    #   - older scenes
+    #       VirtualRealPorn.com_-_{title}_-_{misc}.{ext}
+    #         misc: could be vrtype, instructios for their player etc. Not relevant.
+    #   - new scenes:
+    #       VirtualRealPorn_{title}_{res}_{vrtype}.{ext}
+    #         res: oculus|\d+k
+    #         vrtype: stuff we do not care about but could contain '_'
+    filename:
+      - regex: (?i)^(?:VirtualRealPorn_(?P<title>.+)_(?:oculus|\dk)_.+)|(?:VirtualRealPorn.com_-_(?P<title>.+?)_-_.+)$
+        with: $title
+      # title has spaces replaced with '_' in the filename
+      # but we need '-' for the url
+      - regex: _
+        with: "-"
+  scraper: sceneScraper
+
 movieByURL:
   - action: scrapeXPath
     url: *urlSel
     scraper: movieScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -49,19 +78,22 @@ xPathScrapers:
             - map:
                 VirtualRealAmateurPorn: "VirtualRealAmateur"
       Image: &imageSel //meta[@property="og:image"]/@content
-      Movies:
-        Name: &movieName
-          selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
-          concat: " - "
-        Date: *dateAttr
-        Synopsis: *detailsSel
-        URL: //meta[@property="og:url"]/@content
+      URL: //link[@rel="canonical"]/@href
+      # Movies:
+      #   Name:
+      #     selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
+      #     concat: " - "
+      #   Date: *dateAttr
+      #   Synopsis: *detailsSel
+      #   URL: //meta[@property="og:url"]/@content
   movieScraper:
     movie:
-      Name: *movieName
+      Name:
+        selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
+        concat: " - "
       Date: *dateAttr
       Studio:
         Name: *studioName
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated August 14, 2022
+# Last Updated November 25, 2022
