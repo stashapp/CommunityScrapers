@@ -48,13 +48,12 @@ xPathScrapers:
         concat: "\n"
         postProcess:
           - replace:
-              - regex: '^HMV Maker: .+'
+              - regex: "^HMV Maker: .+"
                 with:
       Tags:
         Name: $infoNode//ul[contains(@class,"video-meta")]/li[i[contains(@class,"fa-tags")]]/a/text()
       Date:
         selector: $infoNode//ul[contains(@class,"video-meta")]/li[i[contains(@class,"fa-calendar-alt")]]/text()
         postProcess:
-          - parseDate: 'Jan 02 2006'
-
+          - parseDate: "Jan 02 2006"
 # Last Updated December 16, 2022
