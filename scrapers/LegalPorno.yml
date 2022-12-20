@@ -34,7 +34,7 @@ xPathScrapers:
         selector: //h1[@class="watchpage-title"]
         postProcess:
           - replace:
-              - regex: .+?([A-Z]{2,3}\d+)$
+              - regex: .+?([A-Z]{2,3}\d+)$|(.+)
                 with: $1
       Performers:
         Name: $description/div[1]/dd/a[contains(@href,'analvids.com/model')]/text()
@@ -55,4 +55,4 @@ xPathScrapers:
       Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
       Image:
         selector: //div[@class='model--avatar']//img/@src
-# Last Updated December 08, 2022
+# Last Updated December 16, 2022
