@@ -27,7 +27,7 @@ xPathScrapers:
               - regex: '^\.\w*'
                 with: ''
       Tags:
-        Name: //meta[@property="video:tag"]/@content
+        Name: //meta[@property="video:tag"]/@content|//ul[@data-qa="scene-specs-list"]/li/span/text()
       Performers:
         Name: //meta[@property="video:actor"]/@content
       Studio:
