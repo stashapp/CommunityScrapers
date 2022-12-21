@@ -18,7 +18,7 @@ xPathScrapers:
       Details: $info/div[starts-with(@class,"desc")]|//div [@class="desc"]/text()
       Performers:
         Name:
-          selector: $info//h4[@class="models"]/a
+          selector: $info//h4[@class="models"]/a|$info//h2[@class="models"]/a
           postProcess:
             - replace:
                 - regex: '\s*,\s*$'
