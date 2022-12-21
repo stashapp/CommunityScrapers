@@ -10,10 +10,15 @@ sceneByFragment:
   scraper: sceneScraper
   queryURL: https://xhamster.com/videos/{filename}
   queryURLReplace:
-    filename: # expects an id in square brackets before extension, as saved by yt-dlp by default
+    filename:
+      # expects an id in square brackets before extension, as saved by yt-dlp by default
       - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
         with: $1
-      - regex: .*\.[^\.]+$ # if no id is found in the filename
+      # or expects an id starting with -xh
+      - regex: '(?i)^.+-(xh[^.]+)\..+$'
+        with: $1
+      # if no id is found in the filename
+      - regex: .*\.[^\.]+$
         with: # clear the filename so that it doesn't leak
 
 xPathScrapers:
@@ -41,5 +46,4 @@ xPathScrapers:
       Performers:
         Name:
           selector: $player/nav/ul/li/a[contains(@href,"/pornstars/")]
-
-# Last Updated November 24, 2022
+# Last Updated December 20, 2022

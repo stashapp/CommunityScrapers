@@ -79,6 +79,7 @@ analnippon.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 analonly.com|Nympho.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analoverdose.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analteenangels.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+analtherapyxxx.com|FamilyTherapyXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analvids.com|LegalPorno.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 analviolation.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analyzedgirls.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -564,6 +565,7 @@ heyzo.com|Heyzo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 hijabhookup.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 himeros.tv|HimerosTV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 hitzefrei.com|Hitzefrei.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+hmvmania.com|HmvMania.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hobybuchanon.com|HobyBuchanon.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 holed.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hollyrandall.com|HollyRandall.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1039,6 +1041,7 @@ rk.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 roccosiffredi.com|Algolia_RoccoSiffredi.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 romemajor.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rubberdoll.net|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+rule34video.com|Rule34Video.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 russian-tgirls.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 rylskyart.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
 samanthagrace.net|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

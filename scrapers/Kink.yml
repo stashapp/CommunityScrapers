@@ -53,7 +53,72 @@ xPathScrapers:
             - replace:
                 - regex: /channel/
                   with: ""
+            - map:
+                30-minutes-of-torment: 30 Minutes of Torment
+                alternadudes: Alternadudes
+                amator: Amator
+                animated-kink: Animated Kink
+                ashley-fires-scifi-dreamgirls: Ashley Fires SciFi Dreamgirls
+                aziani-iron: Aziani Iron
+                ball-gaggers: Ball Gaggers
+                banana-jacks: Banana Jacks
+                bifuck: BiFuck
+                bizarre-video: Bizarre Video
+                bizarre-video-transsexual: Bizarre Video Transsexual
+                bleu-films: Bleu Films
+                bondage-liberation: Bondage Liberation
+                bonus-hole-boys: Bonus Hole Boys
+                bound-and-gagged: Bound & Gagged
+                bound-gang-bangs: Bound Gangbangs
+                bound-gods: Bound Gods
+                bound-in-public: Bound in Public
+                brutal-sessions: Brutal Sessions
+                butt-machine-boys: Butt Machine Boys
+                captive-male: Captive Male
+                chanta-s-bitches: Chanta's Bitches
+                device-bondage: Device Bondage
+                divine-bitches: Divine Bitches
+                electrosluts: Electro Sluts
+                everything-butt: Everything Butt
+                families-tied: Familes Tied
+                filth-syndicate: Filth Syndicate
+                filthy-femdom: Filthy Femdom
+                foot-worship: Foot Worship
+                fucked-and-bound: Fucked and Bound
+                fucking-machines: Fucking Machines
+                hardcore-gangbang: Hardcore Gangbang
+                harmony-fetish: Harmony Fetish
+                hogtied: Hogtied
+                kink-classics: Kink Classics
+                kink-compilations: Kink Compilations
+                kink-features: Kink Features
+                kink-university: Kink University
+                kinklive: KinkLive
+                kinkmen-classics: Kink Men Classics
+                kinkrawtestshoots: KinkRawTestShoots
+                kinktestshoots: KinkTestShoots
+                kinky-bites: Kinky Bites
+                kinky-bites-men: Kinky Bites Men
+                mean-bitch: Mean Bitch
+                men-in-pain: Men In Pain
+                men-on-edge: Men on Edge
+                my-friends-feet: My Friends Feet
+                naked-combat: Naked Combat
+                pov-pickups: POV Pickups
+                public-disgrace: Public Disgrace
+                sadistic-rope: Sadistic Rope
+                sex-and-submission: Sex and Submission
+                struggling-babes: Struggling Babes
+                submissive-x: Submissive X
+                the-training-of-o: The Training of O
+                the-upper-floor: The Upper Floor
+                ts-pussy-hunters: TS Pussy Hunters
+                ts-seduction: TS Seduction
+                ultimate-surrender: Ultimate Surrender
+                water-bondage: Water Bondage
+                whipped-ass: Whipped Ass
+                wired-pussy: Wired Pussy
       URL: //link[@rel="canonical"]/@href
 driver:
   useCDP: true
-# Last Updated December 04, 2022
+# Last Updated December 16, 2022
