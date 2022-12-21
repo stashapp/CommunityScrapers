@@ -44,6 +44,12 @@ xPathScrapers:
                 VirtualXPorn: "Virtual X Porn"
                 WankitnowVR: "Wank It Now VR"
       Image: //div[contains(@class,"splash-screen")]/img/@src
-      URL: //link[@rel="canonical"]/@href
+      URL: &url //link[@rel="canonical"]/@href
+      Code:
+        selector: *url
+        postProcess:
+          - replace:
+            - regex: .+-(\d+)$
+              with: $1
 
-# Last Updated November 04, 2022
+# Last Updated December 21, 2022
