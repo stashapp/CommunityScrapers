@@ -52,7 +52,6 @@ sceneByURL:
       - povblowjobs.com/
       - povthis.com/
       - ragingstallion.com/en/scene/
-      - rodsroom.com/en/video
       - silverstonedvd.com/
       - silviasaint.com/
       - squirtalicious.com/
@@ -208,7 +207,6 @@ xPathScrapers:
                 povblowjobs: POV Blowjobs
                 povthis: POV This
                 ragingstallion: Raging Stallion
-                rodsroom: Rod's Room
                 silverstonedvd: Silverstone DVD
                 silviasaint: Silvia Saint
                 squirtalicious: Squirtalicious
@@ -244,4 +242,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated December 21, 2022
+# Last Updated December 11, 2022
