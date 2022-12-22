@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - disruptivefilms.com/en/photo
+      - disruptivefilms.com/en/photo/
     script:
       - python
       - Algolia.py

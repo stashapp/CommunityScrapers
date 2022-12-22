@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - genderxfilms.com/en/photo
+      - genderxfilms.com/en/photo/
     script:
       - python
       - Algolia.py
@@ -39,7 +39,7 @@ galleryByURL:
 movieByURL:
   - action: script
     url:
-      - genderxfilms.com/en/movie
+      - genderxfilms.com/en/movie/
     script:
       - python
       - Algolia.py

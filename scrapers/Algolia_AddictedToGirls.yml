@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - addicted2girls.com/en/photo
+      - addicted2girls.com/en/photo/
     script:
       - python
       - Algolia.py

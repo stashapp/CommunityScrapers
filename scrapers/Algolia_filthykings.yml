@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - filthykings.com/en/photo
+      - filthykings.com/en/photo/
     script:
       - python
       - Algolia.py

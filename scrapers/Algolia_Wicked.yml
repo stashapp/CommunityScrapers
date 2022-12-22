@@ -39,7 +39,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - wicked.com/en/photo
+      - wicked.com/en/photo/
     script:
       - python
       - Algolia.py

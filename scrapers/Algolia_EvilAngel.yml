@@ -43,7 +43,9 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - evilangel.com/en/photo
+      - evilangel.com/en/photo/
+      - lewood.com/en/photo/
+      - tsfactor/en/photo/
     script:
       - python
       - Algolia.py

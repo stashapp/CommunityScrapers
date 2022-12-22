@@ -41,7 +41,7 @@ movieByURL:
 galleryByURL:
   - action: script
     url:
-      - zerotolerancefilms.com/en/photo
+      - zerotolerancefilms.com/en/photo/
     script:
       - python
       - Algolia.py

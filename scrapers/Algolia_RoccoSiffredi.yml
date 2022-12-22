@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - roccosiffredi.com/en/photo
+      - roccosiffredi.com/en/photo/
     script:
       - python
       - Algolia.py

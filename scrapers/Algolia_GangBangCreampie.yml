@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - gangbangcreampie.com/en/photo
+      - gangbangcreampie.com/en/photo/
     script:
       - python
       - Algolia.py

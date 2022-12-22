@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - touchmywife.com/en/photo
+      - touchmywife.com/en/photo/
     script:
       - python
       - Algolia.py

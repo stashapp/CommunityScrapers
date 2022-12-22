@@ -71,14 +71,14 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - devilsfilm.com/en/photo
-      - joymii.com/en/photo
-      - mommysgirl.com/en/photo
-      - nurumassage.com/en/photo
-      - peternorth.com/en/photo
-      - prettydirty.com/en/photo
-      - puretaboo.com/en/photo
-      - webyoung.com/en/photo
+      - devilsfilm.com/en/photo/
+      - joymii.com/en/photo/
+      - mommysgirl.com/en/photo/
+      - nurumassage.com/en/photo/
+      - peternorth.com/en/photo/
+      - prettydirty.com/en/photo/
+      - puretaboo.com/en/photo/
+      - webyoung.com/en/photo/
     script:
       - python
       - Algolia.py
@@ -88,8 +88,8 @@ movieByURL:
   - action: script
     url:
       - adulttime.com/en/dvd/
-      - devilsfilm.com/en/dvd
-      - devilstgirls.com/en/dvd
+      - devilsfilm.com/en/dvd/
+      - devilstgirls.com/en/dvd/
     script:
       - python
       - Algolia.py

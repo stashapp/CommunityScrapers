@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - allgirlmassage.com/en/photo
+      - allgirlmassage.com/en/photo/
     script:
       - python
       - Algolia.py

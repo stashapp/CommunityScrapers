@@ -39,7 +39,7 @@ movieByURL:
 galleryByURL:
   - action: script
     url:
-      - girlfriendsfilms.com/en/photo
+      - girlfriendsfilms.com/en/photo/
     script:
       - python
       - Algolia.py

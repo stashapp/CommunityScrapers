@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - biphoria.com/en/photo
+      - biphoria.com/en/photo/
     script:
       - python
       - Algolia.py

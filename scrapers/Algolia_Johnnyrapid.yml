@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - johnnyrapid.com/en/photo
+      - johnnyrapid.com/en/photo/
     script:
       - python
       - Algolia.py

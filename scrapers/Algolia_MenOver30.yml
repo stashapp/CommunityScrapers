@@ -31,11 +31,11 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - menover30.com/en/photo
-      - pridestudios.com/en/photo
+      - menover30.com/en/photo/
+      - pridestudios.com/en/photo/
     script:
       - python
       - Algolia.py
       - menover30
       - gallery
-# Last Updated September 16, 2022
+# Last Updated December, 2022

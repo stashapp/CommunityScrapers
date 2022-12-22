@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - fantasymassage.com/en/photo
+      - fantasymassage.com/en/photo/
     script:
       - python
       - Algolia.py

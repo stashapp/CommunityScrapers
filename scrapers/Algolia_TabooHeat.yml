@@ -30,10 +30,10 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - tabooheat.com/en/photo
+      - tabooheat.com/en/photo/
     script:
       - python
       - Algolia.py
       - tabooheat
       - gallery
-# Last Updated June 22, 2022
+# Last Updated December 22, 2022

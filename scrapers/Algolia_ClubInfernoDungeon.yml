@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - clubinfernodungeon.com/en/photo
+      - clubinfernodungeon.com/en/photo/
     script:
       - python
       - Algolia.py

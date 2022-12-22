@@ -30,7 +30,7 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - mypervyfamily.com/en/photo
+      - mypervyfamily.com/en/photo/
     script:
       - python
       - Algolia.py
