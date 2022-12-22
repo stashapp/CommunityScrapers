@@ -233,6 +233,18 @@ def api_search_movie_id(m_id, url):
     req = send_request(url, HEADERS, request_api)
     return req
 
+def api_search_gallery_id(p_id, url):
+    gallery_id = [f"set_id:{p_id}"]
+    request_api = {
+        "requests": [{
+            "indexName": "all_photosets",
+            "params": "query=&hitsPerPage=20&page=0",
+            "facetFilters": gallery_id
+        }]
+    }
+    req = send_request(url, HEADERS, request_api)
+    return req
+
 
 def api_search_query(query, url):
     request_api = {
@@ -514,7 +526,6 @@ def parse_scene_json(scene_json, url=None):
     # Date
     scrape['date'] = scene_json.get('release_date')
     # Details
-    #scrape['details'] = re.sub(r'</br>|<br\s/>|<br>|<br/>', '\n', scene_json.get('description'))
     scrape['details'] = clean_text(scene_json.get('description'))
 
     # Studio Code
@@ -599,14 +610,89 @@ def parse_scene_json(scene_json, url=None):
         elif net_name.lower() == "21 naturals":
             hostname = "21naturals"
         scrape[
-            'url'] = f"https://{hostname}.com/en/video/{scene_json['sitename']}/{scene_json['url_title']}/{scene_json['clip_id']}"
+            'url'] = f"https://{hostname.lower()}.com/en/video/{scene_json['sitename'].lower()}/{scene_json['url_title']}/{scene_json['clip_id']}"
     except:
         if url:
             scrape['url'] = url
     #debug(f"{scrape}")
     return scrape
 
+def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
+    """
+    process an api scene dictionary and return a scraped one
+    """
+    scrape = {}
+    # Title
+    if gallery_json.get('title'):
+        scrape['title'] = gallery_json['title'].strip()
+    # Date
+    scrape['date'] = gallery_json.get('date_online')
+    # Details
+    scrape['details'] = clean_text(gallery_json.get('description'))
 
+    # Studio Code # not yet supported in stash
+    #if gallery_json.get('set_id'):
+    #    scrape['code'] = str(gallery_json['set_id'])
+
+    # Director # not yet supported in stash
+    #directors = []
+    #if gallery_json.get('directors') is not None:
+    #    for director in gallery_json.get('directors'):
+    #        directors.append(director.get('name').strip())
+    #scrape["director"] = ", ".join(directors)
+
+    # Studio
+    scrape['studio'] = {}
+    if gallery_json.get('sitename_pretty') and gallery_json.get('sitename_pretty') in SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
+        scrape['studio']['name'] = SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(gallery_json.get('sitename_pretty'))
+    elif gallery_json.get('sitename_pretty') and gallery_json.get('sitename_pretty') in SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE:
+        scrape['studio']['name'] = gallery_json.get('sitename_pretty')
+    elif gallery_json.get('sitename_pretty') and gallery_json.get('sitename_pretty') in SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE \
+            and gallery_json.get('network_name'):
+        scrape['studio']['name'] = gallery_json.get('network_name')
+    elif gallery_json.get('serie_name'):
+        scrape['studio']['name'] = gallery_json.get('serie_name')
+
+    log.debug(
+        f"[STUDIO] {gallery_json.get('serie_name')} - {gallery_json.get('network_name')} - {gallery_json.get('mainChannelName')} - {gallery_json.get('sitename_pretty')}"
+    )
+    # Performer
+    perf = []
+    for actor in gallery_json.get('actors'):
+        if actor.get('gender') == "female" or NON_FEMALE:
+            perf.append({
+                "name": actor.get('name').strip(),
+                "gender": actor.get('gender')
+            })
+    scrape['performers'] = perf
+
+    # Tags
+    list_tag = []
+    for tag in gallery_json.get('categories'):
+        if tag.get('name') is None:
+            continue
+        tag_name = tag.get('name')
+        tag_name = " ".join(tag.capitalize() for tag in tag_name.split(" "))
+        if tag_name:
+            list_tag.append({"name": tag.get('name')})
+    if FIXED_TAG:
+        list_tag.append({"name": FIXED_TAG})
+    scrape['tags'] = list_tag
+
+    # URL
+    try:
+        hostname = gallery_json['sitename']
+        net_name = gallery_json['network_name']
+        if net_name.lower() == "21 sextury":
+            hostname = "21sextury"
+        elif net_name.lower() == "21 naturals":
+            hostname = "21naturals"
+        scrape[
+            'url'] = f"https://{hostname.lower()}.com/en/video/{gallery_json['sitename'].lower()}/{gallery_json['url_title']}/{gallery_json['set_id']}"
+    except:
+        if url:
+            scrape['url'] = url
+    return scrape
 #
 # Start processing
 #
@@ -663,7 +749,7 @@ else:
     log.debug(f"Stash ID: {SCENE_ID}")
     log.debug(f"Stash Title: {SCENE_TITLE}")
 
-if "movie" not in sys.argv:
+if "movie" not in sys.argv and "gallery" not in sys.argv:
     # Get your sqlite database
     stash_config = graphql.configuration()
     DB_PATH = None
@@ -776,7 +862,7 @@ if "movie" not in sys.argv:
         log.error("Can't find the scene")
         print(json.dumps({}))
         sys.exit()
-else:
+elif "movie" in sys.argv:
     log.debug("Scraping movie")
     movie_id = get_id_from_url(SCENE_URL)
     if movie_id:
@@ -785,3 +871,14 @@ else:
         scraped_movie = parse_movie_json(movie)
         #log.debug(scraped_movie)
         print(json.dumps(scraped_movie))
+elif "gallery" in sys.argv:
+    log.debug("Scraping gallery")
+    gallery_id = get_id_from_url(SCENE_URL)
+    if gallery_id:
+        gallery_results = api_search_gallery_id(gallery_id, api_url)
+        gallery = gallery_results.json()["results"][0].get("hits")
+        if gallery:
+            #log.debug(gallery[0])
+            scraped_gallery = parse_gallery_json(gallery[0])
+            #log.debug(scraped_gallery)
+            print(json.dumps(scraped_gallery))

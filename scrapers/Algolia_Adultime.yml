@@ -5,13 +5,10 @@ sceneByURL:
       - accidentalgangbang.com/en/video/
       - adamandevepictures.com/en/video/
       - adulttime.com/en/video/
-      - AdultTimePilots.com/en/video/
       - adulttimepilots.com/en/video/
       - analteenangels.com/en/video/
       - assholefever.com/en/video/
-      - BeingTrans247.com/en/video/
       - beingtrans247.com/en/video/
-      - burningangel.com/en/video/
       - caughtfapping.com/en/video/
       - devilsfilm.com/en/video/
       - devilstgirls.com/en/video/
@@ -42,7 +39,6 @@ sceneByURL:
       - soapymassage.com/en/video/
       - teensneaks.com/en/video/
       - transfixed.com/en/video/
-      - TransgressiveFilms.com/en/video/
       - transgressivefilms.com/en/video/
       - trickyspa.com/en/video/
       - truelesbian.com/en/video/
@@ -76,13 +72,18 @@ galleryByURL:
   - action: script
     url:
       - devilsfilm.com/en/photo
-      - devilsfilm.com/en/video
-      - devilstgirls.com/en/photo
-      - devilstgirls.com/en/video
+      - joymii.com/en/photo
+      - mommysgirl.com/en/photo
+      - nurumassage.com/en/photo
+      - peternorth.com/en/photo
+      - prettydirty.com/en/photo
+      - puretaboo.com/en/photo
+      - webyoung.com/en/photo
     script:
       - python
       - Algolia.py
       - puretaboo
+      - gallery
 movieByURL:
   - action: script
     url:
@@ -94,4 +95,4 @@ movieByURL:
       - Algolia.py
       - puretaboo
       - movie
-# Last Updated December 14, 2022
+# Last Updated December 22, 2022

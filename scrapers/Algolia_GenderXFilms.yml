@@ -35,6 +35,7 @@ galleryByURL:
       - python
       - Algolia.py
       - genderxfilms
+      - gallery
 movieByURL:
   - action: script
     url:
@@ -44,4 +45,4 @@ movieByURL:
       - Algolia.py
       - genderxfilms
       - movie
-# Last Updated December 14, 2022
+# Last Updated December 22, 2022
