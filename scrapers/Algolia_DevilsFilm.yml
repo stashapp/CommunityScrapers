@@ -7,6 +7,15 @@ sceneByURL:
       - python
       - Algolia.py
       - devilsfilm
+movieByURL:
+  - action: script
+    url:
+      - devilsfilm.com/en/dvd
+    script:
+      - python
+      - Algolia.py
+      - devilsfilm
+      - movie
 sceneByFragment:
     action: script
     script:
