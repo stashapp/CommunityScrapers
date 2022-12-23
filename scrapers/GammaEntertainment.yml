@@ -140,7 +140,7 @@ xPathScrapers:
               # if using the transport subdomain, parameters need to be passed
               # otherwise a cropped square image is returned by default
               - regex: (https:\/\/transform.+)
-                with: $1?width=960&height=543&enlarge=true
+                with: $1?width=1920&height=1080&enlarge=true
       Studio:
         Name:
           selector: //*[local-name()="div" or local-name()=p][contains(text(),"is a site owned and operated by Gamma")]|//meta[@name="twitter:domain"]/@content
