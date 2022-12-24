@@ -25,7 +25,7 @@ except ModuleNotFoundError:
 
 def get_from_url(url_to_parse):
     m = re.match(
-        r'https?://(?:www\.)?((\w+)\.com)/tour/(?:videos|upcoming|models)/(\d+)/([a-z0-9-]+)',
+        r'https?:\/\/(?:www\.)?((\w+)\.com)(?:\/tour)?\/(?:videos|upcoming|models)\/?(\d+)?\/([a-z0-9-]+)',
         url_to_parse)
     if m is None:
         return None, None, None, None
