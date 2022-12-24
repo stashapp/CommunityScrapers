@@ -2,6 +2,7 @@ import json
 import os
 import re
 import sys
+import datetime
 
 try:
     import py_common.log as log
@@ -66,32 +67,35 @@ def fetch_page_json(page_html):
 
 
 def scrape_scene(page_json, studio):
-    if page_json.get("video") is None:
+    if page_json.get("props").get("pageProps").get("content") is None:
         log.error('Could not find  scene in JSON data')
         sys.exit(1)
 
-    scene = page_json["video"]
+    scene = page_json.get("props").get("pageProps").get("content")
 
     scrape = {}
-    scrape['studio'] = {'name': studio}
+    if scene.get('site'):
+        scrape['studio'] = {'name': scene['site']}
+    else:
+        scrape['studio'] = {'name': studio}
     if scene.get('title'):
         scrape['title'] = scene['title']
-    if scene.get('release_date'):
-        scrape['date'] = scene['release_date'][:10]
+    if scene.get('publish_date'):
+        raw_date = scene['publish_date']
+        publish_datetime = datetime.datetime.strptime(raw_date, '%Y/%m/%d %H:%M:%S')
+        scrape['date'] = publish_datetime.strftime('%Y-%m-%d')
     if scene.get('description'):
         details = BeautifulSoup(scene['description'], "html.parser").get_text()
         scrape['details'] = details
     if scene.get('models'):
         models = []
         for m in scene['models']:
-            if m.get('name'):
-                models.append(m['name'])
+            models.append(m)
         scrape['performers'] = [{'name': x} for x in models]
     if scene.get('tags'):
         tags = []
         for t in scene['tags']:
-            if t.get('name'):
-                tags.append(t['name'])
+            tags.append(t)
         scrape['tags'] = [{'name': x} for x in tags]
     if scene.get('extra_thumbs'):
         # available image endings
@@ -110,6 +114,13 @@ def scrape_scene(page_json, studio):
         if img is None:
             img = scene['extra_thumbs'][0]
         scrape['image'] = img
+
+    url_path = page_json.get("page")
+    url_slug = page_json.get("query").get("slug")
+    domain = scene.get("site_domain")
+    url_path = url_path.replace('[slug]', url_slug)
+    scrape['url'] = f"https://{domain}{url_path}"
+
     print(json.dumps(scrape))
 
 
