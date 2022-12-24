@@ -17,6 +17,7 @@ sceneByURL:
       - sweetheartvideo.com/scene/
       - sweetsinner.com/scene/
       - teenslovehugecocks.com/scene/
+      - noirmale.com/scene/
     scraper: sceneScraper
   - action: scrapeXPath
     url:
@@ -36,6 +37,7 @@ sceneByURL:
       - transangels.com/scene/
       - transsensual.com/scene
       - trueamateurs.com/scene/
+      - noirmale.com/scene/
     scraper: scriptScraper
 
 movieByURL:
@@ -65,6 +67,7 @@ performerByURL:
       - sweetsinner.com/model/
       - teenslovehugecocks.com/model/
       - transsensual.com/model/
+      - noirmale.com/model/
     scraper: performerScraper
 
 xPathScrapers:
@@ -112,6 +115,7 @@ xPathScrapers:
                 SweetSinner: Sweet Sinner
                 sweetsinner: Sweet Sinner
                 teenslovehugecocks: Teens Love Huge Cocks
+                noirmale: Noir Male
       Image: $section//img[contains(@src,"poster")]/@src
   scriptScraper:
     common:
@@ -159,6 +163,7 @@ xPathScrapers:
                 transangels: Trans Angels
                 transsensual: TransSensual
                 trueamateurs: True Amateurs
+                noirmale: Noir Male
       Tags: *tags
       Details:
         selector: $script
