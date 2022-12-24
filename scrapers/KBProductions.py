@@ -61,7 +61,7 @@ def make_request(request_url, origin_site):
 
 
 def fetch_page_json(page_html):
-    matches = re.findall(r'window\.__DATA__ = (.+)$', page_html, re.MULTILINE)
+    matches = re.findall(r'(?:<script id="__NEXT_DATA__" type="application\/json">({.+})<\/script>)', page_html, re.MULTILINE)
     return json.loads(matches[0]) if matches else None
 
 
