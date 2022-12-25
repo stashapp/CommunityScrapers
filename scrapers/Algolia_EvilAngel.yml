@@ -40,4 +40,16 @@ sceneByQueryFragment:
     - Algolia.py
     - evilangel
     - validName
-# Last Updated October 04, 2022
+galleryByURL:
+  - action: script
+    url:
+      - evilangel.com/en/photo/
+      - lewood.com/en/photo/
+      - transgressivexxx.com/en/photo/
+      - tsfactor/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - evilangel
+      - gallery
+# Last Updated December 22, 2022

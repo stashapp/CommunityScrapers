@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - mypervyfamily
       - validName
-# Last Updated March 23, 2022
+galleryByURL:
+  - action: script
+    url:
+      - mypervyfamily.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - mypervyfamily
+      - gallery
+# Last Updated December 22, 2022

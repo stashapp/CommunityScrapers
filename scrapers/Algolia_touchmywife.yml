@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - touchmywife
       - validName
-# Last Updated March 23, 2022
+galleryByURL:
+  - action: script
+    url:
+      - touchmywife.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - touchmywife
+      - gallery
+# Last Updated December 22, 2022

@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - addicted2girls
       - validName
-# Last Updated March 23, 2022
+galleryByURL:
+  - action: script
+    url:
+      - addicted2girls.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - addicted2girls
+      - gallery
+# Last Updated December 22, 2022

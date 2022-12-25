@@ -27,4 +27,13 @@ sceneByQueryFragment:
     - Algolia.py
     - tabooheat
     - validName
-# Last Updated June 22, 2022
+galleryByURL:
+  - action: script
+    url:
+      - tabooheat.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - tabooheat
+      - gallery
+# Last Updated December 22, 2022

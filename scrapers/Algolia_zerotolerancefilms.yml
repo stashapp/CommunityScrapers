@@ -38,4 +38,13 @@ movieByURL:
       - Algolia.py
       - zerotolerancefilms
       - movie
-# Last Updated August 15, 2022
+galleryByURL:
+  - action: script
+    url:
+      - zerotolerancefilms.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - zerotolerancefilms
+      - gallery
+# Last Updated December 22, 2022

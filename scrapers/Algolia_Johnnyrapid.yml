@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - johnnyrapid
       - validName
-# Last Updated June 20, 2022
+galleryByURL:
+  - action: script
+    url:
+      - johnnyrapid.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - johnnyrapid
+      - gallery
+# Last Updated December 22, 2022

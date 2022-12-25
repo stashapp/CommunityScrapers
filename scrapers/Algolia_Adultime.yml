@@ -2,12 +2,20 @@ name: "Adultime"
 sceneByURL:
   - action: script
     url:
+      - accidentalgangbang.com/en/video/
+      - adamandevepictures.com/en/video/
       - adulttime.com/en/video/
+      - adulttimepilots.com/en/video/
       - analteenangels.com/en/video/
       - assholefever.com/en/video/
+      - beingtrans247.com/en/video/
+      - caughtfapping.com/en/video/
+      - devilsfilm.com/en/video/
+      - devilstgirls.com/en/video/
       - dpfanatics.com/en/video/
       - famedigital.com/en/video/
       - footsiebabes.com/en/video/
+      - forbiddenseductions.com/en/video/
       - girlstryanal.com/en/video/
       - hairyundies.com/en/video/
       - joymii.com/en/video/
@@ -15,20 +23,27 @@ sceneByURL:
       - lezcuties.com/en/video/
       - massage-parlor.com/en/video/
       - milkingtable.com/en/video/
+      - modeltime.com/en/video/
       - moderndaysins.com/en/video/
       - mommysboy.com/en/video/
       - mommysgirl.com/en/video/
+      - muses.com/en/video/
       - nudefightclub.com/en/video/
       - nurumassage.com/en/video/
+      - officemsconduct.com/en/video/
       - oopsie.com/en/video/
       - outofthefamily.com/en/video/
       - peternorth.com/en/video/
       - prettydirty.com/en/video/
+      - puretaboo.com/en/video/
       - soapymassage.com/en/video/
       - teensneaks.com/en/video/
+      - transfixed.com/en/video/
+      - transgressivefilms.com/en/video/
       - trickyspa.com/en/video/
       - truelesbian.com/en/video/
       - webyoung.com/en/video/
+      - welikegirls.com/en/video/
     script:
       - python
       - Algolia.py
@@ -53,13 +68,31 @@ sceneByQueryFragment:
       - Algolia.py
       - girlsway
       - validName
+galleryByURL:
+  - action: script
+    url:
+      - devilsfilm.com/en/photo/
+      - joymii.com/en/photo/
+      - mommysgirl.com/en/photo/
+      - nurumassage.com/en/photo/
+      - peternorth.com/en/photo/
+      - prettydirty.com/en/photo/
+      - puretaboo.com/en/photo/
+      - webyoung.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - puretaboo
+      - gallery
 movieByURL:
   - action: script
     url:
       - adulttime.com/en/dvd/
+      - devilsfilm.com/en/dvd/
+      - devilstgirls.com/en/dvd/
     script:
       - python
       - Algolia.py
       - puretaboo
       - movie
-# Last Updated December 07, 2022
+# Last Updated December 22, 2022

@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - disruptivefilms
       - validName
-# Last Updated March 23, 2022
+galleryByURL:
+  - action: script
+    url:
+      - disruptivefilms.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - disruptivefilms
+      - gallery
+# Last Updated December 22, 2022
