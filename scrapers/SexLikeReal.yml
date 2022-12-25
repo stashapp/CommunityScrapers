@@ -46,7 +46,7 @@ xPathScrapers:
               - regex: '^\.\s*'
                 with:
       Tags:
-        Name: //meta[@property="video:tag"]/@content
+        Name: //meta[@property="video:tag"]/@content|//ul[@data-qa="scene-specs-list"]/li/span/text()
       Performers:
         Name: //meta[@property="video:actor"]/@content
       Studio:
@@ -70,4 +70,4 @@ xPathScrapers:
           - replace:
               - regex: '^(.+)-(\d+)/?$'
                 with: $2
-# Last Updated November 27, 2022
+# Last Updated December 21, 2022
