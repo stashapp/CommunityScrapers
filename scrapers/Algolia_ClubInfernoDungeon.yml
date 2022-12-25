@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - clubinfernodungeon
       - validName
-# Last Updated March 23, 2022
+galleryByURL:
+  - action: script
+    url:
+      - clubinfernodungeon.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - clubinfernodungeon
+      - gallery
+# Last Updated December 22, 2022

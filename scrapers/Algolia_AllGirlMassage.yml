@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - allgirlmassage
       - validName
-# Last Updated March 23, 2022
+galleryByURL:
+  - action: script
+    url:
+      - allgirlmassage.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - allgirlmassage
+      - gallery
+# Last Updated December 22, 2022
