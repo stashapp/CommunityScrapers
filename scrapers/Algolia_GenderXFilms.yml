@@ -1,39 +1,48 @@
-name: "GangbangCreampie"
+name: GenderX Films
 sceneByURL:
   - action: script
     url:
-      - gangbangcreampie.com/en/video
+      - genderxfilms.com/en/video
     script:
       - python
       - Algolia.py
-      - gangbangcreampie
+      - genderxfilms
 sceneByFragment:
     action: script
     script:
       - python
       - Algolia.py
-      - gangbangcreampie
+      - genderxfilms
 sceneByName:
     action: script
     script:
       - python
       - Algolia.py
-      - gangbangcreampie
+      - genderxfilms
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
       - Algolia.py
-      - gangbangcreampie
+      - genderxfilms
       - validName
 galleryByURL:
   - action: script
     url:
-      - gangbangcreampie.com/en/photo/
+      - genderxfilms.com/en/photo/
     script:
       - python
       - Algolia.py
-      - gangbangcreampie
+      - genderxfilms
       - gallery
+movieByURL:
+  - action: script
+    url:
+      - genderxfilms.com/en/movie/
+    script:
+      - python
+      - Algolia.py
+      - genderxfilms
+      - movie
 # Last Updated December 22, 2022

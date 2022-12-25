@@ -47,13 +47,14 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
-      - evilangel.com/en/video/
-      - lewood.com/en/video/
-      - pansexualx.com/en/video/
-      - transgressivexxx.com/en/video/
-      - tsfactor.com/en/video/
+      - evilangel.com/en/photo/
+      - lewood.com/en/photo/
+      - pansexualx.com/en/photo/
+      - transgressivexxx.com/en/photo/
+      - tsfactor.com/en/photo/
     script:
       - python
       - Algolia.py
       - evilangel
-# Last Updated December 16, 2022
+      - gallery
+# Last Updated December 26, 2022

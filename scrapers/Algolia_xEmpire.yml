@@ -32,4 +32,18 @@ sceneByQueryFragment:
     - Algolia.py
     - xempire
     - validName
-# Last Updated June 22, 2022
+galleryByURL:
+  - action: script
+    url:
+      - allblackx.com/en/photo/
+      - darkx.com/en/photo/
+      - eroticax.com/en/photo/
+      - hardx.com/en/photo/
+      - lesbianx.com/en/photo/
+      - xempire.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - xempire
+      - gallery
+# Last Updated December 22, 2022

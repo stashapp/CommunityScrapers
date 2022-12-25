@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - 21sextury
       - validName
-# Last Updated March 23, 2022
+galleryByURL:
+  - action: script
+    url:
+      - 21sextury.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - 21sextury
+      - gallery
+# Last Updated December 22, 2022
