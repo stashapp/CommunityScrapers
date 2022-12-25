@@ -1107,6 +1107,7 @@ sissypov.com|SissyPov.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 slayed.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 slroriginals.com|SLRoriginals.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 slutinspection.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+smashed.xxx|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 smashpictures.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 smokingmina.com|SmokingMina.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 soapymassage.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
