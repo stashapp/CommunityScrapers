@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - roccosiffredi
       - validName
-# Last Updated March 23, 2022
+galleryByURL:
+  - action: script
+    url:
+      - roccosiffredi.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - roccosiffredi
+      - gallery
+# Last Updated December 22, 2022

@@ -36,4 +36,13 @@ sceneByQueryFragment:
       - Algolia.py
       - wicked
       - validName
-# Last Updated August 05, 2022
+galleryByURL:
+  - action: script
+    url:
+      - wicked.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - wicked
+      - gallery
+# Last Updated December 22, 2022
