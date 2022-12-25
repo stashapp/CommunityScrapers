@@ -619,7 +619,7 @@ def parse_scene_json(scene_json, url=None):
 
 def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
     """
-    process an api scene dictionary and return a scraped one
+    process an api gallery dictionary and return a scraped one
     """
     scrape = {}
     # Title
