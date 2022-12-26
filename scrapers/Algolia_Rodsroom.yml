@@ -8,23 +8,32 @@ sceneByURL:
       - Algolia.py
       - rodsroom
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - rodsroom
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - rodsroom
 sceneByName:
-    action: script
-    script:
-      - python
-      - Algolia.py
-      - rodsroom
-      - searchName
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - rodsroom
+    - searchName
 sceneByQueryFragment:
-    action: script
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - rodsroom
+    - validName
+galleryByURL:
+  - action: script
+    url:
+      - rodsroom.com/en/photo/
     script:
       - python
       - Algolia.py
       - rodsroom
-      - validName
-# Last Updated March 23, 2022
+      - gallery
+# Last Updated December 26, 2022
