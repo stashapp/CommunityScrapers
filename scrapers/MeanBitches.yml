@@ -26,7 +26,7 @@ xPathScrapers:
     common:
       $titlebar: //table[@id="episode_title"]/tbody/tr/
     scene:
-      Title: //table[@id="episode_title"]/tbody/tr/td[1]/text()
+      Title: $titlebar/td[contains(comment(),"Title")]/text()
       Details: //div[@class="episode_description"]/text()
       Studio:
         Name: 
@@ -35,7 +35,7 @@ xPathScrapers:
           fixed: https://www.meanbitches.com/
       Performers:
         Name: 
-          selector: $titlebar/td[2]/text()
+          selector: $titlebar/td[contains(comment(),"Featured Models")]/text()
           postProcess:
             - replace:
                 - regex: "Featuring:(.*)"
