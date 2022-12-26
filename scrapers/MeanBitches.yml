@@ -38,14 +38,17 @@ xPathScrapers:
           selector: $titlebar/td[contains(comment(),"Featured Models")]/text()
           postProcess:
             - replace:
-                - regex: "Featuring:(.*)"
-                  with: $1
+              - regex: 'Featuring:\s*(.*)'
+                with: $1
+              - regex: '\xa0' # non printable char after the comma
+                with: ""
+          split: ","
       Image: 
-        selector: //a[@class='trailer_link']/img/@src
+        selector: //td[@class="episode_thumbs"][@align="center"]//img/@src
         postProcess:
-          - replace:
-            - regex: (.*)
-              with: http://meanbitches.com/$1
+            - replace:
+                - regex: ^/
+                  with: http://meanbitches.com/
       Date: 
         selector: $titlebar/td[3]/text()
         postProcess: 
