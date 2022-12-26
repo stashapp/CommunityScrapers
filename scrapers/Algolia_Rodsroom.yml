@@ -1,0 +1,39 @@
+name: "Rod's Room"
+sceneByURL:
+  - action: script
+    url:
+      - rodsroom.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - rodsroom
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - rodsroom
+sceneByName:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - rodsroom
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - rodsroom
+    - validName
+galleryByURL:
+  - action: script
+    url:
+      - rodsroom.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - rodsroom
+      - gallery
+# Last Updated December 26, 2022
