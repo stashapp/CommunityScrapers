@@ -11,11 +11,10 @@ sceneByURL:
       - https://www.meanbitches.com/tour/updates/
     scraper: sceneScraper
 
-
 xPathScrapers:
   performerScraper:
     performer:
-      Name: //div[contains(@class,'title_bar')][1]/text()            
+      Name: //div[contains(@class,'title_bar') and not(contains(text(),'Updates'))]/text()            
       Image:
         selector: //tr/td/img[@class="thumbs"]/@src
         postProcess:
