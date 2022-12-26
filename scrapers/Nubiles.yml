@@ -220,8 +220,8 @@ xPathScrapers:
           selector: //title/text()
           postProcess:
             - replace:
-              - regex: ^(.+?)\s-.+$
-                with: $1
+                - regex: ^(.+?)\s-.+$
+                  with: $1
       Tags: *tagsAttr
       Image: *imageAttr
 
@@ -232,5 +232,4 @@ xPathScrapers:
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
-
 # Last Updated December 24, 2022
