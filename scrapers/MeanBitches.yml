@@ -50,7 +50,7 @@ xPathScrapers:
                 - regex: ^/
                   with: http://meanbitches.com/
       Date: 
-        selector: $titlebar/td[3]/text()
+        selector: $titlebar/td[contains(text(),"Added")]/text()
         postProcess: 
           - replace:
             - regex: "Added(.*)"
