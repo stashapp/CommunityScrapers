@@ -47,9 +47,10 @@ def process_tags_performers(tagList):
     return map(lambda tag: decode_bytes(tag).replace('.', ' '), tagList)
 
 def process_description_bbcode(description):
-    res = re.sub('\[.*?\].*?\[\/.*?\]','',description)
-    res = re.sub('\[.*?\]','',res)
-    return res.rstrip()
+    res = re.sub(r'\[(?:b|i|u|s|url|quote)?\](.*)?\[\/(?:b|i|u|s|url|quote)\]',r"\1", description )
+    res = re.sub(r'\[.*?\].*?\[\/.*?\]',r'',res)
+    res = re.sub(r'\[.*?\]',r'',res)
+    return res.strip()
 
 def get_torrent_metadata(torrent_data):
     res = {}
