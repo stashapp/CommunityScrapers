@@ -4,6 +4,8 @@ sceneByURL:
     url:
       - evilangel.com/en/video/
       - lewood.com/en/video/
+      - pansexualx.com/en/video/
+      - transgressivexxx.com/en/video/
       - tsfactor.com/en/video/
     script:
       - python
@@ -14,6 +16,8 @@ movieByURL:
     url:
       - evilangel.com/en/movie/
       - lewood.com/en/movie/
+      - pansexualx.com/en/movie/
+      - transgressivexxx.com/en/movie/
       - tsfactor.com/en/movie/
     script:
       - python
@@ -45,11 +49,12 @@ galleryByURL:
     url:
       - evilangel.com/en/photo/
       - lewood.com/en/photo/
+      - pansexualx.com/en/photo/
       - transgressivexxx.com/en/photo/
-      - tsfactor/en/photo/
+      - tsfactor.com/en/photo/
     script:
       - python
       - Algolia.py
       - evilangel
       - gallery
-# Last Updated December 22, 2022
+# Last Updated December 26, 2022
