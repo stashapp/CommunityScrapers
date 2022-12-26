@@ -36,4 +36,13 @@ movieByURL:
       - Algolia.py
       - girlfriendsfilms
       - movie
-# Last Updated October 02, 2022
+galleryByURL:
+  - action: script
+    url:
+      - girlfriendsfilms.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - girlfriendsfilms
+      - gallery
+# Last Updated December 22, 2022

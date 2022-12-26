@@ -28,4 +28,14 @@ sceneByQueryFragment:
     - Algolia.py
     - menover30
     - validName
-# Last Updated September 16, 2022
+galleryByURL:
+  - action: script
+    url:
+      - menover30.com/en/photo/
+      - pridestudios.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - menover30
+      - gallery
+# Last Updated December 22, 2022

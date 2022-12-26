@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - biphoria
       - validName
-# Last Updated March 23, 2022
+galleryByURL:
+  - action: script
+    url:
+      - biphoria.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - biphoria
+      - gallery
+# Last Updated December 22, 2022
