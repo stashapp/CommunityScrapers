@@ -8,6 +8,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - ladyboygold.com/tour
+      - tsraw.com
     scraper: sceneScraper
 xPathScrapers:
   performerScraper:
@@ -53,7 +54,7 @@ xPathScrapers:
         selector: //div[contains(@class, "show_video")]//h2/text()
         postProcess:
           - replace:
-            - regex: \ 4k$
+            - regex: \ 4[Kk]$
               with: ''
       Details:
         selector: //div[contains(@class, "setDescription")]/p[contains(@class, "d-none")]/text()
@@ -67,13 +68,21 @@ xPathScrapers:
             - replace:
               - regex: .*Ladyboy (.*)
                 with: $1
+          split: ', '
       Studio:
         Name:
-          fixed: LadyboyGold
+          selector: //footer//p[contains(text(), 'Copyright')]/text()[2]
+          postProcess:
+            - replace:
+              - regex: ^(\d+\ )?(.+)\.\s+.*
+                with: $2
+            - map:
+                TSRAW.com: TSRaw
+                LadyboyGold.com: LadyboyGold
       Image:
         selector: //div[contains(@class, "show_video")]//img/@style
         postProcess:
           - replace:
-            - regex: (background:url\()(.+)(?:\).+)
+            - regex: (background:\ ?url\()(.+)(?:\).+)
               with: https://ladyboygold.com/$2
-# Last Updated December 19, 2022
+# Last Updated December 29, 2022
