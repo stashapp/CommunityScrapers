@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - pinkoclub.com
       - pinkotgirls.com
+    scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
