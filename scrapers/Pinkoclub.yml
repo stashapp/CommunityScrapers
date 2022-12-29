@@ -17,9 +17,10 @@ xPathScrapers:
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
-        selector: //link[@rel="manifest"]/@href
-        postProcess:
-          - map:
-              /favicon/pinkoclub/site.webmanifest: Pinko Club
-              /favicon/pinkotgirls/site.webmanifest: Pinko TGirls
+        Name:
+          selector: //link[@rel="manifest"]/@href
+          postProcess:
+            - map:
+                /favicon/pinkoclub/site.webmanifest: Pinko Club
+                /favicon/pinkotgirls/site.webmanifest: Pinko TGirls
 # Last Updated December 29, 2022
