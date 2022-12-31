@@ -22,6 +22,7 @@ sceneByURL:
       - familycreep.com/
       - fistingcentral.com/
       - gapingangels.com/
+      - genderxfilms.com/en/video/
       - girlsandstuds.com/
       - grannyghetto.com/
       - hothouse.com/en/video/
@@ -36,15 +37,6 @@ sceneByURL:
       - mommyblowsbest.com/en/scene/
       - motherfuckerxxx.com/
       - myteenoasis.com/
-      - nextdoorbuddies.com/en/video/
-      - nextdoorcasting.com/
-      - nextdoorebony.com/
-      - nextdoorhookups.com/
-      - nextdoormale.com/
-      - nextdoorraw.com/en/video/
-      - nextdoorstudios.com/en/video/
-      - nextdoortaboo.com/en/video/
-      - nextdoortwink.com/en/video/
       - onlyteenblowjobs.com/en/scene/
       - openlife.com/
       - pantypops.com/
@@ -174,6 +166,7 @@ xPathScrapers:
                 familycreep: Family Creep
                 fistingcentral: Fisting Central
                 gapingangels: Gaping Angels
+                genderx: Gender X
                 girlsandstuds: Girls And Studs
                 grannyghetto: Granny Ghetto
                 hothouse: Hot House
@@ -189,15 +182,6 @@ xPathScrapers:
                 mommyblowsbest: Mommy Blows Best
                 motherfuckerxxx: Mother Fucker XXX
                 myteenoasis: My Teen Oasis
-                nextdoorbuddies: Next Door Buddies
-                nextdoorcasting: Next Door Casting
-                nextdoorebony: Next Door Ebony
-                nextdoorhookups: Next Door Hookups
-                nextdoormale: Next Door Male
-                nextdoorraw: Next Door Raw
-                nextdoorstudios: Next Door Studios
-                nextdoortaboo: Next Door Taboo
-                nextdoortwink: Next Door Twink
                 onlyteenblowjobs: Only Teen Blowjobs
                 openlife: Open Life
                 outofthefamily: Out Of The Family
@@ -240,4 +224,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated December 14, 2022
+# Last Updated December 31, 2022
