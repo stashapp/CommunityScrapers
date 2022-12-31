@@ -1,0 +1,48 @@
+name: "Next Door Studios"
+sceneByURL:
+  - action: script
+    url:
+      - nextdoorbuddies.com/en/video/
+      - nextdoorcasting.com/
+      - nextdoorebony.com/
+      - nextdoorhookups.com/
+      - nextdoormale.com/
+      - nextdoorraw.com/en/video/
+      - nextdoorstudios.com/en/video/
+      - nextdoortaboo.com/en/video/
+      - nextdoortwink.com/en/video/
+      
+    script:
+      - python
+      - Algolia.py
+      - nextdoorstudios
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - nextdoorstudios
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - nextdoorstudios
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - nextdoorstudios
+      - validName
+movieByURL:
+  - action: script
+    url:
+      - adulttime.com/en/dvd/
+    script:
+      - python
+      - Algolia.py
+      - puretaboo
+      - movie
+# Last Updated December 07, 2022
