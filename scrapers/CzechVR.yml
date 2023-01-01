@@ -5,6 +5,7 @@ sceneByURL:
       - czechvr.com
       - czechvrcasting.com
       - czechvrfetish.com
+      - czechvrnetwork.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
@@ -12,6 +13,7 @@ movieByURL:
       - czechvr.com
       - czechvrcasting.com
       - czechvrfetish.com
+      - czechvrnetwork.com
     scraper: movieScraper
 
 xPathScrapers:
@@ -57,4 +59,4 @@ xPathScrapers:
         Name: *studioSel
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated September 22, 2021
+# Last Updated December 16, 2022
