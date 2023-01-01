@@ -11,9 +11,9 @@ xPathScrapers:
       $performer: //article[contains(@class, "models-list")]//div[@class="title"]/a
       $script: //div[@class="video-holder"]//script[@type="text/javascript"]
     scene:
-      Title: &titleSel //div[@id="videos"]//h1/text()
+      Title: //div[@id="videos"]//h1/text()
       Date:
-        selector: &dateSel $script/text()
+        selector: $script/text()
         postProcess:
           - replace:
               - regex: .*video-images\/(\d{4})(\d{2})(\d{2}).*
@@ -22,16 +22,16 @@ xPathScrapers:
       Performers:
         Name: $performer/text()
         URL: $performer/@href
-      Details: &detailsAttr
+      Details:
         selector: //div[contains(@class, "reviews-section")]/p/text()
         concat: "\n\n"
       Image:
-        selector: &imageSel $script/text()
+        selector: $script/text()
         postProcess:
           - replace:
               - regex: .*'(https.*jpg)'.*
                 with: $1
-      Studio: &studioAttr
-          Name:
-            fixed: Colby Knox
+      Studio:
+        Name:
+          fixed: Colby Knox
 # Last Updated December 21, 2022
