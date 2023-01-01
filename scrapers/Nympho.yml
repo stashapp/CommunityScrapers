@@ -5,10 +5,10 @@ sceneByURL:
     url:
       - allanal.com/
       - analonly.com/
+      - dirtyauditions.com/
       - nympho.com/
       - swallowed.com/
       - trueanal.com/
-      - dirtyauditions.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -35,5 +35,5 @@ xPathScrapers:
               - regex: (\d+)(?:[dhnrst]+)\s+(.+)
                 with: "$1 $2"
           - parseDate: 2 Jan 2006
-      Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot|//meta[@property="og:image"]/@content                    
-# Last Updated June 06, 2022
+      Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot|//meta[@property="og:image"]/@content
+# Last Updated January 01, 2023
