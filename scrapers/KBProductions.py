@@ -87,6 +87,8 @@ def scrape_scene(page_json, studio):
     if scene.get('description'):
         details = BeautifulSoup(scene['description'], "html.parser").get_text()
         scrape['details'] = details
+    if scene.get('id'):
+        scrape['code'] = str(scene['id'])
     if scene.get('models'):
         models = []
         for m in scene['models']:
@@ -97,7 +99,7 @@ def scrape_scene(page_json, studio):
         for t in scene['tags']:
             tags.append(t)
         scrape['tags'] = [{'name': x} for x in tags]
-    if scene.get('extra_thumbs'):
+    if scene.get('extra_thumbnails'):
         # available image endings
         # ================
         #_player.jpg
@@ -107,12 +109,12 @@ def scrape_scene(page_json, studio):
         #_scene.jpg
         #_scenemobile.jpg
         img = None
-        for i in scene['extra_thumbs']:
+        for i in scene['extra_thumbnails']:
             if i.endswith("_player.jpg"):
                 image = i
                 break
         if img is None:
-            img = scene['extra_thumbs'][0]
+            img = scene['extra_thumbnails'][0]
         scrape['image'] = img
 
     url_path = page_json.get("page")
