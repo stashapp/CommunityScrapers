@@ -126,53 +126,38 @@ def scrape_scene(page_json, studio):
     print(json.dumps(scrape))
 
 
-def get_dict_value(d: dict, v: str):
-    if d.get(v):
-        return d[v]
-    return None
-
-
 def scrape_performer(page_json):
-    if page_json.get("model") is None:
+    if page_json.get("props").get("pageProps").get("model") is None:
         log.error('Could not find performer in JSON data')
         sys.exit(1)
 
-    performer = page_json["model"]
+    performer = page_json.get("props").get("pageProps").get("model")
     scrape = {}
 
-    scrape['name'] = get_dict_value(performer, 'name')
-    scrape['gender'] = get_dict_value(performer, 'gender')
-    scrape['image'] = get_dict_value(performer, 'thumb')
+    scrape['name'] = performer.get('name')
+    scrape['gender'] = performer.get('gender')
+    scrape['image'] = performer.get('thumb')
+    details = BeautifulSoup(performer['Bio'], "html.parser").get_text()
+    scrape['details'] = details
+    scrape['birthdate'] = performer.get("Birthdate")
+    scrape['measurements'] = performer.get("Measurements")
+    scrape['eye_color'] = performer.get("Eyes")
 
-    if performer.get('attributes'):
-        pa = performer['attributes']
-        if pa.get('bio'):
-            scrape['details'] = get_dict_value(pa['bio'], 'value')
-        if pa.get('birthdate'):
-            scrape['birthdate'] = get_dict_value(pa['birthdate'], 'value')
-        if pa.get('measurements'):
-            scrape['measurements'] = get_dict_value(pa['measurements'],
-                                                    'value')
-        if pa.get('eyes'):
-            scrape['eye_color'] = get_dict_value(pa['eyes'], 'value')
-        if pa.get('height'):
-            height_ft = get_dict_value(pa['height'], 'value')
-            if height_ft:
-                h = re.match(r'(\d+)\D(\d+).+', height_ft)
-                if h:
-                    h_int = int(
-                        round((float(h.group(1)) * 12 + float(h.group(2))) *
+    height_ft = performer.get('Height')
+    if height_ft:
+        h = re.match(r'(\d+)\D(\d+).+', height_ft)
+        if h:
+            h_int = int(
+                    round((float(h.group(1)) * 12 + float(h.group(2))) *
                               2.54))  # ft'inches to cm
-                    scrape['height'] = f"{h_int}"
-        if pa.get('weight'):
-            weight_lb = get_dict_value(pa['weight'], 'value')
-            if weight_lb:
-                w = re.match(r'(\d+)\slbs', weight_lb)
-                if w:
-                    w_int = int(round(float(w.group(1)) / 2.2046))  # lbs to kg
-                    scrape['weight'] = f"{w_int}"
-        if pa.get('hair'):
-            scrape['hair_color'] = get_dict_value(pa['hair'], 'value')
+            scrape['height'] = f"{h_int}"
+    weight_lb = performer.get('Weight')
+    if weight_lb:
+        w = re.match(r'(\d+)\slbs', weight_lb)
+        if w:
+            w_int = int(round(float(w.group(1)) / 2.2046))  # lbs to kg
+            scrape['weight'] = f"{w_int}"
+    scrape['hair_color'] = performer.get('Hair')
     print(json.dumps(scrape))
 
 
