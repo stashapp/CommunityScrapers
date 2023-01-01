@@ -1,0 +1,58 @@
+name: MeanBitches
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - meanbitches.com/tour/models/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - meanbitches.com/tour/updates/
+    scraper: sceneScraper
+
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //div[contains(@class,'title_bar') and not(contains(text(),'Updates'))]/text()
+      Image:
+        selector: //tr/td/img[@class="thumbs"]/@src
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: http://meanbitches.com/
+  sceneScraper:
+    common:
+      $titlebar: //table[@id="episode_title"]/tbody/tr/
+    scene:
+      Title: $titlebar/td[contains(comment(),"Title")]/text()
+      Details: //div[@class="episode_description"]/text()
+      Studio:
+        Name:
+          fixed: Mean Bitches
+        URL:
+          fixed: https://www.meanbitches.com/
+      Performers:
+        Name:
+          selector: $titlebar/td[contains(comment(),"Featured Models")]/text()
+          postProcess:
+            - replace:
+                - regex: 'Featuring:\s*(.*)'
+                  with: $1
+                - regex: '\xa0' # non printable char after the comma
+                  with: ""
+          split: ","
+      Image:
+        selector: //td[@class="episode_thumbs"][@align="center"]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: http://meanbitches.com/
+      Date:
+        selector: $titlebar/td[contains(text(),"Added")]/text()
+        postProcess:
+          - replace:
+              - regex: "Added(.*)"
+                with: $1
+          - parseDate: 01/02/2006
+# Last Updated December 26, 2022
