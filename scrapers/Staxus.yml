@@ -2,13 +2,13 @@ name: "Staxus"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://staxus.com/trial/
+      - staxus.com/trial/
     scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://staxus.com/trial/
+      - staxus.com/trial/
     scraper: performerScraper
 
 xPathScrapers:
@@ -17,7 +17,7 @@ xPathScrapers:
       $script: //script[@type="application/ld+json"]
       $info: //div[@class="text"]
     scene:
-      Title: 
+      Title:
         selector: //div[@class="video-descr__title"]//h2
         postProcess:
           - replace:
@@ -65,7 +65,7 @@ xPathScrapers:
         selector: //p[@class="flex-item"]/b[text()="Height:"]/following-sibling::span[1]/text()
         postProcess:
           - replace:
-              - regex: 'cm.*'
+              - regex: "cm.*"
                 with: ""
               - regex: '^.*/(\s)?'
                 with: ""
@@ -73,7 +73,7 @@ xPathScrapers:
         selector: //p[@class="flex-item"]/b[text()="Cock size:"]/following-sibling::span[1]/text()
         postProcess:
           - replace:
-              - regex: 'cm.*'
+              - regex: "cm.*"
                 with: ""
               - regex: '^.*/(\s)?'
                 with: ""
