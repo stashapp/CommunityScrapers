@@ -2,28 +2,42 @@ name: "Staxus"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://staxus.com/trial/
+      - staxus.com/trial/
     scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://staxus.com/trial/
+      - staxus.com/trial/
     scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
     common:
+      $script: //script[@type="application/ld+json"]
       $info: //div[@class="text"]
     scene:
-      Title: //div[@class="video-descr__title"]//h2
-      Date:
-        selector: //div[@class='video-details'][strong='Added:']
+      Title:
+        selector: //div[@class="video-descr__title"]//h2
         postProcess:
           - replace:
-              - regex: "Added: "
+              - regex: " HD"
                 with: ""
-          - parseDate: 02/January/2006
+      Date:
+        selector: $script/text()
+        postProcess:
+          - replace:
+              - regex: .*"(\d{4}-\d{2}-\d{2})".*
+                with: $1
+          - parseDate: 2006-01-02
+      Code:
+        selector: //script[@type="application/ld+json"]
+        postProcess:
+          - replace:
+              - regex: .+id\=(\d+)".+
+                with: $1
+      Director:
+        selector: //div[@class='video-details'][contains(strong,"Director:")]/text()
       Tags:
         Name: //p/a[@href[contains(., "category.php")]]/text()
       Performers:
@@ -33,13 +47,11 @@ xPathScrapers:
         selector: //div[@class="video-descr__content"]/p/text()
         concat: "\n"
       Image:
-        selector: //script[@type="application/ld+json"][contains(.,'"thumbnailUrl":')]
+        selector: //div[contains(@class, "player-wrapper")]/@style
         postProcess:
           - replace:
-              - regex: '^.*thumbnailUrl":\s"([^"]+)".*$'
-                with: "$1"
-              - regex: "contentthumbs"
-                with: "content/contentthumbs"
+              - regex: .*'(.*)'.*
+                with: https:$1
       Studio:
         Name:
           fixed: Staxus
@@ -53,7 +65,7 @@ xPathScrapers:
         selector: //p[@class="flex-item"]/b[text()="Height:"]/following-sibling::span[1]/text()
         postProcess:
           - replace:
-              - regex: 'cm.*'
+              - regex: "cm.*"
                 with: ""
               - regex: '^.*/(\s)?'
                 with: ""
@@ -61,7 +73,7 @@ xPathScrapers:
         selector: //p[@class="flex-item"]/b[text()="Cock size:"]/following-sibling::span[1]/text()
         postProcess:
           - replace:
-              - regex: 'cm.*'
+              - regex: "cm.*"
                 with: ""
               - regex: '^.*/(\s)?'
                 with: ""
@@ -380,4 +392,4 @@ xPathScrapers:
                 with: "https:"
       Details:
         selector: //div[@class="video-descr__section col-md-12"]//p[2]/text()
-# Last Updated August 08, 2021
+# Last Updated December 23, 2022
