@@ -38,8 +38,8 @@ xPathScrapers:
           selector: //a[contains(@title,"Categorie:")]//text()
           postProcess:
             - replace:
-              - regex: (.*)\s\(\d+\)
-                with: $1
+                - regex: (.*)\s\(\d+\)
+                  with: $1
       Performers:
         Name: $performer//h5/text()
         URL:
@@ -95,20 +95,20 @@ xPathScrapers:
       Gender:
         fixed: Male
       Country:
-        selector: //h2[contains(text(),"Nationality:")]/following-sibling::text()
+        selector: //h2[contains(text(),"Nationality:")]/following-sibling::text()[1]
       Height:
-        selector: //h2[contains(text(),"Height:")]/following-sibling::text()
+        selector: //h2[contains(text(),"Height:")]/following-sibling::text()[1]
         postProcess:
           - feetToCm: true
       Weight:
-        selector: //h2[contains(text(),"Weight:")]/following-sibling::text()
+        selector: //h2[contains(text(),"Weight:")]/following-sibling::text()[1]
         postProcess:
           - replace:
               - regex: ^(\d+).+
                 with: $1
           - lbToKg: true
       Measurements:
-        selector: //h2[contains(text(), "Dick:")]/following-sibling::text()
+        selector: //h2[contains(text(), "Dick:")]/following-sibling::text()[1]
         postProcess:
           - replace:
               - regex: '[^\s]+ \((.*) cms\).*$'
