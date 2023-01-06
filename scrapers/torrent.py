@@ -1,7 +1,10 @@
 import sys
 import json
-from os import walk
-from os.path import join, dirname, realpath, basename
+from os.path import basename
+from pathlib import Path
+import re
+from datetime import datetime
+import difflib
 
 try:
     from bencoder import bdecode
@@ -16,7 +19,7 @@ except ModuleNotFoundError:
           "(CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
     sys.exit()
 
-TORRENTS_PATH = join(dirname(dirname(realpath(__file__))), "torrents")
+TORRENTS_PATH = Path("torrents")
 
 
 def get_scene_data(fragment_data):
@@ -34,24 +37,39 @@ def get_scene_data(fragment_data):
       }
     }""", {"id": scene_id})
 
-    if response:
+    if response and response["findScene"]:
         for f in response["findScene"]["files"]:
             scene_files.append({"filename": basename(f["path"]), "size": f["size"]})
         return {"id": scene_id, "title": scene_title, "files": scene_files}
     return {}
 
+def process_tags_performers(tagList):
+    return map(lambda tag: decode_bytes(tag).replace('.', ' '), tagList)
 
-def get_torrent_metadata(scene_data, torrent_data):
-    res = {"title": scene_data["title"], "url": decode_bytes(torrent_data[b"comment"])}
+def process_description_bbcode(description):
+    res = re.sub(r'\[(?:b|i|u|s|url|quote)?\](.*)?\[\/(?:b|i|u|s|url|quote)\]',r"\1", description )
+    res = re.sub(r'\[.*?\].*?\[\/.*?\]',r'',res)
+    res = re.sub(r'\[.*?\]',r'',res)
+    return res.strip()
+
+def get_torrent_metadata(torrent_data):
+    res = {}
+
     if b"metadata" in torrent_data:
         if b"title" in torrent_data[b"metadata"]:
             res["title"] = decode_bytes(torrent_data[b"metadata"][b"title"])
         if b"cover url" in torrent_data[b"metadata"]:
             res["image"] = decode_bytes(torrent_data[b"metadata"][b"cover url"])
         if b"description" in torrent_data[b"metadata"]:
-            res["details"] = decode_bytes(torrent_data[b"metadata"][b"description"])
+            res["details"] = process_description_bbcode(decode_bytes(torrent_data[b"metadata"][b"description"]))
         if b"taglist" in torrent_data[b"metadata"]:
             res["tags"] = [{"name": decode_bytes(t)} for t in torrent_data[b"metadata"][b"taglist"]]
+        if b"taglist" in torrent_data[b"metadata"]:
+            res["performers"]=[{"name":x} for x in process_tags_performers(torrent_data[b"metadata"][b"taglist"])]
+        if b"comment" in torrent_data:
+            res["url"] = decode_bytes(torrent_data[b"comment"])
+        if b"creation date" in torrent_data:
+            res["date"] = datetime.fromtimestamp(torrent_data[b"creation date"]).strftime("%Y-%m-%d")
     return res
 
 
@@ -76,17 +94,46 @@ def scene_in_torrent(scene_data, torrent_data):
 
 
 def process_torrents(scene_data):
-    for root, dirs, files in walk(TORRENTS_PATH):
-        for name in files:
-            if name.endswith(".torrent"):
-                with open(join(root, name), "rb") as f:
-                    torrent_data = bdecode(f.read())
-                    if scene_in_torrent(scene_data, torrent_data):
-                        return get_torrent_metadata(scene_data, torrent_data)
+    if scene_data:
+        for name in TORRENTS_PATH.glob("*.torrent"):
+            with open(name, "rb") as f:
+                torrent_data = bdecode(f.read())
+                if scene_in_torrent(scene_data, torrent_data):
+                    return get_torrent_metadata(torrent_data)
     return {}
+
+def similarity_file_name(search, fileName):
+    result = difflib.SequenceMatcher(a=search.lower(), b=fileName.lower())
+    return result.ratio()
+
+def cleanup_name(name):
+    ret = str(name)
+    ret = ret.removeprefix("torrents\\").removesuffix(".torrent")
+    return ret
 
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
     print(json.dumps(process_torrents(get_scene_data(fragment))))
-# Last Updated December 12, 2022
+elif sys.argv[1] == "fragment":
+    filename = json.loads(sys.stdin.read()).get('url')
+    with open(filename, 'rb') as f:
+        torrent_data = bdecode(f.read())
+        print(json.dumps(get_torrent_metadata(torrent_data)))
+elif sys.argv[1] == "search":
+    search = json.loads(sys.stdin.read()).get('name')
+    torrents = list(TORRENTS_PATH.rglob('*.torrent'))
+    ratios = {}
+    for t in torrents:
+        clean_t = cleanup_name(t)
+        ratios[round(10000*(1-similarity_file_name(search, clean_t)))] = {'url': str(t.absolute()), 'title': clean_t}
+
+    # Order ratios
+    ratios_sorted = dict(sorted(ratios.items()))
+    # Only return the top 5 results
+    if len(ratios) > 5:
+        ratios = ratios_sorted[5:]
+
+    print(json.dumps(list(ratios_sorted.values())))
+
+# Last Updated December 16, 2022
