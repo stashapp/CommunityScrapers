@@ -868,8 +868,8 @@ newsensations.com/tour_rs/|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|
 nextdoorbuddies.com|Algolia_NextdoorStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
 nextdoorcasting.com|Algolia_NextdoorStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
 nextdoorebony.com|Algolia_NextdoorStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
-nextdoorhookups.com|Algolia_NextdoorStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
-nextdoormale.com|Algolia_NextdoorStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
+nextdoorhookups.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+nextdoormale.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 nextdoorraw.com|Algolia_NextdoorStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
 nextdoorstudios.com|Algolia_NextdoorStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
 nextdoortaboo.com|Algolia_NextdoorStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
