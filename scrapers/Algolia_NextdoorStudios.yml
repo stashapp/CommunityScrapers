@@ -34,13 +34,4 @@ sceneByQueryFragment:
       - Algolia.py
       - nextdoorstudios
       - validName
-movieByURL:
-  - action: script
-    url:
-      - adulttime.com/en/dvd/
-    script:
-      - python
-      - Algolia.py
-      - nextdoorstudios
-      - movie
-# Last Updated December 31, 2022
+# Last Updated January 7, 2022
