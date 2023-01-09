@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - brazilian-transsexuals.com
       - braziltgirls.xxx
+      - tgirlsfuck.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -35,4 +36,4 @@ xPathScrapers:
               - regex: ^\/\/
                 with: "https://"
 
-# Last Updated December 16, 2022
+# Last Updated January 09, 2023
