@@ -17,7 +17,7 @@ xPathScrapers:
       Performers:
         Name: //a[@class="model-name no-text-decoration"]
       Image:
-        selector: //video[contains(@class,'video-js')]/@poster
+        selector: //video[contains(@class,"video-js")]/@poster|//div[contains(@class,"model-player")]//img/@src
         postProcess:
           - replace:
               - regex: ^
@@ -27,4 +27,10 @@ xPathScrapers:
           fixed: "Dream Tranny"
       Tags:
         Name: //div[@class="model-categories"]/a/text()
-# Last Updated December 14, 2022
+      URL:
+        selector: //script[contains(.,"API_VIEW_URLS")]/text()
+        postProcess:
+          - replace:
+              - regex: .*/api(/update/\d+)/view_count.*
+                with: "https://dreamtranny.com$1"
+# Last Updated January 06, 2023
