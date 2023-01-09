@@ -8,7 +8,6 @@ performerByURL:
     url:
       - imdb.com
     scraper: performerScraper
-
 sceneByName:
   action: scrapeXPath
   queryURL: https://www.imdb.com/find?q={}
@@ -22,7 +21,11 @@ sceneByURL:
     url:
       - imdb.com/title/
     scraper: sceneScraper
-
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - imdb.com/title/
+    scraper: movieScraper
 xPathScrapers:
   performerSearch:
     common:
@@ -36,7 +39,6 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://www.imdb.com
-
   performerScraper:
     performer:
       Name: //td[@id="overview-top" or @class="name-overview-widget__section"]//h1/span[1]/text()
@@ -93,20 +95,47 @@ xPathScrapers:
 
   sceneScraper:
     scene:
-      Title: //section//h1
-      Date:
+      Title: &title //section//h1
+      URL: &url //meta[@property="og:url"]/@content
+      Movies:
+        Name: *title
+        URL: *url
+      Date: &date
         selector: //li[@data-testid='title-details-releasedate']/div/ul/li/a/text()
         postProcess:
           - replace:
               - regex: '\s*\(.+$'
                 with: ""
+              - regex: '^(\d\d\d\d)$'
+                with: $1-01-01
           - parseDate: January 2, 2006
-      Details: //span[@data-testid="plot-xl"]
+      Details: &desc //span[@data-testid="plot-xl"]
       Tags:
         Name: //div[@data-testid="genres"]/a/span
       Performers:
         Name: //a[@data-testid="title-cast-item__actor"]
       Image: *imageAttr
-      Studio:
-        Name: //li[@data-testid="title-details-companies"]/div//a
-# Last Updated October 30, 2021
+      Studio: &studio
+        Name: (//li[@data-testid="title-details-companies"]/div//a)[1]
+  movieScraper:
+    movie:
+      Name: *title
+      URL: *url
+      Date: *date
+      Director: //section[@data-testid="title-cast"]//li[span[text()="Director"]]//a
+      Duration:
+        selector: //ul[@data-testid="hero-title-block__metadata"]/li[last()]
+        postProcess:
+          - replace:
+              - regex: (\d+)h\s*
+                with: "$1:"
+              - regex: (\d+)m
+                with: "$1:00"
+              - regex: ":$" # only h
+                with: ":00:00"
+              - regex: ^(\d+:\d+)$ # only m
+                with: "00:$1"
+      Studio: *studio
+      Synopsis: *desc
+      FrontImage: *imageAttr
+# Last Updated August 13, 2022

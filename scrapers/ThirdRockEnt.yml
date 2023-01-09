@@ -8,6 +8,7 @@ sceneByURL:
       - analviolation.com/trailers/
       - baddaddypov.com/trailers/
       - badfamilypov.com/trailers/
+      - badmommypov.com/trailers/
       - downtofuckdating.com/trailers/
       - dtfsluts.com/trailers/
       - girlfaction.com/trailers/
@@ -16,6 +17,7 @@ sceneByURL:
       - jamesdeen.com/trailers/
       - onlyprince.com/trailers/
       - pervertgallery.com/trailers/
+      - porkvendors.com/trailers/
       - pornforce.com/trailers/
       - povperverts.net/trailers/
       - publicsexdate.com/trailers/
@@ -40,33 +42,36 @@ xPathScrapers:
       Tags:
         Name: //ul[@class="flex flex-wrap gap-2 text-white"]//a
       Image:
-        selector: //img[@alt="trailer"]/@src0_1x | //div[@id="video_player"]//@poster
+        selector: //img[@alt="trailer"]/@src0_1x | //div[@id="video_player"]//@poster | //video[@id="my-player"]/@poster
       Studio:
         Name:
           selector: //meta[@property="og:url"]/@content
           postProcess:
             - map:
-                https://AbbieMaley.com: AbbieMaley
+                https://AbbieMaley.com: Abbie Maley
                 https://AnalBBC.com: AnalBBC
                 https://ANALIZED.com: Analized
-                https://analviolation.com: AnalViolation
-                https://BadDaddyPOV.com: BadDaddyPOV
-                https://BadFamilyPov.com: BadFamilyPov
-                https://DownToFuckDating.com: DownToFuckDating
-                https://DTFsluts.com: DTFsluts
+                https://analviolation.com: Anal Violation
+                https://BadDaddyPOV.com: Bad Daddy POV
+                https://BadFamilyPov.com: Bad Family POV
+                https://BadMommyPov.com: Bad Mommy POV
+                https://BadMommyPOV.com: Bad Mommy POV
+                https://DownToFuckDating.com: Down To Fuck Dating
+                https://DTFsluts.com: DTF Sluts
                 https://Girlfaction.com: Girlfaction
-                https://HerGape.com: HerGape
-                https://HomemadeAnalWhores.com: HomemadeAnalWhores
-                https://JamesDeen.com: JamesDeen
-                https://OnlyPrince.com: OnlyPrince
-                https://PervertGallery.com: PervertGallery
-                https://PornForce.com: PornForce
-                https://POVPerverts.net: POVPerverts
-                https://publicsexdate.com: PublicSexDate
-                https://SlutInspection.com: SlutInspection
-                https://teenageanalsluts.com: TeenageAnalSluts
-                https://TeenageCorruption.com: TeenageCorruption
-                https://TwistedVisual.com: TwistedVisual
-                https://yourmomdoesanal.com: YourMomDoesAnal
-                https://YourMomDoesPorn.com: YourMomDoesPorn
-# Last Updated October 31, 2021
+                https://HerGape.com: Her Gape
+                https://HomemadeAnalWhores.com: Homemade Anal Whores
+                https://JamesDeen.com: James Deen
+                https://OnlyPrince.com: Only Prince
+                https://PervertGallery.com: Pervert Gallery
+                https://PorkVendors.com: Pork Vendors
+                https://PornForce.com: Porn Force
+                https://POVPerverts.net: POV Perverts
+                https://publicsexdate.com: Public Sex Date
+                https://SlutInspection.com: Slut Inspection
+                https://teenageanalsluts.com: Teenage Anal Sluts
+                https://TeenageCorruption.com: Teenage Corruption
+                https://TwistedVisual.com: Twisted Visual
+                https://yourmomdoesanal.com: Your Mom Does Anal
+                https://YourMomDoesPorn.com: Your Mom Does Porn
+# Last Updated December 20, 2022

@@ -2,9 +2,11 @@ name: hussiemodels
 sceneByURL:
   - action: scrapeXPath
     url:
-      - hussiepass.com/trailers/
       - hookuphotshot.com/trailers
+      - hotandtatted.com/trailers
+      - hussiepass.com/trailers/
       - seehimfuck.com/trailers
+      - seehimsolo.com/trailers
       - povpornstars.com
       # Removes all emoticons from Title, Description, Performers and Tags.
     scraper: sceneScraper
@@ -47,7 +49,9 @@ xPathScrapers:
                   with: $1
             - map:
                 hookuphotshot: HookUp Hotshot
+                hotandtatted: Hot and Tatted
                 hussiepass: Hussie Pass
-                seehimfuck: See HIM Fuck
+                seehimfuck: See Him Fuck
+                seehimsolo: See Him Solo
                 povpornstars: POV Pornstars
-# Last Updated March 29, 2021
+# Last Updated July 13, 2022

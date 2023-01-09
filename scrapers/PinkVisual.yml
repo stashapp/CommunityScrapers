@@ -1,0 +1,32 @@
+name: pinkvisual
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.ipinkvisualpass.com/es/sx/pc/episode
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //div[@class="summary"]/h3[@itemprop="name"]/text()
+      Details: //p[@class="description"]/span[@itemprop="description"]/text()
+      Performers:
+        Name: //p[@class="actors"]/span/a/span/text()
+      Image:
+        selector: //div[@class="collage"]/img[@itemprop="image"][contains(@src,"-01.jpg")]/@src
+        postProcess:
+          - replace:
+              - regex: -01.jpg
+                with: "-07.jpg"
+      Studio:
+        Name: 
+          selector: //h4[@itemprop="partOfTVSeries"]/a[1]
+      Tags:
+        Name: //div[@class='related_links niches']/p/a
+      URL: 
+        selector: //link[@rel='canonical']/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: http://www.ipinkvisualpass.com
+# Last Updated March 12, 2022

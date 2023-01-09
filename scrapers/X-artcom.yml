@@ -1,4 +1,4 @@
-name: xart
+name: X-Art
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -20,5 +20,7 @@ xPathScrapers:
       Performers:
         Name: $sceneinfo/h2/a/text()
       Image: //div[@class="flex-video widescreen"]/a/img/@src
-
-# Last Updated November 08, 2020
+      Studio:
+        Name:
+          fixed: X-Art
+# Last Updated September 22, 2022

@@ -1,8 +1,14 @@
 import json
 import sys
 import re
-import requests
 from pathlib import Path
+
+try:
+    import requests
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
 
 def debug(t):
   sys.stderr.write(t + "\n")

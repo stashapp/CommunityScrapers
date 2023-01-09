@@ -1,0 +1,36 @@
+name: "xSinsVR"
+sceneByURL: &byUrl
+  - action: scrapeXPath
+    url:
+      - billiestar.com/video
+      - xsinsvr.com/video
+    scraper: sceneScraper
+galleryByURL: *byUrl
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title //div[contains(@class,"video-player-container__info")]/div/h1
+      Date: &date
+        selector: //time/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Details: &details
+        selector: //li/div[@class="small"]//p
+        concat: "\n\n"
+      Tags: &tags
+        Name:
+          selector: //div[@class="tags-item"]/a/text()
+      Performers: &performers
+        Name: //span/a[contains(@href,'/model/')]/text()
+      Studio: &studio
+        Name: //strong/a[contains(@href, "/studio/")]/text()
+      Image: //dl8-video/@poster
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Tags: *tags
+      Performers: *performers
+      Studio: *studio
+# Last Updated April 04, 2022

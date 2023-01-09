@@ -1,0 +1,44 @@
+name: "EastBoys"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - eastboys.com/en/tour/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $perf: //span[@class="content"]//a
+    scene:
+      Title:
+        selector: //div[@class="row cover_detail mt-3 mt-sm-5"]/h2[@class="latest"]/text()
+      Date:
+        selector: //div[@class="update_date text-light"]/text()
+        postProcess:
+          - parseDate: 02.01.2006
+      Details:
+        selector: //p[@class="description pr-0 pr-lg-3 text-light"]/text()
+      Performers:
+        Name:
+          selector: $perf
+          postProcess:
+            - replace:
+                - regex: ","
+                  with: ""
+        URL:
+          selector: $perf/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://www.eastboys.com/
+      Tags:
+        Name: //div[@class="categories_detail text-light"]/following-sibling::a
+      Image:
+        selector: //div[@class="col-lg-2 col-6 pt-1 pr-1 pl-0 pb-0"]/img[@class="img_detail_thumb"]/@src
+        postProcess:
+          - replace:
+              - regex: '(.+)(\/\d)'
+                with: "$1/0"
+      Studio:
+        Name:
+          fixed: EastBoys
+# Last Updated March 16, 2022

@@ -1,0 +1,39 @@
+name: "ShinyBound"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - shinybound.com
+      - shinysboundsluts.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $logo: //div[@class="logo"]/a/@href
+    scene:
+      Title: //span[@class='update_title']
+      Details:
+        selector: //span[@class='latest_update_description']
+      Date:
+        selector: //span[@class='availdate']
+        postProcess:
+          - parseDate: 01/02/2006
+      Tags:
+        Name: //span[@class='update_tags']/a
+      Performers:
+        Name:
+          selector: //span[@class='tour_update_models']/a
+      Studio:
+        Name:
+          selector: $logo
+          postProcess:
+            - replace:
+                - regex: https://([^.]+)\..+
+                  with: $1
+            - map:
+                shinysboundsluts: ShinysBoundSluTS
+                shinybound: ShinyBound
+      Image:
+        selector: $logo|//img[@class='stdimage promo_thumb left thumbs']/@src
+        concat: "/"
+# Last Updated May 23, 2022

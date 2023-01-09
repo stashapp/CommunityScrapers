@@ -19,4 +19,6 @@ xPathScrapers:
             - replace:
                 - regex: (.+)(i\.src = ')(.+\.jpg)(.+)
                   with: $3
-# Last Updated August 07, 2020
+                - regex: ^/
+                  with: https://kinkyfamily.com/
+# Last Updated February 19, 2022

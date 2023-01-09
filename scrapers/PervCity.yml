@@ -18,7 +18,7 @@ xPathScrapers:
       Title: $sceneinfo/div[@class="infoHeader"]
       Performers:
         Name: $sceneinfo//span[@class="tour_update_models"]/a
-      Details: $sceneinfo//p/text()
+      Details: $sceneinfo//p/text()|$sceneinfo//h3[@class="description"]
       Image:
         selector: //head/base/@href|//img[@class="posterimg stdimage thumbs"]/@src
         concat: "|"
@@ -52,4 +52,6 @@ xPathScrapers:
                 oraloverdose: OralOverdose
                 pervcity: PervCity
                 upherasshole: UpHerAsshole
-# Last Updated October 14, 2020
+      Tags:
+        Name: $sceneinfo//div[@class="tagcats"]/a/text()
+# Last Updated February 13, 2022

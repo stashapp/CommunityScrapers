@@ -1,0 +1,106 @@
+name: It's POV
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - backdoorpov.com/en/videos
+      - feetishpov.com/en/videos
+      - intimatepov.com/en/videos
+      - itspov.com/en/videos
+      - officepov.com/en/videos
+      - petitepov.com/en/videos
+      - schoolpov.com/en/videos
+      - steppov.com/en/videos
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@id="freetour-video-view"]/h1/text()
+      Details: //div[@id="story"]
+      Tags:
+        Name: //p[@class="categories"]//a/text()
+      Performers:
+        Name: //p[@class="starring"]//a/text()
+      Studio:
+        Name:
+          selector: //img[contains(@class,"FreeTourHeader_site-logo")]/@alt
+          postProcess:
+            - replace:
+              - regex: \.com$
+                with: $1
+      Image: //div[@id="freetour-video-view-video"]//picture/source[1]/@srcset
+driver:
+  useCDP: true
+  cookies:
+    - Cookies:
+        - Name: "gen_disclaimer"
+          Domain: ".itspov.com"
+          Value: "1"
+          Path: "/"
+        - Name: "gen_stored"
+          Domain: ".itspov.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "gen_disclaimer"
+          Domain: ".backdoorpov.com"
+          Value: "1"
+          Path: "/"
+        - Name: "gen_stored"
+          Domain: ".backdoorpov.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "gen_disclaimer"
+          Domain: ".feetishpov.com"
+          Value: "1"
+          Path: "/"
+        - Name: "gen_stored"
+          Domain: ".feetishpov.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "gen_disclaimer"
+          Domain: ".intimatepov.com"
+          Value: "1"
+          Path: "/"
+        - Name: "gen_stored"
+          Domain: ".intimatepov.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "gen_disclaimer"
+          Domain: ".officepov.com"
+          Value: "1"
+          Path: "/"
+        - Name: "gen_stored"
+          Domain: ".officepov.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "gen_disclaimer"
+          Domain: ".petitepov.com"
+          Value: "1"
+          Path: "/"
+        - Name: "gen_stored"
+          Domain: ".petitepov.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "gen_disclaimer"
+          Domain: ".schoolpov.com"
+          Value: "1"
+          Path: "/"
+        - Name: "gen_stored"
+          Domain: ".schoolpov.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "gen_disclaimer"
+          Domain: ".steppov.com"
+          Value: "1"
+          Path: "/"
+        - Name: "gen_stored"
+          Domain: ".steppov.com"
+          Value: "1"
+          Path: "/"
+# Last Updated June 05, 2022

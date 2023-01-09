@@ -2,15 +2,18 @@ import json
 import sys
 from urllib.parse import urlparse
 
-import requests
+try:
+    import requests
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
 
 try:
     import py_common.log as log
 except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr)
-    sys.exit(1)
+    print("You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
+    sys.exit()
 
 # Max number of scenes that a site can return for the search.
 MAX_SCENES = 6

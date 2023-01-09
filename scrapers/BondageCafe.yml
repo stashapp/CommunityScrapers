@@ -1,0 +1,31 @@
+name: "BondageCafe"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bondagecafe.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //span[@class='update_title']
+      Details: //span[@class='latest_update_description']
+      URL: //link[@rel="canonical"]/@href
+      Date:
+        selector: //span[@class='availdate']
+        postProcess:
+          - parseDate: 01/02/2006
+      Tags:
+        Name: //span[@class='update_tags']/a
+      Performers:
+        Name: //span[@class='tour_update_models']/a
+      Studio:
+        Name:
+          fixed: BondageCafe
+      Image:
+        selector: //img[@class='stdimage large_update_thumb left thumbs']/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.bondagecafe.com/
+# Last Updated August 30, 2022

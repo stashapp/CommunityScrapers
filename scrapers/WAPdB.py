@@ -1,11 +1,24 @@
 import json
 import io
 import sys
-import requests
+
 from datetime import datetime
-from bs4 import BeautifulSoup  # requires v4.10.0 and above
 
+try:
+    import requests
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
 
+try:
+    from bs4 import BeautifulSoup # requires v4.10.0 and above
+except ModuleNotFoundError:
+    print("You need to install the BeautifulSoup module (v4.10.0+). (https://pypi.org/project/beautifulsoup4/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install beautifulsoup4", file=sys.stderr)
+    sys.exit()
+    
+    
 def check_compat():
     from bs4 import __version__ as ver
     major, minor, _ = ver.split('.')

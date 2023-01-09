@@ -1,4 +1,3 @@
-
 import json
 import requests
 import sys
@@ -10,6 +9,19 @@ except ModuleNotFoundError:
     print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
     sys.exit()
 
+def get_names(data: list):
+    kn = []
+    if data:
+        for i in data:
+            if (i.get('name')):
+                kn.append({"name": i['name']})
+    return kn
+
+def get_name(data: dict):
+    if data and (data.get("name")):
+        return { "name": data["name"] }
+    return None
+
 if sys.argv[1] == "gallery_query":
     fragment = json.loads(sys.stdin.read())
     log.debug("input: " + json.dumps(fragment))
@@ -20,7 +32,8 @@ if sys.argv[1] == "gallery_query":
     else:
         if len(result["scenes"])  > 0:
             s=result["scenes"][0]
-            res={"title":s["title"],"details":s["details"],"url":s["url"],"date":s["date"],"rating":s["rating"],"studio":s["studio"],"performers":s["performers"],"tags":s["tags"]}
+            log.debug("data: " + json.dumps(s))
+            res={"title":s["title"],"details":s["details"],"url":s["url"],"date":s["date"],"studio":get_name(s["studio"]),"performers":get_names(s["performers"]),"tags":get_names(s["tags"])}
             print (json.dumps(res))
         else:
             print ("{}")

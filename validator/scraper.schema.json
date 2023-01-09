@@ -464,6 +464,14 @@
         "Performers": {
           "title": "Scene performers",
           "allOf": [{ "$ref": "#/definitions/performerObject" }]
+        },
+        "Code": {
+          "title": "Scene studio code",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "Director": {
+          "title": "Scene director",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         }
       }
     },

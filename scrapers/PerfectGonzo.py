@@ -6,8 +6,19 @@ import string
 import sys
 from urllib.parse import urlparse
 # extra modules below need to be installed
-import cloudscraper
-from lxml import html, etree
+try:
+    import cloudscraper
+except ModuleNotFoundError:
+    print("You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper", file=sys.stderr)
+    sys.exit()
+    
+try:
+    from lxml import html, etree
+except ModuleNotFoundError:
+    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml", file=sys.stderr)
+    sys.exit()
 
 STUDIO_MAP = {
     'https://static-cdn-perfectgonzo.explicithd.com/assets/img/favicon_perfectgonzo.com.ico': 'Perfect Gonzo',

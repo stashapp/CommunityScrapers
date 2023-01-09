@@ -10,7 +10,7 @@ from os import path
    '''
 def lookup_scene(id):
     c=conn.cursor()
-    c.execute('select title,synopsis,site,cover_url,scene_url,date(release_date) from scenes where id=?',(id,))
+    c.execute('select title,synopsis,site,cover_url,scene_url,date(release_date, "localtime") from scenes where id=?',(id,))
     row=c.fetchone()
     res={}
     res['title']=row[0]

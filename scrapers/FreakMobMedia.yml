@@ -22,9 +22,9 @@ xPathScrapers:
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
-          fixed: FreakMobMedia
+          fixed: Freak Mob Media
       Tags:
         Name: //span[@class="meta-info"][text()="Category" or text()="Tag"]/following-sibling::a/text()
       Performers:
         Name: //span[@class="meta-info" and text()="Model"]/following-sibling::a/text()
-# Last Updated July 18, 2021
+# Last Updated June 24, 2022

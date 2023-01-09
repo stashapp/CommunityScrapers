@@ -17,8 +17,6 @@ sceneByURL:
       - sweetheartvideo.com/scene/
       - sweetsinner.com/scene/
       - teenslovehugecocks.com/scene/
-      - twistys.com/scene/
-      - twistysnetwork.com/scene/
     scraper: sceneScraper
   - action: scrapeXPath
     url:
@@ -33,6 +31,7 @@ sceneByURL:
       - milfed.com/scene/
       - mofos.com/scene/
       - publicagent.com/scene/
+      - realitykings.com/scene/
       - seancody.com/scene/
       - transangels.com/scene/
       - transsensual.com/scene
@@ -52,7 +51,7 @@ performerByURL:
       - babesnetwork.com/model/
       - devianthardcore.com/model/
       - digitalplayground.com/modelprofile/
-      - doghousedigital.com/
+      - doghousedigital.com/model/
       - familyhookups.com/model
       - girlgrind.com/model
       - iknowthatgirl.com/model/
@@ -60,19 +59,18 @@ performerByURL:
       - lookathernow.com/model/
       - mofos.com/model/
       - mofosnetwork.com/model/
+      - realitykings.com/model/
       - rk.com/model/
       - seancody.com/model/
       - sweetsinner.com/model/
       - teenslovehugecocks.com/model/
       - transsensual.com/model/
-      - twistys.com/model/
-      - twistysnetwork.com/model/
     scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
     common:
-      $section: //img[@alt=""][contains(@src,"poster")]/ancestor::section
+      $section: //div[contains(@class,"tg5e7m")]/ancestor::section
     scene:
       Title: $section//h1/text()|$section//h2/text()
       Date:
@@ -80,7 +78,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: //div[text()="Description:"]/../div[not(@class)]/text()
-      Tags:
+      Tags: &tags
         Name:
           selector: //a[contains(@href,"/scenes?tags")]/text()[1]
           postProcess:
@@ -94,11 +92,27 @@ xPathScrapers:
           selector: $section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
           postProcess:
             - replace:
-                - regex: .*www\.
-                  with: ""
-                - regex: \.com.+
-                  with: ""
-      Image: //img[@alt=""][contains(@src,"poster")]/@src
+                - regex: (.+www\.)(\w+)(.+)
+                  with: $2
+            - map:
+                babesnetwork: Babes
+                devianthardcore: Deviant Hardcore
+                doghousedigital: Doghouse Digital
+                familyhookups: Family Hookups
+                girlgrind: Girl Grind
+                kinkyspa: Kinky Spa
+                Lets Try Anal: Let's Try Anal
+                lookathernow: Look At Her Now
+                mofosnetwork: Mofos
+                realitykings: Reality Kings
+                realityjunkies: Reality Junkies
+                rk: Reality Kings
+                squirted: Squirted
+                sweetheartvideo: Sweetheart Video
+                SweetSinner: Sweet Sinner
+                sweetsinner: Sweet Sinner
+                teenslovehugecocks: Teens Love Huge Cocks
+      Image: $section//img[contains(@src,"poster")]/@src
   scriptScraper:
     common:
       $script: //script[@type="application/ld+json"]
@@ -123,9 +137,29 @@ xPathScrapers:
               - regex: '.+"thumbnailUrl": "([^"]+)".+'
                 with: $1
       Studio:
-        Name: //meta[@name="dti.network"]/@content
-      Tags:
-        Name: //a[contains(@href,"/scenes?tag")]/text()[1]
+        Name:
+          selector: //div[contains(@class,"tg5e7m")]/ancestor::section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: (.+www\.)(\w+)(.+)
+                  with: $2
+            - map:
+                digitalplayground: Digital Playground
+                fakehostel: Fake Hostel
+                faketaxi: Fake Taxi
+                familysinners: Family Sinners
+                iconmale: Icon Male
+                iknowthatgirl: I Know That Girl
+                lilhumpers: Lil Humpers
+                milfed: Milfed
+                publicagent: Public Agent
+                realitykings: Reality Kings
+                rk: Reality Kings
+                seancody: Sean Cody
+                transangels: Trans Angels
+                transsensual: TransSensual
+                trueamateurs: True Amateurs
+      Tags: *tags
       Details:
         selector: $script
         postProcess:
@@ -154,30 +188,28 @@ xPathScrapers:
           selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace:
-                - regex: .*www\.
-                  with: ""
-                - regex: \.com.+
-                  with: ""
-                - regex: " "
-                  with: ""
+                - regex: (.+www\.)(\w+)(.+)
+                  with: $2
             - map:
                 digitalplayground: "Digital Playground"
                 transsensual: TransSensual
+                kinkyspa: Kinky Spa
+
       FrontImage: $section//picture/img[@alt]/@src
 
   performerScraper:
     performer:
-      Name: //section/div/h1/text()|//section/div/h2[not(following-sibling::a)]/text()
+      Name: //section//div/h1/text()|//section/div/h2[not(following-sibling::a)]/text()|//section//div[contains(@class, "font-secondary")]/text()
       Birthdate:
-        selector: //li[contains(.,"Date of Birth")]/span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Date of Birth")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
               - regex: th,|st,|rd,|nd,
                 with: ","
           - parseDate: January 2, 2006
-      Measurements: //li[contains(.,"Measurements")]/span/text()[not(contains(.,"N/A"))]
+      Measurements: //li[contains(.,"Measurements")]/span[last()]/text()[not(contains(.,"N/A"))]
       Country:
-        selector: //li[contains(.,"Birth Place")]/span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Birth Place")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
           - replace:
               - regex: .*?,\s
@@ -285,10 +317,10 @@ xPathScrapers:
               Wisconsin: "USA"
               Wyoming: "USA"
       Height:
-        selector: //li[contains(.,"Height")]/span/text()[not(contains(.,"N/A"))]
+        selector: //li[contains(.,"Height")]/span[last()]/text()[not(contains(.,"N/A"))]
         postProcess:
           - feetToCm: true
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated January 27, 2022
+# Last Updated October 14, 2022

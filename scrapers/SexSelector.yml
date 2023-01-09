@@ -1,0 +1,33 @@
+name: "SexSelector"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sexselector.com/video/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="player__info__top"]/h3/text()
+      Details: //p[@class="player__description"]/text()
+      Date:
+        selector: //div[@class="player"]/p[starts-with(., "Released:")]
+        postProcess:
+          - replace:
+              - regex: "^Released: "
+                with:
+          - parseDate: Jan 2, 2006
+      Image:
+        selector: //a[@class="header__menu header__menu--logo"]/@href
+        postProcess:
+          - replace:
+              - regex: .+(pg\d+)
+                with: https://sm-members.bangbros.com/shoots/sexselector/$1/poster/${1}_01_2160.jpg
+      Studio:
+        Name:
+          fixed: Sex Selector
+      Performers:
+        Name: //div[@class="player__stats"]//a/text()
+      Tags:
+        Name: //div[@class="video__tags__list"]/a/text()
+# Last Updated June 06, 2022

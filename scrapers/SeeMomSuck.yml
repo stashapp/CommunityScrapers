@@ -1,0 +1,33 @@
+name: SeeMomSuck
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - seemomsuck.com/videos
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="videoblock"]/h2
+      Performers:
+        Name: //div[@class="featuringWrapper"]/a
+      Details:
+        selector: //div[@class="epDescription"]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*:\s*'
+                with: ""
+      Studio:
+        Name:
+          fixed: SeeMomSuck
+      Image:
+        selector: //div[@class="video_here"]/img/@src|//div[@class="video_here"]//div[@class="fluid_pseudo_poster"]/@style
+        postProcess:
+          - replace:
+              - regex: (?:.+)(\/content\/.+\.jpg)(?:.+)
+                with: $1
+              - regex: "^/content/"
+                with: "https://www.seemomsuck.com/content/"
+driver:
+  useCDP: true
+  sleep: 4
+# Last Updated February 20, 2022
