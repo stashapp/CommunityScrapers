@@ -1,0 +1,79 @@
+name: "MindGeekAPI"
+sceneByURL:
+  - action: script
+    script:
+      - python3
+      - MindGeekAPI.py
+      - validURL
+    url:
+      - babes.com/scene/
+      - babesnetwork.com/scene/
+      - brazzers.com/video/
+      - danejones.com/scene/
+      - deviante.com/video/
+      - devianthardcore.com/scene/
+      - digitalplayground.com/scene/
+      - dilfed.com/scene/
+      - doghousedigital.com/scene/
+      - erito.com/scene/
+      - eroticspice.com/video/
+      - fakehostel.com/scene/
+      - fakehub.com/scene/
+      - faketaxi.com/scene/
+      - familyhookups.com/scene/
+      - familysinners.com/scene/
+      - forgivemefather.com/video/
+      - girlgrind.com/scene/
+      - iconmale.com/scene/
+      - iknowthatgirl.com/scene/
+      - kinkyspa.com/scene/
+      - lesbea.com/scene/
+      - lilhumpers.com/scene/
+      - lookathernow.com/scene/
+      - loveherass.com/video/
+      - men.com/sceneid/
+      - metrohd.com/scene/
+      - milehighmedia.com/scene/
+      - milfed.com/scene/
+      - mofos.com/scene/
+      - mofosnetwork.com/scene/
+      - momsbangteens.com/scene/
+      - momslickteens.com/scene/
+      - prettydirtyteens.com/video/
+      - propertysex.com/scene/
+      - publicagent.com/scene/
+      - realityjunkies.com/scene/
+      - realitykings.com/scene/
+      - rk.com/scene/
+      - seancody.com/scene/
+      - sexworking.com/video/
+      - sexyhub.com/scene/
+      - shewillcheat.com/scene/
+      - squirted.com/scene/
+      - sweetheartvideo.com/scene/
+      - sweetsinner.com/scene/
+      - teenslovehugecocks.com/scene/
+      - transangels.com/scene/
+      - transsensual.com/scene/
+      - trueamateurs.com/scene/
+      - twistys.com/scene/
+      - twistysnetwork.com/scene/
+      - welivetogether.com/scene/
+sceneByFragment:
+  action: script
+  script:
+    - python3
+    - MindGeekAPI.py
+sceneByName:
+  action: script
+  script:
+    - python3
+    - MindGeekAPI.py
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python3
+    - MindGeekAPI.py
+    - validName
+# Last Updated January 07, 2023

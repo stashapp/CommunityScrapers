@@ -1,14 +1,4 @@
 name: "Brazzers"
-
-sceneByURL:
-  - action: scrapeXPath
-    url:
-      # for brazzers make sure the video URL has the title after the id otherwise we get redirected to the main page
-      # if you only have the  id add an extra part after it eg for https://www.brazzers.com/video/123456/ use https://www.brazzers.com/video/123456/a
-      - brazzers.com/video
-      - men.com/sceneid/
-    scraper: sceneScraper
-
 performerByURL:
   - action: scrapeXPath
     url:
@@ -40,48 +30,6 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://www.brazzers.com
-
-  sceneScraper:
-    common:
-      $titlebar: //*[name()='path'][1]/../../../../h2/..
-      $script: //script[@type="application/ld+json"]
-    scene:
-      Title:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: '.+name":\s*"([^"]+)".+'
-                with: $1
-      Studio:
-        Name:
-          selector: //div[text()="Subsite"]/../a/text()|//meta[@name="dti.network"]/@content
-      # Remove '#' if you want get the studio without space.
-      #          postProcess:
-      #              - replace:
-      #                  - regex: " "
-      #                    with: ""
-      Date:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: '.+uploadDate":\s*"([^"]+)".+'
-                with: $1
-          - parseDate: 2006-01-02
-      Details:
-        selector: //h2[translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz') = 'description']/../div/p/text()
-
-      Tags:
-        Name: //div[text()="Tags"]/../div/a/text()
-      Performers:
-        Name:
-          selector: $titlebar/div/span/a/text()|//h2/span/a[contains(@href,"/modelprofile/")]
-      Image:
-        selector: //img[@alt=""][contains(@src,"poster")]/@src|$script
-        postProcess:
-          - replace:
-              - regex: '.+thumbnailUrl":\s*"([^"]+)".+'
-                with: $1
-      URL: //link[@rel="canonical"]/@href
 
   galleryScraper:
     common:
@@ -222,9 +170,6 @@ xPathScrapers:
               West Virginia: "USA"
               Wisconsin: "USA"
               Wyoming: "USA"
-      Height:
-        selector: //*[contains(.,"Height")]/following-sibling::span/text()[not(contains(.,"N/A"))]
-        postProcess:
           - feetToCm: true
       Image:
         selector: //img[contains(@src, "model")]/@src
@@ -255,4 +200,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated June 23, 2022
+# Last Updated January 07, 2023

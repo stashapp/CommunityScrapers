@@ -4,16 +4,6 @@ sceneByURL:
     url:
       - bellesafilms.com/scene/
       - bellesahouse.com/scene/
-      - danejones.com/scene/
-      - erito.com/scene/
-      - lesbea.com/scene
-      - momsbangteens.com/scene/
-      - momslickteens.com/scene/
-      - propertysex.com/scene/
-      - shewillcheat.com/scene/
-      - sexyhub.com/scene/
-      - welivetogether.com/scene/
-
     scraper: sceneScraper
 
 xPathScrapers:
@@ -47,18 +37,10 @@ xPathScrapers:
             - map:
                 bellesafilms: Bellesa Films
                 bellesahouse: Bellesa House
-                danejones: Dane Jones
-                erito: Erito
-                lesbea: Lesbea
-                propertysex: Property Sex
-                shewillcheat: She Will Cheat
-                sexyhub: Sexy Hub
-                welivetogether: We Live Together
-
       Image:
-        selector: //img[@alt=""][contains(@src,"poster")]/@src|//script[@type="application/ld+json"]/text()
+        selector: //img[contains(@src,"poster_")]/@src|//script[@type="application/ld+json"]/text()
         postProcess:
           - replace:
               - regex: '.*"thumbnailUrl": "([^"]+)".*'
                 with: $1
-# Last Updated June 23, 2022
+# Last Updated January 07, 2023
