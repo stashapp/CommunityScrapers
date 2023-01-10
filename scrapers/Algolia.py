@@ -47,6 +47,7 @@ MOVIE_SITES = {
     "genderx": "https://www.genderxfilms.com/en/movie",
     "girlfriendsfilms": "https://www.girlfriendsfilms.com/en/movie",
     "lewood": "https://www.lewood.com/en/movie",
+    "nakedsword": "https://www.nakedsword.com/en/movies/",
     "outofthefamily": "https://www.outofthefamily.com/en/dvd",
     "peternorth": "https://www.peternorth.com/en/dvd",
     "tsfactor": "https://www.tsfactor.com/en/movie/",
@@ -68,7 +69,8 @@ SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
 # not the studio
 SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "Devil's Film",
-    "GenderXFilms"
+    "GenderXFilms",
+    "ChaosMen"
 ]
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
