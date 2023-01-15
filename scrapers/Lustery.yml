@@ -8,16 +8,16 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //div[@class='video-popup-info']//div[@class='title']/h3/text()
+        selector: //h1[contains(@class,'VideoTitle_title')]/text()
       Performers:
         Name:
-          selector: //div[@class='couple-and-categories']//div[@class='couple']/a/text()
-      Details: //div[@class='video-popup-info']/div[@class='description']/text()
+          selector: //a[contains(@class,'VideoCoupleCard_name']/text()
+      Details: //div[contains(@class,'VideoInfo_description')]/text()
       Tags:
-        Name: //div[@class='tags']/a/text()
+        Name: //span[contains(@class,'TagList_listItem')]/a/text()
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Lustery
 
-# Last Updated October 03, 2020
+# Last Updated January 15, 2023
