@@ -17,7 +17,6 @@ sceneByURL:
       - sweetheartvideo.com/scene/
       - sweetsinner.com/scene/
       - teenslovehugecocks.com/scene/
-      - noirmale.com/scene/
     scraper: sceneScraper
   - action: scrapeXPath
     url:
@@ -31,13 +30,13 @@ sceneByURL:
       - lilhumpers.com/scene/
       - milfed.com/scene/
       - mofos.com/scene/
+      - noirmale.com/scene/
       - publicagent.com/scene/
       - realitykings.com/scene/
       - seancody.com/scene/
       - transangels.com/scene/
       - transsensual.com/scene
       - trueamateurs.com/scene/
-      - noirmale.com/scene/
     scraper: scriptScraper
 
 movieByURL:
@@ -61,13 +60,13 @@ performerByURL:
       - lookathernow.com/model/
       - mofos.com/model/
       - mofosnetwork.com/model/
+      - noirmale.com/model/
       - realitykings.com/model/
       - rk.com/model/
       - seancody.com/model/
       - sweetsinner.com/model/
       - teenslovehugecocks.com/model/
       - transsensual.com/model/
-      - noirmale.com/model/
     scraper: performerScraper
 
 xPathScrapers:
@@ -115,7 +114,6 @@ xPathScrapers:
                 SweetSinner: Sweet Sinner
                 sweetsinner: Sweet Sinner
                 teenslovehugecocks: Teens Love Huge Cocks
-                noirmale: Noir Male
       Image: $section//img[contains(@src,"poster")]/@src
   scriptScraper:
     common:
@@ -156,6 +154,7 @@ xPathScrapers:
                 iknowthatgirl: I Know That Girl
                 lilhumpers: Lil Humpers
                 milfed: Milfed
+                noirmale: Noir Male
                 publicagent: Public Agent
                 realitykings: Reality Kings
                 rk: Reality Kings
@@ -163,7 +162,6 @@ xPathScrapers:
                 transangels: Trans Angels
                 transsensual: TransSensual
                 trueamateurs: True Amateurs
-                noirmale: Noir Male
       Tags: *tags
       Details:
         selector: $script
@@ -328,4 +326,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated October 14, 2022
+# Last Updated January 15, 2023
