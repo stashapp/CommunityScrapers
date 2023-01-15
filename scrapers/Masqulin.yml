@@ -17,7 +17,7 @@ xPathScrapers:
         selector: //p[@id="textDesc"]
       Image: //meta[@property="og:image"]/@content
       Date:
-        selector: //span[@class='availdate']
+        selector: //span[@class='availdate'][1]
         postProcess:
           - parseDate: Jan 02, 2006
       Studio:
