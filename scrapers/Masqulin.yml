@@ -8,22 +8,19 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //h1[@class="titlePlayer"]
+        selector: //div[@class="gallery_info spacer"]/h1
       Performers:
         Name: //span[@class="tour_update_models"]/a
       Tags:
-        Name: //p[@class="sceneInfo"]/span/a
+        Name: //a[@class="tagsVideoPage"]
       Details:
-        selector: //p[@class="col-lg-6 textDescription"]
+        selector: //p[@id="textDesc"]
+      Image: //meta[@property="og:image"]/@content
+      Date:
+        selector: //span[@class='availdate'][1]
         postProcess:
-          - replace:
-              - regex: \.\.\.
-                with:
-              - regex: \s*Read\smore\s*$
-                with:
-      Image:
-        selector: //*[@class="hiddenImg stdimage"]/@src
+          - parseDate: Jan 02, 2006
       Studio:
         Name:
           fixed: Masqulin
-# Last Updated December 29, 2021
+# Last Updated January 07, 2023
