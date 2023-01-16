@@ -4,61 +4,44 @@ sceneByURL:
     url:
       - breeditraw.net/tour/trailers/
     scraper: sceneScraper
-movieByURL:
-  - action: scrapeXPath
-    url:
-      - breeditraw.net/tour/dvds/
-    scraper: movieScraper
 performerByURL:
   - action: scrapeXPath
     url:
       - breeditraw.net/tour/models/
     scraper: performerScraper
-
 xPathScrapers:
   sceneScraper:
     common:
       $performer: //li[@class="update_models"]/a
-      $movie: //li[contains(text(), "DVD(s):")]/following-sibling::li/a
     scene:
       Title: //div[@class="videoDetails clear"]//h3/text()
       Date:
         selector: //span[contains(., "Date Added:")]/following-sibling::text()
         postProcess:
           - replace:
-            - regex: ^\s*
-              with:
+              - regex: ^\s*
+                with:
           - parseDate: January 2, 2006
+      Details: //div[@class="videoDetails clear"]/p
       Tags:
         Name: //li[contains(text(), "Tags:")]/following-sibling::li/a/text()
       Performers:
         Name: $performer/text()
         URL: $performer/@href
-      Image: 
-        selector: //div[@class="player-thumb"]/img/@src0_3x
-        postProcess: &appendDomain
+      Image:
+        selector: //script[contains(text(),"poster")]/text()
+        postProcess:
           - replace:
-              - regex: ^
-                with: https://www.breeditraw.net/
+              - regex: '.+poster="([^"]+)".+'
+                with: https://www.breeditraw.net$1
+              - regex: 1x\.jpg
+                with: "2x.jpg" # 3,4 is also possible but the images get too big
       Studio:
         Name:
           fixed: Breed it Raw
-      Movies:
-        Name: $movie/text()
-        URL: $movie/@href
-
-  movieScraper:
-    movie:
-      Name: //div[@class="profile-details clear"]/h3/text()
-      Studio:
-        Name: //div[@class="stats"]//a/text()
-      FrontImage:
-        selector: //img[@class="dvd_box stdimage thumbs"]/@src0_3x
-        postProcess: *appendDomain
-
   performerScraper:
     performer:
-      Name: 
+      Name:
         selector: //meta[@property="og:title"]/@content
         postProcess:
           - replace:
@@ -72,7 +55,7 @@ xPathScrapers:
           - feetToCm: true
       Weight:
         selector: //strong[contains(., "Weight:")]/following-sibling::text()
-        postProcess:    
+        postProcess:
           - lbToKg: true
       Measurements:
         selector: //strong[contains(., "Dick Size:")]/following-sibling::text()
@@ -81,7 +64,10 @@ xPathScrapers:
               - regex: ^
                 with: 0'
           - feetToCm: true
-      Image: 
-        selector: //div[@class="profile-pic"]/img/@src0_3x
-        postProcess: *appendDomain
+      Image:
+        selector: //div[@class="profile-pic"]/img/@src0_2x # 3x is either too big or an upscale so imho not worth it
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.breeditraw.net/
 # Last Updated December 18, 2022
