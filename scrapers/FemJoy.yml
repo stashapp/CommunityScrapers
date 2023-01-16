@@ -9,6 +9,20 @@ sceneByURL:
     url:
       - femjoy.com/videos/
     scraper: sceneScraper
+performerByName:
+  action: scrapeJson
+  queryURL: https://femjoy.com/api/v2/actors?query={}&limit=20
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeJson
+    url:
+      - https://femjoy.com/models/
+    scraper: performerScraper
+    queryURL: "https://femjoy.com/api/v2/actors/{url}?thumb_size=355x475"
+    queryURLReplace:
+      url:
+        - regex: ".+/models/(.+)"
+          with: "${1}"
 
 xPathScrapers:
   galleryScraper:
@@ -35,7 +49,6 @@ xPathScrapers:
                 - regex: ^
                   with: https://femjoy.com
       Details: &detailsSel //div[@id='model-info']//div[@class="col-md-12"]
-      
   sceneScraper:
     common: *commonSel
     scene:
@@ -45,4 +58,46 @@ xPathScrapers:
       Performers: *performersAttr
       Image: //img[@class="lazy comment-photo"]/@data-original
       Details: *detailsSel
-# Last Updated October 24, 2021
+jsonScrapers:
+  performerSearch:
+    performer:
+      Name: results.#.name
+      URL:
+        selector: results.#.url
+        postProcess: &site
+          - replace:
+              - regex: ^
+                with: "https://femjoy.com"
+  performerScraper:
+    performer:
+      Name: item.name
+      Gender: #item.gender # api seems to have wrong male genders
+        fixed: female # use a fixed one instead
+      Birthdate: item.birth_date
+      Ethnicity: item.ethnicity
+      Height:
+        selector: item.height
+        postProcess:
+          - replace:
+              - regex: \\
+                with:
+          - feetToCm: true
+      Weight:
+        selector: item.weight
+        postProcess:
+          - replace:
+              - regex: \slbs
+                with:
+          - lbToKg: true
+      Measurements: item.cup_size
+      Image:
+        selector: item.thumb.image
+      Country: item.birth_place.country
+      Tags:
+        Name: item.tags.#.name
+      EyeColor: item.eye_color
+      HairColor: item.hair_color
+      URL:
+        selector: item.url
+        postProcess: *site
+# Last Updated August 21, 2022
