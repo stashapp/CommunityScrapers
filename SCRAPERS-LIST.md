@@ -1309,7 +1309,7 @@ truelesbian.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 tryteens.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ts-castingcouch.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tsfactor.com|Algolia_EvilAngel.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|Trans
-tsplayground.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+tsplayground.com|TSPlayground.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Trans
 tspov.com|ChristianXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tsvirtuallovers.com|RealityLovers.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 tuktukpatrol.com|TukTukPatrol.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-

@@ -63,7 +63,6 @@ sceneByURL:
       - tittycreampies.com/
       - transsexualangel.com/en/video/
       - transsexualroadtrip.com/
-      - tsplayground.com/en/video/
       - whiteghetto.com/
     scraper: sceneScraper
 
@@ -217,7 +216,6 @@ xPathScrapers:
                 tittycreampies: Titty Creampies
                 transsexualangel: Transsexual Angel
                 transsexualroadtrip: Transsexual Roadtrip
-                tsplayground: TS Playground
                 whiteghetto: White Ghetto
                 xempire: XEmpire
 
@@ -240,4 +238,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated December 29, 2022
+# Last Updated January 13, 2023
