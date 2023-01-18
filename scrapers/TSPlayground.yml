@@ -1,0 +1,35 @@
+name: "TS Playground"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tsplayground.com/video/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - tsplayground.com/models/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="content-title"]/h1/text()
+      Details: //div[@class="content-desc more-desc"]
+      Date:
+        selector: //div[@class="content-date"]/div[@class="label"]/text()
+        postProcess:
+          - replace:
+              - regex: (\d{2}).(\d{2}).(\d{4})
+                with: $3-$2-$1
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: TS Playground
+      Tags:
+        Name: //div[@class="content-tags"]//a/text()
+      Performers:
+        Name: //div[@class="content-models"]//a/span/text()
+  performerScraper:
+    performer:
+      Name: //div[contains(@class, "title-col")]/h1/text()
+      Image: //div[@class="model-avatar"]/img/@src
+# Last Updated January 13, 2023
