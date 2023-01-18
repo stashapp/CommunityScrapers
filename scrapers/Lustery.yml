@@ -1,23 +1,109 @@
 name: Lustery
+performerByURL:
+  - action: scrapeJson
+    url:
+      - lustery.com/couple/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .+/(.+)
+          with: https://lustery.com/api/couple/$1
+    scraper: performerScraper
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - lustery.com/video-preview/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .+/(.+)
+          with: https://lustery.com/api/video/$1
     scraper: sceneScraper
-xPathScrapers:
+
+jsonScrapers:
+  performerScraper:
+    performer:
+      Name: couple.name
+      Country:
+        selector: couple.location
+        postProcess:
+          - replace:
+              - regex: .+,
+                with:
+      Details:
+        selector: couple.permalink
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://lustery.com/api/couple/
+              - regex: $
+                with: /info
+          - subScraper:
+              selector: coupleInfo.description
+      Image:
+        selector: couple.mainImage.filename
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://cdn.lustery.com/cache/lustery-images/couple-main-image-thumbs/100x100x4/
+
   sceneScraper:
     scene:
-      Title:
-        selector: //div[@class='video-popup-info']//div[@class='title']/h3/text()
+      Title: video.title
+      Details:
+        selector: video.permalink
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://lustery.com/api/video/
+              - regex: $
+                with: /info
+          - subScraper:
+              selector: videoInfo.description
+      Date: #not very accurate as it is the Last Edited Date
+        selector: video.poster.lastEditedAt
+        postProcess:
+          - parseDate: unix
+      URL:
+        selector: video.permalink
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://lustery.com/video-preview/
+      Image:
+        selector: video.poster.filename
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://cdn.lustery.com/cache/lustery-images/video-image-thumbs/750x420x4/
       Performers:
         Name:
-          selector: //div[@class='couple-and-categories']//div[@class='couple']/a/text()
-      Details: //div[@class='video-popup-info']/div[@class='description']/text()
-      Tags:
-        Name: //div[@class='tags']/a/text()
-      Image: //meta[@property="og:image"]/@content
+          selector: "[video.couplePermalink,video.secondaryCouplePermalink]"
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://lustery.com/api/couple/
+                - regex: $
+                  with: /info
+            - subScraper:
+                selector: coupleInfo.members.#.name
+                concat: "|"
+          split: "|"
+        URL:
+          selector: "[video.couplePermalink,video.secondaryCouplePermalink]"
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://lustery.com/couple/
       Studio:
         Name:
           fixed: Lustery
-
-# Last Updated October 03, 2020
+      Tags:
+        Name: video.tags
+      Code: # Not sure, it seems unique though
+        selector: video.thumbnailsBasePath
+        postProcess:
+          - replace:
+              - regex: .*/(\d+)$
+                with: $1
+# Last Updated November 03, 2022
