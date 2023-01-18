@@ -22,11 +22,9 @@ xPathScrapers:
                 with: "https://www.boobpedia.com"
   performerScraper:
     performer:
-      Name: //h1     
-      Gender:
-        fixed: "Female"
-      Twitter: //table//tr/td/b[text()='Twitter']/../following-sibling::td//@href
-      Instagram: //table//tr/td/b[text()='Instagram']/../following-sibling::td//@href
+      Name: //h1
+      Twitter: //table//tr/td/a[b[text()='Twitter']]/@href
+      Instagram: //table//tr/td/a[b[text()='Instagram']]/@href
       Birthdate:
         selector: //table//tr/td//b[text()='Born']/../following-sibling::td/a
         concat: " "
@@ -35,8 +33,8 @@ xPathScrapers:
               - regex: (.*\d\d\d\d).*
                 with: $1
           - parseDate: January 2 2006
-      Ethnicity:   
-        selector: //table//tr/td/b[text()='Ethnicity']/../following-sibling::td/a  
+      Ethnicity:
+        selector: //table//tr/td/b[text()='Ethnicity']/../following-sibling::td/a
         postProcess:
           - replace:
               - regex: \[\d*\]
@@ -74,7 +72,7 @@ xPathScrapers:
                 with: ""
               - regex: ( in) # Remove Unit Inches
                 with: ""
-      FakeTits: 
+      FakeTits:
         selector: //table//tr/td/b[text()='Boobs']/../following-sibling::td/a
         postProcess:
           - replace:
@@ -105,7 +103,7 @@ xPathScrapers:
                 with: "-"
               - regex: (\S)-(\S)
                 with: $1 - $2
-              - regex: (Present|present|Current|current)
+              - regex: (?i)(present|current)
                 with: ""
       Aliases:
         selector: //table//tr/td/b[text()[contains(.,'known')]]/../following-sibling::td
@@ -141,14 +139,12 @@ xPathScrapers:
               - regex: \[\d*\]
                 with: ""
               # Remove <protect> and </protect>, which appears in the details of some performers (e.g. Jenna Jameson)
-              - regex: (<protect>)
-                with: ""
-              - regex: (</protect>)
+              - regex: </?protect>
                 with: ""
               # Remove triple line breaks
               - regex: \n\n\n
                 with: "\n"
-      Country: 
+      Country:
         selector: //table//tr/td/b[text()='Nationality']/../following-sibling::td/a
         postProcess:
           - map:
