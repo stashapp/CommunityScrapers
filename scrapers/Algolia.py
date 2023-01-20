@@ -67,6 +67,7 @@ SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
 # this is because the `serie_name` is the Movie (series) title on these sites,
 # not the studio
 SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
+    "ChaosMen",
     "Devil's Film",
     "GenderXFilms"
 ]

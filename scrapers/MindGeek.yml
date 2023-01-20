@@ -30,6 +30,7 @@ sceneByURL:
       - lilhumpers.com/scene/
       - milfed.com/scene/
       - mofos.com/scene/
+      - noirmale.com/scene/
       - publicagent.com/scene/
       - realitykings.com/scene/
       - seancody.com/scene/
@@ -59,6 +60,7 @@ performerByURL:
       - lookathernow.com/model/
       - mofos.com/model/
       - mofosnetwork.com/model/
+      - noirmale.com/model/
       - realitykings.com/model/
       - rk.com/model/
       - seancody.com/model/
@@ -152,6 +154,7 @@ xPathScrapers:
                 iknowthatgirl: I Know That Girl
                 lilhumpers: Lil Humpers
                 milfed: Milfed
+                noirmale: Noir Male
                 publicagent: Public Agent
                 realitykings: Reality Kings
                 rk: Reality Kings
@@ -323,4 +326,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated October 14, 2022
+# Last Updated January 15, 2023
