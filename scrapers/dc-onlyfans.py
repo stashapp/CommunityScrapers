@@ -22,7 +22,7 @@ except ModuleNotFoundError:
    '''
 
 def lookup_scene(file,db,parent):
-    print(f"using database: {db.name}  {file.name}", file=sys.stderr)
+    log.info(f"using database: {db.name}  {file.name}")
     conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
     c=conn.cursor()
     # which media type should we look up for our file?
@@ -56,11 +56,47 @@ def lookup_scene(file,db,parent):
 
     return res
 
+def lookup_gallery(file,db,parent):
+    log.info(f"using database: {db.name}  {file.name}")
+    conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+    c=conn.cursor()
+    # which media type should we look up for our file?
+    c.execute('select distinct api_type, post_id from medias where medias.directory = ?',(file.as_posix(),))
+    row=c.fetchone()
+    #check for each api_type the right tables
+    api_type = str(row[0])
+    post_id = str(row[1])
+    if api_type == 'Posts':
+        c.execute('select posts.post_id,posts.text,posts.created_at from posts where posts.post_id=?',(post_id,))
+    elif api_type == "Stories":
+        c.execute('select posts.post_id,posts.text,posts.created_at from stories as posts where posts.post_id=?',(post_id,))
+    elif api_type == "Messages":
+        c.execute('select posts.post_id,posts.text,posts.created_at from messages as posts where posts.post_id=?',(post_id,))
+    elif api_type == "Products":
+        c.execute('select posts.post_id,posts.text,posts.created_at from products as posts where posts.post_id=?',(post_id,))
+    else: # api_type == "Others"
+        c.execute('select posts.post_id,posts.text,posts.created_at from others as posts where posts.post_id=?',(post_id,))
+    row=c.fetchone()
+    res={}
+    res['title']=str(parent.name)+ ' - '+row[2].strftime('%Y-%m-%d')
+    res['details']=row[1]
+    res['studio']={'name':'OnlyFans','url':'https://www.onlyfans.com/'}
+    res['url']='https://www.onlyfans.com/'+str(row[0])+'/'+parent.name
+    res['date']=row[2].strftime('%Y-%m-%d')
+    performer={"name":parent.name}
+    image=findPerformerImage(parent)
+    if image is not None:
+        performer['image']=make_image_data_url(image)
+    res['performers']=[performer]
+
+
+    return res
+
 def findFilePath(id):
     scene=graphql.getScene(id)
     if scene:
         return scene["path"]
-    print(f"Error connecting to api",file=sys.stderr)
+    log.error(f"Error connecting to api")
     print("{}")
     sys.exit()
 
@@ -81,26 +117,36 @@ def make_image_data_url(image_path):
         encoded = base64.b64encode(img.read()).decode()
     return 'data:{0};base64,{1}'.format(mime, encoded)
 
-
-if sys.argv[1] == "query":
+if __name__ == '__main__':
     fragment = json.loads(sys.stdin.read())
-    print(json.dumps(fragment),file=sys.stderr)
+    log.debug(json.dumps(fragment))
     id=fragment['id']
-    file=Path(findFilePath(id))
 
-    p=file.parent
-    while not (Path(p.root)==p):
-        p=p.parent
-        for child in p.iterdir():
-            if child.is_dir():
-                for c in child.iterdir():
-                    if c.name== "user_data.db":
-                        scene=lookup_scene(file,c,p)
-                        print(json.dumps(scene))
-                        sys.exit()
-            if child.name=="user_data.db":
-                scene = lookup_scene(file, child, p)
-                print(json.dumps(scene))
-                sys.exit()
-    # not found return an empty map
-    print("{}")
+    file: Path = None
+    if sys.argv[1] == "query":
+        lookup = lookup_scene
+        file=Path(findFilePath(id))
+    elif sys.argv[1] == "querygallery":
+        lookup = lookup_gallery
+        gallery = graphql.getGalleryPath(id)
+        if gallery:
+            gallery_path = gallery.get("path")
+            file = Path(gallery_path)
+
+    if file:
+        p=file.parent
+        while not (Path(p.root)==p):
+            p=p.parent
+            for child in p.iterdir():
+                if child.is_dir():
+                    for c in child.iterdir():
+                        if c.name== "user_data.db":
+                            scene=lookup(file,c,p)
+                            print(json.dumps(scene))
+                            sys.exit()
+                if child.name=="user_data.db":
+                    scene = lookup(file, child, p)
+                    print(json.dumps(scene))
+                    sys.exit()
+        # not found return an empty map
+        print("{}")

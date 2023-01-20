@@ -1,0 +1,55 @@
+name: "Rule34Video"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - rule34video.com/videos/
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://rule34video.com/search/{}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[contains(@class,"item thumb video_")]
+    scene:
+      Title: $searchItem/a[@class="th js-open-popup"]/@title
+      URL: $searchItem/a[@class="th js-open-popup"]/@href
+      Image: $searchItem//img/@data-original
+
+  sceneScraper:
+    common:
+      $article: //div[@class="video_tools"]
+    scene:
+      URL: //link[@rel='canonical']/@href
+      Title: //div[@class="heading"]//h1
+      Details: //div[@class="video_tools"]//div[contains(text(),"Description:")]/em
+      Date:
+        selector: //script[@type="application/ld+json"]
+        postProcess:
+          - replace:
+              - regex: '.+uploadDate": "([^"]+)".+'
+                with: $1
+      Image:
+        selector: //script[@type="application/ld+json"]
+        postProcess:
+          - replace:
+              - regex: '.+thumbnailUrl": "(http[^"]+)".+'
+                with: $1
+      Tags:
+        Name:
+          selector: //div[@class="video_tools"]//div[text()="Categories:" or text()="Tags:"]/following-sibling::a//text()
+          postProcess:
+            - replace:
+                - regex: '^\+.+Suggest$'
+                  with: ""
+      Studio:
+        Name: //div[@class="video_tools"]//div[text()="Artist:"]/following-sibling::a/span
+        URL: //div[@class="video_tools"]//div[text()="Artist:"]/following-sibling::a/@href
+# Last Updated November 25, 2022

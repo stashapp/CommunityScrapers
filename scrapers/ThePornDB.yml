@@ -6,12 +6,22 @@ performerByName:
 performerByURL:
   - action: scrapeJson
     url:
-      - https://api.metadataapi.net/performers/
+      - metadataapi.net/performers/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(.+metadataapi.net)/
+          with: https://api.metadataapi.net/
     scraper: performerScraper
 sceneByURL:
   - action: scrapeJson
     url:
-      - https://api.metadataapi.net/scenes/
+      - metadataapi.net/scenes/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(.+metadataapi.net)/
+          with: https://api.metadataapi.net/
     scraper: sceneScraper
 sceneByName:
   action: scrapeJson
@@ -31,26 +41,36 @@ sceneByFragment:
         with: "." # "%20"
       - regex: \.+
         with: "."
+movieByURL:
+  - action: scrapeJson
+    url:
+      - metadataapi.net/movies/
+    scraper: movieScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(.+metadataapi.net)/
+          with: https://api.metadataapi.net/
 jsonScrapers:
   sceneSearch:
     scene:
-      Title: 
+      Title:
         # Prevent having duplicated title so it don't get ignored by stash
         selector: data.#.[title,_id]
         postProcess:
           - replace:
-            - regex: \[|\"
-              with: ""
-            - regex: \,
-              with: " ["
+              - regex: \[|\"
+                with: ""
+              - regex: \,
+                with: " ["
       Date: data.#.date
       URL:
         selector: data.#.id
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://api.metadataapi.net/scenes/"
-      Image: data.#.background.full
+              - regex: ^
+                with: "https://api.metadataapi.net/scenes/"
+      Image: data.#.background.small
       Details: data.#.description
   performerSearch:
     performer:
@@ -67,9 +87,18 @@ jsonScrapers:
       $extras: data.extras
     performer:
       Name: data.name
+      Details: data.bio
       Gender: $extras.gender
       Birthdate: $extras.birthday
+      Country: $extras.nationality
       Ethnicity: $extras.ethnicity
+      HairColor: $extras.hair_colour
+      Weight:
+        selector: $extras.weight
+        postProcess:
+          - replace:
+              - regex: kg
+                with:
       Height:
         selector: $extras.height
         postProcess:
@@ -96,13 +125,19 @@ jsonScrapers:
       Date: data.date
       URL: data.url
       Image:
-        selector: data.background.small
+        selector: data.background.full
         postProcess:
           - replace:
               - regex: .+default\d+\.png$
                 with:
       Performers:
         Name: data.performers.#.parent.name
+        URL:
+          selector: data.performers.#.parent.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://api.metadataapi.net/performers/"
       Studio:
         Name: data.site.name
       Tags:
@@ -117,9 +152,15 @@ jsonScrapers:
       Details: $data.description
       Date: $data.date
       URL: $data.url
-      Image: $data.background.small
+      Image: $data.background.full
       Performers:
         Name: $data.performers.#.parent.name
+        URL:
+          selector: $data.performers.#.parent.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://api.metadataapi.net/performers/"
       Studio:
         Name: $data.site.name
       Tags:
@@ -133,10 +174,20 @@ jsonScrapers:
                 selector: data.tags.#.tag
                 concat: "|"
           split: "|"
+  movieScraper:
+    movie:
+      Name: data.title
+      Studio:
+        Name: data.site.name
+      FrontImage: data.background.full
+      Synopsis: data.description
+      Date: data.date
+      Duration: data.duration
+      Director: data.director.name
 driver:
   headers:
     - Key: User-Agent
       Value: stashjson/1.0.0
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
-      #Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated December 16, 2021
+    #  Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
+# Last Updated October 02, 2022

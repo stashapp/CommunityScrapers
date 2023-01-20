@@ -1,21 +1,73 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: "SexLikeReal"
 sceneByURL:
   - action: scrapeXPath
     url:
       - sexlikereal.com
     scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  # url format: https://www.sexlikereal.com/scenes/{title}-{code}
+  # However, the url:
+  #     https://www.sexlikereal.com/{code}
+  # will redirect to the full url so that is what we will use for scrapping
+  queryURL: https://www.sexlikereal.com/{filename}
+  queryURLReplace:
+    # filename format:
+    #   SLR_{stufio:[^_]+}_{title:[^_]+}_{res:\d+p}_{code:\d+}_{vrtype}.{ext}
+    #     vrtype: stuff we do not care about but could contain '_'
+    filename:
+      - regex: (?i)^SLR_.+_\d+p_(\d+)_.*$
+        with: $1
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
+        with: # clear the filename so that it doesn't leak
+  scraper: sceneScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1/text()
+      Title:
+        selector: //script[@type="text/javascript"][contains(.,"videoData:")]/text()
+        postProcess:
+          - replace:
+              - regex: '.+videoData:\s{[^{]+title":"([^"]+)",.+'
+                with: $1
+              - regex: '\\u2019'
+                with: "’"
+              - regex: '\\u2013'
+                with: "–"
       Date: //time/@datetime
-      Details: //div[@id="modalSceneAbout"]//comment()[contains(.,'description')]/following-sibling::div
+      Details:
+        selector: //div[@data-qa="scene-about-tab-text"]/text()[last()]
+        postProcess:
+          - replace:
+              - regex: '^\.\s*'
+                with:
       Tags:
-        Name: //meta[@property="video:tag"]/@content
+        Name: //meta[@property="video:tag"]/@content|//ul[@data-qa="scene-specs-list"]/li/span/text()
       Performers:
         Name: //meta[@property="video:actor"]/@content
       Studio:
-        Name: //a[contains(@href,"/studios/")]/div[last()]/text()
+        Name:
+          selector: //a[contains(@href,"/studios/")]/div[last()]/text()
+          postProcess:
+            - map:
+                DDFNetworkVR: "DDF Network VR"
+                LethalHardcoreVR: "Lethal Hardcore VR"
+                LustReality: "Lust Reality"
+                POVcentralVR: "POV Central"
+                RealHotVR: "Real Hot VR"
+                SinsVR: "XSinsVR"
+                VirtualXPorn: "Virtual X Porn"
+                WankitnowVR: "Wank It Now VR"
       Image: //div[contains(@class,"splash-screen")]/img/@src
-
-# Last Updated March 21, 2021
+      URL: &sceneUrl //link[@rel="canonical"]/@href
+      Code:
+        selector: *sceneUrl
+        postProcess:
+          - replace:
+              - regex: '^(.+)-(\d+)/?$'
+                with: $2
+# Last Updated December 21, 2022

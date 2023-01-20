@@ -1,9 +1,0 @@
-name: "ShokoAPI"
-sceneByFragment:
-    action: script
-    script:
-      - python
-      - ShokoAPI.py
-      - query
-
-# Last Updated July 04, 2021

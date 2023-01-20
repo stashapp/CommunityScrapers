@@ -1,0 +1,22 @@
+name: WowNetworkVenus
+sceneByURL:
+  - action: script
+    script:
+      - python
+      - WowNetworkVenus.py
+    url:
+      - venus.ultrafilms.com
+      - venus.wowgirls.com
+      - venus.wowporn.com
+      - venus.allfinegirls.com
+sceneByName:
+    action: script
+    script:
+      - python
+      - WowNetworkVenus.py
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - WowNetworkVenus.py
+# Last Updated September 21, 2022

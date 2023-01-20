@@ -30,9 +30,9 @@ xPathScrapers:
         Name:
           fixed: NaughtyAmericaVR
       Image:
-        selector: $sceneinfo/a/img[@class="box-img"]/@src
+        selector: //div[@class='scene-player']/a/img[@id='scene_img_large']/@src
         postProcess:
           - replace:
               - regex: ^
                 with: "https:"
-# Last Updated January 04, 2022
+# Last Updated May 14, 2022

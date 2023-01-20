@@ -1,27 +1,29 @@
 name: MenAtPlay
 sceneByURL:
-  - action: scrapeXPath
-    url:
-      - menatplay.com
-    scraper: sceneScraper
+   - action: scrapeXPath
+     url:
+        - menatplay.com
+     scraper: sceneScraper
 xPathScrapers:
-  sceneScraper:
-    scene:
-      Title:
-        selector: //div[@class="bookmark"]/h2
-      Date:
-        selector: //p[contains(text(),"Release Date:")]/span
-        postProcess:
-          - parseDate: 01/02/2006
-      Performers:
-        Name: //span[@class="tour_update_models"]/a
-      Tags:
-        Name: //p[@class="sceneInfo"]/span/a
-      Details:
-        selector: //div[@class="video-descr__content"]
-      Image:
-        selector: //img[@class="hiddenImg stdimage"]/@src0_1x
-      Studio:
-        Name:
-          fixed: MenAtPlay
-# Last Updated August 08, 2021
+   sceneScraper:
+      scene:
+         Title:
+            selector: //div[@class="gallery_info spacer"]/h1/text()
+         Details:
+            selector: //div[@class="containerText"]/p
+            concat: "\n"
+         Performers:
+            Name:
+               selector: //div[@class="gallery_info spacer"]/p/span[@class="tour_update_models"]/a/text()
+         Date:
+            selector: //span[@class="availdate"][1]
+            postProcess:
+               - parseDate: Jan 2, 2006
+         Image: //meta[@property="og:image"]/@content
+         Tags:
+            Name:
+               selector: //div[@class="gallery_info spacer"]/div/a[@class="tagsVideoPage"]/text()
+         Studio:
+            Name:
+               fixed: MenAtPlay
+# Last Updated May 29, 2022

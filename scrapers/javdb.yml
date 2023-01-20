@@ -40,20 +40,31 @@ movieByURL:
           with: "javdb36.com"
 xPathScrapers:
   sceneSearch:
+    common:
+      $videoItem: //div[starts-with(@class, 'movie-list')]/div[@class="item"]
     scene:
-      Title: //div[@class="grid-item column"]//div[@class="uid"]
+      Title: $videoItem/a/div[@class="video-title"]
       URL:
-        selector: //div[@class="grid-item column"]/a/@href
+        selector: $videoItem/a[@class="box"]/@href
         postProcess:
           - replace:
               - regex: ^
-                with: https://javdb36.com
-      Image: //div[@class="grid-item column"]//img/@data-src
+                with: "https://javdb36.com"
+      Image: 
+        selector: $videoItem//img/@src
+        postProcess:
+          - replace:
+            - regex: (http:|https:)
+              with:
+            - regex: ^
+              with: "https:"
   sceneQueryScraper:
+    common:
+      $videoItem: //div[starts-with(@class, 'movie-list')]/div[@class="item"]
     scene:
-      Title: //div[@id="videos"]//div[@class="grid-item column"][1]//div[@class="uid"]/text()
+      Title: $videoItem/a/div[@class="video-title"]/text()
       URL:
-        selector: //div[@id="videos"]//div[@class="grid-item column"][1]/a[@class="box"]/@href
+        selector: $videoItem/a[@class="box"]/@href
         postProcess:
           - replace:
               - regex: ^
@@ -140,4 +151,4 @@ driver:
         #  Value: "Add here the actual value from your cookies"
         #  Path: "/"
         #  Domain: "javdb36.com"
-# Last Updated February 18, 2022
+# Last Updated June 02, 2022

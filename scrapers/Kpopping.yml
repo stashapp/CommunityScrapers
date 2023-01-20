@@ -1,0 +1,82 @@
+name: Kpopping
+performerByName:
+  action: scrapeXPath
+  queryURL: https://kpopping.com/profiles/idol/{}
+  scraper: performerScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://kpopping.com/profiles/idol/
+    scraper: performerScraper
+xPathScrapers:
+  performerScraper:
+    common:
+      $summary: //div[contains(@class, "summary-only-one")]
+    performer:
+      Name:
+        selector: $summary/section/h1/text()
+        postProcess:
+          - replace:
+              - regex: " †"
+                with: ""
+      Gender:
+        selector: //ol[@class="breadcrumb"]/li[2]/a/text()
+        postProcess:
+          - map:
+              Girl groups: female
+              Boy groups: male
+              Female idols: female
+              Male idols: male
+      URL: //link[@rel="canonical"]/@href
+      Twitter:
+        selector: //a[contains(@class, "fa-twitter")]/@href
+        postProcess:
+          - replace:
+              - regex: https://twitter.com/(\w+)\?lang=en
+                with: $1
+      Instagram:
+        selector: //a[contains(@class, "fa-instagram")]/@href
+        postProcess:
+          - replace:
+              - regex: https://www.instagram.com/(\w+)/\?hl=en
+                with: $1
+      Birthdate:
+        selector: $summary//div[@class="equal"][contains(., "Birthday:")]/following-sibling::div[1]/a/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      DeathDate:
+        selector: $summary//div[@class="equal"][contains(., "Passed away:")]/following-sibling::div[1]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Country: $summary//strong[contains(., "Country:")]/following-sibling::p/text()
+      Height:
+        selector: $summary//div[@class="equal"][contains(., "Height:")]/following-sibling::div[1]/text()
+        postProcess:
+          - replace:
+              - regex: '.*?(\d+)[\s\xA0]*cm.*'
+                with: $1
+      Weight:
+        selector: $summary//div[@class="equal"][contains(., "Weight:")]/following-sibling::div[1]/text()
+        postProcess:
+          - replace:
+              - regex: '.*?(\d+)[\s\xA0]*kg.*'
+                with: $1
+      CareerLength:
+        selector: //div[contains(@class, "data-grid")]/section[@class="cell"]/div[@class="name"][contains(text(), "Active years:")]/following-sibling::div[1]/text()
+        postProcess:
+          - replace:
+              - regex: -present
+                with: " -"
+      Aliases:
+        selector: $summary//dfn[contains(text(), "Korean")]/following-sibling::text()|$summary//div[@class="equal"][contains(., "Full name:")]/following-sibling::div[1]/text()|$summary//div[@class="equal"][contains(., "Native name:")]/following-sibling::div[1]/text()
+        concat: ", "
+      Image:
+        selector: $summary//div[contains(@class, "whole-body")]/@data-bg
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://kpopping.com/
+      Details:
+        selector: //div[@class="box encyclopedia"]/h2[contains(., "Introduction to ")]/following-sibling::p/text()
+        concat: "\r\n\r\n"
+# Last Updated April 29, 2022

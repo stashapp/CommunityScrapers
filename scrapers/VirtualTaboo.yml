@@ -26,6 +26,9 @@ xPathScrapers:
       Performers:
         Name: $info//div[starts-with(@class,"info")]/a/text()
       Image: &imageSel //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: "Virtual Taboo"
   movieScraper:
     common:
       $info: *infoSel
@@ -51,5 +54,5 @@ xPathScrapers:
           fixed: VirtualTaboo
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated September 17, 2021
+# Last Updated August 14, 2022
 

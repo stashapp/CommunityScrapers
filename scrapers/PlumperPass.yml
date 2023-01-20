@@ -8,14 +8,19 @@ xPathScrapers:
   sceneScraper:
     common:
       $h3: //div[@class="titlerow2"]//h3[@class="releases"]
+      $h2: //h2[@class="vidtitle"]
     scene:
-      Title:
-        selector: //div[h2[@class="vidtitle"]]/p
-      Details: //div[@class="vidinfo col-sm-12 col-md-12 col-lg-12 col-xl-3"]/p
+      Title: $h2
+      Details:
+        selector: $h2/following-sibling::p
+        postProcess:
+          - replace:
+              - regex: �
+                with: é
       Tags:
         Name:
           selector: //p[@class="tags clearfix"]/a
-      # Note about performers: The site only list 1 model even there is 2 in the video.
+      # Note about performers: The site only lists 1 model even there are more in the video.
       Performers:
         Name: $h3/a
       Image:
@@ -30,7 +35,7 @@ xPathScrapers:
         Name:
           fixed: "Plumperpass"
       Date:
-        selector: $h3/text()
+        selector: $h3/text()[1]
         postProcess:
           - parseDate: January 2, 2006
-# Last Updated December 22, 2021
+# Last Updated May 15, 2022

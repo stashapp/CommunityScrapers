@@ -27,14 +27,12 @@ xPathScrapers:
           selector: //meta[@name="keywords"]/@content
           split: ","
       Image:
-        selector: //div[@class="videohere"]/img[@class="thumbs stdimage"]/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()|(//head/base)[1]/@href
+        selector: //base/@href|//div[@class="videohere"]/img[@class="thumbs stdimage"]/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
         concat: "|"
         postProcess:
           - replace:
-              - regex: .+image:\s+"(.+jpg)[^|]+(\|)(.+)
-                with: $1$2$3
-              - regex: ([^|]+)\|(.+)/tour/$
-                with: $2$1
+              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
+                with: $1$2
               - regex: ^\/\/
                 with: "https://"
-# Last Updated November 08, 2020
+# Last Updated June 26, 2022

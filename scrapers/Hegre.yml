@@ -2,10 +2,22 @@ name: Hegre
 sceneByURL:
   - action: scrapeXPath
     url:
+      - hegre.com/movies
       - hegre.com/films
       - hegre.com/massage
       - hegre.com/sexed
     scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://www.hegre.com/?types=Film&q={}"
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 galleryByURL:
   - action: scrapeXPath
     url:
@@ -22,14 +34,35 @@ performerByName:
   scraper: performerSearch
 
 xPathScrapers:
+  sceneSearch:
+    scene:
+      Title:
+        selector: //a[@class='open-in-content-overlay']/@title
+      Date:
+        selector: //a[@class='open-in-content-overlay']//div[@class='details']/span[last()]/text()
+        postProcess:
+          - replace:
+              - regex: (st|nd|rd|th)
+                with: ""
+          - parseDate: Jan 2, 2006
+      URL:
+        selector: //a[@class='open-in-content-overlay']/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.hegre.com"
+      Image:
+        selector: //a[@class='open-in-content-overlay']//div[@class='img-holder']//img/@data-src
+
   sceneScraper:
     common:
       $actor: //a[@class="record-model"]
     scene:
       Title: //meta[@property="og:title"]/@content
+      URL: //link[@hreflang="x-default"]/@href
       Details:
         selector: |
-          //div[@class="film-subtitle"]/text()
+          //div[contains(@class,"film-subtitle")]/text()
           |//div[@class="record-details-column"]//div[contains(@class, "massage-")]//text()
           |//div[@class="film-header"]/div[@class="intro"]//text()
         concat: "\n\n"
@@ -113,4 +146,7 @@ xPathScrapers:
           - replace:
               - regex: \d{3}x
                 with: 640x
-# Last Updated February 07, 2021
+      Details:
+        selector: //div[@class="description translated-text"]//child::text()
+        concat: "\n\n"
+# Last Updated November 03, 2022

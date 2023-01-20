@@ -1,0 +1,56 @@
+name: TransModelDatabase
+
+performerByName:
+  action: scrapeXPath
+  queryURL: "https://transmodeldatabase.com/?s={}"
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - transmodeldatabase.com/model
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    common:
+      $listAnchor: //article[@class="tease tease-model"]/a
+    performer:
+      Name: $listAnchor/@title
+      URL: $listAnchor/@href
+
+  performerScraper:
+    common:
+      $infoPiece: //div[@class="stats"]/table/tbody
+    performer:
+      Name:
+        selector: //span[@itemprop="name"]/@title
+        postProcess:
+          - replace:
+              - regex: "-"
+                with: " "
+      Aliases: $infoPiece/tr/td[text()="Other names"]/following-sibling::td
+      Birthdate:
+        selector: $infoPiece/tr/td[text()="Birthday"]/following-sibling::td
+        postProcess:
+          - parseDate: 2 January, 2006
+      Country:
+        selector: $infoPiece/tr/td[text()="birthplace"]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: .+,\s+([^,]+)$
+                with: $1
+      EyeColor: $infoPiece/tr/td[text()="Eye color"]/following-sibling::td
+      HairColor: $infoPiece/tr/td[text()="Hair color"]/following-sibling::td
+      Ethnicity: $infoPiece/tr/td[text()="ethnicity"]/following-sibling::td
+      Height:
+        selector: $infoPiece/tr/td[text()="Height"]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: '^(\d*).*'
+                with: $1
+      Image: //div[@class="image"]/img/@src
+      Piercings: $infoPiece/tr/td[text()="Piercing"]/following-sibling::td
+      Tattoos: $infoPiece/tr/td[text()="Tattoos"]/following-sibling::td
+      Measurements: $infoPiece/tr/td[text()="Measurements"]/following-sibling::td
+      URL: //span[@itemprop="name"]/@href
+# Last Updated October 12, 2022

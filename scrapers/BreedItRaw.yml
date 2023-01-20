@@ -1,0 +1,73 @@
+name: BreedItRaw
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - breeditraw.net/tour/trailers/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - breeditraw.net/tour/models/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //li[@class="update_models"]/a
+    scene:
+      Title: //div[@class="videoDetails clear"]//h3/text()
+      Date:
+        selector: //span[contains(., "Date Added:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^\s*
+                with:
+          - parseDate: January 2, 2006
+      Details: //div[@class="videoDetails clear"]/p
+      Tags:
+        Name: //li[contains(text(), "Tags:")]/following-sibling::li/a/text()
+      Performers:
+        Name: $performer/text()
+        URL: $performer/@href
+      Image:
+        selector: //script[contains(text(),"poster")]/text()
+        postProcess:
+          - replace:
+              - regex: '.+poster="([^"]+)".+'
+                with: https://www.breeditraw.net$1
+              - regex: 1x\.jpg
+                with: "2x.jpg" # 3,4 is also possible but the images get too big
+      Studio:
+        Name:
+          fixed: Breed it Raw
+  performerScraper:
+    performer:
+      Name:
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: " - .*$"
+                with:
+      Gender:
+        fixed: Male
+      Height:
+        selector: //strong[contains(., "Height:")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //strong[contains(., "Weight:")]/following-sibling::text()
+        postProcess:
+          - lbToKg: true
+      Measurements:
+        selector: //strong[contains(., "Dick Size:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: 0'
+          - feetToCm: true
+      Image:
+        selector: //div[@class="profile-pic"]/img/@src0_2x # 3x is either too big or an upscale so imho not worth it
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.breeditraw.net/
+# Last Updated December 18, 2022

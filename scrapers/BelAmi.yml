@@ -1,0 +1,30 @@
+name: "BelAmi"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - belamionline.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //*[@id="ContentPlaceHolder1_LabelTitle"]
+      Details:
+        selector: //p[span[@id="ContentPlaceHolder1_LabelDescription"]]/following-sibling::p
+        concat: "\n\n"
+      Date:
+        selector: //*[@id="ContentPlaceHolder1_LabelReleased"]
+        postProcess:
+          - parseDate: 1/2/2006
+      Studio:
+        Name:
+          fixed: BelAmi
+      Performers:
+        Name:
+          selector: //div[@class="actors_list"]//text()
+      Image:
+        selector: //div[@class="video_player"]//a[contains(@href,"Screen-")]/@href
+        postProcess:
+          - replace:
+              - regex: .*?Screen-([1-9].*)
+                with: https://freecdn.belamionline.com/Data/Contents/Content_$1/Thumbnail8.jpg
+# Last Updated July 06, 2022
