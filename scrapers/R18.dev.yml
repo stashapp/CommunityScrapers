@@ -50,9 +50,6 @@ jsonScrapers:
         selector: dvd_id
       Date:
         selector: release_date
-      Tags:
-        Name:
-          selector: categories.#.name_en
       Performers:
         Name: 
           selector: actresses.#.name_romaji
@@ -323,11 +320,15 @@ jsonScrapers:
               - regex: Y\*{8}l\b
                 with: "Young Girl" # Not Sure
               - regex: Y\*{8}ls\b
-                with: "Young Girls" # Not Sure        
+                with: "Young Girls" # Not Sure
       Studio:
         Name: maker_name_en
       Code:
         selector: dvd_id
+      Tags:
+        Name:
+          selector: categories.#.name_en
+          postProcess: *ppUncensor
       URL:
         selector: content_id
         postProcess:
@@ -398,6 +399,7 @@ jsonScrapers:
       Tags:
         Name:
           selector: categories.#.name
+          postProcess: *ppUncensor
       Studio:
         Name: maker.name
       Performers: 
