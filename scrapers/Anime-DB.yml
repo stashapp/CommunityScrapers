@@ -120,6 +120,6 @@ xPathScrapers:
 
 driver:
   useCDP: true  # needed for the age confirmation redirect - cookies only work temporarily
-  sleep: 0
+  sleep: 1
 
 # Last Updated January 22, 2023
