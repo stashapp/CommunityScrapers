@@ -103,6 +103,7 @@ xPathScrapers:
                 売り尽くしセール: "" # other unneeded tags
                 Yahooコメント掲載禁止: ""
                 アニメ: ""
+                特典付き・セット商品: ""
       Studio:
         Name: //p[@class="maker"]/a/span/text()
       Date:
