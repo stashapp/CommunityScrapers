@@ -10,9 +10,9 @@ xPathScrapers:
     scene:
       Title: //h2[@class="page-title"]/text()[1]
       Tags:
-        Name: //li/a[@class="btn btn-default"][contains(@href,"/tags/")]/text()
+        Name: //li/a[@class="is-keyword btn btn-default"]/text()
       Performers:
-        Name: //a[@class="btn btn-default label profile hover-name"]/span[@class="name"]/text()
+        Name: //li[@class="model"]/a/span[1]/text()
       Studio:
         Name: //a[@class="btn btn-default label main uploader-tag hover-name"]/span[@class="name"]/text()
       Image:
