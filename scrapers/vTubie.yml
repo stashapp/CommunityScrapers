@@ -6,7 +6,7 @@ performerByName:
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://vtubie.com/
+      - vtubie.com
     scraper: performerScraper
 
 xPathScrapers:
