@@ -12,11 +12,7 @@ xPathScrapers:
       Title: //div[@class='item-tr-inner-col inner-col']/h1/text()
       Details: //div[@class='main-description']/text()
       Image:
-        selector: //script[@type="text/javascript" and contains(text(),"og:image")]/text()
-        postProcess:
-          - replace:
-              - regex: '.+"og:image" content="([^"]+)".+'
-                with: $1
+        selector: //meta[@property="og:image"]/@content
       Studio:
         Name: $studio/@title
         URL: $studio/@href
