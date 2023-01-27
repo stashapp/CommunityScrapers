@@ -5,12 +5,12 @@ sceneByFragment:
   queryURL: https://r18.dev/videos/vod/movies/detail/-/dvd_id={filename}/json
   queryURLReplace:
     filename:
-    # gets just the JAV ID out of the filename. This also removes the file extension which is pretty nice.
-    # You can have your filename be something like "Something Something ABC123 Something Something.mp4" and it will scrape as ABC123.
+      # gets just the JAV ID out of the filename. This also removes the file extension which is pretty nice.
+      # You can have your filename be something like "Something Something ABC123 Something Something.mp4" and it will scrape as ABC123.
       - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
         with: $2
   scraper: sceneSearchIndirect
-  
+
 sceneByURL:
   - action: scrapeJson
     url:
@@ -19,7 +19,7 @@ sceneByURL:
     queryURL: "https://r18.dev/videos/vod/movies/detail/-/combined={url}/json"
     queryURLReplace:
       url:
-        - regex: '.+/id=(.+)/?$'
+        - regex: ".+/id=(.+)/?$"
           with: "$1"
 
 sceneByName:
@@ -31,7 +31,7 @@ sceneByQueryFragment:
   action: scrapeJson
   queryURL: "{url}"
   scraper: sceneScraper
-  
+
 movieByURL:
   - action: scrapeJson
     url:
@@ -39,9 +39,9 @@ movieByURL:
     queryURL: "https://r18.dev/videos/vod/movies/detail/-/combined={url}/json"
     queryURLReplace:
       url:
-        - regex: '.+/id=(.+)/?$'
-          with: "$1"      
-    scraper: movieScraper  
+        - regex: ".+/id=(.+)/?$"
+          with: "$1"
+    scraper: movieScraper
 
 jsonScrapers:
   sceneScraper:
@@ -51,7 +51,7 @@ jsonScrapers:
       Date:
         selector: release_date
       Performers:
-        Name: 
+        Name:
           selector: actresses.#.name_romaji
         Aliases:
           selector: actresses.#.name_kanji
@@ -292,7 +292,7 @@ jsonScrapers:
               - regex: S\*{8}n\b
                 with: "Submission"
               - regex: T\*{6}e\b
-                with: "Tentacle" #MIDD-648 
+                with: "Tentacle" #MIDD-648
               - regex: T\*{6}es\b
                 with: "Tentacles"
               - regex: T\*{5}e\b
@@ -300,7 +300,7 @@ jsonScrapers:
               - regex: T\*{5}ed\b
                 with: "Tortured"
               - regex: T\*{5}es\b
-                with: "Tortures" #MIDD-648 
+                with: "Tortures" #MIDD-648
               - regex: U\*{9}sly\b
                 with: "Unconsciously"
               - regex: U\*{7}g\b
@@ -335,18 +335,18 @@ jsonScrapers:
           - replace:
               - regex: ^
                 with: https://r18.dev/videos/vod/movies/detail/-/id=
-                
+
   movieScraper:
     movie:
       Name:
         selector: dvd_id
       Aliases: title_ja
-      Duration: 
+      Duration:
         selector: runtime_mins
         postProcess:
           - replace:
-            - regex: $
-              with: ":00"        
+              - regex: $
+                with: ":00"
       Date:
         selector: release_date
       FrontImage:
@@ -363,34 +363,34 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: https://r18.dev/videos/vod/movies/detail/-/id=                
+                with: https://r18.dev/videos/vod/movies/detail/-/id=
 
-  # Used for fragment scraping - the api is a little messy if we don't have the exact ID and need to do a search because the search result api doesn't have all the info we need. 
+  # Used for fragment scraping - the api is a little messy if we don't have the exact ID and need to do a search because the search result api doesn't have all the info we need.
   # So we get the ID from the search result page and make another search for it
   # Note I am not getting aliases yet for performers here as it didn't seem worth it to make that many subqueries. You should hopefully be matching them up with StashDB versions of the performers
-  # or doing a performer search anyways. 
+  # or doing a performer search anyways.
   # I've also sent in a request to the dev of the site to make their API a little easier to use, so hopefully that goes through and we can have our cake and eat it too. :)
   sceneSearchIndirect:
     scene:
-    # Title not on this page, so we need to fetch another page to get it
+      # Title not on this page, so we need to fetch another page to get it
       Title:
         selector: content_id
         postProcess:
           - replace:
-            - regex: (.+)
-              with: https://r18.dev/videos/vod/movies/detail/-/combined=$1/json
+              - regex: (.+)
+                with: https://r18.dev/videos/vod/movies/detail/-/combined=$1/json
           - subScraper:
-              selector: dvd_id       
+              selector: dvd_id
       # Code not on this page, so we need to fetch another page to get it. It's the same as title. Surely there must be a way to only query once?
       Code:
         selector: content_id
         postProcess:
           - replace:
-            - regex: (.+)
-              with: https://r18.dev/videos/vod/movies/detail/-/combined=$1/json
+              - regex: (.+)
+                with: https://r18.dev/videos/vod/movies/detail/-/combined=$1/json
           - subScraper:
-              selector: dvd_id 
-      Details: 
+              selector: dvd_id
+      Details:
         selector: title
         postProcess: *ppUncensor
       Image: images.jacket_image.large
@@ -402,8 +402,8 @@ jsonScrapers:
           postProcess: *ppUncensor
       Studio:
         Name: maker.name
-      Performers: 
-        Name: actresses.#.name        
+      Performers:
+        Name: actresses.#.name
       URL:
         selector: content_id
         postProcess:
