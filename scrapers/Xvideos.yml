@@ -19,6 +19,6 @@ xPathScrapers:
         selector: //script[contains(text(), "setThumbUrl169")]/text()|//div[@id="html5video"][span[@class="premium-log-overlay"]]/div[@class="embed-responsive-item"]/@style
         postProcess:
           - replace:
-            - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.jpg).+$
-              with: $1
+              - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.jpg).+$
+                with: $1
 # Last Updated January 23, 2023
