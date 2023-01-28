@@ -57,4 +57,4 @@ xPathScrapers:
       Tags:
         Name: $photopage//div[@class='mb-3']/a/text()
       Performers: *performersAttr
-# Last Updated November 10, 2021
+# Last Updated January 28, 2023
