@@ -19,7 +19,7 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //section[@id="videos_page-page"]/div[@class="row"]/div/h2/text()
+      Title: //main/div/section[1]/div[@class="row"]/div/h1/text()
       Studio: &studioAttr
         Name:
           selector: //meta[@property="og:site_name"]/@content
