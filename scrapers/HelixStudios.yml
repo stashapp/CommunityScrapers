@@ -82,6 +82,21 @@ xPathScrapers:
       URL: //link[@rel="canonical"][1]/@href
       Image:
         selector: //video/@poster
+        postProcess:
+          - replace:
+              - regex: 960w
+                with: 1500w
+      Director:
+        selector: //span[contains(@class, "info-item director")]/text()
+      Code:
+        selector: //*[@id="titleImage"]/@src
+        postProcess:
+          - replace:
+              - regex: ^.*\/\s*
+                with:
+          - replace:
+              - regex: \_1600.*$
+                with:
       Studio:
         Name:
           fixed: Helix
