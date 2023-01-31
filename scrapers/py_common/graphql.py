@@ -52,6 +52,17 @@ def callGraphQL(query, variables=None):
             log.error(
                 "[ERROR][GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.py' in the 'py_common' folder")
             return None
+        elif response.status_code == 404 and if config.STASH.get("url") == "http://localhost:9999":
+            log.error(
+                "[ERROR][GraphQL] HTTP Error 404, Not Found. Your local stash server is your endpoint, but port 9999 did not respond. Did you change stash's port? Edit 'config.py' in the 'py_common' folder to point at the correct port for stash!")
+            return None
+        elif response.status_code == 404 and if config.STASH.get("url") != "http://localhost:9999":
+            log.error(
+                "[ERROR][GraphQL] HTTP Error 404, Not Found. Make sure 'config.py' in the 'py_common' folder points at the correct address and port!")
+            return None
+        else:
+            raise ConnectionError(
+                "GraphQL query failed:{} - {}".format(response.status_code, response.content))
         else:
             raise ConnectionError(
                 "GraphQL query failed:{} - {}".format(response.status_code, response.content))
