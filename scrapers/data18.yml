@@ -49,7 +49,12 @@ xPathScrapers:
       $movieInfo: //div[@id="body2div_b"]
       $studio: //b[text()='Studio']/following-sibling::b/a
     movie:
-      Name: //div[@id="topmedia"]//a/text()
+      Name:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: (.+?)(?:\s\(\d{4}\)\sPorn\sMovie\s\|\sDATA18)
+                with: $1
       Duration:
         selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::span|$movieInfo//b[contains(text(),"Length")]/following-sibling::text()
         postProcess:
@@ -78,4 +83,4 @@ xPathScrapers:
                 with:
       FrontImage: //a[@id='enlargecover']/@href
       BackImage: //a[text()='+Back']/@href
-# Last Updated June 30, 2022
+# Last Updated January 31, 2023
