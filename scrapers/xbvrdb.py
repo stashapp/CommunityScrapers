@@ -29,9 +29,13 @@ def lookup_scene(id):
 
 def find_scene_id(title):
     c = conn.cursor()
-    c.execute('SELECT scene_id FROM files WHERE filename LIKE ?', (title+'____',))
+    c.execute('SELECT scene_id FROM files WHERE filename LIKE ?', (title,))
     id=c.fetchone()
     if id == None:
+        c.execute('SELECT scene_id FROM files WHERE filename LIKE ?', (title+'____',))
+        id=c.fetchone()
+        if id is not None:
+            return id[0]
         c.execute('SELECT id FROM scenes WHERE scene_id LIKE ?', (title,))
         id = c.fetchone()
         if id is not None:
