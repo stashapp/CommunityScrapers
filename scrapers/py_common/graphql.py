@@ -63,9 +63,6 @@ def callGraphQL(query, variables=None):
         else:
             raise ConnectionError(
                 "GraphQL query failed:{} - {}".format(response.status_code, response.content))
-        else:
-            raise ConnectionError(
-                "GraphQL query failed:{} - {}".format(response.status_code, response.content))
     except Exception as err:
         log.error(err)
         return None
