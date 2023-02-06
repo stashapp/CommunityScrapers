@@ -1,0 +1,38 @@
+name: "GroobyNetwork-Brazilian"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - brazilian-transsexuals.com
+      - braziltgirls.xxx
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="trailer_videoinfo"]/h3/text()
+      Date:
+        selector: //div[@class="trailer_videoinfo"]//b[contains(.,"Added")]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: '.*- '
+                with: ''
+          - parseDate: Jan 2, 2006
+      Details: //div[@class="trailer_videoinfo"]//p[not(./*)]/text()
+      Performers:
+        Name: //div[@class="trailer_videoinfo"]//a/text()
+      Studio:
+        Name:
+          selector: //meta[@name="author"]/@content
+          postProcess:
+            - map:
+                Shemales From Hell: Brazil TGirls
+      Image:
+        selector: //base/@href|//div[@class="videohere"]/img[@class="thumbs stdimage"]/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
+                with: $1$2
+              - regex: ^\/\/
+                with: "https://"
+
+# Last Updated December 16, 2022
