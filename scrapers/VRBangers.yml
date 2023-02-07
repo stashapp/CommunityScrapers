@@ -51,13 +51,18 @@ xPathScrapers:
         Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()
       Studio:
         Name: &studioName
-          selector: //meta[@name="dl8-customization-brand-name"]/@content
+          selector: &studioURLSel //meta[@name="dl8-customization-brand-url"]/@content
           postProcess:
             - replace:
-                - regex: \#
+                - regex: ^//
                   with: ""
+            - map:
+                vrbangers.com: VR Bangers
+                vrbgay.com: VRB Gay
+                vrbtrans.com: VRB Trans
+                vrconk.com: VR Conk
         URL: &studioURL
-          selector: //meta[@name="dl8-customization-brand-url"]/@content
+          selector: *studioURLSel
           postProcess:
             - replace:
                 - regex: ^
@@ -87,4 +92,4 @@ xPathScrapers:
         Name: *studioName
         URL: *studioURL
       FrontImage: *imageSel
-# Last Updated November 27, 2022
+# Last Updated February 06, 2023
