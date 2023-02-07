@@ -1,0 +1,39 @@
+name: CarnalPlus
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - carnalplus.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //html/head/title
+        postProcess:
+          - replace:
+              - regex: \| CarnalPlus.com
+                with:
+      Date:
+        selector: //div[@class='releasedate']
+        postProcess:
+          - replace:
+              - regex: \|[^|]*$
+                with:
+          - parseDate: January 02, 2006
+      Image:
+        selector: //script[contains(text(),"useimage")]
+        postProcess:
+          - replace:
+              - regex: '.*useimage\s=\s"([^"]+).+'
+                with: https://carnalplus.com$1
+      Details:
+        selector: //div[@id='forceOverFlow']//p
+        concat: "\n"
+      Tags:
+        Name: //div[@class='update_tags']//span
+      Performers:
+        Name: //a/div[@class='modelView']/h4
+      Studio:
+        Name:
+          selector: //div[@class='logoSubsites']/a/img[@class='img-fluid logoSub']/@alt
+# Last Updated January 27, 2023
