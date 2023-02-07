@@ -74,7 +74,7 @@ xPathScrapers:
               - regex: ([?&]img[wh]=\d+)+$
                 with:
       Studio:
-        Name: 
+        Name:
           selector: //div[@id="navigation"]/h5/a/@alt
           postProcess:
             - map:
@@ -92,5 +92,4 @@ xPathScrapers:
         selector: //div[contains(text(), 'RELEASED')]/span/text()
         postProcess:
           - parseDate: January 02, 2006
-
 # Last Updated February 06, 2023
