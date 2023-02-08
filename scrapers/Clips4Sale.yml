@@ -29,11 +29,12 @@ xPathScrapers:
       URL:
         selector: $card//a[contains(@class, "search-clip__title")]/@href
       Image:
-        selector: $card//img[@draggable="false"]/@data-src
+        selector: $card//a[contains(@class, "search-clip__title")]/@href
         postProcess:
           - replace:
-              - regex: ^//
-                with: https://
+              - regex: https:\/\/www.clips4sale.com\/studio\/(\d+)\/(\d+)\/.*$
+                with: https://imagecdn.clips4sale.com/accounts99/$1/clip_images/previewlg_$2.jpg
+
   c4sSceneScraper:
     common:
       $studio: //span[contains(text(),"From:")]/following-sibling::a
@@ -79,7 +80,7 @@ xPathScrapers:
         # often included in the video tags. So we attempt to find matches there.
         Name: //div/span[contains(text(),"Keywords:")]/..//a
       Image:
-        selector: //div[contains(@class, "clipImage")]/img/@data-src
+        selector: //div[contains(@class, "clipImage")]/div/video/@data-poster
         postProcess: &ppPrependScheme
           - replace:
               - regex: ^//
@@ -112,4 +113,4 @@ xPathScrapers:
         # Clips4Sale doesn't have an explict performer field, but performers are
         # often included in the video tags. So we attempt to find matches there.
         Name: //span[contains(text(),"Keywords:")]/following-sibling::a
-# Last Updated August 21, 2022
+# Last Updated February 03, 2023

@@ -42,6 +42,7 @@ adultprime.com|AdultPrime.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 adulttime.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|Python|-
 adulttimepilots.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 aebn.com|AEBN.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|Straight + Gay
+agentredgirl.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 alettaoceanempire.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 alexismonroe.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 alexlegend.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -810,6 +811,7 @@ mofos.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 mofosnetwork.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 mom4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 momcomesfirst.com|FamilyTherapyXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+momcum.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 momisamilf.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 momlover.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 mommyblowsbest.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
