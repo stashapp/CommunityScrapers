@@ -59,7 +59,8 @@ MOVIE_SITES = {
 # this is because the `serie_name` is the Movie (series) title on these sites,
 # not the studio
 SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
-    "Devilstgirls": "Devil's Tgirls"
+    "Devilstgirls": "Devil's Tgirls",
+    "AgentRedGirl": "Agent Red Girl"
 }
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
