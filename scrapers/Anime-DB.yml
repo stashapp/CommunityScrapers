@@ -63,7 +63,7 @@ xPathScrapers:
       URL: //meta[@property="og:url"]/@content
       Details:
         selector: //section[@class="iteminfo-box"]/blockquote/p[@class="pq"]//text()
-        concat: \n\n
+        concat: "\n\n"
       Code: //dt[text()="規格品番"]/following-sibling::dd[1]/p/text()
       Image: //section[@id="sample-image"]/img/@data-src
       Tags:
@@ -121,6 +121,5 @@ xPathScrapers:
 
 driver:
   useCDP: true  # needed for the age confirmation redirect - cookies only work temporarily
-  sleep: 1
 
 # Last Updated January 22, 2023
