@@ -592,7 +592,9 @@ def parse_scene_json(scene_json, url=None):
             log.warning("Can't locate image.")
     # URL
     try:
-        hostname = scene_json['sitename']
+        hostname = scene_json.get('sitename')
+        if hostname is None:
+            hostname = SITE
         # Movie
         if scene_json.get('movie_title'):
             scrape['movies'] = [{
@@ -606,17 +608,19 @@ def parse_scene_json(scene_json, url=None):
                 if URL_DOMAIN and MOVIE_SITES.get(URL_DOMAIN):
                     scrape['movies'][0][
                         'url'] = f"{MOVIE_SITES[URL_DOMAIN]}/{scene_json['url_movie_title']}/{scene_json['movie_id']}"
-        net_name = scene_json['network_name']
-        if net_name.lower() == "21 sextury":
-            hostname = "21sextury"
-        elif net_name.lower() == "21 naturals":
-            hostname = "21naturals"
+        net_name = scene_json.get('network_name')
+        if net_name:
+            if net_name.lower() == "21 sextury":
+                hostname = "21sextury"
+            elif net_name.lower() == "21 naturals":
+                hostname = "21naturals"
         scrape[
-            'url'] = f"https://{hostname.lower()}.com/en/video/{scene_json['sitename'].lower()}/{scene_json['url_title']}/{scene_json['clip_id']}"
-    except:
+            'url'] = f"https://{hostname.lower()}.com/en/video/{hostname.lower()}/{scene_json['url_title']}/{scene_json['clip_id']}"
+    except Exception as exc:
+        log.debug(f"{exc}")
         if url:
             scrape['url'] = url
-    #debug(f"{scrape}")
+    #log.debug(f"{scrape}")
     return scrape
 
 def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
