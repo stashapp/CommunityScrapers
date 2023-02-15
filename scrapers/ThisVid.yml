@@ -12,7 +12,12 @@ xPathScrapers:
         $desc: //ul[@class="description"]
     scene:
       Title: $container//div[@class='headline']//h1/text()
-      Image: $videowrap//div[@class='video-holder']//div//img/@src
+      Image: 
+        selector: $videowrap//div[@class='video-holder']//div//img/@src
+        postProcess:
+          - replace:
+              - regex: "//"
+                with: https://
       Tags:
         Name: $desc//li//a[contains(@href,"/tags/")]/text()
       Details: $desc//li//p/text()
