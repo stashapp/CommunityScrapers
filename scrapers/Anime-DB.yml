@@ -43,6 +43,10 @@ xPathScrapers:
           - replace:
               - regex: "^"
                 with: "https:"
+              - regex: "/basic/"
+                with: "/small/"
+              - regex: ".jpg"
+                with: "_s.jpg"
       Date:
         selector: //div[@class="item-info"]/p[@class="ndate"]/span/text()
         postProcess:
@@ -105,7 +109,7 @@ xPathScrapers:
                 アニメ: ""
                 特典付き・セット商品: ""
       Studio:
-        Name: //p[@class="maker"]/a/span/text()
+        Name: //dt[text()="レーベル"]/following-sibling::dd[1]/p/text()
       Date:
         selector: //dt[text()="発売日"]/following-sibling::dd[1]/p/text()
         postProcess:
