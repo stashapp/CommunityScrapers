@@ -236,12 +236,13 @@ def api_search_movie_id(m_id, url):
     return req
 
 def api_search_gallery_id(p_id, url):
-    gallery_id = [f"set_id:{p_id}"]
+    gallery_id = [[f"set_id:{p_id}"]]
     request_api = {
         "requests": [{
             "indexName": "all_photosets",
             "params": "query=&hitsPerPage=20&page=0",
-            "facetFilters": gallery_id
+            "facetFilters": gallery_id,
+            "facets": []
         }]
     }
     req = send_request(url, HEADERS, request_api)
@@ -629,7 +630,9 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
     """
     scrape = {}
     # Title
-    if gallery_json.get('title'):
+    if gallery_json.get('clip_title'):
+        scrape['title'] = gallery_json['clip_title'].strip()
+    elif gallery_json.get('title'):
         scrape['title'] = gallery_json['title'].strip()
     # Date
     scrape['date'] = gallery_json.get('date_online')
@@ -693,8 +696,8 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
             hostname = "21sextury"
         elif net_name.lower() == "21 naturals":
             hostname = "21naturals"
-        scrape[
-            'url'] = f"https://{hostname.lower()}.com/en/video/{gallery_json['sitename'].lower()}/{gallery_json['url_title']}/{gallery_json['set_id']}"
+        scrape['url'] = f"https://www.{hostname.lower()}.com/en/photo/" \
+            f"{gallery_json['url_title']}/{gallery_json['set_id']}"
     except:
         if url:
             scrape['url'] = url
