@@ -23,14 +23,11 @@ xPathScrapers:
         Name:
           fixed: Do The Wife
       Image:
-        selector: //img[@class="video-banner"]/@src|//div[@class="vjs-poster"]/@style
+        selector: //img[@class="video-banner"]/@src|//video/@poster
         postProcess:
           - replace:
               - regex: (?:.+)(\/usermedia\/.+\.jpg)(?:.+)
                 with: $1
               - regex: "^/usermedia/"
                 with: "https://dothewife.com/usermedia/"
-driver:
-  useCDP: true
-  sleep: 4
 # Last Updated February 18, 2023
