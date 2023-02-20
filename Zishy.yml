@@ -29,11 +29,11 @@ xPathScrapers:
               with: $3-$1-$2
           - parseDate: 2006-Jan-02
       Image:
-        selector: //video[@poster]/@poster
+        selector: //div[@class="player"]//@style[contains(.,"background")]
         postProcess:
           - replace:
-            - regex: /(.*)
-              with: https://zishy.com/$1
+            - regex: .+url\((/uploads/.+)\);.+
+              with: https://www.zishy.com/$1
       Studio: &studio
         Name:
           fixed: Zishy
