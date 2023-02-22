@@ -19,6 +19,8 @@ xPathScrapers:
           - replace:
               - regex: \[resolution\]
                 with: ipadbig.jpg
+              - regex: ^//
+                with: https://
       Tags:
         Name:
           selector: $videoinfo/div[@class="tags"]//a/text()
