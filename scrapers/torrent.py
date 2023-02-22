@@ -128,12 +128,12 @@ elif sys.argv[1] == "search":
         clean_t = cleanup_name(t)
         ratios[round(10000*(1-similarity_file_name(search, clean_t)))] = {'url': str(t.absolute()), 'title': clean_t}
 
-    # Order ratios
-    ratios_sorted = dict(sorted(ratios.items()))
-    # Only return the top 5 results
+    # Order ratios and return the top 5 results
     if len(ratios) > 5:
-        ratios = ratios_sorted[5:]
+        ratios_sorted = list(ratios_sorted.values())[0:5]
+    else:
+        ratios_sorted = ratios_sorted.values()
 
-    print(json.dumps(list(ratios_sorted.values())))
+    print(json.dumps(list(ratios_sorted)))
 
 # Last Updated December 16, 2022
