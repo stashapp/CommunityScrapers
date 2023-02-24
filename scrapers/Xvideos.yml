@@ -33,7 +33,12 @@ xPathScrapers:
       Performers:
         Name: //li[@class="model"]/a/span[1]/text()
       Studio:
-        Name: //li[@class="main-uploader"]/a[starts-with(@href,'/channels')]/span[@class="name"]/text()
+        Name: //li[@class="main-uploader"]/a[
+                  starts-with(@href,'/channels')          or
+                  starts-with(@href,'/amateur-channels')  or
+                  starts-with(@href,'/model-channels')    or
+                  starts-with(@href,'/pornstar-channels')
+              ]/span[@class="name"]/text()
       Image:
         selector: //script[contains(text(), "setThumbUrl169")]/text()|//div[@id="html5video"][span[@class="premium-log-overlay"]]/div[@class="embed-responsive-item"]/@style
         postProcess:
