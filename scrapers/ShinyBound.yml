@@ -29,8 +29,8 @@ xPathScrapers:
                 - regex: https://([^.]+)\..+
                   with: $1
             - map:
-                shinysboundsluts: Shiny's Bound SluTS
-                shinybound: Shinybound
+                shinysboundsluts: ShinysBoundSluTS
+                shinybound: ShinyBound
       Image:
         selector: //iframe/@src
         postProcess:
