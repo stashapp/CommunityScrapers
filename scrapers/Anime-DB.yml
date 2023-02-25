@@ -15,17 +15,17 @@ sceneByQueryFragment:
         with: "%2F"
   scraper: sceneScraper
 sceneByURL:
-- action: scrapeXPath
-  url:
-    - adultanime.dbsearch.net
-  queryURL: "https://adultanime.dbsearch.net/black_curtain_redirect.php?url={url}&check=true"
-  queryURLReplace:
+  - action: scrapeXPath
     url:
-      - regex: "https:"
-        with:
-      - regex: \/
-        with: "%2F"
-  scraper: sceneScraper
+      - adultanime.dbsearch.net
+    queryURL: "https://adultanime.dbsearch.net/black_curtain_redirect.php?url={url}&check=true"
+    queryURLReplace:
+      url:
+        - regex: "https:"
+          with:
+        - regex: \/
+          with: "%2F"
+    scraper: sceneScraper
 
 xPathScrapers:
   sceneSearch:
@@ -124,6 +124,6 @@ xPathScrapers:
                 with: -0$1
 
 driver:
-  useCDP: true  # needed for the age confirmation redirect - cookies only work temporarily
+  useCDP: true # needed for the age confirmation redirect - cookies only work temporarily
 
 # Last Updated January 22, 2023
