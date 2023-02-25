@@ -17,23 +17,23 @@ xPathScrapers:
         selector: //head/title
         postProcess:
           - replace:
-            - regex: ([\w ]*) - Zishy
-              with: $1
+              - regex: ([\w ]*) - Zishy
+                with: $1
       Details: &details
         selector: //div[@id='descrip']
       Date: &date
         selector: //div[@id='headline']/span[last()]
         postProcess:
           - replace:
-            - regex: added on (\w{3}) (\d{2}). (\d{4})
-              with: $3-$1-$2
+              - regex: added on (\w{3}) (\d{2}). (\d{4})
+                with: $3-$1-$2
           - parseDate: 2006-Jan-02
       Image:
         selector: //div[@class="player"]//@style[contains(.,"background")]
         postProcess:
           - replace:
-            - regex: .+url\((/uploads/.+)\);.+
-              with: https://www.zishy.com/$1
+              - regex: .+url\((/uploads/.+)\);.+
+                with: https://www.zishy.com/$1
       Studio: &studio
         Name:
           fixed: Zishy
@@ -42,8 +42,8 @@ xPathScrapers:
           selector: //span[@class='moreof']/a[text()]
           postProcess:
             - replace:
-              - regex: \#([\w\s]+)
-                with: $1
+                - regex: \#([\w\s]+)
+                  with: $1
   galleryScraper:
     gallery:
       Title: *title
@@ -51,3 +51,4 @@ xPathScrapers:
       Date: *date
       Studio: *studio
       Performers: *performers
+# Last Updated February 26, 2023
