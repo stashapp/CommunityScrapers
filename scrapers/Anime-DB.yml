@@ -45,7 +45,7 @@ xPathScrapers:
                 with: "https:"
               - regex: "/basic/"
                 with: "/small/"
-              - regex: ".jpg"
+              - regex: '\.jpg'
                 with: "_s.jpg"
       Date:
         selector: //div[@class="item-info"]/p[@class="ndate"]/span/text()
