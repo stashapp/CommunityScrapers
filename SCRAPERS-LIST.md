@@ -709,7 +709,7 @@ kpopping.com|Kpopping.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
 kristenbjorn.com|KristenBjorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|Gay
 ladyboy-ladyboy.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 ladyboy.xxx|GroobyNetwork-Partial.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
-ladyboygold.com|LadyboyGold.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Trans
+ladyboygold.com|LadyboyGold.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Trans
 ladydee.xxx|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lanakendrick.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lanesisters.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1324,6 +1324,7 @@ tsfactor.com|Algolia_EvilAngel.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_
 tsgirlfriendexperience.com|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tsplayground.com|TSPlayground.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Trans
 tspov.com|ChristianXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+tsraw.com|LadyboyGold.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Trans
 tsvirtuallovers.com|RealityLovers.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 tuktukpatrol.com|TukTukPatrol.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 tushy.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
