@@ -34,6 +34,7 @@ activeduty.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_ma
 adamandevepictures.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 addicted2girls.com|Algolia_Addicted2Girls.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 addisonstreet.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+adultanime.dbsearch.net|Anime-DB.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Japanese Hentai
 adultdvdempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 adultdvdmarketplace.com|AdultDvdMarketPlace.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 adultempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
