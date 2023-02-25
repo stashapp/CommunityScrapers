@@ -25,7 +25,7 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name:
-          selector: //a[contains(@href,'/models/preview/')]
+          selector: //a[@class="act_name_h"]
       Details:
         selector: //p[@class='text']|//div[@class="preview_desc"]
       Image:
