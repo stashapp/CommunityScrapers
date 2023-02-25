@@ -3,12 +3,24 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - playboyplus.com
+      - pbp-ma.playboy.com
     scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: (?:https://)?(pbp-ma.playboy.com)/gallery/([^/]*)(?:/vip)?
+          with: https://playboyplus.com/gallery/$2
 galleryByURL:
   - action: scrapeXPath
     url:
       - playboyplus.com
+      - pbp-ma.playboy.com
     scraper: galleryScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: (?:https://)?(pbp-ma.playboy.com)/gallery/([^/]*)(?:/vip)?
+          with: https://playboyplus.com/gallery/$2
 xPathScrapers:
   sceneScraper:
     scene:
@@ -39,4 +51,4 @@ xPathScrapers:
       Performers: *performers
       Details: *details
       Studio: *studio
-# Last Updated April 13, 2021
+# Last Updated February 07, 2023
