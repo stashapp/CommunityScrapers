@@ -1,0 +1,25 @@
+name: "ThisVid"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - thisvid.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+        $container: //div[@class='container']
+        $videowrap: //div[@class='column-centre column-video']//div[@class='wrap']
+        $desc: //ul[@class="description"]
+    scene:
+      Title: $container//div[@class='headline']//h1/text()
+      Image: 
+        selector: $videowrap//div[@class='video-holder']//div//img/@src
+        postProcess:
+          - replace:
+              - regex: "//"
+                with: https://
+      Tags:
+        Name: $desc//li//a[contains(@href,"/tags/")]/text()
+      Details: $desc//li//p/text()
+
+# Last Updated February 15, 2023
