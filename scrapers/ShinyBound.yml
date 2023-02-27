@@ -37,5 +37,4 @@ xPathScrapers:
           - replace:
               - regex: .*\?poster=(.*\.jpg).*
                 with: $1
-
 # Last Updated February 23, 2023
