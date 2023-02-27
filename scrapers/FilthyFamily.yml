@@ -8,7 +8,7 @@ sceneByURL:
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: https://filthyfamily\.com
+        - regex: https://(www\.)?filthyfamily\.com
           with: https://mobile.filthyfamily.com
 xPathScrapers:
   sceneScraper:
