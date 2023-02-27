@@ -21,5 +21,11 @@ xPathScrapers:
       Tags:
         Name: $desc//li//a[contains(@href,"/tags/")]/text()
       Details: $desc//li//p/text()
+      Code:
+        selector: //meta[@property="og:video:url"]/@content
+        postProcess:
+          - replace:
+              - regex: .+/(\d+)/?$
+                with: $1
 
 # Last Updated February 15, 2023
