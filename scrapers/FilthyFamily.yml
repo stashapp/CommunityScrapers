@@ -38,7 +38,6 @@ xPathScrapers:
         selector: $videoinfo/div[contains(@class, "act")]/a[@id="ovrl-share-btn"]/@*[name()="addthis:url"]
         postProcess:
           - replace:
-            - regex: mobile\.bangbros\.com
-              with: mobile.filthyfamily.com
-
+              - regex: mobile\.bangbros\.com
+                with: mobile.filthyfamily.com
 # Last Updated February 27, 2023
