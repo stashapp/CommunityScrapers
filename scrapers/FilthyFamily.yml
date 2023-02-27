@@ -5,6 +5,11 @@ sceneByURL:
       - filthyfamily.com
       - mobile.filthyfamily.com
     scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: https://filthyfamily\.com
+          with: https://mobile.filthyfamily.com
 xPathScrapers:
   sceneScraper:
     common:
@@ -36,4 +41,4 @@ xPathScrapers:
             - regex: mobile\.bangbros\.com
               with: mobile.filthyfamily.com
 
-# Last Updated February 22, 2023
+# Last Updated February 27, 2023
