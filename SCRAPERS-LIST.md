@@ -1118,7 +1118,7 @@ shesbrandnew.com|TopWebModels.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 sheseducedme.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shewillcheat.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shinybound.com|ShinyBound.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-shinysboundsluts.com|ShinyBound.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+shinysboundsluts.com|ShinyBound.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 shiofuky.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 shoplyfter.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shoplyftermylf.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
