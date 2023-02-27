@@ -92,6 +92,4 @@ xPathScrapers:
         Name: *studioName
         URL: *studioURL
       FrontImage: *imageSel
-debug:
-  printHTML: true
-# Last Updated February 06, 2023
+# Last Updated February 27, 2023
