@@ -17,7 +17,7 @@ xPathScrapers:
       Date:
         selector: $content/h2
         postProcess:
-          - parseDate: January 02, 2006
+          - parseDate: January 2, 2006
       Title: $content/h1
       Details:
         selector: $content/p
@@ -27,15 +27,15 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class="player-overlay-title"]/h1
-      Details: 
+      Details:
         selector: //section[@class="player-overlay-description"]//div[@class="row"]/div[@class="col"]/*
         concat: "\n\n"
       Date:
         selector: //meta[@property="video:release_date"]/@content
         postProcess:
           - replace:
-            - regex: .*(\d{4}-\d{2}-\d{2}).*
-              with: $1
+              - regex: .*(\d{4}-\d{2}-\d{2}).*
+                with: $1
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
@@ -44,8 +44,8 @@ xPathScrapers:
         selector: //script[contains(text(), "_filmOrigin")]
         postProcess:
           - replace:
-            - regex: '.*id: (\d+).*'
-              with: $1
+              - regex: '.*id: (\d+).*'
+                with: $1
       Movies:
         Name: //p[contains(text(), "Series:")]/following-sibling::a/text()
       Tags:
@@ -55,5 +55,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-
 # Last Updated February 23, 2023
