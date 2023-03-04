@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: Pornbox
 
 sceneByURL:
@@ -38,7 +40,8 @@ jsonScrapers:
         Name:
           selector: niches.#.niche
       Performers:
-        Name: models.#.model_name
+        Name: "[models.#.model_name,male_models.#.model_name].@flatten"
+        Gender: "[models.#.sex,male_models.#.sex].@flatten"
       Image:
         selector: player_poster
       Details:
@@ -74,4 +77,4 @@ jsonScrapers:
           - replace:
               - regex: ^
                 with: https://pornbox.com/contents/$1
-# Last Updated December 10, 2021
+# Last Updated March 03, 2023
