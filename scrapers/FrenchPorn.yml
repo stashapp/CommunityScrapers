@@ -1,0 +1,84 @@
+name: Frenchporn
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.frenchporn.fr
+      - www.alphamales.com
+      - www.andolinixxl.com
+      - www.attackboys.com
+      - www.bravofucker.com
+      - www.berryboys.fr
+      - www.bolatino.com
+      - www.brett-tyler.com
+      - www.bulldogxxx.com
+      - www.cadinot.fr
+      - www.cazzofilm.com
+      - www.citebeur.com
+      - www.clairprod.com
+      - www.crunchboy.com
+      - www.darkcruising.com
+      - www.enzorimenez.com
+      - www.eurocreme.com
+      - www.gayarabclub.fr
+      - www.gayfrenchkiss.fr
+      - www.hardkinks.com
+      - www.harlemsex.fr
+      - www.hotcast.fr
+      - www.kessroyan.com
+      - www.kinkytwink.com
+      - www.knrc.fr
+      - www.machofactory.com
+      - www.mackstudio.com
+      - www.maxence-angel.com
+      - www.menoboy.com
+      - www.mistermale.com
+      - www.paulomassaxxx.com
+      - www.philippwants.com
+      - www.rawfuck.com
+      - www.ridleydovarez.com
+      - www.sketboy.com
+      - www.universblack.com
+      - www.viktor-rom.com
+      - www.vintagegaymovies.com
+      - www.wurstfilm.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //script[contains(.,'"name":')]
+        postProcess:
+          - replace:
+             - regex: ^.+?"name":\s*"([^"]+).+
+               with: $1
+      Performers:
+         Name:
+          selector: //h3/i[contains(@class,'fa-star')]/../text()
+      Image:
+        selector: //script[contains(.,'"thumbnailUrl":')]
+        postProcess:
+          - replace:
+             - regex: ^.+?"thumbnailUrl":\s*"([^"]+).+
+               with: $1
+      Details:
+         selector: //h2[contains(@class,'my-text')]/text()
+      Date:
+        selector: //script[contains(.,'"uploadDate":')]
+        postProcess:
+          - replace:
+             - regex: ^.+?"uploadDate":\s*"([^"]+).+
+               with: $1
+      Tags:
+        Name:
+          selector: //a[contains(@href,'videos')]/h3[@class='h90'][not(i)]/text()
+      Studio:
+        Name:
+          selector: //h3/i[contains(@class,'fa-video')]/../text()
+      Code:
+        selector: //script[contains(.,'"url":')]
+        postProcess:
+          - replace:
+             - regex: ^.+?/detail/(\d+).+
+               with: $1
+
+# Last Updated March 06, 2023
