@@ -20,15 +20,20 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
 # now we can import the scraper module from the parent directory
-import python_generic
+import python_generic   # pylint: disable=import-error,wrong-import-order,wrong-import-position
 
 FRAGMENT_URL = {"url": "http://domain"}
 
 class TestPythonScraper(base_test_case.BaseTestCase):
-    
+    '''
+    Unit tests for PythonScraper class
+    '''
+
     def test_class_init_with_no_args(self):
+        '''
+        no script arguments, no fragment input
+        '''
         # given
-        # no script arguments, no fragment input
         testargs = ["script_name"]
         scraper = None
         with patch.object(sys, 'argv', testargs):
@@ -40,10 +45,14 @@ class TestPythonScraper(base_test_case.BaseTestCase):
         # then
         self.assertIsNone(scraper)
 
+    # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(FRAGMENT_URL)])
-    def test_class_init_with_valid_args_and_valid_stdin(self, raw_input):
+    def test_class_init_with_valid_args_and_valid_stdin(self, _):
+        '''
+        one script argument, the positional first argument 'action'
+        '''
         # given
-        # one script argument, the positional first argument 'action'
+        # arguments are here (first one is the script name)
         testargs = ["script_name", "sceneByURL"]
         with patch.object(sys, 'argv', testargs):
             # when
@@ -56,8 +65,8 @@ class TestPythonScraper(base_test_case.BaseTestCase):
         self.assertHasAttr(scraper, 'fragment')
         self.assertHasAttr(scraper, 'start_processing')
         self.assertIsNotNone(scraper.args)
-        self.assertDictEqual(scraper.fragment, FRAGMENT_URL)
         self.assertEqual(scraper.args.action, 'sceneByURL')
+        self.assertDictEqual(scraper.fragment, FRAGMENT_URL)
 
 if __name__ == '__main__':
     unittest.main()

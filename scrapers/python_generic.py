@@ -1,6 +1,8 @@
+'''
+Generic scraper to investigate interaction with stashapp
+'''
 import argparse
 import json
-import select
 import sys
 
 try:
@@ -13,12 +15,11 @@ except ModuleNotFoundError:
     sys.exit(1)
 
 class PythonScraper:
+    '''
+    Class to encapsulate data and functions
+    '''
     args: argparse.Namespace = None
     fragment: dict = {}
-
-    '''
-    Generic scraper to investigate interaction with stashapp
-    '''
 
     def __init__(self):
         '''
@@ -31,7 +32,7 @@ class PythonScraper:
             log.debug(ex)
             log.error('Scraper initialisation failed. Exiting.')
             sys.exit(1)
-    
+
     def __load_arguments(self):
         '''
         Get the script arguments (specified in the YAML)
@@ -39,14 +40,14 @@ class PythonScraper:
         parser = argparse.ArgumentParser(description='Script argument parser')
         parser.add_argument('action', help='Action for the script to perform')
         self.args = parser.parse_args()
-    
+
     def __load_fragment(self):
         '''
         Get the JSON scene fragment from stdin (this is how stashapp sends it)
         '''
         self.fragment = json.loads(input())
         log.debug(f"fragment: {self.fragment}")
-    
+
     def start_processing(self):
         '''
         Start processing the scraper with the supplied arguments and input
