@@ -1,9 +1,9 @@
 '''
-Unit test for python_generic.py
+Unit tests for base_python_scraper.py
 
 You can run this test with the following command:
 
-python3 -m unittest -v -b scrapers/py_tests/test_python_generic.py
+python3 -m unittest -v -b scrapers/py_tests/base_python_scraper.py
 '''
 import inspect
 import json
@@ -20,16 +20,16 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
 # now we can import the scraper module from the parent directory
-import python_generic   # pylint: disable=import-error,wrong-import-order,wrong-import-position
+from base_python_scraper import BasePythonScraper  # pylint: disable=import-error,wrong-import-order,wrong-import-position
 
 FRAGMENT_URL = {"url": "http://domain"}
 
-class TestPythonScraper(base_test_case.BaseTestCase):
+class TestBasePythonScraper(base_test_case.BaseTestCase):
     '''
-    Unit tests for PythonScraper class
+    Unit tests for BasePythonScraper class
     '''
 
-    def test_class_init_with_no_args(self):
+    def test_base_class_init_with_no_args(self):
         '''
         no script arguments, no fragment input
         '''
@@ -40,7 +40,7 @@ class TestPythonScraper(base_test_case.BaseTestCase):
             # then
             with self.assertRaises(SystemExit):
                 # when
-                scraper = python_generic.PythonScraper()
+                scraper = BasePythonScraper()
 
         # then
         self.assertIsNone(scraper)
@@ -56,12 +56,14 @@ class TestPythonScraper(base_test_case.BaseTestCase):
         testargs = ["script_name", "sceneByURL"]
         with patch.object(sys, 'argv', testargs):
             # when
-            scraper = python_generic.PythonScraper()
+            scraper = BasePythonScraper()
 
         # then
-        self.assertIsInstance(scraper, python_generic.PythonScraper)
+        self.assertIsInstance(scraper, BasePythonScraper)
         self.assertHasAttr(scraper, '__init__')
         self.assertHasAttr(scraper, '__str__')
+        self.assertHasAttr(scraper, '_get_scene_by_url')
+        self.assertHasAttr(scraper, '_load_arguments')
         self.assertHasAttr(scraper, 'args')
         self.assertHasAttr(scraper, 'fragment')
         self.assertIsNotNone(scraper.args)
@@ -79,7 +81,7 @@ class TestPythonScraper(base_test_case.BaseTestCase):
         testargs = ["script_name", "sceneByURL"]
         with patch.object(sys, 'argv', testargs):
             # when
-            scraper = python_generic.PythonScraper()
+            scraper = BasePythonScraper()
 
         # then
         self.assertDictEqual(scraper.result, {
