@@ -14,7 +14,7 @@ except ModuleNotFoundError:
         file=sys.stderr)
     sys.exit(1)
 
-class PythonScraper:
+class BasePythonScraper:
     '''
     Class to encapsulate data and functions
     '''
@@ -26,7 +26,7 @@ class PythonScraper:
         Constructor
         '''
         try:
-            self.__load_arguments()
+            self._load_arguments()
             self.__load_fragment()
             self.__process()
         except Exception as ex:
@@ -34,7 +34,7 @@ class PythonScraper:
             log.error('Scraper initialisation failed. Exiting.')
             sys.exit(1)
 
-    def __load_arguments(self) -> None:
+    def _load_arguments(self) -> None:
         '''
         Get the script arguments (specified in the YAML)
         '''
@@ -55,7 +55,13 @@ class PythonScraper:
         '''
         return json.dumps(self.result)
 
-    def __get_scene_by_url(self, url: str) -> dict:
+    def _get_scene_by_url(self, url: str) -> dict:
+        '''
+        Get scene properties by using a URL. This method should be overriden in
+        a derived class in a scraper file
+        
+        See derived_python_scraper.py for an example
+        '''
         scene = {}
         scene['url'] = url
         return scene
@@ -66,12 +72,12 @@ class PythonScraper:
         '''
         if self.args.action == 'sceneByURL':
             # TODO: implement properly
-            self.result = self.__get_scene_by_url(self.fragment.get('url'))
+            self.result = self._get_scene_by_url(self.fragment.get('url'))
 
 
 if __name__ == '__main__':
     # run the scraper
-    result = PythonScraper()
+    result = BasePythonScraper()
 
     # print scraped result (should be stringified JSON)
     print(result)
