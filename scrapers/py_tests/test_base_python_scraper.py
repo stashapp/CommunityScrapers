@@ -22,7 +22,16 @@ sys.path.insert(0, parentdir)
 # now we can import the scraper module from the parent directory
 from base_python_scraper import BasePythonScraper  # pylint: disable=import-error,wrong-import-order,wrong-import-position
 
-FRAGMENT_URL = {"url": "http://domain"}
+GALLERY_BY_FRAGMENT = {"url": "http://domain/gallery-by-fragment"}
+GALLERY_BY_URL = {"url": "http://domain/gallery-by-url"}
+MOVIE_BY_URL = {"url": "http://domain/movie-by-fragment"}
+PERFORMER_BY_FRAGMENT = {"url": "http://domain/performer-by-fragment"}
+PERFORMER_BY_NAME = {"name": "performer query string"}
+PERFORMER_BY_URL = {"url": "http://domain/performer-by-url"}
+SCENE_BY_FRAGMENT = {"url": "http://domain/scene-by-fragment"}
+SCENE_BY_NAME = {"name": "scene query string"}
+SCENE_BY_QUERY_FRAGMENT = {"url": "http://domain/scene-by-query-fragment"}
+SCENE_BY_URL = {"url": "http://domain/scene-by-url"}
 
 class TestBasePythonScraper(base_test_case.BaseTestCase):
     '''
@@ -46,7 +55,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
         self.assertIsNone(scraper)
 
     # input/stdin patched in here
-    @patch('builtins.input', side_effect=[json.dumps(FRAGMENT_URL)])
+    @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_FRAGMENT)])
     def test_class_init_with_valid_args_and_valid_stdin(self, _):
         '''
         the positional first argument 'action', and fragment with just url
@@ -62,16 +71,187 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
         self.assertIsInstance(scraper, BasePythonScraper)
         self.assertHasAttr(scraper, '__init__')
         self.assertHasAttr(scraper, '__str__')
+        self.assertHasAttr(scraper, '_get_gallery_by_fragment')
+        self.assertHasAttr(scraper, '_get_gallery_by_url')
+        self.assertHasAttr(scraper, '_get_movie_by_url')
+        self.assertHasAttr(scraper, '_get_performer_by_fragment')
+        self.assertHasAttr(scraper, '_get_performer_by_name')
+        self.assertHasAttr(scraper, '_get_performer_by_url')
+        self.assertHasAttr(scraper, '_get_scene_by_fragment')
+        self.assertHasAttr(scraper, '_get_scene_by_name')
+        self.assertHasAttr(scraper, '_get_scene_by_query_fragment')
         self.assertHasAttr(scraper, '_get_scene_by_url')
         self.assertHasAttr(scraper, '_load_arguments')
         self.assertHasAttr(scraper, 'args')
         self.assertHasAttr(scraper, 'fragment')
         self.assertIsNotNone(scraper.args)
         self.assertEqual(scraper.args.action, 'sceneByURL')
-        self.assertDictEqual(scraper.fragment, FRAGMENT_URL)
+        self.assertDictEqual(scraper.fragment, SCENE_BY_FRAGMENT)
 
     # input/stdin patched in here
-    @patch('builtins.input', side_effect=[json.dumps(FRAGMENT_URL)])
+    @patch('builtins.input', side_effect=[json.dumps(GALLERY_BY_FRAGMENT)])
+    def test_class_gallery_by_fragment_result(self, _):
+        '''
+        galleryByFragment result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "galleryByFragment"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = BasePythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'url': GALLERY_BY_FRAGMENT['url']
+        })
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(GALLERY_BY_URL)])
+    def test_class_gallery_by_url_result(self, _):
+        '''
+        galleryByURL result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "galleryByURL"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = BasePythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'url': GALLERY_BY_URL['url']
+        })
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(MOVIE_BY_URL)])
+    def test_class_movie_by_url_result(self, _):
+        '''
+        movieByURL result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "movieByURL"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = BasePythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'url': MOVIE_BY_URL['url']
+        })
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_FRAGMENT)])
+    def test_class_performer_by_fragment_result(self, _):
+        '''
+        performerByFragment result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "performerByFragment"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = BasePythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'url': PERFORMER_BY_FRAGMENT['url']
+        })
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_NAME)])
+    def test_class_performer_by_name_result(self, _):
+        '''
+        performerByName result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "performerByName"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = BasePythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'name': PERFORMER_BY_NAME['name']
+        })
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_URL)])
+    def test_class_performer_by_url_result(self, _):
+        '''
+        performerByURL result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "performerByURL"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = BasePythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'url': PERFORMER_BY_URL['url']
+        })
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_FRAGMENT)])
+    def test_class_scene_by_fragment_result(self, _):
+        '''
+        sceneByFragment result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "sceneByFragment"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = BasePythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'url': SCENE_BY_FRAGMENT['url']
+        })
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_NAME)])
+    def test_class_scene_by_name_result(self, _):
+        '''
+        sceneByName result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "sceneByName"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = BasePythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'title': SCENE_BY_NAME['name']
+        })
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_QUERY_FRAGMENT)])
+    def test_class_scene_by_query_fragment_result(self, _):
+        '''
+        sceneByQueryFragment result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "sceneByQueryFragment"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = BasePythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'url': SCENE_BY_QUERY_FRAGMENT['url']
+        })
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_URL)])
     def test_class_scene_by_url_result(self, _):
         '''
         sceneByURL result should contain correct properties
@@ -85,8 +265,9 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'url': FRAGMENT_URL['url']
+            'url': SCENE_BY_URL['url']
         })
+
 
 if __name__ == '__main__':
     unittest.main()
