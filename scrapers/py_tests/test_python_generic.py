@@ -49,7 +49,7 @@ class TestPythonScraper(base_test_case.BaseTestCase):
     @patch('builtins.input', side_effect=[json.dumps(FRAGMENT_URL)])
     def test_class_init_with_valid_args_and_valid_stdin(self, _):
         '''
-        one script argument, the positional first argument 'action'
+        the positional first argument 'action', and fragment with just url
         '''
         # given
         # arguments are here (first one is the script name)
@@ -61,12 +61,30 @@ class TestPythonScraper(base_test_case.BaseTestCase):
         # then
         self.assertIsInstance(scraper, python_generic.PythonScraper)
         self.assertHasAttr(scraper, '__init__')
+        self.assertHasAttr(scraper, '__str__')
         self.assertHasAttr(scraper, 'args')
         self.assertHasAttr(scraper, 'fragment')
-        self.assertHasAttr(scraper, 'start_processing')
         self.assertIsNotNone(scraper.args)
         self.assertEqual(scraper.args.action, 'sceneByURL')
         self.assertDictEqual(scraper.fragment, FRAGMENT_URL)
+
+    # input/stdin patched in here
+    @patch('builtins.input', side_effect=[json.dumps(FRAGMENT_URL)])
+    def test_class_scene_by_url_result(self, _):
+        '''
+        sceneByURL result should contain correct properties
+        '''
+        # given
+        # arguments are here (first one is the script name)
+        testargs = ["script_name", "sceneByURL"]
+        with patch.object(sys, 'argv', testargs):
+            # when
+            scraper = python_generic.PythonScraper()
+
+        # then
+        self.assertDictEqual(scraper.result, {
+            'url': FRAGMENT_URL['url']
+        })
 
 if __name__ == '__main__':
     unittest.main()

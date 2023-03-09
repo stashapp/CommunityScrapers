@@ -28,12 +28,13 @@ class PythonScraper:
         try:
             self.__load_arguments()
             self.__load_fragment()
+            self.__process()
         except Exception as ex:
             log.debug(ex)
             log.error('Scraper initialisation failed. Exiting.')
             sys.exit(1)
 
-    def __load_arguments(self):
+    def __load_arguments(self) -> None:
         '''
         Get the script arguments (specified in the YAML)
         '''
@@ -41,23 +42,36 @@ class PythonScraper:
         parser.add_argument('action', help='Action for the script to perform')
         self.args = parser.parse_args()
 
-    def __load_fragment(self):
+    def __load_fragment(self) -> None:
         '''
-        Get the JSON scene fragment from stdin (this is how stashapp sends it)
+        Get the JSON fragment from stdin (this is how stashapp sends it)
         '''
         self.fragment = json.loads(input())
         log.debug(f"fragment: {self.fragment}")
 
-    def start_processing(self):
+    def __str__(self) -> str:
         '''
-        Start processing the scraper with the supplied arguments and input
+        Return the scrape result(s) as JSON
         '''
-        pass
+        return json.dumps(self.result)
+
+    def __get_scene_by_url(self, url: str) -> dict:
+        scene = {}
+        scene['url'] = url
+        return scene
+
+    def __process(self) -> None:
+        '''
+        Process with the scraper using the initialised arguments and input
+        '''
+        if self.args.action == 'sceneByURL':
+            # TODO: implement properly
+            self.result = self.__get_scene_by_url(self.fragment.get('url'))
 
 
 if __name__ == '__main__':
-    # instantiate class
-    scraper = PythonScraper()
+    # run the scraper
+    result = PythonScraper()
 
-    # start processing
-    scraper.start_processing()
+    # print scraped result (should be stringified JSON)
+    print(result)
