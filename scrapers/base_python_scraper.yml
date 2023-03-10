@@ -1,8 +1,6 @@
 name: "Base Python Scraper"
 galleryByFragment:
   action: script
-  url:
-    - lifeselector.com
   script:
     - python
     - base_python_scraper.py
@@ -25,16 +23,12 @@ movieByURL:
       - movieByURL
 performerByFragment:
   action: script
-  url:
-    - lifeselector.com
   script:
     - python
     - base_python_scraper.py
     - performerByFragment
 performerByName:
   action: script
-  url:
-    - lifeselector.com
   script:
     - python
     - base_python_scraper.py
@@ -49,24 +43,18 @@ performerByURL:
       - performerByURL
 sceneByFragment:
   action: script
-  url:
-    - lifeselector.com
   script:
     - python
     - base_python_scraper.py
     - sceneByFragment
 sceneByName:
   action: script
-  url:
-    - lifeselector.com
   script:
     - python
     - base_python_scraper.py
     - sceneByName
 sceneByQueryFragment:
   action: script
-  url:
-    - lifeselector.com
   script:
     - python
     - base_python_scraper.py
