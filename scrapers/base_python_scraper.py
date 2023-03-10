@@ -4,6 +4,7 @@ Generic scraper to investigate interaction with stashapp
 import argparse
 import json
 import sys
+from typing import List
 
 try:
     from py_common import log
@@ -62,6 +63,27 @@ class BasePythonScraper:
         Get gallery properties by using fragment object. This method should be
         overriden in a derived class in a scraper file
 
+        This is from the Gallery feature Scrape With...
+
+        example payload:
+
+        {
+            'clientMutationId': None,
+            'date': None,
+            'details': '',
+            'id': '1263',
+            'organized': None,
+            'performer_ids': None,
+            'primary_file_id': None,
+            'rating': None,
+            'rating100': None,
+            'scene_ids': None,
+            'studio_id': None,
+            'tag_ids': None,
+            'title': 'Pictures',
+            'url': ''
+        }
+
         See derived_python_scraper.py for an example
         '''
         gallery = {}
@@ -95,22 +117,60 @@ class BasePythonScraper:
         Get performer properties by using fragment object. This method should be
         overriden in a derived class in a scraper file
 
+        This is sent by stashapp when clicking on one of the results in the list
+        shown for a Performer > Scrape With... > (name) search, i.e.
+        performerByName, and is populated with the values supplied by
+        the fragment of the performerByName list item, not what is currently
+        in the performer's fields.
+
+        example payload:
+
+        {
+            'aliases': None,
+            'birthdate': None,
+            'career_length': None,
+            'country': None,
+            'death_date': None,
+            'details': None,
+            'disambiguation': None,
+            'ethnicity': None,
+            'eye_color': None,
+            'fake_tits': None,
+            'gender': None,
+            'hair_color': None,
+            'height': None,
+            'instagram': None,
+            'measurements': None,
+            'name': 'Dani Blu',
+            'piercings': None,
+            'remote_site_id': None,
+            'stored_id': None,
+            'tattoos': None,
+            'twitter': None,
+            'url': None,
+            'weight': None
+        }
+
         See derived_python_scraper.py for an example
         '''
         performer = {}
         performer['url'] = fragment.get('url')
         return performer
 
-    def _get_performer_by_name(self, name: str) -> dict:
+    def _get_performer_by_name(self, name: str) -> List[dict]:
         '''
         Get performer properties by using a name. This method should be
         overriden in a derived class in a scraper file
+
+        From stashapp's Performer > Scrape With... > (name string)
+
+        Returns: Array of JSON-encoded performer fragments (including at least name)
 
         See derived_python_scraper.py for an example
         '''
         performer = {}
         performer['name'] = name
-        return performer
+        return [performer]
 
     def _get_performer_by_url(self, url: str) -> dict:
         '''
@@ -128,27 +188,79 @@ class BasePythonScraper:
         Get scene properties by using fragment object. This method should be
         overriden in a derived class in a scraper file
 
+        The `fragment` variable is an object sent as JSON from stashapp feature
+        Scrape With... > (Scraper). Here is an example payload:
+
+        {
+            'clientMutationId': None,
+            'code': None,
+            'cover_image': None,
+            'date': None,
+            'details': '',
+            'director': None,
+            'gallery_ids': None,
+            'id': '4752',
+            'movies': None,
+            'o_counter': None,
+            'organized': None,
+            'performer_ids': None,
+            'play_count': None,
+            'play_duration': None,
+            'primary_file_id': None,
+            'rating': None,
+            'rating100': None,
+            'resume_time': None,
+            'stash_ids': None,
+            'studio_id': None,
+            'tag_ids': None,
+            'title': 'Perverse Architects - Scene3.mkv',
+            'url': ''
+        }
+
         See derived_python_scraper.py for an example
         '''
         scene = {}
         scene['url'] = fragment.get('url')
         return scene
 
-    def _get_scene_by_name(self, name: str) -> dict:
+    def _get_scene_by_name(self, name: str) -> List[dict]:
         '''
         Get scene properties by using a name. This method should be overriden in
-        a derived class in a scraper file
+        a derived class in a scraper file.
+
+        The `name` variable is the string submitted from the Scrape Query
+        (Magnifying Glass icon) feature in stashapp web UI
+
+        Returns: Array of JSON-encoded scene fragments
 
         See derived_python_scraper.py for an example
         '''
         scene = {}
         scene['title'] = name
-        return scene
+        return [scene]
 
     def _get_scene_by_query_fragment(self, fragment: dict) -> dict:
         '''
         Get scene properties by using fragment object. This method should be
         overriden in a derived class in a scraper file
+
+        This is sent by stashapp when clicking on one of the results in the list
+        shown for a Scene > Scrape Query, i.e.
+        sceneByName, and is populated with the values supplied by
+        the fragment of the sceneByName list item, not what is currently
+        in the scene's fields.
+
+        example payload:
+        {
+            'code': None,
+            'date': None,
+            'details': None,
+            'director': None,
+            'remote_site_id': None,
+            'title': 'Adulttime 2023-02-23 Syren De Mer Katie Morgan Lauren Phillips '
+                    'Dee Williams.mp4',
+            'url': None
+        }
 
         See derived_python_scraper.py for an example
         '''
