@@ -22,21 +22,21 @@ sys.path.insert(0, parentdir)
 # now we can import the scraper module from the parent directory
 from base_python_scraper import BasePythonScraper  # pylint: disable=import-error,wrong-import-order,wrong-import-position
 
-GALLERY_BY_FRAGMENT = {"url": "http://domain/gallery-by-fragment"}
-GALLERY_BY_URL = {"url": "http://domain/gallery-by-url"}
-MOVIE_BY_URL = {"url": "http://domain/movie-by-fragment"}
-PERFORMER_BY_FRAGMENT = {"url": "http://domain/performer-by-fragment"}
-PERFORMER_BY_NAME = {"name": "performer query string"}
-PERFORMER_BY_URL = {"url": "http://domain/performer-by-url"}
-SCENE_BY_FRAGMENT = {"url": "http://domain/scene-by-fragment"}
-SCENE_BY_NAME = {"name": "scene query string"}
-SCENE_BY_QUERY_FRAGMENT = {"url": "http://domain/scene-by-query-fragment"}
-SCENE_BY_URL = {"url": "http://domain/scene-by-url"}
 
 class TestBasePythonScraper(base_test_case.BaseTestCase):
     '''
     Unit tests for BasePythonScraper class
     '''
+    GALLERY_BY_FRAGMENT = {"url": "http://domain/gallery-by-fragment"}
+    GALLERY_BY_URL = {"url": "http://domain/gallery-by-url"}
+    MOVIE_BY_URL = {"url": "http://domain/movie-by-fragment"}
+    PERFORMER_BY_FRAGMENT = {"url": "http://domain/performer-by-fragment"}
+    PERFORMER_BY_NAME = {"name": "performer query string"}
+    PERFORMER_BY_URL = {"url": "http://domain/performer-by-url"}
+    SCENE_BY_FRAGMENT = {"url": "http://domain/scene-by-fragment"}
+    SCENE_BY_NAME = {"name": "scene query string"}
+    SCENE_BY_QUERY_FRAGMENT = {"url": "http://domain/scene-by-query-fragment"}
+    SCENE_BY_URL = {"url": "http://domain/scene-by-url"}
 
     def test_base_class_init_with_no_args(self):
         '''
@@ -55,8 +55,8 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
         self.assertIsNone(scraper)
 
     # input/stdin patched in here
-    @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_FRAGMENT)])
-    def test_class_init_with_valid_args_and_valid_stdin(self, _):
+    @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_URL)])
+    def test_base_class_init_with_valid_args_and_valid_stdin(self, _):
         '''
         the positional first argument 'action', and fragment with just url
         '''
@@ -86,11 +86,11 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
         self.assertHasAttr(scraper, 'fragment')
         self.assertIsNotNone(scraper.args)
         self.assertEqual(scraper.args.action, 'sceneByURL')
-        self.assertDictEqual(scraper.fragment, SCENE_BY_FRAGMENT)
+        self.assertDictEqual(scraper.fragment, self.SCENE_BY_URL)
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(GALLERY_BY_FRAGMENT)])
-    def test_class_gallery_by_fragment_result(self, _):
+    def test_base_class_gallery_by_fragment_result(self, _):
         '''
         galleryByFragment result should contain correct properties
         '''
@@ -103,12 +103,12 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'url': GALLERY_BY_FRAGMENT['url']
+            'url': self.GALLERY_BY_FRAGMENT['url']
         })
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(GALLERY_BY_URL)])
-    def test_class_gallery_by_url_result(self, _):
+    def test_base_class_gallery_by_url_result(self, _):
         '''
         galleryByURL result should contain correct properties
         '''
@@ -121,12 +121,12 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'url': GALLERY_BY_URL['url']
+            'url': self.GALLERY_BY_URL['url']
         })
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(MOVIE_BY_URL)])
-    def test_class_movie_by_url_result(self, _):
+    def test_base_class_movie_by_url_result(self, _):
         '''
         movieByURL result should contain correct properties
         '''
@@ -139,12 +139,12 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'url': MOVIE_BY_URL['url']
+            'url': self.MOVIE_BY_URL['url']
         })
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_FRAGMENT)])
-    def test_class_performer_by_fragment_result(self, _):
+    def test_base_class_performer_by_fragment_result(self, _):
         '''
         performerByFragment result should contain correct properties
         '''
@@ -157,12 +157,12 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'url': PERFORMER_BY_FRAGMENT['url']
+            'url': self.PERFORMER_BY_FRAGMENT['url']
         })
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_NAME)])
-    def test_class_performer_by_name_result(self, _):
+    def test_base_class_performer_by_name_result(self, _):
         '''
         performerByName result should contain correct properties
         '''
@@ -175,12 +175,12 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'name': PERFORMER_BY_NAME['name']
+            'name': self.PERFORMER_BY_NAME['name']
         })
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_URL)])
-    def test_class_performer_by_url_result(self, _):
+    def test_base_class_performer_by_url_result(self, _):
         '''
         performerByURL result should contain correct properties
         '''
@@ -193,12 +193,12 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'url': PERFORMER_BY_URL['url']
+            'url': self.PERFORMER_BY_URL['url']
         })
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_FRAGMENT)])
-    def test_class_scene_by_fragment_result(self, _):
+    def test_base_class_scene_by_fragment_result(self, _):
         '''
         sceneByFragment result should contain correct properties
         '''
@@ -211,12 +211,12 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'url': SCENE_BY_FRAGMENT['url']
+            'url': self.SCENE_BY_FRAGMENT['url']
         })
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_NAME)])
-    def test_class_scene_by_name_result(self, _):
+    def test_base_class_scene_by_name_result(self, _):
         '''
         sceneByName result should contain correct properties
         '''
@@ -229,12 +229,12 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'title': SCENE_BY_NAME['name']
+            'title': self.SCENE_BY_NAME['name']
         })
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_QUERY_FRAGMENT)])
-    def test_class_scene_by_query_fragment_result(self, _):
+    def test_base_class_scene_by_query_fragment_result(self, _):
         '''
         sceneByQueryFragment result should contain correct properties
         '''
@@ -247,12 +247,12 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'url': SCENE_BY_QUERY_FRAGMENT['url']
+            'url': self.SCENE_BY_QUERY_FRAGMENT['url']
         })
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_URL)])
-    def test_class_scene_by_url_result(self, _):
+    def test_base_class_scene_by_url_result(self, _):
         '''
         sceneByURL result should contain correct properties
         '''
@@ -265,7 +265,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
         # then
         self.assertDictEqual(scraper.result, {
-            'url': SCENE_BY_URL['url']
+            'url': self.SCENE_BY_URL['url']
         })
 
 
