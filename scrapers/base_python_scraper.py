@@ -61,7 +61,7 @@ class BasePythonScraper:
         '''
         Get gallery properties by using fragment object. This method should be
         overriden in a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         gallery = {}
@@ -72,7 +72,7 @@ class BasePythonScraper:
         '''
         Get gallery properties by using a URL. This method should be overriden
         in a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         gallery = {}
@@ -83,7 +83,7 @@ class BasePythonScraper:
         '''
         Get movie properties by using a URL. This method should be overriden in
         a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         movie = {}
@@ -94,7 +94,7 @@ class BasePythonScraper:
         '''
         Get performer properties by using fragment object. This method should be
         overriden in a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         performer = {}
@@ -105,7 +105,7 @@ class BasePythonScraper:
         '''
         Get performer properties by using a name. This method should be
         overriden in a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         performer = {}
@@ -116,7 +116,7 @@ class BasePythonScraper:
         '''
         Get performer properties by using a URL. This method should be overriden
         in a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         performer = {}
@@ -127,7 +127,7 @@ class BasePythonScraper:
         '''
         Get scene properties by using fragment object. This method should be
         overriden in a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         scene = {}
@@ -138,7 +138,7 @@ class BasePythonScraper:
         '''
         Get scene properties by using a name. This method should be overriden in
         a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         scene = {}
@@ -149,7 +149,7 @@ class BasePythonScraper:
         '''
         Get scene properties by using fragment object. This method should be
         overriden in a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         scene = {}
@@ -160,7 +160,7 @@ class BasePythonScraper:
         '''
         Get scene properties by using a URL. This method should be overriden in
         a derived class in a scraper file
-        
+
         See derived_python_scraper.py for an example
         '''
         scene = {}

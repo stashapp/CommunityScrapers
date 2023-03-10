@@ -38,7 +38,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
     SCENE_BY_QUERY_FRAGMENT = {"url": "http://domain/scene-by-query-fragment"}
     SCENE_BY_URL = {"url": "http://domain/scene-by-url"}
 
-    
+
 
     def test_base_class_init_with_no_args(self):
         '''
