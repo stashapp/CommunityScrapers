@@ -1,37 +1,37 @@
-name: "Base Python Scraper"
+name: "Derived Python Scraper"
 galleryByFragment:
   action: script
   script:
     - python
-    - base_python_scraper.py
+    - derived_python_scraper.py
     - galleryByFragment
 galleryByURL:
   - action: script
     url:
-      - lifeselector.com
+      - domain.com/gallery/
     script:
       - python
-      - base_python_scraper.py
+      - derived_python_scraper.py
       - galleryByURL
 movieByURL:
   - action: script
     url:
-      - lifeselector.com
+      - domain.com/movie/
     script:
       - python
-      - base_python_scraper.py
+      - derived_python_scraper.py
       - movieByURL
 performerByFragment:
   action: script
   script:
     - python
-    - base_python_scraper.py
+    - derived_python_scraper.py
     - performerByFragment
 performerByName:
   action: script
   script:
     - python
-    - base_python_scraper.py
+    - derived_python_scraper.py
     - performerByName
 performerByURL:
   - action: script
@@ -39,33 +39,33 @@ performerByURL:
       - lifeselector.com
     script:
       - python
-      - base_python_scraper.py
+      - derived_python_scraper.py
       - performerByURL
 sceneByFragment:
   action: script
   script:
     - python
-    - base_python_scraper.py
+    - derived_python_scraper.py
     - sceneByFragment
 sceneByName:
   action: script
   script:
     - python
-    - base_python_scraper.py
+    - derived_python_scraper.py
     - sceneByName
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - base_python_scraper.py
+    - derived_python_scraper.py
     - sceneByQueryFragment
 sceneByURL:
   - action: script
     url:
-      - lifeselector.com
+      - domain.com/scene/
     script:
       - python
-      - base_python_scraper.py
+      - derived_python_scraper.py
       - sceneByURL
 
 # Last Updated March 10, 2023
