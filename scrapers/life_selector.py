@@ -295,11 +295,70 @@ class LifeSelectorScraper(BasePythonScraper):
             } for scene_number, scene in enumerate(movie['scenes'], start=1)
         ]
 
-        # TODO: sceneByQueryFragment
-        # scene['title'] = f"{movie['name']} - {', '.join([ p['name'] for p in movie_performers ])} (DELETE AS APPROPRIATE)"
-
-        log.debug(f"scenes: {scenes}")
+        log.debug(f"_get_scene_by_name, scenes: {scenes}")
         return scenes
+
+    def _get_scene_by_query_fragment(self, fragment: dict) -> dict:
+        '''
+        Get scene properties by using fragment returned by sceneByName
+
+        This is sent by stashapp when clicking on one of the results in the list
+        shown for a Scene > Scrape Query, i.e.
+        sceneByName, and is populated with the values supplied by
+        the fragment of the sceneByName list item, not what is currently
+        in the scene's fields.
+
+        example payload:
+        {
+            'code': '85900-5',
+            'date': '2021-05-24',
+            'details': 'You have an extraordinary hobby...',
+            'director': None,
+            'remote_site_id': None,
+            'title': 'The Wedding Crasher',
+            'url': 'https://lifeselector.com/game/DisplayPlayer/gameId/85900'
+        }
+        '''
+        scene = {}
+
+        # scene data from fragment.date
+        if fragment.get('date'):
+            scene['date'] = fragment['date']
+
+        # scene data from fragment.details
+        if fragment.get('details'):
+            scene['details'] = fragment['details']
+
+        # scene data from fragment.url
+        if fragment.get('url') is not None:
+            scene['url'] = fragment['url']
+            domain = urlparse(fragment['url']).netloc
+            studio = self.__get_studio_for_domain(domain)
+            if studio is not None:
+                scene['studio'] = studio
+
+            # movie data from scraping HTML
+            movie_data_from_html = self.__get_movie_by_scraping_html(fragment['url'])
+            movie_scenes = movie_data_from_html['scenes']
+            if fragment.get('code'):
+                code, scene_number = fragment['code'].split('-')
+                scene['code'] = code
+                scene['image'] = movie_scenes[int(scene_number) - 1]['image']
+
+        # movie data from fragment.title
+        if fragment.get('title'):
+            movie_data_from_name = self.__get_movie_from_api_by_name(fragment['title'])
+            if movie_data_from_name is not None:
+                movie_performers = movie_data_from_name['performers']
+                scene['title'] = f"{fragment.get('title')} - {', '.join([ p['name'] for p in movie_performers ])} (DELETE AS APPROPRIATE)"
+                scene['performers'] = movie_performers
+                scene['tags'] = movie_data_from_name['tags']
+                scene['movies'] = [
+                    { 'name': fragment['title'] }
+                ]
+        
+        log.debug(f"_get_scene_by_query_fragment, scene: {scene}")
+        return scene
 
     def _get_scene_by_url(self, url: str) -> dict:
         '''
