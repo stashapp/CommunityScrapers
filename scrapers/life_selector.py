@@ -165,7 +165,7 @@ class LifeSelectorScraper(BasePythonScraper):
         movie['front_image'] = carousel_images[0]['src']
         # and scene covers are the 2nd image to last
         movie['scenes'] = [
-            { "image": tag['src'] } for tag in carousel_images[1:]
+            { "image": image['src'] } for image in carousel_images[1:]
         ]
 
         log.debug(f"__get_movie_by_scraping_html, movie: {movie}")
