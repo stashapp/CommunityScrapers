@@ -4,6 +4,7 @@ Generic scraper to investigate interaction with stashapp
 import argparse
 import json
 import sys
+import traceback
 from typing import List
 
 try:
@@ -32,6 +33,7 @@ class BasePythonScraper:
             self.__process()
         except Exception as ex:
             log.debug(ex)
+            traceback.print_exc()
             log.error('Scraper failed. Exiting.')
             sys.exit(1)
 
