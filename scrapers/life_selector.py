@@ -211,6 +211,121 @@ class LifeSelectorScraper(BasePythonScraper):
         log.debug(f"_get_movie_by_url, movie: {movie}")
         return movie
 
+    # TODO: implement this override
+    def _get_performer_by_fragment(self, fragment: dict) -> dict:
+        '''
+        Get performer properties by using fragment object. This method should be
+        overriden in a derived class in a scraper file
+
+        This is sent by stashapp when clicking on one of the results in the list
+        shown for a Performer > Scrape With... > (name) search, i.e.
+        performerByName, and is populated with the values supplied by
+        the fragment of the performerByName list item, not what is currently
+        in the performer's fields.
+
+        example payload:
+
+        {
+            'aliases': None,
+            'birthdate': None,
+            'career_length': None,
+            'country': None,
+            'death_date': None,
+            'details': None,
+            'disambiguation': None,
+            'ethnicity': None,
+            'eye_color': None,
+            'fake_tits': None,
+            'gender': None,
+            'hair_color': None,
+            'height': None,
+            'instagram': None,
+            'measurements': None,
+            'name': 'Dani Blu',
+            'piercings': None,
+            'remote_site_id': None,
+            'stored_id': None,
+            'tattoos': None,
+            'twitter': None,
+            'url': None,
+            'weight': None
+        }
+
+        See derived_python_scraper.py for an example
+        '''
+        performer = {}
+        performer['url'] = fragment.get('url')
+        return performer
+
+    # TODO: implement this override
+    def _get_performer_by_name(self, name: str) -> List[dict]:
+        '''
+        Get performer properties by using a name. This method should be
+        overriden in a derived class in a scraper file
+
+        From stashapp's Performer > Scrape With... > (name string)
+
+        Returns: Array of JSON-encoded performer fragments (including at least name)
+
+        See derived_python_scraper.py for an example
+        '''
+        performer = {}
+        performer['name'] = name
+        return [performer]
+
+    # TODO: implement this override
+    def _get_performer_by_url(self, url: str) -> dict:
+        '''
+        Get performer properties by using a URL. This method should be overriden
+        in a derived class in a scraper file
+
+        See derived_python_scraper.py for an example
+        '''
+        performer = {}
+        performer['url'] = url
+        return performer
+
+    # TODO: implement this override
+    def _get_scene_by_fragment(self, fragment: dict) -> dict:
+        '''
+        Get scene properties by using fragment object. This method should be
+        overriden in a derived class in a scraper file
+
+        The `fragment` variable is an object sent as JSON from stashapp feature
+        Scrape With... > (Scraper). Here is an example payload:
+
+        {
+            'clientMutationId': None,
+            'code': None,
+            'cover_image': None,
+            'date': None,
+            'details': '',
+            'director': None,
+            'gallery_ids': None,
+            'id': '4752',
+            'movies': None,
+            'o_counter': None,
+            'organized': None,
+            'performer_ids': None,
+            'play_count': None,
+            'play_duration': None,
+            'primary_file_id': None,
+            'rating': None,
+            'rating100': None,
+            'resume_time': None,
+            'stash_ids': None,
+            'studio_id': None,
+            'tag_ids': None,
+            'title': 'Perverse Architects - Scene3.mkv',
+            'url': ''
+        }
+
+        See derived_python_scraper.py for an example
+        '''
+        scene = {}
+        scene['url'] = fragment.get('url')
+        return scene
+
     def _get_scene_by_name(self, name: str) -> List[dict]:
         '''
         Get scene properties by using a name
@@ -360,6 +475,7 @@ class LifeSelectorScraper(BasePythonScraper):
         log.debug(f"_get_scene_by_query_fragment, scene: {scene}")
         return scene
 
+    # TODO: remove this method override
     def _get_scene_by_url(self, url: str) -> dict:
         '''
         Get scene properties by using a URL
