@@ -1,0 +1,65 @@
+name: "Life Selector"
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - galleryByFragment
+galleryByURL:
+  - action: script
+    url:
+      - lifeselector.com/pov-photo-gallery/
+    script:
+      - python
+      - life_selector.py
+      - galleryByURL
+movieByURL:
+  - action: script
+    url:
+      - lifeselector.com/game/
+    script:
+      - python
+      - life_selector.py
+      - movieByURL
+performerByFragment:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - performerByFragment
+performerByName:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - performerByName
+performerByURL:
+  - action: script
+    url:
+      - lifeselector.com/model/
+    script:
+      - python
+      - life_selector.py
+      - performerByURL
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - sceneByFragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - sceneByQueryFragment
+# There are no scene URLs, so no `sceneByURL`
+# Search by the game (movie/release) name instead to get a list of scenes
+
+# Last Updated March 10, 2023
