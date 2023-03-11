@@ -3,6 +3,7 @@ lifeselector.com scraper
 '''
 import re
 import sys
+from typing import List
 import unicodedata
 from urllib.parse import urlparse
 
@@ -58,13 +59,8 @@ class LifeSelectorScraper(BasePythonScraper):
         movie_id = re.sub('.*/', '', urlparse(url).path)
         return movie_id
 
-    def __get_clean_url(self, url: str) -> str:
-        '''
-        Clean the URL, e.g. remove the query params
-        '''
-        parsed_url = urlparse(url)
-        clean_url = f"{parsed_url.scheme}://{parsed_url.netloc}{parsed_url.path}"
-        return clean_url
+    def __get_movie_url_for_id(self, movie_id: int) -> str:
+        return f"https://lifeselector.com/game/DisplayPlayer/gameId/{movie_id}"
 
     def __api_search(self, search_string: str) -> dict:
         '''
@@ -92,6 +88,7 @@ class LifeSelectorScraper(BasePythonScraper):
 
         - date
         - front_image (452x310)
+        - id (int)
         - name
         - performers
         - rating (float, scale to 5.0)
@@ -108,14 +105,16 @@ class LifeSelectorScraper(BasePythonScraper):
             game = api_search_result['games'][0]
             movie = {}
             movie['name'] = game['title']
+            movie['id'] = game['id']
             movie['date'] = game['releaseDate']
             movie['front_image'] = game['cover']
-            movie['tags'] = [{ 'name': t['name'] for t in game['tag'] }]
+            movie['tags'] = [{ 'name': t['name'] } for t in game['tag'] ]
             # convert rating to percentage
             movie['rating'] = str(100 * game['rating'] / 5)
             movie['synopsis'] = unicodedata.normalize("NFKD", game['smallDescription'])
-            movie['performers'] = [{ 'name': p['name'] for p in game['performer'] }]
+            movie['performers'] = [{ 'name': p['name'] } for p in game['performer'] ]
 
+        log.debug(f"__get_movie_from_api_by_name, movie: {movie}")
         return movie
 
     def __get_movie_from_api_by_id(self, movie_id: str) -> dict:
@@ -136,6 +135,7 @@ class LifeSelectorScraper(BasePythonScraper):
         movie['name'] = api_result['map']['title']
         movie['synopsis'] = unicodedata.normalize("NFKD", api_result['map']['description'])
 
+        log.debug(f"__get_movie_from_api_by_id, movie: {movie}")
         return movie
 
     def __get_movie_by_scraping_html(self, url: str) -> dict:
@@ -168,15 +168,16 @@ class LifeSelectorScraper(BasePythonScraper):
             { "image": tag['src'] } for tag in carousel_images[1:]
         ]
 
+        log.debug(f"__get_movie_by_scraping_html, movie: {movie}")
         return movie
 
     def _get_movie_by_url(self, url: str) -> dict:
         '''
         Get movie (game) properties by using a URL
 
-        - name
         - date
         - front_image (resolution 2000x1214)
+        - name
         - rating
         - studio
         - synopsis
@@ -185,7 +186,6 @@ class LifeSelectorScraper(BasePythonScraper):
         movie = {}
 
         # movie data from URL string value
-        movie['url'] = self.__get_clean_url(url)
         domain = urlparse(url).netloc
         studio = self.__get_studio_for_domain(domain)
         if studio is not None:
@@ -196,6 +196,7 @@ class LifeSelectorScraper(BasePythonScraper):
         movie_data_from_id = self.__get_movie_from_api_by_id(movie_id)
         movie['name'] = movie_data_from_id['name']
         movie['synopsis'] = movie_data_from_id['synopsis']
+        movie['url'] = self.__get_movie_url_for_id(movie_id)
 
         # movie data from name
         movie_data_from_name = self.__get_movie_from_api_by_name(movie['name'])
@@ -207,8 +208,98 @@ class LifeSelectorScraper(BasePythonScraper):
         movie_data_from_html = self.__get_movie_by_scraping_html(url)
         movie['front_image'] = movie_data_from_html['front_image']
 
-        log.debug(f"movie: {movie}")
+        log.debug(f"_get_movie_by_url, movie: {movie}")
         return movie
+
+    def _get_scene_by_name(self, name: str) -> List[dict]:
+        '''
+        Get scene properties by using a name
+
+        The `name` variable is the string submitted from the Scrape Query
+        (Magnifying Glass icon) feature in stashapp web UI
+
+        Returns: Array of JSON-encoded scene fragments
+
+        - title
+        - details
+        - code ({movie.id}-{scene_number})
+            to be used again in sceneByQueryFragment (to pick scene image)
+        - url
+        - date
+        - image
+        - studio
+            - name
+            - url
+        - movies: List
+            - name
+            - date
+            - rating
+            - studio
+                - name
+                - url
+            - synopsis
+            - url
+            - front_image
+        - tags: List
+            - name
+        - performers: List
+            - name
+        '''
+        # movie contains scene info
+        movie = {}
+        
+        # movie data from name
+        movie_id = None
+        movie_data_from_name = self.__get_movie_from_api_by_name(name)
+        if movie_data_from_name is not None:
+            movie['date'] = movie_data_from_name['date']
+            movie_id = movie_data_from_name['id']
+            movie['rating'] = movie_data_from_name['rating']
+            movie_performers = movie_data_from_name['performers']
+            movie_tags = movie_data_from_name['tags']
+
+        # movie data from id
+        if movie_id is not None:
+            movie_data_from_id = self.__get_movie_from_api_by_id(movie_id)
+            movie['name'] = movie_data_from_id['name']
+            movie['synopsis'] = movie_data_from_id['synopsis']
+
+            # movie data from URL string value
+            movie['url'] = self.__get_movie_url_for_id(movie_id)
+
+        # movie data from url
+        if movie.get('url') is not None:
+            domain = urlparse(movie['url']).netloc
+            studio = self.__get_studio_for_domain(domain)
+            if studio is not None:
+                movie['studio'] = studio
+
+            # movie data from scraping HTML
+            movie_data_from_html = self.__get_movie_by_scraping_html(movie['url'])
+            movie['front_image'] = movie_data_from_html['front_image']
+            movie['scenes'] = movie_data_from_html['scenes']
+        
+        # map movie['scenes'] List into List of scene fragments
+        scenes = [
+            {
+                'title': movie['name'],
+                'details': movie['synopsis'],
+                'code': f"{movie_id}-{scene_number}",
+                'url': movie['url'],
+                'date': movie['date'],
+                'image': scene['image'],
+                'studio': movie['studio'],
+                'movies': [movie],
+                'tags': movie_tags,
+                'performers': movie_performers
+            } for scene_number, scene in enumerate(movie['scenes'], start=1)
+        ]
+
+        # TODO: sceneByQueryFragment
+        # scene['title'] = f"{movie['name']} - {', '.join([ p['name'] for p in movie_performers ])} (DELETE AS APPROPRIATE)"
+
+        log.debug(f"scenes: {scenes}")
+        return scenes
 
     def _get_scene_by_url(self, url: str) -> dict:
         '''
