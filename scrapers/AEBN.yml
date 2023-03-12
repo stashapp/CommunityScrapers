@@ -1,116 +1,26 @@
-name: "AEBN"
-performerByURL:
-  - action: scrapeXPath
-    url:
-      - aebn.com
-    scraper: performerScraper
+name: AEBN_dev
 sceneByURL:
-  - action: scrapeXPath
-    url:
+  - url:
       - aebn.com
-    scraper: sceneScraper
+    action: script
+    script:
+      - python3
+      - AEBN_dev_v02.py
+      - scene
 movieByURL:
-  - action: scrapeXPath
-    url:
+  - url:
       - aebn.com
-    scraper: movieScraper
-xPathScrapers:
-  performerScraper:
-    performer:
-      Name: //div[@class='dts-section-page-heading-title']/h1
-      Gender:
-        selector: //li[@class="section-detail-list-item-gender"]/text()
-        postProcess:
-          - map:
-              TS: transgender_female
-      URL: //link[@rel="canonical"]/@href
-      Birthdate:
-        selector: //div[@class='section-detail dts-list-attributes']/ul/li[contains(.,"Birth Date")]
-        postProcess:
-          - replace:
-              - regex: .+:\s(.+)
-                with: $1
-              - regex: "Sept"
-                with: "Sep"
-          - parseDate: Jan 2, 2006
-      Height:
-        selector: //li[@class='section-detail-list-item-height']/text()
-        postProcess:
-          - replace:
-              - regex: .+\((\d+).+\)
-                with: $1
-      Weight:
-        selector: //li[@class='section-detail-list-item-weight']/text()
-        postProcess:
-          - replace:
-              - regex: .+\((\d+).+\)
-                with: $1
-      EyeColor: 
-        selector: //li[@class='section-detail-list-item-eye-color']/text()
-      Ethnicity:
-        selector: //li[@class='section-detail-list-item-ethnicity']/text()
-        postProcess:
-          - map:
-              White: Caucasian
-      HairColor:
-        selector: //li[@class='section-detail-list-item-hair-color']/text()
-      Details:
-        selector: //div[@class='dts-section-page-detail-description-body']  
-      Image: 
-        selector: //div[@class='dts-section-page-detail-main-image-wrapper']/picture/img/@src
-        postProcess:
-          - replace:
-              - regex: ^([^?]+).*$
-                with: "https:$1"
-  sceneScraper:
-    scene:
-      Title: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
-      Date:
-        selector: //li[@class="section-detail-list-item-release-date"]/text()
-        postProcess:
-          - replace:
-              - regex: "Sept"
-                with: "Sep"
-          - parseDate: Jan 2, 2006
-      Details:
-        selector: //div[@class="dts-section-page-detail-description-body"]//text()
-      Performers:
-        Name: //div[@class="dts-star-name-overlay"]/text()
-      Tags:
-        Name: //span[@class="dts-image-display-name"]//text()
-      Image:
-        selector: //picture[@class="dts-movie-boxcover-front"]/img/@src
-        postProcess:
-          - replace:
-              - regex: ^([^?]+).*$
-                with: "https:$1" 
-  movieScraper:
-    movie:
-      Name: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
-      Director:
-        selector: //li[@class='section-detail-list-item-director']//span//a
-        concat: ", "
-      Duration: //li[@class='section-detail-list-item-duration'][contains(span,"Running Time")]/text()
-      Date:
-        selector: //li[@class="section-detail-list-item-release-date"]/text()
-        postProcess:
-          - replace:
-              - regex: "Sept"
-                with: "Sep"
-          - parseDate: Jan 2, 2006
-      Synopsis: //div[@class="dts-section-page-detail-description-body"]//text()
-      Studio:
-        Name: //div[@class='dts-studio-name-wrapper']/a/text()
-      FrontImage:
-        selector: //picture[@class="dts-movie-boxcover-front"]/img/@src
-        postProcess:
-          - replace:
-              - regex: ^([^?]+).*$
-                with: "https:$1"
-      BackImage:
-        selector: //picture[@class="dts-movie-boxcover-back"]/img/@src
-        postProcess:
-          - replace:
-              - regex: ^([^?]+).*$
-                with: "https:$1"
-# Last Updated July 06, 2022
+    action: script
+    script:
+      - python3
+      - AEBN_dev_v02.py
+      - movie
+performerByURL:
+  - url:
+      - aebn.com
+    action: script
+    script:
+      - python3
+      - AEBN_dev_v02.py
+      - performer
+# Last Updated March 12, 2023
