@@ -410,10 +410,10 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
             movie['rating100'] = movie_data_from_name['rating100']
             movie['performers'] = movie_data_from_name['performers']
             movie['tags'] = movie_data_from_name['tags']
+            movie['name'] = movie_data_from_name['name']
 
             # movie data from id
             movie_data_from_id = self.__get_movie_from_api_by_id(movie_id)
-            movie['name'] = movie_data_from_id['name']
             movie['synopsis'] = movie_data_from_id['synopsis']
 
             # movie data from URL string value
