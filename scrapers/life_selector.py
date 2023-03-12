@@ -41,12 +41,11 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         }
     ]
 
-
-
-    def __get_studio_for_domain(self, domain: str) -> dict:
+    def __get_studio_for_url(self, url: str) -> dict | None:
         '''
-        Get a studio (from constant list of studios) matching a domain
+        Get a studio (from constant list of studios) matching a url
         '''
+        domain = urlparse(url).netloc
         return next(
             (s for s in self.STUDIOS if urlparse(s['url']).netloc == domain),
             None
@@ -84,6 +83,110 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         ).json()
 
         return api_result
+
+    def _get_gallery_by_fragment(self, fragment: dict) -> dict:
+        '''
+        Get gallery properties by using fragment object
+
+        This is from the Gallery feature Scrape With...
+
+        example payload:
+
+        {
+            'clientMutationId': None,
+            'date': None,
+            'details': '',
+            'id': '1263',
+            'organized': None,
+            'performer_ids': None,
+            'primary_file_id': None,
+            'rating': None,
+            'rating100': None,
+            'scene_ids': None,
+            'studio_id': None,
+            'tag_ids': None,
+            'title': 'Pictures',
+            'url': ''
+        }
+        '''
+        gallery = {}
+
+        if fragment.get('url'):
+            gallery.update(self._get_gallery_by_url(fragment['url']))
+        elif fragment.get('title'):
+            gallery.update(self.__get_gallery_by_title(fragment['title']))
+
+        log.debug(f"_get_gallery_by_fragment, gallery: {gallery}")
+        return gallery
+
+    def __get_gallery_by_scraping_html(self, url: str) -> dict:
+        '''
+        Get gallery properties by scraping the HTML code of the page
+
+        - title
+        '''
+        gallery = {}
+
+        # parse web page
+        page = bs(requests.get(url).text, 'html.parser')
+        gallery['title'] = page.find("div", class_="gallery-title").find("h1").string
+
+        log.debug(f"__get_gallery_by_scraping_html, gallery: {gallery}")
+        return gallery
+
+    def __get_gallery_by_title(self, title: str) -> dict:
+        '''
+        Get gallery properties by searching for movie with same title
+
+        - date
+        - details
+        - performers
+        - rating
+        - tags
+        - title
+        '''
+        gallery = {}
+
+        movies_from_api = self.__get_movies_from_api_by_name(title)
+        if len(movies_from_api):
+            movie = movies_from_api[0]
+            gallery['date'] = movie['date']
+            gallery['performers'] = movie['performers']
+            gallery['rating'] = movie['rating']
+            gallery['tags'] = movie['tags']
+            gallery['title'] = movie['name']
+            movie_from_api = self.__get_movie_from_api_by_id(movie['id'])
+            gallery['details'] = movie_from_api['synopsis']
+
+        log.debug(f"__get_gallery_by_title, gallery: {gallery}")
+        return gallery
+
+    def _get_gallery_by_url(self, url: str) -> dict:
+        '''
+        Get gallery properties by using a URL
+
+        - date
+        - details
+        - performers
+        - rating
+        - studio
+        - tags
+        - title
+        - url
+
+        '''
+        gallery = {}
+
+        gallery.update(self.__get_gallery_by_scraping_html(url))
+        # if scraped result has a title, the url is valid
+        if gallery.get('title'):
+            gallery['url'] = url
+            gallery['studio'] = self.__get_studio_for_url(url)
+            # now search the movie with same name
+            gallery.update(self.__get_gallery_by_title(gallery['title']))
+
+        log.debug(f"_get_gallery_by_url, gallery: {gallery}")
+        return gallery
 
     def __get_movies_from_api_by_name(self, movie_name: str) -> List[dict]:
         '''
@@ -194,8 +297,7 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         movie = {}
 
         # movie data from URL string value
-        domain = urlparse(url).netloc
-        movie['studio'] = self.__get_studio_for_domain(domain)
+        movie['studio'] = self.__get_studio_for_url(url)
 
         # movie data from API by id
         movie_id = self.__parse_movie_id_from_url(url)
@@ -206,10 +308,10 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         movie['back_image'] = f"https://i.c7cdn.com/generator/games/{movie_id}/images/episode-guide-{movie_id}.jpg"
 
         # movie data from API by name
-        movie_data_from_name = self.__get_movies_from_api_by_name(movie['name'])
-        if movie_data_from_name:
-            movie['date'] = movie_data_from_name['date']
-            movie['rating100'] = movie_data_from_name['rating100']
+        movies_from_api = self.__get_movies_from_api_by_name(movie['name'])
+        if len(movies_from_api):
+            movie['date'] = movies_from_api[0]['date']
+            movie['rating100'] = movies_from_api[0]['rating100']
 
         # movie data from scraping HTML
         movie_data_from_html = self.__get_movie_by_scraping_html(url)
@@ -277,8 +379,7 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
 
     def _get_performer_by_fragment(self, fragment: dict) -> dict:
         '''
-        Get performer properties by using fragment object. This method should be
-        overriden in a derived class in a scraper file
+        Get performer properties by using fragment object
 
         This is sent by stashapp when clicking on one of the results in the list
         shown for a Performer > Scrape With... > (name) search, i.e.
@@ -330,6 +431,7 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
             if len(performers_from_api):
                 performer = performers_from_api[0]
 
+        log.debug(f"_get_performer_by_fragment, performer: {performer}")
         return performer
 
     def _get_performer_by_name(self, name: str) -> List[dict]:
@@ -340,7 +442,10 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
 
         Returns: Array of JSON-encoded performer fragments
         '''
-        return self.__get_performers_from_api_by_name(name)
+        performers = self.__get_performers_from_api_by_name(name)
+
+        log.debug(f"_get_performer_by_name, performers: {performers}")
+        return performers
 
     def _get_performer_by_url(self, url: str) -> dict:
         '''
@@ -360,6 +465,7 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
             if len(performers_from_api):
                 performer = performers_from_api[0]
 
+        log.debug(f"_get_performer_by_url, performer: {performer}")
         return performer
 
     def _get_scene_by_name(self, name: str) -> List[dict]:
@@ -420,8 +526,7 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
             movie['url'] = self.__get_movie_url_for_id(movie_id)
 
             # movie data from url
-            domain = urlparse(movie['url']).netloc
-            movie['studio'] = self.__get_studio_for_domain(domain)
+            movie['studio'] = self.__get_studio_for_url(movie['url'])
 
             # movie data from scraping HTML
             movie_data_from_html = self.__get_movie_by_scraping_html(movie['url'])
@@ -480,8 +585,7 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         scene['url'] = fragment['url']
 
         # scene data from fragment.url
-        domain = urlparse(scene['url']).netloc
-        scene['studio'] = self.__get_studio_for_domain(domain)
+        scene['studio'] = self.__get_studio_for_url(scene['url'])
 
         # movie data from scraping HTML
         movie_scenes = []
