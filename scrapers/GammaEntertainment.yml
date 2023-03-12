@@ -63,7 +63,6 @@ sceneByURL:
       - tittycreampies.com/
       - transsexualangel.com/en/video/
       - transsexualroadtrip.com/
-      - tsplayground.com/en/video/
       - whiteghetto.com/
     scraper: sceneScraper
 
@@ -139,7 +138,7 @@ xPathScrapers:
               # if using the transport subdomain, parameters need to be passed
               # otherwise a cropped square image is returned by default
               - regex: (https:\/\/transform.+)
-                with: $1?width=960&height=543&enlarge=true
+                with: $1?width=1920&height=1080&enlarge=true
       Studio:
         Name:
           selector: //*[local-name()="div" or local-name()=p][contains(text(),"is a site owned and operated by Gamma")]|//meta[@name="twitter:domain"]/@content
@@ -217,7 +216,6 @@ xPathScrapers:
                 tittycreampies: Titty Creampies
                 transsexualangel: Transsexual Angel
                 transsexualroadtrip: Transsexual Roadtrip
-                tsplayground: TS Playground
                 whiteghetto: White Ghetto
                 xempire: XEmpire
 
@@ -240,4 +238,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated December 14, 2022
+# Last Updated January 13, 2023

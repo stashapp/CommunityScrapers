@@ -117,7 +117,10 @@ def get_scene(scene_id: str) -> dict:
         if model_name:
             scrape['performers'] = []
             scrape['performers'].append({'name': model_name})
-    scrape['image'] = meta.get('thumbnail')
+    image = meta.get('screenshot')
+    if image is None: # fallback to thumbnail
+        image = meta.get('thumbnail')
+    scrape['image'] = image
     date = meta.get('launchDate')
     if date:
         date = re.sub(r"T.*", "", date)

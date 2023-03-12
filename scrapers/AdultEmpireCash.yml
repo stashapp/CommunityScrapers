@@ -17,8 +17,10 @@ sceneByURL:
       - pornstarstroker.com/ # aggregator site?
       - reaganfoxx.com/
       - severesexfilms.com/
+      - smutfactor.com/
       - spankmonster.com/
       - thirdworldxxx.com/
+      - wcpclub.com/
       - westcoastproductions.com/
 
   # VR Sites
@@ -42,6 +44,7 @@ movieByURL:
       - severesexfilms.com/
       # - shemalestrokers.com/ # Scenes published as movies?
       - thirdworldxxx.com/
+      - wcpclub.com/
       - westcoastproductions.com/
 
 xPathScrapers:
@@ -73,6 +76,15 @@ xPathScrapers:
       Image: //link[@rel="image_src"]/@href
       Movies:
         Name: //h1[@class="description"]/following-sibling::p/a/text()
+      Director: //div[@class="director"]/text()
+      Code:
+        selector: //meta[@name="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: ^https?://[^/]+/(\d+)/.+
+                with: $1
+              - regex: ^http.*
+                with:
 
   movieScraper:
     movie:
@@ -127,4 +139,4 @@ xPathScrapers:
                 with: https://imgs1cdn.adultempire.com/product/${1}_lg.jpg
       Studio:
         Name: //meta[@name="og:site_name"]/@content
-# Last Updated April 05, 2022
+# Last Updated January 04, 2022

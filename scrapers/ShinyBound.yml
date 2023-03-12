@@ -8,24 +8,22 @@ sceneByURL:
 
 xPathScrapers:
   sceneScraper:
-    common:
-      $logo: //div[@class="logo"]/a/@href
     scene:
-      Title: //span[@class='update_title']
+      Title: //h1
       Details:
-        selector: //span[@class='latest_update_description']
+        selector: //div[contains(@class, "videoDescription")]/p
       Date:
-        selector: //span[@class='availdate']
+        selector: //div[@class="contentT"]/ul[@class="contentInfo"]/li[./i[contains(@class, "fa-calendar")]]/text()
         postProcess:
-          - parseDate: 01/02/2006
+          - parseDate: Jan 2, 2006
       Tags:
-        Name: //span[@class='update_tags']/a
+        Name: //div[@class="tags"]//a/text()
       Performers:
         Name:
-          selector: //span[@class='tour_update_models']/a
+          selector: //div[@class="models"]//a/text()
       Studio:
         Name:
-          selector: $logo
+          selector: //div[@class="logo"]/a/@href
           postProcess:
             - replace:
                 - regex: https://([^.]+)\..+
@@ -34,6 +32,9 @@ xPathScrapers:
                 shinysboundsluts: ShinysBoundSluTS
                 shinybound: ShinyBound
       Image:
-        selector: $logo|//img[@class='stdimage promo_thumb left thumbs']/@src
-        concat: "/"
-# Last Updated May 23, 2022
+        selector: //iframe/@src
+        postProcess:
+          - replace:
+              - regex: .*\?poster=(.*\.jpg).*
+                with: $1
+# Last Updated February 23, 2023

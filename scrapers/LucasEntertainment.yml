@@ -48,6 +48,7 @@ xPathScrapers:
           fixed: Lucas Entertainment
       Movies:
         Name: //strong[text() = "From:"]/following-sibling::a[1]/text()
+        URL: //strong[text() = "From:"]/following-sibling::a[1]/@href
   movieScraper:
     movie:
       Name: *titleSel
@@ -84,4 +85,4 @@ xPathScrapers:
         postProcess:
           - feetToCm: true
       Image: //div[@class="col-sm-5 col-md-5 col-lg-4 model-main-photo"]/img/@data-original
-# Last Updated December 21, 2021
+# Last Updated January 07, 2023
