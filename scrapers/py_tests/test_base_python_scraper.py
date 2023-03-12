@@ -92,7 +92,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(GALLERY_BY_FRAGMENT)])
-    def test_class_gallery_by_fragment_result(self, _):
+    def test_gallery_by_fragment(self, _):
         '''
         galleryByFragment result should contain correct properties
         '''
@@ -110,7 +110,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(GALLERY_BY_URL)])
-    def test_class_gallery_by_url_result(self, _):
+    def test_gallery_by_url(self, _):
         '''
         galleryByURL result should contain correct properties
         '''
@@ -128,7 +128,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(MOVIE_BY_URL)])
-    def test_class_movie_by_url_result(self, _):
+    def test_movie_by_url(self, _):
         '''
         movieByURL result should contain correct properties
         '''
@@ -146,7 +146,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_FRAGMENT)])
-    def test_class_performer_by_fragment_result(self, _):
+    def test_performer_by_fragment(self, _):
         '''
         performerByFragment result should contain correct properties
         '''
@@ -164,7 +164,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_NAME)])
-    def test_class_performer_by_name_result(self, _):
+    def test_performer_by_name(self, _):
         '''
         performerByName result should contain correct properties
         '''
@@ -184,7 +184,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_URL)])
-    def test_class_performer_by_url_result(self, _):
+    def test_performer_by_url(self, _):
         '''
         performerByURL result should contain correct properties
         '''
@@ -202,7 +202,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_FRAGMENT)])
-    def test_class_scene_by_fragment_result(self, _):
+    def test_scene_by_fragment(self, _):
         '''
         sceneByFragment result should contain correct properties
         '''
@@ -220,7 +220,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_NAME)])
-    def test_class_scene_by_name_result(self, _):
+    def test_scene_by_name(self, _):
         '''
         sceneByName result should contain list with item with correct properties
         '''
@@ -240,7 +240,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_QUERY_FRAGMENT)])
-    def test_class_scene_by_query_fragment_result(self, _):
+    def test_scene_by_query_fragment(self, _):
         '''
         sceneByQueryFragment result should contain correct properties
         '''
@@ -258,7 +258,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_URL)])
-    def test_class_scene_by_url_result(self, _):
+    def test_scene_by_url(self, _):
         '''
         sceneByURL result should contain correct properties
         '''
