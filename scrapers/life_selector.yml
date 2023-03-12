@@ -41,12 +41,9 @@ performerByURL:
       - python
       - life_selector.py
       - performerByURL
-sceneByFragment:
-  action: script
-  script:
-    - python
-    - life_selector.py
-    - sceneByFragment
+# sceneByFragment cannot be used as it returns a single scene result
+# - search by the game (movie/release) name instead, via the Search (magnifying
+#   glass) to get a list of scenes, and then pick the correct scene
 sceneByName:
   action: script
   script:
@@ -59,7 +56,8 @@ sceneByQueryFragment:
     - python
     - life_selector.py
     - sceneByQueryFragment
-# There are no scene URLs, so no `sceneByURL`
-# Search by the game (movie/release) name instead to get a list of scenes
+# sceneByURL cannot be used as it returns a single scene result
+# - search by the game (movie/release) name instead, via the Search (magnifying
+#   glass) to get a list of scenes, and then pick the correct scene
 
 # Last Updated March 10, 2023
