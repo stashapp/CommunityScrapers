@@ -1,4 +1,4 @@
-name: "Life Selector"
+name: "Life Selector / 21 Roles"
 galleryByFragment:
   action: script
   script:
@@ -9,6 +9,7 @@ galleryByURL:
   - action: script
     url:
       - lifeselector.com/pov-photo-gallery/
+      - 21roles.com/pov-photo-gallery/
     script:
       - python
       - life_selector.py
@@ -16,7 +17,8 @@ galleryByURL:
 movieByURL:
   - action: script
     url:
-      - lifeselector.com/game/
+      - lifeselector.com/game/DisplayPlayer/gameId/
+      - 21roles.com/game/DisplayPlayer/gameId/
     script:
       - python
       - life_selector.py
@@ -36,7 +38,8 @@ performerByName:
 performerByURL:
   - action: script
     url:
-      - lifeselector.com/model/
+      - lifeselector.com/model/view/
+      - 21roles.com/model/view/
     script:
       - python
       - life_selector.py
