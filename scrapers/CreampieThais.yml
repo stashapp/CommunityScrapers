@@ -1,0 +1,53 @@
+name: CreampieThais
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - creampiethais.com
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - creampiethais.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //p[@class="contentDescription" and contains(text(),substring-before(//div[@class="contentTitle"][1]/h2/text(),","))]/text() | //div[@class="contentTitle"][1]/h2/text()
+      Date:
+        selector: //div[@class="contentTitle"][1]/small/text()
+        postProcess:
+          - replace:
+              - regex: \[(.+)\]
+                with: $1
+          - parseDate: Jan 2, 2006
+      Image: //div[@class="player"]//video/@poster
+      Performers:
+        Name:
+          selector: //div[@class="contentTitle"][1]/h2/text()
+          postProcess:
+            - replace:
+                - regex: ^(.*?),(.*)
+                  with: $1
+        URL: document.location.href
+      Details:
+        selector: //div[@class="videoDescription"]/text()
+      Studio:
+        fixed: Creampie Thais
+  performerScraper:
+    performer:
+      Name:
+        selector: substring-before(//ul[@class="contentWrap"]//h2/text(),",")
+      Country:
+        fixed: Thailand
+      Gender:
+        fixed: Female
+      Ethnicity:
+        fixed: Asian
+      Tags:
+        Name:
+          selector: //ul[@class="contentWrap"]//h2
+          postProcess:
+            - replace:
+                - regex: .*?(\d+) years.*
+                  with: ${1}yo
+      Image: //img[@alt="Creampie Thais Video Image"][1]/@src
