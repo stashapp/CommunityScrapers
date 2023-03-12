@@ -57,7 +57,7 @@ class TestLifeSelectorScraper(test_base_python_scraper.TestBasePythonScraper):
     )
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(MOVIE_BY_URL)])
-    def test_class_movie_by_url_result(self, _mock1, _mock2, _mock3, _mock4):
+    def test_movie_by_url(self, _mock1, _mock2, _mock3, _mock4):
         '''
         movieByURL result should contain correct properties
         '''
