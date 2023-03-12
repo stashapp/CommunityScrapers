@@ -2,10 +2,13 @@
 Generic scraper to investigate interaction with stashapp
 '''
 import argparse
+import csv
+from datetime import datetime
 import json
+import os
 import sys
 import traceback
-from typing import List
+from typing import Dict, List
 
 try:
     from py_common import log
@@ -16,18 +19,23 @@ except ModuleNotFoundError:
         file=sys.stderr)
     sys.exit(1)
 
+NATIONALITY_COUNTRY_CSV_RELATIVE_FILEPATH = '../geodata/demonyms.csv'
+
 class BasePythonScraper:
     '''
     Class to encapsulate data and functions
     '''
     args: argparse.Namespace = None
+    country_for_nationality: Dict[str, str] = {}
     fragment: dict = {}
+    result: dict | List[dict]
 
     def __init__(self):
         '''
         Constructor
         '''
         try:
+            self.__load_nationality_country_csv()
             self._load_arguments()
             self.__load_fragment()
             self.__process()
@@ -36,6 +44,31 @@ class BasePythonScraper:
             traceback.print_exc()
             log.error('Scraper failed. Exiting.')
             sys.exit(1)
+
+    def __load_nationality_country_csv(self) -> None:
+        '''
+        Loads in the nationality,country CSV from file, and then stores it as
+        a class member variable dict (for reference later)
+
+        The CSV file content is sourced from:
+        https://github.com/knowitall/chunkedextractor/blob/master/src/main/resources/edu/knowitall/chunkedextractor/demonyms.csv
+        '''
+        filepath = os.path.join(
+            os.path.dirname(__file__),
+            NATIONALITY_COUNTRY_CSV_RELATIVE_FILEPATH
+        )
+        with open(filepath) as f:
+            reader = csv.reader(f)
+            self.country_for_nationality = { n: c for n, c in reader }
+
+    def _get_country_for_nationality(self, nationality: str) -> str | None:
+        '''
+        Get the corresponding country when giving a nationality
+        '''
+        return \
+            self.country_for_nationality.get(nationality) \
+                if len(self.country_for_nationality) > 0 \
+                else None
 
     def _load_arguments(self) -> None:
         '''
@@ -59,6 +92,22 @@ class BasePythonScraper:
         output the scrape result(s) as JSON
         '''
         return json.dumps(self.result)
+
+    def _convert_date(self, date_string: str, format_in: str, format_out: str) -> str:
+        '''
+        Convert date by parsing it as `format_in` and rendering it with `format_out`
+
+        If it fails, just return the original `date_string` 
+        '''
+        try:
+            parsed_date = datetime.strptime(date_string, format_in)
+            formatted_date = datetime.strftime(parsed_date, format_out)
+            date_string = formatted_date
+        except Exception as ex:
+            # just log warning
+            log.warning(f"{date_string} could not be converted from {format_in} to {format_out}")
+            log.debug(ex)
+        return date_string
 
     def _get_gallery_by_fragment(self, fragment: dict) -> dict:
         '''

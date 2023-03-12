@@ -3,7 +3,7 @@ Unit tests for base_python_scraper.py
 
 You can run this test with the following command:
 
-python3 -m unittest -v -b scrapers/py_tests/base_python_scraper.py
+python3 -m unittest -v -b scrapers/py_tests/test_base_python_scraper.py
 '''
 import inspect
 import json
@@ -20,7 +20,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.insert(0, parentdir)
 
 # now we can import the scraper module from the parent directory
-from base_python_scraper import BasePythonScraper  # pylint: disable=import-error,wrong-import-order,wrong-import-position
+from py_common.base_python_scraper import BasePythonScraper  # pylint: disable=import-error,wrong-import-order,wrong-import-position
 
 
 class TestBasePythonScraper(base_test_case.BaseTestCase):
@@ -40,7 +40,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
 
 
-    def test_base_class_init_with_no_args(self):
+    def test_class_init_with_no_args(self):
         '''
         no script arguments, no fragment input
         '''
@@ -58,7 +58,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_URL)])
-    def test_base_class_init_with_valid_args_and_valid_stdin(self, _):
+    def test_class_init_with_valid_args_and_valid_stdin(self, _):
         '''
         the positional first argument 'action', and fragment with just url
         '''
@@ -92,7 +92,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(GALLERY_BY_FRAGMENT)])
-    def test_base_class_gallery_by_fragment_result(self, _):
+    def test_class_gallery_by_fragment_result(self, _):
         '''
         galleryByFragment result should contain correct properties
         '''
@@ -110,7 +110,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(GALLERY_BY_URL)])
-    def test_base_class_gallery_by_url_result(self, _):
+    def test_class_gallery_by_url_result(self, _):
         '''
         galleryByURL result should contain correct properties
         '''
@@ -128,7 +128,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(MOVIE_BY_URL)])
-    def test_base_class_movie_by_url_result(self, _):
+    def test_class_movie_by_url_result(self, _):
         '''
         movieByURL result should contain correct properties
         '''
@@ -146,7 +146,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_FRAGMENT)])
-    def test_base_class_performer_by_fragment_result(self, _):
+    def test_class_performer_by_fragment_result(self, _):
         '''
         performerByFragment result should contain correct properties
         '''
@@ -164,7 +164,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_NAME)])
-    def test_base_class_performer_by_name_result(self, _):
+    def test_class_performer_by_name_result(self, _):
         '''
         performerByName result should contain correct properties
         '''
@@ -176,13 +176,15 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
             scraper = BasePythonScraper()
 
         # then
-        self.assertDictEqual(scraper.result, {
-            'name': self.PERFORMER_BY_NAME['name']
-        })
+        self.assertListEqual(scraper.result, [
+            {
+                'name': self.PERFORMER_BY_NAME['name']
+            }
+        ])
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(PERFORMER_BY_URL)])
-    def test_base_class_performer_by_url_result(self, _):
+    def test_class_performer_by_url_result(self, _):
         '''
         performerByURL result should contain correct properties
         '''
@@ -200,7 +202,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_FRAGMENT)])
-    def test_base_class_scene_by_fragment_result(self, _):
+    def test_class_scene_by_fragment_result(self, _):
         '''
         sceneByFragment result should contain correct properties
         '''
@@ -218,9 +220,9 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_NAME)])
-    def test_base_class_scene_by_name_result(self, _):
+    def test_class_scene_by_name_result(self, _):
         '''
-        sceneByName result should contain correct properties
+        sceneByName result should contain list with item with correct properties
         '''
         # given
         # arguments are here (first one is the script name)
@@ -230,13 +232,15 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
             scraper = BasePythonScraper()
 
         # then
-        self.assertDictEqual(scraper.result, {
-            'title': self.SCENE_BY_NAME['name']
-        })
+        self.assertListEqual(scraper.result, [
+            {
+                'title': self.SCENE_BY_NAME['name']
+            }
+        ])
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_QUERY_FRAGMENT)])
-    def test_base_class_scene_by_query_fragment_result(self, _):
+    def test_class_scene_by_query_fragment_result(self, _):
         '''
         sceneByQueryFragment result should contain correct properties
         '''
@@ -254,7 +258,7 @@ class TestBasePythonScraper(base_test_case.BaseTestCase):
 
     # input/stdin patched in here
     @patch('builtins.input', side_effect=[json.dumps(SCENE_BY_URL)])
-    def test_base_class_scene_by_url_result(self, _):
+    def test_class_scene_by_url_result(self, _):
         '''
         sceneByURL result should contain correct properties
         '''
