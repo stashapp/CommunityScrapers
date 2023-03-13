@@ -302,20 +302,20 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         # movie data from API by id
         movie_id = self.__parse_movie_id_from_url(url)
         movie_data_from_id = self.__get_movie_from_api_by_id(movie_id)
-        movie['name'] = movie_data_from_id['name']
         movie['synopsis'] = movie_data_from_id['synopsis']
         movie['url'] = self.__get_movie_url_for_id(movie_id)
         movie['back_image'] = f"https://i.c7cdn.com/generator/games/{movie_id}/images/episode-guide-{movie_id}.jpg"
+
+        # movie data from scraping HTML
+        movie_data_from_html = self.__get_movie_by_scraping_html(url)
+        movie['front_image'] = movie_data_from_html['front_image']
+        movie['name'] = movie_data_from_html['name']
 
         # movie data from API by name
         movies_from_api = self.__get_movies_from_api_by_name(movie['name'])
         if len(movies_from_api):
             movie['date'] = movies_from_api[0]['date']
             movie['rating100'] = movies_from_api[0]['rating100']
-
-        # movie data from scraping HTML
-        movie_data_from_html = self.__get_movie_by_scraping_html(url)
-        movie['front_image'] = movie_data_from_html['front_image']
 
         log.debug(f"_get_movie_by_url, movie: {movie}")
         return movie
