@@ -5,11 +5,21 @@ import base64
 import re
 import datetime
 
-# Seperators to append scene nr to url
-seperators = "+.,"
+# Seperators to append scene nr to url when sending a request
+request_seperators = "+.,"
 
-# Seperator between movie title and Scene Nr string
+# Seperator between movie title and Scene Nr string for auto generated titles
 title_seperator = ": "
+
+# Settings on how to handle performer scraping during scene scraping
+#
+# If both are set to false, the performer scraper will not be invoked and only performer name and URL are scraped
+# If at least one of them is set to True, the performer scraper will be invoked for each performer of a scene,
+# scraping the complete performer details and/or performer images
+#
+# Note that this will slow down scene scraping significantly if set to True
+scrape_performer_details = False
+scrape_performer_images = False
 
 try:
     import py_common.log as log
@@ -48,7 +58,7 @@ except ModuleNotFoundError:
 class Scene:
     def __init__(self):
         self.title = ""
-        self.performers = []
+        self.performers = {}
         self.tags = []
         self.thumbnail = ""
         self.scene_nr = ""
@@ -86,7 +96,8 @@ class Performer():
         self.details = ""
         self.image = ""
 
-def parse_scene(scene):
+def parse_scene(scene, domain_name):
+
     scene_parsed = Scene()
 
     # Get scene id
@@ -126,7 +137,8 @@ def parse_scene(scene):
     performers = scene.findChildren("span", {"class": "dts-scene-star-wrapper"})
 
     for performer in performers:
-        scene_parsed.performers.append(performer.a.text.strip())
+        performer_name = performer.a.text.strip()
+        scene_parsed.performers[performer_name] = domain_name + performer.a["href"]
 
     return scene_parsed
 
@@ -176,6 +188,7 @@ def parse_movie(url):
     performers = soup.find_all("div", "dts-collection-item dts-collection-item-star")
 
     for i in range(len(performers)):
+
         if "data-loc" in performers[i].attrs:
             # Performer is loaded on demand, if the scrollbar is used. Data is retrieved via POST request
             payload = {
@@ -190,9 +203,13 @@ def parse_movie(url):
 
             performer_request = requests.post(domain_name + performers[i]["data-loc"], params=payload)
             performer_soup = BeautifulSoup(performer_request.text, 'html.parser')
-            movie.performers.append(performer_soup.a.text.strip())
+            performer_name = performer_soup.a.text.strip()
+            performer_url = domain_name + performer_soup.a["href"]
         else:
-            movie.performers.append(performers[i]["title"])
+            performer_name = performers[i]["title"]
+            performer_url = domain_name + performers[i].a["href"]
+
+        movie.performers[performer_name] = performer_url
 
     # Tags
     tags = soup.find_all("div", "dts-collection-item dts-collection-item-category")
@@ -211,20 +228,19 @@ def parse_movie(url):
     scenes = soup.find_all("section", id=lambda x: x and x.startswith("scene"))
 
     for scene in scenes:
-        parsed_scene = parse_scene(scene)
+        parsed_scene = parse_scene(scene, domain_name)
 
-        # Title, URL, date, director and studio are inherited from movie
-        parsed_scene.title = movie.title + title_seperator +  "Scene " + str(parsed_scene.scene_nr).zfill(2)
+        # Add scene title and movie
+        parsed_scene.title = movie.title + title_seperator + "Scene " + str(parsed_scene.scene_nr).zfill(2)
         parsed_scene.movie = movie
 
         movie.scenes.append(parsed_scene)
 
         # Add performers and tags from scenes to movie performers and tags
-        movie.performers = movie.performers + parsed_scene.performers
+        movie.performers.update(parsed_scene.performers)
         movie.tags = movie.tags + parsed_scene.tags
 
-    # Remove duplicated performers and tags
-    movie.performers = list(dict.fromkeys(movie.performers))
+    # Remove duplicated tags
     movie.tags = list(dict.fromkeys(movie.tags))
 
     # Get movie duration
@@ -237,7 +253,7 @@ def parse_movie(url):
 
     return movie
 
-def parse_performer(url):
+def parse_performer(url, scrape_performer_details=True, scrape_performer_image=True):
 
     performer = Performer()
 
@@ -247,109 +263,114 @@ def parse_performer(url):
     # Title
     performer.name = soup.h1.text
 
-    attributes = soup.find_all("span", "section-detail-list-item-title")
-
-    for attribute in attributes:
-        # Gender
-        if "Gender" in attribute.text:
-            performer.gender = attribute.parent.text.replace("Gender: ", "")
-
-        # Birthdate
-        if "Birth Date" in attribute.text:
-            birthdate_str = attribute.parent.text.replace("Birth Date: ", "")
-
-            # Datetime expects "Sep" instead of "Sept"
-            birthdate_str = birthdate_str.replace("Sept", "Sep")
-
-            birthdate = datetime.datetime.strptime(birthdate_str, "%b %d, %Y")
-            performer.birthdate = birthdate.strftime("%Y-%m-%d")
-
-        # Ethnicity
-        if "Ethnicity" in attribute.text:
-            performer.ethnicity = attribute.parent.text.replace("Ethnicity: ", "")
-
-        # Hair Color
-        if "Hair Color" in attribute.text:
-            performer.hair_color = attribute.parent.text.replace("Hair Color: ", "")
-
-        # Eye Color
-        if "Eye Color" in attribute.text:
-            performer.eye_color = attribute.parent.text.replace("Eye Color: ", "")
-
-        # Height
-        if "Height" in attribute.text:
-            height_str = attribute.parent.text
-            match_height = re.search("(\d*) cm", height_str)
-            if match_height:
-                performer.height = match_height.group(1)
-
-        # Weight
-        if "Weight" in attribute.text:
-            weight_str = attribute.parent.text
-            match_weight = re.search("(\d*)kg", weight_str)
-            if match_weight:
-                performer.weight = match_weight.group(1)
-
-    # Details
-    details = soup.find_all("div", "dts-star-bio")
-
-    if len(details) > 0:
-        performer.details = details[0].text
-
-    # Tattoos are given in the details section
-    if "Tattoos: " in performer.details:
-        match_tattoos = re.search("Tattoos: (.*)", performer.details)
-        if match_tattoos:
-            performer.tattoos = match_tattoos.group(1)
-            performer.details = performer.details.replace("Tattoos: " + performer.tattoos, "")
-
-    if "Tattoo: " in performer.details:
-        match_tattoos = re.search("Tattoo: (.*)", performer.details)
-        if match_tattoos:
-            performer.tattoos = match_tattoos.group(1)
-            performer.details = performer.details.replace("Tattoo: " + performer.tattoos, "")
-
-    # Piercings are given in the details section
-    if "Piercings:" in performer.details:
-        match_piercings = re.search("Piercings: (.*)", performer.details)
-        if match_piercings:
-            performer.piercings = match_piercings.group(1)
-            performer.details = performer.details.replace("Piercings: " + performer.piercings, "")
-
-    if "Non-ear piercings:" in performer.details:
-        match_piercings = re.search("Non-ear piercings: (.*)", performer.details)
-        if match_piercings:
-            performer.piercings = match_piercings.group(1)
-            performer.details = performer.details.replace("Non-ear piercings: " + performer.piercings, "")
-
-    # Aliases are given in the details section
-    if "AKA" in performer.details:
-        match_aliases = re.search("AKA (.*)", performer.details)
-        if match_aliases:
-            performer.aliases = match_aliases.group(1)
-            performer.details = performer.details.replace("AKA " + performer.aliases, "")
-
-    if "A.K.A:" in performer.details:
-        match_aliases = re.search("A.K.A: (.*)", performer.details)
-        if match_aliases:
-            performer.aliases = match_aliases.group(1)
-            performer.details = performer.details.replace("A.K.A: " + performer.aliases, "")
-
-    # Remove leading/trailing spaces from performer bio
-    performer.details = performer.details.strip()
-
-    # Image
-    image = soup.find_all("div", "dts-section-page-detail-main-image-wrapper")
-
-    if len(image) > 0:
-        image_url_small = image[0].img.attrs["src"]
-
-        match_image_url = re.search("(.*\.jpg)", image_url_small)
-        if match_image_url:
-            performer.image = "https:" + match_image_url.group(1)
-
     # URL
     performer.url = url
+
+    if scrape_performer_details:
+        attributes = soup.find_all("span", "section-detail-list-item-title")
+
+        for attribute in attributes:
+            # Gender
+            if "Gender" in attribute.text:
+                performer.gender = attribute.parent.text.replace("Gender: ", "")
+
+                # Handle Transsexual performers
+                if performer.gender == "TS": performer.gender = "Transgender Female"
+
+            # Birthdate
+            if "Birth Date" in attribute.text:
+                birthdate_str = attribute.parent.text.replace("Birth Date: ", "")
+
+                # Datetime expects "Sep" instead of "Sept"
+                birthdate_str = birthdate_str.replace("Sept", "Sep")
+
+                birthdate = datetime.datetime.strptime(birthdate_str, "%b %d, %Y")
+                performer.birthdate = birthdate.strftime("%Y-%m-%d")
+
+            # Ethnicity
+            if "Ethnicity" in attribute.text:
+                performer.ethnicity = attribute.parent.text.replace("Ethnicity: ", "")
+
+            # Hair Color
+            if "Hair Color" in attribute.text:
+                performer.hair_color = attribute.parent.text.replace("Hair Color: ", "")
+
+            # Eye Color
+            if "Eye Color" in attribute.text:
+                performer.eye_color = attribute.parent.text.replace("Eye Color: ", "")
+
+            # Height
+            if "Height" in attribute.text:
+                height_str = attribute.parent.text
+                match_height = re.search("(\d*) cm", height_str)
+                if match_height:
+                    performer.height = match_height.group(1)
+
+            # Weight
+            if "Weight" in attribute.text:
+                weight_str = attribute.parent.text
+                match_weight = re.search("(\d*)kg", weight_str)
+                if match_weight:
+                    performer.weight = match_weight.group(1)
+
+        # Details
+        details = soup.find_all("div", "dts-star-bio")
+
+        if len(details) > 0:
+            performer.details = details[0].text
+
+        # Tattoos are given in the details section
+        tattoo_keywords = ["Tattoos", "Tattoo"]
+
+        for keyword in tattoo_keywords:
+            if keyword.lower() in performer.details.lower():
+                pattern = re.compile(keyword + ":* ([^)\n]*)", re.IGNORECASE)
+                match_tattoos = re.search(pattern, performer.details)
+                if match_tattoos:
+                    performer.tattoos = match_tattoos.group(1)
+                    performer.details = pattern.sub("", performer.details)
+
+        # Piercings are given in the details section
+        piercing_keywords = ["Non-Ear piercings", "Piercings"]
+
+        for keyword in piercing_keywords:
+            if keyword.lower() in performer.details.lower():
+                pattern = re.compile(keyword + ":* ([^)\n]*)", re.IGNORECASE)
+                match_piercings = re.search(pattern, performer.details)
+                if match_piercings:
+                    performer.piercings = match_piercings.group(1)
+                    performer.details = pattern.sub("", performer.details)
+
+        # Aliases are given in the details section
+        alias_keywords = ["A.K.A", "AKA"]
+
+        for keyword in alias_keywords:
+            if keyword.lower() in performer.details.lower():
+                pattern = re.compile(keyword + ":* ([^)\n]*)", re.IGNORECASE)
+                match_aliases = re.search(pattern, performer.details)
+                if match_aliases:
+                    performer.aliases = match_aliases.group(1)
+                    performer.details = pattern.sub("", performer.details)
+
+        # Remove leading/trailing spaces from performer bio
+        performer.details = performer.details.strip()
+
+        # Remove "()" which might result from tattoo/piercing/alias replacements above
+        performer.details = performer.details.replace("()", "")
+
+        # Remove double spaces which might result from tattoo/piercing/alias replacements above
+        performer.details = performer.details.replace("  ", " ")
+
+    # Image
+    if scrape_performer_image:
+        image = soup.find_all("div", "dts-section-page-detail-main-image-wrapper")
+
+        if len(image) > 0:
+            image_url_small = image[0].img.attrs["src"]
+
+            match_image_url = re.search("(.*\.jpg)", image_url_small)
+            if match_image_url:
+                performer.image = "https:" + match_image_url.group(1)
 
     return performer
 
@@ -368,7 +389,13 @@ def build_stash_scene_json(title, date, director, studio, performers, movie, tag
         json["date"] = date.strftime("%Y-%m-%d")
     json["director"] = director
     json["studio"] = {"name": studio}
-    json["performers"] = [{"name": performer} for performer in performers]
+
+    # Build performer json
+    json["performers"] = []
+    for performer_name in performers.keys():
+        parsed_performer = parse_performer(performers[performer_name], scrape_performer_details, scrape_performer_images)
+        json["performers"].append(build_stash_performer_json(parsed_performer))
+
     json["movies"] = [build_stash_movie_json(movie, decode_cover=False)]
     json["tags"] = [{"name": tag} for tag in tags]
     json["details"] = details
@@ -432,11 +459,6 @@ def build_stash_performer_json(performer):
 
     return json
 
-#Debug
-# url = "https://straight.aebn.com/straight/stars/3090/erik-everhard?fmc=1"
-# sys.argv.append("performer")
-#End Debug
-
 frag = json.loads(sys.stdin.read())
 url = frag["url"]
 
@@ -462,7 +484,7 @@ if len(sys.argv) > 1:
                     log.error("Scene not found")
                     sys.exit()
 
-            match_scene_nr = re.search(".*[" + seperators + "](\d*)$", url)
+            match_scene_nr = re.search(".*[" + request_seperators + "](\d*)$", url)
             if match_scene_nr:
                 try:
                     scene_nr = int(match_scene_nr.group(1))
