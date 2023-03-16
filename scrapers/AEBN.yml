@@ -1,11 +1,11 @@
-name: AEBN_dev
+name: AEBN
 sceneByURL:
   - url:
       - aebn.com
     action: script
     script:
       - python3
-      - AEBN_dev_v02.py
+      - AEBN.py
       - scene
 movieByURL:
   - url:
@@ -13,7 +13,7 @@ movieByURL:
     action: script
     script:
       - python3
-      - AEBN_dev_v02.py
+      - AEBN.py
       - movie
 performerByURL:
   - url:
@@ -21,6 +21,6 @@ performerByURL:
     action: script
     script:
       - python3
-      - AEBN_dev_v02.py
+      - AEBN.py
       - performer
 # Last Updated March 16, 2023
