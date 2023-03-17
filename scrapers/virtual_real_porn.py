@@ -388,6 +388,34 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
         log.debug(f"_get_performer_by_url, performer: {performer}")
         return performer
 
+    def __get_scenes_from_api_by_name(self, scene_name: str) -> List[dict]:
+        '''
+        Get scenes from api via search string
+
+        List of:
+        - id
+        - image
+        - title
+        - url
+        '''
+        scenes = []
+
+        api_search_result = self.__api_search(scene_name)
+
+        if api_search_result and len(api_search_result['data']['results']['videos']) > 1:
+            scenes = [
+                {
+                    'id': video['id'],
+                    'title': video['name'],
+                    'url': video['url'],
+                    'image': video['image']['src']
+                } for video in api_search_result['data']['results']['videos']
+            ]
+
+        return scenes
+
+# TODO: add _get_scene_by_fragment
+
     def _get_scene_by_name(self, name: str) -> List[dict]:
         '''
         Get list of scene properties by using a name
@@ -426,51 +454,19 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
         '''
         scenes = []
 
-        # movie data from name
-        movies_data_from_name = self.__get_movies_from_api_by_name(name)
-        for movie_data_from_name in movies_data_from_name:
-            # movie contains scene info
-            movie = {}
-            movie['date'] = movie_data_from_name['date']
-            movie_id = movie_data_from_name['id']
-            movie['rating100'] = movie_data_from_name['rating100']
-            movie['performers'] = movie_data_from_name['performers']
-            movie['tags'] = movie_data_from_name['tags']
-            movie['name'] = movie_data_from_name['name']
+        # scene data from name
+        scenes_from_api = self.__get_scenes_from_api_by_name(name)
+        if scenes_from_api and len(scenes_from_api) > 0:
+            for scene_from_api in scenes_from_api:
+                scene = {
+                    'image': scene_from_api['image'],
+                    'title': scene_from_api['title'],
+                    'url': scene_from_api['url']
+                }
 
-            # movie data from id
-            movie_data_from_id = self.__get_movie_from_api_by_id(movie_id)
-            movie['synopsis'] = movie_data_from_id['synopsis']
+                # TODO: add more scene properties by scraping HTML of scene['url']
 
-            # movie data from URL string value
-            movie['url'] = self.__get_movie_url_for_id(movie_id)
-
-            # movie data from url
-            movie['studio'] = self.__get_studio_for_url(movie['url'])
-
-            # movie data from scraping HTML
-            movie_data_from_html = self.__get_movie_by_scraping_html(movie['url'])
-            movie['front_image'] = movie_data_from_html['front_image']
-            movie['scenes'] = movie_data_from_html['scenes']
-
-            # map movie['scenes'] List into List of scene fragments
-            scenes.extend(
-                [
-                    {
-                        'title': movie['name'],
-                        'details': movie['synopsis'],
-                        'code': f"{movie_id}-{scene_number}",
-                        'url': movie['url'],
-                        'date': movie['date'],
-                        'image': scene['image'],
-                        'studio': movie['studio'],
-                        'movies': [movie],
-                        'rating100': movie['rating100'],
-                        'tags': movie['tags'],
-                        'performers': movie['performers']
-                    } for scene_number, scene in enumerate(movie['scenes'], start=1)
-                ]
-            )
+                scenes.append(scene)
 
         log.debug(f"_get_scene_by_name, scenes: {scenes}")
         return scenes
@@ -487,48 +483,32 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
         example payload:
         {
-            'code': '85900-5',
-            'date': '2021-05-24',
-            'details': 'You have an extraordinary hobby...',
+            'title': 'Brazilian paradise I',
+            'code': None,
+            'details': None,
             'director': None,
-            'remote_site_id': None,
-            'title': 'The Wedding Crasher',
-            'url': 'https://lifeselector.com/game/DisplayPlayer/gameId/85900'
+            'url': 'https://virtualrealtrans.com/vr-trans-porn-video/brazilian-paradise-i/',
+            'date': None,
+            'remote_site_id': None
         }
         '''
         scene = {}
 
         # scene data from fragment
-        scene['code'], scene_number = fragment['code'].split('-')
-        scene['date'] = fragment['date']
+        scene['title'] = fragment['title']
+        # scene['date'] = fragment['date']
         scene['details'] = fragment.get('details')
         scene['url'] = fragment['url']
 
         # scene data from fragment.url
         scene['studio'] = self.__get_studio_for_url(scene['url'])
 
-        # movie data from scraping HTML
-        movie_scenes = []
-        movie_data_from_html = self.__get_movie_by_scraping_html(fragment['url'])
-        movie_scenes = movie_data_from_html['scenes']
+        # TODO: scrape HTML page for the rest of the scene properties
 
-        # scene data from fragment.code
-        if len(movie_scenes):
-            scene['image'] = movie_scenes[int(scene_number) - 1]['image']
-
-        # movie data from fragment.title
-        movies_from_api = self.__get_movies_from_api_by_name(fragment['title'])
-        if len(movies_from_api):
-            movie = movies_from_api[0]
-            scene['title'] = f"{fragment['title']} - {', '.join([ p['name'] for p in movie['performers'] ])} (DELETE AS APPROPRIATE)"
-            scene['performers'] = movie['performers']
-            scene['tags'] = movie['tags']
-            scene['movies'] = [
-                { 'name': fragment['title'] }
-            ]
-        
         log.debug(f"_get_scene_by_query_fragment, scene: {scene}")
         return scene
+
+# TODO: add _get_scene_by_url
 
 
 if __name__ == '__main__':
