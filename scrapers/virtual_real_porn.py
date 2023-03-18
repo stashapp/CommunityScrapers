@@ -591,15 +591,16 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
                 if attachment_gallery_full:
                     scene['image'] = attachment_gallery_full.get('data-lazy-src')
 
-            script_text = page.find('script', id='virtualreal_download-links-js-extra').string
-            if script_text:
-                log.trace(f"script_text: {script_text}")
-                json_text = re.sub(r'[^\{]*(\{.*\})[^\{]*', r'\1', script_text)
+            script = page.find('script', id='virtualreal_video-streaming-js-extra')
+            if script:
+                script.string
+                log.trace(f"script.string: {script.string}")
+                json_text = re.sub(r'[^\{]*(\{.*\})[^\{]*', r'\1', script.string)
                 log.trace(f"json_text: {json_text}")
                 try:
-                    web_data = json.loads(json_text)
-                    log.trace(f"web_data: {web_data}")
-                    scene['code'] = web_data.get('video_id')
+                    streaming_obj = json.loads(json_text)
+                    log.trace(f"streaming_obj: {streaming_obj}")
+                    scene['code'] = streaming_obj.get('vid')
                 except Exception as ex:
                     log.warning("Could not parse JSON from script text")
                     log.debug(ex)
