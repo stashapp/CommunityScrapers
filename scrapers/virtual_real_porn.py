@@ -1,10 +1,10 @@
 '''
 VirtualRealPorn Network scraper
 '''
+import json
 import re
 import sys
 from typing import List
-import unicodedata
 from urllib.parse import urlparse
 
 try:
@@ -35,6 +35,7 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
     '''
     # tuple for API timeout: (connection_timeout, response_read_timeout)
     API_TIMEOUT = (5, 5)
+    COMMON_TAGS = ['Virtual Reality']
     PAGE_TIMEOUT = (5, 10)
     STUDIOS = [
         {
@@ -148,13 +149,13 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
         '''
         # if the optional parameter `domain` is supplied, only search that domain
         # otherwise search them all
-        log.debug(f"domain (parameter): {domain}")
+        log.trace(f"domain (parameter): {domain}")
         domains_to_search = []
         if domain:
             domains_to_search.append(domain)
         else:
             domains_to_search.extend([ urlparse(s['url']).netloc for s in self.STUDIOS ])
-        log.debug(f"domains_to_search: {domains_to_search}")
+        log.trace(f"domains_to_search: {domains_to_search}")
 
         # this will be merge-updated to populate it
         search_result = {}
@@ -310,7 +311,7 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
         return usernames
 
-    def __cm_to_inches(self, cm: int) -> str:
+    def __cm_to_inches(self, cm: int) -> int:
         '''
         Convert cm to inch (integer)
         '''
@@ -414,7 +415,21 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
         return scenes
 
-# TODO: add _get_scene_by_fragment
+    def _get_scene_by_fragment(self, fragment: dict) -> dict:
+        scene = {}
+
+        if fragment.get('url'):
+            scene_by_url = self._get_scene_by_url(fragment['url'])
+
+            if scene_by_url.get('title'):
+                scene.update(scene_by_url)
+            elif fragment.get('title'):
+                scene_by_name = self._get_scene_by_name(fragment['title'])
+                if scene.get('title'):
+                    scene.update(scene_by_name)
+
+        return scene
+
 
     def _get_scene_by_name(self, name: str) -> List[dict]:
         '''
@@ -459,12 +474,16 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
         if scenes_from_api and len(scenes_from_api) > 0:
             for scene_from_api in scenes_from_api:
                 scene = {
+                    'code': str(scene_from_api['id']),
                     'image': scene_from_api['image'],
                     'title': scene_from_api['title'],
                     'url': scene_from_api['url']
                 }
 
-                # TODO: add more scene properties by scraping HTML of scene['url']
+                # scrape HTML page for the rest of the scene properties
+                scene_by_scraping_html = self.__get_scene_by_scraping_html(scene['url'])
+                if scene_by_scraping_html.get('title'):
+                    scene.update(scene_by_scraping_html)
 
                 scenes.append(scene)
 
@@ -496,19 +515,124 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
         # scene data from fragment
         scene['title'] = fragment['title']
-        # scene['date'] = fragment['date']
         scene['details'] = fragment.get('details')
         scene['url'] = fragment['url']
 
         # scene data from fragment.url
         scene['studio'] = self.__get_studio_for_url(scene['url'])
 
-        # TODO: scrape HTML page for the rest of the scene properties
+        # scrape HTML page for the rest of the scene properties
+        scene_by_scraping_html = self.__get_scene_by_scraping_html(scene['url'])
+        if scene_by_scraping_html.get('title'):
+            scene.update(scene_by_scraping_html)
 
         log.debug(f"_get_scene_by_query_fragment, scene: {scene}")
         return scene
 
-# TODO: add _get_scene_by_url
+    def __get_tag_names(self, page: bs, tag_group_label: str):
+        '''
+        Parse tag names from HTML, given the label name of the group
+        '''
+        tag_names = []
+        tag_group_label_tag = page.find('label', string=tag_group_label)
+        if tag_group_label_tag:
+            links = tag_group_label_tag \
+                    .find_parent('div') \
+                    .find_next_sibling('div', class_='metaSingleData') \
+                    .find_all('a')
+            tag_names = [ link.find('span').string for link in links ]
+
+        log.trace(f"__get_tag_names: for tag_group_label {tag_group_label} returns {tag_names}")
+        return tag_names
+
+    def __get_scene_by_scraping_html(self, url: str) -> dict:
+        '''
+        Scrape HTML page for scene properties
+
+        - code
+        - date
+        - details
+        - image
+        - performers
+        - studio
+        - tags
+        - title
+        - url
+        '''
+        scene = {}
+
+        # parse web page
+        headers = self.__generate_post_headers_for_domain(urlparse(url).netloc)
+        page = bs(requests.get(url, headers=headers, timeout=self.PAGE_TIMEOUT).text, 'html.parser')
+
+        if page:
+            # page parsed, so the url is valid
+            scene['url'] = url
+            scene['studio'] = self.__get_studio_for_url(url)
+
+            scene['title'] = re.sub(r'\ +\|.*', '', page.title.string).strip()
+
+            categories = self.__get_tag_names(page, 'Categories')
+            tags = self.__get_tag_names(page, 'Tags')
+            tags.extend(categories)
+            tags.extend(self.COMMON_TAGS)
+            scene['tags'] = [ { 'name': tag } for tag in tags ]
+
+            scene['details'] = page.find('div', class_="g-cols onlydesktop").string
+
+            scene_date = page.find('div', class_='video-date').span.string
+            scene['date'] = self._convert_date(scene_date, '%b %d, %Y', '%Y-%m-%d')
+
+            dl8_video = page.find('dl8-video')
+            if dl8_video:
+                scene['image'] = dl8_video.get('poster')
+            else:
+                attachment_gallery_full = page.find('img', class_='attachment-gallery-full')
+                if attachment_gallery_full:
+                    scene['image'] = attachment_gallery_full.get('data-lazy-src')
+
+            script_text = page.find('script', id='virtualreal_download-links-js-extra').string
+            if script_text:
+                log.trace(f"script_text: {script_text}")
+                json_text = re.sub(r'[^\{]*(\{.*\})[^\{]*', r'\1', script_text)
+                log.trace(f"json_text: {json_text}")
+                try:
+                    web_data = json.loads(json_text)
+                    log.trace(f"web_data: {web_data}")
+                    scene['code'] = web_data.get('video_id')
+                except Exception as ex:
+                    log.warning("Could not parse JSON from script text")
+                    log.debug(ex)
+
+            performer_items = page.find_all('div', class_='performerItem')
+            if len(performer_items) > 0:
+                scene['performers'] = [ { 'name': performer.img.get('alt') } for performer in performer_items ]
+
+        return scene
+
+    def _get_scene_by_url(self, url: str) -> dict:
+        '''
+        Scrape HTML page and search API for scene properties
+
+        - code
+        - date
+        - details
+        - image
+        - performers
+        - studio
+        - tags
+        - title
+        - url
+        '''
+        scene = {}
+
+        # parse web page
+        scene_by_scraping_html = self.__get_scene_by_scraping_html(url)
+
+        if scene_by_scraping_html.get('title'):
+            scene = scene_by_scraping_html
+
+        return scene
 
 
 if __name__ == '__main__':
