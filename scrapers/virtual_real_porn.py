@@ -583,13 +583,16 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
             scene_date = page.find('div', class_='video-date').span.string
             scene['date'] = self._convert_date(scene_date, '%b %d, %Y', '%Y-%m-%d')
 
-            dl8_video = page.find('dl8-video')
-            if dl8_video:
-                scene['image'] = dl8_video.get('poster')
+            video = page.find('dl8-video') or page.find('video')
+            if video:
+                scene['image'] = video.get('poster')
             else:
                 attachment_gallery_full = page.find('img', class_='attachment-gallery-full')
                 if attachment_gallery_full:
                     scene['image'] = attachment_gallery_full.get('data-lazy-src')
+            if scene.get('image') and scene['image'].startswith('/'):
+                scene['image'] = f"{scene['studio']['url']}{scene['image']}"
+
 
             script = page.find('script', id='virtualreal_video-streaming-js-extra')
             if script:
