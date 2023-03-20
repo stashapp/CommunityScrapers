@@ -130,9 +130,9 @@ elif sys.argv[1] == "search":
 
     # Order ratios and return the top 5 results
     if len(ratios) > 5:
-        ratios_sorted = list(ratios_sorted.values())[0:5]
+        ratios_sorted = list(ratios.values())[0:5]
     else:
-        ratios_sorted = ratios_sorted.values()
+        ratios_sorted = ratios.values()
 
     print(json.dumps(list(ratios_sorted)))
 
