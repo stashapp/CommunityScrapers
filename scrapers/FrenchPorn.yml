@@ -1,0 +1,84 @@
+name: Frenchporn
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - frenchporn.fr
+      - alphamales.com
+      - andolinixxl.com
+      - attackboys.com
+      - bravofucker.com
+      - berryboys.fr
+      - bolatino.com
+      - brett-tyler.com
+      - bulldogxxx.com
+      - cadinot.fr
+      - cazzofilm.com
+      - citebeur.com
+      - clairprod.com
+      - crunchboy.com
+      - darkcruising.com
+      - enzorimenez.com
+      - eurocreme.com
+      - gayarabclub.fr
+      - gayfrenchkiss.fr
+      - hardkinks.com
+      - harlemsex.fr
+      - hotcast.fr
+      - kessroyan.com
+      - kinkytwink.com
+      - knrc.fr
+      - machofactory.com
+      - mackstudio.com
+      - maxence-angel.com
+      - menoboy.com
+      - mistermale.com
+      - paulomassaxxx.com
+      - philippwants.com
+      - rawfuck.com
+      - ridleydovarez.com
+      - sketboy.com
+      - universblack.com
+      - viktor-rom.com
+      - vintagegaymovies.com
+      - wurstfilm.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //script[contains(.,'"name":')]
+        postProcess:
+          - replace:
+             - regex: ^.+?"name":\s*"([^"]+).+
+               with: $1
+      Performers:
+         Name:
+          selector: //h3/i[contains(@class,'fa-star')]/../text()
+      Image:
+        selector: //script[contains(.,'"thumbnailUrl":')]
+        postProcess:
+          - replace:
+             - regex: ^.+?"thumbnailUrl":\s*"([^"]+).+
+               with: $1
+      Details:
+         selector: //h2[contains(@class,'my-text')]/text()
+      Date:
+        selector: //script[contains(.,'"uploadDate":')]
+        postProcess:
+          - replace:
+             - regex: ^.+?"uploadDate":\s*"([^"]+).+
+               with: $1
+      Tags:
+        Name:
+          selector: //a[contains(@href,'videos')]/h3[@class='h90'][not(i)]/text()
+      Studio:
+        Name:
+          selector: //h3/i[contains(@class,'fa-video')]/../text()
+      Code:
+        selector: //script[contains(.,'"url":')]
+        postProcess:
+          - replace:
+             - regex: ^.+?/detail/(\d+).+
+               with: $1
+
+# Last Updated March 22, 2023
