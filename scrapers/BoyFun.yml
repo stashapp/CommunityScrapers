@@ -2,7 +2,7 @@ name: BoyFun
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.boyfun.com/video
+      - boyfun.com/video
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -17,7 +17,6 @@ xPathScrapers:
               - regex: (st|[nr]d|th) 
                 with: "" 
           - parseDate: Jan 2, 2006
-      #Details: //div[@class="heading"]/following-sibling::p[1]
       Details: 
         selector: //div[@class="heading"]/following-sibling::text()
         concat: "\n\n"
