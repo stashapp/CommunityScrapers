@@ -35,6 +35,12 @@ xPathScrapers:
             - replace:
                 - regex: (.*)
                   with: https://dorcelclub.com$1
+      Director:
+        selector: //span[@class='director']/text()
+        postProcess:
+          - replace:
+              - regex: Director\s:\s(.*)
+                with: $1
 
   movieScraper:
     movie:
@@ -69,4 +75,4 @@ xPathScrapers:
               - regex: ([^\s]*)\s1x
                 with: $1
       Synopsis: //span[@class="full"]/p|/div[@class="content-text"]/p
-# Last Updated June 27, 2022
+# Last Updated March 21, 2023
