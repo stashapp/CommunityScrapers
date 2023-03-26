@@ -41,6 +41,8 @@ JAV_MAIN_HTML = None
 R18_MAIN_HTML = None
 PROTECTION_CLOUDFLARE = False
 
+JAV_REGEX = r"([a-zA-Z|tT28]+-\d+[zZ]?[eE]?)(?:-pt)?(\d{1,2})?"
+
 R18_HEADERS = {
     "User-Agent":
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
@@ -556,6 +558,8 @@ if FRAGMENT.get("title"):
     SCENE_TITLE = re.sub(r"-JG\d", "", SCENE_TITLE)
     SCENE_TITLE = re.sub(r"\s.+$", "", SCENE_TITLE)
     SCENE_TITLE = re.sub(r"[ABCDEFGH]$", "", SCENE_TITLE)
+    SCENE_TITLE = re.sub(JAV_REGEX, r"\1", SCENE_TITLE)
+
 else:
     SCENE_TITLE = None
 
