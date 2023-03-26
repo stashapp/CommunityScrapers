@@ -48,4 +48,4 @@ xPathScrapers:
       Studio:
         Name: $actors//a//text()
       Image: //source[@type="image/webp"]/@srcset
-# Last Updated August 19, 2022
+# Last Updated March 27, 2023
