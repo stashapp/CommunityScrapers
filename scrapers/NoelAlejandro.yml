@@ -12,12 +12,11 @@ xPathScrapers:
       Image:
         selector: //video[@id="product-img"]/@poster
       Date:
-        selector: //li[contains(.,"Year:")]
+        selector: //script[@class="yoast-schema-graph"]
         postProcess:
           - replace: 
-              - regex: ^\s*Year:\s*
-                with: ''
-          - parseDate: 2006
+              - regex: .+datePublished\"\:\"(\d{4}-\d{2}-\d{2}).+
+                with: $1
       Director:
         selector: //li[contains(.,"Director:")]
         postProcess:
