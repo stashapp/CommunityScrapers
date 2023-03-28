@@ -33,13 +33,13 @@ xPathScrapers:
           selector: //div[@class="left"]/span[@class="movie"]/a/@href
           postProcess:
             - replace:
-                - regex: (.*)
-                  with: https://dorcelclub.com$1
+                - regex: ^/
+                  with: https://dorcelclub.com/
       Director:
-        selector: //span[@class='director']/text()
+        selector: //div[@class="left"]/span[@class='director']/text()
         postProcess:
           - replace:
-              - regex: Director\s:\s(.*)
+              - regex: Director\s*:\s*(.*)
                 with: $1
 
   movieScraper:
@@ -66,7 +66,7 @@ xPathScrapers:
         selector: //span[@class='director']/text()
         postProcess:
           - replace:
-              - regex: Director\s:\s(.*)
+              - regex: Director\s*:\s*(.*)
                 with: $1
       FrontImage:
         selector: //img[contains(@class, "cover")]/@data-src
