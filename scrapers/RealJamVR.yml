@@ -1,30 +1,48 @@
 name: RealJamVR
-sceneByURL:
+sceneByURL: &byURL
   - action: scrapeXPath
     url:
       - realjamvr.com
     scraper: sceneScraper
+
+galleryByURL: *byURL
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
+      Title: &title
         selector: //h1
-      Date:
-        selector: //div[contains(@class, "date")]
+      Date: &date
+        selector: //div[@class="ms-4"]/text()
         postProcess:
           - replace:
-              - regex: ','
-                with: ""
-          - parseDate: January 2 2006
-      Performers:
-        Name: //span[text()="Featuring:"]/following-sibling::a
-      Tags:
-        Name: //span[text()="TAGS:"]/following-sibling::a
-      Details:
-        selector: //div[contains(@class, "c-video-item-desc")]
+              - regex: 'Sept\.'
+                with: "Sep."
+          - parseDate: Jan. 2, 2006
+          - parseDate: January 2, 2006
+      Performers: &performers
+        Name: //div[contains(@class,"text-sm-start")]/a[contains(@href,"/actor/")]
+      Tags: &tags
+        Name: //a[@class="tag"]
+      Details: &details
+        selector: //div[@class="opacity-75 my-2"]
       Image:
-        selector: //meta[@property="og:image"]/@content
-      Studio:
+        selector: //dl8-video/@poster
+      Code:
+        selector: //source[1]/@src
+        postProcess:
+          - replace:
+            - regex: '.*\/(\d+)_\d+p.mp4.*'
+              with: $1
+      Studio: &studio
         Name:
           fixed: RealJamVR
-# Last Updated June 25, 2021
+    gallery:
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Details: *details
+      Studio: *studio
+
+# Last Updated March 29, 2023
