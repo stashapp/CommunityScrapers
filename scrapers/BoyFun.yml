@@ -6,25 +6,25 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $perf: //span[@class="models"]/span[@class="content"]/a
     scene:
-      Title: 
-        selector: //span[@class="title"]
+      Title: //span[@class="title"]
       Image: //video/@poster
       Date:
         selector: //span[@class="date"]/span[@class="content"]
         postProcess:
           - replace:
-              - regex: (st|[nr]d|th) 
-                with: "" 
+              - regex: (st|[nr]d|th)
+                with: ""
           - parseDate: Jan 2, 2006
-      Details: 
+      Details:
         selector: //div[@class="heading"]/following-sibling::text()
         concat: "\n\n"
       Performers:
-        Name:
-          selector: //span[@class="models"]/span[@class="content"]/a/text()
+        Name: $perf/text()
+        URL: $perf/@href
       Studio:
         Name:
           fixed: BoyFun
-
 # Last Updated March 19, 2023
