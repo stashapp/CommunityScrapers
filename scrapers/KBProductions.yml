@@ -8,6 +8,7 @@ sceneByURL:
 
       - inserted.com/videos/
       - rickysroom.com/videos/
+      - sidechick.com/videos/
 
     action: script
     script:
@@ -19,9 +20,10 @@ performerByURL:
       - inserted.com/tour/models/
       - inserted.com/models/
       - rickysroom.com/models/
+      - sidechick.com/models/
     action: script
     script:
       - python3
       - KBProductions.py
       - performer
-# Last Updated December 24, 2022
+# Last Updated March 14, 2023
