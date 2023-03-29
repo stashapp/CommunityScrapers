@@ -56,6 +56,5 @@ xPathScrapers:
     performer:
       Name: //h2
       Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
-      Image:
-        selector: //div[@class='model--avatar']//img/@src
+      Image: //div[@class='model--avatar']//img/@src
 # Last Updated March 03, 2023
