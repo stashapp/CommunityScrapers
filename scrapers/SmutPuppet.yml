@@ -1,0 +1,108 @@
+name: Smut Puppet
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - smutpuppet.com/update
+      - 3wayfuck.com/update
+      - blackandbig.com/update
+      - blondeslovedick.com/update
+      - brunetteslovedick.com/update
+      - darksodomy.com/update
+      - dothewife.com/update
+      - genlez.com/update
+      - goldenslut.com/update
+      - grannyvsbbc.com/update
+      - groupfucksite.com/update
+      - maturefucksteen.com/update
+      - milfsodomy.com/update
+      - smutmerchants.com/update
+      - suggabunny.com/update
+      - teamfucksgirl.com/update
+      - teenerotica.xxx/update
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - smutpuppet.com/models
+      - 3wayfuck.com/models
+      - blackandbig.com/models
+      - blondeslovedick.com/models
+      - brunetteslovedick.com/models
+      - darksodomy.com/models
+      - dothewife.com/models
+      - genlez.com/models
+      - goldenslut.com/models
+      - grannyvsbbc.com/models
+      - groupfucksite.com/models
+      - maturefucksteen.com/models
+      - milfsodomy.com/models
+      - smutmerchants.com/models
+      - suggabunny.com/models
+      - teamfucksgirl.com/models
+      - teenerotica.xxx/models
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="section-title"]/h4
+      Performers:
+        Name: //div[@class="model-rich"]/h4[@class="theme-color"]/a
+      Details:
+        selector: //p[@class="read-more"]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*:\s*'
+                with: ""
+      Tags:
+        Name:
+          selector: //div[@class="model-categories"]/a/text()
+      Studio:
+        Name:
+          selector: //div[@class="block-logo"]/a/img/@alt
+      Image:
+        selector: //img[@class="video-banner"]/@src|//video/@poster
+        postProcess:
+          - replace:
+              - regex: (?:.+)(\/usermedia\/.+\.jpg)(?:.+)
+                with: $1
+              - regex: "^/usermedia/"
+                with: "https://smutpuppet.com/usermedia/"
+
+  performerScraper:
+    performer:
+      Name:
+        selector: //div[@class="model-content"]/h1[@class="model-title"]
+      Country:
+        selector: //div[@class="model-content"]/p/span[@class="que" and contains(.,"NATIONALITY")]/following-sibling::span[@class="ans"]
+        postProcess:
+          - map:
+              "AMERICAN": "United States"
+              "American": "United States"
+              "BRITISH": "United Kingdom"
+              "British": "United Kingdom"
+              "CZECH": "Czech Republic"
+              "Czech": "Czech Republic"
+              "HUNGARIAN": "Hungary"
+              "Hungarian": "Hungary"
+              "RUSSIAN": "Russia"
+              "Russian": "Russia"
+              "UKRAINAIN": "Ukraine"
+              "Ukrainian": "Ukraine"
+              "USA": "United States"
+      Birthdate:
+        selector: //div[@class="model-content"]/p/span[@class="que" and contains(.,"DATE OF BIRTH")]/following-sibling::span[@class="ans"]
+        postProcess:
+          - replace:
+              - regex: (st|[nr]d|th)
+                with: ''
+          - parseDate: January 2, 2006
+      Image:
+        selector: //div[@class="model-img"]/a/img/@src
+        postProcess:
+          - replace:
+              - regex: "^/usermedia/"
+                with: "https://smutpuppet.com/usermedia/"
+ 
+# Last Updated March 29, 2023
