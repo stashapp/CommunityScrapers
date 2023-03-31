@@ -23,7 +23,7 @@ xPathScrapers:
       Performers: &performers
         Name: //div[contains(@class,"text-sm-start")]/a[contains(@href,"/actor/")]
       Tags: &tags
-        Name: //a[@class="tag"]
+        Name: //a[@class="tag"] | //div[not(@class)]/div[@class="specs-icon"]
       Details: &details
         selector: //div[@class="opacity-75 my-2"]
       Image:
