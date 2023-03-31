@@ -28,12 +28,6 @@ xPathScrapers:
         selector: //div[@class="opacity-75 my-2"]
       Image:
         selector: //dl8-video/@poster
-      Code:
-        selector: //source[1]/@src
-        postProcess:
-          - replace:
-            - regex: '.*\/(\d+)_\d+p.mp4.*'
-              with: $1
       Studio: &studio
         Name:
           fixed: RealJamVR
