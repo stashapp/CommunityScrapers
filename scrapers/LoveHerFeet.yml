@@ -34,6 +34,12 @@ xPathScrapers:
         selector: //div[@class='date']/text()
         postProcess:
           - parseDate: January 2, 2006
+      Code:
+        selector: //*/div[@class='photos vide-section']/a[1]/img/@data-src
+        postProcess:
+          - replace:
+              - regex: ^https?.+/[a-zA-Z_]+(\d+)_.+/.+
+                with: $1
       Image:
         selector: //div[@class='video']//img[contains(@class,'mainThumb') or contains(@class,'update_thumb')]/@src0_3x|//video/@poster|//base/@href
         concat: "|"
@@ -156,4 +162,4 @@ xPathScrapers:
                 with: ""
       Gender:
         fixed: "Female"
-# Last Updated August 28, 2022
+# Last Updated March 31, 2023
