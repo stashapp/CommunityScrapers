@@ -10,6 +10,7 @@ sceneByURL:
       - mamacitaz.com
       - transbella.com
       - vipsexvault.com
+      - doe-tv.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
