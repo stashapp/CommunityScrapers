@@ -51,7 +51,8 @@ MOVIE_SITES = {
     "peternorth": "https://www.peternorth.com/en/dvd",
     "tsfactor": "https://www.tsfactor.com/en/movie/",
     "wicked": "https://www.wicked.com/en/movie",
-    "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie"
+    "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie",
+    "ragingstallion": "https://www.ragingstallion.com/en/movie"
 }
 
 # a dict of sites (`sitename_pretty` from the API) which should set the value
@@ -60,7 +61,8 @@ MOVIE_SITES = {
 # not the studio
 SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
     "Devilstgirls": "Devil's Tgirls",
-    "AgentRedGirl": "Agent Red Girl"
+    "AgentRedGirl": "Agent Red Girl",
+    "RagingStallion.com": "Raging Stallion"
 }
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
