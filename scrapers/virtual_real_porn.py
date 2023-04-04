@@ -563,7 +563,8 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
         # parse web page
         headers = self.__generate_post_headers_for_domain(urlparse(url).netloc)
-        page = bs(requests.get(url, headers=headers, timeout=self.PAGE_TIMEOUT).text, 'html.parser')
+        html = requests.get(url, headers=headers, timeout=self.PAGE_TIMEOUT).text
+        page = bs(html, 'html.parser')
 
         if page:
             # page parsed, so the url is valid
@@ -578,7 +579,19 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
             tags.extend(self.COMMON_TAGS)
             scene['tags'] = [ { 'name': tag } for tag in tags ]
 
-            scene['details'] = page.find('div', class_="g-cols onlydesktop").string
+            # scene['details'] = page.find('div', class_="g-cols onlydesktop").string
+            # details
+            inline_json_scripts = page.find_all('script', type='application/ld+json')
+            log.trace(f"inline_json_scripts: {len(inline_json_scripts)}")
+            log.trace(f"inline_json_scripts: {inline_json_scripts}")
+            for script_string in [ s.string for s in inline_json_scripts ]:
+                if scene.get('details') is None:
+                    try:
+                        info = json.loads(script_string)
+                        if 'description' in info:
+                            scene['details'] = info['description']
+                    except Exception as ex:
+                        log.debug(ex)
 
             scene_date = page.find('div', class_='video-date').span.string
             scene['date'] = self._convert_date(scene_date, '%b %d, %Y', '%Y-%m-%d')
@@ -596,7 +609,6 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
             script = page.find('script', id='virtualreal_video-streaming-js-extra')
             if script:
-                script.string
                 log.trace(f"script.string: {script.string}")
                 json_text = re.sub(r'[^\{]*(\{.*\})[^\{]*', r'\1', script.string)
                 log.trace(f"json_text: {json_text}")
