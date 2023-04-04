@@ -1,6 +1,7 @@
 '''
 VirtualRealPorn Network scraper
 '''
+import concurrent.futures
 import json
 from html import unescape
 import re
@@ -18,7 +19,6 @@ except ModuleNotFoundError:
     )
     sys.exit(1)
 
-
 try:
     from py_common import log
 except ModuleNotFoundError:
@@ -35,9 +35,9 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
     Implemented script actions and helper functions
     '''
     # tuple for API timeout: (connection_timeout, response_read_timeout)
-    API_TIMEOUT = (5, 5)
+    API_TIMEOUT = (3, 8)
     COMMON_TAGS = ['Virtual Reality']
-    PAGE_TIMEOUT = (5, 10)
+    PAGE_TIMEOUT = (3, 8)
     STUDIOS = [
         {
             'name': 'VirtualRealAmateur',
@@ -159,29 +159,61 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
         log.trace(f"domains_to_search: {domains_to_search}")
 
         # this will be merge-updated to populate it
-        search_result = {}
-
-        for search_domain in domains_to_search:
-            # call API
-            post_headers = self.__generate_post_headers_for_domain(search_domain)
-            form_data = {
-                'action': 'virtualreal_search',
-                'query': search_string
+        search_result = {
+            'success': False,
+            'data': {
+                'results': {
+                    'videos': [],
+                    'models': [],
+                    'categories': [],
+                    'tags': []
+                },
+                'counts': {
+                    'videos': 0,
+                    'models': 0,
+                    'categories': 0,
+                    'tags': 0
+                }
             }
-            search_url = f"https://{search_domain}/wp-admin/admin-ajax.php"
-            try:
-                api_result = requests.post(
-                    search_url,
-                    data=form_data,
-                    headers=post_headers,
-                    timeout=self.API_TIMEOUT
-                ).json()
-                # merge-update (combine, deduplicate, and don't overwrite/replace)
-                search_result = {**search_result, **api_result}
-            except Exception as ex:
-                log.warning('API error')
-                log.debug(ex)
+        }
 
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            futures = []
+
+            for search_domain in domains_to_search:
+                # call API
+                post_headers = self.__generate_post_headers_for_domain(search_domain)
+                form_data = {
+                    'action': 'virtualreal_search',
+                    'query': search_string
+                }
+                search_url = f"https://{search_domain}/wp-admin/admin-ajax.php"
+                futures.append(
+                    executor.submit(
+                        requests.post,
+                        search_url,
+                        data=form_data,
+                        headers=post_headers,
+                        timeout=self.API_TIMEOUT
+                    )
+                )
+
+            for future in concurrent.futures.as_completed(futures):
+                # merge-update (combine, deduplicate, and don't overwrite/replace)
+                try:
+                    api_result = future.result().json()
+                    log.trace(f"api_result: {api_result}")
+                    if search_result['success'] is False:
+                        search_result['success'] = api_result['success']
+                    for prop in ['videos', 'models', 'categories', 'tags']:
+                        if api_result['data']['counts'][prop] > 0:
+                            search_result['data']['counts'][prop] += api_result['data']['counts'][prop]
+                            search_result['data']['results'][prop].extend(api_result['data']['results'][prop])
+                except Exception as ex:
+                    log.warning('API error')
+                    log.debug(ex)
+
+        log.trace(f"search_result: {search_result}")
         return search_result
 
     def __get_performers_from_api_by_name(self, performer_name: str) -> List[dict]:
@@ -404,7 +436,7 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
         api_search_result = self.__api_search(scene_name)
 
-        if api_search_result and len(api_search_result['data']['results']['videos']) > 1:
+        if api_search_result and len(api_search_result['data']['results']['videos']) > 0:
             scenes = [
                 {
                     'id': video['id'],
