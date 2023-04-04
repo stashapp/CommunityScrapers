@@ -2,6 +2,7 @@
 VirtualRealPorn Network scraper
 '''
 import json
+from html import unescape
 import re
 import sys
 from typing import List
@@ -586,7 +587,7 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
                     try:
                         info = json.loads(script_string)
                         if 'description' in info:
-                            scene['details'] = info['description']
+                            scene['details'] = unescape(info['description'])
                     except Exception as ex:
                         log.debug(ex)
 
