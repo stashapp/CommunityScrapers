@@ -311,11 +311,11 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
         return usernames
 
-    def __cm_to_inches(self, cm: int) -> int:
+    def __cm_to_inches(self, centimetres) -> int:
         '''
         Convert cm to inch (integer)
         '''
-        return int(float(cm) / 2.54)
+        return int(float(centimetres) / 2.54)
 
     def _get_performer_by_url(self, url: str) -> dict:
         '''
@@ -579,11 +579,8 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
             tags.extend(self.COMMON_TAGS)
             scene['tags'] = [ { 'name': tag } for tag in tags ]
 
-            # scene['details'] = page.find('div', class_="g-cols onlydesktop").string
             # details
             inline_json_scripts = page.find_all('script', type='application/ld+json')
-            log.trace(f"inline_json_scripts: {len(inline_json_scripts)}")
-            log.trace(f"inline_json_scripts: {inline_json_scripts}")
             for script_string in [ s.string for s in inline_json_scripts ]:
                 if scene.get('details') is None:
                     try:
@@ -609,12 +606,9 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
             script = page.find('script', id='virtualreal_video-streaming-js-extra')
             if script:
-                log.trace(f"script.string: {script.string}")
                 json_text = re.sub(r'[^\{]*(\{.*\})[^\{]*', r'\1', script.string)
-                log.trace(f"json_text: {json_text}")
                 try:
                     streaming_obj = json.loads(json_text)
-                    log.trace(f"streaming_obj: {streaming_obj}")
                     scene['code'] = streaming_obj.get('vid')
                 except Exception as ex:
                     log.warning("Could not parse JSON from script text")
@@ -622,7 +616,10 @@ class VirtualRealPornScraper(base_python_scraper.BasePythonScraper):
 
             performer_items = page.find_all('div', class_='performerItem')
             if len(performer_items) > 0:
-                scene['performers'] = [ { 'name': performer.img.get('alt') } for performer in performer_items ]
+                scene['performers'] = [
+                    { 'name': performer.img.get('alt') }
+                    for performer in performer_items
+                ]
 
         return scene
 
