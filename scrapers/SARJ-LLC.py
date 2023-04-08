@@ -168,6 +168,7 @@ def scrape_model(base_url, name):
 
 def map_media(data, studio, base_url):
     url = ""
+    studio_code = data["UUID"]
     studio_name = {'Name': ""}
     if studio is not None:
         studio_url = studio[1]
@@ -199,6 +200,7 @@ def map_media(data, studio, base_url):
         'Tags': list(map(lambda t: {'Name': t}, data['tags'])),
         'Performers': list(map(lambda m: map_model(base_url, m), data['models'])),
         'Studio': studio_name,
+        'Code': studio_code,
         "Director": director
     }
 
@@ -290,11 +292,11 @@ studios = {
     '706DF46B88884F7BB226097952427754': ('Eternal Desire', 'eternaldesire.com'),
     '5592E33324211E3FF640800200C93111': ('Goddess Nudes', 'goddessnudes.com'),
     '5A68E1D7B6E69E7401226779D559A10A': ('Love Hairy', 'lovehairy.com'),
-    'E6B595104E3411DF98790800200C9A66': ('Met Art', 'metart.com'),
-    '5C38C84F55841824817C19987F5447B0': ('Met Art Intimate', 'metart.com'),
-    'E7DFB70DF31C45B3B5E0BF10D733D349': ('Met Art X', 'metartx.com'),
+    'E6B595104E3411DF98790800200C9A66': ('MetArt', 'metart.com'),
+    '5C38C84F55841824817C19987F5447B0': ('MetArt Intimate', 'metart.com'),
+    'E7DFB70DF31C45B3B5E0BF10D733D349': ('MetArt X', 'metartx.com'),
     'D99236C04DD011E1B86C0800200C9A66': ('Rylsky Art', 'rylskyart.com'),
-    '94DB3D0036FC11E1B86C0800200C9A66': ('Sex Art', 'sexart.com'),
+    '94DB3D0036FC11E1B86C0800200C9A66': ('SexArt', 'sexart.com'),
     '3D345D1E156910B44DB5A80CDD746318': ('Straplez', 'straplez.com'),
     '18A2E47EAEFD45F29033A5FCAF1F5B91': ('Stunning 18', 'stunning18.com'),
     'FDAFDF209DC311E0AA820800200C9A66': ('The Life Erotic', 'thelifeerotic.com'),
