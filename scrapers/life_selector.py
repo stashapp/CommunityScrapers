@@ -33,6 +33,12 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
     '''
     Implemented script actions and helper functions
     '''
+    COOKIES = {
+        'age_verification': '1'
+    }
+    HEADERS = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36'
+    }
     GENDER_FEMALE = 'female'
     STUDIOS = [
         {
@@ -79,7 +85,9 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         '''
         # call API
         api_result = requests.get(
-            f"https://contentworker.ls-tester.com/api/search?q={search_string}"
+            f"https://contentworker.ls-tester.com/api/search?q={search_string}",
+            cookies=self.COOKIES,
+            headers=self.HEADERS
         ).json()
 
         return api_result
@@ -128,7 +136,7 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         gallery = {}
 
         # parse web page
-        page = bs(requests.get(url).text, 'html.parser')
+        page = bs(requests.get(url, headers=self.HEADERS, cookies=self.COOKIES).text, 'html.parser')
         gallery['title'] = page.find("div", class_="gallery-title").find("h1").string
 
         log.debug(f"__get_gallery_by_scraping_html, gallery: {gallery}")
@@ -155,8 +163,9 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
             gallery['rating'] = movie['rating']
             gallery['tags'] = movie['tags']
             gallery['title'] = movie['name']
-            movie_from_api = self.__get_movie_from_api_by_id(movie['id'])
-            gallery['details'] = movie_from_api['synopsis']
+            movie_url = self.__get_movie_url_for_id(movie['id'])
+            movie_from_html = self.__get_movie_by_scraping_html(movie_url)
+            gallery['details'] = movie_from_html['synopsis']
 
         log.debug(f"__get_gallery_by_title, gallery: {gallery}")
         return gallery
@@ -228,27 +237,6 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         log.debug(f"__get_movies_from_api_by_name, movies: {movies}")
         return movies
 
-    def __get_movie_from_api_by_id(self, movie_id: str) -> dict:
-        '''
-        Get movie (game) properties by ID
-
-        - name
-        - synopsis
-        '''
-        movie = {}
-
-        # call API
-        api_result = requests.get(
-            "https://lifeselector.com/game/GetEpisodeDetailsInJson"
-            f"/gameId/{movie_id}/choiceId/0"
-        ).json()
-
-        movie['name'] = api_result['map']['title']
-        movie['synopsis'] = unicodedata.normalize("NFKD", api_result['map']['description'])
-
-        log.debug(f"__get_movie_from_api_by_id, movie: {movie}")
-        return movie
-
     def __get_movie_by_scraping_html(self, url: str) -> dict:
         '''
         Get movie (game) properties by scraping the HTML code of the page
@@ -264,7 +252,10 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         movie['url'] = url
 
         # parse web page
-        page = bs(requests.get(url).text, 'html.parser')
+        page = bs(
+            requests.get(url, cookies=self.COOKIES, headers=self.HEADERS).text,
+            'html.parser'
+        )
         movie['name'] = page.title.string.replace(
             ' - Interactive Porn Game',
             ''
@@ -301,15 +292,14 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
 
         # movie data from API by id
         movie_id = self.__parse_movie_id_from_url(url)
-        movie_data_from_id = self.__get_movie_from_api_by_id(movie_id)
-        movie['synopsis'] = movie_data_from_id['synopsis']
-        movie['url'] = self.__get_movie_url_for_id(movie_id)
         movie['back_image'] = f"https://i.c7cdn.com/generator/games/{movie_id}/images/episode-guide-{movie_id}.jpg"
 
         # movie data from scraping HTML
         movie_data_from_html = self.__get_movie_by_scraping_html(url)
         movie['front_image'] = movie_data_from_html['front_image']
         movie['name'] = movie_data_from_html['name']
+        movie['synopsis'] = movie_data_from_html['synopsis']
+        movie['url'] = movie_data_from_html['url']
 
         # movie data from API by name
         movies_from_api = self.__get_movies_from_api_by_name(movie['name'])
@@ -454,7 +444,7 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
         performer = {}
 
         # parse web page
-        page = bs(requests.get(url).text, 'html.parser')
+        page = bs(requests.get(url, cookies=self.COOKIES, headers=self.HEADERS).text, 'html.parser')
 
         # just get the name
         performer_name = page.find("div", class_="model-details").find("h1").string
@@ -518,10 +508,6 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
             movie['tags'] = movie_data_from_name['tags']
             movie['name'] = movie_data_from_name['name']
 
-            # movie data from id
-            movie_data_from_id = self.__get_movie_from_api_by_id(movie_id)
-            movie['synopsis'] = movie_data_from_id['synopsis']
-
             # movie data from URL string value
             movie['url'] = self.__get_movie_url_for_id(movie_id)
 
@@ -532,6 +518,7 @@ class LifeSelectorScraper(base_python_scraper.BasePythonScraper):
             movie_data_from_html = self.__get_movie_by_scraping_html(movie['url'])
             movie['front_image'] = movie_data_from_html['front_image']
             movie['scenes'] = movie_data_from_html['scenes']
+            movie['synopsis'] = movie_data_from_html['synopsis']
         
             # map movie['scenes'] List into List of scene fragments
             scenes.extend(
