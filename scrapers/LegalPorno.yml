@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: "LegalPorno"
 sceneByURL:
   - action: scrapeXPath
@@ -10,12 +12,12 @@ performerByURL:
       - https://www.analvids.com
     scraper: performerScraper
 sceneByFragment:
-    action: script
-    script:
-      - python
-      # use python3 instead if needed
-      - LegalPorno.py
-      - query
+  action: script
+  script:
+    - python
+    # use python3 instead if needed
+    - LegalPorno.py
+    - query
 
 xPathScrapers:
   sceneScraper:
@@ -30,7 +32,7 @@ xPathScrapers:
         postProcess:
           - parseDate: 2006-01-02
       Details: $description/div[3]/dd/text()
-      Code: 
+      Code:
         selector: //h1[@class="watchpage-title"]
         postProcess:
           - replace:
@@ -48,11 +50,11 @@ xPathScrapers:
           - replace:
               - regex: .+(https[^"]+).+
                 with: $1
+      URL: //meta[@property="og:url"]/@content
 
   performerScraper:
     performer:
       Name: //h2
       Country: //td[@class='text-danger']//a[contains(@href,'nationality')]/text()
-      Image:
-        selector: //div[@class='model--avatar']//img/@src
-# Last Updated December 16, 2022
+      Image: //div[@class='model--avatar']//img/@src
+# Last Updated March 03, 2023

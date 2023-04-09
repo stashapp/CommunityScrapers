@@ -1,0 +1,30 @@
+name: BoyFun
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - boyfun.com/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $perf: //span[@class="models"]/span[@class="content"]/a
+    scene:
+      Title: //span[@class="title"]
+      Image: //video/@poster
+      Date:
+        selector: //span[@class="date"]/span[@class="content"]
+        postProcess:
+          - replace:
+              - regex: (st|[nr]d|th)
+                with: ""
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: //div[@class="heading"]/following-sibling::text()
+        concat: "\n\n"
+      Performers:
+        Name: $perf/text()
+        URL: $perf/@href
+      Studio:
+        Name:
+          fixed: BoyFun
+# Last Updated March 19, 2023
