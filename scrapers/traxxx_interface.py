@@ -263,23 +263,10 @@ class TraxxxInterface:
 
     # #tags take too much space in the results page
     #if s.get("tags"):
-    #  tags = []
-    #  for t in s["tags"]:
-    #    if t.get("tag"):
-    #      if t["tag"].get("name"):
-    #        tags.append({
-    #          "name": t["tag"]["name"]
-    #        })
-    #  fragment["tags"] = tags
+    #  fragment["tags"] = [{"name": t["tag"]["name"]} for t in s.get("tags",{}) if t["tag"] and t["tag"].get("name")]
     
     if s.get("actors"):
-      performers = []
-      for a in s["actors"]:
-        if a["actor"].get("name"):
-          performers.append({
-            "name": a["actor"]["name"]
-          })
-      fragment["performers"] = performers
+      fragment["performers"] = [{"name": a["actor"]["name"]} for a in s["actors"] if a["actor"] and a["actor"].get("name")]
     
     return fragment
 
@@ -307,23 +294,10 @@ class TraxxxInterface:
 
 
     if s.get("tags"):
-      tags = []
-      for t in s["tags"]:
-        if t.get("tag"):
-          if t["tag"].get("name"):
-            tags.append({
-              "name": t["tag"]["name"]
-            })
-      fragment["tags"] = tags
+      fragment["tags"] = [{"name": t["tag"]["name"]} for t in s.get("tags",{}) if t["tag"] and t["tag"].get("name")]
     
     if s.get("actors"):
-      performers = []
-      for a in s["actors"]:
-        if a["actor"].get("name"):
-          performers.append({
-            "name": a["actor"]["name"]
-          })
-      fragment["performers"] = performers
+      fragment["performers"] = [{"name": a["actor"]["name"]} for a in s["actors"] if a["actor"] and a["actor"].get("name")]
     
     if s.get("movies"):
       movies = []
