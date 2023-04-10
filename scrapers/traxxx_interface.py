@@ -245,6 +245,9 @@ class TraxxxInterface:
     if s.get("slug"):
       fragment["url"] = f'https://traxxx.me/scene/{s["id"]}/{s["slug"]}/'
 
+    if s.get("shootId"):
+      fragment["code"] = s["shootId"]
+
     if s.get("date"):
       fragment["date"] = s["date"].split("T")[0]
 
@@ -282,6 +285,9 @@ class TraxxxInterface:
 
   def parse_to_stash_scene(self, s):
     fragment = {}
+
+    if s.get("shootId"):
+      fragment["code"] = s["shootId"]
 
     if s.get("title"):
       fragment["title"] = s["title"]
