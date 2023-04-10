@@ -302,7 +302,7 @@ class TraxxxInterface:
     if s.get("movies"):
       movies = []
       for m in s["movies"]:
-        m = m.movie
+        m = m["movie"]
 
         if m.get("title"):
           movie = {
