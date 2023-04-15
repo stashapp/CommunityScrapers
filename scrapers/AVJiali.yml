@@ -19,8 +19,8 @@ xPathScrapers:
         selector: //div[@class="video-date"]/text()
         postProcess:
           - replace:
-              - regex: "st|th|nd|rd"
-                with:
+              - regex: "(\\d)(st|th|nd|rd)"
+                with: $1
           - parseDate: January 2, 2006
       Details:
         selector: //div[@class="videoinfo"]/p
