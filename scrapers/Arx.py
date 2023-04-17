@@ -1,7 +1,8 @@
-import requests
 import sys
 import json
 from urllib.parse import urlparse
+
+import requests
 
 # Static definition, used in the GraphQL request
 site_ids = {
@@ -15,8 +16,11 @@ site_ids = {
     'transroommates.com': 12
 }
 
+# Timeout (seconds) to prevent indefinite hanging
+API_TIMEOUT = 10
+
 # GraphQL API endpoint
-endpoint = "https://arwest-api-production.herokuapp.com/graphql"
+ENDPOINT = "https://arwest-api-production.herokuapp.com/graphql"
 
 # Request headers
 headers = {
@@ -30,11 +34,11 @@ headers = {
     "Referer": "https://lesworship.com"
 }
 
-def __prefix(levelChar):
-    startLevelChar = b'\x01'
-    endLevelChar = b'\x02'
+def __prefix(level_char):
+    start_level_char = b'\x01'
+    end_level_char = b'\x02'
 
-    ret = startLevelChar + levelChar + endLevelChar
+    ret = start_level_char + level_char + end_level_char
     return ret.decode()
 
 def __log(levelChar, s):
@@ -43,36 +47,39 @@ def __log(levelChar, s):
 
     print(__prefix(levelChar) + s + "\n", file=sys.stderr, flush=True)
 
-def LogTrace(s):
+def log_trace(s):
     __log(b't', s)
 
-def LogDebug(s):
+def log_debug(s):
     __log(b'd', s)
 
-def LogInfo(s):
+def log_info(s):
     __log(b'i', s)
 
-def LogWarning(s):
+def log_warning(s):
     __log(b'w', s)
 
-def LogError(s):
+def log_error(s):
     __log(b'e', s)
 
 
-def readJSONInput():
-    input = sys.stdin.read()
-    return json.loads(input)
+def read_json_input():
+    json_input = sys.stdin.read()
+    return json.loads(json_input)
 
 
-def callGraphQL(query, variables=None):
-    json = {'query': query}
+def call_graphql(query, variables=None):
+    graphql_json = {'query': query}
     if variables is not None:
-        json['variables'] = variables
+        graphql_json['variables'] = variables
 
-    response = requests.post(endpoint, json=json, headers=headers)
+    response = requests.post(ENDPOINT, json=graphql_json, headers=headers, timeout=API_TIMEOUT)
 
     if response.status_code == 200:
         result = response.json()
+
+        log_debug(json.dumps(result))
+
         if result.get("errors", None):
             for error in result["errors"]["errors"]:
                 raise Exception("GraphQL error: {}".format(error))
@@ -85,7 +92,7 @@ def callGraphQL(query, variables=None):
         )
 
 
-def getScene(url):
+def get_scene(url):
     # Sending the full query that gets used in the regular frontend
     query = """
         query 
@@ -144,16 +151,16 @@ def getScene(url):
 
     site_id = site_ids.get(urlparse(url).netloc)
     if site_id is None:
-        LogError(f"Could not determine id for site {urlparse(url).netloc}")
+        log_error(f"Could not determine id for site {urlparse(url).netloc}")
         return None
-    
+
     try:
         scene_id = int(urlparse(url).path.split('/')[2])
     except ValueError:
-        LogError(f"No scene id found in url {url}")
+        log_error(f"No scene id found in url {url}")
         return None
-    
-    LogInfo(f"Scraping scene {scene_id}")
+
+    log_info(f"Scraping scene {scene_id}")
 
     variables = {
         'id': int(scene_id),
@@ -161,9 +168,9 @@ def getScene(url):
     }
 
     try:
-        result = callGraphQL(query, variables)
+        result = call_graphql(query, variables)
     except ConnectionError as e:
-        LogError(e)
+        log_error(e)
         return None
 
     result = result.get('scene')
@@ -176,12 +183,13 @@ def getScene(url):
     ret['tags'] = [{'name': x.get('name')} for x in result.get('genres')]
     ret['performers'] = [{'name': x.get('stageName')} for x in result.get('actors')]
     ret['image'] = result.get('primaryPhotoUrl')
-    ret['date'] = result.get('createdAt')[:10]
+    ret['date'] = result.get('availableAt') and result.get('availableAt')[:10] \
+        or result.get('createdAt') and result.get('createdAt')[:10]
 
     return ret
 
 
 if sys.argv[1] == 'scrapeByURL':
-    i = readJSONInput()
-    ret = getScene(i.get('url'))
+    i = read_json_input()
+    ret = get_scene(i.get('url'))
     print(json.dumps(ret))
