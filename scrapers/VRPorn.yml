@@ -33,4 +33,4 @@ xPathScrapers:
       Image: //main/article/header//dl8-video/@poster
       URL: &sceneUrl //link[@rel="canonical"]/@href
       
-# Last Updated April 05, 2023
+# Last Updated April 20, 2023
