@@ -9,6 +9,11 @@ galleryByURL:
     url:
       - dreamtranny.com
     scraper: galleryScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - dreamtranny.com/models/
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -37,7 +42,7 @@ xPathScrapers:
           - replace:
               - regex: .*/api(/update/\d+)/view_count.*
                 with: "https://dreamtranny.com$1/"
-      Code: &codeAttr
+      Code:
         selector: *urlSel
         postProcess:
           - replace:
@@ -51,6 +56,24 @@ xPathScrapers:
       Tags: *tagsAttr
       Performers: *performersAttr
       Studio: *studioAttr
-      Code: *codeAttr
       URL: *urlAttr
+  performerScraper:
+    performer:
+      Name: //h1[@class="model-title"]/text()
+      Gender:
+        fixed: transgender_female
+      Image:
+        selector: //div[@class="model-img"]/a/img[@class="img"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://dreamtranny.com/
+      Country: //div[@class="model-content"]/p/span[text()="NATIONALITY"]/following-sibling::span[1]
+      Birthdate:
+        selector: //div[@class="model-content"]/p/span[text()="DATE OF BIRTH"]/following-sibling::span[1]
+        postProcess:
+          - replace:
+              - regex: (st|[nr]d|th)
+                with: ""
+          - parseDate: January 2, 2006
 # Last Updated April 20, 2023
