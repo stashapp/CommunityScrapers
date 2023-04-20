@@ -1,4 +1,4 @@
-name: "VRPorn.com"
+name: "VRPorn"
 
 sceneByURL:
   - action: scrapeXPath
