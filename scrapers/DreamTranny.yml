@@ -73,7 +73,7 @@ xPathScrapers:
         selector: //div[@class="model-content"]/p/span[text()="DATE OF BIRTH"]/following-sibling::span[1]
         postProcess:
           - replace:
-              - regex: (st|[nr]d|th)
-                with: ""
+              - regex: (\d)(st|[nr]d|th)
+                with: "$1"
           - parseDate: January 2, 2006
 # Last Updated April 20, 2023
