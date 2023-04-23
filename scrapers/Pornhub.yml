@@ -142,4 +142,16 @@ xPathScrapers:
           - replace:
               - regex: "Description: (.*)"
                 with: $1
-# Last Updated July 08, 2022
+
+driver:
+  cookies:
+    - CookieURL: "https://www.pornhub.com"
+      Cookies:
+        - Name:  "accessAgeDisclaimerPH"
+          Domain: ".pornhub.com"
+          Value: "1"
+          Path: "/"
+
+debug:
+  printHTML: true
+# Last Updated April 23, 2023
