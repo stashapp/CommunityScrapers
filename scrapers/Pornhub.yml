@@ -152,6 +152,4 @@ driver:
           Value: "1"
           Path: "/"
 
-debug:
-  printHTML: true
 # Last Updated April 23, 2023
