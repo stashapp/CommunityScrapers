@@ -147,9 +147,8 @@ driver:
   cookies:
     - CookieURL: "https://www.pornhub.com"
       Cookies:
-        - Name:  "accessAgeDisclaimerPH"
+        - Name: "accessAgeDisclaimerPH"
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-
 # Last Updated April 23, 2023
