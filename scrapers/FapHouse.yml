@@ -13,11 +13,11 @@ xPathScrapers:
         postProcess:
           - parseDate: "02.01.2006"
       Details:
-        selector: //div[contains(@class,"video-info-details")]/div[@class="fh-text-with-collapse-multiline"]/p[@class="fh-text-with-collapse-multiline__text"]
+        selector: //div[contains(@class,"video-info-details")]//p
         concat: " "
       Tags:
         Name: //div[@class="video-info-details__categories"]/a
       Studio:
         Name: //a[@class="video-info-details__studio-link"]
       Image: //meta[@property="og:image"]/@content
-# Last Updated April 24, 2023
+# Last Updated April 25, 2023
