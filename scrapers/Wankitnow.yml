@@ -29,6 +29,6 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^(\w+)/(\d+)$
-                with: $1/22/$2 # Needs to be updated every year
+                with: $1/23/$2 # Needs to be updated every year
           - parseDate: Jan/06/02
-# Last Updated June 13, 2022
+# Last Updated April 25, 2023
