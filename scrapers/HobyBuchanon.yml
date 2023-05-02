@@ -1,24 +1,34 @@
 name: HobyBuchanon
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - hobybuchanon.com/updates/
       - hobybuchanon.com/behind-the-scenes/
       - hobybuchanon.com/suck-this-dick/
     scraper: sceneScraper
-xPathScrapers:
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '(https://hobybuchanon.com)(/.+)'
+          with: '$1/_next/data/eMEqlxRfh7Ihk_pned42c$2.json'
+jsonScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="title"]
-      Details: //div[@class="column_attr clearfix"]
-      Date:
-        selector: //time/@datetime
+      Title: pageProps.content.title
+      Code: pageProps.content.slug
+      Date: 
+        selector: pageProps.content.publish_date
         postProcess:
           - replace:
-              - regex: ^(.{10}).*$
-                with: $1
-      Image: //meta[@property="og:image"]/@content
-      Studio:
+              - regex: (\d{4})/(\d{2})/(\d{2})\s.*
+                with: $1-$2-$3
+      Details: pageProps.content.description
+      Performers: 
+        Name: pageProps.content.models
+      Image: pageProps.content.thumb
+      Studio: 
         Name:
-          fixed: HobyBuchanon
-# Last Updated March 30, 2021
+         fixed: "Hoby Buchanon"
+
+# Last Updated May 05, 2023
+
