@@ -8,20 +8,42 @@ from os import path
     docker cp xbvr:/root/.config/xbvr/main.db xbvr.db
     This script needs python3 and sqlite3 
    '''
+
 def lookup_scene(id):
     c=conn.cursor()
-    c.execute('SELECT title,synopsis,site,cover_url,scene_url,date(release_date, "localtime") FROM scenes WHERE id=?',(id,))
+    c.execute('SELECT title,synopsis,site,cover_url,scene_url,date(release_date, "localtime"),scene_id FROM scenes WHERE id=?',(id,))
     row=c.fetchone()
     res={}
     res['title']=row[0]
     res['details']=row[1]
-    res['studio']={"name":row[2]}
+    res['studio']={'name': row[2]}
     res['image']=row[3]
     res['url']=row[4]
     res['date']=row[5]
-    c.execute("SELECT tags.name FROM scene_tags,tags WHERE scene_tags.tag_id=tags.id AND scene_tags.scene_id=? ;",(id,))
-    row = c.fetchall()
-    res['tags']=[{"name":x[0]} for x in row]
+    res['code']=row[6]
+    tags = c.execute("SELECT tags.name FROM scene_tags, tags WHERE scene_tags.tag_id=tags.id AND scene_tags.scene_id=? ;", (id,))
+    tag_names = [x[0] for x in tags]
+# Conditional Tag Related Stuff Goes Here
+    # Check if the "JAVR" tag is present in the tags list
+    if 'javr' in tag_names:
+        # If so, append the "Censored" and "JAV" tags as well
+        # anything scraped via "JAVR" in XBVR is automatically both Censored and JAV!
+        tag_names.append('JAV')
+        tag_names.append('Censored')
+    else:
+        # "JAVR" is now an alias to "Virtual Reality" in StashDB
+        tag_names.append('Virtual Reality')
+    #NaughtyAmerica Studio/Tag Mapping - WIP - looking for a better/less "babby's first Python script filled with if statements" way to do this
+    if row[2] == "NaughtyAmerica VR":
+        if '2 chicks same time' in tag_names:
+            res['studio'] = {'name': '2 Chicks Same Time'}
+        if 'after school' in tag_names:
+            res['studio'] = {'name': 'After School'}
+        if 'american daydreams' in tag_names:
+            res['studio'] = {'name': 'American Daydreams'}
+        if 'pse porn star experience' in tag_names:
+            res['studio'] = {'name': 'PSE Porn Star Experience'}
+    res['tags'] = [{"name": x} for x in tag_names]
     c.execute("SELECT actors.name FROM scene_cast,actors WHERE actors.id=scene_cast.actor_id AND scene_cast.scene_id=? ;",(id,))
     row = c.fetchall()
     res['performers']=[{"name":x[0]} for x in row]
@@ -64,6 +86,8 @@ if not path.exists("xbvr.db"):
     print("Error, the sqlite database xbvr.db does not exist in the scrapers directory.",file=sys.stderr)
     print("Copy this database from the docker container and give it the name xbvr.db",file=sys.stderr)
     print("docker cp xbvr:/root/.config/xbvr/main.db xbvr.db",file=sys.stderr)
+    print("for Windows users:",file=sys.stderr)
+    print("copy %APPDATA%\xbvr\main.db xbvr.db",file=sys.stderr) 
     exit(1)
 
 conn = sqlite3.connect('xbvr.db',detect_types=sqlite3.PARSE_DECLTYPES|sqlite3.PARSE_COLNAMES)
@@ -93,4 +117,3 @@ elif sys.argv[1] == "gallery_query":
         result.pop("image",None)
         print(json.dumps(result))
     conn.close()
-    
