@@ -1,8 +1,8 @@
 name: "GroobyNetwork-Partial"
 sceneByURL:
   - action: scrapeXPath
-    url:
-    # Gone through list at: grooby.com/about/websites/
+    url: &urls
+      # Gone through list at: grooby.com/about/websites/
       - asiantgirl.com
       - blacktgirlshardcore.com
       - black-tgirls.com
@@ -11,7 +11,6 @@ sceneByURL:
       - franks-tgirlworld.com
       - grooby-archives.com
       - groobygirls.com
-      - groobyvr.com
       - ladyboy-ladyboy.com
       - ladyboy.xxx
       - tgirlsex.xxx
@@ -20,18 +19,26 @@ sceneByURL:
       - transexpov.com
       - transgasm.com
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - groobyvr.com
+    scraper: sceneScraperGroobyVR
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()
-      Date:
+      Title: &title //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()
+      Date: &date
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
           - parseDate: January 2, 2006
-      Details: //div[@class="trailerpage_info"]/p[not(@class)]/text()
-      Performers:
+      Details: &details //div[@class="trailerpage_info"]/p[not(@class)]/text()
+      Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
-      Studio:
+      Studio: &studio
         Name: //meta[@name="author"]/@content
       Image:
         selector: //meta[@property="og:image"]/@content
@@ -39,5 +46,31 @@ xPathScrapers:
           - replace:
               - regex: ^// # bobstgirls
                 with: "https://"
-
-# Last Updated July 20, 2021
+  galleryScraper:
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Studio: *studio
+  sceneScraperGroobyVR:
+    scene:
+      Title: *title
+      Date:
+        selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: //div[@class="trailerblock"]/p[not(@class)]/text()
+      Performers:
+        Name: //div[@class="trailer_toptitle_left"]//a/text()
+      Studio: *studio
+      Image:
+        selector: //dl8-video/@poster
+        postProcess:
+          - replace:
+              - regex: content// # errant double slash
+                with: content/
+          - replace:
+              - regex: ^/
+                with: https://www.groobyvr.com/
+# Last Updated December 19, 2022

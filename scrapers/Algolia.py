@@ -236,12 +236,13 @@ def api_search_movie_id(m_id, url):
     return req
 
 def api_search_gallery_id(p_id, url):
-    gallery_id = [f"set_id:{p_id}"]
+    gallery_id = [[f"set_id:{p_id}"]]
     request_api = {
         "requests": [{
             "indexName": "all_photosets",
             "params": "query=&hitsPerPage=20&page=0",
-            "facetFilters": gallery_id
+            "facetFilters": gallery_id,
+            "facets": []
         }]
     }
     req = send_request(url, HEADERS, request_api)
@@ -592,7 +593,9 @@ def parse_scene_json(scene_json, url=None):
             log.warning("Can't locate image.")
     # URL
     try:
-        hostname = scene_json['sitename']
+        hostname = scene_json.get('sitename')
+        if hostname is None:
+            hostname = SITE
         # Movie
         if scene_json.get('movie_title'):
             scrape['movies'] = [{
@@ -606,17 +609,19 @@ def parse_scene_json(scene_json, url=None):
                 if URL_DOMAIN and MOVIE_SITES.get(URL_DOMAIN):
                     scrape['movies'][0][
                         'url'] = f"{MOVIE_SITES[URL_DOMAIN]}/{scene_json['url_movie_title']}/{scene_json['movie_id']}"
-        net_name = scene_json['network_name']
-        if net_name.lower() == "21 sextury":
-            hostname = "21sextury"
-        elif net_name.lower() == "21 naturals":
-            hostname = "21naturals"
+        net_name = scene_json.get('network_name')
+        if net_name:
+            if net_name.lower() == "21 sextury":
+                hostname = "21sextury"
+            elif net_name.lower() == "21 naturals":
+                hostname = "21naturals"
         scrape[
-            'url'] = f"https://{hostname.lower()}.com/en/video/{scene_json['sitename'].lower()}/{scene_json['url_title']}/{scene_json['clip_id']}"
-    except:
+            'url'] = f"https://{hostname.lower()}.com/en/video/{hostname.lower()}/{scene_json['url_title']}/{scene_json['clip_id']}"
+    except Exception as exc:
+        log.debug(f"{exc}")
         if url:
             scrape['url'] = url
-    #debug(f"{scrape}")
+    #log.debug(f"{scrape}")
     return scrape
 
 def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
@@ -625,7 +630,9 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
     """
     scrape = {}
     # Title
-    if gallery_json.get('title'):
+    if gallery_json.get('clip_title'):
+        scrape['title'] = gallery_json['clip_title'].strip()
+    elif gallery_json.get('title'):
         scrape['title'] = gallery_json['title'].strip()
     # Date
     scrape['date'] = gallery_json.get('date_online')
@@ -689,8 +696,8 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
             hostname = "21sextury"
         elif net_name.lower() == "21 naturals":
             hostname = "21naturals"
-        scrape[
-            'url'] = f"https://{hostname.lower()}.com/en/video/{gallery_json['sitename'].lower()}/{gallery_json['url_title']}/{gallery_json['set_id']}"
+        scrape['url'] = f"https://www.{hostname.lower()}.com/en/photo/" \
+            f"{gallery_json['url_title']}/{gallery_json['set_id']}"
     except:
         if url:
             scrape['url'] = url

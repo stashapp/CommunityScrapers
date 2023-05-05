@@ -35,7 +35,7 @@ sceneByFragment:
 xPathScrapers:
   sceneScraper:
     common:
-      $info: &info //div[starts-with(@class,"video-item__info ")]
+      $info: &info //div[starts-with(@class,"video-item__info ")]|//div[@class="single-video-info"]
     scene:
       Title: &titleSel //h1
       Date: &dateAttr
@@ -43,12 +43,12 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsAttr
-        selector: //div[contains(@class,"second-text")]/div//text()
+        selector: //div[contains(@class,"second-text")]/div//text()|//div[contains(@class,"single-video-description")]/div//text()
         concat: " "
       Tags:
-        Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]/text()
+        Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]/text()|//div[@class="single-video-categories"]//a[contains(@href,"category/")]/text()
       Performers:
-        Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()
+        Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()|//div[contains(@class, "single-video-info__starring")]//a/text()
       Studio:
         Name: &studioName
           selector: &studioURLSel //meta[@name="dl8-customization-brand-url"]/@content
@@ -92,4 +92,4 @@ xPathScrapers:
         Name: *studioName
         URL: *studioURL
       FrontImage: *imageSel
-# Last Updated February 06, 2023
+# Last Updated February 27, 2023

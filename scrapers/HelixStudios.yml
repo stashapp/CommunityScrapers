@@ -56,15 +56,7 @@ xPathScrapers:
       Date:
         selector: //div[@class="info-items"]/span[@class="info-item date"]/text()
         postProcess:
-          - replace:
-              - regex: "th|st|nd|rd"
-                with:
-              - regex: '(\d+)\sdays\sago'
-                with: $1
-              - regex: '^([a-zA-Z]+)\s(\d+)$'
-                with: "$1 $2, 2021"
-          - subtractDays: true
-          - parseDate: Jan 2, 2006
+          - parseDate: January 2, 2006
       Details:
         selector: //div[contains(@class, "description-content")]/p/text()
         concat: "#LINEBREAK#"
@@ -82,6 +74,21 @@ xPathScrapers:
       URL: //link[@rel="canonical"][1]/@href
       Image:
         selector: //video/@poster
+        postProcess:
+          - replace:
+              - regex: 960w
+                with: 1500w
+      Director:
+        selector: //span[contains(@class, "info-item director")]/text()
+      Code:
+        selector: //*[@id="titleImage"]/@src
+        postProcess:
+          - replace:
+              - regex: ^.*\/\s*
+                with:
+          - replace:
+              - regex: \_1600.*$
+                with:
       Studio:
         Name:
           fixed: Helix
@@ -137,4 +144,4 @@ xPathScrapers:
           - replace:
               - regex: $
                 with: " "
-# Last Updated December 29, 2021
+# Last Updated February 20, 2023

@@ -1,31 +1,43 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: Pornworld
+
 sceneByURL:
   - action: scrapeXPath
     url:
       - pornworld.com/watch/
     scraper: sceneScraper
+
 sceneByFragment:
   action: scrapeJson
   queryURL: https://pornworld.com/autocomplete?query={filename}
   queryURLReplace:
     filename:
-      - regex: .+(GP\d+).*
+      - regex: .*(GP\d+).*
         with: $1
   scraper: sceneQueryScraper
+
 jsonScrapers:
   sceneQueryScraper:
     scene:
       Title: terms.Scene.0.name
       URL: terms.Scene.0.url
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: 
+      Title:
         selector: //h1
         postProcess:
           - replace:
-            - regex: featuring.+
-              with: ""
+              - regex: featuring.+
+                with: ""
+      Code:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: .*(GP\d+).*
+                with: $1
       Date: //i[contains(@class,"calendar3")]/text()
       Details:
         selector: //meta[@name="description"]/@content
@@ -41,5 +53,5 @@ xPathScrapers:
         Name:
           fixed: Porn World
       Image: //video/@data-poster
-
-# Last Updated August 10, 2021
+      URL: //div[@class="pagination"]/a[1]/@href
+# Last Updated March 03, 2023

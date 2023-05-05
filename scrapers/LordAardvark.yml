@@ -1,0 +1,58 @@
+name: "LordAardvark"
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - lordaardvark.com/html/galleries.html
+    scraper: galleryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lordaardvark.com/films/
+    scraper: sceneScraper
+xPathScrapers:
+  galleryScraper:
+    common:
+      $content: //div[contains(@class, "viewer-content-controls")]
+    gallery:
+      Date:
+        selector: $content/h2
+        postProcess:
+          - parseDate: January 2, 2006
+      Title: $content/h1
+      Details:
+        selector: $content/p
+      Studio:
+        Name:
+          fixed: LordAardvark
+  sceneScraper:
+    scene:
+      Title: //div[@class="player-overlay-title"]/h1
+      Details:
+        selector: //section[@class="player-overlay-description"]//div[@class="row"]/div[@class="col"]/*
+        concat: "\n\n"
+      Date:
+        selector: //meta[@property="video:release_date"]/@content
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}-\d{2}-\d{2}).*
+                with: $1
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: LordAardvark
+      Code:
+        selector: //script[contains(text(), "_filmOrigin")]
+        postProcess:
+          - replace:
+              - regex: '.*id: (\d+).*'
+                with: $1
+      Movies:
+        Name: //p[contains(text(), "Series:")]/following-sibling::a/text()
+      Tags:
+        Name: //div[contains(@class, "col")]/a[@class="player-tag"]/text()
+      Performers:
+        Name: //p[contains(text(), "Characters:")]/following-sibling::a/text()
+
+driver:
+  useCDP: true
+# Last Updated February 23, 2023
