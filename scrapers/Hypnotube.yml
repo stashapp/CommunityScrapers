@@ -4,17 +4,17 @@ sceneByURL:
     url:
       - hypnotube.com
     scraper: sceneScraper
-    
+
 sceneByName:
   action: scrapeXPath
   queryURL: https://hypnotube.com/search/{}/
   scraper: hypnotubeSearch
-  
+
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-  
+
 xPathScrapers:
   hypnotubeSearch:
     common:
