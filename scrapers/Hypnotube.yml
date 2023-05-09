@@ -4,7 +4,29 @@ sceneByURL:
     url:
       - hypnotube.com
     scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://hypnotube.com/search/{}/
+  scraper: hypnotubeSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 xPathScrapers:
+  hypnotubeSearch:
+    common:
+      $card: //div[@class='item-inner-col inner-col']
+    scene:
+      Title:
+        selector: $card//a[contains(@href, '/video')]/@title
+      URL:
+        selector: $card//a[contains(@href, '/video')]/@href
+      Image:
+        selector: $card//img[contains(@data-mb, "shuffle-thumbs")]/@src
+
   sceneScraper:
     common:
       $studio: //a[starts-with(@href,'https://hypnotube.com/user/')]
@@ -23,5 +45,5 @@ xPathScrapers:
                 with: ""
       Tags:
         Name: //div[@class='tags-block']/a/text()
-      URL: //link[rel='canonical']/@href
-# Last Updated January 27, 2023
+      URL: //link[@rel='canonical']/@href
+# Last Updated April 29, 2023
