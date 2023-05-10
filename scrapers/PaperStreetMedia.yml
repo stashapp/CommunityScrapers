@@ -43,7 +43,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //p[@class="video-title"]/text()
-      Details: //div[contains(@class, 'video-description')]//p/text()
+      Details: //div[contains(@class, 'video-description')]/descendant-or-self::*/text()
       Performers:
         Name: //p[@class="model-name"]/a
       Image: //div[@class="video-area"]//stream/@poster
