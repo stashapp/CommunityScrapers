@@ -22,8 +22,8 @@ xPathScrapers:
         selector: //video/@data-poster-url
         postProcess:
           - replace:
-              - regex: \[resolution\]
-                with: ipadbig.jpg
+              - regex: members/\[resolution\]
+                with: big_trailer.jpg
               - regex: ^//
                 with: https://
       Tags:
@@ -40,4 +40,4 @@ xPathScrapers:
           - replace:
               - regex: mobile\.bangbros\.com
                 with: mobile.filthyfamily.com
-# Last Updated February 27, 2023
+# Last Updated May 11, 2023
