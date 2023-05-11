@@ -19,8 +19,8 @@ xPathScrapers:
         #selector: //img[@id="player-overlay-image"]/@src # Better image but can fail on older scenes
         postProcess:
           - replace:
-              - regex: ^
-                with: "https:"
+              - regex: '.*(//x-images\d\.bangbros\.com/[^/]+/shoots/[^/]+).*'
+                with: "https:$1/big_trailer.jpg"
       Studio:
         Name:
           selector: //div[@class="vdoCast"]/a[1]/text()
@@ -37,4 +37,4 @@ xPathScrapers:
           - subScraper:
               selector: //span[@class="thmb_mr_cmn thmb_mr_2 clearfix"]/span[@class="faTxt"]
           - parseDate: Jan 2, 2006
-# Last Updated June 08, 2022
+# Last Updated May 11, 2023
