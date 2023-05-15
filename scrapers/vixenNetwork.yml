@@ -28,5 +28,12 @@ sceneByQueryFragment:
     script:
       - python
       - vixenNetwork.py
-
-# Last Updated January 07, 2022
+      
+sceneByFragment:
+  action: script
+  script:
+      - python
+      - vixenNetwork.py
+      - sceneByFragment
+        
+# Last Updated June 22, 2022
