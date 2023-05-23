@@ -1,0 +1,31 @@
+name: BenefitMonkey
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - benefitmonkey.com/scenes/
+      - lezkey.com/scenes/
+    queryURL: https://benefitmonkey.com/_next/data/c0nOrXwXZNfyZr_FH-gFq/scenes/{url}.json
+    scraper: sceneScraper
+    queryURLReplace:
+      url:
+        - regex: ".*\\/"
+          with: ""
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title: pageProps.content.title
+      Details: pageProps.content.description
+      Date: 
+        selector: pageProps.content.publish_date
+        postProcess:
+          - replace:
+            - regex: \s.*
+              with: ""
+      Image: pageProps.content.trailer_screencap
+      Performers:
+        Name: pageProps.content.models
+      Studio:
+        Name: pageProps.content.site
+      Tags:
+        Name: pageProps.content.tags
+# Last Updated May 23, 2023
