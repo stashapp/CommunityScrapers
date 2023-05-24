@@ -1,0 +1,49 @@
+name: "PornHex"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornhex.com
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - pornhex.com
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@itemprop="name"]/@content
+      Image: //video[@id="player"]/@poster
+      Date: 
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - parseDate: 2006-01-02 15:04:05
+          - parseDate: 2006-01-02
+      Tags:
+        Name: //div[@class="meta-bar col-12 padd-top-small"]//a[contains(@href,"/search?q=")]/@title | //div[@class="meta-bar col-12"]//a[contains(@href,"/categories/")]/text()
+      Performers:
+        Name: //div[@class="meta-bar col-12 padd-top-small"]//a[contains(@href,"/pornstars/")]/text()
+      Details: //meta[@itemprop="description"]/@content
+  performerScraper:
+    common:
+      $pornstar: //section[@class="pornstar-header"]//div[@class="col-6"]//p
+    performer:
+      Name: $pornstar//span[contains(text(),"Alias -")]/following::span/text()
+      Country: $pornstar//span[contains(text(),"Home Country -")]/following::span/text()
+      Ethnicity: $pornstar//span[contains(text(),"Ethnicity -")]/following::span/text()
+      HairColor: $pornstar//span[contains(text(),"Hair -")]/following::span/text()
+      EyeColor: $pornstar//span[contains(text(),"Eye Colour -")]/following::span/text()
+      Height:
+        selector: $pornstar//span[contains(text(),"Height -")]/following::span/text()
+        postProcess:
+          - feetToCm: true
+      Measurements: $pornstar//span[contains(text(),"Measurements -")]/following::span/text()
+      URL: $pornstar//span[contains(text(),"Official site -")]/following::a/@href
+      Image:
+        selector: //section[@class="pornstar-header"]//div[@class="thumbnail-col-2 col-2"]/img[not(contains(@src,"default_portrait"))]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://pornhex.com"
+
+# Last Updated May 24, 2023
