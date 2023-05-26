@@ -597,11 +597,7 @@ def determine_studio_name_from_json(some_json):
             some_json.get('mainChannelName') in MAIN_CHANNELS_AS_STUDIO_FOR_SCENE:
         studio_name = some_json.get('mainChannelName')
     if not studio_name and some_json.get('directors'):
-        directors = []
-        for director in some_json.get('directors'):
-            log.debug(f"director: {director}")
-            directors.append(director.get('name').strip())
-        for director in directors:
+        for director in [ d.get('name').strip() for d in some_json.get('directors') ]:
             if DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE.get(director):
                 studio_name = \
                         DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE.get(director)
