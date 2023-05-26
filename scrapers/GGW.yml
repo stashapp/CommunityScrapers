@@ -1,0 +1,26 @@
+name: "Girls Gone Wild"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - girlsgonewild.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[contains(@class,"watch__title")]/text()
+      Details: //div[contains(@class,"text-mob-more")]/text()
+      Performers:
+        Name: //span[contains(@class,"watch__featuring_models")]/a
+      Studio:
+        Name: "Girls Gone Wild"
+        URL: "https://girlsgonewild.com"
+      Image: //video/@data-poster
+      Tags:
+        Name: //div[contains(@class,"genres-list")]/a[starts-with(@href,"/genre")]
+      Date:
+        selector: //i[contains(@class,"bi-calendar3")]
+        postProcess:
+          - replace:
+            - regex: "::before"
+              with: ""
+# Last Updated May 21, 2023
