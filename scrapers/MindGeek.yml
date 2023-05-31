@@ -73,6 +73,8 @@ xPathScrapers:
   sceneScraper:
     common:
       $section: //div[contains(@class,"tg5e7m")]/ancestor::section
+      $canonicalUrl: &canonicalUrl //link[@rel="canonical"]/@href
+      $movieUriPath: &movieUriPath //a[text()="Movie Info"]/@href
     scene:
       Title: $section//h1/text()|$section//h2/text()
       Date:
@@ -115,11 +117,34 @@ xPathScrapers:
                 sweetsinner: Sweet Sinner
                 teenslovehugecocks: Teens Love Huge Cocks
       Image: $section//img[contains(@src,"poster")]/@src
+      Movies: &sceneMovies
+        URL:
+          selector: $canonicalUrl|$movieUriPath
+          concat: __SEPARATOR__
+          postProcess:
+            - replace:
+              - regex: '^(https://[^/]+).+__SEPARATOR__'
+                with: $1
+        Name:
+          selector: $canonicalUrl|$movieUriPath
+          concat: __SEPARATOR__
+          postProcess:
+            - replace:
+              - regex: '^(https://[^/]+).+__SEPARATOR__'
+                with: $1
+            - subScraper:
+                selector: //h1/text()|//h2/text()
+      Code: &sceneCode
+        selector: $canonicalUrl
+        postProcess:
+          - replace:
+              - regex: '.*/scene/(\d+).*'
+                with: $1
   scriptScraper:
     common:
       $script: //script[@type="application/ld+json"]
-      $canonicalUrl: //link[@rel="canonical"]/@href
-      $movieUriPath: //a[text()="Movie Info"]/@href
+      $canonicalUrl: *canonicalUrl
+      $movieUriPath: *movieUriPath
     scene:
       Title:
         selector: $script
@@ -177,29 +202,8 @@ xPathScrapers:
                 with: '"'
       Performers:
         Name: //div/*[self::h1 or self::h2]/..//a[contains(@href,"/model")]
-      Movies:
-        URL:
-          selector: $canonicalUrl|$movieUriPath
-          concat: __SEPARATOR__
-          postProcess:
-            - replace:
-              - regex: '^(https://[^/]+).+__SEPARATOR__'
-                with: $1
-        Name:
-          selector: $canonicalUrl|$movieUriPath
-          concat: __SEPARATOR__
-          postProcess:
-            - replace:
-              - regex: '^(https://[^/]+).+__SEPARATOR__'
-                with: $1
-            - subScraper:
-                selector: //h2/text()
-      Code:
-        selector: $canonicalUrl
-        postProcess:
-          - replace:
-              - regex: '.*/scene/(\d+).*'
-                with: $1
+      Movies: *sceneMovies
+      Code: *sceneCode
   movieScraper:
     common:
       $section: //div[text()="Release Date:"]/ancestor::section
