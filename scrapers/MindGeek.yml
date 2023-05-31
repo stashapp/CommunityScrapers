@@ -42,8 +42,15 @@ sceneByURL:
 movieByURL:
   - action: scrapeXPath
     url:
-      - digitalplayground.com/movie
-      - transsensual.com/movie
+      - digitalplayground.com/movie/
+      - doghousedigital.com/movie/
+      - iconmale.com/movie/
+      - milehighmedia.com/movie/
+      - noirmale.com/movie/
+      - realityjunkies.com/movie/
+      - sweetheartvideo.com/movie/
+      - sweetsinner.com/movie/
+      - transsensual.com/movie/
     scraper: movieScraper
 
 performerByURL:
