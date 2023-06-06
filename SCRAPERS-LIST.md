@@ -527,6 +527,7 @@ girlgirl.com|JulesJordan.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Les
 girlgirlmania.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlgrind.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Lesbian
 girlsandstuds.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+girlsgonewild.com|GGW.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 girlsgotcream.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlsonlyporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 girlsoutwest.com|GirlsOutWest.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|Lesbian
