@@ -44,4 +44,6 @@ xPathScrapers:
           - replace:
               - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
                 with: $1$2
-# Last Updated June 26, 2022
+      Tags:
+        Name: //div[@class="set_tags"]/ul/li//a/text()
+# Last Updated June 07, 2023
