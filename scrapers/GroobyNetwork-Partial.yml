@@ -46,6 +46,8 @@ xPathScrapers:
           - replace:
               - regex: ^// # bobstgirls
                 with: "https://"
+      Tags: &tags
+        Name: //div[@class="set_tags"]/ul/li//a/text()
   galleryScraper:
     gallery:
       Title: *title
@@ -53,6 +55,7 @@ xPathScrapers:
       Details: *details
       Performers: *performers
       Studio: *studio
+      Tags: *tags
   sceneScraperGroobyVR:
     scene:
       Title: *title
@@ -73,4 +76,5 @@ xPathScrapers:
           - replace:
               - regex: ^/
                 with: https://www.groobyvr.com/
-# Last Updated December 19, 2022
+      Tags: *tags
+# Last Updated June 07, 2023
