@@ -7,17 +7,22 @@ sceneByURL:
       - blacktgirlshardcore.com
       - black-tgirls.com
       - bobstgirls.com
+      - femout.xxx
       - femoutsex.xxx #Scenes on 'femout.xxx' can some times be found on this one as well
       - franks-tgirlworld.com
       - grooby-archives.com
       - groobygirls.com
       - ladyboy-ladyboy.com
       - ladyboy.xxx
+      - realtgirls.com
       - tgirlsex.xxx
       - tgirls.porn
       - tgirls.xxx
+      - tgirlshookup.com
+      - tgirltops.com
       - transexpov.com
       - transgasm.com
+      - transnificent.com
     scraper: sceneScraper
   - action: scrapeXPath
     url:
