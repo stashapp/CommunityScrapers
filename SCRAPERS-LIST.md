@@ -1248,6 +1248,7 @@ teensnaturalway.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teensneaks.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 teenstryblacks.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teenthais.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Thai Uncensored
+teenytaboo.com|TeenyTaboo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tenshigao.com|Tenshigao.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Jav
 terapatrick.com|NikkiAndTera.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tessafowler.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
