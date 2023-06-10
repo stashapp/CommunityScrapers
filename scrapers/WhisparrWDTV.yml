@@ -1,0 +1,7 @@
+name: "Whisparr WDTV XML"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - WhisparrWDTV.py
+      - query
