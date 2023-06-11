@@ -13,12 +13,6 @@ import py_common.log as log
 This script parses kodi nfo files for metadata. The .nfo file must be in the same directory as the video file and must be named exactly alike.
 """
 
-# If you want to ingest image files from the .nfo the path to these files may need to be rewritten. Especially when using a docker container.
-rewriteBasePath = False
-# Example: Z:\Videos\Studio_XXX\example_cover.jpg -> /data/Studio_XXX/example_cover.jpg
-basePathBefore = 'Z:\Videos'
-basePathAfter = "/data"
-
 def query_xml(path, title):
     res = {"title": title}
     try:        
@@ -53,13 +47,6 @@ def query_xml(path, title):
     
     return res
 
-def make_image_data_url(image_path):
-    # type: (str,) -> str
-    mime, _ = mimetypes.guess_type(image_path)
-    with open(image_path, 'rb') as img:
-        encoded = base64.b64encode(img.read()).decode()
-    return 'data:{0};base64,{1}'.format(mime, encoded)
-
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
     s_id = fragment.get("id")
@@ -67,7 +54,7 @@ if sys.argv[1] == "query":
         log.error(f"No ID found")
         sys.exit(1)
     
-    # Assume that .nfo/.xml is named exactly alike the video file and is at the same location
+    # Assume that .xml is named exactly alike the video file and is at the same location
     # Query graphQL for the file path
     scene = graphql.getScene(s_id)
     if scene:
@@ -81,7 +68,7 @@ if sys.argv[1] == "query":
             if f.is_file():
                 res = query_xml(f, fragment["title"])
             else:
-                log.info(f"No nfo/xml files found for the scene: {p}")
+                log.info(f"No xml files found for the scene: {p}")
             
             print(json.dumps(res))
             exit(0)
