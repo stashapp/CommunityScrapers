@@ -9,10 +9,17 @@ import xml.etree.ElementTree as ET
 
 import py_common.graphql as graphql
 import py_common.log as log
-"""  
-This script parses kodi nfo files for metadata. The .nfo file must be in the same directory as the video file and must be named exactly alike.
-"""
 
+"""  
+This script parses WDTV xml metadata files. 
+The .xml file must be in the same directory as the video file and must be named exactly alike.
+
+Code borrowed from the kodi nfo scraper (in https://github.com/stashapp/CommunityScrapers/pull/689)
+It was found the .nfo files exported from Whisparr, did not contain all details required.
+Using the WDTV format instead had all information. 
+
+The intention is not to be a generic WDTV metadata parser, but one that specifically parses WDTV metadata from Whisparr. Based on version v2.0.0.168. This simplifies the integration of Whisparr and Stash.
+"""
 def query_xml(path, title):
     res = {"title": title}
     try:        
@@ -36,7 +43,10 @@ def query_xml(path, title):
     
     if tree.find("firstaired") != None:
         res["date"] = tree.find("firstaired").text
-    
+
+    # This is based on how my version of Whisparr (v2.0.0.168) output the WDTV .xml
+    # It seperated actors by " / " 
+    # then for some reason had duplicated the name seperated by " - "
     if tree.find("actor") != None and tree.find("actor").text:
         res["performers"] = []
         for actor in tree.find("actor").text.split(" / "):
