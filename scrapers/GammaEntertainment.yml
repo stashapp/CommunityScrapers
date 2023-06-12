@@ -19,14 +19,11 @@ sceneByURL:
       - devonlee.com/
       - dylanryder.com/
       - falconstudios.com/en/video/
-      - famedigital.com/
       - familycreep.com/
       - fistingcentral.com/
       - gapingangels.com/
-      - genderxfilms.com/en/video/
       - girlsandstuds.com/
       - grannyghetto.com/
-      - hairyundies.com/
       - hothouse.com/en/video/
       - immorallive.com/en/video/
       - jaysinxxx.com/
@@ -66,9 +63,7 @@ sceneByURL:
       - tittycreampies.com/
       - transsexualangel.com/en/video/
       - transsexualroadtrip.com/
-      - tsplayground.com/en/video/
       - whiteghetto.com/
-      - wicked.com/en/video/
     scraper: sceneScraper
 
 performerByURL:
@@ -83,8 +78,6 @@ movieByURL:
   - action: scrapeXPath
     url:
       - darkx.com/en/movie/
-      - eroticax.com/en/movie/
-      - famedigital.com/en/
       - hardx.com/en/movie/
       - xempire.com/en/movie/
     scraper: movieScraper
@@ -145,7 +138,7 @@ xPathScrapers:
               # if using the transport subdomain, parameters need to be passed
               # otherwise a cropped square image is returned by default
               - regex: (https:\/\/transform.+)
-                with: $1?width=960&height=543&enlarge=true
+                with: $1?width=1920&height=1080&enlarge=true
       Studio:
         Name:
           selector: //*[local-name()="div" or local-name()=p][contains(text(),"is a site owned and operated by Gamma")]|//meta[@name="twitter:domain"]/@content
@@ -177,16 +170,11 @@ xPathScrapers:
                 eroticax: EroticaX
                 evilangel: Evil Angel
                 falconstudios: Falcon Studios
-                famedigital: Fame Digital
                 familycreep: Family Creep
                 fistingcentral: Fisting Central
                 gapingangels: Gaping Angels
-                genderx: Gender X
-                girlfriendsfilms: Girlfriends Films
                 girlsandstuds: Girls And Studs
                 grannyghetto: Granny Ghetto
-                hairyundies: Hairy Undies
-                hardx: HardX
                 hothouse: Hot House
                 immorallive: Immoral Live
                 jaysinxxx: Jay Sin XXX
@@ -228,7 +216,6 @@ xPathScrapers:
                 tittycreampies: Titty Creampies
                 transsexualangel: Transsexual Angel
                 transsexualroadtrip: Transsexual Roadtrip
-                tsplayground: TS Playground
                 whiteghetto: White Ghetto
                 xempire: XEmpire
 
@@ -251,5 +238,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-
-# Last Updated October 02, 2022
+# Last Updated January 13, 2023

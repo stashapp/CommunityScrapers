@@ -27,4 +27,13 @@ sceneByQueryFragment:
       - Algolia.py
       - gangbangcreampie
       - validName
-# Last Updated November 10, 2022
+galleryByURL:
+  - action: script
+    url:
+      - gangbangcreampie.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - gangbangcreampie
+      - gallery
+# Last Updated December 22, 2022

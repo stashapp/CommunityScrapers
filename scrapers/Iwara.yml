@@ -1,0 +1,93 @@
+name: "Iwara"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - iwara.tv
+    scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://ecchi.iwara.tv/videos/{filename} # also works for sfw videos
+  queryURLReplace:
+    filename: # expects the default filename format when saved from Iwara - <some digits>_<id>_<resolution>.<ext>
+      - regex: ".*_([0-9a-zA-Z]{12,})_.*"
+        with: $1
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
+        with: # clear the filename so that it doesn't leak
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://ecchi.iwara.tv/search?f%5B0%5D=type%3Avideo&query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[contains(@class,"view-search")]//div[contains(@class,"views-row")]//div[contains(@class,"node-video")]
+    scene:
+      Title: $searchItem//h3[@class="title"]/a/text()
+      URL:
+        selector: $searchItem//h3[@class="title"]/a/@href
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https://ecchi.iwara.tv"
+      Image:
+        selector: $searchItem//img/@src
+        postProcess:
+          - replace:
+              - regex: "^//"
+                with: "https://"
+      Studio:
+        Name: $searchItem//a[@class="username"]/text()
+        URL:
+          selector: $searchItem//a[@class="username"]/@href
+          postProcess:
+            - replace:
+                - regex: "^"
+                  with: "https://ecchi.iwara.tv"
+      Date:
+        selector: $searchItem//div[@class="submitted"]
+        postProcess:
+          - replace:
+              - regex: '.+(\d{4}-\d{2}-\d{2}).+'
+                with: $1
+          - parseDate: "2006-01-02"
+  sceneScraper:
+    common:
+      $infoNode: //div[@class="node-info"]
+    scene:
+      URL: //link[@rel="canonical"][contains(@href,"http")]/@href
+      Title: $infoNode//h1/text()
+      Details:
+        selector: $infoNode/div[contains(@class,"field-name-body")]//p//*/text()
+        concat: "\n"
+      Image:
+        selector: //video/@poster
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https:"
+      Tags:
+        Name: $infoNode/div[contains(@class,"field-name-field-categories")]//a/text()
+      Studio:
+        Name: $infoNode//a[@class="username"]/text()
+        URL:
+          selector: $infoNode//a[@class="username"]/@href
+          postProcess:
+            - replace:
+                - regex: "^"
+                  with: "https://ecchi.iwara.tv"
+      Date:
+        selector: $infoNode/div[@class="submitted"]
+        postProcess:
+          - replace:
+              - regex: '.+(\d{4}-\d{2}-\d{2}).+'
+                with: $1
+          - parseDate: "2006-01-02"
+# Last Updated November 25, 2022

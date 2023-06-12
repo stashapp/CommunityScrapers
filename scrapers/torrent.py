@@ -11,6 +11,17 @@ try:
 except ModuleNotFoundError:
     print("You need to install the 'bencoder.pyx' module. (https://pypi.org/project/bencoder.pyx/)", file=sys.stderr)
     sys.exit()
+from os.path import basename
+from pathlib import Path
+import re
+from datetime import datetime
+import difflib
+
+try:
+    from bencoder import bdecode
+except ModuleNotFoundError:
+    print("You need to install the 'bencoder.pyx' module. (https://pypi.org/project/bencoder.pyx/)", file=sys.stderr)
+    sys.exit()
 
 try:
     from py_common import graphql

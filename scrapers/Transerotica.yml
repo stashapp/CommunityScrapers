@@ -12,9 +12,14 @@ xPathScrapers:
       Title: //h1[@class='title_bar']
       Image: //div[@id="player"]/video/@poster
       Date:
-        selector: $update//span[@class="upddate"][1]
+        selector: $update//comment()
         postProcess:
+          - replace:
+              - regex: .*(?:class='upddate').*(\d{2}/\d{2}/\d{4}).*
+                with: $1
           - parseDate: "01/02/2006"
+          - map:
+              1970-01-01: ""
       Details:
         selector: $update/p[starts-with(text(),"Description:")]
         postProcess:
@@ -31,4 +36,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Trans Erotica
-# Last Updated August 07, 2021
+# Last Updated February 06, 2023

@@ -23,18 +23,30 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //h1
-      Twitter: //table//tr/td/b/a[text()='Twitter']/@href
-      Instagram: //table//tr/td/b/a[text()='Instagram']/@href
+      Twitter: //table//tr/td/a[b[text()='Twitter']]/@href
+      Instagram: //table//tr/td/a[b[text()='Instagram']]/@href
       Birthdate:
-        selector: //table//tr/td//b[text()='Born:']/../following-sibling::td/a
+        selector: //table//tr/td//b[text()='Born']/../following-sibling::td/a
         concat: " "
         postProcess:
+          - replace:
+              - regex: (.*\d\d\d\d).*
+                with: $1
           - parseDate: January 2 2006
-      Ethnicity: //table//tr/td/b[text()='Ethnicity:']/../following-sibling::td/a
-      Country: //table//tr/td/b[text()='Nationality:']/../following-sibling::td/a
-      EyeColor: //table//tr/td/b[text()='Eye color:']/../following-sibling::td
+      Ethnicity:
+        selector: //table//tr/td/b[text()='Ethnicity']/../following-sibling::td/a
+        postProcess:
+          - replace:
+              - regex: \[\d*\]
+                with: ""
+      EyeColor:
+        selector: //table//tr/td/b[text()='Eye color']/../following-sibling::td
+        postProcess:
+          - replace:
+              - regex: \[\d*\]
+                with: ""
       Height:
-        selector: //table//tr/td/b[text()='Height:']/../following-sibling::td
+        selector: //table//tr/td/b[text()='Height']/../following-sibling::td
         postProcess:
           - replace:
               - regex: (?:.+\D)?(\d+\.\d+)\Dm.+
@@ -42,28 +54,66 @@ xPathScrapers:
               - regex: \.
                 with: ""
       Weight:
-        selector: //table//tr/td/b[text()='Weight:']/../following-sibling::td
+        selector: //table//tr/td/b[text()='Weight']/../following-sibling::td
         postProcess:
           - replace:
               - regex: (?:.+\D)?(\d+)\Dkg.+
                 with: $1
       Measurements:
-        selector: //table//tr/td/b[text()='Measurements:']/../following-sibling::td|//table//tr/td[contains(b,'cup')]/following-sibling::td
+        selector: //table//tr/td/b[text()='Measurements']/../following-sibling::td|//table//tr/td[contains(b,'cup')]/following-sibling::td
         concat: "|"
         postProcess:
           - replace:
-              - regex: (\d+)-(\d+)-(\d+)[^|]+\|(\S+).+ # get measurements + cup
-                with: $1$4-$2-$3
+              - regex: (\d+)-(\d+)-(\d+)[^|]*\|(\d+\S+).+ # get measurements + cup
+                with: $4-$2-$3
               - regex: \|.+$ # fallback to clear non matching regexes
                 with: ""
-      FakeTits: //table//tr/td/b[text()='Boobs:']/../following-sibling::td/a
-      HairColor: //table//tr/td[contains(b,'Hair')]/following-sibling::td
+              - regex: \[\d*\] # Remove References
+                with: ""
+              - regex: ( in) # Remove Unit Inches
+                with: ""
+      FakeTits:
+        selector: //table//tr/td/b[text()='Boobs']/../following-sibling::td/a
+        postProcess:
+          - replace:
+              - regex: \[\d*\] # Remove References
+                with: ""
+          - map:
+              "Enhanced": "Fake"
+              "Natural": "Natural"
+      HairColor:
+        selector: //table//tr/td[contains(b,'Hair')]/following-sibling::td//text()
+        concat: ", "
+        postProcess:
+          - replace:
+              - regex: (,,)
+                with: ","
+              - regex: ( , )
+                with: " "
+              - regex: \[\d*\]
+                with: ""
       # nbsp; screws up the parsing, so use contains instead
-      CareerLength: //table//tr/td/b[text()[contains(.,'active:')]]/../following-sibling::td
-      Aliases: //table//tr/td/b[text()[contains(.,'known')]]/../following-sibling::td
+      CareerLength:
+        selector: //table//tr/td/b[text()[contains(.,'active')]]/../following-sibling::td
+        postProcess:
+          - replace:
+              - regex: \[\d*\] # Remove References
+                with: ""
+              - regex: (—|–)
+                with: "-"
+              - regex: (\S)-(\S)
+                with: $1 - $2
+              - regex: (?i)(present|current)
+                with: ""
+      Aliases:
+        selector: //table//tr/td/b[text()[contains(.,'known')]]/../following-sibling::td
+        postProcess:
+          - replace:
+              - regex: \[\d*\]
+                with: ""
       Image:
         #selector: //table[@class="infobox"]//img/@src #alterntive image, no need for subScraper but gets lq image
-        selector: //table[@class="infobox"]//a[img[@src]]/@href
+        selector: //table[@class="infobox plainlinks"]//a[img[@src]]/@href
         postProcess:
           - replace:
               - regex: ^
@@ -83,4 +133,314 @@ xPathScrapers:
       Details:
         selector: //div[@class="mw-parser-output"]/p
         concat: "\n\n"
-# Last Updated February 01, 2022
+        postProcess:
+          - replace:
+              # Remove References
+              - regex: \[\d*\]
+                with: ""
+              # Remove <protect> and </protect>, which appears in the details of some performers (e.g. Jenna Jameson)
+              - regex: </?protect>
+                with: ""
+              # Remove triple line breaks
+              - regex: \n\n\n
+                with: "\n"
+      Country:
+        selector: //table//tr/td/b[text()='Nationality']/../following-sibling::td/a
+        postProcess:
+          - map:
+              "Abkhaz": "Abkhazia"
+              "Abkhazian": "Abkhazia"
+              "Afghan": "Afghanistan"
+              "Albanian": "Albania"
+              "Algerian": "Algeria"
+              "American Samoan": "American Samoa"
+              "American": "United States of America"
+              "Andorran": "Andorra"
+              "Angolan": "Angola"
+              "Anguillan": "Anguilla"
+              "Antarctic": "Antarctica"
+              "Antiguan": "Antigua and Barbuda"
+              "Argentine": "Argentina"
+              "Argentinian": "Argentina"
+              "Armenian": "Armenia"
+              "Aruban": "Aruba"
+              "Australian": "Australia"
+              "Austrian": "Austria"
+              "Azerbaijani": "Azerbaijan"
+              "Azeri": "Azerbaijan"
+              "Bahamian": "Bahamas"
+              "Bahraini": "Bahrain"
+              "Bangladeshi": "Bangladesh"
+              "Barbadian": "Barbados"
+              "Barbudan": "Antigua and Barbuda"
+              "Basotho": "Lesotho"
+              "Belarusian": "Belarus"
+              "Belgian": "Belgium"
+              "Belizean": "Belize"
+              "Beninese": "Benin"
+              "Beninois": "Benin"
+              "Bermudan": "Bermuda"
+              "Bermudian": "Bermuda"
+              "Bhutanese": "Bhutan"
+              "BIOT": "British Indian Ocean Territory"
+              "Bissau-Guinean": "Guinea-Bissau"
+              "Bolivian": "Bolivia"
+              "Bonaire": "Bonaire"
+              "Bonairean": "Bonaire"
+              "Bosnian": "Bosnia and Herzegovina"
+              "Botswanan": "Botswana"
+              "Bouvet Island": "Bouvet Island"
+              "Brazilian": "Brazil"
+              "British Virgin Island": "Virgin Islands British"
+              "British": "United Kingdom"
+              "Bruneian": "Brunei"
+              "Bulgarian": "Bulgaria"
+              "Burkinabé": "Burkina Faso"
+              "Burmese": "Burma"
+              "Burundian": "Burundi"
+              "Cabo Verdean": "Cabo Verde"
+              "Cambodian": "Cambodia"
+              "Cameroonian": "Cameroon"
+              "Canadian": "Canada"
+              "Cantonese": "Hong Kong"
+              "Caymanian": "Cayman Islands"
+              "Central African": "Central African Republic"
+              "Chadian": "Chad"
+              "Channel Island": "Guernsey"
+              #Channel Island: "Jersey"
+              "Chilean": "Chile"
+              "Chinese": "China"
+              "Christmas Island": "Christmas Island"
+              "Cocos Island": "Cocos (Keeling) Islands"
+              "Colombian": "Colombia"
+              "Comoran": "Comoros"
+              "Comorian": "Comoros"
+              "Congolese": "Congo"
+              "Cook Island": "Cook Islands"
+              "Costa Rican": "Costa Rica"
+              "Croatian": "Croatia"
+              "Cuban": "Cuba"
+              "Curaçaoan": "Curaçao"
+              "Cypriot": "Cyprus"
+              "Czech": "Czech Republic"
+              "Danish": "Denmark"
+              "Djiboutian": "Djibouti"
+              "Dominican": "Dominica"
+              "Dutch": "Netherlands"
+              "Ecuadorian": "Ecuador"
+              "Egyptian": "Egypt"
+              "Emirati": "United Arab Emirates"
+              "Emiri": "United Arab Emirates"
+              "Emirian": "United Arab Emirates"
+              "English people": "England"
+              "English": "England"
+              "Equatoguinean": "Equatorial Guinea"
+              "Equatorial Guinean": "Equatorial Guinea"
+              "Eritrean": "Eritrea"
+              "Estonian": "Estonia"
+              "Ethiopian": "Ethiopia"
+              "European": "European Union"
+              "Falkland Island": "Falkland Islands"
+              "Faroese": "Faroe Islands"
+              "Fijian": "Fiji"
+              "Filipino": "Philippines"
+              "Finnish": "Finland"
+              "Formosan": "Taiwan"
+              "French Guianese": "French Guiana"
+              "French Polynesian": "French Polynesia"
+              "French Southern Territories": "French Southern Territories"
+              "French": "France"
+              "Futunan": "Wallis and Futuna"
+              "Gabonese": "Gabon"
+              "Gambian": "Gambia"
+              "Georgian": "Georgia"
+              "German": "Germany"
+              "Ghanaian": "Ghana"
+              "Gibraltar": "Gibraltar"
+              "Greek": "Greece"
+              "Greenlandic": "Greenland"
+              "Grenadian": "Grenada"
+              "Guadeloupe": "Guadeloupe"
+              "Guamanian": "Guam"
+              "Guatemalan": "Guatemala"
+              "Guinean": "Guinea"
+              "Guyanese": "Guyana"
+              "Haitian": "Haiti"
+              "Heard Island": "Heard Island and McDonald Islands"
+              "Hellenic": "Greece"
+              "Herzegovinian": "Bosnia and Herzegovina"
+              "Honduran": "Honduras"
+              "Hong Kong": "Hong Kong"
+              "Hong Konger": "Hong Kong"
+              "Hungarian": "Hungary"
+              "Icelandic": "Iceland"
+              "Indian": "India"
+              "Indonesian": "Indonesia"
+              "Iranian": "Iran"
+              "Iraqi": "Iraq"
+              "Irish": "Ireland"
+              "Israeli": "Israel"
+              "Israelite": "Israel"
+              "Italian": "Italy"
+              "Ivorian": "Ivory Coast"
+              "Jamaican": "Jamaica"
+              "Jan Mayen": "Jan Mayen"
+              "Japanese": "Japan"
+              "Jordanian": "Jordan"
+              "Kazakh": "Kazakhstan"
+              "Kazakhstani": "Kazakhstan"
+              "Kenyan": "Kenya"
+              "Kirghiz": "Kyrgyzstan"
+              "Kirgiz": "Kyrgyzstan"
+              "Kiribati": "Kiribati"
+              "Korean": "South Korea"
+              "Kosovan": "Kosovo"
+              "Kosovar": "Kosovo"
+              "Kuwaiti": "Kuwait"
+              "Kyrgyz": "Kyrgyzstan"
+              "Kyrgyzstani": "Kyrgyzstan"
+              "Lao": "Lao People's Democratic Republic"
+              "Laotian": "Lao People's Democratic Republic"
+              "Latvian": "Latvia"
+              "Lebanese": "Lebanon"
+              "Lettish": "Latvia"
+              "Liberian": "Liberia"
+              "Libyan": "Libya"
+              "Liechtensteiner": "Liechtenstein"
+              "Lithuanian": "Lithuania"
+              "Luxembourg": "Luxembourg"
+              "Luxembourgish": "Luxembourg"
+              "Macanese": "Macau"
+              "Macedonian": "North Macedonia"
+              "Magyar": "Hungary"
+              "Mahoran": "Mayotte"
+              "Malagasy": "Madagascar"
+              "Malawian": "Malawi"
+              "Malaysian": "Malaysia"
+              "Maldivian": "Maldives"
+              "Malian": "Mali"
+              "Malinese": "Mali"
+              "Maltese": "Malta"
+              "Manx": "Isle of Man"
+              "Marshallese": "Marshall Islands"
+              "Martinican": "Martinique"
+              "Martiniquais": "Martinique"
+              "Mauritanian": "Mauritania"
+              "Mauritian": "Mauritius"
+              "McDonald Islands": "Heard Island and McDonald Islands"
+              "Mexican": "Mexico"
+              "Moldovan": "Moldova"
+              "Monacan": "Monaco"
+              "Mongolian": "Mongolia"
+              "Montenegrin": "Montenegro"
+              "Montserratian": "Montserrat"
+              "Monégasque": "Monaco"
+              "Moroccan": "Morocco"
+              "Motswana": "Botswana"
+              "Mozambican": "Mozambique"
+              "Myanma": "Myanmar"
+              "Namibian": "Namibia"
+              "Nauruan": "Nauru"
+              "Nepalese": "Nepal"
+              "Nepali": "Nepal"
+              "Netherlandic": "Netherlands"
+              "New Caledonian": "New Caledonia"
+              "New Zealand": "New Zealand"
+              "Ni-Vanuatu": "Vanuatu"
+              "Nicaraguan": "Nicaragua"
+              "Nigerian": "Nigeria"
+              "Nigerien": "Niger"
+              "Niuean": "Niue"
+              "Norfolk Island": "Norfolk Island"
+              "Northern Irish": "Northern Ireland"
+              "Northern Marianan": "Northern Mariana Islands"
+              "Norwegian": "Norway"
+              "Omani": "Oman"
+              "Pakistani": "Pakistan"
+              "Palauan": "Palau"
+              "Palestinian": "Palestine"
+              "Panamanian": "Panama"
+              "Papua New Guinean": "Papua New Guinea"
+              "Papuan": "Papua New Guinea"
+              "Paraguayan": "Paraguay"
+              "Persian": "Iran"
+              "Peruvian": "Peru"
+              "Philippine": "Philippines"
+              "Pitcairn Island": "Pitcairn Islands"
+              "Polish": "Poland"
+              "Portuguese": "Portugal"
+              "Puerto Rican": "Puerto Rico"
+              "Qatari": "Qatar"
+              "Romanian": "Romania"
+              "Russian": "Russia"
+              "Rwandan": "Rwanda"
+              "Saba": "Saba"
+              "Saban": "Saba"
+              "Sahraouian": "Western Sahara"
+              "Sahrawi": "Western Sahara"
+              "Sahrawian": "Western Sahara"
+              "Salvadoran": "El Salvador"
+              "Sammarinese": "San Marino"
+              "Samoan": "Samoa"
+              "Saudi Arabian": "Saudi Arabia"
+              "Saudi": "Saudi Arabia"
+              "Scottish": "Scotland"
+              "Senegalese": "Senegal"
+              "Serbian": "Serbia"
+              "Seychellois": "Seychelles"
+              "Sierra Leonean": "Sierra Leone"
+              "Singapore": "Singapore"
+              "Singaporean": "Singapore"
+              "Slovak": "Slovakia"
+              "Slovene": "Slovenia"
+              "Slovenian": "Slovenia"
+              "Solomon Island": "Solomon Islands"
+              "Somali": "Somalia"
+              "Somalilander": "Somaliland"
+              "South African": "South Africa"
+              "South Georgia Island": "South Georgia and the South Sandwich Islands"
+              "South Ossetian": "South Ossetia"
+              "South Sandwich Island": "South Georgia and the South Sandwich Islands"
+              "South Sudanese": "South Sudan"
+              "Spanish": "Spain"
+              "Sri Lankan": "Sri Lanka"
+              "Sudanese": "Sudan"
+              "Surinamese": "Suriname"
+              "Svalbard resident": "Svalbard"
+              "Swati": "Eswatini"
+              "Swazi": "Eswatini"
+              "Swedish": "Sweden"
+              "Swiss": "Switzerland"
+              "Syrian": "Syrian Arab Republic"
+              "Taiwanese": "Taiwan"
+              "Tajikistani": "Tajikistan"
+              "Tanzanian": "Tanzania"
+              "Thai": "Thailand"
+              "Timorese": "Timor-Leste"
+              "Tobagonian": "Trinidad and Tobago"
+              "Togolese": "Togo"
+              "Tokelauan": "Tokelau"
+              "Tongan": "Tonga"
+              "Trinidadian": "Trinidad and Tobago"
+              "Tunisian": "Tunisia"
+              "Turkish": "Turkey"
+              "Turkmen": "Turkmenistan"
+              "Turks and Caicos Island": "Turks and Caicos Islands"
+              "Tuvaluan": "Tuvalu"
+              "Ugandan": "Uganda"
+              "Ukrainian": "Ukraine"
+              "Uruguayan": "Uruguay"
+              "Uzbek": "Uzbekistan"
+              "Uzbekistani": "Uzbekistan"
+              "Vanuatuan": "Vanuatu"
+              "Vatican": "Vatican City State"
+              "Venezuelan": "Venezuela"
+              "Vietnamese": "Vietnam"
+              "Wallis and Futuna": "Wallis and Futuna"
+              "Wallisian": "Wallis and Futuna"
+              "Welsh": "Wales"
+              "Yemeni": "Yemen"
+              "Zambian": "Zambia"
+              "Zimbabwean": "Zimbabwe"
+              "Åland Island": "Åland Islands"
+# Last Updated December 30, 2022

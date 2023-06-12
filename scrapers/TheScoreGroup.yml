@@ -9,6 +9,7 @@ sceneByURL:
       - legsex.com/
       - pornmegaload.com/
       - scoreland.com/
+      - scoreland2.com/
       - xlgirls.com/
     scraper: sceneScraper
 galleryByURL:
@@ -18,7 +19,7 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //section[@id="videos_page-page"]/div[@class="row"]/div/h2/text()
+      Title: //section[contains(@id,"_page-page")]/div[@class="row"]/div/h1/text()
       Studio: &studioAttr
         Name:
           selector: //meta[@property="og:site_name"]/@content
@@ -56,4 +57,4 @@ xPathScrapers:
       Tags:
         Name: $photopage//div[@class='mb-3']/a/text()
       Performers: *performersAttr
-# Last Updated November 10, 2021
+# Last Updated January 31, 2023

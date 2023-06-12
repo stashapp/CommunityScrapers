@@ -2,6 +2,7 @@ import json
 import os
 import re
 import sys
+import datetime
 
 try:
     import py_common.log as log
@@ -25,7 +26,7 @@ except ModuleNotFoundError:
 
 def get_from_url(url_to_parse):
     m = re.match(
-        r'https?://(?:www\.)?((\w+)\.com)/tour/(?:videos|upcoming|models)/(\d+)/([a-z0-9-]+)',
+        r'https?:\/\/(?:www\.)?((\w+)\.com)(?:\/tour)?\/(?:videos|upcoming|models)\/?(\d+)?\/([a-z0-9-]+)',
         url_to_parse)
     if m is None:
         return None, None, None, None
@@ -61,39 +62,44 @@ def make_request(request_url, origin_site):
 
 
 def fetch_page_json(page_html):
-    matches = re.findall(r'window\.__DATA__ = (.+)$', page_html, re.MULTILINE)
+    matches = re.findall(r'(?:<script id="__NEXT_DATA__" type="application\/json">({.+})<\/script>)', page_html, re.MULTILINE)
     return json.loads(matches[0]) if matches else None
 
 
 def scrape_scene(page_json, studio):
-    if page_json.get("video") is None:
+    if page_json.get("props").get("pageProps").get("content") is None:
         log.error('Could not find  scene in JSON data')
         sys.exit(1)
 
-    scene = page_json["video"]
+    scene = page_json.get("props").get("pageProps").get("content")
 
     scrape = {}
-    scrape['studio'] = {'name': studio}
+    if scene.get('site'):
+        scrape['studio'] = {'name': scene['site']}
+    else:
+        scrape['studio'] = {'name': studio}
     if scene.get('title'):
         scrape['title'] = scene['title']
-    if scene.get('release_date'):
-        scrape['date'] = scene['release_date'][:10]
+    if scene.get('publish_date'):
+        raw_date = scene['publish_date']
+        publish_datetime = datetime.datetime.strptime(raw_date, '%Y/%m/%d %H:%M:%S')
+        scrape['date'] = publish_datetime.strftime('%Y-%m-%d')
     if scene.get('description'):
         details = BeautifulSoup(scene['description'], "html.parser").get_text()
         scrape['details'] = details
+    if scene.get('id'):
+        scrape['code'] = str(scene['id'])
     if scene.get('models'):
         models = []
         for m in scene['models']:
-            if m.get('name'):
-                models.append(m['name'])
+            models.append(m)
         scrape['performers'] = [{'name': x} for x in models]
     if scene.get('tags'):
         tags = []
         for t in scene['tags']:
-            if t.get('name'):
-                tags.append(t['name'])
+            tags.append(t)
         scrape['tags'] = [{'name': x} for x in tags]
-    if scene.get('extra_thumbs'):
+    if scene.get('extra_thumbnails'):
         # available image endings
         # ================
         #_player.jpg
@@ -103,63 +109,55 @@ def scrape_scene(page_json, studio):
         #_scene.jpg
         #_scenemobile.jpg
         img = None
-        for i in scene['extra_thumbs']:
+        for i in scene['extra_thumbnails']:
             if i.endswith("_player.jpg"):
                 image = i
                 break
         if img is None:
-            img = scene['extra_thumbs'][0]
+            img = scene['extra_thumbnails'][0]
         scrape['image'] = img
+
+    url_path = page_json.get("page")
+    url_slug = page_json.get("query").get("slug")
+    domain = scene.get("site_domain")
+    url_path = url_path.replace('[slug]', url_slug)
+    scrape['url'] = f"https://{domain}{url_path}"
+
     print(json.dumps(scrape))
 
 
-def get_dict_value(d: dict, v: str):
-    if d.get(v):
-        return d[v]
-    return None
-
-
 def scrape_performer(page_json):
-    if page_json.get("model") is None:
+    if page_json.get("props").get("pageProps").get("model") is None:
         log.error('Could not find performer in JSON data')
         sys.exit(1)
 
-    performer = page_json["model"]
+    performer = page_json.get("props").get("pageProps").get("model")
     scrape = {}
 
-    scrape['name'] = get_dict_value(performer, 'name')
-    scrape['gender'] = get_dict_value(performer, 'gender')
-    scrape['image'] = get_dict_value(performer, 'thumb')
+    scrape['name'] = performer.get('name')
+    scrape['gender'] = performer.get('gender')
+    scrape['image'] = performer.get('thumb')
+    details = BeautifulSoup(performer['Bio'], "html.parser").get_text()
+    scrape['details'] = details
+    scrape['birthdate'] = performer.get("Birthdate")
+    scrape['measurements'] = performer.get("Measurements")
+    scrape['eye_color'] = performer.get("Eyes")
 
-    if performer.get('attributes'):
-        pa = performer['attributes']
-        if pa.get('bio'):
-            scrape['details'] = get_dict_value(pa['bio'], 'value')
-        if pa.get('birthdate'):
-            scrape['birthdate'] = get_dict_value(pa['birthdate'], 'value')
-        if pa.get('measurements'):
-            scrape['measurements'] = get_dict_value(pa['measurements'],
-                                                    'value')
-        if pa.get('eyes'):
-            scrape['eye_color'] = get_dict_value(pa['eyes'], 'value')
-        if pa.get('height'):
-            height_ft = get_dict_value(pa['height'], 'value')
-            if height_ft:
-                h = re.match(r'(\d+)\D(\d+).+', height_ft)
-                if h:
-                    h_int = int(
-                        round((float(h.group(1)) * 12 + float(h.group(2))) *
+    height_ft = performer.get('Height')
+    if height_ft:
+        h = re.match(r'(\d+)\D(\d+).+', height_ft)
+        if h:
+            h_int = int(
+                    round((float(h.group(1)) * 12 + float(h.group(2))) *
                               2.54))  # ft'inches to cm
-                    scrape['height'] = f"{h_int}"
-        if pa.get('weight'):
-            weight_lb = get_dict_value(pa['weight'], 'value')
-            if weight_lb:
-                w = re.match(r'(\d+)\slbs', weight_lb)
-                if w:
-                    w_int = int(round(float(w.group(1)) / 2.2046))  # lbs to kg
-                    scrape['weight'] = f"{w_int}"
-        if pa.get('hair'):
-            scrape['hair_color'] = get_dict_value(pa['hair'], 'value')
+            scrape['height'] = f"{h_int}"
+    weight_lb = performer.get('Weight')
+    if weight_lb:
+        w = re.match(r'(\d+)\slbs', weight_lb)
+        if w:
+            w_int = int(round(float(w.group(1)) / 2.2046))  # lbs to kg
+            scrape['weight'] = f"{w_int}"
+    scrape['hair_color'] = performer.get('Hair')
     print(json.dumps(scrape))
 
 

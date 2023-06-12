@@ -19,12 +19,27 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $performer: //div[@class="scene-item"]/a[@class="scene-box"]
+      $performer: //div[@class="scene-item"]/a[contains(@class,"scene-box")]
     scene:
-      Title: //article/div[@class="StoreHeaderNewContainer"][1]//h2/text()
+      Title: //h1[@class="StoreHeaderNew"]/text()
       Details: //div[@class="med-text"]/p
+      Code:
+        selector: //meta[@property="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: ^.*\/video-(\d+)\/.*$
+                with: $1
+      Date:
+        selector: //div[@id="main"]//div[@class="date"][1]/text()
+        postProcess:
+          - parseDate: 02 Jan 2006
       Tags:
-        Name: //a[@role="button"]/text()
+        Name:
+          selector: //a[contains(@title,"Categorie:")]//text()
+          postProcess:
+            - replace:
+                - regex: (.*)\s\(\d+\)
+                  with: $1
       Performers:
         Name: $performer//h5/text()
         URL:
@@ -37,11 +52,6 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Kristen Bjorn
-      Movies:
-        Name: //article/div[@class="StoreHeaderNewContainer"][2]//h2/text()
-        URL:
-          selector: '//table[@style="width: 90%;margin-top: 20px;"]//img/parent::a/@href'
-          postProcess: *appendDomain
   movieScraper:
     movie:
       Name: //article/div[1]/span/text()
@@ -85,30 +95,23 @@ xPathScrapers:
       Gender:
         fixed: Male
       Country:
-        selector: //h3[contains(text(), "Nationality:")]/text()
-        postProcess:
-          - replace:
-              - regex: "^Nationality: (.*)$"
-                with: $1
+        selector: //h2[contains(text(),"Nationality:")]/following-sibling::text()[1]
       Height:
-        selector: //h3[contains(text(), "Height:")]/text()
+        selector: //h2[contains(text(),"Height:")]/following-sibling::text()[1]
         postProcess:
-          - replace:
-              - regex: "^Height: (.*)$"
-                with: $1
           - feetToCm: true
       Weight:
-        selector: //h3[contains(text(), "Weight:")]/text()
+        selector: //h2[contains(text(),"Weight:")]/following-sibling::text()[1]
         postProcess:
           - replace:
-              - regex: "^Weight: (.*) lbs$"
+              - regex: ^(\d+).+
                 with: $1
           - lbToKg: true
       Measurements:
-        selector: //h3[contains(text(), "Dick:")]/text()
+        selector: //h2[contains(text(), "Dick:")]/following-sibling::text()[1]
         postProcess:
           - replace:
-              - regex: '^Dick: [^\s]+ \((.*) cms\).*$'
+              - regex: '[^\s]+ \((.*) cms\).*$'
                 with: $1
       Image: *imageAttr
-# Last Updated December 26, 2021
+# Last Updated December 23, 2022

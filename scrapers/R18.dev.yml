@@ -1,0 +1,428 @@
+name: R18.dev (JAV)
+
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://r18.dev/videos/vod/movies/detail/-/dvd_id={filename}/json
+  queryURLReplace:
+    filename:
+      # gets just the JAV ID out of the filename. This also removes the file extension which is pretty nice.
+      # You can have your filename be something like "Something Something ABC123 Something Something.mp4" and it will scrape as ABC123.
+      - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
+        with: $2
+  scraper: sceneSearchIndirect
+
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - r18.dev/videos/vod/movies/detail/-/i
+    scraper: sceneScraper
+    queryURL: "https://r18.dev/videos/vod/movies/detail/-/combined={url}/json"
+    queryURLReplace:
+      url:
+        - regex: ".+/id=(.+)/?$"
+          with: "$1"
+
+sceneByName:
+  action: scrapeJson
+  scraper: sceneSearch
+  queryURL: "https://r18.dev/videos/vod/movies/detail/-/dvd_id={}/json"
+
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeJson
+    url:
+      - r18.dev/videos/vod/movies/detail/-/i
+    queryURL: "https://r18.dev/videos/vod/movies/detail/-/combined={url}/json"
+    queryURLReplace:
+      url:
+        - regex: ".+/id=(.+)/?$"
+          with: "$1"
+    scraper: movieScraper
+
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: dvd_id
+      Date:
+        selector: release_date
+      Performers:
+        Name:
+          selector: actresses.#.name_romaji
+        Aliases:
+          selector: actresses.#.name_kanji
+      Image:
+        selector: jacket_full_url
+      Director:
+        selector: directors.#.name_romaji
+      Details:
+        selector: title_en
+        # All this uncensoring stuff happens automatically on the HTML version of the page due to some JS on the frontend there.
+        # I put in a request to the site dev to add this to the backend json api as well so we don't have to do it everytime ourselves plus keep a ever growing list of this stuff
+        postProcess: &ppUncensor
+          - replace:
+              - regex: A\*{3}ed\b
+                with: "Abused"
+              - regex: A\*{3}e\b
+                with: "Abuse"
+              - regex: A\*{3}es\b
+                with: "Abuses"
+              - regex: A\*{4}p\b
+                with: "Asleep" # ZMEN-037
+              - regex: A\*{5}t
+                with: "Assault"
+              - regex: A\*{5}ted\b
+                with: "Assaulted"
+              - regex: B\*{5}p\b
+                with: "Bang Up" # Not Sure
+              - regex: B\*{5}k\b # IPX-374
+                with: "Berserk"
+              - regex: B\*{3}d\b
+                with: "Blood"
+              - regex: B\*{3}dy\b
+                with: "Bloody" # Not Sure
+              - regex: B\*{6}y\b
+                with: "Brutally"
+              - regex: Chai\*{1}saw\b
+                with: "Chainsaw"
+              - regex: C\*{3}d\b
+                with: "Child"
+              - regex: C\*{3}dcare\b
+                with: "Childcare"
+              - regex: C\*{3}dhood\b
+                with: "Childhood"
+              - regex: C\*{3}dish\b
+                with: "Childish" # MMYM-045
+              - regex: C\*{3}dren\b
+                with: "Children"
+              - regex: C\*{1}ck\b
+                with: "Cock"
+              - regex: C\*{1}cks\b
+                with: "Cocks"
+              - regex: C\*{1}llegiate\b
+                with: "Collegiate"
+              - regex: C\*{5}y\b
+                with: "Cruelty"
+              - regex: CrumB\*{2}d\b
+                with: "Crumbled"
+              - regex: D\*{1}ck\b
+                with: "Dick"
+              - regex: D\*{6}e\b
+                with: "Disgrace"
+              - regex: D\*{6}ed\b
+                with: "Disgraced"
+              - regex: D\*{6}eful\b
+                with: "Disgraceful"
+              - regex: D\*{3}king\b
+                with: "Drinking"
+              - regex: D\*{3}ks\b
+                with: "Drinks"
+              - regex: D\*{2}g\b
+                with: "Drug"
+              - regex: D\*{2}gged\b
+                with: "Drugged"
+              - regex: D\*{2}gs\b
+                with: "Drugs"
+              - regex: D\*{3}k\b
+                with: "Drunk"
+              - regex: D\*{3}ken\b
+                with: "Drunken"
+              - regex: D\*{3}kest\b
+                with: "Drunkest"
+              - regex: EnS\*{3}ed\b
+                with: "Enslaved"
+              - regex: F\*{3}e\b
+                with: "Force"
+              - regex: F\*{3}eful\b
+                with: "Forceful"
+              - regex: F\*{3}efully\b
+                with: "Forcefully"
+              - regex: F\*{3}es\b
+                with: "Forces" # Not Sure
+              - regex: F\*{3}ed\b
+                with: "Fucked"
+              - regex: F\*{5}g\b
+                with: "Fucking" # SSNI-391
+              - regex: G\*{9}d\b
+                with: "Gang-Banged"
+              - regex: G\*{6}g\b
+                with: "Gangbang" # STAR-976
+              - regex: G\*{7}g\b
+                with: "Gangbang"
+              - regex: G\*{6}ged\b
+                with: "Gangbanged" # SSNI-242
+              - regex: G\*{7}ged\b
+                with: "Gangbanged"
+              - regex: G\*{7}gers\b
+                with: "Gangbangers"
+              - regex: G\*{6}ging\b
+                with: "Gangbanging"
+              - regex: G\*{7}ging\b
+                with: "Gangbanging"
+              - regex: G\*{7}gs\b
+                with: "Gangbangs"
+              - regex: Half-A\*{4}p\b
+                with: "Half-Asleep" # ZMEN-037
+              - regex: HumB\*{2}d\b
+                with: "Humbled"
+              - regex: H\*{9}n\b
+                with: "Humiliation"
+              - regex: H\*{2}t\b
+                with: "Hurt"
+              - regex: H\*{2}ts\b
+                with: "Hurts"
+              - regex: H\*{7}m\b
+                with: "Hypnotism"
+              - regex: H\*{7}ed\b
+                with: "Hypnotized" # PPPD-376
+              - regex: I\*{4}t\b
+                with: "Incest"
+              - regex: I\*{4}tuous\b
+                with: "Incestuous"
+              - regex: I\*{4}ts\b
+                with: "Insults"
+              - regex: J\*{1}\b
+                with: "Jo" # Not Sure
+              - regex: J\*{1}s\b
+                with: "Jos" # Not Sure
+              - regex: K\*{1}d\b
+                with: "Kid"
+              - regex: K\*{1}dding\b
+                with: "Kidding"
+              - regex: K\*{4}pped\b
+                with: "Kidnapped"
+              - regex: K\*{4}pper\b
+                with: "Kidnapper"
+              - regex: K\*{4}pping\b
+                with: "Kidnapping"
+              - regex: K\*{1}ds\b
+                with: "Kids"
+              - regex: K\*{2}l\b
+                with: "Kill"
+              - regex: K\*{2}led\b
+                with: "Killed" # SNIS-036
+              - regex: K\*{2}ler\b
+                with: "Killer" # Not Sure
+              - regex: K\*{2}ling\b
+                with: "Killing"
+              - regex: Lol\*{1}pop\b
+                with: "Lolipop"
+              - regex: Lo\*{2}ta\b
+                with: "Lolita"
+              - regex: Ma\*{1}ko\b
+                with: "Maiko"
+              - regex: M\*{4}t\b
+                with: "Molest"
+              - regex: M\*{4}tation\b
+                with: "Molestation"
+              - regex: M\*{4}ted\b
+                with: "Molested"
+              - regex: M\*{4}ter\b
+                with: "Molester"
+              - regex: M\*{4}ters\b
+                with: "Molesters"
+              - regex: M\*{4}ting\b
+                with: "Molesting"
+              - regex: M\*{4}tor\b
+                with: "Molestor"
+              - regex: P\*{4}h\b
+                with: "Punish"
+              - regex: P\*{4}hed\b
+                with: "Punished"
+              - regex: P\*{4}hment\b
+                with: "Punishment"
+              - regex: P\*{1}ssy\b
+                with: "Pussy"
+              - regex: R\*{2}e\b
+                with: "Rape"
+              #- regex: R\*{1}pe\b
+              #  with: "Rape" # Can be Rope ? IPX-311
+              - regex: R\*{2}ed\b
+                with: "Raped"
+              - regex: R\*{1}ped\b
+                with: "Raped"
+              - regex: R\*{2}es\b
+                with: "Rapes"
+              - regex: R\*{4}g\b
+                with: "Raping"
+              - regex: S\*{9}l\b
+                with: "School Girl" # Not Sure
+              - regex: S\*{9}ls\b
+                with: "School Girls" # SSNI-296
+              - regex: S\*{8}l\b
+                with: "Schoolgirl"
+              - regex: Sch\*{2}lgirl\b
+                with: "Schoolgirl"
+              - regex: S\*{9}ls\b
+                with: "Schoolgirls" # Not Sure (PPPD-811)
+              - regex: S\*{8}ls\b
+                with: "Schoolgirls"
+              - regex: Sch\*{2}lgirls\b
+                with: "Schoolgirls"
+              - regex: SK\*{2}led\b
+                with: "Skilled"
+              - regex: SK\*{2}lful\b
+                with: "Skillful"
+              - regex: SK\*{2}lfully\b
+                with: "Skillfully"
+              - regex: SK\*{2}ls\b
+                with: "Skills"
+              - regex: S\*{3}e\b
+                with: "Slave"
+              - regex: S\*{3}ery\b
+                with: "Slavery"
+              - regex: S\*{3}es\b
+                with: "Slaves"
+              - regex: S\*{6}g\b
+                with: "Sleeping"
+              - regex: StepB\*{16}r\b
+                with: "StepBrother And Sister" # Not Sure
+              - regex: StepK\*{1}ds \b
+                with: "StepKids"
+              - regex: StepM\*{12}n\b
+                with: "StepMother And Son" # GVG-299
+              - regex: S\*{5}t\b
+                with: "Student"
+              - regex: S\*{5}ts\b
+                with: "Students"
+              - regex: S\*{8}n\b
+                with: "Submission"
+              - regex: T\*{6}e\b
+                with: "Tentacle" #MIDD-648
+              - regex: T\*{6}es\b
+                with: "Tentacles"
+              - regex: T\*{5}e\b
+                with: "Torture"
+              - regex: T\*{5}ed\b
+                with: "Tortured"
+              - regex: T\*{5}es\b
+                with: "Tortures" #MIDD-648
+              - regex: U\*{9}sly\b
+                with: "Unconsciously"
+              - regex: U\*{7}g\b
+                with: "Unwilling"
+              - regex: V\*{5}e\b
+                with: "Violate"
+              - regex: V\*{1}olated\b
+                with: "Violated"
+              - regex: V\*{5}ed\b
+                with: "Violated"
+              - regex: V\*{5}es\b
+                with: "Violates"
+              - regex: V\*{6}e\b
+                with: "Violence"
+              - regex: V\*{5}t\b
+                with: "Violent"
+              - regex: Y\*{8}l\b
+                with: "Young Girl" # Not Sure
+              - regex: Y\*{8}ls\b
+                with: "Young Girls" # Not Sure
+      Studio:
+        Name: maker_name_en
+      Code:
+        selector: dvd_id
+      Tags:
+        Name:
+          selector: categories.#.name_en
+          postProcess: *ppUncensor
+      URL:
+        selector: content_id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://r18.dev/videos/vod/movies/detail/-/id=
+
+  movieScraper:
+    movie:
+      Name:
+        selector: dvd_id
+      Aliases: title_ja
+      Duration:
+        selector: runtime_mins
+        postProcess:
+          - replace:
+              - regex: $
+                with: ":00"
+      Date:
+        selector: release_date
+      FrontImage:
+        selector: jacket_full_url
+      Director:
+        selector: directors.#.name_romaji
+      Synopsis:
+        selector: title_en
+        postProcess: *ppUncensor
+      Studio:
+        Name: maker_name_en
+      URL:
+        selector: content_id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://r18.dev/videos/vod/movies/detail/-/id=
+
+  # Used for fragment scraping - the api is a little messy if we don't have the exact ID and need to do a search because the search result api doesn't have all the info we need.
+  # So we get the ID from the search result page and make another search for it
+  # Note I am not getting aliases yet for performers here as it didn't seem worth it to make that many subqueries. You should hopefully be matching them up with StashDB versions of the performers
+  # or doing a performer search anyways.
+  # I've also sent in a request to the dev of the site to make their API a little easier to use, so hopefully that goes through and we can have our cake and eat it too. :)
+  sceneSearchIndirect:
+    scene:
+      # Title not on this page, so we need to fetch another page to get it
+      Title:
+        selector: content_id
+        postProcess:
+          - replace:
+              - regex: (.+)
+                with: https://r18.dev/videos/vod/movies/detail/-/combined=$1/json
+          - subScraper:
+              selector: dvd_id
+      # Code not on this page, so we need to fetch another page to get it. It's the same as title. Surely there must be a way to only query once?
+      Code:
+        selector: content_id
+        postProcess:
+          - replace:
+              - regex: (.+)
+                with: https://r18.dev/videos/vod/movies/detail/-/combined=$1/json
+          - subScraper:
+              selector: dvd_id
+      Details:
+        selector: title
+        postProcess: *ppUncensor
+      Image: images.jacket_image.large
+      Director: director
+      Date: release_date
+      Tags:
+        Name:
+          selector: categories.#.name
+          postProcess: *ppUncensor
+      Studio:
+        Name: maker.name
+      Performers:
+        Name: actresses.#.name
+      URL:
+        selector: content_id
+        postProcess:
+          - replace:
+              - regex: (.+)
+                with: https://r18.dev/videos/vod/movies/detail/-/id=$1/
+
+  sceneSearch:
+    scene:
+      Title:
+        selector: title
+      Image:
+        selector: images.jacket_image.large
+      Date:
+        selector: release_date
+      URL:
+        selector: content_id
+        postProcess:
+          - replace:
+              - regex: (.+)
+                with: https://r18.dev/videos/vod/movies/detail/-/combined=$1/json
+# Last Updated January 19, 2023
