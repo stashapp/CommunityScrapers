@@ -11,17 +11,6 @@ try:
 except ModuleNotFoundError:
     print("You need to install the 'bencoder.pyx' module. (https://pypi.org/project/bencoder.pyx/)", file=sys.stderr)
     sys.exit()
-from os.path import basename
-from pathlib import Path
-import re
-from datetime import datetime
-import difflib
-
-try:
-    from bencoder import bdecode
-except ModuleNotFoundError:
-    print("You need to install the 'bencoder.pyx' module. (https://pypi.org/project/bencoder.pyx/)", file=sys.stderr)
-    sys.exit()
 
 try:
     from py_common import graphql
@@ -61,6 +50,7 @@ def process_description_bbcode(description):
     res = re.sub(r'\[(?:b|i|u|s|url|quote)?\](.*)?\[\/(?:b|i|u|s|url|quote)\]',r"\1", description )
     res = re.sub(r'\[.*?\].*?\[\/.*?\]',r'',res)
     res = re.sub(r'\[.*?\]',r'',res)
+    res = re.sub(r'[\r\n]{3,}}', '\r\n\r\n', res)
     return res.strip()
 
 def get_torrent_metadata(torrent_data):
@@ -140,11 +130,8 @@ elif sys.argv[1] == "search":
         ratios[round(10000*(1-similarity_file_name(search, clean_t)))] = {'url': str(t.absolute()), 'title': clean_t}
 
     # Order ratios
-    ratios_sorted = dict(sorted(ratios.items()))
-    # Only return the top 5 results
-    if len(ratios) > 5:
-        ratios = ratios_sorted[5:]
+    ratios_sorted = dict(sorted(ratios.items())[:5])
 
     print(json.dumps(list(ratios_sorted.values())))
 
-# Last Updated December 16, 2022
+# Last Updated June 12, 2023
