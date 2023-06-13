@@ -6,6 +6,8 @@ import re
 from datetime import datetime
 import difflib
 
+from py_common import log
+
 try:
     from bencoder import bdecode
 except ModuleNotFoundError:
@@ -47,10 +49,17 @@ def process_tags_performers(tagList):
     return map(lambda tag: decode_bytes(tag).replace('.', ' '), tagList)
 
 def process_description_bbcode(description):
-    res = re.sub(r'\[(?:b|i|u|s|url|quote)?\](.*)?\[\/(?:b|i|u|s|url|quote)\]',r"\1", description )
-    res = re.sub(r'\[.*?\].*?\[\/.*?\]',r'',res)
+    #Remove image tags
+    res = re.sub(r'\[img\]([^\[]*)\[\/img\]',r"", description )
+
+    #Remove bbcode & replace with the contained text
+    res = re.sub(r'\[.*?\]([^\[]*)\[\/(?:b|i|u|s|url|quote)\]',r"\1", res )
+
+    #Cleanup any bbcode tags that may have been left behind
     res = re.sub(r'\[.*?\]',r'',res)
-    res = re.sub(r'[\r\n]{3,}}', '\r\n\r\n', res)
+
+    #Remove excessive newlines
+    res = re.sub(r'[\r|\n]{3,}', '\r\n\r\n', res)
     return res.strip()
 
 def get_torrent_metadata(torrent_data):
@@ -112,6 +121,7 @@ def cleanup_name(name):
     ret = ret.removeprefix("torrents\\").removesuffix(".torrent")
     return ret
 
+log.debug(sys.argv[1])
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
