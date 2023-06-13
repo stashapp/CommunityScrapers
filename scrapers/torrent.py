@@ -6,8 +6,6 @@ import re
 from datetime import datetime
 import difflib
 
-from py_common import log
-
 try:
     from bencoder import bdecode
 except ModuleNotFoundError:
@@ -120,8 +118,6 @@ def cleanup_name(name):
     ret = str(name)
     ret = ret.removeprefix("torrents\\").removesuffix(".torrent")
     return ret
-
-log.debug(sys.argv[1])
 
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
