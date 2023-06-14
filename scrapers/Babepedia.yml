@@ -121,6 +121,8 @@ xPathScrapers:
           - replace:
               - regex: aka
                 with: ""
+              - regex: '\/'
+                with: ","
       Tattoos: $label[text()='Tattoos:']]/text()
       Piercings: $label[text()='Piercings:']]/text()
       Image:
