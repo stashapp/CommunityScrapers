@@ -98,6 +98,7 @@ movieByURL:
       - adulttime.com/en/dvd/
       - devilsfilm.com/en/dvd/
       - devilstgirls.com/en/dvd/
+      - outofthefamily.com/en/dvd/
     script:
       - python
       - Algolia.py
