@@ -29,9 +29,6 @@ try:
     from urllib.parse import urlparse
     from bs4 import BeautifulSoup
 
-    # Set headers with user agent to avoid Cloudflare throwing a hissy fit.
-    # Establish session and implement headers
-
 # If one of these modules is not installed:
 except ModuleNotFoundError:
     log.error(
@@ -63,7 +60,9 @@ def output_json_url(title, tags, url, image, studio, performers, description, da
     }, indent=4)
 
 def get_cookies(scene_url: str):
+    # Establish a session.
     session = requests.Session()
+    # Set headers required for a successful POST query.
     headers = {
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
@@ -80,17 +79,23 @@ def get_cookies(scene_url: str):
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Linux"',
     }
+    # URL of the system status API. This is called when a Loyalfans page is first loaded from what I can tell.
     url = 'https://www.loyalfans.com/api/v2/system-status'
     data = {}
+    # Perform a POST query to capture initial cookies.
     response = session.post(url, headers=headers, json=data)
+    # Return these cookies.
     return response.cookies
 
 
 def get_api_url(scene_url: str):
+    # Extract the last component of the scene URL.
     end_segment = scene_url.split('/')[-1]
+    # Append this to the API link. As far as I can tell, post names in scene URLs are unique. I have yet to encounter any data mismatches.
     return f"https://www.loyalfans.com/api/v1/social/post/{end_segment}"
 
 def get_json(scene_url: str):
+    # Set headers required for a successful request.
     headers = {
         'Accept': 'application/json, text/plain, */*',
         'Accept-Encoding': 'gzip, deflate, br',
@@ -107,20 +112,33 @@ def get_json(scene_url: str):
         'sec-ch-ua-mobile': '?0',
         'sec-ch-ua-platform': '"Linux"'
     }
+    # Set cookies using get_cookies function.
     cookie_set = get_cookies(scene_url)
+    # Perform request using the API URL of the scene in question, adding headers and cookies.
     response = requests.get(get_api_url(scene_url), headers=headers, cookies=cookie_set)
+    # Capture the response as JSON.
     json_data = response.json()
+    # Return the JSON data.
     return json_data
 
 def scrape_scene(scene_url: str) -> dict:
+    # Capture JSON relating to this scene from the Loyalfans API.
     json = get_json(scene_url)
+    # Extract title from the JSON and strip out any whitespace.
     title = json['post']['title'].strip()
+    # Use the video thumbnail/preview poster as the image.
     image = json['post']['video_object']['poster']
+    # Extract description, fix apostrophes and remove HTML newline tags.
     description = json['post']['content'].replace('\u2019', "'").replace('<br />', '')
+    # Sometimes hashtags are included at the bottom of the description. This line strips all that junk out, as we're utilising the hashtags for the tags. Also tidies up double-spacing and ellipses.
     description = re.sub(r'#\w+\b', '', description).strip().replace('  ', ' ').replace('. . .', '...')
+    # Extract studio name.
     studio = json['post']['owner']['display_name']
+    # Extract date. The JSON returns the date in the format '2023-06-18 12:00:00', but we only need the date, so the time is stripped out.
     date = json['post']['created_at']['date'].split(' ')[0]
+    # Extract tags.
     tags_list = json['post']['hashtags']
+    # Lookup table for tag replacements. The tags are in the form of hashtags, and often have multiple words mashed together. This is a quick and dirty way of turning these into meaningful data, and can be expanded on to taste.
     replacements = {
         'Fin Dom': 'Findom',
         'Fem Dom': 'Femdom',
@@ -131,14 +149,18 @@ def scrape_scene(scene_url: str) -> dict:
         'pussydenial': 'pussy denial'
     }
     fixed_tags = []
+    # For every tag we find:
     for tag in tags_list:
+        # Remove the hash from the start.
         tag = tag[1:]
         modified_tag = tag
+        # Split CamelCase tags into separate words.
         modified_tag = re.sub(r'(?<!^)(?=[A-Z])', ' ', tag).strip()
+        # Perform replacements according to the above lookup table.
         for find, replace in replacements.items():
             modified_tag = re.sub(r'\b' + re.escape(find) + r'\b', replace, modified_tag)
         fixed_tags.append(modified_tag)
-
+    # Join all the tags together into a comma-separated list.
     tags = ', '.join(fixed_tags)
 
     # Convert into meaningful JSON that Stash can use.
@@ -152,7 +174,7 @@ def main():
     url = fragment.get("url")
     # If nothing is passed to the script:
     if url is None:
-        log.error("No URL/Title/Name provided")
+        log.error("No URL provided")
         sys.exit(1)
     # If we've been given a URL:
     if url is not None:
@@ -162,4 +184,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Last updated 2023-06-17
+# Last updated 2023-06-18
