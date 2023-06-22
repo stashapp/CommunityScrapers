@@ -1,0 +1,38 @@
+name: UnderHentai
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - underhentai.net/
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.underhentai.net/?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //article[@class="data-block"]//h2/a
+      URL:
+        selector: //article[@class="data-block"]//h2/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.underhentai.net/
+      Image: //article[@class="data-block"]//img/@src
+  sceneScraper:
+    scene:
+      Title: //h1[@class="content-box content-head sidebar-light"]
+      Details: //p[contains(text(),"Official Title")]/following-sibling::span
+      URL: //link[@rel="canonical"]/@href
+      Tags:
+        Name: //p[contains(text(),"Genres")]/following-sibling::a
+      Studio:
+        Name:
+            selector: //p[contains(text(),"Brand")]/following-sibling::a
+      Image: //div[@class="loading"]/img/@src
+# Last Updated June 21, 2023
