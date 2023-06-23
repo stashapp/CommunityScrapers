@@ -1,4 +1,29 @@
 name: UnderHentai
+################################################################################################################
+#                                                HOW TO SET UP                                                 #
+#                              Store this file in the ~/stash/scrapers/AniDB.yml                               #
+#                       (If the scrapers directory is not there it needs to be created)                        #
+################################################################################################################
+#                                                  HOW TO USE                                                  #
+#                                                   SCENES:                                                    #
+#       The scene Scraper by Fragment is the best option in case the file name is the name of the anime        #
+#                      Scenes that were not found can easily be found by the name scraper                      #
+#                           Don't put the episode number otherwise it won't find it                            #
+#                        It is also possible to scrape individually with the anime URL                         #
+#        The scraper doesn't recognize the episode number, I recommend changing it manually at the end         #
+#                                              THAT'S IT, ENJOY!                                               #
+#                                           Made by @escargotbuffed                                            #
+################################################################################################################
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.underhentai.net/{filename}
+  queryURLReplace:
+    filename:
+      - regex: \..+$|\d+
+        with: ""
+      - regex: \s+
+        with: "-"
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -35,4 +60,4 @@ xPathScrapers:
         Name:
             selector: //p[contains(text(),"Brand")]/following-sibling::a
       Image: //div[@class="loading"]/img/@src
-# Last Updated June 21, 2023
+# Last Updated June 23, 2023
