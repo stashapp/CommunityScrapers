@@ -50,7 +50,12 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02, 2006
       Details: //meta[@property="og:description"]/@content|//div[@class="description"]/p
-      Image: //div[@class="img-container"]/img/@src
+      Image:
+        selector: //div[@class="img-container"]/img/@src|//div[contains(@class, "jw-preview")]/@style
+        postProcess:
+          - replace:
+              - regex: (?:background-image:\s*url\(")(.+)(?:"\).*);?
+                with: $1
       Tags:
         Name: //div[@class="tag-list"]/a/text()
       Studio:
@@ -61,4 +66,4 @@ driver:
   clicks:
     - xpath: //a[@class="clickable"]
       sleep: 2
-# Last Updated February 01, 2020
+# Last Updated June 23, 2023
