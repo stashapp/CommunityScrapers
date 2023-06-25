@@ -166,9 +166,13 @@ xPathScrapers:
       Tags:
         Name: '//div/span[text()=" tags: "]/following-sibling::a/span/text()'
       Details:
-        selector: '//div/span/p[@class="bio"]/following-sibling::p//text()'
+        selector: '//div/span/p[@class="bio"]/following-sibling::p'
         concat: "\n"
+        postProcess:
+          - replace:
+              - regex: '(?i)<a[^>]*>'
+                with: ""
       URL: //link[@rel="canonical"]/@href
 driver:
   useCDP: true
-# Last Updated May 25, 2023
+# Last Updated June 25, 2023
