@@ -152,7 +152,12 @@ xPathScrapers:
 
                 Nubiles ET: NubilesET
       Tags: &tagsAttr
-        Name: //div[@class="categories"]/a/text()
+        Name: 
+          selector: //div[@class="categories"]/a/text()|//div[@class="edge-download-item-dimensions"]/text()
+          postProcess:
+            - replace:
+                - regex: .*x(\d*).*
+                  with: $1
       Image: &imageAttr
         selector: //img[@class="fake-video-player-cover"]/@src
         postProcess:
@@ -232,4 +237,4 @@ xPathScrapers:
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
-# Last Updated December 24, 2022
+# Last Updated June 27, 2023
