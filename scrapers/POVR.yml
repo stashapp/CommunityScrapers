@@ -40,6 +40,8 @@ xPathScrapers:
           - replace:
               - regex: medium.jpg
                 with: large.jpg
+              - regex: 472/cover.jpg
+                with: 680/cover.jpg
       Studio: &studioAttr
         Name:
           selector: *urlSel
