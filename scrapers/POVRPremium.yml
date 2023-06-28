@@ -1,7 +1,10 @@
-name: "WankzVR"
+name: "POVR Premium"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - brasilvr.com
+      - milfvr.com
+      - tranzvr.com
       - wankzvr.com
     scraper: sceneScraper
 movieByURL:
@@ -26,8 +29,19 @@ xPathScrapers:
         Name: $info//div[@class="tag-list__body"]//a/text()
       Performers:
         Name: //div[@class="detail__inf detail__inf-align_right"]/div[@class="detail__models"]/a/text()
-#   Blocked by website's anti-scraping.
-#      Image: &imageSel //meta[@property="og:image"]/@content
+      Image: &imageSel //meta[@property="og:image"]/@content
+      Studio: &studioAttr
+        Name:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: ^.*//(?:www.)?([^/]*).*$
+                  with: $1
+            - map:
+                brasilvr.com: BrasilVR
+                milfvr.com: MilfVR
+                tranzvr.com: TranzVR
+                wankzvr.com: WankzVR
   movieScraper:
     common:
       $info: *infoSel
@@ -45,9 +59,7 @@ xPathScrapers:
               - regex: \smin
                 with: ":00"
       Date: *dateAttr
-      Studio:
-        Name:
-          fixed: WankzVR
+      Studio: *studioAttr
       Synopsis: *detailsAttr
-#      FrontImage: *imageSel
-# Last Updated September 28, 2021
+      FrontImage: *imageSel
+# Last Updated June 28, 2023
