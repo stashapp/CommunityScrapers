@@ -16,6 +16,7 @@ xPathScrapers:
   sceneScraper:
     common:
       $info: &infoSel //div[@class="detail"]
+      $url: &urlSel //link[@rel="canonical"]/@href
     scene:
       Title: &titleSel //div[@class="detail__header detail__header-lg"]/h1
       Date: &dateAttr
@@ -32,7 +33,7 @@ xPathScrapers:
       Image: &imageSel //meta[@property="og:image"]/@content
       Studio: &studioAttr
         Name:
-          selector: //link[@rel="canonical"]/@href
+          selector: *urlSel
           postProcess:
             - replace:
                 - regex: ^.*//(?:www.)?([^/]*).*$
@@ -42,6 +43,12 @@ xPathScrapers:
                 milfvr.com: MilfVR
                 tranzvr.com: TranzVR
                 wankzvr.com: WankzVR
+      Code:
+        selector: *urlSel
+        postProcess:
+          - replace:
+              - regex: ^.*-(\d+)$
+                with: $1
   movieScraper:
     common:
       $info: *infoSel

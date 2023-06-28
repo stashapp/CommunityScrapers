@@ -27,4 +27,10 @@ xPathScrapers:
       Studio:
         Name:
           selector: //span[contains(text(), "Studio:")]/following-sibling::a/text()
+      Code:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: ^.*-(\d+)$
+                with: $1
 # Last Updated June 28, 2023
