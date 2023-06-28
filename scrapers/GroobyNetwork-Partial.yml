@@ -40,7 +40,9 @@ xPathScrapers:
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
           - parseDate: January 2, 2006
-      Details: &details //div[@class="trailerpage_info"]/p[not(@class)]/text()
+      Details: &details
+        selector: //div[@class="trailerpage_info"]/p[not(@class)]/text()|//div[@class="trailerpage_info"]/p[not(@class)]/span/text()
+        concat: "\n\n"
       Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
       Studio: &studio
@@ -68,7 +70,9 @@ xPathScrapers:
         selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
           - parseDate: January 2, 2006
-      Details: //div[@class="trailerblock"]/p[not(@class)]/text()
+      Details:
+        selector: //div[@class="trailerblock"]/p[not(@class)]/text()
+        concat: "\n\n"
       Performers:
         Name: //div[@class="trailer_toptitle_left"]//a/text()
       Studio: *studio
@@ -82,4 +86,4 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.groobyvr.com/
       Tags: *tags
-# Last Updated June 07, 2023
+# Last Updated June 28, 2023
