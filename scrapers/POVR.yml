@@ -4,7 +4,55 @@ sceneByURL:
     url:
       - povr.com
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - brasilvr.com
+      - milfvr.com
+      - tranzvr.com
+      - wankzvr.com
+    scraper: sceneScraperPremium
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - wankzvr.com
+    scraper: movieScraper
 xPathScrapers:
+  sceneScraperPremium:
+    common:
+      $info: &infoSel //div[@class="detail"]
+      $url: &urlSel //link[@rel="canonical"]/@href
+    scene:
+      Title: &titleSel //div[@class="detail__header detail__header-lg"]/h1
+      Date: &dateAttr
+        selector: $info//span[@class="detail__date"]/text()
+        postProcess:
+          - parseDate: 2 January, 2006
+      Details: &detailsAttr
+        selector: //div[@class="detail__txt detail__txt-show_lg"]/text()|//span[@class="more__body"]/text()
+        concat: " "
+      Tags:
+        Name: $info//div[@class="tag-list__body"]//a/text()
+      Performers:
+        Name: //div[@class="detail__inf detail__inf-align_right"]/div[@class="detail__models"]/a/text()
+      Image: &imageSel //meta[@property="og:image"]/@content
+      Studio: &studioAttr
+        Name:
+          selector: *urlSel
+          postProcess:
+            - replace:
+                - regex: ^.*//(?:www.)?([^/]*).*$
+                  with: $1
+            - map:
+                brasilvr.com: BrasilVR
+                milfvr.com: MilfVR
+                tranzvr.com: TranzVR
+                wankzvr.com: WankzVR
+      Code: &codeAttr
+        selector: *urlSel
+        postProcess:
+          - replace:
+              - regex: ^.*-(\d+)$
+                with: $1
   sceneScraper:
     scene:
       Title:
@@ -22,15 +70,29 @@ xPathScrapers:
         Name: //li[span[contains(text(), "Tags:")]]/following-sibling::li/a/text()
       Details:
         selector: //div[contains(@class, "player__description")]/p/text()
-      Image:
-        selector: //meta[@property="og:image"]/@content
+      Image: *imageSel
       Studio:
         Name:
           selector: //span[contains(text(), "Studio:")]/following-sibling::a/text()
-      Code:
-        selector: //link[@rel="canonical"]/@href
+      Code: *codeAttr
+  movieScraper:
+    common:
+      $info: *infoSel
+    movie:
+      Name:
+        selector: *titleSel
         postProcess:
           - replace:
-              - regex: ^.*-(\d+)$
-                with: $1
+              - regex: ^
+                with: "WankzVR - "
+      Duration:
+        selector: $info//span[@class="time"]/text()
+        postProcess:
+          - replace:
+              - regex: \smin
+                with: ":00"
+      Date: *dateAttr
+      Studio: *studioAttr
+      Synopsis: *detailsAttr
+      FrontImage: *imageSel
 # Last Updated June 28, 2023
