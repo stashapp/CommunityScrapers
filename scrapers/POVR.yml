@@ -34,7 +34,12 @@ xPathScrapers:
         Name: $info//div[@class="tag-list__body"]//a/text()
       Performers:
         Name: //div[@class="detail__inf detail__inf-align_right"]/div[@class="detail__models"]/a/text()
-      Image: &imageSel //meta[@property="og:image"]/@content
+      Image: &imageAttr
+        selector: //meta[@property="og:image"]/@content|//div[@class="photo-strip__body"]/div[2]/@data-src
+        postProcess:
+          - replace:
+              - regex: medium.jpg
+                with: large.jpg
       Studio: &studioAttr
         Name:
           selector: *urlSel
@@ -70,7 +75,7 @@ xPathScrapers:
         Name: //li[span[contains(text(), "Tags:")]]/following-sibling::li/a/text()
       Details:
         selector: //div[contains(@class, "player__description")]/p/text()
-      Image: *imageSel
+      Image: *imageAttr
       Studio:
         Name:
           selector: //span[contains(text(), "Studio:")]/following-sibling::a/text()
@@ -94,5 +99,5 @@ xPathScrapers:
       Date: *dateAttr
       Studio: *studioAttr
       Synopsis: *detailsAttr
-      FrontImage: *imageSel
+      FrontImage: *imageAttr
 # Last Updated June 28, 2023
