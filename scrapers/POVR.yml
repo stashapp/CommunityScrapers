@@ -23,13 +23,7 @@ xPathScrapers:
       Details:
         selector: //div[contains(@class, "player__description")]/p/text()
       Image:
-        selector: //script[@type="application/ld+json"]
-        postProcess:
-          - replace:
-              - regex: ^.*thumbnailUrl":"([^"]+).*$
-                with: $1
-              - regex: \d+.jpg
-                with: original.jpg
+        selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
           selector: //span[contains(text(), "Studio:")]/following-sibling::a/text()
