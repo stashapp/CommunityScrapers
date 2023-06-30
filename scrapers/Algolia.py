@@ -534,7 +534,7 @@ def parse_movie_json(movie_json: dict) -> dict:
     """
     scrape = {}
     try:
-        studio_name = movie_json[0].get("sitename_pretty")
+        studio_name = determine_studio_name_from_json(movie_json[0])
     except IndexError:
         log.debug("No movie found")
         return scrape
@@ -575,7 +575,10 @@ def parse_movie_json(movie_json: dict) -> dict:
 def determine_studio_name_from_json(some_json):
     '''
     Reusable function to determine studio name based on what was scraped.
-    This can be used for at least scene and gallery scraping
+    This can be used for scraping:
+    - scene
+    - gallery
+    - movie
     '''
     studio_name = None
     if some_json.get('sitename_pretty'):
