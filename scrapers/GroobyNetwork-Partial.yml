@@ -47,12 +47,25 @@ xPathScrapers:
         Name: //div[@class="setdesc"]//a/text()
       Studio: &studio
         Name: //meta[@name="author"]/@content
+        URL:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: (https://[^/]*)/.*
+                  with: $1
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //link[@rel="canonical"]/@href|//img[contains(@class, "update_thumb thumbs stdimage")]/@src|//img[contains(@class, "update_thumb thumbs stdimage")]/@src0_1x
+        concat: "__SEPARATOR__"
         postProcess:
           - replace:
-              - regex: ^// # bobstgirls
+              - regex: ^.*__SEPARATOR__// # bobstgirls
                 with: "https://"
+              - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$
+                with: $1$2
+              - regex: content//
+                with: content/
+              - regex: __SEPARATOR__
+                with: ''
       Tags: &tags
         Name: //div[@class="set_tags"]/ul/li//a/text()
   galleryScraper:
