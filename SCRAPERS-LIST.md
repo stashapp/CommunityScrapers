@@ -121,8 +121,8 @@ av69.tv|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avadawn.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 avanal.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 aventertainments.com|AVE.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Database
-avidolz.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
-avjiali.com|AVJiali.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Chinese Uncensored
+avidolz.com|Avidolz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
+avjiali.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Chinese Uncensored
 avstockings.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avtits.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 aziani.com|Aziani.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1250,7 +1250,7 @@ teenslovehugecocks.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark
 teensnaturalway.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teensneaks.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 teenstryblacks.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-teenthais.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Thai Uncensored
+teenthais.com|Avidolz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Thai Uncensored
 teenytaboo.com|TeenyTaboo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tenshigao.com|Tenshigao.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Jav
 terapatrick.com|NikkiAndTera.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
