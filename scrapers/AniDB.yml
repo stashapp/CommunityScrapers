@@ -128,7 +128,7 @@ driver:
         # Replace value field
         - Name: "adbsess"
           Domain: "anidb.net"
-          Value: "" # Enter the value of the 'adbuin' here
+          Value: "" # Enter the value of the 'adbsess' here
           Path: "/"
         - Name: "adbuin"
           Domain: "anidb.net"
