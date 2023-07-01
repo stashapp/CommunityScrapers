@@ -20,4 +20,20 @@ performerByName:
       - python3
       - ManyVids.py
       - performer_by_name
-# Last Updated December 30, 2022
+      
+sceneByName:
+  action: script
+  script:
+      - python3
+      - ManyVids.py
+      - scene_by_name
+
+sceneByQueryFragment:
+    action: script
+    queryURL: "{url}"
+    script:
+      - python3
+      - ManyVids.py
+      - scene_by_query_fragment
+
+# Last Updated April 22, 2023

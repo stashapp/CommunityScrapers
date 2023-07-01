@@ -35,7 +35,13 @@ xPathScrapers:
                   with: "https://www.woodmancastingx.com/"
       Studio:
         Name:
-          fixed: Woodman Casting X
+          selector: //div[@id="breadcrumb"]
+          postProcess:
+            - replace:
+                - regex: ^[^>]*> (Casting|Sthuf).*$
+                  with: "Woodman Casting X"
+                - regex: ^[^>]*> (Scenes|Backstage|Live).*$
+                  with: "Pierre Woodman"
       Tags:
         Name: //a[@class="tag"]
       Image: //meta[@property="og:image"]/@content
@@ -52,4 +58,4 @@ xPathScrapers:
       URL:
         selector: $res/@href
         postProcess: *pp
-# Last Updated September 28, 2022
+# Last Updated May 30, 2023
