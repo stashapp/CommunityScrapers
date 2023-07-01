@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - futanari.xxx
       - hentaied.com
+      - parasited.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -26,7 +27,7 @@ xPathScrapers:
                 - regex: "Exclude"
                   with: ""
       Details:
-        selector: //div[@class="cont" or @class="column"]/$desc
+        selector: //div[@class="fullss"]/p
         concat: "\n\n"
         postProcess:
           - replace:
@@ -40,4 +41,4 @@ xPathScrapers:
           postProcess:
             - map:
                 Real Life Hentai: Hentaied
-# Last Updated June 29, 2022
+# Last Updated May 21, 2023
