@@ -2,42 +2,53 @@ name: Baberotica
 sceneByURL:
   - action: scrapeXPath
     url:
-      - avidolz.com
       - baberotica.com
       - baberoticavr.com
-      - teenthais.com
+      - avjiali.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $performer: //div[@class="cat"]//a[@rel="tag"][contains(@href, ".com/model/")]
     scene:
       Title:
-        selector: //h1[@itemprop="name"]
+        selector: //div[@class="videoinfo"]/h1/text()
       Performers:
-        Name: //p/span[@itemprop="actor"]/a/span
+        Name: $performer/text()
+        URL: $performer/@href
       Date:
-        selector: //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="datePublished"]/@content
+        selector: //div[@class="video-date"]/text()
         postProcess:
           - replace:
-              - regex: "T.+$"
-                with: ""
-          - parseDate: 2006-01-02
+              - regex: "(\\d)(st|th|nd|rd)"
+                with: $1
+          - parseDate: January 2, 2006
       Tags:
-        Name: //a[@itemprop="genre"]
+        Name: //div[@class="cat"]//a[@rel="tag"][not(contains(@href, ".com/model/"))]/text()
       Details:
-        selector: //div[@itemprop="description"]
+        selector: //div[@class="videoinfo"]/p
+        postProcess:
+          - replace:
+              - regex: '\.\.\. Read More'
+                with: ''
       Image:
-        selector: //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="thumbnailUrl"]/@content
+        selector: //video[contains(@id,"videohtml5tour")]/@poster
         postProcess:
           - replace:
               - regex: ^
                 with: "https:"
+      Code:
+        selector: //video[@id="videohtml5tour"]/@poster
+        postProcess:
+          - replace:
+              - regex: (.*)(AVJI-\d\d\d)(.*)
+                with: $2
       Studio:
         Name:
           selector: //meta[@itemprop="url"]/@content
           postProcess:
             - map:
-                https://avidolz.com: AvIdolz
                 https://baberotica.com: Baberotica
                 https://baberoticavr.com: BaberoticaVR
-                https://teenthais.com: TeenThais
+                https://avjiali.com: AV Jiali
 # Last Updated June 30, 2021

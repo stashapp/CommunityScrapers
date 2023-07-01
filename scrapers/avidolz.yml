@@ -1,0 +1,39 @@
+name: AvIdolz
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - avidolz.com
+      - teenthais.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@itemprop="name"]
+      Performers:
+        Name: //p/span[@itemprop="actor"]/a/span
+      Date:
+        selector: //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="datePublished"]/@content
+        postProcess:
+          - replace:
+              - regex: "T.+$"
+                with: ""
+          - parseDate: 2006-01-02
+      Tags:
+        Name: //a[@itemprop="genre"]
+      Details:
+        selector: //div[@itemprop="description"]
+      Image:
+        selector: //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="thumbnailUrl"]/@content
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+      Studio:
+        Name:
+          selector: //meta[@itemprop="url"]/@content
+          postProcess:
+            - map:
+                https://avidolz.com: AvIdolz
+                https://teenthais.com: TeenThais
+# Last Updated June 30, 2021
