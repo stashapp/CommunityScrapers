@@ -48,7 +48,7 @@ xPathScrapers:
           selector: //meta[@itemprop="url"]/@content
           postProcess:
             - map:
-                https://baberotica.com: Baberotica
-                https://baberoticavr.com: BaberoticaVR
-                https://avjiali.com: AV Jiali
+                https://baberotica.com/: Baberotica
+                https://baberoticavr.com/: BaberoticaVR
+                https://avjiali.com/: AV Jiali
 # Last Updated June 30, 2021
