@@ -18,5 +18,4 @@ xPathScrapers:
                 with: $1
           - parseDate: 2 January 2006
       Details: //h1[@class="capMultiLine"]/following::p/text() | //table[@class="data marT"]//tbody//tr//th[contains(text(),"Description:")]/following::td/text()
-
 # Last Updated May 24, 2023
