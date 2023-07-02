@@ -26,5 +26,4 @@ xPathScrapers:
           - replace:
               - regex: .+/video/(\d+)/.+?$
                 with: $1
-
 # Last Updated June 10, 2023
