@@ -47,8 +47,11 @@ xPathScrapers:
         Name:
           selector: //meta[@itemprop="url"]/@content
           postProcess:
+            - replace:
+              - regex: .*(avjiali|baberotica(?:vr)?)\..*
+                with: $1
             - map:
-                https://baberotica.com/: Baberotica
-                https://baberoticavr.com/: BaberoticaVR
-                https://avjiali.com/: AV Jiali
-# Last Updated June 30, 2021
+                baberotica: Baberotica
+                baberoticavr: BaberoticaVR
+                avjiali: AV Jiali
+# Last Updated July 03, 2023
