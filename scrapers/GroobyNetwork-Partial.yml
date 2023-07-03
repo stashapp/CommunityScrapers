@@ -41,8 +41,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: &details
-        selector: //div[@class="trailerpage_info"]/p[not(@class)]/text()|//div[@class="trailerpage_info"]/p[not(@class)]/span/text()
-        concat: "\n\n"
+        selector: string(//div[@class="trailerpage_info"]/p[not(@class)])
       Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
       Studio: &studio
