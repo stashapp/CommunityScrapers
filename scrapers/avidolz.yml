@@ -33,7 +33,10 @@ xPathScrapers:
         Name:
           selector: //meta[@itemprop="url"]/@content
           postProcess:
+            - replace:
+              - regex: .*(avidolz|teenthais)\..*
+                with: $1
             - map:
-                https://avidolz.com: AvIdolz
-                https://teenthais.com: TeenThais
+                avidolz: AvIdolz
+                teenthais: TeenThais
 # Last Updated June 30, 2021
