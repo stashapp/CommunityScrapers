@@ -41,7 +41,8 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: &details
-        selector: string(//div[@class="trailerpage_info"]/p[not(@class)])
+        selector: //div[@class="trailerpage_info"]/p[not(@class)]/descendant-or-self::*/text()
+        concat: "\n\n"
       Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
       Studio: &studio
@@ -98,4 +99,4 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.groobyvr.com/
       Tags: *tags
-# Last Updated June 28, 2023
+# Last Updated July 03, 2023
