@@ -7,17 +7,22 @@ sceneByURL:
       - blacktgirlshardcore.com
       - black-tgirls.com
       - bobstgirls.com
+      - femout.xxx
       - femoutsex.xxx #Scenes on 'femout.xxx' can some times be found on this one as well
       - franks-tgirlworld.com
       - grooby-archives.com
       - groobygirls.com
       - ladyboy-ladyboy.com
       - ladyboy.xxx
+      - realtgirls.com
       - tgirlsex.xxx
       - tgirls.porn
       - tgirls.xxx
+      - tgirlshookup.com
+      - tgirltops.com
       - transexpov.com
       - transgasm.com
+      - transnificent.com
     scraper: sceneScraper
   - action: scrapeXPath
     url:
@@ -35,17 +40,34 @@ xPathScrapers:
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
           - parseDate: January 2, 2006
-      Details: &details //div[@class="trailerpage_info"]/p[not(@class)]/text()
+      Details: &details
+        selector: //div[@class="trailerpage_info"]/p[not(@class)]/descendant-or-self::*/text()
+        concat: "\n\n"
       Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
       Studio: &studio
         Name: //meta[@name="author"]/@content
+        URL:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: (https://[^/]*)/.*
+                  with: $1
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //link[@rel="canonical"]/@href|//img[contains(@class, "update_thumb thumbs stdimage")]/@src|//img[contains(@class, "update_thumb thumbs stdimage")]/@src0_1x
+        concat: "__SEPARATOR__"
         postProcess:
           - replace:
-              - regex: ^// # bobstgirls
+              - regex: ^.*__SEPARATOR__// # bobstgirls
                 with: "https://"
+              - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$
+                with: $1$2
+              - regex: content//
+                with: content/
+              - regex: __SEPARATOR__
+                with: ''
+      Tags: &tags
+        Name: //div[@class="set_tags"]/ul/li//a/text()
   galleryScraper:
     gallery:
       Title: *title
@@ -53,6 +75,7 @@ xPathScrapers:
       Details: *details
       Performers: *performers
       Studio: *studio
+      Tags: *tags
   sceneScraperGroobyVR:
     scene:
       Title: *title
@@ -60,7 +83,9 @@ xPathScrapers:
         selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
           - parseDate: January 2, 2006
-      Details: //div[@class="trailerblock"]/p[not(@class)]/text()
+      Details:
+        selector: //div[@class="trailerblock"]/p[not(@class)]/text()
+        concat: "\n\n"
       Performers:
         Name: //div[@class="trailer_toptitle_left"]//a/text()
       Studio: *studio
@@ -73,4 +98,5 @@ xPathScrapers:
           - replace:
               - regex: ^/
                 with: https://www.groobyvr.com/
-# Last Updated December 19, 2022
+      Tags: *tags
+# Last Updated July 03, 2023
