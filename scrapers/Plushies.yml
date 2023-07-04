@@ -1,10 +1,37 @@
 name: Plushies
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://plushies.tv/tour/search.php?query={}"
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - plushies.tv
     scraper: sceneScraper
 xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[@class='updateItem']/div[@class='updateDetails']
+      $searchThumb: //div[@class='updateItem']/a/img
+    scene:
+      Title:
+        selector: $searchItem/h4/a
+      Date:
+        selector: $searchItem/p/span[2]
+        postProcess:
+          - parseDate: 01/02/2006
+      URL:
+        selector: $searchItem/h4/a/@href
+      Image:
+        selector: $searchThumb/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://plushies.tv/tour/"
   sceneScraper:
     common:
       $ub: //div[@class="update_block_info"]
@@ -22,7 +49,7 @@ xPathScrapers:
       Details:
         selector: $ub/span[@class="latest_update_description"]
       Image:
-        selector: //img[@class="stdimage large_update_thumb left thumbs"]/@src
+        selector: //img[@class="stdimage small_update_thumb thumbs"]/@src
         postProcess:
           - replace:
               - regex: ^
@@ -30,4 +57,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Plushies
-# Last Updated May 07, 2021
+# Last Updated March 30, 2023

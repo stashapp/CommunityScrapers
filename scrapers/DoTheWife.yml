@@ -1,0 +1,33 @@
+name: Do The Wife
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - dothewife.com/update
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="section-title"]/h4
+      Performers:
+        Name: //div[@class="model-rich"]/h4[@class="theme-color"]/a
+      Details:
+        selector: //p[@class="read-more"]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*:\s*'
+                with: ""
+      Tags:
+        Name:
+          selector: //div[@class="model-categories"]/a/text()
+      Studio:
+        Name:
+          fixed: Do The Wife
+      Image:
+        selector: //img[@class="video-banner"]/@src|//video/@poster
+        postProcess:
+          - replace:
+              - regex: (?:.+)(\/usermedia\/.+\.jpg)(?:.+)
+                with: $1
+              - regex: "^/usermedia/"
+                with: "https://dothewife.com/usermedia/"
+# Last Updated February 18, 2023

@@ -1,10 +1,29 @@
-name: xvideos
+name: Xvideos
 sceneByURL:
   - action: scrapeXPath
     url:
       - xvideos.com
+      - xvideos2.com
+      #- xvideos.es
       - xvideos.red
     scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://www.xvideos.com/video{filename}/x
+  queryURLReplace:
+    filename:
+      # expects an id in square brackets before extension, as saved by yt-dlp by default
+      - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
+        with: $1
+      # or expects an id
+      - regex: '(?i)^.+-(\d+)\..+$'
+        with: $1
+      # if no id is found in the filename
+      - regex: .*\.[^\.]+$
+        with: # clear the filename so that it doesn't leak
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -14,11 +33,24 @@ xPathScrapers:
       Performers:
         Name: //li[@class="model"]/a/span[1]/text()
       Studio:
-        Name: //a[@class="btn btn-default label main uploader-tag hover-name"]/span[@class="name"]/text()
+        Name: //li[@class="main-uploader"]/a[
+          starts-with(@href,'/channels')          or
+          starts-with(@href,'/amateur-channels')  or
+          starts-with(@href,'/model-channels')    or
+          starts-with(@href,'/pornstar-channels')
+          ]/span[@class="name"]/text()
       Image:
         selector: //script[contains(text(), "setThumbUrl169")]/text()|//div[@id="html5video"][span[@class="premium-log-overlay"]]/div[@class="embed-responsive-item"]/@style
         postProcess:
           - replace:
               - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.jpg).+$
                 with: $1
-# Last Updated January 23, 2023
+      URL: //link[@rel="alternate" and @hreflang="x-default"]/@href
+      Date:
+        selector: //script[@type="application/ld+json"]/text()
+        postProcess:
+          - replace:
+              - regex: '[\S\s]+"uploadDate"\s*:\s*"(\d+-\d{2}-\d{2})[^"]+"[\S\s]+'
+                with: $1
+          - parseDate: 2006-01-02
+# Last Updated February 15, 2023

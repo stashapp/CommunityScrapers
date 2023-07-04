@@ -1,0 +1,21 @@
+name: "EroProfile"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - eroprofile.com/m/videos/view/
+      - m.eroprofile.com/p/videos/view/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="capMultiLine"]/text() | //div[@class="pageTitle"]/text()
+      Image: //video[@id="vidVideoViewPlayer"]/@poster | //video[@id="vidPlayer"]/@poster
+      Date: 
+        selector: //div[@class="col-xs-3 col-sm-2 colEmp"][contains(text(),"Upload date")]/following-sibling::div/text() | //table[@class="data marT"]//tbody//tr//th[contains(text(),"Uploaded:")]/following::td/text()
+        postProcess:
+          - replace:
+              - regex: (.+)\s\((.+)ago\)
+                with: $1
+          - parseDate: 2 January 2006
+      Details: //h1[@class="capMultiLine"]/following::p/text() | //table[@class="data marT"]//tbody//tr//th[contains(text(),"Description:")]/following::td/text()
+# Last Updated May 24, 2023

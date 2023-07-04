@@ -3,30 +3,41 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - filthyfamily.com
+      - mobile.filthyfamily.com
     scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: https://(www\.)?filthyfamily\.com
+          with: https://mobile.filthyfamily.com
 xPathScrapers:
   sceneScraper:
+    common:
+      $videoinfo: //div[@id="video-player-meta"]/div[@class="card-info"]
     scene:
-      Title: //div[@class='hideWhilePlaying']/img/@alt
-      Details: //p[@class='videoDetail']/text()
+      Title: $videoinfo/h1/text()
+      Details:
+        selector: $videoinfo/p[@class[contains(.,"desc")]]
       Image:
-        selector: //div[@class="hideWhilePlaying"]/img/@src
+        selector: //video/@data-poster-url
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
+              - regex: \[resolution\]
+                with: ipadbig.jpg
+              - regex: ^//
+                with: https://
       Tags:
         Name:
-          selector: //meta[@http-equiv='keywords']/@content
-          split: ", "
+          selector: $videoinfo/div[@class="tags"]//a/text()
+      Performers:
+        Name: //section[@class="group"]/div[@data-scrollbar="#model-scroll"]/ul//li//div[@class="model-info"]/h2/a/text()
       Studio:
         Name:
           fixed: Filthy Family
       URL:
-        selector: //link[@rel='canonical']/@href
+        selector: $videoinfo/div[contains(@class, "act")]/a[@id="ovrl-share-btn"]/@*[name()="addthis:url"]
         postProcess:
           - replace:
-            - regex: ^
-              with: "https:"
-
-# Last Updated October 07, 2020
+              - regex: mobile\.bangbros\.com
+                with: mobile.filthyfamily.com
+# Last Updated February 27, 2023

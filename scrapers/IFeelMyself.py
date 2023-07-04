@@ -33,7 +33,7 @@ def readJSONInput():
 def extract_SceneInfo(table,cover_url=None):
     description = None
     if table.find(class_= ["blog_wide_new_text","entryBlurb"]):
-        description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(strip=True)
+        description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(" ", strip=True)
         description=unicodedata.normalize('NFKC', description).encode('ascii','ignore').decode('ascii')
     date = table.find(class_="blog-title-right").get_text(strip=True) #This is a BeautifulSoup element
     performer = table.find(class_= ["entryHeadingFlash","entryHeading"]).find_all("a")[1].get_text().replace("_"," ")
