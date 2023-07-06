@@ -10,11 +10,12 @@ xPathScrapers:
       Studio:
         Name:
           selector: //span[@class="sup-title"]/span
-          map:
-            Karups: Karups
-            KarupsOW: Karups Older Women
-            KarupsHA: Karups Hometown Amateurs
-            KarupsPC: Karups Private Collection
+          postProcess:
+            - map:
+                Karups: Karups
+                KarupsOW: Karups Older Women
+                KarupsHA: Karups Hometown Amateurs
+                KarupsPC: Karups Private Collection
       Title: //h1[@class="page-heading"]/span[@class="title"]/text()
       Date:
         selector: //span[@class="date"]/span[@class="content"]/text()
