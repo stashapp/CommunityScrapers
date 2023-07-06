@@ -30,5 +30,4 @@ xPathScrapers:
         Name: //span[@class="models"]/span[@class="content"]//a/text()
       Image:
         selector: //video[@id="player"]/@poster|//div[@class="video-poster"]/img/@src
-
 # Last Updated July 6, 2023
