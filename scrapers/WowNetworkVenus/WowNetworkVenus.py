@@ -5,6 +5,9 @@ import re
 import sys
 import urllib.parse
 from itertools import chain, zip_longest
+from difflib import SequenceMatcher
+import array as arr
+
 
 # to import from a parent directory we need to add that directory to the system path
 csd = os.path.dirname(
@@ -232,28 +235,85 @@ def interleave_results(parsed_scenes):  # interleave search results by studio
 
 def search_query_prep(string: str):
     string = string.replace("’", "'")
-    a = [s for s in string if s.isalnum() or s.isspace() or s == "-" or s == "'"]
+    a = [s for s in string if s.isalpha() or s.isspace() or s == "-" or s == "'"]
     string = "".join(a)
     return urllib.parse.quote(string)
 
+def similar(a, b):
+    return SequenceMatcher(None, a, b).ratio()
+
+def unCamelCase(string: str):
+    substring = ""
+    resultstring = ""
+    for i, v in enumerate(string):
+        if v.isupper() or v.isnumeric():
+            if len(substring) > 1:
+                resultstring = resultstring + substring + " "
+                substring = ""
+        substring = substring + v
+    
+    return resultstring + substring
+
+def parseFilename(string: str):
+    list = string.split("_")
+    if(len(list) > 2):
+        name = list[-3]
+        name = unCamelCase(name)
+        
+        artists = list[0:-3]
+        artists = [unCamelCase(artist) for artist in artists]
+
+        return {
+            "parseable": True,
+            "name": name,
+            "artists": artists
+        }
+    else:
+        return {
+            "parseable": False,
+            "name": string,
+            "artists": []
+        }
+
+def sortBySimilarity(originalName, originalArtists, options):
+    scores = arr.array('d', [])
+
+    for scene in options:
+        scene_name = scene["title"]
+        scene_artists = [artist["name"] for artist in scene["performers"]]
+
+        name_similarity = similar(NAME, scene_name)
+        artists_similarity = similar(sorted(ARTISTS), sorted(scene_artists))
+
+        log.debug("similarity between " + str(NAME) + " and " + str(scene_name) + " is: " + str(name_similarity * 100) + "%")
+        log.debug("similarity between " + str(ARTISTS) + " and " + str(scene_artists) + " is: " + str(artists_similarity * 100) + "%")
+
+        this_similarity = ((name_similarity + artists_similarity) / 2)
+
+        log.debug("score: "+ str(this_similarity))
+
+        scores.append(this_similarity)
+        
+    zipped = zip(scores, options)
+
+    sortedScenes = [scene for _, scene in sorted(zipped, reverse=True, key = lambda x: x[0])]
+
+    log.debug(sortedScenes)
+
+    return sortedScenes
 
 FRAGMENT = json.loads(sys.stdin.read())
 
-NAME = FRAGMENT.get("name")
 URL = FRAGMENT.get("url")
 scraper = WowVenus()
-ret = {}
 
+log.debug(sys.argv[1]);
 
-if NAME:
-    log.debug(f'Searching for "{NAME}"')
-    query_title = search_query_prep(NAME)
-    for studio_name, studio_key in STUDIOS.items():
-        scraper.search(query_title, studio_name, studio_key)
-    parsed_scenes = scraper.parse_results()
-    ret = interleave_results(parsed_scenes)
-elif URL:
+if sys.argv[1] == "url" or sys.argv[1] == "fragment":
+    ret = {}
+    
     query_title = URL.split("/")[-1].replace("-", " ")
+    query_title = ''.join([i for i in query_title if not i.isdigit()]) #remove numbers from string, because searches that contain numbers will get no results
     query_title = urllib.parse.unquote(query_title)
     scene_ID = URL.split("/")[4]
     log.debug(f'Searching for "{query_title}"')
@@ -267,4 +327,47 @@ elif URL:
             "Scene not found!\nSome scenes do not appear in search results unless you are logged in!"
         )
         sys.exit()
-print(json.dumps(ret))
+    
+    print(json.dumps(ret))
+elif sys.argv[1] == "query":
+    parsedFilename = parseFilename(FRAGMENT.get('title'))
+
+    NAME = parsedFilename["name"]
+    ARTISTS = parsedFilename["artists"]
+
+    log.debug("set NAME from title: " + NAME)
+
+    if NAME:
+        log.debug(f'Searching for "{NAME}"')
+        query_title = search_query_prep(NAME)
+        for studio_name, studio_key in STUDIOS.items():
+            scraper.search(query_title, studio_name, studio_key)
+        parsed_scenes = scraper.parse_results()
+        interleaved = interleave_results(parsed_scenes)
+        if(len(interleaved) > 0):
+            sortedBySimilarity = sortBySimilarity(NAME, ARTISTS, interleaved)
+
+            print(json.dumps(sortedBySimilarity[0]))
+else:
+    parsedFilename = parseFilename(FRAGMENT.get("name"))
+
+    NAME = parsedFilename["name"]
+    ARTISTS = parsedFilename["artists"]
+
+    ret = {}
+
+    if NAME:
+        log.debug("set NAME from name: " + NAME)
+
+        log.debug(f'Searching for "{NAME}"')
+        query_title = search_query_prep(NAME)
+        for studio_name, studio_key in STUDIOS.items():
+            scraper.search(query_title, studio_name, studio_key)
+        parsed_scenes = scraper.parse_results()
+
+        interleaved = interleave_results(parsed_scenes)
+        sortedBySimilarity = sortBySimilarity(NAME, ARTISTS, interleaved)
+
+        ret = sortedBySimilarity
+
+    print(json.dumps(ret))
