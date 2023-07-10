@@ -242,13 +242,24 @@ def search_query_prep(string: str):
 def similar(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
+def isSingleLetterEnglishWord(word: str):
+    word = word.lower()
+    return (word == "a" or word == "i")
+
+def commonWordFixes(word: str):
+    word = word.lower()
+    if word == "cant":
+        return "can't"
+    else:
+        return word
+
 def unCamelCase(string: str):
     substring = ""
     resultstring = ""
     for i, v in enumerate(string):
         if v.isupper() or v.isnumeric():
-            if len(substring) > 1:
-                resultstring = resultstring + substring + " "
+            if len(substring) > 1 or isSingleLetterEnglishWord(substring):
+                resultstring = resultstring + commonWordFixes(substring) + " "
                 substring = ""
         substring = substring + v
     
@@ -275,20 +286,26 @@ def parseFilename(string: str):
             "artists": []
         }
 
-def sortBySimilarity(originalName, originalArtists, options):
+def sortBySimilarity(originalName, originalPerformers, options):
     scores = arr.array('d', [])
 
+    originalName_lowercase = originalName.lower()
+    originalPerformers_lowercase = [x.lower() for x in originalPerformers]
+
     for scene in options:
-        scene_name = scene["title"]
-        scene_artists = [artist["name"] for artist in scene["performers"]]
+        optionName = scene["title"]
+        optionName_lowercase = optionName.lower()
 
-        name_similarity = similar(NAME, scene_name)
-        artists_similarity = similar(sorted(ARTISTS), sorted(scene_artists))
+        optionPerformers = [artist["name"] for artist in scene["performers"]]
+        optionPerformers_lowercase = [x.lower() for x in optionPerformers]
 
-        log.debug("similarity between " + str(NAME) + " and " + str(scene_name) + " is: " + str(name_similarity * 100) + "%")
-        log.debug("similarity between " + str(ARTISTS) + " and " + str(scene_artists) + " is: " + str(artists_similarity * 100) + "%")
+        nameSimilarity = similar(originalName_lowercase, optionName_lowercase)
+        performersSimilarity = similar(sorted(originalPerformers_lowercase), sorted(optionPerformers_lowercase))
 
-        this_similarity = ((name_similarity + artists_similarity) / 2)
+        log.debug("similarity between \"" + str(originalName) + "\" and \"" + str(optionName) + "\" is: " + str(nameSimilarity * 100) + "%")
+        log.debug("similarity between " + str(originalPerformers) + " and " + str(optionPerformers) + " is: " + str(performersSimilarity * 100) + "%")
+
+        this_similarity = ((nameSimilarity + performersSimilarity) / 2)
 
         log.debug("score: "+ str(this_similarity))
 
