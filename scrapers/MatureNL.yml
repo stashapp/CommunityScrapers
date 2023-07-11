@@ -28,7 +28,12 @@ xPathScrapers:
                 - regex: .+\/update\/(\d+)\/.+
                   with: $1
       Title: &title //div[@class="box"]/h1/text()
-      Details: &details //div/span[text()="Synopsis:"]/following-sibling::text() | //meta[@name="description"]/@content
+      Details: &details
+        selector: //div/span[text()="Synopsis:"]/following-sibling::text() | //meta[@name="description"]/@content
+        postProcess:
+          - replace:
+              - regex: " Watch this amazing porn video on mature.nl as a member today!"
+                with:
       Tags: &tags
         Name: //div[@id="divPageUpdateNiches"]/a[contains(@class, "tag")]/text()
       Performers: &performers
