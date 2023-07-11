@@ -43,6 +43,5 @@ xPathScrapers:
       Date: *date
       Performers: *performers
       Details: *details
-      Image: *image
 
 # Last Updated July 07, 2023
