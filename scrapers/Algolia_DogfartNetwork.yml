@@ -1,0 +1,39 @@
+name: "DogfartNetwork"
+sceneByURL:
+  - action: script
+    url:
+      - dogfartnetwork.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - dogfartnetwork
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - dogfartnetwork
+sceneByName:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - dogfartnetwork
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - dogfartnetwork
+      - validName
+galleryByURL:
+  - action: script
+    url:
+      - dogfartnetwork.com/en/photo/
+    script:
+      - python
+      - Algolia.py
+      - dogfartnetwork
+      - gallery
+# Last Updated December 22, 2022
