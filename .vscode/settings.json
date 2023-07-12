@@ -1,8 +1,5 @@
 {
     "yaml.schemas": {
-        "https://json.schemastore.org/yamllint.json": [
-            "vscode-vfs://github%2B7b2276223a312c22726566223a7b2274797065223a352c226964223a226d6173746572227d7d/echo6ix/CommunityScrapers/scrapers/Karups.yml",
-            "vscode-vfs://github%2B7b2276223a312c22726566223a7b2274797065223a352c226964223a226d6173746572227d7d/echo6ix/CommunityScrapers/scrapers/MatureNL.yml"
-        ]
+        "validator/scraper.schema.json": "*.yml"
     }
 }
