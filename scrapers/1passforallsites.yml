@@ -1,4 +1,4 @@
-name: 1 Pass For All Sites
+name: "1 Pass For All Sites"
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -24,10 +24,11 @@ xPathScrapers:
           selector: //p[@class="niches-list"]/a/text()
       Date:
         selector: //li[contains(text(),"Added:")]
-        replace:
-          - regex: "Added\\: (.+)"
-            with: $1
-        parseDate: 2 Jan 2006
+        postProcess:
+          - replace:
+            - regex: "Added\\: (.+)"
+              with: $1
+          - parseDate: 2 Jan 2006
       Image: //video/@poster
 
 # Last Updated July 12, 2023
