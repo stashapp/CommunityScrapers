@@ -9,22 +9,23 @@ xPathScrapers:
     scene:
       Title:
         selector: //h1
-      Date:
-        selector: //div[contains(@class, "date")]
         postProcess:
           - replace:
-              - regex: ','
-                with: ""
-          - parseDate: January 2 2006
+              - regex: ^\s+(.+)\s+$
+                with: $1
+      Date:
+        selector: //div[contains(@class, "specs-icon")]/following-sibling::strong
+        postProcess:
+          - parseDate: January 2, 2006
       Performers:
-        Name: //span[text()="Featuring:"]/following-sibling::a
+        Name: (//a[starts-with(@href, "/actor")]/text())[1]
       Tags:
-        Name: //span[text()="TAGS:"]/following-sibling::a
+        Name: //a[starts-with(@href, "/scenes") and @class="tag"]/text()
       Details:
-        selector: //div[contains(@class, "c-video-item-desc")]
+        selector: //div[@class="opacity-75 my-2"]
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //*[@id="video-player"]//@poster
       Studio:
         Name:
           fixed: RealJamVR
-# Last Updated June 25, 2021
+# Last Updated July 17, 2023
