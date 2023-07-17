@@ -14,7 +14,7 @@ xPathScrapers:
               - regex: ^\s+(.+)\s+$
                 with: $1
       Date:
-        selector: //div[contains(@class, "specs-icon")]/following-sibling::strong
+        selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
           - parseDate: January 2, 2006
       Performers:
