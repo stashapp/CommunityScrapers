@@ -76,6 +76,13 @@ sceneByQueryFragment:
       - Algolia.py
       - girlsway
       - validName
+galleryByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - girlsway
+      - gallery
 galleryByURL:
   - action: script
     url:
@@ -104,4 +111,4 @@ movieByURL:
       - Algolia.py
       - puretaboo
       - movie
-# Last Updated May 25, 2023
+# Last Updated July 18, 2023
