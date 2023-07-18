@@ -83,4 +83,4 @@ xPathScrapers:
                 with:
       FrontImage: //a[@id='enlargecover']/@data-featherlight
       BackImage: //a[text()='+Back']/@href
-# Last Updated January 31, 2023
+# Last Updated July 18, 2023
