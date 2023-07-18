@@ -81,7 +81,7 @@ galleryByFragment:
     script:
       - python
       - Algolia.py
-      - girlsway
+      - puretaboo
       - gallery
 galleryByURL:
   - action: script
