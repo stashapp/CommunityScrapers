@@ -1,4 +1,15 @@
 name: data18
+driver:
+  cookies:
+  - CookieURL: "https://data18.com"
+    Cookies:
+      - Name: "data_user_captcha"
+        Domain: ".data18.com"
+        Value: "1"
+        Path: "/"
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
 movieByURL:
   - action: scrapeXPath
     url:
