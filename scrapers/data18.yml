@@ -81,6 +81,6 @@ xPathScrapers:
           - replace:
               - regex: '^Description\s*-\s*'
                 with:
-      FrontImage: //a[@id='enlargecover']/@href
+      FrontImage: //a[@id='enlargecover']/@data-featherlight
       BackImage: //a[text()='+Back']/@href
 # Last Updated January 31, 2023
