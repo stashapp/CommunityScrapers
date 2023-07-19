@@ -1,0 +1,12 @@
+name: Tokyo Hot V2
+
+sceneByFragment:
+  action: script
+  script:
+    - python3
+    - tokyohotv2.py
+    - query
+    - scene
+
+
+# Last Updated July 17, 2023
