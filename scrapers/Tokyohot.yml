@@ -19,5 +19,12 @@ xPathScrapers:
       Performers:
         Name: $movieinfo/dd[1]/a/text()
       Image: //li[@class="package"]/a[1]/@href
+sceneByFragment:
+  action: script
+  script:
+    - python3
+    - Tokyohot.py
+    - query
+    - scene
 
-# Last Updated November 08, 2020
+# Last Updated July 20, 2023
