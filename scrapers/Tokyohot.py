@@ -132,8 +132,8 @@ class ScenePage:
         return None
 
     def get_tags(self):
-        potential_tags = self.soup.find("div", {"class": "infowrapper"}).find_all("a", href=lambda h: "type" in h)
-        return [{"Name":a.text} for a in potential_tags if a.text.isascii()]
+        potential_tags = self.soup.find("div", {"class": "infowrapper"}).find_all("a")
+        return [{"Name":a.text} for a in potential_tags if "type=play" in a.get("href")]
 
     def get_json(self):
         return {
