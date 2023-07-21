@@ -26,8 +26,7 @@ xPathScrapers:
             - replace:
                 - regex: ^\s*(.+)\s*$
                   with: $1
-      Image:
-        selector: //dl8-video/@poster
+      Image: //dl8-video/@poster
       Studio:
         Name:
           fixed: "SexBabesVR"
