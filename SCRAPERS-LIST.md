@@ -1417,7 +1417,7 @@ watchreal.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 watchyoujerk.com|WatchYouJerk.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 waybig.com|Waybig.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 wcpclub.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
-wearehairy.com|wearehairy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+wearehairy.com|wearehairy.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 webyoung.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Lesbian
 wefuckblackgirls.com|WeFuckBlackGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 welikegirls.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
