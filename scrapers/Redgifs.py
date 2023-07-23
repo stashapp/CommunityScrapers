@@ -149,7 +149,10 @@ class Redgifs:
         )
 
 def parseFilename(filename):
-    return filename.split(".")[0]
+    id = filename.replace("redgifs_", "") #remove possible filename prefix
+    id = id.split(".")[0] #remove file extension
+    
+    return id
 
 
 FRAGMENT = json.loads(sys.stdin.read())
