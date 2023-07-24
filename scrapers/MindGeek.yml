@@ -174,7 +174,7 @@ xPathScrapers:
                 with: $1
       Studio:
         Name:
-          selector: //div[contains(@class,"tg5e7m")]/ancestor::section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
+          selector: //div[text()="Subsite"]/following-sibling::a/text()|//div[contains(@class,"tg5e7m")]/ancestor::section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
           postProcess:
             - replace:
                 - regex: (.+www\.)(\w+)(.+)
@@ -361,4 +361,4 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated May 31, 2023
+# Last Updated July 24, 2023
