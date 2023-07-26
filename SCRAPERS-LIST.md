@@ -712,7 +712,7 @@ killergram.com|Killergram.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kimberleelive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kin8tengoku.com|Kin8tengoku.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kingsoffetish.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-kink.com|Kink.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+kink.com|Kink.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|CDP|-
 kink305.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kinkbomb.com|KinkBomb.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kinkvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
