@@ -14,6 +14,7 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 18tokyo.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 18vr.com|BaDoink.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
 1by-day.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+1passforallsites.com|1passforallsites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 1pondo.tv|1pondo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 21naturals.com|Algolia_21Naturals.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 21roles.com|21Roles.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
@@ -168,6 +169,7 @@ bellanextdoor.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bellapass.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bellesafilms.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bellesahouse.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+beltbound.com|BeltBound.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bestoftealconrad.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bffs.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bigbootytgirls.com|BigBootyTGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
@@ -183,6 +185,7 @@ black4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blackambush.com|ExploitedX.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 blacked.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 blackedraw.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+Blackfoxbound UK|BlackFoxBound.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blackmarketxxx.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blackmassivecocks.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 blackph.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -261,6 +264,7 @@ clubinfernodungeon.com|Algolia_ClubInfernoDungeon.yml|:heavy_check_mark:|:heavy_
 clubseventeen.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 clubsweethearts.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 cockhero.info|Cockhero.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+cocksuremen.com|CocksureMen.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 colbyknox.com|ColbyKnox.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 colette.com|Colette.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 college-amateurs.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -700,7 +704,7 @@ jschoolgirls.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 julesjordan.com|JulesJordan.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|-|-
 juliaannlive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 karissa-diamond.com|Karissa-Diamond.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
-karups.com|Karups.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+karups.com|Karups.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 katiebanks.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kellymadison.com|KellyMadisonMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 kendrajames.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -900,6 +904,7 @@ nhentai.net|nhentai.yml|:x:|:heavy_check_mark:|:x:|:x:|-|Hentai
 nikkibenz.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nikkiphoenixxx.com|NikkiAndTera.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ninakayy.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+noelalejandrofilms.com|NoelAlejandro.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 noirmale.com|MindGeek.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 noodledude.io|NoodleDude.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 notmygrandpa.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
