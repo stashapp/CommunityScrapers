@@ -1,0 +1,137 @@
+name: AniDB
+################################################################################################################
+#                                                HOW TO SET UP                                                 #
+#                              Store this file in the ~/stash/scrapers/AniDB.yml                               #
+#                       (If the scrapers directory is not there it needs to be created)                        #
+#                                                 SET COOKIES:                                                 #
+#             Access the anidb.net website > login > right button > inspect > find cookies storage             #
+#       Copy the "Value" of "adbsess" and "adbuin" and replace in the cookies category of this document        #
+#    If your account is new, you need to access any NSFW anime and confirm that you want to see 18+ content    #
+#                    Do not change the order of the columns, as it can make it stop working                    #
+#                               I recommend creating a new account just for this                               #
+#                                               SET USER AGENT:                                                #
+#               Go to your Stash > Settings > Metadata Providers > Scraping > Scraper User Agent               #
+#                                      Use the User Agent of your choice                                       #
+#     I'm currently using: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0      #
+################################################################################################################
+#                                                  HOW TO USE                                                  #
+#                                                   SCENES:                                                    #
+#       The scene Scraper by Fragment is the best option in case the file name is the name of the anime        #
+#                      Scenes that were not found can easily be found by the name scraper                      #
+#                        It is also possible to scrape individually with the anime URL                         #
+#        The scraper doesn't recognize the episode number, I recommend changing it manually at the end         #
+#                                                 PERFORMERS:                                                  #
+#                          Performers need to be individually scraped by name or URL                           #
+#             I recommend creating them by scraping scenes and then searching individually by name             #
+#                                              THAT'S IT, ENJOY!                                               #
+#                                           Made by @escargotbuffed                                            #
+################################################################################################################
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://anidb.net
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://anidb.net/search/anime/?adb.search={}&entity.chartb=1
+  scraper: performerSearch
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://anidb.net/anime/?adb.search={filename}
+  queryURLReplace:
+    filename:
+      - regex: \..+$|\d+
+        with: ""
+      - regex: \s+
+        with: "%20"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://anidb.net/
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://anidb.net/search/anime/?adb.search={}&entity.animetb=1
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //td[@class="relid"]/a
+      URL:
+        selector: //td[@class="relid"]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://anidb.net
+  performerScraper:
+    common:
+      $info: //div[@class="g_section info"]
+      $tab_1_pane: //div[@class="g_section info"]//div[@id="tab_1_pane"]
+      $looks: //div[@class="g_section info"]//div[@id="tab_1_pane"]//tr[contains(@class, 'looks')]
+    performer:
+      Name: $tab_1_pane//tr[contains(@class, 'mainname')]//span[@itemprop="name"]
+      Aliases: $tab_1_pane//tr[contains(@class, 'official')]//label[@itemprop="alternateName"]
+      Gender: $tab_1_pane//tr[contains(@class, 'gender')]//span[@itemprop="gender"]
+      Ethnicity: $tab_1_pane//tr[contains(@class, 'entity')]//span[@class="tagname"]
+      HairColor: $looks//span[contains(@class, 'tagname') and contains(text(), 'hair')]
+      EyeColor: $looks//span[contains(@class, 'tagname') and contains(text(), 'eyes')]
+      Height: $tab_1_pane//tr[contains(@class, 'height')]//span[@itemprop="height"]
+      Weight: $tab_1_pane//tr[contains(@class, 'weight')]//span[@itemprop="weight"]
+      #Measurements: Todo
+      URL: //link[@rel="canonical"]/@href
+      Details: 
+        selector: //div[@itemprop="description"]//text()
+        concat: "\n"
+      Tags:
+        Name: $tab_1_pane//span[@class="g_tag"]//span[@class="tagname"]
+      Image: $info//div[@class="image"]//img/@src
+
+  sceneSearch:
+    scene:
+      Title: //td[@class="relid"]/a
+      URL:
+        selector: //td[@class="relid"]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://anidb.net
+      Image: //td[@class="thumb anime"]//img/@src
+  sceneScraper:
+    common:
+      $info: //div[@class="g_section info"]
+    scene:
+      Title: $info//div[@id="tab_1_pane"]//span[@itemprop="name"]
+      Details: 
+        selector: //div[@itemprop="description"]//text()
+        concat: "\n"
+      Tags:
+        Name: $info//div[@id="tab_1_pane"]//span[@class="tagname"]
+      Performers:
+        Name: //div[@id="characterlist"]//div[contains(@class, 'main character') or contains(@class, 'secondary cast')]//div[@itemprop="character"]/a/span
+      Studio:
+        Name: $info//table[@id="staffoverview"]//tr[last()]/td[@class="name creator"]/a
+      Image: $info//div[@class="image"]//img/@src
+      URL: //link[@rel="canonical"]/@href
+      
+driver:
+  cookies:
+    - CookieURL: "https://anidb.net/"
+      Cookies:
+        # Access adult content requires a anidb account
+        # Replace value field
+        - Name: "adbsess"
+          Domain: "anidb.net"
+          Value: "" # Enter the value of the 'adbsess' here
+          Path: "/"
+        - Name: "adbuin"
+          Domain: "anidb.net"
+          Value: "" # Enter the value of the 'adbuin' here
+          Path: "/"
+# Last Updated June 23, 2023

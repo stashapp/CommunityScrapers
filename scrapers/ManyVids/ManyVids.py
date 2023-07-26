@@ -44,6 +44,17 @@ def get_request(url: str) -> requests.Response():
     }
     return requests.get(url, headers=mv_headers, timeout=(3, 10))
 
+def post_request(url: str, jsonBody:str) -> requests.Response():
+    """
+    wrapper function over requests.post to set common options
+    """
+    mv_headers = {
+        "User-Agent":
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+        "Referer": "https://www.manyvids.com/"
+    }
+    return requests.post(url, json=jsonBody, headers=mv_headers, timeout=(3, 10))
+
 
 def get_model_name(model_id: str) -> str:
     """
@@ -112,11 +123,16 @@ def get_scene(scene_id: str) -> dict:
     scrape = {}
     scrape['title'] = meta.get('title')
     scrape['details'] = meta.get('description')
+    scrape['code'] = scene_id
+    sceneURLPartial = meta.get('url')
+    if sceneURLPartial:
+        scrape["url"] = f'https://www.manyvids.com{sceneURLPartial}'
     if meta.get('modelId'):
         model_name = get_model_name(meta['modelId'])
         if model_name:
             scrape['performers'] = []
             scrape['performers'].append({'name': model_name})
+            scrape['studio'] = {"name": model_name}
     image = meta.get('screenshot')
     if image is None: # fallback to thumbnail
         image = meta.get('thumbnail')
@@ -274,26 +290,52 @@ def performer_by_name(name: str, max_results: int = 25) -> None:
             for i in range(0, max_results):
                 performers.append({"name": names[i].strip(), "url": urls[i]})
     except Exception as search_exc:
-        log.error(f"Failed to search for {name}: {search_exc}")
+        log.error(f"Failed to search for performer {name}: {search_exc}")
     print(json.dumps(performers))
+    
+def scene_by_name(name: str) -> None:
+    if name:
+        search_url = f'https://api.journey-bff.kiwi.manyvids.com/api/v1/search/all'
+    try:
+        response  = post_request(search_url, jsonBody={'keywords':name})
+        # log.debug(response.request.body)
+        # log.debug(response.content)
+        meta = response.json()  
+        vids = meta.get('vids')
+        scrapes = []
+        if vids:
+            for vid in vids:
+                scrape = {}
+                scrape['Title'] = vid.get('username')
+                scrape['URL'] = 'https://www.manyvids.com'+vid.get('url')
+                scrapes.append(scrape)
+        print(json.dumps(scrapes))
+    except Exception as search_exc:
+        log.error(f"Failed to search for scene {name}: {search_exc}")
+    print(json.dumps("{}"))
 
 
 def main():
     fragment = json.loads(sys.stdin.read())
     url = fragment.get("url")
+    queryURL = fragment.get("queryURL")
     name = fragment.get("name")
 
-    if url is None and name is None:
+    if url is None and name is None and queryURL is None:
         log.error("No URL/Name provided")
         sys.exit(1)
 
-    if url and "performer_by_url" in sys.argv:
+    if name and "scene_by_name" in sys.argv:
+        scene_by_name(name)
+    elif url and "performer_by_url" in sys.argv:
         scrape_performer(url)
     elif name and "performer_by_name" in sys.argv:
         search_name = quote_plus(name)
         performer_by_name(search_name)
     elif url:
         scrape_scene(url)
+    elif queryURL:
+        scrape_scene(queryURL)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,87 @@
+name: JacquieEtMichelElite
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - jacquieetmichelelite.com/en/porn-movie
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jacquieetmichelelite.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: //h1[contains(@class,"video-detail__title")]
+      Director: 
+        selector: //li[contains(@class,"video-detail__info") and contains(.,'Director:')]
+        postProcess:
+          - replace:
+            - regex: "^Director:"
+              with: 
+      Duration:
+        selector: //li[contains(@class,"video-detail__info") and contains(.,'Duration:')]
+        postProcess:
+          - replace:
+            - regex: "^Duration:"
+              with: 
+            - regex: " min.+"
+              with: ":00"
+      Date:
+        selector: //script[contains(.,"datePublished")]
+        postProcess:
+          - replace:
+            - regex: ^.+datePublished":\s*"(\d\d\d\d-\d\d-\d\d).+$
+              with: $1
+      Synopsis:
+        selector: //div[contains(@class,"video-detail__description")]//text()
+      Studio:
+        Name: //li[contains(@class,"video-detail__info")]/strong[contains(.,'Studio:')]/following-sibling::a
+      FrontImage: //img[contains(@class,"video-detail__poster__img")]/@src
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //h1[contains(@class,"video-detail__title")]
+      Details:
+        selector: //div[contains(@class,"video-detail__description")]//text()
+      Date:
+        selector: //script[contains(.,"datePublished")]
+        postProcess:
+          - replace:
+            - regex: ^.+datePublished":\s*"(\d\d\d\d-\d\d-\d\d).+$
+              with: $1
+      Image: 
+        selector: //div[contains(@class,"video-detail__handler")]/@style
+        postProcess:
+          - replace:
+            - regex: ^[^']*'([^']*).*
+              with: $1
+      Studio:
+        Name: //li[contains(@class,"video-detail__info")]/strong[contains(.,'Studio:')]/following-sibling::a
+      Director:
+        selector: //li[contains(@class,"video-detail__info") and contains(.,'Director:')]
+        postProcess:
+          - replace:
+            - regex: "^Director:"
+              with: 
+      Performers:
+        Name: //p[contains(@class,"actor-item__title")]
+      Movies:
+        Name: 
+          selector: //a[contains(@class,"video-detail__poster")]/@href
+          postProcess:
+            - replace:
+              - regex: .+?([^/]+)\.html
+                with: $1
+              - regex: "-"
+                with: " "
+        URL: 
+          selector: //a[contains(@class,"video-detail__poster")]/@href
+          postProcess:
+            - replace:
+              - regex: ^
+                with: https://www.jacquieetmichelelite.com 
+
+# Last Updated April 15, 2023

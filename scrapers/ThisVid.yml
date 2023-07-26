@@ -4,6 +4,11 @@ sceneByURL:
     url:
       - thisvid.com
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - thisvid.com
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     common:
@@ -21,5 +26,29 @@ xPathScrapers:
       Tags:
         Name: $desc//li//a[contains(@href,"/tags/")]/text()
       Details: $desc//li//p/text()
+      Code:
+        selector: //meta[@property="og:video:url"]/@content
+        postProcess:
+          - replace:
+              - regex: .+/(\d+)/?$
+                with: $1
+  performerScraper:
+    common:
+      $profileCaseL: //div[@class="profile"]//div[@class="case"]//div[@class="case-left"]
+      $profileCaseR: //div[@class="profile"]//div[@class="case"]//div[@class="case-right"]
+    performer:
+      Name: $profileCaseL//span[contains(text(),"Name")]/strong|//div[@class="profile-menu"]//div[@class="headline"]//h2/text()
+      Birthdate:
+        selector: $profileCaseL//span[contains(text(),"Birth")]/strong
+        postProcess:
+          - parseDate: 02 January, 2006
+          - parseDate: 2006-01-02
+      Country:
+        selector: $profileCaseL//span[contains(text(),"Country")]/strong
+        postProcess:
+          - map:
+              United States: "USA"
+      Gender: $profileCaseR//span[contains(text(),"Gender")]/strong
+      Image: //div[@class="avatar"]/img[not(contains(@src,"no-avatar"))]/@src
 
-# Last Updated February 15, 2023
+# Last Updated February 26, 2023

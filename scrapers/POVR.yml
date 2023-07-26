@@ -4,11 +4,66 @@ sceneByURL:
     url:
       - povr.com
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - brasilvr.com
+      - milfvr.com
+      - tranzvr.com
+      - wankzvr.com
+    scraper: sceneScraperPremium
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - wankzvr.com
+    scraper: movieScraper
 xPathScrapers:
+  sceneScraperPremium:
+    common:
+      $info: &infoSel //div[@class="detail"]
+      $url: &urlSel //link[@rel="canonical"]/@href
+    scene:
+      Title: &titleSel //div[@class="detail__header detail__header-lg"]/h1
+      Date: &dateAttr
+        selector: $info//span[@class="detail__date"]/text()
+        postProcess:
+          - parseDate: 2 January, 2006
+      Details: &detailsAttr
+        selector: //div[@class="detail__txt detail__txt-show_lg"]/text()|//span[@class="more__body"]/text()
+        concat: " "
+      Tags:
+        Name: $info//div[@class="tag-list__body"]//a/text()
+      Performers:
+        Name: //div[@class="detail__inf detail__inf-align_right"]/div[@class="detail__models"]/a/text()
+      Image: &imageAttr
+        selector: //meta[@property="og:image"]/@content|//div[@class="photo-strip__body"]/div[2]/@data-src
+        postProcess:
+          - replace:
+              - regex: medium.jpg
+                with: large.jpg
+              - regex: 472/cover.jpg
+                with: 680/cover.jpg
+      Studio: &studioAttr
+        Name:
+          selector: *urlSel
+          postProcess:
+            - replace:
+                - regex: ^.*//(?:www.)?([^/]*).*$
+                  with: $1
+            - map:
+                brasilvr.com: BrasilVR
+                milfvr.com: MilfVR
+                tranzvr.com: TranzVR
+                wankzvr.com: WankzVR
+      Code: &codeAttr
+        selector: *urlSel
+        postProcess:
+          - replace:
+              - regex: ^.*-(\d+)$
+                with: $1
   sceneScraper:
     scene:
       Title:
-        selector: //span[@class="video__quality video__quality--vr mr-3"]/following-sibling::text()
+        selector: //h1[contains(@class, "heading-title")]/text()
       Date:
         selector: //p[contains(@class, 'player__date')]
         postProcess:
@@ -17,14 +72,34 @@ xPathScrapers:
                 with: $1
           - parseDate: 2 January, 2006
       Performers:
-        Name: //a[@class="btn btn--eptenary btn--xsm"]
+        Name: //li[span[contains(text(), "Pornstars:")]]/following-sibling::li/a/text()
       Tags:
-        Name: //ul[@class="category-link mb-2"]//a
+        Name: //li[span[contains(text(), "Tags:")]]/following-sibling::li/a/text()
       Details:
-        selector: //p[@style]
-      Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //div[contains(@class, "player__description")]/p/text()
+      Image: *imageAttr
       Studio:
         Name:
-          selector: //a[@class="btn btn--secondary btn--xsm"]/text()
-# Last Updated June 13, 2021
+          selector: //span[contains(text(), "Studio:")]/following-sibling::a/text()
+      Code: *codeAttr
+  movieScraper:
+    common:
+      $info: *infoSel
+    movie:
+      Name:
+        selector: *titleSel
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "WankzVR - "
+      Duration:
+        selector: $info//span[@class="time"]/text()
+        postProcess:
+          - replace:
+              - regex: \smin
+                with: ":00"
+      Date: *dateAttr
+      Studio: *studioAttr
+      Synopsis: *detailsAttr
+      FrontImage: *imageAttr
+# Last Updated June 28, 2023
