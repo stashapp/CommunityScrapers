@@ -1,0 +1,40 @@
+name: Metal Bondage
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - metalbondage.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //title/text()
+      Date:
+        selector: //div[@class="metabar"]//text()
+        postProcess:
+          - replace:
+              - regex: '(.*\d{1,2}, \d{4}).*'
+                with: $1
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="textcontent"]/p
+        concat: "\n\n"
+      Code:
+        selector: //div[@class="post-title fix"]//a/text()
+        postProcess:
+          - replace:
+              - regex: '(MB\d+)\s([\w-].*)'
+                with: $1
+      Performers:
+        Name:
+          selector: //div[@class="tags"]//a[@rel="tag"]/text()
+      Tags:
+        Name:
+          selector: //div[@class="tags"]//a[@rel="category tag"]/text()
+      Image: //div[@class="textcontent"]//img/@src
+      Studio:
+        Name:
+          fixed: "Metal Bondage"
+      URL: //link[@rel="canonical"]/@href
+
+# Last Updated July 27, 2023

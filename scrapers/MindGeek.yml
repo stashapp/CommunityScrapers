@@ -39,6 +39,12 @@ sceneByURL:
       - trueamateurs.com/scene/
     scraper: scriptScraper
 
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - transsensual.com/scene
+    scraper: galleryFromSceneScriptScraper
+
 movieByURL:
   - action: scrapeXPath
     url:
@@ -149,17 +155,17 @@ xPathScrapers:
                 with: $1
   scriptScraper:
     common:
-      $script: //script[@type="application/ld+json"]
+      $script: &script //script[@type="application/ld+json"]
       $canonicalUrl: *canonicalUrl
       $movieUriPath: *movieUriPath
     scene:
-      Title:
+      Title: &title
         selector: $script
         postProcess:
           - replace:
               - regex: '.+"name": "([^"]+)".+'
                 with: $1
-      Date:
+      Date: &date
         selector: $script
         postProcess:
           - replace:
@@ -172,9 +178,9 @@ xPathScrapers:
           - replace:
               - regex: '.+"thumbnailUrl": "([^"]+)".+'
                 with: $1
-      Studio:
+      Studio: &studio
         Name:
-          selector: //div[contains(@class,"tg5e7m")]/ancestor::section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
+          selector: //div[text()="Subsite"]/following-sibling::a/text()|//div[contains(@class,"tg5e7m")]/ancestor::section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
           postProcess:
             - replace:
                 - regex: (.+www\.)(\w+)(.+)
@@ -197,7 +203,7 @@ xPathScrapers:
                 transsensual: TransSensual
                 trueamateurs: True Amateurs
       Tags: *tags
-      Details:
+      Details: &details
         selector: $script
         postProcess:
           - replace:
@@ -207,7 +213,7 @@ xPathScrapers:
                 with: $1
               - regex: '\|'
                 with: '"'
-      Performers:
+      Performers: &performers
         Name: //div/*[self::h1 or self::h2]/..//a[contains(@href,"/model")]
       Movies: *sceneMovies
       Code: *sceneCode
@@ -361,4 +367,14 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated May 31, 2023
+  galleryFromSceneScriptScraper:
+    common:
+      $script: *script
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
+# Last Updated July 24, 2023
