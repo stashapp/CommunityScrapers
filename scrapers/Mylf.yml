@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h2[contains(@class,"sceneTitle")]/text()
-      Details: //div[contains(@class,"sceneDesc")]/text()
+      Details: //div[contains(@class,"sceneDesc")]//text()
       Date:
         selector: //div[contains(@class,"sceneDate")]/text()
         postProcess:
@@ -47,4 +47,4 @@ xPathScrapers:
                 MylfBoss: Mylf Boss
                 MylfSelects: Mylf Selects
                 StayHomeMilf: Stay Home Milf
-# Last Updated June 27, 2022
+# Last Updated July 21, 2023

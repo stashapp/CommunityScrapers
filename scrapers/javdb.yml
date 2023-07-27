@@ -1,7 +1,7 @@
 name: JavDB
 sceneByFragment:
   action: scrapeXPath
-  queryURL: https://javdb36.com/search?q={filename}&f=all
+  queryURL: https://javdb.com/search?q={filename}&f=all
   queryURLReplace:
     filename:
       - regex: \..+$
@@ -17,10 +17,10 @@ sceneByURL:
     queryURLReplace:
       url:
         - regex: javdb\.com
-          with: "javdb36.com"
+          with: "javdb.com"
 sceneByName:
   action: scrapeXPath
-  queryURL: https://javdb36.com/search?q={}
+  queryURL: https://javdb.com/search?q={}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
@@ -37,7 +37,7 @@ movieByURL:
     queryURLReplace:
       url:
         - regex: javdb\.com
-          with: "javdb36.com"
+          with: "javdb.com"
 xPathScrapers:
   sceneSearch:
     common:
@@ -49,7 +49,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: "https://javdb36.com"
+                with: "https://javdb.com"
       Image: 
         selector: $videoItem//img/@src
         postProcess:
@@ -68,7 +68,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: "https://javdb36.com"
+                with: "https://javdb.com"
         # If you don't support cookie you can use this regex.
         #    - regex: $
         #      with: "?locale=en"
@@ -135,6 +135,16 @@ driver:
           Domain: "javdb.com"
           Value: "en"
           Path: "/"
+        # Access to certain titles requires a javdb account
+        # Uncomment the below replacing the Value part
+        #- Name: "_jdb_session"
+        #  Value: "Add here the actual value from your cookies"
+        #  Path: "/"
+        #  Domain: "javdb.com"
+        #- Name: "remember_me_token"
+        #  Value: "Add here the actual value from your cookies"
+        #  Path: "/"
+        #  Domain: "javdb.com"
     - CookieURL: "https://javdb36.com"
       Cookies:
         - Name: "locale"
@@ -151,4 +161,4 @@ driver:
         #  Value: "Add here the actual value from your cookies"
         #  Path: "/"
         #  Domain: "javdb36.com"
-# Last Updated June 02, 2022
+# Last Updated July 24, 2023
