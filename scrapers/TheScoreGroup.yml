@@ -60,11 +60,6 @@ xPathScrapers:
 #                  with: _x_800
       URL: &urlAttr
         selector: $url
-        # Sanitize the URL
-        postProcess:
-          - replace:
-              - regex: (https?:\/\/(?:www\.)?[0-9A-za-z-]+\.com\/[0-9A-Za-z-_]+\/[0-9A-Za-z-_]+\/\d+)\/?.*
-                with: $1
       Code: &codeAttr
         selector: $url
         postProcess:
