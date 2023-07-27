@@ -2,29 +2,32 @@ name: "RandyBlue"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - randyblue.com/video/
+      - randyblue.com/scenes/
     scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $titleArea: //div[@class="title-zone"]
     scene:
-      Title: //h2[@class="content-item-name"]
+      Title: $titleArea/h1
       Date:
-        selector: //div[@id="info"]//li[@class="added"]/span
+        selector: $titleArea/div[@class="calendar"]
         postProcess:
           - parseDate: 01/02/2006
-      Details: //div[@class="short-description"]
-      Tags:
-        Name: //div[@class="tagcloud"]/a/text()
-      Performers:
-        Name: //a[@itemprop="actor"]
-      Image:
-        selector: "//script[contains(text(), 'image: ')]"
+      Details:
+        selector: //div[@id="collapseTwo"]
         postProcess:
           - replace:
-              - regex: '^.*image: "([^"]+)",.*$'
-                with: $1
+            - regex: \x{0020}|\x{00A0} # unicode SP, NBSP
+              with: " "
+      Tags:
+        Name: $titleArea/ul[@class="scene-tags"]/li/a
+      Performers:
+        Name: $titleArea/ul[@class="scene-models-list"]/li/a
+      Image: //meta[@itemprop="thumbnailUrl"]/@content
+      URL: //link[@rel="canonical"]/@href
       Studio:
         Name:
           fixed: Randy Blue
-# Last Updated December 17, 2021
+# Last Updated July 08, 2023
