@@ -11,6 +11,10 @@ xPathScrapers:
       Studio:
         Name:
           selector: //div[@class="col-12 col-xl-4"]//dl[2]//a/text()
+          postProcess:
+            - replace:
+                - regex: ([a-z])([A-Z])
+                  with: $1 $2
       Title:
         selector: //title/text()
         postProcess:
@@ -32,4 +36,4 @@ xPathScrapers:
                 - regex: \,
                   with:
       Image: //video[@id="video-player"]/@poster
-# Last Updated July 18, 2023
+# Last Updated July 27, 2023
