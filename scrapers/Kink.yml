@@ -17,6 +17,15 @@ sceneByFragment:
       - regex: .*\((\d+)\)\.[a-zA-Z\d]+$ #support filenames in the form scene - date - performer (12345).mp4
         with: $1
   scraper: sceneScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.kink.com/search?type=performers&q={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - kink.com/model
+    scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
@@ -119,6 +128,51 @@ xPathScrapers:
                 whipped-ass: Whipped Ass
                 wired-pussy: Wired Pussy
       URL: //link[@rel="canonical"]/@href
+  performerSearch:
+    common:
+      $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
+
+    performer:
+      Name: $result/img/@alt
+      URL:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.kink.com
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1/text() # //div[@font-size][number(translate(@font-size,"px",""))>=35]/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ^\s+
+                with: ""
+              - regex: \s+$
+                with: 
+      Twitter:
+        selector: '//div/a[contains(concat(" ", normalize-space(@class), " "), " social-link ") and contains(@href, "twitter.com")]/@href'
+      Image:
+        selector: //div/img[contains(@src, "imagedb")][1]/@src
+      Tattoos:
+        selector: '//div/span[text()=" tags: "]/following-sibling::a[contains(@href,"/tattoo")]//text()'
+        postProcess:
+          - map:
+              Tattoo: "Yes"
+      Piercings:
+        selector: '//div/span[text()=" tags: "]/following-sibling::a[contains(@href,"/pierced")]/span'
+        concat: "\n"
+      Tags:
+        Name: '//div/span[text()=" tags: "]/following-sibling::a/span/text()'
+      Details:
+        selector: '//div/span/p[@class="bio"]/following-sibling::p'
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: '(?i)<a[^>]*>'
+                with: ""
+      URL: //link[@rel="canonical"]/@href
 driver:
   useCDP: true
-# Last Updated December 16, 2022
+# Last Updated June 25, 2023
