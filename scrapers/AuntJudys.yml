@@ -1,7 +1,8 @@
-name: AuntJudysXXX
+name: AuntJudys
 sceneByURL:
   - action: scrapeXPath
     url: 
+      - auntjudys.com
       - auntjudysxxx.com
     scraper: sceneScraper
 xPathScrapers:
@@ -9,7 +10,14 @@ xPathScrapers:
     scene:
       Studio:
         Name:
-          fixed: Aunt Judy's XXX
+          selector: //base/@href
+          postProcess:
+            - replace:
+                - regex: ^https?://(?:www\.)?(.+)\.com/.*$
+                  with: $1
+            - map:
+                auntjudys: Aunt Judy's
+                auntjudysxxx: Aunt Judy's XXX
       Title: //span[@class="title_bar_hilite"]
       Details: //span[@class="update_description"]
       Performers:
@@ -21,4 +29,4 @@ xPathScrapers:
         selector: //div[@class="cell update_date"]/text()[1]
         postProcess:
           - parseDate: 1/2/2006
-# Last Updated July 18, 2023
+# Last Updated July 27, 2023
