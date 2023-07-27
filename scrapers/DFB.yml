@@ -1,0 +1,49 @@
+name: "DFB Network"
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      - dfbnetwork.com/videos/
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Date:
+        selector: //p[contains(text(),"Release date:")]
+        postProcess:
+          - replace:
+              - regex: .*(\d{2}\.\d{2}\.\d{4}).*
+                with: $1
+          - parseDate: 02.01.2006
+      Details:
+        selector: //p[@class="set-descr"]/text()
+        postProcess:
+          - replace:
+              - regex: (^\W*Cast\W*)
+                with:
+      Image:
+        selector: //img[@class="img-responsive"]/@src|//link[@rel="canonical"]/@href
+        concat: '|'
+        postProcess:
+          - replace:
+              - regex: (.*)\|(https?\:\/\/.+\.com).*
+                with: $2$1
+      Performers:
+        Name: //p[@class="set-descr"]/a/text()|//a[contains(@href,"/models/preview/")]/@title
+        URL:
+          selector: //p[@class="set-descr"]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.dfbnetwork.com
+      Studio:
+        Name:
+          fixed: DFB Network
+      Tags:
+        Name:
+          selector: //a[@class="tag"]/i/text()
+          postProcess:
+            - replace:
+                - regex: \-
+                  with: " "
+      Title: //h1[@class="movie-name"]/text()
+# Last Updated July 18, 2023
