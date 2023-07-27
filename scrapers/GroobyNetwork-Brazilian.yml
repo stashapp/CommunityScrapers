@@ -2,9 +2,7 @@ name: "GroobyNetwork-Brazilian"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - brazilian-transsexuals.com
       - braziltgirls.xxx
-      - tgirlsfuck.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -36,4 +34,4 @@ xPathScrapers:
               - regex: ^\/\/
                 with: "https://"
 
-# Last Updated January 09, 2023
+# Last Updated July 27, 2023
