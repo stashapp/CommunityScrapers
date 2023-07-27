@@ -57,12 +57,12 @@ xPathScrapers:
         selector: //p[@id="height_both"]/text()
         postProcess:
           - replace:
-            - regex: .+(/d/d/d)cm
+            - regex: .*(\d{3}) cm
               with: $1
       Weight:
         selector: //p[@id="weight_both"]/text()
         postProcess:
           - replace:
-            - regex: .+(/d/d)kg
+            - regex: .*(\d{2,}) kg
               with: $1
-# Last Updated July 18, 2023
+# Last Updated July 27, 2023
