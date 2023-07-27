@@ -3,7 +3,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - braziltgirls.xxx
-      - tgirlsfuck.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
