@@ -64,7 +64,7 @@ xPathScrapers:
         selector: $url
         postProcess:
           - replace:
-              - regex: https?:\/\/(?:www\.)?[0-9A-za-z-]+\.com\/[0-9A-Za-z-_]+\/[0-9A-Za-z-_]+\/(\d+)\/?.*
+              - regex: .*\/(\d+)\/?$
                 with: $1
   galleryScraper:
     common:
@@ -79,4 +79,4 @@ xPathScrapers:
       Tags:
         Name: $photopage//div[@class='mb-3']/a/text()
       Performers: *performersAttr
-# Last Updated July 18, 2023
+# Last Updated July 27, 2023
