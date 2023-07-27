@@ -1,0 +1,26 @@
+name: "Futanarica"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - futanarica.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //article//h3
+      Image: //article//a/img/@src
+      Studio:
+        Name:
+          fixed: Futanarica
+      URL: //meta[@property="og:url"]/@content
+      Details: //meta[@property="og:description"]/@content
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - replace:
+              - regex: "T(.*)$"
+                with: ""
+          - parseDate: 2006-01-02
+
+# Last Updated July 20, 2023
