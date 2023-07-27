@@ -8,6 +8,7 @@ sceneByURL:
       - 60plusmilfs.com/
       - legsex.com/
       - pornmegaload.com/
+      - naughtymag.com
       - scoreland.com/
       - scoreland2.com/
       - xlgirls.com/
@@ -18,8 +19,10 @@ galleryByURL:
     scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $url: //link[@rel="canonical"]/@href
     scene:
-      Title: //section[contains(@id,"_page-page")]/div[@class="row"]/div/h1/text()
+      Title: &titleAttr //h1[1]/text()
       Studio: &studioAttr
         Name:
           selector: //meta[@property="og:site_name"]/@content
@@ -30,20 +33,42 @@ xPathScrapers:
               - regex: ..,
                 with:
           - parseDate: January 2 2006
-      Details:
-        selector: //div[@class="row"]/div/div[@class="p-desc"]/text()
-        concat: "\n"
+      Details: &details
+        selector: //div[@class="p-desc p-3"]//text()
+        postProcess:
+          - replace:
+              - regex: Read More »
+                with:
+              # Attempt to fix erroneous line breaks where HTML tags existed
+              - regex: \n\n([0-9a-zA-Z\.]+)\n\n
+                with: " $1 "
+        concat: "\n\n"
       Tags:
-        Name: //div[@class="row"]/div/div[@class="mb-3"]/a/text()
+        Name: //div[@class="mb-3"]/a/text()
       Performers: &performersAttr
         Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
       Image:
-        selector: //meta[@itemprop="image"]/@content
-  # Enable this post process if you want better image quality but sometimes it can fail
-  #        postProcess:
-  #          - replace:
-  #            - regex: _lg
-  #              with: _x_800
+# This selector scrapes the canonical scene page cover image
+        selector: //script[contains(text(), "poster")]
+        postProcess:
+          - replace:  
+              - regex: ^.+poster.+'(.+jpg)'.+$
+                with: $1
+# This Selector scrapes the image posted on social media sites
+#        selector: //meta[@itemprop="image"]/@content
+# Enable this post process if you want better image quality but sometimes it can fail
+#          postProcess:
+#            - replace:
+#                - regex: _lg
+#                  with: _x_800
+      URL: &urlAttr
+        selector: $url
+      Code: &codeAttr
+        selector: $url
+        postProcess:
+          - replace:
+              - regex: .*\/(\d+)\/?$
+                with: $1
   galleryScraper:
     common:
       $photopage: //section[@id='photos_page-page']
@@ -57,4 +82,4 @@ xPathScrapers:
       Tags:
         Name: $photopage//div[@class='mb-3']/a/text()
       Performers: *performersAttr
-# Last Updated January 31, 2023
+# Last Updated July 27, 2023
