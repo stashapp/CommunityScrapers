@@ -39,6 +39,9 @@ xPathScrapers:
           - replace:
               - regex: Read More »
                 with:
+              # Attempt to fix erroneous line breaks where HTML tags existed
+              - regex: \n\n([0-9a-zA-Z\.]+)\n\n
+                with: " $1 "
         concat: "\n\n"
       Tags:
         Name: //div[@class="mb-3"]/a/text()
