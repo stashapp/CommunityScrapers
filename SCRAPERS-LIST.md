@@ -185,10 +185,10 @@ blacked.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 blackedraw.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 blackmarketxxx.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blackmassivecocks.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
-blackmeatwhitefeet.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+blackmeatwhitefeet.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 blackph.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-blacksonblondes.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
-blacksoncougars.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+blacksonblondes.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
+blacksoncougars.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 blacktgirlshardcore.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Trans
 blackvalleygirls.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blackwhitefuckfest.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -281,11 +281,11 @@ creampie-angels.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 creativeporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cruelgf.com|CruelGirlfriend.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cuckhunter.com|Arx.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
-cuckoldsessions.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+cuckoldsessions.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 culioneros.com|Pornditos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cum4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cumaholicteens.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-cumbang.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+cumbang.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 cumforcover.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 cumlouder.com|Cumlouder.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cumshotoasis.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -370,7 +370,7 @@ devilsfilmparodies.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devilsgangbangs.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 devilstgirls.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|Python|Trans
 devonlee.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-dfxtra.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+dfxtra.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 diabolic.com|Algolia_zerotolerancefilms.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|python|-
 dianafeet.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dickdrainers.com|Dickdrainers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -385,7 +385,7 @@ dirtycosplay.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 disruptivefilms.com|Algolia_disruptivefilms.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 dlsite.com|DLsite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 doegirls.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-dogfartnetwork.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+dogfartnetwork.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 doghousedigital.com|MindGeek.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
 dollrotic.com|GymRotic.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dollsporn.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -550,8 +550,8 @@ girlsway.com|Algolia_GirlsWay.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|
 girlswhofuckgirls.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 givemepink.com|sapphix.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 givemeteens.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
-gloryhole.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
-gloryholeinitiations.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+gloryhole.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
+gloryholeinitiations.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 gloryholesecrets.com|Aziani.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gloryholeswallow.com|GloryHoleSwallow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 glosstightsglamour.com|GlossTightsGlamour.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -655,9 +655,9 @@ innocenthigh.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 inserted.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 insex.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 insexondemand.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-interracialblowbang.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+interracialblowbang.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 interracialpass.com|InterracialPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Interracial
-interracialpickups.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+interracialpickups.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 interracialpovs.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Interracial
 intimatelesbians.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 intimatepov.com|ItsPOV.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
@@ -1420,9 +1420,9 @@ wankzvr.com|POVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 warashi-asian-pornstars.fr|WAPdB.yml|:x:|:x:|:x:|:heavy_check_mark:|Python|JAV
 watch4beauty.com|Watch4Beauty.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 watch4fetish.com|Watch4Fetish.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-watchingmydaughtergoblack.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+watchingmydaughtergoblack.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 watchingmydaughtergoblack.com|WatchingMyDaughterGoBlack.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-watchingmymomgoblack.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+watchingmymomgoblack.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 watchmygf.me|WatchMyGF.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
 watchreal.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 watchyoujerk.com|WatchYouJerk.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1430,7 +1430,7 @@ waybig.com|Waybig.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 wcpclub.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 wearehairy.com|wearehairy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 webyoung.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Lesbian
-wefuckblackgirls.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+wefuckblackgirls.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 wefuckblackgirls.com|WeFuckBlackGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 welikegirls.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 weliketosuck.com|PuffyNetworkSite.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1487,7 +1487,7 @@ yourmomdoesanal.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yourmomdoesporn.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yummysofie.com|YummySofie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 z-filmz-originals.com|Z-Filmz-Originals.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-zebragirls.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+zebragirls.com|Algolia_DogfartNetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 zentaidolls.com|ZentaiDolls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 zerotolerancefilms.com|Algolia_zerotolerancefilms.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 zexyvr.com|ZexyVR.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
