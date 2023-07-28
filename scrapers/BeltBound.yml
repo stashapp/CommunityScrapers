@@ -1,0 +1,35 @@
+name: BeltBound
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - beltbound.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //a[@rel="bookmark"]/text()
+      Code:
+        selector: '//div[@class="post"]/a/img/@src'
+        postProcess:
+          - replace:
+              - regex: '.*\/updates\/bb(\d+)\/.*'
+                with: BB$1
+      Date:
+        selector: //div[@class="post"]/*[starts-with(text(), "Posted on ")]
+        postProcess:
+          - replace:
+              - regex: 'Posted on ([A-Z]\w+) (\d{1,2})([a-z]{2})?, (\d{4})'
+                with: "$1 $2, $4"
+          - parseDate: January 2, 2006
+      Details:
+        selector: '//div[@class="post"]/p[2]'
+      Performers:
+        Name: '//a[@rel="tag"]'
+      Image: '//div[@class="post"]/a/img/@src'
+      Studio:
+        Name:
+          fixed: "BeltBound"
+
+# Last Updated June 19, 2023
