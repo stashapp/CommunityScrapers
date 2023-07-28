@@ -2,7 +2,7 @@ name: RealJamVR
 sceneByURL:
   - action: scrapeXPath
     url:
-      - realjamvr.com
+      - realjamvr.com/scene/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -10,21 +10,23 @@ xPathScrapers:
       Title:
         selector: //h1
       Date:
-        selector: //div[contains(@class, "date")]
+        selector: //div[@class="ms-4 text-nowrap"]/strong
         postProcess:
           - replace:
               - regex: ','
                 with: ""
           - parseDate: January 2 2006
       Performers:
-        Name: //span[text()="Featuring:"]/following-sibling::a
+        Name: //div[@class="scene-view mx-auto"]/a
       Tags:
-        Name: //span[text()="TAGS:"]/following-sibling::a
+      # Tags + Technical specs, excluding video duration
+        Name: //div[@class="lh-lg"]/a | //div[@class="d-flex justify-content-between my-2"]/div[1]/div[position()<last()]
       Details:
-        selector: //div[contains(@class, "c-video-item-desc")]
+        selector: //div[@class="opacity-75 my-2"]
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //dl8-video/@poster
       Studio:
         Name:
           fixed: RealJamVR
-# Last Updated June 25, 2021
+          
+# Last Updated May 16, 2023
