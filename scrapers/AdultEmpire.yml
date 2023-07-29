@@ -22,6 +22,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
+
 xPathScrapers:
   sceneSearch:
     scene:
@@ -41,20 +42,11 @@ xPathScrapers:
                 with: "https://www.adultdvdempire.com"
       Image:
         selector: //a[@class="boxcover"]/img/@data-src
+
   movieScraper:
     movie:
-      Name:
-        selector: //h1/text()
-        postProcess:
-          - replace:
-            - regex: ^\s+(.+)\s+$
-              with: $1
-      Director:
-        selector: //a[@label="Director"]/text()
-        postProcess:
-          - replace:
-            - regex: ^\s+(.+)\s+$
-              with: $1
+      Name: //h1/text()
+      Director: //a[@label="Director"]/text()
       Duration:
         selector: //small[contains(text(), "Length")]/following-sibling::text()
         postProcess:
@@ -84,29 +76,29 @@ xPathScrapers:
       URL: //meta[@name='og:url']/@content
   sceneScraper:
     scene:
-      Title: //div[@class="clip-page__detail__title__primary"]/text()
+      Title: //h1/text()
+      Details:
+        selector: //h4[contains(@class,"synopsis")]//text()
+        concat: " "
       Date:
-        selector: //strong[starts-with(text(), "Released:")]//ancestor::li/text()
+        selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
           - parseDate: Jan 02 2006
+      Image: //a[@id="front-cover"]/@data-href
       Studio:
-        Name: //a[@label="Studio" and contains(@href, "studio")]
+        Name: //a[@label="Studio"]/text()
       Movies:
-        Name: //div[contains(text(), "from")]//following-sibling::a/text()
-        URL:
-          selector: //div[contains(text(), "from")]//following-sibling::a//@href
-          postProcess:
-            - replace:
-              - regex: ^
-                with: "https://www.adultdvdempire.com"
+        Name: //h1/text()
+        URL: //link[@rel="canonical"]/@href
       Tags:
-        Name: //strong[starts-with(text(), "Attributes:")]//following-sibling::a/text()
+        Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
       Performers:
-        Name: //strong[starts-with(text(), "Starring:")]//following-sibling::a/text()
+        Name: //a[@label="Performer"]//text()
         URL:
-          selector: //strong[starts-with(text(), "Starring:")]//following-sibling::a/@href
+          selector: //a[@label="Performer"]/@href
           postProcess:
             - replace:
-              - regex: ^
-                with: "https://www.adultdvdempire.com"
-# Last Updated July 17, 2023
+                - regex: ^
+                  with: "https://www.adultdvdempire.com"
+      URL: //meta[@name='og:url']/@content
+# Last Updated December 16, 2021
