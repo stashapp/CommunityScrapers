@@ -174,5 +174,7 @@ xPathScrapers:
                 with: ""
       URL: //link[@rel="canonical"]/@href
 driver:
-  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0.0
 # Last Updated June 25, 2023
