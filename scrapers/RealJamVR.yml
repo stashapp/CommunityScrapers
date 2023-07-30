@@ -9,24 +9,26 @@ xPathScrapers:
     scene:
       Title:
         selector: //h1
-      Date:
-        selector: //div[@class="ms-4 text-nowrap"]/strong
         postProcess:
           - replace:
-              - regex: ','
-                with: ""
-          - parseDate: January 2 2006
+              - regex: ^\s+(.+)\s+$
+                with: $1
+      Date:
+        selector: //div[@class="specs-icon"]/following-sibling::strong
+        postProcess:
+          - replace:
+            - regex: ^([a-zA-Z]{3})\D*(\d{1,2},\s*\d+)$
+              with: $1. $2
+          - parseDate: Jan. 2, 2006
       Performers:
-        Name: //div[@class="scene-view mx-auto"]/a
+        Name: (//a[starts-with(@href, "/actor")]/text())[1]
       Tags:
-      # Tags + Technical specs, excluding video duration
-        Name: //div[@class="lh-lg"]/a | //div[@class="d-flex justify-content-between my-2"]/div[1]/div[position()<last()]
+        Name: //a[starts-with(@href, "/scenes") and @class="tag"]/text()
       Details:
         selector: //div[@class="opacity-75 my-2"]
       Image:
-        selector: //dl8-video/@poster
+        selector: //*[@id="video-player"]//@poster
       Studio:
         Name:
           fixed: RealJamVR
-          
-# Last Updated May 16, 2023
+# Last Updated July 17, 2023
