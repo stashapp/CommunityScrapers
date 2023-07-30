@@ -2,7 +2,7 @@ name: RealJamVR
 sceneByURL:
   - action: scrapeXPath
     url:
-      - realjamvr.com
+      - realjamvr.com/scene/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:

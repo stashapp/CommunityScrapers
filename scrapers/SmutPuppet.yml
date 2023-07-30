@@ -1,0 +1,66 @@
+name: SmutPuppet
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - blackandbig.com/update
+      - darksodomy.com/update
+      - dothewife.com/update
+      - dreamtranny.com/update
+      - genlez.com/update
+      - goldenslut.com/update
+      - grannyvsbbc.com/update
+      - jeffsmodels.com/update
+      - milfsodomy.com/update
+      - smutmerchants.com/update
+      - suggabunny.com/update
+      - teenerotica.xxx/update
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Performers:
+        Name: //div[@class="model-rich"]/h4[@class="theme-color"]/a
+      Title: //div[@class="section-title"]/h4
+      Details:
+        selector: //p[@class="read-more"]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*:\s*'
+                with: ""
+      Date:
+        selector: //small[@class="updated-at"]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Tags:
+        Name:
+          selector: //div[@class="model-categories"]/a/text()
+      Studio:
+        Name:
+          selector: //div[@class="block-logo"]/a/img/@alt
+      Image:
+        selector: //img[@class="video-banner"]/@src|//video/@poster
+        postProcess:
+          - replace:
+              - regex: (?:.+)(\/usermedia\/.+\.jpg)(?:.+)
+                with: $1
+              - regex: "^/usermedia/"
+                with: "https://smutpuppet.com/usermedia/"
+      Code:
+        selector: //script[contains(text(),"/api/update/")]
+        postProcess:
+          - replace:
+              - regex: .+\/api\/update\/(\d{3,})\/.+
+                with: $1
+      # Return the sanitized URL
+      URL:
+        selector: //div[@class="block-logo"]/a/img/@src|//script[contains(text(),"/api/update/")]
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: \/static\/(\w+\.[a-z]{3})\/.+\/api\/update\/(\d{3,})\/.+
+                with: https://$1/update/$2/
+# Last Updated July 27, 2023

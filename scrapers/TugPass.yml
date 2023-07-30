@@ -1,0 +1,70 @@
+name: "Tug Pass"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tugpass.com/videos
+    scraper: sceneScraper_network
+  - action: scrapeXPath
+    url: 
+      - familylust.com/videos
+      - petite18.com/videos
+      - seemomsuck.com/videos
+      - clubtug.com/videos
+      - teentugs.com/videos
+      - teasepov.com/videos
+      - over40handjobs.com/videos
+      - meanmassage.com/videos
+      - finishhim.com/videos
+      - ebonytugs.com/videos
+      - cumblastcity.com/videos
+    scraper: sceneScraper_sites
+xPathScrapers:
+  sceneScraper_network:
+    scene:
+      Details: &details //meta[@name="description"]/@content
+      Performers: &performers
+        Name: //div[@class="featuringWrapper"]/a
+      Title: &title
+          selector: //title/text()
+          postProcess:
+            - replace:
+                - regex: \s\|.+$
+                  with:
+                - regex: \s\-.+$
+                  with:
+      # Scrape sanitized URL
+      URL: &url //link[@rel="canonical"]/@href
+      Image:
+        selector: //div[@class="player"]/img/@src
+        postProcess:
+           - replace:
+              - regex: ^
+                with: https://www.tugpass.com/
+      Studio:
+        Name:
+          selector: //div[@class="player"]/img/@src
+          postProcess:
+            - replace:
+                - regex: ^\/[A-Za-z_-]+\/([A-Za-z0-9-]+)\/.+
+                  with: $1
+  sceneScraper_sites:
+    scene:
+      Details: *details
+      Performers: *performers
+      Title: *title
+      URL: *url
+      Image:
+        selector: //img[@id="playerImagePreview"]/@src|//script/text()[contains(.,"posterImage")]|//link[@rel="canonical"]/@href
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: .*(\/.+\/.+\.(jpe?g|gif)).*(https?\:\/\/.+\.com).*
+                with: $3$1
+      Studio:
+        Name:
+          selector: //meta[@name="copyright"]/@content
+          postProcess:
+            - replace:
+                - regex: Copyright\s(.+)\s\d{4}
+                  with: $1
+# Last Updated July 18, 2023
