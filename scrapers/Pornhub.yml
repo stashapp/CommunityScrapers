@@ -18,7 +18,7 @@ sceneByFragment:
   queryURL: https://www.pornhub.com/view_video.php?viewkey={filename}
   queryURLReplace:
     filename:
-      - regex: (?:.*[^a-zA-Z\d])?(ph(?:[a-zA-Z\d]+)).+
+      - regex: (?:.*[^a-zA-Z\d])?((?:ph)?(?:[a-zA-Z\d]{13})).+
         with: $1
       - regex: .*\.[^\.]+$ # if no ph id is found in the filename
         with: # clear the filename so that it doesn't leak to ph
@@ -151,4 +151,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated April 23, 2023
+# Last Updated July 29, 2023
