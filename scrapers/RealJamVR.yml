@@ -16,7 +16,10 @@ xPathScrapers:
       Date:
         selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
-          - parseDate: January 2, 2006
+          - replace:
+            - regex: ^([a-zA-Z]{3})\D*(\d{1,2},\s*\d+)$
+              with: $1. $2
+          - parseDate: Jan. 2, 2006
       Performers:
         Name: (//a[starts-with(@href, "/actor")]/text())[1]
       Tags:
