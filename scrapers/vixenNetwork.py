@@ -16,7 +16,7 @@ except ModuleNotFoundError:
     sys.exit()
 
 # Max number of scenes that a site can return for the search.
-MAX_SCENES = 12
+MAX_SCENES = 6
 
 
 class Site:
