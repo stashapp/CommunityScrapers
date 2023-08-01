@@ -245,6 +245,9 @@ class TraxxxInterface:
     if s.get("slug"):
       fragment["url"] = f'https://traxxx.me/scene/{s["id"]}/{s["slug"]}/'
 
+    if s.get("shootId"):
+      fragment["code"] = s["shootId"]
+
     if s.get("date"):
       fragment["date"] = s["date"].split("T")[0]
 
@@ -260,28 +263,18 @@ class TraxxxInterface:
 
     # #tags take too much space in the results page
     #if s.get("tags"):
-    #  tags = []
-    #  for t in s["tags"]:
-    #    if t.get("tag"):
-    #      if t["tag"].get("name"):
-    #        tags.append({
-    #          "name": t["tag"]["name"]
-    #        })
-    #  fragment["tags"] = tags
+    #  fragment["tags"] = [{"name": t["tag"]["name"]} for t in s.get("tags",{}) if t["tag"] and t["tag"].get("name")]
     
     if s.get("actors"):
-      performers = []
-      for a in s["actors"]:
-        if a["actor"].get("name"):
-          performers.append({
-            "name": a["actor"]["name"]
-          })
-      fragment["performers"] = performers
+      fragment["performers"] = [{"name": a["actor"]["name"]} for a in s["actors"] if a["actor"] and a["actor"].get("name")]
     
     return fragment
 
   def parse_to_stash_scene(self, s):
     fragment = {}
+
+    if s.get("shootId"):
+      fragment["code"] = s["shootId"]
 
     if s.get("title"):
       fragment["title"] = s["title"]
@@ -301,28 +294,15 @@ class TraxxxInterface:
 
 
     if s.get("tags"):
-      tags = []
-      for t in s["tags"]:
-        if t.get("tag"):
-          if t["tag"].get("name"):
-            tags.append({
-              "name": t["tag"]["name"]
-            })
-      fragment["tags"] = tags
+      fragment["tags"] = [{"name": t["tag"]["name"]} for t in s.get("tags",{}) if t["tag"] and t["tag"].get("name")]
     
     if s.get("actors"):
-      performers = []
-      for a in s["actors"]:
-        if a["actor"].get("name"):
-          performers.append({
-            "name": a["actor"]["name"]
-          })
-      fragment["performers"] = performers
+      fragment["performers"] = [{"name": a["actor"]["name"]} for a in s["actors"] if a["actor"] and a["actor"].get("name")]
     
     if s.get("movies"):
       movies = []
       for m in s["movies"]:
-        m = m.movie
+        m = m["movie"]
 
         if m.get("title"):
           movie = {

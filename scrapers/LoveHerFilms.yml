@@ -1,5 +1,4 @@
 name: LoveHerFeet
-
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -24,7 +23,6 @@ performerByURL:
       - loveherfilms.com/tour/models/
       - shelovesblack.com/tour/models/
     scraper: performerScraper
-
 xPathScrapers:
   sceneScraper:
     scene:
@@ -34,6 +32,15 @@ xPathScrapers:
         selector: //div[@class='date']/text()
         postProcess:
           - parseDate: January 2, 2006
+      Code:
+        selector: //*/div[@class='photos vide-section']/a[1]/img/@data-src
+        postProcess:
+          - replace:
+              - regex: ^https?.+/(?:[a-zA-Z]+_(\d+)_.+|(\d+)_[a-zA-Z0-9]+(?:\.jpg)?.*)
+                with: $1$2
+          - replace:
+              - regex: ^\D.*
+                with: 
       Image:
         selector: //div[@class='video']//img[contains(@class,'mainThumb') or contains(@class,'update_thumb')]/@src0_3x|//video/@poster|//base/@href
         concat: "|"
@@ -44,7 +51,11 @@ xPathScrapers:
               - regex: ^/tour([^|]+)\|(.+) # video/@poster urls need a domain
                 with: $2$1
       Studio:
-        Name: //meta[@name='author']/@content
+        Name:
+          selector: //meta[@name='author']/@content
+          postProcess:
+            - map:
+                LoveHerFeet.com: "Love Her Feet"
       Tags:
         Name: //div[@class='video-tags']/a/text()
       Performers:
@@ -156,4 +167,4 @@ xPathScrapers:
                 with: ""
       Gender:
         fixed: "Female"
-# Last Updated August 28, 2022
+# Last Updated April 13, 2023

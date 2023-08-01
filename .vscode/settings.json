@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "validator/scraper.schema.json": "*.yml"
+    }
+}

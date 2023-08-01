@@ -2,7 +2,7 @@ name: RealJamVR
 sceneByURL: &byURL
   - action: scrapeXPath
     url:
-      - realjamvr.com
+      - realjamvr.com/scene/
     scraper: sceneScraper
 
 galleryByURL: *byURL
@@ -12,31 +12,26 @@ xPathScrapers:
     scene:
       Title: &title
         selector: //h1
-      Date: &date
-        selector: //div[@class="ms-4"]/text()
         postProcess:
           - replace:
-              - regex: 'Sept\.'
-                with: "Sep."
+              - regex: ^\s+(.+)\s+$
+                with: $1
+      Date:
+        selector: //div[@class="specs-icon"]/following-sibling::strong
+        postProcess:
+          - replace:
+            - regex: ^([a-zA-Z]{3})\D*(\d{1,2},\s*\d+)$
+              with: $1. $2
           - parseDate: Jan. 2, 2006
-          - parseDate: January 2, 2006
-      Performers: &performers
-        Name: //div[contains(@class,"text-sm-start")]/a[contains(@href,"/actor/")]
-      Tags: &tags
-        Name: //a[@class="tag"] | //div[not(@class)]/div[@class="specs-icon"]
-      Details: &details
+      Performers:
+        Name: (//a[starts-with(@href, "/actor")]/text())[1]
+      Tags:
+        Name: //a[starts-with(@href, "/scenes") and @class="tag"]/text()
+      Details:
         selector: //div[@class="opacity-75 my-2"]
       Image:
-        selector: //dl8-video/@poster
-      Studio: &studio
+        selector: //*[@id="video-player"]//@poster
+      Studio:
         Name:
           fixed: RealJamVR
-    gallery:
-      Title: *title
-      Date: *date
-      Performers: *performers
-      Tags: *tags
-      Details: *details
-      Studio: *studio
-
-# Last Updated March 29, 2023
+# Last Updated July 17, 2023

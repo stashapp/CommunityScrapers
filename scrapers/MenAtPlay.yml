@@ -10,8 +10,8 @@ xPathScrapers:
          Title:
             selector: //div[@class="gallery_info spacer"]/h1/text()
          Details:
-            selector: //div[@class="containerText"]/p
-            concat: "\n"
+            selector: //div[@class="containerText"]/p//text()
+            concat: "\n\n"
          Performers:
             Name:
                selector: //div[@class="gallery_info spacer"]/p/span[@class="tour_update_models"]/a/text()
@@ -26,4 +26,4 @@ xPathScrapers:
          Studio:
             Name:
                fixed: MenAtPlay
-# Last Updated May 29, 2022
+# Last Updated July 02, 2023
