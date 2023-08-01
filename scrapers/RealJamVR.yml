@@ -16,22 +16,30 @@ xPathScrapers:
           - replace:
               - regex: ^\s+(.+)\s+$
                 with: $1
-      Date:
+      Date: &date
         selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
           - replace:
             - regex: ^([a-zA-Z]{3})\D*(\d{1,2},\s*\d+)$
               with: $1. $2
           - parseDate: Jan. 2, 2006
-      Performers:
-        Name: (//a[starts-with(@href, "/actor")]/text())[1]
-      Tags:
-        Name: //a[starts-with(@href, "/scenes") and @class="tag"]/text()
-      Details:
+      Performers: &performers
+        Name: //div[contains(@class,"scene-view")]/a[contains(@href,"/actor/")]
+      Tags: &tags
+        Name: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon" and not(i)]
+      Details: &details
         selector: //div[@class="opacity-75 my-2"]
       Image:
         selector: //*[@id="video-player"]//@poster
-      Studio:
+      Studio: &studio
         Name:
           fixed: RealJamVR
-# Last Updated July 17, 2023
+    gallery:
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Details: *details
+      Studio: *studio
+      
+# Last Updated August 01, 2023
