@@ -73,4 +73,9 @@ xPathScrapers:
         Name: $studio
       Image: *imageSelector
 
-# Last Updated January 18, 2021
+driver:
+  useCDP: true
+  clicks:
+    - xpath: //a/button[@class="button is-danger"]
+
+# Last Updated August 01, 2023
