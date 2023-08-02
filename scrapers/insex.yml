@@ -74,8 +74,42 @@ xPathScrapers:
       Image: *imageSelector
 
 driver:
-  useCDP: true
-  clicks:
-    - xpath: //a/button[@class="button is-danger"]
+  cookies:
+    - CookieURL: "https://hardtied.com"
+      Cookies:
+        - Name: "consent"
+          Value: "yes"
+          Domain: "hardtied.com"
+          Path: "/"
+    - CookieURL: "https://infernalrestraints.com"
+      Cookies:
+        - Name: "consent"
+          Value: "yes"
+          Domain: "infernalrestraints.com"
+          Path: "/"
+    - CookieURL: "https://insex.com"
+      Cookies:
+        - Name: "consent"
+          Value: "yes"
+          Domain: "insex.com"
+          Path: "/"
+    - CookieURL: "https://insexondemand.com"
+      Cookies:
+        - Name: "consent"
+          Value: "yes"
+          Domain: "insexondemand.com"
+          Path: "/"
+    - CookieURL: "https://realtimebondage.com"
+      Cookies:
+        - Name: "consent"
+          Value: "yes"
+          Domain: "realtimebondage.com"
+          Path: "/"
+    - CookieURL: "https://sexuallybroken.com"
+      Cookies:
+        - Name: "consent"
+          Value: "yes"
+          Domain: "sexuallybroken.com"
+          Path: "/"
 
-# Last Updated August 01, 2023
+# Last Updated August 02, 2023
