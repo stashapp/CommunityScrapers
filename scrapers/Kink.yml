@@ -63,67 +63,98 @@ xPathScrapers:
                 - regex: /channel/
                   with: ""
             - map:
-                30-minutes-of-torment: 30 Minutes of Torment
-                alternadudes: Alternadudes
-                amator: Amator
+                # List of sites as of 2023-07-29 from https://www.kink.com/channels
+                # [...new Set([...document.querySelectorAll('h3 > a')]
+                #   .map(a => a.href.split("/").pop() + ": " + a.innerText))]
+                #   .toSorted()
+                #   .join("\n")
+                analized: Analized
                 animated-kink: Animated Kink
                 ashley-fires-scifi-dreamgirls: Ashley Fires SciFi Dreamgirls
                 aziani-iron: Aziani Iron
+                badfam-pov: Bad Family POV
                 ball-gaggers: Ball Gaggers
                 banana-jacks: Banana Jacks
-                bifuck: BiFuck
-                bizarre-video: Bizarre Video
+                bifuck: BiFUCK
                 bizarre-video-transsexual: Bizarre Video Transsexual
+                bizarre-video: Bizarre Video
                 bleu-films: Bleu Films
                 bondage-liberation: Bondage Liberation
-                bonus-hole-boys: Bonus Hole Boys
-                bound-and-gagged: Bound & Gagged
-                bound-gang-bangs: Bound Gangbangs
-                bound-gods: Bound Gods
-                bound-in-public: Bound in Public
+                bound-gang-bangs: Bound Gang Bangs
+                bound-men-wanked: Bound Men Wanked
                 brutal-sessions: Brutal Sessions
-                butt-machine-boys: Butt Machine Boys
-                captive-male: Captive Male
-                chanta-s-bitches: Chanta's Bitches
+                carmen-rivera: Carmen Rivera
+                cfnmeu: CFNMEU
+                ddf-network: DDF Network
+                deviant-hardcore: Deviant Hardcore
                 device-bondage: Device Bondage
+                digital-sin: Digital Sin
                 divine-bitches: Divine Bitches
-                electrosluts: Electro Sluts
+                electrosluts: Electrosluts
                 everything-butt: Everything Butt
-                families-tied: Familes Tied
+                evolved-fights-lesbian-edition: Evolved Fights Lesbian Edition
+                evolved-fights: Evolved Fights
+                families-tied: Families Tied
+                fembot-academy: Fembot Academy
+                femdum: FemDum
+                femme-fatale-films: Femme Fatale Films
+                fetishnetwork: FetishNetwork
                 filth-syndicate: Filth Syndicate
                 filthy-femdom: Filthy Femdom
                 foot-worship: Foot Worship
-                fucked-and-bound: Fucked and Bound
                 fucking-machines: Fucking Machines
+                gangbang-chief: Gangbang Chief
+                gloryhole-secrets: Gloryhole Secrets
                 hardcore-gangbang: Hardcore Gangbang
+                hardcore-punishments: Hardcore Punishments
                 harmony-fetish: Harmony Fetish
+                hogtied-up: Hogtied Up
                 hogtied: Hogtied
+                hot-legs-and-feet: Hot Legs & Feet
+                house-of-taboo: House Of Taboo
                 kink-classics: Kink Classics
-                kink-compilations: Kink Compilations
                 kink-features: Kink Features
+                kink-test-shoots: Kink Test Shoots
                 kink-university: Kink University
                 kinklive: KinkLive
-                kinkmen-classics: Kink Men Classics
-                kinkrawtestshoots: KinkRawTestShoots
-                kinktestshoots: KinkTestShoots
                 kinky-bites: Kinky Bites
-                kinky-bites-men: Kinky Bites Men
+                lakeview-entertainment: Lakeview Entertainment
+                machine-dom: Machine Dom
                 mean-bitch: Mean Bitch
+                medical-y-sado: Medical Y Sado
                 men-in-pain: Men In Pain
-                men-on-edge: Men on Edge
-                my-friends-feet: My Friends Feet
-                naked-combat: Naked Combat
+                pascals-sub-sluts: Pascals Sub Sluts
+                pegging: Pegging
+                peghim: PegHim
+                plumperd: Plumperd
+                pornforce: Porn Force
+                pornstar-platinum: Pornstar Platinum
                 pov-pickups: POV Pickups
                 public-disgrace: Public Disgrace
-                sadistic-rope: Sadistic Rope
-                sex-and-submission: Sex and Submission
+                revenge-of-the-baroness: Revenge Of The Baroness
+                royal-fetish-films: Royal Fetish Films
+                savage-gangbang: Savage Gangbang
+                severe-sex-films: Severe Sex Films
+                sex-and-submission: Sex And Submission
+                sexual-disgrace: Sexual Disgrace
+                sister-wives: Sister Wives
+                slutinspection: Slut Inspection
+                spizoo: Spizoo
+                strapon-squad: Strapon Squad
                 struggling-babes: Struggling Babes
                 submissive-x: Submissive X
-                the-training-of-o: The Training of O
+                submissived: Submissived
+                sweet-femdom: Sweet FemDom
+                the-training-of-o: The Training Of O
                 the-upper-floor: The Upper Floor
+                the-venus-girls: The Venus Girls
+                torment-time: Torment Time
+                transerotica: TransErotica
                 ts-pussy-hunters: TS Pussy Hunters
                 ts-seduction: TS Seduction
+                twisted-visual: Twisted Visual
                 ultimate-surrender: Ultimate Surrender
+                wasteland: Wasteland
                 water-bondage: Water Bondage
                 whipped-ass: Whipped Ass
                 wired-pussy: Wired Pussy
@@ -174,5 +205,7 @@ xPathScrapers:
                 with: ""
       URL: //link[@rel="canonical"]/@href
 driver:
-  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0.0
 # Last Updated June 25, 2023
