@@ -2,7 +2,7 @@ name: FemJoy
 galleryByURL:
   - action: scrapeXPath
     url:
-      - femjoy.com/photos/
+      - femjoy.com/post/
     scraper: galleryScraper
 sceneByURL:
   - action: scrapeXPath
@@ -13,14 +13,14 @@ sceneByURL:
 xPathScrapers:
   galleryScraper:
     common: &commonSel
-      $performer: //div[@id='model-info']//a[starts-with(@href,"/models")]
+      $performer: //h1[@class='post_title']/a[starts-with(@href,"/models")]
     gallery:
-      Title: &titleSel //div[@id='model-info']//span[normalize-space(.)='in']/following-sibling::text()
+      Title: &titleSel //h1[@class='post_title']/span/text()
       Studio: &studioAttr
         Name:
-          fixed: Fem Joy
+          fixed: FemJoy
       Date: &dateAttr
-        selector: //div[@id='model-info']//p[contains(.,"released")]
+        selector: //h2[@class='post_title']/text()[2]
         postProcess:
           - replace:
               - regex: '.*released on\s+'
@@ -45,4 +45,4 @@ xPathScrapers:
       Performers: *performersAttr
       Image: //img[@class="lazy comment-photo"]/@data-original
       Details: *detailsSel
-# Last Updated October 24, 2021
+# Last Updated August 03, 2023
