@@ -1,0 +1,26 @@
+name: Femjoy
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - femjoy.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='post_details']/h1[@class='post_title']/span/text()
+      Studio: 
+        Name: 
+          fixed: Femjoy
+      Date: 
+        selector: //div[@class='post_details']/h2[@class='post_title']
+        postProcess: 
+          - replace:
+              - regex: .+on\s(.+)
+                with: $1
+          - parseDate: Jan 2, 2006             
+      Performers: 
+        Name: //div[@class='post_details']/h1[@class='post_title']/a[contains(@href,"/models/")]
+        URL: //div[@class='post_details']/h1[@class='post_title']/a[contains(@href,"/models/")]/@href        
+      #Image: Uses placeholder cover now
+      Details: //div[@class='post_details']/h2[@class='post_description']/p
+# Last Updated October 13, 2022
