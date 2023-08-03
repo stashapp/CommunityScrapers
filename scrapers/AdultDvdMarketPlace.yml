@@ -18,6 +18,11 @@ sceneByURL:
       - adultdvdmarketplace.com/dvd_view
     scraper: sceneScraper
 
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 xPathScrapers:
   movieScraper:
     movie:
