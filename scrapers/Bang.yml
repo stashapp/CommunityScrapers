@@ -17,19 +17,19 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $movie: //p[contains(text(),"From the Movie:")]//a[contains(@href,"/dvd/")]
-      $performer:  //p[@class="capitalize" and contains(text(),"With:")]/a[contains(@href,"/pornstar/")]
+      $movie: //div[@data-controller="video-entry"]//a[contains(@href,"/dvd/")]//div[contains(@class,"name")]/span[1]
+      $performer:  //p[contains(@class,"capitalize") and contains(text(),"With:")]/a[contains(@href,"/pornstar/")]
     scene:
-      Title: //meta[@name="og:title"]/@content
+      Title: //meta[@property="og:title"]/@content
       Details: //meta[@name="description"]/@content
       Image:
-        selector: //meta[@name="og:image"]/@content
+        selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
               - regex: (.+)(\?.+)
                 with: $1
       Date:
-        selector: //div[@data-controller="login"]//p[contains(text(),"Date:")]/text()
+        selector: //p[contains(text(),"Date:")]/text()
         postProcess:
           - replace:
               - regex: \w+:\s*(\w+\s)(\d+),(\s\d{4}).*
@@ -47,7 +47,7 @@ xPathScrapers:
                 - regex: ^/
                   with: "https://www.bang.com/"
       Studio:
-        Name:  //p[contains(text(),"Studio:")]//a[contains(@href,"from=")]
+        Name: //p[contains(text(),"Studio:")]//a[contains(@href,"from=")]/img/@alt
       Movies:
         Name: $movie
         URL:
@@ -55,20 +55,20 @@ xPathScrapers:
           postProcess: *addhost
   movieScraper:
     common:
-      $details: //div[@data-controller="login"]
-      $image: //div[contains(@class,"justify-start")]/div/img[contains(@src,"/front")]/@src
+      $details: //div[@class="w-full"][1]
+      $image: //body/div[contains(@class,"w-full")][3]/div/div/picture//img[contains(@src,"/front")]/@src
     movie:
       Name:
-        selector: //div[@class="w-full"]/h1
+        selector: $details/h1
       Duration:
-        selector: (//div[@class="w-full"]//span[*[name()='svg']])[2]
+        selector: //p[contains(text(),"Date:")]/span[2]/text()
       Date:
-        selector: $details//p[contains(text(), "Released:")]/span
+        selector: //p[contains(text(),"Date:")]/span[1]/text()
         postProcess:
           - parseDate: Jan 02, 2006
       Synopsis: $details//p[contains(@class,"clear-both")]
       Studio:
-        Name: $details//p[contains(text(),"Studio")]/a
+        Name: $details//p[contains(text(),"Studio")]/a/text()
       FrontImage:
         selector: $image
         postProcess:
@@ -85,15 +85,9 @@ xPathScrapers:
     common:
       $overlay: //div[@class="flex flex-col md:items-start items-center"]
     performer:
-      Name: $overlay/h1
+      Name: $overlay/h2
       URL:
         selector: //link[@rel="canonical"][1]/@href
-      Twitter:
-        selector: "//script[@type=\"application/ld+json\"][contains(.,'\"@type\": \"Person\"')][contains(.,'https://twitter.com/')]/text()"
-        postProcess:
-          - replace:
-              - regex: .+https://twitter.com/([^"]+).+
-                with: $1
       Birthdate:
         selector: $overlay//div[contains(text(),"Born")]/span[contains(text(),"old")]
         postProcess:
@@ -101,12 +95,6 @@ xPathScrapers:
               - regex: \s*(\w+\s)(\d+),(\s\d{4}).*
                 with: $1$2$3
           - parseDate: January 2 2006
-      Country:
-        selector: $overlay//div[contains(text(),"Born")]/text()[contains(.,"in")]/following-sibling::span[not(@class="mx-1")]
-        postProcess:
-          - replace:
-              - regex: (?:.+\s)?(\w+)$
-                with: $1
       HairColor:
         selector: $overlay//div[contains(@class,"md:text-left")]/text()[contains(.,"Hair Color")]/following-sibling::span[1]
       Ethnicity:
@@ -114,11 +102,11 @@ xPathScrapers:
       EyeColor:
         selector: $overlay//div[contains(@class,"md:text-left")]/text()[contains(.,"Eye Color")]/following-sibling::span[1]
       Aliases:
-        selector: $overlay//h1/following-sibling::span
+        selector: $overlay//h1/following-sibling::div
       Image:
-        selector: //div[@class="relative"]/img/@src
+        selector: //div[@class="relative"]//img/@src
         postProcess:
           - replace:
               - regex: \?.+$
                 with: ""
-# Last Updated November 10, 2022
+# Last Updated August 01, 2023

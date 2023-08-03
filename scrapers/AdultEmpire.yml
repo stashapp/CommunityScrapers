@@ -36,6 +36,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
+
 xPathScrapers:
   performerSearch:
     common:
@@ -72,20 +73,11 @@ xPathScrapers:
                 with: "https://www.adultdvdempire.com"
       Image:
         selector: //a[@class="boxcover"]/img/@data-src
+
   movieScraper:
     movie:
-      Name:
-        selector: //h1/text()
-        postProcess:
-          - replace:
-            - regex: ^\s+(.+)\s+$
-              with: $1
-      Director:
-        selector: //a[@label="Director"]/text()
-        postProcess:
-          - replace:
-            - regex: ^\s+(.+)\s+$
-              with: $1
+      Name: //h1/text()
+      Director: //a[@label="Director"]/text()
       Duration:
         selector: //small[contains(text(), "Length")]/following-sibling::text()
         postProcess:
@@ -127,10 +119,6 @@ xPathScrapers:
         selector: //strong[contains(text(), "Released")]/following-sibling::text()
         postProcess:
           - parseDate: Jan 02 2006
-      Image:
-        selector: //iframe/@src
-        subScraper:
-          selector: //video/@poster
       Studio:
         Name: $studio/text()
         URL:
