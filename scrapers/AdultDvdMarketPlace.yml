@@ -7,6 +7,17 @@ movieByURL:
       - adultdvdmarketplace.com/dvd_view
     scraper: movieScraper
 
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.adultdvdmarketplace.com/xcart/adult_dvd/dvd_search.php?type=title&search={}
+  scraper: sceneSearch
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - adultdvdmarketplace.com/dvd_view
+    scraper: sceneScraper
+
 xPathScrapers:
   movieScraper:
     movie:
@@ -21,5 +32,37 @@ xPathScrapers:
         Name: //span[@itemprop="brand"]/text()
       FrontImage: //strong[contains(text(),"Large Front")]/parent::a/@href
       BackImage: //strong[contains(text(),"Large Back")]/parent::a/@href
+
+  sceneSearch:
+    common:
+      $selection: //div[contains(concat(' ',normalize-space(@class),' '),' product-col ')]
+    scene:
+      Title: $selection//h4/a
+      URL:
+        selector: $selection//h4/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.adultdvdmarketplace.com
+      Image: $selection//a/img/@src
+
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Details: //h3[contains(text(), "Description")]/following-sibling::p
+      Date:
+        selector: //span[contains(text(),"Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: 01/2006
+      Image: //strong[contains(text(),"Large Front")]/parent::a/@href
+      Studio:
+        Name: //span[@itemprop="brand"]/text()
+      Movies:
+        Name: //meta[@property="og:title"]/@content
+        URL: //meta[@property="og:url"]/@content
+      Performers:
+        Name: //h3[text()="Cast"]/following-sibling::a
+      Tags:
+        Name: //span[text()="Category:"]/following-sibling::a
 
 # Last Updated September 07, 2020
