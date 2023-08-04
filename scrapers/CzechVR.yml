@@ -22,7 +22,8 @@ xPathScrapers:
       $info: &infoSel //div[@class="post"]
       $url: &urlSel //meta[@name="dl8-customization-brand-url"]/@content
     scene:
-      Title: &titleSel $info//div[@class="nazev"]/h2
+#      Title: &titleSel $info//div[@class="nazev"]/h2
+      Title: &titleSel $info//div[contains(concat(' ',normalize-space(@class),' '),' nazev ')]/h2|$info//div[contains(concat(' ',normalize-space(@class),' '),' nazev ')]/h1
       Date: &dateSel
         selector: $info//div[@class="datum"]/text()
         postProcess:
@@ -59,4 +60,17 @@ xPathScrapers:
         Name: *studioSel
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated December 16, 2022
+
+driver:
+  cookies:
+    - CookieURL: "https://www.czechvr.com"
+      Cookies:
+        - Name: "iagree"
+          Domain: ".czechvr.com"
+          Value: "ano"
+          Path: "/"
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+
+# Last Updated July 25, 2023
