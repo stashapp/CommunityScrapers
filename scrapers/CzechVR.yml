@@ -6,6 +6,7 @@ sceneByURL:
       - czechvrcasting.com
       - czechvrfetish.com
       - czechvrnetwork.com
+      - vrintimacy.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
@@ -14,6 +15,7 @@ movieByURL:
       - czechvrcasting.com
       - czechvrfetish.com
       - czechvrnetwork.com
+      - vrintimacy.com
     scraper: movieScraper
 
 xPathScrapers:
@@ -22,9 +24,14 @@ xPathScrapers:
       $info: &infoSel //div[@class="post"]
       $url: &urlSel //meta[@name="dl8-customization-brand-url"]/@content
     scene:
-#      Title: &titleSel $info//div[@class="nazev"]/h2
-      Title: &titleSel $info//div[contains(concat(' ',normalize-space(@class),' '),' nazev ')]/h2|$info//div[contains(concat(' ',normalize-space(@class),' '),' nazev ')]/h1
-      Date: &dateSel
+      Title: &title
+        # Czech VR Network uses h1, the substudios use h2
+        selector: &titleSel $info//h1|$info//h2
+        postProcess:
+          - replace:
+              - regex: ".+ - "
+                with:
+      Date: &date
         selector: $info//div[@class="datum"]/text()
         postProcess:
           - parseDate: Jan 2, 2006
@@ -33,9 +40,14 @@ xPathScrapers:
         Name: //div[@id="MoreTags"]/div[@class="tagsipka"]//a/text()
       Performers:
         Name: $info//div[@class="featuring"]//a/text()
-      Studio:
-        Name: &studioSel //meta[@name="dl8-customization-brand-name"]/@content
-      Image: &imageSel
+      Studio: &studio
+        Name:
+          selector: *titleSel
+          postProcess:
+            - replace:
+              - regex: "\\d* - .+"
+                with:
+      Image: &image
         selector: $url|//dl8-video/@poster
         concat: " "
         postProcess:
@@ -53,13 +65,12 @@ xPathScrapers:
       $info: *infoSel
       $url: *urlSel
     movie:
-      Name: *titleSel
+      Name: *title
       Duration: $info//div[@class="casDetail"]/span[@class="desktop"]/text()
-      Date: *dateSel
-      Studio:
-        Name: *studioSel
+      Date: *date
+      Studio: *studio
       Synopsis: *detailsSel
-      FrontImage: *imageSel
+      FrontImage: *image
 
 driver:
   cookies:
