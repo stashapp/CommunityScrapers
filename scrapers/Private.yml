@@ -43,7 +43,12 @@ xPathScrapers:
             - subScraper: //div[@class="dvds-wrapper"]/h1/text()
         URL: //a[@data-track="FULL MOVIE"]/@href
       Studio:
-        Name: //div[@class="title-zone"]//span[@class="title-site"]
+        Name:
+          selector: //div[@class="title-zone"]//li/a/span[@class="title-site"]/text()|/html/@lang
+          postProcess:
+            - replace:
+              - regex: ^en$
+                with: Private
       Image: //meta[@property="og:image"]/@content
   movieScraper:
     movie:
