@@ -1,22 +1,36 @@
 name: AdultEmpire
 
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.adultempire.com/performer/search?q={}
+  scraper: performerSearch
+
+performerByURL:
+  - action: scrapeXPath
+    url: 
+      - www.adultempire.com
+    scraper: performerScraper
+
 movieByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
       - adultempire.com
     scraper: movieScraper
+
 sceneByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
       - adultempire.com
     scraper: sceneScraper
+
 sceneByName:
   action: scrapeXPath
   # if needed replace `dvd` with `vod`
   queryURL: https://www.adultdvdempire.com/dvd/search?q={}
   scraper: sceneSearch
+
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
@@ -24,6 +38,23 @@ sceneByQueryFragment:
 
 
 xPathScrapers:
+  performerSearch:
+    common:
+      $performerEl: //div[@id="performerlist"]//a
+    performer:
+      Name: $performerEl/@label
+      URL:
+        selector: $performerEl/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.adultempire.com
+  performerScraper:
+    common:
+      $performerEl: //a[@label="Headshot"]
+    performer:
+      Name: $performerEl/img/@title
+      Image: $performerEl/@href
   sceneSearch:
     scene:
       Title:
@@ -75,30 +106,49 @@ xPathScrapers:
       #         with: $1
       URL: //meta[@name='og:url']/@content
   sceneScraper:
+    common:
+      $movie: //div[contains(text(), "from")]/a
+      $studio: //div[contains(text(), "by")]/a
+      $performers: //strong[contains(text(), "Starring")]/following-sibling::a
     scene:
-      Title: //h1/text()
+      Title: //div[@class="clip-page__detail__title__primary"]/text()
       Details:
         selector: //h4[contains(@class,"synopsis")]//text()
         concat: " "
       Date:
-        selector: //small[contains(text(), "Released")]/following-sibling::text()
+        selector: //strong[contains(text(), "Released")]/following-sibling::text()
         postProcess:
           - parseDate: Jan 02 2006
-      Image: //a[@id="front-cover"]/@data-href
       Studio:
-        Name: //a[@label="Studio"]/text()
-      Movies:
-        Name: //h1/text()
-        URL: //link[@rel="canonical"]/@href
-      Tags:
-        Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
-      Performers:
-        Name: //a[@label="Performer"]//text()
+        Name: $studio/text()
         URL:
-          selector: //a[@label="Performer"]/@href
+          selector: $studio/@href
+          postProcess:
+            - replace:
+              - regex: ^
+                with: "https://www.adultdvdempire.com"
+      Movies:
+        Name: $movie/text()
+        URL:
+          selector: $movie/@href
           postProcess:
             - replace:
                 - regex: ^
                   with: "https://www.adultdvdempire.com"
-      URL: //meta[@name='og:url']/@content
-# Last Updated December 16, 2021
+      Tags:
+        Name:
+          selector: //strong[contains(text(), "Acts")]/..//a/text() | //strong[contains(text(), "Acts")]/..//dt/text()
+          postProcess:
+            - replace:
+                - regex: \:$
+                  with:
+      Performers:
+        Name: $performers/text()
+        URL:
+          selector: $performers/@href
+          postProcess:
+            - replace:
+              - regex: ^
+                with: "https://www.adultdvdempire.com"
+
+# Last Updated August 02, 2023
