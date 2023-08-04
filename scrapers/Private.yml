@@ -23,8 +23,7 @@ xPathScrapers:
     common:
       $content: //section[@class="video-description-and-tags clearfix"]
     scene:
-      Title:
-        selector: $content//ul[@class="scene-models-list"]/preceding-sibling::h1/text()
+      Title: //div[@class="title-zone"]/h1
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
@@ -44,8 +43,7 @@ xPathScrapers:
             - subScraper: //div[@class="dvds-wrapper"]/h1/text()
         URL: //a[@data-track="FULL MOVIE"]/@href
       Studio:
-        Name: $content//span[@class="title-site"]/text()
-        #fixed: Private
+        Name: //div[@class="title-zone"]//span[@class="title-site"]
       Image: //meta[@property="og:image"]/@content
   movieScraper:
     movie:
