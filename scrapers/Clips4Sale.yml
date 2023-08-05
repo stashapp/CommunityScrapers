@@ -113,4 +113,18 @@ xPathScrapers:
         # Clips4Sale doesn't have an explict performer field, but performers are
         # often included in the video tags. So we attempt to find matches there.
         Name: //span[contains(text(),"Keywords:")]/following-sibling::a
-# Last Updated February 03, 2023
+
+driver:
+  cookies:
+    - CookieURL: "https://clips4sale.com"
+      Cookies:
+        - Name: "iAgreeWithTerms"
+          Domain: ".clips4sale.com"
+          Value: "true"
+          Path: "/"
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+
+
+# Last Updated July 24, 2023

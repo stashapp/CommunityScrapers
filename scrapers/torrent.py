@@ -47,9 +47,17 @@ def process_tags_performers(tagList):
     return map(lambda tag: decode_bytes(tag).replace('.', ' '), tagList)
 
 def process_description_bbcode(description):
-    res = re.sub(r'\[(?:b|i|u|s|url|quote)?\](.*)?\[\/(?:b|i|u|s|url|quote)\]',r"\1", description )
-    res = re.sub(r'\[.*?\].*?\[\/.*?\]',r'',res)
+    #Remove image tags
+    res = re.sub(r'\[img\]([^\[]*)\[\/img\]',r"", description )
+
+    #Remove bbcode & replace with the contained text
+    res = re.sub(r'\[.*?\]([^\[]*)\[\/(?:b|i|u|s|url|quote)\]',r"\1", res )
+
+    #Cleanup any bbcode tags that may have been left behind
     res = re.sub(r'\[.*?\]',r'',res)
+
+    #Remove excessive newlines
+    res = re.sub(r'[\r|\n]{3,}', '\r\n\r\n', res)
     return res.strip()
 
 def get_torrent_metadata(torrent_data):
@@ -111,7 +119,6 @@ def cleanup_name(name):
     ret = ret.removeprefix("torrents\\").removesuffix(".torrent")
     return ret
 
-
 if sys.argv[1] == "query":
     fragment = json.loads(sys.stdin.read())
     print(json.dumps(process_torrents(get_scene_data(fragment))))
@@ -128,11 +135,9 @@ elif sys.argv[1] == "search":
         clean_t = cleanup_name(t)
         ratios[round(10000*(1-similarity_file_name(search, clean_t)))] = {'url': str(t.absolute()), 'title': clean_t}
 
-    # Order ratios and return the top 5 results
-    if len(ratios) > 0:
-        ratios_sorted = list(ratios.keys())
-        ratios_sorted.sort()
-        ratios_filtered = (ratios[i] for i in ratios_sorted[:5])
-        print(json.dumps(list(ratios_filtered)))
+    # Order ratios
+    ratios_sorted = dict(sorted(ratios.items())[:5])
 
-# Last Updated December 16, 2022
+    print(json.dumps(list(ratios_sorted.values())))
+
+# Last Updated June 12, 2023
