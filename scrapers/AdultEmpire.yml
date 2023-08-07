@@ -115,12 +115,7 @@ xPathScrapers:
       $movie: //div[contains(text(), "from")]/a
       $studio: //div[contains(text(), "by")]/a
       $performers: //strong[contains(text(), "Starring")]/following-sibling::a
-#      $URI:
-#        selector: "{url}"
-#        postProcess:
-#          - replace:
-#            - regex: https://www.adultempire.com(.+)
-#              with $1
+      $sceneId: //section/@data-tid
     scene:
       Title: //div[@class="clip-page__detail__title__primary"]/text()
       Details:
@@ -161,10 +156,11 @@ xPathScrapers:
             - replace:
               - regex: ^
                 with: "https://www.adultdvdempire.com"
-#      Image:
-#        selector: *movieUrl
-#        subScraper:
-#          selector: //div[div[h3[a[@href="$URI"]]]]/following-sibling::div[1]/div/div/div[1]/a/@href
+      Image:
+        selector: *movieUrl
+        postProcess:
+          - subScraper
+              selector: (//a[@scene_id="$sceneId"])[1]/@href
   sceneMovieScraper:
     scene:
       Title: //h1/text()
