@@ -30,7 +30,7 @@ xPathScrapers:
       Performers:
         Name: $info//h5[@class="latest-scene-subtitle"]//a/text()
       Image: &imageAttr
-        selector: $info//deo-video[1]/@cover-image
+        selector: //web-vr-video-player/@coverimage
         postProcess:
           - replace:
               - regex: ^

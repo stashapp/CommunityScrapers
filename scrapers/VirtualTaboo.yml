@@ -20,7 +20,7 @@ xPathScrapers:
         selector: $genInfo/span[@class="bullet"]/following-sibling::text()
         postProcess:
           - parseDate: 02 January, 2006
-      Details: &detailsSel $info//div[@class="description"]/text()
+      Details: &detailsSel $info//*[@class="description"]
       Tags:
         Name: $info//div[starts-with( @class,"tag-list")]/a/text()
       Performers:
@@ -54,5 +54,5 @@ xPathScrapers:
           fixed: VirtualTaboo
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated August 14, 2022
+# Last Updated August 04, 2023
 

@@ -124,12 +124,14 @@ class Site:
                     scene['performers'].append({"name": model['name']})
 
             scene['tags'] = []
-            if data.get('tags'):
-                for tag in data['tags']:
-                    scene['tags'].append({"name": tag})
-            else:
+            tags = data.get('tags')
+            categories = data.get('categories')
+            if tags == [] and categories:
                 for tag in data['categories']:
                     scene['tags'].append({"name": tag['name']})
+            elif tags:
+                for tag in data['tags']:
+                    scene['tags'].append({"name": tag})
 
             if data.get('images'):
                 if data['images'].get('poster'):
