@@ -5,25 +5,57 @@ sceneByURL: &byUrl
       - mature.nl/
     scraper: sceneScraper
 galleryByURL: *byUrl
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $url: //link[@rel="canonical"]/@href
     scene:
-      Title: &title //div[@class="box"]/h1/text()
-      Details: &details //div/span[text()="Synopsis:"]/following-sibling::text() | //meta[@name="description"]/@content
-      Tags: &tags
-        Name: //div[@class="box-cnt"]/div[@class="mar-t"]//a[contains(@href,"/niche/")]/text()
-      Performers: &performers
-        Name:
-          selector: //div[@class="name"]/span[@class="col-accent"]/text()
+      URL: &url
+        selector: $url
+        postProcess:
+          - replace:
+              - regex: (^https?:\/\/(?:www\.)?mature\.nl\/..\/update\/\d+)\/.+
+                with: $1
+      Code:
+          selector: $url
           postProcess:
             - replace:
-                - regex: ( \(EU\))$
+                - regex: .+\/update\/(\d+)\/.+
+                  with: $1
+      Title: &title //div[@class="box"]/h1/text()
+      Details: &details
+        selector: //div/span[text()="Synopsis:"]/following-sibling::text() | //meta[@name="description"]/@content
+        postProcess:
+          - replace:
+              - regex: " Watch this amazing porn video on mature.nl as a member today!"
+                with:
+      Tags: &tags
+        Name: //div[@id="divPageUpdateNiches"]/a[contains(@class, "tag")]/text()
+      Performers: &performers
+        Name:
+          #This method is easier, but the names here are in uppercase
+          #selector: //div[contains(@class,"card-label")]/a/text()
+          selector: //div[@class="box-cnt"]//span[@class="col-accent"]/following-sibling::text()
+          postProcess:
+            - replace:
+                - regex: \s\(\w+\)
                   with:
+                - regex: \s\(EU\)
+                  with:
+                - regex: " & "
+                  with: ", "
+                - regex: (\w)\.,
+                  with: $1,
+          split: ", "
       Image:
-        selector: //span[@id="spnPageUpdateTrailer"]/a/img/@data-src
+        selector: //span[@id="spnPageUpdateTrailer"]/a/img/@data-src|//img[@class="img-responsive lazy"][1]/@data-src
       Date: &date
-        selector: //div[@class="box-cnt"]/div[@class="mar-t"][not (contains(a, "the full"))]/text()[1]
+        selector: //span[@class="val-m"][1]
         postProcess:
           - replace:
               - regex: ^(\d{1,2}-\d{1,2}-\d{4}).*$
@@ -33,10 +65,12 @@ xPathScrapers:
         Name:
           fixed: "Mature.nl"
     gallery:
+      URL: *url
       Title: *title
       Details: *details
       Tags: *tags
       Performers: *performers
       Date: *date
       Studio: *studio
-# Last Updated January 25, 2023
+
+# Last Updated July 11, 2023

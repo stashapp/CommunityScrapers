@@ -1,25 +1,47 @@
-name: "Karups"
+name: Karups
 sceneByURL:
   - action: scrapeXPath
     url:
       - karups.com/video/
     scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - karups.com/gallery/
+    scraper: galleryScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="page-heading"]/span[@class="title"]/text()
-      Date:
+      Studio: &studio
+        Name:
+          selector: //span[@class="sup-title"]/span
+          postProcess:
+            - map:
+                KarupsOW: Karups Older Women
+                KarupsHA: Karups Hometown Amateurs
+                KarupsPC: Karups Private Collection
+      Title: &title //h1[@class="page-heading"]/span[@class="title"]/text()
+      Date: &date
         selector: //span[@class="date"]/span[@class="content"]/text()
         postProcess:
           - replace:
               - regex: (st|nd|rd|th)\,
                 with: ","
           - parseDate: Jan 02, 2006
-      Details:
-        selector: //div[@class="content-information-description"]/p/text()
-      Performers:
+      Performers: &performers
         Name: //span[@class="models"]/span[@class="content"]//a/text()
-      Image:
+      Details: &details
+        selector: //div[@class="content-information-description"]/p/text()
+      Image: &image
         selector: //video[@id="player"]/@poster|//div[@class="video-poster"]/img/@src
 
-# Last Updated November 08, 2020
+  galleryScraper:
+    gallery:
+      Studio: *studio
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Details: *details
+
+# Last Updated July 11, 2023

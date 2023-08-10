@@ -12,10 +12,10 @@ xPathScrapers:
       Title: //h1[@class='title_bar']
       Image: //div[@id="player"]/video/@poster
       Date:
-        selector: $update//comment()
+        selector: $update/p/span/preceding-sibling::comment()
         postProcess:
           - replace:
-              - regex: .*(?:class='upddate').*(\d{2}/\d{2}/\d{4}).*
+              - regex: .*(\d{2}/\d{2}/\d{4}).*
                 with: $1
           - parseDate: "01/02/2006"
           - map:
@@ -35,5 +35,5 @@ xPathScrapers:
           split: ","
       Studio:
         Name:
-          fixed: Trans Erotica
-# Last Updated February 06, 2023
+          fixed: TransErotica
+# Last Updated July 07, 2023

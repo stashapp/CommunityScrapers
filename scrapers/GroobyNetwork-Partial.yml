@@ -7,6 +7,7 @@ sceneByURL:
       - blacktgirlshardcore.com
       - black-tgirls.com
       - bobstgirls.com
+      - brazilian-transsexuals.com
       - femout.xxx
       - femoutsex.xxx #Scenes on 'femout.xxx' can some times be found on this one as well
       - franks-tgirlworld.com
@@ -18,6 +19,7 @@ sceneByURL:
       - tgirlsex.xxx
       - tgirls.porn
       - tgirls.xxx
+      - tgirlsfuck.com
       - tgirlshookup.com
       - tgirltops.com
       - transexpov.com
@@ -54,7 +56,7 @@ xPathScrapers:
                 - regex: (https://[^/]*)/.*
                   with: $1
       Image:
-        selector: //link[@rel="canonical"]/@href|//img[contains(@class, "update_thumb thumbs stdimage")]/@src|//img[contains(@class, "update_thumb thumbs stdimage")]/@src0_1x
+        selector: //link[@rel="canonical"]/@href|//img[contains(@class, "update_thumb thumbs stdimage")]/@src|//img[contains(@class, "update_thumb thumbs stdimage")]/@src0_1x|//div[@class="trailerposter"]/img/@src0
         concat: "__SEPARATOR__"
         postProcess:
           - replace:
@@ -99,4 +101,4 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.groobyvr.com/
       Tags: *tags
-# Last Updated July 03, 2023
+# Last Updated July 27, 2023

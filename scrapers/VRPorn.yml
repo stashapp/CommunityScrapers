@@ -1,0 +1,36 @@
+name: "VRPorn"
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vrporn.com/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $header: //header[@class="entry-header"]
+      $footer: //footer[@class="entry-footer"]
+      $videoarea: //footer[@class="entry-footer"]/div[@class="layout_area_video"]
+    scene:
+      Title: $header//h1[@class="content-title"]/text()
+      Date:
+        selector: $videoarea/div[2]/span[@class="footer-titles"]/text()
+        postProcess:
+          - replace:
+            - regex: Posted on (?:Premium on )?(.*)
+              with: $1
+          - parseDate: January 02, 2006
+      Details:
+        selector: //main/article/div//p/text()
+        concat: "\n\n" 
+      Tags:
+        Name: $footer//a[@rel="tag"]/text()
+      Performers:
+        Name: $header//div[@class="name_pornstar"]/text()
+      Studio:
+        Name: $header//a[@id="studio-logo"]//span[@class="footer-titles"]/text()
+      Image: //main/article/header//dl8-video/@poster
+      URL: &sceneUrl //link[@rel="canonical"]/@href
+      
+# Last Updated April 20, 2023

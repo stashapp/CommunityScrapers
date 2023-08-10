@@ -40,8 +40,19 @@ xPathScrapers:
           - replace:
               - regex: medium.jpg
                 with: large.jpg
+              # TranzVR defaults to smaller covers, but we can grab a bigger one
               - regex: 472/cover.jpg
                 with: 680/cover.jpg
+              # All of these domains give 403 errors when saving the scraped image
+              # but povr.com has the same images and is totally cool with our scraping
+              - regex: cdns-i.wankzvr.com
+                with: images.povr.com/wvr
+              - regex: images.tranzvr.com
+                with: images.povr.com/tvr
+              - regex: cdns-i.milfvr.com
+                with: images.povr.com/mvr
+              - regex: cdns-i.brasilvr.com
+                with: images.povr.com
       Studio: &studioAttr
         Name:
           selector: *urlSel

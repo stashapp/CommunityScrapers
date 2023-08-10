@@ -9,6 +9,12 @@ xPathScrapers:
     scene:
       Title: //h1
       Details: //p[@class="scene-description"]
+      Date:
+        selector: //script[contains(text(),"uploadDate")]/text()
+        postProcess:
+          - replace:
+              - regex: '.+(\d{4}-\d{2}-\d{2}).+'
+                with: "$1"
       Performers:
         Name:
           selector: //p[@class="grey-performers"]//text()
@@ -28,4 +34,4 @@ xPathScrapers:
       URL: //link[@rel='canonical']/@href
       Tags:
         Name: //a[@class="cat-tag"]
-# Last Updated April 22, 2022
+# Last Updated August 03, 2023

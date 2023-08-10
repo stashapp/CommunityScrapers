@@ -110,6 +110,10 @@ class Site:
             scene['title'] = data.get('title')
             scene['details'] = data.get('description')
             scene['studio'] = {"name": self.name}
+            scene['code'] = data.get('videoId')
+            director = data.get("directors")
+            if director is not None:
+                scene["director"] = ", ".join(d["name"] for d in data.get("directors", []))
 
             date = data.get('releaseDate')
             if date:
@@ -120,7 +124,12 @@ class Site:
                     scene['performers'].append({"name": model['name']})
 
             scene['tags'] = []
-            if data.get('tags'):
+            tags = data.get('tags')
+            categories = data.get('categories')
+            if tags == [] and categories:
+                for tag in data['categories']:
+                    scene['tags'].append({"name": tag['name']})
+            elif tags:
                 for tag in data['tags']:
                     scene['tags'].append({"name": tag})
 
@@ -155,6 +164,7 @@ class Site:
                         sc['title'] = scene.get('title')
                         sc['details'] = scene.get('description')
                         sc['url'] = f"https://www.{self.id.lower()}.com/videos/{slug}"
+                        sc['code'] = scene.get('videoId')
                         sc['studio'] = {"name": self.name}
                         date = scene.get('releaseDate')
                         if date:
@@ -164,7 +174,6 @@ class Site:
                             for model in scene['modelsSlugged']:
                                 sc['performers'].append(
                                     {"name": model['name']})
-
                         if scene.get('images'):
                             if scene['images'].get('listing'):
                                 maxWidth = 0
@@ -188,6 +197,10 @@ class Site:
             models {
                 name
             }
+            videoId
+            directors {
+                name
+            }
             images {
                 poster {
                     src
@@ -195,6 +208,9 @@ class Site:
                 }
             }
             tags
+            categories {
+                name
+            }
         }
     }
     """
@@ -211,6 +227,7 @@ class Site:
                         name
                         slugged: slug
                     }
+                    videoId
                     images {
                         listing {
                             src
