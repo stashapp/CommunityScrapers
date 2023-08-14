@@ -45,7 +45,15 @@ xPathScrapers:
 
   movieScraper:
     movie:
-      Name: //h1/text()
+      Name: 
+        selector: //h1/text()
+        postProcess: 
+          - replace:
+            - regex: \(.*DVD.*Comb.*\)
+              with: 
+          - replace:
+            - regex: \(.*2D.*Vers.*\)
+              with: 
       Director: //a[@label="Director"]/text()
       Duration:
         selector: //small[contains(text(), "Length")]/following-sibling::text()
@@ -76,7 +84,15 @@ xPathScrapers:
       URL: //meta[@name='og:url']/@content
   sceneScraper:
     scene:
-      Title: //h1/text()
+      Title:
+        selector: //h1/text()
+        postProcess: 
+          - replace:
+            - regex: \(.*DVD.*Comb.*\)
+              with: 
+          - replace:
+             - regex: \(.*2D.*Vers.*\)
+               with: 
       Details:
         selector: //h4[contains(@class,"synopsis")]//text()
         concat: " "
@@ -84,11 +100,26 @@ xPathScrapers:
         selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
           - parseDate: Jan 02 2006
-      Image: //a[@id="front-cover"]/@data-href
+      Image:
+        selector: //div[@id="previewContainer"]/@style
+        postProcess:
+          - replace:
+            - regex: "^background-image:url."
+              with: 
+            - regex: \).*$
+              with:
       Studio:
         Name: //a[@label="Studio"]/text()
       Movies:
-        Name: //h1/text()
+        Name: 
+          selector: //h1/text()
+          postProcess: 
+            - replace:
+              - regex: \(.*DVD.*Comb.*\)
+                with: 
+            - replace:
+              - regex: \(.*2D.*Vers.*\)
+                with: 
         URL: //link[@rel="canonical"]/@href
       Tags:
         Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
@@ -101,4 +132,4 @@ xPathScrapers:
                 - regex: ^
                   with: "https://www.adultdvdempire.com"
       URL: //meta[@name='og:url']/@content
-# Last Updated December 16, 2021
+# Last Updated August 14, 2023
