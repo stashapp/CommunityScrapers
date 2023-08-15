@@ -170,7 +170,7 @@ xPathScrapers:
       Measurements: $root//span[contains(text(),"Measurements:")]/following-sibling::span/text()
       Gender:
         fixed: "Female"
-      HairCollor: $root//span[contains(text(),"Hair Color:")]/following-sibling::span/text()
+      HairColor: $root//span[contains(text(),"Hair Color:")]/following-sibling::span/text()
   sceneScraper:
     common:
       $data: //div[contains(concat(' ',normalize-space(@class),' '),' hAewsL ')]
