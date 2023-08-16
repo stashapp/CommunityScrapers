@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 
-name: "LegalPorno"
+name: "AnalVids"
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -16,7 +16,7 @@ sceneByFragment:
   script:
     - python
     # use python3 instead if needed
-    - LegalPorno.py
+    - AnalVids.py
     - query
 
 xPathScrapers:
