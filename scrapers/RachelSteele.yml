@@ -1,0 +1,56 @@
+name: RachelSteele
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - rachel-steele.com
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://rachel-steele.com/x-new/new-preview-list.php?user=rachel-steele&search={}&type=all&submit=Search
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $root: //li[contains(concat(' ',normalize-space(@class),' '),' first ')]
+    scene:
+      Title: $root//h3
+      Image:
+        selector: $root//img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://rachel-steele.com
+      URL:
+        selector: $root/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://rachel-steele.com
+
+  sceneScraper:
+    scene:
+      Title: //div[contains(concat(' ',normalize-space(@class),' '),' span12 ')]/h3/text()
+      Image:
+        selector: //div[contains(concat(' ',normalize-space(@class),' '),' album-details ')]/div/div/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://rachel-steele.com
+      Details: //meta[@name="twitter:description"]/@content
+      Performers:
+        Name:
+          fixed: Rachel Steele
+      Studio:
+        Name:
+          fixed: Rachel Steele
+        URL:
+          fixed: https://Rachel-Steele.com
+
+# Last Updated August 09, 2023
