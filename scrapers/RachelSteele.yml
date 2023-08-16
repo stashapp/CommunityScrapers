@@ -43,13 +43,13 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://rachel-steele.com
-      Details: //div[contains(concat(' ',normalize-space(@class),' '),' span8 ')]//p[contains(text(),"video")]/following-sibling::p[1]|//div[contains(concat(' ',normalize-space(@class),' '),' span8 ')]//br/following-sibling::span
+      Details: //meta[@name="twitter:description"]/@content
       Performers:
         Name:
           fixed: Rachel Steele
       Studio:
         Name:
-          fixed: Rachel-Steele.com
+          fixed: Rachel Steele
         URL:
           fixed: https://Rachel-Steele.com
 
