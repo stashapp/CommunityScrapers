@@ -146,11 +146,7 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
-          selector: $datablob
-          postProcess:
-            - replace:
-                - regex: .+(?:'video_uploader_name'\s*:\s*')([^']+).+
-                  with: $1
+          fixed: Pornhub
 
 driver:
   cookies:
