@@ -28,8 +28,6 @@ MEDIA_CONFIGURATIONS = [
     "(n\d{4})\S*",  # "single part N series"
     "(k\d{4})\S*",  # "single part K series"
     "(kb\d{4})\S*",  # "single part KB series"
-    "(red-?\d{3})\S*",  # "RED Hot collection series"
-    "(sky-?\d{3})\S*",  # "SKY series"
 ]
 
 try:
@@ -112,9 +110,7 @@ class ScenePage:
         info_links = info.find_all("a")
         for link in info_links:
             if "cast" in link.get("href"):
-                perf = TokyoHotModel(
-                    model_url=BASE_DETAIL_URL + link.get("href")
-                ).get_json()
+                perf = TokyoHotModel(model_url=BASE_DETAIL_URL + link.get("href")).get_json()
                 performers.append(perf)
         return performers
 
@@ -137,9 +133,7 @@ class ScenePage:
 
     def get_tags(self):
         potential_tags = self.soup.find("div", {"class": "infowrapper"}).find_all("a")
-        return [
-            {"Name": a.text} for a in potential_tags if "type=play" in a.get("href")
-        ]
+        return [{"Name":a.text} for a in potential_tags if "type=play" in a.get("href")]
 
     def get_json(self):
         return {
@@ -151,7 +145,7 @@ class ScenePage:
             "Studio": {"Name": self.studio},
             "Code": self.scene_id,
             "Image": self.image,
-            "Tags": self.tags,
+            "Tags": self.tags
         }
 
 

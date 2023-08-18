@@ -15,12 +15,8 @@ performerByURL:
 
 xPathScrapers:
   sceneScraper:
-    common:
-      $poster: //section[1]
-      $info: //section[2]
-      $description: //h3
     scene:
-      Title: //h2[contains(@class,"font-primary")]
+      Title: //h2[contains(@class,"edmOvr")]/text()
       Date:
         selector: //h2[contains(@class,"jywyKe")]/text()
         postProcess:
@@ -33,7 +29,6 @@ xPathScrapers:
             - replace:
                 - regex: ',\s*$'
                   with:
-      URL: //link[@rel="canonical"]/@href
       Performers:
         Name: //h2[contains(@class,"hgImKM")]//a/text()
       Studio:
