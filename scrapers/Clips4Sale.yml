@@ -53,7 +53,7 @@ xPathScrapers:
                   [ \t]*[([][])][ \t]*|[ -]+$
                 with:
       Details:
-        selector: $scene//div[contains(@class, "read-more--text")]/p/text()
+        selector: $scene//div[contains(@class, "read-more--text")]//text()
         concat: "\n\n"
       Studio:
         Name: $studio/text()
