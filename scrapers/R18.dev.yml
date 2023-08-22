@@ -425,4 +425,4 @@ jsonScrapers:
           - replace:
               - regex: (.+)
                 with: https://r18.dev/videos/vod/movies/detail/-/combined=$1/json
-# Last Updated January 19, 2023
+# Last Updated August 22, 2023
