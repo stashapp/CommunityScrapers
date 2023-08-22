@@ -38,15 +38,31 @@ xPathScrapers:
   c4sSceneScraper:
     common:
       $scene: //figure[contains(@class, "mediabook-preview")]
-      $studio: //a[@class="hover:underline text-white font-medium w-full truncate block"]/text()
+      $studio: //a[@class="hover:underline text-white font-medium w-full truncate block"]
     scene:
       Title:
         selector: $scene/figcaption/div/p[contains(@class, "lg:text-lg")]/text()
+        postProcess: &ppStripTitle
+          - replace:
+              # https://regex101.com/r/CYLeuO/8
+              - regex: >-
+                  (?i)[ \t]*((Super )?[SH]D)?[ ,-]*(\b(MP4|OPTIMUM|WMV|MOV|AVI|UHD|[48]K)\b|1080p|720p|480p|(Standard|High) Def(inition)?)+[ \t]*
+                with:
+              # https://regex101.com/r/C3TgFG/2
+              - regex: >-
+                  [ \t]*[([][])][ \t]*|[ -]+$
+                with:
       Details:
         selector: $scene//div[contains(@class, "read-more--text")]/p/text()
         concat: "\n\n"
       Studio:
-        Name: $studio
+        Name: $studio/text()
+        URL:
+          selector: $studio/@href
+          postProcess: &ppPrependOrigin
+            - replace:
+                - regex: ^
+                  with: https://www.clips4sale.com
       Date:
         selector: //div[contains(@class, 'border-b border-white/20 lg:border-0 pb-3 lg:pb-0 mb-3 lg:mb-0')]/span[contains(text(),'/')]/text()
         postProcess: &ppParseDate
@@ -55,11 +71,25 @@ xPathScrapers:
                 with: ""
           - parseDate: 1/2/06
       Tags:
-        Name: //span[text()='Keywords']/following-sibling::span[position()=1]/a
+        Name:
+          selector: //span[contains(text(), 'Keywords')]/following-sibling::span/a/text() | //span[contains(text(), 'Category')]/following-sibling::span/a/text()
+          concat: ","
+          postProcess:
+            - replace:
+                - regex: ',\s+'
+                  with: ","
+          split: ","
       Performers:
         # Clips4Sale doesn't have an explict performer field, but performers are
         # often included in the video tags. So we attempt to find matches there.
-        Name: //span[text()='Keywords']/following-sibling::span[position()=1]/a
+        Name:
+          selector: //span[contains(text(), 'Keywords')]/following-sibling::span/a/text() | //span[contains(text(), 'Category')]/following-sibling::span/a/text()
+          concat: ","
+          postProcess:
+            - replace:
+                - regex: ',\s+'
+                  with: ","
+          split: ","
       Image:
         selector: $scene/div[@class="w-full lg:w-7/12 flex-grow flex-shrink-0"]//img/@data-src
         postProcess:
