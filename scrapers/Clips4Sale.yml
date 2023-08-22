@@ -38,6 +38,7 @@ xPathScrapers:
   c4sSceneScraper:
     common:
       $scene: //figure[contains(@class, "mediabook-preview")]
+      $studio: //a[@class="hover:underline text-white font-medium w-full truncate block"]/text()
     scene:
       Title:
         selector: $scene/figcaption/div/p[contains(@class, "lg:text-lg")]/text()
@@ -45,7 +46,7 @@ xPathScrapers:
         selector: $scene//div[contains(@class, "read-more--text")]/p/text()
         concat: "\n\n"
       Studio:
-        selector: //a[@class="hover:underline text-white font-medium w-full truncate block"]/text()
+        Name: $studio
       Date:
         selector: //div[contains(@class, 'border-b border-white/20 lg:border-0 pb-3 lg:pb-0 mb-3 lg:mb-0')]/span[contains(text(),'/')]/text()
         postProcess: &ppParseDate
