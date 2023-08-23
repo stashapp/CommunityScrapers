@@ -1,0 +1,64 @@
+name: Xnxx
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://xnxx.com/
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.xnxx.com/search/{}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]
+      $searchThumb: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]//div[contains(@class, "thumbnail-info-wrapper")]/span[@class="title"]/a
+
+    scene:
+      Title: $searchThumb/text()
+      URL:
+        selector: $searchThumb/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.xnxx.com"
+      Image:
+        selector: $searchItem//div[contains(@class, "phimage")]//img/@data-thumb_url
+
+
+  sceneScraper:
+    common:
+      $studio: //a[@class="gold-plate"]
+    scene:
+      Title: //ti[@class="clear-infobar"]/text()
+      Details: //p[@class="metadata-row video-description"]/text()
+      URL: //link[@rel="canonical"]/@href
+      # Date:
+      #   selector: //script[contains(., 'uploadDate')]/text()
+      #   postProcess:
+      #     - replace:
+      #         - regex: .+(?:"uploadDate":\s")([^"]+).+
+      #           with: $1
+      #         - regex: (.+)T.+
+      #           with: $1
+      #     - parseDate: 2006-01-02
+      Tags:
+        Name: //div[@class="metadata-row video-tags"]]
+      Studio:
+        Name: $studio
+        URL: $studio/@href
+      Image:
+        selector: //div[@class="video-pic"]//img/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https:"
+
+# Last Updated December 29, 2021
