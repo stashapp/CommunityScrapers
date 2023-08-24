@@ -4,7 +4,6 @@ sceneByURL:
     url:
       - brokenlatinawhores.com
     scraper: sceneScraper
-
 xPathScrapers:
   sceneScraper:
     scene:
@@ -20,7 +19,7 @@ xPathScrapers:
         postProcess:
           - parseDate: 01/02/2006
       Image: 
-        selector: //div[@class="update_image"]/a/img/@src0_3x|//div[@class="update_image"]/a/img/@src0_2x|//div[@class="update_image"]/a/img/@src0_1x
+        selector: //div[@class="update_image"]/a/img/@src0_4x|//div[@class="update_image"]/a/img/@src0_3x|//div[@class="update_image"]/a/img/@src0_2x|//div[@class="update_image"]/a/img/@src0_1x
         postProcess:
             - replace:
                 - regex: ^(.*)$
@@ -30,5 +29,5 @@ xPathScrapers:
           selector: //span[@class='update_tags']/a
       Performers:
         Name:
-          selector: //span[@class='tour_update_models']a
+          selector: //span[@class='tour_update_models']/a
 # Last Updated August 24, 2023
