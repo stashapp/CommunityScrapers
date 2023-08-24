@@ -2,58 +2,30 @@ name: Aziani
 sceneByURL:
   - action: scrapeXPath
     url:
-      - gloryholesecrets.com
-    scraper: sceneScraper
-  - action: scrapeXPath
-  # This site differs from the other two in that it lacks the host part in the url,
-  # therefore there is a copy of the scraper with only one extra replace.
-  # It uses YAML anchors, so ideally only the first scraper needs to be changed
-    url:
       - aziani.com
-    scraper: sceneScraperB
+    scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $scene: //div[contains(@class, "heading")][1]
     scene:
-      Studio: &studio
+      Studio:
         Name:
-          selector: //base/@href
-          postProcess:
-            - replace:
-                - regex: ^.+(?:\.|/)(.+)\..+$
-                  with: $1
-            - map:
-                gloryholesecrets: Gloryhole Secrets
-                aziani: Aziani
-      Performers: &performers
-        Name: //div[@class="video_details mb mt0"]/h5[i[@class="icon-female"]]/a
-      Title: &title
-        selector: //h2[@class="H_underline"]/text()
-      Details: &details
-        selector: //div[@class="desc"]/p/text()
-        concat: "\n\n"
-      Tags: &tags
-        Name: //h5[@class="video_categories"]/a
-      Image: &image
-        selector: //img[@id="set-target-1_0"]/@src
-      Date: &date
-        selector: //comment()[contains(.,"icon-calendar")]
-        postProcess:
-          - replace:
-              - regex: ^.*(\d{2}\/\d{2}\/\d{4}).*$
-                with: $1
-          - parseDate: 01/02/2006
-  sceneScraperB:
-    scene:
-      Studio: *studio
-      Performers: *performers
-      Title: *title
-      Details: *details
-      Tags: *tags
-      Image:
-        <<: *image
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://www.aziani.com
-      Date: *date
+          fixed: Aziani
+      Performers:
+        Name: $scene//a[contains(@href, "/models/")]/text()
+      Title: //meta[@property="og:title"]/@content
+      Details: //meta[@property="og:description"]/@content
+      Tags:
+        Name: $scene//a[contains(@href, "/tags/")]/text()
+      Image: //meta[@property="og:image"]/@content
+
+driver:
+  cookies:
+    - CookieURL: "https://aziani.com"
+      Cookies:
+        - Name: nats
+          Value: anythinggoeshere
+          Domain: .aziani.com
+          Path: /
 # Last Updated November 10, 2022

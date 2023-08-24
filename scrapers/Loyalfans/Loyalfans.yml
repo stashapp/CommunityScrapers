@@ -1,0 +1,10 @@
+name: Loyalfans
+sceneByURL:
+  - url:
+      - loyalfans.com
+    action: script
+    script:
+      - python3
+      - Loyalfans.py
+
+# Last Updated June 18, 2023

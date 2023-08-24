@@ -1,0 +1,30 @@
+name: CockyBoys
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cockyboys.com/scenes/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Date:
+        selector: //strong[contains(text(),"Released:")]/following-sibling::text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Tags:
+        Name: //strong[contains(text(),"Categorized Under:")]/following-sibling::a/text()
+      Performers:
+        Name: //strong[contains(text(),"Featuring:")]/following-sibling::a/text()
+      Details:
+        selector: //div[@class="movieDesc"]/.
+        postProcess:
+          - replace:
+              - regex: Description\s*
+                with:
+        concat: "\n\n"
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
+# Last Updated August 21, 2023
