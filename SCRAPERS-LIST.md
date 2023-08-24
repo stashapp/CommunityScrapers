@@ -425,7 +425,7 @@ eastboys.com|EastBoys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 ebonytugs.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 elegantangel.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 elitebabes.com|EliteBabes.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Babes
-www.eporner.com|Eporner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+eporner.com|Eporner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ericjohnssexadventures.com|EricJohnsSexAdventures.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ericvideos.com|EricVideos.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 erito.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
