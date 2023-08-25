@@ -30,7 +30,7 @@ xPathScrapers:
       Tags:
         Name:
           selector: //li[@class="label" and contains(text(), "Tags:")]/following-sibling::text()
-          <<: *stripEmojis
+          postProcess: *stripEmojis
       Studio:
         Name:
           selector: //head/base/@href
@@ -45,4 +45,4 @@ xPathScrapers:
                 seehimfuck: See Him Fuck
                 seehimsolo: See Him Solo
                 povpornstars: POV Pornstars
-# Last Updated July 13, 2022
+# Last Updated August 25, 2023
