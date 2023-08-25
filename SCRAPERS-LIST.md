@@ -981,6 +981,7 @@ only3xvr.com|Only3xGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 onlyblowjob.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 onlygolddigger.com|Only3xGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 onlyprince.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+onlytarts.com|OnlyTarts.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 onlyteenblowjobs.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 oopsie.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 openlife.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
