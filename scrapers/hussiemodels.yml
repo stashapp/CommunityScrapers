@@ -8,7 +8,6 @@ sceneByURL:
       - seehimfuck.com/trailers
       - seehimsolo.com/trailers
       - povpornstars.com
-      # Removes all emoticons from Title, Description, Performers and Tags.
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -22,24 +21,16 @@ xPathScrapers:
       Performers:
         Name:
           selector: //li[@class="update_models"]//a
-          postProcess:
+          postProcess: &stripEmojis
             - replace:
                 - regex: "[^\x00-\x7F]"
                   with:
-      Details:
-        selector: //meta[@property="og:description"]/@content
-        postProcess:
-          - replace:
-              - regex: "[^\x00-\x7F]"
-                with:
+      Details: //meta[@property="og:description"]/@content
       Image: //meta[@property="og:image"]/@content
       Tags:
         Name:
           selector: //li[@class="label" and contains(text(), "Tags:")]/following-sibling::text()
-          postProcess:
-            - replace:
-                - regex: "[^\x00-\x7F]"
-                  with:
+          <<: *stripEmojis
       Studio:
         Name:
           selector: //head/base/@href
