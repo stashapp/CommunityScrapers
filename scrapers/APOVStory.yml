@@ -37,4 +37,4 @@ xPathScrapers:
               - regex: \s+
                 with: ""
           - parseDate: "January2,2006" 
-#last updated August 24, 2023
+# last updated August 24, 2023
