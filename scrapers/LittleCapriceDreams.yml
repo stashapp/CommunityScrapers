@@ -6,18 +6,36 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $project: //div[@id="main-project-content"]
     scene:
       Title: //meta[@property="og:title"]/@content
-      Details: //div[@class="vid_desc"]/p
+      Details: $project//div[contains(@class, "desc-text")]
       Image: //meta[@property="og:image"]/@content
       Studio:
-        Name: //meta[@property="og:site_name"]/@content
+        Name:
+          selector: $project/@class
+          postProcess:
+            - replace:
+                - regex: ".*(buttmuse|caprice-divas|nasstyx|porn-lifestyle|pov-dreams|streetfuck|superprivatex|virtual-reality|wecumtoyou|xpervo).*"
+                  with: $1
+            - map:
+                buttmuse: BUTTMuse
+                caprice-divas: Caprice Divas
+                nasstyx: NASSTYx
+                porn-lifestyle: Pornlifestyle
+                pov-dreams: POVdreams
+                streetfuck: STREETFUCK
+                superprivatex: SuperprivateX
+                virtual-reality: Virtual Reality
+                wecumtoyou: Wecumtoyou
+                xpervo: Xpervo
       Date:
-        selector: //div[@class="vid_date"]
+        selector: //meta[@property="article:published_time"]/@content
         postProcess:
-          - parseDate: January 2, 2006
+          - parseDate: "2006-01-02T15:04:05+00:00"
       Performers:
-        Name: //div[@class="vid_infos"]/div[contains(div, "Models")]//a
+        Name: $project//div[contains(@class, "project-models")]//a
       Tags:
-        Name: //div[@class="vid_infos"]/div[contains(div, "Tags")]//a
-# Last Updated March 28, 2021
+        Name: $project//div[contains(@class, "project-tags")]//a
+# Last Updated August 21, 2023

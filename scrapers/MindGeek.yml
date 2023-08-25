@@ -39,11 +39,24 @@ sceneByURL:
       - trueamateurs.com/scene/
     scraper: scriptScraper
 
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - transsensual.com/scene
+    scraper: galleryFromSceneScriptScraper
+
 movieByURL:
   - action: scrapeXPath
     url:
-      - digitalplayground.com/movie
-      - transsensual.com/movie
+      - digitalplayground.com/movie/
+      - doghousedigital.com/movie/
+      - iconmale.com/movie/
+      - milehighmedia.com/movie/
+      - noirmale.com/movie/
+      - realityjunkies.com/movie/
+      - sweetheartvideo.com/movie/
+      - sweetsinner.com/movie/
+      - transsensual.com/movie/
     scraper: movieScraper
 
 performerByURL:
@@ -73,6 +86,8 @@ xPathScrapers:
   sceneScraper:
     common:
       $section: //div[contains(@class,"tg5e7m")]/ancestor::section
+      $canonicalUrl: &canonicalUrl //link[@rel="canonical"]/@href
+      $movieUriPath: &movieUriPath //a[text()="Movie Info"]/@href
     scene:
       Title: $section//h1/text()|$section//h2/text()
       Date:
@@ -115,17 +130,42 @@ xPathScrapers:
                 sweetsinner: Sweet Sinner
                 teenslovehugecocks: Teens Love Huge Cocks
       Image: $section//img[contains(@src,"poster")]/@src
+      Movies: &sceneMovies
+        URL:
+          selector: $canonicalUrl|$movieUriPath
+          concat: __SEPARATOR__
+          postProcess:
+            - replace:
+              - regex: '^(https://[^/]+).+__SEPARATOR__'
+                with: $1
+        Name:
+          selector: $canonicalUrl|$movieUriPath
+          concat: __SEPARATOR__
+          postProcess:
+            - replace:
+              - regex: '^(https://[^/]+).+__SEPARATOR__'
+                with: $1
+            - subScraper:
+                selector: //h1/text()|//h2/text()
+      Code: &sceneCode
+        selector: $canonicalUrl
+        postProcess:
+          - replace:
+              - regex: '.*/scene/(\d+).*'
+                with: $1
   scriptScraper:
     common:
-      $script: //script[@type="application/ld+json"]
+      $script: &script //script[@type="application/ld+json"]
+      $canonicalUrl: *canonicalUrl
+      $movieUriPath: *movieUriPath
     scene:
-      Title:
+      Title: &title
         selector: $script
         postProcess:
           - replace:
               - regex: '.+"name": "([^"]+)".+'
                 with: $1
-      Date:
+      Date: &date
         selector: $script
         postProcess:
           - replace:
@@ -138,9 +178,9 @@ xPathScrapers:
           - replace:
               - regex: '.+"thumbnailUrl": "([^"]+)".+'
                 with: $1
-      Studio:
+      Studio: &studio
         Name:
-          selector: //div[contains(@class,"tg5e7m")]/ancestor::section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
+          selector: //div[text()="Subsite"]/following-sibling::a/text()|//div[contains(@class,"tg5e7m")]/ancestor::section//a[contains(@href,"site=")]/@title|//link[@rel="canonical"]/@href
           postProcess:
             - replace:
                 - regex: (.+www\.)(\w+)(.+)
@@ -163,7 +203,7 @@ xPathScrapers:
                 transsensual: TransSensual
                 trueamateurs: True Amateurs
       Tags: *tags
-      Details:
+      Details: &details
         selector: $script
         postProcess:
           - replace:
@@ -173,9 +213,10 @@ xPathScrapers:
                 with: $1
               - regex: '\|'
                 with: '"'
-      Performers:
+      Performers: &performers
         Name: //div/*[self::h1 or self::h2]/..//a[contains(@href,"/model")]
-
+      Movies: *sceneMovies
+      Code: *sceneCode
   movieScraper:
     common:
       $section: //div[text()="Release Date:"]/ancestor::section
@@ -326,4 +367,14 @@ xPathScrapers:
       Image:
         selector: //img[contains(@src, "model")]/@src
       URL: //link[@rel="canonical"]/@href
-# Last Updated January 15, 2023
+  galleryFromSceneScriptScraper:
+    common:
+      $script: *script
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
+# Last Updated July 24, 2023

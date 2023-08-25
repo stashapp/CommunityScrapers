@@ -4,6 +4,11 @@ sceneByURL:
     url:
       - tenshigao.com
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - tenshigao.com
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -18,7 +23,7 @@ xPathScrapers:
           - parseDate: January 02, 2006
       Performers:
         Name: //h5/a
-        URL: //h5/a/@href 
+        URL: //h5/a/@href
       Tags:
         Name: //div[@class="cat"]/a
       Details:
@@ -32,4 +37,102 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Tenshigao
-# Last Updated March 02, 2022
+  performerScraper:
+    common:
+      $profile: //div[@class="model-profile"]
+    performer:
+      Name:
+        selector: $profile[contains(strong, "Name:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Name:\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+      Aliases:
+        selector: $profile[contains(strong, "Japanese name:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Japanese name:\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+      Birthdate:
+        selector: $profile[contains(strong, "Birth date:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Birth date:\s*(.*)\s*$
+                with: $1
+          - parseDate: January 2, 2006
+          - parseDate: 2006-01-02
+      Measurements:
+        selector: $profile[contains(strong, "Body:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Body:\s*(.*)\s*$
+                with: $1
+              - regex: B(\d*)-W(\d*)-H(\d*)
+                with: $1-$2-$3
+              - regex: --
+                with:
+              - regex: None
+                with:
+      Weight:
+        selector: $profile[contains(strong, "Weight:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Weight:\s*(.*)\s*$
+                with: $1
+              - regex: (\d+)kg
+                with: $1
+              - regex: None
+                with:
+      Height:
+        selector: $profile[contains(strong, "Height:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Height:\s*(.*)\s*$
+                with: $1
+              - regex: (\d+)cm.*
+                with: $1
+              - regex: None
+                with:
+      Details: concat(string(//div[@class="intro"]//p//text()), string(//div[@class="intro"]//p//span[@class="readmore"]//text()))
+      Piercings:
+        selector: $profile[contains(strong, "Piercings:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Piercings:\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+              - regex: No Piercings
+                with:
+      Tattoos:
+        selector: $profile[contains(strong, "Tattoo:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Tattoo:\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+      HairColor:
+        selector: $profile[contains(strong, "Hair color:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Hair Color:?\s*(.*)\s*$
+                with: $1
+              - regex: .*Hair color:?\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+      URL: //link[@rel="canonical"][1]/@href
+      Image:
+        selector: //img[@class="smallroundedthumbs"]/@src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: https://
+              - regex: 160x160
+                with: 500x500
+# Last Updated August 19, 2023

@@ -15,7 +15,7 @@ xPathScrapers:
       $movieinfo: //div[@class="pure-u-1-5 hidden-sm hidden-xs"]/div[@class="video-info"]
     scene:
       Title: $movieinfo/p[starts-with(strong,"Title")]/text()
-      Details: //meta[@property="og:description"]/@content
+      Details: //div[contains(@class, "video-description")]
       Date:
         selector: //meta[@itemprop="datePublished"]/@content
         postProcess:

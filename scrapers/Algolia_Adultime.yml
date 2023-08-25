@@ -8,17 +8,22 @@ sceneByURL:
       - adulttimepilots.com/en/video/
       - agentredgirl.com/en/video/
       - analteenangels.com/en/video/
+      - asmrfantasy.com/en/video/
       - assholefever.com/en/video/
       - beingtrans247.com/en/video/
+      - blowmepov.com/en/video/
       - caughtfapping.com/en/video/
       - devilsfilm.com/en/video/
       - devilstgirls.com/en/video/
       - dpfanatics.com/en/video/
+      - extremepickups.com/en/video/
       - famedigital.com/en/video/
       - footsiebabes.com/en/video/
       - forbiddenseductions.com/en/video/
       - girlstryanal.com/en/video/
+      - givemeteens.com/en/video/
       - hairyundies.com/en/video/
+      - isthisreal.com/en/video/
       - joymii.com/en/video/
       - kissmefuckme.com/en/video/
       - lezcuties.com/en/video/
@@ -37,14 +42,17 @@ sceneByURL:
       - peternorth.com/en/video/
       - prettydirty.com/en/video/
       - puretaboo.com/en/video/
+      - sabiendemonia.com/en/video/
       - soapymassage.com/en/video/
       - teensneaks.com/en/video/
+      - theyeslist.com/en/video/
       - transfixed.com/en/video/
       - transgressivefilms.com/en/video/
       - trickyspa.com/en/video/
       - truelesbian.com/en/video/
       - webyoung.com/en/video/
       - welikegirls.com/en/video/
+      - wolfwagner.com/en/video/
     script:
       - python
       - Algolia.py
@@ -69,6 +77,13 @@ sceneByQueryFragment:
       - Algolia.py
       - girlsway
       - validName
+galleryByFragment:
+    action: script
+    script:
+      - python
+      - Algolia.py
+      - puretaboo
+      - gallery
 galleryByURL:
   - action: script
     url:
@@ -91,9 +106,10 @@ movieByURL:
       - adulttime.com/en/dvd/
       - devilsfilm.com/en/dvd/
       - devilstgirls.com/en/dvd/
+      - outofthefamily.com/en/dvd/
     script:
       - python
       - Algolia.py
       - puretaboo
       - movie
-# Last Updated February 06, 2023
+# Last Updated July 18, 2023

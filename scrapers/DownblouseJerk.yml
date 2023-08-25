@@ -1,0 +1,33 @@
+name: Downblouse Jerk
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - downblousejerk.com/videoentry/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class='page_title']/text()
+        postProcess:
+          - replace:
+              - regex: .*\x{201C}(.*).
+                with: $1
+      Date:
+        selector: //div[@class="date_likes_holder"]/a[@href="#"]/@title
+        postProcess:
+          - replace:
+              - regex: .+?,\s+([A-Za-z]+) (\d+).+, (\d+),.+
+                with: $1 $2, $3
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //span[@class="meta_modelcategory meta_category"]//a
+      Details: //div[@class="post_excerpt"]/p
+      Tags:
+        Name: //span[@class="meta_videocategory meta_category"]//a 
+      Image:
+        selector: //video/@poster
+      Studio:
+        Name:
+          fixed: Downblouse Jerk
+# Last Updated August 15, 2023

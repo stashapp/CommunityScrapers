@@ -43,7 +43,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //p[@class="video-title"]/text()
-      Details: //p[@class="video-description"]/text()
+      Details: //div[contains(@class, 'video-description')]/descendant-or-self::*/text()
       Performers:
         Name: //p[@class="model-name"]/a
       Image: //div[@class="video-area"]//stream/@poster
@@ -91,4 +91,4 @@ xPathScrapers:
                 teensloveblackcocks: Teens Love Black Cocks
                 thickumz: Thickumz
                 tinysis: Tiny Sis
-# Last Updated June 27, 2022
+# Last Updated May 10, 2023

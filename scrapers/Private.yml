@@ -9,23 +9,33 @@ movieByURL:
     url:
       - private.com
     scraper: movieScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.private.com/search.php?query={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - private.com
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     common:
       $content: //section[@class="video-description-and-tags clearfix"]
     scene:
-      Title:
-        selector: $content//ul[@class="scene-models-list"]/preceding-sibling::h1/text()
+      Title: //div[@class="title-zone"]/h1
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
           # The format changes when another language is selected
           - parseDate: 01/02/2006
-      Details: $content//p[@id="description-section"]
+      Details:
+        selector: $content//p[@id="description-section"]/text()
+        concat: "\n"
       Tags:
-        Name: $content//ul[@class="scene-tags"]/li/a/text()
+        Name: //li[@class="tag-tags"]//a/text()
       Performers:
-        Name: $content//ul[@class="scene-models-list"]//a/text()
+        Name: //li[@class="tag-models"]//a/text()
       Movies:
         Name:
           selector: //a[@data-track="FULL MOVIE"]/@href
@@ -33,8 +43,12 @@ xPathScrapers:
             - subScraper: //div[@class="dvds-wrapper"]/h1/text()
         URL: //a[@data-track="FULL MOVIE"]/@href
       Studio:
-        Name: $content//span[@class="title-site"]/text()
-        #fixed: Private
+        Name:
+          selector: //div[@class="title-zone"]//li/a/span[@class="title-site"]/text()|/html/@lang
+          postProcess:
+            - replace:
+              - regex: ^en$
+                with: Private
       Image: //meta[@property="og:image"]/@content
   movieScraper:
     movie:
@@ -52,6 +66,57 @@ xPathScrapers:
           fixed: Private
       Synopsis: //p[@class="sinopsys"]
       FrontImage: //div[@class="dvds-wrapper"]//img[@class="img-responsive"]/@src
+  performerSearch:
+    common:
+      $searchData: //a[@data-track="PORNSTAR_NAME"]
+    performer:
+      Name: $searchData
+      URL: $searchData/@href
+  performerScraper:
+    common:
+      $performerData: //div[contains(concat(' ',normalize-space(@class),' '),' pornstar-wrapper ')]
+    performer:
+      Name: $performerData//h1
+      URL: //meta[@property="og:url"]/@content
+      Aliases: $performerData//p[@class="aka"]/text()
+      Details: $performerData//li[@class="model-facts-long"]/div
+      Measurements: $performerData//em[text()="Measurements:"]/../text()
+      Height:
+        selector: $performerData//em[text()="Height:"]/../text()
+        postProcess:
+          - replace:
+            - regex: (\d+)cm.+
+              with: $1
+          - map:
+              -: ""
+      Weight:
+        selector: $performerData//em[text()="Weight:"]/../text()
+        postProcess:
+          - replace:
+            - regex: (\d+)kg.+
+              with: $1
+          - map:
+              -: ""
+      Country: $performerData//em[text()="Birth place:"]/../text()
+      HairColor: $performerData//em[text()="Hair Color:"]/../text()
+      EyeColor:
+        selector: $performerData//em[text()="Eye color:"]/../text()
+        postProcess:
+          - map:
+              -: ""
+      Tattoos:
+        selector: $performerData//em[text()="Tattoos:"]/../text()
+        postProcess:
+          - map:
+              -: ""
+      Piercings:
+        selector: $performerData//em[text()="Piercings:"]/../text()
+        postProcess:
+          - map:
+              -: ""
+      Image: $performerData//img/@src
+      Gender:
+        fixed: "Female"
 driver:
   cookies:
     - CookieURL: https://private.com
@@ -60,4 +125,11 @@ driver:
           Domain: ".private.com"
           Value: "en"
           Path: "/"
-# Last Updated March 10, 2020
+        - Name: "agreed18"
+          Domain: ".private.com"
+          Value: "true"
+          Path: "/"
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+# Last Updated August 03, 2023
