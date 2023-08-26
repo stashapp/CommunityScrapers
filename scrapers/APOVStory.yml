@@ -9,14 +9,14 @@ xPathScrapers:
   sceneScraper:
     scene:
       Studio:
-        Name: 
-          fixed: 'A POV Story'
+        Name:
+          fixed: "A POV Story"
       Title:
         selector: //div[@class = 'trailerArea centerwrap']/h3
       Details:
         selector: //div[@class = 'trailerContent']//*//text()
         concat: "\n\n"
-        postProcess: &ppStripDescription
+        postProcess:
           - replace:
               - regex: ^Description:\s*
                 with:
@@ -24,17 +24,14 @@ xPathScrapers:
         Name: //li/span[contains(text(),'CATEGORIES')]/parent::li//a//text()
       Performers:
         Name: //li/span[contains(text(),'FEATURING')]/parent::li//a//text()
-      Image: 
+      Image:
         selector: //div[@class="player-thumb"]/img/@src0_3x
         postProcess:
           - replace:
-            - regex: ^
-              with: 'https://apovstory.com'
+              - regex: ^
+                with: "https://apovstory.com"
       Date:
         selector: //span[contains(text(),'RELEASE DATE')]/parent::li/text()
-        postProcess: &ppParseDate
-          - replace:
-              - regex: \s+
-                with: ""
-          - parseDate: "January2,2006" 
-# last updated August 24, 2023
+        postProcess:
+          - parseDate: "January 2, 2006"
+# Last Updated August 24, 2023
