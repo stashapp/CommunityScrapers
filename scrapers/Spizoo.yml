@@ -12,7 +12,24 @@ sceneByURL:
       - spizoo.com/updates/
       - vlogxxx.com/updates/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.spizoo.com/search.php?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 xPathScrapers:
+  sceneSearch:
+    common:
+      $row: //div[@class="model-update row"]
+    scene:
+      Title: $row//h3
+      URL: $row//h3/../@href
+      Image: $row//img/@src
+      Details: $row//p[contains(@class, "model-update-description")]
+
   sceneScraper:
     common:
       $scene_info: //section[@id="trailer-data" or @id="sceneInfo" or @id="scene-info" or @id="des-scene"]
