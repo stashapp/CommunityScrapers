@@ -76,7 +76,14 @@ xPathScrapers:
       Image: //link[@rel="image_src"]/@href
       Movies:
         Name: //h1[@class="description"]/following-sibling::p/a/text()
-      Director: //div[@class="director"]/text()
+      Director:
+        selector: //div[@class="director"]/text()
+        postProcess:
+          - replace:
+              - regex: \s{2,}
+                with: " "
+              - regex: " ,"
+                with: ","
       Code:
         selector: //meta[@name="og:url"]/@content
         postProcess:
