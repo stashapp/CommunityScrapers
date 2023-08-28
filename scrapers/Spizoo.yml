@@ -35,7 +35,13 @@ xPathScrapers:
       $scene_info: //section[@id="trailer-data" or @id="sceneInfo" or @id="scene-info" or @id="des-scene"]
       $video_section: (//section[@id="trailer-video" or @id="scene" or @id="scene-video"] | //div[contains(@class, "videoHolder")])
     scene:
-      Title: //h1|//h2
+      Title:
+        selector: //div[@class="title" or @class="row"]//h1 | //h2[contains(@class, "titular")] | //title
+        postProcess:
+          # RawAttack titles have a trailing dash and space
+          - replace:
+              - regex: \s\-\s*$
+                with:
       Date:
         selector: $scene_info//p[@class="date"]
         postProcess:
