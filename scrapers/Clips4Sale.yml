@@ -33,7 +33,7 @@ xPathScrapers:
                 - regex: ^
                   with: https://www.clips4sale.com
       Image:
-        selector: $card//img/@data-src
+        selector: $card//img/@src
 
   c4sSceneScraper:
     common:
@@ -91,7 +91,7 @@ xPathScrapers:
                   with: ","
           split: ","
       Image:
-        selector: $scene/div[@class="w-full lg:w-7/12 flex-grow flex-shrink-0"]//img/@data-src
+        selector: $scene//img/@src
         postProcess:
             - replace:
                 - regex: ^
@@ -111,4 +111,4 @@ driver:
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
 
 
-# Last Updated August 22, 2023
+# Last Updated August 31, 2023
