@@ -1,20 +1,20 @@
 name: IAFD
 performerByName:
-    action: script
-    script:
-      - python3
-      - IAFD.py
-      - query
+  action: script
+  script:
+    - python3
+    - IAFD.py
+    - query
 performerByURL:
   - url:
-     - iafd.com
+      - iafd.com/person.rme/perfid=
     action: script
     script:
       - python3
       - IAFD.py
 sceneByURL:
   - url:
-      - iafd.com/title.rme
+      - iafd.com/title.rme/id=
     action: script
     script:
       - python3
@@ -22,10 +22,10 @@ sceneByURL:
       - scene
 movieByURL:
   - url:
-      - iafd.com/title.rme/title=
+      - iafd.com/title.rme/id=
     action: script
     script:
       - python3
       - IAFD.py
       - movie
-# Last Updated August 10, 2022
+# Last Updated September 01, 2023
