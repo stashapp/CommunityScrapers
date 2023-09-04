@@ -1,0 +1,54 @@
+name: Naughty Natural
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - naughtynatural.com/videos/
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - naughtynatural.com/photos/
+    scraper: galleryScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $url: //link[@rel="canonical"]/@href
+    scene:
+      Title: &title //h1[@class="entry-title"]/text()
+      Studio: &studio
+        Name:
+          fixed: Naughty Natural
+      Date: &date
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - replace:
+              - regex: (^\d{4}-\d{2}-\d{2}).*
+                with: $1
+          - parseDate: 2006-01-02
+      Details:
+        selector: //p[@class="description"]/text()
+      Tags: &tags
+        Name: //span[@class="categories"]/a
+      Performers: &performers
+        Name: //span[@class="post_author"]/a
+      # Unable to scrape image! Xpath correctly isolates jpg file, however AWS server blocks scraping of image
+      #Image:
+      #  selector: //script[@type="text/javascript"][contains(text(),"jwplayer")]
+      #  postProcess:
+      #    - replace:
+      #        - regex: .*(https.+jpg).*
+      #          with: $1
+      URL: &url
+        selector: $url
+  galleryScraper:
+    common:
+      $photopage: //section[@id='photos_page-page']
+    gallery:
+      Title: *title
+      Studio: *studio
+      Date: *date
+      Details:
+        selector: //div[@class="gallery_description"]/p/text()
+      Tags: *tags
+      Performers: *performers
+# Last Updated September 03, 2023
