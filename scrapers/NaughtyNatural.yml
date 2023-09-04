@@ -31,13 +31,12 @@ xPathScrapers:
         Name: //span[@class="categories"]/a
       Performers: &performers
         Name: //span[@class="post_author"]/a
-      # Unable to scrape image! Xpath correctly isolates jpg file, however AWS server blocks scraping of image
-      #Image:
-      #  selector: //script[@type="text/javascript"][contains(text(),"jwplayer")]
-      #  postProcess:
-      #    - replace:
-      #        - regex: .*(https.+jpg).*
-      #          with: $1
+      Image:
+        selector: //script[@type="text/javascript"][contains(text(),"jwplayer") and contains(text(),"jpg")]
+        postProcess:
+          - replace:
+            - regex: .*(wp-content.+jpg).*(https:\/\/[^\/]*).*
+              with: $2/$1
       URL: &url
         selector: $url
   galleryScraper:
