@@ -87,6 +87,7 @@ galleryByFragment:
 galleryByURL:
   - action: script
     url:
+      - accidentalgangbang.com/en/photo/
       - devilsfilm.com/en/photo/
       - joymii.com/en/photo/
       - mommysgirl.com/en/photo/
@@ -94,6 +95,7 @@ galleryByURL:
       - peternorth.com/en/photo/
       - prettydirty.com/en/photo/
       - puretaboo.com/en/photo/
+      - transfixed.com/en/video/
       - webyoung.com/en/photo/
     script:
       - python
@@ -112,4 +114,4 @@ movieByURL:
       - Algolia.py
       - puretaboo
       - movie
-# Last Updated July 18, 2023
+# Last Updated September 05, 2023

@@ -728,7 +728,7 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
     elif gallery_json.get('title'):
         scrape['title'] = gallery_json['title'].strip()
     # Date
-    scrape['date'] = gallery_json.get('date_online')
+    scrape['date'] = gallery_json.get('date_online') or gallery_json.get('release_date')
     # Details
     scrape['details'] = clean_text(gallery_json.get('description'))
 
@@ -972,15 +972,24 @@ elif "movie" in sys.argv:
 elif "gallery" in sys.argv:
     scraped_gallery = None
     if SCENE_URL:
-        log.debug("Scraping gallery by URL")
-        gallery_id = get_id_from_url(SCENE_URL)
-        if gallery_id:
-            gallery_results = api_search_gallery_id(gallery_id, api_url)
-            gallery = gallery_results.json()["results"][0].get("hits")
-            if gallery:
-                #log.debug(gallery[0])
-                scraped_gallery = parse_gallery_json(gallery[0])
-                #log.debug(scraped_gallery)
+        if "/video/" in SCENE_URL:
+            log.debug("Scraping scene by URL")
+            scene_id = get_id_from_url(SCENE_URL)
+            api_search_response = api_search_req("id", scene_id, api_url)
+            if api_search_response:
+                # log.debug(f"[API] Search gives {len(api_search_response)} result(s)")
+                # log.trace(f"api_search_response: {api_search_response}")
+                scraped_gallery = parse_gallery_json(api_search_response[0])
+        else:
+            log.debug("Scraping gallery by URL")
+            gallery_id = get_id_from_url(SCENE_URL)
+            if gallery_id:
+                gallery_results = api_search_gallery_id(gallery_id, api_url)
+                gallery = gallery_results.json()["results"][0].get("hits")
+                if gallery:
+                    #log.debug(gallery[0])
+                    scraped_gallery = parse_gallery_json(gallery[0])
+                    #log.debug(scraped_gallery)
     elif SCENE_TITLE:
         log.debug("Scraping gallery by fragment")
         # log.debug(f"[API] Searching using SCENE_TITLE: {SCENE_TITLE}")
