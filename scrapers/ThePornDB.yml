@@ -188,6 +188,8 @@ driver:
   headers:
     - Key: User-Agent
       Value: stashjson/1.0.0
+    # NOTICE: We recommend using ThePornDB as a stash-box instead of using this scraper
+    # and it is being deprecated.
     #- Key: Authorization # Uncomment and add a valid API Key after the `Bearer ` part
     #  Value: Bearer zUotW1dT5ESmpIpMnccUNczf8q4C9Thzn07ZqygE
-# Last Updated October 02, 2022
+# Last Updated September 05, 2023
