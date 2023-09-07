@@ -250,6 +250,7 @@ bushybushy.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bustybeauties.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 buttman.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 calicarter.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+camwhores.tv|CamWhorestv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 canada-tgirl.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 caribbeancom.com|Carib.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 caribbeancompr.com|Carib.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
