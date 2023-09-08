@@ -430,7 +430,7 @@ def performer_query(query):
     for i, name in enumerate(performer_names):
         p = {
             "Name": name,
-            "URL": "https://www.iafd.com/" + performer_urls[i],
+            "URL": "https://www.iafd.com" + performer_urls[i],
         }
         performers.append(p)
     print(json.dumps(performers))
