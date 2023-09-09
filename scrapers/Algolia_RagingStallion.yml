@@ -1,31 +1,30 @@
-name: Falcon Studios
+name: Raging Stallion
 sceneByURL:
   - action: script
     url:
-      - falconstudios.com/en/video
-      - hothouse.com/en/video
+      - ragingstallion.com/en/video
     script:
       - python
       - Algolia.py
-      - falconstudios
+      - ragingstallion
 sceneByFragment:
   action: script
   script:
     - python
     - Algolia.py
-    - falconstudios
+    - ragingstallion
 sceneByName:
   action: script
   script:
     - python
     - Algolia.py
-    - falconstudios
+    - ragingstallion
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
     - Algolia.py
-    - falconstudios
+    - ragingstallion
     - validName
 # Last Updated September 09, 2023

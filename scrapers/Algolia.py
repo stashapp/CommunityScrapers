@@ -92,7 +92,9 @@ SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
     "Dpfanatics": "DP Fanatics",
     "Janedoe": "Jane Doe Pictures",
     "ModernDaySins": "Modern-Day Sins",
-    "Transgressivexxx": "TransgressiveXXX"
+    "Transgressivexxx": "TransgressiveXXX",
+    "Hot House": "Hot House Entertainment",
+    "HotHouse.com": "Hot House Entertainment",
 }
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
