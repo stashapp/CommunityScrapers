@@ -1,0 +1,30 @@
+name: Raging Stallion
+sceneByURL:
+  - action: script
+    url:
+      - ragingstallion.com/en/video
+    script:
+      - python
+      - Algolia.py
+      - ragingstallion
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - ragingstallion
+sceneByName:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - ragingstallion
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Algolia.py
+    - ragingstallion
+    - validName
+# Last Updated September 09, 2023
