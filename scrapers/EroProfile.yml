@@ -17,5 +17,5 @@ xPathScrapers:
               - regex: (.+)\s\((.+)ago\)
                 with: $1
           - parseDate: 2 January 2006
-      Details: //div[@class="boxCnt"]//h1[@class="capMultiLine"]/following-sibling::p/text() | //table[@class="data marT"]//tbody//tr//th[contains(text(),"Description:")]/following::td/text()
+      Details: //h1[@class="capMultiLine"]/following-sibling::p/text() | //table[@class="data marT"]//tbody//tr//th[contains(text(),"Description:")]/following::td/text()
 # Last Updated September 09, 2023
