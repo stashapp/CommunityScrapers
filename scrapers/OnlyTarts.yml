@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="video-detail__title"]
-      Details: //div[@data-id="description" and @class="hidden"]
+      Details: //div[@data-id="description" and @class="hidden"]/text()
       Date:
         selector: //div[@class="video-info__time"]
         postProcess:
@@ -17,10 +17,10 @@ xPathScrapers:
                 with: $1
           - parseDate: 2 January, 2006
       Image:
-        selector: //div[@class="xp-poster"]/@style
+        selector: //script[contains(., "pluginSettings")]/text()
         postProcess:
           - replace:
-              - regex: .*url\("(.*)"\)
+              - regex: .*url":\s*"(.*poster[^"]*).*$
                 with: $1
       Studio:
         Name:
@@ -30,4 +30,4 @@ xPathScrapers:
       Performers:
         Name: //div[contains(@class, "video-info")]//a[contains(@href, "/model")]/text()
         URL: //div[contains(@class, "video-info")]//a[contains(@href, "/model")]/@href
-# Last Updated August 25, 2023
+# Last Updated September 10, 2023
