@@ -2,7 +2,7 @@ name: Raging Stallion
 sceneByURL:
   - action: script
     url:
-      - ragingstallion.com/en/video
+      - ragingstallion.com/en/scene
     script:
       - python
       - Algolia.py
