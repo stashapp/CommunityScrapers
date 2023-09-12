@@ -42,6 +42,7 @@ def get_request(url: str) -> requests.Response():
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
         "Referer": "https://www.manyvids.com/"
     }
+    log.trace(f"GET {url}")
     return requests.get(url, headers=mv_headers, timeout=(3, 10))
 
 def post_request(url: str, jsonBody:str) -> requests.Response():
@@ -53,6 +54,7 @@ def post_request(url: str, jsonBody:str) -> requests.Response():
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
         "Referer": "https://www.manyvids.com/"
     }
+    log.trace(f"POST {url} {jsonBody}")
     return requests.post(url, json=jsonBody, headers=mv_headers, timeout=(3, 10))
 
 
@@ -85,9 +87,6 @@ def clean_text(details: str) -> dict:
 
 
 def map_ethnicity(ethnicity: str) -> str:
-    if ethnicity is None:
-        return None
-
     ethnicities = {
             "Alaskan": "alaskan",
             "Asian": "asian",
@@ -102,10 +101,7 @@ def map_ethnicity(ethnicity: str) -> str:
             "Other": "other"
     }
 
-    found = ethnicities.get(ethnicity)
-    if found:
-        return found
-    return ethnicity
+    return ethnicities.get(ethnicity)
 
 def get_scene(scene_id: str) -> dict:
     """
@@ -116,34 +112,42 @@ def get_scene(scene_id: str) -> dict:
             f"https://video-player-bff.estore.kiwi.manyvids.com/videos/{scene_id}"
         )
     except requests.exceptions.RequestException as api_error:
-        log.error(f"Error {api_error} while requesting data from manyvids api")
+        log.error(f"Error {api_error} while requesting data from API")
         return None
 
     meta = response.json()
+    log.debug(f"Raw response from API: {json.dumps(meta)}")
     scrape = {}
     scrape['title'] = meta.get('title')
     scrape['details'] = meta.get('description')
     scrape['code'] = scene_id
+
     sceneURLPartial = meta.get('url')
     if sceneURLPartial:
         scrape["url"] = f'https://www.manyvids.com{sceneURLPartial}'
+
     if meta.get('modelId'):
         model_name = get_model_name(meta['modelId'])
         if model_name:
-            scrape['performers'] = []
-            scrape['performers'].append({'name': model_name})
+            scrape['performers'] = [{'name': model_name}]
             scrape['studio'] = {"name": model_name}
+
     image = meta.get('screenshot')
     if image is None: # fallback to thumbnail
+        log.debug("No screenshot found, using thumbnail")
         image = meta.get('thumbnail')
     scrape['image'] = image
+
     date = meta.get('launchDate')
     if date:
         date = re.sub(r"T.*", "", date)
         scrape['date'] = date
+    else:
+        log.debug("No date found")
+
     if meta.get('tags'):
         scrape['tags'] = [{"name": x} for x in meta['tags']]
-
+    log.debug(f"Scraped data: {json.dumps(scrape, indent=2)}")
     return scrape
 
 
@@ -159,11 +163,12 @@ def get_model_bio(url_handle: str, performer_url: str) -> dict:
         log.error(f"Error {api_error} while requesting data from manyvids api")
         return None
     model_meta = response.json()
-    log.debug(json.dumps(model_meta)) # useful to get all json entries
+    log.debug(f"Raw response from API: {json.dumps(model_meta)}")
+
     scrape = {}
     scrape['name'] = model_meta.get('displayName')
     scrape['image'] = model_meta.get('portrait')
-    log.debug(f"image {scrape['image']}")
+
     date = model_meta.get('dob')
     if date:
         date = re.sub(r"T.*", "", date)
@@ -242,6 +247,8 @@ def get_model_bio(url_handle: str, performer_url: str) -> dict:
             scrape["career_length"] = re.sub(r"^Joined\s+", "", career_length[0]) + " - today"
     except requests.exceptions.RequestException as url_error:
         log.error(f"Error {url_error} while requesting data from profile page")
+
+    log.debug(f"Scraped data: {json.dumps(scrape, indent=2)}")
     return scrape
 
 
@@ -295,7 +302,7 @@ def performer_by_name(name: str, max_results: int = 25) -> None:
     
 def scene_by_name(name: str) -> None:
     if name:
-        search_url = f'https://api.journey-bff.kiwi.manyvids.com/api/v1/search/all'
+        search_url = 'https://api.journey-bff.kiwi.manyvids.com/api/v1/search/all'
     try:
         response  = post_request(search_url, jsonBody={'keywords':name})
         # log.debug(response.request.body)
