@@ -1,5 +1,3 @@
-# The search by name does not return images by default. To get images you will need to uncomment the driver section at the end of this file.
-# Each click you uncomment will load another 4 images, however the search will be much slower, so it's disabled by default.
 name: "AdultPrime"
 sceneByName:
   action: scrapeXPath
@@ -14,77 +12,60 @@ sceneByQueryFragment:
 sceneByURL:
   - action: scrapeXPath
     url:
-      - adultprime.com/studios/video/
+      - adultprime.com/studios/video
     scraper: sceneScraper
 
 xPathScrapers:
   sceneSearch:
     common:
-      $scenes: //ul[@id='studio-videos-container']
+      $scenes: //ul[@id="studio-videos-container"]
     scene:
       Title:
-        selector: $scenes//span[contains(@class, 'description-title')]/text()
+        selector: $scenes//span[contains(@class, "description-title")]/text()
       Date:
-        selector: $scenes//span[@class='description-releasedate']/text()
+        selector: $scenes//span[@class="description-releasedate"]/text()
         postProcess:
           - parseDate: Jan 02, 2006
       URL:
-        selector: $scenes//a[@class='absolute']/@href
+        selector: $scenes//a[@class="absolute"]/@href
         postProcess:
           - replace:
-            - regex: "^.signup.galleryId."
-              with: "https://adultprime.com/studios/video/"
-      Image:
-        selector: $scenes//div[contains(@class, 'ap-slider-img')]/@style
-        postProcess:
-          - replace:
-              - regex: .+url\("(.+)"\).+
-                with: $1
+              - regex: "^.signup.galleryId."
+                with: "https://adultprime.com/studios/video/"
+      Image: $scenes//div[contains(@class, 'ap-slider-img')]/@data-src
 
   sceneScraper:
+    common:
+      $scene: (//div[@id="theatre-row"]/div)[1]
     scene:
-      Title: //h2[contains(@class,"update-info-title")]/text()
+      Title: $scene//h2
       Date:
-        selector: //p[@class="update-info-line regular"][1]/b[1]/text()
+        selector: ($scene//p[@class="update-info-line regular"]/b)[1]/text()
         postProcess:
-          - parseDate: 02.01.2006
+          - parseDate: "02.01.2006"
       Details:
-        selector: //p[contains(@class,"ap-limited-description-text")]
+        selector: $scene//p[contains(@class,"ap-limited-description-text")]
       Image:
-        selector: //div[contains(@class, "video-wrapper")]//div[starts-with(@style,"background-image:") and not(contains(@style,"player-placeholder.gif"))]/@style
+        selector: $scene//video/@poster | $scene//div[contains(@class, "video-wrapper")]//div[contains(@style,"background-image:") and not(contains(@style,"player-placeholder.gif"))]/@style
         postProcess:
           - replace:
-              - regex: .+url\((.+)\).+
+              # Sometimes they put the URL in quotes, sometimes they just don't
+              # https://regex101.com/r/fszqAQ/3
+              - regex: .+url\(\"?(.+)\"?\).+
                 with: $1
-      URL:
-        selector: //a[contains(@href, "/signup?galleryId")][1]/@href
-        postProcess:
-          - replace:
-            - regex: .*=
-              with: "https://adultprime.com/studios/video/"
+      URL: &url //link[@rel="canonical"]/@href
       Code:
-        selector: //div[@class="keys"]/@title
+        selector: *url
         postProcess:
           - replace:
-            - regex: .+/(\d+)$
-              with: $1
-      Studio: 
-        Name: //p[contains(@class,"update-info-line")]/b/a[contains(@href,"/studio/")]/text()
+              - regex: \D+(\d+)$
+                with: $1
+      Studio:
+        Name: $scene//p[contains(@class,"update-info-line")]//a[contains(@href,"/studio/")]/text()
       Tags:
         Name:
-          selector: //p[contains(@class,"update-info-line regular")][contains(b,"Niches:")]/text()
+          selector: $scene//b[contains(.,"Niches")]/following-sibling::text()
           split: ", "
       Performers:
-        Name: //p[@class="update-info-line regular"]/a[contains(@href, "/signup?")]/text()
-#driver:
-#  useCDP: true
-#  headers:
-#    - Key: User-Agent
-#      Value: stash/1.0.0
-#  clicks:
-#    - xpath: //ul[@id='studio-videos-container']/following-sibling::div[1]/a[@class="lSNext"]
-#      sleep: 1
-#    - xpath: //ul[@id='studio-videos-container']/following-sibling::div[1]/a[@class="lSNext"]
-#      sleep: 1
-
-# Last Updated November 17, 2022
+        Name: $scene//b[contains(.,"Performer")]/following-sibling::a/text()
+# Last Updated September 13, 2023
