@@ -2,12 +2,15 @@ name: "JulesJordan"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - julesjordan.com/
       - girlgirl.com/
       - manuelferrara.com/
       - theassfactory.com/
       - spermswallowers.com/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/
+    scraper: newStyleScraper
 
 galleryByURL:
   - action: scrapeXPath
@@ -85,6 +88,27 @@ xPathScrapers:
       Performers: *performersAttr
       Studio: *studioAttr
 
+  newStyleScraper:
+    common:
+      $scene: //div[@class="movie-player"]
+    scene:
+      Title: $scene//div[@class="movie_title"]
+      Date:
+        selector: $scene//span[contains(., "Date:")]/following-sibling::text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: $scene//span[contains(., "Description:")]/following-sibling::text()
+      Tags:
+        Name: $scene//a[contains(@href, "categories")]/text()
+      Performers:
+        Name: $scene//a[contains(@href, "models")]/text()
+        URL: $scene//a[contains(@href, "models")]/@href
+      Studio: *studioAttr
+      Movies:
+        Name: $scene//span[contains(., "Movie:")]/following-sibling::a/text()
+        URL: $scene//span[contains(., "Movie:")]/following-sibling::a/@href
+      Image: $scene//video/@poster
+
   performerScraper:
     performer:
       Name: //span[@class='title_bar_hilite']/text()
@@ -115,16 +139,9 @@ xPathScrapers:
 
   movieScraper:
     movie:
-      Name: //span[@class="title_bar_hilite"]/text()
-      Synopsis:
-        selector: //div[@class="dvd_extra_fields"]/div/text()[not(contains(.,"Studio"))]
-        concat: " "
-        postProcess:
-          - replace:
-              - regex: "Description:"
-                with:
+      Name: //meta[@property="og:title"]/@content
       Studio:
-        Name: //span[@class="update_date"]/text()[contains(.,"Studio")]/following-sibling::a/text()
-      FrontImage: //div[@class="front"]/a/img/@src0_3x
-      BackImage: //div[@class="back"]/a/img/@src0_3x
-# Last Updated June 09, 2022
+        Name:
+          fixed: Jules Jordan Video
+      FrontImage: //img[contains(@class, "dvd_box")]/@src0_3x
+# Last Updated September 19, 2023
