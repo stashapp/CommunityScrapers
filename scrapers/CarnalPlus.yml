@@ -1,0 +1,187 @@
+name: Carnal+ / FTM+
+sceneByURL:
+  # These studios have standalone scenes
+  - action: scrapeXPath
+    url:
+      - americanmusclehunks.com/videos/
+      - bangbangboys.com/videos/
+      - edwardjames.com/videos/
+      - ftmmen.com/videos/
+      - jalifstudio.com/videos/
+      - jockpussy.com/videos/
+      - staghomme.com/videos/
+      - teensandtwinks.com/videos/
+      - twinks.com/videos/
+    scraper: sceneScraper
+
+  # These studios organize their scenes into groupings
+  - action: scrapeXPath
+    url:
+      - boyforsale.com/videos/
+      - funsizeboys.com/videos/
+      - gaycest.com/videos/
+      - masonicboys.com/videos/
+      - scoutboys.com/videos/
+      - transcest.com/videos/
+      - twinktop.com/videos/
+    scraper: chapterSceneScraper
+
+  # The network site has all scenes but is slightly different?? TODO
+  - action: scrapeXPath
+    url:
+      - carnalplus.com/videos/
+      - ftmplus.com/videos/
+    scraper: networkScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $scene: &sceneContainer //body/div[contains(@class, "mainContainer")]
+    scene:
+      Title: $scene//span[contains(@class, "dvdTitleScene")]
+      Details: &details
+        selector: $scene//div[@class="full-txt"]//text()
+        concat: "\n\n"
+      Image: &image $scene//video/@poster | $scene//img[contains(@class, "hiddenImg")]/@src0_1x | $scene//img[contains(@class, "hiddenImg")]/@src | $scene//img[contains(@class, "hiddenImg")]/@data-src
+      URL: &url //link[@rel="canonical"]/@href
+      Code: &studioCode
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: .*content\/([^\/]+).*
+                with: $1
+              # If the studio code doesn't match the xxx0000 format, remove it
+              - regex: ^(?:https|content).*
+                with: ""
+      Studio: &studio
+        Name:
+          selector: //base/@href
+          postProcess:
+            - replace:
+                # https://regex101.com/r/JxFd9a/1
+                - regex: ^(?:https:\/\/[\w\.]*?)([^.]+)\.com.*$
+                  with: $1
+            - map:
+                americanmusclehunks: American Muscle Hunks
+                bangbangboys: Bang Bang Boys
+                boyforsale: Boy For Sale
+                edwardjames: Edward James
+                ftmmen: FTM Men
+                funsizeboys: Fun Size Boys
+                gaycest: Gaycest
+                jalifstudio: Jalif Studio
+                jockpussy: Jock Pussy
+                masonicboys: Masonic Boys
+                scoutboys: Scout Boys
+                staghomme: Stag Homme
+                teensandtwinks: TeensAndTwinks
+                transcest: Transcest
+                twinks: Twinks
+                twinktop: Twink Top
+        URL: //base/@href
+      Tags: &tags
+        Name: $scene//div[@id="catMovie"]//text()
+      Performers: &performers
+        Name: $scene//div[contains(@class, "modelProfile")]//h2
+
+  networkScraper:
+    common:
+      $scene: ((//div[contains(@class, "main")])[1]/div)[1]
+    scene:
+      Title:
+        selector: $scene//h2
+        concat: " - "
+        postProcess:
+          - replace:
+              - regex: \|
+                with: "-"
+      Details:
+        selector: $scene//div[@class="hiddenDescription"]//text()
+        concat: "\n\n"
+      Image: *image
+      URL:
+        # All scenes on Carnalplus.com should be available from their substudio pages as well
+        selector: //link[@rel="canonical"]/@href | //div[@class="logoSubsites"]//img/@alt
+        concat: __SEPARATOR__
+        postProcess:
+          - replace:
+              - regex: .*(videos/.*)__SEPARATOR__(.*)
+                with: https://$2.com/$1
+              - regex: _vids
+                with: ""
+              # This table is should be the same as the one in Studio Name in chapterSceneScraper and sceneScraper
+              - regex: AmericanMuscleHunks
+                with: americanmusclehunks
+              - regex: BangBangBoys
+                with: bangbangboys
+              - regex: BoyForSale
+                with: boyforsale
+              - regex: EdwardJames
+                with: edwardjames
+              - regex: FTMmen
+                with: ftmmen
+              - regex: FunsizeBoys
+                with: funsizeboys
+              - regex: Gaycest
+                with: gaycest
+              - regex: JalifStudio
+                with: jalifstudio
+              - regex: JockPussy
+                with: jockpussy
+              - regex: MasonicBoys
+                with: masonicboys
+              - regex: ScoutBoys
+                with: scoutboys
+              - regex: StagHomme
+                with: staghomme
+              - regex: TeensAndTwinks
+                with: teensandtwinks
+              - regex: Transcest
+                with: transcest
+              - regex: Twinks
+                with: twinks
+              - regex: TwinkTop
+                with: twinktop
+      Tags:
+        Name: $scene//div[@class="update_tags"]//text()
+      Performers:
+        Name: $scene//div[@id="models"]//h4
+      Studio:
+        Name:
+          selector: //div[@class="logoSubsites"]//img/@alt
+          postProcess:
+            # Keeping the NOOP mappings like Gaycest for consistency
+            - map:
+                AmericanMuscleHunks: American Muscle Hunks
+                BangBangBoys: Bang Bang Boys
+                BoyForSale: Boy For Sale
+                EdwardJames: Edward James
+                FTMmen: FTM Men
+                FunsizeBoys: Fun Size Boys
+                Gaycest: Gaycest
+                JalifStudio: Jalif Studio
+                JockPussy: Jock Pussy
+                MasonicBoys: Masonic Boys
+                ScoutBoys: Scout Boys
+                StagHomme: Stag Homme
+                TeensAndTwinks: TeensAndTwinks
+                Transcest: Transcest
+                Twinks: Twinks
+                TwinkTop: Twink Top
+  chapterSceneScraper:
+    common:
+      $scene: *sceneContainer
+    scene:
+      Title:
+        selector: //span[contains(@class, "dvdTitleScene")] | //span[contains(@class, "chapterNumber")] | //span[contains(@class, "sceneTitle")]
+        concat: " - "
+      Details: *details
+      Code: *studioCode
+      Image: *image
+      URL: *url
+      Studio: *studio
+      Movies:
+        Name: //span[contains(@class, "dvdTitleScene")]
+      Tags: *tags
+      Performers: *performers
+# Last Updated September 20, 2023

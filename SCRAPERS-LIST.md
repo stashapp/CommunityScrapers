@@ -69,6 +69,7 @@ amateursfrombohemia.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amazinganna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ambushmassage.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 amelielou.com|AmelieLou.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+americanmusclehunks.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 amkingdom.com|ATKExotics.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 amourangels.com|AmourAngels.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 anal-angels.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -153,6 +154,7 @@ baeb.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 balletflatsfetish.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bamvisions.com|BamVisions.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bang.com|Bang.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
+bangbangboys.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 bangbros.com|BangBros.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bangingbeauties.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bangteenpussy.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -223,6 +225,7 @@ boundjocks.com|AdultSiteRunner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 boundlife.com|Boundlife.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bountyhunterporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 boxtrucksex.com|BoxTruckSex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+boyforsale.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 boyfriendsharing.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 boyfun.com|BoyFun.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 boysdestroyed.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -259,6 +262,7 @@ canada-tgirl.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 caribbeancom.com|Carib.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 caribbeancompr.com|Carib.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 carmenvalentina.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+carnalplus.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 castingcouch-x.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 catalinacruz.com|Catalina Cruz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cfnmeu.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -435,6 +439,7 @@ dyked.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dylanryder.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 eastboys.com|EastBoys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 ebonytugs.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+edwardjames.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 elegantangel.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 elitebabes.com|EliteBabes.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Babes
 eporner.com|Eporner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -537,6 +542,8 @@ french-twinks.com|Frenchtwinks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 freshmen.net|Freshmen.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 freshoutofhighschool.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 frolicme.com|FrolicMe.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+ftmplus.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|FTM
+ftmmen.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|FTM
 fuckedfeet.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckedhard18.com|FuckedHard18.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckermate.com|Fuckermate.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -550,6 +557,7 @@ fuckstudies.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckthegeek.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fullpornnetwork.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 funbags.com|Voyeurweb.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+funsizeboys.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 futanari.xxx|Hentaied.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 futanarica.com|Futanarica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gag-n-gape.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -558,6 +566,7 @@ gangbangcreampie.com|Algolia_GangBangCreampie.yml|:heavy_check_mark:|:heavy_chec
 gapingangels.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gasm.com|GASM.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gaycastings.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+gaycest.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 gaycreeps.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 gaydvdempire.com|GayAdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 gayempire.com|GayAdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
@@ -710,6 +719,7 @@ iwantclips.com|IWantClips.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|CDP|
 iwara.tv|Iwara.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jacquieetmichelelite.com|JacquieEtMichelElite.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 jacquieetmicheltv.net|JacquieEtMichelTV.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+jalifstudio.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 jamesdeen.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 janafox.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 japaneseflashers.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
@@ -735,6 +745,7 @@ jerkaoke.com|ModelMediaUS.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jessicajaymesxxx.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jimweathersarchives.com|JimWeathersArchives.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 jizzbomb.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+jockpussy.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|FTM
 jodiwest.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
 joeperv.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 johnnyrapid.com|Algolia_Johnnyrapid.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
@@ -832,6 +843,7 @@ manyvids.com|ManyVids|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|python|-
 marcusmojo.com|Algolia_NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 mariskax.com|MariskaX.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 maskurbate.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+masonicboys.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 masqulin.com|Masqulin.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 massage-parlor.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 massagebait.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1173,6 +1185,7 @@ schoolgirlshd.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 schoolpov.com|ItsPOV.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 scoreland.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 scoreland2.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
+scoutboys.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 screwmetoo.com|VegasDreamsLLC.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 seancody.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 seductive18.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1257,6 +1270,7 @@ squirted.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 squirtinglesbian.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 squirtingorgies.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 stagcollective.com|Algolia_NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
+staghomme.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 stasyq.com|StasyQ.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 staxus.com|Staxus.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|gay
 stayhomepov.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1336,6 +1350,7 @@ teenfidelity.com|KellyMadisonMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teenfrombohemia.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teenmegaworld.net|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teenpies.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+teensandtwinks.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 teensexmania.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teensexmovs.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teensgoporn.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1408,6 +1423,7 @@ trans500.com/tourespanol|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 transangels.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 transatplay.com|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 transbella.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+transcest.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|FTM
 transerotica.com|Transerotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 transexdomination.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 transexpov.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Trans
@@ -1445,6 +1461,8 @@ tuktukpatrol.com|TukTukPatrol.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|
 tushy.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 tushyraw.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 tutor4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+twinks.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+twinktop.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 twistedvisual.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 twistys.com|Twistys.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 twistysnetwork.com|Twistys.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
