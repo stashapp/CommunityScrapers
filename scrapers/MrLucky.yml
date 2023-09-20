@@ -1,0 +1,73 @@
+name: Mr.Lucky
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mrluckypov.com/
+    scraper: POVsceneScraper
+  - action: scrapeXPath
+    url:
+      - mrluckyraw.com/
+    scraper: RAWsceneScraper
+  - action: scrapeXPath
+    url:
+      - mrluckylife.com/
+    scraper: LIFEsceneScraper
+
+xPathScrapers:
+# Mr.Lucky POV scence scraper
+  POVsceneScraper:
+    common:
+      $sceneInfo: //section[@id='sceneInfo']
+    scene:
+      Title: //section[@id='scene']//h1
+      Details: $sceneInfo//p[@class='description']
+      Date:
+        selector: $sceneInfo//p[@class='date']
+        postProcess:
+          - parseDate: 2006-01-02
+      Image: //section[@id='scene']//img[@class='update_thumb thumbs']/@src
+      Studio:
+        Name:
+          fixed: Mr.Lucky POV
+      Tags:
+        Name: $sceneInfo//div[@class='col-12']/a/@title
+      Performers:
+        Name: $sceneInfo//div[@class='col-3']/a/@title
+# Mr.Lucky RAW scence scraper
+  RAWsceneScraper:
+    common:
+      $sceneInfo: //section[@id='scene-info']
+    scene:
+      Title: //div[@class='title']/h1
+      Details: $sceneInfo//p[@class='description']
+      Date:
+        selector: $sceneInfo//p[@class='date']
+        postProcess:
+          - parseDate: 2006-01-02
+      Image: //section[@id='scene-video']//img[@class='trailer-thumb img-unlock']/@src
+      Studio:
+        Name:
+          fixed: Mr.Lucky RAW
+      Tags:
+        Name: $sceneInfo//div[@class='categories-holder']//a/@title
+      Performers:
+        Name: $sceneInfo//div[@class='col-3']/a/@title
+# Mr.Lucky LIFE scence scraper
+  LIFEsceneScraper:
+    common:
+      $sceneInfo: //section[@id='trailer-data']
+    scene:
+      Title: $sceneInfo//div[@class='trailer-title']/h2
+      Details: $sceneInfo//p[@class='description']
+      Date:
+        selector: $sceneInfo//p[@class='date']
+        postProcess:
+          - parseDate: 2006-01-02
+      Image: //*[@id="block-content"]/img/@src
+      Studio:
+        Name:
+          fixed: Mr.Lucky LIFE
+      Performers:
+        Name: $sceneInfo//a[@class='model-name']/@title
+
+# Last Updated September 20th, 2023
