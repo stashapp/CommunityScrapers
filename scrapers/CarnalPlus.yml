@@ -227,6 +227,12 @@ xPathScrapers:
                 # Turn PascalCaseWords to Pascal Case Words
                 - regex: ([a-z])([A-Z])
                   with: $1 $2
+        URL:
+          selector: //div[@class="logoSubsites"]//img/@alt
+          postProcess:
+            - replace:
+                - regex: (?P<domain>.*)
+                  with: https://$domain.com
 
   chapterSceneScraper:
     common:
