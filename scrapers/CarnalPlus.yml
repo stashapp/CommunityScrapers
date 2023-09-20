@@ -17,7 +17,6 @@ sceneByURL:
       - teensandtwinks.com/videos/
       - twinks.com/videos/
     scraper: sceneScraper
-
   # These studios organize their scenes into series with chapters
   # You can tell a studio belongs in this category
   # if there's a "SERIES" link in the main navbar for their site
@@ -34,7 +33,6 @@ sceneByURL:
       - twinkloads.com/videos/
       - twinktop.com/videos/
     scraper: chapterSceneScraper
-
   # The network site has all scenes from the standalone sites
   - action: scrapeXPath
     url:
@@ -42,7 +40,6 @@ sceneByURL:
       - carnalplus.com/videos/
       - ftmplus.com/videos/
     scraper: networkScraper
-
 xPathScrapers:
   sceneScraper:
     common:
@@ -70,12 +67,12 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: (?P<networkSite>.+\.com).*__SEPARATOR__.*(?P<path>\/videos.*).html
-                # We'd love to append _vids here but _ triggers the submatch in the regexp
+                # We'd love to append `_vids` here but _ triggers the submatch in the regexp
                 # so we use the URL encoded version of an underscore instead: %5f
                 with: $networkSite$path%5fvids.html
           - subScraper: //div[@class="releasedate"]
           - replace:
-              # Remove the trailing "| Full length video : XX min YY sec" part
+              &cleanDate # Remove the trailing "| Full length video : XX min YY sec" part
               - regex: \s*\|.*
                 with:
           - parseDate: January 02, 2006
@@ -127,7 +124,6 @@ xPathScrapers:
         Name: $scene//div[@id="catMovie"]//text()
       Performers: &performers
         Name: $scene//div[contains(@class, "modelProfile")]//h2 | $scene//div[contains(@class, "modelProfile")]//h3
-
   networkScraper:
     common:
       $scene: ((//div[contains(@class, "main")])[1]/div)[1]
@@ -147,19 +143,17 @@ xPathScrapers:
               # so we need to remove those manually here
               - regex: ^https.*
                 with:
-      Date: &date
+      Date:
         selector: $scene//div[@class="releasedate"]
         postProcess:
-          - replace:
-              # Remove the trailing "| Full length video : XX min YY sec" part
-              - regex: \s*\|.*
-                with:
+          - replace: *cleanDate
           - parseDate: January 02, 2006
       URL:
         # All scenes on network sites should be available from their subsites as well
         # so we construct a valid link to the subsite both to encourage people
-        # to scrape from the canonical source as well as submitting both links to StashDB
-        # the network site will list the duration, which is helpful when evaluating fingerprints
+        # to scrape from the canonical source as well as submitting both links to StashDB:
+        # the network site will list the duration, which is helpful when evaluating
+        # the submitted fingerprints for the scene
         selector: //link[@rel="canonical"]/@href | //div[@class="logoSubsites"]//img/@alt
         concat: __SEPARATOR__
         postProcess:
@@ -233,11 +227,10 @@ xPathScrapers:
             - replace:
                 - regex: (?P<domain>.*)
                   with: https://$domain.com
-
   chapterSceneScraper:
     common:
       $scene: *sceneContainer
-      # The differences from the regular sceneScraper is that we use the
+      # The differences from the regular sceneScraper is that we
       # shuffle the title around a little to reflect what's shown
       # on the page instead of in the title bar (also makes them easier to sort)
       # and we use the series as a movie so that people can group their scenes together
@@ -260,4 +253,4 @@ xPathScrapers:
         URL: //span[contains(@class, "dvdTitleScene")]//a/@href
       Tags: *tags
       Performers: *performers
-# Last Updated September 20, 2023
+# Last Updated September 21, 2023
