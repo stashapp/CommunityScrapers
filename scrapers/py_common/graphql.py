@@ -1,5 +1,4 @@
 import sys
-from typing import Union
 
 try:
     import requests
@@ -277,15 +276,15 @@ def getScene(scene_id):
         path
         phash
         interactive
-        file {
+        files {
             size
             duration
             video_codec
             audio_codec
             width
             height
-            framerate
-            bitrate
+            frame_rate
+            bit_rate
         }
         paths {
             screenshot
