@@ -6,9 +6,10 @@ sceneByURL:
       - 40somethingmag.com/
       - 50plusmilfs.com/
       - 60plusmilfs.com/
+      - bigtithooker.com/
       - legsex.com/
-      - pornmegaload.com/
       - naughtymag.com
+      - pornmegaload.com/
       - scoreland.com/
       - scoreland2.com/
       - xlgirls.com/
@@ -48,19 +49,19 @@ xPathScrapers:
       Performers: &performersAttr
         Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
       Image:
-# This selector scrapes the canonical scene page cover image
+        # This selector scrapes the canonical scene page cover image
         selector: //script[contains(text(), "poster")]
         postProcess:
-          - replace:  
+          - replace:
               - regex: ^.+poster.+'(.+jpg)'.+$
                 with: $1
-# This Selector scrapes the image posted on social media sites
-#        selector: //meta[@itemprop="image"]/@content
-# Enable this post process if you want better image quality but sometimes it can fail
-#          postProcess:
-#            - replace:
-#                - regex: _lg
-#                  with: _x_800
+      # This Selector scrapes the image posted on social media sites
+      #        selector: //meta[@itemprop="image"]/@content
+      # Enable this post process if you want better image quality but sometimes it can fail
+      #          postProcess:
+      #            - replace:
+      #                - regex: _lg
+      #                  with: _x_800
       URL: &urlAttr
         selector: $url
       Code: &codeAttr
@@ -82,4 +83,4 @@ xPathScrapers:
       Tags:
         Name: $photopage//div[@class='mb-3']/a/text()
       Performers: *performersAttr
-# Last Updated July 27, 2023
+# Last Updated September 24, 2023
