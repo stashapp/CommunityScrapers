@@ -8,30 +8,24 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $performer: //article[contains(@class, "models-list")]//div[@class="title"]/a
-      $script: //div[@class="video-holder"]//script[@type="text/javascript"]
+      $performer: //a[contains(@class, "video-model")]
     scene:
-      Title: //div[@id="videos"]//h1/text()
+      Title: //div[contains(@class, "video")]//h1/text()
       Date:
-        selector: $script/text()
+        selector: //div[contains(@class, "video-frame")]//video/source/@src
         postProcess:
           - replace:
-              - regex: .*video-images\/(\d{4})(\d{2})(\d{2}).*
+              - regex: .*(\d{4})(\d{2})(\d{2})\d{6}.*
                 with: $1-$2-$3
           - parseDate: 2006-01-02
       Performers:
-        Name: $performer/text()
+        Name: $performer//h3/text()
         URL: $performer/@href
       Details:
-        selector: //div[contains(@class, "reviews-section")]/p/text()
+        selector: //div[contains(@class, "video")]//p[contains(@class, "mb-5")]/text()
         concat: "\n\n"
-      Image:
-        selector: $script/text()
-        postProcess:
-          - replace:
-              - regex: .*'(https.*jpg)'.*
-                with: $1
+      Image: //div[contains(@class, "video-frame")]//img[contains(@class, "background-img")]/@src
       Studio:
         Name:
           fixed: Colby Knox
-# Last Updated December 21, 2022
+# Last Updated September 23, 2023
