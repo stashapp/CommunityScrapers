@@ -130,7 +130,8 @@ SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE = [
 # a list of networks (`network_name` from the API) which should pick out the
 # `sitename_pretty` for the studio name for a scene
 NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
-    "Fame Digital"  # this should support all sub-studios listed at https://stashdb.org/studios/cd5591a5-eb26-42fc-a406-b6969a8ef3dd
+    "Fame Digital",  # this should support all sub-studios listed at https://stashdb.org/studios/cd5591a5-eb26-42fc-a406-b6969a8ef3dd
+    "fistinginferno",
 ]
 
 # a dict of directors to use as the studio for a scene
