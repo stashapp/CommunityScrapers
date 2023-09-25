@@ -112,7 +112,8 @@ xPathScrapers:
       Image: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
   sceneScraper:
     common:
-      $datablob: //script[contains(., 'videodata')]/text()
+      $datablob: //script[contains(., 'VideoObject')]/text()
+      $videowrap: //div[@class="video-wrapper"]
     scene:
       Title: //meta[@property="og:title"]/@content
       URL: //meta[@property="og:url"]/@content
@@ -120,37 +121,16 @@ xPathScrapers:
         selector: $datablob
         postProcess:
           - replace:
-              - regex: .+(?:'video_date_published'\s*:\s*')([^']+).+
+              - regex: .+(?:"uploadDate"\s*:\s*")([^T]+).+
                 with: $1
-          - parseDate: "20060102"
+          - parseDate: "2006-01-02"
       Tags:
-        Name:
-          selector: $datablob
-          postProcess:
-            - replace:
-                - regex: .+(?:'categories_in_video'\s*:\s*')([^']+).+
-                  with: $1
-          split: ","
+        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," categoriesWrapper ")]/a/text()|$videowrap//div[contains(concat(" ",normalize-space(@class)," ")," tagsWrapper ")]/a/text()
       Performers:
-        Name:
-          selector: $datablob
-          postProcess:
-            - replace:
-                - regex: .+(?:'pornstars_in_video'\s*:\s*')([^']+).+
-                  with: $1
-                - regex: ^No$ # Hardcoded value representing lack of performers
-                  with: ""
-          split: ","
-          
-      Image:
-        selector: //meta[@property="og:image"]/@content
+        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]/a/@data-mxptext
+      Image: $videowrap//meta[@property="og:image"]/@content
       Studio:
-        Name:
-          selector: $datablob
-          postProcess:
-            - replace:
-                - regex: .+(?:'video_uploader_name'\s*:\s*')([^']+).+
-                  with: $1
+        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," usernameWrap ")]//a/text()
 
 driver:
   cookies:
@@ -160,4 +140,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated August 05, 2023
+# Last Updated September 25, 2023
