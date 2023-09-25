@@ -1,5 +1,4 @@
 import argparse
-import base64
 import json
 import sys
 import time
@@ -49,14 +48,17 @@ stash_date = "%Y-%m-%d"
 iafd_date = "%B %d, %Y"
 iafd_date_scene = "%b %d, %Y"
 
+
 def maybe(values: Iterable[str], f: Callable[[str], str] = lambda x: x):
     """
     Returns the first value in values that is not "No data" after applying f to it
     """
     return next((f(x) for x in values if not re.search(r"(?i)no data", x)), None)
 
+
 def cleandict(d: dict):
     return {k: v for k, v in d.items() if v}
+
 
 def map_ethnicity(ethnicity):
     ethnicities = {
@@ -67,12 +69,14 @@ def map_ethnicity(ethnicity):
     }
     return ethnicities.get(ethnicity, ethnicity)
 
+
 def map_gender(gender):
     genders = {
         "f": "Female",
         "m": "Male",
     }
     return genders.get(gender, gender)
+
 
 def map_country(value):
     country = {
@@ -374,9 +378,11 @@ def map_country(value):
     }
     return country.get(value, value)
 
+
 # Only create a single scraper: this saves time when scraping multiple pages
 # because it doesn't need to get past Cloudflare each time
 scraper = cloudscraper.create_scraper()
+
 
 def scrape(url: str, retries=0):
     try:
@@ -398,26 +404,6 @@ def scrape(url: str, retries=0):
     return html.fromstring(scraped.content)
 
 
-def scrape_image(url, retries=0):
-    try:
-        scraped = scraper.get(url, timeout=(3, 5))
-    except requests.exceptions.Timeout as exc_time:
-        log.debug(f"Timeout: {exc_time}")
-        return scrape_image(url, retries + 1)
-    except Exception as e:
-        log.debug(f"scrape error {e}")
-        return None
-    if scraped.status_code >= 400:
-        if retries < 10:
-            wait_time = random.randint(1, 4)
-            log.debug(f"HTTP Error: {scraped.status_code}, waiting {wait_time} seconds")
-            time.sleep(wait_time)
-            return scrape(url, retries + 1)
-        log.error(f"HTTP Error: {scraped.status_code}, giving up")
-        return None
-    b64img = base64.b64encode(scraped.content)
-    return "data:image/jpeg;base64," + b64img.decode("utf-8")
-
 def clean_date(date: str) -> datetime | None:
     date = date.strip()
     cleaned = re.sub(r"(\S+\s+\d+,\s+\d+).*", r"\1", date)
@@ -427,6 +413,7 @@ def clean_date(date: str) -> datetime | None:
         except ValueError:
             pass
     log.warning(f"Unable to parse '{date}' as a date")
+
 
 def performer_query(query):
     tree = scrape(
@@ -438,13 +425,17 @@ def performer_query(query):
     performer_urls = tree.xpath(
         '//table[@id="tblFem" or @id="tblMal"]//td[a[img]]/following-sibling::td[1]/a/@href'
     )
-    performers = [{
+    performers = [
+        {
             "Name": name,
             "URL": f"https://www.iafd.com{url}",
-        } for name, url in zip(performer_names, performer_urls)]
+        }
+        for name, url in zip(performer_names, performer_urls)
+    ]
     print(json.dumps(performers))
     if not performers:
         log.warning(f"No performers found for '{query}'")
+
 
 def performer_from_tree(tree):
     scraped = {}
@@ -455,9 +446,7 @@ def performer_from_tree(tree):
     gender = tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value')
     scraped["gender"] = maybe(gender, map_gender)
 
-    url = tree.xpath(
-        '//div[@id="perfwith"]//*[contains(@href,"person.rme")]/@href'
-    )
+    url = tree.xpath('//div[@id="perfwith"]//*[contains(@href,"person.rme")]/@href')
     scraped["url"] = maybe(url, lambda u: f"https://www.iafd.com{u}")
 
     twitter = tree.xpath(
@@ -488,16 +477,14 @@ def performer_from_tree(tree):
     country = tree.xpath(
         '//div/p[text()="Nationality"]/following-sibling::p[1]//text()'
     )
-    scraped["country"] = maybe(country, lambda c: map_country(re.sub(r"^American,.+", "American", c)))
-
-    height = tree.xpath(
-        '//div/p[text()="Height"]/following-sibling::p[1]//text()'
+    scraped["country"] = maybe(
+        country, lambda c: map_country(re.sub(r"^American,.+", "American", c))
     )
+
+    height = tree.xpath('//div/p[text()="Height"]/following-sibling::p[1]//text()')
     scraped["height"] = maybe(height, lambda h: re.sub(r".*\((\d+)\s+cm.*", r"\1", h))
 
-    weight = tree.xpath(
-        '//div/p[text()="Weight"]/following-sibling::p[1]//text()'
-    )
+    weight = tree.xpath('//div/p[text()="Weight"]/following-sibling::p[1]//text()')
     scraped["weight"] = maybe(weight, lambda w: re.sub(r".*\((\d+)\s+kg.*", r"\1", w))
 
     hair_color = tree.xpath(
@@ -513,16 +500,16 @@ def performer_from_tree(tree):
     career_length = tree.xpath(
         '//div/p[@class="biodata"][contains(text(),"Started around")]/text()'
     )
-    scraped["career_length"] = maybe(career_length, lambda c: re.sub(r"(\D+\d\d\D+)$", "",  c))
+    scraped["career_length"] = maybe(
+        career_length, lambda c: re.sub(r"(\D+\d\d\D+)$", "", c)
+    )
 
     aliases = tree.xpath(
         '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")]]//div[@class="biodata" and not(text()="No known aliases")]/text()'
     )
     scraped["aliases"] = maybe(aliases)
 
-    tattoos = tree.xpath(
-        '//div/p[text()="Tattoos"]/following-sibling::p[1]//text()'
-    )
+    tattoos = tree.xpath('//div/p[text()="Tattoos"]/following-sibling::p[1]//text()')
     scraped["tattoos"] = maybe(tattoos)
 
     piercings = tree.xpath(
@@ -531,7 +518,7 @@ def performer_from_tree(tree):
     scraped["piercings"] = maybe(piercings)
 
     image_url = tree.xpath('//div[@id="headshot"]//img/@src')
-    scraped["images"] = [scrape_image(i) for i in image_url]
+    scraped["images"] = image_url
 
     print(json.dumps(cleandict(scraped)))
     sys.exit(0)
@@ -547,9 +534,7 @@ def scene_from_tree(tree):
     )
     scraped["date"] = maybe(date, clean_date)
 
-    details = tree.xpath(
-        '//div[@id="synopsis"]/div[@class="padded-panel"]//text()'
-    )
+    details = tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()')
     scraped["details"] = maybe(details)
 
     studio = tree.xpath(
@@ -566,7 +551,7 @@ def scene_from_tree(tree):
 
 def movie_from_tree(tree):
     scraped = {}
-    
+
     title = tree.xpath("//h1/text()")
     scraped["name"] = maybe(title, lambda t: re.sub(r"\s*\([0-9]+\)$", "", t.strip()))
 
@@ -590,7 +575,10 @@ def movie_from_tree(tree):
     date = tree.xpath(
         '//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()'
     )
-    scraped["date"] = maybe(date, lambda d: clean_date(d.strip()))
+    # If there's no release date, use the year from the title for an approximate date
+    scraped["date"] = maybe(date, lambda d: clean_date(d.strip())) or maybe(
+        title, lambda t: re.sub(r".*\(([0-9]+)\).*$", r"\1-01-01", t)
+    )
 
     aliases = tree.xpath('//div[@class="col-sm-12"]/dl/dd//text()')
     scraped["aliases"] = ", ".join(aliases)
@@ -601,10 +589,13 @@ def movie_from_tree(tree):
     distributor = tree.xpath(
         '//p[@class="bioheading"][contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]//text()'
     )
-    scraped["studio"] = maybe(studio, lambda s: {"name": s}) or maybe(distributor, lambda s: {"name": s})
+    scraped["studio"] = maybe(studio, lambda s: {"name": s}) or maybe(
+        distributor, lambda s: {"name": s}
+    )
 
     print(json.dumps(cleandict(scraped)))
     sys.exit(0)
+
 
 def main():
     parser = argparse.ArgumentParser("IAFD Scraper")
@@ -661,6 +652,7 @@ def main():
         movie_from_tree(scraped)
     elif args.operation == "scene":
         scene_from_tree(scraped)
+
 
 if __name__ == "__main__":
     main()
