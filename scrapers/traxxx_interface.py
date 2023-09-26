@@ -1,4 +1,4 @@
-import re, sys, copy, json
+import re, sys
 
 # local modules
 try:
@@ -29,9 +29,9 @@ def parse_response(json_input):
 
 def transform_type(value):
   if value.get("__typename") == "Media":
-    if value.get("isS3") == True:
-      return f'https://cdn.traxxx.me/{value.get("path")}'
-    if value.get("isS3") == False:
+    if value.get("isS3"):
+      return f'https://cdndev.traxxx.me/{value.get("path")}'
+    else:
       return f'https://traxxx.me/media/{value.get("path")}'
   return value
 
@@ -47,7 +47,7 @@ class TraxxxInterface:
 
   def __init__(self, fragments={}):
     scheme = "https"
-    domain = 'www.traxxx.me'
+    domain = 'traxxx.me'
 
     if self.port:
       domain = f'{domain}:{self.port}'
@@ -161,7 +161,7 @@ class TraxxxInterface:
 
     results = self.__callGraphQL(query, variables).get("actors")
     log.info(f'performer search "{search}" returned {len(results)} results')
-    return [p for p in results]
+    return results
 
   # shootID refers to a media sources uniqueID e.x. a LegalPorno shootID might be "GIO0001"
   def get_scene_by_shootID(self, shootId):
@@ -181,10 +181,8 @@ class TraxxxInterface:
 
     log.info(f'scene shootID lookup "{shootId}" returned {len(response)} results')
 
-    if len(response) > 0:
-      return response[0]
-    else:
-      return None
+    return next(iter(response), None)
+
 
   def get_scene(self, traxxx_scene_id):
     query = """
@@ -205,10 +203,7 @@ class TraxxxInterface:
 
     log.info(f'scene traxxxID lookup "{traxxx_scene_id}" returned {len(response)} results')
 
-    if len(response) > 0:
-      return response[0]
-    else:
-      return None
+    return next(iter(response), None)
 
   def get_performer(self, traxxx_performer_id):
     query = """
@@ -229,10 +224,7 @@ class TraxxxInterface:
 
     log.info(f'performer traxxxID lookup "{traxxx_performer_id}" returned {len(response)} results')
 
-    if len(response) > 0:
-      return response[0]
-    else:
-      return None
+    return next(iter(response), None)
 
   def parse_to_stash_scene_search(self, s):
     fragment = {}
@@ -308,18 +300,19 @@ class TraxxxInterface:
           movie = {
             "name": m["title"]
           }
-          if m.get["date"]:
+          if m.get("date"):
             movie["date"] = m["date"]
           if m.get("url"):
             movie["url"] = m["url"]
           if m.get("description"):
             movie["synopsis"] = m["description"]
 
-          if m.get["covers"]:
-            if len(m.covers) >= 1:
-              movie["frontImage"] = m["covers"][0]
-            if len(m.covers) >= 2:
-              movie["backImage"] = m["covers"][1]
+          if m.get("covers"):
+            covers = m["covers"]
+            if len(covers) >= 1:
+              movie["front_image"] = covers[0]["media"]
+            if len(covers) >= 2:
+              movie["back_image"] = covers[1]["media"]
 
           movies.append(movie)
       fragment["movies"] = movies
@@ -389,9 +382,9 @@ class TraxxxInterface:
     if p.get("piercings"):
       fragment["piercings"] = p["piercings"]
 
-    if p["naturalBoobs"] == False:
+    if p["naturalBoobs"] is False:
       fragment["fake_tits"] = "Augmented"
-    if p["naturalBoobs"] == True:
+    if p["naturalBoobs"] is True:
       fragment["fake_tits"] = "Natural"
 
     if all( k in p for k in ['cup','bust','waist','hip'] ):
