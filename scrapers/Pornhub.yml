@@ -128,7 +128,7 @@ xPathScrapers:
         Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," categoriesWrapper ")]/a/text()|$videowrap//div[contains(concat(" ",normalize-space(@class)," ")," tagsWrapper ")]/a/text()
       Performers:
         Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]/a/@data-mxptext
-      Image: $videowrap//meta[@property="og:image"]/@content
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," usernameWrap ")]//a/text()
 
@@ -140,4 +140,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated September 25, 2023
+# Last Updated September 26, 2023
