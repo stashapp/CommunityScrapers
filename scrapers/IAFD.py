@@ -5,7 +5,7 @@ import time
 import re
 import random
 import requests
-from typing import Iterable, Callable
+from typing import Iterable, Callable, TypeVar
 from datetime import datetime
 
 # extra modules below need to be installed
@@ -48,8 +48,8 @@ stash_date = "%Y-%m-%d"
 iafd_date = "%B %d, %Y"
 iafd_date_scene = "%b %d, %Y"
 
-
-def maybe(values: Iterable[str], f: Callable[[str], str] = lambda x: x):
+T = TypeVar("T")
+def maybe(values: Iterable[str], f: Callable[[str], (T | None)] = lambda x: x) -> T | None:
     """
     Returns the first value in values that is not "No data" after applying f to it
     """
@@ -60,7 +60,7 @@ def cleandict(d: dict):
     return {k: v for k, v in d.items() if v}
 
 
-def map_ethnicity(ethnicity):
+def map_ethnicity(ethnicity: str):
     ethnicities = {
         "Asian": "asian",
         "Caucasian": "white",
@@ -70,7 +70,7 @@ def map_ethnicity(ethnicity):
     return ethnicities.get(ethnicity, ethnicity)
 
 
-def map_gender(gender):
+def map_gender(gender: str):
     genders = {
         "f": "Female",
         "m": "Male",
@@ -78,8 +78,8 @@ def map_gender(gender):
     return genders.get(gender, gender)
 
 
-def map_country(value):
-    country = {
+def map_country(country: str):
+    countries = {
         # https://en.wikipedia.org/wiki/List_of_adjectival_and_demonymic_forms_for_countries_and_nations
         "Abkhaz": "Abkhazia",
         "Abkhazian": "Abkhazia",
@@ -376,7 +376,152 @@ def map_country(value):
         "Zimbabwean": "Zimbabwe",
         "Åland Island": "Åland Islands",
     }
-    return country.get(value, value)
+    return countries.get(country, country)
+
+
+def clean_date(date: str) -> str | None:
+    date = date.strip()
+    cleaned = re.sub(r"(\S+\s+\d+,\s+\d+).*", r"\1", date)
+    for date_format in [iafd_date, iafd_date_scene]:
+        try:
+            return datetime.strptime(cleaned, date_format).strftime(stash_date)
+        except ValueError:
+            pass
+    log.warning(f"Unable to parse '{date}' as a date")
+
+
+def performer_haircolor(tree):
+    return maybe(
+        tree.xpath(
+            '//div/p[starts-with(.,"Hair Color")]/following-sibling::p[1]//text()'
+        )
+    )
+
+
+def performer_weight(tree):
+    return maybe(
+        tree.xpath('//div/p[text()="Weight"]/following-sibling::p[1]//text()'),
+        lambda w: re.sub(r".*\((\d+)\s+kg.*", r"\1", w),
+    )
+
+
+def performer_height(tree):
+    return maybe(
+        tree.xpath('//div/p[text()="Height"]/following-sibling::p[1]//text()'),
+        lambda h: re.sub(r".*\((\d+)\s+cm.*", r"\1", h),
+    )
+
+
+def performer_country(tree):
+    return maybe(
+        tree.xpath('//div/p[text()="Nationality"]/following-sibling::p[1]//text()'),
+        lambda c: map_country(re.sub(r"^American,.+", "American", c)),
+    )
+
+
+def performer_ethnicity(tree):
+    return maybe(
+        tree.xpath('//div[p[text()="Ethnicity"]]/p[@class="biodata"][1]//text()'),
+        map_ethnicity,
+    )
+
+
+def performer_deathdate(tree):
+    return maybe(
+        tree.xpath(
+            '(//p[@class="bioheading"][text()="Date of Death"]/following-sibling::p)[1]//text()'
+        ),
+        clean_date,
+    )
+
+
+def performer_birthdate(tree):
+    return maybe(
+        tree.xpath(
+            '(//p[@class="bioheading"][text()="Birthday"]/following-sibling::p)[1]//text()'
+        ),
+        clean_date,
+    )
+
+
+def performer_instagram(tree):
+    return maybe(
+        tree.xpath(
+            '//p[@class="biodata"]/a[contains(text(),"http://instagram.com/")]/@href'
+        )
+    )
+
+
+def performer_twitter(tree):
+    return maybe(
+        tree.xpath(
+            '//p[@class="biodata"]/a[contains(text(),"http://twitter.com/")]/@href'
+        )
+    )
+
+
+def performer_url(tree):
+    return maybe(
+        tree.xpath('//div[@id="perfwith"]//*[contains(@href,"person.rme")]/@href'),
+        lambda u: f"https://www.iafd.com{u}",
+    )
+
+
+def performer_gender(tree):
+    return maybe(
+        tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value'), map_gender
+    )
+
+
+def performer_name(tree):
+    return maybe(tree.xpath("//h1/text()"), lambda name: name.strip())
+
+
+def performer_piercings(tree):
+    return maybe(
+        tree.xpath('//div/p[text()="Piercings"]/following-sibling::p[1]//text()')
+    )
+
+
+def performer_tattoos(tree):
+    return maybe(
+        tree.xpath('//div/p[text()="Tattoos"]/following-sibling::p[1]//text()')
+    )
+
+
+def performer_aliases(tree):
+    return maybe(
+        tree.xpath(
+            '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")]]//div[@class="biodata" and not(text()="No known aliases")]/text()'
+        )
+    )
+
+
+def performer_careerlength(tree):
+    return maybe(
+        tree.xpath(
+            '//div/p[@class="biodata"][contains(text(),"Started around")]/text()'
+        ),
+        lambda c: re.sub(r"(\D+\d\d\D+)$", "", c),
+    )
+
+
+def performer_measurements(tree):
+    return maybe(
+        tree.xpath('//div/p[text()="Measurements"]/following-sibling::p[1]//text()')
+    )
+
+def scene_studio(tree):
+    return maybe(tree.xpath('//div[@class="col-xs-12 col-sm-3"]//p[text() = "Studio"]/following-sibling::p[1]//text()'), lambda s: {"name": s})
+
+def scene_details(tree):
+    return maybe(tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()'))
+
+def scene_date(tree):
+    return maybe(tree.xpath('//div[@class="col-xs-12 col-sm-3"]//p[text() = "Release Date"]/following-sibling::p[1]//text()'), clean_date)
+
+def scene_title(tree):
+    return maybe(tree.xpath("//h1/text()"), lambda t: t.strip())
 
 
 # Only create a single scraper: this saves time when scraping multiple pages
@@ -404,17 +549,6 @@ def scrape(url: str, retries=0):
     return html.fromstring(scraped.content)
 
 
-def clean_date(date: str) -> datetime | None:
-    date = date.strip()
-    cleaned = re.sub(r"(\S+\s+\d+,\s+\d+).*", r"\1", date)
-    for date_format in [iafd_date, iafd_date_scene]:
-        try:
-            return datetime.strptime(cleaned, date_format).strftime(stash_date)
-        except ValueError:
-            pass
-    log.warning(f"Unable to parse '{date}' as a date")
-
-
 def performer_query(query):
     tree = scrape(
         f"https://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={query}"
@@ -432,226 +566,110 @@ def performer_query(query):
         }
         for name, url in zip(performer_names, performer_urls)
     ]
-    print(json.dumps(performers))
     if not performers:
         log.warning(f"No performers found for '{query}'")
+    return performers
 
 
 def performer_from_tree(tree):
-    scraped = {}
-
-    name = tree.xpath("//h1/text()")
-    scraped["name"] = maybe(name, lambda name: name.strip())
-
-    gender = tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value')
-    scraped["gender"] = maybe(gender, map_gender)
-
-    url = tree.xpath('//div[@id="perfwith"]//*[contains(@href,"person.rme")]/@href')
-    scraped["url"] = maybe(url, lambda u: f"https://www.iafd.com{u}")
-
-    twitter = tree.xpath(
-        '//p[@class="biodata"]/a[contains(text(),"http://twitter.com/")]/@href'
-    )
-    scraped["twitter"] = maybe(twitter)
-
-    instagram = tree.xpath(
-        '//p[@class="biodata"]/a[contains(text(),"http://instagram.com/")]/@href'
-    )
-    scraped["instagram"] = maybe(instagram)
-
-    birthdate = tree.xpath(
-        '(//p[@class="bioheading"][text()="Birthday"]/following-sibling::p)[1]//text()'
-    )
-    scraped["birthdate"] = maybe(birthdate, clean_date)
-
-    deathdate = tree.xpath(
-        '(//p[@class="bioheading"][text()="Date of Death"]/following-sibling::p)[1]//text()'
-    )
-    scraped["death_date"] = maybe(deathdate, clean_date)
-
-    ethnicity = tree.xpath(
-        '//div[p[text()="Ethnicity"]]/p[@class="biodata"][1]//text()'
-    )
-    scraped["ethnicity"] = maybe(ethnicity, map_ethnicity)
-
-    country = tree.xpath(
-        '//div/p[text()="Nationality"]/following-sibling::p[1]//text()'
-    )
-    scraped["country"] = maybe(
-        country, lambda c: map_country(re.sub(r"^American,.+", "American", c))
-    )
-
-    height = tree.xpath('//div/p[text()="Height"]/following-sibling::p[1]//text()')
-    scraped["height"] = maybe(height, lambda h: re.sub(r".*\((\d+)\s+cm.*", r"\1", h))
-
-    weight = tree.xpath('//div/p[text()="Weight"]/following-sibling::p[1]//text()')
-    scraped["weight"] = maybe(weight, lambda w: re.sub(r".*\((\d+)\s+kg.*", r"\1", w))
-
-    hair_color = tree.xpath(
-        '//div/p[starts-with(.,"Hair Color")]/following-sibling::p[1]//text()'
-    )
-    scraped["hair_color"] = maybe(hair_color)
-
-    measurements = tree.xpath(
-        '//div/p[text()="Measurements"]/following-sibling::p[1]//text()'
-    )
-    scraped["measurements"] = maybe(measurements)
-
-    career_length = tree.xpath(
-        '//div/p[@class="biodata"][contains(text(),"Started around")]/text()'
-    )
-    scraped["career_length"] = maybe(
-        career_length, lambda c: re.sub(r"(\D+\d\d\D+)$", "", c)
-    )
-
-    aliases = tree.xpath(
-        '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")]]//div[@class="biodata" and not(text()="No known aliases")]/text()'
-    )
-    scraped["aliases"] = maybe(aliases)
-
-    tattoos = tree.xpath('//div/p[text()="Tattoos"]/following-sibling::p[1]//text()')
-    scraped["tattoos"] = maybe(tattoos)
-
-    piercings = tree.xpath(
-        '//div/p[text()="Piercings"]/following-sibling::p[1]//text()'
-    )
-    scraped["piercings"] = maybe(piercings)
-
-    image_url = tree.xpath('//div[@id="headshot"]//img/@src')
-    scraped["images"] = image_url
-
-    print(json.dumps(cleandict(scraped)))
-    sys.exit(0)
+    return {
+        "name": performer_name(tree),
+        "gender": performer_gender(tree),
+        "url": performer_url(tree),
+        "twitter": performer_twitter(tree),
+        "instagram": performer_instagram(tree),
+        "birthdate": performer_birthdate(tree),
+        "death_date": performer_deathdate(tree),
+        "ethnicity": performer_ethnicity(tree),
+        "country": performer_country(tree),
+        "height": performer_height(tree),
+        "weight": performer_weight(tree),
+        "hair_color": performer_haircolor(tree),
+        "measurements": performer_measurements(tree),
+        "career_length": performer_careerlength(tree),
+        "aliases": performer_aliases(tree),
+        "tattoos": performer_tattoos(tree),
+        "piercings": performer_piercings(tree),
+        "images": tree.xpath('//div[@id="headshot"]//img/@src'),
+    }
 
 
 def scene_from_tree(tree):
-    scraped = {}
-    title = tree.xpath("//h1/text()")
-    scraped["title"] = maybe(title, lambda t: t.strip())
-
-    date = tree.xpath(
-        '//div[@class="col-xs-12 col-sm-3"]//p[text() = "Release Date"]/following-sibling::p[1]//text()'
-    )
-    scraped["date"] = maybe(date, clean_date)
-
-    details = tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()')
-    scraped["details"] = maybe(details)
-
-    studio = tree.xpath(
-        '//div[@class="col-xs-12 col-sm-3"]//p[text() = "Studio"]/following-sibling::p[1]//text()'
-    )
-    scraped["studio"] = maybe(studio, lambda s: {"name": s})
-
-    performers = tree.xpath('//div[@class="castbox"]/p/a/text()')
-    scraped["performers"] = [{"name": name} for name in performers]
-
-    print(json.dumps(cleandict(scraped)))
-    sys.exit(0)
+    return {
+        "title": scene_title(tree),
+        "date": scene_date(tree),
+        "details": scene_details(tree),
+        "studio": scene_studio(tree),
+        "performers": [{"name": name} for name in tree.xpath('//div[@class="castbox"]/p/a/text()')],
+    }
 
 
 def movie_from_tree(tree):
-    scraped = {}
-
-    title = tree.xpath("//h1/text()")
-    scraped["name"] = maybe(title, lambda t: re.sub(r"\s*\([0-9]+\)$", "", t.strip()))
-
-    directors = tree.xpath(
-        '//p[@class="bioheading"][contains(text(), "Directors")]/following-sibling::p[@class="biodata"][1]/a/text()'
-    )
-    scraped["director"] = maybe(directors, lambda d: d.strip())
-
-    movie_synopsis = tree.xpath(
-        '//div[@id="synopsis"]/div[@class="padded-panel"]//text()'
-    )
-    scraped["synopsis"] = maybe(movie_synopsis)
-
-    duration = tree.xpath(
-        '//p[@class="bioheading"][contains(text(), "Minutes")]/following-sibling::p[@class="biodata"][1]/text()'
-    )
-    # Convert duration from minutes to seconds,
-    # but keep it a string because that's what stash expects
-    scraped["duration"] = maybe(duration, lambda d: str(int(d) * 60))
-
-    date = tree.xpath(
-        '//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()'
-    )
-    # If there's no release date, use the year from the title for an approximate date
-    scraped["date"] = maybe(date, lambda d: clean_date(d.strip())) or maybe(
-        title, lambda t: re.sub(r".*\(([0-9]+)\).*$", r"\1-01-01", t)
-    )
-
-    aliases = tree.xpath('//div[@class="col-sm-12"]/dl/dd//text()')
-    scraped["aliases"] = ", ".join(aliases)
-
-    studio = tree.xpath(
-        '//p[@class="bioheading"][contains(text(),"Studio")]/following-sibling::p[@class="biodata"][1]//text()'
-    )
-    distributor = tree.xpath(
-        '//p[@class="bioheading"][contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]//text()'
-    )
-    scraped["studio"] = maybe(studio, lambda s: {"name": s}) or maybe(
-        distributor, lambda s: {"name": s}
-    )
-
-    print(json.dumps(cleandict(scraped)))
-    sys.exit(0)
+    return {
+        "name": maybe(tree.xpath("//h1/text()"), lambda t: re.sub(r"\s*\([0-9]+\)$", "", t.strip())),
+        "director": maybe(tree.xpath('//p[@class="bioheading"][contains(text(), "Directors")]/following-sibling::p[@class="biodata"][1]/a/text()'), lambda d: d.strip()),
+        "synopsis": maybe(tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()')),
+        # Convert duration from minutes to seconds, but keep it a string because that's what stash expects
+        "duration": maybe(tree.xpath('//p[@class="bioheading"][contains(text(), "Minutes")]/following-sibling::p[@class="biodata"][1]/text()'), lambda d: str(int(d) * 60)),
+        # If there's no release date we will use the year from the title for an approximate date
+        "date": maybe(tree.xpath('//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()'), lambda d: clean_date(d.strip())) or maybe(tree.xpath("//h1/text()"), lambda t: re.sub(r".*\(([0-9]+)\).*$", r"\1-01-01", t)),
+        "aliases": ", ".join(tree.xpath('//div[@class="col-sm-12"]/dl/dd//text()')),
+        "studio": maybe(tree.xpath('//p[@class="bioheading"][contains(text(),"Studio" or contains(text(),"Distributor"))]/following-sibling::p[@class="biodata"][1]//text()'), lambda s: {"name": s}),
+    }
 
 
 def main():
-    parser = argparse.ArgumentParser("IAFD Scraper")
-    subparsers = parser.add_subparsers(dest="operation", help="Operation to perform")
+    parser = argparse.ArgumentParser("IAFD Scraper", argument_default="")
+    subparsers = parser.add_subparsers(
+        dest="operation", help="Operation to perform", required=True
+    )
 
-    search_parser = subparsers.add_parser("search", help="Search for performers")
-    search_parser.add_argument("name", nargs="*", help="Name to search for", default="")
-
-    performer_parser = subparsers.add_parser("performer", help="Scrape a performer")
-    performer_parser.add_argument("url", nargs="?", help="Performer URL", default="")
-
-    movie_scraper = subparsers.add_parser("movie", help="Scrape a movie")
-    movie_scraper.add_argument("url", nargs="?", help="Movie URL", default="")
-
-    scene_scraper = subparsers.add_parser("scene", help="Scrape a scene")
-    scene_scraper.add_argument("url", nargs="?", help="Scene URL", default="")
+    subparsers.add_parser("search", help="Search for performers").add_argument("name", nargs="*", help="Name to search for")
+    subparsers.add_parser("performer", help="Scrape a performer").add_argument("url", nargs="?", help="Performer URL")
+    subparsers.add_parser("movie", help="Scrape a movie").add_argument("url", nargs="?", help="Movie URL")
+    subparsers.add_parser("scene", help="Scrape a scene").add_argument("url", nargs="?", help="Scene URL")
 
     if len(sys.argv) == 1:
         parser.print_help(sys.stderr)
         sys.exit(1)
 
     args = parser.parse_args()
-
-    name = url = None
+    log.warning(f"Before {args = }")
     # Script is being piped into, probably by Stash
     if not sys.stdin.isatty():
         try:
             frag = json.load(sys.stdin)
-            url = frag.get("url")
-            name = frag.get("name")
+            args.__dict__.update(frag)
         except json.decoder.JSONDecodeError:
-            log.error("Invalid JSON")
+            log.error("Received invalid JSON from stdin")
             sys.exit(1)
 
     if args.operation == "search":
-        name = name or " ".join(args.name)
+        name = " ".join(args.name)
         if not name:
             log.error("No query provided")
             sys.exit(1)
         log.debug(f"Searching for '{name}'")
-        performer_query(name)
+        matches = performer_query(name)
+        print(json.dumps(matches))
         sys.exit(0)
 
-    url = url or args.url
+    url = args.url
     if not url:
         log.error("No URL provided")
         sys.exit(1)
 
     log.debug(f"{args.operation} scraping '{url}'")
     scraped = scrape(url)
+    result = {}
     if args.operation == "performer":
-        performer_from_tree(scraped)
+        result = performer_from_tree(scraped)
     elif args.operation == "movie":
-        movie_from_tree(scraped)
+        result = movie_from_tree(scraped)
     elif args.operation == "scene":
-        scene_from_tree(scraped)
+        result = scene_from_tree(scraped)
+
+    print(json.dumps(cleandict(result)))
 
 
 if __name__ == "__main__":
