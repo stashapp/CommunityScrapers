@@ -12,8 +12,10 @@ sceneByURL:
       - badteenspunished.com/video/watch/
       - bountyhunterporn.com/video/watch/
       - brattymilf.com/video/watch/
+      - cheatingsis.com/video/watch/
       - cumswappingsis.com/video/watch/
       - daddyslilangel.com/video/watch/
+      - datingmystepson.com/video/watch/
       - detentiongirls.com/video/watch/
       - driverxxx.com/video/watch/
       - familyswap.xxx/video/watch/
@@ -120,6 +122,7 @@ xPathScrapers:
 
     scene:
       Title: &titleSelector //h2/text()
+      Code: &codeSelector $contentpane//div[contains(@class,"star-rating-wrapper")]/@data-id
       Date: &dateAttr
         selector: $contentpane//span[@class="date"]/text()
         postProcess:
@@ -180,6 +183,7 @@ xPathScrapers:
 
     scene:
       Title: *titleSelector
+      Code: *codeSelector
       Date: *dateAttr
       Details: *detailsAttr
       Performers: *performersAttr
@@ -232,4 +236,4 @@ xPathScrapers:
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
-# Last Updated December 24, 2022
+# Last Updated September 28, 2023
