@@ -57,11 +57,11 @@ driver:
   cookies:
     - Cookies:
         - Name: kt_rt_popAccess
-          Value: 1
+          Value: '1'
           Domain: .rule34video.com
           Path: /
         - Name: kt_tcookie
-          Value: 1
+          Value: '1'
           Domain: .rule34video.com
           Path: /
         - Name: cf_clearance
