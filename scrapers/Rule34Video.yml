@@ -52,4 +52,20 @@ xPathScrapers:
       Studio:
         Name: //div[@class="video_tools"]//div[text()="Artist:"]/following-sibling::a/span
         URL: //div[@class="video_tools"]//div[text()="Artist:"]/following-sibling::a/@href
-# Last Updated November 25, 2022
+driver:
+  useCDP: true
+  cookies:
+    - Cookies:
+        - Name: kt_rt_popAccess
+          Value: 1
+          Domain: .rule34video.com
+          Path: /
+        - Name: kt_tcookie
+          Value: 1
+          Domain: .rule34video.com
+          Path: /
+        - Name: cf_clearance
+          ValueRandom: 43
+          Domain: .rule34video.com
+          Path: /
+# Last Updated September 29, 2023
