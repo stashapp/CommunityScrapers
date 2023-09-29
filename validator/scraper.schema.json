@@ -546,6 +546,15 @@
           "title": "Performer fake tits",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "PenisLength": {
+          "title": "Performer penis length",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "Circumcised": {
+          "title": "Performer circumcised",
+          "description": "Must be one of (case insensitive): `cut`, `uncut`",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "CareerLength": {
           "title": "Performer career length",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
