@@ -49,7 +49,11 @@ iafd_date = "%B %d, %Y"
 iafd_date_scene = "%b %d, %Y"
 
 T = TypeVar("T")
-def maybe(values: Iterable[str], f: Callable[[str], (T | None)] = lambda x: x) -> T | None:
+
+
+def maybe(
+    values: Iterable[str], f: Callable[[str], (T | None)] = lambda x: x
+) -> T | None:
     """
     Returns the first value in values that is not "No data" after applying f to it
     """
@@ -390,6 +394,15 @@ def clean_date(date: str) -> str | None:
     log.warning(f"Unable to parse '{date}' as a date")
 
 
+def clean_alias(alias: str) -> str | None:
+    # Aliases like "X or Y or Z" are indeterminate
+    # and should not be included
+    if " or " in alias:
+        return None
+    # We do not want studio disambiguation: "X (studio.com)" -> "X"
+    return re.sub(r"\s*\(.*$", "", alias)
+
+
 def performer_haircolor(tree):
     return maybe(
         tree.xpath(
@@ -493,7 +506,8 @@ def performer_aliases(tree):
     return maybe(
         tree.xpath(
             '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")]]//div[@class="biodata" and not(text()="No known aliases")]/text()'
-        )
+        ),
+        lambda aliases: ", ".join(filter(None, (clean_alias(alias) for alias in aliases.split(", ")))),
     )
 
 
@@ -511,17 +525,82 @@ def performer_measurements(tree):
         tree.xpath('//div/p[text()="Measurements"]/following-sibling::p[1]//text()')
     )
 
+
 def scene_studio(tree):
-    return maybe(tree.xpath('//div[@class="col-xs-12 col-sm-3"]//p[text() = "Studio"]/following-sibling::p[1]//text()'), lambda s: {"name": s})
+    return maybe(
+        tree.xpath(
+            '//div[@class="col-xs-12 col-sm-3"]//p[text() = "Studio"]/following-sibling::p[1]//text()'
+        ),
+        lambda s: {"name": s},
+    )
+
 
 def scene_details(tree):
     return maybe(tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()'))
 
+
 def scene_date(tree):
-    return maybe(tree.xpath('//div[@class="col-xs-12 col-sm-3"]//p[text() = "Release Date"]/following-sibling::p[1]//text()'), clean_date)
+    return maybe(
+        tree.xpath(
+            '//div[@class="col-xs-12 col-sm-3"]//p[text() = "Release Date"]/following-sibling::p[1]//text()'
+        ),
+        clean_date,
+    )
+
 
 def scene_title(tree):
     return maybe(tree.xpath("//h1/text()"), lambda t: t.strip())
+
+
+def movie_studio(tree):
+    return maybe(
+        tree.xpath(
+            '//p[@class="bioheading"][contains(text(),"Studio" or contains(text(),"Distributor"))]/following-sibling::p[@class="biodata"][1]//text()'
+        ),
+        lambda s: {"name": s},
+    )
+
+
+def movie_date(tree):
+    # If there's no release date we will use the year from the title for an approximate date
+    return maybe(
+        tree.xpath(
+            '//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()'
+        ),
+        lambda d: clean_date(d.strip()),
+    ) or maybe(
+        tree.xpath("//h1/text()"),
+        lambda t: re.sub(r".*\(([0-9]+)\).*$", r"\1-01-01", t),
+    )
+
+
+def movie_duration(tree):
+    # Convert duration from minutes to seconds, but keep it a string because that's what stash expects
+    return maybe(
+        tree.xpath(
+            '//p[@class="bioheading"][contains(text(), "Minutes")]/following-sibling::p[@class="biodata"][1]/text()'
+        ),
+        lambda d: str(int(d) * 60),
+    )
+
+
+def movie_synopsis(tree):
+    return maybe(tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()'))
+
+
+def movie_director(tree):
+    return maybe(
+        tree.xpath(
+            '//p[@class="bioheading"][contains(text(), "Directors")]/following-sibling::p[@class="biodata"][1]/a/text()'
+        ),
+        lambda d: d.strip(),
+    )
+
+
+def movie_title(tree):
+    return maybe(
+        tree.xpath("//h1/text()"), lambda t: re.sub(r"\s*\([0-9]+\)$", "", t.strip())
+    )
 
 
 # Only create a single scraper: this saves time when scraping multiple pages
@@ -600,21 +679,21 @@ def scene_from_tree(tree):
         "date": scene_date(tree),
         "details": scene_details(tree),
         "studio": scene_studio(tree),
-        "performers": [{"name": name} for name in tree.xpath('//div[@class="castbox"]/p/a/text()')],
+        "performers": [
+            {"name": name} for name in tree.xpath('//div[@class="castbox"]/p/a/text()')
+        ],
     }
 
 
 def movie_from_tree(tree):
     return {
-        "name": maybe(tree.xpath("//h1/text()"), lambda t: re.sub(r"\s*\([0-9]+\)$", "", t.strip())),
-        "director": maybe(tree.xpath('//p[@class="bioheading"][contains(text(), "Directors")]/following-sibling::p[@class="biodata"][1]/a/text()'), lambda d: d.strip()),
-        "synopsis": maybe(tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()')),
-        # Convert duration from minutes to seconds, but keep it a string because that's what stash expects
-        "duration": maybe(tree.xpath('//p[@class="bioheading"][contains(text(), "Minutes")]/following-sibling::p[@class="biodata"][1]/text()'), lambda d: str(int(d) * 60)),
-        # If there's no release date we will use the year from the title for an approximate date
-        "date": maybe(tree.xpath('//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()'), lambda d: clean_date(d.strip())) or maybe(tree.xpath("//h1/text()"), lambda t: re.sub(r".*\(([0-9]+)\).*$", r"\1-01-01", t)),
+        "name": movie_title(tree),
+        "director": movie_director(tree),
+        "synopsis": movie_synopsis(tree),
+        "duration": movie_duration(tree),
+        "date": movie_date(tree),
         "aliases": ", ".join(tree.xpath('//div[@class="col-sm-12"]/dl/dd//text()')),
-        "studio": maybe(tree.xpath('//p[@class="bioheading"][contains(text(),"Studio" or contains(text(),"Distributor"))]/following-sibling::p[@class="biodata"][1]//text()'), lambda s: {"name": s}),
+        "studio": movie_studio(tree),
     }
 
 
@@ -624,10 +703,18 @@ def main():
         dest="operation", help="Operation to perform", required=True
     )
 
-    subparsers.add_parser("search", help="Search for performers").add_argument("name", nargs="*", help="Name to search for")
-    subparsers.add_parser("performer", help="Scrape a performer").add_argument("url", nargs="?", help="Performer URL")
-    subparsers.add_parser("movie", help="Scrape a movie").add_argument("url", nargs="?", help="Movie URL")
-    subparsers.add_parser("scene", help="Scrape a scene").add_argument("url", nargs="?", help="Scene URL")
+    subparsers.add_parser("search", help="Search for performers").add_argument(
+        "name", nargs="*", help="Name to search for"
+    )
+    subparsers.add_parser("performer", help="Scrape a performer").add_argument(
+        "url", nargs="?", help="Performer URL"
+    )
+    subparsers.add_parser("movie", help="Scrape a movie").add_argument(
+        "url", nargs="?", help="Movie URL"
+    )
+    subparsers.add_parser("scene", help="Scrape a scene").add_argument(
+        "url", nargs="?", help="Scene URL"
+    )
 
     if len(sys.argv) == 1:
         parser.print_help(sys.stderr)
