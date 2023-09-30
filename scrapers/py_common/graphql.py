@@ -21,13 +21,14 @@ except ModuleNotFoundError:
     sys.exit()
 
 
-def callGraphQL(query, variables=None):
-    api_key = ""
-    if config.STASH.get("api_key"):
-        api_key = config.STASH["api_key"]
-
-    if config.STASH.get("url") is None:
+def callGraphQL(query: str, variables: dict|None=None):
+    api_key = config.STASH.get("api_key", "")
+    url = config.STASH.get("url", "")
+    if not url:
         log.error("You need to set the URL in 'config.py'")
+        return None
+    elif "stashdb.org" in url:
+        log.error("You need to set the URL in 'config.py' to your own stash server")
         return None
 
     stash_url = config.STASH["url"] + "/graphql"
@@ -41,41 +42,38 @@ def callGraphQL(query, variables=None):
     }
     json = {'query': query}
     if variables is not None:
-        json['variables'] = variables
-    try:
-        response = requests.post(stash_url, json=json, headers=headers)
-        if response.status_code == 200:
-            result = response.json()
-            if result.get("error"):
-                for error in result["error"]["errors"]:
-                    raise Exception(f"GraphQL error: {error}")
-            if result.get("data"):
-                return result.get("data")
-        elif response.status_code == 401:
+        json['variables'] = variables # type: ignore
+    response = requests.post(stash_url, json=json, headers=headers)
+    if response.status_code == 200:
+        result = response.json()
+        if (errors := result.get("error")):
+            errors = "\n".join(errors)
+            log.error(f"[ERROR][GraphQL] {errors}")
+            return None
+        if result.get("data"):
+            return result.get("data")
+    elif response.status_code == 401:
+        log.error(
+            "[ERROR][GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.py' in the 'py_common' folder"
+        )
+        return None
+    elif response.status_code == 404:
+        if "localhost:9999" in url:
             log.error(
-                "[ERROR][GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.py' in the 'py_common' folder"
+                "[ERROR][GraphQL] HTTP Error 404, Not Found. Your local stash server is your endpoint, but port 9999 did not respond. Did you change stash's port? Edit 'config.py' in the 'py_common' folder to point at the correct port for stash!"
             )
-            return None
-        elif response.status_code == 404:
-            if config.STASH["url"] == "http://localhost:9999":
-                log.error(
-                    "[ERROR][GraphQL] HTTP Error 404, Not Found. Your local stash server is your endpoint, but port 9999 did not respond. Did you change stash's port? Edit 'config.py' in the 'py_common' folder to point at the correct port for stash!"
-                )
-            else:
-                log.error(
-                    "[ERROR][GraphQL] HTTP Error 404, Not Found. Make sure 'config.py' in the 'py_common' folder points at the correct address and port!"
-                )
-            return None
         else:
-            raise ConnectionError(
-                f"GraphQL query failed:{response.status_code} - {response.content}"
+            log.error(
+                "[ERROR][GraphQL] HTTP Error 404, Not Found. Make sure 'config.py' in the 'py_common' folder points at the correct address and port!"
             )
-    except Exception as err:
-        log.error(err)
         return None
 
+    raise ConnectionError(
+        f"GraphQL query failed: {response.status_code} - {response.content}"
+    )
 
-def configuration():
+
+def configuration() -> dict | None:
     query = """
     query Configuration {
         configuration {
@@ -255,7 +253,7 @@ def configuration():
     return None
 
 
-def getScene(scene_id):
+def getScene(scene_id: str | int) -> dict | None:
     query = """
     query FindScene($id: ID!, $checksum: String) {
         findScene(id: $id, checksum: $checksum) {
@@ -469,14 +467,14 @@ def getScene(scene_id):
     }
     """
 
-    variables = {"id": scene_id}
+    variables = {"id": str(scene_id)}
     result = callGraphQL(query, variables)
     if result:
         return result.get('findScene')
     return None
 
 
-def getSceneScreenshot(scene_id):
+def getSceneScreenshot(scene_id: str | int) -> dict | None:
     query = """
     query FindScene($id: ID!, $checksum: String) {
         findScene(id: $id, checksum: $checksum) {
@@ -487,14 +485,14 @@ def getSceneScreenshot(scene_id):
         }
     }
     """
-    variables = {"id": scene_id}
+    variables = {"id": str(scene_id)}
     result = callGraphQL(query, variables)
     if result:
         return result.get('findScene')
     return None
 
 
-def getSceneByPerformerId(performer_id):
+def getSceneByPerformerId(performer_id: str | int) -> dict | None:
     query = """
         query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene_ids: [Int!]) {
           findScenes(filter: $filter, scene_filter: $scene_filter, scene_ids: $scene_ids) {
@@ -792,7 +790,7 @@ def getSceneByPerformerId(performer_id):
     return None
 
 
-def getSceneIdByPerformerId(performer_id):
+def getSceneIdByPerformerId(performer_id: str | int) -> dict | None:
     query = """
         query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene_ids: [Int!]) {
           findScenes(filter: $filter, scene_filter: $scene_filter, scene_ids: $scene_ids) {
@@ -828,7 +826,7 @@ def getSceneIdByPerformerId(performer_id):
     return None
 
 
-def getPerformersByName(performer_name):
+def getPerformersByName(performer_name: str) -> dict | None:
     query = """
         query FindPerformers($filter: FindFilterType, $performer_filter: PerformerFilterType) {
           findPerformers(filter: $filter, performer_filter: $performer_filter) {
@@ -910,7 +908,7 @@ def getPerformersByName(performer_name):
     return None
 
 
-def getPerformersIdByName(performer_name):
+def getPerformersIdByName(performer_name: str) -> dict | None:
     query = """
         query FindPerformers($filter: FindFilterType, $performer_filter: PerformerFilterType) {
           findPerformers(filter: $filter, performer_filter: $performer_filter) {
@@ -945,7 +943,7 @@ def getPerformersIdByName(performer_name):
     return None
 
 
-def getGallery(gallery_id):
+def getGallery(gallery_id: str | int) -> dict | None:
     query = """
     query FindGallery($id: ID!) {
         findGallery(id: $id) {
@@ -1182,7 +1180,7 @@ def getGallery(gallery_id):
     return None
 
 
-def getGalleryPath(gallery_id):
+def getGalleryPath(gallery_id: str | int) -> dict | None:
     query = """
     query FindGallery($id: ID!) {
         findGallery(id: $id) {
