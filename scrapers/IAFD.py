@@ -704,7 +704,7 @@ def main():
     )
 
     subparsers.add_parser("search", help="Search for performers").add_argument(
-        "name", nargs="*", help="Name to search for"
+        "name", nargs="?", help="Name to search for"
     )
     subparsers.add_parser("performer", help="Scrape a performer").add_argument(
         "url", nargs="?", help="Performer URL"
@@ -721,18 +721,19 @@ def main():
         sys.exit(1)
 
     args = parser.parse_args()
-    log.warning(f"Before {args = }")
+    log.debug(f"Arguments from commandline: {args}")
     # Script is being piped into, probably by Stash
     if not sys.stdin.isatty():
         try:
             frag = json.load(sys.stdin)
             args.__dict__.update(frag)
+            log.debug(f"With arguments from stdin: {args}")
         except json.decoder.JSONDecodeError:
             log.error("Received invalid JSON from stdin")
             sys.exit(1)
 
     if args.operation == "search":
-        name = " ".join(args.name)
+        name = args.name
         if not name:
             log.error("No query provided")
             sys.exit(1)
