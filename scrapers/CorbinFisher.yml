@@ -33,7 +33,7 @@ xPathScrapers:
         selector: //img[@height="815"]/@src0_1x
       Studio:
         Name:
-          fixed: CorbinFisher
+          fixed: Corbin Fisher
 
   performerScraper:
     performer:
