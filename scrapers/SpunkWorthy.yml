@@ -30,7 +30,7 @@ xPathScrapers:
               - regex: "(.*)"
                 with: "https://www.spunkworthy.com$1"
       Details:
-        selector: //div[contains(@class, 'video_synopsis')]//p[not(ancestor::div[@class="scene_models"]) and not(@class) and not(starts-with(text(),"Tags:"))]/text()
+        selector: //div[contains(@class, 'video_synopsis')]//p[not(ancestor::div[@class="scene_models"]) and not(@class)][not (starts-with(text(),'Tags:'))]/text()
         concat: "\n\n"
       Image:
         selector: //div[contains(@class, 'video_player')]/img[1]/@src
