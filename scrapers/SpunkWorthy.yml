@@ -32,6 +32,8 @@ xPathScrapers:
       Details:
         selector: //div[contains(@class, 'video_synopsis')]//p[not(ancestor::div[@class="scene_models"]) and not(@class)][not (starts-with(text(),'Tags:'))]/text()
         concat: "\n\n"
+      Tags:
+        Name: //div[contains(@class, 'video_synopsis')]//p[contains(text(),"Tags:")]/a/text()
       Image:
         selector: //div[contains(@class, 'video_player')]/img[1]/@src
         postProcess:
