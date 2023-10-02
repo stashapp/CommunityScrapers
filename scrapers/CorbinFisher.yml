@@ -1,4 +1,4 @@
-name: corbinfisher
+name: Corbin Fisher
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -33,7 +33,7 @@ xPathScrapers:
         selector: //img[@height="815"]/@src0_1x
       Studio:
         Name:
-          fixed: CorbinFisher
+          fixed: Corbin Fisher
 
   performerScraper:
     performer:
@@ -50,7 +50,7 @@ xPathScrapers:
         selector: //span[contains(text(),"HEIGHT:")]/following-sibling::text()
         postProcess:
           - feetToCm: true
-      Measurements: 
+      Measurements:
         selector: //span[contains(text(),"COCK SIZE:")]/following-sibling::text()
         postProcess:
           - replace:
@@ -59,4 +59,4 @@ xPathScrapers:
           - feetToCm: true
       Image: //div[@class="modelBioPic"]/img/@src0_1x
 
-# Last Updated February 08, 2022
+# Last Updated October 02, 2023
