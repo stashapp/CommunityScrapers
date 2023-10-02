@@ -1,0 +1,87 @@
+name: BluMedia Network
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - boygusher.com/play/
+    scraper: bgScraper
+  - action: scrapeXPath
+    url:
+      - brokestraightboys.com/play/
+    scraper: bsbScraper
+  - action: scrapeXPath
+    url:
+      - collegeboyphysicals.com/play/
+    scraper: cbpScraper
+  - action: scrapeXPath
+    url:
+      - collegedudes.com/play/
+    scraper: cdScraper
+
+xPathScrapers:
+  bgScraper:
+    scene:
+      Title: //div[@class="dettl"]
+      # This is a bad selector and should be improved
+      Details: //div[@class="desc"]
+      Image: (//div[@class="player"]//img)[1]/@src
+      Studio: &studioFromTitle
+        Name:
+          selector: //title/text()
+          postProcess:
+            - replace:
+                - regex: ( - .*)$
+                  with:
+      Performers:
+        Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
+        URL:
+          selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://boygusher.com
+  bsbScraper:
+    scene:
+      Title: (//header/following-sibling::div/div/div/text())[1]
+      # This is a bad selector and should be improved
+      Details:
+        selector: //div[@class="dtlp"]/p
+        concat: "\n\n"
+      Image: (//div[@id="player"]//img)[1]/@src
+      Studio: *studioFromTitle
+      Performers:
+        Name: //span/dl/a/text()
+        URL:
+          selector: //span/dl/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://brokestraightboys.com
+  cbpScraper:
+    scene:
+      Title: //div[@class="dettl"]
+      Image: (//div[@class="player"]//img)[1]/@src
+      Details: //div[@class="desc"]
+      Studio: *studioFromTitle
+      Performers:
+        Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
+        URL:
+          selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://collegeboyphysicals.com
+  cdScraper:
+    scene:
+      Title: //div[contains(@class, "bluBar")]//strong
+      # This is a bad selector and should be improved
+      Details:
+        selector: //div[@class="descD"]//p[string-length(text()) > 1]
+        concat: "\n\n"
+      Image: (//div[@class="player"]//img)[1]/@src
+      Studio: *studioFromTitle
+      Performers:
+        Name: //div[@class="eimg"]//a/text()
+        # This site does not link to their performers, but they DO have profiles
+
+
+# Last Updated October 02, 2023
