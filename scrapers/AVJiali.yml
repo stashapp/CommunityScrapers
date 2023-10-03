@@ -135,6 +135,4 @@ xPathScrapers:
                 with: https://
               - regex: 160x160
                 with: 500x500
-      Disambiguation:
-        fixed: AV Jiali
 # Last Updated October 2, 2023
