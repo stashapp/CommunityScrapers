@@ -1,4 +1,5 @@
 name: English Lads
+
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -10,6 +11,12 @@ performerByURL:
     url:
       - englishlads.com/model
     scraper: performerScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - englishlads.com/photo
+    scraper: galleryScraper
 
 xPathScrapers:
   sceneScraper:
@@ -45,6 +52,8 @@ xPathScrapers:
                   with: "https://www.englishlads.com$1"
       Details:
         selector: //div[not(@class) and @style]
+      Tags:
+        Name: //a[@class="more" and contains(@href, "tag=")]
       Image:
         selector: //img[@class="shoot-splash-image"]/@src | //video/@data-poster
         postProcess:
@@ -103,4 +112,43 @@ xPathScrapers:
                 with: "$2"
               - regex: "(.*)"
                 with: "https://www.englishlads.com$1"
-# Last Updated October 02, 2023
+
+  galleryScraper:
+    gallery:
+      Title:
+        selector: //div[@class="shoot-title"]/h2
+        postProcess:
+          - replace:
+              - regex: ^(.*?)-(.*)-(.*?)$
+                with: "$2"
+      Date:
+        selector: //div[@class="shoot-title"]/h2
+        postProcess:
+          - replace:
+              - regex: ^(.*?)-(.*)-(.*?)$
+                with: "$1"
+              - regex: (st|nd|rd|th)\b
+                with: ""
+          - parseDate: "2 Jan 2006"
+      Performers:
+        Name:
+          selector: //div[@class="shoot-title"]/h2
+          postProcess:
+            - replace:
+                - regex: ^(.*?)-(.*)-(.*?)$
+                  with: "$3"
+          split: ","
+        URL:
+          selector: //div[@class="shoot-title"]/h2/a/@href
+          postProcess:
+            - replace:
+                - regex: "(.*)"
+                  with: "https://www.englishlads.com$1"
+      Details:
+        selector: //div[not(@class) and @style]
+      Tags:
+        Name: //a[@class="more" and contains(@href, "tag=")]
+      Studio:
+        Name:
+          fixed: English Lads
+# Last Updated October 03, 2023
