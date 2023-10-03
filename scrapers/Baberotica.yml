@@ -36,8 +36,8 @@ xPathScrapers:
           selector: //meta[@itemprop="url"]/@content
           postProcess:
             - map:
-                https://avidolz.com: AvIdolz
-                https://baberotica.com: Baberotica
-                https://baberoticavr.com: BaberoticaVR
-                https://teenthais.com: TeenThais
+                https://avidolz.com/: AvIdolz
+                https://baberotica.com/: Baberotica
+                https://baberoticavr.com/: BaberoticaVR
+                https://teenthais.com/: TeenThais
 # Last Updated June 30, 2021
