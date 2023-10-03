@@ -97,7 +97,8 @@ xPathScrapers:
                 with: $1
               - regex: None
                 with:
-      Details: concat(string(//div[@class="intro"]//p//text()), string(//div[@class="intro"]//p//span[@class="readmore"]//text()))
+      Details: 
+        selector: //*[@id="main"]/div[1]/div[2]/p/text()
       Piercings:
         selector: $profile[contains(strong, "Piercings:")]//text()
         postProcess:
@@ -135,4 +136,4 @@ xPathScrapers:
                 with: https://
               - regex: 160x160
                 with: 500x500
-# Last Updated August 19, 2023
+# Last Updated October 03, 2023
