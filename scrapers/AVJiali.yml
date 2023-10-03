@@ -26,8 +26,12 @@ xPathScrapers:
         URL: //div[@class="cat"][1]/a/@href
       Tags:
         Name: //div[@class="cat"][2]/a
-      Details:
-        selector: //h1[@class="none"]
+      Details: 
+        selector: //p[span[@class="readmore"]]
+        postProcess:
+          - replace:
+              - regex: ... Read More
+                with:
       Image:
         selector: //video[@id="videohtml5tour"]/@poster
         postProcess:
@@ -97,7 +101,8 @@ xPathScrapers:
                 with: $1
               - regex: None
                 with:
-      Details: concat(string(//div[@class="intro"]//p//text()), string(//div[@class="intro"]//p//span[@class="readmore"]//text()))
+      Details: 
+        selector: //*[@id="main"]/div[1]/div[2]/p/text()
       Piercings:
         selector: $profile[contains(strong, "Piercings:")]//text()
         postProcess:
