@@ -77,7 +77,7 @@ SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
 # for the studio name for a scene
 SERIE_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "Evil",         # sitename_pretty: Evil Angel
-    "Trans-Active"  # sitename_pretty: Evil Angel
+    "Trans-Active",  # sitename_pretty: Evil Angel
 ]
 
 # a dict of sites (`sitename_pretty` from the API) which should set the value
@@ -111,7 +111,7 @@ SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "Oopsie",
     "Out of the Family",
     "Rocco Siffredi",
-    "Squirtalicious"
+    "Squirtalicious",
 ]
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
@@ -132,6 +132,7 @@ SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE = [
 NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "Fame Digital",  # this should support all sub-studios listed at https://stashdb.org/studios/cd5591a5-eb26-42fc-a406-b6969a8ef3dd
     "fistinginferno",
+    "MyXXXPass",
 ]
 
 # a dict of directors to use as the studio for a scene
