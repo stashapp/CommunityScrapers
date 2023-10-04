@@ -4,6 +4,11 @@ sceneByURL:
     url:
       - cockyboys.com/scenes/
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - cockyboys.com/models/
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -15,7 +20,13 @@ xPathScrapers:
       Tags:
         Name: //strong[contains(text(),"Categorized Under:")]/following-sibling::a/text()
       Performers:
-        Name: //strong[contains(text(),"Featuring:")]/following-sibling::a/text()
+        Name: //div[@class="movieModels"]/span/a[@class="name gothamy"]/@title
+        URL:
+          selector: //div[@class="movieModels"]/span/a[@class="name gothamy"]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://cockyboys.com
       Details:
         selector: //div[@class="movieDesc"]/.
         postProcess:
@@ -27,4 +38,11 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name: //meta[@property="og:site_name"]/@content
-# Last Updated August 21, 2023
+  performerScraper:
+    performer:
+      Name: //h1[@class="gothamy sectionTitle"]/text()
+      Gender:
+        # CockyBoys only has profile pages for male performers
+        fixed: Male
+      Image: //div[@id="modelInfo"]/img/@src
+# Last Updated October 05, 2023
