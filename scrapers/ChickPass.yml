@@ -1,7 +1,7 @@
 name: Chickpass
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - 1111customsxxx.com/tour1/
       - addisonstreet.com/tour1/
       - amazinganna.com/tour1/
@@ -33,35 +33,7 @@ sceneByURL:
     scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
-    url:
-      - 1111customsxxx.com/tour1/
-      - addisonstreet.com/tour1/
-      - amazinganna.com/tour1/
-      - bouncychicks.com/tour1/
-      - chickpass.com/tour1/
-      - chickpassinternational.com/tour1/
-      - chickpasspornstars.com/tour1/
-      - chickpassteens.com/tour1/
-      - college-amateurs.com/tour1/
-      - fuckingparties.com/tour1/
-      - fuckthegeek.com/tour1/
-      - hongkongslut.com/tour1/
-      - lustylina.com/tour1/
-      - messyxxx.com/tour1/
-      - minimuff.com/tour1/
-      - petiteleeanna.com/tour1/
-      - redheadmariah.com/tour1/
-      - stuffintwats.com/tour1/
-      - tandaamateurs.com/tour1/
-      - tandaasians.com/tour1/
-      - tandablondes.com/tour1/
-      - tandabrunettes.com/tour1/
-      - tandaebony.com/tour1/
-      - tandahousewives.com/tour1/
-      - tandalatinas.com/tour1/
-      - tandaredheads.com/tour1/
-      - xxxnj.com/tour1/
-      - zoiestarr.com/tour1/
+    url: *urls  
     scraper: performerScraper
 xPathScrapers:
   sceneScraper:
