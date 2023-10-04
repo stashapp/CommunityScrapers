@@ -2,28 +2,40 @@ name: "Blake Mason"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - blakemason.com
+      - blakemason.com/videos/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $imageUrl: //meta[@property="og:image"]/@content
     scene:
-      Title: //div[@class='col-xs-12 col-md-6']/h1
+      Title: //div[contains(@class, "content-title")]//h2
+      Date:
+        selector: //span[contains(@class, "date")]
+        postProcess:
+          - parseDate: 01/02/2006
+      Code:
+        selector: $imageUrl
+        postProcess:
+          - replace:
+              - regex: .*thumbs/(BM\d+)_.*
+                with: $1
       Details:
-        selector: //div[@class='col-xs-12']/div[@class='text-justify']/text()
+        selector: //div[@class='content-description']/p[@class='text-justify']/text()
         concat: " "
       Studio:
         Name:
           fixed: "Blake Mason"
       Tags:
         Name:
-          selector: //div[@class='tags']/a
+          selector: //p[@class='tags']/a
       Performers:
         Name:
-          selector: //div[@class='col-xs-6 col-sm-6 item']/a
+          selector: //div[contains(@class, 'models-wrap')]//h5
       Image:
-        selector: //*[@id="trailer"]/@poster
+        selector: $imageUrl
         postProcess:
           - replace:
               - regex: ^//
                 with: https://
-# Last Updated June 27, 2022
+# Last Updated October 03, 2023
