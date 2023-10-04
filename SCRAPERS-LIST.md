@@ -9,7 +9,7 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 --------------|-------|:-:|:-:|:-:|:-:|:---:|:------:
 1000facials.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 10musume.com|10Musume.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
-1111customsxxx.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+1111customsxxx.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 18eighteen.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 18tokyo.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 18vr.com|BaDoink.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
@@ -34,7 +34,7 @@ accidentalgangbang.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark
 activeduty.com|Algolia_ActiveDuty.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 adamandevepictures.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 addicted2girls.com|Algolia_Addicted2Girls.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
-addisonstreet.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+addisonstreet.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 adultanime.dbsearch.net|Anime-DB.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Japanese Hentai
 adultdvdempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 adultdvdmarketplace.com|AdultDvdMarketPlace.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
@@ -67,7 +67,7 @@ amateurboxxx.com|AmateurBoxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateure-xtreme.com|AmateureExtreme.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateureuro.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateursfrombohemia.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-amazinganna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+amazinganna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 ambushmassage.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 amelielou.com|AmelieLou.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 americanmusclehunks.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -227,7 +227,7 @@ bootyclapxxx.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 bootysisters.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 boppingbabes.com|WankItNow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 bossymilfs.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
-bouncychicks.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+bouncychicks.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 boundhoneys.com|Boundhoneys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 boundjocks.com|AdultSiteRunner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 boundlife.com|Boundlife.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -288,10 +288,10 @@ charleechaselive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 chastitybabes.com|chastitybabes.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cheatingsis.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 cherrypimps.com|CherryPimps.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
-chickpass.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-chickpassinternational.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-chickpasspornstars.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-chickpassteens.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+chickpass.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+chickpassinternational.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+chickpasspornstars.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+chickpassteens.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 chloelamour.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 chocolatebjs.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 citebeur.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
@@ -311,7 +311,7 @@ cockyboys.com|CockyBoys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 codycummings.com|Algolia_NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 colbyknox.com|ColbyKnox.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 colette.com|Colette.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
-college-amateurs.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+college-amateurs.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 college-uniform.com|CollegeUniform.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 collegeboyphysicals.com|BluMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 collegedudes.com|BluMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
@@ -581,10 +581,10 @@ fuckfiesta.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 fuckingawesome.com|FuckingAwesome.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckinghardcore.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 fuckingoffice.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-fuckingparties.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+fuckingparties.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 fuckingstreet.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckstudies.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-fuckthegeek.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+fuckthegeek.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 fullpornnetwork.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 funbags.com|Voyeurweb.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 funsizeboys.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -688,7 +688,7 @@ homemadeanalwhores.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hometowngirls.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hometownhoneys.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 honeytrans.com|Arx.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Trans
-hongkongslut.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hongkongslut.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 hookuphotshot.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornydoctor.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hornygirlscz.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -869,7 +869,7 @@ lucasentertainment.com|LucasEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|G
 lustcinema.com|LustCinema.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lustery.com|Lustery.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Amateur
 lustreality.com|SLRoriginals.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-lustylina.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+lustylina.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 mackstudio.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 madeincanada.xxx|MadeInCanada.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 madouqu.com|Madou.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -907,7 +907,7 @@ menatplay.com|MenAtPlay.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 menoboy.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 menover30.com|Algolia_MenOver30.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 menpov.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
-messyxxx.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+messyxxx.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 metadataapi.net (JSON API)|ThePornDB.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
 metalbondage.com|MetalBondage.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 metart.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
@@ -922,7 +922,7 @@ milftugs.com|MilfTugs.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 milfvr.com|POVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 milkingtable.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 milovana.com|Milovana.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-minimuff.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+minimuff.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 minnano-av.com|Minnano-AV.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
 missax.com|MissaX.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 mistermale.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
@@ -1105,7 +1105,7 @@ petite18.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 petiteballerinasfucked.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 petited.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 petitehdporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
-petiteleeanna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+petiteleeanna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 petitepov.com|ItsPOV.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 philavise.com|Philavise.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 philippwants.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
@@ -1205,7 +1205,7 @@ realtgirls.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:heavy_check_mark:|:
 realtimebondage.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 realvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
 redgifs.com|Redgifs.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|Python|Gifs
-redheadmariah.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+redheadmariah.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 redpolishfeet.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 reidmylips.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 reidmylips.elxcomplete.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1346,7 +1346,7 @@ stripzvr.com|StripzVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 strokies.com|Strokies.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 stuck4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 studiofow.com|StudioFOW.yml|:heavy_check_mark:|:x:|:x:|:x:|-|3D Animation
-stuffintwats.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+stuffintwats.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 stunning18.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
 subbyhubby.com|SubbyHubby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 submissivex.com|SubmissiveX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1376,14 +1376,14 @@ tadpolexstudio.com|TadpolexStudio.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 takevan.com|TakeVan.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 taliashepard.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tamedteens.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
-tandaamateurs.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-tandaasians.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-tandablondes.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-tandabrunettes.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-tandaebony.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-tandahousewives.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-tandalatinas.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-tandaredheads.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+tandaamateurs.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+tandaasians.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+tandablondes.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+tandabrunettes.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+tandaebony.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+tandahousewives.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+tandalatinas.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+tandaredheads.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 tanyatate.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 taratainton.com|TaraTainton.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teacherfucksteens.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -1635,7 +1635,7 @@ xtube.com|Xtube.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvideos.com|Xvideos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvideos.red|Xvideos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvirtual.com|XVirtual.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-xxxnj.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+xxxnj.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 xxxpawn.com|XXXPawn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yanks.com|Yanks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yesgirlz.com|YesGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1654,7 +1654,7 @@ zentaidolls.com|ZentaiDolls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 zerotolerancefilms.com|Algolia_zerotolerancefilms.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 zexyvr.com|ZexyVR.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 zishy.com|Zishy.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
-zoiestarr.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+zoiestarr.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 
 ## Non url scrapers
 

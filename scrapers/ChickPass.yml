@@ -1,7 +1,7 @@
 name: Chickpass
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - 1111customsxxx.com/tour1/
       - addisonstreet.com/tour1/
       - amazinganna.com/tour1/
@@ -31,6 +31,10 @@ sceneByURL:
       - xxxnj.com/tour1/
       - zoiestarr.com/tour1/
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url: *urls  
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -82,4 +86,45 @@ xPathScrapers:
                 https://www.tandaredheads.com/tour1/: T&A Redheads
                 https://www.xxxnj.com/tour1/: T&A NJ
                 https://www.zoiestarr.com/tour1/: Zoie Starr
-# Last Updated April 23, 2021
+  performerScraper:
+    common:
+      $profile: //p[@class="model__stat"]
+    performer:
+      Name:
+        selector: //span[@class="model_bio_heading"]//text()
+        postProcess:
+          - replace:
+              - regex: \s*(.*)\s*.*Vital Stats:$
+                with: $1
+      Gender:
+        # Chickpass only has female peformer profiles
+        fixed: Female
+      Birthdate:
+        selector: $profile/span[contains(text(), "Birth Date:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+          - parseDate: 2006-01-02
+      Measurements:
+        selector: $profile/span[contains(text(),"Measurements:")]/following-sibling::text()
+      Weight:
+        selector: $profile/span[contains(text(),"Weight:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: lbs
+                with: ""
+          - lbToKg: true
+      Height:
+        selector: $profile/span[contains(text(),"Height:")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      URL: //link[@rel="canonical"]/@href
+      Details:
+        selector: //div[@class="model_bio_info"]/text()
+      Image:
+        selector: //base/@href|//img[@class="model_bio_thumb stdimage thumbs target"]/@src0_2x
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: "[|].+?tour1/"
+                with: 
+# Last Updated October 04, 2023
