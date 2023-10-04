@@ -23,6 +23,7 @@ sceneByURL:
       - thirdworldxxx.com/
       - wcpclub.com/
       - westcoastproductions.com/
+      - data18.empirestores.co/
 
   # VR Sites
   - action: scrapeXPath
@@ -47,6 +48,8 @@ movieByURL:
       - thirdworldxxx.com/
       - wcpclub.com/
       - westcoastproductions.com/
+      - data18.empirestores.co/
+
 
 xPathScrapers:
   sceneScraper:
