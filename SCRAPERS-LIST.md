@@ -1576,6 +1576,7 @@ vrlatina.com|VRLatina.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check
 vrporn.com|VRPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrporncz.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vrxdb.com|VrxDB.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+vtubie.com|vTubie.yml|:x:|:x:|:x:|:heavy_check_mark:|-|VTuber Database
 wakeupnfuck.com|WakeUpnFuck.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wankitnow.com|WankItNow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 wankz.com|wankz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
