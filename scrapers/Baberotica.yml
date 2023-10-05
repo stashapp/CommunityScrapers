@@ -5,7 +5,9 @@ sceneByURL:
       - avidolz.com
       - baberotica.com
       - baberoticavr.com
+      - suckmevr.com
       - teenthais.com
+      - vrpornpass.com
     scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
@@ -41,7 +43,7 @@ xPathScrapers:
               - regex: ^//
                 with: https://
       URL: 
-        selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href
+        selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href | //div[@class="title"]/h5/a/@href
         postProcess:
           - replace:
             - regex: \s*(.*)\s*feed/$
@@ -54,14 +56,17 @@ xPathScrapers:
                 https://avidolz.com/: AvIdolz
                 https://baberotica.com/: Baberotica
                 https://baberoticavr.com/: BaberoticaVR
+                https://suckmevr.com/: SuckMeVR
                 https://teenthais.com/: TeenThais
+                https://vrpornpass.com/: VR PornPass
   performerScraper:
     common:
       $profileBE: //div[@class="model-profile"]
       $profileTT: //div[@class="pure-u-1-4 pure-u-sm-1-2 pure-u-xs-1"]
+      $profilePP: //div[@class="pure-u-1-4 pure-u-sm-1-2 pure-u-xs-1-3"]
     performer:
       Name:
-        selector: $profileBE[contains(strong, "Name:")]//text() | //meta[@itemprop="title"]/@content
+        selector: $profileBE[contains(strong, "Name:")]//text() | //meta[@itemprop="title"]/@content | //div[@class="model-info"]//h1[@itemprop="name"]/text()
         postProcess:
           - replace:
               - regex: .*Name:\s*(.*)\s*$
@@ -80,7 +85,7 @@ xPathScrapers:
       # These sites only have profiles for female performers, so using fixed: Female
         fixed: Female
       Birthdate:
-        selector: $profileBE[contains(strong, "Birth date:")]//text()
+        selector: $profileBE[contains(strong, "Birth date:")]//text() | $profilePP[contains(strong, "Birth date:")]/following-sibling::*[1]/text()
         postProcess:
           - replace:
               - regex: .*Birth date:\s*(.*)\s*$
@@ -88,19 +93,19 @@ xPathScrapers:
           - parseDate: January 2, 2006
           - parseDate: 2006-01-02
       Country:
-        selector: //div[@class="video-info"]/meta[@content="Japanese idol"]/@content | $profileBE[contains(strong, "Country:")]//text() | $profileTT[contains(strong, "Ethnicity:")]/following-sibling::*[1]text()
+        selector: $profileBE[contains(strong, "Country:")]//text() | $profileTT[contains(strong, "Ethnicity:")]/following-sibling::*[1]/text() | $profilePP[contains(strong, "Country:")]/following-sibling::*[1]/text() | //div[@class="video-info"]/meta[@content="Japanese idol"]/@content
         postProcess:
           - replace:
               - regex: .*Country:\s*(.*)\s*$
                 with: $1
-              - regex: None
+              - regex: "None|Other Country"
                 with:
               - regex: ^Thai$
                 with: Thailand
               - regex: ^Japanese idol$
                 with: Japan
       Ethnicity:
-        selector: //div[@class="video-info"]/meta[@content="Japanese idol"]/@content | $profileBE[contains(strong, "Ethnicity:")]//text() | $profileTT[contains(strong, "Ethnicity:")]/following-sibling::*[1]text()
+        selector: $profileBE[contains(strong, "Ethnicity:")]//text() | $profilePP[contains(strong, "Ethnicity:")]/following-sibling::*[1]/text() | $profileTT[contains(strong, "Ethnicity:")]/following-sibling::*[1]/text() | //div[@class="video-info"]/meta[@content="Japanese idol"]/@content
         postProcess:
           - replace:
               - regex: .*Ethnicity:\s*(.*)\s*$
@@ -122,7 +127,7 @@ xPathScrapers:
               - regex: None
                 with:
       Height:
-        selector: $profileBE[contains(strong, "Height:")]//text() | $profileTT[contains(strong, "Height:")]/following-sibling::*[1]text()
+        selector: $profileBE[contains(strong, "Height:")]//text() | $profileTT[contains(strong, "Height:")]/following-sibling::*[1]/text()
         postProcess:
           - replace:
               - regex: .*Height:\s*(.*)\s*$
@@ -134,7 +139,7 @@ xPathScrapers:
               - regex: None
                 with:
       HairColor:
-        selector: $profileBE[contains(strong, "Hair color:")]//text() | $profileTT[contains(strong, "Hair color:")]/following-sibling::*[1]text()
+        selector: $profileBE[contains(strong, "Hair color:")]//text() | $profileTT[contains(strong, "Hair color:")]/following-sibling::*[1]/text()  | $profilePP[contains(strong, "Hair color:")]/following-sibling::*[1]/text()
         postProcess:
           - replace:
               - regex: .*Hair Color:?\s*(.*)\s*$
@@ -143,23 +148,31 @@ xPathScrapers:
                 with: $1
               - regex: None|N/A
                 with:
+      EyeColor:
+        selector: $profileBE[contains(strong, "Eye color:")]//text() | $profileTT[contains(strong, "Eye color:")]/following-sibling::*[1]/text() | $profilePP[contains(strong, "Eye Color:")]/following-sibling::*[1]/text()
+        postProcess:
+          - replace:
+              - regex: .*Eye Color:?\s*(.*)\s*$
+                with: $1
+              - regex: .*Eye color:?\s*(.*)\s*$
+                with: $1
+              - regex: None|N/A
+                with:
       Piercings:
-        selector: $profileBE[contains(strong, "Piercings:")]//text()
+        selector: $profileBE[contains(strong, "Piercings:")]//text() | $profilePP[contains(strong, "Piercings:")]/following-sibling::*[1]/text()
         postProcess:
           - replace:
               - regex: .*Piercings:\s*(.*)\s*$
                 with: $1
-              - regex: None
-                with:
-              - regex: No Piercings
+              - regex: "None|No Piercings|^No$"
                 with:
       Tattoos:
-        selector: $profileBE[contains(strong, "Tattoo:")]//text()
+        selector: $profileBE[contains(strong, "Tattoo:")]//text() | $profilePP[contains(strong, "Tattoos:")]/following-sibling::*[1]/text()
         postProcess:
           - replace:
               - regex: .*Tattoo:\s*(.*)\s*$
                 with: $1
-              - regex: None
+              - regex: "None|^No$"
                 with:
       Instagram:
         selector: $profileBE[contains(strong, "Instagram:")]/a/@href
@@ -172,13 +185,13 @@ xPathScrapers:
               - regex: ... Read More
                 with:
       URL: 
-        selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href
+        selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href | //div[@class="model-info"]/a/@href
         postProcess:
           - replace:
             - regex: \s*(.*)\s*feed/$
               with: $1
       Image:
-        selector: //div[@class="model-photo"]/img[@class="rounded"]/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1-2"]//img/@src
+        selector: //div[@class="model-photo"]/img[@class="rounded"]/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1-2"]//img/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1"]//img/@src
         postProcess:
           - replace:
               - regex: ^//
