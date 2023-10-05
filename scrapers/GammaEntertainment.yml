@@ -7,7 +7,6 @@ sceneByURL:
       - analacrobats.com/en/video/
       - ashleyfires.com/
       - bigfatcreampie.com/
-      - blowpass.com/en/video/
       - bskow.com/en/video/
       - bushybushy.com/
       - buttman.com/
@@ -143,7 +142,6 @@ xPathScrapers:
                 analacrobats: Anal Acrobats
                 ashleyfires: Ashley Fires
                 bigfatcreampie: Big Fat Cream Pie
-                blowpass: Blowpass
                 bskow: BsKow
                 bushybushy: Bushy Bushy
                 buttman: Buttman
@@ -212,4 +210,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated January 13, 2023
+# Last Updated October 04, 2023
