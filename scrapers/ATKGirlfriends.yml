@@ -1,0 +1,90 @@
+name: ATK Girlfriends
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ATKGirlfriends.py
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.atkgirlfriends.com/tour/model/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.atkgirlfriends.com/tour/movie/
+    scraper: sceneScraper
+xPathScrapers:
+  performerScraper:
+    common:
+      $modelWrap: &modelWrap //div[contains(@class, "model-profile-wrap")]
+    performer:
+      Name: //h1[contains(@class, "page-title")]
+      Gender:
+        fixed: female
+      Ethnicity:
+        selector: $modelWrap/b[contains(text(), "Ethnicity")]/following-sibling::text()
+      HairColor:
+        selector: $modelWrap/b[contains(text(), "Hair Color")]/following-sibling::text()
+        postProcess:
+          - map:
+              black: Black
+              blond: Blonde
+              brown: Brown
+              red: Red
+              white: White
+      Height:
+        selector: $modelWrap/b[contains(text(), "Height")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: $modelWrap/b[contains(text(), "Weight")]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: (\d+).*
+              with: $1
+          - lbToKg: true
+      Measurements:
+        selector: $modelWrap/b[contains(text(), "Bust Size")]/following-sibling::text()
+      Image:
+        selector: $modelWrap/img/@src
+  sceneScraper:
+    common:
+      $movieWrap: //div[contains(@class, "movie-wrap")]
+      $modelWrap: *modelWrap
+    scene:
+      Title: //title
+      Details: $movieWrap/b[contains(text(), "Description")]/following-sibling::text()
+      URL:
+        selector: //video/source/@src
+        postProcess:
+          - replace:
+            # 0: Match (ale138ATK_290698001_hd.mp4)
+            # 1: Model (ale138)
+            # 2: Movie (290698)
+            # 3: Scene (001)
+            # 4: Resolution (hd)
+            # 5: Extension (mp4)
+            - regex: &filenameRegex ^.*([a-z]{3}\d{3})ATK_(\d+)(\d{3})_(\w*)\.(\w+).*$
+              with: https://www.atkgirlfriends.com/tour/movie/$2
+      Image: //video/@poster
+      Studio:
+        Name:
+          fixed: ATK Girlfriends
+        URL:
+          fixed: https://www.atkgirlfriends.com/
+      Tags:
+        Name:
+          selector: $movieWrap/b[contains(text(), "Tags")]/following-sibling::text()
+          split: ','
+      Performers:
+        Name: $modelWrap/text()[1]
+driver:
+  cookies:
+    - CookieURL: https://www.atkgirlfriends.com
+      Cookies:
+        - Name: start_session_galleria
+          Domain: www.atkgirlfriends.com
+          Value: stash # Rotate this value if the scraper is blocked. The first request with the new value should fail.
+          Path: /
+# Last Updated April 14, 2022
