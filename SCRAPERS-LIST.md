@@ -134,15 +134,15 @@ av69.tv|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avadawn.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 avanal.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 aventertainments.com|AVE.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Database
-avidolz.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
+avidolz.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|JAV Uncensored
 avjiali.com|AVJiali.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|JAV Uncensored
 avstockings.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avtits.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 aziani.com|Aziani.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 babearchives.com|BabeArchives.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 babepedia.com|Babepedia.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Database
-baberotica.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-baberoticavr.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+baberotica.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+baberoticavr.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 babes.com|Brazzers.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|CDP|-
 babesandstars.com|Babes&Stars.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
 babesnetwork.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
@@ -1353,6 +1353,7 @@ stunning18.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_che
 subbyhubby.com|SubbyHubby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 submissivex.com|SubmissiveX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 subspaceland.com|SubspaceLand.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+suckmevr.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 sugarcookie.xxx|sugarcookie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sugardaddyporn.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 suggabunny.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1416,7 +1417,7 @@ teenslovehugecocks.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark
 teensnaturalway.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teensneaks.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 teenstryblacks.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-teenthais.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Thai Uncensored
+teenthais.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Thai Uncensored
 teentugs.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 teenytaboo.com|TeenyTaboo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tenshigao.com|Tenshigao.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Jav
@@ -1574,7 +1575,8 @@ vrhush.com|VRHush.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 vrintimacy.com|CzechVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 vrlatina.com|VRLatina.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
 vrporn.com|VRPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
-vrporncz.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+vrporncz.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+vrpornpass.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 vrxdb.com|VrxDB.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vtubie.com|vTubie.yml|:x:|:x:|:x:|:heavy_check_mark:|-|VTuber Database
 wakeupnfuck.com|WakeUpnFuck.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
