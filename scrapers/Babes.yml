@@ -1,0 +1,224 @@
+name: Babes
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.babes.com/scene
+    scraper: sceneScraper
+#sceneByName:
+#  action: scrapeXPath
+#  queryURL: https://www.babes.com/scenes?q={}
+#  scraper: sceneScraper
+#sceneByQueryFragment:
+#  action: scraperXPath
+#  queryURL: "{url}"
+#  scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - www.babes.com/model
+    scraper: performerScraper
+#performerByName:
+#  action: scrapeXPath
+#  queryURL: https://www.babes.com/models?q={}
+#  scraper: performerSearch
+xPathScrapers:
+#  performerSearch:
+#    performer:
+#      Name: //a[contains(concat(' ',normalize-space(@class),' '),' one-list-hueuj4 ')]/text()
+#      URL:
+#        selector: //a[contains(concat(' ',normalize-space(@class),' '),' one-list-hueuj4 ')]/@href
+#        postProcess:
+#          - replace:
+#              - regex: ^
+#                with: https://www.babes.com
+  performerScraper:
+    common:
+      $root: //div[contains(concat(' ',normalize-space(@class),' '),' cPKtEE ')]
+    performer:
+      Name: //div[contains(concat(' ',normalize-space(@class),' '),' sc-ebvhsz-1 ')]/text()
+      URL: //link[@rel="canonical"]/@href
+      Image:
+        selector: //div[contains(concat(' ',normalize-space(@class),' '),' cPKtEE ')]//img[1]/@src
+        postProcess:
+          - replace:
+              - regex: (^.+?)width
+                with: $1
+      Birthdate:
+        selector: $root//span[contains(text(),"Date of Birth:")]/following-sibling::span/text()
+        postProcess:
+          - map:
+              N/A: ""
+          - replace:
+#              - regex: \d{1,2}(nd)|\d{1,2}(th)
+              - regex: (nd)|(th)
+                with: ""
+          - parseDate: January 2, 2006
+      Ethnicity: $root//span[contains(text(),"Ethnicity:")]/following-sibling::a/text()
+      Country:
+        selector: $root//span[contains(text(),"Birth Place:")]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: .*?,\s
+                with: ""
+          - map:
+              N/A: ""
+              AK: "USA"
+              AL: "USA"
+              AR: "USA"
+              AZ: "USA"
+              CA: "USA"
+              CO: "USA"
+              CT: "USA"
+              DC: "USA"
+              DE: "USA"
+              FL: "USA"
+              GA: "USA"
+              HI: "USA"
+              IA: "USA"
+              ID: "USA"
+              IL: "USA"
+              IN: "USA"
+              KS: "USA"
+              KY: "USA"
+              LA: "USA"
+              MA: "USA"
+              MD: "USA"
+              ME: "USA"
+              MI: "USA"
+              MN: "USA"
+              MO: "USA"
+              MS: "USA"
+              MT: "USA"
+              NC: "USA"
+              ND: "USA"
+              NE: "USA"
+              NH: "USA"
+              NJ: "USA"
+              NM: "USA"
+              NV: "USA"
+              NY: "USA"
+              OH: "USA"
+              OK: "USA"
+              OR: "USA"
+              PA: "USA"
+              RI: "USA"
+              SC: "USA"
+              SD: "USA"
+              TN: "USA"
+              TX: "USA"
+              UT: "USA"
+              VA: "USA"
+              VT: "USA"
+              WA: "USA"
+              WI: "USA"
+              WV: "USA"
+              WY: "USA"
+              Alabama: "USA"
+              Alaska: "USA"
+              Arizona: "USA"
+              Arkansas: "USA"
+              California: "USA"
+              Colorado: "USA"
+              Connecticut: "USA"
+              Delaware: "USA"
+              Florida: "USA"
+              Georgia: "USA"
+              Hawaii: "USA"
+              Idaho: "USA"
+              Illinois: "USA"
+              Indiana: "USA"
+              Iowa: "USA"
+              Kansas: "USA"
+              Kentucky: "USA"
+              Louisiana: "USA"
+              Maine: "USA"
+              Maryland: "USA"
+              Massachusetts: "USA"
+              Michigan: "USA"
+              Minnesota: "USA"
+              Mississippi: "USA"
+              Missouri: "USA"
+              Montana: "USA"
+              Nebraska: "USA"
+              Nevada: "USA"
+              New Hampshire: "USA"
+              New Jersey: "USA"
+              New Mexico: "USA"
+              New York: "USA"
+              North Carolina: "USA"
+              North Dakota: "USA"
+              Ohio: "USA"
+              Oklahoma: "USA"
+              Oregon: "USA"
+              Pennsylvania: "USA"
+              Rhode Island: "USA"
+              South Carolina: "USA"
+              South Dakota: "USA"
+              Tennessee: "USA"
+              Texas: "USA"
+              Utah: "USA"
+              Vermont: "USA"
+              Virginia: "USA"
+              Washington: "USA"
+              West Virginia: "USA"
+              Wisconsin: "USA"
+              Wyoming: "USA"
+      Height:
+        selector: $root//span[contains(text(),"Height:")]/following-sibling::span/text()
+        postProcess:
+          - feetToCm: true
+      Measurements: $root//span[contains(text(),"Measurements:")]/following-sibling::span/text()
+      Gender:
+        fixed: "Female"
+      HairColor: $root//span[contains(text(),"Hair Color:")]/following-sibling::span/text()
+  sceneScraper:
+    common:
+      $data: //div[contains(concat(' ',normalize-space(@class),' '),' hAewsL ')]
+    scene:
+      Title: $data//h2[contains(concat(' ',normalize-space(@class),' '),' inCUUC ')]
+      Details: $data//p[contains(concat(' ',normalize-space(@class),' '),' sc-1efjxte-1 ')]/text()
+      Tags:
+        Name: $data//a[contains(concat(' ',normalize-space(@class),' '),' iDOtpJ ')]/text()
+      Performers:
+        Name: $data//a[contains(concat(' ',normalize-space(@class),' '),' YbRYu ')]/text()
+        URL:
+          selector: $data//a[contains(concat(' ',normalize-space(@class),' '),' YbRYu ')]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.babes.com
+      Studio:
+        Name:
+          fixed: Babes.com
+        URL:
+          fixed: www.babes.com
+      Image: $data//div[contains(concat(' ',normalize-space(@class),' '),' hAewsL ')]//img[contains(concat(' ',normalize-space(@class),' '),' dDnHIe ')]/@src
+
+#  sceneSearch:
+#    scene:
+#      Title: //a[contains(concat(' ',normalize-space(@class),' '),' one-list-q2wnob ')]/@title
+#      URL:
+#        selector: //a[contains(concat(' ',normalize-space(@class),' '),' one-list-q2wnob ')]/@href
+#        postProcess:
+#          - replace:
+#            -  regex: ^
+#               with: https://www.babes.com
+#      Image: //a[contains(concat(' ',normalize-space(@class),' '),' one-list-q2wnob ')]//img/@src
+        
+#debug:
+#  printHTML: true
+#
+#driver:
+#  useCDP: true
+#  cookies:
+#    - CookieURL: https://www.babes.com
+#      Cookies:
+#        - Name: "iAgree"
+#          Domain: "www.babes.com"
+#          Value: 1
+#          Path: "/"
+#  headers:
+#    - Key: User-Agent
+#      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+
+# Last Updated August 15, 2023
