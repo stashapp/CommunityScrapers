@@ -6,6 +6,7 @@ import re
 import sqlite3
 import sys
 from configparser import ConfigParser, NoSectionError
+from socket import getaddrinfo, AddressFamily, SocketKind # pylint: disable=no-name-in-module
 from urllib.parse import urlparse
 
 try:
@@ -86,6 +87,7 @@ SERIE_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
 # not the studio
 SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
     "Adamandevepictures": "Adam & Eve Pictures",
+    "AdultTimePilots": "Adult Time Pilots",
     "AgentRedGirl": "Agent Red Girl",
     "Devils Gangbangs": "Devil's Gangbangs",
     "Devilstgirls": "Devil's Tgirls",
@@ -704,22 +706,62 @@ def parse_scene_json(scene_json, url=None):
                     scrape['movies'][0][
                         'url'] = f"{MOVIE_SITES[URL_DOMAIN]}/{scene_json['url_movie_title']}/{scene_json['movie_id']}"
         net_name = scene_json.get('network_name')
-        if net_name:
-            if net_name.lower() == "21 sextury":
-                hostname = "21sextury"
-            elif net_name.lower() == "21 naturals":
-                hostname = "21naturals"
-            elif net_name.lower() == 'transfixed':
-                hostname = 'transfixed'
-            
-        scrape[
-            'url'] = f"https://{hostname.lower()}.com/en/video/{hostname.lower()}/{scene_json['url_title']}/{scene_json['clip_id']}"
+        studio_path_part = hostname.lower()
+        if net_name and net_name.replace(' ', '').lower() in [
+                    '21sextury',
+                    '21naturals',
+                    'girlsway',
+                    'transfixed'
+                ]:
+            hostname = net_name.replace(' ', '').lower()
+        if hostname in ['pansexualx']:
+            hostname = 'evilangel'
+
+        fqdn = determine_fqdn(hostname, net_name)
+        if fqdn in ['www.adulttimepilots.com']:
+            scrape['url'] = f"https://{fqdn}/{scene_json['url_title'].lower()}/"
+        else:
+            scrape['url'] = f"https://{fqdn}/en/video/{studio_path_part}/{scene_json['url_title']}/{scene_json['clip_id']}"
     except Exception as exc:
         log.debug(f"{exc}")
         if url:
             scrape['url'] = url
     #log.debug(f"{scrape}")
     return scrape
+
+
+def dns_lookup(fqdn: str) -> list:
+    """
+    DNS (A record) lookup for FQDN (e.g. www.evilangel.com)
+    """
+    try:
+        addrinfo = getaddrinfo(fqdn, 0)
+        log.trace(f"addrinfo: {addrinfo}")
+        dns_records = [
+            i[4][0] for i in addrinfo
+            if i[0] is AddressFamily.AF_INET
+                and ( i[1] is SocketKind.SOCK_RAW or i[1] is SocketKind.SOCK_DGRAM )
+        ]
+        log.trace(f"DNS records: {dns_records}")
+        return dns_records
+    except:
+        log.warning(f"{fqdn} has no DNS records")
+        return []
+
+
+def determine_fqdn(hostname: str, net_name: str) -> str:
+    """
+    Determine FQDN (e.g. www.evilangel.com) from `hostname` and `net_name`
+    """
+    for domain in [ d.replace(' ', '').lower() for d in [hostname, net_name] ]:
+        fqdn = f"www.{domain}.com"
+        fqdn_dns_records = dns_lookup(fqdn)
+        log.debug(f"Found {len(fqdn_dns_records)} DNS records for {fqdn}")
+        if len(fqdn_dns_records) > 0:
+            return fqdn
+    # fallback to net_name FQDN anyway even if it has no DNS records
+    return fqdn
+
 
 def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
     """
@@ -787,7 +829,7 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
             hostname = "21sextury"
         elif net_name.lower() == "21 naturals":
             hostname = "21naturals"
-        scrape['url'] = f"https://www.{hostname.lower()}.com/en/photo/" \
+        scrape['url'] = f"https://{determine_fqdn(hostname, net_name).lower()}/en/photo/" \
             f"{gallery_json['url_title']}/{gallery_json['set_id']}"
     except:
         if url:
