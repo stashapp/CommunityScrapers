@@ -101,4 +101,4 @@ xPathScrapers:
       Studio:
         Name: //div[@class="col-md-3 info"]//span[contains(text(), '發行商')]/../a/text()
 
-# Last Updated Jul 6, 2023
+# Last Updated Jul 06, 2023
