@@ -1352,6 +1352,7 @@ stunning18.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_che
 subbyhubby.com|SubbyHubby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 submissivex.com|SubmissiveX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 subspaceland.com|SubspaceLand.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+suckmevr.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 sugarcookie.xxx|sugarcookie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sugardaddyporn.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 suggabunny.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1573,7 +1574,8 @@ vrhush.com|VRHush.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 vrintimacy.com|CzechVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 vrlatina.com|VRLatina.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
 vrporn.com|VRPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
-vrporncz.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+vrporncz.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+vrpornpass.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 vrxdb.com|VrxDB.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wakeupnfuck.com|WakeUpnFuck.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wankitnow.com|WankItNow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
