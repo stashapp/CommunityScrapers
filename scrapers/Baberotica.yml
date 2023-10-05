@@ -22,12 +22,19 @@ xPathScrapers:
         Name: //p/span[@itemprop="actor"]/a/span | //div[@class="cat"][1]/a/text()
         URL: //div[@class="cat"][1]/a/@href | //span[@itemprop="actor"]/a/@href
       Date:
-        selector: //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="datePublished"]/@content
+      # vrpornpass.com does not currently provide the scene published date on the non-paid site
+        selector: //div[contains(@class, "pure-u-1")]//meta[@itemprop="datePublished"]/@content | //div[@class="video-date"]
         postProcess:
           - replace:
+              - regex: .*Added:\s*(.*)\s*$
+                with: $1
               - regex: "T.+$"
                 with: ""
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
           - parseDate: 2006-01-02
+          - parseDate: January 02, 2006
+          - parseDate: 2006-01-02T15:04:05-07:00
       Tags:
         Name: //a[@itemprop="genre"] | //div[@class="cat"][2]/a
       Details:
@@ -37,7 +44,7 @@ xPathScrapers:
               - regex: ... Read More
                 with:
       Image:
-        selector: //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="thumbnailUrl"]/@content | //div[@class="rel"]/img/@src
+        selector: //div[@id="videohtml5tour"]//img[@class="pure-img"]/@src | //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="thumbnailUrl"]/@content | //div[@class="rel"]/img/@src
         postProcess:
           - replace:
               - regex: ^//
