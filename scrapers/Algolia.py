@@ -753,7 +753,7 @@ def determine_fqdn(hostname: str, net_name: str) -> str:
     """
     Determine FQDN (e.g. www.evilangel.com) from `hostname` and `net_name`
     """
-    for domain in [ d.replace(' ', '').lower() for d in [hostname, net_name] ]:
+    for domain in [ d.replace(' ', '').lower() for d in [hostname, net_name] if d is not None ]:
         fqdn = f"www.{domain}.com"
         fqdn_dns_records = dns_lookup(fqdn)
         log.debug(f"Found {len(fqdn_dns_records)} DNS records for {fqdn}")
