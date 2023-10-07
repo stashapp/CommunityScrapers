@@ -3,42 +3,48 @@ name: TeenMegaWorld
 sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
-    url:
-      - anal-angels.com/trailers/
-      - anal-beauty.com/trailers/
-      - beauty-angels.com/trailers/
-      - beauty4k.com/trailers/
-      - creampie-angels.com/trailers/
-      - dirty-coach.com/trailers/
-      - dirty-doctor.com/trailers/
-      - firstbgg.com/trailers/
-      - fuckstudies.com/trailers/
-      - gag-n-gape.com/trailers/
-      - lollyhardcore.com/trailers/
-      - nubilegirlshd.com/trailers/
-      - old-n-young.com/trailers/
-      - rawcouples.com/trailers/
-      - soloteengirls.net/trailers/
-      - teenmegaworld.net/trailers/
-      - teensexmania.com/trailers/
-      - teensexmovs.com/trailers/
-      - trickymasseur.com/trailers/
-      - x-angels.com/trailers/
-      # Behind paywall
+    url: &urls
+      - anal-angels.com
+      - anal-beauty.com
+      - beauty-angels.com
+      - beauty4k.com
+      - creampie-angels.com
+      - dirty-coach.com
+      - dirty-doctor.com
+      - firstbgg.com
+      - fuckstudies.com
+      - gag-n-gape.com
+      - ohmyholes.com
+      - old-n-young.com
+      - rawcouples.com
+      - soloteengirls.net
+      - teenmegaworld.net
+      - teensexmania.com
+      - teensexmovs.com
+      - trickymasseur.com
+      - x-angels.com
+      # Behind paywall - Scenes for these sites can be scraped from the public https://teenmegaworld.net/ site
       # - 18firstsex.com
       # - aboutgirlslove.com
       # - atmovs.com
       # - exgfbox.com
       # - hometeenvids.com
-      # - nylonsx.com
-      # - squirtingvirgin.com
-      # - watchmefucked.com
-      # - wow-orgasms.com
-      # Unsupported sites
       # - hometoyteens.com
+      # - lollyhardcore.com
+      # - nubilegirlshd.com
+      # - nylonsx.com
       # - privateteenvideo.com
+      # - squirtingvirgin.com
       # - teens3some.com
       # - teenstarsonly.com
+      # - tmwpov.com
+      # - tmwvrnet.com
+      # - watchmefucked.com
+      # - wow-orgasms.com
+performerByURL:
+  - action: scrapeXPath
+    scraper: performerScraper
+    url: *urls
 xPathScrapers:
   sceneScraper:
     common:
@@ -54,10 +60,11 @@ xPathScrapers:
         concat: "\n\n"
       Performers:
         Name: $content//a[contains(@href,"/models/")]
+        URL: $content//a[contains(@href,"/models/")]/@href
       Tags:
         Name: $content//ul[@class="tag-list"]//a
       Image:
-        selector: $content//video/@poster
+        selector: $content//video/@poster | $content//dl8-video/@poster
         postProcess:
           - replace:
               - regex: ^
@@ -69,4 +76,27 @@ xPathScrapers:
             - replace:
                 - regex: \.(com|net)$
                   with:
-# Last Updated September 26, 2021
+  performerScraper:
+    common: 
+      $model: //section[@class="model-info single-component"]
+    performer:
+      Name: $model//h1
+      Details: $model//div[@class="bio"]/div[@class="text"]
+      Gender:
+        # Only female performers are listed on the sites
+        fixed: Female
+      CareerLength:
+        selector: $model//div[@class="title"][contains(text(), "Debut year:")]/following-sibling::div/text()
+        postProcess:
+          - replace:
+              - regex: $
+                with: " - "
+      HairColor: $model//div[@class="title"][contains(text(), "Hair:")]/following-sibling::div/text()
+      EyeColor: $model//div[@class="title"][contains(text(), "Eyes:")]/following-sibling::div/text()
+      Image:
+        selector: $model//img/@data-src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://teenmegaworld.net
+# Last Updated October 07, 2023
