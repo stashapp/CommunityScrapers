@@ -79,7 +79,6 @@ xPathScrapers:
   performerScraper:
     common: 
       $model: //section[@class="model-info single-component"]
-      $model-info: $model//div[@class="title"]
     performer:
       Name: $model//h1
       Details: $model//div[@class="bio"]/div[@class="text"]
@@ -87,13 +86,13 @@ xPathScrapers:
         # Only female performers are listed on the sites
         fixed: Female
       CareerLength:
-        selector: $model-info[contains(text(), "Debut year:")]/following-sibling::div/text()
+        selector: $model//div[@class="title"][contains(text(), "Debut year:")]/following-sibling::div/text()
         postProcess:
           - replace:
               - regex: $
                 with: " - "
-      HairColor: $model-info[contains(text(), "Hair:")]/following-sibling::div/text()
-      EyeColor: $model-info[contains(text(), "Eyes:")]/following-sibling::div/text()
+      HairColor: $model//div[@class="title"][contains(text(), "Hair:")]/following-sibling::div/text()
+      EyeColor: $model//div[@class="title"][contains(text(), "Eyes:")]/following-sibling::div/text()
       Image:
         selector: $model//img/@data-src
         postProcess:
