@@ -33,37 +33,37 @@ except ModuleNotFoundError:
     )
     sys.exit()
 
-def get_request(url: str) -> requests.Response():
+def get_request(url: str) -> requests.Response:
     """
     wrapper function over requests.get to set common options
     """
-    mv_headers = {
-        "User-Agent":
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
-        "Referer": "https://www.manyvids.com/"
-    }
     log.trace(f"GET {url}")
-    return requests.get(url, headers=mv_headers, timeout=(3, 10))
+    return requests.get(url, timeout=(3, 10))
 
-def post_request(url: str, json: dict) -> requests.Response():
+def post_request(url: str, json: dict) -> requests.Response:
     """
     wrapper function over requests.post to set common options
     """
-    mv_headers = {
-        "User-Agent":
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
-        "x-requested-with": "XMLHttpRequest",
-        "Referer": "https://www.manyvids.com/"
-    }
     with requests.Session() as session:
         log.trace(f"POST {url} {json}")
-        poke = session.get("https://www.manyvids.com/", headers=mv_headers, timeout=(3, 10))
+        poke = session.get("https://www.manyvids.com/Vids/", timeout=(3, 10))
         root = html.fromstring(poke.content)
-        token = root.xpath('//html/@data-mvtoken')[0]
-        return session.post(url, json=json | {"mvtoken": token}, headers=mv_headers, timeout=(3, 10))
+        token = root.xpath('//html/@data-mvtoken')
+        if not token:
+            log.error("Failed to get @data-mvtoken from page")
+        xsrf_token = session.cookies.get("XSRF-TOKEN")
+        if not xsrf_token:
+            log.error("Failed to get XSRF-TOKEN from cookies")
+        res = session.post(
+            url,
+            json=json | {"mvtoken": token[0]},
+            headers={"X-XSRF-TOKEN": xsrf_token, "x-requested-with": "XMLHttpRequest"},
+            timeout=(3, 10)
+        )
+        return res
 
 
-def get_model_name(model_id: str) -> str:
+def get_model_name(model_id: str) -> str | None:
     """
     Get model name from its id
     Manyvids redirects to the model profile page as long as you provide the id in the url
@@ -80,7 +80,7 @@ def get_model_name(model_id: str) -> str:
         log.debug(f"Failed to get name for '{model_id}': {exc}")
 
 
-def clean_text(details: str) -> dict:
+def clean_text(details: str) -> str:
     """
     remove escaped backslashes and html parse the details text
     """
@@ -105,7 +105,7 @@ def map_ethnicity(ethnicity: str) -> str:
             "Other": "other"
     }
 
-    return ethnicities.get(ethnicity)
+    return ethnicities.get(ethnicity, ethnicity)
 
 def get_scene(scene_id: str) -> dict:
     """
@@ -155,7 +155,7 @@ def get_scene(scene_id: str) -> dict:
 
     scrape['tags'] = [{"name": x} for x in meta.get('tags', [])]
 
-    log.debug(f"Scraped data: {json.dumps(scrape, indent=2)}")
+    log.debug(f"Scraped data: {json.dumps(scrape)}")
     return scrape
 
 
@@ -256,60 +256,54 @@ def get_model_bio(url_handle: str, performer_url: str) -> dict:
     except requests.exceptions.RequestException as url_error:
         log.error(f"Error while requesting data from profile page: {url_error}")
 
-    log.debug(f"Scraped data: {json.dumps(scrape, indent=2)}")
+    log.debug(f"Scraped data: {json.dumps(scrape)}")
     return scrape
 
 
-def scrape_scene(scene_url: str) -> None:
-    scraped = {}
+def scrape_scene(scene_url: str) -> dict | None:
     if scene_id := re.search(r".+/Video/(\d+)(/.+)?", scene_url):
-        scraped = get_scene(scene_id.group(1))
+        return get_scene(scene_id.group(1))
     else:
         log.error(f"Failed to get video ID from '{scene_url}'")
-    print(json.dumps(scraped))
 
 
-def scrape_performer(performer_url: str) -> None:
-    scraped = {}
+def scrape_performer(performer_url: str) -> dict | None:
+    scraped = None
     if (handler_match := re.search(r".+/Profile/(\d+)/([^/]+)/.*", performer_url)):
         performer_id = handler_match.group(1)
         url_handler = handler_match.group(2).lower()
         performer_about_url = f"https://www.manyvids.com/Profile/{performer_id}/{url_handler}/About/"
         scraped = get_model_bio(url_handler, performer_about_url)
         scraped["url"] = performer_url
+        return scraped
     else:
         log.error(f"Failed to get performer ID from '{performer_url}'")
-    print(json.dumps(scraped))
 
 
-def performer_by_name(name: str, max_results: int = 25) -> None:
+def performer_by_name(name: str, max_results: int = 25) -> list[dict] | None:
     search_url = f'https://www.manyvids.com/MVGirls/?keywords={quote_plus(name)}&search_type=0&sort=10&page=1'
     xpath_url = '//h4[contains(@class,"profile-pic-name")]/a[@title]'
     try:
         response = get_request(search_url)
     except Exception as search_exc:
         log.error(f"Failed to search for performer '{name}': {search_exc}")
-        print("{}")
         return
     root = html.fromstring(response.content)
     perf_nodes = root.xpath(xpath_url)[:max_results]
     performers = [{"name": perf.text.strip(), "url": perf.get('href')} for perf in perf_nodes]
-    print(json.dumps(performers))
+    return performers
 
-def scene_by_name(name: str) -> None:
+def scene_by_name(name: str, max_results: int = 10) -> list[dict] | None:
     try:
-        response  = post_request("https://www.manyvids.com/api/vids/", {
-            "search_type": 1,
-            "sort": 10,
-            "page": 1,
-            "keywords": name,
-        })
+        response = post_request("https://www.manyvids.com/api/vids/", {"sort":10,"page":1,"type":"video","keywords":name})
     except Exception as search_exc:
         log.error(f"Failed to search for scene '{name}': {search_exc}")
-        print("{}")
         return
     meta = response.json()
-    vids = [res['video'] for res in meta['content']['items']]
+    if "error" in meta:
+        log.error(f"Failed to search for scene '{name}': {meta['error']}")
+        return []
+    vids = [res['video'] for res in meta['content']['items'][:max_results]]
     scrapes = []
     for vid in vids:
         scrape = {}
@@ -317,30 +311,36 @@ def scene_by_name(name: str) -> None:
         scrape['URL'] = 'https://www.manyvids.com' + vid['preview']['path']
         scrape['Image'] = vid['videoThumb']
         scrapes.append(scrape)
-    print(json.dumps(scrapes))
+    return scrapes
 
 
 def main():
     fragment = json.loads(sys.stdin.read())
     url = fragment.get("url")
-    queryURL = fragment.get("queryURL")
     name = fragment.get("name")
 
-    if url is None and name is None and queryURL is None:
-        log.error("No URL/Name provided")
-        sys.exit(1)
-
-    if name and "scene_by_name" in sys.argv:
-        scene_by_name(name)
-    elif url and "performer_by_url" in sys.argv:
-        scrape_performer(url)
-    elif name and "performer_by_name" in sys.argv:
-        performer_by_name(name)
-    elif url:
-        scrape_scene(url)
-    elif queryURL:
-        scrape_scene(queryURL)
-
+    result = None
+    if "scene_by_url" in sys.argv or "scene_by_query_fragment" in sys.argv:
+        if url:
+            result = scrape_scene(url)
+        else:
+            log.error("Missing URL: this should not be possible when called from Stash")
+    elif "scene_by_name" in sys.argv:
+        if name:
+            result = scene_by_name(name)
+        else:
+            log.error("Missing search query: this should not be possible when called from Stash")
+    elif "performer_by_url" in sys.argv:
+        if url:
+            result = scrape_performer(url)
+        else:
+            log.error("Missing URL: this should not be possible when called from Stash")
+    elif "performer_by_name" in sys.argv:
+        if name:
+            result = performer_by_name(name)
+        else:
+            log.error("Missing search query: this should not be possible when called from Stash")
+    print(json.dumps(result))
 
 if __name__ == "__main__":
     main()
