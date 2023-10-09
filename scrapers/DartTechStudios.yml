@@ -1,0 +1,67 @@
+name: DartTechStudios
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - darttechstudios.com/Media.php
+    scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.darttechstudios.com/Media.php?ID={filename}
+  queryURLReplace:
+    filename:
+      # the filename of the file downloaded from the site is the ID with an mp4 extension
+      - regex: (.*).mp4 # support filenames in the form 12345_performer_other_data.mp4
+        with: $1
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: &titledateSelector //font[@size="+1"]/b/text()
+        postProcess:
+          - replace:
+            - regex: ([^-]+).*
+              with: $1
+      Date:
+        selector: *titledateSelector
+        postProcess:
+          - replace:
+              - regex: .*([0-9]{2}/[0-9]{2}/[0-9]{4})
+                with: $1
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //div[@class="item2"]/a[contains(@href, '/Videos.php?Model=')]
+      Tags:
+        Name: //div[@class="item2"]/a[contains(@href, '/Videos.php?Fetish=')]
+      Details:
+        selector: //div[@class="item2"]/text()
+        concat: "\n\n"
+        postProcess:
+          - replace: 
+            - regex: "\n\n,"
+              with: ""
+      Image:
+        #selector: //div[@class="galleryEntry_UpdatePage"][1]//img/@src
+        selector: &imgSelector //img[@alt="Main Image"]/@src
+        postProcess:
+          - replace: 
+            - regex: (.*)
+              with: https://www.darttechstudios.com$1
+      Code:  
+        selector: *imgSelector
+        postProcess:
+          - replace:
+            - regex: &codeRegex /Content/[0-9]{4}_(.*)/Main.jpg
+              with: $1
+      URL:
+        selector: *imgSelector
+        postProcess:
+          - replace:
+            - regex: *codeRegex
+              with: https://www.darttechstudios.com/Media.php?ID=$1
+      Studio:
+        Name: 
+          fixed: Dart_Tech Studios
+# Last Updated October 08, 2023
