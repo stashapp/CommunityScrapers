@@ -60,7 +60,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02 2006
       Synopsis:
-        selector: //h4[contains(@class,"synopsis")]//text()
+        selector: //div[contains(@class,"synopsis-content")]//text()
         concat: " "
       Studio:
         Name: //a[@label="Studio"]/text()
@@ -78,12 +78,13 @@ xPathScrapers:
     scene:
       Title: //h1/text()
       Details:
-        selector: //h4[contains(@class,"synopsis")]//text()
+        selector: //div[contains(@class,"synopsis-content")]//text()
         concat: " "
       Date:
         selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
           - parseDate: Jan 02 2006
+      Director: //a[@label="Director"]/text()    
       Image: //a[@id="front-cover"]/@data-href
       Studio:
         Name: //a[@label="Studio"]/text()
@@ -101,4 +102,4 @@ xPathScrapers:
                 - regex: ^
                   with: "https://www.adultdvdempire.com"
       URL: //meta[@name='og:url']/@content
-# Last Updated December 16, 2021
+# Last Updated October 09, 2023
