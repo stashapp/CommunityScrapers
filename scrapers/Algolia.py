@@ -588,36 +588,85 @@ def determine_studio_name_from_json(some_json):
     - gallery
     - movie
     '''
+    
+    serie_name_map = {
+        '21FootArt': '21 Foot Art',
+        'Asshole fever': 'Asshole Fever',
+        'DPFanatics': 'DP Fanatics',
+        'IsThisReal': 'Is This Real?!',
+        'Jerk Buddies': 'HeteroFlexible',
+        'Lezcuties': 'Lez Cuties',
+    }
+    sitename_pretty_map = {
+        'Addicted2Girls': 'Addicted 2 Girls'
+    }
+
+    # Studio name from serie_name
+    if some_json.get('network_name') in [
+        '21 Naturals',
+        '21 Sextreme',
+        '21 Sextury',
+        'asgmax',
+        'Joymii',
+        'ModernDaySins'
+    ]:
+        # edge cases
+        if some_json['network_name'] == '21 Sextury' and some_json['serie_name'] == 'Solo':
+            return some_json['sitename_pretty']
+        # normal case (with some serie_name mapping)
+        return serie_name_map.get(some_json['serie_name'], some_json['serie_name'])
+
+    # Studio name from sitename_pretty
+    if some_json.get('network_name') in [
+        'Zero Tolerance Films'
+    ]:
+        return sitename_pretty_map.get(some_json['sitename_pretty'], some_json['sitename_pretty'])
+
+    # Studio name from network_name
+    if some_json.get('network_name') in [
+        'Adult Time Films',
+        'Adult Time Originals',
+        'Is This Real'
+    ]:
+        # edge cases
+        if some_json.get('serie_name') in [
+            'Accidental Gangbang',
+            'Family Siblings'
+        ]:
+            return some_json.get('serie_name')
+        # normal case (with some serie_name mapping)
+        return serie_name_map.get(some_json['serie_name'], some_json['network_name'])
+
     studio_name = None
-    if some_json.get('sitename_pretty'):
-        if some_json.get('sitename_pretty') in SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
-            studio_name = \
-                    SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(some_json.get('sitename_pretty'))
-        elif some_json.get('sitename_pretty') in SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE \
-                or some_json.get('serie_name') in SERIE_USING_SITENAME_AS_STUDIO_FOR_SCENE \
-                or some_json.get('network_name') \
-                and some_json.get('network_name') in NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE:
-            studio_name = some_json.get('sitename_pretty')
-        elif some_json.get('sitename_pretty') in SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE \
-                and some_json.get('network_name'):
-            studio_name = some_json.get('network_name')
-    if not studio_name and some_json.get('network_name') and \
-            some_json.get('network_name') in NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE:
-        studio_name = some_json.get('sitename_pretty')
-    if not studio_name and some_json.get('mainChannelName') and \
-            some_json.get('mainChannelName') in MAIN_CHANNELS_AS_STUDIO_FOR_SCENE:
-        studio_name = some_json.get('mainChannelName')
-    if not studio_name and some_json.get('directors'):
-        for director in [ d.get('name').strip() for d in some_json.get('directors') ]:
-            if DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE.get(director):
-                studio_name = \
-                        DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE.get(director)
-    if not studio_name and some_json.get('serie_name'):
-        if some_json.get('serie_name') in SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
-            studio_name = \
-                    SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(some_json.get('serie_name'))
-        else:
-            studio_name = some_json.get('serie_name')
+    # if some_json.get('sitename_pretty'):
+    #     if some_json.get('sitename_pretty') in SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
+    #         studio_name = \
+    #                 SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(some_json.get('sitename_pretty'))
+    #     elif some_json.get('sitename_pretty') in SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE \
+    #             or some_json.get('serie_name') in SERIE_USING_SITENAME_AS_STUDIO_FOR_SCENE \
+    #             or some_json.get('network_name') \
+    #             and some_json.get('network_name') in NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE:
+    #         studio_name = some_json.get('sitename_pretty')
+    #     elif some_json.get('sitename_pretty') in SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE \
+    #             and some_json.get('network_name'):
+    #         studio_name = some_json.get('network_name')
+    # if not studio_name and some_json.get('network_name') and \
+    #         some_json.get('network_name') in NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE:
+    #     studio_name = some_json.get('sitename_pretty')
+    # if not studio_name and some_json.get('mainChannelName') and \
+    #         some_json.get('mainChannelName') in MAIN_CHANNELS_AS_STUDIO_FOR_SCENE:
+    #     studio_name = some_json.get('mainChannelName')
+    # if not studio_name and some_json.get('directors'):
+    #     for director in [ d.get('name').strip() for d in some_json.get('directors') ]:
+    #         if DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE.get(director):
+    #             studio_name = \
+    #                     DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE.get(director)
+    # if not studio_name and some_json.get('serie_name'):
+    #     if some_json.get('serie_name') in SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
+    #         studio_name = \
+    #                 SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(some_json.get('serie_name'))
+    #     else:
+    #         studio_name = some_json.get('serie_name')
     return studio_name
 
 def parse_scene_json(scene_json, url=None):
@@ -651,7 +700,7 @@ def parse_scene_json(scene_json, url=None):
         scrape['studio']['name'] = studio_name
 
     log.debug(
-        f"[STUDIO] {scene_json.get('serie_name')} - {scene_json.get('network_name')} - {scene_json.get('mainChannelName')} - {scene_json.get('sitename_pretty')}"
+        f"[STUDIO] {json.dumps({'serie_name': scene_json.get('serie_name'), 'network_name': scene_json.get('network_name'), 'mainChannelName': scene_json.get('mainChannelName'), 'sitename': scene_json.get('sitename'), 'sitename_pretty': scene_json.get('sitename_pretty')})}"
     )
     # Performer
     perf = []
@@ -730,37 +779,21 @@ def parse_scene_json(scene_json, url=None):
     return scrape
 
 
-def dns_lookup(fqdn: str) -> list:
-    """
-    DNS (A record) lookup for FQDN (e.g. www.evilangel.com)
-    """
-    try:
-        addrinfo = getaddrinfo(fqdn, 0)
-        log.trace(f"addrinfo: {addrinfo}")
-        dns_records = [
-            i[4][0] for i in addrinfo
-            if i[0] is AddressFamily.AF_INET
-                and ( i[1] is SocketKind.SOCK_RAW or i[1] is SocketKind.SOCK_DGRAM )
-        ]
-        log.trace(f"DNS records: {dns_records}")
-        return dns_records
-    except:
-        log.warning(f"{fqdn} has no DNS records")
-        return []
-
-
 def determine_fqdn(hostname: str, net_name: str) -> str:
     """
     Determine FQDN (e.g. www.evilangel.com) from `hostname` and `net_name`
     """
-    for domain in [ d.replace(' ', '').lower() for d in [hostname, net_name] if d is not None ]:
-        fqdn = f"www.{domain}.com"
-        fqdn_dns_records = dns_lookup(fqdn)
-        log.debug(f"Found {len(fqdn_dns_records)} DNS records for {fqdn}")
-        if len(fqdn_dns_records) > 0:
-            return fqdn
-    # fallback to net_name FQDN anyway even if it has no DNS records
-    return fqdn
+    if net_name in ['21 Naturals', '21 Sextreme', '21 Sextury']:
+        return f"www.{net_name.replace(' ', '').lower()}.com"
+    elif net_name in ['Adult Time Films', 'Adult Time Originals']:
+        # edge cases
+        sitename_map = {
+            'accidentalgangbang': 'www.accidentalgangbang.com',
+            'jerkbuddies': 'www.heteroflexible.com'
+        }
+        return sitename_map.get(hostname, 'members.adulttime.com')
+    else:
+        return f"www.{hostname}.com"
 
 
 def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
@@ -839,216 +872,217 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
 # Start processing
 #
 
-try:
-    USERFOLDER_PATH = re.match(r".+\.stash.", __file__).group(0)
-    CONFIG_PATH = USERFOLDER_PATH + "config.yml"
-    log.debug(f"Config Path: {CONFIG_PATH}")
-except:
-    USERFOLDER_PATH = None
-    CONFIG_PATH = None
-    log.debug("No config")
+if __name__ == "__main__":
+    try:
+        USERFOLDER_PATH = re.match(r".+\.stash.", __file__).group(0)
+        CONFIG_PATH = USERFOLDER_PATH + "config.yml"
+        log.debug(f"Config Path: {CONFIG_PATH}")
+    except:
+        USERFOLDER_PATH = None
+        CONFIG_PATH = None
+        log.debug("No config")
 
-SITE = sys.argv[1]
-HEADERS = {
-    "User-Agent":
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
-    "Origin": f"https://www.{SITE}.com",
-    "Referer": f"https://www.{SITE}.com"
-}
+    SITE = sys.argv[1]
+    HEADERS = {
+        "User-Agent":
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+        "Origin": f"https://www.{SITE}.com",
+        "Referer": f"https://www.{SITE}.com"
+    }
 
-FRAGMENT = json.loads(sys.stdin.read())
-SEARCH_TITLE = FRAGMENT.get("name")
-SCENE_ID = FRAGMENT.get("id")
-SCENE_TITLE = FRAGMENT.get("title")
-SCENE_URL = FRAGMENT.get("url")
+    FRAGMENT = json.loads(sys.stdin.read())
+    SEARCH_TITLE = FRAGMENT.get("name")
+    SCENE_ID = FRAGMENT.get("id")
+    SCENE_TITLE = FRAGMENT.get("title")
+    SCENE_URL = FRAGMENT.get("url")
 
-# log.trace(f"fragment: {FRAGMENT}")
+    # log.trace(f"fragment: {FRAGMENT}")
 
-# ACCESS API
-# Check existing API keys
-CURRENT_TIME = datetime.datetime.now()
-application_id, api_key = check_config(SITE, CURRENT_TIME)
-# Getting new key
-if application_id is None:
-    application_id, api_key = apikey_get(f"https://www.{SITE}.com/en",
-                                         CURRENT_TIME)
-# Failed to get new key
-if application_id is None:
-    sys.exit(1)
-api_url = f"https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id={application_id}&x-algolia-api-key={api_key}"
+    # ACCESS API
+    # Check existing API keys
+    CURRENT_TIME = datetime.datetime.now()
+    application_id, api_key = check_config(SITE, CURRENT_TIME)
+    # Getting new key
+    if application_id is None:
+        application_id, api_key = apikey_get(f"https://www.{SITE}.com/en",
+                                            CURRENT_TIME)
+    # Failed to get new key
+    if application_id is None:
+        sys.exit(1)
+    api_url = f"https://tsmkfa364q-dsn.algolia.net/1/indexes/*/queries?x-algolia-application-id={application_id}&x-algolia-api-key={api_key}"
 
-#log.debug(HEADERS)
-#log.debug(FRAGMENT)
-URL_DOMAIN = None
-if SCENE_URL:
-    URL_DOMAIN = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc).lower()
-    log.info(f"URL Domain: {URL_DOMAIN}")
+    #log.debug(HEADERS)
+    #log.debug(FRAGMENT)
+    URL_DOMAIN = None
+    if SCENE_URL:
+        URL_DOMAIN = re.sub(r"www\.|\.com", "", urlparse(SCENE_URL).netloc).lower()
+        log.info(f"URL Domain: {URL_DOMAIN}")
 
-if "validName" in sys.argv and SCENE_URL is None:
-    sys.exit(1)
+    if "validName" in sys.argv and SCENE_URL is None:
+        sys.exit(1)
 
-if SCENE_URL and SCENE_ID is None:
-    log.debug(f"URL Scraping: {SCENE_URL}")
-else:
-    log.debug(f"Stash ID: {SCENE_ID}")
-    log.debug(f"Stash Title: {SCENE_TITLE}")
+    if SCENE_URL and SCENE_ID is None:
+        log.debug(f"URL Scraping: {SCENE_URL}")
+    else:
+        log.debug(f"Stash ID: {SCENE_ID}")
+        log.debug(f"Stash Title: {SCENE_TITLE}")
 
-if "movie" not in sys.argv and "gallery" not in sys.argv:
-    # Get your sqlite database
-    stash_config = graphql.configuration()
-    DB_PATH = None
-    if stash_config:
-        DB_PATH = stash_config["general"]["databasePath"]
+    if "movie" not in sys.argv and "gallery" not in sys.argv:
+        # Get your sqlite database
+        stash_config = graphql.configuration()
+        DB_PATH = None
+        if stash_config:
+            DB_PATH = stash_config["general"]["databasePath"]
 
-    if (CONFIG_PATH and DB_PATH is None):
-        # getting your database from the config.yml
-        if os.path.isfile(CONFIG_PATH):
-            with open(CONFIG_PATH, encoding='utf-8') as f:
-                for line in f:
-                    if "database: " in line:
-                        DB_PATH = line.replace("database: ", "").rstrip('\n')
-                        break
-    log.debug(f"Database Path: {DB_PATH}")
-    if DB_PATH:
-        if SCENE_ID:
-            # Get data by GraphQL
-            database_dict = graphql.getScene(SCENE_ID)
-            if database_dict is None:
-                # Get data by SQlite
-                log.warning(
-                    "GraphQL request failed, accessing database directly...")
-                database_dict = check_db(DB_PATH, SCENE_ID)
+        if (CONFIG_PATH and DB_PATH is None):
+            # getting your database from the config.yml
+            if os.path.isfile(CONFIG_PATH):
+                with open(CONFIG_PATH, encoding='utf-8') as f:
+                    for line in f:
+                        if "database: " in line:
+                            DB_PATH = line.replace("database: ", "").rstrip('\n')
+                            break
+        log.debug(f"Database Path: {DB_PATH}")
+        if DB_PATH:
+            if SCENE_ID:
+                # Get data by GraphQL
+                database_dict = graphql.getScene(SCENE_ID)
+                if database_dict is None:
+                    # Get data by SQlite
+                    log.warning(
+                        "GraphQL request failed, accessing database directly...")
+                    database_dict = check_db(DB_PATH, SCENE_ID)
+                else:
+                    database_dict = database_dict["file"]
+                log.debug(f"[DATABASE] Info: {database_dict}")
             else:
-                database_dict = database_dict["file"]
-            log.debug(f"[DATABASE] Info: {database_dict}")
+                database_dict = None
+                log.debug("URL scraping... Ignoring database...")
         else:
             database_dict = None
-            log.debug("URL scraping... Ignoring database...")
-    else:
-        database_dict = None
-        log.warning("Database path missing.")
+            log.warning("Database path missing.")
 
-    # Extract things
-    url_title = None
-    url_id = None
-    url_domain = None
-    if SCENE_URL:
-        url_id = get_id_from_url(SCENE_URL)
-        try:
-            url_title = re.match(r".+/(.+)/\d+", SCENE_URL).group(1)
-            log.info(f"URL_TITLE: {url_title}")
-        except:
-            log.warning("Can't get url_title from URL")
+        # Extract things
+        url_title = None
+        url_id = None
+        url_domain = None
+        if SCENE_URL:
+            url_id = get_id_from_url(SCENE_URL)
+            try:
+                url_title = re.match(r".+/(.+)/\d+", SCENE_URL).group(1)
+                log.info(f"URL_TITLE: {url_title}")
+            except:
+                log.warning("Can't get url_title from URL")
 
-    # Filter title
-    if SCENE_TITLE:
-        SCENE_TITLE = re.sub(r'[-._\']', ' ', os.path.splitext(SCENE_TITLE)[0])
-        # Remove resolution
-        SCENE_TITLE = re.sub(
-            r'\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|]|\sHD|\sSD|', '',
-            SCENE_TITLE)
-        # Remove Date
-        SCENE_TITLE = re.sub(r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}',
-                             '', SCENE_TITLE)
-        log.debug(f"Title: {SCENE_TITLE}")
+        # Filter title
+        if SCENE_TITLE:
+            SCENE_TITLE = re.sub(r'[-._\']', ' ', os.path.splitext(SCENE_TITLE)[0])
+            # Remove resolution
+            SCENE_TITLE = re.sub(
+                r'\sXXX|\s1080p|720p|2160p|KTR|RARBG|\scom\s|\[|]|\sHD|\sSD|', '',
+                SCENE_TITLE)
+            # Remove Date
+            SCENE_TITLE = re.sub(r'\s\d{2}\s\d{2}\s\d{2}|\s\d{4}\s\d{2}\s\d{2}',
+                                '', SCENE_TITLE)
+            log.debug(f"Title: {SCENE_TITLE}")
 
-    # Time to search the API
-    api_search = None
-    api_json = None
+        # Time to search the API
+        api_search = None
+        api_json = None
 
-    # sceneByName
-    if SEARCH_TITLE:
-        SEARCH_TITLE = SEARCH_TITLE.replace(".", " ")
-        log.debug(f"[API] Searching for: {SEARCH_TITLE}")
-        api_search = api_search_req("query_all_scenes", SEARCH_TITLE, api_url)
-        final_json = None
-        if api_search:
-            result_search = []
-            for scene in api_search:
-                scraped_json = parse_scene_json(scene)
-                if scraped_json.get("tags"):
-                    scraped_json.pop("tags")
-                result_search.append(scraped_json)
-            if result_search:
-                final_json = result_search
-        if final_json is None:
-            log.error("API Search finished. No results!")
-        print(json.dumps(final_json))
-        sys.exit()
+        # sceneByName
+        if SEARCH_TITLE:
+            SEARCH_TITLE = SEARCH_TITLE.replace(".", " ")
+            log.debug(f"[API] Searching for: {SEARCH_TITLE}")
+            api_search = api_search_req("query_all_scenes", SEARCH_TITLE, api_url)
+            final_json = None
+            if api_search:
+                result_search = []
+                for scene in api_search:
+                    scraped_json = parse_scene_json(scene)
+                    if scraped_json.get("tags"):
+                        scraped_json.pop("tags")
+                    result_search.append(scraped_json)
+                if result_search:
+                    final_json = result_search
+            if final_json is None:
+                log.error("API Search finished. No results!")
+            print(json.dumps(final_json))
+            sys.exit()
 
-    if url_id:
-        log.debug(f"[API] Searching using URL_ID {url_id}")
-        api_search = api_search_req("id", url_id, api_url)
-        if api_search:
-            log.info(f"[API] Search gives {len(api_search)} result(s)")
-            api_json = json_parser(api_search, 120, True)
+        if url_id:
+            log.debug(f"[API] Searching using URL_ID {url_id}")
+            api_search = api_search_req("id", url_id, api_url)
+            if api_search:
+                log.info(f"[API] Search gives {len(api_search)} result(s)")
+                api_json = json_parser(api_search, 120, True)
+            else:
+                log.warning("[API] No result")
+        if url_title and api_json is None:
+            log.debug("[API] Searching using URL_TITLE")
+            api_search = api_search_req("query_all_scenes", url_title, api_url)
+            if api_search:
+                log.info(f"[API] Search gives {len(api_search)} result(s)")
+                api_json = json_parser(api_search)
+        if SCENE_TITLE and api_json is None:
+            log.debug("[API] Searching using STASH_TITLE")
+            api_search = api_search_req("query_all_scenes", SCENE_TITLE, api_url)
+            if api_search:
+                log.info(f"[API] Search gives {len(api_search)} result(s)")
+                api_json = json_parser(api_search)
+
+        # Scraping the JSON
+        if api_json:
+            log.info(f"Scene found: {api_json['title']}")
+            scraped_json = parse_scene_json(api_json, SCENE_URL)
+            print(json.dumps(scraped_json))
         else:
-            log.warning("[API] No result")
-    if url_title and api_json is None:
-        log.debug("[API] Searching using URL_TITLE")
-        api_search = api_search_req("query_all_scenes", url_title, api_url)
-        if api_search:
-            log.info(f"[API] Search gives {len(api_search)} result(s)")
-            api_json = json_parser(api_search)
-    if SCENE_TITLE and api_json is None:
-        log.debug("[API] Searching using STASH_TITLE")
-        api_search = api_search_req("query_all_scenes", SCENE_TITLE, api_url)
-        if api_search:
-            log.info(f"[API] Search gives {len(api_search)} result(s)")
-            api_json = json_parser(api_search)
-
-    # Scraping the JSON
-    if api_json:
-        log.info(f"Scene found: {api_json['title']}")
-        scraped_json = parse_scene_json(api_json, SCENE_URL)
-        print(json.dumps(scraped_json))
-    else:
-        log.error("Can't find the scene")
-        print(json.dumps({}))
-        sys.exit()
-elif "movie" in sys.argv:
-    log.debug("Scraping movie")
-    movie_id = get_id_from_url(SCENE_URL)
-    if movie_id:
-        movie_results = api_search_movie_id(movie_id, api_url)
-        movie = movie_results.json()["results"][0].get("hits")
-        scraped_movie = parse_movie_json(movie)
-        #log.debug(scraped_movie)
-        print(json.dumps(scraped_movie))
-elif "gallery" in sys.argv:
-    scraped_gallery = None
-    if SCENE_URL:
-        if "/video/" in SCENE_URL:
-            log.debug("Scraping scene by URL")
-            scene_id = get_id_from_url(SCENE_URL)
-            api_search_response = api_search_req("id", scene_id, api_url)
-            if api_search_response:
-                # log.debug(f"[API] Search gives {len(api_search_response)} result(s)")
-                # log.trace(f"api_search_response: {api_search_response}")
-                scraped_gallery = parse_gallery_json(api_search_response[0])
+            log.error("Can't find the scene")
+            print(json.dumps({}))
+            sys.exit()
+    elif "movie" in sys.argv:
+        log.debug("Scraping movie")
+        movie_id = get_id_from_url(SCENE_URL)
+        if movie_id:
+            movie_results = api_search_movie_id(movie_id, api_url)
+            movie = movie_results.json()["results"][0].get("hits")
+            scraped_movie = parse_movie_json(movie)
+            #log.debug(scraped_movie)
+            print(json.dumps(scraped_movie))
+    elif "gallery" in sys.argv:
+        scraped_gallery = None
+        if SCENE_URL:
+            if "/video/" in SCENE_URL:
+                log.debug("Scraping scene by URL")
+                scene_id = get_id_from_url(SCENE_URL)
+                api_search_response = api_search_req("id", scene_id, api_url)
+                if api_search_response:
+                    # log.debug(f"[API] Search gives {len(api_search_response)} result(s)")
+                    # log.trace(f"api_search_response: {api_search_response}")
+                    scraped_gallery = parse_gallery_json(api_search_response[0])
+            else:
+                log.debug("Scraping gallery by URL")
+                gallery_id = get_id_from_url(SCENE_URL)
+                if gallery_id:
+                    gallery_results = api_search_gallery_id(gallery_id, api_url)
+                    gallery = gallery_results.json()["results"][0].get("hits")
+                    if gallery:
+                        #log.debug(gallery[0])
+                        scraped_gallery = parse_gallery_json(gallery[0])
+                        #log.debug(scraped_gallery)
+        elif SCENE_TITLE:
+            log.debug("Scraping gallery by fragment")
+            # log.debug(f"[API] Searching using SCENE_TITLE: {SCENE_TITLE}")
+            api_search = api_search_req("query_all_photosets", SCENE_TITLE, api_url)
+            if api_search:
+                log.info(f"[API] Search gives {len(api_search)} result(s)")
+                # log.trace(f"api_search: {api_search}")
+                log.debug(f"Galleries found: {'; '.join([g['title'] for g in api_search])}")
+                scraped_gallery = parse_gallery_json(api_search[0])
+        # Scraping the JSON
+        if scraped_gallery:
+            print(json.dumps(scraped_gallery))
         else:
-            log.debug("Scraping gallery by URL")
-            gallery_id = get_id_from_url(SCENE_URL)
-            if gallery_id:
-                gallery_results = api_search_gallery_id(gallery_id, api_url)
-                gallery = gallery_results.json()["results"][0].get("hits")
-                if gallery:
-                    #log.debug(gallery[0])
-                    scraped_gallery = parse_gallery_json(gallery[0])
-                    #log.debug(scraped_gallery)
-    elif SCENE_TITLE:
-        log.debug("Scraping gallery by fragment")
-        # log.debug(f"[API] Searching using SCENE_TITLE: {SCENE_TITLE}")
-        api_search = api_search_req("query_all_photosets", SCENE_TITLE, api_url)
-        if api_search:
-            log.info(f"[API] Search gives {len(api_search)} result(s)")
-            # log.trace(f"api_search: {api_search}")
-            log.debug(f"Galleries found: {'; '.join([g['title'] for g in api_search])}")
-            scraped_gallery = parse_gallery_json(api_search[0])
-    # Scraping the JSON
-    if scraped_gallery:
-        print(json.dumps(scraped_gallery))
-    else:
-        log.error("Can't find the gallery")
-        print(json.dumps({}))
-        sys.exit()
+            log.error("Can't find the gallery")
+            print(json.dumps({}))
+            sys.exit()
