@@ -3,8 +3,9 @@ sceneByURL:
   - action: scrapeXPath
     url: &urls
       - avidolz.com
-      - baberotica.com
+      - baberotica.com 
       - baberoticavr.com
+      - nucosplay.com
       - suckmevr.com
       - teenthais.com
       - vrpornpass.com
@@ -17,7 +18,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //h1[@itemprop="name"] | //div[@class="rel"]/img/@alt
+        selector: //h5/a | //h1[@itemprop="name"] | //div[@class="rel"]/img/@alt
       Performers:
         Name: //p/span[@itemprop="actor"]/a/span | //div[@class="cat"][1]/a/text()
         URL: //div[@class="cat"][1]/a/@href | //span[@itemprop="actor"]/a/@href
@@ -44,7 +45,7 @@ xPathScrapers:
               - regex: ... Read More
                 with:
       Image:
-        selector: //div[@id="videohtml5tour"]//img[@class="pure-img"]/@src | //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="thumbnailUrl"]/@content | //div[@class="rel"]/img/@src
+        selector: //div[contains(@class,"pure-u-1")]/meta[@itemprop="thumbnailUrl"]/@content | //div[@id="videohtml5tour"]//img[@class="pure-img"]/@src | //div[@id="videohtml5tour"]/video/@poster | //div[@class="rel"]//img/@src
         postProcess:
           - replace:
               - regex: ^//
@@ -63,6 +64,7 @@ xPathScrapers:
                 https://avidolz.com/: AvIdolz
                 https://baberotica.com/: Baberotica
                 https://baberoticavr.com/: BaberoticaVR
+                https://nucosplay.com/: Nu Cosplay
                 https://suckmevr.com/: SuckMeVR
                 https://teenthais.com/: TeenThais
                 https://vrpornpass.com/: VR PornPass
@@ -149,9 +151,7 @@ xPathScrapers:
         selector: $profileBE[contains(strong, "Hair color:")]//text() | $profileTT[contains(strong, "Hair color:")]/following-sibling::*[1]/text()  | $profilePP[contains(strong, "Hair color:")]/following-sibling::*[1]/text()
         postProcess:
           - replace:
-              - regex: .*Hair Color:?\s*(.*)\s*$
-                with: $1
-              - regex: .*Hair color:?\s*(.*)\s*$
+              - regex: (?i).*hair color:?\s*(.*)\s*$
                 with: $1
               - regex: None|N/A
                 with:
@@ -159,9 +159,7 @@ xPathScrapers:
         selector: $profileBE[contains(strong, "Eye color:")]//text() | $profileTT[contains(strong, "Eye color:")]/following-sibling::*[1]/text() | $profilePP[contains(strong, "Eye Color:")]/following-sibling::*[1]/text()
         postProcess:
           - replace:
-              - regex: .*Eye Color:?\s*(.*)\s*$
-                with: $1
-              - regex: .*Eye color:?\s*(.*)\s*$
+              - regex: (?i).*eye color:?\s*(.*)\s*$
                 with: $1
               - regex: None|N/A
                 with:
@@ -179,7 +177,7 @@ xPathScrapers:
           - replace:
               - regex: .*Tattoo:\s*(.*)\s*$
                 with: $1
-              - regex: "None|^No$"
+              - regex: "None$|^No$|(?i)^No tattoo$"
                 with:
       Instagram:
         selector: $profileBE[contains(strong, "Instagram:")]/a/@href
@@ -207,4 +205,4 @@ xPathScrapers:
                 with: 690x960
               - regex: 270x480
                 with: 405x720
-# Last Updated October 05, 2023
+# Last Updated October 10, 2023
