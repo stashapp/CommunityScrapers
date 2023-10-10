@@ -1034,6 +1034,7 @@ nubiles.net|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 nubileset.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 nubilesporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 nubilesunscripted.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
+nucosplay.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 nudefightclub.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 nudeyogaporn.com|Arx.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 nurumassage.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
