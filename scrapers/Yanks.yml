@@ -6,23 +6,30 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $scene: //div[contains(@class,"update-info ")]
     scene:
       Title:
-        selector: //div[@class='blocktitle clear']/p/../h2/text()
+        selector: $scene//h1
       Performers:
         Name:
-          selector: //div[@class='blocktitle clear']/p/a/text()
+          selector: $scene//strong[contains(text(),'Added')]/following-sibling::a[contains(@href, '/models/')]/text()
       Date:
-        selector: //div[@class='blocktitle clear']/p/text()
+        selector: ($scene//strong[contains(text(),'Added')]/following-sibling::text())[1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        # No point going for 0_2/3/4x, they're poorly upscaled versions of 0_1x
+        selector: >-
+          //div[@id='fakeplayer']//img/@src0_1x |
+          //div[@id='fakeplayer']//img/@src
         postProcess:
           - replace:
-            - regex: .+(\d{4}-\d{2}-\d{2}).+
-              with: $1
-          - parseDate: 2006-01-02
-      Image:
-        selector: //div[@class='mainvideo_here']/a/img/@src
+              - regex: ^
+                with: https://yanks.com
+      Tags:
+        Name: $scene//ul[@class='tags']/li/a/text()
       Studio:
         Name:
           fixed: Yanks
-
-# Last Updated October 30, 2020
+# Last Updated October 11, 2023
