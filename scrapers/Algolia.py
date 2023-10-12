@@ -631,6 +631,7 @@ def determine_studio_name_from_json(some_json):
         # edge cases
         if some_json.get('serie_name') in [
             'Accidental Gangbang',
+            'Dare We Share',
             'Family Siblings'
         ]:
             return some_json.get('serie_name')
@@ -767,7 +768,7 @@ def parse_scene_json(scene_json, url=None):
             hostname = 'evilangel'
 
         fqdn = determine_fqdn(hostname, net_name)
-        if fqdn in ['www.adulttimepilots.com']:
+        if fqdn in ['www.adulttimepilots.com', 'dareweshare.net']:
             scrape['url'] = f"https://{fqdn}/{scene_json['url_title'].lower()}/"
         else:
             scrape['url'] = f"https://{fqdn}/en/video/{studio_path_part}/{scene_json['url_title']}/{scene_json['clip_id']}"
@@ -789,6 +790,7 @@ def determine_fqdn(hostname: str, net_name: str) -> str:
         # edge cases
         sitename_map = {
             'accidentalgangbang': 'www.accidentalgangbang.com',
+            'dareweshare': 'dareweshare.net',
             'jerkbuddies': 'www.heteroflexible.com'
         }
         return sitename_map.get(hostname, 'members.adulttime.com')
