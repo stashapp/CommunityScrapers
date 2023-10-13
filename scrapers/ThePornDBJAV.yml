@@ -1,31 +1,17 @@
-name: ThePornDB
-performerByName:
-  action: scrapeJson
-  queryURL: https://api.metadataapi.net/performers?q={}
-  scraper: performerSearch
-performerByURL:
-  - action: scrapeJson
-    url:
-      - metadataapi.net/performers/
-    queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: ^(.+metadataapi.net)/
-          with: https://api.metadataapi.net/
-    scraper: performerScraper
+name: ThePornDB for JAV
 sceneByURL:
   - action: scrapeJson
     url:
-      - metadataapi.net/scenes/
+      - metadataapi.net/jav/
     queryURL: "{url}"
-    queryURLReplace:
+    queryURLReplace: &redirectToAPI
       url:
         - regex: ^(.+metadataapi.net)/
           with: https://api.metadataapi.net/
     scraper: sceneScraper
 sceneByName:
   action: scrapeJson
-  queryURL: https://api.metadataapi.net/scenes?parse={}
+  queryURL: https://api.metadataapi.net/jav?parse={}&per_page=10
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeJson
@@ -33,7 +19,7 @@ sceneByQueryFragment:
   scraper: sceneScraper
 sceneByFragment:
   action: scrapeJson
-  queryURL: https://api.metadataapi.net/scenes?parse={filename}&hash={oshash}&limit=1
+  queryURL: https://api.metadataapi.net/jav?parse={filename}&per_page=10
   scraper: sceneQueryScraper
   queryURLReplace:
     filename:
@@ -41,6 +27,13 @@ sceneByFragment:
         with: "." # "%20"
       - regex: \.+
         with: "."
+movieByURL:
+  - action: scrapeJson
+    url:
+      - metadataapi.net/jav/
+    scraper: movieScraper
+    queryURL: "{url}"
+    queryURLReplace: *redirectToAPI
 
 jsonScrapers:
   sceneSearch:
@@ -60,54 +53,16 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: "https://api.metadataapi.net/scenes/"
-      Image: data.#.background.small
+                with: "https://api.metadataapi.net/jav/"
+      Image: data.#.background.full
       Details: data.#.description
-  performerSearch:
-    performer:
-      Name: data.#.name
-      URL:
-        selector: data.#.id
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://api.metadataapi.net/performers/
-
-  performerScraper:
-    common:
-      $extras: data.extras
-    performer:
-      Name: data.name
-      Details: data.bio
-      Gender: $extras.gender
-      Birthdate: $extras.birthday
-      Country: $extras.nationality
-      Ethnicity: $extras.ethnicity
-      HairColor: $extras.hair_colour
-      Weight:
-        selector: $extras.weight
-        postProcess:
-          - replace:
-              - regex: kg
-                with:
-      Height:
-        selector: $extras.height
-        postProcess:
-          - replace:
-              - regex: cm
-                with:
-      Measurements: $extras.measurements
-      Tattoos: $extras.tattoos
-      Piercings: $extras.piercings
-      Aliases: data.aliases
-      Image: data.image
 
   sceneScraper:
     common:
       $data: data
       $performers: data.performers
     scene: &scene
-      Title: $data.title
+      Title: $data.external_id
       Details: $data.description
       Director: $data.director.name
       Date: $data.date
@@ -133,12 +88,21 @@ jsonScrapers:
       $performers: data.0.performers
     scene: *scene
 
+  movieScraper:
+    movie:
+      Name: data.external_id
+      Studio:
+        Name: data.site.name
+      FrontImage: data.background.full
+      Synopsis: data.description
+      Date: data.date
+      Duration: data.duration
+      Director: data.director.name
+
 driver:
   headers:
     - Key: User-Agent
       Value: stashjson/1.0.0
-    # NOTICE: We recommend using ThePornDB as a stash-box if you're scraping scenes
-    # if you are scraping JAV and full movies you should use ThePornDBJAV and ThePornDBMovies
     - Key: Authorization
       Value: Bearer YOUR_API_KEY_HERE
 # Last Updated October 13, 2023
