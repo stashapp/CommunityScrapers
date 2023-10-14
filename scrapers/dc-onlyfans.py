@@ -50,7 +50,7 @@ def lookup_scene(file,db,parent):
     performer={"name":parent.name}
     image=findPerformerImage(parent)
     if image is not None:
-        performer['image']=make_image_data_url(image)
+        performer['images']=[make_image_data_url(image)]
     res['performers']=[performer]
 
 
@@ -86,7 +86,7 @@ def lookup_gallery(file,db,parent):
     performer={"name":parent.name}
     image=findPerformerImage(parent)
     if image is not None:
-        performer['image']=make_image_data_url(image)
+        performer['images']=[make_image_data_url(image)]
     res['performers']=[performer]
 
 
