@@ -121,26 +121,29 @@ def lookup_scene(file, db, parent):
         db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
     )
     c = conn.cursor()
-    # which media type should we look up for our file?
-    c.execute(
-        "SELECT api_type, post_id FROM medias WHERE medias.filename=?",
-        (file.name,))
-    match = c.fetchone()
-    if not match:
+
+    c.execute("""
+        SELECT medias.filename, medias.post_id, match.api_type
+        FROM medias
+        JOIN (
+            SELECT api_type, post_id
+            FROM medias
+            WHERE medias.filename = ?
+        ) AS match
+        ON medias.post_id = match.post_id
+        WHERE medias.media_type = 'Videos'
+        ORDER BY medias.id ASC
+    """, (file.name,))
+
+    result = c.fetchall()
+
+    if not result:
         log.error(f'Could not find metadata for scene: {file}')
         print("{}")
         sys.exit()
-    # check for each api_type the right tables
-    api_type = str(match[0])
-    post_id = str(match[1])
-    c.execute("""
-        SELECT medias.filename
-        FROM medias
-        WHERE medias.post_id=?
-        AND medias.media_type = 'Videos'
-        ORDER BY id ASC
-        """, (post_id,))
-    post = c.fetchall()
+
+    api_type = result[0][2]
+    post_id = result[0][1]
 
     if api_type in ("Posts", "Stories", "Messages", "Products", "Others"):
         query = f"""
@@ -155,10 +158,10 @@ def lookup_scene(file, db, parent):
         print("{}")
         sys.exit()
 
-    log.info(f'Found {len(post)} video(s) in post {post_id}')
-    if len(post) > 1:
-        scene_index = [item[0] for item in post].index(file.name) + 1
-        log.debug(f'Video is {scene_index} of {len(post)} in post')
+    log.info(f'Found {len(result)} video(s) in post {post_id}')
+    if len(result) > 1:
+        scene_index = [item[0] for item in result].index(file.name) + 1
+        log.debug(f'Video is {scene_index} of {len(result)} in post')
     else:
         scene_index = 0
 
