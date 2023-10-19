@@ -26,6 +26,7 @@ sceneByURL:
       - tandabrunettes.com/tour1/
       - tandaebony.com/tour1/
       - tandahousewives.com/tour1/
+      - tandalesbians.com/tour1/
       - tandalatinas.com/tour1/
       - tandaredheads.com/tour1/
       - xxxnj.com/tour1/
@@ -43,6 +44,19 @@ xPathScrapers:
       Performers:
         Name: //span[@class="update_models2"][1]/a | //a[@class="model_category_link"][1]//a
       Details: //span[@class="highlighted-bg"] | //div[@class="gallery_description"]
+      Date:
+        selector: //base/@href|//div[@class="title_bar"]/span
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: \s
+                with: "+"
+              - regex: "[|]"
+                with: 'search.php?query='
+          - subScraper:
+              selector: //div[@class="date"]/text()
+              postProcess:
+                - parseDate: Jan 2, 2006
       Tags:
         Name: //span[@class="update_tags show-sm"]/a[@class="category-tag"]//a
       Image:
@@ -127,4 +141,4 @@ xPathScrapers:
           - replace:
               - regex: "[|].+?tour1/"
                 with: 
-# Last Updated October 04, 2023
+# Last Updated October 19, 2023
