@@ -122,7 +122,12 @@ xPathScrapers:
 
     scene:
       Title: &titleSelector //h2/text()
-      Code: &codeSelector $contentpane//div[contains(@class,"star-rating-wrapper")]/@data-id
+      Code: &codeSelector
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+            - regex: ".*/watch/(\\d*?)/.*"
+              with: $1
       Date: &dateAttr
         selector: $contentpane//span[@class="date"]/text()
         postProcess:
@@ -216,6 +221,7 @@ xPathScrapers:
 
     scene:
       Title: *titleSelector
+      Code: *codeSelector
       Date: *dateAttr
       Details: *detailsAttr
       Performers: *performersAttr
@@ -236,4 +242,4 @@ xPathScrapers:
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
-# Last Updated September 28, 2023
+# Last Updated October 19, 2023
