@@ -1,5 +1,5 @@
 """
-This script is a companion to the OnlyFans data scrapers by DIGITALCRIMINAL and derrivatives.
+This script is a companion to the OnlyFans data scrapers by DIGITALCRIMINAL and derivatives.
 The above tools download posts from OnlyFans and save metadata to 'user_data.db' SQLite files.
 
 This script requires python3, stashapp-tools, and sqlite3.
@@ -122,7 +122,9 @@ def lookup_scene(file, db, parent):
     )
     c = conn.cursor()
     # which media type should we look up for our file?
-    c.execute(f"SELECT api_type, post_id FROM medias WHERE medias.filename='{file.name}'")
+    c.execute(
+        "SELECT api_type, post_id FROM medias WHERE medias.filename=?",
+        (file.name,))
     match = c.fetchone()
     if not match:
         log.error(f'Could not find metadata for scene: {file}')
@@ -131,24 +133,23 @@ def lookup_scene(file, db, parent):
     # check for each api_type the right tables
     api_type = str(match[0])
     post_id = str(match[1])
-    c.execute(f"""
+    c.execute("""
         SELECT medias.filename
         FROM medias
-        WHERE medias.post_id = {post_id}
+        WHERE medias.post_id=?
         AND medias.media_type = 'Videos'
         ORDER BY id ASC
-    """)
+        """, (post_id,))
     post = c.fetchall()
 
     if api_type in ("Posts", "Stories", "Messages", "Products", "Others"):
-        table_name = api_type.lower()
         query = f"""
             SELECT posts.post_id, posts.text, posts.created_at
-            FROM {table_name} AS posts, medias
+            FROM {api_type.lower()} AS posts, medias
             WHERE posts.post_id = medias.post_id
-            AND medias.filename = '{file.name}'
+            AND medias.filename = ?
         """
-        c.execute(query)
+        c.execute(query, (file.name,))
     else:
         log.error("Unknown api_type {api_type} for post: {post_id}")
         print("{}")
@@ -195,9 +196,11 @@ def lookup_gallery(file, db, parent):
     )
     c = conn.cursor()
     # which media type should we look up for our file?
-    c.execute(
-        f"SELECT DISTINCT api_type, post_id FROM medias WHERE medias.directory='{file.as_posix()}'",
-    )
+    c.execute("""
+        SELECT DISTINCT api_type, post_id
+        FROM medias
+        WHERE medias.directory = ?
+    """, (file.as_posix(),))
     row = c.fetchone()
     if not row:
         log.error(f'Could not find metadata for gallery: {file}')
@@ -210,9 +213,9 @@ def lookup_gallery(file, db, parent):
         query = f"""
             SELECT posts.post_id, posts.text, posts.created_at
             FROM {api_type.lower()} AS posts
-            WHERE posts.post_id={post_id}
+            WHERE posts.post_id = ?
         """
-        c.execute(query)
+        c.execute(query, (post_id,))
     else:
         log.error("Unknown api_type {api_type} for post: {post_id}")
         print("{}")
@@ -406,7 +409,7 @@ def process_row(row, username, scene_index=0):
     code = str(row[0])
     return {"title": title, "details": details, "date": date, "code": code}
 
-def find_user_data_db(start_path):
+def find_metadata_db(start_path, username):
     """
     Recursively search for 'user_data.db' file upwards starting from 'start_path'.
     """
@@ -414,13 +417,27 @@ def find_user_data_db(start_path):
 
     while start_path != start_path.parent:
         # Search for user_data.db in the current directory and its subdirectories
-        for db_file in start_path.rglob("user_data.db"):
+        for db_file in start_path.rglob(username + '/**/user_data.db'):
             if db_file.is_file():
                 return db_file
 
         start_path = start_path.parent
 
     return None
+
+def username_from_path(path, after='OnlyFans'):
+    """
+    Extract the username from a given path
+    """
+    path = path.parts
+    try:
+        index = path.index(after)
+        if index + 1 < len(path):
+            return path[index + 1]
+        else:
+            return None  # Element found but no item follows it
+    except ValueError:
+        return None  # Element not found in the tuple
 
 ####################################  MAIN #####################################
 def main():
@@ -439,8 +456,13 @@ def main():
         path = Path(find_gallery_path(scrape_id))
 
     if path:
-        db = find_user_data_db(path)
-        p = db.parents[1]
+        username = username_from_path(path)
+
+    if username:
+        db = find_metadata_db(path, username)
+
+        username_index = list(path.parts).index(username)
+        p = Path(*path.parts[:username_index + 1])
 
         scene = lookup(path, db, p)
         print(json.dumps(scene))
@@ -451,4 +473,4 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Last Updated October 17, 2023
+# Last Updated October 19, 2023

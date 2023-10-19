@@ -1,6 +1,6 @@
 # DC OnlyFans (FansDB)
 
-This script is a companion to the OnlyFans data scrapers by DIGITALCRIMINAL and derrivatives.\
+This script is a companion to the OnlyFans data scrapers by DIGITALCRIMINAL and derivatives.\
 The above tools download posts from OnlyFans and save metadata to 'user_data.db' SQLite files.
 
 > [!NOTE]\
@@ -35,7 +35,6 @@ Currently the scraper returns the following information for galeries:
 - Title
 - Details
 - Date
-- Code
 - Studio
 - URLs
 - Performers
@@ -84,17 +83,17 @@ For scenes and galleries, the URL will be set to the following: `https://www.onl
 
 ### Performers
 
-The performer username is taken from the name of the folder that is two levels above the location of the `user_data.db` file (henceforth "studio directory").
+The performer username is taken from the name of the folder proceeding "OnlyFans".
 
 Example:\
-`D:\stash-library\of-scraper\<username>\Metadata\user_data.db`
+`D:\stash-library\of-scraper\OnlyFans\<username>\...`
 
 > [!NOTE]\
 > The only performer that is being matched is the "owner" of the OnlyFans page.
 
 The scraper will try to resolve performer names by searching for performers with an alias matching the username.
 
-By default, the scraper will search recursively from the studio directory for `.jpg` files and base64 encode up to three (3) images for use as a performer image. These files are (by default) cached for 5 minutes by saving the base64 encoded images to disk to speed up bulk scraping.
+By default, the scraper will search recursively from the performer directory for `.jpg` files and base64 encode up to three (3) images for use as a performer image. These files are (by default) cached for 5 minutes by saving the base64 encoded images to disk to speed up bulk scraping.
 
 If desired this behavior can be tweaked by changing these values in `config.json`:
 
@@ -147,4 +146,4 @@ Additionally, the `cache_dir` will be created if it does not yet exist.
 
 ---
 
-Last Updated October 17, 2023
+Last Updated October 19, 2023
