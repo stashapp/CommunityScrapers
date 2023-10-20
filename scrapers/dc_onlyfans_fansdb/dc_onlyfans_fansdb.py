@@ -12,6 +12,7 @@ from pathlib import Path
 import time
 import random
 import uuid
+from typing import Dict
 
 try:
     import stashapi.log as log
@@ -19,14 +20,14 @@ try:
     from stashapi.stashapp import StashInterface
 except ModuleNotFoundError:
     print(
-        "You need to install the stashapp-tools (stashapi) python module. (cmd): "\
+        "You need to install the stashapp-tools (stashapi) python module. (cmd): "
         "pip install stashapp-tools",
         file=sys.stderr
     )
     sys.exit()
 
+# CONFIG ###########################################################################################
 
-###################################  CONFIG ####################################
 # Default config
 default_config = {
     "stash_connection": {
@@ -35,13 +36,13 @@ default_config = {
         "port": 9999,
         "apikey": ""
     },
-    "max_title_length": 64, # Maximum length for scene/gallery titles.
-    "tag_messages": True, # Whether to tag OnlyFans messages.
-    "tag_messages_name": "[OF: Messages]", # Name of tag for OnlyFans messages.
-    "max_performer_images": 3, # Maximum performer images to generate.
-    "cache_time": 300, # Image expiration time (in seconds).
-    "cache_dir": "cache", # Directory to store cached base64 encoded images.
-    "cache_file": "cache.json" # File to store cache information in.
+    "max_title_length": 64,  # Maximum length for scene/gallery titles.
+    "tag_messages": True,  # Whether to tag messages.
+    "tag_messages_name": "[OF: Messages]",  # Name of tag for messages.
+    "max_performer_images": 3,  # Maximum performer images to generate.
+    "cache_time": 300,  # Image expiration time (in seconds).
+    "cache_dir": "cache",  # Directory to store cached base64 encoded images.
+    "cache_file": "cache.json"  # File to store cache information in.
 }
 
 # Read config file
@@ -68,7 +69,7 @@ CACHE_TIME = config['cache_time']
 CACHE_DIR = config['cache_dir']
 CACHE_FILE = config['cache_file']
 
-###################################  STASH  ####################################
+# STASH ############################################################################################
 try:
     stash = StashInterface(STASH_CONNECTION)
 except SystemExit:
@@ -76,9 +77,10 @@ except SystemExit:
     # print("{}")
     sys.exit()
 
-###################################  CACHE  ####################################
+# CACHE  ###########################################################################################
 # Create cache directory
 Path(CACHE_DIR).mkdir(parents=True, exist_ok=True)
+
 
 def load_cache():
     """
@@ -103,6 +105,7 @@ def load_cache():
     except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
+
 def save_cache(cache):
     """
     Save cache data and log update.
@@ -111,8 +114,9 @@ def save_cache(cache):
         json.dump(cache, file, indent=2)
         log.info('[CACHE UPDATED]')
 
-###################################  SCENES ####################################
-def lookup_scene(file, db, parent):
+
+# SCENES ###########################################################################################
+def lookup_scene(file, db, media_dir, username, network):
     """
     Query database for scene metadata and create a structured scrape result.
     """
@@ -165,31 +169,22 @@ def lookup_scene(file, db, parent):
     else:
         scene_index = 0
 
-    scene = process_row(c.fetchone(), str(parent.name), scene_index)
-    images = find_performer_images(parent)
-    performer = find_name_from_alias(str(parent.name))
+    scene = process_row(c.fetchone(), username, network, scene_index)
 
-    scrape = {}
-    scrape["title"] = scene["title"]
-    scrape["details"] = scene["details"]
-    scrape["date"] = scene["date"]
-    scrape["code"] = scene["code"]
-    scrape["studio"] = {
-        "name": f'{parent.name} (OnlyFans)',
-        "url": f'https://www.onlyfans.com/{parent.name}',
-        "parent": find_parent_studio()
+    scrape = {
+        "title": scene["title"], "details": scene["details"], "date": scene["date"],
+        "code": scene["code"], "urls": scene["urls"],
+        "studio": get_studio_info(username, network),
+        "performers": get_performer_info(username, media_dir)
     }
-    scrape["urls"] = [f'https://www.onlyfans.com/{scene["code"]}/{parent.name}']
-    scrape["performers"] = [performer]
-    if images is not None:
-        performer["images"] = images
     if api_type == "Messages" and TAG_MESSAGES:
         scrape["tags"] = [{"name": TAG_MESSAGES_NAME}]
 
     return scrape
 
-##################################  GALLERIES ##################################
-def lookup_gallery(file, db, parent):
+
+# GALLERIES ########################################################################################
+def lookup_gallery(file, db, media_dir, username, network):
     """
     Query database for gallery metadata and create a structured scrape result.
     """
@@ -224,30 +219,22 @@ def lookup_gallery(file, db, parent):
         print("{}")
         sys.exit()
 
-    post = process_row(c.fetchone(), str(parent.name))
-    images = find_performer_images(parent)
-    performer = find_name_from_alias(str(parent.name))
+    gallery = process_row(c.fetchone(), username, network)
 
-    scrape = {}
-    scrape["title"] = post["title"]
-    scrape["details"] = post["details"]
-    scrape["date"] = post["date"]
-    scrape["studio"] = {
-        "name": f'{parent.name} (OnlyFans)',
-        "url": f'https://www.onlyfans.com/{parent.name}',
-        "parent": find_parent_studio()
+    scrape = {
+        "title": gallery["title"], "details": gallery["details"], "date": gallery["date"],
+        "urls": gallery["urls"],
+        "studio": get_studio_info(username, network),
+        "performers": get_performer_info(username, media_dir)
     }
-    scrape["urls"] = [f'https://www.onlyfans.com/{post["code"]}/{parent.name}']
-    scrape["performers"] = [performer]
-    if images is not None:
-        performer["images"] = images
     if api_type == "Messages" and TAG_MESSAGES:
         scrape["tags"] = [{"name": TAG_MESSAGES_NAME}]
 
     return scrape
 
-###################################  LOOKUPS ###################################
-def find_scene_path(scene_id):
+
+# UTILS ############################################################################################
+def get_scene_path(scene_id):
     """
     Find and return the path for a scene by its ID.
     """
@@ -260,7 +247,8 @@ def find_scene_path(scene_id):
     print("{}")
     sys.exit()
 
-def find_gallery_path(gallery_id):
+
+def get_gallery_path(gallery_id):
     """
     Find and return the path for a gallery by its ID.
     """
@@ -273,41 +261,56 @@ def find_gallery_path(gallery_id):
     print("{}")
     sys.exit()
 
-def find_name_from_alias(alias):
-    """
-    Find and return a performer's name by their alias.
-    """
-    perfs = stash.find_performers(
-        f={"aliases": {"value": alias, "modifier": "EQUALS"}},
-        filter={"page": 1, "per_page": 5},
-        fragment="name,id",
-    )
-    log.debug(perfs)
-    if len(perfs) > 0:
-        perf = {"name": perfs[0]['name'], "stored_id": perfs[0]['id']}
-        return perf
-    return alias
 
-def find_parent_studio():
+def get_performer_info(username, media_dir):
     """
-    Find and return OnlyFans (network) `stored_id` else return only name
+    Resolve performer based on username
     """
-    studios = stash.find_studios(
-        f={"name": {"value": "OnlyFans (network)", "modifier": "EQUALS"}},
+    req = stash.find_performers(
+        f={"aliases": {"value": username, "modifier": "EQUALS"}},
         filter={"page": 1, "per_page": 5},
-        fragment="name,id"
+        fragment="id, name",  # type: ignore
     )
-    log.debug(studios)
-    if len(studios) > 0:
-        studio = {
-            "name": studios[0]['name'],
-            "url": "https://onlyfans.com/",
-            "stored_id": studios[0]['id']
-        }
-        return studio
-    return {"name": "OnlyFans (network)", "url": "https://onlyfans.com/"}
+    log.debug(req)
+    res: Dict = {}
+    if len(req) == 1:
+        log.debug(f"Found performer id: {req[0]['id']}")
+        res['stored_id'] = req[0]['id']
+    res['name'] = username
 
-def find_performer_images(path, max_images=MAX_PERFORMER_IMAGES):
+    images = get_performer_images(media_dir)
+    if images is not None:
+        res["images"] = images
+
+    return [res]
+
+
+def get_studio_info(studio_name, studio_network):
+    """
+    Resolve studio based on name and network
+    """
+    req = stash.find_studios(
+        f={"name": {"value": f"{studio_name} ({studio_network})", "modifier": "EQUALS"}},
+        filter={"page": 1, "per_page": 5},
+        fragment="id, name"
+    )
+    log.debug(req)
+    res: Dict = {'parent': {}}
+    if len(req) == 1:
+        log.debug(f"Found studio id: {req[0]['id']}")
+        res['stored_id'] = req[0]['id']
+    res['name'] = f'{studio_name} ({studio_network})'
+    res['parent']['name'] = f'{studio_network} (network)'
+    if studio_network == 'OnlyFans':
+        res['url'] = f'https://onlyfans.com/{studio_name}'
+        res['parent']['url'] = 'https://onlyfans.com/'
+    elif studio_network == 'Fansly':
+        res['url'] = f'https://fansly.com/{studio_name}'
+        res['parent']['url'] = 'https://fansly.com/'
+    return res
+
+
+def get_performer_images(path):
     """
     Find and encode performer images to base64.
     """
@@ -315,7 +318,7 @@ def find_performer_images(path, max_images=MAX_PERFORMER_IMAGES):
 
     cache = load_cache()
 
-    if str(path) in cache: # check if the images are cached
+    if str(path) in cache:  # check if the images are cached
         log.info(f'[CACHE HIT] Using cached image(s) for path: {path}')
         image_filenames = cache[f'{path}'][1]
         log.debug(image_filenames)
@@ -326,15 +329,19 @@ def find_performer_images(path, max_images=MAX_PERFORMER_IMAGES):
                 cached_images.append(base64_data)
         return cached_images
 
-    image_list = list(path.rglob("*.jpg")) # get all jpg files in the provided path
+    image_types = ["*.jpg", "*.png"]
+    image_list = []
+    for image_type in image_types:  # get jpg and png files in provided path
+        type_result = list(path.rglob(image_type))
+        image_list += type_result
 
-    if len(image_list) == 0: # if no images found
+    if len(image_list) == 0:  # if no images found
         log.info(f'No image(s) found for path: {path}')
         return None
 
     # if images found, encode up to `max_images` to base64
     log.info(f'[CACHE MISS] Generating image(s) for path: {path}')
-    selected_images = random.choices(image_list, k=min(max_images, len(image_list)))
+    selected_images = random.choices(image_list, k=min(MAX_PERFORMER_IMAGES, len(image_list)))
 
     encoded_images = []
     cache_filenames = []
@@ -344,6 +351,11 @@ def find_performer_images(path, max_images=MAX_PERFORMER_IMAGES):
             [CACHE MISS] Encoding {index + 1} of {len(selected_images)} image(s) to base64: {image}'
         """)
         base64_data = file_to_base64(image)
+        if base64_data is None:
+            log.error("Error converting image to base64: {image}")
+            print("{}")
+            sys.exit()
+
         encoded_images.append(base64_data)
 
         # Store the base64 image data on disk
@@ -359,7 +371,7 @@ def find_performer_images(path, max_images=MAX_PERFORMER_IMAGES):
 
     return encoded_images
 
-###################################  UTILS  ####################################
+
 def truncate_title(title, max_length):
     """
     Truncate title to provided maximum length while preserving word boundaries.
@@ -375,6 +387,7 @@ def truncate_title(title, max_length):
         return title[:max_length]
     # Otherwise, truncate at the last space character
     return title[:last_space_index]
+
 
 def format_title(title, username, date, scene_index):
     """
@@ -402,47 +415,59 @@ def format_title(title, username, date, scene_index):
     scene_info = f' ({scene_index})' if scene_index > 0 else ''
     return f'{f_title}{scene_info}'
 
-def process_row(row, username, scene_index=0):
+
+def process_row(row, username, network, scene_index=0):
     """
     Process a database row and format post details.
     """
-    date = row[2].strftime("%Y-%m-%d")
-    title = format_title(row[1], username, date, scene_index)
-    details = row[1]
-    code = str(row[0])
-    return {"title": title, "details": details, "date": date, "code": code}
+    res = {}
+    res['date'] = row[2].strftime("%Y-%m-%d")
+    res['title'] = format_title(row[1], username, res['date'], scene_index)
+    res['details'] = row[1]
+    res['code'] = str(row[0])
+    if network == 'OnlyFans':
+        res['urls'] = [f"https://onlyfans.com/{res['code']}/{username}"]
+    elif network == 'Fansly':
+        res['urls'] = [f"https://fansly.com/post/{res['code']}"]
+    return res
 
-def find_metadata_db(start_path, username):
+
+def get_metadata_db(search_path, username, network):
     """
-    Recursively search for 'user_data.db' file upwards starting from 'start_path'.
+    Recursively search for 'user_data.db' file starting from 'search_path'
     """
-    start_path = Path(start_path).resolve()
+    search_path = Path(search_path).resolve()
 
-    while start_path != start_path.parent:
-        # Search for user_data.db in the current directory and its subdirectories
-        for db_file in start_path.rglob(username + '/**/user_data.db'):
-            if db_file.is_file():
-                return db_file
+    while search_path != search_path.parent:
+        db_files = list(search_path.rglob(f"{network}/**/{username}/**/user_data.db"))
+        db_files = [db for db in db_files if db.is_file()]
+        if db_files:
+            return db_files[0]
 
-        start_path = start_path.parent
+        search_path = search_path.parent
 
     return None
 
-def username_from_path(path, after='OnlyFans'):
-    """
-    Extract the username from a given path
-    """
-    path = path.parts
-    try:
-        index = path.index(after)
-        if index + 1 < len(path):
-            return path[index + 1]
-        else:
-            return None  # Element found but no item follows it
-    except ValueError:
-        return None  # Element not found in the tuple
 
-####################################  MAIN #####################################
+def get_path_info(path):
+    """
+    Extract the username and network from a given path
+    """
+    network = 'Fansly' if 'Fansly' in str(path) else 'OnlyFans'
+    parts = path.parts
+    try:
+        index = parts.index(network)
+        if index + 1 < len(parts):
+            return parts[index + 1], network, Path(*parts[:index + 2])
+
+        raise ValueError
+    except ValueError:
+        log.error(f'Could not find username or network in path: {path}')
+        print("{}")
+        sys.exit()
+
+
+# MAIN #############################################################################################
 def main():
     """
     Execute scene or gallery lookup and print the result as JSON.
@@ -450,30 +475,26 @@ def main():
     fragment = json.loads(sys.stdin.read())
     scrape_id = fragment["id"]
 
-    path: Path = None
     if sys.argv[1] == "query":
         lookup = lookup_scene
-        path = Path(find_scene_path(scrape_id))
+        path = Path(get_scene_path(scrape_id))
     elif sys.argv[1] == "querygallery":
         lookup = lookup_gallery
-        path = Path(find_gallery_path(scrape_id))
-
-    if path:
-        username = username_from_path(path)
-
-    if username:
-        db = find_metadata_db(path, username)
-
-        username_index = list(path.parts).index(username)
-        p = Path(*path.parts[:username_index + 1])
-
-        scene = lookup(path, db, p)
-        print(json.dumps(scene))
+        path = Path(get_gallery_path(scrape_id))
+    else:
+        log.error('Invalid argument(s) provided: ' + str(sys.argv))
+        print("{}")
         sys.exit()
 
-    print("{}") # not found return an empty map
+    username, network, media_dir = get_path_info(path)
+    db = get_metadata_db(path, username, network)
+
+    media = lookup(path, db, media_dir, username, network)
+    print(json.dumps(media))
+    sys.exit()
+
 
 if __name__ == "__main__":
     main()
 
-# Last Updated October 19, 2023
+# Last Updated October 20, 2023

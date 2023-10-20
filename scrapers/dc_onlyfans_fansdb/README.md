@@ -30,7 +30,7 @@ The post information for galleries will be scraped from the metadata database ba
 > [!IMPORTANT]\
 > Since galleries are matched on directory, each post should be contained in a separate directory.
 
-Currently the scraper returns the following information for galeries:
+Currently the scraper returns the following information for galleries:
 
 - Title
 - Details
