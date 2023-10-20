@@ -30,12 +30,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="headline hidden-xs"]/text()
-      URL:
-        selector: //link[@rel="canonical"]/@href
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://iwantclips.com/store/item/
+      URL: //link[@rel="canonical"]/@href
       Date:
         selector: //div[@class="col-xs-12 date fix"]/span/em/text()
         postProcess:
