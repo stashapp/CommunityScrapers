@@ -29,9 +29,9 @@ xPathScrapers:
       Image: //div[@class='clip-thumb-16-9']/a/img/@src
   sceneScraper:
     scene:
-      Title: //span[@class="headline hidden-xs"]/text()
+      Title: //h1[@class="headline hidden-xs"]/text()
       URL:
-        selector: //button[@class='btn btn-default cart addToCart']/@data-id
+        selector: //link[@rel="canonical"]/@href
         postProcess:
           - replace:
               - regex: ^
@@ -54,7 +54,7 @@ xPathScrapers:
                   with: ","
           split: ","
       Image:
-        selector: //img[@class="videoPlayer show-flexible-picture"]/@src | //video[@class="video-js embed-responsive-item"]/@poster
+        selector: //div[contains(@class,'vidStuff')]//video[contains(@id,'html5_api')]/@poster | //div[contains(@class,'vidStuff')]//img/@src
       Studio:
         Name:
           fixed: IWantClips
@@ -83,4 +83,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated July 22, 2022
+# Last Updated October 19, 2023
