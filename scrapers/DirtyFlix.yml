@@ -1,0 +1,62 @@
+name: DirtyFlix
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - members.dirtyflix.com/en/watch/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[@class="movie-info"]
+    scene:
+      Title: //div[@class="entry-container"]//div[@class="title"]/h3/text()
+      Details: $details/div[@class="text"]/p/text()
+      Code: //div[@class="like-vote"]/a[@class="left like icon "]/@data-item
+      Date:
+        selector: $details/div[@class="text"]/div[@class="date"]/text()
+        postProcess:
+          - replace:
+              - regex: "Added: (.+)"
+                with: $1
+          - parseDate: Jan 2, 2006
+      Studio:
+        Name:
+          selector: $details/a[@class="site"]/@href
+          postProcess:
+            - replace:
+                - regex: ".+source=(\\d+).+"
+                  with: $1
+            - map:
+                4: Fucking Glasses
+                5: She is Nerdy
+                7: Tricky Agent
+                14: Moms Passions
+                18: Make Him Cuckold
+                19: Young Courtesans
+                21: Disgrace That Bitch
+                22: Private Casting X
+                23: Trick Your Girlfriend
+                27: X-Sensual
+                28: Brutal X
+                30: Massage X
+                31: Spy POV
+                32: Kinky Family
+                33: Debt Sex
+      Performers:
+        Name: $details//a[starts-with(@href,"/en/model/")]/text()
+      Image:
+        selector: //div[@id="myElement"]//div[starts-with(@style,"background-image:")]/@style
+        postProcess:
+          - replace:
+              - regex: .+url\("(.+)"\).+
+                with: $1
+      Tags:
+        Name: $details//a[starts-with(@href,"/en/browse/category/")]/text()
+driver:
+  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: ''
+    - Key: Cookie
+      Value: ''
+# Last Updated October 21, 2023
