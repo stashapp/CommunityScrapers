@@ -12,10 +12,6 @@ except ModuleNotFoundError:
     sys.exit()
 
 
-def call_graphql(query, variables=None):
-    return graphql.callGraphQL(query, variables)
-
-
 def scrape_scene(url):
     query = """
 query scrapeSceneURL($url: String!) {
@@ -69,9 +65,10 @@ query scrapeSceneURL($url: String!) {
 }"""
 
     variables = {"url": url}
-    result = call_graphql(query, variables)
+    result = graphql.callGraphQL(query, variables)
     log.debug(f"result {result}")
-    return result["scrapeSceneURL"]
+    if result:
+        return result["scrapeSceneURL"]
 
 
 FRAGMENT = json.loads(sys.stdin.read())
@@ -81,4 +78,4 @@ if url:
     result = scrape_scene(url)
     print(json.dumps(result))
 else:
-    print(json.dumps({}))
+    print("null")

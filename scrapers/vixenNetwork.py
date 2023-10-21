@@ -181,12 +181,13 @@ class Site:
                                     if image['width'] > maxWidth:
                                         sc['image'] = image['src']
                                     maxWidth = image['width']
-                    search_result.append(sc)
+                        search_result.append(sc)
             return search_result
         return None
 
-    def length(self, studio):
-        return len(studio.id)
+    @property
+    def length(self):
+        return len(self.id)
 
     getVideoQuery = """
     query getVideo($videoSlug: String, $site: Site) {
@@ -241,16 +242,6 @@ class Site:
   """
 
 
-# sort site dicts into a list
-# by reverse id length
-def sortByLength(sites):
-    sorted = []
-    for s in sites:
-        sorted.append(s)
-    sorted.sort(reverse=True, key=s.length)
-    return sorted
-
-
 studios = {
     Site('Blacked Raw'),
     Site('Blacked'),
@@ -282,7 +273,7 @@ if url:
 if search_query and "search" in sys.argv:
     search_query = search_query.lower()
     lst = []
-    filter = []
+    wanted = []
 
     #  Only search on specific site if the studio name is in the search query
     # ('Ariana Vixen Cecilia' will search only on Vixen)
@@ -290,25 +281,25 @@ if search_query and "search" in sys.argv:
     # if the first character is $, filter will be ignored.
     if search_query[0] != "$":
         # make sure longer matches are filtered first
-        studios_sorted = sortByLength(studios)
+        studios_sorted = sorted(studios, reverse=True, key=lambda s: s.length)
         for x in studios_sorted:
             if x.id.lower() in search_query:
-                filter.append(x.id.lower())
+                wanted.append(x.id.lower())
                 continue
             # remove the studio from the search result
             search_query = search_query.replace(x.id.lower(), "")
     else:
         search_query = search_query[1:]
 
-    if filter:
-        log.info(f"Filter: {filter} applied")
+    if wanted:
+        log.info(f"Filter: {wanted} applied")
 
     log.debug(f"Query: '{search_query}'")
 
     for x in studios:
-        if filter:
-            if x.id.lower() not in filter:
-                #log.debug(f"[Filter] {x.id} ignored")
+        if wanted:
+            if x.id.lower() not in wanted:
+                log.debug(f"[Filter] ignoring {x.id}")
                 continue
         s = x.getSearchResult(search_query)
         # merge all list into one

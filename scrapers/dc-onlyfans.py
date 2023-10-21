@@ -96,7 +96,7 @@ def findFilePath(id):
     scene=graphql.getScene(id)
     if scene:
         return scene["path"]
-    log.error(f"Error connecting to api")
+    log.error("Error connecting to api")
     print("{}")
     sys.exit()
 
@@ -128,9 +128,8 @@ if __name__ == '__main__':
         file=Path(findFilePath(id))
     elif sys.argv[1] == "querygallery":
         lookup = lookup_gallery
-        gallery = graphql.getGalleryPath(id)
-        if gallery:
-            gallery_path = gallery.get("path")
+        gallery_path = graphql.getGalleryPath(id)
+        if gallery_path:
             file = Path(gallery_path)
 
     if file:

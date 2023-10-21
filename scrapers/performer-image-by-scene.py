@@ -63,10 +63,10 @@ if parsed_name:
     performer_name = parsed_name.group(1)
     scene_id = parsed_name.group(2)
     log.debug(f"Using scene {scene_id} to get performer image")
-    performer_scene = graphql.getSceneScreenshot(scene_id)
+    screenshot = graphql.getSceneScreenshot(scene_id)
     performer = {'Name': performer_name,
-                 'Image': performer_scene['paths']['screenshot'],
-                 'Images': [performer_scene['paths']['screenshot']]}
+                 'Image': screenshot,
+                 'Images': [screenshot]}
     announce_result_to_stash(performer)
 else:
     # search for scenes with the performer

@@ -110,7 +110,7 @@ if scene:
         if scene['studio']:
             studio = scene['studio']['id']
         gallery_input = {'id': gallery_id,
-                         'url': scene['url'],
+                         'urls': scene['urls'],
                          'title': scene['title'],
                          'date': scene["date"],
                          'details': scene['details'],

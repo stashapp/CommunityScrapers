@@ -16,6 +16,7 @@ except ModuleNotFoundError:
 try:
     import py_common.config as config
     import py_common.log as log
+    from py_common.util import dig
 except ModuleNotFoundError:
     print(
         "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
@@ -250,10 +251,8 @@ def configuration() -> dict | None:
         createMissing
     }
     """
-    result = callGraphQL(query)
-    if result:
-        return result.get("configuration")
-    return None
+    result = callGraphQL(query) or {}
+    return dig(result, "configuration")
 
 
 def getScene(scene_id: str | int) -> dict | None:
@@ -267,7 +266,6 @@ def getScene(scene_id: str | int) -> dict | None:
         id
         title
         details
-        url
         urls
         date
         rating100
@@ -345,7 +343,6 @@ def getScene(scene_id: str | int) -> dict | None:
         id
         title
         date
-        url
         urls
         details
         rating100
@@ -464,15 +461,12 @@ def getScene(scene_id: str | int) -> dict | None:
         weight
     }
     """
-
     variables = {"id": str(scene_id)}
-    result = callGraphQL(query, variables)
-    if result:
-        return result.get("findScene")
-    return None
+    result = callGraphQL(query, variables) or {}
+    return dig(result, "findScene")
 
 
-def getSceneScreenshot(scene_id: str | int) -> dict | None:
+def getSceneScreenshot(scene_id: str | int) -> str | None:
     query = """
     query FindScene($id: ID!, $checksum: String) {
         findScene(id: $id, checksum: $checksum) {
@@ -484,10 +478,8 @@ def getSceneScreenshot(scene_id: str | int) -> dict | None:
     }
     """
     variables = {"id": str(scene_id)}
-    result = callGraphQL(query, variables)
-    if result:
-        return result.get("findScene")
-    return None
+    result = callGraphQL(query, variables) or {}
+    return dig(result, "findScene", "paths", "screenshot")
 
 
 def getSceneByPerformerId(performer_id: str | int) -> dict | None:
@@ -509,7 +501,6 @@ query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene
           id
           title
           details
-          url
           urls
           date
           rating100
@@ -620,7 +611,6 @@ query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene
           id
           title
           date
-          url
           urls
           details
           rating100
@@ -766,11 +756,8 @@ query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene
             "performers": {"value": [str(performer_id)], "modifier": "INCLUDES_ALL"}
         },
     }
-
-    result = callGraphQL(query, variables)
-    if result:
-        return result.get("findScenes")
-    return None
+    result = callGraphQL(query, variables) or {}
+    return dig(result, "findScenes")
 
 
 def getSceneIdByPerformerId(performer_id: str | int) -> dict | None:
@@ -796,11 +783,8 @@ def getSceneIdByPerformerId(performer_id: str | int) -> dict | None:
             "performers": {"value": [str(performer_id)], "modifier": "INCLUDES_ALL"}
         },
     }
-
-    result = callGraphQL(query, variables)
-    if result:
-        return result.get("findScenes")
-    return None
+    result = callGraphQL(query, variables) or {}
+    return dig(result, "findScenes")
 
 
 def getPerformersByName(performer_name: str) -> dict | None:
@@ -877,11 +861,8 @@ def getPerformersByName(performer_name: str) -> dict | None:
         },
         "performer_filter": {},
     }
-
-    result = callGraphQL(query, variables)
-    if result:
-        return result.get("findPerformers")
-    return None
+    result = callGraphQL(query, variables) or {}
+    return dig(result, "findPerformers")
 
 
 def getPerformersIdByName(performer_name: str) -> dict | None:
@@ -913,10 +894,8 @@ def getPerformersIdByName(performer_name: str) -> dict | None:
         "performer_filter": {},
     }
 
-    result = callGraphQL(query, variables)
-    if result:
-        return result.get("findPerformers")
-    return None
+    result = callGraphQL(query, variables) or {}
+    return dig(result, "findPerformers")
 
 
 def getGallery(gallery_id: str | int) -> dict | None:
@@ -928,20 +907,16 @@ def getGallery(gallery_id: str | int) -> dict | None:
     }
     fragment GalleryData on Gallery {
         id
-        files {
-            path
-        }
         created_at
         updated_at
         title
         date
-        url
         urls
         details
         rating100
         organized
-        files {
-            ...SlimImageData
+        folder {
+            path
         }
         cover {
             ...SlimImageData
@@ -952,7 +927,6 @@ def getGallery(gallery_id: str | int) -> dict | None:
         tags {
             ...SlimTagData
         }
-
         performers {
             ...PerformerData
         }
@@ -1019,7 +993,7 @@ def getGallery(gallery_id: str | int) -> dict | None:
             id
         }
         details
-        rating
+        rating100
         aliases
     }
     fragment SlimTagData on Tag {
@@ -1071,7 +1045,6 @@ def getGallery(gallery_id: str | int) -> dict | None:
         id
         title
         details
-        url
         urls
         date
         rating100
@@ -1150,22 +1123,25 @@ def getGallery(gallery_id: str | int) -> dict | None:
     }
     """
     variables = {"id": gallery_id}
-    result = callGraphQL(query, variables)
-    if result:
-        return result.get("findGallery")
-    return None
+    result = callGraphQL(query, variables) or {}
+    return dig(result, "findGallery")
 
 
-def getGalleryPath(gallery_id: str | int) -> dict | None:
+def getGalleryPath(gallery_id: str | int) -> str | None:
     query = """
     query FindGallery($id: ID!) {
         findGallery(id: $id) {
-            path
+            folder {
+                path
+            }
+            files {
+                path
+            }
         }
     }
         """
     variables = {"id": gallery_id}
-    result = callGraphQL(query, variables)
-    if result:
-        return result.get("findGallery")
-    return None
+    result = callGraphQL(query, variables) or {}
+    # Galleries can either be a folder full of files or a zip file
+    return dig(result, "findGallery", "folder", "path") \
+        or dig(result, "findGallery", "files", 0, "path")
