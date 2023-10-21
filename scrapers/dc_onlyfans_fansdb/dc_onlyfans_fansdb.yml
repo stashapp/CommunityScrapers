@@ -5,12 +5,13 @@ sceneByFragment:
     - python
     # use python3 instead if needed
     - dc_onlyfans_fansdb.py
-    - query
+    - queryScene
 galleryByFragment:
   action: script
   script:
     - python
     # use python3 instead if needed
     - dc_onlyfans_fansdb.py
-    - querygallery
-# Last Updated October 19, 2023
+    - queryGallery
+
+# Last Updated October 21, 2023
