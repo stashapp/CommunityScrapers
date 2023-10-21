@@ -42,7 +42,6 @@ class ScrapedPerformer(TypedDict, total=False):
     aliases: str
     "Must be comma-delimited in order to be parsed correctly"
     tags: list[ScrapedTag]
-    "Tags will only "
     image: str
     images: list[str]
     "Images can be URLs or base64-encoded images"
@@ -111,4 +110,7 @@ class SceneSearchResult(TypedDict, total=False):
     date: str
     "Must be in the format YYYY-MM-DD"
     image: str
+    "Image can be a URL or base64-encoded image"
+    tags: list[ScrapedTag]
+    performers: list[ScrapedPerformer]
     studio: ScrapedStudio
