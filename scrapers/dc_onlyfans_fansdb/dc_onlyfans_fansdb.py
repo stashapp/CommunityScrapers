@@ -1,6 +1,6 @@
 """
-This script is a companion to the OnlyFans data scrapers by DIGITALCRIMINAL and derivatives.
-The above tools download posts from OnlyFans and save metadata to 'user_data.db' SQLite files.
+This script is a companion to the OnlyFans/Fansly data scrapers by DIGITALCRIMINAL and derivatives.
+Above tools download posts from OnlyFans/Fansly and save metadata to 'user_data.db' SQLite files.
 
 This script requires python3, stashapp-tools, and sqlite3.
 """
@@ -15,7 +15,7 @@ import uuid
 from typing import Dict
 
 try:
-    import stashapi.log as log
+    from stashapi import log
     from stashapi.tools import file_to_base64
     from stashapi.stashapp import StashInterface
 except ModuleNotFoundError:
@@ -38,7 +38,7 @@ default_config = {
     },
     "max_title_length": 64,  # Maximum length for scene/gallery titles.
     "tag_messages": True,  # Whether to tag messages.
-    "tag_messages_name": "[OF: Messages]",  # Name of tag for messages.
+    "tag_messages_name": "[DC: Messages]",  # Name of tag for messages.
     "max_performer_images": 3,  # Maximum performer images to generate.
     "cache_time": 300,  # Image expiration time (in seconds).
     "cache_dir": "cache",  # Directory to store cached base64 encoded images.
@@ -74,7 +74,7 @@ try:
     stash = StashInterface(STASH_CONNECTION)
 except SystemExit:
     log.error("Unable to connect to Stash, please verify your config.")
-    # print("{}")
+    print('null')
     sys.exit()
 
 # CACHE  ###########################################################################################
@@ -84,7 +84,7 @@ Path(CACHE_DIR).mkdir(parents=True, exist_ok=True)
 
 def load_cache():
     """
-    Load and update cache data, removing expired entries and associated files when necessary.
+    Load and update cache data, removing stale entries and associated files when necessary.
     """
     try:
         with open(CACHE_FILE, 'r', encoding="utf-8") as file:
@@ -95,10 +95,10 @@ def load_cache():
                 if current_time - timestamp <= CACHE_TIME:
                     updated_cache[path] = (timestamp, image_filenames)
                 else:
-                    log.info(f'[CACHE PURGE] Purging expired image(s) for path: {path}')
+                    log.info(f'[CACHE PURGE] Purging stale image(s) for path: {path}')
                     for image_filename in image_filenames:
                         image_path = Path(CACHE_DIR) / image_filename
-                        log.debug(f'[CACHE PURGE] Deleting expired image from disk: {image_path}')
+                        log.debug(f'[CACHE PURGE] Deleting stale image from disk: {image_path}')
                         if Path(image_path).exists() and Path(image_path).is_file():
                             Path(image_path).unlink()
             return updated_cache
@@ -120,7 +120,7 @@ def lookup_scene(file, db, media_dir, username, network):
     """
     Query database for scene metadata and create a structured scrape result.
     """
-    log.debug(f"Using database: {db} for {file}")
+    log.info(f"Using database: {db} for {file}")
     conn = sqlite3.connect(
         db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
     )
@@ -143,7 +143,7 @@ def lookup_scene(file, db, media_dir, username, network):
 
     if not result:
         log.error(f'Could not find metadata for scene: {file}')
-        print("{}")
+        print('null')
         sys.exit()
 
     api_type = result[0][2]
@@ -159,10 +159,10 @@ def lookup_scene(file, db, media_dir, username, network):
         c.execute(query, (file.name,))
     else:
         log.error("Unknown api_type {api_type} for post: {post_id}")
-        print("{}")
+        print('null')
         sys.exit()
 
-    log.info(f'Found {len(result)} video(s) in post {post_id}')
+    log.debug(f'Found {len(result)} video(s) in post {post_id}')
     if len(result) > 1:
         scene_index = [item[0] for item in result].index(file.name) + 1
         log.debug(f'Video is {scene_index} of {len(result)} in post')
@@ -188,7 +188,7 @@ def lookup_gallery(file, db, media_dir, username, network):
     """
     Query database for gallery metadata and create a structured scrape result.
     """
-    log.debug(f"Using database: {db} for {file}")
+    log.info(f"Using database: {db} for {file}")
     conn = sqlite3.connect(
         db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES
     )
@@ -202,7 +202,7 @@ def lookup_gallery(file, db, media_dir, username, network):
     row = c.fetchone()
     if not row:
         log.error(f'Could not find metadata for gallery: {file}')
-        print("{}")
+        print('null')
         sys.exit()
     # check for each api_type the right tables
     api_type = str(row[0])
@@ -216,7 +216,7 @@ def lookup_gallery(file, db, media_dir, username, network):
         c.execute(query, (post_id,))
     else:
         log.error("Unknown api_type {api_type} for post: {post_id}")
-        print("{}")
+        print('null')
         sys.exit()
 
     gallery = process_row(c.fetchone(), username, network)
@@ -244,7 +244,7 @@ def get_scene_path(scene_id):
         return scene["files"][0]["path"]
 
     log.error(f'Path for scene {scene_id} could not be found')
-    print("{}")
+    print('null')
     sys.exit()
 
 
@@ -258,7 +258,7 @@ def get_gallery_path(gallery_id):
         return gallery["folder"]["path"]
 
     log.error(f'Path for gallery {gallery_id} could not be found')
-    print("{}")
+    print('null')
     sys.exit()
 
 
@@ -271,7 +271,7 @@ def get_performer_info(username, media_dir):
         filter={"page": 1, "per_page": 5},
         fragment="id, name",  # type: ignore
     )
-    log.debug(req)
+    log.debug(f'found performer(s): {req}')
     res: Dict = {}
     if len(req) == 1:
         log.debug(f"Found performer id: {req[0]['id']}")
@@ -294,7 +294,7 @@ def get_studio_info(studio_name, studio_network):
         filter={"page": 1, "per_page": 5},
         fragment="id, name"
     )
-    log.debug(req)
+    log.debug(f'found studio(s): {req}')
     res: Dict = {'parent': {}}
     if len(req) == 1:
         log.debug(f"Found studio id: {req[0]['id']}")
@@ -314,12 +314,12 @@ def get_performer_images(path):
     """
     Find and encode performer images to base64.
     """
-    log.info(f'Finding image(s) for path: {path}')
+    log.debug(f'Finding image(s) for path: {path}')
 
     cache = load_cache()
 
     if str(path) in cache:  # check if the images are cached
-        log.info(f'[CACHE HIT] Using cached image(s) for path: {path}')
+        log.debug(f'[CACHE HIT] Using cached image(s) for path: {path}')
         image_filenames = cache[f'{path}'][1]
         log.debug(image_filenames)
         cached_images = []
@@ -336,11 +336,11 @@ def get_performer_images(path):
         image_list += type_result
 
     if len(image_list) == 0:  # if no images found
-        log.info(f'No image(s) found for path: {path}')
+        log.warning(f'No image(s) found for path: {path}')
         return None
 
     # if images found, encode up to `max_images` to base64
-    log.info(f'[CACHE MISS] Generating image(s) for path: {path}')
+    log.debug(f'[CACHE MISS] Generating image(s) for path: {path}')
     selected_images = random.choices(image_list, k=min(MAX_PERFORMER_IMAGES, len(image_list)))
 
     encoded_images = []
@@ -353,7 +353,7 @@ def get_performer_images(path):
         base64_data = file_to_base64(image)
         if base64_data is None:
             log.error("Error converting image to base64: {image}")
-            print("{}")
+            print('null')
             sys.exit()
 
         encoded_images.append(base64_data)
@@ -463,27 +463,27 @@ def get_path_info(path):
         raise ValueError
     except ValueError:
         log.error(f'Could not find username or network in path: {path}')
-        print("{}")
+        print('null')
         sys.exit()
 
 
 # MAIN #############################################################################################
 def main():
     """
-    Execute scene or gallery lookup and print the result as JSON.
+    Execute scene or gallery lookup and print the result as JSON to stdout
     """
     fragment = json.loads(sys.stdin.read())
     scrape_id = fragment["id"]
 
-    if sys.argv[1] == "query":
+    if sys.argv[1] == "queryScene":
         lookup = lookup_scene
         path = Path(get_scene_path(scrape_id))
-    elif sys.argv[1] == "querygallery":
+    elif sys.argv[1] == "queryGallery":
         lookup = lookup_gallery
         path = Path(get_gallery_path(scrape_id))
     else:
         log.error('Invalid argument(s) provided: ' + str(sys.argv))
-        print("{}")
+        print('null')
         sys.exit()
 
     username, network, media_dir = get_path_info(path)
@@ -496,5 +496,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# Last Updated October 20, 2023
