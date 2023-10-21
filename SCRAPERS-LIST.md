@@ -1647,6 +1647,7 @@ xtube.com|Xtube.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvideos.com|Xvideos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvideos.red|Xvideos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvirtual.com|XVirtual.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+xxxjobinterviews.com|XXXJobInterviews.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xxxnj.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 xxxpawn.com|XXXPawn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yanks.com|Yanks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
