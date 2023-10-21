@@ -24,6 +24,12 @@ xPathScrapers:
       $content: //section[@class="video-description-and-tags clearfix"]
     scene:
       Title: //div[@class="title-zone"]/h1
+      Code:
+        selector: //meta[@property="og:video"]/@content
+        postProcess:
+          - replace:
+            - regex: .+\/(.+)\/trailers\/.+
+              with: $1
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
@@ -132,4 +138,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated August 03, 2023
+# Last Updated October 21, 2023
