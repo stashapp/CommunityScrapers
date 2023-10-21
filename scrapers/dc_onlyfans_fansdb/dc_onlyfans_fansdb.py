@@ -158,7 +158,7 @@ def lookup_scene(file, db, media_dir, username, network):
         """
         c.execute(query, (file.name,))
     else:
-        log.error("Unknown api_type {api_type} for post: {post_id}")
+        log.error(f"Unknown api_type {api_type} for post: {post_id}")
         print('null')
         sys.exit()
 
@@ -215,7 +215,7 @@ def lookup_gallery(file, db, media_dir, username, network):
         """
         c.execute(query, (post_id,))
     else:
-        log.error("Unknown api_type {api_type} for post: {post_id}")
+        log.error(f"Unknown api_type {api_type} for post: {post_id}")
         print('null')
         sys.exit()
 
@@ -267,9 +267,14 @@ def get_performer_info(username, media_dir):
     Resolve performer based on username
     """
     req = stash.find_performers(
-        f={"aliases": {"value": username, "modifier": "EQUALS"}},
+        f={
+            "name": {"value": username, "modifier": "EQUALS"},
+            "OR":{
+                "aliases": {"value": username, "modifier": "EQUALS"}
+            }
+        },
         filter={"page": 1, "per_page": 5},
-        fragment="id, name",  # type: ignore
+        fragment="id, name, aliases",  # type: ignore
     )
     log.debug(f'found performer(s): {req}')
     res: Dict = {}
@@ -290,9 +295,14 @@ def get_studio_info(studio_name, studio_network):
     Resolve studio based on name and network
     """
     req = stash.find_studios(
-        f={"name": {"value": f"{studio_name} ({studio_network})", "modifier": "EQUALS"}},
+        f={
+            "name": {"value": f"{studio_name} ({studio_network})", "modifier": "EQUALS"},
+            "OR":{
+                "aliases": {"value": f"{studio_name} ({studio_network})", "modifier": "EQUALS"}
+            }
+        },
         filter={"page": 1, "per_page": 5},
-        fragment="id, name"
+        fragment="id, name, aliases"
     )
     log.debug(f'found studio(s): {req}')
     res: Dict = {'parent': {}}
@@ -352,7 +362,7 @@ def get_performer_images(path):
         """)
         base64_data = file_to_base64(image)
         if base64_data is None:
-            log.error("Error converting image to base64: {image}")
+            log.error(f"Error converting image to base64: {image}")
             print('null')
             sys.exit()
 
@@ -454,17 +464,15 @@ def get_path_info(path):
     Extract the username and network from a given path
     """
     network = 'Fansly' if 'Fansly' in str(path) else 'OnlyFans'
-    parts = path.parts
     try:
-        index = parts.index(network)
-        if index + 1 < len(parts):
-            return parts[index + 1], network, Path(*parts[:index + 2])
-
+        index = path.parts.index(network)
+        if index + 1 < len(path.parts):
+            return path.parts[index + 1], network, Path(*path.parts[:index + 2])
         raise ValueError
     except ValueError:
         log.error(f'Could not find username or network in path: {path}')
         print('null')
-        sys.exit()
+        sys.exit(1)
 
 
 # MAIN #############################################################################################
