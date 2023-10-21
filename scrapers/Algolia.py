@@ -436,9 +436,9 @@ def match_result(api_scene, range_duration=60, single=False, clip_id: str=None):
     match_clip_id = False
     # Using database
     if database_dict:
-        db_duration = int(database_dict["duration"])
-        db_height = str(database_dict["height"])
-        db_size = int(database_dict["size"])
+        db_duration = int(database_dict[0]["duration"])
+        db_height = str(database_dict[0]["height"])
+        db_size = int(database_dict[0]["size"])
         if api_scene.get("download_file_sizes"):
             if db_height == "2160":
                 api_filesize = api_scene["download_file_sizes"].get("4k")
@@ -877,7 +877,7 @@ if "movie" not in sys.argv and "gallery" not in sys.argv:
                     "GraphQL request failed, accessing database directly...")
                 database_dict = check_db(DB_PATH, SCENE_ID)
             else:
-                database_dict = database_dict["file"]
+                database_dict = database_dict["files"]
             log.debug(f"[DATABASE] Info: {database_dict}")
         else:
             database_dict = None
