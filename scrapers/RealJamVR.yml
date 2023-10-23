@@ -3,6 +3,7 @@ sceneByURL: &byURL
   - action: scrapeXPath
     url:
       - realjamvr.com/scene/
+      - porncornvr.com/scene
     scraper: sceneScraper
 
 galleryByURL: *byURL
@@ -33,7 +34,11 @@ xPathScrapers:
         selector: //*[@id="video-player"]//@poster
       Studio: &studio
         Name:
-          fixed: RealJamVR
+          selector: //title
+          postProcess:
+          - replace:
+              - regex: '(.*)\| ([^\|]+VR)$'
+                with: $2
     gallery:
       Title: *title
       Date: *date
@@ -42,4 +47,4 @@ xPathScrapers:
       Details: *details
       Studio: *studio
       
-# Last Updated August 01, 2023
+# Last Updated October 22, 2023
