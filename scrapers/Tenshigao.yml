@@ -11,6 +11,8 @@ performerByURL:
     scraper: performerScraper
 xPathScrapers:
   sceneScraper:
+    common: 
+      $model: //div[@class="model-thumb"]
     scene:
       Title:
         selector: //span[@class="mroundedthumbs"]//@alt
@@ -22,12 +24,17 @@ xPathScrapers:
                 with: "$1"
           - parseDate: January 02, 2006
       Performers:
-        Name: //h5/a
-        URL: //h5/a/@href
+        Name: $model//h5
+        URL: $model//h5/a/@href
       Tags:
         Name: //div[@class="cat"]/a
       Details:
-        selector: //h1[@class="none"]
+        selector: //p[span[@class="readmore"]]
+        postProcess:
+          - replace:
+              - regex: ... Read More
+                with:
+      URL: //link[@rel="canonical"]/@href
       Image:
         selector: //video[@id="videohtml5tour"]/@poster
         postProcess:
@@ -98,16 +105,18 @@ xPathScrapers:
               - regex: None
                 with:
       Details: 
-        selector: //*[@id="main"]/div[1]/div[2]/p/text()
+        selector: //p[span[@class="readmore"]]
+        postProcess:
+          - replace:
+              - regex: ... Read More
+                with:
       Piercings:
         selector: $profile[contains(strong, "Piercings:")]//text()
         postProcess:
           - replace:
               - regex: .*Piercings:\s*(.*)\s*$
                 with: $1
-              - regex: None
-                with:
-              - regex: No Piercings
+              - regex: None|^No$|No Piercings
                 with:
       Tattoos:
         selector: $profile[contains(strong, "Tattoo:")]//text()
@@ -115,18 +124,22 @@ xPathScrapers:
           - replace:
               - regex: .*Tattoo:\s*(.*)\s*$
                 with: $1
-              - regex: None
+              - regex: None|^No$|No Tattoos
                 with:
       HairColor:
         selector: $profile[contains(strong, "Hair color:")]//text()
         postProcess:
           - replace:
-              - regex: .*Hair Color:?\s*(.*)\s*$
-                with: $1
-              - regex: .*Hair color:?\s*(.*)\s*$
+              - regex: (?i).*hair color:?\s*(.*)\s*$
                 with: $1
               - regex: None
                 with:
+      Country:
+        fixed: Japan
+      Ethnicity:
+        fixed: Asian
+      Gender:
+        fixed: Female
       URL: //link[@rel="canonical"][1]/@href
       Image:
         selector: //img[@class="smallroundedthumbs"]/@src
@@ -136,4 +149,4 @@ xPathScrapers:
                 with: https://
               - regex: 160x160
                 with: 500x500
-# Last Updated October 03, 2023
+# Last Updated October 24, 2023
