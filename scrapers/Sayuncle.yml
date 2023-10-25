@@ -17,9 +17,13 @@ xPathScrapers:
         Name: //a[@class="model-name-link"]
       Details:
         selector: //div[@class="col sceneDesc hide"]/text()
+      Tags:
+        Name: 
+         selector: //div[@class="col-12 tags-container"]
+         split: ", "
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
           selector: //div[@class="siteName float-right px-3 rounded"]/a
-# Last Updated January 10, 2022
+# Last Updated October 24, 2022
