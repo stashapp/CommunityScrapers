@@ -485,6 +485,10 @@
           "title": "Performer name",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "Disambiguation": {
+          "title": "Performer disambiguation",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "Aliases": {
           "title": "Performer aliases",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
@@ -786,6 +790,11 @@
                   "feetToCm": {
                     "title": "Feet to Centimetres",
                     "description": "Convert height measurement in feet and inches to centimetres.",
+                    "type": "boolean"
+                  },
+                  "dimensionToMetric": {
+                    "title": "Convert dimension to metric",
+                    "description": "Smart conversion to centimeters: can handle feet, inches or centimeters.",
                     "type": "boolean"
                   },
                   "lbToKg": {
