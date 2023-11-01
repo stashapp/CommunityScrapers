@@ -78,6 +78,7 @@ xPathScrapers:
     performer:
       Name: $tab_1_pane//tr[contains(@class, 'mainname')]//span[@itemprop="name"]
       Aliases: $tab_1_pane//tr[contains(@class, 'official')]//label[@itemprop="alternateName"]
+      Disambiguation: $tab_1_pane//tr[contains(@class, 'mainname')]//a[@class='shortlink']
       Gender: $tab_1_pane//tr[contains(@class, 'gender')]//span[@itemprop="gender"]
       Ethnicity: $tab_1_pane//tr[contains(@class, 'entity')]//span[@class="tagname"]
       HairColor: $looks//span[contains(@class, 'tagname') and contains(text(), 'hair')]
