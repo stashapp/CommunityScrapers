@@ -261,6 +261,8 @@ jsonScrapers:
                 with: "Schoolgirls" # Not Sure (PPPD-811)
               - regex: S\*{8}ls\b
                 with: "Schoolgirls"
+              - regex: S\*{9}s\b
+                with: "Schoolgirls" # NFDM-234
               - regex: Sch\*{2}lgirls\b
                 with: "Schoolgirls"
               - regex: SK\*{2}led\b
