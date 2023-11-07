@@ -19,7 +19,7 @@ sceneByFragment:
   scraper: sceneScraper
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.kink.com/search?type=performers&q={}
+  queryURL: https://www.kinkmen.com/search?type=performers&q={}
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
