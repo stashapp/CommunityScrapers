@@ -9,6 +9,14 @@ performerByURL:
     url:
       - tenshigao.com
     scraper: performerScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://tenshigao.com/?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common: 
@@ -105,7 +113,7 @@ xPathScrapers:
               - regex: None
                 with:
       Details: 
-        selector: //p[span[@class="readmore"]]
+        selector: //p[span[@class="readmore"]] | //div[@class="intro"]/p
         postProcess:
           - replace:
               - regex: ... Read More
@@ -116,7 +124,7 @@ xPathScrapers:
           - replace:
               - regex: .*Piercings:\s*(.*)\s*$
                 with: $1
-              - regex: None|^No$|No Piercings
+              - regex: None|^No$|No Piercing.*
                 with:
       Tattoos:
         selector: $profile[contains(strong, "Tattoo:")]//text()
@@ -124,7 +132,7 @@ xPathScrapers:
           - replace:
               - regex: .*Tattoo:\s*(.*)\s*$
                 with: $1
-              - regex: None|^No$|No Tattoos
+              - regex: None|^No$|No Tattoo.*
                 with:
       HairColor:
         selector: $profile[contains(strong, "Hair color:")]//text()
@@ -149,4 +157,14 @@ xPathScrapers:
                 with: https://
               - regex: 160x160
                 with: 500x500
-# Last Updated October 24, 2023
+  sceneSearch:
+    common:
+      $videos: //div[@class="thumb"]/a
+    scene:
+      Title: $videos/@title 
+      URL: $videos/@href
+      Image: $videos/img/@src
+      Studio:
+        Name:
+          fixed: Tenshigao
+# Last Updated November 07, 2023
