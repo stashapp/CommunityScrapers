@@ -92,10 +92,6 @@ xPathScrapers:
           split: ","
       Image:
         selector: $scene//img/@src
-        postProcess:
-            - replace:
-                - regex: ^
-                  with: "https:"
       URL: //meta[@property="og:url"]/@content
 
 driver:
@@ -111,4 +107,4 @@ driver:
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
 
 
-# Last Updated August 31, 2023
+# Last Updated November 7, 2023
