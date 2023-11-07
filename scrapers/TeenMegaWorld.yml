@@ -14,6 +14,7 @@ sceneByURL:
       - firstbgg.com
       - fuckstudies.com
       - gag-n-gape.com
+      - noboring.com
       - ohmyholes.com
       - old-n-young.com
       - rawcouples.com
@@ -21,6 +22,8 @@ sceneByURL:
       - teenmegaworld.net
       - teensexmania.com
       - teensexmovs.com
+      - tmwpov.com
+      - tmwvrnet.com
       - trickymasseur.com
       - x-angels.com
       # Behind paywall - Scenes for these sites can be scraped from the public https://teenmegaworld.net/ site
@@ -37,8 +40,6 @@ sceneByURL:
       # - squirtingvirgin.com
       # - teens3some.com
       # - teenstarsonly.com
-      # - tmwpov.com
-      # - tmwvrnet.com
       # - watchmefucked.com
       # - wow-orgasms.com
 performerByURL:
@@ -48,55 +49,61 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $content: //div[@class="video"]
+      $content: //div[@class="video-block"]
     scene:
       Title: $content//h1
       Date:
-        selector: $content//div[@class="date"]/time
+        selector: $content//span[@title="Video release date"]/text()
         postProcess:
           - parseDate: January 2, 2006
       Details:
-        selector: $content//div[@class="text"]//p
+        selector: $content//p[@class="video-description-text"]
         concat: "\n\n"
       Performers:
         Name: $content//a[contains(@href,"/models/")]
         URL: $content//a[contains(@href,"/models/")]/@href
       Tags:
-        Name: $content//ul[@class="tag-list"]//a
+        Name: $content//a[@class="video-tag-link"]
       Image:
-        selector: $content//video/@poster | $content//dl8-video/@poster
+        selector: $content//img[@id="video-cover-image"]/@src
         postProcess:
           - replace:
               - regex: ^
-                with: https://teenmegaworld.net
+                with: https://teenmegaworld.net/
       Studio:
         Name:
-          selector: $content//div[@class="site"]/a[1]
+          selector: //base/@href
           postProcess:
             - replace:
-                - regex: \.(com|net)$
-                  with:
+                - regex: https://(.*?)\.(com|net)/$
+                  with: $1
   performerScraper:
     common: 
-      $model: //section[@class="model-info single-component"]
+      $model: //section[contains(@class,"model-profile")]
     performer:
       Name: $model//h1
-      Details: $model//div[@class="bio"]/div[@class="text"]
+      Details: $model//p[contains(@class,"model-profile")]
       Gender:
         # Only female performers are listed on the sites
         fixed: Female
       CareerLength:
-        selector: $model//div[@class="title"][contains(text(), "Debut year:")]/following-sibling::div/text()
+        selector: $model//dt[contains(text(), "Debut year")]/following-sibling::text()
         postProcess:
           - replace:
               - regex: $
                 with: " - "
-      HairColor: $model//div[@class="title"][contains(text(), "Hair:")]/following-sibling::div/text()
-      EyeColor: $model//div[@class="title"][contains(text(), "Eyes:")]/following-sibling::div/text()
+      Aliases: $model//dt[contains(text(), "AKA")]/following-sibling::text()
+      HairColor: 
+        selector: $model//dt[contains(text(), "Hair")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^Fair
+                with: Blonde
+      EyeColor: $model//dt[contains(text(), "Eyes")]/following-sibling::text()
       Image:
-        selector: $model//img/@data-src
+        selector: $model//img/@src
         postProcess:
           - replace:
               - regex: ^
-                with: https://teenmegaworld.net
-# Last Updated October 07, 2023
+                with: https://teenmegaworld.net/
+# Last Updated November 06, 2023
