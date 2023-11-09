@@ -1,4 +1,4 @@
-name: RawFuckClub
+name: Raw Fuck Club
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -19,10 +19,12 @@ xPathScrapers:
         selector: //p[@class='watch-published-date']/text()
         postProcess:
           - replace:
-              - regex: "Posted on (.+)"
+              - regex: 'Reposted on (.+)([.])'
+                with: $1
+              - regex: 'Posted on (.+)'
                 with: $1
           - parseDate: January 2, 2006
       Studio:
         Name:
           fixed: Raw Fuck Club
-# Last Updated November 02, 2023
+# Last Updated November 08, 2023
