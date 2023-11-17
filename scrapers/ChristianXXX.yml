@@ -2,9 +2,9 @@ name: "ChristianXXX"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - becomingfemme.com
-      - pure-ts.com
-      - tspov.com
+      - becomingfemme.com/tour
+      - pure-ts.com/tour
+      - tspov.com/tour
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -35,4 +35,4 @@ xPathScrapers:
                 with: $1$2
               - regex: ^\/\/
                 with: "https://"
-# Last Updated June 26, 2022
+# Last Updated November 17, 2023
