@@ -41,7 +41,10 @@ def extract_SceneInfo(table,cover_url=None):
     debugPrint(f"performer:{performer}")
     date = datetime.strptime(date, '%d %b %Y').date().strftime('%Y-%m-%d') #Convert date to ISO format
     if cover_url == None:
-        cover_url=str(table.find("img")['src'])
+        if table.find("img"):
+            cover_url=str(table.find("img")['src'])
+        else:
+            cover_url=str(table.find("video")['poster'])
     title = table.find(class_= ["entryHeadingFlash","entryHeading"]).find('a').get_text().replace("\x92","'")
     media_id = re.search(r"\/(\d{3,5})\/",cover_url,re.I).group(1)
     artist_id = re.search(r"\/(f\d{4,5})",cover_url,re.I).group(1)
@@ -96,13 +99,14 @@ def scrapeScene(filename,date,url):
             debugPrint(artist_id+"-"+video_id)
             tables = response.find_all(class_= ["blog_wide_news_tbl entry ppss-scene","entry ppss-scene"])
             for table in tables:
-                img=str(table.find("img")['src'])
-                debugPrint(f"Image:{str(img)}")
-                if (f"/{artist_id}-{video_id}" in img) and img.endswith(("vg.jpg","hs.jpg")):
-                    debugPrint("Found a single match video!")
-                    # Extract data from this single result
-                    ret = extract_SceneInfo(table)
-                    break
+                    if table.find('video'):
+                        img=str(table.find("video")['poster'])
+                        debugPrint(f"Image:{str(img)}")
+                        if (f"/{artist_id}-{video_id}vg.jpg" in img) or (f"/{artist_id}-{video_id}hs.jpg" in img):
+                            debugPrint("Found a single match video!")
+                            # Extract data from this single result
+                            ret = extract_SceneInfo(table)
+                            break
             else:
                 sys.stderr.write("0 matches found! Checking offset")
                 pages=int(response.find_all("a", class_="pagging_nonsel")[-1].get_text())
@@ -113,12 +117,13 @@ def scrapeScene(filename,date,url):
                         response = browser.page
                         tables = response.find_all(class_= ["blog_wide_news_tbl entry ppss-scene","entry ppss-scene"])
                         for table in tables:
-                            img=str(table.find("img")["src"])
-                            debugPrint(f"Image:{img}")
-                            if (f"/{artist_id}-{video_id}" in img) and img.endswith(("vg.jpg","hs.jpg")):
-                                sys.stderr.write("FOUND")
-                                ret = extract_SceneInfo(table)
-                                break
+                            if table.find('video'):
+                                img=str(table.find("video")["poster"])
+                                debugPrint(f"Image:{img}")
+                                if (f"/{artist_id}-{video_id}vg.jpg" in img) or (f"/{artist_id}-{video_id}hs.jpg" in img):
+                                    sys.stderr.write("FOUND")
+                                    ret = extract_SceneInfo(table)
+                                    break
                 else:
                     sys.stderr.write("0 matches found!, check your filename")
 
