@@ -13,6 +13,8 @@ sceneByURL:
       - scoreland.com/
       - scoreland2.com/
       - xlgirls.com/
+      - scorevideos.com/
+      - milftugs.com/
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
@@ -78,9 +80,9 @@ xPathScrapers:
       Studio: *studioAttr
       Date: *dateAttr
       Details:
-        selector: $photopage//div[@class="p-desc"]/text()
+        selector: $photopage//div[contains(@class, 'p-desc')]/text()
         concat: "\n"
       Tags:
         Name: $photopage//div[@class='mb-3']/a/text()
       Performers: *performersAttr
-# Last Updated September 24, 2023
+# Last Updated November 18, 2023
