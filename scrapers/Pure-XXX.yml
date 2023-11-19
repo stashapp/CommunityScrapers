@@ -28,8 +28,8 @@ xPathScrapers:
           selector: //div[@id="logo"]//img/@alt | //div[@class="flexslider"]//a/@title
           postProcess:
             - replace:
-              - regex: (.*)\-(.*)
-              - with: $1 $2
+              - regex: \-
+                with: ' '
       Date:
         selector: //div[@class="video_description"]/h4[1]/text()
         postProcess:
@@ -37,4 +37,4 @@ xPathScrapers:
               - regex: .*(\d{4})-(\d{2})-(\d{2}).*
                 with: $1-$2-$3
           - parseDate: 2006-01-02
-# Last Updated November 18, 2023
+# Last Updated November 19, 2023
