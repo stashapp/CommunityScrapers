@@ -1185,8 +1185,9 @@ publicsexadventures.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 publicsexdate.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 puffynetwork.com|Puffynetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pumaswedexxx.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-pure-bbw.com|Pure-BBW.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-pure-ts.com|ChristianXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+pure-bbw.com|Pure-XXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+pure-ts.com|Pure-XXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+pure-xxx.com|Pure-XXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 purebj.com|Only3xGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 puremature.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 purepov.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
