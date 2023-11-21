@@ -4,6 +4,14 @@ sceneByURL:
     url:
       - antoniosuleiman.com
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://antoniosuleiman.com/search.php?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
@@ -31,8 +39,16 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Antonio Suleiman
-debug:
-  printHTML: true
+  sceneSearch:
+    common:
+      $scene: //div[@data-url]
+    scene:
+      Title: $scene//p[@class="left-first-paragraph"]
+      URL: $scene/@data-url
+      # Search doesn't return any description but we can show the performers instead
+      Details: //div[@data-url]//p[@class="left-second-paragraph"]
+      Image: $scene//img/@src0_1x
+      Date: $scene//p[@class="right-paragraph"][1]
 driver:
   cookies:
     - CookieURL: "https://antoniosuleiman.com"
