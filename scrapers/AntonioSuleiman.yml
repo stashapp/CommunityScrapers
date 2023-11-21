@@ -24,6 +24,7 @@ xPathScrapers:
         postProcess:
           - parseDate: 2006-01-02
       Details: $scene/div[@class="wrapper"]/*[last()]
+      URL: //link[@rel="canonical"]/@href
       Tags:
         Name:
           # The worst way to do tags but it's all they have
@@ -48,7 +49,7 @@ xPathScrapers:
       # Search doesn't return any description but we can show the performers instead
       Details: //div[@data-url]//p[@class="left-second-paragraph"]
       Image: $scene//img/@src0_1x
-      Date: $scene//p[@class="right-paragraph"][1]
+      Date: $scene//p[@class="right-paragraph" and not(span)]
 driver:
   cookies:
     - CookieURL: "https://antoniosuleiman.com"
