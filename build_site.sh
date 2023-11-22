@@ -17,8 +17,12 @@ mkdir -p "$outdir"
 buildScraper() 
 {
     f=$1
+
     # get the scraper id from the filename
     scraper_id=$(basename "$f" .yml)
+    if [ "$scraper_id" == "package" ]; then
+        scraper_id=$(basename $(dirname "$f"))
+    fi
 
     echo "Processing $scraper_id"
 
@@ -29,16 +33,20 @@ buildScraper()
     # create the zip file
     # copy other files
     zipfile=$(realpath "$outdir/$scraper_id.zip")
-    
+
+    name=$(grep "^name:" "$f" | cut -d' ' -f2- | sed -e 's/\r//' -e 's/^"\(.*\)"$/\1/')
+    ignore=$(grep "^# ignore:" "$f" | cut -c 10- | sed -e 's/\r//')
+
+    # always ignore package file
+    ignore="-x $ignore package"
+
     pushd $(dirname "$f") > /dev/null
     if [ $(dirname "$f") != "./scrapers" ]; then
-        zip -r "$zipfile" . > /dev/null
+        zip -r "$zipfile" . ${ignore} > /dev/null
     else
         zip "$zipfile" "$scraper_id.yml" > /dev/null
     fi
     popd > /dev/null
-
-    name=$(grep "^name:" "$f" | cut -d' ' -f2- | sed -e 's/\r//' -e 's/^"\(.*\)"$/\1/')
 
     # write to spec index
     echo "- id: $scraper_id
@@ -55,6 +63,11 @@ for f in ./scrapers/*.yml; do
     buildScraper "$f"
 done
 
-for f in ./scrapers/*/*.yml; do 
+find ./scrapers/ -mindepth 2 -name *.yml -print0 | while read -d $'\0' f; do
+    buildScraper "$f"
+done
+
+# handle dependency packages
+find ./scrapers/ -mindepth 2 -name package -print0 | while read -d $'\0' f; do
     buildScraper "$f"
 done
