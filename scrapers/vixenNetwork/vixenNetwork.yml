@@ -1,4 +1,6 @@
 name: "Vixen Media Group"
+# requires: py_common
+
 sceneByURL:
   - url:
       - blacked.com/videos

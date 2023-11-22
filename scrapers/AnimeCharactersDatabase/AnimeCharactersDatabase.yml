@@ -1,4 +1,5 @@
 name: AnimeCharactersDatabase
+# requires: py_common
 
 performerByURL:
 - action: script

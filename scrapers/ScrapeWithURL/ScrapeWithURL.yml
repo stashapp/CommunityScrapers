@@ -1,4 +1,6 @@
 name: Scrape with URL
+# requires: py_common
+
 sceneByFragment:
     action: script
     script:

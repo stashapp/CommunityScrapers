@@ -1,4 +1,6 @@
 name: "KB Productions"
+# requires: py_common
+
 sceneByURL:
   - url:
       # Keeping this to allow for updates using old urls

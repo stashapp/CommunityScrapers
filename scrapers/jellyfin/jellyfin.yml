@@ -1,4 +1,6 @@
 name: Jellyfin
+# requires: py_common
+
 performerByURL:
   - url:
   #Replace this with you local jellyfin host

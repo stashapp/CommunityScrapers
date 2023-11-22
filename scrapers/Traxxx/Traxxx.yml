@@ -1,4 +1,6 @@
 name: "Traxxx"
+# requires: py_common
+
 sceneByURL:
   - url:
      - traxxx.me/scene/

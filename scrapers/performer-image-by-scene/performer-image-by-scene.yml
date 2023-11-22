@@ -1,4 +1,5 @@
 name: Performer Image by scene cover
+# requires: py_common
 
 performerByFragment:
   action: script

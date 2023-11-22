@@ -1,4 +1,6 @@
 name: "DC Onlyfans"
+# requires: py_common
+
 sceneByFragment:
     action: script
     script:

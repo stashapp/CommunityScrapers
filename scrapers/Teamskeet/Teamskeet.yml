@@ -1,4 +1,6 @@
 name: "TeamskeetAPI"
+# requires: py_common
+
 sceneByURL:
   - url:
       - teamskeet.com/movies/

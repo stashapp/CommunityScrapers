@@ -1,4 +1,6 @@
 name: FratX
+# requires: py_common
+
 sceneByURL:
   - action: script
     script:

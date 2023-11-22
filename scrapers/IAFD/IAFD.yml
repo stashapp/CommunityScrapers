@@ -1,4 +1,6 @@
 name: IAFD
+# requires: py_common
+
 performerByName:
   action: script
   script:

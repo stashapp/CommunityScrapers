@@ -1,4 +1,6 @@
 name: "JavLibrary Python"
+# requires: py_common
+
 sceneByFragment:
   action: script
   script:

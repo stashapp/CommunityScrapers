@@ -1,4 +1,6 @@
 name: Filename
+# requires: py_common
+
 sceneByFragment:
   action: script
   script:

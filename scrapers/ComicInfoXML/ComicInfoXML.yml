@@ -1,4 +1,5 @@
 name: "ComicInfo XML"
+# requires: py_common
 
 galleryByFragment:
   action: script

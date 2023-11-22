@@ -1,4 +1,6 @@
 name: JacquieEtMicaelTV
+# requires: py_common
+
 sceneByFragment:
     action: script
     script:

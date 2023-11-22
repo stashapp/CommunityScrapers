@@ -1,4 +1,6 @@
 name: RealityLovers
+# requires: py_common
+
 performerByURL:
   - action: script
     url:

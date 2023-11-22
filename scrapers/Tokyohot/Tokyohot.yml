@@ -1,4 +1,6 @@
 name: tokyohot
+# requires: py_common
+
 sceneByURL:
   - action: scrapeXPath
     url:
