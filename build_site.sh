@@ -42,6 +42,7 @@ buildScraper()
 
     name=$(grep "^name:" "$f" | cut -d' ' -f2- | sed -e 's/\r//' -e 's/^"\(.*\)"$/\1/')
     ignore=$(grep "^# ignore:" "$f" | cut -c 10- | sed -e 's/\r//')
+    dep=$(grep "^# requires:" "$f" | cut -c 12- | sed -e 's/\r//')
 
     # always ignore package file
     ignore="-x $ignore package"
@@ -60,8 +61,17 @@ buildScraper()
   version: $version
   date: $updated
   path: $scraper_id.zip
-  sha256: $(sha256sum "$zipfile" | cut -d' ' -f1)
-" >> "$outdir"/index.yml
+  sha256: $(sha256sum "$zipfile" | cut -d' ' -f1)" >> "$outdir"/index.yml
+
+    # handle dependencies
+    if [ ! -z "$dep" ]; then
+        echo "  requires:" >> "$outdir"/index.yml
+        for d in ${dep//,/ }; do
+            echo "    - $d" >> "$outdir"/index.yml
+        done
+    fi
+
+    echo "" >> "$outdir"/index.yml
 }
 
 # find all yml files in ./scrapers - these are packages individually
