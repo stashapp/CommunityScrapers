@@ -22,17 +22,20 @@ jobs:
       with:
         path: master
         ref: master
+        fetch-depth: '0'
     - run: |
         cd master
         ./build_site.sh ../_site/develop
-    - name: Checkout Stable
-      uses: actions/checkout@v2
-      with:
-        path: stable
-        ref: stable
-    - run: |
-        cd stable
-        ../master/build_site.sh ../_site/stable
+    # uncomment this once we have a stable branch
+    # - name: Checkout Stable
+    #   uses: actions/checkout@v2
+    #   with:
+    #     path: stable
+    #     ref: stable
+    #     fetch-depth: '0'
+    # - run: |
+    #     cd stable
+    #     ../master/build_site.sh ../_site/stable
     - uses: actions/upload-pages-artifact@v1
     
   deploy:
