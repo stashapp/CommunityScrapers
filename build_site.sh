@@ -17,18 +17,24 @@ mkdir -p "$outdir"
 buildScraper() 
 {
     f=$1
+    dir=$(dirname "$f")
 
     # get the scraper id from the filename
     scraper_id=$(basename "$f" .yml)
+    versionFile=$f
     if [ "$scraper_id" == "package" ]; then
-        scraper_id=$(basename $(dirname "$f"))
+        scraper_id=$(basename "$dir")
+    fi
+
+    if [ "$dir" != "./scrapers" ]; then
+        versionFile="$dir"
     fi
 
     echo "Processing $scraper_id"
 
     # create a directory for the version
-    version=$(git log -n 1 --pretty=format:%h -- "$f")
-    updated=$(git log -n 1 --date="format:%F %T %z" --pretty=format:%ad -- "$f")
+    version=$(git log -n 1 --pretty=format:%h -- "$versionFile")
+    updated=$(git log -n 1 --date="format:%F %T %z" --pretty=format:%ad -- "$versionFile")
     
     # create the zip file
     # copy other files
@@ -40,8 +46,8 @@ buildScraper()
     # always ignore package file
     ignore="-x $ignore package"
 
-    pushd $(dirname "$f") > /dev/null
-    if [ $(dirname "$f") != "./scrapers" ]; then
+    pushd "$dir" > /dev/null
+    if [ "$dir" != "./scrapers" ]; then
         zip -r "$zipfile" . ${ignore} > /dev/null
     else
         zip "$zipfile" "$scraper_id.yml" > /dev/null
