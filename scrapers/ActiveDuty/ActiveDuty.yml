@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "Active Duty"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - activeduty.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - activeduty
 sceneByFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - activeduty
 sceneByName:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - activeduty
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - activeduty
     - validName
 # Last Updated September 26, 2023

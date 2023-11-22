@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "Wicked"
 sceneByURL:
   - action: script
@@ -5,7 +6,7 @@ sceneByURL:
       - wicked.com/en/video/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - wicked
 movieByURL:
   - action: script
@@ -13,27 +14,27 @@ movieByURL:
       - wicked.com/en/movie/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - wicked
       - movie
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - wicked
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - wicked
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - wicked
       - validName
 galleryByURL:
@@ -42,7 +43,7 @@ galleryByURL:
       - wicked.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - wicked
       - gallery
 # Last Updated December 22, 2022

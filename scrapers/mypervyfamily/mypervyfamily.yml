@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "MyPervyFamily"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - mypervyfamily.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - mypervyfamily
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - mypervyfamily
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - mypervyfamily
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - mypervyfamily
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - mypervyfamily.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - mypervyfamily
       - gallery
 # Last Updated December 22, 2022

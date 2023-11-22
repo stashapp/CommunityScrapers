@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "FantasyMassage"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - fantasymassage.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - fantasymassage
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - fantasymassage
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - fantasymassage
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - fantasymassage
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - fantasymassage.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - fantasymassage
       - gallery
 # Last Updated December 22, 2022

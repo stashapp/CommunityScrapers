@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "TouchMyWife"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - touchmywife.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - touchmywife
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - touchmywife
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - touchmywife
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - touchmywife
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - touchmywife.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - touchmywife
       - gallery
 # Last Updated December 22, 2022

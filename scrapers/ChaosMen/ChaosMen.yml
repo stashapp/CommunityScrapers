@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "ChaosMen"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - chaosmen.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - chaosmen
 sceneByFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - chaosmen
 sceneByName:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - chaosmen
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - chaosmen
     - validName
 # Last Updated January 10, 2023

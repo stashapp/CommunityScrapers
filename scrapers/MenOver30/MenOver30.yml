@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "MenOver30"
 sceneByURL:
   - action: script
@@ -6,26 +7,26 @@ sceneByURL:
       - pridestudios.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - menover30
 sceneByFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - menover30
 sceneByName:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - menover30
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - menover30
     - validName
 galleryByURL:
@@ -35,7 +36,7 @@ galleryByURL:
       - pridestudios.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - menover30
       - gallery
 # Last Updated December 22, 2022

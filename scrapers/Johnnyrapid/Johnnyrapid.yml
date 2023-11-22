@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "Johnny Rapid"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - johnnyrapid.com/en/video/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - johnnyrapid
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - johnnyrapid
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - johnnyrapid
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - johnnyrapid
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - johnnyrapid.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - johnnyrapid
       - gallery
 # Last Updated December 22, 2022

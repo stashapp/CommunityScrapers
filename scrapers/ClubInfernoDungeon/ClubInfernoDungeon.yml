@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "ClubInfernoDungeon"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - clubinfernodungeon.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - clubinfernodungeon
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - clubinfernodungeon
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - clubinfernodungeon
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - clubinfernodungeon
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - clubinfernodungeon.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - clubinfernodungeon
       - gallery
 # Last Updated December 22, 2022

@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "Adultime"
 sceneByURL:
   - action: script
@@ -56,33 +57,33 @@ sceneByURL:
       - wolfwagner.com/en/video/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlsway
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlsway
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlsway
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlsway
       - validName
 galleryByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - puretaboo
       - gallery
 galleryByURL:
@@ -100,7 +101,7 @@ galleryByURL:
       - webyoung.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - puretaboo
       - gallery
 movieByURL:
@@ -112,7 +113,7 @@ movieByURL:
       - outofthefamily.com/en/dvd/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - puretaboo
       - movie
 # Last Updated October 12, 2023

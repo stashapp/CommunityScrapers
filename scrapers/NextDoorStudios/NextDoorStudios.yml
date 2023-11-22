@@ -1,3 +1,4 @@
+# requires: Algolia
 name: Next Door Studios
 sceneByURL:
   - action: script
@@ -23,26 +24,26 @@ sceneByURL:
       - trystanbull.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - nextdoorstudios
 sceneByFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - nextdoorstudios
 sceneByName:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - nextdoorstudios
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - nextdoorstudios
     - validName
 # Last Updated August 18, 2023

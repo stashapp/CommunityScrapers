@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "Girlfriends Films"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - girlfriendsfilms.com/en/video/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlfriendsfilms
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlfriendsfilms
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlfriendsfilms
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlfriendsfilms
       - validName
 movieByURL:
@@ -33,7 +34,7 @@ movieByURL:
       - girlfriendsfilms.com/en/movie/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlfriendsfilms
       - movie
 galleryByURL:
@@ -42,7 +43,7 @@ galleryByURL:
       - girlfriendsfilms.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlfriendsfilms
       - gallery
 # Last Updated December 22, 2022

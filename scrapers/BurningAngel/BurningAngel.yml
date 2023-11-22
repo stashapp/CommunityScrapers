@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "Burning Angel"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - burningangel.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - burningangel
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - burningangel
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - burningangel
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - burningangel
       - validName
 # Last Updated March 23, 2022

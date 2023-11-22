@@ -1,3 +1,4 @@
+# requires: Algolia
 name: GenderX Films
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - genderxfilms.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - genderxfilms
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - genderxfilms
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - genderxfilms
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - genderxfilms
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - genderxfilms.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - genderxfilms
       - gallery
 movieByURL:
@@ -42,7 +43,7 @@ movieByURL:
       - genderxfilms.com/en/movie/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - genderxfilms
       - movie
 # Last Updated December 22, 2022

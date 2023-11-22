@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "DogfartNetwork"
 sceneByURL:
   - action: script
@@ -19,26 +20,26 @@ sceneByURL:
       - zebragirls.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - dogfartnetwork
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - dogfartnetwork
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - dogfartnetwork
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - dogfartnetwork
       - validName
 galleryByURL:
@@ -61,7 +62,7 @@ galleryByURL:
       - zebragirls.com/en/photo
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - dogfartnetwork
       - gallery
 # Last Updated July 27, 2023

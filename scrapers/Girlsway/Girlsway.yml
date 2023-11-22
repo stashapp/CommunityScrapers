@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "GirlsWay"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - girlsway.com/en/video/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlsway
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlsway
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlsway
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlsway
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - girlsway.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - girlsway
       - gallery
 # Last Updated December 22, 2022

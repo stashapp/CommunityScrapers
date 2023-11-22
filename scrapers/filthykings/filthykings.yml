@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "FilthyKings"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - filthykings.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - filthykings
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - filthykings
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - filthykings
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - filthykings
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - filthykings.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - filthykings
       - gallery
 # Last Updated December 22, 2022

@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "xEmpire"
 sceneByURL:
   - action: script
@@ -10,26 +11,26 @@ sceneByURL:
       - xempire.com/en/video/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - xempire
 sceneByFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - xempire
 sceneByName:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - xempire
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - xempire
     - validName
 galleryByURL:
@@ -43,7 +44,7 @@ galleryByURL:
       - xempire.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - xempire
       - gallery
 # Last Updated December 22, 2022

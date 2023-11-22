@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "EvilAngel"
 sceneByURL:
   - action: script
@@ -9,7 +10,7 @@ sceneByURL:
       - tsfactor.com/en/video/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - evilangel
 movieByURL:
   - action: script
@@ -21,27 +22,27 @@ movieByURL:
       - tsfactor.com/en/movie/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - evilangel
       - movie
 sceneByFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - evilangel
 sceneByName:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - evilangel
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - evilangel
     - validName
 galleryByURL:
@@ -54,7 +55,7 @@ galleryByURL:
       - tsfactor.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - evilangel
       - gallery
 # Last Updated December 26, 2022

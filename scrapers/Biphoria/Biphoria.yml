@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "Biphoria"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - biphoria.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - biphoria
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - biphoria
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - biphoria
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - biphoria
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - biphoria.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - biphoria
       - gallery
 # Last Updated February 07, 2023

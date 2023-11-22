@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "ZeroToleranceFilms"
 sceneByURL:
   - action: script
@@ -6,26 +7,26 @@ sceneByURL:
       - zerotolerancefilms.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - zerotolerancefilms
 sceneByFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - zerotolerancefilms
 sceneByName:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - zerotolerancefilms
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - Algolia.py
+    - ../Algolia/Algolia.py
     - zerotolerancefilms
     - validName
 movieByURL:
@@ -35,7 +36,7 @@ movieByURL:
       - zerotolerancefilms.com/en/movie
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - zerotolerancefilms
       - movie
 galleryByURL:
@@ -44,7 +45,7 @@ galleryByURL:
       - zerotolerancefilms.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - zerotolerancefilms
       - gallery
 # Last Updated December 22, 2022

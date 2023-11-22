@@ -17,6 +17,7 @@ except ModuleNotFoundError:
         "You need to install the following modules 'requests', 'bs4', 'lxml'.", file=sys.stderr)
     sys.exit()
 
+sys.path.append('../')
 try:
     from py_common import graphql
     from py_common import log

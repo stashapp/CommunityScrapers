@@ -1,3 +1,4 @@
+# requires: Algolia
 name: "21Sextury"
 sceneByURL:
   - action: script
@@ -5,26 +6,26 @@ sceneByURL:
       - 21sextury.com/en/video
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - 21sextury
 sceneByFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - 21sextury
 sceneByName:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - 21sextury
       - searchName
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - 21sextury
       - validName
 galleryByURL:
@@ -33,7 +34,7 @@ galleryByURL:
       - 21sextury.com/en/photo/
     script:
       - python
-      - Algolia.py
+      - ../Algolia/Algolia.py
       - 21sextury
       - gallery
 # Last Updated December 22, 2022
