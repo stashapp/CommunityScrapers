@@ -79,8 +79,11 @@ def getData(sceneId):
 def getURL(pageTree):
     return getXPATH(pageTree, URL_XPATH)
 
-def getIMG(pageTree):
-    return getXPATH(pageTree, IMAGE_XPATH)
+def getIMG(data):
+    for item in data['thumbnails']:
+        if item.startswith("https://storage.pmvhaven.com/"):
+            return item
+    return ""
 
 def main():
     params = json.loads(sys.stdin.read())
@@ -95,7 +98,7 @@ def main():
 
     ret = {
         'title': data['title'],
-        'image': getIMG(tree),
+        'image': getIMG(data),
         'date': data['isoDate'].split('T')[0],
         'details': data['description'],
         'studio': {
