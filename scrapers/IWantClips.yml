@@ -40,7 +40,9 @@ xPathScrapers:
               - regex: Published\s(.+)
                 with: $1
           - parseDate: Jan 2, 2006
-      Details: //div[@class="col-xs-12 description fix"]/span
+      Details:
+        selector: //div[@class="col-xs-12 description fix"][last()]/span/text()
+        concat: "\n\n"
       Tags:
         Name:
           selector: //div[@class="col-xs-12 hashtags fix"]/span/em | //div[@class="col-xs-12 category fix"]/span
