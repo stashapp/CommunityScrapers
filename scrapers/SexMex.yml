@@ -14,7 +14,7 @@ xPathScrapers:
         selector: //div[@class="panel-body"]/h4//text()
         postProcess:
           - replace:
-              - regex: (.*) \..*$
+              - regex: ([^.]*)\s\..*
                 with: $1
       Details: &details //div[@class="panel-body"]/p[not(@class)]
       Tags: &tags
