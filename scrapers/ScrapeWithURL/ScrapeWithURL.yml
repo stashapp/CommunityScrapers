@@ -1,11 +1,10 @@
-name: "ShokoAPI"
+name: Scrape with URL
 # requires: py_common
 
 sceneByFragment:
     action: script
     script:
       - python
-      - ShokoAPI.py
-      - query
-
-# Last Updated April 03, 2022
+      - ScrapeWithURL.py
+      
+# Last Updated April 16, 2022

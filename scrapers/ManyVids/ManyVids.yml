@@ -1,4 +1,6 @@
 name: ManyVids
+# requires: py_common
+
 sceneByURL:
   - url:
       - manyvids.com/Video

@@ -1,4 +1,6 @@
 name: "ModelCentroAPI"
+# requires: py_common
+
 sceneByURL:
   - url:
       - beingphoenixmarie.com/scene/
