@@ -34,7 +34,7 @@ buildScraper()
 
     # create a directory for the version
     version=$(git log -n 1 --pretty=format:%h -- "$versionFile")
-    updated=$(git log -n 1 --date="format:%F %T %z" --pretty=format:%ad -- "$versionFile")
+    updated=$(TZ=UTC0 git log -n 1 --date="format-local:%F %T" --pretty=format:%ad -- "$versionFile")
     
     # create the zip file
     # copy other files
