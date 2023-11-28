@@ -66,6 +66,7 @@ xPathScrapers:
     scene:
       Title: //h1
       URL: //link[@rel="alternate"][1]/@href
+      Image: //*[@id="fxgp-gallery"]/a[1]/@href
       Details: $commonRoot//div[contains(concat(' ',normalize-space(@class),' '),' pb-2 ')]
       Studio:
         Name: $commonRoot//span[@data-test="link_span_Studio"]
@@ -82,14 +83,16 @@ xPathScrapers:
         URL: //link[@rel="alternate"][1]/@href
       Performers:
         Name: $performerName/span
+        URL:
+          selector: $performerName/span/text()
+          postProcess:
+            - replace:
+              - regex: \s
+                with: "-"
+              - regex: ^
+                with: "https://www.freeones.com/"
       Tags:
         Name: //li[@class="list-inline-item"]/a
-#        URL:
-#          selector: $performerName/@href
-#          postProcess:
-#            - replace:
-#              - regex: ^
-#                with: "https://www.freeones.com"
 
   movieScraper:
     common:
@@ -200,4 +203,4 @@ xPathScrapers:
               with: ""
           - lbToKg: true
 
-# Last Updated January 19, 2023
+# Last Updated August 09, 2023
