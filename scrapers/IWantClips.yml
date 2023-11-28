@@ -28,6 +28,8 @@ xPathScrapers:
       URL: //span[@class='clip-title']/a/@href
       Image: //div[@class='clip-thumb-16-9']/a/img/@src
   sceneScraper:
+    common:
+      $model: //a[@class="modelLink"]
     scene:
       Title: //h1[@class="headline hidden-xs"]/text()
       URL: //link[@rel="canonical"]/@href
@@ -38,7 +40,9 @@ xPathScrapers:
               - regex: Published\s(.+)
                 with: $1
           - parseDate: Jan 2, 2006
-      Details: //div[@class="col-xs-12 description fix"]/span
+      Details:
+        selector: //div[@class="col-xs-12 description fix"][last()]/span/text()
+        concat: "\n\n"
       Tags:
         Name:
           selector: //div[@class="col-xs-12 hashtags fix"]/span/em | //div[@class="col-xs-12 category fix"]/span
@@ -51,10 +55,9 @@ xPathScrapers:
       Image:
         selector: //div[contains(@class,'vidStuff')]//video[contains(@id,'html5_api')]/@poster | //div[contains(@class,'vidStuff')]//img/@src
       Studio:
-        Name:
-          fixed: IWantClips
+        Name: $model
       Performers:
-        Name: //a[@class="modelLink"]
+        Name: $model
   performerScraper:
     common:
       $author: //li[@class="ais-Hits-item"][1]//span[contains(@class,'clip-author')]
@@ -78,4 +81,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated October 19, 2023
+# Last Updated November 24, 2023
