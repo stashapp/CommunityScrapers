@@ -2,6 +2,16 @@
 
 name: "VRBangers"
 
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://vrbangers.com/search/?s={}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -33,6 +43,18 @@ sceneByFragment:
   scraper: sceneScraper
 
 xPathScrapers:
+  sceneSearch:
+    common:
+      $commonRoot: //article[@class="search__article"]
+    scene:
+      Title: $commonRoot//h2/a
+      Image: $commonRoot//img/@src
+      URL:
+        selector: $commonRoot//h2/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://vrbangers.com"
   sceneScraper:
     common:
       $info: &info //div[starts-with(@class,"video-item__info ")]|//div[@class="single-video-info"]
@@ -92,4 +114,4 @@ xPathScrapers:
         Name: *studioName
         URL: *studioURL
       FrontImage: *imageSel
-# Last Updated February 27, 2023
+# Last Updated August 04, 2023
