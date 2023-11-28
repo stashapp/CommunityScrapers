@@ -195,7 +195,7 @@ def map_media(data, studio, base_url):
     return {
         'Title': data['name'],
         'Details': data['description'],
-        'URL': url,
+        'URLs': [url],
         'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
         'Tags': list(map(lambda t: {'Name': t}, data['tags'])),
         'Performers': list(map(lambda m: map_model(base_url, m), data['models'])),
