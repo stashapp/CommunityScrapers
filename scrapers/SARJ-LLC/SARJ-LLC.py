@@ -167,12 +167,12 @@ def scrape_model(base_url, name):
 
 
 def map_media(data, studio, base_url):
-    url = ""
+    urls = []
     studio_code = data["UUID"]
     studio_name = {'Name': ""}
     if studio is not None:
         studio_url = studio[1]
-        url = f"https://www.{studio_url}{data['path']}"
+        urls = [f"https://www.{studio_url}{data['path']}"]
         studio_name = {'Name': studio[0]}
 
     director = None
@@ -195,7 +195,7 @@ def map_media(data, studio, base_url):
     return {
         'Title': data['name'],
         'Details': data['description'],
-        'URLs': [url],
+        'URLs': urls,
         'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
         'Tags': list(map(lambda t: {'Name': t}, data['tags'])),
         'Performers': list(map(lambda m: map_model(base_url, m), data['models'])),
