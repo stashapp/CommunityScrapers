@@ -20,8 +20,15 @@ except ModuleNotFoundError:
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml", file=sys.stderr)
     sys.exit()
 
+# to import from a parent directory we need to add that directory to the system path
+csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
+parent = os.path.dirname(csd)  # parent directory (should be the scrapers one)
+sys.path.append(
+    parent
+)  # add parent dir to sys path so that we can import py_common from there
+
 try:
-    import py_common.log as log
+    from py_common import log
 except ModuleNotFoundError:
     print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
     sys.exit()
