@@ -10,7 +10,7 @@ xPathScrapers:
       $perf: //span[@class="models"]/span[@class="content"]/a
     scene:
       Title: //span[@class="title"]
-      Image: //video/@poster
+      Image: //video/@poster | //div[@class="video-poster"]/img/@src
       Date:
         selector: //span[@class="date"]/span[@class="content"]
         postProcess:

@@ -1,4 +1,6 @@
 name: WowNetworkVenus
+# requires: py_common
+
 sceneByURL:
   - action: script
     script:

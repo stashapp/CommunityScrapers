@@ -1,0 +1,61 @@
+# requires: Algolia
+name: "EvilAngel"
+sceneByURL:
+  - action: script
+    url:
+      - evilangel.com/en/video/
+      - lewood.com/en/video/
+      - pansexualx.com/en/video/
+      - transgressivexxx.com/en/video/
+      - tsfactor.com/en/video/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - evilangel
+movieByURL:
+  - action: script
+    url:
+      - evilangel.com/en/movie/
+      - lewood.com/en/movie/
+      - pansexualx.com/en/movie/
+      - transgressivexxx.com/en/movie/
+      - tsfactor.com/en/movie/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - evilangel
+      - movie
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - evilangel
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - evilangel
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - evilangel
+    - validName
+galleryByURL:
+  - action: script
+    url:
+      - evilangel.com/en/photo/
+      - lewood.com/en/photo/
+      - pansexualx.com/en/photo/
+      - transgressivexxx.com/en/photo/
+      - tsfactor.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - evilangel
+      - gallery
+# Last Updated December 26, 2022

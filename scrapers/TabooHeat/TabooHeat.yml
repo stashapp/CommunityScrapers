@@ -1,0 +1,40 @@
+# requires: Algolia
+name: "TabooHeat"
+sceneByURL:
+  - action: script
+    url:
+      - tabooheat.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - tabooheat
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - tabooheat
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - tabooheat
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - tabooheat
+    - validName
+galleryByURL:
+  - action: script
+    url:
+      - tabooheat.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - tabooheat
+      - gallery
+# Last Updated December 22, 2022

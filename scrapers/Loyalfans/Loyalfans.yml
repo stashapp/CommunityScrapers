@@ -1,4 +1,6 @@
 name: Loyalfans
+# requires: py_common
+
 sceneByURL:
   - url:
       - loyalfans.com

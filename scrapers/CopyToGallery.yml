@@ -1,7 +1,0 @@
-name: "Copy to Gallery"
-sceneByFragment:
-  action: script
-  script:
-    - python3
-    - CopyToGallery.py
-# Last Updated February 05, 2022

@@ -1,0 +1,40 @@
+# requires: Algolia
+name: "Johnny Rapid"
+sceneByURL:
+  - action: script
+    url:
+      - johnnyrapid.com/en/video/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - johnnyrapid
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - johnnyrapid
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - johnnyrapid
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - johnnyrapid
+      - validName
+galleryByURL:
+  - action: script
+    url:
+      - johnnyrapid.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - johnnyrapid
+      - gallery
+# Last Updated December 22, 2022

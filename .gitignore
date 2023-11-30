@@ -5,3 +5,5 @@ yarn-error.log
 # Scraper-generated files
 /scrapers/*.ini
 **/__pycache__/
+
+/_site
