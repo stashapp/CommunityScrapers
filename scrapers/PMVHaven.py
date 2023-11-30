@@ -27,7 +27,7 @@ except ModuleNotFoundError:
     sys.exit()
 
 #bugfix for socks5 proxies, due to pySocks implementation incompatibility with Stash
-proxy = os.environ['HTTPS_PROXY']
+proxy = os.environ.get('HTTPS_PROXY', '')
 if proxy != "" and proxy.startswith("socks5://"):
     proxy = proxy.replace("socks5://", "socks5h://")
     os.environ['HTTPS_PROXY'] = proxy
