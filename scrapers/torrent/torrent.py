@@ -1,10 +1,17 @@
 import sys
 import json
-from os.path import basename
+import os
 from pathlib import Path
 import re
 from datetime import datetime
 import difflib
+
+# to import from a parent directory we need to add that directory to the system path
+csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
+parent = os.path.dirname(csd)  # parent directory (should be the scrapers one)
+sys.path.append(
+    parent
+)  # add parent dir to sys path so that we can import py_common from there
 
 try:
     from bencoder import bdecode
@@ -39,7 +46,7 @@ def get_scene_data(fragment_data):
 
     if response and response["findScene"]:
         for f in response["findScene"]["files"]:
-            scene_files.append({"filename": basename(f["path"]), "size": f["size"]})
+            scene_files.append({"filename": os.path.basename(f["path"]), "size": f["size"]})
         return {"id": scene_id, "title": scene_title, "files": scene_files}
     return {}
 
