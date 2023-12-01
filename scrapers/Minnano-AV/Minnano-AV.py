@@ -45,7 +45,7 @@ XPATHS = {
 }
 
 REGEXES = {
-    "alias": r"(?P<kanji>[^\x29\uFF09]+?)(?P<studio>[\x28\uFF08\u3010][^\x29\uFF09\u3011]+(?:[\x29\uFF09\u3011]))? [\x28\uFF08](?P<katakana>\w+)? / (?P<romanized>[a-z-A-Z ]+)?[\x29\uFF09]",
+    "alias": r"(?P<kanji>[^\x29\uFF09]+?)(?P<studio>[\x28\uFF08\u3010][^\x29\uFF09\u3011]+(?:[\x29\uFF09\u3011]))?\s[\x28\uFF08](?P<katakana>\w+)?\s+/\s(?P<romanized>[a-z-A-Z ]+)?[\x29\uFF09]",
     "id": r"\d+",
     "birthdate": r"[0-9-]+",
     "career": (r"(?P<start>\d+)年?(?:\d+月)? ?(?:\d+)?日?[-~]? ?(?:(?P<end>\d+)?)?年?"),
