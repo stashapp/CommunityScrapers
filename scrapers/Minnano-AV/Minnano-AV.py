@@ -1,5 +1,4 @@
 import json
-import logging
 import os
 import re
 import sys
@@ -376,4 +375,4 @@ if __name__ == "__main__":
     try:
         main()
     except Exception as e:
-        logging.exception(e)
+        log.error(e)
