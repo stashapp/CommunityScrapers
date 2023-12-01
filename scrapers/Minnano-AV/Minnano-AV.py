@@ -45,6 +45,7 @@ XPATHS = {
 }
 
 REGEXES = {
+    # https://regex101.com/r/9k2GXw/5
     "alias": r"(?P<kanji>[^\x29\uFF09]+?)(?P<studio>[\x28\uFF08\u3010][^\x29\uFF09\u3011]+(?:[\x29\uFF09\u3011]))?\s[\x28\uFF08](?P<katakana>\w+)?\s+/\s(?P<romanized>[a-z-A-Z ]+)?[\x29\uFF09]",
     "id": r"\d+",
     "birthdate": r"[0-9-]+",
