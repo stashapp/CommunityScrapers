@@ -27,7 +27,7 @@ def dig(c: dict | list, *keys: str | int | tuple, default=None) -> Any:
                     if k in d:
                         return d[k]
             return d.get(key)
-        elif isinstance(d, list) and isinstance(key, int) and 0 < key < len(d):
+        elif isinstance(d, list) and isinstance(key, int) and key < len(d):
             return d[key]
         else:
             return default
