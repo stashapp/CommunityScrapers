@@ -20,6 +20,30 @@ galleryByURL:
   - action: scrapeXPath
     url: *urls
     scraper: galleryScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - 18eighteen.com/
+      - 40somethingmag.com/
+      - 50plusmilfs.com/
+      - 60plusmilfs.com/
+      - bigtithooker.com/
+      - legsex.com/
+      - naughtymag.com
+      - pornmegaload.com/
+      - scoreland.com/
+      - scoreland2.com/
+      - xlgirls.com/
+      - scorevideos.com/
+      - milftugs.com/
+    scraper: performerScraper
+performerByName:
+  action: script
+  script: 
+    - python
+    - TheScoreGroup.py
+    - search
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -85,4 +109,37 @@ xPathScrapers:
       Tags:
         Name: $photopage//div[@class='mb-3']/a/text()
       Performers: *performersAttr
-# Last Updated November 18, 2023
+      
+  performerScraper:
+    performer:
+      Name: //h1[@class="model-title"]
+      Gender:
+        fixed: Female
+      URL: //meta[@property="og:url"]/@content
+      Ethnicity:
+        selector: //span[text()="Ethnicity:"]/following-sibling::span
+        postProcess:
+          - map:
+              White: Caucasian
+      HairColor: //span[text()="Hair Color:"]/following-sibling::span
+      Height:
+        selector: //span[text()="Height:"]/following-sibling::span
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //span[text()="Weight:"]/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: (\d+).*
+                with: $1
+          - lbToKg: true
+      Measurements:
+        selector: //span[text()="Bra Size:"]/following-sibling::span|//span[text()="Measurements:"]/following-sibling::span
+        concat: "-"
+        postProcess:
+          - replace:
+              - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
+                with: $1$2
+      Image: //section[@id="model-page"]//img[@class="lazyload"]/@src
+      
+# Last Updated December 03, 2023
