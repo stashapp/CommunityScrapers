@@ -1351,6 +1351,8 @@ stepsiblings.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 stepsiblingscaught.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 stockingvideos.com|FFstockings.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 stockydudes.com|AdultSiteRunner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+store.evilangel.com|EvilAngelStore.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
+store.evilangelvideo.com|EvilAngelStore.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 store.freeones.com|FreeonesStore.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 str8hell.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 strapattackers.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Femdom
