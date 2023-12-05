@@ -13,9 +13,10 @@ xPathScrapers:
         selector: //div[@class="entry-content"]/p[not(*)]/text()
         concat: "\n\n"
         # Remove the trailing "_ _ _ _ _" separator
-        replace:
-          - regex: "(\n\n[_ ]+)"
-            with: ""
+        postProcess:
+          - replace:
+              - regex: "(\n\n[_ ]+)"
+                with: ""
       Date:
         selector: //span[@class="entry-date"]//text()
         postProcess:
