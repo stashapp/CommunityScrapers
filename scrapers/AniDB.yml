@@ -107,6 +107,7 @@ xPathScrapers:
   sceneScraper:
     common:
       $info: //div[@class="g_section info"]
+      $character: //div[@id="characterlist"]//div[contains(@class, 'main character') or contains(@class, 'secondary cast')]//div[@itemprop="character"]
     scene:
       Title: $info//div[@id="tab_1_pane"]//span[@itemprop="name"]
       Details: 
@@ -115,7 +116,13 @@ xPathScrapers:
       Tags:
         Name: $info//div[@id="tab_1_pane"]//span[@class="tagname"]
       Performers:
-        Name: //div[@id="characterlist"]//div[contains(@class, 'main character') or contains(@class, 'secondary cast')]//div[@itemprop="character"]/a/span
+        Name: $character/a/span
+        URL: 
+          selector: $character/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://anidb.net
       Studio:
         Name: $info//table[@id="staffoverview"]//tr[last()]/td[@class="name creator"]/a
       Image: $info//div[@class="image"]//img/@src
@@ -135,4 +142,4 @@ driver:
           Domain: "anidb.net"
           Value: "" # Enter the value of the 'adbuin' here
           Path: "/"
-# Last Updated June 23, 2023
+# Last Updated Dec 5, 2023
