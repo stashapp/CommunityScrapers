@@ -2,6 +2,7 @@ name: Hentaied
 sceneByURL:
   - action: scrapeXPath
     url:
+      - freeze.xxx
       - futanari.xxx
       - hentaied.com
       - parasited.com
@@ -41,4 +42,5 @@ xPathScrapers:
           postProcess:
             - map:
                 Real Life Hentai: Hentaied
-# Last Updated September 28, 2023
+
+# Last Updated December 2, 2023
