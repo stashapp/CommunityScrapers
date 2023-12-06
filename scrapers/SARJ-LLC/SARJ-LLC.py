@@ -231,16 +231,13 @@ def scrape_movie(base_url, date, name):
                 response = requests.get(res['Image'], headers={
                     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
                 }, timeout=(3, 6))
+                if response and response.status_code < 400:
+                    mime = 'image/jpeg'
+                    encoded = base64.b64encode(response.content).decode('utf-8')
+                    res['Image'] = f'data:{mime};base64,{encoded}'
+                    break
             except requests.exceptions.RequestException as req_ex:
-                log.error(f"Error fetching URL {res['Image']}: {req_ex}")
-
-            if response.status_code < 400:
-                mime = 'image/jpeg'
-                encoded = base64.b64encode(response.content).decode('utf-8')
-                res['Image'] = f'data:{mime};base64,{encoded}'
-                break
-
-            log.info(f"Fetching URL {res['Image']} resulted in error status: {response.status_code}")
+                log.info(f"Error fetching URL {res['Image']}: {req_ex}")
             res['Image'] = None
 
     return res
