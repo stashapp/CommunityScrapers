@@ -21,7 +21,13 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-
+performerByURL:
+  - 
+    action: scrapeXPath
+    url:
+       - adultdvdempire.com
+       - adultempire.com
+    scraper: performerScraper
 
 xPathScrapers:
   sceneSearch:
@@ -102,4 +108,31 @@ xPathScrapers:
                 - regex: ^
                   with: "https://www.adultdvdempire.com"
       URL: //meta[@name='og:url']/@content
-# Last Updated October 09, 2023
+  performerScraper:
+    common:
+      $infoPiece: //*[@id="profileModal"]/div/div/div[2]/div[1]/ul
+    performer:
+      Name: //*[@id="content"]/section/div/div[2]/h1/text()
+      Birthdate: $infoPiecel/li[contains(text(), 'Born:')]/text()
+      Gender:
+        fixed: "Female"
+      Height:
+        selector: $infoPiecel/li[contains(text(), 'Height:')]/text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+).*
+                with: $1
+      Image: //*[@id="content"]/section/div/div[1]/a[1]/img/@src
+      Country: $infoPiecel/li[contains(text(), 'From:')]/text()
+      Measurements: $infoPiecel/li[contains(text(), 'Measurements:')]/text()
+      CareerLength: $infoPiece[text() = 'First Seen:']/../text()
+      Aliases:
+        selector: //*[@id="content"]/section/div/div[2]/div[contains(text(), "Alias:")]
+        concat: ", "
+        postProcess:
+          - replace:
+              - regex: "Alias: (.*)"
+                with: $1
+      Details: //*[@id="content"]/section/div/div[5]/aside/text()
+      URL: //link[@rel='canonical']/@href
+# Last Updated December 07, 2023
