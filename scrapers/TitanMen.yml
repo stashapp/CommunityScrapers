@@ -1,0 +1,64 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
+# Author: KinksterGuy
+# Based on: MenAtPlay.yml
+# Last updated: 2023-12-07
+
+name: TitanMen
+sceneByURL:
+   - action: scrapeXPath
+     url:
+        - titanmen.com
+     scraper: sceneScraper
+movieByURL:
+   - action: scrapeXPath
+     url:
+        - titanmen.com
+     scraper: movieScraper
+xPathScrapers:
+   sceneScraper:
+      scene:
+         Title:
+            selector: //h1[@class="scene-header-title"]/text()
+         Details:
+            selector: //div[@class="col span_6_of_12"][1]/p/text()
+            concat: "\n\n"
+         Date:
+            selector: //div[@class="col span_6_of_12"][2]/p[1]/text()
+            postProcess:
+               - parseDate: Jan 2, 2006
+         Studio:
+            Name:
+               fixed: TitanMen
+         Performers:
+            Name:
+               selector: //div[@class="col span_6_of_12"][2]/p[3]/a/text()
+         Movies:
+            Name:
+                selector: //div[@class="col span_6_of_12"][2]/p[2]/a/text()
+         Tags:
+            Name:
+               selector: //div[@class="col span_6_of_12"][2]/p[4]/a/text()
+         Image: //meta[@property="og:image"]/@content
+         # Doesn't work, this site does not have any og:image tags in the head
+   movieScraper:
+      movie:
+         Name:
+            selector: //div[@class="col span_9_of_12"]/h1/text()
+         Synopsis:
+            selector: //div[@class="col span_9_of_12"]/p[1]/text()
+            concat: "\n\n"
+         Date:
+            selector: //div[@class="col span_9_of_12"]/p[3]/text()
+            postProcess:
+               - parseDate: Jan 2, 2006
+         Studio:
+            Name:
+               fixed: TitanMen
+         Performers:
+            Name:
+               selector: //div[@class="col span_9_of_12"]/p[4]/text()
+         FrontImage: //div[@class="header-container"]/img/@content
+         # Doesn't work, think selection syntax is wrong but not sure about this bit TBH
+
+# Last Updated December 07, 2023
