@@ -1,12 +1,20 @@
 import argparse
 import json
+import os
+import random
+import re
+import requests
 import sys
 import time
-import re
-import random
-import requests
 from typing import Iterable, Callable, TypeVar
 from datetime import datetime
+
+# to import from a parent directory we need to add that directory to the system path
+csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
+parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
+sys.path.append(
+    parent
+)  # add parent dir to sys path so that we can import py_common from ther
 
 # extra modules below need to be installed
 try:
@@ -507,7 +515,9 @@ def performer_aliases(tree):
         tree.xpath(
             '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")]]//div[@class="biodata" and not(text()="No known aliases")]/text()'
         ),
-        lambda aliases: ", ".join(filter(None, (clean_alias(alias) for alias in aliases.split(", ")))),
+        lambda aliases: ", ".join(
+            filter(None, (clean_alias(alias) for alias in aliases.split(", ")))
+        ),
     )
 
 
