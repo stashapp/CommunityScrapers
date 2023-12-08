@@ -135,7 +135,12 @@ xPathScrapers:
           - replace:
               - regex: From:\s+(.*)
                 with: $1
-      Measurements: $infoPiecel/li[contains(text(), 'Measurements:')]/text()
+      Measurements:
+        selector: $infoPiece/li[contains(text(), 'Measurements:')]/text()
+        postProcess:
+          - replace:
+              - regex: Measurements:\s+(\d\d\w*)\D+(\d+)\D+(\d+).*
+                with: $1-$2-$3
       CareerLength: $infoPiece[text() = 'First Seen:']/../text()
       Aliases:
         selector: //*[@id="content"]/section/div/div[2]/div[contains(text(), "Alias:")]
