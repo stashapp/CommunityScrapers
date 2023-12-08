@@ -113,7 +113,12 @@ xPathScrapers:
       $infoPiece: //*[@id="profileModal"]/div/div/div[2]/div[1]/ul
     performer:
       Name: //*[@id="content"]/section/div/div[2]/h1/text()
-      Birthdate: $infoPiecel/li[contains(text(), 'Born:')]/text()
+      Birthdate:
+        selector: $infoPiece/li[contains(text(), 'Born:')]/text()
+        postProcess:
+          - replace:
+              - regex: Born:\s+(.*)
+                with: $1
       Gender:
         fixed: "Female"
       Height:
