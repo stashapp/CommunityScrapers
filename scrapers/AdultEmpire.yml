@@ -122,11 +122,12 @@ xPathScrapers:
       Gender:
         fixed: "Female"
       Height:
-        selector: $infoPiecel/li[contains(text(), 'Height:')]/text()
+        selector: $infoPiece/li[contains(text(), 'Height:')]/text()
         postProcess:
           - replace:
-              - regex: ^(\d+).*
+              - regex: Height:\s+(.*)
                 with: $1
+          - feetToCm: true
       Image: //*[@id="content"]/section/div/div[1]/a[1]|/img/@src|//*[@id="content"]/section/div/div[1]/img/@src
       Country:
         selector: $infoPiecel/li[contains(text(), 'From:')]/text()
