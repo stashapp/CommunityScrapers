@@ -122,7 +122,7 @@ xPathScrapers:
           - replace:
               - regex: ^(\d+).*
                 with: $1
-      Image: //*[@id="content"]/section/div/div[1]/a[1]/img/@src
+      Image: //*[@id="content"]/section/div/div[1]/a[1]|/img/@src|//*[@id="content"]/section/div/div[1]/img/@src
       Country: $infoPiecel/li[contains(text(), 'From:')]/text()
       Measurements: $infoPiecel/li[contains(text(), 'Measurements:')]/text()
       CareerLength: $infoPiece[text() = 'First Seen:']/../text()
