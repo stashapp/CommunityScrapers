@@ -113,16 +113,32 @@ xPathScrapers:
       $infoPiece: //*[@id="profileModal"]/div/div/div[2]/div[1]/ul
     performer:
       Name: //*[@id="content"]/section/div/div[2]/h1/text()
-      Birthdate: $infoPiecel/li[contains(text(), 'Born:')]/text()
-      Height:
-        selector: $infoPiecel/li[contains(text(), 'Height:')]/text()
+      Birthdate:
+        selector: $infoPiece/li[contains(text(), 'Born:')]/text()
         postProcess:
           - replace:
-              - regex: ^(\d+).*
+              - regex: Born:\s+(.*)
                 with: $1
+      Height:
+        selector: $infoPiece/li[contains(text(), 'Height:')]/text()
+        postProcess:
+          - replace:
+              - regex: Height:\s+(.*)
+                with: $1
+          - feetToCm: true
       Image: //*[@id="content"]/section/div/div[1]/a[1]|/img/@src|//*[@id="content"]/section/div/div[1]/img/@src
-      Country: $infoPiecel/li[contains(text(), 'From:')]/text()
-      Measurements: $infoPiecel/li[contains(text(), 'Measurements:')]/text()
+      Country:
+        selector: $infoPiecel/li[contains(text(), 'From:')]/text()
+        postProcess:
+          - replace:
+              - regex: From:\s+(.*)
+                with: $1
+      Measurements:
+        selector: $infoPiece/li[contains(text(), 'Measurements:')]/text()
+        postProcess:
+          - replace:
+              - regex: Measurements:\s+(\d\d\w*)\D+(\d+)\D+(\d+).*
+                with: $1-$2-$3
       Aliases:
         selector: //*[@id="content"]/section/div/div[2]/div[contains(text(), "Alias:")]
         concat: ", "
