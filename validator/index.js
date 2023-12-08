@@ -55,8 +55,6 @@ class Validator {
     });
 
     this.mappingPattern = /^([a-z]+)By(Fragment|Name|URL)$/;
-    this.commentPrefix = /^ *# *Last Updated/i;
-    this.commentPattern = /^#( *)Last Updated ((?:Jan|Febr)uary|March|April|May|June|July|August|(?:Septem|Octo|Novem|Decem)ber) (0[1-9]|[1-3]\d), (\d{4})$/;
 
     if (!!this.ajv.getKeyword('deprecated')) {
       this.ajv.removeKeyword('deprecated');
@@ -133,44 +131,6 @@ class Validator {
       if (!valid) {
         const output = betterAjvErrors('scraper', data, validate.errors, { indent: 2 });
         console.log(output);
-      }
-
-      // Verify that there is a "Last Updated" comment
-      if (valid) {
-        const lines = contents
-          .split(/\r?\n/g)
-          .slice(-5)
-          .reverse()
-          .filter(line => !!line.trim());
-
-        const commentLine = lines.findIndex(line => this.commentPrefix.test(line));
-        let validComment = false;
-        if (commentLine === -1) {
-          console.error(chalk.red(`${chalk.bold('ERROR')} 'Last Updated' comment is missing.`));
-        } else {
-          if (commentLine !== 0) {
-            console.error(chalk.red(`${chalk.bold('ERROR')} 'Last Updated' comment is not the last line.`));
-          }
-
-          const comment = lines[commentLine];
-          const match = comment.trim().match(this.commentPattern);
-          if (!match) {
-            console.error(chalk.red(`${chalk.bold('ERROR')} 'Last Updated' comment's format is invalid: ${comment}`));
-          } else {
-            // Validate leading spaces (trailing spaces are ignored)
-            const leadingSpaces = comment != comment.trimLeft();
-            if (leadingSpaces) {
-              console.error(chalk.red(`${chalk.bold('ERROR')} Remove leading spaces: '${comment}'`));
-            }
-            // Validate spacing between '#' and 'Last Updated'
-            if (match[1] !== ' ') {
-              console.error(chalk.red(`${chalk.bold('ERROR')} Missing single space between '#' and 'Last Updated': ${comment}`));
-            } else {
-              validComment = true;
-            }
-          }
-        }
-        valid = valid && validComment;
       }
 
       if (this.verbose || !valid) {
