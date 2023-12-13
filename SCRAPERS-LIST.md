@@ -1228,6 +1228,7 @@ realsensual.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 realtgirls.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Trans
 realtimebondage.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 realvr.com|BaDoink.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
+reddit.com|Reddit.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 redgifs.com|Redgifs.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|Python|Gifs
 redheadmariah.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 redhotstraightboys.com|RedHotStraightBoys.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
