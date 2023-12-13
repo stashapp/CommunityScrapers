@@ -1189,6 +1189,7 @@ private.com|Private.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_m
 privatecastings.com|privatecastings.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 privatesextapes.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 producersfun.com|ProducersFun.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+profiles.myfreecams.com|MFC.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
 propertysex.com|RealityKingsOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 publicagent.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 publicfrombohemia.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1291,7 +1292,7 @@ shagmag.com|shagmag.yml|:x:|:heavy_check_mark:|:x:|:x:|-|Magazines
 shame4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shandafay.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shanedieselsbanginbabes.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-share.myfreecams.com|MFC.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+share.myfreecams.com|MFC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 shefucksonthefirstdate.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shegotsix.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shelovesblack.com|LoveHerFilms.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
