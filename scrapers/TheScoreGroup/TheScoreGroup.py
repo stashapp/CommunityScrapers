@@ -93,9 +93,7 @@ def performer_query(query: str):
     }
     result = client.post("https://www.scoreland.com/search-es/", data=payload)
     tree = html.fromstring(result.content)
-    performers = list(
-        filter(None, [map_performer(p) for p in tree.find_class("model")])
-    )
+    performers = [p for x in tree.find_class("model") if (p := map_performer(x))]
 
     if not performers:
         log.warning(f"No performers found for '{query}'")
