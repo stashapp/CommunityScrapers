@@ -39,7 +39,7 @@ performerByURL:
     scraper: performerScraper
 performerByName:
   action: script
-  script: 
+  script:
     - python
     - TheScoreGroup.py
     - search
@@ -109,7 +109,7 @@ xPathScrapers:
       Tags:
         Name: $photopage//div[@class='mb-3']/a/text()
       Performers: *performersAttr
-      
+
   performerScraper:
     performer:
       Name: //h1[@class="model-title"]
@@ -141,5 +141,4 @@ xPathScrapers:
               - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
                 with: $1$2
       Image: //section[@id="model-page"]//img[@class="lazyload"]/@src
-      
 # Last Updated December 03, 2023
