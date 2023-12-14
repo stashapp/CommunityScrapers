@@ -11,7 +11,7 @@ galleryByURL:
     scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
-    scene:
+    scene: &redditPost
       Title: //shreddit-post/@post-title | //meta[@property="og:title"]/@content
       Date: 
         selector: //shreddit-post/@created-timestamp | //div[@class="top-matter"]//p//time/@datetime
@@ -28,22 +28,7 @@ xPathScrapers:
               - regex: Posted in r\/([\w]+) by u\/([\w-]+)\s(.*)
                 with: $2
   galleryScraper:
-    gallery:
-      Title: //shreddit-post/@post-title | //meta[@property="og:title"]/@content
-      Date: 
-        selector: //shreddit-post/@created-timestamp | //div[@class="top-matter"]//p//time/@datetime
-        postProcess:
-          - replace:
-              - regex: (\d{4}-\d{2}-\d{2})T(.*)
-                with: $1
-          - parseDate: 2006-01-02
-      Performers:
-        Name:
-          selector: //shreddit-post/@author | //meta[@property="og:description"]/@content
-          postProcess:
-            - replace:
-              - regex: Posted in r\/([\w]+) by u\/([\w-]+)\s(.*)
-                with: $2
+    gallery: *redditPost
 driver:
   cookies: # over18 cookie necessary for old.reddit.com URLs due to redirect; new reddit just blurs content instead
     - CookieURL: "https://old.reddit.com/over18/"
@@ -52,4 +37,4 @@ driver:
           Domain: ".reddit.com"
           Value: "1"
           Path: "/"
-# Last Updated December 12, 2023
+# Last Updated December 13, 2023
