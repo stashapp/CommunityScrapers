@@ -1,0 +1,40 @@
+name: "Reddit"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - reddit.com
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - reddit.com
+    scraper: galleryScraper
+xPathScrapers:
+  sceneScraper:
+    scene: &redditPost
+      Title: //shreddit-post/@post-title | //meta[@property="og:title"]/@content
+      Date: 
+        selector: //shreddit-post/@created-timestamp | //div[@class="top-matter"]//p//time/@datetime
+        postProcess:
+          - replace:
+              - regex: (\d{4}-\d{2}-\d{2})T(.*)
+                with: $1
+          - parseDate: 2006-01-02
+      Performers:
+        Name:
+          selector: //shreddit-post/@author | //meta[@property="og:description"]/@content
+          postProcess:
+            - replace:
+              - regex: Posted in r\/([\w]+) by u\/([\w-]+)\s(.*)
+                with: $2
+  galleryScraper:
+    gallery: *redditPost
+driver:
+  cookies: # over18 cookie necessary for old.reddit.com URLs due to redirect; new reddit just blurs content instead
+    - CookieURL: "https://old.reddit.com/over18/"
+      Cookies:
+        - Name: "over18"
+          Domain: ".reddit.com"
+          Value: "1"
+          Path: "/"
+# Last Updated December 13, 2023
