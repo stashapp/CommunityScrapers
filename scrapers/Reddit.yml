@@ -3,13 +3,11 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - reddit.com
-      - old.reddit.com
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
     url:
       - reddit.com
-      - old.reddit.com
     scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
