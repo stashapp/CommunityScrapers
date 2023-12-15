@@ -39,7 +39,7 @@ xPathScrapers:
           - replace:
               - regex: (.*)
                 with: https://www.dorcelvision.com$1
-      Details: $card/details/summary
+      Details: $card/details//p[last()]
         
         
   sceneScraper:
