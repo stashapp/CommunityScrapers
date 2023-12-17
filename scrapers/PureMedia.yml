@@ -1,0 +1,41 @@
+name: 'PureMedia'
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - becomingfemme.com/tour
+      - pure-bbw.com/tour
+      - pure-ts.com/tour
+      - pure-xxx.com/tour
+      - sissypov.com/tour
+      - tspov.com/tour
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='video_membership']//div[@class='titlebox clear']
+      Details: //div[@class='aboutvideo']
+      Date:
+        selector: //div[@class='video_description']/h4[not(contains(.,'Featured'))]
+        postProcess:
+          - replace:
+              - regex: .*[|]
+                with:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //ul[@class='featuredModels']//span[last()]
+      Studio:
+        Name: //meta[@name='author']/@content
+      Tags:
+        Name:
+          selector: //meta[@name='keywords']/@content
+          split: ','
+      Image:
+        selector: //base/@href|//div[@class='videohere']/img[@class='thumbs stdimage']/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
+        concat: '|'
+        postProcess:
+          - replace:
+              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
+                with: $1$2
+              - regex: ^//
+                with: https://
+# Last Updated December 17, 2023

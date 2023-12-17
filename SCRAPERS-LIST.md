@@ -176,7 +176,7 @@ bbcsurprise.com|ExploitedX.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 beauty-angels.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 beauty4k.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 beaverhunt.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
-becomingfemme.com|ChristianXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+becomingfemme.com|PureMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 behindtrans500.com|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 beingphoenixmarie.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 belamionline.com|BelAmi.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -1197,9 +1197,9 @@ publicsexadventures.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 publicsexdate.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 puffynetwork.com|Puffynetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pumaswedexxx.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-pure-bbw.com|Pure-XXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-pure-ts.com|Pure-XXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
-pure-xxx.com|Pure-XXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+pure-bbw.com|PureMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+pure-ts.com|PureMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+pure-xxx.com|PureMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 purebj.com|Only3xGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 puremature.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 purepov.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
@@ -1318,7 +1318,7 @@ siripornstar.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sis.porn|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sislovesme.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sisswap.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-sissypov.com|SissyPov.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+sissypov.com|PureMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sketboy.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 slayed.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 slroriginals.com|SLRoriginals.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
@@ -1544,7 +1544,7 @@ ts-castingcouch.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tsfactor.com|Algolia_EvilAngel.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|Trans
 tsgirlfriendexperience.com|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tsplayground.com|TSPlayground.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Trans
-tspov.com|ChristianXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+tspov.com|PureMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tsraw.com|LadyboyGold.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Trans
 tsvirtuallovers.com|RealityLovers.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 tugpass.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
