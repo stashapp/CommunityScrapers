@@ -6,9 +6,14 @@ sceneByURL:
       - pure-bbw.com/tour
       - pure-ts.com/tour
       - pure-xxx.com/tour
-      - sissypov.com/tour
       - tspov.com/tour
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - pornstarbts.com/tour
+      - sissypov.com/tour
+    scraper: newSiteScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -38,4 +43,34 @@ xPathScrapers:
                 with: $1$2
               - regex: ^//
                 with: https://
-# Last Updated December 17, 2023
+
+  newSiteScraper:
+    common:
+      $details: //div[@class='videoDetails clear']
+    scene:
+      Title: $details/h3
+      Details: $details/p
+      Date:
+        selector: //p[contains(span,'Date Added:')]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //li[@class='update_models']/a
+      Tags:
+        Name: //ul[contains(li,'Tags:')]//a
+      Image:
+        selector: //base/@href|//a[@class='fake_trailer']/img/@src0_1x
+        concat: '|'
+        postProcess:
+          - replace:
+              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
+                with: $1$2
+              - regex: ^//
+                with: https://
+      Studio:
+        Name:
+          selector: //meta[@name='author']/@content
+          postProcess:
+            - map:
+                SISSY POV: Sissy POV
+# Last Updated December 19, 2023
