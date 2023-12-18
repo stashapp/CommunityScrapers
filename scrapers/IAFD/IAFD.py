@@ -489,8 +489,16 @@ def performer_url(tree):
 
 
 def performer_gender(tree):
+    def prepend_transgender(gender: str):
+        perf_id = next(
+            iter(tree.xpath('//form[@id="correct"]/input[@name="PerfID"]/@value')), ""
+        )
+        trans = "Transgender " if perf_id.endswith("_ts") else ""
+        return trans + map_gender(gender)
+
     return maybe(
-        tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value'), map_gender
+        tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value'),
+        prepend_transgender,
     )
 
 
