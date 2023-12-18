@@ -493,7 +493,12 @@ def performer_gender(tree):
         perf_id = next(
             iter(tree.xpath('//form[@id="correct"]/input[@name="PerfID"]/@value')), ""
         )
-        trans = "Transgender " if perf_id.endswith("_ts") else ""
+        trans = (
+            "Transgender "
+            # IAFD are not consistent with their
+            if any(mark in perf_id for mark in ("_ts", "_ftm", "_mtf"))
+            else ""
+        )
         return trans + map_gender(gender)
 
     return maybe(
