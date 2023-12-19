@@ -65,7 +65,7 @@ def maybe(
     """
     Returns the first value in values that is not "No data" after applying f to it
     """
-    return next((f(x) for x in values if not re.search(r"(?i)no data", x)), None)
+    return next((f(x) for x in values if not re.search(r"(?i)no data|director", x)), None)
 
 
 def cleandict(d: dict):
@@ -549,6 +549,15 @@ def performer_measurements(tree):
     )
 
 
+def scene_director(tree):
+    return maybe(
+        tree.xpath(
+            '//p[@class="bioheading"][text()="Director" or text()="Directors"]/following-sibling::p[1]//text()'
+        ),
+        lambda d: d.strip(),
+    )
+
+
 def scene_studio(tree):
     return maybe(
         tree.xpath(
@@ -701,6 +710,7 @@ def scene_from_tree(tree):
         "title": scene_title(tree),
         "date": scene_date(tree),
         "details": scene_details(tree),
+        "director": scene_director(tree),
         "studio": scene_studio(tree),
         "performers": [
             {"name": name} for name in tree.xpath('//div[@class="castbox"]/p/a/text()')
