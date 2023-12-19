@@ -1,0 +1,76 @@
+name: 'PureMedia'
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - becomingfemme.com/tour
+      - pure-bbw.com/tour
+      - pure-ts.com/tour
+      - pure-xxx.com/tour
+      - tspov.com/tour
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - pornstarbts.com/tour
+      - sissypov.com/tour
+    scraper: newSiteScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='video_membership']//div[@class='titlebox clear']
+      Details: //div[@class='aboutvideo']
+      Date:
+        selector: //div[@class='video_description']/h4[not(contains(.,'Featured'))]
+        postProcess:
+          - replace:
+              - regex: .*[|]
+                with:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //ul[@class='featuredModels']//span[last()]
+      Studio:
+        Name: //meta[@name='author']/@content
+      Tags:
+        Name:
+          selector: //meta[@name='keywords']/@content
+          split: ','
+      Image:
+        selector: //base/@href|//div[@class='videohere']/img[@class='thumbs stdimage']/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
+        concat: '|'
+        postProcess:
+          - replace:
+              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
+                with: $1$2
+              - regex: ^//
+                with: https://
+
+  newSiteScraper:
+    common:
+      $details: //div[@class='videoDetails clear']
+    scene:
+      Title: $details/h3
+      Details: $details/p
+      Date:
+        selector: //p[contains(span,'Date Added:')]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //li[@class='update_models']/a
+      Tags:
+        Name: //ul[contains(li,'Tags:')]//a
+      Image:
+        selector: //base/@href|//a[@class='fake_trailer']/img/@src0_1x
+        concat: '|'
+        postProcess:
+          - replace:
+              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
+                with: $1$2
+              - regex: ^//
+                with: https://
+      Studio:
+        Name:
+          selector: //meta[@name='author']/@content
+          postProcess:
+            - map:
+                SISSY POV: Sissy POV
+# Last Updated December 19, 2023

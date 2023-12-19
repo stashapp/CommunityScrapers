@@ -1,7 +1,16 @@
 import base64
 import json
 import sys
+import os
 import re
+
+
+# to import from a parent directory we need to add that directory to the system path
+csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
+parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
+sys.path.append(
+    parent
+)  # add parent dir to sys path so that we can import py_common from ther
 
 BASE_QUERY_MEDIA_SEARCH = "https://my.tokyo-hot.com/product/?q="
 BASE_DETAIL_URL = "https://my.tokyo-hot.com"
@@ -24,10 +33,10 @@ MEDIA_CONFIGURATIONS = [
     ## must contain either 1 or 2 capture groups
     ## group 1 = the code
     ## group 2 (optional) = the part number if it's a multi-part (split) scene
-    "(n\d{4})\D*_\D{2}(\d)\S*",  # "mult-part N series"
-    "(n\d{4})\S*",  # "single part N series"
-    "(k\d{4})\S*",  # "single part K series"
-    "(kb\d{4})\S*",  # "single part KB series"
+    r"(n\d{4})\D*_\D{2}(\d)\S*",  # "mult-part N series"
+    r"(n\d{4})\S*",  # "single part N series"
+    r"(k\d{4})\S*",  # "single part K series"
+    r"(kb\d{4})\S*",  # "single part KB series"
 ]
 
 try:
@@ -110,7 +119,9 @@ class ScenePage:
         info_links = info.find_all("a")
         for link in info_links:
             if "cast" in link.get("href"):
-                perf = TokyoHotModel(model_url=BASE_DETAIL_URL + link.get("href")).get_json()
+                perf = TokyoHotModel(
+                    model_url=BASE_DETAIL_URL + link.get("href")
+                ).get_json()
                 performers.append(perf)
         return performers
 
@@ -133,7 +144,9 @@ class ScenePage:
 
     def get_tags(self):
         potential_tags = self.soup.find("div", {"class": "infowrapper"}).find_all("a")
-        return [{"Name":a.text} for a in potential_tags if "type=play" in a.get("href")]
+        return [
+            {"Name": a.text} for a in potential_tags if "type=play" in a.get("href")
+        ]
 
     def get_json(self):
         return {
@@ -145,7 +158,7 @@ class ScenePage:
             "Studio": {"Name": self.studio},
             "Code": self.scene_id,
             "Image": self.image,
-            "Tags": self.tags
+            "Tags": self.tags,
         }
 
 
@@ -333,7 +346,7 @@ def scrape_scene(name, multipart, partnum):
 def get_image(image_url):
     try:
         response = requests.get(image_url, verify=False, timeout=(3, 6))
-    except requests.exceptions.RequestException as req_ex:
+    except requests.exceptions.RequestException:
         log.error(f"Error fetching URL {image_url}")
 
     if response.status_code < 400:

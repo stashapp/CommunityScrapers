@@ -3,6 +3,7 @@ import os
 import re
 import sys
 from urllib.parse import quote_plus
+from html import unescape
 
 # to import from a parent directory we need to add that directory to the system path
 csd = os.path.dirname(
@@ -122,8 +123,8 @@ def get_scene(scene_id: str) -> dict:
     meta = response.json()
     log.debug(f"Raw response from API: {json.dumps(meta)}")
     scrape = {}
-    scrape['title'] = meta.get('title')
-    scrape['details'] = meta.get('description')
+    scrape['title'] = meta['title']
+    scrape['details'] = unescape(meta['description'])
     scrape['code'] = scene_id
 
     sceneURLPartial = meta.get('url')

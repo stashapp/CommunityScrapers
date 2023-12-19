@@ -65,7 +65,7 @@ def maybe(
     """
     Returns the first value in values that is not "No data" after applying f to it
     """
-    return next((f(x) for x in values if not re.search(r"(?i)no data", x)), None)
+    return next((f(x) for x in values if not re.search(r"(?i)no data|director", x)), None)
 
 
 def cleandict(d: dict):
@@ -489,8 +489,21 @@ def performer_url(tree):
 
 
 def performer_gender(tree):
+    def prepend_transgender(gender: str):
+        perf_id = next(
+            iter(tree.xpath('//form[@id="correct"]/input[@name="PerfID"]/@value')), ""
+        )
+        trans = (
+            "Transgender "
+            # IAFD are not consistent with their
+            if any(mark in perf_id for mark in ("_ts", "_ftm", "_mtf"))
+            else ""
+        )
+        return trans + map_gender(gender)
+
     return maybe(
-        tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value'), map_gender
+        tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value'),
+        prepend_transgender,
     )
 
 
@@ -533,6 +546,15 @@ def performer_careerlength(tree):
 def performer_measurements(tree):
     return maybe(
         tree.xpath('//div/p[text()="Measurements"]/following-sibling::p[1]//text()')
+    )
+
+
+def scene_director(tree):
+    return maybe(
+        tree.xpath(
+            '//p[@class="bioheading"][text()="Director" or text()="Directors"]/following-sibling::p[1]//text()'
+        ),
+        lambda d: d.strip(),
     )
 
 
@@ -688,6 +710,7 @@ def scene_from_tree(tree):
         "title": scene_title(tree),
         "date": scene_date(tree),
         "details": scene_details(tree),
+        "director": scene_director(tree),
         "studio": scene_studio(tree),
         "performers": [
             {"name": name} for name in tree.xpath('//div[@class="castbox"]/p/a/text()')
