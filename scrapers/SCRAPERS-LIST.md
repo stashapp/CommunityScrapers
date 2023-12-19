@@ -315,7 +315,6 @@ cockyboys.com|CockyBoys.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 codycummings.com|Algolia_NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 colbyknox.com|ColbyKnox.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 colette.com|Colette.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
-collectivecorruption.com|CollectiveCorruption.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 college-amateurs.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 college-uniform.com|CollegeUniform.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 collegeboyphysicals.com|BluMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
@@ -625,7 +624,6 @@ girlfaction.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlfriendsfilms.com|Algolia_Girlfriendsfilms.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|Lesbian
 girlgirl.com|JulesJordan.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Lesbian
 girlgirlmania.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-girlgirlxxx.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlgrind.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Lesbian
 girlsandstuds.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlsgotcream.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1022,7 +1020,6 @@ naughtyamerica.com|NaughtyAmerica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 naughtyamericavr.com|NaughtyAmericaVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 naughtynatural.com|NaughtyNatural.yml|:heavy_check_mark:|:heavy_check_mark:|-|-|-|-
 netvideogirls.com|NVGNetwork.yml|:heavy_check_mark:|-|-|-|-|-
-newgrounds.com|Newgrounds.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 newsensations.com/tour_ns/|NewSensationsMain.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 newsensations.com/tour_rs/|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nextdoorbuddies.com|Algolia_NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
