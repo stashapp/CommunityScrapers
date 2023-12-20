@@ -1,0 +1,34 @@
+name: Sexuria
+# movieByURL:
+  # - action: scrapeXPath
+    # url:
+      # - sexuria.net
+    # scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sexuria.net
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //*[@id="dle-content"]/article/h1
+      Details:
+        selector: //h4[text()='Description']/following-sibling::div/text()
+        concat: " "
+      Date:
+        selector: //div[text()='Release Date:']/following-sibling::div/text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Image: //*[@id="dle-content"]/article/div[1]/div[1]/a/@href
+      Studio:
+        Name: //div[text()="Production:"]/following-sibling::div/a/text()
+      Movies:
+        Name: //*[@id="dle-content"]/article/h1
+        URL: //link[@rel="canonical"]/@href
+      Tags:
+        Name: //div[text()="Tags:"]/following-sibling::div/a/text()
+      Performers:
+        Name: //div[@class="stars-porn"]/a/text()
+      URL: //meta[@name='og:url']/@content
+# Last Updated December 17, 2023
