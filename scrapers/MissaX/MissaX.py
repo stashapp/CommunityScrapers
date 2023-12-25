@@ -2,9 +2,18 @@
 import base64
 import datetime
 import json
+import os
 import re
 import sys
 import urllib.parse
+
+# to import from a parent directory we need to add that directory to the system path
+csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
+parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
+sys.path.append(
+    parent
+)  # add parent dir to sys path so that we can import py_common from ther
+
 # extra modules below need to be installed
 try:
     import py_common.log as log
@@ -51,7 +60,7 @@ def scrape_scene_page(url): #scrape the main url
     title = tree.xpath('//p[@class="raiting-section__title"]/text()')[0].strip() #title scrape
     log.debug(f'Title:{title}')
     date = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), " Added:")]/text()[1]')[0] #get date
-    date = re.sub("(?:.+Added:\s)([\d\/]*).+", r'\g<1>', date).strip() #date cleanup
+    date = re.sub(r"(?:.+Added:\s)([\d\/]*).+", r'\g<1>', date).strip() #date cleanup
     date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d") #date parse
     log.debug(f'Date:{date}')
     studio = tree.xpath('//base/@href')[0].strip() #studio scrape
@@ -65,7 +74,7 @@ def scrape_scene_page(url): #scrape the main url
     details = tree.xpath('//p[@class="dvd-scenes__title"]/following-sibling::p//text()') #details scrape
     details = ''.join(details) #join details
     details = '\n'.join(' '.join(line.split()) for line in details.split('\n')) #get rid of double spaces
-    details = re.sub("\r?\n\n?", r'\n', details) #get rid of double newlines
+    details = re.sub(r"\r?\n\n?", r'\n', details) #get rid of double newlines
     log.debug(f'Details:{details}')
     bad_cover_url = tree.xpath("//img[@src0_4x]/@src0_4x") #cover from scene's page if better one is not found (it will be)
     datauri = "data:image/jpeg;base64,"
