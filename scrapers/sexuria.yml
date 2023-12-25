@@ -1,14 +1,17 @@
 name: Sexuria
-# movieByURL:
-  # - action: scrapeXPath
-    # url:
-      # - sexuria.net
-    # scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - sexuria.net
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://sexuria.net/f/j.x.name-released;p.title={}/sort=date/order=desc/"
+  scraper: searchScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -31,4 +34,18 @@ xPathScrapers:
       Performers:
         Name: //div[@class="stars-porn"]/a/text()
       URL: //meta[@name='og:url']/@content
-# Last Updated December 17, 2023
+  searchScraper:
+    common:
+      $result: //article[contains(@class, "short")]
+    scene:
+      Title: $result//h2
+      URL: ($result//a)[1]/@href
+      Details: $result//div[@class="author-cat"]
+      Date: $result//div[@class="date"]
+      Image:
+        selector: $result//img/@data-src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://sexuria.net
+# Last Updated December 25, 2023
