@@ -864,6 +864,7 @@ lexingtonsteele.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lezcuties.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Lesbian
 lifeselector.com|21Roles.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 lilhumpers.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+lilsis.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 lingerieav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 lingerietales.com|WankItNow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 littleasians.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
