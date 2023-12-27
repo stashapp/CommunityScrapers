@@ -1,0 +1,27 @@
+name: The Bro Network
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - thebronetwork.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="gallery_info spacer"]/h1
+      Performers:
+        Name: //div[@class="gallery_info spacer"]//span[@class="tour_update_models"]/a
+      Tags:
+        Name: //a[@class="tagsVideoPage"]
+      Details:
+        selector: //p[@id="textDesc"]
+      Image:
+        selector: //video-js[@id="trailervid"]/@poster
+      Date:
+        selector: //span[@class='availdate'][1]
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Studio:
+        Name:
+          fixed: The Bro Network
+# Last Updated November 02, 2023

@@ -1,0 +1,30 @@
+name: Raw Fuck Club
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.rawfuckclub.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="col-12 pr-0"]/h2
+      Performers:
+        Name: //span[@class="badge badge-primary"]
+      Tags:
+        Name: //span[@class="badge badge-secondary"]
+      Details:
+        selector: //p[@class="watch-description"]
+      Image: //img[@class="img-responsive"]/@src
+      Date:
+        selector: //p[@class='watch-published-date']/text()
+        postProcess:
+          - replace:
+              - regex: 'Reposted on (.+)([.])'
+                with: $1
+              - regex: 'Posted on (.+)'
+                with: $1
+          - parseDate: January 2, 2006
+      Studio:
+        Name:
+          fixed: Raw Fuck Club
+# Last Updated November 08, 2023

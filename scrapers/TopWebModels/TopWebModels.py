@@ -1,119 +1,123 @@
+import html
 import json
 import os
 import re
 import sys
 
+# to import from a parent directory we need to add that directory to the system path
+csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
+parent = os.path.dirname(csd)  # parent directory (should be the scrapers one)
+sys.path.append(
+    parent
+)  # add parent dir to sys path so that we can import py_common from there
+
 try:
     import py_common.log as log
 except ModuleNotFoundError:
-    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
-    sys.exit()
+    print(
+        "You need to download the folder 'py_common' from the community repo!"
+        " (CommunityScrapers/tree/master/scrapers/py_common)",
+        file=sys.stderr,
+    )
+    sys.exit(1)
+
 # make sure to install below modules if needed
 try:
     import requests
 except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
-    sys.exit()
+    log.error(
+        "You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)"
+    )
+    log.error("Run this command in a terminal (cmd): python -m pip install requests")
+    sys.exit(1)
 
 try:
     from bs4 import BeautifulSoup
 except ModuleNotFoundError:
-    print("You need to install the BeautifulSoup module. (https://pypi.org/project/beautifulsoup4/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install beautifulsoup4", file=sys.stderr)
-    sys.exit()
-
-def get_from_url(url_to_parse):
-    m = re.match(r'https?://tour\.((\w+)\.com)/scenes/(\d+)/([a-z0-9-]+)', url_to_parse)
-    if m is None:
-        return None, None, None, None
-    return m.groups()
+    log.error(
+        "You need to install the BeautifulSoup module. (https://pypi.org/project/beautifulsoup4/)"
+    )
+    log.error(
+        "Run this command in a terminal (cmd): python -m pip install beautifulsoup4"
+    )
+    sys.exit(1)
 
 
-def make_request(request_url, origin_site):
-    requests.packages.urllib3.util.ssl_.DEFAULT_CIPHERS += 'HIGH:!DH:!aNULL'
-    requests.packages.urllib3.disable_warnings()
+def parse_url(url):
+    if m := re.match(r"https?://tour\.((\w+)\.com)/scenes/(\d+)/([a-z0-9-]+)", url):
+        return m.groups()
+    log.error("The URL could not be parsed")
+    sys.exit(1)
 
+
+def make_request(request_url):
     try:
-        requests.packages.urllib3.contrib.pyopenssl.DEFAULT_SSL_CIPHER_LIST += 'HIGH:!DH:!aNULL'
-    except AttributeError:
-        # no pyopenssl support used / needed / available
-        pass
-
-    try:
-        r = requests.get(request_url, headers={
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
-            'Origin': origin_site,
-            'Referer': request_url
-        }, timeout=(3, 6), verify=False)
+        r = requests.get(
+            request_url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
+                "Referer": request_url,
+            },
+            timeout=(3, 6),
+        )
     except requests.exceptions.RequestException as e:
-        return None, e
+        log.error(f"Request to '{request_url}' failed: {e}")
+        exit(1)
 
-    if r.status_code == 200:
-        return r.text, None
-    return None, f"HTTP Error: {r.status_code}"
+    if r.status_code != 200:
+        log.error(f": {r.status_code}")
+        exit(1)
+    return BeautifulSoup(r.text, "html.parser")
 
-def fetch_page_json(page_html):
-        matches = re.findall(r'window\.__DATA__ = (.+)$', page_html, re.MULTILINE)
-        return json.loads(matches[0]) if matches else None
 
-def main():
-    stdin = sys.stdin.read()
-    log.debug(stdin)
-    fragment = json.loads(stdin)
+if __name__ == "__main__":
+    fragment = json.loads(sys.stdin.read())
 
-    if not fragment['url']:
-        log.error('No URL entered.')
+    if not (url := fragment["url"]):
+        log.error("No URL entered.")
         sys.exit(1)
-    url = fragment['url'].strip()
-    site, studio, sid, slug = get_from_url(url)
-    if site is None:
-        log.error('The URL could not be parsed')
-        sys.exit(1)
-    response, err = make_request(url, f"https://{site}")
-    if err is not None:
-        log.error('Could not fetch page HTML', err)
-        sys.exit(1)
-    j = fetch_page_json(response)
-    if j is None:
-        log.error('Could not find JSON on page')
-        sys.exit(1)
-    if 'video' not in j['data']:
-        log.error('Could not locate scene within JSON')
+    log.debug(f"Scraping URL: {url}")
+
+    soup = make_request(url)
+    props = soup.find("script", {"type": "application/json"})
+    if not props:
+        log.error("Could not find JSON in page")
         sys.exit(1)
 
-    scene = j["data"]["video"]
+    props = json.loads(props.text)
+    content = props["props"]["pageProps"]["content"]
 
-    if scene.get('id'):
-        if str(scene['id']) != sid:
-            log.error('Wrong scene within JSON')
-            sys.exit(1)
-        log.info(f"Scene {sid} found")
-    scrape = {}
-    if scene.get('title'):
-        scrape['title'] = scene['title']
-    if scene.get('release_date'):
-        scrape['date'] = scene['release_date'][:10]
-    if scene.get('description'):
-        details = BeautifulSoup(scene['description'], "html.parser").get_text()
-        scrape['details'] = details
-    if scene.get('sites'):
-        scene_studio = scene['sites'][0]['name']
-        scrape['studio'] = {'name': scene_studio}
-    if scene.get('models'):
-        models = []
-        for m in scene['models']:
-           models.extend([x.strip() for x in m['name'].split("&") ])
-        scrape['performers'] = [{'name': x} for x in models]
-    if scene.get('tags'):
-        scrape['tags'] = [{'name': x['name']} for x in scene['tags']]
-    if j['data'].get('file_poster'):
-        scrape['image'] = j['data']['file_poster']
-    print(json.dumps(scrape))
+    with open("debug.json", "w", encoding="utf-8") as f:
+        f.write(json.dumps(content, indent=2))
 
+    if not (scene_id := content.get("id")):
+        log.error("Could not find scene ID")
+        sys.exit(1)
+    log.info(f"Scene {scene_id} found")
 
-if __name__ == '__main__':
-    try:
-        main()
-    except Exception as e:
-        log.error(e)
+    scene = {
+        "code": str(scene_id),
+    }
+
+    if title := content.get("title"):
+        scene["title"] = html.unescape(title)
+    if date := content.get("publish_datedate"):
+        from datetime import datetime
+
+        scene["date"] = datetime.strptime(date[:10], "%Y/%m/%d").strftime("%Y-%m-%d")
+    if description := content.get("description"):
+        scene["details"] = html.unescape(description).replace("\u00a0", " ")
+    if sites := content.get("sites"):
+        scene_studio = sites[0]["name"]
+        scene["studio"] = {"name": scene_studio}
+    if models := content.get("models"):
+        scene["performers"] = [{"name": x} for x in models]
+    if tags := content.get("tags"):
+        scene["tags"] = [{"name": x} for x in tags]
+    if scene_cover := content.get("thumb"):
+        if not scene_cover.endswith(".gif"):
+            scene["image"] = scene_cover
+        elif alternative_covers := content.get("thumbs"):
+            # We don't want gifs
+            scene["image"] = alternative_covers[0]
+    print(json.dumps(scene))

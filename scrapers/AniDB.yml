@@ -1,31 +1,68 @@
 name: AniDB
-################################################################################################################
-#                                                HOW TO SET UP                                                 #
-#                              Store this file in the ~/stash/scrapers/AniDB.yml                               #
-#                       (If the scrapers directory is not there it needs to be created)                        #
-#                                                 SET COOKIES:                                                 #
-#             Access the anidb.net website > login > right button > inspect > find cookies storage             #
-#       Copy the "Value" of "adbsess" and "adbuin" and replace in the cookies category of this document        #
-#    If your account is new, you need to access any NSFW anime and confirm that you want to see 18+ content    #
-#                    Do not change the order of the columns, as it can make it stop working                    #
-#                               I recommend creating a new account just for this                               #
-#                                               SET USER AGENT:                                                #
-#               Go to your Stash > Settings > Metadata Providers > Scraping > Scraper User Agent               #
-#                                      Use the User Agent of your choice                                       #
-#     I'm currently using: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0      #
-################################################################################################################
-#                                                  HOW TO USE                                                  #
-#                                                   SCENES:                                                    #
-#       The scene Scraper by Fragment is the best option in case the file name is the name of the anime        #
-#                      Scenes that were not found can easily be found by the name scraper                      #
-#                        It is also possible to scrape individually with the anime URL                         #
-#        The scraper doesn't recognize the episode number, I recommend changing it manually at the end         #
-#                                                 PERFORMERS:                                                  #
-#                          Performers need to be individually scraped by name or URL                           #
-#             I recommend creating them by scraping scenes and then searching individually by name             #
-#                                              THAT'S IT, ENJOY!                                               #
-#                                           Made by @escargotbuffed                                            #
-################################################################################################################
+
+# ~~~~~~ GETTING STARTED ~~~~~~
+# Store this file in the ~/stash/scrapers/AniDB.yml
+#  - If the scrapers directory is not there, you must create it first
+#
+# ~~~~~~ SETTING COOKIES ~~~~~~      
+#  Note: I recommend creating a new account just for this scraper                                    
+#  1. Access the anidb.net website > login > right button > inspect > find cookies storage
+#  2. Copy the "Value" of "adbsess" and "adbuin" and replace in the cookies category of this document
+#  3. If your account is new, you need to access any NSFW anime and confirm that you want to see 18+ content
+#  4. Do not change the order of the columns, as it can make it stop working
+#
+# ~~~~~~ SETTING USER AGENT ~~~~~~
+#  - Go to your Stash > Settings > Metadata Providers > Scraping > Scraper User Agent
+#  - Use the User Agent of your choice
+#     - For example: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0
+#
+# ~~~~~ RECOMMENDED WORKFLOW ~~~~~
+#  1. Scrape scene by fragment (for performers, tags, artwork, etc)
+#     - If this fails, scrape by anime URL
+#  2. Scrape by episode URL (for title, date)
+#  3. Manually set movie scene number on scene page
+#  3. Navigate to each performer's page & scrape by URL
+#  4. Navigate to movie page & scrape by URL
+#
+# ~~~~~~ HOW TO USE (detailed) ~~~~~~    
+# tl;dr when in doubt, use the URL scrapers 
+#  - For scenes: anidb.net/episode/XXX, anidb.net/anime/XXX
+#  - For performers: anidb.net/character/XXX
+#  - For movies: anidb.net/anime/XXX
+#                                         
+# SCENES (by anime):                                                    
+#  - The Scraper by Fragment will usually work, assuming a filename like "[XX] My Lewd Anime - 01 (720p) (x264).mkv"
+#      - This regex expression strips underscores, dashes, content containing brackets and parentheses, and two digit numbers
+#      - For example, the above filename is stripped to "My Lewd Anime"
+#  - If this does not work, I recommend scraping with the episode URL, the anime URL, or the name scraper
+#  - By default, the scene scraper does not set the title, as the episode scraper serves this purpose better
+#     - However, if you'd like to enable this functionality, uncomment the "Title" line in sceneScraperAnime > scene
+#  - The scene (by anime) scraper automatically creates a new movie (i.e., series) entry, 
+#    but unfortunately you will have to set the movie scene (i.e., episode) number manually
+#
+# SCENES (by episode):
+#  - This scraper is only accessible by scraping the episode URL (anidb.net/episode/XXX)
+#  - The scene episode scraper sets the episode title, the anime URL (if missing), and the original airing date
+#    - By default, the regex expression strips the episode number when setting the title
+#    - If you want to keep the episode number, delete the second regex replacement in 
+#      sceneScraperEpisode > scene > Title > postProcess > replace
+#
+# MOVIES:
+#  - The scene (by anime) scraper automatically creates a new movie entry using the anime title and anime URL
+#  - On the movie page, you can scrape by URL
+# 
+# PERFORMERS:                                                  
+#  - Performers need to be individually scraped by name or URL                           
+#  - I recommend creating them by scraping the anime URL, then navigating to the performer page.
+#    The performer URL should already be set, so you just need to press the scrape by URL button.
+#
+# ~~~~~ TROUBLESHOOTING ~~~~~
+# - If you find that the scraper has suddenly stopped working, RESET YOUR COOKIES!
+#
+# ~~~~~ ANYTHING ELSE? ~~~~~
+# THAT'S IT, ENJOY! 
+# Made by @escargotbuffed, further improvements by @symptom6186
+
 performerByURL:
   - action: scrapeXPath
     url:
@@ -41,16 +78,22 @@ sceneByFragment:
   queryURL: https://anidb.net/anime/?adb.search={filename}
   queryURLReplace:
     filename:
-      - regex: \..+$|\d+
-        with: ""
+      - regex: '\[.*?\]|\(.*?\)|\d\d|\..*'
+        with: 
+      - regex: '\-|\_'
+        with: " "
       - regex: \s+
         with: "%20"
-  scraper: sceneScraper
+  scraper: sceneScraperAnime
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://anidb.net/
-    scraper: sceneScraper
+      - https://anidb.net/episode/
+    scraper: sceneScraperEpisode
+  - action: scrapeXPath
+    url:
+      - https://anidb.net/anime/
+    scraper: sceneScraperAnime
 sceneByName:
   action: scrapeXPath
   queryURL: https://anidb.net/search/anime/?adb.search={}&entity.animetb=1
@@ -58,7 +101,13 @@ sceneByName:
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
-  scraper: sceneScraper
+  scraper: sceneScraperAnime
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - https://anidb.net/
+    scraper: sceneScraperAnime
 
 xPathScrapers:
   performerSearch:
@@ -104,15 +153,37 @@ xPathScrapers:
               - regex: ^
                 with: https://anidb.net
       Image: //td[@class="thumb anime"]//img/@src
-  sceneScraper:
+  sceneScraperEpisode:
+    scene:
+      Title: 
+        selector: //div[@id="layout-main"]//h1[@class="ep"]
+        postProcess:
+          - replace:
+             - regex: ^.{0,9}
+               with: ""
+             - regex: \- \d+ \-
+               with: "/"
+      URL: 
+        selector: //ul[@class="main-tabs"]//li[@class="g_odd anime"]//span/a/@href
+        postProcess: 
+          - replace:
+              - regex: ^
+                with: https://anidb.net
+      Date: //div[@id="layout-main"]//span[@itemprop="datePublished"]/@content
+  sceneScraperAnime:
     common:
       $info: //div[@class="g_section info"]
+      $title: //div[@class="g_section info"]//div[@id="tab_1_pane"]//span[@itemprop="name"]
+      $en_title: //div[@class="g_section info"]//div[@id="tab_1_pane"]//tr[contains(@class, "official verified") and contains(.//span, 'en')]//label[@itemprop="alternateName"]
       $character: //div[@id="characterlist"]//div[contains(@class, 'main character') or contains(@class, 'secondary cast')]//div[@itemprop="character"]
     scene:
-      Title: $info//div[@id="tab_1_pane"]//span[@itemprop="name"]
+      #Title: $en_title or $title
+      #Date: 
+      #  selector: $info//div[@id="tab_1_pane"]//span[contains(@itemprop, "datePublished") or contains(@itemprop, "startDate")]
+      #  parseDate: 02.01.2006
       Details: 
         selector: //div[@itemprop="description"]//text()
-        concat: "\n"
+        concat: " "
       Tags:
         Name: $info//div[@id="tab_1_pane"]//span[@class="tagname"]
       Performers:
@@ -123,9 +194,26 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: https://anidb.net
+      Movies:
+        Name: $title
+        URL: //link[@rel="canonical"]/@href
       Studio:
         Name: $info//table[@id="staffoverview"]//tr[last()]/td[@class="name creator"]/a
       Image: $info//div[@class="image"]//img/@src
+      URL: //link[@rel="canonical"]/@href
+    movie:
+      Name: $title
+      Aliases: $en_title
+      Date: 
+        selector: $info//div[@id="tab_1_pane"]//span[contains(@itemprop, "datePublished") or contains(@itemprop, "startDate")]
+        postProcess:
+          - parseDate: 02.01.2006
+      Synopsis: 
+        selector: //div[@itemprop="description"]//text()
+        concat: " "
+      Studio:
+        Name: $info//table[@id="staffoverview"]//tr[last()]/td[@class="name creator"]/a
+      FrontImage: $info//div[@class="image"]//img/@src
       URL: //link[@rel="canonical"]/@href
       
 driver:
@@ -142,4 +230,4 @@ driver:
           Domain: "anidb.net"
           Value: "" # Enter the value of the 'adbuin' here
           Path: "/"
-# Last Updated Dec 5, 2023
+# Last Updated Dec 20, 2023

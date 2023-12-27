@@ -52,12 +52,12 @@ REGEXES = {
     "measurements": (
         r"(?<=T)(?P<height>\d+)? / B(?P<bust>\d+)\([^=]+=(?P<cup>\w+)\) / W(?P<waist>\d+) / H(?P<hip>\d+)"
     ),
-    "url": r"http://www.minnano-av.com/actress\d+.html",
+    "url": r"https://www.minnano-av.com/actress\d+.html",
 }
 
 FORMATS = {
-    "image": "http://www.minnano-av.com{IMAGE_URL_FRAGMENT}",
-    "url": "http://www.minnano-av.com/actress{PERFORMER_ID}.html",
+    "image": "https://www.minnano-av.com{IMAGE_URL_FRAGMENT}",
+    "url": "https://www.minnano-av.com/actress{PERFORMER_ID}.html",
 }
 
 
@@ -309,7 +309,7 @@ def performer_by_url(url):
 
 
 def performer_by_name(name: str, retry=True) -> None:
-    queryURL = f"http://www.minnano-av.com/search_result.php?search_scope=actress&search_word={name}"
+    queryURL = f"https://www.minnano-av.com/search_result.php?search_scope=actress&search_word={name}"
 
     result = requests.get(queryURL)
     tree = etree.HTML(result.text)

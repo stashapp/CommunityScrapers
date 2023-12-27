@@ -45,15 +45,25 @@ xPathScrapers:
         concat: "\n\n"
       Tags:
         Name:
-          selector: //div[@class="col-xs-12 hashtags fix"]/span/em | //div[@class="col-xs-12 category fix"]/span
+          selector: //div[@class="col-xs-12 hashtags hashtags-grey fix"]/span/em | //div[@class="col-xs-12 category fix"]/a
           concat: ","
           postProcess:
+            - replace:
+                - regex: 'Keywords:'
+                  with: $1
             - replace:
                 - regex: ',\s+'
                   with: ","
           split: ","
       Image:
         selector: //div[contains(@class,'vidStuff')]//video[contains(@id,'html5_api')]/@poster | //div[contains(@class,'vidStuff')]//img/@src
+        postProcess:
+          - replace:
+            - regex: (\d*_.*((\.gif)|(\.mp4)))
+              with: t_$1
+          - replace:
+            - regex: '(\.gif)|(\.mp4)'
+              with: ".jpg"
       Studio:
         Name: $model
       Performers:
@@ -81,4 +91,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated November 24, 2023
+# Last Updated December 14, 2023
