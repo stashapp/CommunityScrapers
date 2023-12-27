@@ -427,7 +427,6 @@
       "title": "Scene object",
       "type": "object",
       "additionalProperties": false,
-      "required": ["Title"],
       "properties": {
         "Title": {
           "title": "Scene title",
