@@ -64,6 +64,7 @@ performerByURL:
   - action: scrapeXPath
     url:
       - babesnetwork.com/model/
+      - biempire.com/model/
       - devianthardcore.com/model/
       - digitalplayground.com/modelprofile/
       - doghousedigital.com/model/
