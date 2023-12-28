@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - babesnetwork.com/scene/
+      - biempire.com/scene/
       - devianthardcore.com/scene/
       - doghousedigital.com/
       - familyhookups.com/scene/
@@ -63,6 +64,7 @@ performerByURL:
   - action: scrapeXPath
     url:
       - babesnetwork.com/model/
+      - biempire.com/model/
       - devianthardcore.com/model/
       - digitalplayground.com/modelprofile/
       - doghousedigital.com/model/
@@ -377,4 +379,4 @@ xPathScrapers:
       Performers: *performers
       Tags: *tags
       Studio: *studio
-# Last Updated July 24, 2023
+# Last Updated December 27, 2023
