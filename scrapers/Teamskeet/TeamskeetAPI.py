@@ -47,7 +47,6 @@ DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
 
 # Not necessary but why not ?
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
-ORIGIN = "https://www.teamskeet.com"
 
 fragment = json.loads(sys.stdin.read())
 if fragment["url"]:
@@ -56,22 +55,25 @@ else:
     log.error('You need to set the URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
-if "teamskeet.com/movies/" not in scene_url and "sayuncle.com/movies/" not in scene_url:
-    log.error('The URL is not from a Teamskeet or Sayuncle URL (e.g. teamskeet.com/movies/*****)')
+if "sayuncle.com/movies/" not in scene_url and "teamskeet.com/movies/" not in scene_url:
+    log.error('The URL is not from a Teamskeet or SayUncle URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
+
+# Check the URL and set the API URL
+if 'sayuncle.com' in scene_url:
+    ORIGIN = 'https://www.sayuncle.com'
+    REFERER = 'https://www.sayuncle.com/'
+    API_BASE = 'https://store2.psmcdn.net/sau-elastic-00gy5fg5ra-videoscontent/_doc/'
+if 'teamskeet.com' in scene_url:
+    ORIGIN = 'https://www.teamskeet.com'
+    REFERER = 'https://www.teamskeet.com/'
+    API_BASE = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/'
+
 
 scene_id = re.sub('.+/', '', scene_url)
 if not scene_id:
     log.error("Error with the ID ({})\nAre you sure that the end of your URL is correct ?".format(scene_id))
     sys.exit(1)
-
-api_url = f"https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{scene_id}"
-
-if "sayuncle.com/movies/" in scene_url:
-    api_url = f"https://store2.psmcdn.net/sau-elastic-00gy5fg5ra-videoscontent/_doc/{scene_id}"
-    DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","SayUncle")
-    ORIGIN = "https://www.sayuncle.com"
-
 use_local = 0
 json_file = os.path.join(DIR_JSON, scene_id+".json")
 if os.path.isfile(json_file):
@@ -81,10 +83,11 @@ if os.path.isfile(json_file):
         scene_api_json = json.load(json_file)
 else:
     log.debug("Asking the API...")
+    api_url = f"{API_BASE}{scene_id}"
     headers = {
         'User-Agent': USER_AGENT,
         'Origin': ORIGIN,
-        'Referer': ORIGIN
+        'Referer': REFERER
     }
     scraper = cloudscraper.create_scraper()
     # Send to the API
@@ -128,6 +131,9 @@ scrape['studio']['name'] = scene_api_json['site'].get('name')
 scrape['performers'] = [{"name": x.get('modelName')}
                         for x in scene_api_json.get('models')]
 scrape['tags'] = [{"name": x} for x in scene_api_json.get('tags')]
+# If the scene is from sayuncle.com, we need to add the gay tag to the tags list
+if 'sayuncle.com' in scene_url:
+    scrape['tags'].append({"name": "Gay"})
 scrape['image'] = scene_api_json.get('img')
 
 if use_local == 0:
