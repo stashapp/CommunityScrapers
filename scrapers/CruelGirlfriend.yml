@@ -24,30 +24,33 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name:
-          selector: //div[@class='info-box-white']/h7[contains(.,"MORE CONTENT FROM")]
+          selector: //div[contains(@id,"Lg6T7ciE57Q018g38Ndnn9")]/@id
           postProcess:
             - replace:
-                - regex: \|*MORE CONTENT FROM\|*
+                - regex: Lg6T7ciE57Q018g38Ndnn9
                   with:
+            - replace:
+                - regex: "([a-z])([A-Z])"
+                  with: "$1 $2"
       Details:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: '.+"description": "([^"]+)".+'
-                with: $1
-              - regex: "<br?>|</br?>"
-                with:
+        selector: //div[@class="info-box-white"]//h3[not(img)]
       Tags:
         Name: //div[@class='info-box-white']/h3[contains(.,"Added:")]/a
       Image:
         selector: $script
         postProcess:
           - replace:
-              - regex: '.+"thumbnailUrl": [([^\]]+)\]).+'
-                with: $1
               - regex: '.+"([^"]+/Backgrounds/[^"]+)".+'
                 with: $1
       Studio:
         Name:
           fixed: Cruel Girlfriend
-# Last Updated July 25, 2021
+      Code:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+"contentUrl": "[^"]+/(\d+)\.mp4".+'
+                with: $1
+              - regex: "^{.+" #cleanup on non matches
+                with:
+# Last Updated January 06, 2023

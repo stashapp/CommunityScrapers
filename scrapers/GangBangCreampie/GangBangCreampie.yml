@@ -1,0 +1,40 @@
+# requires: Algolia
+name: "GangbangCreampie"
+sceneByURL:
+  - action: script
+    url:
+      - gangbangcreampie.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - gangbangcreampie
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - gangbangcreampie
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - gangbangcreampie
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - gangbangcreampie
+      - validName
+galleryByURL:
+  - action: script
+    url:
+      - gangbangcreampie.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - gangbangcreampie
+      - gallery
+# Last Updated December 22, 2022

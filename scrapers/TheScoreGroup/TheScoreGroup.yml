@@ -1,0 +1,144 @@
+name: TheScoreGroup
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - 18eighteen.com/
+      - 40somethingmag.com/
+      - 50plusmilfs.com/
+      - 60plusmilfs.com/
+      - bigtithooker.com/
+      - legsex.com/
+      - naughtymag.com
+      - pornmegaload.com/
+      - scoreland.com/
+      - scoreland2.com/
+      - xlgirls.com/
+      - scorevideos.com/
+      - milftugs.com/
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: galleryScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - 18eighteen.com/
+      - 40somethingmag.com/
+      - 50plusmilfs.com/
+      - 60plusmilfs.com/
+      - bigtithooker.com/
+      - legsex.com/
+      - naughtymag.com
+      - pornmegaload.com/
+      - scoreland.com/
+      - scoreland2.com/
+      - xlgirls.com/
+      - scorevideos.com/
+      - milftugs.com/
+    scraper: performerScraper
+performerByName:
+  action: script
+  script:
+    - python
+    - TheScoreGroup.py
+    - search
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $url: //link[@rel="canonical"]/@href
+    scene:
+      Title: &titleAttr //h1[1]/text()
+      Studio: &studioAttr
+        Name:
+          selector: //meta[@property="og:site_name"]/@content
+      Date: &dateAttr
+        selector: //div[@class="stat mb-2"]/span[contains(.,"Date:")]/../span[@class="value"]/text()
+        postProcess:
+          - replace:
+              - regex: ..,
+                with:
+          - parseDate: January 2 2006
+      Details: &details
+        selector: //div[@class="p-desc p-3"]//text()
+        postProcess:
+          - replace:
+              - regex: Read More »
+                with:
+              # Attempt to fix erroneous line breaks where HTML tags existed
+              - regex: \n\n([0-9a-zA-Z\.]+)\n\n
+                with: " $1 "
+        concat: "\n\n"
+      Tags:
+        Name: //div[@class="mb-3"]/a/text()
+      Performers: &performersAttr
+        Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
+      Image:
+        # This selector scrapes the canonical scene page cover image
+        selector: //script[contains(text(), "poster")]
+        postProcess:
+          - replace:
+              - regex: ^.+poster.+'(.+jpg)'.+$
+                with: $1
+      # This Selector scrapes the image posted on social media sites
+      #        selector: //meta[@itemprop="image"]/@content
+      # Enable this post process if you want better image quality but sometimes it can fail
+      #          postProcess:
+      #            - replace:
+      #                - regex: _lg
+      #                  with: _x_800
+      URL: &urlAttr
+        selector: $url
+      Code: &codeAttr
+        selector: $url
+        postProcess:
+          - replace:
+              - regex: .*\/(\d+)\/?$
+                with: $1
+  galleryScraper:
+    common:
+      $photopage: //section[@id='photos_page-page']
+    gallery:
+      Title: $photopage/div[@class="row"]/div/h2/text()
+      Studio: *studioAttr
+      Date: *dateAttr
+      Details:
+        selector: $photopage//div[contains(@class, 'p-desc')]/text()
+        concat: "\n"
+      Tags:
+        Name: $photopage//div[@class='mb-3']/a/text()
+      Performers: *performersAttr
+
+  performerScraper:
+    performer:
+      Name: //h1[@class="model-title"]
+      Gender:
+        fixed: Female
+      URL: //meta[@property="og:url"]/@content
+      Ethnicity:
+        selector: //span[text()="Ethnicity:"]/following-sibling::span
+        postProcess:
+          - map:
+              White: Caucasian
+      HairColor: //span[text()="Hair Color:"]/following-sibling::span
+      Height:
+        selector: //span[text()="Height:"]/following-sibling::span
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //span[text()="Weight:"]/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: (\d+).*
+                with: $1
+          - lbToKg: true
+      Measurements:
+        selector: //span[text()="Bra Size:"]/following-sibling::span|//span[text()="Measurements:"]/following-sibling::span
+        concat: "-"
+        postProcess:
+          - replace:
+              - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
+                with: $1$2
+      Image: //section[@id="model-page"]//img[@class="lazyload"]/@src
+# Last Updated December 03, 2023

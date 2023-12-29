@@ -1,0 +1,37 @@
+name: A POV Story
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - apovstory.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: "A POV Story"
+      Title:
+        selector: //div[@class = 'trailerArea centerwrap']/h3
+      Details:
+        selector: //div[@class = 'trailerContent']//*//text()
+        concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: ^Description:\s*
+                with:
+      Tags:
+        Name: //li/span[contains(text(),'CATEGORIES')]/parent::li//a//text()
+      Performers:
+        Name: //li/span[contains(text(),'FEATURING')]/parent::li//a//text()
+      Image:
+        selector: //div[@class="player-thumb"]/img/@src0_3x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://apovstory.com"
+      Date:
+        selector: //span[contains(text(),'RELEASE DATE')]/parent::li/text()
+        postProcess:
+          - parseDate: "January 2, 2006"
+# Last Updated August 24, 2023

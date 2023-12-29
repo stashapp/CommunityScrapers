@@ -1,0 +1,31 @@
+# requires: Algolia
+name: Blowpass
+sceneByURL:
+  - action: script
+    url:
+      - blowpass.com/en/video/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - blowpass
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - blowpass
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - blowpass
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - blowpass
+    - validName
+# Last Updated October 04, 2023

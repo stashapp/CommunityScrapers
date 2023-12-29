@@ -1,0 +1,11 @@
+name: PMVHaven
+# requires: py_common
+
+sceneByURL:
+  - url:
+     - pmvhaven.com/video/
+    action: script
+    script:
+      - python
+      - PMVHaven.py
+# Last Updated November 30, 2023

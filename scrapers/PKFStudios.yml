@@ -1,0 +1,57 @@
+name: PKF Studios
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pkfstudios.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="entry-title"]/text()
+      Details:
+        # Description is a sequence of p elements containing ONLY text
+        selector: //div[@class="entry-content"]/p[not(*)]/text()
+        concat: "\n\n"
+        # Remove the trailing "_ _ _ _ _" separator
+        postProcess:
+          - replace:
+              - regex: "(\n\n[_ ]+)"
+                with: ""
+      Date:
+        selector: //span[@class="entry-date"]//text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        # Images are loaded with javascript, we'll just grab the last image
+        # from the srcset because it's usually the largest
+        selector: //div[contains(@class, "post-thumbnail")]/img/@data-lazy-srcset
+        postProcess:
+          - replace:
+              - regex: ^.*\s+(https://.*)\s+\d+w$
+                with: $1
+      Studio:
+        Name:
+          fixed: "PKF Studios"
+      Tags:
+        Name:
+          # First selector will match when the tags are outside of the <strong> tag
+          selector: //div[@class="entry-content"]//strong[starts-with(text(), "Role")]/following-sibling::text() | //div[@class="entry-content"]//strong[starts-with(text(), "Role")]/text()
+          postProcess:
+            - replace:
+                - regex: (?:.*:\s+)?([^.]*).?
+                  with: $1
+          split: ", "
+      Performers:
+        Name:
+          # Sometimes the performers are listed in a separate tag, sometimes they're in a paragraph mixed in with the description
+          selector: //div[@class="entry-content"]//*[contains(text(), "Starring")]/text() | //p[contains(., "Starring")]
+          postProcess:
+            - replace:
+                - regex: ".*Starring (.*)"
+                  with: $1
+                - regex: "(?i)directed by johnm"
+                  with: ""
+                - regex: ", (and)?"
+                  with: " and "
+          split: " and "
+# Last Updated December 05, 2023

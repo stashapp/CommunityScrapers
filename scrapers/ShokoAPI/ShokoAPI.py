@@ -29,20 +29,19 @@ except ModuleNotFoundError:
 
 try:
     from py_common import log
+    import py_common.graphql as graphql
 except ModuleNotFoundError:
     print(
         "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
         file=sys.stderr)
     sys.exit()
+import config
 
-#user inputs start
 SHOKO_API_KEY = ''  #leave empty it gets your Shoko api key with your shoko server username and password
-STASH_API_KEY = ""  #your Stash api key
-STASH_URL = "http://localhost:9999/graphql"  #your stash graphql url
-SHOKO_URL = "http://localhost:8111"  #your shoko server url
-SHOKO_USER = ""  #your shoko server username
-SHOKO_PASS = ""  #your shoko server password
-#user inputs end
+SHOKO_URL = config.SHOKO.get("url", "")
+SHOKO_USER = config.SHOKO.get("user", "")
+SHOKO_PASS = config.SHOKO.get("pass", "")
+
 
 
 def validate_user_inputs() -> bool:
@@ -50,28 +49,14 @@ def validate_user_inputs() -> bool:
     if shoko is False:
         log.error("Shoko Url needs to be hostname:port and is currently " +
                   SHOKO_URL)
-    stash = bool(re.match(r"^(http|https)://.+:\d+/graphql$", STASH_URL))
-    if stash is False:
-        log.error(
-            "Stash Url needs to be hostname:port/graphql and is currently " +
-            STASH_URL)
-    return (shoko and stash)
+    return (shoko)
 
 
 def get_filename(scene_id: str) -> str:
     log.debug(f"stash sceneid: {scene_id}")
-    headers = CaseInsensitiveDict()
-    headers["ApiKey"] = STASH_API_KEY
-    headers["Content-Type"] = "application/json"
-    data = data = '{ \"query\": \" query { findScene (id: ' + scene_id + ' ) {path , id} }\" }'
-    resp = requests.post(url=STASH_URL, headers=headers, data=data)
-    if resp.status_code == 200:
-        log.debug("Stash response was successful resp_code: " + str(resp.status_code))
-    else:
-        log.error("response from stash was not successful stash resp_code: " + str(resp.status_code))
-        return None
-    output = resp.json()
-    path = output['data']['findScene']['path']
+    log.debug(graphql.getScene(scene_id))
+    data = graphql.getScene(scene_id)
+    path = data['files'][0]['path']
     log.debug("scene path in stash: " + str(path))
     pattern = "(^.+)([\\\\]|[/])"
     replace = ""
@@ -172,6 +157,12 @@ def get_series(apikey: str, scene_id: str):
 
 
 def query(fragment: dict) -> dict:
+    if fragment['title'] == "":
+        scene_id = fragment['id']
+        query = """query findScene($scene_id:ID!){findScene(id:$scene_id){files{basename}}}"""
+        variables = {'scene_id': scene_id}
+        result = call_graphql(query, variables)
+        basename = result['findScene']['files'][0]['basename']
     filename, apikey = find_scene_id(fragment['id'])
     try:
         findscene_scene_id, findscene_epnumber, find_date = find_scene(apikey, filename)
@@ -196,6 +187,9 @@ def main():
         if mode == 'query':
             data = query(fragment)
     print(json.dumps(data))
+
+def call_graphql(query, variables=None):
+    return graphql.callGraphQL(query, variables)
 
 
 if __name__ == '__main__':

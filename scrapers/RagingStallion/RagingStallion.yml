@@ -1,0 +1,31 @@
+# requires: Algolia
+name: Raging Stallion
+sceneByURL:
+  - action: script
+    url:
+      - ragingstallion.com/en/scene
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - ragingstallion
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - ragingstallion
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - ragingstallion
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - ragingstallion
+    - validName
+# Last Updated September 09, 2023

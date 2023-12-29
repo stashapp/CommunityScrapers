@@ -1,14 +1,38 @@
 name: FreeonesCommunity
+
 performerByName:
   action: scrapeXPath
   queryURL: https://www.freeones.com/babes?q={}&v=teasers&s=relevance&l=96&m%5BcanPreviewFeatures%5D=0
   scraper: performerSearch
+
 performerByURL:
   - action: scrapeXPath
     url:
       - freeones.xxx
       - freeones.com
     scraper: performerScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.freeones.com/vod?q={}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.freeones.com
+    scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - www.freeones.com
+    scraper: movieScraper
 
 xPathScrapers:
   performerSearch:
@@ -22,6 +46,71 @@ xPathScrapers:
                 with: https://www.freeones.com
               - regex: /feed$
                 with: /bio
+  sceneSearch:
+    common:
+      $movieTitle: //div[@data-test="teaser-vod"]//img
+    scene:
+      Title: $movieTitle/@alt
+      Image: $movieTitle/@src
+      URL:
+        selector: //div[@data-test="teaser-vod"]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.freeones.com"
+
+  sceneScraper:
+    common:
+      $commonRoot: //*[@id="description"]
+      $performerName: //a[@data-test="link_Cast"]
+    scene:
+      Title: //h1
+      URL: //link[@rel="alternate"][1]/@href
+      Details: $commonRoot//div[contains(concat(' ',normalize-space(@class),' '),' pb-2 ')]
+      Studio:
+        Name: $commonRoot//span[@data-test="link_span_Studio"]
+      Director: $commonRoot//span[@data-test="link_span_Director"]
+      Date:
+        selector: //div[contains(concat(' ',normalize-space(@class),' '),' mid-content-pr-past-date ')]
+        postProcess:
+          - replace:
+            - regex: .+?(\w+\s\d{1,2},\s\d{4}).+
+              with: $1
+          - parseDate: January 2, 2006
+      Movies:
+        Name: //h1
+        URL: //link[@rel="alternate"][1]/@href
+      Performers:
+        Name: $performerName/span
+      Tags:
+        Name: //li[@class="list-inline-item"]/a
+#        URL:
+#          selector: $performerName/@href
+#          postProcess:
+#            - replace:
+#              - regex: ^
+#                with: "https://www.freeones.com"
+
+  movieScraper:
+    common:
+      $commonRoot: //*[@id="description"]
+      $performerName: //a[@data-test="link_Cast"]
+    movie:
+      Name: //h1
+      Synopsis: $commonRoot//div[contains(concat(' ',normalize-space(@class),' '),' pb-2 ')]
+      Duration: $commonRoot//span[@data-test="link_span_Duration"]
+      Studio:
+        Name: $commonRoot//span[@data-test="link_span_Studio"]
+      Director: $commonRoot//span[@data-test="link_span_Director"]
+      Date:
+        selector: //div[contains(concat(' ',normalize-space(@class),' '),' mid-content-pr-past-date ')]
+        postProcess:
+          - replace:
+            - regex: .+?(\w+\s\d{1,2},\s\d{4}).+
+              with: $1
+          - parseDate: January 2, 2006
+      FrontImage: //*[@id="fxgp-gallery"]/a[1]/@href
+      BackImage: //*[@id="fxgp-gallery"]/a[2]/@href
 
   performerScraper:
     performer:
@@ -35,38 +124,40 @@ xPathScrapers:
       Twitter: //form//a[contains(@href,'twitter.com/')]/@href
       Instagram: //form//a[contains(@href,'instagram.com/')]/@href
       Birthdate:
-        selector: //span[contains(text(),'Born On')]
+        selector: //span[@data-test="link_span_dateOfBirth"]/text()
         postProcess:
-          - replace:
-              - regex: Born On
-                with:
           - parseDate: January 2, 2006
       Ethnicity:
-        selector: //a[@data-test="link_ethnicity"]/span/text()
+        selector: //span[@data-test="link_span_ethnicity"]
         postProcess:
           - map:
               Asian: Asian
               Caucasian: White
               Black: Black
               Latin: Hispanic
-      Country: //a[@data-test="link-country"]/span/text()
-      EyeColor: //span[text()='Eye Color']/following-sibling::span/a
-      Height:
-        selector: //span[text()='Height']/following-sibling::span/a
+      Country:
+        selector: //a[@data-test="link_placeOfBirth"][contains(@href, 'country')]/span/text()
         postProcess:
-          - replace:
-              - regex: \D+[\s\S]+
-                with: ""
+          - map:
+              United States: "USA"
+      EyeColor: //span[text()='Eye Color:']/following-sibling::span/a/span/text()
+      Height:
+        selector: //span[text()='Height:']/following-sibling::span/a
+        postProcess:
+          - feetToCm: true
           - map:
               Unknown: ""
       Measurements:
-        selector: //span[text()='Measurements']/following-sibling::span/span/a
+        selector: //span[(@data-test='link_span_bra') or (@data-test='link_span_waist') or (@data-test='link_span_hip')]
         concat: " - "
         postProcess:
+          - replace:
+              - regex: \sIn
+                with: ""
           - map:
               Unknown: ""
       FakeTits:
-        selector: //span[text()='Boobs']/following-sibling::span/a
+        selector: //span[text()='Boobs:']/following-sibling::span/a
         postProcess:
           - map:
               Unknown: ""
@@ -75,14 +166,16 @@ xPathScrapers:
       CareerLength:
         selector: //div[contains(@class,'timeline-horizontal')]//p[@class='m-0']
         concat: "-"
-      Aliases: //p[@data-test='p_aliases']/text()
+      Aliases:
+        selector: //span[@data-test='link_span_aliases']/text()
+        concat: ", "
       Tattoos:
-        selector: //span[text()='Tattoos']/following-sibling::span/span
+        selector: //span[text()='Tattoo locations:']/following-sibling::span
         postProcess:
           - map:
               Unknown: ""
       Piercings:
-        selector: //span[text()='Piercings']/following-sibling::span/span
+        selector: //span[text()='Piercing locations:']/following-sibling::span
         postProcess:
           - map:
               Unknown: ""
@@ -90,7 +183,7 @@ xPathScrapers:
         selector: //div[contains(@class,'image-container')]//a/img/@src
       Gender:
         fixed: "Female"
-      Details: //div[@data-test="biography"]
+      #Details: //div[@data-test="biography"]
       DeathDate:
         selector: //div[contains(text(),'Passed away on')]
         postProcess:
@@ -102,8 +195,9 @@ xPathScrapers:
       Weight:
         selector: //span[@data-test="link_span_weight"]
         postProcess:
-        - replace:
-            - regex: \D+[\s\S]+
+          - replace:
+            - regex: \slbs
               with: ""
+          - lbToKg: true
 
-# Last Updated April 16, 2021
+# Last Updated January 19, 2023

@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: Pornbox
 
 sceneByURL:
@@ -28,19 +30,22 @@ sceneByQueryFragment:
 jsonScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: scene_name
+      Title: scene_name
       Date:
         selector: publish_date
         postProcess:
           - parseDate: 2006-01-02T15:04:05.999999Z
       Tags:
-        Name:
-          selector: niches.#.niche
+        Name: niches.#.niche
       Performers:
-        Name: models.#.model_name
-      Image:
-        selector: player_poster
+        Name: "[models.#.model_name,male_models.#.model_name].@flatten"
+        Gender:
+          selector: "[models.#.sex,male_models.#.sex].@flatten"
+          postProcess:
+            - map:
+                female: FEMALE
+                male: MALE
+      Image: player_poster
       Details:
         selector: small_description
         postProcess:
@@ -60,10 +65,8 @@ jsonScrapers:
     common:
       $contents: content.contents.#
     scene:
-      Title:
-        selector: $contents.scene_name
-      Image:
-        selector: $contents.thumbnail.large
+      Title: $contents.scene_name
+      Image: $contents.thumbnail.large
       Date:
         selector: $contents.publish_date
         postProcess:
@@ -73,5 +76,5 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: https://pornbox.com/contents/$1
-# Last Updated December 10, 2021
+                with: https://pornbox.com/contents/
+# Last Updated March 03, 2023

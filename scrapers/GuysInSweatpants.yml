@@ -1,0 +1,97 @@
+name: Guys In Sweatpants
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - guysinsweatpants.com/scenes/
+      - guysinsweatpants.com/index.php/scenes/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - guysinsweatpants.com/models/
+      - guysinsweatpants.com/index.php/models/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //div[@id="content"]
+    scene:
+      Title: $content//h1
+      Details:
+        selector: $content//p/text()
+        concat: "\n\n"
+      Date:
+        selector: $content//h1/following-sibling::div/span/text()
+        postProcess:
+          - replace:
+              # https://regex101.com/r/QVvQyH/1
+              - regex: \s*(.*?)\s*\|.*
+                with: $1
+          - parseDate: Jan 2, 2006
+      Image:
+        selector: //div[@id="banner"]/img/@src
+        postProcess: &ppPrependOrigin
+          - replace:
+              - regex: ^
+                with: https://guysinsweatpants.com
+      Studio:
+        Name:
+          fixed: Guys In Sweatpants
+      Performers:
+        Name: $content/div[@class="meta"]//a/text()
+        URL:
+          selector: $content/div[@class="meta"]//a/@href
+          postProcess: *ppPrependOrigin
+  performerScraper:
+    common:
+      $content: //div[@class="inner"]
+    performer:
+      Name: $content//h1
+      Image:
+        selector: //div[@class="model"]/img/@src
+        postProcess: *ppPrependOrigin
+      Details:
+        selector: $content//p/text()
+        concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: (?s)(.*).+Videos:.*
+                with: $1
+      Height:
+        selector: ($content//p/text())[1]
+        postProcess:
+          - replace:
+              - regex: \s*(.*?)\s*\|.*
+                with: $1
+          - feetToCm: true
+      Weight:
+        selector: ($content//p/text())[1]
+        postProcess:
+          - replace:
+              - regex: .*\|\s*(\d*)\D*\|.*
+                with: $1
+          - lbToKg: true
+      Circumcised:
+        selector: ($content//p/text())[1]
+        postProcess:
+          - replace:
+              - regex: .*,\s*(\S*)\s*
+                with: $1
+      PenisLength:
+        selector: ($content//p/text())[1]
+        postProcess:
+          - replace:
+              - regex: .*\|\s+(\d*)\D*,.*
+                with: "0 $1"
+          # We do not have an inchToCm so we lose the fractional part
+          - feetToCm: true
+
+driver:
+  cookies:
+    - CookieURL: https://guysinsweatpants.com
+      Cookies:
+        - Name: pp-accepted
+          Domain: .guysinsweatpants.com
+          Value: "true"
+          Path: "/"
+# Last Updated September 28, 2023

@@ -1,0 +1,60 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
+name: "AnalVids"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - analvids.com/watch/
+      - pissvids.com/watch/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - analvids.com/model/
+      - pissvids.com/model/
+    scraper: performerScraper
+sceneByFragment:
+  action: script
+  script:
+    - python
+    # use python3 instead if needed
+    - AnalVids.py
+    - query
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $title: //h1[contains(@class, "watch__title")]//text()[not(ancestor::span)]
+    scene:
+      Title:
+        selector: $title
+        concat: " "
+      Date:
+        selector: //i[contains(@class, "bi-calendar3")]/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Details:
+        selector: //div[contains(@class, "text-mob-more")]//text()[not(parent::span[contains(@class, "dots")])]
+        concat: " "
+      Code:
+        selector: $title
+        postProcess:
+          - replace:
+              - regex: .+?([A-Z]{2,3}\d+)$|(.+)
+                with: $1
+      Performers:
+        Name: //h1[contains(@class, "watch__title")]//a/text()
+        URL: //h1[contains(@class, "watch__title")]//a/@href
+      Studio:
+        Name: //div[contains(@class, "genres-list")]//a[contains(@href, "/studios/")]/text()
+        URL: //div[contains(@class, "genres-list")]//a[contains(@href, "/studios/")]/@href
+      Tags:
+        Name: //div[contains(@class, "genres-list")]//a[contains(@href, "/genre/")]/text()
+      Image: //video/@data-poster
+
+  performerScraper:
+    performer:
+      Name: //h1
+      Country: //a[contains(@href, "nationality")]
+      Image: //div[contains(@class, 'model__left')]//img/@src
+# Last Updated August 16, 2023

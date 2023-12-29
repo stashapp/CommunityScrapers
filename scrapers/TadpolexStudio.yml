@@ -1,0 +1,42 @@
+name: "TadpolexStudio"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tadpolexstudio.com/trailers
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $models: //div[contains(@class, "models-list-thumbs")]//a
+    scene:
+      Studio:
+        Name:
+          selector: //a[@class="navbar-brand"]/@title
+          postProcess:
+            - map:
+                OFFICIAL Backroom Casting Couch: Backroom Casting Couch
+                BlackAmbush: Black Ambush
+                HOTMILFSFUCK: Hot Milfs Fuck
+                "Exploited College Girls: Excogi": Exploited College Girls
+
+      Title: //div[@class="video-player"]//h2[@class="section-title"]/text()
+      Performers:
+        Name: $models/span
+        URL: $models/@href
+      Date:
+        selector: //strong[text()="Released:"]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Tags:
+        Name: //ul[@class="tags"]//a
+      Image:
+        selector: //base/@href|//div[@class="player-thumb"]//img[contains(@class, "update_thumb")]/@src0_1x
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: "(^[^|]+)\\|([^\\.]+\\.jpg).*"
+                with: $1$2
+      Details:
+        selector: //div[@class="update-info-block"]/h3[text()="Description:"]/following-sibling::text()
+        concat: "\n\n"
+# Last Updated August 20, 2023

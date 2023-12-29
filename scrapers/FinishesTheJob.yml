@@ -14,6 +14,14 @@ xPathScrapers:
     scene:
       Title: $content/h1/text()
       Details: $content/p[2]/text()
+      # only works when url is from finishesthejob.com
+      Date:
+        selector: $content/meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - replace:
+            - regex: "^(.+?)T.*"
+              with: $1
+          - parseDate: "2006-01-02"
       Performers:
         Name: $content/h3/a/text()
       Tags:
@@ -33,4 +41,4 @@ xPathScrapers:
                 with: ""
       URL: //link[@rel='canonical']/@href
 
-# Last Updated June 10, 2021
+# Last Updated October 19, 2023

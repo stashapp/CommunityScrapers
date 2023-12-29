@@ -1,0 +1,49 @@
+name: Evil Angel Store
+movieByURL:
+  - action: scrapeXPath
+    url: &urls
+      - store.evilangelvideo.com/
+      - store.evilangel.com/
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: sceneScraper
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: &name //h1[@class="description"]/text()
+      Director: &director //a[@data-label="Director"]/text()
+      Date:
+        selector: (//div[@class="release-date"])[1]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Synopsis:
+        selector: //div[@class="synopsis"]/p//text()
+        concat: " "
+      FrontImage: (//div[@id="viewLargeBoxcoverCarousel"]//img)[1]/@data-src
+      BackImage: (//div[@id="viewLargeBoxcoverCarousel"]//img)[2]/@data-src
+      Duration:
+        selector: (//div[@class="release-date"])[2]/text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+)\s*hrs\.\s+(\d+)\s*mins\. # xx hrs. xx mins.
+                with: "$1:$2:00"
+      Studio: &studio
+        Name: //a[@data-label="Studio"]/text()
+  sceneScraper:
+    scene:
+      Title: *name
+      Director: *director
+      Date:
+        selector: (//div[@class="release-date"])[1]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Details: //meta[@name="og:description"]/@content
+      Performers:
+        Name: //span[@class="video-performer-name overlay"]
+      Image: //link[@rel="image_src"]/@href
+      Studio: *studio
+      Tags:
+        Name: //div[@class="categories"/a[@data-category="Item Page"]/text()
+# Last Updated December 02, 2023

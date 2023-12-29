@@ -1,0 +1,25 @@
+name: JB Video
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jbvideo.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@id="view_title"]/text()
+      Performers:
+        Name: //strong[text()='Starring:']/following-sibling::a[@onclick='loginPrompt()']/text()
+      Studio:
+        Name:
+          fixed: JB Video
+      Image: //div[contains(@class, 'main_vid')]/img/@src
+      Details: //span[@id='view_description']//text()[.!='\u00A0']
+      Date:
+        selector: //strong[text()='Released:']/following-sibling::text()[1]
+        postProcess:
+          - replace:
+            - regex: " "
+              with: ""
+          - parseDate: "01/02/06"
+# Last Updated December 17, 2023

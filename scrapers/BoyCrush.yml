@@ -1,0 +1,52 @@
+name: BoyCrush Network
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tour.boycrush.com/boy-crush-watch-gay-movies/
+      - tour.baretwinks.com/bare-twinks-watch/
+    scraper: bcScraper
+
+xPathScrapers:
+  bcScraper:
+    common:
+      $imageUrl: //div[@class="flv-player-holder"]//video/@poster|//div[@class="flv-player-holder" and not(//video)]//img/@src
+    scene:
+      Title:
+        selector: //head/title
+        postProcess:
+        - replace:
+          - regex: .* showing (.*) featuring.*
+            with: $1
+      Date:
+        selector: //h2[@class="fsize16"]/text()
+        postProcess:
+        - replace:
+          - regex: (.+) - .*
+            with: $1
+        - parseDate: January 2, 2006
+      Details: //div[@class="diary-descr"]
+      Image: $imageUrl
+      Code: 
+        selector: $imageUrl
+        postProcess:
+        - replace:
+          - regex: .*/largethumbs/([^_]+)_.*
+            with: $1
+      Studio:
+        Name:
+          selector: $imageUrl
+          postProcess:
+          - replace:
+            - regex: .*/largethumbs/([a-z]+).*
+              with: $1
+          - map:
+              bc: BoyCrush
+              bt: BareTwinks
+              hmt: HomeMadeTwinks
+              tast: TastyTwink
+              bf: BoyFeast
+      Performers:
+        Name: //div[@class="models-name"]//h2//a
+      Tags:
+        Name: //div[@class="models-name"]//h4//a
+# Last Updated October 02, 2023

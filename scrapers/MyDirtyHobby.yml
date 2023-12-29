@@ -82,11 +82,20 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-              - regex: '.*{"thumbnail":{[^}]+"src":"([^"]+)".*'
+              - regex: '.*?"thumbnail":\s*{[^}]+"src":\s*"([^"]+)".*'
                 with: $1
               - regex: '\\/'
                 with: "/"
       Studio:
         Name:
           fixed: My Dirty Hobby
-# Last Updated June 20, 2021
+
+driver:
+  cookies:
+    - CookieURL: "https://www.mydirtyhobby.com"
+      Cookies:
+        - Name: "AGEGATEPASSED"
+          Domain: ".mydirtyhobby.com"
+          Value: "1"
+          Path: "/"
+# Last Updated October 02, 2023

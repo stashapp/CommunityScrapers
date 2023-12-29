@@ -1,43 +1,208 @@
 name: Baberotica
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - avidolz.com
-      - baberotica.com
+      - baberotica.com 
       - baberoticavr.com
+      - nucosplay.com
+      - suckmevr.com
       - teenthais.com
+      - vrpornpass.com
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //h1[@itemprop="name"]
+        selector: //h5/a | //h1[@itemprop="name"] | //div[@class="rel"]/img/@alt
       Performers:
-        Name: //p/span[@itemprop="actor"]/a/span
+        Name: //p/span[@itemprop="actor"]/a/span | //div[@class="cat"][1]/a/text()
+        URL: //div[@class="cat"][1]/a/@href | //span[@itemprop="actor"]/a/@href
       Date:
-        selector: //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="datePublished"]/@content
+      # vrpornpass.com does not currently provide the scene published date on the non-paid site
+        selector: //div[contains(@class, "pure-u-1")]//meta[@itemprop="datePublished"]/@content | //div[@class="video-date"]
         postProcess:
           - replace:
+              - regex: .*Added:\s*(.*)\s*$
+                with: $1
               - regex: "T.+$"
                 with: ""
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
           - parseDate: 2006-01-02
+          - parseDate: January 02, 2006
+          - parseDate: 2006-01-02T15:04:05-07:00
       Tags:
-        Name: //a[@itemprop="genre"]
+        Name: //a[@itemprop="genre"] | //div[@class="cat"][2]/a
       Details:
-        selector: //div[@itemprop="description"]
-      Image:
-        selector: //div[contains(@class,"pure-u-1")or @class="container"]/meta[@itemprop="thumbnailUrl"]/@content
+        selector: //div[@itemprop="description"] | //p[span[@class="readmore"]]
         postProcess:
           - replace:
-              - regex: ^
-                with: "https:"
+              - regex: ... Read More
+                with:
+      Image:
+        selector: //div[contains(@class,"pure-u-1")]/meta[@itemprop="thumbnailUrl"]/@content | //div[@id="videohtml5tour"]//img[@class="pure-img"]/@src | //div[@id="videohtml5tour"]/video/@poster | //div[@class="rel"]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: https://
+      URL: 
+        selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href | //div[@class="title"]/h5/a/@href
+        postProcess:
+          - replace:
+            - regex: \s*(.*)\s*feed/$
+              with: $1
       Studio:
         Name:
           selector: //meta[@itemprop="url"]/@content
           postProcess:
             - map:
-                https://avidolz.com: AvIdolz
-                https://baberotica.com: Baberotica
-                https://baberoticavr.com: BaberoticaVR
-                https://teenthais.com: TeenThais
-# Last Updated June 30, 2021
+                https://avidolz.com/: AvIdolz
+                https://baberotica.com/: Baberotica
+                https://baberoticavr.com/: BaberoticaVR
+                https://nucosplay.com/: Nu Cosplay
+                https://suckmevr.com/: SuckMeVR
+                https://teenthais.com/: TeenThais
+                https://vrpornpass.com/: VR PornPass
+  performerScraper:
+    common:
+      $profileBE: //div[@class="model-profile"]
+      $profileTT: //div[@class="pure-u-1-4 pure-u-sm-1-2 pure-u-xs-1"]
+      $profilePP: //div[@class="pure-u-1-4 pure-u-sm-1-2 pure-u-xs-1-3"]
+    performer:
+      Name:
+        selector: $profileBE[contains(strong, "Name:")]//text() | //meta[@itemprop="title"]/@content | //div[@class="model-info"]//h1[@itemprop="name"]/text()
+        postProcess:
+          - replace:
+              - regex: .*Name:\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+      Aliases:
+        selector: $profileBE[contains(strong, "Alias name:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Alias name:\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+      Gender:
+      # These sites only have profiles for female performers, so using fixed: Female
+        fixed: Female
+      Birthdate:
+        selector: $profileBE[contains(strong, "Birth date:")]//text() | $profilePP[contains(strong, "Birth date:")]/following-sibling::*[1]/text()
+        postProcess:
+          - replace:
+              - regex: .*Birth date:\s*(.*)\s*$
+                with: $1
+          - parseDate: January 2, 2006
+          - parseDate: 2006-01-02
+      Country:
+        selector: $profileBE[contains(strong, "Country:")]//text() | $profileTT[contains(strong, "Ethnicity:")]/following-sibling::*[1]/text() | $profilePP[contains(strong, "Country:")]/following-sibling::*[1]/text() | //div[@class="video-info"]/meta[@content="Japanese idol"]/@content
+        postProcess:
+          - replace:
+              - regex: .*Country:\s*(.*)\s*$
+                with: $1
+              - regex: "None|Other Country"
+                with:
+              - regex: ^Thai$
+                with: Thailand
+              - regex: ^Japanese idol$
+                with: Japan
+      Ethnicity:
+        selector: $profileBE[contains(strong, "Ethnicity:")]//text() | $profilePP[contains(strong, "Ethnicity:")]/following-sibling::*[1]/text() | $profileTT[contains(strong, "Ethnicity:")]/following-sibling::*[1]/text() | //div[@class="video-info"]/meta[@content="Japanese idol"]/@content
+        postProcess:
+          - replace:
+              - regex: .*Ethnicity:\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+              - regex: ^Thai$
+                with: Asian
+              - regex: ^Japanese idol$
+                with: Asian
+      Weight:
+        selector: $profileBE[contains(strong, "Weight:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Weight:\s*(.*)\s*$
+                with: $1
+              - regex: (\d+)kg
+                with: $1
+              - regex: None
+                with:
+      Height:
+        selector: $profileBE[contains(strong, "Height:")]//text() | $profileTT[contains(strong, "Height:")]/following-sibling::*[1]/text()
+        postProcess:
+          - replace:
+              - regex: .*Height:\s*(.*)\s*$
+                with: $1
+              - regex: ^cm$
+                with:
+              - regex: (\d+)cm.*
+                with: $1
+              - regex: None
+                with:
+      HairColor:
+        selector: $profileBE[contains(strong, "Hair color:")]//text() | $profileTT[contains(strong, "Hair color:")]/following-sibling::*[1]/text()  | $profilePP[contains(strong, "Hair color:")]/following-sibling::*[1]/text()
+        postProcess:
+          - replace:
+              - regex: (?i).*hair color:?\s*(.*)\s*$
+                with: $1
+              - regex: None|N/A
+                with:
+      EyeColor:
+        selector: $profileBE[contains(strong, "Eye color:")]//text() | $profileTT[contains(strong, "Eye color:")]/following-sibling::*[1]/text() | $profilePP[contains(strong, "Eye Color:")]/following-sibling::*[1]/text()
+        postProcess:
+          - replace:
+              - regex: (?i).*eye color:?\s*(.*)\s*$
+                with: $1
+              - regex: None|N/A
+                with:
+      Piercings:
+        selector: $profileBE[contains(strong, "Piercings:")]//text() | $profilePP[contains(strong, "Piercings:")]/following-sibling::*[1]/text()
+        postProcess:
+          - replace:
+              - regex: .*Piercings:\s*(.*)\s*$
+                with: $1
+              - regex: "None|No Piercings|^No$"
+                with:
+      Tattoos:
+        selector: $profileBE[contains(strong, "Tattoo:")]//text() | $profilePP[contains(strong, "Tattoos:")]/following-sibling::*[1]/text()
+        postProcess:
+          - replace:
+              - regex: .*Tattoo:\s*(.*)\s*$
+                with: $1
+              - regex: "None$|^No$|(?i)^No tattoo$"
+                with:
+      Instagram:
+        selector: $profileBE[contains(strong, "Instagram:")]/a/@href
+      Twitter:
+        selector: $profileBE[contains(strong, "Twitter:")]/a/@href
+      Details:
+        selector: //p[@itemprop="description"]//text() | //p[span[@class="readmore"]]
+        postProcess:
+          - replace:
+              - regex: ... Read More
+                with:
+      URL: 
+        selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href | //div[@class="model-info"]/a/@href
+        postProcess:
+          - replace:
+            - regex: \s*(.*)\s*feed/$
+              with: $1
+      Image:
+        selector: //div[@class="model-photo"]/img[@class="rounded"]/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1-2"]//img/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1"]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: https://
+              - regex: 460x640
+                with: 690x960
+              - regex: 270x480
+                with: 405x720
+# Last Updated October 10, 2023

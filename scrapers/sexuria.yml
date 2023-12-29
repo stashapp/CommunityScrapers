@@ -1,0 +1,51 @@
+name: Sexuria
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sexuria.net
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://sexuria.net/f/j.x.name-released;p.title={}/sort=date/order=desc/"
+  scraper: searchScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //*[@id="dle-content"]/article/h1
+      Details:
+        selector: //h4[text()='Description']/following-sibling::div/text()
+        concat: " "
+      Date:
+        selector: //div[text()='Release Date:']/following-sibling::div/text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Image: //*[@id="dle-content"]/article/div[1]/div[1]/a/@href
+      Studio:
+        Name: //div[text()="Production:"]/following-sibling::div/a/text()
+      Movies:
+        Name: //*[@id="dle-content"]/article/h1
+        URL: //link[@rel="canonical"]/@href
+      Tags:
+        Name: //div[text()="Tags:"]/following-sibling::div/a/text()
+      Performers:
+        Name: //div[@class="stars-porn"]/a/text()
+      URL: //meta[@name='og:url']/@content
+  searchScraper:
+    common:
+      $result: //article[contains(@class, "short")]
+    scene:
+      Title: $result//h2
+      URL: ($result//a)[1]/@href
+      Details: $result//div[@class="author-cat"]
+      Date: $result//div[@class="date"]
+      Image:
+        selector: $result//img/@data-src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://sexuria.net
+# Last Updated December 25, 2023

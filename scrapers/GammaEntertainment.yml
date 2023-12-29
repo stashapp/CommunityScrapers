@@ -3,12 +3,10 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - 1000facials.com/en/scene/
-      - activeduty.com/en/video/
       - alettaoceanempire.com/en/video/
       - analacrobats.com/en/video/
       - ashleyfires.com/
       - bigfatcreampie.com/
-      - blowpass.com/en/video/
       - bskow.com/en/video/
       - bushybushy.com/
       - buttman.com/
@@ -18,13 +16,11 @@ sceneByURL:
       - devilsgangbangs.com/
       - devonlee.com/
       - dylanryder.com/
-      - falconstudios.com/en/video/
       - familycreep.com/
       - fistingcentral.com/
       - gapingangels.com/
       - girlsandstuds.com/
       - grannyghetto.com/
-      - hothouse.com/en/video/
       - immorallive.com/en/video/
       - jaysinxxx.com/
       - jonnidarkkoxxx.com/
@@ -36,34 +32,22 @@ sceneByURL:
       - mommyblowsbest.com/en/scene/
       - motherfuckerxxx.com/
       - myteenoasis.com/
-      - nextdoorbuddies.com/en/video/
-      - nextdoorcasting.com/
-      - nextdoorebony.com/
-      - nextdoorhookups.com/
-      - nextdoormale.com/
-      - nextdoorraw.com/en/video/
-      - nextdoorstudios.com/en/video/
-      - nextdoortaboo.com/en/video/
-      - nextdoortwink.com/en/video/
       - onlyteenblowjobs.com/en/scene/
       - openlife.com/
       - pantypops.com/
       - povblowjobs.com/
       - povthis.com/
-      - ragingstallion.com/en/scene/
       - silverstonedvd.com/
       - silviasaint.com/
       - squirtalicious.com/
       - squirtinglesbian.com/en/video/
       - squirtingorgies.com/en/scene/
-      - stagcollective.com/
       - strapattackers.com/
       - sunnyleone.com/
       - throated.com/en/video/
       - tittycreampies.com/
       - transsexualangel.com/en/video/
       - transsexualroadtrip.com/
-      - tsplayground.com/en/video/
       - whiteghetto.com/
     scraper: sceneScraper
 
@@ -157,7 +141,6 @@ xPathScrapers:
                 analacrobats: Anal Acrobats
                 ashleyfires: Ashley Fires
                 bigfatcreampie: Big Fat Cream Pie
-                blowpass: Blowpass
                 bskow: BsKow
                 bushybushy: Bushy Bushy
                 buttman: Buttman
@@ -170,13 +153,11 @@ xPathScrapers:
                 dylanryder: Dylan Ryder
                 eroticax: EroticaX
                 evilangel: Evil Angel
-                falconstudios: Falcon Studios
                 familycreep: Family Creep
                 fistingcentral: Fisting Central
                 gapingangels: Gaping Angels
                 girlsandstuds: Girls And Studs
                 grannyghetto: Granny Ghetto
-                hothouse: Hot House
                 immorallive: Immoral Live
                 jaysinxxx: Jay Sin XXX
                 jonnidarkkoxxx: Jonni Darkko XXX
@@ -189,35 +170,23 @@ xPathScrapers:
                 mommyblowsbest: Mommy Blows Best
                 motherfuckerxxx: Mother Fucker XXX
                 myteenoasis: My Teen Oasis
-                nextdoorbuddies: Next Door Buddies
-                nextdoorcasting: Next Door Casting
-                nextdoorebony: Next Door Ebony
-                nextdoorhookups: Next Door Hookups
-                nextdoormale: Next Door Male
-                nextdoorraw: Next Door Raw
-                nextdoorstudios: Next Door Studios
-                nextdoortaboo: Next Door Taboo
-                nextdoortwink: Next Door Twink
                 onlyteenblowjobs: Only Teen Blowjobs
                 openlife: Open Life
                 outofthefamily: Out Of The Family
                 pantypops: Panty Pops
                 povblowjobs: POV Blowjobs
                 povthis: POV This
-                ragingstallion: Raging Stallion
                 silverstonedvd: Silverstone DVD
                 silviasaint: Silvia Saint
                 squirtalicious: Squirtalicious
                 squirtinglesbian: Squirting Lesbian
                 squirtingorgies: Squirting Orgies
-                stagcollective: Stag Collective
                 strapattackers: Strap Attackers
                 sunnyleone: Sunny Leone
                 throated: Throated
                 tittycreampies: Titty Creampies
                 transsexualangel: Transsexual Angel
                 transsexualroadtrip: Transsexual Roadtrip
-                tsplayground: TS Playground
                 whiteghetto: White Ghetto
                 xempire: XEmpire
 
@@ -240,4 +209,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated December 29, 2022
+# Last Updated October 04, 2023

@@ -9,8 +9,7 @@ sceneByURL:
       - czechanalsex.com
       - czechbiporn.com
       - czechboobs.com
-      - czechdeviant.com
-      - czechescortgirls
+      - czechescortgirls.com
       - czechexecutor.com
       - czechgaycity.com
       - czechgypsies.com
@@ -43,20 +42,27 @@ xPathScrapers:
       Title:
         selector: //div[@class="heading-detail"]/h1
       Performers:
-        Name: //div[@class="video-info-item color_05-text" and contains(text(), "Actors:")]//a
+        Name: //div[contains(@class, "video-info-item") and contains(text(), "Actors:")]//a
       Details: //meta[@name="description"]/@content
       Tags:
-        Name: //div[@class="video-info-item color_05-text" and contains(text(), "Genres:")]//a
+        Name: //div[contains(@class, "video-info-item") and contains(text(), "Genres:")]//a
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //div[@id="video-poster"]/@data-poster
         postProcess:
           - replace:
-              - regex: "^/"
-                with: "https://www.porncz.com/"
+              - regex: ^
+                with: https://www.porncz.com
       Date:
         selector: //meta[@property="video:release_date"]/@content
         postProcess:
           - parseDate: 2.01.2006
+      URL: &url //link[@rel="canonical"]/@href
+      Code:
+        selector: *url
+        postProcess:
+          - replace:
+              - regex: .*/(\d*)$
+                with: $1
       Studio:
         Name:
           selector: //a[@class="video-detail-logo"]//@alt

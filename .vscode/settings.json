@@ -1,0 +1,6 @@
+{
+    "yaml.schemas": {
+        "validator/scraper.schema.json": "*.yml"
+    },
+    "python.analysis.typeCheckingMode": "basic"
+}
