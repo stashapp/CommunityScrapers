@@ -32,7 +32,7 @@ xPathScrapers:
       Performers: &performers
         Name: //p[@class="contributorName"]//a
       Details: &details
-        selector: //p[@class="description-truncated"]/text()|//span[@id="description-more"]/text()
+        selector: //span[@id="ellipsis"]/preceding-sibling::text()|//span[@id="description-more"]/text()
         concat: "|"
         postProcess:
           - replace:
