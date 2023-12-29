@@ -42,7 +42,7 @@ def save_json(api_json, url):
 
 
 USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
-DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Sayuncle")
+DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
 
 
 # Not necessary but why not ?
@@ -97,8 +97,8 @@ else:
     except:
         log.error("An error has occurred with the page request")
         log.error(f"Request status: `{r.status_code}`")
-        log.error("Check your sayuncleAPI.log for more details")
-        with open("teamskeetAPI.log", 'w', encoding='utf-8') as f:
+        log.error("Check your TeamskeetAPI.log for more details")
+        with open("TeamskeetAPI.log", 'w', encoding='utf-8') as f:
             f.write(f"Scene ID: {scene_id}\n")
             f.write(f"Request:\n{r.text}")
         sys.exit(1)
