@@ -50,6 +50,8 @@ LOCAL_PATH = r""
 SERVER_IP = "http://localhost:9999"
 # API key (Settings > Configuration > Authentication)
 STASH_API = ""
+
+# Automatically reattempt GraphQL queries to Vixen sites which fail with a 403 response 
 MAX_403_REATTEMPTS = 20
 
 SERVER_URL = SERVER_IP + "/graphql"
@@ -320,7 +322,6 @@ class Site:
                 elif response.status_code == 403:
                     log.error("GraphQL query recieved a 403 status response")
                     if reattempts < MAX_403_REATTEMPTS:
-                        reattempts = reattempts + 1
                         log.debug(f"403 Reattempt {reattempts}/{MAX_403_REATTEMPTS}")
                     else:
                         log.error(f"Reached max 403 errors for GraphQL query")
@@ -505,11 +506,23 @@ search_query = frag.get("name")
 url = frag.get("url")
 scene_id = frag.get("id")
 
+def check_alternate_urls(site):
+    for u in frag.get("urls", []):
+        if site.isValidURL(u):
+            return u
+    return None
+
 #sceneByURL
 if url:
     for x in studios:
+        proper_url = None
         if x.isValidURL(url):
-            s = x.getScene(url)
+            proper_url = url
+        else:
+            proper_url = check_alternate_urls(site=x)
+
+        if proper_url != None:
+            s = x.getScene(proper_url)
             # log.info(f"{json.dumps(s)}")
             process_chapters(scene_id=scene_id, api_json=s)
 
