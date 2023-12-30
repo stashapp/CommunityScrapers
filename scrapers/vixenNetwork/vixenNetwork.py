@@ -47,10 +47,10 @@ CHECK_SSL_CERT = True
 # Local folder with JSON inside (Only used if scene isn't found from the API)
 LOCAL_PATH = r""
 
-
 SERVER_IP = "http://localhost:9999"
 # API key (Settings > Configuration > Authentication)
 STASH_API = ""
+MAX_403_REATTEMPTS = 20
 
 SERVER_URL = SERVER_IP + "/graphql"
 
@@ -305,24 +305,33 @@ class Site:
         if not query:
             return None
 
-        try:
-            response = requests.post(self.api, json=query, headers=headers)
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("error"):
-                    for error in result["error"]["errors"]:
-                        raise Exception(f"GraphQL error: {error}")
-                return result
-            elif response.status_code == 403:
-                log.error("GraphQL query recieved a 403 status response")
-                return {}
-            else:
-                raise ConnectionError(
-                    f"GraphQL query failed:{response.status_code} - {response.content}"
-                )
-        except Exception as err:
-            log.error(f"GraphqQL query failed {err}")
-            return None
+        reattempts = 0
+        while True:
+            try:
+                response = requests.post(self.api, json=query, headers=headers)
+                if response.status_code == 200:
+                    result = response.json()
+                    if result.get("error"):
+                        for error in result["error"]["errors"]:
+                            raise Exception(f"GraphQL error: {error}")
+                    if reattempts > 0:
+                        log.debug(f"Successful query after attempt #{reattempts}")
+                    return result
+                elif response.status_code == 403:
+                    log.error("GraphQL query recieved a 403 status response")
+                    if reattempts < MAX_403_REATTEMPTS:
+                        reattempts = reattempts + 1
+                        log.debug(f"403 Reattempt {reattempts}/{MAX_403_REATTEMPTS}")
+                    else:
+                        log.error(f"Reached max 403 errors for GraphQL query")
+                        return {}
+                else:
+                    raise ConnectionError(
+                        f"GraphQL query failed:{response.status_code} - {response.content}"
+                    )
+            except Exception as err:
+                log.error(f"GraphqQL query failed {err}")
+                return None
 
     def parse_scene(self, response):
         scene = {}
