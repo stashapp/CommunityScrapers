@@ -41,6 +41,7 @@ if proxy != "" and proxy.startswith("socks5://"):
     os.environ['HTTP_PROXY'] = proxy
 
 URL_XPATH = '//meta[@property="og:video:url"]/@content'
+URL_XPATH_2 = '//meta[@property="og:video:secure_url"]/@content'
 IMAGE_XPATH = '//meta[@property="og:image"]/@content'
 
 def getHTML(url, retries=0):
@@ -84,7 +85,10 @@ def getData(sceneId):
     return req.json()
 
 def getURL(pageTree):
-    return getXPATH(pageTree, URL_XPATH)
+    url = getXPATH(pageTree, URL_XPATH)
+    if not url:
+        return getXPATH(pageTree, URL_XPATH_2)
+    return url
 
 def getIMG(data):
     for item in data['thumbnails']:
