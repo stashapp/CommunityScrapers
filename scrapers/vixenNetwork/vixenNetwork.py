@@ -300,7 +300,7 @@ class Site:
             "Accept": "application/json",
             "Referer": referer,
             "DNT": "1",
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
         }
         if not query:
             return None
@@ -313,6 +313,9 @@ class Site:
                     for error in result["error"]["errors"]:
                         raise Exception(f"GraphQL error: {error}")
                 return result
+            elif response.status_code == 403:
+                log.error("GraphQL query recieved a 403 status response")
+                return {}
             else:
                 raise ConnectionError(
                     f"GraphQL query failed:{response.status_code} - {response.content}"
@@ -500,6 +503,11 @@ if url:
             s = x.getScene(url)
             # log.info(f"{json.dumps(s)}")
             process_chapters(scene_id=scene_id, api_json=s)
+
+            # drop unwanted keys from json result
+            s.pop('runLength', None)
+            s.pop('markers', None)
+
             print(json.dumps(s))
             sys.exit(0)
     log.error(f"URL: {url} is not supported")
