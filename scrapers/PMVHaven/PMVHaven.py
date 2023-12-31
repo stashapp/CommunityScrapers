@@ -2,22 +2,11 @@ import os
 import json
 import sys
 import requests
-import random
-import time
-from urllib.parse import urlparse
-# extra modules below need to be installed
-try:
-    import cloudscraper
-except ModuleNotFoundError:
-    print("You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper", file=sys.stderr)
-    sys.exit()
 
 try:
-    from lxml import html
+    from py_common import log
 except ModuleNotFoundError:
-    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml", file=sys.stderr)
+    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
     sys.exit()
 
 # to import from a parent directory we need to add that directory to the system path
@@ -27,12 +16,6 @@ sys.path.append(
     parent
 )  # add parent dir to sys path so that we can import py_common from there
 
-try:
-    from py_common import log
-except ModuleNotFoundError:
-    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
-    sys.exit()
-
 #bugfix for socks5 proxies, due to pySocks implementation incompatibility with Stash
 proxy = os.environ.get('HTTPS_PROXY', '')
 if proxy != "" and proxy.startswith("socks5://"):
@@ -40,37 +23,9 @@ if proxy != "" and proxy.startswith("socks5://"):
     os.environ['HTTPS_PROXY'] = proxy
     os.environ['HTTP_PROXY'] = proxy
 
-URL_XPATH = '//meta[@property="og:video:url"]/@content'
-URL_XPATH_2 = '//meta[@property="og:video:secure_url"]/@content'
-IMAGE_XPATH = '//meta[@property="og:image"]/@content'
-
-def getHTML(url, retries=0):
-    scraper = cloudscraper.create_scraper()
-    
-    try:
-        scraped = scraper.get(url)
-    except requests.exceptions.Timeout as exc_time:
-        log.debug(f"Timeout: {exc_time}")
-        return getHTML(url, retries + 1)
-    except Exception as e:
-        log.error(f"scrape error {e}")
-        sys.exit(1)
-    if scraped.status_code >= 400:
-        if retries < 10:
-            wait_time = random.randint(1, 4)
-            log.debug(f"HTTP Error: {scraped.status_code}, waiting {wait_time} seconds")
-            time.sleep(wait_time)
-            return getHTML(url, retries + 1)
-        log.error(f"HTTP Error: {scraped.status_code}, giving up")
-        sys.exit(1)
-
-    return html.fromstring(scraped.text)
-
-def getXPATH(pageTree, XPATH):
-    res = pageTree.xpath(XPATH)
-    if res:
-        return res[0]
-    return ""
+def fail(message):
+    log.error(message)
+    sys.exit(1)
 
 def getData(sceneId):
     try:
@@ -80,40 +35,51 @@ def getData(sceneId):
             "view": True
         })
     except Exception as e:
-        log.error(f"scrape error {e}")
-        sys.exit(1)
+        fail(f"Error fetching data from PMVHaven API: {e}")
     return req.json()
 
-def getURL(pageTree):
-    url = getXPATH(pageTree, URL_XPATH)
-    if not url:
-        return getXPATH(pageTree, URL_XPATH_2)
-    return url
-
-def getIMG(data):
-    for item in data['thumbnails']:
+def getIMG(video):
+    for item in video['thumbnails']:
         if item.startswith("https://storage.pmvhaven.com/"):
             return item
     return ""
 
+'''    
+    This assumes a URL of https://pmvhaven.com/video/{title}_{alphanumericVideoId}
+    As of 2023-12-31, this is the only valid video URL format. If this changes in
+    the future (i.e. more than one valid URL type, or ID not present in URL) and
+    requires falling back to the old cloudscraper method, an xpath of 
+        //meta[@property="video-id"]/@content 
+    can be used to pass into the PMVHaven API
+'''
+
 def main():
     params = json.loads(sys.stdin.read())
-    if not params['url']:
-        log.error('No URL entered.')
-        sys.exit(1)
-    
-    tree = getHTML(params['url'])
-    data = getData(getURL(tree).split('_')[-1])['video'][0]
 
-    tags = data['tags'] + data['categories']
+    if not params['url']:
+        fail('No URL entered.')
+
+    sceneId = params['url'].split('_')[-1]
+
+    if not sceneId or not sceneId.isalnum():
+        fail(f"Did not find scene ID from PMVStash video URL {params['url']}")
+
+    data = getData(sceneId)
+
+    if not 'video' in data or len(data['video']) < 1:
+        fail(f"Video data not found in data: {data}")
+
+    video = getData(sceneId)['video'][0]
+
+    tags = video['tags'] + video['categories']
 
     ret = {
-        'title': data['title'],
-        'image': getIMG(data),
-        'date': data['isoDate'].split('T')[0],
-        'details': data['description'],
+        'title': video['title'],
+        'image': getIMG(video),
+        'date': video['isoDate'].split('T')[0],
+        'details': video['description'],
         'studio': {
-            'Name': data['creator']
+            'Name': video['creator']
         },
         'tags':[
             {
@@ -123,7 +89,7 @@ def main():
         'performers': [
             {
                 'name': x.strip()
-            } for x in data['stars']
+            } for x in video['stars']
         ]
     }
     print(json.dumps(ret))
