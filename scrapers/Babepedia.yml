@@ -73,7 +73,7 @@ xPathScrapers:
               Caucasian: white
               Black: black
               Latin: hispanic
-      Country: $label[text()='Birthplace']]/a/text()
+      Country: $label[text()='Birthplace']]/a[contains(@href,'topbabespercountry')]/text()
       EyeColor:
         selector: $label[text()='Eye color:']]
         postProcess:
