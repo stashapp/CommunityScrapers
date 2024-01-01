@@ -181,7 +181,7 @@ def graphql_getScene(scene_id):
     query = """
     query FindScene($id: ID!, $checksum: String) {
         findScene(id: $id, checksum: $checksum) {
-            file {
+            files {
                 duration
             }
             scene_markers {
@@ -196,7 +196,7 @@ def graphql_getScene(scene_id):
     result = callGraphQL(query, variables)
     if result:
         return_dict = {}
-        return_dict["duration"] = result["findScene"]["file"]["duration"]
+        return_dict["duration"] = result["findScene"]["files"][0]["duration"]
         if result["findScene"].get("scene_markers"):
             return_dict["marker"] = [x.get("seconds") for x in result["findScene"]["scene_markers"]]
         else:
