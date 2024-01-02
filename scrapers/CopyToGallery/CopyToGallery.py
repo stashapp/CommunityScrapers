@@ -119,6 +119,7 @@ if scene:
         gallery_input = {'id': gallery_id,
                          'urls': scene['urls'],
                          'title': scene['title'],
+                         'code': scene['code'],
                          'date': scene["date"],
                          'details': scene['details'],
                          'studio_id': studio,

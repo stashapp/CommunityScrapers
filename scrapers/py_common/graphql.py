@@ -265,6 +265,7 @@ def getScene(scene_id: str | int) -> dict | None:
     fragment SceneData on Scene {
         id
         title
+        code
         details
         urls
         date
@@ -1044,6 +1045,7 @@ def getGallery(gallery_id: str | int) -> dict | None:
     fragment SlimSceneData on Scene {
         id
         title
+        code
         details
         urls
         date
