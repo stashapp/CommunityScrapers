@@ -35,7 +35,8 @@ def getData(sceneId):
     return req.json()
 
 def getIMG(video):
-    for item in video['thumbnails']:
+    # reversed as we want most recent thumb
+    for item in reversed(video['thumbnails']):
         if item.startswith("https://storage.pmvhaven.com/"):
             return item
     return ""
