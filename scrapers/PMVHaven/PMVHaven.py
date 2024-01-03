@@ -11,14 +11,6 @@ except ModuleNotFoundError:
         file=sys.stderr)
     sys.exit(1)
 
-try:
-    from lxml import html
-except ModuleNotFoundError:
-    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml",
-          file=sys.stderr)
-    sys.exit(1)
-
 def fail(message):
     log.error(message)
     sys.exit(1)
@@ -31,11 +23,11 @@ def getData(sceneId):
             "view": True
         })
     except Exception as e:
-        sys.exit(f"Error fetching data from PMVHaven API: {e}")
+        fail(f"Error fetching data from PMVHaven API: {e}")
     return req.json()
 
 def getIMG(video):
-    # reversed as we want most recent thumb
+    # reversed because we want the most recent thumb
     for item in reversed(video['thumbnails']):
         if item.startswith("https://storage.pmvhaven.com/"):
             return item
