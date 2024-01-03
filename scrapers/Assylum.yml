@@ -25,7 +25,7 @@ xPathScrapers:
         selector: //div[@class='mainpic']/comment()
         postProcess:
           - replace:
-              - regex: <!--.*?&lt;img src=&#34;([^&]+)&#34;.*?--\>
+              - regex: .*src=\"([^\"]+).*
                 with: https://www.assylum.com/$1
 
       Tags:
