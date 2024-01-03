@@ -32,26 +32,29 @@ xPathScrapers:
           - replace:
               - regex: featuring.+
                 with: ""
-      Code:
-        selector: //h1
+#      Code:
+#        selector: //h1
+#        postProcess:
+#          - replace:
+#              - regex: .*(GP\d+).*
+#                with: $1
+      Date:
+        selector: //strong/following-sibling::span
         postProcess:
-          - replace:
-              - regex: .*(GP\d+).*
-                with: $1
-      Date: //i[contains(@class,"calendar3")]/text()
-      Details:
-        selector: //meta[@name="description"]/@content
-        postProcess:
-          - replace:
-              - regex: '\x{0092}' # unicode char 0092 (looks like ')
-                with: "'"
+          - parseDate: 2006, January 02
+      Details: //span[text()="Description:"]/..
       Tags:
-        Name: //div[@class="watch"]//a[contains(@href,"genre")]/text()
+        Name: //span[text()="Tags:"]/../a/text()
       Performers:
-        Name: //div[@class="watch"]//a[contains(@href,"model")]/text()
+        Name: //a[contains(@href, '/model/')]
       Studio:
         Name:
           fixed: Porn World
-      Image: //video/@data-poster
-      URL: //div[@class="pagination"]/a[1]/@href
-# Last Updated March 03, 2023
+      Image: //video/@poster
+      URL:
+        selector: //head/link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: (.*)
+                with: https://tour10.pornworld.com$1
+# Last Updated January 03, 2024
