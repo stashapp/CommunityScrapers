@@ -26,13 +26,11 @@ if proxy != "" and proxy.startswith("socks5://"):
 
 def getData(sceneId):
     try:
-        log.debug(sceneId)
         req = requests.post("https://pmvhaven.com/api/v2/videoInput", json={
             "video": sceneId,
             "mode": "InitVideo",
             "view": True
         })
-        log.debug(req.json())
     except Exception as e:
         log.error(f"scrape error {e}")
         sys.exit(1)
