@@ -26,7 +26,9 @@ xPathScrapers:
           - parseDate: 01/02/2006
       Tags:
         Name: //a[@itemprop="genre"]/text()
-      URL: //link[@itemprop="url"]/@href
+      URL: //link[@itemprop="url"]/@href # gets the hobby.porn url
+      # Possible update once XPath scraper handles multiple urls
+      # //div[@class="player"]//a/@href gets the pornhub url
       Image: //span[@itemprop="thumbnail"]/link/@href
   sceneSearch:
     common:
