@@ -15,12 +15,11 @@ sceneByName:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="title-block"]/h1/text()
+      Title: //div[@class="title-block"]/h1
       Performers:
-        Name: //span[@itemprop="author"]/a/text()
+        Name: //span[@itemprop="author" or @itemprop="actor"]/a
       Studio:
-        Name:
-          fixed: Pornhub
+        Name: //span[@itemprop="author"]/a
       Date:
         selector: //div[@class="video-data"]/span/text()[contains(.,'/')]
         postProcess:
@@ -33,7 +32,7 @@ xPathScrapers:
     common:
       $scenecard: //div[contains(@class,"item item-video")]
     scene:
-      Title: $scenecard//div[@class="item-title"]/text()
+      Title: $scenecard//div[@class="item-title"]
       URL: $scenecard//a/@href
       Image: $scenecard//img/@src
 # Last Updated January 05, 2024
