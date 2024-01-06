@@ -5,12 +5,12 @@ name: Pornworld
 sceneByURL:
   - action: scrapeXPath
     url:
-      - www.pornworld.com/watch/
-    scraper: sceneScraper
+      - tour10.pornworld.com/watch/
+    scraper: tour10SceneScraper
   - action: scrapeXPath
     url:
-      - tour10.pornworld.com
-    scraper: tour10SceneScraper
+      - pornworld.com/watch/
+    scraper: sceneScraper
 
 sceneByFragment:
   action: scrapeJson
@@ -30,14 +30,14 @@ jsonScrapers:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h1
+      Title: &title
+        selector: //h1/text()
         postProcess:
           - replace:
               - regex: featuring.+
                 with: ""
       Code:
-        selector: //h1
+        selector: //h1/text()
         postProcess:
           - replace:
               - regex: .*(GP\d+).*
@@ -49,14 +49,18 @@ xPathScrapers:
           - replace:
               - regex: '\x{0092}' # unicode char 0092 (looks like ')
                 with: "'"
+      Tags:
+        Name: //div[@class="watch"]//a[contains(@href,"genre")]/text()
+      Performers:
+        Name: //div[@class="watch"]//a[contains(@href,"model")]/text()
+      Studio:
+        Name:
+          fixed: Porn World
+      Image: //video/@data-poster
+      URL: //div[@class="pagination"]/a[1]/@href
   tour10SceneScraper:
     scene:
-      Title:
-        selector: //h1
-        postProcess:
-          - replace:
-              - regex: featuring.+
-                with: ""
+      Title: *title
       Date:
         selector: //strong/following-sibling::span
         postProcess:
