@@ -41,5 +41,10 @@ xPathScrapers:
       Performers: *perfAttr
       Details: *detailsSel
       Tags: *tagsAttr
-      Image: //div[@class="player-thumb"]/img/@src0_1x
-# Last Updated March 03, 2022
+      Image:
+        selector: //div[@class="player-thumb"]/img/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://cherrypimps.com
+# Last Updated January 06, 2024
