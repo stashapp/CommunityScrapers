@@ -44,10 +44,10 @@ xPathScrapers:
         Name: //li[@class="tag-models"]//a/text()
       Movies:
         Name:
-          selector: //a[@data-track="FULL MOVIE"]/@href
+          selector: //strong[contains(.,'Full Movie')]/../@href
           postProcess:
             - subScraper: //div[@class="dvds-wrapper"]/h1/text()
-        URL: //a[@data-track="FULL MOVIE"]/@href
+        URL: //strong[contains(.,'Full Movie')]/../@href
       Studio:
         Name:
           selector: //div[@class="title-zone"]//li/a/span[@class="title-site"]/text()|/html/@lang
@@ -138,4 +138,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated October 21, 2023
+# Last Updated January 06, 2024
