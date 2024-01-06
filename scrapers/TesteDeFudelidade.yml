@@ -36,7 +36,8 @@ xPathScrapers:
       Movies:
         Name: $movie/@title
         FrontImage: $movie/@src
-        Studio: Teste de Fudelidade
+        Studio: 
+          Name: Teste de Fudelidade
       Tags:
         Name:
           selector: //*[text()='Categorias:']/following-sibling::p/a/text()
