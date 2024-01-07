@@ -82,7 +82,7 @@ xPathScrapers:
           selector: //div[contains(text(), "Download trailer")]/a[1]/@href
           postProcess:
             - replace:
-                - regex: .*\.com/(.+?)\/(videos|scenes).*
+                - regex: .*\.com/(.+?)\/(video|scene).*
                   with: $1
             - map:
                 18eighteen: 18 Eighteen
