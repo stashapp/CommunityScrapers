@@ -32,7 +32,7 @@ jsonScrapers:
         selector: data.scene.description
         postProcess:
           - replace:
-              - regex: (.*?)[A-Z,'\s]+\.?$
+              - regex: (.*?)[A-Z,/'\s]+\.?$
                 with: $1
       Date: data.live_date
       Image:

@@ -16,11 +16,7 @@ except ModuleNotFoundError:
 
 
 def debugPrint(t):
-    #sys.stderr.write(t + "\n");
-
-def call_graphql(query, variables=None):
-    return graphql.callGraphQL(query, variables)
-
+    log.debug(t + "\n");
 
 def scrape_scene(url):
     query = """
@@ -75,7 +71,7 @@ query scrapeSceneURL($url: String!) {
 }"""
 
     variables = {"url": url}
-    result = call_graphql(query, variables)
+    result = graphql.callGraphQL(query, variables)
     log.debug(f"result {result}")
     res = result["scrapeSceneURL"]
     res["url"] = url
@@ -99,7 +95,7 @@ if m := re.match(r"(\d+)_[a-z]+_[a-z]+_\d+_([A-Z]+).*", title):
         apiUrl = "https://assumethepositionstudios.com/api/site/13/updates/0"
         sceneUrlFragment = "https://assumethepositionstudios.com/trailer?updateId="
     else:
-        print("{ Unknown site code }" + siteCode)
+        debugPrint("Unknown site code " + siteCode)
         sys.exit();
 
     debugPrint("Searching for " + str(contentId) + " on " + apiUrl)
