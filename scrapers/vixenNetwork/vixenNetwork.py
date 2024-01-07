@@ -97,12 +97,13 @@ def graphql_findTagbyName(name):
         }
     """
     result = callGraphQL(query)
+    normalized_name = name.lower().strip()
     for tag in result["allTags"]:
-        if tag["name"] == name:
+        if tag["name"].lower() == normalized_name:
             return tag["id"]
         if tag.get("aliases"):
             for alias in tag["aliases"]:
-                if alias == name:
+                if alias.lower() == normalized_name:
                     return tag["id"]
     return None
 
