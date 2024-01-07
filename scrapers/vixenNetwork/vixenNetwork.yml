@@ -26,10 +26,16 @@ sceneByName:
       - python
       - vixenNetwork.py
       - search
+
 sceneByQueryFragment:
     action: script
     script:
       - python
       - vixenNetwork.py
 
-# Last Updated August 05, 2023
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - vixenNetwork.py
+# Last Updated December 30, 2023
