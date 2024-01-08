@@ -240,7 +240,8 @@ xPathScrapers:
                 digitalplayground: "Digital Playground"
                 transsensual: TransSensual
                 kinkyspa: Kinky Spa
-
+                SweetSinner: Sweet Sinner
+                sweetsinner: Sweet Sinner                
       FrontImage: $section//picture/img[@alt]/@src
 
   performerScraper:
