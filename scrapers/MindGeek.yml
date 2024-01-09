@@ -240,7 +240,8 @@ xPathScrapers:
                 digitalplayground: "Digital Playground"
                 transsensual: TransSensual
                 kinkyspa: Kinky Spa
-
+                SweetSinner: Sweet Sinner
+                sweetsinner: Sweet Sinner                
       FrontImage: $section//picture/img[@alt]/@src
 
   performerScraper:
@@ -379,4 +380,4 @@ xPathScrapers:
       Performers: *performers
       Tags: *tags
       Studio: *studio
-# Last Updated December 27, 2023
+# Last Updated January 08, 2024
