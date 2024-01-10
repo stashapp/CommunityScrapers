@@ -58,6 +58,7 @@ movieByURL:
       - sweetheartvideo.com/movie/
       - sweetsinner.com/movie/
       - transsensual.com/movie/
+      - familysinners.com/series/
     scraper: movieScraper
 
 performerByURL:
@@ -241,7 +242,8 @@ xPathScrapers:
                 transsensual: TransSensual
                 kinkyspa: Kinky Spa
                 SweetSinner: Sweet Sinner
-                sweetsinner: Sweet Sinner                
+                sweetsinner: Sweet Sinner   
+                familysinners: Family Sinners             
       FrontImage: $section//picture/img[@alt]/@src
 
   performerScraper:
@@ -380,4 +382,4 @@ xPathScrapers:
       Performers: *performers
       Tags: *tags
       Studio: *studio
-# Last Updated January 08, 2024
+# Last Updated January 10, 2024
