@@ -11,26 +11,17 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $image: //img[contains(@class, "update_thumb") or contains(@class, "trailer-thumb")]
     scene:
       Title:
-        selector: //div[@class="videoDetails clear"]/h3
+        selector: //div[contains(@class, "videoDetails")]/h3
       Date:
-        selector: //div[@class='videoInfo clear']/p[contains(span,"Date Added:")]/text()
+        selector: //div[contains(@class, "videoInfo")]/p[contains(span, "Date Added:")]/text()
         postProcess:
-          - parseDate: 2006-01-02
-      Performers:
-        Name:
-          selector: //li[@class="update_models"]//a
-          postProcess: &stripEmojis
-            - replace:
-                - regex: "[^\x00-\x7F]"
-                  with:
-      Details: //meta[@property="og:description"]/@content
-      Image: //meta[@property="og:image"]/@content
-      Tags:
-        Name:
-          selector: //li[@class="label" and contains(text(), "Tags:")]/following-sibling::text()
-          postProcess: *stripEmojis
+          # Only HookupHotshot still uses this format but the others use YYYY-MM-DD
+          # so they'll fall through and still be correct wrt. expected Stash date format
+          - parseDate: January 02, 2006
       Studio:
         Name:
           selector: //head/base/@href
@@ -45,4 +36,27 @@ xPathScrapers:
                 seehimfuck: See Him Fuck
                 seehimsolo: See Him Solo
                 povpornstars: POV Pornstars
-# Last Updated August 25, 2023
+      Performers:
+        Name: //li[contains(@class, "update_models")]//a
+      Tags:
+        Name: //div[contains(@class, "featuring")]//a[contains(@href, "categories")]
+      Details:
+        selector: //div[contains(@class, "videoDetails")]/p
+        postProcess:
+          - replace:
+              # Where the <br> elements used to be
+              - regex: ([!.?])([^!.?\s])
+                with: "$1\n\n$2"
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: 1x
+                with: 4x
+        # Some people prefer the higher res scene preview images
+        # selector: >-
+        #   $image/@src0_4x |
+        #   $image/@src0_3x |
+        #   $image/@src0_2x |
+        #   $image/@src0_1x
+# Last Updated January 10, 2024
