@@ -13,7 +13,7 @@ xPathScrapers:
       Date:
         selector: $detail//div[@class="video-detail__description--container"]/div[contains(@style, "padding-top")]/text()
         postProcess:
-          - parseDate: Jan 02
+          - parseDate: Jan 02, 2006
       Details:
         selector: $detail/div[@class="container"]/p/text()
         concat: " "
@@ -30,4 +30,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: "SexBabesVR"
-# Last Updated July 21, 2023
+# Last Updated January 10, 2024
