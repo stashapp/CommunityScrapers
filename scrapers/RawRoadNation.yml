@@ -1,0 +1,28 @@
+name: Raw Road Nation
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - rawroadnation.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="panel-heading"]/h3
+      Performers:
+        Name: //a[@class="model_name_title"]
+      Tags:
+        Name: //div[@class="col-12 text-center px-4 py-2"]/a[contains(@href,"en/videos/")]
+      Details: //div[@class="video-seo-description"]/p
+      Image: //video[@id="videoProtectedPlayer"]/@poster
+      Date:
+        selector: //h4[contains(text(), "Release Date")]/text()
+        postProcess:
+          - replace:
+              - regex: "Release Date: (.+)"
+                with: $1
+          - parseDate: 2006-01-02
+      Studio:
+        Name:
+          fixed: Raw Road Nation
+# Last Updated November 05, 2023

@@ -1,0 +1,20 @@
+name: AnimeCharactersDatabase
+# requires: py_common
+
+performerByURL:
+- action: script
+  url:
+    - animecharactersdatabase.com/characters.php
+  script:
+    - python
+    - AnimeCharactersDatabase.py
+    - performerByURL
+
+performerByName:
+  action: script
+  script:
+    - python
+    - AnimeCharactersDatabase.py
+    - performerByName
+
+# Last Updated January 23, 2022

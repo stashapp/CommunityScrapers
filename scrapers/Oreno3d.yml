@@ -1,0 +1,56 @@
+name: "Oreno3d"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - oreno3d.com
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://oreno3d.com/search?keyword={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[@class="g-main-grid"]/article/a
+    scene:
+      Title: $searchItem/h2/text()
+      URL: $searchItem/@href
+      Image:
+        selector: $searchItem/figure/img/@src
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https://oreno3d.com"
+      Studio:
+        Name: $searchItem/div[@class="box-text1"]/div/text()
+  sceneScraper:
+    common:
+      $article: //article[@class="g-main-video-article"]
+      $aTag: //article[@class="g-main-video-article"]/section[@class="video-section-tag"]//a[contains(@class,"tag-btn")]
+    scene:
+      URL: //link[rel='canonical']/@href|//meta[@property='og:url']/@content
+      Title: $article//h1[@class="video-h1"]/text()
+      Details:
+        selector: $article//blockquote[@class="video-information-comment"]/text()
+        concat: "\n"
+      Image:
+        selector: $article//img[@class="video-img"]/@src
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https://oreno3d.com"
+      Tags:
+        Name: $aTag/div/text()
+      Studio:
+        Name: $aTag[contains(@href,"/authors/")]/div/text()
+        URL: $aTag[contains(@href,"/authors/")]/@href
+      Performers:
+        Name: $aTag[contains(@href,"/characters/")]/div/text()
+        URL: $aTag[contains(@href,"/characters/")]/@href
+# Last Updated November 25, 2022

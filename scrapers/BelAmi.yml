@@ -26,5 +26,13 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .*?Screen-([1-9].*)
-                with: https://freecdn.belamionline.com/Data/Contents/Content_$1/Thumbnail8.jpg
-# Last Updated July 06, 2022
+                with: https://freecdn.belamionline.com/Data/Contents/Content_$1/Thumbnail6.jpg
+      Tags:
+        Name: //*[@id="ContentPlaceHolder1_LabelTags"]/a
+      Code:
+        selector: //form[@method="post"]/@action
+        postProcess:
+          - replace:
+              - regex: ^.*\=\s*
+                with:
+# Last Updated January 29, 2023

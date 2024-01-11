@@ -1,0 +1,12 @@
+name: "ComicInfo XML"
+# requires: py_common
+
+galleryByFragment:
+  action: script
+  script:
+    - python3
+    - ComicInfoXML.py
+    - query
+    - gallery
+
+# Last Updated December 26, 2021

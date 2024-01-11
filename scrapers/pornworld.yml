@@ -1,31 +1,47 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: Pornworld
+
 sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tour10.pornworld.com/watch/
+    scraper: tour10SceneScraper
   - action: scrapeXPath
     url:
       - pornworld.com/watch/
     scraper: sceneScraper
+
 sceneByFragment:
   action: scrapeJson
   queryURL: https://pornworld.com/autocomplete?query={filename}
   queryURLReplace:
     filename:
-      - regex: .+(GP\d+).*
+      - regex: .*(GP\d+).*
         with: $1
   scraper: sceneQueryScraper
+
 jsonScrapers:
   sceneQueryScraper:
     scene:
       Title: terms.Scene.0.name
       URL: terms.Scene.0.url
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: 
-        selector: //h1
+      Title: &title
+        selector: //h1/text()
         postProcess:
           - replace:
-            - regex: featuring.+
-              with: ""
+              - regex: featuring.+
+                with: ""
+      Code:
+        selector: //h1/text()
+        postProcess:
+          - replace:
+              - regex: .*(GP\d+).*
+                with: $1
       Date: //i[contains(@class,"calendar3")]/text()
       Details:
         selector: //meta[@name="description"]/@content
@@ -41,5 +57,27 @@ xPathScrapers:
         Name:
           fixed: Porn World
       Image: //video/@data-poster
-
-# Last Updated August 10, 2021
+      URL: //div[@class="pagination"]/a[1]/@href
+  tour10SceneScraper:
+    scene:
+      Title: *title
+      Date:
+        selector: //strong/following-sibling::span
+        postProcess:
+          - parseDate: 2006, January 2
+      Details: //span[text()="Description:"]/..
+      Tags:
+        Name: //span[text()="Tags:"]/../a/text()
+      Performers:
+        Name: //a[contains(@href, '/model/')]
+      Studio:
+        Name:
+          fixed: Porn World
+      Image: //video/@poster
+      URL:
+        selector: //head/link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: (.*)
+                with: https://tour10.pornworld.com$1
+# Last Updated January 04, 2024

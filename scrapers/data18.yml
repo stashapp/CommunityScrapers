@@ -1,4 +1,15 @@
 name: data18
+driver:
+  cookies:
+  - CookieURL: "https://data18.com"
+    Cookies:
+      - Name: "data_user_captcha"
+        Domain: ".data18.com"
+        Value: "1"
+        Path: "/"
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
 movieByURL:
   - action: scrapeXPath
     url:
@@ -49,7 +60,12 @@ xPathScrapers:
       $movieInfo: //div[@id="body2div_b"]
       $studio: //b[text()='Studio']/following-sibling::b/a
     movie:
-      Name: //div[@id="topmedia"]//a/text()
+      Name:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: (.+?)(?:\s\(\d{4}\)\sPorn\sMovie\s\|\sDATA18)
+                with: $1
       Duration:
         selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::span|$movieInfo//b[contains(text(),"Length")]/following-sibling::text()
         postProcess:
@@ -76,6 +92,6 @@ xPathScrapers:
           - replace:
               - regex: '^Description\s*-\s*'
                 with:
-      FrontImage: //a[@id='enlargecover']/@href
+      FrontImage: //a[@id='enlargecover']/@data-featherlight
       BackImage: //a[text()='+Back']/@href
-# Last Updated June 30, 2022
+# Last Updated July 18, 2023

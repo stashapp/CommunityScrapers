@@ -1,0 +1,129 @@
+name: Anime-DB
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://adultanime.dbsearch.net/black_curtain_redirect.php?url=%2F%2Fadultanime.dbsearch.net%2Fsearch%2F%3Fkeyword%3D{}&check=true"
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "https://adultanime.dbsearch.net/black_curtain_redirect.php?url={url}&check=true"
+  queryURLReplace:
+    url:
+      - regex: "https:"
+        with:
+      - regex: \/
+        with: "%2F"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - adultanime.dbsearch.net
+    queryURL: "https://adultanime.dbsearch.net/black_curtain_redirect.php?url={url}&check=true"
+    queryURLReplace:
+      url:
+        - regex: "https:"
+          with:
+        - regex: \/
+          with: "%2F"
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //div[@class="item-info"]/h4/a/text()
+      URL:
+        selector: //div[@class="item-info"]/h4/a/@href
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https:"
+      Image:
+        selector: //section[@class="item-box"]/div[@class="item-img"]/a/img/@data-src
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https:"
+              - regex: "/basic/"
+                with: "/small/"
+              - regex: '\.jpg'
+                with: "_s.jpg"
+      Date:
+        selector: //div[@class="item-info"]/p[@class="ndate"]/span/text()
+        postProcess:
+          - replace: # 2006年1月2日
+              - regex: "\u5E74|\u6708"
+                with: "-"
+              - regex: "\u65E5"
+                with:
+              - regex: -(\d)-
+                with: -0$1-
+              - regex: -(\d)$
+                with: -0$1
+      Studio:
+        Name: //div[@class="item-info"]/p[@class="maker"]/a/text()
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      URL: //meta[@property="og:url"]/@content
+      Details:
+        selector: //section[@class="iteminfo-box"]/blockquote/p[@class="pq"]//text()
+        concat: "\n\n"
+      Code: //dt[text()="規格品番"]/following-sibling::dd[1]/p/text()
+      Image: //section[@id="sample-image"]/img/@data-src
+      Tags:
+        Name:
+          selector: //nav[@id="tag-list"]/ul/li/a/text()
+          postProcess:
+            - map: # remove all 作品形式 (format) tags
+                DVD: ""
+                オリジナルアニメ作品: ""
+                PCゲーム原作アニメ: ""
+                コミック原作アニメ: ""
+                ライトノベル・ノベル原作アニメ: ""
+                同人原作アニメ: ""
+                アダルトコミック原作アニメ: ""
+                ボーイズラブアニメ作品: ""
+                廉価版アニメ: ""
+                BD-BOX・DVD-BOX: ""
+                3D: ""
+                RPG: ""
+                アクション: ""
+                麻雀・テーブルゲーム: ""
+                3Dポリゴン: ""
+                廉価版・新装版: ""
+                萌えゲーアワード受賞: ""
+                4時間以上作品: ""
+                ベスト・総集編: ""
+                サンプル動画: ""
+                アドベンチャー: ""
+                シミュレーション: ""
+                Blu-ray（ブルーレイ）: ""
+                DVDPG: ""
+                UMD: ""
+                VFT: ""
+                フルボイス: ""
+                廉価版: ""
+                BDPG: ""
+                売り尽くしセール: "" # other unneeded tags
+                Yahooコメント掲載禁止: ""
+                アニメ: ""
+                特典付き・セット商品: ""
+      Studio:
+        Name: //dt[text()="レーベル"]/following-sibling::dd[1]/p/text()
+      Date:
+        selector: //dt[text()="発売日"]/following-sibling::dd[1]/p/text()
+        postProcess:
+          - replace: # 2006年1月2日
+              - regex: "\u5E74|\u6708"
+                with: "-"
+              - regex: "\u65E5"
+                with:
+              - regex: -(\d)-
+                with: -0$1-
+              - regex: -(\d)$
+                with: -0$1
+
+driver:
+  useCDP: true # needed for the age confirmation redirect - cookies only work temporarily
+
+# Last Updated January 22, 2023

@@ -1,0 +1,33 @@
+name: "StasyQVR"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - stasyqvr.com/virtualreality
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='video-title']/h1/text()
+      Details: //div[@class='video-info']/p/text()
+      Date: 
+        selector: //div[@class='video-meta-date']/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Code:
+        selector: //script[contains(.,'vrPlayerSettings')]/text()
+        postProcess:
+          - replace:
+              - regex: '[\s\S]*videoId: (\d+),[\s\S]*'
+                with: $1
+      Studio:
+        Name:
+          fixed: StasyQVR
+      Performers:
+        Name: //div[@class='video-info']//a/h2/text()
+      Image:
+        selector: //div[@id='webvr']/div[contains(@style,'background-image:')]/@style
+        postProcess:
+          - replace:
+              - regex: '^background-image: url\(|\);$'
+                with: ""
+# Last Updated October 20, 2023

@@ -1,0 +1,140 @@
+name: PornsiteManager
+sceneByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url:
+      # Taken from https://www.pornsitemanager.com/en/sites on 2023-09-22
+      - alphamales.com/en/videos/detail/
+      - andolinixxl.com/en/videos/detail/
+      - attackboys.com/en/videos/detail/
+      - berryboys.fr/en/videos/detail/
+      - bolatino.com/en/videos/detail/
+      - bravofucker.com/en/videos/detail/
+      - brett-tyler.com/en/videos/detail/
+      - bulldogxxx.com/en/videos/detail/
+      - cadinot.fr/en/videos/detail/
+      - cazzofilm.com/en/videos/detail/
+      - citebeur.com/en/videos/detail/
+      - clairprod.com/en/videos/detail/
+      - crunchboy.com/en/videos/detail/
+      - darkcruising.com/en/videos/detail/
+      - enzorimenez.com/en/videos/detail/
+      - eurocreme.com/en/videos/detail/
+      - frenchporn.fr/en/videos/detail/
+      - gayarabclub.com/en/videos/detail/
+      - gayfrenchkiss.fr/en/videos/detail/
+      - hardkinks.com/en/videos/detail/
+      - harlemsex.com/en/videos/detail/
+      - hotcast.fr/en/videos/detail/
+      - jessroyan.com/en/videos/detail/
+      - jnrc.fr/en/videos/detail/
+      - kinkytwink.com/en/videos/detail/
+      - mackstudio.com/en/videos/detail/
+      - maxence-angel.com/en/videos/detail/
+      - menoboy.com/en/videos/detail/
+      - mistermale.com/en/videos/detail/
+      - paulomassaxxx.com/en/videos/detail/
+      - philippwants.com/en/videos/detail/
+      - rawfuck.com/en/videos/detail/
+      - ridleydovarez.com/en/videos/detail/
+      - sketboy.com/en/videos/detail/
+      - universblack.com/en/videos/detail/
+      - viktor-rom.com/en/videos/detail/
+      - vintagegaymovies.com/en/videos/detail/
+      - wurstfilm.com/en/videos/detail/
+movieByURL:
+  - action: scrapeXPath
+    scraper: movieScraper
+    url:
+      - alphamales.com/en/dvd/detail/
+      - andolinixxl.com/en/dvd/detail/
+      - attackboys.com/en/dvd/detail/
+      - berryboys.fr/en/dvd/detail/
+      - bolatino.com/en/dvd/detail/
+      - bravofucker.com/en/dvd/detail/
+      - brett-tyler.com/en/dvd/detail/
+      - bulldogxxx.com/en/dvd/detail/
+      - cadinot.fr/en/dvd/detail/
+      - cazzofilm.com/en/dvd/detail/
+      - citebeur.com/en/dvd/detail/
+      - clairprod.com/en/dvd/detail/
+      - crunchboy.com/en/dvd/detail/
+      - darkcruising.com/en/dvd/detail/
+      - enzorimenez.com/en/dvd/detail/
+      - eurocreme.com/en/dvd/detail/
+      - frenchporn.fr/en/dvd/detail/
+      - gayarabclub.com/en/dvd/detail/
+      - gayfrenchkiss.fr/en/dvd/detail/
+      - hardkinks.com/en/dvd/detail/
+      - harlemsex.com/en/dvd/detail/
+      - hotcast.fr/en/dvd/detail/
+      - jessroyan.com/en/dvd/detail/
+      - jnrc.fr/en/dvd/detail/
+      - kinkytwink.com/en/dvd/detail/
+      - mackstudio.com/en/dvd/detail/
+      - maxence-angel.com/en/dvd/detail/
+      - menoboy.com/en/dvd/detail/
+      - mistermale.com/en/dvd/detail/
+      - paulomassaxxx.com/en/dvd/detail/
+      - philippwants.com/en/dvd/detail/
+      - rawfuck.com/en/dvd/detail/
+      - ridleydovarez.com/en/dvd/detail/
+      - sketboy.com/en/dvd/detail/
+      - universblack.com/en/dvd/detail/
+      - viktor-rom.com/en/dvd/detail/
+      - vintagegaymovies.com/en/dvd/detail/
+      - wurstfilm.com/en/dvd/detail/
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Details: //h2
+      URL: &url //link[@rel="alternate" and hreflang="en"]/@href
+      Date: &date
+        selector: //script[@type="application/ld+json"]/text()
+        postProcess:
+          - replace:
+              - regex: .*"datePublished"\s*:\s*"([^"]+)".*
+                with: $1
+      Image:
+        selector: //script[@type="application/ld+json"]/text()
+        postProcess:
+          - replace:
+              - regex: .*"contentUrl"\s*:\s*"([^"]+)".*
+                with: $1
+      Studio:
+        Name: //div[@class="row mb-4 px-0"]//h3[i[contains(@class, "fa-video")]]/text()
+      Movies:
+        Name:
+          selector: //div[@class="row mb-4 px-0"]//h3[i[contains(@class, "fa-scrubber")]]/text()
+          postProcess:
+            - replace:
+                - regex: DVD:\s*
+                  with:
+        URL:
+          selector: //div[@class="row mb-4 px-0"]//a[h3[i[contains(@class, "fa-scrubber")]]]/@href | //link[//div[@class="row mb-4 px-0"]//a[h3[i[contains(@class, "fa-scrubber")]]]/@href and @rel="alternate" and @hreflang="en"]/@href
+          concat: __SEPARATOR__
+          postProcess:
+            - replace:
+                - regex: (.*)__SEPARATOR__(https:\/\/[^\/]*)\/.*
+                  with: $2$1
+        FrontImage:
+          selector: //div[@class="row mb-4 px-0"]//a[h3[i[contains(@class, "fa-scrubber")]]]/@href | //link[//div[@class="row mb-4 px-0"]//a[h3[i[contains(@class, "fa-scrubber")]]]/@href and @rel="alternate" and @hreflang="en"]/@href
+          concat: __SEPARATOR__
+          postProcess:
+            - replace:
+                - regex: (.*)__SEPARATOR__(https:\/\/[^\/]*)\/.*
+                  with: $2$1
+            - subScraper: &dvdCover //div[@class="col-sm-8 col-lg-3 pt-4 px-0 px-lg-2 align-items-center"]//img/@src
+      Performers:
+        Name: //div[@class="row mb-4 px-0"]//h3[i[contains(@class, "fa-star")]]/text()
+      Tags:
+        Name: //div[@class="row mb-4 px-0"]//h3[not(i)]/text()
+  movieScraper:
+    movie:
+      Name: //h1
+      URL: *url
+      Synopsis: //div[@class="mb-2 bg-light p-3 my-3 text-justify my-text psm-rounded"]
+      FrontImage: *dvdCover
+      Date: *date
+# Last Updated September 22, 2023

@@ -1,0 +1,40 @@
+# requires: Algolia
+name: "DisruptiveFilms"
+sceneByURL:
+  - action: script
+    url:
+      - disruptivefilms.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - disruptivefilms
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - disruptivefilms
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - disruptivefilms
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - disruptivefilms
+      - validName
+galleryByURL:
+  - action: script
+    url:
+      - disruptivefilms.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - disruptivefilms
+      - gallery
+# Last Updated December 22, 2022

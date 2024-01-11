@@ -1,43 +1,104 @@
 name: "GroobyNetwork-Partial"
 sceneByURL:
   - action: scrapeXPath
-    url:
-    # Gone through list at: grooby.com/about/websites/
+    url: &urls
+      # Gone through list at: grooby.com/about/websites/
       - asiantgirl.com
       - blacktgirlshardcore.com
       - black-tgirls.com
       - bobstgirls.com
+      - brazilian-transsexuals.com
+      - femout.xxx
       - femoutsex.xxx #Scenes on 'femout.xxx' can some times be found on this one as well
       - franks-tgirlworld.com
       - grooby-archives.com
       - groobygirls.com
-      - groobyvr.com
       - ladyboy-ladyboy.com
       - ladyboy.xxx
+      - realtgirls.com
       - tgirlsex.xxx
       - tgirls.porn
       - tgirls.xxx
+      - tgirlsfuck.com
+      - tgirlshookup.com
+      - tgirltops.com
       - transexpov.com
       - transgasm.com
+      - transnificent.com
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - groobyvr.com
+    scraper: sceneScraperGroobyVR
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()
-      Date:
+      Title: &title //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()
+      Date: &date
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
           - parseDate: January 2, 2006
-      Details: //div[@class="trailerpage_info"]/p[not(@class)]/text()
-      Performers:
+      Details: &details
+        selector: //div[@class="trailerpage_info"]/p[not(@class)]/descendant-or-self::*/text()
+        concat: "\n\n"
+      Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
-      Studio:
+      Studio: &studio
         Name: //meta[@name="author"]/@content
+        URL:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: (https://[^/]*)/.*
+                  with: $1
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //link[@rel="canonical"]/@href|//img[contains(@class, "update_thumb thumbs stdimage")]/@src|//img[contains(@class, "update_thumb thumbs stdimage")]/@src0_1x|//div[@class="trailerposter"]/img/@src0
+        concat: "__SEPARATOR__"
         postProcess:
           - replace:
-              - regex: ^// # bobstgirls
+              - regex: ^.*__SEPARATOR__// # bobstgirls
                 with: "https://"
-
-# Last Updated July 20, 2021
+              - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$
+                with: $1$2
+              - regex: content//
+                with: content/
+              - regex: __SEPARATOR__
+                with: ''
+      Tags: &tags
+        Name: //div[@class="set_tags"]/ul/li//a/text()
+  galleryScraper:
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Studio: *studio
+      Tags: *tags
+  sceneScraperGroobyVR:
+    scene:
+      Title: *title
+      Date:
+        selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="trailerblock"]/p[not(@class)]/text()
+        concat: "\n\n"
+      Performers:
+        Name: //div[@class="trailer_toptitle_left"]//a/text()
+      Studio: *studio
+      Image:
+        selector: //dl8-video/@poster
+        postProcess:
+          - replace:
+              - regex: content// # errant double slash
+                with: content/
+          - replace:
+              - regex: ^/
+                with: https://www.groobyvr.com/
+      Tags: *tags
+# Last Updated July 27, 2023

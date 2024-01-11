@@ -1,0 +1,32 @@
+name: tokyohot
+# requires: py_common
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tokyo-hot.com/product/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $movieinfo: //div[@class="infowrapper"]/dl[@class="info"]
+      $tagexists: count(//div[@class="infowrapper"]/dl[@class="info"]/dt[text()="Tags"])
+    scene:
+      Title: //div[@class="pagetitle"]/h2/text()
+      Details: //div[@class="sentence"]//text()
+      Date:
+        selector: $movieinfo/dd[$tagexists+5]/text()
+        postProcess:
+          - parseDate: 2006/01/02
+      Performers:
+        Name: $movieinfo/dd[1]/a/text()
+      Image: //li[@class="package"]/a[1]/@href
+sceneByFragment:
+  action: script
+  script:
+    - python3
+    - Tokyohot.py
+    - query
+    - scene
+
+# Last Updated July 20, 2023

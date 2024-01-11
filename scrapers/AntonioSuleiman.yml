@@ -1,0 +1,67 @@
+name: AntonioSuleiman.com
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - antoniosuleiman.com
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://antoniosuleiman.com/search.php?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $scene: //div[contains(@class, "updatesBlock")]
+      $image: (//div[contains(@class, "updatesBlock")]//img)[1]
+    scene:
+      Title: $scene//h3
+      Date:
+        selector: ($scene//div[contains(@class, "updateDetails")]//p)[1]
+        postProcess:
+          - parseDate: 2006-01-02
+      Details: $scene/div[@class="wrapper"]/*[last()]
+      URL: //link[@rel="canonical"]/@href
+      Tags:
+        Name:
+          # The worst way to do tags but it's all they have
+          selector: //meta[@name="keywords"]/@content
+          split: ","
+      Performers:
+        Name: $scene//*[contains(@class,"tour_update_models")]//a
+      Image: >-
+        $image/@src0_4x |
+        $image/@src0_3x |
+        $image/@src0_2x |
+        $image/@src0_1x
+      Studio:
+        Name:
+          fixed: Antonio Suleiman
+  sceneSearch:
+    common:
+      $scene: //div[@data-url]
+    scene:
+      Title: $scene//p[@class="left-first-paragraph"]
+      URL: $scene/@data-url
+      # Search doesn't return any description but we can show the performers instead
+      Details: //div[@data-url]//p[@class="left-second-paragraph"]
+      Image: $scene//img/@src0_1x
+      Date: $scene//p[@class="right-paragraph" and not(span)]
+driver:
+  cookies:
+    - CookieURL: "https://antoniosuleiman.com"
+      Cookies:
+        - Name: "PHPSESSID"
+          Domain: ".antoniosuleiman.com"
+          # Unsure about the duration of this cookie
+          Value: ovejq7d8cfhoc99q1jrn265af8
+          Path: "/"
+        - Name: "lang"
+          Domain: ".antoniosuleiman.com"
+          # 0 is English, 1 is Arabic
+          Value: "0"
+          Path: "/"
+# Last Updated November 20, 2023

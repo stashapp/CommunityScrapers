@@ -1,0 +1,32 @@
+# requires: Algolia
+name: Falcon Studios
+sceneByURL:
+  - action: script
+    url:
+      - falconstudios.com/en/video
+      - hothouse.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - falconstudios
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - falconstudios
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - falconstudios
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - falconstudios
+    - validName
+# Last Updated September 09, 2023

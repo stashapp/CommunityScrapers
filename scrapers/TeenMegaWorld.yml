@@ -3,70 +3,107 @@ name: TeenMegaWorld
 sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
-    url:
-      - anal-angels.com/trailers/
-      - anal-beauty.com/trailers/
-      - beauty-angels.com/trailers/
-      - beauty4k.com/trailers/
-      - creampie-angels.com/trailers/
-      - dirty-coach.com/trailers/
-      - dirty-doctor.com/trailers/
-      - firstbgg.com/trailers/
-      - fuckstudies.com/trailers/
-      - gag-n-gape.com/trailers/
-      - lollyhardcore.com/trailers/
-      - nubilegirlshd.com/trailers/
-      - old-n-young.com/trailers/
-      - rawcouples.com/trailers/
-      - soloteengirls.net/trailers/
-      - teenmegaworld.net/trailers/
-      - teensexmania.com/trailers/
-      - teensexmovs.com/trailers/
-      - trickymasseur.com/trailers/
-      - x-angels.com/trailers/
-      # Behind paywall
+    url: &urls
+      - anal-angels.com
+      - anal-beauty.com
+      - beauty-angels.com
+      - beauty4k.com
+      - creampie-angels.com
+      - dirty-coach.com
+      - dirty-doctor.com
+      - firstbgg.com
+      - fuckstudies.com
+      - gag-n-gape.com
+      - noboring.com
+      - ohmyholes.com
+      - old-n-young.com
+      - rawcouples.com
+      - soloteengirls.net
+      - teenmegaworld.net
+      - teensexmania.com
+      - teensexmovs.com
+      - tmwpov.com
+      - tmwvrnet.com
+      - trickymasseur.com
+      - x-angels.com
+      # Behind paywall - Scenes for these sites can be scraped from the public https://teenmegaworld.net/ site
       # - 18firstsex.com
       # - aboutgirlslove.com
       # - atmovs.com
       # - exgfbox.com
       # - hometeenvids.com
-      # - nylonsx.com
-      # - squirtingvirgin.com
-      # - watchmefucked.com
-      # - wow-orgasms.com
-      # Unsupported sites
       # - hometoyteens.com
+      # - lollyhardcore.com
+      # - nubilegirlshd.com
+      # - nylonsx.com
       # - privateteenvideo.com
+      # - squirtingvirgin.com
       # - teens3some.com
       # - teenstarsonly.com
+      # - watchmefucked.com
+      # - wow-orgasms.com
+performerByURL:
+  - action: scrapeXPath
+    scraper: performerScraper
+    url: *urls
 xPathScrapers:
   sceneScraper:
     common:
-      $content: //div[@class="video"]
+      $content: //div[@class="video-block"]
     scene:
       Title: $content//h1
       Date:
-        selector: $content//div[@class="date"]/time
+        selector: $content//span[@title="Video release date"]/text()
         postProcess:
           - parseDate: January 2, 2006
       Details:
-        selector: $content//div[@class="text"]//p
+        selector: $content//p[@class="video-description-text"]
         concat: "\n\n"
       Performers:
         Name: $content//a[contains(@href,"/models/")]
+        URL: $content//a[contains(@href,"/models/")]/@href
       Tags:
-        Name: $content//ul[@class="tag-list"]//a
+        Name: $content//a[@class="video-tag-link"]
       Image:
-        selector: $content//video/@poster
+        selector: $content//img[@id="video-cover-image"]/@src
         postProcess:
           - replace:
               - regex: ^
-                with: https://teenmegaworld.net
+                with: https://teenmegaworld.net/
       Studio:
         Name:
-          selector: $content//div[@class="site"]/a[1]
+          selector: //base/@href
           postProcess:
             - replace:
-                - regex: \.(com|net)$
-                  with:
-# Last Updated September 26, 2021
+                - regex: https://(.*?)\.(com|net)/$
+                  with: $1
+  performerScraper:
+    common: 
+      $model: //section[contains(@class,"model-profile")]
+    performer:
+      Name: $model//h1
+      Details: $model//p[contains(@class,"model-profile")]
+      Gender:
+        # Only female performers are listed on the sites
+        fixed: Female
+      CareerLength:
+        selector: $model//dt[contains(text(), "Debut year")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: $
+                with: " - "
+      Aliases: $model//dt[contains(text(), "AKA")]/following-sibling::text()
+      HairColor: 
+        selector: $model//dt[contains(text(), "Hair")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^Fair
+                with: Blonde
+      EyeColor: $model//dt[contains(text(), "Eyes")]/following-sibling::text()
+      Image:
+        selector: $model//img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://teenmegaworld.net/
+# Last Updated November 06, 2023

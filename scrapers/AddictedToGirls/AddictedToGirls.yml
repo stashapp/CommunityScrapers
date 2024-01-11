@@ -1,0 +1,40 @@
+# requires: Algolia
+name: "addicted 2 Girls"
+sceneByURL:
+  - action: script
+    url:
+      - addicted2girls.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - addicted2girls
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - addicted2girls
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - addicted2girls
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - addicted2girls
+      - validName
+galleryByURL:
+  - action: script
+    url:
+      - addicted2girls.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - addicted2girls
+      - gallery
+# Last Updated December 22, 2022

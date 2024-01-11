@@ -1,0 +1,35 @@
+name: XXX Job Interviews
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - xxxjobinterviews.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $scene: //div[contains(@class,"custom-80")][1]
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Details: $scene//div[@class="row profile"]/div[contains(@class, "description")]
+      Date:
+        selector: $scene//div[@class="item-inner"][2]/span
+        postProcess:
+          - replace:
+              - regex: (\w+)\s*(\d+).*?(\d+)
+                with: $1 $2 $3
+          - parseDate: January 2 2006
+      Image:
+        selector: $scene//script[contains(., "posterImage")]
+        postProcess:
+          - replace:
+              - regex: .*posterImage\s*:\s*['"]([^'"]+).*
+                with: https:$1
+      URL: //meta[@property="og:url"]/@content
+      Studio:
+        Name:
+          fixed: XXX Job Interviews
+      Tags:
+        Name: //div[@class="tags"]//a
+      Performers:
+        Name: $scene//a[contains(@href, "pornstars")]
+# Last Updated October 21, 2023

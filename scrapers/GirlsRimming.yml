@@ -6,20 +6,22 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $image: //div[@class='player-thumb']/img
     scene:
       Title: //div[@class='updatesBlock']/h2[@class='title']/text()
       Details: //meta[@name='description']/@content
-      Image: //div[@class='player-thumb']/img/@src0_1x
+      Image: $image/@src0_4x|$image/@src0_3x|$image/@src0_2x|$image/@src0_1x
       Studio:
         Name:
-          fixed: GirlsRimming
+          fixed: Girls Rimming
       Movies:
         Name:
           selector: //div[@class='updatesBlock']/h2[@class='title']/text()
           postProcess:
             - replace:
-              - regex: (.+)(?:\sEp\d).*
-                with: $1
+                - regex: (.+)(?:\sEp\d).*
+                  with: $1
       Tags:
         Name:
           selector: //meta[@name='keywords']/@content
@@ -28,5 +30,4 @@ xPathScrapers:
                 - regex: "[^,]*Id\\s(\\d+)[^,]*"
                   with:
           split: ","
-
-# Last Updated September 30, 2020
+# Last Updated August 20, 2023

@@ -32,6 +32,7 @@ sceneByURL:
       - holed.com/video/
       - lubed.com/video/
       - mom4k.com/video/
+      - momcum.com/video/
       - myveryfirsttime.com/video/
       - nannyspy.com/video/
       - passion-hd.com/video/
@@ -73,10 +74,22 @@ xPathScrapers:
               - regex: ([?&]img[wh]=\d+)+$
                 with:
       Studio:
-        Name: //div[@id="navigation"]/h5/a/@alt
+        Name:
+          selector: //div[@id="navigation"]/h5/a/@alt
+          postProcess:
+            - map:
+                Baeb: BAEB
+                Casting Couch X: Casting Couch-X
+                Cum4K: Cum 4K
+                Exotic4k: Exotic 4K
+                GirlCum: Girl Cum
+                MomCum: Mom Cum
+                NannySpy: Nanny Spy
+                SpyFam: Spy Fam
+                Tiny4K: Tiny 4K
+                WetVR: Wet VR
       Date:
         selector: //div[contains(text(), 'RELEASED')]/span/text()
         postProcess:
           - parseDate: January 02, 2006
-
-# Last Updated March 26, 2022
+# Last Updated February 06, 2023

@@ -1,30 +1,50 @@
 name: RealJamVR
-sceneByURL:
+sceneByURL: &byURL
   - action: scrapeXPath
     url:
-      - realjamvr.com
+      - realjamvr.com/scene/
+      - porncornvr.com/scene
     scraper: sceneScraper
+
+galleryByURL: *byURL
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
+      Title: &title
         selector: //h1
-      Date:
-        selector: //div[contains(@class, "date")]
         postProcess:
           - replace:
-              - regex: ','
-                with: ""
-          - parseDate: January 2 2006
-      Performers:
-        Name: //span[text()="Featuring:"]/following-sibling::a
-      Tags:
-        Name: //span[text()="TAGS:"]/following-sibling::a
-      Details:
-        selector: //div[contains(@class, "c-video-item-desc")]
+              - regex: ^\s+(.+)\s+$
+                with: $1
+      Date: &date
+        selector: //div[@class="specs-icon"]/following-sibling::strong
+        postProcess:
+          - replace:
+            - regex: ^([a-zA-Z]{3})\D*(\d{1,2},\s*\d+)$
+              with: $1. $2
+          - parseDate: Jan. 2, 2006
+      Performers: &performers
+        Name: //div[contains(@class,"scene-view")]/a[contains(@href,"/actor/")]
+      Tags: &tags
+        Name: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon" and not(i)]
+      Details: &details
+        selector: //div[@class="opacity-75 my-2"]
       Image:
-        selector: //meta[@property="og:image"]/@content
-      Studio:
+        selector: //*[@id="video-player"]//@poster
+      Studio: &studio
         Name:
-          fixed: RealJamVR
-# Last Updated June 25, 2021
+          selector: //title
+          postProcess:
+          - replace:
+              - regex: '(.*)\| ([^\|]+VR)$'
+                with: $2
+    gallery:
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Details: *details
+      Studio: *studio
+      
+# Last Updated October 22, 2023

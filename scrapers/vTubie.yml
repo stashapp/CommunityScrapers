@@ -1,0 +1,48 @@
+name: "vTubie"
+performerByName:
+  action: scrapeXPath
+  queryURL: https://vtubie.com/wp-admin/admin-ajax.php?s={}&action=ma_s_ajax
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - vtubie.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //div[div/text()="VTubers"]/following-sibling::a/@title
+      URL: //div[div/text()="VTubers"]/following-sibling::a/@href
+      Image:
+        selector: //div[div/text()="VTubers"]/following-sibling::a//div[@class="ma-s-ajax-result-item-image"]/@style
+        postProcess:
+          - replace:
+              - regex: ^background\-image:url\((.*)\);$
+                with: $1
+
+  performerScraper:
+    performer:
+      Name: //meta[@property="og:title"]/@content
+      Aliases:
+        selector: //div[@class="ma-section-content ma-aname-content"]//a/text()
+        concat: ", "
+      URL:
+        selector: //a[@class="ma-pag-next"]/@href
+        postProcess:
+          - replace:
+              - regex: \?pg=\d
+                with:
+      Gender: //div[@class="ma-section-title" and span/text()="Gender"]/following-sibling::div[1]//a/text()
+      Twitter: //div[@class="ma-section-title" and text()="Twitter "]/following-sibling::div[1]//a/@href
+      Tags:
+        Name: //div[@class="ma-section-title" and text()="Type "]/following-sibling::div[1]//a/text() | //div[@class="ma-section-title" and text()="Group"]/following-sibling::div[1]//a/text()
+      CareerLength:
+        selector: //div[@class="ma-section-title" and text()="Debut "]/following-sibling::div[1]/div/text()
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}).*
+                with: $1-
+      Image: //link[@rel="image_src"]/@href
+
+# Last Updated January 22, 2023
