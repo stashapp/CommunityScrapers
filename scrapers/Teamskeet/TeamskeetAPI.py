@@ -115,7 +115,11 @@ if dt:
     dt = re.sub(r'T.+', '', dt)
     date = datetime.strptime(dt, '%Y-%m-%d')
     scrape['date'] = str(date.date())
-scrape['details'] = scene_api_json.get('description')
+
+#fix for TeamKseet including HTML tags in Description
+CLEANR = re.compile('<.*?>') 
+cleandescription = re.sub(CLEANR,'',scene_api_json.get('description'))
+scrape['details'] = cleandescription
 scrape['studio'] = {}
 scrape['studio']['name'] = scene_api_json['site'].get('name')
 scrape['performers'] = [{"name": x.get('modelName')}
