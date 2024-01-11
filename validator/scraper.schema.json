@@ -642,6 +642,10 @@
           "title": "Gallery title",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "Code": {
+          "title": "Gallery studio code",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "Details": {
           "title": "Gallery details",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
