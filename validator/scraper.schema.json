@@ -665,6 +665,10 @@
         "Performers": {
           "title": "Gallery performers",
           "allOf": [{ "$ref": "#/definitions/performerObject" }]
+        },
+        "Photographer": {
+          "title": "Gallery photographer",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         }
       }
     },
