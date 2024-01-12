@@ -1,4 +1,5 @@
 name: AssumeThePosition
+# requires: py_common
 sceneByURL:
   - action: scrapeJson
     url:
@@ -36,7 +37,7 @@ jsonScrapers:
                 with: $1
       Date: data.live_date
       Image:
-        selector: '[data.producer.url,data.image]'
+        selector: "[data.producer.url,data.image]"
         concat: "/"
       Performers:
         Name: data.models.#.name

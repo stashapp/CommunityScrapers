@@ -2,7 +2,6 @@ import json
 import sys
 import requests
 import re
-import os
 
 try:
     import py_common.graphql as graphql
