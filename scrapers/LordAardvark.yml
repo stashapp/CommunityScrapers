@@ -89,4 +89,6 @@ xPathScrapers:
           - replace:
               - regex: "^"
                 with: "https://lordaardvark.com/"
-# Last Updated February 23, 2023
+driver:
+  useCDP: true
+# Last Updated January 13, 2024
