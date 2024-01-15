@@ -90,7 +90,7 @@ xPathScrapers:
     common:
       $section: //div[contains(@class,"tg5e7m")]/ancestor::section
       $canonicalUrl: &canonicalUrl //link[@rel="canonical"]/@href
-      $movieUriPath: &movieUriPath //a[text()="Movie Info"]/@href
+      $movieUriPath: &movieUriPath //a[text()="Movie Info" or text()="Series Info"]/@href
     scene:
       Title: $section//h1/text()|$section//h2/text()
       Date:
@@ -150,6 +150,15 @@ xPathScrapers:
                 with: $1
             - subScraper:
                 selector: //h1/text()|//h2/text()
+        FrontImage:
+          selector: $canonicalUrl|$movieUriPath
+          concat: '__SEPARATOR__'
+          postProcess:
+            - replace:
+              - regex: '^(https://[^/]+).+__SEPARATOR__'
+                with: $1
+            - subScraper:
+                selector: //section//picture/img/@src
       Code: &sceneCode
         selector: $canonicalUrl
         postProcess:
@@ -244,7 +253,7 @@ xPathScrapers:
                 SweetSinner: Sweet Sinner
                 sweetsinner: Sweet Sinner   
                 familysinners: Family Sinners             
-      FrontImage: $section//picture/img[@alt]/@src
+      FrontImage: //section//picture/img/@src
 
   performerScraper:
     performer:
@@ -382,4 +391,4 @@ xPathScrapers:
       Performers: *performers
       Tags: *tags
       Studio: *studio
-# Last Updated January 10, 2024
+# Last Updated January 15, 2024
