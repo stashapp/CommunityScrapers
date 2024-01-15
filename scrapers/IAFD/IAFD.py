@@ -98,6 +98,8 @@ def map_country(country: str):
         "Abkhaz": "Abkhazia",
         "Abkhazian": "Abkhazia",
         "Afghan": "Afghanistan",
+        # Special case: "African American" is not a country, IAFD means "United States of America"
+        "African American": "United States of America",
         "Albanian": "Albania",
         "Algerian": "Algeria",
         "American Samoan": "American Samoa",
