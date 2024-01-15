@@ -90,7 +90,7 @@ xPathScrapers:
     common:
       $section: //div[contains(@class,"tg5e7m")]/ancestor::section
       $canonicalUrl: &canonicalUrl //link[@rel="canonical"]/@href
-      $movieUriPath: &movieUriPath //a[text()="Movie Info"]/@href
+      $movieUriPath: &movieUriPath //a[text()="Movie Info" or text()="Series Info"]/@href
     scene:
       Title: $section//h1/text()|$section//h2/text()
       Date:
