@@ -114,13 +114,13 @@ def get_scene(scene_id: str) -> dict:
     """
     try:
         response = get_request(
-            f"https://video-player-bff.estore.kiwi.manyvids.com/videos/{scene_id}"
+            f"https://video-player-bff.estore.kiwi.manyvids.com/vercel/videos/{scene_id}/public"
         )
     except requests.exceptions.RequestException as api_error:
         log.error(f"Error {api_error} while requesting data from API")
         return {}
 
-    meta = response.json()
+    meta = response.json()['data']
     log.debug(f"Raw response from API: {json.dumps(meta)}")
     scrape = {}
     scrape['title'] = meta['title']
