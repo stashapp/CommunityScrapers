@@ -52,7 +52,12 @@ xPathScrapers:
         Name: $studio
         URL: $studio/@href
       Movies:
-        Name: $movie/text()
+        Name:
+          selector: $movie/text()
+          postProcess:
+            - replace:
+                - regex: '\s#1$'
+                  with:
         URL: $movie/@href
       Image: //img[@id="playpriimage"]/@src
   movieScraper:
