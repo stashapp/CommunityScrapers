@@ -19,6 +19,7 @@ xPathScrapers:
         selector: //div[@class="col span_6_of_12"][1]/p/text()
         concat: "\n\n"
       Director: $details//strong[starts-with(text(), "Director")]/following-sibling::a
+      Code: //div[@class="rating_box"]/@data-id
       Date:
         selector: $details//strong[starts-with(text(), "Released")]/following-sibling::text()
         postProcess:
@@ -52,7 +53,7 @@ xPathScrapers:
       Tags:
         Name: $details//strong[starts-with(text(), "Categories")]/following-sibling::a
       Image:
-        selector: //script[contains(text(), "scene-image-")]/text()
+        selector: //script[contains(text(), concat("scene-image-", //div[@class="rating_box"]/@data-id))]/text()
         postProcess:
           - replace:
               - regex: .*image:\s*"([^"]+).*
