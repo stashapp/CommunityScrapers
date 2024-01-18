@@ -97,7 +97,10 @@ def sceneByURL():
     details = data["description"]
     image_url = re.sub(r".*,(\S+).*", r"\1", data["mainImages"][0]["imgSrcSet"])
     tags = [{"name": x["name"]} for x in data["categories"]]
-    actors = [{"name": x["name"]} for x in data["starring"]]
+    actors = [
+        {"name": x["name"], "url": f"https://{domain}/{x['uri']}"}
+        for x in data["starring"]
+    ]
 
     # create our output
     return {
