@@ -1,0 +1,9 @@
+name: File Metadata
+# requires: py_common
+
+sceneByFragment:
+  action: script
+  script:
+      - python3
+      - FileMetadata.py
+      - metadata_from_primary
