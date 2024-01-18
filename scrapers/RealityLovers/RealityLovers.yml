@@ -1,5 +1,6 @@
 name: RealityLovers
 # requires: py_common
+# scrapes: Reality Lovers, TS Virtual Lovers
 
 performerByURL:
   - action: script
@@ -37,5 +38,4 @@ sceneByFragment:
     - python
     - RealityLovers.py
     - sceneByFragment
-
-# Last Updated April 26, 2022
+# Last Updated January 18, 2024
