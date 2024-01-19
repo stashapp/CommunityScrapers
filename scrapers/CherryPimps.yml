@@ -21,7 +21,7 @@ xPathScrapers:
                 - regex: "^"
                   with: ""
             - map:
-                Cherry Pimps: "Cherry Pimps"
+                CherryPimps : "Cherry Pimps"
                 Alt         : "Alt" 
                 BCM         : "BCM.XXX"
                 Bush        : "Bush"
@@ -41,6 +41,8 @@ xPathScrapers:
                 Taboo       : "Taboo"
                 Cherry spot : "Cherry Spot"
                 Archives    : "CherryPimps Archives"
+                Wild on cam : "Wild on Cam"
+                COTM        : "Cherry of the Month"
       Date: &dateAttr
         selector: //i[@class='fa fa-calendar']/following-sibling::strong/following-sibling::text()
         postProcess:
