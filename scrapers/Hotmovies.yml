@@ -57,9 +57,13 @@ xPathScrapers:
       URL: //meta[@name="og:url"]/@content
       Director: //a[@label="Director"][1]
       Duration:
-        selector: //meta[@property="og:video:duration"]/@content
+        selector: //strong[contains(text(), "Run Time")]/following-sibling::text()[1]
         postProcess:
-          - javascript: return new Date(value * 1000).toISOString().slice(11, 19)
+          - replace:
+              - regex: " hrs. "
+                with: ":"
+              - regex: " mins."
+                with: ":00"
       Studio:
         Name: //a[@label="Studio"][1]
         URL:
@@ -93,7 +97,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .*,\s
-              - with: ""
+                with: ""
       EyeColor:
         selector: //small[text()="Eyes:"]/following-sibling::text()[1]
         postProcess:
