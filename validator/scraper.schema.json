@@ -813,6 +813,11 @@
                     "title": "Subtract Days",
                     "description": "Subtracts the value in days from the current date.",
                     "type": "boolean"
+                  },
+                  "javascript": {
+                    "title": "Execute JavaScript",
+                    "description": "Executes the given JavaScript code and uses the result as the value.",
+                    "type": "string"
                   }
                 }
               }
