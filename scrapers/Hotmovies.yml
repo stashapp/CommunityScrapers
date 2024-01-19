@@ -1,7 +1,7 @@
 name: Hotmovies
 sceneByName:
   action: scrapeXPath
-  queryURL: https://www.hotmovies.com/search.php?view_style=classic&page=1&num_per_page=24&find_with=all&search_in=video_title%2Ctitle&page_sort=relevance&search_string={}
+  queryURL: https://www.hotmovies.com/adult-clips/search?sort=score&q={}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
@@ -20,122 +20,132 @@ movieByURL:
 performerByURL:
   - action: scrapeXPath
     url:
-      - hotmovies.com/porn-star/
+      - hotmovies.com
     scraper: performerScraper
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.hotmovies.com/star_search.php?words={}&searchtype_value=star
+  queryURL: https://www.hotmovies.com/porn-star/search?sort=rank&q={}
   scraper: performerSearch
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: &title
-        selector: //h1[@class="title"]
-      Details: &desc
-        selector: //span[@class="video_description"]
+      Title: //h1
       Tags:
-        Name: //span[@class="list_attributes"]/a
+        Name: //meta[@property="og:video:tag"]/@content
       Performers:
-        Name: //div[@class="stars section"]//a
-      URL: &url
-        selector: //meta[@property="og:url"]/@content
+        Name: //meta[@property="og:video:actor"]/@content
+      URL: //meta[@name="og:url"]/@content
       Movies:
-        Name: *title
-        URL: *url
+        Name: //a[@id="front-cover"]/img/@title
+        URL:
+          selector: //a[@id="front-cover"]/@href
+          postProcess: &baseUrl
+            - replace:
+                - regex: ^/
+                  with: https://www.hotmovies.com/
+        FrontImage: //a[@id="front-cover"]/img/@src
       Studio:
-        Name: //div[@class="small-4 medium-3 cell video_details"]/a[1]
-      Image:
-        selector: //div[@class="video_preview_wrapper show-for-medium"]/@style
-        postProcess:
-          - replace:
-              - regex: .*?(https?:\/\/\S*\.jpg).*
-                with: $1
+        Name: //a[@data-tl="studio"]
+        URL:
+          selector: //a[@data-tl="studio"]/@href
+          postProcess: *baseUrl
+      Image: //meta[@property="og:image"]/@content
+      Date: //meta[@property="og:video:release_date"]/@content
   movieScraper:
     movie:
-      Name: *title
-      URL: *url
-      Director:
-        selector: //a[contains(@href, "/director/")]/text()
+      Name: //h1
+      URL: //meta[@name="og:url"]/@content
+      Director: //a[@label="Director"][1]
       Duration:
-        selector: //div[@class="small-4 medium-3 cell video_details"]/span[1]
+        selector: //strong[contains(text(), "Run Time")]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: " hrs. "
+                with: ":"
+              - regex: " mins."
+                with: ":00"
       Studio:
-        Name: //a[contains(@href, "/studio/")]/text()
-      Synopsis: *desc
-      FrontImage: //div[@class="lg_inside_wrap"]/@data-front | //img[@id="cover"]/@src
-      BackImage: //div[@class="lg_inside_wrap"]/@data-back
+        Name: //a[@label="Studio"][1]
+        URL:
+          selector: //a[@label="Studio"][1]/@href
+          postProcess: *baseUrl
+      Synopsis: //article
+      FrontImage: //a[@id="front-cover"]/@href
+      BackImage: //a[@id="front-cover"]/following-sibling::a/@href
+      Date: //meta[@property="og:video:release_date"]/@content
   performerSearch:
     performer:
-      Name: //h3[@class="title"]/a/text()
+      Name: //div[@id="performerlist"]//picture/img/@title
       URL:
-        selector: //h3[@class="title"]/a/@href
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://www.hotmovies.com/
+        selector: //div[@id="performerlist"]//a[@class="performer-grid-list__performer__thumb"]/@href
+        postProcess: *baseUrl
+      Image: //div[@id="performerlist"]//picture/img/@src
   performerScraper:
     performer:
-      URL: //link[@rel="canonical"]/@href
-      Name: //h1[@class="title"]/text()
-      Gender:
-        selector: //strong[text()="Gender:"]/following-sibling::text()[1]
-        postProcess:
-          - map:
-              Trans: transgender_female
+      URL: //meta[@name="og:url"]/@content
+      Name: //meta[@name="og:title"]/@content
+      Gender: //meta[@property="og:profile:gender"]/@content
       Birthdate:
-        selector: //strong[text()="Born:"]/following-sibling::text()[1]
+        selector: //title[contains(text(), 'Born:')]
         postProcess:
           - replace:
-              - regex: \s\/+.+
-                with: ""
-              - regex: ^([a-zA-Z]{3})[a-zA-Z]*\s
-                with: "$1 "
-              - regex: (\d)(st|nd|rd|th)
+              - regex: ^.*Born:\s([^\.]*).*$
                 with: $1
-          - parseDate: Jan 2 2006
-      Ethnicity: //strong[text()="Ethnicity:"]/following-sibling::text()[1]
+          - parseDate: January 2 2006
       Country:
-        selector: //strong[text()="Birth Place:"]/following-sibling::text()[1]
+        selector: //small[text()="From:"]/following-sibling::text()[1]
         postProcess:
           - replace:
-              - regex: .+\s+(United\sStates|Italy|France)$
-                with: $1
-      EyeColor: //strong[text()="Eye Color:"]/following-sibling::text()[1]
+              - regex: .*,\s
+                with: ""
+      EyeColor:
+        selector: //small[text()="Eyes:"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: \sEyes
+                with: ""
       Height:
-        selector: //strong[text()="Height:"]/following-sibling::text()[1]
+        selector: //small[text()="Height:"]/following-sibling::text()[1]
         postProcess:
           - feetToCm: true
-      Measurements: //strong[text()="Breast Size:"]/following-sibling::text()[1]
-      CareerLength: //strong[text()="Years Active:"]/following-sibling::text()[1]
-      FakeTits: //strong[text()="Implants:"]/following-sibling::text()[1]
-      Tattoos: //strong[text()="Tattoos:"]/following-sibling::text()[1]
-      Piercings: //strong[text()="Piercings:"]/following-sibling::text()[1]
-      Image: //img[@id='imgStarGalleryFocus']/@src
-      HairColor: //strong[text()="Typical Hair Color:"]/following-sibling::text()[1]
-      Details:
-        selector: //div[@id="bio_description"]//text()
-        concat: "|"
+      Measurements:
+        selector: //small[text()="Stats:"]/following-sibling::text()[1]
         postProcess:
           - replace:
-              - regex: Biography\|
-                with: "Biography:\n"
-              - regex: \|(Early\sLife|Turn\sOns|Awards)\|
-                with: "\n\n$1:\n"
-              - regex: \|[^\|]*(Career|Facts|Quotes)\|
-                with: "\n\n$1:\n"
-              - regex: \|(\d{4})
-                with: "\n$1"
-              - regex: \|
-                with: " "
-      Aliases: //strong[text()="Aliases:"]/following-sibling::text()[1]
+              - regex: "[ \"]"
+                with: ""
+      Image: //a[@class="star__profile__headshot fancy"]/@href
+      HairColor:
+        selector: //title[contains(text(), ' hair')]
+        postProcess:
+          - replace:
+              - regex: ^.*?(\w*)\shair.*$
+                with: $1
+      Details: //article
+      Aliases:
+        selector: //title[contains(text(), 'AKA:')]
+        postProcess:
+          - replace:
+              - regex: ^.*AKA:\s([^\.]*).*$
+                with: $1
+        split: ", "
+      Weight:
+        selector: //title[contains(text(), ' pounds')]
+        postProcess:
+          - replace:
+              - regex: ^.*?(\w*)\spounds.*$
+                with: $1
+          - lbToKg: true
   sceneSearch:
     scene:
-      Title:
-        selector: //div[@class='cell td_title']/h3[@class='title show-for-medium']/a/@title
+      Title: //div[@class="animated-scene-title"]
       URL:
-        selector: //div[@class='cell td_title']/h3[@class='title show-for-medium']/a/@href
-      Details: //div[@class='description show-for-medium']//a/@title
-      Date: 
-         selector: //div[@class='video_dates']/span/a
-      Image:
-        selector: //img[@class="boxcover"]/@src
-# Last Updated August 13, 2022
+        selector: //a[@class="animated-screen"]/@href
+        postProcess: *baseUrl
+      Image: //img[@class="animate screenshot"]/@src
+      Movies:
+        Name: //div[@class="animated-scene-hiddentxt"]/a/i
+        URL:
+          selector: //div[@class="animated-scene-hiddentxt"]/a/@href
+          postProcess: *baseUrl
+# Last Updated January 18, 2024
