@@ -19,9 +19,28 @@ xPathScrapers:
           postProcess:
             - replace:
                 - regex: "^"
-                  with: "CherryPimps - "
+                  with: ""
             - map:
-                CherryPimps - Cherry Pimps: "Cherry Pimps"
+                Cherry Pimps: "Cherry Pimps"
+                Alt         : "Alt" 
+                BCM         : "BCM.XXX"
+                Bush        : "Bush"
+                Busted      : "Busted"
+                Cheese      : "Cheese"
+                Confessions : "Confessions.XXX"
+                Cucked      : "Cucked.XXX"
+                Drilled     : "Drilled.XXX"
+                Ebony xxx   : "Ebony"
+                Exotic      : "Exotic"
+                Femme       : "Femme"
+                Fresh       : "Fresh"
+                Ginger      : "Ginger"
+                Milf xxx    : "MILF"
+                Pegged      : "Pegged"
+                Petite      : "Petite.XXX"
+                Taboo       : "Taboo"
+                Cherry spot : "Cherry Spot"
+                Archives    : "CherryPimps Archives"
       Date: &dateAttr
         selector: //i[@class='fa fa-calendar']/following-sibling::strong/following-sibling::text()
         postProcess:
@@ -43,8 +62,5 @@ xPathScrapers:
       Tags: *tagsAttr
       Image:
         selector: //div[@class="player-thumb"]/img/@src0_1x
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://cherrypimps.com
-# Last Updated January 06, 2024
+        
+# Last Updated January 19, 2024
