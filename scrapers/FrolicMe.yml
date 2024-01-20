@@ -10,7 +10,7 @@ xPathScrapers:
       $platform: //div[@class="js-platform-video"]
     scene:
       Title:
-        selector: //div[@class="film-entry-title"]
+        selector: //div[@class="entry-title"]
         postProcess:
           - replace:
               - regex: "(?i)( - Film)"
@@ -23,16 +23,16 @@ xPathScrapers:
                 with: $2
           - parseDate: 2006-01-02
       Details:
-        selector: //h1[@class="film-entry-description"]|//div[@class="film-content"]/p
+        selector: //div[@class="entry-content"]/p
         concat: "\n\n"
       Performers:
-        Name: //h3/i[span[contains(.,"Models")]]/..//a[contains(@href,"/models/")]/text()
+        Name: //a[@rel="tag" and contains(@href,"/models/")]/text()
       Tags:
-        Name: //h3/i[span[contains(.,"Categories")]]/..//a[contains(@href,"-films/")]/text()
+        Name: //a[@rel="tag" and not(contains(@href,"/models/"))]/text()
       Image:
         selector: $platform/img/@src
       Studio:
         Name:
           fixed: "FrolicMe"
 
-# Last Updated October 03, 2020
+# Last Updated January 19, 2024
