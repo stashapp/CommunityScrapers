@@ -17,7 +17,7 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 1passforallsites.com|1passforallsites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 1pondo.tv|1pondo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 21naturals.com|Algolia_21Naturals.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
-21roles.com|21Roles.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+21roles.com|life_selector.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 21sextreme.com|Algolia_21Sextreme.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 21sextury.com|Algolia_21Sextury.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 2girls1camera.com|TopWebModels.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
@@ -864,7 +864,7 @@ lewrubens.com|LewRubens.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lexidona.com|LexiDona.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lexingtonsteele.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lezcuties.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Lesbian
-lifeselector.com|21Roles.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+lifeselector.com|life_selector.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 lilhumpers.com|MindGeek.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 lilsis.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 lingerieav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
@@ -1592,12 +1592,12 @@ vipissy.com|Vipissy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vipsexvault.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 virtualpee.com|VirtualPee.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 virtualporn.com|VirtualPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
-virtualrealamateurporn.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealgay.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealjapan.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealpassion.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealporn.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealtrans.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
+virtualrealamateurporn.com|virtual_real_porn.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|VR
+virtualrealgay.com|virtual_real_porn.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|VR
+virtualrealjapan.com|virtual_real_porn.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|VR
+virtualrealpassion.com|virtual_real_porn.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|VR
+virtualrealporn.com|virtual_real_porn.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|VR
+virtualrealtrans.com|virtual_real_porn.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|VR
 virtualtaboo.com|VirtualTaboo.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 visit-x.net|Visit-X.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 vivid.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

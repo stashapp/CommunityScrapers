@@ -1,0 +1,65 @@
+name: "VirtualRealPorn Network"
+# galleryByFragment:
+# no galleries on VirtualRealPorn Network sites
+# galleryByURL:
+# no galleries on VirtualRealPorn Network sites
+# movieByURL:
+# no movies on VirtualRealPorn Network sites
+performerByFragment:
+  action: script
+  script:
+    - python
+    - virtual_real_porn.py
+    - performerByFragment
+performerByName:
+  action: script
+  script:
+    - python
+    - virtual_real_porn.py
+    - performerByName
+performerByURL:
+  - action: script
+    url:
+      # virtualrealamateur.com does not appear to list performers
+      - virtualrealgay.com/vr-models/
+      # virtualrealjapan.com does not appear to list performers
+      - virtualrealpassion.com/vr-models/
+      - virtualrealporn.com/vr-pornstars/
+      - virtualrealtrans.com/vr-models/
+    script:
+      - python
+      - virtual_real_porn.py
+      - performerByURL
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - virtual_real_porn.py
+    - sceneByFragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - virtual_real_porn.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - virtual_real_porn.py
+    - sceneByQueryFragment
+sceneByURL:
+  - action: script
+    url:
+      - virtualrealamateurporn.com/vr-amateur-porn-video/
+      - virtualrealgay.com/vr-gay-porn-video/
+      - virtualrealjapan.com/vr-japanese-video/
+      - virtualrealpassion.com/vr-female-pov-porn-video/
+      - virtualrealporn.com/vr-porn-video/
+      - virtualrealtrans.com/vr-trans-porn-video/
+    script:
+      - python
+      - virtual_real_porn.py
+      - sceneByURL
+
+# Last Updated March 17, 2023
