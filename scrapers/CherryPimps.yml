@@ -17,9 +17,6 @@ xPathScrapers:
         Name:
           selector: //a[contains(@href, 'cherrypimps.com/series/')]/@title
           postProcess:
-            - replace:
-                - regex: "^"
-                  with: ""
             - map:
                 CherryPimps : "Cherry Pimps"
                 Alt         : "Alt" 
