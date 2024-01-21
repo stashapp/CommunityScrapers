@@ -1,0 +1,96 @@
+name: Straplez.com
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - straplez.com/model/
+    scraper: sceneScraper
+    queryURL: "https://www.straplez.com/api/movie{url}"
+    queryURLReplace:
+      url:
+        - regex: ^.*\/movie\/(\d+)\/([A-Z_]+)$
+          with: "?name=$2&date=$1"
+performerByURL:
+  - action: scrapeJson
+    url:
+      - straplez.com/model/
+    scraper: performerScraper
+    queryURL: "https://www.straplez.com/api/model{url}"
+    queryURLReplace:
+      url:
+        - regex: ^.*\/model\/([A-Za-z\-]+)\/?$
+          with: "?name=$1&after=0&order=DATE&direction=DESC"
+jsonScrapers:
+  performerScraper:
+    performer:
+      Name: name
+      Gender: gender
+      URL:
+        selector: path
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.straplez.com
+      Ethnicity: ethnicity
+      Country:
+        selector: country.name
+        postProcess:
+          - map:
+              "Unknown": ""
+      HairColor: hair
+      EyeColor: eyes
+      Height:
+        selector: height
+        postProcess:
+          - map:
+              0: ""
+      Weight:
+        selector: weight
+        postProcess:
+          - map:
+              0: ""
+      Image:
+        selector: headshotImagePath
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://cdn.metartnetwork.com/3D345D1E156910B44DB5A80CDD746318
+  sceneScraper:
+    scene:
+      Title: name
+      Date:
+        selector: publishedAt
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05Z
+      Details: description
+      Studio:
+        Name:
+          fixed: Straplez.com
+      Image:
+        selector: splashImagePath
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://cdn.metartnetwork.com/3D345D1E156910B44DB5A80CDD746318
+      Performers:
+        Name: models.#.name
+        Image:
+          selector: models.#.headshotImagePath
+          postProcess:
+            - replace:
+              - regex: ^
+                with: https://cdn.metartnetwork.com/3D345D1E156910B44DB5A80CDD746318
+        URL:
+          selector: models.#.path
+          postProcess:
+            - replace:
+              - regex: ^
+                with: https://www.straplez.com
+      Tags:
+        Name: categories.#.name
+      URL:
+        selector: path
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.straplez.com
+# Last Updated January 21, 2024
