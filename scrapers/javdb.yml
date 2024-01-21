@@ -83,11 +83,8 @@ xPathScrapers:
                 with: ""
       Date: //strong[text()='Released Date:']/../span/text()
       Details:
-        selector: //h2[@class="title is-4"]/strong/text()
-        postProcess:
-          - replace:
-              - regex: (.*?\s)(.+)
-                with: $2
+        selector: //strong[@class="current-title"]/text()
+      Director: //strong[text()='Director:']/../span/a/text()
       Tags:
         Name: //strong[text()='Tags:']/../span/a/text()
       Performers:
@@ -161,4 +158,4 @@ driver:
         #  Value: "Add here the actual value from your cookies"
         #  Path: "/"
         #  Domain: "javdb36.com"
-# Last Updated July 24, 2023
+# Last Updated January 21, 2024
