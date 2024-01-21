@@ -32,7 +32,7 @@ xPathScrapers:
       Performers: &performers
         Name: //p[@class="contributorName"]//a[contains(@href, "profile")]
       Details: &details
-        selector: //p[@class="description-truncated"]
+        selector: //p[@class="description-truncated"] | //p[@class="description-truncated"]/following-sibling::*
         postProcess:
           - replace:
               - regex: \s*\.{3}
