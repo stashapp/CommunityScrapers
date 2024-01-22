@@ -60,7 +60,6 @@ def get_config(default: str | None = None) -> "CustomConfig":
             # py_common should not merge configs
             break
 
-    log.debug(str(config))
     return config
 
 
