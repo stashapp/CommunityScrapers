@@ -66,7 +66,7 @@ class ScrapedMovie(TypedDict, total=False):
     rating: str
     front_image: str
     back_image: str
-    URL: str
+    url: str
     aliases: str
 
 class ScrapedGallery(TypedDict, total=False):

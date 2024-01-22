@@ -1,33 +1,24 @@
-import sys
+import requests
 
-try:
-    import requests
-except ModuleNotFoundError:
-    print(
-        "You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)",
-        file=sys.stderr,
-    )
-    print(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests",
-        file=sys.stderr,
-    )
-    sys.exit()
+import py_common.log as log
+from py_common.config import get_config
+from py_common.util import dig
 
-try:
-    import py_common.config as config
-    import py_common.log as log
-    from py_common.util import dig
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit()
+
+config = get_config(
+    default="""
+# URL for your local Stash server
+url = http://localhost:9999
+
+# API key can be generated in Stash's settings page: `Settings > Security > Authentication`
+api_key =
+"""
+)
 
 
 def callGraphQL(query: str, variables: dict | None = None):
-    api_key = config.STASH.get("api_key", "")
-    url = config.STASH.get("url", "")
+    api_key = config.api_key
+    url = config.url
     if not url:
         log.error("You need to set the URL in 'config.py'")
         return None
@@ -35,7 +26,7 @@ def callGraphQL(query: str, variables: dict | None = None):
         log.error("You need to set the URL in 'config.py' to your own stash server")
         return None
 
-    stash_url = config.STASH["url"] + "/graphql"
+    stash_url = f"{url}/graphql"
     headers = {
         "Accept-Encoding": "gzip, deflate",
         "Content-Type": "application/json",
@@ -45,35 +36,33 @@ def callGraphQL(query: str, variables: dict | None = None):
         "ApiKey": api_key,
     }
     json = {"query": query}
-    if variables is not None:
+    if variables:
         json["variables"] = variables  # type: ignore
     response = requests.post(stash_url, json=json, headers=headers)
     if response.status_code == 200:
         result = response.json()
         if errors := result.get("error"):
             errors = "\n".join(errors)
-            log.error(f"[ERROR][GraphQL] {errors}")
-            return None
-        if result.get("data"):
-            return result.get("data")
+            log.error(f"[GraphQL] {errors}")
+        return result.get("data")
     elif response.status_code == 401:
         log.error(
-            "[ERROR][GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.py' in the 'py_common' folder"
+            "[GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.ini' in the 'py_common' folder"
         )
         return None
     elif response.status_code == 404:
         if "localhost:9999" in url:
             log.error(
-                "[ERROR][GraphQL] HTTP Error 404, Not Found. Your local stash server is your endpoint, but port 9999 did not respond. Did you change stash's port? Edit 'config.py' in the 'py_common' folder to point at the correct port for stash!"
+                "[GraphQL] HTTP Error 404, Not Found. Your local stash server is your endpoint, but port 9999 did not respond. Did you change stash's port? Edit 'config.ini' in the 'py_common' folder to point at the correct port for stash!"
             )
         else:
             log.error(
-                "[ERROR][GraphQL] HTTP Error 404, Not Found. Make sure 'config.py' in the 'py_common' folder points at the correct address and port!"
+                "[GraphQL] HTTP Error 404, Not Found. Make sure 'config.ini' in the 'py_common' folder points at the correct address and port!"
             )
         return None
 
     raise ConnectionError(
-        f"GraphQL query failed: {response.status_code} - {response.content}"
+        f"[GraphQL] Query failed: {response.status_code} - {response.content}"
     )
 
 
