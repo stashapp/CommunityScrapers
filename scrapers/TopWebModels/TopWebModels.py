@@ -107,8 +107,8 @@ if __name__ == "__main__":
         scene["date"] = datetime.strptime(date[:10], "%Y/%m/%d").strftime("%Y-%m-%d")
     if description := content.get("description"):
         scene["details"] = html.unescape(description).replace("\u00a0", " ")
-    if sites := content.get("sites"):
-        scene_studio = sites[0]["name"]
+    if site := content.get("site"):
+        scene_studio = site
         scene["studio"] = {"name": scene_studio}
     if models := content.get("models"):
         scene["performers"] = [{"name": x} for x in models]
