@@ -1,0 +1,7 @@
+name: "Thumbnail Frame Matcher"
+sceneByFragment:
+  action: script
+  script:
+    - ruby
+    - thumbnail_frame_matcher.rb
+# Last Updated August 30, 2022

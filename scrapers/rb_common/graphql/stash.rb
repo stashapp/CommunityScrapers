@@ -256,6 +256,29 @@ module GraphQL
                 framerate
                 bitrate
             }
+            files {
+              id
+              path
+              basename
+              parent_folder_id
+              zip_file_id
+              mod_time
+              size
+              fingerprints {
+                type
+                value
+              }
+              format
+              width
+              height
+              duration
+              video_codec
+              audio_codec
+              frame_rate
+              bit_rate
+              created_at
+              updated_at
+            }
             paths {
                 screenshot
                 preview
