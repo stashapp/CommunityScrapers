@@ -2,11 +2,12 @@ name: Hentaied
 sceneByURL:
   - action: scrapeXPath
     url:
+      - defeatedsexfight.com
       - freeze.xxx
       - futanari.xxx
       - hentaied.com
       - parasited.com
-      - defeatedsexfight.com
+      - plantsvscunts.com
       - somegore.com
     scraper: sceneScraper
 xPathScrapers:
@@ -22,7 +23,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Performers:
         Name: //div[@class="left-top-part"]//div[contains(@class,"tagsmodels singletag")]//a
-      Director:  //div[contains(@class, "director")]//span
+      Director: //div[contains(@class, "director")]//span 
       Tags:
         Name:
           selector: //ul[@class="post-categories"]//a
@@ -50,4 +51,5 @@ xPathScrapers:
                 Futanari XXX                    : Futanari XXX
                 Lesbian Sex Fight               : Defeated Sex Fight
                 Bloody                          : Somegore
-# Last Updated January 20, 2024
+                Plants vs Cunts                 : Plants vs Cunts
+# Last Updated January 24, 2024
