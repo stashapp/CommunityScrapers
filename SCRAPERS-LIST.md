@@ -7,6 +7,7 @@ Column names are **S**cenes, **G**allery, **M**ovies, **P**erformers.
 
 Supported Site|Scraper| S | G | M | P |Needs|Contents
 --------------|-------|:-:|:-:|:-:|:-:|:---:|:------:
+<www.mgstage.com>|mgstage.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 1000facials.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 10musume.com|10Musume.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 1111customsxxx.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
@@ -479,6 +480,7 @@ ebonytugs.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 edwardjames.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 elegantangel.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 elitebabes.com|EliteBabes.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Babes
+emilybloom.com|EmilyBloom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 englishlads.com|EnglishLads.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|Gay
 enzorimenez.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 eporner.com|Eporner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -500,10 +502,10 @@ evilangel.com|Algolia_EvilAngel|:heavy_check_mark:|:heavy_check_mark:|:heavy_che
 evilangel.com|GammaEntertainment.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
 evolvedfights.com|evolvedfightslez.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 evolvedfightslez.com|evolvedfightslez.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+excogigirls.com|ExploitedX.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 exotic4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 explicite-art.com|ExpliciteArt.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 exploitedcollegegirls.com|ExploitedX.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
-excogigirls.com|ExploitedX.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 extrapackage.com|ExtraPackage.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 extremepickups.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 exxxtrasmall.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -926,9 +928,9 @@ menoboy.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|
 menover30.com|Algolia_MenOver30.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 menpov.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 messyxxx.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
-metadataapi.net|**Use the Endpoint**|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 metadataapi.net/jav|ThePornDBJAV.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|JAV
 metadataapi.net/movies|ThePornDBMovies.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Movies
+metadataapi.net|**Use the Endpoint**|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 metalbondage.com|MetalBondage.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 metart.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
 metartnetwork.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
@@ -1662,7 +1664,6 @@ wowgirlsblog.com|WOWGirlsBlog.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wowporn.xxx|WowPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wtfpass.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wurstfilm.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
-www.mgstage.com|mgstage.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 x-angels.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 x-art.com|X-artcom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xart.xxx|Xartxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
