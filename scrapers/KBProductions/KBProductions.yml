@@ -9,6 +9,7 @@ sceneByURL:
       - inserted.com/upcoming/
 
       - inserted.com/videos/
+      - lucidflix.com/episodes/
       - rickysroom.com/videos/
       - sidechick.com/videos/
 
@@ -21,6 +22,7 @@ performerByURL:
   - url:
       - inserted.com/tour/models/
       - inserted.com/models/
+      - lucidflix.com/models/
       - rickysroom.com/models/
       - sidechick.com/models/
     action: script

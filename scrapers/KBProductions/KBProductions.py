@@ -26,7 +26,7 @@ except ModuleNotFoundError:
 
 def get_from_url(url_to_parse):
     m = re.match(
-        r'https?:\/\/(?:www\.)?((\w+)\.com)(?:\/tour)?\/(?:videos|upcoming|models)\/?(\d+)?\/([a-z0-9-]+)',
+        r'https?:\/\/(?:www\.)?((\w+)\.com)(?:\/tour)?\/(?:videos|episodes|upcoming|models)\/?(\d+)?\/([a-z0-9-]+)',
         url_to_parse)
     if m is None:
         return None, None, None, None
@@ -72,12 +72,17 @@ def scrape_scene(page_json, studio):
         sys.exit(1)
 
     scene = page_json.get("props").get("pageProps").get("content")
+    studioMap = {
+        "Lucid flix": "LucidFlix"
+    }
 
     scrape = {}
     if scene.get('site'):
         scrape['studio'] = {'name': scene['site']}
     else:
         scrape['studio'] = {'name': studio}
+    if scrape['studio']['name'] in studioMap:
+        scrape['studio']['name'] = studioMap[scrape['studio']['name']]
     if scene.get('title'):
         scrape['title'] = scene['title']
     if scene.get('publish_date'):
