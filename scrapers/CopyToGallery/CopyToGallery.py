@@ -6,7 +6,7 @@ import py_common.graphql as graphql
 import py_common.log as log
 from py_common.util import dig
 
-find_gallery = False
+find_missing_galleries = False
 
 
 def get_gallery_id_by_path(abs_path):
@@ -95,7 +95,7 @@ if not scene:
 
 
 gallery_ids = [g["id"] for g in scene["galleries"]]
-if not gallery_ids and find_galleries:
+if not gallery_ids and find_missing_galleries:
     log.debug(
         f"No galleries associated with scene {SCENE_ID}, searching for zips in folder..."
     )
