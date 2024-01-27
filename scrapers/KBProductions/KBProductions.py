@@ -143,7 +143,7 @@ def scrape_performer(page_json):
     scrape['gender'] = performer.get('gender')
     scrape['image'] = performer.get('thumb')
     details = ''
-    if 'Bio' in scrape:
+    if 'Bio' in performer:
        details = BeautifulSoup(performer['Bio'], "html.parser").get_text()
     scrape['details'] = details
     scrape['birthdate'] = performer.get("Birthdate")
