@@ -1,0 +1,10 @@
+name: "Copy to Images"
+# requires: py_common
+
+galleryByFragment:
+  action: script
+  script:
+    - python3
+    - CopyToImages.py
+
+# Last Updated January 27, 2024
