@@ -5,35 +5,72 @@ sceneByURL:
     url:
       - allanal.com/
       - analonly.com/
-      - dirtyauditions.com/
       - nympho.com/
       - swallowed.com/
       - trueanal.com/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      # Scenes on dirtyauditions.com do not have tags nor studiocode
+      - dirtyauditions.com/
+    scraper: newSiteScraper
+
 xPathScrapers:
   sceneScraper:
     common:
       $info: //div[@class="content-page-info"]
+      $res: //script[contains(., "trailer_screencap")]
     scene:
-      Title: //h2[@class="title"]/text()|//h1[@class="title"]/text()
-      Details: $info/div[starts-with(@class,"desc")]|//div [@class="desc"]/text()
-      Performers:
+      Title: &title //h2[@class="title"]/text()|//h1[@class="title"]/text()
+      Details: &details $info/div[starts-with(@class,"desc")]|$info//div[@class="desc"]/text()
+      Performers: &performers
         Name:
-          selector: $info//h4[@class="models"]/a|$info//h2[@class="models"]/a
+          selector: $info//h4[contains(@class,"models")]/a|$info//h2[contains(@class,"models")]/a
           postProcess:
             - replace:
                 - regex: '\s*,\s*$'
-                  with: ""
-
-      Studio:
-        Name:
-          selector: //a[contains(@class,"navbar-brand")]/img/@title
-      Date:
-        selector: $info//span[contains(@class,"date") and not(contains(@class,"mobile"))]
+                  with: 
+      Studio: &studio
+        Name: //a[contains(@class,"navbar-brand")]/img/@title
+      Date: &date
+        selector: $res
         postProcess:
           - replace:
-              - regex: (\d+)(?:[dhnrst]+)\s+(.+)
-                with: "$1 $2"
-          - parseDate: 2 Jan 2006
-      Image: //video[contains(@id,"ypp-player")]/@poster|//div[@id="main-player"]/@data-screenshot|//meta[@property="og:image"]/@content
-# Last Updated January 01, 2023
+              - regex: .+?(?:"publish_date":")([^\s"]+).*$
+                with: $1
+          - parseDate: 2006/01/02
+      Code:
+        selector: //a[@class='download-trailer']/@href
+        postProcess:
+          - replace:
+            - regex: ^http.+/(.+?)_(?:.*)$
+              with: $1
+      Image:
+        selector: $res
+        postProcess:
+          - replace:
+              - regex: .+?(?:"trailer_screencap":")([^"]+jpg).*$
+                with: $1
+      Tags:
+        Name:
+          selector: $res
+          postProcess:
+            - replace:
+                - regex: .+?(?:"tags":\[)([^\]]+).*$
+                  with: $1
+                - regex: '["]+'
+                  with: 
+          split: ","
+
+  newSiteScraper:
+    common:
+      $info: //div[@class="content-page-info"]
+      $res: //script[contains(., "trailer_screencap")]
+    scene:
+      Title: *title
+      Details: *details
+      Performers: *performers
+      Studio: *studio
+      Date: *date
+      Image: //meta[@property="og:image"]/@content
+# Last Updated January 27, 2024
