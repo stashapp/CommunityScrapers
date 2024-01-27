@@ -6,6 +6,8 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $image: //img[@class[contains(., "large_update_thumb")]]
     scene:
       Studio:
         Name:
@@ -22,9 +24,9 @@ xPathScrapers:
       Tags:
         Name: //span[@class="update_tags"]/a
       Image:
-        selector: //img[@class[contains(., "large_update_thumb")]]/@src
+        selector: $image/@src0_3x | $image/@src0_2x | $image/@src
         postProcess:
           - replace:
               - regex: ^
                 with: https://willtilexxx.com/
-# Last Updated July 29, 2022
+# Last Updated January 27, 2024
