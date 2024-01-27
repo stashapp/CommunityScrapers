@@ -36,9 +36,9 @@ studio = True
 urls = False
 
 # ADD to existing values or SET
-tagsmode = SET
-performersmode = SET
-urlsmode = SET
+tagsmode = ADD
+performersmode = ADD
+urlsmode = ADD
 """
 )
 
