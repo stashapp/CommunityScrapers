@@ -26,43 +26,44 @@ xPathScrapers:
       Tags: &tags
         Name: //div[@class="tagline"]//a
       Image:
-         selector: //meta[@itemprop="thumbnailUrl"]/@content
-         postProcess:
-           - replace:
-                - regex: \/\/(.*)
-                  with: https://$1
+        selector: //meta[@itemprop="thumbnailUrl"]/@content
+        postProcess:
+          - replace:
+              - regex: \/\/(.*)
+                with: https://$1
       Performers: &performers
         Name: //div[@class="meet"]//a
-      Director: //h3[contains(text(),"Shot by")]/following-sibling::p
+      Director: &director //h3[contains(text(),"Shot by")]/following-sibling::p
       Studio: &studio
-          Name:
-            fixed: We Are Hairy
+        Name:
+          fixed: We Are Hairy
   galleryScraper:
     gallery:
       Title: *title
-      Date: *date 
+      Date: *date
       Studio: *studio
       Performers: *performers
       Tags: *tags
       Details: *details
+      Photographer: *director
   performerScraper:
     performer:
       Name: //span/span[@itemprop="name"]/text()
       Gender:
         fixed: Female
-# Uncomment to scrape performer image
-#      Image:
-#        selector: //div[@class="lhs"]/img/@src
+      # Uncomment to scrape performer image
+      #      Image:
+      #        selector: //div[@class="lhs"]/img/@src
       Height:
         selector: //p[@id="height_both"]/text()
         postProcess:
           - replace:
-            - regex: .*(\d{3}) cm
-              with: $1
+              - regex: .*(\d{3}) cm
+                with: $1
       Weight:
         selector: //p[@id="weight_both"]/text()
         postProcess:
           - replace:
-            - regex: .*(\d{2,}) kg
-              with: $1
-# Last Updated July 27, 2023
+              - regex: .*(\d{2,}) kg
+                with: $1
+# Last Updated January 27, 2024
