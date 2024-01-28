@@ -1,0 +1,66 @@
+name: "Life Selector / 21 Roles"
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - galleryByFragment
+galleryByURL:
+  - action: script
+    url:
+      - lifeselector.com/pov-photo-gallery/
+      - 21roles.com/pov-photo-gallery/
+    script:
+      - python
+      - life_selector.py
+      - galleryByURL
+movieByURL:
+  - action: script
+    url:
+      - lifeselector.com/game/DisplayPlayer/gameId/
+      - 21roles.com/game/DisplayPlayer/gameId/
+    script:
+      - python
+      - life_selector.py
+      - movieByURL
+performerByFragment:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - performerByFragment
+performerByName:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - performerByName
+performerByURL:
+  - action: script
+    url:
+      - lifeselector.com/model/view/
+      - 21roles.com/model/view/
+    script:
+      - python
+      - life_selector.py
+      - performerByURL
+# sceneByFragment cannot be used as it returns a single scene result
+# - search by the game (movie/release) name instead, via the Search (magnifying
+#   glass) to get a list of scenes, and then pick the correct scene
+sceneByName:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - life_selector.py
+    - sceneByQueryFragment
+# sceneByURL cannot be used as it returns a single scene result
+# - search by the game (movie/release) name instead, via the Search (magnifying
+#   glass) to get a list of scenes, and then pick the correct scene
+
+# Last Updated March 12, 2023
