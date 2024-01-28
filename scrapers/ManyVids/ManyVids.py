@@ -158,7 +158,7 @@ def get_scene(scene_id: str) -> dict:
     else:
         log.debug("No date found")
 
-    scrape["tags"] = [{"name": x} for x in meta.get("tags", [])]
+    scrape["tags"] = [{"name": x["label"]} for x in meta.get("tagList", [])]
 
     log.debug(f"Scraped data: {json.dumps(scrape)}")
     return scrape
