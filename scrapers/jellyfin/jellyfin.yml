@@ -1,61 +1,56 @@
 name: Jellyfin
 # requires: py_common
-
-performerByURL:
-  - url:
-  #Replace this with you local jellyfin host
-      - yourhost:8096
-    action: script
-    script:
-      - python3
-      - jellyfin.py
-      - urlperformer
-performerByName:
-    action: script
-    script:
-      - python3
-      - jellyfin.py
-      - queryperformer
-performerByFragment:
-    action: script
-    script:
-      - python3
-      - jellyfin.py
-      - fragmentperformer
-sceneByName:
-    action: script
-    script:
-      - python3
-      - jellyfin.py
-      - queryscene
-sceneByFragment:
-    action: script
-    script:
-      - python3
-      - jellyfin.py
-      - fragmentscene
 sceneByURL:
-  - url:
-#Replace this with you local jellyfin host
-      - yourhost:8096
-    action: script
-    script:
-      - python3
-      - jellyfin.py
-      - urlscene
-sceneByQueryFragment:
-    action: script
+  - action: script
+    url: &baseJellyfinURL
+      # Change this to your Jellyfin URL, same as in config.ini
+      - localhost:8096
     script:
       - python
-      - jellyfin.py
-      - validSearch
-movieByURL:
-  - url:
-#Replace this with you local jellyfin host
-      - yourhost:8096
-    action: script
+      - Jellyfin.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url: *baseJellyfinURL
     script:
-      - python3
-      - jellyfin.py
-      - urlmovie
-# Last Updated June 23, 2022
+      - python
+      - Jellyfin.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url: *baseJellyfinURL
+    script:
+      - python
+      - Jellyfin.py
+      - movie-by-url
+# Last Updated January 30, 2024
