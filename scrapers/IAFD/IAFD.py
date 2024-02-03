@@ -719,8 +719,14 @@ def scene_from_tree(tree):
         "director": scene_director(tree),
         "studio": scene_studio(tree),
         "performers": [
-            {"name": name} for name in tree.xpath('//div[@class="castbox"]/p/a/text()')
-        ],
+    {
+        "name": name,
+        "url": "http://iafd.com" + tree.xpath('//div[@class="castbox"]/p/a/@href')[index],
+        "image": tree.xpath('//div[@class="castbox"]/p/a/img[@class="headshot"]/@src')[index]
+    }
+    for index, name in enumerate(tree.xpath('//div[@class="castbox"]/p/a/text()'))
+],
+
     }
 
 
