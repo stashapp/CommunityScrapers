@@ -1,0 +1,38 @@
+name: "Spritzz"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - spritzz.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="videonewinfo"]/h2
+      Details: //div[@class="videonewinfo"]/p
+      Performers:
+        Name:
+          selector: //p[contains(.,'Cast:')]
+          postProcess:
+            - replace:
+                - regex: \s+,\s+
+                  with: ','
+                - regex: ^Cast:\s+(.+)
+                  with: $1
+          split: ','
+      Image:
+        selector: //img[@id="scene_faceimage"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://spritzz.com/
+      Date:
+        selector : //div[@class="videonewinfo"]/h5
+        postProcess:
+          - replace:
+              - regex: ^.+:\s([^:]+)+$
+                with: $1
+          - parseDate: January 2, 2006
+      Studio:
+        Name:
+          fixed: "Spritzz"
+# Last Updated February 3, 2024
