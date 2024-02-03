@@ -1,0 +1,78 @@
+name: BangBros
+# requires: py_common, AyloAPI
+# scrapes: Ass Parade, Ava Spice, Back Room Facials, Backroom MILF, Ball Honeys, Bang Bus, Bang Casting, Bang POV, Bang Tryouts, BangBros 18, BangBros Angels, Bangbros Clips, BangBros Remastered, BangBros Vault, Big Mouthfuls, Big Tit Cream Pie, Big Tits, Round Asses, BlowJob Fridays, Blowjob Ninjas, Boob Squad, Brown Bunnies, Can He Score, Casting, Chongas, Colombia Fuck Fest, Dirty World Tour, Dorm Invasion, Facial Fest, Fuck Team Five, Glory Hole Loads, Latina Rampage, Living With Anna, MILF Lessons, Milf Soup, Magical Feet, Mom Is Horny, Monsters of Cock, Mr CamelToe, Mr. Anal, My Dirty Maid, My Life In Brazil, Newbie Black, Pawg, Party of 3, Penny Show, Porn Star Spa, Power Munch, Public Bang, Slutty White Girls, Stepmom Videos, Street Ranger, Tugjobs, Virtual Porn, Working Latinas
+galleryByURL:
+  - action: script
+    url:
+      - bangbros.com/video
+      - virtualporn.com/video
+    script:
+      - python
+      - BangBros.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - BangBros.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - bangbros.com/video
+      - virtualporn.com/video
+    script:
+      - python
+      - BangBros.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - BangBros.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - BangBros.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - BangBros.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - BangBros.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - bangbros.com/model/
+    script:
+      - python
+      - BangBros.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - BangBros.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - bangbros.com/movie
+      - virtualporn.com/movie
+      # Since scenes link to the movie we can scrape movies from scenes
+      - bangbros.com/video
+      - virtualporn.com/video
+    script:
+      - python
+      - BangBros.py
+      - movie-by-url
+# Last Updated January 14, 2024

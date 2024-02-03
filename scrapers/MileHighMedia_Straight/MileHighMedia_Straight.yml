@@ -1,0 +1,109 @@
+name: Mile High Media (Straight)
+# requires: py_common, AyloAPI
+# scrapes: Dilfed, Doghouse Digital, Family Sinners, Lesbian Older Younger, Mile High Media, Milfed, Reality Junkies, Sweet Sinner, Sweetheart Video
+galleryByURL:
+  - action: script
+    url:
+      - milehighmedia.com/scene/
+      - dilfed.com/scene/
+      - doghousedigital.com/scene/
+      - familysinners.com/scene/
+      - milfed.com/scene/
+      - realityjunkies.com/scene/
+      - sweetsinner.com/scene/
+      - sweetheartvideo.com/scene/
+    script:
+      - python
+      - MileHighMedia_Straight.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Straight.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - milehighmedia.com/scene/
+      - dilfed.com/scene/
+      - doghousedigital.com/scene/
+      - familysinners.com/scene/
+      - milfed.com/scene/
+      - realityjunkies.com/scene/
+      - sweetsinner.com/scene/
+      - sweetheartvideo.com/scene/
+    script:
+      - python
+      - MileHighMedia_Straight.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Straight.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Straight.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Straight.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Straight.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - milehighmedia.com/model/
+      - dilfed.com/model/
+      - doghousedigital.com/model/
+      - familysinners.com/model/
+      - milfed.com/model/
+      - realityjunkies.com/model/
+      - sweetsinner.com/model/
+      - sweetheartvideo.com/model/
+    script:
+      - python
+      - MileHighMedia_Straight.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Straight.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - milehighmedia.com/movie/
+      - dilfed.com/movie/
+      - doghousedigital.com/movie/
+      - familysinners.com/series/
+      - milfed.com/movie/
+      - realityjunkies.com/movie/
+      - sweetsinner.com/movie/
+      - sweetheartvideo.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - milehighmedia.com/scene/
+      - dilfed.com/scene/
+      - doghousedigital.com/scene/
+      - familysinners.com/scene/
+      - milfed.com/scene/
+      - realityjunkies.com/scene/
+      - sweetsinner.com/scene/
+      - sweetheartvideo.com/scene/
+    script:
+      - python
+      - MileHighMedia_Straight.py
+      - movie-by-url
+# Last Updated January 14, 2024

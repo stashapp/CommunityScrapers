@@ -1,0 +1,74 @@
+name: Tube8Vip
+# requires: py_common, AyloAPI
+# scrapes: Tube8Vip
+galleryByURL:
+  - action: script
+    url:
+      - tube8vip/scene/
+    script:
+      - python
+      - Tube8Vip.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - Tube8Vip.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - tube8vip/scene/
+    script:
+      - python
+      - Tube8Vip.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Tube8Vip.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - Tube8Vip.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Tube8Vip.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - Tube8Vip.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - tube8vip/model/
+    script:
+      - python
+      - Tube8Vip.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Tube8Vip.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - tube8vip/scene/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - tube8vip/movie/
+    script:
+      - python
+      - Tube8Vip.py
+      - movie-by-url
+# Last Updated January 14, 2024

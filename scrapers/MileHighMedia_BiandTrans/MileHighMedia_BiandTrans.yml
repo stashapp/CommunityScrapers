@@ -1,0 +1,79 @@
+name: Mile High Media (Bi and Trans)
+# requires: py_common, AyloAPI
+# scrapes: Bi Empire, Transsensual
+galleryByURL:
+  - action: script
+    url:
+      - biempire.com/scene/
+      - transsensual.com/scene/
+    script:
+      - python
+      - MileHighMedia_BiandTrans.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_BiandTrans.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - biempire.com/scene/
+      - transsensual.com/scene/
+    script:
+      - python
+      - MileHighMedia_BiandTrans.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_BiandTrans.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - MileHighMedia_BiandTrans.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_BiandTrans.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - MileHighMedia_BiandTrans.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - biempire.com/model/
+      - transsensual.com/model/
+    script:
+      - python
+      - MileHighMedia_BiandTrans.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_BiandTrans.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - biempire.com/movie/
+      - transsensual.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - biempire.com/scene/
+      - transsensual.com/scene/
+    script:
+      - python
+      - MileHighMedia_BiandTrans.py
+      - movie-by-url
+# Last Updated January 14, 2024

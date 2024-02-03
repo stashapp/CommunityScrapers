@@ -1,0 +1,99 @@
+name: Deviante
+# requires: py_common, AyloAPI
+# scrapes: Erotic Spice, Forgive Me Father, Love Her Ass, Pretty Dirty Teens, Sex Working
+galleryByURL:
+  - action: script
+    url:
+      - deviante.com/video/
+      - eroticspice.com/video/
+      - forgivemefather.com/video/
+      - loveherass.com/video/
+      - prettydirtyteens.com/video/
+      - sexworking.com/video/
+    script:
+      - python
+      - Deviante.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - Deviante.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - deviante.com/video/
+      - eroticspice.com/video/
+      - forgivemefather.com/video/
+      - loveherass.com/video/
+      - prettydirtyteens.com/video/
+      - sexworking.com/video/
+    script:
+      - python
+      - Deviante.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Deviante.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - Deviante.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Deviante.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - Deviante.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - deviante.com/model/
+      - eroticspice.com/model/
+      - forgivemefather.com/model/
+      - loveherass.com/model/
+      - prettydirtyteens.com/model/
+      - sexworking.com/model/
+    script:
+      - python
+      - Deviante.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Deviante.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - deviante.com/movie/
+      - eroticspice.com/movie/
+      - forgivemefather.com/movie/
+      - loveherass.com/movie/
+      - prettydirtyteens.com/movie/
+      - sexworking.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - deviante.com/video/
+      - eroticspice.com/video/
+      - forgivemefather.com/video/
+      - loveherass.com/video/
+      - prettydirtyteens.com/video/
+      - sexworking.com/video/
+    script:
+      - python
+      - Deviante.py
+      - movie-by-url
+# Last Updated January 14, 2024
