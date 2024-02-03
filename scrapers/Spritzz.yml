@@ -3,7 +3,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - spritzz.com/video/
-
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -37,4 +36,3 @@ xPathScrapers:
         Name:
           fixed: "Spritzz"
 # Last Updated February 3, 2024
-~                                
