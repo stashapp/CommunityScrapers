@@ -1,0 +1,74 @@
+name: Bromo
+# requires: py_common, AyloAPI
+# scrapes: Bromo
+galleryByURL:
+  - action: script
+    url:
+      - bromo.com/scene/
+    script:
+      - python
+      - MileHighMedia_BiandTrans.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - Bromo.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - bromo.com/scene/
+    script:
+      - python
+      - Bromo.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Bromo.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - Bromo.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Bromo.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - Bromo.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - bromo.com/model/
+    script:
+      - python
+      - Bromo.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Bromo.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - bromo.com/scene/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - bromo.com/movie/
+    script:
+      - python
+      - Bromo.py
+      - movie-by-url
+# Last Updated January 14, 2024

@@ -1,0 +1,72 @@
+name: Voyr
+# requires: py_common, AyloAPI
+# scrapes: Voyr
+galleryByURL:
+  - action: script
+    url:
+      - voyr.com/scene/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - gallery-by-url
+sceneByURL:
+  - action: script
+    url:
+      - voyr.com/scene/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - Voyr
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - Voyr
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - Voyr
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - Voyr
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - voyr.com/model/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - voyr.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - voyr.com/scene/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - movie-by-url
+# Last Updated January 13, 2024

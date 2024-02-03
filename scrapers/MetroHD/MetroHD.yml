@@ -1,0 +1,92 @@
+name: Metro HD
+# requires: py_common, AyloAPI
+# scrapes: Metro HD, Deviant Hardcore, Girl Grind, Kinky Spa, She Will Cheat, Family Hookups
+galleryByURL:
+  - action: script
+    url:
+      - metrohd.com/scene/
+      - devianthardcore.com/scene/
+      - familyhookups.com/scene/
+      - girlgrind.com/scene/
+      - kinkyspa.com/scene/
+      - shewillcheat.com/scene/
+    script:
+      - python
+      - MetroHD.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - MetroHD.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - metrohd.com/scene/
+      - devianthardcore.com/scene/
+      - familyhookups.com/scene/
+      - girlgrind.com/scene/
+      - kinkyspa.com/scene/
+      - shewillcheat.com/scene/
+    script:
+      - python
+      - MetroHD.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - MetroHD.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - MetroHD.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - MetroHD.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - MetroHD.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - metrohd.com/model/
+      - devianthardcore.com/model/
+      - familyhookups.com/model/
+      - girlgrind.com/model/
+      - kinkyspa.com/model/
+      - shewillcheat.com/model/
+    script:
+      - python
+      - MetroHD.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - MetroHD.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - metrohd.com/movie/
+      - devianthardcore.com/movie/
+      - familyhookups.com/movie/
+      - girlgrind.com/movie/
+      - kinkyspa.com/movie/
+      - shewillcheat.com/movie/
+    script:
+      - python
+      - MetroHD.py
+      - movie-by-url
+# Last Updated January 14, 2024

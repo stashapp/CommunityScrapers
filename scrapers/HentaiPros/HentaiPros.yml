@@ -1,0 +1,64 @@
+name: Hentai Pros
+# requires: py_common, AyloAPI
+# scrapes: Hentai Pros
+sceneByURL:
+  - action: script
+    url:
+      - hentaipros.com/scene/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - hentaipros
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - hentaipros
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - hentaipros
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - hentaipros
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - hentaipros.com/model/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - hentaipros.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - hentaipros.com/scene/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - movie-by-url
+# Last Updated January 13, 2024

@@ -1,0 +1,72 @@
+name: Squirted
+# requires: py_common, AyloAPI
+# scrapes: Squirted
+galleryByURL:
+  - action: script
+    url:
+      - squirted.com/scene/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - gallery-by-url
+sceneByURL:
+  - action: script
+    url:
+      - squirted.com/scene/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - squirted
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - squirted
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - squirted
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - squirted
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - squirted.com/model/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AyloAPI/scrape.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - squirted.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - squirted.com/scene/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - movie-by-url
+# Last Updated January 13, 2024
