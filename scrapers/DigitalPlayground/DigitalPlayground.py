@@ -26,7 +26,7 @@ def digitalplayground(obj: Any, _) -> Any:
     fixed = replace_at(
         obj, "studio", "name", replacement=lambda x: studio_map.get(x, x)
     )
-    fixed = replace_all(obj, "url", lambda x: x.replace("/model/", "/modelprofile/"))
+    fixed = replace_all(fixed, "url", lambda x: x.replace("/model/", "/modelprofile/"))
 
     return fixed
 

@@ -418,7 +418,7 @@ def to_scraped_performer(
 
 
 def to_scraped_movie(movie_from_api: dict) -> ScrapedMovie:
-    if not movie_from_api["type"] == "movie":
+    if movie_from_api["type"] not in ("movie", "serie"):
         wrong_type = movie_from_api["type"]
         wrong_id = movie_from_api["id"]
         log.error(f"Attempted to scrape a '{wrong_type}' (ID: {wrong_id}) as a movie.")
@@ -619,11 +619,11 @@ def movie_from_url(
     if not api_movie_json:
         return None
 
-    if dig(api_movie_json, "type") == "movie":
+    if dig(api_movie_json, "type") in ("movie", "serie"):
         return postprocess(to_scraped_movie(api_movie_json), api_movie_json)
 
     # If you scrape a scene or trailer, we can still get the correct movie data
-    if dig(api_movie_json, "parent", "type") == "movie":
+    if dig(api_movie_json, "parent", "type") in ("movie", "serie"):
         log.debug("Result is a scene or trailer, getting movie data from parent")
         return postprocess(
             to_scraped_movie(api_movie_json["parent"]), api_movie_json["parent"]
