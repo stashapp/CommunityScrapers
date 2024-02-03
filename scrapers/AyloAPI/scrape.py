@@ -427,9 +427,13 @@ def to_scraped_movie(movie_from_api: dict) -> ScrapedMovie:
     movie: ScrapedMovie = {
         "name": movie_from_api["title"],
         "synopsis": dig(movie_from_api, "description"),
-        "front_image": dig(movie_from_api, "images", "cover", "0", "xx", "url"),
         "url": _construct_url(movie_from_api),
     }
+
+    if front_image := dig(movie_from_api, "images", "cover", "0", "xx", "url"):
+        movie["front_image"] = front_image
+    elif poster := dig(movie_from_api, "images", "poster", "0", "xx", "url"):
+        movie["front_image"] = poster
 
     if date := dig(movie_from_api, "dateReleased"):
         movie["date"] = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%z").strftime(
@@ -619,12 +623,19 @@ def movie_from_url(
     if not api_movie_json:
         return None
 
+    with open("api_response.json", "w", encoding="utf-8") as f:
+        json.dump(api_movie_json, f, indent=2)
+
     if dig(api_movie_json, "type") in ("movie", "serie"):
         return postprocess(to_scraped_movie(api_movie_json), api_movie_json)
 
     # If you scrape a scene or trailer, we can still get the correct movie data
     if dig(api_movie_json, "parent", "type") in ("movie", "serie"):
         log.debug("Result is a scene or trailer, getting movie data from parent")
+        return movie_from_url(
+            url.replace(f"/{movie_id}/", f"/{api_movie_json['parent']['id']}/"),
+            postprocess=postprocess,
+        )
         return postprocess(
             to_scraped_movie(api_movie_json["parent"]), api_movie_json["parent"]
         )
