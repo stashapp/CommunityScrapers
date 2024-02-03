@@ -478,7 +478,7 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
     ):
         scene["image"] = image
 
-    if dig(scene_from_api, "parent", "type") == "movie":
+    if dig(scene_from_api, "parent", "type") in ("movie", "serie"):
         scene["movies"] = [to_scraped_movie(scene_from_api["parent"])]
 
     if studio := get_studio(scene_from_api):
