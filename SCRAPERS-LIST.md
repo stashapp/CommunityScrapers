@@ -1357,6 +1357,7 @@ spermswallowers.com|JulesJordan.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x
 spermswap.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 spizoo.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spoiledvirgins.com|OldGoesYoung.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+spritzz.com|Spritzz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 spunkworthy.com|SpunkWorthy.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 spyfam.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 squirtalicious.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
