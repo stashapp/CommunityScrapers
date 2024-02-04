@@ -123,7 +123,11 @@ def get_scene(scene_id: str) -> dict:
         log.error(f"Error {api_error} while requesting data from API")
         return {}
 
-    meta = response.json()["data"]
+    if not (meta := response.json().get("data")):
+        log.error(f"Failed to get data for scene '{scene_id}'")
+        log.error(f"API response: {response.text}")
+        return {}
+
     log.debug(f"Raw response from API: {json.dumps(meta)}")
     scrape = {}
     scrape["title"] = meta["title"]
