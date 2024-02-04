@@ -1,0 +1,28 @@
+name: "BringMeABoy"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bringmeaboy.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //title
+      Details: //div[@class="update_description"]
+      Performers:
+        Name:
+          selector: //span[@class="update_models"]/a
+      Image:
+        selector: //script[contains(.,'jwplayer("playerMain").setup')]
+        postProcess:
+          - replace:
+              - regex: ^.+?image:\s+'([^']+)'.+
+                with: $1
+      Date:
+        selector : //div[contains(.,"Release Date")]/b
+        postProcess:
+          - parseDate: 01/02/2006
+      Studio:
+        Name:
+          fixed: "Bring Me A Boy"
+# Last Updated January 26, 2024
