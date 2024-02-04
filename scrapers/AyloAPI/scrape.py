@@ -31,6 +31,9 @@ scrape_markers = False
 
 # Minimum similarity ratio to consider a match when searching
 minimum_similarity = 0.75
+
+# Debug mode will save the latest API response to disk
+debug = False
 """
 )
 
@@ -129,8 +132,9 @@ def __api_request(url: str, headers: dict) -> dict | None:
         log.error(f"Errors from API:\n{api_search_errors}")
         return None
 
-    with open("api_response.json", "w", encoding="utf-8") as f:
-        json.dump(api_response, f, indent=2)
+    if config.debug:
+        with open("api_response.json", "w", encoding="utf-8") as f:
+            json.dump(api_response, f, indent=2)
 
     return api_response["result"]
 
@@ -205,6 +209,7 @@ def get_studio(api_object: dict) -> ScrapedStudio | None:
 # As documented by AdultSun, these tag IDs appear to be neutral but
 # are actually gendered so we can map them to their gender-specific counterparts
 tags_map = {
+    90: "Athletic Woman",
     107: "White Woman",
     112: "Black Woman",
     113: "European Woman",
@@ -484,14 +489,8 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
     if studio := get_studio(scene_from_api):
         scene["studio"] = studio
 
-    if markers := scene_from_api.get("timeTags"):
-        if config.scrape_markers:
-            scene["markers"] = [to_marker(m) for m in markers]  # type: ignore
-        else:
-            log.debug(
-                f"This scene has {len(markers)} markers,"
-                " you can enable scraping them in config.ini"
-            )
+    if markers := scene_from_api.get("timeTags") and config.scrape_markers:
+        scene["markers"] = [to_marker(m) for m in markers]  # type: ignore
 
     return scene
 
@@ -966,12 +965,14 @@ def scene_from_fragment(
     if url := fragment.get("url"):
         log.debug(f"Using scene URL: '{url}'")
         if scene := scene_from_url(url, postprocess=postprocess):
-            if (
-                fragment["id"]
-                and config.scrape_markers
-                and (markers := scene.pop("markers", []))  # type: ignore
-            ):
-                add_markers(fragment["id"], markers)
+            if markers := fragment.pop("markers", []):
+                if fragment["id"] and config.scrape_markers:
+                    add_markers(fragment["id"], markers)
+                else:
+                    log.debug(
+                        f"This scene has {len(markers)} markers,"
+                        " you can enable scraping them in config.ini"
+                    )
             return scene
         log.debug("Failed to scrape scene from URL")
     if title := fragment.get("title"):
