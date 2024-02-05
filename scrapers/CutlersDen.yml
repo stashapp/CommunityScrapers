@@ -1,0 +1,34 @@
+name: "CutlersDen"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cutlersden.com/trailers
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="content-title"]/h1
+      Details: //div[@class="content-details"]/p 
+      Performers:
+        Name:
+          selector: //div[contains(.,'Featuring:')]/a
+      Image:
+        selector: //div[@class="player-thumb"]/img/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://cutlersden.com/
+      Date:
+        selector : //div[@class="content-date"]   
+        postProcess:
+          - replace:
+              - regex: ^([^|]+).+
+                with: $1
+          - parseDate: January 2, 2006
+      Tags:
+        Name:
+          selector: //div[contains(.,'Categories:')]/a/text()
+      Studio:
+        Name:
+          fixed: "Cutler's Den"
+# Last Updated February 4, 2024
