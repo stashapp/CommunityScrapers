@@ -332,9 +332,11 @@ def getScene(scene_id: str | int) -> dict | None:
     fragment SlimGalleryData on Gallery {
         id
         title
+        code
         date
         urls
         details
+        photographer
         rating100
         organized
         image_count
@@ -600,9 +602,11 @@ query FindScenes($filter: FindFilterType, $scene_filter: SceneFilterType, $scene
         fragment SlimGalleryData on Gallery {
           id
           title
+          code
           date
           urls
           details
+          photographer
           rating100
           organized
           image_count
@@ -900,9 +904,11 @@ def getGallery(gallery_id: str | int) -> dict | None:
         created_at
         updated_at
         title
+        code
         date
         urls
         details
+        photographer
         rating100
         organized
         folder {

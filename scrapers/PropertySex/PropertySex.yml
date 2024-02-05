@@ -1,0 +1,79 @@
+name: Property Sex
+# requires: py_common, AyloAPI
+# scrapes: House Humpers, Property Sex, Property Sex VR
+galleryByURL:
+  - action: script
+    url:
+      - propertysex.com/scene/
+      - househumpers.com/scene/
+    script:
+      - python
+      - PropertySex.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - PropertySex.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - propertysex.com/scene/
+      - househumpers.com/scene/
+    script:
+      - python
+      - PropertySex.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - PropertySex.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - PropertySex.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - PropertySex.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - PropertySex.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - propertysex.com/model/
+      - househumpers.com/model/
+    script:
+      - python
+      - PropertySex.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - PropertySex.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - propertysex.com/movie/
+      - househumpers.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - propertysex.com/scene/
+      - househumpers.com/scene/
+    script:
+      - python
+      - PropertySex.py
+      - movie-by-url
+# Last Updated January 14, 2024

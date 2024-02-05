@@ -6,25 +6,22 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $siteContent: //div[@class="site-content"]
     scene:
-      Title: $siteContent//h2
+      Title: //div[@class="video-info-wrapper"]//h1
       Performers:
-        Name:
-          selector: $siteContent//h2[contains(text(), "Starring")]
-          postProcess:
-            - replace:
-                - regex: ^\s*Starring:\s*
-                  with: ""
-                - regex: \s*$
-                  with: ""
-          split: " & "
-      Details:
-        selector: $siteContent//div[@class="elementor-widget-container"]/p
-      Image:
-        selector: $siteContent//video/@data-poster
+        Name: //div[@class="content-info-wrapper"]//h5
+      Date:
+        selector: //div[@class="meta-info-wrapper"]//li[last()]
+        postProcess:
+          - replace:
+            - regex: (\d+)(?:[dhnrst]+)\s+(.+)
+              with: $1 $2
+          - parseDate: 2 Jan 2006
+      Details: //p[contains(@class,"description")]
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Yes Girlz
-# Last Updated May 29, 2023
+      Tags:
+        Name: //p[@class="tags"]/a
+# Last Updated February 01, 2024
