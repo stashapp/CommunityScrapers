@@ -1,37 +1,198 @@
 import json
 import re
-import sys
 import requests
+import sys
 from unicodedata import normalize
 from html.parser import HTMLParser
 
 import py_common.log as log
-from py_common.types import ScrapedMovie, ScrapedPerformer, ScrapedScene
-from py_common.util import dig, scraper_args
+from py_common.types import ScrapedMovie, ScrapedPerformer, ScrapedScene, ScrapedStudio
+from py_common.util import dig, replace_all, scraper_args
 
-
+# Maps the `site_domain` key from the API
+# to studio names currently used on StashDB
 studio_map = {
     "2girls1camera.com": "2 Girls 1 Camera",
+    "allanal.com": "All Anal",
+    "alterotic.com": "Alt Erotic",
+    "amazingfilms.com": "Amazing Films",
+    "analonly.com": "Anal Only",
+    "benefitmonkey.com": "Benefit Monkey",
     "biggulpgirls.com": "Big Gulp Girls",
+    "bjraw.com": "BJ Raw",
+    "blackbullchallenge.com": "Black Bull Challenge",
     "cougarseason.com": "Cougar Season",
     "deepthroatsirens.com": "Deepthroat Sirens",
+    "dirtyauditions.com": "Dirty Auditions",
+    "divine-dd.com": "Divine-DD",
     "facialsforever.com": "Facials Forever",
-    "poundedpetite.com": "Pounded Petite",
-    "shesbrandnew.com": "She's Brand New",
-    "topwebmodels.com": "Top Web Models",
-    "twmclassics.com": "TWM Classics",
-    "lucidflix.com": "LucidFlix",
+    "freakmobmedia.com": "Freak Mob Media",
+    "gotfilled.com": "Got Filled",
+    "hobybuchanon.com": "Hoby Buchanon",
+    "inkedpov.com": "Inked POV",
     "inserted.com": "Inserted",
+    "jav888.com": "JAV888",
+    "lady-sonia.com": "Lady Sonia",
+    "lezkey.com": "LezKey",
+    "lucidflix.com": "LucidFlix",
+    "meanfeetfetish.com": "Mean Feet Fetish",
+    "members.hobybuchanon.com": "Hoby Buchanon",
+    "nylonperv.com": "Nylon Perv",
+    "nympho.com": "Nympho",
+    "poundedpetite.com": "Pounded Petite",
+    "red-xxx.com": "Red-XXX",
     "rickysroom.com": "Ricky's Room",
+    "s3xus.com": "S3XUS",
+    "seska.com": "Seska",
+    "sexymodernbull.com": "Sexy Modern Bull",
+    "shesbrandnew.com": "She's Brand New",
     "sidechick.com": "SIDECHICK",
-    # Note: look into adding other sites with the same structure, some listed here
-    # https://x3guide.com/companies/kb-productions
+    "suckthisdick.com": "Suck This Dick",
+    "swallowed.com": "Swallowed",
+    "topwebmodels.com": "Top Web Models",
+    "trueanal.com": "True Anal",
+    "twmclassics.com": "TWM Classics",
+    "xful.com": "Xful",
+    "yesgirlz.com": "Yes Girlz",
+    "yummycouple.com": "Yummy Couple",
+    "z-filmz-originals.com": "Z-Filmz",
 }
+
+
+states = (
+    "AK",
+    "AL",
+    "AR",
+    "AZ",
+    "CA",
+    "CO",
+    "CT",
+    "DC",
+    "DE",
+    "FL",
+    "GA",
+    "HI",
+    "IA",
+    "ID",
+    "IL",
+    "IN",
+    "KS",
+    "KY",
+    "LA",
+    "MA",
+    "MD",
+    "ME",
+    "MI",
+    "MN",
+    "MO",
+    "MS",
+    "MT",
+    "NC",
+    "ND",
+    "NE",
+    "NH",
+    "NJ",
+    "NM",
+    "NV",
+    "NY",
+    "OH",
+    "OK",
+    "OR",
+    "PA",
+    "RI",
+    "SC",
+    "SD",
+    "TN",
+    "TX",
+    "UT",
+    "VA",
+    "VT",
+    "WA",
+    "WI",
+    "WV",
+    "WY",
+    "Alabama",
+    "Alaska",
+    "Arizona",
+    "Arkansas",
+    "California",
+    "Colorado",
+    "Connecticut",
+    "Delaware",
+    "Florida",
+    "Georgia",
+    "Hawaii",
+    "Idaho",
+    "Illinois",
+    "Indiana",
+    "Iowa",
+    "Kansas",
+    "Kentucky",
+    "Louisiana",
+    "Maine",
+    "Maryland",
+    "Massachusetts",
+    "Michigan",
+    "Minnesota",
+    "Mississippi",
+    "Missouri",
+    "Montana",
+    "Nebraska",
+    "Nevada",
+    "New Hampshire",
+    "New Jersey",
+    "New Mexico",
+    "New York",
+    "North Carolina",
+    "North Dakota",
+    "Ohio",
+    "Oklahoma",
+    "Oregon",
+    "Pennsylvania",
+    "Rhode Island",
+    "South Carolina",
+    "South Dakota",
+    "Tennessee",
+    "Texas",
+    "Utah",
+    "Vermont",
+    "Virginia",
+    "Washington",
+    "West Virginia",
+    "Wisconsin",
+    "Wyoming",
+    "United States",
+)
+
+state_map = {x: "USA" for x in states}
 
 
 def clean_url(url: str) -> str:
     # remove any query parameters
     return re.sub(r"\?.*", "", url)
+
+
+# Some sites only work with the `tour.` subdomain
+def fix_url(url: str) -> str:
+    url = url.replace("twmclassics.com", "topwebmodels.com")
+    url = url.replace("suckthisdick.com", "hobybuchanon.com")
+    tour_domain = (
+        "nympho",
+        "allanal",
+        "analonly",
+        "2girls1camera",
+        "biggulpgirls",
+        "deepthroatsirens",
+        "facialsforever",
+        "poundedpetite",
+        "seska",
+        "swallowed",
+        "shesbrandnew",
+        "topwebmodels",
+        "trueanal",
+        "twmclassics",
+    )
+    return re.sub(rf"//(?<!tour\.)({'|'.join(tour_domain)})", r"//tour.\1", url)
 
 
 def strip_tags(html: str) -> str:
@@ -78,116 +239,26 @@ def fetch_page_props(url: str) -> dict | None:
     return content
 
 
-state_map = {
-    "AK": "USA",
-    "AL": "USA",
-    "AR": "USA",
-    "AZ": "USA",
-    "CA": "USA",
-    "CO": "USA",
-    "CT": "USA",
-    "DC": "USA",
-    "DE": "USA",
-    "FL": "USA",
-    "GA": "USA",
-    "HI": "USA",
-    "IA": "USA",
-    "ID": "USA",
-    "IL": "USA",
-    "IN": "USA",
-    "KS": "USA",
-    "KY": "USA",
-    "LA": "USA",
-    "MA": "USA",
-    "MD": "USA",
-    "ME": "USA",
-    "MI": "USA",
-    "MN": "USA",
-    "MO": "USA",
-    "MS": "USA",
-    "MT": "USA",
-    "NC": "USA",
-    "ND": "USA",
-    "NE": "USA",
-    "NH": "USA",
-    "NJ": "USA",
-    "NM": "USA",
-    "NV": "USA",
-    "NY": "USA",
-    "OH": "USA",
-    "OK": "USA",
-    "OR": "USA",
-    "PA": "USA",
-    "RI": "USA",
-    "SC": "USA",
-    "SD": "USA",
-    "TN": "USA",
-    "TX": "USA",
-    "UT": "USA",
-    "VA": "USA",
-    "VT": "USA",
-    "WA": "USA",
-    "WI": "USA",
-    "WV": "USA",
-    "WY": "USA",
-    "Alabama": "USA",
-    "Alaska": "USA",
-    "Arizona": "USA",
-    "Arkansas": "USA",
-    "California": "USA",
-    "Colorado": "USA",
-    "Connecticut": "USA",
-    "Delaware": "USA",
-    "Florida": "USA",
-    "Georgia": "USA",
-    "Hawaii": "USA",
-    "Idaho": "USA",
-    "Illinois": "USA",
-    "Indiana": "USA",
-    "Iowa": "USA",
-    "Kansas": "USA",
-    "Kentucky": "USA",
-    "Louisiana": "USA",
-    "Maine": "USA",
-    "Maryland": "USA",
-    "Massachusetts": "USA",
-    "Michigan": "USA",
-    "Minnesota": "USA",
-    "Mississippi": "USA",
-    "Missouri": "USA",
-    "Montana": "USA",
-    "Nebraska": "USA",
-    "Nevada": "USA",
-    "New Hampshire": "USA",
-    "New Jersey": "USA",
-    "New Mexico": "USA",
-    "New York": "USA",
-    "North Carolina": "USA",
-    "North Dakota": "USA",
-    "Ohio": "USA",
-    "Oklahoma": "USA",
-    "Oregon": "USA",
-    "Pennsylvania": "USA",
-    "Rhode Island": "USA",
-    "South Carolina": "USA",
-    "South Dakota": "USA",
-    "Tennessee": "USA",
-    "Texas": "USA",
-    "Utah": "USA",
-    "Vermont": "USA",
-    "Virginia": "USA",
-    "Washington": "USA",
-    "West Virginia": "USA",
-    "Wisconsin": "USA",
-    "Wyoming": "USA",
-    "United States": "USA",
-}
+def make_performer_url(slug: str, site: str) -> str:
+    return f"https://{site}/models/{slug}"
+
+
+def get_studio(site: str) -> ScrapedStudio:
+    name = studio_map.get(site, site)
+    studio: ScrapedStudio = {
+        "name": name,
+        "url": f"https://{site}",
+    }
+    if name == "Suck This Dick":
+        studio["parent"] = get_studio("hobybuchanon.com")
+    return studio
 
 
 def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
         "name": raw_performer["name"],
         "gender": raw_performer["gender"],
+        "url": make_performer_url(raw_performer["slug"], raw_performer["site_domain"]),
     }
 
     if image := raw_performer.get("thumb"):
@@ -227,47 +298,13 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
         country = country.split(",")[-1].strip()
         performer["country"] = state_map.get(country, country)
 
+    if twitter := raw_performer.get("Twitter", "").removeprefix("@"):
+        performer["twitter"] = f"https://twitter.com/{twitter}"
+
+    if instagram := raw_performer.get("Instagram", "").removeprefix("@"):
+        performer["instagram"] = f"https://www.instagram.com/{instagram}"
+
     return performer
-
-
-def to_scraped_scene(raw_scene: dict) -> ScrapedScene:
-    scene: ScrapedScene = {}
-
-    if title := raw_scene.get("title"):
-        scene["title"] = title
-    if date := raw_scene.get("publish_date"):
-        scene["date"] = date[:10].replace("/", "-")
-    if details := raw_scene.get("description"):
-        scene["details"] = strip_tags(details)
-    if scene_id := raw_scene.get("id"):
-        scene["code"] = str(scene_id)
-    if models := raw_scene.get("models"):
-        scene["performers"] = [{"name": x} for x in models]
-    if tags := raw_scene.get("tags"):
-        scene["tags"] = [{"name": x} for x in tags]
-
-    if site := dig(raw_scene, "site_domain"):
-        studio_name = studio_map.get(site, site)
-        scene["studio"] = {"name": studio_name}
-
-    # extra_thumbnails has the best sizes and in most cases the first one is the same as thumb
-    # thumb is a good fallback if extra_thumbnails is not available
-    # final fallback is special_thumbnails
-    cover_candidates = filter(
-        None,
-        (
-            dig(raw_scene, "extra_thumbnails", 0),
-            dig(raw_scene, "thumb"),
-            dig(raw_scene, "special_thumbnails", 0),
-        ),
-    )
-    # No animated scene covers
-    img_exts = (".jpg", ".jpeg", ".png")
-
-    if scene_cover := next((x for x in cover_candidates if x.endswith(img_exts)), None):
-        scene["image"] = scene_cover
-
-    return scene
 
 
 def to_scraped_movie(raw_movie: dict) -> ScrapedMovie:
@@ -284,11 +321,62 @@ def to_scraped_movie(raw_movie: dict) -> ScrapedMovie:
     if cover := raw_movie.get("trailer_screencap"):
         movie["front_image"] = cover
 
-    if site := dig(raw_movie, "site_domain"):
-        studio_name = studio_map.get(site, site)
-        movie["studio"] = {"name": studio_name}
+    site = raw_movie["site_domain"]
+    movie["studio"] = get_studio(site)
+
+    # There is no reliable way to construct a movie URL from the data
 
     return movie
+
+
+def to_scraped_scene(raw_scene: dict) -> ScrapedScene:
+    site = raw_scene["site_domain"]
+    scene: ScrapedScene = {}
+
+    if title := raw_scene.get("title"):
+        scene["title"] = title
+    if date := raw_scene.get("publish_date"):
+        scene["date"] = date[:10].replace("/", "-")
+    if details := raw_scene.get("description"):
+        scene["details"] = strip_tags(details)
+    if scene_id := raw_scene.get("id"):
+        scene["code"] = str(scene_id)
+    if models := raw_scene.get("models_thumbs"):
+        scene["performers"] = [
+            {
+                "name": x["name"],
+                "image": x["thumb"],
+                "url": make_performer_url(x["slug"], site),
+            }
+            for x in models
+        ]
+    if tags := raw_scene.get("tags"):
+        scene["tags"] = [{"name": x} for x in tags]
+
+    scene["studio"] = get_studio(site)
+
+    # trailer_screencap is what's shown on most sites
+    # extra_thumbnails has the best sizes and in most cases the first one is the same as thumb
+    # thumb is a good fallback if extra_thumbnails is not available
+    # final fallback is special_thumbnails
+    cover_candidates = filter(
+        None,
+        (
+            dig(raw_scene, "trailer_screencap"),
+            dig(raw_scene, "extra_thumbnails", 0),
+            dig(raw_scene, "thumb"),
+            dig(raw_scene, "special_thumbnails", 0),
+        ),
+    )
+    # No animated scene covers
+    img_exts = (".jpg", ".jpeg", ".png")
+
+    if scene_cover := next((x for x in cover_candidates if x.endswith(img_exts)), None):
+        scene["image"] = scene_cover
+
+    # There is no reliable way to construct a scene URL from the data
+
+    return scene
 
 
 def scrape_scene(url: str) -> ScrapedScene | None:
@@ -308,10 +396,7 @@ def scrape_performer(url: str) -> ScrapedPerformer | None:
     if not (props := fetch_page_props(url)):
         return None
 
-    performer = to_scraped_performer(props["model"])
-    performer["url"] = url
-
-    return performer
+    return to_scraped_performer(props["model"])
 
 
 if __name__ == "__main__":
@@ -326,4 +411,6 @@ if __name__ == "__main__":
         case _:
             log.error(f"Invalid operation: {op}")
             sys.exit(1)
+
+    result = replace_all(result, "url", fix_url)  # type: ignore
     print(json.dumps(result))
