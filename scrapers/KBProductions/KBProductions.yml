@@ -1,14 +1,13 @@
-name: "KB Productions"
+name: KB Productions
 # requires: py_common
+# scrapes: Inserted, Lucid Flix, Ricky's Room, Side Chick, 2 Girls 1 Camera, Big Gulp Girls, Cougar Season, Deepthroat Sirens, Facials Forever, Pounded Petite, She's Brand New, Top Web Models, TMW Classics
 
 sceneByURL:
   - url:
-      # Keeping this to allow for updates using old urls
-      - inserted.com/tour/upcoming/
+      # Keeping this to allow for updates using old urls: they will automatically redirect
       - inserted.com/tour/videos/
-      - inserted.com/upcoming/
-
       - inserted.com/videos/
+
       - lucidflix.com/episodes/
       - rickysroom.com/videos/
       - sidechick.com/videos/
@@ -21,19 +20,20 @@ sceneByURL:
       - tour.poundedpetite.com/scenes
       - tour.shesbrandnew.com/scenes
       - tour.topwebmodels.com/scenes
-
     action: script
     script:
-      - python3
+      - python
       - KBProductions.py
-      - scene
+      - scene-by-url
 performerByURL:
   - url:
       - inserted.com/tour/models/
       - inserted.com/models/
+
       - lucidflix.com/models/
       - rickysroom.com/models/
       - sidechick.com/models/
+
       - tour.2girls1camera.com/models
       - tour.biggulpgirls.com/models
       - tour.cougarseason.com/models
@@ -44,7 +44,7 @@ performerByURL:
       - tour.topwebmodels.com/models
     action: script
     script:
-      - python3
+      - python
       - KBProductions.py
-      - performer
+      - performer-by-url
 # Last Updated January 27, 2024
