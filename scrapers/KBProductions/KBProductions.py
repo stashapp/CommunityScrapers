@@ -26,7 +26,7 @@ except ModuleNotFoundError:
 
 def get_from_url(url_to_parse):
     m = re.match(
-        r'https?:\/\/(?:www\.)?((\w+)\.com)(?:\/tour)?\/(?:videos|episodes|upcoming|models)\/?(\d+)?\/([a-z0-9-]+)',
+        r'https?:\/\/(?:www|tour\.)?((\w+)\.com)(?:\/tour)?\/(?:videos|scenes|episodes|upcoming|models)\/?(\d+)?\/([a-z0-9-]+)',
         url_to_parse)
     if m is None:
         return None, None, None, None
@@ -142,15 +142,18 @@ def scrape_performer(page_json):
     scrape['name'] = performer.get('name')
     scrape['gender'] = performer.get('gender')
     scrape['image'] = performer.get('thumb')
-    details = BeautifulSoup(performer['Bio'], "html.parser").get_text()
+    details = ''
+    if 'Bio' in performer:
+       details = BeautifulSoup(performer['Bio'], "html.parser").get_text()
     scrape['details'] = details
     scrape['birthdate'] = performer.get("Birthdate")
     scrape['measurements'] = performer.get("Measurements")
     scrape['eye_color'] = performer.get("Eyes")
+    scrape['ethnicity'] = performer.get("Ethnicity")
 
     height_ft = performer.get('Height')
     if height_ft:
-        h = re.match(r'(\d+)\D(\d+).+', height_ft)
+        h = re.match(r'(\d+)\D+(\d+).+', height_ft)
         if h:
             h_int = int(
                     round((float(h.group(1)) * 12 + float(h.group(2))) *

@@ -13,6 +13,15 @@ sceneByURL:
       - rickysroom.com/videos/
       - sidechick.com/videos/
 
+      - tour.2girls1camera.com/scenes
+      - tour.biggulpgirls.com/scenes
+      - tour.cougarseason.com/scenes
+      - tour.deepthroatsirens.com/scenes
+      - tour.facialsforever.com/scenes
+      - tour.poundedpetite.com/scenes
+      - tour.shesbrandnew.com/scenes
+      - tour.topwebmodels.com/scenes
+
     action: script
     script:
       - python3
@@ -25,9 +34,17 @@ performerByURL:
       - lucidflix.com/models/
       - rickysroom.com/models/
       - sidechick.com/models/
+      - tour.2girls1camera.com/models
+      - tour.biggulpgirls.com/models
+      - tour.cougarseason.com/models
+      - tour.deepthroatsirens.com/models
+      - tour.facialsforever.com/models
+      - tour.poundedpetite.com/models
+      - tour.shesbrandnew.com/models
+      - tour.topwebmodels.com/models
     action: script
     script:
       - python3
       - KBProductions.py
       - performer
-# Last Updated March 14, 2023
+# Last Updated January 27, 2024
