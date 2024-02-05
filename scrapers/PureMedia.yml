@@ -3,74 +3,35 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - becomingfemme.com/tour
+      - pornstarbts.com/tour
       - pure-bbw.com/tour
       - pure-ts.com/tour
       - pure-xxx.com/tour
+      - sissypov.com/tour
       - tspov.com/tour
     scraper: sceneScraper
-  - action: scrapeXPath
-    url:
-      - pornstarbts.com/tour
-      - sissypov.com/tour
-    scraper: newSiteScraper
-
 xPathScrapers:
   sceneScraper:
-    scene:
-      Title: //div[@class='video_membership']//div[@class='titlebox clear']
-      Details: //div[@class='aboutvideo']
-      Date:
-        selector: //div[@class='video_description']/h4[not(contains(.,'Featured'))]
-        postProcess:
-          - replace:
-              - regex: .*[|]
-                with:
-          - parseDate: 2006-01-02
-      Performers:
-        Name: //ul[@class='featuredModels']//span[last()]
-      Studio:
-        Name: //meta[@name='author']/@content
-      Tags:
-        Name:
-          selector: //meta[@name='keywords']/@content
-          split: ','
-      Image:
-        selector: //base/@href|//div[@class='videohere']/img[@class='thumbs stdimage']/@src|//script[contains(.,'jwplayer("jwbox").setup')]/text()
-        concat: '|'
-        postProcess:
-          - replace:
-              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
-                with: $1$2
-              - regex: ^//
-                with: https://
-
-  newSiteScraper:
     common:
-      $details: //div[@class='videoDetails clear']
+      $main: //div[@class='addFeature']
     scene:
-      Title: $details/h3
-      Details: $details/p
+      Title: //div[@class='vpTitle']/h1
+      Details: //div[@class='description']/p
       Date:
-        selector: //p[contains(span,'Date Added:')]/text()
+        selector: $main//h5[contains(.,"Added")]/following-sibling::p
         postProcess:
           - parseDate: January 2, 2006
       Performers:
-        Name: //li[@class='update_models']/a
+        Name: $main//h5[contains(.,"Featuring")]/following-sibling::ul
+      Studio:
+        Name: //meta[@name='author']/@content
       Tags:
-        Name: //ul[contains(li,'Tags:')]//a
+        Name: $main//ul[@class='tags']//a
       Image:
-        selector: //base/@href|//a[@class='fake_trailer']/img/@src0_1x
+        selector: //base/@href|//div[@class='player-thumb']/img/@src0_4x
         concat: '|'
         postProcess:
           - replace:
               - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
                 with: $1$2
-              - regex: ^//
-                with: https://
-      Studio:
-        Name:
-          selector: //meta[@name='author']/@content
-          postProcess:
-            - map:
-                SISSY POV: Sissy POV
-# Last Updated December 19, 2023
+# Last Updated February 5, 2024
