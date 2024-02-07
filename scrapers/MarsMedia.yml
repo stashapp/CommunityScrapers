@@ -12,6 +12,7 @@ sceneByURL:
       - hardbritlads.com
       - southernstrokes.com
       - touchthatboy.com
+      - twinksinshorts.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -36,8 +37,8 @@ xPathScrapers:
           selector: //link[@rel="canonical"]/@href | //base/@href
           postProcess:
             - replace:
-                - regex: ^https://w{3}?\.?([^\.]+).+
-                  with: $1  
+                - regex: ^https://(w{3}\.)?([^\.]+).+
+                  with: $3  
             - map:
                 "barebackcumpigs": Bareback Cum Pigs
                 "barebackthathole": Bareback That Hole
