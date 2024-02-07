@@ -30,7 +30,7 @@ def men(obj: Any, _) -> Any:
     )
 
     # TwinkPop is the only special case for now
-    is_twinkpop = dig(fixed, "studio", "name") != "TwinkPop"
+    is_twinkpop = dig(fixed, "studio", "name") == "TwinkPop"
     scene = "/scene/" if is_twinkpop else "/sceneid/"
     model = "/pornstar/" if is_twinkpop else "/modelprofile/"
     domain = "twinkpop.com" if is_twinkpop else "men.com"
