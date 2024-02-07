@@ -16,8 +16,8 @@ except ModuleNotFoundError:
 ''' This script is a companion to the onlyfans data scraper by DIGITALCRIMINAL
     https://github.com/DIGITALCRIMINAL/OnlyFans
     This tool allows you to download data from onlyfans and saves some metadata on what it downloads.
-    
-    This script needs python3 and requests and sqlite3 
+
+    This script needs python3 and requests and sqlite3
     If you have a password on your instance you need to specify the api key by adding it to py_common/config.py
    '''
 
@@ -94,8 +94,8 @@ def lookup_gallery(file,db,parent):
 
 def findFilePath(id):
     scene=graphql.getScene(id)
-    if scene:
-        return scene["path"]
+    if scene and "files" in scene:
+        return scene["files"][0].get("path")
     log.error("Error connecting to api")
     print("{}")
     sys.exit()
