@@ -93,13 +93,15 @@ def chunkify(config_string):
     if not config_string:
         return chunks, current_chunk
 
-    for line in config_string.strip().splitlines():
+    for lineno, line in enumerate(config_string.strip().splitlines()):
         line = line.strip()
         current_chunk.append(line)
 
         if "=" in line:
             chunks.append(Chunk(current_chunk))
             current_chunk = []
+        elif not line.startswith("#") and line:
+            log.warning(f"Ignoring invalid config line {lineno}: {line}")
     return chunks, current_chunk
 
 

@@ -20,10 +20,10 @@ def callGraphQL(query: str, variables: dict | None = None):
     api_key = config.api_key
     url = config.url
     if not url:
-        log.error("You need to set the URL in 'config.py'")
+        log.error("You need to set the URL in 'config.ini'")
         return None
     elif "stashdb.org" in url:
-        log.error("You need to set the URL in 'config.py' to your own stash server")
+        log.error("You need to set the URL in 'config.ini' to your own stash server")
         return None
 
     stash_url = f"{url}/graphql"
