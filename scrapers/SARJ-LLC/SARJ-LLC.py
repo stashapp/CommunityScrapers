@@ -42,6 +42,8 @@ def scrape_url(url, scrape_type):
         try:
             index = path.index('gallery')
             scraped = scrape_gallery(base_url, path[index + 1], path[index + 2])
+            if scraped and (director := scraped.pop("Director", None)):
+                scraped["Photographer"] = director
         except ValueError:
             log.error(f"gallery scraping not supported for {url}")
             return None
