@@ -109,20 +109,13 @@ def scene_from_fragment(args: dict) -> ScrapedScene | None:
 
 
 hair_map = {
-    "Blond": "BLONDE",
-    "Brown": "BRUNETTE",
-    "Black": "BLACK",
-    "Red": "RED",
-    "Auburn": "AUBURN",
-    "Grey": "GREY",
-    "Bald": "BALD",
-    "Various": "VARIOUS",
-    "Other": "OTHER",
+    "Blond": "Blonde",
+    "Brown": "Brunette",
 }
 
 # GEVI tracks skin color so there's no way to really know ethnicity
 ethnicity_map = {
-    "White": "CAUCASIAN",
+    "White": "Caucasian",
 }
 
 

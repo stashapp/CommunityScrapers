@@ -1,5 +1,6 @@
 name: GEVI
 # requires: py_common
+# scrapes: GayEroticVideoIndex, GEVI
 
 performerByName:
   action: script
@@ -43,4 +44,4 @@ movieByURL:
       - python3
       - GEVI.py
       - movie-by-url
-# Last Updated September 25, 2023
+# Last Updated February 08, 2024
