@@ -40,6 +40,7 @@ studio_map = {
     "nylonperv.com": "Nylon Perv",
     "nympho.com": "Nympho",
     "poundedpetite.com": "Pounded Petite",
+    "premium-nickmarxx.com": "Nick Marxx",
     "red-xxx.com": "Red-XXX",
     "rickysroom.com": "Ricky's Room",
     "s3xus.com": "S3XUS",
@@ -176,6 +177,7 @@ def clean_url(url: str) -> str:
 def fix_url(url: str) -> str:
     url = url.replace("twmclassics.com", "topwebmodels.com")
     url = url.replace("suckthisdick.com", "hobybuchanon.com")
+    url = url.replace("premium-nickmarxx.com", "nickmarxx.com")
     tour_domain = (
         "nympho",
         "allanal",
