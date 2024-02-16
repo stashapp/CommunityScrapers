@@ -21,7 +21,7 @@ def metrohd(obj: Any, _) -> Any:
     match dig(obj, "studio", "name"):
         case "Deviant Hardcore":
             replacement = "devianthardcore.com"
-        case "Family Hook Ups":
+        case "Family Hookups":
             replacement = "familyhookups.com"
         case "Girl Grind":
             replacement = "girlgrind.com"
