@@ -22,6 +22,7 @@ studio_map = {
     "bjraw.com": "BJ Raw",
     "blackbullchallenge.com": "Black Bull Challenge",
     "cougarseason.com": "Cougar Season",
+    "creampiethais.com": "Creampie Thais",
     "deepthroatsirens.com": "Deepthroat Sirens",
     "dirtyauditions.com": "Dirty Auditions",
     "divine-dd.com": "Divine-DD",
