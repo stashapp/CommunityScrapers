@@ -27,7 +27,7 @@ studio_map = {
     "dirtyauditions.com": "Dirty Auditions",
     "divine-dd.com": "Divine-DD",
     "facialsforever.com": "Facials Forever",
-    "freakmobmedia.com": "Freak Mob Media",
+    "freakmobmedia.com": "FreakMob Media",
     "gotfilled.com": "Got Filled",
     "hobybuchanon.com": "Hoby Buchanon",
     "inkedpov.com": "Inked POV",
