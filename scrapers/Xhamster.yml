@@ -21,7 +21,27 @@ sceneByFragment:
       - regex: .*\.[^\.]+$
         with: # clear the filename so that it doesn't leak
 
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://xhamster.com/search/{}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 xPathScrapers:
+  sceneSearch:
+    common:
+      $videoThumbImage: //div[contains(@class, "thumb-list__item video-thumb")]//img[contains(@class, "thumb-image-container__image")]
+      $videoThumbInfo: //div[contains(@class, "thumb-list__item video-thumb")]//a[contains(@class, "video-thumb-info__name")]
+    scene:
+      Title: $videoThumbInfo/@title
+      URL:
+        selector: $videoThumbInfo/@href
+      Image:
+        selector: $videoThumbImage/@src
+
   sceneScraper:
     common:
       $player: //div[@class="width-wrap with-player-container"]
@@ -46,4 +66,4 @@ xPathScrapers:
       Performers:
         Name:
           selector: $player/nav/ul/li/a[contains(@href,"/pornstars/")]
-# Last Updated December 20, 2022
+# Last Updated February 17, 2024
