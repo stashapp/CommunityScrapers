@@ -1,0 +1,36 @@
+name: "BuddhaBangXXX"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - buddhabangxxx.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $h3: //div[@class="section-video"]
+    scene:
+      Title:
+        selector: //div[@class="videoDetails clear"]/h3
+      Details: //div[@class="videoDetails clear"]/p
+      Tags:
+        Name:
+          selector: //div[@class="featuring"]//li[@class="label"]//a
+      Performers:
+        Name: //div[@class="featuring"]//li[@class="update_models"]/a
+      Image:
+        selector: //div[@class="mejs-layers"]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://buddhabangxxx.com
+      Studio:
+        Name:
+          fixed: "Buddha Bang Productions"
+      Date:
+        selector: //div[@class="videoInfo clear"]/p/text()
+        postProcess:
+          - parseDate: January 2, 2006
+          
+driver:
+  useCDP: true
+# Last Updated May 19, 2022
