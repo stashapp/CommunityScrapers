@@ -4,6 +4,16 @@ sceneByURL:
     url:
       - pissplay.com
     scraper: sceneScraper
+    
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://pissplay.com/videos/{filename}
+  queryURLReplace:
+    filename:
+      - regex: (.*)\..*  #support filenames in the form {filename}.mp4
+        with: $1
+  scraper: sceneScraper
+      
 xPathScrapers:
   sceneScraper:
     scene:
@@ -30,4 +40,5 @@ xPathScrapers:
       Studio:
         Name:
           fixed: PissPlay
-# Last Updated February 01, 2022
+         
+# Last Updated May 19, 2022
