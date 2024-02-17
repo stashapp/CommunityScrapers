@@ -28,26 +28,29 @@ xPathScrapers:
     common:
       $videoItem: //*[@id="list"]
     scene:
-      Details: 
-        selector: $videoItem/ul/li/a/img/@alt]
-      Image:
-        selector: $videoItem/ul/li/a/img/@src
-        postProcess:
-          - replace:
-            - regex: pac_s.jpg
-              with: pac_l.jpg
-      Title:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
-      Director:
-        selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]
-      Performers:
-        Name: $videoItem/ul/li[2]/ul/li[2]/dl[2]/dd[1]/ul[1]/li
       Date:
         selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
         postProcess:
           - replace:
             - regex: "/"
               with: "-"
+      Details: 
+        selector: $videoItem/ul/li/a/img/@alt]
+      Director:
+        selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]  
+      Image:
+        selector: $videoItem/ul/li/a/img/@src
+        postProcess:
+          - replace:
+            - regex: pac_s.jpg
+              with: pac_l.jpg
+      Performers:
+        Name: $videoItem/ul/li[2]/ul/li[2]/dl[2]/dd[1]/ul[1]/li
+      Studio:
+        Name:
+          fixed: "Giga"
+      Title:
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
       URL: 
         selector: $videoItem/ul/li/a/@href
         postProcess:
@@ -58,26 +61,29 @@ xPathScrapers:
     common:
       $videoItem: //*[@id="list"]
     scene:
-      Details: 
-        selector: $videoItem/ul/li/a/img/@alt]
-      Image:
-        selector: $videoItem/ul/li/a/img/@src
-        postProcess:
-          - replace:
-            - regex: pac_s.jpg
-              with: pac_l.jpg
-      Title:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
-      Director:
-        selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]
-      Performers:
-        Name: $videoItem/ul/li[2]/ul/li[2]/dl[2]/dd[1]/ul[1]/li
       Date:
         selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
         postProcess:
           - replace:
             - regex: "/"
               with: "-"
+      Details: 
+        selector: $videoItem/ul/li/a/img/@alt]
+      Director:
+        selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]  
+      Image:
+        selector: $videoItem/ul/li/a/img/@src
+        postProcess:
+          - replace:
+            - regex: pac_s.jpg
+              with: pac_l.jpg
+      Performers:
+        Name: $videoItem/ul/li[2]/ul/li[2]/dl[2]/dd[1]/ul[1]/li
+      Studio:
+        Name:
+          fixed: "Giga"
+      Title:
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
       URL: 
         selector: $videoItem/ul/li/a/@href
         postProcess:
@@ -107,7 +113,8 @@ xPathScrapers:
       Performers:
         Name: //*[@id="works_txt"]/ul/li[4]/dl/dd/span/a
       Studio:
-        Name: GIGA
+        Name:
+          fixed: "Giga"
       Title:
         selector:  //*[@id="works_txt"]/ul/li[3]/dl/dd
       URL:
