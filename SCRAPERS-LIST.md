@@ -113,6 +113,7 @@ asian18.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 asianamericantgirls.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 asianfever.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 asiansexdiary.com|VegasDreamsLLC.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+asianstreetmeat.com|AsianStreetMeat.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 asiantgirl.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Trans
 asmrfantasy.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 assholefever.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
