@@ -59,9 +59,13 @@ def scrape_scene_page(url): #scrape the main url
     tree = html.fromstring(tree) #parse html
     title = tree.xpath('//p[@class="raiting-section__title"]/text()')[0].strip() #title scrape
     log.debug(f'Title:{title}')
-    date = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), " Added:")]/text()[1]')[0] #get date
-    date = re.sub(r"(?:.+Added:\s)([\d\/]*).+", r'\g<1>', date).strip() #date cleanup
-    date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d") #date parse
+    date = ''
+    try:
+        date = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), " Added:")]/text()[1]')[0] #get date
+        date = re.sub(r"(?:.+Added:\s)([\d\/]*).+", r'\g<1>', date).strip() #date cleanup
+        date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d") #date parse
+    except:
+        log.error("failed to parse date")
     log.debug(f'Date:{date}')
     studio = tree.xpath('//base/@href')[0].strip() #studio scrape
     studio = studio.replace("www.", "")
