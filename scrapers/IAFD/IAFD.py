@@ -499,7 +499,7 @@ def performer_gender(tree):
         )
         trans = (
             "Transgender "
-            # IAFD are not consistent with their
+            # IAFD are not consistent with their URLs
             if any(mark in perf_id for mark in ("_ts", "_ftm", "_mtf"))
             else ""
         )
@@ -719,7 +719,12 @@ def scene_from_tree(tree):
         "director": scene_director(tree),
         "studio": scene_studio(tree),
         "performers": [
-            {"name": name} for name in tree.xpath('//div[@class="castbox"]/p/a/text()')
+            {
+                "name": p.text_content(),
+                "url": f"https://www.iafd.com{p.get('href')}",
+                "images": p.xpath("img/@src"),
+            }
+            for p in tree.xpath('//div[@class="castbox"]/p/a')
         ],
     }
 
