@@ -48,7 +48,7 @@ def scrape_cover(domain, title):
 
 
 def scene_from_url(url) -> ScrapedScene:
-    domain = urllib.parse.urlparse(url).netloc
+    domain = urllib.parse.urlparse(url).netloc.removeprefix("www.")
     studio = STUDIO_MAP.get(domain, domain)
     body = scraped_content(url)
     tree = html.fromstring(body)
@@ -86,15 +86,17 @@ def scene_from_url(url) -> ScrapedScene:
         scene["performers"] = [
             {"name": x.text.strip(), "url": x.get("href")} for x in performers
         ]
-        log.debug(f"Performers: {", ".join(p["name"] for p in scene['performers'])}")
+        performers = ", ".join(p["name"] for p in scene["performers"])
+        log.debug(f"Performers: {performers}")
     else:
         log.warning("Performers not found")
 
     if tags := tree.xpath(
         '//p[@class="dvd-scenes__data"]//a[contains(@href, "categories")]'
     ):
-        scene["tags"] = [{"name": x.text.strip()} for x in tags]
-        log.debug(f"Tags: {", ".join(t["name"] for t in scene["tags"])}")
+        scene["tags"] = [{"name": x.text.strip()} for x in tags]     
+        tags = ", ".join(t["name"] for t in scene["tags"])
+        log.debug(f"Tags: {tags}")
     else:
         log.warning("Tags not found")
 
