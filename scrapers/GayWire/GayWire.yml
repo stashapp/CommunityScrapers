@@ -5,7 +5,7 @@ galleryByURL:
   - action: script
     url:
       - gaywire.com/video
-      - guyselector/scene
+      - guyselector.com/scene
     script:
       - python
       - GayWire.py
@@ -20,7 +20,7 @@ sceneByURL:
   - action: script
     url:
       - gaywire.com/video
-      - guyselector/scene
+      - guyselector.com/scene
     script:
       - python
       - GayWire.py
@@ -53,7 +53,7 @@ performerByURL:
   - action: script
     url:
       - gaywire.com/model/
-      - guyselector/model/
+      - guyselector.com/model/
     script:
       - python
       - GayWire.py
@@ -68,7 +68,7 @@ movieByURL:
   - action: script
     url:
       - gaywire.com/movie
-      - guyselector/movie
+      - guyselector.com/movie
     script:
       - python
       - GayWire.py
