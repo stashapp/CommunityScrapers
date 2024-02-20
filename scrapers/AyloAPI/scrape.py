@@ -8,7 +8,7 @@ from typing import Any, Callable
 from urllib.parse import urlparse
 
 import py_common.log as log
-from py_common.util import dig, scraper_args
+from py_common.util import dig, guess_nationality, scraper_args
 from py_common.config import get_config
 from py_common.types import (
     ScrapedGallery,
@@ -250,111 +250,6 @@ def to_marker(api_object: dict) -> dict:
     }
 
 
-state_map = {
-    "AK": "USA",
-    "AL": "USA",
-    "AR": "USA",
-    "AZ": "USA",
-    "CA": "USA",
-    "CO": "USA",
-    "CT": "USA",
-    "DC": "USA",
-    "DE": "USA",
-    "FL": "USA",
-    "GA": "USA",
-    "HI": "USA",
-    "IA": "USA",
-    "ID": "USA",
-    "IL": "USA",
-    "IN": "USA",
-    "KS": "USA",
-    "KY": "USA",
-    "LA": "USA",
-    "MA": "USA",
-    "MD": "USA",
-    "ME": "USA",
-    "MI": "USA",
-    "MN": "USA",
-    "MO": "USA",
-    "MS": "USA",
-    "MT": "USA",
-    "NC": "USA",
-    "ND": "USA",
-    "NE": "USA",
-    "NH": "USA",
-    "NJ": "USA",
-    "NM": "USA",
-    "NV": "USA",
-    "NY": "USA",
-    "OH": "USA",
-    "OK": "USA",
-    "OR": "USA",
-    "PA": "USA",
-    "RI": "USA",
-    "SC": "USA",
-    "SD": "USA",
-    "TN": "USA",
-    "TX": "USA",
-    "UT": "USA",
-    "VA": "USA",
-    "VT": "USA",
-    "WA": "USA",
-    "WI": "USA",
-    "WV": "USA",
-    "WY": "USA",
-    "Alabama": "USA",
-    "Alaska": "USA",
-    "Arizona": "USA",
-    "Arkansas": "USA",
-    "California": "USA",
-    "Colorado": "USA",
-    "Connecticut": "USA",
-    "Delaware": "USA",
-    "Florida": "USA",
-    "Georgia": "USA",
-    "Hawaii": "USA",
-    "Idaho": "USA",
-    "Illinois": "USA",
-    "Indiana": "USA",
-    "Iowa": "USA",
-    "Kansas": "USA",
-    "Kentucky": "USA",
-    "Louisiana": "USA",
-    "Maine": "USA",
-    "Maryland": "USA",
-    "Massachusetts": "USA",
-    "Michigan": "USA",
-    "Minnesota": "USA",
-    "Mississippi": "USA",
-    "Missouri": "USA",
-    "Montana": "USA",
-    "Nebraska": "USA",
-    "Nevada": "USA",
-    "New Hampshire": "USA",
-    "New Jersey": "USA",
-    "New Mexico": "USA",
-    "New York": "USA",
-    "North Carolina": "USA",
-    "North Dakota": "USA",
-    "Ohio": "USA",
-    "Oklahoma": "USA",
-    "Oregon": "USA",
-    "Pennsylvania": "USA",
-    "Rhode Island": "USA",
-    "South Carolina": "USA",
-    "South Dakota": "USA",
-    "Tennessee": "USA",
-    "Texas": "USA",
-    "Utah": "USA",
-    "Vermont": "USA",
-    "Virginia": "USA",
-    "Washington": "USA",
-    "West Virginia": "USA",
-    "Wisconsin": "USA",
-    "Wyoming": "USA",
-}
-
-
 ## Helper functions to convert from Aylo's API to Stash's scaper return types
 def to_scraped_performer(
     performer_from_api: dict, site: str | None = None
@@ -399,7 +294,7 @@ def to_scraped_performer(
         ).strftime("%Y-%m-%d")
 
     if birthplace := performer_from_api.get("birthPlace"):
-        performer["country"] = birthplace
+        performer["country"] = guess_nationality(birthplace)
 
     if measurements := performer_from_api.get("measurements"):
         performer["measurements"] = measurements
