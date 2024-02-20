@@ -2,7 +2,7 @@ name: "Rule34Video"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - rule34video.com/videos/
+      - rule34video.com/video/
     scraper: sceneScraper
 
 sceneByName:
