@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import sys
 import difflib
@@ -6,6 +7,9 @@ import requests
 from datetime import datetime
 from typing import Any, Callable
 from urllib.parse import urlparse
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 import py_common.log as log
 from py_common.util import dig, guess_nationality, scraper_args
