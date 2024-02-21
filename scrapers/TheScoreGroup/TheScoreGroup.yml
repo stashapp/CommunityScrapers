@@ -157,7 +157,7 @@ xPathScrapers:
                 with: " $1 "
         concat: "\n\n"
       Tags:
-        Name: //div[@class="mb-3"]/a/text()
+        Name: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]//a/text()
       Performers: &performersAttr
         Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
       Image:
