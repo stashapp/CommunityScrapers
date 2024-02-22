@@ -75,11 +75,13 @@ xPathScrapers:
   sceneScraper:
     common:
       $url: //link[@rel="canonical"]/@href
+      $videopage: //section[@id="videos_page-page" or @id="mixed_page-page"]
+      $stat: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]
     scene:
-      Title: &titleAttr //h1[1]/text()
+      Title: &titleAttr $videopage//h1
       Studio: &studioAttr
         Name:
-          selector: //div[contains(text(), "Download trailer")]/a[1]/@href
+          selector: ($videopage//video/source/@src)[1]
           postProcess:
             - replace:
                 - regex: .*\.com/(.+?)\/(video|scene).*
@@ -140,14 +142,14 @@ xPathScrapers:
                 xlgirls: XL Girls
                 yourwifemymeat: Your Wife My Meat
       Date: &dateAttr
-        selector: //div[@class="stat mb-2"]/span[contains(.,"Date:")]/../span[@class="value"]/text()
+        selector: $videopage$stat/span[contains(.,"Date:")]/following-sibling::span
         postProcess:
           - replace:
               - regex: ..,
                 with:
-          - parseDate: January 2 2006
+          - parseDate: January 2, 2006
       Details: &details
-        selector: //div[@class="p-desc p-3"]//text()
+        selector: $videopage//div[@class="p-desc p-3"]/text()
         postProcess:
           - replace:
               - regex: Read More »
@@ -157,9 +159,9 @@ xPathScrapers:
                 with: " $1 "
         concat: "\n\n"
       Tags:
-        Name: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]//a/text()
+        Name: $videopage//a[contains(@href, "videos-tag") or contains(@href, "scenes-tag")]
       Performers: &performersAttr
-        Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
+        Name: $videopage//span[contains(.,"Featuring:")]/following-sibling::span/a
       Image:
         # This selector scrapes the canonical scene page cover image
         selector: //script[contains(text(), "poster")]
