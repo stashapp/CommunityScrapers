@@ -145,4 +145,6 @@ jsonScrapers:
             - replace:
                 - regex: ^
                   with: https://www.manyvids.com
-# Last Updated February 19, 2024
+      Studio:
+        Name: data.model.displayName
+# Last Updated February 22, 2024
