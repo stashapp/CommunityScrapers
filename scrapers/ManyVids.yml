@@ -30,7 +30,7 @@ sceneByQueryFragment:
       - regex: ^(https:\/\/www\.manyvids\.com\/Video\/)
         with: https://www.manyvids.com/bff/store/video/
       - regex: /[^/]*/*$
-        with: ''
+        with: ""
 
 sceneByFragment:
   action: scrapeJson
@@ -39,7 +39,7 @@ sceneByFragment:
   queryURLReplace:
     filename:
       - regex: \.(\w+)$
-        with: ''
+        with: ""
 
 sceneByURL:
   - action: scrapeJson
@@ -53,16 +53,15 @@ sceneByURL:
           with: https://www.manyvids.com/bff/store/video/$1
 
 jsonScrapers:
-
   performerSearch:
-    performer: 
+    performer:
       Name: models.#.username
       URL:
         selector: models.#.url
         postProcess:
           - replace:
-                - regex: ^
-                  with: https://www.manyvids.com
+              - regex: ^
+                with: https://www.manyvids.com
       Image: models.#.avatar.url
 
   performerScraper:
@@ -74,20 +73,20 @@ jsonScrapers:
         selector: socLnkTwitter
         postProcess:
           - replace:
-                - regex: https://www.twitter.com/
-                  with: ''
-      Instagram: 
+              - regex: https://www.twitter.com/
+                with: ""
+      Instagram:
         selector: socLnkInstagram
         postProcess:
           - replace:
-                - regex: https://instagram.com/
-                  with: ''
+              - regex: https://instagram.com/
+                with: ""
       Birthdate:
         selector: dob
         postProcess:
-          - replace: 
-            - regex: T.*
-              with: ''
+          - replace:
+              - regex: T.*
+                with: ""
           - parseDate: 2006-01-02
       Ethnicity: ethnicity
       Country: location
@@ -96,10 +95,10 @@ jsonScrapers:
         selector: createdAt
         postProcess:
           - replace:
-                - regex: '\-.*'
-                  with: ''
-                - regex: '$'
-                  with: ' - Present'
+              - regex: '\-.*'
+                with: ""
+              - regex: "$"
+                with: " - Present"
       Image: portrait
       Details: description
 
@@ -107,45 +106,43 @@ jsonScrapers:
     scene:
       Title: vids.#.title
       Code: vids.#.id
-      URL: 
-        selector: 'vids.#.{id,slug}.@values'
+      URL:
+        selector: "vids.#.{id,slug}.@values"
         postProcess:
           - replace:
-            - regex: '\["(\d+)",\s*"([^"]+)"\]'
-              with: $1/$2
-            - regex: ^
-              with: https://www.manyvids.com/Video/
+              - regex: '\["(\d+)",\s*"([^"]+)"\]'
+                with: $1/$2
+              - regex: ^
+                with: https://www.manyvids.com/Video/
       Image: vids.#.thumbnail.url
 
   sceneScraper:
     scene:
-        Title: data.title
-        Details: data.description
-        Code: data.id
-        URL:
-          selector: data.url
-          postProcess:
-            - replace:
+      Title: data.title
+      Details: data.description
+      Code: data.id
+      URL:
+        selector: data.url
+        postProcess:
+          - replace:
               - regex: ^
                 with: https://www.manyvids.com
-              - regex: '/*$'
-                with: ''
-        Date:
-          selector: data.launchDate
-          postProcess:
-            - replace: 
+      Date:
+        selector: data.launchDate
+        postProcess:
+          - replace:
               - regex: T.*
-                with: ''
-            - parseDate: 2006-01-02
-        Image: data.screenshot
-        Tags:
-          Name: data.tagList.#.label
-        Performers:
-          Name: data.model.displayName
-          URL:
-            selector: data.model.profileUrl
-            postProcess:
-              - replace:
+                with: ""
+          - parseDate: 2006-01-02
+      Image: data.screenshot
+      Tags:
+        Name: data.tagList.#.label
+      Performers:
+        Name: data.model.displayName
+        URL:
+          selector: data.model.profileUrl
+          postProcess:
+            - replace:
                 - regex: ^
                   with: https://www.manyvids.com
 # Last Updated February 19, 2024
