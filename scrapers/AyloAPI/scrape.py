@@ -384,7 +384,7 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
     if studio := get_studio(scene_from_api):
         scene["studio"] = studio
 
-    if markers := scene_from_api.get("timeTags") and config.scrape_markers:
+    if config.scrape_markers and (markers := scene_from_api.get("timeTags")):
         scene["markers"] = [to_marker(m) for m in markers]  # type: ignore
 
     return scene
