@@ -4,6 +4,8 @@ This is a public repository containing scrapers created by the Stash Community.
 
 **:exclamation: Make sure to read ALL of the instructions here before requesting any help in the Discord channel. For a more user friendly step-by-step guide you can check out the [Guide to Scraping](https://docs.stashapp.cc/beginner-guides/guide-to-scraping/) :exclamation:**
 
+When asking for help do not forget to mention what version of Stash you are using, the scraper that is failing, the URL you are attempting to scrape, and your current Python version (but only if the scraper requires Python)
+
 Note that some scrapers (notably [ThePornDB for Movies](./scrapers/ThePornDBMovies.yml) and [ThePornDB for JAV](./scrapers/ThePornDBJAV.yml)) require extra configuration. As of v0.24.0 this is not possible through the web interface so you will need to open these in a text editor and read the instructions to add the necessary fields, usually an API key or a cookie.
 
 ## Installing scrapers
@@ -33,7 +35,9 @@ Scrapers with **useCDP** set to true require that you have properly configured t
 
 ## Python scrapers
 
-Some scrapers require external programs to function, usually [Python](https://www.python.org/). Depending on your operating system you may need to install both Python and the scrapers dependencies before they will work. For Windows users we strongly recommend installing Python using the [installers from python.org](https://www.python.org/downloads/) instead of through the Windows Store. All scrapers are tested with the newest stable release of Python, currently 3.12.2.
+Some scrapers require external programs to function, usually [Python](https://www.python.org/). All scrapers are tested with the newest stable release of Python, currently 3.12.2.
+
+Depending on your operating system you may need to install both Python and the scrapers' dependencies before they will work. For Windows users we strongly recommend installing Python using the [installers from python.org](https://www.python.org/downloads/) instead of through the Windows Store, and also installing it outside of the Users folder so it is accessible to the entire system: a commonly used option is `C:\Python312`.
 
 After installing Python you can install the most commonly used dependencies by running the following command in a terminal window:
 
