@@ -860,7 +860,7 @@ def scene_from_fragment(
     if url := fragment.get("url"):
         log.debug(f"Using scene URL: '{url}'")
         if scene := scene_from_url(url, postprocess=postprocess):
-            if markers := fragment.pop("markers", []):
+            if markers := scene.pop("markers", []):  # type: ignore
                 if fragment["id"] and config.scrape_markers:
                     add_markers(fragment["id"], markers)
                 else:
