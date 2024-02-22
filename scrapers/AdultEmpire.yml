@@ -39,13 +39,6 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-performerByURL:
-  - 
-    action: scrapeXPath
-    url:
-       - adultdvdempire.com
-       - adultempire.com
-    scraper: performerScraper
 
 xPathScrapers:
   performerSearch:
@@ -133,6 +126,10 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "https://www.adultdvdempire.com"
+      Image:
+        selector: //iframe/@src
+        subScraper:
+          selector: //video/@poster
   sceneScraper:
     scene:
       Title: //h1/text()
