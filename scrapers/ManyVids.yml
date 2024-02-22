@@ -49,10 +49,8 @@ sceneByURL:
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: ^(https:\/\/www\.manyvids\.com\/Video\/)
-          with: https://www.manyvids.com/bff/store/video/
-        - regex: /[^/]*/*$
-          with: ''
+        - regex: .*?(\d+).*
+          with: https://www.manyvids.com/bff/store/video/$1
 
 jsonScrapers:
 
@@ -139,10 +137,15 @@ jsonScrapers:
               - regex: T.*
                 with: ''
             - parseDate: 2006-01-02
-        Image: data.thumbnail
+        Image: data.screenshot
         Tags:
           Name: data.tagList.#.label
         Performers:
           Name: data.model.displayName
-
+          URL:
+            selector: data.model.profileUrl
+            postProcess:
+              - replace:
+                - regex: ^
+                  with: https://www.manyvids.com
 # Last Updated February 19, 2024
