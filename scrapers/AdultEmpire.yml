@@ -128,8 +128,9 @@ xPathScrapers:
                   with: "https://www.adultdvdempire.com"
       Image:
         selector: //iframe/@src
-        subScraper:
-          selector: //video/@poster
+        postProcess:
+          - subScraper:
+              selector: //video/@poster
   sceneScraper:
     scene:
       Title: //h1/text()
