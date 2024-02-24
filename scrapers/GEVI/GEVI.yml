@@ -1,0 +1,47 @@
+name: GEVI
+# requires: py_common
+# scrapes: GayEroticVideoIndex, GEVI
+
+performerByName:
+  action: script
+  script:
+    - python
+    - GEVI.py
+    - performer-by-name
+performerByURL:
+  - url:
+      - gayeroticvideoindex.com/performer
+    action: script
+    script:
+      - python3
+      - GEVI.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - GEVI.py
+    - performer-by-fragment
+sceneByURL:
+  - url:
+      - gayeroticvideoindex.com/episode
+    action: script
+    script:
+      - python3
+      - GEVI.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - GEVI.py
+    - scene-by-fragment
+movieByURL:
+  - url:
+      - gayeroticvideoindex.com/video
+    action: script
+    script:
+      - python3
+      - GEVI.py
+      - movie-by-url
+# Last Updated February 08, 2024

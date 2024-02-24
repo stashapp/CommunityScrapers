@@ -1,4 +1,4 @@
-name: Penthouse
+name: Penthouse Gold
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -20,7 +20,7 @@ xPathScrapers:
           - parseDate: 01/02/2006
       Studio:
         Name: 
-            fixed: "Penthouse"
+            fixed: "Penthouse Gold"
       Performers:
         Name: //div[@class="model"]/a/@title
       Tags:

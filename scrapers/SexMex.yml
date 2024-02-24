@@ -1,4 +1,4 @@
-name: "SexMex"
+name: SexMex
 
 sceneByURL: &byUrl
   - action: scrapeXPath
@@ -10,10 +10,15 @@ galleryByURL: *byUrl
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: &title //div[@class="panel-body"]/h4//text()
+      Title: &title
+        selector: //div[@class="panel-body"]/h4//text()
+        postProcess:
+          - replace:
+              - regex: ([^.]*)\s\..*
+                with: $1
       Details: &details //div[@class="panel-body"]/p[not(@class)]
       Tags: &tags
-        Name: 
+        Name:
           selector: //meta[@name="keywords"]/@content
           split: ","
       Performers: &performers
@@ -21,18 +26,17 @@ xPathScrapers:
       Studio: &studio
         Name:
           fixed: Sex Mex
-      Image: 
+      Image:
         selector: //video/@poster
         postProcess:
           - replace:
               - regex: cover.jpg$
                 with: 1.jpg
-      
+
     gallery:
       Title: *title
       Details: *details
       Tags: *tags
       Performers: *performers
       Studio: *studio
-
-# Last Updated February 14, 2022
+# Last Updated November 26, 2023

@@ -1,0 +1,12 @@
+name: Fit18
+# requires: py_common
+
+sceneByURL:
+  - url:
+      - fit18.com/videos/
+      - thicc18.com/videos/
+    action: script
+    script:
+      - python
+      - Fit18.py
+# Last Updated January 07, 2022

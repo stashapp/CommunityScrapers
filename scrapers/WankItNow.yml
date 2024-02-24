@@ -1,0 +1,52 @@
+name: Wank It Now
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wankitnow.com/videos/
+      - upskirtjerk.com/videos/
+      - realbikinigirls.com/videos/
+      - boppingbabes.com/videos/
+      - lingerietales.com/videos/
+      - downblousejerk.com/videos/
+      
+    scraper: sceneScraper
+    
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[contains(@class, "scene-title")]/text()
+        postProcess:
+          - replace:
+              - regex: .*"(.*).
+                with: $1
+      Studio:          
+        Name: 
+          selector: //meta[@property="og:site_name"]/@content
+          postProcess:
+            - map:
+                WankItNow: Wank It Now
+                UpSkirtJerk: Upskirt Jerk
+                LingerieTales: Lingerie Tales
+                RealBikiniGirls: Real Bikini Girls
+                BoppingBabes: Bopping Babes
+                DownBlouseJerk: Downblouse Jerk
+      Performers:
+        Name: //div[@class="model-name"]/text()
+      Date:
+        selector: //span[@class="meta" and not(following-sibling::*)]
+        postProcess:
+          - replace:
+              - regex: ^(\d+)(st|nd|rd|th)\s+(\w+\s+\d{4})$
+                with: $1 $3
+          - parseDate: 2 Jan 2006          
+      Details: //meta[@property="og:description"]/@content
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name: //div[@class="tags"]//a
+#TODO: Requested by Maista
+#      WankItNow and the sites covered by this scraper possibly are part of the Radical Cash Network (used to be Radical Cash).
+#      Sites that appear to be associated with Radical Cash are here: https://nats.radicalcash.com/external.php?page=sites
+#      Stash has WankItNow as the Parent for: Bopping Babes, Downblouse Jerk, Lingerie Tales, Upskirt Jerk, Wank It Now VR.
+#      Please note, this scraper does not cover Wank It Now VR.
+# Last Updated September 12, 2023

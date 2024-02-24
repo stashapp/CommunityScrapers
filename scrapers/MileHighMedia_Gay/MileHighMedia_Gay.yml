@@ -1,0 +1,79 @@
+name: Mile High Media (Gay)
+# requires: py_common, AyloAPI
+# scrapes: Icon Male, Noir Male, Taboo Male
+galleryByURL:
+  - action: script
+    url:
+      - iconmale.com/scene/
+      - noirmale.com/scene/
+    script:
+      - python
+      - MileHighMedia_Gay.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Gay.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - iconmale.com/scene/
+      - noirmale.com/scene/
+    script:
+      - python
+      - MileHighMedia_Gay.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Gay.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Gay.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Gay.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Gay.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - iconmale.com/model/
+      - noirmale.com/model/
+    script:
+      - python
+      - MileHighMedia_Gay.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - MileHighMedia_Gay.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - iconmale.com/movie/
+      - noirmale.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - iconmale.com/scene/
+      - noirmale.com/scene/
+    script:
+      - python
+      - MileHighMedia_Gay.py
+      - movie-by-url
+# Last Updated January 14, 2024

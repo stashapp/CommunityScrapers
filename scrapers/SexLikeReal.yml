@@ -62,7 +62,12 @@ xPathScrapers:
                 SinsVR: "XSinsVR"
                 VirtualXPorn: "Virtual X Porn"
                 WankitnowVR: "Wank It Now VR"
-      Image: //div[contains(@class,"splash-screen")]/img/@src
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: -app\.
+                with: -desktop.
       URL: &sceneUrl //link[@rel="canonical"]/@href
       Code:
         selector: *sceneUrl
@@ -70,4 +75,4 @@ xPathScrapers:
           - replace:
               - regex: '^(.+)-(\d+)/?$'
                 with: $2
-# Last Updated December 21, 2022
+# Last Updated October 21, 2023

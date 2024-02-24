@@ -1,0 +1,42 @@
+# requires: Algolia
+name: "MenOver30"
+sceneByURL:
+  - action: script
+    url:
+      - menover30.com/en/video
+      - pridestudios.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - menover30
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - menover30
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - menover30
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - menover30
+    - validName
+galleryByURL:
+  - action: script
+    url:
+      - menover30.com/en/photo/
+      - pridestudios.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - menover30
+      - gallery
+# Last Updated December 22, 2022

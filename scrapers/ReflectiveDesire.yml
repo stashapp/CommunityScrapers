@@ -1,0 +1,48 @@
+name: ReflectiveDesire
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - reflectivedesire.com/videos/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - reflectivedesire.com/performers/
+    scraper: performerScraper
+xPathScrapers:
+  performerScraper:
+    common:
+      $socialLinks: //div[@class="title-container"]/div/span[@class="tag-links"]
+    performer:
+      Name: //div[@class="title-container"]/h2
+      Image: //link[@rel="image_src"]/@href
+      Twitter: $socialLinks/a[contains(@href,"https://twitter.com")]/@href
+      Instagram: $socialLinks/a[contains(@href,"https://instagram.com/")]/@href
+      URL: //link[@rel="canonical"]/@href
+  sceneScraper:
+    scene:
+      Title: //div[contains(@class, "title-container")]/h1
+      Code: //section[@class="single-video"]/article[contains(@class, "video")]/@data-video-id
+      Date:
+        selector: //p[contains(@class, "video-text-length")]
+        postProcess:
+          - replace:
+            - regex: ^.* Published (.* \d{4})\.$
+              with: $1
+          - parseDate: "January 2006"
+      Studio:
+        Name:
+          fixed: Reflective Desire
+      Image: //link[@rel="image_src"]/@href
+      URL: //link[@rel="canonical"]/@href
+      Performers:
+        Name: //p[@class="video-text-models"]/a[contains(@href, "/performers/")]
+        URL:
+          selector: //p[@class="video-text-models"]/a[contains(@href, "/performers/")]/@href
+          postProcess:
+            - replace:
+              - regex: ^
+                with: https://reflectivedesire.com
+      Tags:
+        Name: //p[contains(@class, "video-text-attributes")]/a[contains(@href, "/categories/")]
+# Last Updated January 20, 2024

@@ -9,15 +9,20 @@ xPathScrapers:
     scene:
       Title: //h1
       Date:
-        selector: //span[@class="video-info-details__video-publish-date"]
+        selector: //span[contains(@class, "video-info-details__video-publish-date")]
         postProcess:
+          - replace:
+              - regex: Published:\s*
+                with: ""
           - parseDate: "02.01.2006"
       Details:
         selector: //div[contains(@class,"video-info-details")]//p
         concat: " "
+      Performers:
+        Name: //div[contains(@class, "video-info-details__categories")]/a[contains(@href, "pornstars")]
       Tags:
-        Name: //div[@class="video-info-details__categories"]/a
+        Name: //div[contains(@class, "video-info-details__categories")]/a[not (contains(@href, "pornstars") or contains(@href, "studios"))]
       Studio:
-        Name: //a[@class="video-info-details__studio-link"]
+        Name: //a[contains(@class, "video-info-details__studio-link")]
       Image: //meta[@property="og:image"]/@content
-# Last Updated April 25, 2023
+# Last Updated December 31, 2023

@@ -1,0 +1,33 @@
+name: OnlyTarts
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - onlytarts.com/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="video-detail__title"]
+      Details: //div[@data-id="description" and @class="hidden"]/text()
+      Date:
+        selector: //div[@class="video-info__time"]
+        postProcess:
+          - replace:
+              - regex: .*•\s+(.*)
+                with: $1
+          - parseDate: 2 January, 2006
+      Image:
+        selector: //script[contains(., "pluginSettings")]/text()
+        postProcess:
+          - replace:
+              - regex: .*url":\s*"(.*poster[^"]*).*$
+                with: $1
+      Studio:
+        Name:
+          fixed: Only Tarts
+      Tags:
+        Name: //a[contains(@class, "tags__item")]
+      Performers:
+        Name: //div[contains(@class, "video-info")]//a[contains(@href, "/model")]/text()
+        URL: //div[contains(@class, "video-info")]//a[contains(@href, "/model")]/@href
+# Last Updated September 10, 2023

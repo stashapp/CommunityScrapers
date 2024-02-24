@@ -1,0 +1,76 @@
+name: Brazzers
+# requires: py_common, AyloAPI
+# scrapes: Asses in Public, Baby Got Boobs, Big Butts Like It Big, Big Tits at School, Big Tits at Work, Big Tits In Sports, Big Tits In Uniform, Big Wet Butts, BrazzersExxtra, Brazzers Live, Brazzers Vault, Busty & Real, Bustyz, CFNM, Day With A Pornstar, Dirty Masseur, Doctor Adventures, Hot And Mean, Hot Chicks Big Asses, JugFuckers, Milfs Like It Big, Mommy Got Boobs, Moms in control, Pornstars Like it Big, Real Wife Stories, Shes Gonna Squirt, Teens Like It Big, ZZ Series
+galleryByURL:
+  - action: script
+    url:
+      - brazzers.com/video
+      - brazzersnetwork.com/video
+    script:
+      - python
+      - Brazzers.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - Brazzers.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - brazzers.com/video
+      - brazzersnetwork.com/video
+    script:
+      - python
+      - Brazzers.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Brazzers.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - Brazzers.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Brazzers.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - Brazzers.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - brazzers.com/pornstar/
+      - brazzersnetwork.com/pornstar/
+    script:
+      - python
+      - Brazzers.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Brazzers.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - brazzers.com/movie
+      - brazzersnetwork.com/movie
+    script:
+      - python
+      - Brazzers.py
+      - movie-by-url
+# Last Updated January 14, 2024

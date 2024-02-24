@@ -22,11 +22,11 @@ xPathScrapers:
               - regex: (^https?:\/\/(?:www\.)?mature\.nl\/..\/update\/\d+)\/.+
                 with: $1
       Code:
-          selector: $url
-          postProcess:
-            - replace:
-                - regex: .+\/update\/(\d+)\/.+
-                  with: $1
+        selector: $url
+        postProcess:
+          - replace:
+              - regex: .+\/update\/(\d+)\/.+
+                with: $1
       Title: &title //div[@class="box"]/h1/text()
       Details: &details
         selector: //div/span[text()="Synopsis:"]/following-sibling::text() | //meta[@name="description"]/@content
@@ -38,8 +38,8 @@ xPathScrapers:
         Name: //div[@id="divPageUpdateNiches"]/a[contains(@class, "tag")]/text()
       Performers: &performers
         Name:
-          #This method is easier, but the names here are in uppercase
-          #selector: //div[contains(@class,"card-label")]/a/text()
+          # This method is easier, but the names here are in uppercase
+          # selector: //div[contains(@class,"card-label")]/a/text()
           selector: //div[@class="box-cnt"]//span[@class="col-accent"]/following-sibling::text()
           postProcess:
             - replace:
@@ -53,7 +53,7 @@ xPathScrapers:
                   with: $1,
           split: ", "
       Image:
-        selector: //span[@id="spnPageUpdateTrailer"]/a/img/@data-src|//img[@class="img-responsive lazy"][1]/@data-src
+        selector: (//video/@poster | //span[@id="spnPageUpdateTrailer"]/a/img/@data-src | //img[@class="img-responsive lazy"][1]/@data-src)[1]
       Date: &date
         selector: //span[@class="val-m"][1]
         postProcess:
@@ -72,5 +72,4 @@ xPathScrapers:
       Performers: *performers
       Date: *date
       Studio: *studio
-
 # Last Updated July 11, 2023

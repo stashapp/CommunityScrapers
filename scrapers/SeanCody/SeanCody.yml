@@ -1,0 +1,74 @@
+name: Sean Cody
+# requires: py_common, AyloAPI
+# scrapes: Sean Cody
+galleryByURL:
+  - action: script
+    url:
+      - seancody.com/scene/
+    script:
+      - python
+      - SeanCody.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - SeanCody.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - seancody.com/scene/
+    script:
+      - python
+      - SeanCody.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - SeanCody.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - SeanCody.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - SeanCody.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - SeanCody.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - seancody.com/model/
+    script:
+      - python
+      - SeanCody.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - SeanCody.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - seancody.com/scene/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - seancody.com/movie/
+    script:
+      - python
+      - SeanCody.py
+      - movie-by-url
+# Last Updated January 14, 2024

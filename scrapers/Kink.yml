@@ -1,4 +1,4 @@
-name: kink
+name: Kink
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -30,40 +30,30 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //meta[@name="twitter:title"]/@content
-      Date:
-        selector: //span[@class="shoot-date"]/text()
+      Title:
+        selector: //h1[contains(@class, "fs-0")]
         postProcess:
-          - parseDate: January 2, 2006
-      Details:
-        selector: //span[@class="description-text"]/*[self::p or self::ul]
-        concat: "\n\n"
-      Code: //div[@class="shoot-page"]/@data-shootid
-      Director: //span[@class="director-name"]
-      Performers:
-        Name:
-          selector: //p[@class="starring"]/span[@class="names h5"]/a/text()
-          postProcess:
-            - replace:
-                - regex: \,
-                  with: ""
-      Tags:
-        Name:
-          selector: //a[@class="tag"]
-          postProcess:
-            - replace:
-                - regex: \,
-                  with: ""
-      Image: //meta[@name="twitter:image"]/@content
+          - replace:
+              - regex: ^\s*(.*)\s*$
+                with: $1
+      Code: //div[@data-shootid]/@data-shootid
+      Date:
+        selector: //div[@data-setup]/@data-setup
+        postProcess:
+          - replace:
+              - regex: ^.*"publishedDate":"([^T]+).*$
+                with: $1
+          - parseDate: 2006-01-02
+      Director: //span[contains(@class, "director-name")]
       Studio:
         Name:
-          selector: //div[@class="column shoot-logo"]/a/@href
+          selector: //a[contains(@href, "/channel/") and contains(@class, "text-uppercase")]/@href
           postProcess:
             - replace:
                 - regex: /channel/
                   with: ""
             - map:
-                # List of sites as of 2023-07-29 from https://www.kink.com/channels
+                # List of sites as of 2024-01-04 from https://www.kink.com/channels
                 # [...new Set([...document.querySelectorAll('h3 > a')]
                 #   .map(a => a.href.split("/").pop() + ": " + a.innerText))]
                 #   .toSorted()
@@ -90,6 +80,7 @@ xPathScrapers:
                 device-bondage: Device Bondage
                 digital-sin: Digital Sin
                 divine-bitches: Divine Bitches
+                dungeon-sex: Dungeon Sex
                 electrosluts: Electrosluts
                 everything-butt: Everything Butt
                 evolved-fights-lesbian-edition: Evolved Fights Lesbian Edition
@@ -158,11 +149,40 @@ xPathScrapers:
                 water-bondage: Water Bondage
                 whipped-ass: Whipped Ass
                 wired-pussy: Wired Pussy
+      Performers:
+        Name:
+          selector: //div[@data-setup]/@data-setup
+          postProcess:
+            - replace:
+                - regex: ^.*"modelNames":\[([^]]+).*$
+                  with: $1
+                - regex: \"
+                  with: ""
+          split: ","
+      Tags:
+        Name:
+          selector: //h4[contains(text(), "Categories")]/following-sibling::*/a
+          postProcess:
+            - replace:
+                - regex: \,\s*
+                  with: ""
+      Details:
+        selector: //h4[contains(text(), "Description")]/following-sibling::*[1]//text()
+        concat: "\n"
+      Image:
+        selector: //div[@data-setup]/@data-setup
+        postProcess:
+          - replace:
+              - regex: ^.*"posterUrl":"([^"]+).*$
+                with: $1
+              - regex: "?.*$"
+                with: ""
+      # Pages do not include canonical URL links as of 2024
+      # but I'm leaving this in case they change that back
       URL: //link[@rel="canonical"]/@href
   performerSearch:
     common:
       $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
-
     performer:
       Name: $result/img/@alt
       URL:
@@ -181,7 +201,7 @@ xPathScrapers:
               - regex: ^\s+
                 with: ""
               - regex: \s+$
-                with: 
+                with:
       Twitter:
         selector: '//div/a[contains(concat(" ", normalize-space(@class), " "), " social-link ") and contains(@href, "twitter.com")]/@href'
       Image:
@@ -201,7 +221,7 @@ xPathScrapers:
         concat: "\n"
         postProcess:
           - replace:
-              - regex: '(?i)<a[^>]*>'
+              - regex: "(?i)<a[^>]*>"
                 with: ""
       URL: //link[@rel="canonical"]/@href
 driver:

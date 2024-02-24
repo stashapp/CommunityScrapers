@@ -38,6 +38,7 @@ sceneByURL:
       - horrorporn.com/
       - movieporn.com/
       - perversefamily.com/
+      - powerfetish.com/
       - unrealporn.com/
     scraper: sceneScraper
 xPathScrapers:
@@ -45,12 +46,26 @@ xPathScrapers:
     common:
       $studio: //h1/img/@alt
     scene:
-      Title: //div/h2[@class='nice-title']
+      Title: 
+        selector: //div/h1[@class='nice-title']
+        postProcess:
+          - replace:
+            - regex: .+(?:\d:\s*)([^T]+)
+              with: $1
       Details: //div[@class='desc-text']/p
       Tags:
         Name: //a[@class='tag']/text()
+      Performers:
+        Name: //div[@class='stars']//a/text()
       Studio:
         Name: $studio
       Image:
         selector: //video/@poster
-# Last Updated January 08, 2022
+      Date:
+        selector: //script[@type="application/ld+json"]
+        postProcess:
+          - replace:
+              - regex: .+(?:"uploadDate":\s*")([^T]+).+
+                with: $1
+          - parseDate: 2006-01-02
+# Last Updated February 17, 2024

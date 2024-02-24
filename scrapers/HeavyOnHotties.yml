@@ -9,6 +9,10 @@ xPathScrapers:
     scene:
       Title:
         selector: //div[@class="vid-title clearfix text-center-mobile"]/h2
+        postProcess:
+          - replace:
+            - regex: .+\"([^\"]+)\"
+              with: $1
       Date:
         selector: //span[contains(@class, "released title")]/strong/text()
         postProcess:
@@ -25,4 +29,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: HeavyOnHotties
-# Last Updated July 15, 2021
+# Last Updated November 30, 2023

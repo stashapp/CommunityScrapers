@@ -1,0 +1,40 @@
+# requires: Algolia
+name: "ClubInfernoDungeon"
+sceneByURL:
+  - action: script
+    url:
+      - clubinfernodungeon.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - clubinfernodungeon
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - clubinfernodungeon
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - clubinfernodungeon
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - clubinfernodungeon
+      - validName
+galleryByURL:
+  - action: script
+    url:
+      - clubinfernodungeon.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - clubinfernodungeon
+      - gallery
+# Last Updated December 22, 2022

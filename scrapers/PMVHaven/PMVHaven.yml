@@ -1,0 +1,20 @@
+name: PMVHaven
+# requires: py_common
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - PMVHaven.py
+    - sceneByFragment
+
+sceneByURL:
+  - url:
+     - pmvhaven.com/video/
+    action: script
+    script:
+      - python
+      - PMVHaven.py
+      - sceneByURL
+      
+# Last Updated February 8, 2024

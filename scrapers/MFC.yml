@@ -1,10 +1,19 @@
-name: "MFC Share"
+name: "MyFreeCams"
 sceneByURL:
   - action: scrapeXPath
     url:
       - share.myfreecams.com/a/
     scraper: sceneScraper
-
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - share.myfreecams.com/a/
+    scraper: galleryScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - profiles.myfreecams.com/
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -25,5 +34,49 @@ xPathScrapers:
         Name: //a[@class="user-link"]
       Image:
         selector: //meta[@name="twitter:image"]/@content
-
-# Last Updated November 01, 2020
+  galleryScraper:
+    gallery:
+      Title: //h3/text()
+      Studio:
+        Name:
+          fixed: "MFC Share"
+      Date: //span[@class[contains(., "album-at")]]/@title
+      Details: //div[@class="description-view"]/text()
+      Tags:
+        Name:
+          selector: //div[@class[contains(., "tags-container")]]/a/text()
+          postProcess:
+            - replace:
+              - regex: ^#
+                with: ""
+      Performers:
+        Name: //a[@class="user-link"]
+  performerScraper:
+    performer:
+      Name: //span[@id="username_value"]/text()
+      Country: //span[@id="country_value"]/text()
+      Ethnicity: //span[@id="ethnicity_value"]/text()
+      Gender: //span[@id="gender_value"]/text()
+      HairColor: //span[@id="hair_value"]/text()
+      EyeColor: //span[@id="eyes_value"]/text()
+      Height:
+        selector: //span[@id="height_value"][contains(text(), "centimeters")]/text() # only get metric because we can't handle both; it's one or the other
+        postProcess:
+          - replace:
+            - regex: ((\d+)\s(.*))
+              with: $2
+      Weight:
+        selector: //span[@id="weight_value"][contains(text(), "kilos")]/text() # only get metric because we can't handle both; it's one or the other
+        postProcess:
+          - replace:
+            - regex: ((\d+)\s(.*))
+              with: $2
+      Image:
+        selector: //img[@id="main_photo"]/@src | //img[@id="profile_avatar"]/@src
+        postProcess:
+          - replace: # main photo 250px size modifier can be removed to get full size image; 300px avatar can be fetched instead of the 90px one
+            - regex: \.250\.jpg
+              with: .jpg
+            - regex: \.90x90\.jpg
+              with: .300x300.jpg
+# Last Updated December 13, 2023

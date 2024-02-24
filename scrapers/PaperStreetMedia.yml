@@ -16,6 +16,7 @@ sceneByURL:
       - freeusefantasy.com/movies/
       - freeusemilf.com/movies/
       - hijabhookup.com/movies/
+      - hijabmylfs.com/movies/
       - innocenthigh.com/movies/
       - littleasians.com/movies/
       - momswap.com/movies/
@@ -25,6 +26,7 @@ sceneByURL:
       - pervdoctor.com/movies/
       - pervmom.com/movies/
       - pervnana.com/movies/
+      - pervprincipal.com/movies/
       - pervtherapy.com/movies/
       - shoplyfter.com/movies/
       - shoplyftermylf.com/movies/
@@ -69,6 +71,7 @@ xPathScrapers:
                 freeusefantasy: Freeuse Fantasy
                 freeusemilf: Freeuse Milf
                 hijabhookup: Hijab Hookup
+                hijabmylfs: Hijab Mylfs
                 innocenthigh: Innocent High
                 littleasians: Little Asians
                 momswap: Mom Swap
@@ -78,6 +81,7 @@ xPathScrapers:
                 pervdoctor: Perv Doctor
                 pervmom: Perv Mom
                 pervnana: Perv Nana
+                pervprincipal: Perv Principal
                 pervtherapy: Perv Therapy
                 shoplyfter: Shoplyfter
                 shoplyftermylf: Shoplyfter MYLF
@@ -91,4 +95,8 @@ xPathScrapers:
                 teensloveblackcocks: Teens Love Black Cocks
                 thickumz: Thickumz
                 tinysis: Tiny Sis
-# Last Updated May 10, 2023
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+# Last Updated September 28, 2023

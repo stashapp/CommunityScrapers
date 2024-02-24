@@ -3,19 +3,28 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - amateureuro.com
-      - dirtycosplay.com      
+      - dirtycosplay.com
       - doegirls.com
+      - doe-tv.com
       - forbondage.com
+      - latinamilf.com
       - letsdoeit.com
       - mamacitaz.com
       - transbella.com
       - vipsexvault.com
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: doe-tv\.com
+          with: letsdoeit.com
+
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $actors: //div[@class="actors"]
+      $actors: //div[@class="actors" or @class="-mvd-grid-actors"]
       $details: //div[@class="row sides-xs"]
+      $letsdoeit: //div[@class="-mvd-grid-more"]//span/a[@class="-mvd-list-url"]
     scene:
       Title:
         selector: //title/text()
@@ -41,10 +50,10 @@ xPathScrapers:
               - regex: (.*\.?\!?)(?:\s-\s\w.*-.*)$ # remove Studio name at the end of a description
                 with: $1
       Tags:
-        Name: $details//div[@class="col"][4]//a/text()|$details//div[@class="col"][6]//a/text()|//span[@class="-mvd-list-item"]//a/text()
+        Name: $details//div[@class="col"][4]//a/text()|$details//div[@class="col"][6]//a/text()|$letsdoeit
       Performers:
         Name: $actors//span/a[contains(@href,"/models/")]
       Studio:
         Name: $actors//a//text()
       Image: //source[@type="image/webp"]/@srcset
-# Last Updated June 13, 2023
+# Last Updated October 05, 2023
