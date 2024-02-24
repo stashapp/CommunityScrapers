@@ -102,6 +102,10 @@ SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
     "Transgressivexxx": "TransgressiveXXX",
     "Hot House": "Hot House Entertainment",
     "HotHouse.com": "Hot House Entertainment",
+    "1000facials": "1000 Facials",
+    "Immorallive": "Immoral Live",
+    "Mommyblowsbest": "Mommy Blows Best",
+    "Onlyteenblowjobs": "Only Teen Blowjobs"
 }
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
