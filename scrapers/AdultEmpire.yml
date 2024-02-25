@@ -129,8 +129,7 @@ xPathScrapers:
       Image:
         selector: //iframe/@src
         postProcess:
-          - subScraper:
-              selector: //video/@poster
+          - subScraper: //video/@poster
   sceneScraper:
     scene:
       Title: //h1/text()
