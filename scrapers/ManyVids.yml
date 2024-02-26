@@ -38,8 +38,8 @@ sceneByFragment:
   queryURL: "https://www.manyvids.com/bff/store/video/{filename}"
   queryURLReplace:
     filename:
-      - regex: \.(\w+)$
-        with: ""
+      - regex: .*?(\d{6,8}).*
+        with: $1
 
 sceneByURL:
   - action: scrapeJson
@@ -139,7 +139,7 @@ jsonScrapers:
         Name: data.tagList.#.label
       Performers:
         Name: data.model.displayName
-        URL:
+        URL: &performerURL
           selector: data.model.profileUrl
           postProcess:
             - replace:
@@ -147,4 +147,5 @@ jsonScrapers:
                   with: https://www.manyvids.com
       Studio:
         Name: data.model.displayName
+        URL: *performerURL
 # Last Updated February 22, 2024
