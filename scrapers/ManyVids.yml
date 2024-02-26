@@ -8,7 +8,7 @@ performerByName:
 performerByURL:
   - action: scrapeJson
     url:
-      - https://www.manyvids.com/Profile
+      - manyvids.com/Profile
     scraper: performerScraper
     queryURL: "{url}"
     queryURLReplace:
@@ -44,7 +44,7 @@ sceneByFragment:
 sceneByURL:
   - action: scrapeJson
     url:
-      - https://www.manyvids.com/Video/
+      - manyvids.com/Video/
     scraper: sceneScraper
     queryURL: "{url}"
     queryURLReplace:
