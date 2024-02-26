@@ -1,0 +1,24 @@
+name: kimholland.nl
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.kimholland.nl
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@id="player-title"]
+      Details: //div[@class="player-description"]
+      Image: 
+        selector: //div[@class="movie-photo-gallery"]/figure[1]/a/@href
+        postProcess:
+          - replace:
+            - regex: '^images'
+              with: https://www.kimholland.nl/images
+      Studio:
+        Name:
+          fixed: KimHolland
+debug:
+  printHTML: true
