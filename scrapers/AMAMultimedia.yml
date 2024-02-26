@@ -62,13 +62,15 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $scene: //div[@id="trailer_player"]
     scene:
-      Title: //h1[@class="t2019-stitle py-1 py-sm-2 pt-lg-0 mb-0 border-bottom"]/text()
-      Details: //div[@id="t2019-description"]/text()
+      Title: $scene//h1
+      Details: $scene//*[contains(@class, "fa-quote-right")]/following-sibling::span
       Performers:
-        Name: //div[@id="t2019-models"]/a/text()
+        Name: $scene//a[contains(@href, "models")]
       Image:
-        selector: //video[@id="player"]/@poster
+        selector: $scene//video[@id="player"]/@poster
         postProcess:
           - replace:
               - regex: ([?&]img[wh]=\d+)+$
@@ -92,4 +94,4 @@ xPathScrapers:
         selector: //div[contains(text(), 'RELEASED')]/span/text()
         postProcess:
           - parseDate: January 02, 2006
-# Last Updated February 06, 2023
+# Last Updated February 25, 2024

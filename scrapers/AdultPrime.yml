@@ -42,7 +42,7 @@ xPathScrapers:
       Date:
         selector: //div[@id="theatre-row"]//span[@class="description-releasedate"]/text()
         postProcess:
-          - parseDate: "02.01.2006"
+          - parseDate: 02-01-2006
       Details:
         selector: $scene//p[contains(@class,"ap-limited-description-text")]
       Image:
