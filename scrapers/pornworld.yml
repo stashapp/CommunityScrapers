@@ -31,24 +31,19 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: &title
-        selector: //h1/text()
+        selector: //h1
         postProcess:
           - replace:
               - regex: featuring.+
                 with: ""
       Code:
-        selector: //h1/text()
+        selector: //h1
         postProcess:
           - replace:
               - regex: .*(GP\d+).*
                 with: $1
       Date: //i[contains(@class,"calendar3")]/text()
-      Details:
-        selector: //meta[@name="description"]/@content
-        postProcess:
-          - replace:
-              - regex: '\x{0092}' # unicode char 0092 (looks like ')
-                with: "'"
+      Details: //meta[@name="description"]/@content
       Tags:
         Name: //div[@class="watch"]//a[contains(@href,"genre")]/text()
       Performers:
@@ -80,4 +75,4 @@ xPathScrapers:
           - replace:
               - regex: (.*)
                 with: https://tour10.pornworld.com$1
-# Last Updated January 04, 2024
+# Last Updated February 27, 2024
