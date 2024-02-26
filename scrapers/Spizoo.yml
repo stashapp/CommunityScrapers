@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - creamher.com/updates/
+      - drdaddypov.com/updates/
       - firstclasspov.com/updates/
       - mrluckypov.com/updates/
       - mrluckyraw.com/updates/
@@ -61,6 +62,7 @@ xPathScrapers:
                   with: $1
             - map:
                 creamher: Cream Her
+                drdaddypov: Dr. Daddy POV
                 firstclasspov: First Class POV
                 mrluckypov: Mr. LuckyPOV
                 mrluckyraw: Mr. LuckyRaw
@@ -76,4 +78,4 @@ xPathScrapers:
               # Remove any resizing parameters for the image, we want the original
               - regex: "[?&]img(?:q|w|h)=[^&]+"
                 with:
-# Last Updated August 26, 2023
+# Last Updated February 26, 2024
