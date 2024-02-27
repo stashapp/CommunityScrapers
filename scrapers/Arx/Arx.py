@@ -4,6 +4,8 @@ from urllib.parse import urlparse
 
 import requests
 
+from py_common.graphql import GRAPHQL_INTROSPECTION
+
 # Static definition, used in the GraphQL request
 site_ids = {
     'japanlust.com': 2,
@@ -69,6 +71,10 @@ def read_json_input():
 
 
 def call_graphql(query, variables=None):
+    # if the graphQL API changes, uncomment the following to discover available
+    # API fields, queries, etc.
+    # query = GRAPHQL_INTROSPECTION
+
     graphql_json = {'query': query}
     if variables is not None:
         graphql_json['variables'] = variables
@@ -81,7 +87,7 @@ def call_graphql(query, variables=None):
         log_debug(json.dumps(result))
 
         if result.get("errors", None):
-            for error in result["errors"]["errors"]:
+            for error in result["errors"]:
                 raise Exception("GraphQL error: {}".format(error))
         if result.get("data", None):
             return result.get("data")
@@ -97,7 +103,7 @@ def get_scene(url):
     query = """
         query 
             Scene($id: Int!, $siteId: Int) {  
-                scene(id: $id, siteId: $siteId) 
+                legacyScene(id: $id, siteId: $siteId) 
                 {    
                     ...sceneFullFields    
                     __typename  
@@ -173,7 +179,7 @@ def get_scene(url):
         log_error(e)
         return None
 
-    result = result.get('scene')
+    result = result.get('legacyScene')
 
     ret = {}
 
@@ -185,6 +191,7 @@ def get_scene(url):
     ret['image'] = result.get('primaryPhotoUrl')
     ret['date'] = result.get('availableAt') and result.get('availableAt')[:10] \
         or result.get('createdAt') and result.get('createdAt')[:10]
+    ret['code'] = str(result.get('id'))
 
     return ret
 
