@@ -281,6 +281,7 @@ def get_scene(url):
     ret['image'] = result.get('primaryPhotoUrl')
     ret['date'] = result.get('availableAt') and result.get('availableAt')[:10] \
         or result.get('createdAt') and result.get('createdAt')[:10]
+    ret['code'] = str(result.get('id'))
 
     return ret
 
