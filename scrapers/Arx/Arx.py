@@ -22,6 +22,98 @@ API_TIMEOUT = 10
 # GraphQL API endpoint
 ENDPOINT = "https://arwest-api-production.herokuapp.com/graphql"
 
+# GraphQL introspection
+GRAPHQL_INTROSPECTION = """
+    fragment FullType on __Type {
+    kind
+    name
+    fields(includeDeprecated: true) {
+        name
+        args {
+        ...InputValue
+        }
+        type {
+        ...TypeRef
+        }
+        isDeprecated
+        deprecationReason
+    }
+    inputFields {
+        ...InputValue
+    }
+    interfaces {
+        ...TypeRef
+    }
+    enumValues(includeDeprecated: true) {
+        name
+        isDeprecated
+        deprecationReason
+    }
+    possibleTypes {
+        ...TypeRef
+    }
+    }
+    fragment InputValue on __InputValue {
+    name
+    type {
+        ...TypeRef
+    }
+    defaultValue
+    }
+    fragment TypeRef on __Type {
+    kind
+    name
+    ofType {
+        kind
+        name
+        ofType {
+        kind
+        name
+        ofType {
+            kind
+            name
+            ofType {
+            kind
+            name
+            ofType {
+                kind
+                name
+                ofType {
+                kind
+                name
+                ofType {
+                    kind
+                    name
+                }
+                }
+            }
+            }
+        }
+        }
+    }
+    }
+    query IntrospectionQuery {
+    __schema {
+        queryType {
+        name
+        }
+        mutationType {
+        name
+        }
+        types {
+        ...FullType
+        }
+        directives {
+        name
+        locations
+        args {
+            ...InputValue
+        }
+        }
+    }
+    }
+"""
+
 # Request headers
 headers = {
     "Accept-Encoding": "gzip, deflate, br",
@@ -69,6 +161,10 @@ def read_json_input():
 
 
 def call_graphql(query, variables=None):
+    # if the graphQL API changes, uncomment the following to discover available
+    # API fields, queries, etc.
+    # query = GRAPHQL_INTROSPECTION
+
     graphql_json = {'query': query}
     if variables is not None:
         graphql_json['variables'] = variables
@@ -81,7 +177,7 @@ def call_graphql(query, variables=None):
         log_debug(json.dumps(result))
 
         if result.get("errors", None):
-            for error in result["errors"]["errors"]:
+            for error in result["errors"]:
                 raise Exception("GraphQL error: {}".format(error))
         if result.get("data", None):
             return result.get("data")
@@ -97,7 +193,7 @@ def get_scene(url):
     query = """
         query 
             Scene($id: Int!, $siteId: Int) {  
-                scene(id: $id, siteId: $siteId) 
+                legacyScene(id: $id, siteId: $siteId) 
                 {    
                     ...sceneFullFields    
                     __typename  
@@ -173,7 +269,7 @@ def get_scene(url):
         log_error(e)
         return None
 
-    result = result.get('scene')
+    result = result.get('legacyScene')
 
     ret = {}
 
