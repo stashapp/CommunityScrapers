@@ -105,7 +105,7 @@ xPathScrapers:
       Director:
         selector: //*[@id="works_txt"]/ul/li[5]/dl/dd
       Image:  
-        selector: //*[@id="works_pic"]/ul/li[1]/img/@src
+        selector: //*[@id="works_pic"]/ul/li[1]/a/@href | //*[@id="works_pic"]/ul/li[1]/img/@src
         postProcess:
           - replace:
             - regex: pac_s.jpg
@@ -132,4 +132,4 @@ driver:
           Domain: ".www.akiba-web.com"
           Value: "yes"
           Path: "/"
-# Last Updated February 14, 2024
+# Last Updated February 27, 2024
