@@ -4,6 +4,8 @@ from urllib.parse import urlparse
 
 import requests
 
+from py_common.graphql import GRAPHQL_INTROSPECTION
+
 # Static definition, used in the GraphQL request
 site_ids = {
     'japanlust.com': 2,
@@ -21,98 +23,6 @@ API_TIMEOUT = 10
 
 # GraphQL API endpoint
 ENDPOINT = "https://arwest-api-production.herokuapp.com/graphql"
-
-# GraphQL introspection
-GRAPHQL_INTROSPECTION = """
-    fragment FullType on __Type {
-    kind
-    name
-    fields(includeDeprecated: true) {
-        name
-        args {
-        ...InputValue
-        }
-        type {
-        ...TypeRef
-        }
-        isDeprecated
-        deprecationReason
-    }
-    inputFields {
-        ...InputValue
-    }
-    interfaces {
-        ...TypeRef
-    }
-    enumValues(includeDeprecated: true) {
-        name
-        isDeprecated
-        deprecationReason
-    }
-    possibleTypes {
-        ...TypeRef
-    }
-    }
-    fragment InputValue on __InputValue {
-    name
-    type {
-        ...TypeRef
-    }
-    defaultValue
-    }
-    fragment TypeRef on __Type {
-    kind
-    name
-    ofType {
-        kind
-        name
-        ofType {
-        kind
-        name
-        ofType {
-            kind
-            name
-            ofType {
-            kind
-            name
-            ofType {
-                kind
-                name
-                ofType {
-                kind
-                name
-                ofType {
-                    kind
-                    name
-                }
-                }
-            }
-            }
-        }
-        }
-    }
-    }
-    query IntrospectionQuery {
-    __schema {
-        queryType {
-        name
-        }
-        mutationType {
-        name
-        }
-        types {
-        ...FullType
-        }
-        directives {
-        name
-        locations
-        args {
-            ...InputValue
-        }
-        }
-    }
-    }
-"""
 
 # Request headers
 headers = {
