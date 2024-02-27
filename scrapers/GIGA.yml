@@ -105,7 +105,7 @@ xPathScrapers:
       Director:
         selector: //*[@id="works_txt"]/ul/li[5]/dl/dd
       Image:  
-        selector: //*[@id="works_pic"]/ul/li[1]/a/@href
+        selector: //*[@id="works_pic"]/ul/li[1]/a/@href | //*[@id="works_pic"]/ul/li[1]/img/@src
         postProcess:
           - replace:
             - regex: pac_s.jpg
