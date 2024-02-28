@@ -106,6 +106,7 @@ xPathScrapers:
   sceneScraperSingle:
     common:
       $header: //div[@class="clip-page__detail__title text-display-primary"]
+      $clipId: (//*[@data-tid]/@data-tid)[1]
     scene:
       Title: $header/h1
       Studio:
@@ -127,9 +128,12 @@ xPathScrapers:
                 - regex: ^
                   with: "https://www.adultdvdempire.com"
       Image:
-        selector: //iframe/@src
+        selector: (//*[@data-tid]/@data-tid)[1] | //a[@id="front-cover"]/img/@src
+        concat: __SEPARATOR__
         postProcess:
-          - subScraper: //video/@poster
+          - replace:
+              - regex: (\d+).*/([^/]*\d+)[^/\d]*$
+                with: https://imgs1cdn.adultempire.com/backdrop/6000/$2%5f$1/scene-1.jpg
   sceneScraper:
     scene:
       Title: //h1/text()
