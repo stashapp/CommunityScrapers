@@ -96,7 +96,28 @@ def sceneByURL():
 
     title = re.sub(r'\s+VR Porn Video$', '', data["title"])
     details = data["description"]
-    image_url = data["mainImages"][0]["imgSrcSet"].split(',')[0].split(' ')[0]
+
+    # image
+    image_urls = [
+        src_set.split(' ')[0] for src_set in data["mainImages"][0]["imgSrcSet"].split(',')
+    ]
+    # pick highest available quality, or fall back to first image
+    image_url = next(
+        (i for i in image_urls if i.endswith('ultra.jpg')),
+        next(
+            (i for i in image_urls if i.endswith('big.jpg')),
+            next(
+                (i for i in image_urls if i.endswith('high.jpg')),
+                next(
+                    (i for i in image_urls if i.endswith('medium.jpg')),
+                    next(
+                        (i for i in image_urls if i.endswith('small.jpg')),
+                        image_urls[0]
+                    )
+                )
+            )
+        )
+    )
     date = data["releaseDate"]
 
     # tags
