@@ -92,10 +92,11 @@ def sceneByURL():
     log.trace("Scraped the url: " + api_url)
 
     data = scraped.json()
+    # log.debug(json.dumps(data))
 
     title = re.sub(r'\s+VR Porn Video$', '', data["title"])
     details = data["description"]
-    image_url = re.sub(r".*,(\S+).*", r"\1", data["mainImages"][0]["imgSrcSet"])
+    image_url = data["mainImages"][0]["imgSrcSet"].split(',')[0].split(' ')[0]
     date = data["releaseDate"]
 
     # tags
