@@ -16,7 +16,7 @@ sceneByQueryFragment:
 sceneByFragment:
     action: scrapeXPath
     scraper: sceneQueryScraper
-    queryURL: https://www.kimholland.com/search/{title}
+    queryURL: https://www.kimholland.com/search/{filename}
 
 xPathScrapers:
   sceneScraper:
