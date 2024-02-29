@@ -1,4 +1,4 @@
-name: kimholland.com
+name: Kim Holland
 
 sceneByURL:
   - action: scrapeXPath
