@@ -1,4 +1,4 @@
-name: Kim Holland
+name: kimholland.com
 
 sceneByURL:
   - action: scrapeXPath
@@ -13,7 +13,10 @@ sceneByQueryFragment:
     action: scrapeXPath
     queryURL: "{url}"
     scraper: sceneScraper
-
+sceneByFragment:
+    action: scrapeXPath
+    scraper: sceneQueryScraper
+    queryURL: https://www.kimholland.com/search/{title}
 
 xPathScrapers:
   sceneScraper:
@@ -28,7 +31,7 @@ xPathScrapers:
               with: https://www.kimholland.com/images
       Studio:
         Name:
-          fixed: KimHolland
+          fixed: Kim Holland
       URL:
         selector: //div[@class="video-thumbnail fas fa-play"]/@href
         postProcess:
@@ -51,7 +54,27 @@ xPathScrapers:
       Date: //span[@class="movie-item-search-date"]
       Studio:
         Name:
-          fixed: KimHolland
+          fixed: Kim Holland
+      URL:
+        selector: //a[@class="movie-item-search-text-link"]/@href
+        postProcess:
+          - replace:
+            - regex: '/video'
+              with: https://www.kimholland.com/video
+  sceneQueryScraper:
+    scene:
+      Image:
+        selector: //a[@class="movie-item-search-image"]/img/@src
+        postProcess:
+          - replace:
+            - regex: '^/images'
+              with: https://www.kimholland.com/images
+      Title: //a[@class="movie-item-search-text-link"]
+      Details: //div[@class="movie-item-description"]/p
+      Date: //span[@class="movie-item-search-date"]
+      Studio:
+        Name:
+          fixed: Kim Holland
       URL:
         selector: //a[@class="movie-item-search-text-link"]/@href
         postProcess:
@@ -59,4 +82,4 @@ xPathScrapers:
             - regex: '/video'
               with: https://www.kimholland.com/video
 
-# Last updated February 28, 2024
+# Last updated February 29, 2024
