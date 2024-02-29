@@ -36,15 +36,25 @@ xPathScrapers:
           selector: //div[contains(@class,"siteName")]/a[@href]
           postProcess:
             - map:
+                AnalMom: Anal Mom
+                BBCParadise: BBC Paradise
                 GotMylf: Got Mylf
                 FullOfJoi: Full Of JOI
                 LoneMilf: Lone MILF
                 MilfBody: MILF Body
+                Milf Taxi: MILF Taxi
                 MomDrips: Mom Drips
                 MomShoot: Mom Shoot
+                Mylf After Dark: After Dark
+                Mylf Blows: MYLF Blows
+                Mylf Boss: MYLF Boss
+                Mylf Classics: MYLF Classics
                 Mylf Of The Month: Mylf of the Month
+                Mylf Selects: MYLF Selects
                 MylfBlows: Mylf Blows
                 MylfBoss: Mylf Boss
                 MylfSelects: Mylf Selects
+                PervNana: Perv Nana
                 StayHomeMilf: Stay Home Milf
-# Last Updated July 21, 2023
+                UsePOV: Use POV
+# Last Updated February 29, 2024
