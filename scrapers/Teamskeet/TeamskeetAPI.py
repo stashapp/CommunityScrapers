@@ -126,6 +126,10 @@ scrape['performers'] = [{"name": x.get('modelName')}
                         for x in scene_api_json.get('models')]
 scrape['tags'] = [{"name": x} for x in scene_api_json.get('tags')]
 scrape['image'] = scene_api_json.get('img')
+high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
+log.debug(f"Image before: {scrape['image']}")
+log.debug(f"Image after: {high_res}")
+scrape['image'] = high_res
 
 if use_local == 0:
     save_json(scene_api_json, scene_url)
