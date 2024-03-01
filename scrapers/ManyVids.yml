@@ -1,10 +1,8 @@
 name: ManyVids
-
 performerByName:
   action: scrapeJson
   queryURL: https://www.manyvids.com/bff/search/autocomplete?keywords={}&contentPref=0
   scraper: performerSearch
-
 performerByURL:
   - action: scrapeJson
     url:
@@ -15,12 +13,10 @@ performerByURL:
       url:
         - regex: .*/Profile/(\d+)/.*
           with: https://www.manyvids.com/bff/profile/profiles/$1
-
 sceneByName:
   action: scrapeJson
   queryURL: https://www.manyvids.com/bff/search/results?keywords={}&contentPref=0
   scraper: sceneSearch
-
 sceneByQueryFragment:
   action: scrapeJson
   scraper: sceneScraper
@@ -31,7 +27,6 @@ sceneByQueryFragment:
         with: https://www.manyvids.com/bff/store/video/
       - regex: /[^/]*/*$
         with: ""
-
 sceneByFragment:
   action: scrapeJson
   scraper: sceneScraper
@@ -40,7 +35,6 @@ sceneByFragment:
     filename:
       - regex: .*?(\d{6,8}).*
         with: $1
-
 sceneByURL:
   - action: scrapeJson
     url:
@@ -51,7 +45,6 @@ sceneByURL:
       url:
         - regex: .*?(\d+).*
           with: https://www.manyvids.com/bff/store/video/$1
-
 jsonScrapers:
   performerSearch:
     performer:
@@ -63,12 +56,16 @@ jsonScrapers:
               - regex: ^
                 with: https://www.manyvids.com
       Image: models.#.avatar.url
-
   performerScraper:
     performer:
       Name: displayName
       Gender: identification
-      URL: shortLinkUrl
+      URL: &performerURL
+        selector: data.model.profileUrl
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.manyvids.com
       Twitter:
         selector: socLnkTwitter
         postProcess:
@@ -84,10 +81,7 @@ jsonScrapers:
       Birthdate:
         selector: dob
         postProcess:
-          - replace:
-              - regex: T.*
-                with: ""
-          - parseDate: 2006-01-02
+          - parseDate: 2006-01-02T00:00:00.000Z
       Ethnicity: ethnicity
       Country: location
       HairColor: hairColor
@@ -101,7 +95,6 @@ jsonScrapers:
                 with: " - Present"
       Image: portrait
       Details: description
-
   sceneSearch:
     scene:
       Title: vids.#.title
@@ -115,7 +108,6 @@ jsonScrapers:
               - regex: ^
                 with: https://www.manyvids.com/Video/
       Image: vids.#.thumbnail.url
-
   sceneScraper:
     scene:
       Title: data.title
@@ -130,21 +122,13 @@ jsonScrapers:
       Date:
         selector: data.launchDate
         postProcess:
-          - replace:
-              - regex: T.*
-                with: ""
-          - parseDate: 2006-01-02
+          - parseDate: 2006-01-02T00:00:00.000Z
       Image: data.screenshot
       Tags:
         Name: data.tagList.#.label
       Performers:
         Name: data.model.displayName
-        URL: &performerURL
-          selector: data.model.profileUrl
-          postProcess:
-            - replace:
-                - regex: ^
-                  with: https://www.manyvids.com
+        URL: *performerURL
       Studio:
         Name: data.model.displayName
         URL: *performerURL
