@@ -1,0 +1,10 @@
+name: "MYLF"
+sceneByURL:
+  - url:
+      - mylf.com/movies/
+    action: script
+    script:
+      - python
+      - MYLFAPI.py
+      # - logJSON # Save the JSON from the API to a file
+# Last Updated March 01, 2024
