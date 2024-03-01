@@ -60,12 +60,13 @@ jsonScrapers:
     performer:
       Name: displayName
       Gender: identification
-      URL: &performerURL
-        selector: data.model.profileUrl
+      URL:
+        selector: "[legacyUserId,urlHandle]"
+        concat: /
         postProcess:
           - replace:
-              - regex: ^
-                with: https://www.manyvids.com
+              - regex: (.*)$
+                with: https://www.manyvids.com/Profile/$1
       Twitter:
         selector: socLnkTwitter
         postProcess:
@@ -81,7 +82,7 @@ jsonScrapers:
       Birthdate:
         selector: dob
         postProcess:
-          - parseDate: 2006-01-02T00:00:00.000Z
+          - parseDate: 2006-01-02T15:04:05.000Z
       Ethnicity: ethnicity
       Country: location
       HairColor: hairColor
@@ -122,14 +123,17 @@ jsonScrapers:
       Date:
         selector: data.launchDate
         postProcess:
-          - parseDate: 2006-01-02T00:00:00.000Z
+          - parseDate: 2006-01-02T15:04:05.000Z
       Image: data.screenshot
       Tags:
         Name: data.tagList.#.label
-      Performers:
+      Performers: &performer
         Name: data.model.displayName
-        URL: *performerURL
-      Studio:
-        Name: data.model.displayName
-        URL: *performerURL
+        URL:
+          selector: data.model.profileUrl
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.manyvids.com
+      Studio: *performer
 # Last Updated February 22, 2024
