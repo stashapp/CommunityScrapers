@@ -153,7 +153,7 @@ def _create_headers_for(domain: str) -> dict[str, str]:
     api_token = domains.get_token_for(domain, fallback=get_instance_token)
     if api_token is None:
         log.error(f"Unable to get an API token for '{domain}'")
-        sys.exit(1)
+        return {}
 
     api_headers = {
         "Instance": api_token,
@@ -413,6 +413,8 @@ def scene_from_url(
 
     api_URL = f"https://site-api.project1service.com/v2/releases/{scene_id}"
     api_headers = _create_headers_for(domain)
+    if not api_headers:
+        return None
     api_scene_json = __api_request(api_URL, api_headers)
 
     if not api_scene_json:
@@ -530,9 +532,9 @@ def movie_from_url(
             url.replace(f"/{movie_id}/", f"/{api_movie_json['parent']['id']}/"),
             postprocess=postprocess,
         )
-        return postprocess(
-            to_scraped_movie(api_movie_json["parent"]), api_movie_json["parent"]
-        )
+    return postprocess(
+        to_scraped_movie(api_movie_json["parent"]), api_movie_json["parent"]
+    )
 
 
 # Since the "Scrape with..." function in Stash expects a single result, we provide
