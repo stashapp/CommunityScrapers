@@ -5,19 +5,7 @@ import re
 import sys
 from datetime import datetime
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(
-    os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
-
-try:
-    import py_common.log as log
-except ModuleNotFoundError:
-    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
-    sys.exit()
+import py_common.log as log
 
 try:
     import cloudscraper
@@ -42,11 +30,12 @@ def save_json(api_json, url):
 
 
 USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
-DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
+DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Sayuncle")
 
 
 # Not necessary but why not ?
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
+
 
 fragment = json.loads(sys.stdin.read())
 if fragment["url"]:
@@ -55,19 +44,19 @@ else:
     log.error('You need to set the URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
-if "sayuncle.com/movies/" not in scene_url and "teamskeet.com/movies/" not in scene_url:
-    log.error('The URL is not from a Teamskeet or SayUncle URL (e.g. teamskeet.com/movies/*****)')
-    sys.exit(1)
 
 # Check the URL and set the API URL
 if 'sayuncle.com' in scene_url:
     ORIGIN = 'https://www.sayuncle.com'
     REFERER = 'https://www.sayuncle.com/'
     API_BASE = 'https://store2.psmcdn.net/sau-elastic-00gy5fg5ra-videoscontent/_doc/'
-if 'teamskeet.com' in scene_url:
+elif 'teamskeet.com' in scene_url:
     ORIGIN = 'https://www.teamskeet.com'
     REFERER = 'https://www.teamskeet.com/'
     API_BASE = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/'
+else:
+    log.error('The URL is not from a Teamskeet or SayUncle URL (e.g. teamskeet.com/movies/*****)')
+    sys.exit(1)
 
 
 scene_id = re.sub('.+/', '', scene_url)
@@ -125,16 +114,26 @@ if dt:
     dt = re.sub(r'T.+', '', dt)
     date = datetime.strptime(dt, '%Y-%m-%d')
     scrape['date'] = str(date.date())
-scrape['details'] = scene_api_json.get('description')
+
+#fix for TeamKseet including HTML tags in Description
+CLEANR = re.compile('<.*?>') 
+cleandescription = re.sub(CLEANR,'',scene_api_json.get('description'))
+scrape['details'] = cleandescription
 scrape['studio'] = {}
 scrape['studio']['name'] = scene_api_json['site'].get('name')
 scrape['performers'] = [{"name": x.get('modelName')}
                         for x in scene_api_json.get('models')]
 scrape['tags'] = [{"name": x} for x in scene_api_json.get('tags')]
+scrape['image'] = scene_api_json.get('img')
+# Highres is not working with sayuncle.com at the moment
+if 'sayuncle.com' not in scene_url:
+    high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
+    log.debug(f"Image before: {scrape['image']}")
+    log.debug(f"Image after: {high_res}")
+    scrape['image'] = high_res
 # If the scene is from sayuncle.com, we need to add the gay tag to the tags list
 if 'sayuncle.com' in scene_url:
     scrape['tags'].append({"name": "Gay"})
-scrape['image'] = scene_api_json.get('img')
 
 if use_local == 0:
     save_json(scene_api_json, scene_url)
