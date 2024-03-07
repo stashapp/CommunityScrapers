@@ -59,4 +59,6 @@ xPathScrapers:
           - replace:
               - regex: ^./
                 with: https://milovana.com/forum/
-# Last Updated November 12, 2022
+driver:
+  useCDP: true
+# Last Updated March 07, 2023
