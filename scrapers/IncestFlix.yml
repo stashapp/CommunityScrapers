@@ -1,0 +1,34 @@
+name: IncestFlix
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - incestflix.com/watch/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: "IncestFlix"
+      Title:
+        selector: //div[@id = 'incflix-videowrap']//h2
+      Tags:
+        Name: //div[@id = 'videotags']//a[contains(@class, 'studiolink')]
+      Performers:
+        Name: 
+          selector: //div[@id = 'incflix-videowrap']//h2
+          postProcess:
+            - replace:
+              - regex: ( - .*)
+                with:
+            - replace:
+              - regex: (\s*)(,)(\s*)
+                with: $2
+          split: ","
+      Image:
+        selector: //video[@id='incflix-player']/@poster
+        postProcess:
+          - replace:
+            - regex: (.*)
+              with: http:$1
+# Last Updated January 10, 2024

@@ -2,7 +2,6 @@ name: "GammaEntertainment"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - 1000facials.com/en/scene/
       - alettaoceanempire.com/en/video/
       - analacrobats.com/en/video/
       - ashleyfires.com/
@@ -21,7 +20,6 @@ sceneByURL:
       - gapingangels.com/
       - girlsandstuds.com/
       - grannyghetto.com/
-      - immorallive.com/en/video/
       - jaysinxxx.com/
       - jonnidarkkoxxx.com/
       - lanesisters.com/
@@ -29,10 +27,8 @@ sceneByURL:
       - lexingtonsteele.com/
       - maledigital.com/en/video/
       - maskurbate.com/en/video/
-      - mommyblowsbest.com/en/scene/
       - motherfuckerxxx.com/
       - myteenoasis.com/
-      - onlyteenblowjobs.com/en/scene/
       - openlife.com/
       - pantypops.com/
       - povblowjobs.com/
@@ -44,7 +40,6 @@ sceneByURL:
       - squirtingorgies.com/en/scene/
       - strapattackers.com/
       - sunnyleone.com/
-      - throated.com/en/video/
       - tittycreampies.com/
       - transsexualangel.com/en/video/
       - transsexualroadtrip.com/
@@ -134,7 +129,6 @@ xPathScrapers:
                 - regex: \.com$
                   with: ""
             - map:
-                1000facials: 1000 Facials
                 activeduty: Active Duty
                 alettaoceanempire: Aletta Ocean Empire
                 allblackx: All Black X
@@ -158,7 +152,6 @@ xPathScrapers:
                 gapingangels: Gaping Angels
                 girlsandstuds: Girls And Studs
                 grannyghetto: Granny Ghetto
-                immorallive: Immoral Live
                 jaysinxxx: Jay Sin XXX
                 jonnidarkkoxxx: Jonni Darkko XXX
                 lanesisters: Lane Sisters
@@ -167,10 +160,8 @@ xPathScrapers:
                 lexingtonsteele: Lexington Steele
                 maledigital: Male Digital
                 maskurbate: Maskurbate
-                mommyblowsbest: Mommy Blows Best
                 motherfuckerxxx: Mother Fucker XXX
                 myteenoasis: My Teen Oasis
-                onlyteenblowjobs: Only Teen Blowjobs
                 openlife: Open Life
                 outofthefamily: Out Of The Family
                 pantypops: Panty Pops
@@ -183,7 +174,6 @@ xPathScrapers:
                 squirtingorgies: Squirting Orgies
                 strapattackers: Strap Attackers
                 sunnyleone: Sunny Leone
-                throated: Throated
                 tittycreampies: Titty Creampies
                 transsexualangel: Transsexual Angel
                 transsexualroadtrip: Transsexual Roadtrip
@@ -209,4 +199,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated October 04, 2023
+# Last Updated February 24, 2024

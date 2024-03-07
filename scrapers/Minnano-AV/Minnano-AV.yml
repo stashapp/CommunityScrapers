@@ -1,4 +1,5 @@
 name: "Minnano-AV (JAV)"
+# requires: py_common
 performerByURL:
   - url:
       - https://www.minnano-av.com/
@@ -10,9 +11,9 @@ performerByURL:
       - performer_by_url
 
 performerByName:
-    action: script
-    script:
-      - python
-      - Minnano-AV.py
-      - performer_by_name
-# Last Updated December 16, 2023
+  action: script
+  script:
+    - python
+    - Minnano-AV.py
+    - performer_by_name
+# Last Updated January 11, 2024

@@ -21,10 +21,17 @@ xPathScrapers:
       Tags: &tags
         Name:
           selector: //div[@class="tags-item"]/a/text()
+          postProcess:
+            - map:
+                "VR - Virtual-Reality": Virtual Reality
       Performers: &performers
         Name: //span/a[contains(@href,'/model/')]/text()
       Studio: &studio
-        Name: //strong/a[contains(@href, "/studio/")]/text()
+        Name:
+          selector: //strong/a[contains(@href, "/studio/")]/text()
+          postProcess:
+            - map:
+                SinsVR: XSinsVR
       Image: //dl8-video/@poster
     gallery:
       Title: *title
@@ -33,4 +40,4 @@ xPathScrapers:
       Tags: *tags
       Performers: *performers
       Studio: *studio
-# Last Updated April 04, 2022
+# Last Updated February 16th, 2024

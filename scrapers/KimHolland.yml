@@ -1,0 +1,64 @@
+name: Kim Holland
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.kimholland.com
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.kimholland.com/search/{}/
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneSearch
+  queryURL: https://www.kimholland.com/search/{filename}
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //span[@class="front-newest-item-info-title"]
+      Details: //div[@class="front-newest-item-info"]/p
+      Image:
+        selector: //div[@class="video-thumbnail fas fa-play"]/img/@src
+        postProcess:
+          - replace:
+              - regex: "^/images"
+                with: https://www.kimholland.com/images
+      Studio:
+        Name:
+          fixed: Kim Holland
+      URL:
+        selector: //div[@class="video-thumbnail fas fa-play"]/@href
+        postProcess:
+          - replace:
+              - regex: "/images"
+                with: https://www.kimholland.com/video
+          - replace:
+              - regex: '\d{4}x\d{4}.jpg'
+                with:
+  sceneSearch:
+    scene:
+      Image:
+        selector: //a[@class="movie-item-search-image"]/img/@src
+        postProcess:
+          - replace:
+              - regex: "^/images"
+                with: https://www.kimholland.com/images
+      Title: //a[@class="movie-item-search-text-link"]
+      Details: //div[@class="movie-item-description"]/p
+      Date: //span[@class="movie-item-search-date"]
+      Studio:
+        Name:
+          fixed: Kim Holland
+      URL:
+        selector: //a[@class="movie-item-search-text-link"]/@href
+        postProcess:
+          - replace:
+              - regex: "/video"
+                with: https://www.kimholland.com/video
+# Last updated February 29, 2024

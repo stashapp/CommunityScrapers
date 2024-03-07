@@ -48,6 +48,7 @@ if sys.argv[1] == "gallery_query":
             "details": s["details"],
             "urls": s["urls"],
             "date": s["date"],
+            "code": s["code"],
             "studio": get_name(s["studio"]),
             "performers": get_names(s["performers"]),
             "tags": get_names(s["tags"]),

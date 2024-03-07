@@ -2,16 +2,16 @@ name: ThePornDB for JAV
 sceneByURL:
   - action: scrapeJson
     url:
-      - metadataapi.net/jav/
+      - theporndb.net/jav/
     queryURL: "{url}"
     queryURLReplace: &redirectToAPI
       url:
-        - regex: ^(.+metadataapi.net)/
-          with: https://api.metadataapi.net/
+        - regex: ^(.+theporndb.net)/
+          with: https://api.theporndb.net/
     scraper: sceneScraper
 sceneByName:
   action: scrapeJson
-  queryURL: https://api.metadataapi.net/jav?parse={}&per_page=10
+  queryURL: https://api.theporndb.net/jav?parse={}&per_page=10
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeJson
@@ -19,7 +19,7 @@ sceneByQueryFragment:
   scraper: sceneScraper
 sceneByFragment:
   action: scrapeJson
-  queryURL: https://api.metadataapi.net/jav?parse={filename}&per_page=10
+  queryURL: https://api.theporndb.net/jav?parse={filename}&per_page=10
   scraper: sceneQueryScraper
   queryURLReplace:
     filename:
@@ -30,7 +30,7 @@ sceneByFragment:
 movieByURL:
   - action: scrapeJson
     url:
-      - metadataapi.net/jav/
+      - theporndb.net/jav/
     scraper: movieScraper
     queryURL: "{url}"
     queryURLReplace: *redirectToAPI
@@ -53,7 +53,7 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: "https://api.metadataapi.net/jav/"
+                with: "https://api.theporndb.net/jav/"
       Image: data.#.background.full
       Details: data.#.description
 
@@ -76,7 +76,7 @@ jsonScrapers:
           postProcess:
             - replace:
                 - regex: ^
-                  with: "https://metadataapi.net/performers/"
+                  with: "https://theporndb.net/performers/"
       Studio:
         Name: $data.site.name
       Tags:
@@ -104,5 +104,8 @@ driver:
     - Key: User-Agent
       Value: stashjson/1.0.0
     - Key: Authorization
+      # Generate an API key at https://theporndb.net/user/api-tokens
+      # and replace YOUR_API_KEY_HERE with the generated key
       Value: Bearer YOUR_API_KEY_HERE
-# Last Updated October 13, 2023
+      #      ^^^^^^-- This part needs to stay the same
+# Last Updated January 04, 2024

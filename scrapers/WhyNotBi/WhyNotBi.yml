@@ -1,0 +1,74 @@
+name: Why Not Bi
+# requires: py_common, AyloAPI
+# scrapes: Why Not Bi
+galleryByURL:
+  - action: script
+    url:
+      - whynotbi.com/scene/
+    script:
+      - python
+      - WhyNotBi.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - WhyNotBi.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - whynotbi.com/scene/
+    script:
+      - python
+      - WhyNotBi.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - WhyNotBi.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - WhyNotBi.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - WhyNotBi.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - WhyNotBi.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - whynotbi.com/model/
+    script:
+      - python
+      - WhyNotBi.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - WhyNotBi.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - whynotbi.com/scene/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - whynotbi.com/movie/
+    script:
+      - python
+      - WhyNotBi.py
+      - movie-by-url
+# Last Updated January 14, 2024

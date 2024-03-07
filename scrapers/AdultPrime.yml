@@ -40,9 +40,9 @@ xPathScrapers:
     scene:
       Title: $scene//h2
       Date:
-        selector: ($scene//p[@class="update-info-line regular"]/b)[1]/text()
+        selector: //div[@id="theatre-row"]//span[@class="description-releasedate"]/text()
         postProcess:
-          - parseDate: "02.01.2006"
+          - parseDate: 02-01-2006
       Details:
         selector: $scene//p[contains(@class,"ap-limited-description-text")]
       Image:
@@ -68,4 +68,4 @@ xPathScrapers:
           split: ", "
       Performers:
         Name: $scene//b[contains(.,"Performer")]/following-sibling::a/text()
-# Last Updated November 04, 2023
+# Last Updated February 22, 2023

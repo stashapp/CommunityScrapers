@@ -55,7 +55,7 @@ class ScrapedStudio(TypedDict, total=False):
     image: str
 
 class ScrapedMovie(TypedDict, total=False):
-    name: Required[str]
+    name: str
     date: str
     "Must be in the format YYYY-MM-DD"
     duration: str
@@ -66,11 +66,11 @@ class ScrapedMovie(TypedDict, total=False):
     rating: str
     front_image: str
     back_image: str
-    URL: str
+    url: str
     aliases: str
 
 class ScrapedGallery(TypedDict, total=False):
-    title: Required[str]
+    title: str
     details: str
     url: str
     urls: list[str]
@@ -79,6 +79,8 @@ class ScrapedGallery(TypedDict, total=False):
     studio: ScrapedStudio
     tags: list[ScrapedTag]
     performers: list[ScrapedPerformer]
+    code: str
+    photographer: str
 
 class ScrapedScene(TypedDict, total=False):
     title: str

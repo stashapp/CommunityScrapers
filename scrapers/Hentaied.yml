@@ -2,10 +2,13 @@ name: Hentaied
 sceneByURL:
   - action: scrapeXPath
     url:
+      - defeatedsexfight.com
       - freeze.xxx
       - futanari.xxx
       - hentaied.com
       - parasited.com
+      - plantsvscunts.com
+      - somegore.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -19,7 +22,8 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Performers:
-        Name: //div[@class="left-top-part"]//div[contains(@class,"tagsmodels")]//a
+        Name: //div[@class="left-top-part"]//div[contains(@class,"tagsmodels singletag")]//a
+      Director: //div[contains(@class, "director")]//span 
       Tags:
         Name:
           selector: //ul[@class="post-categories"]//a
@@ -41,6 +45,11 @@ xPathScrapers:
           selector: //meta[@property="og:site_name"]/@content
           postProcess:
             - map:
-                Real Life Hentai: Hentaied
-
-# Last Updated December 2, 2023
+                Real Life Hentai | Tentacle Porn: Hentaied
+                Freeze - Time Freeze Porn Videos: Freeze
+                Parasited                       : Parasited
+                Futanari XXX                    : Futanari XXX
+                Lesbian Sex Fight               : Defeated Sex Fight
+                Bloody                          : Somegore
+                Plants vs Cunts                 : Plants vs Cunts
+# Last Updated January 24, 2024

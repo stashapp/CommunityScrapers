@@ -1,0 +1,76 @@
+name: Gay Wire
+# requires: py_common, AyloAPI
+# scrapes: Bait Bus, Bareback Attack, Bareback Casting, ExBF, Guy Selector, Haze Him, It's Gonna Hurt, Out In Public, Pound His Ass, Rub Him, Sausage Party, Thug Hunter, UngloryHole, Urban Invasion
+galleryByURL:
+  - action: script
+    url:
+      - gaywire.com/video
+      - guyselector.com/scene
+    script:
+      - python
+      - GayWire.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - GayWire.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - gaywire.com/video
+      - guyselector.com/scene
+    script:
+      - python
+      - GayWire.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - GayWire.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - GayWire.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - GayWire.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - GayWire.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - gaywire.com/model/
+      - guyselector.com/model/
+    script:
+      - python
+      - GayWire.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - GayWire.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - gaywire.com/movie
+      - guyselector.com/movie
+    script:
+      - python
+      - GayWire.py
+      - movie-by-url
+# Last Updated January 14, 2024

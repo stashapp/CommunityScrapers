@@ -9,6 +9,24 @@ sceneByURL:
     url:
       - lordaardvark.com/films/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://lordaardvark.com/search?search={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: https://lordaardvark.com/search?search={title}
+  scraper: sceneSearch
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://lordaardvark.com/search?search={filename}
+  queryURLReplace:
+    filename:
+      - regex: \.\w*$
+        with: ""
+      - regex: \.
+        with: " "
+  scraper: sceneSearch
 xPathScrapers:
   galleryScraper:
     common:
@@ -52,7 +70,25 @@ xPathScrapers:
         Name: //div[contains(@class, "col")]/a[@class="player-tag"]/text()
       Performers:
         Name: //p[contains(text(), "Characters:")]/following-sibling::a/text()
-
+  sceneSearch:
+    common:
+      $film: //div[@class="question" and .//a[starts-with(@href,"films")]]
+    scene:
+      Title: $film//p[contains(@class,"search-title")]
+      Image:
+        # Not all films have an image, so we need to use the first link instead
+        # to avoid off-by-one errors in the results
+        selector: $film//img/@src
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https://lordaardvark.com"
+      URL:
+        selector: $film//p[contains(@class,"search-title")]/a/@href
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https://lordaardvark.com/"
 driver:
   useCDP: true
-# Last Updated February 23, 2023
+# Last Updated January 13, 2024

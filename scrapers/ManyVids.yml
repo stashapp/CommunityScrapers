@@ -1,0 +1,139 @@
+name: ManyVids
+performerByName:
+  action: scrapeJson
+  queryURL: https://www.manyvids.com/bff/search/autocomplete?keywords={}&contentPref=0
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeJson
+    url:
+      - manyvids.com/Profile
+    scraper: performerScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .*/Profile/(\d+)/.*
+          with: https://www.manyvids.com/bff/profile/profiles/$1
+sceneByName:
+  action: scrapeJson
+  queryURL: https://www.manyvids.com/bff/search/results?keywords={}&contentPref=0
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeJson
+  scraper: sceneScraper
+  queryURL: "{url}"
+  queryURLReplace:
+    url:
+      - regex: ^(https:\/\/www\.manyvids\.com\/Video\/)
+        with: https://www.manyvids.com/bff/store/video/
+      - regex: /[^/]*/*$
+        with: ""
+sceneByFragment:
+  action: scrapeJson
+  scraper: sceneScraper
+  queryURL: "https://www.manyvids.com/bff/store/video/{filename}"
+  queryURLReplace:
+    filename:
+      - regex: .*?(\d{6,8}).*
+        with: $1
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - manyvids.com/Video/
+    scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .*?(\d+).*
+          with: https://www.manyvids.com/bff/store/video/$1
+jsonScrapers:
+  performerSearch:
+    performer:
+      Name: models.#.username
+      URL:
+        selector: models.#.url
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.manyvids.com
+      Image: models.#.avatar.url
+  performerScraper:
+    performer:
+      Name: displayName
+      Gender: identification
+      URL:
+        selector: "[legacyUserId,urlHandle]"
+        concat: /
+        postProcess:
+          - replace:
+              - regex: (.*)$
+                with: https://www.manyvids.com/Profile/$1
+      Twitter:
+        selector: socLnkTwitter
+        postProcess:
+          - replace:
+              - regex: https://www.twitter.com/
+                with: ""
+      Instagram:
+        selector: socLnkInstagram
+        postProcess:
+          - replace:
+              - regex: https://instagram.com/
+                with: ""
+      Birthdate:
+        selector: dob
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05.000Z
+      Ethnicity: ethnicity
+      Country: location
+      HairColor: hairColor
+      CareerLength:
+        selector: createdAt
+        postProcess:
+          - replace:
+              - regex: '\-.*'
+                with: ""
+              - regex: "$"
+                with: " - Present"
+      Image: portrait
+      Details: description
+  sceneSearch:
+    scene:
+      Title: vids.#.title
+      Code: vids.#.id
+      URL:
+        selector: "vids.#.{id,slug}.@values"
+        postProcess:
+          - replace:
+              - regex: '\["(\d+)",\s*"([^"]+)"\]'
+                with: $1/$2
+              - regex: ^
+                with: https://www.manyvids.com/Video/
+      Image: vids.#.thumbnail.url
+  sceneScraper:
+    scene:
+      Title: data.title
+      Details: data.description
+      Code: data.id
+      URL:
+        selector: data.url
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.manyvids.com
+      Date:
+        selector: data.launchDate
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05.000Z
+      Image: data.screenshot
+      Tags:
+        Name: data.tagList.#.label
+      Performers: &performer
+        Name: data.model.displayName
+        URL:
+          selector: data.model.profileUrl
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.manyvids.com
+      Studio: *performer
+# Last Updated February 22, 2024

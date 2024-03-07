@@ -3,7 +3,10 @@ node_modules
 yarn-error.log
 
 # Scraper-generated files
-/scrapers/*.ini
 **/__pycache__/
+*.ini
+*.json
+*.log
 
+# Index build artifact
 /_site

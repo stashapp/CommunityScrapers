@@ -1,4 +1,4 @@
-name: "TeamskeetAPI"
+name: Teamskeet
 # requires: py_common
 
 sceneByURL:
@@ -9,5 +9,4 @@ sceneByURL:
     script:
       - python
       - TeamskeetAPI.py
-      #- logJSON # Save the JSON from the API to a file
-# Last Updated December 29, 2023
+# Last Updated March 04, 2024

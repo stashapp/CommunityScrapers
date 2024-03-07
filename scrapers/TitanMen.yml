@@ -1,0 +1,77 @@
+name: TitanMen
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - titanmen.com
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - titanmen.com
+    scraper: movieScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[contains(@class, "scene-page-detail")]
+    scene:
+      Title: //h1[@class="scene-header-title"]
+      Details:
+        selector: //div[@class="col span_6_of_12"][1]/p/text()
+        concat: "\n\n"
+      Director: $details//strong[starts-with(text(), "Director")]/following-sibling::a
+      Code: //div[@class="rating_box"]/@data-id
+      Date:
+        selector: $details//strong[starts-with(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Studio:
+        Name:
+          selector: $details//strong[starts-with(text(), "Movie Title")]/following-sibling::a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.titanmen.com/
+            - subScraper: //div[contains(@class, "movie-page-detail")]//strong[starts-with(text(), "Studio")]/following-sibling::a
+            - map:
+                Rough: TitanMen Rough
+      Performers:
+        Name: $details//strong[starts-with(text(), "Starring")]/following-sibling::a/text()
+        URL:
+          selector: $details//strong[starts-with(text(), "Starring")]/following-sibling::a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.titanmen.com/
+      Movies:
+        Name: $details//strong[starts-with(text(), "Movie")]/following-sibling::a
+        URL:
+          selector: $details//strong[starts-with(text(), "Movie")]/following-sibling::a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.titanmen.com/
+      Tags:
+        Name: $details//strong[starts-with(text(), "Categories")]/following-sibling::a
+      Image:
+        selector: //script[contains(text(), concat("scene-image-", //div[@class="rating_box"]/@data-id))]/text()
+        postProcess:
+          - replace:
+              - regex: .*image:\s*"([^"]+).*
+                with: $1
+  movieScraper:
+    movie:
+      Name:
+        selector: //div[@class="col span_9_of_12"]/h1/text()
+      Synopsis:
+        selector: //div[@class="col span_9_of_12"]/p[1]/text()
+        concat: "\n\n"
+      Date:
+        selector: //div[@class="col span_9_of_12"]/p[3]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Studio:
+        Name: //div[contains(@class, "movie-page-detail")]//strong[starts-with(text(), "Studio")]/following-sibling::a
+      Director: //div[contains(@class, "movie-page-detail")]//strong[starts-with(text(), "Director")]/following-sibling::a
+      FrontImage: //div[contains(@class, "box-cover")]//img/@src
+# Last Updated January 07, 2024
+

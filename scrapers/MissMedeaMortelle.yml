@@ -1,0 +1,32 @@
+name: Miss Medea Mortelle
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - missmortelle.com/de/shop/videos/v/
+      - missmortelle.com/en/store/videos/v/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $detail: //div[contains(@class, "videodetail")]
+    scene:
+      Title: $detail/div[@class="panel-heading"]
+      Date:
+        selector: $detail/div[@class="panel-body"]/div[@class="row"]/div[@class="col-md-6"][1]/p/text()[contains(., "Added on") or contains(., "Hinzugefügt")]
+        postProcess:
+          - replace:
+            - regex: ^.*(\d{2}\.\d{2}\.\d{4}).*$
+              with: $1
+          - parseDate: "02.01.2006"
+      Details: //div[contains(@class, "videodescription")]
+      Studio:
+        Name: 
+          fixed: Miss Medea Mortelle
+      Image: //meta[@name="og:image"]/@content
+      URL: //meta[@name="og:url"]/@content
+      Performers:
+        Name:
+          fixed: Miss Medea Mortelle
+      Tags:
+        Name: //div[contains(@class, "videotags")]/a[contains(@href, "/t/")]
+# Last Updated January 20, 2024

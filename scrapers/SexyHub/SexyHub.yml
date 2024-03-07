@@ -1,0 +1,84 @@
+name: Sexy Hub
+# requires: py_common, AyloAPI
+# scrapes: Dane Jones, Fitness Rooms, Girlfriends, Lesbea, Massage Rooms, Mom XXX
+galleryByURL:
+  - action: script
+    url:
+      - danejones.com/scene/
+      - sexyhub.com/scene/
+      - lesbea.com/scene/
+    script:
+      - python
+      - SexyHub.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - SexyHub.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - danejones.com/scene/
+      - sexyhub.com/scene/
+      - lesbea.com/scene/
+    script:
+      - python
+      - SexyHub.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - SexyHub.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - SexyHub.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - SexyHub.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - SexyHub.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - danejones.com/modelprofile/
+      - sexyhub.com/modelprofile/
+      - lesbea.com/modelprofile/
+    script:
+      - python
+      - SexyHub.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - SexyHub.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - danejones.com/movie/
+      - sexyhub.com/movie/
+      - lesbea.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - danejones.com/scene/
+      - sexyhub.com/scene/
+      - lesbea.com/scene/
+    script:
+      - python
+      - SexyHub.py
+      - movie-by-url
+# Last Updated January 14, 2024

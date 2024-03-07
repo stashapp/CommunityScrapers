@@ -2,19 +2,59 @@ name: TheScoreGroup
 sceneByURL:
   - action: scrapeXPath
     url: &urls
-      - 18eighteen.com/
-      - 40somethingmag.com/
-      - 50plusmilfs.com/
-      - 60plusmilfs.com/
-      - bigtithooker.com/
-      - legsex.com/
+      - 18eighteen.com
+      - 40somethingmag.com
+      - 50plusmilfs.com
+      - 60plusmilfs.com
+      - bigboobspov.com
+      - bigtitangelawhite.com
+      - bigtithitomi.com
+      - bigtithooker.com
+      - bigtitterrynova.com
+      - bigtitvenera.com
+      - bonedathome.com
+      - bootyliciousmag.com
+      - bustyangelique.com
+      - bustyarianna.com
+      - bustydanniashe.com
+      - bustydustystash.com
+      - bustyinescudna.com
+      - bustykellykay.com
+      - bustykerrymarie.com
+      - bustylornamorga.com
+      - bustymerilyn.com
+      - bustyoldsluts.com
+      - chloesworld.com
+      - christymarks.com
+      - cock4stepmom.com
+      - creampieforgranny.com
+      - crystalgunnsworld.com
+      - daylenerio.com
+      - desiraesworld.com
+      - evanottyvideos.com
+      - feedherfuckher.com
+      - flatandfuckedmilfs.com
+      - homealonemilfs.com
+      - karinahart.com
+      - legsex.com
+      - mickybells.com
+      - milftugs.com
+      - mommystoytime.com
       - naughtymag.com
-      - pornmegaload.com/
-      - scoreland.com/
-      - scoreland2.com/
-      - xlgirls.com/
-      - scorevideos.com/
-      - milftugs.com/
+      - pickinguppussy.com
+      - pornmegaload.com
+      - reneerossvideos.com
+      - scoreclassics.com
+      - scoreland.com
+      - scoreland2.com
+      - scorevideos.com
+      - sharizelvideos.com
+      - stacyvandenbergboobs.com
+      - tawny-peaks.com
+      - titsandtugs.com
+      - valoryirene.com
+      - xlgirls.com
+      - yourwifemymeat.com
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
@@ -22,20 +62,7 @@ galleryByURL:
     scraper: galleryScraper
 performerByURL:
   - action: scrapeXPath
-    url:
-      - 18eighteen.com/
-      - 40somethingmag.com/
-      - 50plusmilfs.com/
-      - 60plusmilfs.com/
-      - bigtithooker.com/
-      - legsex.com/
-      - naughtymag.com
-      - pornmegaload.com/
-      - scoreland.com/
-      - scoreland2.com/
-      - xlgirls.com/
-      - scorevideos.com/
-      - milftugs.com/
+    url: *urls
     scraper: performerScraper
 performerByName:
   action: script
@@ -48,20 +75,81 @@ xPathScrapers:
   sceneScraper:
     common:
       $url: //link[@rel="canonical"]/@href
+      $videopage: //section[@id="videos_page-page" or @id="mixed_page-page"]
+      $stat: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]
     scene:
-      Title: &titleAttr //h1[1]/text()
+      Title: &titleAttr $videopage//h1
       Studio: &studioAttr
         Name:
-          selector: //meta[@property="og:site_name"]/@content
+          selector: ($videopage//video/source/@src)[1]
+          postProcess:
+            - replace:
+                - regex: .*\.com/(.+?)\/(video|scene).*
+                  with: $1
+            - map:
+                18eighteen: 18 Eighteen
+                40somethingmag: 40 Something Mag
+                50plusmilfs: 50 Plus MILFs
+                60plusmilfs: 60 Plus MILFs
+                bigboobspov: Big Boobs POV
+                bigtitangelawhite: Big Tit Angela White
+                bigtithitomi: Big Tit Hitomi
+                bigtithooker: Big Tit Hooker
+                bigtitterrynova: Big Tit Terry Nova
+                bigtitvenera: Big Tit Venera
+                bonedathome: Boned At Home
+                bootyliciousmag: Bootylicious Mag
+                bustyangelique: Busty Angelique
+                bustyarianna: Busty Arianna
+                bustydanniashe: Busty Danni Ashe
+                bustydustystash: busty Dusty Stash
+                bustyinescudna: Busty Ines Cudna
+                bustykellykay: Busty Kelly Kay
+                bustykerrymarie: Busty Kerry Marie
+                bustylornamorga: Busty Lorna Morga
+                bustymerilyn: Busty Merilyn
+                bustyoldsluts: Busty Old Sluts
+                chloesworld: Chloe's World
+                christymarks: Christy Marks
+                cock4stepmom: Cock 4 Stepmom
+                creampieforgranny: Creampie for Granny
+                crystalgunnsworld: Crystal Gunns World
+                daylenerio: Daylene Rio
+                desiraesworld: Desiraes World
+                evanottyvideos: Eva Notty Videos
+                feedherfuckher: Feed Her Fuck Her
+                flatandfuckedmilfs: Flat and Fucked MILFs
+                homealonemilfs: Home Alone MILFs
+                karinahart: Karina Hart
+                legsex: Leg Sex
+                mickybells: Micky Bells
+                milftugs: MILF Tugs
+                mommystoytime: Mommy's Toy Time
+                naughtymag: Naughty Mag
+                pickinguppussy: Picking Up Pussy
+                pornmegaload: Porn Mega Load
+                reneerossvideos: Renee Ross Video
+                scoreclassics: Score Classics
+                # Scoreland2 needs to come before scoreland because it's more specific
+                scoreland2: Scoreland2
+                scoreland: Scoreland
+                scorevideos: Score Videos
+                sharizelvideos: Sha Rizel Videos
+                stacyvandenbergboobs: Stacy Vandenberg Boobs
+                tawny-peaks: Tawny Peaks
+                titsandtugs: Tits And Tugs
+                valoryirene: Valory Irene
+                xlgirls: XL Girls
+                yourwifemymeat: Your Wife My Meat
       Date: &dateAttr
-        selector: //div[@class="stat mb-2"]/span[contains(.,"Date:")]/../span[@class="value"]/text()
+        selector: $videopage$stat/span[contains(.,"Date:")]/following-sibling::span
         postProcess:
           - replace:
               - regex: ..,
                 with:
-          - parseDate: January 2 2006
+          - parseDate: January 2, 2006
       Details: &details
-        selector: //div[@class="p-desc p-3"]//text()
+        selector: $videopage//div[@class="p-desc p-3"]/text()
         postProcess:
           - replace:
               - regex: Read More »
@@ -71,9 +159,9 @@ xPathScrapers:
                 with: " $1 "
         concat: "\n\n"
       Tags:
-        Name: //div[@class="mb-3"]/a/text()
+        Name: $videopage//a[contains(@href, "videos-tag") or contains(@href, "scenes-tag")]
       Performers: &performersAttr
-        Name: //div[@class="stat mb-2"]/span[contains(.,"Featuring:")]/../span[@class="value"]/a/text()
+        Name: $videopage//span[contains(.,"Featuring:")]/following-sibling::span/a
       Image:
         # This selector scrapes the canonical scene page cover image
         selector: //script[contains(text(), "poster")]
@@ -141,4 +229,4 @@ xPathScrapers:
               - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
                 with: $1$2
       Image: //section[@id="model-page"]//img[@class="lazyload"]/@src
-# Last Updated December 03, 2023
+# Last Updated January 07, 2024

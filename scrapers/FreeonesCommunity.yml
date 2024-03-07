@@ -118,8 +118,8 @@ xPathScrapers:
         selector: //h1
         postProcess:
           - replace:
-              - regex: \sBio\s*$
-                with: ""
+              - regex: (.+)\sidentifies.+
+                with: $1
       URL: //link[@rel="alternate" and @hreflang="x-default"]/@href
       Twitter: //form//a[contains(@href,'twitter.com/')]/@href
       Instagram: //form//a[contains(@href,'instagram.com/')]/@href
@@ -144,7 +144,9 @@ xPathScrapers:
       Height:
         selector: //span[text()='Height:']/following-sibling::span/a
         postProcess:
-          - feetToCm: true
+          - replace:
+            - regex: \scm
+              with: ""
           - map:
               Unknown: ""
       Measurements:
@@ -196,8 +198,7 @@ xPathScrapers:
         selector: //span[@data-test="link_span_weight"]
         postProcess:
           - replace:
-            - regex: \slbs
+            - regex: \skg
               with: ""
-          - lbToKg: true
 
-# Last Updated January 19, 2023
+# Last Updated January 2, 2024

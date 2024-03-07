@@ -1,0 +1,185 @@
+name: Reality Kings
+# requires: py_common, AyloAPI
+# scrapes: 40 Inch Plus, 8th Street Latinas, Bad Tow Truck, Big Naturals, Big Tits Boss, Captain Stabbin, CFNM Secret, Crazy Asian GFs, Crazy College GFs, Cum Fiesta, Dare Dorm, Euro Sex Parties, Extreme Asses, Extreme Naturals, First Time Auditions, GF Leaks, Girls of Naked, Happy Tugs, HD Love, Horny Birds, Hot Bush, Hot Girls Game, In the VIP, Lil Humpers, Look At Her Now, Mike in Brazil, Mike's Apartment, Milf Hunter, Milf Next Door, Moms Bang Teens, Moms Lick Teens, Money Talks, Monster Curves, No Faces, Pure 18, Reckless in Miami, RK Prime, RK Shorts, See My Wife, Sneaky Sex, Street BlowJobs, Teens Love Huge Cocks, We Live Together, Wives in Pantyhose, Work Me Harder
+galleryByURL:
+  - action: script
+    url: &sceneUrls
+      - 8thstreetlatinas.com/scene/
+      - bignaturals.com/scene/
+      - cumfiesta.com/scene/
+      - daredorm.com/scene/
+      - eurosexparties.com/scene/
+      - gfleaks.com/scene/
+      - happytugs.com/scene/
+      - hdlove.com/scene/
+      - hornybirds.com/scene/
+      - hotgirlsgame.com/scene/
+      - lilhumpers.com/scene/
+      - lookathernow.com/scene/
+      - mikeinbrazil.com/scene/
+      - mikesapartment.com/scene/
+      - milfhunter.com/scene/
+      - momsbangteens.com/scene/
+      - momslickteens.com/scene/
+      - moneytalks.com/scene/
+      - monstercurves.com/scene/
+      - pure18.com/scene/
+      - realitykings.com/scene/
+      - realitykingsnetwork.com/scene/
+      - recklessinmiami.com/scene/
+      - rk.com/scene/
+      - rkprime.com/scene/
+      - sneakysex.com/scene/
+      - teenslovehugecocks.com/scene/
+      - welivetogether.com/scene/
+      - workmeharder.com/scene/
+    script:
+      - python
+      - RealityKings.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - RealityKings.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url: *sceneUrls
+    script:
+      - python
+      - RealityKings.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - RealityKings.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - RealityKings.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - RealityKings.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - RealityKings.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - 8thstreetlatinas.com/model/
+      - bignaturals.com/model/
+      - cumfiesta.com/model/
+      - daredorm.com/model/
+      - eurosexparties.com/model/
+      - gfleaks.com/model/
+      - happytugs.com/model/
+      - hdlove.com/model/
+      - hornybirds.com/model/
+      - hotgirlsgame.com/model/
+      - lilhumpers.com/model/
+      - lookathernow.com/model/
+      - mikeinbrazil.com/model/
+      - mikesapartment.com/model/
+      - milfhunter.com/model/
+      - momsbangteens.com/model/
+      - momslickteens.com/model/
+      - moneytalks.com/model/
+      - monstercurves.com/model/
+      - pure18.com/model/
+      - realitykings.com/model/
+      - realitykingsnetwork.com/model/
+      - recklessinmiami.com/model/
+      - rk.com/model/
+      - rkprime.com/model/
+      - sneakysex.com/model/
+      - teenslovehugecocks.com/model/
+      - welivetogether.com/model/
+      - workmeharder.com/model/
+    script:
+      - python
+      - RealityKings.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - RealityKings.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - 8thstreetlatinas.com/movie/
+      - bignaturals.com/movie/
+      - cumfiesta.com/movie/
+      - daredorm.com/movie/
+      - eurosexparties.com/movie/
+      - gfleaks.com/movie/
+      - happytugs.com/movie/
+      - hdlove.com/movie/
+      - hornybirds.com/movie/
+      - hotgirlsgame.com/movie/
+      - lilhumpers.com/movie/
+      - lookathernow.com/movie/
+      - mikeinbrazil.com/movie/
+      - mikesapartment.com/movie/
+      - milfhunter.com/movie/
+      - momsbangteens.com/movie/
+      - momslickteens.com/movie/
+      - moneytalks.com/movie/
+      - monstercurves.com/movie/
+      - pure18.com/movie/
+      - realitykings.com/movie/
+      - realitykingsnetwork.com/movie/
+      - recklessinmiami.com/movie/
+      - rk.com/movie/
+      - rkprime.com/movie/
+      - sneakysex.com/movie/
+      - teenslovehugecocks.com/movie/
+      - welivetogether.com/movie/
+      - workmeharder.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - 8thstreetlatinas.com/scene/
+      - bignaturals.com/scene/
+      - cumfiesta.com/scene/
+      - daredorm.com/scene/
+      - eurosexparties.com/scene/
+      - gfleaks.com/scene/
+      - happytugs.com/scene/
+      - hdlove.com/scene/
+      - hornybirds.com/scene/
+      - hotgirlsgame.com/scene/
+      - lilhumpers.com/scene/
+      - lookathernow.com/scene/
+      - mikeinbrazil.com/scene/
+      - mikesapartment.com/scene/
+      - milfhunter.com/scene/
+      - momsbangteens.com/scene/
+      - momslickteens.com/scene/
+      - moneytalks.com/scene/
+      - monstercurves.com/scene/
+      - pure18.com/scene/
+      - realitykings.com/scene/
+      - realitykingsnetwork.com/scene/
+      - recklessinmiami.com/scene/
+      - rk.com/scene/
+      - rkprime.com/scene/
+      - sneakysex.com/scene/
+      - teenslovehugecocks.com/scene/
+      - welivetogether.com/scene/
+      - workmeharder.com/scene/
+    script:
+      - python
+      - RealityKings.py
+      - movie-by-url
+# Last Updated January 14, 2024

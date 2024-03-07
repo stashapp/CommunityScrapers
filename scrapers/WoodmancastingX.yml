@@ -44,7 +44,12 @@ xPathScrapers:
                   with: "Pierre Woodman"
       Tags:
         Name: //a[@class="tag"]
-      Image: //meta[@property="og:image"]/@content
+      Image:
+        selector: //script[contains(.,'image')]
+        postProcess:
+          - replace:
+              - regex: ^.*image:\s+"([^"]+)".*$
+                with: $1
       URL:
         selector: //meta[@property="og:url"]/@content
         postProcess: *pp

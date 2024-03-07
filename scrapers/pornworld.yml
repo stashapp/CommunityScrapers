@@ -5,6 +5,10 @@ name: Pornworld
 sceneByURL:
   - action: scrapeXPath
     url:
+      - tour10.pornworld.com/watch/
+    scraper: tour10SceneScraper
+  - action: scrapeXPath
+    url:
       - pornworld.com/watch/
     scraper: sceneScraper
 
@@ -26,7 +30,7 @@ jsonScrapers:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
+      Title: &title
         selector: //h1
         postProcess:
           - replace:
@@ -39,12 +43,7 @@ xPathScrapers:
               - regex: .*(GP\d+).*
                 with: $1
       Date: //i[contains(@class,"calendar3")]/text()
-      Details:
-        selector: //meta[@name="description"]/@content
-        postProcess:
-          - replace:
-              - regex: '\x{0092}' # unicode char 0092 (looks like ')
-                with: "'"
+      Details: //meta[@name="description"]/@content
       Tags:
         Name: //div[@class="watch"]//a[contains(@href,"genre")]/text()
       Performers:
@@ -54,4 +53,26 @@ xPathScrapers:
           fixed: Porn World
       Image: //video/@data-poster
       URL: //div[@class="pagination"]/a[1]/@href
-# Last Updated March 03, 2023
+  tour10SceneScraper:
+    scene:
+      Title: *title
+      Date:
+        selector: //strong/following-sibling::span
+        postProcess:
+          - parseDate: 2006, January 2
+      Details: //span[text()="Description:"]/..
+      Tags:
+        Name: //span[text()="Tags:"]/../a/text()
+      Performers:
+        Name: //a[contains(@href, '/model/')]
+      Studio:
+        Name:
+          fixed: Porn World
+      Image: //video/@poster
+      URL:
+        selector: //head/link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: (.*)
+                with: https://tour10.pornworld.com$1
+# Last Updated February 27, 2024

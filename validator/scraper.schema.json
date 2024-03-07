@@ -642,6 +642,10 @@
           "title": "Gallery title",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "Code": {
+          "title": "Gallery studio code",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "Details": {
           "title": "Gallery details",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
@@ -665,6 +669,10 @@
         "Performers": {
           "title": "Gallery performers",
           "allOf": [{ "$ref": "#/definitions/performerObject" }]
+        },
+        "Photographer": {
+          "title": "Gallery photographer",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         }
       }
     },
@@ -805,6 +813,11 @@
                     "title": "Subtract Days",
                     "description": "Subtracts the value in days from the current date.",
                     "type": "boolean"
+                  },
+                  "javascript": {
+                    "title": "Execute JavaScript",
+                    "description": "Executes the given JavaScript code and uses the result as the value.",
+                    "type": "string"
                   }
                 }
               }

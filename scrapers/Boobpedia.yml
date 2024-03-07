@@ -5,21 +5,22 @@ performerByURL:
       - boobpedia.com/boobs/
     scraper: performerScraper
 performerByName:
-  action: scrapeXPath
-  queryURL: "https://www.boobpedia.com/wiki/index.php?title=Special%3ASearch&search={}"
+  action: scrapeJson
+  queryURL: "https://www.boobpedia.com/wiki/api.php?action=query&format=json&list=search&srwhat=title&srsearch={}"
   scraper: performerSearch
-xPathScrapers:
+jsonScrapers:
   performerSearch:
-    common:
-      $sr: //div/h2[span[contains(text(),"title")]]/following-sibling::ul[1]//a
     performer:
-      Name: $sr
+      Name: query.search.#.title
       URL:
-        selector: $sr/@href
+        selector: query.search.#.title
         postProcess:
           - replace:
+              - regex: \s
+                with: "_"
               - regex: ^
-                with: "https://www.boobpedia.com"
+                with: "https://www.boobpedia.com/boobs/"
+xPathScrapers:
   performerScraper:
     performer:
       Name: //h1

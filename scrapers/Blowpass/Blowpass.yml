@@ -3,7 +3,12 @@ name: Blowpass
 sceneByURL:
   - action: script
     url:
+      - 1000facials.com/en/video/
       - blowpass.com/en/video/
+      - immorallive.com/en/video/
+      - mommyblowsbest.com/en/video/
+      - onlyteenblowjobs.com/en/video/
+      - throated.com/en/video/
     script:
       - python
       - ../Algolia/Algolia.py
@@ -28,4 +33,4 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - blowpass
     - validName
-# Last Updated October 04, 2023
+# Last Updated February 24, 2024

@@ -19,6 +19,27 @@ performerByURL:
       - private.com
     scraper: performerScraper
 xPathScrapers:
+  movieScraper:
+    movie:
+      Name: &movieName //div[@class="dvds-wrapper"]/h1/text()
+      Director: &movieDirector //p[@class="director"]/span[@itemprop="name"]/text()
+      Duration:
+        selector: &movieDuration //p[em[contains(text(), "Duration:")]]/text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+).+$
+                with: 00:$1:00
+      Date: &movieDate //span[@itemprop="datePublished"]/text()
+      Studio:
+        Name: &movieStudioName //div[@class="dvds-wrapper"]/p[@class="line-dvd"]
+      Synopsis: &movieSynopsis //p[@class="sinopsys"]
+      FrontImage: &movieFrontImage //div[@class="dvds-wrapper"]//img[@class="img-responsive"]/@src
+  performerSearch:
+    common:
+      $searchData: //a[@data-track="PORNSTAR_NAME"]
+    performer:
+      Name: $searchData
+      URL: $searchData/@href
   sceneScraper:
     common:
       $content: //section[@class="video-description-and-tags clearfix"]
@@ -28,8 +49,8 @@ xPathScrapers:
         selector: //meta[@property="og:video"]/@content
         postProcess:
           - replace:
-            - regex: .+\/(.+)\/trailers\/.+
-              with: $1
+              - regex: .+\/(.+)\/trailers\/.+
+                with: $1
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
@@ -44,40 +65,43 @@ xPathScrapers:
         Name: //li[@class="tag-models"]//a/text()
       Movies:
         Name:
-          selector: //a[@data-track="FULL MOVIE"]/@href
+          selector: //strong[contains(.,'Full Movie')]/../@href
           postProcess:
-            - subScraper: //div[@class="dvds-wrapper"]/h1/text()
-        URL: //a[@data-track="FULL MOVIE"]/@href
+            - subScraper: *movieName
+        Director:
+          selector: //strong[contains(.,'Full Movie')]/../@href
+          postProcess:
+            - subScraper: *movieDirector
+        Duration:
+          selector: //strong[contains(.,'Full Movie')]/../@href
+          postProcess:
+            - subScraper: *movieDuration
+            - replace:
+                - regex: ^(\d+).+$
+                  with: 00:$1:00
+        URL: //strong[contains(.,'Full Movie')]/../@href
+        Studio:
+          Name:
+            selector: //strong[contains(.,'Full Movie')]/../@href
+            postProcess:
+              - subScraper: *movieStudioName
+        Synopsis:
+          selector: //strong[contains(.,'Full Movie')]/../@href
+          postProcess:
+            - subScraper: *movieSynopsis
+        FrontImage:
+          selector: //strong[contains(.,'Full Movie')]/../@href
+          postProcess:
+            - subScraper: *movieFrontImage
+
       Studio:
         Name:
           selector: //div[@class="title-zone"]//li/a/span[@class="title-site"]/text()|/html/@lang
           postProcess:
             - replace:
-              - regex: ^en$
-                with: Private
+                - regex: ^en$
+                  with: Private
       Image: //meta[@property="og:image"]/@content
-  movieScraper:
-    movie:
-      Name: //div[@class="dvds-wrapper"]/h1/text()
-      Director: //p[@class="director"]/span[@itemprop="name"]/text()
-      Duration:
-        selector: //p[em[contains(text(), "Duration:")]]/text()
-        postProcess:
-          - replace:
-            - regex: ^(\d+).+$
-              with: 00:$1:00
-      Date: //span[@itemprop="datePublished"]/text()
-      Studio:
-        Name:
-          fixed: Private
-      Synopsis: //p[@class="sinopsys"]
-      FrontImage: //div[@class="dvds-wrapper"]//img[@class="img-responsive"]/@src
-  performerSearch:
-    common:
-      $searchData: //a[@data-track="PORNSTAR_NAME"]
-    performer:
-      Name: $searchData
-      URL: $searchData/@href
   performerScraper:
     common:
       $performerData: //div[contains(concat(' ',normalize-space(@class),' '),' pornstar-wrapper ')]
@@ -91,16 +115,16 @@ xPathScrapers:
         selector: $performerData//em[text()="Height:"]/../text()
         postProcess:
           - replace:
-            - regex: (\d+)cm.+
-              with: $1
+              - regex: (\d+)cm.+
+                with: $1
           - map:
               -: ""
       Weight:
         selector: $performerData//em[text()="Weight:"]/../text()
         postProcess:
           - replace:
-            - regex: (\d+)kg.+
-              with: $1
+              - regex: (\d+)kg.+
+                with: $1
           - map:
               -: ""
       Country: $performerData//em[text()="Birth place:"]/../text()
@@ -138,4 +162,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated October 21, 2023
+# Last Updated January 06, 2024

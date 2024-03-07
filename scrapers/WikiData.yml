@@ -1,0 +1,153 @@
+name: Wikidata
+performerByName:
+  action: scrapeJson
+  queryURL: https://query.wikidata.org/sparql?query=SELECT%20%3Fpornographic_actor%20%3Fpornographic_actorLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%20%20%3Fpornographic_actor%20wdt%3AP106%20wd%3AQ488111%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20rdfs%3Alabel%20%3Flabel.%0A%20%20FILTER(LANG(%3Flabel)%20%3D%20%22en%22).%0A%20%20FILTER(STRSTARTS(lcase(%3Flabel)%2C%20lcase(%22{}%22)))%7D&format=json
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeJson
+    url:
+      - https://www.wikidata.org/wiki/Q
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: https://www.wikidata.org/wiki/
+          with: https://www.wikidata.org/wiki/Special:EntityData/
+        - regex: $
+          with: .json
+    scraper: performerScraper
+jsonScrapers:
+  performerSearch:
+    performer:
+      Name: results.bindings.#.pornographic_actorLabel.value
+      URL:
+        selector: results.bindings.#.pornographic_actor.value
+        postProcess:
+          - replace:
+              - regex: http:\/\/www.wikidata.org\/entity\/
+                with: https://www.wikidata.org/wiki/
+  performerScraper:
+    performer:
+      Name: entities.*.labels.en.value
+      Aliases:
+        selector: entities.*.aliases.en.#.value
+        concat: ", "
+      Image:
+        selector: entities.*.claims.P18.#.mainsnak.datavalue.value
+        postProcess:
+          - replace:
+              - regex: \s
+                with: "%20" # spaces cause 400 error
+              - regex: ^
+                with: "https://commons.wikimedia.org/w/index.php?title=Special:Redirect/file/"
+      Weight:
+        selector: entities.*.claims.P2067.#.mainsnak.datavalue.value.amount
+        postProcess:
+          - replace:
+              - regex: \+
+                with:
+      Birthdate:
+        selector: entities.*.claims.P569.#.mainsnak.datavalue.value.time
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}-\d{1,2}-\d{1,2}).*
+                with: $1
+      DeathDate:
+        selector: entities.*.claims.P570.#.mainsnak.datavalue.value.time
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}-\d{1,2}-\d{1,2}).*
+                with: $1
+      Height:
+        selector: entities.*.claims.P2048.#.mainsnak.datavalue.value.amount
+        postProcess:
+          - replace:
+              - regex: \+
+                with:
+              - regex: \.
+                with:
+      CareerLength:
+        selector: entities.*.claims.P2031.#.mainsnak.datavalue.value.time
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}).*
+                with: $1
+      Gender:
+        selector: entities.*.claims.P21.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.wikidata.org/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      HairColor:
+        selector: entities.*.claims.P1884.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.wikidata.org/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      EyeColor:
+        selector: entities.*.claims.P1340.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.wikidata.org/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      Ethnicity:
+        selector: entities.*.claims.P172.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.wikidata.org/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      Country:
+        selector: entities.*.claims.P27.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.wikidata.org/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+# Personal preference, keep the wikidata url instead of the official website of the performer
+#      URL:
+#        selector: entities.*.claims.P856.#.mainsnak.datavalue.value
+      Twitter:
+        selector: entities.*.claims.P2002.#.mainsnak.datavalue.value
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://twitter.com/"
+      Instagram:
+        selector: entities.*.claims.P2003.#.mainsnak.datavalue.value
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.instagram.com/"
+      Details:
+        selector: entities.*.sitelinks.enwiki.title
+        postProcess:
+          - replace:
+              - regex: " "
+                with:  "_"
+              - regex: ^
+                with: "https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&explaintext&titles="
+              - regex: $
+                with: "&format=json"
+          - subScraper:
+              selector: query.pages.*.extract
+
+
+# Last Updated August 29, 2021

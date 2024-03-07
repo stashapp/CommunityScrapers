@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - rule34video.com/videos/
+      - rule34video.com/video/
     scraper: sceneScraper
 
 sceneByName:
@@ -52,16 +53,21 @@ xPathScrapers:
       Studio:
         Name: //div[@class="video_tools"]//div[text()="Artist:"]/following-sibling::a/span
         URL: //div[@class="video_tools"]//div[text()="Artist:"]/following-sibling::a/@href
+debug:
+  printHTML: true
 driver:
-  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
   cookies:
-    - Cookies:
+    - CookieURL: "https://rule34video.com/"
+      Cookies:
         - Name: kt_rt_popAccess
-          Value: '1'
+          Value: "1"
           Domain: .rule34video.com
           Path: /
         - Name: kt_tcookie
-          Value: '1'
+          Value: "1"
           Domain: .rule34video.com
           Path: /
         - Name: cf_clearance

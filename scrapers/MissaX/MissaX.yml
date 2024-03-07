@@ -1,13 +1,14 @@
 name: "MissaX"
 # requires: py_common
+# scrapes: MissaX, All Her Luv
 
 sceneByURL:
   - action: script
     script:
       - python
       - MissaX.py
+      - scene-by-url
     url:
       - allherluv.com/tour
       - missax.com/tour
-
 # Last Updated September 11, 2022

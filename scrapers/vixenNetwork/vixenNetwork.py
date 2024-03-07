@@ -2,6 +2,7 @@ import json
 import os
 import sys
 from urllib.parse import urlparse
+from datetime import datetime, timedelta
 
 # to import from a parent directory we need to add that directory to the system path
 csd = os.path.dirname(
@@ -27,6 +28,219 @@ except ModuleNotFoundError:
 # Max number of scenes that a site can return for the search.
 MAX_SCENES = 6
 
+# Marker
+# If you want to create a marker while Scraping.
+CREATE_MARKER = False
+# Only create marker if the durations match (API vs Stash)
+MARKER_DURATION_MATCH = True
+# Sometimes the API duration is 0/1, so we can't really know if this matches. True if you want to create anyways
+MARKER_DURATION_UNSURE = True
+# Max allowed difference (seconds) in scene length between Stash & API.
+MARKER_SEC_DIFF = 10
+
+# Tags you don't want to see in the Scraper window.
+IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
+# Tags you want to add in the Scraper window.
+FIXED_TAGS = ""
+# Check the SSL Certificate.
+CHECK_SSL_CERT = True
+# Local folder with JSON inside (Only used if scene isn't found from the API)
+LOCAL_PATH = r""
+
+SERVER_IP = "http://localhost:9999"
+# API key (Settings > Configuration > Authentication)
+STASH_API = ""
+
+# Automatically reattempt GraphQL queries to Vixen sites which fail with a 403 response 
+MAX_403_REATTEMPTS = 20
+
+SERVER_URL = SERVER_IP + "/graphql"
+
+def callGraphQL(query, variables=None):
+    headers = {
+        "Accept-Encoding": "gzip, deflate, br",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+        "Connection": "keep-alive",
+        "DNT": "1",
+        "ApiKey": STASH_API
+    }
+    json = {'query': query}
+    if variables is not None:
+        json['variables'] = variables
+    try:
+        response = requests.post(SERVER_URL, json=json, headers=headers)
+        if response.status_code == 200:
+            result = response.json()
+            if result.get("error"):
+                for error in result["error"]["errors"]:
+                    raise Exception("GraphQL error: {}".format(error))
+            if result.get("data"):
+                return result.get("data")
+        elif response.status_code == 401:
+            log.error("[GraphQL] HTTP Error 401, Unauthorised.")
+            return None
+        else:
+            raise ConnectionError("GraphQL query failed:{} - {}".format(response.status_code, response.content))
+    except Exception as err:
+        log.error(err)
+        return None
+
+def graphql_findTagbyName(name):
+    query = """
+        query {
+            allTags {
+                id
+                name
+                aliases
+            }
+        }
+    """
+    result = callGraphQL(query)
+    normalized_name = name.lower().strip()
+    for tag in result["allTags"]:
+        if tag["name"].lower() == normalized_name:
+            return tag["id"]
+        if tag.get("aliases"):
+            for alias in tag["aliases"]:
+                if alias.lower() == normalized_name:
+                    return tag["id"]
+    return None
+
+def graphql_createMarker(scene_id, title, main_tag, seconds, tags=[]):
+    main_tag_id = graphql_findTagbyName(main_tag)
+    if main_tag_id is None:
+        log.warning("The 'Primary Tag' don't exist ({}), marker won't be created.".format(main_tag))
+        return None
+    log.info("Creating Marker: {}".format(title))
+    query = """
+    mutation SceneMarkerCreate($title: String!, $seconds: Float!, $scene_id: ID!, $primary_tag_id: ID!, $tag_ids: [ID!] = []) {
+        sceneMarkerCreate(
+            input: {
+            title: $title
+            seconds: $seconds
+            scene_id: $scene_id
+            primary_tag_id: $primary_tag_id
+            tag_ids: $tag_ids
+            }
+        ) {
+            ...SceneMarkerData
+        }
+    }
+    fragment SceneMarkerData on SceneMarker {
+        id
+        title
+        seconds
+        stream
+        preview
+        screenshot
+        scene {
+            id
+        }
+        primary_tag {
+            id
+            name
+            aliases
+        }
+        tags {
+            id
+            name
+            aliases
+        }
+    }
+    """
+    variables = {
+        "primary_tag_id": main_tag_id,
+        "scene_id":	scene_id,
+        "seconds":	seconds,
+        "title": title,
+        "tag_ids": tags
+    }
+    result = callGraphQL(query, variables)
+    return result
+
+def graphql_getMarker(scene_id):
+    query = """
+    query FindScene($id: ID!, $checksum: String) {
+        findScene(id: $id, checksum: $checksum) {
+            scene_markers {
+                seconds
+            }
+        }
+    }
+    """
+    variables = {
+        "id": scene_id
+    }
+    result = callGraphQL(query, variables)
+    if result:
+        if result["findScene"].get("scene_markers"):
+            return [x.get("seconds") for x in result["findScene"]["scene_markers"]]
+    return None
+
+def graphql_getScene(scene_id):
+    query = """
+    query FindScene($id: ID!, $checksum: String) {
+        findScene(id: $id, checksum: $checksum) {
+            files {
+                duration
+            }
+            scene_markers {
+                seconds
+            }
+        }
+    }
+    """
+    variables = {
+        "id": scene_id
+    }
+    result = callGraphQL(query, variables)
+    if result:
+        return_dict = {}
+        return_dict["duration"] = result["findScene"]["files"][0]["duration"]
+        if result["findScene"].get("scene_markers"):
+            return_dict["marker"] = [x.get("seconds") for x in result["findScene"]["scene_markers"]]
+        else:
+            return_dict["marker"] = None
+        return return_dict
+    return None
+
+def parse_duration_to_seconds(duration):
+    if duration is None:
+        return None
+    t = datetime.strptime(duration,"%H:%M:%S")
+    delta = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
+    return delta.seconds
+
+def process_chapters(scene_id, api_json):
+    if scene_id and STASH_API and CREATE_MARKER and api_json != {}:
+        log.debug(f"Processing markers: {json.dumps(api_json.get('markers'))}")
+        markers = api_json.get("markers")
+        if markers:
+            stash_scene_info = graphql_getScene(scene_id)
+            api_scene_duration = None
+            if api_json.get("runLength"):                
+                api_scene_duration = api_json.get("runLength")
+            
+            log.debug(f"API Duration: {api_scene_duration}")
+            if MARKER_DURATION_MATCH and api_scene_duration is None:
+                log.info("No duration given by the API.")
+            else:
+                log.debug("Stash Len: {}| API Len: {}".format(stash_scene_info["duration"], api_scene_duration))
+                if (MARKER_DURATION_MATCH and api_scene_duration-MARKER_SEC_DIFF <= stash_scene_info["duration"] <= api_scene_duration+MARKER_SEC_DIFF) or (api_scene_duration in [0,1] and MARKER_DURATION_UNSURE):
+                    for marker in markers:
+                        if stash_scene_info.get("marker"):
+                            if marker.get("seconds") in stash_scene_info["marker"]:
+                                log.debug("Ignoring marker ({}) because already have with same time.".format(marker.get("seconds")))
+                                continue
+                        try:
+                            graphql_createMarker(scene_id, marker.get("title"), marker.get("title"), marker.get("seconds"))
+                        except:
+                            log.error("Marker failed to create")
+                else:
+                    log.info("The duration of this scene don't match the duration of stash scene.")
+        else:
+            log.info("No offical marker for this scene")
 
 class Site:
 
@@ -89,25 +303,37 @@ class Site:
             "Accept": "application/json",
             "Referer": referer,
             "DNT": "1",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0",
         }
         if not query:
             return None
 
-        try:
-            response = requests.post(self.api, json=query, headers=headers)
-            if response.status_code == 200:
-                result = response.json()
-                if result.get("error"):
-                    for error in result["error"]["errors"]:
-                        raise Exception(f"GraphQL error: {error}")
-                return result
-            else:
-                raise ConnectionError(
-                    f"GraphQL query failed:{response.status_code} - {response.content}"
-                )
-        except Exception as err:
-            log.error(f"GraphqQL query failed {err}")
-            return None
+        reattempts = 0
+        while True:
+            try:
+                response = requests.post(self.api, json=query, headers=headers)
+                if response.status_code == 200:
+                    result = response.json()
+                    if result.get("error"):
+                        for error in result["error"]["errors"]:
+                            raise Exception(f"GraphQL error: {error}")
+                    if reattempts > 0:
+                        log.debug(f"Successful query after attempt #{reattempts}")
+                    return result
+                elif response.status_code == 403:
+                    log.error("GraphQL query recieved a 403 status response")
+                    if reattempts < MAX_403_REATTEMPTS:
+                        log.debug(f"403 Reattempt {reattempts}/{MAX_403_REATTEMPTS}")
+                    else:
+                        log.error(f"Reached max 403 errors for GraphQL query")
+                        return {}
+                else:
+                    raise ConnectionError(
+                        f"GraphQL query failed:{response.status_code} - {response.content}"
+                    )
+            except Exception as err:
+                log.error(f"GraphqQL query failed {err}")
+                return None
 
     def parse_scene(self, response):
         scene = {}
@@ -151,6 +377,13 @@ class Site:
                         maxWidth = image['width']
             if url:
                 scene["url"] = url
+
+            scene['runLength'] = parse_duration_to_seconds(data.get("runLength"))
+            
+            markers = data.get('chapters', {}).get('video')
+            if markers:
+                scene["markers"] = markers
+
             return scene
         return None
 
@@ -221,6 +454,13 @@ class Site:
             categories {
                 name
             }
+            runLength
+            chapters {
+                video {
+                    title
+                    seconds
+                }
+            }
         }
     }
     """
@@ -265,13 +505,32 @@ studios = {
 frag = json.loads(sys.stdin.read())
 search_query = frag.get("name")
 url = frag.get("url")
+scene_id = frag.get("id")
+
+def check_alternate_urls(site):
+    for u in frag.get("urls", []):
+        if site.isValidURL(u):
+            return u
+    return None
 
 #sceneByURL
 if url:
     for x in studios:
+        proper_url = None
         if x.isValidURL(url):
-            s = x.getScene(url)
-            #log.debug(f"{json.dumps(s)}")
+            proper_url = url
+        else:
+            proper_url = check_alternate_urls(site=x)
+
+        if proper_url != None:
+            s = x.getScene(proper_url)
+            # log.info(f"{json.dumps(s)}")
+            process_chapters(scene_id=scene_id, api_json=s)
+
+            # drop unwanted keys from json result
+            s.pop('runLength', None)
+            s.pop('markers', None)
+
             print(json.dumps(s))
             sys.exit(0)
     log.error(f"URL: {url} is not supported")

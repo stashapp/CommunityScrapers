@@ -29,9 +29,9 @@ xPathScrapers:
       URL:
         selector: $card//a[contains(@class, "search-clip__title")]/@href
         postProcess:
-            - replace:
-                - regex: ^
-                  with: https://www.clips4sale.com
+          - replace:
+              - regex: ^
+                with: https://www.clips4sale.com
       Image:
         selector: $card//img/@src
 
@@ -41,7 +41,7 @@ xPathScrapers:
       $studio: //a[@class="hover:underline text-white font-medium w-full truncate block"]
     scene:
       Title:
-        selector: $scene/figcaption/div/p[contains(@class, "lg:text-lg")]/text()
+        selector: $scene/figcaption//h1
         postProcess: &ppStripTitle
           - replace:
               # https://regex101.com/r/CYLeuO/8
@@ -105,6 +105,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-
-
 # Last Updated November 07, 2023

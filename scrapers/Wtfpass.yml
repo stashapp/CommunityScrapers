@@ -37,5 +37,11 @@ xPathScrapers:
       Performers:
         Name: $content//div[@class="data-row data-actress"]/a/text()
         URL: $content//div[@class="data-row data-actress"]/a/@href
+      Code:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+            - regex: ".*\\/videos\\/([0-9]+).*"
+              with: $1
 
-# Last Updated November 30, 2020
+# Last Updated February 24, 2024

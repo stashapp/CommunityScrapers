@@ -1,0 +1,54 @@
+name: "MarsMedia"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - barebackthathole.com
+      - barebackcumpigs.com
+      - bearfilms.com
+      - breedmeraw.com
+      - bringmeaboy.com
+      - bulldogpit.com
+      - hairyandraw.com
+      - hardbritlads.com
+      - southernstrokes.com
+      - touchthatboy.com
+      - twinksinshorts.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //title
+      Details: //div[@class="update_description"]
+      Performers:
+        Name:
+          selector: //span[@class="update_models"]/a
+      Image:
+        selector: //script[contains(.,'jwplayer("playerMain").setup')]
+        postProcess:
+          - replace:
+              - regex: ^.+?image:\s+'([^']+)'.+
+                with: $1
+      Date:
+        selector : //div[contains(.,"Release Date")]/b
+        postProcess:
+          - parseDate: 01/02/2006
+      Studio:
+        Name:
+          selector: //link[@rel="canonical"]/@href | //base/@href
+          postProcess:
+            - replace:
+                - regex: ^https://(w{3}\.)?([^\.]+).+
+                  with: $3  
+            - map:
+                "barebackcumpigs": Bareback Cum Pigs
+                "barebackthathole": Bareback That Hole
+                "bearfilms" : Bear Films
+                "breedmeraw" : Breed Me Raw
+                "bringmeaboy" : Bring Me A Boy
+                "bulldogpit" : Bulldog Pit
+                "hairyandraw" : Hairy And Raw
+                "hardbritlads" : HardBritLads
+                "southernstrokes" : Southern Strokes
+                "touchthatboy" : Touch That Boy
+                "twinksinshorts" : Twinks In Shorts
+# Last Updated February 6, 2024

@@ -1,130 +1,126 @@
 import json
-import os
 import sys
+from pathlib import Path
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from ther
+import py_common.graphql as graphql
+import py_common.log as log
+from py_common.util import dig
 
-try:
-    import py_common.graphql as graphql
-    import py_common.log as log
-except ModuleNotFoundError:
-    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
-    sys.exit()
+find_missing_galleries = False
 
-find_gallery = False
 
-def call_graphql(query, variables=None):
-    return graphql.callGraphQL(query, variables)
-
-def get_gallery_id_by_path(gallery_path):
-    log.debug("get_gallery_by_path gallery_path " + str(gallery_path))
+def get_gallery_id_by_path(abs_path):
+    abs_path = str(abs_path.resolve())
+    log.debug(f"Finding gallery associated with path '{abs_path}'")
     query = """
-            query FindGalleries($galleries_filter: GalleryFilterType) {
-              findGalleries(gallery_filter: $galleries_filter filter: {per_page: -1}) {
-                count
-                    galleries {
-                        id
-                    }
-              }
-            }
-            """
-    variables = {"galleries_filter": {"path": {'value': gallery_path, "modifier": "EQUALS"}}}
-    result = call_graphql(query, variables)
-    log.debug("get_gallery_by_path callGraphQL result " + str(result))
-    return result['findGalleries']['galleries'][0]['id']
+query FindGalleries($galleries_filter: GalleryFilterType) {
+  findGalleries(gallery_filter: $galleries_filter filter: {per_page: -1}) {
+    galleries {
+      id
+    }
+  }
+}
+"""
+    variables = {
+        "galleries_filter": {"path": {"value": abs_path, "modifier": "EQUALS"}}
+    }
+    result = graphql.callGraphQL(query, variables)
+    if (
+        result is None
+        or (gallery_id := dig(result, "findGalleries", "galleries", 0, "id")) is None
+    ):
+        log.error(
+            f"No gallery found with path '{abs_path}', make sure you've run a scan first"
+        )
+        exit(1)
+
+    log.debug(f"Found gallery {gallery_id} with path '{abs_path}'")
+    return gallery_id
+
 
 def update_gallery(input):
-    log.debug("gallery input " + str(input))
+    log.debug(f"Updating gallery {input['id']}")
     query = """
-                mutation GalleryUpdate($input : GalleryUpdateInput!) {
-                  galleryUpdate(input: $input) {
-                    id
-                    title
-                  }
-                }
-                """
-    variables = {
-        "input": input
-    }
-    result = call_graphql(query, variables)
-    if result:
-        g_id = result['galleryUpdate'].get('id')
-        g_title = result['galleryUpdate'].get('title')
-        log.info(f"updated Gallery ({g_id}): {g_title}")
-    return result
+mutation GalleryUpdate($input : GalleryUpdateInput!) {
+  galleryUpdate(input: $input) {
+    id
+    title
+  }
+}
+"""
+    variables = {"input": input}
+    result = graphql.callGraphQL(query, variables)
+    if not result:
+        log.error(f"Failed to update gallery {input['id']}")
+        sys.exit(1)
 
-def get_id(obj):
-    ids = []
-    for item in obj:
-        ids.append(item['id'])
-    return ids
+    g_id = result["galleryUpdate"]["id"]
+    g_title = result["galleryUpdate"]["title"]
+    log.info(f"Updated gallery {g_id}: {g_title}")
+
+
+def add_galleries_to_scene(scene_id, gallery_ids):
+    data = {"id": scene_id, "gallery_ids": gallery_ids}
+    query = """
+mutation SceneUpdate($input : SceneUpdateInput!) {
+  sceneUpdate(input: $input) {
+    id
+    title
+  }
+}
+"""
+    variables = {"input": data}
+    result = graphql.callGraphQL(query, variables)
+    if not result:
+        log.error(f"Failed to update scene {scene_id}")
+        sys.exit(1)
+
 
 def find_galleries(scene_id, scene_path):
-    ids = []
-    directory_path = os.path.dirname(scene_path)
-    for (cur, dirs, files) in os.walk(directory_path):
+    directory_path = Path(scene_path).parent
+    log.debug(f"Searching for galleries in {directory_path.resolve()}")
+    return [
+        get_gallery_id_by_path(f) for f in directory_path.glob("*.zip") if f.is_file()
+    ]
 
-        for file in files:
-            if file.endswith('.zip'):
-                gallery_path = os.path.join(cur, file)
-                id = get_gallery_id_by_path(gallery_path)
-                updateScene_with_gallery(scene_id, id)
-                ids.append(id)
-        break
-    log.debug("find_galleries ids' found " + str(ids))
-    return ids
-
-def updateScene_with_gallery(scene_id, gallery_id):
-    data = {'id': scene_id, 'gallery_ids': [gallery_id]}
-    log.debug("data " + str(data))
-    query = """
-                mutation SceneUpdate($input : SceneUpdateInput!) {
-                  sceneUpdate(input: $input) {
-                    id
-                    title
-                  }
-                }
-                """
-    variables = {
-        "input": data
-    }
-    result = call_graphql(query, variables)
-    log.debug("graphql_updateGallery callGraphQL result " + str(result))
 
 FRAGMENT = json.loads(sys.stdin.read())
+log.debug("FRAGMENT " + str(FRAGMENT))
 SCENE_ID = FRAGMENT.get("id")
 
 scene = graphql.getScene(SCENE_ID)
-if scene:
-    scene_galleries = scene['galleries']
-    log.debug("scene_galleries " + str(scene_galleries))
-    gallery_ids = []
-    if len(scene_galleries) > 0:
-        for gallery_obj in scene_galleries:
-            gallery_ids.append(gallery_obj['id'])
-    elif find_gallery:
-        # if no galleries are associated see if any gallery zips exist in directory
-        gallery_ids = find_galleries(SCENE_ID, scene["path"])
-    log.debug("gallery_ids " + str(gallery_ids))
+if not scene:
+    log.error(f"Scene with id '{SCENE_ID}' not found")
+    sys.exit(1)
 
-    for gallery_id in gallery_ids:
-        studio = None
-        if scene['studio']:
-            studio = scene['studio']['id']
-        gallery_input = {'id': gallery_id,
-                         'urls': scene['urls'],
-                         'title': scene['title'],
-                         'date': scene["date"],
-                         'details': scene['details'],
-                         'studio_id': studio,
-                         'tag_ids': get_id(scene['tags']),
-                         'performer_ids': get_id(scene['performers'])}
-        update_gallery(gallery_input)
 
-    print(json.dumps({}))
+gallery_ids = [g["id"] for g in scene["galleries"]]
+if not gallery_ids and find_missing_galleries:
+    log.debug(
+        f"No galleries associated with scene {SCENE_ID}, searching for zips in folder..."
+    )
+    gallery_ids = find_galleries(SCENE_ID, scene["files"][0]["path"])
 
+if not gallery_ids:
+    log.debug("No galleries found, exiting")
+
+word = "gallery" if len(gallery_ids) == 1 else "galleries"
+log.debug(f"Scene has {len(gallery_ids)} {word}: {','.join(gallery_ids)}")
+
+gallery_input = {
+    "urls": scene["urls"],
+    "title": scene["title"],
+    "code": scene["code"],
+    "date": scene["date"],
+    "details": scene["details"],
+    "tag_ids": [t["id"] for t in scene["tags"]],
+    "performer_ids": [p["id"] for p in scene["performers"]],
+    "studio_id": dig(scene, "studio", "id"),
+}
+
+for gallery_id in gallery_ids:
+    update_gallery({"id": gallery_id, **gallery_input})
+
+add_galleries_to_scene(SCENE_ID, gallery_ids)
+
+print(json.dumps({}))
