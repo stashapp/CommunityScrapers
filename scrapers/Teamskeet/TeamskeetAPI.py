@@ -30,7 +30,7 @@ def save_json(api_json, url):
 
 
 USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
-DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Sayuncle")
+DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
 
 
 # Not necessary but why not ?
