@@ -3,22 +3,49 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - bang.com/video
+      - bangpremium.com/video
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.bang.com/videos?term={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - bang.com/dvd
+      - bangpremium.com/dvd
     scraper: movieScraper
 performerByURL:
   - action: scrapeXPath
     url:
       - bang.com/pornstar
+      - bangpremium.com/pornstar
     scraper: performerScraper
 xPathScrapers:
+  sceneSearch:
+    common:
+      $scenes: //div[contains(@class, "video_container")]
+    scene:
+      Title: $scenes//a/span
+      Date:
+        selector: $scenes//span[contains(., "•")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Image: $scenes//img/@src
+      URL:
+        selector: $scenes//a[contains(@href, "/video/")]/@href
+        postProcess: &prependHost
+          - replace:
+              - regex: ^
+                with: https://www.bang.com
   sceneScraper:
     common:
       $movie: //div[@data-controller="video-entry"]//a[contains(@href,"/dvd/")]//div[contains(@class,"name")]/span[1]
-      $performer:  //p[contains(@class,"capitalize") and contains(text(),"With:")]/a[contains(@href,"/pornstar/")]
+      $performer: //p[contains(@class,"capitalize") and contains(text(),"With:")]/a[contains(@href,"/pornstar/")]
     scene:
       Title: //meta[@property="og:title"]/@content
       Details: //meta[@name="description"]/@content
@@ -42,17 +69,14 @@ xPathScrapers:
         Name: $performer
         URL:
           selector: $performer/@href
-          postProcess: &addhost
-            - replace:
-                - regex: ^/
-                  with: "https://www.bang.com/"
+          postProcess: *prependHost
       Studio:
         Name: //p[contains(text(),"Studio:")]//a[contains(@href,"from=")]/img/@alt
       Movies:
         Name: $movie
         URL:
           selector: $movie/@href
-          postProcess: *addhost
+          postProcess: *prependHost
   movieScraper:
     common:
       $details: //div[@class="w-full"][1]
@@ -109,4 +133,4 @@ xPathScrapers:
           - replace:
               - regex: \?.+$
                 with: ""
-# Last Updated August 01, 2023
+# Last Updated March 08, 2024
