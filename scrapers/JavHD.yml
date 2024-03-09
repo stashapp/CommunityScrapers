@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - javhd.com/en/id/
+      - javhd.com/en/studio/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
