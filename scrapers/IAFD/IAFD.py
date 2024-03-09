@@ -60,16 +60,6 @@ def cleandict(d: dict):
     return {k: v for k, v in d.items() if v}
 
 
-def map_ethnicity(ethnicity: str):
-    ethnicities = {
-        "Asian": "asian",
-        "Caucasian": "white",
-        "Black": "black",
-        "Latin": "hispanic",
-    }
-    return ethnicities.get(ethnicity, ethnicity)
-
-
 def map_gender(gender: str):
     genders = {
         "f": "Female",
@@ -129,8 +119,7 @@ def performer_country(tree):
 
 def performer_ethnicity(tree):
     return maybe(
-        tree.xpath('//div[p[text()="Ethnicity"]]/p[@class="biodata"][1]//text()'),
-        map_ethnicity,
+        tree.xpath('//div[p[text()="Ethnicity"]]/p[@class="biodata"][1]//text()')
     )
 
 
