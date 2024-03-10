@@ -48,5 +48,5 @@ xPathScrapers:
       URL: //meta[@property="og:url"]/@content
       Studio:
         Name:
-          fixed: PortaGloryhole
+          fixed: Porta Gloryhole
 # Last Updated March 10, 2024
