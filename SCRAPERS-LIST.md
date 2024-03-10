@@ -228,6 +228,7 @@ blacktgirlshardcore.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:heavy_chec
 blackvalleygirls.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blackwhitefuckfest.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blakemason.com|BlakeMason.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+blowbanggirls.com|BlowBangGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blowmepov.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 blownbyrone.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blowpass.com|Algolia_Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
