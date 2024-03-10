@@ -35,6 +35,10 @@ xPathScrapers:
       $scene: //div[@class="post_details"]
     scene:
       Title: $scene//h1/span
+      Date:
+        selector: $scene//h3[@class="post_date"]/span
+        postProcess:
+          - parseDate: Jan 2, 2006
       Performers:
         Name: $scene//a[contains(@href,"/models/")]
       Tags:
