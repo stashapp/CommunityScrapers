@@ -14,7 +14,7 @@ sceneByURL:
 xPathScrapers:
   movieScraper:
     movie:
-      Name: //h2/a
+      Name: (//h2/a)[1]
       Director: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile']/p[1]/a
       Duration:
         selector: //span[@class='runtime']
@@ -51,7 +51,7 @@ xPathScrapers:
               with: h900
   sceneScraper:
     scene:
-      Title: //h2/a
+      Title: (//h2/a)[1]
       Details: //div[@class='header_info']/div[@class='overview']/p
       Director: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile']/p[1]/a
       Date:
@@ -64,7 +64,7 @@ xPathScrapers:
       Studio:
         Name: //a[@label="Studio"]/text()
       Movies:
-        Name: //h2/a
+        Name: (//h2/a)[1]
         URL: //link[@rel="canonical"]/@href
         Director: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile']/p[1]/a
         Duration:
