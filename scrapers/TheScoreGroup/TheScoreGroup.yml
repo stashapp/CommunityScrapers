@@ -142,12 +142,12 @@ xPathScrapers:
                 xlgirls: XL Girls
                 yourwifemymeat: Your Wife My Meat
       Date: &dateAttr
-        selector: $videopage$stat/span[contains(.,"Date:")]/following-sibling::span
+        selector: $videopage$stat//span[contains(.,"Date:")]/following-sibling::span
         postProcess:
           - replace:
               - regex: ..,
                 with:
-          - parseDate: January 2, 2006
+          - parseDate: January 2 2006
       Details: &details
         selector: $videopage//div[@class="p-desc p-3"]/text()
         postProcess:
