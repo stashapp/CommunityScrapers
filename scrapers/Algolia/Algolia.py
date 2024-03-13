@@ -67,7 +67,8 @@ MOVIE_SITES = {
     "peternorth": "https://www.peternorth.com/en/dvd",
     "tsfactor": "https://www.tsfactor.com/en/movie/",
     "wicked": "https://www.wicked.com/en/movie",
-    "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie"
+    "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie",
+    "3rddegreefilms": "https://www.3rddegreefilms.com/en/movie"
 }
 
 # a dict of serie (`serie_name` from the API) which should set the value
