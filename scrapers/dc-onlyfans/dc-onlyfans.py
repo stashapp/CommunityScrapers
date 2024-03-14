@@ -4,7 +4,7 @@ import sqlite3
 from pathlib import Path
 import base64
 import mimetypes
-
+from datetime import datetime
 try:
     import py_common.graphql as graphql
     import py_common.log as log
@@ -21,9 +21,17 @@ except ModuleNotFoundError:
     If you have a password on your instance you need to specify the api key by adding it to py_common/config.py
    '''
 
+def convert_timestamp(ts_str):
+    if isinstance(ts_str, bytes):
+        ts_str = ts_str.decode('utf-8')
+    return datetime.strptime(ts_str, '%Y-%m-%d %H:%M:%S.%f')
+
+# Register the converter for the 'timestamp' type
+sqlite3.register_converter("timestamp", convert_timestamp)
 def lookup_scene(file,db,parent):
     log.info(f"using database: {db.name}  {file.name}")
     conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+
     c=conn.cursor()
     # which media type should we look up for our file?
     c.execute('select api_type from medias where medias.filename=?',(file.name,))
@@ -59,6 +67,7 @@ def lookup_scene(file,db,parent):
 def lookup_gallery(file,db,parent):
     log.info(f"using database: {db.name}  {file.name}")
     conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
+
     c=conn.cursor()
     # which media type should we look up for our file?
     c.execute('select distinct api_type, post_id from medias where medias.directory = ?',(file.as_posix(),))
