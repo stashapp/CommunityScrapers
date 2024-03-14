@@ -8,30 +8,29 @@ sceneByURL:
       - python
       - ../Algolia/Algolia.py
       - 3rddegreefilms
-#sceneByFragment:
-#  action: script
-#  script:
-#    - python
-#    - ../Algolia/Algolia.py
-#    - 3rddegreefilms
-#sceneByName:
-#  action: script
-#  script:
-#    - python
-#    - ../Algolia/Algolia.py
-#    - 3rddegreefilms
-#    - searchName
-#sceneByQueryFragment:
-#  action: script
-#  script:
-#    - python
-#    - ../Algolia/Algolia.py
-#    - 3rddegreefilms
-#    - validName
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - 3rddegreefilms
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - 3rddegreefilms
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - 3rddegreefilms
+    - validName
 movieByURL:
   - action: script
     url:
-      - diabolic.com/en/movie/
       - 3rddegreefilms.com/en/movie
     script:
       - python

@@ -124,6 +124,7 @@ SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "Out of the Family",
     "Rocco Siffredi",
     "Squirtalicious",
+    "3rd Degree Films",
 ]
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
