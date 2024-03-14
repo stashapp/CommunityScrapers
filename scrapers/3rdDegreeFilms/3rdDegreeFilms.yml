@@ -37,13 +37,13 @@ movieByURL:
       - ../Algolia/Algolia.py
       - 3rddegreefilms
       - movie
-#galleryByURL:
-#  - action: script
-#    url:
-#      - 3rddegreefilms.com/en/photo/
-#    script:
-#      - python
-#      - ../Algolia/Algolia.py
-#      - 3rddegreefilms
-#      - gallery
+galleryByURL:
+  - action: script
+    url:
+      - 3rddegreefilms.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - 3rddegreefilms
+      - gallery
 # Last Updated March 13, 2024
