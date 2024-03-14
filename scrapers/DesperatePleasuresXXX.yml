@@ -1,0 +1,56 @@
+name: DesperatePleasures
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - desperatepleasuresxxx.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
+      Title:
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: (.*) - Desperate Pleasures XXX
+                with: $1
+      Date:
+        selector: //li[@itemprop="datePublished"]//a/@href
+        postProcess:
+          - replace:
+             - regex: .*/(\d{4})/(\d{2})/(\d{2})/
+               with: $1-$2-$3
+      Code:
+        selector: //meta[@property="og:url"]/@content
+        postProcess:
+          - replace:
+            - regex: .*/([-\w]+)/$
+              with: $1
+      Details:
+        selector: //div[@class="elementor-widget-container"]//p/text()
+      Performers:
+        Name:
+          selector: //div[@data-elementor-type="single"]/@class
+          postProcess:
+            - javascript: |
+                if (value && value.length) {
+                  output = [];
+                  value.split(' ').forEach(function (v) {
+                    if (v.trim().substring(0,11) == "model-name-") {
+                      output.push(v.trim().replace("model-name-", "").replace("-", " "));
+                    }
+                  });
+                  return output;
+                }
+          split: ","
+      Tags:
+        Name:
+          selector: //a[@class='elementor-post-info__terms-list-item']/text()
+          postProcess:
+            - javascript: |
+                if (value && value.length) {
+                  return value.trim().replace(/^(#)/, "");
+                }
+      Image: //meta[@property="og:image"]/@content
+# Last Updated March 14th, 2024
