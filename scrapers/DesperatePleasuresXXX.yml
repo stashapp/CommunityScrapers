@@ -1,56 +1,48 @@
-name: DesperatePleasures
+name: Desperate Pleasures XXX
 sceneByURL:
   - action: scrapeXPath
     url:
-      - desperatepleasuresxxx.com/
+      - desperatepleasuresxxx.com/trailer/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Studio:
-        Name: //meta[@property="og:site_name"]/@content
-      Title:
-        selector: //meta[@property="og:title"]/@content
-        postProcess:
-          - replace:
-              - regex: (.*) - Desperate Pleasures XXX
-                with: $1
-      Date:
-        selector: //li[@itemprop="datePublished"]//a/@href
-        postProcess:
-          - replace:
-             - regex: .*/(\d{4})/(\d{2})/(\d{2})/
-               with: $1-$2-$3
+      Title: //h1
       Code:
         selector: //meta[@property="og:url"]/@content
         postProcess:
           - replace:
-            - regex: .*/([-\w]+)/$
-              with: $1
-      Details:
-        selector: //div[@class="elementor-widget-container"]//p/text()
+              - regex: .*/([-\w]+)/$
+                with: $1
+      URL: //link[@rel="canonical"]/@href
+      Date:
+        selector: //li[@itemprop="datePublished"]//a/@href
+        postProcess:
+          - replace:
+              - regex: .*/(\d{4})/(\d{2})/(\d{2})/
+                with: $1-$2-$3
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
       Performers:
         Name:
-          selector: //div[@data-elementor-type="single"]/@class
+          selector: //*[name()="svg" and contains(@class, "e-fas-users")]/../..//*[@class="elementor-post-info__terms-list-item"]
           postProcess:
-            - javascript: |
-                if (value && value.length) {
-                  output = [];
-                  value.split(' ').forEach(function (v) {
-                    if (v.trim().substring(0,11) == "model-name-") {
-                      output.push(v.trim().replace("model-name-", "").replace("-", " "));
-                    }
-                  });
-                  return output;
-                }
-          split: ","
+            - replace:
+                - regex: "#"
+                  with: ""
+                - regex: ([a-z])([A-Z])
+                  with: $1 $2
       Tags:
         Name:
-          selector: //a[@class='elementor-post-info__terms-list-item']/text()
+          selector: //*[name()="svg" and contains(@class, "e-fas-tags")]/../..//*[@class="elementor-post-info__terms-list-item"]
           postProcess:
-            - javascript: |
-                if (value && value.length) {
-                  return value.trim().replace(/^(#)/, "");
-                }
+            - replace:
+                - regex: "#"
+                  with: ""
+                - regex: ([a-z])([A-Z])
+                  with: $1 $2
+      Details:
+        selector: //div[@data-widget_type="theme-post-content.default"]
+        concat: "\n"
       Image: //meta[@property="og:image"]/@content
-# Last Updated March 14th, 2024
+# Last Updated March 14, 2024
