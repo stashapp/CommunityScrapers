@@ -176,6 +176,7 @@ barebackthathole.com|MarsMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 barelylegal.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 baretwinks.com|BoyCrush.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 bathhousebait.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+bathroomcreepers.com|BathroomCreepers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 battlebang.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 bbcparadise.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bbcpie.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
