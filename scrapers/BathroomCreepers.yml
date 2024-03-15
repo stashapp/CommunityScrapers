@@ -31,8 +31,11 @@ xPathScrapers:
     scene:
       Title: //div[@class="videoDetails clear"]//h3
       Date:
-        selector: //span[contains(., "Date Added:")]/following-sibling::text()
+        selector: //comment()[contains(., "Date Added")]
         postProcess:
+          - replace:
+              - regex: '.*?(\w+ \d{1,2}, \d{4}).*'
+                with: $1
           - parseDate: January 2, 2006
       Details: //div[@class="videoDetails clear"]/p
       Tags:
