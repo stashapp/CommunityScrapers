@@ -38,4 +38,6 @@ xPathScrapers:
                     - regex: '.*poster=\\"([^\\]+).+'
                       with: $1
                 - replace: *https
-# Last Updated May 05, 2022
+driver:
+  useCDP: true
+# Last Updated March 15, 2024
