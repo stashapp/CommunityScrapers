@@ -16,11 +16,11 @@ xPathScrapers:
                 with: $1
       URL: //link[@rel="canonical"]/@href
       Date:
-        selector: //li[@itemprop="datePublished"]//a/@href
+        selector: //span[contains(@class, "elementor-post-info__item--type-date")]/text()
         postProcess:
           - replace:
-              - regex: .*/(\d{4})/(\d{2})/(\d{2})/
-                with: $1-$2-$3
+              - regex: .*(\d{2})/(\d{2})/(\d{2}).*
+                with: 20$3-$1-$2
       Studio:
         Name: //meta[@property="og:site_name"]/@content
       Performers:
