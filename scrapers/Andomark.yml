@@ -3,7 +3,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - ariellynn.com/tour/
-      - beatmeup.com/updates/
       - behindtheporno.com/updates/
       - bigbouncybabes.com/updates/
       - bigboobiesclub.com/updates/
@@ -15,7 +14,6 @@ sceneByURL:
       - chocolatepov.com/updates/
       - collectivecorruption.com/updates/
       - dirtroadwarriors.com/updates/
-      - goonmuse.com/updates/
       - hollyhotwife.elxcomplete.com/updates/
       - houseofyre.com/updates/
       - internationalnudes.com/updates/
@@ -33,8 +31,6 @@ sceneByURL:
       - seanmichaelsxxx.com/updates/
       - sheseducedme.com/updates
       - sofiemariexxx.com/updates/
-      - taboovrporn.com/updates/
-      - terapatrick.com/updates/
       - texaspattiusa.com/updates/
       - tmfetish.com/updates/
       - vanillapov.com/updates/
@@ -50,84 +46,137 @@ sceneByURL:
       - yummysofie.com/updates/
       - yummywomen.com/updates/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      # Many sites have better metadata in the members access section, but these
+      # are the ones that ONLY provide the members access version of scene pages
+      - beatmeup.com/access/scenes/
+      - goonmuse.com/access/scenes/
+      - xevunleashed.com/access/scenes/
+    scraper: proSceneScraper
+  - action: scrapeXPath
+    url:
+      # These sites have a members access section that is not linked from their main page
+      # note that these pages often have more tags and a full description but no cover image
+      - ariellynn.com/access/scenes/
+      - behindtheporno.com/access/scenes/
+      - bigboobiesclub.com/access/scenes/
+      - bigbouncybabes.com/access/scenes/
+      - bigtoyxxx.com/access/scenes/
+      - bradsterling.elxcomplete.com/access/scenes/
+      - brittanyandrewsxxx.com/access/scenes/
+      - chocolatepov.com/access/scenes/
+      - datingapphookup.com/access/scenes/
+      - dirtroadwarriors.com/access/scenes/
+      - hollyhotwife.elxcomplete.com/access/scenes/
+      - houseofyre.com/access/scenes/
+      - internationalnudes.com/access/scenes/
+      - johnnygoodluck.com/access/scenes/
+      - mackmovies.com/access/scenes/
+      - melaniehicksxxx.com/access/scenes/
+      - oldsexygrannies.com/access/scenes/
+      - playpetvictoria.com/access/scenes/
+      - queercrush.com/access/scenes/
+      - ravenswallowzxxx.com/access/scenes/
+      - reidmylips.com/access/scenes/
+      - reidmylips.elxcomplete.com/access/scenes/
+      - rionkingxxx.com/access/scenes/
+      - seanmichaelsxxx.com/access/scenes/
+      - sheseducedme.com/access/scenes/
+      - sofiemariexxx.com/access/scenes/
+      - terapatrick.com/access/scenes/
+      - texaspattiusa.com/access/scenes/
+      - tmfetish.com/access/scenes/
+      - vanillapov.com/access/scenes/
+      - willtilexxx.com/access/scenes/
+      - xxxcellentadventures.com/access/scenes/
+      - younggunsxxx.com/access/scenes/
+      - yummybikinimodel.com/access/scenes/
+      - yummygirl.com/access/scenes/
+      - yummygirlz.com/access/scenes/
+      - yummypornclub.com/access/scenes/
+      - yummysexclub.com/access/scenes/
+      - yummysofie.com/access/scenes/
+      - yummywomen.com/access/scenes/
+    scraper: proSceneWithImgFallbackScraper
+
 xPathScrapers:
-  sceneScraper: 
+  sceneScraper:
+    common:
+      $scene: //div[contains(@class, "update_block")]
+      $excludeUpdates: not(ancestor::*[contains(@class, "mpuSection")])
     scene:
-      Title: //span[@class="update_title"]/text()|//title/text()
+      Title: $scene//span[@class="update_title"]/text()|//title/text()
       Date:
-        selector: //span[@class="availdate"]/text()[1]|//span[@class="update_date"]/text()
-        postProcess:
-            - parseDate: 01/02/2006
-      Details: //span[@class="latest_update_description"]
+        # Some sites hide their release date in a comment
+        selector: >-
+          //*[(contains(@class, "availdate") or contains(@class, "update_date")) and contains(., "/")]
+          | //*[(contains(@class, "availdate") or contains(@class, "update_date"))]/comment()
+        postProcess: &datePostProcess
+          - replace:
+              - regex: ".*?([0-9]{2}/[0-9]{2}/[0-9]{4}).*"
+                with: $1
+          - parseDate: 01/02/2006
+      Details: $scene//span[@class="latest_update_description"]
       Performers:
-        Name:
-          selector: //span[@class="tour_update_models"]
-          postProcess:
-            - replace:
-                - regex: "[\\s]*(,)[\\s]*"
-                  with: "$1"
-          split: ","
+        Name: $scene//span[@class="tour_update_models" and $excludeUpdates]/a
       Tags:
-        Name: //span[@class="update_tags"]/a/text()|//span[@class="tour_update_tags"]/a/text()
+        Name: $scene//span[contains(@class, "update_tags")]/a
       Studio:
         Name:
-            selector: //link[@rel="canonical"]/@href
-            postProcess:
-                - replace:
-                    - regex: .elscomplete
-                      with: "" 
-                - replace:
-                    - regex: https://(w{3}?\.?)?(.+?)(\..+)
-                      with: $2
-                - map:
-                   "ariellynn": Ariel Lynn
-                   "beatmeup": Beatmeup
-                   "behindtheporno": Behind The Porno
-                   "bigboobiesclub": Big Boobies Club
-                   "bigbouncybabes": Big Bouncy Babes
-                   "bigtoyxxx": Big Toy XXX
-                   "bradsterling": Brad Sterling XXX
-                   "britstudio": Brit Studio
-                   "brittanyandrewsxxx": BritttanyAndrews XXX
-                   "chocolatepov": ChocolatePOV
-                   "collectivecorruption": Collective Corruption
-                   "datingapphookup": Dating App Hook Ups
-                   "dirtroadwarriors": Dirt Road Warriors
-                   "goonmuse": GoonMuse
-                   "internationalnudes": International Nudes
-                   "hollyhotwife": HollyHotWifeXXX
-                   "houseofyre": House of Fyre
-                   "johnnygoodluck": Johnny Goodluck
-                   "justgoodsex": JustGoodSex
-                   "ravenswallowzxxx": Raven Swallows
-                   "reidmylips": Reid My Lips
-                   "sheseducedme": She Seduced Me
-                   "mackmovies": Mack Movies
-                   "melaniehicksxxx": Melanie Hicks XXX
-                   "oldsexygrannies": OldSexyGrannies
-                   "playpetvictoria": PlaypetVictoria
-                   "queercrush": QueerCrush
-                   "rionkingxxx": Rion King
-                   "seanmichaelsxxx": Sean Michaels
-                   "sofiemariexxx": SofieMarieXXX
-                   "tabooadventures": TabooAdventures
-                   "taboovrporn": TabooVRPorn
-                   "terapatrick": Terra Patrick
-                   "texaspattiusa": TexasPattiUSA
-                   "tmfetish": TMFetish
-                   "vanillapov": VanillaPOV
-                   "willtilexxx": WillTileXXX
-                   "xevunleashed": Xev Unleashed
-                   "xxxcellentadventures": XXXcellentAdventures
-                   "younggunsxxx": YoungGunsXXX
-                   "yummybikinimodel": YummyBikini
-                   "yummygirl": Yummygirl
-                   "yummygirlz": Yummygirlz
-                   "yummypornclub": YummyPornClub
-                   "yummysexclub": Spik Irons' YummySexClub
-                   "yummysofie": Yum Sofie
-                   "yummywomen": Yummywomen
-      Image: 
+          selector: //link[@rel="canonical"]/@href
+          postProcess: &studioPostProcess
+            - replace:
+                - regex: https://(w{3}?\.?)?(.+?)(\..+)
+                  with: $2
+            - map:
+                ariellynn: Ariel Lynn
+                beatmeup: BeatMeUp
+                behindtheporno: Behind The Porno
+                bigboobiesclub: Big Boobies Club
+                bigbouncybabes: Big Bouncy Babes
+                bigtoyxxx: Big Toy XXX
+                bradsterling: Brad Sterling
+                britstudio: Brit Studio
+                brittanyandrewsxxx: Britttany Andrews
+                chocolatepov: ChocolatePOV
+                collectivecorruption: Collective Corruption
+                datingapphookup: Dating App Hook Ups
+                dirtroadwarriors: Dirt Road Warriors
+                goonmuse: GoonMuse
+                internationalnudes: International Nudes
+                hollyhotwife: HollyHotWife
+                houseofyre: House of Fyre
+                johnnygoodluck: Johnny Goodluck
+                justgoodsex: JustGoodSex
+                ravenswallowzxxx: Raven Swallows
+                reidmylips: Reid My Lips
+                sheseducedme: She Seduced Me
+                mackmovies: Mack Movies
+                melaniehicksxxx: Melanie Hicks XXX
+                oldsexygrannies: OldSexyGrannies
+                playpetvictoria: PlaypetVictoria
+                queercrush: QueerCrush
+                rionkingxxx: Rion King
+                seanmichaelsxxx: Sean Michaels
+                sofiemariexxx: Sofie Marie XXX
+                tabooadventures: TabooAdventures
+                terapatrick: Terra Patrick
+                texaspattiusa: TexasPattiUSA
+                tmfetish: TMFetish
+                vanillapov: VanillaPOV
+                willtilexxx: Will Tile XXX
+                xevunleashed: Xev Unleashed
+                xxxcellentadventures: XXXcellentAdventures
+                younggunsxxx: YoungGunsXXX
+                yummybikinimodel: YummyBikini
+                yummygirl: Yummygirl
+                yummygirlz: Yummygirlz
+                yummypornclub: YummyPornClub
+                yummysexclub: Spik Irons' YummySexClub
+                yummysofie: Yum Sofie
+                yummywomen: Yummywomen
+      Image: &image
         selector: //base/@href | //div[@class="update_image"]/a/img/@src0_1x | //span[@class="model_update_thumb"]/img/@src
         concat: /
         postProcess:
@@ -135,6 +184,61 @@ xPathScrapers:
               - regex: ^(https://.+)?https://
                 with: https://
       URL: //link[@rel='canonical']/@href
+  proSceneScraper:
+    common:
+      # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
+      $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
+    scene:
+      Title: //div[@class="title_bar"]/span
+      Date:
+        selector: //div[contains(@class, "update_date") and $excludeUpdates and contains(., "/")]
+        postProcess: *datePostProcess
+      Details: //span[@class="update_description"]
+      Performers:
+        Name: //span[@class="update_models" and $excludeUpdates]/a
+      Tags:
+        Name: //span[@class="update_tags" and $excludeUpdates]/a
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess: *studioPostProcess
+      Image:
+        selector: //base/@href | //script[contains(text(), 'useimage = "/')]/text()
+        concat: __SEPARATOR__
+        postProcess:
+          - replace:
+              # If the image was empty we clear the URL
+              - regex: .*/$
+                with: ""
+              - regex: (https://[^/]+).*useimage = "([^"]*).*
+                with: $1$2
+  proSceneWithImgFallbackScraper:
+    common:
+      # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
+      $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
+    scene:
+      Title: //div[@class="title_bar"]/span
+      Date:
+        selector: //div[contains(@class, "update_date") and $excludeUpdates and contains(., "/")]
+        postProcess: *datePostProcess
+      Details: //span[@class="update_description"]
+      Performers:
+        Name: //span[@class="update_models" and $excludeUpdates]/a
+      Tags:
+        Name: //span[@class="update_tags" and $excludeUpdates]/a
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess: *studioPostProcess
+      Image:
+        selector: //a[@class="option_button"]/@href
+        postProcess:
+          - replace:
+              - regex: _vids.html$
+                with: .html
+              - regex: /access/scenes/
+                with: /updates/
+          - subScraper: *image
 driver:
   cookies:
     - CookieURL: https://sheseducedme.com
