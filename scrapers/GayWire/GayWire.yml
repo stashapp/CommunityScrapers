@@ -1,10 +1,11 @@
 name: Gay Wire
 # requires: py_common, AyloAPI
-# scrapes: Bait Bus, Bareback Attack, Bareback Casting, ExBF, Haze Him, It's Gonna Hurt, Out In Public, Pound His Ass, Rub Him, Sausage Party, Thug Hunter, UngloryHole, Urban Invasion
+# scrapes: Bait Bus, Bareback Attack, Bareback Casting, ExBF, Guy Selector, Haze Him, It's Gonna Hurt, Out In Public, Pound His Ass, Rub Him, Sausage Party, Thug Hunter, UngloryHole, Urban Invasion
 galleryByURL:
   - action: script
     url:
       - gaywire.com/video
+      - guyselector.com/scene
     script:
       - python
       - GayWire.py
@@ -19,6 +20,7 @@ sceneByURL:
   - action: script
     url:
       - gaywire.com/video
+      - guyselector.com/scene
     script:
       - python
       - GayWire.py
@@ -51,6 +53,7 @@ performerByURL:
   - action: script
     url:
       - gaywire.com/model/
+      - guyselector.com/model/
     script:
       - python
       - GayWire.py
@@ -65,6 +68,7 @@ movieByURL:
   - action: script
     url:
       - gaywire.com/movie
+      - guyselector.com/movie
     script:
       - python
       - GayWire.py

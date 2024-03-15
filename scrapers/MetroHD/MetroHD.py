@@ -15,6 +15,11 @@ from AyloAPI.scrape import (
     movie_from_url,
 )
 
+studio_map = {
+    "Family Hook Ups": "Family Hookups",
+    "Metro": "Metro HD",
+}
+
 
 def metrohd(obj: Any, _) -> Any:
     replacement = None
@@ -36,17 +41,7 @@ def metrohd(obj: Any, _) -> Any:
     # metro.com is wrong and needs to be replaced with metrohd.com
     fixed = replace_all(obj, "url", lambda x: x.replace("metro.com", replacement))
 
-    # The API returns Metro as a studio name but we know them as Metro HD
-    fixed = replace_at(
-        fixed, "studio", "name", replacement=lambda x: x.replace("Metro", "Metro HD")
-    )
-    fixed = replace_at(
-        fixed,
-        "studio",
-        "parent",
-        "name",
-        replacement=lambda x: x.replace("Metro", "Metro HD"),
-    )
+    fixed = replace_all(fixed, "name", replacement=lambda x: studio_map.get(x, x))
     return fixed
 
 

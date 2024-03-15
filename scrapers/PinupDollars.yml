@@ -25,8 +25,14 @@ xPathScrapers:
         concat: "\n\n"
       Tags:
         Name: //ul[@class="tags"]//a
-      Image: //div[@class="player-thumb"]/img/@src0_1x
+      Image:
+        selector: //base/@href | //div[@id="fakeplayer"]//img[@id]/@src0_1x
+        concat: __SEPARATOR__
+        postProcess:
+          - replace:
+              - regex: __SEPARATOR__
+                with: ""
       Studio:
         Name:
           selector: //meta[@name="author"]/@content
-# Last Updated April 09, 2021
+# Last Updated March 01, 2024

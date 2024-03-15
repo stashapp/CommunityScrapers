@@ -1,0 +1,48 @@
+name: Desperate Pleasures XXX
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - desperatepleasuresxxx.com/trailer/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Code:
+        selector: //meta[@property="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: .*/([-\w]+)/$
+                with: $1
+      URL: //link[@rel="canonical"]/@href
+      Date:
+        selector: //span[contains(@class, "elementor-post-info__item--type-date")]/text()
+        postProcess:
+          - replace:
+              - regex: .*(\d{2})/(\d{2})/(\d{2}).*
+                with: 20$3-$1-$2
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
+      Performers:
+        Name:
+          selector: //*[name()="svg" and contains(@class, "e-fas-users")]/../..//*[@class="elementor-post-info__terms-list-item"]
+          postProcess:
+            - replace:
+                - regex: "#"
+                  with: ""
+                - regex: ([a-z])([A-Z])
+                  with: $1 $2
+      Tags:
+        Name:
+          selector: //*[name()="svg" and contains(@class, "e-fas-tags")]/../..//*[@class="elementor-post-info__terms-list-item"]
+          postProcess:
+            - replace:
+                - regex: "#"
+                  with: ""
+                - regex: ([a-z])([A-Z])
+                  with: $1 $2
+      Details:
+        selector: //div[@data-widget_type="theme-post-content.default"]
+        concat: "\n"
+      Image: //meta[@property="og:image"]/@content
+# Last Updated March 14, 2024

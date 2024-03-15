@@ -40,6 +40,7 @@ sceneByURL:
       - teensloveblackcocks.com/movies/
       - thickumz.com/movies/
       - tinysis.com/movies/
+      - usepov.com/movies/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -95,8 +96,9 @@ xPathScrapers:
                 teensloveblackcocks: Teens Love Black Cocks
                 thickumz: Thickumz
                 tinysis: Tiny Sis
+                usepov: Use POV
 driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated September 28, 2023
+# Last Updated February 24, 2024

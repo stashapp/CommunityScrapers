@@ -1,0 +1,51 @@
+name: InTheCrack
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - inthecrack.com/Collection/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //section[@class="modelCollectionHeader"]//h2
+      Code:
+        selector: //li[@id="VideoTab"]/a/@href
+        postProcess:
+          - replace:
+              - regex: .*/(\d+)
+                with: $1
+      Details:
+        selector: //div[@class="ClipDetail"]//h4/text() | //div[@class="ClipDetail"]//p
+        concat: __SEPERATOR__
+        postProcess:
+          - javascript: |
+              details = "";
+              parts = value.split("__SEPERATOR__");
+              for (i = 0; i < parts.length/2; i++) {
+                if (parts[i] == "") {
+                  continue;
+                }
+                details = details + parts[i] + "\n" + parts[i+parts.length/2];
+                if ((i+1)*2 < parts.length) {
+                  details = details + "\n\n";
+                }
+              }
+              return(details);
+      Performers:
+        Name:
+          selector: //section[@class="modelCollectionHeader"]//h2
+          postProcess:
+            - replace:
+                - regex: ^\d+\s+
+                  with: ""
+          split: " & "
+      Studio:
+        Name:
+          fixed: InTheCrack
+      Image:
+        selector: //section[@id="modelCollection"]//style/text()
+        postProcess:
+          - replace:
+              - regex: .*url\('([^']+)'.*
+                with: https://www.inthecrack.com$1
+# Last Updated February 16th, 2024

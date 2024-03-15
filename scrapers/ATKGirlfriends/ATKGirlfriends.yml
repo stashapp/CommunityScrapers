@@ -8,12 +8,14 @@ sceneByFragment:
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://www.atkgirlfriends.com/tour/model/
+      # Trying to scrape without the www. prefix will result in a redirect loop
+      - www.atkgirlfriends.com/tour/model/
     scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.atkgirlfriends.com/tour/movie/
+      # Trying to scrape without the www. prefix will result in a redirect loop
+      - www.atkgirlfriends.com/tour/movie/
     scraper: sceneScraper
 xPathScrapers:
   performerScraper:
@@ -42,8 +44,8 @@ xPathScrapers:
         selector: $modelWrap/b[contains(text(), "Weight")]/following-sibling::text()
         postProcess:
           - replace:
-            - regex: (\d+).*
-              with: $1
+              - regex: (\d+).*
+                with: $1
           - lbToKg: true
       Measurements:
         selector: $modelWrap/b[contains(text(), "Bust Size")]/following-sibling::text()
@@ -56,19 +58,12 @@ xPathScrapers:
     scene:
       Title: //title
       Details: $movieWrap/b[contains(text(), "Description")]/following-sibling::text()
-      URL:
-        selector: //video/source/@src
+      Image:
+        selector: //video/@poster | //div[@class="flowplayer minimalist is-splash"]/@style
         postProcess:
           - replace:
-            # 0: Match (ale138ATK_290698001_hd.mp4)
-            # 1: Model (ale138)
-            # 2: Movie (290698)
-            # 3: Scene (001)
-            # 4: Resolution (hd)
-            # 5: Extension (mp4)
-            - regex: &filenameRegex ^.*([a-z]{3}\d{3})ATK_(\d+)(\d{3})_(\w*)\.(\w+).*$
-              with: https://www.atkgirlfriends.com/tour/movie/$2
-      Image: //video/@poster
+              - regex: background-image:url\('(.*)'\);
+                with: $1
       Studio:
         Name:
           fixed: ATK Girlfriends
@@ -77,7 +72,11 @@ xPathScrapers:
       Tags:
         Name:
           selector: $movieWrap/b[contains(text(), "Tags")]/following-sibling::text()
-          split: ','
+          postProcess:
+            - replace:
+                - regex: \s*,\s*
+                  with: ","
+          split: ","
       Performers:
         Name: $modelWrap/text()[1]
 driver:
@@ -88,4 +87,4 @@ driver:
           Domain: www.atkgirlfriends.com
           Value: stash # Rotate this value if the scraper is blocked. The first request with the new value should fail.
           Path: /
-# Last Updated April 14, 2022
+# Last Updated March 14, 2024

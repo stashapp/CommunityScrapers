@@ -1,17 +1,35 @@
 name: AdultEmpire
 
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - adultdvdempire.com/clip
+      - adultempire.com/clip
+    scraper: sceneScraperSingle
+  - action: scrapeXPath
+    url:
+      - adultdvdempire.com
+      - adultempire.com
+    scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
       - adultempire.com
     scraper: movieScraper
-sceneByURL:
+    
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.adultempire.com/performer/search?q={}
+  scraper: performerSearch
+
+performerByURL:
   - action: scrapeXPath
-    url:
-      - adultdvdempire.com
+    url: 
       - adultempire.com
-    scraper: sceneScraper
+      - adultdvdempire.com
+    scraper: performerScraper  
+
 sceneByName:
   action: scrapeXPath
   # if needed replace `dvd` with `vod`
@@ -21,15 +39,20 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-performerByURL:
-  - 
-    action: scrapeXPath
-    url:
-       - adultdvdempire.com
-       - adultempire.com
-    scraper: performerScraper
 
 xPathScrapers:
+  performerSearch:
+    common:
+      $perfomerRoot: //div[@id="performerlist"]//a
+    performer:
+      Name: $perfomerRoot/@label
+      URL: 
+        selector: $perfomerRoot/@href
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.adultempire.com
+
   sceneSearch:
     scene:
       Title:
@@ -80,6 +103,37 @@ xPathScrapers:
       #       - regex: (\d).+
       #         with: $1
       URL: //meta[@name='og:url']/@content
+  sceneScraperSingle:
+    common:
+      $header: //div[@class="clip-page__detail__title text-display-primary"]
+      $clipId: (//*[@data-tid]/@data-tid)[1]
+    scene:
+      Title: $header/h1
+      Studio:
+        Name: //div[contains(text(), "by")]/a
+      Movies:
+        Name: //div[contains(text(), "from")]/a
+      Date:
+        selector: //strong[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Tags:
+        Name: //strong[contains(text(), "Attributes")]/following-sibling::a/text()
+      Performers:
+        Name: //strong[contains(text(), "Starring")]/following-sibling::a/text()
+        URL:
+          selector: //strong[contains(text(), "Starring")]/following-sibling::a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.adultdvdempire.com"
+      Image:
+        selector: (//*[@data-tid]/@data-tid)[1] | //a[@id="front-cover"]/img/@src
+        concat: __SEPARATOR__
+        postProcess:
+          - replace:
+              - regex: (\d+).*/([^/]*\d+)[^/\d]*$
+                with: https://imgs1cdn.adultempire.com/backdrop/6000/$2%5f$1/scene-1.jpg
   sceneScraper:
     scene:
       Title: //h1/text()
@@ -126,7 +180,7 @@ xPathScrapers:
               - regex: Height:\s+(.*)
                 with: $1
           - feetToCm: true
-      Image: //*[@id="content"]/section/div/div[1]/a[1]|/img/@src|//*[@id="content"]/section/div/div[1]/img/@src
+      Image: //*[@id="content"]/section/div/div[1]/a[1]|/img/@src|//*[@id="content"]/section/div/div[1]/img/@src|//section[@class="container-fluid"]//a[@class="fancy"][@label="Headshot"]/@href
       Country:
         selector: $infoPiecel/li[contains(text(), 'From:')]/text()
         postProcess:
@@ -148,4 +202,4 @@ xPathScrapers:
                 with: $1
       Details: //*[@id="content"]/section/div/div[5]/aside/text()
       URL: //link[@rel='canonical']/@href
-# Last Updated December 07, 2023
+# Last Updated Feburary 22, 2024

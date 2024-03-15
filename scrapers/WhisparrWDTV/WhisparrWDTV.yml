@@ -1,0 +1,8 @@
+name: "Whisparr WDTV XML"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - WhisparrWDTV.py
+      - query
+# Last Updated June 17, 2023

@@ -21,7 +21,7 @@ xPathScrapers:
         postProcess:
           # Only HookupHotshot still uses this format but the others use YYYY-MM-DD
           # so they'll fall through and still be correct wrt. expected Stash date format
-          - parseDate: January 02, 2006
+          - parseDate: January 2, 2006
       Studio:
         Name:
           selector: //head/base/@href

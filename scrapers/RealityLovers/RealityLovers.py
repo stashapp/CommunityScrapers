@@ -92,11 +92,26 @@ def sceneByURL():
     log.trace("Scraped the url: " + api_url)
 
     data = scraped.json()
+    # log.debug(json.dumps(data))
 
-    title = data["title"]
+    title = re.sub(r'\s+VR Porn Video$', '', data["title"])
     details = data["description"]
-    image_url = re.sub(r".*,(\S+).*", r"\1", data["mainImages"][0]["imgSrcSet"])
+
+    # image
+    image_urls = [
+        src_set.split(' ')[0] for src_set in data["mainImages"][0]["imgSrcSet"].split(',')
+    ]
+    # pick highest available quality, or fall back to first image
+    suffixes = ['ultra.jpg', 'big.jpg', 'high.jpg', 'medium.jpg', 'small.jpg']
+    image_url = next((url for suffix in suffixes for url in image_urls if url.endswith(suffix)), image_urls[0])
+    date = data["releaseDate"]
+
+    # tags
     tags = [{"name": x["name"]} for x in data["categories"]]
+    tags.append({'name': 'Virtual Reality'})
+    if data["mainImages"][0]["perspective"] == 'VOYEUR':
+        tags.extend([{'name': 'Non-POV'}, {'name': 'Voyeur'}])
+
     actors = [
         {"name": x["name"], "url": f"https://{domain}/{x['uri']}"}
         for x in data["starring"]
@@ -105,6 +120,7 @@ def sceneByURL():
     # create our output
     return {
         "title": title,
+        "date": date,
         "tags": tags,
         "details": details,
         "image": image_url,
