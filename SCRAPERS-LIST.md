@@ -7,7 +7,7 @@ Column names are **S**cenes, **G**allery, **M**ovies, **P**erformers.
 
 Supported Site|Scraper| S | G | M | P |Needs|Contents
 --------------|-------|:-:|:-:|:-:|:-:|:---:|:------:
-1000facials.com|Algolia_Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+1000facials.com|Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 10musume.com|10Musume.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 1111customsxxx.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 18eighteen.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
@@ -239,7 +239,7 @@ blakemason.com|BlakeMason.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 blowbanggirls.com|BlowBangGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blowmepov.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 blownbyrone.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-blowpass.com|Algolia_Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+blowpass.com|Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bobbiedenlive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bobstgirls.com|GroobyNetwork-Partial.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Trans
 bolatino.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
@@ -818,7 +818,7 @@ ikillitts.com|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 ikissgirls.com|IKissGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 iknowthatgirl.com|Mofos/Mofos.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 imdb.com|IMDB.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|Database
-immorallive.com|Algolia_Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+immorallive.com|Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 imnotyourmommy.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 infernalrestraints.com|insex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 inkedpov.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
@@ -1051,7 +1051,7 @@ momcum.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 momisamilf.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 momlover.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 mommy4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-mommyblowsbest.com|Algolia_Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+mommyblowsbest.com|Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mommyjoi.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mommysboy.com|Algolia_Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 mommysboy.net|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1183,7 +1183,7 @@ onlyblowjob.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 onlygolddigger.com|Only3xGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 onlyprince.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 onlytarts.com|OnlyTarts.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-onlyteenblowjobs.com|Algolia_Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+onlyteenblowjobs.com|Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 oopsie.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 openlife.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 oraloverdose.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1618,7 +1618,7 @@ thickumz.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thirdsexxxx.com|ThirdSexXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 thirdworldxxx.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Asian + Latin + Trans
 thisvid.com|ThisVid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
-throated.com|Algolia_Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+throated.com|Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 timtales.com|TimTales.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 tiny4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tinysis.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
