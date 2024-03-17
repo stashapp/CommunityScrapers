@@ -1,0 +1,45 @@
+name: MissAV
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://missav.com/ja/search/{}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $videoItem: //div[starts-with(@class, 'grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-5')]/div/div[@class="thumbnail group"]
+    scene:
+      Title: $videoItem/div[@class="my-2 text-sm text-nord4 truncate"]/a/text()
+      URL:
+        selector: $videoItem/div[@class="my-2 text-sm text-nord4 truncate"]/a/@href
+      Image: 
+        selector: $videoItem/div[@class="relative aspect-w-16 aspect-h-9 rounded overflow-hidden shadow-lg"]/a/img/@data-src
+  sceneScraper:
+    scene:
+      Code: //span[text()='品番:']/../span[@class="font-medium"]/text()
+      Date: //span[text()='配信開始日:']/../span[@class="font-medium"]/text()
+      Title: 
+        selector: //h1[@class="text-base lg:text-lg text-nord6"]/text()
+        postProcess:
+          - replace:
+            - regex: ^.*?\s
+              with: ""
+      Tags:
+        Name: //span[text()='ジャンル:']/../a/text()
+      Performers:
+        Name: //span[text()='女優:']/../a/text()
+      Studio: 
+        Name: //span[text()='メーカー:']/../a/text()
+      Director: //span[text()='監督:']/../a/text()
+      Details: //div[@class="mb-1 text-secondary break-all line-clamp-2"]/text()
+      Image: //link[@as="image"]/@href
+
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: ‘Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1664.3 Safari/537.36’
