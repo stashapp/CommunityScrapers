@@ -4,6 +4,7 @@ import sqlite3
 from pathlib import Path
 import base64
 import mimetypes
+import datetime
 
 try:
     import py_common.graphql as graphql
@@ -20,77 +21,96 @@ except ModuleNotFoundError:
     This script needs python3 and requests and sqlite3
     If you have a password on your instance you need to specify the api key by adding it to py_common/config.py
    '''
-
-def lookup_scene(file,db,parent):
+def format_date_from_string(date_str):
+    """Convert a date string from the database to the format '%Y-%m-%d'."""
+    # Attempt to parse the date_str assuming it's in a recognizable datetime format
+    try:
+        # If the string includes time information, it's parsed and ignored
+        return datetime.strptime(date_str.split(' ')[0], "%Y-%m-%d").strftime('%Y-%m-%d')
+    except ValueError:
+        # Log the error or handle unexpected formats as needed
+        log.error("Unrecognized date format: " + date_str)
+def lookup_scene(file, db, parent):
     log.info(f"using database: {db.name}  {file.name}")
-    conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
-    c=conn.cursor()
-    # which media type should we look up for our file?
-    c.execute('select api_type from medias where medias.filename=?',(file.name,))
-    row=c.fetchone()
-    #check for each api_type the right tables
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    # Which media type should we look up for our file?
+    c.execute('SELECT api_type FROM medias WHERE medias.filename=?', (file.name,))
+    row = c.fetchone()
+    # Check for each api_type the right tables
     api_type = str(row[0])
     if api_type == 'Posts':
-        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
+        c.execute('SELECT posts.post_id, posts.text, medias.link, posts.created_at FROM posts, medias WHERE posts.post_id = medias.post_id AND medias.filename = ?', (file.name,))
     elif api_type == "Stories":
-        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from stories as posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
+        c.execute('SELECT posts.post_id, posts.text, medias.link, posts.created_at FROM stories AS posts, medias WHERE posts.post_id = medias.post_id AND medias.filename = ?', (file.name,))
     elif api_type == "Messages":
-        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from messages as posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
+        c.execute('SELECT posts.post_id, posts.text, medias.link, posts.created_at FROM messages AS posts, medias WHERE posts.post_id = medias.post_id AND medias.filename = ?', (file.name,))
     elif api_type == "Products":
-        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from products as posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
-    else: # api_type == "Others"
-        c.execute('select posts.post_id,posts.text,medias.link,posts.created_at from others as posts,medias where posts.post_id=medias.post_id and medias.filename=?',(file.name,))
-    row=c.fetchone()
-    res={}
-    res['title']=str(parent.name)+ ' - '+row[3].strftime('%Y-%m-%d')
-    res['details']=row[1]
-    res['studio']={'name':'OnlyFans','url':'https://www.onlyfans.com/'}
-    res['url']='https://www.onlyfans.com/'+str(row[0])+'/'+parent.name
-    res['date']=row[3].strftime('%Y-%m-%d')
-    performer={"name":parent.name}
-    image=findPerformerImage(parent)
-    if image is not None:
-        performer['images']=[make_image_data_url(image)]
-    res['performers']=[performer]
+        c.execute('SELECT posts.post_id, posts.text, medias.link, posts.created_at FROM products AS posts, medias WHERE posts.post_id = medias.post_id AND medias.filename = ?', (file.name,))
+    else:  # api_type == "Others"
+        c.execute('SELECT posts.post_id, posts.text, medias.link, posts.created_at FROM others AS posts, medias WHERE posts.post_id = medias.post_id AND medias.filename = ?', (file.name,))
+    row = c.fetchone()
 
+    # Manually format the date from the fetched row
+    formatted_date = row[3][:10]  # Assuming the date is in 'YYYY-MM-DD' format in the string
+
+    res = {
+        'title': f"{str(parent.name)} - {formatted_date}",
+        'details': row[1],
+        'studio': {'name': 'OnlyFans', 'url': 'https://www.onlyfans.com/'},
+        'url': f"https://www.onlyfans.com/{row[0]}/{parent.name}",
+        'date': formatted_date,
+        'performers': [{'name': parent.name, 'images': []}]
+    }
+
+    image = findPerformerImage(parent)
+    if image is not None:
+        res['performers'][0]['images'].append(make_image_data_url(image))
 
     return res
-
-def lookup_gallery(file,db,parent):
+def lookup_gallery(file, db, parent):
     log.info(f"using database: {db.name}  {file.name}")
-    conn = sqlite3.connect(db, detect_types=sqlite3.PARSE_DECLTYPES | sqlite3.PARSE_COLNAMES)
-    c=conn.cursor()
-    # which media type should we look up for our file?
-    c.execute('select distinct api_type, post_id from medias where medias.directory = ?',(file.as_posix(),))
-    row=c.fetchone()
-    #check for each api_type the right tables
-    api_type = str(row[0])
-    post_id = str(row[1])
-    if api_type == 'Posts':
-        c.execute('select posts.post_id,posts.text,posts.created_at from posts where posts.post_id=?',(post_id,))
-    elif api_type == "Stories":
-        c.execute('select posts.post_id,posts.text,posts.created_at from stories as posts where posts.post_id=?',(post_id,))
-    elif api_type == "Messages":
-        c.execute('select posts.post_id,posts.text,posts.created_at from messages as posts where posts.post_id=?',(post_id,))
-    elif api_type == "Products":
-        c.execute('select posts.post_id,posts.text,posts.created_at from products as posts where posts.post_id=?',(post_id,))
-    else: # api_type == "Others"
-        c.execute('select posts.post_id,posts.text,posts.created_at from others as posts where posts.post_id=?',(post_id,))
-    row=c.fetchone()
-    res={}
-    res['title']=str(parent.name)+ ' - '+row[2].strftime('%Y-%m-%d')
-    res['details']=row[1]
-    res['studio']={'name':'OnlyFans','url':'https://www.onlyfans.com/'}
-    res['url']='https://www.onlyfans.com/'+str(row[0])+'/'+parent.name
-    res['date']=row[2].strftime('%Y-%m-%d')
-    performer={"name":parent.name}
-    image=findPerformerImage(parent)
-    if image is not None:
-        performer['images']=[make_image_data_url(image)]
-    res['performers']=[performer]
+    conn = sqlite3.connect(db)
+    c = conn.cursor()
+    # Determine which media type we're looking up for our file
+    c.execute('SELECT DISTINCT api_type, post_id FROM medias WHERE medias.directory = ?', (file.as_posix(),))
+    row = c.fetchone()
 
+    if row:
+        api_type, post_id = row
+        # Check for each api_type the right tables
+        if api_type == 'Posts':
+            c.execute('SELECT post_id, text, created_at FROM posts WHERE post_id = ?', (post_id,))
+        elif api_type == "Stories":
+            c.execute('SELECT post_id, text, created_at FROM stories WHERE post_id = ?', (post_id,))
+        elif api_type == "Messages":
+            c.execute('SELECT post_id, text, created_at FROM messages WHERE post_id = ?', (post_id,))
+        elif api_type == "Products":
+            c.execute('SELECT post_id, text, created_at FROM products WHERE post_id = ?', (post_id,))
+        else:  # api_type == "Others"
+            c.execute('SELECT post_id, text, created_at FROM others WHERE post_id = ?', (post_id,))
 
-    return res
+        row = c.fetchone()
+        if row:
+            # Manually format the date from the fetched row
+            formatted_date = row[2][:10]  # Assuming the date is in 'YYYY-MM-DD' format in the string
+
+            res = {
+                'title': f"{parent.name} - {formatted_date}",
+                'details': row[1],
+                'studio': {'name': 'OnlyFans', 'url': 'https://www.onlyfans.com/'},
+                'url': f"https://www.onlyfans.com/{row[0]}/{parent.name}",
+                'date': formatted_date,
+                'performers': [{'name': parent.name, 'images': []}]
+            }
+
+            image = findPerformerImage(parent)
+            if image is not None:
+                res['performers'][0]['images'].append(make_image_data_url(image))
+
+            return res
+    return {}
+
 
 def findFilePath(id):
     scene=graphql.getScene(id)
