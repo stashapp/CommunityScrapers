@@ -106,6 +106,7 @@ antoniosuleiman.com|AntonioSuleiman.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 apovstory.com|APOVStory.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 archangelvideo.com|ArchAngelVideo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ariellynn.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+artofscat.com|Queensnake.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ashemaletube.com|AShemaleTube.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 ashley4k.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ashleyfires.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1317,6 +1318,8 @@ purepov.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Pytho
 puretaboo.com|Algolia_Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 pussyav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 putalocura.com|Putalocura.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+queensect.com|Queensnake.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+queensnake.com|Queensnake.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 queercrush.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 r18.dev|R18.dev.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|JAV
 rachel-steele.com|RachelSteele.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
