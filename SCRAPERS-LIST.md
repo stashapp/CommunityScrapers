@@ -1007,6 +1007,7 @@ meanfeetfetish.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mar
 meanmassage.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 meetsuckandfuck.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 melaniehicksxxx.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+melonjuggler.com|MelonJuggler.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 men.com|Men/Men.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|Gay
 menatplay.com|MenAtPlay.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 menoboy.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
