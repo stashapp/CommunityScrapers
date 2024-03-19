@@ -4,6 +4,13 @@ sceneByURL:
     url:
       - x-art.com/videos/
     scraper: sceneScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - x-art.com/galleries/
+    scraper: galleryScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -23,4 +30,23 @@ xPathScrapers:
       Studio:
         Name:
           fixed: X-Art
-# Last Updated September 22, 2022
+
+  galleryScraper:
+    common:
+      $actor: //div[@class="small-12 medium-12 large-6 columns info"]/h2/a
+    gallery:
+      Title: //div[@class="small-12 medium-12 large-6 columns info"]/h1[@class="show-for-large-up"]
+      Details: //div[@class="small-12 medium-12 large-6 columns info"]/p[@id="desc"]
+      Date:
+        selector: //div[@class="small-12 medium-12 large-6 columns info"]/h2[1]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Studio:
+        Name:
+          fixed: X-Art
+      Performers:
+        Name: $actor/text()
+        URL:
+          selector: $actor//@href
+
+# Last Updated March 19, 2024
