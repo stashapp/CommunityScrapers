@@ -802,7 +802,7 @@ hunt4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hunterleigh.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hunterpov.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hushpass.com|hushpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-hussiepass.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hussiepass.com|hussiemodels.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|-|-
 hustlaz.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hustler.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hustlerhd.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
@@ -1393,8 +1393,8 @@ seancody.com|SeanCody/SeanCody.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_
 seanmichaelsxxx.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 secretsusan.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 seductive18.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-seehimfuck.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-seehimsolo.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+seehimfuck.com|hussiemodels.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
+seehimsolo.com|hussiemodels.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 seemomsuck.com|Tugpass.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 seemysextapes.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 selfiesuck.com|SelfieSuck.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
