@@ -5,7 +5,7 @@ sceneByFragment:
   queryURL: https://www.newgrounds.com/portal/view/{filename}
   queryURLReplace:
     filename:
-      - regex: ^[^\[]+\[+|(\]).*
+      - regex: ^([^\[]+\[)+|(\]\.).*
         with: ""
 sceneByURL:
   - action: scrapeXPath
@@ -16,6 +16,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //head/title
+      URL: //meta[@property="og:url"]/@content
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
