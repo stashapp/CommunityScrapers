@@ -16,6 +16,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //head/title
+      URL: //meta[@property="og:url"]/@content
       Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
