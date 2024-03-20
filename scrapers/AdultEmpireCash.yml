@@ -5,6 +5,7 @@ sceneByURL:
     scraper: sceneScraper
     url:
       - blackmassivecocks.com/
+      - braziliantransgirls.com/
       - concoxxxion.com/
       - elegantangel.com/
       - forbiddenfruitsfilms.com/
@@ -23,6 +24,7 @@ sceneByURL:
       - spankmonster.com/
       - stephousexxx.com/
       - thirdworldxxx.com/
+      - transationalfantasies.com/
       - wcpclub.com/
       - westcoastproductions.com/
       - data18.empirestores.co/
@@ -38,6 +40,7 @@ movieByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
+      - braziliantransgirls.com/
       # - bangmytransass.com/ # Scenes published as movies?
       # - blacktranswhackers.com/ # Scenes published as movies?
       - concoxxxion.com/
@@ -48,6 +51,7 @@ movieByURL:
       - severesexfilms.com/
       # - shemalestrokers.com/ # Scenes published as movies?
       - thirdworldxxx.com/
+      - transationalfantasies.com/
       - wcpclub.com/
       - westcoastproductions.com/
       - data18.empirestores.co/
@@ -65,7 +69,7 @@ xPathScrapers:
         selector: //div[@class="synopsis"]//text()
         concat: "\n\n"
       Tags:
-        Name: //div[@class="tags"]/a/text()
+        Name: //div[@class="tags"]/a/text()|//div[@class="categories"]/a/text()
       Performers:
         Name: //div[@class="video-performer"]/a//text()
       Studio:
@@ -152,4 +156,4 @@ xPathScrapers:
                 with: https://imgs1cdn.adultempire.com/product/${1}_lg.jpg
       Studio:
         Name: //meta[@name="og:site_name"]/@content
-# Last Updated February 26, 2024
+# Last Updated March 19, 2024
