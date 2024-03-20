@@ -31,9 +31,10 @@ xPathScrapers:
           //img[contains(@class, "dvd_box")]/@src0_2x |
           //img[contains(@class, "dvd_box")]/@src0_1x
         concat: __SEPARATOR__
-        replace:
-          - regex: (.*?)__SEPARATOR__(.*?)(:?__SEPARATOR).*
-            with: $1$2
+        postProcess:
+          - replace:
+              - regex: (.*?)__SEPARATOR__(.*?)(:?__SEPARATOR).*
+                with: $1$2
       Studio: &studio
         Name:
           selector: //head/base/@href
