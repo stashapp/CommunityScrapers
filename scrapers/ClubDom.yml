@@ -1,21 +1,21 @@
-name: SubbyHubby
+name: ClubDom.yml
 sceneByURL:
   - action: scrapeXPath
     url:
-      - subbyhubby.com/tour
+      - clubdom.com/tour
     scraper: sceneScraper
   - action: scrapeXPath
     url:
-      - subbyhubby.com/vod
+      - clubdom.com/vod
     scraper: vodScraper
 sceneByName:
   action: scrapeXPath
-  queryURL: https://www.subbyhubby.com/vod/search.php?st=advanced&page=1&qany=&qex=&none=&tadded=0&cat%5B%5D=17&qall={}
+  queryURL: https://www.clubdom.com/vod/search.php?st=advanced&page=1&qany=&qex=&none=&tadded=0&cat%5B%5D=5&qall={}
   scraper: sceneSearch
 sceneByFragment:
   action: scrapeXPath
   scraper: sceneSearch
-  queryURL: https://www.subbyhubby.com/vod/search.php?st=advanced&page=1&qany=&none=&tadded=0&cat%5B%5D=17&qex={title}
+  queryURL: https://www.clubdom.com/vod/search.php?st=advanced&page=1&qany=&none=&tadded=0&cat%5B%5D=5&qex={title}
   queryURLReplace:
      title:
        - regex: " "
@@ -50,7 +50,7 @@ xPathScrapers:
           selector: //base/@href
           postProcess:
             - map:
-                //www.subbyhubby.com/tour/: Subby Hubby
+                //www.clubdom.com/tour/: Club Dom
   vodScraper:
     scene:
       URL: //div[@class='cell content_tab_current']/a/@href
@@ -81,7 +81,7 @@ xPathScrapers:
                 - regex: https://(www.)?([^.]+)\..*
                   with: $2
             - map:
-                subbyhubby: Subby Hubby
+                clubdom: Club Dom
   sceneSearch:
     scene:
       Title:
