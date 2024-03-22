@@ -2,7 +2,7 @@ name: "DesperateAmateurs"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - desperateamateurs.com/
+      - desperateamateurs.com/tour3/updates/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -19,8 +19,8 @@ xPathScrapers:
         selector: //a[@class="fancybox"]/@href
         postProcess:
           - replace:
-            - regex: ^
-              with: https://desperateamateurs.com/tour3/
+              - regex: ^
+                with: https://desperateamateurs.com/tour3/
       Studio:
         Name:
           fixed: Desperate Amateurs
