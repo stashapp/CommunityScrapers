@@ -56,8 +56,8 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsSel
-        selector: //div[@class="g-cols onlydesktop"]//text()
-        concat: " "
+        selector: //div[@class="g-cols onlydesktop"]/p
+        concat: "\n\n"
       Tags:
         Name: //div[@class="metaHolder"]//a/span/text()
       Performers:
