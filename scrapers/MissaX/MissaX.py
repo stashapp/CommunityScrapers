@@ -1,144 +1,136 @@
-#this scraper scrapes title and uses it to search the site and grab a cover from the search results, among other things
-import base64
-import datetime
 import json
-import os
 import re
 import sys
 import urllib.parse
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from ther
+import cloudscraper
+from lxml import html
 
-# extra modules below need to be installed
-try:
-    import py_common.log as log
-except ModuleNotFoundError:
-    print("You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
-    sys.exit()
+import py_common.log as log
+from py_common.util import scraper_args
+from py_common.types import ScrapedScene
 
-try:
-    import cloudscraper
-except ModuleNotFoundError:
-    log.error("You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)")
-    log.error("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper")
-    sys.exit()
-    
-try:
-    from lxml import html, etree
-except ModuleNotFoundError:
-    log.error("You need to install the lxml module. (https://lxml.de/installation.html#installation)")
-    log.error("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml")
-    sys.exit()
+"This scraper scrapes title and uses it to search the site and grab a cover from the search results, among other things"
 
 STUDIO_MAP = {
-    'https://missax.com/tour/': 'MissaX',
-    'https://allherluv.com/tour/': 'All Her Luv',
+    "missax.com": "MissaX",
+    "allherluv.com": "All Her Luv",
 }
 
-PROXIES = {
-    }
-TIMEOUT = 10
-MAX_PAGES_TO_SEARCH = 20
+scraper = cloudscraper.create_scraper()
 
-def scraped_content(scraper, url):
+
+def scraped_content(url):
     try:
-        scraped = scraper.get(url, timeout=TIMEOUT, proxies=PROXIES)
-    except:
-        log.error("scrape error")
-    if scraped.status_code >= 400:
-        log.error(f"HTTP Error: {scraped.status_code}")
-    return scraped.content
-
-def scrape_scene_page(url): #scrape the main url
-    tree = scraped_content(scraper, url) #get page content
-    tree = html.fromstring(tree) #parse html
-    title = tree.xpath('//p[@class="raiting-section__title"]/text()')[0].strip() #title scrape
-    log.debug(f'Title:{title}')
-    date = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), " Added:")]/text()[1]')[0] #get date
-    date = re.sub(r"(?:.+Added:\s)([\d\/]*).+", r'\g<1>', date).strip() #date cleanup
-    date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d") #date parse
-    log.debug(f'Date:{date}')
-    studio = tree.xpath('//base/@href')[0].strip() #studio scrape
-    studio = studio.replace("www.", "")
-    studio = STUDIO_MAP.get(studio)  # studio map
-    log.debug(f'Studio:{studio}')
-    performers = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), "Featuring:")]//a/text()') #performers scrape
-    log.debug(f'Performers:{performers}')
-    tags = tree.xpath('//p[@class="dvd-scenes__data" and contains(text(), "Categories:")]//a/text()') #tags scrape
-    log.debug(f'Tags:{tags}')
-    details = tree.xpath('//p[@class="dvd-scenes__title"]/following-sibling::p//text()') #details scrape
-    details = ''.join(details) #join details
-    details = '\n'.join(' '.join(line.split()) for line in details.split('\n')) #get rid of double spaces
-    details = re.sub(r"\r?\n\n?", r'\n', details) #get rid of double newlines
-    log.debug(f'Details:{details}')
-    bad_cover_url = tree.xpath("//img[@src0_4x]/@src0_4x") #cover from scene's page if better one is not found (it will be)
-    datauri = "data:image/jpeg;base64,"
-    b64img = scrape_cover(scraper, studio, title, bad_cover_url)
-    return output_json(title,tags,date,details,datauri,b64img,studio,performers)
+        scraped = scraper.get(url)
+        scraped.raise_for_status()
+        return scraped.content
+    except Exception as e:
+        log.error(f"Unable to fetch '{url}': {e}")
+        exit(1)
 
 
-def scrape_cover(scraper, studio, title, bad_cover_url):
-    p = 1
+def scrape_cover(domain, title):
     # loop throught search result pages until img found
-    while p<MAX_PAGES_TO_SEARCH:
-        log.debug(f'Searching page {p} for cover')
-        url = f'https://{studio.replace(" ", "")}.com/tour/search.php?st=advanced&qall=&qany=&qex={urllib.parse.quote(title)}&none=&tadded=0&cat%5B%5D=5&page={p}'
-        tree = scraped_content(scraper, url) #get page content
-        tree = html.fromstring(tree) #parse html
-        if tree.xpath('//*[@class="photo-thumb video-thumb"]'): #if any search results present
-            try:
-                imgurl = tree.xpath(f'//img[@alt="{title}"]/@src0_4x')[0]
-                img = scraped_content(scraper, imgurl)
-                b64img = base64.b64encode(img)
-                log.debug('Cover found!')
-                return b64img
-            except:
-                if tree.xpath('//li[@class="active"]/following-sibling::li'): #if there is a next page
-                    p+=1
-                else:
-                    break
-        else:
+    for p in range(1, 6):
+        log.debug(f"Searching page {p} for cover")
+        url = f"https://{domain}/tour/search.php?st=advanced&qall=&qany=&qex={urllib.parse.quote(title)}&none=&tadded=0&cat%5B%5D=5&page={p}"
+        body = scraped_content(url)
+        tree = html.fromstring(body)
+        if image := tree.xpath(f'//img[@alt="{title}"]/@src0_4x'):
+            return image[0]
+        if not tree.xpath(
+            '//li[@class="active"]/following-sibling::li'
+        ):  # if there is a next page
             break
-    #just a failsafe
-    log.warning('better cover not found, returning the bad one')
-    img = scraped_content(scraper, bad_cover_url)
-    b64img = base64.b64encode(img)
-    return b64img
-    
+
+    log.warning(f"Unable to find better cover for {title}")
 
 
-def output_json(title,tags,date,details,datauri,b64img,studio,performers):
-    return {
-    'title': title,
-    'tags': [{
-        'name': x
-    } for x in tags],
-    'date': date,
-    'details': details.strip(),
-    'image': datauri + b64img.decode('utf-8'),
-    'studio': {
-        'name': studio
-    },
-    'performers': [{
-        'name': x.strip()
-    } for x in performers]
-}
+def scene_from_url(url) -> ScrapedScene:
+    domain = urllib.parse.urlparse(url).netloc.removeprefix("www.")
+    studio = STUDIO_MAP.get(domain, domain)
+    body = scraped_content(url)
+    tree = html.fromstring(body)
 
+    scene: ScrapedScene = {}
+
+    if title := tree.xpath('//p[@class="raiting-section__title"]'):
+        title = title[0].text.strip()
+        log.debug(f"Title: {title}")
+        scene["title"] = title
+    else:
+        log.warning("Title not found, bailing")
+        exit(1)
+
+    if (
+        subheader := tree.xpath(
+            '//p[@class="dvd-scenes__data" and contains(., " Added:")]'
+        )
+    ) and (
+        date := re.match(
+            r".*Added:\s(?P<month>\d\d)/(?P<day>\d\d)/(?P<year>\d{4}).*",
+            subheader[0].text_content(),
+            re.DOTALL | re.MULTILINE,
+        )
+    ):
+        date = f"{date.group('year')}-{date.group('month')}-{date.group('day')}"
+        log.debug(f"Date: {date}")
+        scene["date"] = date
+    else:
+        log.warning("Date not found")
+
+    if performers := tree.xpath(
+        '//p[@class="dvd-scenes__data"]//a[contains(@href, "models")]'
+    ):
+        scene["performers"] = [
+            {"name": x.text.strip(), "url": x.get("href")} for x in performers
+        ]
+        performers = ", ".join(p["name"] for p in scene["performers"])
+        log.debug(f"Performers: {performers}")
+    else:
+        log.warning("Performers not found")
+
+    if tags := tree.xpath(
+        '//p[@class="dvd-scenes__data"]//a[contains(@href, "categories")]'
+    ):
+        scene["tags"] = [{"name": x.text.strip()} for x in tags]     
+        tags = ", ".join(t["name"] for t in scene["tags"])
+        log.debug(f"Tags: {tags}")
+    else:
+        log.warning("Tags not found")
+
+    if details := tree.xpath(
+        '//p[@class="dvd-scenes__title"]/following-sibling::p//text()'
+    ):
+        details = "".join(details)
+        # Get rid of double spaces
+        details = "\n".join(" ".join(line.split()) for line in details.split("\n"))
+        # get rid of double newlines
+        details = re.sub(r"\r?\n\n?", r"\n", details).strip()
+        scene["details"] = details
+    else:
+        log.warning("Details not found")
+
+    scene["studio"] = {"name": studio, "url": f"https://{domain}"}
+
+    # cover from scene's page if better one is not found (it will be)
+    bad_cover_url = tree.xpath("//img[@src0_4x]/@src0_4x")
+    scene["image"] = scrape_cover(domain, title) or bad_cover_url
+    log.debug(f"Image: {scene['image']}")
+    return scene
 
 
 # FRAGNEMT = {"url": "https://allherluv.com/tour/trailers/Like-I-Do.html"}
 
-FRAGNEMT = json.loads(sys.stdin.read())
-if not FRAGNEMT['url']:
-    log.error('No URL entered.')
-    sys.exit()
-url = FRAGNEMT["url"]
+if __name__ == "__main__":
+    op, args = scraper_args()
+    result = None
+    match op, args:
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
 
-scraper = cloudscraper.create_scraper()
-ret = scrape_scene_page(url)
-print(json.dumps(ret))
+    print(json.dumps(result))

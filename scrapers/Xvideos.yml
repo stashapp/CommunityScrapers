@@ -18,7 +18,7 @@ sceneByFragment:
       - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
         with: $1
       # or expects an id
-      - regex: '(?i)^.+-(\d+)\..+$'
+      - regex: '^.*?(\d+)\..+$'
         with: $1
       # if no id is found in the filename
       - regex: .*\.[^\.]+$

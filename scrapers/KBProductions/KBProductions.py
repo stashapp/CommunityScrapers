@@ -7,7 +7,7 @@ from html.parser import HTMLParser
 
 import py_common.log as log
 from py_common.types import ScrapedMovie, ScrapedPerformer, ScrapedScene, ScrapedStudio
-from py_common.util import dig, replace_all, scraper_args
+from py_common.util import dig, guess_nationality, replace_all, scraper_args
 
 # Maps the `site_domain` key from the API
 # to studio names currently used on StashDB
@@ -22,11 +22,12 @@ studio_map = {
     "bjraw.com": "BJ Raw",
     "blackbullchallenge.com": "Black Bull Challenge",
     "cougarseason.com": "Cougar Season",
+    "creampiethais.com": "Creampie Thais",
     "deepthroatsirens.com": "Deepthroat Sirens",
     "dirtyauditions.com": "Dirty Auditions",
     "divine-dd.com": "Divine-DD",
     "facialsforever.com": "Facials Forever",
-    "freakmobmedia.com": "Freak Mob Media",
+    "freakmobmedia.com": "FreakMob Media",
     "gotfilled.com": "Got Filled",
     "hobybuchanon.com": "Hoby Buchanon",
     "inkedpov.com": "Inked POV",
@@ -40,6 +41,7 @@ studio_map = {
     "nylonperv.com": "Nylon Perv",
     "nympho.com": "Nympho",
     "poundedpetite.com": "Pounded Petite",
+    "premium-nickmarxx.com": "Nick Marxx",
     "red-xxx.com": "Red-XXX",
     "rickysroom.com": "Ricky's Room",
     "s3xus.com": "S3XUS",
@@ -59,114 +61,6 @@ studio_map = {
 }
 
 
-states = (
-    "AK",
-    "AL",
-    "AR",
-    "AZ",
-    "CA",
-    "CO",
-    "CT",
-    "DC",
-    "DE",
-    "FL",
-    "GA",
-    "HI",
-    "IA",
-    "ID",
-    "IL",
-    "IN",
-    "KS",
-    "KY",
-    "LA",
-    "MA",
-    "MD",
-    "ME",
-    "MI",
-    "MN",
-    "MO",
-    "MS",
-    "MT",
-    "NC",
-    "ND",
-    "NE",
-    "NH",
-    "NJ",
-    "NM",
-    "NV",
-    "NY",
-    "OH",
-    "OK",
-    "OR",
-    "PA",
-    "RI",
-    "SC",
-    "SD",
-    "TN",
-    "TX",
-    "UT",
-    "VA",
-    "VT",
-    "WA",
-    "WI",
-    "WV",
-    "WY",
-    "Alabama",
-    "Alaska",
-    "Arizona",
-    "Arkansas",
-    "California",
-    "Colorado",
-    "Connecticut",
-    "Delaware",
-    "Florida",
-    "Georgia",
-    "Hawaii",
-    "Idaho",
-    "Illinois",
-    "Indiana",
-    "Iowa",
-    "Kansas",
-    "Kentucky",
-    "Louisiana",
-    "Maine",
-    "Maryland",
-    "Massachusetts",
-    "Michigan",
-    "Minnesota",
-    "Mississippi",
-    "Missouri",
-    "Montana",
-    "Nebraska",
-    "Nevada",
-    "New Hampshire",
-    "New Jersey",
-    "New Mexico",
-    "New York",
-    "North Carolina",
-    "North Dakota",
-    "Ohio",
-    "Oklahoma",
-    "Oregon",
-    "Pennsylvania",
-    "Rhode Island",
-    "South Carolina",
-    "South Dakota",
-    "Tennessee",
-    "Texas",
-    "Utah",
-    "Vermont",
-    "Virginia",
-    "Washington",
-    "West Virginia",
-    "Wisconsin",
-    "Wyoming",
-    "United States",
-)
-
-state_map = {x: "USA" for x in states}
-
-
 def clean_url(url: str) -> str:
     # remove any query parameters
     return re.sub(r"\?.*", "", url)
@@ -176,6 +70,7 @@ def clean_url(url: str) -> str:
 def fix_url(url: str) -> str:
     url = url.replace("twmclassics.com", "topwebmodels.com")
     url = url.replace("suckthisdick.com", "hobybuchanon.com")
+    url = url.replace("premium-nickmarxx.com", "nickmarxx.com")
     tour_domain = (
         "nympho",
         "allanal",
@@ -295,8 +190,7 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
         performer["hair_color"] = hair_color
 
     if country := raw_performer.get("Born"):
-        country = country.split(",")[-1].strip()
-        performer["country"] = state_map.get(country, country)
+        performer["country"] = guess_nationality(country)
 
     if twitter := raw_performer.get("Twitter", "").removeprefix("@"):
         performer["twitter"] = f"https://twitter.com/{twitter}"

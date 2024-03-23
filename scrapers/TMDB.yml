@@ -1,0 +1,96 @@
+name: TheMovieDB
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - themoviedb.org
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - themoviedb.org
+    scraper: sceneScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: (//h2/a)[1]
+      Director: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile']/p[1]/a
+      Duration:
+        selector: //span[@class='runtime']
+        postProcess:
+          - replace:
+              - regex: "h "
+                with: ":"
+              - regex: "m"
+                with: ":00"
+      Date:
+        selector: //span[@class='release']
+        postProcess:
+          - replace:
+              - regex: \(.*$
+                with:
+          - parseDate: 01/02/2006
+      Synopsis: //div[@class='header_info']/div[@class='overview']/p
+      URL: //meta[@name='og:url']/@content
+      FrontImage:
+        selector: (//img[@class='poster']/@src)[1]
+        postProcess:
+          - replace:
+              - regex: w300
+                with: w600
+          - replace:
+              - regex: h450
+                with: h900
+  sceneScraper:
+    scene:
+      Title: (//h2/a)[1]
+      Details: //div[@class='header_info']/div[@class='overview']/p
+      Director: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile']/p[1]/a
+      Date:
+        selector: //span[@class='release']
+        postProcess:
+          - replace:
+              - regex: \(.*$
+                with:
+          - parseDate: 01/02/2006
+      Studio:
+        Name: //a[@label="Studio"]/text()
+      Movies:
+        Name: (//h2/a)[1]
+        URL: //link[@rel="canonical"]/@href
+        Director: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile']/p[1]/a
+        Duration:
+          selector: //small[contains(text(), "Length")]/following-sibling::text()
+          postProcess:
+            - replace:
+                - regex: " hrs. "
+                  with: ":"
+                - regex: " mins."
+                  with: ":00"
+        Date:
+          selector: //span[@class='release']
+          postProcess:
+            - replace:
+                - regex: \(.*$
+                  with:
+            - parseDate: 01/02/2006
+        Synopsis: //div[@class='header_info']/div[@class='overview']/p
+        FrontImage:
+          selector: (//img[@class='poster']/@src)[1]
+          postProcess:
+            - replace:
+                - regex: w300
+                  with: w600
+            - replace:
+                - regex: h450
+                  with: h900
+      Performers:
+        Name: //ol[@class='people scroller']/li[@class='card']/p[1]
+      URL: //meta[@name='og:url']/@content
+
+driver:
+  headers:
+    - Key: "User-Agent"
+      Value: stash-scraper/1.0.0
+# Last Updated March 11, 2024

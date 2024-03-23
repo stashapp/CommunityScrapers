@@ -1,0 +1,58 @@
+name: POV Train
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - povtrain.com/tour/trailer.php?id=
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.povtrain.com/tour/search.php?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //ul[@class="slides"]/li//h3
+      URL: //ul[@class="slides"]/li/a/@href
+      Date:
+        selector: //ul[@class="slides"]/li//comment()[contains(., "Date")]
+        postProcess: &parseDate
+          - replace:
+              - regex: .*</strong>\s*(.*)<.*
+                with: $1
+          - parseDate: January 2, 2006
+      Image:
+        selector: //ul[@class="slides"]/li/a/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://povtrain.com/
+  sceneScraper:
+    scene:
+      Title: //h2
+      Details: //div[@class="desc"]/p
+      Date:
+        selector: //comment()[contains(., "Date Added")]
+        postProcess: *parseDate
+      Image:
+        # Sometimes they put the preview image in a script tag, sometimes it's an actual img
+        selector: //script[contains(., "image:")]/text() | //div[contains(@class, "alpha")]//img[contains(@id, "set-target")]/@src
+        postProcess:
+          - replace:
+              # This regex will only match when we have a script tag
+              # and gives the same result as the img tag, a relative URL
+              - regex: .*image:\s*"([^"]+).*
+                with: $1
+              - regex: ^
+                with: https://povtrain.com
+      Studio:
+        Name:
+          fixed: POV Train
+      Tags:
+        Name: //h5[@class="video_categories"]/a
+      Performers:
+        Name: //h5[@class="featuring_model"]/a
+# Last Updated March 10, 2024

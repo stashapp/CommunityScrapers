@@ -1,0 +1,135 @@
+name: GIGA
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.akiba-web.com/search/index.php?menu=1&keyword={filename}&search=OK
+  queryURLReplace:
+    filename:
+      - regex: \..+$
+        with: ""
+  scraper: sceneQueryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.akiba-web.com/
+      - akiba-web.com/
+    scraper: sceneScraper
+    queryURL: "{url}"
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.akiba-web.com/search/index.php?menu=1&keyword={}&search=OK
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $videoItem: //*[@id="list"]
+    scene:
+      Date:
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
+        postProcess:
+          - replace:
+            - regex: "/"
+              with: "-"
+      Details: 
+        selector: $videoItem/ul/li/a/img/@alt]
+      Director:
+        selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]  
+      Image:
+        selector: $videoItem/ul/li/a/img/@src
+        postProcess:
+          - replace:
+            - regex: pac_s.jpg
+              with: pac_l.jpg
+      Performers:
+        Name: $videoItem/ul/li[2]/ul/li[2]/dl[2]/dd[1]/ul[1]/li
+      Studio:
+        Name:
+          fixed: "Giga"
+      Title:
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
+      URL: 
+        selector: $videoItem/ul/li/a/@href
+        postProcess:
+          - replace:
+            - regex: .*\/....*\/
+              with: https://www.akiba-web.com/product/
+  sceneQueryScraper:
+    common:
+      $videoItem: //*[@id="list"]
+    scene:
+      Date:
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
+        postProcess:
+          - replace:
+            - regex: "/"
+              with: "-"
+      Details: 
+        selector: $videoItem/ul/li/a/img/@alt]
+      Director:
+        selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]  
+      Image:
+        selector: $videoItem/ul/li/a/img/@src
+        postProcess:
+          - replace:
+            - regex: pac_s.jpg
+              with: pac_l.jpg
+      Performers:
+        Name: $videoItem/ul/li[2]/ul/li[2]/dl[2]/dd[1]/ul[1]/li
+      Studio:
+        Name:
+          fixed: "Giga"
+      Title:
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
+      URL: 
+        selector: $videoItem/ul/li/a/@href
+        postProcess:
+          - replace:
+            - regex: .*\/....*\/
+              with: https://www.akiba-web.com/product/
+  sceneScraper:
+    scene:
+      Code:
+        selector:  //*[@id="works_txt"]/ul/li[3]/dl/dd
+      Date:
+        selector: //*[@id="works_txt"]/ul/li[7]/dl/dd
+        postProcess:
+          - replace:
+            - regex: "/"
+              with: "-"
+      Details:
+        selector: //*[@id="works_txt"]/ul/li[2]/b
+      Director:
+        selector: //*[@id="works_txt"]/ul/li[5]/dl/dd
+      Image:  
+        selector: //*[@id="works_pic"]/ul/li[1]/a/@href | //*[@id="works_pic"]/ul/li[1]/img/@src
+        postProcess:
+          - replace:
+            - regex: pac_s.jpg
+              with: pac_l.jpg
+      Performers:
+        Name: //*[@id="works_txt"]/ul/li[4]/dl/dd/span/a
+      Studio:
+        Name:
+          fixed: "Giga"
+      Title:
+        selector:  //*[@id="works_txt"]/ul/li[3]/dl/dd
+      URL:
+        selector: //*[@id="works_pic"]/ul/li[3]/a[1]/@href
+        postProcess:
+          - replace:
+            - regex: .*product_id=
+              with: https://www.akiba-web.com/product/index.php?product_id=
+driver:
+  useCDP: false 
+  cookies:
+    - CookieURL: "https://www.akiba-web.com"
+      Cookies:
+        - Name: "old_check"
+          Domain: ".www.akiba-web.com"
+          Value: "yes"
+          Path: "/"
+# Last Updated February 27, 2024

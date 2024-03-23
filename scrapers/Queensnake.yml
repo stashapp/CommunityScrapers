@@ -1,0 +1,61 @@
+name: Queensnake
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - artofscat.com/previewmovie/
+      - queensect.com/previewmovie/
+      - queensnake.com/previewmovie/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //span[@class="contentFilmName"]
+      Details: //div[@class="contentPreviewDescription"]
+      Date:
+        selector: //span[@class="contentFileDate"]
+        postProcess:
+          - replace:
+              - regex: (\d{4}) (\w+) (\d+).*
+                with: $1 $2 $3
+          - parseDate: 2006 January 2
+      Image: //img[contains(@src, "preview")]/@src
+      # Uncomment this and remove the above line if you want
+      # to scrape the animated gif instead of the static poster image
+      # Image:
+      #   selector: //script[contains(text(),"poster")]
+      #   postProcess:
+      #     - replace:
+      #         - regex: .*?"poster",\s'([^']+).*
+      #           with: $1
+      Studio:
+        Name:
+          selector: //meta[@name="author"]/@content
+          postProcess:
+            - map:
+                artofscat.com: Art of Scat
+                queensect.com: Queensect
+                queensnake.com: Queensnake
+      Tags:
+        Name: //div[@class="contentPreviewTags"]/a
+
+driver:
+  cookies:
+    - CookieURL: https://artofscat.com
+      Cookies:
+        - Name: cLegalAge
+          Value: "true"
+          Domain: "artofscat.com"
+          Path: "/"
+    - CookieURL: https://queensect.com
+      Cookies:
+        - Name: cLegalAge
+          Value: "true"
+          Domain: "queensect.com"
+          Path: "/"
+    - CookieURL: https://queensnake.com
+      Cookies:
+        - Name: cLegalAge
+          Value: "true"
+          Domain: "queensnake.com"
+          Path: "/"
+# Last Updated March 18, 2024

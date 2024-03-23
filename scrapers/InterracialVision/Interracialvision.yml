@@ -1,0 +1,50 @@
+# requires: Algolia
+# scrapes: InterracialVision
+name: InterracialVision
+sceneByURL:
+  - action: script
+    url:
+      - interracialvision.com/en/video/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - interracialvision
+movieByURL:
+  - action: script
+    url:
+      - interracialvision.com/en/movie/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - interracialvision
+      - movie
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - interracialvision
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - interracialvision
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - interracialvision
+    - validName
+galleryByURL:
+  - action: script
+    url:
+      - interracialvision.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - interracialvision
+      - gallery
+# Last Updated December 22, 2022

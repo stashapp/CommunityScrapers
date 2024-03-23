@@ -48,7 +48,7 @@ xPathScrapers:
               - regex: ^
                 with: "https://www.pornhub.com"
       Image:
-        selector: $searchItem//div[contains(@class, "phimage")]//img/@data-thumb_url
+        selector: $searchItem//div[contains(@class, "phimage")]//img/@data-mediumthumb
   performerSearch:
     performer:
       Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()

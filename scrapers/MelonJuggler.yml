@@ -1,20 +1,28 @@
-name: Pawged
+name: Melon Juggler
 sceneByURL:
   - action: scrapeXPath
     url:
-      - pawged.com
+      - melonjuggler.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $model: //span[@class="tour_update_models"]/a
     scene:
       Title:
         selector: //span[@class="update_title"]
       Date:
         selector: //span[@class="availdate"]
         postProcess:
-          - parseDate: 01/02/2006
+          - replace:
+              - regex: (st|nd|rd|th)
+                with: ""
+          - parseDate: 2 Jan 2006
       Performers:
-        Name: //div[@class="update_block_info"]/span[2]/a
+        Name:
+          selector: $model/text()
+        URL:
+          selector: $model/@href
       Tags:
         Name: //span[@class="update_tags"]/a
       Details:
@@ -23,5 +31,5 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
-          fixed: Pawged
-# Last Updated May 09, 2021
+          fixed: Melon Juggler
+# Last Updated March 18, 2024

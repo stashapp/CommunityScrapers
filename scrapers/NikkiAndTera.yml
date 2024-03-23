@@ -3,7 +3,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - nikkiphoenixxx.com
-      - terapatrick.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -35,7 +34,5 @@ xPathScrapers:
           selector: //base/@href
           postProcess:
             - map: # Mapped some names so they fit in better than single names.
-                https://terapatrick.com/: Tera Patrick
                 https://www.nikkiphoenixxx.com/tour/: Nikki Phoenix
-# Last Updated April 15, 2021
-
+# Last Updated February 8, 2024

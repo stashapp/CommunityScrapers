@@ -8,13 +8,16 @@ sceneByURL:
       - danidaniels.com/scene/
       - dillionation.com/scene/
       - fallinlovia.com/scene/
+      - ginagerson.xxx/scene/
+      - lonelymeow.com/scene/
       - modelcentro.net/scene
       - mylifeinmiami.com/scene/
       - natashanice.com/scene/
       - tanyatate.xxx/scene/
       - vinaskyxxx.com/scene/
+      - womenwhosmoke.com/scene/
     action: script
     script:
       - python
       - ModelCentroAPI.py
-# Last Updated September 29, 2022
+# Last Updated March 16, 2024

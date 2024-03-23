@@ -12,25 +12,35 @@ movieByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $info: &infoSel //div[@class="container main-item"]
+      $info: &infoSel //div[@class="content-container main-content"]
     scene:
-      Title: &titleSel $info//h1[@class="latest-scene-title"]/text()
+      Title: &titleSel //div[@class="details__title"]/text()
       Studio: &studioAttr
         Name:
           fixed: "VRHush"
       Date: &dateAttr
-        selector: $info//div[@class="row latest-scene-meta-1"]/div[@class="col-xs-6 text-left"]/text()
-        postProcess:
-          - parseDate: Jan 2, 2006
-      Details: &detailsAttr
-        selector: $info//span[contains(@class, "full-description")]/text()
+        selector: //div[@class="details__info__details__label"]/text()
         concat: " "
+        postProcess:
+          - replace:
+              - regex: \d+:\d+ ([\d/]+)
+                with: $1
+          - parseDate: "2006/01/02"
+      Details: &detailsAttr
+        selector: //p[@class="tab__about"]/text()
       Tags:
-        Name: $info//p[@class="tag-container"]//a[contains(@class, "label label-tag")]/text()
+        Name:
+          selector: //div[@class="tag-list"]//a[contains(@class, "tag-item")]/text()
+          concat: __SEPARATOR__
+          postProcess:
+            - replace:
+                - regex: $
+                  with: __SEPARATOR__Virtual Reality
+          split: __SEPARATOR__
       Performers:
-        Name: $info//h5[@class="latest-scene-subtitle"]//a/text()
+        Name: //span[@class="details__info__starring__wrapper__labelWrapper__name"]//a/text()
       Image: &imageAttr
-        selector: //web-vr-video-player/@coverimage
+        selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
               - regex: ^
@@ -49,4 +59,4 @@ xPathScrapers:
       Date: *dateAttr
       Synopsis: *detailsAttr
       FrontImage: *imageAttr
-# Last Updated September 18, 2021
+# Last Updated February 16th, 2024

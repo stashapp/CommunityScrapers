@@ -63,12 +63,11 @@ xPathScrapers:
                 VirtualXPorn: "Virtual X Porn"
                 WankitnowVR: "Wank It Now VR"
       Image:
-        selector: //div[contains(@class,"splash-screen")]/@style
+        selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-              # https://regex101.com/r/fszqAQ/4
-              - regex: .*url\((?:&quot;|")?([^");]*)(?:&quot;|")?\).*
-                with: $1
+              - regex: -app\.
+                with: -desktop.
       URL: &sceneUrl //link[@rel="canonical"]/@href
       Code:
         selector: *sceneUrl

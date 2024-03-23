@@ -1,0 +1,70 @@
+name: Jax Slayher
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jaxslayher.com/tour/video/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - jaxslayher.com/tour/model/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="title"]
+      Date:
+        selector: //ul[@class="statistic_list"]/li[contains(., "/")]/span
+        postProcess:
+          - replace:
+              - regex: (\w+)\s*(\d+)/(\d+)
+                with: $1 $2, $3
+          - parseDate: Jan 02, 2006
+      # Images are lazy loaded, but they follow a pattern so we can
+      # get the ID from a gallery URL and construct the image URL from that
+      Image:
+        selector: (//img)[1]/@src
+        postProcess:
+          - replace:
+              - regex: .*?/(\d+)/.*
+                with: https://jaxslayher.com/images/updates/$1-1280.jpg
+      Studio:
+        Name:
+          fixed: Jax Slayher
+      Performers:
+        Name: //div[@class="actor"]//a
+        URL:
+          selector: //div[@class="actor"]//a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://jaxslayher.com
+  performerScraper:
+    performer:
+      Name: //div[@class="title"]
+      Image: //div[@class="posted_model"]//img/@src
+      Birthdate:
+        selector: //li/div[contains(., "Birthdate")]/following-sibling::div
+        postProcess:
+          - parseDate: "2006 January 02"
+      EyeColor: //li/div[contains(., "Eyes")]/following-sibling::div
+      HairColor: //li/div[contains(., "Hair")]/following-sibling::div
+      Measurements: //li/div[contains(., "Measurements")]/following-sibling::div
+      Weight:
+        selector: //li/div[contains(., "Weight")]/following-sibling::div
+        postProcess:
+          - replace:
+              - regex: lbs
+                with:
+          - lbToKg: true
+      Height:
+        selector: //li/div[contains(., "Height")]/following-sibling::div
+        postProcess:
+          - feetToCm: true
+      Country:
+        selector: //li/div[contains(., "Born")]/following-sibling::div
+        postProcess:
+          - replace:
+              - regex: .*?,\s*(.*)
+                with: $1
+# Last Updated March 11, 2024

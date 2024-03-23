@@ -24,6 +24,7 @@ sceneByURL:
       - baeb.com/video/
       - bbcpie.com/video/
       - castingcouch-x.com/video/
+      - creepypa.com/video/
       - cum4k.com/video/
       - exotic4k.com/video/
       - facials4k.com/video/
@@ -62,34 +63,27 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $scene: //div[@id="trailer_player"]
     scene:
-      Title: //h1[@class="t2019-stitle py-1 py-sm-2 pt-lg-0 mb-0 border-bottom"]/text()
-      Details: //div[@id="t2019-description"]/text()
+      Title: $scene//h1
+      Details: $scene//*[contains(@class, "fa-quote-right")]/following-sibling::span
       Performers:
-        Name: //div[@id="t2019-models"]/a/text()
+        Name: $scene//a[contains(@href, "models")]
       Image:
-        selector: //video[@id="player"]/@poster
+        selector: >-
+          $scene//video[@id="player"]/@poster |
+          $scene//deo-video/@cover-image |
+          $scene//img[@id="no-player-image"]/@src
         postProcess:
           - replace:
               - regex: ([?&]img[wh]=\d+)+$
                 with:
       Studio:
         Name:
-          selector: //div[@id="navigation"]/h5/a/@alt
+          selector: //p[contains(text(), "Copyright ©")]
           postProcess:
-            - map:
-                Baeb: BAEB
-                Casting Couch X: Casting Couch-X
-                Cum4K: Cum 4K
-                Exotic4k: Exotic 4K
-                GirlCum: Girl Cum
-                MomCum: Mom Cum
-                NannySpy: Nanny Spy
-                SpyFam: Spy Fam
-                Tiny4K: Tiny 4K
-                WetVR: Wet VR
-      Date:
-        selector: //div[contains(text(), 'RELEASED')]/span/text()
-        postProcess:
-          - parseDate: January 02, 2006
-# Last Updated February 06, 2023
+            - replace:
+                - regex: .*?\d{4}\s+([^.]+).*
+                  with: $1
+# Last Updated March 22, 2024

@@ -1,23 +1,34 @@
-name: YummySofie
+# requires: py_common
+name: Broken Latina Whores
 sceneByURL:
   - action: scrapeXPath
     url:
-      - yummysofie.com
+      - brokenlatinawhores.com/updates
     scraper: sceneScraper
+performerByURL:
+  - action: script
+    url:
+      - brokenlatinawhores.com/models
+    script:
+      - python3
+      - BrokenLatinaWhores.py
+      - performerByURL
 xPathScrapers:
   sceneScraper:
+    common:
+      $model: //span[@class="tour_update_models"]/a
     scene:
       Title:
         selector: //span[@class="update_title"]
-      Performers:
-        Name: //span[@class="tour_update_models"]/a
       Date:
         selector: //span[@class="availdate"]
         postProcess:
-          - replace:
-              - regex: ^(\d{2}/\d{2}/\d{4}).+
-                with: $1
           - parseDate: 01/02/2006
+      Performers:
+        Name:
+          selector: $model/text()
+        URL:
+          selector: $model/@href
       Tags:
         Name: //span[@class="update_tags"]/a
       Details:
@@ -26,5 +37,6 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
-          fixed: Yummy Sofie
-# Last Updated February 24, 2022
+          fixed: Broken Latina Whores
+
+# Last Updated March 16, 2024

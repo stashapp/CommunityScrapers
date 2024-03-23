@@ -1,0 +1,35 @@
+name: Naughty Alysha
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - naughtyalysha.com/tour/trailers
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //li[@class="update_models"]/a
+      $image: //div[@class='player-thumb']/img
+    scene:
+      Title: //div[@class="videoDetails clear"]//h3
+      Date:
+        selector: //span[contains(., "Date Added:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: //div[@class="videoDetails clear"]/p
+      Tags:
+        Name: //li[contains(text(), "Tags:")]/following-sibling::li/a/text()
+      Performers:
+        Name: $performer
+        URL: $performer/@href
+      Image:
+        selector: $image/@src0_4x | $image/@src0_3x | $image/@src0_2x | $image/@src0_1x | //script[contains(text(),"src0_3x")]/text()
+        postProcess:
+          - replace:
+              - regex: .*src0_3x="([^"]+).*
+                with: $1
+              - regex: ^
+                with: https://naughtyalysha.com
+      Studio:
+        Name:
+          fixed: Naughty Alysha
+# Last Updated February 29, 2024

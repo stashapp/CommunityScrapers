@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - javhd.com/en/id/
+      - javhd.com/en/studio/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -24,6 +25,7 @@ xPathScrapers:
           - replace:
               - regex: .+datePublished":"([^"]+)",.+
                 with: $1
+          - parseDate: "2006-01-02T15:04:05-07:00"
       Title:
         selector: //h1[@class="content__title"]
       Tags:
