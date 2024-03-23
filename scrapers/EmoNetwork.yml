@@ -1,0 +1,38 @@
+name: "EmoNetwork"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - emonetwork.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="trailer"]//img/@alt
+      Details:
+        selector: //div[@class="videoContainer"]//p/text()
+      Performers:
+        Name:
+          selector: //h2[contains(text(),'Models')]/a/text()
+      Image:
+        selector: //div[@class="trailer"]//img/@src
+      Date:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ^([^-]+).+
+                with: $1
+          - parseDate: January 02, 2006
+      Tags:
+        Name:
+          selector: //h4[contains(text(),'Search Tags')]/a/text()
+      Studio:
+        Name:
+          selector: //h3[contains(text(),'Site')]/a/text()
+          postProcess:
+            - map:
+                EmoTwinks: "Emo Twinks"
+                ExposedEmos: "Exposed Emos"
+                HomoEmo: "Homo Emo"
+                HomoScene: "Homo Scene"
+# Last Updated March 23, 2024
