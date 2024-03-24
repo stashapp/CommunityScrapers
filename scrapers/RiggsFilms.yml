@@ -13,7 +13,7 @@ jsonScrapers:
   sceneScraper:
     scene:
       Title: title
-      Details: decription
+      Details: description
       Date:
         selector: publish_date
         postProcess:
