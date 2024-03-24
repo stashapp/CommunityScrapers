@@ -1,0 +1,31 @@
+name: RoyalFetishFilms
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - royalfetishxxx.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: Royal Fetish Films
+      Performers:
+        Name: 
+          selector: //a[contains(@href, "castmembers")]
+          postProcess:
+            - replace:
+                - regex: \s*,\s*
+                  with: ""
+      Title: //meta[@property="og:title"]/@content
+      Details: //meta[@property="og:description"]/@content
+      Tags:
+        Name: //a[contains(@href, "tags")]
+      Image: //meta[@property="og:image"]/@content
+driver:
+  useCDP: true
+  sleep: 4
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+# Last Updated March 23, 2024
