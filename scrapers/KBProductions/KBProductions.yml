@@ -1,7 +1,12 @@
 name: KB Productions
 # requires: py_common
-# scrapes: 2 Girls 1 Camera, All Anal, Alt Erotic, Amazing Films, Anal Only, Benefit Monkey, Big Gulp Girls, BJ Raw, Black Bull Challenge, Cougar Season, Creampie Thais, Deepthroat Sirens, Dirty Auditions, Divine-DD, Facials Forever, Freak Mob Media, Got Filled, Hoby Buchanon, Inked POV, Inserted, JAV888, Lady Sonia, LezKey, LucidFlix, Mean Feet Fetish, Hoby Buchanon, Nylon Perv, Nympho, Pounded Petite, Red-XXX, Ricky's Room, S3XUS, Seska, Sexy Modern Bull, She's Brand New, SIDECHICK, Suck This Dick, Swallowed, Top Web Models, True Anal, TWM Classics, Xful, Yes Girlz, Yummy Couple, Z-Filmz
+# scrapes: 2 Girls 1 Camera, All Anal, Alt Erotic, Amazing Films, Anal Only, Benefit Monkey, Big Gulp Girls, BJ Raw, Black Bull Challenge, Cougar Season, Creampie Thais, Deepthroat Sirens, Dirty Auditions, Divine-DD, Emo Network, Facials Forever, Freak Mob Media, Gay Life Network, Got Filled, Hoby Buchanon, Inked POV, Inserted, JAV888, Lady Sonia, LezKey, LucidFlix, Mean Feet Fetish, Hoby Buchanon, Nylon Perv, Nympho, Pounded Petite, Red-XXX, Ricky's Room, S3XUS, Seska, Sexy Modern Bull, She's Brand New, SIDECHICK, Suck This Dick, Swallowed, Top Web Models, True Anal, TWM Classics, Xful, Yes Girlz, Yummy Couple, Z-Filmz
 sceneByURL:
+  - action: scrapeXPath
+    url:
+      - emonetwork.com
+      - gaylifenetwork.com
+    scraper: sceneScraper
   - url:
       - 2girls1camera.com/scenes
       - alterotic.com/videos
@@ -105,4 +110,41 @@ performerByURL:
       - python
       - KBProductions.py
       - performer-by-url
-# Last Updated February 05, 2024
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="trailer"]//img/@alt
+      Details: //div[@class="videoContainer"]//p[not(contains(@class,'vjs-no-js'))]/text()
+      Performers:
+        Name: //h2[contains(text(),'Models')]/a/text()
+      Image:
+        selector: //div[@class="trailer"]//img/@src | //video/@poster
+        postProcess:
+          - replace:
+              - regex: ^(https:)?
+                with: "https:"
+      Date:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ^([^-]+).+
+                with: $1 
+          - parseDate: January 2, 2006
+      Tags:
+        Name:
+          selector: //h4[contains(text(),'Search Tags')]/a/text()
+      Studio:
+        Name:
+          selector: //h3[contains(text(),'Site')]/a/text()
+          postProcess:
+            - map:
+                BeddableBoys: "Beddable Boys"
+                BestBareBack: "Best Bareback"
+                EmoTwinks: "Emo Twinks"
+                ExposedEmos: "Exposed Emos"
+                HomoEmo: "Homo Emo"
+                HomoScene: "Homo Scene"
+                LollipopTwinks: "Lollipop Twinks"
+                Twinklight: "Twink Light"
+# Last Updated March 24, 2024
