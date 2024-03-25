@@ -5,6 +5,7 @@ sceneByURL:
     url:
       - americanmusclehunks.com/videos/
       - bangbangboys.com/videos/
+      - cumdumpsluts.com/videos
       - dirtyboysociety.com/videos/
       - edwardjames.com/videos/
       - ftmmen.com/videos/
@@ -101,6 +102,7 @@ xPathScrapers:
                 bangbangboys: Bang Bang Boys
                 boundtwinks: Bound Twinks
                 boyforsale: Boy For Sale
+                cumdumpsluts: Cum Dump Sluts
                 dirtyboysociety: Dirty Boy Society
                 edwardjames: Edward James
                 ftmmen: FTM Men
@@ -171,6 +173,8 @@ xPathScrapers:
                 with: boundtwinks
               - regex: BoyForSale
                 with: boyforsale
+              - regex: CumDumpSluts
+                with: cumdumpsluts
               - regex: DirtyBoySociety
                 with: dirtyboysociety
               - regex: EdwardJames
