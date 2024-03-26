@@ -1,18 +1,18 @@
-name: Paco (EN)
+name: Paco (JP)
 sceneByURL:
   - action: scrapeJson
     url:
-      - en.pacopacomama.com
+      - www.pacopacomama.com
     scraper: sceneScraper
     queryURL: "{url}"
     queryURLReplace:
       url:
         - regex: .*/movie(s|pages)/([^/]+).*
-          with: https://en.pacopacomama.com/dyn/phpauto/movie_details/movie_id/$2.json
+          with: https://www.pacopacomama.com/dyn/phpauto/movie_details/movie_id/$2.json
 
 sceneByFragment:
   action: scrapeJson
-  queryURL: https://en.pacopacomama.com/dyn/phpauto/movie_details/movie_id/{filename}.json
+  queryURL: https://www.pacopacomama.com/dyn/phpauto/movie_details/movie_id/{filename}.json
   # constructs the movie URL from the filename, provided that the filename includes the movie id
   queryURLReplace:
     filename:
@@ -22,29 +22,27 @@ sceneByFragment:
 jsonScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: "[TitleEn,Title]"
-        concat: "|" # get rid of empty result
-        split: "|"
+      Title: Title
       Date:
         selector: Release
         postProcess:
           - parseDate: 2006-01-02
       Performers:
-        Name: ActressesEn
+        Name: Actresses
       Image: ThumbHigh
       Tags:
-        Name: UCNAMEEn
-      Details: DescEn
+        Name: UCNAME
+      Details: Desc
       URL:
         selector: MovieID
         postProcess:
           - replace:
               - regex: ^
-                with: "https://en.pacopacomama.com/movies/"
+                with: "https://www.pacopacomama.com/movies/"
               - regex: $
                 with: "/"
       Studio:
         Name:
-          fixed: PacoPacoMama
+          fixed: パコパコママ
 # Last Updated March 26, 2024
+
