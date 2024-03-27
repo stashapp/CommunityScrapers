@@ -1,0 +1,77 @@
+name: unkotare.com
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - unkotare.com
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.unkotare.com/moviepages/{filename}/index.html
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: unkotare_(.*)\..+$
+        # heyzo uses a 4 digit number for ids, here we take a series of numbers just to be safe
+        with: $1
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $table: //div[@class="head_banner1"]/@title
+    scene:
+      Title: //div[@class="head_banner1"]/@title
+      URL: 
+        selector: //div[@class="prof_pict_area"]/img/@src
+        postProcess:
+          - replace:
+              - regex: .*moviepages\/(.*?)\/.*
+                with: https://www.unkotare.com/moviepages/$1/index.html
+      Details:
+        selector: //div[@id="unko_rank_area"]/script or //div[@class="namearea"]/div or //div[@class="profvalue"]/div or //div[@class="unko_comment"]
+        concat: "📢📢📢"
+        postProcess:
+          - replace:
+              - regex: (\s|\S)*背景色.*?data(\s|\S)*?\s{5}(\d),(\s|\S)*?(\d)(\s|\S)*?(\d)(\s|\S)*?(\d)(\s|\S)*?(\d)(\s|\S)*?📢📢📢(.*?)📢📢📢(.*?)📢📢📢(.*?)📢📢📢(.*?)📢📢📢(.*)
+                with: 👩$14 $13  📏身高：$15  👙三围：$16  💩状态：色 $3/5, 味 $5/5, 大小 $7/5, 硬度 $9/5, 形态 $11/5  🍽️:昨日晚餐：$17
+      Date:
+        selector: $table/td[contains(.,"Released") or contains(., "公開日")]/following-sibling::td/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: 
+          selector: //div[@class="namearea"]/div[@class="d1"]
+          postProcess:
+          - replace:
+              - regex: (.*).\d{2}.
+                with: $1
+      Code:
+        selector: //div[@class="prof_pict_area"]/img/@src
+        postProcess:
+          - replace:
+              - regex: .*moviepages\/(.*?)\/.*
+                with: $1
+      Tags:
+        Name: 
+          selector: //meta[@name="keywords"]/@content
+          split: ","
+      Image:
+        selector: //div[@class="prof_pict_area"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+      Studio:
+        Name:
+          fixed: Unkotare
+driver:
+  cookies:
+    - CookieURL: "https://www.unkotare.com/"
+      Cookies:
+        - Name: "over18_confirmed"
+          Domain: ".unkotare.com"
+          Value: "1"
+          Path: "/"
+debug:
+  printHTML: false
+# Last Updated Jan 11, 2024

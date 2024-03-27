@@ -1,0 +1,56 @@
+name: Heyzo-JP
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.heyzo.com/moviepages
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.heyzo.com/moviepages/{filename}
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: (.*[^a-zA-Z\d])*(\d+)[^a-zA-Z\d].*
+        # heyzo uses a 4 digit number for ids, here we take a series of numbers just to be safe
+        with: $2
+      - regex: $
+        with: /index.html
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $table: //div[@class="info-bg"]/table/tbody/tr
+    scene:
+      Title: /html/head/title/text()
+      URL: 
+        selector: /html/head/meta[@property="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+      Details: //p[@class="memo"]
+      Date:
+        selector: $table/td[contains(.,"Released") or contains(., "公開日")]/following-sibling::td/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Performers:
+        Name: $table/td[contains(.,"Actress") or contains(.,"出演")]/following-sibling::td/a/span
+      Code:
+        selector: //script[contains(.,"movieId =")]
+        postProcess:
+          - replace:
+              - regex: .*movieId\s=\s\'(\d+)\'.*
+                with: Heyzo-$1
+      Tags:
+        Name: //tr[@class="table-tag-keyword-small"]//ul[@class="tag-keyword-list"]/li
+      Image:
+        selector: /html/head/meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: .*(www.*jpg).*
+                with: https://$1
+      Studio:
+        Name:
+          fixed: Heyzo
+# Last Updated Jan 11, 2024

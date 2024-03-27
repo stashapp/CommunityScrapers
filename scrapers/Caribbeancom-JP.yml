@@ -1,0 +1,113 @@
+name: Caribbeancom-JP
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.caribbeancom.com/moviepages
+      - www.caribbeancompr.com/moviepages
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.caribbeancom{filename}
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: .*(\d{6}-\d{3}).* # carribeancom uses ids with form like 062212-055
+        with: .com/moviepages/$1
+      - regex: .*(\d{6}_\d{3}).* # caribbeancompr uses 062212_055
+        with: pr.com/moviepages/$1
+      - regex: $
+        with: /index.html
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $movieinfo: //div[@class="movie-info section"]
+    scene:
+      Title: /html/head/title/text()
+      # //div[contains(@class,"heading")]/h1/text()
+      Details: //div[contains(@class,"movie-info")]//p
+      URL:
+        selector: //link[@hreflang="en-US"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/")]
+        postProcess:
+          - replace:
+              - regex: index\.html$
+                with: index.html
+              - regex: en\.caribbeancom
+                with: www.caribbeancom
+              - regex: eng/moviepages
+                with: moviepages
+              - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
+                with: https://www.caribbeancompr.com/moviepages/$3/index.html
+      Date:
+        selector: //ul/li/span[contains(.,"配信日")]/../span[@class="spec-content"]
+        postProcess:
+          - replace:
+              - regex: (\d{4}).(\d{2}).(\d{2})
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      Performers:
+        Name:
+          selector: //ul/li/span[contains(.,"出演")]/..//a
+      Tags:
+        Name: //ul/li/span[contains(.,"タグ")]/../span/a[contains(@class,"spec")]
+      Image:
+        selector: //link[@hreflang="en-US"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/")]
+        postProcess:
+          - replace:
+              - regex: index\.html$
+                with: images/l.jpg
+              - regex: en\.caribbeancom
+                with: www.caribbeancom
+              - regex: eng/moviepages
+                with: moviepages
+              - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
+                with: https://www.caribbeancompr.com/moviepages/$3/images/$1
+      Studio:
+        Name:
+          selector: //ul[@class="footer-copyright"]/li[contains(.,"©")]
+          postProcess:
+            - replace:
+                - regex: .*\s([\w]+)\.com.*
+                  with: $1
+            - map:
+                caribbeancompr: Caribbeancom Premium
+                caribbeancom: Caribbeancom
+      Code:
+        selector: //link[@hreflang="en-US"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/")]
+        postProcess:
+          - replace:
+              - regex: index\.html$
+                with: index.html
+              - regex: en\.caribbeancom
+                with: www.caribbeancom
+              - regex: eng/moviepages
+                with: moviepages
+              - regex: .*?(\d+-\d+).*
+                with: $1
+              - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
+                with: $3
+debug:
+  printHTML: true
+
+driver:
+  cookies:
+    - CookieURL: "https://www.caribbeancompr.com"
+      Cookies:
+        - Name: "cebsp_"
+          Domain: ".caribbeancompr.com"
+          Value: "3"
+          Path: "/"
+        - Name: "cebs"
+          Domain: ".caribbeancompr.com"
+          Value: "1"
+          Path: "/"
+        - Name: "_gat"
+          Domain: ".caribbeancompr.com"
+          Value: "1"
+          Path: "/"
+        - Name: "PHPSESSID"
+          Domain: "www.caribbeancompr.com"
+          Value: "chtm56df5brck4et9tm9pmf1a4"
+          Path: "/"
+# Last Updated Jan 11, 2024

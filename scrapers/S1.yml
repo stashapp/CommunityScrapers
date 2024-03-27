@@ -1,0 +1,52 @@
+name: S1
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - s1s1s1.com
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://s1s1s1.com/works/detail/{filename}
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: .*(\d{3,4}).*
+        with: SSIS$1
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="p-workPage__title"]
+      Details: //p[@class="p-workPage__text"]
+      URL: 
+        selector: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"品番")]/following-sibling::div/div//span[contains(.,"DVD")]/../text()
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https://s1s1s1.com/works/detail/"
+      Date:
+        selector: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"発売日")]/following-sibling::div/div/a
+        postProcess:
+          - replace:
+              - regex: (\d{4})年(\d{1,2})月(\d{1,2})日
+                with: $1-$2-$3
+          - parseDate: 2006-1-2
+      Director: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"監督")]/following-sibling::div/div/p
+      Performers:
+        Name:
+          selector: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"女優")]/following-sibling::div/div/a
+      Tags:
+        Name: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"ジャンル")]/following-sibling::div/div/a
+      Image:
+        selector: //img[@class="swiper-lazy"][1]/@data-src
+      Studio:
+        Name:
+          fixed: S1 No. 1 Style
+      Code:
+        selector: //div[@class="p-workPage__table"]/div[@class="item"]/div[contains(.,"品番")]/following-sibling::div/div//span[contains(.,"DVD")]/../text()
+        postProcess:
+          - replace:
+              - regex: .*(\d{3,4}).*
+                with: SSIS-$1
+# Last Updated Jan 11, 2024
