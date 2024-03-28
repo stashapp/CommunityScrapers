@@ -39,6 +39,7 @@ addicted2girls.com|AddictedToGirls.yml|:heavy_check_mark:|:heavy_check_mark:|:x:
 addisonstreet.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 adreenawinters.com|InnOfSin.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 adultanime.dbsearch.net|Anime-DB.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Japanese Hentai
+adultdoor.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 adultdvdempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 adultdvdmarketplace.com|AdultDvdMarketPlace.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 adultempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
@@ -72,6 +73,7 @@ amateurboxxx.com|AmateurBoxxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateure-xtreme.com|AmateureExtreme.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateureuro.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amateursfrombohemia.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+amateurthroats.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 amazinganna.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 amazingfilms.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 ambushmassage.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -93,6 +95,7 @@ analmom.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analnippon.com|karatmedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 analonly.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 analoverdose.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+analrecruiters.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analteenangels.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 analtherapyxxx.com|FamilyTherapyXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analvids.com|AnalVids.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
@@ -312,6 +315,7 @@ bulldogpit.com|MarsMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 bulldogxxx.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 burningangel.com|BurningAngel.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 bushybushy.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+bustyamateurboobs.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bustybeauties.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 buttman.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cadinot.fr|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
@@ -347,6 +351,7 @@ class-lesbians.com|ClassLesbians.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 claudiamarie.com|ClaudiaMarie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clips4sale.com|Clips4Sale.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubamateurusa.com|BadPuppy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+clubamberrayne.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubdom.com|SubbyHubby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubelegantangel.com|ClubElegantAngel.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 clubinfernodungeon.com|ClubInfernoDungeon.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Gay
@@ -542,6 +547,7 @@ dyke4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dyked.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dylanryder.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 eastboys.com|EastBoys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+ebonycumdumps.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ebonytugs.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 edwardjames.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 elegantangel.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
@@ -579,6 +585,7 @@ extremepickups.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 exxxtrasmall.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fabsluts.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 facials4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+facialabuse.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 facialsforever.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 fakehostel.com|FakeHub/FakeHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 fakehub.com|FakeHub/FakeHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
@@ -669,6 +676,7 @@ fuckinghardcore.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 fuckingoffice.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckingparties.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 fuckingstreet.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+fuckmepov.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckstudies.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 fuckthegeek.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 fullpornnetwork.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -699,6 +707,7 @@ gaywire.com|GayWire/GayWire.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_che
 genderxfilms.com|GenderXFilms.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|-|Trans
 genlez.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gfleaks.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
+ghettogaggers.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlcum.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlfaction.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlfriendsfilms.com|Girlfriendsfilms.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|Lesbian
@@ -749,6 +758,7 @@ handsonhardcore.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hanime.tv|hanime.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Hentai
 happytugs.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 hardbritlads.com|MarsMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+hardcoredoorway.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hardcoreyouth.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hardfuckgirls.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hardkinks.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
@@ -819,6 +829,7 @@ houseofyre.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hqporner.com|HQPorner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hucows.com|Hucows.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hugecockbreak.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hugerubberdicks.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 humiliation4k.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hungarianhoneys.com|HungarianHoneys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hungfuckers.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -956,6 +967,7 @@ lanakendrick.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lanesisters.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lasublimexxx.com|Lasublime.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lasvegasamateurs.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+latinaabuse.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 latinamilf.com|LetsDoeIt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 latinoguysporn.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 laurenphillips.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1107,6 +1119,7 @@ moneytalks.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mar
 mongerinasia.com|MongerInAsia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 monicamendez.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 monroelee.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+monstercockmadness.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 monstercub.com|AdultSiteRunner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 monstercurves.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 mormongirlz.com|Mormongirlz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1146,6 +1159,7 @@ myveryfirsttime.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 n53i.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|JAV
 nakedsword.com|NakedSword.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 nannyspy.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+nastylittlefacials.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nastypublicsex.com|DollsHub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nastystepfamily.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nataliastarr.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1460,6 +1474,7 @@ sexwithmuslims.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexworking.com|Deviante/Deviante.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 sexyhub.com|SexyHub/SexyHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 sexymodernbull.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
+sexysuckjobs.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shagmag.com|shagmag.yml|:x:|:heavy_check_mark:|:x:|:x:|-|Magazines
 shame4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shandafay.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1517,6 +1532,7 @@ spankmonster.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spearteenpussy.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermantino.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermmania.com|SpermMania.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+spermsuckers.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermswallowers.com|JulesJordan.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 spermswap.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 spizoo.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1661,6 +1677,7 @@ theflourishpov.com|TheFlourish.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 theflourishxxx.com|TheFlourish.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thegayoffice.com|Men/Men.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|Gay
 thehabibshow.com|TheHabibShow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+thehandjobsite.com|AdultDoor.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thelesbianexperience.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 thelifeerotic.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
 thenude.com|TheNude.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
