@@ -667,6 +667,8 @@ freshoutofhighschool.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x
 frolicme.com|FrolicMe.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ftmmen.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|FTM
 ftmplus.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|FTM
+ftvgirls.com|FTV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+ftvmilfs.com|FTV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckedfeet.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckedhard18.com|FuckedHard18.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckermate.com|Fuckermate.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
