@@ -16,19 +16,19 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //h3[contains(@class,"dvd-title")]/span
+        selector: //h3[contains(@class,"dvd-title")]/span|//h1[contains(@class,"update-info-title")]
       Performers:
         Name:
-          selector: //div[@class="middle"]//a[contains(@href,"girl.php")]/text()
+          selector: //a[contains(@href,"girl.php")]/text()
           postProcess:
             - replace:
                 - regex: \s/\s.+ # clubseventeen appends the aliases to the performer's name with a " / "
                   with:
       Tags:
         Name:
-          selector: //div[@class="top"]//a[contains(@href,"niche.php")]/span
+          selector: //div[@class="top"]//a[contains(@href,"niche.php")]/span|//a[contains(@href,"niche.php")]/text()
       Date:
-        selector: //div[@class='top']/p[contains(.,"DATE ADDED:")]
+        selector: //div[@class='top']/p[contains(.,"DATE ADDED:")] | //i[contains(@class,'fa-calendar')]//following-sibling::b
         postProcess:
           - replace:
               - regex: .+\s(\d{2}-\d{2}-\d{4}).+
@@ -37,10 +37,10 @@ xPathScrapers:
       Details:
         selector: //div[@class='bottom']/p[@class='mt-0 hidden-lg']
       Image:
-        selector: //div[contains(@class,'video-wrapper')]/div/@data-image
+        selector: //video[@id="portal-video"]/@poster|//div[contains(@class,'video-wrapper')]/div/@data-image
       Studio:
         Name:
-          fixed: ClubSeventeen
+          selector: //b[contains(text(),"Studio:")]//b[contains(@class,"special-link")]
 
   galleryScraper:
     gallery:
@@ -68,4 +68,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: ClubSeventeen
-# Last Updated May 13, 2021
+# Last Updated Mar 26, 2024

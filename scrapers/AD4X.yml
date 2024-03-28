@@ -1,0 +1,22 @@
+name: AD4X
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ad4x.com/tour
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //title
+      Details:  //div[contains(@class,'description')]
+      Date:
+        selector: //span[@class='date']
+        postProcess:
+          - parseDate: 01/02/2006
+      Image: //video/@poster
+      Performers:
+        Name: //span[contains(text(),'Starring')]/following-sibling::a/text()
+      Studio:
+        Name:
+          fixed: AD4X
+# Last Updated March 27, 2024

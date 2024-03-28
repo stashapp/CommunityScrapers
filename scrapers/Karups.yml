@@ -44,4 +44,12 @@ xPathScrapers:
       Performers: *performers
       Details: *details
 
-# Last Updated July 11, 2023
+driver:
+  cookies:
+    - CookieURL: "https://www.karups.com"
+      Cookies:
+        - Name: "warningHidden"
+          Domain: "www.karups.com"
+          Value: "true"
+          Path: "/"
+# Last Updated March 28, 2024
