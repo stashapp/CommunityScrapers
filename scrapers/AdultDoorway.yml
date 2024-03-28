@@ -13,12 +13,15 @@ sceneByURL:
       - ghettogaggers.com/tour/
       - hardcoredoorway.com/tour/
       - hugerubberdicks.com/tour/
+      - joethepervert.com/tour/
       - latinaabuse.com/tour/
       - monstercockmadness.com/tour/
       - nastylittlefacials.com/tour/
+      - pinkkittygirls.com/tour/
       - sexysuckjobs.com/tour/
       - spermsuckers.com/tour/
       - thehandjobsite.com/tour/
+      - thepantyhosesite.com/tour/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -27,13 +30,13 @@ xPathScrapers:
     scene:
       Title:
         selector: $scene//h1
-      Details:  //div[@class="update-info-block"]/div[@class="update-info-block"][not(ul)]
+      Details: //div[@class="update-info-block"]/div[@class="update-info-block"][not(ul)]
       Date:
         selector: ($scene//strong[contains(text(),'Added')]/following-sibling::text())[1]
         postProcess:
           - replace:
-             - regex: ^([^\|]+).*
-               with: $1
+              - regex: ^([^\|]+).*
+                with: $1
           - parseDate: January 2, 2006
       Image:
         selector: >
@@ -41,7 +44,7 @@ xPathScrapers:
           | //div[@id='fakeplayer']//img/@src0_1x 
           | //div[@id='fakeplayer']//img/@src0_2x 
           | //div[@id='fakeplayer']//img/@src0_3x 
-          | //div[@id='fakeplayer']//img/@src0_4x 
+          | //div[@id='fakeplayer']//img/@src0_4x
         concat: __SEP__
         postProcess:
           - replace:
@@ -57,5 +60,5 @@ xPathScrapers:
           postProcess:
             - replace:
                 - regex: "[^a-zA-Z0-9]+$"
-                  with: ''
+                  with: ""
 # Last Updated March 27, 2024
