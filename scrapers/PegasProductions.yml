@@ -58,29 +58,29 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: janvier
-                with: 01
+                with: "01"
               - regex: f[eé]vrier 
-                with: 02
+                with: "02"
               - regex: mars
-                with: 03
+                with: "03"
               - regex: avril
-                with: 04
+                with: "04"
               - regex: mai
-                with: 05
+                with: "05"
               - regex: juin
-                with: 06
+                with: "06"
               - regex: juillet
-                with: 07
+                with: "07"
               - regex: aout
-                with: 08
+                with: "08"
               - regex: septembre
-                with: 09
+                with: "09"
               - regex: octobre
-                with: 10
+                with: "10"
               - regex: novembre
-                with: 11
+                with: "11"
               - regex: d[eé]cembre
-                with: 12
+                with: "12"
               - regex: \s
                 with: /
           - parseDate: 02/01/2006
