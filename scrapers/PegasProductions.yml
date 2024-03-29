@@ -8,7 +8,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - pegasproductions.com/abonnements
-    scraper: abonnementsnScraper
+    scraper: abonnementsScraper
 
   - action: scrapeXPath
     url:
@@ -16,7 +16,7 @@ sceneByURL:
     scraper: sceneScraper
 
 xPathScrapers:
-  abonnementScraper:
+  abonnementsScraper:
     scene:
       Title: //meta[@itemprop="name"]/@content
       Date:
