@@ -11,12 +11,12 @@ from py_common.util import dig, guess_nationality, replace_all, scraper_args
 
 # Maps the `site_domain` key from the API
 # to studio names currently used on StashDB
-studio_map = {
-    "2girls1camera.com": "2 Girls 1 Camera",
+studio_map = {    "2girls1camera.com": "2 Girls 1 Camera",
     "allanal.com": "All Anal",
     "alterotic.com": "Alt Erotic",
     "amazingfilms.com": "Amazing Films",
     "analonly.com": "Anal Only",
+    "analjesse.com": "Anal Jesse",
     "benefitmonkey.com": "Benefit Monkey",
     "biggulpgirls.com": "Big Gulp Girls",
     "bjraw.com": "BJ Raw",
@@ -28,14 +28,15 @@ studio_map = {
     "divine-dd.com": "Divine-DD",
     "facialsforever.com": "Facials Forever",
     "freakmobmedia.com": "FreakMob Media",
+    "gogobarauditions.com": "Gogo Bar Auditions",
     "gotfilled.com": "Got Filled",
-    "hobybuchanon.com": "Hoby Buchanon",
+    "hobybuchanon.com": "Hoby Buchanon", 
     "inkedpov.com": "Inked POV",
     "inserted.com": "Inserted",
     "jav888.com": "JAV888",
     "lady-sonia.com": "Lady Sonia",
     "lezkey.com": "LezKey",
-    "lucidflix.com": "LucidFlix",
+    "lucidflix.com": "LucidFlix", 
     "meanfeetfetish.com": "Mean Feet Fetish",
     "members.hobybuchanon.com": "Hoby Buchanon",
     "mongerinasia.com": "Monger In Asia",
@@ -52,6 +53,7 @@ studio_map = {
     "sidechick.com": "SIDECHICK",
     "suckthisdick.com": "Suck This Dick",
     "swallowed.com": "Swallowed",
+    "thaigirlswild.com": "Thai Girls Wild",
     "topwebmodels.com": "Top Web Models",
     "trueanal.com": "True Anal",
     "twmclassics.com": "TWM Classics",
@@ -257,6 +259,7 @@ def to_scraped_scene(raw_scene: dict) -> ScrapedScene:
     cover_candidates = filter(
         None,
         (
+            dig(raw_scene, "poster_url"),            
             dig(raw_scene, "trailer_screencap"),
             dig(raw_scene, "extra_thumbnails", 0),
             dig(raw_scene, "thumb"),
