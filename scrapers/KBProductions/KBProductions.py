@@ -38,6 +38,7 @@ studio_map = {
     "lucidflix.com": "LucidFlix",
     "meanfeetfetish.com": "Mean Feet Fetish",
     "members.hobybuchanon.com": "Hoby Buchanon",
+    "mongerinasia.com": "Monger In Asia",
     "nylonperv.com": "Nylon Perv",
     "nympho.com": "Nympho",
     "poundedpetite.com": "Pounded Petite",
