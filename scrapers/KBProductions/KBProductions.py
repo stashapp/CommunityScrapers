@@ -11,7 +11,8 @@ from py_common.util import dig, guess_nationality, replace_all, scraper_args
 
 # Maps the `site_domain` key from the API
 # to studio names currently used on StashDB
-studio_map = {    "2girls1camera.com": "2 Girls 1 Camera",
+studio_map = {
+    "2girls1camera.com": "2 Girls 1 Camera",
     "allanal.com": "All Anal",
     "alterotic.com": "Alt Erotic",
     "amazingfilms.com": "Amazing Films",
