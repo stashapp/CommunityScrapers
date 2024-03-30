@@ -50,8 +50,7 @@ xPathScrapers:
                 seehimsolo: See Him Solo
                 povpornstars: POV Pornstars
     scene:
-      Title:
-        selector: //div[contains(@class, "videoDetails")]/h3
+      Title: //div[contains(@class, "videoDetails")]/*[starts-with(name(), 'h')]
       Date:
         selector: //div[contains(@class, "videoInfo")]/p[contains(span, "Date Added:")]/text()
         postProcess:
