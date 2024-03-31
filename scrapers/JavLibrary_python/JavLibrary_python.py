@@ -4,6 +4,7 @@ import json
 import re
 import sys
 import threading
+import time
 from urllib.parse import urlparse
 
 try:
@@ -231,6 +232,97 @@ BANNED_WORDS = {
     "Y********ls": "Young Girls"
 }
 
+REPLACE_TITLE = {
+    "-uncensored": "",
+    "-Uncensored": "",
+    "uncensored": "",
+    "Uncensored": "",
+    "-uncensore": "",
+    "-Uncensore": "",
+    "_uncen": "",
+    "_Uncen": "",
+    "a.hd": "",
+    "b.hd": "",
+    "c.hd": "",
+    "d.hd": "",
+    "A.HD": "",
+    "B.HD": "",
+    "C.HD": "",
+    "D.HD": "",
+    "a.H": "",
+    "b.H": "",
+    "c.H": "",
+    "d.H": "",
+    "A.H": "",
+    "B.H": "",
+    "C.H": "",
+    "D.H": "",
+    ".hd": "",
+    ".HD": "",
+    "-hd": "",
+    "-HD": "",
+    "_hd": "",
+    "_HD": "",
+    "-4k": "",
+    "-4K": "",
+    ".4k": "",
+    ".4K": "",
+    "a.avi": ".avi",
+    "b.avi": ".avi",
+    "c.avi": ".avi",
+    "d.avi": ".avi",
+    "a.mp4": ".mp4",
+    "b.mp4": ".mp4",
+    "c.mp4": ".mp4",
+    "d.mp4": ".mp4",
+    "a.wmv": ".wmv",
+    "b.wmv": ".wmv",
+    "c.wmv": ".wmv",
+    "d.wmv": ".wmv",  
+    "A.avi": ".avi",
+    "B.mp4": ".avi",
+    "C.mp4": ".avi",
+    "D.avi": ".avi",
+    "A.mp4": ".mp4",
+    "B.mp4": ".mp4",
+    "C.mp4": ".mp4",
+    "D.mp4": ".mp4",
+    "A.wmv": ".wmv",
+    "B.wmv": ".wmv",
+    "C.wmv": ".wmv",
+    "D.wmv": ".wmv",
+    "A.AVI": ".AVI",
+    "B.AVI": ".AVI",
+    "C.AVI": ".AVI",
+    "D.AVI": ".AVI",
+    "A.MP4": ".MP4",
+    "B.MP4": ".MP4",
+    "C.MP4": ".MP4",
+    "D.MP4": ".MP4",
+    "A.WMV": ".WMV",
+    "B.WMV": ".WMV",
+    "C.WMV": ".WMV",
+    "D.WMV": ".WMV",  
+    "A.AVI": ".AVI",
+    "B.MP4": ".AVI",
+    "C.MP4": ".AVI",
+    "D.AVI": ".AVI",
+    "A.MP4": ".MP4",
+    "B.MP4": ".MP4",
+    "C.MP4": ".MP4",
+    "D.MP4": ".MP4",
+    "A.WMV": ".WMV",
+    "B.WMV": ".WMV",
+    "C.WMV": ".WMV",
+    "D.WMV": ".WMV",
+    ".avi": "",
+    ".mp4": "",
+    ".wmv": "",
+    ".AVI": "",
+    ".MP4": "",
+    ".WMV": "",
+}
+
 OBFUSCATED_TAGS = {
     "Girl": "Young Girl", # ロリ系 in Japanese
     "Tits": "Small Tits" # 微乳 in Japanese
@@ -268,13 +360,16 @@ def checking_protection(url):
     return None, None
 
 
-def send_request(url, head, retries=0):
-    if retries > 10:
-        log.warning(f"Scrape for {url} failed after retrying")
+def send_request(url, head, retries=0, delay=1):
+    if retries > 3:
+        log.warning(f"Scrape for {url} failed after retrying {retries} times")
         return None
 
     global JAV_DOMAIN
 
+    if delay != 0:
+        log.info(f"Delaying request by {delay} seconds to prevent Cloudflare rate limiting")
+        time.sleep(delay)
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     response = None
     if url_domain in SITE_JAVLIB:
@@ -294,6 +389,11 @@ def send_request(url, head, retries=0):
         return send_request(url, head, retries+1)
     except Exception as exc_req:
         log.error(f"scrape error exception {exc_req}")
+        if delay != 0:
+            error_delay = delay+2.75
+            log.info(f"Delaying request by {error_delay} seconds and retrying")
+            time.sleep(error_delay)
+        return send_request(url, head, retries+1)
     if response.status_code != 200:
         log.debug(f"[Request] Error, Status Code: {response.status_code}")
         response = None
@@ -306,6 +406,21 @@ def replace_banned_words(matchobj):
         return BANNED_WORDS[word]
     return word
 
+def cleanup_title(title):
+    if title == None:
+        return title
+
+    log.info(f"Starting title cleanup for: {title}")
+    cleaned_title = False
+    for bad_title in REPLACE_TITLE:
+        if bad_title in title:
+            title = title.replace(bad_title, "")
+            cleaned_title = True
+    
+    if cleaned_title:
+        title = title.strip()
+        log.info(f"Found match and using new clean title: {title}")
+    return title
 
 def regexreplace(input_replace):
     word_pattern = re.compile(r'(\w|\*)+')
@@ -496,6 +611,7 @@ def th_imageto_base64(imageurl, typevar):
 FRAGMENT = json.loads(sys.stdin.read())
 
 SEARCH_TITLE = FRAGMENT.get("name")
+SEARCH_TITLE = cleanup_title(SEARCH_TITLE)
 SCENE_URL = FRAGMENT.get("url")
 
 if FRAGMENT.get("title"):
@@ -505,6 +621,7 @@ if FRAGMENT.get("title"):
     SCENE_TITLE = re.sub(r"-JG\d", "", SCENE_TITLE)
     SCENE_TITLE = re.sub(r"\s.+$", "", SCENE_TITLE)
     SCENE_TITLE = re.sub(r"[ABCDEFGH]$", "", SCENE_TITLE)
+    SCENE_TITLE = cleanup_title(SCENE_TITLE)
 else:
     SCENE_TITLE = None
 
@@ -587,7 +704,7 @@ if "searchName" in sys.argv:
                 if isinstance(value,list):
                     jav_result[key] = value[0]
                 if key in ["image", "url"]:
-                    jav_result[key] = f"https:{jav_result[key]}"
+                    jav_result[key] = f"https:{jav_result[key]}".replace("https:https:", "https:")
             jav_result = [jav_result]
         else:
             jav_result = jav_search_by_name(JAV_SEARCH_HTML, jav_xPath_search)
