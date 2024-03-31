@@ -4,6 +4,7 @@ import json
 import re
 import sys
 import threading
+import time
 from urllib.parse import urlparse
 
 try:
@@ -268,13 +269,16 @@ def checking_protection(url):
     return None, None
 
 
-def send_request(url, head, retries=0):
-    if retries > 10:
-        log.warning(f"Scrape for {url} failed after retrying")
+def send_request(url, head, retries=0, delay=1):
+    if retries > 3:
+        log.warning(f"Scrape for {url} failed after retrying {retries} times")
         return None
 
     global JAV_DOMAIN
 
+    if delay != 0:
+        log.info(f"Delaying request by {delay} seconds to prevent Cloudflare rate limiting")
+        time.sleep(delay)
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     response = None
     if url_domain in SITE_JAVLIB:
@@ -294,6 +298,11 @@ def send_request(url, head, retries=0):
         return send_request(url, head, retries+1)
     except Exception as exc_req:
         log.error(f"scrape error exception {exc_req}")
+        if delay != 0:
+            error_delay = delay+2.75
+            log.info(f"Delaying request by {error_delay} seconds and retrying")
+            time.sleep(error_delay)
+        return send_request(url, head, retries+1)
     if response.status_code != 200:
         log.debug(f"[Request] Error, Status Code: {response.status_code}")
         response = None
@@ -587,7 +596,7 @@ if "searchName" in sys.argv:
                 if isinstance(value,list):
                     jav_result[key] = value[0]
                 if key in ["image", "url"]:
-                    jav_result[key] = f"https:{jav_result[key]}"
+                    jav_result[key] = f"https:{jav_result[key]}".replace("https:https:", "https:")
             jav_result = [jav_result]
         else:
             jav_result = jav_search_by_name(JAV_SEARCH_HTML, jav_xPath_search)
