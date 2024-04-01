@@ -50,6 +50,8 @@ adulttimepilots.com|Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_ch
 aebn.com|AEBN.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|Straight + Gay
 agentredgirl.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 akiba-web.com|GIGA.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+akiralane.com|AkiraLaneProductions.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+akiralanebound.com|AkiraLaneProductions.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 alettaoceanempire.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 alexismonroe.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 alexlegend.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1268,6 +1270,7 @@ pacopacomama.com|Paco.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 paintoy.com|insexOL.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pandafuck.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pansexualx.com|EvilAngel|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|Trans
+pantyhoselane.com|AkiraLaneProductions.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pantyjobs.com|pantyjobs.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pantypops.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 paradisegfs.com|VegasDreamworks.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
