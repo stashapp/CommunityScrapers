@@ -838,7 +838,7 @@ hucows.com|Hucows.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hugecockbreak.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hugerubberdicks.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 humiliation4k.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-hungarianhoneys.com|HungarianHoneys.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hungarianhoneys.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hungfuckers.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 hunt4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hunterleigh.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
