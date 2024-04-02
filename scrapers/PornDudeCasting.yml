@@ -61,10 +61,9 @@ xPathScrapers:
         selector: /html/head/meta[@name='twitter:player']/@content
         postProcess:
           - replace:
-            - regex: ^.+\/embed\/
-              with: ""
-      Title:
-        selector: //div[@class="header__nav-user"]/h1
+              - regex: ^.+\/embed\/
+                with: ""
+      Title: //h1
       Performers:
         Name: *pName
         URL: *pURL
@@ -77,8 +76,8 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-            - regex: 720p
-              with: 2160p
+              - regex: 720p
+                with: 2160p
       Studio:
         Name:
           fixed: "Porn Dude Casting"
@@ -86,7 +85,7 @@ xPathScrapers:
         selector: /html/head/meta[@property='article:published_time']/@content
         postProcess:
           - replace:
-            - regex: \s(\d\d:){2}\d\d
-              with: ""
+              - regex: \s(\d\d:){2}\d\d
+                with: ""
           - parseDate: 2006-01-02
 # Last Updated April 01, 2024
