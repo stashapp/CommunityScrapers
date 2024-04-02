@@ -27,4 +27,4 @@ xPathScrapers:
           selector: //p//a[contains(@href,'/fetish/') or contains(@href,'/browse') or contains(@href,'/amateurs/')]/text()
       Image:
         selector: //div[@class='video-player-container video-responsive']/@data-poster|//img[@class="img-responsive"]/@src
-# Last Updated January 22, 2021
+# Last Updated April 02, 2024
