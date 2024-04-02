@@ -23,18 +23,24 @@ xPathScrapers:
         selector: //div[@class="videodetails"]/p[@class="date"]
         postProcess:
           - replace:
-              - regex: '^([0-9/]+).*'
+              - regex: "^([0-9/]+).*"
                 with: $1
           - parseDate: 01/02/2006
       Tags:
         Name: //div[@class="videodetails"]//a[contains(@href,"categories")]/text()
       Performers:
         Name:
-          selector: //p[@class="modelname"]/text()
+          selector: //p[@class="modelname"]/comment()
           postProcess:
             - replace:
-                - regex: 'Starring\s'
-                  with: ''
+                # Try to extract model names from comment
+                # https://regex101.com/r/IF0T90/1
+                - regex: .*?>([A-Z][^<>]+).*?(:?</a>\s*</span>\s*-->)?
+                  with: "$1|"
+                # Default to Akira Lane if the comment is empty (it's hardcoded in the site as well)
+                - regex: "<!-- -->"
+                  with: "Akira Lane"
+          split: "|"
       Studio:
         Name:
           selector: //base/@href
