@@ -75,6 +75,10 @@ xPathScrapers:
         Name: //div[contains(@class, 'video__tools-info')]/div[contains(@class, 'btn--small')]/text()
       Image:
         selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+            - regex: 720p
+              with: 2160p
       Studio:
         Name:
           fixed: "Porn Dude Casting"
