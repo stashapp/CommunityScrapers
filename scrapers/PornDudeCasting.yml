@@ -62,7 +62,7 @@ xPathScrapers:
         postProcess:
           - replace:
             - regex: ^.+\/embed\/
-            - with: ""
+              with: ""
       Title:
         selector: //div[@class="header__nav-user"]/h1
       Performers:
@@ -86,7 +86,7 @@ xPathScrapers:
         selector: /html/head/meta[@property='article:published_time']/@content
         postProcess:
           - replace:
-            - regex: (\d\d:){2}\d\d
+            - regex: \s(\d\d:){2}\d\d
               with: ""
           - parseDate: 2006-01-02
 # Last Updated April 01, 2024
