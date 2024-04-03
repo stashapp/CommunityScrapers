@@ -49,4 +49,49 @@ xPathScrapers:
           - replace:
             - regex: ^
               with: http://www.girlsofpb.com
+      URL:
+        selector: //a[@id='goright']/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: http://www.girlsofpb.com
+          - subScraper:
+              selector: //a[@id='goleft']/@href
+              postProcess:
+                - replace:
+                  - regex: ^
+                    with: http://www.girlsofpb.com
+      Measurements:
+        selector: $topcard/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ".*Bust: (.+), Waist: (.+), Hips: (.+?), .*$"
+                with: "$1-$2-$3"
+      Height:
+        selector: $topcard/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ".*Height: (.+?), .*$"
+                with: "$1"
+          - javascript: |
+              return parseInt(value) * 2.54
+      Weight:
+        selector: $topcard/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ".*Weight: (.+?), .*$"
+                with: "$1"
+          - lbToKg: true
+      Birthdate:
+        selector: $topcard/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: '.*Birth Date: (.+ \d+, \d{4}), .*$'
+                with: "$1"
+          - parseDate: January 2, 2006
+
 # Last Updated April 3, 2024
