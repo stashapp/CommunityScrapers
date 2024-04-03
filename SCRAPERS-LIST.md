@@ -734,6 +734,7 @@ girlgirlxxx.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlgrind.com|MetroHD/MetroHD.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|Lesbian
 girlsandstuds.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlsgotcream.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+girlsofpb.com|GirlsOfPB.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
 girlsonlyporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 girlsoutwest.com|GirlsOutWest.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|Lesbian
 girlsrimming.com|GirlsRimming.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Rimjobs
