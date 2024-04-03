@@ -340,6 +340,7 @@ carnalplus.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 castingcouch-x.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 catalinacruz.com|Catalina Cruz.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 caughtfapping.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+caughtmycoach.com|Nubiles.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cazzofilm.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 cdnbus.lol|JavBus.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 cfnmeu.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
