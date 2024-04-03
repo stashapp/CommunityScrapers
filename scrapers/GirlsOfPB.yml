@@ -19,15 +19,17 @@ xPathScrapers:
       Name: $perfLIs/h3/a/text()
       Image: 
         selector: $perfLIs/a/img/@src
-        replace:
-          - regex: ^
-            with: http://www.girlsofpb.com
+        postProcess:
+          - replace:
+            - regex: ^
+              with: http://www.girlsofpb.com
       URL:
         selector: $perfLIs/h3/a/@href
-        replace:
-          - regex: ^
-            with: http://www.girlsofpb.com
-      
+        postProcess:
+          - replace:
+            - regex: ^
+              with: http://www.girlsofpb.com
+        
   performerScraper:
     common:
       $topcard: /html/body/div[1]/div[3]/div
@@ -47,4 +49,4 @@ xPathScrapers:
           - replace:
             - regex: ^
               with: http://www.girlsofpb.com
-# Last Updated March 29, 2024
+# Last Updated April 3, 2024
