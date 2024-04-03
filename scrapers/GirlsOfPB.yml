@@ -1,0 +1,50 @@
+name: girls of pb
+
+performerByName:
+  action: scrapeXPath
+  queryURL: http://www.girlsofpb.com/search/?do=1&q={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url: 
+     - http://www.girlsofpb.com/
+    scraper: performerScraper
+
+
+xPathScrapers:
+  performerSearch:
+    common:
+      $perfLIs: '//ul/li'
+    performer:
+      Name: $perfLIs/h3/a/text()
+      Image: 
+        selector: $perfLIs/a/img/@src
+        replace:
+          - regex: ^
+            with: http://www.girlsofpb.com
+      URL:
+        selector: $perfLIs/h3/a/@href
+        replace:
+          - regex: ^
+            with: http://www.girlsofpb.com
+      
+  performerScraper:
+    common:
+      $topcard: /html/body/div[1]/div[3]/div
+
+    performer:
+      Name: 
+        selector: $topcard/div/div[1]/h1/text
+        postProcess:
+          - replace:
+            - regex: 'Nude - .*'
+              with: ''
+
+      Details: $topcard/p[2]/text()
+      Image:
+        selector: /html/body/div[1]/div[5]/div/div[1]/div/a/img/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: http://www.girlsofpb.com
+# Last Updated March 29, 2024
