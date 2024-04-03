@@ -415,6 +415,7 @@ currycreampie.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cutlersden.com|CutlersDen.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 czechamateurs.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechanalsex.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechar.com|CzechVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 czechbangbus.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechbiporn.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechbitch.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
