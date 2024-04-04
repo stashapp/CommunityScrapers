@@ -1,25 +1,10 @@
 import json
-import os
 import pathlib
 import sys
 import xml.etree.ElementTree as ET
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  # parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
-
-try:
-    import py_common.graphql as graphql
-    import py_common.log as log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit()
+import py_common.graphql as graphql
+import py_common.log as log
 
 """
 This script parses xml files for metadata. 
@@ -37,39 +22,39 @@ def query_xml(gallery_path, title):
         print("null")
         exit(1)
 
-    if (node := tree.find("Title")) is not None and (title := node.text):
-        res["title"] = title
+    if (node := tree.find("Title")) and (original_title := node.text):
+        res["title"] = original_title
 
-    if (node := tree.find("Web")) is not None and (url := node.text):
+    if (node := tree.find("Web")) and (url := node.text):
         res["url"] = url
 
-    if (node := tree.find("Summary")) is not None and (details := node.text):
+    if (node := tree.find("Summary")) and (details := node.text):
         res["details"] = details
 
-    if (node := tree.find("Released")) is not None and (date := node.text):
+    if (node := tree.find("Released")) and (date := node.text):
         res["date"] = date
 
     year = month = day = None
-    if (node := tree.find("Year")) is not None:
+    if node := tree.find("Year"):
         year = node.text
-    if (node := tree.find("Month")) is not None:
+    if node := tree.find("Month"):
         month = node.text
-    if (node := tree.find("Day")) is not None:
+    if node := tree.find("Day"):
         day = node.text
 
     if year and month and day:
         res["date"] = f"{year}-{month:>02}-{day:>02}"
 
-    if (node := tree.find("Genre")) is not None and (tags := node.text):
+    if (node := tree.find("Genre")) and (tags := node.text):
         res["tags"] = [{"name": x} for x in tags.split(", ")]
 
-    if (node := tree.find("Series")) is not None and (series := node.text):
+    if (node := tree.find("Series")) and (series := node.text):
         res["tags"] = res.get("tags", []) + [{"name": f"Series/Parody: {series}"}]
 
-    if (node := tree.find("Characters")) is not None and (characters := node.text):
+    if (node := tree.find("Characters")) and (characters := node.text):
         res["performers"] = [{"name": x} for x in characters.split(", ")]
 
-    if (node := tree.find("Writer")) is not None and (studio := node.text):
+    if (node := tree.find("Writer")) and (studio := node.text):
         res["studio"] = {"name": studio}
 
     return res
