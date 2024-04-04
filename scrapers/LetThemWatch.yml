@@ -1,0 +1,38 @@
+name: LetThemWatch
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - letthemwatch.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class='memberPicVid']
+      $pic: //div[@class='player-thumb']//img
+    scene:
+      Title: $info/h3
+      Date:
+        selector: $info//div[@class="date"]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: $info//div[@class="memberContent"]/p
+      Image:
+        selector: //base/@href | $pic/@src0_1x | $pic/@src0_2x | $pic/@src_03x | $pic/@src_04x
+        concat: __SEP__
+        postProcess:
+          - replace:
+            - regex: ^(.+)?__SEP__.+__SEP__(.+)$
+              with: $1$2
+      Studio:
+        Name: //meta[@name="author"]/@content
+      Code:
+        selector: //link[@rel='canonical']/@href
+        postProcess:
+          - replace:
+              - regex: .+/(\d+).+$
+                with: $1
+      Tags:
+        Name: $info//p[contains(.,'Categories')]/a
+      Performers:
+        Name: $info//p[contains(.,'Guys')]/a
+# Last Updated April 3, 2024
