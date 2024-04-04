@@ -12,6 +12,7 @@ sceneByURL:
       - badteenspunished.com/video/watch/
       - bountyhunterporn.com/video/watch/
       - brattymilf.com/video/watch/
+      - caughtmycoach.com/video/watch/
       - cheatingsis.com/video/watch/
       - cumswappingsis.com/video/watch/
       - daddyslilangel.com/video/watch/
@@ -135,7 +136,7 @@ xPathScrapers:
         Name: //div[@class="content-pane-performers"]/a/text()
       Studio: &studioFromSiteLinkAttr
         Name:
-          selector: $contentpane//a[@class="site-link"]/text()
+          selector: $contentpane//a[@class="site-link"]/text() | $contentpane//span[@class="site-link"]/text()
           postProcess:
             - replace:
                 - regex: (.+?)\.(com|xxx)
@@ -240,4 +241,4 @@ xPathScrapers:
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
-# Last Updated December 27, 2023
+# Last Updated April 2, 2024
