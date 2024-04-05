@@ -205,4 +205,4 @@ xPathScrapers:
                 with: $1
       Details: //*[@id="content"]/section/div/div[5]/aside/text()
       URL: //link[@rel='canonical']/@href
-# Last Updated Feburary 22, 2024
+# Last Updated April 05, 2024
