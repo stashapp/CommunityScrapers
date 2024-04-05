@@ -5,17 +5,20 @@ sceneByURL:
     url:
       - adultdvdempire.com/clip
       - adultempire.com/clip
+      - gaydvdempire.com/clip
     scraper: sceneScraperSingle
   - action: scrapeXPath
     url:
       - adultdvdempire.com
       - adultempire.com
+      - gaydvdempire.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
       - adultempire.com
+      - gaydvdempire.com
     scraper: movieScraper
     
 performerByName:
