@@ -1,0 +1,105 @@
+name: Glamose
+sceneByURL:
+  - action: scrapeXPath
+    url: 
+      - damselsinperil.com
+    scraper: damselsSceneScraper
+
+  - action: scrapeXPath
+    url: 
+      - femmefight.com
+    scraper: femfightSceneScraper
+
+  - action: scrapeXPath
+    url: 
+      - f-f-fights.com
+    scraper: fffightSceneScraper
+
+  - action: scrapeXPath
+    url: 
+      - lethallipstick.com
+    scraper: lethallipstickSceneScraper
+
+xPathScrapers:
+  commonScraper:
+    scene: 
+      Title: &title //div[@class='info']/h2[@class='name']
+      Details: &details
+         selector: //div[@class='info']/p/text()
+      Tags:  &tags
+        Name: //div[@class='extrainfo']//a[contains(@href,'search')]
+      Performers: &performers
+        Name: //div[@class='modelstop']//text()
+      Date: &date
+        selector: //div[@class='date']
+        postProcess:
+          - parseDate: 'Added: January 2, 2006'
+
+  damselsSceneScraper:
+    scene: &scene
+      Title: *title
+      Details: *details
+      Tags:  *tags
+      Performers: *performers
+      Date: *date
+      Image: 
+        selector: //div[@class='playerholder']//img/@src
+        postProcess:
+          - replace:
+              - regex: '^(https:)?'
+                with: 'https://damselsinperil.com//'
+      Studio:
+        Name: 
+          fixed: Damsels in Distress
+
+  femfightSceneScraper:
+    scene: &scene
+      Title: *title
+      Details: *details
+      Tags:  *tags
+      Performers: *performers
+      Date: *date
+      Image: 
+        selector: //div[@class='playerholder']//img/@src
+        postProcess:
+          - replace:
+              - regex: '^(https:)?'
+                with: 'https://femmefight.com.//'
+      Studio:
+        Name: 
+          fixed: Femme Fight
+
+  fffightSceneScraper:
+    scene: &scene
+      Title: *title
+      Details: *details
+      Tags:  *tags
+      Performers: *performers
+      Date: *date
+      Image: 
+        selector: //div[@class='playerholder']//img/@src
+        postProcess:
+          - replace:
+              - regex: '^(https:)?'
+                with: 'https://f-f-fights.com.//'
+      Studio:
+        Name: 
+          fixed: Fantasy Fetish Fights
+
+  lethallipstickSceneScraper:
+    scene: &scene
+      Title: *title
+      Details: *details
+      Tags:  *tags
+      Performers: *performers
+      Date: *date
+      Image: 
+        selector: //div[@class='playerholder']//img/@src
+        postProcess:
+          - replace:
+              - regex: '^(https:)?'
+                with: 'https://lethallipstick.com.//'
+      Studio:
+        Name: 
+          fixed: Lethal Lipstick
+# Last Updated April 6, 2024
