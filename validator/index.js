@@ -327,28 +327,6 @@ class Validator {
       });
     }
 
-    xPathScrapers.forEach((name) => {
-      if (!configuredXPathScrapers.includes(name)) {
-        errors.unshift({
-          keyword: name,
-          message: `unused XPath scraper: \`${name}\``,
-          params: { keyword: name },
-          dataPath: `/xPathScrapers/${name}`,
-        });
-      }
-    });
-
-    jsonScrapers.forEach((name) => {
-      if (!configuredJsonScrapers.includes(name)) {
-        errors.unshift({
-          keyword: name,
-          message: `unused JSON scraper: \`${name}\``,
-          params: { keyword: name },
-          dataPath: `/jsonScrapers/${name}`,
-        });
-      }
-    });
-
     return errors;
   }
 
