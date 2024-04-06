@@ -29,7 +29,7 @@ xPathScrapers:
       Tags:  &tags
         Name: //div[@class='extrainfo']//a[contains(@href,'search')]
       Performers: &performers
-        Name: //div[@class='modelstop']//a
+        Name: //div[@class='modelstop']//text()
       Date: &date
         selector: //div[@class='date']
         postProcess:
