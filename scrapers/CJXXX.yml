@@ -1,0 +1,92 @@
+name: CJXXX
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 80gays.com
+      - asiaboy.net
+      - asiantwinknetwork.com
+      - auntiebob.com
+      - barebackeu.com
+      - barebacklatinoz.com
+      - barebackmedaddy.com
+      - barebacktwinkz.com
+      - brazilianstudz.com
+      - daddysasians.com
+      - defiantboyz.com
+      - doctortwink.com
+      - cjxxx.com
+      - gayamateurpass.com
+      - gayasiancamz.com
+      - gayasianpiss.com
+      - gayasiantwinkz.com
+      - gaybarebackpass.com
+      - gaylatinpass.com
+      - gaytwinkcamz.com
+      - germancumpigz.com
+      - gloryholehookups.com
+      - hammerboysxxx.com
+      - hotboyusa.com
+      - iomacho.com
+      - laughingasians.com
+      - pragueboyz.com
+      - ramjetvideo.com
+      - spunkstarz.com
+      - str8boyzseduced.com
+      - topherphoenix.com
+      - twinkboysparty.com
+      - twinkyfeet.com
+      - victorcodyxxx.com
+      - workinmenxxx.com
+      - younglatinostudz.com
+    scraper: sceneScraper
+
+  - action: scrapeXPath
+    url:
+      - otbboyz.com
+    scraper: diffStudioSelectorScraper
+        
+xPathScrapers:
+  commonScraper:
+    scene: 
+      Title: &title //span[@class='video_title']/text()
+      Details: &details
+        selector: //div[contains(@class,'intro-video')]//p[not(@class)]/text()
+      Date: &date //p[@class='video_date']/span
+      Image: &image  //video/@poster
+
+  sceneScraper:
+    scene: 
+      Title: *title
+      Details: *details
+      Date: *date 
+      Image: *image 
+      Studio:
+        Name:
+          selector: //title
+          postProcess:
+            - replace:
+                - regex: ^.+[-\|](.+)
+                  with: $1
+                - regex: Gay Porn Network
+                  with: ''
+                - regex: ([a-z])([A-Z])
+                  with: '$1 $2'
+            - map:
+                pragueboyz: Prague Boyz
+
+  diffStudioSelectorScraper:
+    scene: 
+      Title: *title
+      Details: *details
+      Date: *date 
+      Image: *image 
+      Studio:
+        Name:
+          selector: //link[@rel='icon']/@href
+          postProcess:
+            - replace:
+                - regex: (https://)?([^/]+).+
+                  with: $2
+            - map:
+                otbboyz.com: OTB Boyz
+# Last Updated April 7, 2024
