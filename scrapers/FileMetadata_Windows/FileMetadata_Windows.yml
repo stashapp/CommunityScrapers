@@ -1,0 +1,11 @@
+name: File Metadata (Windows)
+
+sceneByFragment:
+  action: script
+  script:
+    - powershell
+    - -ExecutionPolicy
+    - Bypass
+    - -File
+    - FileMetadata_Windows.ps1
+# Last Updated April 07, 2024
