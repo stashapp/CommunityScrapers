@@ -5,6 +5,7 @@ sceneByURL:
   - url:
       - sayuncle.com/movies/
       - teamskeet.com/movies/
+      - mylf.com/movies/
     action: script
     script:
       - python
