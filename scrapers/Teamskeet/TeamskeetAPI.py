@@ -30,7 +30,7 @@ def save_json(api_json, url):
 
 
 USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
-DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
+DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Sayuncle")
 
 
 # Not necessary but why not ?
@@ -54,8 +54,12 @@ elif 'teamskeet.com' in scene_url:
     ORIGIN = 'https://www.teamskeet.com'
     REFERER = 'https://www.teamskeet.com/'
     API_BASE = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/'
+elif 'mylf.com' in scene_url:
+    ORIGIN = 'https://www.mylf.com'
+    REFERER = 'https://www.mylf.com/'
+    API_BASE = 'https://store2.psmcdn.net/mylf-elastic-hka5k7vyuw-videoscontent/_doc/'
 else:
-    log.error('The URL is not from a Teamskeet or SayUncle URL (e.g. teamskeet.com/movies/*****)')
+    log.error('The URL is not from a Teamskeet, MYLF or SayUncle URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
 
