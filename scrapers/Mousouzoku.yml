@@ -2,7 +2,7 @@ name: Mousouzoku
 sceneByURL:
   - action: scrapeXPath
     url:
-      -mousouzoku-av.com/works
+      - mousouzoku-av.com/works
     scraper: sceneScraper
 
 xPathScrapers:
