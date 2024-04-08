@@ -411,6 +411,7 @@ creativeporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 creepypa.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cruelgf.com|CruelGirlfriend.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 crunchboy.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
+cruisingporn|CruisingPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 cuck4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cuckhunter.com|Arx.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 cuckoldsessions.com|Dogfartnetwork.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
