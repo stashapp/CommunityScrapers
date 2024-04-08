@@ -79,6 +79,7 @@ xPathScrapers:
       $stat: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]
     scene:
       Title: $videopage//h1
+       # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...) this helps set studio for Pornmegaload scenes as nothing is released directly from PML." 
       Studio:
         Name:
           selector: ($videopage//video/source/@src)[1]
