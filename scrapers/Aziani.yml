@@ -2,30 +2,34 @@ name: Aziani
 sceneByURL:
   - action: scrapeXPath
     url:
-      - aziani.com
+      - aziani.com/video/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $scene: //div[contains(@class, "heading")][1]
     scene:
       Studio:
         Name:
           fixed: Aziani
       Performers:
-        Name: $scene//a[contains(@href, "/models/")]/text()
-      Title: //meta[@property="og:title"]/@content
-      Details: //meta[@property="og:description"]/@content
+        Name: //dd/a[contains(@href,"models")]
+      Title: //nats-content-view-header-row//h3
+      Details: //nats-content-view-details-row//div[contains(@class,"description")]
       Tags:
-        Name: $scene//a[contains(@href, "/tags/")]/text()
-      Image: //meta[@property="og:image"]/@content
+        Name: //dd/a[contains(@href, "/tag/") or contains(@href, "/category/")]
+      Image:
+        selector: //nats-video-player//img/@srcset | //nats-video-player//img/@src
+        postProcess:
+          - replace:
+              - regex: ^.+https://(\S+).+$
+                with: https://$1
+      Date:
+        selector: //dd[contains(@class,"date")]
+        postProcess:
+          - parseDate: Jan 2, 2006
 
 driver:
-  cookies:
-    - CookieURL: "https://aziani.com"
-      Cookies:
-        - Name: nats
-          Value: anythinggoeshere
-          Domain: .aziani.com
-          Path: /
-# Last Updated November 10, 2022
+  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+# Last Updated March 23, 2024

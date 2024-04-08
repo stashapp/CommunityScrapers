@@ -15,6 +15,10 @@ xPathScrapers:
           selector: //td/a[contains(@href,'/nude_girl/')]/text()
       Title:
         selector: //div[starts-with(@class,'page-heading')]/div/h1/text()
+      Date:
+        selector: //th[text()='Release date']/following-sibling::td/text()
+        postProcess:
+          - parseDate: 02 Jan 2006
       Details:
         selector: //div[@class[contains(.,'description')]]//text()
         concat: " "
@@ -23,4 +27,4 @@ xPathScrapers:
           selector: //p//a[contains(@href,'/fetish/') or contains(@href,'/browse') or contains(@href,'/amateurs/')]/text()
       Image:
         selector: //div[@class='video-player-container video-responsive']/@data-poster|//img[@class="img-responsive"]/@src
-# Last Updated January 22, 2021
+# Last Updated April 02, 2024

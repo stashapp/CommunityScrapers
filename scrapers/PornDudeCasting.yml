@@ -3,11 +3,13 @@ performerByURL:
   - action: scrapeXPath
     url:
       - porndudecasting.com/casting/
+      - porndudecasting.com/models/
     scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - porndudecasting.com/casting/
+      - porndudecasting.com/models/
     scraper: sceneScraper
 xPathScrapers:
   performerScraper:
@@ -16,7 +18,7 @@ xPathScrapers:
       $mHead: //div[@class='model__head desctop']
       $mInfo: //ul[@class='model__info-list desctop']/li
     performer:
-      Name: &pName //h5[@class="model__head-name"]/text()
+      Name: &pName //div[@class="model__head-name"]/text()
       Gender:
         fixed: "Female"
       URL: &pURL //head/meta[@property="og:url"]/@content
@@ -55,8 +57,13 @@ xPathScrapers:
                 with: ""
   sceneScraper:
     scene:
-      Title:
-        selector: //div[@class="header__nav-user"]/h1
+      Code:
+        selector: /html/head/meta[@name='twitter:player']/@content
+        postProcess:
+          - replace:
+              - regex: ^.+\/embed\/
+                with: ""
+      Title: //h1
       Performers:
         Name: *pName
         URL: *pURL
@@ -64,17 +71,21 @@ xPathScrapers:
         selector: //span[@class="desc icon"]/div/text()
         concat: "\n"
       Tags:
-        Name: //div[@class="mob-tag"]/div/text()
+        Name: //div[contains(@class, 'video__tools-info')]/div[contains(@class, 'btn--small')]/text()
       Image:
         selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: 720p
+                with: 2160p
       Studio:
         Name:
           fixed: "Porn Dude Casting"
       Date:
-        selector: //li/span[text()='Cast:']/following-sibling::span
+        selector: /html/head/meta[@property='article:published_time']/@content
         postProcess:
           - replace:
-              - regex: ^
-                with: "01 "
-          - parseDate: 02 January 2006
-# Last Updated May 16, 2021
+              - regex: \s(\d\d:){2}\d\d
+                with: ""
+          - parseDate: 2006-01-02
+# Last Updated April 01, 2024

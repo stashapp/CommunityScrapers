@@ -1,4 +1,4 @@
-name: Paco
+name: Paco (EN)
 sceneByURL:
   - action: scrapeJson
     url:
@@ -47,5 +47,4 @@ jsonScrapers:
       Studio:
         Name:
           fixed: PacoPacoMama
-# Last Updated April 30, 2021
-
+# Last Updated March 26, 2024

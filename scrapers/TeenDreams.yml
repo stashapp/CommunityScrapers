@@ -1,0 +1,43 @@
+name: Teen Dreams
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - teendreams.com/t4/trailers/
+    scraper: teendreams
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - teendreams.com/t4/scenes/
+    scraper: teendreams
+
+xPathScrapers:
+  teendreams:
+    common:
+      $image: //img[contains(@class, "update_thumb")]
+    scene:
+      Title: &title //h1
+      Details: &details //p[@class="description"]
+      URL: &url //link[@rel="canonical"]/@href
+      Date: &date
+        selector: //div[@class="content-date"]
+        postProcess:
+          - replace:
+              - regex: "Released: "
+                with: ""
+      Image: &image >-
+        $image/@src0_4x |
+        $image/@src0_3x |
+        $image/@src0_2x |
+        $image/@src0_1x
+      Studio: &studio
+        Name: //img[contains(@src, "banner")]/@alt
+      Performers: &performers
+        Name: //h3[@class="item-name"]/span
+    gallery:
+      Title: *title
+      Details: *details
+      URL: *url
+      Date: *date
+      Studio: *studio
+      Performers: *performers
+# Last Updated March 28, 2024

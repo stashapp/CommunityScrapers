@@ -2,6 +2,7 @@ name: "CzechVR"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - czechar.com
       - czechvr.com
       - czechvrcasting.com
       - czechvrfetish.com
@@ -11,6 +12,7 @@ sceneByURL:
 movieByURL:
   - action: scrapeXPath
     url:
+      - czechar.com
       - czechvr.com
       - czechvrcasting.com
       - czechvrfetish.com
@@ -35,11 +37,11 @@ xPathScrapers:
         selector: $info//div[@class="datum"]/text()
         postProcess:
           - parseDate: Jan 2, 2006
-      Details: &detailsSel //div[@class="textDetail"]/text()
+      Details: &detailsSel //div[@class="text"]/text()
       Tags:
-        Name: //div[@id="MoreTags"]/div[@class="tagsipka"]//a/text()
+        Name: //div[@class="tag new"]/a/text()
       Performers:
-        Name: $info//div[@class="featuring"]//a/text()
+        Name: $info//div[@class="modelky"]//a//span/text()
       Studio: &studio
         Name:
           selector: *titleSel
@@ -66,7 +68,7 @@ xPathScrapers:
       $url: *urlSel
     movie:
       Name: *title
-      Duration: $info//div[@class="casDetail"]/span[@class="desktop"]/text()
+      Duration: $info//div[@class="cas"]/text()
       Date: *date
       Studio: *studio
       Synopsis: *detailsSel
@@ -84,4 +86,4 @@ driver:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
 
-# Last Updated July 25, 2023
+# Last Updated April 2, 2024

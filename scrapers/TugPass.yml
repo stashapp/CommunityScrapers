@@ -3,41 +3,53 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - tugpass.com/videos
-    scraper: sceneScraper_network
+    scraper: network
   - action: scrapeXPath
-    url: 
+    url:
+      - cumblastcity.com/videos
+      - clubtug.com/videos
       - familylust.com/videos
+      - finishhim.com/videos
+      - meanmassage.com/videos
+      - nookies.com/video
+      - over40handjobs.com/videos
       - petite18.com/videos
       - seemomsuck.com/videos
-      - clubtug.com/videos
       - teentugs.com/videos
+    scraper: primary
+  - action: scrapeXPath
+    url:
+      - breedme.com/videos
+      - edgequeens.com/videos
+      - jawbreakerz.com/videos
+      - milfaf.com/videos
+      - mylked.com/videos
+      - shadyspa.com/videos
+      - shereacts.com/videos
+    scraper: secondary
+  - action: scrapeXPath
+    url:
       - teasepov.com/videos
-      - over40handjobs.com/videos
-      - meanmassage.com/videos
-      - finishhim.com/videos
-      - ebonytugs.com/videos
-      - cumblastcity.com/videos
-    scraper: sceneScraper_sites
+    scraper: teasepov
+
 xPathScrapers:
-  sceneScraper_network:
+  network:
     scene:
       Details: &details //meta[@name="description"]/@content
       Performers: &performers
-        Name: //div[@class="featuringWrapper"]/a
+        Name: //div[@class="featuringWrapper"]/a | //div[@class="video-box"]//a[contains(@href, "/model/")]
       Title: &title
-          selector: //title/text()
-          postProcess:
-            - replace:
-                - regex: \s\|.+$
-                  with:
-                - regex: \s\-.+$
-                  with:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: \s[|-].+$
+                with:
       # Scrape sanitized URL
       URL: &url //link[@rel="canonical"]/@href
       Image:
         selector: //div[@class="player"]/img/@src
         postProcess:
-           - replace:
+          - replace:
               - regex: ^
                 with: https://www.tugpass.com/
       Studio:
@@ -47,24 +59,70 @@ xPathScrapers:
             - replace:
                 - regex: ^\/[A-Za-z_-]+\/([A-Za-z0-9-]+)\/.+
                   with: $1
-  sceneScraper_sites:
+  primary:
     scene:
       Details: *details
       Performers: *performers
       Title: *title
       URL: *url
       Image:
-        selector: //img[@id="playerImagePreview"]/@src|//script/text()[contains(.,"posterImage")]|//link[@rel="canonical"]/@href
-        concat: "|"
+        selector: >
+          //link[@rel="canonical"]/@href 
+          | //div[@class="responsive-image"]/img/@src  
+          | //video/@poster 
+          | //img[@id="playerImagePreview"]/@src  
+          | //span[@class="video_here"]/img/@src
+          | //script/text()[contains(.,"posterImage")]
+        concat: "__SEP__"
         postProcess:
           - replace:
-              - regex: .*(\/.+\/.+\.(jpe?g|gif)).*(https?\:\/\/.+\.com).*
-                with: $3$1
-      Studio:
+              - regex: ^(https:.+(\.com)).*'([^']+(jpe?g|gif))'.*
+                with: $1$3
+              - regex: ^https?:.+(https://.+)
+                with: $1
+              - regex: ^(https?:.+(\.com)).+__SEP__(.+)
+                with: $1$3
+      Studio: &studio
         Name:
           selector: //meta[@name="copyright"]/@content
           postProcess:
             - replace:
                 - regex: Copyright\s(.+)\s\d{4}
                   with: $1
-# Last Updated July 18, 2023
+            - map:
+                breedme: Breed Me
+                milfaf: MILFAF
+  secondary:
+    scene:
+      Title: >-
+        //h3[@class="top-title"] |
+        //div[@class="title-top"]//h5
+      Details: //div[contains(@class, "video-detail") or contains(@class, "title-bottom")]/p
+      Date:
+        selector: //div[@class="title-top"]//span/text()
+        postProcess:
+          - replace:
+              - regex: ^\W+
+                with: ""
+          - parseDate: January 2, 2006
+      Image: //video/@poster
+      Performers:
+        Name: //div[contains(@class, "player") or contains(@class, "title-top")]//a[contains(@href, "models")]
+      URL: *url
+      Studio: *studio
+  # This one site is different enough that it gets its own scraper
+  teasepov:
+    scene:
+      Title: //div[@class="slideTitle"]
+      Details: //div[@class="videoDescription"]
+      Image: //div[@id="player"]/img/@src
+      Date:
+        selector: //div[@class="slideDate"]
+        postProcess:
+          - replace:
+              - regex: ^\W+
+                with: ""
+          - parseDate: January 2, 2006
+      URL: *url
+      Studio: *studio
+# Last Updated April 08, 2024

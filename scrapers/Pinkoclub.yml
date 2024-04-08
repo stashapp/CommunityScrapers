@@ -10,10 +10,20 @@ xPathScrapers:
     scene:
       Title:
         selector: //div[@class="titolo-video"]/h2
+      Director:
+        selector: //div[@class="caption captionvideo"]/strong
+        postProcess:
+          - replace:
+              - regex: "Directed by (.*)"
+                with: "$1"
       Performers:
         Name: //h4/a
       Details:
         selector: //div[@class="caption captionvideo"]
+        postProcess:
+          - replace:
+              - regex: "Directed by (.*)$"
+                with: ""
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:

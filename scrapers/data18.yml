@@ -1,15 +1,4 @@
 name: data18
-driver:
-  cookies:
-  - CookieURL: "https://data18.com"
-    Cookies:
-      - Name: "data_user_captcha"
-        Domain: ".data18.com"
-        Value: "1"
-        Path: "/"
-  headers:
-    - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
 movieByURL:
   - action: scrapeXPath
     url:
@@ -20,6 +9,13 @@ sceneByURL:
     url:
       - data18.com/scenes
     scraper: sceneScraper
+  # Many people have single-file movies and want to scrape them
+  # as scenes instead of making a single-scene Movie object
+  - action: scrapeXPath
+    url:
+      - data18.com/movies
+    scraper: movieScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -59,6 +55,7 @@ xPathScrapers:
     common:
       $movieInfo: //div[@id="body2div_b"]
       $studio: //b[text()='Studio']/following-sibling::b/a
+      $performer: //div[h3[contains(text(), 'Pornstars / Cast')]]//a[@class='bold gen']
     movie:
       Name:
         selector: //title
@@ -94,4 +91,44 @@ xPathScrapers:
                 with:
       FrontImage: //a[@id='enlargecover']/@data-featherlight
       BackImage: //a[text()='+Back']/@href
+    scene:
+      Title:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: (.+?)(?:\s\(\d{4}\)\sPorn\sMovie\s\|\sDATA18)
+                with: $1
+      Date:
+        selector: $movieInfo//span[contains(text(), "Release date")]/text()
+        postProcess:
+          - replace:
+              - regex: 'Release date:\s*'
+                with:
+          - parseDate: January, 2006
+      Studio:
+        Name: $studio/text()
+        URL: $studio/@href
+      Director: //p[b[contains(text(),'Director')]]//a[@class='bold']
+      Performers:
+        Name: $performer
+        URL: $performer/@href
+      Details:
+        selector: //b[text()="Description"]/..
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: '^Description\s*-\s*'
+                with:
+      Image: //a[@id='enlargecover']/@data-featherlight
+driver:
+  cookies:
+    - CookieURL: "https://data18.com"
+      Cookies:
+        - Name: "data_user_captcha"
+          Domain: ".data18.com"
+          Value: "1"
+          Path: "/"
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
 # Last Updated July 18, 2023

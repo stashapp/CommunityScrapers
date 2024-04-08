@@ -1,0 +1,49 @@
+# requires: Algolia
+name: "3rdDegreeFilms"
+sceneByURL:
+  - action: script
+    url:
+      - www.3rddegreefilms.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - 3rddegreefilms
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - 3rddegreefilms
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - 3rddegreefilms
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - 3rddegreefilms
+    - validName
+movieByURL:
+  - action: script
+    url:
+      - 3rddegreefilms.com/en/movie
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - 3rddegreefilms
+      - movie
+galleryByURL:
+  - action: script
+    url:
+      - 3rddegreefilms.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - 3rddegreefilms
+      - gallery
+# Last Updated March 13, 2024

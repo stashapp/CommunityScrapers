@@ -13,14 +13,14 @@ jsonScrapers:
   sceneScraper:
     scene:
       Title: title
-      Details: decription
+      Details: description
       Date:
         selector: publish_date
         postProcess:
           - replace:
-              - regex: \s.+$
-                with:
-          - parseDate: 2006-01-02
+              - regex: "T.*"
+                with: ""
+          - parseDate: "2006-01-02"
       Image: poster_src
       Performers:
         Name: casts.#.screen_name
@@ -30,4 +30,4 @@ jsonScrapers:
       Tags:
         Name: tags.#.name
       Code: id
-# Last Updated January 20, 2023
+# Last Updated March 23, 2024

@@ -1,0 +1,25 @@
+name: "HDPorn"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hdporn.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Details: //span[@class="desc"]/p
+      Performers:
+        Name: //li/span/a
+      Image:
+        selector: //div[@class="video_image"]/@style
+        postProcess:
+          - replace:
+              - regex: ^.+?url\('([^']+).+
+                with: http://hdporn.com/$1
+      Tags:
+        Name: //div[@class="tagLinks"]/span/a
+      Studio:
+        Name:
+          fixed: "HD Porn"
+# Last Updated March 23, 2024

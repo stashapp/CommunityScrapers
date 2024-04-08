@@ -4,9 +4,15 @@ from pathlib import Path
 
 import py_common.graphql as graphql
 import py_common.log as log
+from py_common.config import get_config
 from py_common.util import dig
 
+
+config = get_config(
+    default="""
 find_missing_galleries = False
+"""
+)
 
 
 def get_gallery_id_by_path(abs_path):
@@ -30,7 +36,7 @@ query FindGalleries($galleries_filter: GalleryFilterType) {
         or (gallery_id := dig(result, "findGalleries", "galleries", 0, "id")) is None
     ):
         log.error(
-            f"No gallery found with path '{abs_path}', make sure you've run a scan first"
+            f"Found gallery with path '{abs_path}' but it needs to be added into Stash with a scan first"
         )
         exit(1)
 
@@ -95,7 +101,7 @@ if not scene:
 
 
 gallery_ids = [g["id"] for g in scene["galleries"]]
-if not gallery_ids and find_missing_galleries:
+if not gallery_ids and config.find_missing_galleries:
     log.debug(
         f"No galleries associated with scene {SCENE_ID}, searching for zips in folder..."
     )

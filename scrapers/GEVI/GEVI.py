@@ -163,7 +163,7 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
     if foreskin := from_table(soup, "Foreskin:"):
         performer["circumcised"] = foreskin
 
-    if dick_size := from_table(soup, "Dick size:"):
+    if dick_size := from_table(soup, "Dick Size:"):
         performer["penis_length"] = dick_size.split("/")[-1].strip().removesuffix("cm")
 
     if weight := from_table(soup, "Weight:"):

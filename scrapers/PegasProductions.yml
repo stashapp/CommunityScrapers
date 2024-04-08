@@ -1,21 +1,90 @@
 name: PegasProductions
+
+# This studio has two formats for scenes depending on URL.  The less useful format has '/abonnements' to 
+# start the path  while the more useful one does not.  Scenes appear to be available in both formats, but 
+# there is no map between the resources referenced in each style of URL.
+
 sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pegasproductions.com/abonnements
+    scraper: abonnementsScraper
+
   - action: scrapeXPath
     url:
       - pegasproductions.com
     scraper: sceneScraper
+
 xPathScrapers:
+  abonnementsScraper:
+    scene:
+      Title: //meta[@itemprop="name"]/@content
+      Date:
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - replace:
+              - regex: ^([^T]+).+
+                with: $1
+      Performers:
+        Name:
+          selector: //h1
+          postProcess:
+            - replace:
+                - regex: ^.+?([^:]*)$
+                  with: $1
+                - regex: '[^a-zA-Z0-9\s]'
+                  with: '' 
+      Image: //meta[@itemprop="thumbnailUrl"]/@content
+      Studio:
+        Name:
+          fixed: Pegas Productions
+
   sceneScraper:
     scene:
-      # To access other scenes go to Scene and select model which will show all their scenes
       Title:
         selector: //span[@itemprop="name"]
+      
+      # This format has options for English and French language versions of the scene.  Depending on 
+      # the language the values we key off for Performers and Director will be in English or French.
+      Director: //p[contains(b,"Director") or contains(b,"Réalisateur")]/text()
+      Performers:
+        Name: //div[@class="span10"]/p[contains(b,"Starring") or contains(b,"Distribution")]/a
+
       Date:
         selector: //div[@id="date-duree"]/div[1]/p[1]
+        # English URLs display dates in the format of 02/01/2006.  
+        # French URLs display dates in the format of 01 janvier 2006, using the full french name of the month.
+        # This bit of hackery converts the dates used in the French version to format used on the English page.
         postProcess:
+          - replace:
+              - regex: janvier
+                with: "01"
+              - regex: f[eé]vrier 
+                with: "02"
+              - regex: mars
+                with: "03"
+              - regex: avril
+                with: "04"
+              - regex: mai
+                with: "05"
+              - regex: juin
+                with: "06"
+              - regex: juillet
+                with: "07"
+              - regex: aout
+                with: "08"
+              - regex: septembre
+                with: "09"
+              - regex: octobre
+                with: "10"
+              - regex: novembre
+                with: "11"
+              - regex: d[eé]cembre
+                with: "12"
+              - regex: \s
+                with: /
           - parseDate: 02/01/2006
-      Performers:
-        Name: //div[@class="span10"]/p[contains(b,"Starring")]/a
+
       Tags:
         Name:
           selector: //div[@class="span10"]/p[contains(b,"Tags")]
@@ -34,8 +103,12 @@ xPathScrapers:
                 with: $1
       Studio:
         Name:
-          fixed: PegasProductions
+          fixed: Pegas Productions
+
 driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
   cookies:
     - CookieURL: "https://www.pegasproductions.com/"
       Cookies:
@@ -43,4 +116,4 @@ driver:
           Domain: ".pegasproductions.com"
           Value: "en"
           Path: "/"
-# Last Updated May 17, 2021
+# Last Updated March 29, 2024

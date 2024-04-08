@@ -19,7 +19,7 @@ sceneByFragment:
   scraper: sceneScraper
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.kinkmen.com/search?type=performers&q={}
+  queryURL: https://www.kinkmen.com/models?q={}
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
@@ -30,83 +30,43 @@ performerByURL:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $shoot: //div[contains(@class, "shoot-detail-legend")]
     scene:
-      Title: //meta[@name="twitter:title"]/@content
+      Title: //h1
       Date:
-        selector: //span[@class="shoot-date"]/text()
+        selector: ($shoot/span)[2]
         postProcess:
-          - parseDate: January 2, 2006
+          - parseDate: 01/02/06
       Details:
-        selector: //span[@class="description-text"]/*[self::p or self::ul]
-        concat: "\n\n"
-      Code: //div[@class="shoot-page"]/@data-shootid
-      Director: //span[@class="director-name"]
+        selector: //div[contains(@class, "shoot-detail-description")]/span/p/text()
+        concat: "\n"
+      Code: //div[contains(@class, "shootPage")]/@data-shootid
+      Director: //span[contains(@class, "director-name")]
       Performers:
         Name:
-          selector: //p[@class="starring"]/span[@class="names h5"]/a/text()
+          selector: //h1/following-sibling::*/a[contains(@href, "/model/")]
           postProcess:
             - replace:
                 - regex: \,
                   with: ""
       Tags:
         Name:
-          selector: //a[@class="tag"]
+          selector: //div[contains(@class, "shoot-detail-description")]//a[contains(@href, "/tag/")]
           postProcess:
             - replace:
                 - regex: \,
                   with: ""
-      Image: //meta[@name="twitter:image"]/@content
+      Image: //video/@poster
       Studio:
         Name:
-          selector: //div[@class="column shoot-logo"]/a/@href
-          postProcess:
-            - replace:
-                - regex: /channel/
-                  with: ""
-            - map:
-                # List of sites as of 2023-11-06 from https://www.kinkmen.com/channels
-                # [...new Set([...document.querySelectorAll('h3 > a')]
-                #   .map(a => a.href.split("/").pop() + ": " + a.innerText))]
-                #   .toSorted()
-                #   .join("\n")
-                30-minutes-of-torment: 30 Minutes Of Torment
-                alternadudes: Alternadudes
-                bondage-compound: Bondage Compound
-                bonus-hole-boys: Bonus Hole Boys
-                bound-and-gagged: Bound And Gagged
-                bound-gods: Bound Gods
-                bound-in-public: Bound In Public
-                boynapped: Boynapped
-                butt-machine-boys: Butt Machine Boys
-                fetishnetwork-male: FetishNetwork Male
-                kinkmen-classics: Kink Men Classics
-                kink-men-series: Kink Men Series
-                kinkmen-test-shoot: Kink Men Test Shoots
-                kinky-bites-men: Kinky Bites Men
-                masqulin: Masqulin
-                men-at-play: Men At Play
-                men-on-edge: Men On Edge
-                missionary-boyz: Missionary Boyz
-                my-dirtiest-fantasy: My Dirtiest Fantasy
-                my-friends-feet: My Friends' Feet
-                naked-kombat: Naked Kombat
-                nasty-daddy: Nasty Daddy
-                str8hell: Str8Hell
-                sw-nude: SW Nude
-                taken-rough: Taken Rough
-                therapy-dick: Therapy Dick
-                titanmen-rough: TitanMen Rough
-                wrestlingmale: WrestlingMale
-                yes-father: Yes Father
-                yesirboys: Yesirboys
-  # Kinkmen.com pages still contain old/broken Kink.com link; commenting out URL as it is currently inaccurate
-  #    URL: //link[@rel="canonical"]/@href
+          selector: ($shoot/span)[1]
   performerSearch:
     common:
-      $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
-
+      $result: //a[contains(@class, "ratio-model")]
     performer:
-      Name: $result/img/@alt
+      Name: $result/following-sibling::span
+      Image: $result/img/@src
       URL:
         selector: $result/@href
         postProcess:
@@ -115,35 +75,17 @@ xPathScrapers:
                 with: https://www.kinkmen.com
   performerScraper:
     performer:
-      Name:
-        selector: //h1/text() # //div[@font-size][number(translate(@font-size,"px",""))>=35]/text()
-        concat: " "
-        postProcess:
-          - replace:
-              - regex: ^\s+
-                with: ""
-              - regex: \s+$
-                with: 
-      Twitter:
-        selector: '//div/a[contains(concat(" ", normalize-space(@class), " "), " social-link ") and contains(@href, "twitter.com")]/@href'
-      Image:
-        selector: //div/img[contains(@src, "imagedb")][1]/@src
-      Tattoos:
-        selector: '//div/span[text()=" tags: "]/following-sibling::a[contains(@href,"/tattoo")]//text()'
-        postProcess:
-          - map:
-              Tattoo: "Yes"
-      Piercings:
-        selector: '//div/span[text()=" tags: "]/following-sibling::a[contains(@href,"/pierced")]/span'
-        concat: "\n"
+      Name: //h1
+      Twitter: //div/a[contains(@href, "twitter.com")]/@href
+      Image: //div[contains(@class, "kink-slider-images")]/img/@data-src
       Tags:
-        Name: '//div/span[text()=" tags: "]/following-sibling::a/span/text()'
+        Name: //a[contains(@href, "/tag/")]
       Details:
-        selector: '//div/span/p[@class="bio"]/following-sibling::p'
-        concat: "\n"
+        selector: //p[@class="bio"]/following-sibling::p
+        concat: "\n\n"
         postProcess:
           - replace:
-              - regex: '(?i)<a[^>]*>'
+              - regex: "<a[^>]*>"
                 with: ""
       URL: //link[@rel="canonical"]/@href
 driver:

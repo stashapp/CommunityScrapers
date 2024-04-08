@@ -4,6 +4,7 @@ import json
 import re
 import sys
 import threading
+import time
 from urllib.parse import urlparse
 
 try:
@@ -39,9 +40,14 @@ JAV_SEARCH_HTML = None
 JAV_MAIN_HTML = None
 PROTECTION_CLOUDFLARE = False
 
+# Flaresolverr
+FLARESOLVERR_ENABLED = False
+FLARESOLVERR_URL = "http://localhost:8191/v1"
+FLARESOLVERR_TIMEOUT_MAX = 60000
+
 JAV_HEADERS = {
     "User-Agent":
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0',
     "Referer": "http://www.javlibrary.com/"
 }
 # We can't add movie image atm in the same time as Scene
@@ -231,56 +237,254 @@ BANNED_WORDS = {
     "Y********ls": "Young Girls"
 }
 
+REPLACE_TITLE = {
+    "-uncensored": "",
+    "-Uncensored": "",
+    "uncensored": "",
+    "Uncensored": "",
+    "-uncensore": "",
+    "-Uncensore": "",
+    "_uncen": "",
+    "_Uncen": "",
+    "hd.": ".",
+    "HD.": ".",
+    "a.hd": "",
+    "b.hd": "",
+    "c.hd": "",
+    "d.hd": "",
+    "A.HD": "",
+    "B.HD": "",
+    "C.HD": "",
+    "D.HD": "",
+    "a.H": "",
+    "b.H": "",
+    "c.H": "",
+    "d.H": "",
+    "A.H": "",
+    "B.H": "",
+    "C.H": "",
+    "D.H": "",
+    ".hd": "",
+    ".HD": "",
+    "-hd": "",
+    "-HD": "",
+    "_hd": "",
+    "_HD": "",
+    "-4k": "",
+    "-4K": "",
+    ".4k": "",
+    ".4K": "",
+    "a.avi": ".avi",
+    "b.avi": ".avi",
+    "c.avi": ".avi",
+    "d.avi": ".avi",
+    "a.mp4": ".mp4",
+    "b.mp4": ".mp4",
+    "c.mp4": ".mp4",
+    "d.mp4": ".mp4",
+    "a.wmv": ".wmv",
+    "b.wmv": ".wmv",
+    "c.wmv": ".wmv",
+    "d.wmv": ".wmv",  
+    "A.avi": ".avi",
+    "B.mp4": ".avi",
+    "C.mp4": ".avi",
+    "D.avi": ".avi",
+    "A.mp4": ".mp4",
+    "B.mp4": ".mp4",
+    "C.mp4": ".mp4",
+    "D.mp4": ".mp4",
+    "A.wmv": ".wmv",
+    "B.wmv": ".wmv",
+    "C.wmv": ".wmv",
+    "D.wmv": ".wmv",
+    "A.AVI": ".AVI",
+    "B.AVI": ".AVI",
+    "C.AVI": ".AVI",
+    "D.AVI": ".AVI",
+    "A.MP4": ".MP4",
+    "B.MP4": ".MP4",
+    "C.MP4": ".MP4",
+    "D.MP4": ".MP4",
+    "A.WMV": ".WMV",
+    "B.WMV": ".WMV",
+    "C.WMV": ".WMV",
+    "D.WMV": ".WMV",  
+    "A.AVI": ".AVI",
+    "B.MP4": ".AVI",
+    "C.MP4": ".AVI",
+    "D.AVI": ".AVI",
+    "A.MP4": ".MP4",
+    "B.MP4": ".MP4",
+    "C.MP4": ".MP4",
+    "D.MP4": ".MP4",
+    "A.WMV": ".WMV",
+    "B.WMV": ".WMV",
+    "C.WMV": ".WMV",
+    "D.WMV": ".WMV",
+    ".3g2": "",
+    ".3gp": "",
+    ".amv": "",
+    ".asf": "",
+    ".avi": "",
+    ".f4a": "",
+    ".f4b": "",
+    ".f4p": "",
+    ".f4v": "",
+    ".flv": "",
+    ".flv": "",
+    ".gifv": "",
+    ".m4p": "",
+    ".m4v": "",
+    ".m4v": "",
+    ".mkv": "",
+    ".mng": "",
+    ".mod": "",
+    ".mov": "",
+    ".mp2": "",
+    ".mp4": "",
+    ".mpe": "",
+    ".mpeg": "",
+    ".mpg": "",
+    ".mpv": "",
+    ".mxf": "",
+    ".nsv": "",
+    ".ogg": "",
+    ".ogv": "",
+    ".qt": "",
+    ".rm": "",
+    ".roq": "",
+    ".rrc": "",
+    ".svi": "",
+    ".ts": "",
+    ".vob": "",
+    ".webm": "",
+    ".wmv": "",
+    ".yuv": "", 
+    ".3G2": "",
+    ".3GP": "",
+    ".AMV": "",
+    ".ASF": "",
+    ".AVI": "",
+    ".F4A": "",
+    ".F4B": "",
+    ".F4P": "",
+    ".F4V": "",
+    ".FLV": "",
+    ".FLV": "",
+    ".GIFV": "",
+    ".M4P": "",
+    ".M4V": "",
+    ".M4V": "",
+    ".MKV": "",
+    ".MNG": "",
+    ".MOD": "",
+    ".MOV": "",
+    ".MP2": "",
+    ".MP4": "",
+    ".MPE": "",
+    ".MPEG": "",
+    ".MPG": "",
+    ".MPV": "",
+    ".MXF": "",
+    ".NSV": "",
+    ".OGG": "",
+    ".OGV": "",
+    ".QT": "",
+    ".RM": "",
+    ".ROQ": "",
+    ".RRC": "",
+    ".SVI": "",
+    ".TS": "",
+    ".VOB": "",
+    ".WEBM": "",
+    ".WMV": "",
+    ".YUV": ""
+}
+
 OBFUSCATED_TAGS = {
     "Girl": "Young Girl", # ロリ系 in Japanese
     "Tits": "Small Tits" # 微乳 in Japanese
 }
 
 
-def checking_protection(url):
+class ResponseHTML:
+    content = ""
+    html = ""
+    status_code = 0
+    url = 0
+
+def bypass_protection(url):
     global PROTECTION_CLOUDFLARE
 
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     log.debug("=== Checking Status of Javlib site ===")
     PROTECTION_CLOUDFLARE = False
+    response_html = ResponseHTML
     for site in SITE_JAVLIB:
         url_n = url.replace(url_domain, site)
         try:
-            response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
+            if FLARESOLVERR_ENABLED:             
+                url = FLARESOLVERR_URL
+                headers = {"Content-Type": "application/json"}
+                data = {
+                    "cmd": "request.get",
+                    "url": url_n,
+                    "maxTimeout": FLARESOLVERR_TIMEOUT_MAX
+                }
+
+                log.info(f"Using Flarsolverr: {FLARESOLVERR_URL}")
+                log.info(f"Javlibrary input url: {url}")
+                responseJson = requests.post(url, headers=headers, json=data)
+                json_input = json.loads(str(responseJson.text))
+
+                response_html.content = json_input['solution']['response']
+                response_html.html = json_input['solution']['response']
+                response_html.status_code = json_input['solution']['status']
+                response_html.url = json_input['solution']['url']
+
+                #log.info(f"Flaresolverr response html: {response_html}")
+            else:
+                response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
+                response_html.html = response.text
+                response_html.status_code = response.status_code
         except Exception as exc_req:
             log.warning(f"Exception error {exc_req} while checking protection for {site}")
             return None, None
-        if response.url == "https://www.javlib.com/maintenance.html":
+        if response_html.url == "https://www.javlib.com/maintenance.html":
             log.error(f"[{site}] Maintenance")
-        if "Why do I have to complete a CAPTCHA?" in response.text \
-            or "Checking your browser before accessing" in response.text:
+        if "Why do I have to complete a CAPTCHA?" in response_html.html \
+            or "Checking your browser before accessing" in response_html.html:
             log.error(f"[{site}] Protected by Cloudflare")
             PROTECTION_CLOUDFLARE = True
-        elif response.status_code != 200:
-            log.error(f"[{site}] Other issue ({response.status_code})")
+        elif response_html.status_code != 200:   
+            log.error(f"[{site}] Other issue ({response_html.status_code})")
         else:
             log.info(
-                    f"[{site}] Using this site for scraping ({response.status_code})"
+                    f"[{site}] Using this site for scraping ({response_html.status_code})"
                 )
             log.debug("======================================")
-            return site, response
+            return site, response_html
     log.debug("======================================")
     return None, None
 
 
-def send_request(url, head, retries=0):
-    if retries > 10:
-        log.warning(f"Scrape for {url} failed after retrying")
+def send_request(url, head, retries=0, delay=1):
+    if retries > 3:
+        log.warning(f"Scrape for {url} failed after retrying {retries} times")
         return None
 
     global JAV_DOMAIN
 
+    if delay != 0:
+        log.info(f"Delaying request by {delay} seconds to prevent Cloudflare rate limiting")
+        time.sleep(delay)
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     response = None
     if url_domain in SITE_JAVLIB:
         # Javlib
         if JAV_DOMAIN == "Check":
-            JAV_DOMAIN, response = checking_protection(url)
+            JAV_DOMAIN, response = bypass_protection(url)
             if response:
                 return response
         if JAV_DOMAIN is None:
@@ -294,6 +498,11 @@ def send_request(url, head, retries=0):
         return send_request(url, head, retries+1)
     except Exception as exc_req:
         log.error(f"scrape error exception {exc_req}")
+        if delay != 0:
+            error_delay = delay+2.75
+            log.info(f"Delaying request by {error_delay} seconds and retrying")
+            time.sleep(error_delay)
+        return send_request(url, head, retries+1)
     if response.status_code != 200:
         log.debug(f"[Request] Error, Status Code: {response.status_code}")
         response = None
@@ -306,6 +515,21 @@ def replace_banned_words(matchobj):
         return BANNED_WORDS[word]
     return word
 
+def cleanup_title(title):
+    if title == None:
+        return title
+
+    log.info(f"Starting title cleanup for: {title}")
+    cleaned_title = False
+    for key, value in REPLACE_TITLE.items():
+        if key in title:
+            title = title.replace(key, value)
+            cleaned_title = True
+    
+    if cleaned_title:
+        title = title.strip()
+        log.info(f"Found match and using new clean title: {title}")
+    return title
 
 def regexreplace(input_replace):
     word_pattern = re.compile(r'(\w|\*)+')
@@ -496,15 +720,12 @@ def th_imageto_base64(imageurl, typevar):
 FRAGMENT = json.loads(sys.stdin.read())
 
 SEARCH_TITLE = FRAGMENT.get("name")
+SEARCH_TITLE = cleanup_title(SEARCH_TITLE)
 SCENE_URL = FRAGMENT.get("url")
 
 if FRAGMENT.get("title"):
     SCENE_TITLE = FRAGMENT["title"]
-    # Remove extension
-    SCENE_TITLE = re.sub(r"\..{3}$", "", SCENE_TITLE)
-    SCENE_TITLE = re.sub(r"-JG\d", "", SCENE_TITLE)
-    SCENE_TITLE = re.sub(r"\s.+$", "", SCENE_TITLE)
-    SCENE_TITLE = re.sub(r"[ABCDEFGH]$", "", SCENE_TITLE)
+    SCENE_TITLE = cleanup_title(SCENE_TITLE)
 else:
     SCENE_TITLE = None
 
@@ -567,9 +788,9 @@ jav_xPath[
 jav_xPath[
     "studio"] = '//td[@class="header" and text()="Maker:"]'\
                 '/following-sibling::td/span[@class="maker"]/a/text()'
-jav_xPath[
-    "label"] = '//td[@class="header" and text()="Label:"]'\
-                '/following-sibling::td/span[@class="label"]/a/text()'
+#jav_xPath[
+#    "label"] = '//td[@class="header" and text()="Label:"]'\
+#                '/following-sibling::td/span[@class="label"]/a/text()'
 jav_xPath["image"] = '//div[@id="video_jacket"]/img/@src'
 
 jav_result = {}
@@ -587,7 +808,7 @@ if "searchName" in sys.argv:
                 if isinstance(value,list):
                     jav_result[key] = value[0]
                 if key in ["image", "url"]:
-                    jav_result[key] = f"https:{jav_result[key]}"
+                    jav_result[key] = f"https:{jav_result[key]}".replace("https:https:", "https:")
             jav_result = [jav_result]
         else:
             jav_result = jav_search_by_name(JAV_SEARCH_HTML, jav_xPath_search)

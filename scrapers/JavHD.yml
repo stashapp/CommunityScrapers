@@ -3,9 +3,15 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - javhd.com/en/id/
-    scraper: sceneScraper
+      - javhd.com/en/studio/
+    scraper: javhd
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - javhd.com/en/model/
+    scraper: javhd
 xPathScrapers:
-  sceneScraper:
+  javhd:
     common:
       $script: //script[@type="application/ld+json"]/text()
     scene:
@@ -24,6 +30,7 @@ xPathScrapers:
           - replace:
               - regex: .+datePublished":"([^"]+)",.+
                 with: $1
+          - parseDate: "2006-01-02T15:04:05-07:00"
       Title:
         selector: //h1[@class="content__title"]
       Tags:
@@ -32,4 +39,25 @@ xPathScrapers:
         Name:
           fixed: JavHD
       URL: //link[@rel="canonical"]/@href
-# Last Updated October 28, 2022
+
+    performer:
+      Name: //h1
+      Image: //div[@class="avatar"]/img/@src
+      URL: //link[@rel="canonical"]/@href
+      Details: //div[@class="info"]/p
+      Birthdate:
+        selector: //strong[contains(., "Birth date")]/following-sibling::*
+        postProcess:
+          - parseDate: 2 January 2006
+      EyeColor: //strong[contains(., "Eye color")]/following-sibling::*
+      HairColor: //strong[contains(., "Hair color")]/following-sibling::*
+      Height:
+        selector: //strong[contains(., "Height")]/following-sibling::*
+        postProcess:
+          - replace:
+              - regex: (\d+).*
+                with: $1
+      Weight: //strong[contains(., "Weight")]/following-sibling::*
+      Ethnicity: //strong[contains(., "Ethnicity")]/following-sibling::*
+      FakeTits: //strong[contains(., "Breast factor")]/following-sibling::*
+# Last Updated April 05, 2024

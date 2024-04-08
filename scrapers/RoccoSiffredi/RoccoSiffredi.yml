@@ -9,25 +9,34 @@ sceneByURL:
       - ../Algolia/Algolia.py
       - roccosiffredi
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - roccosiffredi
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - roccosiffredi
 sceneByName:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - roccosiffredi
-      - searchName
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - roccosiffredi
+    - searchName
 sceneByQueryFragment:
-    action: script
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - roccosiffredi
+    - validName
+movieByURL:
+  - action: script
+    url:
+      - roccosiffredi.com/en/dvd/
     script:
       - python
       - ../Algolia/Algolia.py
       - roccosiffredi
-      - validName
+      - movie
 galleryByURL:
   - action: script
     url:

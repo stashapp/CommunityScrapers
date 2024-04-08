@@ -1,0 +1,51 @@
+name: "BadPuppy"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - badpuppy.com
+      - clubamateurusa.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div/h3
+      Details:
+        selector: //td[@colspan="2"]
+      Performers:
+        Name:
+          selector: //td[@class="ten" and not(a[contains(@href,"categories")])]
+          postProcess:
+            - replace:
+              - regex: \([^)]+\)
+                with: ""
+              - regex: \s+
+                with: " "
+          split: ','
+      Image:
+        selector: //base/@href | //script[contains(.,"image:")]
+        concat: "__SEP__"
+        postProcess:
+          - replace:
+              - regex: ^(.+)?__SEP__.+image:"([^"]+)?.+$
+                with: $1/$2
+      Date:
+        selector: //td/b[contains(text(),"Added")]
+        postProcess:
+          - replace:
+              - regex: ^Added:\s*
+                with: ""
+          - parseDate: Jan 2, 2006
+      Tags:
+        Name: //a[@class="model_category_link" and contains(@href,"categories")]
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess:
+            - replace:
+                - regex: ^.+?\.([^\.]+).+
+                  with: $1
+            - map:
+                "badpuppy": BadPuppy
+                "clubamateurusa": ClubAmateurUSA
+# Last Updated March 24, 2024

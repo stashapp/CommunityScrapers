@@ -35,7 +35,7 @@ def extract_SceneInfo(table,cover_url=None):
     if table.find(class_= ["blog_wide_new_text","entryBlurb"]):
         description=table.find(class_= ["blog_wide_new_text","entryBlurb"]).get_text(" ", strip=True)
         description=unicodedata.normalize('NFKC', description).encode('ascii','ignore').decode('ascii')
-    date = table.find(class_="blog-title-right").get_text(strip=True) #This is a BeautifulSoup element
+    date = table.find(class_=["blog-title-right","entryDatestamp"]).get_text(strip=True) #This is a BeautifulSoup element. New IFM scenes are under blog-title-right clase for date. Older videos use entryDatestamp class
     performer = table.find(class_= ["entryHeadingFlash","entryHeading"]).find_all("a")[1].get_text().replace("_"," ")
     performer = str(performer)
     debugPrint(f"performer:{performer}")
@@ -99,14 +99,16 @@ def scrapeScene(filename,date,url):
             debugPrint(artist_id+"-"+video_id)
             tables = response.find_all(class_= ["blog_wide_news_tbl entry ppss-scene","entry ppss-scene"])
             for table in tables:
-                    if table.find('video'):
+                    if table.find('video'): #New scenes use the video tag
                         img=str(table.find("video")['poster'])
-                        debugPrint(f"Image:{str(img)}")
-                        if (f"/{artist_id}-{video_id}vg.jpg" in img) or (f"/{artist_id}-{video_id}hs.jpg" in img):
-                            debugPrint("Found a single match video!")
-                            # Extract data from this single result
-                            ret = extract_SceneInfo(table)
-                            break
+                    elif table.find('img'): #old scenes still use the old format of a img tag
+                        img=str(table.find("img")['src'])
+                    debugPrint(f"Image:{str(img)}") 
+                    if (f"/{artist_id}-{video_id}vg.jpg" in img) or (f"/{artist_id}-{video_id}hs.jpg" in img):
+                        debugPrint("Found a single match video!")
+                        # Extract data from this single result
+                        ret = extract_SceneInfo(table)
+                        break
             else:
                 sys.stderr.write("0 matches found! Checking offset")
                 pages=int(response.find_all("a", class_="pagging_nonsel")[-1].get_text())
@@ -117,13 +119,15 @@ def scrapeScene(filename,date,url):
                         response = browser.page
                         tables = response.find_all(class_= ["blog_wide_news_tbl entry ppss-scene","entry ppss-scene"])
                         for table in tables:
-                            if table.find('video'):
-                                img=str(table.find("video")["poster"])
-                                debugPrint(f"Image:{img}")
-                                if (f"/{artist_id}-{video_id}vg.jpg" in img) or (f"/{artist_id}-{video_id}hs.jpg" in img):
-                                    sys.stderr.write("FOUND")
-                                    ret = extract_SceneInfo(table)
-                                    break
+                            if table.find('video'): #New scenes use the video tag
+                                img=str(table.find("video")['poster'])
+                            elif table.find('img'): #old scenes still use the old format of a img tag
+                                img=str(table.find("img")['src'])
+                            debugPrint(f"Image:{img}")
+                            if (f"/{artist_id}-{video_id}vg.jpg" in img) or (f"/{artist_id}-{video_id}hs.jpg" in img):
+                                sys.stderr.write("FOUND")
+                                ret = extract_SceneInfo(table)
+                                break
                 else:
                     sys.stderr.write("0 matches found!, check your filename")
 

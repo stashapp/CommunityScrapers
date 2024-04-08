@@ -1,0 +1,40 @@
+name: RoyalFetishFilms
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - royalfetishxxx.com/videos
+    scraper: sceneScraper
+    queryURL: "https://royalfetishxxx.adultmembersites.com/api/videos/{url}"
+    queryURLReplace:
+      url:
+        - regex: '.+/videos/(\d+)-.+'
+          with: "$1"
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title: title
+      Details:
+        selector: description
+        postProcess:
+          - replace:
+              - regex: "<p>"
+                with: "\n"
+              - regex: "<[^>]*>"
+                with: ""
+      Date:
+        selector: publish_date
+        postProcess:
+          - replace:
+              - regex: "T.*"
+                with: ""
+          - parseDate: "2006-01-02"
+      Image: poster_src
+      Performers:
+        Name: casts.#.screen_name
+      Studio:
+        Name:
+          fixed: Royal Fetish Films
+      Tags:
+        Name: tags.#.name
+      Code: id
+# Last Updated March 23, 2024

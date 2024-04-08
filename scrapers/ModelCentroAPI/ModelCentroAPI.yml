@@ -15,8 +15,9 @@ sceneByURL:
       - natashanice.com/scene/
       - tanyatate.xxx/scene/
       - vinaskyxxx.com/scene/
+      - womenwhosmoke.com/scene/
     action: script
     script:
       - python
       - ModelCentroAPI.py
-# Last Updated February 22, 2024
+# Last Updated March 16, 2024

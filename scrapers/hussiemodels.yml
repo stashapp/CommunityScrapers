@@ -2,32 +2,45 @@ name: hussiemodels
 sceneByURL:
   - action: scrapeXPath
     url:
-      - hookuphotshot.com/trailers
-      - hotandtatted.com/trailers
+      - hookuphotshot.com/trailers/
+      - hotandtatted.com/trailers/
       - hussiepass.com/trailers/
-      - seehimfuck.com/trailers
-      - seehimsolo.com/trailers
+      - seehimfuck.com/trailers/
+      - seehimsolo.com/trailers/
       - povpornstars.com
-    scraper: sceneScraper
+    scraper: hussieScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - hussiepass.com/dvds/
+      - seehimfuck.com/dvds/
+      - seehimsolo.com/dvds/
+    scraper: hussieScraper
 xPathScrapers:
-  sceneScraper:
+  hussieScraper:
     common:
       $image: //img[contains(@class, "update_thumb") or contains(@class, "trailer-thumb")]
-    scene:
-      Title:
-        selector: //div[contains(@class, "videoDetails")]/h3
-      Date:
-        selector: //div[contains(@class, "videoInfo")]/p[contains(span, "Date Added:")]/text()
+    movie:
+      Name: //div[contains(@class, "profile-details")]/h3
+      Synopsis: &dvdSynopsis //div[contains(@class, "profile-about")]/p/text()
+      FrontImage: &dvdCover
+        selector: >-
+          //head/base/@href |
+          //img[contains(@class, "dvd_box")]/@src0_4x |
+          //img[contains(@class, "dvd_box")]/@src0_3x |
+          //img[contains(@class, "dvd_box")]/@src0_2x |
+          //img[contains(@class, "dvd_box")]/@src0_1x
+        concat: __SEPARATOR__
         postProcess:
-          # Only HookupHotshot still uses this format but the others use YYYY-MM-DD
-          # so they'll fall through and still be correct wrt. expected Stash date format
-          - parseDate: January 02, 2006
-      Studio:
+          - replace:
+              - regex: (.*?)__SEPARATOR__(.*?)(:?__SEPARATOR).*
+                with: $1$2
+      Studio: &studio
         Name:
           selector: //head/base/@href
           postProcess:
             - replace:
-                - regex: ^https://(?:(?:[^.]+\.)?)([^.]+)\.com/.*
+                - regex: ^https://(?:[^.]+\.)?([^.]+)\.com/.*
                   with: $1
             - map:
                 hookuphotshot: HookUp Hotshot
@@ -36,10 +49,32 @@ xPathScrapers:
                 seehimfuck: See Him Fuck
                 seehimsolo: See Him Solo
                 povpornstars: POV Pornstars
+    scene:
+      Title: //div[contains(@class, "videoDetails")]/*[starts-with(name(), 'h')]
+      Date:
+        selector: //div[contains(@class, "videoInfo")]/p[contains(span, "Date Added:")]/text()
+        postProcess:
+          # Only HookupHotshot still uses this format but the others use YYYY-MM-DD
+          # so they'll fall through and still be correct wrt. expected Stash date format
+          - parseDate: January 2, 2006
+      Studio: *studio
       Performers:
         Name: //li[contains(@class, "update_models")]//a
       Tags:
-        Name: //div[contains(@class, "featuring")]//a[contains(@href, "categories")]
+        Name: //div[contains(@class, "featuring")]//a[contains(@href, "/categories/")]
+      Movies:
+        Name: //div[contains(@class, "featuring")]//a[contains(@href, "/dvds/")]
+        URL: //div[contains(@class, "featuring")]//a[contains(@href, "/dvds/")]/@href
+        FrontImage:
+          selector: //div[contains(@class, "featuring")]//a[contains(@href, "/dvds/")]/@href
+          postProcess:
+            - subScraper: *dvdCover
+        Synopsis:
+          selector: //div[contains(@class, "featuring")]//a[contains(@href, "/dvds/")]/@href
+          postProcess:
+            - subScraper: *dvdSynopsis
+        # this fails but I think it's a bug in Stash related to scraping more than one level of nesting
+        # Studio: *studio
       Details:
         selector: //div[contains(@class, "videoDetails")]/p
         postProcess:
