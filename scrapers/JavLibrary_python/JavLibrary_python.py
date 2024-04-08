@@ -40,9 +40,14 @@ JAV_SEARCH_HTML = None
 JAV_MAIN_HTML = None
 PROTECTION_CLOUDFLARE = False
 
+# Flaresolverr
+FLARESOLVERR_ENABLED = False
+FLARESOLVERR_URL = "http://localhost:8191/v1"
+FLARESOLVERR_TIMEOUT_MAX = 60000
+
 JAV_HEADERS = {
     "User-Agent":
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0',
     "Referer": "http://www.javlibrary.com/"
 }
 # We can't add movie image atm in the same time as Scene
@@ -241,6 +246,8 @@ REPLACE_TITLE = {
     "-Uncensore": "",
     "_uncen": "",
     "_Uncen": "",
+    "hd.": ".",
+    "HD.": ".",
     "a.hd": "",
     "b.hd": "",
     "c.hd": "",
@@ -315,12 +322,84 @@ REPLACE_TITLE = {
     "B.WMV": ".WMV",
     "C.WMV": ".WMV",
     "D.WMV": ".WMV",
+    ".3g2": "",
+    ".3gp": "",
+    ".amv": "",
+    ".asf": "",
     ".avi": "",
+    ".f4a": "",
+    ".f4b": "",
+    ".f4p": "",
+    ".f4v": "",
+    ".flv": "",
+    ".flv": "",
+    ".gifv": "",
+    ".m4p": "",
+    ".m4v": "",
+    ".m4v": "",
+    ".mkv": "",
+    ".mng": "",
+    ".mod": "",
+    ".mov": "",
+    ".mp2": "",
     ".mp4": "",
+    ".mpe": "",
+    ".mpeg": "",
+    ".mpg": "",
+    ".mpv": "",
+    ".mxf": "",
+    ".nsv": "",
+    ".ogg": "",
+    ".ogv": "",
+    ".qt": "",
+    ".rm": "",
+    ".roq": "",
+    ".rrc": "",
+    ".svi": "",
+    ".ts": "",
+    ".vob": "",
+    ".webm": "",
     ".wmv": "",
+    ".yuv": "", 
+    ".3G2": "",
+    ".3GP": "",
+    ".AMV": "",
+    ".ASF": "",
     ".AVI": "",
+    ".F4A": "",
+    ".F4B": "",
+    ".F4P": "",
+    ".F4V": "",
+    ".FLV": "",
+    ".FLV": "",
+    ".GIFV": "",
+    ".M4P": "",
+    ".M4V": "",
+    ".M4V": "",
+    ".MKV": "",
+    ".MNG": "",
+    ".MOD": "",
+    ".MOV": "",
+    ".MP2": "",
     ".MP4": "",
+    ".MPE": "",
+    ".MPEG": "",
+    ".MPG": "",
+    ".MPV": "",
+    ".MXF": "",
+    ".NSV": "",
+    ".OGG": "",
+    ".OGV": "",
+    ".QT": "",
+    ".RM": "",
+    ".ROQ": "",
+    ".RRC": "",
+    ".SVI": "",
+    ".TS": "",
+    ".VOB": "",
+    ".WEBM": "",
     ".WMV": "",
+    ".YUV": ""
 }
 
 OBFUSCATED_TAGS = {
@@ -329,33 +408,63 @@ OBFUSCATED_TAGS = {
 }
 
 
-def checking_protection(url):
+class ResponseHTML:
+    content = ""
+    html = ""
+    status_code = 0
+    url = 0
+
+def bypass_protection(url):
     global PROTECTION_CLOUDFLARE
 
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     log.debug("=== Checking Status of Javlib site ===")
     PROTECTION_CLOUDFLARE = False
+    response_html = ResponseHTML
     for site in SITE_JAVLIB:
         url_n = url.replace(url_domain, site)
         try:
-            response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
+            if FLARESOLVERR_ENABLED:             
+                url = FLARESOLVERR_URL
+                headers = {"Content-Type": "application/json"}
+                data = {
+                    "cmd": "request.get",
+                    "url": url_n,
+                    "maxTimeout": FLARESOLVERR_TIMEOUT_MAX
+                }
+
+                log.info(f"Using Flarsolverr: {FLARESOLVERR_URL}")
+                log.info(f"Javlibrary input url: {url}")
+                responseJson = requests.post(url, headers=headers, json=data)
+                json_input = json.loads(str(responseJson.text))
+
+                response_html.content = json_input['solution']['response']
+                response_html.html = json_input['solution']['response']
+                response_html.status_code = json_input['solution']['status']
+                response_html.url = json_input['solution']['url']
+
+                #log.info(f"Flaresolverr response html: {response_html}")
+            else:
+                response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
+                response_html.html = response.text
+                response_html.status_code = response.status_code
         except Exception as exc_req:
             log.warning(f"Exception error {exc_req} while checking protection for {site}")
             return None, None
-        if response.url == "https://www.javlib.com/maintenance.html":
+        if response_html.url == "https://www.javlib.com/maintenance.html":
             log.error(f"[{site}] Maintenance")
-        if "Why do I have to complete a CAPTCHA?" in response.text \
-            or "Checking your browser before accessing" in response.text:
+        if "Why do I have to complete a CAPTCHA?" in response_html.html \
+            or "Checking your browser before accessing" in response_html.html:
             log.error(f"[{site}] Protected by Cloudflare")
             PROTECTION_CLOUDFLARE = True
-        elif response.status_code != 200:
-            log.error(f"[{site}] Other issue ({response.status_code})")
+        elif response_html.status_code != 200:   
+            log.error(f"[{site}] Other issue ({response_html.status_code})")
         else:
             log.info(
-                    f"[{site}] Using this site for scraping ({response.status_code})"
+                    f"[{site}] Using this site for scraping ({response_html.status_code})"
                 )
             log.debug("======================================")
-            return site, response
+            return site, response_html
     log.debug("======================================")
     return None, None
 
@@ -375,7 +484,7 @@ def send_request(url, head, retries=0, delay=1):
     if url_domain in SITE_JAVLIB:
         # Javlib
         if JAV_DOMAIN == "Check":
-            JAV_DOMAIN, response = checking_protection(url)
+            JAV_DOMAIN, response = bypass_protection(url)
             if response:
                 return response
         if JAV_DOMAIN is None:
@@ -412,9 +521,9 @@ def cleanup_title(title):
 
     log.info(f"Starting title cleanup for: {title}")
     cleaned_title = False
-    for bad_title in REPLACE_TITLE:
-        if bad_title in title:
-            title = title.replace(bad_title, "")
+    for key, value in REPLACE_TITLE.items():
+        if key in title:
+            title = title.replace(key, value)
             cleaned_title = True
     
     if cleaned_title:
@@ -616,11 +725,6 @@ SCENE_URL = FRAGMENT.get("url")
 
 if FRAGMENT.get("title"):
     SCENE_TITLE = FRAGMENT["title"]
-    # Remove extension
-    SCENE_TITLE = re.sub(r"\..{3}$", "", SCENE_TITLE)
-    SCENE_TITLE = re.sub(r"-JG\d", "", SCENE_TITLE)
-    SCENE_TITLE = re.sub(r"\s.+$", "", SCENE_TITLE)
-    SCENE_TITLE = re.sub(r"[ABCDEFGH]$", "", SCENE_TITLE)
     SCENE_TITLE = cleanup_title(SCENE_TITLE)
 else:
     SCENE_TITLE = None
@@ -684,9 +788,9 @@ jav_xPath[
 jav_xPath[
     "studio"] = '//td[@class="header" and text()="Maker:"]'\
                 '/following-sibling::td/span[@class="maker"]/a/text()'
-jav_xPath[
-    "label"] = '//td[@class="header" and text()="Label:"]'\
-                '/following-sibling::td/span[@class="label"]/a/text()'
+#jav_xPath[
+#    "label"] = '//td[@class="header" and text()="Label:"]'\
+#                '/following-sibling::td/span[@class="label"]/a/text()'
 jav_xPath["image"] = '//div[@id="video_jacket"]/img/@src'
 
 jav_result = {}
