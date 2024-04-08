@@ -22,6 +22,7 @@ sceneByURL:
       - hollyhotwife.elxcomplete.com/updates/
       - houseofyre.com/updates/
       - humiliation4k.com/updates/
+      - hungarianhoneys.com/tour/updates/
       - internationalnudes.com/updates/
       - johnnygoodluck.com/updates/
       - justgoodsex.com/updates/
@@ -88,6 +89,10 @@ sceneByURL:
       - hollyhotwife.elxcomplete.com/access/scenes/
       - houseofyre.com/access/scenes/
       - humiliation4k.com/access/scenes/
+      # Hungarian Honeys has a members access section but it's not linked from the main page
+      # it also serves pages with status 500 so they're unscrapable right now, making a note
+      # here in case we ever rewrite to a script scraper
+      - hungarianhoneys.com/trailers/
       - internationalnudes.com/access/scenes/
       - johnnygoodluck.com/access/scenes/
       - laurenphillips.com/access/scenes/
@@ -136,6 +141,7 @@ xPathScrapers:
         selector: >-
           //*[(contains(@class, "availdate") or contains(@class, "update_date")) and contains(., "/")]
           | //*[(contains(@class, "availdate") or contains(@class, "update_date"))]/comment()
+          | (//*[contains(@class,'fa-calendar')]/following-sibling::text())[1]
         postProcess: &datePostProcess
           - replace:
               - regex: ".*?([0-9]{2}/[0-9]{2}/[0-9]{4}).*"
@@ -176,6 +182,7 @@ xPathScrapers:
                 hollyhotwife: HollyHotWife
                 houseofyre: House of Fyre
                 humiliation4k: Humiliation 4K
+                hungarianhoneys: Hungarian Honeys
                 internationalnudes: International Nudes
                 johnnygoodluck: Johnny Goodluck
                 justgoodsex: JustGoodSex
@@ -287,4 +294,4 @@ driver:
           Domain: sheseducedme.com
           ValueRandom: 36
           Path: /
-# Last Updated February 8, 2024
+# Last Updated April 1, 2024

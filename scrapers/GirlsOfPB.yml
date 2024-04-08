@@ -1,0 +1,97 @@
+name: girls of pb
+
+performerByName:
+  action: scrapeXPath
+  queryURL: http://www.girlsofpb.com/search/?do=1&q={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url: 
+     - http://www.girlsofpb.com/
+    scraper: performerScraper
+
+
+xPathScrapers:
+  performerSearch:
+    common:
+      $perfLIs: '//ul/li'
+    performer:
+      Name: $perfLIs/h3/a/text()
+      Image: 
+        selector: $perfLIs/a/img/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: http://www.girlsofpb.com
+      URL:
+        selector: $perfLIs/h3/a/@href
+        postProcess:
+          - replace:
+            - regex: ^
+              with: http://www.girlsofpb.com
+        
+  performerScraper:
+    common:
+      $topcard: /html/body/div[1]/div[3]/div
+
+    performer:
+      Name: 
+        selector: $topcard/div/div[1]/h1/text
+        postProcess:
+          - replace:
+            - regex: 'Nude - .*'
+              with: ''
+
+      Details: $topcard/p[2]/text()
+      Image:
+        selector: /html/body/div[1]/div[5]/div/div[1]/div/a/img/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: http://www.girlsofpb.com
+      URL:
+        selector: //a[@id='goright']/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: http://www.girlsofpb.com
+          - subScraper:
+              selector: //a[@id='goleft']/@href
+              postProcess:
+                - replace:
+                  - regex: ^
+                    with: http://www.girlsofpb.com
+      Measurements:
+        selector: $topcard/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ".*Bust: (.+), Waist: (.+), Hips: (.+?), .*$"
+                with: "$1-$2-$3"
+      Height:
+        selector: $topcard/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ".*Height: (.+?), .*$"
+                with: "$1"
+          - javascript: |
+              return parseInt(value) * 2.54
+      Weight:
+        selector: $topcard/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ".*Weight: (.+?), .*$"
+                with: "$1"
+          - lbToKg: true
+      Birthdate:
+        selector: $topcard/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: '.*Birth Date: (.+ \d+, \d{4}), .*$'
+                with: "$1"
+          - parseDate: January 2, 2006
+
+# Last Updated April 3, 2024

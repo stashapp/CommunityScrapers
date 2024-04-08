@@ -2,6 +2,7 @@ name: "PaperStreetMedia"
 sceneByURL:
   - action: scrapeXPath
     url:
+      ### TeamSkeet / PaperStreetMedia sites (straight and lesbian)
       - analmom.com/movies/
       - badmilfs.com/movies/
       - bbcparadise.com/movies/
@@ -41,6 +42,25 @@ sceneByURL:
       - thickumz.com/movies/
       - tinysis.com/movies/
       - usepov.com/movies/
+
+      ### SayUncle / Charged Media sites (Gay)
+      - blackgodz.com/movies
+      - bottomgames.com/movies
+      - boysatcamp.com/movies
+      - boysdoporn.com/movies
+      - brothercrush.com/movies
+      - bullyhim.com/movies
+      - dadcreep.com/movies
+      - doctortapes.com/movies
+      - latinleche.com/movies
+      - militarydick.com/movies
+      - missionaryboys.com/movies
+      - stayhomebro.com/movies
+      - therapydick.com/movies
+      - twinktrade.com/movies
+      - varsitygrip.com/movies
+      - yesfather.com/movies
+      - youngperps.com/movies
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -58,6 +78,7 @@ xPathScrapers:
                 - regex: (.+www\.)(\w+)(.+)
                   with: $2
             - map:
+                ### TeamSkeet Studio Map
                 analmom: Anal Mom
                 badmilfs: Bad MILFs
                 bbcparadise: BBC Paradise
@@ -97,8 +118,27 @@ xPathScrapers:
                 thickumz: Thickumz
                 tinysis: Tiny Sis
                 usepov: Use POV
+
+                ### SayUncle Studio Map
+                blackgodz: Black Godz
+                bottomgames: Bottom Games
+                boysatcamp: Boys At Camp
+                boysdoporn: Boys Do Porn
+                brothercrush: Brother Crush
+                bullyhim: Bully Him
+                dadcreep: Dad Creep
+                doctortapes: Doctor Tapes
+                latinleche: Latin Leche
+                militarydick: Military Dick
+                missionaryboys: Missionary Boys
+                stayhomebro: Stay Home Bro
+                therapydick: Therapy Dick
+                twinktrade: Twink Trade
+                varsitygrip: Varsity Grip
+                yesfather: Yes Father
+                youngperps: Young Perps
 driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated February 24, 2024
+# Last Updated April 1, 2024

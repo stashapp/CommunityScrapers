@@ -1,0 +1,33 @@
+name: FTV
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ftvgirls.com/update
+      - ftvmilfs.com/update
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //meta[@name="description"]/@content
+        postProcess:
+          - replace:
+              - regex: ^([^:]+).+
+                with: $1
+      Details:  //div[@class="OneHeader"]/p
+      Date:
+        selector: //title
+        postProcess:
+          - replace:
+             - regex: ^.+Released\s*([a-zA-Z0-9,\s]+).*
+               with: $1
+          - parseDate: Jan 2, 2006
+      Image: //img[@id="Magazine"]/@src
+      Studio:
+        Name:
+          selector: //title
+          postProcess:
+            - replace:
+                - regex: ^.+on\s*(.+)\.com.+
+                  with: $1
+# Last Updated March 27, 2024
