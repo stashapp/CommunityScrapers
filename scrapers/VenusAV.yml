@@ -1,0 +1,34 @@
+name: VenusAV
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - venus-av.com/products
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='hero']/h1
+      Details: //dt[contains(.,'作品紹介')]/following-sibling::dd/text()
+      Date:
+        selector: //dt[contains(.,'発売日')]/following-sibling::dd/text()
+        postProcess:
+          - parseDate: 2006年1月2日
+      Performers:
+        Name: //dt[contains(.,'出演女優')]/following-sibling::dd/text()
+      Image:
+        selector: //div[@class='productsImg']//img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.venus-av.com/
+      Code: //dt[contains(.,'品番')]/following-sibling::dd
+      Studio:
+        Name: 
+          selector: //dt[contains(.,'レーベル')]/following-sibling::dd/text()
+          postProcess:
+          # Studio map for Japanese names to how the studios are known in StashDB
+            - map:
+                女神: Megami
+
+# Last Updated April 08, 2024
