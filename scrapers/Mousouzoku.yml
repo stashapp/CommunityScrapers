@@ -16,7 +16,7 @@ xPathScrapers:
           - replace:
               - regex: ^.+/([^/]+)/$
                 with: $1
-          - parseDate: 20060102
+          - parseDate: '20060102'
       Tags:
         Name: //dt[contains(.,'ジャンル')]/following-sibling::dd//ul//a
       Performers:
