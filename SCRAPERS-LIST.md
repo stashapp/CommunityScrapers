@@ -1794,6 +1794,7 @@ touchmywife.com|touchmywife.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Py
 touchthatboy.com|MarsMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 toughlovex.com|toughlovex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tour.purgatoryx.com|purgatoryx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+trailertrashboys.com|NakedSword.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 trans4thefans.com|InnOfSin.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trans500.com/tour/|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 trans500.com/tour3/|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
@@ -1822,6 +1823,7 @@ transsexualroadtrip.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|
 tranzvr.com|POVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 traxxx.me|Traxxx.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 treasureislandmedia.com|TreasureIslandMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
+trentonducati.com|NakedSword.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 trickymasseur.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 trickyoldteacher.com|OldGoesYoung.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 trickyspa.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
