@@ -8,14 +8,6 @@ sceneByURL:
       - python
       - ../Algolia/Algolia.py
       - hothouse
-movieByURL:
-  - action: script
-    url:
-      - hothouse.com/en/movie
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - hothouse
 sceneByFragment:
   action: script
   script:
@@ -36,7 +28,6 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - hothouse
     - validName
-
 movieByURL:
   - action: script
     url:
