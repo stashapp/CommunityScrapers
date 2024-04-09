@@ -5,10 +5,10 @@ sceneByFragment:
   queryURL: https://r18.dev/videos/vod/movies/detail/-/dvd_id={filename}/json
   queryURLReplace:
     filename:
-      # gets just the JAV ID out of the filename. This also removes the file extension which is pretty nice.
-      # You can have your filename be something like "Something Something ABC123 Something Something.mp4" and it will scrape as ABC123.
-      - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
-        with: $2
+      # Gets the JAV code from the filename using a modified version of the Javinizer regex
+      # https://regex101.com/r/aIm3op/2
+      - regex: .*?([a-zA-Z|tT28]+)-?(\d+)[zZ]?[eE]?(?:-pt)?(\d{1,2})?.*
+        with: $1$2
   scraper: sceneSearchIndirect
 
 sceneByURL:
