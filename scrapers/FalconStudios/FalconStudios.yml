@@ -31,7 +31,7 @@ sceneByQueryFragment:
 movieByURL:
   - action: script
     url:
-      - falconstudios.com/en/movies/
+      - falconstudios.com/en/movie/
     script:
       - python
       - ../Algolia/Algolia.py
