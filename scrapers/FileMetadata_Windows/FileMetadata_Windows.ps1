@@ -67,6 +67,12 @@ if ($title) {
     $scraped | Add-Member -MemberType NoteProperty -Name "title" -Value $title
 }
 
+# "Publisher" has index 213 and we'll output it as "studio"
+$studio = $folder.GetDetailsOf($fileObj, 213)
+if ($studio) {
+    $scraped | Add-Member -MemberType NoteProperty -Name "studio" -Value @{ name = $studio }
+}
+
 # "Media created" has index 208 and we'll output it as "date" after cleaning it and formatting it for Stash
 $date = $folder.GetDetailsOf($fileObj, 208)
 if ($date) {
