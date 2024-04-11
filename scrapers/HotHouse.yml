@@ -1,40 +1,40 @@
 # requires: Algolia
-name: Falcon Studios
+name: Hot House
 sceneByURL:
   - action: script
     url:
-      - falconstudios.com/en/video
+      - hothouse.com/en/video
     script:
       - python
       - ../Algolia/Algolia.py
-      - falconstudios
+      - hothouse
 sceneByFragment:
   action: script
   script:
     - python
     - ../Algolia/Algolia.py
-    - falconstudios
+    - hothouse
 sceneByName:
   action: script
   script:
     - python
     - ../Algolia/Algolia.py
-    - falconstudios
+    - hothouse
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
     - ../Algolia/Algolia.py
-    - falconstudios
+    - hothouse
     - validName
 movieByURL:
   - action: script
     url:
-      - falconstudios.com/en/movie/
+      - hothouse.com/en/movie/
     script:
       - python
       - ../Algolia/Algolia.py
-      - falconstudios
+      - hothouse
       - movie
 # Last Updated April 09, 2023
