@@ -1914,6 +1914,7 @@ vrintimacy.com|CzechVR.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 vrlatina.com|VRLatina.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
 vrporn.com|VRPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrporncz.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+vrpornnow.com|VRpornnow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 vrpornpass.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 vrxdb.com|VrxDB.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vtubie.com|vTubie.yml|:x:|:x:|:x:|:heavy_check_mark:|-|VTuber Database
