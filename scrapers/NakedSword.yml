@@ -4,6 +4,8 @@ sceneByURL:
     scraper: sceneScraper
     url:
       - nakedsword.com/movies/
+      - trailertrashboys.com/movies/
+      - trentonducati.com/movies/
 movieByURL:
   - action: scrapeXPath
     scraper: movieScraper
