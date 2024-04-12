@@ -1,0 +1,63 @@
+name: "Wake Up n Fuck"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wakeupnfuck.com/scene
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.wakeupnfuck.com/search?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $main: //div[@class="block"]
+    scene:
+      Title: $main/h2
+      Date:
+        selector: $main//text()[contains(.,"Publish Date")]
+        postProcess:
+          - replace:
+              - regex: ^[^\d]+
+                with: 
+          - parseDate: 2 January 2006
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Wake Up n Fuck
+        URL:
+          fixed: https://www.wakeupnfuck.com
+      Tags:
+        Name: $main//li
+      Performers:
+        Name: $main//p/text()
+        URL:
+          selector: $main//a[@class="item"]/@href
+          postProcess: &pp
+            - replace:
+                - regex: ^
+                  with: https://www.wakeupnfuck.com
+      Details: //meta[@name="description"]/@content
+      URL: //meta[@property="og:url"]/@content
+      Code:
+        selector: $main/h2
+        postProcess:
+          - replace:
+              - regex: ^[^\d]+
+                with: 
+
+  sceneSearch:
+    common:
+      $res: //div[contains(@class,("data list"))]
+    scene:
+      Title: $res//img/@alt
+      Image: $res//img/@src
+      URL:
+        selector: $res/a/@href
+        postProcess: *pp
+# Last Updated January 25, 2024

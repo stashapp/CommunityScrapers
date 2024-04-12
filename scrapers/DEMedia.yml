@@ -1,0 +1,29 @@
+name: DEMedia 
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - blackpayback.com/tour/
+      - radicaljizzlam.com/tour/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+      Details: //div[contains(@class,"videoDetails ")]/p
+      Image:
+        selector: //base/@href | //script[contains(.,'poster=')]
+        concat: '__SEP__'
+        postProcess:
+          - replace:
+              - regex: ^(https:.+(\.com)).+?poster="([^"]+).+
+                with: $1$3
+      Tags:
+        Name: //li/a[contains(@href,'/categories/')]/text()
+      Studio:
+        Name:
+          selector: //meta[@name="author"]/@content
+          postProcess:
+            - map:
+                BlackPayBack: "Black Payback"
+# Last Updated March 28, 2024

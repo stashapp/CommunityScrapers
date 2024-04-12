@@ -1,9 +1,0 @@
-name: "DC Onlyfans"
-sceneByFragment:
-    action: script
-    script:
-      - python
-      # use python3 instead if needed
-      - dc-onlyfans.py
-      - query
-# Last Updated April 26, 2022

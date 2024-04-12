@@ -1,0 +1,104 @@
+name: Javbus
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.javbus.com/{filename}
+  queryURLReplace:
+    filename:
+      - regex: -JG\d
+        with: ""
+      - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
+        with: $2
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.javbus.com
+      - https://www.seejav.bid
+      - https://www.cdnbus.lol
+      - https://www.dmmbus.lol
+      - https://www.seedmm.cfd
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.javbus.com/search/{}&type=&parent=ce
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+performerByURL: 
+  - action: scrapeXPath
+    url: 
+      - https://www.javbus.com
+      - https://www.seejav.bid
+      - https://www.cdnbus.lol
+      - https://www.dmmbus.lol
+      - https://www.seedmm.cfd
+    scraper: performerScraper
+performerByName: 
+  action: scrapeXPath
+  queryURL: https://www.javbus.com/searchstar/{}&type=&parent=ce
+  scraper: performerSearch
+
+xPathScrapers: 
+  performerSearch: 
+    performer: 
+      Name: //span[@class="mleft"]
+      URL: //*[@id="waterfall"]/div/a/@href
+  performerScraper: 
+    performer: 
+      Name: //*[@id="waterfall"]/div[1]/div/div[2]/span
+      Birthdate:
+        selector: //*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '生日')]
+        postProcess:
+          - replace:
+            - regex: ^(.*? ){1}
+              with:
+      Height: 
+        selector: //*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '身高')]
+        postProcess:
+          - replace:
+            - regex: ^(.*? ){1}
+              with:
+      # Measurements: //*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '胸圍')]//*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '腰圍')]//*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '臀圍')]//*[@id="waterfall"]/div[1]/div/div[2]/p[contains(text(), '罩杯')]
+      Image: 
+        selector: //*[@id="waterfall"]/div[1]/div/div[1]/img/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.javbus.com
+
+  sceneSearch: 
+    scene: 
+      Title: //div[@class="photo-info"]/span
+      URL: //*[@id="waterfall"]/div/a/@href
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="col-md-3 info"]//span[contains(text(), '識別碼')]/../span[2]/text()
+      URL:
+        selector: /html/head/link[@hreflang="zh"]/@href
+      Date:
+        selector: //div[@class="col-md-3 info"]//span[contains(text(), '發行日期')]/../text()
+      Details:
+        selector: //div[@class="container"]/h3/text()
+        postProcess:
+          - replace:
+            - regex: ^(.*? ){1}
+              with:
+      Tags:
+        Name: //div[@class="col-md-3 info"]//span[@class="genre"]/label/a/text()
+      Performers:
+        Name: //div[@id="video_cast"]/table/tbody/tr/td[@class="text"]/span/span/a
+      Director: //div[@id='video_director']/table/tbody/tr/td[@class="text"]/span/a/text()
+      Image:
+        selector: //div[@class="row movie"]/div[@class="col-md-9 screencap"]/a[@class="bigImage"]/img/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.javbus.com
+      Studio:
+        Name: //div[@class="col-md-3 info"]//span[contains(text(), '發行商')]/../a/text()
+
+# Last Updated July 06, 2023

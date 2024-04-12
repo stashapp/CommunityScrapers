@@ -1,0 +1,11 @@
+name: Teamskeet
+# requires: py_common
+
+sceneByURL:
+  - url:
+      - teamskeet.com/movies/
+    action: script
+    script:
+      - python
+      - TeamskeetAPI.py
+# Last Updated March 04, 2024

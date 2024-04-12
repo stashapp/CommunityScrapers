@@ -1,38 +1,49 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: Pornworld
+
 sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tour10.pornworld.com/watch/
+    scraper: tour10SceneScraper
   - action: scrapeXPath
     url:
       - pornworld.com/watch/
     scraper: sceneScraper
+
 sceneByFragment:
   action: scrapeJson
   queryURL: https://pornworld.com/autocomplete?query={filename}
   queryURLReplace:
     filename:
-      - regex: .+(GP\d+).*
+      - regex: .*(GP\d+).*
         with: $1
   scraper: sceneQueryScraper
+
 jsonScrapers:
   sceneQueryScraper:
     scene:
       Title: terms.Scene.0.name
       URL: terms.Scene.0.url
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: 
+      Title: &title
         selector: //h1
         postProcess:
           - replace:
-            - regex: featuring.+
-              with: ""
-      Date: //i[contains(@class,"calendar3")]/text()
-      Details:
-        selector: //meta[@name="description"]/@content
+              - regex: featuring.+
+                with: ""
+      Code:
+        selector: //h1
         postProcess:
           - replace:
-              - regex: '\x{0092}' # unicode char 0092 (looks like ')
-                with: "'"
+              - regex: .*(GP\d+).*
+                with: $1
+      Date: //i[contains(@class,"calendar3")]/text()
+      Details: //meta[@name="description"]/@content
       Tags:
         Name: //div[@class="watch"]//a[contains(@href,"genre")]/text()
       Performers:
@@ -41,5 +52,27 @@ xPathScrapers:
         Name:
           fixed: Porn World
       Image: //video/@data-poster
-
-# Last Updated August 10, 2021
+      URL: //div[@class="pagination"]/a[1]/@href
+  tour10SceneScraper:
+    scene:
+      Title: *title
+      Date:
+        selector: //strong/following-sibling::span
+        postProcess:
+          - parseDate: 2006, January 2
+      Details: //span[text()="Description:"]/..
+      Tags:
+        Name: //span[text()="Tags:"]/../a/text()
+      Performers:
+        Name: //a[contains(@href, '/model/')]
+      Studio:
+        Name:
+          fixed: Porn World
+      Image: //video/@poster
+      URL:
+        selector: //head/link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: (.*)
+                with: https://tour10.pornworld.com$1
+# Last Updated February 27, 2024

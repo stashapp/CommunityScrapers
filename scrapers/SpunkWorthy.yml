@@ -1,0 +1,73 @@
+name: SpunkWorthy
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - spunkworthy.com/preview/view_video
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - spunkworthy.com/preview/view_guy
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //p[contains(@class, 'h1')]/span[contains(@class, 'h2')]/text()
+      Performers:
+        Name:
+          selector: //div[@class="scene_models"]//p/a/text()
+          postProcess:
+            - replace:
+              - regex: "More of "
+                with: ""
+        URL:
+          selector: //div[@class="scene_models"]//p/a/@href
+          postProcess:
+            - replace:
+              - regex: "(.*)"
+                with: "https://www.spunkworthy.com$1"
+      Details:
+        selector: //div[contains(@class, 'video_synopsis')]//p[not(ancestor::div[@class="scene_models"]) and not(@class)][not (starts-with(text(),'Tags:'))]/text()
+        concat: "\n\n"
+      Tags:
+        Name: //div[contains(@class, 'video_synopsis')]//p[contains(text(),"Tags:")]/a/text()
+      Image:
+        selector: //div[contains(@class, 'video_player')]/img[1]/@src
+        postProcess:
+          - replace:
+            - regex: "(.*)"
+              with: "https://www.spunkworthy.com$1"
+      Studio:
+        Name:
+          fixed: SpunkWorthy
+
+  performerScraper:
+    performer:
+      Name: //p[contains(@class, 'h1')]/span[contains(@class, 'h2')]/text()
+      Gender:
+        fixed: Male
+      Weight:
+        selector: //div[@class='model_left']/p[1]/text()[contains(.,'Weight')]
+        postProcess:
+          - replace:
+            - regex: "Weight: "
+              with: ""
+          - lbToKg: true
+      Height:
+        selector: //div[@class='model_left']/p[1]/text()[contains(.,'Height')]
+        postProcess:
+          - replace:
+            - regex: "Height: "
+              with: ""
+          - feetToCm: true
+      Image:
+        selector: //div[@class='model_left']/img[1]/@src
+        postProcess:
+          - replace:
+            - regex: "(.*)"
+              with: "https://www.spunkworthy.com$1"
+
+# Last Updated October 02, 2023

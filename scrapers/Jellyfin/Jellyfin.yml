@@ -1,0 +1,56 @@
+name: Jellyfin
+# requires: py_common
+sceneByURL:
+  - action: script
+    url: &baseJellyfinURL
+      # Change this to your Jellyfin URL, same as in config.ini
+      - localhost:8096
+    script:
+      - python
+      - Jellyfin.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url: *baseJellyfinURL
+    script:
+      - python
+      - Jellyfin.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Jellyfin.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url: *baseJellyfinURL
+    script:
+      - python
+      - Jellyfin.py
+      - movie-by-url
+# Last Updated January 30, 2024

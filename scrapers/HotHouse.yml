@@ -1,0 +1,40 @@
+# requires: Algolia
+name: Hot House
+sceneByURL:
+  - action: script
+    url:
+      - hothouse.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - hothouse
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - hothouse
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - hothouse
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - hothouse
+    - validName
+movieByURL:
+  - action: script
+    url:
+      - hothouse.com/en/movie/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - hothouse
+      - movie
+# Last Updated April 09, 2023

@@ -1,0 +1,90 @@
+name: ATK Girlfriends
+# requires: py_common
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ATKGirlfriends.py
+performerByURL:
+  - action: scrapeXPath
+    url:
+      # Trying to scrape without the www. prefix will result in a redirect loop
+      - www.atkgirlfriends.com/tour/model/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      # Trying to scrape without the www. prefix will result in a redirect loop
+      - www.atkgirlfriends.com/tour/movie/
+    scraper: sceneScraper
+xPathScrapers:
+  performerScraper:
+    common:
+      $modelWrap: &modelWrap //div[contains(@class, "model-profile-wrap")]
+    performer:
+      Name: //h1[contains(@class, "page-title")]
+      Gender:
+        fixed: female
+      Ethnicity:
+        selector: $modelWrap/b[contains(text(), "Ethnicity")]/following-sibling::text()
+      HairColor:
+        selector: $modelWrap/b[contains(text(), "Hair Color")]/following-sibling::text()
+        postProcess:
+          - map:
+              black: Black
+              blond: Blonde
+              brown: Brown
+              red: Red
+              white: White
+      Height:
+        selector: $modelWrap/b[contains(text(), "Height")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: $modelWrap/b[contains(text(), "Weight")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: (\d+).*
+                with: $1
+          - lbToKg: true
+      Measurements:
+        selector: $modelWrap/b[contains(text(), "Bust Size")]/following-sibling::text()
+      Image:
+        selector: $modelWrap/img/@src
+  sceneScraper:
+    common:
+      $movieWrap: //div[contains(@class, "movie-wrap")]
+      $modelWrap: *modelWrap
+    scene:
+      Title: //title
+      Details: $movieWrap/b[contains(text(), "Description")]/following-sibling::text()
+      Image:
+        selector: //video/@poster | //div[@class="flowplayer minimalist is-splash"]/@style
+        postProcess:
+          - replace:
+              - regex: background-image:url\('(.*)'\);
+                with: $1
+      Studio:
+        Name:
+          fixed: ATK Girlfriends
+        URL:
+          fixed: https://www.atkgirlfriends.com/
+      Tags:
+        Name:
+          selector: $movieWrap/b[contains(text(), "Tags")]/following-sibling::text()
+          postProcess:
+            - replace:
+                - regex: \s*,\s*
+                  with: ","
+          split: ","
+      Performers:
+        Name: $modelWrap/text()[1]
+driver:
+  cookies:
+    - CookieURL: https://www.atkgirlfriends.com
+      Cookies:
+        - Name: start_session_galleria
+          Domain: www.atkgirlfriends.com
+          Value: stash # Rotate this value if the scraper is blocked. The first request with the new value should fail.
+          Path: /
+# Last Updated March 14, 2024

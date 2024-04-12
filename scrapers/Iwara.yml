@@ -1,0 +1,41 @@
+name: iwara.tv
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - iwara.tv/video/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: "[^/]+$"
+          with: ""
+        - regex: "https://www.iwara.tv/video/"
+          with: "https://api.iwara.tv/video/"
+    scraper: sceneScraper
+
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title: title
+      Date:
+        selector: file.createdAt
+        postProcess:
+          - replace:
+              - regex: '(\d{4}-\d{2}-\d{2}).*'
+                with: $1
+          - parseDate: "2006-01-02"
+      Studio:
+        Name: user.name
+      Tags: 
+        Name: tags.#.id
+      Details: body
+      Image:
+        selector: "[file.id,thumbnail]"
+        concat: ","
+        postProcess: 
+          - replace:
+              - regex: '\b([1-9])\b'
+                with: "0$1"
+          - replace:
+              - regex: (.*),(.*)
+                with: "https://i.iwara.tv/image/original/$1/thumbnail-$2.jpg"
+# Last Updated October 05, 2023

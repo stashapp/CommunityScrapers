@@ -1,4 +1,9 @@
-name: AEBN
+name: "AEBN"
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - aebn.com
+    scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -10,6 +15,53 @@ movieByURL:
       - aebn.com
     scraper: movieScraper
 xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //div[@class='dts-section-page-heading-title']/h1
+      Gender:
+        selector: //li[@class="section-detail-list-item-gender"]/text()
+        postProcess:
+          - map:
+              TS: transgender_female
+      URL: //link[@rel="canonical"]/@href
+      Birthdate:
+        selector: //div[@class='section-detail dts-list-attributes']/ul/li[contains(.,"Birth Date")]
+        postProcess:
+          - replace:
+              - regex: .+:\s(.+)
+                with: $1
+              - regex: "Sept"
+                with: "Sep"
+          - parseDate: Jan 2, 2006
+      Height:
+        selector: //li[@class='section-detail-list-item-height']/text()
+        postProcess:
+          - replace:
+              - regex: .+\((\d+).+\)
+                with: $1
+      Weight:
+        selector: //li[@class='section-detail-list-item-weight']/text()
+        postProcess:
+          - replace:
+              - regex: .+\((\d+).+\)
+                with: $1
+      EyeColor: 
+        selector: //li[@class='section-detail-list-item-eye-color']/text()
+      Ethnicity:
+        selector: //li[@class='section-detail-list-item-ethnicity']/text()
+        postProcess:
+          - map:
+              White: Caucasian
+      HairColor:
+        selector: //li[@class='section-detail-list-item-hair-color']/text()
+      Details:
+        selector: //div[@class='dts-section-page-detail-description-body']  
+      Image: 
+        selector: //div[@class='dts-section-page-detail-main-image-wrapper']/picture/img/@src
+        postProcess:
+          - replace:
+              - regex: ^([^?]+).*$
+                with: "https:$1"
   sceneScraper:
     scene:
       Title: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
@@ -31,8 +83,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^([^?]+).*$
-                with: "https:$1"
-
+                with: "https:$1" 
   movieScraper:
     movie:
       Name: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
@@ -62,5 +113,4 @@ xPathScrapers:
           - replace:
               - regex: ^([^?]+).*$
                 with: "https:$1"
-
-# Last Updated October 11, 2021
+# Last Updated July 06, 2022

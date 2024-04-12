@@ -1,0 +1,10 @@
+name: "Copy to Gallery"
+# requires: py_common
+
+sceneByFragment:
+  action: script
+  script:
+    - python3
+    - CopyToGallery.py
+
+# Last Updated January 02, 2024

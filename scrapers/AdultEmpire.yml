@@ -1,17 +1,35 @@
 name: AdultEmpire
 
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - adultdvdempire.com/clip
+      - adultempire.com/clip
+    scraper: sceneScraperSingle
+  - action: scrapeXPath
+    url:
+      - adultdvdempire.com
+      - adultempire.com
+    scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
       - adultempire.com
     scraper: movieScraper
-sceneByURL:
+    
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.adultempire.com/performer/search?q={}
+  scraper: performerSearch
+
+performerByURL:
   - action: scrapeXPath
-    url:
-      - adultdvdempire.com
+    url: 
       - adultempire.com
-    scraper: sceneScraper
+      - adultdvdempire.com
+    scraper: performerScraper  
+
 sceneByName:
   action: scrapeXPath
   # if needed replace `dvd` with `vod`
@@ -22,8 +40,19 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
-
 xPathScrapers:
+  performerSearch:
+    common:
+      $perfomerRoot: //div[@id="performerlist"]//a
+    performer:
+      Name: $perfomerRoot/@label
+      URL: 
+        selector: $perfomerRoot/@href
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://www.adultempire.com
+
   sceneSearch:
     scene:
       Title:
@@ -60,7 +89,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02 2006
       Synopsis:
-        selector: //h4[contains(@class,"synopsis")]//text()
+        selector: //div[contains(@class,"synopsis-content")]//text()
         concat: " "
       Studio:
         Name: //a[@label="Studio"]/text()
@@ -74,16 +103,48 @@ xPathScrapers:
       #       - regex: (\d).+
       #         with: $1
       URL: //meta[@name='og:url']/@content
+  sceneScraperSingle:
+    common:
+      $header: //div[@class="clip-page__detail__title text-display-primary"]
+      $clipId: (//*[@data-tid]/@data-tid)[1]
+    scene:
+      Title: $header/h1
+      Studio:
+        Name: //div[contains(text(), "by")]/a
+      Movies:
+        Name: //div[contains(text(), "from")]/a
+      Date:
+        selector: //strong[contains(text(), "Released")]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 02 2006
+      Tags:
+        Name: //strong[contains(text(), "Attributes")]/following-sibling::a/text()
+      Performers:
+        Name: //strong[contains(text(), "Starring")]/following-sibling::a/text()
+        URL:
+          selector: //strong[contains(text(), "Starring")]/following-sibling::a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.adultdvdempire.com"
+      Image:
+        selector: (//*[@data-tid]/@data-tid)[1] | //a[@id="front-cover"]/img/@src
+        concat: __SEPARATOR__
+        postProcess:
+          - replace:
+              - regex: (\d+).*/([^/]*\d+)[^/\d]*$
+                with: https://imgs1cdn.adultempire.com/backdrop/6000/$2%5f$1/scene-1.jpg
   sceneScraper:
     scene:
       Title: //h1/text()
       Details:
-        selector: //h4[contains(@class,"synopsis")]//text()
+        selector: //div[contains(@class,"synopsis-content")]//text()
         concat: " "
       Date:
         selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
           - parseDate: Jan 02 2006
+      Director: //a[@label="Director"]/text()    
       Image: //a[@id="front-cover"]/@data-href
       Studio:
         Name: //a[@label="Studio"]/text()
@@ -101,4 +162,44 @@ xPathScrapers:
                 - regex: ^
                   with: "https://www.adultdvdempire.com"
       URL: //meta[@name='og:url']/@content
-# Last Updated December 16, 2021
+  performerScraper:
+    common:
+      $infoPiece: //*[@id="profileModal"]/div/div/div[2]/div[1]/ul
+    performer:
+      Name: //*[@id="content"]/section/div/div[2]/h1/text()
+      Birthdate:
+        selector: $infoPiece/li[contains(text(), 'Born:')]/text()
+        postProcess:
+          - replace:
+              - regex: Born:\s+(.*)
+                with: $1
+      Height:
+        selector: $infoPiece/li[contains(text(), 'Height:')]/text()
+        postProcess:
+          - replace:
+              - regex: Height:\s+(.*)
+                with: $1
+          - feetToCm: true
+      Image: //*[@id="content"]/section/div/div[1]/a[1]|/img/@src|//*[@id="content"]/section/div/div[1]/img/@src|//section[@class="container-fluid"]//a[@class="fancy"][@label="Headshot"]/@href
+      Country:
+        selector: $infoPiecel/li[contains(text(), 'From:')]/text()
+        postProcess:
+          - replace:
+              - regex: From:\s+(.*)
+                with: $1
+      Measurements:
+        selector: $infoPiece/li[contains(text(), 'Measurements:')]/text()
+        postProcess:
+          - replace:
+              - regex: Measurements:\s+(\d\d\w*)\D+(\d+)\D+(\d+).*
+                with: $1-$2-$3
+      Aliases:
+        selector: //*[@id="content"]/section/div/div[2]/div[contains(text(), "Alias:")]
+        concat: ", "
+        postProcess:
+          - replace:
+              - regex: "Alias: (.*)"
+                with: $1
+      Details: //*[@id="content"]/section/div/div[5]/aside/text()
+      URL: //link[@rel='canonical']/@href
+# Last Updated Feburary 22, 2024

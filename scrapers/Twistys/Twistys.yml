@@ -1,0 +1,79 @@
+name: Twistys
+# requires: py_common, AyloAPI
+# scrapes: Anette Dawn, Blue Fantasies, Busty Ones, Euro Foxes, Feature Film, Mom Knows Best, Nicole Graves, Turning Twistys, Twistys Hard, Twistys Teasers, When Girls Play
+galleryByURL:
+  - action: script
+    url:
+      - twistys.com/scene/
+      - twistysnetwork.com/scene/
+    script:
+      - python
+      - Twistys.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - Twistys.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - twistys.com/scene/
+      - twistysnetwork.com/scene/
+    script:
+      - python
+      - Twistys.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Twistys.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - Twistys.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Twistys.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - Twistys.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - twistys.com/model/
+      - twistysnetwork.com/model/
+    script:
+      - python
+      - Twistys.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Twistys.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - twistys.com/movie/
+      - twistysnetwork.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - twistys.com/scene/
+      - twistysnetwork.com/scene/
+    script:
+      - python
+      - Twistys.py
+      - movie-by-url
+# Last Updated January 14, 2024

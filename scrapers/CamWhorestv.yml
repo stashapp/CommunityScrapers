@@ -1,0 +1,23 @@
+name: "CamWhores.tv"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - camwhores.tv
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name: //div[@class="item"]//a[contains(@href,"/tags/")]/text()
+      Performers:
+        Name: //div[@class="item"]//a[contains(@href,"/models/")]/text()
+      Details: //meta[@property="og:description"]/@content
+      Code:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: .+/videos_screenshots/(\d+)/.+?$
+                with: $1
+# Last Updated September 08, 2023

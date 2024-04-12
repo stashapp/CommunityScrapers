@@ -9,7 +9,19 @@ xPathScrapers:
     common:
       $info: //div[@class='objectInfo']
     scene:
-      Title: $info/h1/text()
+      Title: $info/h1
+      Date:
+        selector: $info/h1
+        postProcess:
+          - replace:
+              # Try to match their current date format
+              - regex: .*?(\w{3})\.\s*(\d{1,2}),\s*(\d{4}).*
+                with: $1 $2, $3
+          - parseDate: Jan 2, 2006
+          - replace:
+              # Strip out non-date text in case title does not follow the expected format
+              - regex: .*?(\d{4}-\d{2}-\d{2})?.*
+                with: $1
       Details:
         selector: $info/div[@class='content']/p/text()
         concat: "\n\n"

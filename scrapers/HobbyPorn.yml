@@ -1,0 +1,40 @@
+name: HobbyPorn
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hobby.porn
+    scraper: sceneScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://hobby.porn/search/{}/
+  scraper: sceneSearch
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="title-block"]/h1
+      Performers:
+        Name: //span[@itemprop="author" or @itemprop="actor"]/a
+      Studio:
+        Name: //span[@itemprop="author"]/a
+      Date:
+        selector: //div[@class="video-data"]/span/text()[contains(.,'/')]
+        postProcess:
+          - parseDate: 01/02/2006
+      Tags:
+        Name: //a[@itemprop="genre"]/text()
+      URL: //link[@itemprop="url"]/@href # gets the hobby.porn url
+      # Possible update once XPath scraper handles multiple urls
+      # //div[@class="player"]//a/@href gets the pornhub url
+      Image: //span[@itemprop="thumbnail"]/link/@href
+  sceneSearch:
+    common:
+      $scenecard: //div[contains(@class,"item item-video")]
+    scene:
+      Title: $scenecard//div[@class="item-title"]
+      URL: $scenecard//a/@href
+      Image: $scenecard//img/@src
+# Last Updated January 05, 2024

@@ -1,0 +1,49 @@
+# requires: Algolia
+name: "RoccoSiffredi"
+sceneByURL:
+  - action: script
+    url:
+      - roccosiffredi.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - roccosiffredi
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - roccosiffredi
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - roccosiffredi
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - roccosiffredi
+    - validName
+movieByURL:
+  - action: script
+    url:
+      - roccosiffredi.com/en/dvd/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - roccosiffredi
+      - movie
+galleryByURL:
+  - action: script
+    url:
+      - roccosiffredi.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - roccosiffredi
+      - gallery
+# Last Updated December 22, 2022

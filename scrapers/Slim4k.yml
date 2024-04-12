@@ -1,0 +1,43 @@
+name: Slim4k
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - slim4k.com/videos
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - slim4k.com/models
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property='og:title']/@content
+      Details: //div[contains(.,'Description')]/em
+      Image: //meta[@property='og:image']/@content
+      Studio:
+        Name: //div[contains(.,'Site')]/a
+      Tags:
+        Name: //div[contains(.,'Categories')]/a | //div[contains(.,'Tags')]/a
+      Performers:
+        Name: //div[contains(.,'Models')]/a 
+
+  performerScraper:
+    performer:
+      Name:
+        selector: //h2
+      Gender:
+        fixed: Female
+      Image:
+        selector: //div[@class='block-model']//img/@src
+      EyeColor:
+        selector: //span[contains(text(),'Eye Color:')]/following-sibling::text()
+      HairColor:
+        selector: //span[contains(text(),'Hair Color:')]/following-sibling::text()
+      Height: //li[contains(.,'Height')]/span
+      Weight: //li[contains(.,'Weight')]/span
+      Measurements: //li[contains(.,'Parameters')]/span
+      Details: //div[@class='desc']
+# Last Updated April 5, 2024

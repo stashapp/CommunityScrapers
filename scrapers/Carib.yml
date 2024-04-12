@@ -24,8 +24,7 @@ xPathScrapers:
     common:
       $movieinfo: //div[@class="movie-info section divider"]
     scene:
-      Title: /html/head/title/text()
-      # //div[contains(@class,"heading")]/h1/text()
+      Title: //div[contains(@class,"heading")]/h1/text()
       Details: $movieinfo/p
       URL:
         selector: //link[@hreflang="ja-JP"]/@href

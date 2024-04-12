@@ -1,22 +1,52 @@
-name: portagloryhole
+name: PortaGloryhole
 sceneByURL:
   - action: scrapeXPath
     url:
-      - portagloryhole.com
+      - portagloryhole.com/scenes/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://portagloryhole.com/search?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 xPathScrapers:
-  sceneScraper:
+  sceneSearch:
+    common:
+      $result: //div[@data-post-id]
     scene:
-      Title:
-        selector: //h2
+      Title: $result//h1/a
+      Date:
+        selector: $result//span[@class="posted_on"]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      URL:
+        selector: $result//h1/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://portagloryhole.com/
+      Image: $result//img[contains(@class, "item_cover")]/@src
+
+  sceneScraper:
+    common:
+      $scene: //div[@class="post_details"]
+    scene:
+      Title: $scene//h1/span
+      Date:
+        selector: $scene//h3[@class="post_date"]/span
+        postProcess:
+          - parseDate: Jan 2, 2006
       Performers:
-        Name: //h5[i[@class="icon-female"]]/a
+        Name: $scene//a[contains(@href,"/models/")]
       Tags:
-        Name: //h5[@class="video_categories"]/a
-      Details: //div[@class="desc"]/p
-      Image:
-        selector: //meta[@property="og:image"]/@content
+        Name: $scene//a[@class="tags"]
+      Details: $scene//*[@class="post_description"]
+      Image: //meta[@name="twitter:image"]/@content
+      URL: //meta[@property="og:url"]/@content
       Studio:
         Name:
-          fixed: PortaGloryhole
-# Last Updated April 25, 2021
+          fixed: Porta Gloryhole
+# Last Updated March 10, 2024

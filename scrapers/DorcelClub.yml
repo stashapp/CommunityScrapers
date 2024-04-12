@@ -26,15 +26,21 @@ xPathScrapers:
         Name: //div[@class="actress"]/a
       Studio:
         Name:
-          fixed: DorcelClub
+          fixed: Dorcel Club
       Movies:
         Name: //div[@class="left"]/span[@class="movie"]/a/text()
         URL:
           selector: //div[@class="left"]/span[@class="movie"]/a/@href
           postProcess:
             - replace:
-                - regex: (.*)
-                  with: https://dorcelclub.com$1
+                - regex: ^/
+                  with: https://dorcelclub.com/
+      Director:
+        selector: //div[@class="left"]/span[@class='director']/text()
+        postProcess:
+          - replace:
+              - regex: Director\s*:\s*(.*)
+                with: $1
 
   movieScraper:
     movie:
@@ -55,12 +61,12 @@ xPathScrapers:
                 with: ":00:"
       Studio:
         Name:
-          fixed: DorcelClub
+          fixed: Dorcel Club
       Director:
         selector: //span[@class='director']/text()
         postProcess:
           - replace:
-              - regex: Director\s:\s(.*)
+              - regex: Director\s*:\s*(.*)
                 with: $1
       FrontImage:
         selector: //img[contains(@class, "cover")]/@data-src
@@ -69,4 +75,4 @@ xPathScrapers:
               - regex: ([^\s]*)\s1x
                 with: $1
       Synopsis: //span[@class="full"]/p|/div[@class="content-text"]/p
-# Last Updated August 07, 2021
+# Last Updated March 22, 2023

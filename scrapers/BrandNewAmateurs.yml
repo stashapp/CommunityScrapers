@@ -1,0 +1,22 @@
+name: "Brand New Amateurs"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - brandnewamateurs.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //meta[@property="og:title"]/@content
+      Details:
+        selector: //div[@class='videoDetails clear']/p
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Brand New Amateurs
+      Tags:
+        Name:
+          selector: //div[@class='featuring clear']/ul/li/a    
+# Last Updated September 11, 2022

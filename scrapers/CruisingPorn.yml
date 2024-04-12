@@ -1,0 +1,94 @@
+name: CruisingPorn
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cruisingporn.com
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - cruisingporn.com
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[@class='vid-dtls']
+      $pThumb: //div[@class='player-thumb']//img
+    scene:
+      Title: $details/h3
+      Details:
+        selector: $details//div[@class='desc']
+        postProcess:
+          - replace:
+              - regex: ^(VIEW MATCHING PHOTOS\s*)?(.+)?(Featured Models:.+)$
+                with: $2
+      Performers:
+        Name: $details//a[contains(@href,'/models/')]/text()
+      Date:
+        selector: $details//li[i[@class='cal-icon']]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Image:
+        # Try to snag the highest resolution image from the available tags.
+        selector: >
+          $pThumb/@src
+          | $pThumb/@src0_1x
+          | $pThumb/@src0_2x
+          | $pThumb/@src0_3x
+          | $pThumb/@src0_4x
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: .+__SEP__(.+)$
+                with: https://cruisingporn.com/tour/$1
+      Studio:
+        Name:
+          # Some scenes have a web-icon that shows the studio, others don't.
+          # This handles both methods, and hopefully will automatically 'just work' if they add
+          # another studio and use web-icon consistently, without needing to add to the map.
+          selector: $details//li[i[@class='web-icon']]/strong/text() | //div[@class='player-thumb']//img/@alt
+          postProcess:
+            - replace:
+                - regex: ^([^\.]+).+
+                  with: $1
+            - map:
+                dadsandtwinks: Dads and Twinks
+                fightandfuck: Fight and Fuck
+                fore-skin: Fore Skin
+                gaymassagetable: Gay Massage Table
+                lockerroomboys: Locker Room Boys
+                toesuckingguys: Toe Sucking Guys
+
+  performerScraper:
+    performer:
+      Name: //div[@class='modelname_new_diane']
+      Gender:
+        fixed: Male
+      Country: //span[span[contains(.,'Nationality')]]/span[@class='modelfields_value_new']
+      Height:
+        selector: //span[span[contains(.,'Height')]]/span[@class='modelfields_value_new']
+        postProcess:
+          - feetToCm: true
+      PenisLength:
+        selector: //span[span[contains(.,'Cock Size')]]/span[@class='modelfields_value_new']
+        postProcess:
+          - replace:
+              - regex: '([Uu]n)([Cc]ut)'
+                with: ''
+              - regex: ^
+                with: "0' "
+          - feetToCm: true
+      Circumcised:
+        selector: //span[span[contains(.,'Cock Size')]]/span[@class='modelfields_value_new']
+        postProcess:
+          - replace:
+              - regex: '[\d"\s]*'
+                with: ''
+      Tags:
+        Name: //span[span[contains(.,'Role')]]/span[@class='modelfields_value_new']
+      Details:
+        selector: //div[@class='about_funfacts']/text()
+
+# Last Updated April 08, 2024

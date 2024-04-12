@@ -1,0 +1,36 @@
+# requires: Algolia
+name: Blowpass
+sceneByURL:
+  - action: script
+    url:
+      - 1000facials.com/en/video/
+      - blowpass.com/en/video/
+      - immorallive.com/en/video/
+      - mommyblowsbest.com/en/video/
+      - onlyteenblowjobs.com/en/video/
+      - throated.com/en/video/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - blowpass
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - blowpass
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - blowpass
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - blowpass
+    - validName
+# Last Updated February 24, 2024

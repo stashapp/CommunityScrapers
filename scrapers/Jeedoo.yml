@@ -1,0 +1,82 @@
+name: Jeedoo
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jeedoo.com
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - jeedoo.com
+    scraper: movieScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.jeedoo.com/porn-movies/?show_no_offer=1&search={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: (DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads
+                with: ""
+      Date:
+        selector: //b[contains(text(), "Release date:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Studio:
+        Name: //a[@data-original-title="Label" or @title="Label"]/text()
+      Synopsis: //meta[@property="og:description"]/@content
+      FrontImage: //img[contains(@class,"mainimage")][@rel="1"]/@src
+      BackImage: //img[contains(@class,"mainimage")][@rel="2"]/@src
+      URL: //link[@rel="alternate"][@hreflang="en"]/@href
+  sceneScraper:
+    scene:
+      Title: &title
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: (DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads
+                with: ""
+      URL: &url
+        selector: //link[@rel="alternate"][@hreflang="en"]/@href
+      Date:
+        selector: //b[contains(text(), "Release date:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Studio:
+        Name: //a[@title="Label"][1]/text()
+      Details: //meta[@property="og:description"]/@content
+      Movies:
+        Name: *title
+        URL: *url
+      Image: //img[contains(@class,"mainimage")][@rel="1"]/@src
+      Performers:
+        Name: //a[@title="Cast"]/text()
+        URL:
+          selector: //a[@title="Cast"]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.jeedoo.com"
+  sceneSearch:
+    common:
+      $searchItem: //a[contains(@href,"/product/")]/img/..
+    scene:
+      Title: $searchItem/img/@alt
+      URL:
+        selector: $searchItem/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.jeedoo.com"
+      Image: $searchItem/img/@data-src
+# Last Updated June 14, 2022

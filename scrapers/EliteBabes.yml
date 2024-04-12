@@ -1,0 +1,44 @@
+name: EliteBabes
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.elitebabes.com/?s={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - www.elitebabes.com/model/
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //ul//a[contains(@href,"model/")]//text()
+      URL: //ul//a[contains(@href,"model/")]/@href
+
+  performerScraper:
+    common:
+      $infoPiece: //div/ul[@class='list-aside hidden']/li/span
+    performer:
+      Name: //div/h2[@class='fn']/text()
+      Birthdate: $infoPiece[text() = 'Born:']/../text()
+      Gender:
+        fixed: "Female"
+      Height:
+        selector: $infoPiece[text() = 'Height:']/../text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+).*
+                with: $1
+      Image: //div/figure/img/@src
+      Country: $infoPiece[text() = 'Birthplace:']/../text()
+      Tags:
+        Name: //div/div[@class='link-btn']/h2/a
+      Measurements: $infoPiece[text() = 'Measurements:']/../text()
+      CareerLength: $infoPiece[text() = 'First Seen:']/../text()
+      Aliases:
+        selector: //div/p[@class='read-more']/strong
+        concat: ", "
+      HairColor: $infoPiece[text() = 'Hair Color:']/../text()
+      Details: //div/p[@class='read-more-wrap']
+      URL: //link[@rel='canonical']/@href
+# Last Updated August 15, 2022

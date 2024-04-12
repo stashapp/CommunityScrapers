@@ -1,0 +1,11 @@
+name: MYLF
+# requires: py_common
+
+sceneByURL:
+  - url:
+      - mylf.com/movies/
+    action: script
+    script:
+      - python
+      - MYLFAPI.py
+# Last Updated March 04, 2024

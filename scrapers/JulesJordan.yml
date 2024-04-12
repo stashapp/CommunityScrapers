@@ -2,12 +2,28 @@ name: "JulesJordan"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - julesjordan.com/
       - girlgirl.com/
       - manuelferrara.com/
-      - theassfactory.com/
       - spermswallowers.com/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/
+      - theassfactory.com/
+    scraper: newStyleScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - girlgirl.com/
+      - manuelferrara.com/
+      - spermswallowers.com/
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/
+      - theassfactory.com/
+    scraper: newStyleScraper
 
 performerByURL:
   - action: scrapeXPath
@@ -26,20 +42,35 @@ xPathScrapers:
     common:
       $details: //div[@class="backgroundcolor_info"]
       $galinfo: //div[@class="gallery_info"]
+
     scene:
-      Title: //div[@class="title_bar"]/span/text()
-      Date:
+      Title: &titleAttr
+        selector: //div[@class="title_bar"]/span/text()
+      Date: &dateAttr
         selector: $details//div[@class="cell update_date"]/text()
         postProcess:
           - parseDate: 01/02/2006
-      Details:
+      Details: &detailsAttr
         selector: $details//span[@class="update_description"]/text()
         concat: " "
-      Tags:
+      Tags: &tagsAttr
         Name: //span[@class="update_tags"]/a/text()
-      Performers:
+      Performers: &performersAttr
         Name: $details//span[@class="update_models"]/a/text()|$galinfo//span[@class="update_models"]/div/a/text()
         URL: $details//span[@class="update_models"]/a/@href|$galinfo//span[@class="update_models"]/div/a/@href
+      Studio: &studioAttr
+        Name:
+          selector: //base/@href
+          postProcess:
+            - replace:
+                - regex: (.+\/\/|www.|\..+)
+                  with:
+            - map:
+                julesjordan: Jules Jordan
+                girlgirl: Girl Girl
+                manuelferrara: Manuel Ferrara
+                theassfactory: The Ass Factory
+                spermswallowers: Sperm Swallowers
       Movies:
         Name: $details//span[@class="update_dvds"]/a/text()
         URL: $details//span[@class="update_dvds"]/a/@href
@@ -47,10 +78,47 @@ xPathScrapers:
         selector: //script[contains(text(),'useimage')]/text()
         postProcess:
           - replace:
-            - regex: (?:.+useimage = "([^"]+).+)
-              with: $1
-            - regex: (^\/)
-              with: https://www.julesjordan.com/
+              - regex: (?:.+useimage = "([^"]+).+)
+                with: $1
+              - regex: (^\/)
+                with: https://www.julesjordan.com/
+
+    gallery:
+      Title: *titleAttr
+      Date: *dateAttr
+      Details: *detailsAttr
+      Tags: *tagsAttr
+      Performers: *performersAttr
+      Studio: *studioAttr
+
+  newStyleScraper:
+    common:
+      $scene: //div[@class="movie-player"]
+    scene:
+      Title: &newTitleAttr $scene//div[@class="movie_title"]
+      Date: &newDateAttr
+        selector: $scene//span[contains(., "Date:")]/following-sibling::text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: &newDetailsAttr $scene//span[contains(., "Description:")]/following-sibling::text()
+      Tags: &newTagsAttr
+        Name: $scene//a[contains(@href, "categories")]/text()
+      Performers: &newPerformersAttr
+        Name: $scene//a[contains(@href, "models")]/text()
+        URL: $scene//a[contains(@href, "models")]/@href
+      Studio: *studioAttr
+      Movies:
+        Name: $scene//span[contains(., "Movie:")]/following-sibling::a/text()
+        URL: $scene//span[contains(., "Movie:")]/following-sibling::a/@href
+      Image: $scene//video/@poster
+
+    gallery:
+      Title: *newTitleAttr
+      Date: *newDateAttr
+      Details: *newDetailsAttr
+      Tags: *newTagsAttr
+      Performers: *newPerformersAttr
+      Studio: *studioAttr
 
   performerScraper:
     performer:
@@ -59,40 +127,32 @@ xPathScrapers:
         selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Age')]
         postProcess:
           - replace:
-            - regex: "Age:"
-              with:
+              - regex: "Age:"
+                with:
           - parseDate: January 2, 2006
       Measurements:
         selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Measurements')]
         postProcess:
           - replace:
-            - regex: "Measurements:"
-              with:
-            - regex: " "
-              with:
+              - regex: "Measurements:"
+                with:
+              - regex: " "
+                with:
       Height:
         selector: //div[@class='model_bio model_bio_info']//text()[contains(.,'Height')]
         postProcess:
           - replace:
-            - regex: "Height:"
-              with:
+              - regex: "Height:"
+                with:
           - feetToCm: true
       Image:
         selector: //img[contains(@class,'model_bio_thumb')]/@src0_3x
 
   movieScraper:
     movie:
-      Name: //span[@class="title_bar_hilite"]/text()
-      Synopsis:
-        selector: //div[@class="dvd_extra_fields"]/div/text()[not(contains(.,"Studio"))]
-        concat: " "
-        postProcess:
-          - replace:
-            - regex: "Description:"
-              with:
+      Name: //meta[@property="og:title"]/@content
       Studio:
-        Name: //span[@class="update_date"]/text()[contains(.,"Studio")]/following-sibling::a/text()
-      FrontImage: //div[@class="front"]/a/img/@src0_3x
-      BackImage: //div[@class="back"]/a/img/@src0_3x
-
-# Last Updated November 21, 2020
+        Name:
+          fixed: Jules Jordan Video
+      FrontImage: //img[contains(@class, "dvd_box")]/@src0_3x
+# Last Updated September 19, 2023

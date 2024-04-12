@@ -1,0 +1,11 @@
+name: "ShokoAPI"
+# requires: py_common
+
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ShokoAPI.py
+      - query
+
+# Last Updated November 27, 2023

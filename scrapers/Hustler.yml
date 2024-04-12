@@ -39,18 +39,25 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $content: //div[@class="panel-content"]
     scene:
-      Title: //h3/a/text()
+      Title: //h3/a/text()|$content//h3[contains(@class, "headline")]/a/text()
       URL: //link[@rel='canonical']/@href
       Performers:
         Name: 
-          selector: //span[@class="attr-key" and contains(text(),"Cast")]/following-sibling::span[@class="attr-value"]/a[not(text()="Hustler Models") and not(text()="Barely Legal Models")]/text()
+          selector: //span[@class="attr-key" and contains(text(),"Cast")]/following-sibling::span[@class="attr-value"]/a[not(text()="Hustler Models") and not(text()="Barely Legal Models")]/text()|$content//span[contains(text(), "Cast")]//following-sibling::span/a/text()
       Date:
-        selector: //span[@class="attr-key" and contains(text(),"Released")]/following-sibling::span[@class="attr-value"]/text()
+        selector: //span[@class="attr-key" and contains(text(),"Released")]/following-sibling::span[@class="attr-value"]/text()|$content//span[contains(text(), "Released")]//following-sibling::span/text()
         postProcess:
           - parseDate: Jan 02, 2006
-      Details: //meta[@property="og:description"]/@content|//div[@class="description"]/p
-      Image: //div[@class="img-container"]/img/@src
+      Details: //p[following-sibling::a[@class="clickable"]]|//meta[@property="og:description"]/@content|//div[@class="description"]/p
+      Image:
+        selector: //div[@class="img-container"]/img/@src|//div[contains(@class, "jw-preview")]/@style|$content/img/@src
+        postProcess:
+          - replace:
+              - regex: (?:background-image:\s*url\(")(.+)(?:"\).*);?
+                with: $1
       Tags:
         Name: //div[@class="tag-list"]/a/text()
       Studio:
@@ -61,4 +68,4 @@ driver:
   clicks:
     - xpath: //a[@class="clickable"]
       sleep: 2
-# Last Updated February 01, 2020
+# Last Updated June 30, 2023

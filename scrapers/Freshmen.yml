@@ -1,0 +1,23 @@
+name: "Freshmen"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - freshmen.net/content/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1/span/text()
+        concat: " "
+      Details:
+        selector: //div[@class='contentTab']/div[@class='top']//p
+        concat: "\n\n"
+      Performers:
+        Name: //div[@class='actor']/div[@class='name']
+      Image:
+        selector: //*[@id="videoPlayer"]/@poster
+      Studio:
+        Name:
+          fixed: Freshmen
+# Last Updated June 26, 2022

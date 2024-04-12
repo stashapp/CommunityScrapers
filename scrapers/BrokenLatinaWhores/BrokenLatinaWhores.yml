@@ -1,0 +1,42 @@
+# requires: py_common
+name: Broken Latina Whores
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - brokenlatinawhores.com/updates
+    scraper: sceneScraper
+performerByURL:
+  - action: script
+    url:
+      - brokenlatinawhores.com/models
+    script:
+      - python3
+      - BrokenLatinaWhores.py
+      - performerByURL
+xPathScrapers:
+  sceneScraper:
+    common:
+      $model: //span[@class="tour_update_models"]/a
+    scene:
+      Title:
+        selector: //span[@class="update_title"]
+      Date:
+        selector: //span[@class="availdate"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers:
+        Name:
+          selector: $model/text()
+        URL:
+          selector: $model/@href
+      Tags:
+        Name: //span[@class="update_tags"]/a
+      Details:
+        selector: //span[@class="latest_update_description"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Broken Latina Whores
+
+# Last Updated March 16, 2024

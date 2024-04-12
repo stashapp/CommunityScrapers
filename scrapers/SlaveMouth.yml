@@ -1,0 +1,45 @@
+name: SlaveMouth
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - slavemouth.com/session/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h3[contains(concat(" ", normalize-space(@class), " "), " mas_title ")]/text()
+      Details: //div[contains(concat(" ", normalize-space(@class), " "), " description ")]/p[contains(concat(" ", normalize-space(@class), " "), " mas_longdescription ")]/text()
+      Date: 
+        selector: //div[contains(concat(" ", normalize-space(@class), " "), " lch ")]/span[contains(concat(" ", normalize-space(@class), " "), " lc_info ")]
+        postProcess:
+          - replace:
+            - regex: (.*?), (.+)
+              with: $2
+          - parseDate: January 2, 2006
+      Image: 
+        selector: //div[contains(concat(" ", normalize-space(@class), " "), " jwpContainer ")]/script/text()
+        postProcess:
+          - replace:
+            - regex: .+splash:\ \'(.+\.jpg).+
+              with: https://www.slavemouth.com/$1
+      Studio:
+        Name:
+          fixed: SlaveMouth
+      Tags:
+        Name:
+          selector: //div[@id="caseContainer"]/div/p[contains(concat(" ", normalize-space(@class), " "), " tags ")]
+          split: ", "
+          postProcess:
+            - replace:
+              # Why doesn't '^Tags:' work?
+              - regex: ^Tags:(.+)
+                with: $1
+      Performers:
+        Name:
+          selector: //div[contains(concat(" ", normalize-space(@class), " "), " lch ")]/span[contains(concat(" ", normalize-space(@class), " "), " lc_info ")]/text()
+          split: ","
+      Code: //div[@id="caseContainer"]/@data-lid
+
+# Last Updated March 12, 2024

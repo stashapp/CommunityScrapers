@@ -1,0 +1,120 @@
+# requires: Algolia
+name: "Adultime"
+sceneByURL:
+  - action: script
+    url:
+      - accidentalgangbang.com/en/video/
+      - adamandevepictures.com/en/video/
+      - adulttime.com/en/video/
+      - adulttimepilots.com/en/video/
+      - agentredgirl.com/en/video/
+      - analteenangels.com/en/video/
+      - asmrfantasy.com/en/video/
+      - assholefever.com/en/video/
+      - beingtrans247.com/en/video/
+      - blowmepov.com/en/video/
+      - caughtfapping.com/en/video/
+      - devilsfilm.com/en/video/
+      - devilstgirls.com/en/video/
+      - dpfanatics.com/en/video/
+      - extremepickups.com/en/video/
+      - famedigital.com/en/video/
+      - footsiebabes.com/en/video/
+      - forbiddenseductions.com/en/video/
+      - girlstryanal.com/en/video/
+      - givemeteens.com/en/video/
+      - hairyundies.com/en/video/
+      - isthisreal.com/en/video/
+      - joymii.com/en/video/
+      - kissmefuckme.com/en/video/
+      - lezbebad.com/en/video/
+      - lezcuties.com/en/video/
+      - massage-parlor.com/en/video/
+      - milkingtable.com/en/video/
+      - mixedx.com/en/video/
+      - modeltime.com/en/video/
+      - moderndaysins.com/en/video/
+      - mommysboy.com/en/video/
+      - mommysgirl.com/en/video/
+      - muses.com/en/video/
+      - nudefightclub.com/en/video/
+      - nurumassage.com/en/video/
+      - officemsconduct.com/en/video/
+      - oopsie.com/en/video/
+      - outofthefamily.com/en/video/
+      - peternorth.com/en/video/
+      - prettydirty.com/en/video/
+      - puretaboo.com/en/video/
+      - sabiendemonia.com/en/video/
+      - soapymassage.com/en/video/
+      - teensneaks.com/en/video/
+      - theyeslist.com/en/video/
+      - transfixed.com/en/video/
+      - transgressivefilms.com/en/video/
+      - trickyspa.com/en/video/
+      - truelesbian.com/en/video/
+      - webyoung.com/en/video/
+      - welikegirls.com/en/video/
+      - wolfwagner.com/en/video/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlsway
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlsway
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlsway
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlsway
+      - validName
+galleryByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - puretaboo
+      - gallery
+galleryByURL:
+  - action: script
+    url:
+      - accidentalgangbang.com/en/photo/
+      - devilsfilm.com/en/photo/
+      - joymii.com/en/photo/
+      - mommysgirl.com/en/photo/
+      - nurumassage.com/en/photo/
+      - peternorth.com/en/photo/
+      - prettydirty.com/en/photo/
+      - puretaboo.com/en/photo/
+      - transfixed.com/en/video/
+      - webyoung.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - puretaboo
+      - gallery
+movieByURL:
+  - action: script
+    url:
+      - adulttime.com/en/dvd/
+      - devilsfilm.com/en/dvd/
+      - devilstgirls.com/en/dvd/
+      - outofthefamily.com/en/dvd/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - puretaboo
+      - movie
+# Last Updated October 12, 2023

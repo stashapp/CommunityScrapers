@@ -1,0 +1,154 @@
+name: KB Productions
+# requires: py_common
+# scrapes: 2 Girls 1 Camera, All Anal, Alt Erotic, Amazing Films, Anal Only, Benefit Monkey, Big Gulp Girls, BJ Raw, Black Bull Challenge, Cougar Season, Creampie Thais, Deepthroat Sirens, Dirty Auditions, Divine-DD, Emo Network, Facials Forever, Freak Mob Media, Gay Life Network, Got Filled, Hoby Buchanon, Inked POV, Inserted, JAV888, Lady Sonia, LezKey, LucidFlix, Mean Feet Fetish, Monger In Asia, Nylon Perv, Nympho, Pounded Petite, Red-XXX, Ricky's Room, S3XUS, Seska, Sexy Modern Bull, She's Brand New, SIDECHICK, Suck This Dick, Swallowed, Top Web Models, True Anal, TWM Classics, Xful, Yes Girlz, Yummy Couple, Z-Filmz
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - emonetwork.com
+      - gaylifenetwork.com
+    scraper: sceneScraper
+  - url:
+      - 2girls1camera.com/scenes
+      - alterotic.com/videos
+      - amazingfilms.com/videos
+      - analjesse.com/trailers
+      - analonly.com/scenes
+      - benefitmonkey.com/scenes
+      - biggulpgirls.com/scenes
+      - bjraw.com/videos
+      - blackbullchallenge.com/videos
+      - cougarseason.com/scenes
+      - creampiethais.com/videos
+      - deepthroatsirens.com/scenes
+      - dirtyauditions.com/scenes
+      - divine-dd.com/videos
+      - facialsforever.com/scenes
+      - freakmobmedia.com/videos
+      - gogobarauditions.com/trailers
+      - gotfilled.com/videos
+      - hobybuchanon.com/behind-the-scenes
+      - hobybuchanon.com/suck-this-dick
+      - hobybuchanon.com/updates
+      - inkedpov.com/scenes
+      - inserted.com/tour/videos
+      - inserted.com/videos
+      - jav888.com/videos
+      - lady-sonia.com/scenes
+      - lezkey.com/scenes
+      - lucidflix.com/episodes
+      - meanfeetfetish.com/videos
+      - mongerinasia.com/trailers
+      - nylonperv.com/videos
+      - red-xxx.com/scenes
+      - rickysroom.com/videos
+      - s3xus.com/scenes
+      - sexymodernbull.com/videos
+      - sidechick.com/videos
+      - thaigirlswild.com/videos
+      - tour.allanal.com/scenes
+      - tour.nympho.com/scenes
+      - tour.poundedpetite.com/scenes
+      - tour.seska.com/scenes
+      - tour.shesbrandnew.com/scenes
+      - tour.swallowed.com/scenes
+      - tour.topwebmodels.com/scenes
+      - trueanal.com/scenes
+      - xful.com/videos
+      - yesgirlz.com/scenes
+      - yummycouple.com/videos
+      - z-filmz-originals.com/videos
+    action: script
+    script:
+      - python
+      - KBProductions.py
+      - scene-by-url
+performerByURL:
+  - url:
+      - 2girls1camera.com/models
+      - tour.allanal.com/models
+      - alterotic.com/models
+      - amazingfilms.com/models
+      - analonly.com/models
+      - benefitmonkey.com/models
+      - biggulpgirls.com/models
+      - bjraw.com/models
+      - blackbullchallenge.com/models
+      - cougarseason.com/models
+      # creampiethais.com has no model pages
+      - deepthroatsirens.com/models
+      - dirtyauditions.com/models
+      - divine-dd.com/models
+      - facialsforever.com/models
+      - freakmobmedia.com/models
+      - gotfilled.com/models
+      # /models redirects to /hobyshotties
+      - hobybuchanon.com/models
+      - hobybuchanon.com/hobyshotties
+      - inkedpov.com/models
+      - inserted.com/models
+      - inserted.com/tour/models
+      - jav888.com/models
+      # lady-sonia.com has no model pages
+      - lezkey.com/models
+      - lucidflix.com/models
+      - meanfeetfetish.com/models
+      - nylonperv.com/models
+      - tour.nympho.com/models
+      - tour.poundedpetite.com/models
+      # red-xxx.com has no model pages
+      - rickysroom.com/models
+      - s3xus.com/models
+      # seska.com has no model pages
+      - tour.shesbrandnew.com/models
+      - sidechick.com/models
+      - sexymodernbull.com/models
+      - tour.swallowed.com/models
+      - tour.topwebmodels.com/models
+      - trueanal.com/models
+      - xful.com/models
+      - yesgirlz.com/models
+      # yummycouple.com has no model pages
+      - z-filmz-originals.com/models
+    action: script
+    script:
+      - python
+      - KBProductions.py
+      - performer-by-url
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="trailer"]//img/@alt
+      Details: //div[@class="videoContainer"]//p[not(contains(@class,'vjs-no-js'))]/text()
+      Performers:
+        Name: //h2[contains(text(),'Models')]/a/text()
+      Image:
+        selector: //div[@class="trailer"]//img/@src | //video/@poster
+        postProcess:
+          - replace:
+              - regex: ^(https:)?
+                with: "https:"
+      Date:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ^([^-]+).+
+                with: $1 
+          - parseDate: January 2, 2006
+      Tags:
+        Name:
+          selector: //h4[contains(text(),'Search Tags')]/a/text()
+      Studio:
+        Name:
+          selector: //h3[contains(text(),'Site')]/a/text()
+          postProcess:
+            - map:
+                BeddableBoys: "Beddable Boys"
+                BestBareBack: "Best Bareback"
+                EmoTwinks: "Emo Twinks"
+                ExposedEmos: "Exposed Emos"
+                HomoEmo: "Homo Emo"
+                HomoScene: "Homo Scene"
+                LollipopTwinks: "Lollipop Twinks"
+                Twinklight: "Twink Light"
+# Last Updated March 29, 2024

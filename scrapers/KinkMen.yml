@@ -1,0 +1,95 @@
+name: Kink Men
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - kinkmen.com
+    scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.kinkmen.com/shoot/{filename}
+  # constructs the scene URL from the filename, provided that the filename includes the scene id
+  queryURLReplace:
+    filename:
+      # the id in kink.com is a 1-6 digit number
+      - regex: ^(\d+)[^\d].* # support filenames in the form 12345_performer_other_data.mp4
+        with: $1
+      - regex: .*\((\d+)\)\.[a-zA-Z\d]+$ #support filenames in the form scene - date - performer (12345).mp4
+        with: $1
+  scraper: sceneScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.kinkmen.com/models?q={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - kinkmen.com/model
+      - kink.com/model
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $shoot: //div[contains(@class, "shoot-detail-legend")]
+    scene:
+      Title: //h1
+      Date:
+        selector: ($shoot/span)[2]
+        postProcess:
+          - parseDate: 01/02/06
+      Details:
+        selector: //div[contains(@class, "shoot-detail-description")]/span/p/text()
+        concat: "\n"
+      Code: //div[contains(@class, "shootPage")]/@data-shootid
+      Director: //span[contains(@class, "director-name")]
+      Performers:
+        Name:
+          selector: //h1/following-sibling::*/a[contains(@href, "/model/")]
+          postProcess:
+            - replace:
+                - regex: \,
+                  with: ""
+      Tags:
+        Name:
+          selector: //div[contains(@class, "shoot-detail-description")]//a[contains(@href, "/tag/")]
+          postProcess:
+            - replace:
+                - regex: \,
+                  with: ""
+      Image: //video/@poster
+      Studio:
+        Name:
+          selector: ($shoot/span)[1]
+  performerSearch:
+    common:
+      $result: //a[contains(@class, "ratio-model")]
+    performer:
+      Name: $result/following-sibling::span
+      Image: $result/img/@src
+      URL:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.kinkmen.com
+  performerScraper:
+    performer:
+      Name: //h1
+      Twitter: //div/a[contains(@href, "twitter.com")]/@href
+      Image: //div[contains(@class, "kink-slider-images")]/img/@data-src
+      Tags:
+        Name: //a[contains(@href, "/tag/")]
+      Details:
+        selector: //p[@class="bio"]/following-sibling::p
+        concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: "<a[^>]*>"
+                with: ""
+      URL: //link[@rel="canonical"]/@href
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0.0
+# Last Updated November 06, 2023

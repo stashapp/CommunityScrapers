@@ -26,7 +26,21 @@ xPathScrapers:
         selector: //video[@id="ypp-player"]/@poster
       Studio:
         Name:
-          fixed: Hitzefrei
+          selector: //link[@rel="alternate"]/@href
+          postProcess:
+            - replace:
+                - regex: .+/([^\.]+).+
+                  with: $1
+            - map:
+                citycheck: City Check
+                cuffemall: Cuff 'em All
+                familyaffairs: Family Affairs
+                fanalarm: Fanalarm
+                fuckonarrival: Fuck On Arrival
+                milfhunters: MILF Hunters
+                pattisanals: Patti's Anals
+                tour: Hitzefrei
+                unleashed: Unleashed
   performerScraper:
     common:
       $stat: p[@class="stat-value"]
@@ -54,4 +68,4 @@ xPathScrapers:
           - feetToCm: true
       HairColor: //div[p[text()="Hair"]]/$stat
       EyeColor: //div[p[text()="Eyes"]]/$stat
-# Last Updated April 27, 2021
+# Last Updated April 7, 2024
