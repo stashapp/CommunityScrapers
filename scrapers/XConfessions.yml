@@ -26,8 +26,11 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-              - regex: .+?\.synopsis_clean="([^"]+).+?\.short_synopsis_clean="([^"]+).+
-                with: $2  $1
+           - regex: .+synopsis_clean="(?P<full>[^"]+).+short_synopsis_clean="(?P<short>[^"]+).+
+                with: |
+                  $short
+
+                  $full
       Performers:
         Name:
           selector: //p[span[contains(.,"Performers:")]]//a
