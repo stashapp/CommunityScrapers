@@ -19,14 +19,14 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-            - regex: .*release_date."([^\s]+).*
+              - regex: .*release_date."([^\s]+).*
                 with: $1
           - parseDate: 2006-01-02
       Details: &details
         selector: $script
         postProcess:
           - replace:
-            - regex: .+synopsis_clean="(?P<full>[^"]+).+short_synopsis_clean="(?P<short>[^"]+).+
+              - regex: .+synopsis_clean="(?P<full>[^"]+).+short_synopsis_clean="(?P<short>[^"]+).+
                 with: |
                   $short
 
@@ -38,7 +38,7 @@ xPathScrapers:
           split: " & "  # with &
       Director: &director //p[span[contains(.,"Director:")]]//a
       Tags:
-        Name:
+        Name: 
           selector: //div/a[contains(@href,'/categories/')] | //button/@data-test
           postProcess:
             - replace:
@@ -46,7 +46,7 @@ xPathScrapers:
                   with: ''
       Image: &image
         selector: $script
-        postProcess:
+        postProcess: 
           - replace:
               - regex: .+?cover_title_picture[=:]"([^"]+).+
                 with: $1
@@ -73,10 +73,10 @@ xPathScrapers:
     common: *com
     movie:
       Name: *title
-      Director: *director
+      Director: *director 
       Duration: *duration
       Date: *date
       Synopsis: *details
       Studio: *studio
       FrontImage: *image
-# Last Updated April 11, 2024
+# Last Updated April 12, 2024
