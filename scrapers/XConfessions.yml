@@ -19,14 +19,14 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-              - regex: .*release_date."([^\s]+).*
+            - regex: .*release_date."([^\s]+).*
                 with: $1
           - parseDate: 2006-01-02
       Details: &details
         selector: $script
         postProcess:
           - replace:
-           - regex: .+synopsis_clean="(?P<full>[^"]+).+short_synopsis_clean="(?P<short>[^"]+).+
+            - regex: .+synopsis_clean="(?P<full>[^"]+).+short_synopsis_clean="(?P<short>[^"]+).+
                 with: |
                   $short
 
