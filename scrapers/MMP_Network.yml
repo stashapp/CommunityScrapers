@@ -2,9 +2,15 @@ name: "MMP Network"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - dirty-chubby.com/video
+      - dirtycasting.com/video
       - fakeshooting.com/video
+      - lustyxxxfamily.com/video
       - mmpnetwork.com/video
+      - pornmuschimovie.com/video
       - povbitch.com/video
+      - sexgamesprivate.com/video
+      - xxxrealityfuck.com/video
 
     scraper: sceneScraper
 
@@ -15,7 +21,7 @@ xPathScrapers:
       Details:
         selector: //div[@class="videoDescription"]
       Date:
-        selector: //div[@class="videoDate" or @id="videoDate"]/text()
+        selector: //div[@class="videoDate" or @id="videoDate"]/text() | //div[@class="videoInfo"]/text()
         postProcess:
           - replace:
               - regex: "^Added "
@@ -23,7 +29,12 @@ xPathScrapers:
           - replace:
               - regex: " • .*"
                 with: ""
+          - replace:
+              - regex: '.+?(\d{4}/\d{2}/\d{2}).+'
+                with: $1
           - parseDate: January 2, 2006
+          - parseDate: 2006/01/02
+
       Performers:
         Name:
           selector: //div[@class="videoDate"]/a | //div[@class="videoFeaturedModels"]/text()
@@ -46,5 +57,5 @@ xPathScrapers:
       Tags:
         Name: //a[contains(@href,"tag")]/text()
       Image:
-        selector: //div[@class="player"]/img/@src | //video/@poster
-# Last Updated August 30, 2022
+        selector: //div[@class="player"]/img/@src | //div[@class="player"]/video/@poster | //div[@class="player"]/img/@src | //video/@poster
+# Last Updated April 11, 2024
