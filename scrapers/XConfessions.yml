@@ -12,7 +12,7 @@ movieByURL:
 xPathScrapers:
   sceneScraper:
     common: &com
-      $script: //script[contains(.,"window.__NUXT")]/text()
+      $script: //script[contains(.,'window.__NUXT')]/text()
     scene:
       Title: &title //h1
       Date: &date
@@ -33,10 +33,10 @@ xPathScrapers:
                   $full
       Performers:
         Name:
-          selector: //p[span[contains(.,"Performers:")]]//a
-          concat: " & "  # some performers are joined
-          split: " & "  # with &
-      Director: &director //p[span[contains(.,"Director:")]]//a
+          selector: //p[span[contains(.,'Performers:')]]//a
+          concat: ' & '  # some performers are joined
+          split: ' & '  # with &
+      Director: &director //p[span[contains(.,'Director:')]]//a
       Tags:
         Name: 
           selector: //div/a[contains(@href,'/categories/')] | //button/@data-test
@@ -48,8 +48,26 @@ xPathScrapers:
         selector: $script
         postProcess: 
           - replace:
-              - regex: .+?cover_title_picture[=:]"([^"]+).+
+                    # Most scenes have a cover_title_picture value in the script
+              - regex: .+?cover_title_picture="([^"]+).+
                 with: $1
+                    # Some without the cover_title_picture will have twi consecutive images
+                    # with a UID.  The first is the movie poster, the second is the scene cover image
+              - regex: .+,"(https:[^"]+?-[^"]+?)","(https:[^"]+?-[^"]+)".*
+                with: $2
+                    # Some without the UID-style images instead have a sequence of images after
+                    # a time stamp.  The first is th movie poster, the second is the scene image
+              - regex: .+"\d\d\d\d-\d\d-\d\d\s+\d\d:\d\d:\d\d"[0-9a-zA-Z,"]*"(https:[^"]+?)","(https:[^"]+)".*
+                with: $2
+                    # Some don't have any of the above, but have a confession_cover_image value
+                    # that is pretty good, but doesn't have the scene name on it.
+              - regex: .+?confession_cover_image:"([^"]+).+
+                with: $1
+                    # If nothing above matches, take the last image in the script.  Often this
+                    # is the scene image, but it's not 100% reliable.
+              - regex: .+(https:[^"]+).*$
+                with: $1
+                    # Clean up UTF-8 coded slashes for real ones
               - regex: '\\u002F'
                 with: '/'
       Studio: &studio
@@ -67,7 +85,8 @@ xPathScrapers:
         Date: *date
         Synopsis: *details
         Studio: *studio
-        FrontImage: *image
+        URL: &url //link[@rel='canonical']/@href
+        FrontImage: &frontImage //article//div[contains(@class,'134px')]//img[contains(@sizes,'200px') or contains(@src,'jpeg') or contains(@src,'jpg')]/@src
 
   movieScraper:
     common: *com
@@ -78,5 +97,6 @@ xPathScrapers:
       Date: *date
       Synopsis: *details
       Studio: *studio
-      FrontImage: *image
-# Last Updated April 12, 2024
+      URL: *url
+      FrontImage: *frontImage
+# Last Updated April 13, 2024
