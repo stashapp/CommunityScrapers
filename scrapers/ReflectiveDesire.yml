@@ -23,6 +23,8 @@ xPathScrapers:
     scene:
       Title: //div[contains(@class, "title-container")]/h1
       Code: //section[@class="single-video"]/article[contains(@class, "video")]/@data-video-id
+      Details:
+        selector: //meta[@name='description']/@content
       Date:
         selector: //p[contains(@class, "video-text-length")]
         postProcess:
@@ -36,13 +38,21 @@ xPathScrapers:
       Image: //link[@rel="image_src"]/@href
       URL: //link[@rel="canonical"]/@href
       Performers:
-        Name: //p[@class="video-text-models"]/a[contains(@href, "/performers/")]
-        URL:
-          selector: //p[@class="video-text-models"]/a[contains(@href, "/performers/")]/@href
+        Name:
+          selector: //span[contains(text(),'Performers')]/a/text()
+          concat: ","
           postProcess:
             - replace:
-              - regex: ^
-                with: https://reflectivedesire.com
+                - regex: ',\s+'
+                  with: ","
+          split: ","
       Tags:
-        Name: //p[contains(@class, "video-text-attributes")]/a[contains(@href, "/categories/")]
-# Last Updated January 20, 2024
+        Name:
+          selector: //span[contains(text(),'Categories')]/a/text() | //span[@class='hidden-attributes']/text()
+          concat: ","
+          postProcess:
+            - replace:
+                - regex: ',\s+'
+                  with: ","
+          split: ","
+# Last Updated April 14, 2024
