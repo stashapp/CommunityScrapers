@@ -331,9 +331,9 @@ def to_scraped_movie(movie_from_api: dict) -> ScrapedMovie:
     }
 
     if front_image := dig(movie_from_api, "images", "cover", "0", "xx", "url"):
-        movie["front_image"] = front_image
+        movie["front_image"] = re.sub(r"/m=[^/]+", "", front_image)
     elif poster := dig(movie_from_api, "images", "poster", "0", "xx", "url"):
-        movie["front_image"] = poster
+        movie["front_image"] = re.sub(r"/m=[^/]+", "", poster)
 
     if date := dig(movie_from_api, "dateReleased"):
         movie["date"] = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S%z").strftime(
@@ -376,7 +376,7 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
         ("xx", "xl", "lg", "md", "sm", "xs"),
         "url",
     ):
-        scene["image"] = image
+        scene["image"] = re.sub(r"/m=[^/]+", "", image)
 
     if dig(scene_from_api, "parent", "type") in ("movie", "serie"):
         scene["movies"] = [to_scraped_movie(scene_from_api["parent"])]
