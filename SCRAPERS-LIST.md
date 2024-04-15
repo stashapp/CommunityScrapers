@@ -1669,7 +1669,7 @@ sugardaddyporn.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 suggabunny.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sunnylanelive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sunnyleone.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-superbemodels.com|superbemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+superbemodels.com|superbemodels.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|-
 superramon.com|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 susanayn.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swallowbay.com|SwallowBay.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
