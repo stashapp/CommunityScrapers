@@ -68,6 +68,17 @@ def map_gender(gender: str):
     return genders.get(gender, gender)
 
 
+def map_haircolor(haircolor: str):
+    haircolors = {
+        "Blond": "Blonde",
+        "Brown": "Brunette",
+        "Dark Brown": "Brunette",
+        "Red": "Redhead",
+        "Grey": "Gray",
+    }
+    return haircolors.get(haircolor, haircolor)
+
+
 def clean_date(date: str) -> str | None:
     date = date.strip()
     cleaned = re.sub(r"(\S+\s+\d+,\s+\d+).*", r"\1", date)
@@ -92,7 +103,8 @@ def performer_haircolor(tree):
     return maybe(
         tree.xpath(
             '//div/p[starts-with(.,"Hair Color")]/following-sibling::p[1]//text()'
-        )
+        ),
+        map_haircolor,
     )
 
 
