@@ -52,7 +52,8 @@ def maybe(
     Returns the first value in values that is not "No data" after applying f to it
     """
     return next(
-        (f(x) for x in values if not re.search(r"(?i)no data|no director", x)), None
+        (f(x) for x in values if not re.search(r"(?i)no data|no director|none", x)),
+        None,
     )
 
 
