@@ -1254,6 +1254,7 @@ nextdoortaboo.com|NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|
 nextdoortwink.com|NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 nfbusty.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 nhentai.net|nhentai.yml|:x:|:heavy_check_mark:|:x:|:x:|-|Hentai
+nicefeelings.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nickmarxx.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 nikkibenz.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 nikkiphoenixxx.com|NikkiAndTera.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
