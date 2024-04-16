@@ -47,7 +47,6 @@ def bangbros(obj: Any, _) -> Any:
 if __name__ == "__main__":
     domains = [
         "brazzers",
-        "brazzersnetwork",
     ]
     op, args = scraper_args()
     result = None
