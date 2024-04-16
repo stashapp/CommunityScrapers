@@ -155,6 +155,8 @@ autumn-jade.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 av69.tv|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 avadawn.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 avanal.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
+avmoo.online|AVMoo.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|JAV
+avsox.click|AVMoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 aventertainments.com|AVE.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Database
 avidolz.com|Baberotica.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|JAV Uncensored
 avjiali.com|AVJiali.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|JAV Uncensored
