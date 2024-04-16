@@ -3,11 +3,9 @@ sceneByURL:
   - action: scrapeXPath
     url: &URLs 
       - amateureuro.com
-      - dirtycosplay.com
       - doegirls.com
       - doe-tv.com
       - forbondage.com
-      - latinamilf.com
       - letsdoeit.com
       - mamacitaz.com
       - transbella.com
@@ -32,14 +30,19 @@ xPathScrapers:
       $letsdoeit: //div[@class="-mvd-grid-more"]//span/a[@class="-mvd-list-url"]
     scene: 
       Title: //meta[@property='og:title']/@content
-      Details: //div[@class='-mvd-description']/text()
+      Details: //div[@class='-mvd-description']/text() | //read-even-more/text()
       Date: 
-        selector: //meta[@itemprop='uploadDate']/@content
+        selector: //meta[@itemprop='uploadDate']/@content | //div[@class='-mvd-grid-stats']
         postProcess:
+          - replace:
+              - regex: .+(\w\w\w\s\d\d?,\s\d\d\d\d)$
+                with: $1
+          - parseDate: Jan 2, 2006
           - parseDate: 2006-01-02T15:04:05-07:00
       Image: //div[@class='video-container']//img/@src
       Tags:
-        Name: //div[@class='-mvd-grid-more-title' and contains(text(),'Information')]/following-sibling::div//a
+        #Name: //div[@class='-mvd-grid-more-title' and contains(text(),'Information')]/following-sibling::div//a
+        Name: //a[contains(@href,'/categories/')]
       Studio: 
         Name: $actors//a[contains(@href,'/channels/')]
       Performers:
@@ -120,14 +123,14 @@ xPathScrapers:
           postProcess:
             - replace:
                  # Amateur Euro, LetsDOeIt, Mamacitaz, TransBella and VIP Sex Vault substudios are often mentioned in the description. 
-                 # Broken across lines for readability.  Use 5 % characters as a token, because it's unlikely to exist naturally.
+                 # Broken across lines for readability.  Use 5 % characters as a token, since it's unlikely to exist naturally.
                 - regex: .+?((A Girl Knows)|(DoeGirls)|(Her Limit)|(Horny Hostel)|(Latina Milf)|(The White Boxxx)|(Trans Taboo)|(xChimera)).+
                   with: '%%%%%$1'
                 - regex: .+?((Carne Del Mercado)|(Chicas Loca)|(Her Big Ass)|(Operación Limpieza)).+
                   with: '%%%%%$1'
                 - regex: .+?((Exposed Casting)|(Fucked In Traffic)|(Hot Babes Plus)|(Los Consoladores)|(Pinup SexPinup Sex)|(PornDoe Pedia)).+
                   with: '%%%%%$1'
-                 # If we've matched in the description the string will start with 5 % characters.  Trim these off
+                 # If we've matched in the description the string will start with 5 % characters.  Trim these off.
                 - regex: '[%]{5}(.*)'
                   with:  $1
                  # If we don't see the substudio mentioned in the description take it from the end of the TITLE (everything following | )
@@ -143,4 +146,4 @@ xPathScrapers:
       Performers:
         Name: //div[span[contains(.,'Model')]//a[contains(@href,'/models/')]
 
-# Last Updated April 15, 2024
+# Last Updated April 16, 2024
