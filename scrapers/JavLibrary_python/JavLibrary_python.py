@@ -446,6 +446,7 @@ def bypass_protection(url):
                 #log.info(f"Flaresolverr response html: {response_html}")
             else:
                 response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
+                response_html.content = response.content
                 response_html.html = response.text
                 response_html.status_code = response.status_code
                 response_html.url = response.url
