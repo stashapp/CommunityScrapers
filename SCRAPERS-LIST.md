@@ -880,6 +880,7 @@ hotwifefun.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotwifexxx.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotwivescheating.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 househumpers.com|PropertySex/PropertySex.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
+houseofangell.com|OLBMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 houseofgord.com|HouseOfGord.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 houseoftaboo.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 houseofyre.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -887,6 +888,7 @@ hqporner.com|HQPorner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hucows.com|Hucows.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hugecockbreak.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hugerubberdicks.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hungyoungbrit.com|OLBMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 humiliation4k.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hungarianhoneys.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hungfuckers.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -1204,6 +1206,7 @@ mrpov.com|FinishesTheJob.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 muchaslatinas.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 mugfucked.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mugfucked.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+musclebearporn.com|OLBMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 muses.com|Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 my-slavegirl.com|my-slavegirl.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mybabysittersclub.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1466,7 +1469,7 @@ rawcouples.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-
 rawfuck.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 rawfuckboys.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 rawfuckclub.com|RawFuckClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
-rawroadnation.com|RawRoadNation.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+rawroadnation.com|OLBMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 reaganfoxx.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
 realbikinigirls.com|WankItNow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 realfuckingdating.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
