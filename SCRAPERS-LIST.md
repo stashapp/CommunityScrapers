@@ -1866,6 +1866,7 @@ twinksinshorts.com|MarsMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 twinktop.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 twinktrade.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 twinkyfeet.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+twistedfactory.com|TwistedFactory.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 twistedvisual.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 twistys.com|Twistys/Twistys.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 twistysnetwork.com|Twistys/Twistys.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
