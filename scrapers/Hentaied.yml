@@ -9,6 +9,7 @@ sceneByURL:
       - parasited.com
       - plantsvscunts.com
       - somegore.com
+      - vored.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -52,4 +53,4 @@ xPathScrapers:
                 Lesbian Sex Fight               : Defeated Sex Fight
                 Bloody                          : Somegore
                 Plants vs Cunts                 : Plants vs Cunts
-# Last Updated January 24, 2024
+# Last Updated April 18, 2024
