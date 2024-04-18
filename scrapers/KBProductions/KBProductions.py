@@ -31,6 +31,7 @@ studio_map = {
     "freakmobmedia.com": "FreakMob Media",
     "gogobarauditions.com": "Gogo Bar Auditions",
     "gotfilled.com": "Got Filled",
+    "hardwerk.com": "HardWerk",
     "hobybuchanon.com": "Hoby Buchanon",
     "inkedpov.com": "Inked POV",
     "inserted.com": "Inserted",
