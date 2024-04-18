@@ -1035,6 +1035,7 @@ latinoguysporn.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 laughingasians.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 laurenphillips.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 leannecrow.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+legendaryx.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:-:|Python|-
 legsex.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 lesbea.com|SexyHub/SexyHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|Lesbian
 lesbiananalsluts.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
