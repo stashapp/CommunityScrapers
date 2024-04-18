@@ -37,6 +37,7 @@ studio_map = {
     "inserted.com": "Inserted",
     "jav888.com": "JAV888",
     "lady-sonia.com": "Lady Sonia",
+    "legendaryx.com": "Legendary X",
     "lezkey.com": "LezKey",
     "lucidflix.com": "LucidFlix",
     "meanfeetfetish.com": "Mean Feet Fetish",
