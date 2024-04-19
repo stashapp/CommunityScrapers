@@ -170,16 +170,19 @@ xPathScrapers:
         selector: //script[contains(.,'KinkyTracking.all')]
         postProcess:
           - replace:
-              - regex: .+?"modelGender":"woman".+
-                with: '%%%Female'
-              - regex: .+?"modelGender":"man".+
-                with: '%%%Male'
-              - regex: .+?"modelGender":"nonbinary".+
-                with: '%%%Non-Binary'
-              - regex: ^[^%].+
-                with: ''
+              - regex: .+?"((modelGender)|(genderIds))":"((woman)|(man)|(nonbinary)|(tsman)|(tswoman)|(unknown))".+
+                with: '%%%$4'              # This little trick will make sure we're left
+              - regex: ^[^%].+             # with an empty string if we don't match anything
+                with: ''                   # in the regex above.
               - regex: ^%+
                 with: ''
+          - map:
+              woman: Female
+              man: Male
+              tswoman: Transgender Female
+              tsmale: Transgender Male
+              nonbinary: Non-Binary
+              unknown: ''
       URL: 
         selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
         concat: '__SEP__'
@@ -191,4 +194,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: stash-scraper/1.0.0
-# Last Updated April 16, 2024
+# Last Updated April 19, 2024
