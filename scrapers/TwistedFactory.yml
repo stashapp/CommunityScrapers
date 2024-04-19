@@ -180,7 +180,7 @@ xPathScrapers:
               woman: Female
               man: Male
               tswoman: Transgender Female
-              tsmale: Transgender Male
+              tsman: Transgender Male
               nonbinary: Non-Binary
               unknown: ''
       URL: 
