@@ -1,0 +1,92 @@
+name: AVMoo
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - avmoo.online
+      - avsox.click
+    scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - avmoo.online
+    scraper: movieScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - avmoo.online
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title //title
+      Date: &date //p[span[contains(.,'Release Date:')]]/text()
+      Image: &image //a[@class='bigImage']/img/@src
+      Studio: &studio
+        Name: //p[contains(.,'Studio:')]/following-sibling::p
+        URL:
+          selector: //p[contains(.,'Studio:')]/following-sibling::p/a/@href
+          postProcess:
+            - replace:
+                - regex: '^'
+                  with: 'https:'
+      Code: //span[contains(.,'ID:')]/following-sibling::span
+      Tags:
+        Name: //span[@class="genre"]/a
+      Performers:
+        Name: //a[contains(@href,'/star/')]/span
+      Movies:
+        Name: *title
+        FrontImage: *image
+        Studio: *studio
+        Duration: &duration
+          selector: //p[span[contains(.,'Length:')]]/text()
+          postProcess:
+            - replace:
+                - regex: min
+                  with: ":00"
+        URL: &url
+          selector: //ul[@class="dropdown-menu"]//a[contains(.,'English')]/@href
+          postProcess:
+            - replace:
+                - regex: '^'
+                  with: 'https:'
+
+  movieScraper:
+    movie:
+      Name: *title
+      Date: *date
+      Duration: *duration
+      FrontImage: *image
+      Studio: *studio
+      URL: *url
+
+  performerScraper:
+    common:
+      $avatar: //div[@class='avatar-box']
+    performer:
+      Name: $avatar//span/text()
+      Image: $avatar//img/@src
+      Birthdate:
+        selector: $avatar//p[contains(.,'Birthday:')]
+        postProcess:
+          - replace:
+              - regex: '[^\d-]'
+                with: ''
+      Height:
+        selector: $avatar//p[contains(.,'Height')]
+        postProcess:
+          - replace:
+              - regex: '[^\d]'
+                with: ''
+      Measurements:
+        selector: $avatar//p[contains(.,'Bust:')] | $avatar//p[contains(.,'Waist:')] | $avatar//p[contains(.,'Hips:')]
+        concat: '-'
+        postProcess:
+          - replace:
+              - regex: '[^\d-]'
+                with: ''
+
+# Last Updated April 16, 2024
