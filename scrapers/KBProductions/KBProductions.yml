@@ -1,6 +1,6 @@
 name: KB Productions
 # requires: py_common
-# scrapes: 2 Girls 1 Camera, All Anal, Alt Erotic, Amazing Films, Anal Only, Benefit Monkey, Big Gulp Girls, BJ Raw, Black Bull Challenge, Cougar Season, Creampie Thais, Deepthroat Sirens, Dirty Auditions, Divine-DD, Emo Network, Facials Forever, Freak Mob Media, Gay Life Network, Got Filled, Hoby Buchanon, Inked POV, Inserted, JAV888, Lady Sonia, LezKey, LucidFlix, Mean Feet Fetish, Monger In Asia, Nylon Perv, Nympho, Pounded Petite, Red-XXX, Ricky's Room, S3XUS, Seska, Sexy Modern Bull, She's Brand New, SIDECHICK, Suck This Dick, Swallowed, Top Web Models, True Anal, TWM Classics, Xful, Yes Girlz, Yummy Couple, Z-Filmz
+# scrapes: 2 Girls 1 Camera, All Anal, Alt Erotic, Amazing Films, Anal Only, Benefit Monkey, Big Gulp Girls, BJ Raw, Black Bull Challenge, Cougar Season, Creampie Thais, Deepthroat Sirens, Dirty Auditions, Divine-DD, Emo Network, Facials Forever, Freak Mob Media, Gay Life Network, Got Filled, HardWerk, Hoby Buchanon, Inked POV, Inserted, JAV888, Lady Sonia, LezKey, LucidFlix, Mean Feet Fetish, Monger In Asia, Nylon Perv, Nympho, Pounded Petite, Red-XXX, Ricky's Room, S3XUS, Seska, Sexy Modern Bull, She's Brand New, SIDECHICK, Suck This Dick, Swallowed, Top Web Models, True Anal, TWM Classics, Xful, Yes Girlz, Yummy Couple, Z-Filmz
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -26,6 +26,7 @@ sceneByURL:
       - freakmobmedia.com/videos
       - gogobarauditions.com/trailers
       - gotfilled.com/videos
+      - hardwerk.com/films
       - hobybuchanon.com/behind-the-scenes
       - hobybuchanon.com/suck-this-dick
       - hobybuchanon.com/updates
@@ -34,10 +35,12 @@ sceneByURL:
       - inserted.com/videos
       - jav888.com/videos
       - lady-sonia.com/scenes
+      - legendaryx.com/videos
       - lezkey.com/scenes
       - lucidflix.com/episodes
       - meanfeetfetish.com/videos
       - mongerinasia.com/trailers
+      - nyseedxxx.com/video
       - nylonperv.com/videos
       - red-xxx.com/scenes
       - rickysroom.com/videos
@@ -151,4 +154,4 @@ xPathScrapers:
                 HomoScene: "Homo Scene"
                 LollipopTwinks: "Lollipop Twinks"
                 Twinklight: "Twink Light"
-# Last Updated March 29, 2024
+# Last Updated April 19, 2024
