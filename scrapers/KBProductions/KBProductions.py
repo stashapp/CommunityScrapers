@@ -2,6 +2,7 @@ import json
 import re
 import requests
 import sys
+import urllib.parse
 from unicodedata import normalize
 from html.parser import HTMLParser
 
@@ -31,11 +32,13 @@ studio_map = {
     "freakmobmedia.com": "FreakMob Media",
     "gogobarauditions.com": "Gogo Bar Auditions",
     "gotfilled.com": "Got Filled",
+    "hardwerk.com": "HardWerk",
     "hobybuchanon.com": "Hoby Buchanon",
     "inkedpov.com": "Inked POV",
     "inserted.com": "Inserted",
     "jav888.com": "JAV888",
     "lady-sonia.com": "Lady Sonia",
+    "legendaryx.com": "Legendary X",
     "lezkey.com": "LezKey",
     "lucidflix.com": "LucidFlix",
     "meanfeetfetish.com": "Mean Feet Fetish",
@@ -62,6 +65,7 @@ studio_map = {
     "yesgirlz.com": "Yes Girlz",
     "yummycouple.com": "Yummy Couple",
     "z-filmz-originals.com": "Z-Filmz",
+    "api.nyseedxxx.com": "NYSeed"
 }
 
 
@@ -227,7 +231,7 @@ def to_scraped_movie(raw_movie: dict) -> ScrapedMovie:
     return movie
 
 
-def to_scraped_scene(raw_scene: dict) -> ScrapedScene:
+def to_content_scraped_scene(raw_scene: dict) -> ScrapedScene:
     site = raw_scene["site_domain"]
     scene: ScrapedScene = {}
 
@@ -277,12 +281,67 @@ def to_scraped_scene(raw_scene: dict) -> ScrapedScene:
 
     return scene
 
+def to_video_scraped_scene(raw_scene: dict) -> ScrapedScene:
+    site = urllib.parse.urlparse(raw_scene["thumbnail"]["url"]).netloc
+    scene: ScrapedScene = {}
+
+    if title := raw_scene.get("title"):
+        scene["title"] = title
+    if date := raw_scene.get("createdAt"):
+        scene["date"] = date[:10].replace("/", "-")
+    if details := raw_scene.get("description"):
+        scene["details"] = strip_tags(details)
+    if scene_id := raw_scene.get("id"):
+        scene["code"] = str(scene_id)
+    if models := raw_scene.get("performers"):
+        scene["performers"] = [
+            {
+                "name": x["name"],
+                "image": x["avatar"],
+                "gender": x["gender"]
+                #"url": make_performer_url(x["slug"], site),
+            }
+            for x in models
+        ]
+    if tags := raw_scene.get("categories"):
+        scene["tags"] = [{"name": x["name"]} for x in tags]
+
+    scene["studio"] = get_studio(site)
+
+    # trailer_screencap is what's shown on most sites
+    # extra_thumbnails has the best sizes and in most cases the first one is the same as thumb
+    # thumb is a good fallback if extra_thumbnails is not available
+    # final fallback is special_thumbnails
+    #cover_candidates = filter(
+        #None,
+        #(
+            #dig(raw_scene, "poster_url"),            
+            #dig(raw_scene, "trailer_screencap"),
+            #dig(raw_scene, "extra_thumbnails", 0),
+            #dig(raw_scene, "thumb"),
+            #dig(raw_scene, "special_thumbnails", 0),
+        #),
+    #)
+    # No animated scene covers
+    #img_exts = (".jpg", ".jpeg", ".png")
+
+    #if scene_cover := next((x for x in cover_candidates if x.endswith(img_exts)), None):
+    scene["image"] = raw_scene["thumbnail"]["url"]
+
+    # There is no reliable way to construct a scene URL from the data
+
+    return scene
+
 
 def scrape_scene(url: str) -> ScrapedScene | None:
     if not (props := fetch_page_props(url)):
         return None
 
-    scene = to_scraped_scene(props["content"])
+    scene = {}
+    if content := props.get("content"):
+        scene = to_content_scraped_scene(content)
+    if video := props.get("video"):
+        scene = to_video_scraped_scene(video)
     scene["url"] = url
 
     if playlist := dig(props, "playlist", "data", 0):
