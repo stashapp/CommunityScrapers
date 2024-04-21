@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //div[@class="vid-title clearfix text-center-mobile"]/h2
+        selector: //div[@class="vid-title clearfix text-center-mobile"]/h1
         postProcess:
           - replace:
             - regex: .+\"([^\"]+)\"
@@ -28,5 +28,5 @@ xPathScrapers:
                 with: "https://"
       Studio:
         Name:
-          fixed: HeavyOnHotties
-# Last Updated November 30, 2023
+          fixed: Heavy On Hotties
+# Last Updated April 21, 2024
