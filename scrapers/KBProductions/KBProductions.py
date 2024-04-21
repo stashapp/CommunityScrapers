@@ -231,7 +231,7 @@ def to_scraped_movie(raw_movie: dict) -> ScrapedMovie:
     return movie
 
 
-def to_content_scraped_scene(raw_scene: dict) -> ScrapedScene:
+def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     site = raw_scene["site_domain"]
     scene: ScrapedScene = {}
 
@@ -281,7 +281,12 @@ def to_content_scraped_scene(raw_scene: dict) -> ScrapedScene:
 
     return scene
 
-def to_video_scraped_scene(raw_scene: dict) -> ScrapedScene:
+
+def to_scraped_scene_from_video(raw_scene: dict) -> ScrapedScene:
+    # A different format is in the wild that uses the "video" element in the JSON provided in the script
+    # This format uses a different structure than the "content" element that most sites employ.
+    # Currently only one site uses this format, so this section may be under rapid revision as more
+    # sites become known.
     site = urllib.parse.urlparse(raw_scene["thumbnail"]["url"]).netloc
     scene: ScrapedScene = {}
 
@@ -298,7 +303,8 @@ def to_video_scraped_scene(raw_scene: dict) -> ScrapedScene:
             {
                 "name": x["name"],
                 "image": x["avatar"],
-                "gender": x["gender"]
+                "instagram": x["avatar"],
+                "gender": x["gender"].capitalize()
                 #"url": make_performer_url(x["slug"], site),
             }
             for x in models
@@ -307,28 +313,7 @@ def to_video_scraped_scene(raw_scene: dict) -> ScrapedScene:
         scene["tags"] = [{"name": x["name"]} for x in tags]
 
     scene["studio"] = get_studio(site)
-
-    # trailer_screencap is what's shown on most sites
-    # extra_thumbnails has the best sizes and in most cases the first one is the same as thumb
-    # thumb is a good fallback if extra_thumbnails is not available
-    # final fallback is special_thumbnails
-    #cover_candidates = filter(
-        #None,
-        #(
-            #dig(raw_scene, "poster_url"),            
-            #dig(raw_scene, "trailer_screencap"),
-            #dig(raw_scene, "extra_thumbnails", 0),
-            #dig(raw_scene, "thumb"),
-            #dig(raw_scene, "special_thumbnails", 0),
-        #),
-    #)
-    # No animated scene covers
-    #img_exts = (".jpg", ".jpeg", ".png")
-
-    #if scene_cover := next((x for x in cover_candidates if x.endswith(img_exts)), None):
     scene["image"] = raw_scene["thumbnail"]["url"]
-
-    # There is no reliable way to construct a scene URL from the data
 
     return scene
 
@@ -339,9 +324,9 @@ def scrape_scene(url: str) -> ScrapedScene | None:
 
     scene = {}
     if content := props.get("content"):
-        scene = to_content_scraped_scene(content)
+        scene = to_scraped_scene_from_content(content)
     if video := props.get("video"):
-        scene = to_video_scraped_scene(video)
+        scene = to_scraped_scene_from_video(video)
     scene["url"] = url
 
     if playlist := dig(props, "playlist", "data", 0):
