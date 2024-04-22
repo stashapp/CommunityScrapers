@@ -2,6 +2,7 @@ import json
 import re
 import requests
 import sys
+import urllib.parse
 from unicodedata import normalize
 from html.parser import HTMLParser
 
@@ -64,6 +65,7 @@ studio_map = {
     "yesgirlz.com": "Yes Girlz",
     "yummycouple.com": "Yummy Couple",
     "z-filmz-originals.com": "Z-Filmz",
+    "api.nyseedxxx.com": "NYSeed"
 }
 
 
@@ -229,7 +231,7 @@ def to_scraped_movie(raw_movie: dict) -> ScrapedMovie:
     return movie
 
 
-def to_scraped_scene(raw_scene: dict) -> ScrapedScene:
+def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     site = raw_scene["site_domain"]
     scene: ScrapedScene = {}
 
@@ -280,11 +282,51 @@ def to_scraped_scene(raw_scene: dict) -> ScrapedScene:
     return scene
 
 
+def to_scraped_scene_from_video(raw_scene: dict) -> ScrapedScene:
+    # A different format is in the wild that uses the "video" element in the JSON provided in the script
+    # This format uses a different structure than the "content" element that most sites employ.
+    # Currently only one site uses this format, so this section may be under rapid revision as more
+    # sites become known.
+    site = urllib.parse.urlparse(raw_scene["thumbnail"]["url"]).netloc
+    scene: ScrapedScene = {}
+
+    if title := raw_scene.get("title"):
+        scene["title"] = title
+    if date := raw_scene.get("createdAt"):
+        scene["date"] = date[:10].replace("/", "-")
+    if details := raw_scene.get("description"):
+        scene["details"] = strip_tags(details)
+    if scene_id := raw_scene.get("id"):
+        scene["code"] = str(scene_id)
+    if models := raw_scene.get("performers"):
+        scene["performers"] = [
+            {
+                "name": x["name"],
+                "image": x["avatar"],
+                "instagram": x["avatar"],
+                "gender": x["gender"].capitalize()
+                #"url": make_performer_url(x["slug"], site),
+            }
+            for x in models
+        ]
+    if tags := raw_scene.get("categories"):
+        scene["tags"] = [{"name": x["name"]} for x in tags]
+
+    scene["studio"] = get_studio(site)
+    scene["image"] = raw_scene["thumbnail"]["url"]
+
+    return scene
+
+
 def scrape_scene(url: str) -> ScrapedScene | None:
     if not (props := fetch_page_props(url)):
         return None
 
-    scene = to_scraped_scene(props["content"])
+    scene = {}
+    if content := props.get("content"):
+        scene = to_scraped_scene_from_content(content)
+    if video := props.get("video"):
+        scene = to_scraped_scene_from_video(video)
     scene["url"] = url
 
     if playlist := dig(props, "playlist", "data", 0):
