@@ -5,6 +5,7 @@ import os
 import re
 import sqlite3
 import sys
+import base64
 from configparser import ConfigParser, NoSectionError
 from urllib.parse import urlparse
 
@@ -582,10 +583,16 @@ def parse_movie_json(movie_json: dict) -> dict:
         date_by_studio = studios_movie_dates[studio_name]
     scrape["date"] = movie_json[0].get(date_by_studio)
 
-    scrape[
-        "front_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg?width=450&height=636"
-    scrape[
-        "back_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg?width=450&height=636"
+    front_img_req = requests.get(f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg?width=450&height=636")
+    if front_img_req.ok:
+        scrape["front_image"] = front_img_req.url
+
+    back_img_req = requests.get(f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg?width=450&height=636")
+    if back_img_req.ok:
+        if base64.b64encode(front_img_req.content) == base64.b64encode(back_img_req.content):
+            log.debug("back_image same as front_image")
+        else:
+            scrape["back_image"] = back_img_req.url
 
     directors = []
     if movie_json[0].get('directors') is not None:
