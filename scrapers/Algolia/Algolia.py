@@ -119,6 +119,7 @@ SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
 SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "ChaosMen",
     "Devil's Film",
+    "Evil Angel",
     "GenderXFilms",
     "Give Me Teens",
     "Hairy Undies",
