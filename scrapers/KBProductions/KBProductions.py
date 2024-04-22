@@ -65,7 +65,7 @@ studio_map = {
     "yesgirlz.com": "Yes Girlz",
     "yummycouple.com": "Yummy Couple",
     "z-filmz-originals.com": "Z-Filmz",
-    "api.nyseedxxx.com": "NYSeed"
+    "api.nyseedxxx.com": "NYSeed",
 }
 
 
@@ -79,6 +79,7 @@ def fix_url(url: str) -> str:
     url = url.replace("twmclassics.com", "topwebmodels.com")
     url = url.replace("suckthisdick.com", "hobybuchanon.com")
     url = url.replace("premium-nickmarxx.com", "nickmarxx.com")
+    url = url.replace("api.nyseedxxx.com", "nyseedxxx.com")
     tour_domain = (
         "nympho",
         "allanal",
@@ -264,7 +265,7 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     cover_candidates = filter(
         None,
         (
-            dig(raw_scene, "poster_url"),            
+            dig(raw_scene, "poster_url"),
             dig(raw_scene, "trailer_screencap"),
             dig(raw_scene, "extra_thumbnails", 0),
             dig(raw_scene, "thumb"),
@@ -303,9 +304,8 @@ def to_scraped_scene_from_video(raw_scene: dict) -> ScrapedScene:
             {
                 "name": x["name"],
                 "image": x["avatar"],
-                "instagram": x["avatar"],
-                "gender": x["gender"].capitalize()
-                #"url": make_performer_url(x["slug"], site),
+                "twitter": x["username"],
+                "gender": x["gender"].capitalize(),
             }
             for x in models
         ]
@@ -322,7 +322,7 @@ def scrape_scene(url: str) -> ScrapedScene | None:
     if not (props := fetch_page_props(url)):
         return None
 
-    scene = {}
+    scene: ScrapedScene = {}
     if content := props.get("content"):
         scene = to_scraped_scene_from_content(content)
     if video := props.get("video"):
