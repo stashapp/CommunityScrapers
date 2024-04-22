@@ -1586,6 +1586,7 @@ shoplyfter.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shoplyftermylf.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 showerbait.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 showybeauty.com|ShowyBeauty.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
+shy-girls.com|Shy-Girls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shylaj.com|ShylaJ.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 sidechick.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 silverstonedvd.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
