@@ -7,6 +7,7 @@ sceneByURL:
       - brookelynnebriar.com/scene/
       - danidaniels.com/scene/
       - dillionation.com/scene/
+      - facialcasting.com/scene/
       - fallinlovia.com/scene/
       - ginagerson.xxx/scene/
       - lonelymeow.com/scene/
@@ -20,4 +21,4 @@ sceneByURL:
     script:
       - python
       - ModelCentroAPI.py
-# Last Updated March 16, 2024
+# Last Updated April 20, 2024
