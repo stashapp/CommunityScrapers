@@ -25,7 +25,6 @@ performerByURL:
   - action: scrapeXPath
     url:
       - kinkmen.com/model
-      - kink.com/model
     scraper: performerScraper
 
 xPathScrapers:
@@ -73,23 +72,106 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://www.kinkmen.com
+
   performerScraper:
     performer:
-      Name: //h1
-      Twitter: //div/a[contains(@href, "twitter.com")]/@href
-      Image: //div[contains(@class, "kink-slider-images")]/img/@data-src
-      Tags:
-        Name: //a[contains(@href, "/tag/")]
-      Details:
-        selector: //p[@class="bio"]/following-sibling::p
-        concat: "\n\n"
+      Name:
+        selector: //h1/text() # //div[@font-size][number(translate(@font-size,"px",""))>=35]/text()
+        concat: " "
         postProcess:
           - replace:
-              - regex: "<a[^>]*>"
+              - regex: ^\s+
                 with: ""
-      URL: //link[@rel="canonical"]/@href
+              - regex: \s+$
+                with:
+      Twitter:
+        selector: '//div/a[contains(concat(" ", normalize-space(@class), " "), " social-link ") and contains(@href, "twitter.com")]/@href'
+      Image:
+        selector: //img[contains(@class,'kink-slider-img') and contains(@class,'active')]/@data-src
+      Tattoos:
+        selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/tattoo')]/span/text()
+        postProcess:
+          - replace:
+              - regex: .+
+                with: 'Yes'
+      Piercings:
+        selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/pierced')]/span/text()
+        concat: "\n"
+      Tags:
+        Name: //div/span[contains(text(),'tags:')]/following-sibling::a/span/text()
+      Details:
+        selector: //div/span/p[@class="bio"]/following-sibling::p
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: "(?i)<a[^>]*>"
+                with: ""
+      FakeTits: 
+        selector: >
+                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/fake-boobs')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/natural-boobs')]/span/text()
+        postProcess:
+          - replace:
+              - regex: .*?Fake.+
+                with: 'Yes'
+              - regex: .*?Natural.+
+                with: 'No'
+      HairColor: 
+        selector: >
+                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black-hair')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunet')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunette')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blond')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blonde')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/redhead')]/span/text()
+        postProcess:
+          - replace:
+              - regex: \sHair
+                with: ''
+      Ethnicity: 
+        selector: >
+                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/asian')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/latin')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/mixed')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/white')]/span/text()
+      Circumcised: 
+        selector: >
+                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/circumcised')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/uncircumcised')]/span/text()
+        postProcess:
+          - replace:
+              - regex: Uncircumcised
+                with: 'Uncut'
+              - regex: Circumcised
+                with: 'Cut'
+      Gender: 
+        selector: //script[contains(.,'KinkyTracking.all')]
+        postProcess:
+          - replace:
+              - regex: .+?"((modelGender)|(genderIds))":"((woman)|(man)|(nonbinary)|(tsman)|(tswoman)|(unknown))".+
+                with: '%%%$4'              # This little trick will make sure we're left
+              - regex: ^[^%].+             # with an empty string if we don't match anything
+                with: ''                   # in the regex above.
+              - regex: ^%+
+                with: ''
+          - map:
+              woman: Female
+              man: Male
+              tswoman: Transgender Female
+              tsman: Transgender Male
+              nonbinary: Non-Binary
+              unknown: ''
+      URL: 
+        selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
+        concat: '__SEP__'
+        postProcess:
+          - replace:
+              - regex: ^.+?multiSite:'([^']+).+?__SEP__(.+)
+                with: https://$1/model/$2
+
 driver:
   headers:
     - Key: User-Agent
       Value: stash-scraper/1.0.0
-# Last Updated November 06, 2023
+# Last Updated April 21, 2024
