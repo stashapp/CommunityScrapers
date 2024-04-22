@@ -175,7 +175,7 @@ xPathScrapers:
           - replace:
               - regex: ^.*"posterUrl":"([^"]+).*$
                 with: $1
-              - regex: "?.*$"
+              - regex: "\\?.*$"
                 with: ""
       # Pages do not include canonical URL links as of 2024
       # but I'm leaving this in case they change that back
@@ -293,4 +293,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: stash-scraper/1.0.0
-# Last Updated April 21, 2024
+# Last Updated April 22, 2024
