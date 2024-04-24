@@ -65,4 +65,4 @@ xPathScrapers:
                     - regex: ^([^|]+swallowsalon[^|]+)\|.+360w,\s((?:/tour)?/content/contentthumbs/\d+/\d+/[^/]+\.jpg).*
                       with: $1$2
       Studio: *studioAttr
-# Last Updated December 13, 2021
+# Last Updated April 24, 2024
