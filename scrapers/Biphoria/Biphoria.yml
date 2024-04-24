@@ -37,4 +37,14 @@ galleryByURL:
       - ../Algolia/Algolia.py
       - biphoria
       - gallery
-# Last Updated February 07, 2023
+movieByURL:
+  - action: script
+    url:
+      - biphoria.com/en/movie/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - biphoria
+      - movie
+# Last Updated April 24, 2024
+

@@ -57,6 +57,7 @@ MAIN_CHANNELS_AS_STUDIO_FOR_SCENE = [
 # a dict with sites having movie sections
 # used when populating movie urls from the scene scraper
 MOVIE_SITES = {
+    "biphoria.com": "https://www.biphoria.com/en/movie",
     "devilsfilm": "https://www.devilsfilm.com/en/dvd",
     "devilstgirls": "https://www.devilstgirls.com/en/dvd",
     "diabolic": "https://www.diabolic.com/en/movie",
