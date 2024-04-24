@@ -17,6 +17,7 @@ xPathScrapers:
       $logo: //div[@id="logo"]//a/@href
     gallery:
       Title: &titleSel $title
+      Code: &id //div[@class="rating_box"]/@data-id [1]
       Date: &dateAttr
         selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
         postProcess:
@@ -40,6 +41,7 @@ xPathScrapers:
     common: *commonAttr
     scene:
       Title: *titleSel
+      Code: *id
       Date: *dateAttr
       Details: *detailsSel
       Tags: *tagsAttr
