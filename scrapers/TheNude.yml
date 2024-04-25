@@ -119,6 +119,10 @@ xPathScrapers:
       Performers: &performers
         Name: //h1/span[1]/a/text()
         URL: //h1/span[1]/a/@href
+      Tags: &tags
+        Name:
+          selector: //meta[@itemprop="keywords"]/@content
+          split: ","
       Studio: &studio
         Name: //h1/span[3]/a/text()
       Director: //h2/a/text()
@@ -128,6 +132,7 @@ xPathScrapers:
       Title: *title
       Date: *date
       Performers: *performers
+      Tags: *tags
       Studio: *studio
       Photographer: //h2/a/text() 
 
