@@ -17,6 +17,7 @@ xPathScrapers:
       $logo: //div[@id="logo"]//a/@href
     gallery:
       Title: &titleSel $title
+      Code: &id //div[@class="rating_box"]/@data-id [1]
       Date: &dateAttr
         selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
         postProcess:
@@ -40,6 +41,7 @@ xPathScrapers:
     common: *commonAttr
     scene:
       Title: *titleSel
+      Code: *id
       Date: *dateAttr
       Details: *detailsSel
       Tags: *tagsAttr
@@ -63,4 +65,4 @@ xPathScrapers:
                     - regex: ^([^|]+swallowsalon[^|]+)\|.+360w,\s((?:/tour)?/content/contentthumbs/\d+/\d+/[^/]+\.jpg).*
                       with: $1$2
       Studio: *studioAttr
-# Last Updated December 13, 2021
+# Last Updated April 24, 2024
