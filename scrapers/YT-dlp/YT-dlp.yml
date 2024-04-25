@@ -4,7 +4,6 @@ name: YT-dlp
 sceneByFragment:
   action: script
   script:
-      - python3
-      - YT-dlp.py
-      - scene_from_json
-# Last Updated April 23, 2024
+    - python
+    - YT-dlp.py
+# Last Updated April 25, 2024

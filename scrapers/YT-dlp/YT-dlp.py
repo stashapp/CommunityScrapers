@@ -2,34 +2,20 @@ import json
 import os
 import sys
 import datetime
+from pathlib import Path
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from ther
+from py_common import graphql
+from py_common import log
 
-## This scraper will assume that the JSON files are stored in the same directory as the video files,
-## with the same name, but with a .json extension.  You can add a second directory to check
-## for JSON files here.  JSON file names here must match the original media file name, but with a 
-## .json extension.  JSON files will first be taken from the media's folder first, and if not 
+## This scraper assumes that the JSON files are stored in the same directory as the video files,
+## with the same name, but with .info.json or .json extensions. You can add a second directory to check
+## for JSON files here. JSON file names here must match the original media file name, but with a
+## .info.json or .json extension. JSON files will be taken from the media's folder first, and if not
 ## present there a suitably named JSON file in the below directory will be used.
-alternateJsonDir = ''
+alternate_json_dir = ""
 
-try:
-    from py_common import graphql
-    from py_common import log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit()
 
-def scene_from_json(js):
-    scene_id = js["id"]
-    scene_title = js["title"]
+def scene_from_json(scene_id):
     response = graphql.callGraphQL(
         """
     query FilenameBySceneId($id: ID){
@@ -42,60 +28,59 @@ def scene_from_json(js):
         {"id": scene_id},
     )
     assert response is not None
-    path = response["findScene"]["files"][0]["path"]
-    mediaFile = os.path.basename(path)
-    mediaDir  = os.path.dirname(path)
-    jsonInfoFile = os.path.splitext(mediaFile)[0] + '.json'
-    log.debug("[YT-dlp] JSon Info File Name " + jsonInfoFile)
-    
+    file = next(iter(response["findScene"]["files"]), None)
+    if not file:
+        log.debug(f"No files found for scene {scene_id}")
+        return None
+
+    file_path = Path(file["path"])
+    json_files = [file_path.with_suffix(suffix) for suffix in (".info.json", ".json")]
+
+    if alternate_json_dir:
+        json_files += [Path(alternate_json_dir) / p.name for p in json_files]
+
+    json_file = next((f for f in json_files if f.exists()), None)
+
+    if not json_file:
+        paths = "', '".join(str(p) for p in json_files)
+        log.debug(f"No JSON file found for '{file_path}': tried '{paths}'")
+        return None
+
     scene = {}
 
-    if os.path.isfile(os.path.join(mediaDir,jsonInfoFile)):
-        jsonInfoFile = os.path.join(mediaDir,jsonInfoFile)
-    elif alternateJsonDir != '' and os.path.isfile(os.path.join(alternateJsonDir,jsonInfoFile)):
-        jsonInfoFile = os.path.join(alternateJsonDir,jsonInfoFile)
-    else:
-        log.debug(f"[YT-dlp] No JSON file for {mediaFile} found")
-        return(scene)
-    log.debug(f"[YT-dlp] JSON file: {jsonInfoFile}")
-    with open(jsonInfoFile,"r") as read_content:
-        ytJson = json.load(read_content)
+    log.debug(f"Found JSON file: '{json_file}'")
 
-    scene['performers'] = []
-    scene['tags'] = []
-    if 'title' in ytJson:
-        scene['title'] = ytJson['title']
-    if 'thumbnail' in ytJson:
-        scene['image'] = ytJson['thumbnail']
-    if 'webpage_url' in ytJson:
-        scene['url'] = ytJson['webpage_url']
-    if 'cast' in ytJson:
-        for actor in ytJson['cast']:
-            scene['performers'].append({"name": actor})
-    if 'tags' in ytJson:    
-        for tag in ytJson['tags']:
-            scene['tags'].append({"name": tag})
-    if 'categories' in ytJson:
-        for tag in ytJson['categories']:
-            scene['tags'].append({"name": tag})
-  
-    tubesite = ytJson['extractor']   if 'extractor'   in ytJson  else "UNKNOWN"
-    uploadOn = ytJson['upload_date'] if 'upload_date' in ytJson  else "UNKNOWN"
-    uploadBy = ytJson['uploader']    if 'uploader'    in ytJson  else "UNKNOWN"
-    
-    if uploadOn != 'UNKNOWN':
-       s = datetime.datetime.strptime(uploadOn,"%Y%m%d")
-       uploadOn = s.strftime("%B %d, %Y") 
+    yt_json = json.loads(json_file.read_text(encoding="utf-8"))
 
-    scene['details'] = f"Uploaded to {tubesite} on {uploadOn} by {uploadBy}"
+    if title := yt_json.get("title"):
+        scene["title"] = title
+    if thumbnail := yt_json.get("thumbnail"):
+        scene["image"] = thumbnail
+    if url := yt_json.get("webpage_url"):
+        scene["url"] = url
+    scene["performers"] = [{"name": actor} for actor in yt_json.get("cast", [])]
+
+    tags = yt_json.get("tags", []) + yt_json.get("categories", [])
+    scene["tags"] = [{"name": tag} for tag in tags]
+
+    tubesite = yt_json.get("extractor", "UNKNOWN")
+    upload_on = yt_json.get("upload_date", "UNKNOWN")
+    upload_by = yt_json.get("uploader", "UNKNOWN")
+
+    if upload_on != "UNKNOWN":
+        s = datetime.datetime.strptime(upload_on, "%Y%m%d")
+        upload_on = s.strftime("%B %d, %Y")
+        scene["date"] = s.strftime("%Y-%m-%d")
+
+    scene["details"] = f"Uploaded to {tubesite} on {upload_on} by {upload_by}"
 
     return scene
 
-input = sys.stdin.read()
-js = json.loads(input)
 
-if sys.argv[1] == "scene_from_json":
-    log.debug("[YT-dlp] scene from JSON")
-    ret = scene_from_json(js)
+if __name__ == "__main__":
+    input = sys.stdin.read()
+    js = json.loads(input)
+    scene_id = js["id"]
+    ret = scene_from_json(scene_id)
     log.debug(json.dumps(ret))
     print(json.dumps(ret))
