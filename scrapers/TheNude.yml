@@ -6,8 +6,15 @@ performerByName:
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://www.thenude.com
+      - thenude.com
     scraper: performerScraper
+sceneByURL: &coverByURL
+  - action: scrapeXPath
+    url:
+      - thenude.com/cover
+    scraper: coverScraper
+galleryByURL: *coverByURL
+
 xPathScrapers:
   performerSearch:
     performer:
@@ -95,5 +102,38 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "Actual scraped Birthdate:"
+  coverScraper:
+    scene:
+      Title: &title
+        selector: //h1/span[2]/text()
+        postProcess:
+          - replace:
+              - regex: ^\"(.*)\"$
+                with: $1
+      Date: &date
+        selector: //h2[text()[contains(.,'Published on')]]
+        postProcess:
+          - replace:
+              - regex: .*Published on\s(\d{4}-\d{2}-\d{2})
+                with: $1
+      Performers: &performers
+        Name: //h1/span[1]/a/text()
+        URL: //h1/span[1]/a/@href
+      Tags: &tags
+        Name:
+          selector: //meta[@itemprop="keywords"]/@content
+          split: ","
+      Studio: &studio
+        Name: //h1/span[3]/a/text()
+      Director: //h2/a/text()
+      Image:
+        selector: //a[@class="gallery-image-link"]/img/@src
+    gallery:
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
+      Photographer: //h2/a/text() 
 
-# Last Updated August 25, 2022
+# Last Updated April 25, 2024

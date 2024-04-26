@@ -1,0 +1,36 @@
+name: Anatomik Media
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - anatomikmedia.com/videos
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ([^-]+).+
+                with: $1
+      Image: //img/@data-large_image
+      Details: //div[@id='tab-description']/p
+      Date:
+        selector: //script[@class="yoast-schema-graph"]
+        postProcess:
+          - replace:
+              - regex: .+?datePublished[\s:"]+([^"]+)".+
+                with: $1
+          - parseDate: "2006-01-02T15:04:05+00:00"
+      Studio:
+        Name:
+          selector: //meta[@property='og:site_name']/@content
+          postProcess:
+            - replace:
+                - regex: .+-(.+)$
+                  with: $1
+      Performers:
+        Name: //span[@class='tagged_as']/a
+      Tags:
+        Name: //span[@class='posted_in']/a
+# Last Updated April 24, 2024

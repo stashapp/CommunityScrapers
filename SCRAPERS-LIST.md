@@ -44,7 +44,7 @@ adultdoorway.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 adultdvdempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 adultdvdmarketplace.com|AdultDvdMarketPlace.yml|:x:|:x:|:heavy_check_mark:|:x:|-|-
 adultempire.com|AdultEmpire.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
-adultfilmindex.com|AdultFilmIndex.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
+adultfilmindex.com|AdultFilmIndex.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
 adultprime.com|AdultPrime.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 adulttime.com|Adultime.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|Python|-
 adulttimepilots.com|Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
@@ -106,6 +106,7 @@ analtherapyxxx.com|FamilyTherapyXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analvids.com|AnalVids.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 analviolation.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 analyzedgirls.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+anatomikmedia.com|AnatomikMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 andolinixxl.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 angelasommers.com|angelasommers.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 angelawhite.com|AngelaWhite.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -115,6 +116,7 @@ anilos.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 animecharactersdatabase.com|AnimeCharactersDatabase.yml|:x:|:x:|:x:|:heavy_check_mark:|Python|Database
 antoniosuleiman.com|AntonioSuleiman.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 apovstory.com|APOVStory.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+arabellesplayground.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 archangelvideo.com|ArchAngelVideo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ariellynn.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 artofscat.com|Queensnake.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1781,7 +1783,7 @@ thehabibshow.com|TheHabibShow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thehandjobsite.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thelesbianexperience.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Lesbian
 thelifeerotic.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
-thenude.com|TheNude.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
+thenude.com|TheNude.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|-
 thepantyhosesite.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 therapydick.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 thetabutales.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
