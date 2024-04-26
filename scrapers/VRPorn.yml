@@ -5,6 +5,14 @@ sceneByURL:
     url:
       - vrporn.com/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://vrporn.com/?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
@@ -13,7 +21,7 @@ xPathScrapers:
       $footer: //footer[@class="entry-footer"]
       $videoarea: //footer[@class="entry-footer"]/div[@class="layout_area_video"]
     scene:
-      Title: $header//h1[@class="content-title"]/text()
+      Title: $header//h1[contains(@class,"content-title")]/text()
       Date:
         selector: $videoarea/div[2]/span[@class="footer-titles"]/text()
         postProcess:
@@ -32,5 +40,13 @@ xPathScrapers:
         Name: $header//a[@id="studio-logo"]//span[@class="footer-titles"]/text()
       Image: //main/article/header//dl8-video/@poster
       URL: &sceneUrl //link[@rel="canonical"]/@href
-      
-# Last Updated April 20, 2023
+  sceneSearch:
+    common:
+      $videos: //div[@class="entry-footer all_hover box_item_video"]
+    scene:
+      Title: $videos//a[@class="d_post_meta"]/@title
+      URL: $videos//a[@class="d_post_meta"]/@href
+      Image: $videos//div[@class="tube-thumbnail-wrapper"]/img/@src
+      Studio:
+        Name: $videos//div[@class="post_links"]/span[@class="left_links"]/text()
+# Last Updated April 26, 2024
