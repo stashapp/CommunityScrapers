@@ -17,7 +17,7 @@ xPathScrapers:
   sceneScraper:
     common:
       $titleBase: //div[2]/div/div[@class='card-header custom-header card-outline-secondary']
-    gallery:
+    scene:
       Title: //h2[@class='page-title']
       Details: //h3[@class='page-subtitle']
       # Unfortunately proper dates are only provided in the model's portfolio.
