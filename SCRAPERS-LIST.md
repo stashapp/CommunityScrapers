@@ -32,6 +32,7 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 8thstreetlatinas.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 abbiemaley.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abbywinters.com|AbbyWinters.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+abdlgirl.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abuseme.com|AbuseMe.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 accidentalgangbang.com|Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|Python|-
 activeduty.com|ActiveDuty.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -219,6 +220,7 @@ bbcsurprise.com|ExploitedX.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 bbctitans.com|InnOfSin.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bbdbbw.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bbwhighway.com|BBWHighway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+bdsm-tickling.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bearfilms.com|MarsMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 beatmeup.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 beauty-angels.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
@@ -682,6 +684,7 @@ extremepickups.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 exxxtrasmall.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 f-f-fights.com|Glamose.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fabsluts.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+facesitting-paradise.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 facialabuse.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 facials4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 facialsforever.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
@@ -716,11 +719,13 @@ femout.xxx|GroobyNetwork-Partial.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:
 femoutsex.xxx|GroobyNetwork-Partial.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Trans
 ferame.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 fetish-lady-angelina.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+fetishgirlsuk.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fetishnetwork.com|FetishNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 fetishpros.com|FetishPro.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 ffstockings.com|FFstockings.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fieldsoflillithvideo.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 filf.com|FILF.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+filipinays.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fillyfilms.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 filthflix.com|FilthFlix.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 filthyfamily.com|FilthyFamily.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -784,12 +789,14 @@ fuckmepov.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fuckstudies.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 fuckthegeek.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 fullpornnetwork.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+fun-girls|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 funbags.com|Voyeurweb.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 funsizeboys.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 furrychicks.elxcomplete.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 futanari.xxx|Hentaied.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 futanarica.com|Futanarica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gag-n-gape.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+gaggedinpublic.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gaggirls.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gangav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 gangbangcreampie.com|GangBangCreampie.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
@@ -831,6 +838,7 @@ girlgirlxxx.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlgrind.com|MetroHD/MetroHD.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|Lesbian
 girlsandstuds.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlsgotcream.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+girlsinsteel.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 girlsofpb.com|GirlsOfPB.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
 girlsonlyporn.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 girlsoutwest.com|GirlsOutWest.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|Lesbian
@@ -889,11 +897,14 @@ hardx.com|xEmpire.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 harlemsex.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 harmonyvision.com|HarmonyVision.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 hazel-tucker.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+hcavideos.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hd19.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hdcprojects.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hdlove.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 hdmassageporn.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hdporn.com|HDPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hdsex18.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+heavy-chains.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 heavyonhotties.com|HeavyOnHotties.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hegre.com|Hegre.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|-
 helixstudios.com|HelixStudios.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|gay
@@ -1003,6 +1014,7 @@ iomacho.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 ipinkvisualpass.com|PinkVisual.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 isthisreal.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 italianshotclub.com|MVG.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+italoonstore.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 itscleolive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 itspov.com|ItsPOV.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 iwantclips.com|IWantClips.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|CDP|-
@@ -1048,6 +1060,7 @@ jnrc.fr|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 jockbreeders.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 jockpussy.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|FTM
 jocobo.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+jocoboclips.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jodiwest.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
 joeperv.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 joethepervert.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1111,6 +1124,7 @@ laughingasians.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 laurenphillips.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 leannecrow.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 legendaryx.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:-:|Python|-
+leggingsnet.nl|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 legsex.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 lesbea.com|SexyHub/SexyHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|Lesbian
 lesbiananalsluts.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1136,6 +1150,7 @@ lezkey.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Pytho
 lifeselector.com|21Roles.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 lilhumpers.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 lilsis.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
+linamila.tv|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lingerieav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 lingerietales.com|WankItNow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 littleasians.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1146,6 +1161,7 @@ loan4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lonestarangel.com|LoneStarAngel.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lookathernow.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 lordaardvark.com|LordAardvark.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|CDP|-
+lorettas-barefoot-bondage.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 lovehairy.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
 loveherass.com|Deviante/Deviante.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 loveherboobs.com|LoveHerFilms.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Boob Fetish
@@ -1470,6 +1486,7 @@ playwithrae.com|FFCSH.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 plumperpass.com|PlumperPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 plushies.tv|Plushies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pmvhaven.com|PMVHeaven.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|PMVs
+popp-sylvie.eu|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 porkvendors.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornaddict.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornbanx.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1487,6 +1504,7 @@ pornhubpremium.com|PornhubPremium.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_ma
 pornlandvideos.com|MVG.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornmegaload.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 pornmuschimovie.com|MMP_Network.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+pornomeisterei.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornperverts.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornpros.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornstarbts.com|PureMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1542,6 +1560,7 @@ purepov.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Pytho
 puretaboo.com|Adultime.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 pussyav.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 putalocura.com|Putalocura.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+puzzyfun.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 queensect.com|Queensnake.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 queensnake.com|Queensnake.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 queercrush.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1551,6 +1570,7 @@ rachelaldana.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rachelstormsxxx.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 radicaljizzlam.com|DEMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ragingstallion.com|RagingStallion.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+rainwearbondage.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ramjetvideo.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 randyblue.com|RandyBlue.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 raunchybastards.com|AdultSiteRunner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -1601,6 +1621,7 @@ rodsroom.com|NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|P
 romemajor.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rosetti.tv|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 royalfetishxxx.com|RoyalFetishFilms.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+rubberbreed.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rubberdoll.net|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rubberdomina.club|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rubbertits.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1610,6 +1631,7 @@ russiansmokers.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rylskyart.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
 s3xus.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 sabiendemonia.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+sadistenzirkel.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 samanthagrace.net|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 samuelotoole.com|NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 sapphicerotica.com|sapphix.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1654,7 +1676,9 @@ sexwithmuslims.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexworking.com|Deviante/Deviante.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 sexyhub.com|SexyHub/SexyHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 sexymodernbull.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
+sexyrainwear.online|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexysuckjobs.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+sexytiedgirls.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shadyspa.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shagmag.com|shagmag.yml|:x:|:heavy_check_mark:|:x:|:x:|-|Magazines
 shame4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1669,14 +1693,17 @@ shesbrandnew.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:
 sheseducedme.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shewillcheat.com|MetroHD/MetroHD.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 shinybound.com|ShinyBound.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+shinynylonarts.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shinynylonartsbound.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shinysboundsluts.com|ShinyBound.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+shinywear.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shiofuky.com|Jhdv.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 shop.avafetishart.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shop.boundxdressers.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shop.camvivian.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shop.kinkysexbox.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shop.princessnikkicruel.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+shop.sinteque.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shoplyfter.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shoplyftermylf.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 showerbait.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1711,6 +1738,8 @@ smokingmina.com|SmokingMina.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 smutfactor.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 smutmerchants.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 smutpuppet.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+sna-down.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+sna-rain.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sna-rainbound.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sna-shortsbound.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sneakysex.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
@@ -1723,6 +1752,7 @@ sororitysluts.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 southernstrokes.com|MarsMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 spankbang.com|SpankBang.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
 spankmonster.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+spannergeil.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spearteenpussy.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermantino.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermmania.com|SpermMania.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1781,6 +1811,7 @@ sunnylanelive.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sunnyleone.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 superbemodels.com|superbemodels.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|-|-
 superramon.com|Trans500.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+supertightbondage.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 susanayn.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swallowbay.com|SwallowBay.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swallowed.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
@@ -1791,6 +1822,7 @@ sweetheartvideo.com|MileHighMedia_Straight/MileHighMedia_Straight.yml|:heavy_che
 sweetsinner.com|MileHighMedia_Straight/MileHighMedia_Straight.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 sweetyx.com|SweetyX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swinger-blog.xxx|SwingerBlog.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+swizztramplefeet.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 swnude.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 tabooadventures.elxcomplete.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tabooheat.com|TabooHeat.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
@@ -1894,6 +1926,7 @@ thirdworldxxx.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|
 thisvid.com|ThisVid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
 throated.com|Blowpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tied-and-gagged.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+tightslovers.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 timtales.com|TimTales.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 tiny4k.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 tinysis.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1945,6 +1978,7 @@ transsensual.com|MileHighMedia_BiandTrans/MileHighMedia_BiandTrans.yml|:heavy_ch
 transsexualangel.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 transsexualroadtrip.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 tranzvr.com|POVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
+trashbagbondage.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 traxxx.me|Traxxx.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 treasureislandmedia.com|TreasureIslandMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 trentonducati.com|NakedSword.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
@@ -1988,6 +2022,7 @@ uk-tgirls.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 ultrafilms.com|WowNetworkVenus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ultrafilms.xxx|UltraFilms.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 underhentai.net|UnderHentai.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Hentai
+undermyprincess.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 universblack.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 unlimitedmilfs.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 unrealporn.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -2088,6 +2123,7 @@ willtilexxx.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 wolfwagner.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 womenwhosmoke.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 woodmancastingx.com|WoodmancastingX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+woolbondage.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 workinmenxxx.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 workmeharder.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 worstbehaviorproductions.com|AssumeThePositionStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -2112,6 +2148,7 @@ xnxx.com|Xnxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xrares.com|Xrares.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xsinsvr.com|xSinsVR.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 xslist.org|Xslist.yml|:x:|:x:|:x:|:heavy_check_mark:|-|JAV Database
+xtremely-tight.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xtube.com|Xtube.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvideos.com|Xvideos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xvideos.red|Xvideos.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -2135,6 +2172,7 @@ younglatinostudz.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 youngperps.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 youngthroats.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 youporn.com|YouPorn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Tube Site
+yourfetishzone.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yourmomdoesanal.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yourmomdoesporn.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yourpainismypleasure.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -2153,7 +2191,6 @@ zerotolerancefilms.com|zerotolerancefilms.yml|:heavy_check_mark:|:heavy_check_ma
 zexyvr.com|ZexyVR.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|VR
 zishy.com|Zishy.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 zoiestarr.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
-
 
 ## Non url scrapers
 
