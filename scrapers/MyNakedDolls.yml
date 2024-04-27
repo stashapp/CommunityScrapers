@@ -1,0 +1,60 @@
+name: MyNakedDolls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mndmag.com/updates/
+      - mynakeddolls.com/updates/
+    scraper: sceneScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - mndmag.com/updates/
+      - mynakeddolls.com/updates/
+    scraper: galleryScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $titleBase: //div[2]/div/div[@class='card-header custom-header card-outline-secondary']
+    scene:
+      Title: //h2[@class='page-title']
+      Details: //h3[@class='page-subtitle']
+      # Unfortunately proper dates are only provided in the model's portfolio.
+      # Parsing would probably end up being complex and require at least two http requestes per item
+      # Date:
+      #   selector:
+      #   postProcess:
+      #     - parseDate: Jan 02, 2006
+      Tags:
+        Name:
+          selector: //a[@rel='tag']
+      Studio:
+        Name:
+          fixed: My Naked Dolls
+      Performers:
+        Name: $titleBase/ul[@class='nav nav-tabs']/li|$titleBase/div[@class='custom-header-title']/h3
+        # URL: Not implemented, since performer related HTML seems sketchy, URL is only provided for single performer galleries
+
+  galleryScraper:
+    common:
+      $titleBase: //div[2]/div/div[@class='card-header custom-header card-outline-secondary']
+    gallery:
+      Title: //h2[@class='page-title']
+      Details: //h3[@class='page-subtitle']
+      # Unfortunately proper dates are only provided in the model's portfolio.
+      # Parsing would probably end up being complex and require at least two http requestes per item
+      # Date:
+      #   selector:
+      #   postProcess:
+      #     - parseDate: Jan 02, 2006
+      Tags:
+        Name:
+          selector: //a[@rel='tag']
+      Studio:
+        Name:
+          fixed: My Naked Dolls
+      Performers:
+        Name: $titleBase/ul[@class='nav nav-tabs']/li|$titleBase/div[@class='custom-header-title']/h3
+        # URL: Not implemented, since performer related HTML seems sketchy, URL is only provided for single performer galleries
+# Last Updated April 26, 2024
