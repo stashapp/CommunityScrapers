@@ -1,59 +1,149 @@
-name: "LetsDoeIt"
+name: LetsDoeIt
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &URLs 
       - amateureuro.com
-      - dirtycosplay.com
       - doegirls.com
       - doe-tv.com
       - forbondage.com
-      - latinamilf.com
       - letsdoeit.com
       - mamacitaz.com
       - transbella.com
       - vipsexvault.com
-    queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: doe-tv\.com
-          with: letsdoeit.com
-
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url: *URLs
+    scraper: performerScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url: *URLs
+    scraper: galleryScraper
+
 xPathScrapers:
   sceneScraper:
     common:
       $actors: //div[@class="actors" or @class="-mvd-grid-actors"]
       $details: //div[@class="row sides-xs"]
       $letsdoeit: //div[@class="-mvd-grid-more"]//span/a[@class="-mvd-list-url"]
-    scene:
-      Title:
-        selector: //title/text()
+    scene: 
+      Title: //meta[@property='og:title']/@content
+      Details: //div[@class='-mvd-description']/text() | //read-even-more/text()
+      Date: 
+        selector: //meta[@itemprop='uploadDate']/@content | //div[@class='-mvd-grid-stats']
         postProcess:
           - replace:
-              - regex: (.+)(?:\s\|.+)
+              - regex: .+(\w\w\w\s\d\d?,\s\d\d\d\d)$
                 with: $1
-              - regex: (\sExclusive\W+(\w+\W+)?Porn\W+Video)
-                with: ""
-      Date:
-        selector: //meta[@itemprop="uploadDate"]/@content
-        postProcess:
-          - replace:
-              - regex: (\d{4})-(\d{2})-(\d{2}).+
-                with: $1-$2-$3
-          - parseDate: 2006-01-02
-      Details:
-        selector: //meta[@itemprop="description"]/@content
-        postProcess:
-          - replace:
-              - regex: "&#039;"
-                with: "'"
-              - regex: (.*\.?\!?)(?:\s-\s\w.*-.*)$ # remove Studio name at the end of a description
-                with: $1
+          - parseDate: Jan 2, 2006
+          - parseDate: 2006-01-02T15:04:05-07:00
+      Image: //div[@class='video-container']//img/@src
       Tags:
-        Name: $details//div[@class="col"][4]//a/text()|$details//div[@class="col"][6]//a/text()|$letsdoeit
+        #Name: //div[@class='-mvd-grid-more-title' and contains(text(),'Information')]/following-sibling::div//a
+        Name: //a[contains(@href,'/categories/')]
+      Studio: 
+        Name: $actors//a[contains(@href,'/channels/')]
       Performers:
-        Name: $actors//span/a[contains(@href,"/models/")]
+        URL: &performerURL $actors//a[contains(@href,'/models/')]/@href
+        Name: $actors//a[contains(@href,'/models/')]
+        Gender: 
+            # The performer pages don't have a Gender tag, so the best we can do is use the 
+            # Tits Type field, and where this is present assume "Female" and where it's not use "Male".
+            # This does, unfortunately, tag all Trans performers with a gender that, while accurate,
+            # is not as precise as many might wish.
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerGender
+                selector: //div(@class='-api-list-item' and contains(.,'Tits Type')]/span 
+                #selector: //meta/@charset
+                postProcess:
+                  - replace:
+                      - regex: .+?Tits.*$
+                        with: Female
+                      - regex: ^[^F].+
+                        with: Male
+        FakeTits: 
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerTits
+                selector: //div[@class='-api-list-item' and contains(.,'Tits Type')]/span
+                postProcess:
+                  - replace:
+                      - regex: ^.+?Enhanced.+$
+                        with: 'Yes'
+                      - regex: ^.+?Natural.+$
+                        with: 'No'
+        Country:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerCountry
+                selector: //div[(contains(@class,'-api-list-item')) and contains(.,'Birth Place')]/span[@class='-api-list-text']/text()
+        Details:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerDetails
+                selector: //read-even-more
+        Image:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerImage
+                selector: //img[@class='-api-poster-thumb']/@src
+
+  performerScraper:
+    performer:
+      Name: //h1
+      Gender: *performerGender
+      Country: *performerCountry
+      FakeTits: *performerTits
+      Details: *performerDetails
+      Image: *performerImage
+
+  galleryScraper:
+    gallery:
+      Title: //meta[@property='og:title']/@content
+      Details: 
+        selector: //meta[@property='og:description']/@content
+        postProcess:
+          - replace:
+              - regex: '&amp;'
+                with: '&'
+      Date:
+        selector: //div[span[contains(.,'Published')]]
+        postProcess:
+          - replace:
+              - regex: .+(\w\w\w\s\d?\d,\s\d\d\d\d)$
+                with: $1
+          - parseDate: Jan 2, 2006
       Studio:
-        Name: $actors//a//text()
-      Image: //source[@type="image/webp"]/@srcset
-# Last Updated October 05, 2023
+        Name:
+          selector: //meta[@property='og:description']/@content | //title
+          concat: __TITLE__
+          postProcess:
+            - replace:
+                 # Amateur Euro, LetsDOeIt, Mamacitaz, TransBella and VIP Sex Vault substudios are often mentioned in the description. 
+                 # Broken across lines for readability.  Use 5 % characters as a token, since it's unlikely to exist naturally.
+                - regex: .+?((A Girl Knows)|(DoeGirls)|(Her Limit)|(Horny Hostel)|(Latina Milf)|(The White Boxxx)|(Trans Taboo)|(xChimera)).+
+                  with: '%%%%%$1'
+                - regex: .+?((Carne Del Mercado)|(Chicas Loca)|(Her Big Ass)|(Operación Limpieza)).+
+                  with: '%%%%%$1'
+                - regex: .+?((Exposed Casting)|(Fucked In Traffic)|(Hot Babes Plus)|(Los Consoladores)|(Pinup SexPinup Sex)|(PornDoe Pedia)).+
+                  with: '%%%%%$1'
+                 # If we've matched in the description the string will start with 5 % characters.  Trim these off.
+                - regex: '[%]{5}(.*)'
+                  with:  $1
+                 # If we don't see the substudio mentioned in the description take it from the end of the TITLE (everything following | )
+                 # This leaves us with Amateur Euro, LetsDoeIt, Mamacitaz, TransBella or VIPSexVault
+                 # Add spaces between words based on capitalization
+                - regex: ([a-z])([A-Z])
+                  with: '$1 $2'
+                 # But remove them for LetsDoeIt
+                - regex: Lets Doe It
+                  with: LetsDoeIt
+                - regex: '^[^%]{5}.*?__TITLE__.+?\|(.+)'
+                  with:  $1
+      Performers:
+        Name: //div[span[contains(.,'Model')]//a[contains(@href,'/models/')]
+
+# Last Updated April 16, 2024
