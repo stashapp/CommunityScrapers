@@ -1,0 +1,63 @@
+name: VelvetEcstasy
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - velvetecstasy.com
+    scraper: sceneScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - velvetecstasy.com
+    queryURL: '{url}'
+    queryURLReplace:
+      url:
+        - regex: '/galleries/'
+          with: '/pages/'
+        - regex: '_gallery\.htm'
+          with: '.htm'
+
+    scraper: galleryScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title //table//b[1]
+      Image:
+        selector: //link[@rel='icon' and contains(@href,'https:')]/@href | //a[contains(@href,'galleries')]/img[contains(@src,'/photos/')]/@src
+        concat: ','
+        postProcess:
+          - replace:
+            - regex: favicon.png[^\/]+\/
+              with: '/visitors/bonus/archives/'
+      Details: &details
+          selector: //font[not(a) and @size='2']
+          concat: '|'
+          postProcess:
+            - replace:
+                - regex: '([^\|]+)\|(.+)'
+                  with: |
+                        $1
+
+                        $2
+      Studio: &studio
+        Name:
+          fixed: Velvet Ecstasy
+      Tags: &tags
+        Name: 
+          selector: //font/b[contains(.,'Action:')]/following-sibling::text()
+          split: ','
+      Performers: &performers
+        Name: 
+          selector: //font[@size='3']/b/text()
+          split: '&'
+
+  galleryScraper:
+    gallery:
+      Title: *title
+      Studio: *studio
+      Details: *details
+      Tags: *tags
+      Performers: *performers
+
+# Last Updated April 27, 2024
