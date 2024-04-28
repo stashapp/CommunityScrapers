@@ -2046,6 +2046,7 @@ vangoren.com|MVG.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 vanillapov.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 varsitygrip.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 vcaxxx.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+velvetecstasy.com|VelvetEcstasy.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 velvetveronica.com|VelvetVeronica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 venus-av.com|VenusAV.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 venus.allfinegirls.com|WowNetworkVenus.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
