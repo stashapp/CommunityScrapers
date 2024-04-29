@@ -1062,7 +1062,7 @@ jerkaoke.com|ModelMediaUS.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jessicajaymesxxx.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jessroyan.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 jimweathersarchives.com|JimWeathersArchives.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
-jizzaddiction.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
+jizzaddiction.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|Gay
 jizzbomb.com|NewSensationsNetworkSites.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jizzorgy.com|Men/Men.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|Gay
 jnrc.fr|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
@@ -1072,7 +1072,7 @@ jocobo.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jocoboclips.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jodiwest.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
 joeperv.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-joeschmoevideos.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
+joeschmoevideos.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|Gay
 joethepervert.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 johnnygoodluck.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 johnnyrapid.com|Johnnyrapid.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
@@ -1186,7 +1186,7 @@ lustreality.com|SLRoriginals.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-
 lustylina.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 lustyxxxfamily.com|MMP_Network.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 m3ndr3ams.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-machofactory.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
+machofactory.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|Gay
 mackmovies.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mackstudio.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 madeincanada.xxx|MadeInCanada.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
