@@ -9,6 +9,7 @@ performerByName:
     - search
 performerByURL:
   - url:
+      - iafd.com/person.rme/id=
       - iafd.com/person.rme/perfid=
     action: script
     script:
@@ -31,4 +32,4 @@ movieByURL:
       - python3
       - IAFD.py
       - movie
-# Last Updated September 25, 2023
+# Last Updated April 29, 2024
