@@ -1,0 +1,30 @@
+name: BlackMaleMe
+# requires: py_common, AyloAPI
+# scrapes: BlackMaleMe (blackmaleme.com)
+sceneByURL:
+  - action: script
+    url:
+      - blackmaleme.com/scene/
+    script:
+      - python
+      - BlackMaleMe.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - BlackMaleMe.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - BlackMaleMe.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - BlackMaleMe.py
+    - scene-by-query-fragment
+# Last Updated April 25, 2024
