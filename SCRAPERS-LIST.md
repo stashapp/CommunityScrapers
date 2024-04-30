@@ -1701,6 +1701,7 @@ share.myfreecams.com|MFC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 shefucksonthefirstdate.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shegotsix.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shelovesblack.com|LoveHerFilms.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+shemalestardb.com|ShemaleStarDB.yml|:x:|:x:|:x:|:heavy_check_mark:|-|Trans
 shereacts.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 shesbrandnew.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 sheseducedme.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
