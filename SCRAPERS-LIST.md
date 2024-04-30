@@ -1240,6 +1240,7 @@ mgstage.com|mgstage.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV
 mikeinbrazil.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 milehighmedia.com|MileHighMedia_Straight/MileHighMedia_Straight.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 milfaf.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+milfcandy.com|TheFlourish.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 milfed.com|MileHighMedia_Straight/MileHighMedia_Straight.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 milfsodomy.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 milfthing.com|PerfectGonzo.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
