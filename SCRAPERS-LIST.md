@@ -1502,6 +1502,7 @@ popp-sylvie.eu|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 porkvendors.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornaddict.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornbanx.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+pornbcn.com|Pornbcn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornbox.com|Pornbox.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 porncornvr.com|RealJamVR.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|VR
 porncz.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
