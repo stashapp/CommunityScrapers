@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //img[@data-name='image']/@alt
+      Title: (//div[contains(@class, "rowdesktop1nsd")]//div[contains(@class, "et_pb_text_inner")])[1]
       Date:
         selector: //div[@data-date_format]/input[@type='hidden']/@value
         postProcess:
