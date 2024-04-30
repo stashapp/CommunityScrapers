@@ -215,7 +215,7 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
         performer["height"] = str(height_cm)
 
     elif (height_cm := raw_performer.get("height")) and (
-        h := re.match(r"^(\d)+$", height_m)
+        h := re.match(r"^(\d)+$", height_cm)
     ):
         performer["height"] = str(height_cm)
 
