@@ -229,7 +229,7 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     ):
         performer["weight"] = str(w.group(1))
     elif (weight_nounits := raw_performer.get("weight")) and (
-        w := re.match(r"^([\d\.]+)$", weight_kg)
+        w := re.match(r"^([\d\.]+)$", weight_nounits)
     ):
         performer["weight"] = lbs_to_kb(w.group(1)) if raw_performer["site_domain"] in STUDIO_USES_IMPERIAL else str(w.group(1))
 
