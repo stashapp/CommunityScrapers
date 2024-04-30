@@ -23,7 +23,12 @@ xPathScrapers:
       $studio: //div[@id="body2div_b"]//a[contains(@href,"/studios/")]
       $movie: //b[text()="Movie:"]/following-sibling::a[1]
     scene:
-      Title: //span/following-sibling::h1/a/text()
+      Title:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: (.+)\s\(\d{4}\)\s\|\sDATA18
+                with: $1
       Date:
         selector: //span[b[text()="Release date"]]
         postProcess:
@@ -48,7 +53,7 @@ xPathScrapers:
         Name: $studio
         URL: $studio/@href
       Movies:
-        Name: $movie/text()
+        Name: $movie/@title
         URL: $movie/@href
       Image: //img[@id="playpriimage"]/@src
   movieScraper:
@@ -61,7 +66,7 @@ xPathScrapers:
         selector: //title
         postProcess:
           - replace:
-              - regex: (.+?)(?:\s\(\d{4}\)\sPorn\sMovie\s\|\sDATA18)
+              - regex: (.+?)(?:\s\(\d{4}\)(?:\sPorn|\sMovie)\s\|\sDATA18)
                 with: $1
       Duration:
         selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::span|$movieInfo//b[contains(text(),"Length")]/following-sibling::text()
