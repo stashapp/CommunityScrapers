@@ -24,7 +24,9 @@ xPathScrapers:
         Name: //meta[@property='article:tag']/@content
       Performers:
         Name: //span[@class='namepornstarvi']//a
-      Details: //div[contains(@class,'toggle_content')]/p
+      Details:
+        selector: //h5[contains(@class, "toggle_title")]/following-sibling::div[not(.//form)]//text()
+        concat: "\n"
 
 driver:
   headers:
