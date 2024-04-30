@@ -11,7 +11,7 @@ xPathScrapers:
       Date:
         selector: //div[@data-date_format]/input[@type='hidden']/@value
         postProcess:
-          - parseDate: 20060102
+          - parseDate: '20060102'
       Image:
         selector: //div[contains(@style,'background-image')]/@style
         postProcess:
