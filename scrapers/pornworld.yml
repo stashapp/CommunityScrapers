@@ -73,8 +73,7 @@ xPathScrapers:
       Title: *title
       Date:
         selector: //strong/following-sibling::span
-        postProcess:
-          - parseDate: 2006, January 2
+        parseDate: 2006, January 2
       Details: //span[text()="Description:"]/..
       Tags:
         Name: //span[text()="Tags:"]/../a/text()
@@ -90,4 +89,4 @@ xPathScrapers:
           - replace:
               - regex: (.*)
                 with: https://tour10.pornworld.com$1
-# Last Updated February 27, 2024
+# Last Updated May 01, 2024
