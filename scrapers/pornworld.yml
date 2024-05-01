@@ -73,7 +73,7 @@ xPathScrapers:
       Title: *title
       Date:
         selector: //strong/following-sibling::span
-        parseDate: 2006, January 2
+        parseDate: 2006, January 15
       Details: //span[text()="Description:"]/..
       Tags:
         Name: //span[text()="Tags:"]/../a/text()
