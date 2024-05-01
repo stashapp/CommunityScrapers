@@ -2,6 +2,11 @@ name: "Andomark"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - charmmodels.net/updates/
+      - domingoview.com/updates/
+      - feelmevr.com/updates/
+      - letstryhard.com/updates/
+      - test-shoots.com/updates/
       - american-pornstar.com/updates/
       - ariellynn.com/tour/updates/
       - ashley4k.com/updates/
@@ -20,6 +25,7 @@ sceneByURL:
       - datingapphookup.com/updates/
       - dirtroadwarriors.com/updates/
       - dreamgirlsclips.com/updates/
+      - dreamorgan.com/updates/
       - furrychicks.elxcomplete.com/updates/
       - hollyhotwife.elxcomplete.com/updates/
       - houseofyre.com/updates/
@@ -176,11 +182,15 @@ xPathScrapers:
                 brittanyandrewsxxx: Britttany Andrews
                 brittanysbubbles: Brittany Andrews
                 charlieforde: Charlie Forde
+                charmmodels: Charm Models
                 chocolatepov: ChocolatePOV
                 collectivecorruption: Collective Corruption
                 datingapphookup: Dating App Hook Ups
                 dirtroadwarriors: Dirt Road Warriors
+                domingoview: DomingoView
                 dreamgirlsclips: DreamGirls Clips
+                dreammorgan: Drea Morgan
+                feelmevr: FeelMeVR
                 furrychicks: Furry Chicks
                 goonmuse: GoonMuse
                 hollyhotwife: HollyHotWife
@@ -193,6 +203,7 @@ xPathScrapers:
                 justpov: Just POV
                 lasvegasamateurs: Las Vegas Amateurs
                 laurenphillips: Lauren Phillips
+                letstryhard: Let's Try Hard
                 mackmovies: Mack Movies
                 melaniehicksxxx: Melanie Hicks XXX
                 nicefeelings: Nice Feelings
@@ -211,6 +222,7 @@ xPathScrapers:
                 sofiemariexxx: Sofie Marie XXX
                 tabooadventures: Taboo Adventures
                 terapatrick: Terra Patrick
+                test-shoots.com: Test Shoots
                 texaspattiusa: TexasPattiUSA
                 thatfetishgirl: ThatFetishGirl
                 tmfetish: TMFetish
@@ -299,4 +311,4 @@ driver:
           Domain: sheseducedme.com
           ValueRandom: 36
           Path: /
-# Last Updated April 14, 2024
+# Last Updated April 30, 2024

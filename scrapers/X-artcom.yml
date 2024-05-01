@@ -33,20 +33,22 @@ xPathScrapers:
 
   galleryScraper:
     common:
-      $actor: //div[@class="small-12 medium-12 large-6 columns info"]/h2/a
+      $gallery: //div[@class="small-12 medium-12 large-6 columns info"]
     gallery:
-      Title: //div[@class="small-12 medium-12 large-6 columns info"]/h1[@class="show-for-large-up"]
-      Details: //div[@class="small-12 medium-12 large-6 columns info"]/p[@id="desc"]
+      Title: //h1
+      Details:
+        # Studio is inconsistent with their layout: sometimes the description is found in a p tag adjacent
+        # to the p element with id="desc"
+        selector: //p[@id="desc"]/../p
+        concat: "\n\n"
       Date:
-        selector: //div[@class="small-12 medium-12 large-6 columns info"]/h2[1]/text()
+        selector: //h2[span[contains(text(),'Date')]]/text()
         postProcess:
           - parseDate: Jan 02, 2006
       Studio:
         Name:
           fixed: X-Art
       Performers:
-        Name: $actor/text()
-        URL:
-          selector: $actor//@href
-
+        Name: $gallery/h2/a
+        URL: $gallery/h2/a/@href
 # Last Updated March 19, 2024

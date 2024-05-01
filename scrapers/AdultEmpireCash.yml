@@ -4,6 +4,7 @@ sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
     url:
+      - 18lust.com/
       - blackmassivecocks.com/
       - braziliantransgirls.com/
       - bruthasinc.com/
@@ -17,7 +18,6 @@ sceneByURL:
       - jodiwest.com/
       - kingsoffetish.com/
       - latinoguysporn.com/
-      - lethalhardcore.com/
       - pornstarstroker.com/ # aggregator site?
       - reaganfoxx.com/
       - rodneymoorestore.com
@@ -31,13 +31,6 @@ sceneByURL:
       - westcoastproductions.com/
       - data18.empirestores.co/
 
-  # VR Sites
-  - action: scrapeXPath
-    scraper: vrSceneScraper
-    url:
-      - lethalhardcorevr.com/
-      - whorecraftvr.com/
-
 movieByURL:
   - action: scrapeXPath
     scraper: movieScraper
@@ -49,7 +42,6 @@ movieByURL:
       - elegantangel.com/
       - filthykings.com/
       - forbiddenfruitsfilms.com/
-      - lethalhardcore.com/
       - rodneymoorestore.com
       - severesexfilms.com/
       # - shemalestrokers.com/ # Scenes published as movies?
@@ -135,27 +127,4 @@ xPathScrapers:
       FrontImage: //link[@rel="image_src"]/@href
       BackImage: //div[@class="carousel-item"]/img/@data-src
 
-  vrSceneScraper:
-    common:
-      $content: //div[@class="item-page-details"]
-    scene:
-      Title: $content//h1
-      Details:
-        selector: $content//div[@id="synopsis-full"]
-        concat: "\n\n"
-      Performers:
-        Name:
-          selector: $content//span[@class="overlay-inner"]//small
-          postProcess:
-            - replace:
-                - regex: \((.+)\)
-                  with: $1
-      Image:
-        selector: //link[@rel="image_src"]/@href
-        postProcess:
-          - replace:
-              - regex: ^.+/(\d+)h.+$
-                with: https://imgs1cdn.adultempire.com/product/${1}_lg.jpg
-      Studio:
-        Name: //meta[@name="og:site_name"]/@content
-# Last Updated April 12, 2024
+# Last Updated April 29, 2024

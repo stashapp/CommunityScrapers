@@ -10,14 +10,7 @@ xPathScrapers:
       $models: //div[contains(@class, "models-list-thumbs")]//a
     scene:
       Studio:
-        Name:
-          selector: //a[@class="navbar-brand"]/@title
-          postProcess:
-            - map:
-                OFFICIAL Backroom Casting Couch: Backroom Casting Couch
-                BlackAmbush: Black Ambush
-                HOTMILFSFUCK: Hot Milfs Fuck
-                "Exploited College Girls: Excogi": Exploited College Girls
+        Name: //a[@class="navbar-brand"]/@title
 
       Title: //div[@class="video-player"]//h2[@class="section-title"]/text()
       Performers:
@@ -30,13 +23,15 @@ xPathScrapers:
       Tags:
         Name: //ul[@class="tags"]//a
       Image:
-        selector: //base/@href|//div[@class="player-thumb"]//img[contains(@class, "update_thumb")]/@src0_1x
+        selector: //base/@href | //div[@class="player-thumb"]//img[contains(@class, "update_thumb")]/@src0_1x
         concat: "|"
         postProcess:
           - replace:
               - regex: "(^[^|]+)\\|([^\\.]+\\.jpg).*"
                 with: $1$2
+              - regex: "1x.jpg"
+                with: "full.jpg"
       Details:
-        selector: //div[@class="update-info-block"]/h3[text()="Description:"]/following-sibling::text()
+        selector: //div[@class="update-info-block"]/h3[text()="Description:"]/following-sibling::*/text()
         concat: "\n\n"
-# Last Updated August 20, 2023
+# Last Updated April 29, 2024
