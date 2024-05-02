@@ -40,13 +40,14 @@ xPathScrapers:
       Tags: *tagsAttr
       Performers: *performersAttr
       Image:
-        selector: $logo | //div[@class="mejs-poster mejs-layer"]//@src
-        concat: "|"
+        selector: $logo | //script[contains(text(), 'useimage = "/')]/text()
+        concat: __SEPARATOR__
         postProcess:
           - replace:
-            - regex: ^([^|]+swallowsalon[^|]+)\|((?:/tour)?/content//?contentthumbs/\d*.jpg)
-              with: $1$2
+              # If the image was empty we clear the URL
+              - regex: .*/$
+                with: ""
+              - regex: (https://[^/]+).*useimage = "([^"]*).*
+                with: $1$2
       Studio: *studioAttr
-driver:
-  useCDP: true
 # Last Updated May 01, 2024
