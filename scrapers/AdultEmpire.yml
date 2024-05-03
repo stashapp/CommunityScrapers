@@ -17,7 +17,7 @@ movieByURL:
       - adultdvdempire.com
       - adultempire.com
     scraper: movieScraper
-    
+
 performerByName:
   action: scrapeXPath
   queryURL: https://www.adultempire.com/performer/search?q={}
@@ -25,15 +25,15 @@ performerByName:
 
 performerByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - adultempire.com
       - adultdvdempire.com
-    scraper: performerScraper  
+    scraper: performerScraper
 
 sceneByName:
   action: scrapeXPath
-  # if needed replace `dvd` with `vod`
-  queryURL: https://www.adultdvdempire.com/dvd/search?q={}
+  # if needed replace `vod` with `dvd`
+  queryURL: https://www.adultempire.com/vod/search?q={}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
@@ -46,31 +46,23 @@ xPathScrapers:
       $perfomerRoot: //div[@id="performerlist"]//a
     performer:
       Name: $perfomerRoot/@label
-      URL: 
+      URL:
         selector: $perfomerRoot/@href
         postProcess:
           - replace:
-            - regex: ^
-              with: https://www.adultempire.com
+              - regex: ^
+                with: https://www.adultempire.com
 
   sceneSearch:
     scene:
-      Title:
-        selector: //div[@class="item-title"]/a/@*[local-name()="href" or local-name()="title"]
-        concat: "|"
-        postProcess:
-          - replace:
-            - regex: '/(\d+)/[^|]+\|([^|]+)'
-              with: "$2 ($1)"
-        split: "|"
+      Title: //a[@class="boxcover"]/img/@title
       URL:
-        selector: //div[@id="content"]//div[@class="item-title"]/a/@href
+        selector: //a[@class="boxcover"]/@href
         postProcess:
           - replace:
               - regex: ^
-                with: "https://www.adultdvdempire.com"
-      Image:
-        selector: //a[@class="boxcover"]/img/@data-src
+                with: https://www.adultempire.com
+      Image: //a[@class="boxcover"]/img/@src
 
   movieScraper:
     movie:
@@ -80,10 +72,10 @@ xPathScrapers:
         selector: //small[contains(text(), "Length")]/following-sibling::text()
         postProcess:
           - replace:
-            - regex: " hrs. "
-              with: ":"
-            - regex: " mins."
-              with: ":00"
+              - regex: " hrs. "
+                with: ":"
+              - regex: " mins."
+                with: ":00"
       Date:
         selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
@@ -144,7 +136,7 @@ xPathScrapers:
         selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
           - parseDate: Jan 02 2006
-      Director: //a[@label="Director"]/text()    
+      Director: //a[@label="Director"]/text()
       Image: //a[@id="front-cover"]/@data-href
       Studio:
         Name: //a[@label="Studio"]/text()
@@ -202,4 +194,4 @@ xPathScrapers:
                 with: $1
       Details: //*[@id="content"]/section/div/div[5]/aside/text()
       URL: //link[@rel='canonical']/@href
-# Last Updated Feburary 22, 2024
+# Last Updated May 02, 2024

@@ -74,6 +74,7 @@ MOVIE_SITES = {
     "wicked": "https://www.wicked.com/en/movie",
     "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie",
     "3rddegreefilms": "https://www.3rddegreefilms.com/en/movie",
+    "lethalhardcore": "https://www.lethalhardcore.com/en/movies",
     "roccosiffredi": "https://www.roccosiffredi.com/en/dvd",
 }
 
@@ -136,6 +137,7 @@ SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "Rocco Siffredi",
     "Squirtalicious",
     "3rd Degree Films",
+    "Lethalhardcore",
 ]
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the

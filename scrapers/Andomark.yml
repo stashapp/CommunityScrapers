@@ -10,18 +10,25 @@ sceneByURL:
       - bigbouncybabes.com/updates/
       - bigtoyxxx.com/updates/
       - bondagelegend.com/updates/
+      - boxofporn.info/tour/updates/      
       - bradsterling.elxcomplete.com/updates/
       - britstudio.xxx/updates/
       - brittanyandrewsxxx.com/updates/
       - brittanysbubbles.com/updates/
+      - charmmodels.net/updates/      
       - charlieforde.com/updates/
       - chocolatepov.com/updates/
       - collectivecorruption.com/updates/
+      - dallasdiamondz.com/tour/
       - datingapphookup.com/updates/
       - dirtroadwarriors.com/updates/
+      - dixiestrailerpark.com/tour/
+      - domingoview.com/updates/      
       - dreamgirlsclips.com/updates/
       - dreamorgan.com/updates/
+      - feelmevr.com/updates/      
       - furrychicks.elxcomplete.com/updates/
+      - grannycumshere.com/tour/
       - hollyhotwife.elxcomplete.com/updates/
       - houseofyre.com/updates/
       - humiliation4k.com/updates/
@@ -31,8 +38,10 @@ sceneByURL:
       - justgoodsex.com/updates/
       - justpov.com/tour/updates/
       - lasvegasamateurs.com/tour/updates/
+      - letstryhard.com/updates/      
       - mackmovies.com/updates/
       - melaniehicksxxx.com/updates/
+      - msparisandfriends.com/tour/updates/
       - nicefeelings.com/updates/
       - nylons4k.com/updates/
       - oldsexygrannies.com/updates/
@@ -48,11 +57,15 @@ sceneByURL:
       - secretsusan.com/updates/
       - sheseducedme.com/updates/
       - sofiemariexxx.com/updates/
+      - suburbantaboo.com/tour/
       - tabooadventures.elxcomplete.com/updates/
+      - tampahousewives.com/tour/
+      - test-shoots.com/updates/      
       - texaspattiusa.com/updates/
       - thatfetishgirl.com/updates/
       - tmfetish.com/updates/
       - vanillapov.com/updates/
+      - whorebaithals.com/tour/
       - willtilexxx.com/updates/
       - xevunleashed.com/updates/
       - xxxcellentadventures.com/updates/
@@ -158,7 +171,7 @@ xPathScrapers:
         Name: $scene//span[contains(@class, "update_tags")]/a
       Studio:
         Name:
-          selector: //link[@rel="canonical"]/@href
+          selector: //link[@rel="canonical"]/@href | //base/@href
           postProcess: &studioPostProcess
             - replace:
                 - regex: https://(w{3}?\.?)?(.+?)(\..+)
@@ -172,19 +185,26 @@ xPathScrapers:
                 bigbouncybabes: Big Bouncy Babes
                 bigtoyxxx: Big Toy XXX
                 bondagelegend: Bondage Legend
+                boxofporn: Box of Porn
                 bradsterling: Brad Sterling
                 britstudio: Brit Studio
                 brittanyandrewsxxx: Britttany Andrews
                 brittanysbubbles: Brittany Andrews
                 charlieforde: Charlie Forde
+                charmmodels: Charm Models
                 chocolatepov: ChocolatePOV
                 collectivecorruption: Collective Corruption
+                dallasdiamondz: Dallas Diamondz
                 datingapphookup: Dating App Hook Ups
                 dirtroadwarriors: Dirt Road Warriors
+                dixiestrailerpark: Dixie's Trailer Park
+                domingoview: DomingoView
                 dreamgirlsclips: DreamGirls Clips
-                dreamorgan: Drea Morgan
+                dreammorgan: Drea Morgan
+                feelmevr: FeelMeVR
                 furrychicks: Furry Chicks
                 goonmuse: GoonMuse
+                grannycumshere: Granny Cums Here
                 hollyhotwife: HollyHotWife
                 houseofyre: House of Fyre
                 humiliation4k: Humiliation 4K
@@ -195,8 +215,10 @@ xPathScrapers:
                 justpov: Just POV
                 lasvegasamateurs: Las Vegas Amateurs
                 laurenphillips: Lauren Phillips
+                letstryhard: Let's Try Hard
                 mackmovies: Mack Movies
                 melaniehicksxxx: Melanie Hicks XXX
+                msparisandfriends: Ms Paris and Friends
                 nicefeelings: Nice Feelings
                 nylons4k: Nylons 4K
                 oldsexygrannies: OldSexyGrannies
@@ -211,8 +233,12 @@ xPathScrapers:
                 secretsusan: Secret Susan
                 sheseducedme: She Seduced Me
                 sofiemariexxx: Sofie Marie XXX
+                suburbantaboo: Suburban Taboo
+                swingingbicouples: Swinging Bi Couples
                 tabooadventures: Taboo Adventures
+                tampahousewives: Tampa Housewives
                 terapatrick: Terra Patrick
+                test-shoots.com: Test Shoots
                 texaspattiusa: TexasPattiUSA
                 thatfetishgirl: ThatFetishGirl
                 tmfetish: TMFetish
@@ -301,4 +327,4 @@ driver:
           Domain: sheseducedme.com
           ValueRandom: 36
           Path: /
-# Last Updated April 26, 2024
+# Last Updated April 30, 2024

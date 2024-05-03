@@ -29,6 +29,8 @@ jsonScrapers:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $details: //div[contains(concat(' ',normalize-space(@class),' '),' scene-details ')]
     scene:
       Title: &title
         selector: //h1
@@ -36,30 +38,38 @@ xPathScrapers:
           - replace:
               - regex: featuring.+
                 with: ""
-      Code:
-        selector: //h1
+      Date:
+        selector: $details//strong[text() = 'Publication date:']/following-sibling::span
         postProcess:
-          - replace:
-              - regex: .*(GP\d+).*
-                with: $1
-      Date: //i[contains(@class,"calendar3")]/text()
-      Details: //meta[@name="description"]/@content
+          - parseDate: 2006, January 02
+      Details: $details//span[text() = 'Description:']/../text()[2]
       Tags:
-        Name: //div[@class="watch"]//a[contains(@href,"genre")]/text()
+        Name: $details//span[text() = 'Tags:']/following-sibling::a[contains(concat(' ',normalize-space(@class),' '),' link-secondary ')]
       Performers:
-        Name: //div[@class="watch"]//a[contains(@href,"model")]/text()
+        Name: $details//h1/following-sibling::p[1]/a
+        URL:
+          selector: $details//h1/following-sibling::p[1]/a/@href
+          postProcess:
+            - replace:
+                - regex: (.+)
+                  with: https:$1
       Studio:
         Name:
           fixed: Porn World
-      Image: //video/@data-poster
-      URL: //div[@class="pagination"]/a[1]/@href
+      Image: $details//video/@poster
+      URL:
+        selector: //link[@rel = 'canonical']/@href
+        postProcess:
+          - replace:
+              - regex: (.+)
+                with: https:$1
   tour10SceneScraper:
     scene:
       Title: *title
       Date:
         selector: //strong/following-sibling::span
         postProcess:
-          - parseDate: 2006, January 2
+          - parseDate: 2006, January 02
       Details: //span[text()="Description:"]/..
       Tags:
         Name: //span[text()="Tags:"]/../a/text()
@@ -75,4 +85,4 @@ xPathScrapers:
           - replace:
               - regex: (.*)
                 with: https://tour10.pornworld.com$1
-# Last Updated February 27, 2024
+# Last Updated May 02, 2024

@@ -1,8 +1,8 @@
-name: AmateurAllure
+name: SwallowSalon
 galleryByURL:
   - action: scrapeXPath
     url: &urls
-      - amateurallure.com/tour/scenes/
+      - swallowsalon.com/scenes/
     scraper: galleryScraper
 sceneByURL:
   - action: scrapeXPath
@@ -29,7 +29,7 @@ xPathScrapers:
         Name: //div[@class='backgroundcolor_info']//span[@class='update_models']//a
       Studio: &studioAttr
         Name:
-          fixed: Amateur Allure
+          fixed: Swallow Salon
   sceneScraper:
     common: *commonAttr
     scene:
@@ -40,26 +40,14 @@ xPathScrapers:
       Tags: *tagsAttr
       Performers: *performersAttr
       Image:
-        selector: $logo | $title
-        concat: "|"
+        selector: $logo | //script[contains(text(), 'useimage = "/')]/text()
+        concat: __SEPARATOR__
         postProcess:
           - replace:
-              - regex: \s
-                with: "+"
-              # Commas confuse their search engine so we strip everything after the first comma
-              # this has been enough to uniquely identify a scene in every case I've tested
-              - regex: ",.*"
+              # If the image was empty we clear the URL
+              - regex: .*/$
                 with: ""
-              - regex: ^([^|]+)\|(.+)
-                with: "${1}/search.php?st=advanced&qall=&qany=&qex=$2"
-          - subScraper:
-              selector: //div[@id="logo"]//a/@href | //img/@srcset
-              concat: "|"
-              postProcess:
-                - replace:
-                    - regex: ^([^|]+amateurallure[^|]+)\|.+(/content/contentthumbs/\d+/\d+/[^/]+\.jpg) 1920w
-                      with: $1$2
-                    - regex: 1x
-                      with: "full"
+              - regex: (https://[^/]+).*useimage = "([^"]*).*
+                with: $1$2
       Studio: *studioAttr
 # Last Updated May 01, 2024
