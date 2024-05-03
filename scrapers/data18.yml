@@ -23,7 +23,12 @@ xPathScrapers:
       $studio: //b[text()=('Studio') or ('Network')]/following-sibling::b/a
       $movie: //b[text()="Movie:"]/following-sibling::a[1]
     scene:
-      Title: //span/following-sibling::h1/a/text()
+      Title:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: (.+?)(?:,\sw\/.+)?(?:\s\(\d{4}\))?(?:\sPorn\sScene)?\s\|\sDATA18
+                with: $1
       Date:
         selector: //span[b[text()="Release date"]]
         postProcess:
@@ -48,7 +53,12 @@ xPathScrapers:
         Name: $studio
         URL: $studio/@href
       Movies:
-        Name: $movie/@title
+        Name:
+          selector: $movie/@title
+          postProcess:
+            - replace:
+                - regex: (.+?)(?:\s#1)?$
+                  with: $1
         URL: $movie/@href
       Image: //img[@id="playpriimage"]/@src
   movieScraper:
@@ -61,7 +71,7 @@ xPathScrapers:
         selector: //title
         postProcess:
           - replace:
-              - regex: (.+?)(?:\s\(\d{4}\)(?:\sPorn)?\sMovie\s\|\sDATA18)
+              - regex: (.+?)(?:\s\(\d{4}\))?(?:\sPorn)?(?:\sMovie)?\s\|\sDATA18
                 with: $1
       Duration:
         selector: $movieInfo//b[contains(text(),"Length")]/following-sibling::span|$movieInfo//b[contains(text(),"Length")]/following-sibling::text()
@@ -139,4 +149,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated April 26, 2024
+# Last Updated April 30, 2024
