@@ -7,6 +7,7 @@ import requests
 
 import py_common.log as log
 from py_common.cache import cache_to_disk
+from py_common.types import ScrapedScene
 from py_common.util import dig, scraper_args
 
 PROXIES = {}
@@ -40,7 +41,7 @@ def scrape_id(gif_id: str):
 
     scene = {
         "title": gif.get("description"),
-        "tags": gif.get("tags"),
+        "tags": [{"name": t} for t in gif.get("tags")],
         "date": datetime.fromtimestamp(gif["createDate"]).date().strftime("%Y-%m-%d"),
         "performers": [],
     }
