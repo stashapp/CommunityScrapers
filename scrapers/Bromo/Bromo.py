@@ -17,8 +17,8 @@ from AyloAPI.scrape import (
 
 
 def bromo(obj: Any, _) -> Any:
-    # Flatten all studios to just "Bromo"
-    return replace_at(obj, "studio", replacement=lambda _: {"name": "Bromo"})
+    # Bromo have updated their scenes so they have proper studios now
+    return obj
 
 
 if __name__ == "__main__":
