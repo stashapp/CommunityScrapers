@@ -23,8 +23,25 @@ def getData(sceneId: str):
             "view": True
         })
     except Exception as e:
-        fail(f"Error fetching data from PMVHaven API: {e}")
+        fail(f"Error fetching from PMVHaven API (by video ID): {e}")
     return req.json()
+
+def getVideoIdFromDownloadHash(downloadHash: str):
+    # this endpoint doesn't include video tags for now, so will just use it to get video ID
+    try:
+        req = requests.post("https://pmvhaven.com/api/v2/videoInput", json={
+            "mode": "GetByHash",
+            "data": { "_value": downloadHash }
+        })
+    except Exception as e:
+        fail(f"Error fetching from PMVHaven API (by DL hash): {e}")
+    
+    responseBody = req.json()
+
+    if not 'data' in responseBody or len(responseBody['data']) < 1:
+        return None
+
+    return responseBody['data'][0]['_id']
 
 def getIMG(video):
     # reversed because we want the most recent thumb
@@ -65,25 +82,27 @@ def getVideoById(sceneId):
     }
 
 '''
-    Assumes the SceneID is in the title of the video, 
-    e.g. "Hot video 12ab3c45de6f7890abc12ff0.mp4" or similar.
-    The json blob that gets passed though for script based sceneByFragment scaper
-    doesn't get the filename, unlike the xpath scraper, but the name as shown in Stash.
+    Assumes the video ID or the download hash is in the title of the Stash scene.
+    The default file name when downloading from PMVHaven includes the download hash,
+    so this will first assume the parameter is the download hash. If no results are
+    returned then it will assume the parameter is the video ID and attempt data fetch.
 '''
 def sceneByFragment(params):
-
     if not params['title']:
         fail('JSON blob did not contain title property')
 
     regex = re.search(r"([a-z0-9]{24})", params['title'])
     
     if not regex:
-        fail(f"Did not find scene ID from video title {params['title']}")
+        fail(f"Did not find ID from video title {params['title']}")
 
-    sceneId = regex.group(1)
+    inputParam = regex.group(1)
+    videoId = getVideoIdFromDownloadHash(inputParam)
 
-    data = getVideoById(sceneId)
-    return data
+    if (videoId is None):
+        videoId = inputParam
+    
+    return getVideoById(videoId)
 
 
 '''    
