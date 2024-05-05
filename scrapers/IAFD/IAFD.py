@@ -482,6 +482,7 @@ def main():
     result = {}
     if args.operation == "performer":
         result = performer_from_tree(scraped)
+        result["url"] = url
     elif args.operation == "movie":
         result = movie_from_tree(scraped)
     elif args.operation == "scene":
