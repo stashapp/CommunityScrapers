@@ -31,7 +31,7 @@ xPathScrapers:
     performer:
       Name: //h3/text()
       Gender:
-        Fixed: Female
+        fixed: Female
       Ethnicity: 
         selector: //li[span[contains(.,'race')]]/text()
         postProcess:
