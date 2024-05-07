@@ -127,7 +127,7 @@ xPathScrapers:
       Tags:
         Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," categoriesWrapper ")]/a/text()|$videowrap//div[contains(concat(" ",normalize-space(@class)," ")," tagsWrapper ")]/a/text()
       Performers:
-        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]/a/@data-mxptext
+        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]/a[@data-label="pornstar"]/text()
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," usernameWrap ")]//a/text()
