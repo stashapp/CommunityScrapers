@@ -4,7 +4,6 @@ sceneByURL:
   - action: script
     url:
       - falconstudios.com/en/video
-      - hothouse.com/en/video
     script:
       - python
       - ../Algolia/Algolia.py
@@ -29,4 +28,13 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - falconstudios
     - validName
-# Last Updated September 09, 2023
+movieByURL:
+  - action: script
+    url:
+      - falconstudios.com/en/movie/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - falconstudios
+      - movie
+# Last Updated April 09, 2023

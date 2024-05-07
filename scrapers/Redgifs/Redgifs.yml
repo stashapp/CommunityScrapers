@@ -6,28 +6,28 @@ sceneByURL:
     script:
       - python
       - Redgifs.py
-      - url
+      - scene-by-url
     url:
-      - www.redgifs.com/watch/
+      - redgifs.com/watch/
 
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - Redgifs.py
-      - fragment
+  action: script
+  script:
+    - python
+    - Redgifs.py
+    - scene-by-fragment
 
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - Redgifs.py
-      - queryFragment
+  action: script
+  script:
+    - python
+    - Redgifs.py
+    - scene-by-query-fragment
 
 sceneByName:
-    action: script
-    script:
-      - python
-      - Redgifs.py
-      - name
-# Last Updated August 03, 2023
+  action: script
+  script:
+    - python
+    - Redgifs.py
+    - scene-by-name
+# Last Updated May 02, 2024

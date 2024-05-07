@@ -1,0 +1,9 @@
+name: YT-dlp
+# requires: py_common
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - YT-dlp.py
+# Last Updated April 25, 2024

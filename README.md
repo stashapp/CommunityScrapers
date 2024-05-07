@@ -10,7 +10,7 @@ Note that some scrapers (notably [ThePornDB for Movies](./scrapers/ThePornDBMovi
 
 ## Installing scrapers
 
-With the [v0.24.0 release of Stash](https://github.com/stashapp/stash/releases/tag/v0.24.0) you no longer need to install scrapers manually: if you go to `Settings > Metadata Providers` you can find the scrapers from this repository in the `Community (stable)` feed and install them without ever needing to copy any files manually.
+With the [v0.24.0 release of Stash](https://github.com/stashapp/stash/releases/tag/v0.24.0) you no longer need to install scrapers manually: if you go to `Settings > Metadata Providers` you can find the scrapers from this repository in the `Community (stable)` feed and install them without ever needing to copy any files manually. Note that some scrapers still require [manual configuration](#manually-configured-scrapers)
 
 If you still prefer to manage your scrapers manually that is still supported as well, using the same steps as before. Manually installed scrapers and ones installed through Stash can both be used at the same time.
 
@@ -39,7 +39,7 @@ Some scrapers require external programs to function, usually [Python](https://ww
 
 Depending on your operating system you may need to install both Python and the scrapers' dependencies before they will work. For Windows users we strongly recommend installing Python using the [installers from python.org](https://www.python.org/downloads/) instead of through the Windows Store, and also installing it outside of the Users folder so it is accessible to the entire system: a commonly used option is `C:\Python312`.
 
-After installing Python you can install the most commonly used dependencies by running the following command in a terminal window:
+After installing Python you should install the most commonly used dependencies by running the following command in a terminal window:
 
 ```cmd
 python -m pip install stashapp-tools requests cloudscraper beautifulsoup4 lxml
@@ -48,6 +48,14 @@ python -m pip install stashapp-tools requests cloudscraper beautifulsoup4 lxml
 You may need to replace `python` with `py` in the command if you are running on Windows.
 
 If Stash does not detect your Python installation you can set the `Python executable path` in `Settings > System > Application Paths`. Note that this needs to point to the executable itself and not just the folder it is in.
+
+## Manually configured scrapers
+
+Some scrapers need extra configuration before they will work. This is unfortunate if you install them through the web interface as any updates will overwrite your changes.
+
+- [ThePornDBMovies](./scrapers/ThePornDBMovies.yml) and [ThePornDBJAV](./scrapers/ThePornDBJAV.yml) need to be edited to have your API key in them. Make sure you do not remove the `Bearer` part when you add your key.
+- Python scrapers that need to communicate with your Stash (to create markers, for example, or to search your file system) _might_ need to be configured to talk to your local Stash: by default they will use `http://localhost:9999/graphql` with no authentication to make their queries, but if your setup requires otherwise then you can find `py_common/config.ini` and set your own values.
+- Python scrapers that can be configured will (usually) create a default configuration file called `config.ini` in their respective directories the first time you run them.
 
 ## Scrapers
 

@@ -26,7 +26,7 @@ xPathScrapers:
       Performers:
         Name: $titleArea/ul[@class="scene-models-list"]/li/a
       Image: //meta[@itemprop="thumbnailUrl"]/@content
-      URL: //link[@rel="canonical"]/@href
+      URL: //link[@hreflang="x-default"]/@href
       Studio:
         Name:
           fixed: Randy Blue

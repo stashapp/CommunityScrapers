@@ -1,6 +1,5 @@
 name: KB Productions
 # requires: py_common
-# scrapes: 2 Girls 1 Camera, All Anal, Alt Erotic, Amazing Films, Anal Only, Benefit Monkey, Big Gulp Girls, BJ Raw, Black Bull Challenge, Cougar Season, Creampie Thais, Deepthroat Sirens, Dirty Auditions, Divine-DD, Emo Network, Facials Forever, Freak Mob Media, Gay Life Network, Got Filled, Hoby Buchanon, Inked POV, Inserted, JAV888, Lady Sonia, LezKey, LucidFlix, Mean Feet Fetish, Monger In Asia, Nylon Perv, Nympho, Pounded Petite, Red-XXX, Ricky's Room, S3XUS, Seska, Sexy Modern Bull, She's Brand New, SIDECHICK, Suck This Dick, Swallowed, Top Web Models, True Anal, TWM Classics, Xful, Yes Girlz, Yummy Couple, Z-Filmz
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -13,10 +12,12 @@ sceneByURL:
       - amazingfilms.com/videos
       - analjesse.com/trailers
       - analonly.com/scenes
+      - bemefi.com/videos
       - benefitmonkey.com/scenes
       - biggulpgirls.com/scenes
       - bjraw.com/videos
       - blackbullchallenge.com/videos
+      - cannonprod.com/videos
       - cougarseason.com/scenes
       - creampiethais.com/videos
       - deepthroatsirens.com/scenes
@@ -26,6 +27,7 @@ sceneByURL:
       - freakmobmedia.com/videos
       - gogobarauditions.com/trailers
       - gotfilled.com/videos
+      - hardwerk.com/films
       - hobybuchanon.com/behind-the-scenes
       - hobybuchanon.com/suck-this-dick
       - hobybuchanon.com/updates
@@ -33,11 +35,16 @@ sceneByURL:
       - inserted.com/tour/videos
       - inserted.com/videos
       - jav888.com/videos
+      - jizzaddiction.com/scenes
+      - joeschmoevideos.com/scenes
       - lady-sonia.com/scenes
+      - legendaryx.com/videos
       - lezkey.com/scenes
       - lucidflix.com/episodes
+      - machofactory.com/scenes
       - meanfeetfetish.com/videos
       - mongerinasia.com/trailers
+      - nyseedxxx.com/video
       - nylonperv.com/videos
       - red-xxx.com/scenes
       - rickysroom.com/videos
@@ -84,6 +91,8 @@ performerByURL:
       # /models redirects to /hobyshotties
       - hobybuchanon.com/models
       - hobybuchanon.com/hobyshotties
+      - jizzaddiction.com/models
+      - joeschmoevideos.com/models
       - inkedpov.com/models
       - inserted.com/models
       - inserted.com/tour/models
@@ -91,6 +100,7 @@ performerByURL:
       # lady-sonia.com has no model pages
       - lezkey.com/models
       - lucidflix.com/models
+      - machofactory.com/models
       - meanfeetfetish.com/models
       - nylonperv.com/models
       - tour.nympho.com/models
@@ -133,7 +143,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^([^-]+).+
-                with: $1 
+                with: $1
           - parseDate: January 2, 2006
       Tags:
         Name:
@@ -151,4 +161,4 @@ xPathScrapers:
                 HomoScene: "Homo Scene"
                 LollipopTwinks: "Lollipop Twinks"
                 Twinklight: "Twink Light"
-# Last Updated March 29, 2024
+# Last Updated April 29, 2024

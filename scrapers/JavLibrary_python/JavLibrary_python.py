@@ -270,6 +270,8 @@ REPLACE_TITLE = {
     "-HD": "",
     "_hd": "",
     "_HD": "",
+    "1080p": "",
+    "1080P": "",
     "-4k": "",
     "-4K": "",
     ".4k": "",
@@ -412,7 +414,7 @@ class ResponseHTML:
     content = ""
     html = ""
     status_code = 0
-    url = 0
+    url = ""
 
 def bypass_protection(url):
     global PROTECTION_CLOUDFLARE
@@ -433,10 +435,10 @@ def bypass_protection(url):
                     "maxTimeout": FLARESOLVERR_TIMEOUT_MAX
                 }
 
-                log.info(f"Using Flarsolverr: {FLARESOLVERR_URL}")
-                log.info(f"Javlibrary input url: {url}")
-                responseJson = requests.post(url, headers=headers, json=data)
-                json_input = json.loads(str(responseJson.text))
+                log.info(f"Using FlareSolverr: {FLARESOLVERR_URL}")
+                log.info(f"Javlibrary input url: {url_n}")
+                responseJson = requests.post(FLARESOLVERR_URL, headers=headers, json=data)
+                json_input = responseJson.json()
 
                 response_html.content = json_input['solution']['response']
                 response_html.html = json_input['solution']['response']
@@ -446,8 +448,10 @@ def bypass_protection(url):
                 #log.info(f"Flaresolverr response html: {response_html}")
             else:
                 response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
+                response_html.content = response.content
                 response_html.html = response.text
                 response_html.status_code = response.status_code
+                response_html.url = response.url
         except Exception as exc_req:
             log.warning(f"Exception error {exc_req} while checking protection for {site}")
             return None, None
@@ -617,7 +621,10 @@ def buildlist_tagperf(data, type_scrape=""):
                 p_name = re.sub(r"([a-zA-Z]+)(\s)([a-zA-Z]+)", r"\3 \1", p_name)
             if STASH_SUPPORT_NAME_ORDER:
                 # There is such names as "Aoi." and even "@you". Indeed, JAV is fun!
-                parsed_name = re.search("([a-zA-Z\.@]+)(\s)?([a-zA-Z]+)?", p_name)
+                parsed_name = re.search(r"([a-zA-Z\.@]+)(\s)?([a-zA-Z]+)?", p_name)
+                if not parsed_name:
+                    log.debug(f"Failed to parse name: {p_name}")
+                    continue
                 p_name = {}
                 if parsed_name[2] == ' ' and parsed_name[3]:
                     p_name[

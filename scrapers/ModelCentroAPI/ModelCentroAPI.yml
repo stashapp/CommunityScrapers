@@ -3,13 +3,16 @@ name: "ModelCentroAPI"
 
 sceneByURL:
   - url:
+      - arabellesplayground.com/scene/
       - beingphoenixmarie.com/scene/
       - brookelynnebriar.com/scene/
       - danidaniels.com/scene/
       - dillionation.com/scene/
+      - facialcasting.com/scene/
       - fallinlovia.com/scene/
       - ginagerson.xxx/scene/
       - lonelymeow.com/scene/
+      - kinkyrubberworld.com/scene/
       - modelcentro.net/scene
       - mylifeinmiami.com/scene/
       - natashanice.com/scene/
@@ -20,4 +23,4 @@ sceneByURL:
     script:
       - python
       - ModelCentroAPI.py
-# Last Updated March 16, 2024
+# Last Updated May 04, 2024

@@ -1,185 +1,97 @@
-import base64
-import json
-import os
-import re
-import sys
+from base64 import b64encode
 from datetime import datetime
+from pathlib import Path
+import json
+import sys
+import requests
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(
-    os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
-
-try:
-    import py_common.log as log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit()
-try:
-    import requests
-except ModuleNotFoundError:
-    log.error(
-        "You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)"
-    )
-    log.error(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests"
-    )
-    sys.exit()
+import py_common.log as log
+from py_common.cache import cache_to_disk
+from py_common.types import ScrapedScene
+from py_common.util import dig, scraper_args
 
 PROXIES = {}
 TIMEOUT = 10
 
-
-class Redgifs:
-    def __init__(self):
-        self.session = requests.Session()
-        self.session.headers.update(
-            {"content-type": "application/json; charset=UTF-8"}
-        )
-
-        self.session.proxies.update(PROXIES)
-
-        self.getTemporaryToken()
-
-    def log_session_headers(self):
-        log.debug(self.session.headers)
-
-    def GET_req(self, url):
-        scraped = None
-        try:
-            scraped = self.session.get(url, timeout=TIMEOUT)
-        except:
-            log.error("scrape error")
-            return None
-        if scraped.status_code >= 400:
-            log.error(f"HTTP Error: {scraped.status_code}")
-            return None
-        return scraped.content
-
-    def GET_req_json(self, url):
-        scraped = None
-        try:
-            scraped = self.session.get(url, timeout=TIMEOUT)
-        except:
-            log.error("scrape error")
-            return None
-        if scraped.status_code >= 400:
-            log.error(f"HTTP Error: {scraped.status_code}")
-            return None
-        return scraped.json()
-
-    def output_json(self, title, tags, url, b64img, performers, date):
-        return {
-            "title": title,
-            "tags": [{"name": x} for x in tags],
-            "url": url,
-            "image": "data:image/jpeg;base64," + b64img.decode("utf-8"),
-            "performers": [{"name": x.strip()} for x in performers],
-            "date": date
-        }
-
-    def getTemporaryToken(self):
-        req = self.GET_req_json("https://api.redgifs.com/v2/auth/temporary")
-
-        authToken = req.get("token")
-
-        self.session.headers.update(
-            {"Authorization": 'Bearer ' + authToken,}
-        )
-
-        log.debug(req)
-
-    def getIdFromUrl(self, url):
-        id = url.split("/")
-        id = id[-1]
-        id = id.split("?")[0]
-
-        return id;
-
-    def getApiUrlFromId(self, id):
-        return f"https://api.redgifs.com/v2/gifs/{id}?views=yes&users=yes"
+session = requests.Session()
+session.proxies.update(PROXIES)
 
 
-    def getParseUrl(self, url):
-        id = self.getIdFromUrl(url)
-        return self.getParseId(id)
-
-    def getParseId(self, id):
-        id_lowercase = id.lower()
-
-        log.debug(str(id))
-
-        apiurl = self.getApiUrlFromId(id_lowercase)
-
-        req = self.GET_req_json(apiurl)
-
-        log.debug(req)
-
-        gif = req.get("gif")
-        user = req.get("user")
-
-        tags = gif.get("tags")
-
-        date = gif.get("createDate")
-        date = datetime.fromtimestamp(date)
-        date = str(date.date())
-
-        imgurl = gif.get("urls").get("poster")
-        img = self.GET_req(imgurl)
-        b64img = base64.b64encode(img)
-
-        studio_name = user.get("name")
-
-        performers = []
-
-        if user.get("name"):
-            performers = [user.get("name")]
-        elif user.get("username"):
-            performers = [user.get("username")]
+@cache_to_disk("token", 24 * 60 * 60)
+def get_token():
+    req = session.get("https://api.redgifs.com/v2/auth/temporary")
+    req.raise_for_status()
+    return req.json()["token"]
 
 
-        return self.output_json(
-            id, tags, f"https://www.redgifs.com/watch/{id}", b64img, performers, date
-        )
-
-def parseFilename(filename):
-    id = filename.replace("redgifs_", "") #remove possible filename prefix
-    id = id.split(".")[0] #remove file extension
-    
-    return id
+session.headers.update({"Authorization": "Bearer " + get_token()})
 
 
-FRAGMENT = json.loads(sys.stdin.read())
+def scrape_id(gif_id: str):
+    api_url = f"https://api.redgifs.com/v2/gifs/{gif_id}?users=yes"
 
-log.debug(FRAGMENT)
+    req = session.get(api_url)
+    if req.status_code != 200:
+        log.error(f"Failed to fetch {api_url}: {req.status_code} {req.reason}")
+        return
 
-scraper = Redgifs()
+    data = req.json()
+    gif = data["gif"]
+    user = data["user"]
 
-result = ""
+    scene = {
+        "title": gif.get("description"),
+        "tags": [{"name": t} for t in gif.get("tags")],
+        "date": datetime.fromtimestamp(gif["createDate"]).date().strftime("%Y-%m-%d"),
+        "performers": [],
+    }
 
-if sys.argv[1] == "url":
-    url = FRAGMENT.get("url")
+    # We cannot return the image URL because you need the token to access it
+    # and Stash does not have our token: base64 encoding the image instead
+    if img := dig(gif, "urls", ("poster", "hd", "sd")):
+        image_data = session.get(img).content
+        base64_encoded = b64encode(image_data).decode("utf-8")
+        scene["image"] = f"data:image/jpeg;base64,{base64_encoded}"
 
-    log.debug(url)
+    if name := user.get("name"):
+        scene["studio"] = {"name": name, "url": user["url"]}
+        scene["performers"] = [{"name": name}]
 
-    result = json.dumps(scraper.getParseUrl(url))
-elif sys.argv[1] == "queryFragment" or sys.argv[1] == "fragment":
-    id = parseFilename(FRAGMENT.get("title"))
+    if (username := user.get("username")) and username != name:
+        scene["performers"].append({"name": username})
 
-    log.debug(id)
+    return scene
 
-    result = json.dumps(scraper.getParseId(id))
-elif sys.argv[1] == "name":
-    id = parseFilename(FRAGMENT.get("name"))
 
-    log.debug(id)
+def extract_id(string: str):
+    # Redgifs URLs are in the format https://www.redgifs.com/watch/unique-name
+    if "redgifs.com/watch" in string:
+        return string.split("/")[-1].split("#")[0].split("?")[0]
 
-    result = json.dumps([scraper.getParseId(id)])
+    # Filenames are assumed to have the format "Redgifs_{id}.mp4"
+    return Path(string).stem.split("_")[-1]
 
-print(result)
+
+if __name__ == "__main__":
+    op, args = scraper_args()
+    result = None
+    match op, args:
+        case "scene-by-url" | "scene-by-query-fragment", {"url": identifier}:
+            gif_id = extract_id(identifier)
+        case "scene-by-name", {"name": identifier}:
+            gif_id = extract_id(identifier)
+        case "scene-by-fragment", {"title": title, "url": url}:
+            identifier = title or url
+            gif_id = extract_id(identifier)
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
+
+    if gif_id:
+        log.debug(f"Fetching scene with ID '{gif_id}'")
+        result = scrape_id(gif_id)
+    else:
+        log.error(f"Unable to find valid GIF identifier in '{identifier}'")
+        result = None
+
+    print(json.dumps(result))

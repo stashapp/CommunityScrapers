@@ -98,12 +98,7 @@ def sceneByURL():
     details = data["description"]
 
     # image
-    image_urls = [
-        src_set.split(' ')[0] for src_set in data["mainImages"][0]["imgSrcSet"].split(',')
-    ]
-    # pick highest available quality, or fall back to first image
-    suffixes = ['ultra.jpg', 'big.jpg', 'high.jpg', 'medium.jpg', 'small.jpg']
-    image_url = next((url for suffix in suffixes for url in image_urls if url.endswith(suffix)), image_urls[0])
+    image_url = re.sub(r".*,(\S+)\/.*", r"\1/00-Main-photo-Large.jpg", data["mainImages"][0]["imgSrcSet"])
     date = data["releaseDate"]
 
     # tags

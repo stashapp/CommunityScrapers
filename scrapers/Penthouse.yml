@@ -8,7 +8,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: 
-          selector: //div[@class="content-desc content-new-scene"]//h1/text()
+          selector: //div[@class="scene-title-and-social"]//h1/text()
           postProcess:
             - replace:
                 - regex: ^Video\s-\s
@@ -27,4 +27,4 @@ xPathScrapers:
         Name: //ul[@class="scene-tags"]/li/a/text()
       Image: //meta[@itemprop="thumbnailUrl"]/@content[not(contains(., "/no_video_preview_"))]
 
-# Last Updated July 30, 2022
+# Last Updated April 27, 2024

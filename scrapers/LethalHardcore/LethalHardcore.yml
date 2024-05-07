@@ -1,0 +1,50 @@
+# requires: Algolia
+name: "LethalHardcore"
+sceneByURL:
+  - action: script
+    url:
+      - https://www.lethalhardcore.com/en/video
+      - https://www.lethalhardcorevr.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - lethalhardcore
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - lethalhardcore
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - lethalhardcore
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - lethalhardcore
+    - validName
+movieByURL:
+  - action: script
+    url:
+      - lethalhardcore.com/en/movie
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - lethalhardcore
+      - movie
+galleryByURL:
+  - action: script
+    url:
+      - lethalhardcore.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - lethalhardcore
+      - gallery
+# Last Updated April 29, 2024

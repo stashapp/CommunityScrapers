@@ -5,6 +5,7 @@ import os
 import re
 import sqlite3
 import sys
+import base64
 from configparser import ConfigParser, NoSectionError
 from urllib.parse import urlparse
 
@@ -56,19 +57,24 @@ MAIN_CHANNELS_AS_STUDIO_FOR_SCENE = [
 # a dict with sites having movie sections
 # used when populating movie urls from the scene scraper
 MOVIE_SITES = {
+    "biphoria.com": "https://www.biphoria.com/en/movie",
     "devilsfilm": "https://www.devilsfilm.com/en/dvd",
     "devilstgirls": "https://www.devilstgirls.com/en/dvd",
     "diabolic": "https://www.diabolic.com/en/movie",
+    "falconstudios": "https://www.falconstudios.com/en/movie",
+    "ragingstallion": "https://www.ragingstallion.com/en/movie",    
     "evilangel": "https://www.evilangel.com/en/movie",
     "genderx": "https://www.genderxfilms.com/en/movie",
     "girlfriendsfilms": "https://www.girlfriendsfilms.com/en/movie",
     "lewood": "https://www.lewood.com/en/movie",
+    "hothouse": "https://www.hothouse.com/en/movie",
     "outofthefamily": "https://www.outofthefamily.com/en/dvd",
     "peternorth": "https://www.peternorth.com/en/dvd",
     "tsfactor": "https://www.tsfactor.com/en/movie/",
     "wicked": "https://www.wicked.com/en/movie",
     "zerotolerancefilms": "https://www.zerotolerancefilms.com/en/movie",
     "3rddegreefilms": "https://www.3rddegreefilms.com/en/movie",
+    "lethalhardcore": "https://www.lethalhardcore.com/en/movies",
     "roccosiffredi": "https://www.roccosiffredi.com/en/dvd",
 }
 
@@ -99,6 +105,9 @@ SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
     "Devils Gangbangs": "Devil's Gangbangs",
     "Devilstgirls": "Devil's Tgirls",
     "Dpfanatics": "DP Fanatics",
+    "FalconStudios.com": "Falcon Studios",
+    "Gloryholesecrets": "Gloryhole Secrets",
+    "RagingStallion.com": "Raging Stallion",    
     "Janedoe": "Jane Doe Pictures",
     "ModernDaySins": "Modern-Day Sins",
     "Transgressivexxx": "TransgressiveXXX",
@@ -117,8 +126,12 @@ SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
 SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "ChaosMen",
     "Devil's Film",
+    "Evil Angel",
+    "FalconStudios.com",
+    "RagingStallion.com",    
     "GenderXFilms",
     "Give Me Teens",
+    "Gloryholesecrets",
     "Hairy Undies",
     "Lesbian Factor",
     "Oopsie",
@@ -126,6 +139,7 @@ SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "Rocco Siffredi",
     "Squirtalicious",
     "3rd Degree Films",
+    "Lethalhardcore",
 ]
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
@@ -580,10 +594,16 @@ def parse_movie_json(movie_json: dict) -> dict:
         date_by_studio = studios_movie_dates[studio_name]
     scrape["date"] = movie_json[0].get(date_by_studio)
 
-    scrape[
-        "front_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg?width=450&height=636"
-    scrape[
-        "back_image"] = f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg?width=450&height=636"
+    front_img_req = requests.get(f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_front_400x625.jpg?width=450&height=636")
+    if front_img_req.ok:
+        scrape["front_image"] = front_img_req.url
+
+    back_img_req = requests.get(f"https://transform.gammacdn.com/movies{movie[0].get('cover_path')}_back_400x625.jpg?width=450&height=636")
+    if back_img_req.ok:
+        if base64.b64encode(front_img_req.content) == base64.b64encode(back_img_req.content):
+            log.debug("back_image same as front_image")
+        else:
+            scrape["back_image"] = back_img_req.url
 
     directors = []
     if movie_json[0].get('directors') is not None:

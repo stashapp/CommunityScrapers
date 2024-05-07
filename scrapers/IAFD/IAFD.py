@@ -49,10 +49,12 @@ def maybe(
     values: Iterable[str], f: Callable[[str], (T | None)] = lambda x: x
 ) -> T | None:
     """
-    Returns the first value in values that is not "No data" after applying f to it
+    Returns the first value in values that is not a predefined "empty value" after applying f to it
     """
+    empty_values = ["No Data", "No Director", "No known aliases", "None"]
     return next(
-        (f(x) for x in values if not re.search(r"(?i)no data|no director", x)), None
+        (f(x) for x in values if not re.search("|".join(empty_values), x, re.I)),
+        None,
     )
 
 
@@ -66,6 +68,17 @@ def map_gender(gender: str):
         "m": "Male",
     }
     return genders.get(gender, gender)
+
+
+def map_haircolor(haircolor: str):
+    haircolors = {
+        "Blond": "Blonde",
+        "Brown": "Brunette",
+        "Dark Brown": "Brunette",
+        "Red": "Redhead",
+        "Grey": "Gray",
+    }
+    return haircolors.get(haircolor, haircolor)
 
 
 def clean_date(date: str) -> str | None:
@@ -92,7 +105,8 @@ def performer_haircolor(tree):
     return maybe(
         tree.xpath(
             '//div/p[starts-with(.,"Hair Color")]/following-sibling::p[1]//text()'
-        )
+        ),
+        map_haircolor,
     )
 
 
@@ -468,6 +482,7 @@ def main():
     result = {}
     if args.operation == "performer":
         result = performer_from_tree(scraped)
+        result["url"] = url
     elif args.operation == "movie":
         result = movie_from_tree(scraped)
     elif args.operation == "scene":
