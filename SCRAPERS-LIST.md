@@ -840,6 +840,7 @@ gaywire.com|GayWire/GayWire.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_che
 genderxfilms.com|GenderXFilms.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:x:|-|Trans
 genlez.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 germancumpigz.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+germanmistresses.com|GermanMistresses.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gfleaks.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 ghettodoorway.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ghettogaggers.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
