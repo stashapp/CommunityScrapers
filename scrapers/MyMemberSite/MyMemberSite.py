@@ -427,9 +427,11 @@ class MyMemberSite:
         dict
             Resource information.
         """
+        if response['description'] is not None:
+            response['description'] = BeautifulSoup(response['description'], 'html.parser').get_text()
         info = {
             'Title': response['title'],
-            'Details': BeautifulSoup(response['description'], 'html.parser').get_text(),
+            'Details': response['description'] if response['description'] is not None else '',
             'URLs': [f'https://{domain}/{resource_type}/{response["id"]}'],
             'Date': response['publish_date'][0:response['publish_date'].find('T')],
             'Tags': list(map(lambda t: {'Name': t['name']}, response['tags'])),
