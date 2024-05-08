@@ -7,14 +7,14 @@ assignees: ''
 
 ---
 
-** Name of site **
+**Name of site**
 
 example.com
 
-** URLs that you would expect to scrape **
+**URLs that you would expect to scrape**
 
 Example URLs for scenes, performers, movies, galleries
 
-** Notes **
+**Notes**
 
 Any additional notes about this site
