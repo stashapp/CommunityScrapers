@@ -271,6 +271,7 @@ blackcockpassion.com|MVG.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blacked.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 blackedraw.com|vixenNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 blackfoxbound.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+blackgirlfetish.com|BlackGirlFetish.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 blackgodz.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 blackmaleme.com|BlackMaleMe.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Gay
 blackmarketxxx.com|CombatZone.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
