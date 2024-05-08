@@ -7,11 +7,13 @@ assignees: Maista6969
 
 ---
 
-** Scraper name **
+**Scraper name**
+
 Example scraper
 
-** Scraper method **
-Scene / Gallery / Movie / Performer?
-Scrape with URL? If so, what URLs have you tried?
-Scrape with fragment? If so, what is the filename / title / studio code?
-Scrape with name? Give an example you searched for that caused the scraper to fail
+**Scraper method**
+
+Scene / Gallery / Movie / Performer?  
+Scrape with URL? If so, what URLs have you tried?  
+Scrape with fragment? If so, what is the filename / title / studio code?  
+Scrape with name? Give an example you searched for that caused the scraper to fail  
