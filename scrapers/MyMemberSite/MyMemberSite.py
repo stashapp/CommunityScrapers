@@ -197,6 +197,10 @@ class MyMemberSite:
             'api': 'ladyasmondena.mymember.site',
             'name': 'Lady Asmondena',
         },
+        'latexlolanoir.com': {
+            'api': 'latexlolanoir.mymember.site',
+            'name': 'Lola Noir',
+        },
         'latexrapturefans.com': {
             'api': 'latexrapturefans.mymember.site',
             'name': 'LatexRapture',
@@ -521,3 +525,5 @@ if sys.argv[1] == 'scrape':
 output = json.dumps(ret) if ret is not None else '{}'
 # log.debug(f'Send output: {output}')
 print(output)
+
+# Last Updated May 08, 2024
