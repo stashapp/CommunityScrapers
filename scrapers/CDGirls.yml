@@ -1,0 +1,70 @@
+name: CDGirls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cdgirls.com
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - cdgirls.com
+    scraper: performeScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property='og:title']/@content
+      Date:
+        selector: //span[contains(.,'Added')]/following-sibling::span
+        postProcess:
+          - parseDate: 2-1-2006
+      Details:
+        selector: //div[@class='panel-content']/p
+        concat: ' '
+      Performers:
+        Name: //div[@class='model_name']
+        Image: //div[@class='model_img']/img/@src
+      Image:
+        selector: //script[contains(.,'image:')]
+        postProcess:
+          - replace:
+              - regex: .+?image:.+?'([^']+).+
+                with: $1
+      Tags:
+        Name:
+          selector: //div[@class='video-footer']/strong[contains(.,'Tags')]/following-sibling::p/a
+      Studio:
+        Name:
+          # Some scenes are part of multiple subsites.  This grabs the first that's listed.
+          selector: //div[@class='video-footer']/strong[contains(.,'CDGirls WebSite')]/following-sibling::p/a
+          postProcess:
+            - map:
+                Amateur: First Timers
+                Barely18: Just Barely 18
+                Lesbian: Luxury Lesbians
+                Sexmachines: Fucked By A Machine
+                Sybian: Sybian Orgasms
+                Vrbs: VR Body Shots
+
+  performeScraper:
+    performer:
+      Name:  //aside//h3
+      Height:
+        selector: //li[contains(.,'Height')]//strong
+        postProcess:
+          - replace:
+              - regex: '^'
+                with: '0.'
+          - feetToCm: true
+      Weight:
+        selector: //li[contains(.,'Weight')]//strong
+        postProcess:
+          - lbToKg: true
+      EyeColor:  //li[contains(.,'Eye Color')]//strong
+      HairColor:  //li[contains(.,'Hair Color')]//strong
+      Details: //ul[@class='list-unstyled']/li[1]
+      Image: //div[@class='model_img_lg']/img/@src
+      Disambiguation:
+        fixed: CD Girls
+# Last Updated May 08, 2024
