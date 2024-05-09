@@ -17,7 +17,12 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: &title //title
+      Title: &title
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: \s-\sWeAreHairy\.com$
+                with:
       Date: &date
         selector: //h6//span
         postProcess:
