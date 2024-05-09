@@ -132,6 +132,7 @@ arabellesplayground.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python
 archangelvideo.com|ArchAngelVideo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ariellynn.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 artofscat.com|Queensnake.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+asgmax.com|ASGMax.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 ashemaletube.com|AShemaleTube.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 ashley4k.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ashleyfires.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
