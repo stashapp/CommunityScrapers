@@ -1,40 +1,31 @@
 # requires: Algolia
-name: Falcon Studios
+name: ASGMax
 sceneByURL:
   - action: script
     url:
-      - falconstudios.com/en/video
+      - asgmax.com/en/video
     script:
       - python
       - ../Algolia/Algolia.py
-      - falconstudios
+      - asgmax
 sceneByFragment:
   action: script
   script:
     - python
     - ../Algolia/Algolia.py
-    - falconstudios
+    - asgmax
 sceneByName:
   action: script
   script:
     - python
     - ../Algolia/Algolia.py
-    - falconstudios
+    - asgmax
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
     - ../Algolia/Algolia.py
-    - falconstudios
+    - asgmax
     - validName
-movieByURL:
-  - action: script
-    url:
-      - falconstudios.com/en/movie/
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - falconstudios
-      - movie
 # Last Updated May 09, 2024

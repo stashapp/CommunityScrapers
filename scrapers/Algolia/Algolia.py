@@ -155,6 +155,12 @@ SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE = [
     "Upclosex"          # network_name: UpCloseX
 ]
 
+# Some sites lists scenes from different subnetworks and uses mainChannel as studio
+# Good example is asgmax.com.
+SITES_SEGMENT_USING_MAIN_CHANNEL_AS_SCENE_STUDIO = [
+    "asgmax",
+]
+
 # a list of networks (`network_name` from the API) which should pick out the
 # `sitename_pretty` for the studio name for a scene
 NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
@@ -621,6 +627,9 @@ def determine_studio_name_from_json(some_json):
     - movie
     '''
     studio_name = None
+    if some_json.get('segment') in SITES_SEGMENT_USING_MAIN_CHANNEL_AS_SCENE_STUDIO:
+        studio_name = some_json.get('mainChannel', {}).get('name', '')
+        return studio_name
     if some_json.get('sitename_pretty'):
         if some_json.get('sitename_pretty') in SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
             studio_name = \
