@@ -24,7 +24,7 @@ xPathScrapers:
           - parseDate: Jan 2, 2006
       Details: &details //meta[@name="description"]/@content
       Tags: &tags
-        Name: //div[contains(@class,"_results_tags_item")]//small
+        Name: //a[@class="_skip_popup"]/text()
       Image:
         selector: //meta[@name="twitter:image"]/@content
       Performers: &performers
@@ -70,4 +70,4 @@ xPathScrapers:
                 with: ""
           - lbToKg: true
       Measurements: (//span[contains(., "Bust Size:")]/following::span)[1]
-# Last Updated April 29, 2024
+# Last Updated May 9, 2024
