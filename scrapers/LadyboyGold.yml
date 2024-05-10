@@ -8,8 +8,11 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - ladyboygold.com/tour
+    scraper: sceneScraperLadyboyGold
+  - action: scrapeXPath
+    url:
       - tsraw.com
-    scraper: sceneScraper
+    scraper: sceneScraperTSRaw
 xPathScrapers:
   performerScraper:
     common:
@@ -48,20 +51,20 @@ xPathScrapers:
               - regex: ^
                 with: https://www.ladyboygold.com
       Details: //div[@class="profileBio"]/text()
-  sceneScraper:
+  sceneScraperLadyboyGold:
     scene:
-      Title:
+      Title: &title
         selector: //div[contains(@class, "show_video")]//h2/text()
         postProcess:
           - replace:
               - regex: \ 4[Kk]$
                 with: ""
-      Details:
+      Details: &details
         selector: //div[contains(@class, "setDescription")]/p[contains(@class, "d-none")]/text()
         concat: "\n\n"
-      Tags:
+      Tags: &tags
         Name: //div[contains(@class, "tags")]//a/text()
-      Performers:
+      Performers: &performers
         Name:
           selector: //div[contains(@class, "show_video")]//h3/text()
           postProcess:
@@ -71,18 +74,33 @@ xPathScrapers:
           split: ", "
       Studio:
         Name:
-          selector: //footer//p[contains(text(), 'Copyright')]/text()[2]
-          postProcess:
-            - replace:
-                - regex: ^(\d+\ )?(.+)\.\s+.*
-                  with: $2
-            - map:
-                TSRAW.com: TSRaw
-                LadyboyGold.com: LadyboyGold
+          fixed: LadyboyGold
       Image:
-        selector: //div[contains(@class, "show_video")]//img/@style
+        selector: &imageSelector //div[contains(@class, "show_video")]//img/@style
         postProcess:
           - replace:
-              - regex: (background:\ ?url\()(.+)(?:\).+)
-                with: https://ladyboygold.com/$2
-# Last Updated December 29, 2022
+              - regex: &imagePostProcessReplaceRegex (?:background:\ ?url\('?)(.+)(?:'?\).+)
+                with: https://ladyboygold.com/$1
+      Code: &code
+        selector: *imageSelector
+        postProcess:
+          - replace:
+              - regex: (?:.*gal=)(.+)(?:&file.*)
+                with: $1
+  sceneScraperTSRaw:
+    scene:
+      Title: *title
+      Details: *details
+      Tags: *tags
+      Performers: *performers
+      Studio:
+        Name:
+          fixed: TSRaw
+      Image:
+        selector: *imageSelector
+        postProcess:
+          - replace:
+              - regex: *imagePostProcessReplaceRegex
+                with: https://tsraw.com/$1
+      Code: *code
+# Last Updated May 10, 2024
