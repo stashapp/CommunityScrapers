@@ -74,13 +74,19 @@ xPathScrapers:
           split: ", "
       Studio:
         Name:
-          fixed: TSRaw
-      Image:
+          fixed: LadyboyGold
+      Image: &image
         selector: &imageSelector //div[contains(@class, "show_video")]//img/@style
         postProcess:
           - replace:
               - regex: &imagePostProcessReplaceRegex (?:background:\ ?url\('?)(.+)(?:'?\).+)
                 with: https://ladyboygold.com/$1
+      Code: &code
+        selector: *imageSelector
+        postProcess:
+          - replace:
+              - regex: (?:.*gal=)(.+)(?:&file.*)
+                with: $1
   sceneScraperTSRaw:
     scene:
       Title: *title
@@ -96,4 +102,5 @@ xPathScrapers:
           - replace:
               - regex: *imagePostProcessReplaceRegex
                 with: https://tsraw.com/$1
+      Code: *code
 # Last Updated May 10, 2024
