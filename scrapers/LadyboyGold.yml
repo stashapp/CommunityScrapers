@@ -75,7 +75,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: LadyboyGold
-      Image: &image
+      Image:
         selector: &imageSelector //div[contains(@class, "show_video")]//img/@style
         postProcess:
           - replace:
