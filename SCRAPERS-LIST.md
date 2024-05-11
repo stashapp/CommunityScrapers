@@ -755,6 +755,7 @@ fetiliciousfans.com|MyMemberSite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:
 fetish-lady-angelina.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fetishgirlsuk.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 fetishchimera.com|MyMemberSite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
+fetishkitsch.com|FetishKitsch.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|Fetish
 fetishnetwork.com|FetishNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 fetishpros.com|FetishPro.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 ffstockings.com|FFstockings.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
