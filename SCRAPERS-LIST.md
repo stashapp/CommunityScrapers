@@ -463,7 +463,7 @@ clubsteffi.shop|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubsweethearts.com|ClubSeventeen.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 clubtug.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cockhero.info|Cockhero.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-cocksuremen.com|CocksureMen.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+cocksuremen.com|JakeCruiseMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 cockyboys.com|CockyBoys.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 codycummings.com|NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 colbyknox.com|ColbyKnox.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -1022,6 +1022,7 @@ hotandtatted.com|hussiemodels.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotboyusa.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 hotcast.fr|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 hotcrazymess.com|Nubiles.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hotdadshotlads.com|JakeCruiseMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 hotgirlsgame.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 hotguysfuck.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 hothouse.com|FalconStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1104,6 +1105,7 @@ iwantclips.com|IWantClips.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|CDP|
 iwara.tv|Iwara.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jacquieetmichelelite.com|JacquieEtMichelElite.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 jacquieetmicheltv.net|JacquieEtMichelTV.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+jakecruise.com|JakeCruiseMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 jalifstudio.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 jamesdeen.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 janafox.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1953,6 +1955,7 @@ store.freeones.com|FreeonesStore.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:
 str8boyzseduced.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 str8hell.com|Williamhiggins.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 str8togay.com|Men/Men.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|Gay
+straightguysforgayeyes.com|JakeCruiseMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 strapattackers.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Femdom
 straplez.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
 straponcum.com|StrapOnCum.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
