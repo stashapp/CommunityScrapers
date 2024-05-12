@@ -713,6 +713,13 @@ def parse_scene_json(scene_json, url=None):
         tag_name = " ".join(tag.capitalize() for tag in tag_name.split(" "))
         if tag_name:
             list_tag.append({"name": tag.get('name')})
+            
+    # Append content_tags to list_tag
+    for tag in scene_json.get('content_tags', []):
+        if isinstance(tag, str):
+            tag = tag.capitalize()
+            list_tag.append({"name": tag})
+
     if FIXED_TAG:
         list_tag.append({"name": FIXED_TAG})
     scrape['tags'] = list_tag
@@ -818,6 +825,13 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
         tag_name = " ".join(tag.capitalize() for tag in tag_name.split(" "))
         if tag_name:
             list_tag.append({"name": tag.get('name')})
+    # Append content_tags to list_tag
+    for tag in gallery_json.get('content_tags', []):
+        if isinstance(tag, str):
+            tag = tag.capitalize()
+            list_tag.append({"name": tag})
+        else:
+            continue
     if FIXED_TAG:
         list_tag.append({"name": FIXED_TAG})
     scrape['tags'] = list_tag
