@@ -29,18 +29,18 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: (st|[nr]d|th)
-                with: ''
+                with: ""
           - parseDate: 2 Jan 2006
       Image:
         selector: >
-                  //base/@href | //script[contains(text(),"poster=")]/text()
-        concat: '__SEP__'
+          //base/@href | //script[contains(text(),"poster=")]/text()
+        concat: "__SEP__"
         postProcess:
           - replace:
               - regex: ^(.+)?/tour/__SEP__.+?poster="([^"]+)".+$
                 with: $1/$2
               - regex: ^(https:)?
-                with: 'https:'
+                with: "https:"
       Details:
         selector: //div[@class="aboutvideo"]/p
       Studio:
@@ -61,9 +61,9 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^.*Cut.*
-                with: 'Male'
-              - regex: 'logo'
-                with: 'Female'
+                with: "Male"
+              - regex: "logo"
+                with: "Female"
       Height:
         selector: //li[@class='model_profile_dicksize']/span
         postProcess:
@@ -78,37 +78,36 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: '[^\d]'
-                with: ''
+                with: ""
           - lbToKg: true
       PenisLength:
         selector: //li[@class='model_profile_dicksize']/span
         postProcess:
           - replace:
               - regex: '\.[^\d]'
-                with: ''
+                with: ""
               - regex: ^
-                with: '0.'
+                with: "0."
           - feetToCm: true
       Circumcised:
         selector: //li[@class='model_profile_cutuncut']/span
         postProcess:
           - replace:
-              - regex: '-'
-                with: ''
+              - regex: "-"
+                with: ""
       Tags:
         Name: //li[@class='model_profile_position']/span
       Image:
         selector: >
-                  //base/@href
-                  | //img[contains(@class,'model_bio_thumb')]/@src0_1x
-                  | //img[contains(@class,'model_bio_thumb')]/@src0_2x
-                  | //img[contains(@class,'model_bio_thumb')]/@src0_3x
-                  concat: '__SEP__'
+          //base/@href
+          | //img[contains(@class,'model_bio_thumb')]/@src0_1x
+          | //img[contains(@class,'model_bio_thumb')]/@src0_2x
+          | //img[contains(@class,'model_bio_thumb')]/@src0_3x
+        concat: "__SEP__"
         postProcess:
           - replace:
               - regex: ^(.+)?/__SEP__.+__SEP__(.+)?
                 with: $1/$2
               - regex: ^(https:)?
-                with: 'https:'
- 
+                with: "https:"
 # Last Updated May 10, 2023
