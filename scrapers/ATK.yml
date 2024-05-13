@@ -44,6 +44,12 @@ xPathScrapers:
           - replace:
               - regex: .+(?:url\(")(.+)(?:".+)
                 with: $1
+      Code:
+        selector: //source[@type="video/mp4"]/@src|//div[@id="movie-poster"]/@style
+        postProcess:
+          - replace:
+              - regex: .+\/[a-z]\/[a-z]{3}[0-9]{3}\/(\d+)\/.*
+                with: $1
   galleryScraper:
     gallery:
       Studio:
@@ -69,6 +75,12 @@ xPathScrapers:
         Name: //span[contains(text(),"Name:")]/following-sibling::text()
       Photographer: //span[contains(text(),"Photographer:")]/following-sibling::text()
       Details: //div[contains(text(),"Descriptions:")]/following-sibling::h1
+      Code:
+        selector: //img[contains(@alt,' Set')]/@src[1]
+        postProcess:
+          - replace:
+              - regex: https.+\/[a-z]\/[a-z]{3}[0-9]{3}\/(\d+)\/.*
+                with: $1
 driver:
   useCDP: true
 # Last Updated May 12, 2024
