@@ -49,7 +49,7 @@ xPathScrapers:
           concat: ","
           postProcess:
             - replace:
-                - regex: 'Keywords:'
+                - regex: "Keywords:"
                   with: $1
             - replace:
                 - regex: ',\s+'
@@ -59,11 +59,11 @@ xPathScrapers:
         selector: //div[contains(@class,'vidStuff')]//video[contains(@id,'html5_api')]/@poster | //div[contains(@class,'vidStuff')]//img/@src
         postProcess:
           - replace:
-            - regex: (\d*_.*((\.gif)|(\.mp4)))
-              with: t_$1
+              - regex: (\d*_.*((\.gif)|(\.mp4)))
+                with: t_$1
           - replace:
-            - regex: '(\.gif)|(\.mp4)'
-              with: ".jpg"
+              - regex: '(\.gif)|(\.mp4)'
+                with: ".jpg"
       Studio:
         Name: $model
       Performers:
