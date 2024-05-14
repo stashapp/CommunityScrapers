@@ -1,0 +1,71 @@
+name: JacquieEtMichelTV (scenes)
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.jacquieetmicheltv.net/en
+      - www.jacquieetmicheltv2.net/en
+    scraper: sceneScraper
+    
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.jacquieetmicheltv.net/en/content/list?search={}
+  scraper: sceneSearch
+  
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+  
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.jacquieetmicheltv.net/en/content/list?search={filename}
+  queryURLReplace:
+    filename:
+      - regex: ^(\d+)[^\d].* 
+        with: $1
+      - regex: .*\((\d+)\)\.[a-zA-Z\d]+$
+        with: $1
+  scraper: sceneSearch
+  
+xPathScrapers:
+  sceneSearch:
+    common:
+      $result: //div[contains(@class,'contents-list')]//contents-list
+    scene:
+      Title: $result/content-card//h2
+      Image: $result//img/@src
+      URL:
+        selector: $result//a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.jacquieetmicheltv.net
+  sceneScraper:
+    common:
+      $video: //section[contains(@class,'content-detail')]
+    scene:
+      Title: //head/meta[@property="og:title"]/@content
+      Details: 
+        selector: //head/meta[@property="og:description"]/@content
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: "[^\\.!?]*Jacquie & Michel Contact.*?$"
+                with: ""
+          - replace:
+              - regex: "([^\\.!?]*Swame.*?[\\.!]+)"
+                with: ""
+      Studio:
+        Name: //section[contains(@class,'content-detail__creator')]//a/text()
+      Code:
+        selector: //head/link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: ^.*content\/(\w+)\/.*$
+                with: $1
+      Tags:
+        Name: $video//ul//a/text()
+      Image: //head/meta[@property="og:image"]/@content
+      URL: //head/link[@rel="canonical"]/@href
+
