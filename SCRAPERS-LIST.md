@@ -237,6 +237,7 @@ bbwhighway.com|BBWHighway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bbwxxxadventures.com|MyMemberSite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 bdsm-tickling.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bdsmkinkyplay.com|MyMemberSite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
+bearboxxx.com|PPVNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Gay
 bearfilms.com|MarsMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 beatmeup.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 beauty-angels.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
@@ -403,6 +404,7 @@ burningangel.com|BurningAngel.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 bushybushy.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bustyamateurboobs.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 bustybeauties.com|Hustler.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
+butchbear.tv|PPVNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Gay
 buttman.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 cadinot.fr|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 calicarter.com|bellapass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -582,6 +584,7 @@ danidaniels.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 danni.com|Danni.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dannyoceansadventures.com|InnOfSin.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 daredorm.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
+darkalleyxt.com|PPVNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Gay
 darkcruising.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 darkdreams.xxx|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 darkroomvr.com|DarkRoomVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1723,12 +1726,15 @@ ramjetvideo.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 randyblue.com|RandyBlue.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 raunchybastards.com|AdultSiteRunner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 ravenswallowzxxx.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+rawandrough.com|PPVNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Gay
 rawattack.com|Spizoo.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rawcouples.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 rawfuck.com|PornsiteManager.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 rawfuckboys.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 rawfuckclub.com|RawFuckClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+rawnastyfuckers.com|PPVNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Gay
 rawroadnation.com|OLBMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+rawtop.tv|PPVNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Gay
 reaganfoxx.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
 realagent.xxx|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 realbikinigirls.com|WankItNow.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
@@ -2168,6 +2174,7 @@ tranzvr.com|POVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 trashbagbondage.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 traxxx.me|Traxxx.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 treasureislandmedia.com|TreasureIslandMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
+treasureislandmedia.tv|PPVNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|Gay
 trentonducati.com|NakedSword.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|Gay
 trickymasseur.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 trickyoldteacher.com|OldGoesYoung.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
