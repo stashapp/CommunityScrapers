@@ -31,7 +31,7 @@ xPathScrapers:
     common:
       $model: //a[@class="modelLink"]
     scene:
-      Title: //h1[@class="headline hidden-xs"]/text()
+      Title: //div[@class="col-md-12 col-sm-12 col-xs-12 title row-0"]/span/text()
       URL: //link[@rel="canonical"]/@href
       Date:
         selector: //div[@class="col-xs-12 date fix"]/span/em/text()
@@ -91,4 +91,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated May 13, 2024
+# Last Updated May 14, 2024
