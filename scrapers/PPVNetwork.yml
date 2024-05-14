@@ -1,0 +1,89 @@
+name: PPVNetwork
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - barebackbox.com/video
+      - bearboxxx.com/video
+      - butchbear.tv/video
+      - darkalleyxt.com/video
+      - rawandrough.com/video
+      - rawnastyfuckers.com/video
+      - rawtop.tv/video
+      - treasureislandmedia.tv/video
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h3
+      Details: //p[@id='watch_description']
+      Date: //p[@class='addedDate']
+      Tags:
+        Name:
+          selector:  //base/@href | //div[@id='watch_categories_items']//a
+          concat: ','
+          postProcess:
+            - replace:
+                - regex: ^[^,]+
+                  with: 'Gay'
+          split: ','
+      Performers:
+        Name: //div[@id='watch_actors_items']//a
+      Image:
+        selector: //script[contains(.,'splash')]
+        postProcess:
+          - replace:
+              - regex: .+?splash:\s*'([^']+).+
+                with: $1
+      Studio:
+        Name: //p[@class='studio']//a
+
+driver:
+  # Requires CDP to get by the "consent" screen, along with a "CONSENT" cookie with a value of "Y" for each top level URL
+  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+  cookies:
+    - Cookies:
+        - Name: CONSENT
+          Domain: www.barebackbox.com
+          Value: Y
+          Path: /
+    - Cookies:
+        - Name: CONSENT
+          Domain: www.bearboxxx.com
+          Value: Y
+          Path: /
+    - Cookies:
+        - Name: CONSENT
+          Domain: www.butchbear.tv
+          Value: Y
+          Path: /
+    - Cookies:
+        - Name: CONSENT
+          Domain: www.darkalleyxt.com
+          Value: Y
+          Path: /
+    - Cookies:
+        - Name: CONSENT
+          Domain: www.rawandrough.com
+          Value: Y
+          Path: /
+    - Cookies:
+        - Name: CONSENT
+          Domain: www.rawnastyfuckers.com
+          Value: Y
+          Path: /
+    - Cookies:
+        - Name: CONSENT
+          Domain: www.rawtop.tv
+          Value: Y
+          Path: /
+    - Cookies:
+        - Name: CONSENT
+          Domain: www.treasureislandmedia.tv
+          Value: Y
+          Path: /
+
+# Last Updated May 13, 2024
