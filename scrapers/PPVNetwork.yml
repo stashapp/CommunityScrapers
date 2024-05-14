@@ -45,50 +45,42 @@ driver:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
   cookies:
-    - CookieURL: https://barebackbox.com
-      Cookies:
+    - Cookies:
         - Name: CONSENT
           Domain: www.barebackbox.com
           Value: Y
           Path: /
-    - CookieURL: https://bearboxxx.com
-      Cookies:
+    - Cookies:
         - Name: CONSENT
           Domain: www.bearboxxx.com
           Value: Y
           Path: /
-    - CookieURL: https://butchbear.tv
-      Cookies:
+    - Cookies:
         - Name: CONSENT
           Domain: www.butchbear.tv
           Value: Y
           Path: /
-    - CookieURL: https://darkalleyxt.com
-      Cookies:
+    - Cookies:
         - Name: CONSENT
           Domain: www.darkalleyxt.com
           Value: Y
           Path: /
-    - CookieURL: https://rawandrough.com
-      Cookies:
+    - Cookies:
         - Name: CONSENT
           Domain: www.rawandrough.com
           Value: Y
           Path: /
-    - CookieURL: https://rawnastyfuckers.com
-      Cookies:
+    - Cookies:
         - Name: CONSENT
           Domain: www.rawnastyfuckers.com
           Value: Y
           Path: /
-    - CookieURL: https://rawtop.tv
-      Cookies:
+    - Cookies:
         - Name: CONSENT
           Domain: www.rawtop.tv
           Value: Y
           Path: /
-    - CookieURL: https://treasureislandmedia.tv
-      Cookies:
+    - Cookies:
         - Name: CONSENT
           Domain: www.treasureislandmedia.tv
           Value: Y
