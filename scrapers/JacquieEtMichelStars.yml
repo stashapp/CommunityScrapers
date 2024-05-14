@@ -1,0 +1,130 @@
+name: JacquieEtMichelStars (scenes, performers)
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jacquieetmichelstars.com/en/videos
+    scraper: sceneScraper
+    
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.jacquieetmichelstars.com/en/recherche/{}.html
+  scraper: sceneSearch
+  
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+  
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.jacquieetmichelstars.com/en/recherche/{filename}.html
+  queryURLReplace:
+    filename:
+      - regex: ^(\d+)[^\d].*
+        with: $1
+      - regex: .*\((\d+)\)\.[a-zA-Z\d]+$
+        with: $1
+  scraper: sceneSearch
+  
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.jacquieetmichelstars.com/en/recherche/{}.html
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - jacquieetmichelstars.com/en/pornstar
+    scraper: performerScraper
+    
+xPathScrapers:
+  performerSearch:
+    common:
+      $result: //div[contains(@class,'section__video-wrapper')]/div/a/@href
+    performer:
+      Name:
+        selector: $result
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.jacquieetmichelstars.com
+          - subScraper:
+              selector: //section[contains(@class,'section__featured-star')]/section//h3
+      URL:
+        selector: $result
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.jacquieetmichelstars.com
+          - subScraper:
+              selector: //section[contains(@class,'section__featured-star')]/section//a[contains(@class,'button-star-profile')]/@href
+              postProcess:
+                - replace:
+                    - regex: ^
+                      with: https://www.jacquieetmichelstars.com
+  performerScraper:
+     performer:
+      URL: //head/link[@rel="canonical"]/@href
+      Name:
+        selector: //div[contains(@class,'section__actor_profile_wrapper')]/div[contains(@class,'section__actor_profile_wrapper_user')]/span/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ^\s+
+                with: ""
+              - regex: \s+$
+                with:
+      Image: //div[contains(@class,'section__actor_profile_wrapper')]/div[contains(@class,'section__actor_profile_wrapper_user_thumb')]/img/@src
+      Details:
+        selector: //div[contains(@class,'section__actor_profile_wrapper_bio_details')]//text()
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: "(?i)<a[^>]*>"
+                with: ""
+  sceneSearch:
+    common:
+      $result: //section[contains(@class,'section__video')]/div
+    scene:
+      Title: $result//h2
+      Image: $result//img/@src
+      URL:
+        selector: $result//a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.jacquieetmichelstars.com
+  sceneScraper:
+    common:
+      $video: //section[contains(@class,'section__movie')]/div
+      $perf: //section[contains(@class,'section__featured-star')]
+    scene:
+      Title: $video/h1
+      Details: 
+        selector: $video//div[contains(@class,'section__movie-description')]/p
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: "([^\\.!?]*Swame.*?[\\.!]+)"
+                with: ""
+      Performers:
+        Name: 
+          selector: $perf/div/h2/text()
+          postProcess:
+          - replace:
+              - regex: ^.*:\s+
+                with: ""
+        URL:
+          selector: $perf/div[contains(@class,'section__button')]/a/@href
+          postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.jacquieetmichelstars.com
+      Tags:
+        Name: $video//div[contains(@class,'section__movie-categories')]//a/text()
+      Image: $video//img/@src
+      Studio:
+        Name: 
+          fixed: "Jacquie & Michel Stars"
+      URL: //head/link[@rel="canonical"]/@href
+
+# Last Updated May 13, 2024
