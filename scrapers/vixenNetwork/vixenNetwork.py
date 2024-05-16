@@ -42,6 +42,8 @@ MARKER_SEC_DIFF = 10
 IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
 # Tags you want to add in the Scraper window.
 FIXED_TAGS = ""
+# Add studio default tags to scenes (eg, "Anal Sex" for "Tushy")
+USE_STUDIO_DEFAULT_TAGS = True
 # Check the SSL Certificate.
 CHECK_SSL_CERT = True
 # Local folder with JSON inside (Only used if scene isn't found from the API)
@@ -244,8 +246,9 @@ def process_chapters(scene_id, api_json):
 
 class Site:
 
-    def __init__(self, name: str):
+    def __init__(self, name: str, deftags: list):
         self.name = name
+        self.deftags = deftags
         self.id = name.replace(' ', '').upper()
         self.api = "https://www." + self.id.lower() + ".com/graphql"
         self.home = "https://www." + self.id.lower() + ".com"
@@ -366,6 +369,9 @@ class Site:
                     scene['tags'].append({"name": tag['name']})
             elif tags:
                 for tag in data['tags']:
+                    scene['tags'].append({"name": tag})
+            if USE_STUDIO_DEFAULT_TAGS:
+                for tag in self.deftags:
                     scene['tags'].append({"name": tag})
 
             if data.get('images'):
@@ -492,14 +498,14 @@ class Site:
 
 
 studios = {
-    Site('Blacked Raw'),
-    Site('Blacked'),
-    Site('Deeper'),
-    Site('Milfy'),
-    Site('Tushy'),
-    Site('Tushy Raw'),
-    Site('Slayed'),
-    Site('Vixen')
+    Site('Blacked Raw',['Black Male']),
+    Site('Blacked',['Black Male']),
+    Site('Deeper',[]),
+    Site('Milfy',['MILF']),
+    Site('Tushy',['Anal Sex']),
+    Site('Tushy Raw',['Anal Sex']),
+    Site('Slayed',['Lesbian Sex']),
+    Site('Vixen',[])
 }
 
 frag = json.loads(sys.stdin.read())
