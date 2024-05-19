@@ -13,80 +13,87 @@ performerByURL:
 
 xPathScrapers:
   sceneScraper:
-    common:
-      $script: //script[@type="application/ld+json"]
-      $info: //div[@class="text"]
     scene:
       Title:
-        selector: //div[@class="video-descr__title"]//h2
+        selector: //div[contains(@class,"galleryTitle")]/text()
         postProcess:
           - replace:
               - regex: " HD"
                 with: ""
       Date:
-        selector: $script/text()
+        selector: //div[contains(@class,"cell avg_rating")]/div[4]/text()
         postProcess:
-          - replace:
-              - regex: .*"(\d{4}-\d{2}-\d{2})".*
-                with: $1
-          - parseDate: 2006-01-02
+          - parseDate: 02/January/2006
       Code:
-        selector: //script[@type="application/ld+json"]
+        selector: //a[contains(@class,"option_button")]/@href
         postProcess:
           - replace:
-              - regex: .+id\=(\d+)".+
+              - regex: .+id\=(\d+)
                 with: $1
-      Director:
-        selector: //div[@class='video-details'][contains(strong,"Director:")]/text()
-      Tags:
-        Name: //p/a[@href[contains(., "category.php")]]/text()
-      Performers:
-        Name:
-          selector: //div[@class="video-descr__model-item"]/p/a/text()
       Details:
-        selector: //div[@class="video-descr__content"]/p/text()
-        concat: "\n"
-      Image:
-        selector: //div[contains(@class, "player-wrapper")]/@style
-        postProcess:
-          - replace:
-              - regex: .*'(.*)'.*
-                with: https:$1
+        selector: //span[contains(@class,"update_description")]/text()
+        concat: "\n\n"
+      Performers:
+        Name: //div[contains(@class,"model_list")]//span[contains(@itemprop,"name")]/text()
       Studio:
         Name:
           fixed: Staxus
+      Image:
+        selector: //div[contains(@class,"galleryTitle")]/text()
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://staxus.com/trial/search.php?query=
+            - regex: \s
+              with: +
+          - subScraper:
+              selector: //div[@class="screenshotWrapper"][1]/a/@style
+              postProcess:
+                - replace:
+                    - regex: .+background-image:\s*url\((.*?)\);.+
+                      with: $1
+                    - regex: ^
+                      with: https://staxus.com/
 
   performerScraper:
     performer:
-      Name: //div[@class="model-header-details"]/h4/text()
+      Name: //span[@class="title_bar_hilite"]/text()
+      Image:
+        selector: >
+          //div[@class="cell_top cell_thumb"]/img/@src0_3x | //div[@class="cell_top cell_thumb"]/img/@src0
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://staxus.com
       Gender:
         fixed: Male
       Height:
-        selector: //p[@class="flex-item"]/b[text()="Height:"]/following-sibling::span[1]/text()
+        selector: >
+          //div[@class="model_bio"]//b[contains(text(),'Height')]/../following-sibling::div/text()
         postProcess:
           - replace:
-              - regex: "cm.*"
-                with: ""
-              - regex: '^.*/(\s)?'
-                with: ""
-      Measurements:
-        selector: //p[@class="flex-item"]/b[text()="Cock size:"]/following-sibling::span[1]/text()
+            - regex: '[^0-9.]'
+              with: ""
+      PenisLength:
+        selector: >
+          //div[@class="model_bio"]//b[contains(text(),'Measurements')]/../following-sibling::div/text()
         postProcess:
           - replace:
-              - regex: "cm.*"
-                with: ""
-              - regex: '^.*/(\s)?'
-                with: ""
+            - regex: '\,.+'
+              with: ""
+            - regex: '[^0-9.]'
+              with: ""
       Birthdate:
-        selector: //p[@class="flex-item"]/b[text()="Date of birth:"]/following-sibling::span[1]/text()
+        selector: >
+          //div[@class="model_bio"]//b[contains(text(),'Age')]/../following-sibling::div/text()
         postProcess:
           - replace:
               - regex: '(\d+)\S+\s+([a-zA-Z]+)\D+(\d+)'
                 with: "$1 $2 $3"
-          - parseDate: 2 January 2006
-
+          - parseDate: 02/01/2006
       Country:
-        selector: //p[@class="flex-item"]/b[text()="Ethnicity:"]/following-sibling::span[1]/text()
+        selector: >
+          //div[@class="model_bio"]//b[contains(text(),'Nationality')]/../following-sibling::div/text()
         postProcess:
           - map:
               # https://en.wikipedia.org/wiki/List_of_adjectival_and_demonymic_forms_for_countries_and_nations
@@ -384,12 +391,6 @@ xPathScrapers:
               "Zambian": "Zambia"
               "Zimbabwean": "Zimbabwe"
               "Åland Island": "Åland Islands"
-      Image:
-        selector: //div[@class="item active"]/img/@src
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https:"
       Details:
-        selector: //div[@class="video-descr__section col-md-12"]//p[2]/text()
-# Last Updated December 23, 2022
+        selector: //div[@class="model_bio"]/div[last()]/text()
+# Last Updated May 19, 2024
