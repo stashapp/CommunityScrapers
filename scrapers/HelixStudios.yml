@@ -73,7 +73,10 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: 960w
-                with: 1500w
+                with: 1920w
+          - replace:
+              - regex: '.jpg'
+                with: '_1920.jpg'
       Director:
         selector: //span[contains(@class, "info-item director")]/text()
       Code:
@@ -140,4 +143,4 @@ xPathScrapers:
           - replace:
               - regex: $
                 with: " "
-# Last Updated January 14, 2024
+# Last Updated May 19, 2024
