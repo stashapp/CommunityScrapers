@@ -4,6 +4,13 @@ sceneByURL:
     url:
       - vogov.com
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - vogov.com
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -19,6 +26,30 @@ xPathScrapers:
         Name: //div[@class="info-video-category"]//a
       Studio:
         Name:
-          fixed: vogov
+          fixed: VogoV
       Image: //meta[@property="og:image"]/@content
-# Last Updated March 05, 2021
+
+  performerScraper:
+    performer:
+      Name: //div[@class='m-info-details']/h3
+      HairColor: //li[span[contains(.,'Hair:')]]/text()
+      EyeColor: //li[span[contains(.,'Eyes:')]]/text()
+      Height: 
+        selector: //li[span[contains(.,'Height:')]]/text()
+        postProcess:
+          - replace:
+              - regex: .+?\((\d+).+
+                with: $1
+      Weight: 
+        selector: //li[span[contains(.,'Weight:')]]/text()
+        postProcess:
+          - replace:
+              - regex: .+?\((\d+).+
+                with: $1
+      Measurements: //li[span[contains(.,'Measurements:')]]/text()
+      Country: //li[span[contains(.,'Nationality:')]]/text()
+      Details: //div[@class='m-info-description']/article
+      Tags: 
+        Name: //div[@class='m-info-category']/a
+      Image: //img[contains(@class,'thumb')]/@src
+# Last Updated May 21, 2024                             
