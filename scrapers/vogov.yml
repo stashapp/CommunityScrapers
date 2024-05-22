@@ -47,7 +47,7 @@ xPathScrapers:
               - regex: .+?\((\d+).+
                 with: $1
       Measurements: //li[span[contains(.,'Measurements:')]]/text()
-      Nationality: //li[span[contains(.,'Nationality:')]]/text()
+      Country: //li[span[contains(.,'Nationality:')]]/text()
       Details: //div[@class='m-info-description']/article
       Tags: 
         Name: //div[@class='m-info-category']/a
