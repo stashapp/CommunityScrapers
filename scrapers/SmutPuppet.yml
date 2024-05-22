@@ -10,7 +10,9 @@ sceneByURL:
       - goldenslut.com/update
       - grannyvsbbc.com/update
       - jeffsmodels.com/update
+      - maturefucksteen.com/update
       - milfsodomy.com/update
+      - porn-uk.com/update
       - smutmerchants.com/update
       - smutpuppet.com/update
       - suggabunny.com/update
@@ -64,4 +66,4 @@ xPathScrapers:
           - replace:
               - regex: \/static\/(\w+\.[a-z]{3})\/.+\/api\/update\/(\d{3,})\/.+
                 with: https://$1/update/$2/
-# Last Updated July 27, 2023
+# Last Updated May 22, 2024

@@ -1321,6 +1321,7 @@ massagebait.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 masterkeithmovies.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mature.nl|MatureNL.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 mature4k.com|Vip4K.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+maturefucksteen.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maturegapers.com|DollsHub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maturegynoexam.com|DollsHub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 maturegynospy.com|DollsHub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -1633,6 +1634,7 @@ plushies.tv|Plushies.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pmvhaven.com|PMVHeaven.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|PMVs
 popp-sylvie.eu|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 porkvendors.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+porn-uk.com|SmutPuppet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornaddict.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornbanx.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 pornbcn.com|Pornbcn.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
