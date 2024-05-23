@@ -54,9 +54,8 @@ def ensure_requirements(*deps: str):
 
     parsed_deps = {dep: _parse_package(dep) for dep in deps}
 
-    deps_folder = current_path.parent / "dependencies"
-    if deps_folder.exists():
-        sys.path.insert(0, str(deps_folder))
+    deps_folder = current_path.parent.parent / "automatic_dependencies"
+    sys.path.insert(0, str(deps_folder))
 
     try:
         import importlib
@@ -97,4 +96,6 @@ def ensure_requirements(*deps: str):
         ],
         stdout=subprocess.DEVNULL,
     )
-    log.warning("Dependencies installed successfully")
+
+    importlib.invalidate_caches()
+    log.warning(f"Dependencies installed successfully into {deps_folder}")
