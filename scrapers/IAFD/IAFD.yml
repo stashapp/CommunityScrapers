@@ -4,7 +4,7 @@ name: IAFD
 performerByName:
   action: script
   script:
-    - python3
+    - python
     - IAFD.py
     - search
 performerByURL:
@@ -13,23 +13,25 @@ performerByURL:
       - iafd.com/person.rme/perfid=
     action: script
     script:
-      - python3
+      - python
       - IAFD.py
       - performer
 sceneByURL:
   - url:
       - iafd.com/title.rme/id=
+      - iafd.com/title.rme/title=
     action: script
     script:
-      - python3
+      - python
       - IAFD.py
       - scene
 movieByURL:
   - url:
       - iafd.com/title.rme/id=
+      - iafd.com/title.rme/title=
     action: script
     script:
-      - python3
+      - python
       - IAFD.py
       - movie
-# Last Updated April 29, 2024
+# Last Updated May 23, 2024
