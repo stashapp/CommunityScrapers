@@ -16,102 +16,6 @@ api_key =
 )
 
 
-# GraphQL introspection
-#
-# if a graphQL API changes, you can use this as the query string value to
-# discover available API fields, queries, etc.
-GRAPHQL_INTROSPECTION = """
-    fragment FullType on __Type {
-    kind
-    name
-    fields(includeDeprecated: true) {
-        name
-        args {
-        ...InputValue
-        }
-        type {
-        ...TypeRef
-        }
-        isDeprecated
-        deprecationReason
-    }
-    inputFields {
-        ...InputValue
-    }
-    interfaces {
-        ...TypeRef
-    }
-    enumValues(includeDeprecated: true) {
-        name
-        isDeprecated
-        deprecationReason
-    }
-    possibleTypes {
-        ...TypeRef
-    }
-    }
-    fragment InputValue on __InputValue {
-    name
-    type {
-        ...TypeRef
-    }
-    defaultValue
-    }
-    fragment TypeRef on __Type {
-    kind
-    name
-    ofType {
-        kind
-        name
-        ofType {
-        kind
-        name
-        ofType {
-            kind
-            name
-            ofType {
-            kind
-            name
-            ofType {
-                kind
-                name
-                ofType {
-                kind
-                name
-                ofType {
-                    kind
-                    name
-                }
-                }
-            }
-            }
-        }
-        }
-    }
-    }
-    query IntrospectionQuery {
-    __schema {
-        queryType {
-        name
-        }
-        mutationType {
-        name
-        }
-        types {
-        ...FullType
-        }
-        directives {
-        name
-        locations
-        args {
-            ...InputValue
-        }
-        }
-    }
-    }
-"""
-
-
 def callGraphQL(query: str, variables: dict | None = None):
     api_key = config.api_key
     url = config.url
@@ -131,9 +35,9 @@ def callGraphQL(query: str, variables: dict | None = None):
         "DNT": "1",
         "ApiKey": api_key,
     }
-    json = {"query": query}
+    json: dict[str, str | dict] = {"query": query}
     if variables:
-        json["variables"] = variables  # type: ignore
+        json["variables"] = variables
     response = requests.post(stash_url, json=json, headers=headers)
     if response.status_code == 200:
         result = response.json()
@@ -142,23 +46,23 @@ def callGraphQL(query: str, variables: dict | None = None):
             log.error(f"[GraphQL] {errors}")
         return result.get("data")
     elif response.status_code == 401:
-        log.error(
-            "[GraphQL] HTTP Error 401, Unauthorised. You can add a API Key in 'config.ini' in the 'py_common' folder"
-        )
-        return None
-    elif response.status_code == 404:
-        if "localhost:9999" in url:
+        if not api_key:
             log.error(
-                "[GraphQL] HTTP Error 404, Not Found. Your local stash server is your endpoint, but port 9999 did not respond. Did you change stash's port? Edit 'config.ini' in the 'py_common' folder to point at the correct port for stash!"
+                "[GraphQL] Unable to authenticate with Stash: you need to set the API Key in 'config.ini' in the 'py_common' folder"
             )
         else:
             log.error(
-                "[GraphQL] HTTP Error 404, Not Found. Make sure 'config.ini' in the 'py_common' folder points at the correct address and port!"
+                "[GraphQL] Unable to authenticate with Stash: make sure 'config.ini' in the 'py_common' folder has the correct API Key"
             )
+        return None
+    elif response.status_code == 404:
+        log.error(
+            "[GraphQL] Unable to connect to Stash: make sure 'config.ini' in the 'py_common' folder has the correct URL"
+        )
         return None
 
     raise ConnectionError(
-        f"[GraphQL] Query failed: {response.status_code} - {response.content}"
+        f"[GraphQL] Unexpected error: {response.status_code} - {response.content}"
     )
 
 
@@ -1236,5 +1140,102 @@ def getGalleryPath(gallery_id: str | int) -> str | None:
     variables = {"id": gallery_id}
     result = callGraphQL(query, variables) or {}
     # Galleries can either be a folder full of files or a zip file
-    return dig(result, "findGallery", "folder", "path") \
-        or dig(result, "findGallery", "files", 0, "path")
+    return dig(result, "findGallery", "folder", "path") or dig(
+        result, "findGallery", "files", 0, "path"
+    )
+
+
+# GraphQL introspection
+#
+# if a graphQL API changes, you can use this as the query string value to
+# discover available API fields, queries, etc.
+GRAPHQL_INTROSPECTION = """
+    fragment FullType on __Type {
+    kind
+    name
+    fields(includeDeprecated: true) {
+        name
+        args {
+        ...InputValue
+        }
+        type {
+        ...TypeRef
+        }
+        isDeprecated
+        deprecationReason
+    }
+    inputFields {
+        ...InputValue
+    }
+    interfaces {
+        ...TypeRef
+    }
+    enumValues(includeDeprecated: true) {
+        name
+        isDeprecated
+        deprecationReason
+    }
+    possibleTypes {
+        ...TypeRef
+    }
+    }
+    fragment InputValue on __InputValue {
+    name
+    type {
+        ...TypeRef
+    }
+    defaultValue
+    }
+    fragment TypeRef on __Type {
+    kind
+    name
+    ofType {
+        kind
+        name
+        ofType {
+        kind
+        name
+        ofType {
+            kind
+            name
+            ofType {
+            kind
+            name
+            ofType {
+                kind
+                name
+                ofType {
+                kind
+                name
+                ofType {
+                    kind
+                    name
+                }
+                }
+            }
+            }
+        }
+        }
+    }
+    }
+    query IntrospectionQuery {
+    __schema {
+        queryType {
+        name
+        }
+        mutationType {
+        name
+        }
+        types {
+        ...FullType
+        }
+        directives {
+        name
+        locations
+        args {
+            ...InputValue
+        }
+        }
+    }
+    }
+"""
