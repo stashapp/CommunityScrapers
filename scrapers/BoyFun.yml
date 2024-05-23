@@ -3,28 +3,83 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - boyfun.com/video
+      - jawked.com/video
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - boyfun.com/model
+      - jawked.com/model
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $perf: //span[@class="models"]/span[@class="content"]/a
     scene:
-      Title: //span[@class="title"]
+      Title: //span[@class='title']/text()
       Image: //video/@poster | //div[@class="video-poster"]/img/@src
       Date:
-        selector: //span[@class="date"]/span[@class="content"]
+        selector: //*[span[@class='heading' and contains(.,'Added')]]/span[@class='content']
         postProcess:
           - replace:
               - regex: (st|[nr]d|th)
                 with: ""
           - parseDate: Jan 2, 2006
       Details:
-        selector: //div[@class="heading"]/following-sibling::text()
-        concat: "\n\n"
+        selector: //div[@class='content-information-description']/p/text()
       Performers:
-        Name: $perf/text()
-        URL: $perf/@href
+        Name: //*[span[@class='heading' and contains(.,'Starring')]]/span[@class='content']/a
+        URL: //*[span[@class='heading' and contains(.,'Starring')]]/span[@class='content']/a/href()
       Studio:
         Name:
-          fixed: BoyFun
-# Last Updated March 19, 2023
+          selector: //div[@class='logo-holder']/a/@href
+          postProcess:
+            - replace:
+                - regex: .+?\.([^\.]+).+
+                  with: $1
+            - map:
+                boyfun: BoyFun
+                jawked: Jawked
+
+  performerScraper:
+    performer:
+      Name: //section[@class='model-section']//img/@alt
+      Image: //section[@class='model-section']//img/@src
+      Country: //li[span[contains(.,'Nationality')]]/span[@class='value']
+      Height:
+        selector: //li[span[contains(.,'Height')]]/span[@class='value']
+        postProcess:
+          - replace:
+              - regex: (\d+)\s*cm.+
+                with: $1
+      Weight:
+        selector: //li[span[contains(.,'Weight')]]/span[@class='value']
+        postProcess:
+          - replace:
+              - regex: (\d+)\s*kg.+
+                with: $1
+      PenisLength:
+        selector: //li[span[contains(.,'Dick Size')]]/span[@class='value']
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0."
+          - feetToCm: true
+      Circumcised: //li[span[contains(.,'Cut/Uncut')]]/span[@class='value']
+      Tags:
+        Name: //li[span[contains(.,'Role')]]/span[@class='value']
+
+driver:
+  cookies:
+    - CookieURL: https://www.boyfun.com
+      Cookies:
+        - Name: warningHidden
+          Value: "hide"
+          Domain: "www.boyfun.com"
+          Path: "/"
+    - CookieURL: https://www.jawked.com
+      Cookies:
+        - Name: warningHidden
+          Value: "hide"
+          Domain: "www.jawked.com"
+          Path: "/"
+
+# Last Updated May 22, 2024
