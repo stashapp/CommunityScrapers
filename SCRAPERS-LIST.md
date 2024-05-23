@@ -519,6 +519,7 @@ czechbangbus.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechbiporn.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechbitch.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechboobs.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechcabins.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechcasting.com|czechcasting.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechcouples.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechdeviant.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -526,6 +527,7 @@ czechdungeon.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechescortgirls.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechestrogenolit.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechexecutor.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechexperiment.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechfantasy.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechfirstvideo.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechgame.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -549,10 +551,14 @@ czechmassage.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechmegaswingers.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechorgasm.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechparties.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechpawnshop.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechpool.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechrealdolls.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechsauna.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechsexcasting.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechsexparty.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-czechshemale.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+czechshemale.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
+czechsnooper.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechsolarium.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechspy.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 czechstreets.com|Czechav.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
