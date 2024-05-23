@@ -18,8 +18,6 @@ galleryByURL: *coverByURL
 xPathScrapers:
   performerSearch:
     performer:
-      #      Name: //a[@class="model-name"]/text()               Version to get only the name
-      #      Name: //a[@class="model-name"]/../../a/@title       Version to get a little info on label/studio as well
       Name:
         selector: //figcaption/span
         postProcess:
@@ -29,45 +27,38 @@ xPathScrapers:
       URL: //a[@class="model-name"]/@href
   performerScraper:
     performer:
-      Name: //span[@class="model-name"]/text()
-      URL:
-        selector: //meta[@itemprop="url"]/@content
+      Name: //span[@class="model-name"]
+      URL: //link[@rel="canonical"]/@href
       Twitter: //a[text()="TWITTER"]/@href
       Instagram: //a[text()="INSTAGRAM"]/@href
       Birthdate:
-        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
         postProcess:
           - parseDate: January 2006
-          - parseDate: ??-??-2006
+          - parseDate: "??-??-2006"
       Ethnicity:
-        selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/../text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/following-sibling::text()
         postProcess:
           - replace:
-              - regex: Asian
-                with: "asian"
-              - regex: Caucasian
-                with: "white"
-              - regex: Black
-                with: "black"
-              - regex: Latin
-                with: "hispanic"
+              - regex: White
+                with: Caucasian
+              - regex: Hispanic
+                with: Latin
       Country:
         selector: //span[@itemprop="nationality"]/text()
         postProcess:
           - replace:
               - regex: "United States of America"
                 with: "United States"
-      #EyeColor: not listed
       Height:
-        selector: //li/span[@class="list-quest"][contains(text(),'Height')]/../text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Height')]/following-sibling::text()
         postProcess:
           - replace:
               - regex: ^(\d+).+$
                 with: "$1"
-      Measurements:
-        selector: //li/span[@class="list-quest"][contains(text(),'Measurements')]/../text()
+      Measurements: //li/span[@class="list-quest"][contains(text(),'Measurements')]/following-sibling::text()
       FakeTits:
-        selector: //li/span[@class="list-quest"][contains(text(),'Breasts')]/../text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Breasts')]/following-sibling::text()
         postProcess:
           - replace:
               - regex: ^[^\(]+\(([^\)]+)\).*$
@@ -77,17 +68,15 @@ xPathScrapers:
               - regex: Real
                 with: "No"
       CareerLength:
-        selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/../text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/following-sibling::text()
         concat: "-"
       Aliases:
         selector: //meta[@itemprop="additionalName"]/@content
         concat: ", "
-      Tattoos:
-        selector: //li/span[@class="list-quest"][contains(text(),'Tattoos')]/../text()
-      Piercings:
-        selector: //li/span[@class="list-quest"][contains(text(),'Piercings')]/../text()
+      Tattoos: //li/span[@class="list-quest"][contains(text(),'Tattoos')]/following-sibling::text()
+      Piercings: //li/span[@class="list-quest"][contains(text(),'Piercings')]/following-sibling::text()
       Image:
-        selector: //meta[@itemprop="url"]/@content
+        selector: //link[@rel="canonical"]/@href
         postProcess:
           - replace:
               - regex: https:\/\/www\.thenude\.com\/
@@ -97,11 +86,11 @@ xPathScrapers:
       Gender:
         selector: //meta[@itemprop="gender"]/@content
       Details:
-        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
         postProcess:
           - replace:
               - regex: ^
-                with: "Actual scraped Birthdate:"
+                with: "Actual scraped birthdate: "
   coverScraper:
     scene:
       Title: &title
@@ -125,7 +114,7 @@ xPathScrapers:
           split: ","
       Studio: &studio
         Name: //h1/span[3]/a/text()
-      Director: //h2/a/text()
+      Director: //h2/a
       Image:
         selector: //a[@class="gallery-image-link"]/img/@src
     gallery:
@@ -134,6 +123,5 @@ xPathScrapers:
       Performers: *performers
       Tags: *tags
       Studio: *studio
-      Photographer: //h2/a/text() 
-
-# Last Updated April 25, 2024
+      Photographer: //h2/a
+# Last Updated May 23, 2024
