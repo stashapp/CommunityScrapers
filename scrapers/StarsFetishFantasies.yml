@@ -1,0 +1,60 @@
+name: StarsFetishFantasies
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - starsfetishfantasies.com/models/
+    scraper: performerScraper
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - starsfetishfantasies.com/updates/
+    scraper: sceneScraper
+
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name:
+        selector: //h2[@class='title']/a/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: ^/ (.*)
+              with: $1
+      Image:
+        selector: //div[contains(@class, 'model_picture')]/img[contains(@class, 'model_bio_thumb')]/@src0_1x
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://starsfetishfantasies.com$1
+      URL: //link[@rel='canonical']/@href
+  sceneScraper:
+    common:
+      $scene: //div[contains(@class, 'updatesBlock')]/div[@class='update_block']//div[@class='update_block_info']
+    scene:
+      Title: $scene/span[@class='update_title']/text()
+      Details: $scene/span[@class='latest_update_description']/text()
+      Code:
+        selector: //meta[@property='og:image']/@content
+        postProcess:
+          - replace:
+            - regex: ^https://starsfetishfantasies\.com/content/([^/]+)/\d\..+$
+              with: $1
+      URL: //link[@rel='canonical']/@href
+      Date:
+        selector: $scene/span[@class='availdate']/br[1]/preceding-sibling::text()[1]
+        postProcess:
+          - replace:
+            - regex: ^(\d{2}/\d{2}/\d{4}).*$
+              with: $1
+          - parseDate: '01/02/2006'
+      Image: //meta[@property='og:image']/@content
+      Studio:
+        Name:
+          fixed: StarsFetishFantasies.com
+      Tags:
+        Name: $scene/span[@class='update_tags']/a/text()
+      Performers:
+        Name: $scene/span[@class='tour_update_models']/a/text()
+        URL: $scene//span[@class='tour_update_models']/a/@href
+# Last Updated May 23, 2024
