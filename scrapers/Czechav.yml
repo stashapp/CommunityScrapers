@@ -6,9 +6,11 @@ sceneByURL:
       - czechamateurs.com/
       - czechbangbus.com/
       - czechbitch.com/
+      - czechcabins.com/
       - czechcouples.com/
       - czechdungeon.com/
       - czechestrogenolit.com/
+      - czechexperiment.com/
       - czechfantasy.com/
       - czechfirstvideo.com/
       - czechgame.com/
@@ -28,6 +30,10 @@ sceneByURL:
       - czechmegaswingers.com/
       - czechorgasm.com/
       - czechparties.com/
+      - czechpawnshop.com/
+      - czechpool.com/
+      - czechsauna.com/
+      - czechsnooper.com/
       - czechsolarium.com/
       - czechspy.com/
       - czechstreets.com/
@@ -46,7 +52,7 @@ xPathScrapers:
     common:
       $studio: //h1/img/@alt
     scene:
-      Title: 
+      Title:
         selector: //div/h1[@class='nice-title']
         postProcess:
           - replace:
@@ -68,4 +74,4 @@ xPathScrapers:
               - regex: .+(?:"uploadDate":\s*")([^T]+).+
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated February 17, 2024
+# Last Updated May 23, 2024
