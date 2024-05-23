@@ -346,7 +346,7 @@ boxtrucksex.com|BoxTruckSex.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 boycrush.com|BoyCrush.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 boyforsale.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 boyfriendsharing.com|Mypervmom.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-boyfun.com|BoyFun.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+boyfun.com|BoyFun.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 boygusher.com|BluMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 boysatcamp.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 boysdestroyed.com|AMAMultimedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
@@ -1128,6 +1128,7 @@ javhub.com|JavHub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|JAV Uncensored
 javlibrary.com|JavLibrary.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|JAV
 javlibrary.com|JavLibrary_python.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|JAV
 jawbreakerz.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+jawked.com|BoyFun.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 jaxslayher.com|JaxSlayher.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 jaysinxxx.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 jayspov.net|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
