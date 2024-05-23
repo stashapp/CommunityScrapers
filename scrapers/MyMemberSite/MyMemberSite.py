@@ -26,6 +26,14 @@ _studios = {
         "api": "aerie-saunders.mymember.site",
         "name": "Aerie Saunders",
     },
+    "aglaeaproductions.com": {
+        "api": "aglaeaproductions.mymember.site",
+        "name": "Aglaea X",
+    },
+    "aliceshawbelly.com": {
+        "api": "aliceshawbelly.mymember.site",
+        "name": "Alice Shaw",
+    },
     "alterpic.com": {
         "api": "alterpic.mymember.site",
         "name": "Alterpic",
@@ -78,9 +86,17 @@ _studios = {
         "api": "cristalkinky.mymember.site",
         "name": "Cristal Kinky",
     },
+    "cruel-women.com": {
+        "api": "cruel-women.mymember.site",
+        "name": "Cruel Women",
+    },
     "curvymary.com": {
         "api": "curvy-mary.mymember.site",
         "name": "Curvy Mary",
+    },
+    "dannijones.com": {
+        "api": "dannijones.mymember.site",
+        "name": "Danni Jones",
     },
     "deemariexxx.com": {
         "api": "deemariexxx.mymember.site",
@@ -134,17 +150,37 @@ _studios = {
         "api": "greendoorlivetv.mymember.site",
         "name": "The World Famous Green Door",
     },
+    "heatheraustin.live": {
+        "api": "heather-austin.mymember.site",
+        "name": "Heather Austin",
+    },
     "heavybondage4life.com": {
         "api": "heavybondage4life.mymember.site",
         "name": "Heavybondage4Life",
+    },
+    "hornyadventures.com": {
+        "api": "hornyadventurestv.mymember.site",
+        "name": "Horny Adventures",
     },
     "hornysilver.com": {
         "api": "hornysilver.mymember.site",
         "name": "Hornysilver",
     },
+    "hotwifeheidihaze.com": {
+        "api": "heidi-haze.mymember.site",
+        "name": "Heidi Haze",
+    },
+    "islandboyvids.com": {
+        "api": "islandboyvids.mymember.site",
+        "name": "Island Boy Vids",
+    },
     "josyblack.tv": {
         "api": "josyblack.mymember.site",
         "name": "Josy Black",
+    },
+    "juteandroses.com": {
+        "api": "juteandroses.mymember.site",
+        "name": "Jute and Roses",
     },
     "kingnoirexxx.com": {
         "api": "kingnoirexxx.mymember.site",
@@ -158,13 +194,29 @@ _studios = {
         "api": "kinkyponygirl.mymember.site",
         "name": "KinkyPonygirl",
     },
+    "kinkyrubberdreams.com": {
+        "api": "kinkyrubberdreams.mymember.site",
+        "name": "Glowing Darkness",
+    },
     "kitehkawasaki.com": {
         "api": "kitehkawasaki.mymember.site",
         "name": "Kiteh Kawasaki",
     },
+    "labelladx.com": {
+        "api": "labelladx.mymember.site",
+        "name": "LaBellaDiablaX",
+    },
     "lady-asmondena.com": {
         "api": "ladyasmondena.mymember.site",
         "name": "Lady Asmondena",
+    },
+    "lamodelsdoporn.com": {
+        "api": "lamodelsdoporn.mymember.site",
+        "name": "LA Models Do Porn",
+    },
+    "latexkittyxxx.com": {
+        "api": "latexkittyxxx.mymember.site",
+        "name": "Latexkittyxxx",
     },
     "latexlolanoir.com": {
         "api": "latexlolanoir.mymember.site",
@@ -182,7 +234,10 @@ _studios = {
         "api": "loonerlanding.mymember.site",
         "name": "Looner Landing",
     },
-    "lukespov.vip": {"api": "lukespov.mymember.site", "name": "Luke's POV"},
+    "lukespov.vip": {
+        "api": "lukespov.mymember.site",
+        "name": "Luke\"s POV",
+    },
     "marvalstudio.com": {
         "api": "marvalstudio.mymember.site",
         "name": "MarValStudio",
@@ -203,6 +258,50 @@ _studios = {
         "api": "mrhappyendings.mymember.site",
         "name": "Mr Happy Endings",
     },
+    "mymember.site/Goddessjazzy": {
+        "api": "goddessjazzy.mymember.site",
+        "name": "Goddess Jazzy",
+    },
+    "mymember.site/androprince-cs-chamber/": {
+        "api": "androprince-cs-chamber.mymember.site",
+        "name": "AndroPrince C\"s Chamber",
+    },
+    "mymember.site/aoikamogawa": {
+        "api": "aoikamogawa.mymember.site",
+        "name": "Aoi Kamogawa",
+    },
+    "mymember.site/eroticious": {
+        "api": "eroticious.mymember.site",
+        "name": "eroticious",
+    },
+    "mymember.site/kyara-in-ropes": {
+        "api": "kyara-in-ropes.mymember.site",
+        "name": "Kyara in Ropes",
+    },
+    "mymember.site/latex-desire": {
+        "api": "latex-desire.mymember.site",
+        "name": "LatexDesire",
+    },
+    "mymember.site/linaroselina": {
+        "api": "linaroselina.mymember.site",
+        "name": "Lina Roselina",
+    },
+    "mymember.site/mr-rains-sexy-wrestling": {
+        "api": "mr-rains-sexy-wrestling.mymember.site",
+        "name": "Mr Rains Sexy Wrestling",
+    },
+    "mymember.site/officialemyang": {
+        "api": "officialemyang.mymember.site",
+        "name": "Official Em Yang",
+    },
+    "mymember.site/rubbobjectdoll": {
+        "api": "rubbobjectdoll.mymember.site",
+        "name": "RubbobjectDoll",
+    },
+    "nicoledupapillon.net": {
+        "api": "nicole-dupapillon.mymember.site",
+        "name": "Nicole DuPapillon",
+    },
     "nikitzo.com": {
         "api": "nikitzo.mymember.site",
         "name": "NIKITZO",
@@ -210,6 +309,10 @@ _studios = {
     "nikkidavisxo.com": {
         "api": "nikkidavisxo.mymember.site",
         "name": "NikkiDavisXO",
+    },
+    "nylon-encasement.com": {
+        "api": "nylon-encasement.mymember.site",
+        "name": "Nylon Encasement",
     },
     "peacockcouple.com": {
         "api": "peacockcouple.mymember.site",
@@ -222,6 +325,10 @@ _studios = {
     "pervfect.net": {
         "api": "pervfect.mymember.site",
         "name": "Pervfect",
+    },
+    "psilosirenxxx.com": {
+        "api": "psilosirenxxx.mymember.site",
+        "name": "PsiloSiren",
     },
     "riggsfilms.vip": {
         "api": "riggsfilms.mymember.site",
@@ -239,6 +346,10 @@ _studios = {
         "api": "rubberdollemmalee.mymember.site",
         "name": "Rubberdoll Emma Lee",
     },
+    "sam-serenity.com": {
+        "api": "sam-serenity.mymember.site",
+        "name": "Sam Serenity",
+    },
     "sexyhippies.com": {
         "api": "sexyhippies.mymember.site",
         "name": "Sexy Hippies",
@@ -246,6 +357,14 @@ _studios = {
     "shemalevalentina.com": {
         "api": "shemalevalentina.mymember.site",
         "name": "Shemale Valentina",
+    },
+    "slutwife.club": {
+        "api": "slutwife-club.mymember.site",
+        "name": "SLUTWIFE CLUB",
+    },
+    "spanishxbarbiiexxx.com": {
+        "api": "spanishxbarbiie.mymember.site",
+        "name": "Spanish Barbie",
     },
     "strong-men.com": {
         "api": "strong-men.mymember.site",
@@ -263,6 +382,10 @@ _studios = {
         "api": "thestraponsite.mymember.site",
         "name": "The Strapon Site",
     },
+    "theextortionarium.com": {
+        "api": "the-extortionarium.mymember.site",
+        "name": "The Extortionarium",
+    },
     "thegoonhole.com": {
         "api": "thegoonhole.mymember.site",
         "name": "The Goonhole",
@@ -270,6 +393,14 @@ _studios = {
     "thekandikjewel.com": {
         "api": "thekandikjewel.mymember.site",
         "name": "The Kandi K Jewel",
+    },
+    "unlimited.lovely-anita.com": {
+        "api": "lovelyanita.mymember.site",
+        "name": "Lovely Anita",
+    },
+    "whatlizannelikes.com": {
+        "api": "whatlizannelikes.mymember.site",
+        "name": "What Lizanne Likes",
     },
     "yourfitcrush.com": {
         "api": "yourfitcrush.mymember.site",
@@ -304,6 +435,8 @@ def __parse_url(url: str) -> tuple[str, str]:
     parsed = urlparse(url)
 
     domain = re.sub(r"^www\.", "", parsed.netloc)
+    if domain == 'mymember.site':
+        domain += '/' + parsed.path.split('/')[1]
     if not (studio := _studios.get(domain)):
         log.error(f"Domain {domain} not supported, URL: '{url}'")
         sys.exit(-1)
