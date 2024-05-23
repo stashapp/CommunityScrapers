@@ -327,6 +327,13 @@ def movie_title(tree):
     )
 
 
+def video_url(tree):
+    return maybe(
+        tree.xpath('//div/p[contains(., "should be linked to")]/text()[2]'),
+        lambda t: re.sub(r".*http", "http", t.strip()),
+    )
+
+
 # Only create a single scraper: this saves time when scraping multiple pages
 # because it doesn't need to get past Cloudflare each time
 scraper = cloudscraper.create_scraper()
@@ -412,6 +419,7 @@ def scene_from_tree(tree):
             }
             for p in tree.xpath('//div[@class="castbox"]/p/a')
         ],
+        "url": video_url(tree),
     }
 
 
@@ -424,6 +432,7 @@ def movie_from_tree(tree):
         "date": movie_date(tree),
         "aliases": ", ".join(tree.xpath('//div[@class="col-sm-12"]/dl/dd//text()')),
         "studio": movie_studio(tree),
+        "url": video_url(tree),
     }
 
 
