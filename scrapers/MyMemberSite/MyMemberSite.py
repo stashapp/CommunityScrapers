@@ -236,7 +236,7 @@ _studios = {
     },
     "lukespov.vip": {
         "api": "lukespov.mymember.site",
-        "name": "Luke\"s POV",
+        "name": "Luke's POV",
     },
     "marvalstudio.com": {
         "api": "marvalstudio.mymember.site",
@@ -264,7 +264,7 @@ _studios = {
     },
     "mymember.site/androprince-cs-chamber/": {
         "api": "androprince-cs-chamber.mymember.site",
-        "name": "AndroPrince C\"s Chamber",
+        "name": "AndroPrince C's Chamber",
     },
     "mymember.site/aoikamogawa": {
         "api": "aoikamogawa.mymember.site",
@@ -435,8 +435,8 @@ def __parse_url(url: str) -> tuple[str, str]:
     parsed = urlparse(url)
 
     domain = re.sub(r"^www\.", "", parsed.netloc)
-    if domain == 'mymember.site':
-        domain += '/' + parsed.path.split('/')[1]
+    if domain == "mymember.site":
+        domain += "/" + parsed.path.split("/")[1]
     if not (studio := _studios.get(domain)):
         log.error(f"Domain {domain} not supported, URL: '{url}'")
         sys.exit(-1)
