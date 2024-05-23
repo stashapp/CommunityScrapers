@@ -1953,6 +1953,7 @@ squirtinglesbian.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Les
 squirtingorgies.com|GammaEntertainment.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 stagcollective.com|NextDoorStudios.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|Gay
 staghomme.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+starsfetishfantasies.com|StarsFetishFantasies.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Fetish
 stasyq.com|StasyQ.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 stasyqvr.com|StasyQVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 staxus.com|Staxus.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|gay
