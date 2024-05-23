@@ -181,6 +181,11 @@ def map_media(data, studio, base_url):
     urls = []
     studio_code = data["UUID"]
     studio_name = {'Name': ""}
+    
+    # Sites that never put directors in the "crew" section
+    # this eliminates picking up "still photographer" as an additional director
+    directors_not_in_crew = ("SexArt", "ALS Scan")
+    
     if studio is not None:
         studio_url = studio[1]
         urls = [f"https://www.{studio_url}{data['path']}"]
@@ -193,7 +198,7 @@ def map_media(data, studio, base_url):
     if data.get("photographers"):
         for director in data['photographers']:
             directors.append(director.get('name').strip())
-    if data.get('crew') and studio_name["Name"] not in ("Sex Art", "ALS Scan"):
+    if data.get('crew') and studio_name["Name"] not in directors_not_in_crew:
                                 # some sites only use the `photograpers`` section for director
         for crew in data['crew']:
             if crew.get('role') == "Still Photographer":
