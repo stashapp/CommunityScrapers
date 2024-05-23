@@ -6,8 +6,7 @@ galleryByURL:
     script:
       - python3
       - MyMemberSite.py
-      - scrape
-      - gallery
+      - gallery-by-url
     url:
       - aeriefans.com/photosets/
       - alterpic.com/photosets/
@@ -78,8 +77,7 @@ sceneByURL:
     script:
       - python
       - MyMemberSite.py
-      - scrape
-      - scene
+      - scene-by-url
     url:
       - aeriefans.com/videos/
       - alterpic.com/videos/
@@ -144,5 +142,4 @@ sceneByURL:
       - thegoonhole.com/videos/
       - thekandikjewel.com/videos/
       - yourfitcrush.com/videos/
-
-# Last Updated May 08, 2024
+# Last Updated May 24, 2024
