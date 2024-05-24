@@ -232,6 +232,8 @@ xPathScrapers:
             - replace:
                 - regex: ^(.+?)\s-.+$
                   with: $1
+            - map:
+                Nubiles: Nubiles.net      
       Tags: *tagsAttr
       Image: *imageAttr
 
@@ -243,4 +245,4 @@ xPathScrapers:
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
-# Last Updated April 2, 2024
+# Last Updated May 24, 2024
