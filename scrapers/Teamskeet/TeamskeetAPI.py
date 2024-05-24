@@ -44,9 +44,24 @@ else:
     log.error('You need to set the URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
-if "teamskeet.com/movies/" not in scene_url:
-    log.error('The URL is not from a Teamskeet URL (e.g. teamskeet.com/movies/*****)')
+
+# Check the URL and set the API URL
+if 'sayuncle.com' in scene_url:
+    ORIGIN = 'https://www.sayuncle.com'
+    REFERER = 'https://www.sayuncle.com/'
+    API_BASE = 'https://store2.psmcdn.net/sau-elastic-00gy5fg5ra-videoscontent/_doc/'
+elif 'teamskeet.com' in scene_url:
+    ORIGIN = 'https://www.teamskeet.com'
+    REFERER = 'https://www.teamskeet.com/'
+    API_BASE = 'https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/'
+elif 'mylf.com' in scene_url:
+    ORIGIN = 'https://www.mylf.com'
+    REFERER = 'https://www.mylf.com/'
+    API_BASE = 'https://store2.psmcdn.net/mylf-elastic-hka5k7vyuw-videoscontent/_doc/'
+else:
+    log.error('The URL is not from a Teamskeet, MYLF or SayUncle URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
+
 
 scene_id = re.sub('.+/', '', scene_url)
 if not scene_id:
@@ -61,11 +76,11 @@ if os.path.isfile(json_file):
         scene_api_json = json.load(json_file)
 else:
     log.debug("Asking the API...")
-    api_url = f"https://store2.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/{scene_id}"
+    api_url = f"{API_BASE}{scene_id}"
     headers = {
         'User-Agent': USER_AGENT,
-        'Origin': 'https://www.teamskeet.com',
-        'Referer': 'https://www.teamskeet.com/'
+        'Origin': ORIGIN,
+        'Referer': REFERER
     }
     scraper = cloudscraper.create_scraper()
     # Send to the API
@@ -114,10 +129,15 @@ scrape['performers'] = [{"name": x.get('modelName')}
                         for x in scene_api_json.get('models')]
 scrape['tags'] = [{"name": x} for x in scene_api_json.get('tags')]
 scrape['image'] = scene_api_json.get('img')
-high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
-log.debug(f"Image before: {scrape['image']}")
-log.debug(f"Image after: {high_res}")
-scrape['image'] = high_res
+# Highres is not working with sayuncle.com at the moment
+if 'sayuncle.com' not in scene_url:
+    high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
+    log.debug(f"Image before: {scrape['image']}")
+    log.debug(f"Image after: {high_res}")
+    scrape['image'] = high_res
+# If the scene is from sayuncle.com, we need to add the gay tag to the tags list
+if 'sayuncle.com' in scene_url:
+    scrape['tags'].append({"name": "Gay"})
 
 if use_local == 0:
     save_json(scene_api_json, scene_url)
