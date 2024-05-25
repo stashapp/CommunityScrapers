@@ -20,21 +20,23 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     common:
+      $featuring: //h2[span[contains(.,'featuring')]]
     scene:
       Title: //div[@class="row info"]//h1
       Date:
-        selector: //h2[span[contains(.,'featuring')]]/preceding-sibling::h2[1]
+        selector: $featuring/preceding-sibling::h2[1]
         postProcess:
           - parseDate: Jan 02, 2006
       Details:
-        selector: reverse(//h2[span[contains(.,'featuring')]]/preceding-sibling::*[not(div)]//text())
+        selector: reverse($featuring/preceding-sibling::*[not(div)]//text())
         concat: "\n\n"
       Performers:
-        Name: //h2[span[contains(.,'featuring')]]/a
+        Name: $featuring/a
       Image: //div[@class="flex-video widescreen"]/a/img/@src
       Studio:
         Name:
           fixed: X-Art
+
 
   galleryScraper:
     common:
