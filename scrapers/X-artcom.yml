@@ -3,7 +3,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - x-art.com/videos/
+      - x-art.com/members/videos/
     scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: members
+          with: ""
 
 galleryByURL:
   - action: scrapeXPath
@@ -14,22 +20,23 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $sceneinfo: //div[@class="small-12 medium-12 large-12 columns info"]
+      $featuring: //h2[span[contains(.,'featuring')]]
     scene:
-      Title: //div[@class="row info"]/div[@class="small-12 medium-12 large-12 columns"]/h1
+      Title: //div[@class="row info"]//h1
       Date:
-        selector: $sceneinfo/h2[1]/text()
+        selector: $featuring/preceding-sibling::h2[1]
         postProcess:
           - parseDate: Jan 02, 2006
       Details:
-        selector: $sceneinfo/p
-        concat: " "
+        selector: reverse($featuring/preceding-sibling::*[not(div)]//text())
+        concat: "\n\n"
       Performers:
-        Name: $sceneinfo/h2/a/text()
+        Name: $featuring/a
       Image: //div[@class="flex-video widescreen"]/a/img/@src
       Studio:
         Name:
           fixed: X-Art
+
 
   galleryScraper:
     common:
@@ -51,4 +58,5 @@ xPathScrapers:
       Performers:
         Name: $gallery/h2/a
         URL: $gallery/h2/a/@href
-# Last Updated March 19, 2024
+
+# Last Updated May 24, 2024
