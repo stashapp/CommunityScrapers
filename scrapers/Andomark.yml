@@ -55,6 +55,7 @@ sceneByURL:
       - rionkingxxx.com/updates/
       - seanmichaelsxxx.com/updates/
       - secretsusan.com/updates/
+      - sexykarenxxx.com/tour2/updates
       - sheseducedme.com/updates/
       - sofiemariexxx.com/updates/
       - suburbantaboo.com/tour/
@@ -68,6 +69,7 @@ sceneByURL:
       - whorebaithals.com/tour/
       - willtilexxx.com/updates/
       - xevunleashed.com/updates/
+      - xratedwife.com/tour/updates/
       - xxxcellentadventures.com/updates/
       - younggunsxxx.com/updates/
       - yummybikinimodel.com/updates/
@@ -231,6 +233,7 @@ xPathScrapers:
                 rionkingxxx: Rion King
                 seanmichaelsxxx: Sean Michaels
                 secretsusan: Secret Susan
+                sexykarenxxx: Sexy Karen XXX
                 sheseducedme: She Seduced Me
                 sofiemariexxx: Sofie Marie XXX
                 suburbantaboo: Suburban Taboo
@@ -245,6 +248,7 @@ xPathScrapers:
                 vanillapov: VanillaPOV
                 willtilexxx: Will Tile XXX
                 xevunleashed: Xev Unleashed
+                xratedwife: X Rated Wife
                 xxxcellentadventures: XXXcellentAdventures
                 younggunsxxx: YoungGunsXXX
                 yummybikinimodel: YummyBikini
@@ -261,7 +265,7 @@ xPathScrapers:
           - replace:
               - regex: ^(https://.+)?https://
                 with: https://
-              - regex: tour///
+              - regex: tour\d?///
                 with: ""
       URL: //link[@rel='canonical']/@href
   proSceneScraper:
@@ -327,4 +331,4 @@ driver:
           Domain: sheseducedme.com
           ValueRandom: 36
           Path: /
-# Last Updated April 30, 2024
+# Last Updated May 25, 2024

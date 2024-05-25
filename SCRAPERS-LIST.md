@@ -1879,6 +1879,7 @@ sexwithmuslims.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexworking.com|Deviante/Deviante.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 sexyhippies.com|MyMemberSite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 sexyhub.com|SexyHub/SexyHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
+sexykaren.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexymodernbull.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
 sexyrainwear.online|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 sexysuckjobs.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
@@ -2389,6 +2390,7 @@ xhamster.com|Xhamster.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xlgirls.com|TheScoreGroup.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 xnxx.com|Xnxx.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xrares.com|Xrares.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+xratedwife.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 xsinsvr.com|xSinsVR.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 xslist.org|Xslist.yml|:x:|:x:|:x:|:heavy_check_mark:|-|JAV Database
 xtcpov.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
