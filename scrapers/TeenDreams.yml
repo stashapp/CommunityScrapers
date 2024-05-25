@@ -3,11 +3,14 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - teendreams.com/t4/trailers/
+      - teen-depot.com/t4/trailers/ 
     scraper: teendreams
+
 galleryByURL:
   - action: scrapeXPath
     url:
       - teendreams.com/t4/scenes/
+      - teen-depot.com/t4/scenes/
     scraper: teendreams
 
 xPathScrapers:
@@ -15,8 +18,8 @@ xPathScrapers:
     common:
       $image: //img[contains(@class, "update_thumb")]
     scene:
-      Title: &title //h1
-      Details: &details //p[@class="description"]
+      Title: &title //meta[@property='og:title']/@content
+      Details: &details //p[@class="description" and not contains(.,'Deprecated')]
       URL: &url //link[@rel="canonical"]/@href
       Date: &date
         selector: //div[@class="content-date"]
@@ -24,15 +27,28 @@ xPathScrapers:
           - replace:
               - regex: "Released: "
                 with: ""
-      Image: &image >-
-        $image/@src0_4x |
-        $image/@src0_3x |
-        $image/@src0_2x |
-        $image/@src0_1x
+      Image:
+          selector: >-
+            //base/@href |
+            $image/@src0_4x[contains(.,'.jpg')] |
+            $image/@src0_3x[contains(.,'.jpg')] |
+            $image/@src0_2x[contains(.,'.jpg')] |
+            $image/@src0_1x[contains(.,'.jpg')] |
+            //div[@class='player']//img/@src
+          concat: '__SEP__'
+          postProcess:
+            - replace:
+                - regex: ^(https://[^/]+).+?__SEP__
+                  with: $1
+                - regex: __SEP__.+
+                  with: '' 
       Studio: &studio
-        Name: //img[contains(@src, "banner")]/@alt
+        Name: //meta[@name='author']/@content
       Performers: &performers
-        Name: //h3[@class="item-name"]/span
+        Name: 
+          selector: //h3[@class="item-name"]/span
+          split: '&'
+
     gallery:
       Title: *title
       Details: *details
@@ -40,4 +56,5 @@ xPathScrapers:
       Date: *date
       Studio: *studio
       Performers: *performers
-# Last Updated March 28, 2024
+
+# Last Updated May 25, 2024
