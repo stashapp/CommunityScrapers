@@ -2133,6 +2133,7 @@ theassfactory.com|JulesJordan.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|
 theaudreyhollander.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 thebondagechallenge.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thebronetwork.com|TheBroNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+theclassicporn.com|theclassicporn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
 thedicksuckers.com|FinishesTheJob.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 theextortionarium.com|MyMemberSite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 theflourishamateurs.com|TheFlourish.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

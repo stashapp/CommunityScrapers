@@ -1,0 +1,188 @@
+name: TheClassicPorn
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://theclassicporn.com/search/?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - theclassicporn.com
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - theclassicporn.com
+    scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - theclassicporn.com/actors/
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://theclassicporn.com/actors/search/?q={}
+  scraper: performerSearch
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title
+        selector: //div[@class='video-info-top']/p[@class='title']/a[@class='link-blue link-no-border']
+      Tags:
+        Name: //p[@class='data-row data-categories']/a[@class='tag-button']
+      Performers:
+        Name: //div[@class='video-data']/p[@class='data-row data-actress']/a[starts-with(@class,"link")]
+      URL: &url
+        selector: //input[@name="redirect_to"]/@value
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://theclassicporn.com
+      Movies:
+        Name: *title
+        URL: *url
+      Date: &date
+        selector: //div[@class='video-info-top']/ul[@class='info-bar']/li[1]/a[@class='link-yellow']
+        postProcess:
+          - replace:
+              - regex: ^(\d\d\d\d)$
+                with: $1-01-01
+      Image:
+        selector: //div[@class='video-list-item inner']/div[@class='thumb-container']/a[@class='thumb-video-link']/img/@src
+      Director:
+        selector: //div[@class='video-data']/p[@class='data-row data-director']/a[@class='link-light-blue']        
+  movieScraper:
+    movie:
+      Name: *title
+      URL: *url
+      Date: *date
+      Director:
+        selector: //div[@class='video-data']/p[@class='data-row data-director']/a[@class='link-light-blue']
+      Duration:
+        selector: //div[@class='video-info-top']/ul[@class='info-bar']/li[4]
+        postProcess:
+          - replace:
+            - regex: ^(.* (\d+) min)$
+              with: 00:$2:00
+      FrontImage: //div[@class='video-list-item inner']/div[@class='thumb-container']/a[@class='thumb-video-link']/img/@src
+  performerSearch:
+    performer:
+      Name: //p[@class='title']/a[@class='link-blue link-no-border']/text()
+      URL:
+        selector: //p[@class='title']/a[@class='link-blue link-no-border']/@href
+        postProcess:
+          - replace:
+              - regex: ^(.*)
+                with: https://theclassicporn.com$1
+  performerScraper:
+    performer:
+      URL:
+        selector: //input[@name="redirect_to"]/@value
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://theclassicporn.com
+      Name: &name 
+        selector: //div[@class='model-info-container']/p[@class='title']/span[@class='link-blue link-no-border']/text()
+      Gender:
+        selector: //div[@class='model-info-container']/p[@class='title']/i/@title
+        postProcess:
+          - map:
+              Actress: female
+              Actor: male
+      Aliases: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"AKA:")]/following-sibling::text()
+      Birthdate:
+        selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Birthday:")]/following-sibling::text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: Birthday:\s\/+.+
+                with: ""
+              - regex: ^([a-zA-Z]{3})[a-zA-Z]*\s
+                with: "$1 "
+              - regex: (\d)(st|nd|rd|th)
+                with: $1
+              - regex: ^n/a$
+                with: ""
+          - parseDate: Jan 2, 2006
+      CareerLength: 
+        selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Years Active:")]/following-sibling::text()
+        concat: " "
+      Ethnicity: 
+        selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Ethnicity:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: Ethnicity:\s\/+.+
+                with: ""
+              - regex: ^n/a$
+                with: ""
+      Country:
+        selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Nationality")]/following-sibling::text() 
+        postProcess:
+          - replace:
+              - regex: .+\s+(United\sStates|Italy|France)$
+                with: $1
+              - regex: ^n/a$
+                with: ""
+      HairColor: 
+        selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Hair Color:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^n/a$
+                with: ""
+      Measurements: 
+        selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Measurements")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^n/a$
+                with: ""
+      Height:
+        selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Height")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^n/a$
+                with: ""
+              - regex: Height:\s\/+.+
+                with: ""
+      Tattoos: 
+        selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Tattoo:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^n/a$
+                with: ""
+      Piercings: 
+        selector: //div[@class='model-info-container']/ul[@class='model-info-list']/li/span[contains(text(),"Piercing:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^n/a$
+                with: ""
+      Image: //div[@class='model-info-left']/div[@class='thumb-container']/a[@class='thumb-model-link']/img/@src
+  sceneSearch:
+    scene:
+      Title:
+        selector: //div[@class="thumb-video"]/p[@class='title']/a[@class='link-blue link-no-border']
+      URL:
+        selector: //div[@class="thumb-video"]/p[@class='title']/a[@class='link-blue link-no-border']/@href
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://theclassicporn.com/
+      #Details: TBD
+      Date: 
+        selector: //div[@class='video-info-top']/ul[@class='info-bar']/li[1]/a[@class='link-yellow']
+        postProcess:
+          - replace:
+              - regex: ^(\d\d\d\d)$
+                with: $1-01-01
+      Image:
+        selector: //div[@class='video-list-item']/div[@class='thumb-container']/a[@class='thumb-video-link']/img/@src
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://theclassicporn.com/
+      Director:
+        selector: //div[@class='video-data']/p[@class='data-row data-director']/a[@class='link-light-blue']                
+# Last Updated May 24, 2024
