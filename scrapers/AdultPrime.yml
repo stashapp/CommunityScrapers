@@ -1,29 +1,71 @@
 name: "AdultPrime"
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://adultprime.com/studios/search?q={}"
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 sceneByURL:
   - action: scrapeXPath
     url:
-      - adultprime.com/studios/video/
+      - adultprime.com/studios/video
     scraper: sceneScraper
+
 xPathScrapers:
-  sceneScraper:
+  sceneSearch:
+    common:
+      $scenes: //ul[@id="studio-videos-container"]
     scene:
-      Title: //h2[contains(@class,"update-info-title")]/text()
+      Title:
+        selector: $scenes//span[contains(@class, "description-title")]/text()
       Date:
-        selector: //p[@class="update-info-line regular"][1]/b/text()
+        selector: $scenes//span[@class="description-releasedate"]/text()
         postProcess:
-          - parseDate: 02.01.2006
-      Image:
-        selector: //div[starts-with(@style,"background-image:")]/@style
+          - parseDate: Jan 02, 2006
+      URL:
+        selector: $scenes//a[@class="absolute"]/@href
         postProcess:
           - replace:
-              - regex: .+url\((.+)\).+
+              - regex: "^.signup.galleryId."
+                with: "https://adultprime.com/studios/video/"
+      Image: $scenes//div[contains(@class, 'ap-slider-img')]/@data-src
+
+  sceneScraper:
+    common:
+      $scene: //div[@class="update-info-container"]
+    scene:
+      Title: $scene//h2
+      Date:
+        selector: //div[@id="theatre-row"]//span[@class="description-releasedate"]/text()
+        postProcess:
+          - parseDate: 02-01-2006
+      Details:
+        selector: $scene//p[contains(@class,"ap-limited-description-text")]
+      Image:
+        selector: //div[@id="theatre-row"]//video/@poster | //div[@id="theatre-row"]//div[contains(@class, "video-wrapper")]//div[contains(@style,"background-image:") and not(contains(@style,"player-placeholder.gif"))]/@style
+        postProcess:
+          - replace:
+              # Sometimes they put the URL in quotes, sometimes they just don't
+              # https://regex101.com/r/fszqAQ/3
+              - regex: .+url\(\"?(.+)\"?\).+
                 with: $1
-      Studio: 
-        Name: //p[contains(@class,"update-info-line")]/b/a[contains(@href,"/studio/")]/text()
+      URL: &url //link[@rel="canonical"]/@href
+      Code:
+        selector: *url
+        postProcess:
+          - replace:
+              - regex: \D+(\d+)$
+                with: $1
+      Studio:
+        Name: $scene//p[contains(@class,"update-info-line")]//a[contains(@href,"/studio/")]/text()
       Tags:
         Name:
-          selector: //p[contains(@class,"update-info-line regular")][contains(b,"Niches:")]/text()
+          selector: $scene//b[contains(.,"Niches")]/following-sibling::text()
           split: ", "
       Performers:
-        Name: //p[@class="update-info-line regular"]/a[contains(@href, "/signup?")]/text()
-# Last Updated June 08, 2022
+        Name: $scene//b[contains(.,"Performer")]/following-sibling::a/text()
+# Last Updated February 22, 2023

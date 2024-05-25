@@ -1,0 +1,57 @@
+name: Bathroom Creepers
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bathroomcreepers.com/creeper/trailers
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.bathroomcreepers.com/creeper/search.php?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //div[contains(@class, "item-thumb")]/a/@title
+      URL: //div[contains(@class, "item-thumb")]/a/@href
+      Date: //div[contains(@class, "item-info")]//div[contains(@class, "date")]
+      Image:
+        selector: //div[contains(@class, "item-thumb")]/a/img/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://bathroomcreepers.com
+  sceneScraper:
+    common:
+      $performer: //li[@class="update_models"]/a
+      $image: //div[@class='player-thumb']/img
+    scene:
+      Title: //div[@class="videoDetails clear"]//h3
+      Date:
+        selector: //comment()[contains(., "Date Added")]
+        postProcess:
+          - replace:
+              - regex: '.*?(\w+ \d{1,2}, \d{4}).*'
+                with: $1
+          - parseDate: January 2, 2006
+      Details: //div[@class="videoDetails clear"]/p
+      Tags:
+        Name: //li[contains(text(), "Tags:")]/following-sibling::li/a/text()
+      Performers:
+        Name: $performer
+        URL: $performer/@href
+      Image:
+        selector: $image/@src0_4x | $image/@src0_3x | $image/@src0_2x | $image/@src0_1x | //script[contains(text(),"src0_3x")]/text()
+        postProcess:
+          - replace:
+              - regex: .*src0_3x="([^"]+).*
+                with: $1
+              - regex: ^
+                with: https://bathroomcreepers.com
+      Studio:
+        Name:
+          fixed: Bathroom Creepers
+# Last Updated March 15, 2024

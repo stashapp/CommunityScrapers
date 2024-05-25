@@ -2,16 +2,20 @@ name: FFCSH
 sceneByURL:
   - action: scrapeXPath
     url:
+      - babearchives.com/trailers
       - balletflatsfetish.com/tour/
       - barbarafeet.com/tour/
       - blackph.com/tour/
       - cosplayfeet.com/tour/
       - dianafeet.com/tour/
+      - emilyaddison.com/trailers
       - fantasyflipflop.com/tour/
+      - filthyfemdom.com/trailers
       - footfetishbeauties.com/tour/
       - interracialpovs.com/
       - nylonfeetlove.com/tour/
       - nylonup.com/tour/
+      - playwithrae.com/trailers
       - redpolishfeet.com/tour/
       - sweetcarla.com/tour/
       - transfeet.com/tour/
@@ -35,8 +39,16 @@ xPathScrapers:
         Name: //li[contains(.,"Tags:")]/following-sibling::text()
       Details: //div[@class="videoDetails clear"]/p
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //meta[@property="og:image"]/@content | //base/@href | //script[contains(.,"poster")] | //div[@class="player-thumb"]/img/@src0_1x
+        concat: /
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]+)/.+?poster="([^"]+)".+
+                with: $1/$2
       Studio:
         Name:
           selector: //meta[@name="author"]/@content
-# Last Updated February 08, 2022
+          postProcess:
+            - map:
+                ASPEN RAE - PlaywithRae.com: "PlayWithRae"
+# Last Updated Marc 26, 2024

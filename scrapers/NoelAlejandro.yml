@@ -1,0 +1,36 @@
+name: NoelAlejandro
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - noelalejandrofilms.com/product
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //h1[@id="title"]
+      Image:
+        selector: //video[@id="product-img"]/@poster
+      Date:
+        selector: //script[@class="yoast-schema-graph"]
+        postProcess:
+          - replace: 
+              - regex: .+datePublished\"\:\"(\d{4}-\d{2}-\d{2}).+
+                with: $1
+      Director:
+        selector: //li[contains(.,"Director:")]
+        postProcess:
+          - replace: 
+              - regex: ^\s*Director:\s*
+                with: ''
+      Details:
+        selector: //div[@class="film-prologue"]/p
+        concat: "\n\n"
+      Performers:
+        Name:
+          selector: //li[contains(.,"Cast:")]/a
+      Studio:
+        Name:
+          selector: //meta[@name="title"]/@content
+
+# Last Updated March 27, 2023

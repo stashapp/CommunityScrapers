@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
+name: MrBigFatDick
+
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - mrbigfatdick.com/videos/
+    scraper: sceneScraper
+    queryURL: https://backend.mrbigfatdick.com/api/public/updates/{url}
+    queryURLReplace:
+      url:
+        - regex: ".+/videos/([^/]+?)/?$"
+          with: $1
+
+sceneByName:
+  action: scrapeJson
+  queryURL: https://backend.mrbigfatdick.com/api/search/{} # search doesnt like spaces, use _ instead when quering
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+jsonScrapers:
+  sceneSearch:
+    scene:
+      Title: updates.#.fullName
+      URL:
+        selector: updates.#.permaLink
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://backend.mrbigfatdick.com/api/public/updates/"
+      Image: updates.#.image620
+      Date:
+        selector: updates.#.publishDate
+        postProcess:
+          - parseDate: 2006-01-02 15:04:05
+
+  sceneScraper:
+    scene:
+      Title: fullName
+      Date:
+        selector: publishDate
+        postProcess:
+          - parseDate: 2006-01-02 15:04:05
+      Tags:
+        Name: tags.#.fullName
+      Performers:
+        Name:
+          selector: models.#.fullName
+          postProcess:
+            - map:
+                Mrbigfatdick: "Mr. Big Fat Dick"
+      Image: image1920
+      Details: description
+      Studio:
+        Name:
+          fixed: MrBigfatdick # Match the stash.db name
+      URL:
+        selector: permaLink
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.mrbigfatdick.com/videos/"
+# Last Updated November 04, 2022

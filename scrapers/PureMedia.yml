@@ -1,0 +1,37 @@
+name: 'PureMedia'
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - becomingfemme.com/tour
+      - pornstarbts.com/tour
+      - pure-bbw.com/tour
+      - pure-ts.com/tour
+      - pure-xxx.com/tour
+      - sissypov.com/tour
+      - tspov.com/tour
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $main: //div[@class='addFeature']
+    scene:
+      Title: //div[@class='vpTitle']/h1
+      Details: //div[@class='description']/p
+      Date:
+        selector: $main//h5[contains(.,"Added")]/following-sibling::p
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: $main//h5[contains(.,"Featuring")]/following-sibling::ul
+      Studio:
+        Name: //meta[@name='author']/@content
+      Tags:
+        Name: $main//ul[@class='tags']//a
+      Image:
+        selector: //base/@href|//div[@class='player-thumb']/img/@src0_4x
+        concat: '|'
+        postProcess:
+          - replace:
+              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
+                with: $1$2
+# Last Updated February 5, 2024

@@ -1,0 +1,35 @@
+name: Aziani
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - aziani.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: Aziani
+      Performers:
+        Name: //dd/a[contains(@href,"models")]
+      Title: //nats-content-view-header-row//h3
+      Details: //nats-content-view-details-row//div[contains(@class,"description")]
+      Tags:
+        Name: //dd/a[contains(@href, "/tag/") or contains(@href, "/category/")]
+      Image:
+        selector: //nats-video-player//img/@srcset | //nats-video-player//img/@src
+        postProcess:
+          - replace:
+              - regex: ^.+https://(\S+).+$
+                with: https://$1
+      Date:
+        selector: //dd[contains(@class,"date")]
+        postProcess:
+          - parseDate: Jan 2, 2006
+
+driver:
+  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+# Last Updated March 23, 2024

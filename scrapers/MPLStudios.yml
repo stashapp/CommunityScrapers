@@ -14,51 +14,37 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@id="update"]/text()
-      Studio:
-        Name:
-          fixed: "MPL Studios"
-      Date:
-        selector: //div[@id="date"]/text()
+      Title: &title //div[contains(@class,'bg-panel')]/div[2]/span/text()
+      Date: &date
+        selector: //div[@class="me-3"]/text()
         postProcess:
           - replace:
             - regex: (\d+)[a-z]+
               with: $1
-          - parseDate: 2 January 2006
-      Details: //div[@id="update_text"]/text()
-      Performers:
+          - parseDate: Jan 2, 2006
+      Performers: &performers
+        Name: //div[contains(@class,'bg-panel')]/div[1]/span/text()
+      Image: //div[@class='container-fluid']//img/@src
+      Tags: &tags 
+        Name: //div[@id='updateTags']/a
+      Studio: &studio
         Name:
-          selector: //a[@id="portfolio"]/text()
-          postProcess:
-            - replace:
-              - regex: \'.+$
-                with: ""
-      Image:
-        selector: //div[@id="main_cover"]/img/@src
+          fixed: "MPL Studios"
+      Code: &code 
+        selector: //script[contains(.,'idNumber')]
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://mplstudios.com"
+              - regex: .+?idNumber\s*=\s*"([^"]+).+
+                with: $1
   galleryScraper:
     gallery:
-      Title: //div[@id="update"]/text()
-      Studio:
-        Name:
-          fixed: "MPL Studios"
-      Date:
-        selector: //div[@id="date"]/text()
-        postProcess:
-          - replace:
-            - regex: (\d+)[a-z]+
-              with: $1
-          - parseDate: January 2 2006
+      Title: *title
+      Studio: *studio
+      Date: *date
       Details: //div[@id="update_text"]/text()
-      Performers:
-        Name:
-          selector: //a[@id="portfolio"]/text()
-          postProcess:
-            - replace:
-              - regex: \'.+$
-                with: ""
+      Performers: *performers
+      Photographer: //span[contains(.,'Photographer')]/a
+      Code: *code
+      Tags: *tags
 
-# Last Updated October 25, 2020
+# Last Updated May 13, 2024

@@ -1,0 +1,34 @@
+name: Treasure Island Media
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - treasureislandmedia.com/scenes
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="page-header"]
+      Details:
+        selector: //div[@id="content-description"]//p
+        concat: "\n\n"
+      Performers:
+        Name:
+          selector: //div[@id="scene-models"]//a
+      Image:
+        selector: //style[contains(.,"background-image")]
+        postProcess:
+          - replace:
+              - regex: ^.+\(([^)]+).+$
+                with: $1
+      Director:
+        selector: //div[contains(@class,"field-directors")]//div[contains(@class,"field-item")]/text()
+        concat: ", "
+      Studio:
+        Name: //a[contains(@class,"navbar-brand-currsite")]/span[contains(@class,"top")]
+      Date:
+        selector: //meta[@property="video:release_date"]/@content
+        postProcess:
+          - replace:
+              - regex: ^([^T]+).+
+                with: $1
+# Last Updated March 24, 2024

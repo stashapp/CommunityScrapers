@@ -17,11 +17,29 @@ xPathScrapers:
         Name:
           selector: //a[contains(@href, 'cherrypimps.com/series/')]/@title
           postProcess:
-            - replace:
-                - regex: "^"
-                  with: "CherryPimps - "
             - map:
-                CherryPimps - Cherry Pimps: "Cherry Pimps"
+                CherryPimps : "Cherry Pimps"
+                Alt         : "Alt" 
+                BCM         : "BCM.XXX"
+                Bush        : "Bush"
+                Busted      : "Busted"
+                Cheese      : "Cheese"
+                Confessions : "Confessions.XXX"
+                Cucked      : "Cucked.XXX"
+                Drilled     : "Drilled.XXX"
+                Ebony xxx   : "Ebony"
+                Exotic      : "Exotic"
+                Femme       : "Femme"
+                Fresh       : "Fresh"
+                Ginger      : "Ginger"
+                Milf xxx    : "MILF"
+                Pegged      : "Pegged"
+                Petite      : "Petite.XXX"
+                Taboo       : "Taboo"
+                Cherry spot : "Cherry Spot"
+                Archives    : "CherryPimps Archives"
+                Wild on cam : "Wild on Cam"
+                COTM        : "Cherry of the Month"
       Date: &dateAttr
         selector: //i[@class='fa fa-calendar']/following-sibling::strong/following-sibling::text()
         postProcess:
@@ -41,5 +59,7 @@ xPathScrapers:
       Performers: *perfAttr
       Details: *detailsSel
       Tags: *tagsAttr
-      Image: //div[@class="player-thumb"]/img/@src0_1x
-# Last Updated March 03, 2022
+      Image:
+        selector: //div[@class="player-thumb"]/img/@src0_1x
+        
+# Last Updated January 19, 2024

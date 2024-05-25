@@ -12,12 +12,16 @@ sceneByURL:
       - badteenspunished.com/video/watch/
       - bountyhunterporn.com/video/watch/
       - brattymilf.com/video/watch/
+      - caughtmycoach.com/video/watch/
+      - cheatingsis.com/video/watch/
       - cumswappingsis.com/video/watch/
       - daddyslilangel.com/video/watch/
+      - datingmystepson.com/video/watch/
       - detentiongirls.com/video/watch/
       - driverxxx.com/video/watch/
       - familyswap.xxx/video/watch/
       - imnotyourmommy.com/video/watch/
+      - lilsis.com/video/watch/
       - momlover.com/video/watch/
       - momsboytoy.com/video/watch/
       - momsfamilysecrets.com/video/watch/
@@ -35,6 +39,7 @@ sceneByURL:
       - petiteballerinasfucked.com/video/watch/
       - petitehdporn.com/video/watch/
       - princesscum.com/video/watch/
+      - realitysis.com/video/watch/
       - stepsiblingscaught.com/video/watch/
       - teacherfucksteens.com/video/watch/
       - youngermommy.com/video/watch
@@ -57,6 +62,7 @@ sceneByURL:
       - deeplush.com/video/watch/
       - nfbusty.com/video/watch/
       - nubiles.net/video/watch/
+      - smashed.xxx/video/watch/
 
 galleryByURL:
   # Nubiles Porn sites
@@ -88,6 +94,7 @@ galleryByURL:
       - petiteballerinasfucked.com/photo/gallery/
       - petitehdporn.com/photo/gallery/
       - princesscum.com/photo/gallery/
+      - realitysis.com/photo/gallery/
       - stepsiblingscaught.com/photo/gallery/
       - teacherfucksteens.com/photo/gallery/
       - youngermommy.com/photo/gallery/
@@ -109,6 +116,7 @@ galleryByURL:
       - deeplush.com/photo/gallery/
       - nfbusty.com/photo/gallery/
       - nubiles.net/photo/gallery/
+      - smashed.xxx/photo/gallery/
 
 xPathScrapers:
   # Nubiles Porn sites
@@ -118,6 +126,7 @@ xPathScrapers:
 
     scene:
       Title: &titleSelector //h2/text()
+      Code: &codeSelector $contentpane//div[contains(@class,"star-rating-wrapper")]/@data-id
       Date: &dateAttr
         selector: $contentpane//span[@class="date"]/text()
         postProcess:
@@ -129,7 +138,7 @@ xPathScrapers:
         Name: //div[@class="content-pane-performers"]/a/text()
       Studio: &studioFromSiteLinkAttr
         Name:
-          selector: $contentpane//a[@class="site-link"]/text()
+          selector: $contentpane//a[@class="site-link"]/text() | $contentpane//span[@class="site-link"]/text()
           postProcess:
             - replace:
                 - regex: (.+?)\.(com|xxx)
@@ -147,7 +156,7 @@ xPathScrapers:
                 Moms Boy Toy: Mom's Boy Toy
                 Moms Family Secrets: Mom's Family Secrets
                 Moms Tight: Mom's Tight
-                
+
                 Nubiles ET: NubilesET
       Tags: &tagsAttr
         Name: //div[@class="categories"]/a/text()
@@ -166,6 +175,7 @@ xPathScrapers:
               # Remove - S11:E11 part
               - regex: \s-\sS\d+:E\d+$
                 with:
+      Code: *codeSelector
       Details: *detailsAttr
       Date: *dateAttr
       Performers: *performersAttr
@@ -178,6 +188,7 @@ xPathScrapers:
 
     scene:
       Title: *titleSelector
+      Code: *codeSelector
       Date: *dateAttr
       Details: *detailsAttr
       Performers: *performersAttr
@@ -210,6 +221,7 @@ xPathScrapers:
 
     scene:
       Title: *titleSelector
+      Code: *codeSelector
       Date: *dateAttr
       Details: *detailsAttr
       Performers: *performersAttr
@@ -218,17 +230,19 @@ xPathScrapers:
           selector: //title/text()
           postProcess:
             - replace:
-              - regex: ^(.+?)\s-.+$
-                with: $1
+                - regex: ^(.+?)\s-.+$
+                  with: $1
+            - map:
+                Nubiles: Nubiles.net      
       Tags: *tagsAttr
       Image: *imageAttr
 
     gallery:
       Title: *galleryTitleAttr
+      Code: *codeSelector
       Details: *detailsAttr
       Date: *dateAttr
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
-
-# Last Updated June 06, 2022
+# Last Updated May 24, 2024

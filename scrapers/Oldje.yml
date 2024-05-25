@@ -25,11 +25,11 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name:
-          selector: //a[contains(@href,'/models/preview/')]
+          selector: //a[@class="act_name_h"]
       Details:
         selector: //p[@class='text']|//div[@class="preview_desc"]
       Image:
-        selector: (//div[@id="content" or @id="prev_m"]/a)[1]/img/@src
+        selector: //div[@id="content" or @id="prev_m"]/a[1]/img/@src
   oldje3someScraper:
     scene:
       Studio:
@@ -51,4 +51,4 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https://www.oldje-3some.com/"
-# Last Updated April 15, 2021
+# Last Updated February 25, 2023

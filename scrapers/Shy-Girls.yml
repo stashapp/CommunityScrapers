@@ -1,0 +1,26 @@
+name: Shy Girls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - shy-girls.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Image:
+        selector: //img/@data-large_image
+      Details: //div[contains(@class,'short-description')]/p
+      Studio:
+        Name:
+          fixed: Shy-Girls
+      Tags:
+        Name: //span[@class='tagged_as']/a
+      Performers:
+        Name: 
+          selector: //span[@class='posted_in']/a
+          postProcess:
+            - replace:
+                - regex: ([^-]+)[-\s]+.+$
+                  with: $1
+# Last Updated April 22, 2024

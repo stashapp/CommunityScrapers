@@ -1,0 +1,48 @@
+name: BlackGirlFetish
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - blackgirlfetish.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Date: 
+        selector: //script[contains(.,'datePublished')] | //div[@class='datev']
+        postProcess:
+          - replace:
+              - regex: '.+?datePublished":"([\d-]+).+'
+                with: $1
+              - regex: 'Date:\s*'
+                with: ''
+          - parseDate: Jan 2, 2006
+      Details: 
+        selector: //div[@class='scrn-cap']/h4/text() | //div[@class='scrn-cap']/p/text() 
+        concat: ' '
+      Performers:
+        Name: //div[@class='vdtls']/a
+      Image:
+        selector: //script[contains(.,'splashImage')] | //div[@class='imgplayer']//img/@src
+        postProcess:
+          - replace:
+              - regex: .+?splashImages.+"url":"([^"]+).+
+                with: $1
+              - regex: '\\/'
+                with: '/'
+      Studio:
+        Name: 
+          selector: //div[@class='logo']/a/@href
+          postProcess:
+            - replace:
+                - regex: '.+/([^/]+)/?$'
+                  with: $1
+            - map:
+                blackgirlfetish.com: Black Girl Fetish
+                blackfemdomgoddess: Black Femdom Goddess
+                bondagefantasycamp: Bondage Fantasy Camp
+                diamondortega: Diamond Ortega
+                freshfleshamateurs: Fresh Flesh Amateurs
+                    
+# Last Updated May 07, 2024

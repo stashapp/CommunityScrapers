@@ -20,12 +20,15 @@ xPathScrapers:
         selector: $genInfo/span[@class="bullet"]/following-sibling::text()
         postProcess:
           - parseDate: 02 January, 2006
-      Details: &detailsSel $info//div[@class="description"]/text()
+      Details: &detailsSel $info//*[@class="description"]
       Tags:
         Name: $info//div[starts-with( @class,"tag-list")]/a/text()
       Performers:
         Name: $info//div[starts-with(@class,"info")]/a/text()
       Image: &imageSel //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: "Virtual Taboo"
   movieScraper:
     common:
       $info: *infoSel
@@ -51,5 +54,5 @@ xPathScrapers:
           fixed: VirtualTaboo
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated September 17, 2021
+# Last Updated August 04, 2023
 

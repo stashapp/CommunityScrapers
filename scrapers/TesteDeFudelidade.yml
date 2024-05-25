@@ -1,0 +1,59 @@
+name: "Teste de Fudelidade"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - testedefudelidade.com/
+    scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - testedefudelidade.com/filmes/
+    scraper: movieScrapper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - testedefudelidade.com/modelos/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //*[text()='Elenco:']/following-sibling::ul/li/a
+      $movie: //div[contains(@class, 'filme')]/div[@class="capa"]/img
+    scene:
+      Title:
+        selector: //*[@class="title"]/h1
+      Details:
+        selector: //*[@class="descript"]
+      Date:
+        selector: //div[@class="cell desktop"]/div[@class="new"]/span
+        postProcess:
+          - parseDate: 02/01/2006
+      Image:
+        selector: //*[@id="playerFk"]/img/@src
+      Studio:
+        Name: 
+          fixed: Teste de Fudelidade
+      Movies:
+        Name: $movie/@title
+        FrontImage: $movie/@src
+        Studio: 
+          Name: Teste de Fudelidade
+      Tags:
+        Name:
+          selector: //*[text()='Categorias:']/following-sibling::p/a/text()
+      Performers:
+        Name: $performer/text()
+        URL: $performer/@href
+        Image: $performer/div[@class="img"]/img/@src
+  movieScrapper:
+    common:
+      $performer: //*[text()='Elenco:']/following-sibling::ul/li/a
+      $movie: //div[contains(@class, 'filme')]/div[@class="capa"]/img
+    movie:
+      Name: $movie/@title
+      FrontImage: $movie/@src
+  performerScraper:
+    performer:
+      Name: //div[@class="titleGeral"]/div[1]/text()
+      Image: //div[@class="photo"]/img/@src
+# Last Updated January 05, 2024

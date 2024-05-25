@@ -1,0 +1,113 @@
+name: JakeCruiseMedia
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cocksuremen.com/tour/
+      - jakecruise.com/tour/
+      - hotdadshotlads.com/tour/
+      - straightguysforgayeyes.com/tour/
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - cocksuremen.com/tour/
+      - jakecruise.com/tour/
+      - hotdadshotlads.com/tour/
+      - straightguysforgayeyes.com/tour/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //meta[@property="og:title"]/@content
+      Performers:
+        Name: //ul[@class="featuredModels"]/li/a/span
+      Date:
+        selector: //span[@class="post-date"]/text()
+        postProcess:
+          - replace:
+              - regex: (st|[nr]d|th)
+                with: ""
+          - parseDate: 2 Jan 2006
+      Image:
+        selector: >
+          //base/@href | //script[contains(text(),"poster=")]/text()
+        concat: "__SEP__"
+        postProcess:
+          - replace:
+              - regex: ^(.+)?/tour/__SEP__.+?poster="([^"]+)".+$
+                with: $1/$2
+              - regex: ^(https:)?
+                with: "https:"
+      Details:
+        selector: //div[@class="aboutvideo"]/p
+      Studio:
+        Name: //meta[@name='author']/@content
+
+  performerScraper:
+    performer:
+      Name: //div[@class='profile_details']/h3
+      Details: //p[@class='details']
+      EyeColor: //li[contains(.,'EYE COLOR')]/span
+      HairColor: //li[contains(.,'HAIR COLOR')]/span
+      Gender:
+        # One of the sites has female performers, but there's no gender tag on the models pages.
+        # This checks the Cut / UnCut tag and assumes Male if it's found.  Otherwise, just get
+        # a common, simple element and when this is returned assign Female.  Maybe there's a better
+        # way to do it...
+        selector: //li[@class='model_profile_cutuncut']/span | //div[@class='logo']/@class
+        postProcess:
+          - replace:
+              - regex: ^.*Cut.*
+                with: "Male"
+              - regex: "logo"
+                with: "Female"
+      Height:
+        selector: //li[@class='model_profile_dicksize']/span
+        postProcess:
+          - replace:
+              - regex: (\d+)['\s]+(\d+)?.+
+                with: $1.$2
+          - feetToCm: true
+      Weight:
+        # There's a @class that specifies "weight", but it's overloaded to handle hair and eye color
+        # on one site, so we're forced to go with a text match here.
+        selector: //li[contains(.,'WEIGHT')]/span
+        postProcess:
+          - replace:
+              - regex: '[^\d]'
+                with: ""
+          - lbToKg: true
+      PenisLength:
+        selector: //li[@class='model_profile_dicksize']/span
+        postProcess:
+          - replace:
+              - regex: '\.[^\d]'
+                with: ""
+              - regex: ^
+                with: "0."
+          - feetToCm: true
+      Circumcised:
+        selector: //li[@class='model_profile_cutuncut']/span
+        postProcess:
+          - replace:
+              - regex: "-"
+                with: ""
+      Tags:
+        Name: //li[@class='model_profile_position']/span
+      Image:
+        selector: >
+          //base/@href
+          | //img[contains(@class,'model_bio_thumb')]/@src0_1x
+          | //img[contains(@class,'model_bio_thumb')]/@src0_2x
+          | //img[contains(@class,'model_bio_thumb')]/@src0_3x
+        concat: "__SEP__"
+        postProcess:
+          - replace:
+              - regex: ^(.+)?/__SEP__.+__SEP__(.+)?
+                with: $1/$2
+              - regex: ^(https:)?
+                with: "https:"
+# Last Updated May 10, 2023

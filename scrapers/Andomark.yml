@@ -1,42 +1,330 @@
-# Be sure to set a User Agent in Settings! (ex:Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
 name: "Andomark"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - reidmylips.elxcomplete.com/updates/
-      - reidmylips.com/updates/
-      - sheseducedme.com/updates
-      - aliciasgoddesses.com/updates
-      - ariellynn.com/tour/
+      - american-pornstar.com/updates/
+      - ariellynn.com/tour/updates/
+      - ashley4k.com/updates/
+      - behindtheporno.com/updates/
+      - bigboobiesclub.com/updates/
+      - bigbouncybabes.com/updates/
+      - bigtoyxxx.com/updates/
+      - bondagelegend.com/updates/
+      - boxofporn.info/tour/updates/      
+      - bradsterling.elxcomplete.com/updates/
+      - britstudio.xxx/updates/
+      - brittanyandrewsxxx.com/updates/
+      - brittanysbubbles.com/updates/
+      - charmmodels.net/updates/      
+      - charlieforde.com/updates/
+      - chocolatepov.com/updates/
+      - collectivecorruption.com/updates/
+      - dallasdiamondz.com/tour/
+      - datingapphookup.com/updates/
+      - dirtroadwarriors.com/updates/
+      - dixiestrailerpark.com/tour/
+      - domingoview.com/updates/      
+      - dreamgirlsclips.com/updates/
+      - dreamorgan.com/updates/
+      - feelmevr.com/updates/      
+      - furrychicks.elxcomplete.com/updates/
+      - grannycumshere.com/tour/
+      - hollyhotwife.elxcomplete.com/updates/
+      - houseofyre.com/updates/
+      - humiliation4k.com/updates/
+      - hungarianhoneys.com/tour/updates/
+      - internationalnudes.com/updates/
+      - johnnygoodluck.com/updates/
+      - justgoodsex.com/updates/
+      - justpov.com/tour/updates/
+      - lasvegasamateurs.com/tour/updates/
+      - letstryhard.com/updates/      
+      - mackmovies.com/updates/
+      - melaniehicksxxx.com/updates/
+      - msparisandfriends.com/tour/updates/
+      - nicefeelings.com/updates/
+      - nylons4k.com/updates/
+      - oldsexygrannies.com/updates/
+      - pawged.com/tour/updates/
+      - pawgnextdoor.com/tour/updates/
+      - playpetvictoria.com/updates/
+      - queercrush.com/updates/
       - ravenswallowzxxx.com/updates/
+      - reidmylips.com/updates/
+      - reidmylips.elxcomplete.com/updates/
+      - rionkingxxx.com/updates/
+      - seanmichaelsxxx.com/updates/
+      - secretsusan.com/updates/
+      - sheseducedme.com/updates/
+      - sofiemariexxx.com/updates/
+      - suburbantaboo.com/tour/
+      - tabooadventures.elxcomplete.com/updates/
+      - tampahousewives.com/tour/
+      - test-shoots.com/updates/      
+      - texaspattiusa.com/updates/
+      - thatfetishgirl.com/updates/
+      - tmfetish.com/updates/
+      - vanillapov.com/updates/
+      - whorebaithals.com/tour/
+      - willtilexxx.com/updates/
+      - xevunleashed.com/updates/
+      - xxxcellentadventures.com/updates/
+      - younggunsxxx.com/updates/
+      - yummybikinimodel.com/updates/
+      - yummygirl.com/updates/
+      - yummygirlz.com/updates/
+      - yummypornclub.com/updates/
+      - yummysexclub.com/updates/
+      - yummysofie.com/updates/
+      - yummywomen.com/updates/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      # Many sites have better metadata in the members access section, but these
+      # are the ones that ONLY provide the members access version of scene pages
+      - beatmeup.com/access/scenes/
+      - goonmuse.com/access/scenes/
+      - xevunleashed.com/access/scenes/
+    scraper: proSceneScraper
+  - action: scrapeXPath
+    url:
+      # These sites have a members access section that is not linked from their main page
+      # note that these pages often have more tags and a full description but no cover image
+      - ariellynn.com/access/scenes/
+      - ashley4k.com/access/scenes/
+      - behindtheporno.com/access/scenes/
+      - bigboobiesclub.com/access/scenes/
+      - bigbouncybabes.com/access/scenes/
+      - bigtoyxxx.com/access/scenes/
+      - bradsterling.elxcomplete.com/access/scenes/
+      - brittanyandrewsxxx.com/access/scenes/
+      - brittanysbubbles.com/access/scenes/
+      - chocolatepov.com/access/scenes/
+      - datingapphookup.com/access/scenes/
+      - dirtroadwarriors.com/access/scenes/
+      - furrychicks.elxcomplete.com/access/scenes/
+      - hollyhotwife.elxcomplete.com/access/scenes/
+      - houseofyre.com/access/scenes/
+      - humiliation4k.com/access/scenes/
+      # Hungarian Honeys has a members access section but it's not linked from the main page
+      # it also serves pages with status 500 so they're unscrapable right now, making a note
+      # here in case we ever rewrite to a script scraper
+      - hungarianhoneys.com/trailers/
+      - internationalnudes.com/access/scenes/
+      - johnnygoodluck.com/access/scenes/
+      - laurenphillips.com/access/scenes/
+      - mackmovies.com/access/scenes/
+      - melaniehicksxxx.com/access/scenes/
+      - nylons4k.com/access/scenes/
+      - oldsexygrannies.com/access/scenes/
+      - playpetvictoria.com/access/scenes/
+      - queercrush.com/access/scenes/
+      - ravenswallowzxxx.com/access/scenes/
+      - reidmylips.com/access/scenes/
+      - reidmylips.elxcomplete.com/access/scenes/
+      - rionkingxxx.com/access/scenes/
+      - seanmichaelsxxx.com/access/scenes/
+      - secretsusan.com/access/scenes/
+      - sheseducedme.com/access/scenes/
+      - sheseducedme.com/vod/scenes/
+      - sofiemariexxx.com/access/scenes/
+      - tabooadventures.elxcomplete.com/access/scenes/
+      - terapatrick.com/access/scenes/
+      - texaspattiusa.com/access/scenes/
+      - thatfetishgirl.com/access/scenes/
+      - tmfetish.com/access/scenes/
+      - vanillapov.com/access/scenes/
+      - willtilexxx.com/access/scenes/
+      - xxxcellentadventures.com/access/scenes/
+      - younggunsxxx.com/access/scenes/
+      - yummybikinimodel.com/access/scenes/
+      - yummygirl.com/access/scenes/
+      - yummygirlz.com/access/scenes/
+      - yummypornclub.com/access/scenes/
+      - yummysexclub.com/access/scenes/
+      - yummysofie.com/access/scenes/
+      - yummywomen.com/access/scenes/
+    scraper: proSceneWithImgFallbackScraper
+
 xPathScrapers:
   sceneScraper:
+    common:
+      $scene: //div[contains(@class, "update_block")]
+      $excludeUpdates: not(ancestor::*[contains(@class, "mpuSection")])
     scene:
-      Title: //span[@class="update_title"]/text()|//title/text()
+      Title: $scene//span[@class="update_title"]/text()|//title/text()
       Date:
-        selector: //span[@class="availdate"]/text()[1]|//span[@class="update_date"]/text()
-        postProcess:
-            - parseDate: 01/02/2006
-      Details: //span[@class="latest_update_description"]
+        # Some sites hide their release date in a comment
+        selector: >-
+          //*[(contains(@class, "availdate") or contains(@class, "update_date")) and contains(., "/")]
+          | //*[(contains(@class, "availdate") or contains(@class, "update_date"))]/comment()
+          | (//*[contains(@class,'fa-calendar')]/following-sibling::text())[1]
+        postProcess: &datePostProcess
+          - replace:
+              - regex: ".*?([0-9]{2}/[0-9]{2}/[0-9]{4}).*"
+                with: $1
+          - parseDate: 01/02/2006
+      Details: $scene//span[@class="latest_update_description"]
       Performers:
-        Name:
-          selector: //span[@class="tour_update_models"]
-          postProcess:
-            - replace:
-                - regex: "[\\s]*(,)[\\s]*"
-                  with: "$1"
-          split: ","
+        Name: $scene//span[@class="tour_update_models" and $excludeUpdates]/a
       Tags:
-        Name: //span[@class="update_tags"]/a/text()|//span[@class="tour_update_tags"]/a/text()
+        Name: $scene//span[contains(@class, "update_tags")]/a
       Studio:
         Name:
-            selector: //link[@rel="canonical"]/@href
-            postProcess:
-                - replace:
-                    - regex: (.+\/\/)(.+?)(\..+)
-                      with: $2
-      Image: //meta[@property="og:image"]/@content
+          selector: //link[@rel="canonical"]/@href | //base/@href
+          postProcess: &studioPostProcess
+            - replace:
+                - regex: https://(w{3}?\.?)?(.+?)(\..+)
+                  with: $2
+            - map:
+                ariellynn: Ariel Lynn
+                ashley4k: Ashley 4K
+                beatmeup: BeatMeUp
+                behindtheporno: Behind The Porno
+                bigboobiesclub: Big Boobies Club
+                bigbouncybabes: Big Bouncy Babes
+                bigtoyxxx: Big Toy XXX
+                bondagelegend: Bondage Legend
+                boxofporn: Box of Porn
+                bradsterling: Brad Sterling
+                britstudio: Brit Studio
+                brittanyandrewsxxx: Britttany Andrews
+                brittanysbubbles: Brittany Andrews
+                charlieforde: Charlie Forde
+                charmmodels: Charm Models
+                chocolatepov: ChocolatePOV
+                collectivecorruption: Collective Corruption
+                dallasdiamondz: Dallas Diamondz
+                datingapphookup: Dating App Hook Ups
+                dirtroadwarriors: Dirt Road Warriors
+                dixiestrailerpark: Dixie's Trailer Park
+                domingoview: DomingoView
+                dreamgirlsclips: DreamGirls Clips
+                dreammorgan: Drea Morgan
+                feelmevr: FeelMeVR
+                furrychicks: Furry Chicks
+                goonmuse: GoonMuse
+                grannycumshere: Granny Cums Here
+                hollyhotwife: HollyHotWife
+                houseofyre: House of Fyre
+                humiliation4k: Humiliation 4K
+                hungarianhoneys: Hungarian Honeys
+                internationalnudes: International Nudes
+                johnnygoodluck: Johnny Goodluck
+                justgoodsex: JustGoodSex
+                justpov: Just POV
+                lasvegasamateurs: Las Vegas Amateurs
+                laurenphillips: Lauren Phillips
+                letstryhard: Let's Try Hard
+                mackmovies: Mack Movies
+                melaniehicksxxx: Melanie Hicks XXX
+                msparisandfriends: Ms Paris and Friends
+                nicefeelings: Nice Feelings
+                nylons4k: Nylons 4K
+                oldsexygrannies: OldSexyGrannies
+                pawged: PAWGED
+                pawgnextdoor: PAWG Next Door
+                playpetvictoria: PlaypetVictoria
+                queercrush: QueerCrush
+                ravenswallowzxxx: Raven Swallows
+                reidmylips: Reid My Lips
+                rionkingxxx: Rion King
+                seanmichaelsxxx: Sean Michaels
+                secretsusan: Secret Susan
+                sheseducedme: She Seduced Me
+                sofiemariexxx: Sofie Marie XXX
+                suburbantaboo: Suburban Taboo
+                swingingbicouples: Swinging Bi Couples
+                tabooadventures: Taboo Adventures
+                tampahousewives: Tampa Housewives
+                terapatrick: Terra Patrick
+                test-shoots.com: Test Shoots
+                texaspattiusa: TexasPattiUSA
+                thatfetishgirl: ThatFetishGirl
+                tmfetish: TMFetish
+                vanillapov: VanillaPOV
+                willtilexxx: Will Tile XXX
+                xevunleashed: Xev Unleashed
+                xxxcellentadventures: XXXcellentAdventures
+                younggunsxxx: YoungGunsXXX
+                yummybikinimodel: YummyBikini
+                yummygirl: Yummygirl
+                yummygirlz: Yummygirlz
+                yummypornclub: YummyPornClub
+                yummysexclub: Spik Irons' YummySexClub
+                yummysofie: Yum Sofie
+                yummywomen: Yummywomen
+      Image: &image
+        selector: //base/@href | //div[@class="update_image"]/a/img[@src0_1x]/@src0_1x | //span[@class="model_update_thumb"]/img/@src
+        concat: /
+        postProcess:
+          - replace:
+              - regex: ^(https://.+)?https://
+                with: https://
+              - regex: tour///
+                with: ""
       URL: //link[@rel='canonical']/@href
-
-# Last Updated October 09, 2020
+  proSceneScraper:
+    common:
+      # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
+      $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
+    scene:
+      Title: //div[@class="title_bar"]/span
+      Date:
+        selector: //div[contains(@class, "update_date") and $excludeUpdates and contains(., "/")]
+        postProcess: *datePostProcess
+      Details: //span[@class="update_description"]
+      Performers:
+        Name: //span[@class="update_models" and $excludeUpdates]/a
+      Tags:
+        Name: //span[@class="update_tags" and $excludeUpdates]/a
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess: *studioPostProcess
+      Image:
+        selector: //base/@href | //script[contains(text(), 'useimage = "/')]/text()
+        concat: __SEPARATOR__
+        postProcess:
+          - replace:
+              # If the image was empty we clear the URL
+              - regex: .*/$
+                with: ""
+              - regex: (https://[^/]+).*useimage = "([^"]*).*
+                with: $1$2
+  proSceneWithImgFallbackScraper:
+    common:
+      # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
+      $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
+    scene:
+      Title: //div[@class="title_bar"]/span
+      Date:
+        selector: //div[contains(@class, "update_date") and $excludeUpdates and contains(., "/")]
+        postProcess: *datePostProcess
+      Details: //span[@class="update_description"]
+      Performers:
+        Name: //span[@class="update_models" and $excludeUpdates]/a
+      Tags:
+        Name: //span[@class="update_tags" and $excludeUpdates]/a
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess: *studioPostProcess
+      Image:
+        selector: //a[@class="option_button"]/@href
+        postProcess:
+          - replace:
+              - regex: _(vids|caps|highres).html$
+                with: .html
+              - regex: /access/scenes/
+                with: /updates/
+          - subScraper: *image
+driver:
+  cookies:
+    - CookieURL: https://sheseducedme.com
+      Cookies:
+        - Name: nats
+          Domain: sheseducedme.com
+          ValueRandom: 36
+          Path: /
+# Last Updated April 30, 2024

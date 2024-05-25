@@ -1,29 +1,116 @@
-name: superbemodels
+name: SuperbeModels
 sceneByURL:
   - action: scrapeXPath
     url:
-      - superbemodels.com
+      - superbemodels.com/watch
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - superbemodels.com/models
+    scraper: performerScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - superbemodels.com/albums
+    scraper: galleryScraper
+
 xPathScrapers:
   sceneScraper:
-    scene:
-      Title: //div[@class="item-name-model-video item-tags-change"]//h1
-      Date:
-        selector: //span[@class="duration-box duration-box-change"][contains(span,"Release date:")]/em
+    scene: 
+      Title: //meta[@property='og:title']/@content
+      Details: //div[@class='-mvd-description']/text()
+      Date: 
+        selector: //meta[@itemprop='uploadDate']/@content
         postProcess:
-          - parseDate: January 2, 2006
-      Details: //div[@class="item description-video"]/p
-      Performers:
-        Name: //a[@class="models-name-box "]
+          - parseDate: 2006-01-02T15:04:05-07:00
+
+      # The site uses a rotation of images for their cover image,
+      # so the one that's picked up here might not be the same as 
+      # the one you see if you visit the page in your browser. 
+      Image: //div[@class='video-container']//img/@src
       Tags:
-        Name:
-          selector: //div[@class="item item-tags-change"]//a
-          postProcess:
-            - replace:
-                - regex: ","
-                  with: ""
+        Name: //div[@class='-mvd-grid-more-title' and contains(text(),'Information')]/following-sibling::div//a
       Studio:
         Name:
-          fixed: superbemodels
-      Image: //div[@class="block-screenshots"]/a[contains(@href,"/1.jpg")]/@href
-# Last Updated March 15, 2021
+          fixed: Superbe Models
+      Performers:
+        URL: &performerURL //div[@class='-mvd-grid-actors']//a/@href
+        Name: //div[@class='-mvd-grid-actors']//a[contains(@href,'/models')]
+        Gender: &performerGender
+          fixed: Female
+        HairColor:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerHair
+                selector: //div[span[(@class='girl-info-label') and contains(.,'Hair')]]/span[@class='girl-info-info']/text()
+        EyeColor:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerEyes
+                selector: //div[span[(@class='girl-info-label') and contains(.,'Eyes')]]/span[@class='girl-info-info']/text()
+        Height:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerHeight
+                selector: //div[span[(@class='girl-info-label') and contains(.,'Height')]]/span[@class='girl-info-info']/text()
+        Country:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerCountry
+                selector: //div[span[(@class='girl-info-label') and contains(.,'Nationality')]]/span[@class='girl-info-info']/text()
+        Details:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerDetails
+                selector: //div[@class='girl-description']
+        Image:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerImage
+                selector: //svg[contains(@class,'girl-image')]/@data-bg
+        Measurements:
+          selector: *performerURL
+          postProcess:
+            - subScraper: &performerMeasurements
+                selector: >
+                  //div[span[(@class='girl-info-label') and contains(.,'Bust')]]/span[@class='girl-info-info']/text()
+                  | //div[span[(@class='girl-info-label') and contains(.,'Waist')]]/span[@class='girl-info-info']/text()
+                  | //div[span[(@class='girl-info-label') and contains(.,'Hips')]]/span[@class='girl-info-info']/text()
+                concat: '-' 
+
+  performerScraper:
+    performer:
+      Name: //h1
+      Gender: *performerGender
+      Country: *performerCountry
+      Height: *performerHeight
+      HairColor: *performerHair
+      EyeColor: *performerEyes
+      Measurements: *performerMeasurements
+      Details: *performerDetails
+      Image: *performerImage
+
+  galleryScraper:
+    gallery:
+      Title: //h1
+      Date:
+        selector: //div[@class='-a-panel-date']/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Studio:
+        Name:
+          fixed: Superbe Models
+      Performers:
+        Name: //div[@class='-a-panel-actors']//a
+        URL: &performerSelector 
+          selector: //div[@class='-a-panel-actors']//a/@href
+          postProcess:
+            - replace:
+                - regex: '^'
+                  with: 'https://superbemodels.com'
+        Gender: *performerGender
+
+# Last Updated April 14, 2024

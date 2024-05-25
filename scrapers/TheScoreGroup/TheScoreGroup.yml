@@ -1,0 +1,251 @@
+name: TheScoreGroup
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - 18eighteen.com
+      - 40somethingmag.com
+      - 50plusmilfs.com
+      - 60plusmilfs.com
+      - autumn-jade.com
+      - bigboobspov.com
+      - bigtitangelawhite.com
+      - bigtithitomi.com
+      - bigtithooker.com
+      - bigtitterrynova.com
+      - bigtitvenera.com
+      - bonedathome.com
+      - bootyliciousmag.com
+      - bustyangelique.com
+      - bustyarianna.com
+      - bustydanniashe.com
+      - bustydustystash.com
+      - bustyinescudna.com
+      - bustykellykay.com
+      - bustykerrymarie.com
+      - bustylornamorga.com
+      - bustymerilyn.com
+      - bustyoldsluts.com
+      - chloesworld.com
+      - christymarks.com
+      - cock4stepmom.com
+      - creampieforgranny.com
+      - crystalgunnsworld.com
+      - daylenerio.com
+      - desiraesworld.com
+      - evanottyvideos.com
+      - feedherfuckher.com
+      - flatandfuckedmilfs.com
+      - homealonemilfs.com
+      - karinahart.com
+      - legsex.com
+      - mickybells.com
+      - milftugs.com
+      - mommystoytime.com
+      - naughtymag.com
+      - pickinguppussy.com
+      - pornmegaload.com
+      - reneerossvideos.com
+      - scoreclassics.com
+      - scoreland.com
+      - scoreland2.com
+      - scorevideos.com
+      - sharizelvideos.com
+      - stacyvandenbergboobs.com
+      - tawny-peaks.com
+      - titsandtugs.com
+      - valoryirene.com
+      - xlgirls.com
+      - yourwifemymeat.com
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: galleryScraper
+performerByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: performerScraper
+performerByName:
+  action: script
+  script:
+    - python
+    - TheScoreGroup.py
+    - search
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $url: //link[@rel="canonical"]/@href
+      $videopage: //section[@id="videos_page-page" or @id="mixed_page-page"]
+      $stat: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]
+    scene:
+      Title: $videopage//h1
+       # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...) this helps set studio for Pornmegaload scenes as nothing is released directly from PML." 
+      Studio:
+        Name:
+          selector: ($videopage//video/source/@src)[1]
+          postProcess:
+            - replace:
+                - regex: .*\.com/(.+?)\/(video|scene).*
+                  with: $1
+            - map: &studioMap
+                18eighteen: 18 Eighteen
+                40somethingmag: 40 Something Mag
+                50plusmilfs: 50 Plus MILFs
+                60plusmilfs: 60 Plus MILFs
+                autumn-jade: Autumn Jade
+                bigboobspov: Big Boobs POV
+                bigtitangelawhite: Big Tit Angela White
+                bigtithitomi: Big Tit Hitomi
+                bigtithooker: Big Tit Hooker
+                bigtitterrynova: Big Tit Terry Nova
+                bigtitvenera: Big Tit Venera
+                bonedathome: Boned At Home
+                bootyliciousmag: Bootylicious Mag
+                bustyangelique: Busty Angelique
+                bustyarianna: Busty Arianna
+                bustydanniashe: Busty Danni Ashe
+                bustydustystash: busty Dusty Stash
+                bustyinescudna: Busty Ines Cudna
+                bustykellykay: Busty Kelly Kay
+                bustykerrymarie: Busty Kerry Marie
+                bustylornamorga: Busty Lorna Morga
+                bustymerilyn: Busty Merilyn
+                bustyoldsluts: Busty Old Sluts
+                chloesworld: Chloe's World
+                christymarks: Christy Marks
+                cock4stepmom: Cock 4 Stepmom
+                creampieforgranny: Creampie for Granny
+                crystalgunnsworld: Crystal Gunns World
+                daylenerio: Daylene Rio
+                desiraesworld: Desiraes World
+                evanottyvideos: Eva Notty Videos
+                feedherfuckher: Feed Her Fuck Her
+                flatandfuckedmilfs: Flat and Fucked MILFs
+                homealonemilfs: Home Alone MILFs
+                karinahart: Karina Hart
+                legsex: Leg Sex
+                mickybells: Micky Bells
+                milftugs: MILF Tugs
+                mommystoytime: Mommy's Toy Time
+                naughtymag: Naughty Mag
+                pickinguppussy: Picking Up Pussy
+                pornmegaload: Porn Mega Load
+                reneerossvideos: Renee Ross Video
+                scoreclassics: Score Classics
+                # Scoreland2 needs to come before scoreland because it's more specific
+                scoreland2: Scoreland2
+                scoreland: Scoreland
+                scorevideos: Score Videos
+                sharizelvideos: Sha Rizel Videos
+                stacyvandenbergboobs: Stacy Vandenberg Boobs
+                tawny-peaks: Tawny Peaks
+                titsandtugs: Tits And Tugs
+                valoryirene: Valory Irene
+                xlgirls: XL Girls
+                yourwifemymeat: Your Wife My Meat
+      Date: &dateAttr
+        selector: $videopage$stat//span[contains(.,"Date:")]/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: ..,
+                with:
+          - parseDate: January 2 2006
+      Details: &details
+        selector: $videopage//div[@class="p-desc p-3"]/text()
+        postProcess:
+          - replace:
+              - regex: Read More »
+                with:
+              # Attempt to fix erroneous line breaks where HTML tags existed
+              - regex: \n\n([0-9a-zA-Z\.]+)\n\n
+                with: " $1 "
+        concat: "\n\n"
+      Tags:
+        Name: $videopage//a[contains(@href, "videos-tag") or contains(@href, "scenes-tag")]
+      Performers: &performersAttr
+        Name: $videopage//span[contains(.,"Featuring:")]/following-sibling::span/a
+      Image:
+        # This selector scrapes the canonical scene page cover image
+        selector: //script[contains(text(), "poster")]
+        postProcess:
+          - replace:
+              - regex: ^.+poster.+'(.+jpg)'.+$
+                with: $1
+              - regex: ^//
+                with: https://
+      # This Selector scrapes the image posted on social media sites
+      #        selector: //meta[@itemprop="image"]/@content
+      # Enable this post process if you want better image quality but sometimes it can fail
+      #          postProcess:
+      #            - replace:
+      #                - regex: _lg
+      #                  with: _x_800
+      URL: &urlAttr
+        selector: $url
+      Code: &codeAttr
+        selector: $url
+        postProcess:
+          - replace:
+              - regex: .*\/(\d+)\/?$
+                with: $1
+  galleryScraper:
+    common:
+      $photopage: //section[@id='photos_page-page']
+    gallery:
+      Title: //h1
+      Studio:
+        Name:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: ^(https://)?.+?([^\.]+)\.com/.*
+                  with: $2
+            - map: *studioMap
+      Date:
+        selector: //div[span[@class="label" and contains(.,"Date")]]/span[@class="value"]/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)(st|nd|rd|th)
+                with: $1
+          - parseDate: January 2, 2006
+      Details:
+        selector: $photopage//div[contains(@class, 'p-desc')]/text()
+        concat: "\n"
+      Tags:
+        Name: //h3/following-sibling::a[not(contains(@class,"btn-1"))]/text()
+      Performers:
+        Name: //div[span[@class="label" and contains(.,"Featuring")]]/span[@class="value"]//a/text()
+
+  performerScraper:
+    performer:
+      Name: //h1[@class="model-title"]
+      Gender:
+        fixed: Female
+      URL: //meta[@property="og:url"]/@content
+      Ethnicity:
+        selector: //span[text()="Ethnicity:"]/following-sibling::span
+        postProcess:
+          - map:
+              White: Caucasian
+      HairColor: //span[text()="Hair Color:"]/following-sibling::span
+      Height:
+        selector: //span[text()="Height:"]/following-sibling::span
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //span[text()="Weight:"]/following-sibling::span
+        postProcess:
+          - replace:
+              - regex: (\d+).*
+                with: $1
+          - lbToKg: true
+      Measurements:
+        selector: //span[text()="Bra Size:"]/following-sibling::span|//span[text()="Measurements:"]/following-sibling::span
+        concat: "-"
+        postProcess:
+          - replace:
+              - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
+                with: $1$2
+      Image: //section[@id="model-page"]//img[@class="lazyload"]/@src
+# Last Updated April 08, 2024

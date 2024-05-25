@@ -1,0 +1,221 @@
+name: Shopmaker
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 3dxjoy.com
+      - abdlgirl.com
+      - allsensual.net
+      - amateur-fanclubs.com
+      - amateure-xtreme.com
+      - amateurevent.com
+      - amateurlydia.com
+      - amelie-lei.com
+      - americandamsels.net
+      - andy-star-videos.com
+      - antonvideoclips.com
+      - bbdbbw.com
+      - bdsm-tickling.com
+      - bedroombondage.net
+      - blackfoxbound.net
+      - bluflix.net
+      - bondage-girlfriend.com
+      - bondage-store.tv
+      - bondageaspect.com
+      - bondagebeautiesinperil.com
+      - bondageplaydates.com
+      - bound-feet.com
+      - bound-men.com
+      - bound-neighbor-girl.com	
+      - bound-neighbor-girl-request.com	
+      - bound-ticklish-girl.com
+      - boundconvideo.com
+      - boundstudio.de
+      - bp-xiaomeng.com
+      - camangel.vip
+      - casalclips.com
+      - catfight-chicks.com
+      - clubleatherrestrained.com
+      - clubropemarks.com
+      - clubrubberrestrained.com
+      - clubsteffi.shop
+      - crissysweet.com
+      - cuffkeyscuties.com
+      - cutiesinbondage.net
+      - daggi-exclusive.com
+      - damselsgagged.com
+      - darkdreams.xxx
+      - der-schwarze-dorn.com
+      - diana-deluxe.com
+      - dirty-angelina.com
+      - dom-team.club
+      - dominated-men.com
+      - edgingbabes.com
+      - elbowbondage.com
+      - emily-addams.tv
+      - empress-empire.com
+      - eronite-femdom.com
+      - eronite-maledom.com
+      - eronite-movies.com
+      - eveeatsapples.com
+      - extrem-sm.com
+      - facesitting-paradise.com
+      - fetish-lady-angelina.com
+      - fetishgirlsuk.com
+      - fieldsoflillithvideo.com
+      - filipinays.net
+      - fuckedfetish.com
+      - fun-girls
+      - gaggedinpublic.com
+      - gaggirls.net
+      - girlsinsteel.com
+      - girlycast.com
+      - handcuffhandjobs.com
+      - hcavideos.com
+      - hdcprojects.com
+      - heavy-chains.com
+      - hugossexclub.com
+      - images.rubber.at
+      - italoonstore.com
+      - jocobo.com
+      - jocoboclips.com
+      - jupudo.com
+      - kinkhamster.com
+      - kinkyfloridaamateurs.com
+      - kinkystyle.net
+      - kyivjenny.com
+      - leggingsnet.nl
+      - linamila.tv
+      - lorettas-barefoot-bondage.com
+      - m3ndr3ams.com
+      - mariskasworld.com
+      - masterkeithmovies.com
+      - minuitsasori.com
+      - mistresstokyovideo.com  ##
+      - mistresstopia.com
+      - moiramona.com
+      - my-bondage-girl.com
+      - my-slavegirl.com
+      - mystical-girl.com
+      - nica-nordic.com
+      - nicix-fetish.com
+      - nordic-bondage-experience.com
+      - nylonallover.com
+      - pinkzilla.eu
+      - popp-sylvie.eu
+      - pornbanx.com
+      - pornomeisterei.com
+      - puzzyfun.com
+      - rainwearbondage.net
+      - rosetti.tv
+      - rubberbreed.com
+      - rubberdomina.club
+      - rubbertits.net
+      - russiansmokers.com
+      - sadistenzirkel.com
+      - sexyrainwear.online
+      - sexytiedgirls.com
+      - shinynylonarts.net
+      - shinynylonartsbound.com
+      - shinywear.net
+      - shop.avafetishart.com
+      - shop.boundxdressers.com
+      - shop.camvivian.com
+      - shop.kinkysexbox.com
+      - shop.princessnikkicruel.com
+      - shop.sinteque.com
+      - sissy-slut-training.com
+      - sklavin.dev
+      - sna-down.com
+      - sna-rain.com
+      - sna-rainbound.com
+      - sna-shortsbound.com
+      - spannergeil.com
+      - supertightbondage.com
+      - swizztramplefeet.com
+      - the-fetish-clinic.com
+      - tainaworld.com
+      - tied-and-gagged.com
+      - tightslovers.com
+      - thebondagechallenge.com
+      - trashbagbondage.com
+      - undermyprincess.com
+      - uschi-haller.com
+      - vanessa.sweatered.com
+      - watchgirls.net
+      - woolbondage.com
+      - xdreamstv.com
+      - xtremely-tight.com
+      - youngcutiesoldcocks.com
+      - yourfetishzone.com
+      - yourpainismypleasure.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property='og:title']/@content
+      Date: //span[@title="Published at"]/span/text()
+      Details: //meta[@property='og:description']/@content | //meta[@name='description']/@content
+      Image: //meta[@property='og:image']/@content
+      Studio:
+        Name: 
+          selector: //a[@class='navbar-brand' and text() !=''] | //a[@class='navbar-brand']/img/@alt | //a[@class='navbar-brand']/span
+          postProcess:
+            - replace:
+                - regex: \.com$
+                  with: ''
+                - regex: '[\s-]+Fetishclips$'
+                  with: ''
+                - regex: ^Buy Manyvids.fuckedfetish.+
+                  with: Fucked Fetish
+                - regex: ^Smoking fetish videos with Russian.+
+                  with: Russian Smokers 
+                - regex: '[\s-]*German GangBang Movies'
+                  with: ''
+                - regex: '[\s\|]*Brilliant Handjobs and Porn Movies'
+                  with: ''
+                - regex: .+?extrem-SM.+
+                  with: extrem-SM
+                - regex: WEB STORE
+                  with: ''
+            - map:
+                mystical-girl: Mystical Girl
+                Shinynylonart: ShinyNylonArts
+                Shinynylonartsbound: ShinyNylonArts Bound
+                CamVivian Solo Girl: CamVivian
+                Sklavin.dev: Sklavin
+                tied-and-gagged: Tied and Gagged
+                YoungCutiesOldCocks: Young Cuties Old Cocks
+                EVE EATS APPLES: Eve Eats Apples
+                damselsgagged: Damsels Gagged
+                BedroomBondage.net: Bedroom Bondage
+                Bound-neighbor-girl-request: Bound Neighbor Girl Request
+                Bound-neighbor-girl: Bound Neighbor Girl
+                bound-ticklish-girl: Bound Ticklish Girl
+                boundconvideo: BoundCon Video
+                catfight-chicks: Catfight Chicks
+                Nordic-Bondage-Experience: Nordic Bondage Experience
+                Emma ABDLgirl's website: Emma ABDL Girl
+                bdsm-tickling: BDSM Tickling
+                www.fetishgirlsuk: Fetish Girls UK
+                girlsinsteel: Girls In Steel
+                sexytiedgirls: Sexy Tied Girls
+                www.Lorettas-barefoot-bondage: Loretta's Barefoot Bondage
+                SEXYRAINWEAR.online: Sexy Rainwear Online
+                Under my princess: Under My Princess
+      Tags:
+        Name: 
+          selector: //div[contains(.,'Tags')]/a/text() | //span[@title='Categories']//a/text()
+          concat: ','
+          split: ','
+      Performers:
+        Name: 
+          selector: //span//a[contains(@href,'/models/')]
+          postProcess:
+            - replace:
+                - regex: Real-Blind-Date mit\s*(.+)$
+                  with: $1
+                - regex: (.+)?\s*-\s*Kinky Teen Model
+                  with: $1
+
+# Last Updated April 26, 2024

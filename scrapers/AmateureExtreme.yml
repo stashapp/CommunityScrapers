@@ -1,0 +1,32 @@
+name: "AmateureXtreme"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - amateure-xtreme.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class='info-section--title']
+      URL: //link[@rel="canonical"]/@href
+      Date:
+        selector: //div[@class='posted-info meta-description small']/div[@class='float-left']/span[@class='text-nowrap']/span[@class='fa5-text']
+        postProcess:
+          - replace:
+              - regex: $
+                with: -01-01
+      Tags:
+        Name: //a[contains(@href,'collections?')]
+      Performers:
+        Name:
+          selector: //span[@class='models']/span[@class='fa5-text']/a
+      Studio:
+        Name:
+          fixed: AmateureXtreme
+      Image:
+        selector: //script
+        postProcess:
+          - replace:
+              - regex: .+image":\["(.+)\?.+
+                with: $1
+# Last Updated September 13, 2022

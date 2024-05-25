@@ -1,0 +1,84 @@
+name: Czech Hunter (BigStr)
+# requires: py_common, AyloAPI
+# scrapes: Czech Hunter, Debt Dandy, Dirty Scout
+galleryByURL:
+  - action: script
+    url:
+      - czechhunter.com/scene/
+      - debtdandy.com/scene/
+      - dirtyscout.com/scene/
+    script:
+      - python
+      - CzechHunter.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - CzechHunter.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - czechhunter.com/scene/
+      - debtdandy.com/scene/
+      - dirtyscout.com/scene/
+    script:
+      - python
+      - CzechHunter.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - CzechHunter.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - CzechHunter.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - CzechHunter.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - CzechHunter.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - czechhunter.com/model/
+      - debtdandy.com/model/
+      - dirtyscout.com/model/
+    script:
+      - python
+      - CzechHunter.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - CzechHunter.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - czechhunter.com/scene/
+      - debtdandy.com/scene/
+      - dirtyscout.com/scene/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - czechhunter.com/movie/
+      - debtdandy.com/movie/
+      - dirtyscout.com/movie/
+    script:
+      - python
+      - CzechHunter.py
+      - movie-by-url
+# Last Updated January 14, 2024

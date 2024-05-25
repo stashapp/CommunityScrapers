@@ -1,0 +1,19 @@
+name: The Habib Show
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - thehabibshow.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //header/h1/text()
+      Details:
+        selector: //article[@class="article"]/p/text()
+      Image: //div[@class="player"]/@data-poster
+      URL: //meta[@property='og:url']/@content
+      Studio:
+        Name:
+          fixed: The Habib Show
+# Last Updated September 29, 2023

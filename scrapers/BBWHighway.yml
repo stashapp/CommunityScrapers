@@ -1,0 +1,89 @@
+name: BBW Highway
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bbwhighway.com/tour/trailers/
+    scraper: tour
+  - action: scrapeXPath
+    url:
+      - bbwhighway.com/bbwstore/scenes/
+    scraper: member
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://bbwhighway.com/bbwstore/search.php?query={}
+  scraper: search
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: member
+xPathScrapers:
+  tour:
+    scene:
+      Title: //h1
+      Details: //div[@class="videocontent"]
+      Date:
+        selector: //p[@class="date"]
+        postProcess:
+          - replace:
+              - regex: \s\|.*$
+                with: ""
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //span[@class="tour_update_models"]/a
+      Tags:
+        Name: //span[@class="update_tags"]/a
+      Image:
+        # Sometimes the image is in the script tag, sometimes it's in an img tag
+        selector: //script[contains(text(),"poster")] | //img[contains(@src0_1x, "contentthumb")]/@src0_1x
+        postProcess:
+          - replace:
+              # In case it was in a script tag we need to extract the URL
+              - regex: .*?poster="([^"]+).*
+                with: $1
+              # Prepend the domain in any case
+              - regex: ^
+                with: https://bbwhighway.com/
+              - regex: 1x
+                with: full
+      Studio:
+        Name:
+          fixed: BBW Highway
+  search:
+    scene:
+      Title: //div[@class="update_details"]/a[not(./img)]
+      URL: //div[@class="update_details"]/a[not(./img)]/@href
+      Date:
+        selector: //div[contains(@class, "update_date")]
+        postProcess:
+          - parseDate: 01/02/2006
+      Image:
+        selector: //img/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://bbwhighway.com/
+              - regex: 1x
+                with: full
+  member:
+    common:
+      $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
+    scene:
+      Title: //div[@class="title_bar"]
+      Details: //span[@class="update_description"]
+      Date:
+        selector: //div[contains(@class, "update_date")]
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //span[@class="update_models" and $excludeUpdates]/a
+      Tags:
+        Name: //span[@class="update_tags"]/a
+      Image:
+        selector: //img[contains(@src0_1x, "contentthumb")]/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://bbwhighway.com/
+              - regex: 1x
+                with: full
+# Last Updated April 11, 2024

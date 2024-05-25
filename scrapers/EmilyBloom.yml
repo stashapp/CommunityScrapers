@@ -1,0 +1,46 @@
+name: 'Emily Bloom'
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - emilybloom.com/updates/
+      - emilybloom.com/members/scenes/
+    scraper: sceneScraper
+    queryURL: '{url}'
+    queryURLReplace:
+      url:
+        - regex: emilybloom.com/members/scenes/([\w-]+)_[\w^_]+.html$
+          with: emilybloom.com/updates/$1.html
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //span[contains(@class,'update_title')]
+        postProcess:
+          - replace:
+              - regex: \s+VR$
+                with:
+      Details: //span[contains(@class,'latest_update_description')]
+      Performers:
+        Name: //span[contains(@class,'tour_update_models')]/a
+      Image:
+        selector: //div[contains(@class,'update_image')]/div[1]/a/img/@src0_4x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://emilybloom.com/
+      Studio:
+        Name:
+          fixed: Emily Bloom
+        URL:
+          fixed: https://emilybloom.com
+      Tags:
+        Name:
+          selector: //span[contains(@class,'update_tags')]/a
+      Date:
+        selector: //span[contains(@class,'availdate')]
+        postProcess:
+          - parseDate: 01/02/2006
+      URL: //link[@rel="canonical"]/@href
+# Last Updated 01/24/2023

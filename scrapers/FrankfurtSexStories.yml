@@ -1,0 +1,41 @@
+name: "FrankfurtSexStories"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - frankfurtsexstories.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //meta[@property="og:title"]/@content
+      Details: 
+        selector: //div[@class="desc"]/p[not(contains(text(),'VIDEO DESCRIPTION')) and not(contains(text(),'SCENE PICTURES'))]/text()
+        concat: "\n\n"
+      Performers:
+        Name:
+          selector: //div[@id="video-actors"]/a/text()
+      Director:
+        selector: //mark[contains(text(),'Directed by')]/text()
+        postProcess:
+          - replace:
+              - regex: ^.*Directed by
+                with: ""
+      Image:
+        selector: //div[@class="responsive-player"]/video/@poster
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - replace:
+              - regex: ^([^T]+).+
+                with: $1
+      Tags:
+        Name:
+          selector: //div[@class="tags"]/div[@class="tags-list"]/a
+          postProcess:
+            - map:
+                All Videos: "Gay"
+      Studio:
+        Name:
+          selector: //meta[@itemprop="author"]/@content
+# Last Updated March 23, 2024

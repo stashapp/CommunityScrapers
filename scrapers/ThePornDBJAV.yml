@@ -1,0 +1,111 @@
+name: ThePornDB for JAV
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - theporndb.net/jav/
+    queryURL: "{url}"
+    queryURLReplace: &redirectToAPI
+      url:
+        - regex: ^(.+theporndb.net)/
+          with: https://api.theporndb.net/
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeJson
+  queryURL: https://api.theporndb.net/jav?parse={}&per_page=10
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://api.theporndb.net/jav?parse={filename}&per_page=10
+  scraper: sceneQueryScraper
+  queryURLReplace:
+    filename:
+      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename so that it can construct a valid url
+        with: "." # "%20"
+      - regex: \.+
+        with: "."
+movieByURL:
+  - action: scrapeJson
+    url:
+      - theporndb.net/jav/
+    scraper: movieScraper
+    queryURL: "{url}"
+    queryURLReplace: *redirectToAPI
+
+jsonScrapers:
+  sceneSearch:
+    scene:
+      Title:
+        # Prevent having duplicated title so it don't get ignored by stash
+        selector: data.#.[title,_id]
+        postProcess:
+          - replace:
+              - regex: \[|\"
+                with: ""
+              - regex: \,
+                with: " ["
+      Date: data.#.date
+      URL:
+        selector: data.#.id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://api.theporndb.net/jav/"
+      Image: data.#.background.full
+      Details: data.#.description
+
+  sceneScraper:
+    common:
+      $data: data
+      $performers: data.performers
+    scene: &scene
+      Title: $data.external_id
+      Details: $data.description
+      Director: $data.director.name
+      Date: $data.date
+      Code: $data.external_id
+      URL: $data.url
+      Image: $data.background.full
+      Performers:
+        Name: $performers.#.parent.name
+        URL:
+          selector: $performers.#.parent.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://theporndb.net/performers/"
+      Studio:
+        Name: $data.site.name
+      Tags:
+        Name: $data.tags.#.name
+
+  sceneQueryScraper:
+    common:
+      $data: data.0
+      $performers: data.0.performers
+    scene: *scene
+
+  movieScraper:
+    movie:
+      Name: data.external_id
+      Studio:
+        Name: data.site.name
+      FrontImage: data.background.full
+      Synopsis: data.description
+      Date: data.date
+      Duration: data.duration
+      Director: data.director.name
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stashjson/1.0.0
+    - Key: Authorization
+      # Generate an API key at https://theporndb.net/user/api-tokens
+      # and replace YOUR_API_KEY_HERE with the generated key
+      Value: Bearer YOUR_API_KEY_HERE
+      #      ^^^^^^-- This part needs to stay the same
+# Last Updated January 04, 2024

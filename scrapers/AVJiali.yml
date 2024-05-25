@@ -1,0 +1,168 @@
+name: "AV Jiali"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - avjiali.com
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - avjiali.com
+    scraper: performerScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://avjiali.com/?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h5/a
+      Date:
+        selector: //div[@class="video-date"]/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)(st|nd|rd|th)
+                with: "$1"
+          - parseDate: January 02, 2006
+      Performers:
+        Name: //div[@class="cat"][1]/a[starts-with(@href, 'https://avjiali.com/model')]
+        URL: //div[@class="cat"][1]/a/@href
+      Tags:
+        Name: //div[@class="cat"][2]/a
+      Details: 
+        selector: //p[span[@class="readmore"]]
+        postProcess:
+          - replace:
+              - regex: ... Read More
+                with:
+      Image:
+        selector: //video[@id="videohtml5tour"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: "https://"
+      URL: //link[@rel="canonical"]/@href
+      Studio:
+        Name:
+          fixed: AV Jiali
+  performerScraper:
+    common:
+      $profile: //div[@class="model-profile"]
+    performer:
+      Name:
+        selector: $profile[contains(strong, "Name:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Name:\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+      Aliases:
+        selector: $profile[contains(strong, "Chinese name:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Chinese name:\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+      Birthdate:
+        selector: $profile[contains(strong, "Birth date:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Birth date:\s*(.*)\s*$
+                with: $1
+          - parseDate: January 2, 2006
+          - parseDate: 2006-01-02
+      Measurements:
+        selector: $profile[contains(strong, "Body:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Body:\s*(.*)\s*$
+                with: $1
+              - regex: B(\d*)-W(\d*)-H(\d*)
+                with: $1-$2-$3
+              - regex: --
+                with:
+              - regex: None
+                with:
+      Weight:
+        selector: $profile[contains(strong, "Weight:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Weight:\s*(.*)\s*$
+                with: $1
+              - regex: (\d+)kg
+                with: $1
+              - regex: None
+                with:
+      Height:
+        selector: $profile[contains(strong, "Height:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Height:\s*(.*)\s*$
+                with: $1
+              - regex: (\d+)cm.*
+                with: $1
+              - regex: None
+                with:
+      Details:
+        selector: //p[span[@class="readmore"]]
+        postProcess:
+          - replace:
+              - regex: ... Read More
+                with:
+      Piercings:
+        selector: $profile[contains(strong, "Piercings:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Piercings:\s*(.*)\s*$
+                with: $1
+              - regex: None|^No$|No Piercing.*
+                with:
+      Tattoos:
+        selector: $profile[contains(strong, "Tattoo:")]//text()
+        postProcess:
+          - replace:
+              - regex: .*Tattoo:\s*(.*)\s*$
+                with: $1
+              - regex: None|^No$|No Tattoo.*
+                with:
+      HairColor:
+        selector: $profile[contains(strong, "Hair color:")]//text()
+        postProcess:
+          - replace:
+              - regex: (?i).*hair color:?\s*(.*)\s*$
+                with: $1
+              - regex: None
+                with:
+      URL: //link[@rel="canonical"][1]/@href
+      Image:
+        selector: //div[@class="model-photo"]/img[@class="rounded"]/@src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: https://
+              - regex: 460x640
+                with: 690x960
+      Ethnicity:
+        fixed: Asian
+      Gender:
+        fixed: Female
+      Country:
+        fixed: Taiwan
+  sceneSearch:
+    common:
+      $videos: //div[@class="thumb"]/a
+    scene:
+      Title: $videos/@title 
+      URL: $videos/@href
+      Image: $videos/img/@src
+      Studio:
+        Name:
+          fixed: AVJiali
+# Last Updated November 07, 2023

@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
+name: "xVirtual"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - xvirtual.com
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://xvirtual.com/tour/search/?q={}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $ep: //div[contains(concat(' ', normalize-space(@class), ' '), ' episode ')]
+    scene:
+      Title:
+        selector: $ep//a[@class="title"]/h2[@class="nice-title"]/text()
+        postProcess:
+          - replace:
+              - regex: \s*in\s+180°$
+                with:
+      Image:
+        selector: $ep//img[contains(concat(' ', normalize-space(@class), ' '), ' poster ')]/@src
+      URL:
+        selector: $ep//a[@class="title"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://xvirtual.com
+
+  sceneScraper:
+    common:
+      $info: //div[@class="episode preview"]
+    scene:
+      Title:
+        selector: $info//h2[@class="nice-title"]/text()
+        postProcess:
+          - replace:
+              - regex: \s*in\s+180°$
+                with:
+      Details: $info//div[@class="desc-text"]/p
+      Studio:
+        Name:
+          fixed: xVirtual
+      Tags:
+        Name: $info//ul[@class="tags"]/li/a[@class="tag"]/text()
+      Image:
+        selector: //div[@id="video-container"]//dl8-video/@poster
+      URL: //meta[@property="og:url"]/@content
+# Last Updated November 07, 2022

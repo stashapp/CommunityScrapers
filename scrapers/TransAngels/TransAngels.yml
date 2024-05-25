@@ -1,0 +1,78 @@
+name: Trans Angels
+# requires: py_common, AyloAPI
+# scrapes: Trans Angels, TransHarder
+galleryByURL:
+  - action: script
+    url:
+      - transangels.com/scene/
+      - transangelsnetwork.com/scene/
+      - transharder.com/scene/
+    script:
+      - python
+      - TransAngels.py
+      - gallery-by-url
+sceneByURL:
+  - action: script
+    url:
+      - transangels.com/scene/
+      - transangelsnetwork.com/scene/
+      - transharder.com/scene/
+    script:
+      - python
+      - TransAngels.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - TransAngels.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - TransAngels.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - TransAngels.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - TransAngels.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - transangels.com/model/
+      - transangelsnetwork.com/model/
+      - transharder.com/model/
+    script:
+      - python
+      - TransAngels.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - TransAngels.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - transangels.com/movie/
+      - transangelsnetwork.com/movie/
+      - transharder.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - transangels.com/scene/
+      - transangelsnetwork.com/scene/
+      - transharder.com/scene/
+    script:
+      - python
+      - TransAngels.py
+      - movie-by-url
+# Last Updated January 13, 2024

@@ -1,0 +1,36 @@
+name: PornBCN
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornbcn.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: (//div[contains(@class, "rowdesktop1nsd")]//div[contains(@class, "et_pb_text_inner")])[1]
+      Date:
+        selector: //div[@data-date_format]/input[@type='hidden']/@value
+        postProcess:
+          - parseDate: '20060102'
+      Image:
+        selector: //div[contains(@style,'background-image')]/@style
+        postProcess:
+          - replace:
+            - regex: ^.+url\(([^\)]+).+
+              with: $1
+      Studio:
+        Name: //meta[@property='og:site_name']/@content
+      Tags:
+        Name: //meta[@property='article:tag']/@content
+      Performers:
+        Name: //span[@class='namepornstarvi']//a
+      Details:
+        selector: //h5[contains(@class, "toggle_title")]/following-sibling::div[not(.//form)]//text()
+        concat: "\n"
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0.0
+
+# Last Updated April 29, 2024

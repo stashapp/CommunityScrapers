@@ -1,57 +1,81 @@
-name: GoddessSnow
+name: GoddessSnow.com
+
+sceneByName:
+  action: scrapeXPath
+  scraper: sceneSearch
+  queryURL: "https://www.goddesssnow.com/vod/search.php?query={}"
+
+# We don't want the /updates URL here because it has the wrong release date by a year (scenes get released a year early on /scenes)
+# And also the descriotion is truncated often on /updates
+# /scenes also has two versions, one that ends in "_vids.html" and one that ends in ".html"
+# We want to make sure we get the _vids.html version as that is the one with the images
+# We take care of both issues above in the queryURLReplace section
 sceneByURL:
   - action: scrapeXPath
     url:
-      - goddesssnow.com/vod/scenes/
-    scraper: vodScraper
-  - action: scrapeXPath
-    url:
       - goddesssnow.com/updates/
-    scraper: updateScraper
+      - goddesssnow.com/vod/scenes
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        # convert /updates URLs to /vod/scenes
+        - regex: (.+)(\/updates\/)(.+)(\.html)
+          with: $1/vod/scenes/$3.html
+        # fix up the /vod/scenes urls that people may have that do not end in _vids.html. First get rid of it for everyone, then add it back in.
+        # This both adds it to the /updates urls from above, leaves the urls that have the correct form alone, and fix /vod/scenes urls that are the "bad" ones
+        # We are doing this two step process because Go regex does not support backreferences which would have let us cleanly do this in one regex
+        - regex: _vids\.html
+          with: ".html"
+        - regex: \.html
+          with: "_vids.html"
+    scraper: sceneScraper
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 
 xPathScrapers:
-  vodScraper:
+  sceneScraper:
     scene:
-      Title:
-        selector: //div[@class="title_bar"]/span/text()
-      Date:
-        selector: //span[@class="release-date"]/text()
+      Title: //div[@class="title_bar"]/span/text()
+      URL:
+        selector: //div/@data-redirect
         postProcess:
           - replace:
-              - regex: 'Release Date: (\d{2}/\d{2}/\d{4})'
-                with: $1
-          - parseDate: 01/02/2006
-      Details: &details
-        selector: //span[@class="update_description"]/text()
-      Performers:
-        Name: //span[@class="update_models"]/a/text()
-      Tags:
-        Name: //span[@class="update_tags"]/a/text()
-      Studio: &studio
-        Name:
-          fixed: Goddess Alexandra Snow
-      Image: &image
-        selector: //meta[@name="twitter:image"]/@content
-
-  updateScraper:
-    scene:
-      Title:
-        selector: //h2[@class="update-title"]
+              - regex: \.html
+                with: _vids.html
       Date:
-        selector: //span[@class="update-date"]
+        selector: //span[@class="release-date"]/text()|//div[@class="cell update_date"]/text()
         postProcess:
+          - replace:
+              - regex: ^Release Date:\s
+                with:
           - parseDate: 01/02/2006
-      Details:
-        selector: //div[@class="update-join"]/a[2]/@href
+      Details: //span[@class="update_description"]
+      Tags:
+        Name:
+          selector: //span[@class="update_tags"]/a/text()
+      Image:
+        selector: //div[@class="VOD_update"]/img/@src0_4x
         postProcess:
           - replace:
               - regex: ^
                 with: https://www.goddesssnow.com
-          - subScraper: *details
+      Studio:
+        Name:
+          fixed: Alexandra Snow
       Performers:
-        Name: //span[@class="tour_update_models"]/a
-      Tags:
-        Name: //div[@class="update-tags"]/a
-      Studio: *studio
-      Image: *image
-# Last Updated June 07, 2021
+        Name: //span[@class="update_models"]/a
+
+  sceneSearch:
+    scene:
+      Title: //div[@class="update_details"]/div/@data-title
+      URL: //a[@class="update-details-image"]/@href
+      Image:
+        selector: //a[@class="update-details-image"]/img/@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.goddesssnow.com
+# Last Updated January 31, 2023

@@ -2,28 +2,45 @@ name: ThirdRockEnt
 sceneByURL:
   - action: scrapeXPath
     url:
-      - abbiemaley.com/trailers
+      - abbiemaley.com/trailers/
+      - analamateur.com/trailers/
       - analbbc.com/trailers/
       - analized.com/trailers/
       - analviolation.com/trailers/
       - baddaddypov.com/trailers/
       - badfamilypov.com/trailers/
       - badmommypov.com/trailers/
+      - brokensluts.net/trailers/
+      - cumdumpsterteens.com/trailers/
+      - daughterjoi.com/trailers/
       - downtofuckdating.com/trailers/
       - dtfsluts.com/trailers/
+      - fullpornnetwork.com/trailers/
       - girlfaction.com/trailers/
       - hergape.com/trailers/
       - homemadeanalwhores.com/trailers/
       - jamesdeen.com/trailers/
+      - lesbiananalsluts.com/trailers/
+      - mommyjoi.com/trailers/
+      - mugfucked.com/trailers/
       - onlyprince.com/trailers/
       - pervertgallery.com/trailers/
+      - porkvendors.com/trailers/
       - pornforce.com/trailers/
       - povperverts.net/trailers/
       - publicsexdate.com/trailers/
+      - realfuckingdating.com/trailers/
+      - shefucksonthefirstdate.com/trailers/
       - slutinspection.com/trailers/
+      - slutsbts.com/trailers/
+      - slutspov.com/trailers/
+      - sluttybbws.com/trailers/
+      - teasingandpleasing.com/trailers/
       - teenageanalsluts.com/trailers/
       - teenagecorruption.com/trailers/
+      - teenagetryouts.com/trailers/
       - twistedvisual.com/trailers/
+      - wifespov.com/trailers/
       - yourmomdoesanal.com/trailers/
       - yourmomdoesporn.com/trailers/
     scraper: sceneScraper
@@ -48,28 +65,45 @@ xPathScrapers:
           postProcess:
             - map:
                 https://AbbieMaley.com: Abbie Maley
+                https://AnalAmateur.com: Anal Amateur
                 https://AnalBBC.com: AnalBBC
                 https://ANALIZED.com: Analized
                 https://analviolation.com: Anal Violation
                 https://BadDaddyPOV.com: Bad Daddy POV
-                https://BadFamilyPov.com: Bad Family POV
-                https://BadMommyPov.com: Bad Mommy POV
+                https://BadFamilyPOV.com: Bad Family POV
+                https://BadFamilyPov.com: Bad Family POV                
                 https://BadMommyPOV.com: Bad Mommy POV
+                https://BrokenSluts.net: Broken Sluts
+                https://CumDumpsterTeens.com: Cum Dumpster Teens
+                https://DaughterJOI.com: Daughter JOI
                 https://DownToFuckDating.com: Down To Fuck Dating
                 https://DTFsluts.com: DTF Sluts
+                https://FullPornNetwork.com: Full Porn Network
                 https://Girlfaction.com: Girlfaction
                 https://HerGape.com: Her Gape
                 https://HomemadeAnalWhores.com: Homemade Anal Whores
                 https://JamesDeen.com: James Deen
+                https://LesbianAnalSluts.com: Lesbian Anal Sluts
+                https://MommyJOI.com: Mommy JOI
+                https://mugfucked.com: Mug Fucked
                 https://OnlyPrince.com: Only Prince
                 https://PervertGallery.com: Pervert Gallery
+                https://PorkVendors.com: Pork Vendors
                 https://PornForce.com: Porn Force
                 https://POVPerverts.net: POV Perverts
                 https://publicsexdate.com: Public Sex Date
+                https://RealFuckingDating.com: Real Fucking Dating
+                https://SheFucksOnTheFirstDate.com: She Fucks On The First Date
                 https://SlutInspection.com: Slut Inspection
+                https://slutsbts.com: Sluts BTS
+                https://slutspov.com: Sluts POV
+                https://sluttybbws.com: Slutty BBWs
+                https://TeasingandPleasing.com: Teasing And Pleasing
                 https://teenageanalsluts.com: Teenage Anal Sluts
                 https://TeenageCorruption.com: Teenage Corruption
+                https://teenagetryouts.com: Teenage Tryouts
                 https://TwistedVisual.com: Twisted Visual
+                https://wifespov.com: Wifes POV
                 https://yourmomdoesanal.com: Your Mom Does Anal
                 https://YourMomDoesPorn.com: Your Mom Does Porn
-# Last Updated June 23, 2022
+# Last Updated April 7, 2024

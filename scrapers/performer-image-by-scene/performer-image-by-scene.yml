@@ -1,0 +1,18 @@
+name: Performer Image by scene cover
+# requires: py_common
+
+performerByFragment:
+  action: script
+  script:
+    - python
+    - performer-image-by-scene.py
+    - fetch
+
+performerByName:
+  action: script
+  script:
+    - python
+    - performer-image-by-scene.py
+    - query
+
+# Last Updated June 25, 2022

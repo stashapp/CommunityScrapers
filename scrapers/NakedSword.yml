@@ -3,48 +3,83 @@ sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
     url:
-      - nakedsword.com
+      - nakedsword.com/movies/
+      - trailertrashboys.com/movies/
+      - trentonducati.com/movies/
 movieByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
-      - nakedsword.com
+      - nakedsword.com/movies/
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //div[@class="MiMovieTitle"]/text() | //div[@class="MiSceneNumb"]/text()
-        concat: "|"
-        postProcess:
+        selector: //div[@class="VideoTitle"]/h4 | (//*[@aria-current="page"]/following-sibling::div//div[@class="SceneNumbering"]/text())[1]
+        concat: " - "
+      URL:
+        selector: //*[@aria-current="page"]/@href
+        postProcess: &prependHost
           - replace:
-              - regex: "[|]"
-                with: ""
+              - regex: ^/
+                with: https://www.nakedsword.com/
+      Director: &director
+        selector: //div[contains(text(),"director")]/following-sibling::*//a
+        concat: ", "
+      Studio: &studio
+        Name:
+          selector: //div[contains(text(),"studio")]/following-sibling::*//a
+          postProcess:
+            - replace:
+                - regex: "[|]"
+                  with: x
       Performers:
-        Name: //div[@class="MIStarHolder"]/a
-      Details:
-        selector: //div[@class="MIDescriptHolder"]
+        Name: //div[contains(text(),"stars")]/following-sibling::*//a
       Tags:
-        Name: //div[@class="MIThemeHolder"]/a
+        Name: //div[contains(text(),"themes")]/following-sibling::*//a
+      Details: &summary //span[contains(text(),"Summary")]/following-sibling::div/span/span[(contains(@style,"hidden"))]
       Image:
-        selector: //div[@id="playerContainer"]//@src
+        selector: //div[@data-vjs-player="true"]/video/@poster
       Movies:
-        Name: //div[@class="MiMovieTitle"]/text()
-      Studio:
-        Name: //div[@class="MIStudioHolder"]
+        Name: &movieTitle //div[@class="VideoTitle"]/h4
+        URL:
+          selector: //a[contains(@class, "GoToMovieIcon")]/@href
+          postProcess: *prependHost
+        Synopsis:
+          selector: //a[contains(@class, "GoToMovieIcon")]/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://www.nakedsword.com/
+            - subScraper: *summary
+
+        FrontImage: &frontImage //div[contains(@class, "MSD-Poster")]/img/@src
+        BackImage: &backImage
+          selector: //div[contains(@class, "MSD-Poster")]/img/@src
+          postProcess:
+            - replace:
+                - regex: xlf
+                  with: xlb
+
   movieScraper:
     movie:
-      Name:
-        selector: //div[@class="MiMovieTitle"]/text()
+      Name: *movieTitle
       Duration:
-        selector: //div[@class="MiHeaderDuration"]
+        selector: //span[@class="Duration"]
         postProcess:
           - replace:
-              - regex: (\s+|\(|\))
+              - regex: \(|\)
                 with: ""
-      Director: //a[@class="MIDirector"]
-      Synopsis: //div[@class="MIDescriptHolder"]
-      Studio:
-        Name: //div[@class="MIStudioHolder"]
-      FrontImage: //img[contains(@src,"xlf.jpg")]/@src
-      BackImage: //img[@class="BoxCoverOverlay"]/@src
-# Last Updated July 22, 2021
+      Director: *director
+      Synopsis: *summary
+      Studio: *studio
+      FrontImage: *frontImage
+      BackImage: *backImage
+
+driver:
+  useCDP: true
+  sleep: 3
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+# Last Updated March 23, 2024

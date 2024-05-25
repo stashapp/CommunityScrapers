@@ -2,6 +2,7 @@ name: "PaperStreetMedia"
 sceneByURL:
   - action: scrapeXPath
     url:
+      ### TeamSkeet / PaperStreetMedia sites (straight and lesbian)
       - analmom.com/movies/
       - badmilfs.com/movies/
       - bbcparadise.com/movies/
@@ -16,6 +17,7 @@ sceneByURL:
       - freeusefantasy.com/movies/
       - freeusemilf.com/movies/
       - hijabhookup.com/movies/
+      - hijabmylfs.com/movies/
       - innocenthigh.com/movies/
       - littleasians.com/movies/
       - momswap.com/movies/
@@ -25,6 +27,7 @@ sceneByURL:
       - pervdoctor.com/movies/
       - pervmom.com/movies/
       - pervnana.com/movies/
+      - pervprincipal.com/movies/
       - pervtherapy.com/movies/
       - shoplyfter.com/movies/
       - shoplyftermylf.com/movies/
@@ -38,12 +41,32 @@ sceneByURL:
       - teensloveblackcocks.com/movies/
       - thickumz.com/movies/
       - tinysis.com/movies/
+      - usepov.com/movies/
+
+      ### SayUncle / Charged Media sites (Gay)
+      - blackgodz.com/movies
+      - bottomgames.com/movies
+      - boysatcamp.com/movies
+      - boysdoporn.com/movies
+      - brothercrush.com/movies
+      - bullyhim.com/movies
+      - dadcreep.com/movies
+      - doctortapes.com/movies
+      - latinleche.com/movies
+      - militarydick.com/movies
+      - missionaryboys.com/movies
+      - stayhomebro.com/movies
+      - therapydick.com/movies
+      - twinktrade.com/movies
+      - varsitygrip.com/movies
+      - yesfather.com/movies
+      - youngperps.com/movies
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title: //p[@class="video-title"]/text()
-      Details: //p[@class="video-description"]/text()
+      Details: //div[contains(@class, 'video-description')]/descendant-or-self::*/text()
       Performers:
         Name: //p[@class="model-name"]/a
       Image: //div[@class="video-area"]//stream/@poster
@@ -55,6 +78,7 @@ xPathScrapers:
                 - regex: (.+www\.)(\w+)(.+)
                   with: $2
             - map:
+                ### TeamSkeet Studio Map
                 analmom: Anal Mom
                 badmilfs: Bad MILFs
                 bbcparadise: BBC Paradise
@@ -69,6 +93,7 @@ xPathScrapers:
                 freeusefantasy: Freeuse Fantasy
                 freeusemilf: Freeuse Milf
                 hijabhookup: Hijab Hookup
+                hijabmylfs: Hijab Mylfs
                 innocenthigh: Innocent High
                 littleasians: Little Asians
                 momswap: Mom Swap
@@ -78,6 +103,7 @@ xPathScrapers:
                 pervdoctor: Perv Doctor
                 pervmom: Perv Mom
                 pervnana: Perv Nana
+                pervprincipal: Perv Principal
                 pervtherapy: Perv Therapy
                 shoplyfter: Shoplyfter
                 shoplyftermylf: Shoplyfter MYLF
@@ -91,4 +117,28 @@ xPathScrapers:
                 teensloveblackcocks: Teens Love Black Cocks
                 thickumz: Thickumz
                 tinysis: Tiny Sis
-# Last Updated June 27, 2022
+                usepov: Use POV
+
+                ### SayUncle Studio Map
+                blackgodz: Black Godz
+                bottomgames: Bottom Games
+                boysatcamp: Boys At Camp
+                boysdoporn: Boys Do Porn
+                brothercrush: Brother Crush
+                bullyhim: Bully Him
+                dadcreep: Dad Creep
+                doctortapes: Doctor Tapes
+                latinleche: Latin Leche
+                militarydick: Military Dick
+                missionaryboys: Missionary Boys
+                stayhomebro: Stay Home Bro
+                therapydick: Therapy Dick
+                twinktrade: Twink Trade
+                varsitygrip: Varsity Grip
+                yesfather: Yes Father
+                youngperps: Young Perps
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+# Last Updated April 1, 2024

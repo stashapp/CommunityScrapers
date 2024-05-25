@@ -1,0 +1,115 @@
+name: DMM
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.dmm.co.jp/mono/-/search/=/searchstr={filename}/
+  queryURLReplace:
+    filename:
+      - regex: \..+$
+        with: ""
+  scraper: sceneQueryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - dmm.co.jp/
+    scraper: sceneScraper
+    queryURL: "{url}"
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.dmm.co.jp/mono/-/search/=/searchstr={}/
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $videoItem: //*[@id="list"]
+    scene:
+      Title: $videoItem/li/div/p/a/span[@class="txt"]
+      URL: 
+        selector: $videoItem/li/div/p/a/@href
+      Image:
+        selector: $videoItem/li/div/p/a/span[@class="img"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+  sceneQueryScraper:
+    common:
+      $videoItem: //*[@id="list"]
+    scene:
+      Title: $videoItem/li/div/p/a/span[@class="txt"]
+      URL: 
+        selector: $videoItem/li/div/p/a/@href
+      Image:
+        selector: $videoItem/li/div/p/a/span[@class="img"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Details: //td[@id="mu"]//div[@class="mg-b20 lh4"]/p[@class="mg-b20"]/text()
+      Date:
+        selector: //td[contains(.,"発売日") and @class="nw"]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: (\d{4})/(\d{2})/(\d{2})
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      Code: 
+        selector: //td[contains(.,"品番") and @class="nw"]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: ([a-zA-Z]+)(\d+)
+                with: $1-$2
+      Tags:
+        Name: //td[contains(.,"ジャンル") and @class="nw"]/following-sibling::td/a
+      Performers:
+        Name: //td[contains(.,"出演者") and @class="nw"]/following-sibling::td/span/a
+      Studio:
+        Name: 
+          selector: //td[contains(.,"メーカー") and @class="nw"]/following-sibling::td/a
+          postProcess:
+            - map:
+                ムゲンエンターテインメント: MUGEN Entertainment
+                ケイ・エム・プロデュース: K M Produce
+                オペラ: OPERA
+                SODクリエイト: SOD Create
+                三和出版: Sanwa Shuppan
+                セレブの友: Celeb no Tomo
+                AVS collector’s: AVS collector's
+                クィーンロード: SmQueenRoad
+                キャットウォーク: Catwalk
+                ルビー: Ruby
+                マキシング: Maxing
+                プールクラブ・エンタテインメント: POOLCLUB ENTERTAINMENT
+                レイディックス: RADIX
+                エスワン ナンバーワンスタイル: S1 NO.1 STYLE
+                大塚フロッピー: Otsuka Floppy
+                ムーディーズ: Moodyz
+                ヴィ: V
+                #キチックス/妄想族: Kitixx/妄想族
+                #バミューダ/妄想族: BERMUDA/妄想族
+                #ボニータ/妄想族: Bonita/妄想族
+                #タマネギ/妄想族: Onion/妄想族
+                #ミステリア/妄想族: Mystery/妄想族
+
+      Image: //meta[@property="og:image"]/@content
+      URL: 
+        selector: //meta[@property="og:url"]/@content
+      Director: //td[contains(.,"監督") and @class="nw"]/following-sibling::td/a
+
+driver:
+  cookies:
+    - CookieURL: "https://www.dmm.co.jp"
+      Cookies:
+        - Name: "age_check_done"
+          Domain: ".dmm.co.jp"
+          Value: "1"
+          Path: "/"
+# Last Updated Jan 10, 2024

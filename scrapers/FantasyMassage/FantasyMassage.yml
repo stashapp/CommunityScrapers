@@ -1,0 +1,40 @@
+# requires: Algolia
+name: "FantasyMassage"
+sceneByURL:
+  - action: script
+    url:
+      - fantasymassage.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - fantasymassage
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - fantasymassage
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - fantasymassage
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - fantasymassage
+      - validName
+galleryByURL:
+  - action: script
+    url:
+      - fantasymassage.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - fantasymassage
+      - gallery
+# Last Updated December 22, 2022

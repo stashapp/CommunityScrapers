@@ -1,0 +1,55 @@
+name: AkiraLaneProductions
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - akiralane.com/tour/
+      - akiralanebound.com/tour/
+      - pantyhoselane.com/tour/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+      Details: //div[@class="videocontent"]/p
+      Image:
+        selector: //base/@href | //script[contains(.,'poster')]
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: ^.*(https://[^/]+).+src0_.x="([^"]+).+
+                with: $1$2
+      Date:
+        selector: //div[@class="videodetails"]/p[@class="date"]
+        postProcess:
+          - replace:
+              - regex: "^([0-9/]+).*"
+                with: $1
+          - parseDate: 01/02/2006
+      Tags:
+        Name: //div[@class="videodetails"]//a[contains(@href,"categories")]/text()
+      Performers:
+        Name:
+          selector: //p[@class="modelname"]/comment()
+          postProcess:
+            - replace:
+                # Try to extract model names from comment
+                # https://regex101.com/r/IF0T90/1
+                - regex: .*?>([A-Z][^<>]+).*?(:?</a>\s*</span>\s*-->)?
+                  with: "$1|"
+                # Default to Akira Lane if the comment is empty (it's hardcoded in the site as well)
+                - regex: "<!-- -->"
+                  with: "Akira Lane"
+          split: "|"
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess:
+            - replace:
+                - regex: ^.*https://(www\.)?([^\.]+).+
+                  with: $2
+            - map:
+                akiralane: Akira Lane
+                akiralanebound: Akira Lane Bound
+                pantyhoselane: Pantyhose Lane
+# Last Updated April 1, 2024

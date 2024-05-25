@@ -12,7 +12,17 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="sample-model"]
+      Title:
+        selector: //div[@class="player fp-slim fp-edgy fp-mute"]/@style|//div[@class="sample-model"]
+        concat: ": "
+        postProcess:
+          - replace:
+              - regex: .*?https?:.+preview/(\d+).{4}/scene.+\.jpg.*(:.+)
+                with: $1$2
+              - regex: ^0
+                with:
+              - regex: ^
+                with: "Cospuri #"
       Date:
         selector: //div[@class="date"]
         postProcess:
@@ -22,6 +32,12 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name: //div[@class="sample-model"]/a
+        URL:
+          selector: //div[@class="sample-model"]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.cospuri.com
       Tags:
         Name: //a[@class="tag"]
       Details:
@@ -55,4 +71,4 @@ xPathScrapers:
                 with: $2
       Gender:
         fixed: Female
-# Last Updated February 18, 2022
+# Last Updated August 06, 2022

@@ -1,0 +1,73 @@
+name: Femjoy
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - femjoy.com/post/
+    scraper: galleryScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://www.femjoy.com/videos?s={}"
+  scraper: sceneSearch
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - femjoy.com/post/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //h1[@class='post_title']/a[starts-with(@href,"/models")]
+    scene:
+      Title: &titleSel //h1[@class='post_title']/span[last()]/text()
+      Studio: &studioAttr
+        Name:
+          fixed: Femjoy
+      Date: &dateAttr
+        selector: //h2[@class='post_title']/text()[2]
+        postProcess: &datePP
+          - replace:
+              - regex: '.*released on\s+'
+                with:
+          - parseDate: Jan 2, 2006
+      Director: //*[@class='post_title']/a[starts-with(@href,"/director")]
+      Performers: &performersAttr
+        Name: $performer
+        URL:
+          selector: $performer/@href
+          postProcess: &prependDomain
+            - replace:
+                - regex: ^
+                  with: https://femjoy.com
+      Details: &details
+        selector: //*[@class='post_description']//text()
+        concat: "\n"
+      Image: //meta[@name='twitter:image']/@content
+  sceneSearch:
+    common:
+      $scene: //div[@class='post_video']
+      $preview: //div[@class='post_video']//a[@class='preview']
+    scene:
+      Title: $preview/@title
+      Date:
+        selector: $scene//span[@class='posted_on']/text()
+        postProcess: *datePP
+      URL:
+        selector: $preview/@href
+        postProcess: *prependDomain
+      Image:
+        selector: $preview/@data-media-poster
+  galleryScraper:
+    common:
+      $performer: //h1[@class='post_title']/a[starts-with(@href,"/models")]
+    gallery:
+      Title: *titleSel
+      Studio: *studioAttr
+      Date: *dateAttr
+      Performers: *performersAttr
+      Details: *details
+
+# Last Updated August 03, 2023

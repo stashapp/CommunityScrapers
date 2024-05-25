@@ -3,7 +3,6 @@ galleryByURL:
   - action: scrapeXPath
     url: &urls
       - amateurallure.com/tour/scenes/
-      - swallowsalon.com/scenes/
     scraper: galleryScraper
 sceneByURL:
   - action: scrapeXPath
@@ -15,8 +14,10 @@ xPathScrapers:
       $sceneinfo: //div[@class="scene-info"]
       $title: //span[@class='title_bar_hilite']
       $logo: //div[@id="logo"]//a/@href
+      $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
     gallery:
       Title: &titleSel $title
+      Code: &id //div[@class="rating_box" and $excludeUpdates]/@data-id
       Date: &dateAttr
         selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
         postProcess:
@@ -28,39 +29,37 @@ xPathScrapers:
         Name: //div[@class='backgroundcolor_info']//span[@class='update_models']//a
       Studio: &studioAttr
         Name:
-          selector: $logo
-          postProcess:
-            - replace:
-                - regex: '[^.]+\.([^.]+)\.com/.*'
-                  with: $1
-            - map:
-                amateurallure: Amateur Allure
-                swallowsalon: Swallow Salon
+          fixed: Amateur Allure
   sceneScraper:
     common: *commonAttr
     scene:
       Title: *titleSel
+      Code: *id
       Date: *dateAttr
       Details: *detailsSel
       Tags: *tagsAttr
       Performers: *performersAttr
       Image:
-        selector: $logo|$title
+        selector: $logo | $title
         concat: "|"
         postProcess:
           - replace:
               - regex: \s
                 with: "+"
+              # Commas confuse their search engine so we strip everything after the first comma
+              # this has been enough to uniquely identify a scene in every case I've tested
+              - regex: ",.*"
+                with: ""
               - regex: ^([^|]+)\|(.+)
                 with: "${1}/search.php?st=advanced&qall=&qany=&qex=$2"
           - subScraper:
-              selector: //div[@id="logo"]//a/@href|//img/@srcset
+              selector: //div[@id="logo"]//a/@href | //img/@srcset
               concat: "|"
               postProcess:
                 - replace:
                     - regex: ^([^|]+amateurallure[^|]+)\|.+(/content/contentthumbs/\d+/\d+/[^/]+\.jpg) 1920w
                       with: $1$2
-                    - regex: ^([^|]+swallowsalon[^|]+)\|.+360w,\s((?:/tour)?/content/contentthumbs/\d+/\d+/[^/]+\.jpg).*
-                      with: $1$2
+                    - regex: 1x
+                      with: "full"
       Studio: *studioAttr
-# Last Updated December 13, 2021
+# Last Updated May 01, 2024

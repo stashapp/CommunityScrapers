@@ -1,0 +1,80 @@
+name: TheMovieDB
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - themoviedb.org
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - themoviedb.org
+    scraper: sceneScraper
+
+xPathScrapers:
+  movieScraper:
+    movie:
+      Name: &title (//h2/a)[1]
+      Director: &director
+        selector: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile']/p[1]/a
+        concat: ", "
+      Duration:
+        selector: //span[@class='runtime']
+        postProcess:
+          - replace:
+              - regex: "h "
+                with: ":"
+              - regex: "m"
+                with: ":00"
+      Studio: &studio
+        Name: //a[@label="Studio"]/text()
+      Date: &date
+        selector: //span[@class='release']
+        postProcess:
+          - replace:
+              - regex: \(.*$
+                with:
+          - parseDate: 01/02/2006
+      Synopsis: &details //div[@class='header_info']/div[@class='overview']/p
+      URL: //meta[@name='og:url']/@content
+      FrontImage: &image
+        selector: (//img[contains(@class, 'poster')]/@src)[1]
+        postProcess:
+          - replace:
+              - regex: w300
+                with: w600
+          - replace:
+              - regex: h450
+                with: h900
+  sceneScraper:
+    scene:
+      Title: *title
+      Details: *details
+      Director: *director
+      Date: *date
+      Image: *image
+      Studio: *studio
+      Movies:
+        Name: *title
+        URL: //link[@rel="canonical"]/@href
+        Director: *director
+        Duration:
+          selector: //small[contains(text(), "Length")]/following-sibling::text()
+          postProcess:
+            - replace:
+                - regex: " hrs. "
+                  with: ":"
+                - regex: " mins."
+                  with: ":00"
+        Date: *date
+        Synopsis: *details
+        FrontImage: *image
+      Performers:
+        Name: //ol[@class='people scroller']/li[@class='card']/p[1]
+      URL: //meta[@name='og:url']/@content
+
+driver:
+  headers:
+    - Key: "User-Agent"
+      Value: stash-scraper/1.0.0
+# Last Updated April 14, 2024

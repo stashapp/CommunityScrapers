@@ -1,0 +1,26 @@
+name: Visit-X
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - visit-x.net
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="profile-video-details"]//h2
+      Tags:
+        Name: //a[@class="profile-video-details--description-tags-list-item-tag"]/text()
+      Performers:
+        Name: //a[contains(@class, 'profile-video-details--description-complex-actors-link')]/text()
+      Details: //div[contains(@class, 'profile-video-details--description-text')]/text()
+      Date:
+        selector: //span[contains(@class, 'profile-video-details--description-complex-meta-item')][1]/text()
+        postProcess:
+          - parseDate: 02.01.2006
+      Image: //div[contains(@class, 'gallery__preview-image-container')]/img/@src
+      Studio:
+        Name:
+          fixed: Visit-X
+driver:
+  useCDP: true
+# Last Updated April 24, 2023

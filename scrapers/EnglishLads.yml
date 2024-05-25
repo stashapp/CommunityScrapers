@@ -1,0 +1,154 @@
+name: English Lads
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - englishlads.com/video
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - englishlads.com/model
+    scraper: performerScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - englishlads.com/photo
+    scraper: galleryScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="shoot-title"]/h2
+        postProcess:
+          - replace:
+              - regex: ^(.*?)-(.*)-(.*?)$
+                with: "$2"
+      Date:
+        selector: //div[@class="shoot-title"]/h2
+        postProcess:
+          - replace:
+              - regex: ^(.*?)-(.*)-(.*?)$
+                with: "$1"
+              - regex: (st|nd|rd|th)\b
+                with: ""
+          - parseDate: "2 Jan 2006"
+      Performers:
+        Name:
+          selector: //div[@class="shoot-title"]/h2
+          postProcess:
+            - replace:
+                - regex: ^(.*?)-(.*)-(.*?)$
+                  with: "$3"
+          split: ","
+        URL:
+          selector: //div[@class="shoot-title"]/h2/a/@href
+          postProcess:
+            - replace:
+                - regex: "(.*)"
+                  with: "https://www.englishlads.com$1"
+      Details:
+        selector: //div[not(@class) and @style]
+      Tags:
+        Name: //a[@class="more" and contains(@href, "tag=")]
+      Image:
+        selector: //img[@class="shoot-splash-image"]/@src | //video/@data-poster
+        postProcess:
+          - replace:
+              - regex: "(.*)"
+                with: "https://www.englishlads.com$1"
+      Studio:
+        Name:
+          fixed: English Lads
+
+  performerScraper:
+    performer:
+      Name: //h1[@itemprop="name"]/text()
+      Gender:
+        fixed: Male
+      Height:
+        selector: //span[@itemprop='title']
+        postProcess:
+          - replace:
+              - regex: (.*)(\b\d+\'\d{1,2}")(.*)
+                with: "$2"
+          - feetToCm: true
+      Measurements:
+        selector: //span[@itemprop='title']
+        postProcess:
+          - replace:
+              - regex: \s+|\xA0+
+                with: "_"
+              - regex: _+
+                with: " "
+              - regex: (\d{2}\s*yo)\s*(\d{1,2}'\d{1,2}")\s*(\s*\d{2}")\s*(\d{2}")(.*)
+                with: "Waist: $3, Chest: $4"
+      PenisLength:
+        selector: //span[@itemprop='title']
+        postProcess:
+          - replace:
+              - regex: ^(.*?)(\d+\.?\d?)("\s+cock)$
+                with: "0'$2"
+          - feetToCm: true
+      Circumcised:
+        selector: //div[@class='model-text']
+        postProcess:
+          - replace:
+              - regex: (.*?)(uncut|cut)(.*)
+                with: $2
+          - map:
+              uncut: UNCUT
+              cut: CUT
+      Details:
+        selector: //div[@class='model-text']/i
+      Image:
+        selector: //script[contains(.,"modelimage")]
+        postProcess:
+          - replace:
+              - regex: (.*?)(\/public.*?)',(.*)
+                with: "$2"
+              - regex: "(.*)"
+                with: "https://www.englishlads.com$1"
+
+  galleryScraper:
+    gallery:
+      Title:
+        selector: //div[@class="shoot-title"]/h2
+        postProcess:
+          - replace:
+              - regex: ^(.*?)-(.*)-(.*?)$
+                with: "$2"
+      Date:
+        selector: //div[@class="shoot-title"]/h2
+        postProcess:
+          - replace:
+              - regex: ^(.*?)-(.*)-(.*?)$
+                with: "$1"
+              - regex: (st|nd|rd|th)\b
+                with: ""
+          - parseDate: "2 Jan 2006"
+      Performers:
+        Name:
+          selector: //div[@class="shoot-title"]/h2
+          postProcess:
+            - replace:
+                - regex: ^(.*?)-(.*)-(.*?)$
+                  with: "$3"
+          split: ","
+        URL:
+          selector: //div[@class="shoot-title"]/h2/a/@href
+          postProcess:
+            - replace:
+                - regex: "(.*)"
+                  with: "https://www.englishlads.com$1"
+      Details:
+        selector: //div[not(@class) and @style]
+      Tags:
+        Name: //a[@class="more" and contains(@href, "tag=")]
+      Studio:
+        Name:
+          fixed: English Lads
+# Last Updated October 03, 2023

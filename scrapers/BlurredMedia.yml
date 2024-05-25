@@ -14,22 +14,22 @@ xPathScrapers:
       $script: //script[@type="application/ld+json"]
     scene:
       Title:
-        selector: //h1
+        selector: //h1[@class="title"]
       Studio:
         Name:
           selector: //meta[@property="og:site_name"]/@content
           postProcess:
             - map:
-                BiGuysFUCK: Bi Guys Fuck
-                GAYHOOPLA: Gay Hoopla
-                HotGuysFUCK: Hot Guys Fuck
-                SugarDaddyPORN: Sugar Daddy Porn
+                BiGuysFuck: Bi Guys Fuck
+                GayHoopla: Gay Hoopla
+                HotGuysFuck: Hot Guys Fuck
+                SugarDaddyPorn: Sugar Daddy Porn
       Date:
         selector: //meta[@property="og:video:release_date"]/@content
         postProcess:
           - parseDate: 2006-01-02
       Details:
-        selector: //div[@class="about-video" or @class="content" or @class="descriptionIntro" or @class="text"]/p
+        selector: //section[@name="descriptionIntro"]/p
       Tags:
         Name:
           selector: $script[contains(.,'"keywords":')]
@@ -44,7 +44,4 @@ xPathScrapers:
       Image:
         selector: //meta[@property="og:image"]/@content
       URL: //meta[@property="og:url"]/@content
-
-driver:
-  useCDP: true
-# Last Updated February 21, 2021
+# Last Updated October 09, 2022

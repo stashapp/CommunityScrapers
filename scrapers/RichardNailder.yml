@@ -1,0 +1,132 @@
+name: RichardNailder
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bringmeyoursister.com/movie_viewer
+      - glassmannequin.com/movie_viewer
+      - realcoloradogirls.com/movie_viewer
+      - richardnailder.com/movie_viewer
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - bringmeyoursister.com/model_bio
+      - glassmannequin.com/model_bio
+      - realcoloradogirls.com/model_bio
+      - richardnailder.com/model_bio
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2
+      Details: //p[span[@class='title']]/text()
+      Date:
+        selector: //li[contains(.,'Published:')]
+        postProcess:
+          - replace:
+              - regex: 'Published:'
+                with: ''
+          - parseDate: 2 Jan 2006
+      Tags:
+        Name: 
+          selector: //ul[contains(@class,'square')]/li[contains(.,'Tags:') or contains(.,'Category')]/a 
+          postProcess:
+            -  replace:
+                - regex: '^#'
+                  with: ''
+      Performers:
+        Name: //li[contains(.,'Featuring:')]/a
+      Image:  
+        selector: //a[text()='Members Login']/@href | //img[contains(@src,'image.php')][1]/@src
+        concat: '/'
+        postProcess:
+          - replace:
+              - regex: 'members\.'
+                with: ''
+      Studio:
+        Name: //li[contains(.,'Published on:')]/a | //a[text()='Members Login']/@title
+
+  performerScraper:
+    performer:
+      Name:
+        selector: //article/h2
+        postProcess:
+          - replace:
+              - regex: "('s )?Bio$"
+                with: ''
+      Image:
+        selector: //a[text()='Members Login']/@href | //img[contains(@src,'size=3')]/@src
+        concat: '/'
+        postProcess:
+          - replace:
+              - regex: 'members\.'
+                with: ''
+      Gender: 
+        selector: //li[contains(.,'Gender:')]
+        postProcess:
+          - replace:
+              - regex: 'Gender:'
+                with: ''
+      HairColor: 
+        selector: //li[contains(.,'Hair Color:')]
+        postProcess:
+          - replace:
+              - regex: 'Hair Color:'
+                with: ''
+      EyeColor: 
+        selector: //li[contains(.,'Eye Color:')]
+        postProcess:
+          - replace:
+              - regex: 'Eye Color:'
+                with: ''
+      Tattoos: 
+        selector: //li[contains(.,'Tattoos:')]
+        postProcess:
+          - replace:
+              - regex: 'Tattoos:'
+                with: ''
+      Piercings: 
+        selector: //li[contains(.,'Piercings:')]
+        postProcess:
+          - replace:
+              - regex: 'Piercings:'
+                with: ''
+      Ethnicity: 
+        selector: //li[contains(.,'Ethnicity:')]
+        postProcess:
+          - replace:
+              - regex: 'Ethnicity:'
+                with: ''
+      FakeTits: 
+        selector: //li[contains(.,'Real Boobs:')]
+        postProcess:
+          - replace:
+              - regex: 'Real Boobs:'
+                with: ''
+              - regex: '^\s*Yes'
+                with: '%No'
+              - regex: '^\s*No'
+                with: '%Yes'
+              - regex: '^%'
+                with: ''
+      Height: 
+        selector: //li[contains(.,'Height:')]
+        postProcess:
+          - replace:
+              - regex: '[^\d]:'
+                with: ''
+              - regex: ^
+                with: '0.'
+          - feetToCm: true
+      Weight: 
+        selector: //li[contains(.,'Weight:')]
+        postProcess:
+          - replace:
+              - regex: '[^\d]'
+                with: ''
+          - lbToKg: true
+
+      Details: //div[contains(@class,'contentWrapper')]//div[@class='panel']
+
+# Last Updated May 1, 2024

@@ -1,0 +1,95 @@
+name: Mousouzoku
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mousouzoku-av.com/works
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class='ttl-works']
+      Details: //h2[contains(.,'作品紹介')]/following-sibling::p
+      Date:
+        selector: //dt[contains(.,'発売日')]/following-sibling::dd//a/@href
+        postProcess:
+          - replace:
+              - regex: ^.+/([^/]+)/$
+                with: $1
+          - parseDate: '20060102'
+      Tags:
+        Name: //dt[contains(.,'ジャンル')]/following-sibling::dd//ul//a
+      Performers:
+        Name: //dt[contains(.,'出演者')]/following-sibling::dd//ul//p
+      Image:
+        selector: //div[@class='area-intro']/div[contains(@class,'bx-pake')]/figure/a/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.mousouzoku-av.com/
+      Code: //dt[contains(.,'品番')]/following-sibling::dd//p
+      Studio:
+        Name:
+          selector: //div[contains(@class,'c-btn-round')]/a[@class='btn-inner']/p
+          postProcess:
+          # Studio map based on studios present in StashDB.  There are many other studios
+          # available at this site.  Those familiar with the conventions used to translate
+          # JAV studio names from Japanese are welcome to add more.
+            - map:
+                ABC/妄想族: ABC
+                姦乱者/妄想族: Adulterer / Delusionist
+                アクアモール/エマニエル: Aquamole / Emmanuelle
+                Asia/妄想族: Asia
+                B-hole/エマニエル: B-Hole / Emmanuelle
+                バビロン/妄想族: Babylon
+                バミューダ/妄想族: Bermuda
+                ビッグ・ザ・肉道/妄想族: Big the Nikumichi
+                美人魔女/エマニエル: Bijin Majo / Emmanuelle
+                ブラックドッグ/妄想族: Black Dog
+                ボンボンチェリー/妄想族: Bonbon Cherry
+                ボニータ/妄想族: Bonita
+                煩悩組/妄想族: Bonno-gumi
+                ブロッコリー/妄想族: Broccoli
+                チキチキカマー/妄想族: Chiki Chiki Comer
+                チキチキポッド/妄想族: Chiki Chiki Pod
+                こぐま/妄想族: CogmaA
+                DIVA/妄想族: DIVA
+                同人AV倶楽部/妄想族: DoujinAV Club
+                ヒプノシスラボ/妄想族: Dreamy Love/Daydreaming Group
+                ゑびすさん/妄想族: Ebisusan
+                艶熟/エマニエル: Enjuku / Emmanuelle
+                婦人社/エマニエル: Fujinsha / Emmanuelle
+                FunCity/妄想族: FunCity
+                GALDQN/妄想族: GALDQN
+                ジェントルマン/妄想族: Gentleman
+                ハイカラ/妄想族: Haikara
+                レインボー/妄想族: Hero
+                人妻援護会/エマニエル: Hitozuma Engokai / Emmanuelle
+                ホームルーム/妄想族: Homeroom/Daydream Tribe
+                HYBRID映像/妄想族: HYBRID Eizou
+                ILLEGAL＜イリーガル＞/妄想族: ILLEGAL / Iriigaru
+                イノセント/妄想族: Innocent
+                犬/妄想族: Inu
+                濡壺/妄想族: Ju Tsubo
+                熟の蔵/エマニエル: Juku no Zou / Emmanuelle
+                熟女本舗/エマニエル: Jukujo Honpo
+                熟女塾/エマニエル: Jukujojuku / Emmanuelle
+                かぐや姫Pt/妄想族: Kaguya Hime Pt
+                KSB企画/エマニエル: KSB Kikaku / Emmanuelle
+                ラポルノ/妄想族: La Porno
+                ミセスの素顔/エマニエル: Misesu no Sugao / Emmanuelle
+                ムチムッチ/妄想族: Muchimutchi
+                パコパコ団とゆかいな仲間たち/妄想族: Pakopakodan To Yukaina Nakamatachi
+                うさぎ/妄想族: Rabbit
+                RAINY/妄想族: RAINY
+                SEX Agent/妄想族: SEX Agent
+                スパルタン/妄想族: Spartan
+                たんぽぽ/妄想族: Tanpopo
+                ティーチャー/妄想族: Teacher
+                天真乱マン/妄想族: Tenshin Ranman / HERO
+                イエロー/妄想族: Yellow
+                有閑ミセス/エマニエル: Yukan
+                ゆりえっち/妄想族: Yuriecchi
+                ゾクゾク娘/妄想族: Zockzoc Musume
+
+# Last Updated April 08, 2024

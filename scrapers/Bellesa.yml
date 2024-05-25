@@ -1,0 +1,45 @@
+name: "Bellesa"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bellesafilms.com/scene/
+      - bellesahouse.com/scene/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Date:
+        selector: //span[div[text()="Release Date:"]]/text()
+        postProcess:
+          - replace:
+              - regex: "Release Date:"
+                with:
+          - parseDate: January 2, 2006
+      Details: //span/div[text()="Description:"]/following-sibling::text()
+      Tags:
+        Name:
+          selector: //span[div[text()='Categories:']]/a/text()[1]
+          postProcess:
+            - replace:
+                - regex: ^\s*\,|\,\s*$
+                  with:
+      Performers:
+        Name: //h1/following-sibling::div//a[contains(@href,"/model")]/text()
+      Studio:
+        Name:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: .*www\.(.+)\.com.*
+                  with: $1
+            - map:
+                bellesafilms: Bellesa Films
+                bellesahouse: Bellesa House
+      Image:
+        selector: //img[@alt=""][contains(@src,"poster")]/@src|//script[@type="application/ld+json"]/text()
+        postProcess:
+          - replace:
+              - regex: '.*"thumbnailUrl": "([^"]+)".*'
+                with: $1
+# Last Updated February 03, 2024
