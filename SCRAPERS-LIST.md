@@ -866,6 +866,7 @@ funsizeboys.com|CarnalPlus.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 furrychicks.elxcomplete.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 futanari.xxx|Hentaied.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 futanarica.com|Futanarica.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+fuxersnetwork.com|FuxersNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gag-n-gape.com|TeenMegaWorld.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 gaggedinpublic.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 gaggirls.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

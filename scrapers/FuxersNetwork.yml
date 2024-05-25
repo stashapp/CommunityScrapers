@@ -1,0 +1,31 @@
+name: FuxersNetwork
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fuxersnetwork.com/video
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property='og:title']/@content
+      Date: 
+        selector: //div[i[contains(@class,'calendar')]]/span
+        postProcess:
+          - replace:
+              - regex: \s.+
+                with: ''
+      Image:
+        selector: //script[contains(.,'posterImage')]
+        postProcess:
+          - replace:
+              - regex: .+?posterImage:\s*"([^"]+).+
+                with: $1
+      Studio: 
+        Name: //div[span[contains(.,'Site:')]]/a
+      Tags:
+        Name: //div[contains(@class,'-tags')]//a | //div[contains(@class,'-niches')]//a
+      Performers:
+        Name: //div[contains(@class,'-models')]//a 
+
+# Last Updated May 24, 2024
