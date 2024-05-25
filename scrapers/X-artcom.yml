@@ -3,7 +3,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - x-art.com/videos/
+      - x-art.com/members/videos/
     scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: members
+          with: ""
 
 galleryByURL:
   - action: scrapeXPath
