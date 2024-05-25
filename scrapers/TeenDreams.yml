@@ -3,7 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - teendreams.com/t4/trailers/
-      - teen-depot.com/t4/trailers/ 
+      - teen-depot.com/t4/trailers/
     scraper: teendreams
 
 galleryByURL:
@@ -19,7 +19,7 @@ xPathScrapers:
       $image: //img[contains(@class, "update_thumb")]
     scene:
       Title: &title //meta[@property='og:title']/@content
-      Details: &details //p[@class="description" and not contains(.,'Deprecated')]
+      Details: &details //p[@class="description" and not(contains(.,"Deprecated"))]
       URL: &url //link[@rel="canonical"]/@href
       Date: &date
         selector: //div[@class="content-date"]
@@ -28,26 +28,20 @@ xPathScrapers:
               - regex: "Released: "
                 with: ""
       Image:
-          selector: >-
-            //base/@href |
-            $image/@src0_4x[contains(.,'.jpg')] |
-            $image/@src0_3x[contains(.,'.jpg')] |
-            $image/@src0_2x[contains(.,'.jpg')] |
-            $image/@src0_1x[contains(.,'.jpg')] |
-            //div[@class='player']//img/@src
-          concat: '__SEP__'
-          postProcess:
-            - replace:
-                - regex: ^(https://[^/]+).+?__SEP__
-                  with: $1
-                - regex: __SEP__.+
-                  with: '' 
+        selector: //base/@href | //script[contains(text(), "video_content")]
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: (https://[^/]+).*poster="([^"]+).*
+                with: $1$2
+              - regex: -[1-4]x\.
+                with: -full.
       Studio: &studio
-        Name: //meta[@name='author']/@content
+        Name: //meta[@name="author"]/@content
       Performers: &performers
-        Name: 
+        Name:
           selector: //h3[@class="item-name"]/span
-          split: '&'
+          split: "&"
 
     gallery:
       Title: *title
@@ -56,5 +50,4 @@ xPathScrapers:
       Date: *date
       Studio: *studio
       Performers: *performers
-
 # Last Updated May 25, 2024
