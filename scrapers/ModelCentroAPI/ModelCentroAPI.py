@@ -311,8 +311,14 @@ defaultStudioTags= {
     "vinaskyxxx": ["Asian Woman","Natural Tits","Black Hair","Long Hair"],
     "womenwhosmoke": ["Smoking"],
     "xtcpov": ["POV"],
-    
 }
+
+## At least one studio has seriously managed to mess up their tags by not splitting them properly.
+## Do what we can to break the mess of a single tag they return with spaces.  It might not be
+## perfect but it's better than what's returned by the API.
+studioTagsNeedSplitting = [
+	'rexringoxxx.xxx',
+]
 
 scene_id = re.search(r"/(\d+)/*", SCENE_URL).group(1)
 if not scene_id:
@@ -363,7 +369,7 @@ try:
     performer_api_json = r.json()['response']['collection']
     for perf_id in performer_api_json:
         for perf_id2 in performer_api_json[perf_id]['modelId']['collection']:
-            performer_name=performer_api_json[perf_id]['modelId']['collection'][perf_id2]['stageName']
+            performer_name=performer_api_json[perf_id]['modelId']['collection'][perf_id2]['stageName'].strip()
             perf_list.append({"name": performer_name})
 except:
     log.error("Performer API failed")
@@ -375,19 +381,29 @@ scrape['date'] = str(date.date())
 scrape['details'] = scene_api_json.get('description')
 scrape['studio'] = {}
 scrape['studio']['name'] = re.sub(r'www\.|\.com', '', DOMAIN_URL)
+scrape['tags'] = []
 scrape['performers'] = []
 
 if perf_list:
     scrape['performers'] = perf_list
+
 if scrape['studio']['name'] in fixedPerformerStudio:
     for performer in fixedPerformerStudio[scrape['studio']['name']]:
-        if not performer in scrape['performers']:
+        if not any(d['name'].lower() == performer.lower() for d in scrape['performers']):
             scrape['performers'].append({'Name':performer})
 
-scrape['tags'] = [{"name": scene_api_json['tags']['collection'][x].get('alias')} for x in scene_api_json['tags']['collection']]
+if scrape['studio']['name'] in studioTagsNeedSplitting:
+    for x in scene_api_json['tags']['collection']:
+        for tag in scene_api_json['tags']['collection'][x].get('alias').split(' '):
+            if not any(d['name'].lower() == tag.lower() for d in scrape['tags']):
+                scrape['tags'].append({"name": tag.strip()})
+else:
+    scrape['tags'] = [{"name": scene_api_json['tags']['collection'][x].get('alias')} for x in scene_api_json['tags']['collection']]
+
 if scrape['studio']['name'] in defaultStudioTags:
     for tag in defaultStudioTags[scrape['studio']['name']]:
-        scrape['tags'].append({"name": tag})
+        if not any(d['name'].lower() == tag.lower() for d in scrape['tags']):
+            scrape['tags'].append({"name": tag})
 
 if scrape['studio']['name'] in studioMap:
     scrape['studio']['name'] = studioMap[scrape['studio']['name']]
