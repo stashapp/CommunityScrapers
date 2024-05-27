@@ -9,6 +9,7 @@ sceneByURL:
       - parasited.com
       - plantsvscunts.com
       - somegore.com
+      - voodooed.com
       - vored.com
     scraper: sceneScraper
 xPathScrapers:
@@ -24,7 +25,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Performers:
         Name: //div[@class="left-top-part"]//div[contains(@class,"tagsmodels singletag")]//a
-      Director: //div[contains(@class, "director")]//span 
+      Director: //div[contains(@class, "director")]//span
       Tags:
         Name:
           selector: //ul[@class="post-categories"]//a
@@ -53,4 +54,5 @@ xPathScrapers:
                 Lesbian Sex Fight               : Defeated Sex Fight
                 Bloody                          : Somegore
                 Plants vs Cunts                 : Plants vs Cunts
-# Last Updated April 18, 2024
+                Voodooed - Voodoo Doll Porn     : Voodooed
+# Last Updated May 27, 2024
