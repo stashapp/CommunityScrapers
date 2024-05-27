@@ -24,9 +24,9 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneSearch:
     scene:
-      Title: //div[@class='content-meta visible-xs']//a/text()
-      URL: //div[@class='content-meta visible-xs']//a/@href
-      Image: //div[@class='clip-thumb-16-9 visible-xs']/a/img/@src
+      Title: //div[@class='tittle-price d-flex flex-column']//div[@class='content-title']//a/text()
+      URL: //div[@class='tittle-price d-flex flex-column']//div[@class='content-title']//a/@href
+      Image: //div[@class='clip-thumb-16-9 visible-xs']//img[@class='lazy']/@data-original
   sceneScraper:
     common:
       $model: //a[@class="modelLink"]
@@ -91,4 +91,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated May 14, 2024
+# Last Updated May 27, 2024
