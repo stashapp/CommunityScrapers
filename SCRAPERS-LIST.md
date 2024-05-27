@@ -439,6 +439,7 @@ chickpass.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 chickpassinternational.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 chickpasspornstars.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 chickpassteens.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
+chicksonblackdicks.com|TheScoreGroup.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 chloelamour.com|PornCZ.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 chloestoybox.com|MyMemberSite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 chocolatebjs.com|PervCity.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
