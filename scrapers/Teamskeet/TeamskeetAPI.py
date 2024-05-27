@@ -36,6 +36,53 @@ DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON","Teamskeet")
 # Not necessary but why not ?
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 
+### Studio Mapper, to match scraped Studio Name to Studio Name as it appears in StashDB
+studioMap = {
+# TeamSkeet
+    "BadMilfs": "Bad MILFs",
+    "DadCrush": "Dad Crush",
+    "GingerPatch": "Ginger Patch",
+    "Not My Grandpa": "Not My Grandpa!",
+    "PervMom": "Perv Mom",
+    "PervTherapy": "Perv Therapy",
+    "StayHomePov": "Stay Home POV",
+    "StepSiblings": "Step Siblings",
+    "TeenJoi": "Teen JOI",
+## MYLF
+    "AnalMom": "Anal Mom",
+    "BBCParadise": "BBC Paradise",
+    "FullOfJoi": "Full Of JOI",
+    "GotMylf": "Got MYLF",
+    "LoneMilf": "Lone MILF",
+    "MilfBody": "MILF Body",
+    "MomDrips": "Mom Drips",
+    "MomShoot": "Mom Shoot",
+    "MylfBlows": "MYLF Blows",
+    "MylfBoss": "MYLF Boss",
+    "MylfSelects": "MYLF Selects",
+    "PervNana": "Perv Nana",
+    "StayHomeMilf": "Stay Home MILF",
+    "UsePOV": "Use POV",
+## SayUncle
+    "Black Godz": "BlackGodz",
+    "BottomGames": "Bottom Games",
+    "BoysDoPorn": "Boys Do Porn",
+    "DadCreep": "Dad Creep",
+    "DoctorTapes": "Doctor Tapes",
+    "MilitaryDick": "Military Dick",
+    "SayUncle AllStars": "SayUncle All Stars",
+    "StayHomeBro": "Stay Home Bro",
+    "StickyRub": "Sticky Rub",
+    "TroopSex": "Troop Sex",
+    "YesFather": "Yes Father",
+}
+
+### Studio Default tags
+studioDefaultTags = {
+    "TeamSkeet Classics": ['Re-release'],
+    "Mylf Classics": ['Re-release'],
+    "SayUncle Classics": ['Re-release'],
+}
 
 fragment = json.loads(sys.stdin.read())
 if fragment["url"]:
@@ -124,10 +171,17 @@ CLEANR = re.compile('<.*?>')
 cleandescription = re.sub(CLEANR,'',scene_api_json.get('description'))
 scrape['details'] = cleandescription
 scrape['studio'] = {}
-scrape['studio']['name'] = scene_api_json['site'].get('name')
+studioApiName = scene_api_json['site'].get('name')
+log.debug("Studio API name is '" + studioApiName + "'")
+scrape['studio']['name'] = studioMap[studioApiName] if studioApiName in studioMap else studioApiName
 scrape['performers'] = [{"name": x.get('modelName')}
                         for x in scene_api_json.get('models')]
 scrape['tags'] = [{"name": x} for x in scene_api_json.get('tags')]
+if studioApiName in studioDefaultTags:
+    log.debug("Assiging default tags")
+    for tag in studioDefaultTags[studioApiName]:
+        log.debug("Assiging default tags - " + tag) 
+        scrape['tags'].append({"name": tag})
 scrape['image'] = scene_api_json.get('img')
 # Highres is not working with sayuncle.com at the moment
 if 'sayuncle.com' not in scene_url:
