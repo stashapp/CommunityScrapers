@@ -48,7 +48,7 @@ xPathScrapers:
         Name: //div[@class="categories"]//a
       Studio:
         Name:
-          fixed: Joy Bear
+          fixed: JoyBear
       Image: &image
         selector: //script[contains(text(), "poster")]
         postProcess:
