@@ -16,9 +16,10 @@ from AyloAPI.scrape import (
 )
 
 studio_map = {
+    "DP Parody": "DP Parodies",
     "dpw": "DP World",
-    "Dpstar Episodes": "Episodes",
-    "Dpstar Sex Challenges": "Sex Challenges",
+    "Dpstar Sex Challenges": "Sex Challenges",	
+    "Episodes": "Digital Playground Episodes",
 }
 
 
