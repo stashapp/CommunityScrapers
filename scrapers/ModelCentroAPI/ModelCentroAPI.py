@@ -90,7 +90,9 @@ studioMap = {
     "bhalasada":"Bhala Sada",
     "bigjohnnyxxx":"Big Johnny XXX",
     "blondehexe.net":"BlondeHexe",
+    "bohonude.art":"Nude Art Boho",
     "brandonlh":"Brandon Lee Harrington Productions",
+    "brianaleecams":"Briana Lee Cams",
     "brookelynnebriar":"Brookelynne Briar",
     "carlhubaygay.xxx":"Carl Hubay Gay",
     "cartoons4grownfolks":"Cartoons 4 Grown Folks",
@@ -104,6 +106,7 @@ studioMap = {
     "dirtytina":"Dirty Tina",
     "erinelectra":"Erin Electra",
     "erospiration":"Erospiration",
+    "eroticcecelia":"Erotic Cecelia",
     "euroslut.club":"Euro Slut",
     "facialcasting":"Facial Casting",
     "fallinlovia":"Fall In Lovia",
@@ -115,6 +118,7 @@ studioMap = {
     "honeybarefeet":"Miss Honey Barefeet",
     "hurricanefury":"Hurricane Fury",
     "immoralfantasy":"Immoral Fantasy",
+    "irenerouse":"Irene Rouse",
     "isinxxx":"iSinXXX",
     "jenysmith.net":"Jeny Smith",
     "jerkoffwithme":"Jerkoff With Me",
@@ -137,6 +141,7 @@ studioMap = {
     "miamaffia":"Mia Maffia",
     "monstermalesprod":"MonsterMales",
     "mylifeinmiami":"My Life In Miami",
+    "nancyace":"Nancy Ace",
     "nataliek.xxx":"Natalie K",
     "natashanice":"Natasha Nice",
     "niarossxxx":"Nia Ross XXX",
@@ -152,6 +157,7 @@ studioMap = {
     "puremolly":"Molly Pills",
     "realagent.xxx":"Real Agent",
     "realpeachez":"Sarah Peachez",
+    "rexringoxxx.xxx":"Rex Ringo XXX Productions",
     "sabrinasabrokporn":"Sabrina Sabrok Videos",
     "sallydangeloxxx":"City Girlz",
     "sam38g":"Samantha38g",
@@ -188,14 +194,17 @@ fixedPerformerStudio = {
     "anastasiagree" : ["Anastasia Gree"],
     "anisyia.xxx" : ["Anisyia"],
     "blondehexe.net" : ["Blonde Hexe"],
+    "brianaleecams" : ["Briana Lee"],
     "brookelynnebriar" : ["Brookelynne Briar"],
     "claradeemembers" : ["Clara Dee"],
     "danidaniels" : ["Dani's Things"],
+    "eroticcecelia" : ["Cecelia"],
     "fallinlovia" : ["Eva Lovia"],
     "ginagerson.xxx": ["Gina Gerson"],
     "hollandswing": ["Nikki Holland"],
     "honeybarefeet": ["Miss Honey Barefeet"],
     "hurricanefury": ["Hurricane Fury"],
+    "irenerouse": ["Irene Rouse"],
     "jenysmith.net": ["Jeny Smith"],
     "jessieminxxx": ["Jessie Minx"],
     "kacytgirl": ["Kacy"],
@@ -211,6 +220,7 @@ fixedPerformerStudio = {
     "lynnasexworld": ["Lynna Nilsson"],
     "masculinejason": ["Jason Collins"],
     "melenamariarya": ["Melena Maria Rya"],
+    "nancyace": ["Nancy Ace"],
     "nataliek.xxx": ["Natalie K"],
     "natashanice": ["Natasha Nice"],
     "niarossxxx": ["Nia Ross"],
@@ -218,6 +228,7 @@ fixedPerformerStudio = {
     "psychohenessy": ["Alina Henessy"],
     "puremolly": ["Molly Pills"],
     "realpeachez": ["Sarah Peachez"],
+    "rexringoxxx.xxx": ["Rex Ringo"],
     "sabrinasabrokporn": ["Sabrina Sabrok"],
     "sallydangeloxxx": ["Sally D'angelo"],
     "sam38g": ["Samantha 38g"],
@@ -239,17 +250,21 @@ defaultStudioTags= {
     "anastasiagree": ["BBW","Brunette","Solo Female","White Woman"],
     "anisyia.xxx": ["Fake Tits","Brunette","Long Hair","White Woman"],
     "blondehexe.net": ["Blonde","Solo Female","White Woman","Natural Tits"],
+    "bohonude.art": ["Softcore","Solo Female"],
     "brookelynnebriar.net": ["Brunette","Natural Tits","White Woman"],
+    "brianaleecams": ["Brunette","Natural Tits","White Woman","Long Hair","Natural Tits"],
     "carlhubaygay.net": ["Mature","Gay","White Man"],
     "cartoons4grownfolks": ["Animated"],
     "claradeemembers": ["Brunette","Natural Tits","White Woman"],
     "danidaniels": ["Brunette","Natural Tits","White Woman"],
     "darkwetdreemz": ["Natural Tits","Black Woman"],
     "erinelectra": ["Natural Tits","White Woman", "White Man","Twosome (Straight)"],
+    "eroticcecelia": ["Solo Female","Softcore"],
     "facialcasting": ["Facial","Cumshot"],
     "getyourkneesdirty": ["Small Dick","Cumshot","White Man","Blowjob"],
     "ginagerson.xxx": ["Blonde","White Woman","Natural Tits"],
     "hollandswing": ["White Woman","Natural Tits"],
+    "irenerouse": ["Brunette","Long Hair","White Woman","Natural Tits","Solo Female"],
     "jenysmith.net": ["Brunette","Long Hair","White Woman","Natural Tits"],
     "kacytgirl": ["Blonde","Trans Woman","White Woman"],
     "katie71": ["Brunette","Long Hair","White Woman"],
@@ -265,6 +280,7 @@ defaultStudioTags= {
     "masculinejason": ["Bald","White Man","Gay","Tattoos"],
     "melenamariarya": ["White Woman","Natural Tits","Brunette","Long Hair"],
     "miamaffia.xxx": ["Trans Woman","White Woman","Tattoos","Long Hair"],
+    "nancyace": ["White Woman","Blonde","Long Hair","Natural Tits"],
     "nataliek.xxx": ["White Woman","Blonde","Long Hair","MILF","Natural Tits"],
     "natashanice": ["White Woman","Brunette","Long Hair","Natural Tits"],
     "niarossxxx": ["Black Woman","Black Hair","Natural Tits"],
@@ -276,6 +292,7 @@ defaultStudioTags= {
     "psychohenessy": ["White Woman","Brunette","Long Hair","Natural Tits"],
     "puremolly": ["White Woman","Blonde","Long Hair","Natural Tits"],
     "realpeachez": ["White Woman","Blonde","Long Hair","Natural Tits"],
+    "rexringoxxx.xxx": ["Black Male"],
     "sabrinasabrokporn": ["White Woman","Blonde","Long Hair","Fake Tits"],
     "sallydangeloxxx": ["White Woman","Blonde","Long Hair","Fake Tits","Mature"],
     "sam38g": ["White Woman","Red Head","Long Hair","Natural Tits","Big Tits","Solo Female"],
@@ -294,8 +311,14 @@ defaultStudioTags= {
     "vinaskyxxx": ["Asian Woman","Natural Tits","Black Hair","Long Hair"],
     "womenwhosmoke": ["Smoking"],
     "xtcpov": ["POV"],
-    
 }
+
+## At least one studio has seriously managed to mess up their tags by not splitting them properly.
+## Do what we can to break the mess of a single tag they return with spaces.  It might not be
+## perfect but it's better than what's returned by the API.
+studioTagsNeedSplitting = [
+	'rexringoxxx.xxx',
+]
 
 scene_id = re.search(r"/(\d+)/*", SCENE_URL).group(1)
 if not scene_id:
@@ -346,7 +369,7 @@ try:
     performer_api_json = r.json()['response']['collection']
     for perf_id in performer_api_json:
         for perf_id2 in performer_api_json[perf_id]['modelId']['collection']:
-            performer_name=performer_api_json[perf_id]['modelId']['collection'][perf_id2]['stageName']
+            performer_name=performer_api_json[perf_id]['modelId']['collection'][perf_id2]['stageName'].strip()
             perf_list.append({"name": performer_name})
 except:
     log.error("Performer API failed")
@@ -358,19 +381,29 @@ scrape['date'] = str(date.date())
 scrape['details'] = scene_api_json.get('description')
 scrape['studio'] = {}
 scrape['studio']['name'] = re.sub(r'www\.|\.com', '', DOMAIN_URL)
+scrape['tags'] = []
 scrape['performers'] = []
 
 if perf_list:
     scrape['performers'] = perf_list
+
 if scrape['studio']['name'] in fixedPerformerStudio:
     for performer in fixedPerformerStudio[scrape['studio']['name']]:
-        if not performer in scrape['performers']:
+        if not any(d['name'].lower() == performer.lower() for d in scrape['performers']):
             scrape['performers'].append({'Name':performer})
 
-scrape['tags'] = [{"name": scene_api_json['tags']['collection'][x].get('alias')} for x in scene_api_json['tags']['collection']]
+if scrape['studio']['name'] in studioTagsNeedSplitting:
+    for x in scene_api_json['tags']['collection']:
+        for tag in scene_api_json['tags']['collection'][x].get('alias').split(' '):
+            if not any(d['name'].lower() == tag.lower() for d in scrape['tags']):
+                scrape['tags'].append({"name": tag.strip()})
+else:
+    scrape['tags'] = [{"name": scene_api_json['tags']['collection'][x].get('alias')} for x in scene_api_json['tags']['collection']]
+
 if scrape['studio']['name'] in defaultStudioTags:
     for tag in defaultStudioTags[scrape['studio']['name']]:
-        scrape['tags'].append({"name": tag})
+        if not any(d['name'].lower() == tag.lower() for d in scrape['tags']):
+            scrape['tags'].append({"name": tag})
 
 if scrape['studio']['name'] in studioMap:
     scrape['studio']['name'] = studioMap[scrape['studio']['name']]
