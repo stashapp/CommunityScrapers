@@ -15,7 +15,7 @@ xPathScrapers:
           - replace:
               - regex: \s*-.+#\d+.+$
                 with: ""
-      Details: //div[@class="columns"]//*[contains(text(),'Episode Summary')]/following-sibling::text()
+      Details: //div[@class="column is-three-fifths"]//*[contains(text(),'Episode Summary')]/following-sibling::text()
       Date:
         selector: //li[contains(.,'Published:')]/text()[2]
         postProcess:
@@ -58,4 +58,4 @@ driver:
           Domain: ".kellymadison.com"
           Value: "test"
           Path: "/"
-# Last Updated December 03, 2020
+# Last Updated May 28, 2024
