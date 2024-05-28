@@ -1,4 +1,15 @@
 name: "Rule34Video"
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://rule34video.com/video/{filename}
+  queryURLReplace:
+    filename:
+      # Strip out everything after the last _
+      - regex: ([^_]+)_.*
+        with: $1
+  scraper: sceneScraper
+
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -74,4 +85,4 @@ driver:
           ValueRandom: 43
           Domain: .rule34video.com
           Path: /
-# Last Updated September 29, 2023
+# Last Updated May 28, 2024

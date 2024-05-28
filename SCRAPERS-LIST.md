@@ -1825,7 +1825,7 @@ rubberdoll.net|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rubberdollemmalee.com|MyMemberSite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|Python|-
 rubberdomina.club|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rubbertits.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-rule34video.com|Rule34Video.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+rule34video.com|Rule34Video.yml|:heavy_check_mark:|:x:|:x:|:x:|:x:|-
 russian-tgirls.com|GroobyClub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Trans
 russiansmokers.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rylskyart.com|SARJ-LLC.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_check_mark:|Python|-
