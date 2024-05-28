@@ -33,12 +33,12 @@ xPathScrapers:
               - regex: "https://www.caribbeancom.com"
                 with: "https://en.caribbeancom.com/eng"
       Date:
-        selector: //ul/li/span[contains(.,"Release Date")]/../span[@class="spec-content"]
+        selector: //link[@hreflang="ja-JP"]/@href
         postProcess:
           - replace:
-              - regex: (\d{4}).(\d{2}).(\d{2})
-                with: $1-$2-$3
-          - parseDate: 2006-01-02
+              - regex: .*(\d{6}).*
+                with: $1
+          - parseDate: "010206"
       Performers:
         Name:
           selector: //ul/li/span[contains(.,"Starring")]/..//a
