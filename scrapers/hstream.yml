@@ -1,0 +1,41 @@
+name: hstream
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://hstream.moe/hentai/{filename}
+  queryURLReplace:
+    filename:
+      # Strip out everything after the first [
+      - regex: ([^[]+)\s.*
+        with: $1
+      # Remove non-word characters
+      - regex: \W+
+        with: "-"
+      # Remove leading zeroes
+      - regex: 0+(\d)
+        with: $1
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hstream.moe/hentai/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Date:
+        selector: //i[contains(@class, "fa-calendar")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: \s*(\d{4}-\d{2}-\d{2}).*
+                with: $1
+          - parseDate: 2006-01-02
+      Details: //p[contains(text(), "Description")]/following-sibling::p
+      Tags:
+        Name: //li[@class="inline-block p-1"]/a/text()
+      Studio:
+        Name: (//a[contains(@href, "studios")])[1]
+      Image: //meta[@property="og:image"]/@content
+      URL: //meta[@property="og:url"]/@content
+
+# Last Updated May 28, 2024
