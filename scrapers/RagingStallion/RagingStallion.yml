@@ -4,6 +4,7 @@ sceneByURL:
   - action: script
     url:
       - ragingstallion.com/en/scene
+      - ragingstallion.com/en/video
     script:
       - python
       - ../Algolia/Algolia.py
@@ -28,4 +29,4 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - ragingstallion
     - validName
-# Last Updated September 09, 2023
+# Last Updated May 29, 2024
