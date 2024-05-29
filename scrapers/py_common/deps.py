@@ -77,7 +77,7 @@ def ensure_requirements(*deps: str):
         log.debug(f"Failed to import '{e.name}'")
 
     package_names = [parsed[0] for parsed in parsed_deps.values() if parsed]
-    log.warning(f"Installing dependencies: {", ".join(package_names)}")
+    log.warning(f"Installing dependencies: {', '.join(package_names)}")
     log.warning(
         "This can take a while! If you install the dependencies manually "
         "you can avoid this step in the future"
