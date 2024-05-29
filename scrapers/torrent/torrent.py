@@ -1,30 +1,18 @@
 import sys
 import json
 import os
-from pathlib import Path
 import re
-from datetime import datetime
 import difflib
+from datetime import datetime
+from pathlib import Path
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  # parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
+from py_common.deps import ensure_requirements
+from py_common import graphql
 
-try:
-    from bencoder import bdecode
-except ModuleNotFoundError:
-    print("You need to install the 'bencoder.pyx' module. (https://pypi.org/project/bencoder.pyx/)", file=sys.stderr)
-    sys.exit()
+ensure_requirements("bencoder.pyx")
 
-try:
-    from py_common import graphql
-except ModuleNotFoundError:
-    print("You need to download the folder 'py_common' from the community repo! "
-          "(CommunityScrapers/tree/master/scrapers/py_common)", file=sys.stderr)
-    sys.exit()
+from bencoder import bdecode  # noqa: E402
+
 
 TORRENTS_PATH = Path("torrents")
 
@@ -147,4 +135,4 @@ elif sys.argv[1] == "search":
 
     print(json.dumps(list(ratios_sorted.values())))
 
-# Last Updated June 12, 2023
+# Last Updated May 29, 2024
