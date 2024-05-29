@@ -4,6 +4,7 @@ sceneByURL:
   - action: script
     url:
       - ragingstallion.com/en/scene
+      - ragingstallion.com/en/video
     script:
       - python
       - ../Algolia/Algolia.py
