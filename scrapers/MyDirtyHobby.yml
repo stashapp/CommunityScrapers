@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - mydirtyhobby.com/profil/
+      - mydirtyhobby.de/profil/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -98,4 +99,11 @@ driver:
           Domain: ".mydirtyhobby.com"
           Value: "1"
           Path: "/"
-# Last Updated October 02, 2023
+  cookies:
+    - CookieURL: "https://www.mydirtyhobby.de"
+      Cookies:
+        - Name: "AGEGATEPASSED"
+          Domain: ".mydirtyhobby.de"
+          Value: "1"
+          Path: "/"
+# Last Updated May 30, 2024
