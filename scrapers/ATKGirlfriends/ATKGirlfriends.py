@@ -42,8 +42,12 @@ def getSceneByFilename(filename):
     try:
         (height_ft_str, height_ins_str) = re.compile(r"(\d+)[\"'](\d+)").findall(height_ft_ins_str)[0]
     except Exception:
-        height_ft_str = re.compile(r"(\d+)[\"']").findall(height_ft_ins_str)[0]
-        height_ins_str = 0
+        try:
+            height_ft_str = re.compile(r"(\d+)[\"']").findall(height_ft_ins_str)[0]
+            height_ins_str = 0
+        except Exception:
+            height_ft_str = 0
+            height_ins_str = 0
     height_ins = float(height_ft_str) * 12 + float(height_ins_str)
     performer["height"] = str(int(height_ins * cms_per_in))
     weight_lbs_str = tree.xpath(f'{model_profile_wrap_xpath}/b[contains(text(), "Weight")]/following-sibling::text()')[0].strip()
