@@ -39,7 +39,11 @@ def getSceneByFilename(filename):
     performer["ethnicity"] = tree.xpath(f'{model_profile_wrap_xpath}/b[contains(text(), "Ethnicity")]/following-sibling::text()')[0].strip().capitalize()
     performer["hair_color"] = tree.xpath(f'{model_profile_wrap_xpath}/b[contains(text(), "Hair Color")]/following-sibling::text()')[0].strip().capitalize()
     height_ft_ins_str = tree.xpath(f'{model_profile_wrap_xpath}/b[contains(text(), "Height")]/following-sibling::text()')[0].strip()
-    (height_ft_str, height_ins_str) = re.compile(r"(\d+)[\"'](\d+)").findall(height_ft_ins_str)[0]
+    try:
+        (height_ft_str, height_ins_str) = re.compile(r"(\d+)[\"'](\d+)").findall(height_ft_ins_str)[0]
+    except Exception:
+        height_ft_str = re.compile(r"(\d+)[\"']").findall(height_ft_ins_str)[0]
+        height_ins_str = 0
     height_ins = float(height_ft_str) * 12 + float(height_ins_str)
     performer["height"] = str(int(height_ins * cms_per_in))
     weight_lbs_str = tree.xpath(f'{model_profile_wrap_xpath}/b[contains(text(), "Weight")]/following-sibling::text()')[0].strip()
@@ -52,7 +56,10 @@ def getSceneByFilename(filename):
     scene = dict(studio = dict(name = "ATK Girlfriends"), performers = [performer])
     movie_wrap_xpath = f'//img[contains(@src, "/{model_id}/{movie_id}")]/../../../..'
     scene["title"] = tree.xpath(f'{movie_wrap_xpath}//h1')[0].text.strip()
-    scene["details"] = tree.xpath(f'{movie_wrap_xpath}//b[contains(text(), "Description")]/following-sibling::text()')[0].strip()
+    try:
+        scene["details"] = tree.xpath(f'{movie_wrap_xpath}//b[contains(text(), "Description")]/following-sibling::text()')[0].strip()
+    except Exception:
+        scene["details"] = ""
     movie_url_relative = tree.xpath(f'{movie_wrap_xpath}//a/@href')[0]
     scene["url"] = f'https://www.atkgirlfriends.com{movie_url_relative}'
     scene["image"] = tree.xpath(f'{movie_wrap_xpath}//img/@src')[0]
