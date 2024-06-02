@@ -63,7 +63,7 @@ xPathScrapers:
         Name:
           selector: $infoTable//div[text() = 'ジャンル']/..//div[@class='item']//a/text()
       Details: $text
-      Image: //div[@class='swiper-wrapper']/div[1]/img/@data-src
+      Image: //div[@class='swiper-wrapper']/div[1]/img/@data-src | //section[@class='l-slider']//img/@src
   sceneSearchScraper:
     common:
       $scene: //div[@class='swiper-wrapper']//div[@class='item']
