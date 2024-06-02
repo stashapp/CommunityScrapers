@@ -4,6 +4,7 @@ import sys
 import difflib
 import requests
 from datetime import datetime
+from html import unescape
 from typing import Any, Callable
 from urllib.parse import urlparse
 
@@ -353,10 +354,14 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
         log.error(f"Attempted to scrape a '{wrong_type}' (ID: {wrong_id}) as a scene.")
         raise ValueError("Invalid scene from API")
 
+    if (details := dig(scene_from_api, "description")) or (details := dig(scene_from_api, "parent", "description")):
+        details = unescape(details)
+        details = "\n".join([" ".join([s for s in x.strip(" ").split(" ") if s != ""]) for x in "".join(details).split("\n")])
+
     scene: ScrapedScene = {
         "title": scene_from_api["title"],
         "code": str(scene_from_api["id"]),
-        "details": dig(scene_from_api, "description"),
+        "details": details,
         "date": datetime.strptime(
             scene_from_api["dateReleased"], "%Y-%m-%dT%H:%M:%S%z"
         ).strftime("%Y-%m-%d"),
