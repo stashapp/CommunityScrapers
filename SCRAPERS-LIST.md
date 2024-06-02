@@ -1470,7 +1470,7 @@ mydeepdarksecret.com|InnOfSin.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mydirtyhobby.com|MyDirtyHobby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 myfamilypies.com|Nubiles.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 myfirstdaddy.com|AdultSiteRunner.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
-mylf.com|Mylf.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+mylf.com|Teamskeet.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mylfdom.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 mylifeinmiami.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 mylked.com|TugPass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
