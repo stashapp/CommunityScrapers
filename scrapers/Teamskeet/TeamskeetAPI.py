@@ -42,6 +42,7 @@ studioMap = {
     "BadMilfs": "Bad MILFs",
     "DadCrush": "Dad Crush",
     "GingerPatch": "Ginger Patch",
+    "Hussie Pass": "TeamSkeet X Hussie Pass",
     "Not My Grandpa": "Not My Grandpa!",
     "PervMom": "Perv Mom",
     "PervTherapy": "Perv Therapy",
