@@ -49,6 +49,12 @@ studioMap = {
     "StayHomePov": "Stay Home POV",
     "StepSiblings": "Step Siblings",
     "TeenJoi": "Teen JOI",
+    "TeamSkeet X BritStudioxxx": "TeamSkeet X BritStudio.XXX",
+    "TeamSkeet X EvilAngel": "TeamSkeet X Evil Angel",
+    "TeamSkeet X Joy Bear": "TeamSkeet X JoyBear",
+    "TeamSkeet X Molly RedWolf": "TeamSkeet X MollyRedWolf",
+    "TeamSkeet X OZ Fellatio Queens": "TeamSkeet X Aussie Fellatio Queens",
+    "TeamSkeet X SpankMonster": "TeamSkeet X Spank Monster",
 ## MYLF
     "AnalMom": "Anal Mom",
     "BBCParadise": "BBC Paradise",
@@ -81,7 +87,9 @@ studioMap = {
 ### Studio Default tags
 studioDefaultTags = {
     "TeamSkeet Classics": ['Re-release'],
+    "TeamSkeet Selects": ['Compilation'],
     "Mylf Classics": ['Re-release'],
+    "MylfSelects": ['Compilation'],
     "SayUncle Classics": ['Re-release'],
 }
 
