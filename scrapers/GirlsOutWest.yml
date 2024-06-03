@@ -24,8 +24,7 @@ xPathScrapers:
         selector: //meta[@property='og:title']/@content
       Details: &details
         selector: //div[@class='description']//p
-        concat:w
-        : '\n\n'
+        concat: '\n\n'
       Performers: &performers
         Name:
           selector: //div[h5[contains(.,'Featuring')] and @class='tags']//a
