@@ -5,6 +5,12 @@ sceneByURL:
       - tour.girlsoutwest.com/
     scraper: sceneScraper
 
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - tour.girlsoutwest.com/
+    scraper: galleryScraper
+
 performerByURL:
   - action: scrapeXPath
     url:
@@ -14,9 +20,12 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
+      Title: &title
         selector: //meta[@property='og:title']/@content
-      Performers:
+      Details: &details
+        selector: //div[@class='description']//p
+        join: '\n\n'
+      Performers: &performers
         Name:
           selector: //div[h5[contains(.,'Featuring')] and @class='tags']//a
           concat: ','
@@ -29,7 +38,7 @@ xPathScrapers:
                 - regex: ',,+'         ## catch case where multiple commas may appear in a row
                   with: ''
           split: ','                   ## split on ,
-      Tags:
+      Tags: &tags
         Name:
           selector: //div[h5[contains(.,'Tags')] and @class='tags']//a
       Image:
@@ -46,15 +55,24 @@ xPathScrapers:
               with: ''                    # if multiple resolutions are found.
             - regex: __SEP__              # Of course, if there's only one resolution the above won't match
               with: ''                    # but this will get rid of the separator and provide the right URL
-      Date:
+      Date: &date
         selector: //div[h5[contains(.,'Added')] and @class='addInfo']//p
         postProcess:
           - parseDate: January 2, 2006
-      Studio:
+      Studio: &studio
         Name:
           fixed: Girls Out West
         URL:
           fixed: https://girlsoutwest.com
+
+  galleryScraper:
+    gallery:
+      Title: *title
+      Details: *details
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
 
   performerScraper:
     performer:
@@ -86,4 +104,4 @@ driver:
           Value: "5"
           Path: "/"
 
-# Last Updated June 03, 3034
+# Last Updated June 03, 2024
