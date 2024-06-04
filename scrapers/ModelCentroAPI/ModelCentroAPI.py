@@ -140,6 +140,7 @@ studioMap = {
     "melenamariarya":"Melena Maria Rya",
     "miamaffia":"Mia Maffia",
     "monstermalesprod":"MonsterMales",
+    "mugursworld":"Mugur Porn",
     "mylifeinmiami":"My Life In Miami",
     "nancyace":"Nancy Ace",
     "nataliek.xxx":"Natalie K",
