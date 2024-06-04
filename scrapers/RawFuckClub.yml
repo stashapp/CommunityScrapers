@@ -20,20 +20,20 @@ sceneByFragment:
   queryURLReplace:
     title:
       - regex: \.\w+$
-        with: ''
+        with: ""
       - regex: '[^a-zA-Z\d\-._~\s]'
-        with: ''
-      - regex: '[-_]'
-        with: ''
-      - regex: ' '
-        with: '%20'
+        with: ""
+      - regex: "[-_]"
+        with: ""
+      - regex: " "
+        with: "%20"
     filename:
       - regex: \.\w+$
         with:
       - regex: '[^a-zA-Z\d\-._~\s]' # clean filename so that it can construct a valid url
         with:
-      - regex: ' '
-        with: '%20'
+      - regex: " "
+        with: "%20"
 xPathScrapers:
   sceneScraper:
     scene:
@@ -52,9 +52,9 @@ xPathScrapers:
         selector: //p[@class='watch-published-date']/text()
         postProcess:
           - replace:
-              - regex: 'Reposted on (.+)([.])'
+              - regex: "Reposted on (.+)([.])"
                 with: $1
-              - regex: 'Posted on (.+)'
+              - regex: "Posted on (.+)"
                 with: $1
           - parseDate: January 2, 2006
       # Updated 2024-06-03 to support the broader Raw Fuck Club (Network) as well as the normal content
@@ -67,9 +67,9 @@ xPathScrapers:
           postProcess:
             - replace:
                 - regex: ^\/ #if the url is relative (starts with slash), we append the domain
-                  with: 'https://www.rawfuckclub.com/'
-        Image: //img[@class="channel-image-small"]/@src
-        #Parent: Ticket opened: #4919, would love to add a parent, but not possible
+                  with: "https://www.rawfuckclub.com/"
+        # Image: //img[@class="channel-image-small"]/@src
+        # Parent: Ticket opened: #4919, would love to add a parent, but not possible
         #  Name:
         #   fixed: 'Raw Fuck Club (Network)'
         #  URL:
@@ -84,8 +84,8 @@ xPathScrapers:
         selector: //span/img[contains(@src,'map_pin')]/../text()
         postProcess:
           - replace: # Remove whitespace at the start and end
-            - regex: ^\s+|\s+$
-              with: ''
+              - regex: ^\s+|\s+$
+                with: ""
       Instagram: //a[contains(@href,'instagram.com/')]/@href
       # Sometimes the site uses //a[@class='model-external-twitter-url']/@href, other times, it's freeform, so we use this method
       Twitter: //a[contains(@href,'twitter.com/') or contains(@href,'x.com/')]/@href
@@ -101,20 +101,20 @@ xPathScrapers:
         selector: //div[@class='channel-info-block']/h2/a/@onclick
         postProcess: # We have to split apart the location.href='<relative url>' and fix that too
           - replace:
-            - regex: ^location\.href=' # remove the leading location.href='
-              with: ''
-            - regex: \'$ # remove trailing quote
-              with: ''
-            - regex: ^\/ #if the url is relative (starts with slash), we append the domain
-              with: 'https://www.rawfuckclub.com/'
+              - regex: ^location\.href=' # remove the leading location.href='
+                with: ""
+              - regex: \'$ # remove trailing quote
+                with: ""
+              - regex: ^\/ #if the url is relative (starts with slash), we append the domain
+                with: "https://www.rawfuckclub.com/"
     scene:
       Title: //div[@class='last-update-title']/a/@title
       URL:
         selector: //div[@class='last-update-title']/a/@href
         postProcess:
           - replace:
-            - regex: ^\/ #if the url is relative (starts with slash), we append the domain
-              with: 'https://www.rawfuckclub.com/'
+              - regex: ^\/ #if the url is relative (starts with slash), we append the domain
+                with: "https://www.rawfuckclub.com/"
 driver:
   useCDP: false
   cookies:
