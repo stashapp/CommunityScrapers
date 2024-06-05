@@ -5,6 +5,24 @@ import sys
 from py_common import log
 from datetime import datetime
 
+tag_replacements = {
+    "Penetration": "Vaginal Penetration",
+    "Dick-Riding": "Riding",
+    "Porn For Women": "Erotica",
+    "Sex": "Hardcore",
+    "Lesbian-Rough": "Rough",
+    "Unscripted": "Gonzo",
+    "Partner Swapping": "Swapping",
+    "Masturbating": "Masturbation"
+}
+bad_tags = [
+    "original",
+    "hot guy",
+    "hot girls",
+    "bellesa",
+    "bellesa houses"
+]
+
 def scrape_scene(url):
     # replace URL with api url
     videoIDmatch = re.search(r'(\/videos\/)(\d+)(\/.+)', url)
@@ -24,7 +42,7 @@ def scrape_scene(url):
     # craft dictionary response to stash
     res = {}
     res["title"] = body["title"]
-    res["description"] = body["description"]
+    res["details"] = body["description"]
     res["image"] = body["image"]
     res["code"] = str(body["id"])
     res["studio"] = {}
@@ -38,12 +56,17 @@ def scrape_scene(url):
     # remove studio
     studioTag = res["studio"]["name"].lower()
     # create badtags array - studio name, performers
-    badtags = ["original", studioTag]
+    bad_tags.append(studioTag)
     for performer in res["performers"]:
-        badtags.append(performer["name"])
+        bad_tags.append(performer["name"].lower())
     for tag in temptags:
         # filter out bad tags
-        if tag.lower() not in badtags:
+        if tag.lower() not in bad_tags:
+            # replace tags
+            if tag in tag_replacements:
+                tag = tag_replacements[tag]
+            # replace hyphens with spaces
+            tag = tag.replace("-", " ")
             res["tags"].append({"name": tag})
     # Date
     res["date"] = datetime.fromtimestamp(body["posted_on"]).strftime('%Y-%m-%d')
