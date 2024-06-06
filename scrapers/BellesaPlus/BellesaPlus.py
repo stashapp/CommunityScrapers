@@ -5,27 +5,46 @@ import sys
 from py_common import log
 from datetime import datetime
 
-# Replace bellesa tags with stash tags (make sure hyphen is preserved)
+# bellesa original series/studio filtering
+# ignore all redistribution scenes
+bellesa_studio_handles = [
+    "bellesa-house",
+    "bellesa-films",
+    "bellesa-blind-date",
+    "belle-says",
+    "bellesa-house-party",
+    "zero-to-hero"
+]
+
+# Replace bellesa tags with stash tags (make sure all lower and as it appears on API)
 tag_replacements = {
-    "Penetration": "Vaginal Penetration",
-    "Dick-Riding": "Riding",
-    "Porn For Women": "Erotica",
-    "Sex": "Hardcore",
-    "Lesbian-Rough": "Rough",
-    "Unscripted": "Gonzo",
-    "Partner-Swapping": "Swapping",
-    "Masturbating": "Masturbation"
+    "penetration": "Vaginal Penetration",
+    "dick-riding": "Riding",
+    "porn for women": "Erotica",
+    "sex": "Hardcore",
+    "lesbian-rough": "Rough",
+    "unscripted": "Gonzo",
+    "partner-swapping": "Swapping",
+    "masturbating": "Masturbation",
+    "brunnette": "Brown Hair",
+    "real couples": "Real Couple",
+    "threesome fmf": "Threesome (BGG)",
+    "sweaty sex": "Sweaty",
+    "hot guy tattoos": "Tattoos",
+    "tattos": "Tattoos",
+    "girl girl": "Twosome (Lesbian)"
 }
 # tags that do not have a stash equivalent or are invalid either way
 # make sure hyphens are preserved
 bad_tags = [
     "original",
-    "hot-guy",
-    "hot-girls",
+    "hot guy",
+    "hot girls",
     "bellesa",
-    "bellesa-houses"
+    "bellesa houses",
 ]
 
+# parse response for stash
 def parse_response(data):
     res = {}
     res["title"] = data["title"]
@@ -40,25 +59,23 @@ def parse_response(data):
     res["tags"] = []
     # clean tags
     temptags = data["tags"].split(",")
-    # remove studio
-    studioTag = res["studio"]["name"].lower()
     # remove studio from tags
-    bad_tags.append(studioTag)
+    bad_tags.append(res["studio"]["name"].lower())
     # remove performers from tags
     for performer in res["performers"]:
         bad_tags.append(performer["name"].lower())
     for tag in temptags:
         # filter out bad tags
-        if tag.lower() not in bad_tags:
+        lower = tag.lower()
+        if lower not in bad_tags:
             # replace tags
-            if tag in tag_replacements:
-                tag = tag_replacements[tag]
+            if lower in tag_replacements:
+                tag = tag_replacements[lower]
             # replace hyphens with spaces
             tag = tag.replace("-", " ")
             res["tags"].append({"name": tag})
-    # Date
-    date = datetime.fromtimestamp(data["posted_on"]).strftime('%Y-%m-%d')
-    res["date"] = date
+    # parse unix date to YYYY-MM-DD
+    res["date"] = datetime.fromtimestamp(data["posted_on"]).strftime('%Y-%m-%d')
     print(json.dumps(res))
 
 def scrape_scene(url):
@@ -81,6 +98,11 @@ def scrape_scene(url):
     # bellesa scenes also include free redistributions and delayed scenes
     if data["plus"] != 1 or data["bellesa"] == 1:
         log.error("This video URL is from bellesa.co (free) and not bellesaplus.co (premium)")
+        print("{}")
+        sys.exit(1)
+    # check if scene is from bellesa original series/studio
+    if data["content_provider"][0]["handle"] not in bellesa_studio_handles:
+        log.error("This video is not from a bellesa original series/studio")
         print("{}")
         sys.exit(1)
     parse_response(data)
