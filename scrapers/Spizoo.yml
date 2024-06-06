@@ -5,6 +5,7 @@ sceneByURL:
       - creamher.com/updates/
       - drdaddypov.com/updates/
       - firstclasspov.com/updates/
+      - gothgirlfriends.com/updates/
       - mrluckypov.com/updates/
       - mrluckyraw.com/updates/
       - mrluckyvip.com/updates/
@@ -64,6 +65,7 @@ xPathScrapers:
                 creamher: Cream Her
                 drdaddypov: Dr. Daddy POV
                 firstclasspov: First Class POV
+                gothgirlfriends: Goth Girlfriends
                 mrluckypov: Mr. LuckyPOV
                 mrluckyraw: Mr. LuckyRaw
                 mrluckyvip: Mr. LuckyVIP
@@ -78,4 +80,4 @@ xPathScrapers:
               # Remove any resizing parameters for the image, we want the original
               - regex: "[?&]img(?:q|w|h)=[^&]+"
                 with:
-# Last Updated February 26, 2024
+# Last Updated June 05, 2024
