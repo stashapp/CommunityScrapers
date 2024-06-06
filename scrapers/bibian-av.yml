@@ -39,7 +39,7 @@ xPathScrapers:
         postProcess:
           - javascript: |
               if (value && value.length) {
-                vals = value.split(" ");
+                var vals = value.split(" ");
                 vals[0] = vals[0].replace(/(\D+)(\d+)/, "$1-$2")
                 return "["+vals[0]+"] "+vals.slice(1).join(" ");
               }
