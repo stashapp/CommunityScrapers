@@ -192,12 +192,26 @@ if studioApiName in studioDefaultTags:
         log.debug("Assiging default tags - " + tag) 
         scrape['tags'].append({"name": tag})
 scrape['image'] = scene_api_json.get('img')
-# Highres is not working with sayuncle.com at the moment
-if 'sayuncle.com' not in scene_url:
-    high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
-    log.debug(f"Image before: {scrape['image']}")
-    log.debug(f"Image after: {high_res}")
-    scrape['image'] = high_res
+
+# Each of TeamSkeet, MYLF and SayUncle have different ways to handle 
+# high resolution scene images.  SayUncle is a high resoution right
+# from the scrape.  TeamSkeet and MYLF have different mappings between
+# the scraped value and the higher resolution version.
+match scene_url:
+    case str(x) if 'sayuncle.com' in x:
+        log.debug("Say Uncle image, using default size")
+        high_res = scrape['image']
+    case str(x) if 'teamskeet.com' in x:
+        log.debug("TeamSkeet image, mapping members/full")
+        high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
+    case str(x) if 'mylf.com' in x:
+        log.debug("Mylf image, mapping bio_big")
+        high_res = scene_api_json.get('img').replace('shared/med', 'bio_big')
+
+log.debug(f"Image before: {scrape['image']}")
+log.debug(f"Image after: {high_res}")
+scrape['image'] = high_res
+
 # If the scene is from sayuncle.com, we need to add the gay tag to the tags list
 if 'sayuncle.com' in scene_url:
     scrape['tags'].append({"name": "Gay"})
