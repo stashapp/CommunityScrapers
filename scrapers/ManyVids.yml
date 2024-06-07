@@ -98,7 +98,14 @@ jsonScrapers:
       Details: description
   sceneSearch:
     scene:
-      Title: vids.#.title
+      Title:
+       selector: vids.#.title
+       postProcess:
+        - replace:
+            - regex: '\["(\d+)",\s*"([^"]+)"\]'
+              with: $1/$2
+            - regex: ^
+              with: https://www.manyvids.com/Video/
       Code: vids.#.id
       URL:
         selector: "vids.#.{id,slug}.@values"
@@ -111,8 +118,24 @@ jsonScrapers:
       Image: vids.#.thumbnail.url
   sceneScraper:
     scene:
-      Title: data.title
-      Details: data.description
+      Title:
+        selector: data.title
+        postProcess:
+            - replace:
+                - regex: "&amp;"
+                  with: "&"
+            - replace:
+                - regex: "&quot;"
+                  with: "\""
+      Details:
+        selector: data.description
+        postProcess:
+            - replace:
+                - regex: "&amp;"
+                  with: "&"
+            - replace:
+                - regex: "&quot;"
+                  with: "\""
       Code: data.id
       URL:
         selector: data.url
