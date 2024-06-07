@@ -98,14 +98,7 @@ jsonScrapers:
       Details: description
   sceneSearch:
     scene:
-      Title:
-       selector: vids.#.title
-       postProcess:
-        - replace:
-            - regex: '\["(\d+)",\s*"([^"]+)"\]'
-              with: $1/$2
-            - regex: ^
-              with: https://www.manyvids.com/Video/
+      Title: vids.#.title
       Code: vids.#.id
       URL:
         selector: "vids.#.{id,slug}.@values"
@@ -159,4 +152,4 @@ jsonScrapers:
                 - regex: ^
                   with: https://www.manyvids.com
       Studio: *performer
-# Last Updated February 22, 2024
+# Last Updated June 07, 2024
