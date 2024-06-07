@@ -16,7 +16,7 @@ bellesa_studio_handles = [
     "zero-to-hero"
 ]
 
-# Replace bellesa tags with stash tags (make sure all lower and as it appears on API)
+# Replace bellesa tags with stash tags (make sure hyphen is preserved)
 tag_replacements = {
     "penetration": "Vaginal Penetration",
     "dick-riding": "Riding",
