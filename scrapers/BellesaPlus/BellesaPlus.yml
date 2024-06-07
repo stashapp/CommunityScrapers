@@ -3,6 +3,7 @@ sceneByURL:
   - action: script
     url:
       - https://bellesaplus.co/videos/
+      - https://bellesaplus.co/studio-preview/
     script:
       - python
       - BellesaPlus.py

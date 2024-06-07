@@ -32,7 +32,11 @@ tag_replacements = {
     "sweaty sex": "Sweaty",
     "hot guy tattoos": "Tattoos",
     "tattos": "Tattoos",
-    "girl girl": "Twosome (Lesbian)"
+    "girl girl": "Twosome (Lesbian)",
+    "sidefuck": "Side Fuck",
+    "hairpulling": "Hair Pulling",
+    "gbg": "Threesome (BGG)",
+    "gameshow": "Game Show"
 }
 # tags that do not have a stash equivalent or are invalid either way
 # make sure hyphens are preserved
@@ -42,6 +46,8 @@ bad_tags = [
     "hot girls",
     "bellesa",
     "bellesa houses",
+    "bs", # belle says
+    "bellesa original"
 ]
 
 # parse response for stash
@@ -80,7 +86,7 @@ def parse_response(data):
 
 def scrape_scene(url):
     # replace URL with api url
-    videoIDmatch = re.search(r'(\/videos\/)(\d+)(\/.+)', url)
+    videoIDmatch = re.search(r'(\/videos?\/)(\d+)(\/.+)?', url)
     if videoIDmatch is None:
         log.error("Invalid URL")
         sys.exit(1)
