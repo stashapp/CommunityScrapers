@@ -36,7 +36,19 @@ tag_replacements = {
     "sidefuck": "Side Fuck",
     "hairpulling": "Hair Pulling",
     "gbg": "Threesome (BGG)",
-    "gameshow": "Game Show"
+    "gameshow": "Game Show",
+    "male anal fingering": "Anal Fingering",
+    "snowball": "Cum Swapping",
+    "cumkiss": "Cum Kissing",
+    "girl eats guys ass": "Rimming Him",
+    "male rimjob": "Rimming Him",
+    "sloppy": "Sloppy Blowjob",
+    "bi": "Bisexual",
+    "lesbian ass eating": "Rimming (Lesbian)",
+    "fake breasts": "Fake Tits",
+    "girl rims guy": "Rimming Him",
+    "titty suck": "Breast Sucking",
+    "light choking": "Choking"
 }
 # tags that do not have a stash equivalent or are invalid either way
 # make sure hyphens are preserved
@@ -47,7 +59,11 @@ bad_tags = [
     "bellesa",
     "bellesa houses",
     "bs", # belle says
-    "bellesa original"
+    "bellesa original",
+    "bh", # bellesa house
+    "special",
+    "zth", # zero to hero
+    "z2h", # zero 2 hero
 ]
 
 # parse response for stash
