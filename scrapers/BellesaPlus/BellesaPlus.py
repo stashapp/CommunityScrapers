@@ -48,7 +48,9 @@ tag_replacements = {
     "fake breasts": "Fake Tits",
     "girl rims guy": "Rimming Him",
     "titty suck": "Breast Sucking",
-    "light choking": "Choking"
+    "light choking": "Choking",
+    "nipple suck": "Nipple Play",
+    "tall guy": "Tall Man",
 }
 # tags that do not have a stash equivalent or are invalid either way
 # make sure hyphens are preserved
@@ -64,6 +66,7 @@ bad_tags = [
     "special",
     "zth", # zero to hero
     "z2h", # zero 2 hero
+    "euro house", # bellesa euro house
 ]
 
 # parse response for stash
