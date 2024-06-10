@@ -54,6 +54,8 @@ jsonScrapers:
                 with: ""
               - regex: "&amp;"
                 with: "&"
+              - regex: " *<\\s*/?br\\s*/?\\s*>"
+                with: "\n"
       Studio:
         Name: studio
       URL:
