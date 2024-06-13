@@ -46,7 +46,7 @@ def getVideoIdFromDownloadHash(downloadHash: str):
 def getIMG(video):
     # reversed because we want the most recent thumb
     for item in reversed(video['thumbnails']):
-        if item.startswith("https://storage.pmvhaven.com/"):
+        if item.startswith("https://storage.pmvhaven.com/") and "webp320" not in item:
             return item
     return ""
 
