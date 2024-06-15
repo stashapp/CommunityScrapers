@@ -6,7 +6,7 @@ sceneByFragment:
     filename:
       - regex: \..+$
         with: ""
-  scraper: sceneQueryScraper
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
