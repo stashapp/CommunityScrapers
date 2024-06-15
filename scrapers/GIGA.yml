@@ -36,6 +36,10 @@ xPathScrapers:
               with: "-"
       Details: 
         selector: $videoItem/ul/li/a/img/@alt]
+        postProcess:
+          - replace:
+            - regex: "， "
+              with: ", "
       Director:
         selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]  
       Image:
@@ -50,7 +54,12 @@ xPathScrapers:
         Name:
           fixed: "Giga"
       Title:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1] | //*[@id="list"]/h4/a/text()
+        concat: ' '
+        postProcess:
+          - replace:
+            - regex: "， "
+              with: ", "
       URL: 
         selector: $videoItem/ul/li/a/@href
         postProcess:
@@ -69,6 +78,10 @@ xPathScrapers:
               with: "-"
       Details: 
         selector: $videoItem/ul/li/a/img/@alt]
+        postProcess:
+          - replace:
+            - regex: "， "
+              with: ", "
       Director:
         selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]  
       Image:
@@ -83,7 +96,12 @@ xPathScrapers:
         Name:
           fixed: "Giga"
       Title:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1] | //*[@id="list"]/h4/a/text()
+        concat: ' '
+        postProcess:
+          - replace:
+            - regex: "， "
+              with: ", "
       URL: 
         selector: $videoItem/ul/li/a/@href
         postProcess:
@@ -91,17 +109,28 @@ xPathScrapers:
             - regex: .*\/....*\/
               with: https://www.akiba-web.com/product/
   sceneScraper:
+    common:
+      $sceneCode: //*[@id="works_txt"]/ul/li[3]/dl/dd
+      $sceneTitle: //*[@id="works_txt"]/ul/li[2]/b
     scene:
       Code:
-        selector:  //*[@id="works_txt"]/ul/li[3]/dl/dd
-      Date:
+        selector: $sceneCode[text()]
+      Date: 
         selector: //*[@id="works_txt"]/ul/li[7]/dl/dd
         postProcess:
           - replace:
             - regex: "/"
               with: "-"
       Details:
-        selector: //*[@id="works_txt"]/ul/li[2]/b
+        selector: //*[@id="story_list2"]/ul/li[@class="story_window"] | $sceneTitle[text()]
+        postProcess:
+          - replace:
+            - regex: "， "
+              with: ", "
+            - regex: "\\."
+              with: ".\n\n$1"
+            - regex: "\\.\n\n\\.\n\n\\.\n\n"
+              with: "..." 
       Director:
         selector: //*[@id="works_txt"]/ul/li[5]/dl/dd
       Image:  
@@ -116,7 +145,12 @@ xPathScrapers:
         Name:
           fixed: "Giga"
       Title:
-        selector:  //*[@id="works_txt"]/ul/li[3]/dl/dd
+        selector: $sceneCode[text()] | $sceneTitle[text()]
+        concat: ' '
+        postProcess:
+          - replace:
+            - regex: "， "
+              with: ", "
       URL:
         selector: //*[@id="works_pic"]/ul/li[3]/a[1]/@href
         postProcess:
@@ -132,4 +166,4 @@ driver:
           Domain: ".www.akiba-web.com"
           Value: "yes"
           Path: "/"
-# Last Updated February 27, 2024
+# Last Updated June 15, 2024
