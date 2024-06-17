@@ -131,13 +131,13 @@ if os.path.isfile(json_file):
     with open(json_file, encoding="utf-8") as json_file:
         scene_api_json = json.load(json_file)
 else:
-    log.debug("Asking the API...")
     api_url = f"{API_BASE}{scene_id}"
     headers = {
         'User-Agent': USER_AGENT,
         'Origin': ORIGIN,
         'Referer': REFERER
     }
+    log.debug(f"Asking the API... {api_url}")
     scraper = cloudscraper.create_scraper()
     # Send to the API
     r = ""
@@ -160,7 +160,7 @@ else:
             sys.exit(1)
 
     except:
-        if "Please Wait... | Cloudflare" in r.text:
+        if "Just a moment..." in r.text:
             log.error("Protected by Cloudflare. Retry later...")
         else:
             log.error("Invalid page content")
@@ -186,11 +186,10 @@ scrape['studio']['name'] = studioMap[studioApiName] if studioApiName in studioMa
 scrape['performers'] = [{"name": x.get('modelName')}
                         for x in scene_api_json.get('models')]
 scrape['tags'] = [{"name": x} for x in scene_api_json.get('tags')]
-if studioApiName in studioDefaultTags:
-    log.debug("Assiging default tags")
-    for tag in studioDefaultTags[studioApiName]:
-        log.debug("Assiging default tags - " + tag) 
-        scrape['tags'].append({"name": tag})
+scrape['code'] = scene_api_json.get('cId', '').split('/')[-1]
+for tag in studioDefaultTags.get(studioApiName, []):
+    log.debug("Assiging default tags - " + tag)
+    scrape['tags'].append({"name": tag})
 scrape['image'] = scene_api_json.get('img')
 
 # Each of TeamSkeet, MYLF and SayUncle have different ways to handle 
