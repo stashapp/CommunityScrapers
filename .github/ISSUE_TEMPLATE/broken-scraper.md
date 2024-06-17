@@ -1,16 +1,10 @@
 ---
 name: Broken scraper
 about: Scraper is not working as expected
-title: ""
+title: Name of scraper or site
 labels: bug
 assignees: Maista6969
 ---
-
-## Scraper name
-
-Which scraper is failing
-
-## Reproducing the error
 
 (this is important, be as detailed as you can)
 
