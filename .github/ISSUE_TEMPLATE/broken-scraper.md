@@ -1,19 +1,22 @@
 ---
 name: Broken scraper
 about: Scraper is not working as expected
-title: ''
+title: ""
 labels: bug
 assignees: Maista6969
-
 ---
 
-**Scraper name**
+## Scraper name
 
-Example scraper
+Which scraper is failing
 
-**Scraper method**
+## Reproducing the error
 
-Scene / Gallery / Movie / Performer?  
+(this is important, be as detailed as you can)
+
+Are you scraping a scene, gallery, movie, or performer?
 Scrape with URL? If so, what URLs have you tried?  
 Scrape with fragment? If so, what is the filename / title / studio code?  
-Scrape with name? Give an example you searched for that caused the scraper to fail  
+Scrape with name? Give an example you searched for that caused the scraper to fail
+
+Please check the logs to see if there are any relevant error messages you can include
