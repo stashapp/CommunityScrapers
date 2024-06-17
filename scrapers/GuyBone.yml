@@ -37,7 +37,7 @@ xPathScrapers:
       Image: //img[@width='75%']/@src
       Studio:
         Name:
-          Fixed: GuyBone
+          fixed: GuyBone
 
   performerScraper:
     performer:
