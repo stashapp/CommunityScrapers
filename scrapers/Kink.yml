@@ -119,7 +119,7 @@ xPathScrapers:
                   with: ""
       Details:
         selector: //h4[contains(text(), "Description")]/following-sibling::*[1]//text()
-        concat: "\n\n"
+        concat: "\n"
       Image:
         selector: //div[@data-setup]/@data-setup
         postProcess:
