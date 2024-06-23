@@ -759,7 +759,7 @@ fakehostel.com|FakeHub/FakeHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_
 fakehub.com|FakeHub/FakeHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 fakeshooting.com|MMP_Network.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 faketaxi.com|FakeHub/FakeHub.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
-falconstudios.com|FalconStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+falconstudios.com|FalconStudios.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|Gay
 fallinlovia.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 fallonfuckingwest.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 famedigital.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
@@ -1042,7 +1042,7 @@ hotcrazymess.com|Nubiles.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotdadshotlads.com|JakeCruiseMedia.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|Gay
 hotgirlsgame.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 hotguysfuck.com|BlurredMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
-hothouse.com|FalconStudios.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+hothouse.com|HotHouse.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|Gay
 hotlegsandfeet.com|DDFNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 hotmilfsfuck.com|ExploitedX.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 hotmovies.com|Hotmovies.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
@@ -1760,7 +1760,7 @@ rachel-steele.com|RachelSteele.yml|:heavy_check_mark:|:x:|:x:|:x:|-|MILF
 rachelaldana.com|PinupDollars.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 rachelstormsxxx.com|VNAGirls.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 radicaljizzlam.com|DEMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-ragingstallion.com|RagingStallion.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
+ragingstallion.com|RagingStallion.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|Gay
 rainwearbondage.net|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 ramjetvideo.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 randyblue.com|RandyBlue.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
