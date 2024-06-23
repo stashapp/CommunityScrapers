@@ -29,4 +29,13 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - ragingstallion
     - validName
-# Last Updated May 29, 2024
+movieByURL:
+  - action: script
+    url:
+      - ragingstallion.com/en/movie/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - ragingstallion
+      - movie
+# Last Updated June 23, 2024
