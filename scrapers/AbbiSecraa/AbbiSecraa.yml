@@ -1,0 +1,95 @@
+name: AbbiSecraa
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - abbisecraa.com/blog/movie/
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - abbisecraa.com/blog/photos/
+    scraper: galleryScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $title: //header/h1[@class="title"]/text()
+    scene:
+      Title:
+        selector: $title
+        postProcess:
+          - replace:
+            - regex: ' - movie'
+              with: ''
+      Details:
+        selector: //div[contains(@class, "element element-textarea first")]//p/node()
+        concat: ' '
+      Date:
+        selector: //header/p[@class="meta"]/text()
+        postProcess:
+          - replace:
+            - regex: .*[,]\s|\.
+              with: ''
+          - parseDate: 02 January 2006
+      Image: 
+        selector: //div[contains(@class, "element element-image first last")]//img/@src
+      Studio:
+        Name:
+          fixed: "Abbi Secraa"
+      Tags:
+        Name:
+          selector: //meta[@name="keywords"]/@content
+          split: ","
+      Performers:
+        Name:
+          fixed: "Abbi Secraa"
+      Code:
+        selector: $title
+        postProcess:
+          - replace:
+            - regex: '- '
+              with: ''
+          - replace:
+            - regex: ' '
+              with: '-'
+
+  galleryScraper:
+    common:
+      $title: //header/h1[@class="title"]/text()
+    gallery:
+      Title:
+        selector: $title
+        postProcess:
+          - replace:
+            - regex: ' - photos'
+              with: ''
+      Details: 
+        selector: //div[contains(@class, "element element-textarea first")]//p/node()
+        concat: ' '
+      Date:
+        selector: //header/p[@class="meta"]/text()
+        postProcess:
+          - replace:
+            - regex: .*[,]\s|\.
+              with: ''
+          - parseDate: 02 January 2006
+      Studio:
+        Name:
+          fixed: "Abbi Secraa"
+      Tags:
+        Name:
+          selector: //meta[@name="keywords"]/@content
+          split: ","
+      Performers:
+        Name:
+          fixed: "Abbi Secraa"
+      Code:
+        selector: $title
+        postProcess:
+          - replace:
+            - regex: '- '
+              with: ''
+          - replace:
+            - regex: ' '
+              with: '-'
+
+# Last Updated June 09, 2024

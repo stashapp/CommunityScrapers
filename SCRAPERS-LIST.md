@@ -32,6 +32,7 @@ Supported Site|Scraper| S | G | M | P |Needs|Contents
 80gays.com|CJXXX.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 8thstreetlatinas.com|RealityKings/RealityKings.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 abbiemaley.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+abbisecraa.com|AbbiSecraa.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 abbywinters.com|AbbyWinters.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abdlgirl.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 abuseme.com|AbuseMe.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
