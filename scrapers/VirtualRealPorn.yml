@@ -46,28 +46,40 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: &titleDef
-        selector: //h1[@class="titleVideo"]/text()
+        selector: //div[@class="header_video"]//h1
         postProcess:
           - replace:
               - regex: VR [\s\w]+? video$
                 with: ""
       Date: &dateAttr
-        selector: //div[@class="video-date"]/span
+        selector: //div[@class="featured_data"]/text()[2]
         postProcess:
+          - replace:
+              - regex: '.* (\w+ \d+, \d{4}).*'
+                with: $1
           - parseDate: Jan 2, 2006
       Details: &detailsSel
-        selector: //div[@class="g-cols onlydesktop"]/p
+        selector: //div[@class="description_container"]/p
         concat: "\n\n"
       Tags:
-        Name: //div[@class="metaHolder"]//a/span/text()
-      Performers:
         Name:
-          selector: //h1[@class="titleVideo"]/following-sibling::p
+          selector: //div[@class="metaHolder"]//a/span/text()|//script[@type="application/ld+json"][contains(text(),"genre")]/text()
           postProcess:
-            - replace:
-                - regex: \s&\s
-                  with: ", "
-          split: ", "
+            - javascript: |
+                if (value && value.length && value.startsWith('{')) {
+                  // parse JSON
+                  return JSON.parse(value)
+                    .genre
+                    .split(', ')
+                    // can only return one tag, find or default
+                    .find(v => v.toLowerCase() === 'virtual reality')
+                        ?? 'Virtual Reality'
+                } else {
+                  // return (text of tag) as-is
+                  return value
+                }
+      Performers:
+        Name: //div[@class="performers_section"]//div[@class="model-box"]/a/img/@alt
       Studio:
         Name: &studioName
           selector: //meta[@property="og:site_name"]/@content
@@ -96,4 +108,4 @@ xPathScrapers:
         Name: *studioName
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated November 25, 2022
+# Last Updated June 26, 2024
