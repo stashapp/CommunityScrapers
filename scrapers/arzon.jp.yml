@@ -116,8 +116,7 @@ xPathScrapers:
       Director: //div[@class="item_register"]//td[contains(.,"監督")]/following-sibling::td/a
 driver:
   cookies:
-    - CookieURL: "https://www.arzon.jp"
-      Cookies:
+    - Cookies:
         - Name: "PHPSESSID"
           Domain: "www.arzon.jp"
           Value: "l7srbei96iti9ffs1eftqn99q5"
