@@ -63,7 +63,7 @@ xPathScrapers:
                 with: $1
 
   movieScraper:
-    scene:
+    movie:
       Name: 
         selector: /html/head/title/text()
         postProcess:
@@ -93,4 +93,4 @@ xPathScrapers:
             - replace:
                 - regex: .*(FC2).*
                   with: $1
-# Last Updated Jan 11, 2024
+# Last Updated June 26, 2024
