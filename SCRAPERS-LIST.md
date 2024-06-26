@@ -2304,11 +2304,11 @@ vipsexvault.com|LetsDoeIt.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:heavy_c
 virtualpee.com|VirtualPee.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 virtualporn.com|BangBros.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 virtualrealamateurporn.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealgay.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealjapan.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealpassion.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealporn.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
-virtualrealtrans.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
+virtualrealgay.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
+virtualrealjapan.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
+virtualrealpassion.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
+virtualrealporn.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
+virtualrealtrans.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
 virtualtaboo.com|VirtualTaboo.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 visit-x.net|Visit-X.yml|:heavy_check_mark:|:x:|:x:|:x:|CDP|-
 vivid.com|Vivid.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-

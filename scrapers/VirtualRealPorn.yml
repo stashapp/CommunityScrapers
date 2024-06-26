@@ -42,6 +42,11 @@ movieByURL:
     url: *urlSel
     scraper: movieScraper
 
+performerByURL:
+  - action: scrapeXPath
+    url: *urlSel
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -108,4 +113,43 @@ xPathScrapers:
         Name: *studioName
       Synopsis: *detailsSel
       FrontImage: *imageSel
+  performerScraper:
+    performer:
+      Name:
+        selector: //div[@class="head_model"]//h1/text()
+        postProcess:
+          - replace:
+              - regex: ' +$'
+                with: ''
+      Gender:
+        selector: //section[@id="about"]//tr/th[text()="Gender"]//following-sibling::td/text()
+        postProcess:
+          - map:
+              Female Trans: transgender_female
+      Twitter:
+        selector: //div[@id="social"]//a[contains(@class, "twitter")]/@href
+        postProcess:
+          - replace:
+              - regex: twitter.com
+                with: x.com
+      Instagram: //div[@id="social"]//a[contains(@class, "instagram")]/@href
+      Birthdate:
+        selector: //section[@id="about"]//tr/th[text()="Date of birth"]//following-sibling::td/text()
+        parseDate: 02/01/2006
+      Country: //section[@id="about"]//tr/th[text()="Country"]//following-sibling::td/text()
+      HairColor: //section[@id="about"]//tr/th[text()="Hair color"]//following-sibling::td/text()
+      EyeColor: //section[@id="about"]//tr/th[text()="Eyes color"]//following-sibling::td/text()
+      Measurements:
+        selector: //section[@id="about"]//tr/th[text()="Bust"]//following-sibling::td/text()|//section[@id="about"]//tr/th[text()="Waist"]//following-sibling::td/text()|//section[@id="about"]//tr/th[text()="Hips"]//following-sibling::td/text()
+        concat: '-'
+        postProcess:
+          - javascript: |
+              // convert from metric to imperial
+              if (value && value.length) {
+                const cmPerInch = 2.54
+                let measurements = value.split('-')
+                return measurements.map(m => Math.round(m / cmPerInch)).join('-')
+              }
+              return value
+      Image: //div[@class="feature_img_model"]/img/@src
 # Last Updated June 26, 2024
