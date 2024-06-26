@@ -2305,7 +2305,7 @@ virtualpee.com|VirtualPee.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Fetish
 virtualporn.com|BangBros.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 virtualrealamateurporn.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 virtualrealgay.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
-virtualrealjapan.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
+virtualrealjapan.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|VR
 virtualrealpassion.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
 virtualrealporn.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
 virtualrealtrans.com|VirtualRealPorn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|VR
