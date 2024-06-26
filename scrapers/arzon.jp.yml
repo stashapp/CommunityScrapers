@@ -122,9 +122,6 @@ driver:
           Domain: "www.arzon.jp"
           Value: "l7srbei96iti9ffs1eftqn99q5"
           Path: "/"
-driver:
   useCDP: true
   sleep: 1
-
-
-# Last Updated June 11, 2024
+# Last Updated June 26, 2024
