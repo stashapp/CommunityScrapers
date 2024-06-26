@@ -20,7 +20,7 @@ movieByURL:
   - action: scrapeXPath
     url:
       - jade-net-home.com
-    scraper: sceneScraper
+    scraper: movieScraper
 
 xPathScrapers:
   sceneScraper:
@@ -51,7 +51,7 @@ xPathScrapers:
   movieScraper:
     common:
       $movieinfo: //*[@id="detailMain"]
-    scene:
+    movie:
       Name: $movieinfo/div[1]/h1/span
       Synopsis: 
         selector: //div[@id='readmore']
@@ -71,4 +71,4 @@ xPathScrapers:
             - map:
                 大塚フロッピー: Otsuka Floppy
 
-# Last Updated Jan 11, 2024
+# Last Updated June 21, 2024
