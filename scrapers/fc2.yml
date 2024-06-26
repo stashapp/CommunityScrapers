@@ -17,7 +17,7 @@ movieByURL:
   - action: scrapeXPath
     url:
       - https://adult.contents.fc2.com/article
-    scraper: sceneScraper
+    scraper: movieScraper
 
 xPathScrapers:
   sceneScraper:
