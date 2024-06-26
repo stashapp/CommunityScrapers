@@ -135,7 +135,8 @@ xPathScrapers:
       Instagram: //div[@id="social"]//a[contains(@class, "instagram")]/@href
       Birthdate:
         selector: //section[@id="about"]//tr/th[text()="Date of birth"]//following-sibling::td/text()
-        parseDate: 02/01/2006
+        postProcess:
+          - parseDate: 02/01/2006
       Country: //section[@id="about"]//tr/th[text()="Country"]//following-sibling::td/text()
       HairColor: //section[@id="about"]//tr/th[text()="Hair color"]//following-sibling::td/text()
       EyeColor: //section[@id="about"]//tr/th[text()="Eyes color"]//following-sibling::td/text()
