@@ -1,0 +1,96 @@
+name: FC2-JP
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://adult.contents.fc2.com/article
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://adult.contents.fc2.com/article/{filename}/
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: .*?(\d{5,}).*
+        with: $1
+  scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - https://adult.contents.fc2.com/article
+    scraper: movieScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: /html/head/title/text()
+        postProcess:
+            - replace:
+                - regex: (FC2-.+)
+                  with: ""
+      Details: 
+        selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
+      URL: /html/head/meta[@property="og:url"]/@content
+      Date:
+        selector: //*[@id="top"]/div[1]/section[1]/div/section/div[2]/div[2]/p/text()
+        postProcess:
+          - replace:
+              - regex: .*(\d{4})[./-]?(\d{2})[./-]?(\d{2}).*
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //*[@id="top"]/div[1]/section[1]/div/section/div[2]/ul/li[3]/a/text()
+      Tags:
+        Name: //a[@class='tag tagTag']/text()
+      Image: 
+        selector: //div[@class='items_article_MainitemThumb']/span/img/@src
+        postProcess:
+            - replace:
+                - regex: ^
+                  with: "https:"
+      Studio:
+        Name:
+          selector: /html/head/title/text() 
+          postProcess:
+            - replace:
+                - regex: .*(FC2).*
+                  with: $1
+      Code:
+        selector: /html/head/title/text() 
+        postProcess:
+          - replace:
+              - regex: .*(FC2-.+).*
+                with: $1
+
+  movieScraper:
+    movie:
+      Name: 
+        selector: /html/head/title/text()
+        postProcess:
+            - replace:
+                - regex: (FC2-.+)
+                  with: ""
+      Synopsis: 
+        selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
+      URL: /html/head/meta[@property="og:url"]/@content
+      Date:
+        selector: //*[@id="top"]/div[1]/section[1]/div/section/div[2]/div[2]/p/text()
+        postProcess:
+          - replace:
+              - regex: .*(\d{4})[./-]?(\d{2})[./-]?(\d{2}).*
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      FrontImage: 
+        selector: //div[@class='items_article_MainitemThumb']/span/img/@src
+        postProcess:
+            - replace:
+                - regex: ^
+                  with: "https:"
+      Studio:
+        Name:
+          selector: /html/head/title/text() 
+          postProcess:
+            - replace:
+                - regex: .*(FC2).*
+                  with: $1
+# Last Updated June 26, 2024
