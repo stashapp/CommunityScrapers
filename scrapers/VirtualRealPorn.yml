@@ -42,32 +42,49 @@ movieByURL:
     url: *urlSel
     scraper: movieScraper
 
+performerByURL:
+  - action: scrapeXPath
+    url: *urlSel
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
       Title: &titleDef
-        selector: //h1[@class="titleVideo"]/text()
+        selector: //div[@class="header_video"]//h1
         postProcess:
           - replace:
               - regex: VR [\s\w]+? video$
                 with: ""
       Date: &dateAttr
-        selector: //div[@class="video-date"]/span
+        selector: //div[@class="featured_data"]/text()[2]
         postProcess:
+          - replace:
+              - regex: '.* (\w+ \d+, \d{4}).*'
+                with: $1
           - parseDate: Jan 2, 2006
       Details: &detailsSel
-        selector: //div[@class="g-cols onlydesktop"]/p
+        selector: //div[@class="description_container"]/p
         concat: "\n\n"
       Tags:
-        Name: //div[@class="metaHolder"]//a/span/text()
-      Performers:
         Name:
-          selector: //h1[@class="titleVideo"]/following-sibling::p
+          selector: //div[@class="metaHolder"]//a/span/text()|//script[@type="application/ld+json"][contains(text(),"genre")]/text()
           postProcess:
-            - replace:
-                - regex: \s&\s
-                  with: ", "
-          split: ", "
+            - javascript: |
+                if (value && value.length && value.startsWith('{')) {
+                  // parse JSON
+                  return JSON.parse(value)
+                    .genre
+                    .split(', ')
+                    // can only return one tag, find or default
+                    .find(v => v.toLowerCase() === 'virtual reality')
+                        ?? 'Virtual Reality'
+                } else {
+                  // return (text of tag) as-is
+                  return value
+                }
+      Performers:
+        Name: //div[@class="performers_section"]//div[@class="model-box"]/a/img/@alt
       Studio:
         Name: &studioName
           selector: //meta[@property="og:site_name"]/@content
@@ -96,4 +113,44 @@ xPathScrapers:
         Name: *studioName
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated November 25, 2022
+  performerScraper:
+    performer:
+      Name:
+        selector: //div[@class="head_model"]//h1/text()
+        postProcess:
+          - replace:
+              - regex: ' +$'
+                with: ''
+      Gender:
+        selector: //section[@id="about"]//tr/th[text()="Gender"]//following-sibling::td/text()
+        postProcess:
+          - map:
+              Female Trans: transgender_female
+      Twitter:
+        selector: //div[@id="social"]//a[contains(@class, "twitter")]/@href
+        postProcess:
+          - replace:
+              - regex: twitter.com
+                with: x.com
+      Instagram: //div[@id="social"]//a[contains(@class, "instagram")]/@href
+      Birthdate:
+        selector: //section[@id="about"]//tr/th[text()="Date of birth"]//following-sibling::td/text()
+        postProcess:
+          - parseDate: 02/01/2006
+      Country: //section[@id="about"]//tr/th[text()="Country"]//following-sibling::td/text()
+      HairColor: //section[@id="about"]//tr/th[text()="Hair color"]//following-sibling::td/text()
+      EyeColor: //section[@id="about"]//tr/th[text()="Eyes color"]//following-sibling::td/text()
+      Measurements:
+        selector: //section[@id="about"]//tr/th[text()="Bust"]//following-sibling::td/text()|//section[@id="about"]//tr/th[text()="Waist"]//following-sibling::td/text()|//section[@id="about"]//tr/th[text()="Hips"]//following-sibling::td/text()
+        concat: '-'
+        postProcess:
+          - javascript: |
+              // convert from metric to imperial
+              if (value && value.length) {
+                const cmPerInch = 2.54
+                let measurements = value.split('-')
+                return measurements.map(m => Math.round(m / cmPerInch)).join('-')
+              }
+              return value
+      Image: //div[@class="feature_img_model"]/img/@src
+# Last Updated June 26, 2024
