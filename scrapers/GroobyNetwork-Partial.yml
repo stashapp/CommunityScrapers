@@ -87,7 +87,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details:
-        selector: //div[@class="trailerblock"]/p[not(@class)]/text()|//div[@class="trailerblock"]/p[not(@class)]//span/text()
+        selector: //div[@class="trailerblock"]/p[not(@class)]/descendant-or-self::*/text()
         concat: "\n\n"
       Performers:
         Name: //div[@class="trailer_toptitle_left"]//a/text()
