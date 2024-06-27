@@ -98,7 +98,6 @@ xPathScrapers:
           - replace:
               - regex: content// # errant double slash
                 with: content/
-          - replace:
               - regex: ^/
                 with: https://www.groobyvr.com/
       Tags: *tags
