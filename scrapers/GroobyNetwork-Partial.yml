@@ -69,8 +69,9 @@ xPathScrapers:
                 with: content/
               - regex: __SEPARATOR__
                 with: ''
-      Tags: &tags
-        Name: //div[@class="set_tags"]/ul/li//a/text()
+      Tags:
+        Name:
+          selector: &tagsSel //div[@class="set_tags"]/ul/li/text()|//div[@class="set_tags"]/ul/li//a/text()
   galleryScraper:
     gallery:
       Title: *title
@@ -78,7 +79,8 @@ xPathScrapers:
       Details: *details
       Performers: *performers
       Studio: *studio
-      Tags: *tags
+      Tags:
+        Name: *tagsSel
   sceneScraperGroobyVR:
     scene:
       Title: *title
@@ -100,5 +102,10 @@ xPathScrapers:
                 with: content/
               - regex: ^/
                 with: https://www.groobyvr.com/
-      Tags: *tags
+      Tags:
+        Name:
+          selector: *tagsSel
+          postProcess:
+            - map:
+                Tags for This Scene: Virtual Reality
 # Last Updated June 27, 2024
