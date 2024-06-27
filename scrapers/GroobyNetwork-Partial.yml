@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: "GroobyNetwork-Partial"
 sceneByURL:
   - action: scrapeXPath
@@ -68,8 +69,9 @@ xPathScrapers:
                 with: content/
               - regex: __SEPARATOR__
                 with: ''
-      Tags: &tags
-        Name: //div[@class="set_tags"]/ul/li//a/text()
+      Tags:
+        Name:
+          selector: &tagsSel //div[@class="set_tags"]/ul/li/text()|//div[@class="set_tags"]/ul/li//a/text()
   galleryScraper:
     gallery:
       Title: *title
@@ -77,7 +79,8 @@ xPathScrapers:
       Details: *details
       Performers: *performers
       Studio: *studio
-      Tags: *tags
+      Tags:
+        Name: *tagsSel
   sceneScraperGroobyVR:
     scene:
       Title: *title
@@ -86,7 +89,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details:
-        selector: //div[@class="trailerblock"]/p[not(@class)]/text()
+        selector: //div[@class="trailerblock"]/p[not(@class)]/descendant-or-self::*/text()
         concat: "\n\n"
       Performers:
         Name: //div[@class="trailer_toptitle_left"]//a/text()
@@ -97,8 +100,12 @@ xPathScrapers:
           - replace:
               - regex: content// # errant double slash
                 with: content/
-          - replace:
               - regex: ^/
                 with: https://www.groobyvr.com/
-      Tags: *tags
-# Last Updated July 27, 2023
+      Tags:
+        Name:
+          selector: *tagsSel
+          postProcess:
+            - map:
+                Tags for This Scene: Virtual Reality
+# Last Updated June 27, 2024
