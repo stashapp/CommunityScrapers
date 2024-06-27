@@ -7,14 +7,11 @@ sceneByURL:
       - hotguysfuck.com/video
       - sugardaddyporn.com/video
     scraper: sceneScraper
-
 xPathScrapers:
   sceneScraper:
-    common:
-      $script: //script[@type="application/ld+json"]
     scene:
       Title:
-        selector: //h1[@class="title"]
+        selector: //meta[@property="og:title"]/@content
       Studio:
         Name:
           selector: //meta[@property="og:site_name"]/@content
@@ -29,19 +26,24 @@ xPathScrapers:
         postProcess:
           - parseDate: 2006-01-02
       Details:
-        selector: //section[@name="descriptionIntro"]/p
+        selector: //meta[@property="og:description"]/@content
       Tags:
         Name:
-          selector: $script[contains(.,'"keywords":')]
-          postProcess:
-            - replace:
-                - regex: '.+keywords":\s*"([^"]+)".+'
-                  with: $1
-          split: ", "
+          selector: //meta[@property="og:video"]/@content
       Performers:
         Name:
-          selector: //meta[@property="og:video:actor"]/@content
+          selector: //a[contains(@class,'chakra-link')]/p[contains(@class,'chakra-text')]
+          postProcess:
+            - replace:
+                - regex: (.*)\|(.*)
+                  with: $1
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //img[@alt="video poster"]/@src
       URL: //meta[@property="og:url"]/@content
-# Last Updated October 09, 2022
+driver:
+  useCDP: true
+  sleep: 1
+  clicks:
+    - xpath: //button[@tabindex=0 and text()='I am 18 or older - Enter']
+      sleep: 2
+# Last Updated May 30, 2024
