@@ -31,7 +31,7 @@ xPathScrapers:
       Studio:
         Name: //div[@class="ent"]
       Tags:
-        Name: //li[@class='p'] | //div[contains(@class, "searches"]/a[not(@class='expand')]
+        Name: //li[@class="p"] | //div[contains(@class, "searches")]/a[not(@class="expand")]
       URL: //link[rel='canonical']/@href | //meta[@property='og:url']/@content
       Date:
         selector: //script[@type='application/ld+json' and contains(text(),'uploadDate')]
