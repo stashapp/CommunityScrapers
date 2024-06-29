@@ -156,42 +156,41 @@ xPathScrapers:
       URL: //meta[@name='og:url']/@content
   performerScraper:
     common:
-      $infoPiece: //*[@id="profileModal"]/div/div/div[2]/div[1]/ul
+      $modal: //*[@id="profileModal"]
     performer:
-      Name: //*[@id="content"]/section/div/div[2]/h1/text()
+      Name: //h1
       Birthdate:
-        selector: $infoPiece/li[contains(text(), 'Born:')]/text()
+        selector: $modal//li[contains(text(), 'Born:')]
         postProcess:
           - replace:
               - regex: Born:\s+(.*)
                 with: $1
       Height:
-        selector: $infoPiece/li[contains(text(), 'Height:')]/text()
+        selector: $modal//li[contains(text(), 'Height:')]
         postProcess:
           - replace:
               - regex: Height:\s+(.*)
                 with: $1
           - feetToCm: true
-      Image: //*[@id="content"]/section/div/div[1]/a[1]|/img/@src|//*[@id="content"]/section/div/div[1]/img/@src|//section[@class="container-fluid"]//a[@class="fancy"][@label="Headshot"]/@href
+      Image: //*[@id="content"]/section/div/div[1]/a[1] | /img/@src | //*[@id="content"]/section/div/div[1]/img/@src | //section[@class="container-fluid"]//a[@class="fancy"][@label="Headshot"]/@href
       Country:
-        selector: $infoPiecel/li[contains(text(), 'From:')]/text()
+        selector: $modal//li[contains(text(), 'From:')]
         postProcess:
           - replace:
               - regex: From:\s+(.*)
                 with: $1
       Measurements:
-        selector: $infoPiece/li[contains(text(), 'Measurements:')]/text()
+        selector: $modal//li[contains(text(), 'Measurements:')]/text()
         postProcess:
           - replace:
               - regex: Measurements:\s+(\d\d\w*)\D+(\d+)\D+(\d+).*
                 with: $1-$2-$3
       Aliases:
-        selector: //*[@id="content"]/section/div/div[2]/div[contains(text(), "Alias:")]
-        concat: ", "
+        selector: //h1/following-sibling::div[contains(text(), "Alias:")]
         postProcess:
           - replace:
               - regex: "Alias: (.*)"
                 with: $1
-      Details: //*[@id="content"]/section/div/div[5]/aside/text()
+      Details: $modal//h2[contains(text(), "Biography")]/following-sibling::p
       URL: //link[@rel='canonical']/@href
 # Last Updated May 02, 2024
