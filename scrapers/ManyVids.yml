@@ -120,6 +120,12 @@ jsonScrapers:
             - replace:
                 - regex: "&quot;"
                   with: "\""
+            - replace:
+                - regex: "&lt;"
+                  with: "<"
+            - replace:
+                - regex: "&gt;"
+                  with: ">"
       Details:
         selector: data.description
         postProcess:
@@ -129,6 +135,12 @@ jsonScrapers:
             - replace:
                 - regex: "&quot;"
                   with: "\""
+            - replace:
+                - regex: "&lt;"
+                  with: "<"
+            - replace:
+                - regex: "&gt;"
+                  with: ">"
       Code: data.id
       URL:
         selector: data.url
@@ -152,4 +164,4 @@ jsonScrapers:
                 - regex: ^
                   with: https://www.manyvids.com
       Studio: *performer
-# Last Updated June 07, 2024
+# Last Updated June 29, 2024
