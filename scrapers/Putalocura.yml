@@ -43,4 +43,4 @@ xPathScrapers:
                 with: "$1"
       URL: //link[@rel="canonical"]/@href
 
-# Last Updated August 10, 2022
+# Last Updated July 06, 2024
