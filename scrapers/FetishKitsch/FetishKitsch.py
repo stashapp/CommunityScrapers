@@ -1,51 +1,15 @@
 import base64
-import os
 import json
 import sys
 from datetime import datetime
 from typing import Union, Any, Dict, List
 from urllib.parse import urljoin, urlparse
 
+from py_common import log
+from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedTag
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(
-    os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  # parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
-
-try:
-    from py_common import log
-    from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedTag
-except ModuleNotFoundError:
-    print(
-        'You need to download the folder \'py_common\' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)',
-        file=sys.stderr)
-    sys.exit()
-
-try:
-    import requests
-except ModuleNotFoundError:
-    print('You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)',
-          file=sys.stderr)
-    print(
-        'If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests',
-        file=sys.stderr)
-    sys.exit()
-
-try:
-    from bs4 import BeautifulSoup
-except ModuleNotFoundError:
-    print(
-        'You need to install the Beautiful Soup module. (https://pypi.org/project/beautifulsoup4/)',
-        file=sys.stderr,
-    )
-    print(
-        'If you have pip (normally installed with python), run this command in a terminal (cmd): pip install beautifulsoup4',
-        file=sys.stderr,
-    )
-    sys.exit()
+import requests
+from bs4 import BeautifulSoup
 
 
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
@@ -172,7 +136,7 @@ class FetishKitsch:
         Union[str, None]
             The buildId if it was found, None otherwise.
         """
-        log.debug(f'Fetching next.js buildId')
+        log.debug('Fetching next.js buildId')
         try:
             response = requests.get(cls._base_url, headers={'User-Agent': USER_AGENT}, timeout=(3, 6))
         except requests.exceptions.RequestException as req_ex:
@@ -217,10 +181,11 @@ class FetishKitsch:
             return None
 
         post = post['pageProps']['post']
+        assert post is not None
         scene: ScrapedScene = {
             'title': post['title'].replace('_', ' '),
             'url': urljoin(cls._base_url, f'/post/{post_id}'),
-            'date': datetime.strptime(post['shootDate'], '%b %d, %Y').strftime('%Y-%m-%d'),
+            'date': datetime.strptime(post['publishDate'], '%b %d, %Y').strftime('%Y-%m-%d'),
             'tags': list(map(lambda t: cls.map_tag(t), post['tags'])),
             'performers': list(map(lambda p: cls.map_performer(p), post['people'])),
             'studio': {
@@ -247,7 +212,6 @@ if sys.argv[1] == 'scrape' and sys.argv[2] == 'scene':
     ret = scraper.scrape_scene(i['url'])
 
 output = json.dumps(ret) if ret is not None else '{}'
-# log.debug(f'Send output: {output}')
 print(output)
 
-# Last Updated May 11, 2024
+# Last Updated July 08, 2024
