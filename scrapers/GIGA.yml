@@ -28,10 +28,7 @@ xPathScrapers:
     common:
       $videoItem: //*[@id="list"]
     scene:
-      Date:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
-        postProcess:
-          - parseDate: "2006/01/02"
+      Date: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
       Details:
         selector: $videoItem/ul/li/a/img/@alt]
         # The site uses the unicode U+ff0c comma instead of "normal" ASCII commas
@@ -98,6 +95,9 @@ xPathScrapers:
               - regex: .*product_id=
                 with: https://www.akiba-web.com/product/index.php?product_id=
 driver:
+  headers:
+    - Key: Referer
+      Value: https://www.akiba-web.com/
   cookies:
     - CookieURL: "https://www.akiba-web.com"
       Cookies:
@@ -105,4 +105,4 @@ driver:
           Domain: ".www.akiba-web.com"
           Value: "yes"
           Path: "/"
-# Last Updated June 15, 2024
+# Last Updated July 08, 2024
