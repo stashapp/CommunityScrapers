@@ -103,7 +103,7 @@ driver:
     - CookieURL: "https://www.mydirtyhobby.de"
       Cookies:
         - Name: "AGEGATEPASSED"
-          Domain: ".mydirtyhobby.com"
+          Domain: ".mydirtyhobby.de"
           Value: "1"
           Path: "/"
 # Last Updated June 28, 2024
