@@ -56,7 +56,7 @@ xPathScrapers:
                 with: $1
       Tags:
         Name:
-          selector: //div[@class="video_tools"]//div[text()="Categories:" or text()="Tags:"]/following-sibling::a//text()
+          selector: //div[@class="video_tools"]//div[text()="Categories" or text()="Tags"]/following-sibling::a//text()
           postProcess:
             - replace:
                 - regex: '^\+.+Suggest$'
