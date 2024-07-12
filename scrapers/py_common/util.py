@@ -119,10 +119,10 @@ def replace_at(obj: dict, *path: str, replacement: Callable[[T], T]) -> dict:
 
 def is_valid_url(url):
     """
-    Checks if an URL is valid by making a HEAD request and ensuring the response code is 2xx
+    Checks if an URL is valid by making a GET request and ensuring the response code is 2xx
     """
     try:
-        req = Request(url, method="HEAD")
+        req = Request(url)
         with urlopen(req) as response:
             return 200 <= response.getcode() < 300
     except URLError:

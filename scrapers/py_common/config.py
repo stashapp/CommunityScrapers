@@ -45,13 +45,13 @@ def get_config(default: str | None = None) -> "CustomConfig":
 
     # See git history if you want the chained configs version
     config_path = configs[0]
-    if not config_path.exists():
-        log.debug(f"[{prefix}] First run, creating default config at {config_path}")
-        config_path.write_text(str(config), encoding="utf-8")
-    else:
+    if config_path.exists():
         log.debug(f"[{prefix}] Reading config from {config_path}")
         config.update(config_path.read_text(encoding="utf-8"))
+    else:
+        log.debug(f"[{prefix}] First run, creating default config at {config_path}")
 
+    config_path.write_text(str(config), encoding="utf-8")
     return config
 
 
