@@ -21,11 +21,18 @@ def title_from_filename(js):
     }""",
         {"id": scene_id},
     )
-    assert response is not None
-    path = response["findScene"]["files"][0]["path"]
-    filename = os.path.basename(path)
+    if not response:
+        return None
+
+    files = response["findScene"]["files"]
+    if not files:
+        log.warning(f"Skipping scene {scene_id} as it has no files")
+        return None
+
+    filename = os.path.basename(files[0]["path"])
     if REMOVE_EXT:
         filename = os.path.splitext(filename)[0]
+
     if scene_title != filename:
         log.info(
             f"Scene {scene_id}: Title differs from filename: '{scene_title}' => '{filename}'"
