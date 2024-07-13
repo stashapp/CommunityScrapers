@@ -3,36 +3,18 @@ import difflib
 import json
 import os
 import re
-import sqlite3
 import sys
 import base64
 from configparser import ConfigParser, NoSectionError
 from urllib.parse import urlparse
+from py_common.deps import ensure_requirements
+from py_common import graphql
+from py_common import log
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  # parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
+ensure_requirements("bs4:beautifulsoup4", "requests")
 
-try:
-    from bs4 import BeautifulSoup as bs
-    import requests
-    import lxml
-except ModuleNotFoundError:
-    print(
-        "You need to install the following modules 'requests', 'bs4', 'lxml'.", file=sys.stderr)
-    sys.exit()
-
-try:
-    from py_common import graphql
-    from py_common import log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr)
-    sys.exit()
+from bs4 import BeautifulSoup as bs  # noqa: E402
+import requests  # noqa: E402
 
 #
 # User variables
@@ -185,31 +167,6 @@ def clean_text(details: str) -> str:
                          details)  # bs.get_text doesnt replace br's with \n
         details = bs(details, features='lxml').get_text()
     return details
-
-
-def check_db(database_path: str, scn_id: str) -> dict:
-    """
-    get scene data (size, duration, height) directly from the database file
-    """
-    try:
-        sqlite_connection = sqlite3.connect("file:" + database_path +
-                                            "?mode=ro",
-                                            uri=True)
-        log.debug("Connected to SQLite database")
-    except:
-        log.warning("Fail to connect to the database")
-        return None, None, None
-    cursor = sqlite_connection.cursor()
-    cursor.execute("SELECT size,duration,height from scenes WHERE id=?;",
-                   [scn_id])
-    record = cursor.fetchall()
-    database = {}
-    database["size"] = int(record[0][0])
-    database["duration"] = int(record[0][1])
-    database["height"] = str(record[0][2])
-    cursor.close()
-    sqlite_connection.close()
-    return database
 
 
 def send_request(url: str, head: str, send_json="") -> requests.Response:
@@ -928,12 +885,7 @@ if "movie" not in sys.argv and "gallery" not in sys.argv:
         if SCENE_ID:
             # Get data by GraphQL
             database_dict = graphql.getScene(SCENE_ID)
-            if database_dict is None:
-                # Get data by SQlite
-                log.warning(
-                    "GraphQL request failed, accessing database directly...")
-                database_dict = check_db(DB_PATH, SCENE_ID)
-            else:
+            if database_dict is not None:
                 database_dict = database_dict["files"]
             log.debug(f"[DATABASE] Info: {database_dict}")
         else:
