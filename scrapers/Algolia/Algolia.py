@@ -165,7 +165,7 @@ def clean_text(details: str) -> str:
         details = re.sub(r"\\", "", details)
         details = re.sub(r"<\s*/?br\s*/?\s*>", "\n",
                          details)  # bs.get_text doesnt replace br's with \n
-        details = bs(details, features='lxml').get_text()
+        details = bs(details, features='html.parser').get_text()
     return details
 
 
