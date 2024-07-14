@@ -4,12 +4,25 @@ sceneByURL:
     url:
       - treasureislandmedia.com/scenes
     scraper: tim
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://treasureislandmedia.com/scenes?searchval={}
+  scraper: search
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: tim
+  queryURL: "{url}"
 movieByURL:
   - action: scrapeXPath
     url:
       - treasureislandmedia.com/movies
     scraper: tim
 xPathScrapers:
+  search:
+    scene:
+      Title: //div[contains(@class,"tim-views-scenes-page-scene")]/p
+      URL: //div[contains(@class,"tim-views-scenes-page-scene")]/a/@href
+      Image: //div[contains(@class,"tim-views-scenes-page-scene")]//img/@src
   tim:
     scene:
       Title: &title //h2[@class="page-header"]
