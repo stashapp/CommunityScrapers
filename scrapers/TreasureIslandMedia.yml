@@ -30,7 +30,8 @@ xPathScrapers:
         BackImage: //div[contains(@class, "scene-parent-movie-cover-image-back")]//img/@src
         Date:
           selector: //div[contains(@class, "scene-parent-movie-cover-image")]//a/@href
-          subScraper: //meta[@property="video:release_date"]/@content
+          postProcess:
+            - subScraper: //meta[@property="video:release_date"]/@content
         Studio:
           Name: //a[contains(@class,"navbar-brand-currsite")]/span[contains(@class,"top")]
       Performers:
