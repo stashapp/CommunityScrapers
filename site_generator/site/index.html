@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stash Scrapers List</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bulma@1.0.1/css/bulma.min.css"
+    />
+    <link rel="stylesheet" href="assets/index.css" />
+  </head>
+  <body>
+    <nav class="navbar" role="navigation">
+      <a
+        class="navbar-item"
+        href="https://github.com/stashapp/CommunityScrapers"
+        >GitHub</a
+      >
+      <a
+        class="navbar-item"
+        href="https://docs.stashapp.cc/beginner-guides/guide-to-scraping/"
+        >Guide to Scraping</a
+      >
+      <a
+        class="navbar-item"
+        href="https://docs.stashapp.cc/in-app-manual/scraping/"
+        >Scraping Help</a
+      >
+    </nav>
+    <section class="section">
+      <input type="text" class="input" id="search" placeholder="Search..." />
+      <hr />
+      <table
+        class="table is-fullwidth is-striped is-hoverable"
+        id="scraper-table"
+      >
+        <thead>
+          <tr>
+            <th id="scraper_name">Name</th>
+            <th id="scraper_sites">Sites</th>
+            <th id="scraper_scene">Scene</th>
+            <th id="scraper_gallery">Gallery</th>
+            <th id="scraper_movie">Movie</th>
+            <th id="scraper_performer">Performer</th>
+            <th id="scraper_python">Python</th>
+            <th id="scraper_cdp">CDP</th>
+            <th id="lastupdate">Last Update</th>
+          </tr>
+        </thead>
+        <tbody id="scraper-list"></tbody>
+      </table>
+    </section>
+    <button
+      id="top-btn"
+      class="has-background-link"
+      onclick="window.scrollTo({ top: 0, behavior: 'smooth' })"
+      id="scrollToTopBtn"
+    >
+      ⬆️
+    </button>
+    <script type="module" src="assets/scraperlist.js"></script>
+  </body>
+</html>
