@@ -42,8 +42,9 @@ jobs:
     - name: Generate html index page
       run: |
         cd master/site_generator
-        yarn install
-        yarn run ci-build
+        npm i -g ts-node
+        npm ci
+        npm run ci-build
         cp -r site/* ../../_site/
     - uses: actions/upload-pages-artifact@v3
       with:
