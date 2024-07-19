@@ -33,7 +33,14 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: movie-
-                with:    
+                with:   
+      Code:
+        selector: //div[@id="content" or @id="prev_m"]/a[1]/img/@src
+        postProcess:
+          # Extract the studio code from the image URL as it is always in format /sets/nnn/ where nnn is code.
+          - replace:
+            - regex: .*sets\/(\d+).*
+              with: E$1 
   oldje3someScraper:
     scene:
       Studio:
@@ -55,4 +62,11 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https://www.oldje-3some.com/"
-# Last Updated July 18, 2024
+      Code:
+        selector: //img[@class="img-responsive" and contains(@src,"/view/")]/@src
+        postProcess:
+          # Extract the studio code from the partial image URL as it is always in format /photoCover/nnn where nnn is code.
+          - replace:
+            - regex: .*photoCover\/(\d+).*
+              with: E$1
+# Last Updated July 19, 2024
