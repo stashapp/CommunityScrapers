@@ -456,7 +456,6 @@ clips4sale.com|Clips4Sale.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubamateurusa.com|BadPuppy.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 clubamberrayne.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubdom.com|SubbyHubby.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
-clubelegantangel.com|ClubElegantAngel.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:x:|-|-
 clubinfernodungeon.com|ClubInfernoDungeon.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|Gay
 clubleatherrestrained.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 clubropemarks.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
