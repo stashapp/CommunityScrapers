@@ -47,7 +47,7 @@ xPathScrapers:
         Name:
           fixed: Oldje-3some
       Title:
-        selector: //h1
+        selector: //span[@class='breadcrumb_last']
       Tags:
         Name:
           selector: //a[contains(@href,'/videos/tag/')]
@@ -69,4 +69,4 @@ xPathScrapers:
           - replace:
             - regex: .*photoCover\/(\d+).*
               with: E$1
-# Last Updated July 19, 2024
+# Last Updated July 20, 2024
