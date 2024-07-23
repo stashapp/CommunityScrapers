@@ -138,7 +138,7 @@ xPathScrapers:
               Fake/Enhanced: "Fake"
       CareerLength: $label[text()='Years active:']]/text()
       Aliases:
-        selector: //div[@id='socialicons']//a[img[@alt='OnlyFans account']]/@href||//div[@id='socialicons']//a[img[@alt='OnlyFans Paid account']]/@href|//div[@id='socialicons']//a[img[@alt='OnlyFans Free account']]/@href|//div[@id='socialicons']//a[img[@alt='Fansly account']]/@href|//div[@id='bioarea']//h2/text()
+        selector: //div[@id='socialicons']//a[img[@alt='OnlyFans account']]/@href|//div[@id='socialicons']//a[img[@alt='OnlyFans Paid account']]/@href|//div[@id='socialicons']//a[img[@alt='OnlyFans Free account']]/@href|//div[@id='socialicons']//a[img[@alt='Fansly account']]/@href|//div[@id='bioarea']//h2/text()
         postProcess:
           - replace:
               - regex: 'https?://(?:www.)?onlyfans\.com/'
