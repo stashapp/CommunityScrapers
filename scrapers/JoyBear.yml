@@ -64,6 +64,9 @@ xPathScrapers:
                 with: ""
       Synopsis: //div[@class="descriptions"]/p
       FrontImage: *image
+      Studio:
+        Name:
+          fixed: JoyBear
   search:
     scene:
       Title:
@@ -76,4 +79,4 @@ xPathScrapers:
       URL:
         selector: //div[@class="allVideos"]/a/@href
         postProcess: *makeAbsolute
-# Last Updated May 24, 2024
+# Last Updated July 26, 2024
