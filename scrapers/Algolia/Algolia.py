@@ -122,6 +122,7 @@ SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "Squirtalicious",
     "3rd Degree Films",
     "Lethalhardcore",
+    "Wicked",
 ]
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
