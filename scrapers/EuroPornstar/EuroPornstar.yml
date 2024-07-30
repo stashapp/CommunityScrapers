@@ -1,4 +1,4 @@
-name: 06_europornstar
+name: EuroPornstar
 performerByName:
   action: scrapeXPath
   queryURL: https://www.europornstar.com/search.php?q={}
