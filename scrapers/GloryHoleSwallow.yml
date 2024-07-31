@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - gloryholeswallow.com
+      - cumpsters.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -28,13 +29,26 @@ xPathScrapers:
       Tags:
         Name: $info//p[contains(text(),'Tags')]//a/text()
       Image:
-        selector: //div[@id='fakeplayer']//img/@src0_1x
+        selector: //base/@href | //div[@id='fakeplayer']//img/@src0_1x
+        concat: "SEP"
         postProcess:
+          # Base for Gloryhole swallow includes /tour, which is also included in partial image path, remove this duplicate and sepertor
           - replace:
-              - regex: ^
-                with: https://gloryholeswallow.com
+              - regex: \/tour\/SEP
+                with: ""
+          # Will remove SEP for Cumpsters which is a complete URL
+          - replace:
+              - regex: \/SEP
+                with: ""
       Studio:
         Name:
-          fixed: GloryHole Swallow
+          selector: //base/@href
+          postProcess:
+            - replace:
+                - regex: (.+\/\/|www.|\..+)
+                  with:
+            - map:
+                cumpsters: Cumpsters
+                gloryholeswallow: Gloryhole Swallow
       URL: //link[@rel='canonical']/@href
-# Last Updated April 04, 2021
+# Last Updated July 31, 2024
