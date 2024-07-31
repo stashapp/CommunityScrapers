@@ -1,0 +1,181 @@
+name: EuroPornstar
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.europornstar.com/search.php?q={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.europornstar.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name:
+        selector: //div[contains(@class, 'thum')]//text()|//strong[@class='name']/text()
+
+      URL:
+        selector: //div[@class='list-pics']/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.europornstar.com/
+              - regex: " "
+                with: "-"
+              - regex: https:\/\/www\.europornstar\.com
+                with: https://www.europornstar.com/
+              - regex: https:\/\/www\.europornstar\.comhttps:\/\/www\.europornstar\.com
+                with: https://www.europornstar.com/
+              - regex: ".com//"
+                with: ".com/"
+
+
+  performerScraper:
+    performer:
+      Name: //strong[@class='name']/text()
+      Gender:
+        fixed: "Female"
+      URL: //head/meta[@property='og:url']/@content
+      Birthdate:
+        selector: //div[@class='about-info']//div[@class='parameter-row']//span[text()='Birth date:']/following-sibling::strong/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: (\w+:)(\s)(\w+)(\s)(\d+)(\w+)(\s)(\w+)(\s)(\w+)(\s)(\d+)
+                with: $5 $10 $12
+              - regex: '\?'
+                with: ""
+          - parseDate: 02 January 2006
+      Country:
+        selector: //div[@class='model-desc']/div[@class='about']//div[@class='parameter-row']//span[text()='Nationality:']/following-sibling::strong/text()
+        postProcess:
+          - replace:
+              - regex: '\?'
+                with: ""
+              - regex: "Albanian"
+                with: Albania
+              - regex: "Austrian"
+                with: Austria
+              - regex: "British"
+                with: "United Kingdom"
+              - regex: "Belarusian"
+                with: Belarus
+              - regex: "Belarussian"
+                with: Belarus
+              - regex: "Belgian"
+                with: Belgium
+              - regex: "Bulgarian"
+                with: Bulgaria
+              - regex: "Croatian"
+                with: Croatia
+              - regex: "Czech"
+                with: "Czech Republic"
+              - regex: "Danish"
+                with: Denmark
+              - regex: "Dutch"
+                with: Netherlands
+              - regex: "Estonian"
+                with: Estonia
+              - regex: "Finnish"
+                with: Finland
+              - regex: "French"
+                with: France
+              - regex: "Georgian"
+                with: Georgia
+              - regex: "German"
+                with: Germany
+              - regex: "Greek"
+                with: Greece
+              - regex: "Hungarian"
+                with: Hungary
+              - regex: "Irish"
+                with: Ireland
+              - regex: "Italian"
+                with: Italy
+              - regex: "Latvian"
+                with: Latvia
+              - regex: Lithuanian"
+                with: Lithuania
+              - regex: "Moldovan"
+                with: Moldova
+              - regex: "Norwegian"
+                with: Norway
+              - regex: "Polish"
+                with: Poland
+              - regex: "Portuguese"
+                with: Portugal
+              - regex: "Romanian"
+                with: Romania
+              - regex: "Russian"
+                with: Russia
+              - regex: "Serbian"
+                with: Serbia
+              - regex: "Slovakian"
+                with: Slovakia
+              - regex: "Slovenian"
+                with: Slovenia
+              - regex: "Spanish"
+                with: Spain
+              - regex: "Swedish"
+                with: Sweden
+              - regex: "Swiss"
+                with: Switzerland
+              - regex: "Ukrainian"
+                with: Ukraine
+
+      Measurements:
+        selector: //div[@class='model-desc']/div[@class='about']//div[@class='parameter-row']//span[text()='Measurements:']/following-sibling::strong/text()
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: '\?'
+                with: ""
+              - regex: (\d*)([a-zA-Z-]*)(\d*-\d*)(.+?)([a-zA-Z]+)(.*)
+                with: $1$5-$3
+      FakeTits:
+        selector: //div[@class='model-desc']/div[@class='about']//div[@class='parameter-row']//span[text()='Natural Tits:']/following-sibling::strong/text()
+        postProcess:
+          - replace:
+              - regex: '\?'
+                with: ""
+              - regex: "Yes"
+                with: Natural
+              - regex: "No"
+                with: Fake
+
+      Aliases:
+        selector: //div[@class='model-desc']/div[@class='about']//div[@class='parameter-row']//span[text()='Also Named:']/following-sibling::strong/text()
+        postProcess:
+          - replace:
+              - regex: '\?'
+                with: ""
+
+      Details:
+        selector: //div[contains(concat(" ",normalize-space(@class)," ")," about-desc ")]//span/text()|//div[contains(concat(" ",normalize-space(@class)," ")," about-desc ")]//p/text()
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "From "
+              - regex: '\.COM'
+                with: ".COM : "
+              - regex: '\.NET'
+                with: ".NET : "
+              - regex: '\n(,|\.|\))'
+                with: "$1"
+              - regex: '\n(,|\.|\))'
+                with: "$1"
+
+      Tags:
+        Name:
+          selector: //div[@class='model-desc']/div[@class='about']//div[@class='parameter-row']//span[text()='Nationality:']/following-sibling::strong/text()
+          postProcess:
+            - replace:
+                - regex: '\?'
+                  with: ""
+          split: ","
+
+
+
+# Last Updated July 23, 2024
