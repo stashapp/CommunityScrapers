@@ -2,12 +2,27 @@ name: ATKExotics
 sceneByURL:
   - action: scrapeXPath
     url:
-      - atkexotics.com/tour/
-      - amkingdom.com/tour/
+      - atkexotics.com/tour/movie
+      - amkingdom.com/tour/movie
     scraper: sceneScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
+      Title:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: "ATK Exotics : "
+                with: ""
+              - regex: '(\d+\s-\s)'
+                with: ""
+              - regex: '(?:\s-\s)+(\d+$)'
+                with: ""
+              - regex: '\.$'
+                with: ""
+              - regex: '(\. -)'
+                with: " -"
       Studio:
         Name:
           selector: //div[@class='statement']/a[contains(@href,'2257')]/@href
@@ -33,7 +48,6 @@ xPathScrapers:
                 with: ""
               - regex: '\.$'
                 with: ""
-
       Details:
         selector: //meta[contains(@name,'description')]/@content|//*[contains(text(),'Description')]//following-sibling::text()[1]
         postProcess:
