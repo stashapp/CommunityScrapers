@@ -37,17 +37,27 @@ xPathScrapers:
         fixed: "Female"
       URL: //head/meta[@property="og:url"]/@content
       Twitter:
-        selector: //div[@id='socialicons']//a[img[@alt='Twitter account']]/@href
+        selector: //div[@id='socialicons']//a[img[@alt='X account']]/@href
         postProcess:
           - replace:
-              - regex: https://twitter.com/
+              - regex: 'https?://(?:www.)?twitter\.com\/'
                 with: ""
+              - regex: 'https?://(?:www.)?x\.com\/'
+                with: ""
+              - regex: \/$
+                with: ""
+              - regex: '\s\s'
+                with: " "
       Instagram:
         selector: //div[@id='socialicons']//a[img[@alt='Instagram account']]/@href
         postProcess:
           - replace:
-              - regex: https://instagram.com/
+              - regex: 'https?://(?:www.)?instagram\.com\/'
                 with: ""
+              - regex: \/$
+                with: ""
+              - regex: '\s\s'
+                with: " "
       Birthdate:
         selector: $label[text()='Born:']]//text()
         concat: " "
@@ -69,10 +79,10 @@ xPathScrapers:
         selector: $label[text()='Ethnicity:']]/a/text()|$label[text()='Ethnicity:']]/text()
         postProcess:
           - map:
-              Asian: asian
-              Caucasian: white
-              Black: black
-              Latin: hispanic
+              asian: Asian
+              white: Caucasian
+              black: Black
+              hispanic: Latin
       Country: $label[text()='Birthplace']]/a[contains(@href,'topbabespercountry')]/text()
       EyeColor:
         selector: $label[text()='Eye color:']]
@@ -86,6 +96,12 @@ xPathScrapers:
           - replace:
               - regex: "Hair color: "
                 with:
+              - regex: "Brown"
+                with: Brunette
+              - regex: "Brown Hair"
+                with: Brunette
+              - regex: "Fair"
+                with: Blonde
       Height:
         selector: $label[text()='Height:']]/text()
         postProcess:
@@ -111,20 +127,75 @@ xPathScrapers:
           - replace:
               - regex: "Boobs: "
                 with: ""
+              - regex: Augmented
+                with: "Fake"
+              - regex: Real
+                with: "Natural"
+              - regex: \/.*$
+                with: ""
           - map:
-              Real/Natural: "No"
-              Fake/Enhanced: "Yes"
+              Real/Natural: "Natural"
+              Fake/Enhanced: "Fake"
       CareerLength: $label[text()='Years active:']]/text()
       Aliases:
-        selector: //div[@id='bioarea']//h2/text()
+        selector: //div[@id='socialicons']//a[img[@alt='OnlyFans account']]/@href|//div[@id='socialicons']//a[img[@alt='OnlyFans Paid account']]/@href|//div[@id='socialicons']//a[img[@alt='OnlyFans Free account']]/@href|//div[@id='socialicons']//a[img[@alt='Fansly account']]/@href|//div[@id='bioarea']//h2/text()
         postProcess:
           - replace:
+              - regex: 'https?://(?:www.)?onlyfans\.com/'
+                with: ""
+              - regex: 'https?://(?:www.)?fansly\.com\/'
+                with: ""
+              - regex: 'https?://(?:www.)?fans\.ly\/'
+                with: ""
               - regex: aka
                 with: ""
               - regex: '\/'
                 with: ","
-      Tattoos: $label[text()='Tattoos:']]/text()
-      Piercings: $label[text()='Piercings:']]/text()
+              - regex: "tv"
+                with: "TV"
+              - regex: "official"
+                with: "Official"
+              - regex: "free"
+                with: "Free"
+              - regex: "vip"
+                with: "VIP"
+              - regex: "porn"
+                with: "Porn"
+              - regex: '\s\s'
+                with: " "
+        concat: ", "
+      Tattoos:
+        selector: $label[text()='Tattoos:']]/text()
+        postProcess:
+          - replace:
+              - regex: '\byes\b'
+                with: "Various"
+              - regex: '\bno\b'
+                with: "None"
+              - regex: '\bYes\b'
+                with: "Various"
+              - regex: "/bNo/b"
+                with: "None"
+      Piercings:
+        selector: $label[text()='Piercings:']]/text()
+        postProcess:
+          - replace:
+              - regex: '\byes\b'
+                with: "Various"
+              - regex: '\bno\b'
+                with: "None"
+              - regex: '\bYes\b'
+                with: "Various"
+              - regex: "/bNo/b"
+                with: "None"
+              - regex: 'both\snipples'
+                with: "Nipples"
+              - regex: 'Both\snipples'
+                with: "Nipples"
+              - regex: 'Both\sNipples'
+                with: "Nipples"
+              - regex: 'each\snipple'
+                with: "Nipples"
       Image:
         selector: //div[@id='profimg']//a[@class='img']/@href
         # Alternitive selector will use site logo as image if none is found
@@ -146,4 +217,4 @@ xPathScrapers:
                 with: "$1 "
               - regex: '\n(,|\.|\))'
                 with: "$1"
-# Last Updated January 05, 2022
+# Last Updated July 23, 2024
