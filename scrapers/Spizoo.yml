@@ -51,7 +51,6 @@ xPathScrapers:
         postProcess:
           - parseDate: 2006-01-02
       Details: $scene_info//p[@class="description"] | $scene_info//p
-      # Details: $scene_info//p
       Performers:
         Name: $scene_info//a[@class="model-name"]/@title
       Tags:
