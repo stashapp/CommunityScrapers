@@ -5,12 +5,6 @@ sceneByURL:
       - pigboyruben.com
     scraper: sceneScraper
 
-performerByURL:
-  - action: scrapeXPath
-    url:
-      - pigboyruben.com
-    scraper: performerScraper
-
 xPathScrapers:
   sceneScraper:
     scene:
