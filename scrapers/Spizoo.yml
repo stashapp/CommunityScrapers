@@ -85,10 +85,10 @@ xPathScrapers:
                 with:
 driver:
   cookies:
-  - CookieURL: "https://www.mrluckylife.com"
+  - CookieURL: "https://www.mrluckylife.com/"
     Cookies:
-      # Replace this cookie to scrape members area links
-      - Name: "pcar%5xxxxxxxxxxxxxxxxxxxxxxx"
+      # Set this cookie name to the one beginning with `pcar[...]` to scrape the members' pages.
+      - Name: ""
         Domain: ".mrluckylife.com"
         Path: "/"
         Value: ""
