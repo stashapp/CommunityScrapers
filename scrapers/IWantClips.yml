@@ -31,7 +31,7 @@ xPathScrapers:
     common:
       $model: //a[@class="modelLink"]
     scene:
-      Title: //div[@class="col-md-12 col-sm-12 col-xs-12 title row-0"]/span/text()
+      Title: //div[@class="col-md-12 col-sm-12 col-xs-12 title row-0"]/span
       URL: //link[@rel="canonical"]/@href
       Date:
         selector: //div[@class="col-xs-12 date fix"]/span/em/text()
@@ -41,7 +41,7 @@ xPathScrapers:
                 with: $1
           - parseDate: Jan 2, 2006
       Details:
-        selector: //div[@class="col-xs-12 description fix"][last()]/span/text()
+        selector: //div[@class="col-xs-12 description fix"][last()]/span
         concat: "\n\n"
       Tags:
         Name:
@@ -51,7 +51,6 @@ xPathScrapers:
             - replace:
                 - regex: "Keywords:"
                   with: $1
-            - replace:
                 - regex: ',\s+'
                   with: ","
           split: ","
@@ -85,10 +84,18 @@ xPathScrapers:
       Image: //div[@class="sideBar"]//img[contains(@class,'avatar')]/@src
   performerSearch:
     performer:
-      Name: //h5[contains(@class,'featured-store-name')]/a/text()
-      URL:
-        selector: //h5[contains(@class,'featured-store-name')]/a/@href
+      Name: //h5[contains(@class,'featured-store-name')]/a
+      URL: //h5[contains(@class,'featured-store-name')]/a/@href
 
 driver:
-  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
+  cookies:
+    - CookieURL: https://iwantclips.com
+      Cookies:
+        - Name: iwc-new-design
+          Value: "on"
+          Domain: .iwantclips.com
+          Path: /
 # Last Updated May 27, 2024
