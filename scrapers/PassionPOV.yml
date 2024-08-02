@@ -2,7 +2,7 @@ name: "PassionPOV"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - passionpov.com
+      - passionpov.com/videos/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
