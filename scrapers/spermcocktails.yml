@@ -71,3 +71,4 @@ xPathScrapers:
           - replace:
             - regex: (^http|https):\/\/.+\/V([0-9]+).*
               with: "https://www.spermcocktail.com/psnUpdatesFocus.php?vnum=V$2"
+# Last Updated August 03, 2024
