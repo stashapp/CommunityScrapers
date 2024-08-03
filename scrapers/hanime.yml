@@ -4,7 +4,7 @@ sceneByFragment:
   queryURL: https://hanime.tv/videos/hentai/{filename}
   queryURLReplace:
     filename:
-      - regex: ^([a-z\-0-9]+)(\-[0-9]{3,4}p)?.*
+      - regex: ^([a-z\-0-9]+?)(\-[0-9]{3,4}p)?\..+$
         with: $1
   scraper: sceneScraper
 sceneByURL:
@@ -42,4 +42,4 @@ xPathScrapers:
                 with: "static-assets.droidbuzz.top"
               - regex: "https://"
                 with: "https://i1.wp.com/"
-# Last Updated June 25, 2024
+# Last Updated August 4, 2024
