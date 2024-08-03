@@ -1,20 +1,17 @@
-name: VirtualRealPorn
+name: VirtualRealGay
 
 sceneByURL:
   - action: scrapeXPath
     url: &urlSel
-      - virtualrealamateurporn.com/vr-amateur-porn-video/
-      - virtualrealjapan.com/vr-japanese-video/
-      - virtualrealpassion.com/vr-female-pov-porn-video/
-      - virtualrealporn.com/vr-porn-video/
+      - virtualrealgay.com/vr-gay-porn-video/
     scraper: sceneScraper
 
 sceneByFragment:
   action: scrapeXPath
-  # url format: https://virtualrealporn.com/vr-porn-video/{title}
+  # url format: https://virtualrealgay.com/vr-gay-porn-video/{title}
   # title is part of the official filename for more recent scenes
   # however, title will have spaces replaced with '_' in the file name
-  queryURL: https://virtualrealporn.com/vr-porn-video/{filename}/
+  queryURL: https://virtualrealgay.com/vr-gay-porn-video/{filename}/
   queryURLReplace:
     # filename format:
     #   - older scenes
@@ -25,7 +22,7 @@ sceneByFragment:
     #         res: oculus|\d+k
     #         vrtype: stuff we do not care about but could contain '_'
     filename:
-      - regex: (?i)^(?:VirtualRealPorn_(?P<title>.+)_(?:oculus|\dk)_.+)|(?:VirtualRealPorn.com_-_(?P<title>.+?)_-_.+)$
+      - regex: (?i)^(?:VirtualRealGay_(?P<title>.+)_(?:oculus|\dk)_.+)|(?:VirtualRealGay.com_-_(?P<title>.+?)_-_.+)$
         with: $title
       # title has spaces replaced with '_' in the filename
       # but we need '-' for the url
@@ -41,8 +38,7 @@ movieByURL:
 performerByURL:
   - action: scrapeXPath
     url:
-      - virtualrealpassion.com/vr-models/
-      - virtualrealporn.com/vr-models/
+      - virtualrealgay.com/vr-models/
     scraper: performerScraper
 
 xPathScrapers:
@@ -151,4 +147,4 @@ xPathScrapers:
               }
               return value
       Image: //div[@class="feature_img_model"]/img/@src
-# Last Updated June 26, 2024
+# Last Updated August 04, 2024
