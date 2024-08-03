@@ -1976,6 +1976,7 @@ spankmonster.com|AdultEmpireCash.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spannergeil.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spearteenpussy.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermantino.com|Teencoreclub.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+spermcocktails.com|spermcocktails.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermmania.com|SpermMania.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermsuckers.com|AdultDoorway.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 spermswallowers.com|JulesJordan.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
