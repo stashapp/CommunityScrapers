@@ -156,6 +156,7 @@ studioMap = {
     "porntugal":"Porntugal",
     "psychohenessy":"Henessy",
     "puremolly":"Molly Pills",
+    "pvgirls": "Porn Valley Girls",
     "realagent.xxx":"Real Agent",
     "realpeachez":"Sarah Peachez",
     "rexringoxxx.xxx":"Rex Ringo XXX Productions",
