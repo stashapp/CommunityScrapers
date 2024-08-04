@@ -7,6 +7,7 @@ sceneByURL:
       - firstclasspov.com/updates/
       - gothgirlfriends.com/updates/
       - mrluckylife.com/updates/
+      - mrluckylife.com/members/
       - mrluckypov.com/updates/
       - mrluckyraw.com/updates/
       - mrluckyvip.com/updates/
@@ -49,11 +50,11 @@ xPathScrapers:
         selector: $scene_info//p[@class="date"]
         postProcess:
           - parseDate: 2006-01-02
-      Details: $scene_info//p
+      Details: $scene_info//p[@class="description"] | $scene_info//p
       Performers:
-        Name: $scene_info//a[contains(@href,"/model")]/@title
+        Name: $scene_info//a[@class="model-name"]/@title
       Tags:
-        Name: $scene_info//a[contains(@href,"/categories")] | //div[contains(@class, "categories-holder")]/a
+        Name: $scene_info//a[contains(@href,"/categories")] | $scene_info//a[contains(@href,"/category")] | //div[contains(@class, "categories-holder")]/a
       Studio:
         Name:
           # Scenes on Spizoo can have an <i id="site"> element with the studio name, others we get from the base URL
@@ -67,6 +68,7 @@ xPathScrapers:
                 drdaddypov: Dr. Daddy POV
                 firstclasspov: First Class POV
                 gothgirlfriends: Goth Girlfriends
+                mrluckylife: Mr. LuckyLIFE
                 mrluckypov: Mr. LuckyPOV
                 mrluckyraw: Mr. LuckyRaw
                 mrluckyvip: Mr. LuckyVIP
@@ -81,4 +83,13 @@ xPathScrapers:
               # Remove any resizing parameters for the image, we want the original
               - regex: "[?&]img(?:q|w|h)=[^&]+"
                 with:
-# Last Updated June 05, 2024
+driver:
+  cookies:
+  - CookieURL: "https://www.mrluckylife.com/"
+    Cookies:
+      # Set this cookie name to the one beginning with `pcar[...]` to scrape the members' pages.
+      - Name: ""
+        Domain: ".mrluckylife.com"
+        Path: "/"
+        Value: ""
+# Last Updated August 1, 2024
