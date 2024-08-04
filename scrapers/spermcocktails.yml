@@ -1,0 +1,74 @@
+name: SpermCocktail.com
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.spermcocktail.com/psnUpdatesFocus.php?vnum={title}
+  scraper: sceneFragScraper
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - spermcocktail.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneFragScraper:
+    scene:
+      Title: //div[@id="boxDetail"]/div[@id="boxVidTitle"]/text()
+      Details: //div[@id="boxDetail"]/p[@id="boxVidDescription"]/text()
+      Code:
+        selector: (//td/a[@href="/pageJoin.php"])[1]/img/@src
+        postProcess:
+          - replace:
+            - regex: (^http|https):\/\/.+\/V([0-9]+).*
+              with: "V$2"
+      Performers:
+        Name: //div[@id="boxVidDetail"]/a/text()
+      Date:
+        selector: //div[@id="boxVidDetail"]/b[contains(text(), "UPDATED")]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: (\d+)(st|nd|rd|th)
+              with: "$1"
+          - parseDate: Jan 2, 2006
+      Studio:
+        Name:
+          fixed: Sperm Cocktail
+      Image:
+        selector: (//td/a[@href="/pageJoin.php"])[1]/img/@src
+      URL:
+        selector: (//td/a[@href="/pageJoin.php"])[1]/img/@src
+        postProcess:
+          - replace:
+            - regex: (^http|https):\/\/.+\/V([0-9]+).*
+              with: "https://www.spermcocktail.com/psnUpdatesFocus.php?vnum=V$2"
+  sceneScraper:
+    scene:
+      Title: //div[@id="boxDetail"]/div[@id="boxVidTitle"]/text()
+      Details: //div[@id="boxDetail"]/p[@id="boxVidDescription"]/text()
+      Code:
+        selector: (//td/a[@href="/pageJoin.php"])[1]/img/@src
+        postProcess:
+          - replace:
+            - regex: (^http|https):\/\/.+\/V([0-9]+).*
+              with: "V$2"
+      Performers:
+        Name: //div[@id="boxVidDetail"]/a/text()
+      Date:
+        selector: //div[@id="boxVidDetail"]/b[contains(text(), "UPDATED")]/following-sibling::text()
+        postProcess:
+          - replace:
+            - regex: (\d+)(st|nd|rd|th)
+              with: "$1"
+          - parseDate: Jan 2, 2006
+      Studio:
+        Name:
+          fixed: Sperm Cocktail
+      Image:
+        selector: (//td/a[@href="/pageJoin.php"])[1]/img/@src
+      URL:
+        selector: (//td/a[@href="/pageJoin.php"])[1]/img/@src
+        postProcess:
+          - replace:
+            - regex: (^http|https):\/\/.+\/V([0-9]+).*
+              with: "https://www.spermcocktail.com/psnUpdatesFocus.php?vnum=V$2"
+# Last Updated August 03, 2024
