@@ -39,6 +39,10 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: https://joybear.com
+        FrontImage: //div[@class="fFilms"]//a/img/@src
+        Studio: &studioName
+          Name:
+            fixed: JoyBear
       Performers:
         Name: //div[@class="castModels"]//a/span
         URL:
@@ -46,9 +50,7 @@ xPathScrapers:
           postProcess: *makeAbsolute
       Tags:
         Name: //div[@class="categories"]//a
-      Studio:
-        Name:
-          fixed: JoyBear
+      Studio: *studioName
       Image: &image
         selector: //script[contains(text(), "poster")]
         postProcess:
@@ -64,6 +66,7 @@ xPathScrapers:
                 with: ""
       Synopsis: //div[@class="descriptions"]/p
       FrontImage: *image
+      Studio: *studioName
   search:
     scene:
       Title:
