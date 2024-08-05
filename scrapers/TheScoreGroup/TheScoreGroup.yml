@@ -176,6 +176,8 @@ xPathScrapers:
                 with: $1
               - regex: ^//
                 with: https://
+              - regex: _x
+                with: ""
       # This Selector scrapes the image posted on social media sites
       #        selector: //meta[@itemprop="image"]/@content
       # Enable this post process if you want better image quality but sometimes it can fail
