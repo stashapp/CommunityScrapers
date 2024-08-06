@@ -67,6 +67,7 @@ xPathScrapers:
       $scene: //div[@id="trailer_player"]
     scene:
       Title: $scene//h1
+      Code: //div[@data-id]/@data-id
       Details: $scene//*[contains(@class, "fa-quote-right")]/following-sibling::span
       Performers:
         Name: $scene//a[contains(@href, "models")]
