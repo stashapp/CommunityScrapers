@@ -354,9 +354,16 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
         log.error(f"Attempted to scrape a '{wrong_type}' (ID: {wrong_id}) as a scene.")
         raise ValueError("Invalid scene from API")
 
-    if (details := dig(scene_from_api, "description")) or (details := dig(scene_from_api, "parent", "description")):
+    if (details := dig(scene_from_api, "description")) or (
+        details := dig(scene_from_api, "parent", "description")
+    ):
         details = unescape(details)
-        details = "\n".join([" ".join([s for s in x.strip(" ").split(" ") if s != ""]) for x in "".join(details).split("\n")])
+        details = "\n".join(
+            [
+                " ".join([s for s in x.strip(" ").split(" ") if s != ""])
+                for x in "".join(details).split("\n")
+            ]
+        )
 
     scene: ScrapedScene = {
         "title": scene_from_api["title"],
@@ -393,6 +400,15 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
         scene["markers"] = [to_marker(m) for m in markers]  # type: ignore
 
     return scene
+
+
+def to_scraped_gallery(scraped_scene: ScrapedScene) -> ScrapedGallery:
+    gallery_keys = ScrapedGallery.__required_keys__ | ScrapedGallery.__optional_keys__
+    gallery: ScrapedGallery = {
+        k: v for k, v in scraped_scene.items() if k in gallery_keys
+    }  # type: ignore
+
+    return gallery
 
 
 ## Primary functions used to scrape from Aylo's API
@@ -888,6 +904,42 @@ def scene_from_fragment(
     log.warning("Cannot scrape from this fragment: need to have title or url set")
 
 
+def gallery_from_fragment(
+    fragment: dict,
+    search_domains: list[str] | None = None,
+    min_ratio=config.minimum_similarity,
+    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+) -> ScrapedGallery | None:
+    """
+    Scrapes a gallery from a fragment, which must contain at least one of the following:
+    - url: the URL of the scene the gallery belongs to
+    - title: the title of the scene the gallery belongs to
+
+    If domains is provided it will only search those domains,
+    otherwise it will search all known domains (this could be very slow!)
+
+    If min_ratio is provided _AND_ the fragment contains a title but no URL,
+    the search will only return a scene if a match with at least that ratio is found
+
+    If postprocess is provided it will be called on the result before returning
+    """
+    log.debug(f"Fragment scraping gallery {fragment['id']}")
+    if url := fragment.get("url"):
+        log.debug(f"Using gallery URL: '{url}'")
+        if gallery := gallery_from_url(url, postprocess=postprocess):
+            return gallery
+        log.debug("Failed to scrape gallery from URL")
+    if title := fragment.get("title"):
+        log.debug(f"Searching for '{title}'")
+        if scene := find_scene(
+            title, search_domains, min_ratio, postprocess=postprocess
+        ):
+            return to_scraped_gallery(scene)
+        log.debug("Failed to find gallery by title")
+
+    log.warning("Cannot scrape from this fragment: need to have title or url set")
+
+
 def performer_from_fragment(
     fragment: dict,
     search_domains: list[str] | None = None,
@@ -927,8 +979,11 @@ def main_scraper():
     op, args = scraper_args()
     result = None
     match op, args:
-        case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
+        case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url)
+        case "gallery-by-fragment":
+            domains = args.get("extra", None)
+            result = gallery_from_fragment(args, search_domains=domains)
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
         case "scene-by-name", {"name": name, "extra": _domains} if name:
