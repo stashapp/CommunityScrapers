@@ -28,12 +28,11 @@ xPathScrapers:
                 - regex: ^
                   with: https://cockyboys.com
       Details:
-        selector: //div[@class="movieDesc"]/.
+        selector: //div[@class="movieDesc"]
         postProcess:
           - replace:
               - regex: Description\s*
                 with:
-        concat: "\n\n"
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
@@ -45,4 +44,4 @@ xPathScrapers:
         # CockyBoys only has profile pages for male performers
         fixed: Male
       Image: //div[@id="modelInfo"]/img/@src
-# Last Updated October 05, 2023
+# Last Updated June 23, 2024

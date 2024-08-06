@@ -6,36 +6,68 @@ sceneByURL:
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: "[^/]+$"
-          with: ""
-        - regex: "https://www.iwara.tv/video/"
-          with: "https://api.iwara.tv/video/"
+        # only capture video id from url
+        - regex: .*video/([^/]+)(?:/[^/]*)?$
+          with: https://api.iwara.tv/video/$1
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://api.iwara.tv/video/{filename}
+  queryURLReplace:
+    filename: # expects an id in square brackets before extension, as saved by yt-dlp e.g. VIDEO_TITLE [VIDEO_ID].mp4
+      - regex: .*\[([0-9a-zA-Z]{13,})\]\.[^\.]+$
+        with: $1
+  scraper: sceneScraper
 
 jsonScrapers:
   sceneScraper:
     scene:
       Title: title
+      URL:
+        selector: "[id,slug]"
+        concat: /
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.iwara.tv/video/
       Date:
         selector: file.createdAt
         postProcess:
           - replace:
-              - regex: '(\d{4}-\d{2}-\d{2}).*'
+              - regex: (\d{4}-\d{2}-\d{2}).*
                 with: $1
           - parseDate: "2006-01-02"
       Studio:
         Name: user.name
-      Tags: 
+        URL:
+          selector: user.username
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.iwara.tv/profile/
+      Tags:
         Name: tags.#.id
       Details: body
+      # Some videos have a custom thumbnail and we'll want to use that if possible
+      # example of scene with custom thumbnail: https://www.iwara.tv/video/J7W7n4VdKtohQ7/
+      # example of scene with normal thumbnail: https://www.iwara.tv/video/2DORyCe5fVqXz6/
       Image:
-        selector: "[file.id,thumbnail]"
+        selector: "[customThumbnail.id,file.id,thumbnail]"
         concat: ","
-        postProcess: 
+        postProcess:
           - replace:
-              - regex: '\b([1-9])\b'
-                with: "0$1"
-          - replace:
+              # If we found a customThumbnail use it and discard the rest
+              - regex: ([^,]+),[^,]+,.*
+                with: https://i.iwara.tv/image/original/$1/$1.jpg
+              # zero pad if thumbnail is less than 10
+              - regex: \b([0-9])\b
+                with: 0$1
               - regex: (.*),(.*)
-                with: "https://i.iwara.tv/image/original/$1/thumbnail-$2.jpg"
-# Last Updated October 05, 2023
+                with: https://i.iwara.tv/image/original/$1/thumbnail-$2.jpg
+# driver:
+#   headers:
+#     - Key: Authorization
+#       # look for token cookie starts with eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+#       Value: Bearer INSERT_TOKEN
+
+# Last Updated June 14, 2024

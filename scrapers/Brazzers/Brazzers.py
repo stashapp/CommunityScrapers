@@ -5,6 +5,7 @@ from py_common import log
 from py_common.util import dig, replace_all, replace_at
 from AyloAPI.scrape import (
     gallery_from_url,
+    gallery_from_fragment,
     scraper_args,
     scene_from_url,
     scene_search,
@@ -21,7 +22,7 @@ studio_map = {
 }
 
 
-def bangbros(obj: Any, _) -> Any:
+def brazzers(obj: Any, _) -> Any:
     # All brazzers URLs use /video/ instead of the standard /scene/
     # and /pornstar/ instead of the standard /model
     fixed = replace_all(
@@ -52,26 +53,30 @@ if __name__ == "__main__":
     result = None
 
     match op, args:
-        case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
-            result = gallery_from_url(url, postprocess=bangbros)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url, postprocess=brazzers)
+        case "gallery-by-fragment":
+            result = gallery_from_fragment(
+                args, search_domains=domains, postprocess=brazzers
+            )
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, postprocess=bangbros)
+            result = scene_from_url(url, postprocess=brazzers)
         case "scene-by-name", {"name": name} if name:
-            result = scene_search(name, search_domains=domains, postprocess=bangbros)
+            result = scene_search(name, search_domains=domains, postprocess=brazzers)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             result = scene_from_fragment(
-                args, search_domains=domains, postprocess=bangbros
+                args, search_domains=domains, postprocess=brazzers
             )
         case "performer-by-url", {"url": url}:
-            result = performer_from_url(url, postprocess=bangbros)
+            result = performer_from_url(url, postprocess=brazzers)
         case "performer-by-fragment", args:
             result = performer_from_fragment(args)
         case "performer-by-name", {"name": name} if name:
             result = performer_search(
-                name, search_domains=domains, postprocess=bangbros
+                name, search_domains=domains, postprocess=brazzers
             )
         case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url, postprocess=bangbros)
+            result = movie_from_url(url, postprocess=brazzers)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

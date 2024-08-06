@@ -1,0 +1,27 @@
+{
+  "licence": "GPL-3.0",
+  "private": true,
+  "dependencies": {
+    "fuse.js": "^7.0.0",
+    "glob": "^11.0.0",
+    "simple-git": "^3.25.0",
+    "yaml": "^2.4.5",
+    "zod": "^3.23.8"
+  },
+  "scripts": {
+    "vite-dev": "cd site && vite serve",
+    "generate": "ts-node src/parseScrapers.ts",
+    "zod": "npx ts-to-zod src/types.ts src/zodType.ts",
+    "fmt": "npx prettier --write src site",
+    "fuse-index": "node src/fuse-index.js",
+    "ci-build": "npm run generate && npm run fuse-index"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.9",
+    "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "ts-to-zod": "^3.9.1",
+    "typescript": "^5.5.3",
+    "vite": "^5.3.3"
+  }
+}

@@ -31,7 +31,7 @@ xPathScrapers:
     common:
       $searchItem: //div[contains(@class,"item thumb video_")]
     scene:
-      Title: $searchItem/a[@class="th js-open-popup"]/@title
+      Title: $searchItem//div[@class="thumb_title"]/text()
       URL: $searchItem/a[@class="th js-open-popup"]/@href
       Image: $searchItem//img/@data-original
 
@@ -41,7 +41,7 @@ xPathScrapers:
     scene:
       URL: //link[@rel='canonical']/@href
       Title: //div[@class="heading"]//h1
-      Details: //div[@class="video_tools"]//div[contains(text(),"Description:")]/em
+      Details: (//div[@class="info row"]/following-sibling::div)[1]
       Date:
         selector: //script[@type="application/ld+json"]
         postProcess:
@@ -56,14 +56,14 @@ xPathScrapers:
                 with: $1
       Tags:
         Name:
-          selector: //div[@class="video_tools"]//div[text()="Categories:" or text()="Tags:"]/following-sibling::a//text()
+          selector: $article//div[text()="Categories" or text()="Tags"]/following-sibling::a//text()
           postProcess:
             - replace:
                 - regex: '^\+.+Suggest$'
                   with: ""
       Studio:
-        Name: //div[@class="video_tools"]//div[text()="Artist:"]/following-sibling::a/span
-        URL: //div[@class="video_tools"]//div[text()="Artist:"]/following-sibling::a/@href
+        Name: $article//div[text()="Artist"]/following-sibling::a/span
+        URL: $article//div[text()="Artist"]/following-sibling::a/@href
 debug:
   printHTML: true
 driver:
@@ -85,4 +85,4 @@ driver:
           ValueRandom: 43
           Domain: .rule34video.com
           Path: /
-# Last Updated May 28, 2024
+# Last Updated July 20, 2024

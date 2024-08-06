@@ -11,7 +11,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - javdb.com/v/
-      - javdb36.com/v/
+      - javdb367.com/v/
     scraper: sceneScraper
     queryURL: "{url}"
     queryURLReplace:
@@ -31,7 +31,7 @@ movieByURL:
   - action: scrapeXPath
     url:
       - javdb.com/v/
-      - javdb36.com/v/
+      - javdb367.com/v/
     scraper: movieScraper
     queryURL: "{url}"
     queryURLReplace:
@@ -142,10 +142,10 @@ driver:
         #  Value: "Add here the actual value from your cookies"
         #  Path: "/"
         #  Domain: "javdb.com"
-    - CookieURL: "https://javdb36.com"
+    - CookieURL: "https://javdb367.com"
       Cookies:
         - Name: "locale"
-          Domain: "javdb36.com"
+          Domain: "javdb367.com"
           Value: "en"
           Path: "/"
         # Access to certain titles requires a javdb account
@@ -153,9 +153,9 @@ driver:
         #- Name: "_jdb_session"
         #  Value: "Add here the actual value from your cookies"
         #  Path: "/"
-        #  Domain: "javdb36.com"
+        #  Domain: "javdb367.com"
         #- Name: "remember_me_token"
         #  Value: "Add here the actual value from your cookies"
         #  Path: "/"
-        #  Domain: "javdb36.com"
+        #  Domain: "javdb367.com"
 # Last Updated January 21, 2024

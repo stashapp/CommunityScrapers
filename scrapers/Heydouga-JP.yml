@@ -1,0 +1,56 @@
+name: Heydouga-JP
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.heydouga.com/moviepages
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.heydouga.com/moviepages/{filename}
+  # constructs the movie URL from the filename, provided that the filename includes the movie id
+  queryURLReplace:
+    filename:
+      - regex: .*(\d{4})[_\s-](\d{3,4}).*
+        # heydouga uses a 4+3 digit number for ids
+        with: $1/$2/index.html
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: /html/head/title
+      URL: 
+        selector: //a[@class="chip chip-ppv"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.heydouga.com"
+      Details: //*[@id="movie-detail-mobile"]/div
+      Date:
+        selector: //*[@id="movie-info"]//span[contains(.,"配信日")]/following-sibling::span/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Image: 
+        selector: //*[@id="movie-player"]/section[@class="movie-player"]//script[@type="text/javascript"]
+        postProcess:
+          - replace: 
+            - regex: (\s|\S)*(https:.*player_thumb.jpg)(\s|\S)*
+              with: $2
+      Performers:
+        Name: //*[@id="movie-info"]//span[contains(.,"主演")]/following-sibling::span/a/text()
+      Code:
+        selector: //a[@class="chip chip-ppv"]/@href
+        postProcess:
+          - replace:
+              - regex: .*(\d{4})/(\d{3,4}).*
+                with: Heydouga-$1-$2
+      Tags:
+        Name: //*[@id="movie_tag_list"]/li
+      Studio:
+        Name: //*[@id="movie-info"]//span[contains(.,"提供元")]/following-sibling::span/a/text()
+debug:
+  printHTML: false
+driver:
+  useCDP: false
+
+# Last Updated Jan 11, 2024

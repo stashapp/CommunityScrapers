@@ -62,6 +62,7 @@ xPathScrapers:
               - regex: '.*"subtitle":{"text":"([^"]+)"},"rating".*'
                 with: $1
           - parseDate: 02 Jan 2006
+          - parseDate: 02 Jan. 2006
       Performers:
         Name:
           selector: $script
@@ -99,11 +100,10 @@ driver:
           Domain: ".mydirtyhobby.com"
           Value: "1"
           Path: "/"
-  cookies:
     - CookieURL: "https://www.mydirtyhobby.de"
       Cookies:
         - Name: "AGEGATEPASSED"
           Domain: ".mydirtyhobby.de"
           Value: "1"
           Path: "/"
-# Last Updated May 30, 2024
+# Last Updated June 28, 2024

@@ -1,4 +1,57 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: "GroobyNetwork-Partial"
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - transvr.com/tour/models
+    scraper: performerScraper
+  - action: scrapeXPath
+    url:
+      - transexpov.com/tour/models
+    scraper: performerScraperB
+  - action: scrapeXPath
+    url:
+      - asiantgirl.com/tour/models
+      - franks-tgirlworld.com/tour/models
+      - ladyboy-ladyboy.com/tour/models
+      - ladyboy.xxx/tour/models
+    scraper: performerScraper2
+  - action: scrapeXPath
+    url:
+      - blacktgirlshardcore.com/tour/models
+      - black-tgirls.com/tour/models
+      - bobstgirls.com/tour/models
+      - femout.xxx/tour/models
+      - femoutsex.xxx/tour/models
+      - groobygirls.com/tour/models
+      - realtgirls.com/tour/models
+      - tgirlsex.xxx/tour/models
+      - tgirls.porn/tour/models
+      - tgirls.xxx/tour/models
+      - tgirlsfuck.com/tour/models
+      - tgirltops.com/tour/models
+      - transgasm.com/tour/models
+    scraper: performerScraper3
+  - action: scrapeXPath
+    url:
+      - brazilian-transsexuals.com/tour/models
+    scraper: performerScraper4
+  - action: scrapeXPath
+    url:
+      - grooby-archives.com/tour/models
+    scraper: performerScraper5
+  - action: scrapeXPath
+    url:
+      - tgirlshookup.com/tour/models
+    scraper: performerScraper6
+  - action: scrapeXPath
+    url:
+      - transnificent.com/tour/models
+    scraper: performerScraper7
+  - action: scrapeXPath
+    url:
+      - groobyvr.com/tour/models
+    scraper: performerScraper8
 sceneByURL:
   - action: scrapeXPath
     url: &urls
@@ -30,11 +83,132 @@ sceneByURL:
     url:
       - groobyvr.com
     scraper: sceneScraperGroobyVR
+  - action: scrapeXPath
+    url:
+      - transvr.com
+    scraper: sceneScraperTransVR
 galleryByURL:
   - action: scrapeXPath
     url: *urls
     scraper: galleryScraper
 xPathScrapers:
+  performerScraper:
+    performer:
+      Name: &name //h3[@class="modelname"]/text()|//div[@class="model_profile_name"]/text()
+      Gender: &gender
+        fixed: transgender_female
+      Image: &image
+        selector: //link[@rel="canonical"]/@href|//div[@class="model_photo"]/img/@src|//div[@class="model_thumbnail"]/img/@src
+        concat: "__SEPARATOR__"
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]*)/.*__SEPARATOR__(.*)$
+                with: $1$2
+              - regex: 2x
+                with: 3x
+      Country: &country //li/b[text()="Nationality:"]/following-sibling::text()|//li/b[text()="Location:"]/following-sibling::text()
+      Ethnicity: &ethnicity //li/b[text()="Ethnicity:"]/following-sibling::text()
+      Birthdate: &birthdate
+        selector: &birthdateSel //li//b[text()="Birthday:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: (\d)(st|[nr]d|th)
+                with: "$1"
+          - parseDate: 2 January
+  performerScraperB:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: &image3x
+        selector: //link[@rel="canonical"]/@href|//div[@class="model_photo"]/img/@src0_3x|//div[@class="model_thumbnail"]/img/@src0_3x
+        concat: "__SEPARATOR__"
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]*)/.*__SEPARATOR__(.*)$
+                with: $1$2
+              - regex: content//
+                with: content/
+      Country: *country
+      Ethnicity: *ethnicity
+      Birthdate: *birthdate
+  performerScraper2:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image3x
+      Country:
+        selector: //li/b[text()="Location:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: "^.*,\ "
+                with: ""
+      Birthdate: *birthdate
+      Height:
+        selector: //div[@class="readmore"]/p
+        postProcess:
+          - replace:
+              - regex: ^.*Height:\ (\d+).*$
+                with: $1
+  performerScraper3:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image3x
+      Birthdate: *birthdate
+  performerScraper4:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image3x
+      Birthdate: *birthdateSel
+  performerScraper5:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image:
+        selector: //link[@rel="canonical"]/@href|//div[@class="model_photo"]/img/@src0
+        concat: "__SEPARATOR__"
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]*)/.*__SEPARATOR__(.*)$
+                with: $1$2
+              - regex: 2x
+                with: 3x
+      Birthdate: *birthdate
+  performerScraper6:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image3x
+      Birthdate:
+        selector: *birthdateSel
+        postProcess:
+          - replace:
+              - regex: (\d)(st|[nr]d|th)
+                with: "$1"
+              - regex: ([A-Za-z]+)\ (\d+)
+                with: "$2 $1"
+          - parseDate: 2 January
+  performerScraper7:
+    performer:
+      Name: *name
+      Gender:
+        fixed: transgender_male
+      Image: *image3x
+      Birthdate: *birthdate
+  performerScraper8:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image
+      Country: *country
+      Ethnicity: *ethnicity
+      Birthdate: *birthdate
+      Height:
+        selector: //li/b[text()="Height:"]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Measurements: //li/b[text()="Breast Size:"]/following-sibling::text()
   sceneScraper:
     scene:
       Title: &title //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()
@@ -68,8 +242,9 @@ xPathScrapers:
                 with: content/
               - regex: __SEPARATOR__
                 with: ''
-      Tags: &tags
-        Name: //div[@class="set_tags"]/ul/li//a/text()
+      Tags:
+        Name:
+          selector: &tagsSel //div[@class="set_tags"]/ul/li//a/text()
   galleryScraper:
     gallery:
       Title: *title
@@ -77,28 +252,49 @@ xPathScrapers:
       Details: *details
       Performers: *performers
       Studio: *studio
-      Tags: *tags
+      Tags:
+        Name: *tagsSel
   sceneScraperGroobyVR:
     scene:
       Title: *title
-      Date:
+      Date: &dateVR
         selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
           - parseDate: January 2, 2006
-      Details:
-        selector: //div[@class="trailerblock"]/p[not(@class)]/text()
+      Details: &detailsVR
+        selector: //div[@class="trailerblock"]/p[not(@class)]/descendant-or-self::*/text()
         concat: "\n\n"
-      Performers:
+      Performers: &performersVR
         Name: //div[@class="trailer_toptitle_left"]//a/text()
       Studio: *studio
       Image:
-        selector: //dl8-video/@poster
+        selector: &imageSelVR //dl8-video/@poster
         postProcess:
           - replace:
               - regex: content// # errant double slash
                 with: content/
-          - replace:
               - regex: ^/
                 with: https://www.groobyvr.com/
-      Tags: *tags
-# Last Updated July 27, 2023
+      Tags: &tagsVR
+        Name:
+          selector: //div[@class="set_tags"]/ul/li/text()|//div[@class="set_tags"]/ul/li//a/text()
+          postProcess:
+            - map:
+                Tags for This Scene: Virtual Reality
+  sceneScraperTransVR:
+    scene:
+      Title: //dl8-video/@title
+      Date: *dateVR
+      Details: *detailsVR
+      Performers: *performersVR
+      Studio: *studio
+      Image:
+        selector: *imageSelVR
+        postProcess:
+          - replace:
+              - regex: content// # errant double slash
+                with: content/
+              - regex: ^/
+                with: https://www.transvr.com/
+      Tags: *tagsVR
+# Last Updated August 01, 2024

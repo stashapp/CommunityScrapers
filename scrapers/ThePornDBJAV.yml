@@ -1,4 +1,4 @@
-name: ThePornDB for JAV
+name: ThePornDB for JAV (NEEDS EDITING)
 sceneByURL:
   - action: scrapeJson
     url:
@@ -62,11 +62,17 @@ jsonScrapers:
       $data: data
       $performers: data.performers
     scene: &scene
-      Title: $data.external_id
+      Title:
+        selector: $data.external_id
+        postProcess:
+          - javascript: return value.toUpperCase()
       Details: $data.description
       Director: $data.director.name
       Date: $data.date
-      Code: $data.external_id
+      Code:
+        selector: $data.external_id
+        postProcess:
+          - javascript: return value.toUpperCase()
       URL: $data.url
       Image: $data.background.full
       Performers:
@@ -90,7 +96,10 @@ jsonScrapers:
 
   movieScraper:
     movie:
-      Name: data.external_id
+      Name:
+        selector: $data.external_id
+        postProcess:
+          - javascript: return value.toUpperCase()
       Studio:
         Name: data.site.name
       FrontImage: data.background.full

@@ -1,0 +1,57 @@
+name: 10Musume-JP
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - www.10musume.com/movies/
+    scraper: sceneScraper
+    queryURL: "https://www.10musume.com/dyn/phpauto/movie_details/movie_id/{url}.json"
+    queryURLReplace:
+      url:
+        - regex: '.+/movies/(\d{6})_(\d{2}).+'
+          with: "${1}_${2}"
+sceneByFragment:
+  action: scrapeJson
+  queryURL: "https://www.10musume.com/dyn/phpauto/movie_details/movie_id/{filename}.json"
+  scraper: sceneScraper
+  queryURLReplace:
+    filename:
+      - regex: '.*(\d{6})[_.-](\d{2}).+'
+        with: "${1}_${2}"
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: "[Title,TitleEn]"
+        concat: "|" # get rid of empty result
+        split: "|"
+      Details:
+        selector: "[Desc,DescEn]"
+        concat: "|" # get rid of empty result
+        split: "|"
+        postProcess:
+          - replace:
+              - regex: ^\s+(.+)\s+$
+                with: $1
+      Date:
+        selector: Release
+        postProcess:
+          - parseDate: 2006-01-02
+      Image: ThumbHigh
+      Performers:
+        Name: Actresses
+      Studio:
+        Name:
+          fixed: 10Musume
+      Tags:
+        Name: UCNAME
+      URL:
+        selector: MovieID
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.10musume.com/movies/"
+              - regex: $
+                with: "/"
+      Code: MovieID
+
+# Last Updated Jan 11, 2024

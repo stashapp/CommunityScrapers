@@ -1,0 +1,73 @@
+name: NextDoorHobby
+# requires: py_common, AyloAPI
+galleryByURL:
+  - action: script
+    url:
+      - nextdoorhobby.com/scene
+    script:
+      - python
+      - NextDoorHobby.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - NextDoorHobby.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - nextdoorhobby.com/scene
+    script:
+      - python
+      - NextDoorHobby.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - NextDoorHobby.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - NextDoorHobby.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - NextDoorHobby.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - NextDoorHobby.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - NextDoorHobby.com/model/
+    script:
+      - python
+      - NextDoorHobby.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - NextDoorHobby.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - NextDoorHobby.com/movie
+      # Since scenes link to the movie we can scrape movies from scenes
+      - nextdoorhobby.com/scene
+    script:
+      - python
+      - NextDoorHobby.py
+      - movie-by-url
+# Last Updated August 06, 2024

@@ -41,7 +41,7 @@ xPathScrapers:
         selector: //div[@data-setup]/@data-setup
         postProcess:
           - replace:
-              - regex: ^.*"publishedDate":"([^T]+).*$
+              - regex: ^.*"publishedDate":"([^"]+).*$
                 with: $1
           - parseDate: 2006-01-02
       Director: //span[contains(@class, "director-name")]
@@ -53,32 +53,15 @@ xPathScrapers:
                 - regex: /channel/
                   with: ""
             - map:
-                # List of sites as of 2024-01-04 from https://www.kink.com/channels
-                # [...new Set([...document.querySelectorAll('h3 > a')]
+                # List of sites as of 2024-06-18 from https://www.kink.com/channels
+                # [...new Set([...document.querySelectorAll('a.h5[href^="/channel"]')]
                 #   .map(a => a.href.split("/").pop() + ": " + a.innerText))]
                 #   .toSorted()
                 #   .join("\n")
-                analized: Analized
-                animated-kink: Animated Kink
-                ashley-fires-scifi-dreamgirls: Ashley Fires SciFi Dreamgirls
-                aziani-iron: Aziani Iron
-                badfam-pov: Bad Family POV
-                ball-gaggers: Ball Gaggers
-                banana-jacks: Banana Jacks
-                bifuck: BiFUCK
-                bizarre-video-transsexual: Bizarre Video Transsexual
-                bizarre-video: Bizarre Video
-                bleu-films: Bleu Films
+                behind-kink: Behind Kink
                 bondage-liberation: Bondage Liberation
                 bound-gang-bangs: Bound Gang Bangs
-                bound-men-wanked: Bound Men Wanked
-                brutal-sessions: Brutal Sessions
-                carmen-rivera: Carmen Rivera
-                cfnmeu: CFNMEU
-                ddf-network: DDF Network
-                deviant-hardcore: Deviant Hardcore
                 device-bondage: Device Bondage
-                digital-sin: Digital Sin
                 divine-bitches: Divine Bitches
                 dungeon-sex: Dungeon Sex
                 electrosluts: Electrosluts
@@ -86,64 +69,32 @@ xPathScrapers:
                 evolved-fights-lesbian-edition: Evolved Fights Lesbian Edition
                 evolved-fights: Evolved Fights
                 families-tied: Families Tied
-                fembot-academy: Fembot Academy
-                femdum: FemDum
-                femme-fatale-films: Femme Fatale Films
-                fetishnetwork: FetishNetwork
-                filth-syndicate: Filth Syndicate
                 filthy-femdom: Filthy Femdom
                 foot-worship: Foot Worship
                 fucking-machines: Fucking Machines
-                gangbang-chief: Gangbang Chief
-                gloryhole-secrets: Gloryhole Secrets
                 hardcore-gangbang: Hardcore Gangbang
-                hardcore-punishments: Hardcore Punishments
                 harmony-fetish: Harmony Fetish
-                hogtied-up: Hogtied Up
                 hogtied: Hogtied
-                hot-legs-and-feet: Hot Legs & Feet
-                house-of-taboo: House Of Taboo
                 kink-classics: Kink Classics
                 kink-features: Kink Features
                 kink-test-shoots: Kink Test Shoots
                 kink-university: Kink University
                 kinklive: KinkLive
                 kinky-bites: Kinky Bites
-                lakeview-entertainment: Lakeview Entertainment
-                machine-dom: Machine Dom
                 mean-bitch: Mean Bitch
-                medical-y-sado: Medical Y Sado
                 men-in-pain: Men In Pain
-                pascals-sub-sluts: Pascals Sub Sluts
-                pegging: Pegging
-                peghim: PegHim
-                plumperd: Plumperd
-                pornforce: Porn Force
-                pornstar-platinum: Pornstar Platinum
-                pov-pickups: POV Pickups
                 public-disgrace: Public Disgrace
-                revenge-of-the-baroness: Revenge Of The Baroness
-                royal-fetish-films: Royal Fetish Films
+                quality-control: Quality Control
                 savage-gangbang: Savage Gangbang
                 severe-sex-films: Severe Sex Films
                 sex-and-submission: Sex And Submission
-                sexual-disgrace: Sexual Disgrace
-                sister-wives: Sister Wives
-                slutinspection: Slut Inspection
-                spizoo: Spizoo
-                strapon-squad: Strapon Squad
-                struggling-babes: Struggling Babes
+                submissed: Submissed
                 submissive-x: Submissive X
-                submissived: Submissived
-                sweet-femdom: Sweet FemDom
+                tease-and-thank-you: Tease And Thank You
                 the-training-of-o: The Training Of O
                 the-upper-floor: The Upper Floor
-                the-venus-girls: The Venus Girls
-                torment-time: Torment Time
-                transerotica: TransErotica
                 ts-pussy-hunters: TS Pussy Hunters
                 ts-seduction: TS Seduction
-                twisted-visual: Twisted Visual
                 ultimate-surrender: Ultimate Surrender
                 wasteland: Wasteland
                 water-bondage: Water Bondage
@@ -212,7 +163,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .+
-                with: 'Yes'
+                with: "Yes"
       Piercings:
         selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/pierced')]/span/text()
         concat: "\n"
@@ -225,65 +176,64 @@ xPathScrapers:
           - replace:
               - regex: "(?i)<a[^>]*>"
                 with: ""
-      FakeTits: 
+      FakeTits:
         selector: >
-                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/fake-boobs')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/natural-boobs')]/span/text()
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/fake-boobs') or contains(@href,'/natural-boobs')]/span/text()
         postProcess:
           - replace:
               - regex: .*?Fake.+
-                with: 'Yes'
+                with: "Yes"
               - regex: .*?Natural.+
-                with: 'No'
-      HairColor: 
+                with: "No"
+      HairColor:
         selector: >
-                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black-hair')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunet')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunette')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blond')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blonde')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/redhead')]/span/text()
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black-hair')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunet')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunette')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blond')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blonde')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/redhead')]/span/text()
         postProcess:
           - replace:
               - regex: \sHair
-                with: ''
-      Ethnicity: 
+                with: ""
+      Ethnicity:
         selector: >
-                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/asian')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/latin')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/mixed')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/white')]/span/text()
-      Circumcised: 
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/asian')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/latin')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/mixed')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/white')]/span/text()
+      Circumcised:
         selector: >
-                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/circumcised')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/uncircumcised')]/span/text()
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/circumcised')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/uncircumcised')]/span/text()
         postProcess:
           - replace:
               - regex: Uncircumcised
-                with: 'Uncut'
+                with: "Uncut"
               - regex: Circumcised
-                with: 'Cut'
-      Gender: 
+                with: "Cut"
+      Gender:
         selector: //script[contains(.,'KinkyTracking.all')]
         postProcess:
           - replace:
               - regex: .+?"((modelGender)|(genderIds))":"((woman)|(man)|(nonbinary)|(tsman)|(tswoman)|(unknown))".+
-                with: '%%%$4'              # This little trick will make sure we're left
-              - regex: ^[^%].+             # with an empty string if we don't match anything
-                with: ''                   # in the regex above.
+                with: "%%%$4" # This little trick will make sure we're left
+              - regex: ^[^%].+ # with an empty string if we don't match anything
+                with: "" # in the regex above.
               - regex: ^%+
-                with: ''
+                with: ""
           - map:
               woman: Female
               man: Male
               tswoman: Transgender Female
               tsman: Transgender Male
               nonbinary: Non-Binary
-              unknown: ''
-      URL: 
+              unknown: ""
+      URL:
         selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
-        concat: '__SEP__'
+        concat: "__SEP__"
         postProcess:
           - replace:
               - regex: ^.+?multiSite:'([^']+).+?__SEP__(.+)

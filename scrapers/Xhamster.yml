@@ -59,11 +59,11 @@ xPathScrapers:
       Image: //link[@as="image"]/@href
       Studio:
         Name:
-          selector: $player/nav/ul/li/a[contains(@href,"/channels/")]
+          selector: $player/nav//a[contains(@href,"/channels/")]/span
       Tags:
         Name:
-          selector: $player/nav/ul/li/a[contains(@href,"/categories/") or contains(@href,"/tags/")]
+          selector: $player/nav//a[contains(@href,"/categories/") or contains(@href,"/tags/")]
       Performers:
         Name:
-          selector: $player/nav/ul/li/a[contains(@href,"/pornstars/")]
+          selector: $player/nav//a[contains(@href,"/pornstars/")]
 # Last Updated February 17, 2024

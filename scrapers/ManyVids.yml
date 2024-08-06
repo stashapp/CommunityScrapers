@@ -111,8 +111,36 @@ jsonScrapers:
       Image: vids.#.thumbnail.url
   sceneScraper:
     scene:
-      Title: data.title
-      Details: data.description
+      Title:
+        selector: data.title
+        postProcess:
+            - replace:
+                - regex: "&amp;"
+                  with: "&"
+            - replace:
+                - regex: "&quot;"
+                  with: "\""
+            - replace:
+                - regex: "&lt;"
+                  with: "<"
+            - replace:
+                - regex: "&gt;"
+                  with: ">"
+      Details:
+        selector: data.description
+        postProcess:
+            - replace:
+                - regex: "&amp;"
+                  with: "&"
+            - replace:
+                - regex: "&quot;"
+                  with: "\""
+            - replace:
+                - regex: "&lt;"
+                  with: "<"
+            - replace:
+                - regex: "&gt;"
+                  with: ">"
       Code: data.id
       URL:
         selector: data.url
@@ -136,4 +164,4 @@ jsonScrapers:
                 - regex: ^
                   with: https://www.manyvids.com
       Studio: *performer
-# Last Updated February 22, 2024
+# Last Updated June 29, 2024

@@ -29,8 +29,36 @@ xPathScrapers:
     performer:
       Name: //span[@class="model-name"]
       URL: //link[@rel="canonical"]/@href
-      Twitter: //a[text()="TWITTER"]/@href
-      Instagram: //a[text()="INSTAGRAM"]/@href
+      Twitter:
+        selector: //a[text()="TWITTER"]//@href
+        postProcess:
+          - replace:
+              - regex: 'https?://(?:www.)?twitter\.com\/'
+                with: ""
+              - regex: 'https?://(?:www.)?x\.com\/'
+                with: ""
+              - regex: \/$
+                with: ""
+              - regex: "tv"
+                with: "TV"
+              - regex: "official"
+                with: "Official"
+              - regex: '\s\s'
+                with: " "
+      Instagram:
+        selector: //a[text()="INSTAGRAM"]//@href
+        postProcess:
+          - replace:
+              - regex: 'https?://(?:www.)?instagram\.com\/'
+                with: ""
+              - regex: \/$
+                with: ""
+              - regex: "tv"
+                with: "TV"
+              - regex: "official"
+                with: "Official"
+              - regex: '\s\s'
+                with: " "
       Birthdate:
         selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
         postProcess:
@@ -40,41 +68,99 @@ xPathScrapers:
         selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/following-sibling::text()
         postProcess:
           - replace:
-              - regex: White
-                with: Caucasian
-              - regex: Hispanic
-                with: Latin
+              - regex: "Ebony"
+                with: "Black"
+              - regex: "ebony"
+                with: "Black"
+              - regex: "white"
+                with: "Caucasian"
+              - regex: "White"
+                with: "Caucasian"
+              - regex: "hispanic"
+                with: "Latin"
+              - regex: "Hispanic"
+                with: "Latin"
+          - map:
+              asian: Asian
+              white: Caucasian
+              black: Black
+              hispanic: Latin
+              Latina: Latin
+              Arab: Middle Eastern
       Country:
         selector: //span[@itemprop="nationality"]/text()
         postProcess:
           - replace:
-              - regex: "United States of America"
+              - regex: '\bUnited\sStates\sof\sAmerica\b'
                 with: "United States"
+      HairColor:
+        selector: //li/span[@class="list-quest"][contains(text(),'Hair')]/../text()
+        postProcess:
+          - replace:
+              - regex: "Brown"
+                with: Brunette
+              - regex: '\bBrown\sHair\b'
+                with: Brunette
+              - regex: "Fair"
+                with: Blonde
       Height:
         selector: //li/span[@class="list-quest"][contains(text(),'Height')]/following-sibling::text()
         postProcess:
           - replace:
               - regex: ^(\d+).+$
                 with: "$1"
-      Measurements: //li/span[@class="list-quest"][contains(text(),'Measurements')]/following-sibling::text()
+      Measurements:
+        selector: //li/span[@class="list-quest"][contains(text(),'Measurements')]/../text()
+        postProcess:
+          - replace:
+              - regex: \/.*$
+                with: ""
       FakeTits:
-        selector: //li/span[@class="list-quest"][contains(text(),'Breasts')]/following-sibling::text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Breasts')]/../text()
         postProcess:
           - replace:
               - regex: ^[^\(]+\(([^\)]+)\).*$
                 with: "$1"
               - regex: Fake
-                with: "Yes"
+                with: "Augmented"
               - regex: Real
-                with: "No"
+                with: "Natural"
+              - regex: Medium
+                with: ""
       CareerLength:
         selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/following-sibling::text()
         concat: "-"
       Aliases:
         selector: //meta[@itemprop="additionalName"]/@content
         concat: ", "
-      Tattoos: //li/span[@class="list-quest"][contains(text(),'Tattoos')]/following-sibling::text()
-      Piercings: //li/span[@class="list-quest"][contains(text(),'Piercings')]/following-sibling::text()
+      Tattoos:
+        selector: //li/span[@class="list-quest"][contains(text(),'Tattoos')]/../text()
+        postProcess:
+          - replace:
+              - regex: '\byes\b'
+                with: "Various"
+              - regex: '\bno\b'
+                with: "None"
+              - regex: '\bYes\b'
+                with: "Various"
+              - regex: "/bNo/b"
+                with: "None"
+              - regex: '\.'
+                with: ""
+      Piercings:
+        selector: //li/span[@class="list-quest"][contains(text(),'Piercings')]/../text()
+        postProcess:
+          - replace:
+              - regex: '\byes\b'
+                with: "Various"
+              - regex: '\bno\b'
+                with: "None"
+              - regex: '\bYes\b'
+                with: "Various"
+              - regex: "/bNo/b"
+                with: "None"
+              - regex: '\.'
+                with: ""
       Image:
         selector: //link[@rel="canonical"]/@href
         postProcess:
@@ -124,4 +210,4 @@ xPathScrapers:
       Tags: *tags
       Studio: *studio
       Photographer: //h2/a
-# Last Updated May 23, 2024
+# Last Updated July 23, 2024

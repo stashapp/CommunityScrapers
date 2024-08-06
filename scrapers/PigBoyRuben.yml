@@ -1,0 +1,33 @@
+name: PigBoyRuben
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pigboyruben.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='web']//div[@class='page']//div[@class='header']//h1
+      Details:
+        selector: //div[@class='web']//div[@class='containerBig']//div[@class='descr']
+        concat: " "
+      Performers:
+        Name:
+          selector: //div[@class='web']//div[@class='containerBig']//a[starts-with(@href, 'model')]
+        URL:
+          selector: //div[@class='web']//div[@class='containerBig']//a[starts-with(@href, 'model')]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://pigboyruben.com/
+      Image:
+        selector: //div[@class='web']//div[@class='clipifr']//img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://pigboyruben.com/
+      Studio:
+        Name:
+          fixed: Pigboy Ruben
+# Last Updated July 17, 2024

@@ -6,6 +6,7 @@ from py_common import log
 from py_common.util import dig, replace_all, replace_at
 from AyloAPI.scrape import (
     gallery_from_url,
+    gallery_from_fragment,
     scraper_args,
     scene_from_url,
     scene_search,
@@ -62,9 +63,14 @@ if __name__ == "__main__":
     result = None
 
     match op, args:
-        case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
+        case "gallery-by-url", {"url": url} if url:
             url = redirect(url)
             result = gallery_from_url(url, postprocess=bangbros)
+        case "gallery-by-fragment":
+            fixed = replace_all(args, "url", redirect)
+            result = gallery_from_fragment(
+                fixed, search_domains=domains, postprocess=bangbros
+            )
         case "scene-by-url", {"url": url} if url:
             url = redirect(url)
             result = scene_from_url(url, postprocess=bangbros)

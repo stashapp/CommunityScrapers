@@ -6,7 +6,7 @@ sceneByFragment:
     filename:
       - regex: \..+$
         with: ""
-  scraper: sceneQueryScraper
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -28,103 +28,76 @@ xPathScrapers:
     common:
       $videoItem: //*[@id="list"]
     scene:
-      Date:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
-        postProcess:
-          - replace:
-            - regex: "/"
-              with: "-"
-      Details: 
+      Date: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
+      Details:
         selector: $videoItem/ul/li/a/img/@alt]
-      Director:
-        selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]  
+        # The site uses the unicode U+ff0c comma instead of "normal" ASCII commas
+        postProcess: &translateCommas
+          - replace:
+              - regex: ，
+                with: ","
+      Director: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]
       Image:
         selector: $videoItem/ul/li/a/img/@src
         postProcess:
           - replace:
-            - regex: pac_s.jpg
-              with: pac_l.jpg
+              - regex: pac_s.jpg
+                with: pac_l.jpg
       Performers:
         Name: $videoItem/ul/li[2]/ul/li[2]/dl[2]/dd[1]/ul[1]/li
       Studio:
         Name:
           fixed: "Giga"
       Title:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
-      URL: 
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1] | //*[@id="list"]/h4/a
+        concat: " "
+        postProcess: *translateCommas
+      URL:
         selector: $videoItem/ul/li/a/@href
         postProcess:
           - replace:
-            - regex: .*\/....*\/
-              with: https://www.akiba-web.com/product/
-  sceneQueryScraper:
-    common:
-      $videoItem: //*[@id="list"]
-    scene:
-      Date:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
-        postProcess:
-          - replace:
-            - regex: "/"
-              with: "-"
-      Details: 
-        selector: $videoItem/ul/li/a/img/@alt]
-      Director:
-        selector: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]  
-      Image:
-        selector: $videoItem/ul/li/a/img/@src
-        postProcess:
-          - replace:
-            - regex: pac_s.jpg
-              with: pac_l.jpg
-      Performers:
-        Name: $videoItem/ul/li[2]/ul/li[2]/dl[2]/dd[1]/ul[1]/li
-      Studio:
-        Name:
-          fixed: "Giga"
-      Title:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
-      URL: 
-        selector: $videoItem/ul/li/a/@href
-        postProcess:
-          - replace:
-            - regex: .*\/....*\/
-              with: https://www.akiba-web.com/product/
+              - regex: .*\/....*\/
+                with: https://www.akiba-web.com/product/
   sceneScraper:
+    common:
+      $sceneCode: //*[@id="works_txt"]/ul/li[3]/dl/dd
+      $sceneTitle: //*[@id="works_txt"]/ul/li[2]/b
     scene:
-      Code:
-        selector:  //*[@id="works_txt"]/ul/li[3]/dl/dd
+      Code: $sceneCode
       Date:
         selector: //*[@id="works_txt"]/ul/li[7]/dl/dd
         postProcess:
-          - replace:
-            - regex: "/"
-              with: "-"
+          - parseDate: "2006/01/02"
       Details:
-        selector: //*[@id="works_txt"]/ul/li[2]/b
-      Director:
-        selector: //*[@id="works_txt"]/ul/li[5]/dl/dd
-      Image:  
+        selector: $sceneTitle | //*[@id="story_list2"]/ul/li[@class="story_window"]
+        concat: "\n\n"
+        postProcess: *translateCommas
+      Director: //*[@id="works_txt"]/ul/li[5]/dl/dd
+      Image:
         selector: //*[@id="works_pic"]/ul/li[1]/a/@href | //*[@id="works_pic"]/ul/li[1]/img/@src
         postProcess:
           - replace:
-            - regex: pac_s.jpg
-              with: pac_l.jpg
+              - regex: pac_s.jpg
+                with: pac_l.jpg
       Performers:
         Name: //*[@id="works_txt"]/ul/li[4]/dl/dd/span/a
       Studio:
         Name:
           fixed: "Giga"
       Title:
-        selector:  //*[@id="works_txt"]/ul/li[3]/dl/dd
+        selector: $sceneCode | $sceneTitle
+        concat: " "
+        postProcess: *translateCommas
       URL:
         selector: //*[@id="works_pic"]/ul/li[3]/a[1]/@href
         postProcess:
           - replace:
-            - regex: .*product_id=
-              with: https://www.akiba-web.com/product/index.php?product_id=
+              - regex: .*product_id=
+                with: https://www.akiba-web.com/product/index.php?product_id=
 driver:
-  useCDP: false 
+  headers:
+    - Key: Referer
+      Value: https://www.akiba-web.com/
   cookies:
     - CookieURL: "https://www.akiba-web.com"
       Cookies:
@@ -132,4 +105,4 @@ driver:
           Domain: ".www.akiba-web.com"
           Value: "yes"
           Path: "/"
-# Last Updated February 27, 2024
+# Last Updated July 08, 2024

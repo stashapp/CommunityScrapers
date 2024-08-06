@@ -115,7 +115,18 @@ xPathScrapers:
       $datablob: //script[contains(., 'VideoObject')]/text()
       $videowrap: //div[@class="video-wrapper"]
     scene:
-      Title: //meta[@property="og:title"]/@content
+      Title:
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: '^\s*$'
+                with: "Untitled"
+              - regex: "&amp;"
+                with: "&"
+              - regex: "\n"
+                with: " "
+              - regex: '\si\s'
+                with: " I "
       URL: //meta[@property="og:url"]/@content
       Date:
         selector: $datablob
@@ -124,10 +135,30 @@ xPathScrapers:
               - regex: .+(?:"uploadDate"\s*:\s*")([^T]+).+
                 with: $1
           - parseDate: "2006-01-02"
+      Code:
+        selector: //meta[@property="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: '.+?(\=)'
+                with:
       Tags:
-        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," categoriesWrapper ")]/a/text()|$videowrap//div[contains(concat(" ",normalize-space(@class)," ")," tagsWrapper ")]/a/text()
+        Name:
+          selector: //div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," categoriesWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," tagsWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," productionWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," langSpokenWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," relatedSearchTermsContainer ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," userInfo ")]//div[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//i/text()
+          postProcess:
+            - replace:
+                - regex: "onlyfans"
+                  with: "OnlyFans"
+                - regex: "fansly"
+                  with: "Fansly"
       Performers:
-        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]/a[@data-label="pornstar"]/text()
+        Name:
+          selector: //div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//span[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//span[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]//a/text()
+          postProcess:
+            - replace:
+                - regex: '\.'
+                  with: " "
+                - regex: '\_'
+                  with: " "
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," usernameWrap ")]//a/text()
@@ -140,4 +171,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated September 26, 2023
+# Last Updated July 23, 2024

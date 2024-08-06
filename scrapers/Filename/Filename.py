@@ -1,25 +1,10 @@
 import json
 import os
 import sys
+from py_common import graphql
+from py_common import log
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from ther
-
-try:
-    from py_common import graphql
-    from py_common import log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit()
-
-REMOVE_EXT = False  # remove file extension from title
+REMOVE_EXT = True
 
 
 def title_from_filename(js):
@@ -36,11 +21,18 @@ def title_from_filename(js):
     }""",
         {"id": scene_id},
     )
-    assert response is not None
-    path = response["findScene"]["files"][0]["path"]
-    filename = os.path.basename(path)
+    if not response:
+        return None
+
+    files = response["findScene"]["files"]
+    if not files:
+        log.warning(f"Skipping scene {scene_id} as it has no files")
+        return None
+
+    filename = os.path.basename(files[0]["path"])
     if REMOVE_EXT:
         filename = os.path.splitext(filename)[0]
+
     if scene_title != filename:
         log.info(
             f"Scene {scene_id}: Title differs from filename: '{scene_title}' => '{filename}'"

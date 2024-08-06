@@ -17,26 +17,38 @@ jobs:
   build:
     runs-on: ubuntu-22.04
     steps:
-    - name: Checkout main
-      uses: actions/checkout@v2
+    - name: Checkout master
+      uses: actions/checkout@v4
       with:
         path: master
         ref: master
-        fetch-depth: '0'
+        fetch-depth: 0
     - run: |
         cd master
         ./build_site.sh ../_site/stable
     - name: Checkout Stable
-      uses: actions/checkout@v2
+      uses: actions/checkout@v4
       with:
         path: dev
         # replace with develop tag/branch when necessary
         ref: master
-        fetch-depth: '0'
+        fetch-depth: 0
     - run: |
         cd dev
         ../master/build_site.sh ../_site/develop
-    - uses: actions/upload-pages-artifact@v2
+    - uses: actions/setup-node@v4
+      with:
+        node-version: latest
+    - name: Generate html index page
+      run: |
+        cd master/site_generator
+        npm i -g ts-node
+        npm ci
+        npm run ci-build
+        cp -r site/* ../../_site/
+    - uses: actions/upload-pages-artifact@v3
+      with:
+        path: '_site'
     
   deploy:
     environment:
@@ -47,5 +59,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
-    
+        uses: actions/deploy-pages@v4

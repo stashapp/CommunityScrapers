@@ -1,0 +1,77 @@
+name: GuyBone
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - guybone.com
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - guybone.com
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene: 
+      Title: //h2
+      Details: 
+        selector: //div[@class='container 90%' and h2]
+        concat: ' '
+      Performers:
+        Name: //div[@class='feature']//a
+        URL: 
+          selector: //div[@class='feature']//a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://guybone.com
+      Date: 
+        selector: //section[@id='banner']//p
+        postProcess:
+          - parseDate: 1-2-2006
+      Tags:
+        Name:
+          selector: //meta[@name='keywords']/@content
+          split: ', '
+      Image: //img[@width='75%']/@src
+      Studio:
+        Name:
+          fixed: GuyBone
+
+  performerScraper:
+    performer:
+      Name: //h2
+      Gender:
+        fixed: Male
+      Ethnicity:
+        selector: //td[contains(.,'Ethnicity:')]/following-sibling::td[1]
+      Tattoos:
+        selector: //td[contains(.,'Tattoos:')]/following-sibling::td[1]
+      Piercings:
+        selector: //td[contains(.,'Piercings:')]/following-sibling::td[1]
+      Height:
+        selector: //td[contains(.,'Height:')]/following-sibling::td[1]
+        postProcess:
+          - replace:
+              - regex: "''"
+                with: ''
+              - regex: "'"
+                with: '.'
+          - feetToCm: true
+      PenisLength:
+        selector: //td[contains(.,'Dick Size:')]/following-sibling::td[1]
+        postProcess:
+          - replace:
+              - regex: "''"
+                with: ''
+              - regex: ^
+                with: '0.' 
+          - feetToCm: true
+      Circumcised:
+        selector: //td[contains(.,'Dick:')]/following-sibling::td[1]
+      Details:
+        selector: //section[@id="one"]//h2/following-sibling::div/div[1]
+      Image: //section[@id='banner']//img/@src
+
+# Last Updated June 17, 2024

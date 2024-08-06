@@ -15,23 +15,26 @@ sceneByFragment:
   queryURLReplace:
     filename:
       # expects an id in square brackets before extension, as saved by yt-dlp by default
+      # title_of_scene [id-here].mp4
       - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
-        with: $1
-      # or expects an id
+        with: .$1
+      # or expects an id at the end of the filename
+      # title_of_scene42069.mp4
       - regex: '^.*?(\d+)\..+$'
         with: $1
-      # if no id is found in the filename
+      # if no id is found in the filename (there is still a file extension)
+      # clear the filename so that it doesn't leak
       - regex: .*\.[^\.]+$
-        with: # clear the filename so that it doesn't leak
+        with:
 
 xPathScrapers:
   sceneScraper:
     scene:
       Title: //h2[@class="page-title"]/text()[1]
       Tags:
-        Name: //li/a[@class="is-keyword btn btn-default"]/text()
+        Name: //div[contains(@class, "video-tags-list")]//a[starts-with(@href, "/tags")]
       Performers:
-        Name: //li[@class="model"]/a/span[1]/text()
+        Name: //li[@class="model"]//span[@class="name"]
       Studio:
         Name: //li[@class="main-uploader"]/a[
           starts-with(@href,'/channels')          or
@@ -53,4 +56,4 @@ xPathScrapers:
               - regex: '[\S\s]+"uploadDate"\s*:\s*"(\d+-\d{2}-\d{2})[^"]+"[\S\s]+'
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated February 15, 2023
+# Last Updated July 13, 2024

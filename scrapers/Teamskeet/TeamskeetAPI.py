@@ -42,12 +42,19 @@ studioMap = {
     "BadMilfs": "Bad MILFs",
     "DadCrush": "Dad Crush",
     "GingerPatch": "Ginger Patch",
+    "Hussie Pass": "TeamSkeet X Hussie Pass",
     "Not My Grandpa": "Not My Grandpa!",
     "PervMom": "Perv Mom",
     "PervTherapy": "Perv Therapy",
     "StayHomePov": "Stay Home POV",
     "StepSiblings": "Step Siblings",
     "TeenJoi": "Teen JOI",
+    "TeamSkeet X BritStudioxxx": "TeamSkeet X BritStudio.XXX",
+    "TeamSkeet X EvilAngel": "TeamSkeet X Evil Angel",
+    "TeamSkeet X Joy Bear": "TeamSkeet X JoyBear",
+    "TeamSkeet X Molly RedWolf": "TeamSkeet X MollyRedWolf",
+    "TeamSkeet X OZ Fellatio Queens": "TeamSkeet X Aussie Fellatio Queens",
+    "TeamSkeet X SpankMonster": "TeamSkeet X Spank Monster",
 ## MYLF
     "AnalMom": "Anal Mom",
     "BBCParadise": "BBC Paradise",
@@ -80,7 +87,9 @@ studioMap = {
 ### Studio Default tags
 studioDefaultTags = {
     "TeamSkeet Classics": ['Re-release'],
+    "TeamSkeet Selects": ['Compilation'],
     "Mylf Classics": ['Re-release'],
+    "MylfSelects": ['Compilation'],
     "SayUncle Classics": ['Re-release'],
 }
 
@@ -122,13 +131,13 @@ if os.path.isfile(json_file):
     with open(json_file, encoding="utf-8") as json_file:
         scene_api_json = json.load(json_file)
 else:
-    log.debug("Asking the API...")
     api_url = f"{API_BASE}{scene_id}"
     headers = {
         'User-Agent': USER_AGENT,
         'Origin': ORIGIN,
         'Referer': REFERER
     }
+    log.debug(f"Asking the API... {api_url}")
     scraper = cloudscraper.create_scraper()
     # Send to the API
     r = ""
@@ -151,7 +160,7 @@ else:
             sys.exit(1)
 
     except:
-        if "Please Wait... | Cloudflare" in r.text:
+        if "Just a moment..." in r.text:
             log.error("Protected by Cloudflare. Retry later...")
         else:
             log.error("Invalid page content")
@@ -177,18 +186,31 @@ scrape['studio']['name'] = studioMap[studioApiName] if studioApiName in studioMa
 scrape['performers'] = [{"name": x.get('modelName')}
                         for x in scene_api_json.get('models')]
 scrape['tags'] = [{"name": x} for x in scene_api_json.get('tags')]
-if studioApiName in studioDefaultTags:
-    log.debug("Assiging default tags")
-    for tag in studioDefaultTags[studioApiName]:
-        log.debug("Assiging default tags - " + tag) 
-        scrape['tags'].append({"name": tag})
+scrape['code'] = scene_api_json.get('cId', '').split('/')[-1]
+for tag in studioDefaultTags.get(studioApiName, []):
+    log.debug("Assiging default tags - " + tag)
+    scrape['tags'].append({"name": tag})
 scrape['image'] = scene_api_json.get('img')
-# Highres is not working with sayuncle.com at the moment
-if 'sayuncle.com' not in scene_url:
-    high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
-    log.debug(f"Image before: {scrape['image']}")
-    log.debug(f"Image after: {high_res}")
-    scrape['image'] = high_res
+
+# Each of TeamSkeet, MYLF and SayUncle have different ways to handle 
+# high resolution scene images.  SayUncle is a high resoution right
+# from the scrape.  TeamSkeet and MYLF have different mappings between
+# the scraped value and the higher resolution version.
+match scene_url:
+    case str(x) if 'sayuncle.com' in x:
+        log.debug("Say Uncle image, using default size")
+        high_res = scrape['image']
+    case str(x) if 'teamskeet.com' in x:
+        log.debug("TeamSkeet image, mapping members/full")
+        high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
+    case str(x) if 'mylf.com' in x:
+        log.debug("Mylf image, mapping bio_big")
+        high_res = scene_api_json.get('img').replace('shared/med', 'bio_big')
+
+log.debug(f"Image before: {scrape['image']}")
+log.debug(f"Image after: {high_res}")
+scrape['image'] = high_res
+
 # If the scene is from sayuncle.com, we need to add the gay tag to the tags list
 if 'sayuncle.com' in scene_url:
     scrape['tags'].append({"name": "Gay"})

@@ -52,6 +52,10 @@ jsonScrapers:
           - replace:
               - regex: ^none$
                 with: ""
+              - regex: "&amp;"
+                with: "&"
+              - regex: " *<\\s*/?br\\s*/?\\s*>"
+                with: "\n"
       Studio:
         Name: studio
       URL:
@@ -77,4 +81,4 @@ jsonScrapers:
           - replace:
               - regex: ^
                 with: https://pornbox.com/contents/
-# Last Updated March 03, 2023
+# Last Updated June 06, 2024

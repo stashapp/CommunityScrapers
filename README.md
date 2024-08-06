@@ -97,3 +97,10 @@ First, install the validator's dependencies - inside the [`./validator`](./valid
 
 Then, to run the validator, use `node validate.js` in the root of the repository.  
 Specific scrapers can be checked using: `node validate.js scrapers/foo.yml scrapers/bar.yml`
+
+#### Docker option
+Instead of NodeJS being installed, Docker can be used to run the validator
+
+```bash
+docker run --rm -v .:/app node:alpine /bin/sh -c "cd /app/validator && yarn install --silent && cd .. && node validate.js --ci""
+```

@@ -18,7 +18,6 @@ except ModuleNotFoundError:
 # Print debug message.
 PRINT_DEBUG = True
 
-
 def debug(q):
     q = str(q)
     if "[DEBUG]" in q and PRINT_DEBUG == False:
@@ -26,10 +25,11 @@ def debug(q):
     print(q, file=sys.stderr)
 
 ret = {}
-performers = []
 
+def scrape_scene_tags_and_performers(url):
 
-def scrape_scene_img_and_tags(url):
+    # Note this information is behind the paywall 
+
     # Redirect to https://premiumbukkake.com/
     url = url.replace("free.", "")
     url = url.replace(".com/", ".com/tour2/")
@@ -38,27 +38,39 @@ def scrape_scene_img_and_tags(url):
 
     soup = BeautifulSoup(r.text, 'html.parser')
     html_text = soup.find('div', attrs={'class': 'section tour'})
-
-    # Get Image
-    html_img = html_text.find('div', attrs={'class': 'slide_avatar'})
-    scene_img = html_img.find('img').attrs['data-src']
-    ret['image'] = f"https://premiumbukkake.com{scene_img}"
-
     html_info = html_text.find_all('div', attrs={'class': 'slide_info_row'})
 
-    # Get Tags
-    scene_tags = html_info[2].find_all('a')
+    # Find the tag and performer rows by their title
+    tags_row = None
+    performer_row = None
+    for info_row in html_info:
+        if "Pornstars:" in info_row.get_text():
+            performer_row = info_row
+        elif "Categories:" in info_row.get_text():
+            tags_row = info_row
 
-    tags = []
-    for tag in scene_tags:
-        tags.append({'name': tag.text.strip()})
-    ret['tags'] = tags
+    # Get Tags
+    if tags_row:
+        scene_tags = tags_row.find_all('a')
+        tags = []
+        for tag in scene_tags:
+            tags.append({'name': tag.text.strip()})
+        ret['tags'] = tags
 
     # Get Performers
-    scene_performers = html_info[1].find_all('a')
-
-    for performer in scene_performers:
-        performers.append(performer.text.strip())
+    if performer_row:
+        scene_performers = performer_row.find_all('a')
+        performers = []
+        for performer in scene_performers:
+            performers.append(performer.text.strip())
+        perf = []
+        for perf_name in performers:
+            try:
+                perf.append(scrape_performer(perf_name.strip()))
+            except Exception:
+                debug(f"[DEBUG] UNABLE TO SCRAPE PERFROMER {perf_name.strip()} ")
+                pass
+        ret['performers'] = perf
 
 
 def scrape_performer(name):
@@ -84,30 +96,38 @@ def scrape_scene_url(url):
     soup = BeautifulSoup(r.text, 'html.parser')
     script_text = soup.find('script', attrs={'type': 'application/ld+json'}).string.replace("\n", '')
     json_script = json.loads(script_text)
+    
+    # Add Studio Details
+    ret['studio'] = {}
+    ret['studio']['name'] = 'Premium Bukkake'
 
     # Add Scene Details
     ret['title'] = json_script['name']
     ret['details'] = json_script['description']
     ret['date'] = json_script['uploadDate']
+    ret['image'] = json_script['thumbnailUrl']
 
-    scrape_scene_img_and_tags(url)
+    # Get tags and performer from the paywalled site    
+    ret['performers'] = []
+    ret['tags'] = []
+    scrape_scene_tags_and_performers(url)
 
-    # Add Studio Details
-    ret['studio'] = {}
-    ret['studio']['name'] = 'Premium Bukkake'
+    # Extract actor details in free site in case paywalled site does not have information
+    # Actor field comma delimited and starts with actors names, ends with scene type tag.
+    perf = []        
+    actors = json_script['actor'].split(',')
+    tag = actors.pop()
 
-    # Add Performer Details
-    ret['performers'] = {}
+    if not ret['performers']:
+        # No Performer(s) in paywalled site, get from free site
+        for actor in actors:
+            perf.append({ 'name': actor.strip() })
+        ret['performers'] = perf
 
-    perf = []
-    for perf_name in performers:
-        try:
-            perf.append(scrape_performer(perf_name.strip()))
-        except Exception:
-            debug("[DEBUG] UNABLE TO SCRAPE PERFROMER")
-            pass
+    if not ret['tags']:
+        # No tags in paywalled site, get classification tag from free site
+        ret['tags'] = [ { 'name': tag.strip() } ]
 
-    ret['performers'] = perf
     return ret
 
 
@@ -120,4 +140,4 @@ if SCENE_URL:
     print(json.dumps(result))
 else:
     debug("[DEBUG] Nothing Provided To Scrape")
-# Last Updated October 11, 2021
+

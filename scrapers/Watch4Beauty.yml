@@ -49,8 +49,8 @@ jsonScrapers:
                 with: ""
           - replace:
               - regex: '(\d+)-(\d+)-(\d+)'
-                with: "https://s5q3w2t8.ssl.hwcdn.net/production/$1$2$3-magazine-cover-wide-2560.jpg" # wide cover
-                #with: "https://s5q3w2t8.ssl.hwcdn.net/production/$1$2$3-magazine-cover-640.jpg" # normal cover
+                with: "https://mh-c75c2d6726.watch4beauty.com/production/$1$2$3-magazine-cover-wide-2560.jpg" # wide cover
+                #with: "https://mh-c75c2d6726.watch4beauty.com/production/$1$2$3-magazine-cover-640.jpg" # normal cover
       Performers: &storiesPerformers
         Name:
           selector: 0.magazine_simple_title
@@ -90,8 +90,8 @@ jsonScrapers:
                 with: ""
           - replace:
               - regex: '(\d+)-(\d+)-(\d+)'
-                with: "https://s5q3w2t8.ssl.hwcdn.net/production/$1$2$3-issue-cover-wide-2560.jpg" # wide cover
-                #with: "https://s5q3w2t8.ssl.hwcdn.net/production/$1$2$3-issue-cover-640.jpg" # normal cover
+                with: "https://mh-c75c2d6726.watch4beauty.com/production/$1$2$3-issue-cover-wide-2560.jpg" # wide cover
+                #with: "https://mh-c75c2d6726.watch4beauty.com/production/$1$2$3-issue-cover-640.jpg" # normal cover
       Performers: &updatesPerformers
         Name:
           selector: 0.issue_simple_title
@@ -126,4 +126,4 @@ jsonScrapers:
       Date: *updatesDate
       Studio: *studioAttr
       Tags: *updatesTags
-# Last Updated November 12, 2021
+# Last Updated July 5, 2021

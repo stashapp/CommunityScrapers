@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1
+      Title: //h1[@class="video__title"]
       Date:
         selector: //span[contains(@class, "video-publish-date")]
         postProcess:
@@ -16,7 +16,7 @@ xPathScrapers:
                 with: ""
           - parseDate: "02.01.2006"
       Details:
-        selector: //div[contains(@class,"video-info-details")]//p
+        selector: //div[contains(@class,"video-info-details__description")]//p
         concat: " "
       Performers:
         Name: //div[contains(@class, "categories")]/a[contains(@href, "pornstars")]

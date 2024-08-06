@@ -3,6 +3,9 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - gloryholeswallow.com
+      - cumpsters.com
+      - spytug.com
+      - cumclinic.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -28,13 +31,34 @@ xPathScrapers:
       Tags:
         Name: $info//p[contains(text(),'Tags')]//a/text()
       Image:
-        selector: //div[@id='fakeplayer']//img/@src0_1x
+        # Newer vids use img/@src0_1x, older use img/@src, combining both will pickup from both old and new scenes
+        selector: //base/@href | //div[@id='fakeplayer']//img/@src | //div[@id='fakeplayer']//img/@src0_1x
+        concat: "SEP"
         postProcess:
+          # Spytug only studio that uses full path for images, so remove
           - replace:
-              - regex: ^
-                with: https://gloryholeswallow.com
+            - regex: https:\/\/spytug.com\/SEP
+              with: ""
+          # Base for Gloryhole swallow includes /tour, which is also included in partial image path, remove this duplicate and sepertor
+          - replace:
+              - regex: \/tour\/SEP
+                with: ""
+          # Will remove SEP for rest of sites as it is a complete URL
+          - replace:
+              - regex: \/SEP
+                with: ""
+          
       Studio:
         Name:
-          fixed: GloryHole Swallow
+          selector: //base/@href
+          postProcess:
+            - replace:
+                - regex: (.+\/\/|www.|\..+)
+                  with:
+            - map:
+                cumpsters: Cumpsters
+                gloryholeswallow: Gloryhole Swallow
+                spytug: SpyTug
+                cumclinic: CumClinic
       URL: //link[@rel='canonical']/@href
-# Last Updated April 04, 2021
+# Last Updated August 01, 2024

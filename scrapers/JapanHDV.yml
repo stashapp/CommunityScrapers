@@ -4,22 +4,51 @@ sceneByURL:
     url:
       - japanhdv.com
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://japanhdv.com/?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
     url:
       - japanhdv.com/model
     scraper: performerScraper
 xPathScrapers:
+  sceneSearch:
+    common:
+      $videos: //a[@class="video-thumb-prev"]
+    scene:
+      Title: $videos/@title
+      URL: $videos/@href
+      Image: $videos/img[@class="pure-img padding"]/@src
+      Details:
+        selector: $videos/img[@class="pure-img padding"]/@src
+        postProcess:
+          - replace:
+              - regex: .*/content/videos/(.+?)/(.+?)/.+\.jpg
+                with: japanhdv_${1}_${2}_hd.mp4
   sceneScraper:
     common:
       $movieinfo: //div[@class="pure-u-1-5 hidden-sm hidden-xs"]/div[@class="video-info"]
     scene:
       Title: $movieinfo/p[starts-with(strong,"Title")]/text()
-      Details: //div[contains(@class, "video-description")]
-      Date:
-        selector: //meta[@itemprop="datePublished"]/@content
+      # Create studio code in the form Title_of_Movie_sceneX
+      Code:
+        selector: //video/@poster
         postProcess:
-          - parseDate: 2006-01-02T15:04:05-07:00
+          - replace:
+              - regex: .*/content/videos/(.+)/(.*)/.*
+                with: ${1}_${2}
+      Details: //div[contains(@class, "video-description")]
+      # Date no longer appears on public pages but is visible to members
+      Date:
+        selector: //p[contains(strong,"Added")]/text()
+        postProcess:
+          - parseDate: January 2, 2006
       Performers:
         Name: $movieinfo/p[starts-with(strong,"Actress")]/a
         URL: $movieinfo/p[starts-with(strong,"Actress")]/a/@href
@@ -27,10 +56,13 @@ xPathScrapers:
         Name: $movieinfo/p[starts-with(strong,"Categories")]/a
       Image:
         selector: //video[@id="videohtml5tour"]/@poster
-        postProcess:
+        postProcess: &imagePostProcess
           - replace:
               - regex: ^//
                 with: "https://"
+              # Get the original version of the image
+              - regex: \d+x\d+/50
+                with: 0x0/100
       Studio:
         Name:
           fixed: Japan HDV
@@ -73,10 +105,7 @@ xPathScrapers:
                 with:
       Image:
         selector: //div[@class="thumb"]/img/@src
-        postProcess:
-          - replace:
-              - regex: ^//
-                with: "https://"
+        postProcess: *imagePostProcess
       Gender:
         fixed: "Female"
       Details: //div[@id="model"]//p
@@ -85,4 +114,14 @@ xPathScrapers:
         postProcess:
           - map:
               N/A: ""
-# Last Updated January 01, 2022
+
+driver:
+  cookies:
+    - CookieURL: "https://members.japanhdv.com"
+      Cookies:
+        # Replace this cookie to scrape members area links
+        - Name: "wordpress_logged_in_xxxxxxxxxxxxxxxxxxxxxx"
+          Domain: ".japanhdv.com"
+          Path: /
+          Value: "_"
+# Last Updated July 01, 2024

@@ -30,13 +30,24 @@ xPathScrapers:
         selector: //p[@class='text']|//div[@class="preview_desc"]
       Image:
         selector: //div[@id="content" or @id="prev_m"]/a[1]/img/@src
+        postProcess:
+          - replace:
+              - regex: movie-
+                with:   
+      Code:
+        selector: //div[@id="content" or @id="prev_m"]/a[1]/img/@src
+        postProcess:
+          # Extract the studio code from the image URL as it is always in format /sets/nnn/ where nnn is code.
+          - replace:
+            - regex: .*sets\/(\d+).*
+              with: E$1 
   oldje3someScraper:
     scene:
       Studio:
         Name:
           fixed: Oldje-3some
       Title:
-        selector: //h1
+        selector: //span[@class='breadcrumb_last']
       Tags:
         Name:
           selector: //a[contains(@href,'/videos/tag/')]
@@ -51,4 +62,11 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https://www.oldje-3some.com/"
-# Last Updated February 25, 2023
+      Code:
+        selector: //img[@class="img-responsive" and contains(@src,"/view/")]/@src
+        postProcess:
+          # Extract the studio code from the partial image URL as it is always in format /photoCover/nnn where nnn is code.
+          - replace:
+            - regex: .*photoCover\/(\d+).*
+              with: E$1
+# Last Updated July 20, 2024

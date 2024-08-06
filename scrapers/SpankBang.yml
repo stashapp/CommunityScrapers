@@ -19,24 +19,32 @@ sceneByFragment:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class='left']/h1/@title
-      Details: //section[@class="details"]/div/p[2]/text()
-      Image: //div[@class='play_cover']/img/@src
-      Studio:
-        Name: //li[@class='us']/a[@class='ul']/text()
-      Tags:
-        Name: //li[@class='p']/text()|//div[@class='searches']//a[not(@class='expand')]/text()
-      URL: //link[rel='canonical']/@href|//meta[@property='og:url']/@content
-      Date:
-        selector: //script[@type='application/ld+json'][contains(text(),'uploadDate')]/text()
+      Title: //h1[@class="main_content_title"]
+      Details: //section[@class="details"]//p
+      Image:
+        selector: //div[@class='play_cover']/img/@src
         postProcess:
           - replace:
-              - regex: .*uploadDate":\s"(\d{4}-\d{2}-\d{2}).*
+              # Get the highest res image they've got
+              - regex: w:\d+
+                with: w:9999
+      Studio:
+        Name: //div[@class="ent"]
+      Tags:
+        Name: //li[@class="p"] | //div[contains(@class, "searches")]/a[not(@class="expand")]
+      URL: //link[rel='canonical']/@href | //meta[@property='og:url']/@content
+      Date:
+        selector: //script[@type='application/ld+json' and contains(text(),'uploadDate')]
+        postProcess:
+          - replace:
+              - regex: .*uploadDate":\s*"(\d{4}-\d{2}-\d{2}).*
                 with: $1
-          - parseDate: 2006-01-02
+
+debug:
+  printHTML: true
 
 driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated March 27, 2024
+# Last Updated June 28, 2024

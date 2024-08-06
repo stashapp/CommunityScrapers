@@ -181,7 +181,10 @@ def extract_PerformerInfo(table,browser,cover_url=None):
     performer = str(performer)
     debugPrint(f"Extracting info for performer: {performer}")
     if cover_url == None:
-        cover_url=str(table.find("img")['src'])
+        if table.find('video'): #New scenes use the video tag
+            cover_url=str(table.find("video")['poster'])
+        elif table.find('img'): #old scenes still use the old format of a img tag
+            cover_url=str(table.find("img")['src'])
     debugPrint(cover_url)
     artist_id = re.search(r"\/((f|m)\d{4,5})",cover_url,re.I).group(1)
     artist_img = (f"https://bcdn.ifeelmyself.com/artists/" + artist_id + ".jpg")
