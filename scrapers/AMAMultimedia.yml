@@ -19,6 +19,10 @@ name: "AMA Multimedia"
 sceneByURL:
   - action: scrapeXPath
     url:
+      # The network site itself: scenes scraped from these URLs
+      # will not have the correct substudio
+      - pornplus.com/video/
+
       # Straight Porn
       - anal4k.com/video/
       - baeb.com/video/
