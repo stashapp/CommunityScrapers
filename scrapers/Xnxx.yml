@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - xnxx.com
+      - xnxx3.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -20,3 +21,5 @@ xPathScrapers:
             - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.jpg).+$
               with: $1
 # Last Updated November 11, 2020
+
+# Last Updated August 06, 2024
