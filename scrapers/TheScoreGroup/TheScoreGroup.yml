@@ -80,8 +80,9 @@ xPathScrapers:
       $videopage: //section[@id="videos_page-page" or @id="mixed_page-page"]
       $stat: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]
     scene:
+      # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
+      # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
       Title: $videopage//h1
-       # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...) this helps set studio for Pornmegaload scenes as nothing is released directly from PML." 
       Studio:
         Name:
           selector: ($videopage//video/source/@src)[1]
@@ -176,8 +177,8 @@ xPathScrapers:
                 with: $1
               - regex: ^//
                 with: https://
-              - regex: _x
-                with: ""
+              - regex: _x_
+                with: _
       # This Selector scrapes the image posted on social media sites
       #        selector: //meta[@itemprop="image"]/@content
       # Enable this post process if you want better image quality but sometimes it can fail
