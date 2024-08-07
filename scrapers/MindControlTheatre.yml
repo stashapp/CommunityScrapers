@@ -1,0 +1,171 @@
+name: "Mind Control Theatre"
+#
+# This site is niche and run by the primary writer & director themselves.
+# As such, there are many idiosynchrocies to the site that I will try to
+# document here and implement in this scraper.
+# There will be a lot the scraper is doing that makes you say "WTF".
+#
+# BACKGROUND
+# 1. The people who run this site are the production company themselves, and
+#    they are not technology experts. Great people, but they make mistakes that
+#    professionals would not... Commas inside of spans or divs, inconsistent
+#    production attribution (why care if you don't list yourself on your own
+#    website?), and inconsistent file/title/slug naming.
+# 2. The pages are NOT generated from a database with page templates. Each page
+#    is copied from a starting template and manually edited for each release.
+#    This means that some elements, like Director, are not on every page. Or
+#    older pages don't have some media items like high-res cover images.
+
+# PROBLEMS WITH SOLUTIONS
+# 1. Problem: Some pages have no Director specified.
+#    Solution: I asked on Twitter and the studio said "If there's no director
+#    listed, it's Henri Tisserand." This scraper implements this if no director
+#    is detected on the page.
+# 2. Problem: There is no true unique ID given to each release, as would be
+#    necessary if each webpage was generated (real-time or batch), as done
+#    by in big production houses. Their 2257 notices in the videos show
+#    no ID number, file name, or even film title.
+#    Solution: Each webpage slug has to be unique, and it happens to often (NOT
+#    ALWAYS!) be the base filename, base to craft the cover image URL, and key
+#    to access other info.
+#    This scraper considers that slug to be the Studio Code. I verified this
+#    approach in the Stash Discord (but did not capture the approver, sorry).
+
+# PROBLEMS WITHOUT SOLUTIONS (yet)
+# 1. Problem: Older titles do not have 'real' cover images that are findable
+#    by my scraper. This scraper finds a 'play' button on a large transparent
+#    background. All titles for the last decade work with this scraper, so
+#    I consider this a problem that will not be fixed.
+#    Workaround: Pull metadata from StashDB.org, where I have manually set
+#    cover images.
+# 2. Problem: "All the sex" titles do not have a trailer, so my method for
+#    identifying the webpage slug does not work. This would be fixed if it was
+#    possible for an xPathScraper to know the URL of the page it's scraping.
+#    But per the Discord that is not currently (2024) possible. Another solution
+#    may be possible (base on image path), but those have changed in the last 5
+#    years AND it would require reworking the slug identification for the
+#    scraper as a whole, and that would require extensive regression testing.
+#    Workaround: Find and paste in the scene URL manually, then scrape by URL.
+#    Set the studio code manually as well.
+#
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mindcontroltheatre.com/movie/
+    scraper: sceneScraper
+
+
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://mindcontroltheatre.com/movie/{filename}
+  queryURLReplace:
+    filename:
+      # WMV was on older videos, but those videos now download as MP4
+      - regex: \.mp4$|\.wmv$
+        with: ""
+      # Only found -480 on one video, but that's enough
+      - regex: -2160$|-720$|-480$
+        with: ""
+      # Old videos downloaded 'normal' size at like 360p, and '-big' at like 540p, but not anymore
+      - regex: -big$
+        with: ""
+
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $data: //p[@id='data']
+      $videosource: //video/source/@src
+    scene:
+      Title: //h1/text()
+
+      Code: &slugAttr
+        # Grab the slug to solve Problem #2. The Trailer URL is the most consistent URL across scene pages.
+        selector: $videosource
+        postProcess:
+          - replace:
+            - regex: https://trailers.mindcontroltheatre.com/mct/trailers/(.*)-trailer.*
+              with: $1
+
+      # Test for in-line HTML (cite):  https://mindcontroltheatre.com/movie/truhyp2
+      # Test for in-line HTML (a)   :  https://mindcontroltheatre.com/movie/friend-request-sex
+      Details: //div[@id='description']/p[1]
+
+      URL:
+        selector: $videosource
+        postProcess:
+          - replace:
+            - regex: https://trailers.mindcontroltheatre.com/mct/trailers/(.*)-trailer.*
+              with: $1
+            - regex: ^
+              with: https://mindcontroltheatre.com/movie/
+
+      Date:
+        selector: $data/text()
+        postProcess:
+          - replace:
+            - regex: ^(\d{1,2} .*? \d{4})\s*•.*$
+              with: $1
+          - parseDate: 2 January 2006
+
+      Image:
+        # Like "/media/movies/images_large/roommate-situation-2/0.jpg"
+        selector: //video/@poster
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://mindcontroltheatre.com
+
+      Director:
+      # Test for no director (default) :  https://mindcontroltheatre.com/movie/r-word-mct
+      # Test for Henri (main director) :  https://mindcontroltheatre.com/movie/friend-request
+      # Test for Electra (2nd director):  https://mindcontroltheatre.com/movie/laurel-before-3-mct
+        # Extra selector to solve Problem #1: Handle no director specified on page (indicated by no 'director' class) by inserting the default director.
+        selector: /html/@lang | $data/span[@class='director']/a/text()
+        concat: " & "
+        postProcess:
+          - replace:
+            # When no director class, default to main director as the studio told me to do on Twitter/X.
+            - regex: ^en[-A-Z]*$
+              with: "Henri Tisserand"
+            # Strip the IETF language tag and concat, which were used to work around xPathScraper limitations on handling blank xPath returns.
+            # Strip other whitespace and non-word chars (a comma is often in the director span). Background #1.
+            - regex: en[-A-Z]*[& ]+([A-Za-z0-9 ]+)[^A-Za-z0-9 ]*
+              with: $1
+
+      Studio: &studioAttr
+        Name: //p[@id='logo']//a/text()
+        URL:
+          fixed: https://mindcontroltheatre.com
+
+      #Movies:
+      # They have some "Part 1, Part 2" scenes. They also have a few "in the same universe" scenes.
+      # They even have one 5-title, multipart (2, 3, and 5 parts!) saga of movies. But it's not
+      # currently (2024) possible to see the connections easily on the webpage, much less
+      # scrape that information.
+
+      Performers:
+        Name:
+          selector: //div[@id='cast']/a/text()
+
+      Tags:
+        Name:
+          # Currently (2024), no per-scene tags on any releases back to their inception.
+          # Because the studio focuses on a single fetish, set a fixed tag for all MCT studio releases.
+          fixed: Mind Control
+
+
+driver:
+  cookies:
+    - CookieURL: "https://mindcontroltheatre.com/"
+      Cookies:
+        - Name: "age"
+          Domain: "mindcontroltheatre.com"
+          Value: "yes-verified"
+          Path: "/"
+
+#debug:
+#  printHTML: true
+# Last Updated August 05, 2024

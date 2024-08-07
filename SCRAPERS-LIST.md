@@ -1394,6 +1394,7 @@ milfvr.com|POVR.yml|:heavy_check_mark:|:x:|:x:|:x:|-|VR
 militarydick.com|PaperStreetMedia.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 milkingtable.com|Adultime.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 milovana.com|Milovana.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+mindcontroltheatre.com|MindControlTheatre.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 minimuff.com|ChickPass.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|-|-
 minnano-av.com|Minnano-AV.yml|:x:|:x:|:x:|:heavy_check_mark:|-|-
 minuitsasori.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
