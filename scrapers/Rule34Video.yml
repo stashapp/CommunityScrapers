@@ -41,7 +41,9 @@ xPathScrapers:
     scene:
       URL: //link[@rel='canonical']/@href
       Title: //div[@class="heading"]//h1
-      Details: (//div[@class="info row"]/following-sibling::div)[1]
+      Details: 
+        selector: (//div[@id='tab_video_info']/div[@class="row"]/div[@class="label"])[1]//text()
+        concat: "\n"
       Date:
         selector: //script[@type="application/ld+json"]
         postProcess:
@@ -85,4 +87,4 @@ driver:
           ValueRandom: 43
           Domain: .rule34video.com
           Path: /
-# Last Updated July 20, 2024
+# Last Updated August 7, 2024
