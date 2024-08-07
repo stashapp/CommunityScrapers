@@ -41,7 +41,7 @@ xPathScrapers:
       Date:
         selector: $details//strong[text() = 'Publication date:']/following-sibling::span
         postProcess:
-          - parseDate: 2006, January 02
+          - parseDate: 2006, January 2
       Details: $details//span[text() = 'Description:']/../text()[2]
       Tags:
         Name: $details//span[text() = 'Tags:']/following-sibling::a[contains(concat(' ',normalize-space(@class),' '),' link-secondary ')]
