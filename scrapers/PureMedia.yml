@@ -22,7 +22,7 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Performers:
-        Name: $main//h5[contains(.,"Featuring")]/following-sibling::ul
+        Name: $main//h5[contains(.,'Featuring')]/following-sibling::ul//a
       Studio:
         Name: //meta[@name='author']/@content
       Tags:
@@ -32,6 +32,6 @@ xPathScrapers:
         concat: '|'
         postProcess:
           - replace:
-              - regex: "(^[^|]+)\\|.*/tour/([^\\.]+\\.jpg).*"
-                with: $1$2
-# Last Updated February 5, 2024
+              - regex: (?:/tour/\|)
+                with:
+# Last Updated August 10, 2024
