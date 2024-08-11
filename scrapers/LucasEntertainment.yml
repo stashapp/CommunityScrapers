@@ -33,7 +33,7 @@ xPathScrapers:
   search:
     common:
       $scene: //div[@class="scenes-panel"]//a[@class="scene-box"]
-      $performer: //div[@class="model-panel"]//a[@class="scene-box"]
+      $performer: //div[@class="model-panel" and not(.//div[contains(@class, "movie-item")])]//a[@class="scene-box"]
     scene:
       Title: $scene/@title
       URL: $scene/@href
