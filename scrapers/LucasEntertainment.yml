@@ -1,10 +1,18 @@
-name: LucasEntertainment
+name: Lucas Entertainment
 sceneByURL:
   - action: scrapeXPath
     url:
       - lucasentertainment.com/scenes/
       - lucasentertainment.com/tour/scenes/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://lucasentertainment.com/find/{}
+  scraper: search
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
@@ -17,8 +25,28 @@ performerByURL:
       - lucasentertainment.com/models/
       - lucasentertainment.com/tour/models/
     scraper: performerScraper
-
+performerByName:
+  action: scrapeXPath
+  queryURL: https://lucasentertainment.com/find/{}
+  scraper: search
 xPathScrapers:
+  search:
+    common:
+      $scene: //div[@class="scenes-panel"]//a[@class="scene-box"]
+      $performer: //div[@class="model-panel"]//a[@class="scene-box"]
+    scene:
+      Title: $scene/@title
+      URL: $scene/@href
+      Image: $scene/img/@data-original
+      Date:
+        selector: $scene//h6
+        postProcess:
+          - parseDate: "01.02.06"
+      Details: $scene//p
+    performer:
+      Name: $performer/@title
+      URL: $performer/@href
+      Image: $performer/img/@data-original
   sceneScraper:
     common:
       $performer: //strong[text() = "Performers:"]/following-sibling::a
@@ -73,16 +101,16 @@ xPathScrapers:
       Name: *titleSel
       Gender:
         fixed: Male
-      Measurements:
+      PenisLength:
         selector: //strong[text() = "Dick Size:"]/following-sibling::text()[1]
         postProcess:
           - replace:
-              - regex: (^.*$)
-                with: 0'$1
+              - regex: ^
+                with: 0'
           - feetToCm: true
       Height:
         selector: //strong[text() = "Height:"]/following-sibling::text()[1]
         postProcess:
           - feetToCm: true
       Image: //div[@class="col-sm-5 col-md-5 col-lg-4 model-main-photo"]/img/@data-original
-# Last Updated January 07, 2023
+# Last Updated August 11, 2024
