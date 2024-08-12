@@ -2,5 +2,8 @@
     "yaml.schemas": {
         "validator/scraper.schema.json": "*.yml"
     },
-    "python.analysis.typeCheckingMode": "basic"
+    "python.analysis.typeCheckingMode": "basic",
+    "githubPullRequests.ignoredPullRequestBranches": [
+        "master"
+    ]
 }
