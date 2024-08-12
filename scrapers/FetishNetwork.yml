@@ -19,6 +19,7 @@ xPathScrapers:
           //div[contains(@class,"description-long-text")]//text()
           |//span[@class="vg_description-scene"]/text()
           |//span[@class="strong"][contains(text(), "Description")]/following-sibling::text()
+          |//div[contains(@class, "description")]//div[contains(@class, "scene-desc")]
         postProcess:
           - replace:
               - regex: Description:\s?
@@ -26,7 +27,11 @@ xPathScrapers:
               - regex: �
                 with:
       Date:
-        selector: //h4[@class="light-grey"]|//span[@class="vg_dateadded"]|//span[contains(text(), "Added")]/text()
+        selector: |
+          //div[contains(@class,"date-section")]/h4[@class="light-grey"]
+          |//span[@class="vg_dateadded"]
+          |//span[contains(text(), "Added")]/text()
+          |//div[contains(@class, "date-views")]/span[1]
         postProcess:
           - replace:
               - regex: Added:\s
@@ -49,8 +54,11 @@ xPathScrapers:
             //span[@class="white-text"]
             |//div[@id="header"][1]/h1/a/text()
             |//span[@class="vg_attribute-title"][contains(text(), "Site")]/following-sibling::a[1]
+            |/html/head/title
           postProcess:
             - replace:
+                - regex: ^.*Scene by(.+)$
+                  with: $1
                 - regex: \sVideos
                   with:
                 - regex: \.com
@@ -77,4 +85,4 @@ xPathScrapers:
                 - regex: _
                   with: " "
 
-# Last Updated December 19, 2020
+# Last Updated August 12, 2024
