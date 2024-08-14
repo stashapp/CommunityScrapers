@@ -11,13 +11,13 @@ sceneByURL:
 sceneByFragment:
   action: scrapeXPath
   scraper: sceneScraper
-  queryURL: https://www.xvideos.com/video{filename}/x
+  queryURL: https://www.xvideos.com/video.{filename}/x
   queryURLReplace:
     filename:
       # expects an id in square brackets before extension, as saved by yt-dlp by default
       # title_of_scene [id-here].mp4
       - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
-        with: .$1
+        with: $1
       # or expects an id at the end of the filename
       # title_of_scene42069.mp4
       - regex: '^.*?(\d+)\..+$'
@@ -56,4 +56,4 @@ xPathScrapers:
               - regex: '[\S\s]+"uploadDate"\s*:\s*"(\d+-\d{2}-\d{2})[^"]+"[\S\s]+'
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated July 13, 2024
+# Last Updated August 15, 2024
