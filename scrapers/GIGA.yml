@@ -6,7 +6,7 @@ sceneByFragment:
     filename:
       - regex: \..+$
         with: ""
-  scraper: sceneScraper
+  scraper: sceneSearch
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -28,14 +28,20 @@ xPathScrapers:
     common:
       $videoItem: //*[@id="list"]
     scene:
-      Date: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
+      Date:
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
+        postProcess:
+          - parseDate: "2006/01/02"
       Details:
         selector: $videoItem/ul/li/a/img/@alt]
-        # The site uses the unicode U+ff0c comma instead of "normal" ASCII commas
-        postProcess: &translateCommas
+        postProcess:
           - replace:
-              - regex: ，
-                with: ","
+            - regex: "， "
+              with: ", "
+            - regex: "\\."
+              with: ".\n\n$1"
+            - regex: "\\.\n\n\\.\n\n\\.\n\n"
+              with: "..." 
       Director: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]
       Image:
         selector: $videoItem/ul/li/a/img/@src
@@ -51,7 +57,10 @@ xPathScrapers:
       Title:
         selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1] | //*[@id="list"]/h4/a
         concat: " "
-        postProcess: *translateCommas
+        postProcess:
+          - replace:
+            - regex: "， "
+              with: ", "
       URL:
         selector: $videoItem/ul/li/a/@href
         postProcess:
@@ -71,7 +80,14 @@ xPathScrapers:
       Details:
         selector: $sceneTitle | //*[@id="story_list2"]/ul/li[@class="story_window"]
         concat: "\n\n"
-        postProcess: *translateCommas
+        postProcess:
+          - replace:
+            - regex: "， "
+              with: ", "
+            - regex: "\\."
+              with: ".\n\n$1"
+            - regex: "\\.\n\n\\.\n\n\\.\n\n"
+              with: "..." 
       Director: //*[@id="works_txt"]/ul/li[5]/dl/dd
       Image:
         selector: //*[@id="works_pic"]/ul/li[1]/a/@href | //*[@id="works_pic"]/ul/li[1]/img/@src
@@ -87,7 +103,10 @@ xPathScrapers:
       Title:
         selector: $sceneCode | $sceneTitle
         concat: " "
-        postProcess: *translateCommas
+        postProcess:
+          - replace:
+            - regex: "， "
+              with: ", "
       URL:
         selector: //*[@id="works_pic"]/ul/li[3]/a[1]/@href
         postProcess:
@@ -95,6 +114,7 @@ xPathScrapers:
               - regex: .*product_id=
                 with: https://www.akiba-web.com/product/index.php?product_id=
 driver:
+  useCDP: false 
   headers:
     - Key: Referer
       Value: https://www.akiba-web.com/
@@ -105,4 +125,4 @@ driver:
           Domain: ".www.akiba-web.com"
           Value: "yes"
           Path: "/"
-# Last Updated July 08, 2024
+# Last Updated August 10, 2024
