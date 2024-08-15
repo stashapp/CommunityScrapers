@@ -2,28 +2,55 @@ name: GASM
 sceneByURL:
   - action: scrapeXPath
     url:
-      - gasm.com
+      - gasm.com/post/details/
     scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - gasm.com/dvd/
+    scraper: movieScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $details: //div[@class="post_details_main"]
+      $dvd: //div[@class="post_item dvd"]
     scene:
       Title:
-        selector: //div[@class="gqText"]/span[@class="gqTitle"]
+        selector: $details/h1[@class="post_title"]/span/text()
+      Date:
+        selector: $details/h3[@class="post_date"]/span/text()
       Performers:
-        Name: //div[@class="gqOwner"]/a
+        Name: $details/a[@class="tags"][starts-with(@href, '/models/')]/text()
       Tags:
-        Name: //div[@class="content tag"]/a
+        Name: $details/a[@class="tags"][starts-with(@href, '/search?s=')]/text()
       Details:
-        selector: //span[@class="gqDescription"]/text()
-        concat: "\n\n"
-        postProcess:
-          - replace:
-              - regex: '^Part\sof\s*\n+'
-                with:
+        selector: $details/h2[@class="post_description"]/text()
       Movies:
-        Name: //span[@class="gqDescription"]/a[@class="gqTitle"]
-      Image: //meta[@property="og:image"]/@content
+        Name: $dvd/h1/a/text()
+        FrontImage: $dvd/div[@class="post_image"]/a/img[@class="item_cover"]/@src
+        URL: $dvd/h1/a/@href
+      # Image is not accessible from the /post page
       Studio:
         Name:
-          selector: //span[@class="gqOwner"]//a
-# Last Updated May 13, 2021
+          selector: $details/a[@class="tags"][starts-with(@href, '/studio/profile/')]/text()
+  movieScraper:
+    common:
+      $details: //div[@class="post_details"]/div[@class="post_details_main"]
+      $postdate: //div[@class="post_details"]/div[@class="post_details_main"]/h3[@class="post_date"]
+    movie:
+      Name: $details/h1[@class="post_title"]/span/text()
+      Duration:
+        selector: $postdate/span[2]/text()
+        postProcess:
+          - replace:
+            - regex: '^\| '
+              with:
+      Date:
+        selector: $postdate/span[1]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Synopsis:
+        selector: $details/h2[@class="post_description"]/text()
+      FrontImage:
+        selector: //div[@class="post_details"]/div[@class="post_details_left"]/img[@class="item_cover"]/@src
+# Last Updated 2024-08-12
