@@ -52,7 +52,7 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Details: $scene_info//p[@class="description"] | $scene_info//p
       Performers:
-        Name: $scene_info//a[@class="model-name"]/@title
+        Name: $scene_info//a[@class="model-name"]/@title | $scene_info//a[contains(@href,"/model")]/@title
       Tags:
         Name: $scene_info//a[contains(@href,"/categories")] | $scene_info//a[contains(@href,"/category")] | //div[contains(@class, "categories-holder")]/a
       Studio:
@@ -92,4 +92,4 @@ driver:
         Domain: ".mrluckylife.com"
         Path: "/"
         Value: ""
-# Last Updated August 1, 2024
+# Last Updated August 11, 2024
