@@ -16,9 +16,9 @@ sceneByFragment:
     filename:
       # expects an id in square brackets before extension, as saved by yt-dlp by default
       # title_of_scene [id-here].mp4
-      - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
+      - regex: '.*\[([0-9a-zA-Z]{4,})\]\..+'
         with: $1
-      # or expects an id at the end of the filename
+      # or expects a numeric id at the end of the filename
       # title_of_scene42069.mp4
       - regex: '^.*?(\d+)\..+$'
         with: $1
