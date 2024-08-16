@@ -36,7 +36,7 @@ def getVideoIdFromDownloadHash(downloadHash: str):
 
     responseBody = req.json()
 
-    if not (scenes := responseBody.get("data", [])) and scenes:
+    if not (scenes := responseBody.get("data", [])):
         return None
 
     return scenes[0]["_id"]
@@ -45,6 +45,8 @@ def getVideoIdFromDownloadHash(downloadHash: str):
 def getIMG(video):
     # reversed because we want the most recent thumb
     for item in reversed(video["thumbnails"]):
+        if not item:
+            continue
         if item.startswith("https://storage.pmvhaven.com/") and "webp320" not in item:
             return item
     return ""
