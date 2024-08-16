@@ -1,0 +1,40 @@
+name: FratX
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fratx.com/trailer.php?id=
+    scraper: fratx
+
+xPathScrapers:
+  fratx:
+    common:
+      # Description starts with the date formatted like February 2nd, 2011
+      $description: //div[@class="VideoDescription"]
+    scene:
+      Title: //div[@class="name"]
+      Details:
+        selector: $description
+        postProcess:
+          - replace:
+              - regex: \w+\s+\d+(?:st|nd|rd|th)?,\s+\d+\s*-\s*(.*)
+                with: $1
+      Date:
+        selector: $description
+        postProcess:
+          - replace:
+              - regex: (\w+)\s+(\d+)(?:st|nd|rd|th)?,\s+(\d+).*
+                with: $1 $2, $3
+          - parseDate: January 2, 2006
+      Image:
+        selector: //video/@poster
+        postProcess:
+          - replace:
+              - regex: -[1-4]x\.
+                with: -full.
+      Studio:
+        Name:
+          fixed: FratX
+        URL:
+          fixed: https://www.fratx.com
+# Last Updated August 16, 2024
