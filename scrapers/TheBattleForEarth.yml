@@ -73,13 +73,14 @@ xPathScrapers:
       Performers:
         Name:
           selector: //*[contains(text(),'Starring |')]/text()
-          replace:
-            - regex: "Starring \\|" 
-              with: ""
-            - regex: "\\| " 
-              with: "|"
-            - regex: " \\|" 
-              with: "|"
+          postProcess:
+            - replace:
+                - regex: "Starring \\|"
+                  with: ""
+                - regex: "\\| "
+                  with: "|"
+                - regex: " \\|"
+                  with: "|"
           split: "|"
       Studio:
         Name:
