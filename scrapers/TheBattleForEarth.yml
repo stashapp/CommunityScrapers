@@ -47,8 +47,11 @@ xPathScrapers:
                 with: "01-01-20"
           - parseDate: "01-01-2006"
       Details:
-        selector: //*[contains(text(),'Synopsis')]/text() | //*[contains(text(),'Embed:')]/text() 
+        selector: //*[contains(text(),'Synopsis')]/text() | //*[contains(text(),'Embed:')]/text() | //*[@style="font-size:15px; text-align:justify;"]/span
         postProcess:
+          - replace:
+              - regex: "Contains.*Synopsis"  
+                with: "Synopsis"
           - replace:
               - regex: "Synopsis: "  
                 with: ""
