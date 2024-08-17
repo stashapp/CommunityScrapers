@@ -14,7 +14,7 @@ sceneByName:
   scraper: vodSearch
 sceneByFragment:
   action: scrapeXPath
-  scraper: sceneSearch
+  scraper: vodSearch
   queryURL: https://www.clubdom.com/vod/search.php?st=advanced&qex={title}
   queryURLReplace:
      title:
