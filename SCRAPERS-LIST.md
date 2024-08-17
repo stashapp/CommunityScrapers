@@ -2142,6 +2142,7 @@ theamofficial.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 theartporn.com|Wtfpass.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 theassfactory.com|JulesJordan.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|-|-
 theaudreyhollander.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+thebattleforearth.com|TheBattleForEarth.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thebondagechallenge.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 thebronetwork.com|TheBroNetwork.yml|:heavy_check_mark:|:x:|:x:|:x:|-|Gay
 theclassicporn.com|theclassicporn.yml|:heavy_check_mark:|:x:|:heavy_check_mark:|:heavy_check_mark:|-|-
