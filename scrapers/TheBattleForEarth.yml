@@ -1,0 +1,88 @@
+name: The Battle For Earth
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.thebattleforearth.com/
+      - thebattleforearth.com/
+    scraper: sceneScraper
+    queryURL: "{url}"
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $titleName: //*[@class="font_4 wixui-rich-text__text"]/span/span/text() | //*[@class="font_4 wixui-rich-text__text"]/span/text()
+    scene:
+      Title: $titleName
+      Date:
+        selector: //*[@class="font_9 wixui-rich-text__text"]/span/span[@style="letter-spacing:0.05em;"]text()
+        postProcess:
+          - replace:
+              - regex: "Release Date.*Jan 20"  
+                with: "01-01-20"
+              - regex: "Release Date.*Feb 20"  
+                with: "01-02-20"
+              - regex: "Release Date.*Mar 20"  
+                with: "01-03-20"
+              - regex: "Release Date.*April 20"  
+                with: "01-04-20"
+              - regex: "Release Date.*May 20"  
+                with: "01-05-20"
+              - regex: "Release Date.*Jun 20"  
+                with: "01-06-20"
+              - regex: "Release Date.*June 20"  
+                with: "01-06-20"
+              - regex: "Release Date.*July 20"  
+                with: "01-07-20"
+              - regex: "Release Date.*Aug 20"  
+                with: "01-08-20"
+              - regex: "Release Date.*Sept 20"  
+                with: "01-09-20"
+              - regex: "Release Date.*Oct 20"  
+                with: "01-10-20"
+              - regex: "Release Date.*Nov 20"  
+                with: "01-11-20"
+              - regex: "Release Date.*Dec 20"  
+                with: "01-12-20"
+              - regex: "Release Date.*20"
+                with: "01-01-20"
+          - parseDate: "01-01-2006"
+      Details:
+        selector: //*[contains(text(),'Synopsis')]/text() | //*[contains(text(),'Embed:')]/text() | //*[@style="font-size:15px; text-align:justify;"]/span
+        postProcess:
+          - replace:
+              - regex: "Contains.*Synopsis"  
+                with: "Synopsis"
+          - replace:
+              - regex: "Synopsis: "  
+                with: ""
+          - replace:
+              - regex: "Embed: "  
+                with: ""
+      Director:
+        selector: //*[contains(text(),'Director |')]/text()
+        postProcess:
+          - replace:
+              - regex: "Director \\|"  
+                with: ""
+      Image:
+        selector: //picture/img[1]/@src
+        postProcess:
+          - replace:
+              - regex: "jpg.*"  
+                with: "jpg"
+      Performers:
+        Name:
+          selector: //*[contains(text(),'Starring |')]/text()
+          postProcess:
+            - replace:
+                - regex: "Starring \\|"
+                  with: ""
+                - regex: "\\| "
+                  with: "|"
+                - regex: " \\|"
+                  with: "|"
+          split: "|"
+      Studio:
+        Name:
+          fixed: "The Battle For Earth"
+# Last Updated August 17, 2024
