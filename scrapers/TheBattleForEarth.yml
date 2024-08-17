@@ -29,6 +29,8 @@ xPathScrapers:
                 with: "01-05-20"
               - regex: "Release Date.*Jun 20"  
                 with: "01-06-20"
+              - regex: "Release Date.*June 20"  
+                with: "01-06-20"
               - regex: "Release Date.*July 20"  
                 with: "01-07-20"
               - regex: "Release Date.*Aug 20"  
