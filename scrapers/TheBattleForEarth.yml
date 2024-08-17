@@ -10,7 +10,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $titleName: //*[@class="font_4 wixui-rich-text__text"]/span/span/text()
+      $titleName: //*[@class="font_4 wixui-rich-text__text"]/span/span/text() | //*[@class="font_4 wixui-rich-text__text"]/span/text()
     scene:
       Title: $titleName
       Date:
@@ -42,7 +42,7 @@ xPathScrapers:
               - regex: "Release Date.*Dec 20"  
                 with: "01-12-20"
               - regex: "Release Date.*20"
-                with: "20"
+                with: "01-01-20"
           - parseDate: "01-01-2006"
       Details:
         selector: //*[contains(text(),'Synopsis')]/text() | //*[contains(text(),'Embed:')]/text() 
