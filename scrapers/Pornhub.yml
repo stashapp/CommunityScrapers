@@ -7,11 +7,13 @@ performerByURL:
   - action: scrapeXPath
     url:
       - pornhub.com
+      - pornhub.org
     scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - pornhub.com/view_video.php?viewkey=
+      - pornhub.org/view_video.php?viewkey=
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeXPath
