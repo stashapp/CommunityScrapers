@@ -24,7 +24,7 @@ xPathScrapers:
                   with: "\""
             - replace:
                 - regex: "&#039;"
-                  with: "\'"
+                  with: "'"
       Date:
         selector: $movieinfo/dd[$tagexists+5]/text()
         postProcess:
