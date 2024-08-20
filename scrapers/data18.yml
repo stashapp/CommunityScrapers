@@ -57,7 +57,6 @@ xPathScrapers:
           selector: $movie/@title
           postProcess:
             - replace:
-#                - regex: (.+?)(?:\s#1)?$
                 - regex: (.+?)(?:(?:\s#1)?$|(\s)#(\d+))
                   with: $1$2$3
         URL: $movie/@href
