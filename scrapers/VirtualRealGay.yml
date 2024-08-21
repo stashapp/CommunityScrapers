@@ -90,6 +90,12 @@ xPathScrapers:
                 VirtualRealAmateurPorn: "VirtualRealAmateur"
       Image: &imageSel //meta[@property="og:image"]/@content
       URL: //link[@rel="canonical"]/@href
+      Code: 
+        selector: //link[@rel="shortlink"]/@href
+        postProcess:
+          - replace:
+            - regex: ^https://.*/\?p=
+              with:
       # Movies:
       #   Name:
       #     selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
@@ -147,4 +153,4 @@ xPathScrapers:
               }
               return value
       Image: //div[@class="feature_img_model"]/img/@src
-# Last Updated August 04, 2024
+# Last Updated August 21, 2024
