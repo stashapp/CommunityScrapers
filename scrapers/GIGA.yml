@@ -28,6 +28,8 @@ xPathScrapers:
     common:
       $videoItem: //*[@id="list"]
     scene:
+      Code:
+        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
       Date:
         selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
         postProcess:
@@ -125,4 +127,4 @@ driver:
           Domain: ".www.akiba-web.com"
           Value: "yes"
           Path: "/"
-# Last Updated August 10, 2024
+# Last Updated August 22, 2024
