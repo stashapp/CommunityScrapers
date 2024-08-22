@@ -1,21 +1,21 @@
-name: SubbyHubby
+name: ClubDom
 sceneByURL:
   - action: scrapeXPath
     url:
-      - subbyhubby.com/tour
+      - clubdom.com/tour
     scraper: sceneScraper
   - action: scrapeXPath
     url:
-      - subbyhubby.com/vod
+      - clubdom.com/vod
     scraper: vodScraper
 sceneByName:
   action: scrapeXPath
-  queryURL: https://www.subbyhubby.com/vod/search.php?query={}
+  queryURL: https://www.clubdom.com/vod/search.php?query={}
   scraper: vodSearch
 sceneByFragment:
   action: scrapeXPath
-  scraper: vodScraper
-  queryURL: https://www.subbyhubby.com/vod/search.php?st=advanced&qex={title}
+  scraper: vodSearch
+  queryURL: https://www.clubdom.com/vod/search.php?st=advanced&qex={title}
   queryURLReplace:
      title:
        - regex: " "
@@ -47,7 +47,7 @@ xPathScrapers:
                 with: "https:"
       Studio:
         Name:
-          fixed: Subby Hubby
+          fixed: Club Dom
   vodScraper:
     scene:
       URL: //div[@class='cell content_tab_current']/a/@href
@@ -72,8 +72,7 @@ xPathScrapers:
                 with: $1$2
       Studio:
         Name:
-          fixed: Subby Hubby
-
+          fixed: Club Dom
   vodSearch:
     common:
       $update-details: //div[@class="update_details"]

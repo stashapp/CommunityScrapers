@@ -7,11 +7,13 @@ performerByURL:
   - action: scrapeXPath
     url:
       - pornhub.com
+      - pornhub.org
     scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - pornhub.com/view_video.php?viewkey=
+      - pornhub.org/view_video.php?viewkey=
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeXPath
@@ -37,18 +39,19 @@ xPathScrapers:
   sceneSearch:
     common:
       $searchItem: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]
-      $searchThumb: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]//div[contains(@class, "thumbnail-info-wrapper")]/span[@class="title"]/a
+      $searchThumb: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]//div[contains(@class, "thumbnail-info-wrapper")]
 
     scene:
-      Title: $searchThumb/text()
+      Title: $searchThumb/span[@class="title"]/a/text()
       URL:
-        selector: $searchThumb/@href
+        selector: $searchThumb/span[@class="title"]/a/@href
         postProcess:
           - replace:
               - regex: ^
                 with: "https://www.pornhub.com"
-      Image:
-        selector: $searchItem//div[contains(@class, "phimage")]//img/@data-mediumthumb
+      Image: $searchItem//div[contains(@class, "phimage")]//img/@data-mediumthumb
+      Studio:
+        Name: $searchThumb//div[contains(@class, "usernameWrap")]//a[matches(@href, "/(channels|model|pornstar)/")]
   performerSearch:
     performer:
       Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
@@ -171,4 +174,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated July 23, 2024
+# Last Updated August 19, 2024

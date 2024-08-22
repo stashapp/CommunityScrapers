@@ -47,6 +47,9 @@ details {
   word-wrap: normal;
   white-space: pre;
 }
+mark {
+  color: #000
+}
 #top-btn {
   position: fixed;
   bottom: 20px;

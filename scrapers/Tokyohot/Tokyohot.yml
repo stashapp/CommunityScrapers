@@ -13,7 +13,18 @@ xPathScrapers:
       $tagexists: count(//div[@class="infowrapper"]/dl[@class="info"]/dt[text()="Tags"])
     scene:
       Title: //div[@class="pagetitle"]/h2/text()
-      Details: //div[@class="sentence"]//text()
+      Details:
+        selector: //div[@class="sentence"]//text()
+        postProcess:
+            - replace:
+                - regex: "&amp;"
+                  with: "&"
+            - replace:
+                - regex: "&quot;"
+                  with: "\""
+            - replace:
+                - regex: "&#039;"
+                  with: "'"
       Date:
         selector: $movieinfo/dd[$tagexists+5]/text()
         postProcess:

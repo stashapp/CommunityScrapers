@@ -38,7 +38,7 @@ xPathScrapers:
     common:
       $scene: //div[@class="update-info-container"]
     scene:
-      Title: $scene//h2
+      Title: //span[@class="active-crumb"]
       Date:
         selector: //div[@id="theatre-row"]//span[@class="description-releasedate"]/text()
         postProcess:
@@ -68,4 +68,4 @@ xPathScrapers:
           split: ", "
       Performers:
         Name: $scene//b[contains(.,"Performer")]/following-sibling::a/text()
-# Last Updated February 22, 2023
+# Last Updated August 18, 2024
