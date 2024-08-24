@@ -90,8 +90,7 @@ xPathScrapers:
 driver:
   useCDP: true
   cookies:
-    - CookieURL: https://iwantclips.com
-      Cookies:
+    - Cookies:
         - Name: iwc-new-design
           Value: "on"
           Domain: .iwantclips.com
