@@ -29,7 +29,7 @@ xPathScrapers:
       $videoItem: //*[@id="list"]
     scene:
       Code:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1]
+        selector: $videoItem/ul/li/ul[1]/li[1]/dl[1]/dd
       Date:
         selector: $videoItem/ul/li[2]/ul/li[1]/dl[2]/dd
         postProcess:
@@ -57,7 +57,7 @@ xPathScrapers:
         Name:
           fixed: "Giga"
       Title:
-        selector: $videoItem/ul/li[2]/ul/li[1]/dl[1]/dd[1] | //*[@id="list"]/h4/a
+        selector: $videoItem/ul/li/ul[1]/li[1]/dl[1]/dd | //*[@id="list"]/h4/a
         concat: " "
         postProcess:
           - replace:
