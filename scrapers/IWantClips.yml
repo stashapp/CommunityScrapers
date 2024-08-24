@@ -88,14 +88,11 @@ xPathScrapers:
       URL: //h5[contains(@class,'featured-store-name')]/a/@href
 
 driver:
-  headers:
-    - Key: User-Agent
-      Value: stash-scraper/1.0
+  useCDP: true
   cookies:
-    - CookieURL: https://iwantclips.com
-      Cookies:
+    - Cookies:
         - Name: iwc-new-design
           Value: "on"
           Domain: .iwantclips.com
           Path: /
-# Last Updated May 27, 2024
+# Last Updated August 24, 2024
