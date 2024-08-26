@@ -1,0 +1,50 @@
+name: Eporner
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.eporner.com
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.eporner.com/search/{}/
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[@id="vidresults"]/div[contains(@class,"mb")]
+    scene:
+      Title: $searchItem/div[@class="mbunder"]/p/a/text()
+      URL:
+        selector: $searchItem/div[@class="mbunder"]/p/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.eporner.com"
+      Image:
+        selector: $searchItem/div[@class="mbimg"]/div/a/img/@src
+  sceneScraper:
+    scene:
+      Title:
+        selector: //*[@id="video-info"]/h1/text()
+      Date:
+        selector: //script[contains(.,"uploadDate")]/text()
+        postProcess:
+          - replace:
+              - regex: .*uploadDate":\s"(\d{4}-\d{2}-\d{2})T.*
+                with: $1
+          - parseDate: 2006-01-02
+      Performers:
+        Name: //*[@id="video-info-tags"]/ul//li[@class='vit-pornstar starw']/a/text()
+      Tags:
+        Name: //*[@id="video-info-tags"]/ul//li[@class='vit-category' or @class='vit-tag']/a/text()
+      Studio:
+        Name: //*[@id="video-info-tags"]/ul/li[@class='vit-uploader']/a/text()
+      Image: //meta[@property="og:image"]/@content
+      URL: //meta[@property="og:url"]/@content
+
+# Last Updated August 26, 2024

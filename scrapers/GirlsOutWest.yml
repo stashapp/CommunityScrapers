@@ -4,86 +4,96 @@ sceneByURL:
     url:
       - tour.girlsoutwest.com/
     scraper: sceneScraper
-performerByURL:
-  - action: scrapeXPath
-    url:
-      - tour.girlsoutwest.com/models/
-    scraper: performerScraper
+
 galleryByURL:
   - action: scrapeXPath
     url:
       - tour.girlsoutwest.com/
     scraper: galleryScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - tour.girlsoutwest.com/models/
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //div[@class='trailerTitle']/div/h3/text()
-        # uncomment the following to strip performer names from titles
-        #postProcess:
-        #  - replace:
-        #    - regex: .+-
-        #      with:
-      Performers:
+      Title: &title
+        selector: //meta[@property='og:title']/@content
+      Details: &details
+        selector: //div[@class='description']//p
+        concat: '\n\n'
+      Performers: &performers
         Name:
-          selector: //div[@class='trailer topSpace']/div//p/a/text()
-        URL:
-          selector: //div[@class='trailer topSpace']/div//p/a/@href
+          selector: //div[h5[contains(.,'Featuring')] and @class='tags']//a
+          concat: ','
+          postProcess:                 ## Some "performers" are duos with '&' or 'and' in their name
+            - replace:
+                - regex: '\s+&\s+'     ## change & to ,
+                  with: ','
+                - regex: '\s+and\s+'   ## change 'and' to ,
+                  with: ','
+                - regex: ',,+'         ## catch case where multiple commas may appear in a row
+                  with: ''
+          split: ','                   ## split on ,
+      Tags: &tags
+        Name:
+          selector: //div[h5[contains(.,'Tags')] and @class='tags']//a
       Image:
-        # use 1x or 2x for low/medium resolution images
-        selector: //div[@class='videoplayer']/img/@src0_3x
+        selector: >
+                //base/@href |
+                //div[@class='player-thumb']/img/@src0_1x |
+                //div[@class='player-thumb']/img/@src0_2x |
+                //div[@class='player-thumb']/img/@src0_3x |
+                //div[@class='player-thumb']/img/@src0_4x
+        concat: __SEP__
         postProcess:
           - replace:
-            - regex: ^
-              with: https://tour.girlsoutwest.com
-      Date:
-        selector: //div[@class='trailer topSpace']/div[@class='centerwrap clear']/p/text()
-        concat: " "
+            - regex: __SEP__.+__SEP__     # This will leave you with the site name and the last matched image
+              with: ''                    # if multiple resolutions are found.
+            - regex: __SEP__              # Of course, if there's only one resolution the above won't match
+              with: ''                    # but this will get rid of the separator and provide the right URL
+      Date: &date
+        selector: //div[h5[contains(.,'Added')] and @class='addInfo']//p
         postProcess:
-          - replace:
-            - regex: (.+)(\d{2}\/\d{2}\/\d{4})(.+)
-              with: $2
-          - parseDate: 01/02/2006
-      Studio:
+          - parseDate: January 2, 2006
+      Studio: &studio
         Name:
           fixed: Girls Out West
         URL:
           fixed: https://girlsoutwest.com
+
+  galleryScraper:
+    gallery:
+      Title: *title
+      Details: *details
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
+
   performerScraper:
     performer:
       Name:
-        selector: //div[@class='profileDetails clear']/h2/text()
+        selector: //div[@class='bioInfo']/h1/text()
       Gender:
         fixed: Female
       Image:
-        # use 1x or 2x for low/medium resolution images
-        selector: //div[@class='profilePic']/img/@src0_3x
+        selector: >
+                //base/@href |
+                //div[@class='bioPic']/img/@src0_1x |
+                //div[@class='bioPic']/img/@src0_2x |
+                //div[@class='bioPic']/img/@src0_3x |
+                //div[@class='bioPic']/img/@src0_4x
+        concat: __SEP__
         postProcess:
           - replace:
-            - regex: ^
-              with: https://tour.girlsoutwest.com
-  galleryScraper:
-    gallery:
-      Title:
-        selector: //div[@class='trailerTitle']/div/h3/text()
-      Performers:
-        Name:
-          selector: //div[@class='trailer topSpace']/div//p/a/text()
-        URL:
-          selector: //div[@class='trailer topSpace']/div//p/a/@href
-      Date:
-        selector: //div[@class='trailer topSpace']/div[@class='centerwrap clear']/p/text()
-        concat: " "
-        postProcess:
-          - replace:
-            - regex: (.+)(\d{2}\/\d{2}\/\d{4})(.+)
-              with: $2
-          - parseDate: 01/02/2006
-      Studio:
-        Name:
-          fixed: Girls Out West
-        URL:
-          fixed: https://girlsoutwest.com
+            - regex: __SEP__.+__SEP__
+              with: ''
+            - regex: __SEP__
+              with: ''
 
 driver:
   cookies:
@@ -93,4 +103,5 @@ driver:
           Domain: "tour.girlsoutwest.com"
           Value: "5"
           Path: "/"
-# Last Updated December 31, 2020
+
+# Last Updated June 03, 2024

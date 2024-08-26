@@ -1,0 +1,49 @@
+# requires: Algolia
+name: "Wicked"
+sceneByURL:
+  - action: script
+    url:
+      - wicked.com/en/video/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - wicked
+movieByURL:
+  - action: script
+    url:
+      - wicked.com/en/movie/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - wicked
+      - movie
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - wicked
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - wicked
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - wicked
+      - validName
+galleryByURL:
+  - action: script
+    url:
+      - wicked.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - wicked
+      - gallery
+# Last Updated December 22, 2022

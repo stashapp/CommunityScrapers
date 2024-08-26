@@ -1,0 +1,94 @@
+name: "LordAardvark"
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - lordaardvark.com/html/galleries.html
+    scraper: galleryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lordaardvark.com/films/
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://lordaardvark.com/search?search={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: https://lordaardvark.com/search?search={title}
+  scraper: sceneSearch
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://lordaardvark.com/search?search={filename}
+  queryURLReplace:
+    filename:
+      - regex: \.\w*$
+        with: ""
+      - regex: \.
+        with: " "
+  scraper: sceneSearch
+xPathScrapers:
+  galleryScraper:
+    common:
+      $content: //div[contains(@class, "viewer-content-controls")]
+    gallery:
+      Date:
+        selector: $content/h2
+        postProcess:
+          - parseDate: January 2, 2006
+      Title: $content/h1
+      Details:
+        selector: $content/p
+      Studio:
+        Name:
+          fixed: LordAardvark
+  sceneScraper:
+    scene:
+      Title: //div[@class="player-overlay-title"]/h1
+      Details:
+        selector: //section[@class="player-overlay-description"]//div[@class="row"]/div[@class="col"]/*
+        concat: "\n\n"
+      Date:
+        selector: //meta[@property="video:release_date"]/@content
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}-\d{2}-\d{2}).*
+                with: $1
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: LordAardvark
+      Code:
+        selector: //script[contains(text(), "_filmOrigin")]
+        postProcess:
+          - replace:
+              - regex: '.*id: (\d+).*'
+                with: $1
+      Movies:
+        Name: //p[contains(text(), "Series:")]/following-sibling::a/text()
+      Tags:
+        Name: //div[contains(@class, "col")]/a[@class="player-tag"]/text()
+      Performers:
+        Name: //p[contains(text(), "Characters:")]/following-sibling::a/text()
+  sceneSearch:
+    common:
+      $film: //div[@class="question" and .//a[starts-with(@href,"films")]]
+    scene:
+      Title: $film//p[contains(@class,"search-title")]
+      Image:
+        # Not all films have an image, so we need to use the first link instead
+        # to avoid off-by-one errors in the results
+        selector: $film//img/@src
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https://lordaardvark.com"
+      URL:
+        selector: $film//p[contains(@class,"search-title")]/a/@href
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https://lordaardvark.com/"
+driver:
+  useCDP: true
+# Last Updated January 13, 2024

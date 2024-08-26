@@ -1,4 +1,9 @@
 name: AdultFilmIndex
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://adultfilmindex.com
+    scraper: performerScraper
 sceneByURL:
   - action: scrapeJson
     url:
@@ -8,14 +13,14 @@ sceneByURL:
     queryURLReplace:
       url:
         - regex: '.+/movie/([^/]+)/([^/]+)/scene/([^/]+)$'
-          with: "${3}"
+          with: '${3}'
 sceneByName:
   action: scrapeJson
   queryURL: https://adultfilmindex.com/api/v1/stash/scene_search/{}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeJson
-  queryURL: "{url}"
+  queryURL: '{url}'
   scraper: sceneScraper
 sceneByFragment:
   action: scrapeJson
@@ -30,7 +35,83 @@ movieByURL:
     queryURLReplace:
       url:
         - regex: '.+/movie/([^/]+)/.+$'
-          with: "${1}"
+          with: '${1}'
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //div[@class='hero-body']/h1[@class='title']
+      Gender:
+        selector: //head/script[@type='application/ld+json' and contains(text(), 'gender')]
+        postProcess:
+          - replace:
+              - regex: '.*"gender":"(\w{1,})".*'
+                with: '$1'
+      URL: //head/link[@rel='canonical']/@href
+      Birthdate:
+        selector: //strong[text()='Date of Birth:']/..
+        postProcess:
+          - replace:
+              - regex: 'Date of Birth: (.*)'
+                with: '$1'
+          - parseDate: 2006-01-02
+      Ethnicity:
+        selector: //strong[text()='Ethnicity:']/..
+        postProcess:
+          - replace:
+              - regex: 'Ethnicity: (.*)'
+                with: '$1'
+      Country:
+        selector: //strong[text()='Country:']/..
+        postProcess:
+          - replace:
+              - regex: 'Country: (.*)'
+                with: '$1'
+      HairColor:
+        selector: //strong[text()='Hair color:']/..
+        postProcess:
+          - replace:
+              - regex: 'Hair color: (.*)'
+                with: '$1'
+      EyeColor:
+        selector: //strong[text()='EyeColor:']/..
+        postProcess:
+          - replace:
+              - regex: 'EyeColor: (.*)'
+                with: '$1'
+      Height:
+        selector: //strong[text()='Height:']/..
+        postProcess:
+          - replace:
+              - regex: 'Height: ([\d]*).*'
+                with: '$1'
+      Weight:
+        selector: //strong[text()='Weight:']/..
+        postProcess:
+          - replace:
+              - regex: 'Weight: ([\d]*).*'
+                with: '$1'
+      Measurements:
+        selector: //strong[text()='Measurements:']/..
+        postProcess:
+          - replace:
+              - regex: 'Measurements: (.*)'
+                with: '$1'
+      FakeTits:
+        selector: //strong[text()='Natural boobs:']/..
+        postProcess:
+          - replace:
+              - regex: 'Natural boobs: ([\w]*).*'
+                with: '$1'
+          - map:
+              'Yes': 'No'
+              'No': 'Yes'
+      Tattoos:
+        selector: //strong[text()='Tattoos:']/..
+        postProcess:
+          - replace:
+              - regex: 'Tattoos: (.*)'
+                with: '$1'
+      Image: //div[@class='hero-body']/img[@class='actor-image']/@src
 jsonScrapers:
   sceneSearch:
     scene:
@@ -50,7 +131,7 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: T.*$
-                with: ""
+                with: ''
           - parseDate: 2006-01-02
       Movies:
         Name: data.movie.title
@@ -71,7 +152,7 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: T.*$
-                with: ""
+                with: ''
           - parseDate: 2006-01-02
       Studio:
         Name: data.studio.name
@@ -83,4 +164,6 @@ driver:
       Value: stashjson/1.0.0
     - Key: Authorization # Beta key, enabled and active for now
       Value: Bearer 4vY0iwSUVPH5cGAX1AUZarJ8pbuDUK53
-# Last Updated February 05, 2022
+# Last Updated June 22, 2022
+
+

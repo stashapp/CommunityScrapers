@@ -3,11 +3,48 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - xnxx.com
+      - xnxx3.com
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.xnxx.com/search/{}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[@id="content-thumbs"]/div[@class="mozaique cust-nb-cols"]/div[contains(@class,"thumb-block")]
+    scene:
+      Title: $searchItem/div[@class="thumb-under"]/p/a/@title
+      URL:
+        selector: $searchItem/div[@class="thumb-under"]/p/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.xnxx.com"
+      Image:
+        selector: $searchItem//div[@class="thumb"]/a/img/@data-src
+
   sceneScraper:
     scene:
-      Title: //div[@class="clear-infobar"]/strong/text()
+      Title:
+        selector: //div[@class="video-title"]/strong
+        postProcess:
+          - javascript: |
+              if(value?.length){
+                return value.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+              }
+      Date:
+        selector: //script[@type="application/ld+json"]
+        postProcess:
+          - replace:
+              - regex: .+(?:"uploadDate":\s*")([^T]+).+
+                with: $1
+          - parseDate: 2006-01-02
       Tags:
         Name: //div[@class="metadata-row video-tags"]/a/text()
       Studio:
@@ -17,6 +54,6 @@ xPathScrapers:
         selector: //script[contains(text(), "setThumbUrl169")]/text()|//div[@id="html5video"][span[@class="premium-log-overlay"]]/div[@class="embed-responsive-item"]/@style
         postProcess:
           - replace:
-            - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.jpg).+$
-              with: $1
-# Last Updated November 11, 2020
+              - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.jpg).+$
+                with: $1
+# Last Updated August 06, 2024

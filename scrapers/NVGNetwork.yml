@@ -1,0 +1,51 @@
+name: NVG Network
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vip.netvideogirls.com/members/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $details: //div[@class="movie-info"]
+    scene:
+      Title:
+        selector: //title
+        postProcess:
+          - replace:
+            - regex: '.+ / (.+?) / .+'
+              with: $1
+      Code:
+        selector: //div[@class="react-player__preview"]/@style
+        postProcess:
+          - replace:
+            - regex: '.+static\.netvideogirls\.com\/(\d+)-.+'
+              with: $1
+      Date:
+        selector: //div[@class="tool_inform"]//i[@class="icon-calendar"]/../span/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Studio:
+        Name: //div[@class="tool_inform"]//div[@class="name"]/a/text()
+        URL:
+          selector: //div[@class="tool_inform"]//div[@class="name"]/a/@href
+          postProcess:
+            - replace:
+              - regex: (.+)
+                with: https://vip.netvideogirls.com$1
+      Image:
+        selector: //div[@class="react-player__preview"]/@style
+        postProcess:
+          - replace:
+              - regex: .+url\("(.+)"\).+
+                with: $1
+      Tags:
+        Name: //div[@class="tool_list"]//div[@class="item"]/span/text()
+driver:
+  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: ''
+    - Key: Cookie
+      Value: ''
+# Last Updated October 19, 2023

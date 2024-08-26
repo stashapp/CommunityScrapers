@@ -1,0 +1,90 @@
+name: ClubDom
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - clubdom.com/tour
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - clubdom.com/vod
+    scraper: vodScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.clubdom.com/vod/search.php?query={}
+  scraper: vodSearch
+sceneByFragment:
+  action: scrapeXPath
+  scraper: vodSearch
+  queryURL: https://www.clubdom.com/vod/search.php?st=advanced&qex={title}
+  queryURLReplace:
+     title:
+       - regex: " "
+         with: "+"
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: vodScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //span[@class="left"]/h1
+      Date:
+        selector: //strong[contains(.,"Release date:")]/following-sibling::text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //span[@class="models_list"]//a
+      Tags:
+        Name: //span[@class="categories"]//a
+      Details:
+        selector: //strong[contains(.,"Description:")]/following-sibling::text()
+      Image:
+        selector: //div[@class="videoplayer"]/img//@src0_1x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+      Studio:
+        Name:
+          fixed: Club Dom
+  vodScraper:
+    scene:
+      URL: //div[@class='cell content_tab_current']/a/@href
+      Title:
+        selector: //span[@class="title_bar_hilite"]
+      Date:
+        selector: //div[@class="gallery_info"]/div[1]//div[@class="cell update_date"]
+        postProcess:
+          - parseDate: 01/02/2006
+      Performers:
+        Name: //div[@class="gallery_info"]/span[@class="update_models"]/a
+      Tags:
+        Name: //span[@class="update_tags"]/a
+      Details:
+        selector: //span[@class="update_description"]
+      Image:
+        selector: //base/@href|//div[@id="download_form"]/following-sibling::script
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: '(.*)/vod/\|.*thumbnail:"(.*)",vtt_file:.*'
+                with: $1$2
+      Studio:
+        Name:
+          fixed: Club Dom
+  vodSearch:
+    common:
+      $update-details: //div[@class="update_details"]
+    scene:
+      Title:
+        selector: $update-details/a[2]/text()
+      URL:
+        selector: $update-details/a[2]/@href
+      Image:
+        selector: $update-details/a[1]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+# Last Updated August 16, 2024

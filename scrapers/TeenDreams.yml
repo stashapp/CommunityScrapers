@@ -1,0 +1,53 @@
+name: Teen Dreams
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - teendreams.com/t4/trailers/
+      - teen-depot.com/t4/trailers/
+    scraper: teendreams
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - teendreams.com/t4/scenes/
+      - teen-depot.com/t4/scenes/
+    scraper: teendreams
+
+xPathScrapers:
+  teendreams:
+    common:
+      $image: //img[contains(@class, "update_thumb")]
+    scene:
+      Title: &title //meta[@property='og:title']/@content
+      Details: &details //p[@class="description" and not(contains(.,"Deprecated"))]
+      URL: &url //link[@rel="canonical"]/@href
+      Date: &date
+        selector: //div[@class="content-date"]
+        postProcess:
+          - replace:
+              - regex: "Released: "
+                with: ""
+      Image:
+        selector: //base/@href | //script[contains(text(), "video_content")]
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: (https://[^/]+).*poster="([^"]+).*
+                with: $1$2
+              - regex: -[1-4]x\.
+                with: -full.
+      Studio: &studio
+        Name: //meta[@name="author"]/@content
+      Performers: &performers
+        Name:
+          selector: //h3[@class="item-name"]/span
+          split: "&"
+
+    gallery:
+      Title: *title
+      Details: *details
+      URL: *url
+      Date: *date
+      Studio: *studio
+      Performers: *performers
+# Last Updated May 25, 2024

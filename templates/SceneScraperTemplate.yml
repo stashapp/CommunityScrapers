@@ -8,6 +8,8 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
+      Code:
+      Director:
       Details:
       Date:
         selector:
@@ -16,11 +18,10 @@ xPathScrapers:
       Image:
       Studio:
         Name:
-      Movies:
-        Name:
       Tags:
         Name:
       Performers:
         Name:
-
-# Last Updated June XX, 2020
+      Movies:
+        Name:
+# Last Updated June XX, 2024

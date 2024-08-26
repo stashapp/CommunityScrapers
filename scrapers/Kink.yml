@@ -1,4 +1,4 @@
-name: kink
+name: Kink
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -11,47 +11,236 @@ sceneByFragment:
   # constructs the scene URL from the filename, provided that the filename includes the scene id
   queryURLReplace:
     filename:
-        # the id in kink.com is a 1-6 digit number
-      - regex: ^(\d+)[^\d].*  # support filenames in the form 12345_performer_other_data.mp4
+      # the id in kink.com is a 1-6 digit number
+      - regex: ^(\d+)[^\d].* # support filenames in the form 12345_performer_other_data.mp4
         with: $1
       - regex: .*\((\d+)\)\.[a-zA-Z\d]+$ #support filenames in the form scene - date - performer (12345).mp4
         with: $1
   scraper: sceneScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.kink.com/search?type=performers&q={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - kink.com/model
+    scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //meta[@name="twitter:title"]/@content
-      Date:
-        selector: //span[@class="shoot-date"]/text()
+      Title:
+        selector: //h1[contains(@class, "fs-0")]
         postProcess:
-          - parseDate: January 2, 2006
-      Details:
-        selector: //span[@class="description-text"]/*[self::p or self::ul]
-        concat: "\n\n"
-      Performers:
-        Name:
-          selector: //p[@class="starring"]/span[@class="names h5"]/a/text()
-          postProcess:
-            - replace:
-                - regex: \,
-                  with: ""
-      Tags:
-        Name:
-          selector: //a[@class="tag"]
-          postProcess:
-            - replace:
-                - regex: \,
-                  with: ""
-      Image: //meta[@name="twitter:image"]/@content
+          - replace:
+              - regex: ^\s*(.*)\s*$
+                with: $1
+      Code: //div[@data-shootid]/@data-shootid
+      Date:
+        selector: //div[@data-setup]/@data-setup
+        postProcess:
+          - replace:
+              - regex: ^.*"publishedDate":"([^"]+).*$
+                with: $1
+          - parseDate: 2006-01-02
+      Director: //span[contains(@class, "director-name")]
       Studio:
         Name:
-          selector: //div[@class="column shoot-logo"]/a/@href
+          selector: //a[contains(@href, "/channel/") and contains(@class, "text-uppercase")]/@href
           postProcess:
             - replace:
                 - regex: /channel/
                   with: ""
+            - map:
+                # List of sites as of 2024-06-18 from https://www.kink.com/channels
+                # [...new Set([...document.querySelectorAll('a.h5[href^="/channel"]')]
+                #   .map(a => a.href.split("/").pop() + ": " + a.innerText))]
+                #   .toSorted()
+                #   .join("\n")
+                behind-kink: Behind Kink
+                bondage-liberation: Bondage Liberation
+                bound-gang-bangs: Bound Gang Bangs
+                device-bondage: Device Bondage
+                divine-bitches: Divine Bitches
+                dungeon-sex: Dungeon Sex
+                electrosluts: Electrosluts
+                everything-butt: Everything Butt
+                evolved-fights-lesbian-edition: Evolved Fights Lesbian Edition
+                evolved-fights: Evolved Fights
+                families-tied: Families Tied
+                filthy-femdom: Filthy Femdom
+                foot-worship: Foot Worship
+                fucking-machines: Fucking Machines
+                hardcore-gangbang: Hardcore Gangbang
+                harmony-fetish: Harmony Fetish
+                hogtied: Hogtied
+                kink-classics: Kink Classics
+                kink-features: Kink Features
+                kink-test-shoots: Kink Test Shoots
+                kink-university: Kink University
+                kinklive: KinkLive
+                kinky-bites: Kinky Bites
+                mean-bitch: Mean Bitch
+                men-in-pain: Men In Pain
+                public-disgrace: Public Disgrace
+                quality-control: Quality Control
+                savage-gangbang: Savage Gangbang
+                severe-sex-films: Severe Sex Films
+                sex-and-submission: Sex And Submission
+                submissed: Submissed
+                submissive-x: Submissive X
+                tease-and-thank-you: Tease And Thank You
+                the-training-of-o: The Training Of O
+                the-upper-floor: The Upper Floor
+                ts-pussy-hunters: TS Pussy Hunters
+                ts-seduction: TS Seduction
+                ultimate-surrender: Ultimate Surrender
+                wasteland: Wasteland
+                water-bondage: Water Bondage
+                whipped-ass: Whipped Ass
+                wired-pussy: Wired Pussy
+      Performers:
+        Name:
+          selector: //div[@data-setup]/@data-setup
+          postProcess:
+            - replace:
+                - regex: ^.*"modelNames":\[([^]]+).*$
+                  with: $1
+                - regex: \"
+                  with: ""
+          split: ","
+      Tags:
+        Name:
+          selector: //h4[contains(text(), "Categories")]/following-sibling::*/a
+          postProcess:
+            - replace:
+                - regex: \,\s*
+                  with: ""
+      Details:
+        selector: //h4[contains(text(), "Description")]/following-sibling::*[1]//text()
+        concat: "\n"
+      Image:
+        selector: //div[@data-setup]/@data-setup
+        postProcess:
+          - replace:
+              - regex: ^.*"posterUrl":"([^"]+).*$
+                with: $1
+              - regex: "\\?.*$"
+                with: ""
+      # Pages do not include canonical URL links as of 2024
+      # but I'm leaving this in case they change that back
       URL: //link[@rel="canonical"]/@href
+  performerSearch:
+    common:
+      $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
+    performer:
+      Name: $result/img/@alt
+      URL:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.kink.com
+
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1/text() # //div[@font-size][number(translate(@font-size,"px",""))>=35]/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ^\s+
+                with: ""
+              - regex: \s+$
+                with:
+      Twitter:
+        selector: '//div/a[contains(concat(" ", normalize-space(@class), " "), " social-link ") and contains(@href, "twitter.com")]/@href'
+      Image:
+        selector: //img[contains(@class,'kink-slider-img') and contains(@class,'active')]/@data-src
+      Tattoos:
+        selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/tattoo')]/span/text()
+        postProcess:
+          - replace:
+              - regex: .+
+                with: "Yes"
+      Piercings:
+        selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/pierced')]/span/text()
+        concat: "\n"
+      Tags:
+        Name: //div/span[contains(text(),'tags:')]/following-sibling::a/span/text()
+      Details:
+        selector: //div/span/p[@class="bio"]/following-sibling::p
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: "(?i)<a[^>]*>"
+                with: ""
+      FakeTits:
+        selector: >
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/fake-boobs') or contains(@href,'/natural-boobs')]/span/text()
+        postProcess:
+          - replace:
+              - regex: .*?Fake.+
+                with: "Yes"
+              - regex: .*?Natural.+
+                with: "No"
+      HairColor:
+        selector: >
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black-hair')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunet')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunette')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blond')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blonde')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/redhead')]/span/text()
+        postProcess:
+          - replace:
+              - regex: \sHair
+                with: ""
+      Ethnicity:
+        selector: >
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/asian')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/latin')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/mixed')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/white')]/span/text()
+      Circumcised:
+        selector: >
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/circumcised')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/uncircumcised')]/span/text()
+        postProcess:
+          - replace:
+              - regex: Uncircumcised
+                with: "Uncut"
+              - regex: Circumcised
+                with: "Cut"
+      Gender:
+        selector: //script[contains(.,'KinkyTracking.all')]
+        postProcess:
+          - replace:
+              - regex: .+?"((modelGender)|(genderIds))":"((woman)|(man)|(nonbinary)|(tsman)|(tswoman)|(unknown))".+
+                with: "%%%$4" # This little trick will make sure we're left
+              - regex: ^[^%].+ # with an empty string if we don't match anything
+                with: "" # in the regex above.
+              - regex: ^%+
+                with: ""
+          - map:
+              woman: Female
+              man: Male
+              tswoman: Transgender Female
+              tsman: Transgender Male
+              nonbinary: Non-Binary
+              unknown: ""
+      URL:
+        selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
+        concat: "__SEP__"
+        postProcess:
+          - replace:
+              - regex: ^.+?multiSite:'([^']+).+?__SEP__(.+)
+                with: https://$1/model/$2
+
 driver:
-  useCDP: true
-# Last Updated January 25, 2022
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0.0
+# Last Updated April 22, 2024

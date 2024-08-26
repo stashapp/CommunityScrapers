@@ -1,0 +1,31 @@
+name: Brasileirinhas
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - brasileirinhas.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Code:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: .*?(\d+)\.html$
+                with: $1
+      Details:
+        selector: //section[@id='videoSelecionado']//div[@class='sinopseVideo']/*[not(self::h1)]//text()
+        concat: " "
+      Image:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: .*?(\d+)\.html
+                with: https://static1.brasileirinhas.com.br/Brasileirinhas/images/conteudo/cenas/player/$1.jpg
+      Studio:
+        Name:
+          fixed: Brasileirinhas
+      Tags:
+        Name: //section[@id='videoSelecionado']//ul[@class='ulTaguer']/li[@class='liTaguer']/a/text()
+# Last Updated August 18, 2024

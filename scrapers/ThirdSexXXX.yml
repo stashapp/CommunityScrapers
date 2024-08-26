@@ -18,11 +18,16 @@ xPathScrapers:
               - regex: "^Added: +(\\d+)/(\\d+)/(\\d+) .+$"
                 with: $3-$1-$2
       Performers:
-        Name: //div[@class="info"]/p[contains(., "Starring")]/a
+        Name:
+          selector: //div[@class="info"]/p[contains(., "Starring")]/a
+          postProcess:
+            - replace:
+                - regex: ^[a-z]+\.\s*
+                  with: ""
       Details: //div[@class="description"]/p
       Tags:
         Name: //div[contains(@class, "tags")]//a
       Studio:
         Name:
           fixed: ThirdSexXXX
-# Last Updated December 26, 2021
+# Last Updated October 04, 2022

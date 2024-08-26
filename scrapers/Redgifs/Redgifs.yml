@@ -1,0 +1,33 @@
+name: Redgifs
+# requires: py_common
+
+sceneByURL:
+  - action: script
+    script:
+      - python
+      - Redgifs.py
+      - scene-by-url
+    url:
+      - redgifs.com/watch/
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Redgifs.py
+    - scene-by-fragment
+
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Redgifs.py
+    - scene-by-query-fragment
+
+sceneByName:
+  action: script
+  script:
+    - python
+    - Redgifs.py
+    - scene-by-name
+# Last Updated May 02, 2024

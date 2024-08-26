@@ -1,4 +1,4 @@
-name: himerostv
+name: HimerosTV
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -32,4 +32,7 @@ xPathScrapers:
                 with: https://himeros.tv$1
               - regex: "-1x.jpg"
                 with: "-3x.jpg"
-# Last Updated January 09, 2022
+      Studio:
+        Name:
+          fixed: HimerosTV
+# Last Updated November 06, 2023

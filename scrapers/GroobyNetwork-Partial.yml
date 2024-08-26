@@ -1,43 +1,300 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: "GroobyNetwork-Partial"
-sceneByURL:
+performerByURL:
   - action: scrapeXPath
     url:
-    # Gone through list at: grooby.com/about/websites/
+      - transvr.com/tour/models
+    scraper: performerScraper
+  - action: scrapeXPath
+    url:
+      - transexpov.com/tour/models
+    scraper: performerScraperB
+  - action: scrapeXPath
+    url:
+      - asiantgirl.com/tour/models
+      - franks-tgirlworld.com/tour/models
+      - ladyboy-ladyboy.com/tour/models
+      - ladyboy.xxx/tour/models
+    scraper: performerScraper2
+  - action: scrapeXPath
+    url:
+      - blacktgirlshardcore.com/tour/models
+      - black-tgirls.com/tour/models
+      - bobstgirls.com/tour/models
+      - femout.xxx/tour/models
+      - femoutsex.xxx/tour/models
+      - groobygirls.com/tour/models
+      - realtgirls.com/tour/models
+      - tgirlsex.xxx/tour/models
+      - tgirls.porn/tour/models
+      - tgirls.xxx/tour/models
+      - tgirlsfuck.com/tour/models
+      - tgirltops.com/tour/models
+      - transgasm.com/tour/models
+    scraper: performerScraper3
+  - action: scrapeXPath
+    url:
+      - brazilian-transsexuals.com/tour/models
+    scraper: performerScraper4
+  - action: scrapeXPath
+    url:
+      - grooby-archives.com/tour/models
+    scraper: performerScraper5
+  - action: scrapeXPath
+    url:
+      - tgirlshookup.com/tour/models
+    scraper: performerScraper6
+  - action: scrapeXPath
+    url:
+      - transnificent.com/tour/models
+    scraper: performerScraper7
+  - action: scrapeXPath
+    url:
+      - groobyvr.com/tour/models
+    scraper: performerScraper8
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      # Gone through list at: grooby.com/about/websites/
       - asiantgirl.com
       - blacktgirlshardcore.com
       - black-tgirls.com
       - bobstgirls.com
+      - brazilian-transsexuals.com
+      - femout.xxx
       - femoutsex.xxx #Scenes on 'femout.xxx' can some times be found on this one as well
       - franks-tgirlworld.com
       - grooby-archives.com
       - groobygirls.com
-      - groobyvr.com
       - ladyboy-ladyboy.com
       - ladyboy.xxx
+      - realtgirls.com
       - tgirlsex.xxx
       - tgirls.porn
       - tgirls.xxx
+      - tgirlsfuck.com
+      - tgirlshookup.com
+      - tgirltops.com
       - transexpov.com
       - transgasm.com
+      - transnificent.com
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - groobyvr.com
+    scraper: sceneScraperGroobyVR
+  - action: scrapeXPath
+    url:
+      - transvr.com
+    scraper: sceneScraperTransVR
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: galleryScraper
 xPathScrapers:
+  performerScraper:
+    performer:
+      Name: &name //h3[@class="modelname"]/text()|//div[@class="model_profile_name"]/text()
+      Gender: &gender
+        fixed: transgender_female
+      Image: &image
+        selector: //link[@rel="canonical"]/@href|//div[@class="model_photo"]/img/@src|//div[@class="model_thumbnail"]/img/@src
+        concat: "__SEPARATOR__"
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]*)/.*__SEPARATOR__(.*)$
+                with: $1$2
+              - regex: 2x
+                with: 3x
+      Country: &country //li/b[text()="Nationality:"]/following-sibling::text()|//li/b[text()="Location:"]/following-sibling::text()
+      Ethnicity: &ethnicity //li/b[text()="Ethnicity:"]/following-sibling::text()
+      Birthdate: &birthdate
+        selector: &birthdateSel //li//b[text()="Birthday:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: (\d)(st|[nr]d|th)
+                with: "$1"
+          - parseDate: 2 January
+  performerScraperB:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: &image3x
+        selector: //link[@rel="canonical"]/@href|//div[@class="model_photo"]/img/@src0_3x|//div[@class="model_thumbnail"]/img/@src0_3x
+        concat: "__SEPARATOR__"
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]*)/.*__SEPARATOR__(.*)$
+                with: $1$2
+              - regex: content//
+                with: content/
+      Country: *country
+      Ethnicity: *ethnicity
+      Birthdate: *birthdate
+  performerScraper2:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image3x
+      Country:
+        selector: //li/b[text()="Location:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: "^.*,\ "
+                with: ""
+      Birthdate: *birthdate
+      Height:
+        selector: //div[@class="readmore"]/p
+        postProcess:
+          - replace:
+              - regex: ^.*Height:\ (\d+).*$
+                with: $1
+  performerScraper3:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image3x
+      Birthdate: *birthdate
+  performerScraper4:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image3x
+      Birthdate: *birthdateSel
+  performerScraper5:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image:
+        selector: //link[@rel="canonical"]/@href|//div[@class="model_photo"]/img/@src0
+        concat: "__SEPARATOR__"
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]*)/.*__SEPARATOR__(.*)$
+                with: $1$2
+              - regex: 2x
+                with: 3x
+      Birthdate: *birthdate
+  performerScraper6:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image3x
+      Birthdate:
+        selector: *birthdateSel
+        postProcess:
+          - replace:
+              - regex: (\d)(st|[nr]d|th)
+                with: "$1"
+              - regex: ([A-Za-z]+)\ (\d+)
+                with: "$2 $1"
+          - parseDate: 2 January
+  performerScraper7:
+    performer:
+      Name: *name
+      Gender:
+        fixed: transgender_male
+      Image: *image3x
+      Birthdate: *birthdate
+  performerScraper8:
+    performer:
+      Name: *name
+      Gender: *gender
+      Image: *image
+      Country: *country
+      Ethnicity: *ethnicity
+      Birthdate: *birthdate
+      Height:
+        selector: //li/b[text()="Height:"]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Measurements: //li/b[text()="Breast Size:"]/following-sibling::text()
   sceneScraper:
     scene:
-      Title: //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()
-      Date:
+      Title: &title //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()
+      Date: &date
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
           - parseDate: January 2, 2006
-      Details: //div[@class="trailerpage_info"]/p[not(@class)]/text()
-      Performers:
+      Details: &details
+        selector: //div[@class="trailerpage_info"]/p[not(@class)]/descendant-or-self::*/text()
+        concat: "\n\n"
+      Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
-      Studio:
+      Studio: &studio
         Name: //meta[@name="author"]/@content
+        URL:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: (https://[^/]*)/.*
+                  with: $1
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //link[@rel="canonical"]/@href|//img[contains(@class, "update_thumb thumbs stdimage")]/@src|//img[contains(@class, "update_thumb thumbs stdimage")]/@src0_1x|//div[@class="trailerposter"]/img/@src0
+        concat: "__SEPARATOR__"
         postProcess:
           - replace:
-              - regex: ^// # bobstgirls
+              - regex: ^.*__SEPARATOR__// # bobstgirls
                 with: "https://"
-
-# Last Updated July 20, 2021
+              - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$
+                with: $1$2
+              - regex: content//
+                with: content/
+              - regex: __SEPARATOR__
+                with: ''
+      Tags:
+        Name:
+          selector: &tagsSel //div[@class="set_tags"]/ul/li//a/text()
+  galleryScraper:
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Studio: *studio
+      Tags:
+        Name: *tagsSel
+  sceneScraperGroobyVR:
+    scene:
+      Title: *title
+      Date: &dateVR
+        selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: &detailsVR
+        selector: //div[@class="trailerblock"]/p[not(@class)]/descendant-or-self::*/text()
+        concat: "\n\n"
+      Performers: &performersVR
+        Name: //div[@class="trailer_toptitle_left"]//a/text()
+      Studio: *studio
+      Image:
+        selector: &imageSelVR //dl8-video/@poster
+        postProcess:
+          - replace:
+              - regex: content// # errant double slash
+                with: content/
+              - regex: ^/
+                with: https://www.groobyvr.com/
+      Tags: &tagsVR
+        Name:
+          selector: //div[@class="set_tags"]/ul/li/text()|//div[@class="set_tags"]/ul/li//a/text()
+          postProcess:
+            - map:
+                Tags for This Scene: Virtual Reality
+  sceneScraperTransVR:
+    scene:
+      Title: //dl8-video/@title
+      Date: *dateVR
+      Details: *detailsVR
+      Performers: *performersVR
+      Studio: *studio
+      Image:
+        selector: *imageSelVR
+        postProcess:
+          - replace:
+              - regex: content// # errant double slash
+                with: content/
+              - regex: ^/
+                with: https://www.transvr.com/
+      Tags: *tagsVR
+# Last Updated August 01, 2024

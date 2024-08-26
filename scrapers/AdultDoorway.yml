@@ -1,0 +1,69 @@
+name: AdultDoorway
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - adultdoorway.com/tour/
+      - amateurthroats.com/tour/
+      - analrecruiters.com/tour/
+      - blackonblackcrime.com/tour/
+      - bustyamateurboobs.com/tour/
+      - clubamberrayne.com/tour/
+      - ebonycumdumps.com/tour/
+      - facialabuse.com/tour/
+      - fuckmepov.com/tour/
+      - ghettodoorway.com/tour/
+      - ghettogaggers.com/tour/
+      - hardcoredoorway.com/tour/
+      - hugerubberdicks.com/tour/
+      - joethepervert.com/tour/
+      - latinaabuse.com/tour/
+      - monstercockmadness.com/tour/
+      - nastylittlefacials.com/tour/
+      - pinkkittygirls.com/tour/
+      - pornaddict.com/tour/
+      - povhotel.com/tour/
+      - sexysuckjobs.com/tour/
+      - spermsuckers.com/tour/
+      - thehandjobsite.com/tour/
+      - thepantyhosesite.com/tour/
+
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $scene: //div[contains(@class,"update-info ")]
+    scene:
+      Title:
+        selector: $scene//h1
+      Details: //div[@class="update-info-block"]/div[@class="update-info-block"][not(ul)]
+      Date:
+        selector: ($scene//strong[contains(text(),'Added')]/following-sibling::text())[1]
+        postProcess:
+          - replace:
+              - regex: ^([^\|]+).*
+                with: $1
+          - parseDate: January 2, 2006
+      Image:
+        selector: >
+          //base/@href
+          | //div[@id='fakeplayer']//img/@src0_1x 
+          | //div[@id='fakeplayer']//img/@src0_2x 
+          | //div[@id='fakeplayer']//img/@src0_3x 
+          | //div[@id='fakeplayer']//img/@src0_4x
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: ^(.+(\.com)).+__SEP__(.+)$
+                with: $1$3
+              - regex: ^.+(https:.+)$
+                with: $1
+      Tags:
+        Name: $scene//ul[@class='tags']/li/a/text()
+      Studio:
+        Name:
+          selector: //div[@class="update-info-block"]//span[contains(@class,"bg-secondary")]/text()
+          postProcess:
+            - replace:
+                - regex: "[^a-zA-Z0-9]+$"
+                  with: ""
+# Last Updated March 28, 2024

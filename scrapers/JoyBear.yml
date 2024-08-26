@@ -2,42 +2,81 @@ name: JoyBear
 sceneByURL:
   - action: scrapeXPath
     url:
-      - joybear.com
-    scraper: sceneScraper
+      - joybear.com/movies/
+    scraper: joybear
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://www.joybear.com/movies?q={}"
+  scraper: search
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: joybear
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - joybear.com/features/
+    scraper: joybear
+
 xPathScrapers:
-  sceneScraper:
+  joybear:
     scene:
       Title:
-        selector: //span[@class="wide title"]
-      Date:
-        selector: //span[@class="wide source"]/a/following-sibling::text()
+        selector: //h1
         postProcess:
           - replace:
-              - regex: "Published on"
+              - regex: ^Scene\s*(—|-)\s*
                 with: ""
-              - regex: (\d+)(st|nd|rd|th)
-                with: "$1"
-          - parseDate: 2 January 2006
-      Performers:
-        Name: //span[@class="wide cast"]//a
-      Movies:
-        Name:
-          selector: //span[@class="wide source"]/a
-      URL:
-        selector: //span[@class="wide source"]/a/@href
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://www.joybear.com
       Details:
-        selector: //span[@class="wide text"]
-      Image:
-        selector: //div[@class="wide membervideo"]/script/text()
+        selector: //div[@class="descriptions"]/p
+        concat: "\n\n"
+      Movies:
+        Name: //div[@class="fFilms"]//a/img/@alt
+        URL:
+          selector: //div[@class="fFilms"]//a/@href
+          postProcess: &makeAbsolute
+            - replace:
+                - regex: ^
+                  with: https://joybear.com
+        FrontImage: //div[@class="fFilms"]//a/img/@src
+        Studio: &studioName
+          Name:
+            fixed: JoyBear
+      Performers:
+        Name: //div[@class="castModels"]//a/span
+        URL:
+          selector: //div[@class="castModels"]//a/@href
+          postProcess: *makeAbsolute
+      Tags:
+        Name: //div[@class="categories"]//a
+      Studio: *studioName
+      Image: &image
+        selector: //script[contains(text(), "poster")]
         postProcess:
           - replace:
-              - regex: .*?(https?:\/\/\S*\.jpg).*
+              - regex: .*poster:\s*"([^"]+).*
                 with: $1
-      Studio:
-        Name:
-          fixed: Joy Bear
-# Last Updated April 20, 2021
+    movie:
+      Name:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ^Feature\s*(—|-)\s*
+                with: ""
+      Synopsis: //div[@class="descriptions"]/p
+      FrontImage: *image
+      Studio: *studioName
+  search:
+    scene:
+      Title:
+        selector: //div[@class="allVideos"]//img[@alt]/@alt
+        postProcess:
+          - replace:
+              - regex: "joybear original porn video"
+                with: ""
+      Image: //div[@class="allVideos"]//video/@poster
+      URL:
+        selector: //div[@class="allVideos"]/a/@href
+        postProcess: *makeAbsolute
+# Last Updated May 24, 2024

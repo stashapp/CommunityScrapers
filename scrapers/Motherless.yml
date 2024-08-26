@@ -1,13 +1,40 @@
-name: "Motherless"
+name: Motherless
 sceneByURL:
   - action: scrapeXPath
     url:
       - motherless.com
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://motherless.com/term/{}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://motherless.com/{filename}
+  queryURLReplace:
+    filename:
+      - regex: .*?([0-9A-Za-z]{7,8}).*
+        with: $1
+  scraper: sceneScraper
+
 xPathScrapers:
+  sceneSearch:
+    common:
+      $video: //div[h2[contains(., "Videos")]]//a[contains(@class, "img-container")]
+    scene:
+      Title: $video/..//a[@title]/@title
+      URL: $video/..//a[@title]/@href
+      Image: $video//img[@class="static"]/@src
+      Studio:
+        Name: $video/..//a[@class="uploader"]
+
   sceneScraper:
     common:
-        $meta: //div[@class='media-meta']
+      $meta: //div[@class='media-meta']
     scene:
       Title: $meta//h1/text()
       Date:
@@ -20,7 +47,6 @@ xPathScrapers:
           selector: //h4/a[contains(@href,"/term/")]/text()
           postProcess:
             - replace:
-              - regex: \#
-                with:
-
+                - regex: \#
+                  with:
 # Last Updated October 06, 2020

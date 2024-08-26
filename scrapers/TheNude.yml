@@ -6,13 +6,18 @@ performerByName:
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://www.thenude.com
+      - thenude.com
     scraper: performerScraper
+sceneByURL: &coverByURL
+  - action: scrapeXPath
+    url:
+      - thenude.com/cover
+    scraper: coverScraper
+galleryByURL: *coverByURL
+
 xPathScrapers:
   performerSearch:
     performer:
-      #      Name: //a[@class="model-name"]/text()               Version to get only the name
-      #      Name: //a[@class="model-name"]/../../a/@title       Version to get a little info on label/studio as well
       Name:
         selector: //figcaption/span
         postProcess:
@@ -22,43 +27,94 @@ xPathScrapers:
       URL: //a[@class="model-name"]/@href
   performerScraper:
     performer:
-      Name: //span[@class="model-name"]/text()
-      URL:
-        selector: //meta[@itemprop="url"]/@content
-      Twitter: //a[text()="TWITTER"]/@href
-      Instagram: //a[text()="INSTAGRAM"]/@href
-      Birthdate:
-        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
-        postProcess:
-          - parseDate: January 2006
-          - parseDate: ??-??-2006
-      Ethnicity:
-        selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/../text()
+      Name: //span[@class="model-name"]
+      URL: //link[@rel="canonical"]/@href
+      Twitter:
+        selector: //a[text()="TWITTER"]//@href
         postProcess:
           - replace:
-              - regex: Asian
-                with: "asian"
-              - regex: Caucasian
-                with: "white"
-              - regex: Black
-                with: "black"
-              - regex: Latin
-                with: "hispanic"
+              - regex: 'https?://(?:www.)?twitter\.com\/'
+                with: ""
+              - regex: 'https?://(?:www.)?x\.com\/'
+                with: ""
+              - regex: \/$
+                with: ""
+              - regex: "tv"
+                with: "TV"
+              - regex: "official"
+                with: "Official"
+              - regex: '\s\s'
+                with: " "
+      Instagram:
+        selector: //a[text()="INSTAGRAM"]//@href
+        postProcess:
+          - replace:
+              - regex: 'https?://(?:www.)?instagram\.com\/'
+                with: ""
+              - regex: \/$
+                with: ""
+              - regex: "tv"
+                with: "TV"
+              - regex: "official"
+                with: "Official"
+              - regex: '\s\s'
+                with: " "
+      Birthdate:
+        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2006
+          - parseDate: "??-??-2006"
+      Ethnicity:
+        selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: "Ebony"
+                with: "Black"
+              - regex: "ebony"
+                with: "Black"
+              - regex: "white"
+                with: "Caucasian"
+              - regex: "White"
+                with: "Caucasian"
+              - regex: "hispanic"
+                with: "Latin"
+              - regex: "Hispanic"
+                with: "Latin"
+          - map:
+              asian: Asian
+              white: Caucasian
+              black: Black
+              hispanic: Latin
+              Latina: Latin
+              Arab: Middle Eastern
       Country:
         selector: //span[@itemprop="nationality"]/text()
         postProcess:
           - replace:
-              - regex: "United States of America"
+              - regex: '\bUnited\sStates\sof\sAmerica\b'
                 with: "United States"
-      #EyeColor: not listed
+      HairColor:
+        selector: //li/span[@class="list-quest"][contains(text(),'Hair')]/../text()
+        postProcess:
+          - replace:
+              - regex: "Brown"
+                with: Brunette
+              - regex: '\bBrown\sHair\b'
+                with: Brunette
+              - regex: "Fair"
+                with: Blonde
       Height:
-        selector: //li/span[@class="list-quest"][contains(text(),'Height')]/../text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Height')]/following-sibling::text()
         postProcess:
           - replace:
               - regex: ^(\d+).+$
                 with: "$1"
       Measurements:
         selector: //li/span[@class="list-quest"][contains(text(),'Measurements')]/../text()
+        postProcess:
+          - replace:
+              - regex: \/.*$
+                with: ""
       FakeTits:
         selector: //li/span[@class="list-quest"][contains(text(),'Breasts')]/../text()
         postProcess:
@@ -66,21 +122,47 @@ xPathScrapers:
               - regex: ^[^\(]+\(([^\)]+)\).*$
                 with: "$1"
               - regex: Fake
-                with: "Yes"
+                with: "Augmented"
               - regex: Real
-                with: "No"
+                with: "Natural"
+              - regex: Medium
+                with: ""
       CareerLength:
-        selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/../text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/following-sibling::text()
         concat: "-"
       Aliases:
         selector: //meta[@itemprop="additionalName"]/@content
         concat: ", "
       Tattoos:
         selector: //li/span[@class="list-quest"][contains(text(),'Tattoos')]/../text()
+        postProcess:
+          - replace:
+              - regex: '\byes\b'
+                with: "Various"
+              - regex: '\bno\b'
+                with: "None"
+              - regex: '\bYes\b'
+                with: "Various"
+              - regex: "/bNo/b"
+                with: "None"
+              - regex: '\.'
+                with: ""
       Piercings:
         selector: //li/span[@class="list-quest"][contains(text(),'Piercings')]/../text()
+        postProcess:
+          - replace:
+              - regex: '\byes\b'
+                with: "Various"
+              - regex: '\bno\b'
+                with: "None"
+              - regex: '\bYes\b'
+                with: "Various"
+              - regex: "/bNo/b"
+                with: "None"
+              - regex: '\.'
+                with: ""
       Image:
-        selector: //meta[@itemprop="url"]/@content
+        selector: //link[@rel="canonical"]/@href
         postProcess:
           - replace:
               - regex: https:\/\/www\.thenude\.com\/
@@ -90,10 +172,42 @@ xPathScrapers:
       Gender:
         selector: //meta[@itemprop="gender"]/@content
       Details:
-        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/../text()
+        selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
         postProcess:
           - replace:
               - regex: ^
-                with: "Actual scraped Birthdate:"
-
-# Last Updated August 25, 2022
+                with: "Actual scraped birthdate: "
+  coverScraper:
+    scene:
+      Title: &title
+        selector: //h1/span[2]/text()
+        postProcess:
+          - replace:
+              - regex: ^\"(.*)\"$
+                with: $1
+      Date: &date
+        selector: //h2[text()[contains(.,'Published on')]]
+        postProcess:
+          - replace:
+              - regex: .*Published on\s(\d{4}-\d{2}-\d{2})
+                with: $1
+      Performers: &performers
+        Name: //h1/span[1]/a/text()
+        URL: //h1/span[1]/a/@href
+      Tags: &tags
+        Name:
+          selector: //meta[@itemprop="keywords"]/@content
+          split: ","
+      Studio: &studio
+        Name: //h1/span[3]/a/text()
+      Director: //h2/a
+      Image:
+        selector: //a[@class="gallery-image-link"]/img/@src
+    gallery:
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
+      Photographer: //h2/a
+# Last Updated July 23, 2024

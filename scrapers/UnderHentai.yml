@@ -1,0 +1,63 @@
+name: UnderHentai
+################################################################################################################
+#                                                HOW TO SET UP                                                 #
+#                           Store this file in the ~/stash/scrapers/UnderHentai.yml                            #
+#                       (If the scrapers directory is not there it needs to be created)                        #
+################################################################################################################
+#                                                  HOW TO USE                                                  #
+#                                                   SCENES:                                                    #
+#       The scene Scraper by Fragment is the best option in case the file name is the name of the anime        #
+#                      Scenes that were not found can easily be found by the name scraper                      #
+#                           Don't put the episode number otherwise it won't find it                            #
+#                        It is also possible to scrape individually with the anime URL                         #
+#        The scraper doesn't recognize the episode number, I recommend changing it manually at the end         #
+#                                              THAT'S IT, ENJOY!                                               #
+#                                           Made by @escargotbuffed                                            #
+################################################################################################################
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.underhentai.net/{filename}
+  queryURLReplace:
+    filename:
+      - regex: \..+$|\d+
+        with: ""
+      - regex: \s+
+        with: "-"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - underhentai.net/
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.underhentai.net/?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //article[@class="data-block"]//h2/a
+      URL:
+        selector: //article[@class="data-block"]//h2/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.underhentai.net/
+      Image: //article[@class="data-block"]//img/@src
+  sceneScraper:
+    scene:
+      Title: //h1[@class="content-box content-head sidebar-light"]
+      Details: //p[contains(text(),"Official Title")]/following-sibling::span
+      URL: //link[@rel="canonical"]/@href
+      Tags:
+        Name: //p[contains(text(),"Genres")]/following-sibling::a
+      Studio:
+        Name:
+            selector: //p[contains(text(),"Brand")]/following-sibling::a
+      Image: //div[@class="loading"]/img/@src
+# Last Updated June 23, 2023

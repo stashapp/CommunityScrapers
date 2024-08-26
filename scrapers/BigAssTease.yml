@@ -1,0 +1,60 @@
+name: BigAssTease
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bigasstease.com/video
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - bigasstease.com/model_bio
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class='updates-container']//p[@class='update-title']
+      Details: //p[@class='video-description']
+      Date: //li[span[@class='calendar-icon']]//p
+      Tags:
+        Name: //ul[@class='category-list']//a
+      Performers:
+        Name: //ul[@id='models-featured']//a
+      Image:
+        selector: //header//a/@href | //img[contains(@src,'/poster')]/@src
+        concat: '/'
+      Studio:
+        Name: //meta[@name='author']/@content
+
+  performerScraper:
+    performer:
+      Name: //h3/text()
+      Gender:
+        fixed: Female
+      Ethnicity: 
+        selector: //li[span[contains(.,'race')]]/text()
+        postProcess:
+          - map:
+              black: Black
+              caucasian: White
+      Weight:
+        selector: //li[span[contains(.,'weight')]]
+        postProcess:
+          - replace:
+              - regex: '[^\d]'
+                with: ''
+          - lbToKg: true
+      Height:
+        selector: //li[span[contains(.,'height')]]
+        postProcess:
+          - replace:
+              - regex: (\d)'(\d+)"
+                with: $1.$2
+          - feetToCm: true
+      Details: //p[@class='model-description']
+      Image:
+        selector: //header//a/@href | //img[contains(@src,'/bigpic')]/@src
+        concat: '/'
+
+# Last Updated May 06, 2024

@@ -2,16 +2,22 @@ name: "CzechVR"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - czechar.com
       - czechvr.com
       - czechvrcasting.com
       - czechvrfetish.com
+      - czechvrnetwork.com
+      - vrintimacy.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
+      - czechar.com
       - czechvr.com
       - czechvrcasting.com
       - czechvrfetish.com
+      - czechvrnetwork.com
+      - vrintimacy.com
     scraper: movieScraper
 
 xPathScrapers:
@@ -20,19 +26,30 @@ xPathScrapers:
       $info: &infoSel //div[@class="post"]
       $url: &urlSel //meta[@name="dl8-customization-brand-url"]/@content
     scene:
-      Title: &titleSel $info//div[@class="nazev"]/h2
-      Date: &dateSel
+      Title: &title
+        # Czech VR Network uses h1, the substudios use h2
+        selector: &titleSel $info//h1|$info//h2
+        postProcess:
+          - replace:
+              - regex: ".+ - "
+                with:
+      Date: &date
         selector: $info//div[@class="datum"]/text()
         postProcess:
           - parseDate: Jan 2, 2006
-      Details: &detailsSel //div[@class="textDetail"]/text()
+      Details: &detailsSel //div[@class="text"]/text()
       Tags:
-        Name: //div[@id="MoreTags"]/div[@class="tagsipka"]//a/text()
+        Name: //div[@class="tag new"]/a/text()
       Performers:
-        Name: $info//div[@class="featuring"]//a/text()
-      Studio:
-        Name: &studioSel //meta[@name="dl8-customization-brand-name"]/@content
-      Image: &imageSel
+        Name: $info//div[@class="modelky"]//a//span/text()
+      Studio: &studio
+        Name:
+          selector: *titleSel
+          postProcess:
+            - replace:
+              - regex: "\\d* - .+"
+                with:
+      Image: &image
         selector: $url|//dl8-video/@poster
         concat: " "
         postProcess:
@@ -50,11 +67,23 @@ xPathScrapers:
       $info: *infoSel
       $url: *urlSel
     movie:
-      Name: *titleSel
-      Duration: $info//div[@class="casDetail"]/span[@class="desktop"]/text()
-      Date: *dateSel
-      Studio:
-        Name: *studioSel
+      Name: *title
+      Duration: $info//div[@class="cas"]/text()
+      Date: *date
+      Studio: *studio
       Synopsis: *detailsSel
-      FrontImage: *imageSel
-# Last Updated September 22, 2021
+      FrontImage: *image
+
+driver:
+  cookies:
+    - CookieURL: "https://www.czechvr.com"
+      Cookies:
+        - Name: "iagree"
+          Domain: ".czechvr.com"
+          Value: "ano"
+          Path: "/"
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+
+# Last Updated April 2, 2024

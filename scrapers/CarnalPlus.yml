@@ -1,0 +1,260 @@
+name: Carnal+ / FTM+
+sceneByURL:
+  # These studios have standalone scenes
+  - action: scrapeXPath
+    url:
+      - americanmusclehunks.com/videos/
+      - bangbangboys.com/videos/
+      - cumdumpsluts.com/videos
+      - dirtyboysociety.com/videos/
+      - edwardjames.com/videos/
+      - ftmmen.com/videos/
+      - hungfuckers.com/videos/
+      - jalifstudio.com/videos/
+      - jasonsparkslive.com/videos/
+      - jockbreeders.com/videos/
+      - jockpussy.com/videos/
+      - staghomme.com/videos/
+      - teensandtwinks.com/videos/
+      - twinks.com/videos/
+    scraper: sceneScraper
+  # These studios organize their scenes into series with chapters
+  # You can tell a studio belongs in this category
+  # if there's a "SERIES" link in the main navbar for their site
+  - action: scrapeXPath
+    url:
+      - boundtwinks.com/videos/
+      - boyforsale.com/videos/
+      - funsizeboys.com/videos/
+      - gaycest.com/videos/
+      - masonicboys.com/videos/
+      - rawfuckboys.com/videos/
+      - scoutboys.com/videos/
+      - transcest.com/videos/
+      - twinkloads.com/videos/
+      - twinktop.com/videos/
+    scraper: chapterSceneScraper
+  # The network site has all scenes from the standalone sites
+  - action: scrapeXPath
+    url:
+      - barebackplus.com/videos/
+      - carnalplus.com/videos/
+      - ftmplus.com/videos/
+    scraper: networkScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $scene: &sceneContainer //body/div[contains(@class, "mainContainer")]
+    scene:
+      Title: &title
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: \s*\|.*$
+                with:
+      Details: &details
+        selector: $scene//div[@class="full-txt"]//text()
+        concat: "\n\n"
+      Image: &image $scene//video/@poster | $scene//img[contains(@class, "hiddenImg")]/@src0_1x | $scene//img[contains(@class, "hiddenImg")]/@src | $scene//img[contains(@class, "hiddenImg")]/@data-src
+      URL: &url //link[@rel="canonical"]/@href
+      Date: &dateSubscraper
+        # We need to scrape the network site to get the date, but this scraper
+        # has to work for multiple networks so we can't hardcode the network site.
+        # Instead we fetch the network name from the shortcut icon and combine it
+        # with the canonical URL to construct the correct URL to scrape
+        # see https://regex101.com/r/QaZLIY/1 for an example
+        selector: //link[@rel="shortcut icon"]/@href | //link[@rel="canonical"]/@href
+        concat: __SEPARATOR__
+        postProcess:
+          - replace:
+              - regex: (?P<networkSite>.+\.com).*__SEPARATOR__.*(?P<path>\/videos.*).html
+                # We'd love to append `_vids` here but _ triggers the submatch in the regexp
+                # so we use the URL encoded version of an underscore instead: %5f
+                with: $networkSite$path%5fvids.html
+          - subScraper: //div[@class="releasedate"]
+          - replace:
+              &cleanDate # Remove the trailing "| Full length video : XX min YY sec" part
+              - regex: \s*\|.*
+                with:
+          - parseDate: January 02, 2006
+      Code: &studioCode
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: .*content\/([^\/]+).*
+                with: $1
+              # Some of these image URLs will not contain the studio code
+              # so we need to remove those manually here
+              - regex: ^https.*
+                with: ""
+      Studio: &studio
+        Name:
+          selector: //base/@href
+          postProcess:
+            - replace:
+                # https://regex101.com/r/JxFd9a/1
+                - regex: ^(?:https:\/\/[\w\.]*?)([^.]+)\.com.*$
+                  with: $1
+            - map:
+                # The canonical list of studio names are based on what
+                # they are called on their respective network sites
+                americanmusclehunks: American Muscle Hunks
+                bangbangboys: Bang Bang Boys
+                boundtwinks: Bound Twinks
+                boyforsale: Boy For Sale
+                cumdumpsluts: Cum Dump Sluts
+                dirtyboysociety: Dirty Boy Society
+                edwardjames: Edward James
+                ftmmen: FTM Men
+                funsizeboys: Funsize Boys
+                gaycest: Gaycest
+                hungfuckers: Hung Fuckers
+                jalifstudio: Jalif Studio
+                jockpussy: Jock Pussy
+                jockbreeders: Jock Breeders
+                masonicboys: Masonic Boys
+                rawfuckboys: Raw Fuck Boys
+                scoutboys: Scout Boys
+                staghomme: Stag Homme
+                teensandtwinks: Teens And Twinks
+                transcest: Transcest
+                twinks: Twinks
+                twinkloads: Twink Loads
+                twinktop: Twink Top
+        URL: //base/@href
+      Tags: &tags
+        Name: $scene//div[@id="catMovie"]//text()
+      Performers: &performers
+        Name: $scene//div[contains(@class, "modelProfile")]//h2 | $scene//div[contains(@class, "modelProfile")]//h3
+  networkScraper:
+    common:
+      $scene: ((//div[contains(@class, "main")])[1]/div)[1]
+    scene:
+      Title: *title
+      Details:
+        selector: $scene//div[@class='textDescription']//text()[not(parent::span[@id='firstWords' or @id='readmore'])]
+        concat: "\n\n"
+      Image: *image
+      Code:
+        selector: (//source/@src)[1]
+        postProcess:
+          - replace:
+              - regex: .*(\w{3}\d{4}).trailer.*
+                with: $1
+              # Some of these trailer URLs will not contain the studio code
+              # so we need to remove those manually here
+              - regex: ^https.*
+                with:
+      Date:
+        selector: $scene//div[@class="releasedate"]
+        postProcess:
+          - replace: *cleanDate
+          - parseDate: January 02, 2006
+      URL:
+        # All scenes on network sites should be available from their subsites as well
+        # so we construct a valid link to the subsite both to encourage people
+        # to scrape from the canonical source as well as submitting both links to StashDB:
+        # the network site will list the duration, which is helpful when evaluating
+        # the submitted fingerprints for the scene
+        selector: //link[@rel="canonical"]/@href | //div[@class="logoSubsites"]//img/@alt
+        concat: __SEPARATOR__
+        postProcess:
+          - replace:
+              - regex: .*(?P<path>videos/.*)__SEPARATOR__(?P<domain>.*)
+                with: https://$domain.com/$path
+              - regex: _vids
+                with: ""
+              # This table is should contain the same sites Studio Name in sceneScraper
+              - regex: AmericanMuscleHunks
+                with: americanmusclehunks
+              - regex: BangBangBoys
+                with: bangbangboys
+              - regex: BoundTwinks
+                with: boundtwinks
+              - regex: BoyForSale
+                with: boyforsale
+              - regex: CumDumpSluts
+                with: cumdumpsluts
+              - regex: DirtyBoySociety
+                with: dirtyboysociety
+              - regex: EdwardJames
+                with: edwardjames
+              - regex: FTMmen
+                with: ftmmen
+              - regex: FunsizeBoys
+                with: funsizeboys
+              - regex: Gaycest
+                with: gaycest
+              - regex: HungFuckers
+                with: hungfuckers
+              - regex: JasonSparksLive
+                with: jasonsparkslive
+              - regex: JalifStudio
+                with: jalifstudio
+              - regex: JockBreeders
+                with: jockbreeders
+              - regex: JockPussy
+                with: jockpussy
+              - regex: MasonicBoys
+                with: masonicboys
+              - regex: RawFuckBoys
+                with: rawfuckboys
+              - regex: ScoutBoys
+                with: scoutboys
+              - regex: StagHomme
+                with: staghomme
+              - regex: TeensAndTwinks
+                with: teensandtwinks
+              - regex: Transcest
+                with: transcest
+              - regex: Twinks
+                with: twinks
+              - regex: Twinkloads
+                with: twinkloads
+              - regex: TwinkTop
+                with: twinktop
+      Tags:
+        Name: $scene//div[@class="update_tags"]//text()
+      Performers:
+        Name: $scene//div[@id="models"]//h4
+      Studio:
+        Name:
+          selector: //div[@class="logoSubsites"]//img/@alt
+          postProcess:
+            - replace:
+                # Turn PascalCaseWords to Pascal Case Words
+                - regex: ([a-z])([A-Z])
+                  with: $1 $2
+        URL:
+          selector: //div[@class="logoSubsites"]//img/@alt
+          postProcess:
+            - replace:
+                - regex: (?P<domain>.*)
+                  with: https://$domain.com
+  chapterSceneScraper:
+    common:
+      $scene: *sceneContainer
+      # The differences from the regular sceneScraper is that we
+      # shuffle the title around a little to reflect what's shown
+      # on the page instead of in the title bar (also makes them easier to sort)
+      # and we use the series as a movie so that people can group their scenes together
+    scene:
+      Title:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              # https://regex101.com/r/y1Clkp/2
+              - regex: (?P<title>.*?) - (?P<series>.*?) - (?P<chapter>.*?) \|.*
+                with: $series - $chapter - $title
+      Details: *details
+      Date: *dateSubscraper
+      Code: *studioCode
+      Image: *image
+      URL: *url
+      Studio: *studio
+      Movies:
+        Name: //span[contains(@class, "dvdTitleScene")]
+        URL: //span[contains(@class, "dvdTitleScene")]//a/@href
+      Tags: *tags
+      Performers: *performers
+# Last Updated September 21, 2023

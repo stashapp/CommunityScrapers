@@ -1,0 +1,29 @@
+name: "Xrares"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - xrares.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      URL: //meta[@property="og:url"]/@content
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name: //meta[@property="video:tag"]/@content
+      Details: //meta[@property="og:description"]/@content
+      Date:
+        selector: //div[@class="pull-right big-views hidden-xs"]//span[@class="text-white"]/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)\sdays\sago
+                with: $1
+          - subtractDays: true
+      Code:
+        selector: //meta[@property="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: .+/video/(\d+)/.+?$
+                with: $1
+# Last Updated June 10, 2023

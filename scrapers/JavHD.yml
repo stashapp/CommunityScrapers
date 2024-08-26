@@ -3,25 +3,61 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - javhd.com/en/id/
-    scraper: sceneScraper
+      - javhd.com/en/studio/
+    scraper: javhd
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - javhd.com/en/model/
+    scraper: javhd
 xPathScrapers:
-  sceneScraper:
+  javhd:
+    common:
+      $script: //script[@type="application/ld+json"]/text()
     scene:
-      Details: //p[@class="js-description-text"]
+      Details: //h2[@class="content__desc"]
       Performers:
-        Name: //div[@class="model-link"]/a
+        Name: //div[@class="content-info"]/a
       Image:
-        selector: //div[@class="player-container"]/@style
+        selector: $script
         postProcess:
           - replace:
-              - regex: .*url\(\'(.+)\'\).*
+              - regex: .+thumbnail":"([^"]+)",.+
                 with: $1
+      Date: # not to be trusted, they update the dates
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+datePublished":"([^"]+)",.+
+                with: $1
+          - parseDate: "2006-01-02T15:04:05-07:00"
       Title:
-        selector: //h1[@class="info-title"]
+        selector: //h1[@class="content__title"]
       Tags:
-        Name: //div[@class="tag-links"]/a/text()
+        Name: //div[@class="content-desc"]//a
       Studio:
         Name:
           fixed: JavHD
       URL: //link[@rel="canonical"]/@href
-# Last Updated September 22, 2020
+
+    performer:
+      Name: //h1
+      Image: //div[@class="avatar"]/img/@src
+      URL: //link[@rel="canonical"]/@href
+      Details: //div[@class="info"]/p
+      Birthdate:
+        selector: //strong[contains(., "Birth date")]/following-sibling::*
+        postProcess:
+          - parseDate: 2 January 2006
+      EyeColor: //strong[contains(., "Eye color")]/following-sibling::*
+      HairColor: //strong[contains(., "Hair color")]/following-sibling::*
+      Height:
+        selector: //strong[contains(., "Height")]/following-sibling::*
+        postProcess:
+          - replace:
+              - regex: (\d+).*
+                with: $1
+      Weight: //strong[contains(., "Weight")]/following-sibling::*
+      Ethnicity: //strong[contains(., "Ethnicity")]/following-sibling::*
+      FakeTits: //strong[contains(., "Breast factor")]/following-sibling::*
+# Last Updated April 05, 2024

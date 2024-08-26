@@ -1,0 +1,49 @@
+name: Newgrounds
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://www.newgrounds.com/portal/view/{filename}
+  queryURLReplace:
+    filename:
+      - regex: ^([^\[]+\[)+|(\]\.).*
+        with: ""
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - newgrounds.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //head/title
+      URL: //meta[@property="og:url"]/@content
+      Date:
+        selector: //meta[@itemprop="uploadDate"]/@content
+        postProcess:
+          - replace:
+              - regex: (?i)(T\d+.+)
+                with: ""
+          - parseDate: 2006-01-02
+      Image: //meta[@property="og:image"]/@content
+      Details:
+        selector: //meta[@itemprop="description"]/@content
+      Tags:
+        Name: //dd[@class="tags"]//a
+      Performers:
+        Name: //dd[@class="tags"]//a
+      Studio:
+        Name: //div[@class="item-details-main"]//a
+driver:
+  cookies:
+    - CookieURL: "https://www.newgrounds.com"
+      Cookies:
+# You will need to provide the values for the following cookies. View storage under the inspect menu in your browser while logged in.
+      - Name: "NG_GG_username"
+        Domain: ".newgrounds.com"
+        Value: "[insert value here]"
+        Path: "/"
+      - Name: "vmk1du5I8m"
+        Domain: ".newgrounds.com"
+        Value: "[insert value here]"
+        Path: "/"
+# Last Updated October 08, 2023

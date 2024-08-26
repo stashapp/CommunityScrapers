@@ -1,0 +1,53 @@
+name: Inn of Sin
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - adreenawinters.com
+      - bbctitans.com
+      - dannyoceansadventures.com
+      - mydeepdarksecret.com
+      - puerto-rock.com
+      - rebelrhyder.com
+      - richardmannsworld.com
+      - tatsandtits.com
+      - trans4thefans.com
+      - wefuckin.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $scene: //div[@class="vid-box" or @class="vidBox"]
+    scene:
+      Title: $scene//h1 | $scene//h2
+      Details:
+        selector: //*[contains(text(), "About") or contains(text(), "Description")]/following-sibling::p | //span[@itemprop="about"]/p
+        concat: "\n\n"
+      Image: //video/@poster
+      URL: //link[@rel="canonical"]/@href
+      Tags:
+        Name: $scene//span[@itemprop="keywords"]/a
+      Performers:
+        # Doesn't work on adreenawinters.com since they don't have model profiles
+        # we can fix this but let's wait to see if anyone needs it first
+        Name: $scene//a[contains(@href, "/pornstars/")]
+      Studio:
+        Name:
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                # Get the domain name without any subdomains
+                # https://regex101.com/r/JxFd9a/1
+                - regex: ^(?:https:\/\/[\w\.]*?)([^.]+)\.com.*$
+                  with: $1
+            - map:
+                adreenawinters: Adreena Winters
+                bbctitans: BBC Titans
+                dannyoceansadventures: Danny Ocean's Adventures
+                mydeepdarksecret: My Deep Dark Secret
+                puerto-rock: Puerto Rock
+                rebelrhyder: Rebel Rhyder
+                richardmannsworld: Richard Mann's World
+                tatsandtits: Tats and Tits
+                trans4thefans: Trans 4 the Fans
+                wefuckin: We Fuckin
+# Last Updated March 10, 2024

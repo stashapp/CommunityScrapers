@@ -1,0 +1,89 @@
+name: FakeHub
+# requires: py_common, AyloAPI
+# scrapes: Fake Agent, Fake Agent UK, Fake Cop, Fake Driving School, Fake Hospital, Fake Hostel, Fake Taxi, Fakehub Originals, Female Agent, Female Fake Taxi, Public Agent
+galleryByURL:
+  - action: script
+    url:
+      - fakehub.com/scene/
+      - fakehostel.com/scene/
+      - faketaxi.com/scene/
+      - publicagent.com/scene/
+    script:
+      - python
+      - FakeHub.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - FakeHub.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - fakehub.com/scene/
+      - fakehostel.com/scene/
+      - faketaxi.com/scene/
+      - publicagent.com/scene/
+    script:
+      - python
+      - FakeHub.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - FakeHub.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - FakeHub.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - FakeHub.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - FakeHub.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - fakehub.com/modelprofile/
+      - fakehostel.com/modelprofile/
+      - faketaxi.com/modelprofile/
+      - publicagent.com/modelprofile/
+    script:
+      - python
+      - FakeHub.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - FakeHub.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - fakehub.com/movie/
+      - fakehostel.com/movie/
+      - faketaxi.com/movie/
+      - publicagent.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - fakehub.com/scene/
+      - fakehostel.com/scene/
+      - faketaxi.com/scene/
+      - publicagent.com/scene/
+    script:
+      - python
+      - FakeHub.py
+      - movie-by-url
+# Last Updated January 14, 2024

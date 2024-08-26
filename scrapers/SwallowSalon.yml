@@ -1,0 +1,53 @@
+name: SwallowSalon
+galleryByURL:
+  - action: scrapeXPath
+    url: &urls
+      - swallowsalon.com/scenes/
+    scraper: galleryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: sceneScraper
+xPathScrapers:
+  galleryScraper:
+    common: &commonAttr
+      $sceneinfo: //div[@class="scene-info"]
+      $title: //span[@class='title_bar_hilite']
+      $logo: //div[@id="logo"]//a/@href
+      $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
+    gallery:
+      Title: &titleSel $title
+      Code: &id //div[@class="rating_box" and $excludeUpdates]/@data-id
+      Date: &dateAttr
+        selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: &detailsSel //span[@class='update_description']
+      Tags: &tagsAttr
+        Name: //span[@class='update_tags']//a/text()
+      Performers: &performersAttr
+        Name: //div[@class='backgroundcolor_info']//span[@class='update_models']//a
+      Studio: &studioAttr
+        Name:
+          fixed: Swallow Salon
+  sceneScraper:
+    common: *commonAttr
+    scene:
+      Title: *titleSel
+      Code: *id
+      Date: *dateAttr
+      Details: *detailsSel
+      Tags: *tagsAttr
+      Performers: *performersAttr
+      Image:
+        selector: $logo | //script[contains(text(), 'useimage = "/')]/text()
+        concat: __SEPARATOR__
+        postProcess:
+          - replace:
+              # If the image was empty we clear the URL
+              - regex: .*/$
+                with: ""
+              - regex: (https://[^/]+).*useimage = "([^"]*).*
+                with: $1$2
+      Studio: *studioAttr
+# Last Updated May 01, 2024

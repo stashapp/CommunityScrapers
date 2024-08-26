@@ -24,8 +24,7 @@ xPathScrapers:
     common:
       $movieinfo: //div[@class="movie-info section divider"]
     scene:
-      Title: /html/head/title/text()
-      # //div[contains(@class,"heading")]/h1/text()
+      Title: //div[contains(@class,"heading")]/h1/text()
       Details: $movieinfo/p
       URL:
         selector: //link[@hreflang="ja-JP"]/@href
@@ -34,12 +33,12 @@ xPathScrapers:
               - regex: "https://www.caribbeancom.com"
                 with: "https://en.caribbeancom.com/eng"
       Date:
-        selector: //ul/li/span[contains(.,"Release Date")]/../span[@class="spec-content"]
+        selector: //link[@hreflang="ja-JP"]/@href
         postProcess:
           - replace:
-              - regex: (\d{4}).(\d{2}).(\d{2})
-                with: $1-$2-$3
-          - parseDate: 2006-01-02
+              - regex: .*(\d{6}).*
+                with: $1
+          - parseDate: "010206"
       Performers:
         Name:
           selector: //ul/li/span[contains(.,"Starring")]/..//a

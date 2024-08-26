@@ -1,0 +1,185 @@
+name: BluMedia Network
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - boygusher.com/play/
+    scraper: bgScraper
+  - action: scrapeXPath
+    url:
+      - brokestraightboys.com/play/
+    scraper: bsbScraper
+  - action: scrapeXPath
+    url:
+      - collegeboyphysicals.com/play/
+    scraper: cbpScraper
+  - action: scrapeXPath
+    url:
+      - collegedudes.com/play/
+    scraper: cdScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      # Performers from before ~August 2016 have no details
+      - boygusher.com/modelpage
+    scraper: bgScraper
+  - action: scrapeXPath
+    url:
+      - brokestraightboys.com/model/
+    scraper: bsbScraper
+  - action: scrapeXPath
+    url:
+      - collegeboyphysicals.com/modelpage
+    scraper: cbpScraper
+  - action: scrapeXPath
+    url:
+      - collegedudes.com/model/
+    scraper: cdScraper
+
+xPathScrapers:
+  bgScraper:
+    scene:
+      Title: //div[@class="dettl"]
+      # This is a bad selector and should be improved
+      Details: //div[@class="desc"]
+      Image: (//div[@class="player"]//img)[1]/@src
+      Studio: &studioFromTitle
+        Name:
+          selector: //title/text()
+          postProcess:
+            - replace:
+                - regex: ( - .*)$
+                  with:
+      Performers:
+        Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
+        URL:
+          selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://boygusher.com
+    performer:
+      Name: //div[@class="dettl"]
+      Image: //div[@class="modeltn"]/img/@src
+      Height:
+        selector: //div[@class="model-dtls"]//li[contains(text(), "Height")]/strong
+        postProcess: &extractMetric
+          - replace:
+              - regex: .*\((\d*).*
+                with: $1
+      Weight:
+        selector: //div[@class="model-dtls"]//li[contains(text(), "Weight")]/strong
+        postProcess:
+          - lbToKg: true
+      PenisLength:
+        selector: //div[@class="model-dtls"]//li[contains(text(), "Cock")]/strong
+        postProcess: *extractMetric
+      Circumcised:
+        selector: //div[@class="model-dtls"]//li[contains(text(), "Cock")]/strong
+        postProcess:
+          - replace:
+              - regex: .*\)\s*(.*)
+                with: $1
+  bsbScraper:
+    scene:
+      Title: (//header/following-sibling::div/div/div/text())[1]
+      # This is a bad selector and should be improved
+      Details:
+        selector: //div[@class="dtlp"]/p
+        concat: "\n\n"
+      Image: (//div[@id="player"]//img)[1]/@src
+      Studio: *studioFromTitle
+      Performers:
+        Name: //span/dl/a/text()
+        URL:
+          selector: //span/dl/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://brokestraightboys.com
+    performer:
+      Name: (//div[@class="deTlt"]/text())[1]
+      Image: (//div[@class="wdcnt"]//img)[1]/@src
+      Height:
+        selector: //div[@class="wdcnt"]//li[contains(., "Height")]/text()
+        postProcess: &extractMetric
+          - replace:
+              - regex: .*\((\d*).*
+                with: $1
+      Weight:
+        selector: //div[@class="wdcnt"]//li[contains(., "Weight")]/text()
+        postProcess:
+          - lbToKg: true
+      PenisLength:
+        selector: //div[@class="wdcnt"]//li[contains(., "Cock")]/text()
+        postProcess: *extractMetric
+      Circumcised:
+        selector: //div[@class="wdcnt"]//li[contains(., "Cock")]/text()
+        postProcess:
+          - replace:
+              - regex: .*\)\s*(.*)
+                with: $1
+  cbpScraper:
+    scene:
+      Title: //div[@class="dettl"]
+      Image: (//div[@class="player"]//img)[1]/@src
+      Details: //div[@class="desc"]
+      Studio: *studioFromTitle
+      Performers:
+        Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
+        URL:
+          selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://collegeboyphysicals.com
+    performer:
+      Name: //div[@class="dettl"]
+      Image: //div[@class="modeltn"]//img[1]/@src
+      Height:
+        selector: //div[@class="model-dtls"]//li[contains(., "Height")]/strong
+        postProcess: *extractMetric
+      Weight:
+        selector: //div[@class="model-dtls"]//li[contains(., "Weight")]/strong
+        postProcess:
+          - lbToKg: true
+      PenisLength:
+        selector: //div[@class="model-dtls"]//li[contains(., "Cock")]/strong
+        postProcess: *extractMetric
+      Circumcised:
+        selector: //div[@class="model-dtls"]//li[contains(., "Cock")]/strong
+        postProcess:
+          - replace:
+              - regex: .*\)\s*(.*)
+                with: $1
+  cdScraper:
+    scene:
+      Title: //div[contains(@class, "bluBar")]//strong
+      # This is a bad selector and should be improved
+      Details:
+        selector: //div[@class="descD"]//p[string-length(text()) > 1]
+        concat: "\n\n"
+      Image: (//div[@class="player"]//img)[1]/@src
+      Studio: *studioFromTitle
+      Performers:
+        Name: //div[@class="eimg"]//a/text()
+        # This site does not link to their performers, but they DO have profiles
+    performer:
+      Name: //div[contains(@class, "bluBar")]//strong
+      Image: //div[@class="modelPic"]//img[1]/@src
+      Height:
+        selector: //div[@class="modelDtls"]//li[contains(., "Height")]/text()
+        postProcess: *extractMetric
+      Weight:
+        selector: //div[@class="modelDtls"]//li[contains(., "Weight")]/text()
+        postProcess:
+          - lbToKg: true
+      PenisLength:
+        selector: //div[@class="modelDtls"]//li[contains(., "Cock")]/text()
+        postProcess: *extractMetric
+      Circumcised:
+        selector: //div[@class="modelDtls"]//li[contains(., "Cock")]/text()
+        postProcess:
+          - replace:
+              - regex: .*\)\s*(.*)
+                with: $1
+# Last Updated October 02, 2023

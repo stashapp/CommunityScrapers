@@ -1,0 +1,41 @@
+name: RedHotStraightBoys
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - redhotstraightboys.com/tour/updates
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - redhotstraightboys.com/tour/models
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //span[@class='update_title']/text()
+      Performers:
+        Name:
+          selector: //span[@class='tour_update_models']/a/text()
+        URL:
+          selector: //span[@class='tour_update_models']/a/@href
+      Details:
+        selector: //span[@class='latest_update_description']/text()
+      Tags:
+        Name: //span[@class='tour_update_tags']/a/text()
+      Image:
+        selector: //img[contains(@class,'large_update_thumb')]/@src
+      Studio:
+        Name:
+          fixed: RedHotStraightBoys.com
+
+  performerScraper:
+    performer:
+      Name: //span[@class='title_bar_hilite']/text()
+      Gender:
+        fixed: Male
+      Image:
+        selector: //img[contains(@class,'model_bio_thumb')]/@src0_2x
+# Last Updated October 14, 2023

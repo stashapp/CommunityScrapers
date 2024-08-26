@@ -1,0 +1,53 @@
+name: AsianStreetMeat
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - asianstreetmeat.com/join/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - asianstreetmeat.com/join/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performer: //*[@id="the_lot_more"]/table[4]/tbody/tr[3]/td[1]/div[1]/text()
+    scene:
+      Title: //h1[@class="title"]/span
+      Date:
+        selector: //video/@poster
+        postProcess:
+          - replace:
+              - regex: .+photogroup/(\d{4})(\d{2})(\d{2})\d{2}\..+
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      Image: //video/@poster
+      Performers:
+        Name:
+          selector: //video/@title
+          postProcess:
+            - replace:
+                - regex: .*Street Meat Asia - (.+) -.*
+                  with: $1
+      Details:
+        selector: //div[@class="blurb" or @class="blurb_v3"]/a/text()
+      Studio:
+        Name:
+          fixed: Asian Street Meat
+  performerScraper:
+    performer:
+      Name:
+        selector: //video/@title
+        postProcess:
+          - replace:
+              - regex: .*Street Meat Asia - (.+?) - Asian Street Meat.*
+                with: $1
+      Country:
+        fixed: Thailand
+      Gender:
+        fixed: Female
+      Ethnicity:
+        fixed: Asian
+      Image: //img[@class="lazy" or @width="300" or @width="400"]/@src
+# Last Updated February 17, 2024

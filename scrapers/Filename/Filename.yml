@@ -1,0 +1,10 @@
+name: Filename
+# requires: py_common
+
+sceneByFragment:
+  action: script
+  script:
+      - python3
+      - Filename.py
+      - title_from_filename
+# Last Updated September 21, 2022

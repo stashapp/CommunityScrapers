@@ -1,0 +1,84 @@
+name: Reality Dudes
+# requires: py_common, AyloAPI
+# scrapes: Boys First Time, Dick Dorm, Reality Dudes, Str8 Chaser
+galleryByURL:
+  - action: script
+    url:
+      - realitydudes.com/scene/
+      - realitydudesnetwork.com/scene/
+      - papi.com/scene/
+    script:
+      - python
+      - RealityDudes.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - RealityDudes.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - realitydudes.com/scene/
+      - realitydudesnetwork.com/scene/
+      - papi.com/scene/
+    script:
+      - python
+      - RealityDudes.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - RealityDudes.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - RealityDudes.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - RealityDudes.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - RealityDudes.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - realitydudes.com/model/
+      - realitydudesnetwork.com/model/
+      - papi.com/pornstar/
+    script:
+      - python
+      - RealityDudes.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - RealityDudes.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - realitydudes.com/movie/
+      - realitydudesnetwork.com/movie/
+      - papi.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - realitydudes.com/scene/
+      - realitydudesnetwork.com/scene/
+      - papi.com/scene/
+    script:
+      - python
+      - RealityDudes.py
+      - movie-by-url
+# Last Updated January 14, 2024

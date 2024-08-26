@@ -1,0 +1,49 @@
+# requires: Algolia
+name: Next Door Studios
+sceneByURL:
+  - action: script
+    url:
+      - austinwilde.com/en/video
+      - codycummings.com/en/video
+      - marcusmojo.com/en/video
+      - nextdoorbuddies.com/en/video
+      - nextdoorcasting.com/en/video
+      - nextdoorfilms.com/en/video
+      - nextdoorhomemade.com/en/video
+      - nextdoormale.com/en/video
+      - nextdoororiginals.com/en/video
+      - nextdoorraw.com/en/video
+      - nextdoorstudios.com/en/video
+      - nextdoortaboo.com/en/video
+      - nextdoortwink.com/en/video
+      - roddaily.com/en/video
+      - rodsroom.com/en/video
+      - samuelotoole.com/en/video
+      - stagcollective.com/en/video
+      - tommydxxx.com/en/video
+      - trystanbull.com/en/video
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - nextdoorstudios
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - nextdoorstudios
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - nextdoorstudios
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/Algolia.py
+    - nextdoorstudios
+    - validName
+# Last Updated August 18, 2023

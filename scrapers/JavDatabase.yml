@@ -1,0 +1,99 @@
+name: JAVDatabase
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - javdatabase.com
+    scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - javdatabase.com
+    scraper: movieScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - javdatabase.com
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: &title //h1
+      Date: &date //td[contains(.,'Release Date:')]/following-sibling::td
+      Director: &director //td[contains(.,'Director:')]/following-sibling::td
+      Image: &image //meta[@property='og:image']/@content
+      Studio: &studio
+        Name: //td[contains(.,'Studio:')]/following-sibling::td
+        URL: //td[contains(.,'Studio:')]/following-sibling::td//a/@href
+      Code: //td[contains(.,'DVD ID:')]/following-sibling::td | //td[contains(.,'Content ID:')]/following-sibling::td
+      Tags:
+        Name: //td[contains(.,'Genre(s):')]/following-sibling::td//a
+      Details: &details //tr[td[h2[@class='subhead']]]/following-sibling::tr/td/text()
+      Performers:
+        Name: //div[h2[contains(.,'/Idols')]]//a/text()
+        Image:
+          selector: //div[h2[contains(.,'/Idols')]]//img/@data-src
+          postProcess:
+            - replace:
+                - regex: '/thumb/'
+                  with: '/full/'
+        URL: //div[h2[contains(.,'/Idols')]]//a/@href
+      Movies:
+        Name: *title
+        FrontImage: *image
+        Studio: *studio
+        Duration: &duration
+          selector: &duration //td[contains(.,'Runtime:')]/following-sibling::td
+          postProcess:
+            - replace:
+                - regex: min
+                  with: ":00"
+        URL: &url //link[@rel='canonical']/@href
+
+  movieScraper:
+    movie:
+      Name: *title
+      Synopsis: *details
+      Date: *date
+      Duration: *duration
+      Director: *director
+      FrontImage: *image
+      Studio: *studio
+      URL: *url
+
+  performerScraper:
+    common:
+      $avatar: //div[@class='avatar-box']
+    performer:
+      Name:
+        selector: //h1[@class='idol-name']
+        postProcess:
+          - replace:
+              - regex: (.+)\s*-\s*JAV\sProfile$
+                with: $1
+      Gender:
+        fixed: Female
+      Image: //div[@class='idol-portrait']//img/@data-src
+      Birthdate: //b[contains(.,'DOB:')]/following-sibling::a
+      HairColor: //b[contains(.,'Hair Color(s):')]/following-sibling::a
+      Tags: 
+        Name: //b[contains(.,'Tags:')]/following-sibling::a/text()
+      Height:
+        selector: //b[contains(.,'Height:')]/following-sibling::a
+        postProcess:
+          - replace:
+              - regex: '[^\d]'
+                with: ''
+      Measurements:
+        selector: //b[contains(.,'Measurements:')]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: .+?[^\d-]([\d-]+)[^\d-].+
+                with: $1
+            # This can pick up a trailing dash, so get rid of it.
+              - regex: -$
+                with: ''
+
+# Last Updated April 16, 2024

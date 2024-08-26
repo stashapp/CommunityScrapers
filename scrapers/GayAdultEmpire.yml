@@ -14,34 +14,25 @@ sceneByURL:
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
-  # if needed replace `dvd` with `vod`
-  queryURL: https://www.gaydvdempire.com/dvd/search?q={}
+  # if needed replace `vod` with `dvd`
+  queryURL: https://www.gaydvdempire.com/vod/search?q={}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
 
-
 xPathScrapers:
   sceneSearch:
     scene:
-      Title:
-        selector: //div[@class="item-title"]/a/@*[local-name()="href" or local-name()="title"]
-        concat: "|"
-        postProcess:
-          - replace:
-            - regex: '/(\d+)/[^|]+\|([^|]+)'
-              with: "$2 ($1)"
-        split: "|"
+      Title: //a[@class="boxcover"]/img/@title
       URL:
-        selector: //div[@id="content"]//div[@class="item-title"]/a/@href
+        selector: //a[@class="boxcover"]/@href
         postProcess:
           - replace:
               - regex: ^
-                with: "https://www.gaydvdempire.com"
-      Image:
-        selector: //a[@class="boxcover"]/img/@data-src
+                with: https://www.gaydvdempire.com
+      Image: //a[@class="boxcover"]/img/@src
 
   movieScraper:
     movie:
@@ -51,10 +42,10 @@ xPathScrapers:
         selector: //small[contains(text(), "Length")]/following-sibling::text()
         postProcess:
           - replace:
-            - regex: " hrs. "
-              with: ":"
-            - regex: " mins."
-              with: ":00"
+              - regex: " hrs. "
+                with: ":"
+              - regex: " mins."
+                with: ":00"
       Date:
         selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
@@ -78,12 +69,13 @@ xPathScrapers:
     scene:
       Title: //h1/text()
       Details:
-        selector: //h4[contains(@class,"synopsis")]//text()
+        selector: //div[contains(@class,"synopsis-content")]//text()
         concat: " "
       Date:
         selector: //small[contains(text(), "Released")]/following-sibling::text()
         postProcess:
           - parseDate: Jan 02 2006
+      Director: //a[@label="Director"]/text()
       Image: //a[@id="front-cover"]/@data-href
       Studio:
         Name: //a[@label="Studio"]/text()
@@ -101,4 +93,4 @@ xPathScrapers:
                 - regex: ^
                   with: "https://www.gaydvdempire.com"
       URL: //meta[@name='og:url']/@content
-# Last Updated July 17, 2022
+# Last Updated May 02, 2024

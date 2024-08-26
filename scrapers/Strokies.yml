@@ -1,0 +1,42 @@
+name: "Strokies"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - strokies.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class='video-title']
+      Details:
+        selector: //div[@class='video-description']/p/text()
+        concat: "\n\n"
+      Date:
+        selector: //div/p[contains(text(),"Added on:")]
+        postProcess:
+          - replace:
+              - regex: Added on:\s(.+)
+                with: $1
+          - parseDate: Jan 2, 2006
+      Image:
+        selector: //div[@class="vjs-poster"]/@style
+        postProcess:
+          - replace:
+              - regex: .+url\("(.+)\".+
+                with: https:$1
+      Studio:
+        Name:
+          fixed: Strokies
+      Tags:
+        Name: //div[@class='model-tags']//a[contains(@href,"tag")]
+      Performers:
+        Name: //div[@class='model-tags']//a[contains(@href,"model")]
+        URL:
+          selector: //div[@class='model-tags']//a[contains(@href,"model")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://strokies.com
+driver:
+  useCDP: true
+# Last Updated January 20, 2023

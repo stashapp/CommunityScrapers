@@ -1,7 +1,7 @@
 name: JavDB
 sceneByFragment:
   action: scrapeXPath
-  queryURL: https://javdb36.com/search?q={filename}&f=all
+  queryURL: https://javdb.com/search?q={filename}&f=all
   queryURLReplace:
     filename:
       - regex: \..+$
@@ -11,16 +11,16 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - javdb.com/v/
-      - javdb36.com/v/
+      - javdb367.com/v/
     scraper: sceneScraper
     queryURL: "{url}"
     queryURLReplace:
       url:
         - regex: javdb\.com
-          with: "javdb36.com"
+          with: "javdb.com"
 sceneByName:
   action: scrapeXPath
-  queryURL: https://javdb36.com/search?q={}
+  queryURL: https://javdb.com/search?q={}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
@@ -31,13 +31,13 @@ movieByURL:
   - action: scrapeXPath
     url:
       - javdb.com/v/
-      - javdb36.com/v/
+      - javdb367.com/v/
     scraper: movieScraper
     queryURL: "{url}"
     queryURLReplace:
       url:
         - regex: javdb\.com
-          with: "javdb36.com"
+          with: "javdb.com"
 xPathScrapers:
   sceneSearch:
     common:
@@ -49,7 +49,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: "https://javdb36.com"
+                with: "https://javdb.com"
       Image: 
         selector: $videoItem//img/@src
         postProcess:
@@ -68,7 +68,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: "https://javdb36.com"
+                with: "https://javdb.com"
         # If you don't support cookie you can use this regex.
         #    - regex: $
         #      with: "?locale=en"
@@ -83,11 +83,8 @@ xPathScrapers:
                 with: ""
       Date: //strong[text()='Released Date:']/../span/text()
       Details:
-        selector: //h2[@class="title is-4"]/strong/text()
-        postProcess:
-          - replace:
-              - regex: (.*?\s)(.+)
-                with: $2
+        selector: //strong[@class="current-title"]/text()
+      Director: //strong[text()='Director:']/../span/a/text()
       Tags:
         Name: //strong[text()='Tags:']/../span/a/text()
       Performers:
@@ -135,10 +132,20 @@ driver:
           Domain: "javdb.com"
           Value: "en"
           Path: "/"
-    - CookieURL: "https://javdb36.com"
+        # Access to certain titles requires a javdb account
+        # Uncomment the below replacing the Value part
+        #- Name: "_jdb_session"
+        #  Value: "Add here the actual value from your cookies"
+        #  Path: "/"
+        #  Domain: "javdb.com"
+        #- Name: "remember_me_token"
+        #  Value: "Add here the actual value from your cookies"
+        #  Path: "/"
+        #  Domain: "javdb.com"
+    - CookieURL: "https://javdb367.com"
       Cookies:
         - Name: "locale"
-          Domain: "javdb36.com"
+          Domain: "javdb367.com"
           Value: "en"
           Path: "/"
         # Access to certain titles requires a javdb account
@@ -146,9 +153,9 @@ driver:
         #- Name: "_jdb_session"
         #  Value: "Add here the actual value from your cookies"
         #  Path: "/"
-        #  Domain: "javdb36.com"
+        #  Domain: "javdb367.com"
         #- Name: "remember_me_token"
         #  Value: "Add here the actual value from your cookies"
         #  Path: "/"
-        #  Domain: "javdb36.com"
-# Last Updated June 02, 2022
+        #  Domain: "javdb367.com"
+# Last Updated January 21, 2024

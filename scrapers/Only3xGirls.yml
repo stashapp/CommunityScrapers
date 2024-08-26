@@ -2,7 +2,12 @@ name: Only3xGirls
 sceneByURL:
   - action: scrapeXPath
     url:
+      - analjust.com
       - only3xgirls.com
+      - only3xlost.com
+      - only3xseries.com
+      - only3xvr.com
+      - onlygolddigger.com
       - purebj.com
     scraper: sceneScraper
 xPathScrapers:
@@ -27,6 +32,11 @@ xPathScrapers:
           selector: //base/@href
           postProcess:
             - map:
-                https://only3xgirls.com/: Only3xGirls
-                https://purebj.com/: PureBJ
-# Last Updated July 03, 2021
+                https://analjust.com/: Anal Just
+                https://only3xgirls.com/: Only3x Girls
+                https://only3xlost.com/: Only3x Lost
+                https://only3xseries.com/: Only3x Series
+                https://only3xvr.com/: Only3x VR
+                https://onlygolddigger.com/: Only Golddigger
+                https://purebj.com/: Pure BJ
+# Last Updated November 10, 2022

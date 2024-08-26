@@ -2,34 +2,94 @@ name: Spizoo
 sceneByURL:
   - action: scrapeXPath
     url:
+      - creamher.com/updates/
+      - drdaddypov.com/updates/
       - firstclasspov.com/updates/
-      - intimatelesbians.com/updates/
-      - jessicajaymesxxx.com/updates/
+      - gothgirlfriends.com/updates/
+      - mrluckylife.com/updates/
+      - mrluckylife.com/members/
       - mrluckypov.com/updates/
-      - porngoespro.com/updates/
-      - pornstartease.com/updates/
+      - mrluckyraw.com/updates/
+      - mrluckyvip.com/updates/
+      - rawattack.com/updates/
+      - realsensual.com/updates/
       - spizoo.com/updates/
-      - thestripperexperience.com/updates/
+      - vlogxxx.com/updates/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.spizoo.com/search.php?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 xPathScrapers:
-  sceneScraper:
+  sceneSearch:
+    common:
+      $row: //div[@class="model-update row"]
     scene:
-      Title: //h1
+      Title: $row//h3
+      URL: $row//h3/../@href
+      Image: $row//img/@src
+      Details: $row//p[contains(@class, "model-update-description")]
+
+  sceneScraper:
+    common:
+      $scene_info: //section[@id="trailer-data" or @id="sceneInfo" or @id="scene-info" or @id="des-scene"]
+      $video_section: (//section[@id="trailer-video" or @id="scene" or @id="scene-video"] | //div[contains(@class, "videoHolder")])
+    scene:
+      Title:
+        selector: //div[@class="title" or @class="row"]//h1 | //div[@class="title-trailer"]//h2 | //h2[contains(@class, "titular")] | //title
+        postProcess:
+          # RawAttack titles have a trailing dash and space
+          - replace:
+              - regex: \s\-\s*$
+                with:
       Date:
-        selector: //p[@class="date"]
+        selector: $scene_info//p[@class="date"]
         postProcess:
           - parseDate: 2006-01-02
-      Details: //p[@class="description"]
+      Details: $scene_info//p[@class="description"] | $scene_info//p
       Performers:
+        Name: $scene_info//a[@class="model-name"]/@title | $scene_info//a[contains(@href,"/model")]/@title
+      Tags:
+        Name: $scene_info//a[contains(@href,"/categories")] | $scene_info//a[contains(@href,"/category")] | //div[contains(@class, "categories-holder")]/a
+      Studio:
         Name:
-          selector: //section[@id="sceneInfo"]//a[contains(@href,"/model")]/@title
+          # Scenes on Spizoo can have an <i id="site"> element with the studio name, others we get from the base URL
+          selector: //i[@id="site"]/@value | //base/@href
           postProcess:
             - replace:
-                - regex: \s\(.+
-                  with:
-      Tags:
-        Name: //section[@id="sceneInfo"]//a[contains(@href,"/categorie")]/text() | //div[@class="categories-holder"]/a
-      Image: //video[@id="trailervideo"]/@poster
-
-
-# Last Updated June 28, 2021
+                - regex: https?://(?:www\.)?(.*)(?:\.com)(?:/.*)?
+                  with: $1
+            - map:
+                creamher: Cream Her
+                drdaddypov: Dr. Daddy POV
+                firstclasspov: First Class POV
+                gothgirlfriends: Goth Girlfriends
+                mrluckylife: Mr. LuckyLIFE
+                mrluckypov: Mr. LuckyPOV
+                mrluckyraw: Mr. LuckyRaw
+                mrluckyvip: Mr. LuckyVIP
+                rawattack: RawAttack
+                realsensual: Real Sensual
+                spizoo: Spizoo
+                vlogxxx: Vlog XXX
+      Image:
+        selector: $video_section//video/@poster | //img[contains(@class, "update_thumb") or contains(@class, "trailer-thumb")]/@src
+        postProcess:
+          - replace:
+              # Remove any resizing parameters for the image, we want the original
+              - regex: "[?&]img(?:q|w|h)=[^&]+"
+                with:
+driver:
+  cookies:
+  - CookieURL: "https://www.mrluckylife.com/"
+    Cookies:
+      # Set this cookie name to the one beginning with `pcar[...]` to scrape the members' pages.
+      - Name: ""
+        Domain: ".mrluckylife.com"
+        Path: "/"
+        Value: ""
+# Last Updated August 11, 2024

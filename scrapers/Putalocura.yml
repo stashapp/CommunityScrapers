@@ -19,7 +19,7 @@ xPathScrapers:
         postProcess:
           - parseDate: 02/01/2006
       Details:
-        selector: //p[@class="desc"]/following-sibling::p/text()
+        selector: //p[@class="desc"]/following-sibling::p
       # look like it's the same trashy tag everytime so don't think there are useful
       #Tags:
       #  Name: 
@@ -43,4 +43,4 @@ xPathScrapers:
                 with: "$1"
       URL: //link[@rel="canonical"]/@href
 
-# Last Updated August 10, 2022
+# Last Updated July 06, 2024

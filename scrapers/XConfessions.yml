@@ -12,54 +12,91 @@ movieByURL:
 xPathScrapers:
   sceneScraper:
     common: &com
-      $info: //div[@class="w-full tablet:w-1/3 text-base tablet:text-sm mr-6"]
-      $script: //script[contains(.,"window.__NUXT")]/text()
+      $script: //script[contains(.,'window.__NUXT')]/text()
     scene:
       Title: &title //h1
       Date: &date
         selector: $script
         postProcess:
           - replace:
-              - regex: .*production_date."(\d+-\d+-\d+)T.*
+              - regex: .*release_date."([^\s]+).*
                 with: $1
           - parseDate: 2006-01-02
       Details: &details
-        selector: //div[@class="my-2 tablet:my-0 w-full tablet:w-3/5"]/*[local-name()="h2" or local-name()="span"]
-        concat: "\n\n"
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+synopsis_clean="(?P<full>[^"]+).+short_synopsis_clean="(?P<short>[^"]+).+
+                with: |
+                  $short
+
+                  $full
       Performers:
         Name:
-          selector: $info/p[contains(.,"Performers:")]//a
-          concat: " & "  # some performers are joined
-          split: " & "  # with &
+          selector: //p[span[contains(.,'Performers:')]]//a
+          concat: ' & '  # some performers are joined
+          split: ' & '  # with &
+      Director: &director //p[span[contains(.,'Director:')]]//a
       Tags:
-        Name: $info/p[contains(.,"Tags:")]//a
-      Image:
-        selector: //div[@class="negativex"]//@data-srcset
-        postProcess: &pp
+        Name: 
+          selector: //div/a[contains(@href,'/categories/')] | //button/@data-test
+          postProcess:
+            - replace:
+                - regex: 'profile-'
+                  with: ''
+      Image: &image
+        selector: $script
+        postProcess: 
           - replace:
-              - regex: ^([^?]+)\?.*
+                    # Most scenes have a cover_title_picture value in the script
+              - regex: .+?cover_title_picture="([^"]+).+
                 with: $1
+                    # Some without the cover_title_picture will have twi consecutive images
+                    # with a UID.  The first is the movie poster, the second is the scene cover image
+              - regex: .+,"(https:[^"]+?-[^"]+?)","(https:[^"]+?-[^"]+)".*
+                with: $2
+                    # Some without the UID-style images instead have a sequence of images after
+                    # a time stamp.  The first is th movie poster, the second is the scene image
+              - regex: .+"\d\d\d\d-\d\d-\d\d\s+\d\d:\d\d:\d\d"[0-9a-zA-Z,"]*"(https:[^"]+?)","(https:[^"]+)".*
+                with: $2
+                    # Some don't have any of the above, but have a confession_cover_image value
+                    # that is pretty good, but doesn't have the scene name on it.
+              - regex: .+?confession_cover_image:"([^"]+).+
+                with: $1
+                    # If nothing above matches, take the last image in the script.  Often this
+                    # is the scene image, but it's not 100% reliable.
+              - regex: .+(https:[^"]+).*$
+                with: $1
+                    # Clean up UTF-8 coded slashes for real ones
+              - regex: '\\u002F'
+                with: '/'
       Studio: &studio
         Name:
           fixed: XConfessions
+      Movies:
+        Name: *title
+        Director: *director
+        Duration: &duration
+          selector: $script
+          postProcess:
+            - replace:
+                - regex: .+?.length="([^"]+).+
+                  with: $1
+        Date: *date
+        Synopsis: *details
+        Studio: *studio
+        URL: &url //link[@rel='canonical']/@href
+        FrontImage: &frontImage //article//div[contains(@class,'134px')]//img[contains(@sizes,'200px') or contains(@src,'jpeg') or contains(@src,'jpg')]/@src
 
   movieScraper:
     common: *com
     movie:
       Name: *title
-      Director:
-        selector: $info/p[contains(.,"Director:")]/a
-        concat: ", "
-      Duration:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .*w\.length."(\d{2}:\d{2}:\d{2})".*
-                with: $1
+      Director: *director 
+      Duration: *duration
       Date: *date
       Synopsis: *details
       Studio: *studio
-      FrontImage:
-        selector: //div[@class="w-1/3 hidden tablet:block"]//@data-srcset
-        postProcess: *pp
-# Last Updated May 31, 2021
+      URL: *url
+      FrontImage: *frontImage
+# Last Updated April 13, 2024

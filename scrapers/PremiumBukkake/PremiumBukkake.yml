@@ -1,0 +1,10 @@
+name: "PremiumBukkake"
+sceneByURL:
+  - url:
+      - free.premiumbukkake.com
+    action: script
+    script:
+      - python
+      - PremiumBukkake.py
+      - query
+# Last Updated August 15, 2024

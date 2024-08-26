@@ -1,0 +1,76 @@
+name: Bibian-AV
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bibian-av.com
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://bibian-av.com/search/list?keyword={}
+  scraper: sceneSearchScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $title: //h2[@class='p-workPage__title']/text()
+      $text: //p[@class='p-workPage__text']/text()
+      $infoTable: //div[@class='p-workPage__table']
+    scene:
+      URL:
+        selector: $infoTable//div[text() = '品番']/../div[@class='td']//p/text()
+        postProcess:
+          - javascript: |
+              if (value && value.length) {
+                return "https://bibian-av.com/works/detail/" + value
+              }
+      Code:
+        selector: $infoTable//div[text() = '品番']/../div[@class='td']//p/text()
+        postProcess:
+          - replace:
+            - regex: (\D+)(\d+)
+              with: $1-$2
+      Title:
+        selector: $infoTable//div[text() = '品番']/../div[@class='td']//p/text() | //h2[@class='p-workPage__title']/text()
+        concat: " "
+        postProcess:
+          - javascript: |
+              if (value && value.length) {
+                var vals = value.split(" ");
+                vals[0] = vals[0].replace(/(\D+)(\d+)/, "$1-$2")
+                return "["+vals[0]+"] "+vals.slice(1).join(" ");
+              }
+      Date:
+        selector: $infoTable//div[text() = '発売日']/../div[@class='td']//a/text()
+        postProcess:
+          - replace:
+            - regex: (\d+)年(\d+)月(\d+)日
+              with: $1-$2-$3
+          - parseDate: 2006-1-2
+      Director:
+        selector: $infoTable//div[text() = '監督']/../div[@class='td']//p/text()
+      Studio:
+        Name:
+          selector: $infoTable//div[text() = 'レーベル']/../div[@class='item']//a/text()
+        URL:
+          fixed: https://bibian-av.com
+      Performers:
+        Name: $infoTable//div[text() = '女優']/../div[@class='td']//a/text()
+      Tags:
+        Name:
+          selector: $infoTable//div[text() = 'ジャンル']/..//div[@class='item']//a/text()
+      Details: $text
+      Image: //div[@class='swiper-wrapper']/div[1]/img/@data-src | //section[@class='l-slider']//img/@src
+  sceneSearchScraper:
+    common:
+      $scene: //div[@class='swiper-wrapper']//div[@class='item']
+    scene:
+      Title:
+        selector: $scene/div[1]/a/@href | $scene/div[1]/a/div[@class='hover__child']/p[@class='text']/text()
+        concat: " | "
+      Image: $scene/div[1]/a/img/@data-src
+      URL: $scene/div[1]/a/@href
+# Last Updated Mai 29, 2024

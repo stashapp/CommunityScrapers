@@ -1,0 +1,54 @@
+name: ShemaleStarDB
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - shemalestardb.com/stars
+    scraper: performerScraper
+
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h2[@id="star-name"]
+      Gender:
+        fixed: TRANSGENDER_FEMALE
+      Birthdate:
+        selector: //a[@data-target="Birthday"]/following-sibling::a/text()
+        postProcess:
+          - parseDate: Mon, 02 Jan 2006
+      Measurements: //li[a[@data-target="Stats"]]/text()
+      EyeColor: //a[@data-target="Eye Color"]/following-sibling::a/text()
+      HairColor: //a[@data-target="Hair Color"]/following-sibling::a/text()
+      Ethnicity: //a[@data-target="Ethnicity"]/following-sibling::a/text()
+      Country: //li[a[@data-target="Place of Birth"]]/a[last()]/text()
+      Height:
+        selector: //a[@data-target="Height"]/following-sibling::a/text()
+        postProcess:
+          - replace:
+              - regex: '.*\(([\d]*) cm\).*'
+                with: $1
+      Weight:
+        selector: //li[a[@data-target="Weight"]]/text()
+        postProcess:
+          - replace:
+              - regex: '.*\(\s*([\d\.]*) kg\).*'
+                with: $1
+      PenisLength:
+        selector: //li[a[@data-target="Penis"]]/text()
+        postProcess:
+          - replace:
+              - regex: '.*\(\s*([\d\.]*) cm\).*'
+                with: $1
+      Tattoos: //a[@data-target="Tattoos"]/following-sibling::a/text()
+      Piercings: //a[@data-target="Piercings"]/following-sibling::a/text()
+      Aliases: //li[a[@data-target="AKA"]]/text()
+      Image: //div[@class="sdb-model"]//figure/img/@src
+      Twitter: //div[@id="Free Sites"]//a[starts-with(@href, "https://twitter.com")]/@href
+      Instagram:
+        selector: //div[@id="Free Sites"]//a[starts-with(@href, "https://instagram.com")]/@href
+        postProcess:
+          - replace:
+              - regex: '\?.*'
+                with: ''
+
+# Last Updated April 30, 2024

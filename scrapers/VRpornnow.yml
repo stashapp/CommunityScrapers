@@ -1,0 +1,24 @@
+name: VR pornnow
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vrpornnow.com/product
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Details: //p[@id="description"]
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - parseDate: "2006-01-02T15:04:05-07:00"
+      Image: //dl8-video/@poster
+      Studio:
+        Name:
+          fixed: VR pornnow
+      Tags:
+        Name: //div[@id="tag-list"]/div
+      Performers:
+        Name: //div[contains(@class, "actors")]//a
+# Last Updated April 11, 2024

@@ -1,0 +1,37 @@
+name: OLBMedia
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - houseofangell.com
+      - hungyoungbrit.com
+      - musclebearporn.com
+      - rawroadnation.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="panel-heading"]/h3
+      Performers:
+        Name: //span[@class="update_models"]/a
+      Details: //div[@class="video-seo-description"]/p
+      Image: //video[@id="videoProtectedPlayer"]/@poster
+      Date:
+        selector: //h4[contains(text(), "Release Date")]/text()
+        postProcess:
+          - replace:
+              - regex: "Release Date: (.+)"
+                with: $1
+          - parseDate: 2006-01-02
+      Studio:
+        Name:
+          selector: //title
+          postProcess:
+            - replace:
+                - regex: .+?-\s*([^-.]+)[^-]+$
+                  with: $1
+                - regex: ([a-z])([A-Z])
+                  with: $1 $2
+            - map: # Currently only Raw Road Nation doesn't present their name nicely in the title tag.
+                rawroadnation: Raw Road Nation
+# Last Updated Aprol 17, 2024

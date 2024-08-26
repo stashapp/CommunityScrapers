@@ -2,14 +2,28 @@ name: SubbyHubby
 sceneByURL:
   - action: scrapeXPath
     url:
-      - clubdom.com/tour
       - subbyhubby.com/tour
     scraper: sceneScraper
   - action: scrapeXPath
     url:
-      - clubdom.com/vod
       - subbyhubby.com/vod
     scraper: vodScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.subbyhubby.com/vod/search.php?query={}
+  scraper: vodSearch
+sceneByFragment:
+  action: scrapeXPath
+  scraper: vodScraper
+  queryURL: https://www.subbyhubby.com/vod/search.php?st=advanced&qex={title}
+  queryURLReplace:
+     title:
+       - regex: " "
+         with: "+"
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: vodScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -33,13 +47,10 @@ xPathScrapers:
                 with: "https:"
       Studio:
         Name:
-          selector: //base/@href
-          postProcess:
-            - map:
-                //www.clubdom.com/tour/: Club Dom
-                //www.subbyhubby.com/tour/: Subby Hubby
+          fixed: Subby Hubby
   vodScraper:
     scene:
+      URL: //div[@class='cell content_tab_current']/a/@href
       Title:
         selector: //span[@class="title_bar_hilite"]
       Date:
@@ -61,12 +72,20 @@ xPathScrapers:
                 with: $1$2
       Studio:
         Name:
-          selector: //base/@href
-          postProcess:
-            - replace:
-                - regex: https://(www.)?([^.]+)\..*
-                  with: $2
-            - map:
-                clubdom: Club Dom
-                subbyhubby: Subby Hubby
-# Last Updated July 20, 2021
+          fixed: Subby Hubby
+
+  vodSearch:
+    common:
+      $update-details: //div[@class="update_details"]
+    scene:
+      Title:
+        selector: $update-details/a[2]/text()
+      URL:
+        selector: $update-details/a[2]/@href
+      Image:
+        selector: $update-details/a[1]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+# Last Updated August 16, 2024

@@ -1,0 +1,35 @@
+name: Melon Juggler
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - melonjuggler.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $model: //span[@class="tour_update_models"]/a
+    scene:
+      Title:
+        selector: //span[@class="update_title"]
+      Date:
+        selector: //span[@class="availdate"]
+        postProcess:
+          - replace:
+              - regex: (st|nd|rd|th)
+                with: ""
+          - parseDate: 2 Jan 2006
+      Performers:
+        Name:
+          selector: $model/text()
+        URL:
+          selector: $model/@href
+      Tags:
+        Name: //span[@class="update_tags"]/a
+      Details:
+        selector: //span[@class="latest_update_description"]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Melon Juggler
+# Last Updated March 18, 2024

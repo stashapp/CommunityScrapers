@@ -1,0 +1,24 @@
+name: Mug Fucked
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mugfucked.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: Mug Fucked
+      Performers:
+        Name: //div[@class="video-info"]//span[@class="update_models"]/a
+      Title: //h1[contains(@class,"title")]
+      Details: //p[@class="description-text"]
+      Tags:
+        Name: //li/a[contains(@href,"/categories/")]
+      Image: //video/@poster
+      Date:
+        selector: //div[@class="video-info"]/div/label[text()="Date Added"]/following-sibling::p[1]
+        postProcess:
+          - parseDate: 2006-01-02
+# Last Updated November 06, 2022

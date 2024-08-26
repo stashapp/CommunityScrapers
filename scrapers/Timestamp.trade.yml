@@ -1,0 +1,92 @@
+name: Timestamp.trade
+
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - timestamp.trade/scene/
+    scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: scene
+          with: json-scene
+
+galleryByURL: 
+  - action: scrapeJson
+    url:
+      - timestamp.trade/scene/
+    scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: scene
+          with: json-scene
+  - action: scrapeJson
+    url:
+      - timestamp.trade/gallery/
+    scraper: galleryScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: gallery
+          with: json-gallery
+
+galleryByFragment:
+  action: scrapeJson
+  scraper: galleryFragScraper
+  queryURL: https://timestamp.trade/gallery-md5/{checksum}
+
+
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title: title
+      Date: release_date
+      Image: cover_url
+      Details: description
+      URL: scene_url
+#      URLs: urls
+#      URLs: &urls [scene_url]
+      Studio: 
+        Name: studio_name
+      Performers:
+        Name: performers.#.name
+      Tags: 
+        Name: tags.#.name
+    gallery:
+      Title: title
+      Date: release_date
+      Details: description
+      URL: scene_url
+#      URLs: *urls 
+      Studio: 
+        Name: studio_name
+      Performers:
+        Name: performers.#.name
+      Tags: 
+        Name: tags.#.name
+  galleryScraper:
+    gallery:
+      Title: title
+      Date: release_date
+      Details:  description
+      URL: urls.#."url"
+      Studio: 
+        Name: studio.name
+      Performers: 
+        Name: performers.#.name
+      Tags: 
+        Name: tags.#.name
+  galleryFragScraper:
+    gallery:
+      Title: 0.title
+      Date: 0.release_date
+      Details:  0.description
+      URL: 0.urls.#."url"
+      Studio: 
+        Name: 0.studio.name
+      Performers: 
+        Name: 0.performers.#.name
+      Tags: 
+        Name: 0.tags.#.name
+# Last Updated February 26, 2024

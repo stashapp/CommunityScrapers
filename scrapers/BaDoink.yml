@@ -1,4 +1,7 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
 name: "BaDoink"
+
 sceneByURL:
   - action: scrapeXPath
     url: &urls
@@ -9,6 +12,31 @@ sceneByURL:
       - realvr.com
       - vrcosplayx.com
     scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        # remove the members part of the url since the scrapper would not attempt to login
+        - regex: "/members/"
+          with: "/"
+
+sceneByFragment:
+  action: scrapeXPath
+  # url format: https://{studio}.com/vrpornvideo/{title}-{code}
+  # The url without the code is what we will use for scrapping
+  # since it will forward to the correct one:
+  #   url format: https://{studio}.com/vrpornvideo/{title}
+  # both studio and title are part of the official file name
+  queryURL: "{filename}"
+  queryURLReplace:
+    # filename format:
+    #   {studio}_{title}_{res}_{vrtype}.{ext}
+    #     res: oculus|\d+k
+    #     vrtype: stuff we do not care about but could contain '_'
+    filename:
+      - regex: (?i)^(18vr|babevr|badoinkvr|kinkvr|realvr|vrcosplayx)_(.+)_(?:oculus|\dk)_.+$
+        with: https://$1.com/vrpornvideo/$2
+  scraper: sceneScraper
+
 performerByURL:
   - action: scrapeXPath
     url: *urls
@@ -27,7 +55,7 @@ xPathScrapers:
     common:
       $details: &detailsAttr //div[@class="video-rating-and-details"]
     scene:
-      Title: $details/h1/text()
+      Title: //h1[contains(@class, "video-title")]/text()
       Date: &dateSel
         selector: $details//p[@class="video-upload-date"]/text()
         postProcess:
@@ -48,7 +76,15 @@ xPathScrapers:
           - replace:
               - regex: \?.+
                 with: ""
-      URL: //link[@rel='canonical']/@href
+      URL: &sceneUrl //link[@rel="canonical"]/@href
+      Code:
+        selector: *sceneUrl
+        postProcess:
+          - replace:
+              - regex: '^(.+)-(\d+)/?$'
+                with: $2
+              - regex: '^.*[^\d].*$' # if no code is found in the url
+                with: # return an empty string
   # Uncomment this section to user Performer Search on this scraper
   # performerSearch:
   #   common:
@@ -118,4 +154,4 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
-# Last Updated October 03, 2021
+# Last Updated November 25, 2022

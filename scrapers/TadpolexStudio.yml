@@ -1,0 +1,37 @@
+name: "TadpolexStudio"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tadpolexstudio.com/trailers
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $models: //div[contains(@class, "models-list-thumbs")]//a
+    scene:
+      Studio:
+        Name: //a[@class="navbar-brand"]/@title
+
+      Title: //div[@class="video-player"]//h2[@class="section-title"]/text()
+      Performers:
+        Name: $models/span
+        URL: $models/@href
+      Date:
+        selector: //strong[text()="Released:"]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Tags:
+        Name: //ul[@class="tags"]//a
+      Image:
+        selector: //base/@href | //div[@class="player-thumb"]//img[contains(@class, "update_thumb")]/@src0_1x
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: "(^[^|]+)\\|([^\\.]+\\.jpg).*"
+                with: $1$2
+              - regex: "1x.jpg"
+                with: "full.jpg"
+      Details:
+        selector: //div[@class="update-info-block"]/h3[text()="Description:"]/following-sibling::*/text()
+        concat: "\n\n"
+# Last Updated April 29, 2024

@@ -1,0 +1,30 @@
+name: GermanMistresses
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - germanmistresses.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="videodetailswrapper"]/div[@class="videodetails"]/h1/text()
+      Details:
+        selector: //div[@class="videodetailswrapper"]/div[@class="videodetails"]/p/text()
+        concat: "\n\n"
+      Studio:
+        Name:
+          fixed: German Mistresses
+      Image: 
+        selector: //div[@class="videowrapper"]/video/@poster
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://germanmistresses.com
+      URL: //link[@rel="canonical"]/@href
+      Performers:
+        Name: //div[@class="videodetailswrapper"]/div[@class="featuredmodels"]/a/text()
+        URL: //div[@class="videodetailswrapper"]/div[@class="featuredmodels"]/a/@href
+      Tags:
+        Name: //div[@class="videodetailswrapper"]/div[@class="videodetails"]/div[@class="videocats"]/a/text()
+
+# Last Updated May 08, 2024

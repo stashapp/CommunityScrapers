@@ -17,7 +17,7 @@ xPathScrapers:
                 with: ""
           - parseDate: 2 January 2006
      Performers:
-      Name: //a[@class="model"]//a
+      Name: //a[@class="model"]//text()
      Details: //div[@class="description"]/p
      Movies:
         Name:
@@ -29,4 +29,4 @@ xPathScrapers:
      Studio:
         Name:
           selector: //div[@class="pdSRC"]//img/@alt
-# Last Updated March 04, 2021
+# Last Updated October 31, 2023

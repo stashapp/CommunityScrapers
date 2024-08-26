@@ -1,0 +1,30 @@
+name: IFeelMyself
+performerByName:
+  action: script
+  script:
+    - python3
+    - IFeelMyself.py
+    - query
+    - performer
+performerByFragment:
+  action: script
+  script:
+    - python3
+    - IFeelMyself.py
+    - scrape
+sceneByFragment:
+  action: script
+  script:
+    - python3
+    - IFeelMyself.py
+    - query
+    - scene
+sceneByURL:
+  - url:
+      - ifeelmyself.com
+    action: script
+    script:
+      - python3
+      - IFeelMyself.py
+      - url
+# Last Updated February 04, 2023

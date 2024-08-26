@@ -2,6 +2,7 @@ name: The Flourish
 sceneByURL:
   - action: scrapeXPath
     url:
+      - milfcandy.com/trailers/    
       - theflourishxxx.com/trailers/
       - theflourishamateurs.com/trailers/
       - theflourishfetish.com/trailers/

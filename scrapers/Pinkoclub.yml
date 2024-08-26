@@ -3,19 +3,42 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - pinkoclub.com
+      - pinkotgirls.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
         selector: //div[@class="titolo-video"]/h2
+      Director:
+        selector: //div[@class="caption captionvideo"]/strong
+        postProcess:
+          - replace:
+              - regex: "Directed by (.*)"
+                with: "$1"
       Performers:
         Name: //h4/a
       Details:
         selector: //div[@class="caption captionvideo"]
+        postProcess:
+          - replace:
+              - regex: "Directed by (.*)$"
+                with: ""
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
-          fixed: Pink O Club
-# Last Updated May 15, 2021
+          selector: //link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+                - regex: "https://.*/(.*)/.*"
+                  with: $1
+            - map:
+                frameleaks: Frameleaks
+                pinkocomics: PinkoComics
+                porno-atv: ATV
+                the-canaglias: The Canaglias
+                video-porno-italiani: Pinko Club
+                videotrans: Pinko TGirls
+                xtime: XTime
+# Last Updated December 29, 2022

@@ -1,0 +1,74 @@
+name: jade-net-home
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jade-net-home.com
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: "https://www.jade-net-home.com/products/{title}"
+  scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.jade-net-home.com/products/{}
+  scraper: sceneScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - jade-net-home.com
+    scraper: movieScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $movieinfo: //*[@id="detailMain"]
+    scene:
+      Title: $movieinfo/div[1]/h1/span
+      Code: //dt[contains(text(),'Productcode') or contains(text(), '品番')]/following-sibling::dd[1]/text()
+      Details: 
+        selector: //div[@id='readmore']
+        # //span[@class="truncate_more"]
+      Date:
+        selector: //dt[contains(text(),'Downloadable') or contains(text(), '配信開始日')]/following-sibling::dd[1]/text()
+        postProcess:
+          - replace:
+              - regex: (\d{4}).(\d{2}).(\d{2})
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      Tags:
+        Name: //dt[contains(text(), 'Related Tag') or contains(text(), '関連タグ')]/following-sibling::dd[1]/a/text()
+      Image: //div[contains(@class, 'detailPackage')]/img/@src
+      Studio: 
+        Name: 
+          selector: //dt[contains(text(), 'Studios') or contains(text(), 'レーベル')]/following-sibling::dd[1]/a/text()
+          postProcess:
+            - map:
+                大塚フロッピー: Otsuka Floppy
+  movieScraper:
+    common:
+      $movieinfo: //*[@id="detailMain"]
+    movie:
+      Name: $movieinfo/div[1]/h1/span
+      Synopsis: 
+        selector: //div[@id='readmore']
+        # //span[@class="truncate_more"]
+      Date:
+        selector: //dt[contains(text(),'Downloadable') or contains(text(), '配信開始日')]/following-sibling::dd[1]/text()
+        postProcess:
+          - replace:
+              - regex: (\d{4}).(\d{2}).(\d{2})
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      FrontImage: //div[contains(@class, 'detailPackage')]/img/@src
+      Studio: 
+        Name: 
+          selector: //dt[contains(text(), 'Studios') or contains(text(), 'レーベル')]/following-sibling::dd[1]/a/text()
+          postProcess:
+            - map:
+                大塚フロッピー: Otsuka Floppy
+
+# Last Updated June 21, 2024

@@ -1,0 +1,99 @@
+name: DugaJP
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://duga.jp/ppv
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://duga.jp/ppv/{filename}
+  queryURLReplace:
+    filename:
+      - regex: '.*?(\w+-\d+).*'
+        with: "$1"
+  scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://duga.jp/search/=/q={}/
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $videoItem: //div[@id="searchresultarea"]/div[@class="liquidmultilinelist contentsbox"]/div
+    scene:
+      Title: $videoItem/a/div[@class="title"]
+      URL: 
+        selector: $videoItem/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://duga.jp"
+      Image:
+        selector: $videoItem/a/div[@class="image producthoverbox"]/img/@src
+  sceneQueryScraper:
+    common:
+      $videoItem: //div[@id="searchresultarea"]/div[@class="liquidmultilinelist contentsbox"]/div
+    scene:
+      Title: $videoItem/a/div[@class="title"]
+      URL: 
+        selector: $videoItem/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://duga.jp"
+      Image:
+        selector: $videoItem/a/div[@class="image producthoverbox"]/img/@src
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Details: //meta[@property="og:description"]/@content
+      URL:
+        selector: //meta[@property="og:url"]/@content
+      Date:
+        selector: //table[@class="infomation"]/tbody/tr[1]/td/text()
+        postProcess:
+          - replace:
+              - regex: (\d{4})年(\d{2})月(\d{2})日
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+      Performers:
+        Name:
+          selector: //table[@class="infomation"]//ul[@class="performer"]/li/strong/a
+      Tags:
+        Name: 
+          selector: //ul[@class="categorylist"]/li/a
+          postProcess:
+            - map:
+                フェチ: Fetish
+                おっぱい: Tits
+                トイレ: Toilet
+                スカトロ: Scat
+      Image:
+        selector: //div[@class="imagebox"]/a[@itemprop="image"]/@href
+      Studio:
+        Name:
+          selector: //th[text()="レーベル"]/following-sibling::td/a/span
+          postProcess:
+            - map:
+                ムゲンエンターテインメント: MUGEN Entertainment
+                ケイ・エム・プロデュース: K M Produce
+                オペラ: OPERA
+                SODクリエイト: SOD Create
+                三和出版: Sanwa Shuppan
+                セレブの友: Celeb no Tomo
+                AVS collector’s: AVS collector's
+                クィーンロード: SmQueenRoad
+                キャットウォーク: Catwalk
+                ステージ 2 メディア: Stage 2 Media
+                クソミル: Kusomiru
+                レイディックス: RADIX
+                V&Rプランニング: V&R Produce
+      Code:
+        selector: //th[text()="メーカー品番"]/following-sibling::td/span
+
+# Last Updated Jan 11, 2024

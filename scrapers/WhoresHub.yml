@@ -1,0 +1,66 @@
+name: WhoresHub
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.whoreshub.com/
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.whoreshub.com/search/{}/
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[@id="list_videos_videos_list_search_result_items"]
+      $searchThumb: //div[@id="list_videos_videos_list_search_result_items"]//a[contains(@class, "item")]//span[contains(@class, "description")]
+
+    scene:
+      Title: $searchThumb/text()
+      URL:
+        selector:  $searchItem//a[contains(@class, "item")]/@href
+        # postProcess:
+        #   - replace:
+        #       - regex: ^
+        #         with: "https://www.whoreshub.com"
+      Image:
+        selector: $searchItem//span[@class="thumb-img"]/img/@data-src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https:"
+
+  sceneScraper:
+    common:
+      $studio: //div[@class="user-info"]//a/text()
+    scene:
+      Title: //title
+      Details: //title
+      URL: //link[@rel="canonical"]/@href
+      # Date:
+      #   selector: //script[contains(., 'uploadDate')]/text()
+      #   postProcess:
+      #     - replace:
+      #         - regex: .+(?:"uploadDate":\s")([^"]+).+
+      #           with: $1
+      #         - regex: (.+)T.+
+      #           with: $1
+      #     - parseDate: 2006-01-02
+      Tags:
+        Name: //div[@class="tags-outer"]//li//a/text()
+      Studio:
+        Name: $studio
+        URL: $studio/@href
+      Image:
+        selector: //meta[@property="og:image"][1]/@content
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https:"

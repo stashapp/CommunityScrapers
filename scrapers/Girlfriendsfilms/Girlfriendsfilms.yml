@@ -1,0 +1,49 @@
+# requires: Algolia
+name: "Girlfriends Films"
+sceneByURL:
+  - action: script
+    url:
+      - girlfriendsfilms.com/en/video/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlfriendsfilms
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlfriendsfilms
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlfriendsfilms
+      - searchName
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlfriendsfilms
+      - validName
+movieByURL:
+  - action: script
+    url:
+      - girlfriendsfilms.com/en/movie/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlfriendsfilms
+      - movie
+galleryByURL:
+  - action: script
+    url:
+      - girlfriendsfilms.com/en/photo/
+    script:
+      - python
+      - ../Algolia/Algolia.py
+      - girlfriendsfilms
+      - gallery
+# Last Updated December 22, 2022

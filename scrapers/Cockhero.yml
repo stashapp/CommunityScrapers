@@ -1,0 +1,39 @@
+name: Cockhero
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cockhero.info
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.cockhero.info/?s={}
+  scraper: chSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  chSearch:
+    common:
+      $card: //*[@id="main-content"]//article[contains(@class, "item-list")]
+    scene:
+      Title: $card/h2[@class="post-title"]/a
+      URL: $card/h2[@class="post-title"]/a/@href
+      Image: $card//div[@class="mlib-list-image"]/img/@src
+
+  sceneScraper:
+    common:
+      $id: //*[@id="the-post"]
+    scene:
+      Title: $id/div/h1/span
+      Date:
+        selector: $id/div/p/span[@class="tie-date"]
+        postProcess:
+          - parseDate: January _2, 2006
+      Image: $id//div[@class="mlib-list-image"]/img/@src
+      Studio:
+        Name: $id//li[div="Author"]/div[contains(@class,"value")]/a
+      Tags:
+        Name: //*[@id="main-content"]//p[@class="post-tag"]/a
+# Last Updated November 11, 2022

@@ -2,32 +2,28 @@ name: Max-Hardcore
 sceneByURL:
   - action: scrapeXPath
     url:
-      - max-hardcore.com
+      - max-hardcore.com/video/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //h1[@class="title"]
+        selector: //header/h1
         postProcess:
           - replace:
               - regex: "FREE PREVIEW -"
                 with: ""
       Performers:
-        Name: //strong[contains(text(),"Performers:")]/following-sibling::a/text()
+        Name: //ul[@class="tag-list"]//a[contains(@href, "/pornstars/")]
       Tags:
-        Name: //strong[contains(text(),"Category:")]/following-sibling::a/text()
-      Details: //div[@class="description"]/p
-      Image:
-        selector: //a[@href="https://www.max-hardcore.com/signup"][1]/img/@src
+        Name: //ul[@class="tag-list"]//a[contains(@href, "/channels/")]
+      Details: //div[@class="description__inner"]
+      Image: //div[contains(@class, "preview-thumbs")]/img/@src
       Studio:
         Name:
           fixed: Max-Hardcore
       Date:
-        selector: //strong[contains(text(),"Added:")]/following-sibling::text()
+        selector: //span[span[contains(@class, "calendar")]]/../span[contains(@class, "label")]
         postProcess:
-          - replace:
-              - regex: (\d+).+
-                with: $1
-          - subtractDays: true
-# Last Updated May 17, 2021
+          - parseDate: "2006-01-02 15:04:05"
+# Last Updated August 07, 2024

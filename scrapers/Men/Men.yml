@@ -1,0 +1,113 @@
+name: Men.com
+# requires: py_common, AyloAPI
+# scrapes: Big Dicks At School, Drill My Hole, Gods of Men, Jizz Orgy, Men of UK, Men.com, Str8 to Gay, The Gay Office, Top to Bottom, TwinkPop
+galleryByURL:
+  - action: script
+    url: &sceneUrls
+      - \/men.com/scene
+      - www.men.com/scene
+      - mennetwork.com/scene
+      - bigdicksatschool.com/scene/
+      - godsofmen.com/scene/
+      - jizzorgy.com/scene/
+      - menofuk.com/scene/
+      - str8togay.com/scene/
+      - thegayoffice.com/scene/
+      - toptobottom.com/scene/
+      - twinkpop.com/video/
+    script:
+      - python
+      - Men.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - Men.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url: *sceneUrls
+    script:
+      - python
+      - Men.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Men.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - Men.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Men.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - Men.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - \/men.com/modelprofile/
+      - www.men.com/modelprofile/
+      - mennetwork.com/modelprofile/
+      - bigdicksatschool.com/model/
+      - godsofmen.com/model/
+      - jizzorgy.com/model/
+      - menofuk.com/model/
+      - str8togay.com/model/
+      - thegayoffice.com/model/
+      - toptobottom.com/model/
+      - twinkpop.com/pornstar/
+    script:
+      - python
+      - Men.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Men.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - \/men.com/movie
+      - www.men.com/movie/
+      - mennetwork.com/movie
+      - bigdicksatschool.com/movie/
+      - godsofmen.com/movie/
+      - jizzorgy.com/movie/
+      - menofuk.com/movie/
+      - str8togay.com/movie/
+      - thegayoffice.com/movie/
+      - toptobottom.com/movie/
+      - twinkpop.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - \/men.com/scene
+      - www.men.com/scene
+      - mennetwork.com/scene
+      - bigdicksatschool.com/scene/
+      - godsofmen.com/scene/
+      - jizzorgy.com/scene/
+      - menofuk.com/scene/
+      - str8togay.com/scene/
+      - thegayoffice.com/scene/
+      - toptobottom.com/scene/
+      - twinkpop.com/video/
+    script:
+      - python
+      - Men.py
+      - movie-by-url
+# Last Updated January 14, 2024

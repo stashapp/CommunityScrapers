@@ -1,0 +1,29 @@
+name: Sheer
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sheer.com
+    scraper: sheer
+
+xPathScrapers:
+  sheer:
+    scene:
+      Title: //h3[@class="post__title"]
+      Details: //div[@class="post__text"]
+      Date:
+        selector: //span[@class="post__date-text"]
+        postProcess:
+          - replace:
+              # Append the current year for partial dates: this will need to be updated every year
+              - regex: ^(\w{3}\s*\d{2})$
+                with: $1, 2024
+          - parseDate: Jan 02, 2006
+      Image: //div[@class="post__sfw-preview"]/img/@src
+      Performers:
+        Name: //div[@class="post__featuring-models__list"]/a
+      Tags:
+        Name: //a[@class="post-tags__link"]
+      Studio:
+        Name: //div[contains(@class, "post__profile-name")]/a/span
+        URL: //div[contains(@class, "post__profile-name")]/a/@href
+# Last Updated August 08, 2024

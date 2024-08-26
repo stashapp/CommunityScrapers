@@ -4,18 +4,47 @@ sceneByURL:
     url:
       - spankbang.com
     scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://spankbang.com/{filename}/video/
+  queryURLReplace:
+    filename: # expects an id in square brackets before extension, as saved by yt-dlp by default
+      - regex: '.*\[([0-9a-z]{4,})\]\.[^\.]+$'
+        with: $1
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
+        with: # clear the filename so that it doesn't leak
+
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class='left']/h1/@title
-      Details: //meta[@name='description']/@content
-      Image: //div[@class='play_cover']/img/@src
+      Title: //h1[@class="main_content_title"]
+      Details: //section[@class="details"]//p
+      Image:
+        selector: //div[@class='play_cover']/img/@src
+        postProcess:
+          - replace:
+              # Get the highest res image they've got
+              - regex: w:\d+
+                with: w:9999
       Studio:
-        Name: //li[@class='us']/a[@class='ul'][contains(@href,'channel')]/text()
+        Name: //div[@class="ent"]
       Tags:
-        Name: //div[@class='ent']/a[@href[contains(.,'tag')]]/text()|//li[@class='p']/text()
-      Performers:
-        Name: //div[@class='ent']/a[@href[contains(.,'pornstar')]]/text()|//div[@class='left']/h1/a/text()
-      URL: //link[rel='canonical']/@href
+        Name: //li[@class="p"] | //div[contains(@class, "searches")]/a[not(@class="expand")]
+      URL: //link[rel='canonical']/@href | //meta[@property='og:url']/@content
+      Date:
+        selector: //script[@type='application/ld+json' and contains(text(),'uploadDate')]
+        postProcess:
+          - replace:
+              - regex: .*uploadDate":\s*"(\d{4}-\d{2}-\d{2}).*
+                with: $1
 
-# Last Updated October 06, 2020
+debug:
+  printHTML: true
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+# Last Updated June 28, 2024

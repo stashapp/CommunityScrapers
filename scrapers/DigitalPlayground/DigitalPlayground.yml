@@ -1,0 +1,79 @@
+name: Digital Playground
+# requires: py_common, AyloAPI
+# scrapes: Digital Playground, DP Parodies, DP World, Episodes, Flixxx, Rawcut
+galleryByURL:
+  - action: script
+    url:
+      - digitalplayground.com/scene/
+      - digitalplaygroundnetwork.com/scene/
+    script:
+      - python
+      - DigitalPlayground.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - DigitalPlayground.py
+    - gallery-by-fragment
+sceneByURL:
+  - action: script
+    url:
+      - digitalplayground.com/scene/
+      - digitalplaygroundnetwork.com/scene/
+    script:
+      - python
+      - DigitalPlayground.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - DigitalPlayground.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - DigitalPlayground.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - DigitalPlayground.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - DigitalPlayground.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - digitalplayground.com/model
+      - digitalplaygroundnetwork.com/model
+    script:
+      - python
+      - DigitalPlayground.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - DigitalPlayground.py
+    - performer-by-fragment
+movieByURL:
+  - action: script
+    url:
+      - digitalplayground.com/movie/
+      - digitalplaygroundnetwork.com/movie/
+      # Since scenes link to the movie we can scrape movies from scenes
+      - digitalplayground.com/scene/
+      - digitalplaygroundnetwork.com/scene/
+    script:
+      - python
+      - DigitalPlayground.py
+      - movie-by-url
+# Last Updated January 14, 2024

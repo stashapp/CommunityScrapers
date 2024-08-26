@@ -8,6 +8,7 @@ sceneByURL:
       - oraloverdose.com/trailers/
       - pervcity.com/trailers/
       - upherasshole.com/trailers/
+      - dpdiva.com/trailers/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -16,8 +17,25 @@ xPathScrapers:
       $base: //head/base/@href
     scene:
       Title: $sceneinfo/div[@class="infoHeader"]
+      Studio:
+        Name:
+          selector: //head/base/@href
+          postProcess:
+            - replace:
+                - regex: .+/(?:www\.)?([^\.]+)\.com/.*
+                  with: $1
+            - map:
+                analoverdose: Anal Overdose
+                bangingbeauties: Banging Beauties
+                chocolatebjs: Chocolate BJs
+                dpdiva: DP Diva
+                oraloverdose: Oral Overdose
+                pervcity: PervCity
+                upherasshole: Up Her Asshole
       Performers:
         Name: $sceneinfo//span[@class="tour_update_models"]/a
+      Tags:
+        Name: $sceneinfo//div[@class="tagcats"]/a/text()
       Details: $sceneinfo//p/text()|$sceneinfo//h3[@class="description"]
       Image:
         selector: //head/base/@href|//img[@class="posterimg stdimage thumbs"]/@src
@@ -33,25 +51,9 @@ xPathScrapers:
               - regex: \s
                 with: "_"
               - regex: ^
-                with: "https://pervcity.com/search.php?query="  
+                with: "https://pervcity.com/search.php?query="
           - subScraper:
               selector: //div[@class="category_listing_block"]//div[@class="date"]/text()
               postProcess:
                 - parseDate: 01-02-2006
-      Studio:
-        Name:
-          selector: //head/base/@href
-          postProcess:
-            - replace:
-                - regex: .+/([^\.]+)\.com/.*
-                  with: $1
-            - map:
-                analoverdose: AnalOverdose
-                chocolatebjs: ChocolateBjs
-                bangingbeauties: BangingBeauties
-                oraloverdose: OralOverdose
-                pervcity: PervCity
-                upherasshole: UpHerAsshole
-      Tags:
-        Name: $sceneinfo//div[@class="tagcats"]/a/text()
 # Last Updated February 13, 2022

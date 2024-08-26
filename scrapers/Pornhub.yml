@@ -7,18 +7,20 @@ performerByURL:
   - action: scrapeXPath
     url:
       - pornhub.com
+      - pornhub.org
     scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - pornhub.com/view_video.php?viewkey=
+      - pornhub.org/view_video.php?viewkey=
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeXPath
   queryURL: https://www.pornhub.com/view_video.php?viewkey={filename}
   queryURLReplace:
     filename:
-      - regex: (?:.*[^a-zA-Z\d])?(ph(?:[a-zA-Z\d]+)).+
+      - regex: (?:.*[^a-zA-Z\d])?((?:ph)?(?:[a-zA-Z\d]{13})).+
         with: $1
       - regex: .*\.[^\.]+$ # if no ph id is found in the filename
         with: # clear the filename so that it doesn't leak to ph
@@ -37,18 +39,19 @@ xPathScrapers:
   sceneSearch:
     common:
       $searchItem: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]
-      $searchThumb: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]//div[contains(@class, "thumbnail-info-wrapper")]/span[@class="title"]/a
+      $searchThumb: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]//div[contains(@class, "thumbnail-info-wrapper")]
 
     scene:
-      Title: $searchThumb/text()
+      Title: $searchThumb/span[@class="title"]/a/text()
       URL:
-        selector: $searchThumb/@href
+        selector: $searchThumb/span[@class="title"]/a/@href
         postProcess:
           - replace:
               - regex: ^
                 with: "https://www.pornhub.com"
-      Image:
-        selector: $searchItem//div[contains(@class, "phimage")]//img/@data-thumb_url
+      Image: $searchItem//div[contains(@class, "phimage")]//img/@data-mediumthumb
+      Studio:
+        Name: $searchThumb//div[contains(@class, "usernameWrap")]//a[matches(@href, "/(channels|model|pornstar)/")]
   performerSearch:
     performer:
       Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
@@ -112,34 +115,63 @@ xPathScrapers:
       Image: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
   sceneScraper:
     common:
-      $performer: //div[@class="pornstarsWrapper js-pornstarsWrapper"]/a[@data-mxptype="Pornstar"]
-      $studio: //div[@data-type="channel"]/a
+      $datablob: //script[contains(., 'VideoObject')]/text()
+      $videowrap: //div[@class="video-wrapper"]
     scene:
-      Title: //h1[@class="title"]/span/text()
+      Title:
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: '^\s*$'
+                with: "Untitled"
+              - regex: "&amp;"
+                with: "&"
+              - regex: "\n"
+                with: " "
+              - regex: '\si\s'
+                with: " I "
       URL: //meta[@property="og:url"]/@content
       Date:
-        selector: //script[contains(., 'uploadDate')]/text()
+        selector: $datablob
         postProcess:
           - replace:
-              - regex: .+(?:"uploadDate":\s")([^"]+).+
+              - regex: .+(?:"uploadDate"\s*:\s*")([^T]+).+
                 with: $1
-              - regex: (.+)T.+
-                with: $1
-          - parseDate: 2006-01-02
+          - parseDate: "2006-01-02"
+      Code:
+        selector: //meta[@property="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: '.+?(\=)'
+                with:
       Tags:
-        Name: //div[@class="categoriesWrapper"]//a[not(@class="add-btn-small ")]|//div[@class="tagsWrapper"]//a[not(@class="add-btn-small")]
-      Image:
-        selector: //meta[@property="og:image"][1]/@content
+        Name:
+          selector: //div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," categoriesWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," tagsWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," productionWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," langSpokenWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," relatedSearchTermsContainer ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," userInfo ")]//div[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//i/text()
+          postProcess:
+            - replace:
+                - regex: "onlyfans"
+                  with: "OnlyFans"
+                - regex: "fansly"
+                  with: "Fansly"
       Performers:
-        Name: $performer/@data-mxptext
-        URL: $performer/@href
+        Name:
+          selector: //div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//span[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//span[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]//a/text()
+          postProcess:
+            - replace:
+                - regex: '\.'
+                  with: " "
+                - regex: '\_'
+                  with: " "
+      Image: //meta[@property="og:image"]/@content
       Studio:
-        Name: $studio
-        URL: $studio/@href
-      Details:
-        selector: //div[@class="video-info-row"][1]/text()[starts-with(normalize-space(.),"Description:")]
-        postProcess:
-          - replace:
-              - regex: "Description: (.*)"
-                with: $1
-# Last Updated July 08, 2022
+        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," usernameWrap ")]//a/text()
+
+driver:
+  cookies:
+    - CookieURL: "https://www.pornhub.com"
+      Cookies:
+        - Name: "accessAgeDisclaimerPH"
+          Domain: ".pornhub.com"
+          Value: "1"
+          Path: "/"
+# Last Updated August 19, 2024

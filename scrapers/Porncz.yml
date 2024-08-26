@@ -1,0 +1,70 @@
+name: PornCZ
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - amateripremium.com
+      - amateursfrombohemia.com
+      - boysfuckmilfs.com
+      - chloelamour.com
+      - czechanalsex.com
+      - czechbiporn.com
+      - czechboobs.com
+      - czechescortgirls.com
+      - czechexecutor.com
+      - czechgaycity.com
+      - czechgypsies.com
+      - czechhitchhikers.com
+      - czechrealdolls.com
+      - czechsexcasting.com
+      - czechsexparty.com
+      - czechshemale.com
+      - dellaitwins.com
+      - dickontrip.com
+      - fuckingoffice.com
+      - fuckingstreet.com
+      - girlstakeaway.com
+      - hornydoctor.com
+      - hornygirlscz.com
+      - hunterpov.com
+      - ladydee.xxx
+      - porncz.com
+      - publicfrombohemia.com
+      - retroporncz.com
+      - sexintaxi.com
+      - sexwithmuslims.com
+      - susanayn.com
+      - teenfrombohemia.com
+      - vrporncz.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="heading-detail"]/h1
+      Performers:
+        Name: //div[contains(@class, "video-info-item") and contains(text(), "Actors:")]//a
+      Details: //meta[@name="description"]/@content
+      Tags:
+        Name: //div[contains(@class, "video-info-item") and contains(text(), "Genres:")]//a
+      Image:
+        selector: //div[@id="video-poster"]/@data-poster
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.porncz.com
+      Date:
+        selector: //meta[@property="video:release_date"]/@content
+        postProcess:
+          - parseDate: 2.01.2006
+      URL: &url //link[@rel="canonical"]/@href
+      Code:
+        selector: *url
+        postProcess:
+          - replace:
+              - regex: .*/(\d*)$
+                with: $1
+      Studio:
+        Name:
+          selector: //a[@class="video-detail-logo"]//@alt
+# Last Updated September 27, 2022
+

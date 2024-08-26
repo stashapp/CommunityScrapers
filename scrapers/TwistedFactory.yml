@@ -1,0 +1,197 @@
+name: TwistedFactory 
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - twistedfactory.com
+    scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.twistedfactory.com/shoot/{filename}
+  # constructs the scene URL from the filename, provided that the filename includes the scene id
+  queryURLReplace:
+    filename:
+      # the id in kink.com is a 1-6 digit number
+      - regex: ^(\d+)[^\d].* # support filenames in the form 12345_performer_other_data.mp4
+        with: $1
+      - regex: .*\((\d+)\)\.[a-zA-Z\d]+$ #support filenames in the form scene - date - performer (12345).mp4
+        with: $1
+  scraper: sceneScraper
+
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.twistedfactory.com/search?type=performers&q={}
+  scraper: performerSearch
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - twistedfactory.com/model
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[contains(@class, "fs-0")]
+        postProcess:
+          - replace:
+              - regex: ^\s*(.*)\s*$
+                with: $1
+      Code: //div[@data-shootid]/@data-shootid
+      Date:
+        selector: //div[@data-setup]/@data-setup
+        postProcess:
+          - replace:
+              - regex: ^.*"publishedDate":"([^T]+).*$
+                with: $1
+          - parseDate: 2006-01-02
+      Director: //span[contains(@class, "director-name")]
+      Studio:
+        Name: //div[contains(@class,'shoot-detail-legend')]//a 
+      Performers:
+        Name:
+          selector: //h1/following-sibling::*/a[contains(@href, "/model/")]
+          postProcess:
+            - replace:
+                - regex: \,
+                  with: ""
+      Tags:
+        Name:
+          selector: //h4[contains(text(), "Categories")]/following-sibling::*/a
+          postProcess:
+            - replace:
+                - regex: \,\s*
+                  with: ""
+      Details:
+        selector: //h4[contains(text(), "Description")]/following-sibling::*[1]//text()
+        concat: "\n"
+      Image:
+        selector: //div[@data-setup]/@data-setup
+        postProcess:
+          - replace:
+              - regex: ^.*"posterUrl":"([^"]+).*$
+                with: $1
+              - regex: "?.*$"
+                with: ""
+      URL: 
+        selector: //script[contains(.,'KinkyTracking.all')] | //div[@id='shootPage']/@data-shootid
+        concat: '__SEP__'
+        postProcess:
+          - replace:
+              - regex: ^.+?multiSite:'([^']+).+?__SEP__(.+)
+                with: https://$1/shoot/$2
+
+  performerSearch:
+    common:
+      $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
+    performer:
+      Name: $result/img/@alt
+      URL:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.twistedfactory.com
+
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1/text() # //div[@font-size][number(translate(@font-size,"px",""))>=35]/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: ^\s+
+                with: ""
+              - regex: \s+$
+                with:
+      Twitter:
+        selector: '//div/a[contains(concat(" ", normalize-space(@class), " "), " social-link ") and contains(@href, "twitter.com")]/@href'
+      Image:
+        selector: //img[contains(@class,'kink-slider-img') and contains(@class,'active')]/@data-src
+      Tattoos:
+        selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/tattoo')]/span/text()
+        postProcess:
+          - replace:
+              - regex: .+
+                with: 'Yes'
+      Piercings:
+        selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/pierced')]/span/text()
+        concat: "\n"
+      Tags:
+        Name: //div/span[contains(text(),'tags:')]/following-sibling::a/span/text()
+      Details:
+        selector: //div/span/p[@class="bio"]/following-sibling::p
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: "(?i)<a[^>]*>"
+                with: ""
+      FakeTits: 
+        selector: >
+                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/fake-boobs')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/natural-boobs')]/span/text()
+        postProcess:
+          - replace:
+              - regex: .*?Fake.+
+                with: 'Yes'
+              - regex: .*?Natural.+
+                with: 'No'
+      HairColor: 
+        selector: >
+                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black-hair')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunet')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunette')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blond')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blonde')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/redhead')]/span/text()
+        postProcess:
+          - replace:
+              - regex: \sHair
+                with: ''
+      Ethnicity: 
+        selector: >
+                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/asian')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/latin')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/mixed')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/white')]/span/text()
+      Circumcised: 
+        selector: >
+                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/circumcised')]/span/text()
+                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/uncircumcised')]/span/text()
+        postProcess:
+          - replace:
+              - regex: Uncircumcised
+                with: 'Uncut'
+              - regex: Circumcised
+                with: 'Cut'
+      Gender: 
+        selector: //script[contains(.,'KinkyTracking.all')]
+        postProcess:
+          - replace:
+              - regex: .+?"((modelGender)|(genderIds))":"((woman)|(man)|(nonbinary)|(tsman)|(tswoman)|(unknown))".+
+                with: '%%%$4'              # This little trick will make sure we're left
+              - regex: ^[^%].+             # with an empty string if we don't match anything
+                with: ''                   # in the regex above.
+              - regex: ^%+
+                with: ''
+          - map:
+              woman: Female
+              man: Male
+              tswoman: Transgender Female
+              tsman: Transgender Male
+              nonbinary: Non-Binary
+              unknown: ''
+      URL: 
+        selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
+        concat: '__SEP__'
+        postProcess:
+          - replace:
+              - regex: ^.+?multiSite:'([^']+).+?__SEP__(.+)
+                with: https://$1/model/$2
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0.0
+# Last Updated April 19, 2024
