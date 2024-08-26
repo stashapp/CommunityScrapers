@@ -4,7 +4,29 @@ sceneByURL:
     url:
       - www.eporner.com
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.eporner.com/search/{}/
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[@id="vidresults"]/div[contains(@class,"mb")]
+    scene:
+      Title: $searchItem/div[@class="mbunder"]/p/a/text()
+      URL:
+        selector: $searchItem/div[@class="mbunder"]/p/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.eporner.com"
+      Image:
+        selector: $searchItem/div[@class="mbimg"]/div/a/img/@src
   sceneScraper:
     scene:
       Title:
@@ -25,4 +47,4 @@ xPathScrapers:
       Image: //meta[@property="og:image"]/@content
       URL: //meta[@property="og:url"]/@content
 
-# Last Updated August 14, 2023
+# Last Updated August 26, 2024
