@@ -76,5 +76,6 @@ xPathScrapers:
         fixed: "Japan"
       Gender: 
         fixed: "Female"
-
-# Last Updated August 20, 2020
+driver:
+  useCDP: true
+# Last Updated August 26, 2024
