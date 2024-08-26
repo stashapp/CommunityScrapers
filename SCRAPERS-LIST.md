@@ -2438,6 +2438,9 @@ yourfitcrush.com|MyMemberSite.yml|:heavy_check_mark:|:heavy_check_mark:|:x:|:x:|
 yourgoonspace.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
 yourmomdoesanal.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yourmomdoesporn.com|ThirdRockEnt.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+youtube.com|YouTube.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+yummysofie.com|YummySofie.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
+z-filmz-originals.com|Z-Filmz-Originals.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yourpainismypleasure.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yummybikinimodel.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 yummycouple.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:heavy_check_mark:|Python|-
