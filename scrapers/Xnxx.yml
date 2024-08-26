@@ -5,7 +5,30 @@ sceneByURL:
       - xnxx.com
       - xnxx3.com
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.xnxx.com/search/{}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
 xPathScrapers:
+  sceneSearch:
+    common:
+      $searchItem: //div[@id="content-thumbs"]/div[@class="mozaique cust-nb-cols"]/div[contains(@class,"thumb-block")]
+    scene:
+      Title: $searchItem/div[@class="thumb-under"]/p/a/@title
+      URL:
+        selector: $searchItem/div[@class="thumb-under"]/p/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.xnxx.com"
+      Image:
+        selector: $searchItem//div[@class="thumb"]/a/img/@data-src
+
   sceneScraper:
     scene:
       Title:
