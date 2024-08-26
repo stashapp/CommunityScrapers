@@ -1,0 +1,38 @@
+name: "BabestationTV"
+
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.babestation.tv/girls/page/1?search={}
+  scraper: performerSearch
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - babestation.tv/girls
+    scraper: performerScraper
+
+xPathScrapers:
+  performerSearch:
+    common:
+      $result: //a[@type="button"][@class="relative w-full"]
+
+    performer:
+      Name: $result/h3/text()
+      URL:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.babestation.tv
+
+  performerScraper:
+    performer:
+      Name: //div[@id="app"]//h1/text()
+      Image: //div[@id="app"]//div[contains(@class, "w-full")]/img/@src
+      Tags:
+        Name: //div[@id="app"]//div[@class="w-auto text-sm mt-4"]/div/a/button/text()
+      URL: //link[@rel="canonical"]/@href
+      Details:
+        selector: //div[@class="prose"]/p/text()
+        concat: ""
+# Last Updated August 26, 2024
