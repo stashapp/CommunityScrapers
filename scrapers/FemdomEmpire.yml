@@ -79,8 +79,6 @@ xPathScrapers:
         selector: $itemInfo/span[@class="date"]/text()
         postProcess:
           - parseDate: January 2, 2006
-      performer:
-        Name: $itemInfo/span[@class="featuring"]/a/text()
       Image:
         selector: $itemThumb/a/img/@*[name()='src0' or name()='src0_1x']
         postProcess:
