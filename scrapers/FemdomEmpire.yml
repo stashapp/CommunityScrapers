@@ -1,10 +1,18 @@
-name: "FemdomEmpire"
+name: Femdom Empire
 sceneByURL:
   - action: scrapeXPath
     url:
       - femdomempire.com/tour/trailers/
       - feminized.com/tour/trailers/
     scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://femdomempire.com/tour/search.php?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
     url:
@@ -60,6 +68,22 @@ xPathScrapers:
           - replace:
             - regex: "(^[^|]+)\\|/tour/([^\\.]+\\.jpg).*"
               with: $1$2
-
+  sceneSearch:
+    common:
+      $itemThumb: //div[@class='item-thumb']
+      $itemInfo: //div[@class='item-info clear']
+    scene:
+      Title: $itemThumb/a/@title
+      URL: $itemThumb/a/@href
+      Date:
+        selector: $itemInfo/span[@class="date"]/text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        selector: $itemThumb/a/img/@*[name()='src0' or name()='src0_1x']
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://femdomempire.com/
 # Note: Date Added on older scenes seem to be incorrect on FemDomEmpire site. Newer scenes have correct date.
-# Last Updated December 30, 2020
+# Last Updated August 26, 2024
