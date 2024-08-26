@@ -14,15 +14,10 @@ performerByURL:
 xPathScrapers:
   performerSearch:
     common:
-      $result: //*[@id="browse-girls"]//*[@class="w-1/2 sm:w-1/6 px-4 py-2"]//a[1]
+      $result: //a[@type="button"][@class="relative w-full"]
 
     performer:
-      Name:
-        selector: $result/@title
-        postProcess:
-          - replace:
-              - regex: " on Babestation"
-                with: ""
+      Name: $result/h3/text()
       URL:
         selector: $result/@href
         postProcess:
@@ -32,13 +27,12 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      Name: //*[@id="app"]//h1/text()
-      Image: //*[@id="app"]//div[@class="w-full relative"]/img/@src
-      Gender:
-        fixed: "Female"
-      Country:
-        fixed: "United Kingdom"
+      Name: //div[@id="app"]//h1/text()
+      Image: //div[@id="app"]//div[contains(@class, "w-full")]/img/@src
+      Tags:
+        Name: //div[@id="app"]//div[@class="w-auto text-sm mt-4"]/div/a/button/text()
       URL: //link[@rel="canonical"]/@href
       Details:
-        selector: //profile-bio/../noscript/text()
-# Last Updated January 20, 2023
+        selector: //div[@class="prose"]/p/text()
+        concat: ""
+# Last Updated August 26, 2024
