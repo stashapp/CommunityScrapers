@@ -2,32 +2,25 @@ name: It's POV
 sceneByURL:
   - action: scrapeXPath
     url:
-      - backdoorpov.com/en/videos
-      - feetishpov.com/en/videos
-      - intimatepov.com/en/videos
-      - itspov.com/en/videos
-      - officepov.com/en/videos
-      - petitepov.com/en/videos
-      - schoolpov.com/en/videos
-      - steppov.com/en/videos
+      - backdoorpov.com/videos
+      - feetishpov.com/videos
+      - intimatepov.com/videos
+      - itspov.com/videos
+      - officepov.com/videos
+      - petitepov.com/videos
+      - schoolpov.com/videos
+      - steppov.com/videos
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $scene: //div[@id="scenes"]
     scene:
-      Title: //div[@id="freetour-video-view"]/h1/text()
-      Details: //div[@id="story"]
-      Tags:
-        Name: //p[@class="categories"]//a/text()
+      Title: /html/head/title
+      Details: /html/head/meta[@name="description"]/@content
       Performers:
-        Name: //p[@class="starring"]//a/text()
-      Studio:
-        Name:
-          selector: //img[contains(@class,"FreeTourHeader_site-logo")]/@alt
-          postProcess:
-            - replace:
-              - regex: \.com$
-                with: $1
-      Image: //div[@id="freetour-video-view-video"]//picture/source[1]/@srcset
+        Name: $scene/div[@class="player"]/div[@class="actress"]/a/text()
+      Image: $scene/div[@class="player"]//picture/img/@data-src
 driver:
   useCDP: true
   cookies:
@@ -103,4 +96,4 @@ driver:
           Domain: ".steppov.com"
           Value: "1"
           Path: "/"
-# Last Updated June 05, 2022
+# Last Updated August 26, 2024
