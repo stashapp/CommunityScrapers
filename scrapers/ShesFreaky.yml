@@ -9,9 +9,9 @@ sceneByFragment:
   queryURL: https://www.shesfreaky.com/video/{filename}.html
   queryURLReplace:
     filename:
-      - regex: (?:.+)\[([\w\d-]+)\](?:\.\w+$)
+      - regex: (?:.+)\[([\w\d-]+)-\d\](?:\.\w+$)
         with: $1
-      - regex: .*\.[^\.]+$ # if no ph id is found in the filename
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
         with: # clear the filename so that it doesn't leak
   scraper: sceneScraper
 sceneByName:
