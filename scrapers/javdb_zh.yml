@@ -1,0 +1,157 @@
+name: JavDB_zh
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://javdb.com/search?q={filename}&f=all
+  queryURLReplace:
+    filename:
+      - regex: \..+$
+        with: ""
+  scraper: sceneQueryScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - javdb.com/v/
+      - javdb367.com/v/
+    scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: javdb\.com
+          with: "javdb.com"
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://javdb.com/search?q={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - javdb.com/v/
+      - javdb367.com/v/
+    scraper: movieScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: javdb\.com
+          with: "javdb.com"
+xPathScrapers:
+  sceneSearch:
+    common:
+      $videoItem: //div[starts-with(@class, 'movie-list')]/div[@class="item"]
+    scene:
+      Title: $videoItem/a/div[@class="video-title"]
+      URL:
+        selector: $videoItem/a[@class="box"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://javdb.com"
+      Image: 
+        selector: $videoItem//img/@src
+        postProcess:
+          - replace:
+            - regex: (http:|https:)
+              with:
+            - regex: ^
+              with: "https:"
+  sceneQueryScraper:
+    common:
+      $videoItem: //div[starts-with(@class, 'movie-list')]/div[@class="item"]
+    scene:
+      Title: $videoItem/a/div[@class="video-title"]/text()
+      URL:
+        selector: $videoItem/a[@class="box"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://javdb.com"
+        # If you don't support cookie you can use this regex.
+        #    - regex: $
+        #      with: "?locale=zh"
+  sceneScraper:
+    scene:
+      Title:
+        selector: //strong[text()='番號:']/../span
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: \|
+                with: ""
+      Date: //strong[text()='日期:']/../span/text()
+      Director: //strong[text()='導演:']/../span/a/text()
+      Code: //strong[text()='番號:']/../span
+      Details:
+        selector: //h2[@class="title is-4"]/strong/text()
+        postProcess:
+          - replace:
+              - regex: (.*?\s)(.+)
+                with: $2
+      Tags:
+        Name: //strong[text()='類別:']/../span/a/text()
+      Performers:
+        Name: //strong[text()='演員:']/../span/a/text()
+      Studio:
+        Name:
+          selector: //strong[text()='片商:']/../span/a/text()|//strong[text()='發行:']/../span/a/text()
+      Image: //img[@class="video-cover"]/@src
+      URL: //link[@rel="canonical"]/@href
+  movieScraper:
+    movie:
+      Name:
+        selector: //strong[text()='番號:']/../span
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: \|
+                with: ""
+      Director: //strong[text()='導演:']/../span/a/text()
+      Duration:
+        selector: //strong[text()='時長:']/../span/text()
+        postProcess:
+          - replace:
+              - regex: \D
+                with: ""
+      Date: //strong[text()='日期:']/../span/text()
+      Synopsis:
+        selector: //h2[@class="title is-4"]/strong/text()
+        postProcess:
+          - replace:
+              - regex: (.*?\s)(.+)
+                with: $2
+      Studio:
+        Name:
+          selector: //strong[text()='片商:']/../span/a/text()|//strong[text()='發行:']/../span/a/text()
+      FrontImage:
+        selector: //img[@class="video-cover"]/@src
+      URL: //link[@rel="canonical"]/@href
+
+driver:
+  cookies:
+    - CookieURL: "https://javdb.com"
+      Cookies:
+        - Name: "locale"
+          Domain: "javdb.com"
+          Value: "zh"
+          Path: "/"
+    - CookieURL: "https://javdb367.com"
+      Cookies:
+        - Name: "locale"
+          Domain: "javdb367.com"
+          Value: "zh"
+          Path: "/"
+        # Access to certain titles requires a javdb account
+        # Uncomment the below replacing the Value part
+        #- Name: "_jdb_session"
+        #  Value: "Add here the actual value from your cookies"
+        #  Path: "/"
+        #  Domain: "javdb367.com"
+        #- Name: "remember_me_token"
+        #  Value: "Add here the actual value from your cookies"
+        #  Path: "/"
+        #  Domain: "javdb367.com"
+
+# Last Updated August 26, 2024
