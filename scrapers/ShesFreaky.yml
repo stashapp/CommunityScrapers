@@ -1,0 +1,60 @@
+name: ShesFreaky
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://www.shesfreaky.com/video/
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.shesfreaky.com/video/{filename}.html
+  queryURLReplace:
+    filename:
+      - regex: (?:.+)\[([\w\d-]+)\](?:\.\w+$)
+        with: $1
+      - regex: .*\.[^\.]+$ # if no ph id is found in the filename
+        with: # clear the filename so that it doesn't leak
+  scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://www.shesfreaky.com/search/videos/{}/page1.html"
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneSearch:
+    common:
+      $result: //div[@class="main-content"]/div[contains(@class, "item")]
+    scene:
+      Title: $result/div[@class="item-title"]/a/text()
+      URL: $result/a/@href
+      Image:
+        selector: $result/a/div/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "http:"
+  sceneScraper:
+    common:
+      $content: //div[@id="content-main"]
+    scene:
+      Title: //h2
+      Tags:
+        Name: $content/p/a/text()
+      Date:
+        selector: //div[@id="content-details"]/div/div/p/text()[3]
+        postProcess:
+          - parseDate: 2006-01-02
+      Details: $content/p[4]/text()
+      Image:
+        selector: //div[@id="content-thumbs"]/a[1]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "http:"
+              - regex: "-1.jpg$"
+                with: "-3.jpg"
+
+# Last Updated August 27, 2024
