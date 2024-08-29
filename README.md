@@ -59,7 +59,7 @@ Some scrapers need extra configuration before they will work. This is unfortunat
 
 ## Scrapers
 
-You can find a list of sites that currently have a scraper in [SCRAPERS-LIST.md](https://github.com/stashapp/CommunityScrapers/blob/master/SCRAPERS-LIST.md)
+You can find a list of sites that currently have a scraper at https://stashapp.github.io/CommunityScrapers/
 
 :boom: For **most scrapers** you have to provide the scene/performer URL
 
@@ -81,13 +81,6 @@ For more info please check the scraping help [section](https://github.com/stasha
 ## Contributing
 
 Contributions are always welcome! Use the [Scraping Configuration](https://github.com/stashapp/stash/blob/develop/ui/v2.5/src/docs/en/Manual/ScraperDevelopment.md) help section to get started and stop by the [Discord](https://discord.gg/2TsNFKt) #scrapers channel with any questions.
-
-The last line of a scraper definition (`.yml` file) must be the last updated date, in the following format:  
-`# Last Updated Month Day, Year`  
-Month = Full month name (`October`)  
-Day = Day of month, with leading zero (`04`, `16`)  
-Year = Full year (`2020`)  
-Example: `# Last Updated October 04, 2020`
 
 ### Validation
 
