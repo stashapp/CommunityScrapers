@@ -645,6 +645,7 @@ digitalplayground.com|DigitalPlayground/DigitalPlayground.yml|:heavy_check_mark:
 digitalplaygroundnetwork.com|DigitalPlayground/DigitalPlayground.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 dilfed.com|MileHighMedia_Straight/MileHighMedia_Straight.yml|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|:heavy_check_mark:|Python|-
 dillionation.com|ModelCentroAPI.yml|:heavy_check_mark:|:x:|:x:|:x:|Python|-
+diredesires.com|KBProductions.yml|:heavy_check_mark:|:x:|:x:|:-:|Python|-
 dirtroadwarriors.com|Andomark.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dirty-angelina.com|Shopmaker.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
 dirty-chubby.com|MMP_Network.yml|:heavy_check_mark:|:x:|:x:|:x:|-|-
