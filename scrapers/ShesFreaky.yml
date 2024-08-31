@@ -2,7 +2,7 @@ name: ShesFreaky
 sceneByURL:
   - action: scrapeXPath
     url:
-      - https://www.shesfreaky.com/video/
+      - shesfreaky.com/video/
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeXPath
@@ -42,12 +42,9 @@ xPathScrapers:
     scene:
       Title: //h2
       Tags:
-        Name: $content/p/a/text()
-      Date:
-        selector: //div[@id="content-details"]/div/div/p/text()[3]
-        postProcess:
-          - parseDate: 2006-01-02
-      Details: $content/p[4]/text()
+        Name: $content//a
+      Date: //i[contains(@class, "fa-calendar")]/following-sibling::text()[1]
+      Details: $content//span[contains(., "Description:")]/../following-sibling::p
       Image:
         selector: //div[@id="content-thumbs"]/a[1]/img/@src
         postProcess:
@@ -56,5 +53,3 @@ xPathScrapers:
                 with: "http:"
               - regex: "-1.jpg$"
                 with: "-3.jpg"
-
-# Last Updated August 27, 2024
