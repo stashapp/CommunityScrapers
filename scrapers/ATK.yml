@@ -24,6 +24,14 @@ galleryByURL:
       - atkexotics.com/tour/photo
 
     scraper: galleryScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - atkhairy.com/tour/model/
+      - atkpetites.com/tour/model/
+      - atkpremium.com/tour/model/
+      - atkarchives.com/tour/model/
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -115,6 +123,30 @@ xPathScrapers:
           - replace:
               - regex: https.+\/[a-z]\/[a-z]{3}[0-9]{3}\/(\d+)\/.*
                 with: $1
+  performerScraper:
+    performer:
+      Name:
+        selector: //div[@class="modelProfileWrap tour_box"]/span/text()
+      Gender:
+        fixed: Female
+      Image: //div[@class="profileImage left clear"]/img/@src
+      Height:
+        selector: //div[@class="modelInfoWrap"]/span[4]
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //div[@class="modelInfoWrap"]/span[6]
+        postProcess:
+          - replace:
+              - regex: lbs
+                with: ""
+          - lbToKg: true
+      Measurements:
+        selector: //div[@class="modelInfoWrap"]/span[8]
+      Ethnicity:
+        selector: //div[@class="modelInfoWrap"]/span[10]
+      HairColor:
+        selector: //div[@class="modelInfoWrap"]/span[12]
 driver:
   useCDP: true
   cookies:
@@ -123,4 +155,4 @@ driver:
           ValueRandom: 43
           Domain: .amkingdom.com
           Path: /
-# Last July 23, 2024
+# Last September 2, 2024
