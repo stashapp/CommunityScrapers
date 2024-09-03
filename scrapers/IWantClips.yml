@@ -55,7 +55,7 @@ xPathScrapers:
                   with: ","
           split: ","
       Image:
-        selector: //div[contains(@class,'vidStuff')]//video[contains(@id,'html5_api')]/@poster | //div[contains(@class,'vidStuff')]//img/@src
+        selector: //meta[@name='og:image']/@content
         postProcess:
           - replace:
               - regex: (\d*_.*((\.gif)|(\.mp4)))
@@ -95,4 +95,4 @@ driver:
           Value: "on"
           Domain: .iwantclips.com
           Path: /
-# Last Updated August 24, 2024
+# Last Updated September 03, 2024
