@@ -1,0 +1,35 @@
+name: "HentaiDude"
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hentaidude.com/
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://hentaidude.com/?s={}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="title-container"]/h2
+      URL: //meta[@property="og:url"]/@content
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name: //div[@class="postMeta"]/div[@class="new-tags"]/a[@rel="tag"] | //div[@class="censored"]/span
+
+  sceneSearch:
+    common:
+      $searchItem: //section[@id="content"]//*/a[@class="videoLink dudep"]/../a[@class="thlink dudep"]
+    scene:
+      Title: $searchItem/@title
+      URL:
+        selector: $searchItem/@href
+      Image: $searchItem//img[@class="thumb_small"]/@data-src
