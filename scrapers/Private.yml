@@ -55,7 +55,10 @@ xPathScrapers:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
           # The format changes when another language is selected
-          - parseDate: 01/02/2006
+          - replace:
+              - regex: (?:T.+)
+                with:
+          - parseDate: 2006-01-02
       Details:
         selector: $content//p[@id="description-section"]/text()
         concat: "\n"
