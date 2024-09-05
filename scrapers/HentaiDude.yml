@@ -22,13 +22,6 @@ xPathScrapers:
       Title: //div[@class="title-container"]/h2
       URL: //meta[@property="og:url"]/@content
       Image: //meta[@property="og:image"]/@content
-      Movies:
-        Name:
-          selector: //meta[@property="og:title"]/@content
-          postProcess:
-            - replace:
-                - regex: " - Episode.*"
-                  with: ""
       Tags:
         Name: //div[@class="postMeta"]/div[@class="new-tags"]/a[@rel="tag"] | //div[@class="censored"]/span
 
