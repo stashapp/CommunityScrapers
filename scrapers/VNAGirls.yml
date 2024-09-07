@@ -2,7 +2,6 @@ name: VNAGirls
 sceneByURL:
   - action: scrapeXPath
     url:
-      - alexlegend.com
       - angelinacastrolive.com
       - bestoftealconrad.com
       - blownbyrone.com
@@ -82,4 +81,4 @@ xPathScrapers:
               - regex: (\d+)(st|nd|rd|th)
                 with: "$1"
           - parseDate: January 2 2006
-# Last Updated March 25, 2022
+# Last Updated September 06, 2024
