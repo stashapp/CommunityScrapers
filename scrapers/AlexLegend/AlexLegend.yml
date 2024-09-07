@@ -25,7 +25,7 @@ xPathScrapers:
         selector: //script[contains(text(),"myFluidPlayer")]
         postProcess:
           - replace:
-            - regex: ^.*posterImage\s?:\s?'(.*?)'.*
+            - regex: .+posterImage\s?:\s?'(.*?)'.+
               with: $1
       Studio:
         Name:
@@ -36,15 +36,13 @@ xPathScrapers:
           split: ", "
           postProcess:
             - replace:
-              - regex: ^Tags:(.+)
-                with: $1
+              - regex: 'Tags:'
       Performers:
         Name:
           selector: //div[contains(concat(" ", normalize-space(@class), " "), " main__models ")]
           split: ","
           postProcess:
             - replace:
-              - regex: ^Models:(.+)
-                with: $1
+              - regex: 'Models:'
 
 # Last Updated September 06, 2024
