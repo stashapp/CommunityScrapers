@@ -40,7 +40,7 @@ xPathScrapers:
 
   sceneSearch:
     common:
-      $selection: //div[contains(concat(' ',normalize-space(@class),' '),' product-col ')]
+      $selection: //div[contains(@class, "product-col")]
     scene:
       Title: $selection//h4/a
       URL:

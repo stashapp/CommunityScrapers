@@ -152,7 +152,7 @@ xPathScrapers:
                 with: ""
 
       Details:
-        selector: //div[contains(concat(" ",normalize-space(@class)," ")," about-desc ")]//span/text()|//div[contains(concat(" ",normalize-space(@class)," ")," about-desc ")]//p/text()
+        selector: //div[contains(@class,"about-desc")]//span/text()|//div[contains(@class,"about-desc")]//p/text()
         concat: "\n"
         postProcess:
           - replace:

@@ -133,7 +133,7 @@ xPathScrapers:
       URL: //link[@rel="canonical"]/@href
   performerSearch:
     common:
-      $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
+      $result: //div/a[contains(@href, "/model") and contains(@class,"model-link")]
     performer:
       Name: $result/img/@alt
       URL:
@@ -155,7 +155,7 @@ xPathScrapers:
               - regex: \s+$
                 with:
       Twitter:
-        selector: '//div/a[contains(concat(" ", normalize-space(@class), " "), " social-link ") and contains(@href, "twitter.com")]/@href'
+        selector: '//div/a[contains(@class,"social-link") and contains(@href, "twitter.com")]/@href'
       Image:
         selector: //img[contains(@class,'kink-slider-img') and contains(@class,'active')]/@data-src
       Tattoos:

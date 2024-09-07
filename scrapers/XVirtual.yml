@@ -20,7 +20,7 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneSearch:
     common:
-      $ep: //div[contains(concat(' ', normalize-space(@class), ' '), ' episode ')]
+      $ep: //div[contains(@class,"episode")]
     scene:
       Title:
         selector: $ep//a[@class="title"]/h2[@class="nice-title"]/text()
@@ -29,7 +29,7 @@ xPathScrapers:
               - regex: \s*in\s+180°$
                 with:
       Image:
-        selector: $ep//img[contains(concat(' ', normalize-space(@class), ' '), ' poster ')]/@src
+        selector: $ep//img[contains(@class,"poster")]/@src
       URL:
         selector: $ep//a[@class="title"]/@href
         postProcess:

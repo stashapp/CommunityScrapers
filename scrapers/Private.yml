@@ -107,7 +107,7 @@ xPathScrapers:
       Image: //meta[@property="og:image"]/@content
   performerScraper:
     common:
-      $performerData: //div[contains(concat(' ',normalize-space(@class),' '),' pornstar-wrapper ')]
+      $performerData: //div[contains(@class,"pornstar-wrapper")]
     performer:
       Name: $performerData//h1
       URL: //meta[@property="og:url"]/@content

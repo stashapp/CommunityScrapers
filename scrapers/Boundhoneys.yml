@@ -9,7 +9,7 @@ xPathScrapers:
     scene:
       Title: //div[@class="updateVideoTitle"]
       Details:
-        selector: //div[@class="updateDescription"]/b/text()[normalize-space(.)]
+        selector: //div[@class="updateDescription"]/b/text()
         concat: "\n\n"
       Image: //meta[@name="twitter:image"]/@content
       Studio:

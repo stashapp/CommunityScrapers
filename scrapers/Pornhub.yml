@@ -117,6 +117,7 @@ xPathScrapers:
     common:
       $datablob: //script[contains(., 'VideoObject')]/text()
       $videowrap: //div[@class="video-wrapper"]
+      $videoActions: //div[contains(@class,"video-actions-tabs")]
     scene:
       Title:
         selector: //meta[@property="og:title"]/@content
@@ -146,7 +147,12 @@ xPathScrapers:
                 with:
       Tags:
         Name:
-          selector: //div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," categoriesWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," tagsWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," productionWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," langSpokenWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//div[contains(concat(" ",normalize-space(@class)," ")," relatedSearchTermsContainer ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," userInfo ")]//div[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//i/text()
+          selector: $videoActions//div[contains(@class,"categoriesWrapper")]//a/text()
+            |$videoActions//div[contains(@class,"tagsWrapper")]//a/text()
+            |$videoActions//div[contains(@class,"productionWrapper")]//a/text()
+            |$videoActions//div[contains(@class,"langSpokenWrapper")]//a/text()
+            |$videoActions//div[contains(@class,"relatedSearchTermsContainer")]//a/text()
+            |//div[contains(@class,"userInfo")]//div[contains(@class,"usernameBadgesWrapper")]//i/text()
           postProcess:
             - replace:
                 - regex: "onlyfans"
@@ -155,7 +161,8 @@ xPathScrapers:
                   with: "Fansly"
       Performers:
         Name:
-          selector: //div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//span[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a/text()|//div[contains(concat(" ",normalize-space(@class)," ")," video-actions-tabs ")]//span[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]//a/text()
+          selector: $videoActions//span[contains(@class,"usernameBadgesWrapper")]//a/text()
+            |$videoActions//span[contains(@class,"pornstarsWrapper")]//a/text()
           postProcess:
             - replace:
                 - regex: '\.'
@@ -164,7 +171,7 @@ xPathScrapers:
                   with: " "
       Image: //meta[@property="og:image"]/@content
       Studio:
-        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," usernameWrap ")]//a/text()
+        Name: $videowrap//div[contains(@class,"usernameWrap")]//a/text()
 
 driver:
   cookies:

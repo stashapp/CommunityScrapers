@@ -46,7 +46,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Performers: &perfAttr
         Name: //div[@class='update-info-block models-list-thumbs']//span/text()
-      Details: &detailsSel //h4[normalize-space('Description:')]/following-sibling::p/text()
+      Details: &detailsSel //h4[contains(text(),"Description:")]/following-sibling::p/text()
       Tags: &tagsAttr
         Name:
           selector: //ul[@class='tags']/li/a/text()

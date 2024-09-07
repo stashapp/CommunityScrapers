@@ -12,7 +12,7 @@ xPathScrapers:
     scene:
       Title: //span[@class="title_bar_hilite"]
       Details:
-        selector: $updateDesc$divCenter/span/span[@style]/text()[normalize-space(.)]|($updateDesc | $updateDesc/p)/text()[normalize-space(.)]|($updateDesc$divCenter/text())[1]|($updateDesc/text())[1]
+        selector: $updateDesc$divCenter/span/span[@style]/text()|($updateDesc | $updateDesc/p)/text()|($updateDesc$divCenter/text())[1]|($updateDesc/text())[1]
         concat: "\n\n"
       Date:
         selector: //div[@class="cell update_date"][not(ancestor::span[@class="update_description"])]/text()[1]

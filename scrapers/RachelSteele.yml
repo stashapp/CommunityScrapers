@@ -18,7 +18,7 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneSearch:
     common:
-      $root: //li[contains(concat(' ',normalize-space(@class),' '),' first ')]
+      $root: //li[contains(@class,"first")]
     scene:
       Title: $root//h3
       Image:
@@ -36,9 +36,9 @@ xPathScrapers:
 
   sceneScraper:
     scene:
-      Title: //div[contains(concat(' ',normalize-space(@class),' '),' span12 ')]/h3/text()
+      Title: //div[contains(@class,"span12")]/h3/text()
       Image:
-        selector: //div[contains(concat(' ',normalize-space(@class),' '),' album-details ')]/div/div/img/@src
+        selector: //div[contains(@class,"album-details")]/div/div/img/@src
         postProcess:
           - replace:
               - regex: ^

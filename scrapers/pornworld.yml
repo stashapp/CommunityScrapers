@@ -30,7 +30,7 @@ jsonScrapers:
 xPathScrapers:
   sceneScraper:
     common:
-      $details: //div[contains(concat(' ',normalize-space(@class),' '),' scene-details ')]
+      $details: //div[contains(@class,"scene-details")]
     scene:
       Title: &title
         selector: //h1
@@ -44,7 +44,7 @@ xPathScrapers:
           - parseDate: 2006, January 2
       Details: $details//span[text() = 'Description:']/../text()[2]
       Tags:
-        Name: $details//span[text() = 'Tags:']/following-sibling::a[contains(concat(' ',normalize-space(@class),' '),' link-secondary ')]
+        Name: $details//span[text() = 'Tags:']/following-sibling::a[contains(@class,"link-secondary")]
       Performers:
         Name: $details//h1/following-sibling::p[1]/a
         URL:

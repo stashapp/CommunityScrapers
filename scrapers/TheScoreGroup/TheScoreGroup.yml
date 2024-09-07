@@ -78,7 +78,7 @@ xPathScrapers:
     common:
       $url: //link[@rel="canonical"]/@href
       $videopage: //section[@id="videos_page-page" or @id="mixed_page-page"]
-      $stat: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]
+      $stat: //div[contains(@class,"mb-3")]
     scene:
       # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
       # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
