@@ -28,6 +28,7 @@ studio_map = {
     "cougarseason.com": "Cougar Season",
     "creampiethais.com": "Creampie Thais",
     "deepthroatsirens.com": "Deepthroat Sirens",
+    "dickhddaily.com": "DickHDDaily",
     "diredesires.com": "Dire Desires",
     "dirtyauditions.com": "Dirty Auditions",
     "divine-dd.com": "Divine-DD",
