@@ -30,8 +30,9 @@ class Site:
 
     def __init__(self, name: str):
         self.name = name
-        self.homepage = "https://" + self.name.lower() + ".com"
-        self.api = "https://" + self.name.lower() + ".team18.app/graphql"
+        self.name_lower = name.lower()
+        self.homepage = "https://" + self.name_lower + ".com"
+        self.api = "https://" + self.name_lower + ".team18media.app/graphql"
         if name == "Fit18":
             self.api_key = "77cd9282-9d81-4ba8-8868-ca9125c76991"
         elif name == "Thicc18":
@@ -42,7 +43,7 @@ class Site:
         up = urlparse(u)
         if up.hostname is None:
             return False
-        if up.hostname.lstrip("www.").rstrip(".com") == self.name.lower():
+        if up.hostname.lstrip("www.").rstrip(".com") == self.name_lower:
             splits = u.split("/")
             if len(splits) < 4:
                 return False
