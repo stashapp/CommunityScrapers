@@ -32,11 +32,7 @@ xPathScrapers:
           fixed: AlexLegend
       Tags:
         Name:
-          selector: //div[contains(concat(" ", normalize-space(@class), " "), " content-tags ")]
-          split: ", "
-          postProcess:
-            - replace:
-              - regex: 'Tags:'
+          selector: //div[contains(concat(" ", normalize-space(@class), " "), " content-tags ")]/a
       Performers:
         Name:
           selector: //div[contains(concat(" ", normalize-space(@class), " "), " main__models ")]
