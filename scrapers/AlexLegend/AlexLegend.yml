@@ -8,21 +8,23 @@ sceneByURL:
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $sceneWrapper: //section[contains(concat(" ", normalize-space(@class), " "), " content-sec ")]
     scene:
-      Title: //div[contains(concat(" ", normalize-space(@class), " "), " content-title ")]/h1
+      Title: $sceneWrapper//div[contains(concat(" ", normalize-space(@class), " "), " content-title ")]/h1
       Code:
-        selector: //link[@rel="canonical"]/@href
+        selector: /link[@rel="canonical"]/@href
         postProcess:
           - replace:
             - regex: .+-(\d+)\..+
               with: $1
-      Details: //div[contains(concat(" ", normalize-space(@class), " "), " content-desc ")][2]
+      Details: $sceneWrapper//div[contains(concat(" ", normalize-space(@class), " "), " content-desc ")][2]
       Date:
-        selector: //div[contains(concat(" ", normalize-space(@class), " "), " content-date ")]/div[contains(concat(" ", normalize-space(@class), " "), " label ")]
+        selector: $sceneWrapper//div[contains(concat(" ", normalize-space(@class), " "), " content-date ")]/div[contains(concat(" ", normalize-space(@class), " "), " label ")]
         postProcess:
           - parseDate: 02.01.2006
       Image:
-        selector: //script[contains(text(),"myFluidPlayer")]
+        selector: $sceneWrapper//script[contains(text(),"myFluidPlayer")]
         postProcess:
           - replace:
             - regex: .+posterImage\s?:\s?'(.+?)'.+
@@ -32,13 +34,9 @@ xPathScrapers:
           fixed: AlexLegend
       Tags:
         Name:
-          selector: //div[contains(concat(" ", normalize-space(@class), " "), " content-tags ")]/a
+          selector: $sceneWrapper//div[contains(concat(" ", normalize-space(@class), " "), " content-tags ")]/a
       Performers:
         Name:
-          selector: //div[contains(concat(" ", normalize-space(@class), " "), " main__models ")]
-          split: ","
-          postProcess:
-            - replace:
-              - regex: 'Models:'
+          selector: $sceneWrapper//div[contains(concat(" ", normalize-space(@class), " "), " main__models ")]/a[@title]
 
-# Last Updated September 06, 2024
+# Last Updated September 08, 2024
