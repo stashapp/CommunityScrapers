@@ -16,6 +16,7 @@ site_ids = {
     'cuckhunter.com': 10,
     'nudeyogaporn.com': 11,
     'transroommates.com': 12,
+    'transmidnight.com': 14,
     'transdaylight.com': 15
 }
 
