@@ -12,7 +12,7 @@ xPathScrapers:
       Title: $info//h1[@class="video-detail__title"]
       Studio:
         Name:
-          fixed: DarkRoomVR
+          fixed: Dark Room VR
       Date:
         selector: $info//div[@class="video-info__text"]/div[@class="video-info__time"]/text()
         postProcess:
@@ -25,5 +25,4 @@ xPathScrapers:
         Name: $info//div[@class="tags__container"]//a/text()
       Performers:
         Name: $info//div[@class="video-info__text"]//a/text()
-      Image: $info//div[@class="image-container"]//dl8-video/@poster
-# Last Updated January 15, 2022
+      Image: //meta[@property='og:image']/@content
