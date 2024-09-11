@@ -9,10 +9,12 @@ sceneByURL:
       - povmasters.com/scenes/
       - cuckhunter.com/scenes/
       - nudeyogaporn.com/scenes/
+      - transdaylight.com/scenes/
+      - transmidnight.com/scenes/
       - transroommates.com/scenes/
     script:
       - python
       - Arx.py
       - scrapeByURL
 
-# Last Updated February 27, 2024
+# Last Updated September 9, 2024

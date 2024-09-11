@@ -15,7 +15,9 @@ site_ids = {
     'povmasters.com': 8,
     'cuckhunter.com': 10,
     'nudeyogaporn.com': 11,
-    'transroommates.com': 12
+    'transroommates.com': 12,
+    'transmidnight.com': 14,
+    'transdaylight.com': 15
 }
 
 # Timeout (seconds) to prevent indefinite hanging
