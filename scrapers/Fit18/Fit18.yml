@@ -9,4 +9,32 @@ sceneByURL:
     script:
       - python
       - Fit18.py
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://fit18.com/models/
+      - https://thicc18.com/models/
+    scraper: performerScraper
+
+xPathScrapers:
+  performerScraper:
+    common:
+      $info: //div[@class="card info"]
+    performer:
+      Name: $info/h1
+      Gender:
+        fixed: "Female"
+      Image: //picture/img/@src
+      Height:
+        selector: $info/div[2]/h1
+        postProcess:
+          - replace:
+            - regex: cm
+              with:
+      Weight:
+        selector: $info/div[2]/h4
+        postProcess:
+          - replace:
+            - regex: kg
+              with:
 # Last Updated January 07, 2022
