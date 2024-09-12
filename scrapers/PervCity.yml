@@ -1,4 +1,4 @@
-name: "PervCity"
+name: PervCity
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -8,52 +8,102 @@ sceneByURL:
       - oraloverdose.com/trailers/
       - pervcity.com/trailers/
       - upherasshole.com/trailers/
-      - dpdiva.com/trailers/
     scraper: sceneScraper
+    queryURL: '{url}'
+    queryURLReplace:
+      url:
+        - regex: (?:^.+\.com)(/.+)
+          with: https://pervcity.com$1
+  - action: scrapeXPath
+    url:
+      - dpdiva.com/trailers/
+    scraper: dpdivaScraper
+
 xPathScrapers:
   sceneScraper:
     common:
       $sceneinfo: //div[@class="videoInfo"]
       $base: //head/base/@href
+      $image: //img[contains(@class,'posterimg')]
     scene:
-      Title: $sceneinfo/div[@class="infoHeader"]
-      Studio:
-        Name:
-          selector: //head/base/@href
-          postProcess:
-            - replace:
-                - regex: .+/(?:www\.)?([^\.]+)\.com/.*
-                  with: $1
-            - map:
-                analoverdose: Anal Overdose
-                bangingbeauties: Banging Beauties
-                chocolatebjs: Chocolate BJs
-                dpdiva: DP Diva
-                oraloverdose: Oral Overdose
-                pervcity: PervCity
-                upherasshole: Up Her Asshole
-      Performers:
-        Name: $sceneinfo//span[@class="tour_update_models"]/a
-      Tags:
-        Name: $sceneinfo//div[@class="tagcats"]/a/text()
-      Details: $sceneinfo//p/text()|$sceneinfo//h3[@class="description"]
-      Image:
-        selector: //head/base/@href|//img[@class="posterimg stdimage thumbs"]/@src
-        concat: "|"
+      Title: &title $sceneinfo/div[@class="infoHeader"]
+      Code: &code
+        selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-              - regex: ([^|]+)\|(.*)/(content/.+)
-                with: $1$3
+              - regex: https.+/content/(\w+\-\d{4})\-.*/\d.+?$
+                with: $1
+      Studio: &studio
+        Name:
+          selector: //meta[@property="og:image"]/@content
+          postProcess:
+            - replace:
+                - regex: https.+/content/(\w+\-\d{4})\-.*/\d.+?$
+                  with: $1
+                - regex: (?:-.+)
+                  with:
+            # Convert studiocode uppercase to be able to map to studio
+            - javascript: |
+                if (value && value.length) {
+                  return value.toUpperCase()
+                }
+            - map:
+                AO: Anal Overdose
+                BAM: PervCity
+                BB: Banging Beauties
+                BTS: PervCity
+                CBJ: Chocolate BJs
+                DPD: DP Diva
+                LISC: PervCity
+                OO: Oral Overdose
+                SOLO: PervCity
+                UHA: Up Her Asshole
+      Performers: &performers
+        Name: $sceneinfo//span[@class="tour_update_models"]/a
+      Tags: &tags
+        Name: $sceneinfo//div[@class="tagcats"]/a/text()
+      Details: &details $sceneinfo//h3[@class="description"]/text()|$sceneinfo//p/text()
+      Image: &sceneimage $image/@src0_3x|$image/@src0_2x|$image/@src0_1x
       Date:
         selector: $sceneinfo/div[@class="infoHeader"]
         postProcess:
           - replace:
-              - regex: \s
+              - regex: \s|-|\'|’|,
                 with: "_"
+              - regex: "&"
+                with: "%26"
               - regex: ^
                 with: "https://pervcity.com/search.php?query="
           - subScraper:
-              selector: //div[@class="category_listing_block"]//div[@class="date"]/text()
+              selector: &scenedate //div[@class="category_listing_block"]//div[@class="date"]/text()
               postProcess:
                 - parseDate: 01-02-2006
-# Last Updated February 13, 2022
+
+  dpdivaScraper:
+    common:
+      $sceneinfo: //div[@class="videoInfo"]
+      $base: //head/base/@href
+      $image: //img[contains(@class,'posterimg')]
+    scene:
+      Title: *title
+      Image: *sceneimage
+      Tags: *tags
+      Studio: *studio
+      Details: *details
+      Performers: *performers
+      Code: *code
+      Date:
+        selector: $sceneinfo/div[@class="infoHeader"]
+        postProcess:
+          - replace:
+              - regex: \s|-|\'|’|,
+                with: "_"
+              - regex: "&"
+                with: "%26"
+              - regex: ^
+                with: "https://dpdiva.com/search.php?query="
+          - subScraper:
+              selector: *scenedate
+              postProcess:
+                - parseDate: 01-02-2006
+# Last Updated September 12, 2024
