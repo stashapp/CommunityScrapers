@@ -71,11 +71,7 @@ xPathScrapers:
       Studio:
         Name: &studioName //meta[@name="dl8-customization-brand-name"]/@content
       Image: &imageSel
-        selector: //img[@class="video-image"]/@src
-        postProcess:
-          - replace:
-              - regex: \?.+
-                with: ""
+        selector: //div[@id="videoPreviewContainer"]//video[@id="video-preview-hover"]/@poster
       URL: &sceneUrl //link[@rel="canonical"]/@href
       Code:
         selector: *sceneUrl
