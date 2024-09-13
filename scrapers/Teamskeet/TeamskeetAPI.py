@@ -114,8 +114,12 @@ elif 'mylf.com' in scene_url:
     ORIGIN = 'https://www.mylf.com'
     REFERER = 'https://www.mylf.com/'
     API_BASE = 'https://tours-store.psmcdn.net/mylf-elastic-hka5k7vyuw-videoscontent/_doc/'
+elif 'swappz.com' in scene_url:
+    ORIGIN = 'https://www.swappz.com'
+    REFERER = 'https://www.swappz.com/'
+    API_BASE = 'https://tours-store.psmcdn.net/swap_bundle/_search?size=1&q=id:'
 else:
-    log.error('The URL is not from a Teamskeet, MYLF or SayUncle URL (e.g. teamskeet.com/movies/*****)')
+    log.error('The URL is not from a Teamskeet, MYLF, SayUncle or Swappz URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
 
@@ -155,6 +159,9 @@ else:
         scene_api_json_check = r.json().get('found')
         if scene_api_json_check:
             scene_api_json = r.json()['_source']
+        # Get swappz search hit
+        elif r.json().get("hits"):
+            scene_api_json = r.json()['hits']['hits'][0]['_source']
         else:
             log.error('Scene not found (Wrong ID?)')
             sys.exit(1)
@@ -183,14 +190,19 @@ scrape['studio'] = {}
 studioApiName = scene_api_json['site'].get('name')
 log.debug("Studio API name is '" + studioApiName + "'")
 scrape['studio']['name'] = studioMap[studioApiName] if studioApiName in studioMap else studioApiName
-scrape['performers'] = [{"name": x.get('modelName')}
-                        for x in scene_api_json.get('models')]
 scrape['tags'] = [{"name": x} for x in scene_api_json.get('tags')]
 scrape['code'] = scene_api_json.get('cId', '').split('/')[-1]
 for tag in studioDefaultTags.get(studioApiName, []):
     log.debug("Assiging default tags - " + tag)
     scrape['tags'].append({"name": tag})
 scrape['image'] = scene_api_json.get('img')
+# handle swappz performers differently
+if 'swappz.com' in scene_url:
+    scrape['performers'] = [{"name": x.get('title')}
+                        for x in scene_api_json.get('models')]
+else:
+    scrape['performers'] = [{"name": x.get('modelName')}
+                            for x in scene_api_json.get('models')]
 
 # Each of TeamSkeet, MYLF and SayUncle have different ways to handle 
 # high resolution scene images.  SayUncle is a high resoution right
@@ -200,7 +212,7 @@ match scene_url:
     case str(x) if 'sayuncle.com' in x:
         log.debug("Say Uncle image, using default size")
         high_res = scrape['image']
-    case str(x) if 'teamskeet.com' in x:
+    case str(x) if 'teamskeet.com' in x or 'swappz.com' in x:
         log.debug("TeamSkeet image, mapping members/full")
         high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
     case str(x) if 'mylf.com' in x:
