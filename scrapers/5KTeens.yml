@@ -13,8 +13,8 @@ xPathScrapers:
           selector: //span[starts-with(@class, "color-")]/@class
           postProcess:
             - map:
-                color-5KT: 5Kteens
-                color-5KP: 5Kporn
+                color-5KT: 5K teens
+                color-5KP: 5K porn
       Title: //p[@class="trailer-title"]
       Details: //p[@class=""]
       Performers:
