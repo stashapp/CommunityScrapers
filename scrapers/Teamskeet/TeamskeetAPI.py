@@ -119,7 +119,7 @@ elif 'swappz.com' in scene_url:
     REFERER = 'https://www.swappz.com/'
     API_BASE = 'https://tours-store.psmcdn.net/swap_bundle/_search?size=1&q=id:'
 else:
-    log.error('The URL is not from a Teamskeet, MYLF, SayUncle or SwappzURL (e.g. teamskeet.com/movies/*****)')
+    log.error('The URL is not from a Teamskeet, MYLF, SayUncle or Swappz URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
 
