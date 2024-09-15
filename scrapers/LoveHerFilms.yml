@@ -29,7 +29,7 @@ xPathScrapers:
       Title: //h1[@class='title']/text()
       Details:
         selector: //div[@class='information']/p/text()
-        concat: '\n\n'
+        concat: "\n\n"
       Date:
         selector: //div[@class='date']/text()
         postProcess:
