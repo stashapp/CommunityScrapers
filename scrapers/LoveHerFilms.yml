@@ -27,7 +27,9 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class='title']/text()
-      Details: //p[@class='description']/text()
+      Details:
+        selector: //div[@class='information']/p/text()
+        concat: "\n\n"
       Date:
         selector: //div[@class='date']/text()
         postProcess:
