@@ -1,9 +1,12 @@
 name: "Traxxx"
 # requires: py_common
 
+# 2024-09-17: old.traxxx.me is set to be retired, the new site does not have an open GQL API.
+
 sceneByURL:
   - url:
      - traxxx.me/scene/
+     - old.traxxx.me/scene/
     action: script
     script:
       - python
@@ -42,6 +45,7 @@ performerByFragment:
 performerByURL:
   - url:
      - traxxx.me/actor/
+     - old.traxxx.me/actor/
     action: script
     script:
       - python
