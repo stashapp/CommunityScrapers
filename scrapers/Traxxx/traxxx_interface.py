@@ -47,7 +47,7 @@ class TraxxxInterface:
 
   def __init__(self, fragments={}):
     scheme = "https"
-    domain = 'traxxx.me'
+    domain = 'old.traxxx.me'
 
     if self.port:
       domain = f'{domain}:{self.port}'
