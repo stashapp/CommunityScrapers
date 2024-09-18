@@ -7,9 +7,10 @@
     "main": "node index.js"
   },
   "dependencies": {
-    "ajv": "^6.12.6",
-    "better-ajv-errors": "^0.6.7",
-    "chalk": "^4.1.1",
-    "yaml": "^2.2.2"
+    "ajv": "7",
+    "ajv-formats": "^3.0.1",
+    "better-ajv-errors": "^1.2.0",
+    "chalk": "4",
+    "yaml": "^2.5.1"
   }
 }

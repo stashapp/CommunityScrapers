@@ -37,6 +37,7 @@
     "sceneByName": {
       "title": "Scene by name",
       "description": "A single configuration for scraping scene info by the scene name.",
+      "type": "object",
       "allOf": [
         { "$ref": "#/definitions/anyByFragment" },
         {
@@ -54,6 +55,7 @@
     "performerByName": {
       "title": "Performer by name",
       "description": "A single configuration for scraping performer info by their name.",
+      "type": "object",
       "allOf": [
         { "$ref": "#/definitions/anyByFragment" },
         {
@@ -71,6 +73,7 @@
     "performerByFragment": {
       "title": "Performer by fragment",
       "description": "A single configuration for scraping performer info by fragment.",
+      "type": "object",
       "allOf": [
         { "$ref": "#/definitions/anyByFragment" },
         {
@@ -83,6 +86,7 @@
     "galleryByFragment": {
       "title": "Gallery by fragment",
       "description": "A single configuration for scraping gallery info by fragment.",
+      "type": "object",
       "allOf": [
         { "$ref": "#/definitions/anyByFragment" },
         {
