@@ -1,16 +1,13 @@
 name: "SLROriginals"
 sceneByURL:
   - action: scrapeXPath
-    url: &urlAttr
-      - allvr.porn
-      - hardonvr.com
-      - lustreality.com
+    url:
       - slroriginals.com
-      - vrfirsttimer.com
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
-    url: *urlAttr
+    url:
+      - slroriginals.com
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
