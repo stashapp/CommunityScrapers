@@ -39,6 +39,8 @@ xPathScrapers:
           - replace:
               - regex: .*(https?:\/\/.*\.jpg).*\".*
                 with: $1
+              - regex: 2x.jpg
+                with: 4x.jpg
       Studio:
         Name: //meta[@property="og:site_name"]/@content
   performerScraper:
