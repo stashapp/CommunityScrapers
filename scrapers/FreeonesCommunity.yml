@@ -71,7 +71,7 @@ xPathScrapers:
         Name: $commonRoot//span[@data-test="link_span_Studio"]
       Director: $commonRoot//span[@data-test="link_span_Director"]
       Date:
-        selector: //div[contains(concat(' ',normalize-space(@class),' '),' mid-content-pr-past-date ')]
+        selector: //div[contains(concat(' ',normalize-space(@class),' '),' uploaded-date ')]/text()
         postProcess:
           - replace:
             - regex: .+?(\w+\s\d{1,2},\s\d{4}).+

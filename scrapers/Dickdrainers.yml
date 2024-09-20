@@ -9,7 +9,7 @@ xPathScrapers:
     scene:
       Title: //div[@class="videoDetails clear"]//h3
       Details:
-        selector: //div[@class="videoDetails clear"]/p//text()[normalize-space(.)]
+        selector: //div[@class="videoDetails clear"]/p//text()
         concat: "\n\n"
       Date:
         selector: //span[contains(text(), "Date Added")]/following-sibling::text()
@@ -29,6 +29,6 @@ xPathScrapers:
       Tags:
         Name: //li[@class="label"][contains(text(),"Tags:")]/following-sibling::li/a/text()
       Performers:
-        Name: //li[@class="update_models"]//a/text()[normalize-space(.)]
+        Name: //li[@class="update_models"]//a/text()
 
 # Last Updated January 08, 2021
