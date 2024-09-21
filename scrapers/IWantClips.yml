@@ -69,23 +69,18 @@ xPathScrapers:
         Name: $model
   performerScraper:
     common:
-      $author: //li[@class="ais-Hits-item"][1]//span[contains(@class,'clip-author')]
+      $sidebar: //div[@class="sideBar lg-sticky"]
     performer:
-      Name: $author
-      URL: $author/a/@href
-      Details:
-        selector: $author/a/@href
-        postProcess:
-          - replace:
-              - regex: /store/
-                with: "/home/aboutMe/"
-          - subScraper: //p
-        concat: "\n\n"
-      Image: //div[@class="sideBar"]//img[contains(@class,'avatar')]/@src
+      Name: $sidebar//div[@class="col-sm-12 profileName"]/span
+      Details: $sidebar//p
+      Image: $sidebar/div/div/img/@src
   performerSearch:
+    common:
+      $artist: //li[@class="ais-Hits-item grid-artist-item"]
     performer:
-      Name: //h5[contains(@class,'featured-store-name')]/a
-      URL: //h5[contains(@class,'featured-store-name')]/a/@href
+      Name: $artist//h5/a/text()
+      Image: $artist//a/div/img/@src
+      URL: $artist//h5/a/@href
 
 driver:
   useCDP: true
