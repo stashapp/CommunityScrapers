@@ -1,4 +1,4 @@
-name: "Metart"
+name: "SARJ LLC JSON"
 galleryByURL:
   - action: scrapeJson
     url:
