@@ -34,7 +34,13 @@ xPathScrapers:
               - regex: Description\s*
                 with:
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //html/head/comment()[contains(., "og:image")]
+        postProcess:
+          - replace:
+              - regex: .*(https?:\/\/.*\.jpg).*\".*
+                with: $1
+              - regex: 2x.jpg
+                with: 4x.jpg
       Studio:
         Name: //meta[@property="og:site_name"]/@content
   performerScraper:
@@ -44,4 +50,4 @@ xPathScrapers:
         # CockyBoys only has profile pages for male performers
         fixed: Male
       Image: //div[@id="modelInfo"]/img/@src
-# Last Updated June 23, 2024
+# Last Updated September 20, 2024
