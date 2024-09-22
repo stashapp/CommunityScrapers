@@ -1,0 +1,137 @@
+name: "SARJ LLC JSON"
+galleryByURL:
+  - action: scrapeJson
+    url:
+      - alsscan.com
+      - domai.com
+      - eroticbeauty.com
+      - errotica-archives.com
+      - eternaldesire.com
+      - goddessnudes.com
+      - lovehairy.com
+      - metartnetwork.com
+      - metart.com
+      - metartx.com
+      - rylskyart.com
+      - sexart.com
+      - straplez.com
+      - stunning18.com
+      - thelifeerotic.com
+      - vivthomas.com
+    scraper: galleryScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '\S+\.(?P<host>\S+)\.com/\S+gallery/(?P<date>\d+)/(?P<name>[^\s/]+)'
+          with: https://www.$host.com/api/gallery?name=$name&date=$date
+
+performerByURL:
+  - action: scrapeJson
+    url:
+      - alsscan.com
+      - domai.com
+      - eroticbeauty.com
+      - errotica-archives.com
+      - eternaldesire.com
+      - goddessnudes.com
+      - lovehairy.com
+      - metartnetwork.com
+      - metart.com
+      - metartx.com
+      - rylskyart.com
+      - sexart.com
+      - straplez.com
+      - stunning18.com
+      - thelifeerotic.com
+      - vivthomas.com
+    scraper: performerScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '\S+\.(?P<host>\S+)\.com/model/(?P<name>[^\s/]+)'
+          with: https://www.$host.com/api/model?name=$name&after=0
+
+jsonScrapers:
+  galleryScraper:
+    gallery:
+      Title: name
+      Details: description
+      Date: &date
+        selector: publishedAt
+        postProcess:
+          - parseDate: '2006-01-02T15:04:05.9Z'
+      Performers: 
+        Name: models.#.name
+      Tags:
+        Name: tags
+      Studio:
+        Name:
+          selector: siteUUID
+          postProcess:
+            - map:
+                E6B595104E3411DF98790800200C9A66: 'MetArt'
+                E7DFB70DF31C45B3B5E0BF10D733D349: 'MetArt X'
+                D0E7E33329311E3BB6E0800200C93255: 'Domai'
+                5592E33324211E3FF640800200C93111: 'Goddess Nudes'
+                94DB3D0036FC11E1B86C0800200C9A66: 'Sex Art'
+                4F23028982B542FA9C6DAAA747E9B5B3: 'Viv Thomas'
+                FDAFDF209DC311E0AA820800200C9A66: 'The Life Erotic'
+                3D345D1E156910B44DB5A80CDD746318: 'Straplez'
+                15A9FFA04E3511DF98790800200C9A66: 'ErroticaArchives'
+                FDA021004E3411DF98790800200C9A66: 'Erotic Beauty'
+                18A2E47EAEFD45F29033A5FCAF1F5B91: 'Stunning 18'
+                D99236C04DD011E1B86C0800200C9A66: 'Rylsky Art'
+                5C38C84F55841824817C19987F5447B0: 'MetArt Intimate'
+                5A68E1D7B6E69E7401226779D559A10A: 'Love Hairy'
+                2163551D11D0439686AD9D291C8DFD71: 'ALS Scan'
+                706DF46B88884F7BB226097952427754: 'Eternal Desire'
+
+  performerScraper:
+    performer:
+      Name: name
+      Gender:
+        selector: gender
+        postProcess:
+          - javascript: |
+              // capitalise the first letter
+              if (value && value.length) {
+                return value[0].toUpperCase() + value.substring(1)
+              }
+      Ethnicity:
+        selector: ethnicity
+        postProcess:
+          - javascript: |
+              // capitalise the first letter
+              if (value && value.length) {
+                return value[0].toUpperCase() + value.substring(1)
+              }
+      HairColor:
+        selector: hair
+        postProcess:
+          - javascript: |
+              // capitalise the first letter
+              if (value && value.length) {
+                return value[0].toUpperCase() + value.substring(1)
+              }
+      EyeColor:
+        selector: eyes
+        postProcess:
+          - javascript: |
+              // capitalise the first letter
+              if (value && value.length) {
+                return value[0].toUpperCase() + value.substring(1)
+              }
+      Country: country.name
+      Height: height
+      Weight: weight
+      Measurements: size
+      Details: biography
+      Image: 
+        selector: '[siteUUID,headshotImagePath].@tostr'
+        postProcess:
+          - replace: 
+            - regex: '\["|","|"\]'
+              with: ''
+          - javascript: 'return "https://cdn77.metartnetwork.com/" + value;'
+
+# Last Updated May 29, 2024
