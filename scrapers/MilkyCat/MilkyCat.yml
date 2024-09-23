@@ -3,7 +3,7 @@ name: MilkyCat
 sceneByURL:
   - action: script
     url:
-      - milky-cat.com
+      - www.milky-cat.com
     script:  
       - python  
       - scraper.py  
