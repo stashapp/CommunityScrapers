@@ -154,6 +154,7 @@ xPathScrapers:
     common:
       $scene: //div[contains(@class, "update_block")]
       $excludeUpdates: not(ancestor::*[contains(@class, "mpuSection")])
+      $update_image: //div[@class="update_image"]/a/img[@src0_1x]
     scene:
       Title: $scene//span[@class="update_title"]/text()|//title/text()
       Date:
@@ -261,7 +262,7 @@ xPathScrapers:
                 yummysofie: Yum Sofie
                 yummywomen: Yummywomen
       Image: &image
-        selector: //base/@href | //div[@class="update_image"]/a/img[@src0_1x]/@src0_1x | //span[@class="model_update_thumb"]/img/@src
+        selector: //base/@href | ($update_image/@src0_3x or $update_image/@src0_2x or $update_image/@src0_1x or $update_image/@src)[1]
         concat: /
         postProcess:
           - replace:
