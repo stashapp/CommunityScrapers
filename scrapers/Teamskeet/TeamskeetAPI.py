@@ -13,6 +13,27 @@ except ModuleNotFoundError:
     print("You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)", file=sys.stderr)
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper", file=sys.stderr)
     sys.exit()
+try:
+    import requests
+except ModuleNotFoundError:
+    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
+    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
+    sys.exit()
+
+def try_img(imgurl):
+    # members/full - 1600x900
+    # bio_big - 1500x844
+    # shared/hi - 1280x720
+    # shared/med - 765x430
+    for replacement in ['members/full', 'bio_big']:
+        newurl = imgurl.replace('shared/med', replacement)
+        if requests.head(newurl).status_code == 200:
+            return newurl
+    # try shared/hi on /tour url for MYLF
+    if 'mylf' in imgurl:
+        newurl = imgurl.replace('mylf/alm', 'mylf/alm/tour/pics').replace('shared/med', 'shared/hi')
+        if requests.head(newurl).status_code == 200:
+            return newurl
 
 def save_json(api_json, url):
     try:
@@ -208,16 +229,9 @@ else:
 # high resolution scene images.  SayUncle is a high resoution right
 # from the scrape.  TeamSkeet and MYLF have different mappings between
 # the scraped value and the higher resolution version.
-match scene_url:
-    case str(x) if 'sayuncle.com' in x:
-        log.debug("Say Uncle image, using default size")
-        high_res = scrape['image']
-    case str(x) if 'teamskeet.com' in x or 'swappz.com' in x:
-        log.debug("TeamSkeet image, mapping members/full")
-        high_res = scene_api_json.get('img').replace('shared/med', 'members/full')
-    case str(x) if 'mylf.com' in x:
-        log.debug("Mylf image, mapping bio_big")
-        high_res = scene_api_json.get('img').replace('shared/med', 'bio_big')
+
+# try to (and check) higher res images if possible
+high_res = try_img(scene_api_json.get('img'))
 
 log.debug(f"Image before: {scrape['image']}")
 log.debug(f"Image after: {high_res}")
