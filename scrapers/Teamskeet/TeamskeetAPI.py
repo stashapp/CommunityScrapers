@@ -206,7 +206,7 @@ if dt:
 #fix for TeamKseet including HTML tags in Description
 CLEANR = re.compile('<.*?>') 
 cleandescription = re.sub(CLEANR,'',scene_api_json.get('description'))
-scrape['details'] = cleandescription
+scrape['details'] = cleandescription.strip()
 scrape['studio'] = {}
 studioApiName = scene_api_json['site'].get('name')
 log.debug("Studio API name is '" + studioApiName + "'")
