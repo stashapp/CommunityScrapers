@@ -113,4 +113,24 @@ xPathScrapers:
           - replace:
               - regex: ^([^?]+).*$
                 with: "https:$1"
+driver:
+  cookies:
+    - CookieURL: "https://vod.aebn.com"
+      Cookies:
+        - Name: "ageGated"
+          Domain: "vod.aebn.com"
+          Value: ""
+          Path: "/"
+    - CookieURL: "https://gay.aebn.com"
+      Cookies:
+        - Name: "ageGated"
+          Domain: "gay.aebn.com"
+          Value: ""
+          Path: "/"
+    - CookieURL: "https://straight.aebn.com"
+      Cookies:
+        - Name: "ageGated"
+          Domain: "straight.aebn.com"
+          Value: ""
+          Path: "/"
 # Last Updated July 06, 2022
