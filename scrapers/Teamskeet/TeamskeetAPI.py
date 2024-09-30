@@ -33,7 +33,10 @@ def try_img_replacement(imgurl):
         if (try_url(newurl)):
             return newurl
     # try shared/hi on /tour url
-    tourHi = imgurl.replace('/alm', '/alm/tour/pics').replace('shared/med', 'shared/hi')
+    # get the subsite name
+    subsite = imgurl.split("/")[4]
+    # replace with /tour/pics
+    tourHi = imgurl.replace(f"/{subsite}", f"/{subsite}/tour/pics").replace('shared/med', 'shared/hi')
     if (try_url(tourHi)):
         return tourHi
     # fallback to original image
