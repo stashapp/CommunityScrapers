@@ -20,20 +20,24 @@ except ModuleNotFoundError:
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
     sys.exit()
 
-def try_img(imgurl):
+def try_url(url):
+    return requests.head(url).status_code == 200
+
+def try_img_replacement(imgurl):
     # members/full - 1600x900
     # bio_big - 1500x844
     # shared/hi - 1280x720
     # shared/med - 765x430
-    for replacement in ['members/full', 'bio_big']:
+    for replacement in ['members/full', 'bio_big', 'shared/hi']:
         newurl = imgurl.replace('shared/med', replacement)
-        if requests.head(newurl).status_code == 200:
+        if (try_url(newurl)):
             return newurl
-    # try shared/hi on /tour url for MYLF
-    if 'mylf' in imgurl:
-        newurl = imgurl.replace('mylf/alm', 'mylf/alm/tour/pics').replace('shared/med', 'shared/hi')
-        if requests.head(newurl).status_code == 200:
-            return newurl
+    # try shared/hi on /tour url
+    tourHi = imgurl.replace('/alm', '/alm/tour/pics').replace('shared/med', 'shared/hi')
+    if (try_url(tourHi)):
+        return tourHi
+    # fallback to original image
+    return imgurl
 
 def save_json(api_json, url):
     try:
@@ -231,7 +235,7 @@ else:
 # the scraped value and the higher resolution version.
 
 # try to (and check) higher res images if possible
-high_res = try_img(scene_api_json.get('img'))
+high_res = try_img_replacement(scene_api_json.get('img'))
 
 log.debug(f"Image before: {scrape['image']}")
 log.debug(f"Image after: {high_res}")
