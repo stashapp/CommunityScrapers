@@ -3,13 +3,20 @@ galleryByURL:
   - action: scrapeXPath
     url: &urls
       - amateurallure.com/tour/scenes/
-    scraper: galleryScraper
+    scraper: amateurAllure
+  - action: scrapeXPath
+    url: &classicUrls
+      - amateurallureclassics.com/scenes/
+    scraper: amateurAllureClassics
 sceneByURL:
   - action: scrapeXPath
     url: *urls
-    scraper: sceneScraper
+    scraper: amateurAllure
+  - action: scrapeXPath
+    url: *classicUrls
+    scraper: amateurAllureClassics
 xPathScrapers:
-  galleryScraper:
+  amateurAllure:
     common: &commonAttr
       $sceneinfo: //div[@class="scene-info"]
       $title: //span[@class='title_bar_hilite']
@@ -30,8 +37,6 @@ xPathScrapers:
       Studio: &studioAttr
         Name:
           fixed: Amateur Allure
-  sceneScraper:
-    common: *commonAttr
     scene:
       Title: *titleSel
       Code: *id
@@ -59,7 +64,43 @@ xPathScrapers:
                 - replace:
                     - regex: ^([^|]+amateurallure[^|]+)\|.+(/content/contentthumbs/\d+/\d+/[^/]+\.jpg) 1920w
                       with: $1$2
-                    - regex: 1x
+                    - regex: "[124]x"
                       with: "full"
       Studio: *studioAttr
-# Last Updated May 01, 2024
+  amateurAllureClassics:
+    common:
+      $scene: //div[contains(@class, "gallery_info")]
+      $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
+    gallery:
+      Title: &classicTitle //title
+      Code: &classicCode
+        selector: //script[contains(., "setid:")]
+        postProcess:
+          - replace:
+              - regex: .*setid:"(\d+).*
+                with: $1
+      Date: &classicDate # Some sites hide their release date in a comment
+        selector: //*[(contains(@class, "availdate") or contains(@class, "update_date")) and contains(., "/")]
+        postProcess:
+          - replace:
+              - regex: ".*?([0-9]{2}/[0-9]{2}/[0-9]{4}).*"
+                with: $1
+          - parseDate: 01/02/2006
+      Details: &classicDetails $scene//span[@class="update_description"]
+      Performers: &classicPerformers
+        Name: $scene//span[@class="update_models" and $excludeUpdates]/a
+      Tags: &classicTags
+        Name: $scene//span[contains(@class, "update_tags")]/a
+      Studio: &classicStudio
+        Name:
+          fixed: Amateur Allure Classics
+    scene:
+      Title: *classicTitle
+      Code: *classicCode
+      Date: *classicDate
+      Details: *classicDetails
+      Performers: *classicPerformers
+      Tags: *classicTags
+      Studio: *classicStudio
+      Image: //meta[@property="og:image"]/@content
+# Last Updated September 27, 2024

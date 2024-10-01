@@ -2,22 +2,32 @@ name: "Freshmen"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - freshmen.net/content/
+      - club.freshmen.net/secure/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //h1/span/text()
-        concat: " "
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ^(.+)\s\(Issue\s#(\d+).+$
+                with: "Issue $2: $1"
       Details:
-        selector: //div[@class='contentTab']/div[@class='top']//p
+        selector: //div[@class='content_detail__first_col__player__more__description']//div/p
         concat: "\n\n"
-      Performers:
-        Name: //div[@class='actor']/div[@class='name']
-      Image:
-        selector: //*[@id="videoPlayer"]/@poster
+      Date:
+        selector: //div[@class='content_date']/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Image: //div[@class="player"]//img/@src | //div[@class="player"]//video/@poster
       Studio:
         Name:
           fixed: Freshmen
-# Last Updated June 26, 2022
+      Tags:
+        Name:
+          selector: //div[@class="wrapper tag_list"]/a/text()
+      Performers:
+        Name: //div[@class='actors_list__actor']//h3/text()
+
+# Last Updated October 01, 2024
