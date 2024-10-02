@@ -65,11 +65,17 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //p[@class="video-title"]/text()
-      Details: //div[contains(@class, 'video-description')]/descendant-or-self::*/text()
+      Title: //h1[@class="sceneTitle"]/text()
+      Details: //div[contains(@class, 'sceneDesc')]/descendant-or-self::*/text()
       Performers:
-        Name: //p[@class="model-name"]/a
-      Image: //div[@class="video-area"]//stream/@poster
+        Name: //div[contains(@class, 'contentTitle')]/a
+      Image: //div[@class="stream-video-container"]/stream/@poster
+      Date:
+        selector: //div[contains(concat(' ',normalize-space(@class),' '),' sceneDate ')]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Tags:
+        Name: //div[contains(concat(' ',normalize-space(@class),' '),' tags-container ')]/a/text()
       Studio:
         Name:
           selector: //link[@rel="canonical"]/@href
@@ -141,4 +147,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated May 27, 2024
+# Last Updated Sep 27, 2024
