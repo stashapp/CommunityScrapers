@@ -81,7 +81,7 @@ xPathScrapers:
         concat: "|"
         postProcess:
           - replace:
-              - regex: \/static\/(\w+\.[a-z]{3})\/.+\/api\/update\/(\d{2,4})\/.+
+              - regex: \/static\/(.+?\.[a-z]{3})\/.+\/api\/update\/(\d{2,4})\/.+
                 with: https://$1/update/$2/
       # Grab date from porngutter.com
       Date:
