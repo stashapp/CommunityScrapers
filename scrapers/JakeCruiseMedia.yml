@@ -65,8 +65,8 @@ xPathScrapers:
               - regex: "logo"
                 with: "Female"
       Height:
-        selector: //li[@class='model_profile_dicksize']/span
-        postProcess:
+       selector: //li[@class='model_profile_height']/span
+       postProcess:
           - replace:
               - regex: (\d+)['\s]+(\d+)?.+
                 with: $1.$2
