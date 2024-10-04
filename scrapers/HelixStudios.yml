@@ -106,23 +106,25 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      Name: //div[contains(@class, "top")]/h1/text()
+      Name: //div[contains(@class, "section-box model-bio")]/h1/text()
       Gender:
         fixed: Male
       Height:
         selector: //span[text()="Height"]/following-sibling::text()
         postProcess:
           - feetToCm: true
-      Measurements:
+        PenisLength:
         selector: //span[text()="Cock"]/following-sibling::text()
         postProcess:
           - replace:
               - regex: ^
-                with: "0'"
+                with: "0."
           - replace:
-              - regex: inch*
-                with: "''"
+              - regex: \d\d [a-zA-Z]+ [a-zA-Z]+
+                with: "$&"
           - feetToCm: true
+      Tags:
+        Name: //span[text()="Position"]/following-sibling::text()
       Weight:
         selector: //span[text()="Weight"]/following-sibling::text()
         postProcess:
@@ -143,4 +145,4 @@ xPathScrapers:
           - replace:
               - regex: $
                 with: " "
-# Last Updated May 19, 2024
+# Last Updated Sep 28, 2024
