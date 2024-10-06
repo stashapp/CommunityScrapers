@@ -1,0 +1,9 @@
+name: "Cover Image in Directory"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - scene-cover-in-dir.py
+      - query
+
+# Last Updated August 16, 2021
