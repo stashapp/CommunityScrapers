@@ -161,7 +161,7 @@ xPathScrapers:
                   with: "Fansly"
       Performers:
         Name:
-          selector: //$videoActions//span[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a/text()|$videoActions//span[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]//a/text()
+          selector: $videoActions//span[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a/text()|$videoActions//span[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]//a/text()
           postProcess:
             - replace:
                 - regex: '\.'
