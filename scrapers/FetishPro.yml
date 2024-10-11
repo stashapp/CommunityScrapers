@@ -14,13 +14,12 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Performers:
-        Name: //div[@class="models"]//a/text()
+        Name: //div[@class="models"]//a
       Details: //div[contains(@class, "videoDescription")]/p
       Tags:
         Name: //div[@class="tags"]//a
-      Image:
-        selector: //div[@class="videoPreview"]//img/@src
+      Image: //meta[@name="twitter:image"]/@content
       Studio:
         Name:
           fixed: FetishPros
-# Last Updated July 01, 2023
+# Last Updated October 11, 2024
