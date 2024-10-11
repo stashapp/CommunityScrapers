@@ -2,13 +2,13 @@ name: Zishy
 sceneByURL:
   - action: scrapeXPath
     url:
-      - zishy.com/albums
+      - www.zishy.com/albums
     scraper: sceneScraper
 
 galleryByURL:
   - action: scrapeXPath
     url:
-      - zishy.com/albums
+      - www.zishy.com/albums
     scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
