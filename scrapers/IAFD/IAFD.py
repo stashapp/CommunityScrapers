@@ -101,6 +101,13 @@ def clean_alias(alias: str) -> str | None:
     return re.sub(r"\s*\(.*$", "", alias)
 
 
+def base64_image(url) -> str:
+    import base64
+
+    b64img_bytes = base64.b64encode(scraper.get(url).content)
+    return f"data:image/jpeg;base64,{b64img_bytes.decode('utf-8')}"
+
+
 def performer_haircolor(tree):
     return maybe(
         tree.xpath(
@@ -400,7 +407,9 @@ def performer_from_tree(tree):
         "aliases": performer_aliases(tree),
         "tattoos": performer_tattoos(tree),
         "piercings": performer_piercings(tree),
-        "images": tree.xpath('//div[@id="headshot"]//img/@src'),
+        "images": [
+            base64_image(url) for url in tree.xpath('//div[@id="headshot"]//img/@src')
+        ],
     }
 
 
@@ -415,7 +424,7 @@ def scene_from_tree(tree):
             {
                 "name": p.text_content(),
                 "url": f"https://www.iafd.com{p.get('href')}",
-                "images": p.xpath("img/@src"),
+                "images": [base64_image(url) for url in p.xpath("img/@src")],
             }
             for p in tree.xpath('//div[@class="castbox"]/p/a')
         ],
