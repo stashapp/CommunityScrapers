@@ -11,26 +11,19 @@ movieByURL:
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
-    common:
-      $info: &infoSel //div[@class="content-container main-content"]
     scene:
-      Title: &titleSel //div[@class="details__title"]/text()
+      Title: &titleSel //div[@class="details__title"]
       Studio: &studioAttr
         Name:
           fixed: "VRHush"
       Date: &dateAttr
-        selector: //div[@class="details__info__details__label"]/text()
-        concat: " "
+        selector: //div[@class="details__info__details__label" and contains(., "/")]
         postProcess:
-          - replace:
-              - regex: \d+:\d+ ([\d/]+)
-                with: $1
           - parseDate: "2006/01/02"
-      Details: &detailsAttr
-        selector: //p[@class="tab__about"]/text()
+      Details: &detailsAttr //p[@class="tab__about"]
       Tags:
         Name:
-          selector: //div[@class="tag-list"]//a[contains(@class, "tag-item")]/text()
+          selector: //div[@class="tag-list"]//a[contains(@class, "tag-item")]
           concat: __SEPARATOR__
           postProcess:
             - replace:
@@ -38,16 +31,14 @@ xPathScrapers:
                   with: __SEPARATOR__Virtual Reality
           split: __SEPARATOR__
       Performers:
-        Name: //span[@class="details__info__starring__wrapper__labelWrapper__name"]//a/text()
+        Name: //span[@class="details__info__starring__wrapper__labelWrapper__name"]//a
       Image: &imageAttr
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-              - regex: ^
-                with: "https:"
+              - regex: ^//
+                with: "https://"
   movieScraper:
-    common:
-      $info: *infoSel
     movie:
       Name:
         selector: *titleSel
