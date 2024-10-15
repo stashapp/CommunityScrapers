@@ -1,0 +1,20 @@
+name: Copy Metadata
+# requires: py_common
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - CopyMetadata.py
+    - gallery-by-fragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - CopyMetadata.py
+    - scene-by-fragment
+performerByFragment:
+  action: script
+  script:
+    - python
+    - CopyMetadata.py
+    - performer-by-fragment
