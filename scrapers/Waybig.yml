@@ -47,6 +47,7 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //div[@class="title-col -normal col"]/h2
+      URL:  //link[@rel='canonical']/@href
       Gender:
         fixed: Male
       Measurements:
@@ -81,4 +82,4 @@ xPathScrapers:
       Image: //div[@class="image"]//@src
       Details:
         selector: //div[@class="expand-inner"]
-# Last Updated July 30, 2021
+# Last Updated Oct 09. 2024
