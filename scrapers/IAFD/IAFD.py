@@ -234,9 +234,9 @@ def performer_aliases(tree):
 def performer_careerlength(tree):
     return maybe(
         tree.xpath(
-            '//div/p[@class="biodata"][contains(text(),"Started around")]/text()'
+            '//div/p[@class="bioheading"][contains(text(), "Active")][1]/following-sibling::p[1]/text()'
         ),
-        lambda c: re.sub(r"(\D+\d\d\D+)$", "", c),
+        lambda c: " - ".join(re.sub(r"(\D+\d\d\D+)$", "", c.strip()).split("-")),
     )
 
 
