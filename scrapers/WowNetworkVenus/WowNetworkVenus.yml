@@ -6,6 +6,7 @@ sceneByURL:
     script:
       - python
       - WowNetworkVenus.py
+      - url
     url:
       - venus.ultrafilms.com
       - venus.wowgirls.com
@@ -16,9 +17,17 @@ sceneByName:
     script:
       - python
       - WowNetworkVenus.py
+      - search
 sceneByQueryFragment:
     action: script
     script:
       - python
       - WowNetworkVenus.py
-# Last Updated September 21, 2022
+      - fragment
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - WowNetworkVenus.py
+      - query
+# Last Updated July 9, 2023
