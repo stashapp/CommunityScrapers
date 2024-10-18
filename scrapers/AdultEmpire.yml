@@ -193,4 +193,19 @@ xPathScrapers:
                 with: $1
       Details: $modal//h2[contains(text(), "Biography")]/following-sibling::p
       URL: //link[@rel='canonical']/@href
-# Last Updated May 02, 2024
+
+driver:
+  cookies:
+    - CookieURL: "https://www.adultempire.com"
+      Cookies:
+        - Name: "ageConfirmed"
+          Domain: "www.adultempire.com"
+          Value: "true"
+          Path: "/"
+    - CookieURL: "https://www.adultdvdempire.com"
+      Cookies:
+        - Name: "ageConfirmed"
+          Domain: "www.adultdvdempire.com"
+          Value: "true"
+          Path: "/"
+# Last Updated October 18, 2024
