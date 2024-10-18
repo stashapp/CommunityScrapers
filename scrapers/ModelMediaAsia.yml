@@ -1,0 +1,85 @@
+name: "ModelMediaAsia"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - modelmediaasia.com
+    scraper: sceneScraper
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://modelmediaasia.com/zh-CN/videos/{filename}
+  queryURLReplace:
+    # Assume beginning part contains the code
+    filename:
+      # Get the beginning part before the space
+      - regex: '(.*)\s.*'
+        with: $1
+  scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - modelmediaasia.com
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //*[@id="__nuxt"]/main/div/div[2]/div/div/div/div[1]/div/div[1]/div[1]/h2/text()
+      Date:
+        # Some text may be in front of the date
+        selector: //*[@id="__nuxt"]/main/div/div[2]/div/div/div/div[1]/div/div[1]/div[3]/span/text()
+        postProcess:
+          - replace:
+            - regex: '.*(\d{4}/\d{1,2}/\d{1,2})'
+              with: $1
+          - parseDate: 2006/01/02
+      Details:
+        selector: //*[@id="description-01"]/div/p/text()
+      Performers:
+        Name: //*[@id="__nuxt"]/main/div/div[2]/div/div/div/div[3]/div/ul/li/a/div[2]/h6]/text()
+        # Directly set URL doesn't work?
+        Details:
+          selector: //*[@id="__nuxt"]/main/div/div[2]/div/div/div/div[3]/div/ul/li/a/@href
+          postProcess:
+            - replace:
+              - regex: ^
+                with: https://modelmediaasia.com
+      Studio:
+        Name:
+          fixed: "Model Media"
+      Tags:
+        Name: //li[@class="p-1 px-3"]/a[@class="title"]/text()
+      Image: //*[@id="__nuxt"]/main/div/div[1]/div/div/div/div/div[2]/img/@src
+      URL: //link[@rel="canonical"]/@href
+      Code: //*[@id="__nuxt"]/main/div/div[2]/div/div/div/div[1]/div/div[1]/div[2]/a/text()
+  performerScraper:
+    performer:
+      Name: //*[@id="__nuxt"]/main/div/div/div/div[2]/div[1]/h4/text()
+      Gender:
+        fixed: Female
+      Ethnicity:
+        fixed: Asian
+      Country:
+        fixed: Taiwan
+      Height:
+        selector: //*[@id="__nuxt"]/main/div/div/div/div[1]/div[2]/p[1]/text()
+        postProcess:
+          - replace:
+            - regex: '(\d+)\D+cm'
+              with: $1
+      Weight:
+        selector: //*[@id="__nuxt"]/main/div/div/div/div[1]/div[2]/p[2]/text()
+        postProcess:
+          - replace:
+            - regex: '(\d+)\D+kg'
+              with: $1
+      Measurements:
+        selector: //*[@id="__nuxt"]/main/div/div/div/div[1]/div[2]/p[3]/text()
+        postProcess:
+          - replace:
+            - regex: '\s+(\d\d\w*)\D+(\d+)\D+(\d+)'
+              with: $1-$2-$3
+      Image: //*[@id="__nuxt"]/main/div/div/div/div[1]/img/@src
+      URL: //link[@rel='canonical']/@href
+# Last Updated October 17, 2024
