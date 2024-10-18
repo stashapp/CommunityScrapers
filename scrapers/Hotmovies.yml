@@ -112,7 +112,7 @@ xPathScrapers:
         selector: //small[text()="Stats:"]/following-sibling::text()[1]
         postProcess:
           - replace:
-              - regex: "[ \"]"
+              - regex: '[ "]'
                 with: ""
       Image: //a[@class="star__profile__headshot fancy"]/@href
       HairColor:
@@ -148,4 +148,14 @@ xPathScrapers:
         URL:
           selector: //div[@class="animated-scene-hiddentxt"]/a/@href
           postProcess: *baseUrl
-# Last Updated January 18, 2024
+
+driver:
+  cookies:
+    - CookieURL: "https://www.hotmovies.com"
+      Cookies:
+        - Name: "ageConfirmed"
+          Domain: "www.hotmovies.com"
+          Value: "true"
+          Path: "/"
+# Last Updated October 18, 2024
+
