@@ -12,7 +12,7 @@ sceneByFragment:
     # Assume beginning part contains the code
     filename:
       # Get the beginning part before the space
-      - regex: '(.*)\s.*'
+      - regex: ^(\S+).*
         with: $1
   scraper: sceneScraper
 
