@@ -51,7 +51,12 @@ xPathScrapers:
       Tags:
         Name: //li[@class="p-1 px-3"]/a[@class="title"]/text()
       Image: //*[@id="__nuxt"]/main/div/div[1]/div/div/div/div/div[2]/img/@src
-      URL: //link[@rel="canonical"]/@href
+      URL:
+        selector: //*[@id="__nuxt"]/main/div/div[2]/div/div/div/div[1]/div/div[1]/div[2]/a/text()
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://modelmediaasia.com/zh-CN/videos/
       Code: //*[@id="__nuxt"]/main/div/div[2]/div/div/div/div[1]/div/div[1]/div[2]/a/text()
   performerScraper:
     performer:
