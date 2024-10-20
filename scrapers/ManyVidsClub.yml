@@ -1,0 +1,37 @@
+name: "ManyVids Club"
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - manyvids.com/Post
+    scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '.+Post\/+.*?(.+)'
+          with: https://api.manyvids.com/feed/posts/$1
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title: text
+      Details: text
+      Code: postId
+      URL:
+        selector: postId
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.manyvids.com/Post/$1
+      Date:
+        selector: timestamp
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05.000Z
+      Performers:
+        Name: handle
+      Studio:
+        Name: 
+          selector: handle
+          postProcess:
+             - replace:
+                - regex: (.+)
+                  with: "$1 (ManyVids)"
+# Last Updated October 20, 2024
