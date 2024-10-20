@@ -1,0 +1,11 @@
+name: Ersties
+sceneByURL:
+  - action: script
+    url:
+      - ersties.com/
+    script:
+      - python
+      - Ersties.py
+      - scrapeByURL
+
+# Last Updated October 20, 2024
