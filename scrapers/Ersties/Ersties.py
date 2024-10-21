@@ -54,7 +54,7 @@ def get_scene(inputurl):
     ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
     for thumbnail in scrape_data['thumbnails']:
         if thumbnail['is_main']:
-            ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=avif/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
+            ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
             break
 
     return ret
