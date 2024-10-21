@@ -1,39 +1,33 @@
 import sys
 import requests
-from random import choice
 import re
 import json
 
-#Create random UID for site tracking (required for auth)
-first=''.join(choice('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789') for i in range(14))
-second=''.join(choice('0123456789') for i in range(8))
+#Auth Variables For Header
+authorization = ''
+cookie = ''
+x_visit_uid = ''
 
-uid=first+'.'+second
-
-#Create Auth Session
-url="https://api.ersties.com/auth/login"
-
-auth_headers = {
-    'x-visit-uid': uid,
+#Headers for Requests
+scrape_headers = {
+    'authorization': authorization,
+    'cookie': cookie,
+    'x-visit-uid': x_visit_uid,
 }
 
-auth_json_data = {
-    'username': 'your_username',
-    'password': 'your_passsword',
-}
-session = requests.session()
-auth = session.post(url, headers=auth_headers, json=auth_json_data)
+#Get JSON from Stash
+def readJSONInput():
+    input = sys.stdin.read()
+    return json.loads(input)
 
-#Create Bearer Token
-bearer_token = "Bearer " + auth.text
+#Read the input
+i = readJSONInput()
+sys.stderr.write(json.dumps(i))
 
-bearer_token = bearer_token.replace('"', '')
-
-#Scrape
-#example url: https://ersties.com/profile/3265#play-8187-comments
+#Scrape Scene URL
 
 #Get Scene ID from url
-inputurl= sys.stdin.read()
+inputurl= i['url']
 # Use a regular expression to extract the number after '#play-' and before '-comments'
 match = re.search(r'#play-(\d+)-comments', inputurl)
 # Check if the pattern was found and save it as a variable
@@ -43,14 +37,11 @@ if match:
 else:
     print('No match found')
 
-sceneid='8187' #testing scene id
+#Build URL to scrape
 scrape_url='https://api.ersties.com/videos/'+sceneid
 
-scrape_headers = {
-    'Authorization': bearer_token,
-}
-
-scrape = session.get(scrape_url, headers=scrape_headers)
+#Scrape URL
+scrape = requests.get(scrape_url, headers=scrape_headers)
 
 #Parse response
 
@@ -70,5 +61,3 @@ for thumbnail in scrape_data['thumbnails']:
         break
 
 print(json.dumps(ret))
-
-#example poster link: https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=avif/content/images_mysql/images_videothumbnails/backup/Jin_DaringKiara_Still_1_66dad8920cb13.jpg
