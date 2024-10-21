@@ -33,7 +33,6 @@ match = re.search(r'#play-(\d+)-comments', inputurl)
 # Check if the pattern was found and save it as a variable
 if match:
     sceneid = match.group(1)  # The captured group (7976)
-    print(f'Video ID: {sceneid}')
 else:
     print('No match found')
 
@@ -50,7 +49,7 @@ scrape_data = scrape.json()
 ret = {}
 
 ret['title'] = scrape_data['title_en']
-ret['code'] = scrape_data['id']
+ret['code'] = str(scrape_data['id'])
 ret['details'] = scrape_data['model']['description_en']
 ret['studio'] = "Ersties"
 ret['tags'] = [x['name_en'] for x in scrape_data['tags']]
