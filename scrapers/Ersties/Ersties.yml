@@ -6,6 +6,13 @@ sceneByURL:
     script:
       - python
       - Ersties.py
-      - scrapeByURL
-
-# Last Updated October 20, 2024
+      - sceneByURL
+movieByURL:
+  - action: script
+    url:
+      - ersties.com/
+    script:
+      - python
+      - Ersties.py
+      - groupByURL
+# Last Updated October 21, 2024
