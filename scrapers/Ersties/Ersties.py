@@ -51,9 +51,9 @@ ret = {}
 ret['title'] = scrape_data['title_en']
 ret['code'] = str(scrape_data['id'])
 ret['details'] = scrape_data['model']['description_en']
-ret['studio'] = "Ersties"
-ret['tags'] = [x['name_en'] for x in scrape_data['tags']]
-ret['performers'] = [x['name_en'] for x in scrape_data['participated_models']]
+ret['studio'] = {'name':'Ersties'}
+ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
+ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
 for thumbnail in scrape_data['thumbnails']:
     if thumbnail['is_main']:
         ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=avif/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
