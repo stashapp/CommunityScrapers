@@ -93,4 +93,18 @@ xPathScrapers:
                 - regex: ^
                   with: "https://www.gaydvdempire.com"
       URL: //meta[@name='og:url']/@content
-# Last Updated May 02, 2024
+driver:
+  cookies:
+    - CookieURL: "https://www.gayempire.com"
+      Cookies:
+        - Name: "ageConfirmed"
+          Domain: "www.gayempire.com"
+          Value: "true"
+          Path: "/"
+    - CookieURL: "https://www.gaydvdempire.com"
+      Cookies:
+        - Name: "ageConfirmed"
+          Domain: "www.gaydvdempire.com"
+          Value: "true"
+          Path: "/"
+# Last Updated October 21, 2024
