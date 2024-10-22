@@ -87,6 +87,35 @@ def get_group(inputurl):
 
     return ret
 
+def get_performer(inputurl):
+    # Use a regular expression to extract the number after '#play-' and before '-comments'
+    match = re.search(r'profile/(\d+)', inputurl)
+
+    # Check if the pattern was found and save it as a variable
+    if match:
+        groupid = match.group(1)  
+    else:
+        debugPrint('No match found')
+
+    #Build URL to scrape group
+    scrape_url='https://api.ersties.com/models/'+groupid
+
+    #Scrape URL
+    scrape = requests.get(scrape_url, headers=scrape_headers)
+
+    #Parse response
+
+    scrape_data = scrape.json()
+
+    ret = {}
+
+    ret['name'] = scrape_data['name_en']
+    ret['country'] = scrape_data['location_en']
+    ret['details'] = scrape_data['description_en']
+    ret['image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=avif/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail']  
+
+    return ret
+
 if sys.argv[1] == 'sceneByURL':
     i = readJSONInput()
     ret = get_scene(i.get('url'))
@@ -95,4 +124,9 @@ if sys.argv[1] == 'sceneByURL':
 if sys.argv[1] == 'groupByURL':
     i = readJSONInput()
     ret = get_group(i.get('url'))
+    print(json.dumps(ret))
+
+if sys.argv[1] == 'performerByURL':
+    i = readJSONInput()
+    ret = get_performer(i.get('url'))
     print(json.dumps(ret))
