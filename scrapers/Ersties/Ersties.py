@@ -2,6 +2,7 @@ import sys
 import requests
 import re
 import json
+from py_common.util import guess_nationality
 
 #Auth Variables For Header
 authorization = ''
@@ -110,7 +111,8 @@ def get_performer(inputurl):
     ret = {}
 
     ret['name'] = scrape_data['name_en']
-    ret['country'] = scrape_data['location_en']
+    if scrape_data['location_en'] is not None:
+        ret['country'] = guess_nationality(scrape_data['location_en'])
     ret['details'] = scrape_data['description_en']
     ret['image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=avif/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail']  
 
