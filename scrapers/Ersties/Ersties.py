@@ -44,22 +44,25 @@ def get_scene(inputurl):
     scrape = requests.get(scrape_url, headers=scrape_headers)
 
     #Parse response
+    #Check for valid response
+    if scrape.status_code ==200:
+        scrape_data = scrape.json()
 
-    scrape_data = scrape.json()
+        ret = {}
 
-    ret = {}
-
-    ret['title'] = scrape_data['title_en']
-    ret['code'] = str(scrape_data['id'])
-    ret['details'] = scrape_data['model']['description_en']
-    ret['studio'] = {'name':'Ersties'}
-    ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
-    ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
-    for thumbnail in scrape_data['thumbnails']:
-        if thumbnail['is_main']:
-            ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
-            break
-
+        ret['title'] = scrape_data['title_en']
+        ret['code'] = str(scrape_data['id'])
+        ret['details'] = scrape_data['model']['description_en']
+        ret['studio'] = {'name':'Ersties'}
+        ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
+        ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
+        for thumbnail in scrape_data['thumbnails']:
+            if thumbnail['is_main']:
+                ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
+                break
+    else:
+        debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
+        sys.exit()    
     return ret
 
 def get_group(inputurl):
@@ -80,15 +83,19 @@ def get_group(inputurl):
     scrape = requests.get(scrape_url, headers=scrape_headers)
 
     #Parse response
-    scrape_data = scrape.json()
+    #Check for valid response
+    if scrape.status_code ==200:
+        scrape_data = scrape.json()
 
-    ret = {}
+        ret = {}
 
-    ret['name'] = scrape_data['name_en']
-    ret['synopsis'] = scrape_data['description_en']
-    ret['studio'] = {'name':'Ersties'}
-    ret['front_image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail']  
-
+        ret['name'] = scrape_data['name_en']
+        ret['synopsis'] = scrape_data['description_en']
+        ret['studio'] = {'name':'Ersties'}
+        ret['front_image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail']  
+    else:
+        debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
+        sys.exit() 
     return ret
 
 def get_performer(inputurl):
@@ -109,17 +116,20 @@ def get_performer(inputurl):
     scrape = requests.get(scrape_url, headers=scrape_headers)
 
     #Parse response
+    #Check for valid response
+    if scrape.status_code ==200:
+        scrape_data = scrape.json()
 
-    scrape_data = scrape.json()
+        ret = {}
 
-    ret = {}
-
-    ret['name'] = scrape_data['name_en']
-    if scrape_data['location_en'] is not None:
-        ret['country'] = guess_nationality(scrape_data['location_en'])
-    ret['details'] = scrape_data['description_en']
-    ret['image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=avif/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail']  
-
+        ret['name'] = scrape_data['name_en']
+        if scrape_data['location_en'] is not None:
+            ret['country'] = guess_nationality(scrape_data['location_en'])
+        ret['details'] = scrape_data['description_en']
+        ret['image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=avif/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail']  
+    else:
+        debugPrint('No performer ID found in URL. Please make sure you are using the ULR ending with "profile/nnnn".')
+        sys.exit()
     return ret
 
 if sys.argv[1] == 'sceneByURL':
