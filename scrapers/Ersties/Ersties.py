@@ -4,6 +4,7 @@ import re
 import json
 from py_common.util import guess_nationality
 
+#Authentication tokens and cookies are needed for this scraper. Use the network console in your browsers developer tools to find this information in an api call header.
 #Auth Variables For Header
 authorization = ''
 cookie = ''
@@ -33,7 +34,8 @@ def get_scene(inputurl):
     if match:
         sceneid = match.group(1)  
     else:
-        debugPrint('No match found')
+        debugPrint('No scene ID found in URL. Please make sure you are using the ULR ending with "#play-nnnn-comments".')
+        sys.exit()
 
     #Build URL to scrape
     scrape_url='https://api.ersties.com/videos/'+sceneid
@@ -68,7 +70,8 @@ def get_group(inputurl):
     if match:
         groupid = match.group(1)  
     else:
-        debugPrint('No match found')
+        debugPrint('No scene/group ID found in URL. Please make sure you are using the ULR ending with "profile/nnnn".')
+        sys.exit()
 
     #Build URL to scrape group
     scrape_url='https://api.ersties.com/models/'+groupid
@@ -96,7 +99,8 @@ def get_performer(inputurl):
     if match:
         groupid = match.group(1)  
     else:
-        debugPrint('No match found')
+        debugPrint('No performer ID found in URL. Please make sure you are using the ULR ending with "profile/nnnn".')
+        sys.exit()
 
     #Build URL to scrape group
     scrape_url='https://api.ersties.com/models/'+groupid
