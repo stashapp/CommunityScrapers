@@ -9,10 +9,9 @@ from pathlib import Path
 from py_common.deps import ensure_requirements
 from py_common import graphql
 
-ensure_requirements("bencoder.pyx")
+ensure_requirements("fastbencode")
 
-from bencoder import bdecode  # noqa: E402
-
+from fastbencode import bdecode # noqa: E402
 
 TORRENTS_PATH = Path("torrents")
 
