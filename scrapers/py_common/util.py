@@ -31,7 +31,7 @@ def dig(c: dict | list, *keys: str | int | tuple[str | int, ...], default=None) 
                 for k in key:
                     if k in d:
                         return d[k]
-            return d.get(key)
+            return d.get(key, default)
         elif isinstance(d, list) and isinstance(key, int) and key < len(d):
             return d[key]
         else:
