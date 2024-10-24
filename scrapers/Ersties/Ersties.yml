@@ -1,0 +1,26 @@
+name: Ersties
+sceneByURL:
+  - action: script
+    url:
+      - ersties.com/
+    script:
+      - python
+      - Ersties.py
+      - sceneByURL
+movieByURL:
+  - action: script
+    url:
+      - ersties.com/
+    script:
+      - python
+      - Ersties.py
+      - groupByURL
+performerByURL:
+  - action: script
+    url:
+      - ersties.com/
+    script:
+      - python
+      - Ersties.py
+      - performerByURL
+# Last Updated October 21, 2024

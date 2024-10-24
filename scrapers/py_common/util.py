@@ -672,5 +672,6 @@ demonyms = {
     "zambian": "Zambia",
     "zimbabwean": "Zimbabwe",
     "åland island": "Åland Islands",
+    "united states": "USA",
     **{s.lower(): "USA" for s in US_states},
 }
