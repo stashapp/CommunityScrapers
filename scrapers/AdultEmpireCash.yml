@@ -128,4 +128,8 @@ xPathScrapers:
                   with:
       FrontImage: //link[@rel="image_src"]/@href
       BackImage: //div[@class="carousel-item"]/img/@data-src
-# Last Updated April 29, 2024
+driver:
+  headers:
+    - Key: "Cookie"
+      Value: "ageConfirmed=true"
+# Last Updated October 27, 2024
