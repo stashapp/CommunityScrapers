@@ -210,6 +210,14 @@ if dt:
     date = datetime.strptime(dt, '%Y-%m-%d')
     scrape['date'] = str(date.date())
 
+# replace tags manually
+tags = scene_api_json.get('tags')
+if tags:
+    for i, tag in enumerate(tags):
+        # inconsistent use on TeamSkeet since it was added as a tag
+        if tag == "Pumps":
+            tags[i] = "Woman's Heels"
+
 #fix for TeamKseet including HTML tags in Description
 CLEANR = re.compile('<.*?>') 
 cleandescription = re.sub(CLEANR,'',scene_api_json.get('description'))
@@ -218,7 +226,7 @@ scrape['studio'] = {}
 studioApiName = scene_api_json['site'].get('name')
 log.debug("Studio API name is '" + studioApiName + "'")
 scrape['studio']['name'] = studioMap[studioApiName] if studioApiName in studioMap else studioApiName
-scrape['tags'] = [{"name": x} for x in scene_api_json.get('tags')]
+scrape['tags'] = [{"name": x} for x in tags]
 scrape['code'] = scene_api_json.get('cId', '').split('/')[-1]
 for tag in studioDefaultTags.get(studioApiName, []):
     log.debug("Assiging default tags - " + tag)
