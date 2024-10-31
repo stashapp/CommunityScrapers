@@ -46,7 +46,7 @@ def scrape(url: str, retries=0):
 
 
 def scene_title(tree):
-    return xpath_string(tree, "//meta[@property='og:title']/@content")
+    return xpath_string(tree, "//meta[@property='og:title']/@content").split('|')[0].strip()
 
 def scene_date(tree):
     stash_date = "%Y-%m-%d"
