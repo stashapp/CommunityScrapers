@@ -18,21 +18,6 @@ from lxml import html, etree
 
 scraper = cloudscraper.create_scraper()
 
-def node_to_string(node, separator: str):
-    if isinstance(node, list):
-        if len(node) == 1:
-            return node_to_string(node[0], separator)
-        elif len(node) > 1:
-            nodes = map(lambda x: node_to_string(x, separator), node)
-            return separator.join(nodes)
-    elif isinstance(node, etree._ElementUnicodeResult):
-        return node
-    elif isinstance(node, html.HtmlElement):
-        return node.text_content()
-    else:
-        log.debug(type(node))
-    return None
-
 def base64_image(url) -> str:
     import base64
     b64img_bytes = base64.b64encode(scraper.get(url).content)
@@ -55,8 +40,9 @@ def scrape(url: str, retries=0):
 
 def scene_title(tree):
     raw = tree.xpath("//meta[@property='og:title']/@content")
-    title = node_to_string(raw, "\n\n")
-    return title.split('|')[0].strip()
+    if not raw or len(raw) < 1:
+        return ""
+    return raw[0].split('|')[0].strip()
 
 def scene_date(tree):
     stash_date = "%Y-%m-%d"
@@ -66,14 +52,17 @@ def scene_date(tree):
     return datetime.datetime.strptime(raw, date_format).strftime(stash_date)
 
 def scene_details(tree):
-    rawDescription = tree.xpath("//div[contains(@class, 'video_description')]")
+    rawDescription = tree.xpath("//*[contains(@class, 'video_description')]")
     details = rawDescription[0].text_content()
 
+    songs = ""
     rawSong = tree.xpath("//a[contains(@class, 'song_link')]//span/text()")
-    song = node_to_string(rawSong, " - ")
+    rawSongs = zip(rawSong[::2], rawSong[1::2])
+    for (songTitle, songAuthor) in rawSongs:
+        songs += "\n" + songAuthor + " - " + songTitle
 
-    if song:
-        details = details + "\n\nSong: " + song
+    if songs != "":
+        details = details + "\n\nSongs: " + songs
     return details
 
 def scene_tags(tree):
@@ -81,8 +70,11 @@ def scene_tags(tree):
     return []
 
 def get_performers(tree):
-    detailsUrl = tree.xpath("//*[@id='current-video']//button[contains(@class, 'btn-plus')]/@hx-get")[0]
-    scrapedPerformers = scrape("https://www.noodledude.io" + detailsUrl)
+    detailsUrl = tree.xpath("//*[@id='current-video']//button[contains(@class, 'btn-plus')]/@hx-get")
+    if not detailsUrl or len(detailsUrl) < 1:
+        return []
+    
+    scrapedPerformers = scrape("https://www.noodledude.io" + detailsUrl[0])
     performerList = scrapedPerformers.xpath("//a[contains(@class, 'performer_card')]//span[1]/text()")
     return [
         {
@@ -93,7 +85,6 @@ def get_performers(tree):
 
 def scene_image(tree):
     rawUrl = tree.xpath("//video[@id='player']/@poster")[0]
-    log.debug(rawUrl)
     return base64_image(rawUrl)
 
 def scene_from_tree(tree):
