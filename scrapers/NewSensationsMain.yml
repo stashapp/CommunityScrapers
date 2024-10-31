@@ -3,11 +3,13 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - newsensations.com/tour_ns/updates
+      - www.newsensations.com/tour_ns/updates
     scraper: sceneScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - newsensations.com/tour_ns/dvds
+      - www.newsensations.com/tour_ns/dvds
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
@@ -52,4 +54,4 @@ xPathScrapers:
         selector: //div[@class='description']/p[contains(span,"Description:")]/text()
       URL: //link[@rel='canonical']/@href
       FrontImage: //span[@id='trailer_thumb']//img/@src
-# Last Updated July 03, 2021
+# Last Updated October 26, 2024

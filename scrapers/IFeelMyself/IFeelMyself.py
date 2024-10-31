@@ -9,6 +9,7 @@ import unicodedata
 # set value for ifeel_auth cookie here, may change and need to be renewed periodically.
 # if no account available leave value empty and scraper won't find some videos and country and details fields will be missing from performer scrapes.
 
+
 ifeelauth = ""
 
 try:
@@ -45,8 +46,9 @@ def extract_SceneInfo(table,cover_url=None):
             cover_url=str(table.find("img")['src'])
         else:
             cover_url=str(table.find("video")['poster'])
+    debugPrint(f"cover_url:{cover_url}")
     title = table.find(class_= ["entryHeadingFlash","entryHeading"]).find('a').get_text().replace("\x92","'")
-    media_id = re.search(r"\/(\d{3,5})\/",cover_url,re.I).group(1)
+    media_id = re.search(r"\/(\d{2,5})\/",cover_url,re.I).group(1)
     artist_id = re.search(r"\/(f\d{4,5})",cover_url,re.I).group(1)
     tags = table.find_all(class_="tags-list-item-tag")
     tag_list = []
@@ -70,7 +72,7 @@ def scrapeScene(filename,date,url):
       debugPrint("Url found, using that to scrape")
       if url.endswith(".jpg"):
       #use the image url to extract the metadeta
-          media_id = re.search(r"\/(\d{3,5})\/",url,re.I).group(1)
+          media_id = re.search(r"\/(\d{2,5})\/",url,re.I).group(1)
           artist_id = re.search(r"\/(f\d{4,5})",url,re.I).group(1)
           debugPrint(f"Artist id found: {artist_id}")
           debugPrint(f"Media id found: {media_id}")
@@ -89,7 +91,7 @@ def scrapeScene(filename,date,url):
             video_id = re.search(r"-(\d+)",filename,re.I).group(1)
             cookie_obj = create_cookie(name='ifm_search_keyword', value=artist_id, domain='ifeelmyself.com')
             browser.session.cookies.set_cookie(cookie_obj)
-            cookie_obj = create_cookie(name='ifm_prefs', value="a%3A1%3A%7Bs%3A6%3A%22search%22%3Ba%3A17%3A%7Bs%3A8%3A%22category%22%3Ba%3A0%3A%7B%7Ds%3A7%3A%22view_by%22%3Bs%3A4%3A%22news%22%3Bs%3A7%3A%22date_by%22%3Bs%3A7%3A%22anytime%22%3Bs%3A10%3A%22from_month%22%3Bs%3A1%3A%221%22%3Bs%3A9%3A%22from_year%22%3Bs%3A4%3A%222006%22%3Bs%3A8%3A%22to_month%22%3Bs%3A2%3A%2212%22%3Bs%3A7%3A%22to_year%22%3Bs%3A4%3A%223000%22%3Bs%3A7%3A%22country%22%3Bs%3A3%3A%22all%22%3Bs%3A10%3A%22attributes%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_logical%22%3Bs%3A3%3A%22AND%22%3Bs%3A13%3A%22tags_remember%22%3Bs%3A1%3A%22n%22%3Bs%3A4%3A%22tags%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_exclude%22%3Bs%3A0%3A%22%22%3Bs%3A9%3A%22hide_tags%22%3Ba%3A0%3A%7B%7Ds%3A8%3A%22age_from%22%3Bs%3A2%3A%2218%22%3Bs%3A6%3A%22age_to%22%3Bs%3A2%3A%2299%22%3Bs%3A16%3A%22profilevid_limit%22%3Bs%3A0%3A%22%22%3B%7D%7D", domain='.ifeelmyself.com')
+            cookie_obj = create_cookie(name='ifm_prefs', value="a%3A1%3A%7Bs%3A6%3A%22search%22%3Ba%3A18%3A%7Bs%3A11%3A%22search_type%22%3Bs%3A7%3A%22content%22%3Bs%3A8%3A%22category%22%3Ba%3A0%3A%7B%7Ds%3A7%3A%22view_by%22%3Bs%3A4%3A%22news%22%3Bs%3A7%3A%22date_by%22%3Bs%3A7%3A%22anytime%22%3Bs%3A10%3A%22from_month%22%3Bs%3A1%3A%221%22%3Bs%3A9%3A%22from_year%22%3Bs%3A4%3A%222006%22%3Bs%3A8%3A%22to_month%22%3Bs%3A2%3A%2212%22%3Bs%3A7%3A%22to_year%22%3Bs%3A4%3A%223000%22%3Bs%3A7%3A%22country%22%3Bs%3A3%3A%22all%22%3Bs%3A10%3A%22attributes%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_logical%22%3Bs%3A3%3A%22AND%22%3Bs%3A13%3A%22tags_remember%22%3Bs%3A1%3A%22n%22%3Bs%3A4%3A%22tags%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_exclude%22%3Bs%3A0%3A%22%22%3Bs%3A9%3A%22hide_tags%22%3Ba%3A0%3A%7B%7Ds%3A8%3A%22age_from%22%3Bs%3A2%3A%2218%22%3Bs%3A6%3A%22age_to%22%3Bs%3A2%3A%2299%22%3Bs%3A16%3A%22profilevid_limit%22%3Bs%3A0%3A%22%22%3B%7D%7D", domain='.ifeelmyself.com')
             browser.session.cookies.set_cookie(cookie_obj)
             cookie_obj = create_cookie(name='ifeel_auth', value=ifeelauth, domain='.ifeelmyself.com')
             browser.session.cookies.set_cookie(cookie_obj)
@@ -110,7 +112,7 @@ def scrapeScene(filename,date,url):
                         ret = extract_SceneInfo(table)
                         break
             else:
-                sys.stderr.write("0 matches found! Checking offset")
+                debugPrint("0 matches found! Checking offset")
                 pages=int(response.find_all("a", class_="pagging_nonsel")[-1].get_text())
                 debugPrint("Pages:  "+str(pages))
                 if pages:
@@ -125,11 +127,11 @@ def scrapeScene(filename,date,url):
                                 img=str(table.find("img")['src'])
                             debugPrint(f"Image:{img}")
                             if (f"/{artist_id}-{video_id}vg.jpg" in img) or (f"/{artist_id}-{video_id}hs.jpg" in img):
-                                sys.stderr.write("FOUND")
+                                debugPrint("Found a single match video!")
                                 ret = extract_SceneInfo(table)
                                 break
                 else:
-                    sys.stderr.write("0 matches found!, check your filename")
+                    debugPrint("0 matches found!, check your filename")
 
         else:
             debugPrint("Name changed after downloading")
@@ -144,7 +146,7 @@ def scrapeScene(filename,date,url):
                     debugPrint(f"Title: {title}")
                 cookie_obj = create_cookie(name='ifm_search_keyword', value=title, domain='ifeelmyself.com')
                 browser.session.cookies.set_cookie(cookie_obj)
-                cookie_obj = create_cookie(name='ifm_prefs', value="a%3A1%3A%7Bs%3A6%3A%22search%22%3Ba%3A17%3A%7Bs%3A8%3A%22category%22%3Ba%3A0%3A%7B%7Ds%3A7%3A%22view_by%22%3Bs%3A4%3A%22news%22%3Bs%3A7%3A%22date_by%22%3Bs%3A7%3A%22anytime%22%3Bs%3A10%3A%22from_month%22%3Bs%3A1%3A%221%22%3Bs%3A9%3A%22from_year%22%3Bs%3A4%3A%222006%22%3Bs%3A8%3A%22to_month%22%3Bs%3A2%3A%2212%22%3Bs%3A7%3A%22to_year%22%3Bs%3A4%3A%223000%22%3Bs%3A7%3A%22country%22%3Bs%3A3%3A%22all%22%3Bs%3A10%3A%22attributes%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_logical%22%3Bs%3A3%3A%22AND%22%3Bs%3A13%3A%22tags_remember%22%3Bs%3A1%3A%22n%22%3Bs%3A4%3A%22tags%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_exclude%22%3Bs%3A0%3A%22%22%3Bs%3A9%3A%22hide_tags%22%3Ba%3A0%3A%7B%7Ds%3A8%3A%22age_from%22%3Bs%3A2%3A%2218%22%3Bs%3A6%3A%22age_to%22%3Bs%3A2%3A%2299%22%3Bs%3A16%3A%22profilevid_limit%22%3Bs%3A0%3A%22%22%3B%7D%7D", domain='.ifeelmyself.com')
+                cookie_obj = create_cookie(name='ifm_prefs', value="a%3A1%3A%7Bs%3A6%3A%22search%22%3Ba%3A18%3A%7Bs%3A11%3A%22search_type%22%3Bs%3A7%3A%22content%22%3Bs%3A8%3A%22category%22%3Ba%3A0%3A%7B%7Ds%3A7%3A%22view_by%22%3Bs%3A4%3A%22news%22%3Bs%3A7%3A%22date_by%22%3Bs%3A7%3A%22anytime%22%3Bs%3A10%3A%22from_month%22%3Bs%3A1%3A%221%22%3Bs%3A9%3A%22from_year%22%3Bs%3A4%3A%222006%22%3Bs%3A8%3A%22to_month%22%3Bs%3A2%3A%2212%22%3Bs%3A7%3A%22to_year%22%3Bs%3A4%3A%223000%22%3Bs%3A7%3A%22country%22%3Bs%3A3%3A%22all%22%3Bs%3A10%3A%22attributes%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_logical%22%3Bs%3A3%3A%22AND%22%3Bs%3A13%3A%22tags_remember%22%3Bs%3A1%3A%22n%22%3Bs%3A4%3A%22tags%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_exclude%22%3Bs%3A0%3A%22%22%3Bs%3A9%3A%22hide_tags%22%3Ba%3A0%3A%7B%7Ds%3A8%3A%22age_from%22%3Bs%3A2%3A%2218%22%3Bs%3A6%3A%22age_to%22%3Bs%3A2%3A%2299%22%3Bs%3A16%3A%22profilevid_limit%22%3Bs%3A0%3A%22%22%3B%7D%7D", domain='.ifeelmyself.com')
                 browser.session.cookies.set_cookie(cookie_obj)
                 cookie_obj = create_cookie(name='ifeel_auth', value=ifeelauth, domain='.ifeelmyself.com')
                 browser.session.cookies.set_cookie(cookie_obj)
@@ -202,7 +204,7 @@ def queryPerformer(perfname):
     browser.open("https://ifeelmyself.com/public/main.php")
     cookie_obj = create_cookie(name='tags_popup_shown', value='true', domain='ifeelmyself.com')
     browser.session.cookies.set_cookie(cookie_obj)
-    cookie_obj = create_cookie(name='ifm_prefs', value="a%3A1%3A%7Bs%3A6%3A%22search%22%3Ba%3A17%3A%7Bs%3A8%3A%22category%22%3Ba%3A0%3A%7B%7Ds%3A7%3A%22view_by%22%3Bs%3A4%3A%22news%22%3Bs%3A7%3A%22date_by%22%3Bs%3A7%3A%22anytime%22%3Bs%3A10%3A%22from_month%22%3Bs%3A1%3A%221%22%3Bs%3A9%3A%22from_year%22%3Bs%3A4%3A%222006%22%3Bs%3A8%3A%22to_month%22%3Bs%3A2%3A%2212%22%3Bs%3A7%3A%22to_year%22%3Bs%3A4%3A%223000%22%3Bs%3A7%3A%22country%22%3Bs%3A3%3A%22all%22%3Bs%3A10%3A%22attributes%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_logical%22%3Bs%3A3%3A%22AND%22%3Bs%3A13%3A%22tags_remember%22%3Bs%3A1%3A%22n%22%3Bs%3A4%3A%22tags%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_exclude%22%3Bs%3A0%3A%22%22%3Bs%3A9%3A%22hide_tags%22%3Ba%3A0%3A%7B%7Ds%3A8%3A%22age_from%22%3Bs%3A2%3A%2218%22%3Bs%3A6%3A%22age_to%22%3Bs%3A2%3A%2299%22%3Bs%3A16%3A%22profilevid_limit%22%3Bs%3A0%3A%22%22%3B%7D%7D", domain='.ifeelmyself.com')
+    cookie_obj = create_cookie(name='ifm_prefs', value="a%3A1%3A%7Bs%3A6%3A%22search%22%3Ba%3A18%3A%7Bs%3A11%3A%22search_type%22%3Bs%3A7%3A%22content%22%3Bs%3A8%3A%22category%22%3Ba%3A0%3A%7B%7Ds%3A7%3A%22view_by%22%3Bs%3A4%3A%22news%22%3Bs%3A7%3A%22date_by%22%3Bs%3A7%3A%22anytime%22%3Bs%3A10%3A%22from_month%22%3Bs%3A1%3A%221%22%3Bs%3A9%3A%22from_year%22%3Bs%3A4%3A%222006%22%3Bs%3A8%3A%22to_month%22%3Bs%3A2%3A%2212%22%3Bs%3A7%3A%22to_year%22%3Bs%3A4%3A%223000%22%3Bs%3A7%3A%22country%22%3Bs%3A3%3A%22all%22%3Bs%3A10%3A%22attributes%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_logical%22%3Bs%3A3%3A%22AND%22%3Bs%3A13%3A%22tags_remember%22%3Bs%3A1%3A%22n%22%3Bs%3A4%3A%22tags%22%3Ba%3A0%3A%7B%7Ds%3A12%3A%22tags_exclude%22%3Bs%3A0%3A%22%22%3Bs%3A9%3A%22hide_tags%22%3Ba%3A0%3A%7B%7Ds%3A8%3A%22age_from%22%3Bs%3A2%3A%2218%22%3Bs%3A6%3A%22age_to%22%3Bs%3A2%3A%2299%22%3Bs%3A16%3A%22profilevid_limit%22%3Bs%3A0%3A%22%22%3B%7D%7D", domain='.ifeelmyself.com')
     browser.session.cookies.set_cookie(cookie_obj)
     cookie_obj = create_cookie(name='ifm_search_keyword', value=perfname, domain='ifeelmyself.com')
     browser.session.cookies.set_cookie(cookie_obj)

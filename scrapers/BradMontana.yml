@@ -8,8 +8,8 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="title tit"]/h1/text()
-      Details: //div[@class="descript desc"]/p//text()
+      Title: //meta[@property='og:title']/@content
+      Details: //p[not(@class)]/text()
       Date:
         selector: //script[@type="application/ld+json"]
         postProcess:
@@ -18,9 +18,9 @@ xPathScrapers:
                 with: $1
           - parseDate: 2006-01-02
       Performers:
-        Name: //div[@class="elenco elen"]/a/text()
-      Studio: 
+        Name: //a[contains(@href,'atrizes') or contains(@href,'atores')]//div/text()
+      Studio:
         Name: //meta[@property="og:site_name"]/@content
       Image: //meta[@property="og:image"]/@content
 
-# Last Updated Januray 16, 2024
+# Last Updated October 24, 2024
