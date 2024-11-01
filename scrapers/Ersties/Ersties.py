@@ -4,6 +4,7 @@ import re
 import json
 from py_common.util import guess_nationality
 from datetime import datetime
+from bs4 import BeautifulSoup as bs
 
 #Authentication tokens and cookies are needed for this scraper. Use the network console in your browsers developer tools to find this information in an api call header.
 #Auth Variables For Header
@@ -51,9 +52,15 @@ def get_scene(inputurl):
 
         ret = {}
 
+        #Get Gallery ID from response for Gallery Scraping
+        gallery_id = str(scrape_data['gallery_id'])
+
         ret['title'] = scrape_data['title_en']
         ret['code'] = str(scrape_data['id'])
-        ret['details'] = scrape_data['model']['description_en']
+        #Get details from Gallery
+        details=clean_text(get_data_from_gallery(inputurl, gallery_id, 'description_en'))
+        ret['details'] = details    
+        #ret['details'] = details.get_text()
         ret['studio'] = {'name':'Ersties'}
         ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
         ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
@@ -62,10 +69,10 @@ def get_scene(inputurl):
                 ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
                 break
         #Get Date
-        #Get Gallery ID from response
-        gallery_id = str(scrape_data['gallery_id'])
         #Send Gallery ID to fuction for scraping and set the returned date
-        ret['date'] = get_date_from_gallery(inputurl, gallery_id)
+        epoch_time = get_data_from_gallery(inputurl, gallery_id, 'available_since')
+        #Convert date from Epoch Time
+        ret['date'] = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
     else:
         debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
         sys.exit()    
@@ -138,11 +145,11 @@ def get_performer(inputurl):
         sys.exit()
     return ret
 
-def get_date_from_gallery(inputurl, galleryid):
+def get_data_from_gallery(inputurl, galleryid, field):
     # Use a regular expression to extract the model number after '/' and before '#play'
     match = re.search(r'/(\d+)#play', inputurl)
     if match:
-        modelid = match.group(1)  
+        modelid = match.group(1)
     else:
         debugPrint('No model ID found in URL.')
         sys.exit()
@@ -157,17 +164,36 @@ def get_date_from_gallery(inputurl, galleryid):
     #Check for valid response
     if scrape.status_code ==200:
         gallery_data = scrape.json()
+        #Find matching gallery in response
         for i in gallery_data:
             if i['id'] == int(galleryid):
-                #Get Epoch date from response
-                epoch_time = i['available_since']
-                #Convert Epoch date into yyy-mm-dd format
-                available_since = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
-                break
+                #Get field data from response
+                gallery_field = i[field]
+                break            
     else: 
         return
     
-    return available_since
+    return gallery_field
+
+def clean_text(details: str) -> str:
+    """
+    remove escaped backslashes and html parse the details text
+    """
+    if details:
+        details = re.sub(r"\\", "", details)
+        details = re.sub(r"<\s*/?br\s*/?\s*>", "\n",
+                         details)  # bs.get_text doesnt replace br's with \n
+        details = re.sub(r'</?p>', '\n', details)
+#        details = bs(details, features='html.parser').get_text()
+        # Remove leading/trailing/double whitespaces
+        details = '\n'.join(
+            [
+                ' '.join([s for s in x.strip(' ').split(' ') if s != ''])
+                for x in ''.join(details).split('\n')
+            ]
+        )
+        details = details.strip()
+    return details
 
 if sys.argv[1] == 'sceneByURL':
     i = readJSONInput()
