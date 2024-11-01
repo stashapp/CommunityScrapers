@@ -3,18 +3,18 @@ name: "NoodleDude"
 
 sceneByURL:
   - url:
-      - noodledude.io
+      - noodledude.io/videos
     action: script
     script:
       - python
       - NoodleDude.py
-      - scene
+      - scene-by-url
 performerByURL:
   - url:
-      - noodledude.io
+      - noodledude.io/creators
     action: script
     script:
       - python
       - NoodleDude.py
-      - performer
-# Last Updated November 31, 2024
+      - performer-by-url
+# Last Updated November 01, 2024
