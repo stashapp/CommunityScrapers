@@ -27,6 +27,56 @@ def readJSONInput():
 def debugPrint(t):
     sys.stderr.write(t + "\n")
 
+def clean_text(details: str) -> str:
+    """
+    remove escaped backslashes and html parse the details text
+    """
+    if details:
+        details = re.sub(r"\\", "", details)
+        details = re.sub(r"<\s*/?br\s*/?\s*>", "\n",
+                         details)  # bs.get_text doesnt replace br's with \n
+        details = re.sub(r'</?p>', '\n', details)
+        details = bs(details, features='html.parser').get_text()
+        # Remove leading/trailing/double whitespaces
+        details = '\n'.join(
+            [
+                ' '.join([s for s in x.strip(' ').split(' ') if s != ''])
+                for x in ''.join(details).split('\n')
+            ]
+        )
+        details = details.strip()
+    return details
+
+def get_data_from_gallery(inputurl, galleryid, field):
+    # Use a regular expression to extract the model number after '/' and before '#play'
+    match = re.search(r'/(\d+)#play', inputurl)
+    if match:
+        modelid = match.group(1)
+    else:
+        debugPrint('No model ID found in URL.')
+        sys.exit()
+
+    #Build URL to scrape
+    scrape_url='https://api.ersties.com/galleries/'+modelid
+
+    #Scrape URL
+    scrape = requests.get(scrape_url, headers=scrape_headers)
+
+    #Parse response
+    #Check for valid response
+    if scrape.status_code ==200:
+        gallery_data = scrape.json()
+        #Find matching gallery in response
+        for i in gallery_data:
+            if i['id'] == int(galleryid):
+                #Get field data from response
+                gallery_field = i[field]
+                break            
+    else: 
+        return
+    
+    return gallery_field
+
 def get_scene(inputurl):
 
     # Use a regular expression to extract the number after '#play-' and before '-comments'
@@ -58,9 +108,7 @@ def get_scene(inputurl):
         ret['title'] = scrape_data['title_en']
         ret['code'] = str(scrape_data['id'])
         #Get details from Gallery
-        details=clean_text(get_data_from_gallery(inputurl, gallery_id, 'description_en'))
-        ret['details'] = details    
-        #ret['details'] = details.get_text()
+        ret['details'] = clean_text(str(get_data_from_gallery(inputurl, gallery_id, 'description_en')))    
         ret['studio'] = {'name':'Ersties'}
         ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
         ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
@@ -144,56 +192,6 @@ def get_performer(inputurl):
         debugPrint('No performer ID found in URL. Please make sure you are using the ULR ending with "profile/nnnn".')
         sys.exit()
     return ret
-
-def get_data_from_gallery(inputurl, galleryid, field):
-    # Use a regular expression to extract the model number after '/' and before '#play'
-    match = re.search(r'/(\d+)#play', inputurl)
-    if match:
-        modelid = match.group(1)
-    else:
-        debugPrint('No model ID found in URL.')
-        sys.exit()
-
-    #Build URL to scrape
-    scrape_url='https://api.ersties.com/galleries/'+modelid
-
-    #Scrape URL
-    scrape = requests.get(scrape_url, headers=scrape_headers)
-
-    #Parse response
-    #Check for valid response
-    if scrape.status_code ==200:
-        gallery_data = scrape.json()
-        #Find matching gallery in response
-        for i in gallery_data:
-            if i['id'] == int(galleryid):
-                #Get field data from response
-                gallery_field = i[field]
-                break            
-    else: 
-        return
-    
-    return gallery_field
-
-def clean_text(details: str) -> str:
-    """
-    remove escaped backslashes and html parse the details text
-    """
-    if details:
-        details = re.sub(r"\\", "", details)
-        details = re.sub(r"<\s*/?br\s*/?\s*>", "\n",
-                         details)  # bs.get_text doesnt replace br's with \n
-        details = re.sub(r'</?p>', '\n', details)
-#        details = bs(details, features='html.parser').get_text()
-        # Remove leading/trailing/double whitespaces
-        details = '\n'.join(
-            [
-                ' '.join([s for s in x.strip(' ').split(' ') if s != ''])
-                for x in ''.join(details).split('\n')
-            ]
-        )
-        details = details.strip()
-    return details
 
 if sys.argv[1] == 'sceneByURL':
     i = readJSONInput()
