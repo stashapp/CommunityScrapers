@@ -3,6 +3,7 @@ import requests
 import re
 import json
 from py_common.util import guess_nationality
+from datetime import datetime
 
 #Authentication tokens and cookies are needed for this scraper. Use the network console in your browsers developer tools to find this information in an api call header.
 #Auth Variables For Header
@@ -60,6 +61,11 @@ def get_scene(inputurl):
             if thumbnail['is_main']:
                 ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
                 break
+        #Get Date
+        #Get Gallery ID from response
+        gallery_id = str(scrape_data['gallery_id'])
+        #Send Gallery ID to fuction for scraping and set the returned date
+        ret['date'] = get_date_from_gallery(inputurl, gallery_id)
     else:
         debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
         sys.exit()    
@@ -131,6 +137,37 @@ def get_performer(inputurl):
         debugPrint('No performer ID found in URL. Please make sure you are using the ULR ending with "profile/nnnn".')
         sys.exit()
     return ret
+
+def get_date_from_gallery(inputurl, galleryid):
+    # Use a regular expression to extract the model number after '/' and before '#play'
+    match = re.search(r'/(\d+)#play', inputurl)
+    if match:
+        modelid = match.group(1)  
+    else:
+        debugPrint('No model ID found in URL.')
+        sys.exit()
+
+    #Build URL to scrape
+    scrape_url='https://api.ersties.com/galleries/'+modelid
+
+    #Scrape URL
+    scrape = requests.get(scrape_url, headers=scrape_headers)
+
+    #Parse response
+    #Check for valid response
+    if scrape.status_code ==200:
+        gallery_data = scrape.json()
+        for i in gallery_data:
+            if i['id'] == int(galleryid):
+                #Get Epoch date from response
+                epoch_time = gallery_data[0]['available_since']
+                #Convert Epoch date into yyy-mm-dd format
+                available_since = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
+                break
+    else: 
+        return
+    
+    return available_since
 
 if sys.argv[1] == 'sceneByURL':
     i = readJSONInput()
