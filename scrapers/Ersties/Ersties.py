@@ -160,7 +160,7 @@ def get_date_from_gallery(inputurl, galleryid):
         for i in gallery_data:
             if i['id'] == int(galleryid):
                 #Get Epoch date from response
-                epoch_time = gallery_data[0]['available_since']
+                epoch_time = i['available_since']
                 #Convert Epoch date into yyy-mm-dd format
                 available_since = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
                 break
