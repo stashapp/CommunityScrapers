@@ -1,0 +1,26 @@
+name: PornoLab
+# requires: py_common
+
+sceneByURL:
+  - url:
+      - pornolab.net/forum/viewtopic.php?t=
+    action: script
+    script:
+      - python3
+      - pornolab.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - pornolab.py
+    - scene-by-fragment
+movieByURL:
+  - url:
+      - pornolab.net/forum/viewtopic.php?t=
+    action: script
+    script:
+      - python3
+      - pornolab.py
+      - movie-by-url
+# Last Updated November 01, 2024
