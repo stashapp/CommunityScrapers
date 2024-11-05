@@ -119,8 +119,10 @@ def get_scene(inputurl):
         #Get Date
         #Send Gallery ID to fuction for scraping and set the returned date
         epoch_time = get_data_from_gallery(inputurl, gallery_id, 'available_since')
-        #Convert date from Epoch Time
-        ret['date'] = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
+        # Check if the date is returned as an integer.
+        if isinstance(epoch_time, int):
+            #Convert date from Epoch Time
+            ret['date'] = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
     else:
         debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
         sys.exit()    
@@ -194,7 +196,11 @@ def get_group(inputurl):
             #Get Date
             #Send Gallery ID to fuction for scraping and set the returned date
             epoch_time = get_data_from_gallery(inputurl, gallery_id, 'available_since')
-            ret['date'] = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
+            # Check if the date is returned as an integer.
+            # Check if the date is returned as an integer.
+            if isinstance(epoch_time, int):
+                #Convert date from Epoch Time
+                ret['date'] = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
 
             #Thumbnail Scraper from Profile, Galleries don't provide a source for the thumbnail
             #Build URL to scrape Profile
