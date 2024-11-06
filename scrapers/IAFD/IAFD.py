@@ -51,7 +51,7 @@ def maybe(
     """
     Returns the first value in values that is not a predefined "empty value" after applying f to it
     """
-    empty_values = ["No Data", "No Director", "No known aliases", "None"]
+    empty_values = ["No Data", "No Director", "None", "Unknown"]
     return next(
         (f(x) for x in values if not re.search("|".join(empty_values), x, re.I)),
         None,
@@ -219,16 +219,17 @@ def performer_tattoos(tree):
         tree.xpath('//div/p[text()="Tattoos"]/following-sibling::p[1]//text()')
     )
 
+def performer_eyecolor(tree):
+    return maybe(
+        tree.xpath('//div/p[text()="Eye Color"]/following-sibling::p[1]//text()')
+    )
+
 
 def performer_aliases(tree):
-    return maybe(
-        tree.xpath(
-            '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")]]//div[@class="biodata" and not(text()="No known aliases")]/text()'
-        ),
-        lambda aliases: ", ".join(
-            filter(None, (clean_alias(alias) for alias in aliases.split(", ")))
-        ),
+    aliases = tree.xpath(
+        '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")]]//div[@class="biodata" and not(normalize-space(text())="No known aliases")]/text()'
     )
+    return ", ".join([clean_alias(alias.strip()) for alias in aliases if alias])
 
 
 def performer_careerlength(tree):
@@ -347,6 +348,7 @@ scraper = cloudscraper.create_scraper()
 
 
 def scrape(url: str, retries=0):
+    global iafd_uuid_url
     try:
         scraped = scraper.get(url, timeout=(3, 7))
     except requests.exceptions.Timeout as exc_time:
@@ -363,6 +365,7 @@ def scrape(url: str, retries=0):
             return scrape(url, retries + 1)
         log.error(f"HTTP Error: {scraped.status_code}, giving up")
         sys.exit(1)
+    iafd_uuid_url = scraped.url
     return html.fromstring(scraped.content)
 
 
@@ -407,6 +410,7 @@ def performer_from_tree(tree):
         "aliases": performer_aliases(tree),
         "tattoos": performer_tattoos(tree),
         "piercings": performer_piercings(tree),
+        "eye_color": performer_eyecolor(tree),
         "images": [
             base64_image(url) for url in tree.xpath('//div[@id="headshot"]//img/@src')
         ],
@@ -500,7 +504,7 @@ def main():
     result = {}
     if args.operation == "performer":
         result = performer_from_tree(scraped)
-        result["url"] = url
+        result["url"] = iafd_uuid_url
     elif args.operation == "movie":
         result = movie_from_tree(scraped)
     elif args.operation == "scene":
