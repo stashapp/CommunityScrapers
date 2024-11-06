@@ -68,10 +68,10 @@ def get_torrent_metadata(torrent_data):
             res["tags"] = [{"name": decode_bytes(t)} for t in torrent_data[b"metadata"][b"taglist"]]
         if b"taglist" in torrent_data[b"metadata"]:
             res["performers"]=[{"name":x} for x in process_tags_performers(torrent_data[b"metadata"][b"taglist"])]
-        if b"comment" in torrent_data:
-            res["url"] = decode_bytes(torrent_data[b"comment"])
         if b"creation date" in torrent_data:
             res["date"] = datetime.fromtimestamp(torrent_data[b"creation date"]).strftime("%Y-%m-%d")
+    if b"comment" in torrent_data:
+        res["url"] = decode_bytes(torrent_data[b"comment"])
     return res
 
 
