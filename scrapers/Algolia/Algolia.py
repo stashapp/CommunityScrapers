@@ -67,7 +67,8 @@ SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
     "Big Boob Angels": "BAM Visions",
     "Mick's ANAL PantyHOES": "BAM Visions",
     "Real Anal Lovers": "BAM Visions",
-    "XXXmailed": "Blackmailed"
+    "XXXmailed": "Blackmailed", 
+    "AnalPlaytime": "Anal Acrobats"
 }
 
 # a list of serie (`serie_name` from the API) which should use the sitename
@@ -596,7 +597,7 @@ def determine_studio_name_from_json(some_json):
     if some_json.get('segment') in SITES_SEGMENT_USING_MAIN_CHANNEL_AS_SCENE_STUDIO:
         studio_name = some_json.get('mainChannel', {}).get('name', '')
         return studio_name
-    if some_json.get('sitename_pretty'):
+    if not some_json.get('sitename_pretty'):
         if some_json.get('sitename_pretty') in SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
             studio_name = \
                     SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(some_json.get('sitename_pretty'))
