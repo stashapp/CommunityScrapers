@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 from py_common.deps import ensure_requirements
 from py_common import graphql
 from py_common import log
+from py_common.config import get_config
 
 ensure_requirements("bs4:beautifulsoup4", "requests")
 
@@ -20,12 +21,16 @@ import requests  # noqa: E402
 # User variables
 #
 
+config = get_config(default="""
 # File to store the Algolia API key.
-STOCKAGE_FILE_APIKEY = "Algolia.ini"
+STOCKAGE_FILE_APIKEY = Algolia.ini
+
 # Extra tag that will be added to the scene
-FIXED_TAG = ""
+FIXED_TAG =
+
 # Include non female performers
 NON_FEMALE = True
+""")
 
 # a list of main channels (`mainChannelName` from the API) to use as the studio
 # name for a scene
@@ -67,7 +72,14 @@ SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
     "Big Boob Angels": "BAM Visions",
     "Mick's ANAL PantyHOES": "BAM Visions",
     "Real Anal Lovers": "BAM Visions",
-    "XXXmailed": "Blackmailed"
+    "XXXmailed": "Blackmailed",
+    "Secret Crush": "Secret Crush",
+    "AnalTriXXX": "AnalTriXXX",
+    "Anal.Oil.Latex.": "Latex Playtime",
+    "CuckoldSessions": "Cuckold Sessions",
+    "BlacksOnBlondes": "Blacks On Blondes",
+    "Trans-Active": "Trans-Active",
+    "AnalPlaytime": "Anal Acrobats",
 }
 
 # a list of serie (`serie_name` from the API) which should use the sitename
@@ -98,7 +110,7 @@ SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE = {
     "1000facials": "1000 Facials",
     "Immorallive": "Immoral Live",
     "Mommyblowsbest": "Mommy Blows Best",
-    "Onlyteenblowjobs": "Only Teen Blowjobs"
+    "Onlyteenblowjobs": "Only Teen Blowjobs",
 }
 
 # a list of sites (`sitename_pretty` from the API) which should pick out the
@@ -122,6 +134,7 @@ SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
     "Squirtalicious",
     "3rd Degree Films",
     "Lethalhardcore",
+    "Latex Playtime",
     "Wicked",
 ]
 
@@ -135,7 +148,7 @@ SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE = [
     "Muses",            # network_name: Transfixed
     "Officemsconduct",  # network_name: Transfixed
     "Sabiendemonia",    # network_name: Sabien DeMonia
-    "Upclosex"          # network_name: UpCloseX
+    "Upclosex",         # network_name: UpCloseX
 ]
 
 # Some sites lists scenes from different subnetworks and uses mainChannel as studio
@@ -154,7 +167,12 @@ NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE = [
 
 # a dict of directors to use as the studio for a scene
 DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE = {
-    "Le Wood": "LeWood"
+    "Le Wood": "LeWood",
+    "Rocco Siffredi": "Rocco Siffredi",
+    "Scarlet Chase": "Secret Crush",
+    "Angelo Godshack": "Angelo Godshack",
+    "Jonni Darkko": "Jonni Darkko XXX",
+    "Chris Streams": "Chris Streams",
 }
 
 
@@ -178,7 +196,7 @@ def clean_text(details: str) -> str:
     return details
 
 
-def send_request(url: str, head: str, send_json="") -> requests.Response:
+def send_request(url: str, head: dict, send_json="") -> requests.Response:
     """
     get post response from url
     """
@@ -219,18 +237,18 @@ def fetch_page_json(page_html):
 
 
 def check_config(domain, time):
-    if os.path.isfile(STOCKAGE_FILE_APIKEY):
-        config = ConfigParser()
-        config.read(STOCKAGE_FILE_APIKEY)
+    if os.path.isfile(config.STOCKAGE_FILE_APIKEY):
+        parser = ConfigParser()
+        parser.read(config.STOCKAGE_FILE_APIKEY)
         try:
-            time_past = datetime.datetime.strptime(config.get(domain, 'date'),
+            time_past = datetime.datetime.strptime(parser.get(domain, 'date'),
                                                    '%Y-%m-%d %H:%M:%S.%f')
 
             if time_past.hour - 1 < time.hour < time_past.hour + 1 and (
                     time - time_past).days == 0:
                 log.debug("Using old key")
-                application_id = config.get(domain, 'app_id')
-                api_key = config.get(domain, 'api_key')
+                application_id = parser.get(domain, 'app_id')
+                api_key = parser.get(domain, 'api_key')
                 return application_id, api_key
             log.info(
                 f"Need new api key: [{time.hour}|{time_past.hour}|{(time-time_past).days}]"
@@ -242,17 +260,17 @@ def check_config(domain, time):
 
 def write_config(date, app_id, api_key):
     log.debug("Writing config!")
-    config = ConfigParser()
-    config.read(STOCKAGE_FILE_APIKEY)
+    parser = ConfigParser()
+    parser.read(config.STOCKAGE_FILE_APIKEY)
     try:
-        config.get(SITE, 'date')
+        parser.get(SITE, 'date')
     except NoSectionError:
-        config.add_section(SITE)
-    config.set(SITE, 'date', date.strftime("%Y-%m-%d %H:%M:%S.%f"))
-    config.set(SITE, 'app_id', app_id)
-    config.set(SITE, 'api_key', api_key)
-    with open(STOCKAGE_FILE_APIKEY, 'w', encoding='utf-8') as configfile:
-        config.write(configfile)
+        parser.add_section(SITE)
+    parser.set(SITE, 'date', date.strftime("%Y-%m-%d %H:%M:%S.%f"))
+    parser.set(SITE, 'app_id', app_id)
+    parser.set(SITE, 'api_key', api_key)
+    with open(config.STOCKAGE_FILE_APIKEY, 'w', encoding='utf-8') as configfile:
+        parser.write(configfile)
 
 
 # API Search Data
@@ -513,7 +531,7 @@ def match_result(api_scene, range_duration=60, single=False, clip_id: str=None):
     return match_dict
 
 
-def get_id_from_url(url: str) -> str:
+def get_id_from_url(url: str) -> str | None:
     '''
     gets  the id from a valid url
     expects urls of the form www.example.com/.../title/id
@@ -541,7 +559,7 @@ def parse_movie_json(movie_json: dict) -> dict:
     scrape = {}
     try:
         studio_name = determine_studio_name_from_json(movie_json[0])
-    except IndexError:
+    except Exception:
         log.debug("No movie found")
         return scrape
     scrape["synopsis"] = clean_text(movie_json[0].get("description"))
@@ -614,17 +632,16 @@ def determine_studio_name_from_json(some_json):
     if not studio_name and some_json.get('mainChannelName') and \
             some_json.get('mainChannelName') in MAIN_CHANNELS_AS_STUDIO_FOR_SCENE:
         studio_name = some_json.get('mainChannelName')
-    if not studio_name and some_json.get('directors'):
+    if studio_name and some_json.get('directors'):
         for director in [ d.get('name').strip() for d in some_json.get('directors') ]:
             if DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE.get(director):
                 studio_name = \
                         DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE.get(director)
+    if some_json.get('serie_name') and some_json.get('serie_name') in SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
+        studio_name = \
+                SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(some_json.get('serie_name'))
     if not studio_name and some_json.get('serie_name'):
-        if some_json.get('serie_name') in SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
-            studio_name = \
-                    SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(some_json.get('serie_name'))
-        else:
-            studio_name = some_json.get('serie_name')
+        studio_name = some_json.get('serie_name')
     return studio_name
 
 def parse_scene_json(scene_json, url=None):
@@ -663,7 +680,7 @@ def parse_scene_json(scene_json, url=None):
     # Performer
     perf = []
     for actor in scene_json.get('actors'):
-        if actor.get('gender') == "female" or NON_FEMALE:
+        if actor.get('gender') == "female" or config.NON_FEMALE:
             perf.append({
                 "name": actor.get('name').strip(),
                 "gender": actor.get('gender')
@@ -686,8 +703,8 @@ def parse_scene_json(scene_json, url=None):
             tag = tag.capitalize()
             list_tag.append({"name": tag})
 
-    if FIXED_TAG:
-        list_tag.append({"name": FIXED_TAG})
+    if config.FIXED_TAG:
+        list_tag.append({"name": config.FIXED_TAG})
     scrape['tags'] = list_tag
 
     # Image
@@ -775,7 +792,7 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
     # Performer
     perf = []
     for actor in gallery_json.get('actors'):
-        if actor.get('gender') == "female" or NON_FEMALE:
+        if actor.get('gender') == "female" or config.NON_FEMALE:
             perf.append({
                 "name": actor.get('name').strip(),
                 "gender": actor.get('gender')
@@ -798,8 +815,8 @@ def parse_gallery_json(gallery_json: dict, url: str = None) -> dict:
             list_tag.append({"name": tag})
         else:
             continue
-    if FIXED_TAG:
-        list_tag.append({"name": FIXED_TAG})
+    if config.FIXED_TAG:
+        list_tag.append({"name": config.FIXED_TAG})
     scrape['tags'] = list_tag
 
     # URL
@@ -827,7 +844,7 @@ try:
 except:
     USERFOLDER_PATH = None
     CONFIG_PATH = None
-    log.debug("No config")
+    log.debug("No Stash config found")
 
 SITE = sys.argv[1]
 HEADERS = {
