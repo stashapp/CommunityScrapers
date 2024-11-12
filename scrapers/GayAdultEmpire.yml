@@ -78,7 +78,13 @@ xPathScrapers:
       Director: //a[@label="Director"]/text()
       Image: //a[@id="front-cover"]/@data-href
       Studio:
-        Name: //a[@label="Studio"]/text()
+        Name: 
+          selector:  //a[@label="Studio"]/text()
+          concat: '__SEP__'
+          postProcess:
+            - replace:
+                - regex: '^.+__SEP__(.+)$'
+                  with:  $1
       Movies:
         Name: //h1/text()
         URL: //link[@rel="canonical"]/@href
@@ -107,4 +113,4 @@ driver:
           Domain: "www.gaydvdempire.com"
           Value: "true"
           Path: "/"
-# Last Updated October 21, 2024
+# Last Updated November 12, 2024
