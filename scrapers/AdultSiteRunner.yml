@@ -2,24 +2,24 @@ name: Raunchy Bastards
 sceneByURL:
   - action: scrapeXPath
     url:
-      - boundjocks.com/scene/
-      - boyshalfwayhouse.com/scene/
-      - coltstudiogroup.com/scene/
       - daddycarl.com/scene/
-      - hotoldermale.com/scene/
-      - monstercub.com/scene/
       - naturalbornbreeders.com/scene/
-      - older4me.com/scene/
-      - raunchybastards.com/scene/
-      - stockydudes.com/scene/
-      - toplatindaddies.com/scene/
     scraper: oldStyleSite
   - action: scrapeXPath
     url:
       - blackboyaddictionz.com/scene/
       - blacksondaddies.com/scene/
+      - boundjocks.com/scene/
+      - boyshalfwayhouse.com/scene/
+      - coltstudiogroup.com/scene/
+      - hotoldermale.com/scene/
+      - monstercub.com/scene/
       - myfirstdaddy.com/scene/
+      - older4me.com/scene/
       - playdaddy.com/scene/
+      - raunchybastards.com/scene/
+      - stockydudes.com/scene/
+      - toplatindaddies.com/scene/
     scraper: newStyleSite
 xPathScrapers:
   oldStyleSite:
@@ -54,21 +54,8 @@ xPathScrapers:
                 - regex: ^(?:https:\/\/[\w\.]*?)([^.]+)\.com.*$
                   with: $1
             - map:
-                blackboyaddictionz: Black Boy Addictionz
-                blacksondaddies: Blacks on Daddies
-                boundjocks: Bound Jocks
-                boyshalfwayhouse: Boys Halfway House
-                coltstudiogroup: Colt Studio Group
                 daddycarl: Daddy Carl
-                hotoldermale: Hot Older Male
-                monstercub: Monster Cub
-                myfirstdaddy: My First Daddy
                 naturalbornbreeders: Natural Born Breeders
-                older4me: Older4Me
-                playdaddy: Play Daddy
-                raunchybastards: Raunchy Bastards
-                stockydudees: Stocky dudes
-                toplatindaddies: Top Latin Daddies
         URL:
           selector: *image
           postProcess:
@@ -131,4 +118,4 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
       Tags:
         Name: $details//h5[contains(., "Categories")]/a/text()
-# Last Updated September 22, 2023
+# Last Updated November 12, 2024
