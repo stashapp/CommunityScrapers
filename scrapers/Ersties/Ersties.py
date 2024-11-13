@@ -76,6 +76,7 @@ def get_scene(inputurl):
         ret['code'] = str(scrape_data['id'])
         ret['details'] = clean_text(str(scrape_data['gallery']['description_en'])) 
         ret['studio'] = {'name':'Ersties'}
+        ret['groups'] = [{'name': scrape_data['gallery']['title_en']}]
         ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
         ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
         for thumbnail in scrape_data['thumbnails']:
