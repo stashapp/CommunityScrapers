@@ -47,36 +47,6 @@ def clean_text(details: str) -> str:
         details = details.strip()
     return details
 
-def get_data_from_gallery(inputurl, galleryid, field):
-    # Use a regular expression to extract the model number after '/' and before '#play'
-    match = re.search(r'/(\d+)#play', inputurl)
-    if match:
-        modelid = match.group(1)
-    else:
-        debugPrint('No model ID found in URL.')
-        sys.exit()
-
-    #Build URL to scrape
-    scrape_url='https://api.ersties.com/galleries/'+modelid
-
-    #Scrape URL
-    scrape = requests.get(scrape_url, headers=scrape_headers)
-
-    #Parse response
-    #Check for valid response
-    if scrape.status_code ==200:
-        gallery_data = scrape.json()
-        #Find matching gallery in response
-        for i in gallery_data:
-            if i['id'] == int(galleryid):
-                #Get field data from response
-                gallery_field = i[field]
-                break            
-    else: 
-        return
-    
-    return gallery_field
-
 def get_scene(inputurl):
 
     # Use a regular expression to extract the number after '#play-' and before '-comments'
@@ -102,13 +72,9 @@ def get_scene(inputurl):
 
         ret = {}
 
-        #Get Gallery ID from response for Gallery Scraping
-        gallery_id = str(scrape_data['gallery_id'])
-
         ret['title'] = scrape_data['title_en']
         ret['code'] = str(scrape_data['id'])
-        #Get details from Gallery
-        ret['details'] = clean_text(str(get_data_from_gallery(inputurl, gallery_id, 'description_en')))    
+        ret['details'] = clean_text(str(scrape_data['gallery']['description_en'])) 
         ret['studio'] = {'name':'Ersties'}
         ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
         ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
@@ -117,8 +83,7 @@ def get_scene(inputurl):
                 ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
                 break
         #Get Date
-        #Send Gallery ID to fuction for scraping and set the returned date
-        epoch_time = get_data_from_gallery(inputurl, gallery_id, 'available_since')
+        epoch_time = scrape_data['gallery']['available_since']
         # Check if the date is returned as an integer.
         if isinstance(epoch_time, int):
             #Convert date from Epoch Time
@@ -129,25 +94,19 @@ def get_scene(inputurl):
     return ret
 
 def get_group(inputurl):
-    # Check whcih URL is being used, Scene or Profile
-    if re.search(r"#play", inputurl):  # Check if URL is a Scene
-        urltype = 'scene'
-        match = re.search(r'#play-(\d+)-comments', inputurl)
-        sceneid = match.group(1)
-        match = re.search(r"/profile/(\d+)", inputurl)
-        groupid = match.group(1)
-    elif re.search(r"/profile/\d+$", inputurl):  # Check if URL is a Profile
-        urltype = 'profile'
-        match = re.search(r'profile/(\d+)', inputurl)
+    # Check if URL is a Shoot
+    if re.search(r"/shoot/\d+$", inputurl):
+        urltype = 'shoot'
+        match = re.search(r'shoot/(\d+)', inputurl)
         groupid = match.group(1)
     else:
-        debugPrint('No scene/group ID found in URL. Please make sure you are using the ULR ending with "profile/nnnn".')
+        debugPrint('No shoot ID found in URL. Please make sure you are using the correct URL.')
         sys.exit()
     
-    #Scrape Profile
-    if urltype == 'profile':
+    #Scrape Shoot
+    if urltype == 'shoot':
         #Build URL to scrape group
-        scrape_url='https://api.ersties.com/models/'+groupid
+        scrape_url='https://api.ersties.com/galleries/'+groupid
 
         #Scrape URL
         scrape = requests.get(scrape_url, headers=scrape_headers)
@@ -159,68 +118,19 @@ def get_group(inputurl):
 
             ret = {}
 
-            ret['name'] = scrape_data['name_en']
-            ret['synopsis'] = scrape_data['description_en']
+            ret['name'] = scrape_data['title_en']
+            ret['synopsis'] = clean_text(str(scrape_data['description_en']))
             ret['studio'] = {'name':'Ersties'}
-            ret['front_image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail']  
-        else:
-            debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
-            sys.exit() 
-
-    # Scrape Scene
-    if urltype == 'scene':
-        ret = {}
-        #Get Gallery ID from Scene
-        #Build URL to scrape
-        scrape_url='https://api.ersties.com/videos/'+sceneid
-
-        #Scrape URL
-        scrape = requests.get(scrape_url, headers=scrape_headers)
-
-        #Parse response
-        #Check for valid response
-        if scrape.status_code ==200:
-            scrape_data = scrape.json()
-
-            #Get Gallery ID from response for Gallery Scraping
-            gallery_id = str(scrape_data['gallery_id'])
-
-            ret['name'] = get_data_from_gallery(inputurl, gallery_id, 'name_en')
-            
-            #Get details from Gallery
-            details=clean_text(get_data_from_gallery(inputurl, gallery_id, 'description_en'))
-            ret['synopsis'] = details
-
-            ret['studio'] = {'name':'Ersties'}
-
+            ret['front_image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Shoot_Cover/'+scrape_data['image']  
             #Get Date
-            #Send Gallery ID to fuction for scraping and set the returned date
-            epoch_time = get_data_from_gallery(inputurl, gallery_id, 'available_since')
-            # Check if the date is returned as an integer.
+            epoch_time = scrape_data['available_since']
             # Check if the date is returned as an integer.
             if isinstance(epoch_time, int):
                 #Convert date from Epoch Time
                 ret['date'] = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
-
-            #Thumbnail Scraper from Profile, Galleries don't provide a source for the thumbnail
-            #Build URL to scrape Profile
-            scrape_url='https://api.ersties.com/models/'+groupid
-
-            #Scrape URL
-            scrape = requests.get(scrape_url, headers=scrape_headers)
-
-            #Parse response
-            #Check for valid response
-            if scrape.status_code ==200:
-                scrape_data = scrape.json()            
-                ret['front_image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail'] 
-            else:
-                debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
-                sys.exit() 
-
         else:
             debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
-            sys.exit()            
+            sys.exit() 
     
     return ret
 
