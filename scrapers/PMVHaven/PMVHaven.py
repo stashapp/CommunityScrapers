@@ -51,6 +51,10 @@ def getIMG(video):
             return item
     return ""
 
+def getMusic(video):
+    if len(video["music"]) > 0:
+        return "Music:\n" + "\n".join(video["music"])
+    return ""
 
 def getVideoById(sceneId):
     data = getData(sceneId)
@@ -62,12 +66,21 @@ def getVideoById(sceneId):
     tags = video["tags"] + video["categories"]
     urlTitle = video["title"].replace(" ", "-")
 
+    details = ""
+    if video["description"] != None:
+        details += video["description"]
+    music = getMusic(video)
+    if music:
+        if len(details) > 0:
+            details += "\n"
+        details+=music
+
     return {
         "title": video["title"],
         "url": f"https://pmvhaven.com/video/{urlTitle}_{video['_id']}",
         "image": getIMG(video),
         "date": video["isoDate"].split("T")[0],
-        "details": video["description"],
+        "details": details,
         "studio": {"Name": video["creator"]},
         "tags": [{"name": x.strip()} for x in tags],
         "performers": [{"name": x.strip()} for x in video["stars"]],
