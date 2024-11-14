@@ -154,7 +154,6 @@ xPathScrapers:
     common:
       $scene: //div[contains(@class, "update_block")]
       $excludeUpdates: not(ancestor::*[contains(@class, "mpuSection")])
-      $update_image: //div[@class="update_image"]/a/img[@src0_1x]
     scene:
       Title: $scene//span[@class="update_title"]/text()|//title/text()
       Date:
@@ -246,7 +245,7 @@ xPathScrapers:
                 terapatrick: Terra Patrick
                 test-shoots.com: Test Shoots
                 texaspattiusa: TexasPattiUSA
-                thatfetishgirl: ThatFetishGirl
+                thatfetishgirl: That Fetish Girl
                 tmfetish: TMFetish
                 vanillapov: VanillaPOV
                 willtilexxx: Will Tile XXX
@@ -262,14 +261,30 @@ xPathScrapers:
                 yummysofie: Yum Sofie
                 yummywomen: Yummywomen
       Image: &image
-        selector: //base/@href | ($update_image/@src0_3x or $update_image/@src0_2x or $update_image/@src0_1x or $update_image/@src)[1]
-        concat: /
+        selector: >-
+          //base/@href |
+          //div[@class="update_image"]/a/img[@src0_1x]/@src0_1x |
+          //div[@class="update_image"]/a/img[@src0_2x]/@src0_2x |
+          //div[@class="update_image"]/a/img[@src0_3x]/@src0_3x |
+          //div[@class="update_image"]/a/img[@src0_4x]/@src0_4x |
+          //span[@class="model_update_thumb"]/img/@src
+        concat: __SEP__
         postProcess:
           - replace:
               - regex: ^(https://.+)?https://
                 with: https://
+              # This strips out all of the middle results, leaving us with just the site name and the highest resolution image
+              - regex: __SEP__.+__SEP__
+                with: ""
+              # Regardless if multiple images were found we need to replace the separator with a slash to resolve the URL
+              - regex: __SEP__
+                with: ""
+              # Some sites have multiple tour pages, but the images still resolved from the root: remove 'tour1' etc.
               - regex: tour\d?///
                 with: ""
+              # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
+              - regex: (:?-[1-4]x)?\.jpg
+                with: "-full.jpg"
       URL: //link[@rel='canonical']/@href
   proSceneScraper:
     common:
