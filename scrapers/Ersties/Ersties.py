@@ -76,7 +76,6 @@ def get_scene(inputurl):
         ret['code'] = str(scrape_data['id'])
         ret['details'] = clean_text(str(scrape_data['gallery']['description_en'])) 
         ret['studio'] = {'name':'Ersties'}
-        ret['groups'] = [{'name': scrape_data['gallery']['title_en']}]
         ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
         ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
         for thumbnail in scrape_data['thumbnails']:
@@ -89,6 +88,14 @@ def get_scene(inputurl):
         if isinstance(epoch_time, int):
             #Convert date from Epoch Time
             ret['date'] = datetime.fromtimestamp(epoch_time).strftime("%Y-%m-%d")
+        #Get Group Information
+        #Get Group Date
+        group_epoch_time = scrape_data['gallery']['available_since']
+        # Check if the date is returned as an integer.
+        if isinstance(group_epoch_time, int):
+            #Convert date from Epoch Time
+            group_date = datetime.fromtimestamp(group_epoch_time).strftime("%Y-%m-%d")
+        ret['groups'] = [{'name': scrape_data['gallery']['title_en'], 'synopsis': clean_text(str(scrape_data['gallery']['description_en'])), 'studio': {'name':'Ersties'}, 'front_image': f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Shoot_Cover/'+scrape_data['gallery']['image'], 'date': group_date}]
     else:
         debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
         sys.exit()    
