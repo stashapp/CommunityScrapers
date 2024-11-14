@@ -24,8 +24,8 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneSearch:
     scene:
-      Title: //div[@class='tittle-price d-flex flex-column']//div[@class='content-title']//a/text()
-      URL: //div[@class='tittle-price d-flex flex-column']//div[@class='content-title']//a/@href
+      Title: //div[@class='tittle-price d-flex flex-column text-ellipsis']//div[@class='content-title']//a/text()
+      URL: //div[@class='tittle-price d-flex flex-column text-ellipsis']//div[@class='content-title']//a/@href
       Image: //div[@class='clip-thumb-16-9 visible-xs']//img[@class='lazy']/@data-original
   sceneScraper:
     common:
