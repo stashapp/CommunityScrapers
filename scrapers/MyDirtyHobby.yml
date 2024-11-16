@@ -75,7 +75,7 @@ xPathScrapers:
           selector: $script
           postProcess:
             - replace:
-                - regex: '.*"Categories","items":\[([^]]+)\].*'
+                - regex: '.*"(?:K|C)ategorie(?:n|s)","items":\[([^]]+)\].*'
                   with: $1
                 - regex: '{"text":"([^"]+)","href":"[^"]+"}'
                   with: $1
