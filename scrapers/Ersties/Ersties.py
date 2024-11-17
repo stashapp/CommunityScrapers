@@ -77,7 +77,8 @@ def get_scene(inputurl):
         ret['details'] = clean_text(str(scrape_data['gallery']['description_en'])) 
         ret['studio'] = {'name':'Ersties'}
         ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
-        ret['performers'] = [{'name': x['name_en']} for x in scrape_data['participated_models']]
+        ret['performers'] = [{'name':x['name_en'], 'details':x['description_en'], 'urls':['https://ersties.com/profile/'+str(x['id'])],'images':[f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Model_Cover_Image/backup/'+x['thumbnail']] } for x in scrape_data['participated_models']]
+        debugPrint(str(ret))
         for thumbnail in scrape_data['thumbnails']:
             if thumbnail['is_main']:
                 ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
@@ -95,7 +96,7 @@ def get_scene(inputurl):
         if isinstance(group_epoch_time, int):
             #Convert date from Epoch Time
             group_date = datetime.fromtimestamp(group_epoch_time).strftime("%Y-%m-%d")
-        ret['groups'] = [{'name': scrape_data['gallery']['title_en'], 'synopsis': clean_text(str(scrape_data['gallery']['description_en'])), 'studio': {'name':'Ersties'}, 'front_image': f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Shoot_Cover/'+scrape_data['gallery']['image'], 'date': group_date}]
+        ret['groups'] = [{'name': scrape_data['gallery']['title_en'], 'synopsis': clean_text(str(scrape_data['gallery']['description_en'])), 'studio': {'name':'Ersties'}, 'urls':[f'https://ersties.com/shoot/'+str(scrape_data['gallery']['id'])], 'front_image': f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Shoot_Cover/'+scrape_data['gallery']['image'], 'date': group_date}]
     else:
         debugPrint('Response: '+str(scrape.status_code)+'. Please check your auth header.')
         sys.exit()    
@@ -170,7 +171,7 @@ def get_performer(inputurl):
         if scrape_data['location_en'] is not None:
             ret['country'] = guess_nationality(scrape_data['location_en'])
         ret['details'] = scrape_data['description_en']
-        ret['image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=avif/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail']  
+        ret['image'] = f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Model_Cover_Image/backup/'+scrape_data['thumbnail']  
     else:
         debugPrint('No performer ID found in URL. Please make sure you are using the ULR ending with "profile/nnnn".')
         sys.exit()
