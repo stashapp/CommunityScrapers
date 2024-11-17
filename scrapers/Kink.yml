@@ -240,7 +240,5 @@ xPathScrapers:
                 with: https://$1/model/$2
 
 driver:
-  headers:
-    - Key: User-Agent
-      Value: stash-scraper/1.0.0
-# Last Updated April 22, 2024
+  useCDP: true
+# Last Updated November 17, 2024
