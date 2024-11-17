@@ -20,7 +20,7 @@ xPathScrapers:
   sceneScraper:
     common:
       $performer: //div[h3[text()='Pornstars / Cast']]//a[@class='bold gen']
-      $studio: //b[text()=('Studio') or ('Network')]/following-sibling::b/a
+      $studio: //b[text()=('Studio') or ('Network')]/following-sibling::b/a | //b[text()=('Studio') or ('Network')]/following-sibling::a
       $movie: //b[text()="Movie:"]/following-sibling::a[1]
     scene:
       Title:
@@ -64,7 +64,7 @@ xPathScrapers:
   movieScraper:
     common:
       $movieInfo: //div[@id="body2div_b"]
-      $studio: //b[text()=('Studio') or ('Network')]/following-sibling::b/a
+      $studio: //b[text()=('Studio') or ('Network')]/following-sibling::b/a | //b[text()=('Studio') or ('Network')]/following-sibling::a
       $performer: //div[h3[contains(text(), 'Pornstars / Cast')]]//a[@class='bold gen']
     movie:
       Name:
