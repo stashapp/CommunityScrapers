@@ -78,7 +78,6 @@ def get_scene(inputurl):
         ret['studio'] = {'name':'Ersties'}
         ret['tags'] = [{'name': x['name_en']} for x in scrape_data['tags']]
         ret['performers'] = [{'name':x['name_en'], 'details':x['description_en'], 'urls':['https://ersties.com/profile/'+str(x['id'])],'images':[f'https://thumb.ersties.com/width=510,height=660,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/Model_Cover_Image/backup/'+x['thumbnail']] } for x in scrape_data['participated_models']]
-        debugPrint(str(ret))
         for thumbnail in scrape_data['thumbnails']:
             if thumbnail['is_main']:
                 ret['image'] = f'https://thumb.ersties.com/width=900,height=500,fit=cover,quality=85,sharpen=1,format=jpeg/content/images_mysql/images_videothumbnails/backup/'+thumbnail['file_name']
