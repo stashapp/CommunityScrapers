@@ -6,10 +6,10 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
-    Studio:
-      Name:
-        fixed: MomPov
     scene:
+      Studio:
+        Name:
+          fixed: MomPov
       Title:
         selector: //a[@class="title"]/text()
       Date:
