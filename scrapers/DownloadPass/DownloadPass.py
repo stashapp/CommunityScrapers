@@ -2,7 +2,6 @@ import json
 import re
 import sys
 from datetime import datetime as dt
-from typing import List
 
 from py_common import log
 from py_common.deps import ensure_requirements
@@ -43,7 +42,7 @@ def get_first_elem_text(root: html.HtmlElement, expression: str) -> str | None:
     return el
 
 
-def urls_from_style(style_text: str) -> List[str]:
+def urls_from_style(style_text: str) -> list[str]:
     return re.findall(r"(https?://\S+)\)", style_text)
 
 
