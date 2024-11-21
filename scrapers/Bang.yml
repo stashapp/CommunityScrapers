@@ -71,7 +71,12 @@ xPathScrapers:
           selector: $performer/@href
           postProcess: *prependHost
       Studio:
-        Name: //p[contains(text(),"Studio:")]//a[contains(@href,"from=")]/img/@alt
+        Name:
+          selector: //a[starts-with(@href, "/originals/")]/text()
+          postProcess:
+            - replace:
+              - regex: ^yngr\.com$
+                with: "YNGR"
       Movies:
         Name: $movie
         URL:
@@ -133,4 +138,4 @@ xPathScrapers:
           - replace:
               - regex: \?.+$
                 with: ""
-# Last Updated March 08, 2024
+# Last Updated November 21, 2024
