@@ -154,7 +154,7 @@ def scene_from_url(url: str) -> ScrapedScene:
                 performer = ScrapedPerformer(name=p_name)
                 p_url = get_first_elem_text(p_el, "./div[@class='name']/a/@href")
                 if p_url:
-                    performer["urls"] = BASE_URL + p_url
+                    performer["urls"] = [BASE_URL + p_url]
                 performers.append(performer)
         scene["performers"] = performers
 
