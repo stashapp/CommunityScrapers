@@ -16,7 +16,7 @@ xPathScrapers:
         selector: //meta[@property="article:published_time"]/@content
         postProcess:
           - replace:
-              - regex: (\d\d\d\d-\d\d-\d\d).*
+              - regex: (\d{4}-\d{2}-\d{2}).*
                 with: $1
           - parseDate: 2006-01-02
       Details:
