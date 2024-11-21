@@ -1,0 +1,31 @@
+name: DownloadPass
+
+movieByURL:
+  - action: script
+    url:
+      - downloadpass.com/dvds/
+      - heatwavepass.com/dvds/
+    script:
+      - python3
+      - DownloadPass.py
+      - movie-by-url
+sceneByURL:
+  - action: script
+    url:
+      - downloadpass.com/scenes/
+      - heatwavepass.com/scenes/
+    script:
+      - python3
+      - DownloadPass.py
+      - scene-by-url
+performerByURL:
+  - action: script
+    url:
+      - downloadpass.com/pornstars/
+      - heatwavepass.com/pornstars/
+    script:
+      - python3
+      - DownloadPass.py
+      - performer-by-url
+
+# Last Updated November 21, 2024
