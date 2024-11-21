@@ -14,6 +14,12 @@ xPathScrapers:
           - replace:
               - regex: \s*\|.+
                 with: ""
+      Code:
+        selector: //video/source/@src
+        postProcess:
+          - replace:
+              - regex: .+?trailers/([A-Z]+_\d+).*
+                with: "$1"
       Date: 
         selector: //div[@class="released-views"]/span[1]/text()
         postProcess:
@@ -43,4 +49,4 @@ xPathScrapers:
                 with: "$1"
       URL: //link[@rel="canonical"]/@href
 
-# Last Updated July 06, 2024
+# Last Updated November 20, 2024
