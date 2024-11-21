@@ -1,0 +1,27 @@
+name: "MomPov"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mompov.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: MomPov
+      Title:
+        selector: //a[@class="title"]/text()
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - replace:
+              - regex: (\d{4}-\d{2}-\d{2}).*
+                with: $1
+          - parseDate: 2006-01-02
+      Details:
+        selector: //div[@class="entry_content"]/p/text()
+        concat: "\n"
+      Image:
+        selector: //div[@id="inner_content"]/div/a/img/@src
+# Last Updated November 17, 2024
