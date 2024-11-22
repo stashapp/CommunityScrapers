@@ -30,6 +30,7 @@ performerByURL:
       - tgirls.xxx/tour/models
       - tgirlsfuck.com/tour/models
       - tgirltops.com/tour/models
+      - tgirlx.com/tour/models
       - transgasm.com/tour/models
     scraper: performerScraper3
   - action: scrapeXPath
@@ -75,6 +76,7 @@ sceneByURL:
       - tgirlsfuck.com
       - tgirlshookup.com
       - tgirltops.com
+      - tgirlx.com
       - transexpov.com
       - transgasm.com
       - transnificent.com
@@ -297,4 +299,4 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.transvr.com/
       Tags: *tagsVR
-# Last Updated August 01, 2024
+# Last Updated November 22, 2024
