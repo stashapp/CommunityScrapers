@@ -633,6 +633,10 @@
         "Aliases": {
           "title": "Movie aliases",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "Tags": {
+          "title": "Movie tags",
+          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
         }
       }
     },
