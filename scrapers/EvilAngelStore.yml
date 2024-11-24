@@ -53,5 +53,5 @@ driver:
         - Name: "ageConfirmed"
           Domain: "store.evilangelvideo.com"
           Path: /
-          Value: true
+          Value: "true"
 # Last Updated November 24, 2024
