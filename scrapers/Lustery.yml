@@ -41,11 +41,11 @@ jsonScrapers:
           - subScraper:
               selector: coupleInfo.description
       Image:
-        selector: couple.mainImage.filename
+        selector: couple.mainImage.staticPath
         postProcess:
           - replace:
               - regex: ^
-                with: https://cdn.lustery.com/cache/lustery-images/couple-main-image-thumbs/100x100x4/
+                with: https://static.lustery.com/cdn-cgi/image/format=auto,width=750,quality=75/
 
   sceneScraper:
     scene:
@@ -61,7 +61,7 @@ jsonScrapers:
           - subScraper:
               selector: videoInfo.description
       Date: #not very accurate as it is the Last Edited Date
-        selector: video.poster.lastEditedAt
+        selector: video.publishAt
         postProcess:
           - parseDate: unix
       URL:
@@ -71,11 +71,11 @@ jsonScrapers:
               - regex: ^
                 with: https://lustery.com/video-preview/
       Image:
-        selector: video.poster.filename
+        selector: video.poster.staticPath
         postProcess:
           - replace:
               - regex: ^
-                with: https://cdn.lustery.com/cache/lustery-images/video-image-thumbs/750x420x4/
+                with: https://static.lustery.com/cdn-cgi/image/format=auto,width=1920,quality=75/
       Performers:
         Name:
           selector: "[video.couplePermalink,video.secondaryCouplePermalink]"
