@@ -46,4 +46,12 @@ xPathScrapers:
       Studio: *studio
       Tags:
         Name: //div[@class="categories"/a[@data-category="Item Page"]/text()
-# Last Updated December 02, 2023
+driver:
+  cookies:
+    - CookieURL: "https://store.evilangelvideo.com"
+      Cookies:
+        - Name: "ageConfirmed"
+          Domain: "store.evilangelvideo.com"
+          Path: /
+          Value: "true"
+# Last Updated November 24, 2024
