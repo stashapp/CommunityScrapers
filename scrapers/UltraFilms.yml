@@ -11,12 +11,12 @@ xPathScrapers:
       Title: //div[@class="title-block box-shadow"]//text()
       Image: //meta[@property="og:image"]/@content
       Date:
-        selector: //*[@id="video-date"]/text()
+        selector: //script[@type="application/ld+json"]/text()
         postProcess:
           - replace:
-              - regex: ".*Date: "
-                with: ""
-          - parseDate: January 2, 2006
+              - regex: '.*(datePublished":")(\d{4}-\d{2}-\d{2}).*'
+                with: $2
+          - parseDate: 2006-01-02
       Performers:
         Name: //*[@id="video-actors"]/a/text()
       Tags:
@@ -30,4 +30,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Ultra Films
-# Last Updated June 11, 2022
+# Last Updated November 27, 2024
