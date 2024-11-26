@@ -91,7 +91,7 @@ class Parser:
             title = span.text.strip()
             title = re.sub(r"\[.*?\]", "", title)
             title = re.sub(r"\(.*?\)", "", title)
-            title = re.sub(r"/.*", "", title)
+            #title = re.sub(r"/.*", "", title)
             title = title.strip()
             if title:
                 return title
