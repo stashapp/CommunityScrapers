@@ -34,9 +34,12 @@ xPathScrapers:
     scene:
       Title: //h1
       Date:
-        selector: ($shoot/span)[2]
-        postProcess:
-          - parseDate: 01/02/06
+          selector: //div[@data-setup]/@data-setup
+          postProcess:
+            - replace:
+                - regex: ^.*"publishedDate":"([^"]+).*$
+                  with: $1
+            - parseDate: 2006-01-02
       Details:
         selector: //div[contains(@class, "shoot-detail-description")]/span/p/text()
         concat: "\n"
@@ -172,4 +175,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated November 17, 2024
+# Last Updated November 27, 2024
