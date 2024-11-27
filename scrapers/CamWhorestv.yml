@@ -20,4 +20,8 @@ xPathScrapers:
           - replace:
               - regex: .+/videos_screenshots/(\d+)/.+?$
                 with: $1
-# Last Updated September 08, 2023
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper
+# Last Updated November 27, 2024
