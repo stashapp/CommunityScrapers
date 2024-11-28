@@ -117,7 +117,7 @@ xPathScrapers:
         selector: *titleSel
         postProcess:
           - replace:
-              - regex: " VR$"
+              - regex: " VR.*$"
                 with: ""
       Image: //div[contains(@class, "single-model-profile__image app-image")]/img/@src
       Birthdate:
