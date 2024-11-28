@@ -55,7 +55,7 @@ xPathScrapers:
               - regex: (Gay|Trans) VR Porn Video$
                 with: ""
       Date: &dateAttr
-        selector: $info//span[text()="Release date:"]/following-sibling::text()
+        selector: $info//span[text()="Release date:"]/following-sibling::span/text()
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsAttr
