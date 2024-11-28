@@ -136,4 +136,5 @@ xPathScrapers:
       Aliases: $modelInfoItem/span[text()="Aka:"]/following-sibling::span/text()
       Twitter: $modelLinks/a[contains(@href, "twitter")]/@href
       Instagram: $modelLinks/a[contains(@href, "instagram")]/@href
+      URL: //link[@rel="canonical"]/@href
 # Last Updated November 28, 2024
