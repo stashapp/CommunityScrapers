@@ -61,7 +61,7 @@ xPathScrapers:
           - replace:
               - regex: \w+:\s*(\w+\s)(\d+),(\s\d{4}).*
                 with: $1$2$3
-          - parseDate: Jan 02 2006
+          - parseDate: Jan 2 2006
       Tags:
         Name:
           selector: //div[@class="actions"]/a
@@ -75,8 +75,8 @@ xPathScrapers:
           selector: //a[starts-with(@href, "/originals/")]/text()
           postProcess:
             - replace:
-              - regex: ^yngr\.com$
-                with: "YNGR"
+                - regex: ^yngr\.com$
+                  with: "YNGR"
       Movies:
         Name: $movie
         URL:
