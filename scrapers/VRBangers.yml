@@ -4,18 +4,26 @@ name: "VRBangers"
 
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - blowvr.com
       - vrbangers.com
       - vrbgay.com
       - vrbtrans.com
       - vrconk.com
-    scraper: sceneScraper
+    scraper: vrbScraper
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: vrbScraper
 movieByURL:
   - action: scrapeXPath
     url:
       - vrbangers.com
-    scraper: movieScraper
+    scraper: vrbScraper
+performerByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: vrbScraper
 sceneByFragment:
   action: scrapeXPath
   # url format: https://{studio}.com/video/{title}
@@ -31,26 +39,33 @@ sceneByFragment:
       # Titles have spaces replaced with '_' and the url expects '-' instead of spaces
       - regex: _
         with: "-"
-  scraper: sceneScraper
+  scraper: vrbScraper
 
 xPathScrapers:
-  sceneScraper:
+  vrbScraper:
     common:
-      $info: &info //div[starts-with(@class,"video-item__info ")]|//div[@class="single-video-info"]
+      $info: //div[starts-with(@class,"video-item__info ")]|//div[@class="single-video-info"]
+      $modelInfoItem: //div[contains(@class, "single-model-profile__info-wrapper")]//div[@class="single-model-profile__info-item"]
+      $modelLinks: //div[contains(@class, "single-model-profile__actions")]
     scene:
-      Title: &titleSel //h1
+      Title: &titleAttr
+        selector: &titleSel //h1
+        postProcess:
+          - replace:
+              - regex: (Gay|Trans) VR Porn Video$
+                with: ""
       Date: &dateAttr
-        selector: $info//span[text()="Release date:"]/following-sibling::text()
+        selector: $info//span[text()="Release date:"]/following-sibling::span/text()|$info//span[text()="Release date:"]/following-sibling::text()
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsAttr
-        selector: //div[contains(@class,"second-text")]/div//text()|//div[contains(@class,"single-video-description")]/div//text()
-        concat: " "
-      Tags:
+        selector: //div[contains(@class,"second-text")]/div//text()|//div[contains(@class,"single-video-description")]/div//p
+        concat: "\n\n"
+      Tags: &tagsAttr
         Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]/text()|//div[@class="single-video-categories"]//a[contains(@href,"category/")]/text()
-      Performers:
+      Performers: &performersAttr
         Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()|//div[contains(@class, "single-video-info__starring")]//a/text()
-      Studio:
+      Studio: &studioAttr
         Name: &studioName
           selector: &studioURLSel //meta[@name="dl8-customization-brand-url"]/@content
           postProcess:
@@ -71,10 +86,13 @@ xPathScrapers:
                   with: "https:"
       Image: &imageSel //meta[@property="og:image"]/@content
       URL: //link[@rel="canonical"]/@href
-
-  movieScraper:
-    common:
-      $info: *info
+    gallery:
+      Title: *titleAttr
+      Date: *dateAttr
+      Details: *detailsAttr
+      Tags: *tagsAttr
+      Performers: *performersAttr
+      Studio: *studioAttr
     movie:
       Name:
         selector: *titleSel
@@ -94,4 +112,29 @@ xPathScrapers:
         Name: *studioName
         URL: *studioURL
       FrontImage: *imageSel
-# Last Updated April 2, 2024
+    performer:
+      Name:
+        selector: *titleSel
+        postProcess:
+          - replace:
+              - regex: " VR.*$"
+                with: ""
+      Image: //div[contains(@class, "single-model-profile__image app-image")]/img/@src
+      Birthdate:
+        selector: $modelInfoItem/span[text()="Birthday:"]/following-sibling::span/text()
+        postProcess:
+          - parseDate: January 2
+      Measurements: $modelInfoItem/span[text()="Measurements:"]/following-sibling::span/text()
+      Height: $modelInfoItem/span[text()="Height:"]/following-sibling::span/text()
+      Weight: $modelInfoItem/span[text()="Weight:"]/following-sibling::span/text()
+      Tattoos: $modelInfoItem/span[text()="Tatoos:"]/following-sibling::span/text()
+      Piercings: $modelInfoItem/span[text()="Piercings:"]/following-sibling::span/text()
+      Country: $modelInfoItem/span[text()="Country of origin:"]/following-sibling::span/text()
+      Ethnicity: $modelInfoItem/span[text()="Ethnicity:"]/following-sibling::span/text()
+      EyeColor: $modelInfoItem/span[text()="Eye Color:"]/following-sibling::span/text()
+      HairColor: $modelInfoItem/span[text()="Hair Color:"]/following-sibling::span/text()
+      Aliases: $modelInfoItem/span[text()="Aka:"]/following-sibling::span/text()
+      Twitter: $modelLinks/a[contains(@href, "twitter")]/@href
+      Instagram: $modelLinks/a[contains(@href, "instagram")]/@href
+      URL: //link[@rel="canonical"]/@href
+# Last Updated November 28, 2024
