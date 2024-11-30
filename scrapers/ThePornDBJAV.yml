@@ -34,8 +34,55 @@ movieByURL:
     scraper: movieScraper
     queryURL: "{url}"
     queryURLReplace: *redirectToAPI
+performerByName:
+  action: scrapeJson
+  queryURL: https://api.theporndb.net/performers?q={}&page=1&per_page=10
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeJson
+    url:
+      - https://api.theporndb.net/performers
+    scraper: performerScraper
 
 jsonScrapers:
+  performerScraper:
+    performer:
+      Name: data.name
+      Gender: data.extras.gender
+      URL:
+        selector: data.slug
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://theporndb.net/performers/
+      Twitter: data.extras.links.Twitter
+      Instagram: data.extras.links.Instagram
+      Birthdate: data.birthday
+      DeathDate: data.deathday
+      Ethnicity: data.extras.ethnicity
+      # Country:
+      HairColor: data.extras.hair_colour
+      EyeColor: data.extras.eye_colour
+      Height: data.extras.height
+      Weight: data.extras.weight
+      Measurements: data.extras.measurements
+      FakeTits: data.extras.fake_boobs
+      # CareerLength
+      Tattoos: data.extras.tattoos
+      Piercings: data.extras.piercings
+      # Aliases
+      # Tags (see Tag fields)
+      Image: data.image
+      Details: data.bio
+  performerSearch:
+    performer:
+      Name: data.#.name
+      URL:
+        selector: data.#.id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://api.theporndb.net/performers/
   sceneSearch:
     scene:
       Title:
