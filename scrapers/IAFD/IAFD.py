@@ -303,7 +303,7 @@ def movie_date(tree):
         lambda d: clean_date(d.strip()),
     ) or maybe(
         tree.xpath("//h1/text()"),
-        lambda t: (re.sub(title_pattern, r"\1-01-01", t).strip() if re.match(title_pattern, t) else None),
+        lambda t: re.sub(title_pattern, r"\1-01-01", t).strip() if re.match(title_pattern, t) else None,
     )
 
 
