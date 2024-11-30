@@ -295,6 +295,7 @@ def movie_studio(tree):
 
 def movie_date(tree):
     # If there's no release date we will use the year from the title for an approximate date
+    title_pattern = re.compile(r".*\(([0-9]{4})\).*")
     return maybe(
         tree.xpath(
             '//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()'
@@ -302,7 +303,7 @@ def movie_date(tree):
         lambda d: clean_date(d.strip()),
     ) or maybe(
         tree.xpath("//h1/text()"),
-        lambda t: re.sub(r".*\(([0-9]+)\).*$", r"\1-01-01", t),
+        lambda t: re.sub(title_pattern, r"\1-01-01", t).strip() if re.match(title_pattern, t) else None,
     )
 
 
