@@ -9,7 +9,8 @@ import py_common.log as log
 
 ### SET MEMBER ACCESS TOKEN HERE
 ### CAN BE access_token OR refresh_token
-MEMBER_ACCESS_TOKEN = ""
+TEAMSKEET_ACCESS_TOKEN = ""
+MYLF_ACCESS_TOKEN = ""
 ####
 
 
@@ -134,16 +135,20 @@ else:
     log.error('You need to set the URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
-
+IS_MEMBER = False
 # Check the URL and set the API URL
 if 'app.teamskeet.com' in scene_url:
     ORIGIN = "https://app.teamskeet.com"
     REFERER = "https://app.teamskeet.com"
     API_BASE = "https://ma-store.teamskeet.com/ts_movies/_doc/"
+    MEMBER_ACCESS_TOKEN = TEAMSKEET_ACCESS_TOKEN
     IS_MEMBER = True
-    if (MEMBER_ACCESS_TOKEN == ""):
-        log.error("You are trying to scrape a member scene without an acess token")
-        log.error("Please edit the scraper and populate the MEMBER_ACCESS_TOKEN variable")
+elif 'app.mylf.com' in scene_url:
+    ORIGIN = "https://app.mylf.com"
+    REFERER = "https://app.mylf.com"
+    API_BASE = "https://ma-store.mylf.com/mylf_movies/_doc/"
+    MEMBER_ACCESS_TOKEN = MYLF_ACCESS_TOKEN
+    IS_MEMBER = True
 elif 'sayuncle.com' in scene_url:
     ORIGIN = 'https://www.sayuncle.com'
     REFERER = 'https://www.sayuncle.com/'
@@ -164,6 +169,10 @@ else:
     log.error('The URL is not from a Teamskeet, MYLF, SayUncle or Swappz URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
+# check for member access token
+if (IS_MEMBER and MEMBER_ACCESS_TOKEN == ""):
+    log.error("You are trying to scrape a member scene without an acess token")
+    log.error("Please edit the scraper and populate the corresponding _ACCESS_TOKEN variable")
 
 scene_id = re.match(r'.+\/([\w\d-]+)', scene_url)
 if not scene_id:
