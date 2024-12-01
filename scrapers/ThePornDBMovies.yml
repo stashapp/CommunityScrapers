@@ -60,7 +60,7 @@ jsonScrapers:
       Birthdate: data.birthday
       DeathDate: data.deathday
       Ethnicity: data.extras.ethnicity
-      # Country:
+      Country: data.extras.birthplace_code
       HairColor: data.extras.hair_colour
       EyeColor: data.extras.eye_colour
       Height:
@@ -80,7 +80,7 @@ jsonScrapers:
       # CareerLength
       Tattoos: data.extras.tattoos
       Piercings: data.extras.piercings
-      # Aliases
+      Aliases: data.aliases
       # Tags (see Tag fields)
       Image: data.image
       Details: data.bio
