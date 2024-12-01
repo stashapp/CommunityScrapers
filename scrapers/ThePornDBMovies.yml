@@ -63,8 +63,18 @@ jsonScrapers:
       # Country:
       HairColor: data.extras.hair_colour
       EyeColor: data.extras.eye_colour
-      Height: data.extras.height
-      Weight: data.extras.weight
+      Height:
+        selector: data.extras.height
+        postProcess:
+          - replace:
+              - regex: \D
+                with:
+      Weight:
+        selector: data.extras.weight
+        postProcess:
+          - replace:
+              - regex: \D
+                with:
       Measurements: data.extras.measurements
       FakeTits: data.extras.fake_boobs
       # CareerLength
