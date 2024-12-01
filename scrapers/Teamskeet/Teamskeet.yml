@@ -7,8 +7,9 @@ sceneByURL:
       - teamskeet.com/movies/
       - mylf.com/movies/
       - swappz.com/movies/
+      - app.teamskeet.com/movies/
     action: script
     script:
       - python
       - TeamskeetAPI.py
-# Last Updated March 07, 2024
+# Last Updated December 01, 2024
