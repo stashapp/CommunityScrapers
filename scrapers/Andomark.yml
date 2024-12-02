@@ -85,7 +85,7 @@ sceneByURL:
     url:
       # Many sites have better metadata in the members access section, but these
       # are the ones that ONLY provide the members access version of scene pages
-      - beatmeup.com/access/scenes/
+      - cumperfection.com/scenes/
       - goonmuse.com/access/scenes/
       - xevunleashed.com/access/scenes/
     scraper: proSceneScraper
@@ -95,6 +95,7 @@ sceneByURL:
       # note that these pages often have more tags and a full description but no cover image
       - ariellynn.com/access/scenes/
       - ashley4k.com/access/scenes/
+      - beatmeup.com/access/scenes/
       - behindtheporno.com/access/scenes/
       - bigboobiesclub.com/access/scenes/
       - bigbouncybabes.com/access/scenes/
@@ -167,6 +168,7 @@ xPathScrapers:
               - regex: ".*?([0-9]{2}/[0-9]{2}/[0-9]{4}).*"
                 with: $1
           - parseDate: 01/02/2006
+          - parseDate: January 2, 2006
       Details: $scene//span[@class="latest_update_description"]
       Performers:
         Name: $scene//span[@class="tour_update_models" and $excludeUpdates]/a
@@ -177,7 +179,7 @@ xPathScrapers:
           selector: //link[@rel="canonical"]/@href | //base/@href
           postProcess: &studioPostProcess
             - replace:
-                - regex: https://(w{3}?\.?)?(.+?)(\..+)
+                - regex: https?://(w{3}?\.?)?(.+?)(\..+)
                   with: $2
             - map:
                 ariellynn: Ariel Lynn
@@ -197,6 +199,7 @@ xPathScrapers:
                 charmmodels: Charm Models
                 chocolatepov: ChocolatePOV
                 collectivecorruption: Collective Corruption
+                cumperfection: Cum Perfection
                 dallasdiamondz: Dallas Diamondz
                 datingapphookup: Dating App Hook Ups
                 dirtroadwarriors: Dirt Road Warriors
@@ -293,13 +296,13 @@ xPathScrapers:
     scene:
       Title: //div[@class="title_bar"]/span
       Date:
-        selector: //div[contains(@class, "update_date") and $excludeUpdates and contains(., "/")]
+        selector: //div[contains(@class, "update_date") and $excludeUpdates]
         postProcess: *datePostProcess
       Details: //span[@class="update_description"]
       Performers:
         Name: //span[@class="update_models" and $excludeUpdates]/a
       Tags:
-        Name: //span[@class="update_tags" and $excludeUpdates]/a
+        Name: //*[@class="update_tags" and $excludeUpdates]/a
       Studio:
         Name:
           selector: //base/@href
