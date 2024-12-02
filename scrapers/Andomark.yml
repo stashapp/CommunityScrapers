@@ -317,6 +317,9 @@ xPathScrapers:
                 with: ""
               - regex: (https://[^/]+).*useimage = "([^"]*).*
                 with: $1$2
+              # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
+              - regex: (:?-[1-4]x)?\.jpg
+                with: "-full.jpg"
   proSceneWithImgFallbackScraper:
     common:
       # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
