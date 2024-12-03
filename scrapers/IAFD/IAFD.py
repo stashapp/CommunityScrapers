@@ -236,7 +236,9 @@ def performer_eyecolor(tree):
 
 def performer_aliases(tree):
     aliases = tree.xpath(
-        '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")]]//div[@class="biodata" and not(normalize-space(text())="No known aliases")]/text()'
+        '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")'
+        'or contains(normalize-space(text()),"AKA")]]'
+        '//div[@class="biodata" and not(normalize-space(text())="No known aliases")]/text()'
     )
     return ", ".join([clean_alias(alias.strip()) for alias in aliases if alias])
 
