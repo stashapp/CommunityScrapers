@@ -60,7 +60,7 @@ def scrape_file(path):
         scene["details"] = description
 
     if date := metadata_insensitive.get("date"):
-        scene["date"] = datetime.strptime(date, "%Y%m%d").strftime("%Y-%m-%d")
+        scene["date"] = datetime.fromisoformat(date).strftime("%Y-%m-%d")
 
     if date := metadata_insensitive.get("creation_time"):
         scene["date"] = date[:10]
