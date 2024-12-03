@@ -324,7 +324,7 @@ def movie_synopsis(tree):
 def movie_director(tree):
     return maybe(
         tree.xpath(
-            '//p[@class="bioheading"][text()="Director" or text()="Directors"]/following-sibling::p[@class="biodata"][1]/a/text()'
+            '//p[@class="bioheading"][contains(text(),"Director") or contains(text(),"Directors")]/following-sibling::p[@class="biodata"][1]/a/text()'
         ),
         lambda d: d.strip(),
     )
