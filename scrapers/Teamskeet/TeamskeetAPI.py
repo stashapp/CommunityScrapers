@@ -152,15 +152,15 @@ elif 'app.mylf.com' in scene_url:
 elif 'sayuncle.com' in scene_url:
     ORIGIN = 'https://www.sayuncle.com'
     REFERER = 'https://www.sayuncle.com/'
-    API_BASE = 'https://tours-store.psmcdn.net/sau-elastic-00gy5fg5ra-videoscontent/_doc/'
+    API_BASE = 'https://tours-store.psmcdn.net/sau-elastic-alias-videoscontent/_doc/'
 elif 'teamskeet.com' in scene_url:
     ORIGIN = 'https://www.teamskeet.com'
     REFERER = 'https://www.teamskeet.com/'
-    API_BASE = 'https://tours-store.psmcdn.net/ts-elastic-d5cat0jl5o-videoscontent/_doc/'
+    API_BASE = 'https://tours-store.psmcdn.net/ts-elastic-alias-videoscontent/_doc/'
 elif 'mylf.com' in scene_url:
     ORIGIN = 'https://www.mylf.com'
     REFERER = 'https://www.mylf.com/'
-    API_BASE = 'https://tours-store.psmcdn.net/mylf-elastic-hka5k7vyuw-videoscontent/_doc/'
+    API_BASE = 'https://tours-store.psmcdn.net/mylf-elastic-alias-videoscontent/_doc/'
 elif 'swappz.com' in scene_url:
     ORIGIN = 'https://www.swappz.com'
     REFERER = 'https://www.swappz.com/'
