@@ -287,7 +287,7 @@ def scene_title(tree):
 def movie_studio(tree):
     return maybe(
         tree.xpath(
-            '//p[@class="bioheading"][contains(text(),"Studio" or contains(text(),"Distributor"))]/following-sibling::p[@class="biodata"][1]//text()'
+            '//p[@class="bioheading"][contains(text(),"Studio") or contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]//text()'
         ),
         lambda s: {"name": s},
     )
