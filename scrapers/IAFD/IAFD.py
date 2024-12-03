@@ -44,6 +44,14 @@ iafd_date_scene = "%b %d, %Y"
 
 T = TypeVar("T")
 
+SHARED_SELECTORS = {
+    "title": "//h1/text()",
+    "director": '//p[@class="bioheading"][contains(text(),"Director") or contains(text(),"Directors")]/following-sibling::p[@class="biodata"][1]/a/text()',
+    "studio": '//p[@class="bioheading"][contains(text(),"Studio") or contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]//text()',
+    "date": '//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()',
+    "synopsis": '//div[@id="synopsis"]/div[@class="padded-panel"]//text()',
+}
+
 
 def maybe(
     values: Iterable[str], f: Callable[[str], (T | None)] = lambda x: x
@@ -205,7 +213,7 @@ def performer_gender(tree):
 
 
 def performer_name(tree):
-    return maybe(tree.xpath("//h1/text()"), lambda name: name.strip())
+    return maybe(tree.xpath(SHARED_SELECTORS["title"]), lambda name: name.strip())
 
 
 def performer_piercings(tree):
@@ -218,6 +226,7 @@ def performer_tattoos(tree):
     return maybe(
         tree.xpath('//div/p[text()="Tattoos"]/following-sibling::p[1]//text()')
     )
+
 
 def performer_eyecolor(tree):
     return maybe(
@@ -249,46 +258,36 @@ def performer_measurements(tree):
 
 def scene_director(tree):
     return maybe(
-        tree.xpath(
-            '//p[@class="bioheading"][text()="Director" or text()="Directors"]/following-sibling::p[1]//text()'
-        ),
+        tree.xpath(SHARED_SELECTORS["director"]),
         lambda d: d.strip(),
     )
 
 
 def scene_studio(tree):
     return maybe(
-        tree.xpath(
-            '//div[@class="col-xs-12 col-sm-3"]//p[text() = "Studio"]/following-sibling::p[1]//text()'
-        ),
+        tree.xpath(SHARED_SELECTORS["studio"]),
         lambda s: {"name": s},
     )
 
 
 def scene_details(tree):
-    return maybe(tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()'))
+    return maybe(tree.xpath(SHARED_SELECTORS["synopsis"]))
 
 
 def scene_date(tree):
     return maybe(
-        tree.xpath(
-            '//div[@class="col-xs-12 col-sm-3"]//p[text() = "Release Date"]/following-sibling::p[1]//text()'
-        ),
+        tree.xpath(SHARED_SELECTORS["date"]),
         clean_date,
     )
 
 
 def scene_title(tree):
-    return maybe(
-        tree.xpath("//h1/text()"), lambda t: re.sub(r"\s*\(\d{4}\)$", "", t.strip())
-    )
+    return maybe(tree.xpath(SHARED_SELECTORS["title"]), lambda t: re.sub(r"\s*\(\d{4}\)$", "", t.strip()))
 
 
 def movie_studio(tree):
     return maybe(
-        tree.xpath(
-            '//p[@class="bioheading"][contains(text(),"Studio" or contains(text(),"Distributor"))]/following-sibling::p[@class="biodata"][1]//text()'
-        ),
+        tree.xpath(SHARED_SELECTORS["studio"]),
         lambda s: {"name": s},
     )
 
@@ -297,12 +296,10 @@ def movie_date(tree):
     # If there's no release date we will use the year from the title for an approximate date
     title_pattern = re.compile(r".*\(([0-9]{4})\).*")
     return maybe(
-        tree.xpath(
-            '//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()'
-        ),
+        tree.xpath(SHARED_SELECTORS["date"]),
         lambda d: clean_date(d.strip()),
     ) or maybe(
-        tree.xpath("//h1/text()"),
+        tree.xpath(SHARED_SELECTORS["title"]),
         lambda t: re.sub(title_pattern, r"\1-01-01", t).strip() if re.match(title_pattern, t) else None,
     )
 
@@ -318,22 +315,18 @@ def movie_duration(tree):
 
 
 def movie_synopsis(tree):
-    return maybe(tree.xpath('//div[@id="synopsis"]/div[@class="padded-panel"]//text()'))
+    return maybe(tree.xpath(SHARED_SELECTORS["synopsis"]))
 
 
 def movie_director(tree):
     return maybe(
-        tree.xpath(
-            '//p[@class="bioheading"][contains(text(), "Directors")]/following-sibling::p[@class="biodata"][1]/a/text()'
-        ),
+        tree.xpath(SHARED_SELECTORS["director"]),
         lambda d: d.strip(),
     )
 
 
 def movie_title(tree):
-    return maybe(
-        tree.xpath("//h1/text()"), lambda t: re.sub(r"\s*\(\d+\)$", "", t.strip())
-    )
+    return maybe(tree.xpath(SHARED_SELECTORS["title"]), lambda t: re.sub(r"\s*\(\d+\)$", "", t.strip()))
 
 
 def video_url(tree):
