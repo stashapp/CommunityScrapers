@@ -500,7 +500,7 @@ def main():
     result = {}
     if args.operation == "performer":
         result = performer_from_tree(scraped)
-        result["url"] = iafd_uuid_url
+        result["urls"] = [iafd_uuid_url]
     elif args.operation == "movie":
         result = movie_from_tree(scraped)
     elif args.operation == "scene":
