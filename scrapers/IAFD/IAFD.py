@@ -236,9 +236,11 @@ def performer_eyecolor(tree):
 
 def performer_aliases(tree):
     aliases = tree.xpath(
-        '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")]]//div[@class="biodata" and not(normalize-space(text())="No known aliases")]/text()'
+        '//div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA")'
+        'or contains(normalize-space(text()),"AKA")]]'
+        '//div[@class="biodata" and not(normalize-space(text())="No known aliases")]/text()'
     )
-    return ", ".join([clean_alias(alias.strip()) for alias in aliases if alias])
+    return ", ".join([y for x in aliases for y in [clean_alias(x.strip())] if y])
 
 
 def performer_careerlength(tree):
@@ -498,7 +500,7 @@ def main():
     result = {}
     if args.operation == "performer":
         result = performer_from_tree(scraped)
-        result["url"] = iafd_uuid_url
+        result["urls"] = [iafd_uuid_url]
     elif args.operation == "movie":
         result = movie_from_tree(scraped)
     elif args.operation == "scene":
