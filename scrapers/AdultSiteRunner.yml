@@ -1,4 +1,21 @@
-name: Raunchy Bastards
+name: AdultSiteRunner
+performerByURL:
+  - action: scrapeXPath
+    scraper: performerScraper
+    url:
+      - blackboyaddictionz.com/profile/
+      - blacksondaddies.com/profile/
+      - boundjocks.com/profile/
+      - boyshalfwayhouse.com/profile/
+      - coltstudiogroup.com/profile/
+      - hotoldermale.com/profile/
+      - monstercub.com/profile/
+      - myfirstdaddy.com/profile/
+      - older4me.com/profile/
+      - playdaddy.com/profile/
+      - raunchybastards.com/profile/
+      - stockydudes.com/profile/
+      - toplatindaddies.com/profile/
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -131,4 +148,37 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
       Tags:
         Name: $details//h5[contains(., "Categories")]/a/text()
+  performerScraper:
+    common:
+      $modelProfile: //div[@class="modelProfileSidebar"]
+    performer:
+      Name: //div[@class="main_title"]/h3/text()
+      Gender:
+        fixed: Male
+      Height:
+        selector: $modelProfile/div/ul/li[contains(text(),"Height")]/strong/text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: $modelProfile/div/ul/li[contains(text(),"Weight")]/strong/text()
+        postProcess:
+          - replace:
+            - regex: " pounds$"
+              with: ""
+          - lbToKg: true
+      PenisLength:
+        selector: $modelProfile/div/ul/li[contains(text(),"Dick size")]/strong/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)(\.(\d+) inches)
+                with: "0.$1$2"
+          - feetToCm: true
+      Circumcised:
+        selector: $modelProfile/div/ul/li[contains(text(),"Cut")]/strong/text()
+      Tags:
+        Name: $modelProfile/div/ul/li[5]/strong/text() |
+          $modelProfile//a[@class="tagsRnd"]/text()
+      Image: $modelProfile//div[@class="profile"]//img[contains(@class,"img-responsive")]
+      Twitter: //a[contains(@href,"twitter.com")]/@href
+      Details: $modelProfile//div[@class="main_title"]/p[not(@class)]/text()
 # Last Updated November 16, 2024
