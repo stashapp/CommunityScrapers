@@ -34,6 +34,10 @@ _studios = {
         "api": "aliceshawbelly.mymember.site",
         "name": "Alice Shaw",
     },
+    "allinthestepfamily.com": {
+        "api": "all-in-the-step-family.mymember.site",
+        "name": "All in the Step-Family"
+    },
     "alterpic.com": {
         "api": "alterpic.mymember.site",
         "name": "Alterpic",
