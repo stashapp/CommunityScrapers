@@ -42,13 +42,25 @@ def post_query(service, user, id):
 
     if post_lookup_response.status_code == 200:
         data = post_lookup_response.json()
+        log.debug(data)
         post = data['post']
+        studio = {"Name": user}
+        if service == "onlyfans":
+            studio["URL"] = f"https://onlyfans.com/{user}"
+        elif service == "fansly":
+            studio["URL"] = f"https://fansly.com/{user}"
+        elif service == "candfans":
+            studio["URL"] = f"https://candfans.com/{user}"
+        else:
+            debugPrint("No service listed")
 
         out = {"Title": post['title'],
                "Date": post['published'][:10],
                "URL": f"https://coomer.su/{post['service']}/user/{post['user']}/post/{post['id']}",
-               "Details": clean_text(post['content'])
-               }
+               "Details": clean_text(post['content']),
+               "Studio": studio
+        }
+
 
         log.debug(out)
         return out
@@ -92,6 +104,7 @@ def sceneByFragment(fragment):
 
 if sys.argv[1] == 'sceneByURL':
     i = readJSONInput()
+    log.debug(i)
     ret = get_scene(i.get('url'))
     log.debug(f"Returned from search: {json.dumps(ret)}")
     print(json.dumps(ret))
