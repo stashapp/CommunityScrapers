@@ -1,0 +1,7 @@
+name: Coomer
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Coomer.py
+    - sceneByFragment
