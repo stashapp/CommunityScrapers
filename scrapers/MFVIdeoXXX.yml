@@ -41,6 +41,9 @@ xPathScrapers:
           selector: //div[@class="column2"]/h6[1]/a/text()
       Image:
         selector: //meta[@property="og:image"]/@content
+      Studio: 
+        Name: 
+          fixed: MFVideoXXX 
   sceneSearch:
     common:
       $card: //article
