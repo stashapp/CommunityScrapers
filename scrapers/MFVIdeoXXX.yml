@@ -44,6 +44,8 @@ xPathScrapers:
       Studio: 
         Name: 
           fixed: MFVideoXXX 
+      URL:
+        selector: //link[@rel="canonical"]/@href
   sceneSearch:
     common:
       $card: //article
