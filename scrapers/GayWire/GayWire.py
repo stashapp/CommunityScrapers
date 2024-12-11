@@ -23,9 +23,9 @@ studio_map = {
 
 
 def redirect(url: str) -> str:
-    if not url or "gaywire.com/scene/" not in url:
+    if not url:
         return url
-    if (res := head(url)) and (redirect := res.headers.get("Location", url)):
+    if (res := head(url)) and (redirect := res.headers.get("location", url)):
         return redirect if not redirect.endswith("404") else url
     return url
 
