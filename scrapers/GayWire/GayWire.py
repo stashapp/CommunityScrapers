@@ -40,6 +40,11 @@ def gaywire(obj: Any, _) -> Any:
         "url",
         lambda x: x.replace("www.bangbros.com", "gaywire.com"),
     )
+    fixed = replace_all(
+        obj,
+        "urls",
+        lambda x: x.replace("www.bangbros.com", "gaywire.com"),
+    )
 
     # Rename certain studios according to the map
     fixed = replace_at(

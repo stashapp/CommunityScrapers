@@ -229,7 +229,7 @@ def performer_by_url(url):
 
     if favorite_form_url := get_xpath_result(tree, XPATHS["id"]):
         if match := re.search(REGEXES["id"], favorite_form_url):
-            scrape["url"] = FORMATS["url"].format(PERFORMER_ID=match[0])
+            scrape["urls"] = [FORMATS["url"].format(PERFORMER_ID=match[0])]
         else:
             log.debug("URL XPath matched, but no value found.")
 

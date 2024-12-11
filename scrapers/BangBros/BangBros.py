@@ -45,6 +45,11 @@ def bangbros(obj: Any, _) -> Any:
         "url",
         lambda x: x.replace("/scene/", "/video/").replace("www.bangbros.com", domain),
     )
+    fixed = replace_all(
+        obj,
+        "urls",
+        lambda x: x.replace("/scene/", "/video/").replace("www.bangbros.com", domain),
+    )
 
     # Rename certain studios according to the map
     fixed = replace_at(

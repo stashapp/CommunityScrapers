@@ -313,7 +313,7 @@ def to_scraped_performer(
         performer["tags"] = tags
 
     if site:
-        performer["url"] = _construct_performer_url(performer_from_api, site)
+        performer["urls"] = [_construct_performer_url(performer_from_api, site)]
 
     return performer
 

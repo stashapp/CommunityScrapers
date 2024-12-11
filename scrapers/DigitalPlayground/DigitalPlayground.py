@@ -2,7 +2,7 @@ import json
 import sys
 from typing import Any
 from py_common import log
-from py_common.util import replace_at, replace_all
+from py_common.util import replace_all
 from AyloAPI.scrape import (
     gallery_from_url,
     scraper_args,
@@ -18,14 +18,14 @@ from AyloAPI.scrape import (
 studio_map = {
     "DP Parody": "DP Parodies",
     "dpw": "DP World",
-    "Dpstar Sex Challenges": "Sex Challenges",	
+    "Dpstar Sex Challenges": "Sex Challenges",
     "Episodes": "Digital Playground Episodes",
 }
 
 
 def digitalplayground(obj: Any, _) -> Any:
     fixed = replace_all(obj, "name", replacement=lambda x: studio_map.get(x, x))
-    fixed = replace_all(fixed, "url", lambda x: x.replace("/model/", "/modelprofile/"))
+    fixed = replace_all(fixed, "urls", lambda x: x.replace("/model/", "/modelprofile/"))
 
     return fixed
 

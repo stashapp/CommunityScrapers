@@ -31,6 +31,7 @@ def czechhunter(obj: Any, _) -> Any:
 
     # Replace the studio name in all URLs
     fixed = replace_all(obj, "url", lambda x: x.replace("bigstr.com", replacement))
+    fixed = replace_all(fixed, "urls", lambda x: x.replace("bigstr.com", replacement))
 
     return fixed
 

@@ -39,6 +39,11 @@ def rk(obj: Any, _) -> Any:
         "url",
         lambda x: x.replace("realitykings.com", domain),
     )
+    fixed = replace_all(
+        fixed,
+        "urls",
+        lambda x: x.replace("realitykings.com", domain),
+    )
 
     return fixed
 

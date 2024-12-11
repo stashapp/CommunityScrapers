@@ -33,6 +33,11 @@ def fakehub(obj: Any, _) -> Any:
     fixed = replace_all(
         obj,
         "url",
+        lambda x: x.replace("fakehub.com", replacement),
+    )
+    fixed = replace_all(
+        fixed,
+        "urls",
         lambda x: x.replace("/model/", "/modelprofile/").replace(
             "fakehub.com", replacement
         ),

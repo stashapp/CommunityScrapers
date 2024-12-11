@@ -39,6 +39,11 @@ def mofos(obj: Any, _) -> Any:
         "url",
         lambda x: x.replace("mofos.com", domain),
     )
+    fixed = replace_all(
+        fixed,
+        "urls",
+        lambda x: x.replace("mofos.com", domain),
+    )
 
     return fixed
 

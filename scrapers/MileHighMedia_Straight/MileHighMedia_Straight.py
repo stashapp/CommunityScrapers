@@ -50,6 +50,7 @@ def milehigh(obj: Any, _) -> Any:
     # Replace the studio name in all URLs: even if there's no specific studio,
     # milehigh.com is wrong and needs to be replaced with milehighmedia.com
     fixed = replace_all(fixed, "url", lambda x: x.replace("milehigh.com", replacement))
+    fixed = replace_all(fixed, "urls", lambda x: x.replace("milehigh.com", replacement))
 
     return fixed
 

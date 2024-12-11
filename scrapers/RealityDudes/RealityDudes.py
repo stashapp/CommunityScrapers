@@ -17,18 +17,25 @@ from AyloAPI.scrape import (
 
 
 def realitydudes(obj: Any, _) -> Any:
+    if dig(obj, "studio", "name") != "Papi":
+        return obj
+
     # Papi still uses the old domain and model URL
-    if dig(obj, "studio", "name") == "Papi":
-        domain = "papi.com"
-        model = "/pornstar/"
+    domain = "papi.com"
+    model = "/pornstar/"
 
-        return replace_all(
-            obj,
-            "url",
-            lambda x: x.replace("realitydudes.com", domain).replace("/model/", model),
-        )
+    fixed = replace_all(
+        obj,
+        "url",
+        lambda x: x.replace("realitydudes.com", domain).replace("/model/", model),
+    )
+    fixed = replace_all(
+        fixed,
+        "urls",
+        lambda x: x.replace("realitydudes.com", domain).replace("/model/", model),
+    )
 
-    return obj
+    return fixed
 
 
 if __name__ == "__main__":

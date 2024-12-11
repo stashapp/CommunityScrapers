@@ -29,6 +29,11 @@ def propertysex(obj: Any, _) -> Any:
         "url",
         lambda x: x.replace("propertysex.com", domain),
     )
+    fixed = replace_all(
+        fixed,
+        "urls",
+        lambda x: x.replace("propertysex.com", domain),
+    )
 
     return fixed
 

@@ -42,6 +42,13 @@ def men(obj: Any, _) -> Any:
         .replace("/model/", model)
         .replace("men.com", domain),
     )
+    fixed = replace_all(
+        fixed,
+        "urls",
+        lambda x: x.replace("/scene/", scene)
+        .replace("/model/", model)
+        .replace("men.com", domain),
+    )
 
     return fixed
 

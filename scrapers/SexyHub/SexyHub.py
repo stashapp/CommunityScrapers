@@ -35,6 +35,13 @@ def sexyhub(obj: Any, _) -> Any:
             "sexyhub.com", replacement
         ),
     )
+    fixed = replace_all(
+        obj,
+        "urls",
+        lambda x: x.replace("/model/", "/modelprofile/").replace(
+            "sexyhub.com", replacement
+        ),
+    )
 
     return fixed
 

@@ -30,6 +30,11 @@ def brazzers(obj: Any, _) -> Any:
         "url",
         lambda x: x.replace("/scene/", "/video/").replace("/model/", "/pornstar/"),
     )
+    fixed = replace_all(
+        obj,
+        "urls",
+        lambda x: x.replace("/scene/", "/video/").replace("/model/", "/pornstar/"),
+    )
 
     # Rename certain studios according to the map
     fixed = replace_at(

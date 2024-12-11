@@ -49,6 +49,11 @@ def deviante(obj: Any, _) -> Any:
         "url",
         lambda x: x.replace("/scene/", "/video/").replace("deviante.com", replacement),
     )
+    fixed = replace_all(
+        fixed,
+        "urls",
+        lambda x: x.replace("/scene/", "/video/").replace("deviante.com", replacement),
+    )
 
     return fixed
 
