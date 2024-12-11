@@ -8,6 +8,11 @@ from bs4 import BeautifulSoup as bs
 
 # TODO: Enable searching from other fields?
 
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0',
+    'Referer': 'https://coomer.su/search_hash'
+}
+
 def debugPrint(t):
     sys.stderr.write(t + "\n")
 
@@ -38,7 +43,7 @@ def clean_text(details: str) -> str:
 
 def post_query(service, user, id):
     coomer_getpost_url = f"https://coomer.su/api/v1/{service}/user/{user}/post/{id}"
-    post_lookup_response = requests.get(coomer_getpost_url)
+    post_lookup_response = requests.get(coomer_getpost_url, headers=headers)
 
     if post_lookup_response.status_code == 200:
         data = post_lookup_response.json()
@@ -90,7 +95,7 @@ def sceneByFragment(fragment):
 
     coomer_searchhash_url = "https://coomer.su/api/v1/search_hash/"
 
-    hash_lookup_response = requests.get(coomer_searchhash_url + str(readable_hash))
+    hash_lookup_response = requests.get(coomer_searchhash_url + str(readable_hash), headers=headers)
 
     if hash_lookup_response.status_code == 200:
         data = hash_lookup_response.json()
