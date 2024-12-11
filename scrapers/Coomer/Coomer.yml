@@ -1,0 +1,15 @@
+name: Coomer
+sceneByURL:
+  - action: script
+    url:
+      - coomer.su/
+    script:
+      - python
+      - Coomer.py
+      - sceneByURL
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Coomer.py
+    - sceneByFragment
