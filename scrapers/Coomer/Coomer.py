@@ -58,7 +58,8 @@ def post_query(service, user, id):
                "Date": post['published'][:10],
                "URL": f"https://coomer.su/{post['service']}/user/{post['user']}/post/{post['id']}",
                "Details": clean_text(post['content']),
-               "Studio": studio
+               "Studio": studio,
+               "Performers": [{"Name": user}]
         }
 
 
