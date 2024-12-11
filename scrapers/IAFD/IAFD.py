@@ -377,8 +377,8 @@ def performer_query(query):
     )
     performers = [
         {
-            "Name": name,
-            "URL": f"https://www.iafd.com{url}",
+            "name": name,
+            "urls": [f"https://www.iafd.com{url}"],
         }
         for name, url in zip(performer_names, performer_urls)
     ]
@@ -391,7 +391,7 @@ def performer_from_tree(tree):
     return {
         "name": performer_name(tree),
         "gender": performer_gender(tree),
-        "url": performer_url(tree),
+        "urls": [performer_url(tree)],
         "twitter": performer_twitter(tree),
         "instagram": performer_instagram(tree),
         "birthdate": performer_birthdate(tree),
@@ -423,12 +423,12 @@ def scene_from_tree(tree):
         "performers": [
             {
                 "name": p.text_content(),
-                "url": f"https://www.iafd.com{p.get('href')}",
+                "urls": [f"https://www.iafd.com{p.get('href')}"],
                 "images": [base64_image(url) for url in p.xpath("img/@src")],
             }
             for p in tree.xpath('//div[@class="castbox"]/p/a')
         ],
-        "url": video_url(tree),
+        "urls": [video_url(tree)],
     }
 
 
