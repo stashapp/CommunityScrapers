@@ -1,0 +1,62 @@
+name: "MFVideoxx"
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mfvideoxxx.com/
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://mfvideoxxx.com/?s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: "{url}"
+
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://mfvideoxxx.com/{title}
+  queryURLReplace:
+    title:
+      - regex: "[^0-9A-Za-z]"
+        with: "-"
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1
+      Date: 
+        selector: //time/text()
+        postProcess:
+            - parseDate: 02/01/2006
+      Details: //div[@class="entry-content"]/b/p
+      Tags:
+        Name:
+          selector: //div[@class="column2"]/h6[2]/a/text()
+      Performers:
+        Name: 
+          selector: //div[@class="column2"]/h6[1]/a/text()
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio: 
+        Name: 
+          fixed: MFVideoXXX 
+      URL:
+        selector: //link[@rel="canonical"]/@href
+  sceneSearch:
+    common:
+      $card: //article
+    scene:
+      Title: $card//h5
+      Date: 
+        selector: $card//time[@class="entry-date published"]
+        postProcess:
+            - parseDate: 02/01/2006
+      Image:
+        selector: $card//img[@class="attachment-post-thumbnail size-post-thumbnail wp-post-image"]/@src
+      URL: $card/div[1]/a/@href
+
+# Last Updated December 10, 2024
