@@ -23,6 +23,9 @@ def tube8vip(obj: Any, _) -> Any:
     fixed = replace_all(
         fixed, "url", replacement=lambda url: url.replace("elite.com", "tube8vip.com")
     )
+    fixed = replace_all(
+        fixed, "urls", replacement=lambda url: url.replace("elite.com", "tube8vip.com")
+    )
     return fixed
 
 
