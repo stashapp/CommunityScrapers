@@ -4,7 +4,6 @@ import subprocess as sp
 from datetime import datetime
 from urllib.parse import urlparse
 
-from py_common import graphql
 from py_common import log
 
 
@@ -13,19 +12,6 @@ def parse_url(comment):
         return comment
 
     return None
-
-
-def get_path(scene_id):
-    scene = graphql.getScene(scene_id)
-    if not scene:
-        log.error(f"Scene with ID '{scene_id}' not found")
-        return
-
-    if not scene["files"]:
-        log.error(f"Scene with ID '{scene_id}' has no files")
-        return
-
-    return scene["files"][0]["path"]
 
 
 def scrape_file(path):
@@ -74,10 +60,19 @@ def scrape_file(path):
 
 if __name__ == "__main__":
     fragment = json.loads(sys.stdin.read())
-    path = get_path(fragment["id"])
-    if not path:
+    scene_id = fragment["id"]
+
+    if "files" not in fragment:
+        log.error(f"Cannot scrape scene {scene_id} because it contains no files")
         print("null")
-        sys.exit(1)
+        sys.exit(0)
+
+    paths = [f["path"] for f in fragment["files"]]
+    path = paths.pop(0)
+    if paths:
+        log.debug(
+            f"Scene {scene_id} has multiple files, only scraping the first one: {path}"
+        )
 
     scraped = scrape_file(path)
     print(json.dumps(scraped))
