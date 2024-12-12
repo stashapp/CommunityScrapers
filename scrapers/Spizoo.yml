@@ -14,6 +14,7 @@ sceneByURL:
       - rawattack.com/updates/
       - realsensual.com/updates/
       - spizoo.com/updates/
+      - tagteampov.com/updates/
       - vlogxxx.com/updates/
     scraper: sceneScraper
 sceneByName:
@@ -75,6 +76,7 @@ xPathScrapers:
                 rawattack: RawAttack
                 realsensual: Real Sensual
                 spizoo: Spizoo
+                tagteampov: Tag Team POV
                 vlogxxx: Vlog XXX
       Image:
         selector: $video_section//video/@poster | //img[contains(@class, "update_thumb") or contains(@class, "trailer-thumb")]/@src
@@ -85,11 +87,11 @@ xPathScrapers:
                 with:
 driver:
   cookies:
-  - CookieURL: "https://www.mrluckylife.com/"
-    Cookies:
-      # Set this cookie name to the one beginning with `pcar[...]` to scrape the members' pages.
-      - Name: ""
-        Domain: ".mrluckylife.com"
-        Path: "/"
-        Value: ""
+    - CookieURL: "https://www.mrluckylife.com/"
+      Cookies:
+        # Set this cookie name to the one beginning with `pcar[...]` to scrape the members' pages.
+        - Name: ""
+          Domain: ".mrluckylife.com"
+          Path: "/"
+          Value: ""
 # Last Updated August 11, 2024
