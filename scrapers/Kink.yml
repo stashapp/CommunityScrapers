@@ -112,13 +112,13 @@ xPathScrapers:
           split: ","
       Tags:
         Name:
-          selector: //h4[contains(text(), "Categories")]/following-sibling::*/a
+          selector: //p[contains(text(), "Categories")]/following-sibling::span/a/text()
           postProcess:
             - replace:
                 - regex: \,\s*
                   with: ""
       Details:
-        selector: //h4[contains(text(), "Description")]/following-sibling::*[1]//text()
+        selector: //span[contains(text(), "Description")]/following-sibling::span/p/text()
         concat: "\n"
       Image:
         selector: //div[@data-setup]/@data-setup
@@ -241,4 +241,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated November 17, 2024
+# Last Updated December 13, 2024
