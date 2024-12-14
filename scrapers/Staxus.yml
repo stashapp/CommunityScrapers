@@ -28,7 +28,7 @@ xPathScrapers:
         selector: //a[contains(@class,"option_button")]/@href
         postProcess:
           - replace:
-              - regex: .+id\=(\d+)
+              - regex: .+id\=(\d+).*
                 with: $1
       Details:
         selector: //span[contains(@class,"update_description")]/text()
@@ -42,10 +42,10 @@ xPathScrapers:
         selector: //div[contains(@class,"galleryTitle")]/text()
         postProcess:
           - replace:
-            - regex: ^
-              with: https://staxus.com/trial/search.php?query=
-            - regex: \s
-              with: +
+              - regex: ^
+                with: https://staxus.com/trial/search.php?query=
+              - regex: \s
+                with: +
           - subScraper:
               selector: //div[@class="screenshotWrapper"][1]/a/@style
               postProcess:
@@ -63,8 +63,8 @@ xPathScrapers:
           //div[@class="cell_top cell_thumb"]/img/@src0_3x | //div[@class="cell_top cell_thumb"]/img/@src0
         postProcess:
           - replace:
-            - regex: ^
-              with: https://staxus.com
+              - regex: ^
+                with: https://staxus.com
       Gender:
         fixed: Male
       Height:
@@ -72,17 +72,17 @@ xPathScrapers:
           //div[@class="model_bio"]//b[contains(text(),'Height')]/../following-sibling::div/text()
         postProcess:
           - replace:
-            - regex: '[^0-9.]'
-              with: ""
+              - regex: "[^0-9.]"
+                with: ""
       PenisLength:
         selector: >
           //div[@class="model_bio"]//b[contains(text(),'Measurements')]/../following-sibling::div/text()
         postProcess:
           - replace:
-            - regex: '\,.+'
-              with: ""
-            - regex: '[^0-9.]'
-              with: ""
+              - regex: '\,.+'
+                with: ""
+              - regex: "[^0-9.]"
+                with: ""
       Birthdate:
         selector: >
           //div[@class="model_bio"]//b[contains(text(),'Age')]/../following-sibling::div/text()
