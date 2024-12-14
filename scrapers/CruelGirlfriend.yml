@@ -21,7 +21,7 @@ xPathScrapers:
           - replace:
               - regex: 'Added:\s*'
                 with: ""
-          - parseDate: 2006-01-02
+          - parseDate: 02-01-2006
       Performers:
         Name:
           selector: //div[contains(@id,"Lg6T7ciE57Q018g38Ndnn9")]/@id
