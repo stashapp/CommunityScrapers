@@ -2,7 +2,7 @@ name: Cruel Girlfriend
 sceneByURL:
   - action: scrapeXPath
     url:
-      - cruelgf.com/
+      - cruelgf.com/Clip.php
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -13,14 +13,14 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-              - regex: '.+"name": "[^-]+-\s*([^"]+)".+'
+              - regex: '.+"name":\s*"([^"]+)".+'
                 with: $1
       Date:
-        selector: $script
+        selector: //comment()[contains(., 'CLIP DATE')]/following-sibling::text()
         postProcess:
           - replace:
-              - regex: '.+"uploadDate": "([^T]+)T.+'
-                with: $1
+              - regex: 'Added:\s*'
+                with: ""
           - parseDate: 2006-01-02
       Performers:
         Name:
