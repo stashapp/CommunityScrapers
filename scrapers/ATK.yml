@@ -3,31 +3,31 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - atkarchives.com/tour/movie/
-      - atkgalleria.com/tour/movie
-      - atkgirlfriends.com/tour/movie
+      - atkgalleria.com/tour/movie/
+      - atkgirlfriends.com/tour/movie/
       - atkhairy.com/tour/movie/
       - atkpetites.com/tour/movie/
       - atkpremium.com/tour/movie/
     scraper: sceneScraper
   - action: scrapeXPath
     url:
-      - amkingdom.com/tour/movie
-      - atkexotics.com/tour/movie
+      - amkingdom.com/tour/movie/
+      - atkexotics.com/tour/movie/
     scraper: sceneScraperAlt
 galleryByURL:
   - action: scrapeXPath
     url:
       - atkarchives.com/tour/photo/
-      - atkgalleria.com/tour/photo
-      - atkgirlfriends.com/tour/photo
+      - atkgalleria.com/tour/photo/
+      - atkgirlfriends.com/tour/photo/
       - atkhairy.com/tour/photo/
       - atkpetites.com/tour/photo/
       - atkpremium.com/tour/photo/
     scraper: galleryScraper
   - action: scrapeXPath
     url:
-      - amkingdom.com/tour/photo
-      - atkexotics.com/tour/photo
+      - amkingdom.com/tour/photo/
+      - atkexotics.com/tour/photo/
     scraper: galleryScraperAlt
 performerByURL:
   - action: scrapeXPath
@@ -181,9 +181,9 @@ xPathScrapers:
         Name: &PerformerAlt
           selector: //div[contains(@class, 'profile-wrapper')]//text()[contains(., 'Name:')]
           postProcess:
-          - replace:
-              - regex: "Name: "
-                with: ""
+            - replace:
+                - regex: "Name: "
+                  with: ""
       Photographer:
         selector: //div[contains(@class, 'profile-wrapper')]//text()[contains(., 'Photographer:')]
         postProcess:
@@ -201,7 +201,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .+([a-z]{3}[0-9]{3})\.jpg.+
-                with: ATKingdom, $1 
+                with: ATKingdom, $1
       Gender:
         fixed: Female
       Image: //div[@class="profileImage left clear"]/img/@src
@@ -277,8 +277,8 @@ driver:
           Domain: .amkingdom.com
           Path: /
     - Cookies:
-        - Name: __cfduid
-          ValueRandom: 43
+        - Name: start_session_exotics
+          ValueRandom: 26
           Domain: .atkexotics.com
           Path: /
 # Last Updated December 15, 2024
