@@ -2,36 +2,46 @@ name: ATK
 sceneByURL:
   - action: scrapeXPath
     url:
+      - atkarchives.com/tour/movie/
+      - atkgalleria.com/tour/movie
+      - atkgirlfriends.com/tour/movie
       - atkhairy.com/tour/movie/
       - atkpetites.com/tour/movie/
       - atkpremium.com/tour/movie/
-      - atkexotics.com/tour/photo
-      - atkarchives.com/tour/movie/
-      - atkgirlfriends.com/tour/movie
-      - atkgalleria.com/tour/movie
-      - amkingdom.com/tour/movie
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - amkingdom.com/tour/movie
+      - atkexotics.com/tour/movie
+    scraper: sceneScraperAlt
 galleryByURL:
   - action: scrapeXPath
     url:
+      - atkarchives.com/tour/photo/
+      - atkgalleria.com/tour/photo
+      - atkgirlfriends.com/tour/photo
       - atkhairy.com/tour/photo/
       - atkpetites.com/tour/photo/
       - atkpremium.com/tour/photo/
-      - atkarchives.com/tour/photo/
-      - atkgirlfriends.com/tour/photo
-      - atkgalleria.com/tour/photo
+    scraper: galleryScraper
+  - action: scrapeXPath
+    url:
       - amkingdom.com/tour/photo
       - atkexotics.com/tour/photo
-
-    scraper: galleryScraper
+    scraper: galleryScraperAlt
 performerByURL:
   - action: scrapeXPath
     url:
+      - atkarchives.com/tour/model/
       - atkhairy.com/tour/model/
       - atkpetites.com/tour/model/
       - atkpremium.com/tour/model/
-      - atkarchives.com/tour/model/
     scraper: performerScraper
+  - action: scrapeXPath
+    url:
+      - amkingdom/tour/model/
+      - atkexotics.com/tour/model/
+    scraper: performerScraperAlt
 xPathScrapers:
   sceneScraper:
     scene:
@@ -49,14 +59,15 @@ xPathScrapers:
                 atkarchives: "ATK Archives"
       Performers:
         Name: //div[@class='watchName']//text()
-      Title:
+      Title: &Title
         selector: //title/text()
         postProcess:
           - replace:
               - regex: '\.$'
                 with: ""
-      Details: //meta[contains(@name,'description')]/@content|//*[contains(text(),'Description')]//following-sibling::text()[1]
-      Director:
+      Details: &Details
+        selector: //meta[contains(@name,'description')]/@content|//*[contains(text(),'Description')]//following-sibling::text()[1]
+      Director: &Director
         selector: //*[contains(text(),'Photographer')]//following-sibling::text()[not(contains(.,'Photographer'))][1]|//*[contains(@class,'photographer')]//*[contains(@class,'text')]/text()
       Tags:
         Name:
@@ -68,7 +79,7 @@ xPathScrapers:
           - replace:
               - regex: .+(?:url\(")(.+)(?:".+)
                 with: $1
-      Code:
+      Code: &Code
         selector: //div[contains(@class,'flowplayer')]/@style
         postProcess:
           - replace:
@@ -99,13 +110,8 @@ xPathScrapers:
                 with:
       Performers:
         Name: //span[contains(text(),"Name:")]/following-sibling::text()
-      Photographer: //*[contains(text(),'Photographer')]//following-sibling::text()[not(contains(.,'Photographer'))][1]|//*[contains(@class,'photographer')]//*[contains(@class,'text')]/text()
-      Details:
-        selector: //meta[contains(@name,'description')]/@content|//*[contains(text(),'Description')]//following-sibling::text()[1]
-        postProcess:
-          - replace:
-              - regex: '"'
-                with: ""
+      Photographer: *Director
+      Details: *Details
       Tags:
         Name:
           selector: //*[contains(text(),'Tags')]//following-sibling::text()[1] | //*[contains(text(),'Movie:')]//following-sibling::text()[1]
@@ -117,16 +123,85 @@ xPathScrapers:
                   with: " -"
                 - regex: '"'
                   with: ""
-      Code:
+      Code: &CodeGallery
         selector: //img[contains(@alt,' Set')]/@src[1]
         postProcess:
           - replace:
               - regex: https.+\/[a-z]\/[a-z]{3}[0-9]{3}\/(\d+)\/.*
                 with: $1
+  sceneScraperAlt:
+    scene:
+      Studio:
+        Name: &StudioAlt
+          selector: //span[@class="atk_footer_text"]/strong/text()
+          postProcess:
+            - replace:
+                - regex: ^.+20\d{2}\s(ATK \w+),.+$
+                  with: $1
+      Performers:
+        Name:
+          selector: //h1[@class='content-header']/text()
+          postProcess:
+            - replace:
+                - regex: \sVideo.*
+                  with: ""
+      Title: *Title
+      Details: *Details
+      Director: *Director
+      Tags:
+        Name:
+          selector: //*[contains(text(),'Tags')]//following-sibling::text()[1] | //*[contains(text(),'Movie:')]//following-sibling::text()[1]
+          postProcess:
+            - replace:
+                - regex: '\.$'
+                  with: ""
+                - regex: '(\. -)'
+                  with: " -"
+                - regex: '"'
+                  with: ""
+          split: " , "
+      Image:
+        selector: //div[contains(@class,'video-wrap')]/div/@style
+        postProcess:
+          - replace:
+              - regex: (?:background-image:url\(')(.+)(?:'\));?
+                with: $1
+      Code: *Code
+  galleryScraperAlt:
+    gallery:
+      Studio:
+        Name: *StudioAlt
+      Title:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: ^ATK.+\:\s
+                with:
+      Performers:
+        Name: &PerformerAlt
+          selector: //div[contains(@class, 'profile-wrapper')]//text()[contains(., 'Name:')]
+          postProcess:
+          - replace:
+              - regex: "Name: "
+                with: ""
+      Photographer:
+        selector: //div[contains(@class, 'profile-wrapper')]//text()[contains(., 'Photographer:')]
+        postProcess:
+          - replace:
+              - regex: "Photographer: "
+                with: ""
+      Details: *Details
+      Code: *CodeGallery
   performerScraper:
     performer:
       Name:
         selector: //div[@class="modelProfileWrap tour_box"]/span/text()
+      Disambiguation:
+        selector: //div[@class="profileImage left clear"]/img/@src
+        postProcess:
+          - replace:
+              - regex: .+([a-z]{3}[0-9]{3})\.jpg.+
+                with: ATKingdom, $1 
       Gender:
         fixed: Female
       Image: //div[@class="profileImage left clear"]/img/@src
@@ -147,6 +222,52 @@ xPathScrapers:
         selector: //div[@class="modelInfoWrap"]/span[10]
       HairColor:
         selector: //div[@class="modelInfoWrap"]/span[12]
+  performerScraperAlt:
+    performer:
+      Name: *PerformerAlt
+      Disambiguation:
+        selector: //img[@class="set-profile-img"]/@src
+        postProcess:
+          - replace:
+              - regex: .+([a-z]{3}[0-9]{3})\.jpg.+
+                with: ATKingdom, $1
+      Gender:
+        fixed: Female
+      Image: //img[@class="set-profile-img"]/@src
+      Height:
+        selector: //div[contains(@class, 'profile-wrapper')]//text()[contains(., 'Height:')]
+        postProcess:
+          - replace:
+              - regex: "Height:"
+                with: ""
+          - feetToCm: true
+      Weight:
+        selector: //div[contains(@class, 'profile-wrapper')]//text()[contains(., 'Weight:')]
+        postProcess:
+          - replace:
+              - regex: "Weight:"
+                with: ""
+              - regex: " lbs"
+                with: ""
+          - lbToKg: true
+      Measurements:
+        selector: //div[contains(@class, 'profile-wrapper')]//text()[contains(., 'Bust Size:')]
+        postProcess:
+          - replace:
+              - regex: "Bust Size: "
+                with: ""
+      Ethnicity:
+        selector: //div[contains(@class, 'profile-wrapper')]//text()[contains(., 'Ethnicity:')]
+        postProcess:
+          - replace:
+              - regex: "Ethnicity: "
+                with: ""
+      HairColor:
+        selector: //div[contains(@class, 'profile-wrapper')]//text()[contains(., 'Hair Color:')]
+        postProcess:
+          - replace:
+              - regex: "Hair Color: "
+                with: ""
 driver:
   useCDP: true
   cookies:
@@ -155,4 +276,9 @@ driver:
           ValueRandom: 43
           Domain: .amkingdom.com
           Path: /
-# Last September 2, 2024
+    - Cookies:
+        - Name: __cfduid
+          ValueRandom: 43
+          Domain: .atkexotics.com
+          Path: /
+# Last Updated December 15, 2024
