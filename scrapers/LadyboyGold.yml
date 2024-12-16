@@ -1,9 +1,14 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: LadyboyGold
 performerByURL:
   - action: scrapeXPath
     url:
       - ladyboygold.com/index.php
-    scraper: performerScraper
+    scraper: performerScraperLadyboyGold
+  - action: scrapeXPath
+    url:
+      - tsraw.com/model/
+    scraper: performerScraperTSRaw
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -14,7 +19,7 @@ sceneByURL:
       - tsraw.com
     scraper: sceneScraperTSRaw
 xPathScrapers:
-  performerScraper:
+  performerScraperLadyboyGold:
     common:
       $infoPiece: //div[@class="info-box info"]
     performer:
@@ -28,13 +33,13 @@ xPathScrapers:
         fixed: transgender_female
       Weight:
         selector: //div[@class="modelStats"]/ul/li[contains(text(), "Weight:")]/text()
-        postProcess:
+        postProcess: &weightPostProcess
           - replace:
               - regex: .* \(([0-9]*)kg\)
                 with: $1
       Height:
         selector: //div[@class="modelStats"]/ul/li[contains(text(), "Height:")]/text()
-        postProcess:
+        postProcess: &heightPostProcess
           - replace:
               - regex: .* \(([0-9]*)cm\)
                 with: $1
@@ -51,6 +56,67 @@ xPathScrapers:
               - regex: ^
                 with: https://www.ladyboygold.com
       Details: //div[@class="profileBio"]/text()
+  performerScraperTSRaw:
+    common:
+      $infoList: //dl[contains(@class, "model")]
+      $description: //div[contains(@class, "details")]//div[contains(@class, "description")]
+    performer:
+      Name: //div[contains(@class, "model-view")]//h3[contains(@class, "title")]
+      Birthdate:
+        selector: //dt[text()="Born"]/following-sibling::dd[1]//text()|//dt[text()="Age"]/following-sibling::dd[1]//text()
+        concat: ", "
+        postProcess:
+          - javascript: |
+              if (value && value.length) {
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                const [dateStr, age] = value.split(', ')
+                const [month, dateOfMonth] = dateStr.split(' ')
+                const currentYear = new Date().getFullYear()
+                const parsedDate = new Date(currentYear, months.indexOf(month), dateOfMonth, 12)
+                const now = new Date()
+                let extraYear = 0
+                if (
+                  parsedDate.getMonth() > now.getMonth()
+                  ||
+                    (                  
+                      parsedDate.getMonth() === now.getMonth()
+                      && parsedDate.getDate() > now.getDate()
+                    )
+                ) {
+                  extraYear = 1
+                }
+                const birthDate = new Date(currentYear - age + extraYear, months.indexOf(month), dateOfMonth, 12)
+                console.log({dateStr, age, currentYear, parsedDate, now, extraYear, birthDate})
+                return birthDate.toISOString().substr(0, 10)
+              }
+              return value
+      Height:
+        selector: $infoList//dt[text()="Height"]/following-sibling::dd[1]//text()
+        postProcess: *heightPostProcess
+      Weight:
+        selector: $infoList//dt[text()="Weight"]/following-sibling::dd[1]//text()
+        postProcess: *weightPostProcess
+      Gender:
+        fixed: transgender_female
+      Measurements: $infoList//dt[text()="Measurements"]/following-sibling::dd[1]//text()
+      Ethnicity: $infoList//dt[text()="Ethnicity"]/following-sibling::dd[1]//text()
+      Country: $infoList//dt[text()="Nationality"]/following-sibling::dd[1]//text()
+      HairColor: $infoList//dt[text()="Hair Color"]/following-sibling::dd[1]//text()
+      EyeColor: $infoList//dt[text()="Eye Color"]/following-sibling::dd[1]//text()
+      Image: //div[contains(@class, "model view")]//img/@src
+      Details: $description//text()
+      Twitter:
+        selector: $description//div[contains(text(), "twitter.com")]
+        postProcess:
+          - replace:
+              - regex: .*(https://twitter.com/[^\s\.]+).*
+                with: $1
+      Instagram:
+        selector: $description//div[contains(text(), "instagram.com")]
+        postProcess:
+          - replace:
+              - regex: .*(https://instagram.com/[^\s\.]+).*
+                with: $1
   sceneScraperLadyboyGold:
     scene:
       Title: &title
@@ -103,4 +169,20 @@ xPathScrapers:
               - regex: *imagePostProcessReplaceRegex
                 with: https://tsraw.com/$1
       Code: *code
-# Last Updated May 10, 2024
+
+driver:
+  useCDP: true
+  # cookies:
+  #   - CookieURL: "https://www.tsraw.com/"
+  #     Cookies:
+  #       - Name: "nats"
+  #         Domain: ".tsraw.com"
+  #         ValueRandom: 23
+  #         Path: "/"
+  #   - CookieURL: "https://www.tsraw.com/"
+  #     Cookies:
+  #       - Name: "nats"
+  #         Domain: "www.tsraw.com"
+  #         ValueRandom: 23
+  #         Path: "/"
+# Last Updated December 16, 2024
