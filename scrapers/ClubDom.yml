@@ -87,4 +87,4 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https:"
-# Last Updated August 16, 2024
+# Last Updated December 15, 2024
