@@ -3,6 +3,7 @@ import json
 import requests
 import sys
 from datetime import datetime
+import py_common.log as log 
 from py_common.cache import cache_to_disk
 
 def fail(message: str):
@@ -17,11 +18,15 @@ def login(force=False):
 
     username = "YOUR_USERNAME"
     password = "YOUR_PASSWORD"
+    # if no credentials defined, return "undefined to bypass login"
+    if (username == "YOUR_USERNAME"):
+        log.info("Iwara login not specified")
+        return "undefined"
     login_url = 'https://api.iwara.tv/user/login'
     payload = {'email': username, 'password': password}
     response = requests.post(login_url, json=payload)
     if response.status_code != 200:
-        print(json.dumps({"error": "Login failed"}), file=sys.stdout)
+        log.error("Iwara login failed")
         sys.exit(1)
     return response.json().get('token')
 
@@ -37,6 +42,8 @@ def get_video_details(video_id, token):
         if response.status_code == 401:
             token = relogin()
             return get_video_details(video_id, token)
+        elif response.status_code == 404:
+            fail("404 - Video might be behind login wall")
 
         video_data = response.json()
     except requests.RequestException as e:
