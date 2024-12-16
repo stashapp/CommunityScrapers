@@ -63,8 +63,8 @@ xPathScrapers:
         concat: "\n\n"
         postProcess:
           - replace:
-              - regex: ([A-Za-z])(\.)([A-Za-z])
-                with: "$1$2\n\n$3"
+              - regex: (?:[A-Za-z])(\.)(?:^com|^\s)
+                with: "$1\n\n"
       Tags:
         Name:
           selector: //div[@class="metaHolder"]//a/span/text()|//script[@type="application/ld+json"][contains(text(),"genre")]/text()
