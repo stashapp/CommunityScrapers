@@ -172,17 +172,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-  # cookies:
-  #   - CookieURL: "https://www.tsraw.com/"
-  #     Cookies:
-  #       - Name: "nats"
-  #         Domain: ".tsraw.com"
-  #         ValueRandom: 23
-  #         Path: "/"
-  #   - CookieURL: "https://www.tsraw.com/"
-  #     Cookies:
-  #       - Name: "nats"
-  #         Domain: "www.tsraw.com"
-  #         ValueRandom: 23
-  #         Path: "/"
 # Last Updated December 16, 2024
