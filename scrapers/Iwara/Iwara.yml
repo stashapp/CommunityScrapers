@@ -1,0 +1,20 @@
+name: iwara
+# requires: py_common, requests, re, json, sys, datetime  # specify additional Python packages if necessary
+
+sceneByURL:
+  - url:
+      - iwara.tv/video/
+    action: script
+    script:
+      - python
+      - Iwara.py  # Replace with your actual Python scraper file name
+      - sceneByURL
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Iwara.py  # Adjust the file name as necessary
+    - sceneByFragment  # Stash or the user will supply the video ID extracted from a filename or other source
+
+# Last Updated December 15, 2024
