@@ -1,0 +1,42 @@
+name: Authority Angels
+sceneByURL:
+  - action: scrapeXPath
+    # https://authorityangels.com/updates/<scene-id>
+    url:
+      - authorityangels.com/updates/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[2]/div/div/h1/text()
+      Details:
+        selector: //div[2]/div/div/div[3]/p[2]/text()
+      Performers:
+        Name:
+          selector: //div[2]/div/div/div[4]/ul/li/a
+      Date:
+        selector: //div[2]/div/div/div[1]/ul/li[3]/text()
+        postProcess:
+          - parseDate: Jan 02, 2006
+      Studio:
+        Name:
+          fixed: 'Authority Angels'
+      Image:
+        selector: //iframe[@class='cloudflare-player']/@src
+        postProcess:
+          - replace:
+              - regex: '^(.*?)(https://authorityangels\.com/content/thumbs/\d+/[\w/-]+\.png)(.*)$'
+                with: $2
+      Tags:
+        Name:
+          selector: //div[2]/div/div/div[5]/ul/li/a
+driver:
+  cookies:
+    - CookieURL: "https://authorityangels.com"
+      Cookies:
+        - Name: "warningpopup"
+          Domain: "authorityangels.com"
+          Value: "true"
+          Path: "/"
+# Last Updated December 15, 2024
