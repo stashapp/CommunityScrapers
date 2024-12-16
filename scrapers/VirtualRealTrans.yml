@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: VirtualRealTrans
 
 sceneByURL:
@@ -60,6 +61,10 @@ xPathScrapers:
       Details: &detailsSel
         selector: //div[@class="description_container"]/p
         concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: ([A-Za-z])(\.)([A-Za-z])
+                with: "$1$2\n\n$3"
       Tags:
         Name:
           selector: //div[@class="metaHolder"]//a/span/text()|//script[@type="application/ld+json"][contains(text(),"genre")]/text()
@@ -153,4 +158,4 @@ xPathScrapers:
               }
               return value
       Image: //div[@class="feature_img_model"]/img/@src
-# Last Updated August 21, 2024
+# Last Updated December 16, 2024
