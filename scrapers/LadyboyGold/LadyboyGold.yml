@@ -24,6 +24,12 @@ sceneByName:
     - python
     - TSRaw.py
     - scene-by-name
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - TSRaw.py
+    - scene-by-fragment
 sceneByQueryFragment:
   action: script
   script:
@@ -184,4 +190,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated December 16, 2024
+# Last Updated December 17, 2024
