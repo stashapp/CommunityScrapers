@@ -1,0 +1,121 @@
+name: Pure Pass
+sceneByURL:
+  - action: scrapeXPath
+    # https://www.<site>.com/scenes/<scene-name>_vids.html
+    url:
+      - amateurcfnm.com/scenes/
+      - cfnmgames.com/scenes/
+      - girlsabuseguys.com/scenes/
+      - ladyvoyeurs.com/scenes/
+      - littledick.club/scenes/
+      - purecfnm.com/scenes/
+    scraper: purepass_scenes
+  - action: scrapeXPath
+    # https://www.<site>.com/updates/<Scene-name>.html
+    url:
+      - amateurcfnm.com/updates/
+      - cfnmgames.com/updates/
+      - girlsabuseguys.com/updates/
+      - ladyvoyeurs.com/updates/
+      - littledick.club/updates/
+      - purecfnm.com/updates/
+    scraper: purepass_updates
+xPathScrapers:
+  purepass_scenes:
+    scene:
+      Title:
+        selector: //div[3]/div/div[2]/div[1]/span/text()
+      Details:
+        selector: //div[3]/div/div[4]/span[2]/text()
+      Performers:
+        Name:
+          selector: //div[3]/div/div[4]/span[1]/a
+      Date:
+        selector: //div[3]/div/div[4]/div[1]/div/div[1]/text()
+        postProcess:
+          - parseDate: January 02, 2006
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess:
+            - map:
+                https://www.amateurcfnm.com/: Amateur CFNM
+                https://www.cfnmgames.com/: CFNM Games
+                https://www.girlsabuseguys.com/: Girls Abuse Guys
+                https://www.ladyvoyeurs.com/: Lady Voyeurs
+                https://littledick.club/: Little Dick Club
+                https://www.purecfnm.com/: Pure CFNM
+      Tags:
+        Name:
+          selector: //div[3]/div/div[4]/div[2]/a
+      Image:
+        selector: //div[3]/div/div[2]/div[2]/div[1]/div[3]/a/@href
+        subScraper:
+          selector: //base/@href | //*[contains(@id,"set-target")]/@data-src0_3x | //base/@href | //*[contains(@id,"set-target")]/@data-src0_2x | //base/@href | //*[contains(@id,"set-target")]/@data-src0_1x
+          concat: __SEP__
+          postProcess:
+            - replace:
+                - regex: __SEP__/
+                  with: ""
+            - replace:
+                - regex: (https://[^/]+(?:/tour)?/content//contentthumbs/\d+/\d+/[\w\d-]+-\dx\.jpg)((?:(?:tour/)?content//contentthumbs/\d+/\d+/[\w\d-]+-\dx\.jpg)*)
+                  with: $1
+  purepass_updates:
+    common:
+      $title: //div[3]/div[1]/div[2]/div[2]/div[1]/div/span[1]/text()
+    scene:
+      Title:
+        selector: //div[3]/div[1]/div[2]/div[2]/div[1]/div/span[1]/text()
+      Details:
+        selector: //div[3]/div[1]/div[2]/div[2]/div[1]/div/span[4]/text()
+      Performers:
+        Name:
+          selector: //div[3]/div[1]/div[2]/div[2]/div[1]/div/span[2]/a
+      Date:
+        selector: //div[3]/div[1]/div[2]/div[2]/div[1]/div/span[3]
+        postProcess:
+          - parseDate: January 02, 2006
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess:
+            - map:
+                https://www.amateurcfnm.com/: Amateur CFNM
+                https://www.cfnmgames.com/: CFNM Games
+                https://www.girlsabuseguys.com/: Girls Abuse Guys
+                https://www.ladyvoyeurs.com/: Lady Voyeurs
+                https://littledick.club/: Little Dick Club
+                https://www.purecfnm.com/: Pure CFNM
+      Image:
+        selector: //base/@href | //*[contains(@id,"set-target")]/@data-src0_3x | //base/@href | //*[contains(@id,"set-target")]/@data-src0_2x | //base/@href | //*[contains(@id,"set-target")]/@data-src0_1x
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: __SEP__/
+                with: ""
+          - replace:
+              - regex: (https://[^/]+(?:/tour)?/content//contentthumbs/\d+/\d+/[\w\d-]+-\dx\.jpg)((?:(?:tour/)?content//contentthumbs/\d+/\d+/[\w\d-]+-\dx\.jpg)*)
+                with: $1
+  # Scraping tags using /updates/ url Only returns one tag sadly due to subscraping, keeping it in case stash scraper gets updated in the future,
+  # if you want all tags, scrape directly using https://www.<site>.com/scenes/<scene-name>_vids.html
+      Tags:
+        Name:
+          selector: //base/@href | $title
+          concat: "__SEP__"
+          postProcess:
+            - replace:
+                - regex: __SEP__
+                  with: "scenes/"
+            - replace:
+                - regex: ' '
+                  with: '-'
+            - replace:
+                - regex: \'
+                  with: ''
+            - replace:
+                - regex: '$'
+                  with: '_vids.html'
+            - subScraper:
+                selector: //div[3]/div/div[4]/div[2]/a
+
+# Last Updated December 17, 2024
