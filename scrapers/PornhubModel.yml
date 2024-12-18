@@ -1,0 +1,26 @@
+name: PornhubModel
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.pornhub.com/user/search?username={}
+  scraper: performerSearch
+
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
+      URL:
+        selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.pornhub.com"
+
+driver:
+  cookies:
+    - CookieURL: "https://www.pornhub.com"
+      Cookies:
+        - Name: "accessAgeDisclaimerPH"
+          Domain: ".pornhub.com"
+          Value: "1"
+          Path: "/"
+# Last Updated December 18, 2024
