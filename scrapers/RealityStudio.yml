@@ -8,6 +8,20 @@ sceneByURL:
       - menareslaves.com/gallery.html
       - subbygirls.com/gallery.html
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.{filename}
+  queryURLReplace:
+    filename:
+      - regex: ' '
+        with: ''
+      - regex: '^((?i)(?:Female\s*Worship|men\s*are\s*slaves|Cum\s*Countdown|Goddess\s*Kitra|Subby\s*Girls)).*?(?:#)?(\d+)' # site name - performers - #code 4k.ext
+        with: $1.com/gallery.html?$2
+      - regex: '(?i)\.mp4|mkv|wmv|avi$'
+        with: ''
+      - regex: '(?i)(4k|(?:480|720|1080|2160)p)' # sometimes '4k' gets mixed up with the studio code
+        with: ''
+  scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
