@@ -1,10 +1,11 @@
 name: Brazzers
 # requires: py_common, AyloAPI
-# scrapes: Asses in Public, Baby Got Boobs, Big Butts Like It Big, Big Tits at School, Big Tits at Work, Big Tits In Sports, Big Tits In Uniform, Big Wet Butts, BrazzersExxtra, Brazzers Live, Brazzers Vault, Busty & Real, Bustyz, CFNM, Day With A Pornstar, Dirty Masseur, Doctor Adventures, Hot And Mean, Hot Chicks Big Asses, JugFuckers, Milfs Like It Big, Mommy Got Boobs, Moms in control, Pornstars Like it Big, Real Wife Stories, Shes Gonna Squirt, Teens Like It Big, ZZ Series
+# scrapes: Asses in Public, Baby Got Boobs, Big Butts Like It Big, Big Tits at School, Big Tits at Work, Big Tits In Sports, Big Tits In Uniform, Big Wet Butts, BrazzersExxtra, Brazzers Live, Brazzers Vault, Brazzers VR, Busty & Real, Bustyz, CFNM, Day With A Pornstar, Dirty Masseur, Doctor Adventures, Hot And Mean, Hot Chicks Big Asses, JugFuckers, Milfs Like It Big, Mommy Got Boobs, Moms in control, Pornstars Like it Big, Real Wife Stories, Shes Gonna Squirt, Teens Like It Big, ZZ Series
 galleryByURL:
   - action: script
     url:
       - brazzers.com/video
+      - brazzersvr.com/video
       - brazzersnetwork.com/video
     script:
       - python
@@ -20,6 +21,7 @@ sceneByURL:
   - action: script
     url:
       - brazzers.com/video
+      - brazzersvr.com/video
       - brazzersnetwork.com/video
     script:
       - python
@@ -53,6 +55,7 @@ performerByURL:
   - action: script
     url:
       - brazzers.com/pornstar/
+      - brazzersvr.com/pornstar/
       - brazzersnetwork.com/pornstar/
     script:
       - python
@@ -68,6 +71,7 @@ movieByURL:
   - action: script
     url:
       - brazzers.com/movie
+      - brazzersvr.com/movie
       - brazzersnetwork.com/movie
     script:
       - python

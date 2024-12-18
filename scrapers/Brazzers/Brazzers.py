@@ -51,9 +51,7 @@ def brazzers(obj: Any, _) -> Any:
 
 
 if __name__ == "__main__":
-    domains = [
-        "brazzers",
-    ]
+    domains = ["brazzers", "brazzersvr"]
     op, args = scraper_args()
     result = None
 
