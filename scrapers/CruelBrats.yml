@@ -1,0 +1,47 @@
+name: CruelBrats
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cruelbrats.com/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="info-box-pink"]//h7/text()
+        postProcess:
+        - javascript:
+            if (value && value.length) {
+              let words = value.split(' ');
+              for (let i = 0; i < words.length; i++) {
+                words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1).toLowerCase();
+              }
+              return words.join(' ');
+            }
+      Details: //div[@class="info-box-white"]//h3/text()[1]
+      Performers:
+        Name:
+          selector: //div[7]/div/div/h7
+          postProcess:
+           - replace:
+             - regex: '(?i)MORE CONTENT FROM.'
+               with: ""
+      Date:
+        selector: //div[5]//h3/text()[2]
+        postProcess:
+          - replace:
+            - regex: 'Added:\s(\d{2}\s\w{3}\s\d{4})(.*)'
+              with:  "$1"
+          - parseDate: "02 Jan 2006"
+      Studio:
+        Name:
+          fixed: 'Cruel Brats'
+      Tags:
+        Name:  //div[5]//div/h3//a/text()
+      Image:
+        selector: //div[2]/div/video[contains(@poster,'images/Backgrounds/')]/@poster
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://cruelbrats.com/
+# Last Updated October 06, 2024

@@ -4,6 +4,18 @@ sceneByURL:
     url:
       - stasyqvr.com/virtualreality
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://stasyqvr.com/virtualreality/scene/id/{filename}
+  queryURLReplace:
+    filename:
+      - regex: ^(StasyQVR)_([^_]+)_(\d+)_(\d+)_([A-Z]+)_(\d+)\.([a-zA-Z0-9]+)$ # official site file naming scheme: StasyQVR_example scene name_2880_999_LR_180.mp4 # StasyQVR_scene name_resolution_code_LR_180.mp4
+        with: $4-$2
+      - regex: " "
+        with: '_'
+      - regex: "'"
+        with: ''
+  scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -30,4 +42,4 @@ xPathScrapers:
           - replace:
               - regex: '^background-image: url\(|\);$'
                 with: ""
-# Last Updated October 20, 2023
+# Last Updated December 17, 2024

@@ -40,7 +40,7 @@ xPathScrapers:
       Details:
         selector: //strong[contains(.,"Description:")]/following-sibling::text()
       Image:
-        selector: //div[@class="videoplayer"]/img//@src0_1x
+        selector: //div[@class='videoplayer']/img/@src0_3x | //div[@class='videoplayer']/img/@src0_2x | //div[@class='videoplayer']/img/@src0_1x
         postProcess:
           - replace:
               - regex: ^
@@ -87,4 +87,4 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https:"
-# Last Updated August 16, 2024
+# Last Updated December 15, 2024
