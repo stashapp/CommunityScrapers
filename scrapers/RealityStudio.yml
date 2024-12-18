@@ -53,7 +53,7 @@ xPathScrapers:
       Studio:
         Name: //title/text()
       Image:
-          selector: //div[@id="footer"]/p/img/@src | //*[@id="gallerycontainer"]/center/div[5]/img/@src
+          selector: //div[@id="footer"]/p/img/@src| (//*[@id="gallerycontainer"]//img[contains(@src, '') and not(contains(@src, 'header')) and not(contains(@src, 'company'))][1])/@src
           concat: " "
           postProcess:
           - replace:
