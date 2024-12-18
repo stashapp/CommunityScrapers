@@ -150,12 +150,10 @@ xPathScrapers:
           postProcess: *baseUrl
 
 driver:
-  cookies:
-    - CookieURL: "https://www.hotmovies.com"
-      Cookies:
-        - Name: "ageConfirmed"
-          Domain: "www.hotmovies.com"
-          Value: "true"
-          Path: "/"
-# Last Updated October 18, 2024
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper
+    - Key: Cookie
+      Value: ageConfirmed=true
+# Last Updated December 17, 2024
 
