@@ -149,8 +149,7 @@ const fuseConfig = {
 let fuse;
 
 // fuse search
-async function search(event) {
-  const searchValue = event.target.value;
+async function search(searchValue) {
   if (searchValue.length < 3) return setTable(rawScraperList);
   const results = fuse.search(searchValue, {
     limit: 20,
@@ -158,6 +157,7 @@ async function search(event) {
   console.debug(searchValue, results);
   const filterTable = results.map((result) => result.item);
   setTable(filterTable, searchValue);
+  window.location.hash = searchValue
 }
 
 // parse scrapers.json
@@ -169,4 +169,10 @@ const fuseIndex = await fetch("assets/fuse-index.json")
   .then((response) => response.json())
   .then((data) => Fuse.parseIndex(data));
 fuse = new Fuse(rawScraperList, fuseConfig, fuseIndex);
-searchInput.addEventListener("input", debounce(search, 300));
+// if query in URL, jump automatically
+const query = window.location.hash.slice(1)
+if (query) {
+  searchInput.value = query;
+  search(query);
+}
+searchInput.addEventListener("input", event => debounce(search(event.target.value), 300));
