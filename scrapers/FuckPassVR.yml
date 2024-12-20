@@ -4,9 +4,25 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - fuckpassvr.com/video/
-    scraper: sceneScraper
+    scraper: fuckpassvrScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - fuckpassvr.com/vr-pornstars/
+    scraper: fuckpassvrScraper
 xPathScrapers:
-  sceneScraper:
+  fuckpassvrScraper:
+    performer:
+      Name: //h1
+      Measurements: //p[contains(text(), "Measurements:")]/span/text()
+      Height: //p[contains(text(), "Height:")]/span/text()
+      Weight: //p[contains(text(), "Weight:")]/span/text()
+      EyeColor: //p[contains(text(), "Eye Color:")]/span/text()
+      HairColor: //p[contains(text(), "Hair Color:")]/span/text()
+      Country: //p[contains(text(), "Country:")]/span/text()
+      Image: //div[@class="pornstar"]/img/@src
+      Gender:
+        fixed: Female
     scene:
       Title: //main//div[@class="video__top"]//h2[@class="video__title"]
       Details:
