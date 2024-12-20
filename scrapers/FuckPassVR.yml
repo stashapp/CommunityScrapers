@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: FuckPassVR
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - fuckpassvr.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //main//div[@class="video__top"]//h2[@class="video__title"]
+      Details:
+        selector: //div[contains(@class, "readMoreWrapper2")]/p
+        concat: "\n\n"
+      Tags:
+        Name:
+          selector: //p[span[text()="Tags:"]]/*/text()
+          postProcess:
+            - replace:
+                - regex: ^Tags:$
+                  with: Virtual Reality
+      Performers:
+        Name: //div[@class="models"]/a//text()
+      Image:
+        selector: &imageSel //web-vr-video-player/@coverimage
+        postProcess:
+          - replace:
+              - regex: ^'(.*)'$
+                with: $1
+      Studio:
+        Name:
+          fixed: FuckPassVR
+      Date:
+        selector: //span[text()="Released:"]//following-sibling::text()
+        postProcess:
+          - parseDate: Jan 2 2006
+      Code:
+        selector: *imageSel
+        postProcess:
+          - replace:
+              - regex: .*/scenes/([^/]*)/.*
+                with: $1
+# Last Updated December 12, 2024
