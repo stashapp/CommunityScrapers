@@ -26,13 +26,24 @@ xPathScrapers:
     scene:
       Title: //main//div[@class="video__top"]//h2[@class="video__title"]
       Details:
-        selector: //div[contains(@class, "readMoreWrapper2")]/p
-        concat: "\n\n"
+        selector: //meta[@property="og:description"]/@content
+        postProcess:
+          - replace:
+              # maintain line breaks
+              - regex: <br>
+                with: "\n"
+              # maintain paragraph breaks
+              - regex: "</p>(\n*)<p>"
+                with: "$1\n"
+              # strip any remaining tags
+              - regex: <[^>]+>
+                with: ""
       Tags:
         Name:
           selector: //p[span[text()="Tags:"]]/*/text()
           postProcess:
             - replace:
+                # this is a "hack" to add a fixed tag to the list of tags
                 - regex: ^Tags:$
                   with: Virtual Reality
       Performers:
