@@ -20,7 +20,12 @@ xPathScrapers:
       Details: /html/head/meta[@name="description"]/@content
       Performers:
         Name: $scene/div[@class="player"]/div[@class="actress"]/a/text()
-      Image: $scene/div[@class="player"]//picture/img/@data-src
+      Image:
+        selector: $scene/div[@class="player"]//picture/source[last()]/@srcset
+        postProcess:
+          - replace:
+            - regex: (.+1x, )(.+)( 2x)
+              with: $2
 driver:
   useCDP: true
   cookies:
@@ -96,4 +101,4 @@ driver:
           Domain: ".steppov.com"
           Value: "1"
           Path: "/"
-# Last Updated August 26, 2024
+# Last Updated December 20, 2024
