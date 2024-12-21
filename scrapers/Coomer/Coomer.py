@@ -50,8 +50,7 @@ def user_query (service, user):
             data = user_lookup_response.json()
             log.debug(data)
             return data['name']
-    else:
-        return user
+    return user
        
 def post_query(service, user_id, id):
     coomer_getpost_url = f"https://coomer.su/api/v1/{service}/user/{user_id}/post/{id}"
@@ -113,7 +112,7 @@ def sceneByFragment(fragment):
 
     hash_lookup_response = requests.get(coomer_searchhash_url + str(readable_hash), headers=headers)
 
-    
+
     if hash_lookup_response.status_code == 200:
         data = hash_lookup_response.json()
         post = data['posts'][0]  # Not sure why there would be more than one result, we'll just use the first one
