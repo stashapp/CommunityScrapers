@@ -59,4 +59,6 @@ xPathScrapers:
           - feetToCm: true
       Image: //div[@class="modelBioPic"]/img/@src0_1x
 
-# Last Updated Sep 28, 2024
+driver:
+  useCDP: true
+# Last Updated December 22, 2024
