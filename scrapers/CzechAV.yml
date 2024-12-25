@@ -1,0 +1,72 @@
+name: CzechAV
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - creativeporn.com/video/
+      - czechamateurs.com/video/
+      - czechbangbus.com/video/
+      - czechbitch.com/video/
+      - czechcabins.com/video/
+      - czechcouples.com/video/
+      - czechestrogenolit.com/video/
+      - czechexperiment.com/video/
+      - czechfantasy.com/video/
+      - czechfirstvideo.com/video/
+      - czechgangbang.com/video/
+      - czechgardenparty.com/video/
+      - czechgayamateurs.com/video/
+      - czechgaycasting.com/video/
+      - czechgaycouples.com/video/
+      - czechgayfantasy.com/video/
+      - czechgaymassage.com/video/
+      - czechgaysolarium.com/video/
+      - czechharem.com/video/
+      - czechhomeorgy.com/video/
+      - czechlesbians.com/video/
+      - czechmassage.com/video/
+      - czechmegaswingers.com/video/
+      - czechorgasm.com/video/
+      - czechparties.com/video/
+      - czechpawnshop.com/video/
+      - czechpool.com/video/
+      - czechsauna.com/video/
+      - czechsnooper.com/video/
+      - czechsolarium.com/video/
+      - czechspy.com/video/
+      - czechstreets.com/video/
+      - czechsupermodels.com/video/
+      - czechtaxi.com/video/
+      - czechwifeswap.com/video/
+      - gayhorrorporn.com/video/
+      - horrorporn.com/video/
+      - movieporn.com/video/
+      - perversefamily.com/video/
+      - powerfetish.com/video/
+      - unrealporn.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1/span
+      Code:
+        selector: //h1/div/span
+        postProcess:
+          - replace:
+              - regex: .+?(\d+)$
+                with: $1
+      Details: //div[contains(@class,'detail-description--longer')]/p
+      Tags:
+        Name: //div[@data-part="tags"]//a/span
+      Performers:
+        Name: //span[contains(., "Featuring:")]/following-sibling::a
+      Studio:
+        Name: //img[contains(@class, "logo")]/@alt
+      Image: //video/@poster
+      Date:
+        selector: //script[@type="application/ld+json"]
+        postProcess:
+          - replace:
+              - regex: .+(?:"uploadDate":\s*")([^T]+).+
+                with: $1
+          - parseDate: 2006-01-02
+# Last Updated May 23, 2024
