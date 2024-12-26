@@ -29,10 +29,10 @@ xPathScrapers:
               with: $1
           - parseDate: 2006-01-02
       Tags:
-        Name: //div[contains(@class,"tag-container") and contains(.,"Tags:")]//span[@class="name"]/text()
+        Name: //div[contains(@class,"tag-container") and contains(.,"Tags:")]//span[@class="name"]/text()|//div[contains(@class,"tag-container") and contains(.,"Parodies:")]//span[@class="name"]/text()
       Performers:
         Name: //div[contains(@class,"tag-container") and contains(.,"Characters:")]//span[@class="name"]/text()
       Studio:
         Name: //div[contains(@class,"tag-container") and contains(.,"Artists:")]//span[@class="name"]/text()
 
-# Last Updated October 24, 2020
+# Last Updated December 24, 2024
