@@ -81,8 +81,16 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02 2006
       Synopsis:
-        selector: //div[contains(@class,"synopsis-content")]//text()
-        concat: " "
+        selector: //div[contains(@class,"synopsis-content")]/*
+        concat: "\n"
+        postProcess:
+          - replace:
+              # Since we want to remove only occurences at the end and either
+              # one of them might be missing, we need to run the regex twice
+              - regex: "Show (Less|More)$"
+                with: ""
+              - regex: "Show (Less|More)$"
+                with: ""
       Studio:
         Name: //a[@label="Studio"]/text()
       FrontImage: //a[@id="front-cover"]/@data-href
