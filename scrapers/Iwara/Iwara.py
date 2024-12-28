@@ -61,7 +61,7 @@ def to_scraped_scene(json_from_api: dict):
     # Example: https://www.iwara.tv/video/2DORyCe5fVqXz6/
     elif (file_id := dig(json_from_api, "file", "id")) and (
         idx := dig(json_from_api, "thumbnail")
-    ):
+    ) is not None:
         image = f"https://i.iwara.tv/image/original/{file_id}/thumbnail-{idx:02}.jpg"
     else:
         image = "https://placehold.co/600x400?text=Scraper+broken"
