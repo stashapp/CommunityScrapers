@@ -55,6 +55,7 @@ studio_map = {
     "nylonperv.com": "Nylon Perv",
     "nympho.com": "Nympho",
     "poundedpetite.com": "Pounded Petite",
+    "povperv.com": "POV Perv",
     "premium-nickmarxx.com": "Nick Marxx",
     "red-xxx.com": "Red-XXX",
     "rickysroom.com": "Ricky's Room",
