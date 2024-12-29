@@ -12,7 +12,12 @@ sceneByURL:
 jsonScrapers:
   sceneScraper:
     scene:
-      Title: text
+      Title: 
+        selector: "[text,[handle,timestamp].@flatten]"
+        postProcess:
+          - replace:
+              - regex: .+\"(.+)"\,\"(\d{4}-\d{2}-\d{2}).+\".+
+                with: $1 - $2
       Details: text
       Code: postId
       URL:
@@ -34,4 +39,4 @@ jsonScrapers:
              - replace:
                 - regex: (.+)
                   with: "$1 (ManyVids)"
-# Last Updated October 20, 2024
+# Last Updated December 27, 2024
