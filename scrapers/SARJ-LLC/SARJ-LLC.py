@@ -29,33 +29,17 @@ except ModuleNotFoundError:
 def scrape_url(url, scrape_type):
     parsed = urlparse(url)
 
-    path = parsed.path.split('/')
+    *_, date, name = parsed.path.split('/')
     base_url = f"{parsed.scheme}://{parsed.netloc}"
+    scraped = None
     if scrape_type == 'scene':
-        try:
-            index = path.index('movie')
-            scraped = scrape_movie(base_url, path[index + 1], path[index + 2])
-        except ValueError:
-            log.error(f"scene scraping not supported for {url}")
-            return None
+        scraped = scrape_movie(base_url, date, name)
     elif scrape_type == 'gallery':
-        try:
-            index = path.index('gallery')
-            scraped = scrape_gallery(base_url, path[index + 1], path[index + 2])
-            if scraped and (director := scraped.pop("Director", None)):
-                scraped["Photographer"] = director
-        except ValueError:
-            log.error(f"gallery scraping not supported for {url}")
-            return None
+        scraped = scrape_gallery(base_url, date, name)
+        if scraped and (director := scraped.pop("Director", None)):
+            scraped["Photographer"] = director
     elif scrape_type == 'performer':
-        try:
-            index = path.index('model')
-            scraped = scrape_model(base_url, path[index + 1])
-        except ValueError:
-            log.error(f"performer scraping not supported for {url}")
-            return None
-    else:
-        return None
+        scraped = scrape_model(base_url, name)
 
     return scraped
 
