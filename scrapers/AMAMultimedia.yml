@@ -45,6 +45,7 @@ sceneByURL:
       - povd.com/video/
       - puremature.com/video/
       - spyfam.com/video/
+      - strippers4k.com/video/
       - tiny4k.com/video/
       - wetvr.com/video/
 
@@ -91,4 +92,4 @@ xPathScrapers:
             - replace:
                 - regex: .*?\d{4}\s+([^.]+).*
                   with: $1
-# Last Updated March 22, 2024
+# Last Updated December 31, 2024
