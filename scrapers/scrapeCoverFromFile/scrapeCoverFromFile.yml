@@ -1,0 +1,8 @@
+name: "Cover From File"
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - scrapeCoverFromFile.py
+      - scene_fragment
+# Last Updated December 31, 2024
