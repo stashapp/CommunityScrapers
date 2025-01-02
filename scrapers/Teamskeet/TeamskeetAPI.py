@@ -259,7 +259,7 @@ studioApiName = scene_api_json['site'].get('siteName') if IS_MEMBER else scene_a
 log.debug("Studio API name is '" + studioApiName + "'")
 scrape['studio']['name'] = studioMap[studioApiName] if studioApiName in studioMap else studioApiName
 scrape['tags'] = [{"name": x} for x in tags]
-scrape['code'] = scene_api_json.get('cId', '').split('/')[-1]
+scrape['code'] = scene_id if IS_MEMBER else scene_api_json.get('cId', '').split('/')[-1]
 for tag in studioDefaultTags.get(studioApiName, []):
     log.debug("Assiging default tags - " + tag)
     scrape['tags'].append({"name": tag})
