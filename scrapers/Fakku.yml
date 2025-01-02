@@ -1,0 +1,25 @@
+name: "Fakku"
+galleryByURL:
+  - action: scrapeXPath
+    url: 
+      - fakku.net
+    scraper: galleryScraper
+
+xPathScrapers:  
+  galleryScraper:
+    gallery:
+      Title: //h1/text()
+      Studio:
+        Name:
+          selector: //div[contains(text(),"Artist")]/following-sibling::div[1]/a/text()
+      Tags:
+        Name:
+          selector: //div[contains(@class,"w-full")]/a[contains(@href,"tags")]|//div[contains(text(),"Parody")]/following-sibling::div[1]/a/text()|//div[contains(text(),"Magazine")]/following-sibling::div[1]/a/text()|//div[contains(text(),"Event")]/following-sibling::div[1]/a/text()|//div[contains(text(),"Circle")]/following-sibling::div[1]/a/text()|//div[contains(text(),"Publisher")]/following-sibling::div[1]/a/text()
+      Details: 
+        selector: //div[contains(@class,"leading-relaxed")]//text()
+        concat: "\n\n"
+
+driver:
+  useCDP: true
+
+# Last Updated December 23, 2024
