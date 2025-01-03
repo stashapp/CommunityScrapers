@@ -46,7 +46,7 @@ def bangbros(obj: Any, _) -> Any:
         lambda x: x.replace("/scene/", "/video/").replace("www.bangbros.com", domain),
     )
     fixed = replace_all(
-        obj,
+        fixed,
         "urls",
         lambda x: x.replace("/scene/", "/video/").replace("www.bangbros.com", domain),
     )
