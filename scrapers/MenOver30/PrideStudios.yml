@@ -1,42 +1,44 @@
 # requires: Algolia
-name: "MenOver30"
+name: "Pride Studios"
 sceneByURL:
   - action: script
     url:
       - menover30.com/en/video
       - pridestudios.com/en/video
+      - extrabigdicks.com/en/video
     script:
       - python
       - ../Algolia/Algolia.py
-      - menover30
+      - pridestudios
 sceneByFragment:
   action: script
   script:
     - python
     - ../Algolia/Algolia.py
-    - menover30
+    - pridestudios
 sceneByName:
   action: script
   script:
     - python
     - ../Algolia/Algolia.py
-    - menover30
+    - pridestudios
     - searchName
 sceneByQueryFragment:
   action: script
   script:
     - python
     - ../Algolia/Algolia.py
-    - menover30
+    - pridestudios
     - validName
 galleryByURL:
   - action: script
     url:
       - menover30.com/en/photo/
       - pridestudios.com/en/photo/
+      - extrabigdicks.com/en/photo/
     script:
       - python
       - ../Algolia/Algolia.py
-      - menover30
+      - pridestudios
       - gallery
-# Last Updated December 22, 2022
+# Last Updated January 6, 2025
