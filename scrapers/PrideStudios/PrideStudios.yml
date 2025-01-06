@@ -3,9 +3,10 @@ name: "Pride Studios"
 sceneByURL:
   - action: script
     url:
+      - extrabigdicks.com/en/video
+      - familycreep.com/en/video
       - menover30.com/en/video
       - pridestudios.com/en/video
-      - extrabigdicks.com/en/video
     script:
       - python
       - ../Algolia/Algolia.py
@@ -33,9 +34,10 @@ sceneByQueryFragment:
 galleryByURL:
   - action: script
     url:
+      - extrabigdicks.com/en/photo/
+      - familycreep.com/en/photo/
       - menover30.com/en/photo/
       - pridestudios.com/en/photo/
-      - extrabigdicks.com/en/photo/
     script:
       - python
       - ../Algolia/Algolia.py
