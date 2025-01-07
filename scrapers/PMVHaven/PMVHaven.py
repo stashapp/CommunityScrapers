@@ -73,14 +73,14 @@ def getVideoById(sceneId):
     }
 
     if description := dig(video, "description"):
-        scraped["description"] = description
+        scraped["details"] = description
 
     if songs := dig(video, "music"):
         music = "Music:\n" + "\n".join(songs)
         if "description" in scraped:
-            scraped["description"] += "\n" + music
+            scraped["details"] += "\n" + music
         else:
-            scraped["description"] = music
+            scraped["details"] = music
 
     if creator := dig(video, "creator"):
         scraped["studio"] = {"name": creator}
@@ -90,6 +90,7 @@ def getVideoById(sceneId):
     scraped["tags"] = sorted(
         {tag.strip().lower(): tag.strip() for tag in tags}.values()
     )
+    scraped["tags"] = [{"name": tagName} for tagName in scraped["tags"]]
 
     return scraped
 
