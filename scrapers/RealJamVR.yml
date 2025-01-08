@@ -28,10 +28,9 @@ xPathScrapers:
       Date: &date
         selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
-          - replace:
-            - regex: ^([a-zA-Z]{3})\D*(\d{1,2},\s*\d+)$
-              with: $1. $2
+          # both date formats are used interchangeably
           - parseDate: Jan. 2, 2006
+          - parseDate: January 2, 2006
       Performers: &performers
         Name: //div[contains(@class,"scene-view")]/a[contains(@href,"/actor/")]
       Tags: &tags
@@ -58,6 +57,8 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .*/scenes/(\d+)/.*
+                with: $1
+              - regex: .*/videos_app/\w+/(\d+)_.*
                 with: $1
     gallery:
       Title: *title
