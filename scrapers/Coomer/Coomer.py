@@ -5,6 +5,7 @@ import stashapi.log as log
 import requests
 import re
 from bs4 import BeautifulSoup as bs
+import io
 
 # TODO: Enable searching from other fields?
 
@@ -18,6 +19,7 @@ def debugPrint(t):
 
 # Get JSON from Stash
 def readJSONInput():
+    sys.stdin = io.TextIOWrapper(sys.stdin.buffer, encoding='utf-8')
     input = sys.stdin.read()
     return json.loads(input)
 
