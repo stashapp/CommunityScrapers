@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: RealJamVR
 sceneByURL: &byURL
   - action: scrapeXPath
@@ -27,9 +28,15 @@ xPathScrapers:
       Performers: &performers
         Name: //div[contains(@class,"scene-view")]/a[contains(@href,"/actor/")]
       Tags: &tags
-        Name: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon" and not(i)]
+        Name:
+          selector: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon"]
+          postProcess:
+            - replace:
+                # use the duration "specs-icon" as a fixed value replacement "hack"
+                - regex: \d+:\d+:\d+
+                  with: Virtual Reality
       Details: &details
-        selector: //div[@class="opacity-75 my-2"]
+        selector: //div[contains(@class, "collapse-content-wrapper")]/div[contains(@class, "collapse-content")]
       Image:
         selector: //*[@id="video-player"]//@poster
       Studio: &studio
@@ -39,6 +46,12 @@ xPathScrapers:
           - replace:
               - regex: '(.*)\| ([^\|]+VR)$'
                 with: $2
+      Code:
+        selector: //dl8-video/source[1]/@src
+        postProcess:
+          - replace:
+              - regex: .*/scenes/(\d+)/.*
+                with: $1
     gallery:
       Title: *title
       Date: *date
@@ -47,4 +60,4 @@ xPathScrapers:
       Details: *details
       Studio: *studio
       
-# Last Updated October 22, 2023
+# Last Updated January 8, 2025
