@@ -79,6 +79,7 @@ xPathScrapers:
       Birthdate:
         selector: //div[span[text()="Date of Birth:"]]/text()
         postProcess:
+          # both date formats are used interchangeably
           - parseDate: Jan. 2, 2006
           - parseDate: January 2, 2006
       Height:
