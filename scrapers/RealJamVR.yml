@@ -9,6 +9,13 @@ sceneByURL: &byURL
 
 galleryByURL: *byURL
 
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - porncornvr.com/actor/
+      - realjamvr.com/actor/
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -59,5 +66,38 @@ xPathScrapers:
       Tags: *tags
       Details: *details
       Studio: *studio
-      
+  performerScraper:
+    performer:
+      Name: //h1
+      Gender: //div[span[text()="Gender:"]]/text()
+      Country:
+        selector: //div[span[text()="Birth Place:"]]/text()
+        postProcess:
+          - replace:
+              - regex: .*,
+                with: ""
+      Birthdate:
+        selector: //div[span[text()="Date of Birth:"]]/text()
+        postProcess:
+          - parseDate: Jan. 2, 2006
+          - parseDate: January 2, 2006
+      Height:
+        selector: //div[span[text()="Height:"]]/text()
+        postProcess:
+          - replace:
+              - regex: .*\ (\d+)\ cm.*
+                with: $1
+      Weight:
+        selector: //div[span[text()="Weight:"]]/text()
+        postProcess:
+          - replace:
+              - regex: .*\ (\d+)\ kg.*
+                with: $1
+      HairColor: //div[span[text()="Hair color:"]]/text()
+      EyeColor: //div[span[text()="Eyes color:"]]/text()
+      Tags:
+        Name: //div[span[text()="Tags:"]]/a/text()
+      Image: //div[contains(@class, "actor-view")]//img/@src
+      Piercings: //div[span[text()="Piercing:"]]/text()
+      Tattoos: //div[span[text()="Tattoo:"]]/text()
 # Last Updated January 8, 2025
