@@ -47,7 +47,8 @@ T = TypeVar("T")
 SHARED_SELECTORS = {
     "title": "//h1/text()",
     "director": '//p[@class="bioheading"][contains(text(),"Director") or contains(text(),"Directors")]/following-sibling::p[@class="biodata"][1]/a/text()',
-    "studio": '//p[@class="bioheading"][contains(text(),"Studio") or contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]//text()',
+    "studio": '//p[@class="bioheading"][contains(text(),"Studio")]/following-sibling::p[@class="biodata"][1]//text()',
+    "distributor": '//p[@class="bioheading"][contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]//text()',
     "date": '//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()',
     "synopsis": '//div[@id="synopsis"]/div[@class="padded-panel"]//text()',
 }
@@ -269,6 +270,9 @@ def scene_studio(tree):
     return maybe(
         tree.xpath(SHARED_SELECTORS["studio"]),
         lambda s: {"name": s},
+    ) or maybe(
+        tree.xpath(SHARED_SELECTORS["distributor"]),
+        lambda s: {"name": s},
     )
 
 
@@ -300,6 +304,9 @@ def scene_title(tree):
 def movie_studio(tree):
     return maybe(
         tree.xpath(SHARED_SELECTORS["studio"]),
+        lambda s: {"name": s},
+    ) or maybe(
+        tree.xpath(SHARED_SELECTORS["distributor"]),
         lambda s: {"name": s},
     )
 
