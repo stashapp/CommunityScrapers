@@ -90,7 +90,11 @@ xPathScrapers:
                 with: "/"
       Studio:
         Name:
-          fixed: My Dirty Hobby
+          selector: $script
+          postProcess:
+            - replace:
+                - regex: '.*"thumbImg":{"title":"([^"]+)".*'
+                  with: $1
 
 driver:
   cookies:
@@ -106,4 +110,4 @@ driver:
           Domain: ".mydirtyhobby.de"
           Value: "1"
           Path: "/"
-# Last Updated June 28, 2024
+# Last Updated January 10, 2025
