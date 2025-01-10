@@ -29,8 +29,14 @@ xPathScrapers:
         selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
           # both date formats are used interchangeably
-          - parseDate: Jan. 2, 2006
-          - parseDate: January 2, 2006
+          # e.g.
+          # Jan. 2, 2006
+          # January 2, 2006
+          # Sept. 2, 2024
+          - replace:
+              - regex: ([\w]{3})([^\ ]+)?(.*)
+                with: $1$3
+          - parseDate: Jan 2, 2006
       Performers: &performers
         Name: //div[contains(@class,"scene-view")]/a[contains(@href,"/actor/")]
       Tags: &tags
@@ -102,4 +108,4 @@ xPathScrapers:
       Image: //div[contains(@class, "actor-view")]//img/@src
       Piercings: //div[span[text()="Piercing:"]]/text()
       Tattoos: //div[span[text()="Tattoo:"]]/text()
-# Last Updated January 8, 2025
+# Last Updated January 10, 2025
