@@ -22,6 +22,11 @@ studio_map = {
     "MomIsHorny": "Mom Is Horny",
 }
 
+studio_domains = {
+    "Sex Selector": "www.sexselector.com",
+    "Virtual Porn": "virtualporn.com",
+}
+
 
 def redirect(url: str) -> str:
     if not url or "/video" not in url:
@@ -32,23 +37,24 @@ def redirect(url: str) -> str:
 
 
 def bangbros(obj: Any, _) -> Any:
-    domain = (
-        "virtualporn.com"
-        if dig(obj, "studio", "name") == "Virtual Porn"
-        else "bangbros.com"
-    )
+    domain = studio_domains.get(dig(obj, "studio", "name"), "bangbros.com")
+
+    def urlfixer(x):
+        if domain == "www.sexselector.com":
+            return x.replace("www.bangbros.com", domain)
+        return x.replace("/scene/", "/video/").replace("www.bangbros.com", domain)
 
     # All bangbros URLs omit the standard www. subdomain prefix
     # and all scene URLs use /video/ instead of the standard /scene/
     fixed = replace_all(
         obj,
         "url",
-        lambda x: x.replace("/scene/", "/video/").replace("www.bangbros.com", domain),
+        urlfixer,
     )
     fixed = replace_all(
         fixed,
         "urls",
-        lambda x: x.replace("/scene/", "/video/").replace("www.bangbros.com", domain),
+        urlfixer,
     )
 
     # Rename certain studios according to the map
@@ -62,6 +68,7 @@ def bangbros(obj: Any, _) -> Any:
 if __name__ == "__main__":
     domains = [
         "bangbros",
+        "sexselector",
         "virtualporn",
     ]
     op, args = scraper_args()
