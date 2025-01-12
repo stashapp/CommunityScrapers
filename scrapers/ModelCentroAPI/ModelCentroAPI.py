@@ -164,6 +164,7 @@ studioMap = {
     "sabrinasabrokporn":"Sabrina Sabrok Videos",
     "sallydangeloxxx":"City Girlz",
     "sam38g":"Samantha38g",
+    "samantalily.xxx": "Samanta Lily",
     "santalatina":"Santalatina",
     "shalinadevine":"Shalina Devine",
     "shootingstar4u.me":"Orgasmic Shooting Star",
@@ -236,6 +237,7 @@ fixedPerformerStudio = {
     "sabrinasabrokporn": ["Sabrina Sabrok"],
     "sallydangeloxxx": ["Sally D'angelo"],
     "sam38g": ["Samantha 38g"],
+    "samantalily.xxx": ["Samanta Lily"],
     "shootingstar4u.me": ["Orgasmic Shooting Star"],
     "sweetiefox.net": ["Sweetie Fox"],
     "sylviasucker": ["Sylvia Chrystall"],
@@ -301,6 +303,7 @@ defaultStudioTags= {
     "sabrinasabrokporn": ["White Woman","Blonde Hair (Female)","Long Hair","Fake Tits"],
     "sallydangeloxxx": ["White Woman","Blonde Hair (Female)","Long Hair","Fake Tits","Mature"],
     "sam38g": ["White Woman","Red Head","Long Hair","Natural Tits","Big Tits","Solo Female"],
+    "samantalily.xxx": ["White Woman", "Big Tits", "Natural Tits"],
     "santalatina": ["Latina Woman","Black Hair (Female)","Long Hair","Natural Tits"],
     "shalinadevine": ["White Woman","Blonde Hair (Female)","Long Hair","Fake Tits"],
     "shootingstar4u.me": ["White Woman","Blonde Hair (Female)","Natural Tits"],
@@ -395,7 +398,7 @@ if perf_list:
 if scrape['studio']['name'] in fixedPerformerStudio:
     for performer in fixedPerformerStudio[scrape['studio']['name']]:
         if not any(d['name'].lower() == performer.lower() for d in scrape['performers']):
-            scrape['performers'].append({'Name':performer})
+            scrape['performers'].append({'name':performer})
 
 if scrape['studio']['name'] in studioTagsNeedSplitting:
     for x in scene_api_json['tags']['collection']:
