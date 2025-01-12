@@ -68,6 +68,7 @@ studio_map = {
     "swallowed.com": "Swallowed",
     "thaigirlswild.com": "Thai Girls Wild",
     "topwebmodels.com": "Top Web Models",
+    "topwebmodels-interviews.com": "TWM Interviews",
     "trueanal.com": "True Anal",
     "twmclassics.com": "TWM Classics",
     "xful.com": "Xful",
@@ -94,6 +95,7 @@ def clean_url(url: str) -> str:
 # Some sites only work with the `tour.` subdomain
 def fix_url(url: str) -> str:
     url = url.replace("twmclassics.com", "topwebmodels.com")
+    url = url.replace("topwebmodels-interviews.com", "topwebmodels.com")
     url = url.replace("suckthisdick.com", "hobybuchanon.com")
     url = url.replace("premium-nickmarxx.com", "nickmarxx.com")
     url = url.replace("api.nyseedxxx.com", "nyseedxxx.com")
