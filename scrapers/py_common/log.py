@@ -27,10 +27,12 @@ error = partial(__log, "e")
 
 
 # Uncaught exceptions will result in unmarshaling errors which are not helpful
-# so we hook into the exception printing machinery: if users report a failure
+# so we hook into the exception printing machinery: if a user reports a failure
 # with exit code 69 we can assume an uncaught exception instead of something like
 # an accidental print statement or malformed JSON output
+# Also prints the current Python version and executable path for debugging
 def custom_excepthook(exc_type, exc_value, exc_traceback):
+    error(f"Running Pythin {sys.version} at {sys.executable}")
     for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
         error(line)
     print("null")
