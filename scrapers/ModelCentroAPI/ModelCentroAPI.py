@@ -6,28 +6,8 @@ import sys
 from configparser import ConfigParser, NoSectionError
 from urllib.parse import urlparse
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(
-    os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
-
-try:
-    from py_common import log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr)
-    sys.exit()
-
-try:
-    import requests
-except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
-    sys.exit()
+from py_common import log
+import requests
 
 def sendRequest(url, req_headers):
     req = ""
@@ -87,6 +67,7 @@ studioMap = {
     "anastasiagree":"Anastasia Gree",
     "anisyia.xxx":"Anisyia XXX",
     "arabellesplayground": "Arabelle's Playground",
+    "arinna-cum": "Arinna Cum",
     "aussiexxxhookups":"Aussie XXX HookUps",
     "bhalasada":"Bhala Sada",
     "bigjohnnyxxx":"Big Johnny XXX",
@@ -199,6 +180,7 @@ fixedPerformerStudio = {
     "anastasiagree" : ["Anastasia Gree"],
     "anisyia.xxx" : ["Anisyia"],
     "arabellesplayground": ["Arabelle Raphael"],
+    "arinnacum": ["Arinna Cum"],
     "blondehexe.net" : ["Blonde Hexe"],
     "brianaleecams" : ["Briana Lee"],
     "brookelynnebriar" : ["Brookelynne Briar"],
@@ -258,6 +240,7 @@ defaultStudioTags= {
     "anastasiagree": ["BBW","Brown Hair (Female)","Solo Female","White Woman"],
     "anisyia.xxx": ["Fake Tits","Brown Hair (Female)","Long Hair","White Woman"],
     "arabellesplayground": ["Big Tits", "Natural Tits", "White Woman"],
+    "arinna-cum": ["Blonde Hair (Female)", "White Woman"],
     "blondehexe.net": ["Blonde Hair (Female)","Solo Female","White Woman","Natural Tits"],
     "bohonude.art": ["Softcore","Solo Female"],
     "brookelynnebriar.net": ["Brown Hair (Female)","Natural Tits","White Woman"],
