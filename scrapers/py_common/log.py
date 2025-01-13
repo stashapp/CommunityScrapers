@@ -32,7 +32,7 @@ error = partial(__log, "e")
 # an accidental print statement or malformed JSON output
 # Also prints the current Python version and executable path for debugging
 def custom_excepthook(exc_type, exc_value, exc_traceback):
-    error(f"Running Pythin {sys.version} at {sys.executable}")
+    error(f"Running Python {sys.version} at {sys.executable}")
     for line in traceback.format_exception(exc_type, exc_value, exc_traceback):
         error(line)
     print("null")
