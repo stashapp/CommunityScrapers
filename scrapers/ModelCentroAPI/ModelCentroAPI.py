@@ -86,6 +86,7 @@ studioMap = {
     "americankitten":"American Kitten",
     "anastasiagree":"Anastasia Gree",
     "anisyia.xxx":"Anisyia XXX",
+    "arabellesplayground": "Arabelle's Playground",
     "aussiexxxhookups":"Aussie XXX HookUps",
     "bhalasada":"Bhala Sada",
     "bigjohnnyxxx":"Big Johnny XXX",
@@ -197,6 +198,7 @@ fixedPerformerStudio = {
     "amberspanks" : ["Amber Spanks"],
     "anastasiagree" : ["Anastasia Gree"],
     "anisyia.xxx" : ["Anisyia"],
+    "arabellesplayground": ["Arabelle Raphael"],
     "blondehexe.net" : ["Blonde Hexe"],
     "brianaleecams" : ["Briana Lee"],
     "brookelynnebriar" : ["Brookelynne Briar"],
@@ -255,6 +257,7 @@ fixedPerformerStudio = {
 defaultStudioTags= {
     "anastasiagree": ["BBW","Brown Hair (Female)","Solo Female","White Woman"],
     "anisyia.xxx": ["Fake Tits","Brown Hair (Female)","Long Hair","White Woman"],
+    "arabellesplayground": ["Big Tits", "Natural Tits", "White Woman"],
     "blondehexe.net": ["Blonde Hair (Female)","Solo Female","White Woman","Natural Tits"],
     "bohonude.art": ["Softcore","Solo Female"],
     "brookelynnebriar.net": ["Brown Hair (Female)","Natural Tits","White Woman"],
