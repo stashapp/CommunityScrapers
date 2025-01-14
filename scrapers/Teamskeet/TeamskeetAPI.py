@@ -6,6 +6,7 @@ import sys
 from datetime import datetime
 
 import py_common.log as log
+import cloudscraper
 
 ### SET MEMBER ACCESS TOKEN HERE
 ### CAN BE access_token OR refresh_token
@@ -13,22 +14,11 @@ TEAMSKEET_ACCESS_TOKEN = ""
 MYLF_ACCESS_TOKEN = ""
 ####
 
+scraper = cloudscraper.create_scraper()
 
-try:
-    import cloudscraper
-except ModuleNotFoundError:
-    print("You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper", file=sys.stderr)
-    sys.exit()
-try:
-    import requests
-except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
-    sys.exit()
 
 def try_url(url):
-    return requests.head(url).status_code == 200
+    return scraper.head(url).status_code == 200
 
 def try_img_replacement(imgurl):
     # members/full - 1600x900
@@ -196,18 +186,18 @@ else:
     if IS_MEMBER:
         headers.update({"Cookie": f"access_token={MEMBER_ACCESS_TOKEN}"})
     log.debug(f"Asking the API... {api_url}")
-    scraper = cloudscraper.create_scraper()
+
     # Send to the API
     r = ""
     try:
         r = scraper.get(api_url, headers=headers, timeout=(3, 5))
-    except:
+    except Exception as e:
         log.error("An error has occurred with the page request")
-        log.error(f"Request status: `{r.status_code}`")
+        log.error(e)
         log.error("Check your TeamskeetAPI.log for more details")
         with open("TeamskeetAPI.log", 'w', encoding='utf-8') as f:
             f.write(f"Scene ID: {scene_id}\n")
-            f.write(f"Request:\n{r.text}")
+            f.write(f"Request:\n{e}")
         sys.exit(1)
     try:
         scene_api_json_check = r.json().get('found')
@@ -220,7 +210,7 @@ else:
             log.error('Scene not found (Wrong ID?)')
             sys.exit(1)
 
-    except:
+    except Exception:
         log.debug(r.status_code)
         if (r.status_code == 401 and IS_MEMBER):
             log.error("It's likely that your member access token needs to be replaced")
@@ -258,6 +248,8 @@ scrape['studio'] = {}
 studioApiName = scene_api_json['site'].get('siteName') if IS_MEMBER else scene_api_json['site'].get('name')
 log.debug("Studio API name is '" + studioApiName + "'")
 scrape['studio']['name'] = studioMap[studioApiName] if studioApiName in studioMap else studioApiName
+if " x " in scrape['studio']['name'].lower():
+    tags.append("Redistribution")
 scrape['tags'] = [{"name": x} for x in tags]
 scrape['code'] = scene_id if IS_MEMBER else scene_api_json.get('cId', '').split('/')[-1]
 for tag in studioDefaultTags.get(studioApiName, []):
