@@ -1,4 +1,9 @@
 name: ReflectiveDesire
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - reflectivedesire.com/photos/
+    scraper: galleryScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -10,6 +15,40 @@ performerByURL:
       - reflectivedesire.com/performers/
     scraper: performerScraper
 xPathScrapers:
+  galleryScraper:
+    common:
+      $album: //section[@class="album"]
+      $performers: //section[@class="album"]/div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/performers")]
+    gallery:
+      Title: $album/div[contains(@class, "title-container")]/h1/text()
+      Code:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: ^https://reflectivedesire.com/photos/([^/]*)/$
+                with: $1
+      Details: //meta[@name='description']/@content
+      Date:
+        selector: //meta[@name='description']/@content
+        postProcess:
+          - replace:
+            - regex: ^.*Posted (.* \d{4})\.$
+              with: $1
+          - parseDate: "January 2006"
+      Performers:
+        Name: $performers
+        URL:
+          selector: $performers/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://reflectivedesire.com
+      URL: //link[@rel="canonical"]/@href
+      Studio:
+        Name:
+          fixed: Reflective Desire
+      Tags:
+        Name:  $album/div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/categories")]
   performerScraper:
     common:
       $socialLinks: //div[@class="title-container"]/div/span[@class="tag-links"]
@@ -20,16 +59,18 @@ xPathScrapers:
       Instagram: $socialLinks/a[contains(@href,"https://instagram.com/")]/@href
       URL: //link[@rel="canonical"]/@href
   sceneScraper:
+    common:
+      $performers: //div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/performers")]
+      $tags: //div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/categories")]
     scene:
       Title: //div[contains(@class, "title-container")]/h1
       Code: //section[@class="single-video"]/article[contains(@class, "video")]/@data-video-id
-      Details:
-        selector: //meta[@name='description']/@content
+      Details: //meta[@name='description']/@content
       Date:
-        selector: //p[contains(@class, "video-text-length")]
+        selector: //p[contains(@class, "text-length")]
         postProcess:
           - replace:
-            - regex: ^.* Published (.* \d{4})\.$
+            - regex: ^.* Published (.* \d{4})\.?$
               with: $1
           - parseDate: "January 2006"
       Studio:
@@ -38,21 +79,20 @@ xPathScrapers:
       Image: //link[@rel="image_src"]/@href
       URL: //link[@rel="canonical"]/@href
       Performers:
-        Name:
-          selector: //span[contains(text(),'Performers')]/a/text()
-          concat: ","
+        Name: $performers
+        URL:
+          selector: $performers/@href
           postProcess:
             - replace:
-                - regex: ',\s+'
-                  with: ","
-          split: ","
+                - regex: ^
+                  with: https://reflectivedesire.com
       Tags:
         Name:
-          selector: //span[contains(text(),'Categories')]/a/text() | //span[@class='hidden-attributes']/text()
+          selector: $tags/text() | $tags/parent::span/following-sibling::span[@class="hidden-attributes-toggle"]/following-sibling::span[@class="hidden-attributes"]/text()
           concat: ","
           postProcess:
             - replace:
                 - regex: ',\s+'
                   with: ","
           split: ","
-# Last Updated April 14, 2024
+# Last Updated January 11, 2024
