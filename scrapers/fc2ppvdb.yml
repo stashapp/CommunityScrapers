@@ -22,7 +22,7 @@ xPathScrapers:
         selector: //div[@class="w-full lg:pl-8 px-2 lg:w-3/5"]/h2/a
       Date: //div[@class="w-full lg:pl-8 px-2 lg:w-3/5"]/div[contains(.,"販売日：")]/span
       Tags:
-        Name: //div[@class='mv_tag']/child::input/@value
+        Name: //div[contains(.,"タグ")]/span/a
       Performers:
         Name: 
           selector: //div[@class="w-full lg:pl-8 px-2 lg:w-3/5"]/div[contains(.,"女優")]/span/a
