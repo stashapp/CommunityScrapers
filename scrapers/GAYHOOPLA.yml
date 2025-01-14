@@ -1,0 +1,48 @@
+name: GAYHOOPLA
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - gayhoopla.com/video/
+    queryURL: https://api.hotguysfuck.com/api/video?slug={url}
+    queryURLReplace:
+      url:
+        - regex: .+/video/([^?#]+).*
+          with: $1
+    scraper: sceneScraper
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title: video.title
+      Code: video.id
+      Date: video.dateRelease
+      Details: video.description
+      Tags:
+        Name: tags.#.name
+      Performers:
+        Name: video.models.#.name
+        Image: video.models.#.avatar
+      Image: video.mainPhoto
+      # Duration in HH:MM:SS
+      # Duration: video.duration
+      URL:
+        selector: video.slug
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.gayhoopla.com/video/
+      Studio:
+        Name:
+          fixed: GAYHOOPLA
+
+driver:
+  headers:
+    # All of Blurred media is hosted at api.hotguysfuck.com
+    # but the site number determines what scenes it can return
+    # 1 - GAYHOOPLA
+    # 2 - Hot Guys Fuck
+    # 3 - Fatal error:  Uncaught UnhandledMatchError: Unhandled match case '6' in /home/httpd/html/hotguysfuck.com/bootstrap/app.php:55
+    # 4 - Sugar Daddy Porn
+    # 5 - Bi Guys Fuck
+    - Key: SITE
+      Value: "1"
+# Last Updated January 14, 2025
