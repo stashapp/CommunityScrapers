@@ -79,6 +79,7 @@ xPathScrapers:
       Image:
         selector: >-
           $scene//video[@id="player"]/@poster |
+          $scene//dl8-video/@poster |
           $scene//deo-video/@cover-image |
           $scene//img[@id="no-player-image"]/@src
         postProcess:
