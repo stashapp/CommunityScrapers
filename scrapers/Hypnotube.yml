@@ -1,32 +1,11 @@
-name: "Hypnotube"
+name: Hypnotube
 sceneByURL:
   - action: scrapeXPath
     url:
-      - hypnotube.com
+      - hypnotube.com/video/
     scraper: sceneScraper
 
-sceneByName:
-  action: scrapeXPath
-  queryURL: https://hypnotube.com/search/{}/
-  scraper: hypnotubeSearch
-
-sceneByQueryFragment:
-  action: scrapeXPath
-  queryURL: "{url}"
-  scraper: sceneScraper
-
 xPathScrapers:
-  hypnotubeSearch:
-    common:
-      $card: //div[@class='item-inner-col inner-col']
-    scene:
-      Title:
-        selector: $card//a[contains(@href, '/video')]/@title
-      URL:
-        selector: $card//a[contains(@href, '/video')]/@href
-      Image:
-        selector: $card//img[contains(@data-mb, "shuffle-thumbs")]/@src
-
   sceneScraper:
     common:
       $studio: //a[starts-with(@href,'https://hypnotube.com/user/')]
