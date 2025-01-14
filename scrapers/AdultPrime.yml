@@ -45,6 +45,13 @@ xPathScrapers:
           - parseDate: 02-01-2006
       Details:
         selector: $scene//p[contains(@class,"ap-limited-description-text")]
+        postProcess:
+          - replace:
+              # Hack to get multiple paragraphs: whenever we find a punctuation mark
+              # immediately followed by a word character that means xpath.nodeText has
+              # concatenated two paragraphs so we insert two newlines to fix that
+              - regex: '([?!.])(\w)'
+                with: "$1\n\n$2"
       Image:
         selector: //div[@id="theatre-row"]//video/@poster | //div[@id="theatre-row"]//div[contains(@class, "video-wrapper")]//div[contains(@style,"background-image:") and not(contains(@style,"player-placeholder.gif"))]/@style
         postProcess:
