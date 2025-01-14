@@ -32,6 +32,7 @@ sceneByURL:
       - grannycumshere.com/tour/
       - hollyhotwife.elxcomplete.com/updates/
       - houseofyre.com/updates/
+      - hotwiferio.com/newtour/updates
       - humiliation4k.com/updates/
       - hungarianhoneys.com/tour/updates/
       - internationalnudes.com/updates/
@@ -214,6 +215,7 @@ xPathScrapers:
                 grannycumshere: Granny Cums Here
                 hollyhotwife: HollyHotWife
                 houseofyre: House of Fyre
+                hotwiferio: Hot Wife Rio
                 humiliation4k: Humiliation 4K
                 hungarianhoneys: Hungarian Honeys
                 internationalnudes: International Nudes
@@ -284,7 +286,7 @@ xPathScrapers:
               - regex: __SEP__
                 with: ""
               # Some sites have multiple tour pages, but the images still resolved from the root: remove 'tour1' etc.
-              - regex: tour\d?///
+              - regex: (:?new)?tour\d?///?
                 with: ""
               # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
               - regex: (:?-[1-4]x)?\.jpg
