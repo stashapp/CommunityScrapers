@@ -1,6 +1,8 @@
 import json
 import requests
 import sys
+import tempfile
+from os import path
 from typing import Any, Callable
 
 import py_common.log as log
@@ -8,6 +10,7 @@ from py_common.types import ScrapedMovie, ScrapedPerformer, ScrapedScene, Scrape
 from py_common.util import dig, guess_nationality, replace_at, scraper_args
 
 cdn_servers = {}
+cache_results_file = "tsraw-cache.json"
 
 def get_cdn_servers() -> str:
     global cdn_servers
@@ -102,6 +105,7 @@ def get_sets(domain: str, start: int = 0, text_search = ""):
     result = res.json()
     return result
 
+
 def get_all_video_sets(domain: str):
     cms_sets = []
     result = get_sets(domain)
@@ -132,7 +136,13 @@ def scene_search(
     video_sets = get_sets(search_domains[0], text_search=query)["sets"]
     parsed_scenes = [ parse_set_as_scene(cms_set) for cms_set in video_sets ]
 
+    # cache results
+    log.debug(f"writing {len(parsed_scenes)} parsed scenes to {cache_results_file}")
+    with open(cache_results_file, 'w') as f:
+        f.write(json.dumps(parsed_scenes))
+
     return parsed_scenes
+
 
 def scene_from_fragment(
     fragment,
@@ -143,7 +153,20 @@ def scene_from_fragment(
         return None
     log.debug(f"fragment: {fragment}")
 
-    search_results = scene_search(fragment["title"], search_domains=search_domains)
+    # attempt to get from cached results first
+    search_results = None
+    try:
+        log.debug(f"Attempting to get result from {cache_results_file}")
+        with open(cache_results_file, 'r') as f:
+            cached_scenes = json.load(f)
+            log.debug(f"cached_scenes: {cached_scenes}")
+            search_results = cached_scenes
+    except:
+        pass
+    
+    # if no scenes retrieved from cached file, do an API search
+    if search_results is None:
+        search_results = scene_search(fragment["title"], search_domains=search_domains)
     first_match = next(
         (
             r for r in search_results

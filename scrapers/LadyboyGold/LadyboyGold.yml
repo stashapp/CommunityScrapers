@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
-name: LadyboyGold
+name: LadyboyGold / TSRAW
 performerByURL:
   - action: scrapeXPath
     url:
@@ -190,4 +190,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated December 17, 2024
+# Last Updated January 15, 2025
