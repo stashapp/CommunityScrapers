@@ -1,13 +1,11 @@
 import json
 import requests
 import sys
-import tempfile
-from os import path
-from typing import Any, Callable
+from typing import Any
 
 import py_common.log as log
-from py_common.types import ScrapedMovie, ScrapedPerformer, ScrapedScene, ScrapedStudio
-from py_common.util import dig, guess_nationality, replace_at, scraper_args
+from py_common.types import ScrapedScene
+from py_common.util import scraper_args
 
 cdn_servers = {}
 cache_results_file = "tsraw-cache.json"
