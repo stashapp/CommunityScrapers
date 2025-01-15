@@ -13,6 +13,7 @@ query scrapeSceneURL($url: String!) {
         details
         code
         date
+        director
         image
         urls
         studio {
