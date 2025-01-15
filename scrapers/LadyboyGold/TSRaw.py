@@ -27,11 +27,11 @@ def get_cdn_servers() -> str:
 
 
 def parse_set_as_scene(cms_set: Any) -> ScrapedScene:
-    scene = {}
+    scene: ScrapedScene = {}
     log.debug(f"cms_set: {cms_set}")
     scene["title"] = cms_set["name"].rstrip(" 4K")
     scene["details"] = cms_set["description"]
-    # scene["url"]
+    scene["url"] = f"https://members.tsraw.com/video/{cms_set['slug']}"
     scene["date"] = cms_set["added_nice"]
 
     # get image
@@ -143,7 +143,7 @@ def scene_from_fragment(
         return None
     log.debug(f"fragment: {fragment}")
 
-    search_results = scene_search(fragment["title"], search_domains=domains)
+    search_results = scene_search(fragment["title"], search_domains=search_domains)
     first_match = next(
         (
             r for r in search_results
