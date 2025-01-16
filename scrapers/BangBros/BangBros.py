@@ -20,6 +20,7 @@ from AyloAPI.scrape import (
 studio_map = {
     "AvaSpice": "Ava Spice",
     "MomIsHorny": "Mom Is Horny",
+    "Dad's Love Porn": "Dads Love Porn",
 }
 
 studio_domains = {
