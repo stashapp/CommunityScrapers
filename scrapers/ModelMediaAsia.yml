@@ -33,7 +33,7 @@ sceneByFragment:
   scraper: apiScraper_en
 
 performerByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - modelmediaasia.com/en-US/models/
     queryURL: https://api.modelmediaasia.com/api/v2/models/{url}
@@ -42,7 +42,7 @@ performerByURL:
         - regex: .*\/models\/([^?]*).*
           with: $1
     scraper: apiScraper_en
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - modelmediaasia.com/zh-CN/models/
     queryURL: https://api.modelmediaasia.com/api/v2/models/{url}
