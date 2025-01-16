@@ -20,7 +20,7 @@ sceneByURL:
     scraper: apiScraper_cn
 
 sceneByFragment:
-  action: scrapeXPath
+  action: scrapeJson
   queryURL: https://api.modelmediaasia.com/api/v2/videos/{filename}
   queryURLReplace:
     # Assume beginning part contains the code
