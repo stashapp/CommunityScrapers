@@ -5,6 +5,15 @@ import py_common.graphql as graphql
 import py_common.log as log
 
 
+def filter_nones(d):
+    if isinstance(d, dict):
+        return {k: filter_nones(v) for k, v in d.items() if v is not None}
+    if isinstance(d, list):
+        return [filter_nones(v) for v in d]
+
+    return d
+
+
 def scrape_scene(url):
     query = """
 query scrapeSceneURL($url: String!) {
@@ -69,6 +78,8 @@ url = FRAGMENT.get("url")
 
 if url:
     result = scrape_scene(url)
+    result = filter_nones(result)
+    log.debug(f"result {result}")
     print(json.dumps(result))
 else:
     print("null")
