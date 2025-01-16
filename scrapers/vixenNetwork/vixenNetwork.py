@@ -1,16 +1,11 @@
 import json
-import os
+import re
 import sys
 from urllib.parse import urlparse
 from datetime import datetime, timedelta
 import py_common.log as log
 
-try:
-    import requests
-except ModuleNotFoundError:
-    log.error("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)")
-    log.error("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests")
-    sys.exit()
+import requests
 
 # Max number of scenes that a site can return for the search.
 MAX_SCENES = 6
@@ -25,25 +20,16 @@ MARKER_DURATION_UNSURE = True
 # Max allowed difference (seconds) in scene length between Stash & API.
 MARKER_SEC_DIFF = 10
 
-# Tags you don't want to see in the Scraper window.
-IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
-# Tags you want to add in the Scraper window.
-FIXED_TAGS = ""
 # Add studio default tags to scenes (eg, "Anal Sex" for "Tushy")
 USE_STUDIO_DEFAULT_TAGS = True
-# Check the SSL Certificate.
-CHECK_SSL_CERT = True
-# Local folder with JSON inside (Only used if scene isn't found from the API)
-LOCAL_PATH = r""
 
-SERVER_IP = "http://localhost:9999"
 # API key (Settings > Configuration > Authentication)
 STASH_API = ""
+SERVER_URL = "http://localhost:9999/graphql"
 
 # Automatically reattempt GraphQL queries to Vixen sites which fail with a 403 response 
 MAX_403_REATTEMPTS = 20
 
-SERVER_URL = SERVER_IP + "/graphql"
 
 def callGraphQL(query, variables=None):
     headers = {
@@ -231,6 +217,13 @@ def process_chapters(scene_id, api_json):
         else:
             log.info("No offical marker for this scene")
 
+def try_upgrade_image(image_url: str) -> str:
+    # replace the resolution of the image (eg. \d+x\d+) with 3840x2160
+    high_res = re.sub(r"\d+x\d+", "3840x2160", image_url)
+    if requests.head(high_res).status_code == 200:
+        return high_res
+    return image_url
+
 class Site:
 
     def __init__(self, name: str, deftags: list):
@@ -354,7 +347,9 @@ class Site:
                     for image in data['images']['poster']:
                         if image['width'] > maxWidth:
                             scene['image'] = image['src']
-                        maxWidth = image['width']
+                            maxWidth = image['width']
+            if "image" in scene:
+                scene['image'] = try_upgrade_image(scene['image'])
             if url:
                 scene["url"] = url
 
