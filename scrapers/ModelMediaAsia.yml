@@ -60,6 +60,13 @@ jsonScrapers:
       Gender: data.gender
       Ethnicity:
         fixed: Asian
+      Country:
+        fixed: Taiwan
+      Height: data.height_cm
+      Weight: data.weight_kg
+      Measurements:
+        selector: "[data.measurements_chest,data.measurements_waist,data.measurements_hips]"
+        concat: "-"
       Image: data.avatar
 
     scene:
@@ -93,6 +100,8 @@ jsonScrapers:
         Gender: data.models.#.gender
         Ethnicity:
           fixed: Asian
+        Country:
+          fixed: Taiwan
         URL:
           selector: data.models.#.id
           postProcess:
@@ -107,6 +116,13 @@ jsonScrapers:
       Gender: data.gender
       Ethnicity:
         fixed: Asian
+      Country:
+        fixed: Taiwan
+      Height: data.height_cm
+      Weight: data.weight_kg
+      Measurements:
+        selector: "[data.measurements_chest,data.measurements_waist,data.measurements_hips]"
+        concat: "-"
       Image: data.avatar
 
     scene:
@@ -130,6 +146,8 @@ jsonScrapers:
         Aliases: data.models.#.name
         Image: data.models.#.avatar
         Gender: data.models.#.gender
+        Country:
+          fixed: Taiwan
         Ethnicity:
           fixed: Asian
         URL:
