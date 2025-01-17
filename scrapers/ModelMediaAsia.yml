@@ -75,6 +75,12 @@ jsonScrapers:
           - parseDate: unix
       Details: data.description
       Image: data.cover
+      URL:
+        selector: data.serial_number
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://modelmediaasia.com/en-US/videos/
       Tags: &tags
         Name: data.tags.#.name
       Studio:
@@ -110,6 +116,12 @@ jsonScrapers:
       Details: data.description_cn
       Image: data.cover
       Tags: *tags
+      URL:
+        selector: data.serial_number
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://modelmediaasia.com/zh-CN/videos/
       Studio:
         Name:
           fixed: 麻豆傳媒映畫
