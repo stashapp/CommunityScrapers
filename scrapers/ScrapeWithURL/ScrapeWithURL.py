@@ -69,7 +69,6 @@ query scrapeSceneURL($url: String!) {
 
     variables = {"url": url}
     result = graphql.callGraphQL(query, variables)
-    log.debug(f"result {result}")
     return (result or {}).get("scrapeSceneURL", None)
 
 
