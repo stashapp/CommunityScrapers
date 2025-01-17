@@ -1,0 +1,193 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+name: LadyboyGold / TSRAW
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - ladyboygold.com/index.php
+    scraper: performerScraperLadyboyGold
+  - action: scrapeXPath
+    url:
+      - tsraw.com/model/
+    scraper: performerScraperTSRaw
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ladyboygold.com/tour
+    scraper: sceneScraperLadyboyGold
+  - action: scrapeXPath
+    url:
+      - tsraw.com
+    scraper: sceneScraperTSRaw
+sceneByName:
+  action: script
+  script:
+    - python
+    - TSRaw.py
+    - scene-by-name
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - TSRaw.py
+    - scene-by-fragment
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - TSRaw.py
+    - scene-by-query-fragment
+xPathScrapers:
+  performerScraperLadyboyGold:
+    common:
+      $infoPiece: //div[@class="info-box info"]
+    performer:
+      Name:
+        selector: //div[contains(@class, "modelInfo")]/div[@class="profileModel"]/text()
+        postProcess:
+          - replace:
+              - regex: .*Ladyboy (.*)
+                with: $1
+      Gender:
+        fixed: transgender_female
+      Weight:
+        selector: //div[@class="modelStats"]/ul/li[contains(text(), "Weight:")]/text()
+        postProcess: &weightPostProcess
+          - replace:
+              - regex: .* \(([0-9]*)kg\)
+                with: $1
+      Height:
+        selector: //div[@class="modelStats"]/ul/li[contains(text(), "Height:")]/text()
+        postProcess: &heightPostProcess
+          - replace:
+              - regex: .* \(([0-9]*)cm\)
+                with: $1
+      Measurements:
+        selector: //div[@class="modelStats"]/ul/li[contains(text(), "Measurements:")]/text()
+        postProcess:
+          - replace:
+              - regex: Measurements. (.*)
+                with: $1
+      Image:
+        selector: //div[@class="photoUpdate-image col-lg-3 col-md-3 col-sm-6"]/a/img[@class="img-responsive"]/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.ladyboygold.com
+      Details: //div[@class="profileBio"]/text()
+  performerScraperTSRaw:
+    common:
+      $infoList: //dl[contains(@class, "model")]
+      $description: //div[contains(@class, "details")]//div[contains(@class, "description")]
+    performer:
+      Name: //div[contains(@class, "model-view")]//h3[contains(@class, "title")]
+      Birthdate:
+        selector: //dt[text()="Born"]/following-sibling::dd[1]//text()|//dt[text()="Age"]/following-sibling::dd[1]//text()
+        concat: ", "
+        postProcess:
+          - javascript: |
+              if (value && value.length) {
+                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                const [dateStr, age] = value.split(', ')
+                const [month, dateOfMonth] = dateStr.split(' ')
+                const currentYear = new Date().getFullYear()
+                const parsedDate = new Date(currentYear, months.indexOf(month), dateOfMonth, 12)
+                const now = new Date()
+                let extraYear = 0
+                if (
+                  parsedDate.getMonth() > now.getMonth()
+                  ||
+                    (                  
+                      parsedDate.getMonth() === now.getMonth()
+                      && parsedDate.getDate() > now.getDate()
+                    )
+                ) {
+                  extraYear = 1
+                }
+                const birthDate = new Date(currentYear - age + extraYear, months.indexOf(month), dateOfMonth, 12)
+                console.log({dateStr, age, currentYear, parsedDate, now, extraYear, birthDate})
+                return birthDate.toISOString().substr(0, 10)
+              }
+              return value
+      Height:
+        selector: $infoList//dt[text()="Height"]/following-sibling::dd[1]//text()
+        postProcess: *heightPostProcess
+      Weight:
+        selector: $infoList//dt[text()="Weight"]/following-sibling::dd[1]//text()
+        postProcess: *weightPostProcess
+      Gender:
+        fixed: transgender_female
+      Measurements: $infoList//dt[text()="Measurements"]/following-sibling::dd[1]//text()
+      Ethnicity: $infoList//dt[text()="Ethnicity"]/following-sibling::dd[1]//text()
+      Country: $infoList//dt[text()="Nationality"]/following-sibling::dd[1]//text()
+      HairColor: $infoList//dt[text()="Hair Color"]/following-sibling::dd[1]//text()
+      EyeColor: $infoList//dt[text()="Eye Color"]/following-sibling::dd[1]//text()
+      Image: //div[contains(@class, "model view")]//img/@src
+      Details: $description//text()
+      Twitter:
+        selector: $description//div[contains(text(), "twitter.com")]
+        postProcess:
+          - replace:
+              - regex: .*(https://twitter.com/[^\s\.]+).*
+                with: $1
+      Instagram:
+        selector: $description//div[contains(text(), "instagram.com")]
+        postProcess:
+          - replace:
+              - regex: .*(https://instagram.com/[^\s\.]+).*
+                with: $1
+  sceneScraperLadyboyGold:
+    scene:
+      Title: &title
+        selector: //div[contains(@class, "show_video")]//h2/text()
+        postProcess:
+          - replace:
+              - regex: \ 4[Kk]$
+                with: ""
+      Details: &details
+        selector: //div[contains(@class, "setDescription")]/p[contains(@class, "d-none")]/text()
+        concat: "\n\n"
+      Tags: &tags
+        Name: //div[contains(@class, "tags")]//a/text()
+      Performers: &performers
+        Name:
+          selector: //div[contains(@class, "show_video")]//h3/text()
+          postProcess:
+            - replace:
+                - regex: .*Ladyboy (.*)
+                  with: $1
+          split: ", "
+      Studio:
+        Name:
+          fixed: LadyboyGold
+      Image:
+        selector: &imageSelector //div[contains(@class, "show_video")]//img/@style
+        postProcess:
+          - replace:
+              - regex: &imagePostProcessReplaceRegex (?:background:\ ?url\('?)(.+)(?:'?\).+)
+                with: https://ladyboygold.com/$1
+      Code: &code
+        selector: *imageSelector
+        postProcess:
+          - replace:
+              - regex: (?:.*gal=)(.+)(?:&file.*)
+                with: $1
+  sceneScraperTSRaw:
+    scene:
+      Title: *title
+      Details: *details
+      Tags: *tags
+      Performers: *performers
+      Studio:
+        Name:
+          fixed: TSRaw
+      Image:
+        selector: *imageSelector
+        postProcess:
+          - replace:
+              - regex: *imagePostProcessReplaceRegex
+                with: https://tsraw.com/$1
+      Code: *code
+
+driver:
+  useCDP: true
+# Last Updated January 15, 2025
