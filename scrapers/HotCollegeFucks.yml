@@ -1,0 +1,214 @@
+name: Hot College Fucks
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hotcollegefucks.com
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - hotcollegefucks.com/tour/models
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+      Date:
+        selector: //div[@class="added"]
+        postProcess:
+          - replace:
+              - regex: (^\S+\s+)(.+\d{4})(.+)
+                with: $2
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class="modelFeaturing"]//a
+        URL: //div[@class="modelFeaturing"]//a/@href
+      Details:
+        selector: //div[@class="description"]/p
+        concat: "\n\n"
+      Image:
+        selector: //img[@height="815"]/@src0_1x
+      Studio:
+        Name:
+          fixed: Hot College Fucks
+
+  performerScraper:
+    performer:
+      Name: //div[@class="modelBioDetails"]//h2/text()
+      Gender:
+        selector: |
+          //span[contains(text(),"COCK THICKNESS:")]/text()|
+          //span[contains(text(),"BREAST SIZE:")]/text()
+        concat: ","
+        postProcess:
+          - javascript: |
+              const values = value.split(",").map(v => v.trim()).filter(v => v);
+              if(values.some(v => v.includes("COCK THICKNESS:"))) {
+                return "Male"
+              }
+              if(values.some(v => v.includes("BREAST SIZE:"))) {
+                return "Female"
+              }
+              return ""
+      HairColor: //span[contains(text(),"HAIR COLOR:")]/following-sibling::text()
+      EyeColor: //span[contains(text(),"EYES:")]/following-sibling::text()
+      Weight:
+        selector: //span[contains(text(),"WEIGHT:")]/following-sibling::text()
+        postProcess:
+          - lbToKg: true
+      Height:
+        selector: //span[contains(text(),"HEIGHT:")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      PenisLength:
+        selector: //span[contains(text(),"COCK SIZE:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0'"
+          - feetToCm: true
+      Measurements: 
+        selector: |
+          //span[contains(text(),"COCK THICKNESS:")]/text()|
+          //span[contains(text(),"COCK THICKNESS:")]/following-sibling::text()|
+          //span[contains(text(),"BREAST SIZE:")]/text()| 
+          //span[contains(text(),"BREAST SIZE:")]/following-sibling::text() |
+          //span[contains(text(),"HIP SIZE:")]/text()|
+          //span[contains(text(),"HIP SIZE:")]/following-sibling::text()
+        concat: ","
+        postProcess:
+            - javascript: |
+                let pairs = [];
+                const values = value.split(",").map(v => v.trim()).filter(v => v);                
+                for(let i = 0; i < values.length; i += 2) {
+                  const label = values[i];
+                  const val = values[i+1];
+                  if(!val) continue;
+                  const firstPart = val.toLowerCase().charAt(0).toUpperCase() + val.toLowerCase().slice(1);
+                  if(label.includes("COCK THICKNESS:")) {
+                    return firstPart;
+                  }
+                  else {
+                    pairs.push(firstPart);
+                  }
+                }
+                return pairs.join("-");
+      Circumcised:  
+        selector: //span[contains(text(),"CUT:")]/following-sibling::text() | //span[contains(text(),"COCK THICKNESS:")]/text()
+        concat: ","
+        postProcess:
+          - javascript: |
+              const values = value.split(",").map(v => v.trim()).filter(v => v);
+              if (values.some(v => v.includes("YES"))) {
+                return "CUT"
+              }
+              if (values.some(v => v.includes("COCK THICKNESS:"))) {
+                return "UNCUT"
+              }
+              return ""
+      Details:  
+        selector: //div[@class="modelContent"]/node()
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: <br\s*\/?> 
+                with: "\n"
+      Disambiguation:
+        fixed: Hot College Fucks
+      FakeTits:
+        fixed: Natural
+      Image: //div[@class="modelBioPic"]/img/@src0_1x
+      Tags:
+        Name:
+          selector: |
+            //span[contains(text(),"BODY BUILD:")]/text()|
+            //span[contains(text(),"BODY BUILD:")]/following-sibling::text()|
+            //span[contains(text(),"EYES:")]/text()|
+            //span[contains(text(),"EYES:")]/following-sibling::text()|
+            //span[contains(text(),"HAIR COLOR:")]/text()|
+            //span[contains(text(),"HAIR COLOR:")]/following-sibling::text()|
+            //span[contains(text(),"CUT:")]/text() | //span[contains(text(),"AGE:")][not(//span[contains(text(),"CUT:")])]/text()|
+            //span[contains(text(),"CUT:")]/following-sibling::text() | //span[contains(text(),"AGE:")][not(//span[contains(text(),"CUT:")])]/following-sibling::text()|
+            //span[contains(text(),"COCK THICKNESS:")]/text()|
+            //span[contains(text(),"COCK THICKNESS:")]/following-sibling::text()|
+            //span[contains(text(),"BREAST SIZE:")]/text()|
+            //span[contains(text(),"BREAST SIZE:")]/following-sibling::text()|
+            //span[contains(text(),"HIP SIZE:")]/text()|
+            //span[contains(text(),"HIP SIZE:")]/following-sibling::text()
+          concat: ","
+          postProcess:
+            - javascript: |
+                let pairs = [];
+                const values = value.split(",").map(v => v.trim()).filter(v => v);
+                
+                // Aggiungiamo subito il tag Hot College Fucks
+                pairs.push("Hot College Fucks");
+                
+                // Determiniamo il genere
+                const isMale = values.some(v => v.includes("COCK THICKNESS:"));
+                const isFemale = values.some(v => v.includes("BREAST SIZE:"));
+                
+                for(let i = 0; i < values.length; i += 2) {
+                  const label = values[i];
+                  const val = values[i+1];
+                  if(!val) continue;
+                  
+                  const firstPart = val.toLowerCase().charAt(0).toUpperCase() + val.toLowerCase().slice(1);
+                  
+                  // Tag comuni a entrambi i generi
+                  if(label.includes("EYES:")) {
+                    pairs.push(firstPart + " Eyes");
+                  }
+                  else if(label.includes("HAIR COLOR:")) {
+                    pairs.push(firstPart + " Hair");
+                  }
+                  else if(label.includes("BODY BUILD:")) {
+                    const bodyTypes = {
+                      // Tipi maschili
+                      "ATHLETIC": "Athletic",
+                      "SLIM": "Slim",
+                      "AVERAGE": "Average",
+                      "MUSCULAR": "Muscular",
+                      "TONED": "Athletic",
+                      // Tipi femminili
+                      "PETITE": "Petite",
+                      "CURVY": "Curvy",
+                      "VOLUPTUOUS": "Voluptuous",
+                      "THIN": "Slim",
+                      "FIT": "Athletic"
+                    };
+                    pairs.push(bodyTypes[val.trim().toUpperCase()] || firstPart);
+                  }
+                  
+                  // Tag specifici per uomini
+                  if(isMale) {
+                    if(label.includes("AGE:") && !values.some(v => v.includes("CUT:"))) {
+                      pairs.push("Uncircumcised");
+                    }
+                    else if(label.includes("CUT:")) {
+                      pairs.push(val.toUpperCase().includes("YES") ? "Circumcised" : "Uncircumcised");
+                    }
+                    else if(label.includes("COCK THICKNESS:")) {
+                      pairs.push(firstPart + " Dick");
+                    }
+                  }
+                  
+                  // Tag specifici per donne
+                  if(isFemale) {
+                    if(label.includes("BREAST SIZE:")) {
+                      pairs.push(firstPart + " Breasts");
+                    }
+                    if(label.includes("HIP SIZE:")) {
+                      pairs.push(firstPart + " Hips");
+                    }
+                  }
+                }
+                return pairs.join(",");
+          split: ","
+
+driver:
+  useCDP: true
+# Last Updated December 22, 2024
