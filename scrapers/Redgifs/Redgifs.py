@@ -37,7 +37,6 @@ def scene_by_id(gif_id: str) -> ScrapedScene | None:
         return
 
     data = req.json()
-    log.debug(f"Data: {json.dumps(data, indent=2)}")
     gif = data["gif"]
     user = data["user"]
 
