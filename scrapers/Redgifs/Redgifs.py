@@ -2,6 +2,7 @@ from base64 import b64encode
 from datetime import datetime
 from pathlib import Path
 import json
+import re
 import sys
 import requests
 
@@ -68,8 +69,14 @@ def extract_id(string: str):
     if "redgifs.com/watch" in string:
         return string.split("/")[-1].split("#")[0].split("?")[0]
 
-    # Filenames are assumed to have the format "Redgifs_{id}.mp4"
-    return Path(string).stem.split("_")[-1]
+    # Filenames are either 'Redgifs_identifier' or 'Title of Clip [identifier]'
+    filename = Path(string).stem
+    if filename.startswith("Redgifs_"):
+        return filename.split("_")[-1]
+    elif match := re.match(r"\[(\w+)\]", filename):
+        return match.group(1)
+
+    return None
 
 
 if __name__ == "__main__":
