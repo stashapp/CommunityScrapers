@@ -29,7 +29,7 @@ xPathScrapers:
                 with: $1
       Title: &title //div[@class="box"]/h1/text()
       Details: &details
-        selector: //div[contains(@class, "form-group") and ./div[@id="divUpdateSynopsis"]]
+        selector: //div[contains(@class, "form-group") and ./span[text()="Synopsis:"]]
         postProcess:
           - replace:
               - regex: Synopsis:\s*
