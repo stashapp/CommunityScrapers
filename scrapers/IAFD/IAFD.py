@@ -75,6 +75,8 @@ def map_gender(gender: str):
     genders = {
         "f": "Female",
         "m": "Male",
+        "tf": "Transgender Female",
+        "tm": "Transgender Male",
     }
     return genders.get(gender, gender)
 
@@ -195,21 +197,26 @@ def performer_url(tree):
 
 
 def performer_gender(tree):
-    def prepend_transgender(gender: str):
+    def parse_transgender(gender: str):
+        # get trans genders from the short code supplied
+        if gender in ['tf', 'tm']:
+            return map_gender(gender)
+
+        # next, attempt to get the trans gender from the performer id suffix
         perf_id = next(
             iter(tree.xpath('//form[@id="correct"]/input[@name="PerfID"]/@value')), ""
         )
         trans = (
             "Transgender "
             # IAFD are not consistent with their URLs
-            if any(mark in perf_id for mark in ("_ts", "_ftm", "_mtf"))
+            if any(mark in perf_id.lower() for mark in ("_ts", "_ftm", "_mtf"))
             else ""
         )
         return trans + map_gender(gender)
 
     return maybe(
         tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value'),
-        prepend_transgender,
+        parse_transgender,
     )
 
 

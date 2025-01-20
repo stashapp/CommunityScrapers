@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: IAFD
 # requires: py_common
 
@@ -34,4 +35,4 @@ movieByURL:
       - python
       - IAFD.py
       - movie
-# Last Updated December 03, 2024
+# Last Updated January 20, 2025
