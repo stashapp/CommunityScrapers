@@ -129,7 +129,7 @@ def performer_from_url(url) -> ScrapedPerformer | None:
             log.debug("social media urls: %s" % social_media_urls)
             performer["urls"].extend(social_media_urls)
         else:
-            log.warning("could not scrape twitter")
+            log.warning("could not scrape social media links")
         if (website_links := iter(tree.xpath('//div[@class="info-box info"]/ul/li/span[text()="Website:"]/following-sibling::a/@href')), None) is not None:
             website_urls = [ remove_query(url) for url in website_links ]
             log.debug("website_urls: %s" % website_urls)
