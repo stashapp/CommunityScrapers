@@ -76,18 +76,24 @@ def find_scene_id(scene_id: str) -> (str, str):
 
 def lookup_scene(scene_id: str, epnumber: str, apikey: str, date: str) -> dict:
     log.debug(epnumber)
-    title, details, cover, tags = get_series(apikey, scene_id)  #, characters
+    title, details, cover, tags, studio, studio_id = get_series(apikey, scene_id)  #, characters
     tags = tags + ["ShokoAPI"] + ["Hentai"]
-    #characters_json = json.dumps(characters)
-    #json_object = json.loads(characters_json)
-    #character = json_object[0]['character']
-    #log.info(str(character))
     res = {}
     res['title'] = title + " 0" + epnumber
     res['details'] = details
     res['image'] = cover
     res['date'] = date
     res['tags'] = [{"name": i} for i in tags]
+    
+    # Convert the string to a ScrapedStudio instance
+    studio: ScrapedStudio = {
+        "name": studio, # only the name will get imported
+        "image": f"{SHOKO_URL}/api/v3/Image/AniDB/Staff/{studio_id}" 
+        # image will not be imported because of a bug in Stash right now
+        # this will work as soon as that is fixed
+    }
+    
+    res['studio'] = studio
     log.debug("sceneinfo from Shoko: " + str(res))
     return res
 
@@ -150,10 +156,20 @@ def get_series(apikey: str, scene_id: str):
     details = json_object['summary']
     local_sizes = json_object['local_sizes']['Episodes']
     log.debug("number of episodes " + str(local_sizes))
-    #characters = json_object['roles']
     cover = SHOKO_URL + json_object['art']['thumb'][0]['url']
     tags = json_object['tags']
-    return title, details, cover, tags  #, characters
+    
+    series_id = json_object['id']
+    response = requests.get(SHOKO_URL + '/api/v3/Series/%s/Cast?roleType=Studio' % series_id, headers=headers)
+
+    # Parse the JSON response
+    json_response = response.json()
+
+    # Extract the 'Name' field
+    studio = json_response[0]['Staff']['Name']
+    studio_id = json_response[0]['Staff']['ID']   
+    
+    return title, details, cover, tags, studio, studio_id  #, characters
 
 
 def query(fragment: dict) -> dict:
