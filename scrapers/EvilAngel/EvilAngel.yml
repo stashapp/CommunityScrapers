@@ -55,4 +55,12 @@ galleryByURL:
       - ../Algolia/Algolia.py
       - evilangel
       - gallery
-# Last Updated March 9, 2025
+performerByURL:
+  - action: script
+    url:
+      - evilangel.com/en/pornstar/
+    script:
+      - python
+      - ../Algolia/AlgoliaAPI.py
+      - performer-by-url
+# Last Updated March 20, 2025
