@@ -1,8 +1,7 @@
-from datetime import datetime
 import json
 import re
 import sys
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable
 from urllib.parse import urlparse
 
 import requests
@@ -10,13 +9,12 @@ import requests
 from py_common import log
 from py_common.deps import ensure_requirements
 ensure_requirements("algoliasearch")
-from py_common.types import ScrapedPerformer, ScrapedTag
-from py_common.util import dig, guess_nationality, scraper_args
+from py_common.types import ScrapedPerformer
+from py_common.util import guess_nationality, scraper_args
 
 from algoliasearch.search.client import SearchClientSync
 from algoliasearch.search.config import SearchConfig
 from algoliasearch.search.models.hit import Hit
-from algoliasearch.search.models.search_params import SearchParams
 
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
 
@@ -100,7 +98,7 @@ def to_scraped_performer(performer_from_api: Hit, site: str) -> ScrapedPerformer
         performer["weight"] = weight
     
     if home := performer_from_api.attributes.get('home'):
-        performer["country"] = home
+        performer["country"] = guess_nationality(home)
 
     if performer_from_api.has_pictures:
         main_pic = list(performer_from_api.pictures.values())[-1]
@@ -167,7 +165,7 @@ def performer_from_url(
     # return postprocess(to_scraped_performer(api_performer_json), api_performer_json)
 
 
-def performer_search(name: str, sites: List[str]) -> list[ScrapedPerformer]:
+def performer_search(name: str, sites: list[str]) -> list[ScrapedPerformer]:
     site = sites[0]
     # Get API auth and initialise client
     client = get_search_client(site)
@@ -188,7 +186,7 @@ def performer_search(name: str, sites: List[str]) -> list[ScrapedPerformer]:
     return []
 
 
-def performer_from_fragment(args: Dict[str, Any]) -> ScrapedPerformer:
+def performer_from_fragment(args: dict[str, Any]) -> ScrapedPerformer:
     """
     This receives:
     - name
