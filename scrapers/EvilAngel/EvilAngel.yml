@@ -45,18 +45,27 @@ sceneByQueryFragment:
     - ../Algolia/AlgoliaAPI.py
     - evilangel
     - scene-by-query-fragment
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/AlgoliaAPI.py
+    - evilangel
+    - gallery-by-fragment
 galleryByURL:
   - action: script
     url:
       - evilangel.com/en/photo/
+      - evilangel.com/en/video/
+      - lewood.com/en/photo/
       - pansexualx.com/en/photo/
       - transgressivexxx.com/en/photo/
       - tsfactor.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../Algolia/AlgoliaAPI.py
       - evilangel
-      - gallery
+      - gallery-by-url
 performerByURL:
   - action: script
     url:
