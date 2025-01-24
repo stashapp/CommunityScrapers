@@ -4,7 +4,7 @@ import json
 import re
 import sys
 from time import time
-from typing import Any, Callable
+from typing import Any, Callable, Literal
 from urllib.parse import urlparse
 
 import requests
@@ -12,7 +12,7 @@ import requests
 from py_common import log
 from py_common.deps import ensure_requirements
 ensure_requirements("algoliasearch")
-from py_common.types import ScrapedGallery, ScrapedPerformer, ScrapedScene
+from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
 from py_common.util import guess_nationality, scraper_args
 
 from algoliasearch.search.client import SearchClientSync
@@ -129,6 +129,12 @@ genders_map = {
 def parse_gender(gender: str) -> str:
     return genders_map.get(gender, gender)
 
+def _construct_movie_cover_image_url(cover_path: str, position: Literal["front", "back"]) -> str:
+    """
+    Uses `cover_path` with `position`
+    """
+    return f"https://transform.gammacdn.com/movies{cover_path}_{position}_400x625.jpg?width=450&height=636"
+
 def _construct_gallery_url(gallery: Hit, site: str) -> str:
     """
     Uses `gallery.url_title` and `gallery.set_id` with `site`
@@ -141,7 +147,13 @@ def _construct_performer_url(performer: Hit, site: str) -> str:
     """
     return f"{get_homepage_url(site)}/en/pornstar/view/{performer.url_name}/{performer.actor_id}"
 
-def _construct_movie_url(scene: Hit, site: str) -> str:
+def _api_movie_to_movie_url(movie: Hit, site: str) -> str:
+    """
+    Uses `movie.url_title` and `movie.movie_id` with `site`
+    """
+    return f"{get_homepage_url(site)}/en/movie/{movie.url_title}/{movie.movie_id}"
+
+def _api_scene_to_movie_url(scene: Hit, site: str) -> str:
     """
     Uses `scene.url_movie_title` and `scene.movie_id` with `site`
     """
@@ -266,7 +278,7 @@ def to_scraped_scene(scene_from_api: Hit, site: str) -> ScrapedScene:
             "name": scene_from_api.movie_title,
             "date": scene_from_api.movie_date_created,
             "synopsis": scene_from_api.movie_desc,
-            "url": _construct_movie_url(scene_from_api, site),
+            "url": _api_scene_to_movie_url(scene_from_api, site),
         }]
 
     if categories := scene_from_api.categories:
@@ -551,7 +563,70 @@ def performer_from_url(
 
     if response.nb_hits:
         return postprocess(to_scraped_performer(response.hits[0], site), response.hits[0])
-    return {}
+    return None
+
+
+# Helper function to convert from Algolia's API to Stash's scraper return type
+def to_scraped_movie(movie_from_api: Hit, site: str) -> ScrapedMovie:
+    movie: ScrapedMovie = {}
+
+    if title := getattr(movie_from_api, 'title', None):
+        movie["name"] = title
+
+    if date_created := getattr(movie_from_api, 'date_created', None):
+        movie["date"] = date_created
+
+    if length := getattr(movie_from_api, 'length', None):
+        movie["duration"] = str(length)
+
+    if directors := getattr(movie_from_api, 'directors', None):
+        movie["director"] = directors_to_csv_string(directors)
+
+    if description := getattr(movie_from_api, 'description', None):
+        movie["synopsis"] = description
+
+    if studio_name := getattr(movie_from_api, 'studio_name', None):
+        movie["studio"] = { "name": studio_name }
+
+    if cover_path := getattr(movie_from_api, 'cover_path', None):
+        movie["front_image"] = _construct_movie_cover_image_url(cover_path, 'front')
+        movie["back_image"] = _construct_movie_cover_image_url(cover_path, 'back')
+
+    if getattr(movie_from_api, 'url_title', None):
+        movie["url"] = _api_movie_to_movie_url(movie_from_api, site)
+
+    return movie
+
+
+def movie_from_url(
+    url, postprocess: Callable[[ScrapedMovie, dict], ScrapedMovie] = default_postprocess
+) -> ScrapedMovie | None:
+    """
+    Scrapes a movie from a URL, running an optional postprocess function on the result
+    """
+    movie_id = get_id(url)
+    log.debug(f"movie_id: {movie_id}")
+
+    site = get_site(url)
+    log.debug(f"Site: {site}")
+
+    # Get API auth and initialise client
+    client = get_search_client(site)
+
+    response = client.search_single_index(
+        index_name="all_movies",
+        search_params={
+            "attributesToHighlight": [],
+            "filters": f"movie_id:{movie_id}",
+            "length": 1,
+        },
+    )
+
+    log.debug(f"Number of search hits: {response.nb_hits}")
+
+    if response.nb_hits:
+        return postprocess(to_scraped_movie(response.hits[0], site), response.hits[0])
+    return None
 
 
 def performer_search(name: str, sites: list[str]) -> list[ScrapedPerformer]:
@@ -745,9 +820,9 @@ if __name__ == "__main__":
         case "performer-by-name", {"name": name, "extra": extra} if name and extra:
             sites = extra
             result = performer_search(name, sites)
-        # case "movie-by-url", {"url": url} if url:
-        #     url = redirect(url)
-        #     result = movie_from_url(url, postprocess=bangbros)
+        case "movie-by-url", {"url": url} if url:
+            result = movie_from_url(url)
+            # result = movie_from_url(url, postprocess=bangbros)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

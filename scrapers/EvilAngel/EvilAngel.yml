@@ -21,9 +21,9 @@ movieByURL:
       - tsfactor.com/en/movie/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../Algolia/AlgoliaAPI.py
       - evilangel
-      - movie
+      - movie-by-url
 sceneByFragment:
   action: script
   script:
