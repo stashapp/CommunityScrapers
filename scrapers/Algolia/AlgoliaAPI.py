@@ -602,6 +602,32 @@ def scene_search(
     return []
 
 
+def gallery_search(
+    query: str,
+    sites: list[str] | None = None,
+    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
+) -> list[ScrapedGallery]:
+    # TODO: handle multiple sites
+    site = sites[0]
+    # Get API auth and initialise client
+    client = get_search_client(site)
+
+    response = client.search_single_index(
+        index_name="all_photosets",
+        search_params={
+            "attributesToHighlight": [],
+            "query": query,
+            "length": 20,
+        },
+    )
+
+    log.debug(f"Number of search hits: {response.nb_hits}")
+
+    if response.nb_hits:
+        return [ to_scraped_gallery(hit, site) for hit in response.hits ]
+    return []
+
+
 def scene_from_fragment(args: dict[str, Any], sites: list[str]) -> ScrapedScene:
     """
     This receives:
@@ -633,6 +659,44 @@ def scene_from_fragment(args: dict[str, Any], sites: list[str]) -> ScrapedScene:
     return {}
 
 
+def gallery_from_fragment(
+    fragment: dict[str, Any],
+    sites: list[str],
+    # min_ratio=config.minimum_similarity,
+    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+) -> ScrapedGallery | None:
+    """
+    Scrapes a gallery from a fragment, which must contain at least one of the following:
+    - url: the URL of the scene the gallery belongs to
+    - title: the title of the scene the gallery belongs to
+
+    If min_ratio is provided _AND_ the fragment contains a title but no URL,
+    the search will only return a scene if a match with at least that ratio is found
+
+    If postprocess is provided it will be called on the result before returning
+    """
+    log.debug(f"in gallery_from_fragment, fragment: {fragment}")
+    if url := fragment.get("url"):
+        log.debug('doing gallery_from_fragment with gallery_from_url')
+        return gallery_from_url(url)
+
+    if title := fragment.get("title"):
+        log.debug('doing gallery_from_fragment with gallery_search')
+        scraped_galleries = gallery_search(title, sites)
+
+        # one match
+        if len(scraped_galleries) == 1:
+            return scraped_galleries[0]
+
+        # TODO: do some match scoring here based on any other matching/near fragment properties
+
+        # TODO: remove this first result return logic
+        if len(scraped_galleries) > 1:
+            return scraped_galleries[0]
+
+    return None
+
+
 def performer_from_fragment(args: dict[str, Any]) -> ScrapedPerformer:
     """
     This receives:
@@ -655,11 +719,12 @@ if __name__ == "__main__":
         case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url)
             # result = gallery_from_url(url, postprocess=bangbros)
-        # case "gallery-by-fragment":
-        #     fixed = replace_all(args, "url", redirect)
-        #     result = gallery_from_fragment(
-        #         fixed, search_domains=domains, postprocess=bangbros
-        #     )
+        case "gallery-by-fragment", args:
+            sites = args.pop("extra")
+            result = gallery_from_fragment(args, sites)
+            # result = gallery_from_fragment(
+            #     fixed, search_domains=domains, postprocess=bangbros
+            # )
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
             # result = scene_from_url(url, postprocess=bangbros)
