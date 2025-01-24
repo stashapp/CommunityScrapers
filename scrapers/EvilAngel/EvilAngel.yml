@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
 # requires: Algolia
 name: "EvilAngel"
 sceneByURL:
@@ -63,4 +64,18 @@ performerByURL:
       - python
       - ../Algolia/AlgoliaAPI.py
       - performer-by-url
-# Last Updated March 20, 2025
+performerByName:
+  action: script
+  script:
+    - python
+    - ../Algolia/AlgoliaAPI.py
+    - evilangel
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../Algolia/AlgoliaAPI.py
+    - evilangel
+    - performer-by-fragment
+# Last Updated January 23, 2025
