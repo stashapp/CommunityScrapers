@@ -28,22 +28,23 @@ sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../Algolia/AlgoliaAPI.py
     - evilangel
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../Algolia/AlgoliaAPI.py
     - evilangel
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../Algolia/AlgoliaAPI.py
     - evilangel
-    - validName
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:

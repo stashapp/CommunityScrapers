@@ -1,6 +1,9 @@
+from base64 import b64decode
+import configparser
 import json
 import re
 import sys
+from time import time
 from typing import Any, Callable
 from urllib.parse import urlparse
 
@@ -16,6 +19,7 @@ from algoliasearch.search.client import SearchClientSync
 from algoliasearch.search.config import SearchConfig
 from algoliasearch.search.models.hit import Hit
 
+CONFIG_FILE = 'AlgoliaAPI.ini'
 FIXED_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
 
@@ -28,17 +32,69 @@ def headers_for_homepage(homepage: str) -> dict[str, str]:
     }
 
 
-def get_api_auth(homepage: str) -> tuple[str, str]:
+def api_auth_cache_write(site: str, app_id: str, api_key: str):
+    config = configparser.ConfigParser()
+    config.read(CONFIG_FILE)
+    try:
+        config.get(site, 'valid_until')
+    except configparser.NoSectionError:
+        config.add_section(site)
+    config.set(site, "app_id", app_id)
+    config.set(site, "api_key", api_key)
+    if match := re.search(r"validUntil=(\d+)", b64decode(api_key).decode('utf-8')):
+        valid_until = match.group(1)
+    else:
+        valid_until = int(time())
+    config.set(site, "valid_until", valid_until)
+    
+    with open(CONFIG_FILE, 'w', encoding='utf-8') as config_file:
+        config.write(config_file)
+
+
+def api_auth_cache_read(site: str) -> tuple[str, str] | tuple[None, None]:
+    config = configparser.ConfigParser()
+    config.read(CONFIG_FILE)
+    try:
+        valid_until = config.getint(site, 'valid_until')
+        app_id = config.get(site, 'app_id')
+        api_key = config.get(site, 'api_key')
+    except configparser.NoSectionError as e:
+        log.debug(f"Could not find section [{e.section}] in {CONFIG_FILE}")
+        return None, None
+    except configparser.NoOptionError as e:
+        log.debug(f"Could not find option {e.option} in [{e.section}] in {CONFIG_FILE}")
+        return None, None
+    
+    seconds_remaining = valid_until - int(time())
+    if seconds_remaining < 600:
+        return None, None
+    
+    log.debug(f'Using cached auth, valid for the next {seconds_remaining} seconds')
+    
+    return app_id, api_key
+
+
+def get_api_auth(site: str) -> tuple[str, str]:
+    # attempt to get cached API auth
+    if (auth := api_auth_cache_read(site)) and auth[0] and auth[1]:
+        return auth
+    
+    log.debug('No valid auth found in cache, fetching new auth')
+
     # make a request to the site's homepage to get API Key and Application ID
+    homepage = get_homepage_url(site)
     r = requests.get(homepage, headers=headers_for_homepage(homepage))
     # extract JSON
     if not (match := re.search(r"window.env\s+=\s(.+);", r.text)):
         log.error('Cannot find JSON in homepage for API keys')
         sys.exit(1)
     data = json.loads(match.group(1))
-    application_id = data['api']['algolia']['applicationID']
+    app_id = data['api']['algolia']['applicationID']
     api_key = data['api']['algolia']['apiKey']
-    return application_id, api_key
+    
+    api_auth_cache_write(site, app_id, api_key)
+
+    return app_id, api_key
 
 
 def get_homepage_url(site: str) -> str:
@@ -46,14 +102,13 @@ def get_homepage_url(site: str) -> str:
 
 
 def get_search_client(site: str) -> SearchClientSync:
-    homepage = get_homepage_url(site)
     # Get API auth and initialise client
-    app_id, api_key = get_api_auth(homepage)
+    app_id, api_key = get_api_auth(site)
     config = SearchConfig(
         app_id=app_id,
         api_key=api_key,
     )
-    config.headers.update(headers_for_homepage(homepage))
+    config.headers.update(headers_for_homepage(get_homepage_url(site)))
     return SearchClientSync(config=config)
 
 
@@ -208,7 +263,7 @@ def to_scraped_scene(scene_from_api: Hit, site: str) -> ScrapedScene:
                 "urls": [
                     _construct_performer_url(
                         Hit.from_dict({
-                            "objectID": "00000-000-000",
+                            "objectID": "00000-000-000",    # required property for Hit, but we won't use the value
                             "url_name": actor["url_name"],
                             "actor_id": actor["actor_id"],
                         }),
@@ -311,6 +366,31 @@ def performer_search(name: str, sites: list[str]) -> list[ScrapedPerformer]:
     return []
 
 
+def scene_search(
+    query: str,
+    sites: list[str] | None = None,
+    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+) -> list[ScrapedScene]:
+    site = sites[0]
+    # Get API auth and initialise client
+    client = get_search_client(site)
+
+    response = client.search_single_index(
+        index_name="all_scenes",
+        search_params={
+            "attributesToHighlight": [],
+            "query": query,
+            "length": 20,
+        },
+    )
+
+    log.debug(f"Number of search hits: {response.nb_hits}")
+
+    if response.nb_hits:
+        return [ to_scraped_scene(hit, site) for hit in response.hits ]
+    return []
+
+
 def performer_from_fragment(args: dict[str, Any]) -> ScrapedPerformer:
     """
     This receives:
@@ -341,13 +421,17 @@ if __name__ == "__main__":
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
             # result = scene_from_url(url, postprocess=bangbros)
-        # case "scene-by-name", {"name": name} if name:
-        #     result = scene_search(name, search_domains=domains, postprocess=bangbros)
-        # case "scene-by-fragment" | "scene-by-query-fragment", args:
-        #     args = replace_all(args, "url", redirect)
-        #     result = scene_from_fragment(
-        #         args, search_domains=domains, postprocess=bangbros
-        #     )
+        case "scene-by-name", {"name": name, "extra": extra} if name and extra:
+            sites = extra
+            result = scene_search(name, sites)
+            # result = scene_search(name, search_domains=domains, postprocess=bangbros)
+        case "scene-by-fragment" | "scene-by-query-fragment", args:
+            pass
+            # result = scene_from_fragment(args)
+            # args = replace_all(args, "url", redirect)
+            # result = scene_from_fragment(
+            #     args, search_domains=domains, postprocess=bangbros
+            # )
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
         case "performer-by-fragment", args:
