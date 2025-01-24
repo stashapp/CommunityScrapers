@@ -16,19 +16,21 @@ from algoliasearch.search.client import SearchClientSync
 from algoliasearch.search.config import SearchConfig
 from algoliasearch.search.models.hit import Hit
 
+FIXED_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
 
-def get_api_auth(site: str) -> tuple[str, str]:
-    homepage = f"https://www.{site}.com"
-    headers = {
-        "User-Agent":
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0',
+
+def headers_for_homepage(homepage: str) -> dict[str, str]:
+    return {
+        "User-Agent": FIXED_USER_AGENT,
         "Origin": homepage,
         "Referer": homepage
     }
 
+
+def get_api_auth(homepage: str) -> tuple[str, str]:
     # make a request to the site's homepage to get API Key and Application ID
-    r = requests.get(homepage, headers=headers)
+    r = requests.get(homepage, headers=headers_for_homepage(homepage))
     # extract JSON
     if not (match := re.search(r"window.env\s+=\s(.+);", r.text)):
         log.error('Cannot find JSON in homepage for API keys')
@@ -39,20 +41,19 @@ def get_api_auth(site: str) -> tuple[str, str]:
     return application_id, api_key
 
 
-def get_homepage(site: str) -> str:
+def get_homepage_url(site: str) -> str:
     return f"https://www.{site}.com"
 
 
 def get_search_client(site: str) -> SearchClientSync:
+    homepage = get_homepage_url(site)
     # Get API auth and initialise client
-    app_id, api_key = get_api_auth(site)
+    app_id, api_key = get_api_auth(homepage)
     config = SearchConfig(
         app_id=app_id,
         api_key=api_key,
     )
-    homepage = get_homepage(site)
-    config.headers['Origin'] = homepage
-    config.headers['Referer'] = homepage
+    config.headers.update(headers_for_homepage(homepage))
     return SearchClientSync(config=config)
 
 
@@ -66,7 +67,7 @@ genders_map = {
 
 
 def _construct_performer_url(p: Hit, site: str) -> str:
-    return f"https://www.{site}.com/en/pornstar/view/{p.url_name}/{p.actor_id}"
+    return f"{get_homepage_url(site)}/en/pornstar/view/{p.url_name}/{p.actor_id}"
 
 
 ## Helper functions to convert from Algolia's API to Stash's scraper return type
