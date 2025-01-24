@@ -9,7 +9,7 @@ import requests
 from py_common import log
 from py_common.deps import ensure_requirements
 ensure_requirements("algoliasearch")
-from py_common.types import ScrapedPerformer
+from py_common.types import ScrapedPerformer, ScrapedScene
 from py_common.util import guess_nationality, scraper_args
 
 from algoliasearch.search.client import SearchClientSync
@@ -64,17 +64,24 @@ def default_postprocess(obj: Any, _) -> Any:
 genders_map = {
     'shemale': 'transgender_female',
 }
+def parse_gender(gender: str) -> str:
+    return genders_map.get(gender, gender)
+
+def _construct_performer_url(performer: Hit, site: str) -> str:
+    return f"{get_homepage_url(site)}/en/pornstar/view/{performer.url_name}/{performer.actor_id}"
+
+def _construct_movie_url(scene: Hit, site: str) -> str:
+    return f"{get_homepage_url(site)}/en/movie/{scene.url_movie_title}/{scene.movie_id}"
+
+def _construct_scene_url(scene: Hit, site: str) -> str:
+    return f"{get_homepage_url(site)}/en/video/{scene.sitename}/{scene.url_title}/{scene.clip_id}"
 
 
-def _construct_performer_url(p: Hit, site: str) -> str:
-    return f"{get_homepage_url(site)}/en/pornstar/view/{p.url_name}/{p.actor_id}"
-
-
-## Helper functions to convert from Algolia's API to Stash's scraper return type
+# Helper function to convert from Algolia's API to Stash's scraper return type
 def to_scraped_performer(performer_from_api: Hit, site: str) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
         "name": performer_from_api.name,
-        "gender": genders_map.get(performer_from_api.gender, performer_from_api.gender),
+        "gender": parse_gender(performer_from_api.gender),
     }
 
     if details := performer_from_api.description:
@@ -131,6 +138,124 @@ def get_id(url: str) -> str:
     return match.group(1)
 
 
+# Helper function to convert from Algolia's API to Stash's scraper return type
+def to_scraped_scene(scene_from_api: Hit, site: str) -> ScrapedScene:
+    scene: ScrapedScene = {
+        "code": str(scene_from_api.clip_id),
+        "title": scene_from_api.title
+    }
+
+    if description := scene_from_api.description:
+        scene["details"] = description
+
+    if scene_from_api.url_title:
+        scene["urls"] = [
+            _construct_scene_url(scene_from_api, site_available)
+            for site_available in scene_from_api.availableOnSite
+        ]
+
+    if release_date := scene_from_api.release_date:
+        scene["date"] = release_date
+
+    if pictures := scene_from_api.pictures:
+        try:
+            scene['image'] = 'https://images03-fame.gammacdn.com/movies' + next(
+                iter(pictures['nsfw']['top'].values()))
+        except:
+            try:
+                scene['image'] = 'https://images03-fame.gammacdn.com/movies' + next(
+                        iter(pictures['sfw']['top'].values()))
+            except:
+                log.warning("Can't locate image.")
+
+    """
+    A studio name can come from:
+    - studio
+    - channel
+    - serie
+    - segment
+    - sitename
+    - network
+    e.g. see the complexity in `determine_studio_name_from_json` in Algolia.py
+
+    possibly this script should be a class that can be sub-classed with a custom studio parser/postprocessor
+    (or just imported reused functions like the Aylo scrapers seem to do)
+    """
+    if studio_name := scene_from_api.studio_name:
+        scene["studio"] = { "name": studio_name }
+
+    if scene_from_api.movie_id:
+        scene["movies"] = [{
+            "name": scene_from_api.movie_title,
+            "date": scene_from_api.movie_date_created,
+            "synopsis": scene_from_api.movie_desc,
+            "url": _construct_movie_url(scene_from_api, site),
+        }]
+
+    if categories := scene_from_api.categories:
+        scene["tags"] = [
+            {
+                "name": category["name"]
+            }
+            for category in categories
+        ]
+
+    if actors := scene_from_api.actors:
+        scene["performers"] = [
+            {
+                "name": actor["name"],
+                "gender": parse_gender(actor["gender"]),
+                "urls": [
+                    _construct_performer_url(
+                        Hit.from_dict({
+                            "objectID": "00000-000-000",
+                            "url_name": actor["url_name"],
+                            "actor_id": actor["actor_id"],
+                        }),
+                        site,
+                    )
+                ]
+            }
+            for actor in actors
+        ]
+
+    if directors := scene_from_api.directors:
+        scene["director"] = ", ".join([ director["name"] for director in directors ])
+
+    return scene
+
+
+def scene_from_url(
+    url, postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
+) -> ScrapedPerformer | None:
+    """
+    Scrapes a scene from a URL, running an optional postprocess function on the result
+    """
+    clip_id = get_id(url)
+    log.debug(f"Clip ID: {clip_id}")
+
+    site = get_site(url)
+    log.debug(f"Site: {site}")
+
+    # Get API auth and initialise client
+    client = get_search_client(site)
+
+    response = client.search_single_index(
+        index_name="all_scenes",
+        search_params={
+            "attributesToHighlight": [],
+            "filters": f"clip_id:{clip_id}",
+            "length": 1,
+        },
+    )
+
+    log.debug(f"Number of search hits: {response.nb_hits}")
+
+    if response.nb_hits:
+        return postprocess(to_scraped_scene(response.hits[0], site), response.hits[0])
+    return {}
+
+
 def performer_from_url(
     url,
     postprocess: Callable[
@@ -161,9 +286,8 @@ def performer_from_url(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return to_scraped_performer(response.hits[0], site)
+        return postprocess(to_scraped_performer(response.hits[0], site), response.hits[0])
     return {}
-    # return postprocess(to_scraped_performer(api_performer_json), api_performer_json)
 
 
 def performer_search(name: str, sites: list[str]) -> list[ScrapedPerformer]:
@@ -214,9 +338,9 @@ if __name__ == "__main__":
         #     result = gallery_from_fragment(
         #         fixed, search_domains=domains, postprocess=bangbros
         #     )
-        # case "scene-by-url", {"url": url} if url:
-        #     url = redirect(url)
-        #     result = scene_from_url(url, postprocess=bangbros)
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
+            # result = scene_from_url(url, postprocess=bangbros)
         # case "scene-by-name", {"name": name} if name:
         #     result = scene_search(name, search_domains=domains, postprocess=bangbros)
         # case "scene-by-fragment" | "scene-by-query-fragment", args:

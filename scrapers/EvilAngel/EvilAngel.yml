@@ -10,8 +10,8 @@ sceneByURL:
       - tsfactor.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - evilangel
+      - ../Algolia/AlgoliaAPI.py
+      - scene-by-url
 movieByURL:
   - action: script
     url:
