@@ -280,16 +280,16 @@ def to_scraped_scene(scene_from_api: Hit, site: str) -> ScrapedScene:
     return scene
 
 
-def scene_from_url(
-    url, postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
+def scene_from_id(
+    clip_id,
+    sites: list[str],
+    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
 ) -> ScrapedPerformer | None:
     """
-    Scrapes a scene from a URL, running an optional postprocess function on the result
+    Scrapes a scene from a clip_id, running an optional postprocess function on the result
     """
-    clip_id = get_id(url)
-    log.debug(f"Clip ID: {clip_id}")
-
-    site = get_site(url)
+    # TODO: handle multiple sites
+    site = sites[0]
     log.debug(f"Site: {site}")
 
     # Get API auth and initialise client
@@ -309,6 +309,21 @@ def scene_from_url(
     if response.nb_hits:
         return postprocess(to_scraped_scene(response.hits[0], site), response.hits[0])
     return {}
+
+
+def scene_from_url(
+    url, postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
+) -> ScrapedPerformer | None:
+    """
+    Scrapes a scene from a URL, running an optional postprocess function on the result
+    """
+    clip_id = get_id(url)
+    log.debug(f"Clip ID: {clip_id}")
+
+    site = get_site(url)
+    log.debug(f"Site: {site}")
+
+    return scene_from_id(clip_id, [site])
 
 
 def performer_from_url(
@@ -346,6 +361,7 @@ def performer_from_url(
 
 
 def performer_search(name: str, sites: list[str]) -> list[ScrapedPerformer]:
+    # TODO: handle multiple sites
     site = sites[0]
     # Get API auth and initialise client
     client = get_search_client(site)
@@ -371,6 +387,7 @@ def scene_search(
     sites: list[str] | None = None,
     postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
 ) -> list[ScrapedScene]:
+    # TODO: handle multiple sites
     site = sites[0]
     # Get API auth and initialise client
     client = get_search_client(site)
@@ -389,6 +406,37 @@ def scene_search(
     if response.nb_hits:
         return [ to_scraped_scene(hit, site) for hit in response.hits ]
     return []
+
+
+def scene_from_fragment(args: dict[str, Any], sites: list[str]) -> ScrapedScene:
+    """
+    This receives:
+    - extra
+    from the scraper YAML
+    - url
+    - title
+    - code
+    - details
+    - director
+    - date
+    - urls
+    from the result of the scene-by-name search
+    """
+    # the first URL should be usable for a full search
+    if "urls" in args and len(args["urls"]) > 0:
+        return scene_from_url(args["urls"][0])
+
+    # if the (studio) code is present, search by clip_id
+    if "code" in args and len(args["code"]) > 0:
+        return scene_from_id(args["code"], sites)
+    
+    # if a title is present, search by text
+    if "title" in args and len(args["title"]) > 0:
+        scenes = scene_search(args["title"], sites)
+        if len(scenes) > 0:
+            return scenes[0]
+    
+    return {}
 
 
 def performer_from_fragment(args: dict[str, Any]) -> ScrapedPerformer:
@@ -426,9 +474,8 @@ if __name__ == "__main__":
             result = scene_search(name, sites)
             # result = scene_search(name, search_domains=domains, postprocess=bangbros)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            pass
-            # result = scene_from_fragment(args)
-            # args = replace_all(args, "url", redirect)
+            sites = args.pop("extra")
+            result = scene_from_fragment(args, sites)
             # result = scene_from_fragment(
             #     args, search_domains=domains, postprocess=bangbros
             # )
