@@ -3,6 +3,7 @@ name: "ModelCentroAPI"
 
 sceneByURL:
   - url:
+      - aikoprincess.com/scene/
       - amberlilyshow.com/scene/
       - amberspanks.com/scene/
       - americankitten.com/scene/
@@ -114,4 +115,4 @@ sceneByURL:
     script:
       - python
       - ModelCentroAPI.py
-# Last Updated January 12, 2025
+# Last Updated January 25, 2025
