@@ -521,6 +521,7 @@ def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
         movie["director"] = directors_to_csv_string(directors)
 
     if description := movie_from_api.get("description"):
+        # TODO: clean the text to remove HTML like <br>, maybe convert \n to line breaks, etc.
         movie["synopsis"] = description
 
     if studio_name := movie_from_api.get("studio_name"):
