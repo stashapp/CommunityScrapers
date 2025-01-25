@@ -10,7 +10,7 @@ sceneByURL:
       - tsfactor.com/en/video/
     script:
       - python
-      - ../Algolia/AlgoliaAPI.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - scene-by-url
 movieByURL:
   - action: script
@@ -21,35 +21,35 @@ movieByURL:
       - tsfactor.com/en/movie/
     script:
       - python
-      - ../Algolia/AlgoliaAPI.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - evilangel
       - movie-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/AlgoliaAPI.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - evilangel
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/AlgoliaAPI.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - evilangel
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/AlgoliaAPI.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - evilangel
     - scene-by-query-fragment
 galleryByFragment:
   action: script
   script:
     - python
-    - ../Algolia/AlgoliaAPI.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - evilangel
     - gallery-by-fragment
 galleryByURL:
@@ -63,7 +63,7 @@ galleryByURL:
       - tsfactor.com/en/photo/
     script:
       - python
-      - ../Algolia/AlgoliaAPI.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - evilangel
       - gallery-by-url
 performerByURL:
@@ -72,20 +72,20 @@ performerByURL:
       - evilangel.com/en/pornstar/
     script:
       - python
-      - ../Algolia/AlgoliaAPI.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - performer-by-url
 performerByName:
   action: script
   script:
     - python
-    - ../Algolia/AlgoliaAPI.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - evilangel
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
-    - ../Algolia/AlgoliaAPI.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - evilangel
     - performer-by-fragment
 # Last Updated January 23, 2025
