@@ -7,17 +7,16 @@ from time import time
 from typing import Any, Callable, Literal
 from urllib.parse import urlparse
 
-import requests
-
 from py_common import log
 from py_common.deps import ensure_requirements
-ensure_requirements("algoliasearch")
+ensure_requirements("algoliasearch", "requests")
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
 from py_common.util import guess_nationality, scraper_args
 
 from algoliasearch.search.client import SearchClientSync
 from algoliasearch.search.config import SearchConfig
 from algoliasearch.search.models.hit import Hit
+import requests
 
 CONFIG_FILE = 'AlgoliaAPI.ini'
 FIXED_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
