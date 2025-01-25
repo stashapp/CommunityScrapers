@@ -35,11 +35,7 @@ xPathScrapers:
             - regex: ^
               with: "FC2-PPV-"
       Image: 
-        selector: //div[@class="w-full lg:pl-8 px-2 lg:w-3/5"]/div[contains(.,"ID：")]/span
-        postProcess:
-          - replace:
-            - regex: (\d)(\d{2})(\d*)
-              with: https://fc2ppvdb.com/storage/images/article/00$1/$2/fc2ppv-$1$2$3.jpg
+        selector: //div[@class="lg:w-2/5 w-full mb-12 md:mb-0"]/a/img/@src
 
       URL:
          selector: //div[@class="w-full lg:pl-8 px-2 lg:w-3/5"]/div[contains(.,"ID：")]/span
@@ -49,7 +45,7 @@ xPathScrapers:
               with: "https://fc2ppvdb.com/articles/"
 
 debug:
-  printHTML: true
+  printHTML: false
   
 driver:
   cookies:
