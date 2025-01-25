@@ -11,11 +11,10 @@ from py_common import log
 from py_common.deps import ensure_requirements
 ensure_requirements("algoliasearch", "requests")
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
-from py_common.util import guess_nationality, scraper_args
+from py_common.util import dig, guess_nationality, scraper_args
 
 from algoliasearch.search.client import SearchClientSync
 from algoliasearch.search.config import SearchConfig
-from algoliasearch.search.models.hit import Hit
 import requests
 
 CONFIG_FILE = 'AlgoliaAPI.ini'
@@ -110,10 +109,7 @@ def get_homepage_url(site: str) -> str:
 def get_search_client(site: str) -> SearchClientSync:
     # Get API auth and initialise client
     app_id, api_key = get_api_auth(site)
-    config = SearchConfig(
-        app_id=app_id,
-        api_key=api_key,
-    )
+    config = SearchConfig(app_id, api_key)
     config.headers.update(headers_for_homepage(get_homepage_url(site)))
     return SearchClientSync(config=config)
 
@@ -128,79 +124,58 @@ genders_map = {
 def parse_gender(gender: str) -> str:
     return genders_map.get(gender, gender)
 
-def _construct_movie_cover_image_url(cover_path: str, position: Literal["front", "back"]) -> str:
-    """
-    Uses `cover_path` with `position`
-    """
+def _movie_cover_image_url(cover_path: str, position: Literal["front", "back"]) -> str:
     return f"https://transform.gammacdn.com/movies{cover_path}_{position}_400x625.jpg?width=450&height=636"
 
-def _construct_gallery_url(gallery: Hit, site: str) -> str:
-    """
-    Uses `gallery.url_title` and `gallery.set_id` with `site`
-    """
-    return f"{get_homepage_url(site)}/en/photo/{gallery.url_title}/{gallery.set_id}"
+def _gallery_url(site: str, url_title: str, set_id: str) -> str:
+    return f"{get_homepage_url(site)}/en/photo/{url_title}/{set_id}"
 
-def _construct_performer_url(performer: Hit, site: str) -> str:
-    """
-    Uses `performer.url_name` and `performer.actor_id` with `site`
-    """
-    return f"{get_homepage_url(site)}/en/pornstar/view/{performer.url_name}/{performer.actor_id}"
+def _performer_url(site: str, url_name: str, actor_id: str) -> str:
+    return f"{get_homepage_url(site)}/en/pornstar/view/{url_name}/{actor_id}"
 
-def _api_movie_to_movie_url(movie: Hit, site: str) -> str:
-    """
-    Uses `movie.url_title` and `movie.movie_id` with `site`
-    """
-    return f"{get_homepage_url(site)}/en/movie/{movie.url_title}/{movie.movie_id}"
+def _movie_url(site: str, url_title: str, movie_id: str) -> str:
+    return f"{get_homepage_url(site)}/en/movie/{url_title}/{movie_id}"
 
-def _api_scene_to_movie_url(scene: Hit, site: str) -> str:
-    """
-    Uses `scene.url_movie_title` and `scene.movie_id` with `site`
-    """
-    return f"{get_homepage_url(site)}/en/movie/{scene.url_movie_title}/{scene.movie_id}"
-
-def _construct_scene_url(scene: Hit, site: str) -> str:
-    """
-    Uses `scene.sitename`, `scene.url_title` and `scene.clip_id` with `site`
-    """
-    return f"{get_homepage_url(site)}/en/video/{scene.sitename}/{scene.url_title}/{scene.clip_id}"
+def _scene_url(site: str, sitename: str, url_title: str, clip_id: str) -> str:
+    return f"{get_homepage_url(site)}/en/video/{sitename}/{url_title}/{clip_id}"
 
 
 # Helper function to convert from Algolia's API to Stash's scraper return type
-def to_scraped_performer(performer_from_api: Hit, site: str) -> ScrapedPerformer:
+def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
-        "name": performer_from_api.name,
-        "gender": parse_gender(performer_from_api.gender),
+        "name": performer_from_api["name"],
+        "gender": parse_gender(performer_from_api["gender"]),
     }
 
-    if details := performer_from_api.description:
+    if details := performer_from_api["description"]:
         performer["details"] = details
 
-    if eye_color := performer_from_api.attributes.get('eye_color'):
+    if eye_color := performer_from_api["attributes"]["eye_color"]:
         performer["eye_color"] = eye_color
 
-    if hair_color := performer_from_api.attributes.get('hair_color'):
+    if hair_color := performer_from_api["attributes"]["hair_color"]:
         performer["hair_color"] = hair_color
 
-    if ethnicity := performer_from_api.attributes.get('ethnicity'):
+    if ethnicity := performer_from_api["attributes"]["ethnicity"]:
         performer["ethnicity"] = ethnicity
 
-    if alternate_names := performer_from_api.attributes.get('alternate_names'):
+    if alternate_names := performer_from_api["attributes"]["alternate_names"]:
         performer["aliases"] = alternate_names
 
-    if height := performer_from_api.attributes.get('height'):
+    if height := performer_from_api["attributes"]["height"]:
         performer["height"] = height
 
-    if weight := performer_from_api.attributes.get('weight'):
+    if weight := performer_from_api["attributes"]["weight"]:
         performer["weight"] = weight
     
-    if home := performer_from_api.attributes.get('home'):
+    if home := performer_from_api["attributes"]["home"]:
         performer["country"] = guess_nationality(home)
 
-    if performer_from_api.has_pictures:
-        main_pic = list(performer_from_api.pictures.values())[-1]
+    if performer_from_api["has_pictures"]:
+        main_pic = list(performer_from_api["pictures"].values())[-1]
         performer["images"] = [f"{IMAGE_CDN}/actors{main_pic}"]
 
-    performer["urls"] = [_construct_performer_url(performer_from_api, site)]
+    performer["urls"] = [_performer_url(site, performer_from_api["url_name"], performer_from_api["actor_id"])]
 
     return performer
 
@@ -227,34 +202,30 @@ def get_id(url: str) -> str:
 
 
 # Helper function to convert from Algolia's API to Stash's scraper return type
-def to_scraped_scene(scene_from_api: Hit, site: str) -> ScrapedScene:
+def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
     scene: ScrapedScene = {
-        "code": str(scene_from_api.clip_id),
-        "title": scene_from_api.title
+        "code": str(scene_from_api["clip_id"]),
+        "title": scene_from_api["title"]
     }
 
-    if description := scene_from_api.description:
+    if description := scene_from_api["description"]:
         scene["details"] = description
 
-    if scene_from_api.url_title:
+    if scene_from_api["url_title"]:
+        sitename = scene_from_api.get("sitename")
+        url_title = scene_from_api.get("url_title")
         scene["urls"] = [
-            _construct_scene_url(scene_from_api, site_available)
-            for site_available in scene_from_api.availableOnSite
+            _scene_url(site_available, sitename, url_title, scene["code"])
+            for site_available in scene_from_api["availableOnSite"]
         ]
 
-    if release_date := scene_from_api.release_date:
+    if release_date := scene_from_api["release_date"]:
         scene["date"] = release_date
 
-    if pictures := scene_from_api.pictures:
-        try:
-            scene['image'] = 'https://images03-fame.gammacdn.com/movies' + next(
-                iter(pictures['nsfw']['top'].values()))
-        except:
-            try:
-                scene['image'] = 'https://images03-fame.gammacdn.com/movies' + next(
-                        iter(pictures['sfw']['top'].values()))
-            except:
-                log.warning("Can't locate image.")
+    if (images := dig(scene_from_api, "pictures", ("nsfw", "sfw"), "top")) and (
+        image := next(iter(images.values()), None)
+    ):
+        scene["image"] = f"https://images03-fame.gammacdn.com/movies{image}"
 
     """
     A studio name can come from:
@@ -269,24 +240,24 @@ def to_scraped_scene(scene_from_api: Hit, site: str) -> ScrapedScene:
     possibly this script should be a class that can be sub-classed with a custom studio parser/postprocessor
     (or just imported reused functions like the Aylo scrapers seem to do)
     """
-    if studio_name := scene_from_api.studio_name:
+    if studio_name := scene_from_api["studio_name"]:
         scene["studio"] = { "name": studio_name }
 
-    if scene_from_api.movie_id:
+    if scene_from_api["movie_id"]:
         scene["movies"] = [{
-            "name": scene_from_api.movie_title,
-            "date": scene_from_api.movie_date_created,
-            "synopsis": scene_from_api.movie_desc,
-            "url": _api_scene_to_movie_url(scene_from_api, site),
+            "name": scene_from_api["movie_title"],
+            "date": scene_from_api["movie_date_created"],
+            "synopsis": scene_from_api["movie_desc"],
+            "url": _movie_url(site, scene_from_api["url_movie_title"], scene_from_api["movie_id"]),
         }]
 
-    if categories := scene_from_api.categories:
+    if categories := scene_from_api["categories"]:
         scene["tags"] = categories_to_tags(categories)
 
-    if actors := scene_from_api.actors:
+    if actors := scene_from_api["actors"]:
         scene["performers"] = actors_to_performers(actors, site)
 
-    if directors := scene_from_api.directors:
+    if directors := scene_from_api["directors"]:
         scene["director"] = directors_to_csv_string(directors)
 
     return scene
@@ -296,29 +267,14 @@ def directors_to_csv_string(directors):
     return ", ".join([ director["name"] for director in directors ])
 
 def categories_to_tags(categories):
-    return [
-        {
-            "name": category["name"]
-        }
-        for category in categories
-    ]
+    return [{ "name": category["name"] } for category in categories]
 
-
-def actors_to_performers(actors, site):
+def actors_to_performers(actors: list[dict[str, Any]], site: str):
     return [
         {
             "name": actor["name"],
             "gender": parse_gender(actor["gender"]),
-            "urls": [
-                _construct_performer_url(
-                    Hit.from_dict({
-                        "objectID": "00000-000-000",    # required property for Hit, but we won't use the value
-                        "url_name": actor["url_name"],
-                        "actor_id": actor["actor_id"],
-                    }),
-                    site,
-                )
-            ]
+            "urls": [ _performer_url(site, actor["url_name"], actor["actor_id"]) ]
         }
         for actor in actors
     ]
@@ -327,7 +283,7 @@ def actors_to_performers(actors, site):
 def api_scene_from_id(
     clip_id,
     sites: list[str],
-) -> Hit | None:
+) -> dict[str, Any] | None:
     """
     Searches a scene from a clip_id
     """
@@ -350,7 +306,7 @@ def api_scene_from_id(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return response.hits[0]
+        return response.hits[0].to_dict()
     return None
 
 
@@ -406,71 +362,52 @@ def scene_from_url(
     return scene_from_id(clip_id, [site])
 
 
-def to_scraped_gallery(api_hit: Hit, site: str) -> ScrapedGallery | None:
+def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | None:
     """
     Scrapes an API search hit (could be scene or photoset) into a ScrapedGallery
     """
     gallery: ScrapedGallery = {}
 
     # scenes can include corresponding photoset_name
-    if photoset_name := getattr(api_hit, 'photoset_name', None):
+    if photoset_name := api_hit.get("photoset_name"):
         gallery["title"] = photoset_name
     # photosets have their own title (as do scenes)
-    elif title := getattr(api_hit, 'title', None):
+    elif title := api_hit.get("title"):
         gallery["title"] = title
 
-    # photosets have their own title (as do scenes)
-    if title := getattr(api_hit, 'title', None):
-        gallery["title"] = title
-
-    if description := getattr(api_hit, 'description', None):
+    if description := api_hit.get("description"):
         gallery["details"] = description
 
     gallery["urls"] = []
     # scenes can include photoset_id
-    if photoset_id := getattr(api_hit, 'photoset_id', None):
+    if photoset_id := api_hit.get("photoset_id"):
         gallery["code"] = photoset_id
-        gallery["urls"].append(_construct_gallery_url(
-            Hit.from_dict({
-                "objectID": "00000-000-000",    # required property for Hit, but we won't use the value
-                "set_id": photoset_id,
-                "url_title": getattr(api_hit, 'photoset_url_name', None),
-            }),
-            site
-        ))
+        gallery["urls"].append(_gallery_url(site, api_hit.get("photoset_url_name"), photoset_id))
     # photosets have set_id
-    if set_id := getattr(api_hit, 'set_id', None):
+    if set_id := api_hit.get("set_id"):
         gallery["code"] = str(set_id)
-        gallery["urls"].append(_construct_gallery_url(api_hit, site))
+        gallery["urls"].append(_gallery_url(site, api_hit.get("url_title"), set_id))
     # api photosets can have clip_title
-    if clip_title := getattr(api_hit, 'clip_title', None):
-        gallery["urls"].append(_construct_scene_url(
-            Hit.from_dict({
-                "objectID": "00000-000-000",    # required property for Hit, but we won't use the value
-                "clip_id": getattr(api_hit, 'clip_id', None),
-                "url_title": slugify(clip_title),
-                "sitename": getattr(api_hit, 'sitename', None),
-            }),
-            site
-        ))
+    if clip_title := api_hit.get("clip_title"):
+        gallery["urls"].append(_scene_url(site, api_hit.get("sitename"), slugify(clip_title), api_hit.get("clip_id")))
 
     # photoset has date_online
-    if date_online := getattr(api_hit, 'date_online', None):
+    if date_online := api_hit.get("date_online"):
         gallery["date"] = date_online
     # scene has release_date
-    elif release_date := getattr(api_hit, 'release_date', None):
+    elif release_date := api_hit.get("release_date"):
         gallery["date"] = release_date
 
-    if studio_name := getattr(api_hit, 'studio_name', None):
+    if studio_name := api_hit.get("studio_name"):
         gallery["studio"] = { "name": studio_name }
 
-    if categories := getattr(api_hit, 'categories', None):
+    if categories := api_hit.get("categories"):
         gallery["tags"] = categories_to_tags(categories)
 
-    if actors := getattr(api_hit, 'actors', None):
+    if actors := api_hit.get("actors"):
         gallery["performers"] = actors_to_performers(actors, site)
 
-    if directors := getattr(api_hit, 'directors', None):
+    if directors := api_hit.get("directors"):
         gallery["photographer"] = directors_to_csv_string(directors)
     
     return gallery
@@ -503,7 +440,8 @@ def gallery_from_set_id(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return postprocess(to_scraped_gallery(response.hits[0], site), response.hits[0])
+        first_result = response.hits[0].to_dict()
+        return postprocess(to_scraped_gallery(first_result, site), first_result)
     return {}
 
 
@@ -561,38 +499,39 @@ def performer_from_url(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return postprocess(to_scraped_performer(response.hits[0], site), response.hits[0])
+        first_hit = response.hits[0].to_dict()
+        return postprocess(to_scraped_performer(first_hit, site), first_hit)
     return None
 
 
 # Helper function to convert from Algolia's API to Stash's scraper return type
-def to_scraped_movie(movie_from_api: Hit, site: str) -> ScrapedMovie:
+def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
     movie: ScrapedMovie = {}
 
-    if title := getattr(movie_from_api, 'title', None):
+    if title := movie_from_api.get("title"):
         movie["name"] = title
 
-    if date_created := getattr(movie_from_api, 'date_created', None):
+    if date_created := movie_from_api.get("date_created"):
         movie["date"] = date_created
 
-    if length := getattr(movie_from_api, 'length', None):
+    if length := movie_from_api.get("length"):
         movie["duration"] = str(length)
 
-    if directors := getattr(movie_from_api, 'directors', None):
+    if directors := movie_from_api.get("directors"):
         movie["director"] = directors_to_csv_string(directors)
 
-    if description := getattr(movie_from_api, 'description', None):
+    if description := movie_from_api.get("description"):
         movie["synopsis"] = description
 
-    if studio_name := getattr(movie_from_api, 'studio_name', None):
+    if studio_name := movie_from_api.get("studio_name"):
         movie["studio"] = { "name": studio_name }
 
-    if cover_path := getattr(movie_from_api, 'cover_path', None):
-        movie["front_image"] = _construct_movie_cover_image_url(cover_path, 'front')
-        movie["back_image"] = _construct_movie_cover_image_url(cover_path, 'back')
+    if cover_path := movie_from_api.get("cover_path"):
+        movie["front_image"] = _movie_cover_image_url(cover_path, 'front')
+        movie["back_image"] = _movie_cover_image_url(cover_path, 'back')
 
-    if getattr(movie_from_api, 'url_title', None):
-        movie["url"] = _api_movie_to_movie_url(movie_from_api, site)
+    if url_title := movie_from_api.get("url_title"):
+        movie["url"] = _movie_url(site, url_title, movie_from_api.get("movie_id"))
 
     return movie
 
@@ -624,7 +563,8 @@ def movie_from_url(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return postprocess(to_scraped_movie(response.hits[0], site), response.hits[0])
+        first_hit = response.hits[0].to_dict()
+        return postprocess(to_scraped_movie(first_hit, site), first_hit)
     return None
 
 
@@ -646,7 +586,7 @@ def performer_search(name: str, sites: list[str]) -> list[ScrapedPerformer]:
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return [ to_scraped_performer(hit, site) for hit in response.hits ]
+        return [ to_scraped_performer(hit.to_dict(), site) for hit in response.hits ]
     return []
 
 
@@ -672,7 +612,7 @@ def scene_search(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return [ to_scraped_scene(hit, site) for hit in response.hits ]
+        return [ to_scraped_scene(hit.to_dict(), site) for hit in response.hits ]
     return []
 
 
@@ -698,7 +638,7 @@ def gallery_search(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return [ to_scraped_gallery(hit, site) for hit in response.hits ]
+        return [ to_scraped_gallery(hit.to_dict(), site) for hit in response.hits ]
     return []
 
 
