@@ -1,4 +1,4 @@
-from base64 import b64decode
+from base64 import b64decode, b64encode
 import configparser
 import json
 import re
@@ -9,10 +9,10 @@ from urllib.parse import urlparse
 
 from py_common import log
 from py_common.deps import ensure_requirements
-ensure_requirements("algoliasearch", "requests")
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
-from py_common.util import dig, guess_nationality, scraper_args
+from py_common.util import dig, guess_nationality, is_valid_url, scraper_args
 
+ensure_requirements("algoliasearch", "requests")
 from algoliasearch.search.client import SearchClientSync
 from algoliasearch.search.config import SearchConfig
 import requests
@@ -38,6 +38,10 @@ def headers_for_homepage(homepage: str) -> dict[str, str]:
 
 
 def api_auth_cache_write(site: str, app_id: str, api_key: str):
+    """
+    Saves the API auth (app_id and api_key) to the CONFIG_FILE
+    so that it can be loaded in future runs of this script
+    """
     config = configparser.ConfigParser()
     config.read(CONFIG_FILE)
     try:
@@ -57,6 +61,11 @@ def api_auth_cache_write(site: str, app_id: str, api_key: str):
 
 
 def api_auth_cache_read(site: str) -> tuple[str, str] | tuple[None, None]:
+    """
+    Attempts to load a previously obtained set of API auth credentials
+    (`app_id` and `api_key`) for a `site`, if it exists in the
+    CONFIG_FILE and is still valid for a reasonable amount of time
+    """
     config = configparser.ConfigParser()
     config.read(CONFIG_FILE)
     try:
@@ -80,6 +89,11 @@ def api_auth_cache_read(site: str) -> tuple[str, str] | tuple[None, None]:
 
 
 def get_api_auth(site: str) -> tuple[str, str]:
+    """
+    Gets the API auth (`app_id` and `api_key`) for a `site`, either
+    from previously cached in CONFIG_FILE, or retrieved from the
+    site's homepage
+    """
     # attempt to get cached API auth
     if (auth := api_auth_cache_read(site)) and auth[0] and auth[1]:
         return auth
@@ -87,7 +101,7 @@ def get_api_auth(site: str) -> tuple[str, str]:
     log.debug('No valid auth found in cache, fetching new auth')
 
     # make a request to the site's homepage to get API Key and Application ID
-    homepage = get_homepage_url(site)
+    homepage = homepage_url(site)
     r = requests.get(homepage, headers=headers_for_homepage(homepage))
     # extract JSON
     if not (match := re.search(r"window.env\s+=\s(.+);", r.text)):
@@ -102,15 +116,19 @@ def get_api_auth(site: str) -> tuple[str, str]:
     return app_id, api_key
 
 
-def get_homepage_url(site: str) -> str:
+def homepage_url(site: str) -> str:
     return f"https://www.{site}.com"
 
 
 def get_search_client(site: str) -> SearchClientSync:
+    """
+    Initialises a search client with API auth credentials
+    (`app_id` and `api_key`) and request headers
+    """
     # Get API auth and initialise client
     app_id, api_key = get_api_auth(site)
     config = SearchConfig(app_id, api_key)
-    config.headers.update(headers_for_homepage(get_homepage_url(site)))
+    config.headers.update(headers_for_homepage(homepage_url(site)))
     return SearchClientSync(config=config)
 
 
@@ -124,24 +142,26 @@ genders_map = {
 def parse_gender(gender: str) -> str:
     return genders_map.get(gender, gender)
 
-def _movie_cover_image_url(cover_path: str, position: Literal["front", "back"]) -> str:
+def movie_cover_image_url(cover_path: str, position: Literal["front", "back"]) -> str:
     return f"https://transform.gammacdn.com/movies{cover_path}_{position}_400x625.jpg?width=450&height=636"
 
-def _gallery_url(site: str, url_title: str, set_id: str) -> str:
-    return f"{get_homepage_url(site)}/en/photo/{url_title}/{set_id}"
+def gallery_url(site: str, url_title: str, set_id: str) -> str:
+    return f"{homepage_url(site)}/en/photo/{url_title}/{set_id}"
 
-def _performer_url(site: str, url_name: str, actor_id: str) -> str:
-    return f"{get_homepage_url(site)}/en/pornstar/view/{url_name}/{actor_id}"
+def performer_url(site: str, url_name: str, actor_id: str) -> str:
+    return f"{homepage_url(site)}/en/pornstar/view/{url_name}/{actor_id}"
 
-def _movie_url(site: str, url_title: str, movie_id: str) -> str:
-    return f"{get_homepage_url(site)}/en/movie/{url_title}/{movie_id}"
+def movie_url(site: str, url_title: str, movie_id: str) -> str:
+    return f"{homepage_url(site)}/en/movie/{url_title}/{movie_id}"
 
-def _scene_url(site: str, sitename: str, url_title: str, clip_id: str) -> str:
-    return f"{get_homepage_url(site)}/en/video/{sitename}/{url_title}/{clip_id}"
+def scene_url(site: str, sitename: str, url_title: str, clip_id: str) -> str:
+    return f"{homepage_url(site)}/en/video/{sitename}/{url_title}/{clip_id}"
 
 
-# Helper function to convert from Algolia's API to Stash's scraper return type
 def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> ScrapedPerformer:
+    """
+    Helper function to convert from Algolia's API to Stash's scraper return type
+    """
     performer: ScrapedPerformer = {
         "name": performer_from_api["name"],
         "gender": parse_gender(performer_from_api["gender"]),
@@ -175,34 +195,37 @@ def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> Scrap
         main_pic = list(performer_from_api["pictures"].values())[-1]
         performer["images"] = [f"{IMAGE_CDN}/actors{main_pic}"]
 
-    performer["urls"] = [_performer_url(site, performer_from_api["url_name"], performer_from_api["actor_id"])]
+    performer["urls"] = [performer_url(site, performer_from_api["url_name"], performer_from_api["actor_id"])]
 
     return performer
 
 
-def get_site(url: str) -> str:
+def site_from_url(url: str) -> str:
     """
-    Extract the domain from the URL, e.g.
+    Extract the (second level) part of the domain from the URL, e.g.
 
-    www.evilangel.com -> evilangel
-    evilangel.com -> evilangel
+    - www.evilangel.com -> evilangel
+    - evilangel.com -> evilangel
     """
     return urlparse(url).netloc.split(".")[-2]
 
 
-def get_id(url: str) -> str:
+def id_from_url(url: str) -> str | None:
     "Get the ID from a URL"
-    if not (match := re.search(r"/(\d+)$", url)):
+    if match := re.search(r"/(\d+)$", url):
+        return match.group(1)
+    else:
         log.error(
             "Can't get the ID from the URL. "
             "Are you sure that URL is from a site that uses the Algolia API?"
         )
         return None
-    return match.group(1)
 
 
-# Helper function to convert from Algolia's API to Stash's scraper return type
 def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
+    """
+    Helper function to convert from Algolia's API to Stash's scraper return type
+    """
     scene: ScrapedScene = {
         "code": str(scene_from_api["clip_id"]),
         "title": scene_from_api["title"]
@@ -215,7 +238,7 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         sitename = scene_from_api.get("sitename")
         url_title = scene_from_api.get("url_title")
         scene["urls"] = [
-            _scene_url(site_available, sitename, url_title, scene["code"])
+            scene_url(site_available, sitename, url_title, scene["code"])
             for site_available in scene_from_api["availableOnSite"]
         ]
 
@@ -225,7 +248,7 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
     if (images := dig(scene_from_api, "pictures", ("nsfw", "sfw"), "top")) and (
         image := next(iter(images.values()), None)
     ):
-        scene["image"] = f"https://images03-fame.gammacdn.com/movies{image}"
+        scene["image"] = f"{IMAGE_CDN}/movies{image}"
 
     """
     A studio name can come from:
@@ -235,10 +258,9 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
     - segment
     - sitename
     - network
-    e.g. see the complexity in `determine_studio_name_from_json` in Algolia.py
 
-    possibly this script should be a class that can be sub-classed with a custom studio parser/postprocessor
-    (or just imported reused functions like the Aylo scrapers seem to do)
+    create a custom postprocess function in the network scraper to determine
+    the studio name, see EvilAngel.py for an example
     """
     if studio_name := scene_from_api["studio_name"]:
         scene["studio"] = { "name": studio_name }
@@ -248,7 +270,7 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
             "name": scene_from_api["movie_title"],
             "date": scene_from_api["movie_date_created"],
             "synopsis": scene_from_api["movie_desc"],
-            "url": _movie_url(site, scene_from_api["url_movie_title"], scene_from_api["movie_id"]),
+            "url": movie_url(site, scene_from_api["url_movie_title"], scene_from_api["movie_id"]),
         }]
 
     if categories := scene_from_api["categories"]:
@@ -274,7 +296,7 @@ def actors_to_performers(actors: list[dict[str, Any]], site: str):
         {
             "name": actor["name"],
             "gender": parse_gender(actor["gender"]),
-            "urls": [ _performer_url(site, actor["url_name"], actor["actor_id"]) ]
+            "urls": [ performer_url(site, actor["url_name"], actor["actor_id"]) ]
         }
         for actor in actors
     ]
@@ -285,7 +307,10 @@ def api_scene_from_id(
     sites: list[str],
 ) -> dict[str, Any] | None:
     """
-    Searches a scene from a clip_id
+    Searches a scene from a clip_id and returns the API result as-is
+
+    It is a separate function to allow gallery scraping to use scene info
+    as some sites do not have publicly available galleries.
     """
     # TODO: handle multiple sites
     site = sites[0]
@@ -331,8 +356,8 @@ def scene_from_id(
 def gallery_from_scene_id(
     clip_id,
     sites: list[str],
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
-) -> ScrapedScene | None:
+    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess
+) -> ScrapedGallery | None:
     """
     Scrapes a gallery from a clip_id, running an optional postprocess function on the result
     """
@@ -353,13 +378,13 @@ def scene_from_url(
     """
     Scrapes a scene from a URL, running an optional postprocess function on the result
     """
-    clip_id = get_id(url)
+    clip_id = id_from_url(url)
     log.debug(f"Clip ID: {clip_id}")
 
-    site = get_site(url)
+    site = site_from_url(url)
     log.debug(f"Site: {site}")
 
-    return scene_from_id(clip_id, [site])
+    return scene_from_id(clip_id, [site], postprocess)
 
 
 def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | None:
@@ -382,14 +407,14 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | N
     # scenes can include photoset_id
     if photoset_id := api_hit.get("photoset_id"):
         gallery["code"] = photoset_id
-        gallery["urls"].append(_gallery_url(site, api_hit.get("photoset_url_name"), photoset_id))
+        gallery["urls"].append(gallery_url(site, api_hit.get("photoset_url_name"), photoset_id))
     # photosets have set_id
     if set_id := api_hit.get("set_id"):
         gallery["code"] = str(set_id)
-        gallery["urls"].append(_gallery_url(site, api_hit.get("url_title"), set_id))
+        gallery["urls"].append(gallery_url(site, api_hit.get("url_title"), set_id))
     # api photosets can have clip_title
     if clip_title := api_hit.get("clip_title"):
-        gallery["urls"].append(_scene_url(site, api_hit.get("sitename"), slugify(clip_title), api_hit.get("clip_id")))
+        gallery["urls"].append(scene_url(site, api_hit.get("sitename"), slugify(clip_title), api_hit.get("clip_id")))
 
     # photoset has date_online
     if date_online := api_hit.get("date_online"):
@@ -416,7 +441,7 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | N
 def gallery_from_set_id(
     set_id,
     sites: list[str],
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
 ) -> ScrapedGallery | None:
     """
     Scrapes a gallery from a set_id, running an optional postprocess function on the result
@@ -442,46 +467,44 @@ def gallery_from_set_id(
     if response.nb_hits:
         first_result = response.hits[0].to_dict()
         return postprocess(to_scraped_gallery(first_result, site), first_result)
-    return {}
+    return None
 
 
 def gallery_from_url(
     url,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
 ) -> ScrapedGallery | None:
     """
     Scrapes a gallery from a URL, running an optional postprocess function on the result
     """
-    url_id = get_id(url)
-    site = get_site(url)
+    url_id = id_from_url(url)
+    site = site_from_url(url)
     log.debug(f"Site: {site}")
 
     # some sites have public photoset URLs, so can be searched by public photoset ID
     if "/photo/" in url:
         log.debug(f"set_id: {url_id}")
-        return gallery_from_set_id(url_id, [site])
+        return gallery_from_set_id(url_id, [site], postprocess)
     
     # some sites do not have public photosets, but we should be able to use a scene URL
     if "/video/" in url:
         log.debug(f"clip_id: {url_id}")
-        return gallery_from_scene_id(url_id, [site])
+        return gallery_from_scene_id(url_id, [site], postprocess)
 
     return None
 
 
 def performer_from_url(
     url,
-    postprocess: Callable[
-        [ScrapedPerformer, dict], ScrapedPerformer
-    ] = default_postprocess,
+    postprocess: Callable[[ScrapedPerformer, dict], ScrapedPerformer] = default_postprocess,
 ) -> ScrapedPerformer | None:
     """
     Scrapes a performer from a URL, running an optional postprocess function on the result
     """
-    actor_id = get_id(url)
+    actor_id = id_from_url(url)
     log.debug(f"Performer ID: {actor_id}")
 
-    site = get_site(url)
+    site = site_from_url(url)
     log.debug(f"Site: {site}")
 
     # Get API auth and initialise client
@@ -504,8 +527,10 @@ def performer_from_url(
     return None
 
 
-# Helper function to convert from Algolia's API to Stash's scraper return type
 def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
+    """
+    Helper function to convert from Algolia's API to Stash's scraper return type
+    """
     movie: ScrapedMovie = {}
 
     if title := movie_from_api.get("title"):
@@ -528,11 +553,20 @@ def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
         movie["studio"] = { "name": studio_name }
 
     if cover_path := movie_from_api.get("cover_path"):
-        movie["front_image"] = _movie_cover_image_url(cover_path, 'front')
-        movie["back_image"] = _movie_cover_image_url(cover_path, 'back')
+        front_image_url = movie_cover_image_url(cover_path, 'front')
+        if is_valid_url(front_image_url):
+            movie["front_image"] = front_image_url
+        back_image_url = movie_cover_image_url(cover_path, 'back')
+        if is_valid_url(back_image_url):
+            res_front = requests.get(front_image_url, headers=headers_for_homepage(homepage_url(site)))
+            res_back = requests.get(back_image_url, headers=headers_for_homepage(homepage_url(site)))
+            if b64encode(res_front.content) == b64encode(res_back.content):
+                log.debug("Front and Back images identical, NOT scraping back image")
+            else:
+                movie["back_image"] = back_image_url
 
     if url_title := movie_from_api.get("url_title"):
-        movie["url"] = _movie_url(site, url_title, movie_from_api.get("movie_id"))
+        movie["url"] = movie_url(site, url_title, movie_from_api.get("movie_id"))
 
     return movie
 
@@ -543,10 +577,10 @@ def movie_from_url(
     """
     Scrapes a movie from a URL, running an optional postprocess function on the result
     """
-    movie_id = get_id(url)
+    movie_id = id_from_url(url)
     log.debug(f"movie_id: {movie_id}")
 
-    site = get_site(url)
+    site = site_from_url(url)
     log.debug(f"Site: {site}")
 
     # Get API auth and initialise client
@@ -569,7 +603,11 @@ def movie_from_url(
     return None
 
 
-def performer_search(name: str, sites: list[str]) -> list[ScrapedPerformer]:
+def performer_search(
+    name: str, 
+    sites: list[str],
+    postprocess: Callable[[ScrapedPerformer, dict], ScrapedPerformer] = default_postprocess,
+) -> list[ScrapedPerformer]:
     # TODO: handle multiple sites
     site = sites[0]
     # Get API auth and initialise client
@@ -587,13 +625,16 @@ def performer_search(name: str, sites: list[str]) -> list[ScrapedPerformer]:
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return [ to_scraped_performer(hit.to_dict(), site) for hit in response.hits ]
+        return [
+            postprocess(to_scraped_performer(hit.to_dict(), site), hit.to_dict())
+            for hit in response.hits
+        ]
     return []
 
 
 def scene_search(
     query: str,
-    sites: list[str] | None = None,
+    sites: list[str],
     postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
 ) -> list[ScrapedScene]:
     # TODO: handle multiple sites
@@ -613,13 +654,16 @@ def scene_search(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return [ to_scraped_scene(hit.to_dict(), site) for hit in response.hits ]
+        return [
+            postprocess(to_scraped_scene(hit.to_dict(), site), hit.to_dict())
+            for hit in response.hits
+        ]
     return []
 
 
 def gallery_search(
     query: str,
-    sites: list[str] | None = None,
+    sites: list[str],
     postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
 ) -> list[ScrapedGallery]:
     # TODO: handle multiple sites
@@ -639,15 +683,21 @@ def gallery_search(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return [ to_scraped_gallery(hit.to_dict(), site) for hit in response.hits ]
+        return [
+            postprocess(to_scraped_gallery(hit.to_dict(), site), hit.to_dict())
+            for hit in response.hits ]
     return []
 
 
-def scene_from_fragment(args: dict[str, Any], sites: list[str]) -> ScrapedScene:
+def scene_from_fragment(
+    args: dict[str, Any],
+    sites: list[str],
+    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+) -> ScrapedScene:
     """
     This receives:
-    - extra
-    from the scraper YAML
+    - sites
+    from the scraper YAML (array items)
     - url
     - title
     - code
@@ -659,15 +709,15 @@ def scene_from_fragment(args: dict[str, Any], sites: list[str]) -> ScrapedScene:
     """
     # the first URL should be usable for a full search
     if "urls" in args and len(args["urls"]) > 0:
-        return scene_from_url(args["urls"][0])
+        return scene_from_url(args["urls"][0], postprocess)
 
     # if the (studio) code is present, search by clip_id
     if "code" in args and len(args["code"]) > 0:
-        return scene_from_id(args["code"], sites)
+        return scene_from_id(args["code"], sites, postprocess)
     
     # if a title is present, search by text
     if "title" in args and len(args["title"]) > 0:
-        scenes = scene_search(args["title"], sites)
+        scenes = scene_search(args["title"], sites, postprocess)
         if len(scenes) > 0:
             return scenes[0]
     
@@ -678,7 +728,7 @@ def gallery_from_fragment(
     fragment: dict[str, Any],
     sites: list[str],
     # min_ratio=config.minimum_similarity,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
+    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
 ) -> ScrapedGallery | None:
     """
     Scrapes a gallery from a fragment, which must contain at least one of the following:
@@ -692,12 +742,10 @@ def gallery_from_fragment(
     """
     log.debug(f"in gallery_from_fragment, fragment: {fragment}")
     if url := fragment.get("url"):
-        log.debug('doing gallery_from_fragment with gallery_from_url')
-        return gallery_from_url(url)
+        return gallery_from_url(url, postprocess)
 
     if title := fragment.get("title"):
-        log.debug('doing gallery_from_fragment with gallery_search')
-        scraped_galleries = gallery_search(title, sites)
+        scraped_galleries = gallery_search(title, sites, postprocess)
 
         # one match
         if len(scraped_galleries) == 1:
@@ -712,7 +760,10 @@ def gallery_from_fragment(
     return None
 
 
-def performer_from_fragment(args: dict[str, Any]) -> ScrapedPerformer:
+def performer_from_fragment(
+    args: dict[str, Any],
+    postprocess: Callable[[ScrapedPerformer, dict], ScrapedPerformer] = default_postprocess,
+) -> ScrapedPerformer:
     """
     This receives:
     - name
@@ -722,7 +773,7 @@ def performer_from_fragment(args: dict[str, Any]) -> ScrapedPerformer:
     """
     # the first URL should be usable for a full search
     url = args.get("urls")[0]
-    return performer_from_url(url)
+    return performer_from_url(url, postprocess)
 
 
 if __name__ == "__main__":
@@ -733,36 +784,25 @@ if __name__ == "__main__":
     match op, args:
         case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url)
-            # result = gallery_from_url(url, postprocess=bangbros)
         case "gallery-by-fragment", args:
             sites = args.pop("extra")
             result = gallery_from_fragment(args, sites)
-            # result = gallery_from_fragment(
-            #     fixed, search_domains=domains, postprocess=bangbros
-            # )
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
-            # result = scene_from_url(url, postprocess=bangbros)
         case "scene-by-name", {"name": name, "extra": extra} if name and extra:
             sites = extra
             result = scene_search(name, sites)
-            # result = scene_search(name, search_domains=domains, postprocess=bangbros)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             sites = args.pop("extra")
             result = scene_from_fragment(args, sites)
-            # result = scene_from_fragment(
-            #     args, search_domains=domains, postprocess=bangbros
-            # )
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
         case "performer-by-fragment", args:
             result = performer_from_fragment(args)
         case "performer-by-name", {"name": name, "extra": extra} if name and extra:
-            sites = extra
-            result = performer_search(name, sites)
+            result = performer_search(name, extra)
         case "movie-by-url", {"url": url} if url:
             result = movie_from_url(url)
-            # result = movie_from_url(url, postprocess=bangbros)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
