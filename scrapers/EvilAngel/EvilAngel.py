@@ -75,7 +75,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     # determine studio override with custom logic
     # steps through from api_scene["availableOnSite"], and picks the first match
     if site_match := next(
-        (item for item in site_map.keys() if item in available_on_site),
+        (site for site in available_on_site if site in site_map.keys()),
         None
     ):
         return site_map.get(site_match, site_match)
@@ -139,8 +139,8 @@ def postprocess_movie(movie: ScrapedMovie, api_movie: dict[str, Any]) -> Scraped
     if studio_override := determine_studio(api_movie):
         movie["studio"] = { "name": studio_override }
 
-    if description_fixed := fix_ts_trans_find_replace(api_movie.get("description")):
-        movie["synopsis"] = description_fixed
+    if synopsis := movie.get("synopsis"):
+        movie["synopsis"] = fix_ts_trans_find_replace(synopsis)
     
     return movie
 

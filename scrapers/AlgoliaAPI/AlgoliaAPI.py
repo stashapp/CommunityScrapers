@@ -12,9 +12,10 @@ from py_common.deps import ensure_requirements
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
 from py_common.util import dig, guess_nationality, is_valid_url, scraper_args
 
-ensure_requirements("algoliasearch", "requests")
+ensure_requirements("algoliasearch", "bs4:beautifulsoup4", "requests")
 from algoliasearch.search.client import SearchClientSync
 from algoliasearch.search.config import SearchConfig
+from bs4 import BeautifulSoup as bs
 import requests
 
 CONFIG_FILE = 'AlgoliaAPI.ini'
@@ -118,6 +119,18 @@ def get_api_auth(site: str) -> tuple[str, str]:
 
 def homepage_url(site: str) -> str:
     return f"https://www.{site}.com"
+
+
+def clean_text(details: str) -> str:
+    """
+    Remove escaped backslashes and html parse the details text.
+    """
+    if details:
+        details = details.replace("\\", "")
+        details = re.sub(r"<\s*\/?br\s*\/?\s*>", "\n", details)
+        details = bs(details, features='html.parser').get_text()
+        details = '\n'.join(line.strip() for line in details.split('\n') if line.strip())
+    return details
 
 
 def get_search_client(site: str) -> SearchClientSync:
@@ -232,7 +245,7 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
     }
 
     if description := scene_from_api["description"]:
-        scene["details"] = description
+        scene["details"] = clean_text(description)
 
     if scene_from_api["url_title"]:
         sitename = scene_from_api.get("sitename")
@@ -401,7 +414,7 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | N
         gallery["title"] = title
 
     if description := api_hit.get("description"):
-        gallery["details"] = description
+        gallery["details"] = clean_text(description)
 
     gallery["urls"] = []
     # scenes can include photoset_id
@@ -546,8 +559,7 @@ def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
         movie["director"] = directors_to_csv_string(directors)
 
     if description := movie_from_api.get("description"):
-        # TODO: clean the text to remove HTML like <br>, maybe convert \n to line breaks, etc.
-        movie["synopsis"] = description
+        movie["synopsis"] = clean_text(description)
 
     if studio_name := movie_from_api.get("studio_name"):
         movie["studio"] = { "name": studio_name }
