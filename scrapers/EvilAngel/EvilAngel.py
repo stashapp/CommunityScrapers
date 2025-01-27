@@ -4,6 +4,7 @@ import sys
 from typing import Any
 
 from AlgoliaAPI.AlgoliaAPI import (
+  ScrapedMovie,
   gallery_from_fragment,
   gallery_from_url,
   movie_from_url,
@@ -128,10 +129,20 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
     if studio_override := determine_studio(api_scene):
         scene["studio"] = { "name": studio_override }
 
-    if details_fixed := fix_ts_trans_find_replace(api_scene.get("description")):
-        scene["details"] = details_fixed
+    if description_fixed := fix_ts_trans_find_replace(api_scene.get("description")):
+        scene["details"] = description_fixed
 
     return scene
+
+
+def postprocess_movie(movie: ScrapedMovie, api_movie: dict[str, Any]) -> ScrapedMovie:
+    if studio_override := determine_studio(api_movie):
+        movie["studio"] = { "name": studio_override }
+
+    if description_fixed := fix_ts_trans_find_replace(api_movie.get("description")):
+        movie["synopsis"] = description_fixed
+    
+    return movie
 
 
 if __name__ == "__main__":
@@ -161,7 +172,7 @@ if __name__ == "__main__":
             sites = extra
             result = performer_search(name, sites)
         case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url)
+            result = movie_from_url(url, postprocess=postprocess_movie)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
