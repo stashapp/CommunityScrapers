@@ -4,7 +4,7 @@ import json
 import re
 import sys
 from time import time
-from typing import Any, Callable, Literal
+from typing import Any, Callable, Literal, TypeVar
 from urllib.parse import urlparse
 
 from py_common import log
@@ -17,6 +17,8 @@ from algoliasearch.search.client import SearchClientSync
 from algoliasearch.search.config import SearchConfig
 from bs4 import BeautifulSoup as bs
 import requests
+
+T = TypeVar('T')
 
 CONFIG_FILE = 'AlgoliaAPI.ini'
 FIXED_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
@@ -145,7 +147,7 @@ def get_search_client(site: str) -> SearchClientSync:
     return SearchClientSync(config=config)
 
 
-def default_postprocess(obj: Any, _) -> Any:
+def default_postprocess(obj: T, _) -> T:
     return obj
 
 
