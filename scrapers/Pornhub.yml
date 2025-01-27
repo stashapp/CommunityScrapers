@@ -137,7 +137,7 @@ xPathScrapers:
       Tags:
         Name: $videoDetails//a[@data-label="category"] | $videoDetails//a[@data-label="tag"]
       Performers:
-        Name: $videoDetails//a[@data-label="pornstar"]
+        Name: $videoDetails//a[@data-label="pornstar"] | $videoDetails//span[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name: >-
