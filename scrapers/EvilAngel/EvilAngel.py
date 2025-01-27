@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 from typing import Any
 
@@ -105,9 +106,30 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     return None
 
 
-def postprocess_evilangel_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
+def fix_ts_trans_find_replace(text: str) -> str | None:
+    """
+    At some point in time, there was a mass find-replace performed that replaced
+    all occurrences of "TS" or "ts" with "Trans".
+
+    The problem with this is that it replaced every match naively, resulting in
+    these examples:
+    - tits -> tiTrans
+    - hits -> hiTrans
+
+    This regex sub should undo those changes, but leave the intended change:
+    - TS -> Trans
+    """
+    if text:
+        return re.sub(r"(?<=[a-z])Trans", "ts", text)
+    return None
+
+
+def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
     if studio_override := determine_studio(api_scene):
         scene["studio"] = { "name": studio_override }
+
+    if details_fixed := fix_ts_trans_find_replace(api_scene.get("description")):
+        scene["details"] = details_fixed
 
     return scene
 
@@ -124,13 +146,13 @@ if __name__ == "__main__":
             sites = args.pop("extra")
             result = gallery_from_fragment(args, sites)
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, postprocess=postprocess_evilangel_scene)
+            result = scene_from_url(url, postprocess=postprocess_scene)
         case "scene-by-name", {"name": name, "extra": extra} if name and extra:
             sites = extra
-            result = scene_search(name, sites, postprocess=postprocess_evilangel_scene)
+            result = scene_search(name, sites, postprocess=postprocess_scene)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             sites = args.pop("extra")
-            result = scene_from_fragment(args, sites, postprocess=postprocess_evilangel_scene)
+            result = scene_from_fragment(args, sites, postprocess=postprocess_scene)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
         case "performer-by-fragment", args:
