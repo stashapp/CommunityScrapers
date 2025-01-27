@@ -4,6 +4,7 @@ import sys
 from typing import Any
 
 from AlgoliaAPI.AlgoliaAPI import (
+  ScrapedGallery,
   ScrapedMovie,
   gallery_from_fragment,
   gallery_from_url,
@@ -36,7 +37,7 @@ serie_name_map = {
     "XXXmailed": "Blackmailed",
 }
 """
-Each serie_name found in the logic should have a key-value here
+Each serie_name requiring a map/override should have a key-value here
 """
 
 site_map = {
@@ -78,8 +79,13 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         (site for site in available_on_site if site in site_map.keys()),
         None
     ):
+        log.debug(f"matched site '{site_match}' in {available_on_site}")
         return site_map.get(site_match, site_match)
-    elif serie_name in serie_name_map.keys():
+    elif serie_name in [
+        *serie_name_map.keys(),
+        "PansexualX",
+    ]:
+        log.debug(f"matched serie_name '{serie_name}' in {serie_name_map.keys()}")
         return serie_name_map.get(serie_name, serie_name)
     elif main_channel_name in [
         "AnalPlaytime",
@@ -92,6 +98,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         "Secret Crush ",    # trailing space is in the API
         "Transsexual Angel",
     ]:
+        log.debug(f"matched main_channel_name '{main_channel_name}'")
         return channel_name_map.get(main_channel_name, main_channel_name)
     elif director_match := next(
         (item for item in [
@@ -100,10 +107,14 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         ] if item in [c.get("name") for c in api_object.get("channels")]),
         None
     ):
+        log.debug(f"matched director_match '{director_match}'")
         return director_match
     elif movie_desc := api_object.get("movie_desc"):
         if "BAM Visions" in movie_desc:
+            log.debug(f"matched 'BAM Visions' in movie_desc")
             return "BAM Visions"
+    else:
+        log.debug("Did not match any studio override logic")
     return None
 
 
@@ -145,6 +156,16 @@ def postprocess_movie(movie: ScrapedMovie, api_movie: dict[str, Any]) -> Scraped
     return movie
 
 
+def postprocess_gallery(gallery: ScrapedGallery, api_movie: dict[str, Any]) -> ScrapedGallery:
+    if studio_override := determine_studio(api_movie):
+        gallery["studio"] = { "name": studio_override }
+
+    if details := gallery.get("details"):
+        gallery["details"] = fix_ts_trans_find_replace(details)
+
+    return gallery
+
+
 if __name__ == "__main__":
     op, args = scraper_args()
     result = None
@@ -152,10 +173,10 @@ if __name__ == "__main__":
     log.debug(f"args: {args}")
     match op, args:
         case "gallery-by-url", {"url": url} if url:
-            result = gallery_from_url(url)
+            result = gallery_from_url(url, postprocess=postprocess_gallery)
         case "gallery-by-fragment", args:
             sites = args.pop("extra")
-            result = gallery_from_fragment(args, sites)
+            result = gallery_from_fragment(args, sites, postprocess=postprocess_gallery)
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url, postprocess=postprocess_scene)
         case "scene-by-name", {"name": name, "extra": extra} if name and extra:
