@@ -1,0 +1,47 @@
+name: Kayla Kleevage
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - kaylakleevage.com/tour/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+      Details: //div[@class="videocontent"]/p
+      Image:
+        selector: >-
+          //base/@href |
+          //div[@class="videoplayer"]/img/@src0_4x |
+          //div[@class="videoplayer"]/img/@src0_3x |
+          //div[@class="videoplayer"]/img/@src0_2x |
+          //div[@class="videoplayer"]/img/@src0_1x
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: (.*?)__SEP__/tour/(.*?)(:?__SEP).*
+                with: $1$2
+      Date:
+        selector: //div[@class="videodetails"]/p[@class="date"]
+        postProcess:
+          - replace:
+              - regex: "^([0-9/]+).*"
+                with: $1
+          - parseDate: 01/02/2006
+      Tags:
+        Name: //div[@class="videodetails"]//a[contains(@href,"categories")]
+      # Site doesn't credit any performers as of January 2025
+      Performers:
+        Name:
+          fixed: Kayla Kleevage
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess:
+            - replace:
+                - regex: ^.*https://(www\.)?([^\.]+).+
+                  with: $2
+            - map:
+                kaylakleevage: Kayla Kleevage
+# Last Updated January 28, 2025
