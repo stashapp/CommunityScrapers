@@ -44,6 +44,12 @@ xPathScrapers:
                 - regex: ^/
                   with: https://www.hotmovies.com/
         FrontImage: //a[@id="front-cover"]/img/@src
+        BackImage:
+          selector: //a[@id="front-cover"]/img/@src
+          postProcess:
+            - replace:
+                - regex: h\.
+                  with: bh\.
       Studio:
         Name: //a[@data-tl="studio"]
         URL:
@@ -70,8 +76,13 @@ xPathScrapers:
           selector: //a[@label="Studio"][1]/@href
           postProcess: *baseUrl
       Synopsis: //article
-      FrontImage: //a[@id="front-cover"]/@href
-      BackImage: //a[@id="front-cover"]/following-sibling::a/@href
+      FrontImage: //a[@id="front-cover"]/img/@src
+      BackImage:
+        selector: //a[@id="front-cover"]/img/@src
+        postProcess:
+          - replace:
+              - regex: h\.
+                with: bh.
       Date: //meta[@property="og:video:release_date"]/@content
   performerSearch:
     performer:
