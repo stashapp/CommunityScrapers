@@ -11,6 +11,7 @@ sceneByURL:
     script:
       - python
       - EvilAngel.py
+      - evilangel
       - scene-by-url
 movieByURL:
   - action: script

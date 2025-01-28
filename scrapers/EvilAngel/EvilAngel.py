@@ -140,8 +140,8 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
     if studio_override := determine_studio(api_scene):
         scene["studio"] = { "name": studio_override }
 
-    if description_fixed := fix_ts_trans_find_replace(api_scene.get("description")):
-        scene["details"] = description_fixed
+    if details := scene.get("details"):
+        scene["details"] = fix_ts_trans_find_replace(details)
 
     return scene
 
@@ -177,8 +177,9 @@ if __name__ == "__main__":
         case "gallery-by-fragment", args:
             sites = args.pop("extra")
             result = gallery_from_fragment(args, sites, postprocess=postprocess_gallery)
-        case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, postprocess=postprocess_scene)
+        case "scene-by-url", {"url": url, "extra": extra} if url and extra:
+            sites = extra
+            result = scene_from_url(url, sites, postprocess=postprocess_scene)
         case "scene-by-name", {"name": name, "extra": extra} if name and extra:
             sites = extra
             result = scene_search(name, sites, postprocess=postprocess_scene)
