@@ -1,4 +1,4 @@
-name: TwistedFactory 
+name: TwistedFactory
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -43,12 +43,12 @@ xPathScrapers:
         selector: //div[@data-setup]/@data-setup
         postProcess:
           - replace:
-              - regex: ^.*"publishedDate":"([^T]+).*$
+              - regex: .*"publishedDate":"(\d{4}-\d{2}-\d{2}).*
                 with: $1
           - parseDate: 2006-01-02
       Director: //span[contains(@class, "director-name")]
       Studio:
-        Name: //div[contains(@class,'shoot-detail-legend')]//a 
+        Name: //div[contains(@class,'shoot-detail-legend')]//a
       Performers:
         Name:
           selector: //h1/following-sibling::*/a[contains(@href, "/model/")]
@@ -74,9 +74,9 @@ xPathScrapers:
                 with: $1
               - regex: "?.*$"
                 with: ""
-      URL: 
+      URL:
         selector: //script[contains(.,'KinkyTracking.all')] | //div[@id='shootPage']/@data-shootid
-        concat: '__SEP__'
+        concat: "__SEP__"
         postProcess:
           - replace:
               - regex: ^.+?multiSite:'([^']+).+?__SEP__(.+)
@@ -114,7 +114,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .+
-                with: 'Yes'
+                with: "Yes"
       Piercings:
         selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/pierced')]/span/text()
         concat: "\n"
@@ -127,65 +127,65 @@ xPathScrapers:
           - replace:
               - regex: "(?i)<a[^>]*>"
                 with: ""
-      FakeTits: 
+      FakeTits:
         selector: >
-                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/fake-boobs')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/natural-boobs')]/span/text()
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/fake-boobs')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/natural-boobs')]/span/text()
         postProcess:
           - replace:
               - regex: .*?Fake.+
-                with: 'Yes'
+                with: "Yes"
               - regex: .*?Natural.+
-                with: 'No'
-      HairColor: 
+                with: "No"
+      HairColor:
         selector: >
-                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black-hair')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunet')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunette')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blond')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blonde')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/redhead')]/span/text()
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black-hair')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunet')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunette')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blond')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blonde')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/redhead')]/span/text()
         postProcess:
           - replace:
               - regex: \sHair
-                with: ''
-      Ethnicity: 
+                with: ""
+      Ethnicity:
         selector: >
-                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/asian')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/latin')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/mixed')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/white')]/span/text()
-      Circumcised: 
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/asian')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/latin')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/mixed')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/white')]/span/text()
+      Circumcised:
         selector: >
-                    //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/circumcised')]/span/text()
-                    | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/uncircumcised')]/span/text()
+          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/circumcised')]/span/text()
+          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/uncircumcised')]/span/text()
         postProcess:
           - replace:
               - regex: Uncircumcised
-                with: 'Uncut'
+                with: "Uncut"
               - regex: Circumcised
-                with: 'Cut'
-      Gender: 
+                with: "Cut"
+      Gender:
         selector: //script[contains(.,'KinkyTracking.all')]
         postProcess:
           - replace:
               - regex: .+?"((modelGender)|(genderIds))":"((woman)|(man)|(nonbinary)|(tsman)|(tswoman)|(unknown))".+
-                with: '%%%$4'              # This little trick will make sure we're left
-              - regex: ^[^%].+             # with an empty string if we don't match anything
-                with: ''                   # in the regex above.
+                with: "%%%$4" # This little trick will make sure we're left
+              - regex: ^[^%].+ # with an empty string if we don't match anything
+                with: "" # in the regex above.
               - regex: ^%+
-                with: ''
+                with: ""
           - map:
               woman: Female
               man: Male
               tswoman: Transgender Female
               tsman: Transgender Male
               nonbinary: Non-Binary
-              unknown: ''
-      URL: 
+              unknown: ""
+      URL:
         selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
-        concat: '__SEP__'
+        concat: "__SEP__"
         postProcess:
           - replace:
               - regex: ^.+?multiSite:'([^']+).+?__SEP__(.+)
