@@ -94,14 +94,10 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         log.debug(f"matched serie_name '{serie_name}' in {serie_name_map.keys()}")
         return serie_name_map.get(serie_name, serie_name)
     if main_channel_name in [
-        "AnalPlaytime",
-        "Anal Trixxx",
+        *channel_name_map,
         "Buttman",
         "Cock Choking Sluts",
         "Euro Angels",
-        "Jonni Darkko ",    # trailing space is in the API
-        "Le Wood",
-        "Secret Crush ",    # trailing space is in the API
         "Transsexual Angel",
     ]:
         log.debug(f"matched main_channel_name '{main_channel_name}'")
