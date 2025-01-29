@@ -1,3 +1,6 @@
+"""
+Stash scraper for Adult Time (Network) that uses the Algolia API Python client
+"""
 import json
 import re
 import sys
@@ -5,23 +8,21 @@ from typing import Any
 from urllib.parse import urlparse
 
 from AlgoliaAPI.AlgoliaAPI import (
-  ScrapedGallery,
-  ScrapedMovie,
-  gallery_from_fragment,
-  gallery_from_url,
-  movie_from_url,
-  performer_from_fragment,
-  performer_from_url,
-  performer_search,
-  scene_from_fragment,
-  scene_from_url,
-  scene_search,
-  site_from_url
+    gallery_from_fragment,
+    gallery_from_url,
+    movie_from_url,
+    performer_from_fragment,
+    performer_from_url,
+    performer_search,
+    scene_from_fragment,
+    scene_from_url,
+    scene_search,
+    site_from_url
 )
 
 from py_common import log
-from py_common.types import ScrapedScene
-from py_common.util import scraper_args
+from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedScene
+from py_common.util import dig, scraper_args
 
 channel_name_map = {
     "Age & Beauty": "Age and Beauty",
@@ -47,8 +48,12 @@ Each site found in the logic should have a key-value here
 """
 
 def determine_studio(api_object: dict[str, Any]) -> str | None:
+    """
+    Determine studio name from API object properties to use instead of the
+    `studio_name` property scraped by default
+    """
     available_on_site = api_object.get("availableOnSite", [])
-    main_channel_name = api_object.get("mainChannel", {}).get("name")
+    main_channel_name = dig(api_object, "mainChannel", "name")
     serie_name = api_object.get("serie_name")
     log.debug(
         f"available_on_site: {available_on_site}, "
@@ -59,13 +64,13 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     # determine studio override with custom logic
     # steps through from api_scene["availableOnSite"], and picks the first match
     if site_match := next(
-        (site for site in available_on_site if site in site_map.keys()),
+        (site for site in available_on_site if site in site_map),
         None
     ):
         log.debug(f"matched site '{site_match}' in {available_on_site}")
         return site_map.get(site_match, site_match)
-    elif serie_name in [
-        *serie_name_map.keys(),
+    if serie_name in [
+        *serie_name_map,
         "Casey: A True Story",
         "Feed Me",
         "Future Darkly",
@@ -76,18 +81,24 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     ]:
         log.debug(f"matched serie_name '{serie_name}' in {serie_name_map.keys()}")
         return serie_name_map.get(serie_name, serie_name)
-    elif main_channel_name:
+    if main_channel_name:
         # most scenes have the studio name as the main channel name
         return channel_name_map.get(main_channel_name, main_channel_name)
     return None
 
 
 def url_title_from_path(path: str) -> str:
+    """
+    Extracts the url_title part of a URI path
+    """
     return re.sub(r".*/(.*)/\d+$", "/\\1/", path)
 
 
-def sitename_from_url(url: str) -> str | None:
-    if match := re.search(r"/en/video/(.*)/.*/\d+$", url):
+def sitename_from_url(_url: str) -> str | None:
+    """
+    Extracts the sitename part of a URI path
+    """
+    if match := re.search(r"/en/video/(.*)/.*/\d+$", _url):
         return match.group(1)
     return None
 
@@ -111,7 +122,7 @@ def preview_urls(urls: list[str]) -> list[str]:
     """
     if matching_urls := [
         urlparse(url)
-        for sitename in preview_site_map.keys()
+        for sitename in preview_site_map
         for url in urls
         if sitename_from_url(url) == sitename
     ]:
@@ -125,9 +136,12 @@ def preview_urls(urls: list[str]) -> list[str]:
     return []
 
 
-def fix_url(url: str) -> str:
-    if url:
-        site = site_from_url(url)
+def fix_url(_url: str) -> str:
+    """
+    Replaces the host part of the URL if criteria matched
+    """
+    if _url:
+        site = site_from_url(_url)
         # if the site does not have a real/working domain
         if site.endswith("-channel") or site in [
             "daddysboy",
@@ -137,19 +151,22 @@ def fix_url(url: str) -> str:
             "myyoungerlover",
             "nakedyogalife",
         ]:
-            return urlparse(url)._replace(netloc="members.adulttime.com").geturl()
+            return urlparse(_url)._replace(netloc="members.adulttime.com").geturl()
         if site == "futaworld-at":
-            return urlparse(url)._replace(netloc="www.futaworld.com").geturl()
-    return url
+            return urlparse(_url)._replace(netloc="www.futaworld.com").geturl()
+    return _url
 
 
 def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
+    """
+    Applies post-processing to the scene
+    """
     if studio_override := determine_studio(api_scene):
         scene["studio"] = { "name": studio_override }
 
-    if url := scene.get("url"):
+    if _url := scene.get("url"):
         # log.debug(f'scene"[url]" (before): {scene["url"]}')
-        scene["url"] = fix_url(url)
+        scene["url"] = fix_url(_url)
         # log.debug(f'scene"[url]" (after): {scene["url"]}')
 
     if urls := scene.get("urls"):
@@ -163,6 +180,9 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
 
 
 def postprocess_movie(movie: ScrapedMovie, api_movie: dict[str, Any]) -> ScrapedMovie:
+    """
+    Applies post-processing to the movie
+    """
     if studio_override := determine_studio(api_movie):
         movie["studio"] = { "name": studio_override }
 
@@ -170,6 +190,9 @@ def postprocess_movie(movie: ScrapedMovie, api_movie: dict[str, Any]) -> Scraped
 
 
 def postprocess_gallery(gallery: ScrapedGallery, api_movie: dict[str, Any]) -> ScrapedGallery:
+    """
+    Applies post-processing to the gallery
+    """
     if studio_override := determine_studio(api_movie):
         gallery["studio"] = { "name": studio_override }
 
@@ -178,7 +201,6 @@ def postprocess_gallery(gallery: ScrapedGallery, api_movie: dict[str, Any]) -> S
 
 if __name__ == "__main__":
     op, args = scraper_args()
-    result = None
 
     log.debug(f"args: {args}")
     match op, args:

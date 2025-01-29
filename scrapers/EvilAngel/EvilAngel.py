@@ -1,3 +1,6 @@
+"""
+Stash scraper for Evil Angel (Network) that uses the Algolia API Python client
+"""
 import json
 import re
 import sys
@@ -64,6 +67,10 @@ Each site found in the logic should have a key-value here
 """
 
 def determine_studio(api_object: dict[str, Any]) -> str | None:
+    """
+    Determine studio name from API object properties to use instead of the
+    `studio_name` property scraped by default
+    """
     available_on_site = api_object.get("availableOnSite", [])
     main_channel_name = api_object.get("mainChannel", {}).get("name")
     serie_name = api_object.get("serie_name")
@@ -73,21 +80,20 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         f"serie_name: {serie_name}, "
     )
 
-    # determine studio override with custom logic
-    # steps through from api_scene["availableOnSite"], and picks the first match
+    # steps through api_scene["availableOnSite"], and picks the first match
     if site_match := next(
-        (site for site in available_on_site if site in site_map.keys()),
+        (site for site in available_on_site if site in site_map),
         None
     ):
         log.debug(f"matched site '{site_match}' in {available_on_site}")
         return site_map.get(site_match, site_match)
-    elif serie_name in [
-        *serie_name_map.keys(),
+    if serie_name in [
+        *serie_name_map,
         "PansexualX",
     ]:
         log.debug(f"matched serie_name '{serie_name}' in {serie_name_map.keys()}")
         return serie_name_map.get(serie_name, serie_name)
-    elif main_channel_name in [
+    if main_channel_name in [
         "AnalPlaytime",
         "Anal Trixxx",
         "Buttman",
@@ -100,7 +106,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     ]:
         log.debug(f"matched main_channel_name '{main_channel_name}'")
         return channel_name_map.get(main_channel_name, main_channel_name)
-    elif director_match := next(
+    if director_match := next(
         (item for item in [
             "Joey Silvera",
             "Mike Adriano",
@@ -109,12 +115,11 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     ):
         log.debug(f"matched director_match '{director_match}'")
         return director_match
-    elif movie_desc := api_object.get("movie_desc"):
+    if movie_desc := api_object.get("movie_desc"):
         if "BAM Visions" in movie_desc:
-            log.debug(f"matched 'BAM Visions' in movie_desc")
+            log.debug("matched 'BAM Visions' in movie_desc")
             return "BAM Visions"
-    else:
-        log.debug("Did not match any studio override logic")
+    log.debug("Did not match any studio override logic")
     return None
 
 
@@ -137,6 +142,9 @@ def fix_ts_trans_find_replace(text: str) -> str | None:
 
 
 def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
+    """
+    Applies post-processing to the scene
+    """
     if studio_override := determine_studio(api_scene):
         scene["studio"] = { "name": studio_override }
 
@@ -147,16 +155,22 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
 
 
 def postprocess_movie(movie: ScrapedMovie, api_movie: dict[str, Any]) -> ScrapedMovie:
+    """
+    Applies post-processing to the movie
+    """
     if studio_override := determine_studio(api_movie):
         movie["studio"] = { "name": studio_override }
 
     if synopsis := movie.get("synopsis"):
         movie["synopsis"] = fix_ts_trans_find_replace(synopsis)
-    
+
     return movie
 
 
 def postprocess_gallery(gallery: ScrapedGallery, api_movie: dict[str, Any]) -> ScrapedGallery:
+    """
+    Applies post-processing to the gallery
+    """
     if studio_override := determine_studio(api_movie):
         gallery["studio"] = { "name": studio_override }
 
@@ -168,7 +182,6 @@ def postprocess_gallery(gallery: ScrapedGallery, api_movie: dict[str, Any]) -> S
 
 if __name__ == "__main__":
     op, args = scraper_args()
-    result = None
 
     log.debug(f"args: {args}")
     match op, args:
