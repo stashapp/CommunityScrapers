@@ -442,7 +442,7 @@ def add_scene_match_metadata(
             (fragment_details := fragment.get("details"))
             and (api_scene_description := api_scene.get("description"))
         ):
-            api_scene["__match_metadata"]["director"] = SequenceMatcher(
+            api_scene["__match_metadata"]["details"] = SequenceMatcher(
                 None,
                 fragment_details,
                 clean_text(api_scene_description)
@@ -452,7 +452,7 @@ def add_scene_match_metadata(
     return api_scene
 
 
-def sort_api_scenes_by_match_score(
+def sort_api_scenes_by_match(
     api_scenes: list[dict[str, Any]],
     fragment: dict[str, Any] | None
 ) -> list[dict[str, Any]]:
@@ -509,7 +509,7 @@ def api_scene_from_id(
             return response.hits[0].to_dict()
         if response.nb_hits > 1:
             # return best matching search hit
-            return sort_api_scenes_by_match_score(
+            return sort_api_scenes_by_match(
                 [hit.to_dict() for hit in response.hits],
                 fragment
             )[0]
@@ -893,7 +893,7 @@ def add_actor_match_metadata(
     return api_actor
 
 
-def sort_api_actors_by_match_score(
+def sort_api_actors_by_match(
     api_actors: list[dict[str, Any]],
     fragment: dict[str, Any] | None,
 ) -> list[dict[str, Any]]:
@@ -946,7 +946,7 @@ def performer_search(
             return [postprocess(to_scraped_performer(api_actors[0], site), api_actors[0])]
         # multiple search results
         if len(api_actors) > 1:
-            api_actors_sorted = sort_api_actors_by_match_score(api_actors, {"name": query})
+            api_actors_sorted = sort_api_actors_by_match(api_actors, {"name": query})
             return [
                 postprocess(to_scraped_performer(api_actor, site), api_actor)
                 for api_actor in api_actors_sorted
@@ -980,25 +980,93 @@ def scene_search(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        api_scenes = [hit.to_dict() for hit in response.hits]
         # single search result, no need to sort by match ranking
-        if len(api_scenes) == 1:
+        if len(api_scenes := [hit.to_dict() for hit in response.hits]) == 1:
             return [postprocess(to_scraped_scene(api_scenes[0], site), api_scenes[0])]
         # multiple search results
         if len(api_scenes) > 1:
             # if fragment exists, we should have some key-values to evaluate match closeness
-            api_scenes_sorted = sort_api_scenes_by_match_score(api_scenes, fragment)
             return [
                 postprocess(to_scraped_scene(api_scene, site), api_scene)
-                for api_scene in api_scenes_sorted
+                for api_scene in sort_api_scenes_by_match(api_scenes, fragment)
             ]
-
     return []
+
+
+def add_photoset_match_metadata(
+    api_photoset: dict[str, Any],
+    fragment: dict[str, Any] | None
+) -> dict[str, Any]:
+    """
+    Adds match ratio metadata
+    """
+    if fragment:
+        api_photoset["__match_metadata"] = {}
+
+        # higher score for longer matching sequence
+        if fragment_title := fragment.get("title"):
+            api_photoset["__match_metadata"]["title"] = SequenceMatcher(
+                None,
+                fragment_title.lower(),
+                api_photoset.get("title").lower()
+            ).ratio()
+
+        if fragment_date := fragment.get("date"):
+            api_photoset["__match_metadata"]["date"] = SequenceMatcher(
+                None,
+                fragment_date,
+                api_photoset.get("date_online")
+            ).ratio()
+
+        if (
+            (fragment_photographer := fragment.get("photographer"))
+            and (api_photoset_directors := api_photoset.get("directors"))
+        ):
+            api_photoset["__match_metadata"]["director"] = SequenceMatcher(
+                None,
+                fragment_photographer,
+                name_values_as_csv(api_photoset_directors)
+            ).ratio()
+
+        if (
+            (fragment_details := fragment.get("details"))
+            and (api_photoset_description := api_photoset.get("description"))
+        ):
+            api_photoset["__match_metadata"]["details"] = SequenceMatcher(
+                None,
+                fragment_details,
+                clean_text(api_photoset_description)
+            ).ratio()
+
+        log.debug(
+            f"name: {api_photoset.get('title')}, "
+            f"__match_metadata: {api_photoset['__match_metadata']}"
+        )
+    return api_photoset
+
+
+def sort_api_photosets_by_match(
+    api_photosets: list[dict[str, Any]],
+    fragment: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    "Sorts list of API photosets by the closeness match(es) to fragment key-values"
+    log.debug(f'Evaluating API photosets closeness match score, with fragment: {fragment}')
+    if fragment:
+        return sorted(
+            [add_photoset_match_metadata(api_photoset, fragment) for api_photoset in api_photosets],
+            key=lambda api_photoset: sum(
+                                        api_photoset.get("__match_metadata").values()
+                                    ) / len(api_photoset.get("__match_metadata"))
+                                    if api_photoset.get("__match_metadata").values() else 0,
+            reverse=True,
+        )
+    return api_photosets
 
 
 def gallery_search(
     query: str,
     sites: list[str],
+    fragment: dict[str, Any] | None,
     postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
 ) -> list[ScrapedGallery]:
     """
@@ -1021,9 +1089,16 @@ def gallery_search(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return [
-            postprocess(to_scraped_gallery(hit.to_dict(), site), hit.to_dict())
-            for hit in response.hits ]
+        if len(api_photosets := [hit.to_dict() for hit in response.hits]) == 1:
+            return [
+                postprocess(to_scraped_gallery(api_photoset, site), api_photoset)
+                for api_photoset in api_photosets
+            ]
+        if len(api_photosets) > 1:
+            return [
+                postprocess(to_scraped_gallery(api_photoset, site), api_photoset)
+                for api_photoset in sort_api_photosets_by_match(api_photosets, fragment)
+            ]
     return []
 
 
@@ -1066,7 +1141,6 @@ def scene_from_fragment(
 def gallery_from_fragment(
     fragment: dict[str, Any],
     sites: list[str],
-    # min_ratio=config.minimum_similarity,
     postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
 ) -> ScrapedGallery | None:
     """
@@ -1074,17 +1148,17 @@ def gallery_from_fragment(
     - url: the URL of the scene the gallery belongs to
     - title: the title of the scene the gallery belongs to
 
-    If min_ratio is provided _AND_ the fragment contains a title but no URL,
-    the search will only return a scene if a match with at least that ratio is found
-
     If postprocess is provided it will be called on the result before returning
     """
     log.debug(f"in gallery_from_fragment, fragment: {fragment}")
     if fragment_url := fragment.get("url"):
         return gallery_from_url(fragment_url, postprocess)
 
+    if fragment_code := fragment.get("code"):
+        return gallery_from_set_id(fragment_code, sites, postprocess)
+
     if fragment_title := fragment.get("title"):
-        scraped_galleries = gallery_search(fragment_title, sites, postprocess)
+        scraped_galleries = gallery_search(fragment_title, sites, fragment, postprocess)
 
         # one match
         if len(scraped_galleries) == 1:
