@@ -15,8 +15,9 @@ from functools import partial
 
 def __log(level_char: str, s):
     lvl_char = "\x01{}\x02".format(level_char)
-    s = re.sub(r"data:image.+?;base64[^'\"]+", "[...]", str(s))
-    print(lvl_char, s, file=sys.stderr, flush=True)
+    s = re.sub(r"data:.+?;base64[^'\"]+", "[...]", str(s))
+    for line in s.splitlines():
+        print(lvl_char, line, file=sys.stderr, flush=True)
 
 
 trace = partial(__log, "t")
