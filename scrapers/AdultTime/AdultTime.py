@@ -85,6 +85,7 @@ def fix_url(_url: str) -> str:
         site = site_from_url(_url)
         # if the site does not have a real/working domain
         if site.endswith("-channel") or site in [
+            "blackforwife",
             "daddysboy",
             "feedme",
             "grinders",
@@ -112,9 +113,16 @@ channel_name_map = {
     "Age & Beauty": "Age and Beauty",
     "Heteroflexible": "HeteroFlexible",
     "JOI Mom": "J.O.I Mom",
+    "Vixen": "Adult Time x Vixen",
 }
 """
 This map just contains overrides when using a channel name as the studio
+"""
+
+network_name_map = {
+}
+"""
+Each network_name requiring a map/override should have a key-value here
 """
 
 serie_name_map = {
@@ -124,6 +132,7 @@ Each serie_name requiring a map/override should have a key-value here
 """
 
 site_map = {
+    "agentredgirl": "Agent Red Girl",
     "bethecuck": "Be the Cuck",
     "girlsunderarrest": "Girls Under Arrest",
     "SuperHornyFunTime": "Super Horny Fun Time",
@@ -140,10 +149,12 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     """
     available_on_site = api_object.get("availableOnSite", [])
     main_channel_name = dig(api_object, "mainChannel", "name")
+    network_name = api_object.get("network_name")
     serie_name = api_object.get("serie_name")
     log.debug(
         f"available_on_site: {available_on_site}, "
         f"main_channel_name: {main_channel_name}, "
+        f"network_name: {network_name}, "
         f"serie_name: {serie_name}, "
     )
 
@@ -170,6 +181,10 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     ]:
         log.debug(f"matched serie_name '{serie_name}' in {serie_name_map.keys()}")
         return serie_name_map.get(serie_name, serie_name)
+    if network_name in [
+        "Adult Time Films"
+    ]:
+        return network_name_map.get(network_name, network_name)
     if main_channel_name:
         # most scenes have the studio name as the main channel name
         return channel_name_map.get(main_channel_name, main_channel_name)
