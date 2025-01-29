@@ -24,68 +24,6 @@ from py_common import log
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedScene
 from py_common.util import dig, scraper_args
 
-channel_name_map = {
-    "Age & Beauty": "Age and Beauty",
-    "Heteroflexible": "HeteroFlexible",
-    "JOI Mom": "J.O.I Mom",
-}
-"""
-This map just contains overrides when using a channel name as the studio
-"""
-
-serie_name_map = {
-}
-"""
-Each serie_name requiring a map/override should have a key-value here
-"""
-
-site_map = {
-    "bethecuck": "Be the Cuck",
-    "girlsunderarrest": "Girls Under Arrest",
-}
-"""
-Each site found in the logic should have a key-value here
-"""
-
-def determine_studio(api_object: dict[str, Any]) -> str | None:
-    """
-    Determine studio name from API object properties to use instead of the
-    `studio_name` property scraped by default
-    """
-    available_on_site = api_object.get("availableOnSite", [])
-    main_channel_name = dig(api_object, "mainChannel", "name")
-    serie_name = api_object.get("serie_name")
-    log.debug(
-        f"available_on_site: {available_on_site}, "
-        f"main_channel_name: {main_channel_name}, "
-        f"serie_name: {serie_name}, "
-    )
-
-    # determine studio override with custom logic
-    # steps through from api_scene["availableOnSite"], and picks the first match
-    if site_match := next(
-        (site for site in available_on_site if site in site_map),
-        None
-    ):
-        log.debug(f"matched site '{site_match}' in {available_on_site}")
-        return site_map.get(site_match, site_match)
-    if serie_name in [
-        *serie_name_map,
-        "Casey: A True Story",
-        "Feed Me",
-        "Future Darkly",
-        "Go Stuck Yourself",
-        "How Women Orgasm",
-        "Mommy's Boy",
-        "Oopsie",
-    ]:
-        log.debug(f"matched serie_name '{serie_name}' in {serie_name_map.keys()}")
-        return serie_name_map.get(serie_name, serie_name)
-    if main_channel_name:
-        # most scenes have the studio name as the main channel name
-        return channel_name_map.get(main_channel_name, main_channel_name)
-    return None
-
 
 def url_title_from_path(path: str) -> str:
     """
@@ -110,6 +48,9 @@ preview_site_map = {
     "kissmefuckme": "kissmefuckme.net",
     "milfoverload-channel": "milfoverload.net",
     "mommysboy": "mommysboy.net",
+    "preggoworld-channel": "preggoworld.net",
+    "watchyoucheat": "watchyoucheat.net",
+    "womensworld": "adulttimepilots.net",
 }
 
 
@@ -150,11 +91,89 @@ def fix_url(_url: str) -> str:
             "kissmefuckme",
             "myyoungerlover",
             "nakedyogalife",
+            "raunch",
+            "shewantshim",
+            "superhornyfuntime",
+            "switch",
+            "themikeandjoannashow",
+            "theyeslist",
+            "toywithme",
+            "unrelatedx",
+            "watchyoucheat",
+            "womensworld",
         ]:
             return urlparse(_url)._replace(netloc="members.adulttime.com").geturl()
         if site == "futaworld-at":
             return urlparse(_url)._replace(netloc="www.futaworld.com").geturl()
     return _url
+
+
+channel_name_map = {
+    "Age & Beauty": "Age and Beauty",
+    "Heteroflexible": "HeteroFlexible",
+    "JOI Mom": "J.O.I Mom",
+}
+"""
+This map just contains overrides when using a channel name as the studio
+"""
+
+serie_name_map = {
+}
+"""
+Each serie_name requiring a map/override should have a key-value here
+"""
+
+site_map = {
+    "bethecuck": "Be the Cuck",
+    "girlsunderarrest": "Girls Under Arrest",
+    "SuperHornyFunTime": "Super Horny Fun Time",
+}
+"""
+Each site found in the logic should have a key-value here
+"""
+
+
+def determine_studio(api_object: dict[str, Any]) -> str | None:
+    """
+    Determine studio name from API object properties to use instead of the
+    `studio_name` property scraped by default
+    """
+    available_on_site = api_object.get("availableOnSite", [])
+    main_channel_name = dig(api_object, "mainChannel", "name")
+    serie_name = api_object.get("serie_name")
+    log.debug(
+        f"available_on_site: {available_on_site}, "
+        f"main_channel_name: {main_channel_name}, "
+        f"serie_name: {serie_name}, "
+    )
+
+    # determine studio override with custom logic
+    # steps through from api_scene["availableOnSite"], and picks the first match
+    if site_match := next(
+        (site for site in available_on_site if site in site_map),
+        None
+    ):
+        log.debug(f"matched site '{site_match}' in {available_on_site}")
+        return site_map.get(site_match, site_match)
+    if serie_name in [
+        *serie_name_map,
+        "Casey: A True Story",
+        "Feed Me",
+        "Future Darkly",
+        "Go Stuck Yourself",
+        "How Women Orgasm",
+        "Mommy's Boy",
+        "Oopsie",
+        "Sister Trick",
+        "Up Close VR",
+        "Women's World",
+    ]:
+        log.debug(f"matched serie_name '{serie_name}' in {serie_name_map.keys()}")
+        return serie_name_map.get(serie_name, serie_name)
+    if main_channel_name:
+        # most scenes have the studio name as the main channel name
+        return channel_name_map.get(main_channel_name, main_channel_name)
+    return None
 
 
 def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
