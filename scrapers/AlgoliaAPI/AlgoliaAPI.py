@@ -459,7 +459,7 @@ def sort_api_scenes_by_match_score(
     """
     Sorts the list of API scenes by the closeness match(es) to fragment key-values
     """
-    log.debug(f'Evaluating API scene closeness match score, with fragment: {fragment}')
+    log.debug(f'Evaluating API scenes closeness match score, with fragment: {fragment}')
     if fragment:
         # return sorted list
         return sorted(
@@ -865,6 +865,56 @@ def movie_from_url(
     return None
 
 
+def add_actor_match_metadata(
+    api_actor: dict[str, Any],
+    fragment: dict[str, Any] | None
+) -> dict[str, Any]:
+    """
+    Adds match ratio metadata
+    """
+    if fragment:
+        api_actor["__match_metadata"] = {}
+
+        # higher score for longer matching sequence
+        if fragment_name := fragment.get("name"):
+            api_actor["__match_metadata"]["name"] = max(
+                SequenceMatcher(
+                    None,
+                    fragment_name.lower(),
+                    api_actor.get("name").lower()
+                ).get_matching_blocks(),
+                key=lambda x: x.size
+            ).size
+
+        log.debug(
+            f"name: {api_actor.get('name')}, "
+            f"__match_metadata: {api_actor['__match_metadata']}"
+        )
+    return api_actor
+
+
+def sort_api_actors_by_match_score(
+    api_actors: list[dict[str, Any]],
+    fragment: dict[str, Any] | None,
+) -> list[dict[str, Any]]:
+    """
+    Sorts the list of API actors by the closeness match(es) to fragment key-values
+    """
+    log.debug(f'Evaluating API actors closeness match score, with fragment: {fragment}')
+    if fragment:
+        # return sorted list
+        return sorted(
+            [add_actor_match_metadata(api_actor, fragment) for api_actor in api_actors],
+            key=lambda api_scene: sum(
+                                        api_scene.get("__match_metadata").values()
+                                    ) / len(api_scene.get("__match_metadata"))
+                                    if api_scene.get("__match_metadata").values() else 0,
+            reverse=True,
+        )
+
+    return api_actors
+
+
 def performer_search(
     query: str,
     sites: list[str],
@@ -890,10 +940,17 @@ def performer_search(
     log.debug(f"Number of search hits: {response.nb_hits}")
 
     if response.nb_hits:
-        return [
-            postprocess(to_scraped_performer(hit.to_dict(), site), hit.to_dict())
-            for hit in response.hits
-        ]
+        api_actors = [hit.to_dict() for hit in response.hits]
+        # single search result, no need to sort by match ranking
+        if len(api_actors) == 1:
+            return [postprocess(to_scraped_performer(api_actors[0], site), api_actors[0])]
+        # multiple search results
+        if len(api_actors) > 1:
+            api_actors_sorted = sort_api_actors_by_match_score(api_actors, {"name": query})
+            return [
+                postprocess(to_scraped_performer(api_actor, site), api_actor)
+                for api_actor in api_actors_sorted
+            ]
     return []
 
 
