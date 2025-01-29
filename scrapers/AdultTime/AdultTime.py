@@ -191,6 +191,19 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     return None
 
 
+
+def process_action_tags(action_tags: list[dict[str, str | int]]) -> None:
+    """
+    action_tags is a list of {"name": str, "timecode": int}
+
+    You could use this to add markers via GraphQL
+    """
+    log.debug(f"action_tags: {action_tags}")
+
+    # add some code here to use the action_tags data
+    # just return without doing anything for now
+
+
 def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
     """
     Applies post-processing to the scene
@@ -209,6 +222,9 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
         # log.debug(f'scene"[urls]" (after fix): {scene["urls"]}')
         scene["urls"].extend(preview_urls(scene["urls"]))
         # log.debug(f'scene"[urls]" (after extend with preview): {scene["urls"]}')
+
+    if action_tags := api_scene.get("action_tags"):
+        process_action_tags(action_tags)
 
     return scene
 
