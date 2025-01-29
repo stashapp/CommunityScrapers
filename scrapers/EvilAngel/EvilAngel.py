@@ -7,17 +7,17 @@ import sys
 from typing import Any
 
 from AlgoliaAPI.AlgoliaAPI import (
-  ScrapedGallery,
-  ScrapedMovie,
-  gallery_from_fragment,
-  gallery_from_url,
-  movie_from_url,
-  performer_from_fragment,
-  performer_from_url,
-  performer_search,
-  scene_from_fragment,
-  scene_from_url,
-  scene_search
+    ScrapedGallery,
+    ScrapedMovie,
+    gallery_from_fragment,
+    gallery_from_url,
+    movie_from_url,
+    performer_from_fragment,
+    performer_from_url,
+    performer_search,
+    scene_from_fragment,
+    scene_from_url,
+    scene_search
 )
 
 from py_common import log
