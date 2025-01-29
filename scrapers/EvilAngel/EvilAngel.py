@@ -85,13 +85,13 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         (site for site in available_on_site if site in site_map),
         None
     ):
-        log.debug(f"matched site '{site_match}' in {available_on_site}")
+        log.debug(f"matched site '{site_match}'")
         return site_map.get(site_match, site_match)
     if serie_name in [
         *serie_name_map,
         "PansexualX",
     ]:
-        log.debug(f"matched serie_name '{serie_name}' in {serie_name_map.keys()}")
+        log.debug(f"matched serie_name '{serie_name}'")
         return serie_name_map.get(serie_name, serie_name)
     if main_channel_name in [
         *channel_name_map,
