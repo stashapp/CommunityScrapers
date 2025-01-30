@@ -30,6 +30,13 @@ sceneByQueryFragment:
       - GenderXFilms.py
       - genderxfilms
       - scene-by-query-fragment
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - GenderXFilms.py
+    - genderxfilms
+    - gallery-by-fragment
 galleryByURL:
   - action: script
     url:
