@@ -134,6 +134,7 @@ Each serie_name requiring a map/override should have a key-value here
 
 site_map = {
     "agentredgirl": "Agent Red Girl",
+    "asmrfantasy": "ASMR Fantasy",
     "bethecuck": "Be the Cuck",
     "girlsunderarrest": "Girls Under Arrest",
     "SuperHornyFunTime": "Super Horny Fun Time",
