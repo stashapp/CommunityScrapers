@@ -126,6 +126,7 @@ Each network_name requiring a map/override should have a key-value here
 """
 
 serie_name_map = {
+    "Transfixed Muses": "Transfixed",
 }
 """
 Each serie_name requiring a map/override should have a key-value here
