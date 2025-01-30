@@ -142,6 +142,12 @@ site_map = {
 Each site found in the logic should have a key-value here
 """
 
+sitename_pretty_map = {
+}
+"""
+Each sitename_pretty requiring a map/override should have a key-value here
+"""
+
 
 def determine_studio(api_object: dict[str, Any]) -> str | None:
     """
@@ -152,11 +158,13 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     main_channel_name = dig(api_object, "mainChannel", "name")
     network_name = api_object.get("network_name")
     serie_name = api_object.get("serie_name")
+    sitename_pretty = api_object.get("sitename_pretty")
     log.debug(
         f"available_on_site: {available_on_site}, "
         f"main_channel_name: {main_channel_name}, "
         f"network_name: {network_name}, "
         f"serie_name: {serie_name}, "
+        f"sitename_pretty: {sitename_pretty}, "
     )
 
     # determine studio override with custom logic
@@ -186,6 +194,10 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         "Adult Time Films"
     ]:
         return network_name_map.get(network_name, network_name)
+    if sitename_pretty in [
+        "Devil's Film"
+    ]:
+        return sitename_pretty_map.get(sitename_pretty, sitename_pretty)
     if main_channel_name:
         # most scenes have the studio name as the main channel name
         return channel_name_map.get(main_channel_name, main_channel_name)
@@ -240,11 +252,11 @@ def postprocess_movie(movie: ScrapedMovie, api_movie: dict[str, Any]) -> Scraped
     return movie
 
 
-def postprocess_gallery(gallery: ScrapedGallery, api_movie: dict[str, Any]) -> ScrapedGallery:
+def postprocess_gallery(gallery: ScrapedGallery, api_gallery: dict[str, Any]) -> ScrapedGallery:
     """
     Applies post-processing to the gallery
     """
-    if studio_override := determine_studio(api_movie):
+    if studio_override := determine_studio(api_gallery):
         gallery["studio"] = { "name": studio_override }
 
     return gallery
