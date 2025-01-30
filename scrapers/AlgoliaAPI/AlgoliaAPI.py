@@ -277,9 +277,13 @@ def actors_to_performers(actors: list[dict[str, Any]], site: str) -> list[Scrape
         for actor in actors
     ]
 
+def scalar_match(scalar_candidate: int | float, scalar_reference: int | float) -> float:
+    "Calculates a ratio match of two scalar values, e.g. seconds, bytes, etc."
+    return 1 - abs(scalar_candidate - scalar_reference) / scalar_reference
+
 def add_scene_match_metadata(
     api_scene: dict[str, Any],
-    fragment: dict[str, Any] | None
+    fragment: dict[str, Any] | None,
 ) -> dict[str, Any]:
     "Adds match ratio metadata"
     if fragment:
@@ -306,12 +310,30 @@ def add_scene_match_metadata(
             api_scene["__match_metadata"]["details"] = SequenceMatcher(
                 None, fragment_details, clean_text(api_scene_description)
             ).ratio()
-        log.debug(f"__match_metadata: {api_scene['__match_metadata']}")
+        if fragment_files := fragment.get("files"):
+            if api_scene_length := api_scene.get("length"):
+                api_scene["__match_metadata"]["duration"] = scalar_match(
+                    fragment_files[0]["duration"], api_scene_length
+                )
+            if (
+                (api_scene_video_formats := api_scene.get("video_formats"))
+                and (api_scene_size := next(iter([
+                    video_format for video_format in api_scene_video_formats
+                    if video_format.get("format") == f'{fragment_files[0]["height"]}p'
+                ]), {}).get("size"))
+            ):
+                api_scene["__match_metadata"]["size"] = scalar_match(
+                    fragment_files[0]["size"], int(api_scene_size)
+                )
+        log.debug(
+            f"API scene title: {api_scene.get('title')}, "
+            f"__match_metadata: {api_scene['__match_metadata']}"
+        )
     return api_scene
 
 def sort_api_scenes_by_match(
     api_scenes: list[dict[str, Any]],
-    fragment: dict[str, Any] | None
+    fragment: dict[str, Any] | None,
 ) -> list[dict[str, Any]]:
     "Sorts the list of API scenes by the closeness match(es) to fragment key-values"
     log.debug(f'Evaluating API scenes closeness match score, with fragment: {fragment}')
@@ -348,8 +370,7 @@ def api_scene_from_id(
             return response.hits[0].to_dict()
         if response.nb_hits > 1:
             return sort_api_scenes_by_match(
-                [hit.to_dict() for hit in response.hits],
-                fragment
+                [hit.to_dict() for hit in response.hits], fragment
             )[0]
     return None
 
@@ -679,7 +700,7 @@ def scene_search(
         if len(api_scenes) > 1: # multiple search results
             return [
                 postprocess(to_scraped_scene(api_scene, site), api_scene)
-                for api_scene in sort_api_scenes_by_match(api_scenes, fragment) # sort by match
+                for api_scene in sort_api_scenes_by_match(api_scenes, fragment) # sort
             ]
     return []
 
@@ -791,11 +812,11 @@ def scene_from_fragment(
     - urls
     from the result of the scene-by-name search
     """
-    if (urls := fragment.get("urls")): # the first URL should be usable for a full search
+    if urls := fragment.get("urls"): # the first URL should be usable for a full search
         return scene_from_url(urls[0], sites, fragment, postprocess)
-    if (code := fragment.get("code")): # if the (studio) code is present, search by clip_id
+    if code := fragment.get("code"): # if the (studio) code is present, search by clip_id
         return scene_from_id(code, sites, fragment, postprocess)
-    if (title := fragment.get("title")): # if a title is present, search by text
+    if title := fragment.get("title"): # if a title is present, search by text
         if len(scenes := scene_search(title, sites, fragment, postprocess)) > 0:
             return scenes[0] # best match is sorted at the top
     return {}

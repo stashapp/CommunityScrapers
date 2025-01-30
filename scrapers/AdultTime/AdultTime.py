@@ -198,7 +198,7 @@ def process_action_tags(action_tags: list[dict[str, str | int]]) -> None:
 
     You could use this to add markers via GraphQL
     """
-    log.debug(f"action_tags: {action_tags}")
+    log.trace(f"action_tags: {action_tags}")
 
     # add some code here to use the action_tags data
     # just return without doing anything for now
