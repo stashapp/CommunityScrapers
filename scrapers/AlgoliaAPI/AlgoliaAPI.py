@@ -5,13 +5,14 @@ from base64 import b64decode, b64encode
 import configparser
 from difflib import SequenceMatcher
 import json
+import os
 import re
 import sys
 from time import time
 from typing import Any, Callable, Literal, TypeVar
 from urllib.parse import urlparse
 
-from py_common import log
+from py_common import graphql, log
 from py_common.deps import ensure_requirements
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
 from py_common.util import dig, guess_nationality, is_valid_url, scraper_args
@@ -689,7 +690,8 @@ def scene_search(
 
 def add_photoset_match_metadata(
     api_photoset: dict[str, Any],
-    fragment: dict[str, Any] | None
+    fragment: dict[str, Any] | None,
+    db_gallery_file_count: int | None,
 ) -> dict[str, Any]:
     "Adds match ratio metadata"
     if fragment:
@@ -724,6 +726,13 @@ def add_photoset_match_metadata(
                 fragment_details,
                 clean_text(api_photoset_description)
             ).ratio()
+        if (
+            db_gallery_file_count
+            and (api_photoset_num_of_pictures := api_photoset.get("num_of_pictures"))
+        ):
+            api_photoset["__match_metadata"]["num_of_pictures"] = scalar_match(
+                db_gallery_file_count, int(api_photoset_num_of_pictures)
+            )
         log.debug(
             f"name: {api_photoset.get('title')}, "
             f"__match_metadata: {api_photoset['__match_metadata']}"
@@ -737,8 +746,20 @@ def sort_api_photosets_by_match(
     "Sorts list of API photosets by the closeness match(es) to fragment key-values"
     log.debug(f'Evaluating API photosets closeness match score, with fragment: {fragment}')
     if fragment:
+        db_gallery_file_count = len([
+            f for f in os.listdir(db_gallery_path)
+            if os.path.isfile(os.path.join(db_gallery_path, f))
+        ]) \
+            if (
+                fragment.get("id")
+                and (db_gallery_path := graphql.getGalleryPath(fragment.get("id")))
+            ) else None
+        log.debug(f"db_gallery_file_count: {db_gallery_file_count}")
         return sorted(
-            [add_photoset_match_metadata(api_photoset, fragment) for api_photoset in api_photosets],
+            [
+                add_photoset_match_metadata(api_photoset, fragment, db_gallery_file_count)
+                for api_photoset in api_photosets
+            ],
             key=lambda api_photoset: sum(
                                         api_photoset.get("__match_metadata").values()
                                     ) / len(api_photoset.get("__match_metadata"))
