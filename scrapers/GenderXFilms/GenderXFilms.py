@@ -94,11 +94,11 @@ def postprocess_movie(movie: ScrapedMovie, api_movie: dict[str, Any]) -> Scraped
     return movie
 
 
-def postprocess_gallery(gallery: ScrapedGallery, api_movie: dict[str, Any]) -> ScrapedGallery:
+def postprocess_gallery(gallery: ScrapedGallery, api_gallery: dict[str, Any]) -> ScrapedGallery:
     """
     Applies post-processing to the gallery
     """
-    if studio_override := determine_studio(api_movie):
+    if studio_override := determine_studio(api_gallery):
         gallery["studio"] = { "name": studio_override }
 
     return gallery
