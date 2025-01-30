@@ -106,7 +106,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         (item for item in [
             "Joey Silvera",
             "Mike Adriano",
-        ] if item in [c.get("name") for c in api_object.get("channels")]),
+        ] if item in [c.get("name") for c in api_object.get("channels", [])]),
         None
     ):
         log.debug(f"matched director_match '{director_match}'")
