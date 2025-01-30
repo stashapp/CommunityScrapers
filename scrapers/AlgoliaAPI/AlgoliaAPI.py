@@ -842,7 +842,7 @@ def gallery_from_fragment(
     "Scrapes a gallery from a fragment. URL, code, title"
     log.debug(f"in gallery_from_fragment, fragment: {fragment}")
     if _url := fragment.get("url"):
-        return gallery_from_url(_url, postprocess)
+        return gallery_from_url(_url, sites, postprocess)
     if code := fragment.get("code"):
         return gallery_from_set_id(code, sites, postprocess)
     if title := fragment.get("title"):
