@@ -412,30 +412,6 @@ def scene_from_url(
     log.debug(f"Clip ID: {clip_id}, Site: {site}")
     return scene_from_id(clip_id, [site], fragment, postprocess)
 
-def photoset_id_and_url_from_scene(
-    scene_from_api: dict[str, Any],
-    site: str
-) -> tuple[str, str] | tuple[None, None]:
-    "Extracts photoset ID and URL from API scene properties"
-    if (
-        (photoset_id := scene_from_api.get("photoset_id"))
-        and (photoset_url_name := scene_from_api.get("photoset_url_name"))
-    ):
-        return str(photoset_id), gallery_url(site, photoset_url_name, photoset_id)
-    return None, None
-
-def photoset_id_and_url_from_photoset(
-        photoset_from_api: dict[str, Any],
-        site: str
-) -> tuple[str, str] | tuple[None, None]:
-    "Extracts photoset ID and URL from API photoset properties"
-    if (
-        (set_id := photoset_from_api.get("set_id"))
-        and (url_title := photoset_from_api.get("url_title"))
-    ):
-        return str(set_id), gallery_url(site, url_title, set_id)
-    return None, None
-
 def scene_url_from_photoset(photoset_from_api: dict[str, Any], site: str) -> str | None:
     "Extracts scene URL from API photoset properties"
     if (
@@ -457,14 +433,20 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | N
     if description := api_hit.get("description"):
         gallery["details"] = clean_text(description)
     gallery["urls"] = []
+    # scenes _can_ include photoset_id and photoset_url_title
     if (
-        ( # scenes _can_ include photoset_id, photosets have set_id
-            (photoset_id_and_url := photoset_id_and_url_from_scene(api_hit, site))
-            or (photoset_id_and_url := photoset_id_and_url_from_photoset(api_hit, site))
-        ) and photoset_id_and_url[0] and photoset_id_and_url[1]
+        (photoset_id := api_hit.get("photoset_id"))
+        and (photoset_url_name := api_hit.get("photoset_url_name"))
     ):
-        gallery["code"] = photoset_id_and_url[0]
-        gallery["urls"].append(photoset_id_and_url[1])
+        gallery["code"] = photoset_id
+        gallery["urls"].append(gallery_url(site, photoset_url_name, photoset_id))
+    # photosets have set_id and url_title
+    if (
+        (set_id := api_hit.get("set_id"))
+        and (url_title := api_hit.get("url_title"))
+    ):
+        gallery["code"] = str(set_id)
+        gallery["urls"].append(gallery_url(site, url_title, set_id))
     if _scene_url := scene_url_from_photoset(api_hit, site): # api photosets can have clip_title
         gallery["urls"].append(_scene_url)
     if (
