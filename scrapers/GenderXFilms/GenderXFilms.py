@@ -69,6 +69,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         log.debug(f"matched serie_name '{serie_name}'")
         return serie_name_map.get(serie_name, serie_name)
     if main_channel_name:
+        log.debug(f"matched main_channel_name '{main_channel_name}'")
         # most scenes have the studio name as the main channel name
         return channel_name_map.get(main_channel_name, main_channel_name)
     return None
