@@ -145,6 +145,7 @@ Each site found in the logic should have a key-value here
 """
 
 sitename_pretty_map = {
+    "Devilstgirls": "Devil's Tgirls",
 }
 """
 Each sitename_pretty requiring a map/override should have a key-value here
@@ -197,6 +198,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     ]:
         return network_name_map.get(network_name, network_name)
     if sitename_pretty in [
+        *sitename_pretty_map,
         "Devil's Film",
         "Transfixed",
     ]:
