@@ -137,6 +137,7 @@ site_map = {
     "agentredgirl": "Agent Red Girl",
     "asmrfantasy": "ASMR Fantasy",
     "bethecuck": "Be the Cuck",
+    "devilstgirls": "Devil's Tgirls",
     "girlsunderarrest": "Girls Under Arrest",
     "SuperHornyFunTime": "Super Horny Fun Time",
 }
@@ -191,7 +192,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         "Up Close VR",
         "Women's World",
     ]:
-        log.debug(f"matched serie_name '{serie_name}' in {serie_name_map.keys()}")
+        log.debug(f"matched serie_name '{serie_name}'")
         return serie_name_map.get(serie_name, serie_name)
     if network_name in [
         "Adult Time Films"
@@ -202,9 +203,11 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         "Devil's Film",
         "Transfixed",
     ]:
+        log.debug(f"matched sitename_pretty '{sitename_pretty}'")
         return sitename_pretty_map.get(sitename_pretty, sitename_pretty)
     if main_channel_name:
         # most scenes have the studio name as the main channel name
+        log.debug(f"matched main_channel_name '{main_channel_name}'")
         return channel_name_map.get(main_channel_name, main_channel_name)
     return None
 
