@@ -196,7 +196,8 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     ]:
         return network_name_map.get(network_name, network_name)
     if sitename_pretty in [
-        "Devil's Film"
+        "Devil's Film",
+        "Transfixed",
     ]:
         return sitename_pretty_map.get(sitename_pretty, sitename_pretty)
     if main_channel_name:
