@@ -49,7 +49,6 @@ galleryByURL:
     url:
       - 3rddegreefilms.com/en/photo/
       - addicted2girls.com/en/photo/
-      - biphoria.com/en/photo/
       - zerotolerancefilms.com/en/photo/
     script:
       - python
