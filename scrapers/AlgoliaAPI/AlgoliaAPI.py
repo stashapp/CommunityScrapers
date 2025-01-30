@@ -11,6 +11,7 @@ import sys
 from time import time
 from typing import Any, Callable, Literal, TypeVar
 from urllib.parse import urlparse
+from zipfile import ZipFile
 
 from py_common import graphql, log
 from py_common.deps import ensure_requirements
@@ -729,7 +730,13 @@ def add_photoset_match_metadata(
         if (
             db_gallery_file_count
             and (api_photoset_num_of_pictures := api_photoset.get("num_of_pictures"))
+            and int(api_photoset_num_of_pictures) != 0
         ):
+            log.debug(
+                f"db_gallery_file_count: ({type(db_gallery_file_count)}): {db_gallery_file_count}, "
+                f"api_photoset_num_of_pictures: ({type(api_photoset_num_of_pictures)}): "
+                f"{api_photoset_num_of_pictures}"
+            )
             api_photoset["__match_metadata"]["num_of_pictures"] = scalar_match(
                 db_gallery_file_count, int(api_photoset_num_of_pictures)
             )
@@ -746,14 +753,16 @@ def sort_api_photosets_by_match(
     "Sorts list of API photosets by the closeness match(es) to fragment key-values"
     log.debug(f'Evaluating API photosets closeness match score, with fragment: {fragment}')
     if fragment:
-        db_gallery_file_count = len([
-            f for f in os.listdir(db_gallery_path)
-            if os.path.isfile(os.path.join(db_gallery_path, f))
-        ]) \
-            if (
-                fragment.get("id")
-                and (db_gallery_path := graphql.getGalleryPath(fragment.get("id")))
-            ) else None
+        db_gallery_file_count = None
+        if fragment.get("id") and (db_gallery_path := graphql.getGalleryPath(fragment.get("id"))):
+            if os.path.exists(db_gallery_path) and not os.path.isfile(db_gallery_path):
+                db_gallery_file_count = len([
+                    f for f in os.listdir(db_gallery_path)
+                    if os.path.isfile(os.path.join(db_gallery_path, f))
+                ])
+            elif os.path.isfile(db_gallery_path) and db_gallery_path.lower().endswith(".zip"):
+                with ZipFile(db_gallery_path, 'r') as zip_gallery:
+                    db_gallery_file_count = len(zip_gallery.namelist())
         log.debug(f"db_gallery_file_count: {db_gallery_file_count}")
         return sorted(
             [
