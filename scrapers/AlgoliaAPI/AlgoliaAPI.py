@@ -488,11 +488,12 @@ def gallery_from_set_id(
 
 def gallery_from_url(
     _url: str,
+    sites: list[str],
     postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
 ) -> ScrapedGallery | None:
     "Scrapes a gallery from a URL, running an optional postprocess function on the result"
     url_id = id_from_url(_url)
-    site = site_from_url(_url)
+    site = sites[0]
     log.debug(f"Site: {site}")
     if "/photo/" in _url: # some sites have public photoset URLs, so can be searched by set_id
         log.debug(f"set_id: {url_id}")
@@ -838,8 +839,9 @@ if __name__ == "__main__":
 
     log.debug(f"args: {args}")
     match op, args:
-        case "gallery-by-url", {"url": url} if url:
-            result = gallery_from_url(url)
+        case "gallery-by-url", {"url": url, "extra": extra} if url and extra:
+            domains = extra
+            result = gallery_from_url(url, domains)
         case "gallery-by-fragment", args:
             domains = args.pop("extra")
             result = gallery_from_fragment(args, domains)

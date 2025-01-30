@@ -133,6 +133,7 @@ Each serie_name requiring a map/override should have a key-value here
 """
 
 site_map = {
+    "AdultTimePilots": "Adult Time Pilots",
     "agentredgirl": "Agent Red Girl",
     "asmrfantasy": "ASMR Fantasy",
     "bethecuck": "Be the Cuck",
@@ -269,8 +270,9 @@ if __name__ == "__main__":
 
     log.debug(f"args: {args}")
     match op, args:
-        case "gallery-by-url", {"url": url} if url:
-            result = gallery_from_url(url, postprocess=postprocess_gallery)
+        case "gallery-by-url", {"url": url, "extra": extra} if url and extra:
+            sites = extra
+            result = gallery_from_url(url, sites, postprocess=postprocess_gallery)
         case "gallery-by-fragment", args:
             sites = args.pop("extra")
             result = gallery_from_fragment(args, sites, postprocess=postprocess_gallery)

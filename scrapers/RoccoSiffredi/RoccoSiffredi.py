@@ -57,8 +57,9 @@ if __name__ == "__main__":
 
     log.debug(f"args: {args}")
     match op, args:
-        case "gallery-by-url", {"url": url} if url:
-            result = gallery_from_url(url)
+        case "gallery-by-url", {"url": url, "extra": extra} if url and extra:
+            sites = extra
+            result = gallery_from_url(url, sites)
         case "gallery-by-fragment", args:
             sites = args.pop("extra")
             result = gallery_from_fragment(args, sites)
