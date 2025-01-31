@@ -99,6 +99,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         "Cock Choking Sluts",
         "Euro Angels",
         "Transsexual Angel",
+        "TransgressiveXXX",
     ]:
         log.debug(f"matched main_channel_name '{main_channel_name}'")
         return channel_name_map.get(main_channel_name, main_channel_name)
