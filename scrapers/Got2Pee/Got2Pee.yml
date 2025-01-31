@@ -7,11 +7,3 @@ sceneByURL:
     script:
       - python
       - got2pee_scraper.py
-      - scrape
-
-driver:
-  useCDP: false
-  sleep: 2
-
-debug:
-  printHTML: false
