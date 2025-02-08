@@ -72,25 +72,25 @@ xPathScrapers:
         selector: //video/@poster
         postProcess:
           - replace:
-              - regex: 960w
-                with: 1920w
+              - regex: 'img/960w/'
+                with:
           - replace:
               - regex: '.jpg'
                 with: '_1920.jpg'
       Director:
         selector: //span[contains(@class, "info-item director")]/text()
       Code:
-        selector: //*[@id="titleImage"]/@src
+        selector: //video/@poster|//div[@class="video-player-disabled"]/img/@src
         postProcess:
           - replace:
               - regex: ^.*\/\s*
                 with:
           - replace:
-              - regex: \_1600.*$
+              - regex: '.jpg'
                 with:
       Studio:
         Name:
-          fixed: Helix
+          selector: //span[contains(@class, "studio-name")]/text()
 
   performerSearch:
     common:
@@ -148,4 +148,4 @@ xPathScrapers:
           - replace:
               - regex: $
                 with: " "
-# Last Updated Sep 28, 2024
+# Last Updated Feb 08, 2025
