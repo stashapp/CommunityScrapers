@@ -11,18 +11,26 @@ performerByURL:
     scraper: performerScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $videoScript: //script[contains(., "videojs")]
     scene:
-      Title: //h1/text()
-      Details:
-        selector: //div[@class="texte"]/text()
+      Title: //h1
+      Details: //div[@class="texte"]
+      Date:
+        selector: $videoScript
+        postProcess:
+          - replace:
+              - regex: .+video_(\d+).+
+                with: $1
+          - parseDate: unix
       Tags:
-        Name: //a[@class='badge badge-dark']/text()
+        Name: //a[@class='badge badge-dark']
       Performers:
         Name:
-          selector: //a/div[@class='acteur']/div[@class='nom']/text()
+          selector: //a/div[@class='acteur']/div[@class='nom']
         URL:
           selector: //a[div[@class='acteur']]/@href
-          postProcess:
+          postProcess: &prependDomain
             - replace:
                 - regex: ^
                   with: https://www.ericvideos.com
@@ -30,27 +38,25 @@ xPathScrapers:
         Name:
           fixed: EricVideos
       Image:
-        selector: //div[@class='preview'][1]/a/img[@class='preview']/@src
+        selector: $videoScript
         postProcess:
           - replace:
-              - regex: ^
-                with: https://www.ericvideos.com/
+              - regex: '.+poster: "(.+?)".+'
+                with: https://www.ericvideos.com$1
 
   performerScraper:
     performer:
-      Name: //div[@class='col']/h1/text()
+      Name: //h1
       Height:
-        selector: //li[@class='list-group-item'][2]/text()
+        selector: //li[@class='list-group-item'][2]
         postProcess:
           - feetToCm: true
+      PenisLength: //li[@class='list-group-item'][3]
       Gender:
         fixed: male
       Image:
         selector: //div[@class='photo_acteur']/img[@class='thumbnail']/@src
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://www.ericvideos.com/
+        postProcess: *prependDomain
 
 driver:
   cookies:
