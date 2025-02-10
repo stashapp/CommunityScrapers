@@ -3,12 +3,17 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - cutlersden.com/trailers
-    scraper: sceneScraper
+    scraper: cutlersDen
+  - action: scrapeXPath
+    url:
+      - cutlersden.com/VOD/scenes/
+    scraper: cutlersVod
+
 xPathScrapers:
-  sceneScraper:
+  cutlersDen:
     scene:
       Title: //div[@class="content-title"]/h1
-      Details: //div[@class="content-details"]/p 
+      Details: //div[@class="content-details"]/p
       Performers:
         Name:
           selector: //div[contains(.,'Featuring:')]/a
@@ -19,7 +24,7 @@ xPathScrapers:
               - regex: ^
                 with: https://cutlersden.com/
       Date:
-        selector : //div[@class="content-date"]   
+        selector: //div[@class="content-date"]
         postProcess:
           - replace:
               - regex: ^([^|]+).+
@@ -31,4 +36,32 @@ xPathScrapers:
       Studio:
         Name:
           fixed: "Cutler's Den"
+
+  cutlersVod:
+    common:
+      # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
+      $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
+    scene:
+      Title: //div[@class="title_bar"]/span
+      Date:
+        selector: //div[contains(@class, "update_date") and $excludeUpdates]
+        postProcess: &datePostProcess
+          - replace:
+              - regex: ".*?([0-9]{2}/[0-9]{2}/[0-9]{4}).*"
+                with: $1
+          - parseDate: 01/02/2006
+      Details: //span[@class="update_description"]
+      Performers:
+        Name: //span[@class="update_models" and $excludeUpdates]/a
+      Tags:
+        Name: //*[@class="update_tags" and $excludeUpdates]/a
+      Studio:
+        Name:
+          fixed: "Cutler's Den"
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: (:?-[1-4]x)?\.jpg
+                with: "-full.jpg"
 # Last Updated February 4, 2024
