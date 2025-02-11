@@ -6,7 +6,7 @@ sceneByURL:
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
-  queryURL: https://missav.com/en/search/{}
+  queryURL: https://missav.ai/en/search/{}
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
