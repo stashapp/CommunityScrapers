@@ -33,7 +33,7 @@ xPathScrapers:
       Date:
         selector: //meta[@name="og:published_time"]/@content
         postProcess:
-          - parseDate: "2006-01-02T15:04:05+01:00"
+          - parseDate: "2006-01-02T15:04:05-07:00"
       Performers:
         Name: $project//div[contains(@class, "project-models")]//a
       Tags:
