@@ -2,21 +2,18 @@ name: SuperbeModels
 sceneByURL:
   - action: scrapeXPath
     url:
-      - superbemodels.com/watch
       - rawerotic.com/watch
     scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
     url:
-      - superbemodels.com/models
       - rawerotic.com/models
     scraper: performerScraper
 
 galleryByURL:
   - action: scrapeXPath
     url:
-      - superbemodels.com/albums
       - rawerotic.com/albums
     scraper: galleryScraper
 
