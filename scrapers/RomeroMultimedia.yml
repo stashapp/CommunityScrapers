@@ -1,0 +1,78 @@
+name: Romero Multimedia
+# scrapes: Cumflation, Defeated Sex Fight, Defeated.xxx, Freeze, Futanari XXX, Hentaied, Parasited, Plants vs Cunts, Smoking Hawt, Somegore, Voodooed, VORED
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cumflation.com
+      - defeatedsexfight.com
+      - freeze.xxx
+      - futanari.xxx
+      - hentaied.com
+      - parasited.com
+      - plantsvscunts.com
+      - smokinghawt.com
+      - somegore.com
+      - voodooed.com
+      - vored.com
+    scraper: newStyle
+  - action: scrapeXPath
+    url:
+      - defeated.xxx
+    scraper: oldStyle
+xPathScrapers:
+  newStyle:
+    common:
+      $desc: "*[local-name()='p' or local-name()='h3' or local-name()='ol' or local-name()='ul' or (local-name()='div' and @class='excerpt')]"
+    scene:
+      Title: //div[@class="left-top-part"]//h1
+      Date:
+        selector: //div[contains(@class, "datesingle")]
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class="left-top-part"]//div[contains(@class,"tagsmodels singletag")]//a
+      Director: //div[contains(@class, "director")]//span
+      Tags:
+        Name:
+          selector: //ul[@class="post-categories"]//a
+          postProcess:
+            - replace:
+                - regex: "Exclude"
+                  with: ""
+      Details:
+        selector: //div[@class="fullss"]/p
+        concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: '^Description\n+|\(Read Less\)|\(Read more\)'
+                with: ""
+      Image: &image //meta[@property="og:image"]/@content
+      Studio: &studio
+        Name:
+          selector: //meta[@property="og:site_name"]/@content
+          postProcess:
+            - map:
+                Bloody: Somegore
+                Cumflation: Cumflation
+                Defeated.xxx - Female Fighting and Fetish Movies: Defeated.xxx
+                Defeatedxxx: Defeated.xxx
+                Freeze - Time Freeze Porn Videos: Freeze
+                Futanari XXX: Futanari XXX
+                Lesbian Sex Fight: Defeated Sex Fight
+                Parasited: Parasited
+                Plants vs Cunts: Plants vs Cunts
+                Real Life Hentai | Tentacle Porn: Hentaied
+                SmokingHawt: Smoking Hawt
+                Voodooed - Voodoo Doll Porn: Voodooed
+  oldStyle:
+    scene:
+      Title: //h2[1]
+      Details: (//div[@class="post-content"]//div[@class="zapdesc"]/p[2])[1]
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - parseDate: "2006-01-02T15:04:05-07:00"
+      Tags:
+        Name: //*[contains(.,"Included")]/../following-sibling::p//text()
+      Image: *image
+      Studio: *studio
