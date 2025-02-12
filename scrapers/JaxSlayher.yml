@@ -20,14 +20,20 @@ xPathScrapers:
               - regex: (\w+)\s*(\d+)/(\d+)
                 with: $1 $2, $3
           - parseDate: Jan 02, 2006
-      # Images are lazy loaded, but they follow a pattern so we can
-      # get the ID from a gallery URL and construct the image URL from that
-      Image:
-        selector: (//img)[1]/@src
+      Code:
+        selector: //script[contains(text(),"videoID")]
         postProcess:
           - replace:
-              - regex: .*?/(\d+)/.*
-                with: https://jaxslayher.com/images/updates/$1-1280.jpg
+              - regex: .*?videoID\D+(\d+).*
+                with: $1
+      # Images are lazy loaded but they follow a pattern so we can
+      # get the ID from the Next.js script element and construct the image URL from that
+      Image:
+        selector: //script[contains(text(),"videoID")]
+        postProcess:
+          - replace:
+              - regex: .*?videoID\D+(\d+).*
+                with: https://jaxslayher.com/images/updates/poster_$1.jpg
       Studio:
         Name:
           fixed: Jax Slayher
