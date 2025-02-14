@@ -64,6 +64,7 @@ studio_map = {
     "sexymodernbull.com": "Sexy Modern Bull",
     "shesbrandnew.com": "She's Brand New",
     "sidechick.com": "SIDECHICK",
+    "straightnakedthugs.com": "Straight Naked Thugs",
     "suckthisdick.com": "Suck This Dick",
     "swallowed.com": "Swallowed",
     "thaigirlswild.com": "Thai Girls Wild",
