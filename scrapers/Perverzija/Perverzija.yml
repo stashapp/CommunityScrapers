@@ -1,0 +1,17 @@
+name: Perverzija
+
+sceneByURL:
+  - action: script
+    url:
+      - tube.perverzija.com/
+    script:
+      - python
+      - Perverzija.py
+      - scrape
+
+driver:
+  useCDP: false
+  sleep: 2
+
+debug:
+  printHTML: false
