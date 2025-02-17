@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: RealityLovers
 # requires: py_common
 # scrapes: Reality Lovers, TS Virtual Lovers
@@ -38,4 +39,4 @@ sceneByFragment:
     - python
     - RealityLovers.py
     - sceneByFragment
-# Last Updated April 10, 2024
+# Last Updated February 17, 2025

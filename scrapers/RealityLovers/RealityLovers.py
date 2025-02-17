@@ -1,26 +1,51 @@
+"Scraper for RealityLovers network"
 import json
 import sys
 import re
 from urllib.parse import urlparse
-import requests
 from datetime import datetime
+
+import requests.cookies
+
+from py_common import log
+from py_common.deps import ensure_requirements
+ensure_requirements("bs4:beautifulsoup4", "requests")
+
+import requests
+from bs4 import BeautifulSoup as bs
 
 # initialize the session for making requests
 session = requests.session()
-
-try:
-    import py_common.log as log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit(1)
+session.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
+})
+disclaimer_cookie = requests.cookies.create_cookie('agreedToDisclaimer', 'true')
+session.cookies.set_cookie(disclaimer_cookie)
 
 
-#  --------------------------------------------
-# This is a scraper for: RealityLovers sites
-#
+def parse_date(date_str):
+    # Use regex to match the date and capture groups
+    match = re.match(r'(\w+) (\d+)[a-z]+ (\d+)', date_str)
+    if match:
+        month, day, year = match.groups()
+        # Construct a new date string without the suffixes
+        new_date_str = f"{month} {day} {year}"
+        # Parse the date
+        date_obj = datetime.strptime(new_date_str, "%b %d %Y")
+        # Convert to the desired format
+        return date_obj.strftime("%Y-%m-%d")
+    raise ValueError("Date string does not match expected format")
+
+
+def find_largest_image(img_tag):
+    srcset = img_tag['srcset']
+    srcset_list = [item.split() for item in srcset.split(',')]
+
+    # Extract URL and width pairs
+    url_width_pairs = [(url, int(width[:-1])) for url, width in srcset_list]
+
+    # Find the URL with the largest width
+    return max(url_width_pairs, key=lambda x: x[1])[0]
 
 
 def performerByURL():
@@ -138,27 +163,41 @@ def sceneByName():
     # No way to know if the user wanted to search realitylovers or tsvirtuallovers, so search both
     raw_scenes = []
     for domain in ("realitylovers.com", "tsvirtuallovers.com"):
-        api_url = f"https://engine.{domain}/content/search?max=100000&page=0&pornstar=0&category=0&s={query_value}"
-        scraped_scenes = session.get(api_url)
-        scraped_scenes.raise_for_status()
-        scenes = scraped_scenes.json()
-        new_scenes = [{"domain": domain, **s} for s in scenes["contents"]]
-        log.debug(f"Found {len(new_scenes)} scenes from {domain}")
-        raw_scenes.extend(new_scenes)
+        search_results_page = session.get(f"https://{domain}/search/?s={query_value}")
+        search_results_page.raise_for_status()
+        # log.trace(f"search_results_page.text: {search_results_page.text}")
+
+        soup = bs(search_results_page.text, "html.parser")
+        grid_view = soup.find('div', id='gridView')
+        _scenes = grid_view.find_all('div', class_='video-grid-view')
+        log.debug(f"Found {len(_scenes)} scenes from {domain}")
+        raw_scenes.extend(_scenes)
 
     results = []
     for scene in raw_scenes:
-        # Parse the date published.  Get rid of the 'st' (like in 1st) via a regex. ex: "Sep 27th 2018"
-        cleandate = re.sub(r"(st|nd|rd|th)", r"", scene["released"])
-        date = datetime.strptime(cleandate, "%b %d %Y").strftime("%Y-%m-%d")
-        main_image_src = re.sub(r".*1x,(.*) 2x", r"\1", scene["mainImageSrcset"])
-        # Add the new scene to the results
+        # release date
+        release_text = scene.find('p', class_='card-text').text
+        log.debug(f"release_text: {release_text}")
+        release_date = parse_date(release_text.replace('Released: ', ''))
+
+        # title
+        title = scene.find('p', class_='card-title').text
+        log.debug(f"title: {title}")
+
+        # url
+        uri_path = scene.find('a').get('href')
+        log.debug(f"uri_path: {uri_path}")
+        url = f"https://{domain}{uri_path}"
+
+        # image
+        image_url = find_largest_image(scene.find('img'))
+
         results.append(
             {
-                "Title": scene["title"],
-                "URL": f"https://{scene['domain']}/{scene['videoUri']}",
-                "Image": main_image_src,
-                "Date": date,
+                "Title": title,
+                "URL": url,
+                "Image": image_url,
+                "Date": release_date,
             }
         )
 
