@@ -49,35 +49,27 @@ def find_largest_image(img_tag):
     return max(url_width_pairs, key=lambda x: x[1])[0]
 
 
+filename_transforms = [
+    lambda s : re.sub(r'[^/]+$', '00_Main_photo_Large.jpg', s),
+    lambda s : re.sub(r'[^/]+$', '00-Main-photo-Large.jpg', s),
+    lambda s : re.sub(r'\w+_main_', '', s).replace('small.jpg', 'large@2x.jpg'),
+]
+
+
 def replace_filename_in_url(urls_str):
     # Find the first URL in the string
     match = re.match(r'([^ ,]+)', urls_str)
     if match:
         first_url = match.group(1)
         log.debug(f"matched: {first_url}")
-        # make full url if not
-        if first_url.startswith('/'):
-            first_url = f"https://static.rlcontent.com{first_url}"
-        log.debug(f"ensured full: {first_url}")
 
-        # Replace the filename part with "00_Main_photo_Large.jpg"
-        new_url = re.sub(r'[^/]+$', '00_Main_photo_Large.jpg', first_url)
-        log.debug(f"new_url: {new_url}")
-        if is_valid_url(new_url):
-            return new_url
-        # Replace the filename part with "00-Main-photo-Large.jpg"
-        new_url = re.sub(r'[^/]+$', '00-Main-photo-Large.jpg', first_url)
-        log.debug(f"new_url: {new_url}")
-        if is_valid_url(new_url):
-            return new_url
-        # alter the filename part with "00-Main-photo-Large.jpg"
-        new_url = first_url.replace('pov_main_', '')
-        new_url = new_url.replace('small.jpg', 'large@2x.jpg')
-        log.debug(f"new_url: {new_url}")
-        if is_valid_url(new_url):
-            return new_url
-    else:
-        return None
+        for filename_transform in filename_transforms:
+            new_url = filename_transform(first_url)
+            if is_valid_url(new_url):
+                log.debug(f"new_url (valid): {new_url}")
+                return new_url
+            log.debug(f"new_url (invalid): {new_url}")
+    return None
 
 
 def extract_code(string):
@@ -87,6 +79,26 @@ def extract_code(string):
     else:
         return None
 
+
+def clean_text(details: str) -> str:
+    """
+    remove escaped backslashes and html parse the details text
+    """
+    if details:
+        details = re.sub(r"\\", "", details)
+        # details = re.sub(r"<\s*/?br\s*/?\s*>", "\n",
+        #                  details)  # bs.get_text doesnt replace br's with \n
+        details = re.sub(r'</?p>', '\n', details)
+        details = bs(details, features='html.parser').get_text()
+        # Remove leading/trailing/double whitespaces
+        details = '\n'.join(
+            [
+                ' '.join([s for s in x.strip(' ').split(' ') if s != ''])
+                for x in ''.join(details).split('\n')
+            ]
+        )
+        details = details.strip()
+    return details
 
 
 def performerByURL():
@@ -141,6 +153,7 @@ def performerByURL():
 def sceneByURL():
     # read the input.  A URL must be passed in for the sceneByURL call
     inp = json.loads(sys.stdin.read())
+    log.debug(f"inp: {inp}")
     scene_id = re.sub(r".*/([0-9]*)/.*", r"\1", inp["url"])
     if not scene_id:
         log.error("No scene ID found in URL")
@@ -158,13 +171,13 @@ def sceneByURL():
     log.trace("Scraped the url: " + api_url)
 
     data = scraped.json()
-    log.debug(json.dumps(data))
+    log.trace(json.dumps(data))
 
-    title = re.sub(r'\s+VR Porn Video$', '', data["title"])
-    details = data["description"]
+    title = re.sub(r'\s+VR( Porn Video)?$', '', data["title"])
+    details = clean_text(data["description"])
 
     # image
-    log.debug(f'data["mainImages"][0]["imgSrcSet"]: {data["mainImages"][0]["imgSrcSet"]}')
+    # log.debug(f'data["mainImages"][0]["imgSrcSet"]: {data["mainImages"][0]["imgSrcSet"]}')
     image_url = replace_filename_in_url(data["mainImages"][0]["imgSrcSet"])
     date = data["releaseDate"]
 
@@ -179,7 +192,7 @@ def sceneByURL():
         for x in data["starring"]
     ]
 
-    code = extract_code(inp["url"])
+    code = str(data["contentId"])
 
     # create our output
     return {
@@ -206,8 +219,8 @@ def sceneByName():
         return []
     log.trace("Query Value: " + query_value)
 
+    results = []
     # No way to know if the user wanted to search realitylovers or tsvirtuallovers, so search both
-    raw_scenes = []
     for domain in ("realitylovers.com", "tsvirtuallovers.com"):
         search_results_page = session.get(f"https://{domain}/search/?s={query_value}")
         search_results_page.raise_for_status()
@@ -217,35 +230,34 @@ def sceneByName():
         grid_view = soup.find('div', id='gridView')
         _scenes = grid_view.find_all('div', class_='video-grid-view')
         log.debug(f"Found {len(_scenes)} scenes from {domain}")
-        raw_scenes.extend(_scenes)
 
-    results = []
-    for scene in raw_scenes:
-        # release date
-        release_text = scene.find('p', class_='card-text').text
-        log.debug(f"release_text: {release_text}")
-        release_date = parse_date(release_text.replace('Released: ', ''))
+        for scene in _scenes:
+            # release date
+            release_text = scene.find('p', class_='card-text').text
+            log.debug(f"release_text: {release_text}")
+            release_date = parse_date(release_text.replace('Released: ', ''))
 
-        # title
-        title = scene.find('p', class_='card-title').text
-        log.debug(f"title: {title}")
+            # title
+            title = scene.find('p', class_='card-title').text
+            log.debug(f"title: {title}")
 
-        # url
-        uri_path = scene.find('a').get('href')
-        log.debug(f"uri_path: {uri_path}")
-        url = f"https://{domain}{uri_path}"
+            # url
+            uri_path = scene.find('a').get('href')
+            log.debug(f"uri_path: {uri_path}")
+            url = f"https://{domain}{uri_path}"
 
-        # image
-        image_url = find_largest_image(scene.find('img'))
+            # image
+            image_url = find_largest_image(scene.find('img'))
+            log.debug(f"image_url: {image_url}")
 
-        results.append(
-            {
-                "Title": title,
-                "URL": url,
-                "Image": image_url,
-                "Date": release_date,
-            }
-        )
+            results.append(
+                {
+                    "Title": title,
+                    "URL": url,
+                    "Image": image_url,
+                    "Date": release_date,
+                }
+            )
 
     return results
 
