@@ -9,6 +9,7 @@ import requests.cookies
 
 from py_common import log
 from py_common.deps import ensure_requirements
+from py_common.util import is_valid_url
 ensure_requirements("bs4:beautifulsoup4", "requests")
 
 import requests
@@ -46,6 +47,32 @@ def find_largest_image(img_tag):
 
     # Find the URL with the largest width
     return max(url_width_pairs, key=lambda x: x[1])[0]
+
+
+def replace_filename_in_url(urls_str):
+    # Find the first URL in the string
+    match = re.match(r'([^,]+)', urls_str)
+    if match:
+        first_url = match.group(1)
+        # Replace the filename part with "00_Main_photo_Large.jpg"
+        new_url = re.sub(r'[^/]+$', '00_Main_photo_Large.jpg', first_url)
+        if is_valid_url(new_url):
+            return new_url
+        # Replace the filename part with "00-Main-photo-Large.jpg"
+        new_url = re.sub(r'[^/]+$', '00-Main-photo-Large.jpg', first_url)
+        if is_valid_url(new_url):
+            return new_url
+    else:
+        return None
+
+
+def extract_code(string):
+    match = re.search(r'vd/(\d+)/', string)
+    if match:
+        return match.group(1)
+    else:
+        return None
+
 
 
 def performerByURL():
@@ -123,7 +150,8 @@ def sceneByURL():
     details = data["description"]
 
     # image
-    image_url = re.sub(r".*,(\S+)\/.*", r"\1/00-Main-photo-Large.jpg", data["mainImages"][0]["imgSrcSet"])
+    log.debug(f'data["mainImages"][0]["imgSrcSet"]: {data["mainImages"][0]["imgSrcSet"]}')
+    image_url = replace_filename_in_url(data["mainImages"][0]["imgSrcSet"])
     date = data["releaseDate"]
 
     # tags
@@ -137,6 +165,8 @@ def sceneByURL():
         for x in data["starring"]
     ]
 
+    code = extract_code(inp["url"])
+
     # create our output
     return {
         "title": title,
@@ -146,6 +176,8 @@ def sceneByURL():
         "image": image_url,
         "studio": {"name": studio},
         "performers": actors,
+        "urls": [inp["url"]],
+        "code": code,
     }
 
 
