@@ -25,6 +25,7 @@ session.cookies.set_cookie(disclaimer_cookie)
 
 
 def parse_date(date_str):
+    "Convert the date format to YYYY-MM-DD"
     # Use regex to match the date and capture groups
     match = re.match(r'(\w+) (\d+)[a-z]+ (\d+)', date_str)
     if match:
@@ -39,6 +40,7 @@ def parse_date(date_str):
 
 
 def find_largest_image(img_tag):
+    "Pick the largest resolution image from an img srcset"
     srcset = img_tag['srcset']
     srcset_list = [item.split() for item in srcset.split(',')]
 
@@ -57,6 +59,7 @@ filename_transforms = [
 
 
 def replace_filename_in_url(urls_str):
+    "Modify the filename part of the URL"
     # Find the first URL in the string
     match = re.match(r'([^ ,]+)', urls_str)
     if match:
@@ -72,18 +75,8 @@ def replace_filename_in_url(urls_str):
     return None
 
 
-def extract_code(string):
-    match = re.search(r'vd/(\d+)/', string)
-    if match:
-        return match.group(1)
-    else:
-        return None
-
-
 def clean_text(details: str) -> str:
-    """
-    remove escaped backslashes and html parse the details text
-    """
+    "remove escaped backslashes and html parse the details text"
     if details:
         details = re.sub(r"\\", "", details)
         # details = re.sub(r"<\s*/?br\s*/?\s*>", "\n",
@@ -101,7 +94,8 @@ def clean_text(details: str) -> str:
     return details
 
 
-def performerByURL():
+def performer_by_url():
+    "Scraper performer by studio URL"
     # read the input.  A URL must be passed in for the sceneByURL call
     inp = json.loads(sys.stdin.read())
     actor_id = re.sub(r".*/([0-9]*)/.*", r"\1", inp["url"])
@@ -150,7 +144,8 @@ def performerByURL():
     return performer
 
 
-def sceneByURL():
+def scene_by_url():
+    "Use studio URL to scrape the REST API by ID"
     # read the input.  A URL must be passed in for the sceneByURL call
     inp = json.loads(sys.stdin.read())
     log.debug(f"inp: {inp}")
@@ -166,7 +161,7 @@ def sceneByURL():
     api_url = f"https://engine.{domain}/content/videoDetail?contentId={scene_id}"
     scraped = session.get(api_url)
     if scraped.status_code >= 400:
-        log.error("HTTP Error: %s" % scraped.status_code)
+        log.error(f"HTTP Error: {scraped.status_code}")
         return {}
     log.trace("Scraped the url: " + api_url)
 
@@ -208,8 +203,11 @@ def sceneByURL():
     }
 
 
-# Get the scene by the fragment.  The title is used as the search field.  Should return the JSON response.
-def sceneByName():
+def scene_by_name():
+    """
+    Get the scene by the fragment. The title is used as the search field.
+    Scrapes the search page for scene results.
+    """
     # read the input.  A title or name must be passed in
     inp = json.loads(sys.stdin.read())
     log.trace("Input: " + json.dumps(inp))
@@ -264,14 +262,14 @@ def sceneByName():
 
 # Figure out what was invoked by Stash and call the correct thing
 if sys.argv[1] == "performerByURL":
-    print(json.dumps(performerByURL()))
+    print(json.dumps(performer_by_url()))
 elif sys.argv[1] in ("sceneByURL", "sceneByQueryFragment"):
-    print(json.dumps(sceneByURL()))
+    print(json.dumps(scene_by_url()))
 elif sys.argv[1] == "sceneByName":
-    scenes = sceneByName()
+    scenes = scene_by_name()
     print(json.dumps(scenes))
 elif sys.argv[1] == "sceneByFragment":
-    scenes = sceneByName()
+    scenes = scene_by_name()
     if len(scenes) > 0:
         # return the first query result
         print(json.dumps(scenes[0]))
