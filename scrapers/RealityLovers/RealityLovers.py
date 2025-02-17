@@ -51,15 +51,29 @@ def find_largest_image(img_tag):
 
 def replace_filename_in_url(urls_str):
     # Find the first URL in the string
-    match = re.match(r'([^,]+)', urls_str)
+    match = re.match(r'([^ ,]+)', urls_str)
     if match:
         first_url = match.group(1)
+        log.debug(f"matched: {first_url}")
+        # make full url if not
+        if first_url.startswith('/'):
+            first_url = f"https://static.rlcontent.com{first_url}"
+        log.debug(f"ensured full: {first_url}")
+
         # Replace the filename part with "00_Main_photo_Large.jpg"
         new_url = re.sub(r'[^/]+$', '00_Main_photo_Large.jpg', first_url)
+        log.debug(f"new_url: {new_url}")
         if is_valid_url(new_url):
             return new_url
         # Replace the filename part with "00-Main-photo-Large.jpg"
         new_url = re.sub(r'[^/]+$', '00-Main-photo-Large.jpg', first_url)
+        log.debug(f"new_url: {new_url}")
+        if is_valid_url(new_url):
+            return new_url
+        # alter the filename part with "00-Main-photo-Large.jpg"
+        new_url = first_url.replace('pov_main_', '')
+        new_url = new_url.replace('small.jpg', 'large@2x.jpg')
+        log.debug(f"new_url: {new_url}")
         if is_valid_url(new_url):
             return new_url
     else:
@@ -144,7 +158,7 @@ def sceneByURL():
     log.trace("Scraped the url: " + api_url)
 
     data = scraped.json()
-    # log.debug(json.dumps(data))
+    log.debug(json.dumps(data))
 
     title = re.sub(r'\s+VR Porn Video$', '', data["title"])
     details = data["description"]
