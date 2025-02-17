@@ -6,8 +6,10 @@ name: RealityLovers
 performerByURL:
   - action: script
     url:
-      - https://realitylovers.com/girl
-      - https://tsvirtuallovers.com/girl
+      - playgirlstories.com/girl/
+      - realitylovers.com/girl/
+      - tsvirtuallovers.com/girl/
+      - wearecrazy.com/girl/
     script:
       - python
       - RealityLovers.py
@@ -15,8 +17,10 @@ performerByURL:
 sceneByURL:
   - action: script
     url:
-      - https://realitylovers.com/vd/
-      - https://tsvirtuallovers.com/vd/
+      - playgirlstories.com/vd/
+      - realitylovers.com/vd/
+      - tsvirtuallovers.com/vd/
+      - wearecrazy.com/vd/
     script:
       - python
       - RealityLovers.py
