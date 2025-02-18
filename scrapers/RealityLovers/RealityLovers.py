@@ -256,7 +256,7 @@ def web_search_scenes(query_value: str, domain: str) -> list[ScrapedScene]:
     soup = bs(search_results_page.text, "html.parser")
     grid_view = soup.find('div', id='gridView')
     _scenes = grid_view.find_all('div', class_='video-grid-view')
-    log.debug(f"Found {len(_scenes)} scenes from {domain}")
+    log.info(f"Found {len(_scenes)} scenes from {domain}")
 
     _results = []
     for scene in _scenes:
