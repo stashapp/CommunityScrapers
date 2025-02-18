@@ -1,29 +1,113 @@
+"Scraper for RealityLovers network"
+import concurrent.futures
+import itertools
 import json
 import sys
 import re
 from urllib.parse import urlparse
-import requests
 from datetime import datetime
+
+from py_common import log
+from py_common.deps import ensure_requirements
+from py_common.types import (
+    ScrapedPerformer,
+    ScrapedScene,
+)
+from py_common.util import is_valid_url
+ensure_requirements("bs4:beautifulsoup4", "requests")
+
+import requests
+import requests.cookies
+from bs4 import BeautifulSoup as bs
 
 # initialize the session for making requests
 session = requests.session()
+session.headers.update({
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
+})
+disclaimer_cookie = requests.cookies.create_cookie('agreedToDisclaimer', 'true')
+session.cookies.set_cookie(disclaimer_cookie)
 
-try:
-    import py_common.log as log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit(1)
-
-
-#  --------------------------------------------
-# This is a scraper for: RealityLovers sites
-#
+DOMAIN_STUDIO_MAP = {
+    "playgirlstories.com": "Play Girl Stories",
+    "realitylovers.com": "Reality Lovers",
+    "tsvirtuallovers.com": "TS Virtual Lovers",
+    "wearecrazy.com": "We Are Crazy",
+}
 
 
-def performerByURL():
+def parse_date(date_str):
+    "Convert the date format to YYYY-MM-DD"
+    # Use regex to match the date and capture groups
+    match = re.match(r'(\w+) (\d+)[a-z]+ (\d+)', date_str)
+    if match:
+        month, day, year = match.groups()
+        # Construct a new date string without the suffixes
+        new_date_str = f"{month} {day} {year}"
+        # Parse the date
+        date_obj = datetime.strptime(new_date_str, "%b %d %Y")
+        # Convert to the desired format
+        return date_obj.strftime("%Y-%m-%d")
+    raise ValueError("Date string does not match expected format")
+
+
+def find_largest_image(img_tag):
+    "Pick the largest resolution image from an img srcset"
+    srcset = img_tag['srcset']
+    srcset_list = [item.split() for item in srcset.split(',')]
+
+    # Extract URL and width pairs
+    url_width_pairs = [(url, int(width[:-1])) for url, width in srcset_list]
+
+    # Find the URL with the largest width
+    return max(url_width_pairs, key=lambda x: x[1])[0]
+
+
+filename_transforms = [
+    lambda s : re.sub(r'[^/]+$', '00_Main_photo_Large.jpg', s),
+    lambda s : re.sub(r'[^/]+$', '00-Main-photo-Large.jpg', s),
+    lambda s : re.sub(r'\w+_main_', '', s).replace('small.jpg', 'large@2x.jpg'),
+]
+
+
+def replace_filename_in_url(urls_str):
+    "Modify the filename part of the URL"
+    # Find the first URL in the string
+    match = re.match(r'([^ ,]+)', urls_str)
+    if match:
+        first_url = match.group(1)
+        log.debug(f"matched: {first_url}")
+
+        for filename_transform in filename_transforms:
+            new_url = filename_transform(first_url)
+            if is_valid_url(new_url):
+                log.debug(f"new_url (valid): {new_url}")
+                return new_url
+            log.debug(f"new_url (invalid): {new_url}")
+    return None
+
+
+def clean_text(details: str) -> str:
+    "remove escaped backslashes and html parse the details text"
+    if details:
+        details = re.sub(r"\\", "", details)
+        # details = re.sub(r"<\s*/?br\s*/?\s*>", "\n",
+        #                  details)  # bs.get_text doesnt replace br's with \n
+        details = re.sub(r'</?p>', '\n', details)
+        details = bs(details, features='html.parser').get_text()
+        # Remove leading/trailing/double whitespaces
+        details = '\n'.join(
+            [
+                ' '.join([s for s in x.strip(' ').split(' ') if s != ''])
+                for x in ''.join(details).split('\n')
+            ]
+        )
+        details = details.strip()
+    return details
+
+
+def performer_by_url() -> ScrapedPerformer:
+    "Scraper performer by studio URL"
     # read the input.  A URL must be passed in for the sceneByURL call
     inp = json.loads(sys.stdin.read())
     actor_id = re.sub(r".*/([0-9]*)/.*", r"\1", inp["url"])
@@ -72,33 +156,34 @@ def performerByURL():
     return performer
 
 
-def sceneByURL():
+def scene_by_url() -> ScrapedScene:
+    "Use studio URL to scrape the REST API by ID"
     # read the input.  A URL must be passed in for the sceneByURL call
     inp = json.loads(sys.stdin.read())
+    log.debug(f"inp: {inp}")
     scene_id = re.sub(r".*/([0-9]*)/.*", r"\1", inp["url"])
     if not scene_id:
         log.error("No scene ID found in URL")
         return {}
     domain = urlparse(inp["url"]).netloc.replace("www.", "")
-    studio = "Reality Lovers"
-    if "tsvirtuallovers" in domain:
-        studio = "TS Virtual Lovers"
+    studio = DOMAIN_STUDIO_MAP.get(domain, 'Reality Lovers')
 
     api_url = f"https://engine.{domain}/content/videoDetail?contentId={scene_id}"
     scraped = session.get(api_url)
     if scraped.status_code >= 400:
-        log.error("HTTP Error: %s" % scraped.status_code)
+        log.error(f"HTTP Error: {scraped.status_code}")
         return {}
     log.trace("Scraped the url: " + api_url)
 
     data = scraped.json()
-    # log.debug(json.dumps(data))
+    log.trace(json.dumps(data))
 
-    title = re.sub(r'\s+VR Porn Video$', '', data["title"])
-    details = data["description"]
+    title = re.sub(r'\s+VR( Porn( Video)?)?$', '', data["title"])
+    details = clean_text(data["description"])
 
     # image
-    image_url = re.sub(r".*,(\S+)\/.*", r"\1/00-Main-photo-Large.jpg", data["mainImages"][0]["imgSrcSet"])
+    # log.debug(f'data["mainImages"][0]["imgSrcSet"]: {data["mainImages"][0]["imgSrcSet"]}')
+    image_url = replace_filename_in_url(data["mainImages"][0]["imgSrcSet"])
     date = data["releaseDate"]
 
     # tags
@@ -112,6 +197,8 @@ def sceneByURL():
         for x in data["starring"]
     ]
 
+    code = str(data["contentId"])
+
     # create our output
     return {
         "title": title,
@@ -121,11 +208,16 @@ def sceneByURL():
         "image": image_url,
         "studio": {"name": studio},
         "performers": actors,
+        "urls": [inp["url"]],
+        "code": code,
     }
 
 
-# Get the scene by the fragment.  The title is used as the search field.  Should return the JSON response.
-def sceneByName():
+def scene_by_name() -> list[ScrapedScene]:
+    """
+    Get the scene by the fragment. The title is used as the search field.
+    Scrapes the search page for scene results.
+    """
     # read the input.  A title or name must be passed in
     inp = json.loads(sys.stdin.read())
     log.trace("Input: " + json.dumps(inp))
@@ -135,46 +227,77 @@ def sceneByName():
         return []
     log.trace("Query Value: " + query_value)
 
-    # No way to know if the user wanted to search realitylovers or tsvirtuallovers, so search both
-    raw_scenes = []
-    for domain in ("realitylovers.com", "tsvirtuallovers.com"):
-        api_url = f"https://engine.{domain}/content/search?max=100000&page=0&pornstar=0&category=0&s={query_value}"
-        scraped_scenes = session.get(api_url)
-        scraped_scenes.raise_for_status()
-        scenes = scraped_scenes.json()
-        new_scenes = [{"domain": domain, **s} for s in scenes["contents"]]
-        log.debug(f"Found {len(new_scenes)} scenes from {domain}")
-        raw_scenes.extend(new_scenes)
-
     results = []
-    for scene in raw_scenes:
-        # Parse the date published.  Get rid of the 'st' (like in 1st) via a regex. ex: "Sep 27th 2018"
-        cleandate = re.sub(r"(st|nd|rd|th)", r"", scene["released"])
-        date = datetime.strptime(cleandate, "%b %d %Y").strftime("%Y-%m-%d")
-        main_image_src = re.sub(r".*1x,(.*) 2x", r"\1", scene["mainImageSrcset"])
-        # Add the new scene to the results
-        results.append(
-            {
-                "Title": scene["title"],
-                "URL": f"https://{scene['domain']}/{scene['videoUri']}",
-                "Image": main_image_src,
-                "Date": date,
-            }
-        )
+    # send requests concurrently
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        # list of futures for each domain scene search
+        futures = [
+            executor.submit(web_search_scenes, query_value, domain)
+            # No way to know which site to search by title search text, so search all
+            for domain in DOMAIN_STUDIO_MAP
+        ]
+        domain_list_of_scene_list = [
+            future.result()
+            for future in concurrent.futures.as_completed(futures)
+        ]
+        results.extend(list(itertools.chain.from_iterable(domain_list_of_scene_list)))
 
     return results
 
 
+def web_search_scenes(query_value: str, domain: str) -> list[ScrapedScene]:
+    """
+    Searches scenes using the web page search (that returns HTML).
+    Parse each search result HTML into a ScrapedScene.
+    """
+    search_results_page = session.get(f"https://{domain}/search/?s={query_value}")
+    search_results_page.raise_for_status()
+
+    soup = bs(search_results_page.text, "html.parser")
+    grid_view = soup.find('div', id='gridView')
+    _scenes = grid_view.find_all('div', class_='video-grid-view')
+    log.info(f"Found {len(_scenes)} scenes from {domain}")
+
+    _results = []
+    for scene in _scenes:
+        # release date
+        release_text = scene.find('p', class_='card-text').text
+        log.debug(f"release_text: {release_text}")
+        release_date = parse_date(release_text.replace('Released: ', ''))
+
+        # title
+        title = scene.find('p', class_='card-title').text
+        log.debug(f"title: {title}")
+
+        # url
+        uri_path = scene.find('a').get('href')
+        log.debug(f"uri_path: {uri_path}")
+        url = f"https://{domain}{uri_path}"
+
+        # image
+        image_url = find_largest_image(scene.find('img'))
+        log.debug(f"image_url: {image_url}")
+
+        _results.append({
+            "title": title,
+            "url": url,
+            "image": image_url,
+            "date": release_date,
+            "studio": { "name": DOMAIN_STUDIO_MAP.get(domain) },
+        })
+    return _results
+
+
 # Figure out what was invoked by Stash and call the correct thing
 if sys.argv[1] == "performerByURL":
-    print(json.dumps(performerByURL()))
+    print(json.dumps(performer_by_url()))
 elif sys.argv[1] in ("sceneByURL", "sceneByQueryFragment"):
-    print(json.dumps(sceneByURL()))
+    print(json.dumps(scene_by_url()))
 elif sys.argv[1] == "sceneByName":
-    scenes = sceneByName()
+    scenes = scene_by_name()
     print(json.dumps(scenes))
 elif sys.argv[1] == "sceneByFragment":
-    scenes = sceneByName()
+    scenes = scene_by_name()
     if len(scenes) > 0:
         # return the first query result
         print(json.dumps(scenes[0]))
