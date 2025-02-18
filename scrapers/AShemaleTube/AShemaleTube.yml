@@ -22,10 +22,13 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 sceneByURL:
-  - action: scrapeXPath
+  - action: script
     url:
-      - ashemaletube.com/videos
-    scraper: sceneScraper
+      - ashemaletube.com/videos/
+    script:
+      - python
+      - AShemaleTube.py
+      - scene-by-url
 
 xPathScrapers:
   performerSearch:
@@ -124,4 +127,4 @@ xPathScrapers:
                   with: https://www.ashemaletube.com/
       Image: //meta[@property="og:image"]/@content
       URL: //meta[@property="og:url"]/@content
-# Last Updated January 20, 2025
+# Last Updated February 18, 2025
