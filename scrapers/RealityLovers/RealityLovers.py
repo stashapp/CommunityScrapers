@@ -1,18 +1,23 @@
 "Scraper for RealityLovers network"
+import concurrent.futures
+import itertools
 import json
 import sys
 import re
 from urllib.parse import urlparse
 from datetime import datetime
 
-import requests.cookies
-
 from py_common import log
 from py_common.deps import ensure_requirements
+from py_common.types import (
+    ScrapedPerformer,
+    ScrapedScene,
+)
 from py_common.util import is_valid_url
 ensure_requirements("bs4:beautifulsoup4", "requests")
 
 import requests
+import requests.cookies
 from bs4 import BeautifulSoup as bs
 
 # initialize the session for making requests
@@ -22,6 +27,13 @@ session.headers.update({
 })
 disclaimer_cookie = requests.cookies.create_cookie('agreedToDisclaimer', 'true')
 session.cookies.set_cookie(disclaimer_cookie)
+
+DOMAIN_STUDIO_MAP = {
+    "playgirlstories.com": "Play Girl Stories",
+    "realitylovers.com": "Reality Lovers",
+    "tsvirtuallovers.com": "TS Virtual Lovers",
+    "wearecrazy.com": "We Are Crazy",
+}
 
 
 def parse_date(date_str):
@@ -94,7 +106,7 @@ def clean_text(details: str) -> str:
     return details
 
 
-def performer_by_url():
+def performer_by_url() -> ScrapedPerformer:
     "Scraper performer by studio URL"
     # read the input.  A URL must be passed in for the sceneByURL call
     inp = json.loads(sys.stdin.read())
@@ -144,7 +156,7 @@ def performer_by_url():
     return performer
 
 
-def scene_by_url():
+def scene_by_url() -> ScrapedScene:
     "Use studio URL to scrape the REST API by ID"
     # read the input.  A URL must be passed in for the sceneByURL call
     inp = json.loads(sys.stdin.read())
@@ -154,9 +166,7 @@ def scene_by_url():
         log.error("No scene ID found in URL")
         return {}
     domain = urlparse(inp["url"]).netloc.replace("www.", "")
-    studio = "Reality Lovers"
-    if "tsvirtuallovers" in domain:
-        studio = "TS Virtual Lovers"
+    studio = DOMAIN_STUDIO_MAP.get(domain, 'Reality Lovers')
 
     api_url = f"https://engine.{domain}/content/videoDetail?contentId={scene_id}"
     scraped = session.get(api_url)
@@ -203,7 +213,7 @@ def scene_by_url():
     }
 
 
-def scene_by_name():
+def scene_by_name() -> list[ScrapedScene]:
     """
     Get the scene by the fragment. The title is used as the search field.
     Scrapes the search page for scene results.
@@ -218,46 +228,64 @@ def scene_by_name():
     log.trace("Query Value: " + query_value)
 
     results = []
-    # No way to know if the user wanted to search realitylovers or tsvirtuallovers, so search both
-    for domain in ("realitylovers.com", "tsvirtuallovers.com"):
-        search_results_page = session.get(f"https://{domain}/search/?s={query_value}")
-        search_results_page.raise_for_status()
-        # log.trace(f"search_results_page.text: {search_results_page.text}")
-
-        soup = bs(search_results_page.text, "html.parser")
-        grid_view = soup.find('div', id='gridView')
-        _scenes = grid_view.find_all('div', class_='video-grid-view')
-        log.debug(f"Found {len(_scenes)} scenes from {domain}")
-
-        for scene in _scenes:
-            # release date
-            release_text = scene.find('p', class_='card-text').text
-            log.debug(f"release_text: {release_text}")
-            release_date = parse_date(release_text.replace('Released: ', ''))
-
-            # title
-            title = scene.find('p', class_='card-title').text
-            log.debug(f"title: {title}")
-
-            # url
-            uri_path = scene.find('a').get('href')
-            log.debug(f"uri_path: {uri_path}")
-            url = f"https://{domain}{uri_path}"
-
-            # image
-            image_url = find_largest_image(scene.find('img'))
-            log.debug(f"image_url: {image_url}")
-
-            results.append(
-                {
-                    "Title": title,
-                    "URL": url,
-                    "Image": image_url,
-                    "Date": release_date,
-                }
-            )
+    # send requests concurrently
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+        # list of futures for each domain scene search
+        futures = [
+            executor.submit(web_search_scenes, query_value, domain)
+            # No way to know which site to search by title search text, so search all
+            for domain in DOMAIN_STUDIO_MAP
+        ]
+        domain_list_of_scene_list = [
+            future.result()
+            for future in concurrent.futures.as_completed(futures)
+        ]
+        results.extend(list(itertools.chain.from_iterable(domain_list_of_scene_list)))
 
     return results
+
+
+def web_search_scenes(query_value: str, domain: str) -> list[ScrapedScene]:
+    """
+    Searches scenes using the web page search (that returns HTML).
+    Parse each search result HTML into a ScrapedScene.
+    """
+    search_results_page = session.get(f"https://{domain}/search/?s={query_value}")
+    search_results_page.raise_for_status()
+
+    soup = bs(search_results_page.text, "html.parser")
+    grid_view = soup.find('div', id='gridView')
+    _scenes = grid_view.find_all('div', class_='video-grid-view')
+    log.debug(f"Found {len(_scenes)} scenes from {domain}")
+
+    _results = []
+    for scene in _scenes:
+        # release date
+        release_text = scene.find('p', class_='card-text').text
+        log.debug(f"release_text: {release_text}")
+        release_date = parse_date(release_text.replace('Released: ', ''))
+
+        # title
+        title = scene.find('p', class_='card-title').text
+        log.debug(f"title: {title}")
+
+        # url
+        uri_path = scene.find('a').get('href')
+        log.debug(f"uri_path: {uri_path}")
+        url = f"https://{domain}{uri_path}"
+
+        # image
+        image_url = find_largest_image(scene.find('img'))
+        log.debug(f"image_url: {image_url}")
+
+        _results.append({
+            "title": title,
+            "url": url,
+            "image": image_url,
+            "date": release_date,
+            "studio": { "name": DOMAIN_STUDIO_MAP.get(domain) },
+        })
+    return _results
 
 
 # Figure out what was invoked by Stash and call the correct thing
