@@ -178,7 +178,7 @@ def scene_by_url() -> ScrapedScene:
     data = scraped.json()
     log.trace(json.dumps(data))
 
-    title = re.sub(r'\s+VR( Porn Video)?$', '', data["title"])
+    title = re.sub(r'\s+VR( Porn( Video)?)?$', '', data["title"])
     details = clean_text(data["description"])
 
     # image
