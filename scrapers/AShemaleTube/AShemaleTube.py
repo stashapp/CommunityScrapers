@@ -1,6 +1,5 @@
 from datetime import datetime
 import json
-from lxml import html
 import re
 import sys
 from urllib.parse import urlparse, urlunparse
@@ -9,13 +8,14 @@ from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.types import (
     ScrapedPerformer,
+    ScrapedScene,
 )
 from py_common.util import scraper_args
 
-ensure_requirements("cloudscraper")
+ensure_requirements("cloudscraper", "fp:free-proxy", "lxml")
 import cloudscraper  # noqa: E402
-ensure_requirements("fp:free-proxy")
 from fp.fp import FreeProxy
+from lxml import html
 
 
 scraper = cloudscraper.create_scraper()
@@ -35,15 +35,15 @@ def li_value(key: str) -> str:
 def parse_date(date_string: str) -> str:
     try:
         return datetime.strftime(datetime.strptime(date_string, "%d %B %Y"), "%Y-%m-%d")
-    except:
+    except Exception:
         return date_string
 
 
-def scrapeUrl(url):
-    return html.document_fromstring(scrapeUrlToString(url))
+def scrape_url(url):
+    return html.document_fromstring(scrape_url_to_string(url))
 
 
-def scrapeUrlToString(url, max_retries=5):
+def scrape_url_to_string(url, max_retries=5):
     retries = 0
     while retries < max_retries:
         try:
@@ -54,14 +54,13 @@ def scrapeUrlToString(url, max_retries=5):
             if scraped.status_code == 200:
                 log.debug('HTTP Status: 200')
                 return scraped.text
-            else:
-                log.error('HTTP Error: %s' % scraped.status_code)
+            log.error('HTTP Error: %s' % scraped.status_code)
         except Exception as e:
             log.error("scraper.get error: %s" % e)
-        
+
         retries += 1
         log.debug('Retrying (%d/%d)...' % (retries, max_retries))
-    
+
     raise Exception('Failed to scrape the URL after %d retries' % max_retries)
 
 
@@ -72,7 +71,7 @@ def remove_query(url: str) -> str:
 def performer_from_url(url) -> ScrapedPerformer | None:
     performer: ScrapedPerformer = {}
     try:
-        tree = scrapeUrl(url)
+        tree = scrape_url(url)
         if (name := next(iter(tree.xpath('//h1[contains(@class, "content-name") or contains(@class, "username")]/text()')), None)) is not None:
             performer["name"] = name.strip()
         else:
@@ -142,6 +141,36 @@ def performer_from_url(url) -> ScrapedPerformer | None:
     return performer
 
 
+def scene_from_url(_url: str) -> ScrapedScene | None:
+    scene: ScrapedScene = {}
+    try:
+        tree = scrape_url(_url)
+        # title
+        if (title := next(iter(tree.xpath('//div[@id="item-info"]//h1/text()')), None)) is not None:
+            scene["title"] = title.strip()
+        # date
+        if (added := next(iter(tree.xpath('//div[@id="item-info"]//div[contains(@class, "views-count-add")]/text()')), None)) is not None:
+            if match := re.search(r'Added\s(\d+-\d+-\d+)', added):
+                scene["date"] = match.group(1)
+        # tags
+        if (tags := iter(tree.xpath('//a[contains(@class, "btn-tag")]/@title')), None) is not None:
+            scene["tags"] = [
+                { 'name': tag }
+                for tag in set(tags)
+                if tag.lower() != "suggest" and tag.lower() != "suggest tag"
+            ]
+        # performers
+        if (performers := iter(tree.xpath('//a[@class="model-card"]/text()[2]')), None) is not None:
+            scene["performers"] = [ { "name": re.sub(r'\n\t(.*)\n', r'\1', p) } for p in set(performers) ]
+        # image
+        if (image := next(iter(tree.xpath('//meta[@property="og:image"]/@content')), None)) is not None:
+            scene["image"] = image
+    except Exception as e:
+        log.error('error happened: %s' % e)
+    log.debug("scene: %s" % scene)
+    return scene
+
+
 if __name__ == "__main__":
     op, args = scraper_args()
 
@@ -149,6 +178,8 @@ if __name__ == "__main__":
     match op, args:
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
         case _:
             log.error(
                 f"Not implemented: Operation: {op}, arguments: {json.dumps(args)}"
