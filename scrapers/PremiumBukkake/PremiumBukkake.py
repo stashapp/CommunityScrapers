@@ -235,6 +235,11 @@ def scrape_scene(given_url):
 
     ret['studio'] = {}
     ret['studio']['name'] = 'Premium Bukkake'
+    ret['urls'] = []
+    ret['performers'] = []
+    ret['tags'] = []
+    ret['image'] = ''
+    ret['date'] = ''
 
     # Get info from the paywalled site first as the most accurate source
     # for most details and only source for some scenes
