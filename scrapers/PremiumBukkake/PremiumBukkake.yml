@@ -1,10 +1,12 @@
 name: "PremiumBukkake"
 sceneByURL:
   - url:
-      - free.premiumbukkake.com
+      - free.premiumbukkake.com/updates
+      - premiumbukkake.com/tour2
+      - members.premiumbukkake.com/scenes
     action: script
     script:
       - python
       - PremiumBukkake.py
       - query
-# Last Updated August 15, 2024
+# Last Updated February 21, 2025
