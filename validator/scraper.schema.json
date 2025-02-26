@@ -444,6 +444,10 @@
           "title": "Scene URL",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "URLs": {
+          "title": "Scene URLs",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "Date": {
           "title": "Scene date",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
@@ -503,6 +507,10 @@
         },
         "URL": {
           "title": "Performer URL",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "URLs": {
+          "title": "Performer URLs",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Twitter": {
@@ -630,6 +638,10 @@
           "title": "Movie URL",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "URLs": {
+          "title": "Movie URLs",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "Aliases": {
           "title": "Movie aliases",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
@@ -660,6 +672,10 @@
         },
         "URL": {
           "title": "Gallery URL",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "URLs": {
+          "title": "Gallery URLs",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Date": {
@@ -696,6 +712,10 @@
         },
         "URL": {
           "title": "Studio URL",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "URLs": {
+          "title": "Studio URLs",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         }
       }
