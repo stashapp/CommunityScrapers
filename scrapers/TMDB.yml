@@ -78,7 +78,7 @@ driver:
     - Key: "User-Agent"
       Value: stash-scraper/1.0.0
   cookies:
-    - CookieURL: "www.themoviedb.org"
+    - CookieURL: "https://www.themoviedb.org"
       Cookies:
         - Name: "preferences"
           Domain: "www.themoviedb.org"
