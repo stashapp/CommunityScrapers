@@ -38,12 +38,7 @@ xPathScrapers:
           - parseDate: "2 Jan 2006"
       Performers:
         Name:
-          selector: //div[@class="shoot-title"]/h2
-          postProcess:
-            - replace:
-                - regex: ^(.*?)-(.*)-(.*?)$
-                  with: "$3"
-          split: ","
+          selector: //div[@class="shoot-title"]/h2/a/text()
         URL:
           selector: //div[@class="shoot-title"]/h2/a/@href
           postProcess:
