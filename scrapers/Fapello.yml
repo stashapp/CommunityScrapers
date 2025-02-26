@@ -1,0 +1,19 @@
+name: Fapello
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - fapello.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerScraper:
+    common:
+      $cover: //div[@class="main_content"]/div/div[contains(@class,"items-center")]
+    performer:
+      Name: $cover//h2
+      # Image: $cover//img/@src
+      Aliases: $cover//p[contains(@class,"flex")]
+      URLs: $cover//p[contains(@class,"text-center")]/a/@href
+
+driver:
+  useCDP: true
