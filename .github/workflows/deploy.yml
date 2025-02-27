@@ -44,7 +44,7 @@ jobs:
     - name: Cache scrapers-debug
       uses: actions/cache@v4
       with:
-        path: site_generator/src/scrapers-debug.json
+        path: site_generator/scrapers-debug.json
         key: scrapers-debug
     - name: Generate html index page
       run: |
