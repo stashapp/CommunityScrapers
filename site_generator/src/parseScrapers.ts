@@ -87,6 +87,8 @@ export async function validateNewScrapers(): Promise<void> {
     .then((files) => files.split("\n").filter((file) => file.length))
     // skip files not in scrapers
     .then((files) => files.filter((file) => file.startsWith("scrapers/")))
+    // map to full path
+    .then((files) => files.map((file) => `../${file}`));
   // check if only yml files
   const nonYml = newScrapers.some((file) => !file.endsWith(".yml"));
   if (nonYml) {
