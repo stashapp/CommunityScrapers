@@ -61,7 +61,7 @@ xPathScrapers:
           - replace:
               - regex: ^.*\[(.*) cm\].*$
                 with: $1
-      Measurements:
+      PenisLength:
         selector: //span[text()="Cock:"]/following-sibling::text()
         postProcess:
           - replace:
