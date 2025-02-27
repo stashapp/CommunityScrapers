@@ -77,7 +77,7 @@ def getVideoById(sceneId):
 
     if songs := dig(video, "music"):
         music = "Music:\n" + "\n".join(songs)
-        if "description" in scraped:
+        if "details" in scraped:
             scraped["details"] += "\n" + music
         else:
             scraped["details"] = music
