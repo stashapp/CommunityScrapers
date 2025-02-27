@@ -84,13 +84,21 @@ export async function validateNewScrapers(): Promise<void> {
   // get modified files
   const newScrapers = await git.diff(["--name-only", "HEAD^1", "HEAD"])
     // skip empty lines
-    .then((files) => files.split("\n").filter((file) => file.length));
+    .then((files) => files.split("\n").filter((file) => file.length))
+    // skip files not in scrapers
+    .then((files) => files.filter((file) => file.startsWith("scrapers/")))
   // check if only yml files
   const nonYml = newScrapers.some((file) => !file.endsWith(".yml"));
   if (nonYml) {
     console.log("non-yml files detected, cowardly refusing to do partial updates")
     // run full validation
     return validateAllScrapers();
+  }
+  if (!newScrapers.length) {
+    console.log("no new scrapers detected, recycling old mdscrapers")
+    const oldScrapers = JSON.parse(readFileSync("scrapers-debug.json", "utf8")) as scraperExport[];
+    writeFileSync("site/assets/scrapers.json", JSON.stringify(oldScrapers));
+    return;
   }
   console.log("only validating new scrapers")
   const newValidScrapers = await parseScrapers(newScrapers)
