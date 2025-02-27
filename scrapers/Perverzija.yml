@@ -1,0 +1,40 @@
+name: Perverzija
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tube.perverzija.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $meta: //div[@class="item-tax-list"]
+    scene:
+      Title:
+        selector: //div[@class="title-info"]/h1/text()
+        postProcess:
+          - replace:
+              - regex: ((.+–){2} )
+                with: ""
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - replace:
+            - regex: T[\d:+]+
+              with: ""
+          - parseDate: 2006-01-02
+      Details:
+        selector: //div[@class="bialty-container"]/p
+        concat: " "
+      Performers:
+        Name:
+          selector: $meta/div[2]/a/text()
+      Tags:
+        Name:
+          selector: $meta/div[3]/a/text()
+      Studio:
+        # sometimes features multiple studios
+        # usepov-summer-stevens-what-we-do-in-the-bus-stop/
+        Name: $meta/div[1]/a[last()]/text()
+      Image:
+        selector: //div[@id="featured-img-id"]/img/@src
