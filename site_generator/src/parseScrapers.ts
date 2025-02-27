@@ -74,7 +74,9 @@ export async function validateAllScrapers(): Promise<void> {
 
 export async function validateNewScrapers(): Promise<void> {
   // check for presence of scrapers-debug.json
-  if (!readFileSync("scrapers-debug.json", "utf8")) {
+  try {
+    readFileSync("scrapers-debug.json", "utf8");
+  } catch {
     console.log("no scrapers-debug.json found, cowardly refusing to do partial updates")
     // run full validation
     return validateAllScrapers();

@@ -23,7 +23,8 @@ jobs:
         path: master
         ref: master
         fetch-depth: 0
-    - run: |
+    - name: Build Stable
+      run: |
         cd master
         ./build_site.sh ../_site/stable
     - name: Checkout Stable
@@ -33,7 +34,8 @@ jobs:
         # replace with develop tag/branch when necessary
         ref: master
         fetch-depth: 0
-    - run: |
+    - name: Build Develop
+      run: |
         cd dev
         ../master/build_site.sh ../_site/develop
     - uses: actions/setup-node@v4
@@ -43,7 +45,7 @@ jobs:
       uses: actions/cache@v4
       with:
         path: site_generator/src/scrapers-debug.json
-        key: ${{ runner.os }}-scrapers-debug
+        key: scrapers-debug
     - name: Generate html index page
       run: |
         cd master/site_generator
