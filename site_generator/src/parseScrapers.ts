@@ -86,7 +86,7 @@ export async function validateNewScrapers(): Promise<void> {
     // skip empty lines
     .then((files) => files.split("\n").filter((file) => file.length));
   // check if only yml files
-  const nonYml = newScrapers.some((file) => file.endsWith(".yml"));
+  const nonYml = newScrapers.some((file) => !file.endsWith(".yml"));
   if (nonYml) {
     console.log("non-yml files detected, cowardly refusing to do partial updates")
     // run full validation
