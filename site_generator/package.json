@@ -10,7 +10,7 @@
   },
   "scripts": {
     "vite-dev": "cd site && vite serve",
-    "generate": "ts-node src/parseScrapers.ts",
+    "generate": "ts-node src/run.ts",
     "zod": "npx ts-to-zod src/types.ts src/zodType.ts",
     "fmt": "npx prettier --write src site",
     "fuse-index": "node src/fuse-index.js",

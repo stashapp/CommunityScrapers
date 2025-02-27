@@ -122,7 +122,6 @@ async function getLastUpdate(scraper: ymlScraper): Promise<Date | false> {
   // if script we have to take all files into account, or take the folder
   // check if scraper has a parent folder
   const filename = scraper.filename.replace(/^\.\.\/scrapers\//, "");
-  console.log(filename);
   const folder = filename.split("/").slice(0, -1).join("/");
   const isFolder = await lstat(folder)
     .then((stat) => stat.isDirectory())

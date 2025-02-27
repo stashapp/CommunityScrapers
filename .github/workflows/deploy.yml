@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout master
       uses: actions/checkout@v4
@@ -39,6 +39,11 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: latest
+    - name: Cache scrapers-debug
+      uses: actions/cache@v4
+      with:
+        path: site_generator/src/scrapers-debug.json
+        key: ${{ runner.os }}-scrapers-debug
     - name: Generate html index page
       run: |
         cd master/site_generator
@@ -54,7 +59,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Deploy to GitHub Pages
