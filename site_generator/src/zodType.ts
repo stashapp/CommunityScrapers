@@ -27,7 +27,8 @@ export const singleActionsSchema = z.union([
 export const arrayActionsSchema = z.union([
   z.literal("performerByURL"),
   z.literal("sceneByURL"),
-  z.literal("movieByURL"),
+  z.literal("groupByURL"),
+  z.literal("movieByURL"), // deprecated
   z.literal("galleryByURL"),
 ]);
 
@@ -146,7 +147,8 @@ export const ymlScraperSchema = z.record(z.any()).and(
     sceneByQueryFragment: byFragmentScraperDefnSchema.optional(),
     sceneByFragment: byFragmentScraperDefnSchema.optional(),
     sceneByURL: z.array(byUrlScraperDefnSchema).optional(),
-    movieByURL: z.array(byUrlScraperDefnSchema).optional(),
+    groupByURL: z.array(byUrlScraperDefnSchema).optional(),
+    movieByURL: z.array(byUrlScraperDefnSchema).optional(), // deprecated
     galleryByFragment: z
       .union([scriptScraperSchema, byFragmentScraperSchema])
       .optional(),

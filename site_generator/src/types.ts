@@ -34,6 +34,7 @@ export type singleActions =
 export type arrayActions =
   | "performerByURL"
   | "sceneByURL"
+  | "groupByURL"
   | "movieByURL"
   | "galleryByURL";
 interface baseUrlScraper {
@@ -99,6 +100,7 @@ export interface ymlScraper {
   sceneByQueryFragment?: byFragmentScraperDefn;
   sceneByFragment?: byFragmentScraperDefn;
   sceneByURL?: byUrlScraperDefn[];
+  groupByURL?: byUrlScraperDefn[]; // deprecated
   movieByURL?: byUrlScraperDefn[];
   galleryByFragment?: scriptScraper | byFragmentScraper;
   galleryByURL?: byUrlScraperDefn[];

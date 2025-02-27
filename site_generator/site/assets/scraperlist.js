@@ -102,8 +102,8 @@ const setTable = (scrapers, searchValue = "") => {
     createToolTip(row.insertCell(2), sType.scene);
     // gallery scraping
     createToolTip(row.insertCell(3), sType.gallery);
-    // movie scraping
-    row.insertCell(4).textContent = returnMatch(sType.movie.url, "🔗");
+    // group scraping
+    row.insertCell(4).textContent = returnMatch(sType.group.url, "🔗");
     // performer scraping
     createToolTip(row.insertCell(5), sType.performer);
     // requires
