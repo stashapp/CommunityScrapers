@@ -24,7 +24,7 @@ xPathScrapers:
               - regex: \s-\sWeAreHairy\.com$
                 with:
       Date: &date
-        selector: //h6//span
+        selector: //h6/span[last()]
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &details //meta[@name="description"]/@content
