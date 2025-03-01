@@ -81,13 +81,15 @@ def post_query(service, user_id, id):
 
         mentions, hashtags = extract_mentions_and_tags(post.get('content', ''))
 
-        tags = []
+        unique_performers = {user_name}  # Set to store unique performer names
+        unique_performers.update(mentions)  # Add mentions, avoiding duplicates
+
+        performers = [{"Name": name, "urls": [studio['URL']]} for name in unique_performers]
+
         if post['tags'] is not None:
-            tags = [{"name": item } for item in post['tags']]
+            tags = [{"name": item} for item in post['tags']]
         else:
             tags = [{"name": tag} for tag in hashtags]
-        
-        # Extract mentions and hashtags BEFORE using them in the dictionary
 
         out = {
             "Title": post['title'],
@@ -95,7 +97,7 @@ def post_query(service, user_id, id):
             "URL": f"https://coomer.su/{post['service']}/user/{post['user']}/post/{post['id']}",
             "Details": clean_text(post['content']),
             "Studio": studio,
-            "Performers": [{"Name": user_name, "urls": [studio['URL']]}] + [{"Name": mention} for mention in mentions],
+            "Performers": performers,
             "Tags": tags,
         }
 
@@ -103,6 +105,7 @@ def post_query(service, user_id, id):
         return out
     else:
         debugPrint(f'Response: {str(post_lookup_response.status_code)} \n Text: {str(post_lookup_response.text)}')
+
 
 def get_scene(inputurl):    
     match = re.search(r'/(\w+?)/user/(.+?)/post/(\d+)', inputurl)
