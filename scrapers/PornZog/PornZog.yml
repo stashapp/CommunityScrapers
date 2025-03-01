@@ -1,0 +1,21 @@
+name: "PornZog"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornzog.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name: //meta[@property="video:tag"]/@content
+      Performers:
+        Name: //ul[@class="models-list"]/li/a/text()
+      Details: //p[@class="description"]/span//text()
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper
+# Last Updated Feburuary 28, 2025
