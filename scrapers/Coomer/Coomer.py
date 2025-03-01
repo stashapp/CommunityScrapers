@@ -14,8 +14,11 @@ headers = {
     'Referer': 'https://coomer.su/search_hash'
 }
 
-def extract_mentions(text):
-    return re.findall(r'@([^\s<]+)', text) if text else []
+def extract_mentions_and_tags(text):
+    mentions = re.findall(r'@([\w\-.]+)', text) if text else []
+    hashtags = re.findall(r'#([\w\-.]+)', text) if text else []
+    return mentions, hashtags
+
 
 def debugPrint(t):
     sys.stderr.write(t + "\n")
@@ -67,6 +70,7 @@ def post_query(service, user_id, id):
         post = data['post']
         user_name = user_query(service, user_id)
         studio = {"Name": user_name}
+
         if service == "onlyfans":
             studio["URL"] = f"https://onlyfans.com/{user_name}"
         elif service == "fansly":
@@ -76,25 +80,33 @@ def post_query(service, user_id, id):
         else:
             debugPrint("No service listed")
 
-        tags = []
+        mentions, hashtags = extract_mentions_and_tags(post.get('content', ''))
+
+        unique_performers = {user_name}  # Set to store unique performer names
+        unique_performers.update(mentions)  # Add mentions, avoiding duplicates
+
+        performers = [{"Name": name, "urls": [studio['URL']]} for name in unique_performers]
+
         if post['tags'] is not None:
-            tags = [{"name": item } for item in post['tags']]
-            
+            tags = [{"name": item} for item in post['tags']]
+        else:
+            tags = [{"name": tag} for tag in hashtags]
+
         out = {
             "Title": post['title'],
             "Date": post['published'][:10],
             "URL": f"https://coomer.su/{post['service']}/user/{post['user']}/post/{post['id']}",
             "Details": clean_text(post['content']),
             "Studio": studio,
-            "Performers": [{"Name": user_name, "urls": [studio['URL']]}] + 
-              [{"Name": mention} for mention in extract_mentions(post.get('content', ''))],
-            "Tags": tags
+            "Performers": performers,
+            "Tags": tags,
         }
 
         log.debug(out)
         return out
     else:
         debugPrint(f'Response: {str(post_lookup_response.status_code)} \n Text: {str(post_lookup_response.text)}')
+
 
 def get_scene(inputurl):    
     match = re.search(r'/(\w+?)/user/(.+?)/post/(\d+)', inputurl)
