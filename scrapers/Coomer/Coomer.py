@@ -82,8 +82,8 @@ def post_query(service, user_id, id):
 
         mentions, hashtags = extract_mentions_and_tags(post.get('content', ''))
 
-        unique_performers = {user_name}  # Set to store unique performer names
-        unique_performers.update(mentions)  # Add mentions, avoiding duplicates
+        unique_performers = {user_name}  
+        unique_performers.update(mentions)  
 
         performers = [{"Name": name, "urls": [studio['URL']]} for name in unique_performers]
 
