@@ -14,6 +14,9 @@ headers = {
     'Referer': 'https://coomer.su/search_hash'
 }
 
+def extract_mentions(text):
+    return re.findall(r'@([^\s<]+)', text) if text else []
+
 def debugPrint(t):
     sys.stderr.write(t + "\n")
 
@@ -77,13 +80,15 @@ def post_query(service, user_id, id):
         if post['tags'] is not None:
             tags = [{"name": item } for item in post['tags']]
             
-        out = {"Title": post['title'],
-               "Date": post['published'][:10],
-               "URL": f"https://coomer.su/{post['service']}/user/{post['user']}/post/{post['id']}",
-               "Details": clean_text(post['content']),
-               "Studio": studio,
-               "Performers": [{"Name": user_name, "urls": [studio['URL']]}],
-               "Tags": tags
+        out = {
+            "Title": post['title'],
+            "Date": post['published'][:10],
+            "URL": f"https://coomer.su/{post['service']}/user/{post['user']}/post/{post['id']}",
+            "Details": clean_text(post['content']),
+            "Studio": studio,
+            "Performers": [{"Name": user_name, "urls": [studio['URL']]}] + 
+              [{"Name": mention} for mention in extract_mentions(post.get('content', ''))],
+            "Tags": tags
         }
 
         log.debug(out)
