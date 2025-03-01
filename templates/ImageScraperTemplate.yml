@@ -1,0 +1,25 @@
+name: Example image scraper
+imageByURL:
+  - action: scrapeXPath
+    url:
+      - example.com
+    scraper: imageScraper
+xPathScrapers:
+  imageScraper:
+    image:
+      Title:
+      Code:
+      Details:
+      Photographer:
+      URLs:
+      Date:
+        selector:
+        postProcess:
+          - parseDate: January 2, 2006
+      Studio:
+        Name:
+      Tags:
+        Name:
+      Performers:
+        Name:
+# Last Updated February XX, 2025
