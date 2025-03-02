@@ -1,4 +1,4 @@
-name: Examaple scene scraper
+name: Example scene scraper
 sceneByURL:
   - action: scrapeXPath
     url:
