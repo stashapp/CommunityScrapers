@@ -15,8 +15,8 @@ headers = {
 }
 
 def extract_mentions_and_tags(text):
-    mentions = re.findall(r'@([^\s<]+)', text) if text else []
-    hashtags = re.findall(r'#([^\s<]+)', text) if text else []
+    mentions = re.findall(r'@([\w\-._\d]+)', text) if text else []
+    hashtags = re.findall(r'#(\w+)\b', text) if text else []
     return mentions, hashtags
 
 def debugPrint(t):
@@ -28,7 +28,7 @@ def readJSONInput():
     input = sys.stdin.read()
     return json.loads(input)
 
-def clean_text(details: str) -> str:
+def clean_text(details: str) -> (str, str):
     """
     remove escaped backslashes and html parse the details text
     """
@@ -38,7 +38,6 @@ def clean_text(details: str) -> str:
                          details)  # bs.get_text doesnt replace br's with \n
         details = re.sub(r'</?p>', '\n', details)
         details = bs(details, features='html.parser').get_text()
-        # Remove leading/trailing/double whitespaces
         details = '\n'.join(
             [
                 ' '.join([s for s in x.strip(' ').split(' ') if s != ''])
@@ -46,7 +45,47 @@ def clean_text(details: str) -> str:
             ]
         )
         details = details.strip()
-    return details
+        lines = details.split('\n')
+        first_line = lines[0] if lines else ""
+        
+        if len(first_line) > 100:
+            # Consider only the first 100 characters for truncation
+            first_100_chars = first_line[:100]
+            # Regular expression to match common emoji patterns
+            emoji_pattern = re.compile(
+                "["
+                "\U0001F600-\U0001F64F"  # emoticons
+                "\U0001F300-\U0001F5FF"  # symbols & pictographs
+                "\U0001F680-\U0001F6FF"  # transport & map symbols
+                "\U0001F1E0-\U0001F1FF"  # flags (iOS)
+                "\U00002702-\U000027B0"  # Dingbats
+                "\U000024C2-\U0001F251" 
+                "]+", flags=re.UNICODE
+            )
+            match = emoji_pattern.search(first_100_chars)
+            if match:
+                truncated_first_line = first_100_chars[:match.start()]
+            else:
+                dot_index = first_100_chars.find('.')
+                if dot_index != -1:
+                    truncated_first_line = first_100_chars[:dot_index + 1]
+                else:
+                    exclam_index = first_100_chars.find('!')
+                    if exclam_index != -1:
+                        truncated_first_line = first_100_chars[:exclam_index + 1]
+                    else:
+                        truncated_first_line = first_100_chars
+
+            rest_of_details = '\n'.join(lines[1:]).strip() if len(lines) > 1 else ""
+            rest_of_details = truncated_first_line + '\n' + rest_of_details
+            first_line = first_100_chars
+        else:
+            rest_of_details = '\n'.join(lines[1:]).strip() if len(lines) > 1 else ""
+
+        first_line = first_line.title()  
+
+        return first_line, rest_of_details
+    return "", ""
 
 def user_query (service, user):
     if re.match('[0-9]*', user): 
@@ -68,36 +107,36 @@ def post_query(service, user_id, id):
         log.debug(data)
         post = data['post']
         user_name = user_query(service, user_id)
-        studio = {"Name": user_name}
-
+        
         if service == "onlyfans":
-            studio["URL"] = f"https://onlyfans.com/{user_name}"
+            studio = {"Name": f"{user_name} (OnlyFans)", "URL": f"https://onlyfans.com/{user_name}"}
         elif service == "fansly":
-            studio["URL"] = f"https://fansly.com/{user_name}"
+            studio = {"Name": f"{user_name} (Fansly)", "URL": f"https://fansly.com/{user_name}"}
         elif service == "candfans":
-            studio["URL"] = f"https://candfans.com/{user_name}"
+            studio = {"Name": f"{user_name} (CandFans)", "URL": f"https://candfans.com/{user_name}"}
         else:
+            studio = {"Name": user_name}
             debugPrint("No service listed")
 
         mentions, hashtags = extract_mentions_and_tags(post.get('content', ''))
 
-        unique_performers = {user_name}  # Set to store unique performer names
-        unique_performers.update(mentions)  # Add mentions, avoiding duplicates
-
-        performers = [{"Name": name, "urls": [studio['URL']]} for name in unique_performers]
+        unique_performers = {user_name}  
+        unique_performers.update(mentions)  
 
         if post['tags'] is not None:
             tags = [{"name": item} for item in post['tags']]
         else:
             tags = [{"name": tag} for tag in hashtags]
 
+        first_line, rest_of_details = clean_text(post['content'])
+
         out = {
-            "Title": post['title'],
-            "Date": post['published'][:10],
+            "Title": first_line,
+            "Date": post['published'].split('T')[0],
             "URL": f"https://coomer.su/{post['service']}/user/{post['user']}/post/{post['id']}",
-            "Details": clean_text(post['content']),
+            "Details": rest_of_details,
             "Studio": studio,
-            "Performers": performers,
+            "Performers": [{"Name": name, "urls": [studio['URL']]} for name in unique_performers],
             "Tags": tags,
         }
 
