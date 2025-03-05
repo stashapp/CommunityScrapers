@@ -35,6 +35,7 @@ NON_FEMALE = True
 # a list of main channels (`mainChannelName` from the API) to use as the studio
 # name for a scene
 MAIN_CHANNELS_AS_STUDIO_FOR_SCENE = [
+    "BiPhoria",
     "Buttman",
     "Cock Choking Sluts",
     "Devil's Film Parodies",
@@ -611,6 +612,7 @@ def determine_studio_name_from_json(some_json):
     - movie
     '''
     studio_name = None
+    log.debug(f"Main Channel Name - [{some_json.get('mainChannel',{}).get('name','')}]")
     if some_json.get('segment') in SITES_SEGMENT_USING_MAIN_CHANNEL_AS_SCENE_STUDIO:
         studio_name = some_json.get('mainChannel', {}).get('name', '')
         return studio_name
@@ -618,20 +620,25 @@ def determine_studio_name_from_json(some_json):
         if some_json.get('sitename_pretty') in SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE:
             studio_name = \
                     SITES_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(some_json.get('sitename_pretty'))
+            log.debug(f"Studio Using override as studio")
         elif some_json.get('sitename_pretty') in SITES_USING_SITENAME_AS_STUDIO_FOR_SCENE \
                 or some_json.get('serie_name') in SERIE_USING_SITENAME_AS_STUDIO_FOR_SCENE \
                 or some_json.get('network_name') \
                 and some_json.get('network_name') in NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE:
+            log.debug(f"Studio Using sitename_pretty")
             studio_name = some_json.get('sitename_pretty')
         elif some_json.get('sitename_pretty') in SITES_USING_NETWORK_AS_STUDIO_FOR_SCENE \
                 and some_json.get('network_name'):
+            log.debug(f"Studio Using network name")
             studio_name = some_json.get('network_name')
     if not studio_name and some_json.get('network_name') and \
             some_json.get('network_name') in NETWORKS_USING_SITENAME_AS_STUDIO_FOR_SCENE:
+        log.debug(f"Studio Using network using site name")
         studio_name = some_json.get('sitename_pretty')
-    if not studio_name and some_json.get('mainChannelName') and \
-            some_json.get('mainChannelName') in MAIN_CHANNELS_AS_STUDIO_FOR_SCENE:
-        studio_name = some_json.get('mainChannelName')
+    if not studio_name and some_json.get('mainChannel', {}).get('name', '') and \
+            some_json.get('mainChannel', {}).get('name', '') in MAIN_CHANNELS_AS_STUDIO_FOR_SCENE:
+        log.debug(f"Studi Using Main Channel Name")
+        studio_name = some_json.get('mainChannel', {}).get('name', '')
     if studio_name and some_json.get('directors'):
         for director in [ d.get('name').strip() for d in some_json.get('directors') ]:
             if DIRECTOR_AS_STUDIO_OVERRIDE_FOR_SCENE.get(director):
@@ -641,6 +648,7 @@ def determine_studio_name_from_json(some_json):
         studio_name = \
                 SERIE_USING_OVERRIDE_AS_STUDIO_FOR_SCENE.get(some_json.get('serie_name'))
     if not studio_name and some_json.get('serie_name'):
+        log.debug(f"Default Series Name")
         studio_name = some_json.get('serie_name')
     return studio_name
 
