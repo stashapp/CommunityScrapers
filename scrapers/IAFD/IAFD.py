@@ -73,10 +73,10 @@ def cleandict(d: dict):
 
 def map_gender(gender: str):
     genders = {
-        "f": "Female",
-        "m": "Male",
-        "tf": "Transgender Female",
-        "tm": "Transgender Male",
+        "Woman": "Female",
+        "Man": "Male",
+        "Trans woman": "Transgender Female",
+        "Trans man": "Transgender Male",
     }
     return genders.get(gender, gender)
 
@@ -195,7 +195,11 @@ def performer_url(tree):
         lambda u: f"https://www.iafd.com{u}",
     )
 
+def performer_gender_map(tree):
+    gender = tree.xpath('//p[@class="bioheading" and contains(text(), "Gender")]/following-sibling::p[1]/text()')
+    return map_gender(gender[0])
 
+# unused code
 def performer_gender(tree):
     def parse_transgender(gender: str):
         # get trans genders from the short code supplied
@@ -218,6 +222,7 @@ def performer_gender(tree):
         tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value'),
         parse_transgender,
     )
+# end unused code
 
 
 def performer_name(tree):
@@ -419,7 +424,7 @@ def performer_query(query):
 def performer_from_tree(tree):
     return {
         "name": performer_name(tree),
-        "gender": performer_gender(tree),
+        "gender": performer_gender_map(tree),
         "urls": [performer_url(tree)],
         "twitter": performer_twitter(tree),
         "instagram": performer_instagram(tree),
