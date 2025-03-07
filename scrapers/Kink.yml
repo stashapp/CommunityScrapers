@@ -146,10 +146,12 @@ xPathScrapers:
         selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
           - replace:
-            - regex: '.+"description":"(.+?)".+'
+            - regex: '.+"description":"(.+?)",.+'
               with: "$1"
             - regex: '\\n'
               with: "\n"
+            - regex: \\"
+              with: '"'
       Image:
         selector: //div[@data-setup]/@data-setup
         postProcess:
@@ -271,4 +273,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated Feb 27, 2025
+# Last Updated March 7, 2025
