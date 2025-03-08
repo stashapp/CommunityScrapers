@@ -1,0 +1,28 @@
+name: "CamCaps"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - camcaps.io
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //meta[@name="description"]/@content
+        postProcess:
+          - replace:
+            - regex: ".*- "
+              with: ""    
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name: //meta[@property="video:tag"]/@content
+      Details: //meta[@property="og:description"]/@content
+      Performers:
+        Name:
+          selector: //meta[@name="description"]/@content
+          split: " And"           
+          postProcess:
+            - replace:
+                - regex: " -.*"
+                  with: ""
+# Last Updated February 28, 2025
