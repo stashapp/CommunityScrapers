@@ -137,11 +137,7 @@ xPathScrapers:
           split: ","
       Tags:
         Name:
-          selector: //p[contains(text(), "Categories")]/following-sibling::span/a/text()
-          postProcess:
-            - replace:
-                - regex: \,\s*
-                  with: ""
+          selector: //div[@id="shootPage"]//a[contains(@class,"rounded-pill")]/text()
       Details:
         selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
