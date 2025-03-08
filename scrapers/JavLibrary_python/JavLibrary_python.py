@@ -437,7 +437,8 @@ def bypass_protection(url):
 
                 log.info(f"Using FlareSolverr: {FLARESOLVERR_URL}")
                 log.info(f"Javlibrary input url: {url_n}")
-                responseJson = requests.post(FLARESOLVERR_URL, headers=headers, json=data)
+                cookies = {'over18': '18'}
+                responseJson = requests.post(FLARESOLVERR_URL, cookies=cookies, headers=headers, json=data)
                 json_input = responseJson.json()
 
                 response_html.content = json_input['solution']['response']
@@ -473,7 +474,7 @@ def bypass_protection(url):
     return None, None
 
 
-def send_request(url, head, retries=0, delay=1):
+def send_request(url, head, retries=0, delay=2.5):
     if retries > 3:
         log.warning(f"Scrape for {url} failed after retrying {retries} times")
         return None
