@@ -1,4 +1,4 @@
-name: caribbeancom
+name: Caribbeancom
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -12,11 +12,11 @@ sceneByFragment:
   queryURLReplace:
     filename:
       - regex: .*(\d{6}-\d{3}).* # carribeancom uses ids with form like 062212-055
-        with: .com/eng/moviepages/$1
+        with: .com/eng/moviepages/$1/index.html
       - regex: .*(\d{6}_\d{3}).* # caribbeancompr uses 062212_055
-        with: pr.com/eng/moviepages/$1
-      - regex: $
-        with: /index.html
+        with: pr.com/eng/moviepages/$1/index.html
+      - regex: .+[^index.html]$ # if no valid ID found in filename
+        with: .com/404.html # clear filename
   scraper: sceneScraper
 
 xPathScrapers:
