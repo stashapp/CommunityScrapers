@@ -1,28 +1,25 @@
-name: Example scene scraper
-sceneByURL:
+name: Example gallery scraper
+galleryByURL:
   - action: scrapeXPath
     url:
       - example.com
-    scraper: sceneScraper
+    scraper: galleryScraper
 xPathScrapers:
-  sceneScraper:
-    scene:
+  galleryScraper:
+    gallery:
       Title:
       Code:
       Details:
-      Director:
+      Photographer:
       URLs:
       Date:
         selector:
         postProcess:
           - parseDate: January 2, 2006
-      Image:
       Studio:
         Name:
       Tags:
         Name:
       Performers:
-        Name:
-      Groups:
         Name:
 # Last Updated February XX, 2025
