@@ -130,7 +130,7 @@ IS_MEMBER = False
 if 'app.teamskeet.com' in scene_url:
     ORIGIN = "https://app.teamskeet.com"
     REFERER = "https://app.teamskeet.com"
-    API_BASE = "https://ma-store.teamskeet.com/ts_movies/_doc/"
+    API_BASE = "https://ma-store.teamskeet.com/ts_index/_doc/movie-"
     MEMBER_ACCESS_TOKEN = TEAMSKEET_ACCESS_TOKEN
     IS_MEMBER = True
 elif 'app.mylf.com' in scene_url:
