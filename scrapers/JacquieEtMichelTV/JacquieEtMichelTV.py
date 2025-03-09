@@ -1,5 +1,7 @@
 import base64
 from datetime import datetime as dt
+from html import unescape
+
 import json
 import sys
 from py_common import log
@@ -36,7 +38,7 @@ def scene_from_url(url: str) -> ScrapedScene | None:
     log.debug(f"Video data: {json.dumps(video_data)}")
     scene: ScrapedScene = {
         "title": video_data["name"],
-        "details": video_data["description"],
+        "details": unescape(video_data["description"]).strip(),
         "date": dt.fromisoformat(video_data["datePublished"]).date().isoformat(),
         "tags": [{"name": t} for t in video_data["keywords"].split(",")],
     }
