@@ -66,7 +66,7 @@ xPathScrapers:
 
   movieScraper:
     movie:
-      Name: //h1/text()
+      Name: //div[contains(@class, "title-rating-section")]//h1/text()
       Director: //a[@label="Director"]/text()
       Duration:
         selector: //small[contains(text(), "Length")]/following-sibling::text()
@@ -138,7 +138,7 @@ xPathScrapers:
                 with: https://imgs1cdn.adultempire.com/backdrop/6000/$2%5f$1/scene-1.jpg
   sceneScraper:
     scene:
-      Title: //h1/text()
+      Title: //div[contains(@class, "title-rating-section")]//h1/text()
       Details:
         selector: //div[contains(@class,"synopsis-content")]//text()
         concat: " "
@@ -151,7 +151,7 @@ xPathScrapers:
       Studio:
         Name: //a[@label="Studio"]/text()
       Movies:
-        Name: //h1/text()
+        Name: //div[contains(@class, "title-rating-section")]//h1/text()
         URL: //link[@rel="canonical"]/@href
       Tags:
         Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
@@ -168,7 +168,7 @@ xPathScrapers:
     common:
       $modal: //*[@id="profileModal"]
     performer:
-      Name: //h1
+      Name: //main//h1
       Birthdate:
         selector: $modal//li[contains(text(), 'Born:')]
         postProcess:
@@ -218,4 +218,4 @@ driver:
           Domain: "www.adultdvdempire.com"
           Value: "true"
           Path: "/"
-# Last Updated October 18, 2024
+# Last Updated March 11, 2025
