@@ -11,7 +11,7 @@ from py_common.config import get_config
 config = get_config(
     default="""
 username = 
-password = 
+password = ""
 """
 )
 
