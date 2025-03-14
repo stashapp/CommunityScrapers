@@ -1,0 +1,26 @@
+name: Example group scraper
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - example.com
+    scraper: groupScraper
+xPathScrapers:
+  groupScraper:
+    group:
+      Name:
+      Aliases:
+      Duration:
+      Date:
+        selector:
+        postProcess:
+          - parseDate: January 2, 2006
+      Director:
+      URLs:
+      Synopsis:
+      Studio:
+        Name: 
+      Tags:
+        Name:
+      FrontImage:
+      BackImage:
+# Last Updated February XX, 2025
