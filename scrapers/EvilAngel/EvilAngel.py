@@ -5,6 +5,7 @@ import json
 import re
 import sys
 from typing import Any
+from urllib.parse import urlparse
 
 from AlgoliaAPI.AlgoliaAPI import (
     ScrapedGallery,
@@ -17,7 +18,8 @@ from AlgoliaAPI.AlgoliaAPI import (
     performer_search,
     scene_from_fragment,
     scene_from_url,
-    scene_search
+    scene_search,
+    site_from_url
 )
 
 from py_common import log
@@ -138,6 +140,20 @@ def fix_ts_trans_find_replace(text: str) -> str | None:
     return None
 
 
+def fix_url(_url: str) -> str:
+    """
+    Replaces the host part of the URL if criteria matched
+    """
+    if _url:
+        site = site_from_url(_url)
+        # if the site does not have a real/working domain
+        if site in [
+            "lexingtonsteele",
+        ]:
+            return urlparse(_url)._replace(netloc="www.evilangel.com").geturl()
+    return _url
+
+
 def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
     """
     Applies post-processing to the scene
@@ -147,6 +163,12 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
 
     if details := scene.get("details"):
         scene["details"] = fix_ts_trans_find_replace(details)
+
+    if _url := scene.get("url"):
+        scene["url"] = fix_url(_url)
+
+    if urls := scene.get("urls"):
+        scene["urls"] = [fix_url(url) for url in urls]
 
     return scene
 
