@@ -42,8 +42,11 @@ def sitename_from_url(_url: str) -> str | None:
 
 
 preview_site_map = {
+    "adulttimepilots": "adulttimepilots.com",
+    "caughtfapping": "caughtfapping.com",
     "daddysboy": "daddysboy.org",
     "dareweshare": "dareweshare.net",
+    "gostuckyourself": "gostuckyourself.net",
     "gostuckyourself-channel": "gostuckyourself.net",
     "kissmefuckme": "kissmefuckme.net",
     "milfoverload-channel": "milfoverload.net",
@@ -85,9 +88,16 @@ def fix_url(_url: str) -> str:
         site = site_from_url(_url)
         # if the site does not have a real/working domain
         if site.endswith("-channel") or site in [
+            "adamandevepictures",
+            "adulttimepilots",
+            "all-sexstudio",
+            "beingtrans247",
             "blackforwife",
+            "caughtfapping",
+            "coupleswapping",
             "daddysboy",
             "feedme",
+            "gostuckyourself",
             "grinders",
             "kissmefuckme",
             "myyoungerlover",
