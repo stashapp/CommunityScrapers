@@ -80,16 +80,8 @@ xPathScrapers:
                   with: ","
           split: ","
       Performers:
-        # Clips4Sale doesn't have an explict performer field, but performers are
-        # often included in the video tags. So we attempt to find matches there.
         Name:
-          selector: //span[contains(text(), 'Keywords')]/following-sibling::span/a/text() | //span[contains(text(), 'Category')]/following-sibling::span/a/text() | $studio/text()
-          concat: ","
-          postProcess:
-            - replace:
-                - regex: ',\s+'
-                  with: ","
-          split: ","
+          selector: //a[@data-testid="clips-page-studio-link"]/text()
       Image:
         selector: $scene//img/@src
       URL: //meta[@property="og:url"]/@content
