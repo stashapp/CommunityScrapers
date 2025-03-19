@@ -18,4 +18,13 @@ sceneByQueryFragment:
     - python
     - JavLibrary_python.py
     - validSearch
-# Last Updated April 4, 2024
+sceneByURL:
+  - action: script
+    url:
+      - www.javlibrary.com/
+      - javlibrary.com/
+    script:
+      - python
+      - JavLibrary_python.py
+      - validSearch
+# Last Updated March 4, 2025
