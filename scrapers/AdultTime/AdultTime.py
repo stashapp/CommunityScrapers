@@ -22,7 +22,7 @@ from AlgoliaAPI.AlgoliaAPI import (
 
 from py_common import log
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedScene
-from py_common.util import dig, scraper_args
+from py_common.util import dig, is_valid_url, scraper_args
 
 
 def url_title_from_path(path: str) -> str:
@@ -43,6 +43,7 @@ def sitename_from_url(_url: str) -> str | None:
 
 preview_site_map = {
     "adulttimepilots": "adulttimepilots.com",
+    "all-sexstudio": "allsexstudio.net",
     "caughtfapping": "caughtfapping.com",
     "daddysboy": "daddysboy.org",
     "dareweshare": "dareweshare.net",
@@ -86,6 +87,9 @@ def fix_url(_url: str) -> str:
     """
     if _url:
         site = site_from_url(_url)
+        # vivid.com
+        if site == "vivid":
+            return urlparse(_url)._replace(netloc="tour1.vivid.com").geturl()
         # if the site does not have a real/working domain
         if site.endswith("-channel") or site in [
             "adamandevepictures",
@@ -110,12 +114,18 @@ def fix_url(_url: str) -> str:
             "theyeslist",
             "toywithme",
             "unrelatedx",
+            "upclosex",
+            "vixen",
             "watchyoucheat",
             "womensworld",
         ]:
             return urlparse(_url)._replace(netloc="members.adulttime.com").geturl()
         if site == "futaworld-at":
             return urlparse(_url)._replace(netloc="www.futaworld.com").geturl()
+        # for any other host, check if there is a website
+        homepage = urlparse(_url)._replace(path="").geturl()
+        if not is_valid_url(homepage):
+            return urlparse(_url)._replace(netloc="members.adulttime.com").geturl()
     return _url
 
 
