@@ -147,6 +147,8 @@ def to_scraped_movie(item: dict) -> ScrapedMovie:
         movie["rating"] = str(rating)
     elif rating := item.get("CommunityRating"):
         movie["rating"] = str(rating)
+    if tags := item.get("Genres"):
+        movie["tags"] = [{"name": tag} for tag in tags]
 
     return movie
 
