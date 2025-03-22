@@ -1,0 +1,38 @@
+name: Example performer scraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - example.com
+    scraper: performerScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name:
+      Disambiguation:
+      # Gender only accepts the following case insensitive values: male, female, transgender_male, transgender_female, intersex, non_binary.
+      Gender:
+      URLs:
+      Birthdate:
+        selector:
+        postProcess:
+          - parseDate: January 2, 2006
+      Ethnicity:
+      Country:
+      EyeColor:
+      Height:
+      Measurements:
+      FakeTits:
+      PenisLength:
+      Circumcised:
+      CareerLength:
+      Tattoos:
+      Piercings:
+      Aliases:
+      Details:
+      DeathDate:
+        selector:
+        postProcess:
+          - parseDate: January 2, 2006
+      HairColor:
+      Weight:
+# Last Updated February XX, 2025
