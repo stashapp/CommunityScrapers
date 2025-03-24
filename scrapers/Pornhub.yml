@@ -42,9 +42,9 @@ xPathScrapers:
       $searchThumb: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]//div[contains(@class, "thumbnail-info-wrapper")]
 
     scene:
-      Title: $searchThumb/span[@class="title"]/a/text()
+      Title: $searchThumb//span[@class="title"]/a/text()
       URL:
-        selector: $searchThumb/span[@class="title"]/a/@href
+        selector: $searchThumb//span[@class="title"]/a/@href
         postProcess:
           - replace:
               - regex: ^
@@ -152,4 +152,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated August 19, 2024
+# Last Updated March 24, 2025
