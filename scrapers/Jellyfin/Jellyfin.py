@@ -23,6 +23,10 @@ api_key = xxxxxxxxxxxxxxxxxxxxxxxx
 # Jellyfin user-id (extract from Jellyfin->Admin->User from the URL of the User)
 # for example: http://localhost:8096/web/index.html#!/myprofile.html?userId=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 userid = xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+# If you want to create an Movie based on the Scene, set this to true
+Scene2Movie = False
+# If you want to Ignore Primary Image for scraped Scenes from Jellyfin, set this to true
+IgnoreSceneImage = False
 """
 )
 
@@ -38,16 +42,18 @@ if errors:
     log.error(f"Please configure {' and '.join(errors)} in your config.ini")
     exit(1)
 
-base_params = {"api_key": config.api_key, "userid": config.userid}
-base_url = urlparse(config.host)._replace(query=urlencode(base_params))
+base_url = urlparse(config.host)
+headers = {
+    "Authorization": f"MediaBrowser Token=\"{config.api_key}\", Client=\"StashScraper\", Version=\"1.0\", DeviceId=\"StashScraperDevice\", Device=\"Python\"",
+}
 
 
 def to_scraped_performer(item: dict) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
         "name": item["Name"],
-        "url": base_url._replace(path=f"Persons/{quote(item['Name'])}").geturl(),
+        "url": base_url._replace(path=f"Persons/{quote(item['Name'])}", query=urlencode({"userId": config.userid})).geturl(),
         "images": [
-            base_url._replace(path=f"Items/{item['Id']}/Images/Primary").geturl()
+            base_url._replace(path=f"Items/{item['Id']}/Images/Primary", query=urlencode({"userId": config.userid})).geturl()
         ],
     }
 
@@ -69,9 +75,11 @@ def to_scraped_performer(item: dict) -> ScrapedPerformer:
 def to_scraped_scene(item: dict) -> ScrapedScene:
     scene: ScrapedScene = {
         "title": item["Name"],
-        "url": base_url._replace(path=f"Items/{item['Id']}").geturl(),
-        "image": base_url._replace(path=f"Items/{item['Id']}/Images/Primary").geturl(),
+        "url": base_url._replace(path=f"Items/{item['Id']}", query=urlencode({"userId": config.userid})).geturl(),
     }
+
+    if not config.IgnoreSceneImage:
+        scene["image"] = base_url._replace(path=f"Items/{item['Id']}/Images/Primary", query=urlencode({"userId": config.userid})).geturl()
 
     if date := item.get("PremiereDate"):
         scene["date"] = date[:10]
@@ -96,6 +104,10 @@ def to_scraped_scene(item: dict) -> ScrapedScene:
         for url in urls:
             if url["Name"] in ("IMDb", "TheMovieDb"):
                 scene["url"] = url["Url"]
+    if config.Scene2Movie == True:
+        movie_url_path = base_url._replace(path=f"Items/{item['Id']}", query=urlencode({"userId": config.userid})).geturl()
+        movie = movie_from_url(movie_url_path)
+        scene["movies"] = [movie]
 
     return scene
 
@@ -104,7 +116,7 @@ def to_scraped_movie(item: dict) -> ScrapedMovie:
     movie: ScrapedMovie = {
         "name": item["Name"],
         "front_image": base_url._replace(
-            path=f"Items/{item['Id']}/Images/Primary"
+            path=f"Items/{item['Id']}/Images/Primary", query=urlencode({"userId": config.userid})
         ).geturl(),
     }
 
@@ -135,6 +147,8 @@ def to_scraped_movie(item: dict) -> ScrapedMovie:
         movie["rating"] = str(rating)
     elif rating := item.get("CommunityRating"):
         movie["rating"] = str(rating)
+    if tags := item.get("Genres"):
+        movie["tags"] = [{"name": tag} for tag in tags]
 
     return movie
 
@@ -144,15 +158,16 @@ def scene_from_url(url: str) -> ScrapedScene | None:
     if match := re.search(r"(?<!user)id=([a-f0-9]+)", url):
         movie_id = match.group(1)
         log.debug(f"Converting from web UI URL using ID {movie_id}")
-        url = base_url._replace(path=f"Users/{config.userid}/Items/{movie_id}").geturl()
+        url = base_url._replace(path=f"Items/{movie_id}", query=urlencode({"userId": config.userid})).geturl()
     else:
-        url = urlparse(url)._replace(query=urlencode(base_params)).geturl()
+        url_parsed = urlparse(url)
+        url = url_parsed._replace(query=urlencode({"userId": config.userid})).geturl()
 
     log.debug(f"Getting scene through URL '{url}'")
-    res = requests.get(url)
+    res = requests.get(url, headers=headers)
 
     scene = res.json()
-    if not scene["Name"]:
+    if not scene.get("Name"):
         log.warning(
             "Failed to scrape from URL: make sure this scene is in your library"
         )
@@ -176,7 +191,7 @@ def scene_search(title: str) -> list[ScrapedScene]:
         "IncludeItemTypes": "Movie",
         "Fields": "Overview,Genres,Studios,People,ExternalUrls,PremiereDate",
         "Recursive": True,
-        **base_params,
+        "userId": config.userid,
     }
 
     search_url = base_url._replace(
@@ -184,14 +199,14 @@ def scene_search(title: str) -> list[ScrapedScene]:
     ).geturl()
     log.debug(f"Querying URL: {search_url}")
 
-    res = requests.get(search_url)
+    res = requests.get(search_url, headers=headers)
     result = res.json()
 
     scenes = [to_scraped_scene(item) for item in result["Items"]]
     # In order for scene-by-query-fragment to scrape these scenes, we need to
     # add their Jellyfin URLs to the scene object: users can rescrape to get a TMDb URL
     scrapable_urls = [
-        base_url._replace(path=f"Users/{config.userid}/Items/{item['Id']}").geturl()
+        base_url._replace(path=f"Items/{item['Id']}", query=urlencode({"userId": config.userid})).geturl()
         for item in result["Items"]
     ]
     scrapable_scenes = [
@@ -220,7 +235,7 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
     log.debug(f"Getting performer from URL: '{url}'")
 
     performer_url = urlparse(url)
-    res = requests.get(performer_url._replace(query=urlencode(base_params)).geturl())
+    res = requests.get(performer_url._replace(query=urlencode({"userId": config.userid})).geturl(), headers=headers)
     person = res.json()
 
     if "Name" not in person:
@@ -237,12 +252,12 @@ def performer_search(query: str) -> list[ScrapedPerformer]:
     search_params = {
         "searchTerm": query,
         "fields": "OriginalTitle,ProductionLocations,PremiereDate,Tags,ExternalUrls",
-        **base_params,
+        "userId": config.userid,
     }
 
     get_url = base_url._replace(path="Persons", query=urlencode(search_params))
     log.debug(f"Querying URL: {get_url}")
-    res = requests.get(get_url.geturl())
+    res = requests.get(get_url.geturl(), headers=headers)
 
     search_result = res.json()
     performers = [to_scraped_performer(item) for item in search_result["Items"]]
@@ -256,10 +271,10 @@ def movie_from_url(url):
     if match := re.search(r"(?<!user)id=([a-f0-9]+)", url):
         movie_id = match.group(1)
         log.debug(f"Converting from web UI URL using ID {movie_id}")
-        url = base_url._replace(path=f"Users/{config.userid}/Items/{movie_id}").geturl()
+        url = base_url._replace(path=f"Items/{movie_id}", query=urlencode({"userId": config.userid})).geturl()
 
     log.debug(f"Getting movie through URL '{url}'")
-    res = requests.get(url)
+    res = requests.get(url, headers=headers)
     result = res.json()
 
     if not result.get("Name"):
