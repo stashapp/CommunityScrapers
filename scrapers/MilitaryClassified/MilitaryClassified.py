@@ -25,7 +25,7 @@ except ModuleNotFoundError:
     sys.exit()
 
 # Define a list of special performer names that should preserve their capitalization
-SPECIAL_PERFORMER_NAMES = ["TJ"]
+SPECIAL_PERFORMER_NAMES = ["TJ", "JJ"]
 
 def extract_performers(title):
     """Extract performer names from the title."""
