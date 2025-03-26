@@ -129,6 +129,7 @@ studioMap = {
     "nancyace":"Nancy Ace",
     "nataliek.xxx":"Natalie K",
     "natashanice":"Natasha Nice",
+    "naughty-lada": "Naughty Lada",
     "niarossxxx":"Nia Ross XXX",
     "niksindian":"Niks Indian",
     "officialelizabethmarxs":"ElizabethMarxs",
