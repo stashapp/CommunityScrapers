@@ -1,0 +1,35 @@
+name: BreathTakers
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - breath-takers.com/updates/previews/images/
+    scraper: galleryScraper
+
+xPathScrapers:
+  galleryScraper:
+    gallery:
+      Title:
+        selector: //div[@class='row']//h1/text()
+        postProcess:
+          - replace:
+              - regex: '-'
+                with:
+      Studio:
+        Name:
+          fixed: Breath-Takers
+      Date:
+        selector: //p[@class='feat_date']
+        postProcess:
+          - replace:
+              - regex: " - Image Set"
+                with:
+          - parseDate: January 2006
+      Performers:
+        Name: //p[@class='feat_model']/a
+        URL:
+          selector: //p[@class='feat_model']/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: http://www.breath-takers.com
+# Last Updated March 26, 2025
