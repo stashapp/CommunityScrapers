@@ -279,6 +279,7 @@ defaultStudioTags= {
     "nancyace": ["White Woman","Blonde Hair (Female)","Long Hair","Natural Tits"],
     "nataliek.xxx": ["White Woman","Blonde Hair (Female)","Long Hair","MILF","Natural Tits"],
     "natashanice": ["White Woman","Brown Hair (Female)","Long Hair","Natural Tits"],
+    "naughty-lada": ["White Woman","Brown Hair (Female)", "MILF", "Natural Tits"],
     "niarossxxx": ["Black Woman","Black Hair (Female)","Natural Tits"],
     "niksindian": ["South Asian Woman"],
     "officialelizabethmarxs": ["White Woman","Natural Tits","Red Hair"],
