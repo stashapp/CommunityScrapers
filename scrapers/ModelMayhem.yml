@@ -1,0 +1,53 @@
+name: ModelMayhem
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - www.modelmayhem.com
+    scraper: performerScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //span[@id="user_name"]
+      Gender:
+        selector: //span[@id="user_type"]/a/text()
+        postProcess:
+          - map:
+             "Female Model": female
+             "Male Model": male
+      Ethnicity: //div[@class="field-name"][contains(text(), "Ethnicity:")]/../div[@class="field-data"]/text()
+      EyeColor: //div[@class="field-name"][contains(text(), "Eye Color:")]/../div[contains(@class,"field-data")]/text()
+      Height:
+        selector: //div[@class="field-name"][contains(text(), "Height:")]/../div[contains(@class,"field-data")]/@metric
+        postProcess:
+          - replace:
+            - regex: " cm$"
+              with: ""
+      Measurements:
+        selector:
+          //div[@class="field-name"][contains(text(), "Bust:")]/../div[contains(@class,"field-data")]/@us |
+          //div[@class="field-name"][contains(text(), "Cup:")]/../div[contains(@class,"field-data")]/text() |
+          //div[@class="field-name"][contains(text(), "Waist:")]/../div[contains(@class,"field-data")]/@us |
+          //div[@class="field-name"][contains(text(), "Hips:")]/../div[contains(@class,"field-data")]/@us
+        concat: " "
+        postProcess:
+          - replace:
+            - regex: "\""
+              with: ""
+            - regex: (\S+) ([A-Z]+) (.+)
+              with: $1$2 $3
+            - regex: \s
+              with: "-"
+            # if only one number (male), zero out
+            - regex: ^\d+$
+              with: ""
+      Tattoos: //div[@class="field-name"][contains(text(), "Tattoos:")]/../div[contains(@class,"field-data")]/text()
+      Piercings: //div[@class="field-name"][contains(text(), "Piercings:")]/../div[contains(@class,"field-data")]/text()
+      HairColor: //div[@class="field-name"][contains(text(), "Hair Color:")]/../div[contains(@class,"field-data")]/text()
+      Weight:
+        selector: //div[@class="field-name"][contains(text(), "Weight:")]/../div[contains(@class,"field-data")]/text()
+        postProcess:
+          - replace:
+            - regex: " kg$"
+              with: ""
+      Image: //div[@class="avatar-image-container"]/a/img/@data-src
+# Last Updated March 30, 2025
