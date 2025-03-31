@@ -1,0 +1,37 @@
+name: AngeloGodshack
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - angelogodshackxxx.com/model
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - angelogodshackxxx.com/video
+    scraper: sceneScraper
+
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h1[@class="verified"]/text()
+      Image: //img[@class="model-cover-photo"]/@src
+  sceneScraper:
+    scene:
+      Title: //h1/text()
+      Details: //div[@class="description"]/p/text()
+      Studio:
+        Name:
+          fixed: Angelo Godshack Original
+      Tags:
+        Name:
+          selector: //meta[@name="description"]/@content
+          split: ","
+          postProcess:
+            - replace:
+              # remove first entry (title)
+              - regex: "^(.+?), "
+                with: ""
+      Image: //video-js/@data-poster
+      Performers:
+        Name: //div[@class="video-detail__description"]//a[starts-with(@href,"/model")]/div/text()
+# Last Updated March 31, 2025
