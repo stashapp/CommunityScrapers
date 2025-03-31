@@ -635,7 +635,7 @@
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Duration": {
-          "title": "MGroupovie duration",
+          "title": "Group duration",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Director": {
