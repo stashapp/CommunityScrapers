@@ -11,6 +11,6 @@
     "ajv-formats": "^3.0.1",
     "better-ajv-errors": "^1.2.0",
     "chalk": "4",
-    "yaml": "^2.5.1"
+    "yaml": "2"
   }
 }
