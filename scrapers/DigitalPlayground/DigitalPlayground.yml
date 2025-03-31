@@ -72,8 +72,11 @@ movieByURL:
       # Since scenes link to the movie we can scrape movies from scenes
       - digitalplayground.com/scene/
       - digitalplaygroundnetwork.com/scene/
+      # series pages
+      - digitalplayground.com/series/
+      - digitalplaygroundnetwork.com/series/
     script:
       - python
       - DigitalPlayground.py
       - movie-by-url
-# Last Updated January 14, 2024
+# Last Updated March 31, 2025
