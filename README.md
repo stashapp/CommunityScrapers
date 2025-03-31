@@ -95,5 +95,5 @@ Specific scrapers can be checked using: `node validate.js scrapers/foo.yml scrap
 Instead of NodeJS being installed, Docker can be used to run the validator
 
 ```bash
-docker run --rm -v .:/app node:alpine /bin/sh -c "cd /app/validator && yarn install --silent && cd .. && node validate.js --ci""
+docker run --rm -v .:/app node:alpine /bin/sh -c "cd /app/validator && yarn install --silent && cd .. && node validate.js --ci"
 ```

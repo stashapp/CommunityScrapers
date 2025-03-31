@@ -102,14 +102,16 @@ const setTable = (scrapers, searchValue = "") => {
     createToolTip(row.insertCell(2), sType.scene);
     // gallery scraping
     createToolTip(row.insertCell(3), sType.gallery);
+    // image scraping
+    createToolTip(row.insertCell(4), sType.image);
     // group scraping
-    row.insertCell(4).textContent = returnMatch(sType.group.url, "🔗");
+    row.insertCell(5).textContent = returnMatch(sType.group.url, "🔗");
     // performer scraping
-    createToolTip(row.insertCell(5), sType.performer);
+    createToolTip(row.insertCell(6), sType.performer);
     // requires
-    row.insertCell(6).textContent = returnMatch(scp.requires.python, "🐍");
-    row.insertCell(7).textContent = returnMatch(scp.requires.cdp, "🌐");
-    row.insertCell(8).textContent = ago(new Date(scp.lastUpdate));
+    row.insertCell(7).textContent = returnMatch(scp.requires.python, "🐍");
+    row.insertCell(8).textContent = returnMatch(scp.requires.cdp, "🌐");
+    row.insertCell(9).textContent = ago(new Date(scp.lastUpdate));
   });
 };
 

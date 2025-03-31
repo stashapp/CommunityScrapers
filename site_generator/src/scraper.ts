@@ -23,8 +23,12 @@ interface searchTypes {
     url: boolean;
   };
   gallery: {
-    fragment: boolean;
     url: boolean;
+    fragment: boolean;
+  };
+  image: {
+    url: boolean;
+    fragment: boolean;
   };
 }
 
@@ -61,6 +65,10 @@ const getSearchTypes = (scraper: ymlScraper): searchTypes => ({
     fragment: scraper.galleryByFragment !== undefined,
     url: scraper.galleryByURL !== undefined,
   },
+  image: {
+    url: scraper.imageByURL !== undefined,
+    fragment: scraper.imageByFragment !== undefined,
+  },
 });
 
 function collectURLSites(scraper: ymlScraper): string[] {
@@ -71,6 +79,8 @@ function collectURLSites(scraper: ymlScraper): string[] {
     "movieByURL", // deprecated
     "groupByURL",
     "galleryByURL",
+    "imageByURL",
+    "imageByFragment",
   ];
   let urlSites: string[] = [];
   for (const action of urlActions) {
@@ -103,6 +113,8 @@ function hasPython(scraper: ymlScraper): boolean {
     "groupByURL",
     "galleryByFragment",
     "galleryByURL",
+    "imageByURL",
+    "imageByFragment",
   ];
   return actions.some((action) => {
     const scrapers = scraper[action];
