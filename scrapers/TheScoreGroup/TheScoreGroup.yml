@@ -1,6 +1,7 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: TheScoreGroup
 sceneByURL:
-  - action: scrapeXPath
+  - action: script
     url: &urls
       - 18eighteen.com
       - 40somethingmag.com
@@ -57,7 +58,10 @@ sceneByURL:
       - valoryirene.com
       - xlgirls.com
       - yourwifemymeat.com
-    scraper: sceneScraper
+    script:
+      - python
+      - TheScoreGroup.py
+      - scene-by-url
 galleryByURL:
   - action: scrapeXPath
     url: *urls
@@ -71,7 +75,7 @@ performerByName:
   script:
     - python
     - TheScoreGroup.py
-    - search
+    - performer-by-name
 
 xPathScrapers:
   sceneScraper:
@@ -79,18 +83,19 @@ xPathScrapers:
       $url: //link[@rel="canonical"]/@href
       $videopage: //section[@id="videos_page-page" or @id="mixed_page-page"]
       $stat: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]
-    scene:
-      # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
-      # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
-      Title: $videopage//h1
+  galleryScraper:
+    common:
+      $photopage: //section[@id='photos_page-page']
+    gallery:
+      Title: //h1
       Studio:
         Name:
-          selector: ($videopage//video/source/@src)[1]
+          selector: //link[@rel="canonical"]/@href
           postProcess:
             - replace:
-                - regex: .*\.com/(.+?)\/(video|scene).*
-                  with: $1
-            - map: &studioMap
+                - regex: ^(https://)?.+?([^\.]+)\.com/.*
+                  with: $2
+            - map:
                 18eighteen: 18 Eighteen
                 40somethingmag: 40 Something Mag
                 50plusmilfs: 50 Plus MILFs
@@ -147,66 +152,6 @@ xPathScrapers:
                 valoryirene: Valory Irene
                 xlgirls: XL Girls
                 yourwifemymeat: Your Wife My Meat
-      Date: &dateAttr
-        selector: $videopage$stat//span[contains(.,"Date:")]/following-sibling::span
-        postProcess:
-          - replace:
-              - regex: ..,
-                with:
-          - parseDate: January 2 2006
-      Details: &details
-        selector: $videopage//div[@class="p-desc p-3"]/text()
-        postProcess:
-          - replace:
-              - regex: Read More »
-                with:
-              # Attempt to fix erroneous line breaks where HTML tags existed
-              - regex: \n\n([0-9a-zA-Z\.]+)\n\n
-                with: " $1 "
-        concat: "\n\n"
-      Tags:
-        Name: $videopage//a[contains(@href, "videos-tag") or contains(@href, "scenes-tag")]
-      Performers: &performersAttr
-        Name: $videopage//span[contains(.,"Featuring:")]/following-sibling::span/a
-      Image:
-        # This selector scrapes the canonical scene page cover image
-        selector: //script[contains(text(), "poster")]
-        postProcess:
-          - replace:
-              - regex: ^.+poster.+'(.+jpg)'.+$
-                with: $1
-              - regex: ^//
-                with: https://
-              - regex: _x_
-                with: _
-      # This Selector scrapes the image posted on social media sites
-      #        selector: //meta[@itemprop="image"]/@content
-      # Enable this post process if you want better image quality but sometimes it can fail
-      #          postProcess:
-      #            - replace:
-      #                - regex: _lg
-      #                  with: _x_800
-      URL: &urlAttr
-        selector: $url
-      Code: &codeAttr
-        selector: $url
-        postProcess:
-          - replace:
-              - regex: .*\/(\d+)\/?$
-                with: $1
-  galleryScraper:
-    common:
-      $photopage: //section[@id='photos_page-page']
-    gallery:
-      Title: //h1
-      Studio:
-        Name:
-          selector: //link[@rel="canonical"]/@href
-          postProcess:
-            - replace:
-                - regex: ^(https://)?.+?([^\.]+)\.com/.*
-                  with: $2
-            - map: *studioMap
       Date:
         selector: //div[span[@class="label" and contains(.,"Date")]]/span[@class="value"]/text()
         postProcess:
@@ -253,4 +198,4 @@ xPathScrapers:
               - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
                 with: $1$2
       Image: //section[@id="model-page"]//img[@class="lazyload"]/@src
-# Last Updated April 08, 2024
+# Last Updated April 01, 2025
