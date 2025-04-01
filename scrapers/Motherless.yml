@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: Motherless
 sceneByURL:
   - action: scrapeXPath
@@ -40,6 +41,19 @@ xPathScrapers:
       Date:
         selector: $meta//div[@class='media-meta-stats']/span[not(contains(.,'Views')) and not(contains(.,'Favorites'))]/text()
         postProcess:
+          # handle relative hours
+          - javascript: |
+              if (value && value.includes("h ago")) {
+                  const hours = parseInt(value.replace(/(\d+).*/, "$1"))
+                  return new Date(Date.now() - hours * 3600000).toISOString().substring(0, 10)
+              }
+              return value
+          # handle relative days
+          - replace:
+            - regex: (\d+)\s*d(ays)?\sago.*
+              with: $1
+          - subtractDays: true
+          # handle actual date
           - parseDate: 02 Jan 2006
       Image: //video/@data-poster
       Tags:
@@ -49,4 +63,4 @@ xPathScrapers:
             - replace:
                 - regex: \#
                   with:
-# Last Updated October 06, 2020
+# Last Updated April 01, 2025
