@@ -166,7 +166,6 @@ def scene_from_url(url: str) -> ScrapedScene:
     result = client.get(url)
     tree = html.fromstring(result.content)
 
-    stat = '//div[contains(concat(" ",normalize-space(@class)," ")," mb-3 ")]'
     video_page = '//section[@id="videos_page-page" or @id="mixed_page-page"]'
 
     # title
@@ -186,9 +185,11 @@ def scene_from_url(url: str) -> ScrapedScene:
         scene["studio"] = { "name": STUDIO_MAP.get(studio_ref, studio_ref) }
 
     # date
-    if raw_date := tree.xpath(f'{video_page}{stat}//span[contains(.,"Date:")]/following-sibling::span'):
-        clean_date = re.sub(r"(\d+)[a-z]{2}", r"\1", next(iter(raw_date)).text).replace("..,", "")
-        scene["date"] = datetime.strptime(clean_date, "%B %d, %Y").strftime("%Y-%m-%d")
+    if raw_date := tree.xpath(f'{video_page}//div[contains(concat(" ",normalize-space(@class)," ")," mb-3 ")]//span[contains(.,"Date:")]/following-sibling::span'):
+        scene["date"] = datetime.strptime(
+            re.sub(r"(\d+)[a-z]{2}", r"\1", next(iter(raw_date)).text).replace("..,", ""),
+            "%B %d, %Y"
+        ).strftime("%Y-%m-%d")
 
     # details
     if description := tree.xpath(f'{video_page}//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'):
