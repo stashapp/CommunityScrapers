@@ -191,7 +191,7 @@ def scene_from_url(url: str) -> ScrapedScene:
         scene["date"] = datetime.strptime(clean_date, "%B %d, %Y").strftime("%Y-%m-%d")
 
     # details
-    if description := tree.xpath(f'{video_page}//div[@class="p-desc p-3"]/text()'):
+    if description := tree.xpath(f'{video_page}//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'):
         scene["details"] = "\n\n".join([p.strip() for p in description if len(p.strip())])
 
     # tags
