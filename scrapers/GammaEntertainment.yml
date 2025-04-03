@@ -3,7 +3,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - alettaoceanempire.com/en/video/
-      - analacrobats.com/en/video/
       - ashleyfires.com/
       - bigfatcreampie.com/
       - bskow.com/en/video/
@@ -11,8 +10,6 @@ sceneByURL:
       - buttman.com/
       - cumshotoasis.com/
       - currycreampie.com/
-      - devilsfilmparodies.com/
-      - devilsgangbangs.com/
       - devonlee.com/
       - dylanryder.com/
       - fistingcentral.com/
@@ -20,7 +17,6 @@ sceneByURL:
       - girlsandstuds.com/
       - grannyghetto.com/
       - jaysinxxx.com/
-      - jonnidarkkoxxx.com/
       - lanesisters.com/
       - lesbianfactor.com/
       - lexingtonsteele.com/
@@ -29,20 +25,14 @@ sceneByURL:
       - motherfuckerxxx.com/
       - myteenoasis.com/
       - openlife.com/
-      - pantypops.com/
-      - povblowjobs.com/
       - povthis.com/
       - silverstonedvd.com/
       - silviasaint.com/
       - squirtalicious.com/
       - squirtinglesbian.com/en/video/
       - squirtingorgies.com/en/scene/
-      - strapattackers.com/
       - sunnyleone.com/
-      - tittycreampies.com/
-      - transsexualangel.com/en/video/
       - transsexualroadtrip.com/
-      - whiteghetto.com/
     scraper: sceneScraper
 
 performerByURL:
@@ -50,7 +40,6 @@ performerByURL:
     url:
       - activeduty.com/en/pornstar/
       - assholefever.com/en/pornstar/
-      - evilangel.com/en/pornstar/
     scraper: performerScraper
 
 movieByURL:
@@ -140,8 +129,6 @@ xPathScrapers:
                 cumshotoasis: Cumshot Oasis
                 currycreampie: Curry Creampie
                 darkx: DarkX
-                devilsfilmparodies: Devil's Film Parodies
-                devilsgangbangs: Devil's Gangbangs
                 devonlee: Devon Lee
                 dylanryder: Dylan Ryder
                 eroticax: EroticaX
@@ -176,7 +163,6 @@ xPathScrapers:
                 tittycreampies: Titty Creampies
                 transsexualangel: Transsexual Angel
                 transsexualroadtrip: Transsexual Roadtrip
-                whiteghetto: White Ghetto
                 xempire: XEmpire
 
   performerScraper:
