@@ -90,35 +90,35 @@ sceneByURL:
       - upclosevr.com/en/video/
     script:
       - python
-      - AdultTime.py
+      - adult_time.py
       - girlsway
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - AdultTime.py
+    - adult_time.py
     - girlsway
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - AdultTime.py
+    - adult_time.py
     - girlsway
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - AdultTime.py
+    - adult_time.py
     - girlsway
     - scene-by-query-fragment
 galleryByFragment:
   action: script
   script:
     - python
-    - AdultTime.py
+    - adult_time.py
     - puretaboo
     - gallery-by-fragment
 galleryByURL:
@@ -148,7 +148,7 @@ galleryByURL:
       - webyoung.com/en/photo/
     script:
       - python
-      - AdultTime.py
+      - adult_time.py
       - puretaboo
       - gallery-by-url
 movieByURL:
@@ -160,7 +160,7 @@ movieByURL:
       - outofthefamily.com/en/dvd/
     script:
       - python
-      - AdultTime.py
+      - adult_time.py
       - puretaboo
       - movie-by-url
 performerByURL:
@@ -224,20 +224,20 @@ performerByURL:
       - upclosevr.com/en/pornstar/
     script:
       - python
-      - AdultTime.py
+      - adult_time.py
       - performer-by-url
 performerByName:
   action: script
   script:
     - python
-    - AdultTime.py
+    - adult_time.py
     - girlsway
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
-    - AdultTime.py
+    - adult_time.py
     - girlsway
     - performer-by-fragment
 # Last Updated January 30, 2025

@@ -6,28 +6,28 @@ sceneByURL:
       - biphoria.com/en/video
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
+      - ../AlgoliaAPI/algolia_api.py
       - biphoria
       - scene-by-url
 sceneByFragment:
     action: script
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
+      - ../AlgoliaAPI/algolia_api.py
       - biphoria
       - scene-by-fragment
 sceneByName:
     action: script
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
+      - ../AlgoliaAPI/algolia_api.py
       - biphoria
       - scene-by-name
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
+      - ../AlgoliaAPI/algolia_api.py
       - biphoria
       - scene-by-query-fragment
 galleryByURL:
@@ -36,7 +36,7 @@ galleryByURL:
       - biphoria.com/en/photo/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
+      - ../AlgoliaAPI/algolia_api.py
       - biphoria
       - gallery-by-url
 movieByURL:
@@ -45,7 +45,7 @@ movieByURL:
       - biphoria.com/en/movie/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
+      - ../AlgoliaAPI/algolia_api.py
       - biphoria
       - movie-by-url
 # Last Updated January 30, 2025

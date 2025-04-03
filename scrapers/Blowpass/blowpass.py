@@ -5,7 +5,7 @@ import json
 import sys
 from typing import Any
 
-from AlgoliaAPI.AlgoliaAPI import (
+from scrapers.AlgoliaAPI.algolia_api import (
     ScrapedGallery,
     ScrapedMovie,
     gallery_from_fragment,

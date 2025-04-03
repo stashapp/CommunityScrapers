@@ -6,7 +6,7 @@ import sys
 from typing import Any
 from urllib.parse import urlparse
 
-from AlgoliaAPI.AlgoliaAPI import (
+from scrapers.AlgoliaAPI.algolia_api import (
     gallery_from_fragment,
     gallery_from_url,
     movie_from_url,

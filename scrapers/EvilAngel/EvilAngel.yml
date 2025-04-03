@@ -17,7 +17,7 @@ sceneByURL:
       - tsfactor.com/en/video/
     script:
       - python
-      - EvilAngel.py
+      - evil_angel.py
       - evilangel
       - scene-by-url
 movieByURL:
@@ -29,35 +29,35 @@ movieByURL:
       - tsfactor.com/en/movie/
     script:
       - python
-      - EvilAngel.py
+      - evil_angel.py
       - evilangel
       - movie-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - EvilAngel.py
+    - evil_angel.py
     - evilangel
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - EvilAngel.py
+    - evil_angel.py
     - evilangel
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - EvilAngel.py
+    - evil_angel.py
     - evilangel
     - scene-by-query-fragment
 galleryByFragment:
   action: script
   script:
     - python
-    - EvilAngel.py
+    - evil_angel.py
     - evilangel
     - gallery-by-fragment
 galleryByURL:
@@ -70,7 +70,7 @@ galleryByURL:
       - tsfactor.com/en/photo/
     script:
       - python
-      - EvilAngel.py
+      - evil_angel.py
       - evilangel
       - gallery-by-url
 performerByURL:
@@ -79,20 +79,20 @@ performerByURL:
       - evilangel.com/en/pornstar/
     script:
       - python
-      - EvilAngel.py
+      - evil_angel.py
       - performer-by-url
 performerByName:
   action: script
   script:
     - python
-    - EvilAngel.py
+    - evil_angel.py
     - evilangel
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
-    - EvilAngel.py
+    - evil_angel.py
     - evilangel
     - performer-by-fragment
 # Last Updated March 20, 2025

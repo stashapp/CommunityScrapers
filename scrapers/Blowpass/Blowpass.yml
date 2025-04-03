@@ -12,28 +12,28 @@ sceneByURL:
       - throated.com/en/video/
     script:
       - python
-      - Blowpass.py
+      - blowpass.py
       - blowpass
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - Blowpass.py
+    - blowpass.py
     - blowpass
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - Blowpass.py
+    - blowpass.py
     - blowpass
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - Blowpass.py
+    - blowpass.py
     - blowpass
     - scene-by-query-fragment
 # Last Updated January 30, 2025

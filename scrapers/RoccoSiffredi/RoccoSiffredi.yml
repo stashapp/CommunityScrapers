@@ -6,28 +6,28 @@ sceneByURL:
       - roccosiffredi.com/en/video
     script:
       - python
-      - RoccoSiffredi.py
+      - rocco_siffredi.py
       - roccosiffredi
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - RoccoSiffredi.py
+    - rocco_siffredi.py
     - roccosiffredi
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - RoccoSiffredi.py
+    - rocco_siffredi.py
     - roccosiffredi
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - RoccoSiffredi.py
+    - rocco_siffredi.py
     - roccosiffredi
     - scene-by-query-fragment
 movieByURL:
@@ -36,7 +36,7 @@ movieByURL:
       - roccosiffredi.com/en/dvd/
     script:
       - python
-      - RoccoSiffredi.py
+      - rocco_siffredi.py
       - roccosiffredi
       - movie-by-url
 galleryByURL:
@@ -45,7 +45,7 @@ galleryByURL:
       - roccosiffredi.com/en/photo/
     script:
       - python
-      - RoccoSiffredi.py
+      - rocco_siffredi.py
       - roccosiffredi
       - gallery-by-url
 # Last Updated January 29, 2025

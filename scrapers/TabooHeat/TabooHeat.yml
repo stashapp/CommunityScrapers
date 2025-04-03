@@ -6,28 +6,28 @@ sceneByURL:
       - tabooheat.com/en/video/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
+      - ../AlgoliaAPI/algolia_api.py
       - tabooheat
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
+    - ../AlgoliaAPI/algolia_api.py
     - tabooheat
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
+    - ../AlgoliaAPI/algolia_api.py
     - tabooheat
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
+    - ../AlgoliaAPI/algolia_api.py
     - tabooheat
     - scene-by-query-fragment
 galleryByURL:
@@ -36,7 +36,7 @@ galleryByURL:
       - tabooheat.com/en/photo/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
+      - ../AlgoliaAPI/algolia_api.py
       - tabooheat
       - gallery-by-url
 # Last Updated January 30, 2025

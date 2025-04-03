@@ -247,7 +247,7 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         scene["date"] = release_date
     if _largest_scene_image := largest_scene_image(scene_from_api):
         scene["image"] = f"{IMAGE_CDN}/movies{_largest_scene_image}"
-    # for studio name overrides, see EvilAngel.py or AdultTime.py for examples
+    # for studio name overrides, see evil_angel.py or adult_time.py for examples
     if studio_name := scene_from_api.get("studio_name"):
         scene["studio"] = { "name": studio_name }
     if scene_from_api.get("movie_id"):
