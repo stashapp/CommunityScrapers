@@ -121,7 +121,7 @@ def scrape_scene(url):
 
     # check if response is from bellesaplus
     # bellesa scenes also include free redistributions and delayed scenes
-    if data["plus"] != 1 or data["bellesa"] == 1:
+    if data["access"]["plus"] != 1 or data["access"]["bellesa"] == 1:
         log.error("This video URL is from bellesa.co (free) and not bellesaplus.co (premium)")
         print("{}")
         sys.exit(1)
