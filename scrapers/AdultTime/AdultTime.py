@@ -9,7 +9,7 @@ from urllib.error import URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
-from scrapers.AlgoliaAPI.algolia_api import (
+from AlgoliaAPI.AlgoliaAPI import (
     gallery_from_fragment,
     gallery_from_url,
     movie_from_url,

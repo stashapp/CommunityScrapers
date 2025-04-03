@@ -6,35 +6,35 @@ sceneByURL:
       - genderxfilms.com/en/video
     script:
       - python
-      - genderx_films.py
+      - GenderXFilms.py
       - genderxfilms
       - scene-by-url
 sceneByFragment:
     action: script
     script:
       - python
-      - genderx_films.py
+      - GenderXFilms.py
       - genderxfilms
       - scene-by-fragment
 sceneByName:
     action: script
     script:
       - python
-      - genderx_films.py
+      - GenderXFilms.py
       - genderxfilms
       - scene-by-name
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - genderx_films.py
+      - GenderXFilms.py
       - genderxfilms
       - scene-by-query-fragment
 galleryByFragment:
   action: script
   script:
     - python
-    - genderx_films.py
+    - GenderXFilms.py
     - genderxfilms
     - gallery-by-fragment
 galleryByURL:
@@ -44,7 +44,7 @@ galleryByURL:
       - genderxfilms.com/en/video/
     script:
       - python
-      - genderx_films.py
+      - GenderXFilms.py
       - genderxfilms
       - gallery-by-url
 movieByURL:
@@ -53,7 +53,7 @@ movieByURL:
       - genderxfilms.com/en/movie/
     script:
       - python
-      - genderx_films.py
+      - GenderXFilms.py
       - genderxfilms
       - movie-by-url
 performerByURL:
@@ -62,20 +62,20 @@ performerByURL:
       - evilangel.com/en/pornstar/
     script:
       - python
-      - genderx_films.py
+      - GenderXFilms.py
       - performer-by-url
 performerByName:
   action: script
   script:
     - python
-    - genderx_films.py
+    - GenderXFilms.py
     - genderxfilms
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
-    - genderx_films.py
+    - GenderXFilms.py
     - genderxfilms
     - performer-by-fragment
 # Last Updated January 30, 2025
