@@ -5,7 +5,9 @@ import json
 import re
 import sys
 from typing import Any
+from urllib.error import URLError
 from urllib.parse import urlparse
+from urllib.request import Request, urlopen
 
 from AlgoliaAPI.AlgoliaAPI import (
     gallery_from_fragment,
@@ -22,7 +24,7 @@ from AlgoliaAPI.AlgoliaAPI import (
 
 from py_common import log
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedScene
-from py_common.util import dig, is_valid_url, scraper_args
+from py_common.util import dig, scraper_args
 
 
 def url_title_from_path(path: str) -> str:
@@ -81,14 +83,35 @@ def preview_urls(urls: list[str]) -> list[str]:
     return []
 
 
+def _is_valid_url(_url: str, highest_status_code: int = 299):
+    """
+    Checks if an URL is valid by making a HEAD request and ensuring the response status code is
+    acceptable (defaults to 200-299, can supply highest_status_code to allow redirects,
+    e.g. 308 will allow 200-308)
+    """
+    try:
+        req = Request(_url, method="HEAD", headers={
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.3;; en-US) AppleWebKit/600.1 (KHTML, like Gecko) Chrome/54.0.2210.311 Safari/602",
+        })
+        with urlopen(req) as response:
+            log.debug(f"status code: {response.getcode()}")
+            return 200 <= response.getcode() <= highest_status_code
+    except URLError as e:
+        log.error(f"URLError: {e}")
+        return False
+
+
 def fix_url(_url: str) -> str:
     """
     Replaces the host part of the URL if criteria matched
     """
+    log.debug(f"checking URL: {_url}")
     if _url:
         site = site_from_url(_url)
+        log.debug(f"site: {site}")
         # vivid.com
         if site == "vivid":
+            log.debug("fixed URL for vivid")
             return urlparse(_url)._replace(netloc="tour1.vivid.com").geturl()
         # if the site does not have a real/working domain
         if site.endswith("-channel") or site in [
@@ -119,12 +142,18 @@ def fix_url(_url: str) -> str:
             "watchyoucheat",
             "womensworld",
         ]:
+            log.debug("site in non-working domain list")
             return urlparse(_url)._replace(netloc="members.adulttime.com").geturl()
         if site == "futaworld-at":
+            log.debug("override for futaworld")
             return urlparse(_url)._replace(netloc="www.futaworld.com").geturl()
         # for any other host, check if there is a website
         homepage = urlparse(_url)._replace(path="").geturl()
-        if not is_valid_url(homepage):
+        log.debug(f"testing homepage: {homepage}")
+        if _is_valid_url(homepage, 399):
+            log.debug("homepage is valid, returning URL as-is")
+        else:
+            log.debug("homepage test failed, replacing host")
             return urlparse(_url)._replace(netloc="members.adulttime.com").geturl()
     return _url
 
@@ -253,16 +282,16 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
         scene["studio"] = { "name": studio_override }
 
     if _url := scene.get("url"):
-        # log.debug(f'scene"[url]" (before): {scene["url"]}')
+        log.debug(f'scene"[url]" (before): {scene["url"]}')
         scene["url"] = fix_url(_url)
-        # log.debug(f'scene"[url]" (after): {scene["url"]}')
+        log.debug(f'scene"[url]" (after): {scene["url"]}')
 
     if urls := scene.get("urls"):
-        # log.debug(f'scene"[urls]" (before): {scene["urls"]}')
+        log.debug(f'scene"[urls]" (before): {scene["urls"]}')
         scene["urls"] = [fix_url(url) for url in urls]
-        # log.debug(f'scene"[urls]" (after fix): {scene["urls"]}')
+        log.debug(f'scene"[urls]" (after fix): {scene["urls"]}')
         scene["urls"].extend(preview_urls(scene["urls"]))
-        # log.debug(f'scene"[urls]" (after extend with preview): {scene["urls"]}')
+        log.debug(f'scene"[urls]" (after extend with preview): {scene["urls"]}')
 
     if action_tags := api_scene.get("action_tags"):
         process_action_tags(action_tags)
