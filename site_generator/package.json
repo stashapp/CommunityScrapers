@@ -17,11 +17,11 @@
     "ci-build": "npm run generate && npm run fuse-index"
   },
   "devDependencies": {
-    "@types/node": "^22.13.14",
+    "@types/node": "^22.14.0",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
     "ts-to-zod": "^3.15.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.3"
+    "vite": "^6.2.5"
   }
 }
