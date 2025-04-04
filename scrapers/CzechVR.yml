@@ -77,8 +77,7 @@ xPathScrapers:
 driver:
   useCDP: true
   cookies:
-    - CookieURL: "https://www.czechvr.com"
-      Cookies:
+    - Cookies:
         - Name: "iagree"
           Domain: ".czechvr.com"
           Value: "ano"
