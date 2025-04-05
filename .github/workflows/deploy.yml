@@ -41,11 +41,6 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: latest
-    - name: Cache scrapers-debug
-      uses: actions/cache@v4
-      with:
-        path: master/site_generator/scrapers-debug.json
-        key: scrapers-debug
     - name: Generate html index page
       run: |
         cd master/site_generator
