@@ -5,6 +5,7 @@ name: "VRBangers"
 sceneByURL:
   - action: scrapeXPath
     url: &urls
+      - arporn.com
       - blowvr.com
       - vrbangers.com
       - vrbgay.com
@@ -45,7 +46,7 @@ xPathScrapers:
   vrbScraper:
     common:
       $info: //div[starts-with(@class,"video-item__info ")]|//div[@class="single-video-info"]
-      $modelInfoItem: //div[contains(@class, "single-model-profile__info-wrapper")]//div[@class="single-model-profile__info-item"]
+      $modelInfoItem: //div[contains(@class, "single-model-profile__info-wrapper")]//div[@class="single-model-profile__info-item"]|//div[contains(@class, "single-model-profile")]//li[@class="model-info-item"]
       $modelLinks: //div[contains(@class, "single-model-profile__actions")]
     scene:
       Title: &titleAttr
@@ -62,9 +63,9 @@ xPathScrapers:
         selector: //div[contains(@class,"second-text")]/div//text()|//div[contains(@class,"single-video-description")]/div//p
         concat: "\n\n"
       Tags: &tagsAttr
-        Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]/text()|//div[@class="single-video-categories"]//a[contains(@href,"category/")]/text()
+        Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]/text()|//div[@class="single-video-categories"]//a[contains(@href,"category/")]//text()
       Performers: &performersAttr
-        Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()|//div[contains(@class, "single-video-info__starring")]//a/text()
+        Name: //div[starts-with(@class, 'video-item__info-starring')]//a/text()|//div[contains(@class, "single-video-info__starring")]//a//text()
       Studio: &studioAttr
         Name: &studioName
           selector: &studioURLSel //meta[@name="dl8-customization-brand-url"]/@content
@@ -73,6 +74,7 @@ xPathScrapers:
                 - regex: ^//
                   with: ""
             - map:
+                arporn.com: AR Porn
                 blowvr.com: Blow VR
                 vrbangers.com: VR Bangers
                 vrbgay.com: VRB Gay
@@ -84,7 +86,7 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "https:"
-      Image: &imageSel //meta[@property="og:image"]/@content
+      Image: &imageSel //div[contains(@class, "single-video-poster__preview")]/img/@src|//meta[@property="og:image"]/@content
       URL: //link[@rel="canonical"]/@href
     gallery:
       Title: *titleAttr
@@ -117,7 +119,7 @@ xPathScrapers:
         selector: *titleSel
         postProcess:
           - replace:
-              - regex: " VR.*$"
+              - regex: " (AR|VR).*$"
                 with: ""
       Image: //div[contains(@class, "single-model-profile__image app-image")]/img/@src
       Birthdate:
@@ -137,4 +139,7 @@ xPathScrapers:
       Twitter: $modelLinks/a[contains(@href, "twitter")]/@href
       Instagram: $modelLinks/a[contains(@href, "instagram")]/@href
       URL: //link[@rel="canonical"]/@href
-# Last Updated November 28, 2024
+# you can use (a suitably configured) CDP to make use of a proxy/VPN to bypass region-based age-restriction
+# driver:
+#   useCDP: true
+# Last Updated April 11, 2025
