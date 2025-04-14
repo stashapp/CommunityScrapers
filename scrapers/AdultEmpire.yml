@@ -218,4 +218,17 @@ driver:
           Domain: "www.adultdvdempire.com"
           Value: "true"
           Path: "/"
+    # replace with your account etoken
+    - CookieURL: "https://www.adultempire.com"
+      Cookies:
+        - Name: "etoken"
+          Domain: "www.adultempire.com"
+          Value: "" # replace with your account etoken
+          Path: "/"
+    - CookieURL: "https://www.adultdvdempire.com"
+      Cookies:
+        - Name: "etoken"
+          Domain: "www.adultdvdempire.com"
+          Value: "" # replace with your account etoken
+          Path: "/"
 # Last Updated March 11, 2025
