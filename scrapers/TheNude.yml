@@ -110,7 +110,7 @@ xPathScrapers:
               - regex: ^(\d+).+$
                 with: "$1"
               # Height is an integer value. When the site returns "???" as the height value, replace it as if no value is returned
-          - regex: \?\?\?
+              - regex: \?\?\?
                 with: ""
       Measurements:
         selector: //li/span[@class="list-quest"][contains(text(),'Measurements')]/../text()
