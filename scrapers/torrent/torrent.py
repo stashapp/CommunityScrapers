@@ -124,6 +124,9 @@ elif sys.argv[1] == "fragment":
 elif sys.argv[1] == "search":
     search = json.loads(sys.stdin.read()).get('name')
     torrents = list(TORRENTS_PATH.rglob('*.torrent'))
+    if len(torrents) == 0:
+        print("No torrents found")
+        exit(1)
     ratios = {}
     for t in torrents:
         clean_t = cleanup_name(t)
