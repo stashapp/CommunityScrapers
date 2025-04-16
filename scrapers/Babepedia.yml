@@ -220,5 +220,5 @@ xPathScrapers:
 driver:
   headers:
     - Key: User-Agent
-      Value: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:133.0) Gecko/20100101 Firefox/133.0
-# Last Updated January 26, 2025
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0
+# Last Updated April 16, 2025
