@@ -119,7 +119,16 @@ xPathScrapers:
       $videowrap: //div[@class="video-wrapper"]
       $videoDetails: //div[contains(@class,"video-detailed-info")]
     scene:
-      Title: //h1
+      Title:
+        selector: //h1
+        postProcess:
+          - replace:
+              # This scraper can be misused and end up pulling its information
+              # from https://www.pornhub.com/view_video.php?viewkey=
+              # that is, a page without a proper Pornhub scene code:
+              # this will make it return an empty result instead of an erroneous title
+              - regex: ^Recently Featured Porn Videos$
+                with: ""
       URL: //meta[@property="og:url"]/@content
       Date:
         selector: $datablob
