@@ -31,7 +31,7 @@ xPathScrapers:
     common:
       $model: //a[@class="modelLink"]
     scene:
-      Title: //div[@class="col-md-12 col-sm-12 col-xs-12 title row-0"]/span
+      Title: //h1[@class='no-style']
       URL: //link[@rel="canonical"]/@href
       Date:
         selector: //div[@class="col-xs-12 date fix"]/span/em/text()
@@ -90,4 +90,4 @@ driver:
           Value: "on"
           Domain: .iwantclips.com
           Path: /
-# Last Updated September 03, 2024
+# Last Updated April 16, 2025
