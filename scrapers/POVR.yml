@@ -1,15 +1,22 @@
 name: POVR
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - povr.com
     scraper: sceneScraper
   - action: scrapeXPath
-    url:
+    url: &urlsPremium
       - brasilvr.com
       - milfvr.com
       - tranzvr.com
       - wankzvr.com
+    scraper: sceneScraperPremium
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url: *urlsPremium
     scraper: sceneScraperPremium
 movieByURL:
   - action: scrapeXPath
@@ -30,9 +37,9 @@ xPathScrapers:
       Details: &detailsAttr
         selector: //div[@class="detail__txt detail__txt-show_lg"]/text()|//span[@class="more__body"]/text()
         concat: " "
-      Tags:
+      Tags: &tagsAttr
         Name: $info//div[@class="tag-list__body"]//a/text()
-      Performers:
+      Performers: &performersAttr
         Name: //div[@class="detail__inf detail__inf-align_right"]/div[@class="detail__models"]/a/text()
       Image: &imageAttr
         selector: //meta[@property="og:image"]/@content|//div[@class="photo-strip__body"]/div[2]/@data-src
@@ -71,27 +78,43 @@ xPathScrapers:
           - replace:
               - regex: ^.*-(\d+)$
                 with: $1
+    gallery:
+      Title: *titleSel
+      Date: *dateAttr
+      Details: *detailsAttr
+      Tags: *tagsAttr
+      Performers: *performersAttr
+      Studio: *studioAttr
+      Code: *codeAttr
   sceneScraper:
     scene:
-      Title:
+      Title: &title
         selector: //h1[contains(@class, "heading-title")]/text()
-      Date:
+      Date: &date
         selector: //p[contains(@class, 'player__date')]
         postProcess:
           - replace:
               - regex: .*\s(\d+\s[a-zA-Z]+,\s\d+)$
                 with: $1
           - parseDate: 2 January, 2006
-      Performers:
+      Performers: &performers
         Name: //li[span[contains(text(), "Pornstars:")]]/following-sibling::li/a/text()
-      Tags:
+      Tags: &tags
         Name: //li[span[contains(text(), "Tags:")]]/following-sibling::li/a/text()
-      Details:
+      Details: &details
         selector: //div[contains(@class, "player__description")]/p/text()
       Image: *imageAttr
-      Studio:
+      Studio: &studio
         Name:
           selector: //span[contains(text(), "Studio:")]/following-sibling::a/text()
+      Code: *codeAttr
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Tags: *tags
+      Performers: *performers
+      Studio: *studio
       Code: *codeAttr
   movieScraper:
     common:
@@ -113,4 +136,4 @@ xPathScrapers:
       Studio: *studioAttr
       Synopsis: *detailsAttr
       FrontImage: *imageAttr
-# Last Updated June 28, 2023
+# Last Updated April 17, 2025
