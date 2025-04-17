@@ -1,15 +1,20 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: NaughtyAmericaVR
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - naughtyamericavr.com/scene/
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
       $sceneinfo: //div[@class="scene-info"]/div/div
     scene:
-      Title:
+      Title: &title
         selector: $sceneinfo/div/p[@class="scene-title"]
         # # alternative selector
         #selector: //div[@class="grey-title"]
@@ -17,16 +22,16 @@ xPathScrapers:
         #  - replace:
         #      - regex:  \s*VR\sPorn\sVideos\s*$
         #        with:
-      Date:
+      Date: &date
         selector: $sceneinfo/p[@class="scene_date"]/text()
         postProcess:
           - parseDate: January 2, 2006
-      Details: $sceneinfo/div/p[@class="scene-description"]
-      Tags:
+      Details: &details $sceneinfo/div/p[@class="scene-description"]
+      Tags: &tags
         Name: $sceneinfo/div/p[@class="details categories"]/a
-      Performers:
+      Performers: &performers
         Name: $sceneinfo/div/p[@class="details"][1]/a
-      Studio:
+      Studio: &studio
         Name:
           fixed: NaughtyAmericaVR
       Image:
@@ -35,4 +40,11 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https:"
-# Last Updated May 14, 2022
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Tags: *tags
+      Performers: *performers
+      Studio: *studio
+# Last Updated April 17, 2025
