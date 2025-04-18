@@ -64,6 +64,7 @@ studioMap = {
     "amberlilyshow":"Amber Lily Show",
     "amberspanks":"Amber Spanks",
     "americankitten":"American Kitten",
+    "amirahadaraxxx":"Amirah Adara XXX",
     "anastasiagree":"Anastasia Gree",
     "anisyia.xxx":"Anisyia XXX",
     "arabellesplayground": "Arabelle's Playground",
@@ -180,6 +181,7 @@ studioMap = {
 fixedPerformerStudio = {
     "amberlilyshow" : ["Amber Lily"],
     "amberspanks" : ["Amber Spanks"],
+    "amirahadaraxxx" : ["Amirah Adara"],
     "anastasiagree" : ["Anastasia Gree"],
     "anisyia.xxx" : ["Anisyia"],
     "arabellesplayground": ["Arabelle Raphael"],
@@ -242,6 +244,7 @@ fixedPerformerStudio = {
 # Use the site name as it shows up in the URL.  Where the TLD is not .com, include the TLD (eg, .xxx)
 
 defaultStudioTags= {
+    "amirahadaraxxx": ["Brown Hair (Female)", "Hungarian", "Natural Tits", "Small Tits", "White Woman"],
     "anastasiagree": ["BBW","Brown Hair (Female)","Solo Female","White Woman"],
     "anisyia.xxx": ["Fake Tits","Brown Hair (Female)","Long Hair","White Woman"],
     "arabellesplayground": ["Big Tits", "Natural Tits", "White Woman"],
