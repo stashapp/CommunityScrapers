@@ -17,7 +17,38 @@ xPathScrapers:
     scene:
       Performers:
         Name: //span[@class="model-info-label"]/following-sibling::a
-      Title: //p[@class="video-detailinfo"]/span
+      Title:
+        selector: //p[@class="video-detailinfo"]
+        postProcess:
+          - replace:
+              - regex: ^(.*?)EROTIC SOLO$
+                with: "Erotic Solo: ${1}"
+              - regex: ^(.*?)MASSAGE$
+                with: "Massage: ${1}"
+              - regex: ^(.*?)FETISH BOUTIQUE$
+                with: "Fetish Boutique: ${1}"
+              - regex: ^(.*?)WRESTLING$
+                with: "Wrestling: ${1}"
+              - regex: ^(.*?)FULL CONTACT$
+                with: "Full Contact: ${1}"
+              - regex: ^(.*?)BACKSTAGE$
+                with: "${1}: Backstage"
+              - regex: ^(.*?)CHERRY BUSTING$
+                with: "Cherry Busting: ${1}"
+              - regex: ^(.*?)WANK PARTY$
+                with: "${1}"
+              - regex: ^(.*?)RAUNCHY$
+                with: "Raunchy: ${1}"
+              - regex: ^(.*?)CZECH UP$
+                with: "Czech Up: ${1}"
+              - regex: ^(.*?)HELPING HAND$
+                with: "Helping Hand: ${1}"
+              - regex: ^(.*?)AIRPORT SECURITY$
+                with: "Airport Security: ${1}"
+              - regex: ^(.*?)YOUNG OFFENDERS$
+                with: "Young Offenders: ${1}"
+              - regex: ^(.*?)SOFT DUOS$
+                with: "Soft Duos: ${1}"
       Date:
         selector: //span[@class="date_field_video"]/text()
         postProcess:
@@ -84,4 +115,4 @@ driver:
     - xpath: //a[@class="cc-btn cc-dismiss"]
     - xpath: //span[@class="more_info_field_video"]
       sleep: 5
-# Last Updated January 16, 2022
+# Last Updated October 01, 2024
