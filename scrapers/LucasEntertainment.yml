@@ -2,7 +2,9 @@ name: Lucas Entertainment
 sceneByURL:
   - action: scrapeXPath
     url:
+      - lucasentertainment.com/movies/
       - lucasentertainment.com/scenes/
+      - lucasentertainment.com/tour/movies/
       - lucasentertainment.com/tour/scenes/
     scraper: sceneScraper
 sceneByName:
@@ -59,6 +61,7 @@ xPathScrapers:
               - regex: (^[a-zA-Z]+\s[0-9]+)[a-z]+(\s[0-9]+$)
                 with: $1$2
           - parseDate: January 2 2006
+          - parseDate: Jan 2, 2006
       Performers:
         Name: $performer/text()
         URL: $performer/@href
@@ -69,7 +72,7 @@ xPathScrapers:
         selector: //script[contains(text(), "image:")]/text()
         postProcess:
           - replace:
-              - regex: "^.*image: '([^']+)'.*$"
+              - regex: "^.*image: ['\"]([^'\"]+)*?['\"].+"
                 with: $1
       Studio: &studioAttr
         Name:
@@ -113,4 +116,4 @@ xPathScrapers:
         postProcess:
           - feetToCm: true
       Image: //div[@class="col-sm-5 col-md-5 col-lg-4 model-main-photo"]/img/@data-original
-# Last Updated August 11, 2024
+# Last Updated April 18, 2025
