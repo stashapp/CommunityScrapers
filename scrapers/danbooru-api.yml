@@ -1,4 +1,4 @@
-name: danbooru
+name: danbooru-api
 sceneByURL:
   - action: scrapeJson
     url: &urls

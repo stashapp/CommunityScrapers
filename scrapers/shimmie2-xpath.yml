@@ -1,0 +1,34 @@
+name: shimmie2-xpath
+# https://github.com/stashapp/CommunityScrapers/issues/2273
+# loosely based on danbooru
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - https://shimmie.shishnet.org/post/view/
+    scraper: postScraper
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+xPathScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: //tr[@data-row="Uploader"]//time
+        postProcess:
+          - replace:
+            - regex: "T.+"
+              with: ""
+          - parseDate: 2006-01-02
+      Tags: &tag_string
+        Name:
+          selector: //tr[@data-row="Tags"]//td/a/text()
+      URLs: &source
+        selector: //tr[@data-row="Source Link"]/td/div/a/@href
+    scene:
+      Date: *date
+      Tags: *tag_string
+      URLs: *source
+
+# Last Updated April 19, 2025

@@ -1,0 +1,49 @@
+name: shimmie2-graphql
+# https://github.com/stashapp/CommunityScrapers/issues/2273
+# loosely based on danbooru
+sceneByURL:
+  - action: scrapeJson
+    url: &urls
+      - https://shimmie.shishnet.org/post/view/
+      - https://rule34.paheal.net/post/view/
+    scraper: postScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '(https:\/\/.+)\/post\/view\/(\d+)(?:\?.+)?(?:#.+)?'
+          with: '${1}/graphql?query=query(%24id:Int!){post(post_id:%24id){posted,tags,source}}&variables={"id":${2}}'
+imageByURL:
+  - action: scrapeJson
+    url: *urls
+    scraper: postScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '(https:\/\/.+)\/post\/view\/(\d+)(?:\?.+)?(?:#.+)?'
+          with: '${1}/graphql?query=query(%24id:Int!){post(post_id:%24id){posted,tags,source}}&variables={"id":${2}}'
+
+jsonScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: data.post.posted
+        postProcess:
+          - replace:
+            - regex: " .+"
+              with: ""
+          - parseDate: 2006-01-02
+      Tags: &tag_string
+        Name:
+          selector: data.post.tags
+      URLs: &source
+        selector: data.post.source
+        postProcess:
+          - replace:
+            - regex: "null"
+              with: ""
+    scene:
+      Date: *date
+      Tags: *tag_string
+      URLs: *source
+
+# Last Updated April 19, 2025
