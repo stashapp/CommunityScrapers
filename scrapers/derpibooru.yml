@@ -1,0 +1,57 @@
+name: derpibooru
+# based on gelbooru-xpath
+# https://github.com/stashapp/CommunityScrapers/issues/2277
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - https://derpibooru.org/images/
+      - https://furbooru.org/images/
+    scraper: postScraper
+
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+xPathScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: //div[contains(@class,"image-metabar")]/div/time/@datetime
+        postProcess:
+          - replace:
+            - regex: T.+
+              with: ""
+          - parseDate: 2006-01-02
+      Performers: &performers
+        Name:
+          selector: //span[@data-tag-category="character"]/span/a[@class="tag__name"]/text()
+      Studio: &artist
+        Name:
+          selector: //span[@data-tag-category="origin"]/@data-tag-name
+          postProcess:
+            - replace:
+              - regex: "artist:"
+                with: ""
+      Tags: &tag_string
+        Name:
+          selector: //span[@data-tag-category=""]/@data-tag-name
+      URLs: &source
+        selector: //div[@class="image_sources"]//a/@href
+      Details: &details
+        selector: '//div[@class="paragraph"]/text()'
+    scene:
+      Date: *date
+      Performers: *performers
+      Studio: *artist
+      Tags: *tag_string
+      URLs: *source
+      Details: *details
+
+driver:
+  useCDP: true
+  headers:
+    - Key: "User-Agent"
+      Value: "stashapp/stash scraper"
+
+# Last Updated April 19, 2025
