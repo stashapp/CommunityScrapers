@@ -11,6 +11,7 @@ sceneByURL:
       - https://xbooru.com
       - https://safebooru.org
       - https://hypnohub.net
+      - https://yande.re/post/show/
     scraper: postScraper
 imageByURL:
   - action: scrapeXPath
