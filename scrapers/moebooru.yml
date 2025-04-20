@@ -7,7 +7,6 @@ sceneByURL:
       - https://konachan.net/post/show
       - https://konachan.com/post/show
     scraper: postScraper
-    queryURL: "{url}"
 
 imageByURL:
   - action: scrapeXPath
