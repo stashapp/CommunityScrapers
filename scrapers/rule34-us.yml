@@ -1,0 +1,36 @@
+name: rule34-us
+# for gelbooru 0.1x
+# https://github.com/stashapp/CommunityScrapers/issues/2273
+# loosely based on danbooru
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - https://rule34.us
+    scraper: postScraper
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+xPathScrapers:
+  postScraper:
+    image:
+      Performers: &performers
+        Name:
+          selector: //li[contains(@class,"character-tag")]/a[1]/text()
+      Studio: &artist
+        Name: //li[contains(@class,"artist-tag")]/a[1]/text()
+      Tags: &tag_string
+        Name:
+          selector: //li[contains(@class,"general-tag")]/a[1]/text()
+    scene:
+      Performers: *performers
+      Studio: *artist
+      Tags: *tag_string
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stashapp/stash scraper
+
+# Last Updated April 19, 2025

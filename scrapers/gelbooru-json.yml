@@ -1,0 +1,44 @@
+name: gelbooru-json
+# https://github.com/stashapp/CommunityScrapers/issues/2273
+# loosely based on danbooru
+sceneByURL:
+  - action: scrapeJson
+    url: &urls
+      # does not work, see https://github.com/stashapp/CommunityScrapers/issues/2273
+      - https://rule34.xxx
+    scraper: postScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: 'index\.php.+&id=(\d+)(.+)?'
+          with: "index.php?page=dapi&q=index&json=1&s=post&id=$1"
+
+imageByURL:
+  - action: scrapeJson
+    url: *urls
+    scraper: postScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: 'index\.php.+&id=(\d+)(.+)?'
+          with: "index.php?page=dapi&q=index&json=1&s=post&id=$1"
+
+jsonScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: 0.change
+        postProcess:
+          - parseDate: unix
+      Tags: &tag_string
+        Name:
+          selector: 0.tags
+          split: " "
+      URLs: &source
+        selector: 0.source
+    scene:
+      Date: *date
+      Tags: *tag_string
+      URLs: *source
+
+# Last Updated April 19, 2025

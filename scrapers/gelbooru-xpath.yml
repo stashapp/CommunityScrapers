@@ -1,0 +1,55 @@
+name: gelbooru-xpath
+# for gelbooru 0.2+
+# https://github.com/stashapp/CommunityScrapers/issues/2273
+# loosely based on danbooru
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - https://gelbooru.com
+      - https://tbib.org
+      - https://rule34.xxx
+      - https://xbooru.com
+      - https://safebooru.org
+      - https://hypnohub.net
+      - https://yande.re/post/show/
+    scraper: postScraper
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+xPathScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: //li[contains(text(),"Posted")]/text()[1]
+        postProcess:
+          - replace:
+            - regex: 'Posted:'
+              with: ""
+            - regex: \d{2}:\d{2}:\d{2}$
+              with: ""
+          - parseDate: 2006-01-02
+      Performers: &performers
+        Name:
+          selector: //li[contains(@class,"tag-type-character")]/a[last()]/text()
+      Studio: &artist
+        Name: //li[contains(@class,"tag-type-artist")]/a[last()]/text()
+      Tags: &tag_string
+        Name:
+          selector: //li[contains(@class,"tag-type-general")]/a[last()]/text()
+      URLs: &source
+        selector: '//li[contains(text(),"Source:")]/a/@href'
+    scene:
+      Date: *date
+      Performers: *performers
+      Studio: *artist
+      Tags: *tag_string
+      URLs: *source
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stashapp/stash scraper
+
+# Last Updated April 19, 2025
