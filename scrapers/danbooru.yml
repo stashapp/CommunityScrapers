@@ -14,6 +14,8 @@ sceneByURL:
       - https://sonohara.donmai.us/posts/
       # testing instance
       - https://testbooru.donmai.us/posts/
+      # anti-ddos
+      # - https://booru.allthefallen.moe/posts/
     scraper: postScraper
     queryURL: "{url}"
     queryURLReplace:
