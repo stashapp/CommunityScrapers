@@ -1,4 +1,5 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
+# requires: py_common
 name: TheScoreGroup
 sceneByURL:
   - action: script
