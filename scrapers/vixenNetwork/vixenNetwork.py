@@ -272,7 +272,7 @@ class Site:
         up = urlparse(u)
         if up.hostname is None:
             return False
-        if up.hostname.lstrip("www.").rstrip(".com") == self.id.lower():
+        if up.hostname.split('.')[1] == self.id.lower():
             splits = u.split("/")
             if len(splits) < 4:
                 return False
@@ -502,6 +502,7 @@ studios = {
     Site("Tushy Raw", ["Anal Sex"]),
     Site("Slayed", ["Lesbian Sex"]),
     Site("Vixen", []),
+    Site("Wifey", []),
 }
 
 frag = json.loads(sys.stdin.read())
