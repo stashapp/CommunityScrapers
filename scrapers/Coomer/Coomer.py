@@ -2,6 +2,7 @@ import sys
 import json
 import hashlib
 import stashapi.log as log
+import pathlib
 import requests
 import re
 from bs4 import BeautifulSoup as bs
@@ -104,11 +105,15 @@ def get_scene(inputurl):
     return post_query(service, user, id)
 
 def sceneByFragment(fragment):
-    file = fragment[0]
-    with open(file["path"], "rb") as f:
-        bytes = f.read()
-        readable_hash = hashlib.sha256(bytes).hexdigest()
-        log.debug(f"sha256 hash: {readable_hash}")
+    file = pathlib.Path(fragment[0]["path"])
+    matched_hash = re.search(r"([0-9a-f]{64})", file.name)
+    if matched_hash:
+        readable_hash = matched_hash.group(1)
+        log.debug(f"sha256 hash in file name: {readable_hash}")
+    else:
+        with file.open("rb") as f:
+            readable_hash = hashlib.file_digest(f, "sha256").hexdigest()
+            log.debug(f"calculated sha256 hash: {readable_hash}")
 
     coomer_searchhash_url = "https://coomer.su/api/v1/search_hash/"
 
