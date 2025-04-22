@@ -1,7 +1,7 @@
 name: PornhubModel
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.pornhub.com/user/search?username={}&city=&videos=1&gender=0&orientation=0&relation=0&country=&o=popular&age1=0&age2=0
+  queryURL: https://www.pornhub.com/user/search?username={}
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
@@ -12,10 +12,13 @@ performerByURL:
 
 xPathScrapers:
   performerSearch:
+    common:
+      $resultBox: //ul[contains(@class,"search-results")]/li
     performer:
-      Name: //li/div[contains(concat(" ", normalize-space(@class), " "), " usernameWrap ")]/span/a[@class="usernameLink"]/text()
+      Image: $resultBox//img/@src
+      Name: $resultBox//a[@class="usernameLink"]/text()
       URL:
-        selector: //li/div[contains(concat(" ", normalize-space(@class), " "), " usernameWrap ")]/span/a[@class="usernameLink"]/@href
+        selector: $resultBox//a[@class="usernameLink"]/@href
         postProcess:
           - replace:
               - regex: ^
