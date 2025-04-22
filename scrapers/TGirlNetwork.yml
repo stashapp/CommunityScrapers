@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: TGirl-Network
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - tgirl-network.com/tour/show_gal.php
+    scraper: tgirlNetworkScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tgirl-network.com/tour/show_video.php
+    scraper: tgirlNetworkScraper
+xPathScrapers:
+  tgirlNetworkScraper:
+    common:
+      $title: //h1[contains(@class, "galtitle")]
+    scene:
+      Title: &title
+        selector: $title
+      Performers: &performers
+        Name: &performersName
+          selector: //div[contains(@class, "galheader")]
+          postProcess:
+            - replace:
+                - regex: .*The TGirl Network Presents (.*) In.*
+                  with: "$1"
+      Details: &details
+        selector: $title/following-sibling::p
+      Image: &image
+        selector: &imageSel //div[@class="galbox"]/@style
+        postProcess:
+          - replace:
+              - regex: "background-image:\\ ?url\\((.*)\\);"
+                with: "$1"
+              - regex: width=\d+
+                with: width=1920
+              - regex: height=\d+
+                with: height=1080
+              - regex: "&crop=1"
+                with: ""
+              - regex: ^
+                with: https://www.tgirl-network.com/tour/
+      Code: &code
+        selector: *imageSel
+        postProcess:
+          - replace:
+              - regex: "background-image:\\ ?url\\((.*)\\);"
+                with: "$1"
+              - regex: .*gal=(\d+).*
+                with: "$1"
+      Studio: &studio
+        Name: *performersName
+    gallery:
+      Title: *title
+      Performers: *performers
+      Details: *details
+      Code: *code
+      Studio: *studio
+# Last Updated April 22, 2025
