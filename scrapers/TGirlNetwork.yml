@@ -10,6 +10,10 @@ sceneByURL:
     url:
       - tgirl-network.com/tour/show_video.php
     scraper: tgirlNetworkScraper
+  - action: scrapeXPath
+    url:
+      - ts-baileyjay.com/show_video.php
+    scraper: tsBaileyJayScraper
 xPathScrapers:
   tgirlNetworkScraper:
     common:
@@ -26,9 +30,9 @@ xPathScrapers:
                   with: "$1"
       Details: &details
         selector: $title/following-sibling::p
-      Image: &image
+      Image:
         selector: &imageSel //div[@class="galbox"]/@style
-        postProcess:
+        postProcess: &imagePostProcess
           - replace:
               - regex: "background-image:\\ ?url\\((.*)\\);"
                 with: "$1"
@@ -42,7 +46,7 @@ xPathScrapers:
                 with: https://www.tgirl-network.com/tour/
       Code: &code
         selector: *imageSel
-        postProcess:
+        postProcess: &codePostProcess
           - replace:
               - regex: "background-image:\\ ?url\\((.*)\\);"
                 with: "$1"
@@ -56,4 +60,19 @@ xPathScrapers:
       Details: *details
       Code: *code
       Studio: *studio
+  tsBaileyJayScraper:
+    scene:
+      Title: //tr[1]/td[2]
+      Performers:
+        Name:
+          fixed: Bailey Jay
+      Studio:
+        Name:
+          fixed: Bailey Jay
+      Image:
+        selector: &imageSelTsBaileyJay //tr[1]/td[1]/img/@src
+        postProcess: *imagePostProcess
+      Code:
+        selector: *imageSelTsBaileyJay
+        postProcess: *codePostProcess
 # Last Updated April 22, 2025
