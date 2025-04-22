@@ -11,6 +11,7 @@ sceneByURL:
       - tushy.com/videos
       - tushyraw.com/videos
       - vixen.com/videos
+      - wifey.com/videos
     action: script
     script:
       - python
@@ -38,4 +39,4 @@ sceneByFragment:
     script:
       - python
       - vixenNetwork.py
-# Last Updated December 30, 2023
+# Last Updated April 21, 2025
