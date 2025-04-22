@@ -29,7 +29,8 @@ session.headers.update({"Authorization": "Bearer " + get_token()})
 
 
 def scene_by_id(gif_id: str) -> ScrapedScene | None:
-    api_url = f"https://api.redgifs.com/v2/gifs/{gif_id}?users=yes"
+    # The RedGIFs API only works with lowercased IDs, though other IDs are case-insensitive
+    api_url = f"https://api.redgifs.com/v2/gifs/{lower(gif_id)}?users=yes"
 
     req = session.get(api_url)
     if req.status_code != 200:
