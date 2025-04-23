@@ -52,6 +52,7 @@ STUDIO_MAP = {
     "flatandfuckedmilfs": "Flat and Fucked MILFs",
     "homealonemilfs": "Home Alone MILFs",
     "karinahart": "Karina Hart",
+    "latinacoochies": "Latina Coochies",
     "legsex": "Leg Sex",
     "mickybells": "Micky Bells",
     "milftugs": "MILF Tugs",
