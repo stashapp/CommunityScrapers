@@ -147,6 +147,8 @@ xPathScrapers:
                 with: ""
               - regex: 'https?://(?:www.)?fans\.ly\/'
                 with: ""
+              - regex: '^https?://.+?/.+?/'
+                with: ""
               - regex: aka
                 with: ""
               - regex: '\/'
@@ -197,7 +199,7 @@ xPathScrapers:
               - regex: 'each\snipple'
                 with: "Nipples"
       Image:
-        selector: //div[@id='profimg']//a[@class='img']/@href
+        selector: //div[@id='profimg']//a[contains(@class,'img')]/@href
         # Alternitive selector will use site logo as image if none is found
         # selector: //div[@id='profimg']//a/@href
         postProcess:
@@ -221,4 +223,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0
-# Last Updated April 16, 2025
+# Last Updated April 24, 2025
