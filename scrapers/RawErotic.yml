@@ -2,34 +2,34 @@ name: SuperbeModels
 sceneByURL:
   - action: scrapeXPath
     url:
-      - superbemodels.com/watch
+      - rawerotic.com/watch
     scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
     url:
-      - superbemodels.com/models
+      - rawerotic.com/models
     scraper: performerScraper
 
 galleryByURL:
   - action: scrapeXPath
     url:
-      - superbemodels.com/albums
+      - rawerotic.com/albums
     scraper: galleryScraper
 
 xPathScrapers:
   sceneScraper:
-    scene: 
+    scene:
       Title: //meta[@property='og:title']/@content
       Details: //div[@class='-mvd-description']/text()
-      Date: 
+      Date:
         selector: //meta[@itemprop='uploadDate']/@content
         postProcess:
           - parseDate: 2006-01-02T15:04:05-07:00
 
       # The site uses a rotation of images for their cover image,
-      # so the one that's picked up here might not be the same as 
-      # the one you see if you visit the page in your browser. 
+      # so the one that's picked up here might not be the same as
+      # the one you see if you visit the page in your browser.
       Image: //div[@class='video-container']//img/@src
       Tags:
         Name: //div[@class='-mvd-grid-more-title' and contains(text(),'Information')]/following-sibling::div//a
@@ -79,7 +79,7 @@ xPathScrapers:
                   //div[span[(@class='girl-info-label') and contains(.,'Bust')]]/span[@class='girl-info-info']/text()
                   | //div[span[(@class='girl-info-label') and contains(.,'Waist')]]/span[@class='girl-info-info']/text()
                   | //div[span[(@class='girl-info-label') and contains(.,'Hips')]]/span[@class='girl-info-info']/text()
-                concat: '-' 
+                concat: "-"
 
   performerScraper:
     performer:
@@ -105,12 +105,10 @@ xPathScrapers:
           fixed: Superbe Models
       Performers:
         Name: //div[@class='-a-panel-actors']//a
-        URL: &performerSelector 
+        URL: &performerSelector
           selector: //div[@class='-a-panel-actors']//a/@href
           postProcess:
             - replace:
-                - regex: '^'
-                  with: 'https://superbemodels.com'
+                - regex: "^"
+                  with: "https://superbemodels.com"
         Gender: *performerGender
-
-# Last Updated April 14, 2024

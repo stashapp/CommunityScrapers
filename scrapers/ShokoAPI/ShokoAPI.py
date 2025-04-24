@@ -1,10 +1,11 @@
-from urllib.request import Request, urlopen
-import sys
 import os
+import sys
 import json
 import re
-import urllib.error
-import urllib.request
+import unicodedata  # For Unicode normalization
+from urllib.parse import quote  # For URL encoding
+from urllib.request import Request, urlopen  # For HTTP requests
+import urllib.error  # For handling URL-related errors
 
 # to import from a parent directory we need to add that directory to the system path
 csd = os.path.dirname(
@@ -35,13 +36,13 @@ except ModuleNotFoundError:
         "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
         file=sys.stderr)
     sys.exit()
+    
 import config
 
 SHOKO_API_KEY = ''  #leave empty it gets your Shoko api key with your shoko server username and password
 SHOKO_URL = config.SHOKO.get("url", "")
 SHOKO_USER = config.SHOKO.get("user", "")
 SHOKO_PASS = config.SHOKO.get("pass", "")
-
 
 
 def validate_user_inputs() -> bool:
@@ -61,8 +62,10 @@ def get_filename(scene_id: str) -> str:
     pattern = "(^.+)([\\\\]|[/])"
     replace = ""
     filename = re.sub(pattern, replace, str(path))
-    log.debug(f"encoded filename: {filename}")
-    return filename
+    normalized_filename = unicodedata.normalize('NFC', filename)
+    encoded_filename = quote(normalized_filename, safe='')
+    log.debug(f"encoded filename: {encoded_filename}")
+    return encoded_filename
 
 
 def find_scene_id(scene_id: str) -> (str, str):
@@ -76,18 +79,26 @@ def find_scene_id(scene_id: str) -> (str, str):
 
 def lookup_scene(scene_id: str, epnumber: str, apikey: str, date: str) -> dict:
     log.debug(epnumber)
-    title, details, cover, tags = get_series(apikey, scene_id)  #, characters
+    title, details, cover, tags, studio, studio_id = get_series(apikey, scene_id)  #, characters
     tags = tags + ["ShokoAPI"] + ["Hentai"]
-    #characters_json = json.dumps(characters)
-    #json_object = json.loads(characters_json)
-    #character = json_object[0]['character']
-    #log.info(str(character))
     res = {}
     res['title'] = title + " 0" + epnumber
     res['details'] = details
     res['image'] = cover
     res['date'] = date
     res['tags'] = [{"name": i} for i in tags]
+    
+    if studio is None or studio_id is None:
+        log.info("No studio information found. Skipping studio.")
+    else:
+        # Convert the string to a ScrapedStudio instance
+        studio: ScrapedStudio = {
+            "name": studio,  # Map the string to the required `name` field
+            "image": f"{SHOKO_URL}/api/v3/Image/AniDB/Staff/{studio_id}" 
+        }
+    
+        res['studio'] = studio
+        
     log.debug("sceneinfo from Shoko: " + str(res))
     return res
 
@@ -143,17 +154,43 @@ def get_series(apikey: str, scene_id: str):
     headers["apikey"] = apikey
     request = Request(SHOKO_URL + '/api/serie/fromep?id=' + scene_id, headers=headers)
 
-    response_body = urlopen(request).read()
-    json_object = json.loads(response_body.decode('utf-8'))
+    try:
+        response_body = urlopen(request).read()
+        json_object = json.loads(response_body.decode('utf-8'))
+    except Exception as e:
+        log.error(f"Failed to fetch series details: {e}")
+        return None, None, None, None, None, None
+
     log.debug("got series:\t" + str(json_object))
-    title = json_object['name']
-    details = json_object['summary']
-    local_sizes = json_object['local_sizes']['Episodes']
+    title = json_object.get('name', None)
+    details = json_object.get('summary', None)
+    local_sizes = json_object.get('local_sizes', {}).get('Episodes', 0)
     log.debug("number of episodes " + str(local_sizes))
-    #characters = json_object['roles']
     cover = SHOKO_URL + json_object['art']['thumb'][0]['url']
-    tags = json_object['tags']
-    return title, details, cover, tags  #, characters
+    tags = json_object.get('tags', [])
+
+    series_id = json_object.get('id')
+
+    try:
+        response = requests.get(
+            f'{SHOKO_URL}/api/v3/Series/{series_id}/Cast?roleType=Studio', 
+            headers=headers
+        )
+        response.raise_for_status()
+        json_response = response.json()
+    except requests.RequestException as e:
+        log.error(f"Failed to fetch studio data: {e}")
+        json_response = []
+          
+    # Handle cases where there are no studios
+    if json_response:
+        studio = json_response[0].get('Staff', {}).get('Name', None)
+        studio_id = json_response[0].get('Staff', {}).get('ID', None)
+    else:
+        studio = None
+        studio_id = None
+
+    return title, details, cover, tags, studio, studio_id  #, characters
 
 
 def query(fragment: dict) -> dict:

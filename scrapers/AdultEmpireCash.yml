@@ -19,6 +19,7 @@ sceneByURL:
       - jodiwest.com/
       - kingsoffetish.com/
       - latinoguysporn.com/
+      - lewood.com/
       - only3x.com/
       - pornstarstroker.com/ # aggregator site?
       - reaganfoxx.com/
@@ -44,6 +45,7 @@ movieByURL:
       - elegantangel.com/
       - filthykings.com/
       - forbiddenfruitsfilms.com/
+      - lewood.com/
       - rodneymoorestore.com
       - severesexfilms.com/
       # - shemalestrokers.com/ # Scenes published as movies?
@@ -56,8 +58,8 @@ movieByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="description"]/text()
-      Date:
+      Title: &TitleSel //h1[@class="description"]/text()
+      Date: &DateSel
         selector: //div[@class="release-date"][1]/text()
         postProcess:
           - parseDate: Jan 02, 2006
@@ -71,10 +73,13 @@ xPathScrapers:
       Studio:
         Name:
           selector: //div[@class="studio"]/span[contains(text(),"Studio:")]/following-sibling::*
-          postProcess:
+          postProcess: &PP
             # Override studio name only when needed
             - map:
+                Evil Angel - LeWood: LeWood
                 Jay Rock Clips: Jay's POV
+                LeWood Productions: LeWood
+                LeWood Selects: LeWood
             - replace:
                 # 'Jane Doe Clips' => 'Jane Doe'
                 - regex: \sClips$
@@ -90,6 +95,8 @@ xPathScrapers:
                 with: " "
               - regex: " ,"
                 with: ","
+              - regex: "Francesca Le, Mark Wood"
+                with: "Le Wood"
       Code:
         selector: //meta[@name="og:url"]/@content
         postProcess:
@@ -101,11 +108,8 @@ xPathScrapers:
 
   movieScraper:
     movie:
-      Name: //h1[@class="description"]/text()
-      Date:
-        selector: //div[@class="release-date"][1]/text()
-        postProcess:
-          - parseDate: Jan 02, 2006
+      Name: *TitleSel
+      Date: *DateSel
       Synopsis:
         selector: //div[@class="synopsis"]//text()
         concat: "\n\n"
@@ -121,15 +125,11 @@ xPathScrapers:
       Studio:
         Name:
           selector: //div[@class="studio"]/a
-          postProcess:
-            - replace:
-                # 'Jane Doe Clips' => 'Jane Doe'
-                - regex: \sClips$
-                  with:
+          postProcess: *PP
       FrontImage: //link[@rel="image_src"]/@href
       BackImage: //div[@class="carousel-item"]/img/@data-src
 driver:
   headers:
     - Key: "Cookie"
       Value: "ageConfirmed=true"
-# Last Updated October 27, 2024
+# Last Updated March 9, 2025

@@ -37,6 +37,7 @@ sceneByURL:
       - sophiedeelive.com
       - sunnylanelive.com
       - vickyathome.com
+      - wydesyde.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:

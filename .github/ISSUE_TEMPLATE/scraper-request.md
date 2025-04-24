@@ -2,7 +2,7 @@
 name: Scraper request
 about: Missing scraper for site
 title: Name of site
-labels: enhancement
+labels: new-scraper
 assignees: ""
 ---
 

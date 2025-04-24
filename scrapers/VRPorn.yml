@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: "VRPorn"
 
 sceneByURL:
@@ -38,7 +39,12 @@ xPathScrapers:
         Name: $header//div[@class="name_pornstar"]/text()
       Studio:
         Name: $header//a[@id="studio-logo"]//span[@class="footer-titles"]/text()
-      Image: //main/article/header//dl8-video/@poster
+      Image:
+        selector: //main/article/header//dl8-video/@poster
+        postProcess:
+          - replace:
+              - regex: (.*)(-\d+x\d+)(\.\w+$)
+                with: $1$3
       URL: &sceneUrl //link[@rel="canonical"]/@href
   sceneSearch:
     common:
@@ -49,4 +55,4 @@ xPathScrapers:
       Image: $videos//div[@class="tube-thumbnail-wrapper"]/img/@src
       Studio:
         Name: $videos//div[@class="post_links"]/span[@class="left_links"]/text()
-# Last Updated April 26, 2024
+# Last Updated January 10, 2025

@@ -1,0 +1,68 @@
+name: e621
+# fork of danbooru
+sceneByURL:
+  - action: scrapeJson
+    url: &urls
+      - https://e621.net/posts/
+      # e926 - SFW
+      - https://e926.net/posts/
+    scraper: postScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '(https:\/\/.+\/posts\/)(\d+)(?:(\?.+)|(\#.+)|(\/.+))?'
+          with: "$1$2.json"
+
+imageByURL:
+  - action: scrapeJson
+    url: *urls
+    scraper: postScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '(https:\/\/.+\/posts\/)(\d+)(?:(\?.+)|(\#.+)|(\/.+))?'
+          with: "$1$2.json"
+
+jsonScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: post.created_at
+        postProcess:
+          - replace:
+            - regex: "T.+"
+              with: ""
+          - parseDate: 2006-01-02
+      Performers: &character
+        Name:
+          selector: post.tags.character
+      Studio: &artist
+        Name: post.tags.artist
+      Tags: &tags_general
+        Name:
+          selector: post.tags.general
+      URLs: &source
+        selector: post.sources
+      Details: &description
+        selector: post.description
+    scene:
+      Date: *date
+      Performers: *character
+      Studio: *artist
+      Tags: *tags_general
+      URLs: *source
+      Details: *description
+
+driver:
+  headers:
+    # see https://e621.net/wiki_pages/2425
+    # for authentication type
+    # needs posts:show ?
+    #- Key: "Authorization"
+    #  Value: "Basic ="
+
+    # In accordance with api guidelines, do not remove
+    - Key: "User-Agent"
+      Value: "stashapp/CommunityScrapers (by feederbox826)"
+
+# Last Updated April 19, 2025

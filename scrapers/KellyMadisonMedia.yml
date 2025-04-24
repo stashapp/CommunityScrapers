@@ -1,20 +1,38 @@
-name: "Kelly Madison Media"
+name: Kelly Madison Media
+# scrapes: PornFidelity, TeenFidelity, Kelly Madison, 5Kteens, 5KPorn
 sceneByURL:
   - action: scrapeXPath
     url:
       - pornfidelity.com
       - teenfidelity.com
       - kellymadison.com
-    scraper: sceneScraper
+    scraper: mainSite
+  - action: scrapeXPath
+    url:
+      - 5kteens.com/episodes
+      - 5kporn.com/episodes
+    scraper: 5kSite
 xPathScrapers:
-  sceneScraper:
+  mainSite:
     scene:
-      Title: 
-        selector: //div[contains(@class,"card-header-title")]//div[@class="level-item"]/span/following-sibling::text()
+      Title:
+        selector: //h1
         postProcess:
           - replace:
-              - regex: \s*-.+#\d+.+$
+              - regex: \s*-.+
                 with: ""
+      Code:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: .*-\s*(.+\s#\d+)
+                with: $1
+              - regex: Teenfidelity
+                with: TF
+              - regex: Pornfidelity
+                with: PF
+              - regex: Kelly Madison
+                with: KM
       Details: //div[@class="column is-three-fifths"]//*[contains(text(),'Episode Summary')]/following-sibling::text()
       Date:
         selector: //li[contains(.,'Published:')]/text()[2]
@@ -24,9 +42,10 @@ xPathScrapers:
                 with:
           - parseDate: 2006-01-02
       Performers:
-        Name: //a[@class and contains(@href,"/models/")]/text()
+        Name: //a[@class and contains(@href,"/models/")]
       Image:
-        selector: //script[contains(text(),"poster_image")]/text() #Some url don't have it. (https://www.pornfidelity.com/episodes/73238852)
+        # Some url don't have it. (https://www.pornfidelity.com/episodes/73238852)
+        selector: //script[contains(text(),"poster_image")]
         postProcess:
           - replace:
               - regex: .+(?:poster:\s")([^"]+).+
@@ -38,24 +57,73 @@ xPathScrapers:
             - replace:
                 - regex: \s*#.+
                   with: ""
+  5kSite:
+    scene:
+      Title: //p[@class="trailer-title"]
+      Code:
+        selector: //span[contains(@class, "color-5K")]
+        postProcess:
+          - replace:
+              - regex: (?i)(eens|orn)
+                with: ""
+      Studio:
+        Name:
+          selector: //span[starts-with(@class, "color-")]/@class
+          postProcess:
+            - map:
+                color-5KT: 5Kteens
+                color-5KP: 5Kporn
+      Details: //p[@class=""]
+      Performers:
+        Name:
+          selector: //h5[text()[contains(.,'Starring')]]
+          postProcess:
+            - replace:
+                - regex: Starring:\s([\w\s]+)
+                  with: $1
+      Date:
+        selector: //h5[text()[contains(.,'Published')]]
+        postProcess:
+          - replace:
+              - regex: Published\:\s(\d{4}-\d{2}-\d{2})
+                with: $1
+      Image:
+        selector: //img[@class="trailer-poster"]/@src | //script[contains(., "videojs(")]
+        postProcess:
+          - replace:
+              - regex: '^.+poster: "(.+?)".+$'
+                with: $1
+
 driver:
   cookies:
     - CookieURL: "https://www.pornfidelity.com/"
       Cookies:
         - Name: "nats"
           Domain: ".pornfidelity.com"
-          Value: "test"
+          ValueRandom: 23
           Path: "/"
     - CookieURL: "https://www.teenfidelity.com/"
       Cookies:
         - Name: "nats"
           Domain: ".teenfidelity.com"
-          Value: "test"
+          ValueRandom: 23
           Path: "/"
     - CookieURL: "https://www.kellymadison.com/"
       Cookies:
         - Name: "nats"
           Domain: ".kellymadison.com"
-          Value: "test"
+          ValueRandom: 23
           Path: "/"
-# Last Updated May 28, 2024
+    - CookieURL: "https://www.5kteens.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".5kteens.com"
+          ValueRandom: 23
+          Path: "/"
+    - CookieURL: "https://www.5kporn.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".5kporn.com"
+          ValueRandom: 23
+          Path: "/"
+# Last Updated February 05, 2025

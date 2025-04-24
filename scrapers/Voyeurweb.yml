@@ -6,6 +6,15 @@ sceneByURL:
       - www.homeclips.com/contributions/view/
     scraper: sceneScraper
 
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.homeclips.com/contributions/view/{filename}
+  scraper: sceneScraper
+  queryURLReplace:
+    filename:
+      - regex: ^.*[/\\](\d*)-\d*\..*
+        with: $1
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -25,4 +34,4 @@ xPathScrapers:
         URL:
           fixed: https://www.homeclips.com/
         
-# Last Updated October 03, 2020
+# Last Updated February 21, 2025

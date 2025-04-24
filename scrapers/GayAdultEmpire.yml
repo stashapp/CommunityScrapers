@@ -139,4 +139,17 @@ driver:
           Domain: "www.gayempire.com"
           Value: "true"
           Path: "/"
-# Last Updated October 21, 2024
+        # replace with your account etoken
+    - CookieURL: "https://www.gaydvdempire.com"
+      Cookies:
+        - Name: "etoken"
+          Domain: "www.gaydvdempire.com"
+          Value: "" # replace with your account etoken
+          Path: "/"
+    - CookieURL: "https://www.gayempire.com"
+      Cookies:
+        - Name: "etoken"
+          Domain: "www.gayempire.com"
+          Value: "" # replace with your account etoken
+          Path: "/"
+# Last Updated April 14, 2025

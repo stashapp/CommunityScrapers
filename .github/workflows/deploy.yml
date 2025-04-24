@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout master
       uses: actions/checkout@v4
@@ -23,7 +23,8 @@ jobs:
         path: master
         ref: master
         fetch-depth: 0
-    - run: |
+    - name: Build Stable
+      run: |
         cd master
         ./build_site.sh ../_site/stable
     - name: Checkout Stable
@@ -33,7 +34,8 @@ jobs:
         # replace with develop tag/branch when necessary
         ref: master
         fetch-depth: 0
-    - run: |
+    - name: Build Develop
+      run: |
         cd dev
         ../master/build_site.sh ../_site/develop
     - uses: actions/setup-node@v4
@@ -54,7 +56,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Deploy to GitHub Pages

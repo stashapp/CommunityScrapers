@@ -1,0 +1,48 @@
+name: moebooru
+# based on gelbooru-xpath
+# https://github.com/stashapp/CommunityScrapers/issues/2277
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - https://konachan.net/post/show
+      - https://konachan.com/post/show
+    scraper: postScraper
+
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+xPathScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: //li[contains(text(),"Posted")]/a/@title
+        postProcess:
+          - replace:
+            - regex: \d{2}:\d{2}:\d{2}
+              with: ""
+          - parseDate: Mon Jan 2 2006
+      Performers: &performers
+        Name:
+          selector: //li[contains(@class,"tag-type-character")]/a[last()]/text()
+      Studio: &artist
+        Name: //li[contains(@class,"tag-type-artist")]/a[last()]/text()
+      Tags: &tag_string
+        Name:
+          selector: //li[contains(@class,"tag-type-general")]/a[last()]/text()
+      URLs: &source
+        selector: '//li[contains(text(),"Source:")]/a/@href'
+    scene:
+      Date: *date
+      Performers: *performers
+      Studio: *artist
+      Tags: *tag_string
+      URLs: *source
+
+driver:
+  headers:
+    - Key: "User-Agent"
+      Value: "stashapp/stash scraper"
+
+# Last Updated April 19, 2025

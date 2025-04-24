@@ -9,9 +9,9 @@ xPathScrapers:
     common:
       $project: //div[@id="main-project-content"]
     scene:
-      Title: //meta[@property="og:title"]/@content
+      Title: $project//h1
       Details: $project//div[contains(@class, "desc-text")]
-      Image: //meta[@property="og:image"]/@content
+      Image: //meta[@name="og:image"]/@content
       Studio:
         Name:
           selector: $project/@class
@@ -31,11 +31,11 @@ xPathScrapers:
                 wecumtoyou: Wecumtoyou
                 xpervo: Xpervo
       Date:
-        selector: //meta[@property="article:published_time"]/@content
+        selector: //meta[@name="og:published_time"]/@content
         postProcess:
-          - parseDate: "2006-01-02T15:04:05+00:00"
+          - parseDate: "2006-01-02T15:04:05-07:00"
       Performers:
         Name: $project//div[contains(@class, "project-models")]//a
       Tags:
-        Name: $project//div[contains(@class, "project-tags")]//a
+        Name: $project//div[contains(@class, "project-tags")]//a[@data-count]
 # Last Updated August 21, 2023

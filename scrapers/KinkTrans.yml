@@ -1,0 +1,166 @@
+name: Kink Trans
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.kinktrans.com/shoot/{filename}
+  # constructs the scene URL from the filename, provided that the filename includes the scene id
+  queryURLReplace:
+    filename:
+      # the id in kink.com is a 1-6 digit number
+      - regex: ^(\d+)[^\d].* # support filenames in the form 12345_performer_other_data.mp4
+        with: $1
+      - regex: .*\((\d+)\)\.[a-zA-Z\d]+$ #support filenames in the form scene - date - performer (12345).mp4
+        with: $1
+  scraper: sceneScraper
+
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.kinktrans.com/models?q={}
+  scraper: performerSearch
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[contains(@class, "fs-0")]
+        postProcess:
+          - replace:
+              - regex: ^\s*(.*)\s*$
+                with: $1
+      Code: //div[@data-shootid]/@data-shootid
+      Date:
+        selector: //div[@data-setup]/@data-setup
+        postProcess:
+          - replace:
+              - regex: ^.*"publishedDate":"([^"]+).*$
+                with: $1
+          - parseDate: 2006-01-02
+      Director: //span[contains(@class, "director-name")]
+      Studio:
+        Name:
+          selector: //a[contains(@href, "/channel/") and contains(@class, "text-uppercase")]/@href
+          postProcess:
+            - replace:
+                - regex: /channel/
+                  with: ""
+            - map:
+                # List of sites as of 2025-02-27 from https://www.kink.com/channels
+                # [...new Set([...document.querySelectorAll('a.h5[href^="/channel"]')]
+                #   .map(a => a.href.split("/").pop() + ": " + a.innerText))]
+                #   .toSorted()
+                #   .join("\n")
+                # kink.com
+                behind-kink: Behind Kink
+                bondage-liberation: Bondage Liberation
+                bound-gang-bangs: Bound Gang Bangs
+                ddf-network: DDF Network
+                device-bondage: Device Bondage
+                divine-bitches: Divine Bitches
+                dungeon-sex: Dungeon Sex
+                electrosluts: Electrosluts
+                everything-butt: Everything Butt
+                evolved-fights-lesbian-edition: Evolved Fights Lesbian Edition
+                evolved-fights: Evolved Fights
+                families-tied: Families Tied
+                filthy-femdom: Filthy Femdom
+                foot-worship: Foot Worship
+                fucking-machines: Fucking Machines
+                hardcore-gangbang: Hardcore Gangbang
+                harmony-fetish: Harmony Fetish
+                hogtied: Hogtied
+                hot-legs-and-feet: Hot Legs & Feet
+                house-of-taboo: House Of Taboo
+                kink-classics: Kink Classics
+                kink-features: Kink Features
+                kink-test-shoots: Kink Test Shoots
+                kink-trans: Kink Trans
+                kink-university: Kink University
+                kinklive: KinkLive
+                kinky-bites: Kinky Bites
+                mean-bitch: Mean Bitch
+                men-in-pain: Men In Pain
+                public-disgrace: Public Disgrace
+                quality-control: Quality Control
+                rubber-pervs: Rubber Pervs
+                savage-gangbang: Savage Gangbang
+                severe-sex-films: Severe Sex Films
+                sex-and-submission: Sex And Submission
+                submissed: Submissed
+                submissive-x: Submissive X
+                tease-and-thank-you: Tease And Thank You
+                the-training-of-o: The Training Of O
+                the-upper-floor: The Upper Floor
+                tied-tales: Tied Tales
+                ultimate-surrender: Ultimate Surrender
+                wasteland: Wasteland
+                water-bondage: Water Bondage
+                whipped-ass: Whipped Ass
+                wired-pussy: Wired Pussy
+                # kinkmen.com
+                30-minutes-of-torment: 30 Minutes Of Torment
+                axel-abysse: Axel Abysse
+                bound-and-gagged: Bound And Gagged
+                bound-gods: Bound Gods
+                bound-in-public: Bound In Public
+                butt-machine-boys: Butt Machine Boys
+                kink-men-series: KinkMen Series
+                kinkmen-classics: KinkMen Classics
+                kinkmen-test-shoot: Kink Men Test Shoots
+                kinky-bites-men: Kinky Bites Men
+                men-on-edge: Men On Edge
+                naked-kombat: Naked Kombat
+                str8hell: Str8Hell
+                taken-rough: Taken Rough
+                # kinktrans.com
+      Performers:
+        Name:
+          selector: //div[@data-setup]/@data-setup
+          postProcess:
+            - replace:
+                - regex: ^.*"modelNames":\[([^]]+).*$
+                  with: $1
+                - regex: \"
+                  with: ""
+          split: ","
+      Tags:
+        Name:
+          selector: //p[contains(text(), "Categories")]/following-sibling::span/a/text()
+          postProcess:
+            - replace:
+                - regex: \,\s*
+                  with: ""
+      Details:
+        selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
+        postProcess:
+          - replace:
+            - regex: '.+"description":"(.+?)","duration".+'
+              with: "$1"
+            - regex: '( ?)\\n'
+              with: "\n"
+            - regex: \\"
+              with: '"'
+      Image:
+        selector: //div[@data-setup]/@data-setup
+        postProcess:
+          - replace:
+              - regex: ^.*"posterUrl":"([^"]+).*$
+                with: $1
+              - regex: "\\?.*$"
+                with: ""
+      # Pages do not include canonical URL links as of 2024
+      # but I'm leaving this in case they change that back
+      URL: //link[@rel="canonical"]/@href
+  performerSearch:
+    common:
+      $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
+    performer:
+      Name: $result/img/@alt
+      URL:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.kinktrans.com
+
+driver:
+  useCDP: true
+# Last Updated March 9, 2025

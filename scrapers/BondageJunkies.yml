@@ -1,0 +1,56 @@
+name: BondageJunkies
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bondagejunkies.com/updates
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $performerTitle: //div[@id="wide-content"]/div/h1/text()
+      $idDate: //p[@class="byliner"]/text()[1]
+    scene:
+      Title:
+        selector: $performerTitle
+      Code:
+        selector: $idDate
+        postProcess:
+          - replace:
+            - regex: '#(\d+).*'
+              with: $1
+      Date:
+        selector: $idDate
+        postProcess:
+          - replace:
+            - regex: .*(\d{4}-\d{2}-\d{2})
+              with: $1
+      Details:
+        selector: //p[@class="updatedesc"]/text()
+      Performers:
+        Name:
+          selector: $performerTitle
+          postProcess:
+            - replace:
+              - regex: (.*) vs\.? (.*)
+                with: $1
+          split: " & "
+      Tags:
+        Name:
+          selector: //p[@class="titletags"]/text()
+          split: ", "
+      Studio:
+        Name:
+          fixed: Bondage Junkies
+      Image:
+        selector: //div[@id="wide-content"]//img[1]/@src
+        postProcess:
+        - replace:
+          - regex: ^
+            with: https://bondagejunkies.com
+      URL:
+        selector: //div[@id="wide-content"]//a[@class="updatebtn"][2]/@href
+        postProcess:
+        - replace:
+          - regex: /join
+            with:

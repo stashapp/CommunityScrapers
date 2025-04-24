@@ -185,7 +185,9 @@ xPathScrapers:
         selector: //div[@itemprop="description"]//text()
         concat: " "
       Tags:
-        Name: $info//div[@id="tab_1_pane"]//span[@class="tagname"]
+        #Name: $info//div[@id="tab_1_pane"]//span[@class="tagname"]
+        # limit to type content indicators, elements, fetishes, level at least 1 star (increase min star level by adjusting in weight, 600 = 3 stars)
+        Name: //div[@class="pane anime_tags"]//div[@class="tag" and (@data-anidb-weight="0" or number(@data-anidb-weight)>=200) and (@data-anidb-groupid="animetb_2604" or @data-anidb-groupid="animetb_2611" or @data-anidb-groupid="animetb_2608")]//span[@class="tagname"]
       Performers:
         Name: $character/a/span
         URL: 

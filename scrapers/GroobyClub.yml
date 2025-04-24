@@ -1,7 +1,8 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: "GroobyClub"
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urlsSub
       # checked for all sites https://www.grooby.club/tour/
       - asianamericantgirls.com
       - canada-tgirl.com
@@ -18,11 +19,18 @@ sceneByURL:
       - uk-tgirls.com
     scraper: substudioScraper
   - action: scrapeXPath
-    url:
+    url: &urlsClub
       - grooby.club
       # other grooby sites which work
       - tgirljapan.com
       - tgirljapanhardcore.com
+    scraper: clubScraper
+galleryByURL:
+  - action: scrapeXPath
+    url: *urlsSub
+    scraper: substudioScraper
+  - action: scrapeXPath
+    url: *urlsClub
     scraper: clubScraper
 
 xPathScrapers:
@@ -41,7 +49,7 @@ xPathScrapers:
         concat: " "
       Performers: &performers
         Name: //div[@class="setdesc"]//a[contains(@href, "models")]/text()
-      Studio:
+      Studio: &studioClub
         Name: //div[@class="sitename"]/a/text()
       URL: &url //link[@rel="canonical"]/@href
       Image: &image
@@ -51,7 +59,15 @@ xPathScrapers:
               - regex: ^//
                 with: https://
       Tags:
-        Name: &tagName //div[@class="set_tags"]/ul/li//a/text()
+        Name: &tagsSel //div[@class="set_tags"]/ul/li//a/text()
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Studio: *studioClub
+      Tags:
+        Name: *tagsSel
 
   substudioScraper:
     scene:
@@ -59,7 +75,7 @@ xPathScrapers:
       Date: *date
       Details: *details
       Performers: *performers
-      Studio:
+      Studio: &studioSub
         Name: //meta[@name="author"]/@content
       URL: *url
       Image: *image
@@ -74,5 +90,16 @@ xPathScrapers:
             - replace:
                 - regex: ^.+/tour
                   with: https://grooby.club/tour
-            - subScraper: *tagName
-# Last Updated August 21, 2023
+            - subScraper: *tagsSel
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Studio: *studioSub
+      Tags:
+        Name: *tagsSel
+# you can bypass region-blocking by using a proxy with CDP
+# driver:
+#   useCDP: true
+# Last Updated April 17, 2025

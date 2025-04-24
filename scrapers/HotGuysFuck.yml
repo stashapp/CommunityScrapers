@@ -1,0 +1,73 @@
+name: Hot Guys Fuck
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - hotguysfuck.com/video/
+    queryURL: https://api.hotguysfuck.com/api/video?slug={url}
+    queryURLReplace:
+      url:
+        - regex: .+/video/([^?#]+).*
+          with: $1
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeJson
+  queryURL: https://api.hotguysfuck.com/api/search-all?searchType=videos&s={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: https://api.hotguysfuck.com/api/video?slug={url}
+  queryURLReplace:
+    url:
+      - regex: .+/video/([^?#]+).*
+        with: $1
+  scraper: sceneScraper
+
+jsonScrapers:
+  sceneSearch:
+    scene:
+      Title: videos.data.#.title
+      Image: videos.data.#.mainPhoto
+      URL:
+        selector: videos.data.#.slug
+        postProcess: &makeURL
+          - replace:
+              - regex: ^
+                with: https://www.hotguysfuck.com/video/
+      Date:
+        selector: videos.data.#.dateRelease
+        postProcess:
+          - parseDate: Jan 02 2006
+  sceneScraper:
+    scene:
+      Title: video.title
+      Code: video.id
+      Date: video.dateRelease
+      Details: video.description
+      Tags:
+        Name: tags.#.name
+      Performers:
+        Name: video.models.#.name
+        Image: video.models.#.avatar
+      Image: video.mainPhoto
+      # Duration in HH:MM:SS
+      # Duration: video.duration
+      URL:
+        selector: video.slug
+        postProcess: *makeURL
+      Studio:
+        Name:
+          fixed: Hot Guys Fuck
+
+driver:
+  headers:
+    # All of Blurred media is hosted at api.hotguysfuck.com
+    # but the site number determines what scenes it can return
+    # 1 - GAYHOOPLA
+    # 2 - Hot Guys Fuck
+    # 3 - Fatal error:  Uncaught UnhandledMatchError: Unhandled match case '3' in /home/httpd/html/hotguysfuck.com/bootstrap/app.php:55
+    # 4 - Sugar Daddy Porn
+    # 5 - Bi Guys Fuck
+    # 9 - Hot Guys House (sub only?)
+    - Key: SITE
+      Value: "2"
+# Last Updated January 15, 2025

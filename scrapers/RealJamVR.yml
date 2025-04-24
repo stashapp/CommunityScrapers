@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: RealJamVR
 sceneByURL: &byURL
   - action: scrapeXPath
@@ -7,6 +8,13 @@ sceneByURL: &byURL
     scraper: sceneScraper
 
 galleryByURL: *byURL
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - porncornvr.com/actor/
+      - realjamvr.com/actor/
+    scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
@@ -20,16 +28,27 @@ xPathScrapers:
       Date: &date
         selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
+          # both date formats are used interchangeably
+          # e.g.
+          # Jan. 2, 2006
+          # January 2, 2006
+          # Sept. 2, 2024
           - replace:
-            - regex: ^([a-zA-Z]{3})\D*(\d{1,2},\s*\d+)$
-              with: $1. $2
-          - parseDate: Jan. 2, 2006
+              - regex: ([\w]{3})([^\ ]+)?(.*)
+                with: $1$3
+          - parseDate: Jan 2, 2006
       Performers: &performers
         Name: //div[contains(@class,"scene-view")]/a[contains(@href,"/actor/")]
       Tags: &tags
-        Name: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon" and not(i)]
+        Name:
+          selector: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon"]
+          postProcess:
+            - replace:
+                # use the duration "specs-icon" as a fixed value replacement "hack"
+                - regex: \d+:\d+:\d+
+                  with: Virtual Reality
       Details: &details
-        selector: //div[@class="opacity-75 my-2"]
+        selector: //div[contains(@class, "collapse-content-wrapper")]/div[contains(@class, "collapse-content")]
       Image:
         selector: //*[@id="video-player"]//@poster
       Studio: &studio
@@ -39,6 +58,14 @@ xPathScrapers:
           - replace:
               - regex: '(.*)\| ([^\|]+VR)$'
                 with: $2
+      Code:
+        selector: //dl8-video/source[1]/@src
+        postProcess:
+          - replace:
+              - regex: .*/scenes/(\d+)/.*
+                with: $1
+              - regex: .*/videos_app/\w+/(\d+)_.*
+                with: $1
     gallery:
       Title: *title
       Date: *date
@@ -46,5 +73,39 @@ xPathScrapers:
       Tags: *tags
       Details: *details
       Studio: *studio
-      
-# Last Updated October 22, 2023
+  performerScraper:
+    performer:
+      Name: //h1
+      Gender: //div[span[text()="Gender:"]]/text()
+      Country:
+        selector: //div[span[text()="Birth Place:"]]/text()
+        postProcess:
+          - replace:
+              - regex: .*,
+                with: ""
+      Birthdate:
+        selector: //div[span[text()="Date of Birth:"]]/text()
+        postProcess:
+          # both date formats are used interchangeably
+          - parseDate: Jan. 2, 2006
+          - parseDate: January 2, 2006
+      Height:
+        selector: //div[span[text()="Height:"]]/text()
+        postProcess:
+          - replace:
+              - regex: .*\ (\d+)\ cm.*
+                with: $1
+      Weight:
+        selector: //div[span[text()="Weight:"]]/text()
+        postProcess:
+          - replace:
+              - regex: .*\ (\d+)\ kg.*
+                with: $1
+      HairColor: //div[span[text()="Hair color:"]]/text()
+      EyeColor: //div[span[text()="Eyes color:"]]/text()
+      Tags:
+        Name: //div[span[text()="Tags:"]]/a/text()
+      Image: //div[contains(@class, "actor-view")]//img/@src
+      Piercings: //div[span[text()="Piercing:"]]/text()
+      Tattoos: //div[span[text()="Tattoo:"]]/text()
+# Last Updated January 10, 2025

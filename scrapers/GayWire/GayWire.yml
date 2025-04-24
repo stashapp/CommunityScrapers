@@ -4,7 +4,9 @@ name: Gay Wire
 galleryByURL:
   - action: script
     url:
-      - gaywire.com/video
+      - gaywire.com/scene
+      # Old-style URLs will be redirected
+      - gaywire.com/h1/video
       - guyselector.com/scene
     script:
       - python
@@ -19,7 +21,9 @@ galleryByFragment:
 sceneByURL:
   - action: script
     url:
-      - gaywire.com/video
+      - gaywire.com/scene
+      # Old-style URLs will be redirected
+      - gaywire.com/h1/video
       - guyselector.com/scene
     script:
       - python
@@ -69,8 +73,13 @@ movieByURL:
     url:
       - gaywire.com/movie
       - guyselector.com/movie
+      # Since scenes link to the movie we can scrape movies from scenes
+      - gaywire.com/scene
+      # Old-style URLs will be redirected
+      - gaywire.com/h1/video
+      - guyselector.com/scene
     script:
       - python
       - GayWire.py
       - movie-by-url
-# Last Updated January 14, 2024
+# Last Updated January 11, 2025

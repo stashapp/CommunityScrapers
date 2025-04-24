@@ -29,11 +29,18 @@ xPathScrapers:
                 with: $1
       Title: &title //div[@class="box"]/h1/text()
       Details: &details
-        selector: //div/span[text()="Synopsis:"]/following-sibling::text() | //meta[@name="description"]/@content
+        selector: //div[contains(@class, "form-group") and ./span[text()="Synopsis:"]]
         postProcess:
           - replace:
-              - regex: " Watch this amazing porn video on mature.nl as a member today!"
+              - regex: Synopsis:\s*
                 with:
+              - regex: \s*(?:Watch this amazing porn video on mature.nl as a member today!|Show more…)$
+                with:
+              # Hack to get multiple paragraphs: whenever we find a punctuation mark
+              # immediately followed by a word character that means xpath.nodeText has
+              # concatenated two paragraphs so we insert two newlines to fix that
+              - regex: '([?!.])(\w)'
+                with: "$1\n\n$2"
       Tags: &tags
         Name: //div[@id="divPageUpdateNiches"]/a[contains(@class, "tag")]/text()
       Performers: &performers
@@ -72,4 +79,7 @@ xPathScrapers:
       Performers: *performers
       Date: *date
       Studio: *studio
+
+debug:
+  printHTML: true
 # Last Updated July 11, 2023

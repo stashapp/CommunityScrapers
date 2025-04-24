@@ -57,8 +57,87 @@ xPathScrapers:
               - regex: ^
                 with: "0'"
           - feetToCm: true
+      Measurements: //span[contains(text(),"COCK THICKNESS:")]/following-sibling::text()
+      Circumcised:  
+        selector: //span[contains(text(),"CUT:")]/following-sibling::text() | //span[contains(text(),"AGE:")]/following-sibling::text()
+        postProcess:
+          - javascript: |
+              if (!value || value.match(/^\d+$/)) {  // Se è vuoto o contiene solo numeri (è l'età)
+                return "UNCUT"
+              }
+              return value.toUpperCase().includes("YES") ? "CUT" : "UNCUT"
+      Details:  
+        selector: //div[@class="modelContent"]/node()
+        concat: "\n"
+        postProcess:
+          - replace:
+              - regex: <br\s*\/?> 
+                with: "\n"
+      Disambiguation:
+        fixed: Corbin Fisher
+      FakeTits:
+        fixed: Natural
       Image: //div[@class="modelBioPic"]/img/@src0_1x
+      Tags:
+        Name:
+          selector: |
+            //span[contains(text(),"BODY BUILD:")]/text()|
+            //span[contains(text(),"BODY BUILD:")]/following-sibling::text()|
+            //span[contains(text(),"EYES:")]/text()|
+            //span[contains(text(),"EYES:")]/following-sibling::text()|
+            //span[contains(text(),"HAIR COLOR:")]/text()|
+            //span[contains(text(),"HAIR COLOR:")]/following-sibling::text()|
+            //span[contains(text(),"CUT:")]/text() | //span[contains(text(),"AGE:")][not(//span[contains(text(),"CUT:")])]/text()|
+            //span[contains(text(),"CUT:")]/following-sibling::text() | //span[contains(text(),"AGE:")][not(//span[contains(text(),"CUT:")])]/following-sibling::text()|
+            //span[contains(text(),"COCK THICKNESS:")]/text()|
+            //span[contains(text(),"COCK THICKNESS:")]/following-sibling::text()
+          concat: ","
+          postProcess:
+            - javascript: |
+                let pairs = [];
+                const values = value.split(",").map(v => v.trim()).filter(v => v);
+                
+                // Aggiungiamo subito il tag Corbin Fisher
+                pairs.push("Corbin Fisher");
+                
+                for(let i = 0; i < values.length; i += 2) {
+                  const label = values[i];
+                  const val = values[i+1];
+                  if(!val) continue;
+                  
+                  const firstPart = val.toLowerCase().charAt(0).toUpperCase() + val.toLowerCase().slice(1);
+                  
+                  if(label.includes("AGE:")) {
+                    pairs.push("Uncircumcised");
+                    continue;
+                  }
+                  
+                  if(label.includes("EYES:")) {
+                    pairs.push(firstPart + " Eyes");
+                  }
+                  else if(label.includes("HAIR COLOR:")) {
+                    pairs.push(firstPart + " Hair");
+                  }
+                  else if(label.includes("CUT:")) {
+                    pairs.push(val.toUpperCase().includes("YES") ? "Circumcised" : "Uncircumcised");
+                  }
+                  else if(label.includes("BODY BUILD:")) {
+                    const bodyTypes = {
+                      "ATHLETIC": "Athletic",
+                      "SLIM": "Slim",
+                      "AVERAGE": "Average",
+                      "MUSCULAR": "Muscular",
+                      "TONED": "Athletic"
+                    };
+                    pairs.push(bodyTypes[val.trim().toUpperCase()] || firstPart);
+                  }
+                  else if(label.includes("COCK THICKNESS:")) {
+                    pairs.push(firstPart + " Dick");
+                  }
+                }
+                return pairs.join(",");
+          split: ","
 
 driver:
   useCDP: true
-# Last Updated December 22, 2024
+# Last Updated January 18, 2025

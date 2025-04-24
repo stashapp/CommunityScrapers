@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: AShemaleTube
 
 performerByName:
@@ -5,10 +6,13 @@ performerByName:
   queryURL: "https://www.ashemaletube.com/models/?modelsearchSubmitCheck=FORM_SENDED&key=models&mode=model-search&searchName={}&submitModelSearch=Search&filterCountry=&filterHair=&filterEthnicity=&filterEyes=&filterPenis=&filterBreast=&mode=model-search"
   scraper: performerSearch
 performerByURL:
-  - action: scrapeXPath
+  - action: script
     url:
       - ashemaletube.com/model/
-    scraper: performerScraper
+    script:
+      - python
+      - AShemaleTube.py
+      - performer-by-url
 sceneByName:
   action: scrapeXPath
   queryURL: "https://www.ashemaletube.com/search/{}/?sort=re"
@@ -18,10 +22,13 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 sceneByURL:
-  - action: scrapeXPath
+  - action: script
     url:
-      - ashemaletube.com/videos
-    scraper: sceneScraper
+      - ashemaletube.com/videos/
+    script:
+      - python
+      - AShemaleTube.py
+      - scene-by-url
 
 xPathScrapers:
   performerSearch:
@@ -120,4 +127,4 @@ xPathScrapers:
                   with: https://www.ashemaletube.com/
       Image: //meta[@property="og:image"]/@content
       URL: //meta[@property="og:url"]/@content
-# Last Updated September 29, 2022
+# Last Updated February 18, 2025

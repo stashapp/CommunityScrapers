@@ -1,10 +1,14 @@
 import json
 import sys
 from typing import Never
-import requests
 import re
 
 import py_common.log as log
+from py_common.util import dig
+from py_common.deps import ensure_requirements
+
+ensure_requirements("requests")
+import requests  # noqa: E402
 
 
 def fail(message: str) -> Never:
@@ -51,60 +55,60 @@ def getIMG(video):
             return item
     return ""
 
-def getMusic(video):
-    if len(video["music"]) > 0:
-        return "Music:\n" + "\n".join(video["music"])
-    return ""
 
 def getVideoById(sceneId):
     data = getData(sceneId)
 
-    if "video" not in data or len(data["video"]) < 1:
+    if not (video := dig(data, "video", 0)):
         fail(f"Video data not found in API response: {data}")
 
-    video = data["video"][0]
-    tags = video["tags"] + video["categories"]
     urlTitle = video["title"].replace(" ", "-")
 
-    details = ""
-    if video["description"] != None:
-        details += video["description"]
-    music = getMusic(video)
-    if music:
-        if len(details) > 0:
-            details += "\n"
-        details+=music
-
-    return {
+    scraped = {
         "title": video["title"],
         "url": f"https://pmvhaven.com/video/{urlTitle}_{video['_id']}",
         "image": getIMG(video),
         "date": video["isoDate"].split("T")[0],
-        "details": details,
-        "studio": {"Name": video["creator"]},
-        "tags": [{"name": x.strip()} for x in tags],
-        "performers": [{"name": x.strip()} for x in video["stars"]],
+        "performers": [{"name": x.strip()} for x in dig(video, "stars", default=[])],
     }
 
+    if description := dig(video, "description"):
+        scraped["details"] = description
 
-"""
+    if songs := dig(video, "music"):
+        music = "Music:\n" + "\n".join(songs)
+        if "details" in scraped:
+            scraped["details"] += "\n" + music
+        else:
+            scraped["details"] = music
+
+    if creator := dig(video, "creator"):
+        scraped["studio"] = {"name": creator}
+
+    tags = dig(video, "tags", default=[]) + dig(video, "categories", default=[])
+    # remove duplicates and sort
+    scraped["tags"] = sorted(
+        {tag.strip().lower(): tag.strip() for tag in tags}.values()
+    )
+    scraped["tags"] = [{"name": tagName} for tagName in scraped["tags"]]
+
+    return scraped
+
+
+def sceneByFragment(params):
+    """
     Assumes the video ID or the download hash is in the title of the Stash scene.
     The default file name when downloading from PMVHaven includes the download hash,
     so this will first assume the parameter is the download hash. If no results are
     returned then it will assume the parameter is the video ID and attempt data fetch.
-"""
-
-
-def sceneByFragment(params):
-    if not params["title"]:
+    """
+    if not (title := dig(params, "title")):
         fail("JSON blob did not contain title property")
 
-    regex = re.search(r"([a-z0-9]{24})", params["title"])
+    if not (match := re.search(r"([a-z0-9]{24})", title)):
+        fail(f"Did not find ID from video title '{title}'")
 
-    if not regex:
-        fail(f"Did not find ID from video title {params['title']}")
-
-    inputParam = regex.group(1)
+    inputParam = match.group(1)
     videoId = getVideoIdFromDownloadHash(inputParam)
 
     if videoId is None:
@@ -113,24 +117,23 @@ def sceneByFragment(params):
     return getVideoById(videoId)
 
 
-"""    
+def sceneByURL(params):
+    """
     This assumes a URL of https://pmvhaven.com/video/{title}_{alphanumericVideoId}
     As of 2024-01-01, this is the only valid video URL format. If this changes in
     the future (i.e. more than one valid URL type, or ID not present in URL) and
-    requires falling back to the old cloudscraper method, an xpath of 
-        //meta[@property="video-id"]/@content 
+    requires falling back to the old cloudscraper method, an xpath of
+        //meta[@property="video-id"]/@content
     can be used to pass into the PMVHaven API
-"""
+    """
 
-
-def sceneByURL(params):
-    if not params["url"]:
+    if not (url := dig(params, "url")):
         fail("No URL entered")
 
-    sceneId = params["url"].split("_")[-1]
+    sceneId = url.split("_")[-1]
 
-    if not sceneId or not sceneId.isalnum():
-        fail(f"Did not find scene ID from PMVStash video URL {params['url']}")
+    if not (sceneId and sceneId.isalnum()):
+        fail(f"Did not find scene ID from PMVStash video URL {url}")
 
     data = getVideoById(sceneId)
     return data

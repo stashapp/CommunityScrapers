@@ -22,13 +22,16 @@ export const singleActionsSchema = z.union([
   z.literal("sceneByQueryFragment"),
   z.literal("sceneByFragment"),
   z.literal("galleryByFragment"),
+  z.literal("imageByFragment"),
 ]);
 
 export const arrayActionsSchema = z.union([
   z.literal("performerByURL"),
   z.literal("sceneByURL"),
+  z.literal("groupByURL"),
   z.literal("movieByURL"),
   z.literal("galleryByURL"),
+  z.literal("imageByURL"),
 ]);
 
 const replaceRegexSchema = z.object({
@@ -146,10 +149,11 @@ export const ymlScraperSchema = z.record(z.any()).and(
     sceneByQueryFragment: byFragmentScraperDefnSchema.optional(),
     sceneByFragment: byFragmentScraperDefnSchema.optional(),
     sceneByURL: z.array(byUrlScraperDefnSchema).optional(),
+    groupByURL: z.array(byUrlScraperDefnSchema).optional(),
     movieByURL: z.array(byUrlScraperDefnSchema).optional(),
-    galleryByFragment: z
-      .union([scriptScraperSchema, byFragmentScraperSchema])
-      .optional(),
+    galleryByFragment: byFragmentScraperDefnSchema.optional(),
     galleryByURL: z.array(byUrlScraperDefnSchema).optional(),
+    imageByURL: z.array(byUrlScraperDefnSchema).optional(),
+    imageByFragment: byFragmentScraperSchema.optional(),
   }),
 );

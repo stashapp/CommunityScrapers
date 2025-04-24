@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: Motherless
 sceneByURL:
   - action: scrapeXPath
@@ -17,7 +18,7 @@ sceneByFragment:
   queryURL: https://motherless.com/{filename}
   queryURLReplace:
     filename:
-      - regex: .*?([0-9A-Za-z]{7,8}).*
+      - regex: .*?([0-9A-Fa-f]{6,8}).*
         with: $1
   scraper: sceneScraper
 
@@ -40,6 +41,22 @@ xPathScrapers:
       Date:
         selector: $meta//div[@class='media-meta-stats']/span[not(contains(.,'Views')) and not(contains(.,'Favorites'))]/text()
         postProcess:
+          # parse all in JS
+          - javascript: |
+              let date
+              if (value.includes("m ago")) {
+                date = new Date()
+              } else if (value.includes("h ago")) {
+                const hours = parseInt(value.replace(/(\d+).*/, "$1"))
+                date = new Date(Date.now() - hours * 3600 * 1000)
+              } else if (value.includes ("d ago")) {
+                const days = parseInt(value.replace(/(\d+).*/, "$1"))
+                date = new Date(Date.now() - days * 24 * 3600 * 1000)
+              } else {
+                return value
+              }
+              return date.toISOString().split("T")[0]
+          - parseDate: 2006-01-02
           - parseDate: 02 Jan 2006
       Image: //video/@data-poster
       Tags:
@@ -49,4 +66,4 @@ xPathScrapers:
             - replace:
                 - regex: \#
                   with:
-# Last Updated October 06, 2020
+# Last Updated April 01, 2025

@@ -21,13 +21,13 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
+      Title: &title
         selector: //div[@class="shoot-title"]/h2
         postProcess:
           - replace:
               - regex: ^(.*?)-(.*)-(.*?)$
                 with: "$2"
-      Date:
+      Date: &date
         selector: //div[@class="shoot-title"]/h2
         postProcess:
           - replace:
@@ -36,31 +36,21 @@ xPathScrapers:
               - regex: (st|nd|rd|th)\b
                 with: ""
           - parseDate: "2 Jan 2006"
-      Performers:
-        Name:
-          selector: //div[@class="shoot-title"]/h2
-          postProcess:
-            - replace:
-                - regex: ^(.*?)-(.*)-(.*?)$
-                  with: "$3"
-          split: ","
+      Performers: &performers
+        Name: //div[contains(@class, "shoot-title")]//a
         URL:
-          selector: //div[@class="shoot-title"]/h2/a/@href
-          postProcess:
+          selector: //div[contains(@class, "shoot-title")]//a/@href
+          postProcess: &prependHost
             - replace:
-                - regex: "(.*)"
-                  with: "https://www.englishlads.com$1"
-      Details:
-        selector: //div[not(@class) and @style]
-      Tags:
+                - regex: ^
+                  with: https://www.englishlads.com$1
+      Details: &details //div[not(@class) and @style]
+      Tags: &tags
         Name: //a[@class="more" and contains(@href, "tag=")]
       Image:
         selector: //img[@class="shoot-splash-image"]/@src | //video/@data-poster
-        postProcess:
-          - replace:
-              - regex: "(.*)"
-                with: "https://www.englishlads.com$1"
-      Studio:
+        postProcess: *prependHost
+      Studio: &studio
         Name:
           fixed: English Lads
 
@@ -115,40 +105,9 @@ xPathScrapers:
 
   galleryScraper:
     gallery:
-      Title:
-        selector: //div[@class="shoot-title"]/h2
-        postProcess:
-          - replace:
-              - regex: ^(.*?)-(.*)-(.*?)$
-                with: "$2"
-      Date:
-        selector: //div[@class="shoot-title"]/h2
-        postProcess:
-          - replace:
-              - regex: ^(.*?)-(.*)-(.*?)$
-                with: "$1"
-              - regex: (st|nd|rd|th)\b
-                with: ""
-          - parseDate: "2 Jan 2006"
-      Performers:
-        Name:
-          selector: //div[@class="shoot-title"]/h2
-          postProcess:
-            - replace:
-                - regex: ^(.*?)-(.*)-(.*?)$
-                  with: "$3"
-          split: ","
-        URL:
-          selector: //div[@class="shoot-title"]/h2/a/@href
-          postProcess:
-            - replace:
-                - regex: "(.*)"
-                  with: "https://www.englishlads.com$1"
-      Details:
-        selector: //div[not(@class) and @style]
-      Tags:
-        Name: //a[@class="more" and contains(@href, "tag=")]
-      Studio:
-        Name:
-          fixed: English Lads
-# Last Updated October 03, 2023
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Details: *details
+      Tags: *tags
+      Studio: *studio

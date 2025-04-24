@@ -1,14 +1,27 @@
 name: "ModelMediaAsia"
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - modelmediaasia.com/en-US/videos/
+    queryURL: https://api.modelmediaasia.com/api/v2/videos/{url}
+    queryURLReplace:
+      url:
+        - regex: .*\/videos\/([^?]*).*
+          with: $1
+    scraper: apiScraper_en
+  - action: scrapeJson
+    url:
       - modelmediaasia.com/zh-CN/videos/
-    scraper: sceneScraper
+    queryURL: https://api.modelmediaasia.com/api/v2/videos/{url}
+    queryURLReplace:
+      url:
+        - regex: .*\/videos\/([^?]*).*
+          with: $1
+    scraper: apiScraper_cn
 
 sceneByFragment:
-  action: scrapeXPath
-  queryURL: https://modelmediaasia.com/videos/{filename}
+  action: scrapeJson
+  queryURL: https://api.modelmediaasia.com/api/v2/videos/{filename}
   queryURLReplace:
     # Assume beginning part contains the code
     filename:
@@ -17,74 +30,130 @@ sceneByFragment:
         with: $1
       - regex: .*\.[^\.]+$ # if no id is found in the filename
         with: # clear the filename so that it doesn't leak
-  scraper: sceneScraper
+  scraper: apiScraper_en
 
 performerByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - modelmediaasia.com/en-US/models/
+    queryURL: https://api.modelmediaasia.com/api/v2/models/{url}
+    queryURLReplace:
+      url:
+        - regex: .*\/models\/([^?]*).*
+          with: $1
+    scraper: apiScraper_en
+  - action: scrapeJson
+    url:
       - modelmediaasia.com/zh-CN/models/
-    scraper: performerScraper
+    queryURL: https://api.modelmediaasia.com/api/v2/models/{url}
+    queryURLReplace:
+      url:
+        - regex: .*\/models\/([^?]*).*
+          with: $1
+    scraper: apiScraper_cn
 
-xPathScrapers:
-  sceneScraper:
-    common:
-      $detailspart: //div[@class="details-part"]
-    scene:
-      Title: $detailspart//h2
-      Date:
-        # Some text may be in front of the date
-        selector: $detailspart//span[contains(@class, "trending-year")]
-        postProcess:
-          - replace:
-            - regex: '.*(\d{4}/\d{1,2}/\d{1,2})'
-              with: $1
-          - parseDate: 2006/01/02
-      Details:
-        selector: //div[@id="description-01"]/div/p/text()
-      Performers:
-        Name: $detailspart//div[@class="content-details trending-info"][2]//h6/text()
-        # workaround for including URL
-        # URL arrays don't work https://github.com/stashapp/stash/issues/5294
-        # Details:
-        #   selector: //*[@id="__nuxt"]/main/div/div[2]/div/div/div/div[3]/div/ul/li/a/@href
-        #   postProcess:
-        #     - replace:
-        #       - regex: ^
-        #         with: https://modelmediaasia.com
-      Studio:
-        Name:
-          fixed: "Model Media"
-      Tags:
-        Name: //ul[contains(@class, "iq-blogtag")]/li/a/text()
-      Image: //div[@class="iq-main-slider site-video"]//div[contains(@class,"object-cover")]/img/@src
-      Code: //div[@class="details-part"]//a[contains(@class,"text-capitalize")]/text()
-  performerScraper:
-    common:
-      $infobox: //div[@id="__nuxt"]/main//div[@class="flex flex-col gap-3 my-5"]
+jsonScrapers:
+  apiScraper_en:
     performer:
-      Name: //div[@id="__nuxt"]/main//div[contains(@class,"text-white")]/div/h4[1]/text()
-      Gender:
-        fixed: Female
+      Name: data.name
+      Aliases: data.name_cn
+      Gender: data.gender
       Ethnicity:
         fixed: Asian
-      Height:
-        selector: $infobox/p[1]/text()
-        postProcess:
-          - replace:
-            - regex: '(\d+)\D+cm'
-              with: $1
-      Weight:
-        selector: $infobox/p[2]/text()
-        postProcess:
-          - replace:
-            - regex: '(\d+)\D+kg'
-              with: $1
+      Country:
+        fixed: Taiwan
+      Height: data.height_cm
+      Weight: data.weight_kg
       Measurements:
-        selector: $infobox/p[3]/text()
+        selector: "[data.measurements_chest,data.measurements_waist,data.measurements_hips]"
+        concat: "-"
+      Image: data.avatar
+
+    scene:
+      Title: data.title
+      Code: &code data.serial_number
+      Date: &date
+        selector: data.published_at
         postProcess:
           - replace:
-            - regex: '\s*(\d+\w*)\D+(\d+)\D+(\d+)'
-              with: $1-$2-$3
-      Image: //img[@class="w-full aspect-[3/4]"]/@src
-# Last Updated October 26, 2024
+              # Remove milliseconds
+              - regex: (\d{10}).*
+                with: $1
+          - parseDate: unix
+      Details: data.description
+      Image: data.cover
+      URL:
+        selector: data.serial_number
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://modelmediaasia.com/en-US/videos/
+      Tags: &tags
+        Name: data.tags.#.name
+      Studio:
+        Name:
+          fixed: Model Media Asia
+      Performers:
+        Name: data.models.#.name
+        Aliases: data.models.#.name_cn
+        Image: data.models.#.avatar
+        Gender: data.models.#.gender
+        Ethnicity:
+          fixed: Asian
+        Country:
+          fixed: Taiwan
+        URL:
+          selector: data.models.#.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://modelmediaasia.com/en-US/models/
+
+  apiScraper_cn:
+    performer:
+      Name: data.name_cn
+      Aliases: data.name
+      Gender: data.gender
+      Ethnicity:
+        fixed: Asian
+      Country:
+        fixed: Taiwan
+      Height: data.height_cm
+      Weight: data.weight_kg
+      Measurements:
+        selector: "[data.measurements_chest,data.measurements_waist,data.measurements_hips]"
+        concat: "-"
+      Image: data.avatar
+
+    scene:
+      Title: data.title_cn
+      Code: *code
+      Date: *date
+      Details: data.description_cn
+      Image: data.cover
+      Tags: *tags
+      URL:
+        selector: data.serial_number
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://modelmediaasia.com/zh-CN/videos/
+      Studio:
+        Name:
+          fixed: 麻豆傳媒映畫
+      Performers:
+        Name: data.models.#.name_cn
+        Aliases: data.models.#.name
+        Image: data.models.#.avatar
+        Gender: data.models.#.gender
+        Country:
+          fixed: Taiwan
+        Ethnicity:
+          fixed: Asian
+        URL:
+          selector: data.models.#.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://modelmediaasia.com/zh-CN/models/
+# Last Updated January 16, 2025

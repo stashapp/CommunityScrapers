@@ -6,7 +6,21 @@ sceneByURL:
       - loyalfans.com
     action: script
     script:
-      - python3
+      - python
       - Loyalfans.py
+      - scene-by-url
 
-# Last Updated June 18, 2023
+sceneByName:
+  action: script
+  script:
+    - python
+    - Loyalfans.py
+    - scene-by-name
+
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Loyalfans.py
+    - scene-by-query-fragment
+# Last Updated January 13, 2025

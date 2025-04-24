@@ -27,6 +27,8 @@ studio_map = {
     "cannonprod.com": "Cannon Productions",
     "cougarseason.com": "Cougar Season",
     "creampiethais.com": "Creampie Thais",
+    "darkshade.com": "Darkshade",
+    "members.darkshade.com": "Darkshade",
     "deepthroatsirens.com": "Deepthroat Sirens",
     "dickhddaily.com": "DickHDDaily",
     "diredesires.com": "Dire Desires",
@@ -35,6 +37,7 @@ studio_map = {
     "facialsforever.com": "Facials Forever",
     "freakmobmedia.com": "FreakMob Media",
     "gogobarauditions.com": "Gogo Bar Auditions",
+    "gogoworldporn.com": "GoGo World Porn",
     "gotfilled.com": "Got Filled",
     "hardwerk.com": "HardWerk",
     "hobybuchanon.com": "Hoby Buchanon",
@@ -54,6 +57,7 @@ studio_map = {
     "nickmarxx.com": "Nick Marxx",
     "nylonperv.com": "Nylon Perv",
     "nympho.com": "Nympho",
+    "pervect.com": "Pervect",
     "poundedpetite.com": "Pounded Petite",
     "povperv.com": "POV Perv",
     "premium-nickmarxx.com": "Nick Marxx",
@@ -61,13 +65,16 @@ studio_map = {
     "rickysroom.com": "Ricky's Room",
     "s3xus.com": "S3XUS",
     "seska.com": "Seska",
+    "sextapes.com": "SexTapes",
     "sexymodernbull.com": "Sexy Modern Bull",
     "shesbrandnew.com": "She's Brand New",
     "sidechick.com": "SIDECHICK",
     "suckthisdick.com": "Suck This Dick",
     "swallowed.com": "Swallowed",
     "thaigirlswild.com": "Thai Girls Wild",
+    "theartemixxx.com": "The ArtemiXXX",
     "topwebmodels.com": "Top Web Models",
+    "topwebmodels-interviews.com": "TWM Interviews",
     "trueanal.com": "True Anal",
     "twmclassics.com": "TWM Classics",
     "xful.com": "Xful",
@@ -94,6 +101,7 @@ def clean_url(url: str) -> str:
 # Some sites only work with the `tour.` subdomain
 def fix_url(url: str) -> str:
     url = url.replace("twmclassics.com", "topwebmodels.com")
+    url = url.replace("topwebmodels-interviews.com", "topwebmodels.com")
     url = url.replace("suckthisdick.com", "hobybuchanon.com")
     url = url.replace("premium-nickmarxx.com", "nickmarxx.com")
     url = url.replace("api.nyseedxxx.com", "nyseedxxx.com")

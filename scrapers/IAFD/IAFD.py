@@ -47,7 +47,8 @@ T = TypeVar("T")
 SHARED_SELECTORS = {
     "title": "//h1/text()",
     "director": '//p[@class="bioheading"][contains(text(),"Director") or contains(text(),"Directors")]/following-sibling::p[@class="biodata"][1]/a/text()',
-    "studio": '//p[@class="bioheading"][contains(text(),"Studio") or contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]//text()',
+    "studio": '//p[@class="bioheading"][contains(text(),"Studio")]/following-sibling::p[@class="biodata"][1]//text()',
+    "distributor": '//p[@class="bioheading"][contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]//text()',
     "date": '//p[@class="bioheading"][contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]/text()',
     "synopsis": '//div[@id="synopsis"]/div[@class="padded-panel"]//text()',
 }
@@ -72,8 +73,10 @@ def cleandict(d: dict):
 
 def map_gender(gender: str):
     genders = {
-        "f": "Female",
-        "m": "Male",
+        "Woman": "Female",
+        "Man": "Male",
+        "Trans woman": "Transgender Female",
+        "Trans man": "Transgender Male",
     }
     return genders.get(gender, gender)
 
@@ -192,24 +195,34 @@ def performer_url(tree):
         lambda u: f"https://www.iafd.com{u}",
     )
 
+def performer_gender_map(tree):
+    gender = tree.xpath('//p[@class="bioheading" and contains(text(), "Gender")]/following-sibling::p[1]/text()')
+    return map_gender(gender[0])
 
+# unused code
 def performer_gender(tree):
-    def prepend_transgender(gender: str):
+    def parse_transgender(gender: str):
+        # get trans genders from the short code supplied
+        if gender in ['tf', 'tm']:
+            return map_gender(gender)
+
+        # next, attempt to get the trans gender from the performer id suffix
         perf_id = next(
             iter(tree.xpath('//form[@id="correct"]/input[@name="PerfID"]/@value')), ""
         )
         trans = (
             "Transgender "
             # IAFD are not consistent with their URLs
-            if any(mark in perf_id for mark in ("_ts", "_ftm", "_mtf"))
+            if any(mark in perf_id.lower() for mark in ("_ts", "_ftm", "_mtf"))
             else ""
         )
         return trans + map_gender(gender)
 
     return maybe(
         tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value'),
-        prepend_transgender,
+        parse_transgender,
     )
+# end unused code
 
 
 def performer_name(tree):
@@ -269,6 +282,9 @@ def scene_studio(tree):
     return maybe(
         tree.xpath(SHARED_SELECTORS["studio"]),
         lambda s: {"name": s},
+    ) or maybe(
+        tree.xpath(SHARED_SELECTORS["distributor"]),
+        lambda s: {"name": s},
     )
 
 
@@ -300,6 +316,9 @@ def scene_title(tree):
 def movie_studio(tree):
     return maybe(
         tree.xpath(SHARED_SELECTORS["studio"]),
+        lambda s: {"name": s},
+    ) or maybe(
+        tree.xpath(SHARED_SELECTORS["distributor"]),
         lambda s: {"name": s},
     )
 
@@ -405,7 +424,7 @@ def performer_query(query):
 def performer_from_tree(tree):
     return {
         "name": performer_name(tree),
-        "gender": performer_gender(tree),
+        "gender": performer_gender_map(tree),
         "urls": [performer_url(tree)],
         "twitter": performer_twitter(tree),
         "instagram": performer_instagram(tree),

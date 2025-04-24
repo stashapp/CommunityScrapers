@@ -6,28 +6,8 @@ import sys
 from configparser import ConfigParser, NoSectionError
 from urllib.parse import urlparse
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(
-    os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
-
-try:
-    from py_common import log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr)
-    sys.exit()
-
-try:
-    import requests
-except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
-    sys.exit()
+from py_common import log
+import requests
 
 def sendRequest(url, req_headers):
     req = ""
@@ -84,8 +64,11 @@ studioMap = {
     "amberlilyshow":"Amber Lily Show",
     "amberspanks":"Amber Spanks",
     "americankitten":"American Kitten",
+    "amirahadaraxxx":"Amirah Adara XXX",
     "anastasiagree":"Anastasia Gree",
     "anisyia.xxx":"Anisyia XXX",
+    "arabellesplayground": "Arabelle's Playground",
+    "arinna-cum": "Arinna Cum",
     "aussiexxxhookups":"Aussie XXX HookUps",
     "bhalasada":"Bhala Sada",
     "bigjohnnyxxx":"Big Johnny XXX",
@@ -97,6 +80,7 @@ studioMap = {
     "carlhubaygay.xxx":"Carl Hubay Gay",
     "cartoons4grownfolks":"Cartoons 4 Grown Folks",
     "claradeemembers":"Clara Dee Members",
+    "clubmaseratixxx": "Club Maserati XXX",
     "cospimps":"CosPimps",
     "danidaniels":"Dani Daniels",
     "darkwetdreemz":"Dark Wet Dreemz",
@@ -128,6 +112,8 @@ studioMap = {
     "katrinporto":"Katrin Porto",
     "kendrasinclaire":"Kendra Sinclaire",
     "kinkyrubberworld":"Kinky Rubber World",
+    "klubkelli": "Klub Kelli",
+    "krisskiss":"Kriss Kiss",
     "kyleenash":"Kylee Nash",
     "ladysublime":"Lady Sublime",
     "lilcandy":"LilCandy",
@@ -145,6 +131,7 @@ studioMap = {
     "nancyace":"Nancy Ace",
     "nataliek.xxx":"Natalie K",
     "natashanice":"Natasha Nice",
+    "naughty-lada": "Naughty Lada",
     "niarossxxx":"Nia Ross XXX",
     "niksindian":"Niks Indian",
     "officialelizabethmarxs":"ElizabethMarxs",
@@ -163,6 +150,7 @@ studioMap = {
     "sabrinasabrokporn":"Sabrina Sabrok Videos",
     "sallydangeloxxx":"City Girlz",
     "sam38g":"Samantha38g",
+    "samantalily.xxx": "Samanta Lily",
     "santalatina":"Santalatina",
     "shalinadevine":"Shalina Devine",
     "shootingstar4u.me":"Orgasmic Shooting Star",
@@ -193,12 +181,16 @@ studioMap = {
 fixedPerformerStudio = {
     "amberlilyshow" : ["Amber Lily"],
     "amberspanks" : ["Amber Spanks"],
+    "amirahadaraxxx" : ["Amirah Adara"],
     "anastasiagree" : ["Anastasia Gree"],
     "anisyia.xxx" : ["Anisyia"],
+    "arabellesplayground": ["Arabelle Raphael"],
+    "arinnacum": ["Arinna Cum"],
     "blondehexe.net" : ["Blonde Hexe"],
     "brianaleecams" : ["Briana Lee"],
     "brookelynnebriar" : ["Brookelynne Briar"],
     "claradeemembers" : ["Clara Dee"],
+    "clubmaseratixxx": ["Maserati XXX"],
     "danidaniels" : ["Dani's Things"],
     "eroticcecelia" : ["Cecelia"],
     "fallinlovia" : ["Eva Lovia"],
@@ -212,6 +204,7 @@ fixedPerformerStudio = {
     "kacytgirl": ["Kacy"],
     "katie71": ["Katlynn"],
     "kendrasinclaire": ["Kendra Sinclaire"],
+    "krisskiss" : ["Kriss Kiss"],
     "kyleenash": ["Kylee Nash"],
     "ladysublime": ["Lady Sublime"],
     "lilcandy": ["Lil Candy"],
@@ -225,6 +218,7 @@ fixedPerformerStudio = {
     "nancyace": ["Nancy Ace"],
     "nataliek.xxx": ["Natalie K"],
     "natashanice": ["Natasha Nice"],
+    "naughty-lada": ["Naughty Lada"],
     "niarossxxx": ["Nia Ross"],
     "officialelizabethmarxs":["Elizabeth Marxs"],
     "psychohenessy": ["Alina Henessy"],
@@ -234,6 +228,7 @@ fixedPerformerStudio = {
     "sabrinasabrokporn": ["Sabrina Sabrok"],
     "sallydangeloxxx": ["Sally D'angelo"],
     "sam38g": ["Samantha 38g"],
+    "samantalily.xxx": ["Samanta Lily"],
     "shootingstar4u.me": ["Orgasmic Shooting Star"],
     "sweetiefox.net": ["Sweetie Fox"],
     "sylviasucker": ["Sylvia Chrystall"],
@@ -249,68 +244,76 @@ fixedPerformerStudio = {
 # Use the site name as it shows up in the URL.  Where the TLD is not .com, include the TLD (eg, .xxx)
 
 defaultStudioTags= {
-    "anastasiagree": ["BBW","Brunette","Solo Female","White Woman"],
-    "anisyia.xxx": ["Fake Tits","Brunette","Long Hair","White Woman"],
-    "blondehexe.net": ["Blonde","Solo Female","White Woman","Natural Tits"],
+    "amirahadaraxxx": ["Brown Hair (Female)", "Hungarian", "Natural Tits", "Small Tits", "White Woman"],
+    "anastasiagree": ["BBW","Brown Hair (Female)","Solo Female","White Woman"],
+    "anisyia.xxx": ["Fake Tits","Brown Hair (Female)","Long Hair","White Woman"],
+    "arabellesplayground": ["Big Tits", "Natural Tits", "White Woman"],
+    "arinna-cum": ["Blonde Hair (Female)", "White Woman"],
+    "blondehexe.net": ["Blonde Hair (Female)","Solo Female","White Woman","Natural Tits"],
     "bohonude.art": ["Softcore","Solo Female"],
-    "brookelynnebriar.net": ["Brunette","Natural Tits","White Woman"],
-    "brianaleecams": ["Brunette","Natural Tits","White Woman","Long Hair","Natural Tits"],
+    "brookelynnebriar.net": ["Brown Hair (Female)","Natural Tits","White Woman"],
+    "brianaleecams": ["Brown Hair (Female)","Natural Tits","White Woman","Long Hair","Natural Tits"],
     "carlhubaygay.net": ["Mature","Gay","White Man"],
     "cartoons4grownfolks": ["Animated"],
-    "claradeemembers": ["Brunette","Natural Tits","White Woman"],
-    "danidaniels": ["Brunette","Natural Tits","White Woman"],
+    "claradeemembers": ["Brown Hair (Female)","Natural Tits","White Woman"],
+    "clubmaseratixxx": ["Brown Hair (Female)", "Natural Tits", "Big Tits", "Black Woman"],
+    "danidaniels": ["Brown Hair (Female)","Natural Tits","White Woman"],
     "darkwetdreemz": ["Natural Tits","Black Woman"],
     "erinelectra": ["Natural Tits","White Woman", "White Man","Twosome (Straight)"],
     "eroticcecelia": ["Solo Female","Softcore"],
     "facialcasting": ["Facial","Cumshot"],
     "getyourkneesdirty": ["Small Dick","Cumshot","White Man","Blowjob"],
-    "ginagerson.xxx": ["Blonde","White Woman","Natural Tits"],
+    "ginagerson.xxx": ["Blonde Hair (Female)","White Woman","Natural Tits"],
     "hollandswing": ["White Woman","Natural Tits"],
-    "irenerouse": ["Brunette","Long Hair","White Woman","Natural Tits","Solo Female"],
-    "jenysmith.net": ["Brunette","Long Hair","White Woman","Natural Tits"],
-    "kacytgirl": ["Blonde","Trans Woman","White Woman"],
-    "katie71": ["Brunette","Long Hair","White Woman"],
-    "kendrasinclaire": ["Trans Woman","White Woman","Brunette","Long Hair"],
+    "irenerouse": ["Brown Hair (Female)","Long Hair","White Woman","Natural Tits","Solo Female"],
+    "jenysmith.net": ["Brown Hair (Female)","Long Hair","White Woman","Natural Tits"],
+    "kacytgirl": ["Blonde Hair (Female)","Trans Woman","White Woman"],
+    "katie71": ["Brown Hair (Female)","Long Hair","White Woman"],
+    "kendrasinclaire": ["Trans Woman","White Woman","Brown Hair (Female)","Long Hair"],
+    "klubkelli": ["Redistribution"],
+    "krisskiss": ["White Woman","Brown Hair (Female)","Long Hair"],
     "kyleenash": ["Fake Tits","Solo Female","MILF","White Woman"],
-    "ladysublime": ["BBW","Brunette","Solo Female","White Woman", "Long Hair"],
+    "ladysublime": ["BBW","Brown Hair (Female)","Solo Female","White Woman", "Long Hair"],
     "lilcandy": ["White Woman","Natural Tits"],
-    "lilumoon": ["White Woman","Natural Tits","Brunette","Long Hair"],
-    "lilychey": ["White Woman","Natural Tits","Brunette","Long Hair"],
-    "lonelymeow": ["Asian Woman","Natural Tits","Black Hair","Long Hair"],
-    "lornablu.net": ["Mature","Blonde","White Woman","Natural Tits"],
-    "lynnasexworld": ["Blonde","White Woman","Fake Tits"],
+    "lilumoon": ["White Woman","Natural Tits","Brown Hair (Female)","Long Hair"],
+    "lilychey": ["White Woman","Natural Tits","Brown Hair (Female)","Long Hair"],
+    "lonelymeow": ["Asian Woman","Natural Tits","Black Hair (Female)","Long Hair"],
+    "lornablu.net": ["Mature","Blonde Hair (Female)","White Woman","Natural Tits"],
+    "lynnasexworld": ["Blonde Hair (Female)","White Woman","Fake Tits"],
     "masculinejason": ["Bald","White Man","Gay","Tattoos"],
-    "melenamariarya": ["White Woman","Natural Tits","Brunette","Long Hair"],
+    "melenamariarya": ["White Woman","Natural Tits","Brown Hair (Female)","Long Hair"],
     "miamaffia.xxx": ["Trans Woman","White Woman","Tattoos","Long Hair"],
-    "nancyace": ["White Woman","Blonde","Long Hair","Natural Tits"],
-    "nataliek.xxx": ["White Woman","Blonde","Long Hair","MILF","Natural Tits"],
-    "natashanice": ["White Woman","Brunette","Long Hair","Natural Tits"],
-    "niarossxxx": ["Black Woman","Black Hair","Natural Tits"],
+    "nancyace": ["White Woman","Blonde Hair (Female)","Long Hair","Natural Tits"],
+    "nataliek.xxx": ["White Woman","Blonde Hair (Female)","Long Hair","MILF","Natural Tits"],
+    "natashanice": ["White Woman","Brown Hair (Female)","Long Hair","Natural Tits"],
+    "naughty-lada": ["White Woman","Brown Hair (Female)", "MILF", "Big Tits", "Natural Tits"],
+    "niarossxxx": ["Black Woman","Black Hair (Female)","Natural Tits"],
     "niksindian": ["South Asian Woman"],
     "officialelizabethmarxs": ["White Woman","Natural Tits","Red Hair"],
-    "peccatriciproduzioni": ["Mature","Brunette","White Woman","Natural Tits"],
+    "peccatriciproduzioni": ["Mature","Brown Hair (Female)","White Woman","Natural Tits"],
     "peghim": ["Pegging","Toys","Anal Toys","Strap-on"],
     "platinumpuzzy.net": ["BBW"],
-    "psychohenessy": ["White Woman","Brunette","Long Hair","Natural Tits"],
-    "puremolly": ["White Woman","Blonde","Long Hair","Natural Tits"],
-    "realpeachez": ["White Woman","Blonde","Long Hair","Natural Tits"],
+    "psychohenessy": ["White Woman","Brown Hair (Female)","Long Hair","Natural Tits"],
+    "puremolly": ["White Woman","Blonde Hair (Female)","Long Hair","Natural Tits"],
+    "realpeachez": ["White Woman","Blonde Hair (Female)","Long Hair","Natural Tits"],
     "rexringoxxx.xxx": ["Black Male"],
-    "sabrinasabrokporn": ["White Woman","Blonde","Long Hair","Fake Tits"],
-    "sallydangeloxxx": ["White Woman","Blonde","Long Hair","Fake Tits","Mature"],
+    "sabrinasabrokporn": ["White Woman","Blonde Hair (Female)","Long Hair","Fake Tits"],
+    "sallydangeloxxx": ["White Woman","Blonde Hair (Female)","Long Hair","Fake Tits","Mature"],
     "sam38g": ["White Woman","Red Head","Long Hair","Natural Tits","Big Tits","Solo Female"],
-    "santalatina": ["Latina Woman","Black Hair","Long Hair","Natural Tits"],
-    "shalinadevine": ["White Woman","Blonde","Long Hair","Fake Tits"],
-    "shootingstar4u.me": ["White Woman","Blonde","Natural Tits"],
-    "sirberusssanctum.net": ["Black Man","Black Hair"],
-    "sluttywildthing": ["White Woman","Brunette","Long Hair","Natural Tits"],
+    "samantalily.xxx": ["White Woman", "Big Tits", "Natural Tits"],
+    "santalatina": ["Latina Woman","Black Hair (Female)","Long Hair","Natural Tits"],
+    "shalinadevine": ["White Woman","Blonde Hair (Female)","Long Hair","Fake Tits"],
+    "shootingstar4u.me": ["White Woman","Blonde Hair (Female)","Natural Tits"],
+    "sirberusssanctum.net": ["Black Man","Black Hair (Male)"],
+    "sluttywildthing": ["White Woman","Brown Hair (Female)","Long Hair","Natural Tits"],
     "sweetiefox.net": ["White Woman","Fake Tits"],
-    "sylviasucker": ["White Woman","Brunette","Blowjob","Natural Tits"],
-    "tahliaparis": ["White Woman","Fake Tits","Blonde"],
-    "tanyatate.xxx": ["White Woman","Fake Tits","Blonde"],
+    "sylviasucker": ["White Woman","Brown Hair (Female)","Blowjob","Natural Tits"],
+    "tahliaparis": ["White Woman","Fake Tits","Blonde Hair (Female)"],
+    "tanyatate.xxx": ["White Woman","Fake Tits","Blonde Hair (Female)"],
     "theaudreyhollander": ["White Woman","Natural Tits","Red Hair"],
     "ticklehotness": ["Tickling"],
     "trinetyguess": ["BBW","Solo Female","White Woman"],
-    "vinaskyxxx": ["Asian Woman","Natural Tits","Black Hair","Long Hair"],
+    "vinaskyxxx": ["Asian Woman","Natural Tits","Black Hair (Female)","Long Hair"],
     "womenwhosmoke": ["Smoking"],
     "xtcpov": ["POV"],
 }
@@ -392,7 +395,7 @@ if perf_list:
 if scrape['studio']['name'] in fixedPerformerStudio:
     for performer in fixedPerformerStudio[scrape['studio']['name']]:
         if not any(d['name'].lower() == performer.lower() for d in scrape['performers']):
-            scrape['performers'].append({'Name':performer})
+            scrape['performers'].append({'name':performer})
 
 if scrape['studio']['name'] in studioTagsNeedSplitting:
     for x in scene_api_json['tags']['collection']:

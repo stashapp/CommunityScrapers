@@ -1,0 +1,167 @@
+name: "modelgaydar"
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - modelgaydar.com/en-US/videos/
+    queryURL: https://api.modelgaydar.com/api/v2/videos/{url}
+    queryURLReplace:
+      url:
+        - regex: .*\/videos\/([^?]*).*
+          with: $1
+    scraper: apiScraper_en
+  - action: scrapeJson
+    url:
+      - modelgaydar.com/zh-TW/videos/
+    queryURL: https://api.modelgaydar.com/api/v2/videos/{url}
+    queryURLReplace:
+      url:
+        - regex: .*\/videos\/([^?]*).*
+          with: $1
+    scraper: apiScraper_cn
+
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://api.modelgaydar.com/api/v2/videos/{filename}
+  queryURLReplace:
+    # Assume beginning part contains the code
+    filename:
+      # Get file that matches code
+      - regex: ^([\w\d-]+).*
+        with: $1
+      - regex: .*\.[^\.]+$ # if no id is found in the filename
+        with: # clear the filename so that it doesn't leak
+  scraper: apiScraper_en
+
+performerByURL:
+  - action: scrapeJson
+    url:
+      - modelgaydar.com/en-US/models/
+    queryURL: https://api.modelgaydar.com/api/v2/models/{url}
+    queryURLReplace:
+      url:
+        - regex: .*\/models\/([^?]*).*
+          with: $1
+    scraper: apiScraper_en
+  - action: scrapeJson
+    url:
+      - modelgaydar.com/zh-TW/models/
+    queryURL: https://api.modelgaydar.com/api/v2/models/{url}
+    queryURLReplace:
+      url:
+        - regex: .*\/models\/([^?]*).*
+          with: $1
+    scraper: apiScraper_cn
+
+jsonScrapers:
+  apiScraper_en:
+    performer:
+      Name: data.name
+      Disambiguation:
+        fixed: Model Gaydar
+      Aliases: data.name_cn
+      Gender: data.gender
+      Ethnicity:
+        fixed: Asian
+      Height: data.height_cm
+      Weight: data.weight_kg
+      Image: data.avatar
+
+    scene:
+      Title: data.title
+      Code: &code data.serial_number
+      Date: &date
+        selector: data.published_at
+        postProcess:
+          - replace:
+              # Remove milliseconds
+              - regex: (\d{10}).*
+                with: $1
+          - parseDate: unix
+      Details:
+        selector: data.description
+        postProcess:
+          - replace:
+              - regex: 【.*】
+                with:
+      Image: data.cover
+      URL:
+        selector: data.serial_number
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://modelgaydar.com/en-US/videos/
+      Tags: &tags
+        Name: data.tags.#.name
+      Studio:
+        Name:
+          fixed: Model Gaydar
+      Performers:
+        Name: data.models.#.name
+        Disambiguation:
+          fixed: Model Gaydar
+        Aliases: data.models.#.name_cn
+        Image: data.models.#.avatar
+        Gender: data.models.#.gender
+        Ethnicity:
+          fixed: Asian
+        Country:
+          fixed: Taiwan
+        URL:
+          selector: data.models.#.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://modelgaydar.com/en-US/models/
+
+  apiScraper_cn:
+    performer:
+      Name: data.name_cn
+      Disambiguation:
+        fixed: Model Gaydar
+      Aliases: data.name
+      Gender: data.gender
+      Ethnicity:
+        fixed: Asian
+      Height: data.height_cm
+      Weight: data.weight_kg
+      Image: data.avatar
+
+    scene:
+      Title: data.title_cn
+      Code: *code
+      Date: *date
+      Details:
+        selector: data.description_cn
+        postProcess:
+          - replace:
+              - regex: 【.*】
+                with:
+      Image: data.cover
+      Tags: *tags
+      URL:
+        selector: data.serial_number
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://modelgaydar.com/zh-TW/videos/
+      Studio:
+        Name:
+          fixed: Model Gaydar
+      Performers:
+        Name: data.models.#.name_cn
+        Disambiguation:
+          fixed: Model Gaydar
+        Aliases: data.models.#.name
+        Image: data.models.#.avatar
+        Gender: data.models.#.gender
+        Country:
+          fixed: Taiwan
+        Ethnicity:
+          fixed: Asian
+        URL:
+          selector: data.models.#.id
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://modelgaydar.com/zh-TW/models/
+# Last Updated January 16, 2025

@@ -1,0 +1,21 @@
+name: Fapello
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - fapello.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerScraper:
+    common:
+      $cover: //div[@class="main_content"]/div/div[contains(@class,"items-center")]
+    performer:
+      Name: $cover//h2
+      # Image behind stricter scrape barrier (403'd)
+      # Image: $cover//img/@src
+      Aliases: $cover//p[contains(@class,"flex")]
+      URLs: $cover//p[contains(@class,"text-center")]/a/@href
+
+# CDP required to bypass TLS fingerprinting
+driver:
+  useCDP: true

@@ -3,6 +3,8 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - kink.com
+      - kinkmen.com
+      - kinktrans.com
     scraper: sceneScraper
 
 sceneByFragment:
@@ -19,12 +21,14 @@ sceneByFragment:
   scraper: sceneScraper
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.kink.com/search?type=performers&q={}
+  queryURL: https://www.kink.com/models?q={}
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
     url:
       - kink.com/model
+      - kinkmen.com/model
+      - kinktrans.com/model
     scraper: performerScraper
 
 xPathScrapers:
@@ -53,14 +57,16 @@ xPathScrapers:
                 - regex: /channel/
                   with: ""
             - map:
-                # List of sites as of 2024-06-18 from https://www.kink.com/channels
+                # List of sites as of 2025-02-27 from https://www.kink.com/channels
                 # [...new Set([...document.querySelectorAll('a.h5[href^="/channel"]')]
                 #   .map(a => a.href.split("/").pop() + ": " + a.innerText))]
                 #   .toSorted()
                 #   .join("\n")
+                # kink.com
                 behind-kink: Behind Kink
                 bondage-liberation: Bondage Liberation
                 bound-gang-bangs: Bound Gang Bangs
+                ddf-network: DDF Network
                 device-bondage: Device Bondage
                 divine-bitches: Divine Bitches
                 dungeon-sex: Dungeon Sex
@@ -75,9 +81,12 @@ xPathScrapers:
                 hardcore-gangbang: Hardcore Gangbang
                 harmony-fetish: Harmony Fetish
                 hogtied: Hogtied
+                hot-legs-and-feet: Hot Legs & Feet
+                house-of-taboo: House Of Taboo
                 kink-classics: Kink Classics
                 kink-features: Kink Features
                 kink-test-shoots: Kink Test Shoots
+                kink-trans: Kink Trans
                 kink-university: Kink University
                 kinklive: KinkLive
                 kinky-bites: Kinky Bites
@@ -85,6 +94,7 @@ xPathScrapers:
                 men-in-pain: Men In Pain
                 public-disgrace: Public Disgrace
                 quality-control: Quality Control
+                rubber-pervs: Rubber Pervs
                 savage-gangbang: Savage Gangbang
                 severe-sex-films: Severe Sex Films
                 sex-and-submission: Sex And Submission
@@ -93,13 +103,28 @@ xPathScrapers:
                 tease-and-thank-you: Tease And Thank You
                 the-training-of-o: The Training Of O
                 the-upper-floor: The Upper Floor
-                ts-pussy-hunters: TS Pussy Hunters
-                ts-seduction: TS Seduction
+                tied-tales: Tied Tales
                 ultimate-surrender: Ultimate Surrender
                 wasteland: Wasteland
                 water-bondage: Water Bondage
                 whipped-ass: Whipped Ass
                 wired-pussy: Wired Pussy
+                # kinkmen.com
+                30-minutes-of-torment: 30 Minutes Of Torment
+                axel-abysse: Axel Abysse
+                bound-and-gagged: Bound And Gagged
+                bound-gods: Bound Gods
+                bound-in-public: Bound In Public
+                butt-machine-boys: Butt Machine Boys
+                kink-men-series: KinkMen Series
+                kinkmen-classics: KinkMen Classics
+                kinkmen-test-shoot: Kink Men Test Shoots
+                kinky-bites-men: Kinky Bites Men
+                men-on-edge: Men On Edge
+                naked-kombat: Naked Kombat
+                str8hell: Str8Hell
+                taken-rough: Taken Rough
+                # kinktrans.com
       Performers:
         Name:
           selector: //div[@data-setup]/@data-setup
@@ -112,14 +137,17 @@ xPathScrapers:
           split: ","
       Tags:
         Name:
-          selector: //p[contains(text(), "Categories")]/following-sibling::span/a/text()
-          postProcess:
-            - replace:
-                - regex: \,\s*
-                  with: ""
+          selector: //div[@id="shootPage"]//a[contains(@class,"rounded-pill")]/text()
       Details:
-        selector: //span[contains(text(), "Description")]/following-sibling::span/p/text()
-        concat: "\n"
+        selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
+        postProcess:
+          - replace:
+            - regex: '.+"description":"(.+?)","duration".+'
+              with: "$1"
+            - regex: '( ?)\\n'
+              with: "\n"
+            - regex: \\"
+              with: '"'
       Image:
         selector: //div[@data-setup]/@data-setup
         postProcess:
@@ -241,4 +269,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated December 13, 2024
+# Last Updated March 9, 2025

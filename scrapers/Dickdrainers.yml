@@ -23,6 +23,9 @@ xPathScrapers:
                 with: $1
               - regex: ^
                 with: http://dickdrainers.com
+              # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
+              - regex: (:?-[1-4]x)?\.jpg
+                with: "-full.jpg"
       Studio:
         Name:
           fixed: Dick Drainers
@@ -30,5 +33,3 @@ xPathScrapers:
         Name: //li[@class="label"][contains(text(),"Tags:")]/following-sibling::li/a/text()
       Performers:
         Name: //li[@class="update_models"]//a/text()
-
-# Last Updated January 08, 2021

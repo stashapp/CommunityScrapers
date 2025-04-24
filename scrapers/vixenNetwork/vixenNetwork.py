@@ -1,16 +1,11 @@
 import json
-import os
+import re
 import sys
 from urllib.parse import urlparse
 from datetime import datetime, timedelta
 import py_common.log as log
 
-try:
-    import requests
-except ModuleNotFoundError:
-    log.error("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)")
-    log.error("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests")
-    sys.exit()
+import requests
 
 # Max number of scenes that a site can return for the search.
 MAX_SCENES = 6
@@ -25,25 +20,16 @@ MARKER_DURATION_UNSURE = True
 # Max allowed difference (seconds) in scene length between Stash & API.
 MARKER_SEC_DIFF = 10
 
-# Tags you don't want to see in the Scraper window.
-IGNORE_TAGS = ["Sex","Feature","HD","Big Dick"]
-# Tags you want to add in the Scraper window.
-FIXED_TAGS = ""
 # Add studio default tags to scenes (eg, "Anal Sex" for "Tushy")
 USE_STUDIO_DEFAULT_TAGS = True
-# Check the SSL Certificate.
-CHECK_SSL_CERT = True
-# Local folder with JSON inside (Only used if scene isn't found from the API)
-LOCAL_PATH = r""
 
-SERVER_IP = "http://localhost:9999"
 # API key (Settings > Configuration > Authentication)
 STASH_API = ""
+SERVER_URL = "http://localhost:9999/graphql"
 
-# Automatically reattempt GraphQL queries to Vixen sites which fail with a 403 response 
+# Automatically reattempt GraphQL queries to Vixen sites which fail with a 403 response
 MAX_403_REATTEMPTS = 20
 
-SERVER_URL = SERVER_IP + "/graphql"
 
 def callGraphQL(query, variables=None):
     headers = {
@@ -52,11 +38,11 @@ def callGraphQL(query, variables=None):
         "Accept": "application/json",
         "Connection": "keep-alive",
         "DNT": "1",
-        "ApiKey": STASH_API
+        "ApiKey": STASH_API,
     }
-    json = {'query': query}
+    json = {"query": query}
     if variables is not None:
-        json['variables'] = variables
+        json["variables"] = variables
     try:
         response = requests.post(SERVER_URL, json=json, headers=headers)
         if response.status_code == 200:
@@ -70,10 +56,15 @@ def callGraphQL(query, variables=None):
             log.error("[GraphQL] HTTP Error 401, Unauthorised.")
             return None
         else:
-            raise ConnectionError("GraphQL query failed:{} - {}".format(response.status_code, response.content))
+            raise ConnectionError(
+                "GraphQL query failed:{} - {}".format(
+                    response.status_code, response.content
+                )
+            )
     except Exception as err:
         log.error(err)
         return None
+
 
 def graphql_findTagbyName(name):
     query = """
@@ -96,10 +87,15 @@ def graphql_findTagbyName(name):
                     return tag["id"]
     return None
 
+
 def graphql_createMarker(scene_id, title, main_tag, seconds, tags=[]):
     main_tag_id = graphql_findTagbyName(main_tag)
     if main_tag_id is None:
-        log.warning("The 'Primary Tag' don't exist ({}), marker won't be created.".format(main_tag))
+        log.warning(
+            "The 'Primary Tag' don't exist ({}), marker won't be created.".format(
+                main_tag
+            )
+        )
         return None
     log.info("Creating Marker: {}".format(title))
     query = """
@@ -140,13 +136,14 @@ def graphql_createMarker(scene_id, title, main_tag, seconds, tags=[]):
     """
     variables = {
         "primary_tag_id": main_tag_id,
-        "scene_id":	scene_id,
-        "seconds":	seconds,
+        "scene_id": scene_id,
+        "seconds": seconds,
         "title": title,
-        "tag_ids": tags
+        "tag_ids": tags,
     }
     result = callGraphQL(query, variables)
     return result
+
 
 def graphql_getMarker(scene_id):
     query = """
@@ -158,14 +155,13 @@ def graphql_getMarker(scene_id):
         }
     }
     """
-    variables = {
-        "id": scene_id
-    }
+    variables = {"id": scene_id}
     result = callGraphQL(query, variables)
     if result:
         if result["findScene"].get("scene_markers"):
             return [x.get("seconds") for x in result["findScene"]["scene_markers"]]
     return None
+
 
 def graphql_getScene(scene_id):
     query = """
@@ -180,26 +176,28 @@ def graphql_getScene(scene_id):
         }
     }
     """
-    variables = {
-        "id": scene_id
-    }
+    variables = {"id": scene_id}
     result = callGraphQL(query, variables)
     if result:
         return_dict = {}
         return_dict["duration"] = result["findScene"]["files"][0]["duration"]
         if result["findScene"].get("scene_markers"):
-            return_dict["marker"] = [x.get("seconds") for x in result["findScene"]["scene_markers"]]
+            return_dict["marker"] = [
+                x.get("seconds") for x in result["findScene"]["scene_markers"]
+            ]
         else:
             return_dict["marker"] = None
         return return_dict
     return None
 
+
 def parse_duration_to_seconds(duration):
     if duration is None:
         return None
-    t = datetime.strptime(duration,"%H:%M:%S")
+    t = datetime.strptime(duration, "%H:%M:%S")
     delta = timedelta(hours=t.hour, minutes=t.minute, seconds=t.second)
     return delta.seconds
+
 
 def process_chapters(scene_id, api_json):
     if scene_id and STASH_API and CREATE_MARKER and api_json != {}:
@@ -208,35 +206,63 @@ def process_chapters(scene_id, api_json):
         if markers:
             stash_scene_info = graphql_getScene(scene_id)
             api_scene_duration = None
-            if api_json.get("runLength"):                
+            if api_json.get("runLength"):
                 api_scene_duration = api_json.get("runLength")
-            
+
             log.debug(f"API Duration: {api_scene_duration}")
             if MARKER_DURATION_MATCH and api_scene_duration is None:
                 log.info("No duration given by the API.")
             else:
-                log.debug("Stash Len: {}| API Len: {}".format(stash_scene_info["duration"], api_scene_duration))
-                if (MARKER_DURATION_MATCH and api_scene_duration-MARKER_SEC_DIFF <= stash_scene_info["duration"] <= api_scene_duration+MARKER_SEC_DIFF) or (api_scene_duration in [0,1] and MARKER_DURATION_UNSURE):
+                log.debug(
+                    "Stash Len: {}| API Len: {}".format(
+                        stash_scene_info["duration"], api_scene_duration
+                    )
+                )
+                if (
+                    MARKER_DURATION_MATCH
+                    and api_scene_duration - MARKER_SEC_DIFF
+                    <= stash_scene_info["duration"]
+                    <= api_scene_duration + MARKER_SEC_DIFF
+                ) or (api_scene_duration in [0, 1] and MARKER_DURATION_UNSURE):
                     for marker in markers:
                         if stash_scene_info.get("marker"):
                             if marker.get("seconds") in stash_scene_info["marker"]:
-                                log.debug("Ignoring marker ({}) because already have with same time.".format(marker.get("seconds")))
+                                log.debug(
+                                    "Ignoring marker ({}) because already have with same time.".format(
+                                        marker.get("seconds")
+                                    )
+                                )
                                 continue
                         try:
-                            graphql_createMarker(scene_id, marker.get("title"), marker.get("title"), marker.get("seconds"))
+                            graphql_createMarker(
+                                scene_id,
+                                marker.get("title"),
+                                marker.get("title"),
+                                marker.get("seconds"),
+                            )
                         except:
                             log.error("Marker failed to create")
                 else:
-                    log.info("The duration of this scene don't match the duration of stash scene.")
+                    log.info(
+                        "The duration of this scene don't match the duration of stash scene."
+                    )
         else:
             log.info("No offical marker for this scene")
 
-class Site:
 
+def try_upgrade_image(image_url: str) -> str:
+    # replace the resolution of the image (eg. \d+x\d+) with 3840x2160
+    high_res = re.sub(r"\d+x\d+", "5760x3240", image_url)
+    if requests.head(high_res).status_code == 200:
+        return high_res
+    return image_url
+
+
+class Site:
     def __init__(self, name: str, deftags: list):
         self.name = name
         self.deftags = deftags
-        self.id = name.replace(' ', '').upper()
+        self.id = name.replace(" ", "").upper()
         self.api = "https://www." + self.id.lower() + ".com/graphql"
         self.home = "https://www." + self.id.lower() + ".com"
         self.search_count = MAX_SCENES
@@ -246,12 +272,11 @@ class Site:
         up = urlparse(u)
         if up.hostname is None:
             return False
-        if up.hostname.lstrip("www.").rstrip(".com") == self.id.lower():
-            splits = u.split("/")
-            if len(splits) < 4:
+        if up.hostname.split('.')[1] == self.id.lower():
+            splits = up.path.split("/")
+            if len(splits) < 3:
                 return False
-            if splits[-2] == "videos":
-                return True
+            return splits[-2] == "videos"
         return False
 
     def getSlug(self, url: str):
@@ -262,12 +287,9 @@ class Site:
     def getScene(self, url: str):
         log.debug(f"Scraping using {self.name} graphql API")
         q = {
-            'query': self.getVideoQuery,
-            'operationName': "getVideo",
-            'variables': {
-                "site": self.id,
-                "videoSlug": self.getSlug(url)
-            }
+            "query": self.getVideoQuery,
+            "operationName": "getVideo",
+            "variables": {"site": self.id, "videoSlug": self.getSlug(url)},
         }
         r = self.callGraphQL(query=q, referer=url)
         return self.parse_scene(r)
@@ -275,13 +297,9 @@ class Site:
     def getSearchResult(self, query: str):
         log.debug(f"Searching using {self.name} graphql API")
         q = {
-            'query': self.getSearchQuery,
-            'operationName': "getSearchResults",
-            'variables': {
-                "site": self.id,
-                "query": query,
-                "first": self.search_count
-            }
+            "query": self.getSearchQuery,
+            "operationName": "getSearchResults",
+            "variables": {"site": self.id, "query": query, "first": self.search_count},
         }
         r = self.callGraphQL(query=q, referer=self.home)
         return self.parse_search(r)
@@ -314,53 +332,57 @@ class Site:
 
     def parse_scene(self, response):
         scene = {}
-        if response is None or response.get('data') is None:
+        if response is None or response.get("data") is None:
             return scene
 
-        data = response['data'].get('findOneVideo')
+        data = response["data"].get("findOneVideo")
         if data:
-            scene['title'] = data.get('title')
-            scene['details'] = data.get('description')
-            scene['studio'] = {"name": self.name}
-            scene['code'] = data.get('videoId')
+            scene["title"] = data.get("title")
+            scene["details"] = data.get("description")
+            scene["studio"] = {"name": self.name}
+            scene["code"] = data.get("videoId")
             director = data.get("directors")
             if director is not None:
-                scene["director"] = ", ".join(d["name"] for d in data.get("directors", []))
+                scene["director"] = ", ".join(
+                    d["name"] for d in data.get("directors", [])
+                )
 
-            date = data.get('releaseDate')
+            date = data.get("releaseDate")
             if date:
-                scene['date'] = date.split("T")[0]
-            scene['performers'] = []
-            if data.get('models'):
-                for model in data['models']:
-                    scene['performers'].append({"name": model['name']})
+                scene["date"] = date.split("T")[0]
+            scene["performers"] = []
+            if data.get("models"):
+                for model in data["models"]:
+                    scene["performers"].append({"name": model["name"]})
 
-            scene['tags'] = []
-            tags = data.get('tags')
-            categories = data.get('categories')
+            scene["tags"] = []
+            tags = data.get("tags")
+            categories = data.get("categories")
             if tags == [] and categories:
-                for tag in data['categories']:
-                    scene['tags'].append({"name": tag['name']})
+                for tag in data["categories"]:
+                    scene["tags"].append({"name": tag["name"]})
             elif tags:
-                for tag in data['tags']:
-                    scene['tags'].append({"name": tag})
+                for tag in data["tags"]:
+                    scene["tags"].append({"name": tag})
             if USE_STUDIO_DEFAULT_TAGS:
                 for tag in self.deftags:
-                    scene['tags'].append({"name": tag})
+                    scene["tags"].append({"name": tag})
 
-            if data.get('images'):
-                if data['images'].get('poster'):
+            if data.get("images"):
+                if data["images"].get("poster"):
                     maxWidth = 0
-                    for image in data['images']['poster']:
-                        if image['width'] > maxWidth:
-                            scene['image'] = image['src']
-                        maxWidth = image['width']
+                    for image in data["images"]["poster"]:
+                        if image["width"] > maxWidth:
+                            scene["image"] = image["src"]
+                            maxWidth = image["width"]
+            if "image" in scene:
+                scene["image"] = try_upgrade_image(scene["image"])
             if url:
                 scene["url"] = url
 
-            scene['runLength'] = parse_duration_to_seconds(data.get("runLength"))
-            
-            markers = data.get('chapters', {}).get('video')
+            scene["runLength"] = parse_duration_to_seconds(data.get("runLength"))
+
+            markers = data.get("chapters", {}).get("video")
             if markers:
                 scene["markers"] = markers
 
@@ -370,39 +392,38 @@ class Site:
     def parse_search(self, response):
         search_result = []
 
-        if response is None or response.get('data') is None:
+        if response is None or response.get("data") is None:
             return search_result
 
-        data = response['data'].get('searchVideos')
+        data = response["data"].get("searchVideos")
         if data:
             for scene in data["edges"]:
                 scene = scene.get("node")
                 if scene:
-                    slug = scene.get('slug')
+                    slug = scene.get("slug")
                     # search results without a url are useless
                     # only add results with a slug present
                     if slug:
                         sc = {}
-                        sc['title'] = scene.get('title')
-                        sc['details'] = scene.get('description')
-                        sc['url'] = f"https://www.{self.id.lower()}.com/videos/{slug}"
-                        sc['code'] = scene.get('videoId')
-                        sc['studio'] = {"name": self.name}
-                        date = scene.get('releaseDate')
+                        sc["title"] = scene.get("title")
+                        sc["details"] = scene.get("description")
+                        sc["url"] = f"https://www.{self.id.lower()}.com/videos/{slug}"
+                        sc["code"] = scene.get("videoId")
+                        sc["studio"] = {"name": self.name}
+                        date = scene.get("releaseDate")
                         if date:
-                            sc['date'] = date.split("T")[0]
-                        sc['performers'] = []
-                        if scene.get('modelsSlugged'):
-                            for model in scene['modelsSlugged']:
-                                sc['performers'].append(
-                                    {"name": model['name']})
-                        if scene.get('images'):
-                            if scene['images'].get('listing'):
+                            sc["date"] = date.split("T")[0]
+                        sc["performers"] = []
+                        if scene.get("modelsSlugged"):
+                            for model in scene["modelsSlugged"]:
+                                sc["performers"].append({"name": model["name"]})
+                        if scene.get("images"):
+                            if scene["images"].get("listing"):
                                 maxWidth = 0
-                                for image in scene['images']['listing']:
-                                    if image['width'] > maxWidth:
-                                        sc['image'] = image['src']
-                                    maxWidth = image['width']
+                                for image in scene["images"]["listing"]:
+                                    if image["width"] > maxWidth:
+                                        sc["image"] = image["src"]
+                                    maxWidth = image["width"]
                         search_result.append(sc)
             return search_result
         return None
@@ -472,14 +493,15 @@ class Site:
 
 
 studios = {
-    Site('Blacked Raw',['Black Male']),
-    Site('Blacked',['Black Male']),
-    Site('Deeper',[]),
-    Site('Milfy',['MILF']),
-    Site('Tushy',['Anal Sex']),
-    Site('Tushy Raw',['Anal Sex']),
-    Site('Slayed',['Lesbian Sex']),
-    Site('Vixen',[])
+    Site("Blacked Raw", ["Black Male"]),
+    Site("Blacked", ["Black Male"]),
+    Site("Deeper", []),
+    Site("Milfy", ["MILF"]),
+    Site("Tushy", ["Anal Sex"]),
+    Site("Tushy Raw", ["Anal Sex"]),
+    Site("Slayed", ["Lesbian Sex"]),
+    Site("Vixen", []),
+    Site("Wifey", []),
 }
 
 frag = json.loads(sys.stdin.read())
@@ -487,13 +509,15 @@ search_query = frag.get("name")
 url = frag.get("url")
 scene_id = frag.get("id")
 
+
 def check_alternate_urls(site):
     for u in frag.get("urls", []):
         if site.isValidURL(u):
             return u
     return None
 
-#sceneByURL
+
+# sceneByURL
 if url:
     for x in studios:
         proper_url = None
@@ -508,8 +532,8 @@ if url:
             process_chapters(scene_id=scene_id, api_json=s)
 
             # drop unwanted keys from json result
-            s.pop('runLength', None)
-            s.pop('markers', None)
+            s.pop("runLength", None)
+            s.pop("markers", None)
 
             print(json.dumps(s))
             sys.exit(0)
@@ -517,7 +541,7 @@ if url:
     print("{}")
     sys.exit(1)
 
-#sceneByName
+# sceneByName
 if search_query and "search" in sys.argv:
     search_query = search_query.lower()
     lst = []
@@ -553,6 +577,6 @@ if search_query and "search" in sys.argv:
         # merge all list into one
         if s:
             lst.extend(s)
-    #log.debug(f"{json.dumps(lst)}")
+    # log.debug(f"{json.dumps(lst)}")
     print(json.dumps(lst))
     sys.exit(0)

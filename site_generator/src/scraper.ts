@@ -19,12 +19,16 @@ interface searchTypes {
     name: boolean;
     url: boolean;
   };
-  movie: {
+  group: {
     url: boolean;
   };
   gallery: {
-    fragment: boolean;
     url: boolean;
+    fragment: boolean;
+  };
+  image: {
+    url: boolean;
+    fragment: boolean;
   };
 }
 
@@ -53,12 +57,17 @@ const getSearchTypes = (scraper: ymlScraper): searchTypes => ({
     name: scraper.performerByName !== undefined,
     url: scraper.performerByURL !== undefined,
   },
-  movie: {
-    url: scraper.movieByURL !== undefined,
+  group: {
+    // check for deprecated movieByURL
+    url: scraper.groupByURL !== undefined || scraper.movieByURL !== undefined,
   },
   gallery: {
     fragment: scraper.galleryByFragment !== undefined,
     url: scraper.galleryByURL !== undefined,
+  },
+  image: {
+    url: scraper.imageByURL !== undefined,
+    fragment: scraper.imageByFragment !== undefined,
   },
 });
 
@@ -67,8 +76,11 @@ function collectURLSites(scraper: ymlScraper): string[] {
   const urlActions = [
     "sceneByURL",
     "performerByURL",
-    "movieByURL",
+    "movieByURL", // deprecated
+    "groupByURL",
     "galleryByURL",
+    "imageByURL",
+    "imageByFragment",
   ];
   let urlSites: string[] = [];
   for (const action of urlActions) {
@@ -97,9 +109,12 @@ function hasPython(scraper: ymlScraper): boolean {
     "sceneByQueryFragment",
     "sceneByFragment",
     "sceneByURL",
-    "movieByURL",
+    "movieByURL", // deprecated
+    "groupByURL",
     "galleryByFragment",
     "galleryByURL",
+    "imageByURL",
+    "imageByFragment",
   ];
   return actions.some((action) => {
     const scrapers = scraper[action];
@@ -122,7 +137,6 @@ async function getLastUpdate(scraper: ymlScraper): Promise<Date | false> {
   // if script we have to take all files into account, or take the folder
   // check if scraper has a parent folder
   const filename = scraper.filename.replace(/^\.\.\/scrapers\//, "");
-  console.log(filename);
   const folder = filename.split("/").slice(0, -1).join("/");
   const isFolder = await lstat(folder)
     .then((stat) => stat.isDirectory())

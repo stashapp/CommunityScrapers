@@ -1,0 +1,47 @@
+name: okebooru
+# for okebooru custom (shimmie + gelbooru)
+# https://github.com/stashapp/CommunityScrapers/issues/2274
+# based on gelbooru
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - https://booru.oke.moe/post/view/
+    scraper: postScraper
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+xPathScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: //span[@id="post_info_date"]/time/@datetime
+        postProcess:
+          - replace:
+            - regex: T.+
+              with: ""
+          - parseDate: 2006-01-02
+      Performers: &performers
+        Name:
+          selector: //a[@class="tag_name tag_category_character"]/text()
+      Studio: &artist
+        Name: //a[@class="tag_name tag_category_artist"]/text()
+      Tags: &tag_string
+        Name:
+          selector: //section[@id="Tagsleft"]//tbody/tr/td/a[@class="tag_name"]/text()
+      URLs: &source
+        selector: '//div[@style="overflow: hidden; white-space: nowrap; max-width: 350px; text-overflow: ellipsis;"]/a/@href'
+    scene:
+      Date: *date
+      Performers: *performers
+      Studio: *artist
+      Tags: *tag_string
+      URLs: *source
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stashapp/stash scraper
+
+# Last Updated April 19, 2025

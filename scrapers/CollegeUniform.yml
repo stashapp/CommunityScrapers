@@ -17,7 +17,7 @@ xPathScrapers:
       Date: &date
         selector: //span[@class="update_date"]
         postProcess:
-          - parseDate: 02/01/2006
+          - parseDate: 01/02/2006
       Performers: &performers
         Name: //span[@class="tour_update_models"]/a
       Details: &details
@@ -43,4 +43,4 @@ xPathScrapers:
       Studio: *studio
       Date: *date
       Tags: *tags
-# Last Updated July 25, 2021
+# Last Updated January 11, 2025

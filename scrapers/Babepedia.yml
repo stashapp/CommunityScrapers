@@ -217,4 +217,8 @@ xPathScrapers:
                 with: "$1 "
               - regex: '\n(,|\.|\))'
                 with: "$1"
-# Last Updated July 23, 2024
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0
+# Last Updated April 16, 2025

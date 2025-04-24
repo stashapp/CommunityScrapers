@@ -1,0 +1,75 @@
+name: danbooru-api
+sceneByURL:
+  - action: scrapeJson
+    url: &urls
+      - https://danbooru.donmai.us/posts/
+      # Rated E / SFW
+      - https://safebooru.donmai.us/posts/
+      - https://donmai.moe/posts
+      # alternative subdomains
+      - https://hijiribe.donmai.us/posts/
+      - https://kagamihara.donmai.us/posts/
+      - https://saitou.donmai.us/posts/
+      - https://shima.donmai.us/posts/
+      - https://sonohara.donmai.us/posts/
+      # testing instance
+      - https://testbooru.donmai.us/posts/
+      # anti-ddos
+      # - https://booru.allthefallen.moe/posts/
+    scraper: postScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '(https:\/\/.+\/posts\/)(\d+)(?:(\?.+)|(\#.+)|(\/.+))?'
+          with: "$1$2.json"
+
+imageByURL:
+  - action: scrapeJson
+    url: *urls
+    scraper: postScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '(https:\/\/.+\/posts\/)(\d+)(?:(\?.+)|(\#.+)|(\/.+))?'
+          with: "$1$2.json"
+
+jsonScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: created_at
+        postProcess:
+          - replace:
+            - regex: "T.+"
+              with: ""
+          - parseDate: 2006-01-02
+      Performers: &performers
+        Name:
+          selector: tag_string_character
+          split: " "
+      Studio: &artist
+        Name: tag_string_artist
+      Tags: &tag_string
+        Name:
+          selector: tag_string_general
+          split: " "
+      URLs: &source
+        selector: source
+    scene:
+      Date: *date
+      Performers: *performers
+      Studio: *artist
+      Tags: *tag_string
+      URLs: *source
+
+driver:
+  headers:
+    # see https://danbooru.donmai.us/wiki_pages/help:api
+    # for authentication type
+    # needs posts:show ?
+    #- Key: "Authorization"
+    #  Value: "Basic ="
+    - Key: "User-Agent"
+      Value: "stashapp/stash scraper"
+
+# Last Updated April 19, 2025

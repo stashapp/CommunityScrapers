@@ -42,9 +42,9 @@ xPathScrapers:
       $searchThumb: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]//div[contains(@class, "thumbnail-info-wrapper")]
 
     scene:
-      Title: $searchThumb/span[@class="title"]/a/text()
+      Title: $searchThumb//span[@class="title"]/a/text()
       URL:
-        selector: $searchThumb/span[@class="title"]/a/@href
+        selector: $searchThumb//span[@class="title"]/a/@href
         postProcess:
           - replace:
               - regex: ^
@@ -117,20 +117,18 @@ xPathScrapers:
     common:
       $datablob: //script[contains(., 'VideoObject')]/text()
       $videowrap: //div[@class="video-wrapper"]
-      $videoActions: //div[contains(@class,"video-actions-tabs")]
+      $videoDetails: //div[contains(@class,"video-detailed-info")]
     scene:
       Title:
-        selector: //meta[@property="og:title"]/@content
+        selector: //h1
         postProcess:
           - replace:
-              - regex: '^\s*$'
-                with: "Untitled"
-              - regex: "&amp;"
-                with: "&"
-              - regex: "\n"
-                with: " "
-              - regex: '\si\s'
-                with: " I "
+              # This scraper can be misused and end up pulling its information
+              # from https://www.pornhub.com/view_video.php?viewkey=
+              # that is, a page without a proper Pornhub scene code:
+              # this will make it return an empty result instead of an erroneous title
+              - regex: ^Recently Featured Porn Videos$
+                with: ""
       URL: //meta[@property="og:url"]/@content
       Date:
         selector: $datablob
@@ -146,34 +144,14 @@ xPathScrapers:
               - regex: '.+?(\=)'
                 with:
       Tags:
-        Name:
-          selector: >-
-            $videoActions//div[
-              contains(concat(" ",normalize-space(@class)," ")," categoriesWrapper ")
-              or contains(concat(" ",normalize-space(@class)," ")," tagsWrapper ")
-              or contains(concat(" ",normalize-space(@class)," ")," productionWrapper ")
-              or contains(concat(" ",normalize-space(@class)," ")," langSpokenWrapper ")
-              or contains(concat(" ",normalize-space(@class)," ")," relatedSearchTermsContainer ")
-              ]//a
-            | //div[contains(concat(" ",normalize-space(@class)," ")," userInfo ")]//div[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//i
-          postProcess:
-            - replace:
-                - regex: "onlyfans"
-                  with: "OnlyFans"
-                - regex: "fansly"
-                  with: "Fansly"
+        Name: $videoDetails//a[@data-label="category"] | $videoDetails//a[@data-label="tag"]
       Performers:
-        Name:
-          selector: $videoActions//span[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a/text()|$videoActions//span[contains(concat(" ",normalize-space(@class)," ")," pornstarsWrapper ")]//a
-          postProcess:
-            - replace:
-                - regex: '\.'
-                  with: " "
-                - regex: '\_'
-                  with: " "
+        Name: $videoDetails//a[@data-label="pornstar"] | $videoDetails//span[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a
       Image: //meta[@property="og:image"]/@content
       Studio:
-        Name: $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," usernameWrap ")]//a/text()
+        Name: >-
+          $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," usernameWrap ")]//a
+          $videoDetails//a[@data-label="channel"]
 
 driver:
   cookies:
@@ -183,4 +161,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated August 19, 2024
+# Last Updated March 24, 2025

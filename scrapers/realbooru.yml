@@ -1,0 +1,43 @@
+name: realbooru
+# https://github.com/stashapp/CommunityScrapers/issues/2273
+# loosely based on danbooru
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - https://realbooru.com/
+    scraper: postScraper
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+xPathScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: '//span[@style="color: #555;"]/text()[1]'
+        postProcess:
+          - replace:
+            - regex: 'Posted at (.+) by'
+              with: "$1"
+          - parseDate: Jan, 2 2006
+      Performers: &performers
+        Name:
+          selector: //a[@class="character"]/text()
+      Studio: &model
+        Name: //a[@class="model"]/text()
+      Tags: &tag_string
+        Name:
+          selector: //a[@class="tag-type-general"]/text()
+    scene:
+      Date: *date
+      Performers: *performers
+      Studio: *model
+      Tags: *tag_string
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stashapp/stash scraper
+
+# Last Updated April 19, 2025

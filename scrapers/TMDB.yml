@@ -34,8 +34,7 @@ xPathScrapers:
           - replace:
               - regex: \(.*$
                 with:
-          - parseDate: "02.01.2006"
-          - parseDate: 01/02/2006
+          - parseDate: 02/01/2006
       Synopsis: &details //div[@class='header_info']/div[@class='overview']/p
       URL: //meta[@name='og:url']/@content
       FrontImage: &image
@@ -78,4 +77,13 @@ driver:
   headers:
     - Key: "User-Agent"
       Value: stash-scraper/1.0.0
+  cookies:
+    - CookieURL: "https://www.themoviedb.org"
+      Cookies:
+        - Name: "preferences"
+          Domain: "www.themoviedb.org"
+          # America/Pacific becuase of #2199
+          # {"adult":true,"i18n_fallback_language":"en-US","locale":"en-US","country_code":"US","timezone":"America/Pacific"}
+          Value: "%7B%22adult%22%3Atrue%2C%22i18n_fallback_language%22%3A%22en-US%22%2C%22locale%22%3A%22en-US%22%2C%22country_code%22%3A%22US%22%2C%22timezone%22%3A%22America%2FPacific%22%7D"
+          Path: "/"
 # Last Updated April 14, 2024

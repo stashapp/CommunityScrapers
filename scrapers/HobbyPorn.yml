@@ -26,9 +26,12 @@ xPathScrapers:
           - parseDate: 01/02/2006
       Tags:
         Name: //a[@itemprop="genre"]/text()
-      URL: //link[@itemprop="url"]/@href # gets the hobby.porn url
-      # Possible update once XPath scraper handles multiple urls
-      # //div[@class="player"]//a/@href gets the pornhub url
+      URLs:
+        selector: //link[@itemprop="url"]/@href | //iframe[contains(@src, 'pornhub.com')]/@src
+        postProcess:
+          - replace:
+              - regex: https:\/\/www\.pornhub\.com\/embed\/
+                with: "https://www.pornhub.org/view_video.php?viewkey="
       Image: //span[@itemprop="thumbnail"]/link/@href
   sceneSearch:
     common:
@@ -37,4 +40,4 @@ xPathScrapers:
       Title: $scenecard//div[@class="item-title"]
       URL: $scenecard//a/@href
       Image: $scenecard//img/@src
-# Last Updated January 05, 2024
+# Last Updated March 24, 2025

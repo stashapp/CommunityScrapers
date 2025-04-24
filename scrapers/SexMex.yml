@@ -4,18 +4,75 @@ sceneByURL: &byUrl
   - action: scrapeXPath
     url:
       - sexmex.xxx
-    scraper: sceneScraper
+    scraper: sexmex
+sceneByName:
+  action: scrapeXPath
+  queryURL: "https://sexmex.xxx/tour/search.php?query={}"
+  scraper: search
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sexmex
+
 galleryByURL: *byUrl
 
 xPathScrapers:
-  sceneScraper:
+  search:
+    common:
+      $scene: //div[@data-setid]
+    scene:
+      Title: $scene//h5
+      URL: $scene//h5/a/@href
+      Date:
+        selector: $scene/p[contains(@class, "scene-date")]
+        postProcess:
+          - parseDate: 01/02/2006
+      Image: $scene//img/@src
+  sexmex:
     scene:
       Title: &title
-        selector: //div[@class="panel-body"]/h4//text()
+        selector: &titleSel //div[@class="panel-body"]/h4
         postProcess:
           - replace:
               - regex: ([^.]*)\s\..*
                 with: $1
+      URL: &url
+        selector: //base/@href | //option[@selected]/@value
+        concat: "/"
+        postProcess:
+          - replace:
+              - regex: tour/+tour
+                with: tour
+      # This uses the site search to find the scene so it
+      # will sometimes produce false positives
+      Code: &code
+        selector: *titleSel
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: "+"
+              - regex: "&"
+                with: "%26"
+              - regex: ^
+                with: "https://sexmex.xxx/tour/search.php?query="
+          - subScraper:
+              selector: //div[@data-setid][1]/@data-setid
+      # This uses the site search to find the scene so it
+      # will sometimes produce false positives
+      Date: &date
+        selector: *titleSel
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: "+"
+              - regex: "&"
+                with: "%26"
+              - regex: ^
+                with: "https://sexmex.xxx/tour/search.php?query="
+          - subScraper:
+              selector: //p[contains(@class, "scene-date")][1]
+              postProcess:
+                - parseDate: 01/02/2006
       Details: &details //div[@class="panel-body"]/p[not(@class)]
       Tags: &tags
         Name:
@@ -35,8 +92,10 @@ xPathScrapers:
 
     gallery:
       Title: *title
+      Code: *code
+      Date: *date
       Details: *details
       Tags: *tags
       Performers: *performers
       Studio: *studio
-# Last Updated November 26, 2023
+# Last Updated January 18, 2025

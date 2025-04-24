@@ -30,12 +30,15 @@ export type singleActions =
   | "sceneByName"
   | "sceneByQueryFragment"
   | "sceneByFragment"
-  | "galleryByFragment";
+  | "galleryByFragment"
+  | "imageByFragment";
 export type arrayActions =
   | "performerByURL"
   | "sceneByURL"
-  | "movieByURL"
-  | "galleryByURL";
+  | "groupByURL"
+  | "movieByURL" // deprecated
+  | "galleryByURL"
+  | "imageByURL";
 interface baseUrlScraper {
   action: urlScrapeActions;
   scraper: string;
@@ -99,9 +102,12 @@ export interface ymlScraper {
   sceneByQueryFragment?: byFragmentScraperDefn;
   sceneByFragment?: byFragmentScraperDefn;
   sceneByURL?: byUrlScraperDefn[];
-  movieByURL?: byUrlScraperDefn[];
-  galleryByFragment?: scriptScraper | byFragmentScraper;
+  groupByURL?: byUrlScraperDefn[];
+  movieByURL?: byUrlScraperDefn[]; // deprecated
+  galleryByFragment?: byFragmentScraperDefn;
   galleryByURL?: byUrlScraperDefn[];
+  imageByURL?: byUrlScraperDefn[];
+  imageByFragment?: byFragmentScraper;
 }
 
 export const isUrlScraper = (

@@ -1,16 +1,17 @@
-name: "SiteName"
+name: Example scene scraper
 sceneByURL:
   - action: scrapeXPath
     url:
-      - siteurl.com
+      - example.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
       Code:
-      Director:
       Details:
+      Director:
+      URLs:
       Date:
         selector:
         postProcess:
@@ -22,6 +23,6 @@ xPathScrapers:
         Name:
       Performers:
         Name:
-      Movies:
+      Groups:
         Name:
-# Last Updated June XX, 2024
+# Last Updated February XX, 2025

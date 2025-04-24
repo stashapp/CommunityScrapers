@@ -34,6 +34,11 @@
       "description": "An array of one or more configurations for scraping gallery info by URL(s).",
       "allOf": [{ "$ref": "#/definitions/anyByURL" }]
     },
+    "imageByURL": {
+      "title": "Image by URL",
+      "description": "An array of one or more configurations for scraping image info by URL(s).",
+      "allOf": [{ "$ref": "#/definitions/anyByURL" }]
+    },
     "sceneByName": {
       "title": "Scene by name",
       "description": "A single configuration for scraping scene info by the scene name.",
@@ -86,6 +91,19 @@
     "galleryByFragment": {
       "title": "Gallery by fragment",
       "description": "A single configuration for scraping gallery info by fragment.",
+      "type": "object",
+      "allOf": [
+        { "$ref": "#/definitions/anyByFragment" },
+        {
+          "properties": {
+            "action": { "not": { "enum": ["stash"] } }
+          }
+        }
+      ]
+    },
+    "imageByFragment": {
+      "title": "Image by fragment",
+      "description": "A single configuration for scraping Image info by fragment.",
       "type": "object",
       "allOf": [
         { "$ref": "#/definitions/anyByFragment" },
@@ -423,8 +441,10 @@
         },
         "scene": { "$ref": "#/definitions/sceneObject" },
         "performer": { "$ref": "#/definitions/performerObject" },
-        "movie": { "$ref": "#/definitions/movieObject" },
-        "gallery": { "$ref": "#/definitions/galleryObject" }
+        "movie": { "$ref": "#/definitions/groupObject" },
+        "group": { "$ref": "#/definitions/groupObject" },
+        "gallery": { "$ref": "#/definitions/galleryObject" },
+        "image": { "$ref": "#/definitions/imageObject" }
       }
     },
     "sceneObject": {
@@ -444,6 +464,10 @@
           "title": "Scene URL",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
+        "URLs": {
+          "title": "Scene URLs",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
         "Date": {
           "title": "Scene date",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
@@ -457,8 +481,12 @@
           "allOf": [{ "$ref": "#/definitions/studioObject" }]
         },
         "Movies": {
-          "title": "Scene movies",
-          "allOf": [{ "$ref": "#/definitions/movieObject" }]
+          "title": "Scene groups",
+          "allOf": [{ "$ref": "#/definitions/groupObject" }]
+        },
+        "Groups": {
+          "title": "Scene groups",
+          "allOf": [{ "$ref": "#/definitions/groupObject" }]
         },
         "Tags": {
           "title": "Scene tags",
@@ -503,6 +531,10 @@
         },
         "URL": {
           "title": "Performer URL",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "URLs": {
+          "title": "Performer URLs",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Twitter": {
@@ -588,54 +620,58 @@
         }
       }
     },
-    "movieObject": {
-      "title": "Movie object",
+    "groupObject": {
+      "title": "Group object",
       "type": "object",
       "additionalProperties": false,
       "required": ["Name"],
       "properties": {
         "Name": {
-          "title": "Movie name",
+          "title": "Group name",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Date": {
-          "title": "Movie date",
+          "title": "Group date",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Duration": {
-          "title": "Movie duration",
+          "title": "Group duration",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Director": {
-          "title": "Movie director",
+          "title": "Group director",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Synopsis": {
-          "title": "Movie synopsis",
+          "title": "Group synopsis",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Studio": {
-          "title": "Movie studio",
+          "title": "Group studio",
           "allOf": [{ "$ref": "#/definitions/studioObject" }]
         },
         "FrontImage": {
-          "title": "Movie front image",
+          "title": "Group front image",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "BackImage": {
-          "title": "Movie back image",
+          "title": "Group back image",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "URL": {
-          "title": "Movie URL",
+          "title": "Group URL",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "URLs": {
+          "title": "Group URLs",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Aliases": {
-          "title": "Movie aliases",
+          "title": "Group aliases",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Tags": {
-          "title": "Movie tags",
+          "title": "Group tags",
           "allOf": [{ "$ref": "#/definitions/tagsObject" }]
         }
       }
@@ -660,6 +696,10 @@
         },
         "URL": {
           "title": "Gallery URL",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "URLs": {
+          "title": "Gallery URLs",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Date": {
@@ -697,6 +737,10 @@
         "URL": {
           "title": "Studio URL",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "URLs": {
+          "title": "Studio URLs",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         }
       }
     },
@@ -708,6 +752,53 @@
       "properties": {
         "Name": {
           "title": "Tag name",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        }
+      }
+    },
+    "imageObject": {
+      "title": "Image object",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Title": {
+          "title": "Image title",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "Code": {
+          "title": "Image studio code",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "Details": {
+          "title": "Image details",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "URL": {
+          "title": "Image URL",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "URLs": {
+          "title": "Image URLs",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "Date": {
+          "title": "Image date",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "Studio": {
+          "title": "Image studio",
+          "allOf": [{ "$ref": "#/definitions/studioObject" }]
+        },
+        "Tags": {
+          "title": "Image tags",
+          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
+        },
+        "Performers": {
+          "title": "Image performers",
+          "allOf": [{ "$ref": "#/definitions/performerObject" }]
+        },
+        "Photographer": {
+          "title": "Image photographer",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         }
       }

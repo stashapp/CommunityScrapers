@@ -1,30 +1,35 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: naughtyamerica
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - naughtyamerica.com/scene/
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
       $sceneinfo: //div[@class="scene-info"]
     scene:
-      Title: $sceneinfo/h1[@class="scene-title grey-text"]
-      Date:
+      Title: &title $sceneinfo/h1[@class="scene-title grey-text"]
+      Date: &date
         selector: //div[@class="date-tags"]/span
         postProcess:
           - parseDate: Jan 2, 2006
-      Details:
+      Details: &details
         selector: //div[@class="synopsis grey-text"]
         postProcess:
           - replace:
               - regex: "Synopsis"
                 with: ""
-      Tags:
+      Tags: &tags
         Name: //div[@class="categories grey-text"]/a
-      Performers:
+      Performers: &performers
         Name: $sceneinfo/h2/div[@class="performer-list"]/a
-      Studio:
+      Studio: &studio
         Name: $sceneinfo/h2/a[@class="site-title grey-text link"]
       Image:
         selector: //img[@class="start-card lazyload"]/@data-src|//img[@class="start-card"]/@src|//dl8-video[@id="vr_player"]/@poster|(//div[@class="overlays"]/a/picture)[1]/source[@type="image/jpeg"]/@data-srcset|//img[contains(@class,"start-card desktop-only")]/@data-srcset
@@ -32,4 +37,11 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https:"
-# Last Updated July 02, 2022
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Tags: *tags
+      Performers: *performers
+      Studio: *studio
+# Last Updated April 17, 2025

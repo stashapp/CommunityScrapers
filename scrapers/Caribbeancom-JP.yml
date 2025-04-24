@@ -12,11 +12,11 @@ sceneByFragment:
   queryURLReplace:
     filename:
       - regex: .*(\d{6}-\d{3}).* # carribeancom uses ids with form like 062212-055
-        with: .com/moviepages/$1
+        with: .com/moviepages/$1/index.html
       - regex: .*(\d{6}_\d{3}).* # caribbeancompr uses 062212_055
-        with: pr.com/moviepages/$1
-      - regex: $
-        with: /index.html
+        with: pr.com/moviepages/$1/index.html
+      - regex: .+[^index.html]$$ # if no valid ID found in filename
+        with: .com/404.html # clear filename
   scraper: sceneScraper
 
 xPathScrapers:
@@ -88,7 +88,7 @@ xPathScrapers:
               - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
                 with: $3
 debug:
-  printHTML: true
+  printHTML: false
 
 driver:
   cookies:
@@ -105,9 +105,5 @@ driver:
         - Name: "_gat"
           Domain: ".caribbeancompr.com"
           Value: "1"
-          Path: "/"
-        - Name: "PHPSESSID"
-          Domain: "www.caribbeancompr.com"
-          Value: "chtm56df5brck4et9tm9pmf1a4"
           Path: "/"
 # Last Updated Jan 11, 2024

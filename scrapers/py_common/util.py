@@ -1,13 +1,15 @@
 from argparse import ArgumentParser
 from functools import reduce
-from typing import Any, Callable, TypeVar
+from typing import Any, Callable, Iterable, Mapping, TypeVar
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 import json
 import sys
 
 
-def dig(c: dict | list, *keys: str | int | tuple[str | int, ...], default=None) -> Any:
+def dig(
+    c: Mapping | Iterable, *keys: str | int | tuple[str | int, ...], default=None
+) -> Any:
     """
     Helper function to get a value from a nested dict or list
 

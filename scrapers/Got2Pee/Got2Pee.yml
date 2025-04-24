@@ -1,0 +1,9 @@
+name: Got2Pee
+
+sceneByURL:
+  - action: script
+    url:
+      - got2pee.com/videos/
+    script:
+      - python
+      - got2pee_scraper.py

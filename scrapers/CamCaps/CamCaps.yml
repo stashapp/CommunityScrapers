@@ -1,0 +1,16 @@
+name: "CamCaps"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - camcaps.io/video/*
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: 
+        selector: //meta[@name="description"]/@content
+      Image: //meta[@property="og:image"]/@content
+      Tags:
+        Name: //meta[@property="video:tag"]/@content
+      Details: //meta[@property="og:description"]/@content
+# Last Updated March 18, 2025
