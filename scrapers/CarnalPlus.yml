@@ -142,7 +142,7 @@ xPathScrapers:
     scene:
       Title: *title
       Details:
-        selector: $scene//div[@class='textDescription']//text()[not(parent::span[@id='firstWords' or @id='readmore'])]
+        selector: $scene//div[@class='textDescription']//p
         concat: "\n\n"
       Image: *image
       Code:
@@ -348,4 +348,4 @@ xPathScrapers:
           - replace:
               - regex: dvd-.*?\.jpg
                 with: dvd-full.jpg
-# Last Updated September 21, 2023
+# Last Updated April 24, 2025
