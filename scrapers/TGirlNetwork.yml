@@ -1,0 +1,85 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+# You will probably need to add the following environment variable to your stash config:
+#
+# GODEBUG=tlsrsakex=1
+#
+# This is a workaround for the Go TLS library not supporting RSA key exchange.
+# The sites below are currently using RSA key exchange, which is not supported by the Go TLS library.
+# source: https://github.com/stashapp/CommunityScrapers/issues/2064
+name: TGirl-Network
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - tgirl-network.com/tour/show_gal.php
+    scraper: tgirlNetworkScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tgirl-network.com/tour/show_video.php
+    scraper: tgirlNetworkScraper
+  - action: scrapeXPath
+    url:
+      - ts-baileyjay.com/show_video.php
+    scraper: tsBaileyJayScraper
+xPathScrapers:
+  tgirlNetworkScraper:
+    common:
+      $title: //h1[contains(@class, "galtitle")]
+    scene:
+      Title: &title
+        selector: $title
+      Performers: &performers
+        Name: &performersName
+          selector: //div[contains(@class, "galheader")]
+          postProcess:
+            - replace:
+                - regex: .*The TGirl Network Presents (.*) In.*
+                  with: "$1"
+      Details: &details
+        selector: $title/following-sibling::p
+      Image:
+        selector: &imageSel //div[@class="galbox"]/@style
+        postProcess: &imagePostProcess
+          - replace:
+              - regex: "background-image:\\ ?url\\((.*)\\);"
+                with: "$1"
+              - regex: width=\d+
+                with: width=1920
+              - regex: height=\d+
+                with: height=1080
+              - regex: "&crop=1"
+                with: ""
+              - regex: ^
+                with: https://www.tgirl-network.com/tour/
+      Code: &code
+        selector: *imageSel
+        postProcess: &codePostProcess
+          - replace:
+              - regex: "background-image:\\ ?url\\((.*)\\);"
+                with: "$1"
+              - regex: .*gal=(\d+).*
+                with: "$1"
+      Studio: &studio
+        Name: *performersName
+    gallery:
+      Title: *title
+      Performers: *performers
+      Details: *details
+      Code: *code
+      Studio: *studio
+  tsBaileyJayScraper:
+    scene:
+      Title: //tr[1]/td[2]
+      Performers:
+        Name:
+          fixed: Bailey Jay
+      Studio:
+        Name:
+          fixed: Bailey Jay
+      Image:
+        selector: &imageSelTsBaileyJay //tr[1]/td[1]/img/@src
+        postProcess: *imagePostProcess
+      Code:
+        selector: *imageSelTsBaileyJay
+        postProcess: *codePostProcess
+# Last Updated April 22, 2025
