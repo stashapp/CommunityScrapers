@@ -1,4 +1,9 @@
 name: Carnal+ / FTM+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - carnalplus.com/series/
+    scraper: movieScraper
 sceneByURL:
   # These studios have standalone scenes
   - action: scrapeXPath
@@ -55,7 +60,12 @@ xPathScrapers:
       Details: &details
         selector: $scene//div[@class="full-txt"]//text()
         concat: "\n\n"
-      Image: &image $scene//video/@poster | $scene//img[contains(@class, "hiddenImg")]/@src0_1x | $scene//img[contains(@class, "hiddenImg")]/@src | $scene//img[contains(@class, "hiddenImg")]/@data-src
+      Image: &image 
+        selector: $scene//video/@poster | $scene//img[contains(@class, "hiddenImg")]/@src0_1x | $scene//img[contains(@class, "hiddenImg")]/@src | $scene//img[contains(@class, "hiddenImg")]/@data-src
+        postProcess:
+          - replace:
+              - regex: -1x.*?\.jpg
+                with: -full.jpg
       URL: &url //link[@rel="canonical"]/@href
       Date: &dateSubscraper
         # We need to scrape the network site to get the date, but this scraper
@@ -132,7 +142,7 @@ xPathScrapers:
     scene:
       Title: *title
       Details:
-        selector: $scene//div[@class='textDescription']//text()[not(parent::span[@id='firstWords' or @id='readmore'])]
+        selector: $scene//div[@class='textDescription']//p
         concat: "\n\n"
       Image: *image
       Code:
@@ -150,6 +160,8 @@ xPathScrapers:
         postProcess:
           - replace: *cleanDate
           - parseDate: January 02, 2006
+
+
       URL:
         # All scenes on network sites should be available from their subsites as well
         # so we construct a valid link to the subsite both to encourage people
@@ -217,20 +229,57 @@ xPathScrapers:
         Name: $scene//div[@class="update_tags"]//text()
       Performers:
         Name: $scene//div[@id="models"]//h4
-      Studio:
+      Director: 
+        selector: //span[contains(text(), "Director:")]/following-sibling::text()[1]
+      Studio: &netStudio
         Name:
-          selector: //div[@class="logoSubsites"]//img/@alt
+          selector: //div[@class="title-updates-logo"]//a/@href
           postProcess:
             - replace:
-                # Turn PascalCaseWords to Pascal Case Words
-                - regex: ([a-z])([A-Z])
-                  with: $1 $2
-        URL:
-          selector: //div[@class="logoSubsites"]//img/@alt
+                  # https://regex101.com/r/JxFd9a/1
+                - regex: /$
+                  with: ""
+            - map:
+                # The canonical list of studio names are based on what
+                # they are called on their respective network sites
+                americanmusclehunks: American Muscle Hunks
+                bangbangboys: Bang Bang Boys
+                boundtwinks: Bound Twinks
+                boyforsale: Boy For Sale
+                cumdumpsluts: Cum Dump Sluts
+                dirtyboysociety: Dirty Boy Society
+                edwardjames: Edward James
+                ftmmen: FTM Men
+                funsizeboys: Funsize Boys
+                gaycest: Gaycest
+                hungfuckers: Hung Fuckers
+                jalifstudio: Jalif Studio
+                jockpussy: Jock Pussy
+                jockbreeders: Jock Breeders
+                masonicboys: Masonic Boys
+                rawfuckboys: Raw Fuck Boys
+                scoutboys: Scout Boys
+                staghomme: Stag Homme
+                teensandtwinks: Teens And Twinks
+                transcest: Transcest
+                twinks: Twinks
+                twinkloads: Twink Loads
+                twinktop: Twink Top
+
+      Movies:
+        Name:
+          selector: //div[contains(@class, "series-img")]//img[contains(@alt, "series cover")]/@alt
           postProcess:
             - replace:
-                - regex: (?P<domain>.*)
-                  with: https://$domain.com
+                - regex: ^(.*) series cover$
+                  with: $1
+        URL: 
+          selector: //div[contains(@class, "series-content")]//a[contains(@href, "/series")]/@href
+          postProcess:
+            - replace:
+                - regex: ^\/(.*)$
+                  with: https://carnalplus.com/$1
+        Studio: *netStudio
   chapterSceneScraper:
     common:
       $scene: *sceneContainer
@@ -255,6 +304,48 @@ xPathScrapers:
       Movies:
         Name: //span[contains(@class, "dvdTitleScene")]
         URL: //span[contains(@class, "dvdTitleScene")]//a/@href
+        Studio: *studio
       Tags: *tags
       Performers: *performers
-# Last Updated September 21, 2023
+
+  movieScraper:
+    movie:
+      Name: //h1[@class="modelbio-title"]
+      Synopsis: //div[@id="showmore-desc"]//p
+      Studio:
+        Name:
+          selector: //div[@class="siteName"]
+          postProcess:
+            - map:
+                # The canonical list of studio names are based on what
+                # they are called on their respective network sites
+                americanmusclehunks: American Muscle Hunks
+                bangbangboys: Bang Bang Boys
+                boundtwinks: Bound Twinks
+                boyforsale: Boy For Sale
+                cumdumpsluts: Cum Dump Sluts
+                dirtyboysociety: Dirty Boy Society
+                edwardjames: Edward James
+                ftmmen: FTM Men
+                funsizeboys: Funsize Boys
+                gaycest: Gaycest
+                hungfuckers: Hung Fuckers
+                jalifstudio: Jalif Studio
+                jockpussy: Jock Pussy
+                jockbreeders: Jock Breeders
+                masonicboys: Masonic Boys
+                rawfuckboys: Raw Fuck Boys
+                scoutboys: Scout Boys
+                staghomme: Stag Homme
+                teensandtwinks: Teens And Twinks
+                transcest: Transcest
+                twinks: Twinks
+                twinkloads: Twink Loads
+                twinktop: Twink Top
+      FrontImage:
+        selector: //div[@class="sidebar__inner"]//div[contains(@class, "item-model")]//picture/@data-iesrc
+        postProcess:
+          - replace:
+              - regex: dvd-.*?\.jpg
+                with: dvd-full.jpg
+# Last Updated April 24, 2025
