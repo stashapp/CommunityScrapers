@@ -8,11 +8,15 @@ sceneByURL:
       - 40somethingmag.com
       - 50plusmilfs.com
       - 60plusmilfs.com
+      - analqts.com
       - autumn-jade.com
+      - bigboobalexya.com
+      - bigboobbundle.com
       - bigboobspov.com
       - bigtitangelawhite.com
       - bigtithitomi.com
       - bigtithooker.com
+      - bigtitkatiethornton.com
       - bigtitterrynova.com
       - bigtitvenera.com
       - bonedathome.com
@@ -31,34 +35,63 @@ sceneByURL:
       - chloesworld.com
       - christymarks.com
       - cock4stepmom.com
+      - codivorexxx.com
       - creampieforgranny.com
       - crystalgunnsworld.com
       - daylenerio.com
       - desiraesworld.com
+      - ebonythots.com
       - evanottyvideos.com
       - feedherfuckher.com
       - flatandfuckedmilfs.com
+      - grannygetsafacial.com
+      - grannylovesbbc.com
+      - grannylovesyoungcock.com
+      - hairycoochies.com
       - homealonemilfs.com
+      - hornyasianmilfs.com
+      - ibonedyourmom.com
+      - ifuckedtheboss.com
+      - joanabliss.com
       - karinahart.com
       - latinacoochies.com
+      - latinmommas.com
+      - leannecrowvideos.com
       - legsex.com
+      - megatitsminka.com
+      - milfbundle.com
       - mickybells.com
+      - milfthreesomes.com
       - milftugs.com
+      - millymarks.com
       - mommystoytime.com
+      - nataliefiore.com
+      - naughtyfootjobs.com
       - naughtymag.com
+      - naughtytugs.com
+      - nicolepeters.com
+      - oldhornymilfs.com
       - pickinguppussy.com
+      - pornloser.com
       - pornmegaload.com
       - reneerossvideos.com
+      - roxired.com
+      - sarennasworld.com
       - scoreclassics.com
       - scoreland.com
       - scoreland2.com
       - scorevideos.com
       - sharizelvideos.com
+      - silversluts.com
       - stacyvandenbergboobs.com
       - tawny-peaks.com
+      - tiffany-towers.com
       - titsandtugs.com
+      - tnatryouts.com
       - valoryirene.com
       - xlgirls.com
+      - yourmomlovesanal.com
+      - yourmomsgotbigtits.com
       - yourwifemymeat.com
     script:
       - python
@@ -102,9 +135,13 @@ xPathScrapers:
                 40somethingmag: 40 Something Mag
                 50plusmilfs: 50 Plus MILFs
                 60plusmilfs: 60 Plus MILFs
+                analqts: Anal QTs
                 autumn-jade: Autumn Jade
+                bigboobalexya: Big Boob Alexya
+                bigboobbundle: Big Boob Bundle
                 bigboobspov: Big Boobs POV
                 bigtitangelawhite: Big Tit Angela White
+                bigtitkatiethornton: Big Tit Katie Thornton
                 bigtithitomi: Big Tit Hitomi
                 bigtithooker: Big Tit Hooker
                 bigtitterrynova: Big Tit Terry Nova
@@ -125,35 +162,64 @@ xPathScrapers:
                 chloesworld: Chloe's World
                 christymarks: Christy Marks
                 cock4stepmom: Cock 4 Stepmom
+                codivorexxx: Codi Vore XXX
                 creampieforgranny: Creampie for Granny
                 crystalgunnsworld: Crystal Gunns World
                 daylenerio: Daylene Rio
                 desiraesworld: Desiraes World
+                ebonythots: Ebony Thots
                 evanottyvideos: Eva Notty Videos
                 feedherfuckher: Feed Her Fuck Her
                 flatandfuckedmilfs: Flat and Fucked MILFs
+                grannygetsafacial: Granny Gets Facial
+                grannylovesbbc: Granny Loves BBC
+                grannylovesyoungcock: Granny Loves Young Cock
+                hairycoochies: Hairy Coochies
                 homealonemilfs: Home Alone MILFs
+                hornyasianmilfs: Horny AsisnlM ILFs
+                ibonedyourmom: I Boned Your Mom
+                ifuckedtheboss: I Fucked The Boss
+                joanabliss: Joana Bliss
                 karinahart: Karina Hart
+                latinmommas: Latin Mommas
                 latinacoochies: Latina Coochies
+                leannecrowvideos: Leanne Crow Videos
                 legsex: Leg Sex
+                megatitsminka: Mega Tits Minka
                 mickybells: Micky Bells
+                milfbundle: MILF Bundle
+                milfthreesomes: MILF Threesomes
                 milftugs: MILF Tugs
+                millymarks: Milly Marks
                 mommystoytime: Mommy's Toy Time
+                nataliefiore: Natalie Fiore
                 naughtymag: Naughty Mag
+                naughtyfootjobs: Naughty Foot Jobs
+                naughtytugs: Naughty Tugs
+                nicolepeters: Nicole Peters
+                oldhornymilfs: Old Horny MILFS
                 pickinguppussy: Picking Up Pussy
+                pornloser: Porn Loser
                 pornmegaload: Porn Mega Load
                 reneerossvideos: Renee Ross Video
+                roxired: Roxi Red
+                sarennasworld: Sarenna's World
                 scoreclassics: Score Classics
                 # Scoreland2 needs to come before scoreland because it's more specific
                 scoreland2: Scoreland2
                 scoreland: Scoreland
                 scorevideos: Score Videos
                 sharizelvideos: Sha Rizel Videos
+                silversluts: Silver Sluts
                 stacyvandenbergboobs: Stacy Vandenberg Boobs
                 tawny-peaks: Tawny Peaks
+                tiffany-towers: Tiffany Towers
                 titsandtugs: Tits And Tugs
+                tnatryouts: TNA Tryouts
                 valoryirene: Valory Irene
                 xlgirls: XL Girls
+                yourmomlovesanal: Your Mom Loves Anal
+                yourmomsgotbigtits: Your Mom's Got Big Tits
                 yourwifemymeat: Your Wife My Meat
       Date:
         selector: //div[span[@class="label" and contains(.,"Date")]]/span[@class="value"]/text()
@@ -201,4 +267,4 @@ xPathScrapers:
               - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
                 with: $1$2
       Image: //section[@id="model-page"]//img[@class="lazyload"]/@src
-# Last Updated April 22, 2025
+# Last Updated April 24, 2025
