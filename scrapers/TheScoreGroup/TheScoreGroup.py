@@ -36,7 +36,7 @@ STUDIO_MAP = {
     "bustyangelique": "Busty Angelique",
     "bustyarianna": "Busty Arianna",
     "bustydanniashe": "Busty Danni Ashe",
-    "bustydustystash": "busty Dusty Stash",
+    "bustydustystash": "Busty Dusty Stash",
     "bustyinescudna": "Busty Ines Cudna",
     "bustykellykay": "Busty Kelly Kay",
     "bustykerrymarie": "Busty Kerry Marie",
