@@ -1,5 +1,4 @@
 name: "Nubiles"
-
 # Nubiles Porn sites: https://nubilesporn.com/page/series
 # Nubile Films sites: https://nubilefilms.com/page/series
 # Standalone sites: https://nubilescash.com/page/about (contains all network sites)
@@ -164,9 +163,14 @@ xPathScrapers:
       Tags: &tagsAttr
         Name: //div[@class="categories"]/a/text()
       Image: &imageAttr
-        selector: //video/@poster
+        # Newer scenes have video elements with a poster attribute
+        # but older scenes still have an image element
+        selector: //video/@poster | //img[@class="fake-video-player-cover"]/@src
         postProcess:
           - replace:
+              # Old-style image links do not always include the protocol
+              - regex: ^//
+                with: https://
               # There are higher res scene covers that aren't used on their public pages
               - regex: 1280\.
                 with: "1920."
