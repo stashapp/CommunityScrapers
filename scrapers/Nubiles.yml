@@ -165,6 +165,11 @@ xPathScrapers:
         Name: //div[@class="categories"]/a/text()
       Image: &imageAttr
         selector: //video/@poster
+        postProcess:
+          - replace:
+              # There are higher res scene covers that aren't used on their public pages
+              - regex: 1280\.
+                with: "1920."
 
     gallery:
       Title: &galleryTitleAttr
@@ -233,7 +238,7 @@ xPathScrapers:
                 - regex: ^(.+?)\s-.+$
                   with: $1
             - map:
-                Nubiles: Nubiles.net      
+                Nubiles: Nubiles.net
       Tags: *tagsAttr
       Image: *imageAttr
 
