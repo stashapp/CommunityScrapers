@@ -164,11 +164,7 @@ xPathScrapers:
       Tags: &tagsAttr
         Name: //div[@class="categories"]/a/text()
       Image: &imageAttr
-        selector: //img[@class="fake-video-player-cover"]/@src
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https:"
+        selector: //video/@poster
 
     gallery:
       Title: &galleryTitleAttr
