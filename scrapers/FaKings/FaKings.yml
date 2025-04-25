@@ -1,0 +1,13 @@
+name: FaKings
+sceneByURL:
+  - action: script
+    url:
+      - fakings.com/en/video/
+      - madlifes.com/en/video/
+      - nigged.com/en/video/
+      - pepeporn.com/en/video
+    script:
+      - python
+      - FaKings.py
+      - scene-by-url
+# Last Updated February XX, 2025
