@@ -6,7 +6,7 @@ This is a public repository containing scrapers created by the Stash Community.
 
 When asking for help do not forget to mention what version of Stash you are using, the scraper that is failing, the URL you are attempting to scrape, and your current Python version (but only if the scraper requires Python)
 
-Note that some scrapers (notably [ThePornDB for Movies](./scrapers/ThePornDBMovies.yml) and [ThePornDB for JAV](./scrapers/ThePornDBJAV.yml)) require extra configuration. As of v0.24.0 this is not possible through the web interface so you will need to open these in a text editor and read the instructions to add the necessary fields, usually an API key or a cookie.
+Note that some scrapers require manual configuration. You can find more details in the [docs](./docs) folder
 
 ## Installing scrapers
 
@@ -14,7 +14,9 @@ With the [v0.24.0 release of Stash](https://github.com/stashapp/stash/releases/t
 
 If you still prefer to manage your scrapers manually that is still supported as well, using the same steps as before. Manually installed scrapers and ones installed through Stash can both be used at the same time.
 
-## Installing scrapers (manually)
+## Installing Scrapers (manually)
+<details>
+<summary>Instructions</summary>
 
 To download all of the scrapers at once you can clone the git repository. If you only need some of the scrapers they can be downloaded individually.
 
@@ -32,12 +34,13 @@ Some sites block content if the user agent is not valid. If you get some kind of
 Scraper User Agent` setting in stash. Valid strings e.g. for firefox can be found here https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox . Scrapers for those sites should have a comment mentioning this along with a tested and working user agent string
 
 Scrapers with **useCDP** set to true require that you have properly configured the `Chrome CDP path` setting in Stash. If you decide to use a remote instance the headless chromium docker image from https://hub.docker.com/r/chromedp/headless-shell/ is highly recommended.
+</details>
 
 ## Python scrapers
 
 Some scrapers require external programs to function, usually [Python](https://www.python.org/). All scrapers are tested with the newest stable release of Python, currently 3.13.x
 
-Depending on your operating system you may need to install both Python and the scrapers' dependencies before they will work. For Windows users we strongly recommend installing Python using the [installers from python.org](https://www.python.org/downloads/) instead of through the Windows Store, and also installing it outside of the Users folder so it is accessible to the entire system: a commonly used option is `C:\Python312`.
+Depending on your operating system you may need to install both Python and the scrapers' dependencies before they will work. For Windows users we strongly recommend installing Python using the [installers from python.org](https://www.python.org/downloads/) instead of through the Windows Store, and also installing it outside of the Users folder so it is accessible to the entire system: a commonly used option is `C:\Python313`.
 
 After installing Python you should install the most commonly used dependencies by running the following command in a terminal window:
 
@@ -51,9 +54,8 @@ If Stash does not detect your Python installation you can set the `Python execut
 
 ## Manually configured scrapers
 
-Some scrapers need extra configuration before they will work. This is unfortunate if you install them through the web interface as any updates will overwrite your changes.
+See the [docs](./docs) folder for instructions for scrapers that require manual configuration or special settings. 
 
-- [ThePornDBMovies](./scrapers/ThePornDBMovies.yml) and [ThePornDBJAV](./scrapers/ThePornDBJAV.yml) need to be edited to have your API key in them. Make sure you do not remove the `Bearer` part when you add your key.
 - Python scrapers that need to communicate with your Stash (to create markers, for example, or to search your file system) _might_ need to be configured to talk to your local Stash: by default they will use `http://localhost:9999/graphql` with no authentication to make their queries, but if your setup requires otherwise then you can find `py_common/config.ini` and set your own values.
 - Python scrapers that can be configured will (usually) create a default configuration file called `config.ini` in their respective directories the first time you run them.
 
@@ -88,16 +90,17 @@ Contributions are always welcome! Use the [Scraping Configuration](https://githu
 
 ### Validation
 
-The scrapers in this repository can be validated against a schema and checked for common errors.
+```sh
+# nodejs
+cd stashapp/CommunityScripts
+cd validator
+# install dependencies
+yarn
+# validate all scrapers
+node validate.js
+# validate specific scrapers
+node validate.js scrapers/foo.yml scrapers/bar.yml
 
-First, install the validator's dependencies - inside the [`./validator`](./validator) folder, run: `yarn`.
-
-Then, to run the validator, use `node validate.js` in the root of the repository.  
-Specific scrapers can be checked using: `node validate.js scrapers/foo.yml scrapers/bar.yml`
-
-#### Docker option
-Instead of NodeJS being installed, Docker can be used to run the validator
-
-```bash
+# or use docker
 docker run --rm -v .:/app node:alpine /bin/sh -c "cd /app/validator && yarn install --silent && cd .. && node validate.js --ci"
 ```
