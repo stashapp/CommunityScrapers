@@ -118,6 +118,9 @@ xPathScrapers:
       $datablob: //script[contains(., 'VideoObject')]/text()
       $videowrap: //div[@class="video-wrapper"]
       $videoDetails: //div[contains(@class,"video-detailed-info")]
+      # Check that the button does not appear inside a "From:" div because then you'll get the studio
+      # as a performer if it's an affiliate channel, for example https://www.pornhub.com/view_video.php?viewkey=67e19227400d2
+      $studioButton: //div[contains(@class,"video-actions-tabs")]//span[not(ancestor::div[@class="from"])][contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a
     scene:
       Title:
         selector: //h1
@@ -146,12 +149,10 @@ xPathScrapers:
       Tags:
         Name: $videoDetails//a[@data-label="category"] | $videoDetails//a[@data-label="tag"]
       Performers:
-        Name: $videoDetails//a[@data-label="pornstar"] | $videoDetails//span[contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a
+        Name: $videoDetails//a[@data-label="pornstar"] | $studioButton
       Image: //meta[@property="og:image"]/@content
       Studio:
-        Name: >-
-          $videowrap//div[contains(concat(" ",normalize-space(@class)," ")," usernameWrap ")]//a
-          $videoDetails//a[@data-label="channel"]
+        Name: $videoDetails//a[@data-label="channel"] | $studioButton
 
 driver:
   cookies:
