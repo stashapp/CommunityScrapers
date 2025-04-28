@@ -7,16 +7,36 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: 
-        selector: //meta[@property="og:title"]/@content
+      Title: //h3
+      Date:
+        selector: //div[@class="videoInfo clear"]/p[contains(span,"Date Added:")]
+        postProcess:
+          - replace:
+              - regex: "Date Added:"
+                with: ""
+          - parseDate: January 2, 2006
       Details:
-        selector: //div[@class='videoDetails clear']/p
+        selector: //div[@class="videoDetails clear"]//p
+        concat: "\n\n"
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //base/@href | //script[contains(text(), "video_content")]
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: (https://[^/]+).*src="([^"]+).*
+                with: $1$2
+              - regex: -[1-4]x\.
+                with: -full.
+      Performers:
+        Name:
+          selector: //li[@class="update_models"]/a
+          postProcess:
+            - replace:
+                # For some reason many of their performers have names like 'Name;;Name'
+                - regex: (.+?);;.+
+                  with: $1
+      Tags:
+        Name: //ul[contains(li,"Tags:")]//a
       Studio:
         Name:
           fixed: Brand New Amateurs
-      Tags:
-        Name:
-          selector: //div[@class='featuring clear']/ul/li/a    
-# Last Updated September 11, 2022
