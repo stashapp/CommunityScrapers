@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="shadow video-details"]/h1/text()
+      Title: //div[@class="shadow video-details"]/h1
       Details: //div[@class="shadow video-details"]/p[not(@class)][1]
       Date:
         selector: //p[@class="video-date"]/text()[2]
@@ -17,11 +17,20 @@ xPathScrapers:
                 with: ","
           - parseDate: January 2, 2006
       Image: //section[@class="top-wrapper"]/div//video/@poster
+      Performers:
+        Name:
+          # This studio doesn't have links to performers or anything that's easy to select
+          # so we rely on them having a set pattern for their video titles:
+          # Performer Name - Producer's Fun
+          selector: //h1[contains(., " - ")]
+          postProcess:
+            - replace:
+                - regex: ^(.+)\s+-.+
+                  with: $1
       Studio:
         Name:
           fixed: Producers Fun
       Tags:
         Name:
-          selector: //p[@class="video-tags"]/a/text()
-
+          selector: //p[@class="video-tags"]/a
 # Last Updated June 23, 2022
