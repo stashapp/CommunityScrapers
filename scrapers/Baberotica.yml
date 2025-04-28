@@ -17,6 +17,7 @@ sceneByURL:
 performerByURL:
   - action: scrapeXPath
     url: *urls
+    scraper: performerScraper
   - action: scrapeXPath
     url:
       - hamezo.com
