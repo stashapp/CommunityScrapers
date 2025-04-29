@@ -55,7 +55,8 @@ xPathScrapers:
               - regex: VR [\s\w]+? video$
                 with: ""
       Date: &dateAttr
-        selector: //div[@class="featured_data"]/text()[2]
+        selector: //div[@class="featured_data"]/text()
+        concat: " "
         postProcess:
           - replace:
               - regex: '.* (\w+ \d+, \d{4}).*'
@@ -157,4 +158,4 @@ xPathScrapers:
               }
               return value
       Image: //div[@class="feature_img_model"]/img/@src
-# Last Updated August 21, 2024
+# Last Updated April 29, 2025
