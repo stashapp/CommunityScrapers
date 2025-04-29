@@ -194,7 +194,7 @@ def get_studio(api_object: dict) -> ScrapedStudio | None:
     studio_name = dig(api_object, "collections", 0, "name")
     parent_name = dig(api_object, "brandMeta", ("displayName", "name", "shortName"))
     if studio_name:
-        if parent_name.lower() != studio_name.lower():
+        if parent_name and parent_name.lower() != studio_name.lower():
             return {
                 "name": studio_name,
                 "parent": {"name": parent_name},
@@ -235,13 +235,16 @@ tags_map = {
 
 
 def to_tag(api_object: dict) -> ScrapedTag:
-    mapped_tag = tags_map.get(api_object["id"], api_object["name"].strip())
+    tag_id: int = api_object["id"]
+    name: str = api_object["name"].strip()
+    mapped_tag = tags_map.get(tag_id, name)
     return {"name": mapped_tag}
 
 
 def to_tags(api_object: dict) -> list[ScrapedTag]:
     tags = api_object.get("tags", [])
-    return [to_tag(x) for x in tags if "name" in x or x.get("id") in tags_map.keys()]
+    valid_tags = [x for x in tags if "name" in x or x.get("id") in tags_map.keys()]
+    return [to_tag(x) for x in valid_tags]
 
 
 def to_marker(api_object: dict) -> dict:
@@ -327,9 +330,11 @@ def to_scraped_movie(movie_from_api: dict) -> ScrapedMovie:
 
     movie: ScrapedMovie = {
         "name": movie_from_api["title"],
-        "synopsis": dig(movie_from_api, "description"),
         "url": _construct_url(movie_from_api),
     }
+
+    if synopsis := dig(movie_from_api, "description"):
+        movie["synopsis"] = synopsis
 
     if front_image := dig(movie_from_api, "images", "cover", "0", "xx", "url"):
         movie["front_image"] = re.sub(r"/m=[^/]+", "", front_image)
@@ -354,21 +359,9 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
         log.error(f"Attempted to scrape a '{wrong_type}' (ID: {wrong_id}) as a scene.")
         raise ValueError("Invalid scene from API")
 
-    if (details := dig(scene_from_api, "description")) or (
-        details := dig(scene_from_api, "parent", "description")
-    ):
-        details = unescape(details)
-        details = "\n".join(
-            [
-                " ".join([s for s in x.strip(" ").split(" ") if s != ""])
-                for x in "".join(details).split("\n")
-            ]
-        )
-
     scene: ScrapedScene = {
         "title": scene_from_api["title"],
         "code": str(scene_from_api["id"]),
-        "details": details,
         "date": datetime.strptime(
             scene_from_api["dateReleased"], "%Y-%m-%dT%H:%M:%S%z"
         ).strftime("%Y-%m-%d"),
@@ -379,6 +372,17 @@ def to_scraped_scene(scene_from_api: dict) -> ScrapedScene:
         ],
         "tags": to_tags(scene_from_api),
     }
+
+    if (details := dig(scene_from_api, "description")) or (
+        details := dig(scene_from_api, "parent", "description")
+    ):
+        details = unescape(details)
+        scene["details"] = "\n".join(
+            [
+                " ".join([s for s in x.strip(" ").split(" ") if s != ""])
+                for x in "".join(details).split("\n")
+            ]
+        )
 
     if image := dig(
         scene_from_api,
@@ -883,7 +887,7 @@ def scene_from_fragment(
     if url := fragment.get("url"):
         log.debug(f"Using scene URL: '{url}'")
         if scene := scene_from_url(url, postprocess=postprocess):
-            if markers := scene.pop("markers", []):  # type: ignore
+            if markers := dig(scene, "markers", default=[]):
                 if fragment["id"] and config.scrape_markers:
                     add_markers(fragment["id"], markers)
                 else:
