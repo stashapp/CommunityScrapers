@@ -10,9 +10,17 @@ sceneByURL:
       - teenthais.com
       - vrpornpass.com
     scraper: sceneScraper
+  - action: scrapeXPath
+    url: 
+      - hamezo.com
+    scraper: altSceneScraper
 performerByURL:
   - action: scrapeXPath
     url: *urls
+    scraper: performerScraper
+  - action: scrapeXPath
+    url:
+      - hamezo.com
     scraper: performerScraper
 xPathScrapers:
   sceneScraper:
@@ -22,7 +30,7 @@ xPathScrapers:
       Performers:
         Name: //p/span[@itemprop="actor"]/a/span | //div[@class="cat"][1]/a/text()
         URL: //div[@class="cat"][1]/a/@href | //span[@itemprop="actor"]/a/@href
-      Date:
+      Date:  &Date
       # vrpornpass.com does not currently provide the scene published date on the non-paid site
         selector: //div[contains(@class, "pure-u-1")]//meta[@itemprop="datePublished"]/@content | //div[@class="video-date"]
         postProcess:
@@ -38,25 +46,25 @@ xPathScrapers:
           - parseDate: 2006-01-02T15:04:05-07:00
       Tags:
         Name: //a[@itemprop="genre"] | //div[@class="cat"][2]/a
-      Details:
+      Details: &Details
         selector: //div[@itemprop="description"] | //p[span[@class="readmore"]]
         postProcess:
           - replace:
               - regex: ... Read More
                 with:
-      Image:
+      Image: &Image
         selector: //div[contains(@class,"pure-u-1")]/meta[@itemprop="thumbnailUrl"]/@content | //div[@id="videohtml5tour"]//img[@class="pure-img"]/@src | //div[@id="videohtml5tour"]/video/@poster | //div[@class="rel"]//img/@src
         postProcess:
           - replace:
               - regex: ^//
                 with: https://
-      URL: 
+      URL: &URL
         selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href | //div[@class="title"]/h5/a/@href
         postProcess:
           - replace:
             - regex: \s*(.*)\s*feed/$
               with: $1
-      Studio:
+      Studio: &Studio
         Name:
           selector: //meta[@itemprop="url"]/@content
           postProcess:
@@ -64,10 +72,26 @@ xPathScrapers:
                 https://avidolz.com/: AvIdolz
                 https://baberotica.com/: Baberotica
                 https://baberoticavr.com/: BaberoticaVR
+                https://hamezo.com/: Hamezo
                 https://nucosplay.com/: Nu Cosplay
                 https://suckmevr.com/: SuckMeVR
                 https://teenthais.com/: TeenThais
                 https://vrpornpass.com/: VR PornPass
+  altSceneScraper:
+    scene:
+      Title:
+        selector: //h1
+      Performers:
+        Name: //div[@class="model-thumb"]//h5/a/text()
+        URL: //div[@class="model-thumb"]//h5/a/@href
+      Tags:
+        Name: //div[@class="cat"]/a
+      Studio: 
+        Name: //symbol[@id="logosvg"]/title
+      Details: *Details
+      Date: *Date
+      Image: *Image
+      URL: *URL
   performerScraper:
     common:
       $profileBE: //div[@class="model-profile"]
@@ -83,11 +107,11 @@ xPathScrapers:
               - regex: None
                 with:
       Aliases:
-        selector: $profileBE[contains(strong, "Alias name:")]//text()
+        selector: $profileBE[contains(strong, "Alias name:")]//text() | $profileBE[contains(strong, "Japanese name:")]//text()
         postProcess:
           - replace:
-              - regex: .*Alias name:\s*(.*)\s*$
-                with: $1
+              - regex: .*(Alias|Japanese) name:\s*(.*)\s*$
+                with: $2
               - regex: None
                 with:
       Gender:
@@ -181,6 +205,12 @@ xPathScrapers:
                 with:
       Instagram:
         selector: $profileBE[contains(strong, "Instagram:")]/a/@href
+      Measurements:
+        selector: $profileBE[contains(strong, "Body:")]//text() 
+        postProcess:
+          - replace:
+              - regex: .*Body:\s*(.*)\s*$
+                with: $1
       Twitter:
         selector: $profileBE[contains(strong, "Twitter:")]/a/@href
       Details:
@@ -196,7 +226,7 @@ xPathScrapers:
             - regex: \s*(.*)\s*feed/$
               with: $1
       Image:
-        selector: //div[@class="model-photo"]/img[@class="rounded"]/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1-2"]//img/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1"]//img/@src
+        selector: //div[@class="model-photo"]/img[@class="rounded"]/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1-2"]//img/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1"]//img/@src | //img[@class="smallroundedthumbs"]/@src
         postProcess:
           - replace:
               - regex: ^//
@@ -205,4 +235,4 @@ xPathScrapers:
                 with: 690x960
               - regex: 270x480
                 with: 405x720
-# Last Updated October 10, 2023
+# Last Updated April 27, 2025
