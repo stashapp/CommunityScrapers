@@ -1,11 +1,5 @@
 name: VirtualRealTrans
 
-sceneByURL:
-  - action: scrapeXPath
-    url: &urlSel
-      - virtualrealtrans.com/vr-trans-porn-video
-    scraper: sceneScraper
-
 sceneByFragment:
   action: scrapeXPath
   # url format: https://virtualrealtrans.com/vr-trans-porn-video/{title}
@@ -30,17 +24,6 @@ sceneByFragment:
         with: "-"
   scraper: sceneScraper
 
-movieByURL:
-  - action: scrapeXPath
-    url: *urlSel
-    scraper: movieScraper
-
-performerByURL:
-  - action: scrapeXPath
-    url:
-      - virtualrealtrans.com/vr-models/
-    scraper: performerScraper
-
 xPathScrapers:
   sceneScraper:
     scene:
@@ -51,7 +34,8 @@ xPathScrapers:
               - regex: VR [\s\w]+? video$
                 with: ""
       Date: &dateAttr
-        selector: //div[@class="featured_data"]/text()[2]
+        selector: //div[@class="featured_data"]/text()
+        concat: " "
         postProcess:
           - replace:
               - regex: '.* (\w+ \d+, \d{4}).*'
@@ -103,54 +87,4 @@ xPathScrapers:
       #   Date: *dateAttr
       #   Synopsis: *detailsSel
       #   URL: //meta[@property="og:url"]/@content
-  movieScraper:
-    movie:
-      Name:
-        selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
-        concat: " - "
-      Date: *dateAttr
-      Studio:
-        Name: *studioName
-      Synopsis: *detailsSel
-      FrontImage: *imageSel
-  performerScraper:
-    performer:
-      Name:
-        selector: //div[@class="head_model"]//h1/text()
-        postProcess:
-          - replace:
-              - regex: \s+$
-                with: ""
-      Gender:
-        selector: //section[@id="about"]//tr/th[text()="Gender"]//following-sibling::td/text()
-        postProcess:
-          - map:
-              Female Trans: transgender_female
-      Twitter:
-        selector: //div[@id="social"]//a[contains(@class, "twitter")]/@href
-        postProcess:
-          - replace:
-              - regex: twitter.com
-                with: x.com
-      Instagram: //div[@id="social"]//a[contains(@class, "instagram")]/@href
-      Birthdate:
-        selector: //section[@id="about"]//tr/th[text()="Date of birth"]//following-sibling::td/text()
-        postProcess:
-          - parseDate: 02/01/2006
-      Country: //section[@id="about"]//tr/th[text()="Country"]//following-sibling::td/text()
-      HairColor: //section[@id="about"]//tr/th[text()="Hair color"]//following-sibling::td/text()
-      EyeColor: //section[@id="about"]//tr/th[text()="Eyes color"]//following-sibling::td/text()
-      Measurements:
-        selector: //section[@id="about"]//tr/th[text()="Bust"]//following-sibling::td/text()|//section[@id="about"]//tr/th[text()="Waist"]//following-sibling::td/text()|//section[@id="about"]//tr/th[text()="Hips"]//following-sibling::td/text()
-        concat: "-"
-        postProcess:
-          - javascript: |
-              // convert from metric to imperial
-              if (value && value.length) {
-                const cmPerInch = 2.54
-                let measurements = value.split('-')
-                return measurements.map(m => Math.round(m / cmPerInch)).join('-')
-              }
-              return value
-      Image: //div[@class="feature_img_model"]/img/@src
-# Last Updated August 21, 2024
+# Last Updated April 29, 2025
