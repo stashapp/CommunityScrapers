@@ -60,7 +60,7 @@ xPathScrapers:
       Details: &details
         selector: $scene//div[@class="full-txt"]//text()
         concat: "\n\n"
-      Image: &image 
+      Image: &image
         selector: $scene//video/@poster | $scene//img[contains(@class, "hiddenImg")]/@src0_1x | $scene//img[contains(@class, "hiddenImg")]/@src | $scene//img[contains(@class, "hiddenImg")]/@data-src
         postProcess:
           - replace:
@@ -161,7 +161,6 @@ xPathScrapers:
           - replace: *cleanDate
           - parseDate: January 02, 2006
 
-
       URL:
         # All scenes on network sites should be available from their subsites as well
         # so we construct a valid link to the subsite both to encourage people
@@ -226,17 +225,16 @@ xPathScrapers:
               - regex: TwinkTop
                 with: twinktop
       Tags:
-        Name: $scene//div[@class="update_tags"]//text()
+        Name: $scene//div[@class="update_tags"]//a
       Performers:
-        Name: $scene//div[@id="models"]//h4
-      Director: 
+        Name: $scene//div[@class="update-models"]//a
+      Director:
         selector: //span[contains(text(), "Director:")]/following-sibling::text()[1]
       Studio: &netStudio
         Name:
           selector: //div[@class="title-updates-logo"]//a/@href
           postProcess:
             - replace:
-                  # https://regex101.com/r/JxFd9a/1
                 - regex: /$
                   with: ""
             - map:
@@ -273,7 +271,7 @@ xPathScrapers:
             - replace:
                 - regex: ^(.*) series cover$
                   with: $1
-        URL: 
+        URL:
           selector: //div[contains(@class, "series-content")]//a[contains(@href, "/series")]/@href
           postProcess:
             - replace:
