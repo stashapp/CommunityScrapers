@@ -1,33 +1,41 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: "SexSelector"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - sexselector.com/video/
+      - sexselector.com/scene/
+      - sexselector.com/video/ # this is an old URL that will redirect to /scene/
     scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="player__info__top"]/h3/text()
-      Details: //p[@class="player__description"]/text()
+      Title: //h2[contains(@class, "kPUciZ")]
+      Details: //section[@data-cy="description"]/p/text()
       Date:
-        selector: //div[@class="player"]/p[starts-with(., "Released:")]
+        selector: //h2[contains(@class, "fgCBCx")]
         postProcess:
-          - replace:
-              - regex: "^Released: "
-                with:
-          - parseDate: Jan 2, 2006
+          - parseDate: January 2, 2006
       Image:
-        selector: //a[@class="header__menu header__menu--logo"]/@href
+        selector: //div[@class="vjs-poster"]/@style
         postProcess:
           - replace:
-              - regex: .+(pg\d+)
-                with: https://sm-members.bangbros.com/shoots/sexselector/$1/poster/${1}_01_2160.jpg
+              - regex: .*(https.*\.jpg).*
+                with: $1
       Studio:
-        Name:
-          fixed: Sex Selector
+        Name: //div[contains(@class, "gQQXgf")]//a/text()
       Performers:
-        Name: //div[@class="player__stats"]//a/text()
+        Name: //h2[contains(@class, "hJngjI")]//a/text()
       Tags:
-        Name: //div[@class="video__tags__list"]/a/text()
-# Last Updated June 06, 2022
+        Name: //div[contains(@class, "eZmGdy")]//a/text()
+      URL: &urlSel //link[@rel="canonical"]/@href
+      Code:
+        selector: *urlSel
+        postProcess:
+          - replace:
+              - regex: .*scene/(\d+)/.*
+                with: $1
+# you can use a CDN proxy with CDP to bypass region-based age restrictions
+# driver:
+#   useCDP: true
+# Last Updated May 1, 2025
