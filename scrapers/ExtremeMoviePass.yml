@@ -1,0 +1,30 @@
+name: ExtremeMoviePass
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - extrememoviepass.com/t7/scenes/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2
+      Date:
+        selector: //li[contains(., "Published on")]
+        postProcess:
+          - replace:
+              - regex: .+?(\d{4}.+)
+                with: $1
+      Image:
+        selector: //base/@href | //video/@poster
+        concat: "/"
+        postProcess:
+          - replace:
+              - regex: /t7///t7
+                with: /t7
+              # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
+              - regex: (:?-[1-4]x)?\.jpg
+                with: "-full.jpg"
+      Performers:
+        Name: //center/a[contains(@href, "/models/")]
+      # This network site does not list the actual substudio for scenes
+      # so we cannot return a Studio value here
