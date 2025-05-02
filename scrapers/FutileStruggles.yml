@@ -9,7 +9,7 @@ xPathScrapers:
     common:
       $galleryinfo: //div[@class="gallery_info"]
     scene:
-      Title: $galleryinfo/div[@class="title_bar"]/span/text()
+      Title: //div[@class="title_bar"]/span/text()
       Details: $galleryinfo/span[@class="update_description"]/text()
       Date:
         selector: $galleryinfo/div/div/div[@class="cell update_date"]/text()
@@ -28,4 +28,4 @@ xPathScrapers:
         Name: $galleryinfo/span[@class="update_tags"]/a/text()
       Performers:
         Name: $galleryinfo/span[@class="update_models"]/a/text()
-# Last Updated May 1, 2025
+# Last Updated May 2, 2025
