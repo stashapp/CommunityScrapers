@@ -77,7 +77,6 @@ xPathScrapers:
     gallery:
       Title: *title
       Code: *code
-      Date: *date
       Details: *details
       Tags: *tags
       Performers: *performers
