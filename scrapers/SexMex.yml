@@ -57,22 +57,6 @@ xPathScrapers:
                 with: "https://sexmex.xxx/tour/search.php?query="
           - subScraper:
               selector: //div[@data-setid][1]/@data-setid
-      # This uses the site search to find the scene so it
-      # will sometimes produce false positives
-      Date: &date
-        selector: *titleSel
-        postProcess:
-          - replace:
-              - regex: \s+
-                with: "+"
-              - regex: "&"
-                with: "%26"
-              - regex: ^
-                with: "https://sexmex.xxx/tour/search.php?query="
-          - subScraper:
-              selector: //p[contains(@class, "scene-date")][1]
-              postProcess:
-                - parseDate: 01/02/2006
       Details: &details //div[@class="panel-body"]/p[not(@class)]
       Tags: &tags
         Name:
