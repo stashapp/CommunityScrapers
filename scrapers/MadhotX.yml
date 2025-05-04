@@ -11,13 +11,6 @@ xPathScrapers:
     scene:
       Title: //div[@class="video-details"]//h1[@class="title"]
       Details: //div[@class="video-details"]//p[@class="desc"]
-      Date:
-        selector: //div[contains(@class,'row')]//div[contains(@class,'video-info__time')]/text()
-        postProcess:
-          - replace:
-              - regex: ^.+?(\d+\s+\w+,?\s+\d+).*
-                with: $1
-          - parseDate: 2 January, 2006
       Image: //video[@id="player"]/@data-poster
       Studio:
         Name:
