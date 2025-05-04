@@ -1,0 +1,32 @@
+name: MadhotX
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - madhotx.com/video
+      - madgloryholes.com/video
+      - madmasseur.com/video
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="video-details"]//h1[@class="title"]
+      Details: //div[@class="video-details"]//p[@class="desc"]
+      Image: //video[@id="player"]/@data-poster
+      Studio:
+        Name:
+          selector: //th[contains(.,'Episode')]/following-sibling::td
+          postProcess:
+            - replace:
+                - regex: '^(.+)?\s*-.+'
+                  with: $1
+      Code:
+        selector: //th[contains(.,'Episode')]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: '^.+?\s*-(.+)'
+                with: $1
+      Tags:
+        Name: //ul[@class="tags"]/li[@class="tag"]/a
+      Performers:
+        Name: //div[@class="actor"]/a
+# Last Updated May 3, 2025
