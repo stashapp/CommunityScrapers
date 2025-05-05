@@ -22,7 +22,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Born to be Bound
-      Image: //div[@id="gallery-1"]//img/@src
+      Image: //div[@id="gallery-1"]//a/@href
       # tags includes mix of performers and content tags
       # p=60260 vs p=10032
       Performers:
