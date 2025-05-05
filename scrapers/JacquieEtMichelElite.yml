@@ -53,7 +53,7 @@ xPathScrapers:
             - regex: ^.+datePublished":\s*"(\d\d\d\d-\d\d-\d\d).+$
               with: $1
       Image: 
-        selector: //div[contains(@class,"video-detail__handler")]/@style | //img[contains(@class,"video-detail__poster__img")]/@src | //img[contains(@class,"video-player__poster__img")]/@data-src
+        selector: //div[contains(@class,"video-detail__handler")]/@style | //img[@id="video-player-poster"]/@src
         postProcess:
           - replace:
             - regex: ^[^']*'([^']*).*
