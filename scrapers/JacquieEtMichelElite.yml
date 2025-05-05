@@ -39,7 +39,7 @@ xPathScrapers:
         selector: //div[contains(@class,"video-detail__description")]//text()
       Studio:
         Name: //li[contains(@class,"video-detail__info")]/strong[contains(.,'Studio:')]/following-sibling::a
-      FrontImage: //img[contains(@class,"video-detail__poster__img")]/@src
+      FrontImage: //img[contains(@class,"video-detail__poster__img")]/@src | //img[contains(@class,"video-player__poster__img")]/@data-src
   sceneScraper:
     scene:
       Title: 
@@ -53,7 +53,7 @@ xPathScrapers:
             - regex: ^.+datePublished":\s*"(\d\d\d\d-\d\d-\d\d).+$
               with: $1
       Image: 
-        selector: //div[contains(@class,"video-detail__handler")]/@style
+        selector: //div[contains(@class,"video-detail__handler")]/@style | //img[@id="video-player-poster"]/@src
         postProcess:
           - replace:
             - regex: ^[^']*'([^']*).*
@@ -84,4 +84,4 @@ xPathScrapers:
               - regex: ^
                 with: https://www.jacquieetmichelelite.com 
 
-# Last Updated April 15, 2023
+# Last Updated May 5, 2025
