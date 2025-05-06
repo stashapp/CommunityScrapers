@@ -122,7 +122,6 @@ xPathScrapers:
         Name: 
           selector: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/text()
         URL: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/@href
-      Group:
       Image: /html/head/meta[@property='og:image']/@content
       Tags:
         Name: $videoItem/p/span[../b[contains(.,'Genre(s):')]]/a[@rel='tag']/text()
