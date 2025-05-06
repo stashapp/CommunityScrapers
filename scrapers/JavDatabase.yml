@@ -84,19 +84,13 @@ xPathScrapers:
         URL: &url //link[@rel='canonical']/@href
 
   movieScraper:
+    common:
+      $infobox: //div[@class="movietable"]/div[@class="row"][1]
     movie:
       Name: *title
-      Synopsis:
-        selector: //h4[@class='subhead' and starts-with(normalize-space(.), 'About')]/following-sibling::text()
-        postProcess:
-          - replace:
-              - regex: '\s+'
-                with: ' '
-          - replace:
-              - regex: '^\s+|\s+$'
-                with: ''
+      Synopsis: $infobox/div[2]/p[1]/text()
       Date:
-        selector: //p[b[contains(.,'Release Date:')]]/text()
+        selector: $infobox//p[b[contains(.,'Release Date:')]]/text()
         postProcess:
           - replace:
               - regex: '\s+'
@@ -105,7 +99,7 @@ xPathScrapers:
               - regex: '^\s+|\s+$'
                 with: ''
       Duration:
-        selector: //p[b[contains(.,'Runtime:')]]/text()
+        selector: $infobox//p[b[contains(.,'Runtime:')]]/text()
         postProcess:
           - replace:
               - regex: '\s*\(.*?\)'
@@ -129,9 +123,9 @@ xPathScrapers:
       FrontImage: *image
       Studio:
         Name:
-          selector: //p[b[contains(.,'Studio:')]]//a/text()
+          selector: $infobox//p[b[contains(.,'Studio:')]]//a/text()
         URL:
-          selector: //p[b[contains(.,'Studio:')]]//a/@href
+          selector: $infobox//p[b[contains(.,'Studio:')]]//a/@href
       URL: *url
 
   performerScraper:
@@ -181,7 +175,7 @@ xPathScrapers:
       Studio:
         Name: $videoItem/p/span[../b[contains(.,'Studio:')]]/a[@rel='tag']/text()
       Performers:
-        Name: 
+        Name:
           selector: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/text()
         URL: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/@href
       Image: /html/head/meta[@property='og:image']/@content
