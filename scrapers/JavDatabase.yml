@@ -1,4 +1,5 @@
 name: JAVDatabase
+
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -45,22 +46,83 @@ xPathScrapers:
         FrontImage: *image
         Studio: *studio
         Duration: &duration
-          selector: &duration //td[contains(.,'Runtime:')]/following-sibling::td
+          selector: //td[contains(.,'Runtime:')]/following-sibling::td
           postProcess:
+            # 1) strip out any parenthetical content, e.g. (HD: 128)
             - replace:
-                - regex: min
-                  with: ":00"
+                - regex: '\s*\(.*?\)'
+                  with: ''
+            # 2) collapse multiple whitespace
+            - replace:
+                - regex: '\s+'
+                  with: ' '
+            # 3) convert “min” or “min.” to “:00”
+            - replace:
+                - regex: 'min\.?'
+                  with: ':00'
+            # 4) remove stray “HD” markers
+            - replace:
+                - regex: 'HD:?'
+                  with: ''
+            # 5) remove space before colon
+            - replace:
+                - regex: '\s+:'
+                  with: ':'
+            # 6) trim leading/trailing whitespace
+            - replace:
+                - regex: '^\s+|\s+$'
+                  with: ''
         URL: &url //link[@rel='canonical']/@href
 
   movieScraper:
     movie:
       Name: *title
-      Synopsis: *details
-      Date: *date
-      Duration: *duration
+      Synopsis:
+        selector: //h4[@class='subhead' and starts-with(normalize-space(.), 'About')]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: '\s+'
+                with: ' '
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+      Date:
+        selector: //p[b[contains(.,'Release Date:')]]/text()
+        postProcess:
+          - replace:
+              - regex: '\s+'
+                with: ' '
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
+      Duration:
+        selector: //p[b[contains(.,'Runtime:')]]/text()
+        postProcess:
+          - replace:
+              - regex: '\s*\(.*?\)'
+                with: ''
+          - replace:
+              - regex: '\s+'
+                with: ' '
+          - replace:
+              - regex: 'min\.?'
+                with: ':00'
+          - replace:
+              - regex: 'HD:?'
+                with: ''
+          - replace:
+              - regex: '\s+:'
+                with: ':'
+          - replace:
+              - regex: '^\s+|\s+$'
+                with: ''
       Director: *director
       FrontImage: *image
-      Studio: *studio
+      Studio:
+        Name:
+          selector: //p[b[contains(.,'Studio:')]]//a/text()
+        URL:
+          selector: //p[b[contains(.,'Studio:')]]//a/@href
       URL: *url
 
   performerScraper:
@@ -71,14 +133,14 @@ xPathScrapers:
         selector: //h1[@class='idol-name']
         postProcess:
           - replace:
-              - regex: (.+)\s*-\s*JAV\sProfile$
-                with: $1
+              - regex: '(.+)\s*-\s*JAV\sProfile$'
+                with: '$1'
       Gender:
         fixed: Female
       Image: //div[@class='idol-portrait']//img/@data-src
       Birthdate: //b[contains(.,'DOB:')]/following-sibling::a
       HairColor: //b[contains(.,'Hair Color(s):')]/following-sibling::a
-      Tags: 
+      Tags:
         Name: //b[contains(.,'Tags:')]/following-sibling::a/text()
       Height:
         selector: //b[contains(.,'Height:')]/following-sibling::a
@@ -90,10 +152,11 @@ xPathScrapers:
         selector: //b[contains(.,'Measurements:')]/following-sibling::text()
         postProcess:
           - replace:
-              - regex: .+?[^\d-]([\d-]+)[^\d-].+
-                with: $1
-            # This can pick up a trailing dash, so get rid of it.
-              - regex: -$
+              - regex: '.+?[^\d-]([\d-]+)[^\d-].+'
+                with: '$1'
+          # remove any trailing dash
+          - replace:
+              - regex: '-$'
                 with: ''
 
-# Last Updated April 16, 2024
+# Last Updated May 6, 2025
