@@ -17,6 +17,15 @@ performerByURL:
       - javdatabase.com
     scraper: performerScraper
 
+sceneByFragment: # Scrape all scene info if JAV code is in the filename (path)
+  action: scrapeXPath
+  queryURL: https://www.javdatabase.com/movies/{filename}
+  queryURLReplace:
+    filename:
+      - regex: (.*@|.*[\s|\[|\(]|\b)(\w+-\d+)([\s|\]|\)]+.*|.*|\.\w+) # Match all text before and after JAV Code, including JAV code
+        with: $2 # Replace all text in filename with just the JAV Code for this search
+  scraper: sceneSearch
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -96,4 +105,26 @@ xPathScrapers:
               - regex: -$
                 with: ''
 
-# Last Updated April 16, 2024
+  sceneSearch:
+    common:
+      $videoPosterItem: /html/body/div[@id="page"]/div[@id="content"]/div[@id="primary"]/main/div[@class="entry-content"]/table/tbody/tr[@class="moviecovertb"]/td/div[@id="poster-container"]/a/img/@src
+      $videoItem: /html/body/div[@id="page"]/div[@id="content"]/div[@id="primary"]/main/div[@class="entry-content"]/div[@class="movietable"]/div[@class="row"]/div[2]
+      $videoDetailsItem: /html/body/div[@id="page"]/div[@id="content"]/div[@id="primary"]/main/div[@class="entry-content"]/div[@class="movietable"]/div/h4[@class='subhead']/../text()
+    scene:
+      Title: $videoItem/p[b[contains(.,'Title:')]]/text()
+      Code: $videoItem/p[b[contains(.,'DVD ID:')]]/text()
+      URL: /html/head/link[@rel="canonical"]/@href
+      Date: $videoItem/p[b[contains(.,'Release Date:')]]/text()
+      Director: $videoItem/p/span[../b[contains(.,'Director:')]]/a[@rel='tag']/text()
+      Studio:
+        Name: $videoItem/p/span[../b[contains(.,'Studio:')]]/a[@rel='tag']/text()
+      Performers:
+        Name: 
+          selector: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/text()
+        URL: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/@href
+      Image: /html/head/meta[@property='og:image']/@content
+      Tags:
+        Name: $videoItem/p/span[../b[contains(.,'Genre(s):')]]/a[@rel='tag']/text()
+      Details: $videoDetailsItem
+
+# Last Updated May 6, 2025
