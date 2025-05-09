@@ -23,7 +23,7 @@ xPathScrapers:
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
-          fixed: Only Tarts
+          fixed: OnlyTarts
       Tags:
         Name: //a[contains(@class, "tags__item")]
       Performers:
