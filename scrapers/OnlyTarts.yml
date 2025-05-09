@@ -6,28 +6,26 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $desktopDetails: //div[contains(@class, "video-detail__desktop-sidebar")]
     scene:
-      Title: //h1[@class="video-detail__title"]
-      Details: //div[@data-id="description" and @class="hidden"]/text()
+      Title: $desktopDetails/h1
+      Details: //details/p/text()
       Date:
-        selector: //div[@class="video-info__time"]
+        selector: $desktopDetails//div[@class="video-info__time"]
         postProcess:
           - replace:
+              # TODO: This also contains the exact scene duration if we ever get
+              # scrapers to return that field as well
               - regex: .*•\s+(.*)
                 with: $1
           - parseDate: 2 January, 2006
-      Image:
-        selector: //script[contains(., "pluginSettings")]/text()
-        postProcess:
-          - replace:
-              - regex: .*url":\s*"(.*poster[^"]*).*$
-                with: $1
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Only Tarts
       Tags:
         Name: //a[contains(@class, "tags__item")]
       Performers:
-        Name: //div[contains(@class, "video-info")]//a[contains(@href, "/model")]/text()
-        URL: //div[contains(@class, "video-info")]//a[contains(@href, "/model")]/@href
-# Last Updated September 10, 2023
+        Name: $desktopDetails//div[contains(@class, "video-info__text")]//a[contains(@href, "/model")]
+        URL: $desktopDetails//div[contains(@class, "video-info__text")]//a[contains(@href, "/model")]/@href
