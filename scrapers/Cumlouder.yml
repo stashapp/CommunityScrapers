@@ -8,13 +8,77 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //div[@class="video-top"]/h1
-      Details: //div[@class="content"]/p/text()
+      Details:
+        selector: //div[@class="content"]/p
+        postProcess:
+          - replace:
+              - regex: "^Description:"
+                with: ""
       Performers:
         Name: //a[@class="pornstar-link"]
       Tags:
         Name: //ul[@class="tags"]/li/a
       Studio:
         Name:
-          fixed: Cumlouder
+          selector: //video[@id="cum_player"]/@poster
+          postProcess:
+            - replace:
+                - regex: .+-all/(?P<spanishStudioName>[^/]+)/(?P<studioCode>[^/]+).+
+                  with: $spanishStudioName
+                # Some scenes like https://www.cumlouder.com/porn-video/wild-sex-for-krissy-lynn/
+                # will show up as "Unknown Site" and the above regex will not match
+                # so we default it to Cum Louder for now
+                - regex: ^https.+
+                  with: Cum Louder
+                # Other videos like https://www.cumlouder.com/porn-video/hot-big-ass-latina-teen-corine-enjoys-rough-pussy-fucking-after-casting/
+                # are not actually Cum Louder videos but previews/trailers/redistributions from other sites
+                - regex: //th0cdn.+
+                  with: WARNING! NOT A CUMLOUDER SCENE!
+            # Studios are always Spanish in their URLs so we grab the sitenames and map them into
+            # the English names that are used on StashDB
+
+            # Although their list of sites is currently incomplete (only listing 20 sites) we can
+            # grab them from from https://www.cumlouder.com/es/sitios/
+            # const spanishNames = [...document.querySelectorAll(".show-site-name")].map((el) => el.getAttribute("site-url"))
+            # and then get the english studio names from https://www.cumlouder.com/sites
+            # const englishNames = [...document.querySelectorAll(".show-site-name")].map((el) => el.innerText)
+            # const renames = spanishNames.map((name, idx) => `${name}: ${englishNames[idx]}`).sort().join("\n")
+            # console.log(renames)
+            - map: &studioMap
+                autoescuela: Cumlouder Driving School
+                chicasmalas: Boldly Girls
+                culosenpublico: Latin Asses in Public
+                cumcash: Cum Cash
+                cumextreme: Cum Extreme
+                diosasdelapaja: Handjob Goddess
+                domingas: Boob Day
+                dulces18: Sweet 18
+                elfollovolumen: Fuckin Van
+                ex-novias: Ex-Girlfriends
+                fuckingclinic: The Fucking Clinic
+                fuckingroom: The Fucking Room
+                giracumlouder: Cum Louder Tour
+                heroesdelporno: Porns Heros
+                mamadasenlacalle: Street Suckers
+                mecorroentucara: Give Me Spunk
+                melotrago: Hungry Cum Eaters
+                nachovidal: Ready or Not... Here I Cum
+                parodiasdelporno: Spoof Porn
+                pilladas: Pornstar Fisher
+                pollasxl: Cocks XL
+                pov: POV
+                reventandoculos: Breaking Asses
+                seraszorra: Bitch Confessions
+                siemprejodiendo: Cum Trick
+                soloculazos: Stunning Butts
+                viviendoconleyla: Living With Leyla
+                viviendoconunapornostar: Living With a Pornstar
+      Code:
+        selector: //video[@id="cum_player"]/@poster
+        postProcess:
+          - replace:
+              - regex: .+-all/(?P<spanishStudioName>[^/]+)/(?P<studioCode>[^/]+).+
+                with: $studioCode
+              - regex: ^https.+|^//.+
+                with: ""
       Image: //video[@id="cum_player"]/@poster
-# Last Updated March 05, 2021
