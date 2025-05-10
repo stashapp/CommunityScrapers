@@ -1,51 +1,58 @@
-# requires: Algolia
-name: "ZeroToleranceFilms"
+# requires: AlgoliaAPI
+name: ZeroToleranceFilms
 sceneByURL:
   - action: script
     url:
-      - diabolic.com/en/video
-      - zerotolerancefilms.com/en/video
+      - 3rddegreefilms.com/en/video/
+      - addicted2girls.com/en/video/
+      - diabolic.com/en/video/
+      - zerotolerancefilms.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - zerotolerancefilms.py
       - zerotolerancefilms
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - zerotolerancefilms.py
     - zerotolerancefilms
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - zerotolerancefilms.py
     - zerotolerancefilms
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - zerotolerancefilms.py
     - zerotolerancefilms
-    - validName
+    - scene-by-query-fragment
 movieByURL:
   - action: script
     url:
+      - 3rddegreefilms.com/en/movie/
       - diabolic.com/en/movie/
-      - zerotolerancefilms.com/en/movie
+      - zerotolerancefilms.com/en/movie/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - zerotolerancefilms.py
       - zerotolerancefilms
-      - movie
+      - movie-by-url
 galleryByURL:
   - action: script
     url:
+      - 3rddegreefilms.com/en/photo/
+      - addicted2girls.com/en/photo/
       - zerotolerancefilms.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - zerotolerancefilms.py
       - zerotolerancefilms
-      - gallery
-# Last Updated December 22, 2022
+      - gallery-by-url
+# Last Updated January 30, 2025

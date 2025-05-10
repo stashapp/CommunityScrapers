@@ -1,8 +1,9 @@
-# requires: Algolia
+# requires: AlgoliaAPI
 name: Blowpass
 sceneByURL:
   - action: script
     url:
+      - 1000facials.com/en/scene/
       - 1000facials.com/en/video/
       - blowpass.com/en/video/
       - immorallive.com/en/video/
@@ -11,26 +12,28 @@ sceneByURL:
       - throated.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - Blowpass.py
       - blowpass
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - Blowpass.py
     - blowpass
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - Blowpass.py
     - blowpass
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - Blowpass.py
     - blowpass
-    - validName
-# Last Updated February 24, 2024
+    - scene-by-query-fragment
+# Last Updated January 30, 2025

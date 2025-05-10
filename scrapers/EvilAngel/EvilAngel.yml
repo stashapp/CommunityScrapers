@@ -1,16 +1,25 @@
-# requires: Algolia
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+# requires: AlgoliaAPI
 name: "EvilAngel"
 sceneByURL:
   - action: script
     url:
+      - analacrobats.com/en/video/
       - evilangel.com/en/video/
+      - jonnidarkkoxxx.com/en/video/
       - pansexualx.com/en/video/
+      - pantypops.com/en/video/
+      - povblowjobs.com/en/video/
+      - strapattackers.com/en/video/
+      - tittycreampies.com/en/video/
       - transgressivexxx.com/en/video/
+      - transsexualangel.com/en/video/
       - tsfactor.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - EvilAngel.py
       - evilangel
+      - scene-by-url
 movieByURL:
   - action: script
     url:
@@ -20,39 +29,70 @@ movieByURL:
       - tsfactor.com/en/movie/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - EvilAngel.py
       - evilangel
-      - movie
+      - movie-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - EvilAngel.py
     - evilangel
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - EvilAngel.py
     - evilangel
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - EvilAngel.py
     - evilangel
-    - validName
+    - scene-by-query-fragment
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - EvilAngel.py
+    - evilangel
+    - gallery-by-fragment
 galleryByURL:
   - action: script
     url:
       - evilangel.com/en/photo/
+      - evilangel.com/en/video/
       - pansexualx.com/en/photo/
       - transgressivexxx.com/en/photo/
       - tsfactor.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - EvilAngel.py
       - evilangel
-      - gallery
-# Last Updated March 9, 2025
+      - gallery-by-url
+performerByURL:
+  - action: script
+    url:
+      - evilangel.com/en/pornstar/
+    script:
+      - python
+      - EvilAngel.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - EvilAngel.py
+    - evilangel
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - EvilAngel.py
+    - evilangel
+    - performer-by-fragment
+# Last Updated March 20, 2025
