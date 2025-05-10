@@ -136,6 +136,7 @@ studioMap = {
     "niksindian":"Niks Indian",
     "officialelizabethmarxs":"ElizabethMarxs",
     "onedomproductions":"One Dom Productions",
+    "openlegsxxx": "Open Legs",
     "peccatriciproduzioni":"Pecca Trici Produzioni",
     "peghim":"Peg Him",
     "platinumpuzzy.net":"Platinum Puzzy",
