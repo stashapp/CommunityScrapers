@@ -8,7 +8,7 @@ import cloudscraper
 
 from py_common.config import get_config
 from py_common.types import ScrapedPerformer, ScrapedScene, ScrapedMovie, ScrapedStudio
-from py_common.util import scraper_args
+from py_common.util import scraper_args, guess_nationality
 import py_common.log as log
 
 
@@ -141,7 +141,7 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
 
     performer: ScrapedPerformer = {
         "name": name,
-        "url": url,
+        "urls": [url],
         "gender": "MALE",
     }
 
@@ -176,14 +176,14 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
         performer["ethnicity"] = ethnicity_map.get(skin_color, skin_color)  # type: ignore
 
     if country := from_table(soup, "From:"):
-        performer["country"] = country.split(",")[-1].strip()
+        performer["country"] = guess_nationality(country)
 
     if birth_year := from_table(soup, "Born:"):
         # Unfortunately GEVI only tracks birth years, not full dates
-        performer["birthdate"] = f"{birth_year}-01-01"
+        performer["birthdate"] = f"{birth_year[-4:]}-01-01"
 
     if death_year := from_table(soup, "Died:"):
-        performer["death_date"] = f"{death_year}-01-01"
+        performer["death_date"] = f"{death_year[-4:]}-01-01"
 
     if (bio := soup.find("div", string="Notes:")) and (bio := bio.find_next("div")):
         performer["details"] = bio.get_text(separator="\n")
