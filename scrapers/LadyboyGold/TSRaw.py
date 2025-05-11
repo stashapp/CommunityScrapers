@@ -1,37 +1,37 @@
 import json
-import requests
 import sys
 from typing import Any
+
+import requests
 
 import py_common.log as log
 from py_common.types import ScrapedScene
 from py_common.util import scraper_args
 
-cdn_servers = {}
-cache_results_file = "tsraw-cache.json"
+CACHE_RESULTS_FILE = "tsraw-cache.json"
+CMS_AREA_ID = "cc6bd0ac-a417-47d1-9868-7855b25986e5"
+REQUESTS_TIMEOUT = 10
 
-def get_cdn_servers() -> str:
-    global cdn_servers
-    cms_area_id = 8
+def get_cdn_servers() -> dict[str, Any]:
     search_params = {
-        "cms_area_id": cms_area_id
+        "cms_area_id": CMS_AREA_ID
     }
     headers = {
-        "x-nats-cms-area-id": f"{cms_area_id}",
+        "x-nats-cms-area-id": f"{CMS_AREA_ID}",
         "x-nats-entity-decode": f"{1}",
         "x-nats-natscode": "MC4wLjAuMC4wLjAuMC4wLjA"
     }
     url = "https://nats.islanddollars.com/tour_api.php/content/config"
-    res = requests.get(url, params=search_params, headers=headers)
-    result = res.json()
-    cdn_servers = result['servers']
+    res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
+    _result = res.json()
+    return _result['servers']
 
 
-def parse_set_as_scene(cms_set: Any) -> ScrapedScene:
+def parse_set_as_scene(cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScene:
     scene: ScrapedScene = {}
     log.debug(f"cms_set: {cms_set}")
     scene["title"] = cms_set["name"].rstrip(" 4K")
-    scene["details"] = cms_set["description"]
+    scene["details"] = cms_set["description"].strip()
     scene["url"] = f"https://members.tsraw.com/video/{cms_set['slug']}"
     scene["date"] = cms_set["added_nice"]
 
@@ -67,7 +67,6 @@ def extract_names(cms_set, data_type_name):
     ]
 
 def get_sets(domain: str, start: int = 0, text_search = ""):
-    cms_area_id = 8
     search_params = {
         "cms_set_ids": "",
         "data_types": "1",
@@ -80,7 +79,7 @@ def get_sets(domain: str, start: int = 0, text_search = ""):
         "status": "enabled",
         "text_search": text_search,
         "data_type_search": '{"100001":"164"}',
-        "cms_area_id": cms_area_id
+        "cms_area_id": CMS_AREA_ID
     }
     headers = {
         "origin": f"https://www.{domain}.com",
@@ -94,22 +93,23 @@ def get_sets(domain: str, start: int = 0, text_search = ""):
         "sec-fetch-site": "cross-site",
         "sec-gpc": "1",
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-        "x-nats-cms-area-id": f"{cms_area_id}",
+        "x-nats-cms-area-id": f"{CMS_AREA_ID}",
         "x-nats-entity-decode": f"{1}",
         "x-nats-natscode": "MC4wLjAuMC4wLjAuMC4wLjA"
     }
     url = "https://nats.islanddollars.com/tour_api.php/content/sets"
-    res = requests.get(url, params=search_params, headers=headers)
-    result = res.json()
-    return result
+    res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
+    _result = res.json()
+    return _result
 
 
 def get_all_video_sets(domain: str):
     cms_sets = []
-    result = get_sets(domain)
-    if result is not None and "total_count" in result:
-        total_count = result["total_count"]
-        cms_sets.extend(result["sets"])
+    _result = get_sets(domain)
+    if _result is not None and "total_count" in _result:
+        total_count = _result["total_count"]
+        log.debug(f"Total count: {total_count}")
+        cms_sets.extend(_result["sets"])
     return cms_sets
 
 
@@ -128,15 +128,15 @@ def scene_search(
     log.debug(f"Matching '{query}' against {len(search_domains)} sites")
 
     # get CDN servers to prepend to image URLs
-    get_cdn_servers()
+    cdn_servers = get_cdn_servers()
     log.debug(f"CDN servers: {cdn_servers}")
 
     video_sets = get_sets(search_domains[0], text_search=query)["sets"]
-    parsed_scenes = [ parse_set_as_scene(cms_set) for cms_set in video_sets ]
+    parsed_scenes = [ parse_set_as_scene(cms_set, cdn_servers) for cms_set in video_sets ]
 
     # cache results
-    log.debug(f"writing {len(parsed_scenes)} parsed scenes to {cache_results_file}")
-    with open(cache_results_file, 'w') as f:
+    log.debug(f"writing {len(parsed_scenes)} parsed scenes to {CACHE_RESULTS_FILE}")
+    with open(CACHE_RESULTS_FILE, 'w', encoding='utf-8') as f:
         f.write(json.dumps(parsed_scenes))
 
     return parsed_scenes
@@ -154,14 +154,20 @@ def scene_from_fragment(
     # attempt to get from cached results first
     search_results = None
     try:
-        log.debug(f"Attempting to get result from {cache_results_file}")
-        with open(cache_results_file, 'r') as f:
+        log.debug(f"Attempting to get result from {CACHE_RESULTS_FILE}")
+        with open(CACHE_RESULTS_FILE, 'r', encoding='utf-8') as f:
             cached_scenes = json.load(f)
             log.debug(f"cached_scenes: {cached_scenes}")
             search_results = cached_scenes
-    except:
-        pass
-    
+    except FileNotFoundError:
+        log.error(f"Cache file {CACHE_RESULTS_FILE} not found")
+    except json.JSONDecodeError:
+        log.error(f"Error decoding JSON from {CACHE_RESULTS_FILE}")
+    except (OSError, IOError) as e:
+        log.error(f"An I/O error occurred: {e}")
+    except Exception as e:
+        log.error(f"An unexpected error occurred: {e}")
+
     # if no scenes retrieved from cached file, do an API search
     if search_results is None:
         search_results = scene_search(fragment["title"], search_domains=search_domains)
