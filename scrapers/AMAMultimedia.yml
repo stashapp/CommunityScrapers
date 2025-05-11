@@ -120,4 +120,4 @@ jsonScrapers:
         selector: posterUrl
         postProcess: *fullSizeImage
       Studio:
-        Name: sponsors.name
+        Name: sponsor.name
