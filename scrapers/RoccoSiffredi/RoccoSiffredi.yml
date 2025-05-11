@@ -1,49 +1,51 @@
-# requires: Algolia
-name: "RoccoSiffredi"
+# requires: AlgoliaAPI
+name: RoccoSiffredi
 sceneByURL:
   - action: script
     url:
       - roccosiffredi.com/en/video
     script:
       - python
-      - ../Algolia/Algolia.py
+      - RoccoSiffredi.py
       - roccosiffredi
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - RoccoSiffredi.py
     - roccosiffredi
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - RoccoSiffredi.py
     - roccosiffredi
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - RoccoSiffredi.py
     - roccosiffredi
-    - validName
+    - scene-by-query-fragment
 movieByURL:
   - action: script
     url:
       - roccosiffredi.com/en/dvd/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - RoccoSiffredi.py
       - roccosiffredi
-      - movie
+      - movie-by-url
 galleryByURL:
   - action: script
     url:
       - roccosiffredi.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - RoccoSiffredi.py
       - roccosiffredi
-      - gallery
-# Last Updated December 22, 2022
+      - gallery-by-url
+# Last Updated January 29, 2025
