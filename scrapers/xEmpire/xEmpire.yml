@@ -64,4 +64,18 @@ movieByURL:
       - ../AlgoliaAPI/AlgoliaAPI.py
       - xempire
       - movie-by-url
+performerByURL:
+  - action: script
+    url:
+      - allblackx.com/en/pornstar/
+      - darkx.com/en/pornstar/
+      - eroticax.com/en/pornstar/
+      - hardx.com/en/pornstar/
+      - lesbianx.com/en/pornstar/
+      - xempire.com/en/pornstar/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - xempire
+      - performer-by-url
 # Last Updated May 12, 2025
