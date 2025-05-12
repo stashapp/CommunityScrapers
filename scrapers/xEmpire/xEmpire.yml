@@ -71,6 +71,20 @@ movieByURL:
       - ../AlgoliaAPI/AlgoliaAPI.py
       - xempire
       - movie-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - xempire
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - xempire
+    - performer-by-name
 performerByURL:
   - action: script
     url:
