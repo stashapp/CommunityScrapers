@@ -36,6 +36,13 @@ sceneByQueryFragment:
     - ../AlgoliaAPI/AlgoliaAPI.py
     - xempire
     - scene-by-query-fragment
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - xempire
+    - gallery-by-fragment
 galleryByURL:
   - action: script
     url:
