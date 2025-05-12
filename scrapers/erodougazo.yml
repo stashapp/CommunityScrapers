@@ -80,6 +80,10 @@ xPathScrapers:
                   "N": 14,
                 };
                 var bandSize = bust - differenceMap[cupSize];
+                // add 1 if the band size is odd
+                if (bandSize % 2 !== 0) {
+                  bandSize += 1;
+                }
 
                 // return the formatted string
                 return bandSize + cupSize + "-" + waist + "-" + hips;
