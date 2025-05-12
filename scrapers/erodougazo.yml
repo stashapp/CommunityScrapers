@@ -101,8 +101,6 @@ xPathScrapers:
               - regex: "、"
                 with: ","
   sceneScraper:
-    # common:
-    #   $details: //div[@class="video-details"]
     scene:
       Title: //h2[@id="AVPtitle"]
       Date:
@@ -126,7 +124,6 @@ xPathScrapers:
         Name: //div[@id="AVdata"]//div[@class="update avd production p_s"]//a/text()
       Image:
         selector: //meta[@property="og:image"]/@content
-      # URL: &sceneUrl //link[@rel="canonical"]/@href
       Code:
         selector: //div[@id="AVdata"]//dl[dt[contains(text(), "品番")]]/dd
 # Last Updated May 12, 2025
