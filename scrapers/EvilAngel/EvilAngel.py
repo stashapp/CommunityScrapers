@@ -148,6 +148,7 @@ def fix_url(_url: str) -> str:
         site = site_from_url(_url)
         # if the site does not have a real/working domain
         if site in [
+            "lewood",   # real site, but uses AdultEmpireCash system rather than Algolia
             "lexingtonsteele",
         ]:
             return urlparse(_url)._replace(netloc="www.evilangel.com").geturl()
