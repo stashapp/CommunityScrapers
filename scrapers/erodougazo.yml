@@ -1,0 +1,132 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: erodougazo
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - erodougazo.com/actress/av/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - erodougazo.com/av/video/
+    scraper: sceneScraper
+
+xPathScrapers:
+  performerScraper:
+    common:
+      $p1a: //div[@class="ActressProfileP"]/ul[@class="p1a"]
+      $p1b: //div[@class="ActressProfileP"]/ul[@class="p1b"]
+    performer:
+      Name:
+        selector: //p[@class="APname"]/a/text()[last()]
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Height:
+        # japanese: 身長 = english: height
+        selector: $p1a/li[i[contains(text(), "身長")]]/span
+        postProcess:
+          - replace:
+              - regex: (\d+)cm
+                with: $1
+      Measurements:
+        # first selector is cup size, second is bust, waist, hips
+        # japanese: スリーサイズ = english: measurements
+        selector: $p1a/li/a[contains(@href, "/actress/index/cs")]/text()|$p1a/li[i[contains(text(), "スリーサイズ")]]/span
+        concat: "," # concat so the cup size and measurements can be processed as one input value
+        postProcess:
+          - javascript: |
+              if (value && value.length) {
+                // split the string by comma
+                var parts = value.split(",");
+
+                // check if the first part contains a cup size
+                var cupSizeRegex = /[A-Z]+/;
+                var cupSizeMatch = parts[0].match(cupSizeRegex);
+                if (!cupSizeMatch) {
+                  return "";
+                }
+                var cupSize = cupSizeMatch[0];
+
+                // check if the second part contains measurements
+                var measurementsRegex = /(\d+)[^\d]*(\d+)[^\d]*(\d+)/;
+                var measurementsMatch = parts[1].match(measurementsRegex);
+                if (!measurementsMatch) {
+                  return "";
+                }
+                // extract the measurements and convert to inches
+                var bust = Math.round(parseInt(measurementsMatch[1]) / 2.54);
+                var waist = Math.round(parseInt(measurementsMatch[2]) / 2.54);
+                var hips = Math.round(parseInt(measurementsMatch[3]) / 2.54);
+
+                // calculate bra band size from bust size and cup size
+                var differenceMap = {
+                  "AA": 0,
+                  "A": 1,
+                  "B": 2,
+                  "C": 3,
+                  "D": 4,
+                  "DD": 5,
+                  "E": 5,
+                  "DDD": 6,
+                  "F": 6,
+                  "DDDD": 7,
+                  "G": 7,
+                  "H": 8,
+                  "I": 9,
+                  "J": 10,
+                  "K": 11,
+                  "L": 12,
+                  "M": 13,
+                  "N": 14,
+                };
+                var bandSize = bust - differenceMap[cupSize];
+
+                // return the formatted string
+                return bandSize + cupSize + "-" + waist + "-" + hips;
+              } else {
+                return "";
+              }
+      Birthdate:
+        # japanese: 生年月日 = english: birthdate
+        selector: $p1b/li[i[contains(text(), "生年月日")]]/span
+        postProcess:
+          - replace:
+              - regex: (\d{4})年(\d{1,2})月(\d{1,2})日
+                with: $2/$3/$1
+          - parseDate: 1/2/2006
+      Aliases:
+        selector: //p[@class="APname"]/a/@title
+        postProcess:
+          - replace:
+              - regex: "、"
+                with: ","
+  sceneScraper:
+    # common:
+    #   $details: //div[@class="video-details"]
+    scene:
+      Title: //h2[@id="AVPtitle"]
+      Date:
+        selector: //div[@id="AVdata"]//dl[dt[contains(text(), "FANZA")]]/dd
+        postProcess:
+          - parseDate: 2006/01/02
+      Details: //div[@id="AVdata"]//div/p
+      Tags:
+        Name: //div[@id="AVdata"]//div[contains(@class, "genre")]//dd
+      Performers:
+        Name:
+          selector: //dd[contains(@class, "actress_name")]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://erodougazo.com
+            # sub-scrape to get english name as performer name (to match performer scraper)
+            - subScraper:
+                selector: //p[@class="APname"]/a/text()[last()]
+      Studio:
+        Name: //div[@id="AVdata"]//div[@class="update avd production p_s"]//a/text()
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      # URL: &sceneUrl //link[@rel="canonical"]/@href
+      Code:
+        selector: //div[@id="AVdata"]//dl[dt[contains(text(), "品番")]]/dd
+# Last Updated May 12, 2025
