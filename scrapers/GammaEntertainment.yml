@@ -42,14 +42,6 @@ performerByURL:
       - assholefever.com/en/pornstar/
     scraper: performerScraper
 
-movieByURL:
-  - action: scrapeXPath
-    url:
-      - darkx.com/en/movie/
-      - hardx.com/en/movie/
-      - xempire.com/en/movie/
-    scraper: movieScraper
-
 xPathScrapers:
   sceneScraper:
     common:
@@ -184,4 +176,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated February 24, 2024
+# Last Updated May 12, 2025
