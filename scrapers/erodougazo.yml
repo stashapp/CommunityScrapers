@@ -54,39 +54,47 @@ xPathScrapers:
                   return "";
                 }
                 // extract the measurements and convert to inches
-                var bust = Math.round(parseInt(measurementsMatch[1]) / 2.54);
-                var waist = Math.round(parseInt(measurementsMatch[2]) / 2.54);
-                var hips = Math.round(parseInt(measurementsMatch[3]) / 2.54);
+                var overbustCm = parseInt(measurementsMatch[1]);
+                var waistInches = Math.round(parseInt(measurementsMatch[2]) / 2.54);
+                var hipsInches = Math.round(parseInt(measurementsMatch[3]) / 2.54);
 
-                // calculate bra band size from bust size and cup size
+                // from https://aimerfeel.com/blogs/news/how-to-measure-your-japanese-bra-size#:~:text=Find%20your%20appropriate%20size%20by,Your%20cup%20size%20is%20A.
                 var differenceMap = {
-                  "AA": 0,
-                  "A": 1,
-                  "B": 2,
-                  "C": 3,
-                  "D": 4,
-                  "DD": 5,
-                  "E": 5,
-                  "DDD": 6,
-                  "F": 6,
-                  "DDDD": 7,
-                  "G": 7,
-                  "H": 8,
-                  "I": 9,
-                  "J": 10,
-                  "K": 11,
-                  "L": 12,
-                  "M": 13,
-                  "N": 14,
+                    "A": 10,
+                    "B": 13,
+                    "C": 15,
+                    "D": 18,
+                    "E": 20,
+                    "F": 23,
+                    "G": 25,
+                    "H": 28,
                 };
-                var bandSize = bust - differenceMap[cupSize];
-                // add 1 if the band size is odd
-                if (bandSize % 2 !== 0) {
-                  bandSize += 1;
-                }
+
+                // from https://katherinehamilton.com/pages/international-bra-size-chart
+                var cupSizeMap = {
+                    "A": "AA",
+                    "B": "A",
+                    "C": "B",
+                    "D": "C",
+                    "E": "D",
+                    "F": "E",
+                    "G": "F",
+                    "H": "G",
+                };
+
+                // calculate underbust size from overbust size and cup size
+                var underbustCm = overbustCm - differenceMap[cupSize];
+                // round to the nearest 5 for the band size
+                var bandSizeNearest5 = Math.round(underbustCm / 5) * 5;
+
+                // convert band size to inches plus 4 inches
+                var bandSizeInches = Math.round(bandSizeNearest5 / 2.54 + 4);
+
+                // convert cup size to US size
+                var usCupSize = cupSizeMap[cupSize];
 
                 // return the formatted string
-                return bandSize + cupSize + "-" + waist + "-" + hips;
+                return bandSizeInches + usCupSize + "-" + waistInches + "-" + hipsInches;
               } else {
                 return "";
               }
