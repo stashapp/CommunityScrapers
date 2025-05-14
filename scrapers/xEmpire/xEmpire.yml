@@ -1,5 +1,6 @@
-# requires: Algolia
-name: "xEmpire"
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+# requires: AlgoliaAPI
+name: xEmpire
 sceneByURL:
   - action: script
     url:
@@ -11,28 +12,37 @@ sceneByURL:
       - xempire.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - xempire
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - xempire
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - xempire
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - xempire
-    - validName
+    - scene-by-query-fragment
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - xempire
+    - gallery-by-fragment
 galleryByURL:
   - action: script
     url:
@@ -44,7 +54,49 @@ galleryByURL:
       - xempire.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - xempire
-      - gallery
-# Last Updated December 22, 2022
+      - gallery-by-url
+movieByURL:
+  - action: script
+    url:
+      - allblackx.com/en/movie/
+      - darkx.com/en/movie/
+      - eroticax.com/en/movie/
+      - hardx.com/en/movie/
+      - lesbianx.com/en/movie/
+      - xempire.com/en/movie/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - xempire
+      - movie-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - xempire
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - xempire
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - allblackx.com/en/pornstar/
+      - darkx.com/en/pornstar/
+      - eroticax.com/en/pornstar/
+      - hardx.com/en/pornstar/
+      - lesbianx.com/en/pornstar/
+      - xempire.com/en/pornstar/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - xempire
+      - performer-by-url
+# Last Updated May 12, 2025
