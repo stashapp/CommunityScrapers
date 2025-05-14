@@ -1,5 +1,5 @@
 name: AdultEmpireCash
-# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Forbidden Fruits Films, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Rodney Moore, Severe Sex Films, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
+# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Forbidden Fruits Films, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, Severe Sex Films, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
 # Sites ("Brands") from https://www.adultempirecash.com
 sceneByURL:
   - action: scrapeXPath
@@ -23,6 +23,7 @@ sceneByURL:
       - only3x.com/
       - pornstarstroker.com/ # aggregator site?
       - reaganfoxx.com/
+      - realgirlsfuck.com
       - rodneymoorestore.com
       - severesexfilms.com/
       - smutfactor.com/
@@ -73,8 +74,7 @@ xPathScrapers:
       Studio:
         Name:
           selector: //div[@class="studio"]/span[contains(text(),"Studio:")]/following-sibling::*
-          postProcess: &PP
-            # Override studio name only when needed
+          postProcess: &PP # Override studio name only when needed
             - map:
                 Evil Angel - LeWood: LeWood
                 Jay Rock Clips: Jay's POV

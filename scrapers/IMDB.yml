@@ -1,7 +1,7 @@
 name: IMDB
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.imdb.com/search/name-text/?bio={}
+  queryURL: https://www.imdb.com/search/name/?name={}
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
