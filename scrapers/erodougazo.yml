@@ -36,68 +36,43 @@ xPathScrapers:
         postProcess:
           - javascript: |
               if (value && value.length) {
-                // split the string by comma
-                var parts = value.split(",");
+                // create super regex to match the entire pattern
+                const allRegex = /([A-Z])?カップ,[^\d]*(\d+)?[^\d]*\/[^\d]*(\d+)?[^\d]*\/[^\d]*(\d+)?/;
+                const [_, cup, bust, waist, hips] = value.match(allRegex);
+                if (!cup || !bust || !waist || !hips) return `failed: ${cup}, ${bust}, ${waist}, ${hips}`;
 
-                // check if the first part contains a cup size
-                var cupSizeRegex = /[A-Z]+/;
-                var cupSizeMatch = parts[0].match(cupSizeRegex);
-                if (!cupSizeMatch) {
-                  return "";
-                }
-                var cupSize = cupSizeMatch[0];
+                // metric to imperial conversion
+                const cmToInch = (cm) => Math.round(cm / 2.54);
 
-                // check if the second part contains measurements
-                var measurementsRegex = /(\d+)[^\d]*(\d+)[^\d]*(\d+)/;
-                var measurementsMatch = parts[1].match(measurementsRegex);
-                if (!measurementsMatch) {
-                  return "";
-                }
                 // extract the measurements and convert to inches
-                var overbustCm = parseInt(measurementsMatch[1]);
-                var waistInches = Math.round(parseInt(measurementsMatch[2]) / 2.54);
-                var hipsInches = Math.round(parseInt(measurementsMatch[3]) / 2.54);
+                const overbustCm = Number.parseInt(bust);
+                const waistInches = Math.round(cmToInch(Number.parseInt(waist)));
+                const hipsInches = Math.round(cmToInch(Number.parseInt(hips)));
 
                 // from https://aimerfeel.com/blogs/news/how-to-measure-your-japanese-bra-size#:~:text=Find%20your%20appropriate%20size%20by,Your%20cup%20size%20is%20A.
-                var differenceMap = {
-                    "A": 10,
-                    "B": 13,
-                    "C": 15,
-                    "D": 18,
-                    "E": 20,
-                    "F": 23,
-                    "G": 25,
-                    "H": 28,
-                };
+                const differenceFromCup = (cup) => 10 + Math.ceil(2.5 * (cup.charCodeAt(0) - 65));
 
                 // from https://katherinehamilton.com/pages/international-bra-size-chart
-                var cupSizeMap = {
-                    "A": "AA",
-                    "B": "A",
-                    "C": "B",
-                    "D": "C",
-                    "E": "D",
-                    "F": "E",
-                    "G": "F",
-                    "H": "G",
-                };
+                const cupJPToUS = (cup) => cup === "A" ? "AA" : String.fromCharCode(cup.charCodeAt(0) - 1);
 
-                // calculate underbust size from overbust size and cup size
-                var underbustCm = overbustCm - differenceMap[cupSize];
+                // calculate JP underbust size from provided bust (overbust) size and cup size (JP)
+                const underbustCm = overbustCm - differenceFromCup(cup);
+
                 // round to the nearest 5 for the band size
-                var bandSizeNearest5 = Math.round(underbustCm / 5) * 5;
+                const bandSizeJP = Math.round(underbustCm / 5) * 5;
 
                 // convert band size to inches plus 4 inches
-                var bandSizeInches = Math.round(bandSizeNearest5 / 2.54 + 4);
+                const _bandSizeUS = Math.round(bandSizeJP / 2.54 + 4);
+                // adjust for odd band sizes
+                const bandSizeUS = _bandSizeUS % 2 === 0 ? _bandSizeUS : _bandSizeUS + 1;
 
                 // convert cup size to US size
-                var usCupSize = cupSizeMap[cupSize];
+                const usCupSize = cupJPToUS(cup);
 
                 // return the formatted string
-                return bandSizeInches + usCupSize + "-" + waistInches + "-" + hipsInches;
-              } else {
-                return "";
+                return `${bandSizeUS}${usCupSize}-${waistInches}-${hipsInches}`;
               }
+              return "";
       Birthdate:
         # japanese: 生年月日 = english: birthdate
         selector: $p1b/li[i[contains(text(), "生年月日")]]/span
