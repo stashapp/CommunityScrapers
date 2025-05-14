@@ -1,0 +1,30 @@
+name: Damplipsamp
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - damplips.com/p
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="entry-title"]
+      Details:  //div[@class="entry-content-single"]
+      Date:
+        selector: //span[contains(@class,'updated')]
+        postProcess:
+          - parseDate: January 2, 2006
+      Image: //video/@poster
+      Performers:
+        Name: //span[contains(text(),'NAME:')]/following-sibling::span/a
+      Tags:
+        Name: //div[@class="entry-header"]/span[@class="entry-category"]/a
+      Code:
+        selector: //link[@rel="shortlink"]/@href
+        postProcess:
+          - replace:
+              - regex: '^.+=(\d+)$'
+                with: $1
+      Studio:
+        Name:
+          fixed: Damp Lips
+# Last Updated May 11, 2025
