@@ -103,9 +103,13 @@ xPathScrapers:
         selector: $p1b/li[i[contains(text(), "生年月日")]]/span
         postProcess:
           - replace:
-              - regex: (\d{4})年(\d{1,2})月(\d{1,2})日
-                with: $2/$3/$1
-          - parseDate: 1/2/2006
+              - regex: (\d{4})[^\d]*(\d+)?[^\d]*(\d+)?[^\d]*
+                with: $1-$2-$3
+          # when only the year is provided, use the first day of the year
+          - replace:
+              - regex: (\d{4})--
+                with: $1-1-1
+          - parseDate: "2006-1-2"
       Aliases:
         selector: //p[@class="APname"]/a/@title
         postProcess:
