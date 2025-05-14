@@ -17,10 +17,9 @@ xPathScrapers:
       $p1a: //div[@class="ActressProfileP"]/ul[@class="p1a"]
       $p1b: //div[@class="ActressProfileP"]/ul[@class="p1b"]
     performer:
-      Name:
-        selector: //p[@class="APname"]/a/text()[last()]
-      Image:
-        selector: //meta[@property="og:image"]/@content
+      # Main name in katakana
+      Name: &name //p[@class="APname"]//span
+      Image: //meta[@property="og:image"]/@content
       Height:
         # japanese: 身長 = english: height
         selector: $p1a/li[i[contains(text(), "身長")]]/span
@@ -39,7 +38,10 @@ xPathScrapers:
                 // create super regex to match the entire pattern
                 const allRegex = /([A-Z])?カップ,[^\d]*(\d+)?[^\d]*\/[^\d]*(\d+)?[^\d]*\/[^\d]*(\d+)?/;
                 const [_, cup, bust, waist, hips] = value.match(allRegex);
-                if (!cup || !bust || !waist || !hips) return `failed: ${cup}, ${bust}, ${waist}, ${hips}`;
+                if (!cup || !bust || !waist || !hips) {
+                  console.log(`failed to parse ${value}: ${cup}, ${bust}, ${waist}, ${hips}`);
+                  return value;
+                }
 
                 // metric to imperial conversion
                 const cmToInch = (cm) => Math.round(cm / 2.54);
@@ -86,14 +88,19 @@ xPathScrapers:
                 with: $1-1-1
           - parseDate: "2006-1-2"
       Aliases:
-        selector: //p[@class="APname"]/a/@title
+        selector: //p[@class="APname"]//span/following-sibling::text()
         postProcess:
           - replace:
+              # Aliases are kanji followed by romanized
+              - regex: (^[^\s]+)\s+(.+)
+                with: $1, $2
               - regex: "、"
                 with: ","
   sceneScraper:
     scene:
       Title: //h2[@id="AVPtitle"]
+      Image: //meta[@property="og:image"]/@content
+      Code: //div[@id="AVdata"]//dl[dt[contains(text(), "品番")]]/dd
       Date:
         selector: //div[@id="AVdata"]//dl[dt[contains(text(), "FANZA")]]/dd
         postProcess:
@@ -102,19 +109,12 @@ xPathScrapers:
       Tags:
         Name: //div[@id="AVdata"]//div[contains(@class, "genre")]//dd
       Performers:
-        Name:
+        Name: //dd[contains(@class, "actress_name")]/a
+        URLs:
           selector: //dd[contains(@class, "actress_name")]/a/@href
           postProcess:
             - replace:
                 - regex: ^
                   with: https://erodougazo.com
-            # sub-scrape to get english name as performer name (to match performer scraper)
-            - subScraper:
-                selector: //p[@class="APname"]/a/text()[last()]
       Studio:
         Name: //div[@id="AVdata"]//div[@class="update avd production p_s"]//a/text()
-      Image:
-        selector: //meta[@property="og:image"]/@content
-      Code:
-        selector: //div[@id="AVdata"]//dl[dt[contains(text(), "品番")]]/dd
-# Last Updated May 12, 2025
