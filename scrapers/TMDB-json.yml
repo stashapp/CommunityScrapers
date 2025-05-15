@@ -1,0 +1,53 @@
+# ATTRIBUTION
+# Uses APIs from TMDB (https://www.themoviedb.org/)
+
+name: TheMovieDB JSON
+
+movieByURL:
+  - action: scrapeJson
+    url:
+      - themoviedb.org
+    scraper: jsonMovieScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '.+\/movie\/(\d+).+'
+          with: https://api.themoviedb.org/3/movie/$1?append_to_response=credits
+
+jsonScrapers:
+  jsonMovieScraper:
+    movie:
+      Name: titlez
+      Director:
+        selector: credits.crew.#(job=="Director").name
+        concat: ", "
+      Duration:
+        selector: runtime
+        postProcess:
+          - javascript: |
+              // minutes to hours:minutes
+              const hours = Math.floor(value / 60)
+              const minutes = value % 60
+              return `${hours}:${minutes}`
+      Studio:
+        Name: production_companies.#.name
+      Date:
+        selector: release_date
+        postProcess:
+          - parseDate: 2006-01-02
+      Synopsis: overview
+      FrontImage:
+        selector: poster_path
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://image.tmdb.org/t/p/original
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0.0
+    - Key: Authorization
+      Value: Bearer YOUR-BEARER-HERE
+
+# Last Updated May 15, 2025
