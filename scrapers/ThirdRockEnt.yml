@@ -8,41 +8,48 @@ sceneByURL:
       - analized.com/trailers/
       - analviolation.com/trailers/
       - baddaddypov.com/trailers/
-      - badfamilypov.com/trailers/
-      - badmommypov.com/trailers/
       - brokensluts.net/trailers/
       - cumdumpsterteens.com/trailers/
-      - daughterjoi.com/trailers/
-      - downtofuckdating.com/trailers/
       - dtfsluts.com/trailers/
-      - fullpornnetwork.com/trailers/
       - girlfaction.com/trailers/
       - hergape.com/trailers/
       - homemadeanalwhores.com/trailers/
       - jamesdeen.com/trailers/
       - lesbiananalsluts.com/trailers/
-      - mommyjoi.com/trailers/
       - mugfucked.com/trailers/
       - onlyprince.com/trailers/
       - pervertgallery.com/trailers/
       - porkvendors.com/trailers/
       - pornforce.com/trailers/
-      - povperverts.net/trailers/
       - publicsexdate.com/trailers/
-      - realfuckingdating.com/trailers/
-      - shefucksonthefirstdate.com/trailers/
       - slutinspection.com/trailers/
-      - slutsbts.com/trailers/
-      - slutspov.com/trailers/
       - sluttybbws.com/trailers/
       - teasingandpleasing.com/trailers/
       - teenageanalsluts.com/trailers/
       - teenagecorruption.com/trailers/
       - teenagetryouts.com/trailers/
       - twistedvisual.com/trailers/
-      - wifespov.com/trailers/
       - yourmomdoesanal.com/trailers/
       - yourmomdoesporn.com/trailers/
+
+      # There is currently no known way to scrape the correct
+      # substudio when scraping from these network sites
+      - badfamilypov.com/trailers/
+      - fullpornnetwork.com/trailers/
+
+      # These sites no longer have public scenes but might open up again
+      - badmommypov.com/trailers/
+      - daughterjoi.com/trailers/
+      - mommyjoi.com/trailers/
+
+      # Old sites that are just redirects now
+      - downtofuckdating.com/trailers/
+      - realfuckingdating.com/trailers/
+      - wifespov.com/trailers/
+      - slutsbts.com/trailers/
+      - povperverts.net/trailers/
+      - shefucksonthefirstdate.com/trailers/
+
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -53,57 +60,64 @@ xPathScrapers:
         selector: //label[contains(text(),"Date Added")]/following-sibling::p/text()
         postProcess:
           - parseDate: 2006-01-02
+      URLs: &url //meta[@property="og:url"]/@content
       Performers:
         Name: //p[@class="mb-1"]//a
       Tags:
-        Name: //ul[@class="flex flex-wrap gap-2 text-white"]//a
+        Name: //label[contains(., "Categories")]/following-sibling::div/ul/li/a
       Image:
         selector: //img[@alt="trailer"]/@src0_1x | //div[@id="video_player"]//@poster | //video[@id="my-player"]/@poster
+        postProcess:
+          - replace:
+              # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
+              - regex: (:?-[1-4]x)?\.jpg$
+                with: "-full.jpg"
       Studio:
         Name:
-          selector: //meta[@property="og:url"]/@content
+          selector: *url
           postProcess:
+            - replace:
+                - regex: ^(?:https:\/\/[\w\.]*?)([^.]+)\.(?:com|net).*
+                  with: $1
             - map:
-                https://AbbieMaley.com: Abbie Maley
-                https://AnalAmateur.com: Anal Amateur
-                https://AnalBBC.com: AnalBBC
-                https://ANALIZED.com: Analized
-                https://analviolation.com: Anal Violation
-                https://BadDaddyPOV.com: Bad Daddy POV
-                https://BadFamilyPOV.com: Bad Family POV
-                https://BadFamilyPov.com: Bad Family POV                
-                https://BadMommyPOV.com: Bad Mommy POV
-                https://BrokenSluts.net: Broken Sluts
-                https://CumDumpsterTeens.com: Cum Dumpster Teens
-                https://DaughterJOI.com: Daughter JOI
-                https://DownToFuckDating.com: Down To Fuck Dating
-                https://DTFsluts.com: DTF Sluts
-                https://FullPornNetwork.com: Full Porn Network
-                https://Girlfaction.com: Girlfaction
-                https://HerGape.com: Her Gape
-                https://HomemadeAnalWhores.com: Homemade Anal Whores
-                https://JamesDeen.com: James Deen
-                https://LesbianAnalSluts.com: Lesbian Anal Sluts
-                https://MommyJOI.com: Mommy JOI
-                https://mugfucked.com: Mug Fucked
-                https://OnlyPrince.com: Only Prince
-                https://PervertGallery.com: Pervert Gallery
-                https://PorkVendors.com: Pork Vendors
-                https://PornForce.com: Porn Force
-                https://POVPerverts.net: POV Perverts
-                https://publicsexdate.com: Public Sex Date
-                https://RealFuckingDating.com: Real Fucking Dating
-                https://SheFucksOnTheFirstDate.com: She Fucks On The First Date
-                https://SlutInspection.com: Slut Inspection
-                https://slutsbts.com: Sluts BTS
-                https://slutspov.com: Sluts POV
-                https://sluttybbws.com: Slutty BBWs
-                https://TeasingandPleasing.com: Teasing And Pleasing
-                https://teenageanalsluts.com: Teenage Anal Sluts
-                https://TeenageCorruption.com: Teenage Corruption
-                https://teenagetryouts.com: Teenage Tryouts
-                https://TwistedVisual.com: Twisted Visual
-                https://wifespov.com: Wifes POV
-                https://yourmomdoesanal.com: Your Mom Does Anal
-                https://YourMomDoesPorn.com: Your Mom Does Porn
-# Last Updated April 7, 2024
+                abbiemaley: Abbie Maley
+                analamateur: Anal Amateur
+                analbbc: AnalBBC
+                analized: Analized
+                analviolation: Anal Violation
+                baddaddypov: Bad Daddy POV
+                badfamilypov: Bad Family POV
+                badmommypov: Bad Mommy POV
+                brokensluts: Broken Sluts
+                cumdumpsterteens: Cum Dumpster Teens
+                daughterjoi: Daughter JOI
+                downtofuckdating: Down To Fuck Dating
+                dtfsluts: DTF Sluts
+                fullpornnetwork: Full Porn Network
+                girlfaction: Girlfaction
+                hergape: Her Gape
+                homemadeanalwhores: Homemade Anal Whores
+                jamesdeen: James Deen
+                lesbiananalsluts: Lesbian Anal Sluts
+                mommyjoi: Mommy JOI
+                mugfucked: Mug Fucked
+                onlyprince: Only Prince
+                pervertgallery: Pervert Gallery
+                porkvendors: Pork Vendors
+                pornforce: Porn Force
+                povperverts: POV Perverts
+                publicsexdate: Public Sex Date
+                realfuckingdating: Real Fucking Dating
+                shefucksonthefirstdate: She Fucks On The First Date
+                slutinspection: Slut Inspection
+                slutsbts: Sluts BTS
+                slutspov: Sluts POV
+                sluttybbws: Slutty BBWs
+                teasingandpleasing: Teasing and Pleasing
+                teenageanalsluts: Teenage Anal Sluts
+                teenagecorruption: Teenage Corruption
+                teenagetryouts: Teenage Tryouts
+                twistedvisual: Twisted Visual
+                wifespov: Wifes POV
+                yourmomdoesanal: Your Mom Does Anal
+                yourmomdoesporn: Your Mom Does Porn
