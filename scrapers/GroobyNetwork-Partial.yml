@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: "GroobyNetwork-Partial"
 performerByURL:
   - action: scrapeXPath
