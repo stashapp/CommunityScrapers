@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 
-name: "BaDoink"
+name: BaDoink
 
 sceneByURL:
   - action: scrapeXPath
@@ -15,7 +15,7 @@ sceneByURL:
     queryURL: "{url}"
     queryURLReplace:
       url:
-        # remove the members part of the url since the scrapper would not attempt to login
+        # remove the members part of the url since the scraper would not attempt to login
         - regex: "/members/"
           with: "/"
 
@@ -55,19 +55,19 @@ xPathScrapers:
     common:
       $details: &detailsAttr //div[@class="video-rating-and-details"]
     scene:
-      Title: //h1[contains(@class, "video-title")]/text()
+      Title: //h1[contains(@class, "video-title")]
       Date: &dateSel
-        selector: $details//p[@class="video-upload-date"]/text()
+        selector: $details//p[@class="video-upload-date"]
         postProcess:
           - replace:
               - regex: Uploaded:\s
                 with:
           - parseDate: January 02, 2006
-      Details: &detailsSel $details//p[@class="video-description"]/text()
+      Details: &detailsSel $details//p[@class="video-description"]
       Tags:
-        Name: $details//p[@class="video-tags"]//a/text()
+        Name: $details//p[@class="video-tags"]//a
       Performers:
-        Name: $details//p[@class="video-actors"]/a/text()
+        Name: $details//p[@class="video-actors"]/a
       Studio:
         Name: &studioName //meta[@name="dl8-customization-brand-name"]/@content
       Image: &imageSel
@@ -107,35 +107,41 @@ xPathScrapers:
     common:
       $stats: //ul[@id='girlOptionDetails']
     performer:
-      Name: //div[@class='girl-details-info']/h1/text()
+      Name:
+        selector: //div[@class='girl-details-info']/h1
+        postProcess:
+          - replace:
+              # Names are 'Performer Name - VR Porn Videos' so we remove the last part
+              - regex: \s-\sVR.*
+                with: ""
       Gender:
         fixed: female
       URL: //link[@rel='canonical']/@href
-      Twitter: //a[contains(@class,'social-media') and contains (@href,'twitter')]/@href
-      Instagram: //a[contains(@class,'social-media') and contains (@href,'instagram')]/@href
+      Twitter: //a[contains(@class,'social-media') and contains (@href,'x.com')]/@href
+      Instagram: //a[contains(@class,'social-media') and contains (@href,'instagram.com')]/@href
       Ethnicity:
-        selector: $stats/li[span[contains(.,'Ethnicity')]]/span[contains(@class,'value')]/text()
+        selector: $stats/li[span[contains(.,'Ethnicity')]]/span[contains(@class,'value')]
         postProcess:
           - map:
               Caucasian: white
               Asian: asian
               Black: black
               Latin: hispanic
-      Country: $stats/li[span[contains(.,'Country')]]/span[contains(@class,'value')]/text()
-      EyeColor: $stats/li[span[contains(.,'Eyes')]]/span[contains(@class,'value')]/text()
+      Country: $stats/li[span[contains(.,'Country')]]/span[contains(@class,'value')]
+      EyeColor: $stats/li[span[contains(.,'Eyes')]]/span[contains(@class,'value')]
       Height:
-        selector: $stats/li[span[contains(.,'Height')]]/span[contains(@class,'value')]/text()
+        selector: $stats/li[span[contains(.,'Height')]]/span[contains(@class,'value')]
         postProcess:
           - feetToCm: true
-      Measurements: $stats/li[span[contains(.,'Measure')]]/span[contains(@class,'value')]/text()
-      Aliases: $stats/li[span[contains(.,'Aka')]]/span[contains(@class,'value')]/text()
+      Measurements: $stats/li[span[contains(.,'Measure')]]/span[contains(@class,'value')]
+      Aliases: $stats/li[span[contains(.,'Aka')]]/span[contains(@class,'value')]
       Image: //img[@id='girlImage']/@src
   movieScraper:
     common:
       $details: *detailsAttr
     movie:
       Name:
-        selector: //meta[@name="dl8-customization-brand-name"]/@content|$details/h1/text()
+        selector: //meta[@name="dl8-customization-brand-name"]/@content|$details/h1
         concat: " - "
       Duration:
         selector: $details//p[@class="video-duration"]/text()
@@ -150,4 +156,3 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
-# Last Updated November 25, 2022
