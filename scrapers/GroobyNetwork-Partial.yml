@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
 name: "GroobyNetwork-Partial"
 performerByURL:
   - action: scrapeXPath
@@ -24,6 +23,8 @@ performerByURL:
       - femout.xxx/tour/models
       - femoutsex.xxx/tour/models
       - groobygirls.com/tour/models
+      - joeystransfeetgirls.com/tour/models
+      - kellyquellxxx.com/tour/models
       - realtgirls.com/tour/models
       - tgirlsex.xxx/tour/models
       - tgirls.porn/tour/models
@@ -67,6 +68,8 @@ sceneByURL:
       - franks-tgirlworld.com
       - grooby-archives.com
       - groobygirls.com
+      - joeystransfeetgirls.com
+      - kellyquellxxx.com
       - ladyboy-ladyboy.com
       - ladyboy.xxx
       - realtgirls.com
@@ -117,6 +120,9 @@ xPathScrapers:
               - regex: (\d)(st|[nr]d|th)
                 with: "$1"
           - parseDate: 2 January
+          - parseDate: 2 Jan
+          - parseDate: January 2
+          - parseDate: Jan 2
   performerScraperB:
     performer:
       Name: *name
@@ -299,4 +305,4 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.transvr.com/
       Tags: *tagsVR
-# Last Updated November 22, 2024
+# Last Updated May 16, 2025
