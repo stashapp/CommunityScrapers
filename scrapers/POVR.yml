@@ -89,24 +89,17 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: &title
-        selector: //h1[contains(@class, "heading-title")]/text()
-      Date: &date
-        selector: //p[contains(@class, 'player__date')]
-        postProcess:
-          - replace:
-              - regex: .*\s(\d+\s[a-zA-Z]+,\s\d+)$
-                with: $1
-          - parseDate: 2 January, 2006
+        selector: //h1[contains(@class, "heading-title")]
+      Date: &date //meta[@property="video:release_date"]/content
       Performers: &performers
-        Name: //li[span[contains(text(), "Pornstars:")]]/following-sibling::li/a/text()
+        Name: //meta[@property="video:actor"]/@content
       Tags: &tags
-        Name: //li[span[contains(text(), "Tags:")]]/following-sibling::li/a/text()
-      Details: &details
-        selector: //div[contains(@class, "player__description")]/p/text()
+        Name: //li[span[contains(text(), "Tags:")]]/following-sibling::li/a
+      Details: &details //div[contains(@class, "player__description")]/p
       Image: *imageAttr
       Studio: &studio
         Name:
-          selector: //span[contains(text(), "Studio:")]/following-sibling::a/text()
+          selector: //span[contains(text(), "Studio:")]/following-sibling::a
       Code: *codeAttr
     gallery:
       Title: *title
