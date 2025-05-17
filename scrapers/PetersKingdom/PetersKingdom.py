@@ -26,7 +26,7 @@ def scrape_scene_tags(hostname: str, postid: int):
         tags_url = f"https://{hostname}/wp-json/wp/v2/video-category?post={postid}"
     tags_data = url_json(tags_url)
     log.debug(f"Tags URL: {tags_url}")
-    return [{"name": p["name"] for p in tags_data}]
+    return [{"name": p["name"]} for p in tags_data]
 
 
 def scrape_scene_performers(url):
