@@ -1,0 +1,19 @@
+name: PetersKingdom
+# requires: py_common
+
+sceneByURL:
+  - url:
+      - dirtycinema.com
+      - milfuckd.com
+      - mypovfam.com
+      - passionsonly.com
+      - pervertedpov.com
+      - peterskingdom.com
+      - rawwhitemeat.com
+      - slutsaroundtown.com
+    action: script
+    script:
+      - python
+      - PetersKingdom.py
+      - scene
+# Last Updated May 17, 2025
