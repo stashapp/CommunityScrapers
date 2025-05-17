@@ -1,0 +1,27 @@
+name: PetersKingdom
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - dirtycinema.com
+      - milfuckd.com
+      - mypovfam.com
+      - passionsonly.com
+      - pervertedpov.com    
+      - peterskingdom.com
+      - rawwhitemeat.com
+      - slutsaroundtown.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1
+      Details: //div[contains(@class,'info__content')]/p | //div[@class='e-con-inner']//div[not(h2) and @class='elementor-widget-container']/text()
+      Image: //video/@poster
+      Studio:
+        Name: //a[contains(@class,'header__logo')]/img/@alt
+      Performers:
+        Name: //span[contains(.,'Starring')]/a | //a[contains(@href,'performers') and @class='jet-listing-dynamic-terms__link']
+
+# Last Updated May 16, 2025
