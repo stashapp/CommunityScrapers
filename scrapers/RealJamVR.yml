@@ -38,7 +38,7 @@ xPathScrapers:
                 with: $1$3
           - parseDate: Jan 2, 2006
       Performers: &performers
-        Name: //div[contains(@class,"scene-view")]//a[contains(@href,"/actor/")]
+        Name: //div[contains(text(),"Starring:")]//a[contains(@href,"/actor/")]
       Tags: &tags
         Name:
           selector: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon"]
