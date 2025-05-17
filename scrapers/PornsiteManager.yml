@@ -3,7 +3,8 @@ sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
     url:
-      # Taken from https://www.pornsitemanager.com/en/sites on 2023-09-22
+      # Taken from https://www.pornsitemanager.com/en/sites on 2025-05-17
+      - adamjacques.fr/en/videos/detail/
       - alphamales.com/en/videos/detail/
       - andolinixxl.com/en/videos/detail/
       - attackboys.com/en/videos/detail/
@@ -16,6 +17,7 @@ sceneByURL:
       - cazzofilm.com/en/videos/detail/
       - citebeur.com/en/videos/detail/
       - clairprod.com/en/videos/detail/
+      - cocksuckerprod.com/en/videos/detail/
       - crunchboy.com/en/videos/detail/
       - darkcruising.com/en/videos/detail/
       - enzorimenez.com/en/videos/detail/
@@ -23,6 +25,7 @@ sceneByURL:
       - frenchporn.fr/en/videos/detail/
       - gayarabclub.com/en/videos/detail/
       - gayfrenchkiss.fr/en/videos/detail/
+      - gaynetwork.com/en/videos/detail/
       - hardkinks.com/en/videos/detail/
       - harlemsex.com/en/videos/detail/
       - hotcast.fr/en/videos/detail/
@@ -32,8 +35,9 @@ sceneByURL:
       - mackstudio.com/en/videos/detail/
       - maxence-angel.com/en/videos/detail/
       - menoboy.com/en/videos/detail/
+      - mika-ayden.com/en/videos/detail/
+      - militarygayxxx.com/en/videos/detail/
       - mistermale.com/en/videos/detail/
-      - paulomassaxxx.com/en/videos/detail/
       - philippwants.com/en/videos/detail/
       - rawfuck.com/en/videos/detail/
       - ridleydovarez.com/en/videos/detail/
@@ -42,10 +46,12 @@ sceneByURL:
       - viktor-rom.com/en/videos/detail/
       - vintagegaymovies.com/en/videos/detail/
       - wurstfilm.com/en/videos/detail/
+
 movieByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
+      - adamjacques.fr/en/dvd/detail/
       - alphamales.com/en/dvd/detail/
       - andolinixxl.com/en/dvd/detail/
       - attackboys.com/en/dvd/detail/
@@ -58,6 +64,7 @@ movieByURL:
       - cazzofilm.com/en/dvd/detail/
       - citebeur.com/en/dvd/detail/
       - clairprod.com/en/dvd/detail/
+      - cocksuckerprod.com/en/dvd/detail/
       - crunchboy.com/en/dvd/detail/
       - darkcruising.com/en/dvd/detail/
       - enzorimenez.com/en/dvd/detail/
@@ -65,6 +72,7 @@ movieByURL:
       - frenchporn.fr/en/dvd/detail/
       - gayarabclub.com/en/dvd/detail/
       - gayfrenchkiss.fr/en/dvd/detail/
+      - gaynetwork.com/en/dvd/detail/
       - hardkinks.com/en/dvd/detail/
       - harlemsex.com/en/dvd/detail/
       - hotcast.fr/en/dvd/detail/
@@ -74,8 +82,9 @@ movieByURL:
       - mackstudio.com/en/dvd/detail/
       - maxence-angel.com/en/dvd/detail/
       - menoboy.com/en/dvd/detail/
+      - mika-ayden.com/en/dvd/detail/
+      - militarygayxxx.com/en/dvd/detail/
       - mistermale.com/en/dvd/detail/
-      - paulomassaxxx.com/en/dvd/detail/
       - philippwants.com/en/dvd/detail/
       - rawfuck.com/en/dvd/detail/
       - ridleydovarez.com/en/dvd/detail/
@@ -103,10 +112,10 @@ xPathScrapers:
               - regex: .*"contentUrl"\s*:\s*"([^"]+)".*
                 with: $1
       Studio:
-        Name: //div[@class="row mb-4 px-0"]//h3[i[contains(@class, "fa-video")]]/text()
+        Name: //*[i[contains(@class, "fa-video")]]/span
       Movies:
         Name:
-          selector: //div[@class="row mb-4 px-0"]//h3[i[contains(@class, "fa-scrubber")]]/text()
+          selector: //div[@class="row mb-4 px-0"]//h3[i[contains(@class, "fa-scrubber")]]
           postProcess:
             - replace:
                 - regex: DVD:\s*
@@ -127,9 +136,10 @@ xPathScrapers:
                   with: $2$1
             - subScraper: &dvdCover //div[@class="col-sm-8 col-lg-3 pt-4 px-0 px-lg-2 align-items-center"]//img/@src
       Performers:
-        Name: //div[@class="row mb-4 px-0"]//h3[i[contains(@class, "fa-star")]]/text()
+        Name: //div[contains(@class, "models-list-img")]//a
+        URLs: //div[contains(@class, "models-list-img")]//a/@href
       Tags:
-        Name: //div[@class="row mb-4 px-0"]//h3[not(i)]/text()
+        Name: //div[@class="row mb-4 px-0"]//h3[not(i)]
   movieScraper:
     movie:
       Name: //h1
@@ -137,4 +147,3 @@ xPathScrapers:
       Synopsis: //div[@class="mb-2 bg-light p-3 my-3 text-justify my-text psm-rounded"]
       FrontImage: *dvdCover
       Date: *date
-# Last Updated September 22, 2023
