@@ -12,6 +12,7 @@ sceneByQueryFragment:
 sceneByURL:
   - action: scrapeXPath
     url:
+      - adult-prime.com/video
       - adultprime.com/studios/video
     scraper: sceneScraper
 
@@ -38,11 +39,11 @@ xPathScrapers:
     common:
       $scene: //div[@class="update-info-container"]
     scene:
-      Title: //span[@class="active-crumb"]
+      Title: //h1/text()
       Date:
-        selector: //div[@id="theatre-row"]//span[@class="description-releasedate"]/text()
+        selector: //*[contains(@class, "fa-calendar")]/../b[contains(text(), "-")]/text()
         postProcess:
-          - parseDate: 02-01-2006
+          - parseDate: 2006-01-02
       Details:
         selector: $scene//p[contains(@class,"ap-limited-description-text")]
         postProcess:
@@ -53,13 +54,7 @@ xPathScrapers:
               - regex: '([?!.])(\w)'
                 with: "$1\n\n$2"
       Image:
-        selector: //div[@id="theatre-row"]//video/@poster | //div[@id="theatre-row"]//div[contains(@class, "video-wrapper")]//div[contains(@style,"background-image:") and not(contains(@style,"player-placeholder.gif"))]/@style
-        postProcess:
-          - replace:
-              # Sometimes they put the URL in quotes, sometimes they just don't
-              # https://regex101.com/r/fszqAQ/3
-              - regex: .+url\(\"?(.+)\"?\).+
-                with: $1
+        selector: //div[contains(@class, "video-item")]/@data-image
       URL: &url //link[@rel="canonical"]/@href
       Code:
         selector: *url
@@ -68,11 +63,18 @@ xPathScrapers:
               - regex: \D+(\d+)$
                 with: $1
       Studio:
-        Name: $scene//p[contains(@class,"update-info-line")]//a[contains(@href,"/studio/")]/text()
+        Name:
+          selector: //meta[@name="Keywords"]/@content
+          postProcess:
+            - replace: # get the last keyword in a list
+                - regex: ^.*,\s*
+                  with: ""
       Tags:
         Name:
           selector: $scene//b[contains(.,"Niches")]/following-sibling::text()
           split: ", "
       Performers:
-        Name: $scene//b[contains(.,"Performer")]/following-sibling::a/text()
-# Last Updated August 18, 2024
+        Name:
+          selector: $scene//b[contains(.,"Niches")]/following-sibling::*[@class]/text()
+          split: ", "
+# Last Updated May 17, 2025
