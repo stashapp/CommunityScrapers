@@ -2,39 +2,42 @@ name: "AdultPrime"
 sceneByName:
   action: scrapeXPath
   queryURL: "https://adultprime.com/studios/search?q={}"
-  scraper: sceneSearch
+  scraper: searchMainSite
 
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
-  scraper: sceneScraper
+  scraper: mainSite
 
 sceneByURL:
   - action: scrapeXPath
     url:
       - adultprime.com/studios/video
-    scraper: sceneScraper
+    scraper: mainSite
+  - action: scrapeXPath
+    url:
+      - adult-prime.com/video.php
+    scraper: secondarySite
 
 xPathScrapers:
-  sceneSearch:
+  searchMainSite:
     common:
       $scenes: //ul[@id="studio-videos-container"]
     scene:
-      Title:
-        selector: $scenes//span[contains(@class, "description-title")]/text()
+      Title: $scenes//span[contains(@class, "description-title")]
       Date:
-        selector: $scenes//span[@class="description-releasedate"]/text()
+        selector: $scenes//span[@class="description-releasedate"]
         postProcess:
           - parseDate: Jan 02, 2006
       URL:
         selector: $scenes//a[@class="absolute"]/@href
         postProcess:
           - replace:
-              - regex: "^.signup.galleryId."
-                with: "https://adultprime.com/studios/video/"
+              - regex: ^
+                with: https://adultprime.com
       Image: $scenes//div[contains(@class, 'ap-slider-img')]/@data-src
 
-  sceneScraper:
+  mainSite:
     common:
       $scene: //div[@class="update-info-container"]
     scene:
@@ -43,8 +46,9 @@ xPathScrapers:
         selector: //div[@id="theatre-row"]//span[@class="description-releasedate"]/text()
         postProcess:
           - parseDate: 02-01-2006
-      Details:
-        selector: $scene//p[contains(@class,"ap-limited-description-text")]
+      URL: &url //link[@rel="canonical"]/@href
+      Details: &details
+        selector: //p[contains(@class, "ap-limited-description-text")]
         postProcess:
           - replace:
               # Hack to get multiple paragraphs: whenever we find a punctuation mark
@@ -60,19 +64,48 @@ xPathScrapers:
               # https://regex101.com/r/fszqAQ/3
               - regex: .+url\(\"?(.+)\"?\).+
                 with: $1
-      URL: &url //link[@rel="canonical"]/@href
       Code:
         selector: *url
         postProcess:
           - replace:
-              - regex: \D+(\d+)$
+              - regex: .+?(\d+)$
                 with: $1
+      Performers:
+        Name: $scene//b[contains(.,"Performer")]/following-sibling::a
       Studio:
-        Name: $scene//p[contains(@class,"update-info-line")]//a[contains(@href,"/studio/")]/text()
+        Name: $scene//b[contains(.,"Studio")]/following-sibling::a
       Tags:
         Name:
           selector: $scene//b[contains(.,"Niches")]/following-sibling::text()
           split: ", "
+
+  secondarySite:
+    common:
+      $scene: //div[@class="content-wrapper"]/div[@class="content-wrapper"]
+    scene:
+      Title: $scene//h1
+      Date: ($scene//i[contains(@class, "fa-calendar")]/following-sibling::b)[1]
+      # Secondary site has no canonical URLs so we construct one for the main site
+      URL:
+        selector: $scene//div[contains(@class, "update-info-site")]/a/@href
+        postProcess:
+          - replace:
+              - regex: .+?(\d+)$
+                with: https://adultprime.com/studios/video?id=$1
+      Details: *details
+      Image: $scene//div[@data-image]/@data-image
+      Studio:
+        Name:
+          selector: //meta[@name="Keywords"]/@content
+          postProcess:
+            - replace: # get the last keyword in a list
+                - regex: ^.*,\s*
+                  with: ""
       Performers:
-        Name: $scene//b[contains(.,"Performer")]/following-sibling::a/text()
-# Last Updated August 18, 2024
+        Name:
+          selector: $scene//b[contains(.,"Performer")]/following-sibling::text()
+          split: ", "
+      Tags:
+        Name:
+          selector: $scene//b[contains(.,"Niche")]/following-sibling::text()
+          split: ", "
