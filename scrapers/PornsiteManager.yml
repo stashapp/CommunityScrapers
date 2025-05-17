@@ -137,7 +137,6 @@ xPathScrapers:
             - subScraper: &dvdCover //div[@class="col-sm-8 col-lg-3 pt-4 px-0 px-lg-2 align-items-center"]//img/@src
       Performers:
         Name: //div[contains(@class, "models-list-img")]//a
-        URLs: //div[contains(@class, "models-list-img")]//a/@href
       Tags:
         Name: //div[@class="row mb-4 px-0"]//h3[not(i)]
   movieScraper:
