@@ -15,5 +15,5 @@ sceneByURL:
     script:
       - python
       - PetersKingdom.py
-      - scene
+      - scene-by-url
 # Last Updated May 17, 2025
