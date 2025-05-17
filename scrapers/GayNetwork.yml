@@ -1,9 +1,9 @@
-name: PornsiteManager
+name: GayNetwork
 sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
     url:
-      # Taken from https://www.pornsitemanager.com/en/sites on 2025-05-17
+      # Taken from https://www.gaynetwork.com/en/sites on 2025-05-17
       - adamjacques.fr/en/videos/detail/
       - alphamales.com/en/videos/detail/
       - andolinixxl.com/en/videos/detail/
