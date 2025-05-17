@@ -213,7 +213,7 @@ xPathScrapers:
       Measurements: //li/b[text()="Breast Size:"]/following-sibling::text()
   sceneScraper:
     scene:
-      Title: &title //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()
+      Title: &title //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()[last()]
       Date: &date
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
@@ -299,4 +299,4 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.transvr.com/
       Tags: *tagsVR
-# Last Updated November 22, 2024
+# Last Updated May 16, 2025
