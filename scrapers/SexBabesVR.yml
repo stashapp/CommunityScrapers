@@ -15,13 +15,17 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02, 2006
       Details:
-        selector: $detail/div[@class="container"]/p/text()
-        concat: " "
+        selector: $detail//div[@class="readMoreWrapper"]//p
+        concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: Read More$
+                with: ""
       Tags:
-        Name: $detail//div[@class="tags"]//a/text()
+        Name: $detail//div[@class="tags"]//a
       Performers:
         Name:
-          selector: $detail//div[@class="video-detail__description--author"]//a/text()
+          selector: $detail//div[@class="video-detail__description--author"]//a
           postProcess:
             - replace:
                 - regex: ^\s*(.+)\s*$
@@ -29,5 +33,4 @@ xPathScrapers:
       Image: //dl8-video/@poster
       Studio:
         Name:
-          fixed: "SexBabesVR"
-# Last Updated January 10, 2024
+          fixed: SexBabesVR
