@@ -1,6 +1,7 @@
 import json
 import re
 import sys
+from html import unescape
 
 import py_common.log as log
 from py_common.deps import ensure_requirements
@@ -26,12 +27,12 @@ def scrape_scene_tags(hostname: str, postid: int):
         tags_url = f"https://{hostname}/wp-json/wp/v2/video-category?post={postid}"
     tags_data = url_json(tags_url)
     log.debug(f"Tags URL: {tags_url}")
-    return [{"name": p["name"]} for p in tags_data]
+    return [{"name": unescape(p["name"])} for p in tags_data]
 
 
 def scrape_scene_performers(url):
     performers_data = url_json(url)
-    return [{"name": p["name"] for p in performers_data}]
+    return [{"name": unescape(p["name"]) for p in performers_data}]
 
 
 def scrape_scene_media(url):
@@ -47,25 +48,17 @@ def scrape_scene_video(url: str):
     hostname = url.split("/")[2]
     # start constructing with sub-scrapers
     studio_data = url_json(f"https://{hostname}/wp-json")
-    cleaned_details = (
-        scene_data["content"]["rendered"]
-        .replace("<p>", "")
-        .replace("</p>", "")
-        .replace("</span>", "")
-        .strip()
-    )
+    details = re.sub(r"</?[^>]+>", "", scene_data["content"]["rendered"]).strip()
+
     scene = {
-        "title": scene_data["title"]["rendered"],
+        "title": unescape(scene_data["title"]["rendered"]),
         "date": scene_data["date"].split("T")[0],
-        "details": re.sub(r"<span .+>", "", cleaned_details),
+        "details": unescape(details),
         "tags": scrape_scene_tags(hostname, scene_data["id"]),
         "image": scrape_scene_media(
             scene_data["_links"]["wp:featuredmedia"][0]["href"]
         ),
-        "studio": {
-            # urldecode for peter's kingdom
-            "name": studio_data["name"].replace("&#039;", "'")
-        },
+        "studio": {"name": unescape(studio_data["name"])},
     }
     # pull performers link if exists
     wp_terms = scene_data["_links"]["wp:term"]
@@ -77,7 +70,7 @@ def scrape_scene_video(url: str):
         performers_url = None
     if performers_url:
         performers_data = url_json(performers_url)
-        scene["performers"] = [{"name": p["name"]} for p in performers_data]
+        scene["performers"] = [{"name": unescape(p["name"])} for p in performers_data]
     # return to handler
     return scene
 
