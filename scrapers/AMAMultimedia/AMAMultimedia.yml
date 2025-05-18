@@ -1,0 +1,52 @@
+name: "AMA Multimedia"
+# Scrapes:
+sceneByURL:
+  - action: script
+    url:
+      # Straight Porn
+      - anal4k.com/video/
+      - baeb.com/video/
+      - bbcpie.com/video/
+      - castingcouch-x.com/video/
+      - creepypa.com/video/
+      - cum4k.com/video/
+      - exotic4k.com/video/
+      - facials4k.com/video/
+      - fantasyhd.com/video/
+      - girlcum.com/video/
+      - holed.com/video/
+      - lubed.com/video/
+      - mom4k.com/video/
+      - momcum.com/video/
+      - myveryfirsttime.com/video/
+      - nannyspy.com/video/
+      - passion-hd.com/video/
+      - pornplus.com/video/
+      - pornpros.com/video/
+      - pornprosnetwork.com/video/
+      - povd.com/video/
+      - puremature.com/video/
+      - spyfam.com/video/
+      - strippers4k.com/video/
+      - tiny4k.com/video/
+      - wetvr.com/video/
+
+      # Gay Porn
+      - bathhousebait.com/video/
+      - boysdestroyed.com/video/
+      - damnthatsbig.com/video/
+      - gaycastings.com/video/
+      - gaycreeps.com/video/
+      - gayroom.com/video/
+      - gayviolations.com/video/
+      - manroyale.com/video/
+      - massagebait.com/video/
+      - menpov.com/video/
+      - officecock.com/video/
+      - outhim.com/video/
+      - showerbait.com/video/
+      - thickandbig.com/video/
+    script:
+      - python
+      - scrape.py
+      - scene-by-url
