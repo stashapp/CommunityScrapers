@@ -1,0 +1,44 @@
+name: "SG Video"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sg-video.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Studio:
+        Name:
+          fixed: SG Video
+      Title:
+        selector: //div//h2/text()
+      Details:
+        selector: //div[@class="descriptions"]//div[@class="texts"]//p[1]/text()
+      Tags:
+        Name:
+          selector: //div[@class="descriptions"]//div[@class="texts"]//p[2]//a/text()
+      Image:
+        selector: //div[@class="descriptions"]//div[@id="thumbs"][@class="video fk"]//img
+#      Title:
+#        selector: //title
+#        postProcess:
+#          - replace:
+#              - regex: (^.+) - 1 .+$
+#                with: $1
+#      Details: //div[@class="sp-info-txt"]/p/text()
+#      Performers:
+#        Name:
+#          selector: //p[@class="sp-info-name"]/a/text()
+#      Tags:
+#        Name:
+#          selector: //p[@class="niches-list"]/a/text()
+#      Date:
+#        selector: //li[contains(text(),"Added:")]
+#        postProcess:
+#          - replace:
+#            - regex: "Added\\: (.+)"
+#              with: $1
+#          - parseDate: 2 Jan 2006
+#      Image: //video/@poster
+
+# Last Updated July 12, 2023
