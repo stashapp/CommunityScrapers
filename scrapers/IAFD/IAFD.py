@@ -1,4 +1,3 @@
-import argparse
 import json
 import random
 import re
@@ -8,35 +7,14 @@ import time
 from typing import Iterable, Callable, TypeVar
 from datetime import datetime
 
-from py_common.util import guess_nationality
+from py_common.util import guess_nationality, scraper_args
 import py_common.log as log
+from py_common.deps import ensure_requirements
 
+ensure_requirements("cloudscraper", "lxml")
 
-try:
-    import cloudscraper
-except ModuleNotFoundError:
-    print(
-        "You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)",
-        file=sys.stderr,
-    )
-    print(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper",
-        file=sys.stderr,
-    )
-    sys.exit()
-
-try:
-    from lxml import html
-except ModuleNotFoundError:
-    print(
-        "You need to install the lxml module. (https://lxml.de/installation.html#installation)",
-        file=sys.stderr,
-    )
-    print(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml",
-        file=sys.stderr,
-    )
-    sys.exit()
+import cloudscraper  # noqa: E402
+from lxml import html  # noqa: E402
 
 stash_date = "%Y-%m-%d"
 iafd_date = "%B %d, %Y"
@@ -93,8 +71,8 @@ def map_haircolor(haircolor: str):
 
 
 def clean_date(date: str) -> str | None:
-    date = date.strip()
-    cleaned = re.sub(r"(\S+\s+\d+,\s+\d+).*", r"\1", date)
+    stripped = date.strip()
+    cleaned = re.sub(r"(\S+\s+\d+,\s+\d+).*", r"\1", stripped)
     for date_format in [iafd_date, iafd_date_scene]:
         try:
             return datetime.strptime(cleaned, date_format).strftime(stash_date)
@@ -191,38 +169,16 @@ def performer_twitter(tree):
 
 def performer_url(tree):
     return maybe(
-        tree.xpath('//div[@id="perfwith"]//*[contains(@href,"person.rme")]/@href'),
-        lambda u: f"https://www.iafd.com{u}",
+        tree.xpath("//*[@data-src]/@data-src"),
+        lambda u: u.replace("matchups", "person"),
     )
+
 
 def performer_gender_map(tree):
-    gender = tree.xpath('//p[@class="bioheading" and contains(text(), "Gender")]/following-sibling::p[1]/text()')
-    return map_gender(gender[0])
-
-# unused code
-def performer_gender(tree):
-    def parse_transgender(gender: str):
-        # get trans genders from the short code supplied
-        if gender in ['tf', 'tm']:
-            return map_gender(gender)
-
-        # next, attempt to get the trans gender from the performer id suffix
-        perf_id = next(
-            iter(tree.xpath('//form[@id="correct"]/input[@name="PerfID"]/@value')), ""
-        )
-        trans = (
-            "Transgender "
-            # IAFD are not consistent with their URLs
-            if any(mark in perf_id.lower() for mark in ("_ts", "_ftm", "_mtf"))
-            else ""
-        )
-        return trans + map_gender(gender)
-
-    return maybe(
-        tree.xpath('//form[@id="correct"]/input[@name="Gender"]/@value'),
-        parse_transgender,
+    gender = tree.xpath(
+        '//p[@class="bioheading" and contains(text(), "Gender")]/following-sibling::p[1]/text()'
     )
-# end unused code
+    return map_gender(gender[0])
 
 
 def performer_name(tree):
@@ -378,7 +334,6 @@ scraper = cloudscraper.create_scraper()
 
 
 def scrape(url: str, retries=0):
-    global iafd_uuid_url
     try:
         scraped = scraper.get(url, timeout=(3, 7))
     except requests.exceptions.Timeout as exc_time:
@@ -395,7 +350,7 @@ def scrape(url: str, retries=0):
             return scrape(url, retries + 1)
         log.error(f"HTTP Error: {scraped.status_code}, giving up")
         sys.exit(1)
-    iafd_uuid_url = scraped.url
+
     return html.fromstring(scraped.content)
 
 
@@ -479,69 +434,36 @@ def movie_from_tree(tree):
     }
 
 
-def main():
-    parser = argparse.ArgumentParser("IAFD Scraper", argument_default="")
-    subparsers = parser.add_subparsers(
-        dest="operation", help="Operation to perform", required=True
-    )
-
-    subparsers.add_parser("search", help="Search for performers").add_argument(
-        "name", nargs="?", help="Name to search for"
-    )
-    subparsers.add_parser("performer", help="Scrape a performer").add_argument(
-        "url", nargs="?", help="Performer URL"
-    )
-    subparsers.add_parser("movie", help="Scrape a movie").add_argument(
-        "url", nargs="?", help="Movie URL"
-    )
-    subparsers.add_parser("scene", help="Scrape a scene").add_argument(
-        "url", nargs="?", help="Scene URL"
-    )
-
-    if len(sys.argv) == 1:
-        parser.print_help(sys.stderr)
-        sys.exit(1)
-
-    args = parser.parse_args()
-    log.debug(f"Arguments from commandline: {args}")
-    # Script is being piped into, probably by Stash
-    if not sys.stdin.isatty():
-        try:
-            frag = json.load(sys.stdin)
-            args.__dict__.update(frag)
-            log.debug(f"With arguments from stdin: {args}")
-        except json.decoder.JSONDecodeError:
-            log.error("Received invalid JSON from stdin")
-            sys.exit(1)
-
-    if args.operation == "search":
-        name = args.name
-        if not name:
-            log.error("No query provided")
-            sys.exit(1)
-        log.debug(f"Searching for '{name}'")
-        matches = performer_query(name)
-        print(json.dumps(matches))
-        sys.exit(0)
-
-    url = args.url
-    if not url:
-        log.error("No URL provided")
-        sys.exit(1)
-
-    log.debug(f"{args.operation} scraping '{url}'")
+def scene_from_url(url: str):
     scraped = scrape(url)
-    result = {}
-    if args.operation == "performer":
-        result = performer_from_tree(scraped)
-        result["urls"] = [iafd_uuid_url]
-    elif args.operation == "movie":
-        result = movie_from_tree(scraped)
-    elif args.operation == "scene":
-        result = scene_from_tree(scraped)
+    return cleandict(scene_from_tree(scraped))
 
-    print(json.dumps(cleandict(result)))
+
+def performer_from_url(url: str):
+    scraped = scrape(url)
+    return cleandict(performer_from_tree(scraped))
+
+
+def movie_from_url(url: str):
+    scraped = scrape(url)
+    return cleandict(movie_from_tree(scraped))
 
 
 if __name__ == "__main__":
-    main()
+    op, args = scraper_args()
+    result = None
+
+    match op, args:
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
+        case "performer-by-url", {"url": url} if url:
+            result = performer_from_url(url)
+        case "performer-by-name", {"name": query} if query:
+            result = performer_query(query)
+        case "movie-by-url", {"url": url} if url:
+            result = movie_from_url(url)
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
+
+    print(json.dumps(result))

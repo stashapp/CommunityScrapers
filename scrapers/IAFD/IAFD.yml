@@ -7,7 +7,7 @@ performerByName:
   script:
     - python
     - IAFD.py
-    - search
+    - performer-by-name
 performerByURL:
   - url:
       - iafd.com/person.rme/id=
@@ -16,7 +16,7 @@ performerByURL:
     script:
       - python
       - IAFD.py
-      - performer
+      - performer-by-url
 sceneByURL:
   - url:
       - iafd.com/title.rme/id=
@@ -25,7 +25,7 @@ sceneByURL:
     script:
       - python
       - IAFD.py
-      - scene
+      - scene-by-url
 movieByURL:
   - url:
       - iafd.com/title.rme/id=
@@ -34,5 +34,5 @@ movieByURL:
     script:
       - python
       - IAFD.py
-      - movie
+      - movie-by-url
 # Last Updated March 5, 2025
