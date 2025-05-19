@@ -35,6 +35,8 @@ movieByURL:
   - action: scrapeXPath
     url:
       - julesjordan.com/trial/dvds/
+      - manuelferrara.com/trial/dvds/
+      - theassfactory.com/trial/dvds/
     scraper: movieScraper
 
 xPathScrapers:
