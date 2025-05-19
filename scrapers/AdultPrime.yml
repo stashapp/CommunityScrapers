@@ -73,7 +73,7 @@ xPathScrapers:
       Performers:
         Name: $scene//b[contains(.,"Performer")]/following-sibling::a
       Studio:
-        Name: $scene//b[contains(.,"Studio")]/following-sibling::a
+        Name: $scene//b[contains(.,"Studio")]/a | $scene//b[contains(.,"Studio")]/following-sibling::a
       Tags:
         Name:
           selector: $scene//b[contains(.,"Niches")]/following-sibling::text()
