@@ -1,0 +1,38 @@
+name: RimTeens
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - rimteens.com/members/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - rimteens.com/model/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="ax-mega ax-mega-1st entry-title"]
+      Date:
+        selector: //p[@class="ax-meta ax-meta-m entry-meta entry-meta-m"]/span/time
+      Details:
+        selector: //div[@class="ax-content-narrow ax-typography-xl entry-content"]/p
+      Image:
+        selector: //div[@class="entry-featured-media entry-featured-media-main"]/meta[@content]
+      Studio:
+        Name:
+          fixed: RimTeens
+      Performers:
+        Name: //h2[@class="ax-gamma ax-gamma-1st author-title"]/a/span
+      Tags:
+        Name: //div[@class='entry-after-content']/p/span/a
+  performerScraper:
+    performer:
+      Name: //h1[@class="ax-alpha ax-alpha-2nd page-title archive-title"]
+      Details: //div[@class="col-md-4 middle-col"]/p[@class="archive-description"]
+      Image: //span[@class="avatar"]//img[@src]
+      Birthdate: //div[@class="birthdate-section"]/p
+      EyeColor: //div[@class="eyes-section"]/p
+      HairColor: //div[@class="hair-section"]/p
+      Height: //div[@class="height-section"]/p
+# Last Updated May 19, 2025
