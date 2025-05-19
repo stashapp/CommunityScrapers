@@ -13,15 +13,15 @@ xPathScrapers:
         selector: //span[@class="date"]
         postProcess:
           - replace:
-            - regex: (\w+) (0?[1-9]|[12][0-9]|3[01])(?:st|nd|th) (\d{4})
-              with: $1 $2, $3
-          - parseDate: January 2, 2006
+              - regex: (\w+) (0?[1-9]|[12][0-9]|3[01])(?:st|nd|th) (\d{4})
+                with: $1 $2, $3
+          - parseDate: Jan 2, 2006
       Image:
         selector: //center/img/@src
         postProcess:
           - replace:
-            - regex: ^
-              with: "https://teenytaboo.com/"
+              - regex: ^
+                with: "https:"
       Studio:
         Name:
           fixed: Teeny Taboo
@@ -35,6 +35,5 @@ xPathScrapers:
           split: ","
           postProcess:
             - replace:
-              - regex: \x{00a0}
-                with: ""
-# Last Updated June 11, 2023
+                - regex: \x{00a0}
+                  with: ""
