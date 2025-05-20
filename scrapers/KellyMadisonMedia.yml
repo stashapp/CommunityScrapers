@@ -12,6 +12,10 @@ sceneByURL:
       - 5kteens.com/episodes
       - 5kporn.com/episodes
     scraper: 5kSite
+  - action: scrapeXPath
+    url:
+      - 8kmilfs.com/episodes
+    scraper: 8ksite
 xPathScrapers:
   mainSite:
     scene:
@@ -94,6 +98,27 @@ xPathScrapers:
               - regex: '^.+poster: "(.+?)".+$'
                 with: $1
 
+  8ksite:
+    scene:
+      Title: //strong[text()="Title:"]/following-sibling::a
+      Code:
+        selector: //strong[text()="Title:"]/following-sibling::a/@href
+        postProcess:
+          - replace:
+              - regex: .+8KM/(\d+)
+                with: "8KM #$1"
+      URL: //strong[text()="Title:"]/following-sibling::a/@href
+      Date: //i[contains(@class, "fa-calendar")]/following-sibling::span
+      Image: //video/@poster
+      Details:
+        selector: (//h2)[1]/following-sibling::p
+        postProcess:
+          - replace:
+              - regex: ^Episode Summary:\s+
+                with: ""
+      Performers:
+        Name: //strong[text()="Starring:"]/following-sibling::a
+
 driver:
   cookies:
     - CookieURL: "https://www.pornfidelity.com/"
@@ -126,4 +151,9 @@ driver:
           Domain: ".5kporn.com"
           ValueRandom: 23
           Path: "/"
-# Last Updated February 05, 2025
+    - CookieURL: "https://www.8kmilfs.com/"
+      Cookies:
+        - Name: "nats"
+          Domain: ".8kmilfs.com"
+          ValueRandom: 23
+          Path: "/"
