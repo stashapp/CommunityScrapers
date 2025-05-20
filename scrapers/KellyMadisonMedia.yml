@@ -14,6 +14,7 @@ sceneByURL:
     scraper: 5kSite
   - action: scrapeXPath
     url:
+      - 8kteens.com/episodes
       - 8kmilfs.com/episodes
     scraper: 8ksite
 xPathScrapers:
@@ -105,8 +106,8 @@ xPathScrapers:
         selector: //strong[text()="Title:"]/following-sibling::a/@href
         postProcess:
           - replace:
-              - regex: .+8KM/(\d+)
-                with: "8KM #$1"
+              - regex: .+?(8\w+)/(\d+)
+                with: "$1 #$2"
       URL: //strong[text()="Title:"]/following-sibling::a/@href
       Date: //i[contains(@class, "fa-calendar")]/following-sibling::span
       Image: //video/@poster
@@ -149,11 +150,5 @@ driver:
       Cookies:
         - Name: "nats"
           Domain: ".5kporn.com"
-          ValueRandom: 23
-          Path: "/"
-    - CookieURL: "https://www.8kmilfs.com/"
-      Cookies:
-        - Name: "nats"
-          Domain: ".8kmilfs.com"
           ValueRandom: 23
           Path: "/"
