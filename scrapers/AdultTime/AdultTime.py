@@ -188,6 +188,7 @@ site_map = {
     "bethecuck": "Be the Cuck",
     "devilstgirls": "Devil's Tgirls",
     "girlsunderarrest": "Girls Under Arrest",
+    "officemsconduct-channel": "Transfixed",
     "SuperHornyFunTime": "Super Horny Fun Time",
 }
 """
@@ -230,6 +231,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         return site_map.get(site_match, site_match)
     if serie_name in [
         *serie_name_map,
+        "Accidental Gangbang",
         "Casey: A True Story",
         "Feed Me",
         "Future Darkly",
@@ -238,6 +240,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         "Mommy's Boy",
         "Oopsie",
         "Sister Trick",
+        "Up Close",
         "Up Close VR",
         "Women's World",
     ]:
@@ -246,6 +249,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     if network_name in [
         "Adult Time Films"
     ]:
+        log.debug(f"matched network_name '{network_name}'")
         return network_name_map.get(network_name, network_name)
     if sitename_pretty in [
         *sitename_pretty_map,
@@ -258,6 +262,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         # most scenes have the studio name as the main channel name
         log.debug(f"matched main_channel_name '{main_channel_name}'")
         return channel_name_map.get(main_channel_name, main_channel_name)
+    log.debug("no override matched")
     return None
 
 

@@ -464,6 +464,10 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | N
         gallery["performers"] = actors_to_performers(actors, site)
     if directors := api_hit.get("directors"):
         gallery["photographer"] = name_values_as_csv(directors)
+    # photosets have their own cover image
+    if picture := api_hit.get("picture"):
+        # just log this out, to aid user in selecting the cover image
+        log.info(f"Cover image: {IMAGE_CDN}/photo_set{picture}")
     return gallery
 
 def gallery_from_set_id(
