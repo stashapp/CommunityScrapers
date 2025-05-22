@@ -40,15 +40,18 @@ xPathScrapers:
                 with: "–"
       Date: //time/@datetime
       Details:
-        selector: //div[@data-qa="scene-about-tab-text"]/text()[last()]
+        selector: //div[@data-qa="scene-about-tab-text"]/text()
         postProcess:
           - replace:
               - regex: '^\.\s*'
                 with:
       Tags:
-        Name: //meta[@property="video:tag"]/@content|//ul[@data-qa="scene-specs-list"]/li/span/text()
+        Name: >-
+          //meta[@property="video:tag"]/@content
+          |
+          //a[@data-qa="scene-tags-list-item-link"]/text()
       Performers:
-        Name: //meta[@property="video:actor"]/@content
+        Name: //a[contains(@data-qa, "scene-model-list-item-name")]/text()
       Studio:
         Name:
           selector: //a[contains(@href,"/studios/")]/div[last()]/text()
@@ -64,12 +67,7 @@ xPathScrapers:
                 SinsVR: "XSinsVR"
                 VirtualXPorn: "Virtual X Porn"
                 WankitnowVR: "Wank It Now VR"
-      Image:
-        selector: //meta[@property="og:image"]/@content
-        postProcess:
-          - replace:
-              - regex: -app\.
-                with: -desktop.
+      Image: //div[@id="webvr"]//img/@src
       URL: &sceneUrl //link[@rel="canonical"]/@href
       Code:
         selector: *sceneUrl
@@ -77,4 +75,4 @@ xPathScrapers:
           - replace:
               - regex: '^(.+)-(\d+)/?$'
                 with: $2
-# Last Updated October 21, 2023
+# Last Updated May 22, 2025
