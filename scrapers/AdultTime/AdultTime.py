@@ -55,6 +55,7 @@ preview_site_map = {
     "milfoverload-channel": "milfoverload.net",
     "mommysboy": "mommysboy.net",
     "preggoworld-channel": "preggoworld.net",
+    "shewantshim": "shewantshim.net",
     "watchyoucheat": "watchyoucheat.net",
     "womensworld": "adulttimepilots.net",
 }
@@ -119,6 +120,7 @@ def fix_url(_url: str) -> str:
             "adulttimepilots",
             "all-sexstudio",
             "beingtrans247",
+            "between the sheets with alison rey",
             "blackforwife",
             "caughtfapping",
             "coupleswapping",
@@ -131,6 +133,7 @@ def fix_url(_url: str) -> str:
             "nakedyogalife",
             "raunch",
             "shewantshim",
+            "showersolos",
             "superhornyfuntime",
             "switch",
             "themikeandjoannashow",
@@ -175,6 +178,8 @@ Each network_name requiring a map/override should have a key-value here
 """
 
 serie_name_map = {
+    "20 Questions": "20 Random Questions With",
+    "Oopsie": "Oopsie!",
     "Transfixed Muses": "Transfixed",
 }
 """
@@ -188,6 +193,8 @@ site_map = {
     "bethecuck": "Be the Cuck",
     "devilstgirls": "Devil's Tgirls",
     "girlsunderarrest": "Girls Under Arrest",
+    "grinders-channel": "Grinders",
+    "howwomenorgasm-channel": "How Women Orgasm",
     "officemsconduct-channel": "Transfixed",
     "SuperHornyFunTime": "Super Horny Fun Time",
 }
@@ -223,29 +230,38 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
 
     # determine studio override with custom logic
     # steps through from api_scene["availableOnSite"], and picks the first match
-    if site_match := next(
-        (site for site in available_on_site if site in site_map),
-        None
-    ):
-        log.debug(f"matched site '{site_match}' in {available_on_site}")
-        return site_map.get(site_match, site_match)
     if serie_name in [
         *serie_name_map,
         "Accidental Gangbang",
         "Casey: A True Story",
+        "Daddy's Girl",
         "Feed Me",
         "Future Darkly",
         "Go Stuck Yourself",
         "How Women Orgasm",
+        "LeTS Be Bad",
         "Mommy's Boy",
         "Oopsie",
+        "Perspective",
+        "Poly Family Life",
         "Sister Trick",
+        "Sweet Sweet Sally Mae",
+        "Teen Overload",
+        "Teenage Lesbian",
+        "The Mike and Joanna Show",
+        "Tomboyish",
         "Up Close",
         "Up Close VR",
         "Women's World",
     ]:
         log.debug(f"matched serie_name '{serie_name}'")
         return serie_name_map.get(serie_name, serie_name)
+    if site_match := next(
+        (site for site in available_on_site if site in site_map),
+        None
+    ):
+        log.debug(f"matched site '{site_match}' in {available_on_site}")
+        return site_map.get(site_match, site_match)
     if network_name in [
         "Adult Time Films"
     ]:
