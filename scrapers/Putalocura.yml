@@ -1,4 +1,4 @@
-name: Putalocura
+name: Puta Locura
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -20,19 +20,14 @@ xPathScrapers:
           - replace:
               - regex: .+?trailers/([A-Z]+_\d+).*
                 with: "$1"
-      Date: 
-        selector: //div[@class="released-views"]/span[1]/text()
+      Date:
+        selector: (//div[@class="released-views"]/span)[1]
         postProcess:
           - parseDate: 02/01/2006
-      Details:
-        selector: //p[@class="desc"]/following-sibling::p
-      # look like it's the same trashy tag everytime so don't think there are useful
-      #Tags:
-      #  Name: 
-      #    selector: //div[@class="categories"]/a/text()
+      Details: //p[@class="desc"]/following-sibling::p
       Performers:
-        Name: 
-          selector: //span[@class="site-name"]/text()
+        Name:
+          selector: //span[@class="site-name"]
           postProcess:
             - replace:
                 - regex: \s*[-&,]\s*
@@ -40,13 +35,11 @@ xPathScrapers:
           split: " and "
       Studio:
         Name:
-          fixed: "Putalocura"
-      Image: 
+          fixed: "Puta Locura"
+      Image:
         selector: //div[@class="top-area-content"]/script
         postProcess:
           - replace:
               - regex: .+posterImage.*"(.+)".*
                 with: "$1"
       URL: //link[@rel="canonical"]/@href
-
-# Last Updated November 20, 2024
