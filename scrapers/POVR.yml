@@ -90,7 +90,7 @@ xPathScrapers:
     scene:
       Title: &title
         selector: //h1[contains(@class, "heading-title")]
-      Date: &date //meta[@property="video:release_date"]/content
+      Date: &date //meta[@property="video:release_date"]/@content
       Performers: &performers
         Name: //meta[@property="video:actor"]/@content
       Tags: &tags
