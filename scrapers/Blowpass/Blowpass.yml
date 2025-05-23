@@ -36,4 +36,58 @@ sceneByQueryFragment:
     - Blowpass.py
     - blowpass
     - scene-by-query-fragment
-# Last Updated January 30, 2025
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - Blowpass.py
+    - blowpass
+    - gallery-by-fragment
+galleryByURL:
+  - action: script
+    url:
+      - 1000facials.com/en/photo/
+      - 1000facials.com/en/video/
+      - blowpass.com/en/photo/
+      - blowpass.com/en/video/
+      - immorallive.com/en/photo/
+      - immorallive.com/en/video/
+      - mommyblowsbest.com/en/photo/
+      - mommyblowsbest.com/en/video/
+      - onlyteenblowjobs.com/en/photo/
+      - onlyteenblowjobs.com/en/video/
+      - throated.com/en/photo/
+      - throated.com/en/video/
+    script:
+      - python
+      - Blowpass.py
+      - blowpass
+      - gallery-by-url
+performerByURL:
+  - action: script
+    url:
+      - 1000facials.com/en/pornstar/
+      - blowpass.com/en/pornstar/
+      - immorallive.com/en/pornstar/
+      - mommyblowsbest.com/en/pornstar/
+      - onlyteenblowjobs.com/en/pornstar/
+      - throated.com/en/pornstar/
+    script:
+      - python
+      - Blowpass.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - Blowpass.py
+    - blowpass
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Blowpass.py
+    - blowpass
+    - performer-by-fragment
+# Last Updated May 23, 2025

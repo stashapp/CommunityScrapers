@@ -42,6 +42,7 @@ Each serie_name requiring a map/override should have a key-value here
 """
 
 site_map = {
+    "sunlustxxx": "Sun Lust XXX",
 }
 """
 Each site found in the logic should have a key-value here
@@ -65,6 +66,13 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
         f"sitename_pretty: {sitename_pretty}, "
     )
 
+    if serie_name in [
+        *serie_name_map,
+        "Blowbanged",
+        "Squirting Orgies",
+    ]:
+        log.debug(f"matched serie_name '{serie_name}'")
+        return serie_name_map.get(serie_name, serie_name)
     # steps through api_scene["availableOnSite"], and picks the first match
     if site_match := next(
         (site for site in available_on_site if site in site_map),
@@ -72,11 +80,6 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
     ):
         log.debug(f"matched site '{site_match}'")
         return site_map.get(site_match, site_match)
-    if serie_name in [
-        *serie_name_map,
-    ]:
-        log.debug(f"matched serie_name '{serie_name}'")
-        return serie_name_map.get(serie_name, serie_name)
     if main_channel_name:
         log.debug(f"matched main_channel_name '{main_channel_name}'")
         # most scenes have the studio name as the main channel name
