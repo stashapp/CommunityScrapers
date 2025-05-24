@@ -59,28 +59,26 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1
-      Details:
-        selector: //div[contains(@class, "videoDescription")]/p
+      Details: //div[contains(@class, "videoDescription")]/p
       Date:
         selector: //div[@class="contentT"]/ul[@class="contentInfo"]/li[./i[contains(@class, "fa-calendar")]]/text()
         postProcess:
           - parseDate: Jan 2, 2006
       Tags:
-        Name: 
+        Name:
           selector: //div[@class="tags"]//a/text()
           postProcess:
             - replace:
-                - regex: '^#'
-                  with: ''
+                - regex: "^#"
+                  with: ""
       Performers:
-        Name:
-          selector: //div[@class="models"]//a/text()
+        Name: //div[@class="models"]//a/text()
       Code:
         selector: //a[contains(@id,"cart-item")]/@id
         postProcess:
           - replace:
-              - regex: '^cart-item-'
-                with: ''
+              - regex: "^cart-item-"
+                with: ""
       Studio:
         Name:
           selector: //div[@class="logo"]/a/@href
@@ -141,7 +139,7 @@ xPathScrapers:
                 txfetishlegends: Tx Fetish Legends
                 vorevixens: Vore Vixens
       Image:
-        selector: //meta[@name="twitter:image"]/@content | //iframe/@src
+        selector: //meta[@name="twitter:image"]/@content | //iframe/@src | //div[contains(@class, "videoPreview")]//img/@src
         postProcess:
           - replace:
               - regex: .*\?poster=(.*\.jpg).*

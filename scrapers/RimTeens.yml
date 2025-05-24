@@ -3,36 +3,41 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - rimteens.com/members/
-    scraper: sceneScraper
+      - rimteens.com/xtras/
+    scraper: rimteens
 performerByURL:
   - action: scrapeXPath
     url:
       - rimteens.com/model/
-    scraper: performerScraper
+    scraper: rimteens
 xPathScrapers:
-  sceneScraper:
+  rimteens:
+    common:
+      $scene: //article[not(ancestor::aside)]
     scene:
-      Title: //h1[@class="ax-mega ax-mega-1st entry-title"]
+      Title: //h1[not(ancestor::aside)]
       Date:
-        selector: //p[@class="ax-meta ax-meta-m entry-meta entry-meta-m"]/span/time
-      Details:
-        selector: //div[@class="ax-content-narrow ax-typography-xl entry-content"]/p
-      Image:
-        selector: //div[@class="entry-featured-media entry-featured-media-main"]/meta[@content]
+        selector: //time[not(ancestor::aside)]/@datetime
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05-07:00
+      Details: //div[@itemprop="articleBody" and not(ancestor::aside)]
+      Image: //meta[@itemprop="url"]/@content
       Studio:
         Name:
-          fixed: RimTeens
+          selector: //a[contains(@class, "entry-category") and not(ancestor::aside)]
+          postProcess:
+            - replace:
+                - regex: MEMBERS
+                  with: RimTeens
       Performers:
-        Name: //h2[@class="ax-gamma ax-gamma-1st author-title"]/a/span
+        Name: //h2[not(ancestor::aside)]/a/span
       Tags:
-        Name: //div[@class='entry-after-content']/p/span/a
-  performerScraper:
+        Name: //a[contains(@class, "entry-tag")]
     performer:
-      Name: //h1[@class="ax-alpha ax-alpha-2nd page-title archive-title"]
-      Details: //div[@class="col-md-4 middle-col"]/p[@class="archive-description"]
-      Image: //span[@class="avatar"]//img[@src]
-      Birthdate: //div[@class="birthdate-section"]/p
-      EyeColor: //div[@class="eyes-section"]/p
-      HairColor: //div[@class="hair-section"]/p
-      Height: //div[@class="height-section"]/p
-# Last Updated May 19, 2025
+      Name: //h1[contains(@class, "page-title")]
+      Details: //p[contains(@class, "archive-description")]
+      Image: //span[not(ancestor::aside) and contains(@class, "avatar")]/img/@data-src
+      Birthdate: //div[contains(@class, "birthdate-section")]/p
+      EyeColor: //div[contains(@class, "eyes-section")]/p
+      HairColor: //div[contains(@class, "hair-section")]/p
+      Height: //div[contains(@class, "height-section")]/p
