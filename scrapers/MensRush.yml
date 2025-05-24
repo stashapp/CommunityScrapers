@@ -1,0 +1,19 @@
+name: MensRush
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.mensrush.tv/single.php
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="detail_title"]/h2/text()
+      Details:
+        selector: //div[@class="movie_detail"]/h3[1]/following-sibling::p[1]/text()
+        concat: "\n\n"
+      Studio:
+        Name: //div[@class="movie_detail"]/p/a[contains(@href,"maid")]/text()
+      Tags:
+        Name: //div[@class="movie_detail"]/p/a[contains(@href,"geid")]/text()
+# Last Updated May 23, 2025
