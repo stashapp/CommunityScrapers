@@ -70,4 +70,9 @@ xPathScrapers:
       Tags:
         Name: //span[text()="Category:"]/following-sibling::a
 
-# Last Updated September 07, 2020
+driver:
+  useCDP: true
+  clicks:
+    - xpath: //a[contains(text(), "ENTER")]
+
+# Last Updated May 25, 2025
