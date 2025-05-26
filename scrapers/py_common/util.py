@@ -205,6 +205,18 @@ def __default_parser(**kwargs):
     gbf.add_argument("--details")
     gbf.add_argument("--urls", nargs="+")
 
+    subparsers.add_parser(
+        "image-by-url", help="Scrape an image by its URL"
+    ).add_argument("--url", help="Image URL")
+
+    ibf = subparsers.add_parser("image-by-fragment", help="Scrape an image")
+    ibf.add_argument("-u", "--url")
+    ibf.add_argument("--id")
+    ibf.add_argument("--title")
+    ibf.add_argument("--date")
+    ibf.add_argument("--details")
+    ibf.add_argument("--urls", nargs="+")
+
     return parser
 
 

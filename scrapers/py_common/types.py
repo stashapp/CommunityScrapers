@@ -130,6 +130,19 @@ class ScrapedScene(TypedDict, total=False):
     director: str
 
 
+class ScrapedImage(TypedDict, total=False):
+    title: str
+    details: str
+    urls: list[str]
+    date: str
+    studio: ScrapedStudio
+    galleries: list[ScrapedGallery]
+    performers: list[ScrapedPerformer]
+    tags: list[ScrapedTag]
+    code: str
+    photographer: str
+
+
 # Technically we can return a full ScrapedPerformer but the current UI only
 # shows the name. The URL is absolutely necesserary for the result to be used
 # in the next step: actually scraping the performer
