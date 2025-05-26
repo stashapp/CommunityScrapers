@@ -107,7 +107,7 @@ export interface ymlScraper {
   galleryByFragment?: byFragmentScraperDefn;
   galleryByURL?: byUrlScraperDefn[];
   imageByURL?: byUrlScraperDefn[];
-  imageByFragment?: byFragmentScraper;
+  imageByFragment?: byFragmentScraperDefn;
 }
 
 export const isUrlScraper = (

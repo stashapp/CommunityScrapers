@@ -154,6 +154,6 @@ export const ymlScraperSchema = z.record(z.any()).and(
     galleryByFragment: byFragmentScraperDefnSchema.optional(),
     galleryByURL: z.array(byUrlScraperDefnSchema).optional(),
     imageByURL: z.array(byUrlScraperDefnSchema).optional(),
-    imageByFragment: byFragmentScraperSchema.optional(),
+    imageByFragment: byFragmentScraperDefnSchema.optional(),
   }),
 );

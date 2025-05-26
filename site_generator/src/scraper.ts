@@ -80,7 +80,6 @@ function collectURLSites(scraper: ymlScraper): string[] {
     "groupByURL",
     "galleryByURL",
     "imageByURL",
-    "imageByFragment",
   ];
   let urlSites: string[] = [];
   for (const action of urlActions) {
