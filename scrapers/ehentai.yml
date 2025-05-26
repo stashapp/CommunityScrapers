@@ -32,7 +32,7 @@ xPathScrapers:
       Title: 
         selector: //h1[@id="gn"]
       Details:
-        selector: //div[@id="cdiv"]/div[@class="c1" and //div[contains(@class,"c4")]/a[@name="ulcomment"]][1]//div[@class="c6"]/text()
+        selector: //div[@id="cdiv"]/div[@class="c1" and //div[contains(@class,"c4")]/a[@name="ulcomment"]][1]//div[@class="c6"]//text()
         concat: " "
       URL: 
         selector: //table[@class="ptt"]//td[@class="ptds"]//a[text()="1"]/@href
