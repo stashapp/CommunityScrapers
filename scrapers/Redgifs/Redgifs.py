@@ -8,7 +8,7 @@ import requests
 
 import py_common.log as log
 from py_common.cache import cache_to_disk
-from py_common.types import ScrapedScene
+from py_common.types import ScrapedImage, ScrapedScene
 from py_common.util import dig, scraper_args
 
 PROXIES = {}
@@ -28,23 +28,26 @@ def get_token():
 session.headers.update({"Authorization": "Bearer " + get_token()})
 
 
-def scene_by_id(gif_id: str) -> ScrapedScene | None:
+def fetch_data(gif_id: str) -> dict | None:
     # The RedGIFs API only works with lowercased IDs, though other IDs are case-insensitive
     api_url = f"https://api.redgifs.com/v2/gifs/{gif_id.lower()}?users=yes"
 
     req = session.get(api_url)
     if req.status_code != 200:
         log.error(f"Failed to fetch {api_url}: {req.status_code} {req.reason}")
-        return
+        return None
 
-    data = req.json()
+    return req.json()
+
+
+def to_scraped_scene(data: dict) -> ScrapedScene | None:
     gif = data["gif"]
     user = data["user"]
 
     scene: ScrapedScene = {
         "tags": [{"name": t} for t in gif.get("tags")],
         "date": datetime.fromtimestamp(gif["createDate"]).date().isoformat(),
-        "url": f"https://www.redgifs.com/watch/{gif_id}",
+        "url": f"https://www.redgifs.com/watch/{gif['id']}",
         "performers": [],
     }
 
@@ -70,6 +73,33 @@ def scene_by_id(gif_id: str) -> ScrapedScene | None:
     return scene
 
 
+def to_scraped_image(data: dict) -> ScrapedImage | None:
+    gif = data["gif"]
+    user = data["user"]
+
+    image: ScrapedImage = {
+        "tags": [{"name": t} for t in gif.get("tags")],
+        "date": datetime.fromtimestamp(gif["createDate"]).date().isoformat(),
+        "urls": [f"https://www.redgifs.com/watch/{gif['id']}"],
+        "performers": [],
+    }
+
+    if title := gif.get("title"):
+        image["title"] = title
+
+    if name := user.get("name"):
+        image["studio"] = {"name": name, "url": user["url"]}
+        urls = [
+            url for url in [dig(user, f"socialUrl{i}") for i in range(1, 16)] if url
+        ]
+        image["performers"] = [{"name": name, "urls": urls}]
+
+    if (username := user.get("username")) and username != name:
+        image["performers"].append({"name": username})
+
+    return image
+
+
 def extract_id(string: str):
     # Redgifs URLs are in the format https://www.redgifs.com/watch/identifier
     if match := re.search(r"redgifs.com/watch/(\w+)", string):
@@ -86,21 +116,60 @@ def extract_id(string: str):
 
 
 def scene_by_url(url: str) -> ScrapedScene | None:
-    if identifier := extract_id(url):
-        return scene_by_id(identifier)
+    if not (identifier := extract_id(url)):
+        log.error(f"Could not extract ID from URL: {url}")
+        return
 
-    log.error(f"Could not extract ID from URL: {url}")
+    if not (data := fetch_data(identifier)):
+        return
+
+    return to_scraped_scene(data)
 
 
 def scene_by_fragment(fragment: dict) -> ScrapedScene | None:
-    if (url := dig(fragment, "url")) and (identifier := extract_id(url)):
-        return scene_by_id(identifier)
-    elif (filename := dig(fragment, "files", 0, "path")) and (
-        identifier := extract_id(filename)
+    if (
+        (url := dig(fragment, "url"))
+        and (identifier := extract_id(url))
+        and (data := fetch_data(identifier))
     ):
-        return scene_by_id(identifier)
-    log.error("Could not extract ID from fragment")
-    log.error("Filename must match 'Redgifs_identifier' or 'whatever [identifier]'")
+        return to_scraped_scene(data)
+    if not (filename := dig(fragment, "files", 0, "path")):
+        log.error(
+            "Could not extract ID from fragment: need to have a file or a Redgifs URL"
+        )
+        return None
+    if (identifier := extract_id(filename)) and (data := fetch_data(identifier)):
+        return to_scraped_scene(data)
+    if data := fetch_data(Path(filename).stem):
+        return to_scraped_scene(data)
+    log.debug("Unable to scrape this fragment from Redgifs")
+
+
+def image_by_url(url: str) -> ScrapedImage | None:
+    if not (identifier := extract_id(url)):
+        log.error(f"Could not extract ID from URL: {url}")
+        return
+    if not (data := fetch_data(identifier)):
+        log.error(f"Could not fetch data for '{identifier}', removed from site?")
+        return
+    return to_scraped_image(data)
+
+
+def image_by_fragment(fragment: dict) -> ScrapedImage | None:
+    if (
+        (url := dig(fragment, "url"))
+        and (identifier := extract_id(url))
+        and (data := fetch_data(identifier))
+    ):
+        return to_scraped_image(data)
+    if (identifier := extract_id(fragment["title"])) and (
+        data := fetch_data(identifier)
+    ):
+        return to_scraped_image(data)
+
+    if data := fetch_data(Path(fragment["title"]).stem):
+        return to_scraped_image(data)
+    log.debug("Unable to scrape this fragment from Redgifs")
 
 
 if __name__ == "__main__":
@@ -110,9 +179,13 @@ if __name__ == "__main__":
         case "scene-by-url" | "scene-by-query-fragment", {"url": url}:
             result = scene_by_url(url)
         case "scene-by-name", {"name": identifier}:
-            result = [s for s in [scene_by_id(identifier.strip())] if s]
+            result = [s for s in [to_scraped_scene(identifier.strip())] if s]
         case "scene-by-fragment", fragment:
             result = scene_by_fragment(fragment)
+        case "image-by-url", {"url": url}:
+            result = image_by_url(url)
+        case "image-by-fragment", fragment:
+            result = image_by_fragment(fragment)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

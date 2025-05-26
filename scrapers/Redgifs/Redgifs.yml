@@ -30,4 +30,19 @@ sceneByName:
     - python
     - Redgifs.py
     - scene-by-name
-# Last Updated May 02, 2024
+
+imageByURL:
+  - action: script
+    script:
+      - python
+      - Redgifs.py
+      - image-by-url
+    url:
+      - redgifs.com/watch/
+
+imageByFragment:
+  action: script
+  script:
+    - python
+    - Redgifs.py
+    - image-by-fragment
