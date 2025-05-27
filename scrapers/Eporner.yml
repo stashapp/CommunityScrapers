@@ -47,4 +47,13 @@ xPathScrapers:
       Image: //meta[@property="og:image"]/@content
       URL: //meta[@property="og:url"]/@content
 
-# Last Updated August 26, 2024
+driver:
+  cookies:
+    - CookieURL: "https://www.eporner.com"
+      Cookies:
+        - Name: "PHPSESSID"
+          Domain: ".eporner.com"
+          # replace with PHPSESSID from logged in browser
+          Value: ""
+          Path: "/"
+# Last Updated May 26, 2025
