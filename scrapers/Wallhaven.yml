@@ -1,0 +1,48 @@
+name: Wallhaven
+imageByURL:
+  - action: scrapeJson
+    url: 
+      - wallhaven.cc/w/
+      - whvn.cc/
+    scraper: imageScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .+([\w\d]{6})$
+          with: https://wallhaven.cc/api/v1/w/$1
+
+jsonScrapers:
+  imageScraper:
+    image:
+      Title:
+        selector: '[[[data.tags.#(category=="Models")#]|@flatten.#(name!="model")#,data.tags.#(category=="Pornstars")#,[data.tags.#(category%"*Characters")#]|@flatten.#(name!="anime girls")#]|@flatten.#.name,[data.tags.#(category=="Companies & Logos")#,data.tags.#(category=="Photographers")#,data.tags.#(category=="Artists")#]|@flatten.0.name,[[[[[[data.tags.#(category!="Models")#]|@flatten.#(category!="Pornstars")#]|@flatten.#(category!%"*Characters")#]|@flatten.#(category!="Photographers")#]|@flatten.#(category!="Artists")#]|@flatten.#(category!="Companies & Logos")#.name]|@flatten]|@flatten'
+        concat: " "
+      Code: data.id
+      Date:
+        selector: data.created_at
+        postProcess:
+          - replace:
+            - regex: '^(\d{4}-\d{2}-\d{2}).*'
+              with: $1
+      Details:
+        selector: '[data.category,data.purity,data.uploader.username]'
+        concat: " "
+      Photographer:
+        selector: '[data.tags.#(category=="Photographers")#,data.tags.#(category=="Artists")#]|@flatten.0.name'
+      URLs:
+        selector: '[data.url,data.short_url]'
+      Studio:
+        Name:
+          selector: '[data.tags.#(category=="Companies & Logos")#,data.tags.#(category=="Photographers")#,data.tags.#(category=="Artists")#]|@flatten.0.name'
+      Tags:
+        Name:
+          selector: '[!"wallpaper",[[[[[data.tags.#(category!="Models")#]|@flatten.#(category!="Pornstars")#]|@flatten.#(category!%"*Characters")#]|@flatten.#(category!="Photographers")#]|@flatten.#(category!="Artists")#]|@flatten.#(category!="Companies & Logos")#.name]|@flatten'
+      Performers:
+        Name:
+          selector: '[[data.tags.#(category=="Models")#]|@flatten.#(name!="model")#,data.tags.#(category=="Pornstars")#,[data.tags.#(category%"*Characters")#]|@flatten.#(name!="anime girls")#]|@flatten.#.name'
+
+# NSFW needs account and API key
+#driver:
+#  headers:
+#    - Key: X-API-Key
+#      Value: <API-Key>
