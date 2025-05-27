@@ -51,35 +51,9 @@ driver:
   cookies:
     - CookieURL: "https://www.eporner.com"
       Cookies:
-        - Name: "ADBp"
-          Domain: "www.eporner.com"
-          Value: "yes"
-          Path: "/"
-    - CookieURL: "https://www.eporner.com"
-      Cookies:
-        - Name: "ADBpcount"
-          Domain: "www.eporner.com"
-          Value: "1"
-          Path: "/"
-    - CookieURL: "https://www.eporner.com"
-      Cookies:
-        # may need replaced
-        - Name: "ap.KEytYDvIqp1"
-          Domain: "www.eporner.com"
-          Value: "true"
-          Path: "/"
-    - CookieURL: "https://www.eporner.com"
-      Cookies:
-        - Name: "EPRNS"
-          Domain: "www.eporner.com"
-          # replace with your EPRNS value
-          Value: ""
-          Path: "/"
-    - CookieURL: "https://www.eporner.com"
-      Cookies:
         - Name: "PHPSESSID"
           Domain: ".eporner.com"
-          # replace with your phpsessid
+          # replace with PHPSESSID from logged in browser
           Value: ""
           Path: "/"
 # Last Updated May 26, 2025
