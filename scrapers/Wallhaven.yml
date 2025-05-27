@@ -3,11 +3,12 @@ imageByURL:
   - action: scrapeJson
     url: 
       - wallhaven.cc/w/
+      - whvn.cc/
     scraper: imageScraper
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: '^https://wallhaven.cc/w/(.+)$'
+        - regex: .+([\w\d]{6})$
           with: https://wallhaven.cc/api/v1/w/$1
 
 jsonScrapers:
