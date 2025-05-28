@@ -35,29 +35,12 @@ xPathScrapers:
       Name: //div[@id="bioarea"]/h1
       Gender:
         fixed: "Female"
-      URL: //head/meta[@property="og:url"]/@content
-      Twitter:
-        selector: //div[@id='socialicons']//a[img[@alt='X account']]/@href
+      URLs: 
+        selector: //head/meta[@property="og:url"]/@content | //div[@id='socialicons']/a/@href
         postProcess:
           - replace:
-              - regex: 'https?://(?:www.)?twitter\.com\/'
-                with: ""
-              - regex: 'https?://(?:www.)?x\.com\/'
-                with: ""
-              - regex: \/$
-                with: ""
-              - regex: '\s\s'
-                with: " "
-      Instagram:
-        selector: //div[@id='socialicons']//a[img[@alt='Instagram account']]/@href
-        postProcess:
-          - replace:
-              - regex: 'https?://(?:www.)?instagram\.com\/'
-                with: ""
-              - regex: \/$
-                with: ""
-              - regex: '\s\s'
-                with: " "
+            - regex: 'https?://(?:www.)?babepedia\.com\/onlyfans\/'
+              with: 'https://onlyfans.com/'
       Birthdate:
         selector: $label[text()='Born:']]//text()
         concat: " "
@@ -138,17 +121,9 @@ xPathScrapers:
               Fake/Enhanced: "Fake"
       CareerLength: $label[text()='Years active:']]/text()
       Aliases:
-        selector: //div[@id='socialicons']//a[img[@alt='OnlyFans account']]/@href|//div[@id='socialicons']//a[img[@alt='OnlyFans Paid account']]/@href|//div[@id='socialicons']//a[img[@alt='OnlyFans Free account']]/@href|//div[@id='socialicons']//a[img[@alt='Fansly account']]/@href|//div[@id='bioarea']//h2/text()
+        selector: //div[@id='bioarea']//h2/text()
         postProcess:
           - replace:
-              - regex: 'https?://(?:www.)?onlyfans\.com/'
-                with: ""
-              - regex: 'https?://(?:www.)?fansly\.com\/'
-                with: ""
-              - regex: 'https?://(?:www.)?fans\.ly\/'
-                with: ""
-              - regex: '^https?://.+?/.+?/'
-                with: ""
               - regex: aka
                 with: ""
               - regex: '\/'
@@ -223,4 +198,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0
-# Last Updated April 24, 2025
+# Last Updated May 28, 2025
