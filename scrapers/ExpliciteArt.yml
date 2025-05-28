@@ -32,6 +32,13 @@ xPathScrapers:
         Name:
           fixed: Explicite Art
       Title: //div[@class="header"]//h1 #//head/title
+      Date:
+        selector: $info
+        postProcess:
+          - replace:
+              - regex: '^.+?(\d+)\sdays\sago.*$'
+                with: $1
+          - subtractDays: true
 
   galleryScraper:
     common:
@@ -46,4 +53,11 @@ xPathScrapers:
         Name:
           fixed: Explicite Art
       Title: //div[@class="header"]//h1 #//head/title
-# Last Updated November 14, 2020
+      Date:
+        selector: $info
+        postProcess:
+          - replace:
+              - regex: '^.+?(\d+)\sdays\sago.*$'
+                with: $1
+          - subtractDays: true
+# Last Updated May 27, 2025
