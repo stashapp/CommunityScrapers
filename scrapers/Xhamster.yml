@@ -46,7 +46,7 @@ xPathScrapers:
     common:
       $player: //div[@class="width-wrap with-player-container"]
     scene:
-      Title: $player/h1
+      Title: $player//h1
       Details: //div[@class="ab-info controls-info__item xh-helper-hidden"]/p
       URL: //meta[@property='og:url']/@content|//meta[@name='twitter:url']/@content
       Date:
@@ -59,7 +59,7 @@ xPathScrapers:
       Image: //link[@as="image"]/@href
       Studio:
         Name:
-          selector: $player/nav//a[contains(@href,"/channels/")]/span
+          selector: $player/nav//a[contains(@href,"/channels/")]//div[contains(@class,"content")]/span
       Tags:
         Name:
           selector: $player/nav//a[contains(@href,"/categories/") or contains(@href,"/tags/")]
