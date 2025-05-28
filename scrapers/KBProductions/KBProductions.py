@@ -68,6 +68,7 @@ studio_map = {
     "poundedpetite.com": "Pounded Petite",
     "povperv.com": "POV Perv",
     "premium-nickmarxx.com": "Nick Marxx",
+    "queercrush.com": "QueerCrush",
     "red-xxx.com": "Red-XXX",
     "rickysroom.com": "Ricky's Room",
     "s3xus.com": "S3XUS",
@@ -423,7 +424,7 @@ def scrape_scene(url: str) -> ScrapedScene | None:
         scene = to_scraped_scene_from_content(content)
     if video := props.get("video"):
         scene = to_scraped_scene_from_video(video)
-    scene["url"] = url
+    scene["urls"] = [url]
 
     if playlist := dig(props, "playlist", "data", 0):
         scene["movies"] = [to_scraped_movie(playlist)]
