@@ -45,8 +45,8 @@ xPathScrapers:
   sceneScraper:
     common:
       $player: //div[@class="width-wrap with-player-container"]
-      $creator: $player/nav//a[contains(@href,"/creators/")]//div[contains(@class,"content")]/span
-      $user: $player/nav//a[contains(@href,"/users/")]//div[contains(@class,"content")]/span
+      $creator: //div[@class="width-wrap with-player-container"]/nav//a[contains(@href,"/creators/")]//div[contains(@class,"content")]/span
+      $user: //div[@class="width-wrap with-player-container"]/nav//a[contains(@href,"/users/")]//div[contains(@class,"content")]/span
     scene:
       Title: $player//h1
       Details: //div[@class="ab-info controls-info__item xh-helper-hidden"]/p
