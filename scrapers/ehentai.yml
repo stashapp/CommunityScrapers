@@ -1,0 +1,62 @@
+name: ehentai
+
+# intended to extract gallery ID from folder / zip / cbz file names as produces by gallery-dl ("1234567 some gallery name.zip")
+galleryByFragment:
+  action: scrapeXPath
+  queryURL: https://e-hentai.org/?f_search={filename}
+  queryURLReplace:
+    filename:
+      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename so that it can construct a valid url
+        with: ""
+      - regex: '^([0-9]{4,})[^0-9]+.*' # capture numeric sequence at begining as gallery ID
+        with: "gid:$1"
+      - regex: '\-|\_'
+        with: " "
+      - regex: \s+
+        with: "%20"
+  scraper: searchScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - e-hentai.org/g/
+    scraper: galleryScraper
+xPathScrapers:
+  searchScraper:
+    gallery:
+      Title: 
+        selector: //table[@class="itg gltc"]//tr[position()=2]/td[@class="gl3c glname"]/a/div[@class="glink"]/text()
+      URL: 
+        selector: //table[@class="itg gltc"]//tr[position()=2]/td[@class="gl3c glname"]/a/@href
+  galleryScraper:
+    gallery:
+      Title: 
+        selector: //h1[@id="gn"]
+      Details:
+        selector: //div[@id="cdiv"]/div[@class="c1" and //div[contains(@class,"c4")]/a[@name="ulcomment"]][1]//div[@class="c6"]//text()
+        concat: " "
+      URL: 
+        selector: //table[@class="ptt"]//td[@class="ptds"]//a[text()="1"]/@href
+      Date:
+        selector: //div[@id="gdd"]//tr[td[@class="gdt1" and contains(text(), "Posted")]]/td[@class="gdt2"]
+        postProcess:
+          - replace:
+            - regex: (\d{4}-\d{2}-\d{2})(.+)
+              with: $1
+          - parseDate: 2006-01-02
+      Tags:
+        Name:
+          selector: //div[@id="taglist"]//td//div[@class="gt" or @class="gtl"]/a[starts-with(@id, "ta_parody:") or starts-with(@id, "ta_female:") or starts-with(@id, "ta_mixed:") or starts-with(@id, "ta_other:")]/text()
+      Performers:
+        Name: //div[@id="taglist"]//td//div[@class="gt" or @class="gtl"]/a[starts-with(@id, "ta_character:")]/text()
+      Studio:
+        Name: //div[@id="taglist"]//td//div[@class="gt" or @class="gtl"]/a[starts-with(@id, "ta_artist:")]/text()
+
+driver:
+  cookies:
+    - CookieURL: "https://e-hentai.org/"
+      Cookies:
+        # ignore extreme content warning
+        - Name: "nw"
+          Domain: "e-hentai.org"
+          Value: "1" # Enter the value of the 'adbsess' here
+          Path: "/"
