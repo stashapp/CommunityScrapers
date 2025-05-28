@@ -45,6 +45,8 @@ xPathScrapers:
   sceneScraper:
     common:
       $player: //div[@class="width-wrap with-player-container"]
+      $creator: $player/nav//a[contains(@href,"/creators/")]//div[contains(@class,"content")]/span
+      $user: $player/nav//a[contains(@href,"/users/")]//div[contains(@class,"content")]/span
     scene:
       Title: $player//h1
       Details: //div[@class="ab-info controls-info__item xh-helper-hidden"]/p
@@ -59,11 +61,11 @@ xPathScrapers:
       Image: //link[@as="image"]/@href
       Studio:
         Name:
-          selector: $player/nav//a[contains(@href,"/channels/")]//div[contains(@class,"content")]/span
+          selector: $player/nav//a[contains(@href,"/channels/")]//div[contains(@class,"content")]/span | $creator | $user
       Tags:
         Name:
           selector: $player/nav//a[contains(@href,"/categories/") or contains(@href,"/tags/")]
       Performers:
         Name:
-          selector: $player/nav//a[contains(@href,"/pornstars/")]
+          selector: $player/nav//a[contains(@href,"/pornstars/")] | $creator | $user
 # Last Updated February 17, 2024
