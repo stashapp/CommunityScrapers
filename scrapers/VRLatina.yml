@@ -37,14 +37,14 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https:"
-      Movies:
+      Groups:
         Name: &movieName //title
         Date: *dateAttr
         Duration: &durationAttr //div[@class="info-elem -length -time"]/span[@class="sub-label"]
         Synopsis: *detailsSel
         URL: //meta[@property="og:url"]/@content
   movieScraper:
-    movie:
+    group:
       Name: *movieName
       Date: *dateAttr
       Duration: *durationAttr

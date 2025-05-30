@@ -11,7 +11,7 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   movieScraper:
-    movie:
+    group:
       Name: &name //h1[@class="description"]/text()
       Director: &director //a[@data-label="Director"]/text()
       Date:

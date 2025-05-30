@@ -19,7 +19,7 @@ xPathScrapers:
      Performers:
       Name: //a[@class="model"]//text()
      Details: //div[@class="description"]/p
-     Movies:
+     Groups:
         Name:
           selector: //div[@class="pdSRC"]//a[starts-with(@href,"/dvds/")]
      Tags:

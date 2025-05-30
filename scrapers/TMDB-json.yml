@@ -16,7 +16,7 @@ groupByURL:
 
 jsonScrapers:
   jsonMovieScraper:
-    movie:
+    group:
       Name: titlez
       Director:
         selector: credits.crew.#(job=="Director").name

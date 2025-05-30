@@ -75,7 +75,7 @@ xPathScrapers:
       Studio:
         Name: //div[@id="video_maker"]/table/tbody/tr/td[@class="text"]/span/a/text()
   movieScraper:
-    movie:
+    group:
       Name: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
       Director: //div[@id='video_director']/table/tbody/tr/td[@class="text"]/span/a/text()
       Duration: 

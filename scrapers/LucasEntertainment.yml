@@ -77,11 +77,11 @@ xPathScrapers:
       Studio: &studioAttr
         Name:
           fixed: Lucas Entertainment
-      Movies:
+      Groups:
         Name: //strong[text() = "From:"]/following-sibling::a[1]/text()
         URL: //strong[text() = "From:"]/following-sibling::a[1]/@href
   movieScraper:
-    movie:
+    group:
       Name: *titleSel
       Date:
         selector: *dateSel

@@ -66,7 +66,7 @@ xPathScrapers:
     common:
       $info: *infoSel
       $url: *urlSel
-    movie:
+    group:
       Name: *title
       Duration: $info//div[@class="cas"]/text()
       Date: *date

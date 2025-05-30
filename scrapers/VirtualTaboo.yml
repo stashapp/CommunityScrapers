@@ -33,7 +33,7 @@ xPathScrapers:
     common:
       $info: *infoSel
       $genInfo: //div[@class="row video-detail"]//div[@class="info mt-5"]
-    movie:
+    group:
       Name:
         selector: *titleSel
         postProcess:

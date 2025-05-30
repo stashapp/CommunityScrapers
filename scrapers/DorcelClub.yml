@@ -27,7 +27,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Dorcel Club
-      Movies:
+      Groups:
         Name: //div[@class="left"]/span[@class="movie"]/a/text()
         URL:
           selector: //div[@class="left"]/span[@class="movie"]/a/@href
@@ -43,7 +43,7 @@ xPathScrapers:
                 with: $1
 
   movieScraper:
-    movie:
+    group:
       Name: //img[contains(@class, "cover")]/@alt
       Duration:
         selector: //span[@class='duration']/text()

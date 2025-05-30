@@ -103,7 +103,7 @@ xPathScrapers:
           - replace:
             - regex: ^https://.*/\?p=
               with:
-      # Movies:
+      # Groups:
       #   Name:
       #     selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
       #     concat: " - "
@@ -111,7 +111,7 @@ xPathScrapers:
       #   Synopsis: *detailsSel
       #   URL: //meta[@property="og:url"]/@content
   movieScraper:
-    movie:
+    group:
       Name:
         selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
         concat: " - "

@@ -39,7 +39,7 @@ xPathScrapers:
               - regex: ^//
                 with: "https://"
   movieScraper:
-    movie:
+    group:
       Name:
         selector: *titleSel
         postProcess:

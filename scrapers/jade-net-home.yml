@@ -51,7 +51,7 @@ xPathScrapers:
   movieScraper:
     common:
       $movieinfo: //*[@id="detailMain"]
-    movie:
+    group:
       Name: $movieinfo/div[1]/h1/span
       Synopsis: 
         selector: //div[@id='readmore']

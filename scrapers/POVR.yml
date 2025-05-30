@@ -112,7 +112,7 @@ xPathScrapers:
   movieScraper:
     common:
       $info: *infoSel
-    movie:
+    group:
       Name:
         selector: *titleSel
         postProcess:

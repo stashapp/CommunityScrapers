@@ -25,7 +25,7 @@ xPathScrapers:
         Name: $details/a[@class="tags"][starts-with(@href, '/search?s=')]/text()
       Details:
         selector: $details/h2[@class="post_description"]/text()
-      Movies:
+      Groups:
         Name: $dvd/h1/a/text()
         FrontImage: $dvd/div[@class="post_image"]/a/img[@class="item_cover"]/@src
         URL: $dvd/h1/a/@href
@@ -37,7 +37,7 @@ xPathScrapers:
     common:
       $details: //div[@class="post_details"]/div[@class="post_details_main"]
       $postdate: //div[@class="post_details"]/div[@class="post_details_main"]/h3[@class="post_date"]
-    movie:
+    group:
       Name: $details/h1[@class="post_title"]/span/text()
       Duration:
         selector: $postdate/span[2]/text()

@@ -25,7 +25,7 @@ sceneByQueryFragment:
 
 xPathScrapers:
   movieScraper:
-    movie:
+    group:
       Name: //meta[@property="og:title"]/@content
       Director: //span[contains(text(),"Director")]/following-sibling::a/text()
       Date:
@@ -62,7 +62,7 @@ xPathScrapers:
       Image: //strong[contains(text(),"Large Front")]/parent::a/@href
       Studio:
         Name: //span[@itemprop="brand"]/text()
-      Movies:
+      Groups:
         Name: //meta[@property="og:title"]/@content
         URL: //meta[@property="og:url"]/@content
       Performers:

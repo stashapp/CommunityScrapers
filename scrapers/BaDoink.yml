@@ -139,7 +139,7 @@ xPathScrapers:
   movieScraper:
     common:
       $details: *detailsAttr
-    movie:
+    group:
       Name:
         selector: //meta[@name="dl8-customization-brand-name"]/@content|$details/h1
         concat: " - "

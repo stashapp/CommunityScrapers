@@ -95,7 +95,7 @@ xPathScrapers:
       Image: //img[@class="video-cover"]/@src
       URL: //link[@rel="canonical"]/@href
   movieScraper:
-    movie:
+    group:
       Name:
         selector: //strong[text()='ID:']/../span
         concat: "|"

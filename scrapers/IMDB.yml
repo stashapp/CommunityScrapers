@@ -97,7 +97,7 @@ xPathScrapers:
     scene:
       Title: &title //section//h1
       URL: &url //meta[@property="og:url"]/@content
-      Movies:
+      Groups:
         Name: *title
         URL: *url
       Date: &date
@@ -118,7 +118,7 @@ xPathScrapers:
       Studio: &studio
         Name: (//li[@data-testid="title-details-companies"]/div//a)[1]
   movieScraper:
-    movie:
+    group:
       Name: *title
       URL: *url
       Date: *date

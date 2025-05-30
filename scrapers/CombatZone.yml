@@ -55,7 +55,7 @@ xPathScrapers:
                 SP: Smash Pictures
 
   movieScraper:
-    movie:
+    group:
       Name: //h1
       Date:
         selector: //p[span[contains(text(), "Release Date:")]]/text()[2]

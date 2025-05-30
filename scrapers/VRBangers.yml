@@ -95,7 +95,7 @@ xPathScrapers:
       Tags: *tagsAttr
       Performers: *performersAttr
       Studio: *studioAttr
-    movie:
+    group:
       Name:
         selector: *titleSel
         postProcess:
