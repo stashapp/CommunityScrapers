@@ -4,7 +4,7 @@ sceneByURL:
     scraper: sceneScraper
     url:
       - extrapackage.com/video
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:

@@ -65,7 +65,7 @@ performerByFragment:
     - python
     - LetsDoeIt.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - letsdoeit.com/movie/

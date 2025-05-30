@@ -1,5 +1,5 @@
 name: Carnal+ / FTM+
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - carnalplus.com/series/

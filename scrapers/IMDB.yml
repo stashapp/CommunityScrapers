@@ -21,7 +21,7 @@ sceneByURL:
     url:
       - imdb.com/title/
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - imdb.com/title/

@@ -41,7 +41,7 @@ performerByURL:
   - action: scrapeXPath
     url: *urls
     scraper: performerScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url: *urls
     scraper: movieScraper

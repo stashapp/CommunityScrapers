@@ -82,7 +82,7 @@ performerByFragment:
     - python
     - MileHighMedia_Straight.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - milehighmedia.com/movie/

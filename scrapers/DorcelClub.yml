@@ -6,7 +6,7 @@ sceneByURL:
       - dorcelclub.com/scene
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - dorcelclub.com/en/porn-movie

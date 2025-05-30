@@ -1,6 +1,6 @@
 name: GayAdultEmpire
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - gaydvdempire.com

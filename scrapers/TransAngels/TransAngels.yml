@@ -61,7 +61,7 @@ performerByFragment:
     - python
     - TransAngels.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - transangels.com/movie/

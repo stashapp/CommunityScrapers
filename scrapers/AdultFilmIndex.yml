@@ -26,7 +26,7 @@ sceneByFragment:
   action: scrapeJson
   queryURL: https://adultfilmindex.com/api/v1/stash/scene_fragment_search/{filename}/{oshash}
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeJson
     url:
       - https://adultfilmindex.com/movie/

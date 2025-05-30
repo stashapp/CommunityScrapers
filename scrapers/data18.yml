@@ -1,5 +1,5 @@
 name: data18
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - data18.com/movies

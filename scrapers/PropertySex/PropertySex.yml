@@ -64,7 +64,7 @@ performerByFragment:
     - python
     - PropertySex.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - propertysex.com/movie/

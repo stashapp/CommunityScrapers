@@ -21,7 +21,7 @@ performerByName:
   action: scrapeXPath
   queryURL: "https://men.treasureislandmedia.com/men?haircolor=All&eyecolor=All&bodytype=All&cocksize=All&cocktype=All&ismarked=All&isexclusive=All&sexrole=All&modelname={}"
   scraper: search
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - treasureislandmedia.com/movies

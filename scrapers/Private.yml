@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - private.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - private.com

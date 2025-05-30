@@ -9,7 +9,7 @@ sceneByURL:
     url:
       - aebn.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - aebn.com

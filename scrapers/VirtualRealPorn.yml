@@ -35,7 +35,7 @@ sceneByFragment:
         with: "-"
   scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url: *urlSel
     scraper: movieScraper

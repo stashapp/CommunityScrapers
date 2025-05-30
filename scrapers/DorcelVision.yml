@@ -5,7 +5,7 @@ sceneByURL:
       - https://www.dorcelvision.com/en/movies
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - https://www.dorcelvision.com/en/movies

@@ -1,6 +1,6 @@
 name: TheMovieDB
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - themoviedb.org

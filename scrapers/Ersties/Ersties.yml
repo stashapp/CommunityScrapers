@@ -7,7 +7,7 @@ sceneByURL:
       - python
       - Ersties.py
       - sceneByURL
-movieByURL:
+groupByURL:
   - action: script
     url:
       - ersties.com/

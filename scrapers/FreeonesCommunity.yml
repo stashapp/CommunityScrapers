@@ -28,7 +28,7 @@ sceneByURL:
       - www.freeones.com
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - www.freeones.com

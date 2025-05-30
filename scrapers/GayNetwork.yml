@@ -47,7 +47,7 @@ sceneByURL:
       - vintagegaymovies.com/en/videos/detail/
       - wurstfilm.com/en/videos/detail/
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:

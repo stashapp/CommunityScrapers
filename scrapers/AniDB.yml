@@ -103,7 +103,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraperAnime
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - https://anidb.net/

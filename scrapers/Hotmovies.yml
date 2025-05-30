@@ -12,7 +12,7 @@ sceneByURL:
     url:
       - hotmovies.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - hotmovies.com

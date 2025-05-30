@@ -6,7 +6,7 @@ sceneByURL:
       - javdatabase.com
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - javdatabase.com

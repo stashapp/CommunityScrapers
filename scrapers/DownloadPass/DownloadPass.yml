@@ -1,6 +1,6 @@
 name: DownloadPass
 
-movieByURL:
+groupByURL:
   - action: script
     url:
       - downloadpass.com/dvds/

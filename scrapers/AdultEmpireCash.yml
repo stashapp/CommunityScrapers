@@ -35,7 +35,7 @@ sceneByURL:
       - westcoastproductions.com/
       - data18.empirestores.co/
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:

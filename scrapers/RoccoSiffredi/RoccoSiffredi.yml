@@ -30,7 +30,7 @@ sceneByQueryFragment:
     - RoccoSiffredi.py
     - roccosiffredi
     - scene-by-query-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - roccosiffredi.com/en/dvd/

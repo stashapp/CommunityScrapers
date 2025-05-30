@@ -15,7 +15,7 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - lucasentertainment.com/movies/

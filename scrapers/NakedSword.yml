@@ -6,7 +6,7 @@ sceneByURL:
       - nakedsword.com/movies/
       - trailertrashboys.com/movies/
       - trentonducati.com/movies/
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:

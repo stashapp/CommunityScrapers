@@ -9,7 +9,7 @@ sceneByURL:
       - python
       - ../Algolia/Algolia.py
       - interracialvision
-movieByURL:
+groupByURL:
   - action: script
     url:
       - interracialvision.com/en/movie/

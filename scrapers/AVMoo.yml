@@ -6,7 +6,7 @@ sceneByURL:
       - avsox.click
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - avmoo.online

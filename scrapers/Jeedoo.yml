@@ -5,7 +5,7 @@ sceneByURL:
     url:
       - jeedoo.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - jeedoo.com

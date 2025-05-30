@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - pinklabel.tv
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - pinklabel.tv

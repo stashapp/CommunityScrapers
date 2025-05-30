@@ -76,7 +76,7 @@ performerByFragment:
     - python
     - MetroHD.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - metrohd.com/movie/

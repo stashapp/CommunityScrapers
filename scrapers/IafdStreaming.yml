@@ -1,6 +1,6 @@
 name: IafdStreaming
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - streaming.iafd.com/

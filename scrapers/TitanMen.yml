@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - titanmen.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - titanmen.com

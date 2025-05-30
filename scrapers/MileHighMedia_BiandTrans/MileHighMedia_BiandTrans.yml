@@ -64,7 +64,7 @@ performerByFragment:
     - python
     - MileHighMedia_BiandTrans.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - biempire.com/movie/

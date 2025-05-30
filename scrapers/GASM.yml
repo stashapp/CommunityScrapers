@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - gasm.com/post/details/
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - gasm.com/dvd/

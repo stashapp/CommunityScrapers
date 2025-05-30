@@ -1,5 +1,5 @@
 name: FreeonesStore
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - store.freeones.com

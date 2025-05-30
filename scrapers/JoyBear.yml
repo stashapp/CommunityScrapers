@@ -13,7 +13,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: joybear
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - joybear.com/features/

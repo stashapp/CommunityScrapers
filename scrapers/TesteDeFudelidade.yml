@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - testedefudelidade.com/
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - testedefudelidade.com/filmes/

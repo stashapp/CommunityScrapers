@@ -64,7 +64,7 @@ performerByFragment:
     - python
     - Twistys.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - twistys.com/movie/

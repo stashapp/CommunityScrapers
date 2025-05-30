@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - xconfessions.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - xconfessions.com

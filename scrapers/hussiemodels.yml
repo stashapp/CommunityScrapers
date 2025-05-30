@@ -9,7 +9,7 @@ sceneByURL:
       - seehimsolo.com/trailers/
       - povpornstars.com
     scraper: hussieScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - hussiepass.com/dvds/

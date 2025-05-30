@@ -31,7 +31,7 @@ performerByURL:
       - julesjordan.com/trial/models/
     scraper: performerScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - julesjordan.com/trial/dvds/

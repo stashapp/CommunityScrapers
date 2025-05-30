@@ -73,7 +73,7 @@ performerByFragment:
     - python
     - Mofos.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - mofos.com/movie/

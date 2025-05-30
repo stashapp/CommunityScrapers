@@ -1,6 +1,6 @@
 name: AdultDvdMarketPlace
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - adultdvdmarketplace.com/xcart/adult_dvd/dvd_view.php?adult_dvd_id=

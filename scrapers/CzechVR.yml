@@ -9,7 +9,7 @@ sceneByURL:
       - czechvrnetwork.com
       - vrintimacy.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - czechar.com
