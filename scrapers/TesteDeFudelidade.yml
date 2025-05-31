@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - testedefudelidade.com/
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - testedefudelidade.com/filmes/
@@ -33,7 +33,7 @@ xPathScrapers:
       Studio:
         Name: 
           fixed: Teste de Fudelidade
-      Movies:
+      Groups:
         Name: $movie/@title
         FrontImage: $movie/@src
         Studio: 
@@ -49,7 +49,7 @@ xPathScrapers:
     common:
       $performer: //*[text()='Elenco:']/following-sibling::ul/li/a
       $movie: //div[contains(@class, 'filme')]/div[@class="capa"]/img
-    movie:
+    group:
       Name: $movie/@title
       FrontImage: $movie/@src
   performerScraper:

@@ -11,7 +11,7 @@ sceneByURL:
       - adultdvdempire.com
       - adultempire.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
@@ -65,7 +65,7 @@ xPathScrapers:
       Image: //a[@class="boxcover"]/img/@src
 
   movieScraper:
-    movie:
+    group:
       Name: //div[contains(@class, "title-rating-section")]//h1/text()
       Director: //a[@label="Director"]/text()
       Duration:
@@ -113,7 +113,7 @@ xPathScrapers:
       Title: $header/h1
       Studio:
         Name: //div[contains(text(), "by")]/a
-      Movies:
+      Groups:
         Name: //div[contains(text(), "from")]/a
       Date:
         selector: //strong[contains(text(), "Released")]/following-sibling::text()
@@ -150,7 +150,7 @@ xPathScrapers:
       Image: //a[@id="front-cover"]/@data-href
       Studio:
         Name: //a[@label="Studio"]/text()
-      Movies:
+      Groups:
         Name: //div[contains(@class, "title-rating-section")]//h1/text()
         URL: //link[@rel="canonical"]/@href
       Tags:

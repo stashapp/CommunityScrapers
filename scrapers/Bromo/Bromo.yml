@@ -61,7 +61,7 @@ performerByFragment:
     - python
     - Bromo.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - bromo.com/scene/

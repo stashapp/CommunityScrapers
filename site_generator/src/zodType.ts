@@ -29,7 +29,6 @@ export const arrayActionsSchema = z.union([
   z.literal("performerByURL"),
   z.literal("sceneByURL"),
   z.literal("groupByURL"),
-  z.literal("movieByURL"),
   z.literal("galleryByURL"),
   z.literal("imageByURL"),
 ]);
@@ -150,7 +149,6 @@ export const ymlScraperSchema = z.record(z.any()).and(
     sceneByFragment: byFragmentScraperDefnSchema.optional(),
     sceneByURL: z.array(byUrlScraperDefnSchema).optional(),
     groupByURL: z.array(byUrlScraperDefnSchema).optional(),
-    movieByURL: z.array(byUrlScraperDefnSchema).optional(),
     galleryByFragment: byFragmentScraperDefnSchema.optional(),
     galleryByURL: z.array(byUrlScraperDefnSchema).optional(),
     imageByURL: z.array(byUrlScraperDefnSchema).optional(),

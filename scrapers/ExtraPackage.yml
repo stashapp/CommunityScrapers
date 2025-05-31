@@ -4,7 +4,7 @@ sceneByURL:
     scraper: sceneScraper
     url:
       - extrapackage.com/video
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
@@ -28,7 +28,7 @@ xPathScrapers:
         Name: //li[contains(.,"Categories :")]/a
       Details:
         selector: //div[@class="video-info mt-3"]/p
-      Movies:
+      Groups:
         Name: //div[@class="gblViewInfo"]//div[contains(.,"DVD :")]/a
         URL:
           selector: //div[@class="gblViewInfo"]//div[contains(.,"DVD :")]/a/@href
@@ -46,7 +46,7 @@ xPathScrapers:
         Name:
           selector: //div[@class="gblViewInfo"]//div[contains(.,"Studio:")]/a
   movieScraper:
-    movie:
+    group:
       Name:
         selector: //div[@class="boxGradientTop gradient section"]//p[contains(.,"Information")]
         postProcess:
