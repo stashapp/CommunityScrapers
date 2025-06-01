@@ -17,7 +17,7 @@ sceneByFragment:
   queryURL: https://www.eporner.com/video-{filename}/ # Scrapes data on video so long as the EPORNER video id is in the filename
   queryURLReplace:
     filename:
-      - regex: '(EPORNER\.COM - \[)(\w+)(\]{1}.*)' # Filename must start with "EPORNER.COM - " followed by the video id in square brackets (see any EPORNER video url for example)
+      - regex: '(\[)(\w+)(\]{1}.*)' # Filename must start with "EPORNER.COM - " followed by the video id in square brackets (see any EPORNER video url for example)
         with: $2
   scraper: singleSceneScrape
 
