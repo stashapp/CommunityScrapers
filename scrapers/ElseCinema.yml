@@ -34,6 +34,7 @@ xPathScrapers:
           - replace:
               - regex: '^([^\?]+).+'
                 with: $1
+      Director: //span/a[contains(@href,'/directors/')]
       Studio:
         Name:
           fixed: Else Cinema
