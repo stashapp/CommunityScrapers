@@ -20,23 +20,23 @@ xPathScrapers:
         postProcess:
           - parseDate: 2006-01-02T15:04:05Z
       Image: //meta[@property="og:image"]/@content
-      Studio: 
-        Name: 
+      Studio:
+        Name:
           selector: //div[@class="logo"]/a/@aria-label
           postProcess:
             - replace:
                 - regex: '\s*logo$'
                   with: ''
-      Tags: 
+      Tags:
         Name: //div[@class="media-info__buttons"]/a[contains(@href,"tags")]
-      Performers: 
+      Performers:
         Name: //h3[@class="media-box__title"]
 
   performerScraper:
     performer:
       Name: //h1[@class="title"]
       Image: //div[contains(@class,"img-holder")]/img/@src
-      Birthdate: 
+      Birthdate:
         selector: //div[contains(., "Birthday")]/span
         postProcess:
           - replace:
@@ -52,9 +52,11 @@ xPathScrapers:
       Measurements: //div[contains(., "Body")]/span
       Height:
         selector: //div[contains(., "Height")]/span
-        postProcess: 
+        postProcess:
           - replace:
               - regex: '^.*?([\d]+)\s*cm.*'
+                with: $1
+              - regex: '^.*?([\d\.]+)\s*m.*'
                 with: $1
               - regex: '[^\d]'
                 with: ''
