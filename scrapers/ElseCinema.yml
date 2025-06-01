@@ -26,6 +26,8 @@ xPathScrapers:
                 with:
       Performers:
         Name: //a[contains(@href,'/performers')]/li
+      Tags:
+        Name: //ul/a[contains(@href,'/categories')]/li
       Image:
         selector: //link/@imagesrcset
         postProcess:
