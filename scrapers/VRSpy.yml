@@ -1,6 +1,12 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 name: VRSpy
 
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - vrspy.com/star/
+    scraper: performerScraper
+
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -8,6 +14,47 @@ sceneByURL:
     scraper: sceneScraper
 
 xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //a[@class="breadcrumbs--current"]/text()
+      Image: //div[@class="avatar"]/img/@src
+      Height:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Height:")]/following-sibling::span/text()
+        postProcess: &postProcessRemoveNone
+          - replace:
+              - regex: None
+                with: ""
+      Weight:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Weight:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      Country:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Nationality:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      Tattoos:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Tattoos:")]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: ^No$
+                with: ""
+      Measurements:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Measurements:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      HairColor:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Hair color:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      EyeColor:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Eye color:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      Details: &detailsSel //div[contains(@class, "show-more-text")]/p
+      Birthdate:
+        selector: *detailsSel
+        postProcess:
+          # attempt to pick out date of birth from Biography
+          - replace:
+              - regex: .*((January|February|March|April|May|June|July|August|September|October|November|December)\ \d+,\ \d{4}).*
+                with: $1
+          - parseDate: January 2, 2006
+
   sceneScraper:
     scene:
       Title: //dl8-video/@title
@@ -17,7 +64,13 @@ xPathScrapers:
           - parseDate: 2 January 2006
       Details:
         selector: //div[@class="show-more-text"]/p
-        # I don't know how to preserve the blank lines in the p element
+        # The blank lines in the p element are stripped as whitespace by stashapp, but they can be
+        # recreated by looking at the end and starts of sentences without a space following the "."
+        # or "!" or "?"
+        postProcess:
+          - replace:
+              - regex: (\w[\.\!\?])(\w)
+                with: "$1\n\n$2"
       Studio:
         Name:
           fixed: VRSpy
