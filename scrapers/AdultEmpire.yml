@@ -11,7 +11,7 @@ sceneByURL:
       - adultdvdempire.com
       - adultempire.com
     scraper: sceneScraper
-groupByURL:
+movieByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
@@ -65,7 +65,7 @@ xPathScrapers:
       Image: //a[@class="boxcover"]/img/@src
 
   movieScraper:
-    group:
+    movie:
       Name: //div[contains(@class, "title-rating-section")]//h1/text()
       Director: //a[@label="Director"]/text()
       Duration:
