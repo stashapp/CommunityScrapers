@@ -30,6 +30,7 @@ channel_name_map = {
     "AnalPlaytime": "Anal Acrobats",
     "Anal Trixxx": "AnalTriXXX",
     "Jonni Darkko ": "Jonni Darkko XXX",    # trailing space is in the API
+    "LatexPlaytime": "Latex Playtime",
     "Le Wood": "LeWood",
     "Secret Crush ": "Secret Crush",    # trailing space is in the API
 }
