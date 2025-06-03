@@ -65,7 +65,7 @@ xPathScrapers:
       Image: //a[@class="boxcover"]/img/@src
 
   movieScraper:
-    movie:
+    group:
       Name: //div[contains(@class, "title-rating-section")]//h1/text()
       Director: //a[@label="Director"]/text()
       Duration:
@@ -102,7 +102,7 @@ xPathScrapers:
       #     - replace:
       #       - regex: (\d).+
       #         with: $1
-      URL: //meta[@name='og:url']/@content
+      URLs: //meta[@name='og:url']/@content
       Tags:
         Name: //a[@name="categories"]/../ul/li/a/text()
   sceneScraperSingle:
