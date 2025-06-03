@@ -24,6 +24,11 @@
       "description": "An array of one or more configurations for scraping movie info by URL(s).",
       "allOf": [{ "$ref": "#/definitions/anyByURL" }]
     },
+    "groupByURL": {
+      "title": "Group by URL",
+      "description": "An array of one or more configurations for scraping group info by URL(s).",
+      "allOf": [{ "$ref": "#/definitions/anyByURL" }]
+    },
     "performerByURL": {
       "title": "Performer by URL",
       "description": "An array of one or more configurations for scraping performer info by URL(s).",

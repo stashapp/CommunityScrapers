@@ -11,7 +11,7 @@ sceneByURL:
       - adultdvdempire.com
       - adultempire.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - adultdvdempire.com
