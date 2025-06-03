@@ -1,4 +1,13 @@
 name: hstream
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://hstream.moe/search?search={}
+  scraper: sceneSearch 
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper     
+
 sceneByFragment:
   action: scrapeXPath
   queryURL: https://hstream.moe/hentai/{filename}
@@ -20,6 +29,27 @@ sceneByURL:
       - hstream.moe/hentai/
     scraper: sceneScraper
 xPathScrapers:
+  sceneSearch:              
+     scene:
+      URL:   //div[contains(@class,'relative')]/a/@href
+      Title:
+        selector: //div[contains(@class,'relative')]/a/img/@alt
+      Image:
+        selector: //div[contains(@class,'relative')]/a/img/@src
+        postProcess:
+          - replace:          
+              # 1) make relative paths absolute
+              - regex: '^/'                                     
+                with: https://hstream.moe/
+              # 2) turn “…/gallery‑…” into “…/cover‑…”
+              - regex: '/gallery-'
+                with: '/cover-'
+              # 3) drop the “‑thumbnail” tag
+              - regex: '-thumbnail'
+                with:
+              # 4) remove the extra frame index after the episode number
+              - regex: '(-ep-\d+)-\d+\.webp$'
+                with: $1.webp
   sceneScraper:
     scene:
       Title: //h1
@@ -35,7 +65,16 @@ xPathScrapers:
         Name: //li[@class="inline-block p-1"]/a/text()
       Studio:
         Name: (//a[contains(@href, "studios")])[1]
-      Image: //meta[@property="og:image"]/@content
-      URL: //meta[@property="og:url"]/@content
+      Image: 
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+                  # 1) gallery  ➜  cover
+                  - regex: gallery
+                    with: cover
+                  # 2) trim the trailing “-0” (or “-1”, etc.)
+                  - regex: (-ep-\d+)-\d+\.webp$
+                    with: $1.webp    
 
-# Last Updated May 28, 2024
+      URL: //meta[@property="og:url"]/@content
+# Last Updated May 29, 2025
