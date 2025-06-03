@@ -43,8 +43,10 @@ movieByURL:
 performerByURL:
   - action: scrapeXPath
     url:
+      - virtualrealgay.com/vr-models/
       - virtualrealpassion.com/vr-models/
       - virtualrealporn.com/vr-models/
+      - virtualrealtrans.com/vr-models/
     scraper: performerScraper
 
 xPathScrapers:
@@ -156,8 +158,12 @@ xPathScrapers:
               if (value && value.length) {
                 const cmPerInch = 2.54
                 let measurements = value.split('-')
+                // fix waist and hips swapped (this is a rare occurrence)
+                if (measurements[1] > measurements[2]) {
+                  measurements = [measurements[0], measurements[2], measurements[1]]
+                }
                 return measurements.map(m => Math.round(m / cmPerInch)).join('-')
               }
               return value
       Image: //div[@class="feature_img_model"]/img/@src
-# Last Updated April 29, 2025
+# Last Updated June 2, 2025
