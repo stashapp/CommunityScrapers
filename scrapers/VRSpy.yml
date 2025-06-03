@@ -64,12 +64,17 @@ xPathScrapers:
           - parseDate: 2 January 2006
       Details:
         selector: //div[@class="show-more-text"]/p
-        # The blank lines in the p element are stripped as whitespace by stashapp, but they can be
-        # recreated by looking at the end and starts of sentences without a space following the "."
-        # or "!" or "?"
         postProcess:
           - replace:
+              # The blank lines in the p element are stripped as whitespace by stashapp, but they can be
+              # recreated by looking at the end and starts of sentences without a space following the "."
+              # or "!" or "?"
               - regex: (\w[\.\!\?])(\w)
+                with: "$1\n\n$2"
+              # Some scene descriptions include b tags as pseudo-headings
+              # These all appear to end with a lowercase letter, and the following paragraph starts
+              # with an uppercase letter.
+              - regex: ([a-z])([A-Z])
                 with: "$1\n\n$2"
       Studio:
         Name:
