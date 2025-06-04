@@ -42,7 +42,7 @@ XPATHS = {
     "name": '//section[@class="main-column details"]/h1/span/text()',
     "search_url": '../h2[@class="ttl"]/a/@href',
     "search": '//p[@class="furi"]',
-    "twitter": ("//span[text()='ブログ']/../p/a[contains(@href,'twitter.com')]/@href"),
+    "twitter": ("//span[text()='ブログ']/../p/a[contains(@href,'twitter.com')]/@href|//span[text()='ブログ']/../p/a[contains(@href,'x.com')]/@href"),
 }
 
 REGEXES = {
