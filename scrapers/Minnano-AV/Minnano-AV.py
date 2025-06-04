@@ -233,7 +233,10 @@ def performer_by_url(url):
             if match := re.match(REGEXES["alias"], alias):
                 aliases.add(match.group("kanji"))
                 try:
-                    aliases.add(reverse_first_last_name(match.group("romanized")))
+                    if(JAPANESE):
+                        aliases.add(reverse_first_last_name(match.group("romanized")))
+                    else:
+                        aliases.add(match.group("romanized"))
                 except:
                     pass
 
