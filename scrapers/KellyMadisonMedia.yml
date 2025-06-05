@@ -78,6 +78,8 @@ xPathScrapers:
             - map:
                 color-5KT: 5Kteens
                 color-5KP: 5Kporn
+                color-8KM: 8K Milfs
+                color-8KT: 8K Teens
       Details: //p[@class=""]
       Performers:
         Name:
@@ -119,6 +121,8 @@ xPathScrapers:
                 with: ""
       Performers:
         Name: //strong[text()="Starring:"]/following-sibling::a
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
 
 driver:
   cookies:
