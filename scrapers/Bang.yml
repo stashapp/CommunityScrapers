@@ -13,7 +13,7 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - bang.com/dvd
@@ -77,7 +77,7 @@ xPathScrapers:
             - replace:
                 - regex: ^yngr\.com$
                   with: "YNGR"
-      Movies:
+      Groups:
         Name: $movie
         URL:
           selector: $movie/@href
@@ -86,7 +86,7 @@ xPathScrapers:
     common:
       $details: //div[@class="w-full"][1]
       $image: //body/div[contains(@class,"w-full")][3]/div/div/picture//img[contains(@src,"/front")]/@src
-    movie:
+    group:
       Name:
         selector: $details/h1
       Duration:

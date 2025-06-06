@@ -6,7 +6,7 @@ sceneByURL:
       - nakedsword.com/movies/
       - trailertrashboys.com/movies/
       - trentonducati.com/movies/
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
@@ -40,7 +40,7 @@ xPathScrapers:
       Details: &summary //span[contains(text(),"Summary")]/following-sibling::div/span/span[(contains(@style,"hidden"))]
       Image:
         selector: //div[@data-vjs-player="true"]/video/@poster
-      Movies:
+      Groups:
         Name: &movieTitle //div[@class="VideoTitle"]/h4
         URL:
           selector: //a[contains(@class, "GoToMovieIcon")]/@href
@@ -62,7 +62,7 @@ xPathScrapers:
                   with: xlb
 
   movieScraper:
-    movie:
+    group:
       Name: *movieTitle
       Duration:
         selector: //span[@class="Duration"]

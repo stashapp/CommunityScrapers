@@ -155,7 +155,7 @@ galleryByURL:
       - AdultTime.py
       - puretaboo
       - gallery-by-url
-movieByURL:
+groupByURL:
   - action: script
     url:
       - adulttime.com/en/dvd/

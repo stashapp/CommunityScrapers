@@ -13,7 +13,7 @@ sceneByFragment:
       - regex: .*?(\d{5,}).*
         with: $1
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - https://adult.contents.fc2.com/article
@@ -63,7 +63,7 @@ xPathScrapers:
                 with: $1
 
   movieScraper:
-    movie:
+    group:
       Name: 
         selector: /html/head/title/text()
         postProcess:

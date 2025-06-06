@@ -29,7 +29,7 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - lethalhardcore
     - validName
-movieByURL:
+groupByURL:
   - action: script
     url:
       - lethalhardcore.com/en/movie

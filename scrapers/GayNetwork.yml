@@ -47,7 +47,7 @@ sceneByURL:
       - vintagegaymovies.com/en/videos/detail/
       - wurstfilm.com/en/videos/detail/
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
@@ -113,7 +113,7 @@ xPathScrapers:
                 with: $1
       Studio:
         Name: //*[i[contains(@class, "fa-video")]]/span
-      Movies:
+      Groups:
         Name:
           selector: //div[@class="row mb-4 px-0"]//h3[i[contains(@class, "fa-scrubber")]]
           postProcess:
@@ -140,7 +140,7 @@ xPathScrapers:
       Tags:
         Name: //div[@class="row mb-4 px-0"]//h3[not(i)]
   movieScraper:
-    movie:
+    group:
       Name: //h1
       URL: *url
       Synopsis: //div[@class="mb-2 bg-light p-3 my-3 text-justify my-text psm-rounded"]

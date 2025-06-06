@@ -103,7 +103,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraperAnime
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - https://anidb.net/
@@ -196,14 +196,14 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: https://anidb.net
-      Movies:
+      Groups:
         Name: $title
         URL: //link[@rel="canonical"]/@href
       Studio:
         Name: $info//table[@id="staffoverview"]//tr[last()]/td[@class="name creator"]/a
       Image: $info//div[@class="image"]//img/@src
       URL: //link[@rel="canonical"]/@href
-    movie:
+    group:
       Name: $title
       Aliases: $en_title
       Date: 

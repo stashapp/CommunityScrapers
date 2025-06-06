@@ -28,7 +28,7 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - falconstudios
     - validName
-movieByURL:
+groupByURL:
   - action: script
     url:
       - falconstudios.com/en/movie/

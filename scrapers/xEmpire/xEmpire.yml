@@ -57,7 +57,7 @@ galleryByURL:
       - ../AlgoliaAPI/AlgoliaAPI.py
       - xempire
       - gallery-by-url
-movieByURL:
+groupByURL:
   - action: script
     url:
       - allblackx.com/en/movie/

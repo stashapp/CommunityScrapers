@@ -12,7 +12,7 @@ sceneByURL:
     url:
       - hotmovies.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - hotmovies.com
@@ -35,7 +35,7 @@ xPathScrapers:
       Performers:
         Name: //meta[@property="og:video:actor"]/@content
       URL: //meta[@name="og:url"]/@content
-      Movies:
+      Groups:
         Name: //a[@id="front-cover"]/img/@title
         URL:
           selector: //a[@id="front-cover"]/@href
@@ -58,7 +58,7 @@ xPathScrapers:
       Image: //meta[@property="og:image"]/@content
       Date: //meta[@property="og:video:release_date"]/@content
   movieScraper:
-    movie:
+    group:
       Name: //h1
       URL: //meta[@name="og:url"]/@content
       Director: //a[@label="Director"][1]
@@ -154,7 +154,7 @@ xPathScrapers:
         selector: //a[@class="animated-screen"]/@href
         postProcess: *baseUrl
       Image: //img[@class="animate screenshot"]/@src
-      Movies:
+      Groups:
         Name: //div[@class="animated-scene-hiddentxt"]/a/i
         URL:
           selector: //div[@class="animated-scene-hiddentxt"]/a/@href
