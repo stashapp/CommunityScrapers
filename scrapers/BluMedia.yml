@@ -114,8 +114,12 @@ xPathScrapers:
         selector: //div[@class="model-lft"]//li[contains(., "Weight")]/text()
         postProcess:
           - replace:
-              - regex: .*\((\d*).*
+              - regex: .*\(\d*\s*lb).*
                 with: $1
+              - regex: \d*\s*kg
+                with: ''
+              - regex: '[^\d]'
+                with: ''
           - lbToKg: true
       PenisLength:
         selector: //div[@class="model-lft"]//li[contains(., "Cock")]/text()
