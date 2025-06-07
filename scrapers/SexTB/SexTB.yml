@@ -1,0 +1,30 @@
+
+name: "SexTB"
+sceneByURL:
+  - action: script
+    url:
+      - sextb.net/
+    script:
+      - python
+      - SexTB.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - SexTB.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - SexTB.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - SexTB.py
+    - scene-by-query-fragment
+ 
+# Last Updated June 04, 2025
