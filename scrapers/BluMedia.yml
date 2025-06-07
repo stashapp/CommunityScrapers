@@ -116,6 +116,7 @@ xPathScrapers:
           - replace:
               - regex: .*\((\d*).*
                 with: $1
+          - lbToKg: true
       PenisLength:
         selector: //div[@class="model-lft"]//li[contains(., "Cock")]/text()
         postProcess: *extractMetric
@@ -189,4 +190,4 @@ xPathScrapers:
           - replace:
               - regex: .*\)\s*(.*)
                 with: $1
-# Last Updated May 30, 2025
+# Last Updated June 7, 2025
