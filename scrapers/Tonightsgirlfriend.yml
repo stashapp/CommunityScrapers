@@ -11,8 +11,16 @@ galleryByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $url: //link[@rel="canonical"]/@href
     scene:
       Title: &title //h1
+      Code: &code
+        selector: $url
+        postProcess:
+          - replace:
+              - regex: https?:\/\/(?:www\.)?[0-9A-za-z-]+\.com\/[0-9A-Za-z-_]+\/[0-9A-Za-z-_]+\-(\d+)\/?.*
+                with: $1
       Details: &details //p[@class="scene-description"]
       Date: &date
         selector: //script[contains(text(),"uploadDate")]/text()
@@ -41,6 +49,7 @@ xPathScrapers:
         Name: //a[@class="cat-tag"]
     gallery:
       Title: *title
+      Code: *code
       Date: *date
       Details: *details
       Tags: *tags
@@ -49,4 +58,4 @@ xPathScrapers:
 # you can use proxy/CDN with CDP to bypass region-blocking
 # driver:
 #   useCDP: true
-# Last Updated April 17, 2025
+# Last Updated June 08, 2025
