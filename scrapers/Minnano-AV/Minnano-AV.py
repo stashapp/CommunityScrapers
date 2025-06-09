@@ -37,7 +37,7 @@ XPATHS = {
     ),
     "h1_kanji": '//section[@class="main-column details"]/h1/text()',
     "h1_romaji": '//section[@class="main-column details"]/h1/span/text()',
-    "aliases": "//span[text()='別名']/following-sibling::p/text()",
+    "aliases": "//section[@class=\"main-column details\"]/h1/text()|//span[text()='別名']/following-sibling::p/text()",
     "origin": "//span[text()='出身地']/../p/a/text()",
     "name": '//section[@class="main-column details"]/h1/span/text()',
     "search_url": '../h2[@class="ttl"]/a/@href',
