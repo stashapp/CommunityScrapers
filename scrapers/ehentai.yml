@@ -47,7 +47,7 @@ xPathScrapers:
         Name:
           selector: //div[@id="taglist"]//td//div[@class="gt" or @class="gtl"]/a[starts-with(@id, "ta_parody:") or starts-with(@id, "ta_female:") or starts-with(@id, "ta_mixed:") or starts-with(@id, "ta_other:")]/text()
       Performers:
-        Name: //div[@id="taglist"]//td//div[@class="gt" or @class="gtl"]/a[starts-with(@id, "ta_character:")]/text()
+        Name: //div[@id="taglist"]//td//div[@class="gt" or @class="gtl"]/a[starts-with(@id, "ta_character:") or starts-with(@id, "ta_cosplayer:")]/text()
       Studio:
         Name: //div[@id="taglist"]//td//div[@class="gt" or @class="gtl"]/a[starts-with(@id, "ta_artist:")]/text()
 
