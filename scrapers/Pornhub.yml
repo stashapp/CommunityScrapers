@@ -121,6 +121,8 @@ xPathScrapers:
       # Check that the button does not appear inside a "From:" div because then you'll get the studio
       # as a performer if it's an affiliate channel, for example https://www.pornhub.com/view_video.php?viewkey=67e19227400d2
       $studioButton: //div[contains(@class,"video-actions-tabs")]//span[not(ancestor::div[@class="from"])][contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a
+      # datalayer for unlisted-proof videos #2385
+      $dataLayer: //script[@type="text/javascript"][contains(.,'window.dataLayer.push')]
     scene:
       Title:
         selector: //h1
@@ -134,12 +136,12 @@ xPathScrapers:
                 with: ""
       URL: //meta[@property="og:url"]/@content
       Date:
-        selector: $datablob
+        selector: $dataLayer
         postProcess:
           - replace:
-              - regex: .+(?:"uploadDate"\s*:\s*")([^T]+).+
+              - regex: .*(?:'video_date_published'\s*:\s*')(\d+)'.+
                 with: $1
-          - parseDate: "2006-01-02"
+          - parseDate: "20060102"
       Code:
         selector: //meta[@property="og:url"]/@content
         postProcess:
@@ -162,4 +164,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated March 24, 2025
+# Last Updated June 11, 2025
