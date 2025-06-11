@@ -13,7 +13,7 @@ xPathScrapers:
     scene:
       Title: $sceneWrapper//div[contains(concat(" ", normalize-space(@class), " "), " content-title ")]/h1
       Code:
-        selector: /link[@rel="canonical"]/@href
+        selector: /html/head/link[@rel="canonical"]/@href
         postProcess:
           - replace:
             - regex: .+-(\d+)\..+
@@ -24,11 +24,12 @@ xPathScrapers:
         postProcess:
           - parseDate: 02.01.2006
       Image:
-        selector: $sceneWrapper//script[contains(text(),"myFluidPlayer")]
+        # use code to construct homepage_thumb since it is higher res
+        selector: /html/head/link[@rel="canonical"]/@href
         postProcess:
           - replace:
-            - regex: .+posterImage\s?:\s?'(.+?)'.+
-              with: $1
+            - regex: .+-(\d+)\..+
+              with: https://alexlegend.com/media/misc/homepage_thumbs/$1.jpg
       Studio:
         Name:
           fixed: AlexLegend
@@ -39,4 +40,4 @@ xPathScrapers:
         Name:
           selector: $sceneWrapper//div[contains(concat(" ", normalize-space(@class), " "), " main__models ")]/a[@title]
 
-# Last Updated September 08, 2024
+# Last Updated June 11, 2025
