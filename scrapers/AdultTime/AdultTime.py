@@ -163,8 +163,19 @@ def fix_url(_url: str) -> str:
 
 channel_name_map = {
     "Age & Beauty": "Age and Beauty",
+    "Black Money Erotica": "Adult Time x Black Money Erotica",
+    "Bratty Sis": "Adult Time x Bratty Sis",
+    "Cuck Hunter": "Adult Time x Cuck Hunter",
+    "Frameleaks": "Adult Time x Frameleaks",
     "Heteroflexible": "HeteroFlexible",
+    "Horny Household": "Adult Time x Horny Household",
+    "Hussie Pass": "Adult Time x Hussie Pass",
     "JOI Mom": "J.O.I Mom",
+    "Lady Lazarus": "Adult Time x Lady Lazarus",
+    "LesbianX": "Adult Time x LesbianX",
+    "LucidFlix": "Adult Time x LucidFlix",
+    "Slayed": "Adult Time x Slayed",
+    "Taboo Heat": "Adult Time x Taboo Heat",
     "Vixen": "Adult Time x Vixen",
 }
 """
