@@ -199,7 +199,7 @@ def performerByURL(url, result={}):
 
     # left table, works for link and plain text fields, return result list
     def parse_left(field):
-        template = "//table//th[text()='{0}' or a/text()='{0}']/following-sibling::td/a/text()"
+        template = "//table//th[text()='{}' or a/text()='{}']/following-sibling::td[1]/text()"
         return tree.xpath(template.format(field))
 
     result["tags"] = additional_tags
