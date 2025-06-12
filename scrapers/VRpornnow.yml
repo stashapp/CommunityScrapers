@@ -10,7 +10,7 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1
-      Details: //p[@id="description"]
+      Details: //meta[@name="description"]/@content
       Date:
         selector: //meta[@property="article:published_time"]/@content
         postProcess:
