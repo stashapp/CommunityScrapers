@@ -1,0 +1,45 @@
+name: DeviantArt
+# DeviantArt blocks all VPNs. This scraper will not work with a VPN due to DA block
+imageByURL:
+  - action: scrapeJson
+    url:
+      - deviantart.com
+    scraper: imageScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ':'
+          with: '%3A'
+        - regex: '/'
+          with: '%2F'
+        - regex: '^'
+          with: 'https://backend.deviantart.com/oembed?url='
+jsonScrapers:
+  imageScraper:
+    image:
+      Title: title
+      Date:
+        selector: pubdate
+        postProcess:
+          - replace:
+            - regex: ([\d-]+)T([\d:-]+)
+              with: $1
+          - parseDate: 2006-01-02
+      Studio:
+        Name: author_name
+      Tags:
+        Name:
+          selector: tags
+          split: ", "
+driver:
+  headers:
+    - Key: Accept
+      Value: 'application/json'
+    - Key: Host
+      Value: backend.deviantart.com
+    - Key: User-Agent
+      Value: stash-scraper/v1
+    - Key: Accept-Encoding
+      Value: '*'
+
+# Last Updated June 12, 2025
