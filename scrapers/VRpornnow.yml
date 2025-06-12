@@ -35,25 +35,14 @@ xPathScrapers:
       Code:
         selector: *urlSel
         postProcess:
-          - replace:
+          - replace: &pickCode
               - regex: .*/videos/(\d+).*
                 with: $1
       Image:
-        selector: //script[@type="application/ld+json"]
+        selector: *urlSel
         postProcess:
-          - javascript: |
-              if (value && value.length) {
-                // parse JSON
-                const obj = JSON.parse(value);
-                // find WebPage item
-                const webPageItem = obj["@graph"].find(item => item["@type"] === "WebPage");
-                // attempt to pick scene ID from image.url
-                const regex = new RegExp("/uploads/(\\d+)");
-                const matches = regex.exec(webPageItem.image.url);
-                if (matches) {
-                  const sceneId = matches[1]
-                  return `https://www.vrpornnow.com/files/images/${sceneId}/fsk16/${sceneId}_Cover_quer_VR_FSK16.webp`;
-                }
-              }
-              return value
+          - replace: *pickCode
+          - replace:
+              - regex: ^(.*)$
+                with: "https://www.vrpornnow.com/files/images/${1}/fsk16/${1}_Cover_quer_VR_FSK16.webp"
 # Last Updated June 12, 2025
