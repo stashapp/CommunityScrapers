@@ -164,6 +164,7 @@ def fix_url(_url: str) -> str:
 channel_name_map = {
     "Age & Beauty": "Age and Beauty",
     "Heteroflexible": "HeteroFlexible",
+    "Hussie Pass": "Adult Time x Hussie Pass",
     "JOI Mom": "J.O.I Mom",
     "Vixen": "Adult Time x Vixen",
 }
