@@ -120,9 +120,27 @@ xPathScrapers:
               - regex: ^Episode Summary:\s+
                 with: ""
       Performers:
-        Name: //strong[text()="Starring:"]/following-sibling::a
+        Name:
+          selector: //strong[text()="Starring:"]/following-sibling::a
+          postProcess:
+            - map:
+                Madison: Ryan Madison
+      Tags:
+        Name:
+          selector: //div[contains(@class, "dropdown")]/ul/li[position() > 1]
+          postProcess:
+            - replace:
+                # Chapters are named like 'Missionary (04:30)' so we strip the timestamp
+                # TODO: scrape as markers if we ever get support for that
+                - regex: \s*\(.+$
+                  with: ""
       Studio:
-        Name: //meta[@property="og:site_name"]/@content
+        Name:
+          selector: //meta[@property="og:site_name"]/@content
+          postProcess:
+            - map:
+                8Kmilfs: 8K Milfs
+                8Kteens: 8K Teens
 
 driver:
   cookies:
