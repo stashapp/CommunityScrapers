@@ -1,5 +1,5 @@
 name: data18
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - data18.com/movies
@@ -52,7 +52,7 @@ xPathScrapers:
       Studio:
         Name: $studio
         URL: $studio/@href
-      Movies:
+      Groups:
         Name:
           selector: $movie/@title
           postProcess:
@@ -66,7 +66,7 @@ xPathScrapers:
       $movieInfo: //div[@id="body2div_b"]
       $studio: //b[text()=('Studio') or ('Network')]/following-sibling::b/a | //b[text()=('Studio') or ('Network')]/following-sibling::a
       $performer: //div[h3[contains(text(), 'Pornstars / Cast')]]//a[@class='bold gen']
-    movie:
+    group:
       Name:
         selector: //title
         postProcess:
@@ -131,7 +131,7 @@ xPathScrapers:
           - replace:
               - regex: '^Description\s*-\s*'
                 with:
-      Movies:
+      Groups:
         Name:
           selector: //title
           postProcess:

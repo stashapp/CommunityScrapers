@@ -6,7 +6,7 @@ sceneByURL:
       - avsox.click
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - avmoo.online
@@ -37,7 +37,7 @@ xPathScrapers:
         Name: //span[@class="genre"]/a
       Performers:
         Name: //a[contains(@href,'/star/')]/span
-      Movies:
+      Groups:
         Name: *title
         FrontImage: *image
         Studio: *studio
@@ -55,7 +55,7 @@ xPathScrapers:
                   with: 'https:'
 
   movieScraper:
-    movie:
+    group:
       Name: *title
       Date: *date
       Duration: *duration

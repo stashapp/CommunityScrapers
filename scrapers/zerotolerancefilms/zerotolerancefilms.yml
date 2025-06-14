@@ -33,7 +33,7 @@ sceneByQueryFragment:
     - zerotolerancefilms.py
     - zerotolerancefilms
     - scene-by-query-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - 3rddegreefilms.com/en/movie/

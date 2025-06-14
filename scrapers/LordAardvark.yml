@@ -64,7 +64,7 @@ xPathScrapers:
           - replace:
               - regex: '.*id: (\d+).*'
                 with: $1
-      Movies:
+      Groups:
         Name: //p[contains(text(), "Series:")]/following-sibling::a/text()
       Tags:
         Name: //div[contains(@class, "col")]/a[@class="player-tag"]/text()

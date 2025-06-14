@@ -80,7 +80,7 @@ performerByFragment:
     - python
     - Men.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - \/men.com/movie

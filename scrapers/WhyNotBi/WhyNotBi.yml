@@ -61,7 +61,7 @@ performerByFragment:
     - python
     - WhyNotBi.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - whynotbi.com/scene/
