@@ -1,80 +1,164 @@
-name: hstream
-sceneByName:
-  action: scrapeXPath
-  queryURL: https://hstream.moe/search?search={}
-  scraper: sceneSearch 
-sceneByQueryFragment:
-  action: scrapeXPath
-  queryURL: "{url}"
-  scraper: sceneScraper     
+name: "hstream"
 
 sceneByFragment:
   action: scrapeXPath
   queryURL: https://hstream.moe/hentai/{filename}
   queryURLReplace:
     filename:
-      # Strip out everything after the first [
-      - regex: ([^[]+)\s.*
-        with: $1
-      # Remove non-word characters
-      - regex: \W+
-        with: "-"
-      # Remove leading zeroes
-      - regex: 0+(\d)
-        with: $1
+      # [HSUB] Anime_02_Title - sub eng - E05v2 Uncensored (HD) www.example.com [3bb935c6].mp4
+      # 1. Removes tags inside square brackets [xxx]
+      - regex: '\[[^\]]*\]'
+        with: ""
+      
+      # 2. Removes tags inside parentheses (xxx)
+      - regex: '\([^)]*\)'
+        with: ""
+      
+      # 3. Removes file extensions (.mp4, .avi, .mkv...)
+      - regex: '\.\w{2,4}$'
+        with: ""
+      
+      # 4. Removes known tags: sub eng, engsub, uncensored, www
+      - regex: '(?i)(sub[\s\-_]?eng|engsub|uncensored|censored|www\.[^\s]+)'
+        with: ""
+
+      # 5. Standardizes separators into hyphens
+      - regex: '[\s\._+]+'
+        with: '-'
+        
+      # 6. Removes extended prefixes for episodes and seasons (but keeps the number)
+      - regex: '(?i)(^|[\-])(?:ep|episode|episodio|act|vol|season|stagione)([\-]?\d{1,2})'
+        with: '$1$2'
+        
+      # 7. Converts short prefixes for seasons and episodes into numbers (e.g., S02E05 → 02-05)
+      - regex: '(?i)\b(e|s)(\d{1,2})((e|s)(\d{1,2}))?\b'
+        with: '$2-$5'
+
+      # 8. Removes version suffixes from numbers (v2, vFinal, vRev3)
+      - regex: '(?i)(\d{1,2})(?:-)?v(?:\d+|final|finale|rev\d*)\b'
+        with: '$1'
+
+      # 9. Converts any short number (max 2 digits) with a leading zero into -<number>
+      - regex: '(^|[^0-9])0?(\d{1,2})([^0-9]|$)'
+        with: '$1$2$3'
+      
+      # 10. Replaces invalid URL characters (but keeps hyphens)
+      - regex: '[^a-zA-Z0-9\-]+'
+        with: '-'
+      
+      # 11. Inserts a hyphen between letters and numbers (e.g., "abc2" → "abc-2")
+      - regex: '([a-zA-Z])(\d)'
+        with: '$1-$2'
+        
+      # 12. Removes everything after the last short number
+      - regex: '^(.*-\d{1,2})(?:-\d{1,2})*(?:-.*)?$'
+        with: '$1'
+        
+      # 13. Multiple hyphens → only one
+      - regex: '-+'
+        with: '-'
+      
+      # 14. Removes leading/trailing hyphens (with #12, trailing ones are already removed)
+      - regex: '^-+|-+$'
+        with: ""
   scraper: sceneScraper
+
 sceneByURL:
   - action: scrapeXPath
     url:
       - hstream.moe/hentai/
     scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://hstream.moe/search?search={}&view=poster
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - hstream.moe/hentai/
+    scraper: groupScraper
+
 xPathScrapers:
-  sceneSearch:              
-     scene:
-      URL:   //div[contains(@class,'relative')]/a/@href
-      Title:
-        selector: //div[contains(@class,'relative')]/a/img/@alt
-      Image:
-        selector: //div[contains(@class,'relative')]/a/img/@src
-        postProcess:
-          - replace:          
-              # 1) make relative paths absolute
-              - regex: '^/'                                     
-                with: https://hstream.moe/
-              # 2) turn “…/gallery‑…” into “…/cover‑…”
-              - regex: '/gallery-'
-                with: '/cover-'
-              # 3) drop the “‑thumbnail” tag
-              - regex: '-thumbnail'
-                with:
-              # 4) remove the extra frame index after the episode number
-              - regex: '(-ep-\d+)-\d+\.webp$'
-                with: $1.webp
   sceneScraper:
     scene:
-      Title: //h1
-      Date:
+      Title:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ' (\d{1})$'
+                with: ' 0$1'
+      Date: &date
         selector: //i[contains(@class, "fa-calendar")]/following-sibling::text()
         postProcess:
           - replace:
-              - regex: \s*(\d{4}-\d{2}-\d{2}).*
-                with: $1
+              - regex: '\s*(\d{4}-\d{2}-\d{2}).*'
+                with: '$1'
           - parseDate: 2006-01-02
-      Details: //p[contains(text(), "Description")]/following-sibling::p
+      Details: &details (//p[contains(text(), "Description")]/following-sibling::p)[1]
       Tags:
-        Name: //li[@class="inline-block p-1"]/a/text()
+        Name:
+          selector: //li[@class="inline-block p-1"]/a/text()
+          postProcess:
+            - map:
+                "48Fps": ""
+                "4K": ""
+                "4K 48Fps": ""
+                "Lq": ""
       Studio:
         Name: (//a[contains(@href, "studios")])[1]
-      Image: 
-        selector: //meta[@property="og:image"]/@content
+      Image: &image //meta[@property="og:image"]/@content
+      URL: //meta[@property="og:url"]/@content
+      Movies:
+        Name: //h1/a/text()
+        Aliases: //h2/text()
+        Date: *date
+        Synopsis: *details
+        URL: //h1/a/@href
+        FrontImage: &cover
+          selector: *image
+          postProcess:
+            - replace:
+                # 1) img gallery  ➜  1° cover
+                - regex: '/gallery-(ep-)\d+-\d+(\.[a-zA-Z0-9]+)$'
+                  with: '/cover-${1}1${2}'
+
+  sceneSearch:
+    scene:
+      Title: //div[contains(@class, "relative")]/a/img/@alt
+      URL: //div[contains(@class, "relative")]/a/@href
+      Image:
+        selector: //div[contains(@class, "relative")]/a/img/@src
         postProcess:
           - replace:
-                  # 1) gallery  ➜  cover
-                  - regex: gallery
-                    with: cover
-                  # 2) trim the trailing “-0” (or “-1”, etc.)
-                  - regex: (-ep-\d+)-\d+\.webp$
-                    with: $1.webp    
+              # 1) make relative paths absolute
+              - regex: '^/'                                     
+                with: https://hstream.moe/
 
-      URL: //meta[@property="og:url"]/@content
-# Last Updated May 29, 2025
+  groupScraper:
+    movie:
+      Name:
+        selector: //h1/text()
+        postProcess:
+          - replace:
+              - regex: '\s*\([^)]*\)'
+                with: ""
+      Aliases:
+        selector: //h1/text()
+        postProcess:
+          - replace:
+              - regex: '.*\(([^)]*)\)'
+                with: '$1'
+      Date: *date
+      Studio:
+        Name: //a[contains(@href, "studios")]/text()
+      Synopsis: *details
+      FrontImage: *cover
+
+# Last Updated June 15, 2025
