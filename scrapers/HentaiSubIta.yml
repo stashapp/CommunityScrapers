@@ -122,10 +122,11 @@ xPathScrapers:
                 "Altro": ""
                 "Anime Bondage": "Bondage"
                 "HD": ""
-      Aliases: &aliases //span[@class="alter"]/text()
-      Synopsis: &synopsis
-        selector: //div[@class="entry-content"]/p//text()
-        concat: "\n\n"
+      Movies:
+        Aliases: &aliases //span[@class="alter"]/text()
+        Synopsis: &synopsis
+          selector: //div[@class="entry-content"]/p//text()
+          concat: "\n\n"
 
   sceneScraper:
     scene:
