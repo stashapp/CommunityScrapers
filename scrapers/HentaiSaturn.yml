@@ -137,6 +137,7 @@ xPathScrapers:
       Studio: &studio
         Name: //div/b[text()="Studio:"]/following-sibling::text()[1]
       Movies:
+        Name: &name //div/b[text()="Titolo:"]/following-sibling::text()[1]
         Aliases: &aliases //div[@class="container hentai-title-as mb-3 w-100"]/div[@class="box-trasparente-alternativo rounded"]/text()
         Synopsis: &synopsis
           selector: //div[@id="full-trama"]//text() | //div[@id="shown-trama"]//text()
@@ -169,7 +170,7 @@ xPathScrapers:
               - regex: '^(.*)$'
                 with: 'https://www.hentaisaturn.tv/episode/$1'
       Movies:
-        Name: //div/b[text()="Titolo:"]/following-sibling::text()[1]
+        Name: *name
         Synopsis: *details
         URL: *urlSeries
         FrontImage: *image
