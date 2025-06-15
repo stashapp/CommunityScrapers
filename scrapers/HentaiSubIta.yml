@@ -123,6 +123,7 @@ xPathScrapers:
                 "Anime Bondage": "Bondage"
                 "HD": ""
       Movies:
+        Name: &name //meta[@property="article:section"]/@content
         Aliases: &aliases //span[@class="alter"]/text()
         Synopsis: &synopsis
           selector: //div[@class="entry-content"]/p//text()
@@ -143,7 +144,7 @@ xPathScrapers:
       Image: *image
       URL: *url
       Movies:
-        Name: //meta[@property="article:section"]/@content
+        Name: *name
         Aliases: *aliases
         Date: *date
         Synopsis: *details
