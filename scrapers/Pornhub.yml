@@ -42,7 +42,7 @@ xPathScrapers:
       $searchThumb: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]//div[contains(@class, "thumbnail-info-wrapper")]
 
     scene:
-      Title: $searchThumb//span[@class="title"]/a/text()
+      Title: $searchThumb//span[@class="title"]/a
       URL:
         selector: $searchThumb//span[@class="title"]/a/@href
         postProcess:
@@ -51,7 +51,7 @@ xPathScrapers:
                 with: "https://www.pornhub.com"
       Image: $searchItem//div[contains(@class, "phimage")]//img/@data-mediumthumb
       Studio:
-        Name: $searchThumb//div[contains(@class, "usernameWrap")]//a[matches(@href, "/(channels|model|pornstar)/")]
+        Name: $searchThumb//div[contains(@class, "usernameWrap")]/a[matches(@href, "/(channels|model|pornstar)/")]
   performerSearch:
     performer:
       Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
