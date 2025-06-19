@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - titanmen.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - titanmen.com
@@ -42,7 +42,7 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: https://www.titanmen.com/
-      Movies:
+      Groups:
         Name: $details//strong[starts-with(text(), "Movie")]/following-sibling::a
         URL:
           selector: $details//strong[starts-with(text(), "Movie")]/following-sibling::a/@href
@@ -59,7 +59,7 @@ xPathScrapers:
               - regex: .*image:\s*"([^"]+).*
                 with: $1
   movieScraper:
-    movie:
+    group:
       Name:
         selector: //div[@class="col span_9_of_12"]/h1/text()
       Synopsis:

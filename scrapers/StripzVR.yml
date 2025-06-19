@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - stripzvr.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - stripzvr.com
@@ -38,12 +38,12 @@ xPathScrapers:
       Performers:
         Name: //p[contains(text(), "MODEL :")]/a
       Image: &imageSel //meta[@property="og:image"]/@content
-      Movies:
+      Groups:
         Name: *titleSel
         Date: *dateAttr
         URL: //meta[@property="og:url"]/@content
   movieScraper:
-    movie:
+    group:
       Name: *titleSel
       Date: *dateAttr
       Studio:

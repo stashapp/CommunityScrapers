@@ -16,7 +16,7 @@ galleryByURL:
   - action: scrapeXPath
     url: *urls
     scraper: vrbScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - vrbangers.com
@@ -95,7 +95,7 @@ xPathScrapers:
       Tags: *tagsAttr
       Performers: *performersAttr
       Studio: *studioAttr
-    movie:
+    group:
       Name:
         selector: *titleSel
         postProcess:

@@ -1,6 +1,6 @@
 name: GayAdultEmpire
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - gaydvdempire.com
@@ -40,7 +40,7 @@ xPathScrapers:
       Image: //a[@class="boxcover"]/img/@src
 
   movieScraper:
-    movie:
+    group:
       Name: &name //h1/text()
       Director: &director //a[@label="Director"]/text()
       Duration:
@@ -72,7 +72,7 @@ xPathScrapers:
       Date: *date
       Image: *image
       Studio: *studio
-      Movies:
+      Groups:
         Name: *name
         URL: *url
       Tags:
@@ -102,7 +102,7 @@ xPathScrapers:
                 with: $1
       Studio:
         Name: //a[@label="Studio" and preceding-sibling::text()[normalize-space(.)="by"]]
-      Movies:
+      Groups:
         Name: //a[@label="Studio" and preceding-sibling::text()[normalize-space(.)="from"]]
         URL:
           selector: //a[@label="Studio" and preceding-sibling::text()[normalize-space(.)="from"]]/@href

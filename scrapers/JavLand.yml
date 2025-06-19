@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - jav.land
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - jav.land
@@ -24,7 +24,7 @@ xPathScrapers:
       Studio: 
         Name: &studioName $info//td[strong[text()="Maker:"]]/following-sibling::td//a[1]/text()
       Image: &imageSel //img[@class="img-responsive"]/@src
-      Movies:
+      Groups:
         # Automatically create a movie with the Title as the name.
         # It will miss the Studio and FrontImage due to the limit of scraping.
         # To add the missing Studio and FrontImage data, go to that movie and scrape with the URL again.
@@ -49,7 +49,7 @@ xPathScrapers:
   movieScraper:
     common:
       $info: *infoSel
-    movie:
+    group:
       Name: *titleSel
       Duration: *durationAttr
       Date: *dateAttr

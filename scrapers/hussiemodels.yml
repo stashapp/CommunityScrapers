@@ -9,7 +9,7 @@ sceneByURL:
       - seehimsolo.com/trailers/
       - povpornstars.com
     scraper: hussieScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - hussiepass.com/dvds/
@@ -20,7 +20,7 @@ xPathScrapers:
   hussieScraper:
     common:
       $image: //img[contains(@class, "update_thumb") or contains(@class, "trailer-thumb")]
-    movie:
+    group:
       Name: //div[contains(@class, "profile-details")]/h3
       Synopsis: &dvdSynopsis //div[contains(@class, "profile-about")]/p/text()
       FrontImage: &dvdCover
@@ -62,7 +62,7 @@ xPathScrapers:
         Name: //li[contains(@class, "update_models")]//a
       Tags:
         Name: //div[contains(@class, "featuring")]//a[contains(@href, "/categories/")]
-      Movies:
+      Groups:
         Name: //div[contains(@class, "featuring")]//a[contains(@href, "/dvds/")]
         URL: //div[contains(@class, "featuring")]//a[contains(@href, "/dvds/")]/@href
         FrontImage:

@@ -15,7 +15,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Girls Rimming
-      Movies:
+      Groups:
         Name:
           selector: //div[@class='updatesBlock']/h2[@class='title']/text()
           postProcess:

@@ -32,7 +32,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeJson
     url:
       - r18.dev/videos/vod/movies/detail/-/i
@@ -339,7 +339,7 @@ jsonScrapers:
                 with: https://r18.dev/videos/vod/movies/detail/-/id=
 
   movieScraper:
-    movie:
+    group:
       Name:
         selector: dvd_id
       Aliases: title_ja
