@@ -39,6 +39,7 @@ sceneByQueryFragment:
 xPathScrapers:
   performerScraperLadyboyGold:
     common:
+      $modelStatsListItem: //div[@class="modelStats"]/ul/li
       $infoPiece: //div[@class="info-box info"]
     performer:
       Name:
@@ -50,19 +51,19 @@ xPathScrapers:
       Gender:
         fixed: transgender_female
       Weight:
-        selector: //div[@class="modelStats"]/ul/li[contains(text(), "Weight:")]/text()
+        selector: $modelStatsListItem[contains(text(), "Weight:")]/text()
         postProcess: &weightPostProcess
           - replace:
-              - regex: .* \(([0-9]*)kg\)
+              - regex: .* \(([0-9\.]*)kg\)
                 with: $1
       Height:
-        selector: //div[@class="modelStats"]/ul/li[contains(text(), "Height:")]/text()
+        selector: $modelStatsListItem[contains(text(), "Height:")]/text()
         postProcess: &heightPostProcess
           - replace:
               - regex: .* \(([0-9]*)cm\)
                 with: $1
       Measurements:
-        selector: //div[@class="modelStats"]/ul/li[contains(text(), "Measurements:")]/text()
+        selector: $modelStatsListItem[contains(text(), "Measurements:")]/text()
         postProcess:
           - replace:
               - regex: Measurements. (.*)
@@ -74,23 +75,26 @@ xPathScrapers:
               - regex: ^
                 with: https://www.ladyboygold.com
       Details: //div[@class="profileBio"]/text()
-  performerScraperTSRaw:
-    common:
-      $infoList: //dl[contains(@class, "model")]
-      $description: //div[contains(@class, "details")]//div[contains(@class, "description")]
-    performer:
-      Name: //div[contains(@class, "model-view")]//h3[contains(@class, "title")]
       Birthdate:
-        selector: //dt[text()="Born"]/following-sibling::dd[1]//text()|//dt[text()="Age"]/following-sibling::dd[1]//text()
-        concat: ", "
-        postProcess:
+        # use Age and Birthday
+        selector: >-
+          $modelStatsListItem[contains(text(), "Age:")]/text()
+          |
+          $modelStatsListItem[contains(text(), "Birthday:")]/text()
+        concat: "|"
+        postProcess: &birthdatePostProcess
           - javascript: |
               if (value && value.length) {
-                const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-                const [dateStr, age] = value.split(', ')
-                const [month, dateOfMonth] = dateStr.split(' ')
+                const [age, birthday] = value.split('|').map(s => s.trim().replace(/.*:\s*/, ''))
+                console.debug({age, birthday})
                 const currentYear = new Date().getFullYear()
-                const parsedDate = new Date(currentYear, months.indexOf(month), dateOfMonth, 12)
+                const [month, dateOfMonth] = birthday.split(' ')
+                console.debug({month, dateOfMonth})
+                const monthIndex = [
+                  'January', 'February', 'March', 'April', 'May', 'June',
+                  'July', 'August', 'September', 'October', 'November', 'December'
+                ].indexOf(month)
+                const parsedDate = new Date(currentYear, monthIndex, dateOfMonth, 12)
                 const now = new Date()
                 let extraYear = 0
                 if (
@@ -103,11 +107,25 @@ xPathScrapers:
                 ) {
                   extraYear = 1
                 }
-                const birthDate = new Date(currentYear - age + extraYear, months.indexOf(month), dateOfMonth, 12)
-                console.log({dateStr, age, currentYear, parsedDate, now, extraYear, birthDate})
+                const birthDate = new Date(currentYear - age - extraYear, monthIndex, dateOfMonth, 12)
+                console.debug({age, birthday, currentYear, parsedDate, now, extraYear, birthDate})
+
                 return birthDate.toISOString().substr(0, 10)
               }
               return value
+  performerScraperTSRaw:
+    common:
+      $infoList: //dl[contains(@class, "model")]
+      $description: //div[contains(@class, "details")]//div[contains(@class, "description")]
+    performer:
+      Name: //div[contains(@class, "model-view")]//h3[contains(@class, "title")]
+      Birthdate:
+        selector: >-
+          //dt[text()="Age"]/following-sibling::dd[1]//text()
+          |
+          //dt[text()="Born"]/following-sibling::dd[1]//text()
+        concat: "|"
+        postProcess: *birthdatePostProcess
       Height:
         selector: $infoList//dt[text()="Height"]/following-sibling::dd[1]//text()
         postProcess: *heightPostProcess
@@ -190,4 +208,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated January 15, 2025
+# Last Updated June 18, 2025
