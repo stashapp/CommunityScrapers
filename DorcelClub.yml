@@ -1,0 +1,83 @@
+name: DorcelClub
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - dorcelclub.com/en/scene
+      - dorcelclub.com/scene
+    scraper: sceneScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - dorcelclub.com/en/porn-movie
+    scraper: movieScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Details: //meta[@property="og:description"]/@content
+      Image:
+        selector: //img[@class="thumbnail lazyload"]/@data-src
+        postProcess:
+          - replace:
+              - regex: '(_[0-9]+_[0-9]+_[0-9]+_crop_[a-f0-9]+\.jpg)$'
+                with: '.jpg'
+      Date:
+        selector: //span[@class="publish_date"]
+        postProcess:
+          - parseDate: January 02, 2006
+      Performers:
+        Name: //div[@class="actress"]/a
+      Studio:
+        Name:
+          fixed: Dorcel Club
+      Movies:
+        Name: //div[@class="left"]/span[@class="movie"]/a/text()
+        URL:
+          selector: //div[@class="left"]/span[@class="movie"]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: https://dorcelclub.com/
+      Director:
+        selector: //div[@class="left"]/span[@class='director']/text()
+        postProcess:
+          - replace:
+              - regex: Director\s*:\s*(.*)
+                with: $1
+
+  movieScraper:
+    movie:
+      Name: //img[contains(@class, "cover")]/@alt
+      Duration:
+        selector: //span[@class='duration']/text()
+        postProcess:
+          - replace:
+              - regex: ([0-9]+)h\s*([0-9]+)?
+                with: "$1:$2:00"
+              - regex: ([0-9]+)m\s*([0-9]+)?
+                with: "0:$1:$2"
+              - regex: "^:"
+                with: "0:"
+              - regex: ":$"
+                with: ":00"
+              - regex: "::"
+                with: ":00:"
+      Studio:
+        Name:
+          fixed: Dorcel Club
+      Director:
+        selector: //span[@class='director']/text()
+        postProcess:
+          - replace:
+              - regex: Director\s*:\s*(.*)
+                with: $1
+      FrontImage:
+        selector: //img[contains(@class, "cover")]/@data-src
+        postProcess:
+          - replace:
+              - regex: ([^\s]*)\s1x
+                with: $1
+      Synopsis: //span[@class="full"]/p|/div[@class="content-text"]/p
+# Last Updated March 22, 2023
