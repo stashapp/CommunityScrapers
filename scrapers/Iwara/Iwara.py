@@ -18,8 +18,8 @@ password = ""
 has_login = config.username and config.password
 
 
-@cache_to_disk(key="iwara_auth_token", ttl=86400)
-def login():
+@cache_to_disk(ttl=60 * 60 * 24)
+def auth_token():
     login_url = "https://api.iwara.tv/user/login"
     payload = {"email": config.username, "password": config.password}
     response = requests.post(login_url, json=payload)
@@ -34,7 +34,7 @@ def login():
 def api_request(query):
     headers = {}
     if has_login:
-        token = login()
+        token = auth_token()
         headers["Authorization"] = f"Bearer {token}"
 
     response = requests.get(query, headers=headers)
@@ -46,7 +46,7 @@ def api_request(query):
     elif not response.ok:
         log.error(f"Failed to fetch video data: {response.reason}")
         # Cached login might be invalid, nuke it before next attempt
-        login.clear_cache()
+        auth_token.clear_cache()
         sys.exit(1)
 
     return response.json()

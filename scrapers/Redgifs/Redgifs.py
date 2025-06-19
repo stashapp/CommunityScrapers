@@ -18,14 +18,14 @@ session = requests.Session()
 session.proxies.update(PROXIES)
 
 
-@cache_to_disk("token", 24 * 60 * 60)
-def get_token():
+@cache_to_disk(ttl=24 * 60 * 60)
+def auth_token():
     req = session.get("https://api.redgifs.com/v2/auth/temporary")
     req.raise_for_status()
     return req.json()["token"]
 
 
-session.headers.update({"Authorization": "Bearer " + get_token()})
+session.headers.update({"Authorization": "Bearer " + auth_token()})
 
 
 def fetch_data(gif_id: str) -> dict | None:

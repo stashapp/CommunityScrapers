@@ -1,16 +1,15 @@
 from datetime import datetime, timedelta
 from functools import wraps
+import hashlib
 from inspect import stack
 from pathlib import Path
 import json
 import py_common.log as log
 
 
-def cache_to_disk(key: str, ttl: int):
+def cache_to_disk(ttl: int):
     """
     Caches the result of the decorated function for ttl seconds
-
-    Does not account for function parameters!
     """
     paths = [frame.filename for frame in stack() if not frame.filename.startswith("<")]
     if len(paths) < 2:
@@ -32,16 +31,24 @@ def cache_to_disk(key: str, ttl: int):
                 log.error(f"Failed to parse cache file '{cache_file}'")
                 return func(*args, **kwargs)
 
+            # Use the args to generate a synthetic cache key
+            args_tuple = (args, sorted(kwargs.items()))
+            args_hash = hashlib.sha256(
+                json.dumps(args_tuple).encode("utf-8")
+            ).hexdigest()
+            synthetic_key = f"{func.__name__}_{args_hash}"
+
             if (
-                key in data
-                and datetime.fromisoformat(data[key]["timestamp"]) > datetime.now()
+                synthetic_key in data
+                and datetime.fromisoformat(data[synthetic_key]["expires"])
+                > datetime.now()
             ):
-                log.debug(f"Using cached value for {key}")
-                return data[key]["data"]
+                log.debug(f"Using cached value for {synthetic_key}")
+                return data[synthetic_key]["data"]
 
             result = func(*args, **kwargs)
-            data[key] = {
-                "timestamp": (datetime.now() + timedelta(seconds=ttl)).isoformat(),
+            data[synthetic_key] = {
+                "expires": (datetime.now() + timedelta(seconds=ttl)).isoformat(),
                 "data": result,
             }
             json_data = json.dumps(data, ensure_ascii=False, indent=2)
