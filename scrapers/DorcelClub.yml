@@ -17,7 +17,12 @@ xPathScrapers:
     scene:
       Title: //meta[@property="og:title"]/@content
       Details: //meta[@property="og:description"]/@content
-      Image: //img[@class="thumbnail lazyload"]/@data-src
+      Image:
+        selector: //img[@class="thumbnail lazyload"]/@data-src
+        postProcess:
+          - replace:
+              - regex: '(_[0-9]+_[0-9]+_[0-9]+_crop_[a-f0-9]+\.jpg)$'
+                with: '.jpg'
       Date:
         selector: //span[@class="publish_date"]
         postProcess:
@@ -75,4 +80,4 @@ xPathScrapers:
               - regex: ([^\s]*)\s1x
                 with: $1
       Synopsis: //span[@class="full"]/p|/div[@class="content-text"]/p
-# Last Updated March 22, 2023
+# Last Updated June 19, 2025
