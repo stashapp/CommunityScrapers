@@ -1,17 +1,24 @@
 name: pornpics.com
-galleryByURL:
+galleryByURL: &coverByURL
   - action: scrapeXPath
     url:
       - pornpics.com/galleries/
     scraper: galleryScraper
+imageByURL: *coverByURL
 xPathScrapers:
   galleryScraper:
     gallery:
-      Title: //h1
-      Tags:
+      Title: &title
+        selector: //h1
+      Tags: &tags
         Name: //span[@class="gallery-info__title" and (contains(., "Categories") or contains(., "Tags"))]/following-sibling::div//a
-      Performers:
+      Performers: &performers
         Name: //span[@class="gallery-info__title" and contains(., "Models")]/following-sibling::div//a
-      Studio:
+      Studio: &studio
         Name: //span[@class="gallery-info__title" and contains(., "Channel")]/following-sibling::a
-# Last Updated July 02, 2024
+    image:
+      Title: *title
+      Tags: *tags
+      Performers: *performers
+      Studio: *studio
+# Last Updated June 21, 2025
