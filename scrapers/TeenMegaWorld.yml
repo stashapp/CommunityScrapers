@@ -71,14 +71,9 @@ xPathScrapers:
               - regex: ^
                 with: https://teenmegaworld.net/
       Studio:
-        Name:
-          selector: //base/@href
-          postProcess:
-            - replace:
-                - regex: https://(.*?)\.(com|net)/$
-                  with: $1
+        Name: //a[contains(@class, "video-site-link")]
   performerScraper:
-    common: 
+    common:
       $model: //section[contains(@class,"model-profile")]
     performer:
       Name: $model//h1
@@ -93,7 +88,7 @@ xPathScrapers:
               - regex: $
                 with: " - "
       Aliases: $model//dt[contains(text(), "AKA")]/following-sibling::text()
-      HairColor: 
+      HairColor:
         selector: $model//dt[contains(text(), "Hair")]/following-sibling::text()
         postProcess:
           - replace:
