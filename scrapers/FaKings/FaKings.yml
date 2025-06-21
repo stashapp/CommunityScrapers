@@ -2,10 +2,22 @@ name: FaKings
 sceneByURL:
   - action: script
     url:
+      - fakings.com/video/
+      - madlifes.com/video/
+      - nigged.com/video/
+      - pepeporn.com/video/
       - fakings.com/en/video/
       - madlifes.com/en/video/
       - nigged.com/en/video/
-      - pepeporn.com/en/video
+      - pepeporn.com/en/video/
+      - fakings.com/es/video/
+      - madlifes.com/es/video/
+      - nigged.com/es/video/
+      - pepeporn.com/es/video/
+      - fakings.com/pt/video/
+      - madlifes.com/pt/video/
+      - nigged.com/pt/video/
+      - pepeporn.com/pt/video/
     script:
       - python
       - FaKings.py

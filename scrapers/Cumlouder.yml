@@ -45,6 +45,7 @@ xPathScrapers:
             # const renames = spanishNames.map((name, idx) => `${name}: ${englishNames[idx]}`).sort().join("\n")
             # console.log(renames)
             - map: &studioMap
+                amateur: Cumlouder Amateur
                 autoescuela: Cumlouder Driving School
                 chicasmalas: Boldly Girls
                 culosenpublico: Latin Asses in Public
