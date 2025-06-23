@@ -242,6 +242,8 @@ if tags:
         # inconsistent use on TeamSkeet since it was added as a tag
         if tag == "Pumps":
             tags[i] = "Woman's Heels"
+        if tag.lower() == "null":
+            tags.pop(i)
 
 #fix for TeamKseet including HTML tags in Description
 CLEANR = re.compile('<.*?>') 
