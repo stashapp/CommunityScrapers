@@ -1,0 +1,40 @@
+name: QueerCrush
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - queercrush.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $title: //header/h1[@class="title"]/text()
+    scene:
+      Title:
+        selector: //div[contains(@class, "section-title")]//h1/text()
+      Details:
+        selector: //div[contains(@class, "content-info-wrapper")]//p[contains(@class, "description")]/text()
+        concat: " "
+      Date:
+        selector: //div[contains(@class, "meta-info-wrapper")]//li[last()]//span/text()
+        postProcess:
+          - parseDate: January 02, 2006
+      Image:
+        selector: //div[contains(@class, "v-player-wrap")]//div[contains(@class, "vjs-poster")]/@style
+        postProcess:
+          - replace:
+              - regex: background-image:url\('(.*)'\)
+                with: $1
+      Studio:
+        Name:
+          fixed: Queer Crush
+      Tags:
+        Name:
+          selector: //p[contains(@class, "tags")]/a/text()
+      Performers:
+        Name:
+          selector: //ul[contains(@class, "multiple-models")]//li/h5/text()
+          postProcess:
+            - replace:
+                - regex: \s*\([^)]*\)
+                  with: ""
+# Last Updated June 20, 2025
