@@ -155,8 +155,12 @@ elif 'swappz.com' in scene_url:
     ORIGIN = 'https://www.swappz.com'
     REFERER = 'https://www.swappz.com/'
     API_BASE = 'https://tours-store.psmcdn.net/swap_bundle/_search?size=1&q=id:'
+elif 'freeuse.com' in scene_url:
+    ORIGIN = 'https://www.freeuse.com'
+    REFERER = 'https://www.freeus.com/'
+    API_BASE = 'https://tours-store.psmcdn.net/freeusebundle/_search?size=1&q=id:'
 else:
-    log.error('The URL is not from a Teamskeet, MYLF, SayUncle or Swappz URL (e.g. teamskeet.com/movies/*****)')
+    log.error('The URL is not from a Teamskeet, MYLF, Freeuse, SayUncle or Swappz URL (e.g. teamskeet.com/movies/*****)')
     sys.exit(1)
 
 # check for member access token
@@ -238,6 +242,8 @@ if tags:
         # inconsistent use on TeamSkeet since it was added as a tag
         if tag == "Pumps":
             tags[i] = "Woman's Heels"
+        if tag.lower() == "null":
+            tags.pop(i)
 
 #fix for TeamKseet including HTML tags in Description
 CLEANR = re.compile('<.*?>') 
@@ -260,8 +266,8 @@ scrape['image'] = scene_api_json.get('img')
 if IS_MEMBER:
     scrape['performers'] = [{"name": x.get('name')}
         for x in scene_api_json.get('models')]
-# handle swappz performers differently
-elif 'swappz.com' in scene_url:
+# handle swappz and freeuse performers differently
+elif any(u in scene_url for u in ['swappz.com','freeuse.com']):
     scrape['performers'] = [{"name": x.get('title')}
         for x in scene_api_json.get('models')]
 else:
@@ -286,4 +292,5 @@ if 'sayuncle.com' in scene_url:
 
 if use_local == 0:
     save_json(scene_api_json, scene_url)
+log.debug(json.dumps(scene_api_json))
 print(json.dumps(scrape))

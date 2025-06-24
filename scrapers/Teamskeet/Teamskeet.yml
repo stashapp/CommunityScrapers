@@ -9,8 +9,9 @@ sceneByURL:
       - mylf.com/movies/
       - app.mylf.com/movies/
       - swappz.com/movies/
+      - freeuse.com/movies/
     action: script
     script:
       - python
       - TeamskeetAPI.py
-# Last Updated December 01, 2024
+# Last Updated June 23, 2025
