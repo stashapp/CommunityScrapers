@@ -22,3 +22,8 @@ xPathScrapers:
         Name: //a[contains(@href, "scene-category")]
       Performers:
         Name: //a[contains(@href, "pornstar")]
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
