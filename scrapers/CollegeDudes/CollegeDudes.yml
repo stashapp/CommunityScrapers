@@ -1,0 +1,65 @@
+name: College Dudes
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.collegedudes.com/play/
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - www.collegedudes.com/model/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: /html/body/div[1]/strong
+      Performers:
+        Name: //div[@class="featImg"]/div[@class="eimg"]/span/a
+        URL: //div[@class="featImg"]/div[@class="eimg"]/span/a/@href
+      Details:
+        selector: //div[@class="descD"]/p[2]
+      Image:
+        selector: //div[@class="plypcnt"]/img/@src
+      Studio:
+        Name:
+          fixed: College Dudes
+
+  performerScraper:
+    performer:
+      Name: /html/body/div[1]/strong
+      Gender:
+        fixed: Male
+      Weight:
+        selector: //div[@class="modelDtls"]/ul/li/strong[contains(text(),"Weight:")]/following-sibling::text()
+        postProcess:
+          - replace:
+                - regex: (?:.*\(\s*(\d+)\s*kg\))
+                  with: "$1"
+      Height:
+        selector: //div[@clss="modelDtls"]/ul/li/strong[contains(text(),"Height:")]/following-sibling::text()
+        postProcess:
+          - replace:
+                - regex: (?:.*\(\s*(\d+)\s*cm\))
+                  with: "$1"
+      PenisLength:
+        selector: //div[@class="modelDtls"]/ul/li/strong[contains(text(),"Cock:")]/following-sibling::text()
+        postProcess:
+          - replace:
+                - regex: (?:.*\(\s*(\d+)\s*cm\))
+                  with: "$1"
+      Details:  
+        selector: //div[@class="modelDtls"]//p
+        concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: \"
+                with: ""
+      FakeTits:
+        fixed: Natural
+      Image: //div[@class="modelPic"]/img/@src
+
+driver:
+  useCDP: false
