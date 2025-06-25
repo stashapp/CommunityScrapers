@@ -150,10 +150,10 @@ xPathScrapers:
           - replace:
               - regex: '(?i)^HentaiSaturn - | Streaming.*$'
                 with: ""
-              - regex: '(?i)\s+episodio\s+'
-                with: ' - '
-              - regex: ' (\d{1})$'
-                with: ' 0$1'
+              - regex: '(?i)\s+episodio\s+(\d+)$'
+                with: ' ep$1'
+              - regex: ' ep(\d{1})$'
+                with: ' ep0$1'
       Details: *details
       Tags: *tags
       Image: *image
@@ -193,7 +193,7 @@ xPathScrapers:
               - regex: '(?i)^HentaiSaturn - | Streaming.*$'
                 with: ""
               - regex: '$'
-                with: ' - 00'
+                with: ' ep00'
       Date: *date
       Details: *synopsis
       Tags: *tags
@@ -231,4 +231,4 @@ xPathScrapers:
       Synopsis: *synopsis
       FrontImage: *image
 
-# Last Updated June 15, 2025
+# Last Updated June 24, 2025
