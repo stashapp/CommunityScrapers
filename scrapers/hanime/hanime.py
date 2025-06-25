@@ -15,8 +15,8 @@ def search_hanime(query):
         "tags_mode": "AND",
         "brands": [],
         "blacklist": [],
-        "order_by": "views",
-        "ordering": "desc",
+        "order_by": "title_sortable",
+        "ordering": "asc",
         "page": 0
     }
 
