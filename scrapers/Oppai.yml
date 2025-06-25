@@ -80,10 +80,10 @@ xPathScrapers:
         selector: //h1[contains(@class, "line")]/text()
         postProcess:
           - replace:
-              - regex: '(?i)\s+Ep\s+'
-                with: ' - '
-              - regex: ' (\d{1})$'
-                with: ' 0$1'
+              - regex: '(?i)\s+Ep\s+(\d+)$'
+                with: ' ep$1'
+              - regex: ' ep(\d{1})$'
+                with: ' ep0$1'
       Details: &details //div[@class="description"]/h5/text()[1]
       Tags:
         Name:
@@ -132,4 +132,4 @@ xPathScrapers:
                 with: '$1'
         Synopsis: *details
 
-# Last Updated June 15, 2025
+# Last Updated June 24, 2025
