@@ -135,8 +135,8 @@ xPathScrapers:
         selector: *title
         postProcess:
           - replace:
-              - regex: '(?i)\s+episodio\s+'
-                with: ' - '
+              - regex: '(?i)\s+episodio\s+(\d+)$'
+                with: ' ep$1'
       Date: *date
       Details: *details
       Tags: *tags
@@ -164,7 +164,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: '$'
-                with: ' - 00'
+                with: ' ep00'
       Date: *date
       Details: *synopsis
       Tags: *tags
@@ -193,4 +193,4 @@ xPathScrapers:
       Synopsis: *synopsis
       FrontImage: *image
 
-# Last Updated June 15, 2025
+# Last Updated June 24, 2025
