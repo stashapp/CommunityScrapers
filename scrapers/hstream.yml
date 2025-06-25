@@ -92,8 +92,10 @@ xPathScrapers:
         selector: //h1
         postProcess:
           - replace:
-              - regex: ' (\d{1})$'
-                with: ' 0$1'
+              - regex: '\s+-\s+(\d+)$'
+                with: ' ep$1'
+              - regex: ' ep(\d{1})$'
+                with: ' ep0$1'
       Date: &date
         selector: //i[contains(@class, "fa-calendar")]/following-sibling::text()
         postProcess:
@@ -161,4 +163,4 @@ xPathScrapers:
       Synopsis: *details
       FrontImage: *cover
 
-# Last Updated June 15, 2025
+# Last Updated June 24, 2025
