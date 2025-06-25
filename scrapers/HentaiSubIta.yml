@@ -108,8 +108,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: '\s*(\d{4})'
-                with: '$1'
-          - parseDate: 2006
+                with: '${1}-01-01'
       # Site only have the covers (not thumbnails)
       Image: &image //meta[@property="og:image"]/@content
       Studio: &studio
@@ -193,4 +192,4 @@ xPathScrapers:
       Synopsis: *synopsis
       FrontImage: *image
 
-# Last Updated June 24, 2025
+# Last Updated June 25, 2025
