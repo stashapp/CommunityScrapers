@@ -66,8 +66,20 @@ sceneByFragment:
 sceneByURL:
   - action: scrapeXPath
     url:
-      - hanime.tv/
+      - hanime.tv/videos/hentai/
     scraper: sceneScraper
+
+sceneByName:
+  action: script
+  script:
+    - python
+    - hanime.py
+
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - hanime.py
 
 xPathScrapers:
   sceneScraper:
@@ -76,10 +88,10 @@ xPathScrapers:
         selector: //h1[@class="tv-title"]/text()
         postProcess:
           - replace:
-              - regex: '(\d+)$'
-                with: '- $1'
-              - regex: ' (\d{1})$'
-                with: ' 0$1'
+              - regex: '(?i)\s+(?:ep\.?|(?:- )?episode)?\s*(\d+)$'
+                with: ' ep$1'
+              - regex: ' ep(\d{1})$'
+                with: ' ep0$1'
       Date: &date
         selector: //div[@class="hvpimbc-item"]/div[contains(.,"Release Date")]/../div[@class="hvpimbc-text grey--text"]/text()
         postProcess:
@@ -124,7 +136,7 @@ xPathScrapers:
           selector: //h1[@class="tv-title"]/text()
           postProcess:
             - replace:
-                - regex: ' (\d+)$'
+                - regex: '(?i)\s+(?:ep\.?|(?:- )?episode)?\s*(\d+)$'
                   with: ""
         Aliases: //h2/span[@class="mr-3 grey--text"]/text()
         Date: *date
@@ -142,4 +154,4 @@ xPathScrapers:
                 - regex: '(.+-)(\d+)(-?[^-]+)$'
                   with: '${1}1${3}'
 
-# Last Updated June 15, 2025
+# Last Updated June 24, 2025
