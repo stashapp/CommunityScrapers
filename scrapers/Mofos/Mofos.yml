@@ -1,14 +1,15 @@
 name: Mofos
 # requires: py_common, AyloAPI
-# scrapes: Busted Babysitters, Don't Break Me, Drone Hunter, Girls Gone Pink, I Know That Girl, In Gang We Bang, Latina Sex Tapes, Let's Post It, Let's Try Anal, Milfs Like It Black, Mofos B Sides, MOFOS Lab, Mofos World Wide, Pervs On Patrol, Pornstar Vote, Project RV, Public Pickups, Real Slut Party, Share My BF, She's A Freak, Stranded Teens, The Sex Scout
+# scrapes: Busted Babysitters, Don't Break Me, Drone Hunter, Girls Gone Pink, He's Got Rizz, I Know That Girl, In Gang We Bang, Latina Sex Tapes, Let's Post It, Let's Try Anal, Milfs Like It Black, Mofos B Sides, MOFOS Lab, Mofos World Wide, Pervs On Patrol, Pornstar Vote, Project RV, Public Pickups, Real Slut Party, Share My BF, She's A Freak, Stranded Teens, The Sex Scout
 galleryByURL:
   - action: script
     url:
+      - hesgotrizz.com/scene/
+      - iknowthatgirl.com/scene/
+      - letstryanal.com/scene/
       - mofos.com/scene/
       - mofosnetwork.com/scene/
-      - iknowthatgirl.com/scene/
       - publicpickups.com/scene/
-      - letstryanal.com/scene/
     script:
       - python
       - Mofos.py
@@ -22,11 +23,12 @@ galleryByFragment:
 sceneByURL:
   - action: script
     url:
+      - hesgotrizz.com/scene/
+      - iknowthatgirl.com/scene/
+      - letstryanal.com/scene/
       - mofos.com/scene/
       - mofosnetwork.com/scene/
-      - iknowthatgirl.com/scene/
       - publicpickups.com/scene/
-      - letstryanal.com/scene/
     script:
       - python
       - Mofos.py
@@ -58,11 +60,12 @@ performerByName:
 performerByURL:
   - action: script
     url:
+      - hesgotrizz.com/model/
+      - iknowthatgirl.com/model/
+      - letstryanal.com/model/
       - mofos.com/model/
       - mofosnetwork.com/model/
-      - iknowthatgirl.com/model/
       - publicpickups.com/model/
-      - letstryanal.com/model/
     script:
       - python
       - Mofos.py
@@ -76,19 +79,20 @@ performerByFragment:
 movieByURL:
   - action: script
     url:
+      - hesgotrizz.com/movie/
+      - iknowthatgirl.com/movie/
+      - letstryanal.com/movie/
       - mofos.com/movie/
       - mofosnetwork.com/movie/
-      - iknowthatgirl.com/movie/
       - publicpickups.com/movie/
-      - letstryanal.com/movie/
       # Since scenes link to the movie we can scrape movies from scenes
+      - hesgotrizz.com/scene/
+      - iknowthatgirl.com/scene/
+      - letstryanal.com/scene/
       - mofos.com/scene/
       - mofosnetwork.com/scene/
-      - iknowthatgirl.com/scene/
       - publicpickups.com/scene/
-      - letstryanal.com/scene/
     script:
       - python
       - Mofos.py
       - movie-by-url
-# Last Updated June 01, 2024
