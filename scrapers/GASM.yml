@@ -29,7 +29,12 @@ xPathScrapers:
       Movies:
         Name: $dvd/h1/a
         FrontImage: $dvd/div[@class="post_image"]/a/img[@class="item_cover"]/@src
-        URL: $dvd/h1/a/@href
+        URL:
+          selector: $dvd/h1/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.gasm.com
       # Image is not accessible from the /post page
       Studio:
         Name: $details/a[@class="tags" and starts-with(@href, '/studio/profile/')]
