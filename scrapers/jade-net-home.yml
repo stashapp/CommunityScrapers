@@ -16,7 +16,7 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - jade-net-home.com
@@ -51,7 +51,7 @@ xPathScrapers:
   movieScraper:
     common:
       $movieinfo: //*[@id="detailMain"]
-    movie:
+    group:
       Name: $movieinfo/div[1]/h1/span
       Synopsis: 
         selector: //div[@id='readmore']

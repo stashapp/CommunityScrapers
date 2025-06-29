@@ -31,7 +31,7 @@ performerByURL:
       - julesjordan.com/trial/models/
     scraper: performerScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - julesjordan.com/trial/dvds/
@@ -73,7 +73,7 @@ xPathScrapers:
                 manuelferrara: Manuel Ferrara
                 theassfactory: The Ass Factory
                 spermswallowers: Sperm Swallowers
-      Movies:
+      Groups:
         Name: $details//span[@class="update_dvds"]/a/text()
         URL: $details//span[@class="update_dvds"]/a/@href
       Image:
@@ -109,7 +109,7 @@ xPathScrapers:
         Name: $scene//a[contains(@href, "models")]/text()
         URL: $scene//a[contains(@href, "models")]/@href
       Studio: *studioAttr
-      Movies:
+      Groups:
         Name: $scene//span[contains(., "Movie:")]/following-sibling::a/text()
         URL: $scene//span[contains(., "Movie:")]/following-sibling::a/@href
       Image: $scene//video/@poster
@@ -151,7 +151,7 @@ xPathScrapers:
         selector: //img[contains(@class,'model_bio_thumb')]/@src0_3x
 
   movieScraper:
-    movie:
+    group:
       Name: //meta[@property="og:title"]/@content
       Studio:
         Name:

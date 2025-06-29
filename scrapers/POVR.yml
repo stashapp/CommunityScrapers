@@ -18,7 +18,7 @@ galleryByURL:
   - action: scrapeXPath
     url: *urlsPremium
     scraper: sceneScraperPremium
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - wankzvr.com
@@ -112,7 +112,7 @@ xPathScrapers:
   movieScraper:
     common:
       $info: *infoSel
-    movie:
+    group:
       Name:
         selector: *titleSel
         postProcess:

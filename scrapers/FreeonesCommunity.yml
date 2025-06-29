@@ -28,7 +28,7 @@ sceneByURL:
       - www.freeones.com
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - www.freeones.com
@@ -77,7 +77,7 @@ xPathScrapers:
             - regex: .+?(\w+\s\d{1,2},\s\d{4}).+
               with: $1
           - parseDate: January 2, 2006
-      Movies:
+      Groups:
         Name: //h1
         URL: //link[@rel="alternate"][1]/@href
       Performers:
@@ -95,7 +95,7 @@ xPathScrapers:
     common:
       $commonRoot: //*[@id="description"]
       $performerName: //a[@data-test="link_Cast"]
-    movie:
+    group:
       Name: //h1
       Synopsis: $commonRoot//div[contains(concat(' ',normalize-space(@class),' '),' pb-2 ')]
       Duration: $commonRoot//span[@data-test="link_span_Duration"]

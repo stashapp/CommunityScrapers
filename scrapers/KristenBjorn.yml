@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - kristenbjorn.com/video
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - kristenbjorn.com/web/model/store/
@@ -53,7 +53,7 @@ xPathScrapers:
         Name:
           fixed: Kristen Bjorn
   movieScraper:
-    movie:
+    group:
       Name: //article/div[1]/span/text()
       Date:
         selector: //span[text()="Release Date:"]/following-sibling::text()

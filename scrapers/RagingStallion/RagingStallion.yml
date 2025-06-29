@@ -29,7 +29,7 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - ragingstallion
     - validName
-movieByURL:
+groupByURL:
   - action: script
     url:
       - ragingstallion.com/en/movie/

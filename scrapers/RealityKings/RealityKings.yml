@@ -116,7 +116,7 @@ performerByFragment:
     - python
     - RealityKings.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - 8thstreetlatinas.com/movie/

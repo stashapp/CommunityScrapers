@@ -51,7 +51,7 @@ performerByFragment:
     - python
     - ../AyloAPI/scrape.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - hentaipros.com/movie/

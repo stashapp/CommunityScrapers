@@ -43,6 +43,6 @@ xPathScrapers:
               - regex: " Series"
                 with: ""
       # URL need to have "?trilogy=" to get the name of the Trilogy
-      Movies:
+      Groups:
         Name: //span[contains(text(),"Part of")]/following-sibling::text()
 # Last Updated June 27, 2022

@@ -12,7 +12,7 @@ sceneByURL:
     url:
       - theclassicporn.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - theclassicporn.com
@@ -41,7 +41,7 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://theclassicporn.com
-      Movies:
+      Groups:
         Name: *title
         URL: *url
       Date: &date
@@ -55,7 +55,7 @@ xPathScrapers:
       Director:
         selector: //div[@class='video-data']/p[@class='data-row data-director']/a[@class='link-light-blue']        
   movieScraper:
-    movie:
+    group:
       Name: *title
       URL: *url
       Date: *date

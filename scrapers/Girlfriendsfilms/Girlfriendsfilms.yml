@@ -28,7 +28,7 @@ sceneByQueryFragment:
       - ../Algolia/Algolia.py
       - girlfriendsfilms
       - validName
-movieByURL:
+groupByURL:
   - action: script
     url:
       - girlfriendsfilms.com/en/movie/

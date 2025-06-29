@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - private.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - private.com
@@ -20,7 +20,7 @@ performerByURL:
     scraper: performerScraper
 xPathScrapers:
   movieScraper:
-    movie:
+    group:
       Name: &movieName //div[@class="dvds-wrapper"]/h1/text()
       Director: &movieDirector //p[@class="director"]/span[@itemprop="name"]/text()
       Duration:
@@ -66,7 +66,7 @@ xPathScrapers:
         Name: //li[@class="tag-tags"]//a/text()
       Performers:
         Name: //li[@class="tag-models"]//a/text()
-      Movies:
+      Groups:
         Name:
           selector: //strong[contains(.,'Full Movie')]/../@href
           postProcess:

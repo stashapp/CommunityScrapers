@@ -26,7 +26,7 @@ xPathScrapers:
       Image: //*[@id="dle-content"]/article/div[1]/div[1]/a/@href
       Studio:
         Name: //div[text()="Production:"]/following-sibling::div/a/text()
-      Movies:
+      Groups:
         Name: //*[@id="dle-content"]/article/h1
         URL: //link[@rel="canonical"]/@href
       Tags:

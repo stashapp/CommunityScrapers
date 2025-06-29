@@ -5,7 +5,7 @@ sceneByURL:
       - newsensations.com/tour_ns/updates
       - www.newsensations.com/tour_ns/updates
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - newsensations.com/tour_ns/dvds
@@ -31,7 +31,7 @@ xPathScrapers:
           fixed: NewSensations
       URL: //link[@rel='canonical']/@href
   movieScraper:
-    movie:
+    group:
       Name:
         selector: //div[@class='indSceneDVD']/h2
         postProcess:

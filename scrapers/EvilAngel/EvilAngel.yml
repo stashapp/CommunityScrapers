@@ -21,7 +21,7 @@ sceneByURL:
       - EvilAngel.py
       - evilangel
       - scene-by-url
-movieByURL:
+groupByURL:
   - action: script
     url:
       - evilangel.com/en/movie/

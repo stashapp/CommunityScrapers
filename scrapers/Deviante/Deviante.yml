@@ -76,7 +76,7 @@ performerByFragment:
     - python
     - Deviante.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - deviante.com/movie/
