@@ -362,6 +362,10 @@ _studios = {
         "api": "sexyhippies.mymember.site",
         "name": "Sexy Hippies",
     },
+    "sephypink.com": {
+        "api": "sephypink.mymember.site",
+        "name": "Persephone Pink",
+    },
     "shemalevalentina.com": {
         "api": "shemalevalentina.mymember.site",
         "name": "Shemale Valentina",
