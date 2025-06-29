@@ -36,8 +36,8 @@ jsonScrapers:
         Name: data.children.0.data.subreddit_name_prefixed
     gallery: *redditPost
 
-driver:
-  headers:
-    - Key: User-Agent
-      Value: stashapp/stash:v1 (by /u/feederbox826)
+# driver:
+#   headers:
+#     - Key: User-Agent
+#       Value: stashapp/stash:v1 (by /u/feederbox826)
 # Last Updated June 26, 2025
