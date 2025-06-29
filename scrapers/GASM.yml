@@ -8,6 +8,7 @@ movieByURL:
   - action: scrapeXPath
     url:
       - gasm.com/dvd/
+      - gasm.com/movies/
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
@@ -15,42 +16,39 @@ xPathScrapers:
       $details: //div[@class="post_details_main"]
       $dvd: //div[@class="post_item dvd"]
     scene:
-      Title:
-        selector: $details/h1[@class="post_title"]/span/text()
+      Title: $details/h1[@class="post_title"]/span
       Date:
-        selector: $details/h3[@class="post_date"]/span/text()
+        selector: $details/h3[@class="post_date"]/span
+        postProcess:
+          - parseDate: Jan 02, 2006
       Performers:
-        Name: $details/a[@class="tags"][starts-with(@href, '/models/')]/text()
+        Name: $details/a[@class="tags"][starts-with(@href, '/models/')]
       Tags:
-        Name: $details/a[@class="tags"][starts-with(@href, '/search?s=')]/text()
-      Details:
-        selector: $details/h2[@class="post_description"]/text()
+        Name: $details/a[@class="tags" and starts-with(@href, '/search?s=')]
+      Details: $details/h2[@class="post_description"]
       Movies:
-        Name: $dvd/h1/a/text()
+        Name: $dvd/h1/a
         FrontImage: $dvd/div[@class="post_image"]/a/img[@class="item_cover"]/@src
         URL: $dvd/h1/a/@href
       # Image is not accessible from the /post page
       Studio:
-        Name:
-          selector: $details/a[@class="tags"][starts-with(@href, '/studio/profile/')]/text()
+        Name: $details/a[@class="tags" and starts-with(@href, '/studio/profile/')]
   movieScraper:
     common:
       $details: //div[@class="post_details"]/div[@class="post_details_main"]
       $postdate: //div[@class="post_details"]/div[@class="post_details_main"]/h3[@class="post_date"]
     movie:
-      Name: $details/h1[@class="post_title"]/span/text()
+      Name: $details/h1[@class="post_title"]/span
       Duration:
         selector: $postdate/span[2]/text()
         postProcess:
           - replace:
-            - regex: '^\| '
-              with:
+              - regex: '^\| '
+                with:
       Date:
-        selector: $postdate/span[1]/text()
+        selector: $postdate/span[1]
         postProcess:
           - parseDate: Jan 2, 2006
-      Synopsis:
-        selector: $details/h2[@class="post_description"]/text()
-      FrontImage:
-        selector: //div[@class="post_details"]/div[@class="post_details_left"]/img[@class="item_cover"]/@src
+      Synopsis: $details/h2[@class="post_description"]
+      FrontImage: //div[@class="post_details"]/div[@class="post_details_left"]/img[@class="item_cover"]/@src
 # Last Updated 2024-08-12
