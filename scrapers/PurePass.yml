@@ -33,7 +33,7 @@ xPathScrapers:
       Date:
         selector: //div[3]/div/div[4]/div[1]/div/div[1]/text()
         postProcess:
-          - parseDate: January 02, 2006
+          - parseDate: January 2, 2006
       Studio:
         Name:
           selector: //base/@href
@@ -96,8 +96,8 @@ xPathScrapers:
           - replace:
               - regex: (https://[^/]+(?:/tour)?/content//contentthumbs/\d+/\d+/[\w\d-]+-\dx\.jpg)((?:(?:tour/)?content//contentthumbs/\d+/\d+/[\w\d-]+-\dx\.jpg)*)
                 with: $1
-  # Scraping tags using /updates/ url Only returns one tag sadly due to subscraping, keeping it in case stash scraper gets updated in the future,
-  # if you want all tags, scrape directly using https://www.<site>.com/scenes/<scene-name>_vids.html
+      # Scraping tags using /updates/ url Only returns one tag sadly due to subscraping, keeping it in case stash scraper gets updated in the future,
+      # if you want all tags, scrape directly using https://www.<site>.com/scenes/<scene-name>_vids.html
       Tags:
         Name:
           selector: //base/@href | $title
@@ -107,15 +107,14 @@ xPathScrapers:
                 - regex: __SEP__
                   with: "scenes/"
             - replace:
-                - regex: ' '
-                  with: '-'
+                - regex: " "
+                  with: "-"
             - replace:
                 - regex: \'
-                  with: ''
+                  with: ""
             - replace:
-                - regex: '$'
-                  with: '_vids.html'
+                - regex: "$"
+                  with: "_vids.html"
             - subScraper:
                 selector: //div[3]/div/div[4]/div[2]/a
-
 # Last Updated December 17, 2024
