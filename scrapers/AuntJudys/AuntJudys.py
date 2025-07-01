@@ -1,55 +1,28 @@
 import json
-import os
-import sys
 import urllib.request
 import urllib.parse
+import py_common.log as log
+from py_common.util import scraper_args
+from py_common.deps import ensure_requirements
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  # parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
-
-try:
-    from lxml import html
-except ModuleNotFoundError:
-    print(
-        "You need to install the lxml module. (https://lxml.de/installation.html#installation)",
-        file=sys.stderr,
-    )
-    print(
-        "If you have pip (normally installed with python),",
-        "run this command in a terminal (cmd): python -m pip install lxml",
-        file=sys.stderr,
-    )
-    sys.exit(1)
-
-try:
-    from py_common.log import debug
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo",
-        "https://github.com/stashapp/CommunityScrapers",
-        file=sys.stderr,
-    )
-    sys.exit(1)
+ensure_requirements("lxml")
+from lxml import html  # noqa: E402
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
 }
 
 
-def sceneByURL(url):
+def scene_from_url(url):
     req = urllib.request.Request(url, headers=headers)
     res = urllib.request.urlopen(req)
     if not res.status == 200:
-        debug(f"Request to '{url}' failed with status code {res.status}")
+        log.error(f"Request to '{url}' failed with status code {res.status}")
         return {}
 
     tree = html.fromstring(res.read().decode())
 
-    m, d, y = (
+    date = "-".join(
         tree.xpath("//div[contains(@class,'update_date')]/text()[1]")
         .pop(0)
         .strip()
@@ -72,7 +45,7 @@ def sceneByURL(url):
         "tags": [
             {"name": x} for x in tree.xpath("//span[@class='update_tags']/a/text()")
         ],
-        "date": "-".join([y, m, d]),
+        "date": date,
     }
 
     try:
@@ -82,7 +55,7 @@ def sceneByURL(url):
             res = urllib.request.urlopen(req)
             tree = html.fromstring(res.read().decode())
             next_url = None
-            links = tree.xpath("//div[a[@href='{}']]".format(url))
+            links = tree.xpath(f"//div[a[@href='{url}']]")
             if len(links):
                 link = links[0]
                 scene["code"] = link.get("data-setid")
@@ -95,7 +68,7 @@ def sceneByURL(url):
                         "",
                         "",
                     )
-                )
+                ).replace("-4x", "-full")
             else:
                 n = tree.xpath("//a[@class='pagenav' and span[text()='>']]/@href")
                 if len(n):
@@ -110,11 +83,17 @@ def sceneByURL(url):
                         )
                     )
     except Exception as e:
-        debug(f"Unable to find image for scene: {e}")
+        log.error(f"Unable to find image for scene: {e}")
 
     return scene
 
 
-if sys.argv[1] == "sceneByURL":
-    j = json.loads(sys.stdin.read())
-    print(json.dumps(sceneByURL(j["url"])))
+if __name__ == "__main__":
+    op, args = scraper_args()
+    result = None
+    if op != "scene-by-url":
+        log.error(f"Unsupported operation: {op}")
+        exit(-1)
+
+    result = scene_from_url(args["url"])
+    print(json.dumps(result))

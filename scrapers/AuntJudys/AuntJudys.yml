@@ -8,5 +8,4 @@ sceneByURL:
     script:
       - python
       - AuntJudys.py
-      - sceneByURL
-# Last Updated August 18, 2023
+      - scene-by-url
