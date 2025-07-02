@@ -4,6 +4,14 @@ sceneByURL:
     url:
       - thebronetwork.com
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://thebronetwork.com/models
+    scraper: performerScraper
+    
+    
 xPathScrapers:
   sceneScraper:
     scene:
@@ -24,4 +32,29 @@ xPathScrapers:
       Studio:
         Name:
           fixed: The Bro Network
-# Last Updated November 02, 2023
+          
+  performerScraper:
+    performer:
+      Name: //div[@class="heroTitle"]//h1/text()
+      Gender:
+        fixed: Male
+      HairColor:
+        selector: //span[contains(text(),"Hair color")]/following-sibling::text()
+      EyeColor:
+        selector: //span[contains(text(),"Eye color")]/following-sibling::text()
+      Height:
+        selector: //span[contains(text(),"Height:")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Circumcised:  
+        selector: //span[contains(text(),"Cock:")]/following-sibling::text()
+      PenisLength:
+        selector: //span[contains(text(),"Cock Size:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0'"
+          - feetToCm: true
+      Image: //div[@class="model_picture"]/img/@src
+
+# Last Updated July 2, 2025
