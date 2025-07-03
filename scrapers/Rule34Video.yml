@@ -68,23 +68,45 @@ xPathScrapers:
         URL: $article//div[text()="Artist"]/following-sibling::a/@href
 debug:
   printHTML: true
+# see configuration notes in https://discourse.stashapp.cc/t/ddos-guard-for-scrapers/2369
 driver:
-  headers:
-    - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
   cookies:
     - CookieURL: "https://rule34video.com/"
       Cookies:
-        - Name: kt_rt_popAccess
+        - Name: "__ddgid_"
+          Value: "FILL_IN_FROM_BROWSER"
+          Domain: ".rule34video.com"
+          Path: "/"
+        - Name: "__ddgmark_"
+          Value: "FILL_IN_FROM_BROWSER"
+          Domain: ".rule34video.com"
+          Path: "/"
+        - Name: "__ddg2_"
+          Value: "FILL_IN_FROM_BROWSER"
+          Domain: ".rule34video.com"
+          Path: "/"
+        - Name: "ddg_last_challenge"
+          Value: "FILL_IN_FROM_BROWSER"
+          Domain: "rule34video.com"
+          Path: "/"
+        - Name: "__ddg1_"
+          Value: "FILL_IN_FROM_BROWSER"
+          Domain: ".rule34video.com"
+          Path: "/"
+        - Name: "PHPSESSID"
+          Value: "FILL_IN_FROM_BROWSER"
+          Domain: ".rule34video.com"
+          Path: "/"
+        - Name: "kt_ips"
+          Value: "FILL_IN_FROM_BROWSER"
+          Domain: ".rule34video.com"
+          Path: "/"
+        - Name: "kt_tcookie"
           Value: "1"
-          Domain: .rule34video.com
-          Path: /
-        - Name: kt_tcookie
+          Domain: "rule34video.com"
+          Path: "/"
+        - Name: "kt_rt_popAccess"
           Value: "1"
-          Domain: .rule34video.com
-          Path: /
-        - Name: cf_clearance
-          ValueRandom: 43
-          Domain: .rule34video.com
-          Path: /
-# Last Updated August 7, 2024
+          Domain: "rule34video.com"
+          Path: "/"
+# Last Updated July 2, 2025
