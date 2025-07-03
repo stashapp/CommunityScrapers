@@ -54,6 +54,6 @@ xPathScrapers:
         selector: //td[contains(text(),"Dick size")]/following-sibling::td/text()
       Details:  
         selector: //div[@class="content_detail__first_col__description__white_box"]/p
-      Image: //div[@class="content_detail__first_col__top__gallery__big"]/img@src
+      Image: //div[@class="content_detail__first_col__top__gallery__big"]/img/@src
 
-# Last Updated July 2, 2025
+# Last Updated July 3, 2025
