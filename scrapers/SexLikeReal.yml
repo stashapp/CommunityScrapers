@@ -19,7 +19,7 @@ sceneByFragment:
     #   SLR_{stufio:[^_]+}_{title:[^_]+}_{res:\d+p}_{code:\d+}_{vrtype}.{ext}
     #     vrtype: stuff we do not care about but could contain '_'
     filename:
-      - regex: (?i)^SLR_.+_\d+p_(\d+)_.*$
+      - regex: (?i)^SLR_.+(?:_\d+p)?_(\d+)_.*$
         with: $1
       - regex: .*\.[^\.]+$ # if no id is found in the filename
         with: # clear the filename so that it doesn't leak
