@@ -147,7 +147,7 @@ studioMap = {
     "pvgirls": "Porn Valley Girls",
     "realagent.xxx":"Real Agent",
     "realpeachez":"Sarah Peachez",
-    "rebeccalordproductions.com":"Rebecca Lord Productions",
+    "rebeccalordproductions":"Rebecca Lord Productions",
     "rexringoxxx.xxx":"Rex Ringo XXX Productions",
     "sabrinasabrokporn":"Sabrina Sabrok Videos",
     "sallydangeloxxx":"City Girlz",
