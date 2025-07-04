@@ -58,14 +58,6 @@ xPathScrapers:
             - replace:
                 - regex: '(.*)\| ([^\|]+VR)$'
                   with: $2
-      Code:
-        selector: //dl8-video/source[1]/@src
-        postProcess:
-          - replace:
-              - regex: .*/scenes(\d*)?/(\d+)/.*
-                with: $2
-              - regex: .*/videos_app/\w+/(\d+)_.*
-                with: $1
     gallery:
       Title: *title
       Date: *date
@@ -108,4 +100,4 @@ xPathScrapers:
       Image: //div[contains(@class, "actor-view")]//img/@src
       Piercings: //div[span[text()="Piercing:"]]/text()
       Tattoos: //div[span[text()="Tattoo:"]]/text()
-# Last Updated June 9, 2025
+# Last Updated July 4, 2025
