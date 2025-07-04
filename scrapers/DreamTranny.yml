@@ -106,6 +106,6 @@ xPathScrapers:
           - parseDate: January 2, 2006
 driver:
   # site uses age verification for regions including UK and US
-  # using CDP with a VPN configured to another region, e.g. NL, will bypass this
-  useCDP: true
+  # using CDP (set to true) with a VPN configured to another region, e.g. NL, will bypass this
+  useCDP: false
 # Last Updated July 4, 2025
