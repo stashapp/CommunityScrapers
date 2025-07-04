@@ -83,9 +83,12 @@ xPathScrapers:
               - regex: ([!.?])([^!.?\s])
                 with: "$1\n\n$2"
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //base/@href | //script[contains(text(),"var video_content")]/text()
+        concat: ","
         postProcess:
           - replace:
+              - regex: ',.+poster="(.+?)".+'
+                with: "$1"
               - regex: 1x
                 with: 4x
         # Some people prefer the higher res scene preview images
@@ -94,4 +97,4 @@ xPathScrapers:
         #   $image/@src0_3x |
         #   $image/@src0_2x |
         #   $image/@src0_1x
-# Last Updated January 10, 2024
+# Last Updated July 4, 2025
