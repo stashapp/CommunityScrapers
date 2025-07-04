@@ -22,14 +22,15 @@ def scene_from_url(url):
 
     tree = html.fromstring(res.read().decode())
 
-    date = "-".join(
+    m, d, y = (
         tree.xpath("//div[contains(@class,'update_date')]/text()[1]")
         .pop(0)
         .strip()
         .split("/")
     )
-    url_parts = urllib.parse.urlparse(url)
+    date = "-".join((y, m, d))
 
+    url_parts = urllib.parse.urlparse(url)
     scene = {
         "title": tree.xpath("//span[@class='title_bar_hilite']/text()").pop(),
         "details": tree.xpath("//span[@class='update_description']/text()")
