@@ -62,7 +62,7 @@ xPathScrapers:
         selector: //dl8-video/source[1]/@src
         postProcess:
           - replace:
-              - regex: .*/scenes/(\d+)/.*
+              - regex: .*/scenes\d?/(\d+)/.*
                 with: $1
               - regex: .*/videos_app/\w+/(\d+)_.*
                 with: $1
