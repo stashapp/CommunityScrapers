@@ -11,7 +11,7 @@ if __name__ == "__main__":
         case "scene-by-url" | "scene-by-query-fragment", {"url": url} if url:
             result = scene_by_url(url)
         case "scene-by-name", {"name": query}:
-            result = scene_search(query, site="fakings")
+            result = scene_search(query, site="pepeporn")
         case "scene-by-fragment", fragment:
             result = scene_by_fragment(fragment)
         case _:
