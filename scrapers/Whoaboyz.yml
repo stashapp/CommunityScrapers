@@ -3,9 +3,27 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - whoaboyz.com/tour/
-    scraper: sceneScraper
+    scraper: woahboyz
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.whoaboyz.com/tour/search.php?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: woahboyz
 xPathScrapers:
-  sceneScraper:
+  sceneSearch:
+    scene:
+      Title: //div[@class="item-wrapper"]//h3
+      URL: //div[@class="item-wrapper"]//h3/a/@href
+      Image:
+        selector: //div[@class="preview"]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.whoaboyz.com/tour/
+  woahboyz:
     common:
       $scene: //div[@class="trailer"]
     scene:
