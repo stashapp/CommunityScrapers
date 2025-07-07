@@ -1,0 +1,51 @@
+name: The-Female-Orgasm
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - the-female-orgasm.com/explore/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h3
+      Date:
+        selector: //div[@class="videoInfo clear"]/p[contains(span,"Date Added:")]
+        postProcess:
+          - replace:
+              - regex: "Date Added:"
+                with: ""
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="videoDetails clear"]//p
+        concat: "\n\n"
+      Image:
+        selector: >-
+          //base/@href |
+          //div[@class="player-thumb"]//img[@src0_1x]/@src0_1x |
+          //div[@class="player-thumb"]//img[@src0_2x]/@src0_2x |
+          //div[@class="player-thumb"]//img[@src0_3x]/@src0_3x |
+          //div[@class="player-thumb"]//img[@src0_4x]/@src0_4x
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: ^(https://.+)?https://
+                with: https://
+              # This strips out all of the middle results, leaving us with just the site name and the highest resolution image
+              - regex: __SEP__.+__SEP__
+                with: ""
+              # Regardless if multiple images were found we need to replace the separator with a slash to resolve the URL
+              - regex: __SEP__
+                with: ""
+              # Some sites have multiple tour pages, but the images still resolved from the root: remove 'tour1' etc.
+              - regex: explore///?
+                with: ""
+              # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
+              - regex: (:?-[1-4]x)?\.jpg
+                with: "-full.jpg"
+      Performers:
+        Name: //li[@class="update_models"]/a
+      Tags:
+        Name: //ul[contains(li,"Tags:")]//a
+      Studio:
+        Name:
+          fixed: The-Female-Orgasm
