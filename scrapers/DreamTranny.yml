@@ -1,4 +1,13 @@
-name: "DreamTranny"
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: DreamTranny
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://dreamtranny.com/updates/?q={}
+  scraper: sceneListScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -15,6 +24,20 @@ performerByURL:
       - dreamtranny.com/models/
     scraper: performerScraper
 xPathScrapers:
+  sceneListScraper:
+    scene:
+      Title: //div[contains(@class, "video-item")]//div[@class="item-content"]//a
+      Image: //div[contains(@class, "video-item")]//a[@class="item-thumb"]/img/@src
+      Date:
+        selector: //div[contains(@class, "video-item")]//div[@class="item-content"]/div[2]/p
+        postProcess:
+          - parseDate: Jan 2, 2006
+      URL:
+        selector: //div[contains(@class, "video-item")]//div[@class="item-content"]//a/@href
+        postProcess:
+          - replace:
+              - regex: ^(/.*)
+                with: https://dreamtranny.com$1
   sceneScraper:
     scene:
       Title: &titleSel //div[@class="section-title"]/h4/text()
@@ -26,14 +49,19 @@ xPathScrapers:
       Performers: &performersAttr
         Name: //a[@class="model-name no-text-decoration"]
       Image:
-        selector: //video[contains(@class,"video-js")]/@poster|//div[contains(@class,"model-player")]//img/@src
+        selector: >-
+          //video[contains(@class,"video-js")]/@poster
+          |
+          //div[contains(@class,"model-player")]//img/@src
+          |
+          //video[contains(@class,"vjs")]/@poster
         postProcess:
           - replace:
-              - regex: ^
-                with: "https://dreamtranny.com"
+              - regex: ^(/.*)
+                with: https://dreamtranny.com$1
       Studio: &studioAttr
         Name:
-          fixed: "Dream Tranny"
+          fixed: Dream Tranny
       Tags: &tagsAttr
         Name: //div[@class="model-categories"]/a/text()
       URL: &urlAttr
@@ -66,8 +94,8 @@ xPathScrapers:
         selector: //div[@class="model-img"]/a/img[@class="img"]/@src
         postProcess:
           - replace:
-              - regex: ^
-                with: https://dreamtranny.com/
+              - regex: ^(/.*)
+                with: https://dreamtranny.com/$1
       Country: //div[@class="model-content"]/p/span[text()="NATIONALITY"]/following-sibling::span[1]
       Birthdate:
         selector: //div[@class="model-content"]/p/span[text()="DATE OF BIRTH"]/following-sibling::span[1]
@@ -76,4 +104,8 @@ xPathScrapers:
               - regex: (\d)(st|[nr]d|th)
                 with: "$1"
           - parseDate: January 2, 2006
-# Last Updated April 20, 2023
+driver:
+  # site uses age verification for regions including UK and US
+  # using CDP (set to true) with a VPN configured to another region, e.g. NL, will bypass this
+  useCDP: false
+# Last Updated July 4, 2025

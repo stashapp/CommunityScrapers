@@ -1,4 +1,4 @@
-name: "hucows"
+name: HuCows
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -8,24 +8,27 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="entry-title"]
+      Code:
+        selector: //div[@class="entry-content"]/a/@href
+        postProcess:
+          - replace:
+              - regex: https://www.hucows.com/members/(hu\d\d\d).*
+                with: $1
       Details:
         selector: //div[@class="entry-content"]/p
         concat: " "
       Date:
-        selector: //div[@itemprop="datePublished"]//text()
-        concat: " "
+        selector: //div[@itemprop="datePublished"]
         postProcess:
           - replace:
               - regex: ^\s+
                 with:
           - parseDate: 2 Jan 2006
-      Image: //div[contains(@class,"post-single-img")]//img/@src
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Hucows
       Tags:
-        Name: //a[@rel="category tag"]/text()
+        Name: //a[@rel="category tag"]
       Performers:
-        Name: //span[@class="posttags"]/a/text()
-
-# Last Updated November 08, 2020
+        Name: //span[@class="posttags"]/a
