@@ -57,7 +57,8 @@ def cache_to_disk(ttl: int):
 
         def clear():
             log.debug("Clearing cache")
-            cache_file.unlink()
+            if cache_file.exists():
+                cache_file.unlink()
 
         wrapper.clear_cache = clear  # type: ignore
         return wrapper

@@ -1,28 +1,31 @@
 import re
 import json
-import requests
 import sys
 from datetime import datetime
 import py_common.log as log
 from py_common.cache import cache_to_disk
 from py_common.util import dig, scraper_args
 from py_common.config import get_config
+from py_common.deps import ensure_requirements
+
+ensure_requirements("cloudscraper")
+
+import cloudscraper  # noqa: E402
 
 config = get_config(
     default="""
 username = 
-password = ""
+password =
 """
 )
-
-has_login = config.username and config.password
+scraper = cloudscraper.create_scraper()
 
 
 @cache_to_disk(ttl=60 * 60 * 24)
 def auth_token():
     login_url = "https://api.iwara.tv/user/login"
     payload = {"email": config.username, "password": config.password}
-    response = requests.post(login_url, json=payload)
+    response = scraper.post(login_url, json=payload)
     if response.status_code != 200:
         log.error(
             "Failed to log in to Iwara, check password/username in Iwara/config.ini"
@@ -31,13 +34,15 @@ def auth_token():
     return response.json().get("token")
 
 
+has_login = config.username and config.password
+if has_login:
+    token = auth_token()
+    scraper.headers["Authorization"] = f"Bearer {token}"
+
+
 def api_request(query):
     headers = {}
-    if has_login:
-        token = auth_token()
-        headers["Authorization"] = f"Bearer {token}"
-
-    response = requests.get(query, headers=headers)
+    response = scraper.get(query, headers=headers)
     if response.status_code == 404 and not has_login:
         log.error(
             "Login required: please fill in your username and password in Iwara/config.ini"
@@ -68,7 +73,7 @@ def to_scraped_scene(json_from_api: dict):
 
     return {
         "title": json_from_api["title"],
-        "url": f"https://www.iwara.tv/video/{json_from_api["id"]}",
+        "url": f"https://www.iwara.tv/video/{json_from_api['id']}",
         "image": image,
         "date": datetime.strptime(json_from_api["createdAt"], "%Y-%m-%dT%H:%M:%S.%fZ")
         .date()
@@ -76,7 +81,7 @@ def to_scraped_scene(json_from_api: dict):
         "details": json_from_api["body"],
         "studio": {
             "Name": dig(json_from_api, "user", "name"),
-            "URL": f"https://www.iwara.tv/profile/{dig(json_from_api, "user", "username")}",
+            "URL": f"https://www.iwara.tv/profile/{dig(json_from_api, 'user', 'username')}",
         },
         "tags": [{"name": tag["id"]} for tag in json_from_api.get("tags", [])],
     }
