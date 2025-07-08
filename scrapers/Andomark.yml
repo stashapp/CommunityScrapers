@@ -294,6 +294,9 @@ xPathScrapers:
               # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
               - regex: (:?-[1-4]x)?\.jpg
                 with: "-full.jpg"
+              # Bypass the CDN (which is protected by a token) and grab it direct from the site
+              - regex: (.+)(cdn\.)([^?]+).+
+                with: $1$3
       URL: //link[@rel='canonical']/@href
   proSceneScraper:
     common:
@@ -326,6 +329,9 @@ xPathScrapers:
               # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
               - regex: (:?-[1-4]x)?\.jpg
                 with: "-full.jpg"
+              # Bypass the CDN (which is protected by a token) and grab it direct from the site
+              - regex: (.+)(cdn\.)([^?]+).+
+                with: $1$3
   proSceneWithImgFallbackScraper:
     common:
       # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
