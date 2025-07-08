@@ -17,7 +17,7 @@ xPathScrapers:
       Date:
         selector: //div[contains(@class, "meta-info-wrapper")]//li[last()]//span/text()
         postProcess:
-          - parseDate: January 02, 2006
+          - parseDate: January 2, 2006
       Image:
         selector: //div[contains(@class, "v-player-wrap")]//div[contains(@class, "vjs-poster")]/@style
         postProcess:
@@ -26,7 +26,7 @@ xPathScrapers:
                 with: $1
       Studio:
         Name:
-          fixed: Queer Crush
+          fixed: QueerCrush
       Tags:
         Name:
           selector: //p[contains(@class, "tags")]/a/text()
