@@ -250,6 +250,10 @@ _studios = {
         "api": "marvalstudio.mymember.site",
         "name": "MarValStudio",
     },
+    "members.baebihel.com": {
+        "api": "baebi-hel.mymember.site",
+        "name": "Baebi Hel",
+    },
     "michaelfittnation.com": {
         "api": "michaelfittnation.mymember.site",
         "name": "Michael Fitt",
