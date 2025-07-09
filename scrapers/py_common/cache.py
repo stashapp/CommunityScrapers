@@ -55,12 +55,6 @@ def cache_to_disk(ttl: int):
             cache_file.write_text(json_data, encoding="utf-8")
             return result
 
-        def clear():
-            log.debug("Clearing cache")
-            if cache_file.exists():
-                cache_file.unlink()
-
-        wrapper.clear_cache = clear  # type: ignore
         return wrapper
 
     return decorator

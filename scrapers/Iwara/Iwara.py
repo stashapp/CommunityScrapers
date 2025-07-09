@@ -22,36 +22,40 @@ scraper = cloudscraper.create_scraper()
 
 
 @cache_to_disk(ttl=60 * 60 * 24)
-def auth_token():
+def auth_token(username: str, password: str):
     login_url = "https://api.iwara.tv/user/login"
-    payload = {"email": config.username, "password": config.password}
-    response = scraper.post(login_url, json=payload)
+    payload = {"email": username, "password": password}
+    response = scraper.post(
+        login_url,
+        headers={
+            "Host": "api.iwara.tv",
+            "Origin": "https://www.iwara.tv",
+            "Referer": "https://www.iwara.tv",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
+        },
+        json=payload,
+    )
     if response.status_code != 200:
-        log.error(
-            "Failed to log in to Iwara, check password/username in Iwara/config.ini"
-        )
+        log.error(f"{response.status_code} {response.reason} - {response.text}")
         sys.exit(1)
     return response.json().get("token")
 
 
 has_login = config.username and config.password
 if has_login:
-    token = auth_token()
+    token = auth_token(config.username, config.password)
     scraper.headers["Authorization"] = f"Bearer {token}"
 
 
 def api_request(query):
-    headers = {}
-    response = scraper.get(query, headers=headers)
+    response = scraper.get(query)
     if response.status_code == 404 and not has_login:
         log.error(
-            "Login required: please fill in your username and password in Iwara/config.ini"
+            "Login required for this video: please fill in your username and password in Iwara/config.ini"
         )
         sys.exit(1)
     elif not response.ok:
-        log.error(f"Failed to fetch video data: {response.reason}")
-        # Cached login might be invalid, nuke it before next attempt
-        auth_token.clear_cache()
+        log.error(f"Failed to fetch video: {response.status_code} {response.reason}")
         sys.exit(1)
 
     return response.json()
