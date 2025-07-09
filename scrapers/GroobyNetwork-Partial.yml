@@ -271,7 +271,10 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: &detailsVR
-        selector: //div[@class="trailerblock"]/p[not(@class)]/descendant-or-self::*/text()
+        selector: >-
+          //div[@class="trailerblock"]/p[not(@class)]/descendant-or-self::*/text()
+          |
+          //div[@class="trailerpage_info"]//p/descendant-or-self::*/text()
         concat: "\n\n"
       Performers: &performersVR
         Name: //div[@class="trailer_toptitle_left"]//a/text()
@@ -306,4 +309,8 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.transvr.com/
       Tags: *tagsVR
-# Last Updated May 16, 2025
+
+# Use CDP with a configured proxy/CDN to bypass region-based age-verification
+driver:
+  useCDP: false
+# Last Updated July 9, 2025
