@@ -110,6 +110,10 @@ _studios = {
         "api": "deemariexxx.mymember.site",
         "name": "Dee Marie",
     },
+    "dirtydemi.com": {
+        "api": "dirtydemi.mymember.site",
+        "name": "Dirty Demi",
+    },
     "europornvids.com": {
         "api": "europornvids.mymember.site",
         "name": "Euro Porn Vids",
