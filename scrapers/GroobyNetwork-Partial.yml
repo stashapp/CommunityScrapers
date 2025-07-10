@@ -226,11 +226,36 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: &details
+        # Grooby Network sites use a p tag for the scene description, where each subsequent
+        # paragraph is a nested span tag, so they need to be captured separately.
+        # There doesn't appear to be a way to capture the text of all child elements
+        # (e.g. <a> <em> <strong>) to get the full text of each paragraph, while also
+        # ignoring the nested span tags.
+        # So instead, the entire text of the p tag is captured, and then the newlines are
+        # recreated in the post-processing step.
         selector: //div[@class="trailerpage_info"]/p[not(@class)]
         postProcess:
-          - replace:
-              - regex: (\.)([A-Za-z\"])
-                with: "$1\n\n$2"
+          - javascript: |
+              if (value && value.length > 0) {
+                const result = [];
+                for (let i = 0; i < value.length; i++) {
+                  const character = value[i];
+                  if (
+                    character === '.'
+                    && i !== value.length - 1 // not the last character
+                    && !value.slice(i + 1).startsWith('XXX') // not a .XXX domain
+                    && !value.slice(i + 1).startsWith('com') // not a .com domain
+                    && !value.slice(i + 1).startsWith(' ') // not the end of a sentence
+                    && !value.slice(i + 1).startsWith('.') // not consecutive dots
+                  ) {
+                    result.push(character, '\n\n');
+                  } else {
+                    result.push(character);
+                  }
+                }
+                return result.join('').trim();
+              }
+              return value;
       Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
       Studio: &studio
