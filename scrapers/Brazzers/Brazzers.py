@@ -59,18 +59,20 @@ def brazzers(obj: Any, api_result: Any) -> Any:
 
 
 if __name__ == "__main__":
-    domains = ["brazzers", "brazzersvr"]
+    domains = ["brazzersnetwork", "brazzersvr"]
     op, args = scraper_args()
     result = None
 
     match op, args:
         case "gallery-by-url", {"url": url} if url:
+            url = url.replace("brazzers.com", "brazzersnetwork.com")
             result = gallery_from_url(url, postprocess=brazzers)
         case "gallery-by-fragment":
             result = gallery_from_fragment(
                 args, search_domains=domains, postprocess=brazzers
             )
         case "scene-by-url", {"url": url} if url:
+            url = url.replace("brazzers.com", "brazzersnetwork.com")
             result = scene_from_url(url, postprocess=brazzers)
         case "scene-by-name", {"name": name} if name:
             result = scene_search(name, search_domains=domains, postprocess=brazzers)
@@ -79,6 +81,7 @@ if __name__ == "__main__":
                 args, search_domains=domains, postprocess=brazzers
             )
         case "performer-by-url", {"url": url}:
+            url = url.replace("brazzers.com", "brazzersnetwork.com")
             result = performer_from_url(url, postprocess=brazzers)
         case "performer-by-fragment", args:
             result = performer_from_fragment(args)
@@ -87,6 +90,7 @@ if __name__ == "__main__":
                 name, search_domains=domains, postprocess=brazzers
             )
         case "movie-by-url", {"url": url} if url:
+            url = url.replace("brazzers.com", "brazzersnetwork.com")
             result = movie_from_url(url, postprocess=brazzers)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
