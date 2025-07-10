@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
-name: "GroobyNetwork-Partial"
+name: GroobyNetwork-Partial
 performerByURL:
   - action: scrapeXPath
     url:
@@ -226,8 +226,11 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: &details
-        selector: //div[@class="trailerpage_info"]/p[not(@class)]/descendant-or-self::*/text()
-        concat: "\n\n"
+        selector: //div[@class="trailerpage_info"]/p[not(@class)]
+        postProcess:
+          - replace:
+              - regex: (\.)([A-Za-z\"])
+                with: "$1\n\n$2"
       Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
       Studio: &studio
@@ -306,4 +309,6 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.transvr.com/
       Tags: *tagsVR
-# Last Updated May 16, 2025
+driver:
+  useCDP: false
+# Last Updated July 10, 2025
