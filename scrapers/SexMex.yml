@@ -68,7 +68,12 @@ xPathScrapers:
         Name: //div[@class="panel-body"]/p[@class="cptn-model"]/a//text()
       Studio: &studio
         Name:
-          fixed: Sex Mex
+          selector: //base/@href
+          postProcess:
+            - map:
+                https://exposedlatinas.com/tour/: Exposed Latinas
+                https://sexmex.xxx/tour/: Sex Mex
+                https://transqueens.com/tour/: Trans Queens
       Image:
         selector: //video/@poster
         postProcess:
