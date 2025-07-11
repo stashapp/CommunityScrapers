@@ -24,11 +24,14 @@ sceneByFragment:
 xPathScrapers:
   sceneScraper:
     common:
-      $title: //h1[contains(@class, "watch__title")]//text()[not(ancestor::span)]
+      $title: //title
     scene:
       Title:
         selector: $title
-        concat: " "
+        postProcess:
+          - replace:
+              - regex: \s*-\s*(Piss|Anal)Vids$
+                with: ""
       Date:
         selector: //i[contains(@class, "bi-calendar3")]/text()
         postProcess:
@@ -40,16 +43,16 @@ xPathScrapers:
         selector: $title
         postProcess:
           - replace:
-              - regex: .+?([A-Z]{2,3}\d+)$|(.+)
+              - regex: .+?([A-Z]{2,3}\d+)\s*-\s*(Piss|Anal)Vids$$|(.*)
                 with: $1
       Performers:
         Name: //h1[contains(@class, "watch__title")]//a/text()
         URL: //h1[contains(@class, "watch__title")]//a/@href
       Studio:
-        Name: //div[contains(@class, "genres-list")]//a[contains(@href, "/studios/")]/text()
+        Name: //div[contains(@class, "genres-list")]//a[contains(@href, "/studios/")]
         URL: //div[contains(@class, "genres-list")]//a[contains(@href, "/studios/")]/@href
       Tags:
-        Name: //div[contains(@class, "genres-list")]//a[contains(@href, "/genre/")]/text()
+        Name: //div[contains(@class, "genres-list")]//a[contains(@href, "/genre/")]
       Image: //video/@data-poster
 
   performerScraper:
