@@ -104,13 +104,20 @@ def homepage_url(site: str) -> str:
     "Generates the homepage (base URL) for a site/domain"
     return f"https://www.{site}.com"
 
+
 def clean_text(details: str) -> str:
     "Remove escaped backslashes and html parse the details text."
     if details:
         details = details.replace("\\", "")
         details = re.sub(r"<\s*\/?br\s*\/?\s*>", "\n", details)
-        details = bs(details, features='html.parser').get_text("\n", strip=True)
+        details = bs(details, features="html.parser").get_text()
+        details = "\n".join(
+            " ".join(x.strip().split())
+            for x in details.split("\n")
+        )
+        details = details.strip()
     return details
+
 
 def get_search_client(site: str) -> SearchClientSync:
     "Initialises a search client with API auth credentials (`app_id` and `api_key`) and request" \
