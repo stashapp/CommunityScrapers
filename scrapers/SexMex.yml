@@ -3,7 +3,9 @@ name: SexMex
 sceneByURL: &byUrl
   - action: scrapeXPath
     url:
-      - sexmex.xxx
+      - exposedlatinas.com/tour/updates
+      - sexmex.xxx/tour/updates
+      - transqueens.com/tour/updates
     scraper: sexmex
 sceneByName:
   action: scrapeXPath
