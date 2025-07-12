@@ -24,7 +24,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .*url":\s*"(.*poster[^"]*).*$
-                with: https:$1
+                with: $1
       Date:
         selector: //div[@class="video-info__time"]//text()
         postProcess:
