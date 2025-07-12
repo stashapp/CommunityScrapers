@@ -108,8 +108,11 @@ def clean_text(details: str) -> str:
     "Remove escaped backslashes and html parse the details text."
     if details:
         details = details.replace("\\", "")
+        # replace breaks with newlines
         details = re.sub(r"<\s*\/?br\s*\/?\s*>", "\n", details)
-        details = bs(details, features='html.parser').get_text("\n", strip=True)
+        # don't strip to preserve newlines
+        # don't add additional newlines
+        details = bs(details, features='html.parser').get_text("", strip=False)
     return details
 
 def get_search_client(site: str) -> SearchClientSync:
