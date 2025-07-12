@@ -19,8 +19,9 @@ end
 module GraphQL
   class Stash < GraphQLBase
     def initialize(referer: nil)
-      @api_key = Config::Stash.api_key
-      @url = Config::Stash.endpoint + "/graphql"
+      @config = Stash::Config.new
+      @api_key = @config.api_key
+      @url = @config.endpoint + "/graphql"
       @extra_headers = { "ApiKey": @api_key }
       @extra_headers["Referer"] = referer if referer
     end
