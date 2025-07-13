@@ -110,6 +110,13 @@ galleryByURL:
       - whatlizannelikes.com/photosets/
       - yourfitcrush.com/photosets/
 
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - MyMemberSite.py
+    - scene-by-url
+
 sceneByURL:
   - action: script
     script:
