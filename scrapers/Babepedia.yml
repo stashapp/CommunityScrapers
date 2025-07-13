@@ -13,7 +13,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name:
-        selector: //span[@class="results"]//a[contains(@href, '/babe/')]|//div[@id="bioarea"]/h1
+        selector: //span[@class="results"]//a[contains(@href, '/babe/')]|//h1[@id="babename"]
         postProcess:
           - replace:
               - regex: "aka(\\s+[A-Z]+)"
@@ -32,15 +32,15 @@ xPathScrapers:
     common:
       $label: //div[@id='bioarea']//ul/li[span[@class='label']
     performer:
-      Name: //div[@id="bioarea"]/h1
+      Name: //h1[@id="babename"]
       Gender:
         fixed: "Female"
-      URLs: 
+      URLs:
         selector: //head/meta[@property="og:url"]/@content | //div[@id='socialicons']/a/@href
         postProcess:
           - replace:
-            - regex: 'https?://(?:www.)?babepedia\.com\/onlyfans\/'
-              with: 'https://onlyfans.com/'
+              - regex: 'https?://(?:www.)?babepedia\.com\/onlyfans\/'
+                with: "https://onlyfans.com/"
       Birthdate:
         selector: $label[text()='Born:']]//text()
         concat: " "
