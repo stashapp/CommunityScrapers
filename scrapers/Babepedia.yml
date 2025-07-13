@@ -30,7 +30,7 @@ xPathScrapers:
 
   performerScraper:
     common:
-      $label: //div[@id='bioarea']//ul/li[span[@class='label']
+      $infoblock: //div[@id="personal-info-block"]
     performer:
       Name: //h1[@id="babename"]
       Gender:
@@ -42,43 +42,38 @@ xPathScrapers:
               - regex: 'https?://(?:www.)?babepedia\.com\/onlyfans\/'
                 with: "https://onlyfans.com/"
       Birthdate:
-        selector: $label[text()='Born:']]//text()
-        concat: " "
+        selector: $infoblock//span[@class="label" and text()='Born:']/following-sibling::span
         postProcess:
           - replace:
-              - regex: (\w+:)(\s)(\w+)(\s)(\d+)(\w+)(\s)(\w+)(\s)(\w+)(\s)(\d+)
-                with: $5 $10 $12
+              - regex: \w+\s+(?P<day>\d+)(:?st|nd|rd|th)\s+(\w+)\s(?P<month>\w+)\s+(?P<year>\d+)
+                with: $day $month $year
           - parseDate: 2 January 2006
       DeathDate:
-        selector: $label[text()='Died:']]/text()
+        selector: $infoblock//span[@class="label" and text()='Died:']/following-sibling::span
         postProcess:
           - replace:
-              - regex: (\d+)(st|nd|rd|th)
-                with: "$1"
-              - regex: (\sof\s)|(\(age.+)
-                with: " "
-          - parseDate: Monday 2 January 2006
+              - regex: \w+\s+(?P<day>\d+)(:?st|nd|rd|th)\s+(\w+)\s(?P<month>\w+)\s+(?P<year>\d+).+
+                with: $day $month $year
+          - parseDate: 2 January 2006
       Ethnicity:
-        selector: $label[text()='Ethnicity:']]/a/text()|$label[text()='Ethnicity:']]/text()
+        selector: $infoblock//span[@class="label" and text()='Ethnicity:']/following-sibling::span
         postProcess:
           - map:
               asian: Asian
               white: Caucasian
               black: Black
               hispanic: Latin
-      Country: $label[text()='Birthplace']]/a[contains(@href,'topbabespercountry')]/text()
-      EyeColor:
-        selector: $label[text()='Eye color:']]
+      Country:
+        selector: $infoblock//span[@class="label" and text()='Nationality:']/following-sibling::span
         postProcess:
           - replace:
-              - regex: "Eye color: "
-                with:
+              - regex: \(|\)
+                with: ""
+      EyeColor: $infoblock//span[@class="label" and text()='Eye color:']/following-sibling::span
       HairColor:
-        selector: $label[text()='Hair color:']]
+        selector: $infoblock//span[@class="label" and text()='Hair color:']/following-sibling::span
         postProcess:
           - replace:
-              - regex: "Hair color: "
-                with:
               - regex: "Brown"
                 with: Brunette
               - regex: "Brown Hair"
@@ -86,116 +81,62 @@ xPathScrapers:
               - regex: "Fair"
                 with: Blonde
       Height:
-        selector: $label[text()='Height:']]/text()
+        selector: $infoblock//span[@class="label" and text()='Height:']/following-sibling::span
         postProcess:
           - replace:
               - regex: ^.*\s(\d+)\scm.*$
                 with: $1
       Weight:
-        selector: $label[text()='Weight:']]/text()
+        selector: $infoblock//span[@class="label" and text()='Weight:']/following-sibling::span
         postProcess:
           - replace:
               - regex: ^.*\s(\d+)\skg.*$
                 with: $1
       Measurements:
-        selector: $label[text()='Measurements:']]/text()|$label[text()='Bra/cup size:']]/text()
-        concat: "|"
+        selector: $infoblock//span[@class="label" and text()='Measurements:']/following-sibling::span
         postProcess:
           - replace:
               - regex: (\d*)([a-zA-Z-]*)(\d*-\d*)(.+?)([a-zA-Z]+)(.*)
                 with: $1$5-$3
       FakeTits:
-        selector: $label[text()='Boobs:']]
+        selector: $infoblock//span[@class="label" and text()='Boobs:']/following-sibling::span
         postProcess:
           - replace:
-              - regex: "Boobs: "
-                with: ""
               - regex: Augmented
-                with: "Fake"
+                with: Fake
               - regex: Real
-                with: "Natural"
+                with: Natural
               - regex: \/.*$
                 with: ""
           - map:
               Real/Natural: "Natural"
               Fake/Enhanced: "Fake"
-      CareerLength: $label[text()='Years active:']]/text()
-      Aliases:
-        selector: //div[@id='bioarea']//h2/text()
+      CareerLength:
+        selector: $infoblock//span[@class="label" and text()='Years active:']/following-sibling::span
         postProcess:
           - replace:
-              - regex: aka
+              - regex: \s+\(.*
                 with: ""
-              - regex: '\/'
-                with: ","
-              - regex: "tv"
-                with: "TV"
-              - regex: "official"
-                with: "Official"
-              - regex: "free"
-                with: "Free"
-              - regex: "vip"
-                with: "VIP"
-              - regex: "porn"
-                with: "Porn"
-              - regex: '\s\s'
-                with: " "
+      Aliases:
+        selector: //span[@class="aliasname"]
         concat: ", "
       Tattoos:
-        selector: $label[text()='Tattoos:']]/text()
+        selector: $infoblock//span[@class="label" and text()='Tattoos:']/following-sibling::span
         postProcess:
           - replace:
-              - regex: '\byes\b'
-                with: "Various"
-              - regex: '\bno\b'
-                with: "None"
-              - regex: '\bYes\b'
-                with: "Various"
-              - regex: "/bNo/b"
-                with: "None"
+              - regex: (?i)\b(yes\b
+                with: Various
+              - regex: (?i)\bno\b
+                with: None
       Piercings:
-        selector: $label[text()='Piercings:']]/text()
+        selector: $infoblock//span[@class="label" and text()='Piercings:']/following-sibling::span
         postProcess:
           - replace:
-              - regex: '\byes\b'
-                with: "Various"
-              - regex: '\bno\b'
-                with: "None"
-              - regex: '\bYes\b'
-                with: "Various"
-              - regex: "/bNo/b"
-                with: "None"
-              - regex: 'both\snipples'
-                with: "Nipples"
-              - regex: 'Both\snipples'
-                with: "Nipples"
-              - regex: 'Both\sNipples'
-                with: "Nipples"
-              - regex: 'each\snipple'
-                with: "Nipples"
-      Image:
-        selector: //div[@id='profimg']//a[contains(@class,'img')]/@href
-        # Alternitive selector will use site logo as image if none is found
-        # selector: //div[@id='profimg']//a/@href
-        postProcess:
-          - replace:
-              - regex: javascript\:alert.+;
-                with: /images/logo.png
-              - regex: ^
-                with: https://www.babepedia.com
-      Details:
-        selector: //div[@class="babebanner separate"]/p//text()
-        concat: "\n"
-        postProcess:
-          - replace:
-              - regex: '\nPerformances'
-                with: "\n\nPerformances"
-              - regex: '(and|with|of|,)\n'
-                with: "$1 "
-              - regex: '\n(,|\.|\))'
-                with: "$1"
-driver:
-  headers:
-    - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0
-# Last Updated May 28, 2025
+              - regex: (?i)\b(yes\b
+                with: Various
+              - regex: (?i)\bno\b
+                with: None
+              - regex: (?i)(?:both|each)\snipples?
+                with: Nipples
+      Image: //meta[@property="og:image"]/@content
+      Details: //p[@id="biotext"]
