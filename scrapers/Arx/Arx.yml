@@ -3,6 +3,7 @@ name: Arx
 sceneByURL:
   - action: scrapeXPath
     url: &urls
+      - analvault.com
       - cuckhunter.com
       - honeytrans.com
       - japanlust.com
@@ -10,6 +11,7 @@ sceneByURL:
       - lesworship.com
       - nudeyogaporn.com
       - povmasters.com
+      - randypass.com
       - transdaylight.com
       - transmidnight.com
       - transroommates.com
