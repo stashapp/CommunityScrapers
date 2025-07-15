@@ -1,20 +1,47 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: Arx
 sceneByURL:
-  - action: script
-    url:
-      - japanlust.com/scenes/
-      - honeytrans.com/scenes/
-      - lesworship.com/scenes/
-      - joibabes.com/scenes/
-      - povmasters.com/scenes/
-      - cuckhunter.com/scenes/
-      - nudeyogaporn.com/scenes/
-      - transdaylight.com/scenes/
-      - transmidnight.com/scenes/
-      - transroommates.com/scenes/
-    script:
-      - python
-      - Arx.py
-      - scrapeByURL
-
-# Last Updated September 9, 2024
+  - action: scrapeXPath
+    url: &urls
+      - cuckhunter.com
+      - honeytrans.com
+      - japanlust.com
+      - joibabes.com
+      - lesworship.com
+      - nudeyogaporn.com
+      - povmasters.com
+      - transdaylight.com
+      - transmidnight.com
+      - transroommates.com
+    scraper: htmlScraper
+performerByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: htmlScraper
+xPathScrapers:
+  htmlScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Date:
+        selector: //h1/following-sibling::div[contains(@class, "items-center")]//span[@class="block"]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: //span[text()="Description:"]/following-sibling::span
+      Performers:
+        Name: //span[text()="Models:"]/following-sibling::div//a//span/text()
+      Tags:
+        Name: &tagsSel //a[contains(@href, "/categories/")]//text()
+      URL: &urlSel //meta[@property="og:url"]/@content
+      Image: &imageSel //meta[@property="og:image"]/@content
+      Code:
+        selector: *urlSel
+        postProcess:
+          - replace:
+              - regex: 'https?://[^/]+/scenes/(\d+)/.*'
+                with: $1
+    performer:
+      Name: //meta[@property="og:image:alt"]/@content
+      Image: *imageSel
+      Tags:
+        Name: *tagsSel
+# Last Updated July 15, 2025
