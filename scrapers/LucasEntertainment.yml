@@ -68,12 +68,7 @@ xPathScrapers:
       Details: &detailsAttr
         selector: //div[@class="container"]//p[@class="plain-link"]/following-sibling::p/text()
         concat: "\n\n"
-      Image:
-        selector: //script[contains(text(), "image:")]/text()
-        postProcess:
-          - replace:
-              - regex: "^.*image: ['\"]([^'\"]+)*?['\"].+"
-                with: $1
+      Image: //meta[@name='twitter:image']/@content
       Studio: &studioAttr
         Name:
           fixed: Lucas Entertainment
@@ -116,4 +111,4 @@ xPathScrapers:
         postProcess:
           - feetToCm: true
       Image: //div[@class="col-sm-5 col-md-5 col-lg-4 model-main-photo"]/img/@data-original
-# Last Updated April 18, 2025
+# Last Updated July 15, 2025
