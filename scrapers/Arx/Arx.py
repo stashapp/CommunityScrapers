@@ -62,13 +62,13 @@ def call_graphql(query, variables=None):
 
         if result.get("errors", None):
             for error in result["errors"]:
-                raise Exception("GraphQL error: {}".format(error))
+                raise RuntimeError(f"GraphQL error: {error}")
         if result.get("data", None):
             return result.get("data")
     else:
         raise ConnectionError(
-            "GraphQL query failed:{} - {}. Query: {}. Variables: {}".format(
-                response.status_code, response.content, query, variables)
+            f"GraphQL query failed:{response.status_code} - {response.content}. "
+            f"Query: {query}. Variables: {variables}"
         )
 
 
