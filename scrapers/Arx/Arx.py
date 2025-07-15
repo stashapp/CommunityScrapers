@@ -148,26 +148,28 @@ def get_scene(url):
     }
 
     try:
-        result = call_graphql(query, variables)
+        legacy_scene = call_graphql(query, variables)
     except ConnectionError as e:
         log.error(e)
         return None
 
-    result = result.get('legacyScene')
+    legacy_scene = legacy_scene.get('legacyScene')
 
-    ret = {}
+    scraped_scene = {}
 
-    ret['title'] = result.get('title')
-    ret['details'] = result.get('summary')
-    ret['studio'] = {'name': result.get('sites')[0].get('name')}
-    ret['tags'] = [{'name': x.get('name')} for x in result.get('genres')]
-    ret['performers'] = [{'name': x.get('stageName')} for x in result.get('actors')]
-    ret['image'] = result.get('primaryPhotoUrl')
-    ret['date'] = result.get('availableAt') and result.get('availableAt')[:10] \
-        or result.get('createdAt') and result.get('createdAt')[:10]
-    ret['code'] = str(result.get('id'))
+    scraped_scene['title'] = legacy_scene.get('title')
+    scraped_scene['details'] = legacy_scene.get('summary')
+    scraped_scene['studio'] = {'name': legacy_scene.get('sites')[0].get('name')}
+    scraped_scene['tags'] = [{'name': x.get('name')} for x in legacy_scene.get('genres')]
+    scraped_scene['performers'] = [{'name': x.get('stageName')} for x in legacy_scene.get('actors')]
+    scraped_scene['image'] = legacy_scene.get('primaryPhotoUrl')
+    if (date := legacy_scene.get('availableAt')):
+        scraped_scene['date'] = date[:10]
+    elif (date := legacy_scene.get('createdAt')):
+        scraped_scene['date'] = date[:10]
+    scraped_scene['code'] = str(legacy_scene.get('id'))
 
-    return ret
+    return scraped_scene
 
 
 if sys.argv[1] == 'scrapeByURL':
