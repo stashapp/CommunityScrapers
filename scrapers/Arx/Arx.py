@@ -1,10 +1,10 @@
-import sys
 import json
+import sys
 from urllib.parse import urlparse
 
 import requests
 
-from py_common.graphql import GRAPHQL_INTROSPECTION
+from py_common import log
 
 # Static definition, used in the GraphQL request
 site_ids = {
@@ -38,34 +38,6 @@ headers = {
     "Referer": "https://lesworship.com"
 }
 
-def __prefix(level_char):
-    start_level_char = b'\x01'
-    end_level_char = b'\x02'
-
-    ret = start_level_char + level_char + end_level_char
-    return ret.decode()
-
-def __log(levelChar, s):
-    if levelChar == "":
-        return
-
-    print(__prefix(levelChar) + s + "\n", file=sys.stderr, flush=True)
-
-def log_trace(s):
-    __log(b't', s)
-
-def log_debug(s):
-    __log(b'd', s)
-
-def log_info(s):
-    __log(b'i', s)
-
-def log_warning(s):
-    __log(b'w', s)
-
-def log_error(s):
-    __log(b'e', s)
-
 
 def read_json_input():
     json_input = sys.stdin.read()
@@ -86,7 +58,7 @@ def call_graphql(query, variables=None):
     if response.status_code == 200:
         result = response.json()
 
-        log_debug(json.dumps(result))
+        log.debug(json.dumps(result))
 
         if result.get("errors", None):
             for error in result["errors"]:
@@ -159,16 +131,16 @@ def get_scene(url):
 
     site_id = site_ids.get(urlparse(url).netloc)
     if site_id is None:
-        log_error(f"Could not determine id for site {urlparse(url).netloc}")
+        log.error(f"Could not determine id for site {urlparse(url).netloc}")
         return None
 
     try:
         scene_id = int(urlparse(url).path.split('/')[2])
     except ValueError:
-        log_error(f"No scene id found in url {url}")
+        log.error(f"No scene id found in url {url}")
         return None
 
-    log_info(f"Scraping scene {scene_id}")
+    log.info(f"Scraping scene {scene_id}")
 
     variables = {
         'id': int(scene_id),
@@ -178,7 +150,7 @@ def get_scene(url):
     try:
         result = call_graphql(query, variables)
     except ConnectionError as e:
-        log_error(e)
+        log.error(e)
         return None
 
     result = result.get('legacyScene')
