@@ -3,14 +3,57 @@ import json
 import sys
 import os
 import re
+import subprocess
+import importlib
 
+# The subdirectory for extra packages that might not be present
+deps_dir = os.path.join(os.path.dirname(__file__), 'deps')
+os.makedirs(deps_dir, exist_ok=True)
 
 # to import from a parent directory we need to add that directory to the system path
 csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
 parent = os.path.dirname(csd)  #  parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from ther
+sys.path.append(parent)  # add parent dir to sys path so that we can import py_common from ther
+
+# dynamic deps
+if deps_dir not in sys.path:
+    sys.path.insert(0, deps_dir
+)
+
+try:
+    from py_common import log
+except ModuleNotFoundError:
+    log.info(
+        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
+        file=sys.stderr,
+    )
+    sys.exit()
+
+def ensure_package(requirement_string, import_name=None):
+    name = import_name or requirement_string.split("==")[0].split(">=")[0].split("<=")[0].split(">")[0].split("<")[0].strip()
+    try:
+        importlib.import_module(name)
+    except ImportError:
+        log.info(f"Installing {requirement_string} into {deps_dir}...")
+        subprocess.check_call(
+    [
+        sys.executable,
+        "-m", "pip", "install",
+        requirement_string,
+        "--target", deps_dir
+    ],
+    stdout=subprocess.DEVNULL,
+    stderr=subprocess.DEVNULL
+)
+
+ensure_package("requests")
+ensure_package("bs4")
+ensure_package("googletrans==4.0.0rc1")
+
+import requests
+from googletrans import Translator
+from bs4 import BeautifulSoup
+
 
 BASE_QUERY_MEDIA_SEARCH = "https://my.tokyo-hot.com/product/?q="
 BASE_DETAIL_URL = "https://my.tokyo-hot.com"
@@ -39,41 +82,47 @@ MEDIA_CONFIGURATIONS = [
     r"(kb\d{4})\S*",  # "single part KB series"
 ]
 
-try:
-    from py_common import log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo! (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit()
+def smart_title(s):
+    return " ".join(word.capitalize() for word in s.split(" "))
 
-try:
-    import requests
-except ModuleNotFoundError:
-    print(
-        "You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)",
-        file=sys.stderr,
-    )
-    print(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests",
-        file=sys.stderr,
-    )
-    sys.exit()
+def load_translations_cache(cache_file):
+    if os.path.exists(cache_file):
+        try:
+            if os.path.getsize(cache_file) == 0:
+                log.info("Cache file is empty. Starting with empty cache.")
+                return {}
+            with open(cache_file, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, TypeError) as e:
+            log.info(f"Cache file invalid: {e}. Starting with empty cache.")
+            return {}
+    return {}
 
-try:
-    from bs4 import BeautifulSoup
-except ModuleNotFoundError:
-    print(
-        "You need to install the Beautiful Soup module. (https://pypi.org/project/beautifulsoup4/)",
-        file=sys.stderr,
-    )
-    print(
-        "If you have pip (normally installed with python), run this command in a terminal (cmd): pip install beautifulsoup4",
-        file=sys.stderr,
-    )
-    sys.exit()
+def translate_text(input_list):
+    cache_file = "translation_cache.json"
+    cache = load_translations_cache(cache_file)
 
+    translator = Translator()
+    output_list = []
+
+    for text in input_list:
+        key = str(text)
+        if key in cache:
+            translated = cache[key]
+        else:
+            try:
+                result = translator.translate(key, src='ja', dest='en')
+                translated = result.text
+                cache[key] = translated
+            except Exception as e:
+                log.info(f"Translation error for '{key}': {e}")
+                translated = ""
+        output_list.append(translated)
+
+    with open(cache_file, "w", encoding="utf-8") as f:
+        json.dump(cache, f, ensure_ascii=False, indent=2)
+
+    return output_list
 
 class ScenePage:
     def __init__(self, scene_id, multipart, partnum, url):
@@ -91,13 +140,12 @@ class ScenePage:
         self.tags = self.get_tags()
 
     def get_title(self):
-        title = self.scene_id
-        if self.multipart:
-            title = title + f" - Part {self.partnum}"
         scene_title = self.soup.find("div", {"class": "pagetitle"})
-        if scene_title:
-            title = title + " - " + scene_title.text.strip()
-        return title
+        scene_title = smart_title(scene_title.text.strip())
+        if self.multipart:
+            scene_title = scene_title + f" - Part {self.partnum}"
+        
+        return scene_title
 
     def get_studio(self):
         info = self.soup.find("div", {"class": "infowrapper"})
@@ -122,7 +170,8 @@ class ScenePage:
                 perf = TokyoHotModel(
                     model_url=BASE_DETAIL_URL + link.get("href")
                 ).get_json()
-                performers.append(perf)
+                if perf:
+                    performers.append(perf)
         return performers
 
     def get_details(self):
@@ -136,7 +185,7 @@ class ScenePage:
         log.info("Invoking self date")
         info_dd = self.soup.find("div", {"class": "infowrapper"}).find_all("dd")
         for dd in info_dd:
-            search = re.search("(\d{4})/(\d{2})/(\d{2})", dd.text)
+            search = re.search(r"(\d{4})/(\d{2})/(\d{2})", dd.text)
             if search:
                 date = f"{search[1]}-{search[2]}-{search[3]}"
                 return date
@@ -144,10 +193,21 @@ class ScenePage:
 
     def get_tags(self):
         potential_tags = self.soup.find("div", {"class": "infowrapper"}).find_all("a")
-        return [
-            {"Name": a.text} for a in potential_tags if "type=play" in a.get("href")
+        tag_tags_raw = [
+            a.text for a in potential_tags if "type=tag" in a.get("href")
         ]
+        play_tags = [
+            a.text for a in potential_tags if "type=play" in a.get("href")
+        ]
+        translated_tags = translate_text(tag_tags_raw)
+        
+        combined = play_tags + translated_tags
+        formatted = {smart_title(item) for item in combined}
 
+        return [
+            {"Name": a} for a in sorted(formatted)
+        ]
+        
     def get_json(self):
         return {
             "Title": self.title,
@@ -177,76 +237,90 @@ class TokyoHotModel:
 
     def get_name(self):
         name = None
-        model_name = self.model_soup.find("div", {"class": "pagetitle mb0"})
-        if model_name:
-            name = model_name.text.strip()
+        try:
+            model_name = self.model_soup.find("div", {"class": "pagetitle mb0"})
+            if model_name:
+                name = model_name.text.strip()
+        except:
+            pass
         return name
 
     def get_height(self):
-        info_dt = self.model_soup.find("dl", {"class": "info"}).find_all("dt")
-        info_dd = self.model_soup.find("dl", {"class": "info"}).find_all("dd")
-        info_dict = dict(map(lambda k, v: (k.text, v.text), info_dt, info_dd))
-
-        if info_dict.get("Height"):
-            parse_data = re.search("(\d{3})cm\s~\s(\d{3})cm", info_dict.get("Height"))
-            if parse_data:
-                data = (int(parse_data[1]) + int(parse_data[2])) / 2
-                return str(data)
-        return None
+        height = None
+        try:
+            info_dt = self.model_soup.find("dl", {"class": "info"}).find_all("dt")
+            info_dd = self.model_soup.find("dl", {"class": "info"}).find_all("dd")
+            info_dict = dict(map(lambda k, v: (k.text, v.text), info_dt, info_dd))
+    
+            if info_dict.get("Height"):
+                parse_data = re.search(r"(\d{3})cm\s~\s(\d{3})cm", info_dict.get("Height"))
+                if parse_data:
+                    data = (int(parse_data[1]) + int(parse_data[2])) / 2
+                    return str(data)
+        except:
+            pass
+        return height
 
     def get_weight(self):
-        info_dt = self.model_soup.find("dl", {"class": "info"}).find_all("dt")
-        info_dd = self.model_soup.find("dl", {"class": "info"}).find_all("dd")
-        info_dict = dict(map(lambda k, v: (k.text, v.text), info_dt, info_dd))
-        if info_dict.get("Weight"):
-            parse_data = re.search(
-                "(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Weight")
-            )
-            if parse_data:
-                data = (int(parse_data[1]) + int(parse_data[2])) / 2
-                return str(data)
-        return None
+        weight = None
+        try:
+            info_dt = self.model_soup.find("dl", {"class": "info"}).find_all("dt")
+            info_dd = self.model_soup.find("dl", {"class": "info"}).find_all("dd")
+            info_dict = dict(map(lambda k, v: (k.text, v.text), info_dt, info_dd))
+            if info_dict.get("Weight"):
+                parse_data = re.search(
+                    r"(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Weight")
+                )
+                if parse_data:
+                    data = (int(parse_data[1]) + int(parse_data[2])) / 2
+                    return str(data)
+        except:
+            pass
+        return weight
 
     def get_measurements(self):
-        info_dt = self.model_soup.find("dl", {"class": "info"}).find_all("dt")
-        info_dd = self.model_soup.find("dl", {"class": "info"}).find_all("dd")
-        info_dict = dict(map(lambda k, v: (k.text, v.text), info_dt, info_dd))
-
-        cup = None
-        bust = None
-        waist = None
-        hip = None
-
-        if info_dict.get("Cup Size"):
-            parse_cup = re.search("^(\w)", info_dict.get("Cup Size"))
-            if parse_cup:
-                cup = JAP_TO_US_BUST.get(parse_cup[1].strip())
-
-        if info_dict.get("Bust Size"):
-            parse_bust = re.search(
-                "(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Bust Size")
-            )
-            if parse_bust:
-                bust = round(((int(parse_bust[1]) + int(parse_bust[2])) / 2) * 0.393701)
-
-        if info_dict.get("Waist Size"):
-            parse_waist = re.search(
-                "(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Waist Size")
-            )
-            if parse_waist:
-                waist = round(
-                    ((int(parse_waist[1]) + int(parse_waist[2])) / 2) * 0.393701
+        measurements = None
+        try:
+            info_dt = self.model_soup.find("dl", {"class": "info"}).find_all("dt")
+            info_dd = self.model_soup.find("dl", {"class": "info"}).find_all("dd")
+            info_dict = dict(map(lambda k, v: (k.text, v.text), info_dt, info_dd))
+    
+            cup = None
+            bust = None
+            waist = None
+            hip = None
+    
+            if info_dict.get("Cup Size"):
+                parse_cup = re.search(r"^(\w)", info_dict.get("Cup Size"))
+                if parse_cup:
+                    cup = JAP_TO_US_BUST.get(parse_cup[1].strip())
+    
+            if info_dict.get("Bust Size"):
+                parse_bust = re.search(
+                    r"(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Bust Size")
                 )
-
-        if info_dict.get("Hip"):
-            parse_hip = re.search("(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Hip"))
-            if parse_hip:
-                hip = round(((int(parse_hip[1]) + int(parse_hip[2])) / 2) * 0.393701)
-
-        if cup and bust and waist and hip:
-            return f"{bust}{cup}-{waist}-{hip}"
-
-        return None
+                if parse_bust:
+                    bust = round(((int(parse_bust[1]) + int(parse_bust[2])) / 2) * 0.393701)
+    
+            if info_dict.get("Waist Size"):
+                parse_waist = re.search(
+                    r"(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Waist Size")
+                )
+                if parse_waist:
+                    waist = round(
+                        ((int(parse_waist[1]) + int(parse_waist[2])) / 2) * 0.393701
+                    )
+    
+            if info_dict.get("Hip"):
+                parse_hip = re.search(r"(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Hip"))
+                if parse_hip:
+                    hip = round(((int(parse_hip[1]) + int(parse_hip[2])) / 2) * 0.393701)
+    
+            if cup and bust and waist and hip:
+                return f"{bust}{cup}-{waist}-{hip}"
+        except:
+            pass
+        return measurements
 
     def get_images(self):
         try:
@@ -258,26 +332,37 @@ class TokyoHotModel:
             return None
 
     def get_json(self):
-        return {
-            "Name": self.model_name,
-            "Gender": self.gender,
-            "URL": self.url,
-            "Ethnicity": self.ethnicity,
-            "Country": self.country,
-            "Height": self.height,
-            "Weight": self.weight,
-            "Measurements": self.measurements,
-            "Images": self.images,
-        }
-
+        if self.model_name: 
+            return {
+                "Name": self.model_name,
+                "Gender": self.gender,
+                "URL": self.url,
+                "Ethnicity": self.ethnicity,
+                "Country": self.country,
+                "Height": self.height,
+                "Weight": self.weight,
+                "Measurements": self.measurements,
+                "Images": self.images,
+            }
+        else:
+            return None
 
 def query(fragment, query_type):
     res = None
     media_info = None
+    
+    file_name = fragment['files'][0]['path'].split('/')[-1]
+
+    log.info("/path/example/file.mp4".split('/')[-1])
+    log.info("file.mp4".split('/')[-1])
 
     if query_type in ("scene"):
-        name = re.sub(r"\s", "_", fragment["title"]).lower()
+        name = re.sub(r"\s", "_", file_name).lower()       
         media_info = _extract_media_id(name)
+
+        if not media_info:
+            name = re.sub(r"\s", "_", fragment["code"]).lower()
+            media_info = _extract_media_id(name)
 
     if media_info:
         res = scrape_scene(
