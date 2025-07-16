@@ -24,8 +24,7 @@ xPathScrapers:
     common:
       $movieinfo: //div[@class="movie-info section"]
     scene:
-      Title: /html/head/title/text()
-      # //div[contains(@class,"heading")]/h1/text()
+      Title: //div[@id="moviepages"]//div[@class="heading"]/h1/text()
       Details: //div[contains(@class,"movie-info")]//p
       URL:
         selector: //link[@hreflang="en-US"]/@href|//script[contains(.,"posterImage = '/moviepages/'+movie_id+'/images/")]
@@ -56,7 +55,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: index\.html$
-                with: images/l.jpg
+                with: images/l_l.jpg
               - regex: en\.caribbeancom
                 with: www.caribbeancom
               - regex: eng/moviepages
