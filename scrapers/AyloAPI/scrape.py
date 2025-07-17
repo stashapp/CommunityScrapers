@@ -767,7 +767,7 @@ def scene_search(
         candidates = [
             postprocess(to_scraped_scene(result), result)
             for result in api_response
-            if result["id"] not in already_seen
+            if (result["id"] not in already_seen) and (result["type"] == "scene")
         ]
         search_results.extend(
             c
