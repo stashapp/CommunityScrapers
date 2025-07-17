@@ -51,10 +51,6 @@ performerByURL:
     url:
       - transnificent.com/tour/models
     scraper: performerScraper7
-  - action: scrapeXPath
-    url:
-      - groobyvr.com/tour/models
-    scraper: performerScraper8
 sceneByURL:
   - action: scrapeXPath
     url: &urls
@@ -85,10 +81,6 @@ sceneByURL:
       - transgasm.com
       - transnificent.com
     scraper: sceneScraper
-  - action: scrapeXPath
-    url:
-      - groobyvr.com
-    scraper: sceneScraperGroobyVR
   - action: scrapeXPath
     url:
       - transvr.com
@@ -205,19 +197,6 @@ xPathScrapers:
         fixed: transgender_male
       Image: *image3x
       Birthdate: *birthdate
-  performerScraper8:
-    performer:
-      Name: *name
-      Gender: *gender
-      Image: *image
-      Country: *country
-      Ethnicity: *ethnicity
-      Birthdate: *birthdate
-      Height:
-        selector: //li/b[text()="Height:"]/following-sibling::text()
-        postProcess:
-          - feetToCm: true
-      Measurements: //li/b[text()="Breast Size:"]/following-sibling::text()
   sceneScraper:
     scene:
       Title: &title //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()[last()]
@@ -291,51 +270,38 @@ xPathScrapers:
       Studio: *studio
       Tags:
         Name: *tagsSel
-  sceneScraperGroobyVR:
-    scene:
-      Title: *title
-      Date: &dateVR
-        selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
-        postProcess:
-          - parseDate: January 2, 2006
-      Details: &detailsVR
-        selector: //div[contains(@class,"trailerpage_description")]//*/text()
-        concat: "\n\n"
-      Performers: &performersVR
-        Name: //div[@class="trailer_toptitle_left"]//a/text()
-      Studio: *studio
-      Image:
-        selector: &imageSelVR //dl8-video/@poster
-        postProcess:
-          - replace:
-              - regex: content// # errant double slash
-                with: content/
-              - regex: ^/
-                with: https://www.groobyvr.com/
-      Tags: &tagsVR
-        Name:
-          selector: //div[@class="set_tags"]/ul/li/text()|//div[@class="set_tags"]/ul/li//a/text()
-          postProcess:
-            - map:
-                Tags for This Scene: Virtual Reality
   sceneScraperTransVR:
     scene:
       Title: //dl8-video/@title
-      Date: *dateVR
-      Details: *detailsVR
-      Performers: *performersVR
+      Date:
+        selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[contains(@class,"trailerpage_description")]//*/text()
+        concat: "\n\n"
+      Performers:
+        Name: //div[@class="trailer_toptitle_left"]//a/text()
       Studio: *studio
       Image:
-        selector: *imageSelVR
+        selector: //dl8-video/@poster
         postProcess:
           - replace:
               - regex: content// # errant double slash
                 with: content/
               - regex: ^/
                 with: https://www.transvr.com/
-      Tags: *tagsVR
+      Tags:
+        Name:
+          selector: >-
+            //div[@class="set_tags"]/ul/li/text()
+            |
+            //div[@class="set_tags"]/ul/li//a/text()
+          postProcess:
+            - map:
+                Tags for This Scene: Virtual Reality
 
 # Use CDP with a configured proxy to bypass region-based age-verification
 driver:
   useCDP: false
-# Last Updated July 11, 2025
+# Last Updated July 17, 2025
