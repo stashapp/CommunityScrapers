@@ -16,6 +16,7 @@ sceneByURL:
       - britstudio.xxx/updates/
       - brittanyandrewsxxx.com/updates/
       - brittanysbubbles.com/updates/
+      - brokemodel.com/tour
       - calisabliss.com/updates/
       - charmmodels.net/updates/
       - charlieforde.com/updates/
@@ -183,7 +184,7 @@ xPathScrapers:
           selector: //link[@rel="canonical"]/@href | //base/@href
           postProcess: &studioPostProcess
             - replace:
-                - regex: https?://(w{3}?\.?)?(.+?)(\..+)
+                - regex: https?://(w{3}?|free\.?)?(.+?)(\..+)
                   with: $2
             - map:
                 ariellynn: Ariel Lynn
@@ -199,6 +200,7 @@ xPathScrapers:
                 britstudio: Brit Studio
                 brittanyandrewsxxx: Britttany Andrews
                 brittanysbubbles: Brittany Andrews
+                brokemodel: Broke Model
                 calisabliss: Calisa Bliss
                 charlieforde: Charlie Forde
                 charmmodels: Charm Models
