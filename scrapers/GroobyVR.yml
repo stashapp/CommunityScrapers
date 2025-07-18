@@ -34,8 +34,9 @@ xPathScrapers:
           - replace:
               - regex: ^(/.*)
                 with: https://www.groobyvr.com$1
+              # the full variant should be the original unscaled image
               - regex: 2x
-                with: 3x
+                with: full
       Country: //li/b[text()="Nationality:"]/following-sibling::text()|//li/b[text()="Location:"]/following-sibling::text()
       Ethnicity: //li/b[text()="Ethnicity:"]/following-sibling::text()
       Birthdate:
@@ -116,4 +117,4 @@ xPathScrapers:
 # Use CDP with a configured proxy to bypass region-based age-verification
 driver:
   useCDP: false
-# Last Updated July 17, 2025
+# Last Updated July 18, 2025
