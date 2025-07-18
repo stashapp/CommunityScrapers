@@ -74,16 +74,9 @@ xPathScrapers:
         #      with: "?locale=en"
   sceneScraper:
     scene:
-      Title:
-        selector: //strong[text()='ID:']/../span
-        concat: "|"
-        postProcess:
-          - replace:
-              - regex: \|
-                with: ""
+      Title: //strong[@class="current-title"]/text()
+      Code: //a[@title="Copy ID"]/@data-clipboard-text
       Date: //strong[text()='Released Date:']/../span/text()
-      Details:
-        selector: //strong[@class="current-title"]/text()
       Director: //strong[text()='Director:']/../span/a/text()
       Tags:
         Name: //strong[text()='Tags:']/../span/a/text()
