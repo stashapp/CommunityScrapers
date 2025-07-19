@@ -1,0 +1,11 @@
+name: "NFO Metadata Reader"
+
+sceneByFragment:
+  action: script
+  script:
+      - python
+      - nfo.py
+      - sceneByFragment
+
+
+# Last Updated September 26, 2022
