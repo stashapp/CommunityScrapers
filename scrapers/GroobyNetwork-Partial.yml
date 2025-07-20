@@ -246,7 +246,7 @@ xPathScrapers:
                 - regex: (https://[^/]*)/.*
                   with: $1
       Image:
-        selector: //link[@rel="canonical"]/@href|//img[contains(@class, "update_thumb thumbs stdimage")]/@src|//img[contains(@class, "update_thumb thumbs stdimage")]/@src0_1x|//div[@class="trailerposter"]/img/@src0
+        selector: //link[@rel="canonical"]/@href|//img[contains(@class, "thumbs stdimage")][1]/@src|//img[contains(@class, "thumbs stdimage")][1]/@src0_1x|//div[@class="trailerposter"]/img/@src0
         concat: "__SEPARATOR__"
         postProcess:
           - replace:
@@ -304,4 +304,4 @@ xPathScrapers:
 # Use CDP with a configured proxy to bypass region-based age-verification
 driver:
   useCDP: false
-# Last Updated July 17, 2025
+# Last Updated July 20, 2025
