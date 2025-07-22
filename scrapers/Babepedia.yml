@@ -138,5 +138,10 @@ xPathScrapers:
                 with: None
               - regex: (?i)(?:both|each)\snipples?
                 with: Nipples
-      Image: //meta[@property="og:image"]/@content
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: _thumb\d+
+                with: ""
       Details: //p[@id="biotext"]
