@@ -35,7 +35,7 @@ xPathScrapers:
       Name: //h1[@id="babename"]
       Gender:
         fixed: "Female"
-      URLs:
+      URL:
         selector: //head/meta[@property="og:url"]/@content | //div[@id='socialicons']/a/@href
         postProcess:
           - replace:
