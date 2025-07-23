@@ -32,7 +32,13 @@ jsonScrapers:
           - parseDate: "2006-01-02 15:04:05"
       Details: &details $scene.synopsis
       Tags: &tags
-        Name: $scene.tags
+        Name:
+          selector: $scene.tags
+          postProcess:
+            - replace:
+                # Strip leading and trailing whitespace, some of their tags are legacy
+                - regex: ^\s+|\s+$
+                  with: ""
       Performers: &performers
         Name: "[$scene.performers.female,$scene.performers.male].@flatten"
       Studio: &studio
@@ -40,10 +46,10 @@ jsonScrapers:
       # Scenes in the API do not contain a direct link to their cover image but the
       # pattern is predictable enough that we can construct an image URL
       Image:
-        selector: $scene.promo_video_data.@values.0
+        selector: $scene.trailers.@values.0
         postProcess:
           - replace:
-              - regex: .+promo/([^/]+/[^/]+).*
+              - regex: .+trailers/([^_]+?)trailer.*
                 with: https://images1.naughtycdn.com/cms/nacmscontent/v1/scenes/$1/scene/horizontal/1279x852c.webp
     gallery:
       Title: *title
