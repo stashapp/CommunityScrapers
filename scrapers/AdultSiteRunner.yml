@@ -54,8 +54,10 @@ xPathScrapers:
         selector: $scene//span[contains(@class, "sceneDetails")]
         postProcess: &ppDate
           - replace:
+              - regex: ^Details:\s*
+                with: ""
               # https://regex101.com/r/rsjbb6/3
-              - regex: ^(?:Details:\s*)?(\w{3}\s*\d{1,2}),\s*(\d{4}).*?$
+              - regex: ^(\w{3}\s*\d{1,2}),\s*(\d{4}).*?$
                 with: $1, $2
           - parseDate: Jan 2, 2006
       # All of this can be replaced once scrapers get access to the URL they are scraping
@@ -163,8 +165,8 @@ xPathScrapers:
         selector: $modelProfile/div/ul/li[contains(text(),"Weight")]/strong/text()
         postProcess:
           - replace:
-            - regex: " pounds$"
-              with: ""
+              - regex: " pounds$"
+                with: ""
           - lbToKg: true
       PenisLength:
         selector: $modelProfile/div/ul/li[contains(text(),"Dick size")]/strong/text()
