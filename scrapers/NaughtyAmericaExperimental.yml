@@ -8,11 +8,11 @@ sceneByURL:
       - naughtyamericavr.com/scene/
       - tonightsts.com/scene/
       - thundercock.com/scene/
-    queryURL: https://api.naughtyapi.com/tools/scenes/scenes?id={url}
+    queryURL: "{url}"
     queryURLReplace:
       url:
         - regex: .*?(\d+)(?:\?|#|$)
-          with: $1
+          with: https://api.naughtyapi.com/tools/scenes/scenes?id=$1
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeJson
@@ -25,7 +25,7 @@ jsonScrapers:
     scene:
       Title: &title $scene.title
       Code: &code $scene.id
-      URLs: $scene.scene_url
+      URL: $scene.scene_url
       Date: &date
         selector: $scene.published_date
         postProcess:
@@ -34,23 +34,37 @@ jsonScrapers:
       Tags: &tags
         Name:
           selector: $scene.tags
+          # Strip leading and trailing whitespace, some of their tags are legacy
+          # concat them and split them afterwards to reduce excessive log output
+          concat: "__SEP__"
           postProcess:
             - replace:
-                # Strip leading and trailing whitespace, some of their tags are legacy
-                - regex: ^\s+|\s+$
+                - regex: __SEP__\s+|__SEP__\s+
                   with: ""
+          split: "__SEP__"
       Performers: &performers
         Name: "[$scene.performers.female,$scene.performers.male].@flatten"
       Studio: &studio
         Name: $scene.site_name
       # Scenes in the API do not contain a direct link to their cover image but the
-      # pattern is predictable enough that we can construct an image URL
+      # pattern is predictable enough that we can construct an image URL from the promo/trailer link
       Image:
-        selector: $scene.trailers.@values.0
+        # Grab the trailer or the promo video, whichever is available
+        selector: "[$scene.trailers.@values.0,$scene.promo_video_data.@values.0].0"
         postProcess:
-          - replace:
-              - regex: .+trailers/([^_]+?)trailer.*
-                with: https://images1.naughtycdn.com/cms/nacmscontent/v1/scenes/$1/scene/horizontal/1279x852c.webp
+          - javascript: |
+              console.log(value);
+              const match = value.match(/.+(?:promo|\.com)\/(?<prefix>[^/]+)\/(?:trailers(?:\/vr)?\/)?(?<name>[^/_]+).*/);
+              if (match) {
+                const prefix = match[1];
+                let name = match[2];
+                if (name.startsWith(prefix)) {
+                  name = name.slice(prefix.length);
+                }
+                name = name.replace(/trailer|trailer$/, '');
+                return `https://images4.naughtycdn.com/cms/nacmscontent/v1/scenes/${prefix}/${name}/scene/horizontal/1279x852c.webp`;
+              }
+              return null;
     gallery:
       Title: *title
       Code: *code
