@@ -61,7 +61,7 @@ jsonScrapers:
                 if (name.startsWith(prefix)) {
                   name = name.slice(prefix.length);
                 }
-                name = name.replace(/trailer|trailer$/, '');
+                name = name.replace(/teaser|trailer$/, '');
                 return `https://images4.naughtycdn.com/cms/nacmscontent/v1/scenes/${prefix}/${name}/scene/horizontal/1279x852c.webp`;
               }
               return null;
