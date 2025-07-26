@@ -8,14 +8,6 @@ performerByURL:
     url:
       - imdb.com
     scraper: performerScraper
-sceneByName:
-  action: scrapeXPath
-  queryURL: https://www.imdb.com/find?q={}
-  scraper: sceneSearch
-sceneByQueryFragment:
-  action: scrapeXPath
-  queryURL: "{url}"
-  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -83,19 +75,6 @@ xPathScrapers:
           - replace:
               - regex: \D
                 with: ""
-
-  sceneSearch:
-    common:
-      $scenerow: //h3[text() = "Titles"]/following-sibling::table//tr[contains(@class, 'findResult')]
-    scene:
-      Title: $scenerow//td[@class='result_text']
-      URL:
-        selector: $scenerow//td[@class='result_text']/a/@href
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://imdb.com
-      Image: $scenerow//td[@class='primary_photo']//img/@src
 
   sceneScraper:
     scene:
