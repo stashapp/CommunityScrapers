@@ -210,15 +210,11 @@ def scene_from_url(url: str) -> ScrapedScene:
     video_page = video_page[0]
 
     # title
-    if (
-        title := video_page.xpath(
-            "normalize-space("  # trim leading/trailing whitespace
-            "//h1/span/following-sibling::text()[1] | "  # if h1 contains a span, ignore the span and take the remaining text
-            "//h1[not(span)]/text()"  # if h1 has no span, just take the text
-            ")"
-        )
-    ):
-        scene["title"] = title
+    match video_page.xpath("//h1"):
+        case [title, _]:
+            scene["title"] = title.text_content().strip()
+        case _:
+            log.debug("Could not find title in page, scraper needs updating")
 
     # studio
     # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
