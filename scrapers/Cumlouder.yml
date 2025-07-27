@@ -25,13 +25,8 @@ xPathScrapers:
             - replace:
                 - regex: .+-all/(?P<spanishStudioName>[^/]+)/(?P<studioCode>[^/]+).+
                   with: $spanishStudioName
-                # Some scenes like https://www.cumlouder.com/porn-video/wild-sex-for-krissy-lynn/
-                # will show up as "Unknown Site" and the above regex will not match
-                # so we default it to Cum Louder for now
-                - regex: ^https.+
-                  with: Cum Louder
-                # Other videos like https://www.cumlouder.com/porn-video/hot-big-ass-latina-teen-corine-enjoys-rough-pussy-fucking-after-casting/
-                # are not actually Cum Louder videos but previews/trailers/redistributions from other sites
+                - regex: .+?/tubes/.+
+                  with: "YOU HAVE THE WRONG URL"
                 - regex: //th0cdn.+
                   with: WARNING! NOT A CUMLOUDER SCENE!
             # Studios are always Spanish in their URLs so we grab the sitenames and map them into
