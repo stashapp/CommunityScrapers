@@ -99,6 +99,7 @@ class ScrapedMovie(TypedDict, total=False):
     back_image: str
     url: str
     aliases: str
+    tags: list[ScrapedTag]
 
 
 class ScrapedGallery(TypedDict, total=False):
