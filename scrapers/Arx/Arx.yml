@@ -65,7 +65,7 @@ xPathScrapers:
           postProcess:
             - replace:
                 - regex: *domainAndCodeRegex
-                  with: $1
+                  with: https://www.$1
     performer:
       Name: //meta[@property="og:image:alt"]/@content
       Image:
