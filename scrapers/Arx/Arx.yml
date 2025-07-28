@@ -39,11 +39,31 @@ xPathScrapers:
         selector: *urlSel
         postProcess:
           - replace:
-              - regex: 'https?://[^/]+/scenes/(\d+)/.*'
-                with: $1
+              - regex: &domainAndCodeRegex 'https?://([^/]+)/scenes/(\d+)/.*'
+                with: $2
+      Studio:
+        Name:
+          selector: *urlSel
+          postProcess:
+            - replace:
+                - regex: *domainAndCodeRegex
+                  with: $1
+            - map:
+                analvault.com: Anal Vault
+                cuckhunter.com: Cuck Hunter
+                honeytrans.com: Honey Trans
+                japanlust.com: Japan Lust
+                joibabes.com: JOI Babes
+                lesworship.com: Les Worship
+                nudeyogaporn.com: Nude Yoga Porn
+                povmasters.com: POV Master
+                randypass.com: Randy Pass
+                transdaylight.com: Trans Daylight
+                transmidnight.com: Trans Midnight
+                transroommates.com: Trans Roommates
     performer:
       Name: //meta[@property="og:image:alt"]/@content
       Image: *imageSel
       Tags:
         Name: *tagsSel
-# Last Updated July 15, 2025
+# Last Updated July 28, 2025
