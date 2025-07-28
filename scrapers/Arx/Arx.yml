@@ -68,7 +68,12 @@ xPathScrapers:
                   with: $1
     performer:
       Name: //meta[@property="og:image:alt"]/@content
-      Image: *imageSel
+      Image:
+        selector: *imageSel
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]+/fit-in/)[^/]+(.*)$
+                with: "${1}0x0${2}"
       Tags:
         Name: *tagsSel
 # Last Updated July 28, 2025
