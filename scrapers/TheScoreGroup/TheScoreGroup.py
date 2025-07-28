@@ -234,7 +234,7 @@ def scene_from_url(url: str) -> ScrapedScene:
                 "..,", ""
             ),
             "%B %d, %Y",
-        ).isoformat()
+        ).strftime("%Y-%m-%d")
 
     # details
     if description := video_page.xpath(
