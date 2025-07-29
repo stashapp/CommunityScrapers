@@ -5,15 +5,16 @@ import urllib3
 
 from py_common import log
 from py_common.util import dig, scraper_args
-
-import requests
-
+from py_common.deps import ensure_requirements
 from py_common.types import (
     ScrapedScene,
     ScrapedPerformer,
     ScrapedGallery,
     ScrapedTag,
 )
+
+ensure_requirements("requests")
+import requests  # noqa: E402
 
 
 # Had to set verify=False due to a certificate issue with their site
