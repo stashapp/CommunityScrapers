@@ -47,7 +47,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Performers: &performersAttr
-        Name: //a[@class="model-name no-text-decoration"]
+        Name: //a[contains(@class, "model-name")]/text()
       Image:
         selector: >-
           //video[contains(@class,"video-js")]/@poster
@@ -108,4 +108,4 @@ driver:
   # site uses age verification for regions including UK and US
   # using CDP (set to true) with a VPN configured to another region, e.g. NL, will bypass this
   useCDP: false
-# Last Updated July 4, 2025
+# Last Updated August 1, 2025
