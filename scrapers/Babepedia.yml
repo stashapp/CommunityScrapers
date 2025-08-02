@@ -93,11 +93,11 @@ xPathScrapers:
               - regex: ^.*\s(\d+)\skg.*$
                 with: $1
       Measurements:
-        selector: $infoblock//span[@class="label" and text()='Measurements:']/following-sibling::span
-        postProcess:
-          - replace:
-              - regex: (\d*)([a-zA-Z-]*)(\d*-\d*)(.+?)([a-zA-Z]+)(.*)
-                with: $1$5-$3
+        selector: $infoblock//span[@class="label" and text()='Measurements:' or text()='Bra/cup size:']/following-sibling::span
+        concat: " "
+        replace:
+          - regex: ^(\d*)-(\d*)-(\d*) (\d*[A-Z]*).*$
+            with: $4-$2-$3
       FakeTits:
         selector: $infoblock//span[@class="label" and text()='Boobs:']/following-sibling::span
         postProcess:
@@ -118,8 +118,11 @@ xPathScrapers:
               - regex: \s+\(.*
                 with: ""
       Aliases:
-        selector: //span[@class="aliasname"]
-        concat: ", "
+        selector: //h2[@id="aka"]/text()
+        postProcess:
+          - replace:
+              - regex: " -"
+                with: ","
       Tattoos:
         selector: $infoblock//span[@class="label" and text()='Tattoos:']/following-sibling::span
         postProcess:
