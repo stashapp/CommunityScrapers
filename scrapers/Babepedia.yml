@@ -96,7 +96,7 @@ xPathScrapers:
         selector: $infoblock//span[@class="label" and text()='Measurements:' or text()='Bra/cup size:']/following-sibling::span
         concat: " "
         replace:
-          - regex: ^(\d*)-(\d*)-(\d*) (\d*[A-Z]*).*$
+          - regex: ^(\d*[A-Z]*)-(\d*)-(\d*) (\d*[A-Z]*).*$
             with: $4-$2-$3
       FakeTits:
         selector: $infoblock//span[@class="label" and text()='Boobs:']/following-sibling::span
