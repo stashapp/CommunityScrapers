@@ -16,7 +16,7 @@ jsonScrapers:
         selector: "[id,title]"
         concat: " "
       Code: id
-      Date: clips.@reverse.0.releaseDate
+      Date: clips.0.releaseDate
       Details:
         selector: "{clips.#.title,clips.#.description}"
         postProcess:
