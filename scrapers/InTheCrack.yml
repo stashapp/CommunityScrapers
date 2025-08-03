@@ -18,11 +18,11 @@ jsonScrapers:
       Code: id
       Date: clips.0.releaseDate
       Details:
-        selector: "{clips.#.title,clips.#.description}"
+        selector: "{shootLocation,clips.#.title,clips.#.description}"
         postProcess:
           - javascript: |
-              const {title, description} = JSON.parse(value)
-              return title.map((sub, i) => `${sub}\n${description[i]}`).join('\n\n');
+              const {shootLocation, title, description} = JSON.parse(value)
+              return ('Shoot Location: ' + shootLocation + '\n\n' + title.map((sub, i)
       Performers:
         Name:
           selector: title
