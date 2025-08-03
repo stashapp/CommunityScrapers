@@ -45,6 +45,7 @@ xPathScrapers:
           - replace:
               - regex: '^\.\s*'
                 with:
+        concat: "\n"
       Tags:
         Name: >-
           //meta[@property="video:tag"]/@content
