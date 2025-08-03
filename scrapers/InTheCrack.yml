@@ -22,7 +22,7 @@ jsonScrapers:
         postProcess:
           - javascript: |
               const {shootLocation, title, description} = JSON.parse(value)
-              return ('Shoot Location: ' + shootLocation + '\n\n' + title.map((sub, i)
+              return `Shoot Location: ${shootLocation}\n\n` + title.map((sub, i) => `${sub}\n${description[i]}`).join('\n\n');
       Performers:
         Name:
           selector: title
