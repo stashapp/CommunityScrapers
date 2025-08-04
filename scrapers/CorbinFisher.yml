@@ -38,6 +38,17 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Corbin Fisher
+      Tags:
+        Name:
+          selector: //head/link[@rel="canonical"]/@href
+          postProcess:
+            - replace:
+              - regex: .*-(remastered|REMASTERED)\..*
+                with: "Remaster,Re-Release"
+            - replace:
+              - regex: ^http.*
+                with: ""
+          split: ","
 
   performerScraper:
     performer:
