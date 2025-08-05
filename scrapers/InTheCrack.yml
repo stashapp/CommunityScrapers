@@ -3,6 +3,8 @@ sceneByURL:
   - action: scrapeJson
     url:
       - inthecrack.com/Collection/
+      # Some of their links are lowercase for some reason
+      - inthecrack.com/collection/
     queryURLReplace:
       url:
         - regex: .+?(\d+)
@@ -18,11 +20,14 @@ jsonScrapers:
       Code: id
       Date: clips.0.releaseDate
       Details:
-        selector: "{shootLocation,clips.#.title,clips.#.description}"
+        selector: '{shootLocation,description,clips.#.title,"descriptions":clips.#.description}'
         postProcess:
           - javascript: |
-              const {shootLocation, title, description} = JSON.parse(value)
-              return `Shoot Location: ${shootLocation}\n\n` + title.map((sub, i) => `${sub}\n${description[i]}`).join('\n\n');
+              const {shootLocation, description, title, descriptions} = JSON.parse(value)
+              // Some collections have a primary description so we include
+              // that between the shoot Location and the clip descriptions
+              const maybeDescription = description ? description + "\n\n" : ""
+              return `Shoot Location: ${shootLocation}\n\n` + maybeDescription + title.map((sub, i) => `${sub}\n${descriptions[i]}`).join('\n\n');
       Performers:
         Name:
           selector: title
