@@ -121,5 +121,5 @@ xPathScrapers:
       
 # Use CDP with a configured proxy to bypass region-based age-verification
 driver:
-  useCDP: true
+  useCDP: false
 # Last Updated August 7, 2025
