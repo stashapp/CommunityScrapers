@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - trans500.com/tour/
       - trans500.com/tour3/
+      - trans500.com/trailers/
     scraper: sceneScraper
   - action: scrapeXPath
     url:
@@ -21,13 +22,19 @@ xPathScrapers:
       Title: //div[@class="col-sm-12"]/p/../h2/text()
       Details: //p[@class="description"]
       Image:
-        selector: //video[@id="my-video"]/@poster
+        selector: &imageSel //video[contains(@id, "my-video")]/@poster
         postProcess:
           - replace:
               - regex: ^
-                with: "http://www.trans500.com"
+                with: "https://www.trans500.com"
       Studio:
         Name: //p[@class="pull-right"]/b/text()
+      Code:
+        selector: *imageSel
+        postProcess: &codePostProcess
+          - replace:
+              - regex: .*/([^/]+)/.*
+                with: $1
 
   sceneScraperEspanol:
     scene:
@@ -48,7 +55,7 @@ xPathScrapers:
         Name: //div[@class="scene-infobrick"][contains(text(), "TSGirls:")]/a/text()
       Details: //section[@id="scene-desc"]/p/text()
       Image:
-        selector: //video/@poster|//meta[@name="twitter:image0"]/@content
+        selector: &imageSelEspanol //video/@poster|//meta[@name="twitter:image0"]/@content
         postProcess:
           - replace:
               - regex: '^http:'
@@ -71,4 +78,7 @@ xPathScrapers:
                   with: "Behind Trans500"
       Tags:  # Either //meta[@name="keywords"]/@content OR: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
         Name: //div[@class="scene-infobrick"][contains(text(), "Categories:")]/a/text()
-# Last Updated January 03, 2023
+      Code:
+        selector: *imageSelEspanol
+        postProcess: *codePostProcess
+# Last Updated August 7, 2025
