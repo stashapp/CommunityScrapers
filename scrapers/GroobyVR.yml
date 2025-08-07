@@ -36,11 +36,14 @@ xPathScrapers:
               - regex: content//
                 with: content/
               # ensure URLs are converted from relative to absolute
-              - regex: ^([a-z]*)(/.*)$
-                with: https://www.groobyvr.com/$1$2
+              - regex: ^(tour/|/tour/)
+                with: https://www.groobyvr.com/tour/
+              # protocol-less URLs to absolute
+              - regex: ^//
+                with: https://
               # the full variant should be the original unscaled image
-              - regex: -\dx
-                with: -full
+              - regex: (\d+)(-\dx)?\.(jpg|jpeg|png|gif)$
+                with: $1-full.$3
       Country: //li/b[text()="Nationality:"]/following-sibling::text()|//li/b[text()="Location:"]/following-sibling::text()
       Ethnicity: //li/b[text()="Ethnicity:"]/following-sibling::text()
       Birthdate:
@@ -74,7 +77,10 @@ xPathScrapers:
         Name:
           fixed: Grooby VR
       Image:
-        selector: //dl8-video/@poster
+        selector: &imageSel >-
+          //dl8-video/@poster
+          |
+          //meta[@property="og:image"]/@content
         postProcess: *imagePostProcess
       Tags: &tags
         Name:
@@ -115,5 +121,5 @@ xPathScrapers:
       
 # Use CDP with a configured proxy to bypass region-based age-verification
 driver:
-  useCDP: false
+  useCDP: true
 # Last Updated August 7, 2025
