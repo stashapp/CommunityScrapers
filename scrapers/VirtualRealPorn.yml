@@ -59,33 +59,34 @@ xPathScrapers:
               - regex: VR [\s\w]+? video$
                 with: ""
       Date: &dateAttr
-        selector: //div[@class="featured_data"]/text()
-        concat: " "
+        selector: //script[@type="application/ld+json" and @class="yoast-schema-graph"]/text()
         postProcess:
-          - replace:
-              - regex: '.* (\w+ \d+, \d{4}).*'
-                with: $1
-          - parseDate: Jan 2, 2006
+          - javascript: |
+              if (value && value.length && value.startsWith('{')) {
+                // parse JSON
+                return JSON.parse(value)["@graph"]
+                  .find(item => item["@type"] === "WebPage")
+                  .datePublished
+                  // return YYYY-MM-DD format from full ISO datetime, e.g. 2024-01-01T12:00:00Z
+                  .substring(0, 10)
+              }
+              // return as-is if not JSON
+              return value
       Details: &detailsSel
         selector: //div[@class="description_container"]/p
         concat: "\n\n"
       Tags:
         Name:
-          selector: //div[@class="metaHolder"]//a/span/text()|//script[@type="application/ld+json"][contains(text(),"genre")]/text()
+          selector: >-
+            //div[@class="metaHolder"]//a/span/text()
+            |
+            //link[@rel="canonical"]/@href
           postProcess:
-            - javascript: |
-                if (value && value.length && value.startsWith('{')) {
-                  // parse JSON
-                  return JSON.parse(value)
-                    .genre
-                    .split(', ')
-                    // can only return one tag, find or default
-                    .find(v => v.toLowerCase() === 'virtual reality')
-                        ?? 'Virtual Reality'
-                } else {
-                  // return (text of tag) as-is
-                  return value
-                }
+            - replace:
+                # the second selector xpath returns a URL, this is a "hack" to get a
+                # fixed tag by converting it to "Virtual Reality"
+                - regex: ^http.*$
+                  with: Virtual Reality
       Performers:
         Name: //div[@class="performers_section"]//div[@class="model-box"]/a/img/@alt
       Studio:
@@ -98,7 +99,7 @@ xPathScrapers:
             - map:
                 VirtualRealAmateurPorn: "VirtualRealAmateur"
       Image: &imageSel //meta[@property="og:image"]/@content
-      URL: //link[@rel="canonical"]/@href
+      URL: //link[@rel="alternate" and @hreflang="x-default"]/@href
       Code: 
         selector: //link[@rel="shortlink"]/@href
         postProcess:
@@ -166,4 +167,7 @@ xPathScrapers:
               }
               return value
       Image: //div[@class="feature_img_model"]/img/@src
-# Last Updated June 2, 2025
+# sites now have age-checking and geoblocking, so we can use CDP (with VPN/proxy) to bypass it
+driver:
+  useCDP: false
+# Last Updated August 5, 2025
