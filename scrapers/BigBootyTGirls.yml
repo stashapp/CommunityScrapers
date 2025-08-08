@@ -1,26 +1,48 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: BigBootyTGirls
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - bigbootytgirls.com
     scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="titleBlock2 clear"]/h3/text()
-      Date:
+      Title: &title //div[@class="titleBlock2 clear"]/h3/text()
+      Date: &date
         selector: //span[@class="availdate"]/text()
         postProcess:
           - parseDate: 01/02/2006
-      Details: //span[@class="latest_update_description"]/text()
-      Tags:
+      Details: &details //span[@class="latest_update_description"]/text()
+      Tags: &tags
         Name: //span[@class="update_tags"]/a/text()
-      Performers:
+      Performers: &performers
         Name: //span[@class="tour_update_models"]/a/text()
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: &imageSel //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: BigBootyTGirls
+      Code: &code
+        selector: *imageSel
+        postProcess:
+          - replace:
+              - regex: .*/content/([^/]+).*
+                with: $1
+  galleryScraper:
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Tags: *tags
+      Performers: *performers
+      Studio:
+        Name:
+          fixed: BigBootyTGirls
+      Code: *code
 
-# Last Updated November 08, 2020
+# Last Updated August 7, 2025
