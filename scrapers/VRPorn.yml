@@ -22,37 +22,37 @@ xPathScrapers:
       $footer: //footer[@class="entry-footer"]
       $videoarea: //footer[@class="entry-footer"]/div[@class="layout_area_video"]
     scene:
-      Title: $header//h1[contains(@class,"content-title")]/text()
+      Title: $header//h1[contains(@class,"content-title")]
       Date:
-        selector: $videoarea/div[2]/span[@class="footer-titles"]/text()
+        selector: $footer//span[@class="footer-titles"]/text()
         postProcess:
           - replace:
-            - regex: Posted on (?:Premium on )?(.*)
-              with: $1
+              - regex: Posted on (?:Premium on )?(.*)
+                with: $1
           - parseDate: January 02, 2006
       Details:
-        selector: //main/article/div//p/text()
-        concat: "\n\n" 
+        selector: //div[contains(@class, "post-video-description")]//p/text()
+        concat: "\n"
       Tags:
-        Name: $footer//a[@rel="tag"]/text()
+        Name: $footer//a[@rel="tag"]
       Performers:
-        Name: $header//div[@class="name_pornstar"]/text()
+        Name: $header/following-sibling::*//div[@class="name_pornstar"]
       Studio:
-        Name: $header//a[@id="studio-logo"]//span[@class="footer-titles"]/text()
+        Name: //a[@id="studio-logo"]//span[@class="footer-titles"]
       Image:
-        selector: //main/article/header//dl8-video/@poster
+        selector: //dl8-video/@poster
         postProcess:
           - replace:
               - regex: (.*)(-\d+x\d+)(\.\w+$)
                 with: $1$3
-      URL: &sceneUrl //link[@rel="canonical"]/@href
+      URL: //link[@rel="canonical"]/@href
   sceneSearch:
     common:
       $videos: //div[@class="entry-footer all_hover box_item_video"]
     scene:
-      Title: $videos//a[@class="d_post_meta"]/@title
-      URL: $videos//a[@class="d_post_meta"]/@href
+      Title: $videos//div[@class="d_post_meta"]/a
+      URL: $videos//div[@class="d_post_meta"]/a/@href
       Image: $videos//div[@class="tube-thumbnail-wrapper"]/img/@src
       Studio:
-        Name: $videos//div[@class="post_links"]/span[@class="left_links"]/text()
+        Name: $videos//div[@class="d_post_meta"]//span[@class="left_links"]
 # Last Updated January 10, 2025
