@@ -211,7 +211,7 @@ def scene_from_url(url: str) -> ScrapedScene:
 
     # title
     match video_page.xpath("//h1"):
-        case [title]:
+        case [title] | [title, _]:
             scene["title"] = title.text_content().strip()
         case _:
             log.debug("Could not find title in page, scraper needs updating")
