@@ -6,6 +6,7 @@ sceneByURL:
     url: &urls
       - chan.sankakucomplex.com
       - idol.sankakucomplex.com
+      - www.idolcomplex.com
     scraper: postScraper
 imageByURL:
   - action: scrapeXPath
