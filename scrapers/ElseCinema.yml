@@ -1,0 +1,42 @@
+name: ElseCinema
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - elsecinema.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[contains(@class,"my-3")]/img/@name
+      Date:
+        selector: //script[@type='application/ld+json' and contains(., 'dateCreated')]/text()
+        postProcess:
+          - replace:
+              - regex: .*dateCreated(?:[\"\s:])+(\d+-\d+-\d+) .*
+                with: $1
+          - parseDate: 2006-01-02
+      Details:
+        selector: //script[contains(.,"window.__NUXT")]/text()
+        postProcess:
+          - replace:
+              - regex: .*,synopsis_clean(?:[\s:])+\"(.*)\",short_synopsis.*
+                with: $1
+              - regex: \\
+                with:
+      Performers:
+        Name: //a[contains(@href,'/performers')]/li
+      Tags:
+        Name: //ul/a[contains(@href,'/categories')]/li
+      Image:
+        selector: //link/@imagesrcset
+        postProcess:
+          - replace:
+              - regex: '^([^\?]+).+'
+                with: $1
+      Director: //span/a[contains(@href,'/directors/')]
+      Studio:
+        Name:
+          fixed: Else Cinema
+
+# Last Updated June 1, 2025
