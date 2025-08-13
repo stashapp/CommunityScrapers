@@ -246,17 +246,26 @@ xPathScrapers:
                 - regex: (https://[^/]*)/.*
                   with: $1
       Image:
-        selector: //link[@rel="canonical"]/@href|//div[@class="player-thumb"]/img[contains(@class, "thumbs stdimage")]/@src|//div[@class="player-thumb"]/img[contains(@class, "thumbs stdimage")]/@src0_1x|//div[@class="trailerposter"]/img/@src0
-        concat: "__SEPARATOR__"
+        selector: >-
+          //link[@rel="canonical"]/@href
+          |
+          //div[@class="player-thumb"]/img[contains(@class, "thumbs stdimage")]/@src
+          |
+          //div[@class="player-thumb"]/img[contains(@class, "thumbs stdimage")]/@src0_1x
+          |
+          //div[@class="trailerposter"]/img/@src0
+          |
+          //div[@id="fakeplayer"]//img/@src
+        concat: __SEPARATOR__
         postProcess:
           - replace:
-              - regex: ^.*__SEPARATOR__// # bobstgirls
+              - regex: ^.*__SEPARATOR__// # img urls without protocol, but with domain, e.g. //bobstgirls.com/whatever
                 with: "https://"
-              - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$
+              - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$ # remove any path part from canonical URL
                 with: $1$2
-              - regex: content//
+              - regex: content//  # remove errant double slash in image URL
                 with: content/
-              - regex: __SEPARATOR__
+              - regex: __SEPARATOR__ # remove the separator we added to process the canonical link and relative image URL together
                 with: ''
       Tags:
         Name:
@@ -304,4 +313,4 @@ xPathScrapers:
 # Use CDP with a configured proxy to bypass region-based age-verification
 driver:
   useCDP: false
-# Last Updated July 20, 2025
+# Last Updated August 13, 2025
