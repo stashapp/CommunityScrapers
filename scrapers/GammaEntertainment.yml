@@ -12,7 +12,6 @@ sceneByURL:
       - currycreampie.com/
       - devonlee.com/
       - dylanryder.com/
-      - fistingcentral.com/
       - gapingangels.com/
       - girlsandstuds.com/
       - grannyghetto.com/
@@ -126,7 +125,6 @@ xPathScrapers:
                 eroticax: EroticaX
                 evilangel: Evil Angel
                 familycreep: Family Creep
-                fistingcentral: Fisting Central
                 gapingangels: Gaping Angels
                 girlsandstuds: Girls And Studs
                 grannyghetto: Granny Ghetto
@@ -176,4 +174,4 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated May 12, 2025
+# Last Updated August 13, 2025
