@@ -8,8 +8,15 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="big_title2017"]
+      Code:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+            - regex: .*\/(\d+)\/\d+\.jpg
+              with: "fta$1"
       Details:
-        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article
+        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article/h2 | //div[@class="vid_txt_block2 vid_txt_block2017"]/article/p//text() | //div[@class="vid_txt_block2 vid_txt_block2017"]/article/p//br
+        concat: "\n\n"
       Date:
         selector: //time[@datetime]
         postProcess:
@@ -23,4 +30,4 @@ xPathScrapers:
         Name: //li[@class="vid_keywords"]/a
       Performers:
         Name: //li[@class="small_act_pic small_act_picvidpage"]/a
-# Last Updated January 10, 2022
+# Last Updated August 15, 2025
