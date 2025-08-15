@@ -39,11 +39,41 @@ xPathScrapers:
         selector: *urlSel
         postProcess:
           - replace:
-              - regex: 'https?://[^/]+/scenes/(\d+)/.*'
-                with: $1
+              - regex: &domainAndCodeRegex 'https?://([^/]+)/scenes/(\d+)/.*'
+                with: $2
+      Studio:
+        Name:
+          selector: *imageSel
+          postProcess:
+            - replace:
+                - regex: '.*/scene_thumbs/([^\d]+).*'
+                  with: $1
+            - map:
+                hhdp: Anal Vault
+                chi: Cuck Hunter
+                hhsm: Honey Trans
+                jly: Japan Lust
+                joi: JOI Babes
+                hhles: Les Worship
+                yoga: Nude Yoga Porn
+                pov: POV Masters
+                tsdl: Trans Daylight
+                tstm: Trans Midnight
+                tsrm: Trans Roommates
+        URL:
+          selector: *urlSel
+          postProcess:
+            - replace:
+                - regex: *domainAndCodeRegex
+                  with: https://www.$1
     performer:
       Name: //meta[@property="og:image:alt"]/@content
-      Image: *imageSel
+      Image:
+        selector: *imageSel
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]+/fit-in/)[^/]+(.*)$
+                with: "${1}0x0${2}"
       Tags:
         Name: *tagsSel
-# Last Updated July 15, 2025
+# Last Updated July 28, 2025

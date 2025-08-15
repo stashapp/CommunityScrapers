@@ -1,0 +1,47 @@
+name: Sketchy Sex
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sketchysex.com/trailer.php?id=
+    scraper: sketchysex
+
+xPathScrapers:
+  sketchysex:
+    scene:
+      Title: //div[@class="name"]
+      Details:
+        selector: //div[@class="VideoDescription"]
+        postProcess:
+          - replace:
+            - regex: \w+\s+\d+(?:st|nd|rd|th)?,\s+\d+\s*-\s*(.*)
+              with: $1
+      Date:
+        selector: //div[@class="date"]
+        postProcess:
+          - replace:
+            - regex: "ADDED:"
+              with: ""
+          - replace:
+            - regex: (\w+)\s+(\d+),\s+(\d+)
+              with: $1 $2, $3
+          - parseDate: Jan 2, 2006
+      Image:
+        selector: //video/@data-setup
+        postProcess:
+          - replace:
+            - regex: .*https://
+              with: https://
+          - replace:
+            - regex: .jpg.*
+              with: .jpg
+          - replace:
+            - regex: -[1-4]x\.
+              with: -full.
+      Studio:
+        Name:
+          fixed: Sketchy Sex
+        URL:
+          fixed: https://www.sketchysex.com
+
+# Last Updated July 21, 2025

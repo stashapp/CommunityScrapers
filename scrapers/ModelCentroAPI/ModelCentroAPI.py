@@ -133,6 +133,7 @@ studioMap = {
     "natashanice":"Natasha Nice",
     "naughty-lada": "Naughty Lada",
     "niarossxxx":"Nia Ross XXX",
+    "nikkojordan":"Nikko Jordan",
     "niksindian":"Niks Indian",
     "officialelizabethmarxs":"ElizabethMarxs",
     "onedomproductions":"One Dom Productions",
@@ -173,6 +174,7 @@ studioMap = {
     "womenwhosmoke":"Women Who Smoke",
     "xtcpov":"XTC POV",
     "xtremestudios.studio69swf.live":"Xtreme Studios Media",
+    "xxxotikangelzent": "xXxOTIK ANGELZ",
     "yourgoonspace":"Your Goon Space"
 }
 
@@ -222,6 +224,7 @@ fixedPerformerStudio = {
     "natashanice": ["Natasha Nice"],
     "naughty-lada": ["Naughty Lada"],
     "niarossxxx": ["Nia Ross"],
+    "nikkojordan": ["Nikko Jordan"],
     "officialelizabethmarxs":["Elizabeth Marxs"],
     "psychohenessy": ["Alina Henessy"],
     "puremolly": ["Molly Pills"],

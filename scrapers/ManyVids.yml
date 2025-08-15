@@ -82,6 +82,7 @@ jsonScrapers:
       Birthdate:
         selector: dob
         postProcess:
+          - parseDate: 2006-01-02T15:04:05.000
           - parseDate: 2006-01-02T15:04:05.000Z
       Ethnicity: ethnicity
       Country: location
@@ -114,33 +115,33 @@ jsonScrapers:
       Title:
         selector: data.title
         postProcess:
-            - replace:
-                - regex: "&amp;"
-                  with: "&"
-            - replace:
-                - regex: "&quot;"
-                  with: "\""
-            - replace:
-                - regex: "&lt;"
-                  with: "<"
-            - replace:
-                - regex: "&gt;"
-                  with: ">"
+          - replace:
+              - regex: "&amp;"
+                with: "&"
+          - replace:
+              - regex: "&quot;"
+                with: '"'
+          - replace:
+              - regex: "&lt;"
+                with: "<"
+          - replace:
+              - regex: "&gt;"
+                with: ">"
       Details:
         selector: data.description
         postProcess:
-            - replace:
-                - regex: "&amp;"
-                  with: "&"
-            - replace:
-                - regex: "&quot;"
-                  with: "\""
-            - replace:
-                - regex: "&lt;"
-                  with: "<"
-            - replace:
-                - regex: "&gt;"
-                  with: ">"
+          - replace:
+              - regex: "&amp;"
+                with: "&"
+          - replace:
+              - regex: "&quot;"
+                with: '"'
+          - replace:
+              - regex: "&lt;"
+                with: "<"
+          - replace:
+              - regex: "&gt;"
+                with: ">"
       Code: data.id
       URL:
         selector: data.url

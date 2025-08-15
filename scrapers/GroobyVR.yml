@@ -30,13 +30,20 @@ xPathScrapers:
         fixed: transgender_female
       Image:
         selector: //div[@class="model_photo"]/img/@src
-        postProcess:
+        postProcess: &imagePostProcess
           - replace:
-              - regex: ^(/.*)
-                with: https://www.groobyvr.com$1
+              # errant double slash
+              - regex: content//
+                with: content/
+              # ensure URLs are converted from relative to absolute
+              - regex: ^(tour/|/tour/)
+                with: https://www.groobyvr.com/tour/
+              # protocol-less URLs to absolute
+              - regex: ^//
+                with: https://
               # the full variant should be the original unscaled image
-              - regex: 2x
-                with: full
+              - regex: (\d+)(-\dx)?\.(jpg|jpeg|png|gif)$
+                with: $1-full.$3
       Country: //li/b[text()="Nationality:"]/following-sibling::text()|//li/b[text()="Location:"]/following-sibling::text()
       Ethnicity: //li/b[text()="Ethnicity:"]/following-sibling::text()
       Birthdate:
@@ -70,13 +77,11 @@ xPathScrapers:
         Name:
           fixed: Grooby VR
       Image:
-        selector: //dl8-video/@poster
-        postProcess:
-          - replace:
-              - regex: content// # errant double slash
-                with: content/
-              - regex: ^/
-                with: https://www.groobyvr.com/
+        selector: &imageSel >-
+          //dl8-video/@poster
+          |
+          //meta[@property="og:image"]/@content
+        postProcess: *imagePostProcess
       Tags: &tags
         Name:
           selector: >-
@@ -117,4 +122,4 @@ xPathScrapers:
 # Use CDP with a configured proxy to bypass region-based age-verification
 driver:
   useCDP: false
-# Last Updated July 18, 2025
+# Last Updated August 7, 2025

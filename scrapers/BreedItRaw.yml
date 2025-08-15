@@ -26,7 +26,7 @@ xPathScrapers:
       Tags:
         Name: //li[contains(text(), "Tags:")]/following-sibling::li/a/text()
       Performers:
-        Name: $performer/text()
+        Name: $performer
         URL: $performer/@href
       Image:
         selector: //script[contains(text(),"poster")]/text()
@@ -34,8 +34,8 @@ xPathScrapers:
           - replace:
               - regex: '.+poster="([^"]+)".+'
                 with: https://www.breeditraw.net$1
-              - regex: 1x\.jpg
-                with: "2x.jpg" # 3,4 is also possible but the images get too big
+              - regex: (1|2|3|4)x\.jpg
+                with: "full.jpg"
       Studio:
         Name:
           fixed: Breed it Raw
@@ -45,7 +45,7 @@ xPathScrapers:
         selector: //meta[@property="og:title"]/@content
         postProcess:
           - replace:
-              - regex: " - .*$"
+              - regex: \s*-\s*.*$
                 with:
       Gender:
         fixed: Male
@@ -70,4 +70,5 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://www.breeditraw.net/
-# Last Updated December 18, 2022
+              - regex: (1|2|3|4)x\.jpg
+                with: "full.jpg"

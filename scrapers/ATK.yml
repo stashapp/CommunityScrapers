@@ -66,7 +66,7 @@ xPathScrapers:
               - regex: '\.$'
                 with: ""
       Details: &Details
-        selector: //meta[contains(@name,'description')]/@content|//*[contains(text(),'Description')]//following-sibling::text()[1]
+        selector: //*[contains(text(),'Description')]/following-sibling::*
       Director: &Director
         selector: //*[contains(text(),'Photographer')]//following-sibling::text()[not(contains(.,'Photographer'))][1]|//*[contains(@class,'photographer')]//*[contains(@class,'text')]/text()
       Tags:

@@ -40,6 +40,7 @@ sceneByURL:
       - czechwifeswap.com/
       - gayhorrorporn.com/
       - horrorporn.com/
+      - lifepornstories.com/
       - monstercockgang.com/
       - movieporn.com/
       - perversefamily.com/
@@ -60,7 +61,7 @@ xPathScrapers:
                 with: $1
       Details: //div[contains(@class,'detail-description--longer')]/p
       Tags:
-        Name: //div[@data-part="tags"]//a/span
+        Name: //li[@class="tag ellipsis no-shrink"]/a/span/text()
       Performers:
         Name: //span[contains(., "Featuring:")]/following-sibling::a
       Studio:
@@ -73,4 +74,4 @@ xPathScrapers:
               - regex: .+(?:"uploadDate":\s*")([^T]+).+
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated May 23, 2024
+# Last Updated July 29, 2025

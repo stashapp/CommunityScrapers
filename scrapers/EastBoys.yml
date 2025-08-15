@@ -2,43 +2,38 @@ name: "EastBoys"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - eastboys.com/en/tour/
+      - eastboys.com/tour/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $perf: //span[@class="content"]//a
+      $perf: //li[contains(text(),"Added:")]/../li[2]
     scene:
       Title:
-        selector: //div[@class="row cover_detail mt-3 mt-sm-5"]/h2[@class="latest"]/text()
+        selector: //h2[@class="gen-title"]/text()
       Date:
-        selector: //div[@class="update_date text-light"]/text()
+        selector: //li[contains(text(),"Added:")]
         postProcess:
-          - parseDate: 02.01.2006
+          - replace:
+            - regex: "^Added:\\x{00A0}(.+)$"
+              with: $1
+          - parseDate: 02-01-2006
       Details:
-        selector: //p[@class="description pr-0 pr-lg-3 text-light"]/text()
+        selector: //div[@id="druhos"]/text()
       Performers:
         Name:
-          selector: $perf
-          postProcess:
-            - replace:
-                - regex: ","
-                  with: ""
+          selector: $perf/span/a/text()
         URL:
-          selector: $perf/@href
+          selector: $perf/span/a/@href
           postProcess:
             - replace:
                 - regex: ^/
                   with: https://www.eastboys.com/
       Tags:
-        Name: //div[@class="categories_detail text-light"]/following-sibling::a
+        Name: //h6[contains(text(),"Categories")]/../span/a/text()
       Image:
-        selector: //div[@class="col-lg-2 col-6 pt-1 pr-1 pl-0 pb-0"]/img[@class="img_detail_thumb"]/@src
-        postProcess:
-          - replace:
-              - regex: '(.+)(\/\d)'
-                with: "$1/0"
+        selector: //video/@poster
       Studio:
         Name:
           fixed: EastBoys
-# Last Updated March 16, 2022
+# Last Updated July 27, 2025

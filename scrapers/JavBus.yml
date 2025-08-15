@@ -90,7 +90,7 @@ xPathScrapers:
       Tags:
         Name: //div[@class="col-md-3 info"]//span[@class="genre"]/label/a/text()
       Performers:
-        Name: //div[@id="video_cast"]/table/tbody/tr/td[@class="text"]/span/span/a
+        Name: //div[@class="star-name"]/a
       Director: //div[@id='video_director']/table/tbody/tr/td[@class="text"]/span/a/text()
       Image:
         selector: //div[@class="row movie"]/div[@class="col-md-9 screencap"]/a[@class="bigImage"]/img/@src
@@ -101,4 +101,10 @@ xPathScrapers:
       Studio:
         Name: //div[@class="col-md-3 info"]//span[contains(text(), '發行商')]/../a/text()
 
-# Last Updated July 06, 2023
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
+    - Key: Accept-Language
+      Value: zh-cn
+# Last Updated Aug 01, 2025

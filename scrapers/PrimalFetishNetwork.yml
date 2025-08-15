@@ -1,0 +1,29 @@
+name: PrimalFetishNetwork
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - primalfetishnetwork.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class='video__movieTitle']
+      Date:
+        selector: //div[contains(@class, 'video__data') and contains(text(), 'Date')]
+        postProcess:
+          - replace:
+            - regex: '^Date '
+              with: ''
+            - regex: 'st|nd|rd|th'
+              with: ''
+          - parseDate: 02 Jan 2006
+      Performers:
+        Name: //div[@class="video__listLinks"]/a/span/text()
+      Tags:
+        Name: //div[contains(@class, 'video__listLinks--tags')]/a/text()
+      Details:
+        selector: //div[contains(@class, 'video-desc')][1]/p
+        concat: "\n\n"
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name: //a[@class="video__listModel"][contains(@href,"/paysites/")]/text()

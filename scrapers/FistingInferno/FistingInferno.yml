@@ -4,6 +4,7 @@ sceneByURL:
   - action: script
     url:
       - fistinginferno.com/en/video/
+      - fistingcentral.com/en/video/
     script:
       - python
       - ../Algolia/Algolia.py
@@ -32,9 +33,10 @@ galleryByURL:
   - action: script
     url:
       - fistinginferno.com/en/photo/
+      - fistingcentral.com/en/photo/
     script:
       - python
       - ../Algolia/Algolia.py
       - fistinginferno
       - gallery
-# Last Updated September 24, 2023
+# Last Updated August 13, 2025

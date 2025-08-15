@@ -194,7 +194,7 @@ def scene_from_url(url: str) -> ScrapedScene:
     "Scrape scene URL from HTML"
     # url
     clean_url = urlunparse(urlparse(url)._replace(query=""))
-    scene: ScrapedScene = {"url": clean_url}
+    scene: ScrapedScene = {}
 
     result = client.get(url)
     tree = html.fromstring(result.content)
@@ -210,24 +210,11 @@ def scene_from_url(url: str) -> ScrapedScene:
     video_page = video_page[0]
 
     # title
-    if (
-        title := video_page.xpath(
-            "normalize-space("  # trim leading/trailing whitespace
-            "//h1/span/following-sibling::text()[1] | "  # if h1 contains a span, ignore the span and take the remaining text
-            "//h1[not(span)]/text()"  # if h1 has no span, just take the text
-            ")"
-        )
-    ):
-        scene["title"] = title
-
-    # studio
-    # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
-    # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
-    if video_src := video_page.xpath("//video/source/@src"):
-        studio_ref = re.sub(
-            r".*\.com/(.+?)\/(video|scene).*", r"\1", next(iter(video_src))
-        )
-        scene["studio"] = {"name": STUDIO_MAP.get(studio_ref, studio_ref)}
+    match video_page.xpath("//h1"):
+        case [title] | [title, _]:
+            scene["title"] = title.text_content().strip()
+        case _:
+            log.debug("Could not find title in page, scraper needs updating")
 
     # date
     if raw_date := video_page.xpath(
@@ -238,9 +225,20 @@ def scene_from_url(url: str) -> ScrapedScene:
                 "..,", ""
             ),
             "%B %d, %Y",
-        ).isoformat()
+        ).strftime("%Y-%m-%d")
 
-    # details
+    scene_id = re.sub(r".*\/(\d+)\/?$", r"\1", clean_url)
+    scene["code"] = scene_id
+    scene["url"] = clean_url
+
+    # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
+    # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
+    if video_src := video_page.xpath("//video/source/@src"):
+        studio_ref = re.sub(
+            r".*\.com/(.+?)\/(video|scene).*", r"\1", next(iter(video_src))
+        )
+        scene["studio"] = {"name": STUDIO_MAP.get(studio_ref, studio_ref)}
+
     if description := video_page.xpath(
         '//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'
     ):
@@ -248,19 +246,13 @@ def scene_from_url(url: str) -> ScrapedScene:
             [p.strip() for p in description if len(p.strip())]
         )
 
-    # tags
     if tags := video_page.xpath('//a[contains(@href, "-tag")]'):
         scene["tags"] = [{"name": tag.text} for tag in iter(tags)]
 
-    # performers
     if performers := video_page.xpath(
         '//span[contains(.,"Featuring:")]/following-sibling::span/a'
     ):
         scene["performers"] = [{"name": p.text} for p in iter(performers)]
-
-    # code
-    scene_id = re.sub(r".*\/(\d+)\/?$", r"\1", clean_url)
-    scene["code"] = scene_id
 
     # image
     if image_url := best_quality_scene_image(scene_id):

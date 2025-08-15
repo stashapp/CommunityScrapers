@@ -8,14 +8,6 @@ performerByURL:
     url:
       - imdb.com
     scraper: performerScraper
-sceneByName:
-  action: scrapeXPath
-  queryURL: https://www.imdb.com/find?q={}
-  scraper: sceneSearch
-sceneByQueryFragment:
-  action: scrapeXPath
-  queryURL: "{url}"
-  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -29,69 +21,60 @@ movieByURL:
 xPathScrapers:
   performerSearch:
     common:
-      $listAnchor: //div[@class="lister-list"]/div[@class="lister-item mode-detail"]/div[@class="lister-item-content"]/h3/a
+      $listAnchor: //a[./h3]
     performer:
       Name:
-        selector: $listAnchor/text()
+        selector: $listAnchor
+        postProcess:
+          - replace:
+              # Remove result index, like '1. Performer Performerson' and '2. Lady Performerson'
+              - regex: ^\d+\.\s+
+                with: ""
       URL:
         selector: $listAnchor/@href
         postProcess:
           - replace:
               - regex: ^
                 with: https://www.imdb.com
+              # Strip query parameters used for tracking
+              - regex: \?.+$
+                with: ""
   performerScraper:
     performer:
-      Name: //td[@id="overview-top" or @class="name-overview-widget__section"]//h1/span[1]/text()
+      Name: //*[@data-testid="hero__primary-text"]
       Birthdate:
-        selector: //time/@datetime
+        selector: (//li[@data-testid="nm_pd_bl"]//li)[1]
         postProcess:
-          - parseDate: 2006-1-2
+          - parseDate: January 2, 2006
       Image: &imageAttr
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
               - regex: '.*/imdb[^/]*\.png'
                 with:
-      Details:
-        #        selector: //div[@class="name-trivia-bio-text"]/div/text()[1]
-        selector: //span[@class='see-more inline nobr-only']/a/@href
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https://www.imdb.com/"
-          - subScraper:
-              selector: //div[@class="soda odd"]/p/text()
-
-      URL: //div[@id='details-official-sites']/a[contains(text(),'Official Site')]/@href
+      URLs: //li[@data-testid="details-officialsites"]//a[@target="_blank"]/@href
       #     Facebook:  //div[@id='details-official-sites']/a[contains(text(),'Facebook')]/@href
-      Instagram: //div[@id='details-official-sites']/a[contains(@href,"instagram.com/")]/@href
       Aliases:
-        selector: //div[@id="details-akas"]/h4/following-sibling::text()
+        selector: //li[@data-testid="nm_pd_ans"]//li | //span[contains(text(), "Nicknames")]/following-sibling::*//li/span
         concat: "|"
         postProcess:
           - replace:
               - regex: '\|+'
                 with: ", "
+          - javascript: |
+              return [...new Set(
+                value.split(',')
+                  .map(s => s.trim())
+                  .filter(s => s)
+              )]
+              .sort((a, b) => a.localeCompare(b))
+              .join(', ');
       Height:
-        selector: //div[@id="details-height"]/h4/following-sibling::text()
+        selector: //li[@data-testid="nm_pd_he"]//li
         postProcess:
           - replace:
-              - regex: (.+)\s*\(.+$
-                with: $1
-          - feetToCm: true
-
-  sceneSearch:
-    common:
-      $scenerow: //h3[text() = "Titles"]/following-sibling::table//tr[contains(@class, 'findResult')]
-    scene:
-      Title: $scenerow//td[@class='result_text']
-      URL:
-        selector: $scenerow//td[@class='result_text']/a/@href
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://imdb.com
-      Image: $scenerow//td[@class='primary_photo']//img/@src
+              - regex: \D
+                with: ""
 
   sceneScraper:
     scene:
@@ -141,5 +124,5 @@ xPathScrapers:
 driver:
   headers:
     - Key: User-Agent
-      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0
 # Last Updated August 13, 2022
