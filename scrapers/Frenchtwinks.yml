@@ -15,7 +15,7 @@ xPathScrapers:
             - regex: .*\/(\d+)\/\d+\.jpg
               with: "fta$1"
       Details:
-        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article/h2 | //div[@class="vid_txt_block2 vid_txt_block2017"]/article/p//text() | //div[@class="vid_txt_block2 vid_txt_block2017"]/article/p//br
+        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article/*/text()
         concat: "\n\n"
       Date:
         selector: //time[@datetime]
