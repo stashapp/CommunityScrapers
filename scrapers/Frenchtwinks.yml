@@ -26,7 +26,7 @@ xPathScrapers:
         postProcess:
           - replace:
             - regex: .*\/(\d+)\/0?(\d+)\.jpg
-              with: "https://www.french-twinks.com/img/gay-video/fullsize/video-gay_$1-$2.jpg"
+              with: "https://www.french-twinks.com/img/gay-video/fullsize/video-gay_$1-1.jpg"
       Studio:
         Name:
           fixed: French Twinks
