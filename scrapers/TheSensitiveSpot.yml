@@ -10,7 +10,7 @@ xPathScrapers:
     scene:
       Title: //div[@class="contentD"]/h1
       Date:
-        selector: //div[@class="contentT"]/ul[@class="contentInfo"]/li[2]/text()
+        selector: //ul[@class="contentInfo"]/li[i[contains(@class, 'fa-calendar')]]/text()
         postProcess:
           - parseDate: Jan 2, 2006
       Details: //div[contains(@class, 'videoDescription')]/p[string-length(normalize-space(.)) > 0]
@@ -22,3 +22,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: "The Sensitive Spot"
+
