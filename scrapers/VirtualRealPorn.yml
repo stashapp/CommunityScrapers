@@ -59,13 +59,11 @@ xPathScrapers:
               - regex: VR [\s\w]+? video$
                 with: ""
       Date: &dateAttr
-        selector: //div[@class="featured_data"]/text()
-        concat: " "
+        selector: //script[@type="application/ld+json"]/text()
         postProcess:
           - replace:
-              - regex: '.* (\w+ \d+, \d{4}).*'
+              - regex: .*"datePublished"\s*:\s*"([^"T]+).*
                 with: $1
-          - parseDate: Jan 2, 2006
       Details: &detailsSel
         selector: //div[@class="description_container"]/p
         concat: "\n\n"
@@ -99,12 +97,12 @@ xPathScrapers:
                 VirtualRealAmateurPorn: "VirtualRealAmateur"
       Image: &imageSel //meta[@property="og:image"]/@content
       URL: //link[@rel="canonical"]/@href
-      Code: 
+      Code:
         selector: //link[@rel="shortlink"]/@href
         postProcess:
           - replace:
-            - regex: ^https://.*/\?p=
-              with:
+              - regex: ^https://.*/\?p=
+                with:
       # Movies:
       #   Name:
       #     selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
