@@ -1,4 +1,4 @@
-name: luxePlayhouse
+name: luxeplayhouse
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -21,7 +21,7 @@ xPathScrapers:
       Performers:
         Name: //ul[@class="luxe-list"][1]/li/a
       Tags:
-        Name: //ul[@id="tag-list"]/li/a
+        Name: //ul[@id="tag-list"]/li/a[not(@id)]
       Image:
         selector: //div[@class="item-video-thumb bTRAILER"]/@data-videoposter
 # Last Updated August 15, 2025
