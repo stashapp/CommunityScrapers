@@ -195,8 +195,10 @@ def get_studio(site: str) -> ScrapedStudio:
 
 def get_code(site: str, raw_scene: dict) -> str | None:
     log.debug(site)
-    if site == "allanal.com" and (trailer := dig(raw_scene, "trailer_url")):
-        return re.sub(r".+(aa\d+).+", r"\1", trailer)
+    if (trailer := dig(raw_scene, "trailer_url")) and (
+        match := re.search(r"/(\w{2,3}\d{4})", trailer)
+    ):
+        return match.group(1)
 
     if _id := dig(raw_scene, "id"):
         return str(_id)
