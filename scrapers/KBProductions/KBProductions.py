@@ -193,6 +193,15 @@ def get_studio(site: str) -> ScrapedStudio:
     return studio
 
 
+def get_code(site: str, raw_scene: dict) -> str | None:
+    log.debug(site)
+    if site == "allanal.com" and (trailer := dig(raw_scene, "trailer_url")):
+        return re.sub(r".+(aa\d+).+", r"\1", trailer)
+
+    if _id := dig(raw_scene, "id"):
+        return str(_id)
+
+
 def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     # Convert dict keys to lower case because, of couse, they can come in differently depending on studio.
     raw_performer = {key.lower(): value for key, value in raw_performer.items()}
@@ -339,8 +348,8 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
         scene["date"] = date[:10].replace("/", "-")
     if details := raw_scene.get("description"):
         scene["details"] = strip_tags(details)
-    if scene_id := raw_scene.get("id"):
-        scene["code"] = str(scene_id)
+    if code := get_code(site, raw_scene):
+        scene["code"] = code
     if models := raw_scene.get("models_thumbs"):
         scene["performers"] = [
             {
