@@ -198,9 +198,10 @@ def scene_from_url(url: str) -> ScrapedScene | None:
     if not (api_headers := _create_headers()):
         return None
 
-    if (photoset := __raw_photoset_from_api(set_id, api_headers)) and not (
-        clip_id := dig(photoset, "clip_id")
-    ):
+    if not (photoset := __raw_photoset_from_api(set_id, api_headers)):
+        return
+
+    if not (clip_id := dig(photoset, "clip_id")):
         log.error("Unable to scrape: this photoset has no associated video")
         return
 
@@ -216,6 +217,8 @@ def scene_from_url(url: str) -> ScrapedScene | None:
 
     # Using the clip_id is pointless here since those URLs do not resolve
     scene["code"] = set_id
+    if not dig(scene, "details") and (description := dig(photoset, "description")):
+        scene["details"] = description
 
     return scene
 
