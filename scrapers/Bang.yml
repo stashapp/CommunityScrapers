@@ -53,8 +53,8 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-              - regex: (.+)(\?.+)
-                with: $1
+              - regex: ^
+                with: https://i.bang.com
       Date:
         selector: //p[contains(text(),"Date:")]/text()
         postProcess:
@@ -64,7 +64,7 @@ xPathScrapers:
           - parseDate: Jan 2 2006
       Tags:
         Name:
-          selector: //div[@class="actions"]/a
+          selector: //a[@class="genres"]
       Performers:
         Name: $performer
         URL:
