@@ -1,4 +1,4 @@
-name: Naughty America Experimental
+name: Naughty America
 sceneByURL:
   - action: scrapeJson
     url: &urls
