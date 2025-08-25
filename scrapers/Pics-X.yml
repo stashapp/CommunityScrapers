@@ -16,7 +16,7 @@ xPathScrapers:
               - regex: .+"name":"([^"]+)".+
                 with: $1
       Details:
-        selector: //div[@id="pornstar-details-container"]//p[not last()]
+        selector: //div[@id="pornstar-details-container"]//p[@class="content"][1]
         concat: "\n\n"
       Gender:
         selector: $perf
@@ -53,7 +53,6 @@ xPathScrapers:
           - replace:
               - regex: ";"
                 with: ","
-      Piercings:
       Aliases: //strong[text()="Aliases:"]/following-sibling::text()
       HairColor: //strong[text()="Hair color:"]/following-sibling::text()
       Height:
