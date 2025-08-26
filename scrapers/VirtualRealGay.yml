@@ -72,7 +72,7 @@ xPathScrapers:
                 VirtualRealAmateurPorn: "VirtualRealAmateur"
       Image: &imageSel //meta[@property="og:image"]/@content
       URL: //link[@rel="canonical"]/@href
-      Code: 
+      Code:
         selector: //link[@rel="shortlink"]/@href
         postProcess:
           - replace:
