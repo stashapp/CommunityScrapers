@@ -37,17 +37,9 @@ xPathScrapers:
       Date:
         selector: //script[@type="application/ld+json" and @class="yoast-schema-graph"]/text()
         postProcess:
-          - javascript: |
-              if (value && value.length && value.startsWith('{')) {
-                // parse JSON
-                return JSON.parse(value)["@graph"]
-                  .find(item => item["@type"] === "WebPage")
-                  .datePublished
-                  // return YYYY-MM-DD format from full ISO datetime, e.g. 2024-01-01T12:00:00Z
-                  .substring(0, 10)
-              }
-              // return as-is if not JSON
-              return value
+          - replace:
+              - regex: .*"datePublished"\s*:\s*"([^"T]+).*
+                with: $1
       Details:
         selector: //div[@class="description_container"]/p
         concat: "\n\n"
