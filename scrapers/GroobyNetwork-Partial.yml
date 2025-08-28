@@ -256,6 +256,8 @@ xPathScrapers:
           //div[@class="trailerposter"]/img/@src0
           |
           //div[@id="fakeplayer"]//img/@src
+          |
+          //div[@class="trailer_video"]//video/@data-poster
         concat: __SEPARATOR__
         postProcess:
           - replace:
@@ -267,6 +269,8 @@ xPathScrapers:
                 with: content/
               - regex: __SEPARATOR__ # remove the separator we added to process the canonical link and relative image URL together
                 with: ''
+              - regex: (\d+).jpg
+                with: $1-full.jpg # get the highest res version of the image
       Tags:
         Name:
           selector: &tagsSel //div[@class="set_tags"]/ul/li//a/text()
@@ -313,4 +317,4 @@ xPathScrapers:
 # Use CDP with a configured proxy to bypass region-based age-verification
 driver:
   useCDP: false
-# Last Updated August 13, 2025
+# Last Updated August 28, 2025
