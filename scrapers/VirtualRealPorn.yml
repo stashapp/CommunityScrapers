@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: VirtualRealPorn
 
 sceneByURL:
@@ -69,21 +70,18 @@ xPathScrapers:
         concat: "\n\n"
       Tags:
         Name:
-          selector: //div[@class="metaHolder"]//a/span/text()|//script[@type="application/ld+json"][contains(text(),"genre")]/text()
+          selector: >-
+            //div[@class="metaHolder"]//a/span/text()
+            |
+            //script[@type="application/ld+json" and not(@class="yoast-schema-graph")]/text()
+          concat: ", "
           postProcess:
-            - javascript: |
-                if (value && value.length && value.startsWith('{')) {
-                  // parse JSON
-                  return JSON.parse(value)
-                    .genre
-                    .split(', ')
-                    // can only return one tag, find or default
-                    .find(v => v.toLowerCase() === 'virtual reality')
-                        ?? 'Virtual Reality'
-                } else {
-                  // return (text of tag) as-is
-                  return value
-                }
+            - replace:
+                - regex: \{.*\"keywords\"\s*:\s*\"([^\"]+)\".*
+                  with: $1
+                - regex: "[Vv][Rr] ?[Pp]orn"
+                  with: Virtual Reality
+          split: ", "
       Performers:
         Name: //div[@class="performers_section"]//div[@class="model-box"]/a/img/@alt
       Studio:
@@ -94,9 +92,9 @@ xPathScrapers:
                 - regex: \.com
                   with: ""
             - map:
-                VirtualRealAmateurPorn: "VirtualRealAmateur"
+                VirtualRealAmateurPorn: VirtualRealAmateur
       Image: &imageSel //meta[@property="og:image"]/@content
-      URL: //link[@rel="canonical"]/@href
+      URL: //link[@rel="alternate" and @hreflang="x-default"]/@href
       Code:
         selector: //link[@rel="shortlink"]/@href
         postProcess:
@@ -164,4 +162,7 @@ xPathScrapers:
               }
               return value
       Image: //div[@class="feature_img_model"]/img/@src
-# Last Updated June 2, 2025
+# sites now have age-checking and geoblocking, so we can use CDP (with VPN/proxy) to bypass it
+driver:
+  useCDP: false
+# Last Updated August 26, 2025

@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: VirtualRealTrans
 
 sceneByFragment:
@@ -27,64 +28,55 @@ sceneByFragment:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: &titleDef
+      Title:
         selector: //div[@class="header_video"]//h1
         postProcess:
           - replace:
               - regex: VR [\s\w]+? video$
                 with: ""
-      Date: &dateAttr
-        selector: //div[@class="featured_data"]/text()
-        concat: " "
+      Date:
+        selector: //script[@type="application/ld+json" and @class="yoast-schema-graph"]/text()
         postProcess:
           - replace:
-              - regex: '.* (\w+ \d+, \d{4}).*'
+              - regex: .*"datePublished"\s*:\s*"([^"T]+).*
                 with: $1
-          - parseDate: Jan 2, 2006
-      Details: &detailsSel
+      Details:
         selector: //div[@class="description_container"]/p
         concat: "\n\n"
       Tags:
         Name:
-          selector: //div[@class="metaHolder"]//a/span/text()|//script[@type="application/ld+json"][contains(text(),"genre")]/text()
+          selector: >-
+            //div[@class="metaHolder"]//a/span/text()
+            |
+            //script[@type="application/ld+json" and not(@class="yoast-schema-graph")]/text()
+          concat: ", "
           postProcess:
-            - javascript: |
-                if (value && value.length && value.startsWith('{')) {
-                  // parse JSON
-                  return JSON.parse(value)
-                    .genre
-                    .split(', ')
-                    // can only return one tag, find or default
-                    .find(v => v.toLowerCase() === 'virtual reality')
-                        ?? 'Virtual Reality'
-                } else {
-                  // return (text of tag) as-is
-                  return value
-                }
+            - replace:
+                - regex: \{.*\"keywords\"\s*:\s*\"([^\"]+)\".*
+                  with: $1
+                - regex: "[Vv][Rr] ?[Pp]orn"
+                  with: Virtual Reality
+          split: ", "
       Performers:
         Name: //div[@class="performers_section"]//div[@class="model-box"]/a/img/@alt
       Studio:
-        Name: &studioName
+        Name:
           selector: //meta[@property="og:site_name"]/@content
           postProcess:
             - replace:
                 - regex: \.com
                   with: ""
             - map:
-                VirtualRealAmateurPorn: "VirtualRealAmateur"
-      Image: &imageSel //meta[@property="og:image"]/@content
-      URL: //link[@rel="canonical"]/@href
+                VirtualRealAmateurPorn: VirtualRealAmateur
+      Image: //meta[@property="og:image"]/@content
+      URL: //link[@rel="alternate" and @hreflang="x-default"]/@href
       Code: 
         selector: //link[@rel="shortlink"]/@href
         postProcess:
           - replace:
             - regex: ^https://.*/\?p=
               with:
-      # Movies:
-      #   Name:
-      #     selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
-      #     concat: " - "
-      #   Date: *dateAttr
-      #   Synopsis: *detailsSel
-      #   URL: //meta[@property="og:url"]/@content
-# Last Updated April 29, 2025
+# sites now have age-checking and geoblocking, so we can use CDP (with VPN/proxy) to bypass it
+driver:
+  useCDP: false
+# Last Updated August 26, 2025
