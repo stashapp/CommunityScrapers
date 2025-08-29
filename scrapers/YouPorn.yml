@@ -26,7 +26,7 @@ xPathScrapers:
           - parseDate: Published on January 2, 2006
       Image: //meta[@property='og:image']/@content
       Studio:
-        Name: //div[@class='watchTopInfoPanelTable']//a[@href[contains(.,'channel/')]]/text()
+        Name: //div[@class='watchTopInfoPanelTable']//div[@class="submitByLink"]/a/text()
       Tags:
         Name: $tags//a[@href[contains(.,'category/') or contains(.,'porntags/')]]/text()
       Performers:
