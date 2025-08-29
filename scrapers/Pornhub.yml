@@ -1,7 +1,7 @@
 name: Pornhub
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.pornhub.com/pornstars/search?search={}
+  queryURL: https://www.pornhub.com/video/search?search={}&o=mr
   scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
@@ -54,9 +54,9 @@ xPathScrapers:
         Name: $searchThumb//div[contains(@class, "usernameWrap")]/a[matches(@href, "/(channels|model|pornstar)/")]
   performerSearch:
     performer:
-      Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
+      Name: //div[@class="userCardNameBlock"]//a[@class="username"]/text()
       URL:
-        selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
+        selector: //div[@class="userCardNameBlock"]//a[@class="username"]/@href
         postProcess:
           - replace:
               - regex: ^
