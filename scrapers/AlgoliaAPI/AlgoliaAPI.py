@@ -258,12 +258,12 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         scene["movies"] = [movie_from_api_scene(scene_from_api, site)]
         # log out scene number
         try:
+            movie_title = scene_from_api.get("movie_title")
             clip_path = scene_from_api.get("clip_path")
-            log.debug(f"clip_path: {clip_path}")
             [_, scene_number] = clip_path.split("_")
             # it may be possible to populate the Scene Number field in the stash scene via a hook
             # or something, but for now just log it out as an editing aid
-            log.info(f"Scene number: {int(scene_number)}")
+            log.info(f"{movie_title}, Scene #{scene_number}")
         except Exception as e:
             log.error(f"Could not determine scene number: {e}")
     if categories := scene_from_api.get("categories"):
