@@ -29,6 +29,7 @@ T = TypeVar('T')
 CONFIG_FILE = 'AlgoliaAPI.ini'
 FIXED_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
+TRANSFORM_IMAGE_CDN = "https://transform.gammacdn.com"
 
 
 def slugify(text: str) -> str:
@@ -135,7 +136,7 @@ def parse_gender(gender: str) -> str:
 def movie_cover_image_url(cover_path: str, position: Literal["front", "back"]) -> str:
     "Gets corresponding value from map, else returns argument value"
     return (
-        "https://transform.gammacdn.com/movies"
+        f"{TRANSFORM_IMAGE_CDN}/movies"
         f"{cover_path}_{position}_400x625.jpg?width=450&height=636"
     )
 
@@ -255,6 +256,16 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         scene["studio"] = { "name": studio_name }
     if scene_from_api.get("movie_id"):
         scene["movies"] = [movie_from_api_scene(scene_from_api, site)]
+        # log out scene number
+        try:
+            movie_title = scene_from_api.get("movie_title")
+            clip_path = scene_from_api.get("clip_path")
+            [_, scene_number] = clip_path.split("_")
+            # it may be possible to populate the Scene Number field in the stash scene via a hook
+            # or something, but for now just log it out as an editing aid
+            log.info(f"{movie_title}, Scene #{scene_number}")
+        except Exception as e:
+            log.error(f"Could not determine scene number: {e}")
     if categories := scene_from_api.get("categories"):
         scene["tags"] = name_values_as_list(categories)
     if actors := scene_from_api.get("actors"):
@@ -275,7 +286,7 @@ def actors_to_performers(actors: list[dict[str, Any]], site: str) -> list[Scrape
     "Converts API actors to list of ScrapedPerformer"
     return [
         {
-            "name": actor.get("name"),
+            "name": actor.get("name").strip(),
             "gender": parse_gender(actor.get("gender")),
             "urls": [ performer_url(site, actor.get("url_name"), actor.get("actor_id")) ]
         }
@@ -470,7 +481,7 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | N
     # photosets have their own cover image
     if picture := api_hit.get("picture"):
         # just log this out, to aid user in selecting the cover image
-        log.info(f"Cover image: {IMAGE_CDN}/photo_set{picture}")
+        log.info(f"Cover image: {TRANSFORM_IMAGE_CDN}/photo_set{picture}")
     return gallery
 
 def gallery_from_set_id(
