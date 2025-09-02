@@ -29,6 +29,7 @@ T = TypeVar('T')
 CONFIG_FILE = 'AlgoliaAPI.ini'
 FIXED_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
+TRANSFORM_IMAGE_CDN = "https://transform.gammacdn.com"
 
 
 def slugify(text: str) -> str:
@@ -135,7 +136,7 @@ def parse_gender(gender: str) -> str:
 def movie_cover_image_url(cover_path: str, position: Literal["front", "back"]) -> str:
     "Gets corresponding value from map, else returns argument value"
     return (
-        "https://transform.gammacdn.com/movies"
+        f"{TRANSFORM_IMAGE_CDN}/movies"
         f"{cover_path}_{position}_400x625.jpg?width=450&height=636"
     )
 
@@ -470,7 +471,7 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | N
     # photosets have their own cover image
     if picture := api_hit.get("picture"):
         # just log this out, to aid user in selecting the cover image
-        log.info(f"Cover image: {IMAGE_CDN}/photo_set{picture}")
+        log.info(f"Cover image: {TRANSFORM_IMAGE_CDN}/photo_set{picture}")
     return gallery
 
 def gallery_from_set_id(
