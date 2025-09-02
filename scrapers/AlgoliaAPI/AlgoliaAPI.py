@@ -275,7 +275,7 @@ def actors_to_performers(actors: list[dict[str, Any]], site: str) -> list[Scrape
     "Converts API actors to list of ScrapedPerformer"
     return [
         {
-            "name": actor.get("name"),
+            "name": actor.get("name").strip(),
             "gender": parse_gender(actor.get("gender")),
             "urls": [ performer_url(site, actor.get("url_name"), actor.get("actor_id")) ]
         }
