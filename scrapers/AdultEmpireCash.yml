@@ -1,5 +1,5 @@
 name: AdultEmpireCash
-# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Forbidden Fruits Films, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, Severe Sex Films, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
+# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, Severe Sex Films, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
 # Sites ("Brands") from https://www.adultempirecash.com
 sceneByURL:
   - action: scrapeXPath
@@ -12,6 +12,7 @@ sceneByURL:
       - concoxxxion.com/
       - elegantangel.com/
       - forbiddenfruitsfilms.com/
+      - helixstudios.com/
       - hornyhousehold.com/
       - hotwifefun.com/
       - hotwivescheating.com/
@@ -47,6 +48,7 @@ movieByURL:
       - elegantangel.com/
       - filthykings.com/
       - forbiddenfruitsfilms.com/
+      - helixstudios.com/
       - lewood.com/
       - rodneymoorestore.com
       - severesexfilms.com/
