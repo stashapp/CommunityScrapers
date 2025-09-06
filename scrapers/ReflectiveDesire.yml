@@ -61,7 +61,7 @@ xPathScrapers:
   sceneScraper:
     common:
       $performers: //div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/performers")]
-      $tags: //div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/categories")]
+      $tags: //div[@class="item-text"]/p[@class="text-attributes"]/span/a
     scene:
       Title: //div[contains(@class, "title-container")]/h1
       Code: //section[@class="single-video"]/article[contains(@class, "video")]/@data-video-id
