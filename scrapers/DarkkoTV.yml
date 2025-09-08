@@ -1,0 +1,44 @@
+name: DarkkoTV
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - darkkotv.com/scenes/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //div[@class="vidImidWrap"]
+    scene:
+      Title:
+        selector: //h4[@class="text_light"]
+        postProcess:
+          - replace:
+            - regex: ^\s+
+              with: ""
+            - regex: \s+$
+              with: ""
+      Details:
+        selector: $content//div[@class="vidImgContent text_light"]/p//text()
+        concat: " ​"
+      Date:
+        selector: $content//i[@class="fa-solid fa-calendar"]/../../text()
+        postProcess:
+          - parseDate: 01-02-2006
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Darkko TV
+      Tags:
+        Name: //div[@class="blogTags"]/ul/li/a/text()
+      Performers:
+        Name: $content//i[@class="mlisti fa-solid fa-user text_med s_icon"]/../a/text()
+
+driver:
+  cookies:
+    - CookieURL: "https://darkkotv.com"
+      Cookies:
+        - Name: "warn"
+          Domain: "darkkotv.com"
+          Value: "true"
+          Path: "/"
