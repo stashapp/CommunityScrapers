@@ -86,7 +86,7 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "https:"
-      Image: &imageSel //div[contains(@class, "single-video-poster__preview")]/img/@src|//meta[@property="og:image"]/@content
+      Image: &imageSel //section[@id='video-page-banner']/picture/div[contains(concat(' ',normalize-space(@class),' '),' app-image ')]/img/@src
       URL: //link[@rel="canonical"]/@href
     gallery:
       Title: *titleAttr
@@ -142,4 +142,4 @@ xPathScrapers:
 # you can use (a suitably configured) CDP to make use of a proxy/VPN to bypass region-based age-restriction
 # driver:
 #   useCDP: true
-# Last Updated April 11, 2025
+# Last Updated Sept 10, 2025
