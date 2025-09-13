@@ -51,7 +51,7 @@ jsonScrapers:
       # pattern is predictable enough that we can construct an image URL from the promo/trailer link
       Image:
         # Grab the trailer or the promo video, whichever is available
-        selector: "[$scene.trailers.@values.0,$scene.promo_video_data.@values.0].0"
+        selector: '[{"vid":data.0.trailers.@values.0},{"vid":data.0.promo_video_data.@values.0}].#(vid!=null).vid'
         postProcess:
           - javascript: |
               console.log(value);
