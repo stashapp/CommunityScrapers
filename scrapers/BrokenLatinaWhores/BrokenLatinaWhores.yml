@@ -27,7 +27,7 @@ xPathScrapers:
       Performers:
         Name:
           selector: $model/text()
-        URL:
+        URLs:
           selector: $model/@href
       Tags:
         Name: //span[@class="update_tags"]/a
@@ -38,5 +38,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Broken Latina Whores
-
-# Last Updated March 16, 2024
+# Last Updated September 17, 2025

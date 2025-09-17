@@ -46,7 +46,7 @@ xPathScrapers:
       $perfomerRoot: //div[@id="performerlist"]//a
     performer:
       Name: $perfomerRoot/@label
-      URL:
+      URLs:
         selector: $perfomerRoot/@href
         postProcess:
           - replace:
@@ -123,7 +123,7 @@ xPathScrapers:
         Name: //strong[contains(text(), "Attributes")]/following-sibling::a/text()
       Performers:
         Name: //strong[contains(text(), "Starring")]/following-sibling::a/text()
-        URL:
+        URLs:
           selector: //strong[contains(text(), "Starring")]/following-sibling::a/@href
           postProcess:
             - replace:
@@ -157,7 +157,7 @@ xPathScrapers:
         Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]/text()
       Performers:
         Name: //a[@label="Performer"]//text()
-        URL:
+        URLs:
           selector: //a[@label="Performer"]/@href
           postProcess:
             - replace:
@@ -202,7 +202,7 @@ xPathScrapers:
               - regex: "Alias: (.*)"
                 with: $1
       Details: $modal//h2[contains(text(), "Biography")]/following-sibling::p
-      URL: //link[@rel='canonical']/@href
+      URLs: //link[@rel='canonical']/@href
 
 driver:
   cookies:
@@ -231,4 +231,4 @@ driver:
           Domain: "www.adultdvdempire.com"
           Value: "" # replace with your account etoken
           Path: "/"
-# Last Updated March 11, 2025
+# Last Updated September 17, 2025

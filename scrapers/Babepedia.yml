@@ -19,7 +19,7 @@ xPathScrapers:
               - regex: "aka(\\s+[A-Z]+)"
                 with: " aka $1"
 
-      URL:
+      URLs:
         selector: //span[@class="results"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
         postProcess:
           - replace:
@@ -35,7 +35,7 @@ xPathScrapers:
       Name: //h1[@id="babename"]
       Gender:
         fixed: "Female"
-      URL:
+      URLs:
         selector: //head/meta[@property="og:url"]/@content | //div[@id='socialicons']/a/@href
         postProcess:
           - replace:
@@ -148,3 +148,4 @@ xPathScrapers:
               - regex: _thumb\d+
                 with: ""
       Details: //p[@id="biotext"]
+# Last Updated September 17, 2025

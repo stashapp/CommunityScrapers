@@ -27,7 +27,7 @@ xPathScrapers:
         selector: //div[@class='content-information-description']/p/text()
       Performers:
         Name: //*[span[@class='heading' and contains(.,'Starring')]]/span[@class='content']/a
-        URL: //*[span[@class='heading' and contains(.,'Starring')]]/span[@class='content']/a/href()
+        URLs: //*[span[@class='heading' and contains(.,'Starring')]]/span[@class='content']/a/href()
       Studio:
         Name:
           selector: //div[@class='logo-holder']/a/@href
@@ -81,5 +81,4 @@ driver:
           Value: "hide"
           Domain: "www.jawked.com"
           Path: "/"
-
-# Last Updated May 22, 2024
+# Last Updated September 17, 2025

@@ -116,7 +116,7 @@ xPathScrapers:
                 with: ""
       Gender:
         fixed: female
-      URL: //link[@rel='canonical']/@href
+      URLs: //link[@rel='canonical']/@href
       Twitter: //a[contains(@class,'social-media') and contains (@href,'x.com')]/@href
       Instagram: //a[contains(@class,'social-media') and contains (@href,'instagram.com')]/@href
       Ethnicity:
@@ -156,3 +156,4 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
+# Last Updated September 17, 2025

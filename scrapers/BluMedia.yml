@@ -51,7 +51,7 @@ xPathScrapers:
                   with:
       Performers:
         Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
-        URL:
+        URLs:
           selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
           postProcess:
             - replace:
@@ -90,7 +90,7 @@ xPathScrapers:
         Name: //meta[@name="Author"]/@content
       Performers:
         Name: //div[@class="vid-dtls"]/div[@class="vid-models"]/a
-        URL:
+        URLs:
           selector: //div[@class="vid-dtls"]/div[@class="vid-models"]/a/@href
           postProcess:
             - replace:
@@ -138,7 +138,7 @@ xPathScrapers:
       Studio: *studioFromTitle
       Performers:
         Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
-        URL:
+        URLs:
           selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
           postProcess:
             - replace:
@@ -194,4 +194,4 @@ xPathScrapers:
           - replace:
               - regex: .*\)\s*(.*)
                 with: $1
-# Last Updated June 7, 2025
+# Last Updated September 17, 2025

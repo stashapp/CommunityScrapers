@@ -21,7 +21,7 @@ xPathScrapers:
         Name: //strong[contains(text(),"Categorized Under:")]/following-sibling::a/text()
       Performers:
         Name: //div[@class="movieModels"]/span/a[@class="name gothamy"]/@title
-        URL:
+        URLs:
           selector: //div[@class="movieModels"]/span/a[@class="name gothamy"]/@href
           postProcess:
             - replace:
@@ -50,4 +50,4 @@ xPathScrapers:
         # CockyBoys only has profile pages for male performers
         fixed: Male
       Image: //div[@id="modelInfo"]/img/@src
-# Last Updated September 20, 2024
+# Last Updated September 17, 2025
