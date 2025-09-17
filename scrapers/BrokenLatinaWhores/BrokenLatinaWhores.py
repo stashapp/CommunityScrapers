@@ -2,7 +2,6 @@ import re
 import sys
 import requests
 import json
-from datetime import datetime
 from urllib.parse import urlparse
 
 try:
@@ -44,16 +43,17 @@ def performer_by_url():
         return {}
 
     tree = html.fromstring(scraped.content)
-    image = tree.xpath('//div[contains(@class, "model_picture")]/img/@src0_3x')[0].strip()
-    image = '{uri.scheme}://{uri.netloc}/{img}'.format(uri=urlparse(scraped.url), img=image[1:])
+
+    _first_scene_year = int(tree.xpath('//span[@class="availdate"]/text()')[-1].strip().split('/')[-1])
+    _first_performed_age = int(re.search(r"Age:\s*([0-9]{2})", "".join(tree.xpath('//div[@class="model_bio"]/text()')), re.DOTALL | re.IGNORECASE).group(1))
+
     name = tree.xpath('//meta[@name="keywords"]/@content')[0].strip().capitalize()
-    birthdate = re.search("([0-9]{2})", "".join(tree.xpath('//div[@class="model_bio"]/text()'))).group(0)
-    birthdate = datetime.now().replace(year=datetime.now().year - int(birthdate)).replace(month=1, day=1).strftime(
-        '%Y-%m-%d')
+    image = '{uri.scheme}://{uri.netloc}/{img}'.format(uri=urlparse(scraped.url), img=tree.xpath('//div[contains(@class, "model_picture")]/img/@src0_3x')[0][1:])
+    birthdate = f"{_first_scene_year - _first_performed_age}-01-01"
 
     return {
-        "Image": image,
         "Name": name,
+        "Image": image,
         "Disambiguation": "Broken Latina Whores",
         "Gender": "Female",
         "Birthdate": birthdate,
@@ -66,5 +66,4 @@ if sys.argv[1] == "performerByURL":
 else:
     log.error("Unknown argument passed: " + sys.argv[1])
     print("{}")
-
-# Last Updated March 16, 2024
+# Last Updated September 17, 2025
