@@ -78,7 +78,7 @@ xPathScrapers:
         Name: //div[@class="approved-tags"]/a
       Performers:
         Name: $actor/@title
-        URL:
+        URLs:
           selector: $actor//a/@href
           postProcess:
             - replace:
@@ -101,7 +101,7 @@ xPathScrapers:
         Name: //div[@class="approved-tags"]/a
       Performers:
         Name: $actor/@title
-        URL:
+        URLs:
           selector: $actor//a/@href
           postProcess:
             - replace:
@@ -111,7 +111,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //div[@class="search-results"][not(preceding::h2[@class="no-results"])]//a/@title
-      URL:
+      URLs:
         selector: //div[@class="search-results"][not(preceding::h2[@class="no-results"])]//div[@id="search-results-wrapper"]//a/@href
         postProcess:
           - replace:
@@ -149,4 +149,4 @@ xPathScrapers:
       Details:
         selector: //div[@class="description translated-text"]//child::text()
         concat: "\n\n"
-# Last Updated November 03, 2022
+# Last Updated September 17, 2025

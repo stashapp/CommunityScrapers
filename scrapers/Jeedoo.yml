@@ -61,7 +61,7 @@ xPathScrapers:
       Image: //img[contains(@class,"mainimage")][@rel="1"]/@src
       Performers:
         Name: //a[@title="Cast"]/text()
-        URL:
+        URLs:
           selector: //a[@title="Cast"]/@href
           postProcess:
             - replace:
@@ -79,4 +79,4 @@ xPathScrapers:
               - regex: ^
                 with: "https://www.jeedoo.com"
       Image: $searchItem/img/@data-src
-# Last Updated June 14, 2022
+# Last Updated September 17, 2025

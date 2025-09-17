@@ -20,7 +20,7 @@ xPathScrapers:
         selector: //div[@class='desc frame']
       Performers:
         Name: //span[@class='value']/a
-        URL: //span[@class='value']/a/@href
+        URLs: //span[@class='value']/a/@href
       Studio:
         Name:
           fixed: MilfTugs
@@ -69,5 +69,5 @@ xPathScrapers:
       Measurements:
         selector: //span[contains(text(),'Measurements:')]/following-sibling::span
 
-      URL: //link[@rel="canonical"]/@href
-# Last Updated September 05, 2021
+      URLs: //link[@rel="canonical"]/@href
+# Last Updated September 17, 2025

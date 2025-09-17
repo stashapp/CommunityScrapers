@@ -59,7 +59,7 @@ xPathScrapers:
         Name: //span[@class="update_tags"]/a/text()
       Performers: &performersAttr
         Name: $details//span[@class="update_models"]/a/text()|$galinfo//span[@class="update_models"]/div/a/text()
-        URL: $details//span[@class="update_models"]/a/@href|$galinfo//span[@class="update_models"]/div/a/@href
+        URLs: $details//span[@class="update_models"]/a/@href|$galinfo//span[@class="update_models"]/div/a/@href
       Studio: &studioAttr
         Name:
           selector: //base/@href
@@ -107,7 +107,7 @@ xPathScrapers:
         Name: $scene//a[contains(@href, "categories")]/text()
       Performers: &newPerformersAttr
         Name: $scene//a[contains(@href, "models")]/text()
-        URL: $scene//a[contains(@href, "models")]/@href
+        URLs: $scene//a[contains(@href, "models")]/@href
       Studio: *studioAttr
       Movies:
         Name: $scene//span[contains(., "Movie:")]/following-sibling::a/text()
@@ -157,4 +157,4 @@ xPathScrapers:
         Name:
           fixed: Jules Jordan Video
       FrontImage: //img[contains(@class, "dvd_box")]/@src0_3x
-# Last Updated September 19, 2023
+# Last Updated September 17, 2025

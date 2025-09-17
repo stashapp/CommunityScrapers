@@ -67,7 +67,7 @@ xPathScrapers:
         Name: //nav//h1
       Performers: &performers
         Name: //h2/a
-        URL:
+        URLs:
           selector: //h2/a/@href
           postProcess:
             - replace:
@@ -156,4 +156,4 @@ xPathScrapers:
               WI: "USA"
               WV: "USA"
               WY: "USA"
-# Last Updated November 10, 2022
+# Last Updated September 17, 2025

@@ -39,7 +39,7 @@ xPathScrapers:
           fixed: Guys In Sweatpants
       Performers:
         Name: $content/div[@class="meta"]//a/text()
-        URL:
+        URLs:
           selector: $content/div[@class="meta"]//a/@href
           postProcess: *ppPrependOrigin
   performerScraper:
@@ -94,4 +94,4 @@ driver:
           Domain: .guysinsweatpants.com
           Value: "true"
           Path: "/"
-# Last Updated September 28, 2023
+# Last Updated September 17, 2025

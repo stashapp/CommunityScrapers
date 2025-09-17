@@ -62,11 +62,11 @@ xPathScrapers:
         Name: //div[@class='video-tags']/a/text()
       Performers:
         Name: //div[@class='featured']/a/text()
-        URL: //div[@class='featured']/a/@href
+        URLs: //div[@class='featured']/a/@href
   performerSearch:
     performer:
       Name: //h3/../a/@title
-      URL: //h3/../a/@href
+      URLs: //h3/../a/@href
   performerScraper:
     performer:
       Name: //div[@class="bio"]//h2/text()
@@ -169,4 +169,4 @@ xPathScrapers:
                 with: ""
       Gender:
         fixed: "Female"
-# Last Updated April 13, 2023
+# Last Updated September 17, 2025

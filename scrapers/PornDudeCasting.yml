@@ -21,7 +21,7 @@ xPathScrapers:
       Name: &pName //div[@class="model__head-name"]/text()
       Gender:
         fixed: "Female"
-      URL: &pURL //head/meta[@property="og:url"]/@content
+      URLs: &pURL //head/meta[@property="og:url"]/@content
       Twitter:
         selector: $mHead//a[@class='card__user-social-link twitter']/@href
         postProcess:
@@ -66,7 +66,7 @@ xPathScrapers:
       Title: //h1
       Performers:
         Name: *pName
-        URL: *pURL
+        URLs: *pURL
       Details:
         selector: //span[@class="desc icon"]/div/text()
         concat: "\n"
@@ -88,4 +88,4 @@ xPathScrapers:
               - regex: \s(\d\d:){2}\d\d
                 with: ""
           - parseDate: 2006-01-02
-# Last Updated April 01, 2024
+# Last Updated September 17, 2025

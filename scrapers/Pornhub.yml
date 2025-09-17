@@ -55,7 +55,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
-      URL:
+      URLs:
         selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
         postProcess:
           - replace:
@@ -111,7 +111,7 @@ xPathScrapers:
           - replace:
               - regex: \s+to\s+
                 with: "-"
-      URL: //link[@rel="canonical"][1]/@href
+      URLs: //link[@rel="canonical"][1]/@href
       Image: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
   sceneScraper:
     common:
@@ -164,4 +164,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated June 11, 2025
+# Last Updated September 17, 2025

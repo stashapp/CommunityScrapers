@@ -17,7 +17,7 @@ xPathScrapers:
     performer:
       Image: $resultBox//img/@src
       Name: $resultBox//a[@class="usernameLink"]/text()
-      URL:
+      URLs:
         selector: $resultBox//a[@class="usernameLink"]/@href
         postProcess:
           - replace:
@@ -73,7 +73,7 @@ xPathScrapers:
           - replace:
               - regex: \s+to\s+
                 with: "-"
-      URL: //link[@rel="canonical"][1]/@href
+      URLs: //link[@rel="canonical"][1]/@href
       Image: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
 
 driver:
@@ -84,4 +84,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated April 21, 2025
+# Last Updated September 17, 2025
