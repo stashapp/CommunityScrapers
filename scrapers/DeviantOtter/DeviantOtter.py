@@ -1,6 +1,6 @@
 import sys
 import json
-import lxml.html
+import lxml
 import re
 from scrapers.py_common.browser import get_html, get_iframe_content
 
