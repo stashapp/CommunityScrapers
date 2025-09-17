@@ -529,10 +529,6 @@
           "description": "Must be one of (case insensitive): `male`, `female`, `transgender_male`, `transgender_female`, `intersex`, `non_binary`",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
-        "URL": {
-          "title": "Performer URL",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
         "URLs": {
           "title": "Performer URLs",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
