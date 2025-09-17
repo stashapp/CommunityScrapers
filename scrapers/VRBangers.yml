@@ -138,8 +138,8 @@ xPathScrapers:
       Aliases: $modelInfoItem/span[text()="Aka:"]/following-sibling::span/text()
       Twitter: $modelLinks/a[contains(@href, "twitter")]/@href
       Instagram: $modelLinks/a[contains(@href, "instagram")]/@href
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
 # you can use (a suitably configured) CDP to make use of a proxy/VPN to bypass region-based age-restriction
 # driver:
 #   useCDP: true
-# Last Updated April 11, 2025
+# Last Updated September 17, 2025

@@ -43,7 +43,7 @@ xPathScrapers:
           selector: //*[text()='Categorias:']/following-sibling::p/a/text()
       Performers:
         Name: $performer/text()
-        URL: $performer/@href
+        URLs: $performer/@href
         Image: $performer/div[@class="img"]/img/@src
   movieScrapper:
     common:
@@ -56,4 +56,4 @@ xPathScrapers:
     performer:
       Name: //div[@class="titleGeral"]/div[1]/text()
       Image: //div[@class="photo"]/img/@src
-# Last Updated January 05, 2024
+# Last Updated September 17, 2025
