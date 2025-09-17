@@ -47,7 +47,7 @@ def performer_by_url():
     _first_scene_year = int(tree.xpath('//span[@class="availdate"]/text()')[-1].strip().split('/')[-1])
     _first_performed_age = int(re.search(r"Age:\s*([0-9]{2})", "".join(tree.xpath('//div[@class="model_bio"]/text()')), re.DOTALL | re.IGNORECASE).group(1))
 
-    name = tree.xpath('//meta[@name="keywords"]/@content')[0].strip().capitalize()
+    name = re.sub(r"^\s*/\s*", "", tree.xpath('//div[@class="updatesBlock"]/h2/text()')[0])
     image = '{uri.scheme}://{uri.netloc}/{img}'.format(uri=urlparse(scraped.url), img=tree.xpath('//div[contains(@class, "model_picture")]/img/@src0_3x')[0][1:])
     birthdate = f"{_first_scene_year - _first_performed_age}-01-01"
 
