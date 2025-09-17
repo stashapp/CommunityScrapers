@@ -1,0 +1,9 @@
+name: Maverick Men
+sceneByURL:
+  - action: script
+    url:
+      - vod.maverickmen.com/
+    script:
+      - python
+      - MaverickMen.py
+# Last Updated September 17, 2025

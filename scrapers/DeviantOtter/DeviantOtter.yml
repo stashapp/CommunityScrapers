@@ -1,0 +1,9 @@
+name: Deviant Otter
+sceneByURL:
+  - action: script
+    url:
+      - vod.deviantotter.com/
+    script:
+      - python
+      - DeviantOtter.py
+# Last Updated September 17, 2025

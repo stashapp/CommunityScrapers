@@ -1,0 +1,9 @@
+name: Gaysonic
+sceneByURL:
+  - action: script
+    url:
+      - gaysonic.eu/
+    script:
+      - python
+      - Gaysonic.py
+# Last Updated September 17, 2025

@@ -1,0 +1,9 @@
+name: Tetatita
+sceneByURL:
+  - action: script
+    url:
+      - tetatita.com/
+    script:
+      - python
+      - Tetatita.py
+# Last Updated September 17, 2025
