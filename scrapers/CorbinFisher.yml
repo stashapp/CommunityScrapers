@@ -3,7 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - corbinfisher.com/sfw/trailers
-      - corbinfisher.com/tour/sfw/trailers
+      - corbinfisher.com/tour/trailers
     scraper: sceneScraper
 
 performerByURL:
