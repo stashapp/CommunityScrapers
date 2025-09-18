@@ -45,7 +45,7 @@ xPathScrapers:
             fixed: JoyBear
       Performers:
         Name: //div[@class="castModels"]//a/span
-        URL:
+        URLs:
           selector: //div[@class="castModels"]//a/@href
           postProcess: *makeAbsolute
       Tags:
@@ -79,4 +79,4 @@ xPathScrapers:
       URL:
         selector: //div[@class="allVideos"]/a/@href
         postProcess: *makeAbsolute
-# Last Updated May 24, 2024
+# Last Updated September 17, 2025

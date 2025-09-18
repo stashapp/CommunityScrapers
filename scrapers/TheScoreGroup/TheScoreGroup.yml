@@ -241,7 +241,7 @@ xPathScrapers:
       Name: //h1[@class="model-title"]
       Gender:
         fixed: Female
-      URL: //meta[@property="og:url"]/@content
+      URLs: //meta[@property="og:url"]/@content
       Ethnicity:
         selector: //span[text()="Ethnicity:"]/following-sibling::span
         postProcess:
@@ -267,4 +267,4 @@ xPathScrapers:
               - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
                 with: $1$2
       Image: //section[@id="model-page"]//img[@class="lazyload"]/@src
-# Last Updated April 24, 2025
+# Last Updated September 17, 2025

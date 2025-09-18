@@ -154,7 +154,7 @@ xPathScrapers:
       $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
     performer:
       Name: $result/img/@alt
-      URL:
+      URLs:
         selector: $result/@href
         postProcess:
           - replace:
@@ -163,4 +163,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated March 9, 2025
+# Last Updated September 17, 2025

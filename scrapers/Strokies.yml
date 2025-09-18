@@ -31,7 +31,7 @@ xPathScrapers:
         Name: //div[@class='model-tags']//a[contains(@href,"tag")]
       Performers:
         Name: //div[@class='model-tags']//a[contains(@href,"model")]
-        URL:
+        URLs:
           selector: //div[@class='model-tags']//a[contains(@href,"model")]/@href
           postProcess:
             - replace:
@@ -39,4 +39,4 @@ xPathScrapers:
                   with: https://strokies.com
 driver:
   useCDP: true
-# Last Updated January 20, 2023
+# Last Updated September 17, 2025

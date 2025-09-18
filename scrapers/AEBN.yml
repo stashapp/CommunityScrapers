@@ -23,7 +23,7 @@ xPathScrapers:
         postProcess:
           - map:
               TS: transgender_female
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Birthdate:
         selector: //div[@class='section-detail dts-list-attributes']/ul/li[contains(.,"Birth Date")]
         postProcess:
@@ -133,4 +133,4 @@ driver:
           Domain: "straight.aebn.com"
           Value: ""
           Path: "/"
-# Last Updated July 06, 2022
+# Last Updated September 17, 2025

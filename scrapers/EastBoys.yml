@@ -23,7 +23,7 @@ xPathScrapers:
       Performers:
         Name:
           selector: $perf/span/a/text()
-        URL:
+        URLs:
           selector: $perf/span/a/@href
           postProcess:
             - replace:
@@ -36,4 +36,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: EastBoys
-# Last Updated July 27, 2025
+# Last Updated September 17, 2025

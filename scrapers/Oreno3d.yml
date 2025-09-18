@@ -52,5 +52,5 @@ xPathScrapers:
         URL: $aTag[contains(@href,"/authors/")]/@href
       Performers:
         Name: $aTag[contains(@href,"/characters/")]/div/text()
-        URL: $aTag[contains(@href,"/characters/")]/@href
-# Last Updated November 25, 2022
+        URLs: $aTag[contains(@href,"/characters/")]/@href
+# Last Updated September 17, 2025

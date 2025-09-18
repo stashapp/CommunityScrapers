@@ -131,7 +131,7 @@ xPathScrapers:
         selector: $profile/span[contains(text(),"Height:")]/following-sibling::text()
         postProcess:
           - feetToCm: true
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Details:
         selector: //div[@class="model_bio_info"]/text()
       Image:
@@ -141,4 +141,4 @@ xPathScrapers:
           - replace:
               - regex: "[|].+?tour1/"
                 with:
-# Last Updated October 20, 2023
+# Last Updated September 17, 2025

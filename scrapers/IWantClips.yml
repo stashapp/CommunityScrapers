@@ -80,7 +80,7 @@ xPathScrapers:
     performer:
       Name: $artist//h5/a/text()
       Image: $artist//a/div/img/@src
-      URL: $artist//h5/a/@href
+      URLs: $artist//h5/a/@href
 
 driver:
   useCDP: true
@@ -90,4 +90,4 @@ driver:
           Value: "on"
           Domain: .iwantclips.com
           Path: /
-# Last Updated April 16, 2025
+# Last Updated September 17, 2025

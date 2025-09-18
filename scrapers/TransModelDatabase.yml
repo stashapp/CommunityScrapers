@@ -16,7 +16,7 @@ xPathScrapers:
       $listAnchor: //article[@class="tease tease-model"]/a
     performer:
       Name: $listAnchor/@title
-      URL: $listAnchor/@href
+      URLs: $listAnchor/@href
 
   performerScraper:
     common:
@@ -52,5 +52,5 @@ xPathScrapers:
       Piercings: $infoPiece/tr/td[text()="Piercing"]/following-sibling::td
       Tattoos: $infoPiece/tr/td[text()="Tattoos"]/following-sibling::td
       Measurements: $infoPiece/tr/td[text()="Measurements"]/following-sibling::td
-      URL: //span[@itemprop="name"]/@href
-# Last Updated October 12, 2022
+      URLs: //span[@itemprop="name"]/@href
+# Last Updated September 17, 2025

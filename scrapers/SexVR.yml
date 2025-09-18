@@ -17,13 +17,13 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //div[@class="item-col item--pornstar col"]//a/@title
-      URL: //div[@class="item-col item--pornstar col"]//a/@href
+      URLs: //div[@class="item-col item--pornstar col"]//a/@href
   performerScraper:
     common:
       $info: //div[@class="profile-info"]
     performer:
       Name: $info//li[@class="profile-field profile-field-name"]/span[@class="sub-desc"]/text()
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Gender:
         selector: //meta[@name="application-name"]/@content
         postProcess:
@@ -82,5 +82,4 @@ xPathScrapers:
       Studio:
         Name: //span[@class="studio-name"]//text()
       Image: //dl8-video/@poster
-
-# Last Updated November 10, 2020
+# Last Updated September 17, 2025

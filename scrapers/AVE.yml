@@ -49,7 +49,7 @@ xPathScrapers:
           - parseDate: 1/2/2006
       Performers:
         Name: $performer
-        URL: $performer/@href
+        URLs: $performer/@href
       Tags:
         Name: $singleInfo[contains(span,"Category")]/span[@class="value-category"]/a
       Details:
@@ -66,4 +66,4 @@ xPathScrapers:
       Studio:
         Name: $singleInfo[contains(span,"Studio")]/span[@class="value"]/a
       URL: //link[@rel="canonical"]/@href
-# Last Updated November 19, 2021
+# Last Updated September 17, 2025

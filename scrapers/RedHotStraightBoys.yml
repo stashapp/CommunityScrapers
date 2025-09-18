@@ -19,7 +19,7 @@ xPathScrapers:
       Performers:
         Name:
           selector: //span[@class='tour_update_models']/a/text()
-        URL:
+        URLs:
           selector: //span[@class='tour_update_models']/a/@href
       Details:
         selector: //span[@class='latest_update_description']/text()
@@ -38,4 +38,4 @@ xPathScrapers:
         fixed: Male
       Image:
         selector: //img[contains(@class,'model_bio_thumb')]/@src0_2x
-# Last Updated October 14, 2023
+# Last Updated September 17, 2025

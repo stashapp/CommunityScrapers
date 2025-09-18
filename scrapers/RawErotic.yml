@@ -37,7 +37,7 @@ xPathScrapers:
         Name:
           fixed: Superbe Models
       Performers:
-        URL: &performerURL //div[@class='-mvd-grid-actors']//a/@href
+        URLs: &performerURL //div[@class='-mvd-grid-actors']//a/@href
         Name: //div[@class='-mvd-grid-actors']//a[contains(@href,'/models')]
         Gender: &performerGender
           fixed: Female
@@ -105,10 +105,11 @@ xPathScrapers:
           fixed: Superbe Models
       Performers:
         Name: //div[@class='-a-panel-actors']//a
-        URL: &performerSelector
+        URLs: &performerSelector
           selector: //div[@class='-a-panel-actors']//a/@href
           postProcess:
             - replace:
                 - regex: "^"
                   with: "https://superbemodels.com"
         Gender: *performerGender
+# Last Updated September 17, 2025

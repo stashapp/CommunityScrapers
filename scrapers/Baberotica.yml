@@ -29,7 +29,7 @@ xPathScrapers:
         selector: //h5/a | //h1[@itemprop="name"] | //div[@class="rel"]/img/@alt
       Performers:
         Name: //p/span[@itemprop="actor"]/a/span | //div[@class="cat"][1]/a/text()
-        URL: //div[@class="cat"][1]/a/@href | //span[@itemprop="actor"]/a/@href
+        URLs: //div[@class="cat"][1]/a/@href | //span[@itemprop="actor"]/a/@href
       Date:  &Date
       # vrpornpass.com does not currently provide the scene published date on the non-paid site
         selector: //div[contains(@class, "pure-u-1")]//meta[@itemprop="datePublished"]/@content | //div[@class="video-date"]
@@ -83,7 +83,7 @@ xPathScrapers:
         selector: //h1
       Performers:
         Name: //div[@class="model-thumb"]//h5/a/text()
-        URL: //div[@class="model-thumb"]//h5/a/@href
+        URLs: //div[@class="model-thumb"]//h5/a/@href
       Tags:
         Name: //div[@class="cat"]/a
       Studio: 
@@ -219,7 +219,7 @@ xPathScrapers:
           - replace:
               - regex: ... Read More
                 with:
-      URL: 
+      URLs:
         selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href | //div[@class="model-info"]/a/@href
         postProcess:
           - replace:
@@ -235,4 +235,4 @@ xPathScrapers:
                 with: 690x960
               - regex: 270x480
                 with: 405x720
-# Last Updated April 27, 2025
+# Last Updated September 17, 2025

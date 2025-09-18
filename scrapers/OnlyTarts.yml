@@ -28,4 +28,5 @@ xPathScrapers:
         Name: //a[contains(@class, "tags__item")]
       Performers:
         Name: $desktopDetails//div[contains(@class, "video-info__text")]//a[contains(@href, "/model")]
-        URL: $desktopDetails//div[contains(@class, "video-info__text")]//a[contains(@href, "/model")]/@href
+        URLs: $desktopDetails//div[contains(@class, "video-info__text")]//a[contains(@href, "/model")]/@href
+# Last Updated September 17, 2025

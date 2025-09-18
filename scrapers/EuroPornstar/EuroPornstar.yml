@@ -15,7 +15,7 @@ xPathScrapers:
       Name:
         selector: //div[contains(@class, 'thum')]//text()|//strong[@class='name']/text()
 
-      URL:
+      URLs:
         selector: //div[@class='list-pics']/a/@href
         postProcess:
           - replace:
@@ -36,7 +36,7 @@ xPathScrapers:
       Name: //strong[@class='name']/text()
       Gender:
         fixed: "Female"
-      URL: //head/meta[@property='og:url']/@content
+      URLs: //head/meta[@property='og:url']/@content
       Birthdate:
         selector: //div[@class='about-info']//div[@class='parameter-row']//span[text()='Birth date:']/following-sibling::strong/text()
         concat: " "
@@ -175,7 +175,4 @@ xPathScrapers:
                 - regex: '\?'
                   with: ""
           split: ","
-
-
-
-# Last Updated July 23, 2024
+# Last Updated September 17, 2025

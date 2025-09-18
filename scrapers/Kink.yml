@@ -164,7 +164,7 @@ xPathScrapers:
       $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
     performer:
       Name: $result/img/@alt
-      URL:
+      URLs:
         selector: $result/@href
         postProcess:
           - replace:
@@ -259,7 +259,7 @@ xPathScrapers:
               tsman: Transgender Male
               nonbinary: Non-Binary
               unknown: ""
-      URL:
+      URLs:
         selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
         concat: "__SEP__"
         postProcess:
@@ -269,4 +269,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated March 9, 2025
+# Last Updated September 17, 2025

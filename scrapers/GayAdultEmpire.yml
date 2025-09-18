@@ -79,7 +79,7 @@ xPathScrapers:
         Name: //div[h2[contains(.,'Categories')]]//a[@label="Category"]
       Performers:
         Name: //a[@label="Performer"]
-        URL:
+        URLs:
           selector: //a[@label="Performer"]/@href
           postProcess:
             - replace:
@@ -112,7 +112,7 @@ xPathScrapers:
                   with: https://www.gaydvdempire.com
       Performers:
         Name: //a[@label="Clip Performer"]
-        URL:
+        URLs:
           selector: //a[@label="Clip Performer"]/@href
           postProcess:
             - replace:
@@ -152,4 +152,4 @@ driver:
           Domain: "www.gayempire.com"
           Value: "" # replace with your account etoken
           Path: "/"
-# Last Updated April 14, 2025
+# Last Updated September 17, 2025

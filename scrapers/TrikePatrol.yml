@@ -52,7 +52,7 @@ xPathScrapers:
     performer:
       Name:
         selector: //div[@class='by-left']/a
-      URL:
+      URLs:
         selector: //div[@class='by-left']/a/@href
 
   performerScraper:
@@ -86,5 +86,5 @@ xPathScrapers:
         selector: //span[contains(text(),'Measurements:')]/following-sibling::text()
       Details: //div[@class='model-desc']
 
-      URL: //link[@rel="canonical"]/@href
-# Last Updated August 08, 2021
+      URLs: //link[@rel="canonical"]/@href
+# Last Updated September 17, 2025

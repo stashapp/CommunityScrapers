@@ -18,7 +18,7 @@ xPathScrapers:
 
     performer:
       Name: $result/h3/text()
-      URL:
+      URLs:
         selector: $result/@href
         postProcess:
           - replace:
@@ -31,8 +31,8 @@ xPathScrapers:
       Image: //div[@id="app"]//div[contains(@class, "w-full")]/img/@src
       Tags:
         Name: //div[@id="app"]//div[@class="w-auto text-sm mt-4"]/div/a/button/text()
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Details:
         selector: //div[@class="prose"]/p/text()
         concat: ""
-# Last Updated August 26, 2024
+# Last Updated September 17, 2025

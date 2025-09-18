@@ -32,7 +32,7 @@ xPathScrapers:
           - replace:
               - regex: " Porn$"
                 with: ""
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Country:
         selector: //li[contains(text(), "Birthplace:")]/span/text()
         postProcess:
@@ -122,4 +122,4 @@ xPathScrapers:
             - replace:
                 - regex: ".*Not Added Yet.*"
                   with: ""
-# Last Updated May 01, 2022
+# Last Updated September 17, 2025

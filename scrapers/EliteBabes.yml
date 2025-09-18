@@ -13,7 +13,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //ul//a[contains(@href,"model/")]//text()
-      URL: //ul//a[contains(@href,"model/")]/@href
+      URLs: //ul//a[contains(@href,"model/")]/@href
 
   performerScraper:
     common:
@@ -40,5 +40,5 @@ xPathScrapers:
         concat: ", "
       HairColor: $infoPiece[text() = 'Hair Color:']/../text()
       Details: //div/p[@class='read-more-wrap']
-      URL: //link[@rel='canonical']/@href
-# Last Updated August 15, 2022
+      URLs: //link[@rel='canonical']/@href
+# Last Updated September 17, 2025

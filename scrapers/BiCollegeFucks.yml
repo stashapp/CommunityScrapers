@@ -25,7 +25,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Performers:
         Name: //div[@class="modelFeaturing"]//a
-        URL: //div[@class="modelFeaturing"]//a/@href
+        URLs: //div[@class="modelFeaturing"]//a/@href
       Details:
         selector: //div[@class="description"]/p
         concat: "\n\n"
@@ -211,4 +211,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated January 18, 2025
+# Last Updated September 17, 2025

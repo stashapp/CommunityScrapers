@@ -21,7 +21,7 @@ xPathScrapers:
         Name: //li[contains(text(), "Tags:")]/following-sibling::li/a/text()
       Performers:
         Name: $performer
-        URL: $performer/@href
+        URLs: $performer/@href
       Image:
         selector: $image/@src0_4x | $image/@src0_3x | $image/@src0_2x | $image/@src0_1x | //script[contains(text(),"src0_3x")]/text()
         postProcess:
@@ -35,4 +35,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Girls.Dreamnet.com
-# Last Updated December 19, 2024
+# Last Updated September 17, 2025

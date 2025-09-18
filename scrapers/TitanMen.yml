@@ -36,7 +36,7 @@ xPathScrapers:
                 Rough: TitanMen Rough
       Performers:
         Name: $details//strong[starts-with(text(), "Starring")]/following-sibling::a/text()
-        URL:
+        URLs:
           selector: $details//strong[starts-with(text(), "Starring")]/following-sibling::a/@href
           postProcess:
             - replace:
@@ -73,5 +73,4 @@ xPathScrapers:
         Name: //div[contains(@class, "movie-page-detail")]//strong[starts-with(text(), "Studio")]/following-sibling::a
       Director: //div[contains(@class, "movie-page-detail")]//strong[starts-with(text(), "Director")]/following-sibling::a
       FrontImage: //div[contains(@class, "box-cover")]//img/@src
-# Last Updated January 07, 2024
-
+# Last Updated September 17, 2025

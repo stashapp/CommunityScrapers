@@ -37,7 +37,7 @@ xPathScrapers:
     performer:
       Name:
         selector: $listAnchor/@title
-      URL:
+      URLs:
         selector: $listAnchor/@href
         postProcess:
           - replace:
@@ -83,7 +83,7 @@ xPathScrapers:
               - regex: ^/
                 with: https://www.ashemaletube.com/
           - subScraper: //link[@rel="alternate"][1]/@href
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
 
   sceneSearch:
     common:
@@ -119,7 +119,7 @@ xPathScrapers:
             - replace:
                 - regex: \n\t(.*)\n
                   with: $1
-        URL:
+        URLs:
           selector: //a[@class="model-card"]/@href
           postProcess:
             - replace:
@@ -127,4 +127,4 @@ xPathScrapers:
                   with: https://www.ashemaletube.com/
       Image: //meta[@property="og:image"]/@content
       URL: //meta[@property="og:url"]/@content
-# Last Updated February 18, 2025
+# Last Updated September 17, 2025

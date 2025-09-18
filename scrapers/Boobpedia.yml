@@ -12,7 +12,7 @@ jsonScrapers:
   performerSearch:
     performer:
       Name: query.search.#.title
-      URL:
+      URLs:
         selector: query.search.#.title
         postProcess:
           - replace:
@@ -125,7 +125,7 @@ xPathScrapers:
                 - replace:
                     - regex: ^
                       with: https://www.boobpedia.com
-      URL:
+      URLs:
         selector: //script[contains(.,"wgPageName")]
         postProcess:
           - replace:
@@ -444,4 +444,4 @@ xPathScrapers:
               "Zambian": "Zambia"
               "Zimbabwean": "Zimbabwe"
               "Åland Island": "Åland Islands"
-# Last Updated December 30, 2022
+# Last Updated September 17, 2025

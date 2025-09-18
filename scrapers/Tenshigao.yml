@@ -33,7 +33,7 @@ xPathScrapers:
           - parseDate: January 02, 2006
       Performers:
         Name: $model//h5
-        URL: $model//h5/a/@href
+        URLs: $model//h5/a/@href
       Tags:
         Name: //div[@class="cat"]/a
       Details:
@@ -148,7 +148,7 @@ xPathScrapers:
         fixed: Asian
       Gender:
         fixed: Female
-      URL: //link[@rel="canonical"][1]/@href
+      URLs: //link[@rel="canonical"][1]/@href
       Image:
         selector: //img[@class="smallroundedthumbs"]/@src
         postProcess:
@@ -167,4 +167,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Tenshigao
-# Last Updated November 07, 2023
+# Last Updated September 17, 2025

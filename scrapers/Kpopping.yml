@@ -27,7 +27,7 @@ xPathScrapers:
               Boy groups: male
               Female idols: female
               Male idols: male
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Twitter:
         selector: //a[contains(@class, "fa-twitter")]/@href
         postProcess:
@@ -79,4 +79,4 @@ xPathScrapers:
       Details:
         selector: //div[@class="box encyclopedia"]/h2[contains(., "Introduction to ")]/following-sibling::p/text()
         concat: "\r\n\r\n"
-# Last Updated April 29, 2022
+# Last Updated September 17, 2025

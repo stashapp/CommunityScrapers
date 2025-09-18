@@ -38,7 +38,7 @@ xPathScrapers:
           - parseDate: "2 Jan 2006"
       Performers: &performers
         Name: //div[contains(@class, "shoot-title")]//a
-        URL:
+        URLs:
           selector: //div[contains(@class, "shoot-title")]//a/@href
           postProcess: &prependHost
             - replace:
@@ -111,3 +111,4 @@ xPathScrapers:
       Details: *details
       Tags: *tags
       Studio: *studio
+# Last Updated September 17, 2025

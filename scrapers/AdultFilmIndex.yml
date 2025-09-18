@@ -46,7 +46,7 @@ xPathScrapers:
           - replace:
               - regex: '.*"gender":"(\w{1,})".*'
                 with: '$1'
-      URL: //head/link[@rel='canonical']/@href
+      URLs: //head/link[@rel='canonical']/@href
       Birthdate:
         selector: //strong[text()='Date of Birth:']/..
         postProcess:
@@ -164,6 +164,4 @@ driver:
       Value: stashjson/1.0.0
     - Key: Authorization # Beta key, enabled and active for now
       Value: Bearer 4vY0iwSUVPH5cGAX1AUZarJ8pbuDUK53
-# Last Updated June 22, 2022
-
-
+# Last Updated September 17, 2025

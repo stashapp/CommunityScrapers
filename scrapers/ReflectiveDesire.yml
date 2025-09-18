@@ -37,7 +37,7 @@ xPathScrapers:
           - parseDate: "January 2006"
       Performers:
         Name: $performers
-        URL:
+        URLs:
           selector: $performers/@href
           postProcess:
             - replace:
@@ -57,7 +57,7 @@ xPathScrapers:
       Image: //link[@rel="image_src"]/@href
       Twitter: $socialLinks/a[contains(@href,"https://twitter.com")]/@href
       Instagram: $socialLinks/a[contains(@href,"https://instagram.com/")]/@href
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
   sceneScraper:
     common:
       $performers: //div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/performers")]
@@ -80,7 +80,7 @@ xPathScrapers:
       URL: //link[@rel="canonical"]/@href
       Performers:
         Name: $performers
-        URL:
+        URLs:
           selector: $performers/@href
           postProcess:
             - replace:
@@ -95,4 +95,4 @@ xPathScrapers:
                 - regex: ',\s+'
                   with: ","
           split: ","
-# Last Updated January 11, 2024
+# Last Updated September 17, 2025

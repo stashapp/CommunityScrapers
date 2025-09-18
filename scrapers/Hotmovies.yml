@@ -87,13 +87,13 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //div[@id="performerlist"]//picture/img/@title
-      URL:
+      URLs:
         selector: //div[@id="performerlist"]//a[@class="performer-grid-list__performer__thumb"]/@href
         postProcess: *baseUrl
       Image: //div[@id="performerlist"]//picture/img/@src
   performerScraper:
     performer:
-      URL: //meta[@name="og:url"]/@content
+      URLs: //meta[@name="og:url"]/@content
       Name: //meta[@name="og:title"]/@content
       Gender: //meta[@property="og:profile:gender"]/@content
       Birthdate:
@@ -166,5 +166,4 @@ driver:
       Value: stash-scraper
     - Key: Cookie
       Value: ageConfirmed=true
-# Last Updated December 17, 2024
-
+# Last Updated September 17, 2025

@@ -42,7 +42,7 @@ xPathScrapers:
                   with: $1
       Performers:
         Name: $performer//h5/text()
-        URL:
+        URLs:
           selector: $performer/@href
           postProcess: &appendDomain
             - replace:
@@ -114,4 +114,4 @@ xPathScrapers:
               - regex: '[^\s]+ \((.*) cms\).*$'
                 with: $1
       Image: *imageAttr
-# Last Updated December 23, 2022
+# Last Updated September 17, 2025

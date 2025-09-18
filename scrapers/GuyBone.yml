@@ -20,7 +20,7 @@ xPathScrapers:
         concat: ' '
       Performers:
         Name: //div[@class='feature']//a
-        URL: 
+        URLs:
           selector: //div[@class='feature']//a/@href
           postProcess:
             - replace:
@@ -73,5 +73,4 @@ xPathScrapers:
       Details:
         selector: //section[@id="one"]//h2/following-sibling::div/div[1]
       Image: //section[@id='banner']//img/@src
-
-# Last Updated June 17, 2024
+# Last Updated September 17, 2025

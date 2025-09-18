@@ -15,7 +15,7 @@ xPathScrapers:
       $result: //div[@class="search models"]//div[@class="item"]/div[@class="thumb"]/a
     performer:
       Name: $result//div[@class="name"]/text()
-      URL:
+      URLs:
         selector: $result/@href
         postProcess:
           - replace:
@@ -27,7 +27,7 @@ xPathScrapers:
       $result: //div[@class="features"]
     performer:
       Name: //div[@class="profile"]//h1/text()
-      URL:
+      URLs:
         selector: //link[@rel="canonical"]/@content
         postProcess:
           - replace:
@@ -82,4 +82,4 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "Cup "
-# Last Updated November 19, 2021
+# Last Updated September 17, 2025

@@ -48,7 +48,7 @@ xPathScrapers:
         Name: //b[text()='Categories:']/following-sibling::a
       Performers:
         Name: $performer
-        URL: $performer/@href
+        URLs: $performer/@href
       Studio:
         Name: $studio
         URL: $studio/@href
@@ -123,7 +123,7 @@ xPathScrapers:
       Director: //p[b[contains(text(),'Director')]]//a[@class='bold']
       Performers:
         Name: $performer
-        URL: $performer/@href
+        URLs: $performer/@href
       Details:
         selector: //b[text()="Description"]/..
         concat: " "
@@ -151,4 +151,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated April 30, 2024
+# Last Updated September 17, 2025
