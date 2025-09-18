@@ -2,13 +2,15 @@ name: Corbin Fisher
 sceneByURL:
   - action: scrapeXPath
     url:
-      - corbinfisher.com
+      - corbinfisher.com/sfw/trailers
+      - corbinfisher.com/tour/sfw/trailers
     scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
     url:
       - corbinfisher.com/tour/models
+      - corbinfisher.com/sfw/models
     scraper: performerScraper
 
 xPathScrapers:
@@ -155,4 +157,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated January 18, 2025
+# Last Updated September 18, 2025
