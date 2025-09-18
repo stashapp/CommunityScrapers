@@ -27,6 +27,8 @@ xPathScrapers:
       Performers:
         Name:
           selector: $model/text()
+        Disambiguation:
+          fixed: Broken Latina Whores
         URLs:
           selector: $model/@href
       Tags:
