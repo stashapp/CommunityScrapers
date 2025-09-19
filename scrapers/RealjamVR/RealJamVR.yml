@@ -1,5 +1,19 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 name: RealJamVR
+sceneByName:
+  action: script
+  script:
+    - python
+    - RealJamVR.py
+    - realjamvr
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - RealJamVR.py
+    - realjamvr
+    - scene-by-fragment
 sceneByURL: &byURL
   - action: scrapeXPath
     url:
