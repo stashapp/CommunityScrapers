@@ -1,8 +1,11 @@
 name: Babepedia
 performerByName:
-  action: scrapeXPath
-  queryURL: https://www.babepedia.com/search/{}
-  scraper: performerSearch
+  action: script
+  script:
+    - python
+    - Babepedia.py
+    - babepedia
+    - performer-by-name
 performerByURL:
   - action: scrapeXPath
     url:
@@ -10,24 +13,6 @@ performerByURL:
     scraper: performerScraper
 
 xPathScrapers:
-  performerSearch:
-    performer:
-      Name:
-        selector: //span[@class="results"]//a[contains(@href, '/babe/')]|//h1[@id="babename"]
-        postProcess:
-          - replace:
-              - regex: "aka(\\s+[A-Z]+)"
-                with: " aka $1"
-
-      URL:
-        selector: //span[@class="results"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://www.babepedia.com
-              - regex: https:\/\/www\.babepedia\.comhttps:\/\/www\.babepedia\.com
-                with: https://www.babepedia.com
-
   performerScraper:
     common:
       $infoblock: //div[@id="personal-info-block"]
@@ -148,3 +133,9 @@ xPathScrapers:
               - regex: _thumb\d+
                 with: ""
       Details: //p[@id="biotext"]
+driver:
+  # Requires CDP to get by the "consent" screen, along with a "CONSENT" cookie with a value of "Y" for each top level URL
+  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
