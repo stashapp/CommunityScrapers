@@ -5,7 +5,6 @@ sceneByName:
   script:
     - python
     - RealJamVR.py
-    - realjamvr
     - scene-by-name
 sceneByQueryFragment:
   action: scrapeXPath
