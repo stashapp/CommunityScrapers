@@ -1,33 +1,43 @@
 name: Babepedia
-performerByName:
-  action: scrapeXPath
-  queryURL: https://www.babepedia.com/search/{}
-  scraper: performerSearch
 performerByURL:
-  - action: scrapeXPath
+  - action: script
     url:
-      - https://www.babepedia.com
-    scraper: performerScraper
+     - www.babepedia.com/babe/
+    script:
+      - python
+      - Babepedia.py
+      - performer-by-url
+performerByName:
+  action: scrapeJson
+  scraper: performerSearch
+  queryURL: https://www.babepedia.com/ajax-search.php?term={}
 
-xPathScrapers:
+jsonScrapers:
   performerSearch:
     performer:
-      Name:
-        selector: //span[@class="results"]//a[contains(@href, '/babe/')]|//h1[@id="babename"]
-        postProcess:
-          - replace:
-              - regex: "aka(\\s+[A-Z]+)"
-                with: " aka $1"
-
+      Name: "#.label"
       URL:
-        selector: //span[@class="results"]//a[contains(@href, '/babe/')]/@href|//meta[@property='og:url']/@content
+        selector: "#.value"
         postProcess:
           - replace:
-              - regex: ^
-                with: https://www.babepedia.com
-              - regex: https:\/\/www\.babepedia\.comhttps:\/\/www\.babepedia\.com
-                with: https://www.babepedia.com
+            - regex: "^"
+              with: "https://www.babepedia.com/babe/"
+            - regex: " "
+              with: "_"
+      # works intermittently, make sure UA is up-to-date
+      Image:
+        selector: "#.value"
+        postProcess:
+          - replace:
+            - regex: "^"
+              with: "https://www.babepedia.com/pics/"
+            - regex: " "
+              with: "%20"
+            - regex: '$'
+              with: ".jpg"
 
+# xpath scraper retained since not all functionality ported over
+xPathScrapers:
   performerScraper:
     common:
       $infoblock: //div[@id="personal-info-block"]
@@ -148,3 +158,5 @@ xPathScrapers:
               - regex: _thumb\d+
                 with: ""
       Details: //p[@id="biotext"]
+
+# Last Updated Sept 20, 2025
