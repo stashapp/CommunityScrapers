@@ -5,9 +5,9 @@ import requests
 from py_common import log
 from py_common.util import scraper_args
 
-def searchSceneByName(_name: str) -> list:
+def searchSceneByName(name: str) -> list:
     myUrl = "https://realjamvr.com/search/" 
-    formData = {"search": _name}
+    formData = {"search": name}
     result = requests.post(url=myUrl, data=formData).json()
 
     returnData = []
@@ -20,16 +20,13 @@ def searchSceneByName(_name: str) -> list:
 
     return returnData
 
-if __name__ == "__main__" or __name__.endswith("Babepedia"):
+if __name__ == "__main__":
     op, args = scraper_args()
     returnValue: list
 
     match op, args:
-        case "scene-by-name", {"name": name, "extra": extra} if name and extra:
-            sites = extra
+        case "scene-by-name", {"name": name} if name:
             returnValue = searchSceneByName(name)
-        case "scene-by-fragment", args:
-            returnValue = args
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
