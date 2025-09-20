@@ -1,5 +1,15 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 name: RealJamVR
+sceneByName:
+  action: script
+  script:
+    - python
+    - RealJamVR.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: "{url}"
 sceneByURL: &byURL
   - action: scrapeXPath
     url:
@@ -25,6 +35,12 @@ xPathScrapers:
           - replace:
               - regex: ^\s+(.+)\s+$
                 with: $1
+      URL:
+        selector: //a[@class='btn btn-m1']/@href
+        postProcess:
+          - replace:
+              - regex: .+next=(.+)
+                with: https://realjamvr.com$1
       Date: &date
         selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
@@ -100,4 +116,4 @@ xPathScrapers:
       Image: //div[contains(@class, "actor-view")]//img/@src
       Piercings: //div[span[text()="Piercing:"]]/text()
       Tattoos: //div[span[text()="Tattoo:"]]/text()
-# Last Updated July 4, 2025
+# Last Updated Sept 19, 2025
