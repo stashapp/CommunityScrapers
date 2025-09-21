@@ -1,0 +1,35 @@
+name: Perverformer
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - perverformer.com/en/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $tags: //main/div[@class="columns"]/div[@class="secondary"]/div[@class="area"]/p/span[@class="nowrap"]
+    scene:
+      Title:
+        selector: //main/div[@class="heading"]/h1
+      Date:
+        selector: //script[@type="application/ld+json"]
+        postProcess:
+          - javascript: |
+              // Parse JSON
+              if (value && value.length) {
+                return JSON.parse(value).uploadDate
+              }
+          - parseDate: 2006-01-02T15:04:05+0000
+      Performers:
+        Name: $tags/a[contains(@href, "/model/")]
+      Tags:
+        Name: $tags/a[not(contains(@href, "/model/"))]
+      Details:
+        selector: //main/div[@class="columns"]/div[@class="secondary"]/div[@class="area"]/span[@class="collapsible-partial"]
+        concat: "\n"
+      Image: //main/div[@class="columns"]/div[@class="primary"]//video/@poster
+      URL: //link[@rel="canonical"]/@href
+      Studio:
+        Name:
+          fixed: perverformer
+# Last Updated September 21, 2025
