@@ -55,7 +55,7 @@ jsonScrapers:
         postProcess:
           - javascript: |
               console.log(value);
-              const match = value.match(/.+(?:promo|\.com)\/(?<prefix>[^/]+)\/(?:trailers(?:\/vr)?\/)?(?<name>[^/_]+).*/);
+              const match = value.match(/.+(?:promo|\.com)\/(?:nonsecure\/)?(?<prefix>[^/]+)\/(?:trailers(?:\/vr)?\/)?(?<name>[^/_]+).*/);
               if (match) {
                 const prefix = match[1];
                 let name = match[2];
