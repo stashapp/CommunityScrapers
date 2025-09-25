@@ -2,25 +2,21 @@ import json
 import re
 import sys
 from datetime import datetime # birthday formatting
-from urllib import parse
 
 import cloudscraper
 from lxml import html
 
 # for image
 import base64
-import requests
 
 import py_common.log as log
 from py_common.util import scraper_args
-from py_common.types import ScrapedPerformer
+from py_common.types import ScrapedPerformer, PerformerSearchResult
 
 scraper = cloudscraper.create_scraper()
 
-FIREFOX_UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0"
-
 def fetch_as_base64(url: str) -> str | None:
-  return base64.b64encode(requests.get(url, headers={ 'User-Agent': FIREFOX_UA }).content).decode('utf-8')
+  return base64.b64encode(scraper.get(url).content).decode('utf-8')
 
 def biography_xpath_test(tree, html_name: str, selector: str) -> str | None:
   elem = tree.xpath(f'//span[contains(text(), "{html_name}")]/following-sibling::span{selector}/text()')
@@ -67,8 +63,9 @@ def performer_from_url(url) -> ScrapedPerformer:
     # get height
     height = biography_xpath_test(tree, "Height", "")
     if height:
-      cm_height = re.search(r'(\d+) cm', height)[1]
-      performer['height'] = cm_height
+      cm_height = re.search(r'(\d+) cm', height)
+      if cm_height:
+        performer['height'] = cm_height[1]
     # get measurements
     measurements = biography_xpath_test(tree, "Measurements", "")
     cup_size = biography_xpath_test(tree, "Bra/cup size", "")
@@ -89,14 +86,29 @@ def performer_from_url(url) -> ScrapedPerformer:
       performer['images'] = [f"data:image/jpg;base64,{b64img}"]
     return performer
 
+def map_performer_search(performer) -> PerformerSearchResult:
+    result: PerformerSearchResult = {
+       "name": performer['label'],
+       "url": f"https://www.babepedia.com/babe/{performer['value']}"
+    }
+    return result
+
+def performer_by_name(name) -> list[PerformerSearchResult]:
+    url = f"https://www.babepedia.com/ajax-search.php?term={name}"
+    scraped = scraper.get(url)
+    scraped.raise_for_status()
+    data = scraped.json()
+    return list(map(map_performer_search,data))
+
 if __name__ == "__main__":
     op, args = scraper_args()
     result = None
     match op, args:
         case "performer-by-url", {"url": url} if url:
             result = performer_from_url(url)
+        case "performer-by-name", {"name": name} if name:
+            result = performer_by_name(name)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
-
     print(json.dumps(result))

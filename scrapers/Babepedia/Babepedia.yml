@@ -8,33 +8,11 @@ performerByURL:
       - Babepedia.py
       - performer-by-url
 performerByName:
-  action: scrapeJson
-  scraper: performerSearch
-  queryURL: https://www.babepedia.com/ajax-search.php?term={}
-
-jsonScrapers:
-  performerSearch:
-    performer:
-      Name: "#.label"
-      URL:
-        selector: "#.value"
-        postProcess:
-          - replace:
-            - regex: "^"
-              with: "https://www.babepedia.com/babe/"
-            - regex: " "
-              with: "_"
-      # works intermittently, make sure UA is up-to-date
-      Image:
-        selector: "#.value"
-        postProcess:
-          - replace:
-            - regex: "^"
-              with: "https://www.babepedia.com/pics/"
-            - regex: " "
-              with: "%20"
-            - regex: '$'
-              with: ".jpg"
+  action: script
+  script:
+    - python
+    - Babepedia.py
+    - performer-by-name
 
 # xpath scraper retained since not all functionality ported over
 xPathScrapers:
@@ -159,4 +137,4 @@ xPathScrapers:
                 with: ""
       Details: //p[@id="biotext"]
 
-# Last Updated Sept 20, 2025
+# Last Updated September 25, 2025
