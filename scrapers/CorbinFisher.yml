@@ -2,13 +2,13 @@ name: Corbin Fisher
 sceneByURL:
   - action: scrapeXPath
     url:
-      - corbinfisher.com
+      - corbinfisher.com/sfw/trailers
     scraper: sceneScraper
 
 performerByURL:
   - action: scrapeXPath
     url:
-      - corbinfisher.com/tour/models
+      - corbinfisher.com/sfw/models
     scraper: performerScraper
 
 xPathScrapers:
@@ -33,8 +33,11 @@ xPathScrapers:
           - replace:
               - regex: <br\s*\/?> 
                 with: "\n"
-      Image:
-        selector: //img[@height="815"]/@src0_1x
+      # Intentionally disabled
+      # https://github.com/stashapp/CommunityScrapers/pull/2496
+      # https://discourse.stashapp.cc/t/sfw-vs-nsfw-covers/3712
+      # Image:
+      #   selector: //img[@height="815"]/@src0_1x
       Studio:
         Name:
           fixed: Corbin Fisher
@@ -155,4 +158,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated January 18, 2025
+# Last Updated September 25, 2025
