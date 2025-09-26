@@ -41,8 +41,7 @@ xPathScrapers:
 driver:
   useCDP: true
   cookies:
-    - CookieURL: "https://francescomalcom.com/"
-      Cookies:
+    - Cookies:
         - Name: "splash"
           Domain: "francescomalcom.com"
           Value: "1"
