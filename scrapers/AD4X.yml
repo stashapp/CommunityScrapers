@@ -2,21 +2,31 @@ name: AD4X
 sceneByURL:
   - action: scrapeXPath
     url:
-      - ad4x.com/tour
+      - ad4x.com/en/videos
+      - ad4x.com/videos
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //title
-      Details:  //div[contains(@class,'description')]
+      Title: //div[contains(@class, 'section-title')]
+      Details: //div[contains(@class,'description')]
       Date:
-        selector: //span[@class='date']
+        selector: //script[contains(text(), '"publish_date"')]/text()
         postProcess:
-          - parseDate: 01/02/2006
-      Image: //video/@poster
+          - replace:
+              - regex: .+publish_date":"(\d{4})\/(\d{2})\/(\d{2}).+
+                with: $1-$2-$3
+      Image:
+        selector: //meta[@property="og:image"]/@content
       Performers:
-        Name: //span[contains(text(),'Starring')]/following-sibling::a/text()
+        Name: //div[contains(@class, 'model-thumb')]/following-sibling::h5/text()
       Studio:
         Name:
           fixed: AD4X
-# Last Updated March 27, 2024
+      Code:
+        selector: //script[contains(text(), '"id"')]/text()
+        postProcess:
+          - replace:
+            - regex: .+"id":(\d+).+
+              with: $1
+# Last Updated September 26, 2025
