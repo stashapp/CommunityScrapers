@@ -178,6 +178,3 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
-
-debug:
-  printHTML: true
