@@ -51,10 +51,6 @@ xPathScrapers:
       Details: //meta[@name="description"]/@content
       Image:
         selector: //meta[@property="og:image"]/@content
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://i.bang.com
       Date:
         selector: //p[contains(text(),"Date:")]/text()
         postProcess:
@@ -138,4 +134,4 @@ xPathScrapers:
           - replace:
               - regex: \?.+$
                 with: ""
-# Last Updated November 21, 2024
+# Last Updated September 26, 2025
