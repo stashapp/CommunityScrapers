@@ -1,0 +1,30 @@
+name: Francesco Malcom
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://francescomalcom.com/product
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: (.+) - FrancescoMalcom.com official content
+                with: $1
+      Details: //p[@class="desc"]
+      Date:
+        fixed: 2021-09-15
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Francesco Malcom
+      Code:
+        selector: //script[contains(text(), 'processedLink')]/text()
+        postProcess:
+          - replace:
+            - regex: .+product\/(\d+)\/.+
+              with: $1
+# Last Updated September 26, 2025
