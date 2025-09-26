@@ -7,15 +7,18 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $next_data: //script[@id="__NEXT_DATA__"]
     scene:
       Title: //div[contains(@class, 'section-title')]
       Details: //div[contains(@class,'description')]
       Date:
-        selector: //script[contains(text(), '"publish_date"')]/text()
+        selector: $next_data/text()
         postProcess:
           - replace:
-              - regex: .+publish_date":"(\d{4})\/(\d{2})\/(\d{2}).+
-                with: $1-$2-$3
+              - regex: '.+"content":{(?:[^}]+)"publish_date":"(\d{4}\/\d{2}\/\d{2}).+'
+                with: $1
+          - parseDate: 2006/01/02
       Image:
         selector: //meta[@property="og:image"]/@content
       Performers:
@@ -24,9 +27,9 @@ xPathScrapers:
         Name:
           fixed: AD4X
       Code:
-        selector: //script[contains(text(), '"id"')]/text()
+        selector: $next_data/text()
         postProcess:
           - replace:
-            - regex: .+"id":(\d+).+
+            - regex: '.+"content":{(?:[^}]+)"id":(\d+).+'
               with: $1
 # Last Updated September 26, 2025
