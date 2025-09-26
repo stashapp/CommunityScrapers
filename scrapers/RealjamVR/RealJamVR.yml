@@ -14,11 +14,11 @@ sceneByURL: &byURL
   - action: scrapeXPath
     url:
       - realjamvr.com/scene/
-    scraper: sceneScraperRealJamVr
+    scraper: sceneScraper
   - action: scrapeXPath
     url:
       - porncornvr.com/scene
-    scraper: sceneScraperPornCornVr
+    scraper: sceneScraper
 galleryByURL: *byURL
 performerByURL:
   - action: scrapeXPath
@@ -28,7 +28,7 @@ performerByURL:
     scraper: performerScraper
 
 xPathScrapers:
-  sceneScraperRealJamVr:
+  sceneScraper:
     scene:
       Title: &title
         selector: //h1
@@ -37,70 +37,16 @@ xPathScrapers:
               - regex: ^\s+(.+)\s+$
                 with: $1
       URL:
-        selector: //a[@class='btn btn-m1']/@href
+        # incredible amounts of jank
+        # scrape the address png with an alt containing the site name, the most consistent between sites
+        selector: //img[contains(@src, "address.png")]/@alt | //a[@class='btn btn-m1']/@href
+        concat: "|"
         postProcess:
           - replace:
-              - regex: .+next=(.+)
-                with: https://realjamvr.com$1
-      Date: &date
-        selector: //div[@class="specs-icon"]/following-sibling::strong
-        postProcess:
-          # both date formats are used interchangeably
-          # e.g.
-          # Jan. 2, 2006
-          # January 2, 2006
-          # Sept. 2, 2024
-          - replace:
-              - regex: ([\w]{3})([^\ ]+)?(.*)
-                with: $1$3
-          - parseDate: Jan 2, 2006
-      Performers: &performers
-        Name:
-          selector: //a[contains(@href, 'actor')][contains(text(), 'VR')]
-          postProcess:
-            - replace:
-              - regex: (.+)\sVR.+
-                with: $1
-      Tags: &tags
-        Name:
-          selector: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon"]
-          postProcess:
-            - replace:
-                # use the duration "specs-icon" as a fixed value replacement "hack"
-                - regex: \d+:\d+:\d+
-                  with: Virtual Reality
-      Details: &details
-        selector: //div[contains(@class, "collapse-content-wrapper")]/div[contains(@class, "collapse-content")]
-      Image:
-        selector: //*[@id="video-player"]//@poster
-      Studio: &studio
-        Name:
-          selector: //title
-          postProcess:
-            - replace:
-                - regex: '(.*)\| ([^\|]+VR)$'
-                  with: $2
-    gallery:
-      Title: *title
-      Date: *date
-      Performers: *performers
-      Tags: *tags
-      Details: *details
-      Studio: *studio
-  sceneScraperPornCornVr:
-    scene:
-      Title: &title
-        selector: //h1
-        postProcess:
-          - replace:
-              - regex: ^\s+(.+)\s+$
-                with: $1
-      URL:
-        selector: //a[@class='btn btn-m1']/@href
-        postProcess:
-          - replace:
-              - regex: .+next=(.+)
-                with: https://porncornvr.com$1
+              - regex: (.+)\|.+\?next=(.+)
+                with: https://$1.com$2
+          - javascript: |
+              return value.toLowerCase()
       Date: &date
         selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
