@@ -2,6 +2,16 @@
 
 name: BaDoink
 
+sceneByName:
+  action: scrapeXPath
+  scraper: sceneByNameBaDoinkVr
+  queryURL: https://badoinkvr.com/vrpornvideos/search/{}
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: "{url}"
+
 sceneByURL:
   - action: scrapeXPath
     url: &urls
@@ -51,6 +61,18 @@ movieByURL:
 #   queryURL: https://kinkvr.com/bdsm-performers/search/{}?all=1
 #   scraper: performerSearch
 xPathScrapers:
+  sceneByNameBaDoinkVr:
+    common:
+      $card: //div[@data-video-card-scene-id]
+    scene:
+      Title: $card/a[@data-video-scene-name]/@title
+      URL:
+        selector: $card/a[@data-video-scene-name]/@href
+        postProcess:
+          - replace:
+              - regex: '^'
+                with:   https://badoinkvr.com$1
+      Image: $card//img/@data-src
   sceneScraper:
     common:
       $details: &detailsAttr //div[@class="video-rating-and-details"]
