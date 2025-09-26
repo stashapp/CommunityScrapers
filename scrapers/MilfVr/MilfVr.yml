@@ -3,24 +3,14 @@ sceneByName:
   action: script
   script:
     - python
-    - MilfVr.py
+    - MilfVR.py
     - scene-by-name
 sceneByQueryFragment:
   action: scrapeXPath
   scraper: sceneScraper
   queryURL: "{url}"
 
-jsonScrapers:
-  sceneByName:
-    scene:
-      Title: "#.label"
-      URL:
-        selector: "#.url"
-        postProcess:
-          - replace:
-            - regex: "^"
-              with: "https://www.milfvr.com"
-
+# POVR at 8810f21
 xPathScrapers:
   sceneScraper:
     common:
