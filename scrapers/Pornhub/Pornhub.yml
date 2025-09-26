@@ -1,8 +1,4 @@
 name: Pornhub
-performerByName:
-  action: scrapeXPath
-  queryURL: https://www.pornhub.com/pornstars/search?search={}
-  scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
     url:
@@ -35,6 +31,13 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
+performerByName:
+  action: script
+  script:
+    - python3
+    - PornhubStar.py
+    - performer-by-name
+
 xPathScrapers:
   sceneSearch:
     common:
@@ -52,15 +55,6 @@ xPathScrapers:
       Image: $searchItem//div[contains(@class, "phimage")]//img/@data-mediumthumb
       Studio:
         Name: $searchThumb//div[contains(@class, "usernameWrap")]/a[matches(@href, "/(channels|model|pornstar)/")]
-  performerSearch:
-    performer:
-      Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
-      URL:
-        selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https://www.pornhub.com"
   performerScraper:
     common:
       $infoPiece: //div[@class="infoPiece"]
@@ -164,4 +158,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated June 11, 2025
+# Last Updated September 26, 2026
