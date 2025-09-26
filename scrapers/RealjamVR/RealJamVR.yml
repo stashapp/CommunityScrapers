@@ -14,12 +14,11 @@ sceneByURL: &byURL
   - action: scrapeXPath
     url:
       - realjamvr.com/scene/
-    scraper: sceneScraper
-  - action: scrapeXPath
-    url:
       - porncornvr.com/scene
     scraper: sceneScraper
+
 galleryByURL: *byURL
+
 performerByURL:
   - action: scrapeXPath
     url:
@@ -127,4 +126,4 @@ xPathScrapers:
       Image: //div[contains(@class, "actor-view")]//img/@src
       Piercings: //div[span[text()="Piercing:"]]/text()
       Tattoos: //div[span[text()="Tattoo:"]]/text()
-# Last Updated Sept 19, 2025
+# Last Updated Sept 25, 2025
