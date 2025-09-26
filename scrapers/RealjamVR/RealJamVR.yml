@@ -36,11 +36,16 @@ xPathScrapers:
               - regex: ^\s+(.+)\s+$
                 with: $1
       URL:
-        selector: //a[@class='btn btn-m1']/@href
+        # incredible amounts of jank
+        # scrape the address png with an alt containing the site name, the most consistent between sites
+        selector: //img[contains(@src, "address.png")]/@alt | //a[@class='btn btn-m1']/@href
+        concat: "|"
         postProcess:
           - replace:
-              - regex: .+next=(.+)
-                with: https://realjamvr.com$1
+              - regex: (.+)\|.+\?next=(.+)
+                with: https://$1.com$2
+          - javascript: |
+              return value.toLowerCase()
       Date: &date
         selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
@@ -54,7 +59,12 @@ xPathScrapers:
                 with: $1$3
           - parseDate: Jan 2, 2006
       Performers: &performers
-        Name: //div[contains(text(),"Starring:")]//a[contains(@href,"/actor/")]
+        Name:
+          selector: //a[contains(@href, 'actor')][contains(text(), 'VR')]
+          postProcess:
+            - replace:
+              - regex: (.+)\sVR.+
+                with: $1
       Tags: &tags
         Name:
           selector: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon"]
@@ -116,4 +126,4 @@ xPathScrapers:
       Image: //div[contains(@class, "actor-view")]//img/@src
       Piercings: //div[span[text()="Piercing:"]]/text()
       Tattoos: //div[span[text()="Tattoo:"]]/text()
-# Last Updated Sept 19, 2025
+# Last Updated Sept 25, 2025
