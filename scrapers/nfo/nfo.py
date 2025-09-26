@@ -5,15 +5,8 @@ import sys
 from typing import List, Union
 import xml.etree.ElementTree
 
-try:
-    import py_common.log as log
-    import py_common.graphql as graphql
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr
-    )
-    sys.exit()
+import py_common.log as log
+import py_common.graphql as graphql
 
 # Allows us to simply debug the script via CLI args
 if len(sys.argv) > 2 and '-d' in sys.argv:
