@@ -9,6 +9,8 @@ import xml.etree.ElementTree as ET
 
 import py_common.graphql as graphql
 import py_common.log as log
+from py_common.util import scraper_args
+
 """  
 This script parses kodi nfo files for metadata. The .nfo file must be in the same directory as the video file and must be named exactly alike.
 """
@@ -21,7 +23,7 @@ basePathAfter = "/data"
 
 def query_xml(path, title):
     res = {"title": title}
-    try:        
+    try:
         tree = ET.parse(path)
     except Exception as e:
         log.error(f'xml parsing failed:{e}')
@@ -57,7 +59,7 @@ def query_xml(path, title):
             if actor.find("type") != None:
                 if actor.find("type").text == "Actor":
                     res["performers"].append({"name": actor.find("name").text})
-            else if actor.find("name") != None:
+            elif actor.find("name") != None:
                 res["performers"].append({"name": actor.find("name").text})
             else:
                 res["performers"].append({"name": actor.text})
@@ -88,15 +90,13 @@ def make_image_data_url(image_path):
         encoded = base64.b64encode(img.read()).decode()
     return 'data:{0};base64,{1}'.format(mime, encoded)
 
-if sys.argv[1] == "query":
-    fragment = json.loads(sys.stdin.read())
+def scene_by_fragment(fragment: dict):
+    # Assume that .nfo/.xml is named exactly alike the video file and is at the same location
+    # Query graphQL for the file path
     s_id = fragment.get("id")
     if not s_id:
         log.error(f"No ID found")
         sys.exit(1)
-    
-    # Assume that .nfo/.xml is named exactly alike the video file and is at the same location
-    # Query graphQL for the file path
     scene = graphql.getScene(s_id)
     if scene:
         scene_path = scene.get("path")
@@ -110,6 +110,16 @@ if sys.argv[1] == "query":
                 res = query_xml(f, fragment["title"])
             else:
                 log.info(f"No nfo/xml files found for the scene: {p}")
-            
-            print(json.dumps(res))
-            exit(0)
+            return res
+
+if __name__ == "__main__":
+    op, args = scraper_args()
+    result = None
+    match op, args:
+        case "scene-by-fragment", fragment:
+            result = scene_by_fragment(fragment)
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
+
+    print(json.dumps(result))

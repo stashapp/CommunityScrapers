@@ -1,9 +1,10 @@
 name: "Kodi XML"
+# requires: py_common
+
 sceneByFragment:
     action: script
     script:
       - python
-      # use python3 instead if needed
       - kodi.py
       - query
 
