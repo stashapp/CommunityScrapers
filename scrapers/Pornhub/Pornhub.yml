@@ -2,8 +2,10 @@ name: Pornhub
 performerByURL:
   - action: scrapeXPath
     url:
-      - pornhub.com
-      - pornhub.org
+      - pornhub.com/pornstar/
+      - pornhub.org/pornstar/
+      - pornhub.com/model/
+      - pornhub.org/model/
     scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
