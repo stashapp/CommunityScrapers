@@ -4,6 +4,30 @@ from typing import Literal, Required, TypedDict
 Types for outputs that scrapers can produce and that Stash will accept
 """
 
+# export specific types for eternal inclusion
+type Ethnicity = Literal[
+    "CAUCASIAN",
+    "BLACK",
+    "ASIAN",
+    "INDIAN",
+    "LATIN",
+    "MIDDLE_EASTERN",
+    "MIXED",
+    "OTHER",
+]
+
+type EyeColor = Literal["BLUE", "BROWN", "GREEN", "GREY", "HAZEL", "RED"]
+type HairColor = Literal[
+    "BLONDE",
+    "BRUNETTE",
+    "BLACK",
+    "RED",
+    "AUBURN",
+    "GREY",
+    "BALD",
+    "VARIOUS",
+    "OTHER",
+]
 
 class ScrapedTag(TypedDict):
     name: str
@@ -30,30 +54,11 @@ class ScrapedPerformer(TypedDict, total=False):
     "Must be in the format YYYY-MM-DD"
     death_date: str
     "Must be in the format YYYY-MM-DD"
-    ethnicity: Literal[
-        "CAUCASIAN",
-        "BLACK",
-        "ASIAN",
-        "INDIAN",
-        "LATIN",
-        "MIDDLE_EASTERN",
-        "MIXED",
-        "OTHER",
-    ]
+    ethnicity: Ethnicity
     country: str
     "Not validated"
-    eye_color: Literal["BLUE", "BROWN", "GREEN", "GREY", "HAZEL", "RED"]
-    hair_color: Literal[
-        "BLONDE",
-        "BRUNETTE",
-        "BLACK",
-        "RED",
-        "AUBURN",
-        "GREY",
-        "BALD",
-        "VARIOUS",
-        "OTHER",
-    ]
+    eye_color: EyeColor
+    hair_color: HairColor
     "Hair color, can be 'VARIOUS' or 'OTHER' if the performer has multiple hair colors"
     height: str
     "Height in centimeters"
