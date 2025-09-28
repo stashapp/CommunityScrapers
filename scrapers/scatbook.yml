@@ -1,0 +1,70 @@
+name: scatbook
+performerByURL:
+  - action: scrapeJson
+    url:
+      - scatbook.com/
+    scraper: performerScraper
+    queryURL: "https://api.scatbook.com/api/users/{url}"
+    queryURLReplace:
+      url:
+        - regex: '^https?:\/\/(www\.)?scatbook\.com\/([^\/]+)(\/(.*)?)?$'
+          with: "$2"
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - scatbook.com/posts/
+    scraper: sceneScraper
+    queryURL: "https://api.scatbook.com/api/posts/{url}"
+    queryURLReplace:
+      url:
+        - regex: '.+/posts/(\d+)+'
+          with: "$1"
+jsonScrapers:
+  performerScraper:
+    performer:
+      Name: displayName
+      Aliases: username
+      Details: description
+      Gender: tags.#(section=="gender").name
+      Image: avatarS3Route
+      URL:
+        selector: username
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://scatbook.com/
+      Tags:
+        Name: tags.#.name
+  sceneScraper:
+    scene:
+      Title: title
+      Details:
+        selector: content
+        postProcess:
+          - javascript: |
+              // URL decode
+              if (value && value.length) {
+                return decodeURI(value)
+              }
+      Date:
+        selector: publishedAt
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05.000Z
+      Image: preview.cover
+      Performers:
+        Name: author.displayName
+        Aliases: author.username
+        Details: author.description
+        Image: author.avatarS3Route
+        URL:
+          selector: author.username
+          postProcess:
+            - replace:
+              - regex: ^
+                with: https://scatbook.com/
+      Studio:
+        Name: username
+      Tags:
+        Name: categories.#.en
+      Code: id
+# Last Updated September 24, 2025
