@@ -19,49 +19,54 @@ sceneByURL:
     scraper: 8ksite
 xPathScrapers:
   mainSite:
+    common:
+      $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]/text()
     scene:
       Title:
         selector: //h1
-        postProcess:
-          - replace:
-              - regex: \s*-.+
-                with: ""
       Code:
-        selector: //h1
+        selector: $ldjson
         postProcess:
           - replace:
-              - regex: .*-\s*(.+\s#\d+)
-                with: $1
-              - regex: Teenfidelity
+              - regex: '.+"description":"Episode (#\d+).+".+"@type":"Organization","name":"([^"]+)".+'
+                with: $2 $1
+              - regex: Teen Fidelity
                 with: TF
-              - regex: Pornfidelity
+              - regex: Porn Fidelity
                 with: PF
               - regex: Kelly Madison
                 with: KM
-      Details: //div[@class="column is-three-fifths"]//*[contains(text(),'Episode Summary')]/following-sibling::text()
+      Details: //div[contains(text(), "Episode Summary")]/../p/text()
       Date:
         selector: //li[contains(.,'Published:')]/text()[2]
         postProcess:
           - replace:
-              - regex: Published:\s
-                with:
+              - regex: '"uploadDate":"([^T]+)'
+                with: "$1"
           - parseDate: 2006-01-02
       Performers:
-        Name: //a[@class and contains(@href,"/models/")]
-      Image:
-        # Some url don't have it. (https://www.pornfidelity.com/episodes/73238852)
-        selector: //script[contains(text(),"poster_image")]
-        postProcess:
-          - replace:
-              - regex: .+(?:poster:\s")([^"]+).+
-                with: $1
-      Studio:
         Name:
-          selector: //span[contains(text(),"Episode")]/following-sibling::text()[1]
+          selector: //div[contains(@class,"column-video-info")]/p[@class="mb-0"]/a/text()
           postProcess:
             - replace:
-                - regex: \s*#.+
-                  with: ""
+              - regex: "Madison"
+                with: "Ryan Madison"
+      Image:
+        selector: $ldjson
+        postProcess:
+          - replace:
+            - regex: '.+"thumbnailUrl":"([^"]+)".+'
+              with: "$1"
+      Studio:
+        Name:
+          selector: $ldjson
+          postProcess:
+            - replace:
+                - regex: '.+"@type":"Organization","name":"([^"]+)".+'
+                  with: "$1"
+            - map:
+                Porn Fidelity: PornFidelity
+                Teen Fidelity: TeenFidelity
   5kSite:
     scene:
       Title: //p[@class="trailer-title"]
@@ -144,24 +149,6 @@ xPathScrapers:
 
 driver:
   cookies:
-    - CookieURL: "https://www.pornfidelity.com/"
-      Cookies:
-        - Name: "nats"
-          Domain: ".pornfidelity.com"
-          ValueRandom: 23
-          Path: "/"
-    - CookieURL: "https://www.teenfidelity.com/"
-      Cookies:
-        - Name: "nats"
-          Domain: ".teenfidelity.com"
-          ValueRandom: 23
-          Path: "/"
-    - CookieURL: "https://www.kellymadison.com/"
-      Cookies:
-        - Name: "nats"
-          Domain: ".kellymadison.com"
-          ValueRandom: 23
-          Path: "/"
     - CookieURL: "https://www.5kteens.com/"
       Cookies:
         - Name: "nats"
@@ -174,3 +161,5 @@ driver:
           Domain: ".5kporn.com"
           ValueRandom: 23
           Path: "/"
+
+# Last Updated September 29, 2025
