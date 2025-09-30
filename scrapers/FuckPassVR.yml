@@ -1,5 +1,13 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 name: FuckPassVR
+sceneByName:
+  action: scrapeXPath
+  scraper: sceneByName
+  queryURL: https://www.fuckpassvr.com/destination?s={}
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: fuckpassvrScraper
+  queryURL: "{url}"
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -11,6 +19,13 @@ performerByURL:
       - fuckpassvr.com/vr-pornstars/
     scraper: fuckpassvrScraper
 xPathScrapers:
+  sceneByName:
+    common:
+      $card: //div[contains(concat(' ',normalize-space(@class),' '),' videos__element ')]
+    scene:
+      Title: $card//a[@class="videos__videoTitle"]
+      URL: $card//a/@href
+      Image: $card//img/@src
   fuckpassvrScraper:
     performer:
       Name: //h1
