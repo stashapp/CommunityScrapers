@@ -24,7 +24,7 @@ xPathScrapers:
       Gender:
         fixed: Female
     scene:
-      Title: //main//div[@class="video__top"]//h2[@class="video__title"]
+      Title: //h1[@class='video__title']
       Details:
         selector: //meta[@property="og:description"]/@content
         postProcess:
@@ -48,12 +48,7 @@ xPathScrapers:
                   with: Virtual Reality
       Performers:
         Name: //div[@class="models"]/a//text()
-      Image:
-        selector: &imageSel //web-vr-video-player/@coverimage
-        postProcess:
-          - replace:
-              - regex: ^'(.*)'$
-                with: $1
+      Image: &imageSel //div[@class='video__videoWrapper']/pornhall-player/@poster
       Studio:
         Name:
           fixed: FuckPassVR
@@ -67,4 +62,8 @@ xPathScrapers:
           - replace:
               - regex: .*/scenes/([^/]*)/.*
                 with: $1
-# Last Updated December 12, 2024
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36
+# Last Updated September 29, 2025
