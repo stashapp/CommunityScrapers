@@ -48,7 +48,12 @@ xPathScrapers:
                   with: Virtual Reality
       Performers:
         Name: //div[@class="models"]/a//text()
-      Image: &imageSel //div[@class='video__videoWrapper']/pornhall-player/@poster
+      Image:
+        selector: &imageSel //div[@class='video__videoWrapper']/pornhall-player/@poster
+        postProcess:
+          - replace:
+              - regex: "'"
+                with: ""
       Studio:
         Name:
           fixed: FuckPassVR
