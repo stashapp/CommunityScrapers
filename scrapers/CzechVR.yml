@@ -121,7 +121,5 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0
-#    - Key: Referer
-#      Value: https://www.czechvr.com/
 
-# Last Updated April 5, 2025
+# Last Updated Sept 30, 2025
