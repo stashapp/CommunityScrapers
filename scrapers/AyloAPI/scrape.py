@@ -285,8 +285,10 @@ def to_scraped_performer(
 
     # All remaining fields are only available when scraped directly
     if height := performer_from_api.get("height"):
-        # Convert to cm
-        performer["height"] = str(round(height * 2.54))
+        # Aylo sometimes returns unreasonably small heights for performers
+        if height > 5:
+            # Convert to cm
+            performer["height"] = str(round(height * 2.54))
 
     if weight := performer_from_api.get("weight"):
         # Convert to kg
