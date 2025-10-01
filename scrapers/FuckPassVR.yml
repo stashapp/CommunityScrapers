@@ -1,5 +1,13 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 name: FuckPassVR
+sceneByName:
+  action: scrapeXPath
+  scraper: sceneByName
+  queryURL: https://www.fuckpassvr.com/destination?s={}
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: fuckpassvrScraper
+  queryURL: "{url}"
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -11,6 +19,13 @@ performerByURL:
       - fuckpassvr.com/vr-pornstars/
     scraper: fuckpassvrScraper
 xPathScrapers:
+  sceneByName:
+    common:
+      $card: //div[contains(concat(' ',normalize-space(@class),' '),' videos__element ')]
+    scene:
+      Title: $card//a[@class="videos__videoTitle"]
+      URL: $card//a/@href
+      Image: $card//img/@src
   fuckpassvrScraper:
     performer:
       Name: //h1
@@ -24,7 +39,7 @@ xPathScrapers:
       Gender:
         fixed: Female
     scene:
-      Title: //main//div[@class="video__top"]//h2[@class="video__title"]
+      Title: //h1[@class='video__title']
       Details:
         selector: //meta[@property="og:description"]/@content
         postProcess:
@@ -49,11 +64,11 @@ xPathScrapers:
       Performers:
         Name: //div[@class="models"]/a//text()
       Image:
-        selector: &imageSel //web-vr-video-player/@coverimage
+        selector: &imageSel //div[@class='video__videoWrapper']/pornhall-player/@poster
         postProcess:
           - replace:
-              - regex: ^'(.*)'$
-                with: $1
+              - regex: "'"
+                with: ""
       Studio:
         Name:
           fixed: FuckPassVR
@@ -67,4 +82,4 @@ xPathScrapers:
           - replace:
               - regex: .*/scenes/([^/]*)/.*
                 with: $1
-# Last Updated December 12, 2024
+# Last Updated September 29, 2025
