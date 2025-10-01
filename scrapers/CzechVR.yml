@@ -1,4 +1,14 @@
 name: "CzechVR"
+sceneByName:
+  action: scrapeXPath
+  scraper: sceneByName
+  queryURL: https://www.czechvr.com/searching?search={}
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: "{url}"
+
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -21,11 +31,30 @@ movieByURL:
     scraper: movieScraper
 
 xPathScrapers:
+  sceneByName:
+    common:
+      $card: //div[contains(concat(' ',normalize-space(@class),' '),' postTag ')]
+    scene:
+      Title: $card//h2
+      URL:
+        selector: $card//div[@class='desktop']/a/@href
+        postProcess:
+          - replace:
+              - regex: ^\.
+                with: https://www.czechvr.com
+      Image:
+        selector: $card//div[@class='desktop']/a/img/@src
+        postProcess:
+          - replace:
+              - regex: ^\.
+                with: https://www.czechvr.com
+
   sceneScraper:
     common:
       $info: &infoSel //div[@class="post"]
       $url: &urlSel //meta[@name="dl8-customization-brand-url"]/@content
     scene:
+      URL: //link[@rel='canonical']/@href
       Title: &title
         # Czech VR Network uses h1, the substudios use h2
         selector: &titleSel $info//h1|$info//h2
@@ -33,6 +62,12 @@ xPathScrapers:
           - replace:
               - regex: ".+ - "
                 with:
+      Code:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: ^Czech\sVR\s(\d+).+
+                with: $1
       Date: &date
         selector: $info//div[@class="datum"]/text()
         postProcess:
@@ -86,4 +121,4 @@ driver:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/137.0
 
-# Last Updated April 5, 2025
+# Last Updated Sept 30, 2025
