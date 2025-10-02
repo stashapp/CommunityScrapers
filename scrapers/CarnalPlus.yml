@@ -298,12 +298,7 @@ xPathScrapers:
       URL: *url
       Studio: *studio
       Movies:
-        Name: 
-          selector: //span[contains(@class, "dvdTitleScene")]
-          postProcess:
-            - replace:
-                - regex: ^(.*)\s*-\s*Chapter.*$
-                  with: $1
+        Name: //span[contains(@class, "dvdTitleScene")]
         URL: //span[contains(@class, "dvdTitleScene")]//a/@href
         Studio: *studio
       Tags: *tags
