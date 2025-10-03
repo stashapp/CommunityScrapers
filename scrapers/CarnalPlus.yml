@@ -67,7 +67,7 @@ xPathScrapers:
               - regex: -1x.*?\.jpg
                 with: -full.jpg
               - regex: width=1500
-                with: width=1920
+                with: width=9999
       URL: &url //link[@rel="canonical"]/@href
       Date: &dateSubscraper
         # We need to scrape the network site to get the date, but this scraper
