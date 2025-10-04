@@ -15,58 +15,46 @@ performerByName:
   action: scrapeXPath
   queryURL: "https://www.loveherfilms.com/tour/search.php?model_name={}"
   scraper: performerSearch
-performerByURL:
-  - action: scrapeXPath
-    url:
-      - loveherboobs.com/tour/models/
-      - loveherfeet.com/tour/models/
-      - loveherfilms.com/tour/models/
-      - shelovesblack.com/tour/models/
-    scraper: performerScraper
+# broken
+# performerByURL:
+#   - action: scrapeXPath
+#     url:
+#       - loveherboobs.com/tour/models/
+#       - loveherfeet.com/tour/models/
+#       - loveherfilms.com/tour/models/
+#       - shelovesblack.com/tour/models/
+#     scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class='title']/text()
+      Title: //h1[contains(@class, "HeroModel_title")]/text()
       Details:
-        selector: //div[@class='information']/p/text()
-        concat: "\n\n"
+        selector: //p[contains(@class, "HeroModel_text")]/text()
       Date:
-        selector: //div[@class='date']/text()
+        selector: //p[contains(@class,"dateText")]/text()
         postProcess:
-          - parseDate: January 2, 2006
-      Code:
-        selector: //*/div[@class='photos vide-section']/a[1]/img/@data-src
-        postProcess:
-          - replace:
-              - regex: ^https?.+/(?:[a-zA-Z]+_(\d+)_.+|(\d+)_[a-zA-Z0-9]+(?:\.jpg)?.*)
-                with: $1$2
-          - replace:
-              - regex: ^\D.*
-                with: 
+          - parseDate: 2 January, 2006
       Image:
-        selector: //div[@class='video']//img[contains(@class,'mainThumb') or contains(@class,'update_thumb')]/@src0_3x|//video/@poster|//base/@href
-        concat: "|"
-        postProcess:
-          - replace:
-              - regex: ^(https[^|]+)\|.+ # mainThumb urls do not need anything
-                with: $1
-              - regex: ^/tour([^|]+)\|(.+) # video/@poster urls need a domain
-                with: $2$1
+        selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
-          selector: //meta[@name='author']/@content
+          selector: //script[@id="video-json-ld"]/text()
           postProcess:
-            - map:
-                LoveHerFeet.com: "Love Her Feet"
+            - replace:
+              - regex: '.+"publisher":.+"name":"([^"]+).+'
+                with: $1
       Tags:
-        Name: //div[@class='video-tags']/a/text()
+        Name: //a[contains(@class,"Description_tagItem")]/p/text()
       Performers:
-        Name: //div[@class='featured']/a/text()
-        URL: //div[@class='featured']/a/@href
+        Name: //a[contains(@class,"Description_model")]/p[1]/text()
   performerSearch:
+    common:
+      $modelItem: //a[contains(@class,"ModelItem")]
     performer:
-      Name: //h3/../a/@title
-      URL: //h3/../a/@href
+      Name: $modelItem/div/img/@src
+      URL:
+        selector: //meta[@name="twitter:site"]/@content | $modelItem/@href
+        concat: ""
   performerScraper:
     performer:
       Name: //div[@class="bio"]//h2/text()
@@ -169,4 +157,4 @@ xPathScrapers:
                 with: ""
       Gender:
         fixed: "Female"
-# Last Updated April 13, 2023
+# Last Updated October 3, 2025
