@@ -66,6 +66,8 @@ xPathScrapers:
           - replace:
               - regex: -1x.*?\.jpg
                 with: -full.jpg
+              - regex: width=1500
+                with: width=9999
       URL: &url //link[@rel="canonical"]/@href
       Date: &dateSubscraper
         # We need to scrape the network site to get the date, but this scraper
@@ -135,7 +137,13 @@ xPathScrapers:
       Tags: &tags
         Name: $scene//div[@id="catMovie"]//text()
       Performers: &performers
-        Name: $scene//div[contains(@class, "modelProfile")]//h2 | $scene//div[contains(@class, "modelProfile")]//h3
+        Name: 
+          selector: $scene//div[contains(@class, "modelProfile")]//img/@alt
+          postProcess:
+            - replace:
+                - regex: ^(.*?)\s*/.*$
+                  with: $1
+
   networkScraper:
     common:
       $scene: ((//div[contains(@class, "main")])[1]/div)[1]
@@ -227,7 +235,7 @@ xPathScrapers:
       Tags:
         Name: $scene//div[@class="update_tags"]//a
       Performers:
-        Name: $scene//div[@class="update-models"]//a
+        Name: $scene//div[@class="update-models"]//a | $scene//span[contains(text(), "Played by")]//a
       Director:
         selector: //span[contains(text(), "Director:")]/following-sibling::text()[1]
       Studio: &netStudio
@@ -281,18 +289,8 @@ xPathScrapers:
   chapterSceneScraper:
     common:
       $scene: *sceneContainer
-      # The differences from the regular sceneScraper is that we
-      # shuffle the title around a little to reflect what's shown
-      # on the page instead of in the title bar (also makes them easier to sort)
-      # and we use the series as a movie so that people can group their scenes together
     scene:
-      Title:
-        selector: //title/text()
-        postProcess:
-          - replace:
-              # https://regex101.com/r/y1Clkp/2
-              - regex: (?P<title>.*?) - (?P<series>.*?) - (?P<chapter>.*?) \|.*
-                with: $series - $chapter - $title
+      Title: *title
       Details: *details
       Date: *dateSubscraper
       Code: *studioCode
@@ -346,4 +344,4 @@ xPathScrapers:
           - replace:
               - regex: dvd-.*?\.jpg
                 with: dvd-full.jpg
-# Last Updated April 24, 2025
+# Last Updated October 02, 2025
