@@ -35,9 +35,10 @@ def fetch_site_urls() -> list[str]:
 
         current_page += 1
 
+    site_urls = list(set(site_urls))
     site_urls.sort()
     # Remove duplicates
-    return list(set(site_urls))
+    return site_urls
 
 if __name__ == "__main__":
     site_urls: list[str] = fetch_site_urls()
