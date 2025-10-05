@@ -137,6 +137,9 @@ def __fetch_studio(api_url: str, scrape_url: str) -> ScrapedStudio:
 
     parsed_url = urlparse(scrape_url)
     studio_url = f"{parsed_url.scheme}://{parsed_url.netloc}"
+    if parsed_url.netloc == "mymember.site":
+        studio_url += f"/{parsed_url.path.split('/', 3)[1]}"
+
     return ScrapedStudio(
         name=response["site_info"].get("site_long_name", "MyMemberSite"),
         url=studio_url,
