@@ -70,9 +70,10 @@ def __parse_url(api_url: str, scraped_url: str) -> str:
         The API URL corresponding to the given URL.
     """
     parsed = urlparse(scraped_url)
+    path = parsed.path if r"(www\.)?mymember\.site" in parsed.netloc else f"/{parsed.path.split('/', 2)[-1]}"
     if not (
         match := re.match(
-            r"^/(?P<type>videos|photosets)/(?P<id>\d+)(?:-(?P<name>.+))?$", parsed.path
+            r"^/(?P<type>videos|photosets)/(?P<id>\d+)(?:-(?P<name>.+))?$", path
         )
     ):
         log.error(f"Unable to parse URL '{scraped_url}'")
