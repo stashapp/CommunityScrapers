@@ -36,6 +36,10 @@ xPathScrapers:
           - parseDate: 2 January, 2006
       Image:
         selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+            - regex: "-1x"
+              with: "-full"
       Studio:
         Name:
           selector: //script[@id="video-json-ld"]/text()
