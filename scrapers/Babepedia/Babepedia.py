@@ -111,6 +111,12 @@ def performer_from_url(url) -> ScrapedPerformer:
         cm_height = re.search(r'(\d+) cm', height)
         if cm_height:
             performer['height'] = cm_height[1]
+    # get weight
+    weight = biography_xpath_test(tree, "Weight", "")
+    if weight:
+        kg_weight = re.search(r'(\d+) kg', weight)
+        if kg_weight:
+            performer['weight'] = kg_weight[1]
     # get measurements
     measurements = biography_xpath_test(tree, "Measurements", "")
     cup_size = biography_xpath_test(tree, "Bra/cup size", "")
