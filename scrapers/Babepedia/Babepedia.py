@@ -23,28 +23,27 @@ def biography_xpath_test(tree, html_name: str, selector: str) -> str | None:
   return elem[0].strip() if elem else None
 
 def sanitize_ethnicity(str) -> Ethnicity:
-    str = str.upper()
-    if str in ["CAUCASIAN","BLACK","ASIAN","INDIAN","LATIN","MIDDLE_EASTERN","MIXED","OTHER"]:
-        return str
+    str_upper = str.upper()
+    if str_upper in ["CAUCASIAN","BLACK","ASIAN","INDIAN","LATIN","MIDDLE_EASTERN","MIXED","OTHER"]:
+        return str_upper
     # catch mixed-race
-    if "Mixed" in str.lower():
-        return str
-    return "Other" # type: ignore
+    if "MIXED" in str_upper:
+        return str_upper
+    return str # type: ignore
 
 def sanitize_eye_color(str) -> EyeColor | None:
-    str = str.upper()
-    if str in ["Blue","Brown","Green","Grey","Hazel","Red"]:
-        return str
-    return None
+    str_upper = str.upper()
+    if str_upper in ["Blue","Brown","Green","Grey","Hazel","Red"]:
+        return str_upper
+    return str
 
 def sanitize_hair_color(str) -> HairColor:
-    str = str.upper()
     if str in ["Blonde","Brunette","Black","Red","Auburn","Grey","Bald","Various","Other"]:
         return str
     # brown to brunette
     if str.lower() == "brown":
         return "Brunette" # type: ignore
-    return "Other" # type: ignore
+    return str # type: ignore
 
 def performer_from_url(url) -> ScrapedPerformer:
     scraped = scraper.get(url)
