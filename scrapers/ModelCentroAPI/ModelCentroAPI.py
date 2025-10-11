@@ -149,6 +149,7 @@ studioMap = {
     "realagent.xxx":"Real Agent",
     "realpeachez":"Sarah Peachez",
     "rebeccalordproductions":"Rebecca Lord Productions",
+    "redbottomxxx":"Red Bottom Productions",
     "rexringoxxx.xxx":"Rex Ringo XXX Productions",
     "sabrinasabrokporn":"Sabrina Sabrok Videos",
     "sallydangeloxxx":"City Girlz",
