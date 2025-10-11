@@ -258,6 +258,9 @@ if tags:
         # inconsistent use on TeamSkeet since it was added as a tag
         if tag == "Pumps":
             tags[i] = "Woman's Heels"
+        # All "Doll" scnees under freeuse or "Freaky Fembots"
+        if tag == "Doll":
+            tags[i] = "Robot"
         if tag.lower() == "null":
             tags.pop(i)
 
