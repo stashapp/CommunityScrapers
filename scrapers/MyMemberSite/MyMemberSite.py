@@ -71,7 +71,7 @@ def __parse_url(api_url: str, scraped_url: str) -> str:
     """
     path = urlparse(scraped_url).path
     if not (
-        match := re.match(
+        match := re.search(
             r"\/(?P<type>videos|photosets)\/(?P<id>\d+)(?:-(?P<name>.+))?$", path
         )
     ):
