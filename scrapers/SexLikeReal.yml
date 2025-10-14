@@ -29,33 +29,20 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //script[@type="text/javascript"][contains(.,"videoData:")]/text()
+        selector: //meta[@property="og:image:alt"]/@content
+      Date:
+        selector: //time/@datetime
         postProcess:
-          - replace:
-              - regex: '.+videoData:\s{[^{]+title":"([^"]+)",.+'
-                with: $1
-              - regex: '\\u2019'
-                with: "’"
-              - regex: '\\u2013'
-                with: "–"
-      Date: //time/@datetime
+          - parseDate: "2006-01-02T15:04:05.000Z"
       Details:
-        selector: //div[@data-qa="scene-about-tab-text"]/text()
-        postProcess:
-          - replace:
-              - regex: '^\.\s*'
-                with:
-        concat: "\n"
+        selector: //div[@style="display:contents"]/p/text()
       Tags:
-        Name: >-
-          //meta[@property="video:tag"]/@content
-          |
-          //a[@data-qa="scene-tags-list-item-link"]/text()
+        Name: //div[@style="display:contents"]/ul/li/a/span/text()
       Performers:
-        Name: //a[contains(@data-qa, "scene-model-list-item-name")]/text()
+        Name: //a[contains(@class,"avatar") and contains(@class,"avatar-size-64")]/@title
       Studio:
         Name:
-          selector: //a[contains(@href,"/studios/")]/div[last()]/text()
+          selector: //a[contains(@href,"/studios/") and contains(@class,"avatar avatar-size-32")]/@title
           postProcess:
             - map:
                 DDFNetworkVR: "DDF Network VR"
@@ -68,12 +55,6 @@ xPathScrapers:
                 SinsVR: "XSinsVR"
                 VirtualXPorn: "Virtual X Porn"
                 WankitnowVR: "Wank It Now VR"
-      Image: //div[@id="webvr"]//img/@src
-      URL: &sceneUrl //link[@rel="canonical"]/@href
-      Code:
-        selector: *sceneUrl
-        postProcess:
-          - replace:
-              - regex: '^(.+)-(\d+)/?$'
-                with: $2
-# Last Updated May 22, 2025
+      Image: //meta[@property="og:image"]/@content
+      URL: //meta[@property="og:url"]/@content
+# Last Updated October 15, 2025
