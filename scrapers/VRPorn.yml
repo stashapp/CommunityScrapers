@@ -18,41 +18,36 @@ sceneByQueryFragment:
 xPathScrapers:
   sceneScraper:
     common:
-      $header: //header[@class="entry-header"]
-      $footer: //footer[@class="entry-footer"]
-      $videoarea: //footer[@class="entry-footer"]/div[@class="layout_area_video"]
+      $vidinfos: //div[@class="app-page-video-primary"]
     scene:
-      Title: $header//h1[contains(@class,"content-title")]
+      Title: $vidinfos//h1[@class="ui-player-title__main-title stl-color-white"]
       Date:
-        selector: $footer//span[@class="footer-titles"]/text()
+        selector: $vidinfos//span[@class="ui-player-title__sub-text stl-color-grey9b"][3]/text()
         postProcess:
-          - replace:
-              - regex: Posted on (?:Premium on )?(.*)
-                with: $1
-          - parseDate: January 02, 2006
+          - parseDate: Jan 2 2006
       Details:
-        selector: //div[contains(@class, "post-video-description")]//p/text()
+        selector: $vidinfos//div[@class="ui-detail-video__description-text text stl-color-white"]/div/p
         concat: "\n"
       Tags:
-        Name: $footer//a[@rel="tag"]
+        Name: $vidinfos//div[@class="list mt2-6"]/a/text()
       Performers:
-        Name: $header/following-sibling::*//div[@class="name_pornstar"]
+        Name: $vidinfos//a[@class="ui-card-model__name"]/text()
       Studio:
-        Name: //a[@id="studio-logo"]//span[@class="footer-titles"]
-      Image:
-        selector: //dl8-video/@poster
-        postProcess:
-          - replace:
-              - regex: (.*)(-\d+x\d+)(\.\w+$)
-                with: $1$3
-      URL: //link[@rel="canonical"]/@href
+        Name: $vidinfos//a[@class="ui-detail-video__title text stl-text-16wb600v3 mr2-2"]/text()
+      Image: //meta[@property="og:image"]/@content
+      URL: //meta[@property="og:url"]/@content
   sceneSearch:
     common:
-      $videos: //div[@class="entry-footer all_hover box_item_video"]
+      $videos: //div[@class="-videos app-page-search__list mt2-24"]
     scene:
-      Title: $videos//div[@class="d_post_meta"]/a
-      URL: $videos//div[@class="d_post_meta"]/a/@href
-      Image: $videos//div[@class="tube-thumbnail-wrapper"]/img/@src
+      Title: $videos//article[@class="ui-video-card ui-card-effect"]/header[@class="ui-video-card__header"]/a/@title
+      URL:
+        selector: $videos//article[@class="ui-video-card ui-card-effect"]/header[@class="ui-video-card__header"]/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://vrporn.com"
+      Image: $videos//article[@class="ui-video-card ui-card-effect"]/header[@class="ui-video-card__header"]/a/img/@src
       Studio:
-        Name: $videos//div[@class="d_post_meta"]//span[@class="left_links"]
-# Last Updated January 10, 2025
+        Name: $videos//article[@class="ui-video-card ui-card-effect"]/div[@class="ui-video-card__info"]/a[@class="ui-video-card__studio-link"]/@title
+# Last Updated October 14, 2025
