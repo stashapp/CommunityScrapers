@@ -2,6 +2,58 @@ name: gelbooru-xpath
 # for gelbooru 0.2+
 # https://github.com/stashapp/CommunityScrapers/issues/2273
 # loosely based on danbooru
+
+# intended to capture filename as produced by gallery-dl (rule34_<id>_<hash>.<ext>)
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: "{filename}"
+  queryURLReplace:
+    filename:
+      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename so that it can construct a valid url
+        with: ""
+      - regex: "^gelbooru_(.*)" # map to domain by prefix
+        with: "https://gelbooru.com/index.php?page=post&s=view&id=$1"
+      - regex: "tbib_(.*)" # map to domain by prefix
+        with: "https://tbib.org/index.php?page=post&s=view&id=$1"
+      - regex: "^rule34_(.*)" # map to domain by prefix
+        with: "https://rule34.xxx/index.php?page=post&s=view&id=$1"
+      - regex: "^xbooru_(.*)" # map to domain by prefix
+        with: "https://xbooru.com/post/show/$1"
+      - regex: "^/safebooru_(.*)" # map to domain by prefix
+        with: "https://safebooru.org/post/show/$1"
+      - regex: "^/hypnohub_(.*)" # map to domain by prefix
+        with: "https://hypnohub.net/post/show/$1"
+      - regex: "^yandere_(.*)" # map to domain by prefix
+        with: "https://yande.re/post/show/$1"
+      - regex: '^(.*&id=)([0-9]+)_.*$' # capture numeric sequence at begining as ID
+        with: "$1$2"
+  scraper: postScraper
+# intended to capture filename as produced by gallery-dl (rule34_<id>_<hash>.<ext>)
+imageByFragment:
+  action: scrapeXPath
+  queryURL: "{filename}"
+  queryURLReplace:
+    filename:
+      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename so that it can construct a valid url
+        with: ""
+      - regex: "^gelbooru_(.*)" # map to domain by prefix
+        with: "https://gelbooru.com/index.php?page=post&s=view&id=$1"
+      - regex: "tbib_(.*)" # map to domain by prefix
+        with: "https://tbib.org/index.php?page=post&s=view&id=$1"
+      - regex: "^rule34_(.*)" # map to domain by prefix
+        with: "https://rule34.xxx/index.php?page=post&s=view&id=$1"
+      - regex: "^xbooru_(.*)" # map to domain by prefix
+        with: "https://xbooru.com/post/show/$1"
+      - regex: "^/safebooru_(.*)" # map to domain by prefix
+        with: "https://safebooru.org/post/show/$1"
+      - regex: "^/hypnohub_(.*)" # map to domain by prefix
+        with: "https://hypnohub.net/post/show/$1"
+      - regex: "^yandere_(.*)" # map to domain by prefix
+        with: "https://yande.re/post/show/$1"
+      - regex: '^(.*[^0-9])([0-9]+)_.*$' # capture numeric sequence at begining as ID
+        with: "$1$2"
+  scraper: postScraper
+
 sceneByURL:
   - action: scrapeXPath
     url: &urls
@@ -21,8 +73,48 @@ imageByURL:
 xPathScrapers:
   postScraper:
     image:
+      Title: &title
+        selector: //title
+        postProcess:
+          - replace:
+            # remove gelbooru title suffix
+            - regex: '[ ]+-[ ]+Image View[ ]+-[ ]+\| Gelbooru.*$'
+              with: ""
+            # remove tbib title prefix
+            - regex: '^The Big ImageBoard \(TBIB\)[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
+              with: "$1"
+            # remove rule34 title of list page (redirect when unknown)
+            - regex: '^The Big ImageBoard \(TBIB\)$'
+              with: ""
+            # remove rule34 title prefix
+            - regex: '^Rule 34[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
+              with: "$1"
+            # remove rule34 title of list page (redirect when unknown)
+            - regex: '^Rule 34$'
+              with: ""
+            # remove xbooru title prefix
+            - regex: '^Xbooru[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
+              with: "$1"
+            # remove xbooru title of list page (redirect when unknown)
+            - regex: '^Xbooru$'
+              with: ""
+            # remove safebooru title prefix
+            - regex: '^Safebooru[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
+              with: "$1"
+            # remove safebooru title of list page (redirect when unknown)
+            - regex: '^Safebooru$'
+              with: ""
+            # remove hypnohub title prefix
+            - regex: '^HypnoHub[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
+              with: "$1"
+            # remove hypnohub title of list page (redirect when unknown)
+            - regex: '^HypnoHub$'
+              with: ""
+            # remove yandere title prefix
+            - regex: ' \| #[0-9]+ \| yande.re$'
+              with: ""
       Date: &date
-        selector: //li[contains(text(),"Posted")]/text()[1]
+        selector: //div[@id="post-view" or @id="container"]//li[contains(text(),"Posted")]/text()[1]
         postProcess:
           - replace:
             - regex: 'Posted:'
@@ -32,15 +124,23 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers: &performers
         Name:
-          selector: //li[contains(@class,"tag-type-character")]/a[last()]/text()
+          selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-character")]/a[last()]/text()
       Studio: &artist
-        Name: //li[contains(@class,"tag-type-artist")]/a[last()]/text()
+        Name: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-artist")]/a[last()]/text()
       Tags: &tag_string
         Name:
-          selector: //li[contains(@class,"tag-type-general")]/a[last()]/text()
+          # Variant A: only pull tags
+          #selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-general")]/a[last()]/text()
+          # Variant B: also pull metadata tags (like 2D, 3D) and copyrights (source material names)
+          selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-general") or contains(@class,"tag-type-metadata") or contains(@class,"tag-type-copyright")]/a[last()]/text()
       URLs: &source
-        selector: '//li[contains(text(),"Source:")]/a/@href'
+        selector: '//div[@id="post-view" or @id="container"]//li[contains(text(),"Source:")]/a/@href'
+      # pulls note overlay texts (translations) into Details box
+      Details:
+        selector: //div[@id="post-view" or @id="container"]//div[contains(@class,"note-body")]/text()
+        concat: "\n"
     scene:
+      Title: *title
       Date: *date
       Performers: *performers
       Studio: *artist
@@ -52,4 +152,4 @@ driver:
     - Key: User-Agent
       Value: stashapp/stash scraper
 
-# Last Updated April 19, 2025
+# Last Updated October 16, 2025
