@@ -36,8 +36,17 @@ xPathScrapers:
   sceneScraper:
     common:
       $meta: //div[@class='media-meta']
+      $error: //div[@class='error-page view-page']
     scene:
-      Title: $meta//h1/text()
+      Title:
+        selector: $meta//h1/text()
+        postProcess:
+          - javascript: |
+              // Check if error page div exists (deleted video)
+              if (context.error && context.error.includes("File not found")) {
+                return null;
+              }
+              return value;
       Date:
         selector: $meta//div[@class='media-meta-stats']/span[not(contains(.,'Views')) and not(contains(.,'Favorites'))]/text()
         postProcess:
@@ -66,4 +75,4 @@ xPathScrapers:
             - replace:
                 - regex: \#
                   with:
-# Last Updated April 01, 2025
+# Last Updated October 17, 2025
