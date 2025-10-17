@@ -87,7 +87,7 @@ def search(s_type, name):
         def map_result(result):
             item = result['item']
             return {
-                'name': item['name'],
+                'name': item['name'].strip(),
                 'url': f"https://www.metartnetwork.com{item['path']}",
             }
     elif s_type == 'scene':
@@ -97,10 +97,10 @@ def search(s_type, name):
             if studio:
                 image = f"https://www.{studio[1]}{item['thumbnailCoverPath']}"
             return {
-                'title': item['name'],
+                'title': item['name'].strip(),
                 'url': f"https://www.metartnetwork.com{item['path']}",
                 'date': item['publishedAt'][0:item['publishedAt'].find('T')],
-                'performers': [{'name': m['name']} for m in item['models']],
+                'performers': [{'name': m['name'].strip()} for m in item['models']],
                 'image': image,
             }
     else:
@@ -163,7 +163,7 @@ def scrape_model(base_url, name):
 
 def map_media(data, studio, base_url):
     urls = []
-    studio_code = data["UUID"]
+    studio_code = data["UUID"].strip()
     studio_name = {'Name': ""}
     
     # Sites that never put directors in the "crew" section
@@ -173,7 +173,7 @@ def map_media(data, studio, base_url):
     if studio is not None:
         studio_url = studio[1]
         urls = [f"https://www.{studio_url}{data['path']}"]
-        studio_name = {'Name': studio[0]}
+        studio_name = {'Name': studio[0].strip()}
 
     director = None
     directors = []
@@ -190,11 +190,11 @@ def map_media(data, studio, base_url):
                     name = crew_name.strip()
                     if name not in directors:
                         directors.append(name)
-    director = ", ".join(directors)
+    director = ", ".join(directors).strip()
 
     return {
-        'Title': data['name'],
-        'Details': data['description'],
+        'Title': data['name'].strip(),
+        'Details': data.get('description') and data['description'].strip(),
         'URLs': urls,
         'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
         'Tags': [{'Name': t.strip()} for t in data['tags']],
@@ -251,13 +251,13 @@ def scrape_gallery(base_url, date, name):
 
 def map_model(base_url, model):
     # Convert tags list to dictionary format
-    tags = [{'Name': t} for t in model['tags']]
+    tags = [{'Name': t.strip()} for t in model['tags']]
 
     def add_tag(key, tag_format):
         nonlocal tags
         if key in model and model[key] != "":
             tags.append({
-                'Name': tag_format.format(model[key])
+                'Name': tag_format.format(model[key]).strip()
             })
 
     add_tag('hair', '{} hair')
@@ -271,17 +271,17 @@ def map_model(base_url, model):
         country_name = None
 
     return {
-        'Name': model.get("name"),
-        'Gender': model.get("gender" or "").upper(),
+        'Name': model.get("name", "").strip(),
+        'Gender': model.get("gender", "").upper().strip(),
         'URL': f"{base_url}{model.get('path')}",
-        'Ethnicity': model.get("ethnicity"),
+        'Ethnicity': model.get("ethnicity", "").strip() if model.get("ethnicity") else None,
         'Country': country_name,
-        'Height': str(model.get("height")),
-        'Weight': str(model.get("weight")),
-        'Measurements': model.get("size"),
-        'Details': model.get("biography"),
-        'hair_color': model.get("hair" or "").capitalize(),
-        'eye_color': model.get("eyes" or "").capitalize(),
+        'Height': str(model.get("height", "")).strip(),
+        'Weight': str(model.get("weight", "")).strip(),
+        'Measurements': model.get("size", "").strip() if model.get("size") else None,
+        'Details': model.get("biography", "").strip() if model.get("biography") else None,
+        'hair_color': model.get("hair", "").capitalize().strip(),
+        'eye_color': model.get("eyes", "").capitalize().strip(),
         'Image': f"https://cdn.metartnetwork.com/{model.get('siteUUID')}{model.get('headshotImagePath')}",
         'Tags': tags
     }
