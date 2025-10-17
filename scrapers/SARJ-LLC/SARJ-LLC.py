@@ -3,6 +3,7 @@ import os
 import json
 import sys
 import re
+from typing import Any
 from urllib.parse import urlparse, urlencode
 
 # to import from a parent directory we need to add that directory to the system path
@@ -26,7 +27,8 @@ except ModuleNotFoundError:
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
     sys.exit()
 
-def scrape_url(url, scrape_type):
+
+def scrape_url(url: str, scrape_type: str) -> dict[str, Any] | None:
     parsed = urlparse(url)
 
     *_, date, name = parsed.path.split('/')
@@ -44,7 +46,7 @@ def scrape_url(url, scrape_type):
     return scraped
 
 
-def query(fragment, query_type):
+def query(fragment: dict[str, Any], query_type: str) -> dict[str, Any] | None:
     res = None
     if query_type in ('scene', 'gallery'):
         name = re.sub(r'\W', '_', fragment['title']).upper()
@@ -58,18 +60,18 @@ def query(fragment, query_type):
     return res
 
 
-def capitalize_word(match):
+def capitalize_word(match: re.Match[str]) -> str:
     """Helper function to capitalize words"""
     return match.group(0).lower().capitalize()
 
 
-def transform_name_part(part):
+def transform_name_part(part: str) -> str:
     """Transform a name part by replacing underscores/hyphens and capitalizing"""
     cleaned = re.sub('[_-]', ' ', part)
     return re.sub(r'\w\S*', capitalize_word, cleaned)
 
 
-def search(s_type, name):
+def search(s_type: str, name: str) -> list[dict[str, Any]]:
     search_type = {
         'scene': 'MOVIE',
         'gallery': 'GALLERY',
@@ -77,23 +79,24 @@ def search(s_type, name):
     }[s_type]
     page = 1
     page_size = 30
-    args = {
+    args: dict[str, str | int] = {
         'searchPhrase': name,
         'pageSize': page_size,
         'sortBy': 'relevance'
     }
-
+    
     if s_type == 'performer':
-        def map_result(result):
+        def map_result(result: dict[str, Any]) -> dict[str, Any]:
             item = result['item']
             return {
                 'name': item['name'].strip(),
                 'url': f"https://www.metartnetwork.com{item['path']}",
             }
     elif s_type == 'scene':
-        def map_result(result):
+        def map_result(result: dict[str, Any]) -> dict[str, Any]:
             item = result['item']
             studio = get_studio(item['siteUUID'])
+            image = ""
             if studio:
                 image = f"https://www.{studio[1]}{item['thumbnailCoverPath']}"
             return {
@@ -106,12 +109,15 @@ def search(s_type, name):
     else:
         return []
 
-    results = []
+    results: list[dict[str, Any]] = []
 
     log.info(f"Searching for {s_type} '{name}'")
     while True:
         args['page'] = page
         response = fetch("https://metartnetwork.com", "search-results", args)
+        
+        if response is None:
+            break
 
         # Filter results by type and map them
         filtered_results = [
@@ -128,7 +134,7 @@ def search(s_type, name):
     return results
 
 
-def fetch(base_url, fetch_type, arguments):
+def fetch(base_url: str, fetch_type: str, arguments: dict[str, str | int]) -> dict[str, Any] | None:
     url = f"{base_url}/api/{fetch_type}?{urlencode(arguments)}"
     log.debug(f"Fetching URL {url}")
     try:
@@ -143,11 +149,11 @@ def fetch(base_url, fetch_type, arguments):
         log.info(f"Fetching URL {url} resulted in error status: {response.status_code}")
         return None
 
-    data = response.json()
+    data: dict[str, Any] = response.json()
     return data
 
 
-def scrape_model(base_url, name):
+def scrape_model(base_url: str, name: str) -> dict[str, Any] | None:
     # Transform the name by splitting on hyphens and processing each part
     name_parts = name.split('-')
     transformed_parts = [transform_name_part(part) for part in name_parts]
@@ -161,10 +167,10 @@ def scrape_model(base_url, name):
     return map_model(base_url, data)
 
 
-def map_media(data, studio, base_url):
-    urls = []
+def map_media(data: dict[str, Any], studio: tuple[str, str] | None, base_url: str) -> dict[str, Any]:
+    urls: list[str] = []
     studio_code = data["UUID"].strip()
-    studio_name = {'Name': ""}
+    studio_name: dict[str, str] = {'Name': ""}
     
     # Sites that never put directors in the "crew" section
     # this eliminates picking up "still photographer" as an additional director
@@ -175,15 +181,15 @@ def map_media(data, studio, base_url):
         urls = [f"https://www.{studio_url}{data['path']}"]
         studio_name = {'Name': studio[0].strip()}
 
-    director = None
-    directors = []
+    director: str | None = None
+    directors: list[str] = []
 
     # director seems to be included in `photographers` and `crew` section
     if data.get("photographers"):
         for director in data['photographers']:
             directors.append(director.get('name').strip())
     if data.get('crew') and studio_name["Name"] not in directors_not_in_crew:
-                                # some sites only use the `photograpers`` section for director
+        # some sites only use the `photograpers`` section for director
         for crew in data['crew']:
             if crew.get('role') == "Still Photographer":
                 for crew_name in crew.get('names'):
@@ -205,7 +211,7 @@ def map_media(data, studio, base_url):
     }
 
 
-def scrape_movie(base_url, date, name):
+def scrape_movie(base_url: str, date: str, name: str) -> dict[str, Any] | None:
     log.info(f"Scraping movie '{name}' released on {date}")
     data = fetch(base_url, 'movie', {'name': name, 'date': date})
     if data is None:
@@ -234,7 +240,7 @@ def scrape_movie(base_url, date, name):
     return res
 
 
-def scrape_gallery(base_url, date, name):
+def scrape_gallery(base_url: str, date: str, name: str) -> dict[str, Any] | None:
     log.info(f"Scraping gallery '{name}' released on {date}")
     data = fetch(base_url, 'gallery', {'name': name, 'date': date})
     if data is None:
@@ -249,11 +255,11 @@ def scrape_gallery(base_url, date, name):
     return map_media(data, studio, base_url)
 
 
-def map_model(base_url, model):
+def map_model(base_url: str, model: dict[str, Any]) -> dict[str, Any]:
     # Convert tags list to dictionary format
-    tags = [{'Name': t.strip()} for t in model['tags']]
+    tags: list[dict[str, str]] = [{'Name': t.strip()} for t in model['tags']]
 
-    def add_tag(key, tag_format):
+    def add_tag(key: str, tag_format: str) -> None:
         nonlocal tags
         if key in model and model[key] != "":
             tags.append({
@@ -287,7 +293,7 @@ def map_model(base_url, model):
     }
 
 
-studios = {
+studios: dict[str, tuple[str, str]] = {
     '2163551D11D0439686AD9D291C8DFD71': ('ALS Scan', 'alsscan.com'),
     'D0E7E33329311E3BB6E0800200C93255': ('Domai', 'domai.com'),
     'FDA021004E3411DF98790800200C9A66': ('Erotic Beauty', 'eroticbeauty.com'),
@@ -307,7 +313,7 @@ studios = {
 }
 
 
-def validate_url(url):
+def validate_url(url: str | None) -> bool:
     if url is None or not re.match('^https?://', url):
         return False
 
@@ -321,7 +327,7 @@ def validate_url(url):
     return False
 
 
-def get_studio(site_uuid):
+def get_studio(site_uuid: str) -> tuple[str, str] | None:
     return studios[site_uuid] if site_uuid in studios else None
 
 
