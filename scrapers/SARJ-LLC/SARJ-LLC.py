@@ -57,6 +57,18 @@ def query(fragment, query_type):
         res = scraper('https://metartnetwork.com', date, name)
     return res
 
+
+def capitalize_word(match):
+    """Helper function to capitalize words"""
+    return match.group(0).lower().capitalize()
+
+
+def transform_name_part(part):
+    """Transform a name part by replacing underscores/hyphens and capitalizing"""
+    cleaned = re.sub('[_-]', ' ', part)
+    return re.sub(r'\w\S*', capitalize_word, cleaned)
+
+
 def search(s_type, name):
     search_type = {
         'scene': 'MOVIE',
@@ -88,7 +100,7 @@ def search(s_type, name):
                 'title': item['name'],
                 'url': f"https://www.metartnetwork.com{item['path']}",
                 'date': item['publishedAt'][0:item['publishedAt'].find('T')],
-                'performers': list(map(lambda m: {'name': m['name']}, item['models'])),
+                'performers': [{'name': m['name']} for m in item['models']],
                 'image': image,
             }
     else:
@@ -101,15 +113,12 @@ def search(s_type, name):
         args['page'] = page
         response = fetch("https://metartnetwork.com", "search-results", args)
 
-        results += list(
-            map(
-                map_result,
-                filter(
-                    lambda r: r['type'] == search_type,
-                    response['items']
-                )
-            )
-        )
+        # Filter results by type and map them
+        filtered_results = [
+            map_result(r) for r in response['items']
+            if r['type'] == search_type
+        ]
+        results += filtered_results
 
         if page * page_size > response['total'] or len(response['items']) == 0:
             break
@@ -139,20 +148,11 @@ def fetch(base_url, fetch_type, arguments):
 
 
 def scrape_model(base_url, name):
-    transformed_name = str.join(
-        ' ',
-        list(
-            map(
-                lambda p:
-                re.sub(
-                    '[_-]',
-                    ' ',
-                    re.sub(r'\w\S*', lambda m: m.group(0).lower().capitalize(), p),
-                ),
-                name.split('-')
-            )
-        )
-    )
+    # Transform the name by splitting on hyphens and processing each part
+    name_parts = name.split('-')
+    transformed_parts = [transform_name_part(part) for part in name_parts]
+    transformed_name = ' '.join(transformed_parts)
+    
     log.info(f"Scraping model '{name}' as '{transformed_name}'")
     data = fetch(base_url, 'model', {'name': transformed_name, 'order': 'DATE', 'direction': 'DESC'})
     if data is None:
@@ -197,8 +197,8 @@ def map_media(data, studio, base_url):
         'Details': data['description'],
         'URLs': urls,
         'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
-        'Tags': list(map(lambda t: {'Name': t}, data['tags'])),
-        'Performers': list(map(lambda m: map_model(base_url, m), data['models'])),
+        'Tags': [{'Name': t.strip()} for t in data['tags']],
+        'Performers': [map_model(base_url, m) for m in data['models']],
         'Studio': studio_name,
         'Code': studio_code,
         "Director": director
@@ -250,7 +250,8 @@ def scrape_gallery(base_url, date, name):
 
 
 def map_model(base_url, model):
-    tags = list(map(lambda t: {'Name': t}, model['tags']))
+    # Convert tags list to dictionary format
+    tags = [{'Name': t} for t in model['tags']]
 
     def add_tag(key, tag_format):
         nonlocal tags
