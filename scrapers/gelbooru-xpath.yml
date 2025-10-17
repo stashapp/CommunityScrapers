@@ -73,46 +73,9 @@ imageByURL:
 xPathScrapers:
   postScraper:
     image:
-      Title: &title
-        selector: //title
-        postProcess:
-          - replace:
-            # remove gelbooru title suffix
-            - regex: '[ ]+-[ ]+Image View[ ]+-[ ]+\| Gelbooru.*$'
-              with: ""
-            # remove tbib title prefix
-            - regex: '^The Big ImageBoard \(TBIB\)[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
-              with: "$1"
-            # remove rule34 title of list page (redirect when unknown)
-            - regex: '^The Big ImageBoard \(TBIB\)$'
-              with: ""
-            # remove rule34 title prefix
-            - regex: '^Rule 34[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
-              with: "$1"
-            # remove rule34 title of list page (redirect when unknown)
-            - regex: '^Rule 34$'
-              with: ""
-            # remove xbooru title prefix
-            - regex: '^Xbooru[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
-              with: "$1"
-            # remove xbooru title of list page (redirect when unknown)
-            - regex: '^Xbooru$'
-              with: ""
-            # remove safebooru title prefix
-            - regex: '^Safebooru[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
-              with: "$1"
-            # remove safebooru title of list page (redirect when unknown)
-            - regex: '^Safebooru$'
-              with: ""
-            # remove hypnohub title prefix
-            - regex: '^HypnoHub[ ]+-[ ]+(.*)[ ]+\|[ ]+[0-9]+$'
-              with: "$1"
-            # remove hypnohub title of list page (redirect when unknown)
-            - regex: '^HypnoHub$'
-              with: ""
-            # remove yandere title prefix
-            - regex: ' \| #[0-9]+ \| yande.re$'
-              with: ""
+      # title intentionally excluded
+      #Title: &title
+      #  selector: //title
       Date: &date
         selector: //div[@id="post-view" or @id="container"]//li[contains(text(),"Posted")]/text()[1]
         postProcess:
@@ -131,8 +94,8 @@ xPathScrapers:
         Name:
           # Variant A: only pull tags
           #selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-general")]/a[last()]/text()
-          # Variant B: also pull metadata tags (like 2D, 3D) and copyrights (source material names)
-          selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-general") or contains(@class,"tag-type-metadata") or contains(@class,"tag-type-copyright")]/a[last()]/text()
+          # Variant B: also pull metadata tags (like 2D, 3D, AI generated)
+          selector: //div[@id="post-view" or @id="container"]//li[contains(@class,"tag-type-general") or contains(@class,"tag-type-metadata")]/a[last()]/text()
       URLs: &source
         selector: '//div[@id="post-view" or @id="container"]//li[contains(text(),"Source:")]/a/@href'
       # pulls note overlay texts (translations) into Details box
@@ -140,7 +103,8 @@ xPathScrapers:
         selector: //div[@id="post-view" or @id="container"]//div[contains(@class,"note-body")]/text()
         concat: "\n"
     scene:
-      Title: *title
+      # title intentionally excluded
+      #Title: *title
       Date: *date
       Performers: *performers
       Studio: *artist
@@ -152,4 +116,4 @@ driver:
     - Key: User-Agent
       Value: stashapp/stash scraper
 
-# Last Updated October 16, 2025
+# Last Updated October 17, 2025
