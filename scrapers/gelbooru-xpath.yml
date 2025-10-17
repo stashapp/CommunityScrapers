@@ -4,7 +4,7 @@ name: gelbooru-xpath
 # loosely based on danbooru
 
 # intended to capture filename as produced by gallery-dl (rule34_<id>_<hash>.<ext>)
-sceneByFragment:
+sceneByFragment: &fragementscraper
   action: scrapeXPath
   queryURL: "{filename}"
   queryURLReplace:
@@ -28,31 +28,7 @@ sceneByFragment:
       - regex: '^(.*&id=)([0-9]+)_.*$' # capture numeric sequence at begining as ID
         with: "$1$2"
   scraper: postScraper
-# intended to capture filename as produced by gallery-dl (rule34_<id>_<hash>.<ext>)
-imageByFragment:
-  action: scrapeXPath
-  queryURL: "{filename}"
-  queryURLReplace:
-    filename:
-      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename so that it can construct a valid url
-        with: ""
-      - regex: "^gelbooru_(.*)" # map to domain by prefix
-        with: "https://gelbooru.com/index.php?page=post&s=view&id=$1"
-      - regex: "tbib_(.*)" # map to domain by prefix
-        with: "https://tbib.org/index.php?page=post&s=view&id=$1"
-      - regex: "^rule34_(.*)" # map to domain by prefix
-        with: "https://rule34.xxx/index.php?page=post&s=view&id=$1"
-      - regex: "^xbooru_(.*)" # map to domain by prefix
-        with: "https://xbooru.com/post/show/$1"
-      - regex: "^/safebooru_(.*)" # map to domain by prefix
-        with: "https://safebooru.org/post/show/$1"
-      - regex: "^/hypnohub_(.*)" # map to domain by prefix
-        with: "https://hypnohub.net/post/show/$1"
-      - regex: "^yandere_(.*)" # map to domain by prefix
-        with: "https://yande.re/post/show/$1"
-      - regex: '^(.*[^0-9])([0-9]+)_.*$' # capture numeric sequence at begining as ID
-        with: "$1$2"
-  scraper: postScraper
+imageByFragment: *fragementscraper
 
 sceneByURL:
   - action: scrapeXPath
