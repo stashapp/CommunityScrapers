@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $tags: //main/div[@class="columns"]/div[@class="secondary"]/div[@class="area"]/p/span[@class="nowrap"]
+      $tags: //main/div[@class="columns"]/div[@class="secondary"]/div[@class="area"]/div/div[@class="tag-cloud"]/div
     scene:
       Title:
         selector: //main/div[@class="heading"]/h1
@@ -32,4 +32,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Perverformer
-# Last Updated September 21, 2025
+# Last Updated Octover 04, 2025
