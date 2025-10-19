@@ -1,0 +1,32 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/stashapp/CommunityScrapers/refs/heads/master/validator/scraper.schema.json
+name: "MadBrosX"
+# scrapes: MadBros
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - madbrosx.com
+    scraper: madbrosx
+
+xPathScrapers:
+  madbrosx:
+    scene:
+      Title: //h3[@class = "page-heading"]/span/@title
+      Date:
+        selector: //div[@class = "video_page-sub-head__DqmKK"]//span[@aria-label = "calendar"]/../text()
+        postProcess:
+        - parseDate: January 2, 2006
+      Details:
+        selector: //div[@id = "rc-tabs-1-panel-description"]/p/text()
+        postProcess:
+        - replace:
+            - regex: "^No description$"
+              with: ""
+      Performers:
+        Name: //h4[@class = "ant-list-item-meta-title"]//a[contains(@href, "model")]/text()
+      Studio:
+        Name:
+          fixed: Madbros
+      Image: //meta[@property = "og:image"]/@content
+      Tags:
+        Name: //span[@class = "ant-tag"]/a/text()
