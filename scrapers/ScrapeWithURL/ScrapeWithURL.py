@@ -73,12 +73,20 @@ query scrapeSceneURL($url: String!) {
 
 
 FRAGMENT = json.loads(sys.stdin.read())
-url = FRAGMENT.get("url")
+urls = FRAGMENT.get("urls")
 
-if url:
-    result = scrape_scene(url)
-    result = filter_nones(result)
-    log.debug(f"result {result}")
-    print(json.dumps(result))
+for url in urls:
+    if not url.startswith('http'):
+      continue # skip urls that don't start with http
+    else:
+        try:
+            result = scrape_scene(url)
+            result = filter_nones(result)
+            log.debug(f"result {result}")
+            print(json.dumps(result))
+            if result:
+                break
+        except Exception:
+            continue
 else:
     print("null")
