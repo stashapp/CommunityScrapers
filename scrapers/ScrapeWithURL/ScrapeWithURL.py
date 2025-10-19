@@ -76,7 +76,9 @@ FRAGMENT = json.loads(sys.stdin.read())
 urls = FRAGMENT.get("urls")
 
 for url in urls:
-    if url[0] == 'h': # Sanity check that URL starts with h
+    if not url.startswith('http'):
+      continue # skip urls that don't start with http
+    else:
         try:
             result = scrape_scene(url)
             result = filter_nones(result)
