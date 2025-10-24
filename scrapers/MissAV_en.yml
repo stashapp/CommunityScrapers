@@ -2,7 +2,9 @@ name: MissAV (en)
 sceneByURL:
   - action: scrapeXPath
     url:
-      - missav.com
+      - missav.ai
+      - missav.ws
+      - missav.live
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
