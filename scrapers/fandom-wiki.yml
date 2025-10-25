@@ -1,0 +1,91 @@
+name: fandom-wiki
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - fandom.com/
+    queryURL: "{url}"
+    scraper: performerScraper
+
+xPathScrapers:
+  performerScraper:
+    common:
+      $infobox: //aside[contains(@class, 'portable-infobox')]
+    performer:
+      Name: 
+        selector: $infobox/h2//text()
+        postProcess:
+        - replace:
+          - regex: "[[0-9]+]"
+            with: "$1"
+      Aliases:
+        selector: $infobox//div[@data-source="full_name" or @data-source="full" or @data-source="also_known_as" or @data-source="known" or @data-source="aka" or contains(@data-source,"Name") or contains(@data-source,"name") or contains(@data-source,"alias") or contains(@data-source,"Alias")]/div/text()
+      Gender:
+        selector:  $infobox//div[@data-source="gender" or @data-source="Gender" or @data-source="sex"]/div//text()
+        concat: " "
+        postProcess:
+        - replace:
+          - regex: ^([^ ]+).*
+            with: "$1"
+      Birthdate:
+        selector: $infobox//div[contains(@data-source,"Birth") or contains(@data-source,"birth") or @data-source="born"]/div//text()
+        concat: " "
+        postProcess:
+        - replace:
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: "$1$2"
+          - regex: "\\(.*\\)"
+            with: ""
+          - regex: "[,]"
+            with: ""
+          - regex: "([0-9])(?:st|nd|th)"
+            with: "$1"
+          - regex: (\w+:)(\s)(\w+)(\s)(\d+)(\w+)(\s)(\w+)(\s)(\w+)(\s)(\d+)
+            with: $5 $10 $12
+        - parseDate: January 2 2006
+      Ethnicity:
+        selector: $infobox//div[@data-source="species" or contains(@data-source,"Race") or contains(@data-source,"race")]/div//text()
+      Country:
+        selector: $infobox//div[@data-source="nationality"]/div//text()
+      HairColor:
+        selector: $infobox//div[contains(@data-source,"hair") or contains(@data-source,"Hair")]/div//text()
+      EyeColor:
+        selector: $infobox//div[contains(@data-source,"eye") or contains(@data-source,"Eye")]/div//text()
+      Height:
+        selector: $infobox//div[@data-source="height"]/div//text()
+        concat: " "
+        postProcess:
+        - replace:
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: "$1$2"
+          - regex: ^(?:.*[^0-9.])?([0-9]+)\.([0-9]+)[ ]?(?:m|M)(?:.*)?$
+            with: "$1$2"
+          - regex: ^(?:.*[^0-9])?([0-9]+)[ ]?(?:cm)(?:.*)?$
+            with: "$1"
+          - regex: ^(?:.*[^0-9])?([0-9]+)(?:.*)?$
+            with: "$1"
+      Weight:
+        selector: $infobox//div[@data-source="weight"]/div//text()
+        concat: " "
+        postProcess:
+        - replace:
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: "$1$2"
+          - regex: ^(?:.*[^0-9.])?([0-9]+)(?:\.[0-9]+)?[ ]?(?:kg|Kg|KG)(?:.*)?$
+            with: "$1"
+          - regex: ^(?:.*[^0-9])?([0-9]+)(?:.*)?$
+            with: "$1"
+      Measurements:
+        selector: $infobox//div[@data-source="measurements"]/div//text()
+        concat: " "
+        postProcess:
+        - replace:
+          - regex: ^(?:.*B|.*[^0-9])?([0-9]+)\"[ -]+W?([0-9]+)\"[ -]+H?([0-9]+)\"(.*)?$
+            with: "$1-$2-$3"
+          - regex: ^(?:.*B|.*[^0-9])?([0-9]+)(?:cm)?[ -]+W?([0-9]+)(?:cm)?[ -]+H?([0-9]+)(?:cm)?.*$
+            with: "$1-$2-$3"
+      Tags:
+        Name:
+          selector: //nav[@id="articleCategories"]//li[contains(@class, "category")]/@data-name
+      Image:
+        selector: $infobox//figure//img/@src
