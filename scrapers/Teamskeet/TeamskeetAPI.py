@@ -10,8 +10,7 @@ import cloudscraper
 
 ### SET MEMBER ACCESS TOKEN HERE
 ### CAN BE access_token OR refresh_token
-TEAMSKEET_ACCESS_TOKEN = ""
-MYLF_ACCESS_TOKEN = ""
+REPTYLE_ACCESS_TOKEN = ""
 ####
 
 scraper = cloudscraper.create_scraper()
@@ -133,17 +132,11 @@ else:
 
 IS_MEMBER = False
 # Check the URL and set the API URL
-if "app.teamskeet.com" in scene_url:
-    ORIGIN = "https://app.teamskeet.com"
-    REFERER = "https://app.teamskeet.com"
+if "app.reptyle.com" in scene_url:
+    ORIGIN = "https://app.reptyle.com"
+    REFERER = "https://app.reptyle.com"
     API_BASE = "https://ma-store.teamskeet.com/ts_index/_doc/movie-"
-    MEMBER_ACCESS_TOKEN = TEAMSKEET_ACCESS_TOKEN
-    IS_MEMBER = True
-elif "app.mylf.com" in scene_url:
-    ORIGIN = "https://app.mylf.com"
-    REFERER = "https://app.mylf.com"
-    API_BASE = "https://ma-store.mylf.com/mylf_movies/_doc/"
-    MEMBER_ACCESS_TOKEN = MYLF_ACCESS_TOKEN
+    MEMBER_ACCESS_TOKEN = REPTYLE_ACCESS_TOKEN
     IS_MEMBER = True
 elif "sayuncle.com" in scene_url:
     ORIGIN = "https://www.sayuncle.com"
