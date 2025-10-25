@@ -135,7 +135,7 @@ IS_MEMBER = False
 if "app.reptyle.com" in scene_url:
     ORIGIN = "https://app.reptyle.com"
     REFERER = "https://app.reptyle.com"
-    API_BASE = "https://ma-store.teamskeet.com/ts_index/_doc/movie-"
+    API_BASE = "https://ma-store.reptyle.com/ts_index/_doc/movie-"
     MEMBER_ACCESS_TOKEN = REPTYLE_ACCESS_TOKEN
     IS_MEMBER = True
 elif "sayuncle.com" in scene_url:
