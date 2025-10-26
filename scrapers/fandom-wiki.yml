@@ -51,7 +51,7 @@ xPathScrapers:
           - regex: "\\[[ ]*[0-9]+[ ]*\\]"
             with: ""
           # remove expressions in braces (likely only giving context)
-          - regex: "\\(.*\\)"
+          - regex: \([^)]*\)
             with: ""
           # remove commas ("September 26, 1981" -> "September 26 1981")
           - regex: "[,]"
@@ -174,16 +174,23 @@ xPathScrapers:
             }
             return value;
       Measurements:
-        selector: $infobox//div[@data-source="measurements"]/div//text()
+        # looks for one field with all values, or split fields (get combined into single string)
+        # split fields really only work corretly if the field order is still B-W-H
+        selector: $infobox//div[@data-source="measurements" or @data-source="bust" or @data-source="waist" or @data-source="hips"]/div//text()
         concat: " "
         postProcess:
+        # there are probably many formats used - examples fo seen formats
+        # B93 W59 H88 cm (B37" W23" H35")
+        # separate fields with <number> cm
         - replace:
           # remove citation markers like "[3]"
           - regex: "\\[[ ]*[0-9]+[ ]*\\]"
             with: ""
-          - regex: ^(?:.*B|.*[^0-9])?([0-9]+)\"[ -]+W?([0-9]+)\"[ -]+H?([0-9]+)\"(.*)?$
-            with: "$1-$2-$3"
-          - regex: ^(?:.*B|.*[^0-9])?([0-9]+)(?:cm)?[ -]+W?([0-9]+)(?:cm)?[ -]+H?([0-9]+)(?:cm)?.*$
+          # remove expressions in braces (to remove noise from potential split fields)
+          - regex: \([^)]*\)
+            with: ""
+          # reduce to B-W-H removing prefixes and units ("B93 W59 H88 cm" -> "93-59-88")
+          - regex: ^(?:.*B|.*[^0-9])?([0-9]{2,})\s*(?:cm|")?[\s\-]+W?([0-9]{2,})\s*(?:cm|")?[\s\-]+H?([0-9]{2,})\s*(?:cm|")?.*$
             with: "$1-$2-$3"
       Tags:
         Name:
