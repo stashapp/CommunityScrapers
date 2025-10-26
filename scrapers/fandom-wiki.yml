@@ -15,16 +15,26 @@ xPathScrapers:
         selector: $infobox/h2//text()
         postProcess:
         - replace:
-          - regex: "[[0-9]+]"
-            with: "$1"
+          # remove citation markers like "[3]"
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: ""
       Aliases:
         selector: $infobox//div[@data-source="full_name" or @data-source="full" or @data-source="also_known_as" or @data-source="known" or @data-source="aka" or contains(@data-source,"Name") or contains(@data-source,"name") or contains(@data-source,"alias") or contains(@data-source,"Alias")]/div/text()
+        postProcess:
+        - replace:
+          # remove citation markers like "[3]"
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: ""
       Gender:
         selector:  $infobox//div[@data-source="gender" or @data-source="Gender" or @data-source="sex"]/div//text()
         concat: " "
         postProcess:
         - replace:
-          - regex: ^([^ ]+).*
+          # remove citation markers like "[3]"
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: ""
+          # reduce to single word
+          - regex: ^([^\s]+).*
             with: "$1"
       Birthdate:
         selector: $infobox//div[contains(@data-source,"Birth") or contains(@data-source,"birth") or @data-source="born" or @data-source="dob" or @data-source="DOB"]/div//text()
@@ -39,7 +49,7 @@ xPathScrapers:
         - replace:
           # remove citation markers like "[3]"
           - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: "$1$2"
+            with: ""
           # remove expressions in braces (likely only giving context)
           - regex: "\\(.*\\)"
             with: ""
@@ -65,12 +75,32 @@ xPathScrapers:
         postProcess: *postprocessDate
       Ethnicity:
         selector: $infobox//div[@data-source="species" or contains(@data-source,"Race") or contains(@data-source,"race")]/div//text()
+        postProcess:
+        - replace:
+          # remove citation markers like "[3]"
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: ""
       Country:
         selector: $infobox//div[@data-source="nationality"]/div//text()
+        postProcess:
+        - replace:
+          # remove citation markers like "[3]"
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: ""
       HairColor:
         selector: $infobox//div[contains(@data-source,"hair") or contains(@data-source,"Hair")]/div//text()
+        postProcess:
+        - replace:
+          # remove citation markers like "[3]"
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: ""
       EyeColor:
         selector: $infobox//div[contains(@data-source,"eye") or contains(@data-source,"Eye")]/div//text()
+        postProcess:
+        - replace:
+          # remove citation markers like "[3]"
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: ""
       Height:
         selector: $infobox//div[@data-source="height"]/div//text()
         concat: " "
@@ -118,8 +148,9 @@ xPathScrapers:
         concat: " "
         postProcess:
         - replace:
+          # remove citation markers like "[3]"
           - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: "$1$2"
+            with: ""
           - regex: ^(?:.*[^0-9.])?([0-9]+)(?:\.[0-9]+)?[ ]?(?:kg|Kg|KG)(?:.*)?$
             with: "$1"
           - regex: ^(?:.*[^0-9])?([0-9]+)(?:.*)?$
@@ -129,6 +160,9 @@ xPathScrapers:
         concat: " "
         postProcess:
         - replace:
+          # remove citation markers like "[3]"
+          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: ""
           - regex: ^(?:.*B|.*[^0-9])?([0-9]+)\"[ -]+W?([0-9]+)\"[ -]+H?([0-9]+)\"(.*)?$
             with: "$1-$2-$3"
           - regex: ^(?:.*B|.*[^0-9])?([0-9]+)(?:cm)?[ -]+W?([0-9]+)(?:cm)?[ -]+H?([0-9]+)(?:cm)?.*$
