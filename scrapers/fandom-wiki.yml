@@ -1,5 +1,4 @@
 name: fandom-wiki
-
 performerByURL:
   - action: scrapeXPath
     url:
@@ -55,15 +54,44 @@ xPathScrapers:
         selector: $infobox//div[@data-source="height"]/div//text()
         concat: " "
         postProcess:
+        # there are many formats used, a lot of them use multi-unit formats, or even multiple values - some examples
+        # 163 cm (5'4")[3]
+        # 5'3 (1.60m)
+        # 171 cm (5'7½")
+        # 171 cm (5'7.3"), according to source abc
+        # 5 feet 3 inches (160cm)[3]
+        # 163cm[1] (5'4")[note 1]
+        # 168 cm (with heels)
         - replace:
+          # remove citation markers like "[3]"
           - regex: "\\[[ ]*[0-9]+[ ]*\\]"
+            with: ""
+          # height in meters, pulls out as centimeters number ("1.63 m (5'4")" -> "163")
+          - regex: ^(?:.*[^0-9.])?([0-9]+)\.([0-9]{2}])[ ]?(?:m|M)(?:.*)?$
             with: "$1$2"
-          - regex: ^(?:.*[^0-9.])?([0-9]+)\.([0-9]+)[ ]?(?:m|M)(?:.*)?$
-            with: "$1$2"
-          - regex: ^(?:.*[^0-9])?([0-9]+)[ ]?(?:cm)(?:.*)?$
+          # height in centimeters, pulls out just the number ("163 cm (5'4")" -> "163")
+          - regex: ^(?:.*[^0-9])?([0-9]{3})[ ]?(?:cm|CM)(?:.*)?$
             with: "$1"
-          - regex: ^(?:.*[^0-9])?([0-9]+)(?:.*)?$
+          # pull out any three digit number from string (to catch those in cm without units)
+          - regex: ^(?:.*[^0-9])?([0-9]{3})(?:.*)?$
             with: "$1"
+          # reduce any variant of imperial to predicatble format ("5' 4"" -> "5'4")
+          - regex: ^(?:.*[^0-9])?([0-9])\s*(?:'|ft|ft.|feet|foot)\s*([0-9])(?:.*)?$
+            with: "$1'$2"
+        # use JS to convert imperial to metric, if imperial
+        - javascript: |
+            if (value && value.length) {
+              console.log('has value');
+              const match = /^(\d)'(\d)$/.exec(value);
+              if (match) {
+                console.log('regexp match');
+                const feet = parseInt(match[1]);
+                const inches = parseInt(match[2]);
+                const imperialHeight = feet + inches / 12.0;
+                return (imperialHeight * 30.48).toFixed(0);
+              }
+            }
+            return value;
       Weight:
         selector: $infobox//div[@data-source="weight"]/div//text()
         concat: " "
