@@ -46,6 +46,7 @@ xPathScrapers:
         # January 7, 11942
         # Between 1 August 1950 and 31 July 1951
         # 2 May 1998 (aged 46/47)
+        # 1997 [3] some more text
         - replace:
           # remove citation markers like "[3]"
           - regex: "\\[[ ]*[0-9]+[ ]*\\]"
@@ -68,6 +69,9 @@ xPathScrapers:
           # remove extra content around first par with format "May 2 1998" -> "May 2 1998"
           - regex: ^(?:.*[^\w])?(\w{3,})(?:\s+)(\d{1,2})(?:\s+)(\d{4})(?:.*)?$
             with: $1 $2 $3
+          # starts with a year -> expand to JJanuary first
+          - regex: ^(\d{4})(?:[^\d].*)?$
+            with: January 1 $1
         - parseDate: January 2 2006
       DeathDate:
         selector: $infobox//div[contains(@data-source,"Death") or contains(@data-source,"death") or @data-source="died" or @data-source="dod" or @data-source="DOD"]/div//text()
