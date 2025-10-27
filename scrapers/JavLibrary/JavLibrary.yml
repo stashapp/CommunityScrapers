@@ -5,7 +5,7 @@ sceneByFragment:
   action: script
   script:
     - python
-    - JavLibrary/JavLibrary.py
+    - JavLibrary.py
   # Note: If javlibrary doesn't work, you can replace javlibrary with any mirrors in the queryURL.
   # The scraper matches the DVD version of a title. If you want the Blu-Ray version you'll need to add the correct URL manually and scrape using that afterwards.
 
@@ -18,19 +18,19 @@ sceneByURL:
       - n53i.com/
     script:
       - python
-      - JavLibrary/JavLibrary.py
+      - JavLibrary.py
 
 sceneByName:
   action: script
   script:
     - python
-    - JavLibrary/JavLibrary.py
+    - JavLibrary.py
 
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - JavLibrary/JavLibrary.py
+    - JavLibrary.py
 
 movieByURL:
   - action: script
@@ -41,6 +41,6 @@ movieByURL:
       - n53i.com/
     script:
       - python
-      - JavLibrary/JavLibrary.py
+      - JavLibrary.py
 
-# Last Updated October 27, 2024 - Converted to use cloudscraper for Cloudflare bypass
+# Last Updated October 27, 2024
