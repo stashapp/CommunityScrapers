@@ -1,75 +1,22 @@
-"""JAVLibrary scraper using cloudscraper"""
+"""JAVLibrary scraper using pydoll for Cloudflare bypass"""
 import json
 import re
 import sys
 import base64
+import asyncio
 from urllib.parse import urlparse
 
 from py_common import log
 from py_common.util import scraper_args
 from py_common.deps import ensure_requirements
 
-ensure_requirements("cloudscraper", "lxml")
+ensure_requirements("pydoll-python", "lxml")
 
-import cloudscraper  # noqa: E402
+from pydoll.browser import Chrome  # noqa: E402
 from lxml import html  # noqa: E402
-
-# Headers to bypass Cloudflare
-HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
-    "Accept-Language": "en-US,en;q=0.5",
-    "Accept-Encoding": "gzip, deflate, br",
-    "DNT": "1",
-    "Connection": "keep-alive",
-    "Upgrade-Insecure-Requests": "1",
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "none",
-}
 
 # Mirror sites to try
 MIRROR_SITES = ["javlibrary", "o58c", "e59f", "p54u", "d52q", "n53i"]
-
-# Create a single scraper instance to reuse across requests with browser configuration
-scraper = cloudscraper.create_scraper(
-    browser={
-        'browser': 'firefox',
-        'platform': 'windows',
-        'mobile': False
-    },
-    delay=10,  # Add delay for Cloudflare protection
-    interpreter='native'  # Use native interpreter
-)
-
-
-def try_mirrors(url):
-    """Try different mirror sites until one works"""
-    parsed = urlparse(url)
-    domain = parsed.netloc.replace('www.', '').replace('.com', '')
-
-    # If not a javlib domain, return as-is
-    if domain not in MIRROR_SITES:
-        return url, None
-
-    cookies = {'over18': '18'}
-
-    for mirror in MIRROR_SITES:
-        try_url = url.replace(domain, mirror)
-        log.info(f"Trying mirror: {mirror}")
-
-        try:
-            response = scraper.get(try_url, headers=HEADERS, cookies=cookies, timeout=30)
-            if response.status_code == 200:
-                log.info(f"Successfully connected to {mirror}")
-                return try_url, response
-            else:
-                log.debug(f"Mirror {mirror} returned status {response.status_code}")
-        except Exception as e:
-            log.debug(f"Mirror {mirror} failed: {e}")
-
-    log.error("All mirrors failed")
-    return url, None
 
 
 def get_xpath_text(tree, xpath):
@@ -90,24 +37,94 @@ def get_xpath_list(tree, xpath):
     return []
 
 
-def clean_url_regex(url_str, pattern, replacement):
-    """Apply regex replacement to URL"""
-    return re.sub(pattern, replacement, url_str)
+async def fetch_page_html(url):
+    """Fetch page HTML using pydoll browser automation"""
+    try:
+        log.info(f"Starting browser for URL: {url}")
+        async with Chrome() as browser:
+            tab = await browser.start()
+            log.info(f"Navigating to: {url}")
+            await tab.go_to(url)
+
+            # Wait a bit for page to load
+            await asyncio.sleep(2)
+
+            # Get page HTML
+            page_html = await tab.query('//html').get_attribute('outerHTML')
+
+            log.info("Successfully fetched page HTML")
+            return page_html, tab.url
+
+    except Exception as e:
+        log.error(f"Error fetching page with pydoll: {e}")
+        return None, None
+
+
+async def try_mirrors_async(url):
+    """Try different mirror sites until one works"""
+    parsed = urlparse(url)
+    domain = parsed.netloc.replace('www.', '').replace('.com', '')
+
+    # If not a javlib domain, try it directly
+    if domain not in MIRROR_SITES:
+        log.info(f"Not a javlib domain, trying directly: {url}")
+        html_content, final_url = await fetch_page_html(url)
+        if html_content:
+            return url, html_content, final_url
+        return url, None, None
+
+    for mirror in MIRROR_SITES:
+        try_url = url.replace(domain, mirror)
+        log.info(f"Trying mirror: {mirror}")
+
+        html_content, final_url = await fetch_page_html(try_url)
+        if html_content and 'Access denied' not in html_content:
+            log.info(f"Successfully connected to {mirror}")
+            return try_url, html_content, final_url
+
+        log.debug(f"Mirror {mirror} failed or blocked")
+
+    log.error("All mirrors failed")
+    return url, None, None
+
+
+def try_mirrors(url):
+    """Synchronous wrapper for try_mirrors_async"""
+    return asyncio.run(try_mirrors_async(url))
+
+
+async def fetch_image_base64_async(url):
+    """Fetch image and convert to base64"""
+    try:
+        async with Chrome() as browser:
+            tab = await browser.start()
+            response = await tab.request.get(url)
+            if response.status_code == 200:
+                content = await response.content()
+                b64_image = base64.b64encode(content).decode('utf-8')
+                return f"data:image/jpeg;base64,{b64_image}"
+    except Exception as e:
+        log.warning(f"Failed to fetch image: {e}")
+    return None
+
+
+def fetch_image_base64(url):
+    """Synchronous wrapper for fetch_image_base64_async"""
+    return asyncio.run(fetch_image_base64_async(url))
 
 
 def scrape_scene(url):
     """Scrape scene information from JavLibrary"""
     try:
-        log.info(f"Fetching URL: {url}")
+        log.info(f"Scraping scene: {url}")
 
         # Try mirrors if needed
-        working_url, response = try_mirrors(url)
-        if response is None:
+        working_url, html_content, final_url = try_mirrors(url)
+        if html_content is None:
             log.error("Failed to connect to any mirror site")
             return {}
 
-        tree = html.fromstring(response.content)
-
+        tree = html.fromstring(html_content)
         scene = {}
 
         # Title: Get the DVD ID code
@@ -116,7 +133,7 @@ def scrape_scene(url):
             scene['code'] = code
             scene['title'] = code
 
-        # URL: Get from meta tag or construct from code
+        # URL: Get from meta tag or use final URL
         url_xpath = get_xpath_text(tree, '//meta[@property="og:url"]/@content')
         if url_xpath:
             # Process URL to ensure correct format
@@ -125,6 +142,8 @@ def scrape_scene(url):
                 query_part = url_processed.split('?')[1]
                 url_processed = f"https://www.javlibrary.com/en/?{query_part}"
             scene['url'] = url_processed
+        else:
+            scene['url'] = final_url
 
         # Date
         date = get_xpath_text(tree, '//div[@id="video_date"]/table/tbody/tr/td[@class="text"]/text()')
@@ -160,14 +179,10 @@ def scrape_scene(url):
             image_clean = re.sub(r'(http:|https:)', '', image)
             image_url = f"https:{image_clean}"
 
-            # Convert to base64
-            try:
-                img_response = scraper.get(image_url, headers=HEADERS, timeout=10)
-                if img_response.status_code == 200:
-                    b64_image = base64.b64encode(img_response.content).decode('utf-8')
-                    scene['image'] = f"data:image/jpeg;base64,{b64_image}"
-            except Exception as e:
-                log.warning(f"Failed to fetch image: {e}")
+            # Note: Image fetching with pydoll is slow, skip for now
+            # Users can enable if needed
+            log.debug(f"Image URL: {image_url} (skipping base64 conversion for performance)")
+            # scene['image'] = fetch_image_base64(image_url)
 
         # Studio
         studio = get_xpath_text(tree, '//div[@id="video_maker"]/table/tbody/tr/td[@class="text"]/span/a/text()')
@@ -178,22 +193,23 @@ def scrape_scene(url):
 
     except Exception as e:
         log.error(f"Error scraping scene: {e}")
+        import traceback
+        log.debug(traceback.format_exc())
         return {}
 
 
 def scrape_movie(url):
     """Scrape movie information from JavLibrary"""
     try:
-        log.info(f"Fetching URL: {url}")
+        log.info(f"Scraping movie: {url}")
 
         # Try mirrors if needed
-        working_url, response = try_mirrors(url)
-        if response is None:
+        working_url, html_content, final_url = try_mirrors(url)
+        if html_content is None:
             log.error("Failed to connect to any mirror site")
             return {}
 
-        tree = html.fromstring(response.content)
-
+        tree = html.fromstring(html_content)
         movie = {}
 
         # Name: DVD ID
@@ -227,26 +243,15 @@ def scrape_movie(url):
         if studio:
             movie['studio'] = {"name": studio}
 
-        # Front Image
-        image = get_xpath_text(tree, '//div[@id="video_jacket"]/img/@src')
-        if image:
-            # Clean the image URL
-            image_clean = re.sub(r'(http:|https:)', '', image)
-            image_url = f"https:{image_clean}"
-
-            # Convert to base64
-            try:
-                img_response = scraper.get(image_url, headers=HEADERS, timeout=10)
-                if img_response.status_code == 200:
-                    b64_image = base64.b64encode(img_response.content).decode('utf-8')
-                    movie['front_image'] = f"data:image/jpeg;base64,{b64_image}"
-            except Exception as e:
-                log.warning(f"Failed to fetch image: {e}")
+        # Front Image - skip for performance
+        log.debug("Skipping front image for performance")
 
         return movie
 
     except Exception as e:
         log.error(f"Error scraping movie: {e}")
+        import traceback
+        log.debug(traceback.format_exc())
         return {}
 
 
@@ -258,21 +263,27 @@ def search_scenes(query):
         log.info(f"Searching: {search_url}")
 
         # Try mirrors if needed
-        working_url, response = try_mirrors(search_url)
-        if response is None:
+        working_url, html_content, final_url = try_mirrors(search_url)
+        if html_content is None:
             log.error("Failed to connect to any mirror site")
             return []
 
-        tree = html.fromstring(response.content)
-
         # Check if we landed directly on a scene page
-        if "/en/?v=" in response.url:
+        if "/en/?v=" in final_url:
             log.info("Direct match found, scraping scene page")
-            # We're on a scene page, scrape it
-            scene = scrape_scene(response.url)
-            if scene:
+            # Parse the HTML we already have
+            tree = html.fromstring(html_content)
+            scene = {}
+
+            # Extract basic info for search result
+            code = get_xpath_text(tree, '//div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()')
+            if code:
+                scene['title'] = code
+                scene['url'] = final_url
                 return [scene]
             return []
+
+        tree = html.fromstring(html_content)
 
         # Parse search results
         results = []
@@ -304,6 +315,8 @@ def search_scenes(query):
 
     except Exception as e:
         log.error(f"Error searching: {e}")
+        import traceback
+        log.debug(traceback.format_exc())
         return []
 
 
@@ -360,5 +373,7 @@ if __name__ == "__main__":
 
     except Exception as e:
         log.error(f"Fatal error: {e}")
+        import traceback
+        log.debug(traceback.format_exc())
         print(json.dumps({}))
         sys.exit(1)
