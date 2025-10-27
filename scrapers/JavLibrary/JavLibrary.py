@@ -14,8 +14,62 @@ ensure_requirements("cloudscraper", "lxml")
 import cloudscraper  # noqa: E402
 from lxml import html  # noqa: E402
 
-# Create a single scraper instance to reuse across requests
-scraper = cloudscraper.create_scraper()
+# Headers to bypass Cloudflare
+HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:124.0) Gecko/20100101 Firefox/124.0",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.5",
+    "Accept-Encoding": "gzip, deflate, br",
+    "DNT": "1",
+    "Connection": "keep-alive",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+}
+
+# Mirror sites to try
+MIRROR_SITES = ["javlibrary", "o58c", "e59f", "p54u", "d52q", "n53i"]
+
+# Create a single scraper instance to reuse across requests with browser configuration
+scraper = cloudscraper.create_scraper(
+    browser={
+        'browser': 'firefox',
+        'platform': 'windows',
+        'mobile': False
+    },
+    delay=10,  # Add delay for Cloudflare protection
+    interpreter='native'  # Use native interpreter
+)
+
+
+def try_mirrors(url):
+    """Try different mirror sites until one works"""
+    parsed = urlparse(url)
+    domain = parsed.netloc.replace('www.', '').replace('.com', '')
+
+    # If not a javlib domain, return as-is
+    if domain not in MIRROR_SITES:
+        return url, None
+
+    cookies = {'over18': '18'}
+
+    for mirror in MIRROR_SITES:
+        try_url = url.replace(domain, mirror)
+        log.info(f"Trying mirror: {mirror}")
+
+        try:
+            response = scraper.get(try_url, headers=HEADERS, cookies=cookies, timeout=30)
+            if response.status_code == 200:
+                log.info(f"Successfully connected to {mirror}")
+                return try_url, response
+            else:
+                log.debug(f"Mirror {mirror} returned status {response.status_code}")
+        except Exception as e:
+            log.debug(f"Mirror {mirror} failed: {e}")
+
+    log.error("All mirrors failed")
+    return url, None
 
 
 def get_xpath_text(tree, xpath):
@@ -45,8 +99,13 @@ def scrape_scene(url):
     """Scrape scene information from JavLibrary"""
     try:
         log.info(f"Fetching URL: {url}")
-        response = scraper.get(url, timeout=30)
-        response.raise_for_status()
+
+        # Try mirrors if needed
+        working_url, response = try_mirrors(url)
+        if response is None:
+            log.error("Failed to connect to any mirror site")
+            return {}
+
         tree = html.fromstring(response.content)
 
         scene = {}
@@ -103,7 +162,7 @@ def scrape_scene(url):
 
             # Convert to base64
             try:
-                img_response = scraper.get(image_url, timeout=10)
+                img_response = scraper.get(image_url, headers=HEADERS, timeout=10)
                 if img_response.status_code == 200:
                     b64_image = base64.b64encode(img_response.content).decode('utf-8')
                     scene['image'] = f"data:image/jpeg;base64,{b64_image}"
@@ -126,8 +185,13 @@ def scrape_movie(url):
     """Scrape movie information from JavLibrary"""
     try:
         log.info(f"Fetching URL: {url}")
-        response = scraper.get(url, timeout=30)
-        response.raise_for_status()
+
+        # Try mirrors if needed
+        working_url, response = try_mirrors(url)
+        if response is None:
+            log.error("Failed to connect to any mirror site")
+            return {}
+
         tree = html.fromstring(response.content)
 
         movie = {}
@@ -172,7 +236,7 @@ def scrape_movie(url):
 
             # Convert to base64
             try:
-                img_response = scraper.get(image_url, timeout=10)
+                img_response = scraper.get(image_url, headers=HEADERS, timeout=10)
                 if img_response.status_code == 200:
                     b64_image = base64.b64encode(img_response.content).decode('utf-8')
                     movie['front_image'] = f"data:image/jpeg;base64,{b64_image}"
@@ -193,8 +257,12 @@ def search_scenes(query):
         search_url = f"https://www.javlibrary.com/en/vl_searchbyid.php?keyword={query}"
         log.info(f"Searching: {search_url}")
 
-        response = scraper.get(search_url, timeout=30)
-        response.raise_for_status()
+        # Try mirrors if needed
+        working_url, response = try_mirrors(search_url)
+        if response is None:
+            log.error("Failed to connect to any mirror site")
+            return []
+
         tree = html.fromstring(response.content)
 
         # Check if we landed directly on a scene page

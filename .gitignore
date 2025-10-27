@@ -7,6 +7,7 @@ yarn-error.log
 *.ini
 *.json
 *.log
+**/automatic_dependencies/
 
 # Index build artifact
 /_site
