@@ -139,6 +139,12 @@ xPathScrapers:
           - replace:
               - regex: cm
                 with: ""
+      Weight:
+        selector: //span[@class="label"][contains(text(),"Weight")]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: kg
+                with: ""
       Image:
         selector: //div[@class="details"]//img/@src
         # Newer models allow for 1440x
@@ -149,4 +155,6 @@ xPathScrapers:
       Details:
         selector: //div[@class="description translated-text"]//child::text()
         concat: "\n\n"
-# Last Updated September 17, 2025
+      Tags:
+        Name: //div[contains(@class,"details")]//div[contains(@class,"current-tags")]//a[contains(@class,"tag")]/text()
+# Last Updated October 28, 2025
