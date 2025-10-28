@@ -15,6 +15,12 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - helixstudios.com/movie/
+    scraper: groupScraper
+
 performerByURL:
   - action: scrapeXPath
     url:
@@ -91,6 +97,19 @@ xPathScrapers:
       Studio:
         Name:
           selector: //span[contains(@class, "studio-name")]/text()
+
+  groupScraper:
+    movie:
+      Duration:
+        selector: //span.info-item.duration/text()
+        postProcess:
+          - replace:
+            - regex: " min$"
+              with: ":00"
+      FrontImage: //img[@id="frontCover"]/@src
+      BackImage: //img[@id="backCover"]/@src
+      Name: //h1/text()
+      Synopsis: /html/head/meta[@name="Description"]/@content
 
   performerSearch:
     common:

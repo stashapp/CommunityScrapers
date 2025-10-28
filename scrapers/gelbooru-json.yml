@@ -1,6 +1,7 @@
 name: gelbooru-json
 # https://github.com/stashapp/CommunityScrapers/issues/2273
 # loosely based on danbooru
+# specifically for rule34.xxx, see gelbooru-xpath
 sceneByURL:
   - action: scrapeJson
     url: &urls
@@ -9,9 +10,12 @@ sceneByURL:
     scraper: postScraper
     queryURL: "{url}"
     queryURLReplace:
-      url:
+      url: &urlreplace
         - regex: 'index\.php.+&id=(\d+)(.+)?'
           with: "index.php?page=dapi&q=index&json=1&s=post&id=$1"
+        - regex: '$'
+          with: "&api_key=NOT_AN_API_KEY&user_id=2"
+        # https://api.rule34.xxx/
 
 imageByURL:
   - action: scrapeJson
@@ -19,9 +23,7 @@ imageByURL:
     scraper: postScraper
     queryURL: "{url}"
     queryURLReplace:
-      url:
-        - regex: 'index\.php.+&id=(\d+)(.+)?'
-          with: "index.php?page=dapi&q=index&json=1&s=post&id=$1"
+      url: *urlreplace
 
 jsonScrapers:
   postScraper:

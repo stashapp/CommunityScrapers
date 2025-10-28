@@ -21,9 +21,14 @@ xPathScrapers:
   sceneScraper:
     common:
       $table: //div[@class="info-bg"]/table/tbody/tr
+      $metadata: //div[@id="movie"]/script[@type="application/ld+json"]
     scene:
-      Title: /html/head/title/text()
-      URL: 
+      Title:
+        selector: $metadata/text()
+        postProcess:
+          - javascript: |
+              return JSON.parse(value)?.name ?? null;
+      URL:
         selector: /html/head/meta[@property="og:url"]/@content
         postProcess:
           - replace:

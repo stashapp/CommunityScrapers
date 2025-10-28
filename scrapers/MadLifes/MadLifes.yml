@@ -1,0 +1,35 @@
+name: MadLifes
+# requires: py_common, FAKNetwork
+sceneByURL:
+  - action: script
+    url:
+      # Implicitly english language
+      - madlifes.com/video/
+      # Explicitly english language
+      - madlifes.com/en/video/
+      # Explicitly spanish language
+      - madlifes.com/es/video/
+      # Explicitly portugese language
+      - madlifes.com/pt/video/
+    script:
+      - python
+      - MadLifes.py
+      - scene-by-url
+sceneByName:
+  action: script
+  script:
+    - python
+    - MadLifes.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - MadLifes.py
+    - scene-by-query-fragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - MadLifes.py
+    - scene-by-fragment

@@ -1,0 +1,25 @@
+name: PlayboyPlus
+galleryByURL:
+  - action: script
+    url:
+      - playboyplus.com/en/update/
+    script:
+      - python
+      - PlayboyPlus.py
+      - gallery-by-url
+sceneByURL:
+  - action: script
+    url:
+      - playboyplus.com/en/update/
+    script:
+      - python
+      - PlayboyPlus.py
+      - scene-by-url
+performerByURL:
+  - action: script
+    url:
+      - playboyplus.com/en/model/view/
+    script:
+      - python
+      - PlayboyPlus.py
+      - performer-by-url

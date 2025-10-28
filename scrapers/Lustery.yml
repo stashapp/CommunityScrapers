@@ -75,7 +75,7 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: https://static.lustery.com/cdn-cgi/image/format=auto,width=1920,quality=75/
+                with: https://cdn77-public.lustery.com/cache/image/resize/format=auto,width=1920,quality=75/
       Performers:
         Name:
           selector: "[video.couplePermalink,video.secondaryCouplePermalink]"

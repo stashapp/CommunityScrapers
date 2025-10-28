@@ -1,40 +1,43 @@
 name: "Reddit"
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - reddit.com
-    scraper: sceneScraper
+    queryURL: https://api.reddit.com/api/info?id=t3_{url}
+    queryURLReplace:
+      url:
+        - regex: '.+\/comments\/([a-z0-9]{6,7})\/.+'
+          with: "${1}"
+    scraper: t3Scraper
 galleryByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - reddit.com
-    scraper: galleryScraper
-xPathScrapers:
-  sceneScraper:
+    queryURL: https://api.reddit.com/api/info?id=t3_{url}
+    queryURLReplace:
+      url:
+        - regex: '.+\/comments\/([a-z0-9]{6,7})\/.+'
+          with: "${1}"
+    scraper: t3Scraper
+
+jsonScrapers:
+  # t3 is the internal data type for posts
+  # https://www.reddit.com/dev/api/
+  t3Scraper:
     scene: &redditPost
-      Title: //shreddit-post/@post-title | //meta[@property="og:title"]/@content
-      Date: 
-        selector: //shreddit-post/@created-timestamp | //div[@class="top-matter"]//p//time/@datetime
+      Title: data.children.0.data.title
+      Date:
+        selector: data.children.0.data.created_utc
         postProcess:
-          - replace:
-              - regex: (\d{4}-\d{2}-\d{2})T(.*)
-                with: $1
-          - parseDate: 2006-01-02
+          - parseDate: unix
       Performers:
-        Name:
-          selector: //shreddit-post/@author | //meta[@property="og:description"]/@content
-          postProcess:
-            - replace:
-              - regex: Posted in r\/([\w]+) by u\/([\w-]+)\s(.*)
-                with: $2
-  galleryScraper:
+        Name: data.children.0.data.author
+      Studio:
+        Name: data.children.0.data.subreddit_name_prefixed
     gallery: *redditPost
-driver:
-  cookies: # over18 cookie necessary for old.reddit.com URLs due to redirect; new reddit just blurs content instead
-    - CookieURL: "https://old.reddit.com/over18/"
-      Cookies:
-        - Name: "over18"
-          Domain: ".reddit.com"
-          Value: "1"
-          Path: "/"
-# Last Updated December 13, 2023
+
+# driver:
+#   headers:
+#     - Key: User-Agent
+#       Value: stashapp/stash:v1 (by /u/feederbox826)
+# Last Updated June 26, 2025

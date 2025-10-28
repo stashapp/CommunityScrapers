@@ -81,39 +81,51 @@ xPathScrapers:
                 with: $1
   bsbScraper:
     scene:
-      Title: (//header/following-sibling::div/div/div/text())[1]
-      # This is a bad selector and should be improved
+      Title: //h1
       Details:
-        selector: //div[@class="dtlp"]/p
+        selector: //div[@class="vid-dtls"]/p
         concat: "\n\n"
-      Image: (//div[@id="player"]//img)[1]/@src
-      Studio: *studioFromTitle
+      Image: //div[@class="player-main"]/img/@src
+      Studio: 
+        Name: //meta[@name="Author"]/@content
       Performers:
-        Name: //span/dl/a/text()
+        Name: //div[@class="vid-dtls"]/div[@class="vid-models"]/a
         URL:
-          selector: //span/dl/a/@href
+          selector: //div[@class="vid-dtls"]/div[@class="vid-models"]/a/@href
           postProcess:
             - replace:
                 - regex: ^
                   with: https://brokestraightboys.com
     performer:
-      Name: (//div[@class="deTlt"]/text())[1]
-      Image: (//div[@class="wdcnt"]//img)[1]/@src
+      Name: 
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: '-\s*Gay Porn Videos$'
+                with: ''
+      Image: //div[@class="model-lft"]/span/img/@src
       Height:
-        selector: //div[@class="wdcnt"]//li[contains(., "Height")]/text()
+        selector: //div[@class="model-lft"]//li[contains(., "Height")]/text()
         postProcess: &extractMetric
           - replace:
               - regex: .*\((\d*).*
                 with: $1
       Weight:
-        selector: //div[@class="wdcnt"]//li[contains(., "Weight")]/text()
+        selector: //div[@class="model-lft"]//li[contains(., "Weight")]/text()
         postProcess:
+          - replace:
+              - regex: .*\(\d*\s*lb).*
+                with: $1
+              - regex: \d*\s*kg
+                with: ''
+              - regex: '[^\d]'
+                with: ''
           - lbToKg: true
       PenisLength:
-        selector: //div[@class="wdcnt"]//li[contains(., "Cock")]/text()
+        selector: //div[@class="model-lft"]//li[contains(., "Cock")]/text()
         postProcess: *extractMetric
       Circumcised:
-        selector: //div[@class="wdcnt"]//li[contains(., "Cock")]/text()
+        selector: //div[@class="model-lft"]//li[contains(., "Cock")]/text()
         postProcess:
           - replace:
               - regex: .*\)\s*(.*)
@@ -182,4 +194,4 @@ xPathScrapers:
           - replace:
               - regex: .*\)\s*(.*)
                 with: $1
-# Last Updated October 02, 2023
+# Last Updated June 7, 2025

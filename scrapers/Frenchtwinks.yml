@@ -8,14 +8,25 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1[@class="big_title2017"]
+      Code:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+            - regex: .*\/(\d+)\/\d+\.jpg
+              with: "fta$1"
       Details:
-        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article
+        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article/*/text()
+        concat: "\n\n"
       Date:
         selector: //time[@datetime]
         postProcess:
           - parseDate: 2006-01-02
       Image:
         selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+            - regex: .*\/(\d+)\/0?(\d+)\.jpg
+              with: "https://www.french-twinks.com/img/gay-video/fullsize/video-gay_$1-1.jpg"
       Studio:
         Name:
           fixed: French Twinks
@@ -23,4 +34,4 @@ xPathScrapers:
         Name: //li[@class="vid_keywords"]/a
       Performers:
         Name: //li[@class="small_act_pic small_act_picvidpage"]/a
-# Last Updated January 10, 2022
+# Last Updated August 15, 2025

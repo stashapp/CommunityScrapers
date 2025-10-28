@@ -1,7 +1,7 @@
 name: "VRLatina"
 sceneByURL:
   - action: scrapeXPath
-    url: &urlSel 
+    url:
       - vrlatina.com/video
     scraper: sceneScraper
 groupByURL: 
@@ -17,25 +17,24 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //meta[@property="og:title"]/@content
-      Date: &dateAttr
-        selector: //div[contains( text(), "Release date:")]/following-sibling::span
+      Date:
+        selector: //div[contains(text(), "Release date:")]/following-sibling::span
         postProcess:
           - parseDate: Jan 02, 2006
-      Details: &detailsSel
-        selector: //meta[@property="og:description"]/@content
+      Details: //meta[@property="og:description"]/@content
       Tags:
         Name: //a[@class="tag"]/@title
       Performers:
         Name: //div[@class="content-links -models"]//a/span
         URL: //div[@class="content-links -models"]//a/@href
       Studio:
-        Name: &studioName
+        Name:
           fixed: VRLatina
-      Image: &imageSel 
+      Image:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-              - regex: ^
+              - regex: ^//
                 with: "https:"
       Groups:
         Name: &movieName //title
@@ -62,13 +61,13 @@ xPathScrapers:
         selector: //span[text()="Dob:"]/following-sibling::span
         postProcess:
           - parseDate: "2006-01-02"
-      Height: 
+      Height:
         selector: //span[text()="Height:"]/following-sibling::span
         postProcess:
           - replace:
               - regex: " cm"
                 with: ""
-      Weight: 
+      Weight:
         selector: //span[text()="Weight:"]/following-sibling::span
         postProcess:
           - replace:
@@ -80,4 +79,3 @@ xPathScrapers:
       Ethnicity: //span[text()="Ethnicity:"]/following-sibling::span
       Image: //div[@class="model-avatar"]/div[@class="image"]/img/@src
       Details: //span[text()="Biography:"]/following-sibling::span
-# Last Updated December 22, 2021

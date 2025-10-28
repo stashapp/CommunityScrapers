@@ -1,51 +1,43 @@
 name: InTheCrack
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - inthecrack.com/Collection/
-    scraper: sceneScraper
-xPathScrapers:
-  sceneScraper:
+      # Some of their links are lowercase for some reason
+      - inthecrack.com/collection/
+    queryURLReplace:
+      url:
+        - regex: .+?(\d+)
+          with: https://api.inthecrack.com/Collection/$1
+    queryURL: "{url}"
+    scraper: inTheCrack
+jsonScrapers:
+  inTheCrack:
     scene:
-      Title: //section[@class="modelCollectionHeader"]//h2
-      Code:
-        selector: //li[@id="VideoTab"]/a/@href
-        postProcess:
-          - replace:
-              - regex: .*/(\d+)
-                with: $1
+      Title:
+        selector: "[id,title]"
+        concat: " "
+      Code: id
+      Date: clips.0.releaseDate
       Details:
-        selector: //div[@class="ClipDetail"]//h4/text() | //div[@class="ClipDetail"]//p
-        concat: __SEPERATOR__
+        selector: '{shootLocation,description,clips.#.title,"descriptions":clips.#.description}'
         postProcess:
           - javascript: |
-              details = "";
-              parts = value.split("__SEPERATOR__");
-              for (i = 0; i < parts.length/2; i++) {
-                if (parts[i] == "") {
-                  continue;
-                }
-                details = details + parts[i] + "\n" + parts[i+parts.length/2];
-                if ((i+1)*2 < parts.length) {
-                  details = details + "\n\n";
-                }
-              }
-              return(details);
+              const {shootLocation, description, title, descriptions} = JSON.parse(value)
+              // Some collections have a primary description so we include
+              // that between the shoot Location and the clip descriptions
+              const maybeDescription = description ? description + "\n\n" : ""
+              return `Shoot Location: ${shootLocation}\n\n` + maybeDescription + title.map((sub, i) => `${sub}\n${descriptions[i]}`).join('\n\n');
       Performers:
         Name:
-          selector: //section[@class="modelCollectionHeader"]//h2
-          postProcess:
-            - replace:
-                - regex: ^\d+\s+
-                  with: ""
+          selector: title
           split: " & "
       Studio:
         Name:
           fixed: InTheCrack
       Image:
-        selector: //section[@id="modelCollection"]//style/text()
+        selector: id
         postProcess:
           - replace:
-              - regex: .*url\('([^']+)'.*
-                with: https://www.inthecrack.com$1
-# Last Updated February 16th, 2024
+              - regex: (.+)
+                with: https://api.inthecrack.com/FileStore/images/posters/collections/$1.jpg

@@ -1,0 +1,55 @@
+name: sankakucomplex
+# https://github.com/stashapp/CommunityScrapers/issues/2273
+# based on gelbooru-xpath
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - chan.sankakucomplex.com
+      - idol.sankakucomplex.com
+      - www.idolcomplex.com
+    scraper: postScraper
+imageByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: postScraper
+
+xPathScrapers:
+  postScraper:
+    image:
+      Date: &date
+        selector: //div[@id="stats"]/a[contains(@href,"/?tags=date")]/text()
+        postProcess:
+          - replace:
+            - regex: \d{2}:\d{2}$
+              with: ""
+          - parseDate: 2006-01-02
+      Performers: &performers
+        Name:
+          selector: //li[contains(@class,"tag-type-idol")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-character")]/a[last()]/text()
+      Studio: &artist
+        Name: //li[contains(@class,"tag-type-artist")]/a[last()]/text() |
+          //li[contains(@class,"tag-type-studio")]/a[last()]/text()
+      # copied from CSS ~L367
+      # excluded: automatic, copyright, medium, genre, meta, operator
+      Tags: &tag_string
+        Name:
+          selector: //li[contains(@class,"tag-type-fashion")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-anatomy")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-pose")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-activity")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-role")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-flora")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-fauna")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-entity")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-object")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-substance")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-setting")]/a[last()]/text() |
+            //li[contains(@class,"tag-type-general")]/a[last()]/text()
+    scene:
+      Date: *date
+      Performers: *performers
+      Studio: *artist
+      Tags: *tag_string
+
+# Last Updated August 9, 2025

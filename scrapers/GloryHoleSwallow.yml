@@ -6,6 +6,11 @@ sceneByURL:
       - cumpsters.com
       - spytug.com
       - cumclinic.com
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: \/members\/scenes\/(.*)_vids\.html
+          with: /tour/trailers/$1.html 
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:

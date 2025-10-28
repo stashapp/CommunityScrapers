@@ -1,0 +1,35 @@
+name: PepePorn
+# requires: py_common, FAKNetwork
+sceneByURL:
+  - action: script
+    url:
+      # Implicitly english language
+      - pepeporn.com/video/
+      # Explicitly english language
+      - pepeporn.com/en/video/
+      # Explicitly spanish language
+      - pepeporn.com/es/video/
+      # Explicitly portugese language
+      - pepeporn.com/pt/video/
+    script:
+      - python
+      - PepePorn.py
+      - scene-by-url
+sceneByName:
+  action: script
+  script:
+    - python
+    - PepePorn.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - PepePorn.py
+    - scene-by-query-fragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - PepePorn.py
+    - scene-by-fragment

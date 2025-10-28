@@ -17,8 +17,7 @@ xPathScrapers:
       Performers:
         Name: $hidden/td[text()="Aktorzy:" or text()="Actors:"]/following-sibling::td/ul/li/a
       Studio:
-        Name:
-          fixed: xes.pl
+        Name: //a[@class="producerLink"]
       Date: //div[@class="details"]/table/tbody/tr/td[text()="Data dodania:" or text()="Add date:"]/following-sibling::td
       Tags:
         Name: $hidden/td[text()="Kategorie:" or text()="Categories:"]/following-sibling::td/ul/li/a

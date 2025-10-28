@@ -1,13 +1,14 @@
 import json
 import sys
-import string, re
-import bs4, requests  
+import re
+import bs4
+import requests  
 from os import path
 import datetime
 import urllib.parse
 from py_common.cache import cache_to_disk
 
-@cache_to_disk("milkycat_news", 24 * 60 * 60)
+@cache_to_disk(ttl=24 * 60 * 60)
 def fetchNews():
   news_url = "https://www.milky-cat.com/movie/news.html"
   content = requests.get(news_url).text

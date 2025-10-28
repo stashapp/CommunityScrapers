@@ -1,40 +1,40 @@
-# requires: Algolia
+# requires: py_common, AyloAPI
 name: "MyPervyFamily"
 sceneByURL:
   - action: script
     url:
-      - mypervyfamily.com/en/video
+      - mypervyfamily.com/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - mypervyfamily
+      - ../AyloAPI/scrape.py
+      - scene-by-url
 sceneByFragment:
     action: script
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AyloAPI/scrape.py
       - mypervyfamily
+      - scene-by-fragment
 sceneByName:
     action: script
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AyloAPI/scrape.py
       - mypervyfamily
-      - searchName
+      - scene-by-name
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AyloAPI/scrape.py
       - mypervyfamily
-      - validName
+      - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
-      - mypervyfamily.com/en/photo/
+      - mypervyfamily.com/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - mypervyfamily
-      - gallery
+      - ../AyloAPI/scrape.py
+      - gallery-by-url
 # Last Updated December 22, 2022

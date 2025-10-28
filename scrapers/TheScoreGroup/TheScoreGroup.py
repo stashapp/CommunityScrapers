@@ -10,7 +10,7 @@ import requests
 from py_common.deps import ensure_requirements
 import py_common.log as log
 from py_common.types import ScrapedPerformer, ScrapedScene
-from py_common.util import is_valid_url, scraper_args
+from py_common.util import dig, is_valid_url, scraper_args
 
 ensure_requirements("lxml", "requests")
 
@@ -132,7 +132,7 @@ client = requests.Session()
 #     </div>
 #   </div>
 # </div>
-def map_performer(el) -> ScrapedPerformer:
+def map_performer(el) -> ScrapedPerformer | None:
     "Converts performer search result into scraped performer"
     url = el.xpath(".//a/@href")[0]
     if "no-model" in url:
@@ -149,7 +149,7 @@ def map_performer(el) -> ScrapedPerformer:
 
     return {
         "name": name,
-        "url": fixed_url,
+        "urls": [fixed_url],
         "image": image,
     }
 
@@ -181,7 +181,7 @@ def best_quality_scene_image(code: str) -> str | None:
     "Finds the highest resolution scene image for a scene ID"
     no_qual_path = (
         "https://cdn77.scoreuniverse.com/modeldir/data/posting/"
-        f"{code[0:len(code)-3]}/{code[-3:]}/posting_{code}"
+        f"{code[0 : len(code) - 3]}/{code[-3:]}/posting_{code}"
     )
     for quality in ["_1920", "_1600", "_1280", "_800", "_xl", "_lg", "_med", ""]:
         image_url = f"{no_qual_path}{quality}.jpg"
@@ -194,51 +194,65 @@ def scene_from_url(url: str) -> ScrapedScene:
     "Scrape scene URL from HTML"
     # url
     clean_url = urlunparse(urlparse(url)._replace(query=""))
-    scene: ScrapedScene = { "url": clean_url }
+    scene: ScrapedScene = {}
 
     result = client.get(url)
     tree = html.fromstring(result.content)
 
-    video_page = '//section[@id="videos_page-page" or @id="mixed_page-page"]'
+    if not (
+        video_page := tree.xpath(
+            '//section[@id="videos_page-page" or @id="mixed_page-page"]'
+        )
+    ):
+        log.error("Page layout has changed, scraper needs updating")
+        return scene
+
+    video_page = video_page[0]
 
     # title
-    if title := tree.xpath(
-        'normalize-space('  # trim leading/trailing whitespace
-        f'{video_page}//h1/span/following-sibling::text()[1] | '    # if h1 contains a span, ignore the span and take the remaining text
-        f'{video_page}//h1[not(span)]/text()'   # if h1 has no span, just take the text
-        ')'
-    ):
-        scene["title"] = title
-
-    # studio
-    # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
-    # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
-    if video_src := tree.xpath(f'{video_page}//video/source/@src'):
-        studio_ref = re.sub(r".*\.com/(.+?)\/(video|scene).*", r"\1", next(iter(video_src)))
-        scene["studio"] = { "name": STUDIO_MAP.get(studio_ref, studio_ref) }
+    match video_page.xpath("//h1"):
+        case [title] | [title, _]:
+            scene["title"] = title.text_content().strip()
+        case _:
+            log.debug("Could not find title in page, scraper needs updating")
 
     # date
-    if raw_date := tree.xpath(f'{video_page}//div[contains(concat(" ",normalize-space(@class)," ")," mb-3 ")]//span[contains(.,"Date:")]/following-sibling::span'):
+    if raw_date := video_page.xpath(
+        '//div[contains(concat(" ",normalize-space(@class)," ")," mb-3 ")]//span[contains(.,"Date:")]/following-sibling::span'
+    ):
         scene["date"] = datetime.strptime(
-            re.sub(r"(\d+)[a-z]{2}", r"\1", next(iter(raw_date)).text).replace("..,", ""),
-            "%B %d, %Y"
+            re.sub(r"(\d+)[a-z]{2}", r"\1", next(iter(raw_date)).text).replace(
+                "..,", ""
+            ),
+            "%B %d, %Y",
         ).strftime("%Y-%m-%d")
 
-    # details
-    if description := tree.xpath(f'{video_page}//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'):
-        scene["details"] = "\n\n".join([p.strip() for p in description if len(p.strip())])
-
-    # tags
-    if tags := tree.xpath(f'{video_page}//a[contains(@href, "videos-tag") or contains(@href, "scenes-tag")]'):
-        scene["tags"] = [ { "name": tag.text } for tag in iter(tags) ]
-
-    # performers
-    if performers := tree.xpath(f'{video_page}//span[contains(.,"Featuring:")]/following-sibling::span/a'):
-        scene["performers"] = [ { "name": p.text } for p in iter(performers) ]
-
-    # code
     scene_id = re.sub(r".*\/(\d+)\/?$", r"\1", clean_url)
     scene["code"] = scene_id
+    scene["url"] = clean_url
+
+    # Original studio is determinable by looking at the CDN links (<source src="//cdn77.scoreuniverse.com/naughtymag/scenes...)
+    # this helps set studio for PornMegaLoad URLs as nothing is released directly by the network
+    if video_src := video_page.xpath("//video/source/@src"):
+        studio_ref = re.sub(
+            r".*\.com/(.+?)\/(video|scene).*", r"\1", next(iter(video_src))
+        )
+        scene["studio"] = {"name": STUDIO_MAP.get(studio_ref, studio_ref)}
+
+    if description := video_page.xpath(
+        '//div[@class="p-desc p-3" or contains(@class, "desc")]/text()'
+    ):
+        scene["details"] = "\n\n".join(
+            [p.strip() for p in description if len(p.strip())]
+        )
+
+    if tags := video_page.xpath('//a[contains(@href, "-tag")]'):
+        scene["tags"] = [{"name": tag.text} for tag in iter(tags)]
+
+    if performers := video_page.xpath(
+        '//span[contains(.,"Featuring:")]/following-sibling::span/a'
+    ):
+        scene["performers"] = [{"name": p.text} for p in iter(performers)]
 
     # image
     if image_url := best_quality_scene_image(scene_id):

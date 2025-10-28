@@ -59,7 +59,9 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1
-      Details: //div[contains(@class, "videoDescription")]/p
+      Details:
+        selector: //div[contains(@class, "videoDescription")]/p
+        concat: "\n"
       Date:
         selector: //div[@class="contentT"]/ul[@class="contentInfo"]/li[./i[contains(@class, "fa-calendar")]]/text()
         postProcess:
@@ -144,4 +146,4 @@ xPathScrapers:
           - replace:
               - regex: .*\?poster=(.*\.jpg).*
                 with: $1
-# Last Updated May 13, 2025
+# Last Updated June 4, 2025

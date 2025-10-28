@@ -12,7 +12,7 @@ xPathScrapers:
         Name:
           fixed: "Oops Family"
       Title:
-        selector: //h1[@class = 'video-detail__title']//text()
+        selector: //div[@class="video-detail__title"]/text()
       Details:
         selector: //div[@data-id="description" and @class="hidden"]//text()
       Tags:
@@ -24,7 +24,7 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: .*url":\s*"(.*poster[^"]*).*$
-                with: https:$1
+                with: $1
       Date:
         selector: //div[@class="video-info__time"]//text()
         postProcess:
@@ -32,4 +32,4 @@ xPathScrapers:
             - regex: (.*) • (.*)
               with: $2
           - parseDate: "2 January, 2006"
-# Last Updated December 29, 2023
+# Last Updated October 17, 2025

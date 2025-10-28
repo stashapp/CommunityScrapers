@@ -25,29 +25,31 @@ except ModuleNotFoundError:
     sys.exit(1)
 
 XPATHS = {
-    "alias": "//section[@class=\"main-column details\"]/h1/text()|//span[text()='別名']/following-sibling::p/text()",
-    "birthdate": "//span[text()='生年月日']/../p/a/@href",
+    "birthdate": "//span[text()='生年月日']/../p/text()",
     "career": "//span[text()='AV出演期間']/../p/text()",
     "debut": "//span[text()='デビュー作品']/../p/text()",
-    "id": '//form[@class="add_favorite"]/@action',
+    "url": "//meta[@property='og:url']/@content",
+    #"id": '//form[@class="add_favorite"]/@action',
     "image": "//div[@class='act-area']/div[@class=\"thumb\"]/img/@src",
     "instagram": ("//span[text()='ブログ']/../p/a[contains(@href,'instagram.com')]/@href"),
     "measurements": (
         "//span[text()='サイズ']/../p/a/@href|//span[text()='サイズ']/../p/text()"
     ),
-    "name_kanji": '//section[@class="main-column details"]/h1/text()',
+    "h1_kanji": '//section[@class="main-column details"]/h1/text()',
+    "h1_romaji": '//section[@class="main-column details"]/h1/span/text()',
+    "aliases": "//section[@class=\"main-column details\"]/h1/text()|//span[text()='別名']/following-sibling::p/text()",
     "origin": "//span[text()='出身地']/../p/a/text()",
     "name": '//section[@class="main-column details"]/h1/span/text()',
     "search_url": '../h2[@class="ttl"]/a/@href',
     "search": '//p[@class="furi"]',
-    "twitter": ("//span[text()='ブログ']/../p/a[contains(@href,'twitter.com')]/@href"),
+    "twitter": ("//span[text()='ブログ']/../p/a[contains(@href,'twitter.com')]/@href|//span[text()='ブログ']/../p/a[contains(@href,'x.com')]/@href"),
 }
 
 REGEXES = {
     # https://regex101.com/r/9k2GXw/5
     "alias": r"(?P<kanji>[^\x29\uFF09]+?)(?P<studio>[\x28\uFF08\u3010][^\x29\uFF09\u3011]+(?:[\x29\uFF09\u3011]))?\s[\x28\uFF08](?P<katakana>\w+)?\s+/\s(?P<romanized>[a-z-A-Z ]+)?[\x29\uFF09]",
     "id": r"\d+",
-    "birthdate": r"[0-9-]+",
+    "birthdate": r"(?P<year>\d{4})年(?P<month>\d{2})月(?P<day>\d{2})日",
     # https://regex101.com/r/FSqv0L/1
     "career": (r"(?P<start>\d{4})年?(?:\d+月)? ?(?:\d+)?日?[-~]? ?(?:(?P<end>\d+)?)?年?"),
     "measurements": (
@@ -185,6 +187,8 @@ def get_xpath_result(tree: Any, xpath_string: str) -> str | list[str] | None:
 
 
 def performer_by_url(url):
+    lang = sys.argv[2]
+
     request = requests.get(url)
     log.debug(request.status_code)
 
@@ -199,49 +203,62 @@ def performer_by_url(url):
         if origin_result == "海外":
             JAPANESE = False
 
-    if name_xpath_result := get_xpath_result(tree, XPATHS["name"]):
-        _, romanized_name = name_xpath_result.split(" / ")
-        performer_name = romanized_name
-        if JAPANESE:
-            performer_name = reverse_first_last_name(performer_name)
-        scrape["name"] = performer_name
-        aliases.add(romanized_name)
-
-    if kanji_xpath_result := get_xpath_result(tree, XPATHS["name_kanji"]):
+    if h1_kanji_xpath_result := get_xpath_result(tree, XPATHS["h1_kanji"]):
         # \u3010 is 【
-        if "\u3010" in kanji_xpath_result:
-            kanji_name, _ = kanji_xpath_result.split("\u3010")
+        if "\u3010" in h1_kanji_xpath_result:
+            kanji_name, _ = h1_kanji_xpath_result.split("\u3010")
         else:
-            kanji_name = kanji_xpath_result
+            kanji_name = h1_kanji_xpath_result
+
+    if h1_romaji_xpath_result := get_xpath_result(tree, XPATHS["h1_romaji"]):
+        _, romanized_name = h1_romaji_xpath_result.split(" / ")
+        if JAPANESE:
+            romanized_name = reverse_first_last_name(romanized_name)
+
+    if lang == "JP":
+        if kanji_name != "":
+            scrape["name"] = kanji_name
+        else:
+            log.debug("Kanji name XPath matched, but no value found.")
+        aliases.add(romanized_name)
+    else:
         if kanji_name != "":
             aliases.add(kanji_name)
         else:
             log.debug("Kanji name XPath matched, but no value found.")
+        scrape["name"] = romanized_name
 
-    if aliases_xpath_result := get_xpath_result(tree, XPATHS["alias"]):
+    if aliases_xpath_result := get_xpath_result(tree, XPATHS["aliases"]):
         for alias in aliases_xpath_result:
             if match := re.match(REGEXES["alias"], alias):
                 aliases.add(match.group("kanji"))
                 try:
-                    aliases.add(match.group("romanized"))
+                    if(JAPANESE):
+                        aliases.add(reverse_first_last_name(match.group("romanized")))
+                    else:
+                        aliases.add(match.group("romanized"))
                 except:
                     pass
 
-    if favorite_form_url := get_xpath_result(tree, XPATHS["id"]):
-        if match := re.search(REGEXES["id"], favorite_form_url):
-            scrape["urls"] = [FORMATS["url"].format(PERFORMER_ID=match[0])]
+    aliases.discard(scrape["name"]) # Remove performer name from aliases list
+
+    scrape["urls"] = []
+
+    if self_url_result := get_xpath_result(tree, XPATHS["url"]):
+        if self_url_result != None:
+            scrape["urls"].append(self_url_result)
         else:
             log.debug("URL XPath matched, but no value found.")
 
     if twitter_url_result := get_xpath_result(tree, XPATHS["twitter"]):
         if twitter_url_result != None:
-            scrape["twitter"] = twitter_url_result
+            scrape["urls"].append(twitter_url_result)
         else:
             log.debug("Twitter XPath matched, but no value found.")
 
     if instagram_url_result := get_xpath_result(tree, XPATHS["instagram"]):
         if instagram_url_result != None:
-            scrape["instagram"] = instagram_url_result
+            scrape["urls"].append(instagram_url_result)
         else:
             log.debug("Instagram XPath matched, but no value found.")
 
@@ -249,21 +266,25 @@ def performer_by_url(url):
         if match := re.search(
             REGEXES["birthdate"], convert_to_halfwidth(birthdate_result)
         ):
-            scrape["birthdate"] = match[0]
+            scrape["birthdate"] = match["year"]+"-"+match["month"]+"-"+match["day"]
+            log.debug(match)
         else:
             log.debug("Birthday XPath matched, but no value found.")
 
     if measurements_result := get_xpath_result(tree, XPATHS["measurements"]):
         combined = "".join(measurements_result)
         if match := re.search(REGEXES["measurements"], convert_to_halfwidth(combined)):
-            waist_in_inches, hip_in_inches = [
-                cm_to_inches(int(measurement))
-                for measurement in [match["waist"], match["hip"]]
-            ]
+            if lang == "JP":
+                scrape["measurements"] = f"{match['bust']}{match['cup']}-{match['waist']}-{match['hip']}"
+            else:
+                waist_in_inches, hip_in_inches = [
+                    cm_to_inches(int(measurement))
+                    for measurement in [match["waist"], match["hip"]]
+                ]
 
-            bra_size = convert_bra_jp_to_us(f'{match["bust"]}{match["cup"]}')
+                bra_size = convert_bra_jp_to_us(f'{match["bust"]}{match["cup"]}')
 
-            scrape["measurements"] = f"{bra_size}-{waist_in_inches}-{hip_in_inches}"
+                scrape["measurements"] = f"{bra_size}-{waist_in_inches}-{hip_in_inches}"
             if match["height"] != None:
                 scrape["height"] = match["height"]
         else:
@@ -289,7 +310,7 @@ def performer_by_url(url):
             log.debug("Career debut XPath matched, but no value found.")
 
     if image_result := get_xpath_result(tree, XPATHS["image"]):
-        clean_url_fragment = str.replace(image_result, "?new", "")
+        clean_url_fragment = str.replace(image_result, "?newav", "")
         if clean_url_fragment != "":
             scrape["image"] = str.format(
                 FORMATS["image"], IMAGE_URL_FRAGMENT=clean_url_fragment
@@ -310,6 +331,7 @@ def performer_by_url(url):
 
 
 def performer_by_name(name: str, retry=True) -> None:
+    lang = sys.argv[2]
     queryURL = f"https://www.minnano-av.com/search_result.php?search_scope=actress&search_word={name}"
 
     result = requests.get(queryURL)

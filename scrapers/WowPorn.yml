@@ -2,9 +2,10 @@ name: "WowPorn"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - wowporn.xxx
-      - allfinegirls.net
+      - wowporn.com
+      - allfinegirls.com
       - wowgirls.xxx
+      - wowgirls.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -32,4 +33,4 @@ xPathScrapers:
               - map:
                   WOW PORN: "Wow Porn"
 
-# Last Updated September 16, 2020
+# Last Updated August 31, 2025

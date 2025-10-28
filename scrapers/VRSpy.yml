@@ -1,0 +1,120 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: VRSpy
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - vrspy.com/star/
+    scraper: performerScraper
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vrspy.com/video/
+    scraper: sceneScraper
+
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //a[@class="breadcrumbs--current"]/text()
+      Image: //div[@class="avatar"]/img/@src
+      Height:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Height:")]/following-sibling::span/text()
+        postProcess: &postProcessRemoveNone
+          - replace:
+              - regex: None
+                with: ""
+      Weight:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Weight:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      Country:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Nationality:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      Tattoos:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Tattoos:")]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: ^No$
+                with: ""
+      Measurements:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Measurements:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      HairColor:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Hair color:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      EyeColor:
+        selector: //div[@class="star-info-row"]/span[contains(text(), "Eye color:")]/following-sibling::span/text()
+        postProcess: *postProcessRemoveNone
+      Details: &detailsSel //div[contains(@class, "show-more-text")]/p
+      Birthdate:
+        selector: *detailsSel
+        postProcess:
+          # attempt to pick out date of birth from Biography
+          - replace:
+              - regex: .*((January|February|March|April|May|June|July|August|September|October|November|December)\ \d+,\ \d{4}).*
+                with: $1
+          - parseDate: January 2, 2006
+
+  sceneScraper:
+    scene:
+      Title: //dl8-video/@title
+      Date:
+        selector: //div[@class="video-details-info-item"][contains(text(), "Release date:")]/span/text()
+        postProcess:
+          - parseDate: 2 January 2006
+      Details:
+        selector: //div[@class="show-more-text"]/p
+        postProcess:
+          - replace:
+              # The blank lines in the p element are stripped as whitespace by stashapp, but they can be
+              # recreated by looking at the end and starts of sentences without a space following the "."
+              # or "!" or "?"
+              - regex: (\w[\.\!\?])(\w)
+                with: "$1\n\n$2"
+              # Some scene descriptions include b tags as pseudo-headings
+              # These all appear to end with a lowercase letter, and the following paragraph starts
+              # with an uppercase letter.
+              - regex: ([a-z])([A-Z])
+                with: "$1\n\n$2"
+      Studio:
+        Name:
+          fixed: VRSpy
+      Tags:
+        Name:
+          # >- means multiline, newlines ignored, no newline at the end
+          # this allows multiple xpath expressions to be written/read more easily
+          selector: >-
+            //div[@class="video-categories"]/a//text()
+            |
+            //div[@class="video-details-info-item"][contains(text(), "Viewing angle:")]/span/text()
+            |
+            //div[@class="video-details-info-item"][contains(text(), "Resolution:")]/span/text()
+            |
+            //div[@class="video-details-info-item"][contains(text(), "Format:")]/span/text()
+            |
+            //div[@class="video-details-info-item"][contains(text(), "Directed by:")]/span/text()
+          postProcess:
+            - replace:
+                # this is a "hack" to achieve a fixed value as well as the dynamic values,
+                # where the "Directed by:" xpath above seems to always be VRSpy
+                - regex: VRSpy
+                  with: Virtual Reality
+      Image:
+        selector: &imageSel //div[@class="player-cover"]/img/@src
+        postProcess:
+          - replace:
+              - regex: .*w=\d+/(.*)
+                with: $1
+              - regex: cover-details  # this is seen on the scene URL page but isn't really the cover image
+                with: cover  # the actual scene cover images can be seen in scene listing, such as performer pages
+      Performers:
+        Name: //div[@class="video-actor-item"]/span/text()
+      URL: //link[@rel="canonical"]/@href
+      Code:
+        selector: *imageSel
+        postProcess:
+          - replace:
+              - regex: .*/videos/(\d+)/.*
+                with: $1
+
+# Last Updated June 3, 2025

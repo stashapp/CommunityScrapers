@@ -1,0 +1,69 @@
+name: Pics-X
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - pics-x.com/pornstar/
+    scraper: picsx
+xPathScrapers:
+  picsx:
+    common:
+      $perf: //script[contains(., "Person")]
+    performer:
+      Name:
+        selector: $perf
+        postProcess:
+          - replace:
+              - regex: .+"name":"([^"]+)".+
+                with: $1
+      Details:
+        selector: //div[@id="pornstar-details-container"]//p[@class="content"][1]
+        concat: "\n\n"
+      Gender:
+        selector: $perf
+        postProcess:
+          - replace:
+              - regex: .+"gender":"([^"]+)".+
+                with: $1
+      Birthdate:
+        selector: $perf
+        postProcess:
+          - replace:
+              - regex: .+"birthDate":"([^"]+)".+
+                with: $1
+              - regex: ^{.+
+                with: ""
+      Ethnicity: //strong[text()="Ethnicity:"]/following-sibling::text()
+      Country: //strong[text()="Nationality:"]/following-sibling::text()
+      EyeColor: //strong[text()="Eye color:"]/following-sibling::text()
+      Measurements: //strong[text()="Measurements:"]/following-sibling::text()
+      FakeTits:
+        selector: //strong[text()="Natural boobs:"]/following-sibling::text()
+        postProcess:
+          - map:
+              "Yes": "No"
+              "No": "Yes"
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - map:
+              "https://cdn.pics-x.com/assets/img/silhouette.png": ""
+      Tattoos:
+        selector: //strong[text()="Tattoos:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ";"
+                with: ","
+      Aliases: //strong[text()="Aliases:"]/following-sibling::text()
+      HairColor: //strong[text()="Hair color:"]/following-sibling::text()
+      Height:
+        selector: //strong[text()="Height:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: (\d+).+
+                with: $1
+      Weight:
+        selector: //strong[text()="Weight:"]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: (\d+).+
+                with: $1

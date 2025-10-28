@@ -76,8 +76,7 @@ xPathScrapers:
         Name: $scene//b[contains(.,"Studio")]/a | $scene//b[contains(.,"Studio")]/following-sibling::a
       Tags:
         Name:
-          selector: $scene//b[contains(.,"Niches")]/following-sibling::text()
-          split: ", "
+          selector: $scene//b[contains(.,"Niches")]/following-sibling::a
 
   secondarySite:
     common:

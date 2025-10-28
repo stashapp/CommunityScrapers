@@ -171,9 +171,6 @@ xPathScrapers:
               # Old-style image links do not always include the protocol
               - regex: ^//
                 with: https://
-              # There are higher res scene covers that aren't used on their public pages
-              - regex: 1280\.
-                with: "1920."
 
     gallery:
       Title: &galleryTitleAttr

@@ -1,52 +1,61 @@
 import re
 import json
-import requests
 import sys
 from datetime import datetime
 import py_common.log as log
 from py_common.cache import cache_to_disk
 from py_common.util import dig, scraper_args
 from py_common.config import get_config
+from py_common.deps import ensure_requirements
+
+ensure_requirements("cloudscraper")
+
+import cloudscraper  # noqa: E402
 
 config = get_config(
     default="""
 username = 
-password = ""
+password =
 """
 )
+scraper = cloudscraper.create_scraper()
 
-has_login = config.username and config.password
 
-
-@cache_to_disk(key="iwara_auth_token", ttl=86400)
-def login():
+@cache_to_disk(ttl=60 * 60 * 24)
+def auth_token(username: str, password: str):
     login_url = "https://api.iwara.tv/user/login"
-    payload = {"email": config.username, "password": config.password}
-    response = requests.post(login_url, json=payload)
+    payload = {"email": username, "password": password}
+    response = scraper.post(
+        login_url,
+        headers={
+            "Host": "api.iwara.tv",
+            "Origin": "https://www.iwara.tv",
+            "Referer": "https://www.iwara.tv",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
+        },
+        json=payload,
+    )
     if response.status_code != 200:
-        log.error(
-            "Failed to log in to Iwara, check password/username in Iwara/config.ini"
-        )
+        log.error(f"{response.status_code} {response.reason} - {response.text}")
         sys.exit(1)
     return response.json().get("token")
 
 
-def api_request(query):
-    headers = {}
-    if has_login:
-        token = login()
-        headers["Authorization"] = f"Bearer {token}"
+has_login = config.username and config.password
+if has_login:
+    token = auth_token(config.username, config.password)
+    scraper.headers["Authorization"] = f"Bearer {token}"
 
-    response = requests.get(query, headers=headers)
+
+def api_request(query):
+    response = scraper.get(query)
     if response.status_code == 404 and not has_login:
         log.error(
-            "Login required: please fill in your username and password in Iwara/config.ini"
+            "Login required for this video: please fill in your username and password in Iwara/config.ini"
         )
         sys.exit(1)
     elif not response.ok:
-        log.error(f"Failed to fetch video data: {response.reason}")
-        # Cached login might be invalid, nuke it before next attempt
-        login.clear_cache()
+        log.error(f"Failed to fetch video: {response.status_code} {response.reason}")
         sys.exit(1)
 
     return response.json()
@@ -68,7 +77,7 @@ def to_scraped_scene(json_from_api: dict):
 
     return {
         "title": json_from_api["title"],
-        "url": f"https://www.iwara.tv/video/{json_from_api["id"]}",
+        "url": f"https://www.iwara.tv/video/{json_from_api['id']}",
         "image": image,
         "date": datetime.strptime(json_from_api["createdAt"], "%Y-%m-%dT%H:%M:%S.%fZ")
         .date()
@@ -76,7 +85,7 @@ def to_scraped_scene(json_from_api: dict):
         "details": json_from_api["body"],
         "studio": {
             "Name": dig(json_from_api, "user", "name"),
-            "URL": f"https://www.iwara.tv/profile/{dig(json_from_api, "user", "username")}",
+            "URL": f"https://www.iwara.tv/profile/{dig(json_from_api, 'user', 'username')}",
         },
         "tags": [{"name": tag["id"]} for tag in json_from_api.get("tags", [])],
     }

@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
-name: "GroobyNetwork-Partial"
+name: GroobyNetwork-Partial
 performerByURL:
   - action: scrapeXPath
     url:
@@ -51,10 +51,6 @@ performerByURL:
     url:
       - transnificent.com/tour/models
     scraper: performerScraper7
-  - action: scrapeXPath
-    url:
-      - groobyvr.com/tour/models
-    scraper: performerScraper8
 sceneByURL:
   - action: scrapeXPath
     url: &urls
@@ -85,10 +81,6 @@ sceneByURL:
       - transgasm.com
       - transnificent.com
     scraper: sceneScraper
-  - action: scrapeXPath
-    url:
-      - groobyvr.com
-    scraper: sceneScraperGroobyVR
   - action: scrapeXPath
     url:
       - transvr.com
@@ -205,19 +197,6 @@ xPathScrapers:
         fixed: transgender_male
       Image: *image3x
       Birthdate: *birthdate
-  performerScraper8:
-    performer:
-      Name: *name
-      Gender: *gender
-      Image: *image
-      Country: *country
-      Ethnicity: *ethnicity
-      Birthdate: *birthdate
-      Height:
-        selector: //li/b[text()="Height:"]/following-sibling::text()
-        postProcess:
-          - feetToCm: true
-      Measurements: //li/b[text()="Breast Size:"]/following-sibling::text()
   sceneScraper:
     scene:
       Title: &title //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()[last()]
@@ -226,8 +205,36 @@ xPathScrapers:
         postProcess:
           - parseDate: January 2, 2006
       Details: &details
-        selector: //div[@class="trailerpage_info"]/p[not(@class)]/descendant-or-self::*/text()
-        concat: "\n\n"
+        # Grooby Network sites use a p tag for the scene description, where each subsequent
+        # paragraph is a nested span tag, so they need to be captured separately.
+        # There doesn't appear to be a way to capture the text of all child elements
+        # (e.g. <a> <em> <strong>) to get the full text of each paragraph, while also
+        # ignoring the nested span tags.
+        # So instead, the entire text of the p tag is captured, and then the newlines are
+        # recreated in the post-processing step.
+        selector: //div[@class="trailerpage_info"]/p[not(@class)]
+        postProcess:
+          - javascript: |
+              if (value && value.length > 0) {
+                const result = [];
+                for (let i = 0; i < value.length; i++) {
+                  const character = value[i];
+                  if (
+                    character === '.'
+                    && i !== value.length - 1 // not the last character
+                    && !value.slice(i + 1).startsWith('XXX') // not a .XXX domain
+                    && !value.slice(i + 1).startsWith('com') // not a .com domain
+                    && !value.slice(i + 1).startsWith(' ') // not the end of a sentence
+                    && !value.slice(i + 1).startsWith('.') // not consecutive dots
+                  ) {
+                    result.push(character, '\n\n');
+                  } else {
+                    result.push(character);
+                  }
+                }
+                return result.join('').trim();
+              }
+              return value;
       Performers: &performers
         Name: //div[@class="setdesc"]//a/text()
       Studio: &studio
@@ -239,18 +246,31 @@ xPathScrapers:
                 - regex: (https://[^/]*)/.*
                   with: $1
       Image:
-        selector: //link[@rel="canonical"]/@href|//img[contains(@class, "update_thumb thumbs stdimage")]/@src|//img[contains(@class, "update_thumb thumbs stdimage")]/@src0_1x|//div[@class="trailerposter"]/img/@src0
-        concat: "__SEPARATOR__"
+        selector: >-
+          //link[@rel="canonical"]/@href
+          |
+          //div[@class="player-thumb"]/img[contains(@class, "thumbs stdimage")]/@src
+          |
+          //div[@class="player-thumb"]/img[contains(@class, "thumbs stdimage")]/@src0_1x
+          |
+          //div[@class="trailerposter"]/img/@src0
+          |
+          //div[@id="fakeplayer"]//img/@src
+          |
+          //div[@class="trailer_video"]//video/@data-poster
+        concat: __SEPARATOR__
         postProcess:
           - replace:
-              - regex: ^.*__SEPARATOR__// # bobstgirls
+              - regex: ^.*__SEPARATOR__// # img urls without protocol, but with domain, e.g. //bobstgirls.com/whatever
                 with: "https://"
-              - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$
+              - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$ # remove any path part from canonical URL
                 with: $1$2
-              - regex: content//
+              - regex: content//  # remove errant double slash in image URL
                 with: content/
-              - regex: __SEPARATOR__
+              - regex: __SEPARATOR__ # remove the separator we added to process the canonical link and relative image URL together
                 with: ''
+              - regex: (\d+).jpg
+                with: $1-full.jpg # get the highest res version of the image
       Tags:
         Name:
           selector: &tagsSel //div[@class="set_tags"]/ul/li//a/text()
@@ -263,47 +283,38 @@ xPathScrapers:
       Studio: *studio
       Tags:
         Name: *tagsSel
-  sceneScraperGroobyVR:
-    scene:
-      Title: *title
-      Date: &dateVR
-        selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
-        postProcess:
-          - parseDate: January 2, 2006
-      Details: &detailsVR
-        selector: //div[@class="trailerblock"]/p[not(@class)]/descendant-or-self::*/text()
-        concat: "\n\n"
-      Performers: &performersVR
-        Name: //div[@class="trailer_toptitle_left"]//a/text()
-      Studio: *studio
-      Image:
-        selector: &imageSelVR //dl8-video/@poster
-        postProcess:
-          - replace:
-              - regex: content// # errant double slash
-                with: content/
-              - regex: ^/
-                with: https://www.groobyvr.com/
-      Tags: &tagsVR
-        Name:
-          selector: //div[@class="set_tags"]/ul/li/text()|//div[@class="set_tags"]/ul/li//a/text()
-          postProcess:
-            - map:
-                Tags for This Scene: Virtual Reality
   sceneScraperTransVR:
     scene:
       Title: //dl8-video/@title
-      Date: *dateVR
-      Details: *detailsVR
-      Performers: *performersVR
+      Date:
+        selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[contains(@class,"trailerpage_description")]//*/text()
+        concat: "\n\n"
+      Performers:
+        Name: //div[@class="trailer_toptitle_left"]//a/text()
       Studio: *studio
       Image:
-        selector: *imageSelVR
+        selector: //dl8-video/@poster
         postProcess:
           - replace:
               - regex: content// # errant double slash
                 with: content/
               - regex: ^/
                 with: https://www.transvr.com/
-      Tags: *tagsVR
-# Last Updated May 16, 2025
+      Tags:
+        Name:
+          selector: >-
+            //div[@class="set_tags"]/ul/li/text()
+            |
+            //div[@class="set_tags"]/ul/li//a/text()
+          postProcess:
+            - map:
+                Tags for This Scene: Virtual Reality
+
+# Use CDP with a configured proxy to bypass region-based age-verification
+driver:
+  useCDP: false
+# Last Updated August 28, 2025

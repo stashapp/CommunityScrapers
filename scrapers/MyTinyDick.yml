@@ -1,0 +1,72 @@
+name: MyTinyDick
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - mytinydick.com
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - mytinydick.com
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //meta[@property="og:title"]/@content
+      Details:  //meta[@property="og:description"]/@content
+      Date:
+        selector: //meta[@property="video:release_date"]/@content
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05Z
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          selector: //div[@class="logo"]/a/@aria-label
+          postProcess:
+            - replace:
+                - regex: '\s*logo$'
+                  with: ''
+      Tags:
+        Name: //div[@class="media-info__buttons"]/a[contains(@href,"tags")]
+      Performers:
+        Name: //h3[@class="media-box__title"]
+
+  performerScraper:
+    performer:
+      Name: //h1[@class="title"]
+      Image: //div[contains(@class,"img-holder")]/img/@src
+      Birthdate:
+        selector: //div[contains(., "Birthday")]/span
+        postProcess:
+          - replace:
+              - regex: '\(.+$'
+                with: ''
+              - regex: 'N/A'
+                with: ''
+          - parseDate: 2 January, 2006
+      Country: //div[contains(., "Country")]/span
+      HairColor: //div[contains(., "Hair")]/span
+      EyeColor: //div[contains(., "Eyes")]/span
+      Ethnicity: //div[contains(., "Ethnicity")]/span
+      Measurements: //div[contains(., "Body")]/span
+      Height:
+        selector: //div[contains(., "Height")]/span
+        postProcess:
+          - replace:
+              - regex: '^.*?([\d]+)\s*cm.*'
+                with: $1
+              - regex: '^.*?([\d\.]+)\s*m.*'
+                with: $1
+              - regex: '[^\d]'
+                with: ''
+      Weight:
+        selector: //div[contains(., "Weight")]/span
+        postProcess:
+          - replace:
+              - regex: '^.*?([\d]+)\s*kg.*'
+                with: $1
+              - regex: '[^\d]'
+                with: ''
+
+# Last Updated May 31, 2025

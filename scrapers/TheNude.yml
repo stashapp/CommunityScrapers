@@ -14,6 +14,7 @@ sceneByURL: &coverByURL
       - thenude.com/cover
     scraper: coverScraper
 galleryByURL: *coverByURL
+imageByURL: *coverByURL
 
 xPathScrapers:
   performerSearch:
@@ -203,7 +204,8 @@ xPathScrapers:
           split: ","
       Studio: &studio
         Name: //h1/span[3]/a/text()
-      Director: //h2/a
+      Director: &director
+        selector: //h2/a
       Image:
         selector: //a[@class="gallery-image-link"]/img/@src
     gallery:
@@ -212,5 +214,12 @@ xPathScrapers:
       Performers: *performers
       Tags: *tags
       Studio: *studio
-      Photographer: //h2/a
-# Last Updated July 23, 2024
+      Photographer: *director
+    image:
+      Title: *title
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
+      Photographer: *director
+# Last Updated June 21, 2025

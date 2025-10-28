@@ -1,0 +1,119 @@
+name: PornBaseData
+# Heavily modified from WikiData scraper
+# Does not support pbc.xxx links, scroll to the bottom of infobox and hit the DATA link, also starts with Q####
+performerByURL:
+  - action: scrapeJson
+    url:
+      - https://pornbasedata.com/wiki/Q
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: https://pornbasedata.com/wiki/
+          with: https://pornbasedata.com/wiki/Special:EntityData/
+        - regex: $
+          with: .json
+    scraper: performerScraper
+jsonScrapers:
+  performerScraper:
+    performer:
+      Name: entities.*.labels.en.value
+      Aliases:
+        selector: entities.*.aliases.en.#.value
+        concat: ", "
+      Image:
+        selector: entities.*.claims.P470.#.mainsnak.datavalue.value
+        postProcess:
+          - replace:
+              - regex: \s
+                with: "%20" # spaces cause 400 error
+              - regex: ^
+                with: "https://pornbasedata.com/wiki/Special:Redirect/file/"
+      Weight:
+        selector: entities.*.claims.P159.#.mainsnak.datavalue.value.amount
+        postProcess:
+          - replace:
+              - regex: \+
+                with:
+      Birthdate:
+        selector: entities.*.claims.P9.#.mainsnak.datavalue.value.time
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}-\d{1,2}-\d{1,2}).*
+                with: $1
+      DeathDate:
+        selector: entities.*.claims.P247.#.mainsnak.datavalue.value.time
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}-\d{1,2}-\d{1,2}).*
+                with: $1
+      Height:
+        selector: entities.*.claims.P156.#.mainsnak.datavalue.value.amount
+        postProcess:
+          - replace:
+              - regex: \+
+                with:
+              - regex: \.
+                with:
+      CareerLength:
+        selector: entities.*.claims.P153.#.mainsnak.datavalue.value.time
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}).*
+                with: $1
+      Gender:
+        fixed: Male # gay porn
+      HairColor:
+        selector: entities.*.claims.P162.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://pornbasedata.com/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      EyeColor:
+        selector: entities.*.claims.P386.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://pornbasedata.com/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      Ethnicity:
+        selector: entities.*.claims.P136.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://pornbasedata.com/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      Country:
+        selector: entities.*.claims.P131.#.mainsnak.datavalue.value.numeric-id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://pornbasedata.com/wiki/Special:EntityData/Q"
+              - regex: $
+                with: .json
+          - subScraper:
+              selector: entities.*.labels.en.value
+      Twitter:
+        selector: entities.*.claims.P137.#.mainsnak.datavalue.value
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://twitter.com/"
+      Instagram:
+        selector: entities.*.claims.P349*.#.mainsnak.datavalue.value
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.instagram.com/"
+      # too many other sites to reasonably map
+
+# Last Updated August 10, 2025

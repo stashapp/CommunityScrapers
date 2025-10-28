@@ -1,4 +1,4 @@
-name: "Minnano-AV (JAV)"
+name: "Minnano-AV (EN)"
 # requires: py_common
 performerByURL:
   - url:
@@ -9,6 +9,7 @@ performerByURL:
       - python
       - Minnano-AV.py
       - performer_by_url
+      - EN
 
 performerByName:
   action: script
@@ -16,4 +17,5 @@ performerByName:
     - python
     - Minnano-AV.py
     - performer_by_name
-# Last Updated January 11, 2024
+    - EN
+# Last Updated June 4th, 2025

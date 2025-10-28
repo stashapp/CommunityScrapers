@@ -1,0 +1,48 @@
+name: SexTB
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sextb.net
+      - sextb.date
+    scraper: sceneScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://sextb.net/search/{}
+  scraper: searchScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $title: //h1[@class="film-info-title"]/strong
+      $fileinfo: //div[@id="infomation"]/div[@class="col-7"]
+    scene:
+      Title: $title/text()[1]
+      Code: $title/a[1]/text()
+      Director: $fileinfo/div[1]/a/strong/text()
+      Date:
+        selector: $fileinfo/div[7]/strong/text()
+        postProcess:
+          - parseDate: Jan. 2, 2006
+      Image: //div[@id="infomation"]/div[contains(@class,"covert")]/img/@data-src
+      Studio:
+        Name: $fileinfo/div[3]/a/strong/text()
+      Tags:
+        Name: $fileinfo/div[5]/a/strong/text()
+      Performers:
+        Name: $fileinfo/div[4]/a/strong/text()
+  searchScraper:
+    common:
+      $description: //div[@class="tray-item-description"]
+    scene:
+      Title: $description/div[@class="tray-item-title"]/text()
+      Code: $description/div[@class="tray-item-meta-info"]/div[@class="tray-item-code"]/text()
+      URL:
+        selector: //div[contains(@class,"tray-item")]/a/@href
+        postProcess:
+          - replace:
+            - regex: "^"
+              with: "https://sextb.net"
+# Last Updated June 11, 2025

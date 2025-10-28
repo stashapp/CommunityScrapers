@@ -12,6 +12,7 @@ from urllib.request import Request, urlopen
 from AlgoliaAPI.AlgoliaAPI import (
     gallery_from_fragment,
     gallery_from_url,
+    IMAGE_CDN,
     movie_from_url,
     performer_from_fragment,
     performer_from_url,
@@ -163,8 +164,19 @@ def fix_url(_url: str) -> str:
 
 channel_name_map = {
     "Age & Beauty": "Age and Beauty",
+    "Black Money Erotica": "Adult Time x Black Money Erotica",
+    "Bratty Sis": "Adult Time x Bratty Sis",
+    "Cuck Hunter": "Adult Time x Cuck Hunter",
+    "Frameleaks": "Adult Time x Frameleaks",
     "Heteroflexible": "HeteroFlexible",
+    "Horny Household": "Adult Time x Horny Household",
+    "Hussie Pass": "Adult Time x Hussie Pass",
     "JOI Mom": "J.O.I Mom",
+    "Lady Lazarus": "Adult Time x Lady Lazarus",
+    "LesbianX": "Adult Time x LesbianX",
+    "LucidFlix": "Adult Time x LucidFlix",
+    "Slayed": "Adult Time x Slayed",
+    "Taboo Heat": "Adult Time x Taboo Heat",
     "Vixen": "Adult Time x Vixen",
 }
 """
@@ -301,6 +313,13 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
     """
     if studio_override := determine_studio(api_scene):
         scene["studio"] = { "name": studio_override }
+
+    # override the image for Devils Film scenes
+    if api_scene.get("studio_name") == "Devils Film" \
+        and (images := dig(api_scene, "pictures", ("nsfw", "sfw"), "top")) \
+        and next(iter(images.keys()), None) == "960x544" \
+        and (largest_image := dig(api_scene, "pictures", "resized")):
+        scene["image"] = f"{IMAGE_CDN}/movies{largest_image}"
 
     if _url := scene.get("url"):
         log.debug(f'scene"[url]" (before): {scene["url"]}')

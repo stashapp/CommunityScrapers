@@ -50,7 +50,6 @@ class Validator {
     this.schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
     this.ajv = new Ajv({
       // allErrors: true,
-      ignoreKeywordsWithRef: true, // should be 'fail' with ajv v7
       strict: true,
     });
     addFormats(this.ajv);

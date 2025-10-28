@@ -2,12 +2,13 @@ name: PurgatoryX
 sceneByURL:
   - action: scrapeXPath
     url:
-      - tour.purgatoryx.com/view/
+      - tour.purgatoryx.com/episodes/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="title"]/text()
+      # space to match multiple classes
+      Title: //h1[contains(@class,"title ")]/text()
       URL: 
         selector: //head/link[@rel="canonical"]/@href
         postProcess:
@@ -16,7 +17,7 @@ xPathScrapers:
               with: "?trilogy=1"
       Image: //video[@id="main-player"]/@poster
       Date:
-        selector: //span[@class="date"]/text()
+        selector: //div[@class="meta"]/span[1]/text()
         postProcess:
           - replace:
             - regex: ^\w+day\s+
@@ -25,19 +26,14 @@ xPathScrapers:
       Details: //div[@class="description"]/p/text()
       Performers:
         Name:
-          selector: //div[@class="model-wrap"]//li/h5
-      # They use the same tags for all scenes (blowjobs,multi scene porn,exclusive videos, pornstars, hardcore, fantasy, milfs, teens, facials, trilogy)
-      #Tags:
-      #  Name:
-      #    selector: //meta[@name="keywords"]/@content
-      #    postProcess:
-      #      - replace:
-      #        - regex: \s*,\s*
-      #          with: ","
-      #    split: ","
+          selector: //div[@class="models-wrap"]//li/h5
+      Tags:
+       Name:
+         selector: //meta[@name="keywords"]/@content
+         split: ","
       Studio:
         Name:
-          selector: //p[@class="series"]//span/text()
+          selector: //p[contains(@class,"series ")]/text()
           postProcess:
             - replace:
               - regex: " Series"
@@ -45,4 +41,4 @@ xPathScrapers:
       # URL need to have "?trilogy=" to get the name of the Trilogy
       Groups:
         Name: //span[contains(text(),"Part of")]/following-sibling::text()
-# Last Updated June 27, 2022
+# Last Updated September 25, 2025

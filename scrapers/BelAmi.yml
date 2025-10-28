@@ -4,6 +4,13 @@ sceneByURL:
     url:
       - belamionline.com
     scraper: sceneScraper
+    
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - belamionline.com
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -49,4 +56,23 @@ xPathScrapers:
           - replace:
               - regex: ^.*\=\s*
                 with:
-# Last Updated January 13, 2024
+  performerScraper:
+    performer:
+      Name: //div[@class="head top_head"]//h1/text()
+      Gender:
+        fixed: Male
+      HairColor:
+        selector: //td[contains(text(),"Hair color:")]/following-sibling::td/text()
+      EyeColor:
+        selector: //td[contains(text(),"Eye color:")]/following-sibling::td/text()
+      Weight:
+        selector: //td[contains(text(),"Weight:")]/following-sibling::td/text()
+      Height:
+        selector: //td[contains(text(),"Height:")]/following-sibling::td/text()
+      PenisLength:
+        selector: //td[contains(text(),"Dick size:")]/following-sibling::td/text()
+      Details:  
+        selector: //div[@class="model_des"]/p
+      Image: //div[@class="main_card"]/div[@class="left"]/div[@class="img"]/img/@src
+      
+# Last Updated July 3, 2025

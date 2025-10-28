@@ -7,72 +7,67 @@ sceneByURL:
       - sexlikereal.com
     scraper: sceneScraper
 
-sceneByFragment:
-  action: scrapeXPath
-  # url format: https://www.sexlikereal.com/scenes/{title}-{code}
-  # However, the url:
-  #     https://www.sexlikereal.com/{code}
-  # will redirect to the full url so that is what we will use for scrapping
-  queryURL: https://www.sexlikereal.com/{filename}
-  queryURLReplace:
-    # filename format:
-    #   SLR_{stufio:[^_]+}_{title:[^_]+}_{res:\d+p}_{code:\d+}_{vrtype}.{ext}
-    #     vrtype: stuff we do not care about but could contain '_'
-    filename:
-      - regex: (?i)^SLR_.+_\d+p_(\d+)_.*$
-        with: $1
-      - regex: .*\.[^\.]+$ # if no id is found in the filename
-        with: # clear the filename so that it doesn't leak
-  scraper: sceneScraper
+# as of 2025-10-24, code link does not work, either at /scenes or /
+
+# sceneByFragment:
+#   action: scrapeXPath
+#   # url format: https://www.sexlikereal.com/scenes/{title}-{code}
+#   # However, the url:
+#   #     https://www.sexlikereal.com/{code}
+#   # will redirect to the full url so that is what we will use for scrapping
+#   queryURL: https://www.sexlikereal.com/{filename}
+#   queryURLReplace:
+#     # filename format:
+#     #   SLR_{stufio:[^_]+}_{title:[^_]+}_{res:\d+p}_{code:\d+}_{vrtype}.{ext}
+#     #     vrtype: stuff we do not care about but could contain '_'
+#     filename:
+#       - regex: (?i)^SLR_.+(?:_\d+p)?_(\d+)_.*$
+#         with: $1
+#       - regex: .*\.[^\.]+$ # if no id is found in the filename
+#         with: # clear the filename so that it doesn't leak
+#   scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]/text()
     scene:
       Title:
-        selector: //script[@type="text/javascript"][contains(.,"videoData:")]/text()
+        selector: //h1
+      Date:
+        selector: //p/time[@datetime][not(@data-hk)]/@datetime
         postProcess:
           - replace:
-              - regex: '.+videoData:\s{[^{]+title":"([^"]+)",.+'
-                with: $1
-              - regex: '\\u2019'
-                with: "’"
-              - regex: '\\u2013'
-                with: "–"
-      Date: //time/@datetime
+            - regex: "T.+"
+              with: ""
+          - parseDate: 2006-01-02
       Details:
-        selector: //div[@data-qa="scene-about-tab-text"]/text()
+        selector: $ldjson
         postProcess:
           - replace:
-              - regex: '^\.\s*'
-                with:
+              - regex: .*"description":\s?"([^"]+).+
+                with: $1
+              - regex: "^'|'\\r\\n"
+                with: ""
+              - regex: '\\r\\n\\r\\n'
+                with: "\n\n"
+      # fragile but it works
       Tags:
-        Name: >-
-          //meta[@property="video:tag"]/@content
-          |
-          //a[@data-qa="scene-tags-list-item-link"]/text()
+        Name: //div/ul/li/a/span
       Performers:
-        Name: //a[contains(@data-qa, "scene-model-list-item-name")]/text()
+        Name: //a[starts-with(@href,"/pornstars/")]/text()
       Studio:
         Name:
-          selector: //a[contains(@href,"/studios/")]/div[last()]/text()
+          selector: //h3/a[starts-with(@href,"/studios/")]/text()
           postProcess:
             - map:
                 DDFNetworkVR: "DDF Network VR"
                 KinkyGirlsBerlin: "Kinky Girls Berlin"
                 LethalHardcoreVR: "Lethal Hardcore VR"
                 LittleCapriceVR: "Little Caprice Dreams Virtual Reality"
-                LustReality: "LustReality"
                 POVcentralVR: "POV Central"
-                RealHotVR: "RealHotVR"
                 SinsVR: "XSinsVR"
                 VirtualXPorn: "Virtual X Porn"
                 WankitnowVR: "Wank It Now VR"
-      Image: //div[@id="webvr"]//img/@src
-      URL: &sceneUrl //link[@rel="canonical"]/@href
-      Code:
-        selector: *sceneUrl
-        postProcess:
-          - replace:
-              - regex: '^(.+)-(\d+)/?$'
-                with: $2
-# Last Updated May 22, 2025
+      Image: /html/head/meta[@property="og:image"]/@content
+# Last Updated October 24, 2025

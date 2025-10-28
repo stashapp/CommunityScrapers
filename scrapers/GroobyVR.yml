@@ -1,0 +1,125 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: GroobyVR
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - groobyvr.com/tour/models
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url: &urls
+      - groobyvr.com
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.groobyvr.com/tour/search.php?qall={}
+  scraper: sceneSearchResultsScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: sceneScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h3[@class="modelname"]/text()|//div[@class="model_profile_name"]/text()
+      Gender:
+        fixed: transgender_female
+      Image:
+        selector: //div[@class="model_photo"]/img/@src
+        postProcess: &imagePostProcess
+          - replace:
+              # errant double slash
+              - regex: content//
+                with: content/
+              # ensure URLs are converted from relative to absolute
+              - regex: ^(tour/|/tour/)
+                with: https://www.groobyvr.com/tour/
+              # protocol-less URLs to absolute
+              - regex: ^//
+                with: https://
+              # the full variant should be the original unscaled image
+              - regex: (\d+)(-\dx)?\.(jpg|jpeg|png|gif)$
+                with: $1-full.$3
+      Country: //li/b[text()="Nationality:"]/following-sibling::text()|//li/b[text()="Location:"]/following-sibling::text()
+      Ethnicity: //li/b[text()="Ethnicity:"]/following-sibling::text()
+      Birthdate:
+        selector: //li//b[text()="Birthday:"]/following-sibling::text()
+        postProcess:
+          - replace: &removeOrdinal
+              - regex: (\d)(st|nd|rd|th)
+                with: $1
+          - parseDate: 2 January
+          - parseDate: 2 Jan
+          - parseDate: January 2
+          - parseDate: Jan 2
+      Height:
+        selector: //li/b[text()="Height:"]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Measurements: //li/b[text()="Breast Size:"]/following-sibling::text()
+  sceneScraper:
+    scene:
+      Title: &title //p[@class="trailertitle"]/text()|//div[@class="trailer_toptitle_left"]/text()[last()]
+      Date: &date
+        selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: &details
+        selector: //div[contains(@class,"trailerpage_description")]//*/text()
+        concat: "\n\n"
+      Performers: &performers
+        Name: //div[@class="trailer_toptitle_left"]//a/text()
+      Studio: &studio
+        Name:
+          fixed: Grooby VR
+      Image:
+        selector: &imageSel >-
+          //dl8-video/@poster
+          |
+          //meta[@property="og:image"]/@content
+        postProcess: *imagePostProcess
+      Tags: &tags
+        Name:
+          selector: >-
+            //div[@class="set_tags"]/ul/li/text()
+            |
+            //div[@class="set_tags"]/ul/li//a/text()
+          postProcess:
+            - map:
+                Tags for This Scene: Virtual Reality
+    gallery:
+      Title: *title
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Studio: *studio
+      Tags: *tags
+  sceneSearchResultsScraper:
+    common:
+      $video: //div[@class="sexyvideo"]
+    scene:
+      Title: $video/h4
+      Details: $video/p[@class="photodesc"]
+      Date:
+        selector: $video/p[@class="dateadded"]//text()
+        postProcess:
+          - replace: *removeOrdinal
+          - parseDate: 2 Jan 2006
+      Performers:
+        Name: //div[@class="modelnamecontainer"]//a/text()
+      Image: $video//img/@src
+      URL:
+        selector: $video/h4/a/@href
+        postProcess:
+          - replace:
+              - regex: ^(//www\..*)
+                with: https:$1
+      
+# Use CDP with a configured proxy to bypass region-based age-verification
+driver:
+  useCDP: false
+# Last Updated August 7, 2025

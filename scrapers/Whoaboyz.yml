@@ -1,0 +1,44 @@
+name: Whoaboyz
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - whoaboyz.com/tour/
+    scraper: woahboyz
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.whoaboyz.com/tour/search.php?query={}
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: woahboyz
+xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //div[@class="item-wrapper"]//h3
+      URL: //div[@class="item-wrapper"]//h3/a/@href
+      Image:
+        selector: //div[@class="preview"]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.whoaboyz.com/tour/
+  woahboyz:
+    common:
+      $scene: //div[@class="trailer"]
+    scene:
+      Title: $scene/h2
+      Details: $scene/h2/following-sibling::p
+      URLs: //link[@rel="canonical"]/@href
+      Date:
+        selector: $scene/p[@class="date-trailer"]/span
+        postProcess:
+          - parseDate: 01/02/2006
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Whoaboyz
+      Tags:
+        Name: $scene/p[@class="tags"]//a
+      Performers:
+        Name: $scene/p[@class="casting"]//a

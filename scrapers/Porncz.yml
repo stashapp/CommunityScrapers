@@ -9,6 +9,7 @@ sceneByURL:
       - czechanalsex.com
       - czechbiporn.com
       - czechboobs.com
+      - czechcaravan.com
       - czechescortgirls.com
       - czechexecutor.com
       - czechgaycity.com
@@ -39,32 +40,14 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //div[@class="heading-detail"]/h1
+      Title: //h1
       Performers:
-        Name: //div[contains(@class, "video-info-item") and contains(text(), "Actors:")]//a
-      Details: //meta[@name="description"]/@content
+        Name: //div[contains(@class, "mini-avatars")]//a
+      Details: //meta[@property="og:description"]/@content
       Tags:
-        Name: //div[contains(@class, "video-info-item") and contains(text(), "Genres:")]//a
-      Image:
-        selector: //div[@id="video-poster"]/@data-poster
-        postProcess:
-          - replace:
-              - regex: ^
-                with: https://www.porncz.com
-      Date:
-        selector: //meta[@property="video:release_date"]/@content
-        postProcess:
-          - parseDate: 2.01.2006
-      URL: &url //link[@rel="canonical"]/@href
-      Code:
-        selector: *url
-        postProcess:
-          - replace:
-              - regex: .*/(\d*)$
-                with: $1
+        Name: //div[contains(@class, "video-info")]//a[contains(@href, "category")]
+      Image: //video/@data-poster | //deo-video/@cover-image
+      Date: //meta[@property="video:release_date"]/@content
+      URL: //link[@rel="canonical"]/@href
       Studio:
-        Name:
-          selector: //a[@class="video-detail-logo"]//@alt
-# Last Updated September 27, 2022
-
+        Name: //meta[@property="video:series"]/@content

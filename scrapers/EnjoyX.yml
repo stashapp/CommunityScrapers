@@ -7,9 +7,9 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[contains(@class,'row')]//div[contains(@class,'video-detail__title')]/text()
+      Title: (//h1)[1]
       Date:
-        selector: //div[contains(@class,'row')]//div[contains(@class,'video-info__time')]/text()
+        selector: (//div[contains(@class,'video-info__time')])[1]
         postProcess:
           - replace:
               - regex: ^.+?(\d+\s+\w+,?\s+\d+).*
@@ -19,13 +19,12 @@ xPathScrapers:
         selector: //script[contains(.,'pluginSettings')]
         postProcess:
           - replace:
-            - regex: ^.+?"poster".+?"url":\s*"([^"]+).+
-              with: $1
+              - regex: ^.+?"poster".+?"url":\s*"([^"]+).+
+                with: $1
       Studio:
         Name:
           fixed: EnjoyX
       Tags:
-        Name: //a[@class='tags__item']/text()
+        Name: //a[@class='tags__item']
       Performers:
-        Name: //div[contains(@class,'row')]//a[contains(@href,'model')]/text()
-# Last Updated April 3, 2024
+        Name: //div[contains(@class,'video-info')]//a[contains(@href,'model')]/text()

@@ -1,5 +1,15 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 name: RealJamVR
+sceneByName:
+  action: script
+  script:
+    - python
+    - RealJamVR.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: "{url}"
 sceneByURL: &byURL
   - action: scrapeXPath
     url:
@@ -25,6 +35,17 @@ xPathScrapers:
           - replace:
               - regex: ^\s+(.+)\s+$
                 with: $1
+      URL:
+        # incredible amounts of jank
+        # scrape the address png with an alt containing the site name, the most consistent between sites
+        selector: //img[contains(@src, "address.png")]/@alt | //a[@class='btn btn-m1']/@href
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: (.+)\|.+\?next=(.+)
+                with: https://$1.com$2
+          - javascript: |
+              return value.toLowerCase()
       Date: &date
         selector: //div[@class="specs-icon"]/following-sibling::strong
         postProcess:
@@ -38,7 +59,12 @@ xPathScrapers:
                 with: $1$3
           - parseDate: Jan 2, 2006
       Performers: &performers
-        Name: //div[contains(text(),"Starring:")]//a[contains(@href,"/actor/")]
+        Name:
+          selector: //a[contains(@href, 'actor')][contains(text(), 'VR')]
+          postProcess:
+            - replace:
+              - regex: (.+)\sVR.+
+                with: $1
       Tags: &tags
         Name:
           selector: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon"]
@@ -58,14 +84,6 @@ xPathScrapers:
             - replace:
                 - regex: '(.*)\| ([^\|]+VR)$'
                   with: $2
-      Code:
-        selector: //dl8-video/source[1]/@src
-        postProcess:
-          - replace:
-              - regex: .*/scenes/(\d+)/.*
-                with: $1
-              - regex: .*/videos_app/\w+/(\d+)_.*
-                with: $1
     gallery:
       Title: *title
       Date: *date
@@ -108,4 +126,4 @@ xPathScrapers:
       Image: //div[contains(@class, "actor-view")]//img/@src
       Piercings: //div[span[text()="Piercing:"]]/text()
       Tattoos: //div[span[text()="Tattoo:"]]/text()
-# Last Updated January 10, 2025
+# Last Updated Sept 25, 2025

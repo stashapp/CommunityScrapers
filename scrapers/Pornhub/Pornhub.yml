@@ -1,13 +1,11 @@
 name: Pornhub
-performerByName:
-  action: scrapeXPath
-  queryURL: https://www.pornhub.com/pornstars/search?search={}
-  scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
     url:
-      - pornhub.com
-      - pornhub.org
+      - pornhub.com/pornstar/
+      - pornhub.org/pornstar/
+      - pornhub.com/model/
+      - pornhub.org/model/
     scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
@@ -35,6 +33,13 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
+performerByName:
+  action: script
+  script:
+    - python3
+    - PornhubStar.py
+    - performer-by-name
+
 xPathScrapers:
   sceneSearch:
     common:
@@ -42,7 +47,7 @@ xPathScrapers:
       $searchThumb: //ul[contains(@class, "search-video-thumbs") and not(@id="bottomVideos")]//div[contains(@class, "thumbnail-info-wrapper")]
 
     scene:
-      Title: $searchThumb//span[@class="title"]/a/text()
+      Title: $searchThumb//span[@class="title"]/a
       URL:
         selector: $searchThumb//span[@class="title"]/a/@href
         postProcess:
@@ -51,16 +56,7 @@ xPathScrapers:
                 with: "https://www.pornhub.com"
       Image: $searchItem//div[contains(@class, "phimage")]//img/@data-mediumthumb
       Studio:
-        Name: $searchThumb//div[contains(@class, "usernameWrap")]//a[matches(@href, "/(channels|model|pornstar)/")]
-  performerSearch:
-    performer:
-      Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
-      URL:
-        selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https://www.pornhub.com"
+        Name: $searchThumb//div[contains(@class, "usernameWrap")]/a[matches(@href, "/(channels|model|pornstar)/")]
   performerScraper:
     common:
       $infoPiece: //div[@class="infoPiece"]
@@ -121,6 +117,8 @@ xPathScrapers:
       # Check that the button does not appear inside a "From:" div because then you'll get the studio
       # as a performer if it's an affiliate channel, for example https://www.pornhub.com/view_video.php?viewkey=67e19227400d2
       $studioButton: //div[contains(@class,"video-actions-tabs")]//span[not(ancestor::div[@class="from"])][contains(concat(" ",normalize-space(@class)," ")," usernameBadgesWrapper ")]//a
+      # datalayer for unlisted-proof videos #2385
+      $dataLayer: //script[@type="text/javascript"][contains(.,'window.dataLayer.push')]
     scene:
       Title:
         selector: //h1
@@ -134,12 +132,12 @@ xPathScrapers:
                 with: ""
       URL: //meta[@property="og:url"]/@content
       Date:
-        selector: $datablob
+        selector: $dataLayer
         postProcess:
           - replace:
-              - regex: .+(?:"uploadDate"\s*:\s*")([^T]+).+
+              - regex: .*(?:'video_date_published'\s*:\s*')(\d+)'.+
                 with: $1
-          - parseDate: "2006-01-02"
+          - parseDate: "20060102"
       Code:
         selector: //meta[@property="og:url"]/@content
         postProcess:
@@ -162,4 +160,4 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated March 24, 2025
+# Last Updated September 26, 2026

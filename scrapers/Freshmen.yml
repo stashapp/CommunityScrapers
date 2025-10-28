@@ -4,6 +4,13 @@ sceneByURL:
     url:
       - club.freshmen.net/secure/
     scraper: sceneScraper
+    
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - club.freshmen.net/secure/model
+    scraper: performerScraper
+    
 xPathScrapers:
   sceneScraper:
     scene:
@@ -29,5 +36,24 @@ xPathScrapers:
           selector: //div[@class="wrapper tag_list"]/a/text()
       Performers:
         Name: //div[@class='actors_list__actor']//h3/text()
+        
+  performerScraper:
+    performer:
+      Name: //div[@class="content_detail__first_col"]//h1[1]/text()
+      Gender:
+        fixed: Male
+      HairColor:
+        selector: //td[contains(text(),"Hair color")]/following-sibling::td/text()
+      EyeColor:
+        selector: //td[contains(text(),"Eye color")]/following-sibling::td/text()
+      Weight:
+        selector: //td[contains(text(),"Weight")]/following-sibling::td/text()
+      Height:
+        selector: //td[contains(text(),"Height")]/following-sibling::td/text()
+      PenisLength:
+        selector: //td[contains(text(),"Dick size")]/following-sibling::td/text()
+      Details:  
+        selector: //div[@class="content_detail__first_col__description__white_box"]/p
+      Image: //div[@class="content_detail__first_col__top__gallery__big"]/img/@src
 
-# Last Updated October 01, 2024
+# Last Updated July 3, 2025

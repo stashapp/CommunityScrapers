@@ -1,0 +1,22 @@
+name: "Minnano-AV (JP)"
+# requires: py_common
+# Japanese mode returns performer name in Japanese and Japanese style measurement
+performerByURL:
+  - url:
+      - https://www.minnano-av.com/
+      - http://www.minnano-av.com/
+    action: script
+    script:
+      - python
+      - Minnano-AV.py
+      - performer_by_url
+      - JP
+
+performerByName:
+  action: script
+  script:
+    - python
+    - Minnano-AV.py
+    - performer_by_name
+    - JP
+# Last Updated June 4th, 2025

@@ -57,17 +57,17 @@ xPathScrapers:
             - replace:
                 - regex: '\s'
                   with: "+"
-                - regex: '&'
+                - regex: "&"
                   with: "%26"
                 - regex: ^
                   with: https://porngutter.com/updates/?step=2&show_bonus_sites=1&q=
             - subScraper:
-                selector: //a[@class="quick-tag"]/text()
+                selector: //a[@class="quick-tag"]
       Image: &image
-        selector: //img[@class="video-banner"]/@src|//video/@poster
+        selector: //img[@class="video-banner"]/@src | //video/@poster
         postProcess:
           - replace:
-              - regex: ^
+              - regex: ^/
                 with: https://porngutter.com
       Code: &code
         selector: $script
@@ -77,7 +77,7 @@ xPathScrapers:
                 with: $1
       # Return the sanitized URL
       URL: &URL
-        selector: $image/@src|$script
+        selector: $image/@src | $script
         concat: "|"
         postProcess:
           - replace:
@@ -115,4 +115,3 @@ xPathScrapers:
         selector: *date
         postProcess:
           - parseDate: Jan 2, 2006
-# Last Updated May 22, 2024

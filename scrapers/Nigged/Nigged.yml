@@ -1,0 +1,35 @@
+name: Nigged
+# requires: py_common, FAKNetwork
+sceneByURL:
+  - action: script
+    url:
+      # Implicitly english language
+      - nigged.com/video/
+      # Explicitly english language
+      - nigged.com/en/video/
+      # Explicitly spanish language
+      - nigged.com/es/video/
+      # Explicitly portugese language
+      - nigged.com/pt/video/
+    script:
+      - python
+      - Nigged.py
+      - scene-by-url
+sceneByName:
+  action: script
+  script:
+    - python
+    - Nigged.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Nigged.py
+    - scene-by-query-fragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Nigged.py
+    - scene-by-fragment

@@ -102,7 +102,7 @@ xPathScrapers:
       #     - replace:
       #       - regex: (\d).+
       #         with: $1
-      URL: //meta[@name='og:url']/@content
+      URLs: //meta[@name='og:url']/@content
       Tags:
         Name: //a[@name="categories"]/../ul/li/a/text()
   sceneScraperSingle:

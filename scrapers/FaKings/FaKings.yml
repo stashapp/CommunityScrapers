@@ -1,13 +1,35 @@
 name: FaKings
+# requires: py_common, FAKNetwork
 sceneByURL:
   - action: script
     url:
+      # Implicitly english language
+      - fakings.com/video/
+      # Explicitly english language
       - fakings.com/en/video/
-      - madlifes.com/en/video/
-      - nigged.com/en/video/
-      - pepeporn.com/en/video
+      # Explicitly spanish language
+      - fakings.com/es/video/
+      # Explicitly portugese language
+      - fakings.com/pt/video/
     script:
       - python
       - FaKings.py
       - scene-by-url
-# Last Updated February XX, 2025
+sceneByName:
+  action: script
+  script:
+    - python
+    - FaKings.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - FaKings.py
+    - scene-by-query-fragment
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - FaKings.py
+    - scene-by-fragment

@@ -30,6 +30,7 @@ channel_name_map = {
     "AnalPlaytime": "Anal Acrobats",
     "Anal Trixxx": "AnalTriXXX",
     "Jonni Darkko ": "Jonni Darkko XXX",    # trailing space is in the API
+    "LatexPlaytime": "Latex Playtime",
     "Le Wood": "LeWood",
     "Secret Crush ": "Secret Crush",    # trailing space is in the API
 }
@@ -40,6 +41,7 @@ This map just contains overrides when using a channel name as the studio
 serie_name_map = {
     "TransPlaytime": "TS Playground",
     "XXXmailed": "Blackmailed",
+    "Anal.Oil.Latex.": "Latex Playtime",
 }
 """
 Each serie_name requiring a map/override should have a key-value here

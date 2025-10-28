@@ -1,24 +1,66 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: VR pornnow
 sceneByURL:
   - action: scrapeXPath
     url:
       - vrpornnow.com/product
+      - vrpornnow.com/videos/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1
-      Details: //p[@id="description"]
+      Details: //meta[@name="description"]/@content
       Date:
         selector: //meta[@property="article:published_time"]/@content
         postProcess:
           - parseDate: "2006-01-02T15:04:05-07:00"
-      Image: //dl8-video/@poster
+      Tags:
+        Name:
+          selector: &tagsSel >-
+            //div[@id="tag-list"]/div
+            |
+            //div[@class="tags inner-container"]//h2
+          postProcess:
+            - replace:
+                # this is a "hack" to use the h2 "Tags" for a fixed value as well as the actual tags
+                - regex: Tags
+                  with: Virtual Reality
       Studio:
         Name:
-          fixed: VR pornnow
-      Tags:
-        Name: //div[@id="tag-list"]/div
+          selector: *tagsSel
+          concat: ", "
+          postProcess:
+            - javascript: |
+                if (value?.toLowerCase().includes("cgi")) {
+                  return "VR Pornnow CGI"
+                }
+                return "VR Pornnow"
       Performers:
         Name: //div[contains(@class, "actors")]//a
-# Last Updated April 11, 2024
+      URL: //meta[@property="og:url"]/@content
+      Code:
+        selector: &jsonSel //script[@type="application/ld+json"]
+        postProcess:
+          - javascript: &codeParse |
+              if (value?.length) {
+                // parse JSON
+                const obj = JSON.parse(value);
+                // find WebPage item
+                const webPageItem = obj["@graph"].find(item => item["@type"] === "WebPage");
+                // attempt to pick scene ID from image.url
+                const regex = new RegExp("\/([A-Za-z0-9]+)_Cover");
+                const matches = regex.exec(webPageItem.image.url);
+                if (matches) {
+                  return matches[1];
+                }
+              }
+              return ""
+      Image:
+        selector: *jsonSel
+        postProcess:
+          - javascript: *codeParse
+          - replace:
+              - regex: ^(.*)$
+                with: "https://www.vrpornnow.com/files/images/${1}/fsk16/${1}_Cover_quer_VR_FSK16.webp"
+# Last Updated June 12, 2025

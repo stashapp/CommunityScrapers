@@ -133,6 +133,7 @@ studioMap = {
     "natashanice":"Natasha Nice",
     "naughty-lada": "Naughty Lada",
     "niarossxxx":"Nia Ross XXX",
+    "nikkojordan":"Nikko Jordan",
     "niksindian":"Niks Indian",
     "officialelizabethmarxs":"ElizabethMarxs",
     "onedomproductions":"One Dom Productions",
@@ -147,7 +148,8 @@ studioMap = {
     "pvgirls": "Porn Valley Girls",
     "realagent.xxx":"Real Agent",
     "realpeachez":"Sarah Peachez",
-    "rebeccalordproductions.com":"Rebecca Lord Productions",
+    "rebeccalordproductions":"Rebecca Lord Productions",
+    "redbottomxxx":"Red Bottom Productions",
     "rexringoxxx.xxx":"Rex Ringo XXX Productions",
     "sabrinasabrokporn":"Sabrina Sabrok Videos",
     "sallydangeloxxx":"City Girlz",
@@ -173,6 +175,7 @@ studioMap = {
     "womenwhosmoke":"Women Who Smoke",
     "xtcpov":"XTC POV",
     "xtremestudios.studio69swf.live":"Xtreme Studios Media",
+    "xxxotikangelzent": "xXxOTIK ANGELZ",
     "yourgoonspace":"Your Goon Space"
 }
 
@@ -222,6 +225,7 @@ fixedPerformerStudio = {
     "natashanice": ["Natasha Nice"],
     "naughty-lada": ["Naughty Lada"],
     "niarossxxx": ["Nia Ross"],
+    "nikkojordan": ["Nikko Jordan"],
     "officialelizabethmarxs":["Elizabeth Marxs"],
     "psychohenessy": ["Alina Henessy"],
     "puremolly": ["Molly Pills"],

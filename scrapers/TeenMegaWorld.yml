@@ -46,23 +46,33 @@ performerByURL:
   - action: scrapeXPath
     scraper: performerScraper
     url: *urls
+galleryByURL:
+  - action: scrapeXPath
+    scraper: sceneScraper
+    url: *urls
 xPathScrapers:
   sceneScraper:
     common:
       $content: //div[@class="video-block"]
     scene:
-      Title: $content//h1
-      Date:
+      Title: &title $content//h1
+      Code: &code
+        selector: //script[contains(text(), "window.site.setId = ")]/text()
+        postProcess:
+          - replace:
+              - regex: .*'(\d+).*;
+                with: $1
+      Date: &date
         selector: $content//span[@title="Video release date"]/text()
         postProcess:
           - parseDate: January 2, 2006
-      Details:
+      Details: &details
         selector: $content//p[@class="video-description-text"]
         concat: "\n\n"
-      Performers:
+      Performers: &performers
         Name: $content//a[contains(@href,"/models/")]
         URL: $content//a[contains(@href,"/models/")]/@href
-      Tags:
+      Tags: &tags
         Name: $content//a[@class="video-tag-link"]
       Image:
         selector: $content//img[@id="video-cover-image"]/@src
@@ -70,15 +80,18 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://teenmegaworld.net/
-      Studio:
-        Name:
-          selector: //base/@href
-          postProcess:
-            - replace:
-                - regex: https://(.*?)\.(com|net)/$
-                  with: $1
+      Studio: &studio
+        Name: //a[contains(@class, "video-site-link")]
+    gallery:
+      Title: *title
+      Code: *code
+      Date: *date
+      Details: *details
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
   performerScraper:
-    common: 
+    common:
       $model: //section[contains(@class,"model-profile")]
     performer:
       Name: $model//h1
@@ -93,7 +106,7 @@ xPathScrapers:
               - regex: $
                 with: " - "
       Aliases: $model//dt[contains(text(), "AKA")]/following-sibling::text()
-      HairColor: 
+      HairColor:
         selector: $model//dt[contains(text(), "Hair")]/following-sibling::text()
         postProcess:
           - replace:
@@ -106,4 +119,4 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://teenmegaworld.net/
-# Last Updated November 06, 2023
+# Last Updated September 22, 2025

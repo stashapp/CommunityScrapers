@@ -166,7 +166,8 @@ def scrape_info_from_paywalled():
             except Exception:
                 log.warning(f"[DEBUG] UNABLE TO SCRAPE PERFROMER {perf_name} ")
                 pass
-        ret['performers'] = perf
+        if perf and perf[0] is not None:    
+            ret['performers'] = perf
     
     # Add paywalled url
     ret['urls'] = [paywall_url, members_url]

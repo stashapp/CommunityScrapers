@@ -1,0 +1,31 @@
+name: Got Cuffs
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - https://gotcuffs.com/vod/scenes/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $galleryinfo: //div[@class="gallery_info"]
+    scene:
+      Title: //div[@class="title_bar"]/span/text()
+      Details: $galleryinfo/span[@class="update_description"]/text()
+      Date:
+        selector: $galleryinfo/div/div/div[@class="cell update_date"]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Image:
+        selector: $galleryinfo//div[@class="VOD_update"][1]/img/@src0_4x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://gotcuffs.com"
+      Studio:
+        Name:
+          fixed: "Got Cuffs"
+      Tags:
+        Name: $galleryinfo/span[@class="update_tags"]/a/text()
+      Performers:
+        Name: $galleryinfo/span[@class="update_models"]/a/text()
+# Last Updated July 11, 2025

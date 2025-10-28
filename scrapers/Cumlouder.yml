@@ -25,13 +25,8 @@ xPathScrapers:
             - replace:
                 - regex: .+-all/(?P<spanishStudioName>[^/]+)/(?P<studioCode>[^/]+).+
                   with: $spanishStudioName
-                # Some scenes like https://www.cumlouder.com/porn-video/wild-sex-for-krissy-lynn/
-                # will show up as "Unknown Site" and the above regex will not match
-                # so we default it to Cum Louder for now
-                - regex: ^https.+
-                  with: Cum Louder
-                # Other videos like https://www.cumlouder.com/porn-video/hot-big-ass-latina-teen-corine-enjoys-rough-pussy-fucking-after-casting/
-                # are not actually Cum Louder videos but previews/trailers/redistributions from other sites
+                - regex: .+?/tubes/.+
+                  with: "YOU HAVE THE WRONG URL"
                 - regex: //th0cdn.+
                   with: WARNING! NOT A CUMLOUDER SCENE!
             # Studios are always Spanish in their URLs so we grab the sitenames and map them into
@@ -45,16 +40,21 @@ xPathScrapers:
             # const renames = spanishNames.map((name, idx) => `${name}: ${englishNames[idx]}`).sort().join("\n")
             # console.log(renames)
             - map: &studioMap
+                amateur: Cumlouder Amateur
                 autoescuela: Cumlouder Driving School
+                blablacum: Bla Bla Cum
                 chicasmalas: Boldly Girls
+                colombia: Colombia
                 culosenpublico: Latin Asses in Public
                 cumcash: Cum Cash
+                cumcorneador: The Cuckold Maker
                 cumextreme: Cum Extreme
                 diosasdelapaja: Handjob Goddess
                 domingas: Boob Day
                 dulces18: Sweet 18
                 elfollovolumen: Fuckin Van
-                ex-novias: Ex-Girlfriends
+                exnovias: Ex-Girlfriends
+                follovolumen: Fuckin Van
                 fuckingclinic: The Fucking Clinic
                 fuckingroom: The Fucking Room
                 giracumlouder: Cum Louder Tour

@@ -1,0 +1,17 @@
+name: Babepedia
+performerByURL:
+  - action: script
+    url:
+     - www.babepedia.com/babe/
+    script:
+      - python
+      - Babepedia.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - Babepedia.py
+    - performer-by-name
+
+# Last Updated September 27, 2025

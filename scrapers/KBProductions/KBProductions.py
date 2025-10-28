@@ -56,6 +56,7 @@ studio_map = {
     "legendaryx.com": "Legendary X",
     "lezkey.com": "LezKey",
     "lucidflix.com": "LucidFlix",
+    "lukecooperx.com": "Luke CooperX",
     "machofactory.com": "Macho Factory",
     "meanfeetfetish.com": "Mean Feet Fetish",
     "members.hobybuchanon.com": "Hoby Buchanon",
@@ -64,6 +65,7 @@ studio_map = {
     "nikkizee.com": "Nikki Zee",
     "nylonperv.com": "Nylon Perv",
     "nympho.com": "Nympho",
+    "passionpov.com": "PassionPOV",
     "pervect.com": "Pervect",
     "poundedpetite.com": "Pounded Petite",
     "povperv.com": "POV Perv",
@@ -83,6 +85,7 @@ studio_map = {
     "theartemixxx.com": "The ArtemiXXX",
     "topwebmodels.com": "Top Web Models",
     "topwebmodels-interviews.com": "TWM Interviews",
+    "3rdwheel.toughlovex.com": "ToughLoveX",
     "trueanal.com": "True Anal",
     "twmclassics.com": "TWM Classics",
     "xful.com": "Xful",
@@ -113,6 +116,7 @@ def fix_url(url: str) -> str:
     url = url.replace("suckthisdick.com", "hobybuchanon.com")
     url = url.replace("premium-nickmarxx.com", "nickmarxx.com")
     url = url.replace("api.nyseedxxx.com", "nyseedxxx.com")
+    url = url.replace("3rdwheel.toughlovex.com", "tour.toughlovex.com")
     tour_domain = (
         "nympho",
         "allanal",
@@ -189,6 +193,16 @@ def get_studio(site: str) -> ScrapedStudio:
     if name == "Suck This Dick":
         studio["parent"] = get_studio("hobybuchanon.com")
     return studio
+
+
+def get_code(site: str, raw_scene: dict) -> str | None:
+    if (trailer := dig(raw_scene, "trailer_url")) and (
+        match := re.search(r"/(\w{2,3}\d{4})", trailer)
+    ):
+        return match.group(1)
+
+    if _id := dig(raw_scene, "id"):
+        return str(_id)
 
 
 def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
@@ -337,8 +351,8 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
         scene["date"] = date[:10].replace("/", "-")
     if details := raw_scene.get("description"):
         scene["details"] = strip_tags(details)
-    if scene_id := raw_scene.get("id"):
-        scene["code"] = str(scene_id)
+    if code := get_code(site, raw_scene):
+        scene["code"] = code
     if models := raw_scene.get("models_thumbs"):
         scene["performers"] = [
             {

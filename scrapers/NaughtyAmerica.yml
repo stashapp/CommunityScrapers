@@ -1,47 +1,81 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
-name: naughtyamerica
+name: Naughty America
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url: &urls
+      - myfriendshotmom.com/scene/
+      - mysistershotfriend.com/scene/
       - naughtyamerica.com/scene/
+      - naughtyamericavr.com/scene/
+      - thundercock.com/scene/
+      - tonightsgirlfriend.com/scene/
+      - tonightsts.com/scene/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .*?(\d+)(?:\?|#|$)
+          with: https://api.naughtyapi.com/tools/scenes/scenes?id=$1
     scraper: sceneScraper
 galleryByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url: *urls
     scraper: sceneScraper
-xPathScrapers:
+jsonScrapers:
   sceneScraper:
     common:
-      $sceneinfo: //div[@class="scene-info"]
+      $scene: data.0
     scene:
-      Title: &title $sceneinfo/h1[@class="scene-title grey-text"]
+      Title: &title $scene.title
+      Code: &code $scene.id
+      URL: $scene.scene_url
       Date: &date
-        selector: //div[@class="date-tags"]/span
+        selector: $scene.published_date
         postProcess:
-          - parseDate: Jan 2, 2006
-      Details: &details
-        selector: //div[@class="synopsis grey-text"]
-        postProcess:
-          - replace:
-              - regex: "Synopsis"
-                with: ""
+          - parseDate: "2006-01-02 15:04:05"
+      Details: &details $scene.synopsis
       Tags: &tags
-        Name: //div[@class="categories grey-text"]/a
+        Name:
+          selector: $scene.tags
+          # Strip leading and trailing whitespace, some of their tags are legacy
+          # concat them and split them afterwards to reduce excessive log output
+          concat: "__SEP__"
+          postProcess:
+            - replace:
+                - regex: __SEP__\s+|__SEP__\s+
+                  with: ""
+          split: "__SEP__"
       Performers: &performers
-        Name: $sceneinfo/h2/div[@class="performer-list"]/a
+        Name: "[$scene.performers.female,$scene.performers.male].@flatten"
       Studio: &studio
-        Name: $sceneinfo/h2/a[@class="site-title grey-text link"]
+        Name: $scene.site_name
+      # Scenes in the API do not contain a direct link to their cover image but the
+      # pattern is predictable enough that we can construct an image URL from the promo/trailer link
       Image:
-        selector: //img[@class="start-card lazyload"]/@data-src|//img[@class="start-card"]/@src|//dl8-video[@id="vr_player"]/@poster|(//div[@class="overlays"]/a/picture)[1]/source[@type="image/jpeg"]/@data-srcset|//img[contains(@class,"start-card desktop-only")]/@data-srcset
+        # Grab the trailer or the promo video, whichever is available
+        selector: '[{"vid":data.0.trailers.@values.0},{"vid":data.0.promo_video_data.@values.0}].#(vid!=null).vid'
         postProcess:
-          - replace:
-              - regex: ^
-                with: "https:"
+          - javascript: |
+              console.log(value);
+              const match = value.match(/.+(?:promo|\.com)\/(?:nonsecure\/)?(?<prefix>[^/]+)\/(?:trailers(?:\/vr)?\/)?(?<name>[^/_]+).*/);
+              if (match) {
+                const prefix = match[1];
+                let name = match[2];
+                if (name.startsWith(prefix)) {
+                  name = name.slice(prefix.length);
+                }
+                name = name.replace(/teaser|trailer$/, '');
+                return `https://images4.naughtycdn.com/cms/nacmscontent/v1/scenes/${prefix}/${name}/scene/horizontal/1279x852c.webp`;
+              }
+              return null;
     gallery:
       Title: *title
+      Code: *code
       Date: *date
       Details: *details
       Tags: *tags
       Performers: *performers
       Studio: *studio
-# Last Updated April 17, 2025
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:137.0) Gecko/20100101 Firefox/140.0

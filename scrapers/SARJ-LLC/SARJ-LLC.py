@@ -238,6 +238,11 @@ def scrape_gallery(base_url, date, name):
     log.info(f"Scraping gallery '{name}' released on {date}")
     data = fetch(base_url, 'gallery', {'name': name, 'date': date})
     if data is None:
+        # try fetching from movie
+        log.info(f"Gallery '{name}' not found, trying to fetch as movie")
+        data = fetch(base_url, 'movie', {'name': name, 'date': date})
+    if data is None:
+        log.error(f"Gallery '{name}' not found")
         return None
 
     studio = get_studio(data['siteUUID'])

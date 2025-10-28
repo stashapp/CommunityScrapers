@@ -23,8 +23,8 @@ xPathScrapers:
       Title: &title
         selector: //meta[@property='og:title']/@content
       Details: &details
-        selector: //div[@class='description']//p
-        concat: '\n\n'
+        selector: //div[@class='description']//p//text()
+        concat: "\n\n"
       Performers: &performers
         Name:
           selector: //div[h5[contains(.,'Featuring')] and @class='tags']//a
@@ -104,4 +104,4 @@ driver:
           Value: "5"
           Path: "/"
 
-# Last Updated June 03, 2024
+# Last Updated June 22, 2025

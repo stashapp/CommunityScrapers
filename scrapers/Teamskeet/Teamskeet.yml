@@ -5,12 +5,13 @@ sceneByURL:
   - url:
       - sayuncle.com/movies/
       - teamskeet.com/movies/
-      - app.teamskeet.com/movies/
       - mylf.com/movies/
-      - app.mylf.com/movies/
+      - mylf.com/b/movies/
       - swappz.com/movies/
+      - freeuse.com/movies/
+      - app.reptyle.com/movies/
     action: script
     script:
       - python
       - TeamskeetAPI.py
-# Last Updated December 01, 2024
+# Last Updated October 24, 2025

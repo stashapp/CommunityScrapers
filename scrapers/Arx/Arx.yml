@@ -1,20 +1,79 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: Arx
 sceneByURL:
-  - action: script
-    url:
-      - japanlust.com/scenes/
-      - honeytrans.com/scenes/
-      - lesworship.com/scenes/
-      - joibabes.com/scenes/
-      - povmasters.com/scenes/
-      - cuckhunter.com/scenes/
-      - nudeyogaporn.com/scenes/
-      - transdaylight.com/scenes/
-      - transmidnight.com/scenes/
-      - transroommates.com/scenes/
-    script:
-      - python
-      - Arx.py
-      - scrapeByURL
-
-# Last Updated September 9, 2024
+  - action: scrapeXPath
+    url: &urls
+      - analvault.com
+      - cuckhunter.com
+      - honeytrans.com
+      - japanlust.com
+      - joibabes.com
+      - lesworship.com
+      - nudeyogaporn.com
+      - povmasters.com
+      - randypass.com
+      - transdaylight.com
+      - transmidnight.com
+      - transroommates.com
+    scraper: htmlScraper
+performerByURL:
+  - action: scrapeXPath
+    url: *urls
+    scraper: htmlScraper
+xPathScrapers:
+  htmlScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Date:
+        selector: //h1/following-sibling::div[contains(@class, "items-center")]//span[@class="block"]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: //span[text()="Description:"]/following-sibling::span
+      Performers:
+        Name: //span[text()="Models:"]/following-sibling::div//a//span/text()
+      Tags:
+        Name: &tagsSel //a[contains(@href, "/categories/")]//text()
+      URL: &urlSel //meta[@property="og:url"]/@content
+      Image: &imageSel //meta[@property="og:image"]/@content
+      Code:
+        selector: *urlSel
+        postProcess:
+          - replace:
+              - regex: &domainAndCodeRegex 'https?://([^/]+)/scenes/(\d+)/.*'
+                with: $2
+      Studio:
+        Name:
+          selector: *imageSel
+          postProcess:
+            - replace:
+                - regex: '.*/scene_thumbs/([^\d]+).*'
+                  with: $1
+            - map:
+                hhdp: Anal Vault
+                chi: Cuck Hunter
+                hhsm: Honey Trans
+                jly: Japan Lust
+                joi: JOI Babes
+                hhles: Les Worship
+                yoga: Nude Yoga Porn
+                pov: POV Masters
+                tsdl: Trans Daylight
+                tstm: Trans Midnight
+                tsrm: Trans Roommates
+        URL:
+          selector: *urlSel
+          postProcess:
+            - replace:
+                - regex: *domainAndCodeRegex
+                  with: https://www.$1
+    performer:
+      Name: //meta[@property="og:image:alt"]/@content
+      Image:
+        selector: *imageSel
+        postProcess:
+          - replace:
+              - regex: ^(https://[^/]+/fit-in/)[^/]+(.*)$
+                with: "${1}0x0${2}"
+      Tags:
+        Name: *tagsSel
+# Last Updated July 28, 2025
