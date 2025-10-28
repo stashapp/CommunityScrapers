@@ -27,7 +27,7 @@ jsonScrapers:
       Details: description
       Gender: tags.#(section=="gender").name
       Image: avatarS3Route
-      URL:
+      URLs:
         selector: username
         postProcess:
           - replace:
@@ -56,7 +56,7 @@ jsonScrapers:
         Aliases: author.username
         Details: author.description
         Image: author.avatarS3Route
-        URL:
+        URLs:
           selector: author.username
           postProcess:
             - replace:

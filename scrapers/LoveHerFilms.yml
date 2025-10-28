@@ -27,7 +27,7 @@ jsonScrapers:
   performerSearch:
     performer:
       Name: items.#.modelName
-      URL:
+      URLs:
         selector: items.#.slug
         replace:
           - regex: "^"
