@@ -15,7 +15,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - helixstudios.com/movie/
@@ -99,7 +99,7 @@ xPathScrapers:
           selector: //span[contains(@class, "studio-name")]/text()
 
   groupScraper:
-    movie:
+    group:
       Duration:
         selector: //span.info-item.duration/text()
         postProcess:
@@ -167,4 +167,4 @@ xPathScrapers:
           - replace:
               - regex: $
                 with: " "
-# Last Updated Feb 08, 2025
+# Last Updated October 27, 2025

@@ -1,7 +1,7 @@
 name: "VRLatina"
 sceneByURL:
   - action: scrapeXPath
-    url:
+    url: &urlSel
       - vrlatina.com/video
     scraper: sceneScraper
 groupByURL: 
@@ -17,20 +17,21 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //meta[@property="og:title"]/@content
-      Date:
+      Date: &dateAttr
         selector: //div[contains(text(), "Release date:")]/following-sibling::span
         postProcess:
           - parseDate: Jan 02, 2006
-      Details: //meta[@property="og:description"]/@content
+      Details: &detailsSel
+        selector: //meta[@property="og:description"]/@content
       Tags:
         Name: //a[@class="tag"]/@title
       Performers:
         Name: //div[@class="content-links -models"]//a/span
         URL: //div[@class="content-links -models"]//a/@href
       Studio:
-        Name:
+        Name: &studioName
           fixed: VRLatina
-      Image:
+      Image: &imageSel
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
