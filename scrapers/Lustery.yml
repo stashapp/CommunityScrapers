@@ -89,7 +89,7 @@ jsonScrapers:
                 selector: coupleInfo.members.#.name
                 concat: "|"
           split: "|"
-        URL:
+        URLs:
           selector: "[video.couplePermalink,video.secondaryCouplePermalink]"
           postProcess:
             - replace:
@@ -106,4 +106,4 @@ jsonScrapers:
           - replace:
               - regex: .*/(\d+)$
                 with: $1
-# Last Updated November 03, 2022
+# Last Updated September 17, 2025

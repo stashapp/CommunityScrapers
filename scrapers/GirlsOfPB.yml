@@ -23,7 +23,7 @@ xPathScrapers:
           - replace:
             - regex: ^
               with: http://www.girlsofpb.com
-      URL:
+      URLs:
         selector: $perfLIs/h3/a/@href
         postProcess:
           - replace:
@@ -49,7 +49,7 @@ xPathScrapers:
           - replace:
             - regex: ^
               with: http://www.girlsofpb.com
-      URL:
+      URLs:
         selector: //a[@id='goright']/@href
         postProcess:
           - replace:
@@ -93,5 +93,4 @@ xPathScrapers:
               - regex: '.*Birth Date: (.+ \d+, \d{4}), .*$'
                 with: "$1"
           - parseDate: January 2, 2006
-
-# Last Updated April 3, 2024
+# Last Updated September 17, 2025

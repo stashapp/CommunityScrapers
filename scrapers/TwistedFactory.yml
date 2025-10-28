@@ -87,7 +87,7 @@ xPathScrapers:
       $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
     performer:
       Name: $result/img/@alt
-      URL:
+      URLs:
         selector: $result/@href
         postProcess:
           - replace:
@@ -183,7 +183,7 @@ xPathScrapers:
               tsman: Transgender Male
               nonbinary: Non-Binary
               unknown: ""
-      URL:
+      URLs:
         selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
         concat: "__SEP__"
         postProcess:
@@ -194,4 +194,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: stash-scraper/1.0.0
-# Last Updated April 19, 2024
+# Last Updated September 17, 2025

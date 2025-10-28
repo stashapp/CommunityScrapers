@@ -65,5 +65,5 @@ xPathScrapers:
           fixed: X-Art
       Performers:
         Name: $gallery/h2/a
-        URL: $gallery/h2/a/@href
-# Last Updated May 25, 2024
+        URLs: $gallery/h2/a/@href
+# Last Updated September 17, 2025

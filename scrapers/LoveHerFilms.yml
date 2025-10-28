@@ -61,6 +61,11 @@ xPathScrapers:
         Name: //a[contains(@class,"Description_tagItem")]/p/text()
       Performers:
         Name: //a[contains(@class,"Description_model")]/p[1]/text()
+        URLs: //a[contains(@class,"Description_model")]/@href
+  performerSearch:
+    performer:
+      Name: //h3/../a/@title
+      URLs: //h3/../a/@href
   performerScraper:
     common:
       $heroText: //div[contains(@class,"HeroModel_textWrapper")]

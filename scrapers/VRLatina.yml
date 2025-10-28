@@ -27,7 +27,7 @@ xPathScrapers:
         Name: //a[@class="tag"]/@title
       Performers:
         Name: //div[@class="content-links -models"]//a/span
-        URL: //div[@class="content-links -models"]//a/@href
+        URLs: //div[@class="content-links -models"]//a/@href
       Studio:
         Name: &studioName
           fixed: VRLatina
@@ -80,3 +80,4 @@ xPathScrapers:
       Ethnicity: //span[text()="Ethnicity:"]/following-sibling::span
       Image: //div[@class="model-avatar"]/div[@class="image"]/img/@src
       Details: //span[text()="Biography:"]/following-sibling::span
+# Last Updated September 17, 2025

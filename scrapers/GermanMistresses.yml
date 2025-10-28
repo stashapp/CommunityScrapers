@@ -23,8 +23,7 @@ xPathScrapers:
       URL: //link[@rel="canonical"]/@href
       Performers:
         Name: //div[@class="videodetailswrapper"]/div[@class="featuredmodels"]/a/text()
-        URL: //div[@class="videodetailswrapper"]/div[@class="featuredmodels"]/a/@href
+        URLs: //div[@class="videodetailswrapper"]/div[@class="featuredmodels"]/a/@href
       Tags:
         Name: //div[@class="videodetailswrapper"]/div[@class="videodetails"]/div[@class="videocats"]/a/text()
-
-# Last Updated May 08, 2024
+# Last Updated September 17, 2025

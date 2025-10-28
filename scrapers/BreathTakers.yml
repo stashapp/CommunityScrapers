@@ -26,10 +26,10 @@ xPathScrapers:
           - parseDate: January 2006
       Performers:
         Name: //p[@class='feat_model']/a
-        URL:
+        URLs:
           selector: //p[@class='feat_model']/a/@href
           postProcess:
             - replace:
                 - regex: ^
                   with: http://www.breath-takers.com
-# Last Updated March 26, 2025
+# Last Updated September 17, 2025
