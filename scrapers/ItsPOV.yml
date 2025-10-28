@@ -16,18 +16,21 @@ xPathScrapers:
     common:
       $scene: //div[@id="scenes"]
     scene:
-      Title: /html/head/title
+      Title: /html/head/meta[@property="og:title"]/@content
       Details: /html/head/meta[@name="description"]/@content
+      Date:
+        selector: //span[@class="publish_date"]/text()
+        postProcess:
+          - parseDate: January 2, 2006
       Performers:
         Name: $scene/div[@class="player"]/div[@class="actress"]/a/text()
       Image:
-        selector: $scene/div[@class="player"]//picture/source[last()]/@srcset
+        selector: $scene/div[@class="player"]//picture/source[last()]/@data-srcset
         postProcess:
           - replace:
             - regex: (.+1x, )(.+)( 2x)
               with: $2
 driver:
-  useCDP: true
   cookies:
     - Cookies:
         - Name: "gen_disclaimer"
@@ -101,4 +104,4 @@ driver:
           Domain: ".steppov.com"
           Value: "1"
           Path: "/"
-# Last Updated December 20, 2024
+# Last Updated October 28, 2025
