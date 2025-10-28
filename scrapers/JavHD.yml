@@ -43,7 +43,7 @@ xPathScrapers:
     performer:
       Name: //h1
       Image: //div[@class="avatar"]/img/@src
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Details: //div[@class="info"]/p
       Birthdate:
         selector: //strong[contains(., "Birth date")]/following-sibling::*
@@ -60,4 +60,4 @@ xPathScrapers:
       Weight: //strong[contains(., "Weight")]/following-sibling::*
       Ethnicity: //strong[contains(., "Ethnicity")]/following-sibling::*
       FakeTits: //strong[contains(., "Breast factor")]/following-sibling::*
-# Last Updated April 05, 2024
+# Last Updated September 17, 2025

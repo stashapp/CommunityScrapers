@@ -51,7 +51,7 @@ performerByURL:
   - action: scrapeXPath
     url: *urls
     scraper: performerScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url: *urls
     scraper: movieScraper
@@ -138,7 +138,7 @@ xPathScrapers:
                 with: ""
       Gender:
         fixed: female
-      URL: //link[@rel='canonical']/@href
+      URLs: //link[@rel='canonical']/@href
       Twitter: //a[contains(@class,'social-media') and contains (@href,'x.com')]/@href
       Instagram: //a[contains(@class,'social-media') and contains (@href,'instagram.com')]/@href
       Ethnicity:
@@ -161,7 +161,7 @@ xPathScrapers:
   movieScraper:
     common:
       $details: *detailsAttr
-    movie:
+    group:
       Name:
         selector: //meta[@name="dl8-customization-brand-name"]/@content|$details/h1
         concat: " - "
@@ -178,3 +178,4 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
+# Last Updated September 17, 2025

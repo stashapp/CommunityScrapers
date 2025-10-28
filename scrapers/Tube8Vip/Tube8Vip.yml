@@ -61,7 +61,7 @@ performerByFragment:
     - python
     - Tube8Vip.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - tube8vip/scene/

@@ -51,7 +51,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Performers:
         Name: $movieinfo/p[starts-with(strong,"Actress")]/a
-        URL: $movieinfo/p[starts-with(strong,"Actress")]/a/@href
+        URLs: $movieinfo/p[starts-with(strong,"Actress")]/a/@href
       Tags:
         Name: $movieinfo/p[starts-with(strong,"Categories")]/a
       Image:
@@ -124,4 +124,4 @@ driver:
           Domain: ".japanhdv.com"
           Path: /
           Value: "_"
-# Last Updated July 01, 2024
+# Last Updated September 17, 2025

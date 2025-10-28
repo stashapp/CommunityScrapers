@@ -38,6 +38,7 @@ studio_map = {
     "doggvision.com": "DoggVision",
     "dripdropprod.net": "DripDrip",
     "facialsforever.com": "Facials Forever",
+    "fantasypov.com": "FantasyPOV",
     "freakmobmedia.com": "FreakMob Media",
     "gogobarauditions.com": "Gogo Bar Auditions",
     "gogoworldporn.com": "GoGo World Porn",

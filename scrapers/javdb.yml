@@ -27,7 +27,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - javdb.com/v/
@@ -88,7 +88,7 @@ xPathScrapers:
       Image: //img[@class="video-cover"]/@src
       URL: //link[@rel="canonical"]/@href
   movieScraper:
-    movie:
+    group:
       Name:
         selector: //strong[text()='ID:']/../span
         concat: "|"

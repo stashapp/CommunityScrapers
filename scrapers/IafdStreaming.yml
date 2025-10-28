@@ -1,6 +1,6 @@
 name: IafdStreaming
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - streaming.iafd.com/
@@ -13,7 +13,7 @@ sceneByURL:
 
 xPathScrapers:
   movieScraper:
-    movie:
+    group:
       Name: //h1[@class="description"]/text()
       Director: //div[@class="director"]/a/text()
       Duration:
@@ -48,7 +48,7 @@ xPathScrapers:
         Name: //a[@data-label="Performer"]/img/@title
       Tags:
         Name: //div[@class="tags"]/a/text()
-      Movies:
+      Groups:
         Name: //a[contains(@data-label, "Full Movie Text")]/text()
 
 # Last Updated August 30, 2020

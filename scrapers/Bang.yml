@@ -13,7 +13,7 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - bang.com/dvd
@@ -63,7 +63,7 @@ xPathScrapers:
           selector: //a[@class="genres"]
       Performers:
         Name: $performer
-        URL:
+        URLs:
           selector: $performer/@href
           postProcess: *prependHost
       Studio:
@@ -73,7 +73,7 @@ xPathScrapers:
             - replace:
                 - regex: ^yngr\.com$
                   with: "YNGR"
-      Movies:
+      Groups:
         Name: $movie
         URL:
           selector: $movie/@href
@@ -82,7 +82,7 @@ xPathScrapers:
     common:
       $details: //div[@class="w-full"][1]
       $image: //body/div[contains(@class,"w-full")][3]/div/div/picture//img[contains(@src,"/front")]/@src
-    movie:
+    group:
       Name:
         selector: $details/h1
       Duration:
@@ -111,7 +111,7 @@ xPathScrapers:
       $overlay: //div[@class="flex flex-col md:items-start items-center"]
     performer:
       Name: $overlay/h2
-      URL:
+      URLs:
         selector: //link[@rel="canonical"][1]/@href
       Birthdate:
         selector: $overlay//div[contains(text(),"Born")]/span[contains(text(),"old")]

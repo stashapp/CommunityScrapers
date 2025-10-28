@@ -1,5 +1,5 @@
 name: data18
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - data18.com/movies
@@ -48,11 +48,11 @@ xPathScrapers:
         Name: //b[text()='Categories:']/following-sibling::a
       Performers:
         Name: $performer
-        URL: $performer/@href
+        URLs: $performer/@href
       Studio:
         Name: $studio
         URL: $studio/@href
-      Movies:
+      Groups:
         Name:
           selector: $movie/@title
           postProcess:
@@ -66,7 +66,7 @@ xPathScrapers:
       $movieInfo: //div[@id="body2div_b"]
       $studio: //b[text()=('Studio') or ('Network')]/following-sibling::b/a | //b[text()=('Studio') or ('Network')]/following-sibling::a
       $performer: //div[h3[contains(text(), 'Pornstars / Cast')]]//a[@class='bold gen']
-    movie:
+    group:
       Name:
         selector: //title
         postProcess:
@@ -123,7 +123,7 @@ xPathScrapers:
       Director: //p[b[contains(text(),'Director')]]//a[@class='bold']
       Performers:
         Name: $performer
-        URL: $performer/@href
+        URLs: $performer/@href
       Details:
         selector: //b[text()="Description"]/..
         concat: " "
@@ -131,7 +131,7 @@ xPathScrapers:
           - replace:
               - regex: '^Description\s*-\s*'
                 with:
-      Movies:
+      Groups:
         Name:
           selector: //title
           postProcess:
@@ -151,4 +151,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated April 30, 2024
+# Last Updated September 17, 2025

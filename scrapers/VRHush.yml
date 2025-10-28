@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - vrhush.com/scenes
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - vrhush.com/scenes
@@ -39,7 +39,7 @@ xPathScrapers:
               - regex: ^//
                 with: "https://"
   movieScraper:
-    movie:
+    group:
       Name:
         selector: *titleSel
         postProcess:

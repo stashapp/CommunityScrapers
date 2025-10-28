@@ -36,7 +36,7 @@ xPathScrapers:
         Name: $main//li
       Performers:
         Name: $main//p/text()
-        URL:
+        URLs:
           selector: $main//a[@class="item"]/@href
           postProcess: &pp
             - replace:
@@ -60,4 +60,4 @@ xPathScrapers:
       URL:
         selector: $res/a/@href
         postProcess: *pp
-# Last Updated January 25, 2024
+# Last Updated September 17, 2025

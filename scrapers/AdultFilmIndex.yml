@@ -26,7 +26,7 @@ sceneByFragment:
   action: scrapeJson
   queryURL: https://adultfilmindex.com/api/v1/stash/scene_fragment_search/{filename}/{oshash}
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeJson
     url:
       - https://adultfilmindex.com/movie/
@@ -46,7 +46,7 @@ xPathScrapers:
           - replace:
               - regex: '.*"gender":"(\w{1,})".*'
                 with: '$1'
-      URL: //head/link[@rel='canonical']/@href
+      URLs: //head/link[@rel='canonical']/@href
       Birthdate:
         selector: //strong[text()='Date of Birth:']/..
         postProcess:
@@ -133,7 +133,7 @@ jsonScrapers:
               - regex: T.*$
                 with: ''
           - parseDate: 2006-01-02
-      Movies:
+      Groups:
         Name: data.movie.title
       Performers:
         Name: data.actors.#.name
@@ -142,7 +142,7 @@ jsonScrapers:
       Tags:
         Name: data.tags.#.name
   movieScraper:
-    movie:
+    group:
       Name: data.title
       Synopsis: data.description
       URL: data.url
@@ -164,6 +164,4 @@ driver:
       Value: stashjson/1.0.0
     - Key: Authorization # Beta key, enabled and active for now
       Value: Bearer 4vY0iwSUVPH5cGAX1AUZarJ8pbuDUK53
-# Last Updated June 22, 2022
-
-
+# Last Updated September 17, 2025

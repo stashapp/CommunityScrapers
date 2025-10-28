@@ -28,7 +28,7 @@ sceneByURL:
       - www.freeones.com
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - www.freeones.com
@@ -38,7 +38,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //div[@id="search-result"]//p[@data-test="subject-name"]/text()
-      URL:
+      URLs:
         selector: //div[@id="search-result"]//div[@data-test="teaser-subject"]/a/@href
         postProcess:
           - replace:
@@ -77,7 +77,7 @@ xPathScrapers:
             - regex: .+?(\w+\s\d{1,2},\s\d{4}).+
               with: $1
           - parseDate: January 2, 2006
-      Movies:
+      Groups:
         Name: //h1
         URL: //link[@rel="alternate"][1]/@href
       Performers:
@@ -95,7 +95,7 @@ xPathScrapers:
     common:
       $commonRoot: //*[@id="description"]
       $performerName: //a[@data-test="link_Cast"]
-    movie:
+    group:
       Name: //h1
       Synopsis: $commonRoot//div[contains(concat(' ',normalize-space(@class),' '),' pb-2 ')]
       Duration: $commonRoot//span[@data-test="link_span_Duration"]
@@ -120,7 +120,7 @@ xPathScrapers:
           - replace:
               - regex: (.+)\sidentifies.+
                 with: $1
-      URL: //link[@rel="alternate" and @hreflang="x-default"]/@href
+      URLs: //link[@rel="alternate" and @hreflang="x-default"]/@href
       Twitter: //form//a[contains(@href,'twitter.com/')]/@href
       Instagram: //form//a[contains(@href,'instagram.com/')]/@href
       Birthdate:
@@ -204,5 +204,4 @@ xPathScrapers:
           - replace:
             - regex: \skg
               with: ""
-
-# Last Updated June 22, 2025
+# Last Updated September 17, 2025

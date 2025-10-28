@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - kristenbjorn.com/video
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - kristenbjorn.com/web/model/store/
@@ -42,7 +42,7 @@ xPathScrapers:
                   with: $1
       Performers:
         Name: $performer//h5/text()
-        URL:
+        URLs:
           selector: $performer/@href
           postProcess: &appendDomain
             - replace:
@@ -53,7 +53,7 @@ xPathScrapers:
         Name:
           fixed: Kristen Bjorn
   movieScraper:
-    movie:
+    group:
       Name: //article/div[1]/span/text()
       Date:
         selector: //span[text()="Release Date:"]/following-sibling::text()
@@ -114,4 +114,4 @@ xPathScrapers:
               - regex: '[^\s]+ \((.*) cms\).*$'
                 with: $1
       Image: *imageAttr
-# Last Updated December 23, 2022
+# Last Updated September 17, 2025

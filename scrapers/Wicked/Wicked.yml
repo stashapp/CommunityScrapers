@@ -8,7 +8,7 @@ sceneByURL:
       - python
       - ../Algolia/Algolia.py
       - wicked
-movieByURL:
+groupByURL:
   - action: script
     url:
       - wicked.com/en/movie/

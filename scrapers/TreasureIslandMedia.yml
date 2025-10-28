@@ -21,7 +21,7 @@ performerByName:
   action: scrapeXPath
   queryURL: "https://men.treasureislandmedia.com/men?haircolor=All&eyecolor=All&bodytype=All&cocksize=All&cocktype=All&ismarked=All&isexclusive=All&sexrole=All&modelname={}"
   scraper: search
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - treasureislandmedia.com/movies
@@ -34,7 +34,7 @@ xPathScrapers:
       Image: //div[contains(@class,"tim-views-scenes-page-scene")]//img/@src
     performer:
       Name: //div[contains(@class,"tim-views-scenes-page-scene")]/p
-      URL: //div[contains(@class,"tim-views-scenes-page-scene")]/a/@href
+      URLs: //div[contains(@class,"tim-views-scenes-page-scene")]/a/@href
   tim:
     scene:
       Title: &title //h2[@class="page-header"]
@@ -48,7 +48,7 @@ xPathScrapers:
           - replace:
               - regex: ^([^T]+).+
                 with: $1
-      Movies:
+      Groups:
         Name: //div[contains(@class, "scene-parent-movie-cover-image")]//img/@alt
         URL: //div[contains(@class, "scene-parent-movie-cover-image")]//a/@href
         FrontImage: (//div[contains(@class, "scene-parent-movie-cover-image")])[1]//img/@src
@@ -75,7 +75,7 @@ xPathScrapers:
         Name: //a[contains(@class,"navbar-brand-currsite")]/span[contains(@class,"top")]
       Tags:
         Name: //div[contains(@class, "field-name-field-tags")]//a
-    movie:
+    group:
       Name: *title
       Date: *date
       Studio: *studio
@@ -86,7 +86,7 @@ xPathScrapers:
         concat: ", "
     performer:
       Name: //div[contains(@class,'model-profile-top')]//h3/text()
-      URL: //link[contains(@rel,'canonical')]/@href
+      URLs: //link[contains(@rel,'canonical')]/@href
       Country: //span[contains(@style,"777777")]/text()
       Gender:
         fixed: Male
@@ -112,4 +112,4 @@ xPathScrapers:
           - feetToCm: true
       Image:
         selector: //*[@id="top-content-outer-wrap"]/div/div[1]/div[2]/div/div/a/@href
-# Last Updated July 14, 2024
+# Last Updated September 17, 2025

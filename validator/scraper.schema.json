@@ -19,9 +19,9 @@
       "description": "An array of one or more configurations for scraping scene info by URL(s).",
       "allOf": [{ "$ref": "#/definitions/anyByURL" }]
     },
-    "movieByURL": {
-      "title": "Movie by URL",
-      "description": "An array of one or more configurations for scraping movie info by URL(s).",
+    "groupByURL": {
+      "title": "Group by URL",
+      "description": "An array of one or more configurations for scraping group info by URL(s).",
       "allOf": [{ "$ref": "#/definitions/anyByURL" }]
     },
     "performerByURL": {
@@ -441,7 +441,6 @@
         },
         "scene": { "$ref": "#/definitions/sceneObject" },
         "performer": { "$ref": "#/definitions/performerObject" },
-        "movie": { "$ref": "#/definitions/groupObject" },
         "group": { "$ref": "#/definitions/groupObject" },
         "gallery": { "$ref": "#/definitions/galleryObject" },
         "image": { "$ref": "#/definitions/imageObject" }
@@ -479,10 +478,6 @@
         "Studio": {
           "title": "Scene studio",
           "allOf": [{ "$ref": "#/definitions/studioObject" }]
-        },
-        "Movies": {
-          "title": "Scene groups",
-          "allOf": [{ "$ref": "#/definitions/groupObject" }]
         },
         "Groups": {
           "title": "Scene groups",
@@ -527,10 +522,6 @@
         "Gender": {
           "title": "Performer gender",
           "description": "Must be one of (case insensitive): `male`, `female`, `transgender_male`, `transgender_female`, `intersex`, `non_binary`",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URL": {
-          "title": "Performer URL",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "URLs": {

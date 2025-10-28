@@ -31,7 +31,7 @@ performerByURL:
       - julesjordan.com/trial/models/
     scraper: performerScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - julesjordan.com/trial/dvds/
@@ -59,7 +59,7 @@ xPathScrapers:
         Name: //span[@class="update_tags"]/a/text()
       Performers: &performersAttr
         Name: $details//span[@class="update_models"]/a/text()|$galinfo//span[@class="update_models"]/div/a/text()
-        URL: $details//span[@class="update_models"]/a/@href|$galinfo//span[@class="update_models"]/div/a/@href
+        URLs: $details//span[@class="update_models"]/a/@href|$galinfo//span[@class="update_models"]/div/a/@href
       Studio: &studioAttr
         Name:
           selector: //base/@href
@@ -73,7 +73,7 @@ xPathScrapers:
                 manuelferrara: Manuel Ferrara
                 theassfactory: The Ass Factory
                 spermswallowers: Sperm Swallowers
-      Movies:
+      Groups:
         Name: $details//span[@class="update_dvds"]/a/text()
         URL: $details//span[@class="update_dvds"]/a/@href
       Image:
@@ -107,9 +107,9 @@ xPathScrapers:
         Name: $scene//a[contains(@href, "categories")]/text()
       Performers: &newPerformersAttr
         Name: $scene//a[contains(@href, "models")]/text()
-        URL: $scene//a[contains(@href, "models")]/@href
+        URLs: $scene//a[contains(@href, "models")]/@href
       Studio: *studioAttr
-      Movies:
+      Groups:
         Name: $scene//span[contains(., "Movie:")]/following-sibling::a/text()
         URL: $scene//span[contains(., "Movie:")]/following-sibling::a/@href
       Image: $scene//video/@poster
@@ -151,10 +151,10 @@ xPathScrapers:
         selector: //img[contains(@class,'model_bio_thumb')]/@src0_3x
 
   movieScraper:
-    movie:
+    group:
       Name: //meta[@property="og:title"]/@content
       Studio:
         Name:
           fixed: Jules Jordan Video
       FrontImage: //img[contains(@class, "dvd_box")]/@src0_3x
-# Last Updated September 19, 2023
+# Last Updated September 17, 2025

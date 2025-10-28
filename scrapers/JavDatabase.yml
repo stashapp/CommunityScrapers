@@ -6,7 +6,7 @@ sceneByURL:
       - javdatabase.com
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - javdatabase.com
@@ -49,8 +49,8 @@ xPathScrapers:
             - replace:
                 - regex: '/thumb/'
                   with: '/full/'
-        URL: //div[h2[contains(.,'/Idols')]]//a/@href
-      Movies:
+        URLs: //div[h2[contains(.,'/Idols')]]//a/@href
+      Groups:
         Name: *title
         FrontImage: *image
         Studio: *studio
@@ -86,7 +86,7 @@ xPathScrapers:
   movieScraper:
     common:
       $infobox: //div[@class="movietable"]/div[@class="row"][1]
-    movie:
+    group:
       Name: *title
       Synopsis: $infobox/div[2]/p[1]/text()
       Date:
@@ -177,10 +177,9 @@ xPathScrapers:
       Performers:
         Name:
           selector: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/text()
-        URL: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/@href
+        URLs: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/@href
       Image: /html/head/meta[@property='og:image']/@content
       Tags:
         Name: $videoItem/p/span[../b[contains(.,'Genre(s):')]]/a[@rel='tag']/text()
       Details: $videoDetailsItem
-
-# Last Updated May 6, 2025
+# Last Updated September 17, 2025

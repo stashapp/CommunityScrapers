@@ -1,5 +1,5 @@
 name: Carnal+ / FTM+
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - carnalplus.com/series/
@@ -272,7 +272,7 @@ xPathScrapers:
                 twinkloads: Twink Loads
                 twinktop: Twink Top
 
-      Movies:
+      Groups:
         Name:
           selector: //div[contains(@class, "series-img")]//img[contains(@alt, "series cover")]/@alt
           postProcess:
@@ -297,7 +297,7 @@ xPathScrapers:
       Image: *image
       URL: *url
       Studio: *studio
-      Movies:
+      Groups:
         Name: //span[contains(@class, "dvdTitleScene")]
         URL: //span[contains(@class, "dvdTitleScene")]//a/@href
         Studio: *studio
@@ -305,7 +305,7 @@ xPathScrapers:
       Performers: *performers
 
   movieScraper:
-    movie:
+    group:
       Name: //h1[@class="modelbio-title"]
       Synopsis: //div[@id="showmore-desc"]//p
       Studio:

@@ -13,7 +13,7 @@ sceneByURL:
     url:
       - imdb.com/title/
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - imdb.com/title/
@@ -30,7 +30,7 @@ xPathScrapers:
               # Remove result index, like '1. Performer Performerson' and '2. Lady Performerson'
               - regex: ^\d+\.\s+
                 with: ""
-      URL:
+      URLs:
         selector: $listAnchor/@href
         postProcess:
           - replace:
@@ -80,7 +80,7 @@ xPathScrapers:
     scene:
       Title: &title //section//h1
       URL: &url //meta[@property="og:url"]/@content
-      Movies:
+      Groups:
         Name: *title
         URL: *url
       Date: &date
@@ -101,7 +101,7 @@ xPathScrapers:
       Studio: &studio
         Name: (//li[@data-testid="title-details-companies"]/div//a)[1]
   movieScraper:
-    movie:
+    group:
       Name: *title
       URL: *url
       Date: *date
@@ -125,4 +125,4 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0
-# Last Updated August 13, 2022
+# Last Updated September 17, 2025
