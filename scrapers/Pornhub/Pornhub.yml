@@ -107,7 +107,7 @@ xPathScrapers:
           - replace:
               - regex: \s+to\s+
                 with: "-"
-      URL: //link[@rel="canonical"][1]/@href
+      URLs: //link[@rel="canonical"][1]/@href
       Image: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
   sceneScraper:
     common:

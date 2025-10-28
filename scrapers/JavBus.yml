@@ -43,9 +43,9 @@ performerByName:
 
 xPathScrapers: 
   performerSearch: 
-    performer: 
+    performer:
       Name: //span[@class="mleft"]
-      URL: //*[@id="waterfall"]/div/a/@href
+      URLs: //*[@id="waterfall"]/div/a/@href
   performerScraper: 
     performer: 
       Name: //*[@id="waterfall"]/div[1]/div/div[2]/span
@@ -107,4 +107,4 @@ driver:
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
     - Key: Accept-Language
       Value: zh-cn
-# Last Updated Aug 01, 2025
+# Last Updated September 17, 2025

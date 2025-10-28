@@ -25,11 +25,11 @@ xPathScrapers:
           - replace:
               - regex: "^AKA:"
                 with: ""
-      URL: //a[@class="model-name"]/@href
+      URLs: //a[@class="model-name"]/@href
   performerScraper:
     performer:
       Name: //span[@class="model-name"]
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Twitter:
         selector: //a[text()="TWITTER"]//@href
         postProcess:
@@ -197,7 +197,7 @@ xPathScrapers:
                 with: $1
       Performers: &performers
         Name: //h1/span[1]/a/text()
-        URL: //h1/span[1]/a/@href
+        URLs: //h1/span[1]/a/@href
       Tags: &tags
         Name:
           selector: //meta[@itemprop="keywords"]/@content
@@ -222,4 +222,4 @@ xPathScrapers:
       Tags: *tags
       Studio: *studio
       Photographer: *director
-# Last Updated June 21, 2025
+# Last Updated September 17, 2025

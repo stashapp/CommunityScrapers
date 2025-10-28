@@ -49,7 +49,7 @@ jsonScrapers:
   performerSearch:
     performer:
       Name: models.#.username
-      URL:
+      URLs:
         selector: models.#.url
         postProcess:
           - replace:
@@ -60,7 +60,7 @@ jsonScrapers:
     performer:
       Name: displayName
       Gender: identification
-      URL:
+      URLs:
         selector: "[legacyUserId,urlHandle]"
         concat: /
         postProcess:
@@ -158,11 +158,11 @@ jsonScrapers:
         Name: data.tagList.#.label
       Performers: &performer
         Name: data.model.displayName
-        URL:
+        URLs:
           selector: data.model.profileUrl
           postProcess:
             - replace:
                 - regex: ^
                   with: https://www.manyvids.com
       Studio: *performer
-# Last Updated June 29, 2024
+# Last Updated September 17, 2025

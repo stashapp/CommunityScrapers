@@ -49,7 +49,7 @@ xPathScrapers:
             - replace:
                 - regex: '/thumb/'
                   with: '/full/'
-        URL: //div[h2[contains(.,'/Idols')]]//a/@href
+        URLs: //div[h2[contains(.,'/Idols')]]//a/@href
       Groups:
         Name: *title
         FrontImage: *image
@@ -177,10 +177,9 @@ xPathScrapers:
       Performers:
         Name:
           selector: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/text()
-        URL: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/@href
+        URLs: $videoItem/p/span[../b[contains(.,'Idol(s)/Actress(es):')]]/a/@href
       Image: /html/head/meta[@property='og:image']/@content
       Tags:
         Name: $videoItem/p/span[../b[contains(.,'Genre(s):')]]/a[@rel='tag']/text()
       Details: $videoDetailsItem
-
-# Last Updated May 6, 2025
+# Last Updated September 17, 2025

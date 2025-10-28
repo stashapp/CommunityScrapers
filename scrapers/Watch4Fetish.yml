@@ -18,7 +18,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Performers:
         Name: //div[@class='user-details-card-name']/text()
-        URL: //a[@class="uk-flex"]/@href
+        URLs: //a[@class="uk-flex"]/@href
       Tags:
         Name: //div[@class="abt-rw tgs"]/a
       Details:
@@ -32,4 +32,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Watch4Fetish
-# Last Updated May 07, 2021
+# Last Updated September 17, 2025

@@ -71,7 +71,7 @@ xPathScrapers:
         concat: "\n\n"
       Performers: &performers
         Name: $content//a[contains(@href,"/models/")]
-        URL: $content//a[contains(@href,"/models/")]/@href
+        URLs: $content//a[contains(@href,"/models/")]/@href
       Tags: &tags
         Name: $content//a[@class="video-tag-link"]
       Image:

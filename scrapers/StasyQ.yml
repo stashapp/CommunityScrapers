@@ -46,12 +46,12 @@ xPathScrapers:
 
       Performers:
         Name: $performer//text()
-        URL: $performer/@href
+        URLs: $performer/@href
       URL: //link[@rel='canonical']/@href
   performerSearch:
     performer:
       Name: //div[@class="model-preview-card__info"]//a[contains(@href,'/m/')]/text()
-      URL:
+      URLs:
         selector: //div[@class="model-preview-card__info"]//a[contains(@href,'/m/')]/@href
   performerScraper:
     common:
@@ -125,5 +125,5 @@ xPathScrapers:
                 with: $1
               - regex: .+schema\.org.+
                 with:
-      URL: //link[@rel='canonical']/@href
-# Last Updated July 17, 2022
+      URLs: //link[@rel='canonical']/@href
+# Last Updated September 17, 2025

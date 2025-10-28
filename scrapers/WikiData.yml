@@ -19,7 +19,7 @@ jsonScrapers:
   performerSearch:
     performer:
       Name: results.bindings.#.pornographic_actorLabel.value
-      URL:
+      URLs:
         selector: results.bindings.#.pornographic_actor.value
         postProcess:
           - replace:
@@ -148,6 +148,4 @@ jsonScrapers:
                 with: "&format=json"
           - subScraper:
               selector: query.pages.*.extract
-
-
-# Last Updated August 29, 2021
+# Last Updated September 17, 2025

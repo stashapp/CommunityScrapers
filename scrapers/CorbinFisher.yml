@@ -25,7 +25,7 @@ xPathScrapers:
           - parseDate: January 2, 2006
       Performers:
         Name: //div[@class="modelFeaturing"]//a
-        URL: //div[@class="modelFeaturing"]//a/@href
+        URLs: //div[@class="modelFeaturing"]//a/@href
       Details:
         selector: //div[@class="description"]/p//text() | //div[@class="description"]/p//br
         concat: "\n\n"

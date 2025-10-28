@@ -27,7 +27,7 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name: //a[@class="girl_item"]/span[@class="name"]
-        URL:
+        URLs:
           selector: //a[@class="girl_item"]/@href
           postProcess: &pp
             - replace:
@@ -63,4 +63,4 @@ xPathScrapers:
       URL:
         selector: $res/@href
         postProcess: *pp
-# Last Updated May 30, 2023
+# Last Updated September 17, 2025

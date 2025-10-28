@@ -47,7 +47,7 @@ xPathScrapers:
         Name: $details//span[text() = 'Tags:']/following-sibling::a[contains(concat(' ',normalize-space(@class),' '),' link-secondary ')]
       Performers:
         Name: $details//h1/following-sibling::p[1]/a
-        URL:
+        URLs:
           selector: $details//h1/following-sibling::p[1]/a/@href
           postProcess:
             - replace:
@@ -85,4 +85,4 @@ xPathScrapers:
           - replace:
               - regex: (.*)
                 with: https://tour10.pornworld.com$1
-# Last Updated May 02, 2024
+# Last Updated September 17, 2025

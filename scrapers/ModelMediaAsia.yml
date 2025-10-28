@@ -102,7 +102,7 @@ jsonScrapers:
           fixed: Asian
         Country:
           fixed: Taiwan
-        URL:
+        URLs:
           selector: data.models.#.id
           postProcess:
             - replace:
@@ -150,10 +150,10 @@ jsonScrapers:
           fixed: Taiwan
         Ethnicity:
           fixed: Asian
-        URL:
+        URLs:
           selector: data.models.#.id
           postProcess:
             - replace:
                 - regex: ^
                   with: https://modelmediaasia.com/zh-CN/models/
-# Last Updated January 16, 2025
+# Last Updated September 17, 2025

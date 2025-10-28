@@ -15,7 +15,7 @@ xPathScrapers:
       Performers:
         Name:
           selector: //div[@class='web']//div[@class='containerBig']//a[starts-with(@href, 'model')]
-        URL:
+        URLs:
           selector: //div[@class='web']//div[@class='containerBig']//a[starts-with(@href, 'model')]/@href
           postProcess:
             - replace:
@@ -30,4 +30,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Pigboy Ruben
-# Last Updated July 17, 2024
+# Last Updated September 17, 2025

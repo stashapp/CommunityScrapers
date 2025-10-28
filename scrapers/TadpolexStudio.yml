@@ -15,7 +15,7 @@ xPathScrapers:
       Title: //div[@class="video-player"]//h2[@class="section-title"]/text()
       Performers:
         Name: $models/span
-        URL: $models/@href
+        URLs: $models/@href
       Date:
         selector: //strong[text()="Released:"]/following-sibling::text()
         postProcess:
@@ -34,4 +34,4 @@ xPathScrapers:
       Details:
         selector: //div[@class="update-info-block"]/h3[text()="Description:"]/following-sibling::*/text()
         concat: "\n\n"
-# Last Updated April 29, 2024
+# Last Updated September 17, 2025

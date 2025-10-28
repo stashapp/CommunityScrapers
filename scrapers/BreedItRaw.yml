@@ -27,7 +27,7 @@ xPathScrapers:
         Name: //li[contains(text(), "Tags:")]/following-sibling::li/a/text()
       Performers:
         Name: $performer
-        URL: $performer/@href
+        URLs: $performer/@href
       Image:
         selector: //script[contains(text(),"poster")]/text()
         postProcess:
@@ -72,3 +72,4 @@ xPathScrapers:
                 with: https://www.breeditraw.net/
               - regex: (1|2|3|4)x\.jpg
                 with: "full.jpg"
+# Last Updated September 17, 2025
