@@ -28,7 +28,7 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - hothouse
     - validName
-movieByURL:
+groupByURL:
   - action: script
     url:
       - hothouse.com/en/movie/

@@ -4,6 +4,10 @@ sceneByURL:
     url:
       - vrlatina.com/video
     scraper: sceneScraper
+groupByURL: 
+  - action: scrapeXPath
+    url: *urlSel
+    scraper: movieScraper
 performerByURL:
   - action: scrapeXPath
     url:
@@ -32,6 +36,21 @@ xPathScrapers:
           - replace:
               - regex: ^//
                 with: "https:"
+      Groups:
+        Name: &movieName //title
+        Date: *dateAttr
+        Duration: &durationAttr //div[@class="info-elem -length -time"]/span[@class="sub-label"]
+        Synopsis: *detailsSel
+        URL: //meta[@property="og:url"]/@content
+  movieScraper:
+    group:
+      Name: *movieName
+      Date: *dateAttr
+      Duration: *durationAttr
+      Studio:
+        Name: *studioName
+      Synopsis: *detailsSel
+      FrontImage: *imageSel
   performerScraper:
     performer:
       Name: //span[text()="Name:"]/following-sibling::span

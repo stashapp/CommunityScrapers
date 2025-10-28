@@ -19,7 +19,7 @@ sceneByURL:
       - czechvrnetwork.com
       - vrintimacy.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - czechar.com
@@ -101,7 +101,7 @@ xPathScrapers:
     common:
       $info: *infoSel
       $url: *urlSel
-    movie:
+    group:
       Name: *title
       Duration: $info//div[@class="cas"]/text()
       Date: *date

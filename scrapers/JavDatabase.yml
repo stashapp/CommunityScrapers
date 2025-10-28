@@ -6,7 +6,7 @@ sceneByURL:
       - javdatabase.com
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - javdatabase.com
@@ -50,7 +50,7 @@ xPathScrapers:
                 - regex: '/thumb/'
                   with: '/full/'
         URL: //div[h2[contains(.,'/Idols')]]//a/@href
-      Movies:
+      Groups:
         Name: *title
         FrontImage: *image
         Studio: *studio
@@ -86,7 +86,7 @@ xPathScrapers:
   movieScraper:
     common:
       $infobox: //div[@class="movietable"]/div[@class="row"][1]
-    movie:
+    group:
       Name: *title
       Synopsis: $infobox/div[2]/p[1]/text()
       Date:

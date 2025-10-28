@@ -13,7 +13,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: joybear
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - joybear.com/features/
@@ -31,7 +31,7 @@ xPathScrapers:
       Details:
         selector: //div[@class="descriptions"]/p
         concat: "\n\n"
-      Movies:
+      Groups:
         Name: //div[@class="fFilms"]//a/img/@alt
         URL:
           selector: //div[@class="fFilms"]//a/@href
@@ -57,7 +57,7 @@ xPathScrapers:
           - replace:
               - regex: .*poster:\s*"([^"]+).*
                 with: $1
-    movie:
+    group:
       Name:
         selector: //h1
         postProcess:

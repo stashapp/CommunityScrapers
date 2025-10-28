@@ -3,7 +3,7 @@
 
 name: TheMovieDB JSON
 
-movieByURL:
+groupByURL:
   - action: scrapeJson
     url:
       - themoviedb.org
@@ -16,7 +16,7 @@ movieByURL:
 
 jsonScrapers:
   jsonMovieScraper:
-    movie:
+    group:
       Name: titlez
       Director:
         selector: credits.crew.#(job=="Director").name

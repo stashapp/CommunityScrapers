@@ -21,7 +21,7 @@ performerByName:
   action: scrapeXPath
   queryURL: "https://men.treasureislandmedia.com/men?haircolor=All&eyecolor=All&bodytype=All&cocksize=All&cocktype=All&ismarked=All&isexclusive=All&sexrole=All&modelname={}"
   scraper: search
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - treasureislandmedia.com/movies
@@ -48,7 +48,7 @@ xPathScrapers:
           - replace:
               - regex: ^([^T]+).+
                 with: $1
-      Movies:
+      Groups:
         Name: //div[contains(@class, "scene-parent-movie-cover-image")]//img/@alt
         URL: //div[contains(@class, "scene-parent-movie-cover-image")]//a/@href
         FrontImage: (//div[contains(@class, "scene-parent-movie-cover-image")])[1]//img/@src
@@ -75,7 +75,7 @@ xPathScrapers:
         Name: //a[contains(@class,"navbar-brand-currsite")]/span[contains(@class,"top")]
       Tags:
         Name: //div[contains(@class, "field-name-field-tags")]//a
-    movie:
+    group:
       Name: *title
       Date: *date
       Studio: *studio

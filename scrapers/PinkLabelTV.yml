@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - pinklabel.tv
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - pinklabel.tv
@@ -19,7 +19,7 @@ sceneByQueryFragment:
   scraper: sceneScraper
 xPathScrapers:
   movieScraper:
-    movie:
+    group:
       Name: &title
         selector: //meta[@property='og:title']/@content
         postProcess:
@@ -70,7 +70,7 @@ xPathScrapers:
       URL: *url
       Image: *image
       Studio: *studio
-      Movies:
+      Groups:
         URL: //meta[@property='og:url']/@content
         Name: *title
       Tags:

@@ -76,6 +76,14 @@ xPathScrapers:
           - replace:
             - regex: ^https://.*/\?p=
               with:
+      # Groups:
+      #   Name:
+      #     selector: //meta[@property="og:site_name"]/@content|//h1[@class="titleVideo"]
+      #     concat: " - "
+      #   Date: *dateAttr
+      #   Synopsis: *detailsSel
+      #   URL: //meta[@property="og:url"]/@content
+# Last Updated April 29, 2025
 # sites now have age-checking and geoblocking, so we can use CDP (with VPN/proxy) to bypass it
 driver:
   useCDP: false

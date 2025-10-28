@@ -5,7 +5,7 @@ sceneByURL:
     url:
       - jeedoo.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - jeedoo.com
@@ -21,7 +21,7 @@ sceneByQueryFragment:
 
 xPathScrapers:
   movieScraper:
-    movie:
+    group:
       Name:
         selector: //title/text()
         postProcess:
@@ -55,7 +55,7 @@ xPathScrapers:
       Studio:
         Name: //a[@title="Label"][1]/text()
       Details: //meta[@property="og:description"]/@content
-      Movies:
+      Groups:
         Name: *title
         URL: *url
       Image: //img[contains(@class,"mainimage")][@rel="1"]/@src

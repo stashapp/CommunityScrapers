@@ -26,7 +26,7 @@ sceneByFragment:
   action: scrapeJson
   queryURL: https://adultfilmindex.com/api/v1/stash/scene_fragment_search/{filename}/{oshash}
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeJson
     url:
       - https://adultfilmindex.com/movie/
@@ -133,7 +133,7 @@ jsonScrapers:
               - regex: T.*$
                 with: ''
           - parseDate: 2006-01-02
-      Movies:
+      Groups:
         Name: data.movie.title
       Performers:
         Name: data.actors.#.name
@@ -142,7 +142,7 @@ jsonScrapers:
       Tags:
         Name: data.tags.#.name
   movieScraper:
-    movie:
+    group:
       Name: data.title
       Synopsis: data.description
       URL: data.url

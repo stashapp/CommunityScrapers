@@ -9,7 +9,7 @@ sceneByURL:
     url:
       - aebn.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - aebn.com
@@ -85,7 +85,7 @@ xPathScrapers:
               - regex: ^([^?]+).*$
                 with: "https:$1" 
   movieScraper:
-    movie:
+    group:
       Name: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
       Director:
         selector: //li[@class='section-detail-list-item-director']//span//a

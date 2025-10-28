@@ -51,7 +51,7 @@ performerByURL:
   - action: scrapeXPath
     url: *urls
     scraper: performerScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url: *urls
     scraper: movieScraper
@@ -161,7 +161,7 @@ xPathScrapers:
   movieScraper:
     common:
       $details: *detailsAttr
-    movie:
+    group:
       Name:
         selector: //meta[@name="dl8-customization-brand-name"]/@content|$details/h1
         concat: " - "

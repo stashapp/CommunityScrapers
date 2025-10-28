@@ -37,7 +37,7 @@ sceneByURL:
       - westcoastproductions.com/
       - data18.empirestores.co/
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
@@ -88,7 +88,7 @@ xPathScrapers:
                 - regex: \sClips$
                   with:
       Image: //link[@rel="image_src"]/@href
-      Movies:
+      Groups:
         Name: //h1[@class="description"]/following-sibling::p/a/text()
       Director:
         selector: //div[@class="director"]/text()
@@ -110,7 +110,7 @@ xPathScrapers:
                 with:
 
   movieScraper:
-    movie:
+    group:
       Name: *TitleSel
       Date: *DateSel
       Synopsis:

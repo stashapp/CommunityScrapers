@@ -1,6 +1,6 @@
 name: AdultDvdMarketPlace
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - adultdvdmarketplace.com/xcart/adult_dvd/dvd_view.php?adult_dvd_id=
@@ -25,7 +25,7 @@ sceneByQueryFragment:
 
 xPathScrapers:
   movieScraper:
-    movie:
+    group:
       Name: //meta[@property="og:title"]/@content
       Director: //span[contains(text(),"Director")]/following-sibling::a/text()
       Date:
@@ -62,7 +62,7 @@ xPathScrapers:
       Image: //a[contains(@href, "large_front_image")]/@href
       Studio:
         Name: //span[@itemprop="brand"]/text()
-      Movies:
+      Groups:
         Name: //meta[@property="og:title"]/@content
         URL: //meta[@property="og:url"]/@content
       Performers:
