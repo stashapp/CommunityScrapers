@@ -166,7 +166,7 @@ jsonScrapers:
                   with: https://www.manyvids.com
       Studio:
         Name: data.model.displayName
-        URLs:
+        URL:
           selector: data.model.profileUrl
           postProcess:
             - replace:
