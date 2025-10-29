@@ -164,5 +164,11 @@ jsonScrapers:
             - replace:
                 - regex: ^
                   with: https://www.manyvids.com
-      Studio: *performer
-# Last Updated September 17, 2025
+      Studio:
+        Name: data.model.displayName
+        URLs:
+          selector: data.model.profileUrl
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.manyvids.com
