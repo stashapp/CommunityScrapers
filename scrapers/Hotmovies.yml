@@ -90,7 +90,7 @@ xPathScrapers:
                 with: bh.
       Date: //meta[@property="og:video:release_date"]/@content
       Tags: 
-        Name: //div[@class='movie__content-meta__cats m-b-1']/a
+        Name: //strong[contains(text(), "Categories:")]/following-sibling::a
   performerSearch:
     performer:
       Name: //div[@id="performerlist"]//picture/img/@title
