@@ -60,7 +60,12 @@ xPathScrapers:
   movieScraper:
     group:
       Name: //h1
-      URL: //meta[@name="og:url"]/@content
+      URLs: 
+        selector: //meta[@name="og:url"]/@content
+        postProcess:
+          - replace:
+              - regex: \?.*
+                with: ""
       Director: //a[@label="Director"][1]
       Duration:
         selector: //strong[contains(text(), "Run Time")]/following-sibling::text()[1]
@@ -84,6 +89,8 @@ xPathScrapers:
               - regex: h\.
                 with: bh.
       Date: //meta[@property="og:video:release_date"]/@content
+      Tags: 
+        Name: //div[@class='movie__content-meta__cats m-b-1']/a
   performerSearch:
     performer:
       Name: //div[@id="performerlist"]//picture/img/@title
