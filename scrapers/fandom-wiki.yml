@@ -12,33 +12,13 @@ xPathScrapers:
       $infobox: //aside[contains(@class, 'portable-infobox')]
     performer:
       Name: 
-        selector: $infobox/h2//text()
-        postProcess:
-        - replace:
-          # remove citation markers like "[3]"
-          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: ""
+        selector: $infobox/h2//text()[1]
       Aliases:
-        selector: $infobox//div[@data-source="full_name" or @data-source="full" or @data-source="also_known_as" or @data-source="known" or @data-source="aka" or contains(@data-source,"Name") or contains(@data-source,"name") or contains(@data-source,"alias") or contains(@data-source,"Alias")]/div/text()
-        postProcess:
-        - replace:
-          # remove citation markers like "[3]"
-          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: ""
+        selector: $infobox//div[@data-source="full_name" or @data-source="full" or @data-source="also_known_as" or @data-source="known" or @data-source="aka" or contains(@data-source,"Name") or contains(@data-source,"name") or contains(@data-source,"alias") or contains(@data-source,"Alias")]/div/text()[1]
       Gender:
-        selector:  $infobox//div[@data-source="gender" or @data-source="Gender" or @data-source="sex"]/div//text()
-        concat: " "
-        postProcess:
-        - replace:
-          # remove citation markers like "[3]"
-          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: ""
-          # reduce to single word
-          - regex: ^([^\s]+).*
-            with: "$1"
+        selector:  $infobox//div[@data-source="gender" or @data-source="Gender" or @data-source="sex"]/div//text()[1]
       Birthdate:
-        selector: $infobox//div[contains(@data-source,"Birth") or contains(@data-source,"birth") or @data-source="born" or @data-source="dob" or @data-source="DOB"]/div//text()
-        concat: " "
+        selector: $infobox//div[contains(@data-source,"Birth") or contains(@data-source,"birth") or @data-source="born" or @data-source="dob" or @data-source="DOB"]/div//text()[1]
         postProcess: &postprocessDate
         # there are many formats used, many only give partial info - some examples
         # September 26, 1981
@@ -48,9 +28,6 @@ xPathScrapers:
         # 2 May 1998 (aged 46/47)
         # 1997 [3] some more text
         - replace:
-          # remove citation markers like "[3]"
-          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: ""
           # remove expressions in braces (likely only giving context)
           - regex: \([^)]*\)
             with: ""
@@ -74,37 +51,16 @@ xPathScrapers:
             with: January 1 $1
         - parseDate: January 2 2006
       DeathDate:
-        selector: $infobox//div[contains(@data-source,"Death") or contains(@data-source,"death") or @data-source="died" or @data-source="dod" or @data-source="DOD"]/div//text()
-        concat: " "
+        selector: $infobox//div[contains(@data-source,"Death") or contains(@data-source,"death") or @data-source="died" or @data-source="dod" or @data-source="DOD"]/div//text()[1]
         postProcess: *postprocessDate
       Ethnicity:
-        selector: $infobox//div[@data-source="species" or contains(@data-source,"Race") or contains(@data-source,"race")]/div//text()
-        postProcess:
-        - replace:
-          # remove citation markers like "[3]"
-          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: ""
+        selector: $infobox//div[@data-source="species" or contains(@data-source,"Race") or contains(@data-source,"race")]/div//text()[1]
       Country:
-        selector: $infobox//div[@data-source="nationality"]/div//text()
-        postProcess:
-        - replace:
-          # remove citation markers like "[3]"
-          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: ""
+        selector: $infobox//div[@data-source="nationality"]/div//text()[1]
       HairColor:
-        selector: $infobox//div[contains(@data-source,"hair") or contains(@data-source,"Hair")]/div//text()
-        postProcess:
-        - replace:
-          # remove citation markers like "[3]"
-          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: ""
+        selector: $infobox//div[contains(@data-source,"hair") or contains(@data-source,"Hair")]/div//text()[1]
       EyeColor:
-        selector: $infobox//div[contains(@data-source,"eye") or contains(@data-source,"Eye")]/div//text()
-        postProcess:
-        - replace:
-          # remove citation markers like "[3]"
-          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: ""
+        selector: $infobox//div[contains(@data-source,"eye") or contains(@data-source,"Eye")]/div//text()[1]
       Height:
         selector: $infobox//div[@data-source="height"]/div//text()
         concat: " "
@@ -133,21 +89,9 @@ xPathScrapers:
           # reduce any variant of imperial to predicatble format ("5' 4"" -> "5'4")
           - regex: ^(?:.*[^0-9])?([0-9])\s*(?:'|ft|ft.|feet|foot)\s*([0-9])(?:.*)?$
             with: "$1'$2"
-        # use JS to convert imperial to metric, if imperial
-        - javascript: |
-            if (value && value.length) {
-              const match = /^(\d)'(\d)$/.exec(value);
-              if (match) {
-                const feet = parseInt(match[1]);
-                const inches = parseInt(match[2]);
-                const imperialHeight = feet + inches / 12.0;
-                return (imperialHeight * 30.48).toFixed(0);
-              }
-            }
-            return value;
+        - feetToCm: True
       Weight:
-        selector: $infobox//div[@data-source="weight"]/div//text()
-        concat: " "
+        selector: $infobox//div[@data-source="weight"]/div//text()[1]
         postProcess:
         # there are many formats used, a lot of them use multi-unit formats, or even multiple values - some examples
         # 127 lb (58kg)
@@ -156,9 +100,6 @@ xPathScrapers:
         # 58.2 kg (127.3 lb)
         # 58 kg
         - replace:
-          # remove citation markers like "[3]"
-          - regex: "\\[[ ]*[0-9]+[ ]*\\]"
-            with: ""
           # in kg, pull out just the number
           - regex: ^(?:.*[^0-9.])?([0-9]{2,3})(?:\.[0-9]+)?[ ]?(?:kg|Kg|KG)(?:.*)?$
             with: "$1"
@@ -166,21 +107,11 @@ xPathScrapers:
           - regex: ^(?:.*[^0-9.])?([0-9]{2,3}})(?:\.[0-9]+)?[ ]?(?:lb|Lb|LB)(?:.*)?$
             with: "$1lb"
         # use JS to convert imperial to metric, if imperial
-        - javascript: |
-            if (value && value.length) {
-              console.log('weight has value');
-              const match = /^(\d+)lb$/.exec(value);
-              if (match) {
-                console.log('wight lbs regexp match');
-                const imperialWight = parseInt(match[1]);
-                return (imperialWight * 2.20462).toFixed(0);
-              }
-            }
-            return value;
+        - lbToKg: true
       Measurements:
         # looks for one field with all values, or split fields (get combined into single string)
         # split fields really only work corretly if the field order is still B-W-H
-        selector: $infobox//div[@data-source="measurements" or @data-source="bust" or @data-source="waist" or @data-source="hips"]/div//text()
+        selector: $infobox//div[@data-source="measurements" or @data-source="bust" or @data-source="waist" or @data-source="hips"]/div//text()[1]
         concat: " "
         postProcess:
         # there are probably many formats used - examples fo seen formats
