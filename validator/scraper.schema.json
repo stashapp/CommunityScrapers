@@ -483,6 +483,11 @@
           "title": "Scene groups",
           "allOf": [{ "$ref": "#/definitions/groupObject" }]
         },
+        "Movies": {
+          "title": "[DEPRECATED] Scene groups",
+          "description": "[DEPRECATED] Use `Groups` instead.",
+          "allOf": [{ "$ref": "#/definitions/groupObject" }]
+        },
         "Tags": {
           "title": "Scene tags",
           "allOf": [{ "$ref": "#/definitions/tagsObject" }]
