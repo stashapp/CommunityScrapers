@@ -33,7 +33,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsSel //span[text()="Description:"]/following-sibling::span
-      Performers: 
+      Performers:
         Name: &performersSel //span[text()="Models:"]/following-sibling::div//a//span/text()
       Tags:
         Name: &tagsSel //a[contains(@href, "/categories/")]//text()
