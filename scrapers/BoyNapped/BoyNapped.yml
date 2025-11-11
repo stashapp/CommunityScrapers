@@ -1,0 +1,59 @@
+name: "BoyNapped"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - boynapped.com/ultimatekink/movie
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - boynapped.com/ultimatekink/model
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $imageUrl: //video/@poster
+    scene:
+      Title: //h1[@class='title']
+      Date:
+        selector: //span[@class='pub-date']
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Code:
+        selector: $imageUrl
+        postProcess:
+          - replace:
+              - regex: .*thumbs/(boyn\d+)_.*
+                with: $1
+      Details:
+        selector: //div[@class='description']/p/text()
+        concat: " "
+      Studio:
+        Name:
+          fixed: "BoyNapped"
+      Tags:
+        Name:
+          selector: //div[@class='tags']/a
+      Performers:
+        Name: //div[contains(@class, 'model-wrap')]//h5
+        URLs: //div[contains(@class, 'model-wrap')]//a/@href
+      Image:
+        selector: $imageUrl
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: https://
+  performerScraper:
+    performer:
+      Name: //h2[@class="model-name"]
+      Gender:
+        fixed: Male
+      Image: 
+        selector: //span[@class="model-pic"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: https://
+
+# Last Updated November 11, 2025
