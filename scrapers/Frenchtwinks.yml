@@ -4,6 +4,11 @@ sceneByURL:
     url:
       - french-twinks.com
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - french-twinks.com/en/french-gay-porn-video
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -22,11 +27,11 @@ xPathScrapers:
         postProcess:
           - parseDate: 2006-01-02
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //iframe/@src
         postProcess:
           - replace:
-            - regex: .*\/(\d+)\/0?(\d+)\.jpg
-              with: "https://www.french-twinks.com/img/gay-video/fullsize/video-gay_$1-1.jpg"
+            - regex: .*/img/(.+)\.jpg.*
+              with: "https://www.french-twinks.com/cdn-cgi/image//img/$1.jpg"
       Studio:
         Name:
           fixed: French Twinks
@@ -34,4 +39,29 @@ xPathScrapers:
         Name: //li[@class="vid_keywords"]/a
       Performers:
         Name: //li[@class="small_act_pic small_act_picvidpage"]/a
-# Last Updated August 15, 2025
+        URLs: //li[@class="small_act_pic small_act_picvidpage"]/a/@href
+  performerScraper:
+    performer:
+      Name: //h1[@class="subtitle_line"]
+      Image: //div[@id="mygallery"]/a/@href
+      EyeColor: 
+        selector: //td[contains(text(),"Eyes")]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: ": "
+                with: ""
+      Gender:
+         fixed: Male
+      Height:
+        selector: //td[contains(text(),"Height")]/following-sibling::td
+        postProcess:
+          - feetToCm: true
+      PenisLength:
+        selector: //td[contains(text(),"Cock")]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0'"
+          - feetToCm: true
+
+# Last Updated November 11, 2025
