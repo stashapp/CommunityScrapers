@@ -49,10 +49,8 @@ xPathScrapers:
       Tags:
         Name:
           selector: //div[@class="flex flex-wrap gap-2 mt-2"]//a[contains(@href,'/tags/')]
-          attribute: text
       Date:
         selector: //script[@type="application/ld+json"][contains(.,"uploadDate")]/text()
-        attribute: text
         postProcess:
           - replace:
               - regex: '^[\s\S]*"uploadDate":"(\d{4}-\d{2}-\d{2})[\s\S]*'
