@@ -1,0 +1,10 @@
+id: MeanBitches
+name: MeanBitches
+metadata: {}
+version: 20251116
+date: "2025-11-16 21:43:00"
+requires: []
+source_repository: https://stashapp.github.io/CommunityScrapers/stable/index.yml
+files:
+- MeanBitches.yml
+- MeanBitches.py
