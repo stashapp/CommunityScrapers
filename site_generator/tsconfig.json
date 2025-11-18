@@ -2,7 +2,6 @@
   "compilerOptions": {
     "strict": true,
     "strictNullChecks": true,
-    "target": "ES2020",
-    "moduleResolution": "node"
+    "target": "ES2020"
   }
 }

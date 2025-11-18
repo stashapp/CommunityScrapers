@@ -41,7 +41,7 @@ const replaceRegexSchema = z.object({
 const baseUrlScraperSchema = z.object({
   action: urlScrapeActionsSchema,
   scraper: z.string(),
-  queryURLReplace: z.record(z.array(replaceRegexSchema)).optional(),
+  queryURLReplace: z.record(z.string(), z.array(replaceRegexSchema)).optional(),
 });
 
 const byFragmentScraperSchema = baseUrlScraperSchema.extend({
@@ -61,6 +61,7 @@ export const byUrlScraperSchema = baseUrlScraperSchema.extend({
 });
 
 const xPathScraperSchema = z.record(
+  z.string(),
   z.object({
     fixed: z.string().optional(),
     selector: z.string().optional(),
@@ -127,7 +128,7 @@ export const anyScraperSchema = z.union([
   scriptScraperSchema,
 ]);
 
-export const ymlScraperSchema = z.record(z.any()).and(
+export const ymlScraperSchema = z.record(z.string(), z.any()).and(
   z.object({
     filename: z.string(),
     name: z.string(),

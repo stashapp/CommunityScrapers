@@ -2,7 +2,7 @@ import { parse } from "yaml";
 import { readFileSync, writeFileSync } from "fs";
 import { ymlScraper } from "./types";
 import { glob } from "glob";
-import { z } from "zod";
+import * as z from "zod";
 import { ymlScraperSchema } from "./zodType";
 import { git } from "./git";
 import { exportScraper, scraperExport } from "./scraper";
@@ -45,12 +45,19 @@ async function parseRepository(
   return parseScrapers(allYmlFiles);
 }
 
-const mergeScraperArr = (oldScrapers: scraperExport[], newScrapers: scraperExport[]) => {
+const mergeScraperArr = (
+  oldScrapers: scraperExport[],
+  newScrapers: scraperExport[],
+) => {
   // iterate through newScrapers and delete from old if exists
-  const cleanOldScrapers = oldScrapers.filter((oldScraper) =>
-    !newScrapers.some((newScraper) => newScraper.filename === oldScraper.filename));
+  const cleanOldScrapers = oldScrapers.filter(
+    (oldScraper) =>
+      !newScrapers.some(
+        (newScraper) => newScraper.filename === oldScraper.filename,
+      ),
+  );
   return [...cleanOldScrapers, ...newScrapers];
-}
+};
 
 function validate(scraper: ymlScraper) {
   ymlScraperSchema.parse(scraper);
@@ -77,12 +84,15 @@ export async function validateNewScrapers(): Promise<void> {
   try {
     readFileSync("scrapers-debug.json", "utf8");
   } catch {
-    console.log("no scrapers-debug.json found, cowardly refusing to do partial updates")
+    console.log(
+      "no scrapers-debug.json found, cowardly refusing to do partial updates",
+    );
     // run full validation
     return validateAllScrapers();
   }
   // get modified files
-  const newScrapers = await git.diff(["--name-only", "HEAD^1", "HEAD"])
+  const newScrapers = await git
+    .diff(["--name-only", "HEAD^1", "HEAD"])
     // skip empty lines
     .then((files) => files.split("\n").filter((file) => file.length))
     // skip files not in scrapers
@@ -92,23 +102,29 @@ export async function validateNewScrapers(): Promise<void> {
   // check if only yml files
   const nonYml = newScrapers.some((file) => !file.endsWith(".yml"));
   if (nonYml) {
-    console.log("non-yml files detected, cowardly refusing to do partial updates")
+    console.log(
+      "non-yml files detected, cowardly refusing to do partial updates",
+    );
     // run full validation
     return validateAllScrapers();
   }
   if (!newScrapers.length) {
-    console.log("no new scrapers detected, recycling old mdscrapers")
-    const oldScrapers = JSON.parse(readFileSync("scrapers-debug.json", "utf8")) as scraperExport[];
+    console.log("no new scrapers detected, recycling old mdscrapers");
+    const oldScrapers = JSON.parse(
+      readFileSync("scrapers-debug.json", "utf8"),
+    ) as scraperExport[];
     writeFileSync("site/assets/scrapers.json", JSON.stringify(oldScrapers));
     return;
   }
-  console.log("only validating new scrapers")
+  console.log("only validating new scrapers");
   const newValidScrapers = await parseScrapers(newScrapers)
     .then((undefScrapers) => undefScrapers.map(validate))
-    .then((scrapers) => scrapers.map(exportScraper));
+    .then((scrapers) => scrapers.map((s) => exportScraper(s as ymlScraper)));
   let newMdScrapers: scraperExport[] = await Promise.all(newValidScrapers);
   // merge with old scrapers
-  const oldScrapers = JSON.parse(readFileSync("scrapers-debug.json", "utf8")) as scraperExport[];
+  const oldScrapers = JSON.parse(
+    readFileSync("scrapers-debug.json", "utf8"),
+  ) as scraperExport[];
   let newScraperArr = mergeScraperArr(oldScrapers, newMdScrapers);
   newScraperArr = newScraperArr.sort((a, b) => (a.name > b.name ? 1 : -1));
   // export to files

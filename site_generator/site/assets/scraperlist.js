@@ -159,7 +159,7 @@ async function search(searchValue) {
   console.debug(searchValue, results);
   const filterTable = results.map((result) => result.item);
   setTable(filterTable, searchValue);
-  window.location.hash = searchValue
+  window.location.hash = searchValue;
 }
 
 // parse scrapers.json
@@ -172,9 +172,11 @@ const fuseIndex = await fetch("assets/fuse-index.json")
   .then((data) => Fuse.parseIndex(data));
 fuse = new Fuse(rawScraperList, fuseConfig, fuseIndex);
 // if query in URL, jump automatically
-const query = window.location.hash.slice(1)
+const query = window.location.hash.slice(1);
 if (query) {
   searchInput.value = query;
   search(query);
 }
-searchInput.addEventListener("input", event => debounce(search(event.target.value), 300));
+searchInput.addEventListener("input", (event) =>
+  debounce(search(event.target.value), 300),
+);
