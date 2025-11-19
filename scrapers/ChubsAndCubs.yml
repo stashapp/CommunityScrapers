@@ -12,7 +12,12 @@ xPathScrapers:
       Details:
         selector: //div[@class="content"][1]/p/text()
         concat: "\n\n"
-      Image: //img[contains(@src,"poster.jpg")]/@src
+      Image:
+        selector: //img[contains(@src,"poster.jpg")]/@src
+        postProcess:
+          - replace:
+            - regex: "^"
+              with: https://chubsandcubs.com/
       Studio:
         Name:
           fixed: Chubs & Cubs
@@ -47,5 +52,5 @@ xPathScrapers:
         postProcess:
           - replace:
             - regex: "(.*)"
-              with: "https://www.spunkworthy.com$1"
+              with: "https://chubsandcubs.com$1"
 # Last Updated November 18, 2025
