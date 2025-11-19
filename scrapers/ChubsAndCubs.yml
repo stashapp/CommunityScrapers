@@ -1,0 +1,51 @@
+name: ChubsAndCubs
+# similar to SpunkWorthy.yml
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - chubsandcubs.com/tour/view_video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //p[@class="h1"]/text()
+      Details:
+        selector: //div[@class="content"][1]/p/text()
+        concat: "\n\n"
+      Image: //img[contains(@src,"poster.jpg")]/@src
+      Studio:
+        Name:
+          fixed: Chubs & Cubs
+      Performers:
+        Name:
+          selector: //div[@class="scene_models"]//p/a/text()
+          postProcess:
+            - replace:
+              - regex: "More of "
+                with: ""
+  performerScraper:
+    performer:
+      Name: //p[contains(@class, 'h1')]/span[contains(@class, 'h2')]/text()
+      Gender:
+        fixed: Male
+      Weight:
+        selector: //div[@class='model_left']/p[1]/text()[contains(.,'Weight')]
+        postProcess:
+          - replace:
+            - regex: "Weight: "
+              with: ""
+          - lbToKg: true
+      Height:
+        selector: //div[@class='model_left']/p[1]/text()[contains(.,'Height')]
+        postProcess:
+          - replace:
+            - regex: "Height: "
+              with: ""
+          - feetToCm: true
+      Image:
+        selector: //div[@class='model_left']/img[1]/@src
+        postProcess:
+          - replace:
+            - regex: "(.*)"
+              with: "https://www.spunkworthy.com$1"
+# Last Updated November 18, 2025
