@@ -1,67 +1,40 @@
-name: Killergram
+# requires: py_common, AyloAPI
+name: "Killergram"
 sceneByURL:
-  - action: scrapeXPath
+  - action: script
     url:
-      - killergram.com
-    scraper: sceneScraper
-xPathScrapers:
-  sceneScraper:
-    scene:
-      Performers:
-        Name: //span[@class="modelstarring"]/a/text()
-      Date:
-        selector: //span[@class="episodeheader"][starts-with(.,"published")]/following-sibling::text()
-        postProcess:
-          - parseDate: 02 January 2006
-      Details: //table[@class="episodetext"][@bgcolor="#ffffff"]//td[@align="left"][not(span)]
-      Image:
-        selector: &img //img[@id="episode_001"]/@src
-      Title:
-        selector: *img
-        postProcess:
-          - replace:
-              - regex: ".*/[^/]+_([^/]+)/thumbs.*"
-                with: "$1"
-      Studio:
-        Name:
-          #fixed: Killergram
-          selector: //img[@id="episode_showcase"]/@src
-          postProcess:
-            - replace:
-                - regex: '.*/websiteicons/([^\.]+)\.jpg.*'
-                  with: $1
-            - map:
-                anal rehab: Anal Rehab
-                bitch funkers: Bitch Funkers
-                booty packers: Booty Back Packers
-                brown sugar: Brown Sugar Rush
-                burlesque xxx: Burlesque XXX
-                chain smokers: Hardcore Chain Smokers
-                club babes: Sexy Club Babes
-                college babes: College Babes Exposed
-                cream my cunt: Cream My Cunt
-                cum party sluts: Cum Party Sluts
-                dogging missions: On A Dogging Mission
-                fetish sex clinic: Fetish Sex Clinic
-                get shafted: Baby Loves The Shaft
-                girly riders: Girly Riders
-                gloryhole girls: Gloryhole Gaggers
-                hard-fi sex: Urban Perversions
-                killergram platinum: Killergram Platinum
-                kinky couples: UK Reality Swingers
-                lets get slippy: Let's Get Slippy
-                nylon cum sluts: Nylon Cum Sluts
-                office antics: Cum Into My Office
-                pornostatic: Pornostatic
-                porn stars utd: UK Soccer Babes
-                rock chicks: Rock Chicks
-                ru 4 hire: Are You For Hire
-                space hoppers: Space Hoppers And Lolly Poppers
-                street walkers: UK Street Walkers
-                tattooed sluts: Tattooed Fuck Sluts
-                the handy man: The Handy Man
-                the lady pimp: The Lady Pimp
-                voyeur cams: Voyeur Cam Sluts
-                wife sluts: Wife Slut Adventures
-                wishes cum true: Wishes Cum True
-# Last Updated February 28, 2022
+      - killergram.com/video/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - scene-by-url
+sceneByFragment:
+    action: script
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - killergram
+      - scene-by-fragment
+sceneByName:
+    action: script
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - killergram
+      - scene-by-name
+sceneByQueryFragment:
+    action: script
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - killergram
+      - scene-by-query-fragment
+galleryByURL:
+  - action: script
+    url:
+      - killergram.com/photo/
+    script:
+      - python
+      - ../AyloAPI/scrape.py
+      - gallery-by-url
+# Last Updated November 20, 2025
