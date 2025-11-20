@@ -29,6 +29,7 @@ xPathScrapers:
           - replace:
               - regex: (.+?)(?:,\sw\/.+)?(?:\s\(\d{4}\))?(?:\sPorn\sScene)?\s\|\sDATA18
                 with: $1
+      URLs: //div[@id='h1div']/h1/a/@href
       Date:
         selector: //span[b[text()="Release date"]]
         postProcess:
@@ -59,7 +60,7 @@ xPathScrapers:
             - replace:
                 - regex: (.+?)(?:(?:\s#1)?$|(\s)#(\d+))
                   with: $1$2$3
-        URL: $movie/@href
+        URLs: $movie/@href
       Image: //img[@id="playpriimage"]/@src
   movieScraper:
     common:
