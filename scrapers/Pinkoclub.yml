@@ -72,29 +72,10 @@ xPathScrapers:
       $results: //div[contains(@class, "container")]//div[contains(@class, "titolo-sezione")][h2[contains(text(), "Added search")]]/following-sibling::div
     scene:
       Title: $results//h4/a/@title
-      Performers:
-        Name:
-          selector: &relativeUrl $results//h4/a/@href
-          postProcess:
-            - replace:
-                - regex: ^
-                  with: "https://www.pinkotgirls.com"
-            - subScraper:
-                selector: *performersName
-                concat: ","
-          split: ","
       Details: $results//p/a/text()
       Image: $results//a[@class="link-photo-home"]/img/@src
-      Studio:
-        Name:
-          selector: *relativeUrl
-          postProcess:
-            - replace:
-                - regex: ^
-                  with: "https://www.pinkotgirls.com"
-            - subScraper: *studioName
       URL:
-        selector: *relativeUrl
+        selector: $results//h4/a/@href
         postProcess:
           - replace:
               - regex: ^
