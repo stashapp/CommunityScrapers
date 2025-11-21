@@ -10,6 +10,11 @@ sceneByURL:
       url:
         - regex: scene
           with: json-scene
+          
+sceneByFragment:
+  action: scrapeJson
+  scraper: sceneScraper
+  queryURL: https://timestamp.trade/hash_lookup?md5={checksum}&ohash={oshash}
 
 galleryByURL: 
   - action: scrapeJson
@@ -44,8 +49,8 @@ jsonScrapers:
       Date: release_date
       Image: cover_url
       Details: description
-      URL: scene_url
-#      URLs: urls
+#      URL: scene_url
+      URLs: urls
 #      URLs: &urls [scene_url]
       Studio: 
         Name: studio_name
@@ -70,7 +75,8 @@ jsonScrapers:
       Title: title
       Date: release_date
       Details:  description
-      URL: urls.#."url"
+#      URL: urls.#."url"
+      URLs: urls.#.url                                    
       Studio: 
         Name: studio.name
       Performers: 
@@ -82,11 +88,12 @@ jsonScrapers:
       Title: 0.title
       Date: 0.release_date
       Details:  0.description
-      URL: 0.urls.#."url"
+#      URL: 0.urls.#."url"
+      URLs: urls.#.url     
       Studio: 
         Name: 0.studio.name
       Performers: 
         Name: 0.performers.#.name
       Tags: 
         Name: 0.tags.#.name
-# Last Updated February 26, 2024
+# Last Updated November 18, 2025
