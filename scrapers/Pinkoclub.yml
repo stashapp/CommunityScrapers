@@ -1,14 +1,27 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: Pinkoclub
-sceneByURL:
+galleryByURL:
   - action: scrapeXPath
-    url:
+    url: &urls
       - pinkoclub.com
       - pinkotgirls.com
+    scraper: sceneScraper
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.pinkotgirls.com/search/{}.php
+  scraper: searchResultsScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url: *urls
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
+      Title: &title
         selector: //div[@class="titolo-video"]/h2
       Director:
         selector: //div[@class="caption captionvideo"]/strong
@@ -16,19 +29,19 @@ xPathScrapers:
           - replace:
               - regex: "Directed by (.*)"
                 with: "$1"
-      Performers:
-        Name: //h4/a
-      Details:
+      Performers: &performers
+        Name: &performersName //h4/a
+      Details: &details
         selector: //div[@class="caption captionvideo"]
         postProcess:
           - replace:
               - regex: "Directed by (.*)$"
                 with: ""
       Image:
-        selector: //meta[@property="og:image"]/@content
-      Studio:
-        Name:
-          selector: //link[@rel="canonical"]/@href
+        selector: &imageSel //meta[@property="og:image"]/@content
+      Studio: &studio
+        Name: &studioName
+          selector: &canonical //link[@rel="canonical"]/@href
           postProcess:
             - replace:
                 - regex: "https://.*/(.*)/.*"
@@ -41,4 +54,49 @@ xPathScrapers:
                 video-porno-italiani: Pinko Club
                 videotrans: Pinko TGirls
                 xtime: XTime
-# Last Updated December 29, 2022
+      URL: *canonical
+      Code: &code
+        selector: *imageSel
+        postProcess:
+          - replace:
+              - regex: "https://.*/.*/(.*)/.*"
+                with: $1
+    gallery:
+      Title: *title
+      Performers: *performers
+      Details: *details
+      Studio: *studio
+      Code: *code
+  searchResultsScraper:
+    common:
+      $results: //div[contains(@class, "container")]//div[contains(@class, "titolo-sezione")][h2[contains(text(), "Added search")]]/following-sibling::div
+    scene:
+      Title: $results//h4/a/@title
+      Performers:
+        Name:
+          selector: &relativeUrl $results//h4/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.pinkotgirls.com"
+            - subScraper:
+                selector: *performersName
+                concat: ","
+          split: ","
+      Details: $results//p/a/text()
+      Image: $results//a[@class="link-photo-home"]/img/@src
+      Studio:
+        Name:
+          selector: *relativeUrl
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: "https://www.pinkotgirls.com"
+            - subScraper: *studioName
+      URL:
+        selector: *relativeUrl
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.pinkotgirls.com"
+# Last Updated November 21, 2025
