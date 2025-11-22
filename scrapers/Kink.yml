@@ -138,6 +138,10 @@ xPathScrapers:
       Tags:
         Name:
           selector: //div[@id="shootPage"]//p[text()="Categories"]/../following-sibling::div
+          postProcess:
+            - replace:
+              - regex: \,\s*
+                with: ","
           split: ","
       Details:
         selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
