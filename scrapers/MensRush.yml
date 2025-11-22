@@ -12,8 +12,10 @@ xPathScrapers:
       Details:
         selector: //div[@class="movie_detail"]/h3[1]/following-sibling::p[1]/text()
         concat: "\n\n"
+      Image:
+        selector: //div[@id="movie_area"]/div[@class="player"]/div/img/@src
       Studio:
         Name: //div[@class="movie_detail"]/p/a[contains(@href,"maid")]/text()
       Tags:
         Name: //div[@class="movie_detail"]/p/a[contains(@href,"geid")]/text()
-# Last Updated May 23, 2025
+# Last Updated November 22, 2025
