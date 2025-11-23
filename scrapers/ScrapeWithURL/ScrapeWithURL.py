@@ -83,8 +83,8 @@ for url in urls:
             result = scrape_scene(url)
             result = filter_nones(result)
             log.debug(f"result {result}")
-            print(json.dumps(result))
             if result:
+                print(json.dumps(result))
                 break
         except Exception:
             continue
