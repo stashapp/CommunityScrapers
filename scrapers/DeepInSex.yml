@@ -1,0 +1,55 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: DeepInSex
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - deepinsex.com/pornstar/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - deepinsex.com
+    scraper: sceneScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //div[@class="pornstar-name"]/h1
+      Image: //meta[@property="og:image"]/@content
+      Birthdate:
+        selector: //div[contains(@class, "Birthday")]/span[contains(@class, "about-value")]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details: //div[contains(@class, "Bio")]/span[contains(@class, "about-value")]/text()
+      Height:
+        selector: //div[contains(@class, "Height")]/span[contains(@class, "about-value")]
+        postProcess:
+          - replace:
+              - regex: .*\((\d+)\s*cm\).*
+                with: $1
+      Ethnicity: //div[contains(@class, "Ethnicity")]/span[contains(@class,"about-value")]
+      Measurements: //div[contains(@class, "Measurements")]/span[contains(@class,"about-value")]
+      HairColor: //div[contains(@class, "Hair Color")]/span[contains(@class,"about-value")]
+      EyeColor: //div[contains(@class, "Eye Color")]/span[contains(@class,"about-value")]
+  sceneScraper:
+    scene:
+      Title: //h1[contains(@class,"single-title")]
+      Date: //time/@datetime
+      Details: //section[contains(@class, "video-description")]//p
+      Tags:
+        Name:
+          # select the tags and also the "Tags:" header to convert to "Virtual Reality"
+          selector: >-
+            //div[@class="tags-list"]//span
+            |
+            //h2[@id="tags-title"]
+          postProcess:
+            - replace:
+                - regex: '^Tags:$'
+                  with: Virtual Reality
+      Performers:
+        Name: //section[@class="single-pornstars"]//div[contains(@class, "single-pornstar-name")]
+      Image: //meta[@property="og:image"]/@content
+      URL: //meta[@property="og:url"]/@content
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
+# Last Updated November 24, 2025
