@@ -1,15 +1,54 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 name: DeepInSex
+performerByName:
+  action: scrapeJson
+  scraper: searchResponsePerformerScraper
+  queryURL: "https://deepinsex.com/api/search/suggestions?q={}"
 performerByURL:
   - action: scrapeXPath
     url:
       - deepinsex.com/pornstar/
     scraper: performerScraper
+sceneByName:
+  action: scrapeJson
+  scraper: searchResponseSceneScraper
+  queryURL: "https://deepinsex.com/api/search/suggestions?q={}"
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: "{url}"
 sceneByURL:
   - action: scrapeXPath
     url:
       - deepinsex.com
     scraper: sceneScraper
+jsonScrapers:
+  searchResponsePerformerScraper:
+    performer:
+      Name: pornstars.#.name
+      Image: pornstars.#.avatar_url
+      URLs:
+        selector: pornstars.#.slug
+        postProcess:
+          - replace:
+              - regex: '^(.*)$'
+                with: 'https://deepinsex.com/pornstar/$1'
+  searchResponseSceneScraper:
+    scene:
+      Title: videos.#.name
+      Date:
+        selector: videos.#.image.created_at
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05.000000Z
+      Image: videos.#.image_url
+      Performers:
+        Name: videos.#.pornstar_names
+      URL:
+        selector: videos.#.slug
+        postProcess:
+          - replace:
+              - regex: '^(.*)$'
+                with: 'https://deepinsex.com/$1'
 xPathScrapers:
   performerScraper:
     performer:
