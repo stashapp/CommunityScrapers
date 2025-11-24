@@ -73,7 +73,9 @@ xPathScrapers:
     scene:
       Title: //h1[contains(@class,"single-title")]
       Date: //time/@datetime
-      Details: //section[contains(@class, "video-description")]//p
+      Details:
+        selector: //section[contains(@class, "video-description")]//p
+        concat: "\n\n"
       Tags:
         Name:
           # select the tags and also the "Tags:" header to convert to "Virtual Reality"
