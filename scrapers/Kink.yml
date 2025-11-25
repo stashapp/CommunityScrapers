@@ -137,7 +137,11 @@ xPathScrapers:
           split: ","
       Tags:
         Name:
-          selector: //div[@id="shootPage"]//a[contains(@class,"rounded-pill")]/text()
+          selector: //div[@id="shootPage"]//p[text()="Categories"]/../following-sibling::div/a
+          postProcess:
+            - replace:
+              - regex: \,\s*
+                with: ""
       Details:
         selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
@@ -269,4 +273,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated September 17, 2025
+# Last Updated November 24, 2025
