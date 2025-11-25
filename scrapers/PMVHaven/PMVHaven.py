@@ -96,17 +96,22 @@ def getVideoById(sceneId):
 
 
 def sceneByFragment(params):
+   """
+    Assumes the video ID or the download hash is in the title or file name of the 
+    Stash scene. The default file name when downloading from PMVHaven includes the 
+    download hash, so this will first assume the parameter is the download hash. If no 
+    results are returned then it will assume the parameter is the video ID and attempt 
+    data fetch.
     """
-    Assumes the video ID or the download hash is in the title of the Stash scene.
-    The default file name when downloading from PMVHaven includes the download hash,
-    so this will first assume the parameter is the download hash. If no results are
-    returned then it will assume the parameter is the video ID and attempt data fetch.
-    """
+    
+    fileName = dig(params, "files", 0, "path")
+
     if not (title := dig(params, "title")):
         fail("JSON blob did not contain title property")
 
     if not (match := re.search(r"([a-z0-9]{24})", title)):
-        fail(f"Did not find ID from video title '{title}'")
+        if not (match := re.search(r"([a-z0-9]{24})", fileName)):
+            fail(f"Did not find ID from video title '{title}' or fileName '{fileName}'")
 
     inputParam = match.group(1)
     videoId = getVideoIdFromDownloadHash(inputParam)
