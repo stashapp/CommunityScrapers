@@ -1,0 +1,25 @@
+name: Amateur Allure Network
+
+sceneByURL:
+  - action: script
+    url:
+      - amateurallure.com/tour/scenes/
+      - amateurallureclassics.com/scenes/
+      - swallowsalon.com/scenes/
+    script:
+      - python
+      - AmateurAllureNetwork.py
+      - sceneByURL
+
+galleryByURL:
+  - action: script
+    url:
+      - amateurallure.com/tour/scenes/
+      - amateurallureclassics.com/scenes/
+      - swallowsalon.com/scenes/
+    script:
+      - python
+      - AmateurAllureNetwork.py
+      - galleryByURL
+
+# Last Updated November 26, 2025
