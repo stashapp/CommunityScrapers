@@ -4,6 +4,7 @@ import json
 import sys
 import re
 from urllib.parse import urlparse, urlencode
+from py_common import types
 
 # to import from a parent directory we need to add that directory to the system path
 csd = os.path.dirname(
@@ -25,6 +26,16 @@ except ModuleNotFoundError:
     print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
     print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
     sys.exit()
+
+# helper functions
+def capitalize_word(match: re.Match[str]) -> str:
+    """Helper function to capitalize words"""
+    return match.group(0).lower().capitalize()
+
+def transform_name_part(part: str) -> str:
+    """Transform a name part by replacing underscores/hyphens and capitalizing"""
+    cleaned = re.sub('[_-]', ' ', part)
+    return re.sub(r'\w\S*', capitalize_word, cleaned)
 
 def scrape_url(url, scrape_type):
     parsed = urlparse(url)
@@ -75,7 +86,7 @@ def search(s_type, name):
         def map_result(result):
             item = result['item']
             return {
-                'name': item['name'],
+                'name': item['name'].strip(),
                 'url': f"https://www.metartnetwork.com{item['path']}",
             }
     elif s_type == 'scene':
@@ -88,7 +99,7 @@ def search(s_type, name):
                 'title': item['name'],
                 'url': f"https://www.metartnetwork.com{item['path']}",
                 'date': item['publishedAt'][0:item['publishedAt'].find('T')],
-                'performers': list(map(lambda m: {'name': m['name']}, item['models'])),
+                'performers': [{'name': m['name'].strip()} for m in item['models']],
                 'image': image,
             }
     else:
@@ -101,15 +112,13 @@ def search(s_type, name):
         args['page'] = page
         response = fetch("https://metartnetwork.com", "search-results", args)
 
-        results += list(
-            map(
-                map_result,
-                filter(
-                    lambda r: r['type'] == search_type,
-                    response['items']
-                )
-            )
-        )
+        if response is None:
+            break
+
+        results += [
+            map_result(r) for r in response['items']
+            if r['type'] == search_type
+        ]
 
         if page * page_size > response['total'] or len(response['items']) == 0:
             break
@@ -139,20 +148,11 @@ def fetch(base_url, fetch_type, arguments):
 
 
 def scrape_model(base_url, name):
-    transformed_name = str.join(
-        ' ',
-        list(
-            map(
-                lambda p:
-                re.sub(
-                    '[_-]',
-                    ' ',
-                    re.sub(r'\w\S*', lambda m: m.group(0).lower().capitalize(), p),
-                ),
-                name.split('-')
-            )
-        )
-    )
+    # Transform the name by splitting on hyphens and processing each part
+    name_parts = name.split('-')
+    transformed_parts = [transform_name_part(part) for part in name_parts]
+    transformed_name = ' '.join(transformed_parts)
+
     log.info(f"Scraping model '{name}' as '{transformed_name}'")
     data = fetch(base_url, 'model', {'name': transformed_name, 'order': 'DATE', 'direction': 'DESC'})
     if data is None:
@@ -183,22 +183,22 @@ def map_media(data, studio, base_url):
         for director in data['photographers']:
             directors.append(director.get('name').strip())
     if data.get('crew') and studio_name["Name"] not in directors_not_in_crew:
-                                # some sites only use the `photograpers`` section for director
+        # some sites only use the `photograpers`` section for director
         for crew in data['crew']:
             if crew.get('role') == "Still Photographer":
                 for crew_name in crew.get('names'):
                     name = crew_name.strip()
                     if name not in directors:
                         directors.append(name)
-    director = ", ".join(directors)
+    director = ", ".join(directors).strip()
 
     return {
-        'Title': data['name'],
-        'Details': data['description'],
+        'Title': data['name'].strip(),
+        'Details': data.get('description', "").strip() or None,
         'URLs': urls,
         'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
-        'Tags': list(map(lambda t: {'Name': t}, data['tags'])),
-        'Performers': list(map(lambda m: map_model(base_url, m), data['models'])),
+        'Tags': [{'Name': t.strip()} for t in data['tags']],
+        'Performers': [map_model(base_url, m) for m in data['models']],
         'Studio': studio_name,
         'Code': studio_code,
         "Director": director
@@ -250,13 +250,14 @@ def scrape_gallery(base_url, date, name):
 
 
 def map_model(base_url, model):
-    tags = list(map(lambda t: {'Name': t}, model['tags']))
+    # Convert tags list to dictionary format
+    tags: list[dict[str, str]] = [{'Name': t.strip()} for t in model['tags']]
 
     def add_tag(key, tag_format):
         nonlocal tags
         if key in model and model[key] != "":
             tags.append({
-                'Name': tag_format.format(model[key])
+                'Name': tag_format.format(model[key]).strip()
             })
 
     add_tag('hair', '{} hair')
@@ -270,15 +271,15 @@ def map_model(base_url, model):
         country_name = None
 
     return {
-        'Name': model.get("name"),
+        'Name': model.get("name", "").strip(),
         'Gender': model.get("gender" or "").upper(),
         'URL': f"{base_url}{model.get('path')}",
-        'Ethnicity': model.get("ethnicity"),
+        'Ethnicity': model.get("ethnicity").strip() or None,
         'Country': country_name,
-        'Height': str(model.get("height")),
-        'Weight': str(model.get("weight")),
-        'Measurements': model.get("size"),
-        'Details': model.get("biography"),
+        'Height': str(model.get("height")).strip() or None,
+        'Weight': str(model.get("weight")).strip() or None,
+        'Measurements': model.get("size").strip() or None,
+        'Details': model.get("biography").strip() or None,
         'hair_color': model.get("hair" or "").capitalize(),
         'eye_color': model.get("eyes" or "").capitalize(),
         'Image': f"https://cdn.metartnetwork.com/{model.get('siteUUID')}{model.get('headshotImagePath')}",
