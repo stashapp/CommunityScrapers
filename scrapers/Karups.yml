@@ -35,6 +35,10 @@ xPathScrapers:
         selector: //div[@class="content-information-description"]/p/text()
       Image: &image
         selector: //video[@id="player"]/@poster|//div[@class="video-poster"]/img/@src
+        postProcess:
+          - replace:
+              - regex: \/thumbs_pg\/
+                with: /thumbs/
 
   galleryScraper:
     gallery:
@@ -52,4 +56,4 @@ driver:
           Domain: "www.karups.com"
           Value: "true"
           Path: "/"
-# Last Updated March 28, 2024
+# Last Updated November 28, 2025
