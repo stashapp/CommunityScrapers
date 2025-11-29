@@ -1,10 +1,20 @@
 name: JAVDatabase
 
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.javdatabase.com/movies/{}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneSearch
+
 sceneByURL:
   - action: scrapeXPath
     url:
       - javdatabase.com
-    scraper: sceneScraper
+    scraper: sceneSearch
 
 groupByURL:
   - action: scrapeXPath
