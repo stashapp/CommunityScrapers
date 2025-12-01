@@ -252,7 +252,7 @@ if __name__ == "__main__":
 
     result = None
     match op, args:
-        case "scene-by-name", {"name": name, "extra": extra} if name:
+        case "scene-by-name", {"name": name} if name:
             log.debug(f"scene-by-name, name: {name}, domains: {domains}")
             result = scene_search(name, search_domains=domains)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
