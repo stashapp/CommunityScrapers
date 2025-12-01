@@ -1,6 +1,14 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 
 name: SexLikeReal
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.sexlikereal.com/search?q={}
+  scraper: searchResultsScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -36,7 +44,7 @@ xPathScrapers:
         selector: //h1
       Date:
         selector: //p/time[@datetime][not(@data-hk)]/@datetime
-        postProcess:
+        postProcess: &datePostProcess
           - replace:
             - regex: "T.+"
               with: ""
@@ -70,17 +78,34 @@ xPathScrapers:
                 VirtualXPorn: Virtual X Porn
                 WankitnowVR: Wank It Now VR
       Image: /html/head/meta[@property="og:image"]/@content
-driver:
-  # to get around region/age blocking `useCDP: true` with CDP configured with VPN
-  useCDP: false
-  cookies:
-    - Cookies:
-        - Name: bfm_d
-          Domain: .www.sexlikereal.com
-          Path: /
-          Value: "true"
-        - Name: s_av
-          Domain: .www.sexlikereal.com
-          Path: /
-          Value: "true"
+  searchResultsScraper:
+    common:
+      $results: //div[div[div[h1[text()="Search Results"]]]]/following-sibling::div/ul[@data-qa="scenes-grid"]//li
+    scene:
+      Title: $results//h3/a/@title
+      Studio:
+        Name: $results//h3/following-sibling::p/a/text()
+      Image: $results//div/a/img[not(@class="avatar-image")]/@src
+      Date:
+        selector: $results//p/time/@datetime
+        postProcess: *datePostProcess
+      URL:
+        selector: $results//h3/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.sexlikereal.com"
+# to get around region/age blocking `useCDP: true` with CDP configured with VPN
+# driver:
+#   useCDP: true
+#   cookies:
+#     - Cookies:
+#         - Name: bfm_d
+#           Domain: .www.sexlikereal.com
+#           Path: /
+#           Value: "true"
+#         - Name: s_av
+#           Domain: .www.sexlikereal.com
+#           Path: /
+#           Value: "true"
 # Last Updated December 1, 2025
