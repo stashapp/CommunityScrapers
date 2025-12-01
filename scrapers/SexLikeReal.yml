@@ -70,4 +70,17 @@ xPathScrapers:
                 VirtualXPorn: "Virtual X Porn"
                 WankitnowVR: "Wank It Now VR"
       Image: /html/head/meta[@property="og:image"]/@content
-# Last Updated October 24, 2025
+driver:
+  # to get around region/age blocking `useCDP: true` with CDP configured with VPN
+  useCDP: false
+  cookies:
+    - Cookies:
+        - Name: bfm_d
+          Domain: .www.sexlikereal.com
+          Path: /
+          Value: "true"
+        - Name: s_av
+          Domain: .www.sexlikereal.com
+          Path: /
+          Value: "true"
+# Last Updated December 1, 2025
