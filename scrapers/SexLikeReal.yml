@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 
-name: "SexLikeReal"
+name: SexLikeReal
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -61,14 +61,14 @@ xPathScrapers:
           selector: //h3/a[starts-with(@href,"/studios/")]/text()
           postProcess:
             - map:
-                DDFNetworkVR: "DDF Network VR"
-                KinkyGirlsBerlin: "Kinky Girls Berlin"
-                LethalHardcoreVR: "Lethal Hardcore VR"
-                LittleCapriceVR: "Little Caprice Dreams Virtual Reality"
-                POVcentralVR: "POV Central"
-                SinsVR: "XSinsVR"
-                VirtualXPorn: "Virtual X Porn"
-                WankitnowVR: "Wank It Now VR"
+                DDFNetworkVR: DDF Network VR
+                KinkyGirlsBerlin: Kinky Girls Berlin
+                LethalHardcoreVR: Lethal Hardcore VR
+                LittleCapriceVR: Little Caprice Dreams Virtual Reality
+                POVcentralVR: POV Central
+                SinsVR: XSinsVR
+                VirtualXPorn: Virtual X Porn
+                WankitnowVR: Wank It Now VR
       Image: /html/head/meta[@property="og:image"]/@content
 driver:
   # to get around region/age blocking `useCDP: true` with CDP configured with VPN
