@@ -78,6 +78,7 @@ xPathScrapers:
                 VirtualXPorn: Virtual X Porn
                 WankitnowVR: Wank It Now VR
       Image: /html/head/meta[@property="og:image"]/@content
+      URL: //meta[@property="og:url"]/@content
   searchResultsScraper:
     common:
       $results: //div[div[div[h1[text()="Search Results"]]]]/following-sibling::div/ul[@data-qa="scenes-grid"]//li
