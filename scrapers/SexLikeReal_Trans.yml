@@ -1,0 +1,112 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+
+name: SexLikeReal (Trans)
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.sexlikereal.com/trans/search?q={}
+  scraper: searchResultsScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - sexlikereal.com/trans/
+    scraper: sceneScraper
+
+# as of 2025-10-24, code link does not work, either at /scenes or /
+
+# sceneByFragment:
+#   action: scrapeXPath
+#   # url format: https://www.sexlikereal.com/scenes/{title}-{code}
+#   # However, the url:
+#   #     https://www.sexlikereal.com/{code}
+#   # will redirect to the full url so that is what we will use for scrapping
+#   queryURL: https://www.sexlikereal.com/{filename}
+#   queryURLReplace:
+#     # filename format:
+#     #   SLR_{stufio:[^_]+}_{title:[^_]+}_{res:\d+p}_{code:\d+}_{vrtype}.{ext}
+#     #     vrtype: stuff we do not care about but could contain '_'
+#     filename:
+#       - regex: (?i)^SLR_.+(?:_\d+p)?_(\d+)_.*$
+#         with: $1
+#       - regex: .*\.[^\.]+$ # if no id is found in the filename
+#         with: # clear the filename so that it doesn't leak
+#   scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]/text()
+    scene:
+      Title:
+        selector: //h1
+      Date:
+        selector: //p/time[@datetime][not(@data-hk)]/@datetime
+        postProcess: &datePostProcess
+          - replace:
+            - regex: "T.+"
+              with: ""
+          - parseDate: 2006-01-02
+      Details:
+        selector: $ldjson
+        postProcess:
+          - replace:
+              - regex: .*"description":\s?"([^"]+).+
+                with: $1
+              - regex: "^'|'\\r\\n"
+                with: ""
+              - regex: '\\r\\n\\r\\n'
+                with: "\n\n"
+      # fragile but it works
+      Tags:
+        Name: //div/ul/li/a/span
+      Performers:
+        Name: //a[starts-with(@href,"/trans/pornstars/")]/text()
+      Studio:
+        Name:
+          selector: //h3/a[starts-with(@href,"/trans/studios/")]/text()
+          postProcess:
+            - map:
+                DDFNetworkVR: DDF Network VR
+                KinkyGirlsBerlin: Kinky Girls Berlin
+                LethalHardcoreVR: Lethal Hardcore VR
+                LittleCapriceVR: Little Caprice Dreams Virtual Reality
+                POVcentralVR: POV Central
+                SinsVR: XSinsVR
+                VirtualXPorn: Virtual X Porn
+                WankitnowVR: Wank It Now VR
+      Image: /html/head/meta[@property="og:image"]/@content
+      URL: //meta[@property="og:url"]/@content
+  searchResultsScraper:
+    common:
+      $results: //div[div[div[h1[text()="Search Results"]]]]/following-sibling::div/ul[@data-qa="scenes-grid"]//li
+    scene:
+      Title: $results//h3/a/@title
+      Studio:
+        Name: $results//h3/following-sibling::p/a/text()
+      Image: $results//div/a/img[not(@class="avatar-image")]/@src
+      Date:
+        selector: $results//p/time/@datetime
+        postProcess: *datePostProcess
+      URL:
+        selector: $results//h3/a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://www.sexlikereal.com"
+# to get around region/age blocking `useCDP: true` with CDP configured with VPN
+# driver:
+#   useCDP: true
+#   cookies:
+#     - Cookies:
+#         - Name: bfm_d
+#           Domain: .www.sexlikereal.com
+#           Path: /
+#           Value: "true"
+#         - Name: s_av
+#           Domain: .www.sexlikereal.com
+#           Path: /
+#           Value: "true"
+# Last Updated December 1, 2025
