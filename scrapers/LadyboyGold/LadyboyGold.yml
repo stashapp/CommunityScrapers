@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
-name: LadyboyGold / TSRAW
+name: LadyboyGold (Network)
 performerByURL:
   - action: scrapeXPath
     url:
