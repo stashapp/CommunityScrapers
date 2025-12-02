@@ -55,10 +55,10 @@ groupByURL:
     url: *urls
     scraper: movieScraper
 # Uncomment this section to enable Performer Search on this scraper
-# performerByName:
-#   action: scrapeXPath
-#   queryURL: https://badoinkvr.com/vr-pornstars/search/{}?all=1
-#   scraper: performerSearch
+performerByName:
+  action: scrapeXPath
+  queryURL: https://badoinkvr.com/vr-pornstars/search/{}?all=1
+  scraper: performerSearch
 xPathScrapers:
   sceneByNameBaDoinkVr:
     common:
@@ -125,16 +125,16 @@ xPathScrapers:
         selector: $girlA/@href
         postProcess:
           - replace:
-              - regex: .*badoinkvr\.com/girl/redirect/([^\?]+).+
-                with: https://badoinkvr.com/vr-pornstar/$1
-              - regex: .*vrcosplayx\.com/girl/redirect/([^\?]+).+
-                with: https://vrcosplayx.com/cosplaygirl/$1
-              - regex: .*18vr\.com/girl/redirect/([^\?]+).+
-                with: https://18vr.com/vrgirl/$1
-              - regex: .*babesvr\.com/girl/redirect/([^\?]+).+
-                with: https://babevr.com/vrbabe/$1
-              - regex: .*realvr\.com/girl/redirect/([^\?]+).+
-                with: https://realvr.com/pornstar/$1
+              - regex: ^/vr-pornstar/
+                with: https://badoinkvr.com/vr-pornstar/
+              - regex: ^/cosplaygirl/
+                with: https://vrcosplayx.com/cosplaygirl/
+              - regex: ^/vrgirl/
+                with: https://18vr.com/vrgirl/
+              - regex: ^/vrbabe/
+                with: https://babevr.com/vrbabe/
+              - regex: ^/pornstar/
+                with: https://realvr.com/pornstar/
   performerScraper:
     common:
       $stats: //ul[@id='girlOptionDetails']
