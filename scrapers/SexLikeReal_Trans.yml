@@ -1,9 +1,9 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 
-name: SexLikeReal
+name: SexLikeReal (Trans)
 sceneByName:
   action: scrapeXPath
-  queryURL: https://www.sexlikereal.com/search?q={}
+  queryURL: https://www.sexlikereal.com/trans/search?q={}
   scraper: searchResultsScraper
 sceneByQueryFragment:
   action: scrapeXPath
@@ -12,7 +12,7 @@ sceneByQueryFragment:
 sceneByURL:
   - action: scrapeXPath
     url:
-      - sexlikereal.com
+      - sexlikereal.com/trans/
     scraper: sceneScraper
 
 # as of 2025-10-24, code link does not work, either at /scenes or /
@@ -63,10 +63,10 @@ xPathScrapers:
       Tags:
         Name: //div/ul/li/a/span
       Performers:
-        Name: //a[starts-with(@href,"/pornstars/")]/text()
+        Name: //a[starts-with(@href,"/trans/pornstars/")]/text()
       Studio:
         Name:
-          selector: //h3/a[starts-with(@href,"/studios/")]/text()
+          selector: //h3/a[starts-with(@href,"/trans/studios/")]/text()
           postProcess:
             - map:
                 DDFNetworkVR: DDF Network VR
