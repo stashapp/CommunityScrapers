@@ -102,6 +102,11 @@ xPathScrapers:
         Name: &studioName //meta[@name="dl8-customization-brand-name"]/@content
       Image: &imageSel
         selector: //div[@id="videoPreviewContainer"]//video[@id="video-preview-hover"]/@poster
+        postProcess:
+          # remove the _1 from the end of the filename to get the original/NSFW image
+          - replace:
+              - regex: _1\.jpg$
+                with: .jpg
       URL: &sceneUrl //link[@rel="canonical"]/@href
       Code:
         selector: *sceneUrl
