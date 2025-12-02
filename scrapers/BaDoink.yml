@@ -87,7 +87,15 @@ xPathScrapers:
           - parseDate: January 02, 2006
       Details: &detailsSel $details//p[@class="video-description"]
       Tags:
-        Name: $details//p[@class="video-tags"]//a
+        Name:
+          selector: >-
+            $details//p[@class="video-tags"]//a
+            |
+            $details//p[@class="video-tags"]//span[contains(@class, "video-tags-label")]
+          postProcess:
+            - replace:
+                - regex: "^.*Tags:.*$"
+                  with: Virtual Reality
       Performers:
         Name: $details//p[@class="video-actors"]/a
       Studio:
@@ -178,4 +186,4 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
-# Last Updated September 17, 2025
+# Last Updated December 2, 2025
