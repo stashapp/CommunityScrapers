@@ -216,21 +216,21 @@ def scene_from_fragment(
 
     # attempt to get from cached results first
     search_results = None
-    # try:
-    #     log.debug(f"Attempting to get result from {CACHE_RESULTS_FILE}")
-    #     with open(CACHE_RESULTS_FILE, 'r', encoding='utf-8') as f:
-    #         log.debug(f"Opened cache file {CACHE_RESULTS_FILE}")
-    #         cached_scenes = json.load(f)
-    #         log.debug(f"cached_scenes: {cached_scenes}")
-    #         search_results = cached_scenes
-    # except FileNotFoundError:
-    #     log.error(f"Cache file {CACHE_RESULTS_FILE} not found")
-    # except json.JSONDecodeError:
-    #     log.error(f"Error decoding JSON from {CACHE_RESULTS_FILE}")
-    # except (OSError, IOError) as e:
-    #     log.error(f"An I/O error occurred: {e}")
-    # except Exception as e:
-    #     log.error(f"An unexpected error occurred: {e}")
+    try:
+        log.debug(f"Attempting to get result from {CACHE_RESULTS_FILE}")
+        with open(CACHE_RESULTS_FILE, 'r', encoding='utf-8') as f:
+            log.debug(f"Opened cache file {CACHE_RESULTS_FILE}")
+            cached_scenes = json.load(f)
+            log.debug(f"cached_scenes: {cached_scenes}")
+            search_results = cached_scenes
+    except FileNotFoundError:
+        log.error(f"Cache file {CACHE_RESULTS_FILE} not found")
+    except json.JSONDecodeError:
+        log.error(f"Error decoding JSON from {CACHE_RESULTS_FILE}")
+    except (OSError, IOError) as e:
+        log.error(f"An I/O error occurred: {e}")
+    except Exception as e:
+        log.error(f"An unexpected error occurred: {e}")
 
     # if no scenes retrieved from cached file, do an API search
     if search_results is None:
