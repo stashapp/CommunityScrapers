@@ -38,61 +38,6 @@ sceneByFragment: # Scrape all scene info if JAV code is in the filename (path)
   scraper: sceneSearch
 
 xPathScrapers:
-  sceneScraper:
-    scene:
-      Title: &title //h1
-      Date: &date //td[contains(.,'Release Date:')]/following-sibling::td
-      Director: &director //td[contains(.,'Director:')]/following-sibling::td
-      Image: &image //meta[@property='og:image']/@content
-      Studio: &studio
-        Name: //td[contains(.,'Studio:')]/following-sibling::td
-        URL: //td[contains(.,'Studio:')]/following-sibling::td//a/@href
-      Code: //td[contains(.,'DVD ID:')]/following-sibling::td | //td[contains(.,'Content ID:')]/following-sibling::td
-      Tags:
-        Name: //td[contains(.,'Genre(s):')]/following-sibling::td//a
-      Details: &details //tr[td[h2[@class='subhead']]]/following-sibling::tr/td/text()
-      Performers:
-        Name: //div[h2[contains(.,'/Idols')]]//a/text()
-        Image:
-          selector: //div[h2[contains(.,'/Idols')]]//img/@data-src
-          postProcess:
-            - replace:
-                - regex: '/thumb/'
-                  with: '/full/'
-        URLs: //div[h2[contains(.,'/Idols')]]//a/@href
-      Groups:
-        Name: *title
-        FrontImage: *image
-        Studio: *studio
-        Duration: &duration
-          selector: //td[contains(.,'Runtime:')]/following-sibling::td
-          postProcess:
-            # 1) strip out any parenthetical content, e.g. (HD: 128)
-            - replace:
-                - regex: '\s*\(.*?\)'
-                  with: ''
-            # 2) collapse multiple whitespace
-            - replace:
-                - regex: '\s+'
-                  with: ' '
-            # 3) convert “min” or “min.” to “:00”
-            - replace:
-                - regex: 'min\.?'
-                  with: ':00'
-            # 4) remove stray “HD” markers
-            - replace:
-                - regex: 'HD:?'
-                  with: ''
-            # 5) remove space before colon
-            - replace:
-                - regex: '\s+:'
-                  with: ':'
-            # 6) trim leading/trailing whitespace
-            - replace:
-                - regex: '^\s+|\s+$'
-                  with: ''
-        URL: &url //link[@rel='canonical']/@href
-
   movieScraper:
     common:
       $infobox: //div[@class="movietable"]/div[@class="row"][1]
