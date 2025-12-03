@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+name: Pornopedia
+performerByURL:
+  - action: script
+    url:
+      - pornopedia.com
+    script:
+      - python
+      - Pornopedia.py
+      - performer-by-url
+# Last Updated December 3, 2025
