@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
-name: LadyboyGold / TSRAW
+name: LadyboyGold (Network)
 performerByURL:
   - action: scrapeXPath
     url:
@@ -22,19 +22,19 @@ sceneByName:
   action: script
   script:
     - python
-    - TSRaw.py
+    - island_dollars.py
     - scene-by-name
 sceneByFragment:
   action: script
   script:
     - python
-    - TSRaw.py
+    - island_dollars.py
     - scene-by-fragment
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - TSRaw.py
+    - island_dollars.py
     - scene-by-query-fragment
 xPathScrapers:
   performerScraperLadyboyGold:
@@ -208,4 +208,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated June 18, 2025
+# Last Updated December 1, 2025

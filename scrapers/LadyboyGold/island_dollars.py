@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
 import json
 import sys
 from typing import Any
@@ -8,16 +9,66 @@ import py_common.log as log
 from py_common.types import ScrapedScene
 from py_common.util import scraper_args
 
-CACHE_RESULTS_FILE = "tsraw-cache.json"
-CMS_AREA_ID = "cc6bd0ac-a417-47d1-9868-7855b25986e5"
+CACHE_RESULTS_FILE = "islanddollars-cache.json"
+CONFIG = {
+    "ladyboycrush": {
+        "cms_area_id": "74175374-c756-4ae9-97b2-e011512a1521",
+        "studio_name": "Ladyboy Crush",
+        "sets": {
+            "cms_block_id": "106093",
+            "data_type_search": '{"100001":"184"}'
+        }
+    },
+    "ladyboyglamour": {
+        "cms_area_id": "60f34ef8-3a0e-44ae-8afc-5795ee75eeff",
+        "studio_name": "Ladyboy Glamour",
+        "sets": {
+            "cms_block_id": "109727",
+            "data_type_search": '{"100001":"190"}'
+        }
+    },
+    "ladyboypussy": {
+        "cms_area_id": "3b74725d-ad01-45a1-8186-ac6be1bc1661",
+        "studio_name": "Ladyboy Pussy",
+        "sets": {
+            "cms_block_id": "112975",
+            "data_type_search": '{"100001":"183"}'
+        }
+    },
+    "ladyboysfuckedbareback": {
+        "cms_area_id": "126f96ec-ffdc-4f4b-a459-c9a2e78b9b67",
+        "studio_name": "Ladyboys Fucked Bareback",
+        "sets": {
+            "cms_block_id": "105792",
+            "data_type_search": '{"100001":"182"}'
+        }
+    },
+    "ladyboyvice": {
+        "cms_area_id": "c594b28c-ab09-44da-9166-0a332d33469f",
+        "studio_name": "Ladyboy Vice",
+        "sets": {
+            "cms_block_id": "106090",
+            "data_type_search": '{"100001":"185"}'
+        }
+    },
+    "tsraw": {
+        "cms_area_id": "cc6bd0ac-a417-47d1-9868-7855b25986e5",
+        "studio_name": "TSRaw",
+        "sets": {
+            "cms_block_id": "102013",
+            "data_type_search": '{"100001":"164"}'
+        }
+    },
+}
+
 REQUESTS_TIMEOUT = 10
 
-def get_cdn_servers() -> dict[str, Any]:
+def get_cdn_servers(domain: str) -> dict[str, Any]:
     search_params = {
-        "cms_area_id": CMS_AREA_ID
+        "cms_area_id": CONFIG[domain]["cms_area_id"]
     }
     headers = {
-        "x-nats-cms-area-id": f"{CMS_AREA_ID}",
+        "x-nats-cms-area-id": f"{CONFIG[domain]['cms_area_id']}",
         "x-nats-entity-decode": f"{1}",
         "x-nats-natscode": "MC4wLjAuMC4wLjAuMC4wLjA"
     }
@@ -27,12 +78,12 @@ def get_cdn_servers() -> dict[str, Any]:
     return _result['servers']
 
 
-def parse_set_as_scene(cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScene:
+def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScene:
     scene: ScrapedScene = {}
     log.debug(f"cms_set: {cms_set}")
     scene["title"] = cms_set["name"].rstrip(" 4K")
     scene["details"] = cms_set["description"].strip()
-    scene["url"] = f"https://members.tsraw.com/video/{cms_set['slug']}"
+    scene["url"] = f"https://members.{domain}.com/video/{cms_set['slug']}"
     scene["date"] = cms_set["added_nice"]
 
     # get image
@@ -46,7 +97,7 @@ def parse_set_as_scene(cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScen
     cdn_url = cdn_url.rstrip("/")
 
     scene["image"] = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
-    scene["studio"] = {"name": "TSRaw"}
+    scene["studio"] = {"name": CONFIG[domain]["studio_name"]}
 
     categories = extract_names(cms_set, "Category")
     tags = extract_names(cms_set, "Tags")
@@ -56,6 +107,7 @@ def parse_set_as_scene(cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScen
     scene["tags"] = [ {"name": ct } for ct in categories_and_tags ]
     scene["performers"] = [ {"name": p } for p in performers ]
     # scene["code"] = cms_set["cms_set_id"]
+
     return scene
 
 def extract_names(cms_set, data_type_name):
@@ -73,13 +125,13 @@ def get_sets(domain: str, start: int = 0, text_search = ""):
         "content_count": "1",
         "count": "12",
         "start": f"{start}",
-        "cms_block_id": "102013",
+        "cms_block_id": CONFIG[domain]["sets"]["cms_block_id"],
         "orderby": "published_desc",
         "content_type": "video",
         "status": "enabled",
         "text_search": text_search,
-        "data_type_search": '{"100001":"164"}',
-        "cms_area_id": CMS_AREA_ID
+        "data_type_search": CONFIG[domain]["sets"]["data_type_search"],
+        "cms_area_id": CONFIG[domain]["cms_area_id"]
     }
     headers = {
         "origin": f"https://www.{domain}.com",
@@ -93,7 +145,7 @@ def get_sets(domain: str, start: int = 0, text_search = ""):
         "sec-fetch-site": "cross-site",
         "sec-gpc": "1",
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-        "x-nats-cms-area-id": f"{CMS_AREA_ID}",
+        "x-nats-cms-area-id": f"{CONFIG[domain]['cms_area_id']}",
         "x-nats-entity-decode": f"{1}",
         "x-nats-natscode": "MC4wLjAuMC4wLjAuMC4wLjA"
     }
@@ -127,12 +179,23 @@ def scene_search(
 
     log.debug(f"Matching '{query}' against {len(search_domains)} sites")
 
-    # get CDN servers to prepend to image URLs
-    cdn_servers = get_cdn_servers()
-    log.debug(f"CDN servers: {cdn_servers}")
+    parsed_scenes: list[ScrapedScene] = []
 
-    video_sets = get_sets(search_domains[0], text_search=query)["sets"]
-    parsed_scenes = [ parse_set_as_scene(cms_set, cdn_servers) for cms_set in video_sets ]
+    def fetch_domain(domain):
+        cdn_servers = get_cdn_servers(domain)
+        log.debug(f"CDN servers: {cdn_servers}")
+        log.debug(f"Searching domain: {domain} for query: {query}")
+        video_sets = get_sets(domain, text_search=query)["sets"]
+        return [parse_set_as_scene(domain, cms_set, cdn_servers) for cms_set in video_sets]
+
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(fetch_domain, domain): domain for domain in search_domains}
+        for future in as_completed(futures):
+            try:
+                domain_parsed_scenes = future.result()
+                parsed_scenes.extend(domain_parsed_scenes)
+            except Exception as e:
+                log.error(f"Error processing domain {futures[future]}: {e}")
 
     # cache results
     log.debug(f"writing {len(parsed_scenes)} parsed scenes to {CACHE_RESULTS_FILE}")
@@ -156,6 +219,7 @@ def scene_from_fragment(
     try:
         log.debug(f"Attempting to get result from {CACHE_RESULTS_FILE}")
         with open(CACHE_RESULTS_FILE, 'r', encoding='utf-8') as f:
+            log.debug(f"Opened cache file {CACHE_RESULTS_FILE}")
             cached_scenes = json.load(f)
             log.debug(f"cached_scenes: {cached_scenes}")
             search_results = cached_scenes
@@ -183,14 +247,16 @@ def scene_from_fragment(
     return first_match
 
 if __name__ == "__main__":
-    domains = ["tsraw"]
+    domains = list(CONFIG.keys())
     op, args = scraper_args()
 
     result = None
     match op, args:
         case "scene-by-name", {"name": name} if name:
+            log.debug(f"scene-by-name, name: {name}, domains: {domains}")
             result = scene_search(name, search_domains=domains)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
+            log.debug(f"scene-by-fragment, args: {args}, domains: {domains}")
             result = scene_from_fragment(args, search_domains=domains)            
         case _:
             log.error(f"Invalid operation: {op}")
