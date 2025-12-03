@@ -162,6 +162,7 @@ def scene_by_url() -> ScrapedScene:
     # read the input.  A URL must be passed in for the sceneByURL call
     inp = json.loads(sys.stdin.read())
     log.debug(f"inp: {inp}")
+    urls = [inp["url"]]
     scene_id = re.sub(r".*/([0-9]*)/.*", r"\1", inp["url"])
     if not scene_id:
         log.error("No scene ID found in URL")
@@ -180,6 +181,14 @@ def scene_by_url() -> ScrapedScene:
     log.trace(json.dumps(data))
 
     title = re.sub(r'\s+VR( Porn( Video)?)?$', '', data["title"])
+    # sub studio overrides
+    if 'play girl stories' in title.lower():
+        studio = 'Play Girl Stories'
+        urls = [
+            urlparse(inp["url"])._replace(netloc='playgirlstories.com').geturl(),
+            urlparse(inp["url"])._replace(netloc='realitylovers.com').geturl()
+        ]
+
     details = clean_text(data["description"])
 
     # image
@@ -209,7 +218,7 @@ def scene_by_url() -> ScrapedScene:
         "image": image_url,
         "studio": {"name": studio},
         "performers": actors,
-        "urls": [inp["url"]],
+        "urls": urls,
         "code": code,
     }
 
