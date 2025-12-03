@@ -54,7 +54,7 @@ def performer_from_url(url) -> ScrapedPerformer | None:
             performer["birthdate"] = parse_date(birthdate.strip())
         else:
             log.warning("could not scrape birthdate")
-        if (country := iter(tree.xpath(bio_value('Place of birth'))), None) is not None:
+        if (country := iter(tree.xpath(bio_value('Nationality'))), None) is not None:
             country = "".join(country)
             log.debug("scraped country: %s" % country)
             performer["country"] = country.strip()
