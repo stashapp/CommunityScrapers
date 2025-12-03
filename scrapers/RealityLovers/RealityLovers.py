@@ -107,10 +107,9 @@ def clean_text(details: str) -> str:
     return details
 
 
-def performer_by_url() -> ScrapedPerformer:
+def performer_by_url(inp) -> ScrapedPerformer:
     "Scraper performer by studio URL"
     # read the input.  A URL must be passed in for the sceneByURL call
-    inp = json.loads(sys.stdin.read())
     actor_id = re.sub(r".*/([0-9]*)/.*", r"\1", inp["url"])
     if not actor_id:
         log.error("No actor ID found in URL")
@@ -157,22 +156,31 @@ def performer_by_url() -> ScrapedPerformer:
     return performer
 
 
-def scene_by_url() -> ScrapedScene:
-    "Use studio URL to scrape the REST API by ID"
-    # read the input.  A URL must be passed in for the sceneByURL call
-    inp = json.loads(sys.stdin.read())
-    log.debug(f"inp: {inp}")
-    scene_id = re.sub(r".*/([0-9]*)/.*", r"\1", inp["url"])
+def get_domain_and_api_url_from_scene_url(scene_url: str) -> tuple[str, str]:
+    "Convert a scene URL to the corresponding API URL"
+    domain = urlparse(scene_url).netloc.replace("www.", "")
+    scene_id = re.sub(r".*/([0-9]*)/.*", r"\1", scene_url)
     if not scene_id:
         log.error("No scene ID found in URL")
-        return {}
-    domain = urlparse(inp["url"]).netloc.replace("www.", "")
+    api_url = f"https://engine.{domain}/content/videoDetail?contentId={scene_id}" if scene_id else None
+    return domain, api_url
+
+
+def scene_by_url(inp) -> ScrapedScene:
+    "Use studio URL to scrape the REST API by ID"
+    # read the input.  A URL must be passed in for the sceneByURL call
+    urls = [inp["url"]]
+    domain, api_url = get_domain_and_api_url_from_scene_url(inp["url"])
     studio = DOMAIN_STUDIO_MAP.get(domain, 'Reality Lovers')
 
-    api_url = f"https://engine.{domain}/content/videoDetail?contentId={scene_id}"
-    scraped = session.get(api_url)
-    if scraped.status_code >= 400:
-        log.error(f"HTTP Error: {scraped.status_code}")
+    try:
+        scraped = session.get(api_url)
+        scraped.raise_for_status()
+    except requests.HTTPError as e:
+        log.error(f"HTTP Error: {e.response.status_code}")
+        return {}
+    except requests.RequestException as e:
+        log.error(f"Request Exception: {str(e)}")
         return {}
     log.trace("Scraped the url: " + api_url)
 
@@ -180,6 +188,14 @@ def scene_by_url() -> ScrapedScene:
     log.trace(json.dumps(data))
 
     title = re.sub(r'\s+VR( Porn( Video)?)?$', '', data["title"])
+    # sub studio overrides
+    if 'play girl stories' in title.lower():
+        studio = 'Play Girl Stories'
+        urls = [
+            urlparse(inp["url"])._replace(netloc='playgirlstories.com').geturl(),
+            urlparse(inp["url"])._replace(netloc='realitylovers.com').geturl()
+        ]
+
     details = clean_text(data["description"])
 
     # image
@@ -209,19 +225,50 @@ def scene_by_url() -> ScrapedScene:
         "image": image_url,
         "studio": {"name": studio},
         "performers": actors,
-        "urls": [inp["url"]],
+        "urls": urls,
         "code": code,
     }
 
+def scene_by_query_fragment(inp) -> ScrapedScene:
+    """
+    Get the scene by the fragment. The title is used as the search field.
+    Scrapes the search page for scene results and returns the first result.
+    """
+    log.debug(f"Input: {inp}")
+    if "url" in inp:
+        log.debug("Attempting to get scene by URL")
+        _domain, api_url = get_domain_and_api_url_from_scene_url(inp["url"])
+        if api_url:
+            r = session.head(api_url)
+            if r.status_code == 200:
+                log.debug("API URL is valid, getting scene by URL")
+                return scene_by_url(inp)
+            else:
+                log.debug("API URL is not valid, falling back to scene by name")
 
-def scene_by_name() -> list[ScrapedScene]:
+    log.debug("Attempting to get scene by name")
+    scenes = scene_by_name(inp)
+    if len(scenes) > 0:
+        log.debug("Found scenes by name")
+        log.trace(f"Scenes: {json.dumps(scenes)}")
+        # match to input fragment
+        return next(iter(
+            (
+                scene for scene in scenes
+                if inp["title"] == scene["title"]
+                and inp["url"] == scene["url"]
+            ),
+        ), scenes[0])
+    else:
+        log.info("No results")
+        return {}
+
+def scene_by_name(inp) -> list[ScrapedScene]:
     """
     Get the scene by the fragment. The title is used as the search field.
     Scrapes the search page for scene results.
     """
     # read the input.  A title or name must be passed in
-    inp = json.loads(sys.stdin.read())
-    log.trace("Input: " + json.dumps(inp))
     query_value = inp["title"] if "title" in inp else inp["name"]
     if not query_value:
         log.error("No title or name Entered")
@@ -248,36 +295,47 @@ def scene_by_name() -> list[ScrapedScene]:
 
 def web_search_scenes(query_value: str, domain: str) -> list[ScrapedScene]:
     """
-    Searches scenes using the web page search (that returns HTML).
-    Parse each search result HTML into a ScrapedScene.
+    Searches scenes using the API.
+    Parse each search result into a ScrapedScene.
     """
-    search_results_page = session.get(f"https://{domain}/search/?s={query_value}")
-    search_results_page.raise_for_status()
-
-    soup = bs(search_results_page.text, "html.parser")
-    grid_view = soup.find('div', id='gridView')
-    _scenes = grid_view.find_all('div', class_='video-grid-view')
-    log.info(f"Found {len(_scenes)} scenes from {domain}")
+    search_results = session.get(
+        f"https://engine.{domain}/content/search?max=100000&page=0&pornstar=0&category=0&perspective=&sort=&s={query_value}",
+        headers={"Referer": f"https://{domain}/"},
+    )
+    search_results.raise_for_status()
 
     _results = []
-    for scene in _scenes:
+    for scene in search_results.json().get("contents", []):
+        log.debug(f"scene: {scene}")
+
         # release date
-        release_text = scene.find('p', class_='card-text').text
-        log.debug(f"release_text: {release_text}")
-        release_date = parse_date(release_text.replace('Released: ', ''))
+        release_date = parse_date(scene.get("released"))
 
         # title
-        title = scene.find('p', class_='card-title').text
+        title = scene.get("title")
         log.debug(f"title: {title}")
 
         # url
-        uri_path = scene.find('a').get('href')
+        uri_path = scene.get("videoUri")
         log.debug(f"uri_path: {uri_path}")
-        url = f"https://{domain}{uri_path}"
+        url = f"https://{domain}/{uri_path}"
 
         # image
-        image_url = find_largest_image(scene.find('img'))
+        img = {
+            "srcset": scene.get("mainImageSrcset"),
+        }
+        log.debug(f"img: {img}")
+        image_url = find_largest_image(img)
         log.debug(f"image_url: {image_url}")
+
+        # performers
+        performers = [
+            {"name": actor["name"], "url": f"https://{domain}/{actor['uri']}"}
+            for actor in scene.get("actors", [])
+        ]
+
+        # description
+        details = clean_text(scene.get("description", ""))
 
         _results.append({
             "title": title,
@@ -285,27 +343,24 @@ def web_search_scenes(query_value: str, domain: str) -> list[ScrapedScene]:
             "image": image_url,
             "date": release_date,
             "studio": { "name": DOMAIN_STUDIO_MAP.get(domain) },
+            "performers": performers,
+            "details": details,
         })
     return _results
 
 
 # Figure out what was invoked by Stash and call the correct thing
+inp = json.loads(sys.stdin.read())
+log.trace("Input: " + json.dumps(inp))
 if sys.argv[1] == "performerByURL":
-    print(json.dumps(performer_by_url()))
-elif sys.argv[1] in ("sceneByURL", "sceneByQueryFragment"):
-    print(json.dumps(scene_by_url()))
+    print(json.dumps(performer_by_url(inp)))
+elif sys.argv[1] == "sceneByURL":
+    print(json.dumps(scene_by_url(inp)))
+elif sys.argv[1] in ("sceneByFragment", "sceneByQueryFragment"):
+    print(json.dumps(scene_by_query_fragment(inp)))
 elif sys.argv[1] == "sceneByName":
-    scenes = scene_by_name()
+    scenes = scene_by_name(inp)
     print(json.dumps(scenes))
-elif sys.argv[1] == "sceneByFragment":
-    scenes = scene_by_name()
-    if len(scenes) > 0:
-        # return the first query result
-        print(json.dumps(scenes[0]))
-    else:
-        # empty array for no results
-        log.info("No results")
-        print("{}")
 else:
     log.error("Unknown argument passed: " + sys.argv[1])
     print(json.dumps({}))
