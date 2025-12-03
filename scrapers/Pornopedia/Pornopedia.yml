@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+name: Pornopedia
+performerByURL:
+  - action: script
+    url:
+      - pornopedia.com
+    script:
+      - python
+      - Pornopedia.py
+      - performer-by-url
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h1[@id="firstHeading"]//text()
+      Birthdate:
+        selector: //table[contains(@class, "biography")]//th[text()="Date of birth:"]/following-sibling::td//text()
+        concat: ""
+        postProcess:
+          - parseDate: January 2, 2006
+      Height:
+        selector: //table[contains(@class, "biography")]//th[text()="Height:"]/following-sibling::td//text()
+        concat: ""
+      Measurements:
+        selector: //table[contains(@class, "biography")]//th[text()="Bra size:"]/following-sibling::td//text()
+        concat: ""
+      EyeColor:
+        selector: //table[contains(@class, "biography")]//th[text()="Eye color:"]/following-sibling::td//text()
+      HairColor:
+        selector: //table[contains(@class, "biography")]//th[text()="Hair color:"]/following-sibling::td//text()
+      Ethnicity:
+        selector: //table[contains(@class, "biography")]//th[text()="Ethnicity:"]/following-sibling::td//text()
+      Country:
+        selector: //table[contains(@class, "biography")]//th[text()="Place of birth:"]/following-sibling::td//text()
+      Image: //td[@class="infobox-image"]//a[img]/@href
+driver:
+  useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36
+# Last Updated December 3, 2025
