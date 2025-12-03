@@ -29,6 +29,7 @@ disclaimer_cookie = requests.cookies.create_cookie('agreedToDisclaimer', 'true')
 session.cookies.set_cookie(disclaimer_cookie)
 
 DOMAIN_STUDIO_MAP = {
+    "kinkvr.com": "KinkVR",
     "playgirlstories.com": "Play Girl Stories",
     "realitylovers.com": "Reality Lovers",
     "tsvirtuallovers.com": "TS Virtual Lovers",

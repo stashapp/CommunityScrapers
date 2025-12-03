@@ -6,6 +6,7 @@ name: RealityLovers
 performerByURL:
   - action: script
     url:
+      - kinkvr.com/girl/
       - playgirlstories.com/girl/
       - realitylovers.com/girl/
       - tsvirtuallovers.com/girl/
@@ -17,6 +18,7 @@ performerByURL:
 sceneByURL:
   - action: script
     url:
+      - kinkvr.com/vd/
       - playgirlstories.com/vd/
       - realitylovers.com/vd/
       - tsvirtuallovers.com/vd/
@@ -43,4 +45,4 @@ sceneByFragment:
     - python
     - RealityLovers.py
     - sceneByFragment
-# Last Updated February 17, 2025
+# Last Updated December 2, 2025
