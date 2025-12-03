@@ -248,36 +248,47 @@ def scene_by_name() -> list[ScrapedScene]:
 
 def web_search_scenes(query_value: str, domain: str) -> list[ScrapedScene]:
     """
-    Searches scenes using the web page search (that returns HTML).
-    Parse each search result HTML into a ScrapedScene.
+    Searches scenes using the API.
+    Parse each search result into a ScrapedScene.
     """
-    search_results_page = session.get(f"https://{domain}/search/?s={query_value}")
-    search_results_page.raise_for_status()
-
-    soup = bs(search_results_page.text, "html.parser")
-    grid_view = soup.find('div', id='gridView')
-    _scenes = grid_view.find_all('div', class_='video-grid-view')
-    log.info(f"Found {len(_scenes)} scenes from {domain}")
+    search_results = session.get(
+        f"https://engine.{domain}/content/search?max=100000&page=0&pornstar=0&category=0&perspective=&sort=&s={query_value}",
+        headers={"Referer": f"https://{domain}/"},
+    )
+    search_results.raise_for_status()
 
     _results = []
-    for scene in _scenes:
+    for scene in search_results.json().get("contents", []):
+        log.debug(f"scene: {scene}")
+
         # release date
-        release_text = scene.find('p', class_='card-text').text
-        log.debug(f"release_text: {release_text}")
-        release_date = parse_date(release_text.replace('Released: ', ''))
+        release_date = parse_date(scene.get("released"))
 
         # title
-        title = scene.find('p', class_='card-title').text
+        title = scene.get("title")
         log.debug(f"title: {title}")
 
         # url
-        uri_path = scene.find('a').get('href')
+        uri_path = scene.get("videoUri")
         log.debug(f"uri_path: {uri_path}")
-        url = f"https://{domain}{uri_path}"
+        url = f"https://{domain}/{uri_path}"
 
         # image
-        image_url = find_largest_image(scene.find('img'))
+        img = {
+            "srcset": scene.get("mainImageSrcset"),
+        }
+        log.debug(f"img: {img}")
+        image_url = find_largest_image(img)
         log.debug(f"image_url: {image_url}")
+
+        # performers
+        performers = [
+            {"name": actor["name"], "url": f"https://{domain}/{actor['uri']}"}
+            for actor in scene.get("actors", [])
+        ]
+
+        # description
+        details = clean_text(scene.get("description", ""))
 
         _results.append({
             "title": title,
@@ -285,6 +296,8 @@ def web_search_scenes(query_value: str, domain: str) -> list[ScrapedScene]:
             "image": image_url,
             "date": release_date,
             "studio": { "name": DOMAIN_STUDIO_MAP.get(domain) },
+            "performers": performers,
+            "details": details,
         })
     return _results
 
