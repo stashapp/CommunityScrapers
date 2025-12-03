@@ -42,7 +42,7 @@ xPathScrapers:
     common:
       $infobox: //div[@class="movietable"]/div[@class="row"][1]
     group:
-      Name: *title
+      Name: //h1
       Synopsis: $infobox/div[2]/p[1]/text()
       Date:
         selector: $infobox//p[b[contains(.,'Release Date:')]]/text()
@@ -74,14 +74,14 @@ xPathScrapers:
           - replace:
               - regex: '^\s+|\s+$'
                 with: ''
-      Director: *director
-      FrontImage: *image
+      Director: //td[contains(.,'Director:')]/following-sibling::td
+      FrontImage: //meta[@property='og:image']/@content
       Studio:
         Name:
           selector: $infobox//p[b[contains(.,'Studio:')]]//a/text()
         URL:
           selector: $infobox//p[b[contains(.,'Studio:')]]//a/@href
-      URL: *url
+      URLs: //div[h2[contains(.,'/Idols')]]//a/@href
 
   performerScraper:
     common:
