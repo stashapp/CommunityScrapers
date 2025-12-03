@@ -85,6 +85,16 @@ def performer_from_url(url) -> ScrapedPerformer | None:
             performer["height"] = re.sub(r"(\d+)\s*cm.*", r"\1", height.strip())
         else:
             log.warning("could not scrape height")
+        if (weight := next(iter(tree.xpath(bio_value('Weight'))), None)) is not None:
+            log.debug("scraped weight: %s" % weight)
+            performer["weight"] = re.sub(r"(\d+)\s*kg.*", r"\1", weight.strip())
+        else:
+            log.warning("could not scrape weight")
+        if (aliases := next(iter(tree.xpath(bio_value('Alias(es)'))), None)) is not None:
+            log.debug("scraped aliases: %s" % aliases)
+            performer["aliases"] = aliases.strip()
+        else:
+            log.warning("could not scrape aliases")
         if (image := next(iter(tree.xpath('//td[@class="infobox-image"]//img/@src')), None)) is not None:
             log.debug("scraped image: %s" % image)
             image = re.sub(r"/thumb/", "/", image)
