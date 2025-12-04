@@ -157,6 +157,9 @@ def __api_request(url: str, headers: dict) -> dict | None:
         with open("api_response.json", "w", encoding="utf-8") as f:
             json.dump(api_response, f, indent=2)
 
+    if "result" not in api_response:
+        log.error(f"Invalid API response: {json.dumps(api_response, indent=None)}")
+        return None
     return api_response["result"]
 
 
