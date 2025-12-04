@@ -35,6 +35,10 @@ minimum_similarity = 0.75
 
 # Debug mode will save the latest API response to disk
 debug = False
+
+# Proxy option to allow user configuring proxy with VPN to bypass geo-restrictions, e.g.
+# https_proxy = http://localhost:8888
+https_proxy =
 """
 )
 
@@ -110,7 +114,17 @@ def add_markers(scene_id: str, markers: list[dict]):
 # network stuff
 def __raw_request(url, headers) -> requests.Response:
     log.trace(f"Sending GET request to {url}")
-    response = requests.get(url, headers=headers, timeout=10)
+    if len(config.https_proxy) > 0:
+        proxies = {
+            "http": config.https_proxy,
+            "https": config.https_proxy,
+        }
+        log.debug(f"[REQUEST] Using proxy: {config.https_proxy}")
+        response = requests.get(
+            url, headers=headers, timeout=10, proxies=proxies
+        )
+    else:
+        response = requests.get(url, headers=headers, timeout=10)
 
     if response.status_code == 429:
         log.error(
@@ -118,6 +132,12 @@ def __raw_request(url, headers) -> requests.Response:
             "you have sent too many requests in a given amount of time."
         )
         sys.exit(1)
+
+    if response.status_code == 403:
+        log.error(
+            "[REQUEST] 403 Forbidden: access to the requested resource is denied. "
+            "This may be due to geo-restrictions, consider configuring the proxy option."
+        )
 
     # Even a 404 will contain an instance token
     return response
