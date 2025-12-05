@@ -186,7 +186,8 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
         performer["death_date"] = f"{death_year[-4:]}-01-01"
 
     if (bio := soup.find("div", string="Notes:")) and (bio := bio.find_next("div")):
-        performer["details"] = bio.get_text(separator="\n")
+    	if bio.get_text(separator="\n") != "none available":
+        	performer["details"] = bio.get_text(separator="\n")
 
     if aliases := soup.find_all("h2"):
         if config.disambiguate_aliases:
