@@ -60,6 +60,7 @@ studio_map = {
     "lukecooperx.com": "Luke CooperX",
     "machofactory.com": "Macho Factory",
     "meanfeetfetish.com": "Mean Feet Fetish",
+    "milflicious.com": "Milflicious",
     "members.hobybuchanon.com": "Hoby Buchanon",
     "mongerinasia.com": "Monger In Asia",
     "nickmarxx.com": "Nick Marxx",
