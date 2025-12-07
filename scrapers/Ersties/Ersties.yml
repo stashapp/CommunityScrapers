@@ -1,4 +1,5 @@
 name: Ersties
+
 sceneByURL:
   - action: script
     url:
@@ -7,20 +8,21 @@ sceneByURL:
       - python
       - Ersties.py
       - sceneByURL
-groupByURL:
+
+galleryByURL:
   - action: script
     url:
-      - ersties.com/
+      - ersties.com/shoot/
     script:
       - python
       - Ersties.py
       - groupByURL
+
 performerByURL:
   - action: script
     url:
-      - ersties.com/
+      - ersties.com/profile/
     script:
       - python
       - Ersties.py
       - performerByURL
-# Last Updated October 21, 2024
