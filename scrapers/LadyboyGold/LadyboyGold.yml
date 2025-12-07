@@ -1,6 +1,15 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
 name: LadyboyGold (Network)
 performerByURL:
+  # 1) MEMBERS-ONLY URLs → use ladyboygold.py
+  - action: script
+    url:
+      - members.ladyboygold.com
+    script:
+      - python
+      - ladyboygold.py
+      - performer-by-url
+  # 2) PUBLIC URLs → default to scrapeXPath
   - action: scrapeXPath
     url:
       - ladyboygold.com/index.php
@@ -10,6 +19,15 @@ performerByURL:
       - tsraw.com/model/
     scraper: performerScraperTSRaw
 sceneByURL:
+  # 1) MEMBERS-ONLY URLs → use ladyboygold.py
+  - action: script
+    url:
+      - members.ladyboygold.com
+    script:
+      - python
+      - ladyboygold.py
+      - scene-by-url
+  # 2) PUBLIC URLs → default to scrapeXPath
   - action: scrapeXPath
     url:
       - ladyboygold.com/tour
@@ -208,4 +226,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated December 1, 2025
+# Last Updated December 7, 2025
