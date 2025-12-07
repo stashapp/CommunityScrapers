@@ -34,7 +34,7 @@ xPathScrapers:
           - replace:
               - regex: \(.*$
                 with:
-          - parseDate: 02/01/2006
+          - parseDate: 2006-01-02
       Synopsis: &details //div[@class='header_info']/div[@class='overview']/p
       URL: //meta[@name='og:url']/@content
       FrontImage: &image
