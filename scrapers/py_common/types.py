@@ -106,6 +106,7 @@ class ScrapedMovie(TypedDict, total=False):
     aliases: str
     tags: list[ScrapedTag]
 
+ScrapedGroup = ScrapedMovie
 
 class ScrapedGallery(TypedDict, total=False):
     title: str
@@ -130,6 +131,7 @@ class ScrapedScene(TypedDict, total=False):
     image: str
     studio: ScrapedStudio
     movies: list[ScrapedMovie]
+    groups: list[ScrapedMovie]
     tags: list[ScrapedTag]
     performers: list[ScrapedPerformer]
     code: str
