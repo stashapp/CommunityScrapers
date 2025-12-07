@@ -156,8 +156,12 @@ def __default_parser(**kwargs):
     ).add_argument("--url")
 
     # Filling in an URL and hitting the "Scrape" icon
-    subparsers.add_parser(
+    subparsers.add_parser( # DEPRECATED, USE group-by-url instead
         "movie-by-url", help="Scrape a movie by its URL"
+    ).add_argument("--url")
+
+    subparsers.add_parser(
+        "group-by-url", help="Scrape a group by its URL"
     ).add_argument("--url")
 
     # The looking glass search icon
@@ -232,6 +236,7 @@ def scraper_args(**kwargs):
     - performer-by-fragment
     - performer-by-url
     - movie-by-url
+    - group-by-url
     - scene-by-name
     - scene-by-url
     - scene-by-fragment

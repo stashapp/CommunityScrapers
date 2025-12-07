@@ -1,3 +1,4 @@
+# requires: py_common
 name: Ersties
 sceneByURL:
   - action: script
@@ -6,21 +7,21 @@ sceneByURL:
     script:
       - python
       - Ersties.py
-      - sceneByURL
+      - scene-by-url
 groupByURL:
   - action: script
     url:
-      - ersties.com/
+      - ersties.com/shoot/
     script:
       - python
       - Ersties.py
-      - groupByURL
+      - group-by-url
 performerByURL:
   - action: script
     url:
-      - ersties.com/
+      - ersties.com/profile/
     script:
       - python
       - Ersties.py
-      - performerByURL
-# Last Updated October 21, 2024
+      - performer-by-url
+# Last Updated: December 7, 2025
