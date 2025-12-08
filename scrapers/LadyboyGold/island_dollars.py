@@ -109,11 +109,27 @@ def last_value(d: dict[str, Any]) -> Any:
 
 def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScene:
     scene: ScrapedScene = {}
-    log.debug(f"cms_set: {cms_set}")
-    scene["title"] = cms_set["name"].rstrip(" 4K")
-    scene["details"] = cms_set["description"].strip()
-    scene["url"] = f"https://members.{domain}.com/video/{cms_set['slug']}"
-    scene["date"] = cms_set["added_nice"]
+    log.trace(f"cms_set: {cms_set}")
+    if title := cms_set.get("title", None):
+        log.trace(f"title from cms_set['title']: {title}")
+        scene["title"] = title.rstrip(" 4K")
+    elif name := cms_set.get("name", None):
+        log.trace(f"title from cms_set['name']: {name}")
+        scene["title"] = name.rstrip(" 4K")
+    else:
+        log.error("No title or name found in cms_set")
+    
+    if description := cms_set.get("description", None):
+        log.trace(f"description from cms_set['description']: {description}")
+        scene["details"] = description.strip()
+
+    if slug := cms_set.get("slug", None):
+        log.trace(f"slug from cms_set['slug']: {slug}")
+        scene["url"] = f"https://members.{domain}.com/video/{slug}"
+
+    if added_nice := cms_set.get("added_nice", None):
+        log.trace(f"date from cms_set['added_nice']: {added_nice}")
+        scene["date"] = added_nice
 
     # get image
     if cms_set_image := last_value(cms_set["preview_formatted"]["thumb"])[0]:
@@ -130,7 +146,7 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
 
     scene["tags"] = [ {"name": ct } for ct in categories_and_tags ]
     scene["performers"] = [ {"name": p } for p in performers ]
-    # scene["code"] = cms_set["cms_set_id"]
+    scene["code"] = cms_set["cms_set_id"]
 
     return scene
 
@@ -247,21 +263,29 @@ def get_sets(domain: str, start: int = 0, text_search: str | None = None, slug :
         "cms_set_ids": "",
         "data_types": "1",
         "content_count": "1",
-        "count": "12",
+        "count": "5",
         "start": f"{start}",
         "cms_block_id": CONFIG[domain]["sets"]["cms_block_id"],
         "orderby": "published_desc",
         "content_type": "video",
         "status": "enabled",
-        "text_search": text_search,
         "data_type_search": CONFIG[domain]["sets"]["data_type_search"],
         "cms_area_id": CONFIG[domain]["cms_area_id"],
-        "slug": slug
     }
+    if slug is not None:
+        search_params["slug"] = slug
+    if text_search is not None:
+        search_params["text_search"] = text_search
     headers = headers_for_domain(domain)
     url = "https://nats.islanddollars.com/tour_api.php/content/sets"
     res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
-    _result = res.json()
+    log.trace(f"Content-Length: {res.headers.get('Content-Length')}")
+    log.trace(f"Content-Type: {res.headers.get('Content-Type')}")
+    try:
+        _result = res.json()
+    except Exception as e:
+        log.error(f"Error parsing JSON response: {e}")
+        _result = {"sets": []}
     log.trace(f"get_sets result: {_result}")
     return _result
 

@@ -16,6 +16,7 @@ performerByURL:
   - action: scrapeXPath
     url:
       - ladyboygold.com/index.php
+      - ladyboygold.com/tour/index.php
     scraper: performerScraperLadyboyGold
   - action: script
     url:
@@ -34,15 +35,12 @@ sceneByURL:
     url:
       - ladyboygold.com/tour
     scraper: sceneScraperLadyboyGold
-    queryURL: "https://ladyboygold.com/tour/show_video.php?galid={url}&section=1552"
+    queryURL: "{url}"
     queryURLReplace:
       url:
-        # maintain current tour URL
-        - regex: '.*galid=(\d+).*'
-          with: "${1}"
-        # convert old style tour URL
+        # convert old style tour URL /tour/12345
         - regex: '.+/tour/(\d+).*'
-          with: "${1}"
+          with: "https://ladyboygold.com/tour/show_video.php?galid=${1}&section=1552"
   - action: scrapeXPath
     url:
       - ladyboycrush.com/show_video.php
