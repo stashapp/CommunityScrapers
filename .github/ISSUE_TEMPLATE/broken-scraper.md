@@ -3,7 +3,7 @@ name: Broken scraper
 about: Scraper is not working as expected
 title: Name of scraper or site
 labels: bug
-assignees: Maista6969
+assignees: ""
 ---
 
 (this is important, be as detailed as you can)
