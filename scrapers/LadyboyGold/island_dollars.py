@@ -110,24 +110,24 @@ def last_value(d: dict[str, Any]) -> Any:
 def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScene:
     scene: ScrapedScene = {}
     log.trace(f"cms_set: {cms_set}")
-    if title := cms_set.get("title", None):
+    if title := cms_set.get("title"):
         log.trace(f"title from cms_set['title']: {title}")
         scene["title"] = title.rstrip(" 4K")
-    elif name := cms_set.get("name", None):
+    elif name := cms_set.get("name"):
         log.trace(f"title from cms_set['name']: {name}")
         scene["title"] = name.rstrip(" 4K")
     else:
         log.error("No title or name found in cms_set")
     
-    if description := cms_set.get("description", None):
+    if description := cms_set.get("description"):
         log.trace(f"description from cms_set['description']: {description}")
         scene["details"] = description.strip()
 
-    if slug := cms_set.get("slug", None):
+    if slug := cms_set.get("slug"):
         log.trace(f"slug from cms_set['slug']: {slug}")
         scene["url"] = f"https://members.{domain}.com/video/{slug}"
 
-    if added_nice := cms_set.get("added_nice", None):
+    if added_nice := cms_set.get("added_nice"):
         log.trace(f"date from cms_set['added_nice']: {added_nice}")
         scene["date"] = added_nice
 
@@ -187,46 +187,46 @@ def parse_model_as_performer(domain: str, cms_data: Any, cdn_servers: dict[str, 
         if cdn_url := cdn_url_for_server_id(cdn_servers, cms_set_image["cms_content_server_id"]):
             performer["image"] = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
 
-    if weight := data_detail_values.get("4", None):
+    if weight := data_detail_values.get("4"):
         # object containing "value": "140lbs (63kg)", extract numeric weight in kg
         weight_value = weight["value"]
         if match := re.search(r'(\d[\.\d+]*)\s*kg', weight_value):
             performer["weight"] = match.group(1)
 
-    if age := data_detail_values.get("2", None):
+    if age := data_detail_values.get("2"):
         # object containing "value": "23", extract numeric age
-        if born := data_detail_values.get("1", None):
+        if born := data_detail_values.get("1"):
             # object containing "value": "value": "May 25", extract born date
             if inferred_birthday := infer_birthday_from_age_and_born(int(age["value"]), born["value"]):
                 performer["birthdate"] = inferred_birthday
     
-    if measurements := data_detail_values.get("6", None):
+    if measurements := data_detail_values.get("6"):
         # object containing "value": "38C-32-40"
         performer["measurements"] = measurements["value"]
 
-    if height := data_detail_values.get("3", None):
+    if height := data_detail_values.get("3"):
         # object containing "value": "5'5\" (165cm)", extract numeric height in cm
         height_value = height["value"]
         if match := re.search(r'(\d[\.\d+]*)\s*cm', height_value):
             performer["height"] = match.group(1)
 
-    if country := data_detail_values.get("8", None):
+    if country := data_detail_values.get("8"):
         # object containing "value": "Brazil"
         performer["country"] = guess_nationality(country["value"])
 
-    if hair_color := data_detail_values.get("13", None):
+    if hair_color := data_detail_values.get("13"):
         # object containing "value": "Brown"
         performer["hair_color"] = hair_color["value"]
 
-    if eye_color := data_detail_values.get("14", None):
+    if eye_color := data_detail_values.get("14"):
         # object containing "value": "Brown"
         performer["eye_color"] = eye_color["value"]
 
-    if ethnicity := data_detail_values.get("7", None):
+    if ethnicity := data_detail_values.get("7"):
         # object containing "value": "Latina"
         performer["ethnicity"] = ethnicity["value"]
 
-    if gender := data_detail_values.get("5", None):
+    if gender := data_detail_values.get("5"):
         # object containing "value": "Trans"
         performer["gender"] = GENDER_MAP.get(gender["value"], gender["value"])
 
