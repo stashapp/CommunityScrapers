@@ -52,8 +52,13 @@ xPathScrapers:
                 - regex: '\s*,\s*'
                   with: ","
           split: ","
-      Title: //div[@class='customcontent']/h1
-      Details: //div[@class='customcontent']/div[1]/text()|//div[@class='customcontent']/h2
+      Title: /html/head/title
+      Details:
+        selector: /html/head/meta[not(@content)]/@name
+        postProcess:
+          - replace:
+            - regex: "<br />"
+              with: "\n"
       Tags:
         Name:
           selector: //div[@class='customcontent']/h4/text()
@@ -83,4 +88,4 @@ xPathScrapers:
               - regex: (\d+)(st|nd|rd|th)
                 with: "$1"
           - parseDate: January 2 2006
-# Last Updated September 06, 2024
+# Last Updated December 7, 2025
