@@ -1,13 +1,15 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime
 import json
+import re
 import sys
 from typing import Any
 
 import requests
 
 import py_common.log as log
-from py_common.types import ScrapedScene
-from py_common.util import scraper_args
+from py_common.types import ScrapedPerformer, ScrapedScene
+from py_common.util import guess_nationality, scraper_args
 
 CACHE_RESULTS_FILE = "islanddollars-cache.json"
 CONFIG = {
@@ -60,80 +62,14 @@ CONFIG = {
         }
     },
 }
+GENDER_MAP = {
+    "Trans": "TRANSGENDER_FEMALE",
+}
 
 REQUESTS_TIMEOUT = 10
 
-def get_cdn_servers(domain: str) -> dict[str, Any]:
-    search_params = {
-        "cms_area_id": CONFIG[domain]["cms_area_id"]
-    }
-    headers = {
-        "x-nats-cms-area-id": f"{CONFIG[domain]['cms_area_id']}",
-        "x-nats-entity-decode": f"{1}",
-        "x-nats-natscode": "MC4wLjAuMC4wLjAuMC4wLjA"
-    }
-    url = "https://nats.islanddollars.com/tour_api.php/content/config"
-    res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
-    _result = res.json()
-    return _result['servers']
-
-
-def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScene:
-    scene: ScrapedScene = {}
-    log.debug(f"cms_set: {cms_set}")
-    scene["title"] = cms_set["name"].rstrip(" 4K")
-    scene["details"] = cms_set["description"].strip()
-    scene["url"] = f"https://members.{domain}.com/video/{cms_set['slug']}"
-    scene["date"] = cms_set["added_nice"]
-
-    # get image
-    # Get the last item
-    last_key = list(cms_set["preview_formatted"]["thumb"].keys())[-1]
-    last_value = cms_set["preview_formatted"]["thumb"][last_key]
-    cms_set_image = last_value[0]
-    cms_content_server_id = cms_set_image["cms_content_server_id"]
-    # get cdn url
-    cdn_url = cdn_servers[cms_content_server_id]["settings"]["url"]
-    cdn_url = cdn_url.rstrip("/")
-
-    scene["image"] = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
-    scene["studio"] = {"name": CONFIG[domain]["studio_name"]}
-
-    categories = extract_names(cms_set, "Category")
-    tags = extract_names(cms_set, "Tags")
-    categories_and_tags = categories + tags
-    performers = extract_names(cms_set, "Models")
-
-    scene["tags"] = [ {"name": ct } for ct in categories_and_tags ]
-    scene["performers"] = [ {"name": p } for p in performers ]
-    # scene["code"] = cms_set["cms_set_id"]
-
-    return scene
-
-def extract_names(cms_set, data_type_name):
-    return [
-        value['name']
-        for data_type in cms_set["data_types"]
-        if data_type['data_type'] == data_type_name
-        for value in data_type['data_values']
-    ]
-
-def get_sets(domain: str, start: int = 0, text_search = ""):
-    search_params = {
-        "cms_set_ids": "",
-        "data_types": "1",
-        "content_count": "1",
-        "count": "12",
-        "start": f"{start}",
-        "cms_block_id": CONFIG[domain]["sets"]["cms_block_id"],
-        "orderby": "published_desc",
-        "content_type": "video",
-        "status": "enabled",
-        "text_search": text_search,
-        "data_type_search": CONFIG[domain]["sets"]["data_type_search"],
-        "cms_area_id": CONFIG[domain]["cms_area_id"]
-    }
-    headers = {
+def headers_for_domain(domain: str) -> dict[str, str]:
+    return {
         "origin": f"https://www.{domain}.com",
         "referer": f"https://www.{domain}.com",
         "priority": "u=1, i",
@@ -149,9 +85,184 @@ def get_sets(domain: str, start: int = 0, text_search = ""):
         "x-nats-entity-decode": f"{1}",
         "x-nats-natscode": "MC4wLjAuMC4wLjAuMC4wLjA"
     }
+
+def get_cdn_servers(domain: str) -> dict[str, Any]:
+    search_params = {
+        "cms_area_id": CONFIG[domain]["cms_area_id"]
+    }
+    headers = {
+        "x-nats-cms-area-id": f"{CONFIG[domain]['cms_area_id']}",
+        "x-nats-entity-decode": f"{1}",
+        "x-nats-natscode": "MC4wLjAuMC4wLjAuMC4wLjA"
+    }
+    url = "https://nats.islanddollars.com/tour_api.php/content/config"
+    res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
+    _result = res.json()
+    return _result['servers']
+
+def last_value(d: dict[str, Any]) -> Any:
+    """Get the last value in a dictionary."""
+    if not d:
+        return None
+    last_key = list(d.keys())[-1]
+    return d[last_key]
+
+def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScene:
+    scene: ScrapedScene = {}
+    log.debug(f"cms_set: {cms_set}")
+    scene["title"] = cms_set["name"].rstrip(" 4K")
+    scene["details"] = cms_set["description"].strip()
+    scene["url"] = f"https://members.{domain}.com/video/{cms_set['slug']}"
+    scene["date"] = cms_set["added_nice"]
+
+    # get image
+    if cms_set_image := last_value(cms_set["preview_formatted"]["thumb"])[0]:
+        # get cdn url
+        if cdn_url := cdn_url_for_server_id(cdn_servers, cms_set_image["cms_content_server_id"]):
+            scene["image"] = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
+
+    scene["studio"] = {"name": CONFIG[domain]["studio_name"]}
+
+    categories = extract_names(cms_set, "Category")
+    tags = extract_names(cms_set, "Tags")
+    categories_and_tags = categories + tags
+    performers = extract_names(cms_set, "Models")
+
+    scene["tags"] = [ {"name": ct } for ct in categories_and_tags ]
+    scene["performers"] = [ {"name": p } for p in performers ]
+    # scene["code"] = cms_set["cms_set_id"]
+
+    return scene
+
+def infer_birthday_from_age_and_born(age: int, born_str: str) -> str | None:
+    try:
+        born_date = datetime.strptime(born_str, "%B %d")
+        current_year = datetime.now().year
+        born_date = born_date.replace(year=current_year)
+        today = datetime.now()
+        if born_date > today:
+            born_date = born_date.replace(year=current_year - 1)
+        birth_year = born_date.year - age
+        birth_date = born_date.replace(year=birth_year)
+        return birth_date.strftime("%Y-%m-%d")
+    except ValueError as e:
+        log.error(f"Error parsing born date: {e}")
+        return None
+
+def cdn_url_for_server_id(cdn_servers: dict[str, Any], server_id: str) -> str | None:
+    server_info = cdn_servers.get(server_id, None)
+    if server_info is None:
+        return None
+    cdn_url = server_info["settings"]["url"]
+    return cdn_url.rstrip("/")
+
+def parse_model_as_performer(domain: str, cms_data: Any, cdn_servers: dict[str, Any]) -> ScrapedPerformer:
+    performer: ScrapedPerformer = {}
+    log.trace(f"cms_data: {cms_data}")
+    performer["name"] = cms_data["name"]
+    performer["details"] = cms_data["description"]
+    performer["url"] = f"https://www.{domain}.com/model/{cms_data['slug']}"
+
+    data_detail_values = cms_data.get("data_detail_values", {})
+
+    # get image
+    if cms_set_image := last_value(data_detail_values["preview"]["11"])[0]:
+        # get cdn url
+        if cdn_url := cdn_url_for_server_id(cdn_servers, cms_set_image["cms_content_server_id"]):
+            performer["image"] = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
+
+    if weight := data_detail_values.get("4", None):
+        # object containing "value": "140lbs (63kg)", extract numeric weight in kg
+        weight_value = weight["value"]
+        if match := re.search(r'(\d[\.\d+]*)\s*kg', weight_value):
+            performer["weight"] = match.group(1)
+
+    if age := data_detail_values.get("2", None):
+        # object containing "value": "23", extract numeric age
+        if born := data_detail_values.get("1", None):
+            # object containing "value": "value": "May 25", extract born date
+            if inferred_birthday := infer_birthday_from_age_and_born(int(age["value"]), born["value"]):
+                performer["birthdate"] = inferred_birthday
+    
+    if measurements := data_detail_values.get("6", None):
+        # object containing "value": "38C-32-40"
+        performer["measurements"] = measurements["value"]
+
+    if height := data_detail_values.get("3", None):
+        # object containing "value": "5'5\" (165cm)", extract numeric height in cm
+        height_value = height["value"]
+        if match := re.search(r'(\d[\.\d+]*)\s*cm', height_value):
+            performer["height"] = match.group(1)
+
+    if country := data_detail_values.get("8", None):
+        # object containing "value": "Brazil"
+        performer["country"] = guess_nationality(country["value"])
+
+    if hair_color := data_detail_values.get("13", None):
+        # object containing "value": "Brown"
+        performer["hair_color"] = hair_color["value"]
+
+    if eye_color := data_detail_values.get("14", None):
+        # object containing "value": "Brown"
+        performer["eye_color"] = eye_color["value"]
+
+    if ethnicity := data_detail_values.get("7", None):
+        # object containing "value": "Latina"
+        performer["ethnicity"] = ethnicity["value"]
+
+    if gender := data_detail_values.get("5", None):
+        # object containing "value": "Trans"
+        performer["gender"] = GENDER_MAP.get(gender["value"], gender["value"])
+
+    log.debug(f"(parsed) performer: {performer}")
+    return performer
+
+def extract_names(cms_set, data_type_name):
+    return [
+        value['name']
+        for data_type in cms_set["data_types"]
+        if data_type['data_type'] == data_type_name
+        for value in data_type['data_values']
+    ]
+
+def get_models(domain: str, start: int = 0, name: str | None = None, slug: str | None = None):
+    search_params = {
+        "cms_data_type_id": "4",
+        "start": f"{start}",
+        "count": "10",
+        "orderby": "published_desc",
+        "cms_block_id": CONFIG[domain]["sets"]["cms_block_id"],
+        "name": name,
+        "slug": slug
+    }
+    headers = headers_for_domain(domain)
+    url = "https://nats.islanddollars.com/tour_api.php/content/data-values"
+    res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
+    _result = res.json()
+    log.trace(f"get_models result: {_result}")
+    return _result
+
+def get_sets(domain: str, start: int = 0, text_search: str | None = None, slug : str | None = None):
+    search_params = {
+        "cms_set_ids": "",
+        "data_types": "1",
+        "content_count": "1",
+        "count": "12",
+        "start": f"{start}",
+        "cms_block_id": CONFIG[domain]["sets"]["cms_block_id"],
+        "orderby": "published_desc",
+        "content_type": "video",
+        "status": "enabled",
+        "text_search": text_search,
+        "data_type_search": CONFIG[domain]["sets"]["data_type_search"],
+        "cms_area_id": CONFIG[domain]["cms_area_id"],
+        "slug": slug
+    }
+    headers = headers_for_domain(domain)
     url = "https://nats.islanddollars.com/tour_api.php/content/sets"
     res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
     _result = res.json()
+    log.trace(f"get_sets result: {_result}")
     return _result
 
 
@@ -166,26 +277,23 @@ def get_all_video_sets(domain: str):
 
 
 def scene_search(
-    query: str,
+    query: str | None = None,
+    slug: str | None = None,
     search_domains: list[str] | None = None,
 ) -> list[ScrapedScene]:
-    if not query:
-        log.error("No query provided")
-        return None
-
     if not search_domains:
         log.error("No search_domains provided")
         return None
 
-    log.debug(f"Matching '{query}' against {len(search_domains)} sites")
+    log.debug(f"Matching query: {query} and slug: {slug} against {len(search_domains)} sites")
 
     parsed_scenes: list[ScrapedScene] = []
 
     def fetch_domain(domain):
         cdn_servers = get_cdn_servers(domain)
-        log.debug(f"CDN servers: {cdn_servers}")
-        log.debug(f"Searching domain: {domain} for query: {query}")
-        video_sets = get_sets(domain, text_search=query)["sets"]
+        log.trace(f"CDN servers: {cdn_servers}")
+        log.trace(f"Searching domain: {domain} for query: {query}")
+        video_sets = get_sets(domain, text_search=query, slug=slug)["sets"]
         return [parse_set_as_scene(domain, cms_set, cdn_servers) for cms_set in video_sets]
 
     with ThreadPoolExecutor() as executor:
@@ -203,6 +311,43 @@ def scene_search(
         f.write(json.dumps(parsed_scenes))
 
     return parsed_scenes
+
+
+def performer_search(
+    name: str | None = None,
+    slug: str | None = None,
+    search_domains: list[str] | None = None,
+) -> list[ScrapedPerformer]:
+    if not search_domains:
+        log.error("No search_domains provided")
+        return None
+
+    log.debug(f"Matching name: {name} and slug: {slug} against {len(search_domains)} sites")
+
+    parsed_performers: list[ScrapedPerformer] = []
+
+    def fetch_domain(domain):
+        cdn_servers = get_cdn_servers(domain)
+        log.trace(f"CDN servers: {cdn_servers}")
+        log.trace(f"Searching domain: {domain} for query: {name}")
+        models = get_models(domain, name=name, slug=slug)["data_values"]
+        return [parse_model_as_performer(domain, cms_data, cdn_servers) for cms_data in models]
+
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(fetch_domain, domain): domain for domain in search_domains}
+        for future in as_completed(futures):
+            try:
+                domain_parsed_performers = future.result()
+                parsed_performers.extend(domain_parsed_performers)
+            except Exception as e:
+                log.error(f"Error processing domain {futures[future]}: {e}")
+
+    # cache results
+    log.debug(f"writing {len(parsed_performers)} parsed performers to {CACHE_RESULTS_FILE}")
+    with open(CACHE_RESULTS_FILE, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(parsed_performers))
+
+    return parsed_performers
 
 
 def scene_from_fragment(
@@ -246,18 +391,88 @@ def scene_from_fragment(
 
     return first_match
 
+def performer_by_url(
+    url: str,
+    search_domains: list[str] | None = None,
+) -> ScrapedPerformer:
+    # extract slug from url
+    match = re.search(r'/model/([^/]+)', url)
+    if not match:
+        log.error(f"Could not extract slug from url: {url}")
+        return None
+    slug = match.group(1)
+
+    search_results = performer_search(slug=slug, search_domains=search_domains)
+    first_match = next(
+        (
+            r for r in search_results
+            if r["url"].endswith(f"/model/{slug}")
+        ),
+        None
+    )
+    return first_match
+
+def scene_by_url(
+    url: str,
+    search_domains: list[str] | None = None,
+) -> ScrapedScene:
+    # extract slug from url
+    match = re.search(r'/video/([^/]+)', url)
+    if not match:
+        log.error(f"Could not extract slug from url: {url}")
+        return None
+    slug = match.group(1)
+
+    search_results = scene_search(slug=slug, search_domains=search_domains)
+    first_match = next(
+        (
+            r for r in search_results
+            if r["url"].endswith(f"/video/{slug}")
+        ),
+        None
+    )
+    return first_match
+
+def performer_by_fragment(
+    fragment,
+    search_domains: list[str] | None = None,
+) -> ScrapedPerformer:
+    search_results = performer_search(fragment["name"], search_domains=search_domains)
+    log.debug(f"search_results: {search_results}")
+    first_match = next(
+        (
+            r for r in search_results
+            if r["name"] == fragment["name"]
+        ),
+        {}
+    )
+
+    return first_match
+
 if __name__ == "__main__":
     domains = list(CONFIG.keys())
     op, args = scraper_args()
 
     result = None
     match op, args:
+        case "performer-by-fragment", args:
+            log.debug(f"performer-by-fragment, args: {args}, domains: {domains}")
+            result = performer_by_fragment(args, search_domains=domains)
+        case "performer-by-name", {"name": name} if name:
+            log.debug(f"performer-by-name, name: {name}, domains: {domains}")
+            result = performer_search(name, search_domains=domains)
+        case "performer-by-url", {"url": url} if url:
+            log.debug(f"performer-by-url, url: {url}, domains: {domains}")
+            result = performer_by_url(url, search_domains=domains)
         case "scene-by-name", {"name": name} if name:
             log.debug(f"scene-by-name, name: {name}, domains: {domains}")
             result = scene_search(name, search_domains=domains)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             log.debug(f"scene-by-fragment, args: {args}, domains: {domains}")
-            result = scene_from_fragment(args, search_domains=domains)            
+            result = scene_from_fragment(args, search_domains=domains)
+        case "scene-by-url", {"url": url} if url:
+            log.debug(f"scene-by-url, url: {url}, domains: {domains}")
+            result = scene_by_url(url, search_domains=domains)
         case _:
             log.error(f"Invalid operation: {op}")
             sys.exit(1)
