@@ -17,48 +17,49 @@ CONFIG = {
         "cms_area_id": "74175374-c756-4ae9-97b2-e011512a1521",
         "studio_name": "Ladyboy Crush",
         "sets": {
-            "cms_block_id": "106093",
-            "data_type_search": '{"100001":"184"}'
+            "cms_block_id": "106093"
         }
     },
     "ladyboyglamour": {
         "cms_area_id": "60f34ef8-3a0e-44ae-8afc-5795ee75eeff",
         "studio_name": "Ladyboy Glamour",
         "sets": {
-            "cms_block_id": "109727",
-            "data_type_search": '{"100001":"190"}'
+            "cms_block_id": "109727"
+        }
+    },
+    "ladyboygold": {
+        "cms_area_id": "a1fbacce-2340-45ef-9576-129e766e63f9",
+        "studio_name": "LadyboyGold",
+        "sets": {
+            "cms_block_id": "109727"
         }
     },
     "ladyboypussy": {
         "cms_area_id": "3b74725d-ad01-45a1-8186-ac6be1bc1661",
         "studio_name": "Ladyboy Pussy",
         "sets": {
-            "cms_block_id": "112975",
-            "data_type_search": '{"100001":"183"}'
+            "cms_block_id": "112975"
         }
     },
     "ladyboysfuckedbareback": {
         "cms_area_id": "126f96ec-ffdc-4f4b-a459-c9a2e78b9b67",
         "studio_name": "Ladyboys Fucked Bareback",
         "sets": {
-            "cms_block_id": "105792",
-            "data_type_search": '{"100001":"182"}'
+            "cms_block_id": "105792"
         }
     },
     "ladyboyvice": {
         "cms_area_id": "c594b28c-ab09-44da-9166-0a332d33469f",
         "studio_name": "Ladyboy Vice",
         "sets": {
-            "cms_block_id": "106090",
-            "data_type_search": '{"100001":"185"}'
+            "cms_block_id": "106090"
         }
     },
     "tsraw": {
         "cms_area_id": "cc6bd0ac-a417-47d1-9868-7855b25986e5",
         "studio_name": "TSRaw",
         "sets": {
-            "cms_block_id": "102013",
-            "data_type_search": '{"100001":"164"}'
+            "cms_block_id": "102013"
         }
     },
 }
@@ -137,7 +138,17 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
         if cdn_url := cdn_url_for_server_id(cdn_servers, cms_set_image["cms_content_server_id"]):
             scene["image"] = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
 
-    scene["studio"] = {"name": CONFIG[domain]["studio_name"]}
+    if main_website := extract_names(cms_set, "MainWebsite"):
+        # url
+        scene["url"] = f"https://members.{main_website[0].lower()}/video/{cms_set['slug']}"
+
+        # studio
+        # use first value, remove .com or whatever suffix if present, and lowercase
+        main_website_name = re.sub(r'\..*$', '', main_website[0], flags=re.IGNORECASE).lower()
+        if main_website_name in CONFIG:
+            scene["studio"] = {"name": CONFIG[main_website_name]["studio_name"]}
+        else:
+            scene["studio"] = {"name": main_website}
 
     categories = extract_names(cms_set, "Category")
     tags = extract_names(cms_set, "Tags")
@@ -254,9 +265,18 @@ def get_models(domain: str, start: int = 0, name: str | None = None, slug: str |
     headers = headers_for_domain(domain)
     url = "https://nats.islanddollars.com/tour_api.php/content/data-values"
     res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
-    _result = res.json()
-    log.trace(f"get_models result: {_result}")
-    return _result
+    data_values = []
+    try:
+        _result = res.json()
+    except Exception as e:
+        log.error(f"Error parsing JSON response: {e}")
+        _result = {"data_values": []}
+    else:
+        if _result is not None and "total_count" in _result:
+            log.debug(f"Total count: {_result['total_count']}")
+            data_values.extend(_result["data_values"])
+    log.trace(f"get_models result: {data_values}")
+    return data_values
 
 def get_sets(domain: str, start: int = 0, text_search: str | None = None, slug : str | None = None):
     search_params = {
@@ -269,7 +289,6 @@ def get_sets(domain: str, start: int = 0, text_search: str | None = None, slug :
         "orderby": "published_desc",
         "content_type": "video",
         "status": "enabled",
-        "data_type_search": CONFIG[domain]["sets"]["data_type_search"],
         "cms_area_id": CONFIG[domain]["cms_area_id"],
     }
     if slug is not None:
@@ -277,17 +296,26 @@ def get_sets(domain: str, start: int = 0, text_search: str | None = None, slug :
     if text_search is not None:
         search_params["text_search"] = text_search
     headers = headers_for_domain(domain)
+    log.debug(f"Searching domain {domain} with params: {search_params} and headers: {headers}")
     url = "https://nats.islanddollars.com/tour_api.php/content/sets"
     res = requests.get(url, params=search_params, headers=headers, timeout=REQUESTS_TIMEOUT)
     log.trace(f"Content-Length: {res.headers.get('Content-Length')}")
     log.trace(f"Content-Type: {res.headers.get('Content-Type')}")
+    cms_sets = []
     try:
         _result = res.json()
     except Exception as e:
         log.error(f"Error parsing JSON response: {e}")
         _result = {"sets": []}
-    log.trace(f"get_sets result: {_result}")
-    return _result
+    else:
+        if _result is not None and "total_count" in _result:
+            log.debug(f"Search hits for domain {domain}: {_result['total_count']}")
+            cms_sets.extend(_result["sets"])
+        else:
+            log.debug(f"No results found for domain {domain}")
+            log.debug(f"Response content: {res.text}")
+    log.trace(f"get_sets result: {cms_sets}")
+    return cms_sets
 
 
 def get_all_video_sets(domain: str):
@@ -317,7 +345,7 @@ def scene_search(
         cdn_servers = get_cdn_servers(domain)
         log.trace(f"CDN servers: {cdn_servers}")
         log.trace(f"Searching domain: {domain} for query: {query}")
-        video_sets = get_sets(domain, text_search=query, slug=slug)["sets"]
+        video_sets = get_sets(domain, text_search=query, slug=slug)
         return [parse_set_as_scene(domain, cms_set, cdn_servers) for cms_set in video_sets]
 
     with ThreadPoolExecutor() as executor:
@@ -354,7 +382,7 @@ def performer_search(
         cdn_servers = get_cdn_servers(domain)
         log.trace(f"CDN servers: {cdn_servers}")
         log.trace(f"Searching domain: {domain} for query: {name}")
-        models = get_models(domain, name=name, slug=slug)["data_values"]
+        models = get_models(domain, name=name, slug=slug)
         return [parse_model_as_performer(domain, cms_data, cdn_servers) for cms_data in models]
 
     with ThreadPoolExecutor() as executor:
