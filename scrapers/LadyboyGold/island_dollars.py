@@ -166,7 +166,7 @@ def calculate_dob(age: int, born_str: str, added: datetime) -> str | None:
         birth_year = added.year - age
         birthday = datetime.strptime(born_str, "%B %d")
 
-        # check if birthday has occurred yet in added_date year
+        # check if birthday has occurred yet in added year
         birthday_in_added_year = datetime(added.year, birthday.month, birthday.day)
 
         if added < birthday_in_added_year:
