@@ -161,17 +161,19 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
 
     return scene
 
-def infer_birthday_from_age_and_born(age: int, born_str: str, added: datetime) -> str | None:
+def calculate_dob(age: int, born_str: str, added: datetime) -> str | None:
     try:
-        born_date = datetime.strptime(born_str, "%B %d")
-        current_year = datetime.now().year
-        born_date = born_date.replace(year=current_year)
-        added_date = datetime(current_year, added.month, added.day)
-        if born_date > added_date:
-            born_date = born_date.replace(year=current_year - 1)
-        birth_year = born_date.year - age - (current_year - added.year)
-        birth_date = born_date.replace(year=birth_year)
-        return birth_date.strftime("%Y-%m-%d")
+        birth_year = added.year - age
+        birthday = datetime.strptime(born_str, "%B %d")
+
+        # check if birthday has occurred yet in added_date year
+        birthday_in_added_year = datetime(added.year, birthday.month, birthday.day)
+
+        if added < birthday_in_added_year:
+            birth_year -= 1
+
+        date_of_birth = birthday.replace(year=birth_year)
+        return date_of_birth.strftime("%Y-%m-%d")
     except ValueError as e:
         log.error(f"Error parsing born date: {e}")
         return None
@@ -222,7 +224,7 @@ def parse_model_as_performer(domain: str, cms_data: Any, cdn_servers: dict[str, 
             log.debug(f"added: {added}")
 
             # object containing "value": "value": "May 25", extract born date
-            if inferred_birthday := infer_birthday_from_age_and_born(int(age["value"]), born["value"], added):
+            if inferred_birthday := calculate_dob(int(age["value"]), born["value"], added):
                 performer["birthdate"] = inferred_birthday
     
     if measurements := data_detail_values.get("6"):
