@@ -161,15 +161,15 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
 
     return scene
 
-def infer_birthday_from_age_and_born(age: int, born_str: str) -> str | None:
+def infer_birthday_from_age_and_born(age: int, born_str: str, added: datetime) -> str | None:
     try:
         born_date = datetime.strptime(born_str, "%B %d")
         current_year = datetime.now().year
         born_date = born_date.replace(year=current_year)
-        today = datetime.now()
-        if born_date > today:
+        added_date = datetime(current_year, added.month, added.day)
+        if born_date > added_date:
             born_date = born_date.replace(year=current_year - 1)
-        birth_year = born_date.year - age
+        birth_year = born_date.year - age - (current_year - added.year)
         birth_date = born_date.replace(year=birth_year)
         return birth_date.strftime("%Y-%m-%d")
     except ValueError as e:
@@ -207,8 +207,21 @@ def parse_model_as_performer(domain: str, cms_data: Any, cdn_servers: dict[str, 
     if age := data_detail_values.get("2"):
         # object containing "value": "23", extract numeric age
         if born := data_detail_values.get("1"):
+            # get first cms_set_id from data_detail_values
+            if first_cms_set_id := next(iter(cms_data.get("cms_set_ids", [])), None):
+                log.debug(f"first_cms_set_id: {first_cms_set_id}")
+                # get added date from cms_set
+                cms_sets = get_sets(domain, cms_set_id=first_cms_set_id)
+                if cms_sets and "added_nice" in cms_sets[0]:
+                    added_nice = cms_sets[0]["added_nice"]
+                    added = datetime.strptime(added_nice, "%Y-%m-%d")
+                else:
+                    added = datetime.now()
+            else:
+                added = datetime.now()
+
             # object containing "value": "value": "May 25", extract born date
-            if inferred_birthday := infer_birthday_from_age_and_born(int(age["value"]), born["value"]):
+            if inferred_birthday := infer_birthday_from_age_and_born(int(age["value"]), born["value"], added):
                 performer["birthdate"] = inferred_birthday
     
     if measurements := data_detail_values.get("6"):
@@ -273,24 +286,34 @@ def get_models(domain: str, start: int = 0, name: str | None = None, slug: str |
         _result = {"data_values": []}
     else:
         if _result is not None and "total_count" in _result:
-            log.debug(f"Total count: {_result['total_count']}")
+            log.debug(f"Total count at domain: {domain}: {_result['total_count']}")
             data_values.extend(_result["data_values"])
     log.trace(f"get_models result: {data_values}")
     return data_values
 
-def get_sets(domain: str, start: int = 0, text_search: str | None = None, slug : str | None = None):
+def get_sets(
+        domain: str,
+        content_type: str | None,
+        cms_set_id: str | None = None,
+        start: int = 0,
+        text_search: str | None = None,
+        slug : str | None = None
+    ) -> list[Any]:
+
     search_params = {
-        "cms_set_ids": "",
         "data_types": "1",
         "content_count": "1",
         "count": "5",
         "start": f"{start}",
         "cms_block_id": CONFIG[domain]["sets"]["cms_block_id"],
         "orderby": "published_desc",
-        "content_type": "video",
         "status": "enabled",
         "cms_area_id": CONFIG[domain]["cms_area_id"],
     }
+    if cms_set_id is not None:
+        search_params["cms_set_ids"] = f"[{cms_set_id}]"
+    if content_type is not None:
+        search_params["content_type"] = content_type
     if slug is not None:
         search_params["slug"] = slug
     if text_search is not None:
@@ -320,7 +343,7 @@ def get_sets(domain: str, start: int = 0, text_search: str | None = None, slug :
 
 def get_all_video_sets(domain: str):
     cms_sets = []
-    _result = get_sets(domain)
+    _result = get_sets(domain, content_type="video")
     if _result is not None and "total_count" in _result:
         total_count = _result["total_count"]
         log.debug(f"Total count: {total_count}")
@@ -345,7 +368,7 @@ def scene_search(
         cdn_servers = get_cdn_servers(domain)
         log.trace(f"CDN servers: {cdn_servers}")
         log.trace(f"Searching domain: {domain} for query: {query}")
-        video_sets = get_sets(domain, text_search=query, slug=slug)
+        video_sets = get_sets(domain, content_type="video", text_search=query, slug=slug)
         return [parse_set_as_scene(domain, cms_set, cdn_servers) for cms_set in video_sets]
 
     with ThreadPoolExecutor() as executor:
@@ -356,6 +379,7 @@ def scene_search(
                 parsed_scenes.extend(domain_parsed_scenes)
             except Exception as e:
                 log.error(f"Error processing domain {futures[future]}: {e}")
+                log.debug(e.with_traceback())
 
     # cache results
     log.debug(f"writing {len(parsed_scenes)} parsed scenes to {CACHE_RESULTS_FILE}")
