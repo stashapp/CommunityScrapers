@@ -208,7 +208,7 @@ def parse_model_as_performer(domain: str, cms_data: Any, cdn_servers: dict[str, 
         # object containing "value": "23", extract numeric age
         if born := data_detail_values.get("1"):
             # get first cms_set_id from data_detail_values
-            if first_cms_set_id := next(iter(cms_data.get("cms_set_ids", [])), None):
+            if first_cms_set_id := next(iter(cms_data.get("cms_set_id", [])), None):
                 log.debug(f"first_cms_set_id: {first_cms_set_id}")
                 # get added date from cms_set
                 cms_sets = get_sets(domain, cms_set_id=first_cms_set_id)
@@ -219,6 +219,7 @@ def parse_model_as_performer(domain: str, cms_data: Any, cdn_servers: dict[str, 
                     added = datetime.now()
             else:
                 added = datetime.now()
+            log.debug(f"added: {added}")
 
             # object containing "value": "value": "May 25", extract born date
             if inferred_birthday := infer_birthday_from_age_and_born(int(age["value"]), born["value"], added):
@@ -293,7 +294,7 @@ def get_models(domain: str, start: int = 0, name: str | None = None, slug: str |
 
 def get_sets(
         domain: str,
-        content_type: str | None,
+        content_type: str | None = None,
         cms_set_id: str | None = None,
         start: int = 0,
         text_search: str | None = None,
