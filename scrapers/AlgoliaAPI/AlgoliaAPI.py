@@ -51,10 +51,13 @@ def api_auth_cache_write(site: str, app_id: str, api_key: str):
         config.add_section(site)
     config.set(site, "app_id", app_id)
     config.set(site, "api_key", api_key)
-    if match := re.search(r"validUntil=(\d+)", b64decode(api_key).decode('utf-8')):
-        valid_until = match.group(1)
-    else:
-        valid_until = int(time())
+    # set a default valid_until to 24 hours from now
+    valid_until = str(int(time()) + 24 * 60 * 60)
+    try:
+        if match := re.search(r"validUntil=(\d+)", b64decode(api_key).decode('utf-8')):
+            valid_until = match.group(1)
+    except Exception as e:
+        log.debug(f"Could not extract validUntil from api_key: {e}")
     config.set(site, "valid_until", valid_until)
     with open(CONFIG_FILE, 'w', encoding='utf-8') as config_file:
         config.write(config_file)
@@ -92,17 +95,28 @@ def get_api_auth(site: str) -> tuple[str, str]:
     homepage = homepage_url(site)
     r = requests.get(homepage, headers=headers_for_homepage(homepage), timeout=10)
     # extract JSON
-    if not (match := re.search(r"window.env\s+=\s(.+);", r.text)):
+    if match := re.search(r"window.env\s*=\s*(.+);", r.text):
+        log.debug('Found JSON in window.env')
+        data = json.loads(match.group(1))
+        app_id = data['api']['algolia']['applicationID']
+        api_key = data['api']['algolia']['apiKey']
+    elif match := re.search(r"algoliaObj\s*=\s*(.+?);", r.text, re.DOTALL): # variant, e.g. VirtualRealPorn network sites
+        log.debug('Found JSON in algoliaObj')
+        data = json.loads(match.group(1))
+        app_id = data['api']['appId']
+        api_key = data['api']['searchKey']
+    else:
         log.error('Cannot find JSON in homepage for API keys')
+        log.debug(f'Homepage content: {r.text}')
         sys.exit(1)
-    data = json.loads(match.group(1))
-    app_id = data['api']['algolia']['applicationID']
-    api_key = data['api']['algolia']['apiKey']
+    log.debug(f'Fetched API auth: app_id={app_id}, api_key={api_key}')
     api_auth_cache_write(site, app_id, api_key)
     return app_id, api_key
 
 def homepage_url(site: str) -> str:
     "Generates the homepage (base URL) for a site/domain"
+    if site.startswith("virtualreal"): # VirtualRealPorn network sites do not use www
+        return f"https://{site}.com"
     return f"https://www.{site}.com"
 
 def clean_text(details: str) -> str:
@@ -128,7 +142,10 @@ def default_postprocess(obj: T, _) -> T:
     "This is the default function for the postprocess argument"
     return obj
 
-genders_map = {'shemale': 'transgender_female'}
+genders_map = {
+    'female_trans': 'transgender_female',
+    'shemale': 'transgender_female',
+}
 def parse_gender(gender: str) -> str:
     "Gets corresponding value from map, else returns argument value"
     return genders_map.get(gender, gender)
