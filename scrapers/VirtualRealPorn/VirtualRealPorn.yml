@@ -1,0 +1,109 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+# requires: AlgoliaAPI
+name: VirtualRealPorn (Network)
+sceneByURL:
+  - action: script
+    url: &videoUrls
+      - virtualrealamateurporn.com/vr-amateur-porn-video/
+      - virtualrealgay.com/vr-gay-porn-video/
+      - virtualrealjapan.com/vr-japanese-video/
+      - virtualrealpassion.com/vr-female-pov-porn-video/
+      - virtualrealporn.com/vr-porn-video/
+      - virtualrealtrans.com/vr-trans-porn-video/
+    script:
+      - python
+      - VirtualRealPorn.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - VirtualRealPorn.py
+    # you can specify which sites to search here
+    - virtualrealamateurporn
+    - virtualrealgay
+    - virtualrealjapan
+    - virtualrealpassion
+    - virtualrealporn
+    - virtualrealtrans
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - VirtualRealPorn.py
+    # you can specify which sites to search here
+    - virtualrealamateurporn
+    - virtualrealgay
+    - virtualrealjapan
+    - virtualrealpassion
+    - virtualrealporn
+    - virtualrealtrans
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - VirtualRealPorn.py
+    # you can specify which sites to search here
+    - virtualrealamateurporn
+    - virtualrealgay
+    - virtualrealjapan
+    - virtualrealpassion
+    - virtualrealporn
+    - virtualrealtrans
+    - scene-by-query-fragment
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - VirtualRealPorn.py
+    # you can specify which sites to search here
+    - virtualrealamateurporn
+    - virtualrealgay
+    - virtualrealjapan
+    - virtualrealpassion
+    - virtualrealporn
+    - virtualrealtrans
+    - gallery-by-fragment
+galleryByURL:
+  - action: script
+    url: *videoUrls
+    script:
+      - python
+      - VirtualRealPorn.py
+      - gallery-by-url
+performerByURL:
+  - action: script
+    url:
+      - virtualrealgay.com/vr-models/
+      - virtualrealpassion.com/vr-models/
+      - virtualrealporn.com/vr-pornstars/
+      - virtualrealtrans.com/vr-models/
+    script:
+      - python
+      - VirtualRealPorn.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - VirtualRealPorn.py
+    # you can specify which sites to search here
+    - virtualrealgay
+    - virtualrealpassion
+    - virtualrealporn
+    - virtualrealtrans
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - VirtualRealPorn.py
+    # you can specify which sites to search here
+    - virtualrealgay
+    - virtualrealpassion
+    - virtualrealporn
+    - virtualrealtrans
+    - performer-by-fragment
+# Last Updated December 10, 2025
