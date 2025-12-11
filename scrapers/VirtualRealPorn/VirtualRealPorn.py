@@ -19,7 +19,7 @@ from AlgoliaAPI.AlgoliaAPI import (
 
 from py_common import log
 from py_common.types import ScrapedPerformer, ScrapedScene
-from py_common.util import dig, guess_nationality, scraper_args
+from py_common.util import guess_nationality, scraper_args
 
 CONFIG = {
     "virtualrealamateurporn": {
@@ -255,7 +255,6 @@ def scene_search(
 ) -> list[ScrapedScene]:
     "Searches the API for scenes with a text query"
     log.debug(f"scene_search, query: {query}, sites: {sites}, fragment: {fragment}")
-    site = sites[0] # VirtualRealPorn network sites appear to use the same API keys
     # set a default api_scenes list
     api_scenes: list[dict[str, Any]] = []
     index_names = indexes_for_sites("videos", sites)
@@ -389,7 +388,6 @@ def performer_search(
 ) -> list[ScrapedPerformer]:
     "Searches the API for actors with a text query"
     log.debug(f"performer_search, query: {query}, sites: {sites}, fragment: {fragment}")
-    site = sites[0] # VirtualRealPorn network sites appear to use the same API keys
     # set a default api_models list
     api_models: list[dict[str, Any]] = []
     index_names = indexes_for_sites("models", sites)
