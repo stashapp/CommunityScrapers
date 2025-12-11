@@ -4,7 +4,7 @@ Stash scraper for Evil Angel (Network) that uses the Algolia API Python client
 import json
 import sys
 from typing import Any, Callable
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 from AlgoliaAPI.AlgoliaAPI import (
     ScrapedGallery,
@@ -93,9 +93,9 @@ def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> Scrap
     if gender := performer_from_api.get("gender"):
         performer["gender"] = parse_gender(gender.strip())
     if eye_color := performer_from_api.get("eyesColor"):
-        performer["eye_color"] = eye_color.strip()
+        performer["eye_color"] = eye_color.strip().capitalize()
     if hair_color := performer_from_api.get("hairColor"):
-        performer["hair_color"] = hair_color.strip()
+        performer["hair_color"] = hair_color.strip().capitalize()
     if country := performer_from_api.get("country"):
         performer["country"] = guess_nationality(country.strip())
     if image_url := performer_from_api.get("imageURL"):
@@ -282,6 +282,8 @@ def scene_from_url(
 ) -> ScrapedScene | None:
     "Scrapes a scene from a URL, running an optional postprocess function on the result"
     slug = urlparse(_url).path.rstrip("/").split("/")[-1]
+    # virtualrealjapan has special characters in slugs, we need to URL-decode it to work with search
+    slug = unquote(slug)
     site = site_from_url(_url)
     log.debug(f"slug: {slug}, site: {site}")
     scenes = scene_search(slug, [site], postprocess=postprocess)
