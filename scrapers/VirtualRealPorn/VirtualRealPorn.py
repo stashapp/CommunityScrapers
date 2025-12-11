@@ -284,7 +284,7 @@ def scene_from_url(
     slug = urlparse(_url).path.rstrip("/").split("/")[-1]
     site = site_from_url(_url)
     log.debug(f"slug: {slug}, site: {site}")
-    scenes = scene_search(slug, [site], indexes_for_sites("videos", [site]), postprocess=postprocess)
+    scenes = scene_search(slug, [site], postprocess=postprocess)
     log.debug(f"scenes: {scenes}")
     if scenes:
         return scenes[0]
