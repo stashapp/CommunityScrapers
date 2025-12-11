@@ -285,7 +285,12 @@ xPathScrapers:
         Name: *tagsSel
   sceneScraperTransVR:
     scene:
-      Title: //dl8-video/@title
+      Title:
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: ^Trans\s*VR\s*-\s*
+                with: ""
       Date:
         selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
@@ -297,9 +302,16 @@ xPathScrapers:
         Name: //div[@class="trailer_toptitle_left"]//a/text()
       Studio: *studio
       Image:
-        selector: //dl8-video/@poster
+        selector: >-
+          //dl8-video/@poster
+          |
+          //video/@data-poster
+          |
+          //script[contains(., "player.poster")]/text()
         postProcess:
           - replace:
+              - regex: ^.*player\.poster\s*=\s*['"]([^'"]+)['"].*$
+                with: $1
               - regex: content// # errant double slash
                 with: content/
               - regex: ^/
@@ -313,8 +325,4 @@ xPathScrapers:
           postProcess:
             - map:
                 Tags for This Scene: Virtual Reality
-
-# Use CDP with a configured proxy to bypass region-based age-verification
-driver:
-  useCDP: false
-# Last Updated August 28, 2025
+# Last Updated December 9, 2025
