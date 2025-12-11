@@ -19,7 +19,7 @@ sceneByFragment:
   script:
     - python
     - VirtualRealPorn.py
-    # you can specify which sites to search here
+    # you can specify which sites to search here (comment out any you don't want)
     - virtualrealamateurporn
     - virtualrealgay
     - virtualrealjapan
@@ -32,7 +32,7 @@ sceneByName:
   script:
     - python
     - VirtualRealPorn.py
-    # you can specify which sites to search here
+    # you can specify which sites to search here (comment out any you don't want)
     - virtualrealamateurporn
     - virtualrealgay
     - virtualrealjapan
@@ -45,7 +45,7 @@ sceneByQueryFragment:
   script:
     - python
     - VirtualRealPorn.py
-    # you can specify which sites to search here
+    # you can specify which sites to search here (comment out any you don't want)
     - virtualrealamateurporn
     - virtualrealgay
     - virtualrealjapan
@@ -58,7 +58,7 @@ galleryByFragment:
   script:
     - python
     - VirtualRealPorn.py
-    # you can specify which sites to search here
+    # you can specify which sites to search here (comment out any you don't want)
     - virtualrealamateurporn
     - virtualrealgay
     - virtualrealjapan
@@ -100,7 +100,7 @@ performerByFragment:
   script:
     - python
     - VirtualRealPorn.py
-    # you can specify which sites to search here
+    # you can specify which sites to search here (comment out any you don't want)
     - virtualrealgay
     - virtualrealpassion
     - virtualrealporn
