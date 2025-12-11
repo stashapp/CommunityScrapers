@@ -440,7 +440,7 @@ if __name__ == "__main__":
             result = scene_from_url(url)
         case "scene-by-name", {"name": name, "extra": extra} if name and extra:
             sites = extra
-            result = scene_search(name, sites, index_names=indexes_for_sites("videos", sites))
+            result = scene_search(name, sites)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             sites = args.pop("extra")
             result = scene_from_fragment(args, sites)
