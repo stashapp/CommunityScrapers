@@ -89,7 +89,7 @@ performerByName:
   script:
     - python
     - VirtualRealPorn.py
-    # you can specify which sites to search here
+    # you can specify which sites to search here (comment out any you don't want)
     - virtualrealgay
     - virtualrealpassion
     - virtualrealporn
