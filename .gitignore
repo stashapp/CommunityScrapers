@@ -14,3 +14,6 @@ yarn-error.log
 # generator
 site_generator/site/assets/fuse-index.json
 site_generator/site/assets/scrapers.json
+
+# Python virtual environment
+.venv*
