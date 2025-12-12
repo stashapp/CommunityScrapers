@@ -1,7 +1,27 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+name: VRBangers
 
-name: "VRBangers"
-
+sceneByName:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    - vrbangers
+    - scene-by-name
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    - vrbangers
+    - scene-by-fragment
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    - vrbangers
+    - scene-by-query-fragment
 sceneByURL:
   - action: scrapeXPath
     url: &urls
@@ -25,22 +45,22 @@ performerByURL:
   - action: scrapeXPath
     url: *urls
     scraper: vrbScraper
-sceneByFragment:
-  action: scrapeXPath
-  # url format: https://{studio}.com/video/{title}
-  queryURL: "{filename}"
-  queryURLReplace:
-    # filename format:
-    #   {studio}_{title}_{res}_{vrtype}.{ext}
-    #     res: oculus|\d+k
-    #     vrtype: stuff we do not care about but could contain '_'
-    filename:
-      - regex: (?i)^(vrbangers|vrbgay|vrbtrans|vrconk)_(.+)_(?:oculus|\dk)_.+$
-        with: https://$1.com/video/$2
-      # Titles have spaces replaced with '_' and the url expects '-' instead of spaces
-      - regex: _
-        with: "-"
-  scraper: vrbScraper
+# sceneByFragment:
+#   action: scrapeXPath
+#   # url format: https://{studio}.com/video/{title}
+#   queryURL: "{filename}"
+#   queryURLReplace:
+#     # filename format:
+#     #   {studio}_{title}_{res}_{vrtype}.{ext}
+#     #     res: oculus|\d+k
+#     #     vrtype: stuff we do not care about but could contain '_'
+#     filename:
+#       - regex: (?i)^(vrbangers|vrbgay|vrbtrans|vrconk)_(.+)_(?:oculus|\dk)_.+$
+#         with: https://$1.com/video/$2
+#       # Titles have spaces replaced with '_' and the url expects '-' instead of spaces
+#       - regex: _
+#         with: "-"
+#   scraper: vrbScraper
 
 xPathScrapers:
   vrbScraper:
@@ -139,7 +159,4 @@ xPathScrapers:
       Twitter: $modelLinks/a[contains(@href, "twitter")]/@href
       Instagram: $modelLinks/a[contains(@href, "instagram")]/@href
       URLs: //link[@rel="canonical"]/@href
-# you can use (a suitably configured) CDP to make use of a proxy/VPN to bypass region-based age-restriction
-# driver:
-#   useCDP: true
-# Last Updated September 17, 2025
+# Last Updated December 11, 2025
