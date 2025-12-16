@@ -45,9 +45,12 @@ groupByURL:
       - vrbangers.com
     scraper: vrbScraper
 performerByURL:
-  - action: scrapeXPath
+  - action: script
     url: *urls
-    scraper: vrbScraper
+    script:
+      - python
+      - VRBangers.py
+      - performer-by-url
 # sceneByFragment:
 #   action: scrapeXPath
 #   # url format: https://{studio}.com/video/{title}

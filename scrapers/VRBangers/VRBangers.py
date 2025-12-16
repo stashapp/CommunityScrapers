@@ -136,10 +136,9 @@ def to_scraped_performer(api_model: dict, domain: str) -> ScrapedPerformer:
                 performer["ethnicity"] = value
             elif label == "country of origin":
                 performer["country"] = guess_nationality(value)
-    if featured_image := api_model.get("featuredImage"):
-        permalink = featured_image.get("permalink")
-        if permalink:
-            performer["image"] = f"https://content.{domain}.com{permalink}"
+    if featured_image_permalink := api_model.get("featuredImage", {}).get("permalink"):
+        if featured_image_permalink:
+            performer["image"] = f"https://content.{domain}.com{featured_image_permalink}"
     return performer
 
 def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
@@ -250,6 +249,31 @@ def scene_from_url(url: str) -> ScrapedScene:
     api_scene = response.json().get("data", {}).get("item", {})
     return to_scraped_scene(api_scene, domain)
 
+def performer_from_url(url: str) -> ScrapedPerformer:
+    """
+    Scrapes a performer from a URL at the corresponding site API
+    """
+    # extract domain and slug from url in one regex
+    match = re.match(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/model/([a-zA-Z0-9\-]+)/?", url)
+    if not match:
+        log.error(f"Invalid performer URL format: {url}")
+        return {}
+    domain = match.group(1)
+    if domain not in CONFIG.keys():
+        log.error(f"Domain {domain} not in sites: {CONFIG.keys()}")
+        return {}
+    slug = match.group(2)
+
+    headers = headers_for_domain(domain)
+    api_url = f"https://content.{domain}.com/api/content/v1/models/{slug}"
+    log.debug(f"Fetching performer from {api_url} with headers: {headers}")
+    response = requests.get(api_url, headers=headers)
+    if response.status_code != 200:
+        log.error(f"Failed to fetch performer from {domain}: HTTP {response.status_code}")
+        return {}
+    api_model = response.json().get("data", {}).get("item", {})
+    return to_scraped_performer(api_model, domain)
+
 if __name__ == "__main__":
     op, args = scraper_args()
 
@@ -269,8 +293,8 @@ if __name__ == "__main__":
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             sites = args.pop("extra")
             result = scene_from_fragment(args, sites)
-        # case "performer-by-url", {"url": url}:
-        #     result = performer_from_url(url)
+        case "performer-by-url", {"url": url}:
+            result = performer_from_url(url)
         # case "performer-by-fragment", args:
         #     result = performer_from_fragment(args)
         # case "performer-by-name", {"name": name, "extra": extra} if name and extra:
