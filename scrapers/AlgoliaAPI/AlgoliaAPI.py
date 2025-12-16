@@ -16,7 +16,7 @@ from zipfile import ZipFile
 from py_common import graphql, log
 from py_common.deps import ensure_requirements
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
-from py_common.util import dig, guess_nationality, is_valid_url, scraper_args
+from py_common.util import dig, guess_nationality, feet_to_cm, lb_to_kg, is_valid_url, scraper_args
 ensure_requirements("algoliasearch", "bs4:beautifulsoup4", "requests")
 
 from algoliasearch.search.client import SearchClientSync
@@ -173,6 +173,15 @@ def scene_url(site: str, sitename: str, url_title: str, clip_id: str) -> str:
     "Generates URL for a scene"
     return f"{homepage_url(site.lower())}/en/video/{sitename.lower()}/{url_title}/{clip_id}"
 
+def parse_endowment(performer_from_api: dict[str, Any], gender: str | None) -> dict[str, Any] | None:
+    "Parses penis length if gender is male"
+    if (
+        gender == "male"
+        and (endowment := dig(performer_from_api, "attributes", "endowment"))
+    ):
+        return {"penis_length": feet_to_cm("0'" + endowment.strip())}
+    return None
+
 def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> ScrapedPerformer:
     "Helper function to convert from Algolia's API to Stash's scraper return type"
     performer: ScrapedPerformer = {}
@@ -191,9 +200,11 @@ def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> Scrap
     if alternate_names := dig(performer_from_api, "attributes", "alternate_names"):
         performer["aliases"] = alternate_names.strip()
     if height := dig(performer_from_api, "attributes", "height"):
-        performer["height"] = height.strip()
+        performer["height"] = feet_to_cm(height.strip())
     if weight := dig(performer_from_api, "attributes", "weight"):
-        performer["weight"] = weight.strip()
+        performer["weight"] = lb_to_kg(weight.strip())
+    if endowment := parse_endowment(performer_from_api, performer.get("gender")):
+        performer.update(endowment)
     if home := dig(performer_from_api, "attributes", "home"):
         performer["country"] = guess_nationality(home.strip())
     if performer_from_api.get("has_pictures") and (pictures := performer_from_api.get("pictures")):
