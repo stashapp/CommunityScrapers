@@ -13,7 +13,7 @@ from py_common.util import guess_nationality, scraper_args
 
 import requests
 from bs4 import BeautifulSoup as bs
-from AlgoliaAPI.AlgoliaAPI import sort_api_actors_by_match
+from AlgoliaAPI.AlgoliaAPI import sort_api_actors_by_match, sort_api_scenes_by_match
 
 CONFIG = {
     "arporn": {
@@ -50,6 +50,9 @@ TAG_MAPPER = {
     "Compilations": "Compilation",
 }
 MODEL_URL_REGEX = re.compile(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/model/([a-zA-Z0-9\-]+)/?")
+
+# simple cache for digests
+DIGEST_CACHE: dict[str, dict] = {}
 
 def studio_name_for_domain(domain: str) -> str:
     return CONFIG.get(domain, {}).get("studio_name", domain)
@@ -248,15 +251,19 @@ def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
             scene["image"] = f"https://content.{domain}.com{permalink}"
     return scene
 
-def scene_search(query: str, sites: list[str]) -> list[ScrapedScene]:
+def scene_search(query: str, sites: list[str], fragment: dict[str, Any] | None = None) -> list[ScrapedScene]:
     """
     Searches for scenes matching the query across the specified sites
     """
     api_scenes = api_search(query, sites)
-    return [
-        to_scraped_scene(scene, domain)
+    all_scenes = [
+        {**scene, "_domain": domain}
         for domain, data in api_scenes.items()
-        for scene in data.get("videos", [])
+        for scene in data.get("videos", [])[:10]    # limit to first 10 scenes per site
+    ]
+    return [
+        to_scraped_scene(scene, scene["_domain"])
+        for scene in sort_api_scenes_by_match(all_scenes, fragment if fragment is not None else {"title": query})
     ]
 
 def scene_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedScene:
@@ -276,13 +283,11 @@ def scene_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedSc
     - urls
     from the result of the scene-by-name search
     """
-    # if urls := fragment.get("urls"): # the first URL should be usable for a full search
-    #     return scene_from_url(urls[0], sites, fragment, postprocess)
-    # if code := fragment.get("code"): # if the (studio) code is present, search by clip_id
-    #     return scene_from_id(code, sites, fragment, postprocess)
-    # if title := fragment.get("title"): # if a title is present, search by text
-    #     if len(scenes := scene_search(title, sites, fragment, postprocess)) > 0:
-    #         return scenes[0] # best match is sorted at the top
+    if urls := fragment.get("urls"): # the first URL should be usable for a full search
+        return scene_from_url(urls[0])
+    if title := fragment.get("title"): # if a title is present, search by text
+        if len(scenes := scene_search(title, sites, fragment)) > 0:
+            return scenes[0] # best match is sorted at the top
     return {}
 
 def scene_from_url(url: str) -> ScrapedScene:
@@ -344,7 +349,7 @@ def performer_search(query: str, sites: list[str]) -> list[ScrapedPerformer]:
     all_models = [
         {**model, "_domain": domain, "name": model.get("title", "")}
         for domain, data in api_search_results.items()
-        for model in data.get("models", [])
+        for model in data.get("models", [])[:10]    # limit to first 10 models per site
     ]
     return [
         to_scraped_performer(model, model["_domain"])
@@ -404,15 +409,18 @@ def get_digest(site: str) -> dict | None:
     :return: The "digest" of the site
     :rtype: dict | None
     """
+    if site in DIGEST_CACHE:
+        return DIGEST_CACHE[site]
     headers = headers_for_domain(site)
     api_url = f"https://content.{site}.com/api/content/v1/digest"
-    log.debug(f"Searching {api_url} with headers: {headers}")
+    log.debug(f"Fetching {api_url} with headers: {headers}")
     response = requests.get(api_url, headers=headers)
     if response.status_code != 200:
         log.error(f"Failed to search {site}: HTTP {response.status_code}")
         return None
-    _json = response.json()
-    return _json.get("data", {}).get("digest", {})
+    digest = response.json().get("data", {}).get("digest", {})
+    DIGEST_CACHE[site] = digest
+    return digest
 
 if __name__ == "__main__":
     op, args = scraper_args()

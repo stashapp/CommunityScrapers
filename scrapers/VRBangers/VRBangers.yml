@@ -8,21 +8,39 @@ sceneByName:
   script:
     - python
     - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
     - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
     - scene-by-name
 sceneByFragment:
   action: script
   script:
     - python
     - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
     - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
     - scene-by-fragment
 sceneByQueryFragment:
   action: script
   script:
     - python
     - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
     - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
     - scene-by-query-fragment
 sceneByURL:
   - action: script
