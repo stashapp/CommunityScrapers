@@ -38,6 +38,17 @@ CONFIG = {
         "studio_name": "VRB Trans",
     },
 }
+SOCIAL_BASE_URLS = {
+    "facebook": "https://www.facebook.com/people",
+    "instagram": "https://www.instagram.com",
+    "twitter": "https://x.com",
+}
+TAG_MAPPER = {
+    "STEREO_180_LR": "180°",
+    "MONO_360": "360°",
+    "FISHEYE_STEREO_180_LR": "Fisheye",
+    "Compilations": "Compilation",
+}
 MODEL_URL_REGEX = re.compile(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/model/([a-zA-Z0-9\-]+)/?")
 
 def studio_name_for_domain(domain: str) -> str:
@@ -101,17 +112,25 @@ def api_search(query: str, domains: list[str]) -> dict[str, dict[list[dict]]]:
 
     return results
 
+def generate_social_url(label: str, value: str) -> str:
+    """
+    Generates a full social media URL based on the label and value
+    """
+    base_url = SOCIAL_BASE_URLS.get(label.lower(), f"https://{label}.com")
+    return f"{base_url}/{value}"
+
 def to_scraped_performer(api_model: dict, domain: str) -> ScrapedPerformer:
     """
     Converts an API model dictionary to a ScrapedPerformer
     """
+    digest = get_digest(domain)
     performer: ScrapedPerformer = {}
     if slug := api_model.get("slug"):
         performer["url"] = f"https://{domain}.com/model/{slug}/"
     if description := api_model.get("description"):
         performer["details"] = clean_text(description)
     if title := api_model.get("title"):
-        performer["name"] = title
+        performer["name"] = title.strip()
     if model_information := api_model.get("modelInformation"):
         # this is a list of objects with "label" and "value" keys
         for info in model_information:
@@ -139,7 +158,8 @@ def to_scraped_performer(api_model: dict, domain: str) -> ScrapedPerformer:
                     # assume value is in kg, e.g. "44"
                     performer["weight"] = value
             elif label == "measurements":
-                performer["measurements"] = value.replace(' ', '')
+                # remove spaces and replace "/" with "-"
+                performer["measurements"] = value.replace(" ", "").replace("/", "-")
             elif label == "hair color":
                 performer["hair_color"] = value
             elif label == "eye color":
@@ -151,6 +171,14 @@ def to_scraped_performer(api_model: dict, domain: str) -> ScrapedPerformer:
     if featured_image_permalink := api_model.get("featuredImage", {}).get("permalink"):
         if featured_image_permalink:
             performer["image"] = f"https://content.{domain}.com{featured_image_permalink}"
+    if social_items := api_model.get("socialItems", []):
+        social_urls = [
+            generate_social_url(digest_item.get("label"), item.get("value"))
+            for digest_item in digest.get("socialItems", [])
+            for item in social_items
+            if item.get("id") == digest_item.get("id")
+        ]
+        performer["urls"] = social_urls
     return performer
 
 def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
@@ -158,6 +186,7 @@ def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
     Converts an API scene dictionary to a ScrapedScene
     """
     log.debug(f"Converting API scene: {api_scene} from domain: {domain}")
+    digest = get_digest(domain)
     scene: ScrapedScene = {}
     if title := api_scene.get("title"):
         scene["title"] = title
@@ -176,16 +205,37 @@ def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
     scene["tags"] = []
     # add categories as tags
     if categories := api_scene.get("categories"):
-        scene["tags"].extend([ { "name": c.get("name") } for c in categories ])
-    # add available download qualities as tags
-    if downloads_quality := api_scene.get("videoSettings", {}).get("downloadsQuality", []):
-        # quality is like "2K_180x180_3dh", extract the "2K" part
-        resolution_pattern = re.compile(r"^(\d{3,4}p|\dK)")
-        for dq in downloads_quality:
-            if match := resolution_pattern.match(dq):
-                quality_tag = match.group(1)
-                if quality_tag not in [tag["name"] for tag in scene["tags"]]:
-                    scene["tags"].append({ "name": f"{quality_tag} Available" })
+        scene["tags"].extend([ { "name": TAG_MAPPER.get(c.get("name"), c.get("name")) } for c in categories ])
+    def _extend_tags_from_ids(ids, digest_key, name_fmt=lambda n: n, tag_mapper=None):
+        if not ids:
+            return []
+        items = digest.get(digest_key, [])
+        return [
+            {"name": name_fmt(tag_mapper(item.get("name", "")) if tag_mapper else item.get("name", ""))}
+            for id_ in ids
+            for item in items
+            if item.get("id") == id_
+        ]
+
+    if video_tech_bar := api_scene.get("videoTechBar", {}):
+        scene["tags"].extend(_extend_tags_from_ids(
+            video_tech_bar.get("resolutions", []), "videoResolutions"
+        ))
+        scene["tags"].extend(_extend_tags_from_ids(
+            video_tech_bar.get("formats", []), "videoFormats",
+            tag_mapper=lambda n: TAG_MAPPER.get(n, n)
+        ))
+        scene["tags"].extend(_extend_tags_from_ids(
+            video_tech_bar.get("positions", []), "videoPositions"
+        ))
+        scene["tags"].extend(_extend_tags_from_ids(
+            video_tech_bar.get("degrees", []), "videoDegrees",
+            name_fmt=lambda n: f"{n}°"
+        ))
+        scene["tags"].extend(_extend_tags_from_ids(
+            video_tech_bar.get("fps", []), "videoFps",
+            name_fmt=lambda n: f"{n} FPS"
+        ))
     # add fixed tag for VR
     if "Virtual Reality" not in [tag["name"] for tag in scene["tags"]]:
         scene["tags"].append({ "name": "Virtual Reality" })
@@ -344,6 +394,25 @@ def performer_from_fragment(fragment: dict[str, Any], sites: list[str]) -> Scrap
             # return best match (the first one)
             return performers[0]
     return {}
+
+def get_digest(site: str) -> dict | None:
+    """
+    Gets a site's set of lookup values
+    
+    :param site: The domain (without TLD)
+    :type site: str
+    :return: The "digest" of the site
+    :rtype: dict | None
+    """
+    headers = headers_for_domain(site)
+    api_url = f"https://content.{site}.com/api/content/v1/digest"
+    log.debug(f"Searching {api_url} with headers: {headers}")
+    response = requests.get(api_url, headers=headers)
+    if response.status_code != 200:
+        log.error(f"Failed to search {site}: HTTP {response.status_code}")
+        return None
+    _json = response.json()
+    return _json.get("data", {}).get("digest", {})
 
 if __name__ == "__main__":
     op, args = scraper_args()
