@@ -18,8 +18,12 @@ from AlgoliaAPI.AlgoliaAPI import (
 )
 
 from py_common import log
+from py_common.deps import ensure_requirements
+ensure_requirements("bs4:beautifulsoup4", "requests")
 from py_common.types import ScrapedPerformer, ScrapedScene
 from py_common.util import guess_nationality, scraper_args
+from bs4 import BeautifulSoup as bs
+import requests
 
 CONFIG = {
     "virtualrealamateurporn": {
@@ -321,6 +325,20 @@ def scene_search(
         ]
     return []
 
+def postprocess_scene(scene: ScrapedScene, _: dict[str, Any]) -> ScrapedScene:
+    """
+    Applies post-processing to the scene
+    """
+    if _url := scene.get("url"):
+        if "virtualreal" in _url:
+            # get the title from the web page to fix missing symbols in the API data
+            r = requests.get(_url)
+            soup = bs(r.content, "html.parser")
+            if title_tag := soup.find("h1"):
+                scene["title"] = title_tag.text.strip()
+
+    return scene
+
 def scene_from_url(
     _url: str,
     postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
@@ -481,13 +499,13 @@ if __name__ == "__main__":
             sites = args.pop("extra")
             result = gallery_from_fragment(args, sites)
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url)
+            result = scene_from_url(url, postprocess=postprocess_scene)
         case "scene-by-name", {"name": name, "extra": extra} if name and extra:
             sites = extra
-            result = scene_search(name, sites)
+            result = scene_search(name, sites, postprocess=postprocess_scene)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             sites = args.pop("extra")
-            result = scene_from_fragment(args, sites)
+            result = scene_from_fragment(args, sites, postprocess=postprocess_scene)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
         case "performer-by-fragment", args:
