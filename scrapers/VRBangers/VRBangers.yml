@@ -23,7 +23,7 @@ sceneByQueryFragment:
     - vrbangers
     - scene-by-query-fragment
 sceneByURL:
-  - action: scrapeXPath
+  - action: script
     url: &urls
       - arporn.com
       - blowvr.com
@@ -31,7 +31,10 @@ sceneByURL:
       - vrbgay.com
       - vrbtrans.com
       - vrconk.com
-    scraper: vrbScraper
+    script:
+      - python
+      - VRBangers.py
+      - scene-by-url
 galleryByURL:
   - action: scrapeXPath
     url: *urls

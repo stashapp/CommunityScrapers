@@ -146,6 +146,7 @@ def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
     """
     Converts an API scene dictionary to a ScrapedScene
     """
+    log.debug(f"Converting API scene: {api_scene} from domain: {domain}")
     scene: ScrapedScene = {}
     if title := api_scene.get("title"):
         scene["title"] = title
@@ -160,12 +161,24 @@ def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
 
     if description := api_scene.get("description"):
         scene["details"] = clean_text(description)
+
     scene["tags"] = []
+    # add categories as tags
     if categories := api_scene.get("categories"):
         scene["tags"].extend([ { "name": c.get("name") } for c in categories ])
+    # add available download qualities as tags
+    if downloads_quality := api_scene.get("videoSettings", {}).get("downloadsQuality", []):
+        # quality is like "2K_180x180_3dh", extract the "2K" part
+        resolution_pattern = re.compile(r"^(\d{3,4}p|\dK)")
+        for dq in downloads_quality:
+            if match := resolution_pattern.match(dq):
+                quality_tag = match.group(1)
+                if quality_tag not in [tag["name"] for tag in scene["tags"]]:
+                    scene["tags"].append({ "name": f"{quality_tag} Available" })
     # add fixed tag for VR
     if "Virtual Reality" not in [tag["name"] for tag in scene["tags"]]:
         scene["tags"].append({ "name": "Virtual Reality" })
+
     if models := api_scene.get("models"):
         scene["performers"] = [to_scraped_performer(model, domain) for model in models]
     scene["studio"] = { "name": studio_name_for_domain(domain) }
@@ -211,6 +224,32 @@ def scene_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedSc
     #         return scenes[0] # best match is sorted at the top
     return {}
 
+def scene_from_url(url: str) -> ScrapedScene:
+    """
+    Scrapes a scene from a URL at the corresponding site API
+    """
+    # extract domain and slug from url in one regex
+    match = re.match(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/video/([a-zA-Z0-9\-]+)/?", url)
+    if not match:
+        log.error(f"Invalid scene URL format: {url}")
+        return {}
+    domain = match.group(1)
+    if domain not in CONFIG.keys():
+        log.error(f"Domain {domain} not in sites: {CONFIG.keys()}")
+        return {}
+    slug = match.group(2)
+
+    headers = headers_for_domain(domain)
+    api_url = f"https://content.{domain}.com/api/content/v1/videos/{slug}"
+    params = { "limit": 1 }
+    log.debug(f"Fetching scene from {api_url} with params: {params} and headers: {headers}")
+    response = requests.get(api_url, headers=headers, params=params)
+    if response.status_code != 200:
+        log.error(f"Failed to fetch scene from {domain}: HTTP {response.status_code}")
+        return {}
+    api_scene = response.json().get("data", {}).get("item", {})
+    return to_scraped_scene(api_scene, domain)
+
 if __name__ == "__main__":
     op, args = scraper_args()
 
@@ -222,9 +261,8 @@ if __name__ == "__main__":
         # case "gallery-by-fragment", args:
         #     sites = args.pop("extra")
         #     result = gallery_from_fragment(args, sites)
-        # case "scene-by-url", {"url": url, "extra": extra} if url and extra:
-        #     sites = extra
-        #     result = scene_from_url(url, sites)
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url)
         case "scene-by-name", {"name": name, "extra": extra} if name and extra:
             sites = extra
             result = scene_search(name, sites)
