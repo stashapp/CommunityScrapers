@@ -331,11 +331,20 @@ def postprocess_scene(scene: ScrapedScene, _: dict[str, Any]) -> ScrapedScene:
     """
     if _url := scene.get("url"):
         if "virtualreal" in _url:
+            log.debug(f"postprocess_scene, fetching page for URL: {_url}")
             # get the title from the web page to fix missing symbols in the API data
             r = requests.get(_url)
             soup = bs(r.content, "html.parser")
             if title_tag := soup.find("h1"):
+                log.debug(f"Found title tag: {title_tag}")
                 scene["title"] = title_tag.text.strip()
+
+            # get the description from the web page to fix missing newlines in the API data
+            if description_tag := soup.find("div", class_="description_container"):
+                log.debug(f"Found description tag: {description_tag}")
+                # find each p tag inside description_container and join with newlines
+                paragraphs = description_tag.find_all("p")
+                scene["details"] = "\n\n".join(p.text.strip() for p in paragraphs)
 
     return scene
 
