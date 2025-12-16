@@ -3,7 +3,7 @@ sceneByURL:
   - action: scrapeJson
     url:
       - modelmediaasia.com/en-US/videos/
-    queryURL: https://api.modelmediaasia.com/api/v2/videos/{url}
+    queryURL: https://model-api.bvncmsldo.com/api/v2/videos/{url}
     queryURLReplace:
       url:
         - regex: .*\/videos\/([^?]*).*
@@ -12,7 +12,7 @@ sceneByURL:
   - action: scrapeJson
     url:
       - modelmediaasia.com/zh-CN/videos/
-    queryURL: https://api.modelmediaasia.com/api/v2/videos/{url}
+    queryURL: https://model-api.bvncmsldo.com/api/v2/videos/{url}
     queryURLReplace:
       url:
         - regex: .*\/videos\/([^?]*).*
@@ -21,7 +21,7 @@ sceneByURL:
 
 sceneByFragment:
   action: scrapeJson
-  queryURL: https://api.modelmediaasia.com/api/v2/videos/{filename}
+  queryURL: https://model-api.bvncmsldo.com/api/v2/videos/{filename}
   queryURLReplace:
     # Assume beginning part contains the code
     filename:
@@ -36,7 +36,7 @@ performerByURL:
   - action: scrapeJson
     url:
       - modelmediaasia.com/en-US/models/
-    queryURL: https://api.modelmediaasia.com/api/v2/models/{url}
+    queryURL: https://model-api.bvncmsldo.com/api/v2/models/{url}
     queryURLReplace:
       url:
         - regex: .*\/models\/([^?]*).*
@@ -45,7 +45,7 @@ performerByURL:
   - action: scrapeJson
     url:
       - modelmediaasia.com/zh-CN/models/
-    queryURL: https://api.modelmediaasia.com/api/v2/models/{url}
+    queryURL: https://model-api.bvncmsldo.com/api/v2/models/{url}
     queryURLReplace:
       url:
         - regex: .*\/models\/([^?]*).*
