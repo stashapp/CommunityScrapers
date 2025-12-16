@@ -13,6 +13,7 @@ from py_common.util import guess_nationality, scraper_args
 
 import requests
 from bs4 import BeautifulSoup as bs
+from AlgoliaAPI.AlgoliaAPI import sort_api_actors_by_match
 
 CONFIG = {
     "arporn": {
@@ -37,6 +38,7 @@ CONFIG = {
         "studio_name": "VRB Trans",
     },
 }
+MODEL_URL_REGEX = re.compile(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/model/([a-zA-Z0-9\-]+)/?")
 
 def studio_name_for_domain(domain: str) -> str:
     return CONFIG.get(domain, {}).get("studio_name", domain)
@@ -123,11 +125,21 @@ def to_scraped_performer(api_model: dict, domain: str) -> ScrapedPerformer:
                 except ValueError:
                     log.warning(f"Invalid birthdate format for performer {performer.get('name')}: {value}")
             elif label == "height":
-                performer["height"] = value
+                if cm := re.search(r"(\d+)\s*cm", value.lower()):
+                    # e.g. "5'4\" (or 162 cm)"
+                    performer["height"] = cm.group(1)
+                else:
+                    # assume value is in cm, e.g. "162"
+                    performer["height"] = value
             elif label == "weight":
-                performer["weight"] = value
+                if kg:= re.search(r"(\d+)\s*kg", value.lower()):
+                    # e.g. "97 lbs (or 44 kg)"
+                    performer["weight"] = kg.group(1)
+                else:
+                    # assume value is in kg, e.g. "44"
+                    performer["weight"] = value
             elif label == "measurements":
-                performer["measurements"] = value
+                performer["measurements"] = value.replace(' ', '')
             elif label == "hair color":
                 performer["hair_color"] = value
             elif label == "eye color":
@@ -254,7 +266,7 @@ def performer_from_url(url: str) -> ScrapedPerformer:
     Scrapes a performer from a URL at the corresponding site API
     """
     # extract domain and slug from url in one regex
-    match = re.match(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/model/([a-zA-Z0-9\-]+)/?", url)
+    match = MODEL_URL_REGEX.match(url)
     if not match:
         log.error(f"Invalid performer URL format: {url}")
         return {}
@@ -273,6 +285,65 @@ def performer_from_url(url: str) -> ScrapedPerformer:
         return {}
     api_model = response.json().get("data", {}).get("item", {})
     return to_scraped_performer(api_model, domain)
+
+def performer_search(query: str, sites: list[str]) -> list[ScrapedPerformer]:
+    """
+    Searches for performers matching the query across the specified sites
+    """
+    api_search_results = api_search(query, sites)
+    all_models = [
+        {**model, "_domain": domain, "name": model.get("title", "")}
+        for domain, data in api_search_results.items()
+        for model in data.get("models", [])
+    ]
+    return [
+        to_scraped_performer(model, model["_domain"])
+        for model in sort_api_actors_by_match(all_models, {"name": query})
+    ]
+
+def performer_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedPerformer:
+    """
+    Scrapes a performer from a fragment across the specified sites
+
+    This receives:
+    - sites
+    from the scraper YAML (array items), and fragment containing:
+    - url
+    - name
+    - disambiguation
+    - gender
+    - urls
+    - twitter
+    - instagram
+    - birthdate
+    - ethnicity
+    - country
+    - eye_color
+    - height
+    - measurements
+    - fake_tits
+    - penis_length
+    - circumcised
+    - career_length
+    - tattoos
+    - piercings
+    - aliases
+    - details
+    - death_date
+    - hair_color
+    - weight
+    """
+    # if there are any studio performer profile URLs, use the first match
+    for _url in fragment.get("urls", []):
+        if MODEL_URL_REGEX.match(_url):
+            return performer_from_url(_url)
+    # search by name
+    if name := fragment.get("name"):
+        performers = performer_search(name, sites)
+        if len(performers) > 0:
+            # return best match (the first one)
+            return performers[0]
+    return {}
 
 if __name__ == "__main__":
     op, args = scraper_args()
@@ -295,11 +366,12 @@ if __name__ == "__main__":
             result = scene_from_fragment(args, sites)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
-        # case "performer-by-fragment", args:
-        #     result = performer_from_fragment(args)
-        # case "performer-by-name", {"name": name, "extra": extra} if name and extra:
-        #     sites = extra
-        #     result = performer_search(name, sites)
+        case "performer-by-fragment", args:
+            sites = args.pop("extra")
+            result = performer_from_fragment(args, sites)
+        case "performer-by-name", {"name": name, "extra": extra} if name and extra:
+            sites = extra
+            result = performer_search(name, sites)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

@@ -1,4 +1,6 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
+# requires: AlgoliaAPI
+# scrapes: AR Porn, Blow VR, VR Bangers, VRB Gay, VRB Trans, VR Conk
 name: VRBangers
 
 sceneByName:
@@ -44,6 +46,32 @@ groupByURL:
     url:
       - vrbangers.com
     scraper: vrbScraper
+performerByFragment:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
+    - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
+    - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
+    - performer-by-name
 performerByURL:
   - action: script
     url: *urls
