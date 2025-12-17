@@ -9,7 +9,7 @@ from typing import Any
 from py_common.deps import ensure_requirements
 ensure_requirements("bs4:beautifulsoup4", "requests")
 import py_common.log as log
-from py_common.types import ScrapedGroup, ScrapedPerformer, ScrapedScene
+from py_common.types import ScrapedGallery, ScrapedGroup, ScrapedPerformer, ScrapedScene
 from py_common.util import guess_nationality, scraper_args
 
 import requests
@@ -84,7 +84,7 @@ def headers_for_domain(domain: str) -> dict[str, str]:
         "sec-fetch-site": "same-site",
         "sec-gpc": "1",
         "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
-        "accept": "application/json, text/plain, */*",
+        "accept": "application/json",
         "accept-language": "en-GB,en;q=0.6",
     }
 
@@ -407,14 +407,8 @@ def scene_search(query: str, sites: list[str], fragment: dict[str, Any] | None =
     all_scenes = [
         {**scene, "_domain": domain}
         for domain, data in api_scenes.items()
-        for scene in data.get("videos", [])[:1]    # limit to first 1 scenes per site
+        for scene in data.get("videos", [])
     ]
-    if "dezyred" in sites:
-        dezyred_api_scenes = dezyred_api_scene_search(query)
-        all_scenes.extend(
-            {**scene, "_domain": "dezyred"}
-            for scene in dezyred_api_scenes.get("dezyred", [])
-        )
     # log the number of scenes found per domain
     domain_counts = {}
     for scene in all_scenes:
@@ -422,9 +416,21 @@ def scene_search(query: str, sites: list[str], fragment: dict[str, Any] | None =
         domain_counts[domain] = domain_counts.get(domain, 0) + 1
     log.debug(f"Number of scenes found per domain: {domain_counts}")
     scraped_scenes = [
-        dezyred_to_scraped_scene(scene, scene["_domain"]) if scene["_domain"] == "dezyred" else to_scraped_scene(scene, scene["_domain"])
-        for scene in sort_api_scenes_by_match(all_scenes, fragment if fragment is not None else {"title": query})
+        to_scraped_scene(scene, scene["_domain"])
+        for scene in sort_api_scenes_by_match(all_scenes, fragment if fragment is not None else {"title": query})[:40]  # limit to first 40 best-matching scenes
     ]
+    if "dezyred" in sites:
+        dezyred_api_scenes = dezyred_api_scene_search(query)
+        dezyred_all_scenes = [
+            {**scene, "_domain": "dezyred"}
+            for scene in dezyred_api_scenes.get("dezyred", [])
+        ]
+        log.debug(f"Number of Dezyred scenes found: {len(dezyred_all_scenes)}")
+        dezyred_scraped_scenes = [
+            dezyred_to_scraped_scene(scene, scene["_domain"])
+            for scene in dezyred_all_scenes
+        ]
+        scraped_scenes.extend(dezyred_scraped_scenes)
     # write scraped_scenes as JSON to file cache
     with open(SCRAPED_SCENES_FILE_CACHE, "w", encoding="utf-8") as f:
         f.write(json.dumps(scraped_scenes, ensure_ascii=False, indent=2))
@@ -493,14 +499,48 @@ def scene_from_url(url: str) -> ScrapedScene:
 
     headers = headers_for_domain(domain)
     api_url = f"https://content.{domain}.com/api/content/v1/videos/{slug}"
-    params = { "limit": 1 }
-    log.debug(f"Fetching scene from {api_url} with params: {params} and headers: {headers}")
-    response = requests.get(api_url, headers=headers, params=params)
-    if response.status_code != 200:
-        log.error(f"Failed to fetch scene from {domain}: HTTP {response.status_code}")
+    log.debug(f"Fetching scene from {api_url} with headers: {headers}")
+    try:
+        log.trace(f"Making request to URL: {api_url}")
+        response = requests.get(api_url, headers=headers, timeout=10)
+        log.trace(f"API response: {response.text}")
+        if response.status_code != 200:
+            log.error(f"Failed to fetch scene from {domain}: HTTP {response.status_code}")
+            return {}
+        api_scene = response.json().get("data", {}).get("item", {})
+    except requests.RequestException as e:
+        log.error(f"Request exception while fetching scene from {domain}: {e}")
         return {}
-    api_scene = response.json().get("data", {}).get("item", {})
+    except BaseException as e:
+        log.error(f"Unexpected exception while fetching scene from {domain}: {e}")
+        return {}
+    log.debug(f"Fetched API scene: {api_scene}")
     return to_scraped_scene(api_scene, domain)
+
+def gallery_from_url(url: str) -> ScrapedGallery:
+    """
+    Scrapes a gallery from a URL at the corresponding site API
+    """
+    # the "gallery" is just the scene, so scrape the scene and then convert to gallery
+    scene = scene_from_url(url)
+    if not scene:
+        return {}
+    gallery: ScrapedGallery = {}
+    if title := scene.get("title"):
+        gallery["title"] = title
+    if url := scene.get("url"):
+        gallery["url"] = url
+    if date := scene.get("date"):
+        gallery["date"] = date
+    if details := scene.get("details"):
+        gallery["details"] = details
+    if tags := scene.get("tags"):
+        gallery["tags"] = tags
+    if performers := scene.get("performers"):
+        gallery["performers"] = performers
+    if studio := scene.get("studio"):
+        gallery["studio"] = studio
+    return gallery
 
 def get_api_model(domain: str, api_url: str) -> dict[str, Any]:
     headers = headers_for_domain(domain)
@@ -692,9 +732,8 @@ if __name__ == "__main__":
 
     log.debug(f"args: {args}")
     match op, args:
-        # case "gallery-by-url", {"url": url, "extra": extra} if url and extra:
-        #     sites = extra
-        #     result = gallery_from_url(url, sites)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url)
         # case "gallery-by-fragment", args:
         #     sites = args.pop("extra")
         #     result = gallery_from_fragment(args, sites)
