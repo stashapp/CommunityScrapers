@@ -59,6 +59,20 @@ sceneByURL:
       - python
       - VRBangers.py
       - scene-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
+    - dezyred
+    - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
+    - gallery-by-fragment
 galleryByURL:
   - action: script
     url: *urls

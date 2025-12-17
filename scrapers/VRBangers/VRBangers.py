@@ -482,6 +482,16 @@ def scene_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedSc
             return scenes[0] # best match is sorted at the top
     return {}
 
+def gallery_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedGallery:
+    """
+    Scrapes a gallery from a fragment across the specified sites
+    """
+    # the "gallery" is just the scene, so scrape the scene and then convert to gallery
+    scene = scene_from_fragment(fragment, sites)
+    if not scene:
+        return {}
+    return gallery_from_scene(scene)
+
 def scene_from_url(url: str) -> ScrapedScene:
     """
     Scrapes a scene from a URL at the corresponding site API
@@ -517,14 +527,10 @@ def scene_from_url(url: str) -> ScrapedScene:
     log.debug(f"Fetched API scene: {api_scene}")
     return to_scraped_scene(api_scene, domain)
 
-def gallery_from_url(url: str) -> ScrapedGallery:
+def gallery_from_scene(scene: ScrapedScene) -> ScrapedGallery:
     """
-    Scrapes a gallery from a URL at the corresponding site API
+    Converts a ScrapedScene to a ScrapedGallery
     """
-    # the "gallery" is just the scene, so scrape the scene and then convert to gallery
-    scene = scene_from_url(url)
-    if not scene:
-        return {}
     gallery: ScrapedGallery = {}
     if title := scene.get("title"):
         gallery["title"] = title
@@ -541,6 +547,16 @@ def gallery_from_url(url: str) -> ScrapedGallery:
     if studio := scene.get("studio"):
         gallery["studio"] = studio
     return gallery
+
+def gallery_from_url(url: str) -> ScrapedGallery:
+    """
+    Scrapes a gallery from a URL at the corresponding site API
+    """
+    # the "gallery" is just the scene, so scrape the scene and then convert to gallery
+    scene = scene_from_url(url)
+    if not scene:
+        return {}
+    return gallery_from_scene(scene)
 
 def get_api_model(domain: str, api_url: str) -> dict[str, Any]:
     headers = headers_for_domain(domain)
@@ -734,9 +750,9 @@ if __name__ == "__main__":
     match op, args:
         case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url)
-        # case "gallery-by-fragment", args:
-        #     sites = args.pop("extra")
-        #     result = gallery_from_fragment(args, sites)
+        case "gallery-by-fragment", args:
+            sites = args.pop("extra")
+            result = gallery_from_fragment(args, sites)
         case "group-by-url", {"url": url} if url:
             result = group_from_url(url)
         case "scene-by-url", {"url": url} if url:
