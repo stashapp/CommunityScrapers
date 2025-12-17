@@ -53,27 +53,27 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //meta[@property="og:title"]/@content
-      Details: //td[@id="mu"]//div[@class="mg-b20 lh4"]/p[@class="mg-b20"]/text()
+      Details: /html/body/div[2]/main/div[3]/div[2]/div/div[2]/div[1]/div[2]/div/div[1]/text()
       Date:
-        selector: //td[contains(.,"発売日") and @class="nw"]/following-sibling::td
+        selector: //th[contains(.,"発売日")]/following-sibling::td/span/text()
         postProcess:
           - replace:
               - regex: (\d{4})/(\d{2})/(\d{2})
                 with: $1-$2-$3
           - parseDate: 2006-01-02
       Code: 
-        selector: //td[contains(.,"品番") and @class="nw"]/following-sibling::td
+        selector: //th[contains(.,"品番")]/following-sibling::td/span/text()
         postProcess:
           - replace:
               - regex: ([a-zA-Z]+)(\d+)
                 with: $1-$2
       Tags:
-        Name: //td[contains(.,"ジャンル") and @class="nw"]/following-sibling::td/a
+        Name: //th[contains(.,"ジャンル")]/following-sibling::td/span/div/a
       Performers:
-        Name: //td[contains(.,"出演者") and @class="nw"]/following-sibling::td/span/a
+        Name: //th[contains(.,"出演者")]/following-sibling::td/span/div/a
       Studio:
         Name: 
-          selector: //td[contains(.,"メーカー") and @class="nw"]/following-sibling::td/a
+          selector: //th[contains(.,"メーカー")]/following-sibling::td/span/a
           postProcess:
             - map:
                 ムゲンエンターテインメント: MUGEN Entertainment
@@ -102,7 +102,7 @@ xPathScrapers:
       Image: //meta[@property="og:image"]/@content
       URL: 
         selector: //meta[@property="og:url"]/@content
-      Director: //td[contains(.,"監督") and @class="nw"]/following-sibling::td/a
+      Director: //th[contains(.,"監督")]/following-sibling::td/span/div/a
 
 driver:
   cookies:
