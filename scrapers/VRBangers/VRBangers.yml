@@ -48,21 +48,24 @@ sceneByQueryFragment:
 sceneByURL:
   - action: script
     url: &urls
-      - arporn.com
-      - blowvr.com
+      - arporn.com/video/
+      - blowvr.com/video/
       # dezyred.com does not have distinct scene URLs, but instead uses a single page for its games (see groupByURL)
-      - vrbangers.com
-      - vrbgay.com
-      - vrbtrans.com
-      - vrconk.com
+      - vrbangers.com/video/
+      - vrbgay.com/video/
+      - vrbtrans.com/video/
+      - vrconk.com/video/
     script:
       - python
       - VRBangers.py
       - scene-by-url
 galleryByURL:
-  - action: scrapeXPath
+  - action: script
     url: *urls
-    scraper: vrbScraper
+    script:
+      - python
+      - VRBangers.py
+      - gallery-by-url
 groupByURL:
   - action: script
     url:
@@ -102,13 +105,13 @@ performerByName:
 performerByURL:
   - action: script
     url:
-      - arporn.com
-      - blowvr.com
-      - dezyred.com
-      - vrbangers.com
-      - vrbgay.com
-      - vrbtrans.com
-      - vrconk.com
+      - arporn.com/model/
+      - blowvr.com/model/
+      - dezyred.com/pornstars/
+      - vrbangers.com/model/
+      - vrbgay.com/model/
+      - vrbtrans.com/model/
+      - vrconk.com/model/
     script:
       - python
       - VRBangers.py
