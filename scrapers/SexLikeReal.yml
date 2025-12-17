@@ -61,7 +61,7 @@ xPathScrapers:
                 with: "\n\n"
       # fragile but it works
       Tags:
-        Name: //div/ul/li/a/span
+        Name: //div/ul/li/a/span | //div[@style]/p/a[starts-with(@href,"/tags")]/text()
       Performers:
         Name: //a[starts-with(@href,"/pornstars/")]/text()
       Studio:
@@ -109,4 +109,4 @@ xPathScrapers:
 #           Domain: .www.sexlikereal.com
 #           Path: /
 #           Value: "true"
-# Last Updated December 1, 2025
+# Last Updated December 17, 2025
