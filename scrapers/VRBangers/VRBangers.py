@@ -1,6 +1,7 @@
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime, timezone
 import json
+import os
 import re
 import sys
 from typing import Any
@@ -52,8 +53,9 @@ TAG_MAPPER = {
 MODEL_URL_REGEX = re.compile(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/(?:model|pornstars)/([a-zA-Z0-9\-]+)/?")
 DEZYRED_GAME_URL_REGEX = re.compile(r"https?://(?:www\.)?dezyred\.com/games/([a-zA-Z0-9\-]+)/?")
 
-# simple cache for digests
+# simple caches
 DIGEST_CACHE: dict[str, dict] = {}
+SCRAPED_SCENES_FILE_CACHE = "scraped_scenes_cache.json"
 
 def studio_name_for_domain(domain: str) -> str:
     return CONFIG.get(domain, {}).get("studio_name", domain)
@@ -114,6 +116,46 @@ def api_search(query: str, domains: list[str]) -> dict[str, dict[list[dict]]]:
             if result is not None:
                 results[domain] = result
 
+    return results
+
+def dezyred_api_scene_search(query: str) -> dict[str, dict[list[dict]]]:
+    """
+    Searches the Dezyred API for scenes matching the query
+    """
+    results: dict[str, dict[list[dict]]] = {}
+    domains = ["dezyred"]
+
+    def fetch(domain):
+        headers = headers_for_domain(domain)
+        api_url = f"https://{domain}.com/api/games"
+        log.debug(f"Searching {api_url} with headers: {headers}")
+        response = requests.get(api_url, headers=headers)
+        if response.status_code != 200:
+            log.error(f"Failed to search {domain}: HTTP {response.status_code}")
+            return domain, None
+        _json = response.json()
+        # _json is a list of games, each game has a list of scenes
+        scenes_count = sum(len(game.get("scenes", [])) for game in _json)
+        log.debug(f"Found {len(_json)} games and {scenes_count} scenes on {domain}")
+        return domain, _json
+
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(fetch, domain): domain for domain in domains}
+        for future in as_completed(futures):
+            domain, result = future.result()
+            if result is not None:
+                # a result is a list of games, each with a list of scene dicts
+                # we need to flatten this into a list of scenes where the
+                # query matches the scene name or the game title
+                scenes = []
+                for game in result:
+                    game_title = game.get("title", "").lower()
+                    for scene in game.get("scenes", []):
+                        scene_name = scene.get("name", "").lower()
+                        if query.lower() in scene_name or query.lower() in game_title:
+                            scenes.append({**scene, "_game": game, "title": scene.get("name", "")})
+                results[domain] = scenes
+    log.debug(f"Dezyred search found {len(results.get('dezyred', []))} matching scenes for query '{query}'")
     return results
 
 def generate_social_url(label: str, value: str) -> str:
@@ -323,20 +365,71 @@ def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
             scene["image"] = f"https://content.{domain}.com{permalink}"
     return scene
 
+def dezyred_to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
+    """
+    Converts an Dezyred API scene dictionary to a ScrapedScene
+    """
+    log.debug(f"Converting Dezyred API scene: {api_scene} from domain: {domain}")
+    scene: ScrapedScene = {}
+    if name := api_scene.get("name"):
+        scene["title"] = name
+    scene["studio"] = { "name": studio_name_for_domain(domain) }
+    if image := api_scene.get("image"):
+        scene["image"] = image
+    # models is a list of model IDs, we need to fetch each model
+    # if models := api_scene.get("models"):
+    #     scene["performers"] = [to_scraped_performer(model, domain) for model in models]
+    # there is not much information for a scene, so we can get it from the _game
+    # which is the parent of the scene
+    if game := api_scene.get("_game", {}):
+        if game_page_url := game.get("pageUrl"):
+            scene["url"] = f"https://{domain}.com{game_page_url}"
+        if game_created_at := game.get("createdAt"):
+            # date is ISO, e.g. "2023-06-30T12:34:56Z", get first 10 characters
+            scene["date"] = game_created_at[:10]
+        if description := game.get("description"):
+            scene["details"] = clean_text(description)
+
+        scene["tags"] = []
+        # add categories as tags
+        if categories := game.get("categories"):
+            scene["tags"].extend([ { "name": TAG_MAPPER.get(c.get("title"), c.get("title")) } for c in categories ])
+        # add fixed tag for VR
+        if "Virtual Reality" not in [tag["name"] for tag in scene["tags"]]:
+            scene["tags"].append({ "name": "Virtual Reality" })
+    return scene
+
 def scene_search(query: str, sites: list[str], fragment: dict[str, Any] | None = None) -> list[ScrapedScene]:
     """
     Searches for scenes matching the query across the specified sites
     """
-    api_scenes = api_search(query, sites)
+    api_scenes = api_search(query, [ s for s in sites if s != "dezyred" ])
     all_scenes = [
         {**scene, "_domain": domain}
         for domain, data in api_scenes.items()
-        for scene in data.get("videos", [])[:10]    # limit to first 10 scenes per site
+        for scene in data.get("videos", [])[:1]    # limit to first 1 scenes per site
     ]
-    return [
-        to_scraped_scene(scene, scene["_domain"])
+    if "dezyred" in sites:
+        dezyred_api_scenes = dezyred_api_scene_search(query)
+        all_scenes.extend(
+            {**scene, "_domain": "dezyred"}
+            for scene in dezyred_api_scenes.get("dezyred", [])
+        )
+    # log the number of scenes found per domain
+    domain_counts = {}
+    for scene in all_scenes:
+        domain = scene["_domain"]
+        domain_counts[domain] = domain_counts.get(domain, 0) + 1
+    log.debug(f"Number of scenes found per domain: {domain_counts}")
+    scraped_scenes = [
+        dezyred_to_scraped_scene(scene, scene["_domain"]) if scene["_domain"] == "dezyred" else to_scraped_scene(scene, scene["_domain"])
         for scene in sort_api_scenes_by_match(all_scenes, fragment if fragment is not None else {"title": query})
     ]
+    # write scraped_scenes as JSON to file cache
+    with open(SCRAPED_SCENES_FILE_CACHE, "w", encoding="utf-8") as f:
+        f.write(json.dumps(scraped_scenes, ensure_ascii=False, indent=2))
+        f.write("\n")
+    return scraped_scenes
 
 def scene_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedScene:
     """
@@ -355,6 +448,22 @@ def scene_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedSc
     - urls
     from the result of the scene-by-name search
     """
+    # attempt to get the scene from the cache first
+    if os.path.exists(SCRAPED_SCENES_FILE_CACHE):
+        with open(SCRAPED_SCENES_FILE_CACHE, "r", encoding="utf-8") as f:
+            try:
+                scraped_scenes_cache = json.load(f)
+            except json.JSONDecodeError:
+                log.error(f"Failed to decode JSON from cache file: {SCRAPED_SCENES_FILE_CACHE}")
+                scraped_scenes_cache = []
+        for cached_scene in scraped_scenes_cache:
+            log.debug(f"Checking cached scene: {cached_scene}")
+            if (
+                fragment.get("url") and cached_scene.get("url") == fragment.get("url")
+                and cached_scene.get("title", "").lower() == fragment.get("title", "").lower()
+            ):
+                log.debug(f"Found scene in cache for URL: {fragment.get('url')} and title: {fragment.get('title')}")
+                return cached_scene
     if urls := fragment.get("urls"): # the first URL should be usable for a full search
         return scene_from_url(urls[0])
     if title := fragment.get("title"): # if a title is present, search by text
