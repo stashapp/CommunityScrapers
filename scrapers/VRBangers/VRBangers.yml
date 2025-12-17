@@ -11,6 +11,7 @@ sceneByName:
     # you can comment out studios you don't want to search
     - arporn
     - blowvr
+    - dezyred
     - vrbangers
     - vrbgay
     - vrbtrans
@@ -24,6 +25,7 @@ sceneByFragment:
     # you can comment out studios you don't want to search
     - arporn
     - blowvr
+    - dezyred
     - vrbangers
     - vrbgay
     - vrbtrans
@@ -37,6 +39,7 @@ sceneByQueryFragment:
     # you can comment out studios you don't want to search
     - arporn
     - blowvr
+    - dezyred
     - vrbangers
     - vrbgay
     - vrbtrans
@@ -47,6 +50,7 @@ sceneByURL:
     url: &urls
       - arporn.com
       - blowvr.com
+      # dezyred.com does not have distinct scene URLs, but instead uses a single page for its games (see groupByURL)
       - vrbangers.com
       - vrbgay.com
       - vrbtrans.com
@@ -60,10 +64,13 @@ galleryByURL:
     url: *urls
     scraper: vrbScraper
 groupByURL:
-  - action: scrapeXPath
+  - action: script
     url:
-      - vrbangers.com
-    scraper: vrbScraper
+      - dezyred.com/games/
+    script:
+      - python
+      - VRBangers.py
+      - group-by-url
 performerByFragment:
   action: script
   script:
@@ -72,6 +79,7 @@ performerByFragment:
     # you can comment out studios you don't want to search
     - arporn
     - blowvr
+    - dezyred
     - vrbangers
     - vrbgay
     - vrbtrans
@@ -85,6 +93,7 @@ performerByName:
     # you can comment out studios you don't want to search
     - arporn
     - blowvr
+    - dezyred
     - vrbangers
     - vrbgay
     - vrbtrans
@@ -92,7 +101,14 @@ performerByName:
     - performer-by-name
 performerByURL:
   - action: script
-    url: *urls
+    url:
+      - arporn.com
+      - blowvr.com
+      - dezyred.com
+      - vrbangers.com
+      - vrbgay.com
+      - vrbtrans.com
+      - vrconk.com
     script:
       - python
       - VRBangers.py

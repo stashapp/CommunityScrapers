@@ -8,7 +8,7 @@ from typing import Any
 from py_common.deps import ensure_requirements
 ensure_requirements("bs4:beautifulsoup4", "requests")
 import py_common.log as log
-from py_common.types import ScrapedPerformer, ScrapedScene
+from py_common.types import ScrapedGroup, ScrapedPerformer, ScrapedScene
 from py_common.util import guess_nationality, scraper_args
 
 import requests
@@ -49,7 +49,8 @@ TAG_MAPPER = {
     "FISHEYE_STEREO_180_LR": "Fisheye",
     "Compilations": "Compilation",
 }
-MODEL_URL_REGEX = re.compile(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/model/([a-zA-Z0-9\-]+)/?")
+MODEL_URL_REGEX = re.compile(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/(?:model|pornstars)/([a-zA-Z0-9\-]+)/?")
+DEZYRED_GAME_URL_REGEX = re.compile(r"https?://(?:www\.)?dezyred\.com/games/([a-zA-Z0-9\-]+)/?")
 
 # simple cache for digests
 DIGEST_CACHE: dict[str, dict] = {}
@@ -130,6 +131,10 @@ def to_scraped_performer(api_model: dict, domain: str) -> ScrapedPerformer:
     performer: ScrapedPerformer = {}
     if slug := api_model.get("slug"):
         performer["url"] = f"https://{domain}.com/model/{slug}/"
+    if performer.get("url"):
+        performer["urls"] = [performer["url"]]
+    else:
+        performer["urls"] = []
     if description := api_model.get("description"):
         performer["details"] = clean_text(description)
     if title := api_model.get("title"):
@@ -181,7 +186,74 @@ def to_scraped_performer(api_model: dict, domain: str) -> ScrapedPerformer:
             for item in social_items
             if item.get("id") == digest_item.get("id")
         ]
-        performer["urls"] = social_urls
+        performer["urls"].extend(social_urls)
+    return performer
+
+def dezyred_to_scraped_performer(api_model: dict, domain: str) -> ScrapedPerformer:
+    """
+    Converts a Dezyred API model dictionary to a ScrapedPerformer
+    """
+    performer: ScrapedPerformer = {}
+    if page_url := api_model.get("pageUrl"):
+        performer["url"] = f"https://{domain}.com{page_url}"
+    elif slug := api_model.get("slug"):
+        performer["url"] = f"https://{domain}.com/pornstars/{slug}"
+    if performer.get("url"):
+        performer["urls"] = [performer["url"]]
+    else:
+        performer["urls"] = []
+    if description := api_model.get("description"):
+        performer["details"] = clean_text(description)
+    if first_name := api_model.get("firstName"):
+        if last_name := api_model.get("lastName"):
+            performer["name"] = f"{first_name.strip()} {last_name.strip()}"
+        else:
+            performer["name"] = first_name.strip()
+    if about := api_model.get("about"):
+        if bio_stats := about.get("bioStats"):
+            # this is a list of objects with "label" and "value" keys
+            for info in bio_stats:
+                name = info.get("name", "").lower()
+                value = info.get("value", "")
+                if name == "height":
+                    if cm := re.search(r"(\d+)\s*cm", value.lower()):
+                        # e.g. "5'4\" (or 162 cm)"
+                        performer["height"] = cm.group(1)
+                    else:
+                        # assume value is in cm, e.g. "162"
+                        performer["height"] = value
+                elif name == "weight":
+                    if kg:= re.search(r"(\d+)\s*kg", value.lower()):
+                        # e.g. "97 lbs (or 44 kg)"
+                        performer["weight"] = kg.group(1)
+                    else:
+                        # assume value is in kg, e.g. "44"
+                        performer["weight"] = value
+                elif name == "measurements":
+                    # remove spaces and replace "/" with "-"
+                    performer["measurements"] = value.replace(" ", "").replace("/", "-")
+                elif name == "hair color":
+                    performer["hair_color"] = value
+                elif name == "eye color":
+                    performer["eye_color"] = value
+                elif name == "ethnicity":
+                    performer["ethnicity"] = value
+                elif name == "country of origin":
+                    performer["country"] = guess_nationality(value)
+                elif name == "place of birth" and "country" not in performer:
+                    performer["country"] = guess_nationality(value)
+        if biography_annotation := about.get("biography", {}).get("annotation"):
+            # biography has full and annotation, the full is mostly VR blurb
+            performer["details"] = clean_text(biography_annotation)
+        if birth_date := about.get("birthDate"):
+            # value is ISO date, e.g. "1990-05-15" or "1985-03-03 12:00:00"
+            # just get first 10 characters
+            performer["birthdate"] = birth_date[:10]
+        if photo := about.get("photo"):
+            performer["image"] = photo
+    if socials := api_model.get("socials", []):
+        social_urls = [ s["url"] for s in socials if s["url"] ]
+        performer["urls"].extend(social_urls)
     return performer
 
 def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
@@ -316,11 +388,19 @@ def scene_from_url(url: str) -> ScrapedScene:
     api_scene = response.json().get("data", {}).get("item", {})
     return to_scraped_scene(api_scene, domain)
 
+def get_api_model(domain: str, api_url: str) -> dict[str, Any]:
+    headers = headers_for_domain(domain)
+    log.debug(f"Fetching model from {api_url} with headers: {headers}")
+    response = requests.get(api_url, headers=headers)
+    if response.status_code != 200:
+        log.error(f"Failed to fetch model from {domain}: HTTP {response.status_code}")
+        return {}
+    response_json = response.json()
+    data_item = response_json.get("data", {}).get("item", {})
+    api_model = data_item if data_item else response_json
+    return api_model
+
 def performer_from_url(url: str) -> ScrapedPerformer:
-    """
-    Scrapes a performer from a URL at the corresponding site API
-    """
-    # extract domain and slug from url in one regex
     match = MODEL_URL_REGEX.match(url)
     if not match:
         log.error(f"Invalid performer URL format: {url}")
@@ -330,16 +410,17 @@ def performer_from_url(url: str) -> ScrapedPerformer:
         log.error(f"Domain {domain} not in sites: {CONFIG.keys()}")
         return {}
     slug = match.group(2)
+    if domain == "dezyred":
+        api_url = f"https://{domain}.com/api/models/{slug}"
+        return dezyred_to_scraped_performer(get_api_model(domain, api_url), domain)
+    else:
+        api_url = f"https://content.{domain}.com/api/content/v1/models/{slug}"
+        return to_scraped_performer(get_api_model(domain, api_url), domain)
 
-    headers = headers_for_domain(domain)
-    api_url = f"https://content.{domain}.com/api/content/v1/models/{slug}"
-    log.debug(f"Fetching performer from {api_url} with headers: {headers}")
-    response = requests.get(api_url, headers=headers)
-    if response.status_code != 200:
-        log.error(f"Failed to fetch performer from {domain}: HTTP {response.status_code}")
-        return {}
-    api_model = response.json().get("data", {}).get("item", {})
-    return to_scraped_performer(api_model, domain)
+def dezyred_performer_from_id(model_id: str) -> ScrapedPerformer:
+    domain = "dezyred"
+    api_url = f"https://{domain}.com/api/models/{model_id}"
+    return dezyred_to_scraped_performer(get_api_model(domain, api_url), domain)
 
 def performer_search(query: str, sites: list[str]) -> list[ScrapedPerformer]:
     """
@@ -422,6 +503,76 @@ def get_digest(site: str) -> dict | None:
     DIGEST_CACHE[site] = digest
     return digest
 
+def to_scraped_group(api_group: dict, domain: str) -> ScrapedGroup:
+    """
+    Converts an API group dictionary to a ScrapedGroup
+    """
+    group: ScrapedGroup = {}
+    group["studio"] = { "name": studio_name_for_domain(domain) }
+    if title := api_group.get("title"):
+        group["name"] = title
+    if description := api_group.get("description"):
+        group["synopsis"] = clean_text(description)
+    if page_url := api_group.get("pageUrl"):
+        group["url"] = f"https://{domain}.com{page_url}"
+    if posters_list_item := api_group.get("posters", {}).get("listItem"):
+        group["front_image"] = posters_list_item
+    if categories := api_group.get("categories", []):
+        group["tags"] = [ { "name": c.get("title") } for c in categories ]
+    if created_at := api_group.get("createdAt"):
+        # date is ISO date, e.g. "2023-06-15T12:34:56Z", just get first 10 characters
+        group["date"] = created_at[:10]
+
+    # performers are in "models" key, which is a list of model IDs
+    # this is not a property of the group, but we can log them out for some
+    # useful info for the associated scenes, as the scenes do not include
+    # performer details
+    if model_ids := api_group.get("models", []):
+        # use futures to fetch all performers concurrently
+        performers: list[ScrapedPerformer] = []
+        with ThreadPoolExecutor() as executor:
+            futures = {
+                executor.submit(dezyred_performer_from_id, model_id): model_id
+                for model_id in model_ids
+            }
+            for future in as_completed(futures):
+                performer = future.result()
+                if performer:
+                    performers.append(performer)
+        log.debug(f"Group performers: {[p.get('name') for p in performers]}")
+
+    # the scene titles can be logged out
+    if scenes := api_group.get("scenes", []):
+        scene_titles = [ scene.get("name") for scene in scenes ]
+        log.debug(f"Group scenes: {scene_titles}")
+    
+    return group
+
+def group_from_url(url: str) -> ScrapedGroup:
+    """
+    Dezyred "games" are really groups of scenes
+    
+    :param url: URL of the "game", e.g. https://dezyred.com/games/white-iris/
+    :type url: str
+    :return: ScrapedGroup representing the game
+    :rtype: ScrapedGroup
+    """
+    match = DEZYRED_GAME_URL_REGEX.match(url)
+    if not match:
+        log.error(f"Invalid group URL format: {url}")
+        return {}
+    slug = match.group(1)
+    domain = "dezyred"
+    headers = headers_for_domain(domain)
+    api_url = f"https://{domain}.com/api/games/{slug}"
+    log.debug(f"Fetching group from {api_url} with headers: {headers}")
+    response = requests.get(api_url, headers=headers)
+    if response.status_code != 200:
+        log.error(f"Failed to fetch group from {domain}: HTTP {response.status_code}")
+        return {}
+    api_group = response.json()
+    return to_scraped_group(api_group, domain)
+
 if __name__ == "__main__":
     op, args = scraper_args()
 
@@ -433,6 +584,8 @@ if __name__ == "__main__":
         # case "gallery-by-fragment", args:
         #     sites = args.pop("extra")
         #     result = gallery_from_fragment(args, sites)
+        case "group-by-url", {"url": url} if url:
+            result = group_from_url(url)
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
         case "scene-by-name", {"name": name, "extra": extra} if name and extra:
