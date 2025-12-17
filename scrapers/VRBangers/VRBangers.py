@@ -457,7 +457,7 @@ def scene_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedSc
                 log.error(f"Failed to decode JSON from cache file: {SCRAPED_SCENES_FILE_CACHE}")
                 scraped_scenes_cache = []
         for cached_scene in scraped_scenes_cache:
-            log.debug(f"Checking cached scene: {cached_scene}")
+            log.debug(f"Checking cached scene: {cached_scene.get('title')}")
             if (
                 fragment.get("url") and cached_scene.get("url") == fragment.get("url")
                 and cached_scene.get("title", "").lower() == fragment.get("title", "").lower()
@@ -467,6 +467,11 @@ def scene_from_fragment(fragment: dict[str, Any], sites: list[str]) -> ScrapedSc
     if urls := fragment.get("urls"): # the first URL should be usable for a full search
         return scene_from_url(urls[0])
     if title := fragment.get("title"): # if a title is present, search by text
+        if match := re.match(r"^(vrbangers|vrbgay|vrbtrans|vrconk)_(.+)_(?:oculus|\dk)_.+$", title.strip(), re.IGNORECASE):
+            domain = match.group(1).lower()
+            # convert the 2nd part to a slug (underscores to hyphens, lowercase)
+            slug = match.group(2).replace("_", "-").lower()
+            return scene_from_url(f"https://{domain}.com/video/{slug}/")
         if len(scenes := scene_search(title, sites, fragment)) > 0:
             return scenes[0] # best match is sorted at the top
     return {}
