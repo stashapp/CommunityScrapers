@@ -378,6 +378,7 @@ def dezyred_to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
     # which is the parent of the scene
     if game := api_scene.get("_game", {}):
         group = to_scraped_group(game, domain)
+        scene["groups"] = [group]
         if (group_name := group.get("name")) and (scene_name := api_scene.get("name")):
             scene["title"] = f"{group_name} - {scene_name}"
         if group_url := group.get("url"):
