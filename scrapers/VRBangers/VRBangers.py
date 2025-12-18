@@ -440,7 +440,9 @@ def scene_search(query: str, sites: list[str], fragment: dict[str, Any] | None =
             dezyred_to_scraped_scene(scene, scene["_domain"])
             for scene in dezyred_all_scenes
         ]
-        scraped_scenes.extend(dezyred_scraped_scenes)
+        # dezyred scenes are selected for exact matches on game or scene, so
+        # put them at the start of the list
+        scraped_scenes = dezyred_scraped_scenes + scraped_scenes
     # write scraped_scenes as JSON to file cache
     with open(SCRAPED_SCENES_FILE_CACHE, "w", encoding="utf-8") as f:
         f.write(json.dumps(scraped_scenes, ensure_ascii=False, indent=2))
