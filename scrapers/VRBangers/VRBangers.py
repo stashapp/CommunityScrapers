@@ -371,32 +371,41 @@ def dezyred_to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
     """
     log.debug(f"Converting Dezyred API scene: {api_scene} from domain: {domain}")
     scene: ScrapedScene = {}
-    if name := api_scene.get("name"):
-        scene["title"] = name
     scene["studio"] = { "name": studio_name_for_domain(domain) }
     if image := api_scene.get("image"):
         scene["image"] = image
-    # models is a list of model IDs, we need to fetch each model
-    # if models := api_scene.get("models"):
-    #     scene["performers"] = [to_scraped_performer(model, domain) for model in models]
     # there is not much information for a scene, so we can get it from the _game
     # which is the parent of the scene
     if game := api_scene.get("_game", {}):
-        if game_page_url := game.get("pageUrl"):
-            scene["url"] = f"https://{domain}.com{game_page_url}"
-        if game_created_at := game.get("createdAt"):
-            # date is ISO, e.g. "2023-06-30T12:34:56Z", get first 10 characters
-            scene["date"] = game_created_at[:10]
-        if description := game.get("description"):
-            scene["details"] = clean_text(description)
-
-        scene["tags"] = []
-        # add categories as tags
-        if categories := game.get("categories"):
-            scene["tags"].extend([ { "name": TAG_MAPPER.get(c.get("title"), c.get("title")) } for c in categories ])
-        # add fixed tag for VR
-        if "Virtual Reality" not in [tag["name"] for tag in scene["tags"]]:
-            scene["tags"].append({ "name": "Virtual Reality" })
+        group = to_scraped_group(game, domain)
+        if (group_name := group.get("name")) and (scene_name := api_scene.get("name")):
+            scene["title"] = f"{group_name} - {scene_name}"
+        if group_url := group.get("url"):
+            scene["url"] = group_url
+        if group_date := group.get("date"):
+            scene["date"] = group_date
+        if group_synopsis := group.get("synopsis"):
+            scene["details"] = group_synopsis
+        if group_tags := group.get("tags"):
+            scene["tags"] = group_tags
+        # the game lists the perfomers, but a group does not have performers
+        # performers are in "models" key, which is a list of model IDs
+        if model_ids := game.get("models", []):
+            # use futures to fetch all performers concurrently
+            performers: list[ScrapedPerformer] = []
+            with ThreadPoolExecutor() as executor:
+                futures = {
+                    executor.submit(dezyred_performer_from_id, model_id): model_id
+                    for model_id in model_ids
+                }
+                for future in as_completed(futures):
+                    performer = future.result()
+                    if performer:
+                        performers.append(performer)
+            log.debug(f"Group performers: {[p.get('name') for p in performers]}")
+            scene["performers"] = performers
+    elif scene_name := api_scene.get("name"):
+        scene["title"] = scene_name
     return scene
 
 def scene_search(query: str, sites: list[str], fragment: dict[str, Any] | None = None) -> list[ScrapedScene]:
@@ -513,7 +522,9 @@ def scene_from_url(url: str) -> ScrapedScene:
     try:
         log.trace(f"Making request to URL: {api_url}")
         response = requests.get(api_url, headers=headers, timeout=10)
-        log.trace(f"API response: {response.text}")
+        log.trace(f"API response: {response}")
+        log.trace(f"API response status code: {response.status_code}")
+        log.trace(f"API response text: {response.text}")
         if response.status_code != 200:
             log.error(f"Failed to fetch scene from {domain}: HTTP {response.status_code}")
             return {}
@@ -688,7 +699,10 @@ def to_scraped_group(api_group: dict, domain: str) -> ScrapedGroup:
     if posters_list_item := api_group.get("posters", {}).get("listItem"):
         group["front_image"] = posters_list_item
     if categories := api_group.get("categories", []):
-        group["tags"] = [ { "name": c.get("title") } for c in categories ]
+        group["tags"] = [ { "name": TAG_MAPPER.get(c.get("title"), c.get("title")) } for c in categories ]
+        # add fixed tag for VR
+        if "Virtual Reality" not in [tag["name"] for tag in group["tags"]]:
+            group["tags"].append({ "name": "Virtual Reality" })
     if created_at := api_group.get("createdAt"):
         # date is ISO date, e.g. "2023-06-15T12:34:56Z", just get first 10 characters
         group["date"] = created_at[:10]
