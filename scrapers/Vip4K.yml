@@ -42,8 +42,8 @@ xPathScrapers:
           - replace:
               - regex: https.+/(\w+)/?$
                 with: $1
-      Image: 
-        selector: //picture[@class='player-item__inner']/img/@data-src
+      Image:
+        selector: //div[@id='player-rmp']/@data-poster
         postProcess:
           - replace:
               - regex: ^//
@@ -57,4 +57,4 @@ xPathScrapers:
           postProcess:
             - map:
                 Sis: Sis.Porn
-# Last Updated December 11, 2023
+# Last Updated December 18, 2025
