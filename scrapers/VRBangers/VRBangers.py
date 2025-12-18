@@ -10,7 +10,7 @@ from py_common.deps import ensure_requirements
 ensure_requirements("bs4:beautifulsoup4", "requests")
 import py_common.log as log
 from py_common.types import ScrapedGallery, ScrapedGroup, ScrapedPerformer, ScrapedScene
-from py_common.util import guess_nationality, scraper_args
+from py_common.util import dig, guess_nationality, scraper_args
 
 import requests
 from bs4 import BeautifulSoup as bs
@@ -365,11 +365,11 @@ def to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
             scene["image"] = f"https://content.{domain}.com{permalink}"
     return scene
 
-def dezyred_to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
+def dezyred_game_scene_to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
     """
-    Converts an Dezyred API scene dictionary to a ScrapedScene
+    Converts a Dezyred API game scene dictionary to a ScrapedScene
     """
-    log.debug(f"Converting Dezyred API scene: {api_scene} from domain: {domain}")
+    log.debug(f"Converting Dezyred API game scene: {api_scene} from domain: {domain}")
     scene: ScrapedScene = {}
     scene["studio"] = { "name": studio_name_for_domain(domain) }
     if image := api_scene.get("image"):
@@ -409,6 +409,34 @@ def dezyred_to_scraped_scene(api_scene: dict, domain: str) -> ScrapedScene:
         scene["title"] = scene_name
     return scene
 
+def dezyred_interactive_video_to_scraped_scene(api_video: dict, domain: str) -> ScrapedScene:
+    """
+    Converts an Dezyred API interactive video dictionary to a ScrapedScene
+    """
+    log.debug(f"Converting Dezyred API interactive video: {api_video} from domain: {domain}")
+    scene: ScrapedScene = {}
+    scene["studio"] = { "name": studio_name_for_domain(domain) }
+    if title := api_video.get("title"):
+        scene["title"] = title
+    if page_url := api_video.get("pageUrl"):
+        scene["url"] = f"https://{domain}.com/videos/{page_url}"
+    if image := dig(api_video, "posters", ("previewItem", "listItem")):
+        scene["image"] = image
+    if categories := api_video.get("categories"):
+        scene["tags"] = [ { "name": TAG_MAPPER.get(c.get("title"), c.get("title")) } for c in categories ]
+        # add fixed tag for VR
+        if "Virtual Reality" not in [tag["name"] for tag in scene["tags"]]:
+            scene["tags"].append({ "name": "Virtual Reality" })
+    if model_ids := api_video.get("models"):
+        # this is a list of model IDs
+        scene["performers"] = dezyred_models_from_id_list(model_ids)
+    if created_at := api_video.get("createdAt"):
+        # date is ISO format, e.g. "2023-06-15T12:34:56Z", get first 10 characters
+        scene["date"] = created_at[:10]
+    if description := api_video.get("description"):
+        scene["details"] = clean_text(description)
+    return scene
+
 def scene_search(query: str, sites: list[str], fragment: dict[str, Any] | None = None) -> list[ScrapedScene]:
     """
     Searches for scenes matching the query across the specified sites
@@ -437,7 +465,7 @@ def scene_search(query: str, sites: list[str], fragment: dict[str, Any] | None =
         ]
         log.debug(f"Number of Dezyred scenes found: {len(dezyred_all_scenes)}")
         dezyred_scraped_scenes = [
-            dezyred_to_scraped_scene(scene, scene["_domain"])
+            dezyred_game_scene_to_scraped_scene(scene, scene["_domain"])
             for scene in dezyred_all_scenes
         ]
         # dezyred scenes are selected for exact matches on game or scene, so
@@ -509,7 +537,7 @@ def scene_from_url(url: str) -> ScrapedScene:
     Scrapes a scene from a URL at the corresponding site API
     """
     # extract domain and slug from url in one regex
-    match = re.match(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/video/([a-zA-Z0-9\-]+)/?", url)
+    match = re.match(r"https?://(?:www\.)?([a-zA-Z0-9\-]+)\.com/videos?/([a-zA-Z0-9\-]+)/?", url)
     if not match:
         log.error(f"Invalid scene URL format: {url}")
         return {}
@@ -520,7 +548,10 @@ def scene_from_url(url: str) -> ScrapedScene:
     slug = match.group(2)
 
     headers = headers_for_domain(domain)
-    api_url = f"https://content.{domain}.com/api/content/v1/videos/{slug}"
+    if domain == "dezyred":
+        api_url = f"https://{domain}.com/api/interactive-videos/{slug}"
+    else:
+        api_url = f"https://content.{domain}.com/api/content/v1/videos/{slug}"
     log.debug(f"Fetching scene from {api_url} with headers: {headers}")
     try:
         log.trace(f"Making request to URL: {api_url}")
@@ -531,7 +562,10 @@ def scene_from_url(url: str) -> ScrapedScene:
         if response.status_code != 200:
             log.error(f"Failed to fetch scene from {domain}: HTTP {response.status_code}")
             return {}
-        api_scene = response.json().get("data", {}).get("item", {})
+        if domain == "dezyred":
+            api_scene = response.json()
+        else:
+            api_scene = response.json().get("data", {}).get("item", {})
     except requests.RequestException as e:
         log.error(f"Request exception while fetching scene from {domain}: {e}")
         return {}
@@ -539,6 +573,8 @@ def scene_from_url(url: str) -> ScrapedScene:
         log.error(f"Unexpected exception while fetching scene from {domain}: {e}")
         return {}
     log.debug(f"Fetched API scene: {api_scene}")
+    if domain == "dezyred":
+        return dezyred_interactive_video_to_scraped_scene(api_scene, domain)
     return to_scraped_scene(api_scene, domain)
 
 def gallery_from_scene(scene: ScrapedScene) -> ScrapedGallery:
@@ -716,16 +752,7 @@ def to_scraped_group(api_group: dict, domain: str) -> ScrapedGroup:
     # performer details
     if model_ids := api_group.get("models", []):
         # use futures to fetch all performers concurrently
-        performers: list[ScrapedPerformer] = []
-        with ThreadPoolExecutor() as executor:
-            futures = {
-                executor.submit(dezyred_performer_from_id, model_id): model_id
-                for model_id in model_ids
-            }
-            for future in as_completed(futures):
-                performer = future.result()
-                if performer:
-                    performers.append(performer)
+        performers = dezyred_models_from_id_list(model_ids)
         log.debug(f"Group performers: {[p.get('name') for p in performers]}")
 
     # the scene titles can be logged out
@@ -734,6 +761,19 @@ def to_scraped_group(api_group: dict, domain: str) -> ScrapedGroup:
         log.debug(f"Group scenes: {scene_titles}")
     
     return group
+
+def dezyred_models_from_id_list(model_ids: list[int]) -> list[ScrapedPerformer]:
+    performers: list[ScrapedPerformer] = []
+    with ThreadPoolExecutor() as executor:
+        futures = {
+                executor.submit(dezyred_performer_from_id, model_id): model_id
+                for model_id in model_ids
+            }
+        for future in as_completed(futures):
+            performer = future.result()
+            if performer:
+                performers.append(performer)
+    return performers
 
 def group_from_url(url: str) -> ScrapedGroup:
     """
