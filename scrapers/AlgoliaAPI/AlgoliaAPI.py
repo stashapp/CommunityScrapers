@@ -173,15 +173,6 @@ def scene_url(site: str, sitename: str, url_title: str, clip_id: str) -> str:
     "Generates URL for a scene"
     return f"{homepage_url(site.lower())}/en/video/{sitename.lower()}/{url_title}/{clip_id}"
 
-def parse_endowment(performer_from_api: dict[str, Any], gender: str | None) -> dict[str, Any] | None:
-    "Parses penis length if gender is male"
-    if (
-        gender == "male"
-        and (endowment := dig(performer_from_api, "attributes", "endowment"))
-    ):
-        return {"penis_length": feet_to_cm("0'" + endowment.strip())}
-    return None
-
 def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> ScrapedPerformer:
     "Helper function to convert from Algolia's API to Stash's scraper return type"
     performer: ScrapedPerformer = {}
@@ -203,8 +194,8 @@ def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> Scrap
         performer["height"] = feet_to_cm(height.strip())
     if weight := dig(performer_from_api, "attributes", "weight"):
         performer["weight"] = lb_to_kg(weight.strip())
-    if endowment := parse_endowment(performer_from_api, performer.get("gender")):
-        performer.update(endowment)
+    if endowment := dig(performer_from_api, "attributes", "endowment"):
+        performer["penis_length"] = feet_to_cm("0'" + endowment.strip())
     if home := dig(performer_from_api, "attributes", "home"):
         performer["country"] = guess_nationality(home.strip())
     if performer_from_api.get("has_pictures") and (pictures := performer_from_api.get("pictures")):
