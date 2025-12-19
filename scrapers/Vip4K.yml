@@ -47,7 +47,8 @@ xPathScrapers:
               - regex: https.+/(\w+)/?$
                 with: $1
       Image:
-        selector: //div[@id='player-rmp']/@data-poster
+        # scene with preview | scene without preview
+        selector: //div[@id='player-rmp']/@data-poster|//picture[@class='player-item__inner']/img/@src
         postProcess:
           - replace:
               - regex: ^//
