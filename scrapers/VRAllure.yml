@@ -2,12 +2,37 @@
 # VR Allure is part of KB Productions, but has its own scraper file as the site
 # does not have the same JSON script as other KBP sites.
 name: VR Allure
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - vrallure.com/models
+    scraper: performerScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - vrallure.com/scenes
     scraper: sceneScraper
 xPathScrapers:
+  performerScraper:
+    common:
+      $modelAttributes: //ul[@class="model-attributes"]
+    performer:
+      Name: //h1[@id="model-name"]
+      Gender: $modelAttributes/li[span="Gender"]/text()
+      Ethnicity: $modelAttributes/li[span="Ethnicity"]/text()
+      Height:
+        selector: $modelAttributes/li[span="Height"]/text()
+        postProcess:
+          - feetToCm: true
+      EyeColor: $modelAttributes/li[span="Eye Color"]/text()
+      HairColor: $modelAttributes/li[span="Hair Color"]/text()
+      URLs: //link[@rel="canonical"]/@href
+      Image:
+        selector: //div[@class="model-photo"]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: "https://"
   sceneScraper:
     scene:
       Title: //h1[@class="latest-scene-title"]
