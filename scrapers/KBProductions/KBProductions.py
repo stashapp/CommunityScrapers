@@ -212,6 +212,9 @@ def get_code(site: str, raw_scene: dict) -> str | None:
     if _id := dig(raw_scene, "id"):
         return str(_id)
 
+def torso_variant(url: str) -> str:
+    # Convert a thumbnail URL to a torso variant URL
+    return re.sub(r"^(.*)(\.jpg)", r"\1_torso\2", url)
 
 def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     # Convert dict keys to lower case because, of couse, they can come in differently depending on studio.
@@ -233,10 +236,10 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     }
 
     if image := raw_performer.get("thumb"):
-        performer["images"] = [image]
+        performer["images"] = [torso_variant(image)]
     elif image := raw_performer.get("thumbnail"):
         image = re.sub(r"^//", "https://", image)
-        performer["images"] = [image]
+        performer["images"] = [torso_variant(image)]
 
     if bio := raw_performer.get("bio"):
         performer["details"] = strip_tags(bio)
@@ -399,9 +402,7 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     img_exts = (".jpg", ".jpeg", ".png")
 
     if scene_cover := next((x for x in cover_candidates if type(x) is str and x.endswith(img_exts)), None):
-        if scene_cover.startswith("//"):
-            scene_cover = "https:" + scene_cover
-        scene["image"] = scene_cover
+        scene["image"] = re.sub(r"^//", "https://", scene_cover)
 
     # There is no reliable way to construct a scene URL from the data
 
