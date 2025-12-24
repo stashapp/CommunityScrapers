@@ -1,0 +1,61 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+# VR Allure is part of KB Productions, but has its own scraper file as the site
+# does not have the same JSON script as other KBP sites.
+name: VR Allure
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vrallure.com/scenes
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="latest-scene-title"]
+      URL: &urlSel //link[@rel="canonical"]/@href
+      Studio:
+        # derive from canonical URL to support other KBP sites with this layout
+        Name:
+          selector: *urlSel
+          postProcess:
+            - replace:
+                # get the domain from the URL
+                - regex: ^https?://(?:www\.)?([^/]+)/.+$
+                  with: $1
+            - map:
+                # map domain to studio name
+                vrallure.com: VR Allure
+      Code:
+        selector: *urlSel
+        postProcess:
+          - replace:
+              # get the part after /scenes/ in the URL and get the part of that before the underscore
+              - regex: ^.*/scenes/([^_]+)_.*$
+                with: $1
+      Date:
+        selector: //p[@class="publish-date"]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: //p[@class="desc"]/span
+        concat: "\n\n"
+      Tags:
+        Name:
+          selector: //p[@class="tag-container"]/a/text()
+          postProcess:
+            # map certain studio tags to Stash tags
+            - map:
+                Finger Bang: Fingering
+                HD Virtual Reality Porn: HD Available
+                Pussylick: Pussy Licking - POV
+                Virtual Reality Porn: Virtual Reality
+      Performers:
+        Name: //p[@class="model-name"]
+        URLs:
+          selector: //p[@class="model-name"]/a/@href
+      Image:
+        selector: //web-vr-video-player/@coverimage
+        postProcess:
+          - replace:
+              - regex: ^//
+                with: "https://"
+# Last Updated December 24, 2025
