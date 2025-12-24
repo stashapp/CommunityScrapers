@@ -199,6 +199,11 @@ def get_studio(site: str) -> ScrapedStudio:
 
 
 def get_code(site: str, raw_scene: dict) -> str | None:
+    if (scene_code := dig(raw_scene, "scene_code")) and (
+        match := re.match(r"^([^_]+).*$", scene_code)
+    ):
+        return match.group(1)
+
     if (trailer := dig(raw_scene, "trailer_url")) and (
         match := re.search(r"/(\w{2,3}\d{4})", trailer)
     ):
@@ -394,6 +399,8 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     img_exts = (".jpg", ".jpeg", ".png")
 
     if scene_cover := next((x for x in cover_candidates if type(x) is str and x.endswith(img_exts)), None):
+        if scene_cover.startswith("//"):
+            scene_cover = "https:" + scene_cover
         scene["image"] = scene_cover
 
     # There is no reliable way to construct a scene URL from the data
