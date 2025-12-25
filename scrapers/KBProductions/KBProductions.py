@@ -90,6 +90,7 @@ studio_map = {
     "3rdwheel.toughlovex.com": "ToughLoveX",
     "trueanal.com": "True Anal",
     "twmclassics.com": "TWM Classics",
+    "vrhush.com": "VRHush",
     "xful.com": "Xful",
     "yesgirlz.com": "Yes Girlz",
     "yummycouple.com": "Yummy Couple",
@@ -198,6 +199,11 @@ def get_studio(site: str) -> ScrapedStudio:
 
 
 def get_code(site: str, raw_scene: dict) -> str | None:
+    if (scene_code := dig(raw_scene, "scene_code")) and (
+        match := re.match(r"^([^_]+).*$", scene_code)
+    ):
+        return match.group(1)
+
     if (trailer := dig(raw_scene, "trailer_url")) and (
         match := re.search(r"/(\w{2,3}\d{4})", trailer)
     ):
@@ -206,6 +212,9 @@ def get_code(site: str, raw_scene: dict) -> str | None:
     if _id := dig(raw_scene, "id"):
         return str(_id)
 
+def torso_variant(url: str) -> str:
+    # Convert a thumbnail URL to a torso variant URL
+    return re.sub(r"^(.*)(\.jpg)", r"\1_torso\2", url)
 
 def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     # Convert dict keys to lower case because, of couse, they can come in differently depending on studio.
@@ -227,10 +236,10 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     }
 
     if image := raw_performer.get("thumb"):
-        performer["images"] = [image]
+        performer["images"] = [torso_variant(image)]
     elif image := raw_performer.get("thumbnail"):
         image = re.sub(r"^//", "https://", image)
-        performer["images"] = [image]
+        performer["images"] = [torso_variant(image)]
 
     if bio := raw_performer.get("bio"):
         performer["details"] = strip_tags(bio)
@@ -344,6 +353,7 @@ def to_scraped_movie(raw_movie: dict) -> ScrapedMovie:
 
 
 def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
+    log.debug(f"Raw scene data: {json.dumps(raw_scene)}")
     site = raw_scene["site_domain"]
     scene: ScrapedScene = {}
 
@@ -365,6 +375,9 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
             for x in models
         ]
     if tags := raw_scene.get("tags"):
+        # add fixed tag "Virtual Reality" for VR studios
+        if site in ("vrhush.com") and "Virtual Reality" not in tags:
+            tags.append("Virtual Reality")
         scene["tags"] = [{"name": x} for x in tags]
 
     scene["studio"] = get_studio(site)
@@ -388,8 +401,8 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     # No animated scene covers
     img_exts = (".jpg", ".jpeg", ".png")
 
-    if scene_cover := next((x for x in cover_candidates if x.endswith(img_exts)), None):
-        scene["image"] = scene_cover
+    if scene_cover := next((x for x in cover_candidates if type(x) is str and x.endswith(img_exts)), None):
+        scene["image"] = re.sub(r"^//", "https://", scene_cover)
 
     # There is no reliable way to construct a scene URL from the data
 
