@@ -87,7 +87,7 @@ def scene_by_url(url) -> ScrapedScene:
     director = tree.xpath("//a[contains(@href,'/works?q=')]")
     title = tree.xpath("//h1[contains(@class, 'text-lg')]")[0].text
     performers = list(map(map_by_name, tree.xpath("//a[contains(@class, 'chip')]/span[1]")))
-    image_url = tree.xpath("//main/section[2]/div[1]/div[2]/a/div/img/@src")[0]
+    image_url = tree.xpath("//a[contains(@class,'md:grow')]/div/img/@src")[0]
     image_bytes = fetch_as_base64(image_url)
     image_base64 = f"data:image/jpg;base64,{image_bytes}"
     # url = tree.xpath("html/head//link[@rel='canonical']/@href")[0]
