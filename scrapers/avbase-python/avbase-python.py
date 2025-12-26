@@ -3,9 +3,9 @@ import sys
 from datetime import datetime
 
 import py_common.log as log
-from py_common.config import get_config
 import requests
 from lxml import html
+from py_common.config import get_config
 from py_common.types import ScrapedScene
 from py_common.util import scraper_args
 
@@ -89,6 +89,7 @@ def scene_by_url(url) -> ScrapedScene:
     # url = tree.xpath("html/head//link[@rel='canonical']/@href")[0]
     tags = list(map(map_by_name, tree.xpath("//a[contains(@href,'/tags/')]")))
     code = tree.xpath("//span[contains(text(), '名寄せID: ')]/following-sibling::div/span[contains(text(),'-')]")[0].text
+    description = tree.xpath("//div[contains(@class, 'text-xs') and contains(text(), '紹介文')]/following-sibling::div")
 
     scene: ScrapedScene = {
         "title": title,
@@ -99,6 +100,7 @@ def scene_by_url(url) -> ScrapedScene:
         },
         "date": date,
         "director": director[0].text if director else None,
+        "details" : description[0].text if description else None,
         "performers": performers,
         "code": code,
         "tags": tags
@@ -113,6 +115,8 @@ if __name__ == "__main__":
         case "scene-by-name", {"name": name} if name:
             result = scene_by_name(name)
         case "scene-by-query-fragment", {"url": url} if url:
+            result = scene_by_url(url)
+        case "scene-by-url", {"url": url} if url:
             result = scene_by_url(url)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
