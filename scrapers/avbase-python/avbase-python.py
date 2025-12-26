@@ -1,3 +1,4 @@
+import base64
 import json
 import sys
 from datetime import datetime
@@ -6,7 +7,7 @@ import py_common.log as log
 import requests
 from lxml import html
 from py_common.config import get_config
-from py_common.types import ScrapedScene
+from py_common.types import ScrapedScene, SceneSearchResult
 from py_common.util import scraper_args
 
 BASE_URL = "https://www.avbase.net"
@@ -43,19 +44,20 @@ def process_date(date_string):
     return datetime.strptime(date_string, '%Y/%m/%d').date().isoformat()
 
 
-def map_scene(node) -> ScrapedScene:
+def map_scene(node) -> SceneSearchResult:
     title = node.xpath('.//div[@class="grow"]/a[contains(@href,"/works")]')[0].text.strip()
     performers = list(map(map_by_name, node.xpath('.//a[contains(@href,"/talents")]/span')))
     maker = node.xpath('.//a[contains(@href,"label")]')[0].text
     scraped_image = node.xpath('.//img[@loading]/@src')[0]
+    image_bytes = fetch_as_base64(scraped_image)
+    image_base64 = f"data:image/jpg;base64,{image_bytes}"
     url = BASE_URL + node.xpath('.//div[@class="grow"]/a[contains(@href,"/works")]/@href')[0]
     raw_date = node.xpath('.//a[contains(@href,"/works/date")]')[0].text
     date = process_date(raw_date)
-    scene: ScrapedScene = {
+    scene: SceneSearchResult = {
         "title": title,
         "urls": [url],
-        # "image" : image_base64,
-        "image": scraped_image,
+        "image" : image_base64,
         "studio": {
             "name": maker
         },
@@ -85,7 +87,9 @@ def scene_by_url(url) -> ScrapedScene:
     director = tree.xpath("//a[contains(@href,'/works?q=')]")
     title = tree.xpath("//h1[contains(@class, 'text-lg')]")[0].text
     performers = list(map(map_by_name, tree.xpath("//a[contains(@class, 'chip')]/span[1]")))
-    image = tree.xpath("//main/section[2]/div[1]/div[2]/a/div/img/@src")[0]
+    image_url = tree.xpath("//main/section[2]/div[1]/div[2]/a/div/img/@src")[0]
+    image_bytes = fetch_as_base64(image_url)
+    image_base64 = f"data:image/jpg;base64,{image_bytes}"
     # url = tree.xpath("html/head//link[@rel='canonical']/@href")[0]
     tags = list(map(map_by_name, tree.xpath("//a[contains(@href,'/tags/')]")))
     code = tree.xpath("//span[contains(text(), '名寄せID: ')]/following-sibling::div/span[contains(text(),'-')]")[0].text
@@ -94,7 +98,7 @@ def scene_by_url(url) -> ScrapedScene:
     scene: ScrapedScene = {
         "title": title,
         "urls": [url],
-        "image": image,
+        "image": image_base64,
         "studio": {
             "name": maker
         },
@@ -107,6 +111,9 @@ def scene_by_url(url) -> ScrapedScene:
     }
     return scene
 
+
+def fetch_as_base64(url: str) -> str | None:
+    return base64.b64encode(requests.get(url).content).decode('utf-8')
 
 if __name__ == "__main__":
     op, args = scraper_args()
