@@ -50,7 +50,7 @@ def map_scene(node) -> SceneSearchResult:
     maker = node.xpath('.//a[contains(@href,"label")]')[0].text
     scraped_image = node.xpath('.//img[@loading]/@src')[0]
     image_bytes = fetch_as_base64(scraped_image)
-    image_base64 = f"data:image/jpg;base64,{image_bytes}"
+    image_base64 = f"data:image/jpeg;base64,{image_bytes}"
     url = BASE_URL + node.xpath('.//div[@class="grow"]/a[contains(@href,"/works")]/@href')[0]
     raw_date = node.xpath('.//a[contains(@href,"/works/date")]')[0].text
     date = process_date(raw_date)
