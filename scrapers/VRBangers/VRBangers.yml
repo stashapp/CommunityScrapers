@@ -1,0 +1,133 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+# requires: AlgoliaAPI
+# scrapes: AR Porn, Blow VR, Dezyred, VR Bangers, VRB Gay, VRB Trans, VR Conk
+name: VRBangers
+
+sceneByName:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
+    - dezyred
+    - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
+    - scene-by-name
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
+    - dezyred
+    - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
+    - scene-by-fragment
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
+    - dezyred
+    - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
+    - scene-by-query-fragment
+sceneByURL:
+  - action: script
+    url: &urls
+      - arporn.com/video/
+      - blowvr.com/video/
+      - dezyred.com/videos/
+      - vrbangers.com/video/
+      - vrbgay.com/video/
+      - vrbtrans.com/video/
+      - vrconk.com/video/
+    script:
+      - python
+      - VRBangers.py
+      - scene-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
+    - dezyred
+    - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
+    - gallery-by-fragment
+galleryByURL:
+  - action: script
+    url: *urls
+    script:
+      - python
+      - VRBangers.py
+      - gallery-by-url
+groupByURL:
+  - action: script
+    url:
+      - dezyred.com/games/
+    script:
+      - python
+      - VRBangers.py
+      - group-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
+    - dezyred
+    - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - VRBangers.py
+    # you can comment out studios you don't want to search
+    - arporn
+    - blowvr
+    - dezyred
+    - vrbangers
+    - vrbgay
+    - vrbtrans
+    - vrconk
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - arporn.com/model/
+      - blowvr.com/model/
+      - dezyred.com/pornstars/
+      - vrbangers.com/model/
+      - vrbgay.com/model/
+      - vrbtrans.com/model/
+      - vrconk.com/model/
+    script:
+      - python
+      - VRBangers.py
+      - performer-by-url
+# Last Updated December 18, 2025
