@@ -16,7 +16,7 @@ from zipfile import ZipFile
 from py_common import graphql, log
 from py_common.deps import ensure_requirements
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
-from py_common.util import dig, guess_nationality, is_valid_url, scraper_args
+from py_common.util import dig, guess_nationality, feet_to_cm, lb_to_kg, is_valid_url, scraper_args
 ensure_requirements("algoliasearch", "bs4:beautifulsoup4", "requests")
 
 from algoliasearch.search.client import SearchClientSync
@@ -191,9 +191,11 @@ def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> Scrap
     if alternate_names := dig(performer_from_api, "attributes", "alternate_names"):
         performer["aliases"] = alternate_names.strip()
     if height := dig(performer_from_api, "attributes", "height"):
-        performer["height"] = height.strip()
+        performer["height"] = feet_to_cm(height.strip())
     if weight := dig(performer_from_api, "attributes", "weight"):
-        performer["weight"] = weight.strip()
+        performer["weight"] = lb_to_kg(weight.strip())
+    if endowment := dig(performer_from_api, "attributes", "endowment"):
+        performer["penis_length"] = feet_to_cm("0'" + endowment.strip())
     if home := dig(performer_from_api, "attributes", "home"):
         performer["country"] = guess_nationality(home.strip())
     if performer_from_api.get("has_pictures") and (pictures := performer_from_api.get("pictures")):
