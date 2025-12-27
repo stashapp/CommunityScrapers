@@ -59,6 +59,10 @@ xPathScrapers:
                 with: ""
               - regex: '\\r\\n\\r\\n'
                 with: "\n\n"
+              # remove full ldjson if no description
+              # https://discord.com/channels/559159668438728723/651418567475986432/1454463628181770240
+              - regex: ^{.+
+                with: ""
       # fragile but it works
       Tags:
         Name: //div/ul/li/a/span | //div[@style]/p/a[starts-with(@href,"/tags")]/text()
@@ -109,4 +113,4 @@ xPathScrapers:
 #           Domain: .www.sexlikereal.com
 #           Path: /
 #           Value: "true"
-# Last Updated December 17, 2025
+# Last Updated December 27, 2025

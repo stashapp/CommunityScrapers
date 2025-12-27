@@ -59,6 +59,10 @@ xPathScrapers:
                 with: ""
               - regex: '\\r\\n\\r\\n'
                 with: "\n\n"
+              # remove full ldjson if no description
+              # https://discord.com/channels/559159668438728723/651418567475986432/1454463628181770240
+              - regex: ^{.+
+                with: ""
       # fragile but it works
       Tags:
         Name: //div/ul/li/a/span
