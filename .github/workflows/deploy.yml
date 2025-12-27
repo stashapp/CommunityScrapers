@@ -2,7 +2,7 @@ name: Deploy repository to Github Pages
 
 on:
   push:
-    branches: [ master, stable ]
+    branches: [ master ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -17,38 +17,30 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     steps:
-    - name: Checkout master
-      uses: actions/checkout@v4
+    - name: Checkout develop
+      uses: actions/checkout@v6
       with:
-        path: master
+        path: develop
         ref: master
         fetch-depth: 0
-    - name: Build Stable
+    - name: Build develop
       run: |
-        cd master
-        ./build_site.sh ../_site/stable
-    - name: Checkout Stable
-      uses: actions/checkout@v4
-      with:
-        path: dev
-        # replace with develop tag/branch when necessary
-        ref: master
-        fetch-depth: 0
-    - name: Build Develop
+        cd develop
+        ./build_site.sh ../_site/develop
+    - name: copy develop to stable
       run: |
-        cd dev
-        ../master/build_site.sh ../_site/develop
-    - uses: actions/setup-node@v4
+        cp -r _site/develop _site/stable
+    - uses: actions/setup-node@v6
       with:
         node-version: latest
     - name: Generate html index page
       run: |
-        cd master/site_generator
+        cd develop/site_generator
         npm i -g ts-node
         npm ci
         npm run ci-build
         cp -r site/* ../../_site/
-    - uses: actions/upload-pages-artifact@v3
+    - uses: actions/upload-pages-artifact@v4
       with:
         path: '_site'
     
