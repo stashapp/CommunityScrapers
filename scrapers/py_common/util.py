@@ -153,7 +153,8 @@ def feet_to_cm(value: str) -> str:
         inches = float(filtered[1])
 
     length = feet * FOOT_IN_CM + inches * INCH_IN_CM
-    return str(round(length))
+    rounded = round(length)
+    return str(rounded) if rounded > 0 else ""
 
 
 def lb_to_kg(value: str) -> str:
@@ -186,7 +187,8 @@ def lb_to_kg(value: str) -> str:
             return ""
 
     weight *= LB_IN_KG
-    return str(round(weight))
+    rounded = round(weight)
+    return str(rounded) if rounded > 0 else ""
 
 
 def is_valid_url(url):
