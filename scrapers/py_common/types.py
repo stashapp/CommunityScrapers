@@ -52,13 +52,7 @@ class ScrapedPerformer(TypedDict, total=False):
         "INTERSEX",
         "NON_BINARY",
     ]
-    url: str
-    "Deprecated: use urls"
     urls: list[str]
-    twitter: str
-    "Deprecated: use urls"
-    instagram: str
-    "Deprecated: use urls"
     birthdate: str
     "Must be in the format YYYY-MM-DD"
     death_date: str
@@ -96,8 +90,6 @@ class ScrapedStudio(TypedDict, total=False):
     "Name is the only required field"
     stored_id: str
     "Set if studio matched"
-    url: str
-    "Deprecated: use urls"
     urls: list[str]
     parent: "ScrapedStudio"
     image: str
@@ -117,8 +109,6 @@ class ScrapedGroup(TypedDict, total=False):
     "Must be in the format YYYY-MM-DD"
     rating: str
     director: str
-    url: str
-    "Deprecated: use urls"
     urls: list[str]
     synopsis: str
     studio: ScrapedStudio
@@ -138,8 +128,6 @@ class ScrapedGallery(TypedDict, total=False):
     code: str
     details: str
     photographer: str
-    url: str
-    "Deprecated: use urls"
     urls: list[str]
     date: str
     "Must be in the format YYYY-MM-DD"
@@ -153,8 +141,6 @@ class ScrapedScene(TypedDict, total=False):
     code: str
     details: str
     director: str
-    url: str
-    "Deprecated: use urls"
     urls: list[str]
     date: str
     image: str
