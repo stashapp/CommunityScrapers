@@ -1,6 +1,12 @@
+# OS-specific files
 .DS_Store
+
+# Node.js dependencies and logs
 node_modules
 yarn-error.log
+
+# Python virtual environments
+.venv*
 
 # Scraper-generated files
 **/__pycache__/
@@ -8,12 +14,12 @@ yarn-error.log
 *.json
 *.log
 
-# Index build artifact
+# Build artifacts
 /_site
 
-# generator
+# Generator artifacts
 site_generator/site/assets/fuse-index.json
 site_generator/site/assets/scrapers.json
 
-# Python virtual environment
-.venv*
+# Automatic dependencies
+/scrapers/automatic_dependencies/
