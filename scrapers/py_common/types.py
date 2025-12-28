@@ -114,9 +114,9 @@ class ScrapedGroup(TypedDict, total=False):
     studio: ScrapedStudio
     tags: list[ScrapedTag]
     front_image: str
-    "This should be a base64 encoded data URL"
+    "Image can be a URL or base64-encoded data URL"
     back_image: str
-    "This should be a base64 encoded data URL"
+    "Image can be a URL or base64-encoded data URL"
 
 
 # ScrapedMovie is deprecated in favor of ScrapedGroup
@@ -144,7 +144,7 @@ class ScrapedScene(TypedDict, total=False):
     urls: list[str]
     date: str
     image: str
-    "This should be a base64 encoded data URL"
+    "Image can be a URL or base64-encoded data URL"
     studio: ScrapedStudio
     tags: list[ScrapedTag]
     performers: list[ScrapedPerformer]
