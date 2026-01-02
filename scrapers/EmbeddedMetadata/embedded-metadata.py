@@ -44,11 +44,12 @@ details_ignored_labels = {
 	'ColorSpace', 'ComponentsConfiguration', 'CompressedBitsPerPixel', 'ExifVersion', 'FlashpixVersion', 'YCbCrPositioning', 'JPEGInterchangeFormat', 'JPEGInterchangeFormatLength', 'BaselineExposureOffset',
 	'FNumber', 'FileSource', 'Flash', 'FocalLength', 'FocalLengthIn35mmFilm', 'GainControl', 'ISOSpeedRatings', 'LightSource', 'MaxApertureValue', 'MeteringMode', 'Saturation', 'SceneCaptureType', 'SensingMethod', 'BaselineExposure',
 	'Sharpness', 'WhiteBalance', 'ShutterSpeedValue', 'ApertureValue', 'FocalLength', 'FocalLengthIn35mmFilm', 'FocalLengthIn35mmFormat', 'ExposureTime', 'ExposureProgram', 'ExposureBiasValue', 'MaxApertureValue', 'ShutterSpeedValue', 
-	'ExposureIndex', 'FocalPlaneResolutionUnit', 'FocalPlaneXResolution', 'FocalPlaneYResolution',
-	'PixelXDimension', 'PixelYDimension', 'XResolution', 'YResolution', 'ExifImageWidth', 'ExifImageHeight', 'ImageHeight', 'ImageWidth', 'RelatedImageHeight', 'RelatedImageWidth',
-	'RecordVersion', 'CharacterSet', 'SceneType', 'BrightnessValue', 'ISO', 'Compression', 'ModifyDate'
-	'FlashCompensation', 'LensID', 'InteropIndex', 'InteropVersion', 'ThumbnailImage', 'ThumbnailLength', 'ThumbnailOffset', 'OffsetSchema', 'Padding', 'OtherImageLength', 'OtherImageStart',
-	'GPSVersionID', 'XMPToolkit'
+	'ExposureIndex', 'FocalPlaneResolutionUnit', 'FocalPlaneXResolution', 'FocalPlaneYResolution', 'AFAreaMode', 'AFPoint', 'AFPointsInFocus', 'Focus', 'FlashSetting', 'DigitalZoom', 'ISOSelection', 'ISOSpeed',
+	'ToneComp', 'Quality', 'RetouchHistory', 'Saturation2', 'ScanIFD', 'SceneAssist', 'SceneMode', 'Sharpening', 'ShotInfo', 'ToneComp',
+	'PixelXDimension', 'PixelYDimension', 'XResolution', 'YResolution', 'ExifImageWidth', 'ExifImageHeight', 'ImageHeight', 'ImageWidth', 'RelatedImageHeight', 'RelatedImageWidth', 'ImageLength', 'ByteOrder', 'Offset',
+	'RecordVersion', 'CharacterSet', 'SceneType', 'BrightnessValue', 'ISO', 'Compression', 'ModifyDate', 'SubSecTime', 'SubSecTimeDigitized', 'SubSecTimeOriginal', 'ImageAdjustment', 'ImageStabilization',
+	'FlashCompensation', 'LensID', 'InteropIndex', 'InteropVersion', 'ThumbnailImage', 'ThumbnailLength', 'ThumbnailOffset', 'OffsetSchema', 'Padding', 'OtherImageLength', 'OtherImageStart', 'NoiseReduction', 'ActiveDLighting',
+	'GPSVersionID', 'XMPToolkit', 'NativeDigest', 'ColorMode', 'ICCProfile', 'BitsPerSample', 'DerivedFrom', 'format', 'InteroperabilityIndex', 'InteroperabilityVersion', 'InteroperabilityTag', 'DataDump', 'MakerNote', 'Version'
 }
 details_ignored_labels.update(details_upprocessed_fields_ignored)
 details_ignored_labels.difference_update(details_upprocessed_fields_unignored)
@@ -91,12 +92,18 @@ def process_image(image_path: str):
 		if value:
 			if isinstance(value, list):
 				for list_value in value:
-					details += str(list_value) + "\n"
+					details_value = _process_charset_string(list_value)
+					if details_value:
+						details += details_value + "\n"
 			elif isinstance(value, dict):
 				for list_value in value.values():
-					details += str(list_value) + "\n"
+					details_value = _process_charset_string(list_value)
+					if details_value:
+						details += details_value + "\n"
 			else:
-				details += str(value) + "\n"
+				details_value = _process_charset_string(value)
+				if details_value:
+					details += details_value + "\n"
 	if len(details) > 0:
 		details += '\n'
 
@@ -124,13 +131,15 @@ def process_image(image_path: str):
 		except:
 			continue
 		
-		fields_processed.add(field)
-		label = _field_name_to_details_label(field)
-		date_details += label + ': ' + date_value.isoformat() + "\n"
-		
 		if date_value.day == 1 and date_value.month == 1 and date_value.year == 2000:
 			continue
-
+		
+		fields_processed.add(field)
+		label = _field_name_to_details_label(field)
+		log.debug(f"field {field} label {label}")
+		if label is not None:
+			date_details += label + ': ' + date_value.isoformat() + "\n"
+		
 		ret['Date'] = date_value.date().isoformat()
 	if details_date_fields and len(date_details) > 0:
 		details += 'Dates:\n' + date_details + '\n'
@@ -148,13 +157,26 @@ def process_image(image_path: str):
 
 		fields_processed.add(field)
 		label = _field_name_to_details_label(field)
-		title_details += label + ': ' + str(value) + "\n"
-
+		
 		if value:
-			ret['Title'] = value
+			if isinstance(value, list):
+				for list_value in value:
+					ret['Title'] = list_value
+					if label is not None:
+						title_details += label + ': ' + _process_charset_string(list_value) + "\n"
+			elif isinstance(value, dict):
+				for list_value in value.values():
+					ret['Title'] = list_value
+					if label is not None:
+						title_details += label + ': ' + _process_charset_string(list_value) + "\n"
+			else:
+				ret['Title'] = value
+				if label is not None:
+					title_details += label + ': ' + _process_charset_string(value) + "\n"
+
 	if details_title_fields and len(title_details) > 0:
 		details += 'Titles:\n' + title_details + '\n'
-	
+		log.debug("titles "+title_details)
 	#
 	# studio / photographer
 	#
@@ -174,11 +196,13 @@ def process_image(image_path: str):
 				for list_value in value:
 					ret['Studio'] = {'Name': list_value}
 					ret['Photographer'] = list_value
-					author_details += label + ': ' + str(list_value) + "\n"
+					if label is not None:
+						author_details += label + ': ' + str(list_value) + "\n"
 			else:
 				ret['Studio'] = {'Name': value}
 				ret['Photographer'] = value
-				author_details += label + ': ' + str(value) + "\n"
+				if label is not None:
+					author_details += label + ': ' + str(value) + "\n"
 	if details_author_fields and len(author_details) > 0:
 		details += 'Authors:\n' + author_details + '\n'
 	
@@ -196,7 +220,14 @@ def process_image(image_path: str):
 		
 		if 'Tags' not in ret:
 			ret['Tags'] = []
-		for value_part in value.split(','):
+		if isinstance(value, list):
+			value_parts = []
+			for list_value in value:
+				value_parts.extend(list_value.split(','))
+		else:
+			value_parts.extend(value.split(','))
+
+		for value_part in value_parts:
 			if not value_part:
 				continue
 			ret['Tags'].append({
@@ -306,18 +337,31 @@ def process_image(image_path: str):
 
 	return ret
 
+
 def _field_name_to_details_label(field: str) -> str:
-	if '.' in field and (field.startswith("Exif.") or field.startswith("Iptc") or field.startswith("Xmp")):
+	# pyexiv2
+	if '.' in field and (field.startswith("Exif") or field.startswith("Iptc") or field.startswith("Xmp")):
 		label = field[field.rindex('.')+1:]
+	# exiftool property
 	elif ':' in field and (field.startswith("EXIF") or field.startswith("IPTC") or field.startswith("XMP")):
 		label = field[field.rindex(':')+1:]
 	else:
 		return None
 	
-	if label in details_ignored_labels:
+	if label in details_ignored_labels or label.startswith('0x'):
 		return None
 	
 	return label
+
+
+def _process_charset_string(value):
+	value = str(value)
+	
+	if value.startswith('charset='):
+		value = value[value.index(' '):]
+	
+	return value.strip()
+
 
 def get_imape_paths(image_id):
 	query = """
