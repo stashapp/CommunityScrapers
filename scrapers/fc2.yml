@@ -22,12 +22,16 @@ groupByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Code:
-        selector: //meta[@name="description"]/@content
+      Title: 
+        selector: //div[@class='items_article_headerInfo']/h3/text()
+        concat: " "
         postProcess:
-          - replace:
-            - regex: '(?s).*?(FC2-PPV-\d+).*'
-              with: '$1'
+            - replace:
+                - regex: '\s+'
+                  with: ""
+      Details: 
+        selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
+      URLs: /html/head/meta[@property="og:url"]/@content
       Date:
         selector: //*[@id="top"]/div[1]/section[1]/div/section/div[2]/div[2]/p/text()
         postProcess:
@@ -35,14 +39,10 @@ xPathScrapers:
               - regex: .*(\d{4})[./-]?(\d{2})[./-]?(\d{2}).*
                 with: $1-$2-$3
           - parseDate: 2006-01-02
-      Title: 
-        selector: //div[@class='items_article_headerInfo']/h3/text()
-        concat: " "
-        postProcess:
-          - replace:
-            - regex: '\s+'
-              with: ''
-      URLs: /html/head/meta[@property="og:url"]/@content
+      Performers:
+        Name: //*[@id="top"]/div[1]/section[1]/div/section/div[2]/ul/li[3]/a/text()
+      Tags:
+        Name: //a[@class='tag tagTag']/text()
       Image: 
         selector: //div[@class='items_article_MainitemThumb']/span/img/@src
         postProcess:
@@ -53,11 +53,17 @@ xPathScrapers:
         selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
       Studio:
         Name:
-          selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
-      Tags:
-        Name: //a[@class='tag tagTag']/text()
-      Details: 
-        selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
+          selector: /html/head/title/text() 
+          postProcess:
+            - replace:
+                - regex: .*(FC2).*
+                  with: $1
+      Code:
+        selector: //meta[@name="description"]/@content
+        postProcess:
+          - replace:
+              - regex: (?s).*?(FC2-PPV-\d+).*
+                with: $1
 
   movieScraper:
     group:
@@ -65,9 +71,11 @@ xPathScrapers:
         selector: //div[@class='items_article_headerInfo']/h3/text()
         concat: " "
         postProcess:
-          - replace:
-            - regex: '\s+'
-              with: ''
+            - replace:
+                - regex: \s+
+                  with: ""
+      Synopsis: 
+        selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
       URLs: /html/head/meta[@property="og:url"]/@content
       Date:
         selector: //*[@id="top"]/div[1]/section[1]/div/section/div[2]/div[2]/p/text()
@@ -86,10 +94,11 @@ xPathScrapers:
         selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
       Studio:
         Name:
-          selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
+          selector: /html/head/title/text() 
+          postProcess:
+            - replace:
+                - regex: .*(FC2).*
+                  with: $1
       Tags:
         Name: //a[@class='tag tagTag']/text()
-      Synopsis: 
-        selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
-# Last Updated January 3, 2026
-
+# Last Updated January 3, 2025
