@@ -1,3 +1,2 @@
 pyexiv2
 pyexiftool
-stashapp-tools
