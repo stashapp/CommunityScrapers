@@ -54,6 +54,10 @@ xPathScrapers:
       Studio:
         Name:
           selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
+      Tags:
+        Name: //a[@class='tag tagTag']/text()
+      Details: 
+        selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
 
   movieScraper:
     group:
@@ -83,4 +87,9 @@ xPathScrapers:
       Studio:
         Name:
           selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
+      Tags:
+        Name: //a[@class='tag tagTag']/text()
+      Synopsis: 
+        selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
 # Last Updated January 3, 2026
+
