@@ -49,11 +49,7 @@ xPathScrapers:
         selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
       Studio:
         Name:
-          selector: /html/head/title/text() 
-          postProcess:
-            - replace:
-                - regex: .*(FC2).*
-                  with: $1
+          fixed: FC2 
       Code:
         selector: //meta[@name="description"]/@content
         postProcess:
@@ -86,12 +82,9 @@ xPathScrapers:
         selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
       Studio:
         Name:
-          selector: /html/head/title/text() 
-          postProcess:
-            - replace:
-                - regex: .*(FC2).*
-                  with: $1
+          fixed: FC2 
       Tags:
         Name: //a[@class='tag tagTag']/text()
 # Last Updated January 3, 2025
+
 
