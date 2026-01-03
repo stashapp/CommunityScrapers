@@ -25,10 +25,6 @@ xPathScrapers:
       Title: 
         selector: //div[@class='items_article_headerInfo']/h3/text()
         concat: " "
-        postProcess:
-            - replace:
-                - regex: '\s+'
-                  with: ""
       Details: 
         selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
       URLs: /html/head/meta[@property="og:url"]/@content
@@ -70,10 +66,6 @@ xPathScrapers:
       Name: 
         selector: //div[@class='items_article_headerInfo']/h3/text()
         concat: " "
-        postProcess:
-            - replace:
-                - regex: \s+
-                  with: ""
       Synopsis: 
         selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
       URLs: /html/head/meta[@property="og:url"]/@content
@@ -102,3 +94,4 @@ xPathScrapers:
       Tags:
         Name: //a[@class='tag tagTag']/text()
 # Last Updated January 3, 2025
+
