@@ -23,14 +23,11 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: 
-        selector: /html/head/title/text()
-        postProcess:
-            - replace:
-                - regex: (FC2-.+)
-                  with: ""
+        selector: //div[@class='items_article_headerInfo']/h3/text()
+        concat: " "
       Details: 
         selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
-      URL: /html/head/meta[@property="og:url"]/@content
+      URLs: /html/head/meta[@property="og:url"]/@content
       Date:
         selector: //*[@id="top"]/div[1]/section[1]/div/section/div[2]/div[2]/p/text()
         postProcess:
@@ -48,31 +45,26 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "https:"
+      Director:
+        selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
       Studio:
         Name:
-          selector: /html/head/title/text() 
-          postProcess:
-            - replace:
-                - regex: .*(FC2).*
-                  with: $1
+          fixed: FC2 
       Code:
-        selector: /html/head/title/text() 
+        selector: //meta[@name="description"]/@content
         postProcess:
           - replace:
-              - regex: .*(FC2-.+).*
+              - regex: (?s).*?(FC2-PPV-\d+).*
                 with: $1
 
   movieScraper:
     group:
       Name: 
-        selector: /html/head/title/text()
-        postProcess:
-            - replace:
-                - regex: (FC2-.+)
-                  with: ""
+        selector: //div[@class='items_article_headerInfo']/h3/text()
+        concat: " "
       Synopsis: 
         selector: //script[@data-template-name="image-lazy-cushion"]/following-sibling::div/text()
-      URL: /html/head/meta[@property="og:url"]/@content
+      URLs: /html/head/meta[@property="og:url"]/@content
       Date:
         selector: //*[@id="top"]/div[1]/section[1]/div/section/div[2]/div[2]/p/text()
         postProcess:
@@ -86,11 +78,13 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "https:"
+      Director:
+        selector: //section[@class="items_comment_sellerBox"]/div/div/h4/a
       Studio:
         Name:
-          selector: /html/head/title/text() 
-          postProcess:
-            - replace:
-                - regex: .*(FC2).*
-                  with: $1
-# Last Updated June 26, 2024
+          fixed: FC2 
+      Tags:
+        Name: //a[@class='tag tagTag']/text()
+# Last Updated January 3, 2025
+
+
