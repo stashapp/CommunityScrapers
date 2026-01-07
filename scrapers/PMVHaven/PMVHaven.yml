@@ -3,7 +3,7 @@ sceneByURL:
   - action: scrapeJson
     url:
       - pmvhaven.com/video/
-    queryURL: https://pmvhaven.com/api/videos/{url}/watch-page
+    queryURL: https://pmvhaven.com/api/videos/{url}
     queryURLReplace:
       url:
         - regex: .*([a-z0-9]{24}).*
@@ -11,7 +11,7 @@ sceneByURL:
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeJson
-  queryURL: https://pmvhaven.com/api/videos/{filename}/watch-page
+  queryURL: https://pmvhaven.com/api/videos/{filename}
   queryURLReplace:
     filename:
       - regex: .*([a-z0-9]{24}).*
@@ -21,25 +21,25 @@ sceneByFragment:
 jsonScrapers:
   sceneScraper:
     scene:
-      Title: data.video.title
+      Title: data.title
       Date:
-        selector: data.video.uploadDate
+        selector: data.uploadDate
         postProcess:
           - replace:
               - regex: "T(.*)$"
                 with: ""
           - parseDate: 2006-01-02
 
-      Details: data.video.description
+      Details: data.description
       Tags:
-        Name: data.video.tags
+        Name: data.tags
       Performers:
-        Name: data.video.starsTags
-      Image: data.video.thumbnailUrl
+        Name: data.starsTags
+      Image: data.thumbnailUrl
       Studio:
-        Name: data.video.creator.0
+        Name: data.uploaderUsername
       URL:
-        selector: data.video._id
+        selector: data._id
         postProcess:
           - replace:
             - regex: (.*)
