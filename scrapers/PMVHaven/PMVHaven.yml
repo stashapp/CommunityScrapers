@@ -6,7 +6,7 @@ sceneByURL:
     queryURL: https://pmvhaven.com/api/videos/{url}
     queryURLReplace:
       url:
-        - regex: .*([a-z0-9]{24}).*
+        - regex: .*([a-f0-9]{24}).*
           with: $1
     scraper: sceneScraper
 sceneByFragment:
@@ -14,7 +14,7 @@ sceneByFragment:
   queryURL: https://pmvhaven.com/api/videos/{filename}
   queryURLReplace:
     filename:
-      - regex: .*([a-z0-9]{24}).*
+      - regex: .*([a-f0-9]{24}).*
         with: $1
   scraper: sceneScraper
 
