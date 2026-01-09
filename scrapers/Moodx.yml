@@ -9,8 +9,14 @@ xPathScrapers:
     scene:
       Title:
         selector: //h1[@class="heading-movie"]/text()
+      Details:
+        selector: //div[@class="label" and text()="Description:"]/following-sibling::div[contains(@class, 'value')]/text()
       Image:
-        selector: (//video[@id="v_player"]/@poster)
+        selector: //video[@id="v_player"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^(\/)(.*)$
+                with: https://moodx.tv/$2
       Studio:
         Name:
           fixed: 'Mood X'
