@@ -18,7 +18,7 @@ NOTE: Realbooru's JSON API is currently offline "indefinitely".
 
 TAG MAPPING:
 - Model tags (class="model") -> Performers field
-- Artist tags (class="artist") -> Studio field (first artist) + Tags field (additional artists)
+- Character tags (class="character") -> Performers field (for cosplay, e.g., "d.va")
 - All other tags (general, copyright, series, metadata) -> Tags field (no prefix)
 
 FILENAME FORMATS SUPPORTED:
@@ -79,8 +79,7 @@ class RealbooruHTMLParser(HTMLParser):
     def __init__(self):
         super().__init__()
         self.categorized_tags = {
-            "models": [],     # Performers
-            "artists": [],    # Studio (first) + tags (rest)
+            "models": [],     # Performers (includes both model and character tags for cosplay)
             "general": []     # All other tags (copyright, series, metadata, general, etc.)
         }
         self.score = None
@@ -99,11 +98,9 @@ class RealbooruHTMLParser(HTMLParser):
                 tag_class = attrs_dict.get('class', '').lower()
 
                 # Models/performers get special treatment
-                if 'model' in tag_class:
+                # Note: 'character' is used for cosplay (e.g., "d.va" when someone cosplays D.Va)
+                if 'model' in tag_class or 'character' in tag_class:
                     self.current_tag_class = 'model'
-                # Artists get special treatment (studio)
-                elif 'artist' in tag_class:
-                    self.current_tag_class = 'artist'
                 # Everything else goes to general tags
                 # This includes: copyright, series, metadata, general, and any future classes
                 else:
@@ -121,9 +118,6 @@ class RealbooruHTMLParser(HTMLParser):
                 if self.current_tag_class == 'model':
                     if tag_name not in self.categorized_tags["models"]:
                         self.categorized_tags["models"].append(tag_name)
-                elif self.current_tag_class == 'artist':
-                    if tag_name not in self.categorized_tags["artists"]:
-                        self.categorized_tags["artists"].append(tag_name)
                 else:  # Everything else (general, copyright, series, metadata, etc.)
                     if tag_name not in self.categorized_tags["general"]:
                         self.categorized_tags["general"].append(tag_name)
@@ -243,14 +237,13 @@ def map_to_stashapp(post_data, categorized_tags):
 
     Stashapp expects JSON with fields:
         - urls: [string] (array of links)
-        - performers: [{"name": string}] (models/characters)
-        - studio: {"name": string} (first artist)
+        - performers: [{"name": string}] (models/characters for cosplay)
         - tags: [{"name": string}] (all other tags - no prefix)
         - details: string
 
     Args:
         post_data: Post metadata dict
-        categorized_tags: Dict with keys: models, artists, general
+        categorized_tags: Dict with keys: models, general
 
     Returns: dict in Stashapp format
     """
@@ -260,37 +253,23 @@ def map_to_stashapp(post_data, categorized_tags):
     if post_data.get("id"):
         result["urls"] = [f"https://realbooru.com/index.php?page=post&s=view&id={post_data['id']}"]
 
-    # Performers from model tags
+    # Performers from model tags (includes both models and character cosplay)
     if categorized_tags.get("models"):
         result["performers"] = [{"name": performer} for performer in categorized_tags["models"]]
         log(f"Mapped {len(categorized_tags['models'])} performers")
 
-    # Studio from first artist
-    artists = categorized_tags.get("artists", [])
-    if artists:
-        result["studio"] = {"name": artists[0]}
-        log(f"Mapped artist '{artists[0]}' to studio")
-
-    # Tags - combine general tags and additional artists (no prefixes)
+    # Tags - all general tags (includes copyright, series, metadata, general, etc.)
     all_tags = []
-
-    # All general tags (includes copyright, series, metadata, general, etc.)
     for tag in categorized_tags.get("general", []):
         all_tags.append({"name": tag})
 
-    # Additional artists (after first) as tags
-    if len(artists) > 1:
-        for artist in artists[1:]:
-            all_tags.append({"name": artist})
-
     # NOTE: optional behavior that I personally like.
     #       disabling this for upstream.
-    # Add "scraped" marker tag if we have any tags/performers/studio
+    # Add "scraped" marker tag if we have any tags/performers
     # (indicates successful scraping)
     # has_content = (
     #     all_tags or
-    #     categorized_tags.get("models") or
-    #     artists
+    #     categorized_tags.get("models")
     # )
     # if has_content:
     #     all_tags.append({"name": "[scraped]"})
