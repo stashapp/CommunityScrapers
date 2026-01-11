@@ -1,0 +1,19 @@
+name: Rule34xxx
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Rule34xxx.py
+
+imageByFragment:
+  action: script
+  script:
+    - python
+    - Rule34xxx.py
+
+driver:
+  useCDP: false
+  headers:
+    - Key: User-Agent
+      Value: stashapp/stash scraper (rule34.xxx)
