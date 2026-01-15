@@ -29,14 +29,19 @@ type HairColor = Literal[
     "OTHER",
 ]
 
-class ScrapedTag(TypedDict):
-    name: str
+
+class ScrapedTag(TypedDict, total=False):
+    name: Required[str]
     "Name is the only required field"
+    stored_id: str
+    "Set if tag matched"
 
 
 class ScrapedPerformer(TypedDict, total=False):
     name: Required[str]
     "Name is the only required field"
+    stored_id: str
+    "Set if performer matched"
     disambiguation: str
     "This is only added through Tagger view"
     gender: Literal[
@@ -48,8 +53,6 @@ class ScrapedPerformer(TypedDict, total=False):
         "NON_BINARY",
     ]
     urls: list[str]
-    twitter: str
-    instagram: str
     birthdate: str
     "Must be in the format YYYY-MM-DD"
     death_date: str
@@ -85,70 +88,82 @@ class ScrapedPerformer(TypedDict, total=False):
 class ScrapedStudio(TypedDict, total=False):
     name: Required[str]
     "Name is the only required field"
-    url: str
+    stored_id: str
+    "Set if studio matched"
+    urls: list[str]
     parent: "ScrapedStudio"
     image: str
-
-
-class ScrapedMovie(TypedDict, total=False):
-    name: str
-    date: str
-    "Must be in the format YYYY-MM-DD"
-    duration: str
-    "Duration in seconds"
-    director: str
-    synopsis: str
-    studio: ScrapedStudio
-    rating: str
-    front_image: str
-    back_image: str
-    url: str
+    details: str
     aliases: str
+    "Aliases must be comma-delimited to be parsed correctly"
     tags: list[ScrapedTag]
 
-ScrapedGroup = ScrapedMovie
+
+class ScrapedGroup(TypedDict, total=False):
+    stored_id: str
+    name: str
+    aliases: str
+    duration: str
+    "Duration in seconds"
+    date: str
+    "Must be in the format YYYY-MM-DD"
+    rating: str
+    director: str
+    urls: list[str]
+    synopsis: str
+    studio: ScrapedStudio
+    tags: list[ScrapedTag]
+    front_image: str
+    "Image can be a URL or base64-encoded data URL"
+    back_image: str
+    "Image can be a URL or base64-encoded data URL"
+
+
+# ScrapedMovie is deprecated in favor of ScrapedGroup
+ScrapedMovie = ScrapedGroup
+
 
 class ScrapedGallery(TypedDict, total=False):
     title: str
+    code: str
     details: str
-    url: str
+    photographer: str
     urls: list[str]
     date: str
     "Must be in the format YYYY-MM-DD"
     studio: ScrapedStudio
     tags: list[ScrapedTag]
     performers: list[ScrapedPerformer]
-    code: str
-    photographer: str
 
 
 class ScrapedScene(TypedDict, total=False):
     title: str
+    code: str
     details: str
-    url: str
+    director: str
     urls: list[str]
     date: str
     image: str
+    "Image can be a URL or base64-encoded data URL"
     studio: ScrapedStudio
-    movies: list[ScrapedMovie]
-    groups: list[ScrapedMovie]
     tags: list[ScrapedTag]
     performers: list[ScrapedPerformer]
-    code: str
-    director: str
+    movies: list[ScrapedMovie]
+    "Deprecated: use groups"
+    groups: list[ScrapedGroup]
+    duration: int
 
 
 class ScrapedImage(TypedDict, total=False):
     title: str
+    code: str
     details: str
+    photographer: str
     urls: list[str]
     date: str
     studio: ScrapedStudio
-    galleries: list[ScrapedGallery]
-    performers: list[ScrapedPerformer]
     tags: list[ScrapedTag]
-    code: str
-    photographer: str
+    performers: list[ScrapedPerformer]
 
 
 # Technically we can return a full ScrapedPerformer but the current UI only
