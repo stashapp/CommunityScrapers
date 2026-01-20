@@ -85,7 +85,7 @@ def get_scene(inputurl) -> ScrapedScene:
                 'details': model.get('description_en', ''),
                 'urls': [f'https://ersties.com/profile/{model.get("id")}'],
                 'images': [
-                    f'https://thumb.ersties.com/format=jpeg/content/images_mysql/Model_Cover_Image/backup/{model.get("thumbnail", "")}'
+                    f'https://thumb.ersties.com/format=jpeg/plain/https://ersties.com/content/images_mysql/Model_Cover_Image/backup/{model.get("thumbnail", "")}'
                 ],
             }
             for model in scrape_data.get('participated_models', [])
@@ -94,7 +94,7 @@ def get_scene(inputurl) -> ScrapedScene:
         # Main image
         for thumbnail in scrape_data.get('thumbnails', []):
             if thumbnail.get('is_main'):
-                ret['image'] = f"https://thumb.ersties.com/format=jpeg/content/images_mysql/images_videothumbnails/backup/{thumbnail.get('file_name', '')}"
+                ret['image'] = f"https://thumb.ersties.com/format=jpeg/plain/https://ersties.com/content/images_mysql/images_videothumbnails/backup/{thumbnail.get('file_name', '')}"
                 break
         # Date (scene + group)
         epoch_time = gallery.get('available_since')
@@ -108,7 +108,7 @@ def get_scene(inputurl) -> ScrapedScene:
             'synopsis': clean_text(str(gallery.get('description_en', ''))),
             'studio': {'name': 'Ersties'},
             'urls': [f'https://ersties.com/shoot/{gallery.get("id", "")}'],
-            'front_image': f"https://thumb.ersties.com/format=jpeg/content/images_mysql/Shoot_Cover/{gallery.get('image', '')}",
+            'front_image': f"https://thumb.ersties.com/format=jpeg/plain/https://ersties.com/content/images_mysql/Shoot_Cover/{gallery.get('image', '')}",
             'date': group_date,
         }]
 
@@ -145,7 +145,7 @@ def get_group(inputurl) -> ScrapedGroup:
             ret['name'] = scrape_data.get('title_en', '')
             ret['synopsis'] = clean_text(str(scrape_data.get('description_en', '')))
             ret['studio'] = {'name': 'Ersties'}
-            ret['front_image'] = f"https://thumb.ersties.com/format=jpeg/content/images_mysql/Shoot_Cover/{scrape_data.get('image', '')}"
+            ret['front_image'] = f"https://thumb.ersties.com/format=jpeg/plain/https://ersties.com/content/images_mysql/Shoot_Cover/{scrape_data.get('image', '')}"
             # Get Date
             epoch_time = scrape_data.get('available_since')
             if isinstance(epoch_time, int):
