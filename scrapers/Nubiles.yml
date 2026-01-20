@@ -61,6 +61,7 @@ sceneByURL:
       - anilos.com/video/watch/
       - brattysis.com/video/watch/
       - deeplush.com/video/watch/
+      - glowingdesire.com/video/stream/
       - nfbusty.com/video/watch/
       - nubiles.net/video/watch/
       - smashed.xxx/video/watch/
@@ -118,6 +119,7 @@ galleryByURL:
       - anilos.com/photo/gallery/
       - brattysis.com/photo/gallery/
       - deeplush.com/photo/gallery/
+      - glowingdesire.com/photo/gallery/
       - nfbusty.com/photo/gallery/
       - nubiles.net/photo/gallery/
       - smashed.xxx/photo/gallery/
@@ -253,4 +255,4 @@ xPathScrapers:
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
-# Last Updated November 28, 2025
+# Last Updated January 20, 2026
