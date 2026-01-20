@@ -48,8 +48,12 @@ xPathScrapers:
               - regex: <br>
                 with: "\n"
               # maintain paragraph breaks
-              - regex: "</p>(\n*)<p>"
+              - regex: "<p></p>"
+                with: ""
+              - regex: "(\\.\\s*)<p>"
                 with: "$1\n"
+              - regex: "</p>"
+                with: "\n"
               # strip any remaining tags
               - regex: <[^>]+>
                 with: ""
