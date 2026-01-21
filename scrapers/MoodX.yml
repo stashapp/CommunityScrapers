@@ -1,4 +1,4 @@
-name: "MoodX"
+name: "Mood X"
 sceneByURL:
   - action: scrapeXPath
     url:
