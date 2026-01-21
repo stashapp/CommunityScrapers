@@ -45,9 +45,7 @@ xPathScrapers:
         postProcess:
           - replace:
               # maintain line breaks
-              - regex: <br>
-                with: "\n"
-              - regex: </p>
+              - regex: (<br>|</p>)
                 with: "\n"
               # strip any remaining tags
               - regex: <[^>]+>
