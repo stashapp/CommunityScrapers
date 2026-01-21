@@ -45,6 +45,7 @@ xPathScrapers:
       Image: //div[@class="pornstar"]/img/@src
       Gender:
         fixed: Female
+      URLs: //div[@class="pornstar__wrapper"]//div[contains(@class, "shareBtn__shareElement--copy")]/@data-url
     scene:
       Title: //h1[@class='video__title']
       Details:
