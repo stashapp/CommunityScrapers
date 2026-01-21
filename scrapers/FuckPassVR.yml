@@ -50,6 +50,18 @@ xPathScrapers:
               # strip any remaining tags
               - regex: <[^>]+>
                 with: ""
+          - javascript: |
+              if (value && value.length) {
+                // HTML entity decode
+                const map = {
+                  '&amp;': '&',
+                  '&lt;': '<',
+                  '&gt;': '>',
+                  '&quot;': '"',
+                  '&#39;': "'"
+                };
+                return value.replace(/&(?:amp|lt|gt|quot|#39);/g, m => map[m]);
+              }
       Tags:
         Name:
           selector: //p[span[text()="Tags:"]]/*/text()
