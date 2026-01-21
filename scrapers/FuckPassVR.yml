@@ -24,7 +24,7 @@ xPathScrapers:
       $card: //div[contains(@class, "videos__element")]
     scene:
       Title: $card//a[@class="videos__videoTitle"]
-      URL: $card//a[@class="videos__videoTitle"]/@href
+      URL: $card//a/@href
       Image: $card//img/@src
   fuckpassvrScraper:
     performer:
