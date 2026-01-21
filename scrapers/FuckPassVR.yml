@@ -13,6 +13,10 @@ sceneByURL:
     url:
       - fuckpassvr.com/video/
     scraper: fuckpassvrScraper
+performerByName:
+  action: scrapeXPath
+  scraper: sceneByName
+  queryURL: https://www.fuckpassvr.com/destination?s={}
 performerByURL:
   - action: scrapeXPath
     url:
@@ -21,7 +25,10 @@ performerByURL:
 xPathScrapers:
   sceneByName:
     common:
-      $card: //div[contains(concat(' ',normalize-space(@class),' '),' videos__element ')]
+      $card: //div[contains(@class, "videos__element")]
+    performer:
+      Name: $card//a[contains(@href, "/vr-pornstars/")]/text()
+      URLs: $card//a[contains(@href, "/vr-pornstars/")]/@href
     scene:
       Title: $card//a[@class="videos__videoTitle"]
       URL: $card//a/@href
@@ -38,6 +45,7 @@ xPathScrapers:
       Image: //div[@class="pornstar"]/img/@src
       Gender:
         fixed: Female
+      URLs: //div[@class="pornstar__wrapper"]//div[contains(@class, "shareBtn__shareElement--copy")]/@data-url
     scene:
       Title: //h1[@class='video__title']
       Details:
@@ -45,14 +53,23 @@ xPathScrapers:
         postProcess:
           - replace:
               # maintain line breaks
-              - regex: <br>
+              - regex: (<br>|</p>)
                 with: "\n"
-              # maintain paragraph breaks
-              - regex: "</p>(\n*)<p>"
-                with: "$1\n"
               # strip any remaining tags
               - regex: <[^>]+>
                 with: ""
+          - javascript: |
+              if (value && value.length) {
+                // HTML entity decode
+                const map = {
+                  '&amp;': '&',
+                  '&lt;': '<',
+                  '&gt;': '>',
+                  '&quot;': '"',
+                  '&#39;': "'"
+                };
+                return value.replace(/&(?:amp|lt|gt|quot|#39);/g, m => map[m]);
+              }
       Tags:
         Name:
           selector: //p[span[text()="Tags:"]]/*/text()
@@ -82,4 +99,5 @@ xPathScrapers:
           - replace:
               - regex: .*/scenes/([^/]*)/.*
                 with: $1
-# Last Updated September 29, 2025
+      URL: //link[@rel="canonical"]/@href
+# Last Updated January 21, 2026
