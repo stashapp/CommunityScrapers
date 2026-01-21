@@ -47,12 +47,7 @@ xPathScrapers:
               # maintain line breaks
               - regex: <br>
                 with: "\n"
-              # maintain paragraph breaks
-              - regex: "<p></p>"
-                with: ""
-              - regex: "(\\.\\s*)<p>"
-                with: "$1\n"
-              - regex: "</p>"
+              - regex: </p>
                 with: "\n"
               # strip any remaining tags
               - regex: <[^>]+>
@@ -86,4 +81,6 @@ xPathScrapers:
           - replace:
               - regex: .*/scenes/([^/]*)/.*
                 with: $1
-# Last Updated September 29, 2025
+debug:
+  printHTML: true
+# Last Updated January 21, 2026
