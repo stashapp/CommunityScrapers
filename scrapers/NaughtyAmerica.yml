@@ -51,11 +51,15 @@ jsonScrapers:
       # pattern is predictable enough that we can construct an image URL from the promo/trailer link
       Image:
         # Grab the trailer or the promo video, whichever is available
-        selector: '[{"vid":data.0.trailers.@values.0},{"vid":data.0.promo_video_data.@values.0}].#(vid!=null).vid'
+        # selector: '[{"vid":data.0.trailers.@values.0},{"vid":data.0.promo_video_data.@values.0}].#(vid!=null).vid'
+        selector: $scene
         postProcess:
           - javascript: |
-              console.log(value);
-              const match = value.match(/.+(?:promo|\.com)\/(?:nonsecure\/)?(?<prefix>[^/]+)\/(?:trailers(?:\/vr)?\/)?(?<name>[^/_]+).*/);
+              console.debug(value);
+              const scene = JSON.parse(value);
+              const trailerOrPromoVideo = Object.values(scene.trailers)[0] || Object.values(scene.promo_video_data)[0];
+              console.debug(`trailerOrPromoVideo: ${trailerOrPromoVideo}`);
+              const match = trailerOrPromoVideo.match(/.+(?:promo|\.com)\/(?:nonsecure\/)?(?<prefix>[^/]+)\/(?:trailers(?:\/vr)?\/)?(?<name>[^/_]+).*/);
               if (match) {
                 const prefix = match[1];
                 let name = match[2];
@@ -63,9 +67,26 @@ jsonScrapers:
                   name = name.slice(prefix.length);
                 }
                 name = name.replace(/teaser|trailer$/, '');
-                return `https://images4.naughtycdn.com/cms/nacmscontent/v1/scenes/${prefix}/${name}/scene/horizontal/1279x852c.webp`;
+                let resolution = "1279x852"; // default resolution
+                // studio-specific logic
+                const sceneURL = scene.scene_url;
+                if (sceneURL.includes("www.naughtyamerica.com")) {
+                  resolution = "1279x852";
+                } else if (sceneURL.includes("www.naughtyamericavr.com")) {
+                  resolution = "1000x563";
+                } else if (sceneURL.includes("www.tonightsgirlfriend.com")) {
+                  resolution = "1499x944";
+                } else if (
+                    sceneURL.includes("www.myfriendshotmom.com") ||
+                    sceneURL.includes("www.mysistershotfriend.com") ||
+                    sceneURL.includes("www.thundercock.com") ||
+                    sceneURL.includes("www.tonightsts.com")
+                ) {
+                  resolution = "1279x719";
+                }
+                return `https://images4.naughtycdn.com/cms/nacmscontent/v1/scenes/${prefix}/${name}/scene/horizontal/${resolution}c.jpg`;
               }
-              return null;
+              return "";
     gallery:
       Title: *title
       Code: *code
