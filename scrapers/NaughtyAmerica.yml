@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: Naughty America
 sceneByURL:
   - action: scrapeJson
@@ -8,13 +9,16 @@ sceneByURL:
       - naughtyamericavr.com/scene/
       - thundercock.com/scene/
       - tonightsgirlfriend.com/scene/
-      - tonightsts.com/scene/
     queryURL: "{url}"
     queryURLReplace:
       url:
         - regex: .*?(\d+)(?:\?|#|$)
           with: https://api.naughtyapi.com/tools/scenes/scenes?id=$1
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - tonightsts.com/scene/
+    scraper: sceneXPathScraper
 galleryByURL:
   - action: scrapeJson
     url: *urls
@@ -95,7 +99,30 @@ jsonScrapers:
       Tags: *tags
       Performers: *performers
       Studio: *studio
-
+xPathScrapers:
+  sceneXPathScraper:
+    scene:
+      # Fallback scraper in case the JSON API is not available
+      Title: //div[@class="scenepage-info"]/h1
+      Date:
+        selector: //span[@class="scenepage-date"]/text()
+        postProcess:
+          # MM-DD-YY format
+          - parseDate: 01-02-19
+      Image: //img[@class="playcard"]/@src
+      Details: //div[@class="scenepage-description"]
+      Tags:
+        Name: //div[@class="scenepage-categories"]/a/text()
+      URL: //link[@rel="canonical"]/@href
+      Performers:
+        Name:
+          selector: //div[@class="scenepage-info"]/p
+          postProcess:
+            - replace:
+                # Remove "Added: <date>" suffix
+                - regex: Added:.*
+                  with: ""
+          split: ","
 driver:
   headers:
     - Key: User-Agent
