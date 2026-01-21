@@ -21,10 +21,10 @@ performerByURL:
 xPathScrapers:
   sceneByName:
     common:
-      $card: //div[contains(concat(' ',normalize-space(@class),' '),' videos__element ')]
+      $card: //div[contains(@class, "videos__element")]
     scene:
       Title: $card//a[@class="videos__videoTitle"]
-      URL: $card//a/@href
+      URL: $card//a[@class="videos__videoTitle"]/@href
       Image: $card//img/@src
   fuckpassvrScraper:
     performer:
@@ -79,4 +79,5 @@ xPathScrapers:
           - replace:
               - regex: .*/scenes/([^/]*)/.*
                 with: $1
+      URL: //link[@rel="canonical"]/@href
 # Last Updated January 21, 2026
