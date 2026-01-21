@@ -79,6 +79,4 @@ xPathScrapers:
           - replace:
               - regex: .*/scenes/([^/]*)/.*
                 with: $1
-debug:
-  printHTML: true
 # Last Updated January 21, 2026
