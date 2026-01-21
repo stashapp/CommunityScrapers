@@ -13,6 +13,10 @@ sceneByURL:
     url:
       - fuckpassvr.com/video/
     scraper: fuckpassvrScraper
+performerByName:
+  action: scrapeXPath
+  scraper: sceneByName
+  queryURL: https://www.fuckpassvr.com/destination?s={}
 performerByURL:
   - action: scrapeXPath
     url:
@@ -22,6 +26,9 @@ xPathScrapers:
   sceneByName:
     common:
       $card: //div[contains(@class, "videos__element")]
+    performer:
+      Name: $card//a[contains(@href, "/vr-pornstars/")]/text()
+      URLs: $card//a[contains(@href, "/vr-pornstars/")]/@href
     scene:
       Title: $card//a[@class="videos__videoTitle"]
       URL: $card//a/@href
