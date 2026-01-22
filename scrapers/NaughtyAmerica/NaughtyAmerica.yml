@@ -1,0 +1,25 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+# requires: py_common
+name: Naughty America
+sceneByURL:
+  - url: &urls
+      - myfriendshotmom.com/scene/
+      - mysistershotfriend.com/scene/
+      - naughtyamerica.com/scene/
+      - naughtyamericavr.com/scene/
+      - thundercock.com/scene/
+      - tonightsgirlfriend.com/scene/
+      - tonightsts.com/scene/
+    action: script
+    script:
+      - python
+      - NaughtyAmerica.py
+      - scene-by-url
+galleryByURL:
+  - url: *urls
+    action: script
+    script:
+      - python
+      - NaughtyAmerica.py
+      - gallery-by-url
+# Last Updated January 22, 2026
