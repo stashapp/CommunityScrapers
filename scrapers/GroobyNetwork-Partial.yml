@@ -258,9 +258,13 @@ xPathScrapers:
           //div[@id="fakeplayer"]//img/@src
           |
           //div[@class="trailer_video"]//video/@data-poster
+          |
+          //script[contains(., "player.poster")]/text()
         concat: __SEPARATOR__
         postProcess:
           - replace:
+              - regex: (__SEPARATOR__).*player\.poster\s*=\s*['"]([^'"]+)['"].*$
+                with: __SEPARATOR__$2
               - regex: ^.*__SEPARATOR__// # img urls without protocol, but with domain, e.g. //bobstgirls.com/whatever
                 with: "https://"
               - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$ # remove any path part from canonical URL
@@ -325,4 +329,6 @@ xPathScrapers:
           postProcess:
             - map:
                 Tags for This Scene: Virtual Reality
+debug:
+  printHTML: true
 # Last Updated December 9, 2025
