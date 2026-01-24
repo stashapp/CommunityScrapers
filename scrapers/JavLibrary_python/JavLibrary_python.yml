@@ -23,8 +23,10 @@ sceneByURL:
     url:
       - www.javlibrary.com/
       - javlibrary.com/
+      - www.javlib.com/
+      - javlib.com/
     script:
       - python
       - JavLibrary_python.py
       - validSearch
-# Last Updated March 4, 2025
+# Last Updated January 24, 2026
