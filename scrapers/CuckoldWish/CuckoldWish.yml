@@ -14,6 +14,13 @@ xPathScrapers:
     scene:
       Title: //h1[@class="videos__title"]
       Details: //div[@class="video__filmDescription"]
+      Date:
+        selector: //span[@class="videos__date"]/text()
+        postProcess:
+          - replace:
+            - regex: (th)|(nd)
+              with:
+          - parseDate: 2 Jan 2006
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
