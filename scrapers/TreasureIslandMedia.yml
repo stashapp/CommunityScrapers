@@ -103,7 +103,7 @@ xPathScrapers:
         selector: //div[contains(@class,'bio-content')]//li[contains(.,'Weight')]/span
         postProcess:
           - lbToKg: true
-      Measurements:
+      PenisLength:
         selector: //div[contains(@class,'bio-content')]//li[contains(.,'Length')]/span
         postProcess:
           - replace:
