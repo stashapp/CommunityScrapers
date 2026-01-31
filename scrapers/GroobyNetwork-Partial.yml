@@ -329,6 +329,4 @@ xPathScrapers:
           postProcess:
             - map:
                 Tags for This Scene: Virtual Reality
-debug:
-  printHTML: true
 # Last Updated December 9, 2025
