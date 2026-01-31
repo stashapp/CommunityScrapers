@@ -1,4 +1,4 @@
-name: wtfpass
+name: CuckoldWish
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -18,14 +18,14 @@ xPathScrapers:
         selector: //span[@class="videos__date"]/text()
         postProcess:
           - replace:
-            - regex: (th)|(nd)
+            - regex: st|nd|rd|th
               with:
           - parseDate: 2 Jan 2006
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name: 
-          fixed: Cuckold-Wish
+          fixed: Cuckoldwish
       Tags:
         Name: 
           selector: $tags | $channels
