@@ -37,8 +37,7 @@ xPathScrapers:
           split: " & "
       Tags:
         Name:
-          selector: //p[@class="titletags"]/text()
-          split: ", "
+          selector: //p[@class="titletags"]/a/text()
       Studio:
         Name:
           fixed: Bondage Junkies
@@ -54,3 +53,5 @@ xPathScrapers:
         - replace:
           - regex: /join
             with:
+
+# Last Updated February 07, 2026
