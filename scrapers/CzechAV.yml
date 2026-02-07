@@ -2,6 +2,7 @@ name: CzechAV
 sceneByURL:
   - action: scrapeXPath
     url:
+      - annalovesshemale.com/
       - creativeporn.com/
       - czechamateurs.com/
       - czechbangbus.com/
@@ -75,4 +76,4 @@ xPathScrapers:
               - regex: .+(?:"uploadDate":\s*")([^T]+).+
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated July 29, 2025
+# Last Updated February 7, 2025
