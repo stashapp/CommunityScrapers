@@ -356,14 +356,8 @@ class Site:
                     scene["performers"].append({"name": model["name"]})
 
             scene["tags"] = []
-            tags = data.get("tags")
-            categories = data.get("categories")
-            if tags == [] and categories:
-                for tag in data["categories"]:
-                    scene["tags"].append({"name": tag["name"]})
-            elif tags:
-                for tag in data["tags"]:
-                    scene["tags"].append({"name": tag})
+            for tag in data["categories"]:
+                scene["tags"].append({"name": tag["name"]})
             if USE_STUDIO_DEFAULT_TAGS:
                 for tag in self.deftags:
                     scene["tags"].append({"name": tag})
@@ -451,7 +445,6 @@ class Site:
                     width
                 }
             }
-            tags
             categories {
                 name
             }
