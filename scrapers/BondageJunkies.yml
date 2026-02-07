@@ -27,6 +27,7 @@ xPathScrapers:
               with: $1
       Details:
         selector: //p[@class="updatedesc"]/text()
+        concat: "\n\n"
       Performers:
         Name:
           selector: $performerTitle
