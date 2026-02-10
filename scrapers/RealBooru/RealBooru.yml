@@ -1,0 +1,20 @@
+name: RealBooru
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - RealBooru.py
+
+imageByFragment:
+  action: script
+  script:
+    - python
+    - RealBooru.py
+
+# Driver configuration for HTTP requests
+driver:
+  useCDP: false
+  headers:
+    - Key: User-Agent
+      Value: stashapp/stash scraper (RealBooru)
