@@ -1,0 +1,36 @@
+name: RawFuckBoys
+sceneByURL:
+  - action: script
+    url:
+      - rawfuckboys.com/videos/
+    script:
+      - python
+      - RawFuckBoys.py
+      - sceneByURL
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - RawFuckBoys.py
+    - sceneByFragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - RawFuckBoys.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - RawFuckBoys.py
+    - sceneByQueryFragment
+performerByURL:
+  - action: script
+    url:
+      - rawfuckboys.com/models/
+    script:
+      - python
+      - RawFuckBoys.py
+      - performerByURL
+# Last Updated February 15, 2026
