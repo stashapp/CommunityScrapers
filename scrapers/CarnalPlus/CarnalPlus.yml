@@ -1,0 +1,30 @@
+name: CarnalPlus
+sceneByURL:
+  - action: script
+    url:
+      - carnalplus.com/videos/
+    script:
+      - python
+      - CarnalPlus.py
+      - sceneByURL
+sceneByName:
+  action: script
+  script:
+    - python
+    - CarnalPlus.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - CarnalPlus.py
+    - sceneByQueryFragment
+performerByURL:
+  - action: script
+    url:
+      - carnalplus.com/models/
+    script:
+      - python
+      - CarnalPlus.py
+      - performerByURL
+# Last Updated February 15, 2026
