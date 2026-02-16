@@ -1,0 +1,36 @@
+name: TwinkLoads
+sceneByURL:
+  - action: script
+    url:
+      - twinkloads.com/videos/
+    script:
+      - python
+      - TwinkLoads.py
+      - sceneByURL
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - TwinkLoads.py
+    - sceneByFragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - TwinkLoads.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - TwinkLoads.py
+    - sceneByQueryFragment
+performerByURL:
+  - action: script
+    url:
+      - twinkloads.com/models/
+    script:
+      - python
+      - TwinkLoads.py
+      - performerByURL
+# Last Updated February 16, 2026
