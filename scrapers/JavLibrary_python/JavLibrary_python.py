@@ -83,7 +83,7 @@ IGNORE_ALIASES = False
 # Always wait for the aliases to load. (Depends on network response)
 WAIT_FOR_ALIASES = False
 # All javlib sites
-SITE_JAVLIB = ["javlibrary", "o58c", "e59f"]
+SITE_JAVLIB = ["javlibrary"]
 
 BANNED_WORDS = {
     "A******ation": "Asphyxiation",
@@ -238,6 +238,8 @@ BANNED_WORDS = {
 }
 
 REPLACE_TITLE = {
+    "FHD_6M-": "",
+    "[FHD6m]": "",
     "-uncensored": "",
     "-Uncensored": "",
     "uncensored": "",
@@ -416,60 +418,69 @@ class ResponseHTML:
     status_code = 0
     url = ""
 
-def bypass_protection(url):
-    global PROTECTION_CLOUDFLARE
-
+def bypass_protection(url, retries=4):
     url_domain = re.sub(r"www\.|\.com", "", urlparse(url).netloc)
     log.debug("=== Checking Status of Javlib site ===")
-    PROTECTION_CLOUDFLARE = False
     response_html = ResponseHTML
-    for site in SITE_JAVLIB:
-        url_n = url.replace(url_domain, site)
-        try:
-            if FLARESOLVERR_ENABLED:             
-                url = FLARESOLVERR_URL
-                headers = {"Content-Type": "application/json"}
-                data = {
-                    "cmd": "request.get",
-                    "url": url_n,
-                    "maxTimeout": FLARESOLVERR_TIMEOUT_MAX
-                }
+    site = "javlibrary"
+    url_n = url.replace(url_domain, site)
+    try:
+        if FLARESOLVERR_ENABLED:             
+            url = FLARESOLVERR_URL
+            headers = {"Content-Type": "application/json"}
+            data = {
+                "cmd": "request.get",
+                "url": url_n,""
+                "session": "2",
+                "session_ttl_minutes": 120,
+                "maxTimeout": FLARESOLVERR_TIMEOUT_MAX,
+                "set-cookie": "over18=18",
+            }
 
-                log.info(f"Using FlareSolverr: {FLARESOLVERR_URL}")
-                log.info(f"Javlibrary input url: {url_n}")
-                cookies = {'over18': '18'}
-                responseJson = requests.post(FLARESOLVERR_URL, cookies=cookies, headers=headers, json=data)
-                json_input = responseJson.json()
+            log.info(f"Using FlareSolverr: {FLARESOLVERR_URL}")
+            log.info(f"Javlibrary input url: {url_n}")
+            cookies = {'over18': '18'}
+            responseJson = requests.post(FLARESOLVERR_URL, cookies=cookies, headers=headers, json=data)
+            json_input = responseJson.json()
 
-                response_html.content = json_input['solution']['response']
-                response_html.html = json_input['solution']['response']
-                response_html.status_code = json_input['solution']['status']
-                response_html.url = json_input['solution']['url']
+            response_html.content = json_input['solution']['response']
+            response_html.html = json_input['solution']['response']
+            response_html.status_code = json_input['solution']['status']
+            response_html.url = json_input['solution']['url']
 
-                #log.info(f"Flaresolverr response html: {response_html}")
-            else:
-                response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
-                response_html.content = response.content
-                response_html.html = response.text
-                response_html.status_code = response.status_code
-                response_html.url = response.url
-        except Exception as exc_req:
-            log.warning(f"Exception error {exc_req} while checking protection for {site}")
-            return None, None
-        if response_html.url == "https://www.javlib.com/maintenance.html":
-            log.error(f"[{site}] Maintenance")
-        if "Why do I have to complete a CAPTCHA?" in response_html.html \
-            or "Checking your browser before accessing" in response_html.html:
-            log.error(f"[{site}] Protected by Cloudflare")
-            PROTECTION_CLOUDFLARE = True
-        elif response_html.status_code != 200:   
-            log.error(f"[{site}] Other issue ({response_html.status_code})")
+            #log.info(f"Flaresolverr response html: {response_html}")
         else:
             log.info(
                     f"[{site}] Using this site for scraping ({response_html.status_code})"
                 )
             log.debug("======================================")
             return site, response_html
+            response = requests.get(url_n, headers=JAV_HEADERS, timeout=10)
+            response_html.content = response.content
+            response_html.html = response.text
+            response_html.status_code = response.status_code
+            response_html.url = response.url
+    except Exception as exc_req:
+        log.warning(f"Exception error {exc_req} while checking protection for {site}")
+        if retries == 4:
+            retries = retries -1
+            log.warning(f"Retrying once normally after 7s delay [retries left: {retries}] for site: {site}")
+            time.sleep(7.2)
+            bypass_protection(url_n,retries)
+        else:
+            return None, None
+    if response_html.url == "https://www.javlib.com/maintenance.html":
+        log.error(f"[{site}] Maintenance")
+    elif response_html.url == "https://www.javlibrary.com/maintenance.html":
+        log.error(f"[{site}] Maintenance")
+    elif response_html.status_code != 200:   
+        log.error(f"[{site}] Other issue ({response_html.status_code})")
+    else:
+        log.info(
+                f"[{site}] Using this site for scraping | status code: ({response_html.status_code})"
+            )
+        log.debug("======================================")
+        return site, response_html
     log.debug("======================================")
     return None, None
 
@@ -572,11 +583,11 @@ def getxpath(xpath, tree):
 
 
 def jav_search(html, xpath):
-    if "/en/?v=" in html.url:
+    if "/en/jav" in html.url:
         log.debug(f"Using the provided movie page ({html.url})")
         return html
     jav_search_tree = lxml.html.fromstring(html.content)
-    jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
+    jav_url = getxpath(xpath['url'], jav_search_tree)  # ./javme5it6a
     if jav_url:
         url_domain = urlparse(html.url).netloc
         jav_url = re.sub(r"^\.", f"https://{url_domain}/en", jav_url[0])
@@ -589,20 +600,36 @@ def jav_search(html, xpath):
 
 def jav_search_by_name(html, xpath):
     jav_search_tree = lxml.html.fromstring(html.content)
-    jav_url = getxpath(xpath['url'], jav_search_tree)  # ./?v=javme5it6a
+    jav_url = getxpath(xpath['url'], jav_search_tree)  # ./javme5it6a
     jav_title = getxpath(xpath['title'], jav_search_tree)
     jav_image = getxpath(
         xpath['image'], jav_search_tree
     )  # //pics.dmm.co.jp/mono/movie/adult/13gvh029/13gvh029ps.jpg
-    log.debug(f"There is/are {len(jav_url)} scene(s)")
     lst = []
-    for count, _ in enumerate(jav_url):
-        lst.append({
-            "title": jav_title[count],
-            "url":
-            f"https://www.javlibrary.com/en/{jav_url[count].replace('./', '')}",
-            "image": re.sub("^//","https://",jav_image[count])
-        })
+    # Added fallback for 1 item results which redirect to video page automatically
+    if(len(jav_url) == 0):
+        jav_url = getxpath('//meta[@property="og:url"]/@content', jav_search_tree)
+        jav_title = getxpath('//div[@id="video_title"]/h3/a/text()', jav_search_tree)
+        jav_image = getxpath('//div[@id="video_jacket"]/img/@src', jav_search_tree)
+
+        if(len(jav_url) > 0):
+            for count, _ in enumerate(jav_url):
+                log.debug(jav_url[count])
+                lst.append({
+                    "title": jav_title[count],
+                    "url":
+                    f"https:{jav_url[count]}",
+                    "image": re.sub("^//","https://",jav_image[count])
+                })
+    else:
+        for count, _ in enumerate(jav_url):
+            lst.append({
+                "title": jav_title[count],
+                "url":
+                f"https://www.javlibrary.com/en/{jav_url[count].replace('./', '')}",
+                "image": re.sub("^//","https://",jav_image[count])
+            })
+    log.debug(f"There is/are {len(lst)} scene(s)")
     return lst
 
 
@@ -805,7 +832,7 @@ jav_result = {}
 
 if "searchName" in sys.argv:
     if JAV_SEARCH_HTML:
-        if "/en/?v=" in JAV_SEARCH_HTML.url:
+        if "/en/jav" in JAV_SEARCH_HTML.url:
             log.debug(f"Scraping the movie page directly ({JAV_SEARCH_HTML.url})")
             jav_tree = lxml.html.fromstring(JAV_SEARCH_HTML.content)
             jav_result["title"] = getxpath(jav_xPath["title"], jav_tree)
@@ -883,8 +910,8 @@ if JAV_MAIN_HTML:
                                             jav_result["title"][0])).lstrip()
         if jav_result.get("director"):
             jav_result["director"] = jav_result["director"][0]
-        if jav_result.get("label"):
-            jav_result["label"] = jav_result["label"][0]
+        #if jav_result.get("label"):
+        #    jav_result["label"] = jav_result["label"][0]
         if jav_result.get("performers_url") and IGNORE_ALIASES is False:
             javlibrary_aliases_thread = threading.Thread(
                 target=th_request_perfpage,
@@ -915,9 +942,9 @@ scrape['details'] = regexreplace(jav_result.get('details', ""))
 scrape['studio'] = {
     'name': next(iter(jav_result.get('studio', []))),
 }
-scrape['label'] = {
-    'name': jav_result.get('label'),
-}
+#scrape['label'] = {
+#    'name': jav_result.get('label'),
+#}
 
 if WAIT_FOR_ALIASES and not IGNORE_ALIASES:
     try:
