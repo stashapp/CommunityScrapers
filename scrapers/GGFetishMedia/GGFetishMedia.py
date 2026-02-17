@@ -4,10 +4,10 @@ import json
 import requests
 import re
 import os
-from bs4 import BeautifulSoup
-from bs4 import NavigableString
+from bs4 import BeautifulSoup, NavigableString
 from datetime import datetime
 from urllib.parse import quote, urlparse
+from py_common.util import dig, scraper_args
 
 def resolve_url(url):
     try:
@@ -38,7 +38,7 @@ def get_oldest_wayback_date(url: str) -> str:
             date_object = datetime.strptime(raw_timestamp, "%Y%m%d%H%M%S")
             return date_object.strftime("%Y-%m-%d")
         else:
-            return "No archive found for this URL."
+            return "" # do not return non-date type
             
     except requests.exceptions.RequestException as e:
         print(f"Error connecting to API: {e}", file=sys.stderr)
@@ -168,27 +168,16 @@ def scrape_scene(url):
         "date": date,
         "urls": checked_urls,
         "code": code,
-        "studio": {"name": studioName}
+        "studio": {"name": studioName},
+        "tags": [{"name": "Missing Date", "stashid": "ffbbb41f-3bd7-4b3d-b26d-74236d5ac2aa"}] # using wayback date at best
     }
 
-def main():
-    try:
-        raw = sys.stdin.read().strip()
-
-        if not raw:
-            print(json.dumps({"scenes": []}))
-            return
-
-        data = json.loads(raw)
-        url = data.get("url") or data.get("query")
-
-        scene = scrape_scene(url)
-
-        print(json.dumps(scene))
-
-    except Exception as e:
-        print(f"Scraper error: {e}", file=sys.stderr)
-        print(json.dumps({"scenes": []}))
-
 if __name__ == "__main__":
-    main()
+    op, args = scraper_args()
+    match op, args:
+        case "scene-by-url", {"url": url} if url:
+            scene = scrape_scene(url)
+            print(json.dumps(scene))
+        case _:
+            log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            sys.exit(1)
