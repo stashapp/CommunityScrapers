@@ -9,4 +9,4 @@ sceneByURL:
     script:
       - python
       - GGFetishMedia.py
-      - sceneByURL
+      - scene-by-url
