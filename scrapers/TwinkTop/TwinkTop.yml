@@ -1,0 +1,36 @@
+name: TwinkTop
+sceneByURL:
+  - action: script
+    url:
+      - twinktop.com/videos/
+    script:
+      - python
+      - TwinkTop.py
+      - sceneByURL
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - TwinkTop.py
+    - sceneByFragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - TwinkTop.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - TwinkTop.py
+    - sceneByQueryFragment
+performerByURL:
+  - action: script
+    url:
+      - twinktop.com/models/
+    script:
+      - python
+      - TwinkTop.py
+      - performerByURL
+# Last Updated February 16, 2026
