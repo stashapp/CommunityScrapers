@@ -141,17 +141,47 @@ def performer_from_url(url) -> ScrapedPerformer:
     bio = tree.xpath('//p[@id="biotext"]')
     if bio:
         performer["details"] = bio[0].text_content().strip()
-    # get images
-    img_url = tree.xpath('//div[@id="profimg"]/a/@href')
-    if img_url:
-        b64img = fetch_as_base64(f"https://www.babepedia.com/{img_url[0]}")
-        performer['images'] = [f"data:image/jpg;base64,{b64img}"]
+    # get social/website URLs
+    # Babepedia proxies some links as relative paths (e.g. /onlyfans/username)
+    # rather than linking to the external site directly. Map known patterns;
+    # log any unrecognised relative URLs so they can be added later.
+    # Babepedia proxies some links through their own domain, both as relative
+    # paths (/onlyfans/username) and absolute URLs
+    # (https://www.babepedia.com/onlyfans/username). Map both forms.
+    proxy_url_map = {
+        "https://www.babepedia.com/onlyfans/": "https://onlyfans.com/",
+        "/onlyfans/": "https://onlyfans.com/",
+    }
+    social_urls = tree.xpath('//div[@id="socialicons"]/a/@href')
+    for href in social_urls:
+        matched = False
+        for prefix, replacement in proxy_url_map.items():
+            if href.startswith(prefix):
+                performer["urls"].append(href.replace(prefix, replacement, 1))
+                matched = True
+                break
+        if not matched:
+            if href.startswith("http"):
+                performer["urls"].append(href)
+            else:
+                log.warning(f"Unrecognised relative URL skipped: {href}")
+    # get images - collect all from main gallery, then user uploads
+    # Returns URLs so Stash can present a picker when multiple images exist.
+    base_url = "https://www.babepedia.com"
+    main_imgs = tree.xpath('//div[@id="profbox2"]//a[@class="img"]/@href')
+    user_imgs = tree.xpath('//div[contains(@class,"useruploads2")]//a[@class="img"]/@href')
+    all_imgs = [
+        href if href.startswith("http") else f"{base_url}{href}"
+        for href in main_imgs + user_imgs
+    ]
+    if all_imgs:
+        performer["images"] = all_imgs
     return performer
 
 def map_performer_search(performer) -> PerformerSearchResult:
     result: PerformerSearchResult = {
        "name": performer['label'],
-       "url": f"https://www.babepedia.com/babe/{performer['value']}"
+       "url": f"https://www.babepedia.com/babe/{performer['value'].replace(' ', '_')}"
     }
     return result
 
