@@ -403,7 +403,12 @@ jsonScrapers:
           selector: categories.#.name
           postProcess: *ppUncensor
       Studio:
-        Name: maker.name
+        Name:
+          selector: maker.name
+          postProcess:
+            - replace:
+                - regex: ^\s+|\s+$
+                  with: ""
       Performers:
         Name: actresses.#.name
       URL:
