@@ -1,7 +1,9 @@
 import json
 import re
 import sys
+import html
 import urllib3
+from urllib.parse import quote_plus
 
 from py_common import log
 from py_common.util import dig, scraper_args
@@ -92,6 +94,22 @@ def _create_headers() -> dict[str, str]:
     }
 
 
+def clean_description(text: str) -> str:
+    """Strip HTML tags and unescape entities from description fields.
+    The PB+ API sometimes returns raw HTML (e.g. <p>...<br></p>),
+    and sometimes plain text. This handles both cases safely.
+    """
+    if not text:
+        return text
+    # Replace <br> variants with a newline before stripping other tags
+    text = re.sub(r"<\s*br\s*/?\s*>", "\n", text, flags=re.IGNORECASE)
+    # Strip all remaining HTML tags
+    text = re.sub(r"<[^>]+>", "", text)
+    # Unescape HTML entities (e.g. &amp; -> &)
+    text = html.unescape(text)
+    return text.strip()
+
+
 def to_scraped_tag(res: dict) -> ScrapedTag:
     return {
         "name": res["name"],
@@ -106,15 +124,26 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
 
     if (actor_id := dig(res, "actor_id")) and (url_name := dig(res, "url_name")):
         performer["urls"] = [
-            f"https://www.playboyplus.com/en/model/view/{url_name}/{actor_id}"
+            f"https://www.playboyplus.com/en/model/view/{url_name}/{actor_id}",
+            f"https://members.playboyplus.com/en/model/view/{url_name}/{actor_id}",
         ]
 
     if details := dig(res, "description"):
-        performer["details"] = details
+        performer["details"] = clean_description(details)
 
-    if pictures := dig(res, "pictures"):
-        main_pic = list(pictures.values())[-1]
-        performer["images"] = [f"https://transform.gammacdn.com/actors{main_pic}"]
+    # PB+ uses /media/ as the CDN path prefix, not /actors/ like other Gamma sites.
+    # Log the raw pictures field to aid debugging if the image is still missing.
+    pictures = dig(res, "pictures")
+    log.debug(f"Actor pictures field: {pictures}")
+    if pictures and (main_pic := list(pictures.values())[-1]):
+        performer["images"] = [f"https://transform.gammacdn.com/media{main_pic}"]
+    elif actor_id := dig(res, "actor_id"):
+        # Fallback: construct from actor_id using the known PB+ URL pattern.
+        # The suffix number (e.g. "-7-") appears stable but may vary per performer;
+        # if images are still missing, check the debug log for the raw pictures field.
+        performer["images"] = [
+            f"https://transform.gammacdn.com/media/actor-{actor_id}-modelHeroMobile-7-nsfw.jpg"
+        ]
 
     if eye_color := dig(res, "attributes", "eye_color"):
         performer["eye_color"] = eye_color
@@ -143,10 +172,11 @@ def to_scraped_gallery(res: dict) -> ScrapedGallery:
         "title": res["title"],
         "code": str(res["set_id"]),
         "date": res["date_online"],
-        "studio": {"name": res["studio_name"]},
     }
+    if studio_name := res.get("studio_name", "").strip():
+        gallery["studio"] = {"name": studio_name}
     if description := dig(res, "description"):
-        gallery["details"] = description
+        gallery["details"] = clean_description(description)
 
     if performers := dig(res, "actors"):
         gallery["performers"] = [to_scraped_performer(p) for p in performers]
@@ -164,11 +194,11 @@ def to_scraped_scene(res: dict) -> ScrapedScene:
     scene: ScrapedScene = {
         "title": res["title"],
         "date": res["release_date"],
-        "studio": {"name": res["studio_name"]},
     }
-
+    if studio_name := res.get("studio_name", "").strip():
+        scene["studio"] = {"name": studio_name}
     if description := dig(res, "description"):
-        scene["details"] = description
+        scene["details"] = clean_description(description)
 
     if performers := dig(res, "actors"):
         scene["performers"] = [to_scraped_performer(p) for p in performers]
@@ -218,7 +248,7 @@ def scene_from_url(url: str) -> ScrapedScene | None:
     # Using the clip_id is pointless here since those URLs do not resolve
     scene["code"] = set_id
     if not dig(scene, "details") and (description := dig(photoset, "description")):
-        scene["details"] = description
+        scene["details"] = clean_description(description)
 
     return scene
 
@@ -262,6 +292,21 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
     return to_scraped_performer(actor)
 
 
+def performer_search(query: str) -> list[ScrapedPerformer]:
+    if not (api_headers := _create_headers()):
+        return []
+    app_id = api_headers["X-Algolia-Application-Id"]
+    api_URL = f"https://{app_id.lower()}-dsn.algolia.net/1/indexes/all_actors/query"
+    payload = {"params": f"query={quote_plus(query)}&hitsPerPage=20"}
+    log.debug(f"Searching performers for '{query}'... {api_URL}")
+    res = requests.post(api_URL, headers=api_headers, json=payload).json()
+    hits = res.get("hits") or []
+    if not hits:
+        log.warning(f"No performers found for query: {query}")
+        return []
+    return [to_scraped_performer(hit) for hit in hits]
+
+
 def main_scraper():
     """
     Takes arguments from stdin or from the command line and dumps output as JSON to stdout
@@ -275,6 +320,8 @@ def main_scraper():
             result = scene_from_url(url)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
+        case "performer-by-name", {"name": name} if name:
+            result = performer_search(name)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
