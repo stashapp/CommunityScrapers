@@ -38,5 +38,6 @@ xPathScrapers:
     performer:
       Name: //h1[contains(@class, "ui-heading-h1")]
       Image: //div[contains(@class, "blocks-model-view-thumbnail")]//img/@data-original
-      URLs:
-        fixed: "{inputURL}"
+      Tags:
+        Name: //div[contains(@class,"model-view-top-lists")]/a/text()
+      URLs: //div[contains(@class,"model-view-social-bar")]//a/@href
