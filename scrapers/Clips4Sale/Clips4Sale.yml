@@ -1,0 +1,54 @@
+name: Clips4Sale
+
+sceneByURL:
+  - action: script
+    url:
+      - clips4sale.com/studio/
+    script:
+      - python
+      - Clips4Sale.py
+      - scene-by-url
+
+sceneByName:
+  action: script
+  script:
+    - python
+    - Clips4Sale.py
+    - scene-by-name
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Clips4Sale.py
+    - scene-by-fragment
+
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Clips4Sale.py
+    - scene-by-query-fragment
+
+performerByName:
+  action: script
+  script:
+    - python
+    - Clips4Sale.py
+    - performer-by-name
+
+performerByURL:
+  - action: script
+    url:
+      - clips4sale.com/performers/
+    script:
+      - python
+      - Clips4Sale.py
+      - performer-by-url
+
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Clips4Sale.py
+    - performer-by-fragment
