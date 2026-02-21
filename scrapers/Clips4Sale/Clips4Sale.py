@@ -117,7 +117,7 @@ def fetch_studio_data(studio_id: str, studio_slug: str) -> StudioData:
     url = f"https://www.clips4sale.com/studio/{studio_id}/{studio_slug}?_data=routes%2F%28%24lang%29.studio.%24id_.%24studioSlug.%24"
     try:
         response = scraper.get(url)
-        if response.status_code == 200:
+        if response.ok:
             # Response is newline delimited JSON
             first_line = response.text.splitlines()[0]
             data = json.loads(first_line)
@@ -141,7 +141,7 @@ def fetch_performer_data(performer_id: str, performer_slug: str) -> PerformerDat
     url = f"https://www.clips4sale.com/performers/{performer_id}/{encoded_slug}?_data=routes%2F%28%24lang%29.performers.%24performerId.%28%24performerSlug%29"
     try:
         response = scraper.get(url)
-        if response.status_code == 200:
+        if response.ok:
             # Response is newline delimited JSON
             first_line = response.text.splitlines()[0]
             data = json.loads(first_line)
@@ -327,7 +327,7 @@ def scene_search(
     log.debug(f"Searching URL: {url}")
     try:
         response = scraper.get(url)
-        if response.status_code != 200:
+        if not response.ok:
             log.error(f"Search failed with status code {response.status_code}")
             return []
 
@@ -366,7 +366,7 @@ def scene_from_url(url: str) -> Optional[ScrapedScene | SceneSearchResult]:
 
         try:
             response = scraper.get(data_url)
-            if response.status_code == 200:
+            if response.ok:
                 # Response is newline delimited JSON, first line is what we want
                 first_line = response.text.splitlines()[0]
                 data = json.loads(first_line)
@@ -411,7 +411,7 @@ def performer_search(
     log.debug(f"Searching Performer URL: {url}")
     try:
         response = scraper.get(url)
-        if response.status_code != 200:
+        if not response.ok:
             log.error(
                 f"Performer search failed with status code {response.status_code}"
             )
