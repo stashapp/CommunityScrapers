@@ -407,7 +407,7 @@ jsonScrapers:
           selector: maker.name
           postProcess:
             - replace:
-                - regex: ^\s*|\s*$
+                - regex: ^\s+|\s+$
                   with: ""
       Performers:
         Name: actresses.#.name
