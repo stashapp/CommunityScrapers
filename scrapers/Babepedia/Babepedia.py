@@ -58,7 +58,7 @@ def performer_from_url(url) -> ScrapedPerformer:
     }
     aliases = tree.xpath('//h2[@id="aka"][1]/text()')
     if aliases:
-        performer['aliases'] = ", ".join(aliases[0].split(" - "))
+        performer['aliases'] = ", ".join(aliases[0].strip().split(" - "))
     # get birthdate
     birth_container = tree.xpath('//span[contains(text(), "Born:")]/following-sibling::span/a')
     if birth_container:
@@ -86,10 +86,12 @@ def performer_from_url(url) -> ScrapedPerformer:
             performer["career_length"] = f"{start}-"
         else:
             performer["career_length"] = f"{start} - {end}"
-    # get country
-    country = biography_xpath_test(tree, "Nationality", "")
-    if country:
-       performer['country'] = country.strip("() ")
+    # get country - extract ISO code from flag icon class (first nationality only)
+    nationality_flags = tree.xpath('//span[contains(text(), "Nationality")]/following-sibling::span//span[contains(@class, "fi-")]/@class')
+    if nationality_flags:
+        match = re.search(r'\bfi-([a-z]{2})\b', nationality_flags[0])
+        if match:
+            performer['country'] = match.group(1).upper()
     # get ethnicity
     ethnicity = biography_xpath_test(tree, "Ethnicity", "/a")
     if ethnicity:
