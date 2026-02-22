@@ -1,0 +1,42 @@
+name: SayUncle
+sceneByURL:
+  - action: script
+    url:
+      - sayuncle.com/movies/
+    script:
+      - python
+      - SayUncle.py
+      - sceneByURL
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - SayUncle.py
+    - sceneByFragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - SayUncle.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - SayUncle.py
+    - sceneByQueryFragment
+performerByURL:
+  - action: script
+    url:
+      - sayuncle.com/models/
+    script:
+      - python
+      - SayUncle.py
+      - performerByURL
+performerByName:
+  action: script
+  script:
+    - python
+    - SayUncle.py
+    - performerByName
+# Last Updated February 15, 2026
