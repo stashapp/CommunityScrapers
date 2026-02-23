@@ -45,6 +45,22 @@ def sanitize_hair_color(str) -> HairColor:
         return "Brunette" # type: ignore
     return str # type: ignore
 
+def sanitize_fake_tits(value: str) -> str | None:
+    # Maps Babepedia's breast type labels to Stash's valid fake_tits values:
+    # "Fake", "Natural", or "Na". We never return "Na" here — if Babepedia
+    # has no data, it's cleaner to leave the field unset than to store "Na".
+    mapping = {
+        "fake/enhanced": "Fake",    # observed on Babepedia
+        "real/natural":  "Natural", # observed on Babepedia
+        "fake":          "Fake",    # defensive
+        "enhanced":      "Fake",    # defensive
+        "augmented":     "Fake",    # defensive
+        "natural":       "Natural", # defensive
+        "real":          "Natural", # defensive
+    }
+    # Anything unrecognised returns None, which the caller treats as no data.
+    return mapping.get(value.lower().strip())
+
 def performer_from_url(url) -> ScrapedPerformer:
     scraped = scraper.get(url)
     scraped.raise_for_status()
@@ -128,9 +144,8 @@ def performer_from_url(url) -> ScrapedPerformer:
         performer['measurements'] = measurements
     # get fake/naturals
     breast_type = biography_xpath_test(tree, "Boobs", "/a")
-    if breast_type:
-        real_breasts = breast_type == "Real/Natural"
-        performer['fake_tits'] = str(not real_breasts)
+    if fake_tits := sanitize_fake_tits(breast_type or ""):
+        performer['fake_tits'] = fake_tits
     # get tattoos
     tattoos = biography_xpath_test(tree, "Tattoos", "")
     if tattoos and tattoos != "None":
