@@ -116,6 +116,54 @@ def to_scraped_tag(res: dict) -> ScrapedTag:
     }
 
 
+# Map PlayboyPlus "home" field values to ISO 3166-1 alpha-2 country codes.
+# The API returns full country names; extend this dict as new values are
+# discovered via the warning log below.
+COUNTRY_MAP = {
+    "United States": "US",
+    "United Kingdom": "GB",
+    "Canada": "CA",
+    "Australia": "AU",
+    "Germany": "DE",
+    "France": "FR",
+    "Brazil": "BR",
+    "Czech Republic": "CZ",
+    "Hungary": "HU",
+    "Sweden": "SE",
+    "Denmark": "DK",
+    "Netherlands": "NL",
+    "Italy": "IT",
+    "Spain": "ES",
+    "Russia": "RU",
+    "Mexico": "MX",
+    "Japan": "JP",
+    "South Africa": "ZA",
+    "New Zealand": "NZ",
+    "Poland": "PL",
+    "Romania": "RO",
+}
+
+# Map PlayboyPlus hair_color values to StashDB internal values.
+# StashDB stores "Brunette" internally but displays it as "Brown" in the UI —
+# always use the internal value here.
+HAIR_COLOR_MAP = {
+    "Brown": "Brunette",
+    "Brunette": "Brunette",
+    "Blonde": "Blonde",
+    "Black": "Black",
+    "Red": "Red",
+    "Auburn": "Auburn",
+    "Grey": "Grey",
+    "White": "White",
+    "Bald": "Bald",
+    "Other": "Other",
+}
+
+
+def sanitize_hair_color(value: str) -> str | None:
+    return HAIR_COLOR_MAP.get(value.strip()) if value else None
+
+
 def to_scraped_performer(res: dict) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
         "name": res["name"],
@@ -132,23 +180,25 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
         performer["details"] = clean_description(details)
 
     # PB+ uses /media/ as the CDN path prefix, not /actors/ like other Gamma sites.
-    # Log the raw pictures field to aid debugging if the image is still missing.
-    pictures = dig(res, "pictures")
-    log.debug(f"Actor pictures field: {pictures}")
-    if pictures and (main_pic := list(pictures.values())[-1]):
-        performer["images"] = [f"https://transform.gammacdn.com/media{main_pic}"]
-    elif actor_id := dig(res, "actor_id"):
-        # Fallback: construct from actor_id using the known PB+ URL pattern.
-        # The suffix number (e.g. "-7-") appears stable but may vary per performer;
-        # if images are still missing, check the debug log for the raw pictures field.
-        performer["images"] = [
-            f"https://transform.gammacdn.com/media/actor-{actor_id}-modelHeroMobile-7-nsfw.jpg"
-        ]
+    # multicontent_data.nsfw is the primary image source despite pictures also existing,
+    # because pictures can contain broken legacy URLs (e.g. 119840/119840_500x750.jpg)
+    # while multicontent_data consistently points to the current CDN-hosted hero images.
+    # modelHeroMobile (1000x1600 portrait) is the correct variant for performer images —
+    # modelHero is a wide banner crop (1920x810) not suitable as a performer thumbnail.
+    # Fallback to pictures only if multicontent_data is absent.
+    if nsfw := dig(res, "multicontent_data", "nsfw"):
+        if img := next(
+            (e["file"] for e in nsfw if e.get("name") == "modelHeroMobile"), None
+        ):
+            performer["images"] = [f"https://transform.gammacdn.com/media/{img}"]
+    elif pictures := dig(res, "pictures"):
+        if main_pic := list(pictures.values())[-1]:
+            performer["images"] = [f"https://transform.gammacdn.com/media{main_pic}"]
 
     if eye_color := dig(res, "attributes", "eye_color"):
         performer["eye_color"] = eye_color
 
-    if hair_color := dig(res, "attributes", "hair_color"):
+    if hair_color := sanitize_hair_color(dig(res, "attributes", "hair_color") or ""):
         performer["hair_color"] = hair_color
 
     if height := dig(res, "attributes", "height"):
@@ -159,10 +209,18 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
         performer["weight"] = str(round(float(weight) * 0.453))
 
     if home := dig(res, "attributes", "home"):
-        if home.endswith("United States"):
-            performer["country"] = "USA"
-        else:
-            performer["country"] = home.split()[-1]
+        home = home.strip()
+        if home and home != "N/A":
+            # "home" is a full location string, e.g. "Burlington DC United States"
+            # or "London United Kingdom" — match by checking which country name it ends with
+            matched = next(
+                (code for name, code in COUNTRY_MAP.items() if home.endswith(name)),
+                None,
+            )
+            if matched:
+                performer["country"] = matched
+            else:
+                log.warning(f"Unknown country value: {home!r} — add to COUNTRY_MAP if valid")
 
     return performer
 
