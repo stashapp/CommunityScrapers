@@ -45,6 +45,22 @@ def sanitize_hair_color(str) -> HairColor:
         return "Brunette" # type: ignore
     return str # type: ignore
 
+def sanitize_fake_tits(value: str) -> str | None:
+    # Maps Babepedia's breast type labels to Stash's valid fake_tits values:
+    # "Fake", "Natural", or "Na". We never return "Na" here — if Babepedia
+    # has no data, it's cleaner to leave the field unset than to store "Na".
+    mapping = {
+        "fake/enhanced": "Fake",    # observed on Babepedia
+        "real/natural":  "Natural", # observed on Babepedia
+        "fake":          "Fake",    # defensive
+        "enhanced":      "Fake",    # defensive
+        "augmented":     "Fake",    # defensive
+        "natural":       "Natural", # defensive
+        "real":          "Natural", # defensive
+    }
+    # Anything unrecognised returns None, which the caller treats as no data.
+    return mapping.get(value.lower().strip())
+
 def performer_from_url(url) -> ScrapedPerformer:
     scraped = scraper.get(url)
     scraped.raise_for_status()
@@ -58,7 +74,7 @@ def performer_from_url(url) -> ScrapedPerformer:
     }
     aliases = tree.xpath('//h2[@id="aka"][1]/text()')
     if aliases:
-        performer['aliases'] = ", ".join(aliases[0].split(" - "))
+        performer['aliases'] = ", ".join(aliases[0].strip().split(" - "))
     # get birthdate
     birth_container = tree.xpath('//span[contains(text(), "Born:")]/following-sibling::span/a')
     if birth_container:
@@ -86,10 +102,12 @@ def performer_from_url(url) -> ScrapedPerformer:
             performer["career_length"] = f"{start}-"
         else:
             performer["career_length"] = f"{start} - {end}"
-    # get country
-    country = biography_xpath_test(tree, "Nationality", "")
-    if country:
-       performer['country'] = country.strip("() ")
+    # get country - extract ISO code from flag icon class (first nationality only)
+    nationality_flags = tree.xpath('//span[contains(text(), "Nationality")]/following-sibling::span//span[contains(@class, "fi-")]/@class')
+    if nationality_flags:
+        match = re.search(r'\bfi-([a-z]{2})\b', nationality_flags[0])
+        if match:
+            performer['country'] = match.group(1).upper()
     # get ethnicity
     ethnicity = biography_xpath_test(tree, "Ethnicity", "/a")
     if ethnicity:
@@ -126,9 +144,8 @@ def performer_from_url(url) -> ScrapedPerformer:
         performer['measurements'] = measurements
     # get fake/naturals
     breast_type = biography_xpath_test(tree, "Boobs", "/a")
-    if breast_type:
-        real_breasts = breast_type == "Real/Natural"
-        performer['fake_tits'] = str(not real_breasts)
+    if fake_tits := sanitize_fake_tits(breast_type or ""):
+        performer['fake_tits'] = fake_tits
     # get tattoos
     tattoos = biography_xpath_test(tree, "Tattoos", "")
     if tattoos and tattoos != "None":
