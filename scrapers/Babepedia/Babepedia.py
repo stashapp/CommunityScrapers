@@ -3,7 +3,7 @@ import re
 import sys
 from datetime import datetime # birthday formatting
 
-import cloudscraper
+from py_common.proxy import StashRequests
 from lxml import html
 
 # for image
@@ -13,10 +13,11 @@ import py_common.log as log
 from py_common.util import scraper_args
 from py_common.types import ScrapedPerformer, PerformerSearchResult, Ethnicity, EyeColor, HairColor
 
-scraper = cloudscraper.create_scraper()
+scraper = StashRequests(cloudflare=True)
 
 def fetch_as_base64(url: str) -> str | None:
-  return base64.b64encode(scraper.get(url).content).decode('utf-8')
+  data = base64.b64encode(scraper.get(url).content).decode('utf-8')
+  return f"data:image/jpg;base64,{data}"
 
 def biography_xpath_test(tree, html_name: str, selector: str) -> str | None:
   elem = tree.xpath(f'//span[contains(text(), "{html_name}")]/following-sibling::span{selector}/text()')
@@ -38,12 +39,10 @@ def sanitize_eye_color(str) -> EyeColor | None:
     return str
 
 def sanitize_hair_color(str) -> HairColor:
-    if str in ["Blonde","Brunette","Black","Red","Auburn","Grey","Bald","Various","Other"]:
-        return str
     # brown to brunette
     if str.lower() == "brown":
-        return "Brunette" # type: ignore
-    return str # type: ignore
+        return "BRUNETTE"
+    return str
 
 def sanitize_fake_tits(value: str) -> str | None:
     # Maps Babepedia's breast type labels to Stash's valid fake_tits values:
@@ -105,7 +104,7 @@ def performer_from_url(url) -> ScrapedPerformer:
     # get country - extract ISO code from flag icon class (first nationality only)
     nationality_flags = tree.xpath('//span[contains(text(), "Nationality")]/following-sibling::span//span[contains(@class, "fi-")]/@class')
     if nationality_flags:
-        match = re.search(r'\bfi-([a-z]{2})\b', nationality_flags[0])
+        match = re.search(r'fi fi-([a-z]{2})', nationality_flags[0])
         if match:
             performer['country'] = match.group(1).upper()
     # get ethnicity
@@ -144,8 +143,10 @@ def performer_from_url(url) -> ScrapedPerformer:
         performer['measurements'] = measurements
     # get fake/naturals
     breast_type = biography_xpath_test(tree, "Boobs", "/a")
-    if fake_tits := sanitize_fake_tits(breast_type or ""):
-        performer['fake_tits'] = fake_tits
+    if breast_type:
+        breast_type_str = "Natural" if "Real" in breast_type else "Fake" if "Fake" in breast_type else None
+        if breast_type_str:
+            performer['fake_tits'] = breast_type_str
     # get tattoos
     tattoos = biography_xpath_test(tree, "Tattoos", "")
     if tattoos and tattoos != "None":
@@ -188,7 +189,7 @@ def performer_from_url(url) -> ScrapedPerformer:
     main_imgs = tree.xpath('//div[@id="profbox2"]//a[@class="img"]/@href')
     user_imgs = tree.xpath('//div[contains(@class,"useruploads2")]//a[@class="img"]/@href')
     all_imgs = [
-        href if href.startswith("http") else f"{base_url}{href}"
+        fetch_as_base64(href if href.startswith("http") else f"{base_url}{href}")
         for href in main_imgs + user_imgs
     ]
     if all_imgs:
