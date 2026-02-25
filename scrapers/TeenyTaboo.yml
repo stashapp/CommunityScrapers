@@ -7,17 +7,17 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[@class="customhcolor"]
-      Details: //h2[@class="customhcolor2"]
+      Title: //h1[@class="video-title"]/text()
+      Details: //div[@style]/p/text()
       Date:
-        selector: //span[@class="date"]
+        selector: //div[@class="video-info"]/div/p[contains(text(), "Added on:")]
         postProcess:
           - replace:
-              - regex: (\w+) (0?[1-9]|[12][0-9]|3[01])(?:st|nd|th) (\d{4})
-                with: $1 $2, $3
+              - regex: (.+:) (.+)
+                with: $2
           - parseDate: Jan 2, 2006
       Image:
-        selector: //center/img/@src
+        selector: //div[@id="video-player-section"]/a/img/@src
         postProcess:
           - replace:
               - regex: ^
@@ -27,13 +27,10 @@ xPathScrapers:
           fixed: Teeny Taboo
       Tags:
         Name:
-          selector: //h4[@class="customhcolor" and not(./span)]
-          split: ","
+          selector: //div[@class="model-tags"][2]/a/text()
       Performers:
         Name:
-          selector: //h3[@class="customhcolor"]
-          split: ","
-          postProcess:
-            - replace:
-                - regex: \x{00a0}
-                  with: ""
+          selector: //div[@class="model-tags"][1]/a/text()
+
+driver:
+  useCDP: true
