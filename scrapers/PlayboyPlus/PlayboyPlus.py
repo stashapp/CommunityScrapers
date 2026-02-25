@@ -2,7 +2,6 @@ import json
 import re
 import sys
 import html
-import urllib3
 from urllib.parse import quote_plus
 
 from py_common import log
@@ -15,13 +14,28 @@ from py_common.types import (
     ScrapedTag,
 )
 
-ensure_requirements("requests")
+ensure_requirements("requests", "pycountry")
 import requests  # noqa: E402
+import pycountry # needed for country guessing
+"""why pycountry?
+"home" seems to be a free-field text box with multiple formats without commas, which means we can't use py_common/util/guess_nationality
+nor does a static lookup table make sense
 
+Formats found so far:
+- "City Country"
+  - https://www.playboyplus.com/en/model/view/-/122006
+  - https://www.playboyplus.com/en/model/view/-/121668
+- "City, Country"
+  - https://www.playboyplus.com/en/model/view/-/122477
+- "Country"
+  - https://www.playboyplus.com/en/model/view/-/122230
+  - https://www.playboyplus.com/en/model/view/-/122337
 
-# Had to set verify=False due to a certificate issue with their site
-urllib3.disable_warnings()
-
+and even US is inconsistent, with state sometimes being shortened, USA/ United States
+"Los Angeles CA United States" https://www.playboyplus.com/en/model/view/-/118857
+"Los Angeles California USA" https://www.playboyplus.com/en/model/view/-/120984
+"Ashland KY USA" https://www.playboyplus.com/en/model/view/-/118164
+"""
 
 def __raw_photoset_from_api(set_id: str, headers) -> dict | None:
     app_id = headers["X-Algolia-Application-Id"]
@@ -71,8 +85,7 @@ def _create_headers() -> dict[str, str]:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
             "Referer": "https://www.playboyplus.com",
             "Origin": "https://www.playboyplus.com",
-        },
-        verify=False,
+        }
     )
     if (script_tag := re.search(r"window.env\s+=\s(.+);", r.text, re.MULTILINE)) and (
         page_json := json.loads(script_tag.group(1))
@@ -115,54 +128,23 @@ def to_scraped_tag(res: dict) -> ScrapedTag:
         "name": res["name"],
     }
 
-
-# Map PlayboyPlus "home" field values to ISO 3166-1 alpha-2 country codes.
-# The API returns full country names; extend this dict as new values are
-# discovered via the warning log below.
-COUNTRY_MAP = {
-    "United States": "US",
-    "United Kingdom": "GB",
-    "Canada": "CA",
-    "Australia": "AU",
-    "Germany": "DE",
-    "France": "FR",
-    "Brazil": "BR",
-    "Czech Republic": "CZ",
-    "Hungary": "HU",
-    "Sweden": "SE",
-    "Denmark": "DK",
-    "Netherlands": "NL",
-    "Italy": "IT",
-    "Spain": "ES",
-    "Russia": "RU",
-    "Mexico": "MX",
-    "Japan": "JP",
-    "South Africa": "ZA",
-    "New Zealand": "NZ",
-    "Poland": "PL",
-    "Romania": "RO",
-}
-
-# Map PlayboyPlus hair_color values to StashDB internal values.
-# StashDB stores "Brunette" internally but displays it as "Brown" in the UI —
-# always use the internal value here.
-HAIR_COLOR_MAP = {
-    "Brown": "Brunette",
-    "Brunette": "Brunette",
-    "Blonde": "Blonde",
-    "Black": "Black",
-    "Red": "Red",
-    "Auburn": "Auburn",
-    "Grey": "Grey",
-    "White": "White",
-    "Bald": "Bald",
-    "Other": "Other",
-}
-
-
-def sanitize_hair_color(value: str) -> str | None:
-    return HAIR_COLOR_MAP.get(value.strip()) if value else None
-
+def country_lookup(home):
+    # if there is a comma, get last part
+    if "," in home:
+        comma_guess = home.split(",")[-1].strip()
+        if country := pycountry.countries.get(name=comma_guess):
+            return country.alpha_2
+    else:
+        # split and try RTL search
+        parts = home.split()
+        for i in range(len(parts)):
+            guess = " ".join(parts[i:]).strip()
+            try:
+                if result := pycountry.countries.search_fuzzy(guess):
+                    return result[0].alpha_2
+            except LookupError:
+                continue
+    return None
 
 def to_scraped_performer(res: dict) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
@@ -198,8 +180,8 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
     if eye_color := dig(res, "attributes", "eye_color"):
         performer["eye_color"] = eye_color
 
-    if hair_color := sanitize_hair_color(dig(res, "attributes", "hair_color") or ""):
-        performer["hair_color"] = hair_color
+    if hair_color := dig(res, "attributes", "hair_color"):
+        performer["hair_color"] = "Brunette" if hair_color == "Brown" else hair_color
 
     if height := dig(res, "attributes", "height"):
         performer["height"] = height
@@ -211,16 +193,9 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
     if home := dig(res, "attributes", "home"):
         home = home.strip()
         if home and home != "N/A":
-            # "home" is a full location string, e.g. "Burlington DC United States"
-            # or "London United Kingdom" — match by checking which country name it ends with
-            matched = next(
-                (code for name, code in COUNTRY_MAP.items() if home.endswith(name)),
-                None,
-            )
-            if matched:
-                performer["country"] = matched
-            else:
-                log.warning(f"Unknown country value: {home!r} — add to COUNTRY_MAP if valid")
+            guess = country_lookup(home)
+            if guess:
+                performer["country"] = guess
 
     return performer
 
