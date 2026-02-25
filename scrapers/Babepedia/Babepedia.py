@@ -41,7 +41,7 @@ def sanitize_eye_color(str) -> EyeColor | None:
 def sanitize_hair_color(str) -> HairColor:
     # brown to brunette
     if str.lower() == "brown":
-        return "BRUNETTE"
+        return "Brunette" # type: ignore
     return str
 
 def sanitize_fake_tits(value: str) -> str | None:
