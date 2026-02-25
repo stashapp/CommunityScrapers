@@ -17,7 +17,9 @@ xPathScrapers:
     scene:
       Performers:
         Name: //span[@class="model-info-label"]/following-sibling::a
-      Title: //p[@class="video-detailinfo"]/span
+      Title:
+        selector: //p[@class="video-detailinfo"]/text() | //p[@class="video-detailinfo"]/span
+        concat: ": "
       Date:
         selector: //span[@class="date_field_video"]/text()
         postProcess:
