@@ -2,7 +2,6 @@ import json
 import re
 import sys
 import html
-import urllib3
 from urllib.parse import quote_plus
 
 from py_common import log
@@ -15,13 +14,28 @@ from py_common.types import (
     ScrapedTag,
 )
 
-ensure_requirements("requests")
+ensure_requirements("requests", "pycountry")
 import requests  # noqa: E402
+import pycountry # needed for country guessing
+"""why pycountry?
+"home" seems to be a free-field text box with multiple formats without commas, which means we can't use py_common/util/guess_nationality
+nor does a static lookup table make sense
 
+Formats found so far:
+- "City Country"
+  - https://www.playboyplus.com/en/model/view/-/122006
+  - https://www.playboyplus.com/en/model/view/-/121668
+- "City, Country"
+  - https://www.playboyplus.com/en/model/view/-/122477
+- "Country"
+  - https://www.playboyplus.com/en/model/view/-/122230
+  - https://www.playboyplus.com/en/model/view/-/122337
 
-# Had to set verify=False due to a certificate issue with their site
-urllib3.disable_warnings()
-
+and even US is inconsistent, with state sometimes being shortened, USA/ United States
+"Los Angeles CA United States" https://www.playboyplus.com/en/model/view/-/118857
+"Los Angeles California USA" https://www.playboyplus.com/en/model/view/-/120984
+"Ashland KY USA" https://www.playboyplus.com/en/model/view/-/118164
+"""
 
 def __raw_photoset_from_api(set_id: str, headers) -> dict | None:
     app_id = headers["X-Algolia-Application-Id"]
@@ -71,8 +85,7 @@ def _create_headers() -> dict[str, str]:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
             "Referer": "https://www.playboyplus.com",
             "Origin": "https://www.playboyplus.com",
-        },
-        verify=False,
+        }
     )
     if (script_tag := re.search(r"window.env\s+=\s(.+);", r.text, re.MULTILINE)) and (
         page_json := json.loads(script_tag.group(1))
@@ -115,6 +128,23 @@ def to_scraped_tag(res: dict) -> ScrapedTag:
         "name": res["name"],
     }
 
+def country_lookup(home):
+    # if there is a comma, get last part
+    if "," in home:
+        comma_guess = home.split(",")[-1].strip()
+        if country := pycountry.countries.get(name=comma_guess):
+            return country.alpha_2
+    else:
+        # split and try RTL search
+        parts = home.split()
+        for i in range(len(parts)):
+            guess = " ".join(parts[i:]).strip()
+            try:
+                if result := pycountry.countries.search_fuzzy(guess):
+                    return result[0].alpha_2
+            except LookupError:
+                continue
+    return None
 
 def to_scraped_performer(res: dict) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
@@ -132,24 +162,26 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
         performer["details"] = clean_description(details)
 
     # PB+ uses /media/ as the CDN path prefix, not /actors/ like other Gamma sites.
-    # Log the raw pictures field to aid debugging if the image is still missing.
-    pictures = dig(res, "pictures")
-    log.debug(f"Actor pictures field: {pictures}")
-    if pictures and (main_pic := list(pictures.values())[-1]):
-        performer["images"] = [f"https://transform.gammacdn.com/media{main_pic}"]
-    elif actor_id := dig(res, "actor_id"):
-        # Fallback: construct from actor_id using the known PB+ URL pattern.
-        # The suffix number (e.g. "-7-") appears stable but may vary per performer;
-        # if images are still missing, check the debug log for the raw pictures field.
-        performer["images"] = [
-            f"https://transform.gammacdn.com/media/actor-{actor_id}-modelHeroMobile-7-nsfw.jpg"
-        ]
+    # multicontent_data.nsfw is the primary image source despite pictures also existing,
+    # because pictures can contain broken legacy URLs (e.g. 119840/119840_500x750.jpg)
+    # while multicontent_data consistently points to the current CDN-hosted hero images.
+    # modelHeroMobile (1000x1600 portrait) is the correct variant for performer images —
+    # modelHero is a wide banner crop (1920x810) not suitable as a performer thumbnail.
+    # Fallback to pictures only if multicontent_data is absent.
+    if nsfw := dig(res, "multicontent_data", "nsfw"):
+        if img := next(
+            (e["file"] for e in nsfw if e.get("name") == "modelHeroMobile"), None
+        ):
+            performer["images"] = [f"https://transform.gammacdn.com/media/{img}"]
+    elif pictures := dig(res, "pictures"):
+        if main_pic := list(pictures.values())[-1]:
+            performer["images"] = [f"https://transform.gammacdn.com/media{main_pic}"]
 
     if eye_color := dig(res, "attributes", "eye_color"):
         performer["eye_color"] = eye_color
 
     if hair_color := dig(res, "attributes", "hair_color"):
-        performer["hair_color"] = hair_color
+        performer["hair_color"] = "Brunette" if hair_color == "Brown" else hair_color
 
     if height := dig(res, "attributes", "height"):
         performer["height"] = height
@@ -159,10 +191,11 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
         performer["weight"] = str(round(float(weight) * 0.453))
 
     if home := dig(res, "attributes", "home"):
-        if home.endswith("United States"):
-            performer["country"] = "USA"
-        else:
-            performer["country"] = home.split()[-1]
+        home = home.strip()
+        if home and home != "N/A":
+            guess = country_lookup(home)
+            if guess:
+                performer["country"] = guess
 
     return performer
 
