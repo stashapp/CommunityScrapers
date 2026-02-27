@@ -180,10 +180,10 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
 
     if birth_year := from_table(soup, "Born:"):
         # Unfortunately GEVI only tracks birth years, not full dates
-        performer["birthdate"] = f"{birth_year[-4:]}-01-01"
+        performer["birthdate"] = f"{birth_year[-4:]}"
 
     if death_year := from_table(soup, "Died:"):
-        performer["death_date"] = f"{death_year[-4:]}-01-01"
+        performer["death_date"] = f"{death_year[-4:]}"
 
     if (bio := soup.find("div", string="Notes:")) and (bio := bio.find_next("div")):
     	if bio.get_text(separator="\n") != "none available":
@@ -259,7 +259,7 @@ def movie_from_url(url: str) -> ScrapedMovie | None:
 
         if released := table.get("Released"):
             # Unfortunately GEVI only tracks release years, not full dates
-            movie["date"] = f"{released.get_text(strip=True)}-01-01"
+            movie["date"] = f"{released.get_text(strip=True)}"
 
         if distributor_cell := table.get("Distributor"):
             distributor: ScrapedStudio = name_with_url(distributor_cell.find("a"))  # type: ignore
