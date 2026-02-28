@@ -1,0 +1,234 @@
+name: "HentaiSaturn"
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.hentaisaturn.tv/episode/{filename}
+  queryURLReplace:
+    filename:
+      # [HSUB] Anime_02_Title - sub ita - E05v2 Uncensored (HD) www.example.com [3bb935c6].mp4
+      # 1. Rimuove tag tra parentesi quadre [xxx]
+      - regex: '\[[^\]]*\]'
+        with: ""
+      
+      # 2. Rimuove tag tra parentesi tonde (xxx)
+      - regex: '\([^)]*\)'
+        with: ""
+      
+      # 3. Rimuove estensione file (.mp4, .avi, .mkv...)
+      - regex: '\.\w{2,4}$'
+        with: ""
+      
+      # 4. Rimuove tag noti: sub ita, itasub, uncensored, www
+      - regex: '(?i)(sub[\s\-_]?ita|itasub|uncensored|censored|www\.[^\s]+)'
+        with: ""
+
+      # 5. Standardizza separatori in trattini
+      - regex: '[\s\._+]+'
+        with: '-'
+        
+      # 6. Rimuove prefissi estesi di episodi e stagioni (ma lascia il numero)
+      - regex: '(?i)(^|[\-])(?:ep|episode|episodio|act|vol|season|stagione)([\-]?\d{1,2})'
+        with: '$1$2'
+        
+      # 7. Converte prefissi brevi di stagione e episodio in numeri (es. S02E05 → 02-05)
+      - regex: '(?i)\b(e|s)(\d{1,2})((e|s)(\d{1,2}))?\b'
+        with: '$2-$5'
+
+      # 8. Rimuove suffissi di versione dai numeri (v2, vFinal, vRev3)
+      - regex: '(?i)(\d{1,2})(?:-)?v(?:\d+|final|finale|rev\d*)\b'
+        with: '$1'
+
+      # 9. Converte ogni numero breve (max 2 cifre) con zero iniziale in -<numero>
+      - regex: '(^|[^0-9])0?(\d{1,2})([^0-9]|$)'
+        with: '$1$2$3'
+      
+      # 10. Sostituisce caratteri non validi URL (ma lascia i trattini)
+      - regex: '[^a-zA-Z0-9\-]+'
+        with: '-'
+      
+      # 11. Inserisce trattino tra lettera e numero (es. "abc2" → "abc-2")
+      - regex: '([a-zA-Z])(\d)'
+        with: '$1-$2'
+        
+      # 12. Elimina tutto dopo l’ultimo numero breve
+      - regex: '^(.*-\d{1,2})(?:-\d{1,2})*(?:-.*)?$'
+        with: '$1'
+        
+      # 13. Trattini multipli → uno solo
+      - regex: '-+'
+        with: '-'
+      
+      # 14. Rimuove trattini iniziali/finali (con #12 i finali già non ci sono)
+      - regex: '^-+|-+$'
+        with: ""
+        
+      # 15. Aggiungi "ep-" davanti all'ultimo numero
+      - regex: '(\d+)$'
+        with: 'ep-$1'
+  scraper: sceneScraper
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hentaisaturn.tv/episode/
+    scraper: sceneScraper
+
+# scrape some information for the scene through the series
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.hentaisaturn.tv/hentailist?search={}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: ScenefromSeriesScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - hentaisaturn.tv/hentai/
+    scraper: groupScraper
+
+xPathScrapers:
+  commonXPaths:
+    scene:
+      Title: &title (//title[contains(text(), "HentaiSaturn")])[1]/text()
+      Details: &details //div[@class="card-body"]/b[.="Trama:"]/following-sibling::text()[1]
+      # Site only have the covers (not thumbnails)
+      Image: &image //meta[@property="og:image"]/@content
+      Tags: &tags
+        Name:
+          selector: //div/a[@class="badge badge-light generi-as mb-1"]/text()
+          postProcess:
+            - map:
+                "HD": ""
+      # series url from scene page
+      URL: &urlSeries //div[@class="card-body"]/a[@class="btn btn-light w-100 mt-3 mb-3"]/@href
+      Date: &date
+        selector: //div/b[text()="Data di uscita:"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: 'Gennaio'   
+                with: 'January'
+              - regex: 'Febbraio'  
+                with: 'February'
+              - regex: 'Marzo'     
+                with: 'March'
+              - regex: 'Aprile'    
+                with: 'April'
+              - regex: 'Maggio'    
+                with: 'May'
+              - regex: 'Giugno'    
+                with: 'June'
+              - regex: 'Luglio'    
+                with: 'July'
+              - regex: 'Agosto'    
+                with: 'August'
+              - regex: 'Settembre' 
+                with: 'September'
+              - regex: 'Ottobre'   
+                with: 'October'
+              - regex: 'Novembre'  
+                with: 'November'
+              - regex: 'Dicembre'  
+                with: 'December'
+          - parseDate: 2 January 2006
+      Studio: &studio
+        Name: //div/b[text()="Studio:"]/following-sibling::text()[1]
+      Movies:
+        Name: &name //div/b[text()="Titolo:"]/following-sibling::text()[1]
+        Aliases: &aliases //div[@class="container hentai-title-as mb-3 w-100"]/div[@class="box-trasparente-alternativo rounded"]/text()
+        Synopsis: &synopsis
+          selector: //div[@id="full-trama"]//text() | //div[@id="shown-trama"]//text()
+
+  sceneScraper:
+    scene:
+      Title:
+        selector: *title
+        postProcess:
+          - replace:
+              - regex: '(?i)^HentaiSaturn - | Streaming.*$'
+                with: ""
+              - regex: '(?i)\s+episodio\s+(\d+)$'
+                with: ' ep$1'
+              - regex: ' ep(\d{1})$'
+                with: ' ep0$1'
+      Details: *details
+      Tags: *tags
+      Image: *image
+      URL:
+        selector: *title
+        postProcess:
+          - replace:
+              - regex: '(?i)^HentaiSaturn - | Streaming.*$'
+                with: ""
+              - regex: '(?i)\s+episodio\s+'
+                with: ' ep '
+              - regex: '[\s\._+]+'
+                with: '-'
+              - regex: '^(.*)$'
+                with: 'https://www.hentaisaturn.tv/episode/$1'
+      Movies:
+        Name: *name
+        Synopsis: *details
+        URL: *urlSeries
+        FrontImage: *image
+        
+  sceneSearch:
+    scene:
+      Title: //div[@class="info-archivio"]/h3/a/text()
+      URL: //div[@class="info-archivio"]/h3/a/@href
+      Image: //div[@class="item-archivio"]//img[contains(@class, "copertina-archivio")]/@src
+      Details: //div[@class="info-archivio"]/a[@class="thumb image-wrapper"]/p/text()
+      #Tags:
+      #  Name: //div[@class="info-archivio"]/a[@class="badge badge-light generi-as mb-1"]/text()
+
+  ScenefromSeriesScraper:
+    scene:
+      Title:
+        selector: *title
+        postProcess:
+          - replace:
+              - regex: '(?i)^HentaiSaturn - | Streaming.*$'
+                with: ""
+              - regex: '$'
+                with: ' ep00'
+      Date: *date
+      Details: *synopsis
+      Tags: *tags
+      Studio: *studio
+      Image: *image
+      URL: 
+        selector: //div[contains(@class, 'episodes-button')]/a/@href
+        postProcess:
+          - replace:
+              - regex: '-(\d+)$'
+                with: '-0'
+      Movies:
+        Name:
+          selector: *title
+          postProcess:
+            - replace:
+                - regex: '(?i)^HentaiSaturn - | Streaming.*$'
+                  with: ""
+        Aliases: *aliases
+        Date: *date
+        Synopsis: *synopsis
+        FrontImage: *image
+
+  groupScraper:
+    movie:
+      Name:
+        selector: *title
+        postProcess:
+          - replace:
+              - regex: '(?i)^HentaiSaturn - | Streaming.*$'
+                with: ""
+      Aliases: *aliases
+      Date: *date
+      Studio: *studio
+      Synopsis: *synopsis
+      FrontImage: *image
+
+# Last Updated June 24, 2025
