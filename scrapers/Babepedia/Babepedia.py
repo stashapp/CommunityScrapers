@@ -204,11 +204,11 @@ def map_performer_search(performer) -> PerformerSearchResult:
     return result
 
 def performer_by_name(name) -> list[PerformerSearchResult]:
-    url = f"https://www.babepedia.com/ajax-search.php?term={name}"
-    scraped = scraper.get(url)
+    search_term = name.replace('-', ' ')
+    scraped = scraper.get("https://www.babepedia.com/ajax-search.php", params={"term": search_term})
     scraped.raise_for_status()
     data = scraped.json()
-    return list(map(map_performer_search,data))
+    return list(map(map_performer_search, data))
 
 if __name__ == "__main__":
     op, args = scraper_args()
