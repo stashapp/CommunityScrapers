@@ -264,6 +264,7 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         scene["code"] = str(clip_id)
     if title := scene_from_api.get("title"):
         scene["title"] = title.strip()
+        log.info(f"{title}")
     if description := scene_from_api.get("description"):
         scene["details"] = clean_text(description)
     if _scene_urls := scene_urls(scene_from_api):
@@ -289,7 +290,6 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
             log.error(f"Could not determine scene number: {e}")
     if categories := scene_from_api.get("categories"):
         if content_tags := scene_from_api.get("content_tags"):
-            log.debug(f"Adding content_tags to tags: {content_tags}")
             content_tags = list_to_name_values(content_tags)
             scene["tags"] = name_values_as_list(categories) + content_tags
         else:
@@ -303,7 +303,6 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
             try:
                 [_, scene_number] = clip_path.split("_")
                 scene["title"] = f"{scene['title']}, Scene {parse_scene_number(scene_number)}"
-                log.info(f"Studio {scene_from_api.get('studio_name')} detected, parsing scene number from clip_path: {scene_number} -> {scene['title']}")
             except Exception as e:
                 log.error(f"Could not determine scene number: {e}")
     return scene
@@ -420,6 +419,7 @@ def api_scene_from_id(
             "length": 1,
         },
     )
+    log.debug(f"API response: {response}")
     log.debug(f"Number of search hits: {response.nb_hits}")
     if response.nb_hits:
         if response.nb_hits == 1:
@@ -630,6 +630,12 @@ def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
         and (movie_id := movie_from_api.get("movie_id"))
     ):
         movie["url"] = movie_url(site, url_title, movie_id)
+    if categories := movie_from_api.get("categories"):
+        if content_tags := movie_from_api.get("content_tags"):
+            content_tags = list_to_name_values(content_tags)
+            movie["tags"] = name_values_as_list(categories) + content_tags
+        else:
+            movie["tags"] = name_values_as_list(categories)
     return movie
 
 def movie_from_url(
