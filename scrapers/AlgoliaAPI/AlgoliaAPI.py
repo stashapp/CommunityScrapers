@@ -31,6 +31,8 @@ FIXED_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/201
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
 TRANSFORM_IMAGE_CDN = "https://transform.gammacdn.com"
 
+# Studios, that have identical scene title from scenes from same movie. Adding scene number to title.
+SCENE_NUMBER_STUDIOS = ["falconstudios"] 
 
 def slugify(text: str) -> str:
     "This _should_ reproduce the behaviour of the title/name URL slug transform"
@@ -262,6 +264,7 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         scene["code"] = str(clip_id)
     if title := scene_from_api.get("title"):
         scene["title"] = title.strip()
+        log.info(f"{title}")
     if description := scene_from_api.get("description"):
         scene["details"] = clean_text(description)
     if _scene_urls := scene_urls(scene_from_api):
@@ -286,12 +289,27 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         except Exception as e:
             log.error(f"Could not determine scene number: {e}")
     if categories := scene_from_api.get("categories"):
-        scene["tags"] = name_values_as_list(categories)
+        if content_tags := scene_from_api.get("content_tags"):
+            log.debug(f"Adding content_tags to tags: {content_tags}")
+            content_tags = list_to_name_values(content_tags)
+            scene["tags"] = name_values_as_list(categories) + content_tags
+        else:
+            scene["tags"] = name_values_as_list(categories)
     if actors := scene_from_api.get("actors"):
         scene["performers"] = actors_to_performers(actors, site)
     if directors := scene_from_api.get("directors"):
         scene["director"] = name_values_as_csv(directors)
+    if scene_from_api.get("sitename") in SCENE_NUMBER_STUDIOS:
+        if clip_path := scene_from_api.get("clip_path"):
+            try:
+                [_, scene_number] = clip_path.split("_")
+                scene["title"] = f"{scene['title']}, Scene {parse_scene_number(scene_number)}"
+                log.info(f"Studio {scene_from_api.get('studio_name')} detected, parsing scene number from clip_path: {scene_number} -> {scene['title']}")
+            except Exception as e:
+                log.error(f"Could not determine scene number: {e}")
     return scene
+
+def parse_scene_number(s): return re.sub(r'\b0+(\d+)\b', r'\1', s)
 
 def name_values_as_csv(objects: list[dict[str, Any]]) -> str:
     "Transforms list of objects with name property to CSV string"
@@ -300,6 +318,10 @@ def name_values_as_csv(objects: list[dict[str, Any]]) -> str:
 def name_values_as_list(objects: list[dict[str, Any]]) -> list[str]:
     "Transforms list of objects with name property to list of objects with only the name property"
     return [{ "name": obj.get("name") } for obj in objects]
+
+def list_to_name_values(objects: list[str]) -> list[dict[str, Any]]:
+    "Transforms list of strings to list of objects with name property"
+    return [{ "name": obj } for obj in objects]
 
 def actors_to_performers(actors: list[dict[str, Any]], site: str) -> list[ScrapedPerformer]:
     "Converts API actors to list of ScrapedPerformer"
@@ -399,6 +421,7 @@ def api_scene_from_id(
             "length": 1,
         },
     )
+    log.debug(f"API response: {response}")
     log.debug(f"Number of search hits: {response.nb_hits}")
     if response.nb_hits:
         if response.nb_hits == 1:
