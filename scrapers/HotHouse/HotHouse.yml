@@ -1,0 +1,67 @@
+# requires: Algolia
+name: Hot House
+sceneByURL:
+  - action: script
+    url:
+      - hothouse.com/en/video
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - hothouse
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - hothouse
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - hothouse
+    - searchName
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - hothouse
+    - scene-by-query-fragment
+groupByURL:
+  - action: script
+    url:
+      - hothouse.com/en/movie/
+      
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - movie-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - hothouse
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - hothouse
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - hothouse.com/en/pornstar/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - hothouse
+      - performer-by-url
+
+# Last Updated March 3, 2026
