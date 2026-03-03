@@ -264,7 +264,6 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         scene["code"] = str(clip_id)
     if title := scene_from_api.get("title"):
         scene["title"] = title.strip()
-        log.info(f"{title}")
     if description := scene_from_api.get("description"):
         scene["details"] = clean_text(description)
     if _scene_urls := scene_urls(scene_from_api):
@@ -421,7 +420,6 @@ def api_scene_from_id(
             "length": 1,
         },
     )
-    log.debug(f"API response: {response}")
     log.debug(f"Number of search hits: {response.nb_hits}")
     if response.nb_hits:
         if response.nb_hits == 1:
