@@ -32,7 +32,7 @@ IMAGE_CDN = "https://images03-fame.gammacdn.com"
 TRANSFORM_IMAGE_CDN = "https://transform.gammacdn.com"
 
 # Studios, that have identical scene title from scenes from same movie. Adding scene number to title.
-SCENE_NUMBER_STUDIOS = ["falconstudios"] 
+SCENE_NUMBER_STUDIOS = ["falconstudios", "hothouse", "ragingstallion"] 
 
 def slugify(text: str) -> str:
     "This _should_ reproduce the behaviour of the title/name URL slug transform"
