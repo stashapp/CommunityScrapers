@@ -3,39 +3,65 @@ name: Raging Stallion
 sceneByURL:
   - action: script
     url:
-      - ragingstallion.com/en/scene
       - ragingstallion.com/en/video
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - ragingstallion
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - ragingstallion
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - ragingstallion
     - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - ragingstallion
-    - validName
+    - scene-by-query-fragment
 groupByURL:
   - action: script
     url:
       - ragingstallion.com/en/movie/
+      
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - movie-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - ragingstallion
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - ragingstallion
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - ragingstallion.com/en/pornstar/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - ragingstallion
-      - movie
-# Last Updated June 23, 2024
+      - performer-by-url
+
+# Last Updated March 3, 2026
