@@ -141,7 +141,7 @@ if "app.reptyle.com" in scene_url:
 elif "sayuncle.com" in scene_url:
     ORIGIN = "https://www.sayuncle.com"
     REFERER = "https://www.sayuncle.com/"
-    API_BASE = "https://tours-store.psmcdn.net/sau-elastic-alias-videoscontent/_doc/"
+    API_BASE = "https://tours-store.psmcdn.net/sau_network/_search?size=1&q=id:"
 elif "teamskeet.com" in scene_url:
     ORIGIN = "https://www.teamskeet.com"
     REFERER = "https://www.teamskeet.com/"
@@ -282,8 +282,8 @@ if IS_MEMBER:
     scrape["performers"] = [
         {"name": x.get("name")} for x in scene_api_json.get("models")
     ]
-# handle swappz and freeuse performers differently
-elif any(u in scene_url for u in ["swappz.com", "freeuse.com"]):
+# handle swappz, freeuse and sayuncle performers differently
+elif any(u in scene_url for u in ["swappz.com", "freeuse.com", "sayuncle.com"]):
     scrape["performers"] = [
         {"name": x.get("title")} for x in scene_api_json.get("models")
     ]
