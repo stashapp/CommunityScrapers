@@ -6,35 +6,61 @@ sceneByURL:
       - falconstudios.com/en/video
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - falconstudios
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - falconstudios
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - falconstudios
     - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - falconstudios
-    - validName
+    - scene-by-query-fragment
 groupByURL:
   - action: script
     url:
       - falconstudios.com/en/movie/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - movie-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - falconstudios
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - falconstudios
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - falconstudios.com/en/pornstar/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - falconstudios
-      - movie
-# Last Updated May 09, 2024
+      - performer-by-url
+
+# Last Updated March 3, 2026
