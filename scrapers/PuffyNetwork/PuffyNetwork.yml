@@ -1,0 +1,22 @@
+name: PuffyNetwork
+sceneByURL:
+  - action: script
+    url:
+      - puffynetwork.com/videos/
+      - wetandpuffy.com/videos/
+      - wetandpissy.com/videos/
+      - weliketosuck.com/videos/
+      - simplyanal.com/videos/
+    script: [python, PuffyNetwork.py, scene-by-url]
+galleryByURL:
+  - action: script
+    url:
+      - puffynetwork.com/videos/
+      - wetandpuffy.com/videos/
+      - wetandpissy.com/videos/
+      - weliketosuck.com/videos/
+      - simplyanal.com/videos/
+    script: [python, PuffyNetwork.py, gallery-by-url]
+# Note: eurobabefacials.com has merged into puffynetwork.com and redirects there.
+# Legacy ebf- prefixed content is still accessible via puffynetwork.com.
+# Last Updated: March 1, 2026
