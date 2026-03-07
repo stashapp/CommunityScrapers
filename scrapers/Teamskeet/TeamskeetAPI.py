@@ -145,11 +145,11 @@ elif "sayuncle.com" in scene_url:
 elif "teamskeet.com" in scene_url:
     ORIGIN = "https://www.teamskeet.com"
     REFERER = "https://www.teamskeet.com/"
-    API_BASE = "https://tours-store.psmcdn.net/ts-elastic-alias-videoscontent/_doc/"
+    API_BASE = "https://tours-store.psmcdn.net/ts_network/_search?size=1&q=id:"
 elif "mylf.com" in scene_url:
     ORIGIN = "https://www.mylf.com"
     REFERER = "https://www.mylf.com/"
-    API_BASE = "https://tours-store.psmcdn.net/mylf-elastic-alias-videoscontent/_doc/"
+    API_BASE = "https://tours-store.psmcdn.net/mylf_bundle/_search?size=1&q=id:"
 elif "swappz.com" in scene_url:
     ORIGIN = "https://www.swappz.com"
     REFERER = "https://www.swappz.com/"
