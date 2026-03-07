@@ -282,14 +282,9 @@ if IS_MEMBER:
     scrape["performers"] = [
         {"name": x.get("name")} for x in scene_api_json.get("models")
     ]
-# handle swappz, freeuse and sayuncle performers differently
-elif any(u in scene_url for u in ["swappz.com", "freeuse.com", "sayuncle.com"]):
-    scrape["performers"] = [
-        {"name": x.get("title")} for x in scene_api_json.get("models")
-    ]
 else:
     scrape["performers"] = [
-        {"name": x.get("modelName")} for x in scene_api_json.get("models")
+        {"name": x.get("title")} for x in scene_api_json.get("models")
     ]
 
 # Each of TeamSkeet, MYLF and SayUncle have different ways to handle
