@@ -37,8 +37,6 @@ def _build_urls(api_scene: dict) -> list[str]:
     url_title = api_scene.get("url_title", "")
     clip_id = api_scene.get("clip_id", "")
     return [
-        f"https://www.playboytv.com/en/episode/view/{url_title}/{clip_id}",
-        f"https://members.playboytv.com/en/episode/view/{url_title}/{clip_id}",
         f"https://www.playboytv.com/en/episode/playboytv/{url_title}/{clip_id}",
         f"https://members.playboytv.com/en/episode/playboytv/{url_title}/{clip_id}",
     ]
