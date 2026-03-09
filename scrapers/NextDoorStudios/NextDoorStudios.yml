@@ -1,4 +1,4 @@
-# requires: Algolia
+# requires: AlgoliaAPI
 name: Next Door Studios
 sceneByURL:
   - action: script
