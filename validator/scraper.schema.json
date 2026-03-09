@@ -252,8 +252,14 @@
                     }
                   },
                   "oneOf": [
-                    { "required": ["ValueRandom"] },
-                    { "required": ["Value"] }
+                    {
+                      "required": ["ValueRandom"],
+                      "properties": { "ValueRandom": { "type": "integer", "minimum": 1 } }
+                    },
+                    {
+                      "required": ["Value"],
+                      "properties": { "Value": { "type": "string" } }
+                    }
                   ]
                 }
               }
@@ -348,7 +354,10 @@
                 "action": { "enum": ["scrapeXPath", "scrapeJson"] }
               }
             },
-            "then": { "required": ["scraper"] }
+            "then": {
+              "required": ["scraper"],
+              "properties": { "scraper": { "type": "string" } }
+            }
           },
           {
             "if": {
@@ -356,7 +365,16 @@
                 "action": { "const": "script" }
               }
             },
-            "then": { "required": ["script"] }
+            "then": {
+              "required": ["script"],
+              "properties": {
+                "script": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string" }
+                }
+              }
+            }
           }
         ]
       }
@@ -411,7 +429,13 @@
               "action": { "enum": ["scrapeXPath", "scrapeJson"] }
             }
           },
-          "then": { "required": ["scraper", "queryURL"] }
+          "then": {
+            "required": ["scraper", "queryURL"],
+            "properties": {
+              "scraper": { "type": "string" },
+              "queryURL": { "type": "string" }
+            }
+          }
         },
         {
           "if": {
@@ -419,7 +443,16 @@
               "action": { "const": "script" }
             }
           },
-          "then": { "required": ["script"] }
+          "then": {
+            "required": ["script"],
+            "properties": {
+              "script": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              }
+            }
+          }
         }
       ]
     },
