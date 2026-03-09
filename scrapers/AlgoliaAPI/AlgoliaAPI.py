@@ -15,7 +15,7 @@ from zipfile import ZipFile
 
 from py_common import graphql, log
 from py_common.deps import ensure_requirements
-from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
+from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene, ScrapedTag
 from py_common.util import dig, guess_nationality, feet_to_cm, lb_to_kg, is_valid_url, scraper_args
 ensure_requirements("algoliasearch", "bs4:beautifulsoup4", "requests")
 
@@ -264,7 +264,6 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         scene["code"] = str(clip_id)
     if title := scene_from_api.get("title"):
         scene["title"] = title.strip()
-        log.info(f"{title}")
     if description := scene_from_api.get("description"):
         scene["details"] = clean_text(description)
     if _scene_urls := scene_urls(scene_from_api):
@@ -289,11 +288,10 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         except Exception as e:
             log.error(f"Could not determine scene number: {e}")
     if categories := scene_from_api.get("categories"):
-        if content_tags := scene_from_api.get("content_tags"):
-            content_tags = list_to_name_values(content_tags)
-            scene["tags"] = name_values_as_list(categories) + content_tags
-        else:
-            scene["tags"] = name_values_as_list(categories)
+        scene["tags"] = name_values_as_list(categories)
+    if content_tags := scene_from_api.get("content_tags"):
+        mapped_content_tags = list_to_name_values(content_tags)
+        scene["tags"] += mapped_content_tags
     if actors := scene_from_api.get("actors"):
         scene["performers"] = actors_to_performers(actors, site)
     if directors := scene_from_api.get("directors"):
@@ -301,23 +299,21 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
     if scene_from_api.get("sitename") in SCENE_NUMBER_STUDIOS:
         if clip_path := scene_from_api.get("clip_path"):
             try:
-                [_, scene_number] = clip_path.split("_")
-                scene["title"] = f"{scene['title']}, Scene {parse_scene_number(scene_number)}"
+                scene_number = clip_path.split("_")[1].replace("0", "")
+                scene["title"] = f"{scene['title']}, Scene {scene_number}"
             except Exception as e:
                 log.error(f"Could not determine scene number: {e}")
     return scene
-
-def parse_scene_number(s): return re.sub(r'\b0+(\d+)\b', r'\1', s)
 
 def name_values_as_csv(objects: list[dict[str, Any]]) -> str:
     "Transforms list of objects with name property to CSV string"
     return ", ".join([ obj.get("name") for obj in objects ])
 
-def name_values_as_list(objects: list[dict[str, Any]]) -> list[str]:
+def name_values_as_list(objects: list[dict[str, Any]]) -> list[ScrapedTag]:
     "Transforms list of objects with name property to list of objects with only the name property"
     return [{ "name": obj.get("name") } for obj in objects]
 
-def list_to_name_values(objects: list[str]) -> list[dict[str, Any]]:
+def list_to_name_values(objects: list[str]) -> list[ScrapedTag]:
     "Transforms list of strings to list of objects with name property"
     return [{ "name": obj } for obj in objects]
 
@@ -419,7 +415,6 @@ def api_scene_from_id(
             "length": 1,
         },
     )
-    log.debug(f"API response: {response}")
     log.debug(f"Number of search hits: {response.nb_hits}")
     if response.nb_hits:
         if response.nb_hits == 1:
@@ -630,12 +625,11 @@ def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
         and (movie_id := movie_from_api.get("movie_id"))
     ):
         movie["url"] = movie_url(site, url_title, movie_id)
-    if categories := movie_from_api.get("categories"):
-        if content_tags := movie_from_api.get("content_tags"):
-            content_tags = list_to_name_values(content_tags)
-            movie["tags"] = name_values_as_list(categories) + content_tags
-        else:
-            movie["tags"] = name_values_as_list(categories)
+    if categories := scene_from_api.get("categories"):
+        scene["tags"] = name_values_as_list(categories)
+        if content_tags := scene_from_api.get("content_tags"):
+            mapped_content_tags = list_to_name_values(content_tags)
+            scene["tags"] += mapped_content_tags
     return movie
 
 def movie_from_url(
