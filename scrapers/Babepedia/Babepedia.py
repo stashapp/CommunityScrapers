@@ -204,8 +204,9 @@ def map_performer_search(performer) -> PerformerSearchResult:
     return result
 
 def performer_by_name(name) -> list[PerformerSearchResult]:
-    url = f"https://www.babepedia.com/ajax-search.php?term={name}"
-    scraped = scraper.get(url)
+    # dashes stripped #2671
+    search_name = name.replace("-", " ")
+    scraped = scraper.get("https://www.babepedia.com/ajax-search.php", params={"term": search_name})
     scraped.raise_for_status()
     data = scraped.json()
     return list(map(map_performer_search,data))
