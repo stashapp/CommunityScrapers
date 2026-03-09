@@ -15,7 +15,7 @@ from zipfile import ZipFile
 
 from py_common import graphql, log
 from py_common.deps import ensure_requirements
-from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
+from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene, ScrapedTag
 from py_common.util import dig, guess_nationality, feet_to_cm, lb_to_kg, is_valid_url, scraper_args
 ensure_requirements("algoliasearch", "bs4:beautifulsoup4", "requests")
 
@@ -31,6 +31,8 @@ FIXED_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/201
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
 TRANSFORM_IMAGE_CDN = "https://transform.gammacdn.com"
 
+# Studios, that have identical scene title from scenes from same movie. Adding scene number to title.
+SCENE_NUMBER_STUDIOS = ["falconstudios", "hothouse", "ragingstallion"] 
 
 def slugify(text: str) -> str:
     "This _should_ reproduce the behaviour of the title/name URL slug transform"
@@ -287,19 +289,33 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
             log.error(f"Could not determine scene number: {e}")
     if categories := scene_from_api.get("categories"):
         scene["tags"] = name_values_as_list(categories)
+    if content_tags := scene_from_api.get("content_tags"):
+        mapped_content_tags = list_to_name_values(content_tags)
+        scene["tags"] += mapped_content_tags
     if actors := scene_from_api.get("actors"):
         scene["performers"] = actors_to_performers(actors, site)
     if directors := scene_from_api.get("directors"):
         scene["director"] = name_values_as_csv(directors)
+    if scene_from_api.get("sitename") in SCENE_NUMBER_STUDIOS:
+        if clip_path := scene_from_api.get("clip_path"):
+            try:
+                scene_number = clip_path.split("_")[1].replace("0", "")
+                scene["title"] = f"{scene['title']}, Scene {scene_number}"
+            except Exception as e:
+                log.error(f"Could not determine scene number: {e}")
     return scene
 
 def name_values_as_csv(objects: list[dict[str, Any]]) -> str:
     "Transforms list of objects with name property to CSV string"
     return ", ".join([ obj.get("name") for obj in objects ])
 
-def name_values_as_list(objects: list[dict[str, Any]]) -> list[str]:
+def name_values_as_list(objects: list[dict[str, Any]]) -> list[ScrapedTag]:
     "Transforms list of objects with name property to list of objects with only the name property"
     return [{ "name": obj.get("name") } for obj in objects]
+
+def list_to_name_values(objects: list[str]) -> list[ScrapedTag]:
+    "Transforms list of strings to list of objects with name property"
+    return [{ "name": obj } for obj in objects]
 
 def actors_to_performers(actors: list[dict[str, Any]], site: str) -> list[ScrapedPerformer]:
     "Converts API actors to list of ScrapedPerformer"
@@ -609,6 +625,11 @@ def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
         and (movie_id := movie_from_api.get("movie_id"))
     ):
         movie["url"] = movie_url(site, url_title, movie_id)
+    if categories := scene_from_api.get("categories"):
+        scene["tags"] = name_values_as_list(categories)
+        if content_tags := scene_from_api.get("content_tags"):
+            mapped_content_tags = list_to_name_values(content_tags)
+            scene["tags"] += mapped_content_tags
     return movie
 
 def movie_from_url(
