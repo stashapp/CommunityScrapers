@@ -25,26 +25,80 @@ sceneByURL:
       - trystanbull.com/en/video
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - nextdoorstudios
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - nextdoorstudios
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - nextdoorstudios
     - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - nextdoorstudios
-    - validName
-# Last Updated August 18, 2023
+    - scene-by-query-fragment
+groupByURL:
+  - action: script
+    url:
+      - nextdoorstudios.com/en/movie/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - movie-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - nextdoorstudios
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - nextdoorstudios
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - austinwilde.com/en/pornstar
+      - codycummings.com/en/pornstar
+      - marcusmojo.com/en/pornstar
+      - nextdoorbuddies.com/en/pornstar
+      - nextdoorcasting.com/en/pornstar
+      - nextdoorfilms.com/en/pornstar
+      - nextdoorhomemade.com/en/pornstar
+      - nextdoorhookups.com/en/pornstar
+      - nextdoormale.com/en/pornstar
+      - nextdoororiginals.com/en/pornstar
+      - nextdoorraw.com/en/pornstar
+      - nextdoorstudios.com/en/pornstar
+      - nextdoortaboo.com/en/pornstar
+      - nextdoortwink.com/en/pornstar
+      - roddaily.com/en/pornstar
+      - rodsroom.com/en/pornstar
+      - samuelotoole.com/en/pornstar
+      - stagcollective.com/en/pornstar
+      - tommydxxx.com/en/pornstar
+      - trystanbull.com/en/pornstar
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - nextdoorstudios
+      - performer-by-url
+
+# Last Updated March 3, 2026
