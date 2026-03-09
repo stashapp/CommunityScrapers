@@ -1,26 +1,12 @@
-#!/usr/bin/env node
-'use strict';
+import fs from 'node:fs';
+import path from 'node:path';
 
-const fs = require('fs');
-const path = require('path');
+import Ajv from "npm:ajv@8"
 
-const safeRequire = (name) => {
-  try {
-    return require(name);
-  } catch (error) {
-    if (error && error.code === 'MODULE_NOT_FOUND') {
-      console.log(`Error: Cannot find module '${name}', have you installed the dependencies?`);
-      process.exit(1);
-    }
-    throw error;
-  }
-};
-
-const Ajv = safeRequire('ajv').default;
-const betterAjvErrors = safeRequire('better-ajv-errors').default;
-const chalk = safeRequire('chalk');
-const YAML = safeRequire('yaml');
-const addFormats = safeRequire('ajv-formats');
+import betterAjvErrors from 'npm:better-ajv-errors@2';
+import chalk from 'npm:chalk@5';
+import { parse } from 'npm:yaml@2';
+import addFormats from "npm:ajv-formats@3"
 
 // https://www.peterbe.com/plog/nodejs-fs-walk-or-glob-or-fast-glob
 function walk(directory, ext, filepaths = []) {
@@ -46,7 +32,7 @@ class Validator {
     this.sortedURLs = flags.includes('-s');
     this.verbose = flags.includes('-v');
 
-    const schemaPath = path.resolve(__dirname, './scraper.schema.json');
+    const schemaPath = path.resolve(import.meta.dirname, './scraper.schema.json');
     this.schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
     this.ajv = new Ajv({
       // allErrors: true,
@@ -63,7 +49,7 @@ class Validator {
     if (files && Array.isArray(files) && files.length > 0) {
       scrapers = files.map(file => path.resolve(file));
     } else {
-      const scrapersDir = path.resolve(__dirname, '../scrapers');
+      const scrapersDir = path.resolve(import.meta.dirname, '../scrapers');
       scrapers = walk(scrapersDir, '.yml');
     }
 
@@ -81,7 +67,7 @@ class Validator {
       let contents, data;
       try {
         contents = fs.readFileSync(file, 'utf8');
-        data = YAML.parse(contents, yamlLoadOptions);
+        data = parse(contents, yamlLoadOptions);
       } catch (error) {
         console.error(`${chalk.red(chalk.bold('ERROR'))} in: ${relPath}:`);
         error.stack = null;
@@ -337,7 +323,7 @@ class Validator {
   }
 }
 
-function main(flags, files) {
+export function main(flags, files) {
   const args = process.argv.slice(2)
   flags = (flags === undefined) ? args.filter(arg => arg.startsWith('-')) : flags;
   files = (files === undefined) ? args.filter(arg => !arg.startsWith('-')) : files;
@@ -347,10 +333,6 @@ function main(flags, files) {
     process.exit(result ? 0 : 1);
   }
 }
+export default main
 
-if (require.main === module) {
-  main();
-}
-
-module.exports = main;
-module.exports.Validator = Validator;
+main()

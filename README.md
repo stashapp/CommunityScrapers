@@ -89,14 +89,14 @@ Contributions are always welcome! Use the [Scraping Configuration](https://githu
 
 The scrapers in this repository can be validated against a schema and checked for common errors.
 
-First, install the validator's dependencies - inside the [`./validator`](./validator) folder, run: `yarn`.
+To run the validator, use `deno run -R=scrapers -R="validator\scraper.schema.json" validate.js` in the root of the repository.  
+Specific scrapers can be checked using: `deno run -R=scrapers -R="validator\scraper.schema.json" scrapers/foo.yml scrapers/bar.yml`
 
-Then, to run the validator, use `node validate.js` in the root of the repository.  
-Specific scrapers can be checked using: `node validate.js scrapers/foo.yml scrapers/bar.yml`
+Deno asks for env and sys permissions, these seem to mostly be from [chalk](https://www.npmjs.com/package/chalk)
 
 #### Docker option
-Instead of NodeJS being installed, Docker can be used to run the validator
+Instead of Deno being installed, Docker can be used to run the validator
 
 ```bash
-docker run --rm -v .:/app node:alpine /bin/sh -c "cd /app/validator && yarn install --silent && cd .. && node validate.js --ci"
+docker run --rm -v .:/app denoland/deno:distroless run -R=/app/ -E /app/validate.js --ci
 ```
