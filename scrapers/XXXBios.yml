@@ -1,0 +1,53 @@
+name: XXXBios
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - xxxbios.com
+    scraper: performerScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //div[@class="clearfix entry-content"]/h2[1]
+      Birthdate:
+        selector: //strong[text()="Date of Birth:"]/../text()
+        postProcess:
+          - replace:
+            - regex: (st|nd|rd|th),
+              with: ''
+          - parseDate: January 2 2006
+      Country:
+        selector: //strong[text()="Home Town :"]/../text()
+        postProcess:
+          - replace:
+            - regex: .+\((.+)\)
+              with: "$1"
+      Measurements:
+        selector: //strong[text()="Measurements :"]/../text()
+        postProcess:
+          - replace:
+            - regex: \s
+              with: ''
+      Height:
+        selector: //strong[contains(text(),"Height")]/../text()
+        postProcess:
+          - replace:
+            - regex: .+\((\d+)\.(\d+)+m\)
+              with: '$1$2'
+      HairColor: //strong[text()="Hair Colour :"]/../text()
+      EyeColor: //strong[text()="Eye Colour :"]/../text()
+      Tattoos: //strong[contains(text(),"Tattoos")]/../text()
+      Piercings: //strong[contains(text(),"Piercings")]/../text()
+      CareerLength:
+        selector: //strong[contains(text(),"Years Active")]/../text()
+        postProcess:
+          - replace:
+            - regex: (\d{4}) – (\d{4}).+,.+
+              with: $1-$2
+      Image:
+        selector: //img[@fetchpriority="high"]/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: https://xxxbios.com
+
+# Last Updated March 9, 2026
