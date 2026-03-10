@@ -118,6 +118,7 @@ xPathScrapers:
       URL: //link[@rel="canonical"]/@href
 
 driver:
+  useCDP: true
   cookies:
     - CookieURL: "https://javdb.com"
       Cookies:
