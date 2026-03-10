@@ -1,0 +1,32 @@
+name: CamSoda
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - www.camsoda.com/porn/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //title
+      Date:
+        selector: //div[starts-with(@class,"index-module__wrapper")]/script[@type="application/ld+json"][1]/text()
+        postProcess:
+          - replace:
+            - regex: '.+"uploadDate":"([\d-]+)T.+".+'
+              with: $1
+          - parseDate: 2006-01-02
+      Image: //video/@poster
+      Studio:
+        Name:
+          selector: //div[starts-with(@class,"index-module__wrapper")]/script[@type="application/ld+json"][1]/text()
+          postProcess:
+            - replace:
+              - regex: .+"creator":{.+"name":"(.+?)".+
+                with: $1
+      Tags:
+        Name: //a[not(contains(@class,"index-module__tagModel"))][contains(@class,"index-module__tag")]/text()
+      Performers:
+        Name: //a[contains(@class,"index-module__tagModel")]/text()
+driver:
+  useCDP: true
+# Last Updated February XX, 2025
