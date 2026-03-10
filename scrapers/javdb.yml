@@ -120,8 +120,7 @@ xPathScrapers:
 driver:
   useCDP: true
   cookies:
-    - CookieURL: "https://javdb.com"
-      Cookies:
+    - Cookies:
         - Name: "locale"
           Domain: "javdb.com"
           Value: "en"
@@ -136,8 +135,7 @@ driver:
         #  Value: "Add here the actual value from your cookies"
         #  Path: "/"
         #  Domain: "javdb.com"
-    - CookieURL: "https://javdb367.com"
-      Cookies:
+    - Cookies:
         - Name: "locale"
           Domain: "javdb367.com"
           Value: "en"
