@@ -1,9 +1,23 @@
 name: nhentai
+
+# intended to extract gallery ID from folder / zip / cbz file names as produces by gallery-dl ("1234567 some gallery name.zip")
+galleryByFragment:
+  action: scrapeXPath
+  queryURL: https://nhentai.net/g/{filename}/
+  queryURLReplace:
+    filename:
+      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename down to basic charatcers to remove any brackets etc
+        with: ""
+      - regex: '^([0-9]{3,})[^0-9]+.*' # capture numeric sequence at begining as gallery ID
+        with: "$1"
+  scraper: galleryScraper
+
 galleryByURL:
   - action: scrapeXPath
     url:
       - nhentai.net/g/
     scraper: galleryScraper
+
 xPathScrapers:
   galleryScraper:
     gallery:
