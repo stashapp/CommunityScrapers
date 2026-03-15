@@ -625,11 +625,11 @@ def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
         and (movie_id := movie_from_api.get("movie_id"))
     ):
         movie["url"] = movie_url(site, url_title, movie_id)
-    if categories := scene_from_api.get("categories"):
-        scene["tags"] = name_values_as_list(categories)
-        if content_tags := scene_from_api.get("content_tags"):
+    if categories := movie_from_api.get("categories"):
+        movie["tags"] = name_values_as_list(categories)
+        if content_tags := movie_from_api.get("content_tags"):
             mapped_content_tags = list_to_name_values(content_tags)
-            scene["tags"] += mapped_content_tags
+            movie["tags"] += mapped_content_tags
     return movie
 
 def movie_from_url(
