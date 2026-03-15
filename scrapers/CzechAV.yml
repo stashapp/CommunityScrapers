@@ -61,7 +61,9 @@ xPathScrapers:
           - replace:
               - regex: .+?(\d+)$
                 with: $1
-      Details: //div[contains(@class,"read-more ")]/div/p/text()
+      Details:
+        selector: //div[contains(@class,"read-more ")]/div/p/text()
+        concat: "\n\n"
       Tags:
         Name: //li[@class="tag ellipsis no-shrink"]/a/span/text()
       Performers:
