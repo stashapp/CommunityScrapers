@@ -6,9 +6,7 @@ galleryByFragment:
   queryURL: https://nhentai.net/g/{filename}/
   queryURLReplace:
     filename:
-      - regex: "[^a-zA-Z\\d\\-._~]" # clean filename down to basic charatcers to remove any brackets etc
-        with: ""
-      - regex: '^([0-9]{3,})[^0-9]+.*' # capture numeric sequence at begining as gallery ID
+      - regex: '(?:\[|^)?(\d+)[^\d]+' # capture numeric sequence at begining as gallery ID
         with: "$1"
   scraper: galleryScraper
 
@@ -49,4 +47,4 @@ xPathScrapers:
       Studio:
         Name: //div[contains(@class,"tag-container") and contains(.,"Artists:")]//span[@class="name"]/text()
 
-# Last Updated December 24, 2024
+# Last Updated March 14, 2026
