@@ -80,6 +80,7 @@ studio_map = {
     "sextapes.com": "SexTapes",
     "sexymodernbull.com": "Sexy Modern Bull",
     "shesbrandnew.com": "She's Brand New",
+    "shehergirls.com": "SheHerGirls",
     "sidechick.com": "SIDECHICK",
     "suckthisdick.com": "Suck This Dick",
     "swallowed.com": "Swallowed",
@@ -214,7 +215,12 @@ def get_code(site: str, raw_scene: dict) -> str | None:
 
 def torso_variant(url: str) -> str:
     # Convert a thumbnail URL to a torso variant URL
-    return re.sub(r"^(.*)(\.jpg)", r"\1_torso\2", url)
+    torso_image_url = re.sub(r"^(.*)(\.jpg)", r"\1_torso\2", url)
+    # if it exists, use the torso variant, otherwise fall back to the original URL
+    r = requests.head(torso_image_url)
+    if r.status_code == 200:
+        return torso_image_url
+    return url
 
 def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     # Convert dict keys to lower case because, of couse, they can come in differently depending on studio.
@@ -224,6 +230,7 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     STUDIO_USES_IMPERIAL = [
         "joeschmoevideos.com",
         "jizzaddiction.com",
+        "shehergirls.com",
     ]
 
     performer: ScrapedPerformer = {
@@ -248,6 +255,8 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
         performer["birthdate"] = birthdate
 
     if measurements := raw_performer.get("measurements"):
+        # replace | with - for bra|waist|hips format
+        measurements = measurements.replace("|", "-")
         performer["measurements"] = measurements
 
     if eye_color := raw_performer.get("eyes"):
