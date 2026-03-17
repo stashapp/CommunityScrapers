@@ -54,7 +54,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1/span
+      Title: //h1/span[2]
       Code:
         selector: //h1/div/span
         postProcess:
