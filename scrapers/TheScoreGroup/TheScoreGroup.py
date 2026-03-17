@@ -201,7 +201,7 @@ def scene_from_url(url: str) -> ScrapedScene:
 
     if not (
         video_page := tree.xpath(
-            '//section[@id="videos_page-page" or @id="mixed_page-page"]'
+            '//article[@id="videos_page-page" or @id="mixed_page-page"]'
         )
     ):
         log.error("Page layout has changed, scraper needs updating")

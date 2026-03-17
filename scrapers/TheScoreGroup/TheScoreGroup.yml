@@ -116,11 +116,11 @@ xPathScrapers:
   sceneScraper:
     common:
       $url: //link[@rel="canonical"]/@href
-      $videopage: //section[@id="videos_page-page" or @id="mixed_page-page"]
+      $videopage: //article[@id="videos_page-page" or @id="mixed_page-page"]
       $stat: //div[contains(concat(' ',normalize-space(@class),' '),' mb-3 ')]
   galleryScraper:
     common:
-      $photopage: //section[@id='photos_page-page']
+      $photopage: //article[@id='photos_page-page']
     gallery:
       Title: //h1
       Studio:
@@ -266,5 +266,5 @@ xPathScrapers:
           - replace:
               - regex: (\d+[a-zA-Z]{1,3})-\d+(-\d+-\d+)
                 with: $1$2
-      Image: //section[@id="model-page"]//img[@class="lazyload"]/@src
-# Last Updated September 17, 2025
+      Image: //article[@id="model-page"]//img[@class="lazyload"]/@src
+# Last Updated March 17, 2026
