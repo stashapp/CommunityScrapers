@@ -54,7 +54,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1/span
+      Title: //h1//*[not(@class='visually-hidden')]/text()
       Code:
         selector: //h1/div/span
         postProcess:
