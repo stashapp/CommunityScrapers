@@ -11,12 +11,8 @@ sceneByURL:
     scraper: sceneScraper
 sceneByFragment:
   action: scrapeJson
-  queryURL: https://pmvhaven.com/api/videos/{filename}
-  queryURLReplace:
-    filename:
-      - regex: .*([a-f0-9]{24}).*
-        with: $1
-  scraper: sceneScraper
+  queryURL: https://pmvhaven.com/api/videos/phash?hash={phash}&didstance=8
+  scraper: resultScraper
 
 jsonScrapers:
   sceneScraper:
@@ -44,5 +40,35 @@ jsonScrapers:
           - replace:
             - regex: (.*)
               with: https://pmvhaven.com/video/$1
+  resultScraper:
+    scene:
+      Title: videos.#.title
+      Date:
+        selector: videos.#.uploadDate
+        postProcess:
+          - replace:
+              - regex: "T(.*)$"
+                with: ""
+          - parseDate: 2006-01-02
 
-# Last Updated December 7, 2025
+      Details: videos.#.description
+      Tags:
+        Name: videos.#.tags
+      Performers:
+        Name: videos.#.starsTags
+      Image: videos.#.thumbnailUrl
+      Studio:
+        Name: videos.#.uploaderUsername
+      URL:
+        selector: videos.#._id
+        postProcess:
+          - replace:
+            - regex: (.*)
+              with: https://pmvhaven.com/video/$1
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/v1
+
+# Last Updated March 17, 2026
