@@ -1,5 +1,5 @@
 name: Romero Multimedia
-# scrapes: Cumflation, Defeated Sex Fight, Defeated.xxx, Freeze, Futanari XXX, Hentaied, Parasited, Plants vs Cunts, Smoking Hawt, Somegore, Voodooed, VORED
+# scrapes: Cumflation, Defeated Sex Fight, Defeated.xxx, Freeze, Futanari XXX, Hentaied, Monster Porn, Parasited, Plants vs Cunts, Smoking Hawt, Somegore, Voodooed, VORED
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -8,6 +8,7 @@ sceneByURL:
       - freeze.xxx
       - futanari.xxx
       - hentaied.com
+      - monsterporn.con
       - parasited.com
       - plantsvscunts.com
       - smokinghawt.com
