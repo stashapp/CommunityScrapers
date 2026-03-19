@@ -67,40 +67,65 @@ USER_AGENT = (
 )
 
 ### Studio Mapper, to match scraped Studio Name to Studio Name as it appears in StashDB
+### All studios included, ordered alphabetically
 studioMap = {
-    # TeamSkeet
-    "BadMilfs": "Bad MILFs",
+## Family Strokes
+    # Ask Your Mother
+    # Black Step Dad
     "DadCrush": "Dad Crush",
-    "GingerPatch": "Ginger Patch",
-    "Hussie Pass": "TeamSkeet X Hussie Pass",
+    # Family Strokes
+    # Family Strokes Features
+    # Foster Tapes
     "Not My Grandpa": "Not My Grandpa!",
     "PervMom": "Perv Mom",
-    "PervTherapy": "Perv Therapy",
-    "StayHomePov": "Stay Home POV",
-    "StepSiblings": "Step Siblings",
-    "TeenJoi": "Teen JOI",
-    "TeamSkeet X BritStudioxxx": "TeamSkeet X BritStudio.XXX",
-    "TeamSkeet X EvilAngel": "TeamSkeet X Evil Angel",
-    "TeamSkeet X Joy Bear": "TeamSkeet X JoyBear",
-    "TeamSkeet X Molly RedWolf": "TeamSkeet X MollyRedWolf",
-    "TeamSkeet X OZ Fellatio Queens": "TeamSkeet X Aussie Fellatio Queens",
-    "TeamSkeet X SpankMonster": "TeamSkeet X Spank Monster",
-    ## MYLF
+    "PervNana": "Perv Nana",
+    # Sis Loves Me
+    # Tiny Sis
+## Freeuse
+    # Freaky Fembots
+    # Freeuse Fantasy
+    "FreeUse Milf": "Freeuse MILF",
+    "UsePOV": "Use POV",
+## MYLF
     "AnalMom": "Anal Mom",
     "BBCParadise": "BBC Paradise",
+    # Blue Collar Babes
     "FullOfJoi": "Full Of JOI",
     "GotMylf": "Got MYLF",
+    # Hookup Pad
+    "Hijab Mylfs": "Hijab MYLFs",
     "LoneMilf": "Lone MILF",
     "MilfBody": "MILF Body",
+    # Milfty
     "MomDrips": "Mom Drips",
+    # Mommy’s Little Man
     "MomShoot": "Mom Shoot",
+    # Mylf After Dark
+    # Mylf Classics
     "MylfBlows": "MYLF Blows",
     "MylfBoss": "MYLF Boss",
+    # Mylfdom
     "MylfSelects": "MYLF Selects",
-    "PervNana": "Perv Nana",
+    # Mylfwood
+    # New Mylfs
+    # Oye Mami
+    # Secrets
+    # Shag Street
     "StayHomeMilf": "Stay Home MILF",
-    "UsePOV": "Use POV",
-    ## SayUncle
+    # Tiger Moms
+## Pervz
+    # Charmed
+    "Milf Taxi": "MILF Taxi",
+    "PervDoctor": "Perv Doctor",
+    # PervDriver
+    "PervMassage": "Perv Massage",
+    # PervPrincipal
+    "PervTherapy": "Perv Therapy",
+    # Pervz Features
+    # Pervz Singles
+    # Shoplyfter
+    "Shoplyfter Mylf": "Shoplyfter MYLF",
+## SayUncle
     "Black Godz": "BlackGodz",
     "BottomGames": "Bottom Games",
     "BoysDoPorn": "Boys Do Porn",
@@ -112,6 +137,43 @@ studioMap = {
     "StickyRub": "Sticky Rub",
     "TroopSex": "Troop Sex",
     "YesFather": "Yes Father",
+## Swappz
+    # Daughter Swap
+    # MomSwap
+    # Sis Swap
+    # Swappz Features
+    # Swappz Singles
+## TeamSkeet
+    "BadMilfs": "Bad MILFs",
+    # Bracefaced
+    # CFNM Teens
+    # Dyked
+    # Exxxtra Small
+    "GingerPatch": "Ginger Patch",
+    "Hussie Pass": "TeamSkeet X Hussie Pass",
+    # Innocent High
+    # My Babysitters Club
+    # POV Life
+    # She's New
+    "StayHomePov": "Stay Home POV",
+    "StepSiblings": "Step Siblings",
+    "TeamSkeet X BritStudioxxx": "TeamSkeet X BritStudio.XXX",
+    "TeamSkeet X EvilAngel": "TeamSkeet X Evil Angel",
+    "TeamSkeet X Joy Bear": "TeamSkeet X JoyBear",
+    "TeamSkeet X Molly RedWolf": "TeamSkeet X MollyRedWolf",
+    "TeamSkeet X OZ Fellatio Queens": "TeamSkeet X Aussie Fellatio Queens",
+    "TeamSkeet X SpankMonster": "TeamSkeet X Spank Monster",
+    # TeamSkeet Features
+    # TeamSkeet Labs
+    # Teen Curves
+    "TeenJoi": "Teen JOI",
+    # Teen Pies
+    # Teens Do Porn
+    # Teens Love Anal
+    # The Real Workout
+    # This Girl Sucks
+    # Titty Attack
+    # more??
 }
 
 ### Studio Default tags
@@ -158,6 +220,14 @@ elif "freeuse.com" in scene_url:
     ORIGIN = "https://www.freeuse.com"
     REFERER = "https://www.freeus.com/"
     API_BASE = "https://tours-store.psmcdn.net/freeusebundle/_search?size=1&q=id:"
+elif "pervz.com" in scene_url:
+    ORIGIN = "https://www.pervz.com"
+    REFERER = "https://www.pervz.com/"
+    API_BASE = "https://tours-store.psmcdn.net/pervbundle/_search?size=1&q=id:"
+elif "familystrokes.com" in scene_url:
+    ORIGIN = "https://www.familystrokes.com"
+    REFERER = "https://www.familystrokes.com/"
+    API_BASE = "https://tours-store.psmcdn.net/familybundle/_search?size=1&q=id:"
 else:
     log.error(
         "The URL is not from a Teamskeet, MYLF, Freeuse, SayUncle or Swappz URL (e.g. teamskeet.com/movies/*****)"
