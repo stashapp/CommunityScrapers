@@ -45,6 +45,7 @@ sceneByURL:
       - barebackplus.com/videos/
       - carnalplus.com/videos/
       - ftmplus.com/videos/
+      - jockpack.com/videos/
     scraper: networkScraper
 xPathScrapers:
   sceneScraper:
@@ -52,7 +53,7 @@ xPathScrapers:
       $scene: &sceneContainer //body/div[contains(@class, "mainContainer")]
     scene:
       Title: &title
-        selector: //title/text()
+        selector: //meta[@property="og:title"]/@content
         postProcess:
           - replace:
               - regex: \s*\|.*$
@@ -344,4 +345,4 @@ xPathScrapers:
           - replace:
               - regex: dvd-.*?\.jpg
                 with: dvd-full.jpg
-# Last Updated October 02, 2025
+# Last Updated March 20, 2026
