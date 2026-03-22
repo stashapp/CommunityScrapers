@@ -24,7 +24,7 @@ xPathScrapers:
     common:
       $scenes: //ul[@id="studio-videos-container"]
     scene:
-      Title: $scenes//span[contains(@class, "description-title")]
+      Title: //div[@class="ap-breadcrumbs"]//li[contains(@class, "active-crumb")]
       Date:
         selector: $scenes//span[@class="description-releasedate"]
         postProcess:
