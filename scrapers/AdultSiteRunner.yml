@@ -147,7 +147,7 @@ xPathScrapers:
         selector: ($details//h5[contains(text(), "Details")]/text())[1]
         postProcess: *ppDate
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //div[@id="playerWrap"]/img/@src
       Tags:
         Name: $details//h5[contains(., "Categories")]/a/text()
   performerScraper:
@@ -183,4 +183,4 @@ xPathScrapers:
       Image: $modelProfile//div[@class="profile"]//img[contains(@class,"img-responsive")]
       Twitter: //a[contains(@href,"twitter.com")]/@href
       Details: $modelProfile//div[@class="main_title"]/p[not(@class)]/text()
-# Last Updated September 17, 2025
+# Last Updated March 25, 2026
