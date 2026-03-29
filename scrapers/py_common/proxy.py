@@ -158,6 +158,10 @@ class StashRequests:
       log.warning(f"[proxy] Cloudscraper request failed: {e}")
     if check_flaresolverr(FLARESOLVERR_URL):
       log.info(f"[proxy] trying FlareSolverr for {url}")
+      # HEAD is not supported
+      if method == "head":
+        method = "get"
+        log.warning("[proxy] HEAD not supported by FlareSolverr, using GET instead")
       try:
         post_data = (kwargs.get("json") or kwargs.get("data")) if method == "post" else None
         return flaresolverr_req(url, method=method, postData=post_data, proxy=PROXY_URL)
@@ -170,5 +174,8 @@ class StashRequests:
 
   def post(self, url, **kwargs):
     return self._request("post", url, **kwargs)
+  
+  def head(self, url, **kwargs):
+    return self._request("head", url, **kwargs)
 
 stash_requests = StashRequests()
