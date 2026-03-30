@@ -28,6 +28,14 @@ xPathScrapers:
           - replace:
               - regex: '.+description": "*([^"]+)".+'
                 with: "$1"
+              - regex: "&amp;"
+                with: "&"
+              - regex: "&quot;"
+                with: "\""
+              - regex: "&#039;"
+                with: "'"
+              - regex: ' in .+'
+                with: ""
       Date: &commonDate
         selector: $script
         postProcess:
