@@ -619,7 +619,16 @@
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "CareerLength": {
+          "deprecated": true,
           "title": "Performer career length",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "CareerStart": {
+          "title": "Performer career start",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "CareerEnd": {
+          "title": "Performer career end",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Tattoos": {
