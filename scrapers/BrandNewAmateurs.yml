@@ -2,7 +2,7 @@ name: "Brand New Amateurs"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - brandnewamateurs.com
+      - brandnewamateurs.com/trailers/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
