@@ -23,7 +23,7 @@ IS_MEMBER = False
 LOG_FILE = "NaughtyAmerica.log"
 
 USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0"
 )
 
 HEADERS = {
@@ -124,9 +124,10 @@ def to_scraped_scene(scene_from_api: dict[str, Any]) -> ScrapedScene:
     promo_video_data = scene_from_api.get('promo_video_data', {})
     log.debug(f"promo_video_data: {promo_video_data}")
     # check trailers or promo_video_data are dicts with at least one entry
-    if (isinstance(trailers, dict) and len(trailers) > 0) or (isinstance(promo_video_data, dict) and len(promo_video_data) > 0):
+    combined = (trailers or {}) | (promo_video_data or {})
+    if len(combined) > 0:
         log.debug("trailers or promo_video_data contain entries")
-        if trailer_or_promo_video := next(iter(trailers.values()), None) or next(iter(promo_video_data.values()), None):
+        if trailer_or_promo_video := next(iter(combined.values()), None):
             log.debug(f"trailer_or_promo_video: {trailer_or_promo_video}")
             # extract prefix and name
             match = re.match(r".+(?:promo|\.com)/(?:nonsecure/)?([^/]+)/(?:trailers(?:/vr)?/)?([^/_]+).*", trailer_or_promo_video)
