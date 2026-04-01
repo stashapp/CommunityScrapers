@@ -38,8 +38,8 @@ xPathScrapers:
         selector: $script
         postProcess:
           - replace:
-              - regex: '.+thumbnailUrl": "(http[^"]+)".+'
-                with: "$1"
+            - regex: '.+thumbnailUrl": "(http[^"]+)".+'
+              with: "$1"
       Studio:
         Name:
           fixed: French Twinks
