@@ -11,6 +11,8 @@ performerByURL:
     scraper: performerScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $script: //script[@type='application/ld+json' and contains(text(), '"VideoObject"')]/text()
     scene:
       Title: //h1[@class="big_title2017"]
       Code:
@@ -22,16 +24,22 @@ xPathScrapers:
       Details:
         selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article/*/text()
         concat: "\n\n"
+      Director:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+(?:directors":\s")([^"]+).+
+                with: $1
       Date:
         selector: //time[@datetime]
         postProcess:
           - parseDate: 2006-01-02
       Image:
-        selector: //iframe/@src
+        selector: $script
         postProcess:
           - replace:
-            - regex: .*/img/(.+)\.jpg.*
-              with: "https://www.french-twinks.com/cdn-cgi/image//img/$1.jpg"
+            - regex: '.+thumbnailUrl": "(http[^"]+)".+'
+              with: "$1"
       Studio:
         Name:
           fixed: French Twinks
@@ -64,4 +72,4 @@ xPathScrapers:
                 with: "0'"
           - feetToCm: true
 
-# Last Updated November 11, 2025
+# Last Updated March 25, 2026
