@@ -287,8 +287,10 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
             log.info(f"{movie_title}, Scene #{scene_number}")
         except Exception as e:
             log.error(f"Could not determine scene number: {e}")
+    # set scene tags as empty in case any is missing
+    scene["tags"] = []
     if categories := scene_from_api.get("categories"):
-        scene["tags"] = name_values_as_list(categories)
+        scene["tags"] += name_values_as_list(categories)
     if content_tags := scene_from_api.get("content_tags"):
         mapped_content_tags = list_to_name_values(content_tags)
         scene["tags"] += mapped_content_tags
