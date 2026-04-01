@@ -1,0 +1,136 @@
+name: Richard XXX
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - studsvr.com/scene
+    scraper: vrSceneScraper
+  - action: scrapeXPath
+    url:
+      - richard.xxx/scene
+    scraper: regularSceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - richard.xxx/pornstar
+    scraper: regularPerformer
+  - action: scrapeXPath
+    url:
+      - studsvr.com/pornstar
+    scraper: studPerformer  
+xPathScrapers:
+  sceneScraper:
+    common: &commonCommon
+      $script: //script[@type='application/ld+json' and contains(text(), '"VideoObject"')]/text()
+    scene:
+      Details: &commonDetails
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+description": "*([^"]+)".+'
+                with: "$1"
+              - regex: "&amp;"
+                with: "&"
+              - regex: "&quot;"
+                with: "\""
+              - regex: "&#039;"
+                with: "'"
+              - regex: ' in .+'
+                with: ""
+      Date: &commonDate
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+datePublished": "*([^"]+)".+'
+                with: "$1"
+          - parseDate: 2006-01-02 15:04:05
+      Image: &commonImage
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+thumbnailUrl": "(http[^"]+)".+'
+                with: "$1"
+      Studio: &commonStudio
+        Name:
+          selector: //span[@class="scene-title"]/a/text()
+      Tags: &commonTags
+        Name: //p[@class="scene-categories"]/a
+      Performers: &commonPerformers
+        Name: //div[@class="scene-synopsis"]/h1[@class="scene-name"]/span[@class="scene-actors"]/a
+  vrSceneScraper:
+    common: *commonCommon
+    scene: 
+      Title: //h1[@class="h5 video-title"]
+      Details: *commonDetails
+      Studio:
+        Name: 
+          fixed: "StudsVR"
+      Tags:
+        Name: //p[@class="video-categories"]/a
+      Date: *commonDate
+      Image: *commonImage
+      Performers: 
+        Name: //h1[@class="h5 video-title"]/a
+  regularSceneScraper:
+    common: *commonCommon
+    scene: 
+      Title:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: '.+name": "([^"]+)".+'
+                with: "$1"
+              - regex: "&amp;"
+                with: "&"
+              - regex: "&quot;"
+                with: "\""
+              - regex: "&#039;"
+                with: "'"
+              - regex: ' in .+'
+                with: ""
+      Details: *commonDetails
+      Studio: *commonStudio
+      Tags: *commonTags
+      Date: *commonDate
+      Performers: *commonPerformers
+      Image: *commonImage
+  studPerformer:
+    performer:
+      Name:
+        selector: //h1[@class="stud-name"]
+        postProcess:
+          - replace:
+            - regex: "Pornstar "
+              with: ""
+      Height:
+        selector: //p[span="Height:"]/text()[last()]
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //p[span="Weight:"]/text()[last()]
+        postProcess:
+          - lbToKg: true
+      PenisLength:
+        selector: //p[span="Penis:"]/text()[last()]
+        postProcess:
+          - replace:
+              - regex: ^
+                with: 0'
+          - feetToCm: true
+      Image: 
+        selector: //img[@alt="Stud photo"]/@src
+        postProcess:
+          - replace:
+            - regex:  ^
+              with: "https:"
+      
+  regularPerformer:
+    performer:
+      Name: //h1[@class="pornstar-name"]
+      Image: 
+        selector: //div[@class="col col-sm-5 col-lg-3 col-12 pornstar-image"]/img/@src
+        postProcess:
+          - replace:
+            - regex:  ^
+              with: "https:"
+
+# Last Updated March 30, 2026
