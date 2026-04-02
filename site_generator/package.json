@@ -4,12 +4,11 @@
   "dependencies": {
     "fuse.js": "^7.1.0",
     "glob": "^13.0.6",
-    "simple-git": "^3.32.3",
-    "yaml": "^2.8.2",
+    "simple-git": "^3.33.0",
+    "yaml": "^2.8.3",
     "zod": "^4.3.6"
   },
   "scripts": {
-    "dev": "serve site/",
     "generate": "ts-node src/run.ts",
     "zod": "npx ts-to-zod src/types.ts src/zodType.ts",
     "fmt": "npx prettier --write src site",
@@ -17,12 +16,10 @@
     "ci-build": "npm run generate && npm run fuse-index"
   },
   "devDependencies": {
-    "@types/node": "^25.3.5",
-    "prettier": "^3.8.1",
-    "serve": "^14.2.6",
+    "@types/node": "^25.5.0",
     "ts-node": "^10.9.2",
     "ts-to-zod": "^5.1.0",
-    "typescript": "^5.9.3"
+    "typescript": "^6.0.2"
   },
-  "packageManager": "pnpm@10.31.0"
+  "packageManager": "pnpm@10.33.0"
 }
