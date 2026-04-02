@@ -1,4 +1,4 @@
-import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.basic.min.mjs";
+import Fuse from "https://cdn.jsdelivr.net/npm/fuse.js@7.2.0/dist/fuse.basic.min.mjs";
 import ago from "./ago.js";
 // constant elements
 const searchInput = document.querySelector("#search");
