@@ -3,13 +3,15 @@ name: Teamskeet
 
 sceneByURL:
   - url:
-      - sayuncle.com/movies/
-      - teamskeet.com/movies/
-      - mylf.com/movies/
-      - mylf.com/b/movies/
-      - swappz.com/movies/
-      - freeuse.com/movies/
-      - app.reptyle.com/movies/
+    - app.reptyle.com/movies/
+    - familystrokes.com/movies/
+    - freeuse.com/movies/
+    - mylf.com/b/movies/
+    - mylf.com/movies/
+    - pervz.com/movies/
+    - sayuncle.com/movies/
+    - swappz.com/movies/
+    - teamskeet.com/movies/
     action: script
     script:
       - python
