@@ -33,8 +33,7 @@ buildScraper()
     echo "Processing $scraper_id"
 
     # create a directory for the version
-    version=$(git log -n 1 --pretty=format:%h -- "$versionFile")
-    updated=$(TZ=UTC0 git log -n 1 --date="format-local:%F %T" --pretty=format:%ad -- "$versionFile")
+    IFS='|' read -r version updated < <(TZ=UTC0 git log -n 1 --date="format-local:%F %T" --pretty=format:'%h|%ad' -- "$versionFile")
     
     # create the zip file
     # copy other files
