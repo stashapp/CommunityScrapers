@@ -5,7 +5,9 @@ from urllib.parse import urlparse
 from datetime import datetime, timedelta
 import py_common.log as log
 
-import requests
+from py_common.proxy import StashRequests
+
+requests = StashRequests()
 
 # Max number of scenes that a site can return for the search.
 MAX_SCENES = 6
