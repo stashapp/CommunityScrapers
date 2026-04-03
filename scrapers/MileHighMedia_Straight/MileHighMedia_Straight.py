@@ -1,5 +1,6 @@
 import json
 import sys
+import re
 from typing import Any
 from py_common import log
 from py_common.util import dig, replace_all
@@ -73,6 +74,8 @@ if __name__ == "__main__":
         case "gallery-by-url" | "gallery-by-fragment", {"url": url} if url:
             result = gallery_from_url(url, postprocess=milehigh)
         case "scene-by-url", {"url": url} if url:
+            # force replace url to sweetheartvideo.com otherwise the site goes to adultmobile
+            url = re.sub(r'^https?://www\.\w+\.com', "https://www.sweetheartvideo.com", url)
             result = scene_from_url(url, postprocess=milehigh)
         case "scene-by-name", {"name": name} if name:
             result = scene_search(name, search_domains=domains, postprocess=milehigh)
