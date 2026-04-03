@@ -165,7 +165,7 @@ def _create_headers_for(domain: str) -> dict[str, str]:
     return api_headers
 
 
-def _construct_url(api_result: dict) -> str:
+def _construct_url(api_result: dict) -> str | None:
     """
     Tries to construct a valid public URL for an API result
 
@@ -177,6 +177,10 @@ def _construct_url(api_result: dict) -> str:
     """
 
     brand = api_result["brand"]
+    # exclude brands without their own sites
+    if brand in ["leviproductions"]: 
+        return None
+
     type_ = api_result["type"]
     id_ = api_result["id"]
     slug = slugify(api_result["title"])
