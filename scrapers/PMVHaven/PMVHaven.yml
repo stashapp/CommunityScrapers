@@ -53,9 +53,9 @@ jsonScrapers:
 
       Details: videos.#.description
       Tags:
-        Name: videos.#.tags
+        Name: videos.#.tags.@values
       Performers:
-        Name: videos.#.starsTags
+        Name: videos.#.starsTags.@values
       Image: videos.#.thumbnailUrl
       Studio:
         Name: videos.#.uploaderUsername
@@ -71,4 +71,4 @@ driver:
     - Key: User-Agent
       Value: stash-scraper/v1
 
-# Last Updated March 17, 2026
+# Last Updated April 4, 2026
