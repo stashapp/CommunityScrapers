@@ -44,47 +44,6 @@ def sitename_from_url(_url: str) -> str | None:
     return None
 
 
-preview_site_map = {
-    "adulttimepilots": "adulttimepilots.com",
-    "all-sexstudio": "allsexstudio.net",
-    "caughtfapping": "caughtfapping.com",
-    "daddysboy": "daddysboy.org",
-    "dareweshare": "dareweshare.net",
-    "gostuckyourself": "gostuckyourself.net",
-    "gostuckyourself-channel": "gostuckyourself.net",
-    "kissmefuckme": "kissmefuckme.net",
-    "milfoverload-channel": "milfoverload.net",
-    "mommysboy": "mommysboy.net",
-    "preggoworld-channel": "preggoworld.net",
-    "shewantshim": "shewantshim.net",
-    "watchyoucheat": "watchyoucheat.net",
-    "womensworld": "adulttimepilots.net",
-}
-
-
-def preview_urls(urls: list[str]) -> list[str]:
-    """
-    some sites have scene preview pages using the url_title as the path, e.g.
-    - https://adulttimepilots.com/Expose-Her-Therapy/
-    - https://daddysboy.org/A-Bets-A-Bet-Pop/
-    - https://dareweshare.net/Thats-Good-Teamwork/
-    """
-    if matching_urls := [
-        urlparse(url)
-        for sitename in preview_site_map
-        for url in urls
-        if sitename_from_url(url) == sitename
-    ]:
-        return [
-            parsed_url._replace(
-                netloc=preview_site_map.get(sitename_from_url(parsed_url.path).lower()),
-                path=url_title_from_path(parsed_url.path).lower(),
-            ).geturl()
-            for parsed_url in matching_urls
-        ]
-    return []
-
-
 def _is_valid_url(_url: str, highest_status_code: int = 299):
     """
     Checks if an URL is valid by making a HEAD request and ensuring the response status code is
@@ -330,8 +289,6 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
         log.debug(f'scene"[urls]" (before): {scene["urls"]}')
         scene["urls"] = [fix_url(url) for url in urls]
         log.debug(f'scene"[urls]" (after fix): {scene["urls"]}')
-        scene["urls"].extend(preview_urls(scene["urls"]))
-        log.debug(f'scene"[urls]" (after extend with preview): {scene["urls"]}')
 
     if action_tags := api_scene.get("action_tags"):
         process_action_tags(action_tags)
