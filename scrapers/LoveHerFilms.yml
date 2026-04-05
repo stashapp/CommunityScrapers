@@ -37,19 +37,20 @@ jsonScrapers:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1[contains(@class, "HeroModel_title")]/text()
+      Title: //h1/text()
       Details:
-        selector: //p[contains(@class, "HeroModel_text")]/text()
+        selector: //section/div/p[contains(@class, "__body")]/text()
       Date:
         selector: //p[contains(@class,"dateText")]/text()
         postProcess:
           - parseDate: 2 January, 2006
+      # available in ld+json with CDP load, or for some reason in the CTA button
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: //a[@aria-label="Get access"][contains(@class,"CTAButton")]/@href
         postProcess:
           - replace:
-            - regex: "-1x"
-              with: "-full"
+            - regex: '.+imgUrl=(https:\/\/.+?)\?expires.+'
+              with: $1
       Studio:
         Name:
           selector: //script[@id="video-json-ld"]/text()
@@ -58,10 +59,10 @@ xPathScrapers:
               - regex: '.+"publisher":.+"name":"([^"]+).+'
                 with: $1
       Tags:
-        Name: //a[contains(@class,"Description_tagItem")]/p/text()
+        Name: //a[contains(@class,"_tagItem")]//p/text()
       Performers:
-        Name: //a[contains(@class,"Description_model")]/p[1]/text()
-        URLs: //a[contains(@class,"Description_model")]/@href
+        Name: //ul[contains(@class,"__modelList")]//a[contains(@class,"__model")]/p[1]/text()
+        URLs: //ul[contains(@class,"__modelList")]//a[contains(@class,"__model")]/@href
   performerSearch:
     performer:
       Name: //h3/../a/@title
@@ -106,4 +107,4 @@ driver:
   headers:
     - Key: X-Site-Id
       Value: 677d3f422e587cf94d1a9e5d
-# Last Updated October 7, 2025
+# Last Updated April 5, 2026
