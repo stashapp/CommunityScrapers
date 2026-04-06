@@ -32,6 +32,10 @@ xPathScrapers:
               - regex: "1x.jpg"
                 with: "full.jpg"
       Details:
-        selector: //div[@class="update-info-block"]/h3[text()="Description:"]/following-sibling::*/text()
-        concat: "\n\n"
-# Last Updated September 17, 2025
+        selector: //div[contains(@class, 'update-info-block')][h3[contains(., 'Description:')]]
+        concat: " "
+        postProcess:
+          - replace:
+            - regex: (Description:)
+              with: "" 
+# Last Updated March 5, 2026
