@@ -1,0 +1,10 @@
+# requires: py_common
+name: TheEnglishMansion
+sceneByURL:
+  - action: script
+    url:
+      - https://members.theenglishmansion.com/members/gallery.html
+    script:
+      - python
+      - TheEnglishMansion.py
+      - scene-by-url
