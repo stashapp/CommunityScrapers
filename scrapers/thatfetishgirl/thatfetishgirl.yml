@@ -1,0 +1,17 @@
+# ThatFetishGirl Scene Scraper Configuration
+# Updated: 2025-12-31
+# 
+# This scraper extracts scene metadata including:
+# - Title, performers, release date
+# - Duration, tags, description
+# - Studio info and thumbnail image
+
+name: ThatFetishGirlPython
+
+sceneByURL:
+  - action: script
+    url:
+      - thatfetishgirl.com/scenes
+    script:
+      - python
+      - thatfetishgirl.py
