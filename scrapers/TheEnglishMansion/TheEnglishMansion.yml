@@ -8,3 +8,21 @@ sceneByURL:
       - python
       - TheEnglishMansion.py
       - scene-by-url
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - theenglishmansion.com/mistress.html
+    scraper: performerScraper
+
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h1
+      Details: //h3[contains(text(),"About:")]/following-sibling::p[1]/text()
+      Image:
+        selector: //img[@id="mainAva"]/@src
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: "https://www.theenglishmansion.com"
