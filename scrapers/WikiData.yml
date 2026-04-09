@@ -148,4 +148,8 @@ jsonScrapers:
                 with: "&format=json"
           - subScraper:
               selector: query.pages.*.extract
-# Last Updated September 17, 2025
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Stash Scraper (https://github.com/stashapp/CommunityScrapers/; ) generic-library/0.0'
+# Last Updated April 10, 2026
