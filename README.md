@@ -4,7 +4,7 @@ This repository contains scrapers created by the Stash community.
 
 **:exclamation: Make sure to read ALL of the instructions here before requesting help from the community**. :exclamation: 
 
-> [!tip] 
+> [!TIP] 
 For a more user friendly step-by-step guide you can check out the [Guide to Scraping](https://docs.stashapp.cc/beginner-guides/guide-to-scraping/).
 
 ## Installing scrapers via manager
@@ -28,10 +28,10 @@ To download all scrapers at once, clone this git repository. If you only need sp
 When downloading individual files:
 
 1. Open the `.yml` file you want.
-2. Click the **Raw** button.
+2. Click the **Download raw file** button.
 3. Save the page as a `.yml` file to preserve the correct format.
 
-![](https://user-images.githubusercontent.com/1358708/82524777-cd4cfe80-9afd-11ea-808d-5ea7bf26704f.jpg)
+![](https://github.com/user-attachments/assets/112f525a-34b4-4996-a962-e3ae5979c18e)
 
 Move scraper files to your configured `Scrapers Path` under `Settings > System > Application Paths` (default: `~/.stash/scrapers`). You may recognize `~/.stash` as the folder where the config and database files are located.
 
@@ -39,13 +39,13 @@ After manually updating the scrapers folder or editing a scraper file, reload sc
 
 Some sites block content if the user agent is not valid. If you get a blocked or denied message, configure the `Scraping -> Scraper User Agent` setting in Stash. Valid Firefox user agent strings can be found [here](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/User-Agent/Firefox). Scrapers for those sites should include a comment with a tested and working user agent string.
 
-Scrapers with **useCDP** set to true require that you have properly configured the `Chrome CDP path` setting in Stash. If you decide to use a remote instance, the headless Chromium Docker image from [chromedp/headless-shell](https://hub.docker.com/r/chromedp/headless-shell/) is highly recommended.
+Scrapers with **useCDP** set to true require that you have properly configured the `Chrome CDP path` setting in Stash. If you decide to use a remote instance, the headless Chromium Docker image from [chromedp/headless-shell](https://hub.docker.com/r/chromedp/headless-shell/) is highly recommended. `browserless/chrome` is not CDP-compatible and is not supported.
 
 ## Python scrapers
 
 Some scrapers require external programs to function, usually [Python](https://www.python.org/). All scrapers are tested with the newest stable release of Python, currently 3.14.x
 
-Depending on your operating system you may need to install both Python and the scrapers' dependencies before they will work. For Windows users we strongly recommend installing Python using the [installers from python.org](https://www.python.org/downloads/) instead of through the Windows Store, and also installing it outside of the Users folder so it is accessible to the entire system: a commonly used option is `C:\Python313`.
+Depending on your operating system you may need to install both Python and the scrapers' dependencies before they will work. For Windows users we strongly recommend installing Python using the [installers from python.org](https://www.python.org/downloads/) instead of through the Windows Store, and also installing it outside of the Users folder so it is accessible to the entire system: a commonly used option is `C:\Python314`.
 
 After installing Python you should install the most commonly used dependencies by running the following command in a terminal window:
 
@@ -106,15 +106,20 @@ Contributions are always welcome! Use the [Scraping Configuration](https://githu
 
 The scrapers in this repository can be validated against a schema and checked for common errors.
 
-To run the validator, use `deno run -R=scrapers -R="validator\scraper.schema.json" validate.js` in the root of the repository.  
-Specific scrapers can be checked using: `deno run -R=scrapers -R="validator\scraper.schema.json" scrapers/foo.yml scrapers/bar.yml`
+[Deno](https://deno.com/) is used as a drop-in, sandboxed NodeJS alternative
 
-Deno asks for env and sys permissions, these seem to mostly be from [chalk](https://www.npmjs.com/package/chalk)
+```sh
+# check all scrapers
+deno run -R=scrapers -R="validator\scraper.schema.json" validate.js
+# check specific scraper
+deno run -R=scrapers -R="validator\scraper.schema.json" validate.js scrapers/foo.yml scrapers/bar.yml
+```
+Deno asks for env and sys permissions from [chalk](https://www.npmjs.com/package/chalk)
 
 #### Docker option
 
-Instead of Deno being installed, Docker can be used to run the validator
+Instead of Deno, [Docker](https://docs.docker.com/engine/install/) can be used to run the validator
 
-```bash
+```sh
 docker run --rm -v .:/app denoland/deno:distroless run -R=/app/ -E /app/validate.js --ci
 ```
