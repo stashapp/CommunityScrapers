@@ -1,0 +1,17 @@
+name: fc2ppvdb
+
+sceneByURL:
+  - url:
+      - fc2ppvdb.com/articles/
+    action: script
+    script:
+      - python
+      - fc2ppvdb.py
+      - scene-by-url
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - fc2ppvdb.py
+    - scene-by-fragment
