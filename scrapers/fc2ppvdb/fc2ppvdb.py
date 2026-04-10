@@ -40,6 +40,13 @@ def get_flaresolverr_soln(url):
     return response.json().get("solution")
 
 def scene_from_url(url: str) -> ScrapedScene:
+    # if no config, throw error
+    if not config["age_pass"] or not config["fc2ppvdb_session"]:
+        log.error("Missing required cookies in config. Please update config and try again.")
+        log.debug(f"age_pass cookie: {config['age_pass']}")
+        log.debug(f"fc2ppvdb_session cookie: {config['fc2ppvdb_session']}")
+        return {}
+
     log.debug("getting fresh cloudflare cookies")
     # get solution
     solution = get_flaresolverr_soln(url)
@@ -61,7 +68,13 @@ def scene_from_url(url: str) -> ScrapedScene:
 
     log.debug("cookies set, hitting article info endpoint")
     # scrape main page, then info page with session cookies
-    session.get(url)
+    init = session.get(url)
+    # check for login text
+    if "https://fc2ppvdb.com/login" in init.text.lower():
+        log.error("Prompted for login, likely due to invalid cookies. Check config and try again.")
+        log.debug(f"age_pass cookie: {config['age_pass']}")
+        log.debug(f"fc2ppvdb_session cookie: {config['fc2ppvdb_session']}")
+        return {}
     try:
         resp_json = session.get(article_info_url).json()
     except json.JSONDecodeError:
