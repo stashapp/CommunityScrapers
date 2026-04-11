@@ -7,10 +7,10 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $tags: //main/div[@class="columns"]/div[@class="secondary"]/div[@class="area"]/div/div[@class="tag-cloud"]/div
+      $tags: //div[@class="tag-cloud"]
     scene:
       Title:
-        selector: //main/div[@class="heading"]/h1
+        selector: //main/h1
       Date:
         selector: //script[@type="application/ld+json"]
         postProcess:
@@ -21,15 +21,15 @@ xPathScrapers:
               }
           - parseDate: 2006-01-02T15:04:05+0000
       Performers:
-        Name: $tags/a[contains(@href, "/model/")]
+        Name: $tags/a/span[contains(@class, "category-21") or contains(@class, "category-22")]
       Tags:
-        Name: $tags/a[not(contains(@href, "/model/"))]
+        Name: $tags/a/span[not(contains(@class, "category-21")) and not(contains(@class, "category-22"))]
       Details:
         selector: //main/div[@class="columns"]/div[@class="secondary"]/div[@class="area"]/span[@class="collapsible-partial"]
         concat: "\n"
-      Image: //main/div[@class="columns"]/div[@class="primary"]//video/@poster
+      Image: //main/div[@class="columns"]//video/@poster
       URL: //link[@rel="canonical"]/@href
       Studio:
         Name:
           fixed: Perverformer
-# Last Updated Octover 04, 2025
+# Last Updated April 11, 2026
