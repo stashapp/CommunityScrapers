@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $tags: //main/div[@class="columns"]/div/div[@class="area"]/div[@class="tag-cloud"]
+      $tags: //div[@class="tag-cloud"]
     scene:
       Title:
         selector: //main/h1
