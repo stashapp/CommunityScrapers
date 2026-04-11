@@ -1,0 +1,35 @@
+name: Example Wordpress scene scraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wordpress.example.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //meta[@property="og:title"]/@content
+      Code:
+        selector: //link[@rel="alternate"][@type="application/json"]/@href
+        postProcess:
+          - replace:
+            - regex: .+\/posts\/(\d+)
+              with: $1
+      Date:
+        selector: //meta[@property="article:published_time"]
+        postProcess:
+          - replace:
+            - regex: T.*$
+              with: ""
+          - parseDate: 2006-01-02
+      Studio:
+        Name:
+          selector: //meta[@property="og:site_name"]
+          postProcess:
+            - replace:
+                - regex: '\.com'
+                  with: ""
+      Details: //meta[@name="description"]/@content
+      Image: //meta[@property="og:image"]/@content
+# Last Updated February XX, 2026
