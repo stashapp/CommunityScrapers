@@ -195,45 +195,26 @@ else:
 IS_MEMBER = False
 # Check the URL and set the API URL
 if "app.reptyle.com" in scene_url:
-    ORIGIN = "https://app.reptyle.com"
-    REFERER = "https://app.reptyle.com"
     API_BASE = "https://ma-store.reptyle.com/ts_index/_doc/movie-"
     MEMBER_ACCESS_TOKEN = REPTYLE_ACCESS_TOKEN
     IS_MEMBER = True
 elif "sayuncle.com" in scene_url:
-    ORIGIN = "https://www.sayuncle.com"
-    REFERER = "https://www.sayuncle.com/"
     API_BASE = "https://tours-store.psmcdn.net/sau_network/_search?size=1&q=id:"
 elif "teamskeet.com" in scene_url:
-    ORIGIN = "https://www.teamskeet.com"
-    REFERER = "https://www.teamskeet.com/"
     API_BASE = "https://tours-store.psmcdn.net/ts_network/_search?size=1&q=id:"
 elif "mylf.com" in scene_url:
-    ORIGIN = "https://www.mylf.com"
-    REFERER = "https://www.mylf.com/"
     API_BASE = "https://tours-store.psmcdn.net/mylf_bundle/_search?size=1&q=id:"
 elif "swappz.com" in scene_url:
-    ORIGIN = "https://www.swappz.com"
-    REFERER = "https://www.swappz.com/"
     API_BASE = "https://tours-store.psmcdn.net/swap_bundle/_search?size=1&q=id:"
 elif "freeuse.com" in scene_url:
-    ORIGIN = "https://www.freeuse.com"
-    REFERER = "https://www.freeus.com/"
     API_BASE = "https://tours-store.psmcdn.net/freeusebundle/_search?size=1&q=id:"
 elif "pervz.com" in scene_url:
-    ORIGIN = "https://www.pervz.com"
-    REFERER = "https://www.pervz.com/"
     API_BASE = "https://tours-store.psmcdn.net/pervbundle/_search?size=1&q=id:"
 elif "familystrokes.com" in scene_url:
-    ORIGIN = "https://www.familystrokes.com"
-    REFERER = "https://www.familystrokes.com/"
     API_BASE = "https://tours-store.psmcdn.net/familybundle/_search?size=1&q=id:"
 else:
-    log.error(
-        "The URL is not from a Teamskeet, MYLF, Freeuse, SayUncle or Swappz URL (e.g. teamskeet.com/movies/*****)"
-    )
-    sys.exit(1)
-
+    log.error("URL is not from a supported site. Attempting to continue with reptyle_bundle")
+    API_BASE = "https://tours-store.psmcdn.net/reptyle_bundle/_search?size=1&q=id:"
 # check for member access token
 if IS_MEMBER and MEMBER_ACCESS_TOKEN == "":
     log.error("You are trying to scrape a member scene without an acess token")
@@ -259,7 +240,7 @@ if os.path.isfile(json_file):
         scene_api_json = json.load(json_file)
 else:
     api_url = f"{API_BASE}{scene_id}"
-    headers = {"User-Agent": USER_AGENT, "Origin": ORIGIN, "Referer": REFERER}
+    headers = {"User-Agent": USER_AGENT}
     if IS_MEMBER:
         headers.update({"Cookie": f"access_token={MEMBER_ACCESS_TOKEN}"})
     log.debug(f"Asking the API... {api_url}")
@@ -342,11 +323,14 @@ scrape["studio"]["name"] = (
 if " x " in scrape["studio"]["name"].lower():
     tags.append("Redistribution")
 scrape["tags"] = [{"name": x} for x in tags]
-scrape["code"] = scene_id if IS_MEMBER else scene_api_json.get("cId", "").split("/")[-1]
+code = str(scene_api_json.get("itemId", ""))
+scrape["code"] = code
 for tag in studioDefaultTags.get(studioApiName, []):
     log.debug("Assiging default tags - " + tag)
     scrape["tags"].append({"name": tag})
 scrape["image"] = scene_api_json.get("img")
+# artifically construct members URL
+scrape["url"] = f"https://app.reptyle.com/movies/{code}"
 # handle members performers differently
 if IS_MEMBER:
     scrape["performers"] = [
