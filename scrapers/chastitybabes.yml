@@ -16,13 +16,13 @@ xPathScrapers:
           - replace:
             - regex: (.*) – (.*)
               with: $2
-      Date: 
-        selector: //div[@class="post_info"]/text()[1]
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
         postProcess:
           - replace:
-            - regex: '.*Posted on (.*) in.*'
-              with: $1
-          - parseDate: "Jan 2, 2006" 
+            - regex: T.*$
+              with: ""
+          - parseDate: 2006-01-02
       Details: 
         selector: //div[@class="postcontent"]/p
       Performers: 
@@ -38,5 +38,13 @@ xPathScrapers:
         Name:
           fixed: Chastity Babes
       Image: //img[@class="thumb_img"]/@src
+      Code:
+        selector: //div[@class="post_info"]/text()[1]
+        postProcess:
+          - replace:
+            - regex: 'Update (.+) \|.+'
+              with: "$1"
+            - regex: "\t"
+              with: ""
 
-# Last Updated January 27, 2021
+# Last Updated April 11, 2026
