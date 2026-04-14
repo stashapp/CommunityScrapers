@@ -1,7 +1,7 @@
 import json
 import re
 import sys
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import py_common.log as log
 from py_common.config import get_config
 from py_common.types import ScrapedScene
@@ -86,8 +86,15 @@ def scrape_scene_from_page(url: str) -> ScrapedScene:
     date = safe_find(container, 'div.mtb-col3')
     if date:
         date = date.replace("Updated ", "")
-        date = datetime.strptime(date, '%b %d, %Y').isoformat()
-        scene['date'] = date.split("T")[0]
+        # catch "Today" and "Yesterday"
+        today = datetime.now(timezone.utc)
+        if date == "Today":
+            date = today
+        elif date == "Yesterday":
+            date = today - timedelta(days=1)
+        else:
+            date = datetime.strptime(date, '%b %d, %Y')
+        scene['date'] = date.isoformat().split("T")[0]
 
     length_str = safe_find(container, 'div.smb-col1 .length')
     # convert hh:mm:ss to seconds
