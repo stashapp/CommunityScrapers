@@ -273,4 +273,13 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated November 24, 2025
+  cookies:
+    - Cookies:
+        - Name: "age_gate_accepted"
+          Domain: "www.kink.com"
+          Value: "1"
+          Path: "/"
+
+debug:
+  printHTML: true
+# Last Updated April 14, 2026
