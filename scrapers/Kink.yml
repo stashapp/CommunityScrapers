@@ -279,7 +279,4 @@ driver:
           Domain: "www.kink.com"
           Value: "1"
           Path: "/"
-
-debug:
-  printHTML: true
 # Last Updated April 14, 2026

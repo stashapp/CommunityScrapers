@@ -163,4 +163,10 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated September 17, 2025
+  cookies:
+    - Cookies:
+        - Name: "age_gate_accepted"
+          Domain: "www.kinkmen.com"
+          Value: "1"
+          Path: "/"
+# Last Updated April 14, 2026
