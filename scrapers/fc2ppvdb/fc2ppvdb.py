@@ -25,6 +25,15 @@ age_pass =
 """
 )
 
+def check_login(text):
+    if 'https://fc2ppvdb.com/login' in text.lower():
+        log.error("Login prompt detected. Check cookies and try again.")
+        log.error("fc2ppv_session ends with %3D, age_pass with %3D%3D")
+        log.debug(f"age_pass cookie: {config['age_pass']}")
+        log.debug(f"fc2ppvdb_session cookie: {config['fc2ppvdb_session']}")
+        return True
+    return False
+
 def get_flaresolverr_soln(url):
     response = requests.post(FLARESOLVERR_URL, json={
         "cmd": "request.get",
@@ -69,14 +78,18 @@ def scene_from_url(url: str) -> ScrapedScene:
     log.debug("cookies set, hitting article info endpoint")
     # scrape main page, then info page with session cookies
     init = session.get(url)
-    # check for login text
-    if "https://fc2ppvdb.com/login" in init.text.lower():
-        log.error("Prompted for login, likely due to invalid cookies. Check config and try again.")
-        log.debug(f"age_pass cookie: {config['age_pass']}")
-        log.debug(f"fc2ppvdb_session cookie: {config['fc2ppvdb_session']}")
+    # check for CF ASN block
+    if init.status_code == 403 and "1005" in init.text:
+        log.error("Cloudflare ASN block detected. This scraper will not work from this IP address.")
         return {}
+    if check_login(init.text):
+        return {}
+    # get actual info afterwards
     try:
-        resp_json = session.get(article_info_url).json()
+        info_res = session.get(article_info_url)
+        if check_login(info_res.text):
+            return {}
+        resp_json = info_res.json()
     except json.JSONDecodeError:
         log.error("Invalid JSON response from article info endpoint. Try again.")
         return {}
