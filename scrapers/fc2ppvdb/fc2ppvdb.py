@@ -22,6 +22,7 @@ config = get_config(
 
 fc2ppvdb_session =
 age_pass =
+xsrf_token = 
 """
 )
 
@@ -31,6 +32,7 @@ def check_login(text):
         log.error("fc2ppv_session ends with %3D, age_pass with %3D%3D")
         log.debug(f"age_pass cookie: {config['age_pass']}")
         log.debug(f"fc2ppvdb_session cookie: {config['fc2ppvdb_session']}")
+        log.debug(f"XSRF-TOKEN cookie: {config['xsrf_token']}")
         return True
     return False
 
@@ -41,6 +43,7 @@ def get_flaresolverr_soln(url):
         "cookies": [
             { "name": "age_pass", "value": config["age_pass"] },
             { "name": "fc2ppvdb_session", "value": config["fc2ppvdb_session"] },
+            { "name": "XSRF-TOKEN", "value": config["xsrf_token"] },
         ],
         "session_ttl_minutes": 5, # destroy session after 5 minutes
     })
@@ -50,10 +53,11 @@ def get_flaresolverr_soln(url):
 
 def scene_from_url(url: str) -> ScrapedScene:
     # if no config, throw error
-    if not config["age_pass"] or not config["fc2ppvdb_session"]:
+    if not config["age_pass"] or not config["fc2ppvdb_session"] or not config["xsrf_token"]:
         log.error("Missing required cookies in config. Please update config and try again.")
         log.debug(f"age_pass cookie: {config['age_pass']}")
         log.debug(f"fc2ppvdb_session cookie: {config['fc2ppvdb_session']}")
+        log.debug(f"XSRF-TOKEN cookie: {config['xsrf_token']}")
         return {}
 
     log.debug("getting fresh cloudflare cookies")
@@ -70,6 +74,11 @@ def scene_from_url(url: str) -> ScrapedScene:
     for cookie in soln_cookies:
         session.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'], path=cookie['path'])
     session.headers.update({"User-Agent": solution.get("userAgent")})
+
+    # add get solution cookies
+    session.cookies.set("age_pass", config["age_pass"], domain=".fc2ppvdb.com", path="/")
+    session.cookies.set("fc2ppvdb_session", config["fc2ppvdb_session"], domain=".fc2ppvdb.com", path="/")
+    session.cookies.set("XSRF-TOKEN", config["xsrf_token"], domain=".fc2ppvdb.com", path="/")
 
     # parse url to hit json endpoint, has to be done immediately
     article_id = url.rstrip("/").split("/")[-1]
