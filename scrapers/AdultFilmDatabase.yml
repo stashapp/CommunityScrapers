@@ -1,0 +1,47 @@
+name: AdultFilmDatabase
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - adultfilmdatabase.com/video/
+    scraper: groupScraper
+xPathScrapers:
+  groupScraper:
+    group:
+      Name: //h1
+      Duration:
+        selector: //span[@itemprop="duration"]/text()
+        postProcess:
+          - replace:
+            - regex: "^Runtime: "
+              with: ""
+      Date:
+        selector: //div[@class="w3-container w3-padding"]/text()[3]
+        postProcess:
+          - replace:
+            - regex: \(|\)
+              with: ''
+      Director: //span[@itemprop="director"]/a/span/text()
+      Synopsis: //p[@itemprop="description"]/text()
+      URLs:
+        selector: //div[@class="w3-container"]//a[@target="_blank"][@rel="nofollow"]/@href
+        postProcess:
+          - replace:
+            - regex: '\?(refId|partner_id)=.+'
+              with: ""
+      Studio:
+        Name: //a[contains(@href,"/studio")]/text()
+      Tags:
+        Name: //p/a[contains(@href,"/browse.cfm")]/span/text()
+      FrontImage:
+        selector: //img[@itemprop="image"]/@src
+        postProcess:
+          - replace:
+            - regex: "^"
+              with: "https://www.adultfilmdatabase.com"
+      BackImage:
+        selector: //img[@title][2]/@src
+        postProcess:
+          - replace:
+            - regex: "^"
+              with: "https://www.adultfilmdatabase.com"
+# Last Updated April 20, 2026
