@@ -58,6 +58,7 @@ body:
         Please provide any relevant logs that may help in diagnosing the issue with the scraper. 
         
         You can find the logs in Stash under Settings > Logs. Make sure to set the Log Level to Debug to get the most detailed logs.
+      render: shell
     validations:
       required: true
   - type: textarea
