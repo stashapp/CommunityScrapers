@@ -8,9 +8,12 @@ sceneByURL:
     scraper: sceneScraper
   - action: scrapeXPath
     url:
-      - julesjordan.com/
       - theassfactory.com/
     scraper: newStyleScraper
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/
+    scraper: 26Redesign
 
 galleryByURL:
   - action: scrapeXPath
@@ -21,9 +24,12 @@ galleryByURL:
     scraper: sceneScraper
   - action: scrapeXPath
     url:
-      - julesjordan.com/
       - theassfactory.com/
     scraper: newStyleScraper
+  - action: scrapeXPath
+    url:
+      - julesjordan.com/
+    scraper: 26Redesign
 
 performerByURL:
   - action: scrapeXPath
@@ -120,6 +126,35 @@ xPathScrapers:
       Details: *newDetailsAttr
       Tags: *newTagsAttr
       Performers: *newPerformersAttr
+      Studio: *studioAttr
+
+  26Redesign:
+    scene:
+      Title: &26TitleAttr //h1[@class="scene-title"]/text()
+      Date: &26DateAttr
+        selector: //script[@type="application/ld+json"][2]
+        postProcess:
+          - replace:
+            - regex: .*uploadDate":\s"(\d{4}-\d{2}-\d{2})T.*
+              with: $1
+          - parseDate: 2006-01-02
+      Details: &26DetailsAttr //div[@class="scene-desc"]/text()
+      Tags: &26TagsAttr
+        Name: //a[@class="cat-tag"]/text()
+      Performers: &26PerformersAttr
+        Name: //div[@class="scene-meta"]//span[@class="update_models"]/a/text()
+      Studio: *studioAttr
+      Groups:
+        Name: //div[contains(text(),"Movie")]/following-sibling::div[@class="val"]/a/text()
+        URL: //div[contains(text(),"Movie")]/following-sibling::div[@class="val"]/a/@href
+      Image: //video/@poster
+
+    gallery:
+      Title: *26TitleAttr
+      Date: *26DateAttr
+      Details: *26DetailsAttr
+      Tags: *26TagsAttr
+      Performers: *26PerformersAttr
       Studio: *studioAttr
 
   performerScraper:
