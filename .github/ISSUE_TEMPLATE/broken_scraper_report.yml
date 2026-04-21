@@ -1,6 +1,6 @@
-name: Suggest improvement
-description: Suggest an improvement to an existing scraper to enhance its functionality or metadata retrieval.
-labels: ["enhancement"]
+name: Broken scraper report
+description: Report a scraper that is not working as expected.
+labels: ["bug"]
 body:
   - type: input
     id: package-name
@@ -19,8 +19,9 @@ body:
   - type: dropdown
     id: scraper-type
     attributes:
-      label: Which scraper types need improvement?
+      label: Which scraper types are affected?
       description: You can select more than one.
+      multiple: true
       options:
         - performerByName
         - performerByFragment
@@ -42,25 +43,33 @@ body:
       label: Scraper type specific details
       description: |
         Please provide additional details that may be relevant. For example:
-        For "<object>ByURL" scrapers, please provide an example URL that you would want to be able to scrape with that scraper.
-        For "<object>ByFragment" scrapers, please provide the details about which fragment you would want that scraper to use.
-        For "<object>ByName" scrapers, please provide an example of an <object> name that you would want to be able to scrape with that scraper.
+        For "<object>ByURL" scrapers, please provide an URL that you tried to scrape with that scraper.
+        For "<object>ByFragment" scrapers, please provide the details about which query you tried when using that scraper.
+        For "<object>ByName" scrapers, please provide an <object> name that you tried to scrape with that scraper.
     validations:
-      required: false
+      required: true
   - type: textarea
-    id: site-details
+    id: logs
     attributes:
-      label: Site specific details
+      label: Logs
       description: |
-        Please provide any additional details about the site that may be relevant for writing a scraper. For example, does the site require an account to access content? Does it belong to a larger network? Does it have an API? Anything else you think may be relevant.
+        Please provide any relevant logs that may help in diagnosing the issue with the scraper. You can find the logs in Stash under Settings > Logs. Make sure to set the Log Level to Debug to get the most detailed logs.
+    validations:
+      required: true
+  - type: textarea
+    id: additional-details
+    attributes:
+      label: Additional details
+      description: |
+        If there are any additional details about the issue that you think may be relevant, please provide them here.
     validations:
       required: false
   - type: checkboxes
     id: confirm-search
     attributes:
-      label: Have you looked at existing improvement suggestions?
+      label: Have you looked at existing bug reports?
       description: |
-        Please ensure you have first [searched existing improvement suggestions](https://github.com/stashapp/CommunityScrapers/issues?q=is%3Aissue%20label%3Aenhancement) to make sure your request is not a duplicate.
+        Please ensure you have first [searched existing bug reports](https://github.com/stashapp/CommunityScrapers/issues?q=is%3Aissue%20label%3Abug) to make sure your report is not a duplicate.
       options:
-        - label: I have searched the existing improvement suggestions.
+        - label: I have searched the existing bug reports.
           required: true
