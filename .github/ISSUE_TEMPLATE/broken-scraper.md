@@ -1,16 +1,74 @@
----
-name: Broken scraper
-about: Scraper is not working as expected
-title: Name of scraper or site
-labels: bug
-assignees: ""
----
-
-(this is important, be as detailed as you can)
-
-Are you scraping a scene, gallery, movie, or performer?
-Scrape with URL? If so, what URLs have you tried?  
-Scrape with fragment? If so, what is the filename / title / studio code?  
-Scrape with name? Give an example you searched for that caused the scraper to fail
-
-Please check the logs to see if there are any relevant error messages you can include
+name: Broken scraper report
+description: Report a scraper that is not working as expected.
+labels: ["bug"]
+body:
+  - type: input
+    id: package-name
+    attributes:
+      label: Package name of the scraper
+      description: Go to Settings > Metadata Providers > Installed Scrapers and under "Package" column, find the package name of the scraper.
+    validations:
+      required: true
+  - type: input
+    id: package-version
+    attributes:
+      label: Scraper version
+      description: Go to Settings > Metadata Providers > Installed Scrapers and under "Installed version" column, find the version of the scraper.
+    validations:
+      required: true
+  - type: dropdown
+    id: scraper-type
+    attributes:
+      label: Which scraper types are affected?
+      description: You can select more than one.
+      options:
+        - performerByName
+        - performerByFragment
+        - performerByURL
+        - sceneByName
+        - sceneByQueryFragment
+        - sceneByFragment
+        - sceneByURL
+        - groupByURL
+        - galleryByFragment
+        - galleryByURL
+        - imageByFragment
+        - imageByURL
+    validations:
+      required: true
+  - type: textarea
+    id: scraper-type-details
+    attributes:
+      label: Scraper type specific details
+      description: |
+        Please provide additional details that may be relevant. For example:
+        For "<object>ByURL" scrapers, please provide an URL that you tried to scrape with that scraper.
+        For "<object>ByFragment" scrapers, please provide the details about which query you tried when using that scraper.
+        For "<object>ByName" scrapers, please provide an <object> name that you tried to scrape with that scraper.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Please provide any relevant logs that may help in diagnosing the issue with the scraper. You can find the logs in Stash under Settings > Logs. Make sure to set the Log Level to Debug to get the most detailed logs.
+    validations:
+      required: true
+  - type: textarea
+    id: additional-details
+    attributes:
+      label: Additional details
+      description: |
+        If there are any additional details about the issue that you think may be relevant, please provide them here.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm-search
+    attributes:
+      label: Have you looked at existing bug reports?
+      description: |
+        Please ensure you have first [searched existing bug reports](https://github.com/stashapp/CommunityScrapers/issues?q=is%3Aissue%20label%3Abug) to make sure your report is not a duplicate.
+      options:
+        - label: I have searched the existing bug reports.
+          required: true
