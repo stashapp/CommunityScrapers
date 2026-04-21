@@ -36,9 +36,9 @@ body:
       label: Scraper type specific details
       description: |
         Please provide additional details that may be relevant. For example:
-        
-        For "<object>ByURL" scrapers, please provide an example URL that you would expect to be able to scrape with that scraper.
-        For "<object>ByFragment" scrapers, please provide the details about which fragment you would want that scraper to use.
+
+        For "<object>ByURL" scrapers, please provide an example URL that you would expect to be able to scrape with that scraper.  
+        For "<object>ByFragment" scrapers, please provide the details about which fragment you would want that scraper to use.  
         For "<object>ByName" scrapers, please provide an example of an <object> name that you would expect to be able to scrape with that scraper.
     validations:
       required: false
