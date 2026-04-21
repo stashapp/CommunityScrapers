@@ -43,6 +43,7 @@ body:
       label: Scraper type specific details
       description: |
         Please provide additional details that may be relevant. For example:
+        
         For "<object>ByURL" scrapers, please provide an URL that you tried to scrape with that scraper.
         For "<object>ByFragment" scrapers, please provide the details about which query you tried when using that scraper.
         For "<object>ByName" scrapers, please provide an <object> name that you tried to scrape with that scraper.
