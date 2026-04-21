@@ -43,10 +43,11 @@ body:
       label: Scraper type specific details
       description: |
         Please provide additional details that may be relevant. For example:
+        - For "\<object\>ByURL" scrapers, please provide an example URL that you would want to be able to scrape with that scraper.  
+        - For "\<object\>ByFragment" scrapers, please provide the details about which fragment you would want that scraper to use.  
+        - For "\<object\>ByName" scrapers, please provide an example of an "\<object\>" name that you would want to be able to scrape with that scraper.
 
-        For "<object>ByURL" scrapers, please provide an URL that you tried to scrape with that scraper.  
-        For "<object>ByFragment" scrapers, please provide the details about which query you tried when using that scraper.  
-        For "<object>ByName" scrapers, please provide an <object> name that you tried to scrape with that scraper.
+        \<object\> can be performer, scene, group, gallery, or image depending on the scraper type.
     validations:
       required: true
   - type: textarea
@@ -54,7 +55,9 @@ body:
     attributes:
       label: Logs
       description: |
-        Please provide any relevant logs that may help in diagnosing the issue with the scraper. You can find the logs in Stash under Settings > Logs. Make sure to set the Log Level to Debug to get the most detailed logs.
+        Please provide any relevant logs that may help in diagnosing the issue with the scraper. 
+        
+        You can find the logs in Stash under Settings > Logs. Make sure to set the Log Level to Debug to get the most detailed logs.
     validations:
       required: true
   - type: textarea
