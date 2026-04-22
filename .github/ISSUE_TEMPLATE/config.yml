@@ -2,6 +2,7 @@ blank_issues_enabled: false
 contact_links:
   - name: Existing scraper list
     url: https://stashapp.github.io/CommunityScrapers
+    about: Searchable list of existing scrapers with additional details.
   - name: Community forum
     url: https://discourse.stashapp.cc
     about: Start a discussion on the community forum.
