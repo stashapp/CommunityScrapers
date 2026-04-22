@@ -25,7 +25,7 @@ body:
       description: | 
         You can select more than one.
 
-        You can learn more about scraper types [here](https://docs.stashapp.cc/in-app-manual/scraping/#scraper-types).
+        Learn more about scraper types [here](https://docs.stashapp.cc/in-app-manual/scraping/#scraper-types).
       multiple: true
       options:
         - performerByName

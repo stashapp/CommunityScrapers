@@ -15,6 +15,7 @@ body:
       label: Suggested improvements
       description: | 
         Please provide details about the improvements you are suggesting for the scraper.
+    validations:
       required: true
   - type: textarea
     id: additional-details
