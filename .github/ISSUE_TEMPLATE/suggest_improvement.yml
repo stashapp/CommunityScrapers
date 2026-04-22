@@ -5,65 +5,22 @@ body:
   - type: input
     id: package-name
     attributes:
-      label: Package name of the scraper
-      description: Go to Settings > Metadata Providers > Installed Scrapers and under "Package" column, find the package name of the scraper.
-    validations:
-      required: true
-  - type: input
-    id: package-version
-    attributes:
-      label: Scraper version
-      description: Go to Settings > Metadata Providers > Installed Scrapers and under "Installed version" column, find the version of the scraper.
-    validations:
-      required: true
-  - type: dropdown
-    id: scraper-type
-    attributes:
-      label: Which scraper types need improvement?
-      description: You can select more than one.
-      multiple: true
-      options:
-        - performerByName
-        - performerByFragment
-        - performerByURL
-        - sceneByName
-        - sceneByQueryFragment
-        - sceneByFragment
-        - sceneByURL
-        - groupByURL
-        - galleryByFragment
-        - galleryByURL
-        - imageByFragment
-        - imageByURL
+      label: Scraper name
+      description: Go to **Settings** > **Metadata Providers** > **Installed Scrapers** and under "Package" column, find the package name of the scraper.
     validations:
       required: true
   - type: textarea
-    id: scraper-type-details
+    id: suggested-improvements
     attributes:
-      label: Scraper type specific details
-      description: |
-        Please provide additional details that may be relevant. For example:
-        - For "\<object\>ByURL" scrapers, please provide an example URL that you would want to be able to scrape with that scraper.  
-        - For "\<object\>ByFragment" scrapers, please provide the details about which fragment you would want that scraper to use.  
-        - For "\<object\>ByName" scrapers, please provide an example of an "\<object\>" name that you would want to be able to scrape with that scraper.
-
-        \<object\> can be performer, scene, group, gallery, or image depending on the scraper type.
-    validations:
-      required: false
+      label: Suggested improvements
+      description: | 
+        Please provide details about the improvements you are suggesting for the scraper.
+      required: true
   - type: textarea
-    id: site-details
+    id: additional-details
     attributes:
-      label: Site specific details
+      label: Additional details
       description: |
-        Please provide any additional details about the site that may be relevant for writing a scraper. For example, does the site require an account to access content? Does it belong to a larger network? Does it have an API? Anything else you think may be relevant.
+        If there are any additional details about the issue that you think may be relevant, please provide them here.
     validations:
       required: false
-  - type: checkboxes
-    id: confirm-search
-    attributes:
-      label: Have you looked at existing improvement suggestions?
-      description: |
-        Please ensure you have first [searched existing improvement suggestions](https://github.com/stashapp/CommunityScrapers/issues?q=is%3Aissue%20label%3Aenhancement) to make sure your request is not a duplicate.
-      options:
-        - label: I have searched the existing improvement suggestions.
-          required: true

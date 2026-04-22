@@ -5,15 +5,18 @@ body:
   - type: input
     id: domain
     attributes:
-      label: Domain of the site you want scraped
-      description: Provide the domain of the site you want scraped, without "www" or "https://". For example, "example.com".
+      label: Domain
+      description: Provide the domain of the site you want scraped.
     validations:
       required: true
   - type: dropdown
     id: scraper-type
     attributes:
-      label: Which scraper types are you requesting?
-      description: You can select more than one.
+      label: Which scraper type(s) are you requesting?
+      description: |
+        You can select more than one.
+
+        You can learn more about scraper types [here](https://docs.stashapp.cc/in-app-manual/scraping/#scraper-types).
       multiple: true
       options:
         - performerByName
@@ -31,32 +34,29 @@ body:
     validations:
       required: true
   - type: textarea
-    id: scraper-type-details
+    id: scraper-specific-examples
     attributes:
-      label: Scraper type specific details
+      label: Specific examples
       description: |
-        Please provide additional details that may be relevant. For example:
-        - For "\<object\>ByURL" scrapers, please provide an example URL that you would want to be able to scrape with that scraper.  
-        - For "\<object\>ByFragment" scrapers, please provide the details about which fragment you would want that scraper to use.  
-        - For "\<object\>ByName" scrapers, please provide an example of an "\<object\>" name that you would want to be able to scrape with that scraper.
-
-        \<object\> can be performer, scene, group, gallery, or image depending on the scraper type.
+        Please provide specific example URLs or detail the implementation you want the scraper to have.
     validations:
-      required: false
+      required: true
   - type: textarea
-    id: site-details
+    id: additional-details
     attributes:
-      label: Site specific details
+      label: Additional details
       description: |
-        Please provide any additional details about the site that may be relevant for writing a scraper. For example, does the site require an account to access content? Does it belong to a larger network? Does it have an API? Anything else you think may be relevant.
+        If there are any additional details about the site that you think may be relevant, please provide them here.
+
+        For example, does the site require an account to access content? Does it belong to a larger network? Does it have an API?
     validations:
       required: false
   - type: checkboxes
-    id: confirm-search
+    id: already-exists
     attributes:
-      label: Have you looked at existing scraper requests?
+      label: Have you checked the existing scraper list?
       description: |
-        Please ensure you have first [searched existing scraper requests](https://github.com/stashapp/CommunityScrapers/issues?q=is%3Aissue%20label%3Anew-scraper) to make sure your request is not a duplicate.
+        Please ensure you have first [searched the existing scraper list](https://stashapp.github.io/CommunityScrapers) to make sure your request is not for a scraper that already exists.
       options:
-        - label: I have searched the existing scraper requests.
+        - label: I confirm that I have checked the existing scraper list.
           required: true

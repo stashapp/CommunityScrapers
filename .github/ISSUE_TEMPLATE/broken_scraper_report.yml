@@ -5,22 +5,27 @@ body:
   - type: input
     id: package-name
     attributes:
-      label: Package name of the scraper
-      description: Go to Settings > Metadata Providers > Installed Scrapers and under "Package" column, find the package name of the scraper.
+      label: Scraper name
+      description: Go to **Settings** > **Metadata Providers** > **Installed Scrapers** and under "Package" column, find the package name of the scraper.
+      placeholder: ManyVids
     validations:
       required: true
   - type: input
     id: package-version
     attributes:
       label: Scraper version
-      description: Go to Settings > Metadata Providers > Installed Scrapers and under "Installed version" column, find the version of the scraper.
+      description: Go to **Settings** > **Metadata Providers** > **Installed Scrapers** and under "Installed version" column, find the version of the scraper.
+      placeholder: 622231e
     validations:
       required: true
   - type: dropdown
     id: scraper-type
     attributes:
-      label: Which scraper types are affected?
-      description: You can select more than one.
+      label: Which scraper type(s) are affected?
+      description: | 
+        You can select more than one.
+
+        You can learn more about scraper types [here](https://docs.stashapp.cc/in-app-manual/scraping/#scraper-types).
       multiple: true
       options:
         - performerByName
@@ -38,16 +43,16 @@ body:
     validations:
       required: true
   - type: textarea
-    id: scraper-type-details
+    id: scraper-specific-examples
     attributes:
-      label: Scraper type specific details
+      label: Specific examples
       description: |
-        Please provide additional details that may be relevant. For example:
-        - For "\<object\>ByURL" scrapers, please provide an example URL that you would want to be able to scrape with that scraper.  
-        - For "\<object\>ByFragment" scrapers, please provide the details about which fragment you would want that scraper to use.  
-        - For "\<object\>ByName" scrapers, please provide an example of an "\<object\>" name that you would want to be able to scrape with that scraper.
+        Please provide additional details with relevant examples so that the issue can be accurately diagnosed and reproduced.
+        - For "\<object\>ByURL" scrapers, please provide an example URL that fails to scrape.
+        - For "\<object\>ByName" scrapers, please provide an example name/title that fails to scrape.
+        - If you are reporting an issue with a "\<object\>ByFragment" scrapers, we will follow up asking for additional details to diagnose the issue as these scrapers rely on metadata fragments which are unique for each scraper. 
 
-        \<object\> can be performer, scene, group, gallery, or image depending on the scraper type.
+        \<object\> can be performer, scene, group, gallery, or image.
     validations:
       required: true
   - type: textarea
@@ -57,10 +62,10 @@ body:
       description: |
         Please provide any relevant logs that may help in diagnosing the issue with the scraper. 
         
-        You can find the logs in Stash under Settings > Logs. Make sure to set the Log Level to Debug to get the most detailed logs.
+        You can find the logs in Stash under **Settings** > **Logs**. Make sure to set the Log level to Debug to get the most detailed logs.
       render: shell
     validations:
-      required: true
+      required: false
   - type: textarea
     id: additional-details
     attributes:
@@ -77,4 +82,15 @@ body:
         Please ensure you have first [searched existing bug reports](https://github.com/stashapp/CommunityScrapers/issues?q=is%3Aissue%20label%3Abug) to make sure your report is not a duplicate.
       options:
         - label: I have searched the existing bug reports.
+          required: true
+  - type: checkboxes
+    id: geoblocking
+    attributes:
+      label: Are you in a country that may be geoblocked by the site being scraped?
+      description: |
+        Some sites may restrict access based on your geographic location. Please ensure you are not in a country that may be geoblocked by the site being scraped. 
+        
+        If you are unsure, please check if you can access the site being scraped in a web browser without using a VPN or proxy. If you cannot access the site, it is likely that you are in a geoblocked country.
+      options:
+        - label: I am not in a country that may be geoblocked.
           required: true
