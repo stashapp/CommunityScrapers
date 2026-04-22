@@ -88,7 +88,7 @@ body:
     attributes:
       label: Are you in a country that may be geoblocked by the site being scraped?
       description: |
-        Some sites may restrict access based on your geographic location. Please ensure you are not in a country that may be geoblocked by the site being scraped. 
+        Some sites may restrict access based on your geographic location.
         
         If you are unsure, please check if you can access the site being scraped in a web browser without using a VPN or proxy. If you cannot access the site, it is likely that you are in a geoblocked country.
       options:
