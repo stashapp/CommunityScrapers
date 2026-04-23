@@ -7,11 +7,15 @@ from datetime import datetime
 
 import py_common.log as log
 import cloudscraper
+from py_common.config import get_config
 
-### SET MEMBER ACCESS TOKEN HERE
-### CAN BE access_token OR refresh_token
-REPTYLE_ACCESS_TOKEN = ""
-####
+config = get_config(
+    default="""
+    # set your member access token here
+    # can be access_token OR refresh_token
+    REPTYLE_ACCESS_TOKEN = ""
+"""
+)
 
 scraper = cloudscraper.create_scraper()
 
@@ -196,7 +200,7 @@ IS_MEMBER = False
 # Check the URL and set the API URL
 if "app.reptyle.com" in scene_url:
     API_BASE = "https://ma-store.reptyle.com/ts_index/_doc/movie-"
-    MEMBER_ACCESS_TOKEN = REPTYLE_ACCESS_TOKEN
+    MEMBER_ACCESS_TOKEN = config["REPTYLE_ACCESS_TOKEN"]
     IS_MEMBER = True
 elif "sayuncle.com" in scene_url:
     API_BASE = "https://tours-store.psmcdn.net/sau_network/_search?size=1&q=id:"
