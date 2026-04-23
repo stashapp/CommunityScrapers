@@ -93,4 +93,4 @@ body:
         If you are unsure, please check if you can access the site being scraped in a web browser without using a VPN or proxy. If you cannot access the site, it is likely that you are in a geoblocked country.
       options:
         - label: I am not in a country that may be geoblocked.
-          required: true
+          required: false
