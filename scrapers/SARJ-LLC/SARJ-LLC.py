@@ -192,14 +192,9 @@ def map_media(data, studio, base_url):
                         directors.append(name)
     director = ", ".join(directors).strip()
 
-    details = data.get('description', "") or None
-    # If "description" is missing or empty, try "descriptionSfw"
-    if not details:
-        details = data.get("descriptionSfw") or None
-
     return {
         'Title': data['name'].strip(),
-        'Details': details,
+        'Details': data.get('description', "") or data.get("descriptionSfw", "") or None,
         'URLs': urls,
         'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
         'Tags': [{'Name': t.strip()} for t in data['tags']],
