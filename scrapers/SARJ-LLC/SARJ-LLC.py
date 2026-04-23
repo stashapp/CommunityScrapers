@@ -194,7 +194,7 @@ def map_media(data, studio, base_url):
 
     return {
         'Title': data['name'].strip(),
-        'Details': data.get('description', "") or None,
+        'Details': data.get('description', "") or data.get("descriptionSfw", "") or None,
         'URLs': urls,
         'Date': data['publishedAt'][0:data['publishedAt'].find('T')],
         'Tags': [{'Name': t.strip()} for t in data['tags']],
