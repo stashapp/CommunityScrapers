@@ -14,18 +14,22 @@ sceneByFragment:
   queryURL: https://www.xvideos.com/video.{filename}/x
   queryURLReplace:
     filename:
+      # xvideos id is of format [a-z0-9]{6,11} (6ch from 2007, 11ch from 2026)
+      # can also be numeric id - 7digita -> 11ch
+
       # expects an id in square brackets before extension, as saved by yt-dlp by default
       # title_of_scene [id-here].mp4
-      - regex: '.*\[([0-9a-zA-Z]{4,})\]\..+'
+      - regex: '.*\[([a-z0-9]{6,11})\]\..+'
         with: $1
       # expect an ID at the beginning followed by an underscore, as saved by
       # JDownloader by default
-      - regex: '^([0-9a-zA-Z]{4,})_.+'
+      - regex: '^([a-z0-9]{6,11})_.+'
         with: $1
+      # removed since it doesnt work with video. format
       # or expects a numeric id at the end of the filename
       # title_of_scene42069.mp4
-      - regex: '^.*?(\d+)\..+$'
-        with: $1
+      # - regex: '^.*?(\d{7})\..+$'
+      #   with: $1
       # if no id is found in the filename (there is still a file extension)
       # clear the filename so that it doesn't leak
       - regex: .*\.[^\.]+$
