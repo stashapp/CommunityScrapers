@@ -76,9 +76,9 @@ def scene_from_url(url: str) -> ScrapedScene:
     session.headers.update({"User-Agent": solution.get("userAgent")})
 
     # add get solution cookies
-    session.cookies.set("age_pass", config["age_pass"], domain=".fc2ppvdb.com", path="/")
-    session.cookies.set("fc2ppvdb_session", config["fc2ppvdb_session"], domain=".fc2ppvdb.com", path="/")
-    session.cookies.set("XSRF-TOKEN", config["xsrf_token"], domain=".fc2ppvdb.com", path="/")
+    session.cookies.set("age_pass", config["age_pass"], domain="fc2ppvdb.com", path="/")
+    session.cookies.set("fc2ppvdb_session", config["fc2ppvdb_session"], domain="fc2ppvdb.com", path="/")
+    session.cookies.set("XSRF-TOKEN", config["xsrf_token"], domain="fc2ppvdb.com", path="/")
 
     # parse url to hit json endpoint, has to be done immediately
     article_id = url.rstrip("/").split("/")[-1]
