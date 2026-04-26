@@ -1,12 +1,10 @@
 import json
-import os
-import pathlib
 import re
 import sys
 from datetime import datetime
+import requests
 
 import py_common.log as log
-import cloudscraper
 from py_common.config import get_config
 
 config = get_config(
@@ -17,12 +15,11 @@ config = get_config(
 """
 )
 
-scraper = cloudscraper.create_scraper()
-
+scraper = requests.session()
+MEMBER_ACCESS_TOKEN = config["REPTYLE_ACCESS_TOKEN"]
 
 def try_url(url):
     return scraper.head(url).status_code == 200
-
 
 def try_img_replacement(imgurl):
     # members/full - 1600x900
@@ -45,35 +42,10 @@ def try_img_replacement(imgurl):
     # fallback to original image
     return imgurl
 
-
-def save_json(api_json, url):
-    try:
-        if sys.argv[1] == "logJSON":
-            try:
-                os.makedirs(DIR_JSON)
-            except FileExistsError:
-                pass  # Dir already exist
-            api_json["url"] = url
-            filename = os.path.join(DIR_JSON, str(api_json["id"]) + ".json")
-            with open(filename, "w", encoding="utf-8") as file:
-                json.dump(api_json, file, ensure_ascii=False, indent=4)
-    except IndexError:
-        pass
-
-
-USERFOLDER_PATH = str(pathlib.Path(__file__).parent.parent.absolute())
-DIR_JSON = os.path.join(USERFOLDER_PATH, "scraperJSON", "Teamskeet")
-
-
-# Not necessary but why not ?
-USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
-)
-
 ### Studio Mapper, to match scraped Studio Name to Studio Name as it appears in StashDB
 ### All studios included, ordered alphabetically
 studioMap = {
-## Family Strokes
+ ## Family Strokes
     # Ask Your Mother
     # Black Step Dad
     "DadCrush": "Dad Crush",
@@ -85,12 +57,12 @@ studioMap = {
     "PervNana": "Perv Nana",
     # Sis Loves Me
     # Tiny Sis
-## Freeuse
+ ## Freeuse
     # Freaky Fembots
     # Freeuse Fantasy
     "FreeUse Milf": "Freeuse MILF",
     "UsePOV": "Use POV",
-## MYLF
+ ## MYLF
     "AnalMom": "Anal Mom",
     "BBCParadise": "BBC Paradise",
     # Blue Collar Babes
@@ -117,7 +89,7 @@ studioMap = {
     # Shag Street
     "StayHomeMilf": "Stay Home MILF",
     # Tiger Moms
-## Pervz
+ ## Pervz
     # Charmed
     "Milf Taxi": "MILF Taxi",
     "PervDoctor": "Perv Doctor",
@@ -129,7 +101,7 @@ studioMap = {
     # Pervz Singles
     # Shoplyfter
     "Shoplyfter Mylf": "Shoplyfter MYLF",
-## SayUncle
+ ## SayUncle
     "Black Godz": "BlackGodz",
     "BottomGames": "Bottom Games",
     "BoysDoPorn": "Boys Do Porn",
@@ -141,13 +113,13 @@ studioMap = {
     "StickyRub": "Sticky Rub",
     "TroopSex": "Troop Sex",
     "YesFather": "Yes Father",
-## Swappz
+ ## Swappz
     # Daughter Swap
     # MomSwap
     # Sis Swap
     # Swappz Features
     # Swappz Singles
-## TeamSkeet
+ ## TeamSkeet
     "BadMilfs": "Bad MILFs",
     # Bracefaced
     # CFNM Teens
@@ -189,63 +161,63 @@ studioDefaultTags = {
     "SayUncle Classics": ["Re-release"],
 }
 
-fragment = json.loads(sys.stdin.read())
-if fragment["url"]:
-    scene_url = fragment["url"]
-else:
-    log.error("You need to set the URL (e.g. teamskeet.com/movies/*****)")
-    sys.exit(1)
-
-IS_MEMBER = False
-# Check the URL and set the API URL
-if "app.reptyle.com" in scene_url:
+def scrape_members(scene_url):
+    # check for access_token
+    if MEMBER_ACCESS_TOKEN == "":
+        log.error("You are trying to scrape a member scene without an acess token")
+        log.error("Please update config.ini with a refresh token")
+    # use different api url
     API_BASE = "https://ma-store.reptyle.com/ts_index/_doc/movie-"
-    MEMBER_ACCESS_TOKEN = config["REPTYLE_ACCESS_TOKEN"]
-    IS_MEMBER = True
-elif "sayuncle.com" in scene_url:
-    API_BASE = "https://tours-store.psmcdn.net/sau_network/_search?size=1&q=id:"
-elif "teamskeet.com" in scene_url:
-    API_BASE = "https://tours-store.psmcdn.net/ts_network/_search?size=1&q=id:"
-elif "mylf.com" in scene_url:
-    API_BASE = "https://tours-store.psmcdn.net/mylf_bundle/_search?size=1&q=id:"
-elif "swappz.com" in scene_url:
-    API_BASE = "https://tours-store.psmcdn.net/swap_bundle/_search?size=1&q=id:"
-elif "freeuse.com" in scene_url:
-    API_BASE = "https://tours-store.psmcdn.net/freeusebundle/_search?size=1&q=id:"
-elif "pervz.com" in scene_url:
-    API_BASE = "https://tours-store.psmcdn.net/pervbundle/_search?size=1&q=id:"
-elif "familystrokes.com" in scene_url:
-    API_BASE = "https://tours-store.psmcdn.net/familybundle/_search?size=1&q=id:"
-else:
-    log.error("URL is not from a supported site. Attempting to continue with reptyle_bundle")
-    API_BASE = "https://tours-store.psmcdn.net/reptyle_bundle/_search?size=1&q=id:"
-# check for member access token
-if IS_MEMBER and MEMBER_ACCESS_TOKEN == "":
-    log.error("You are trying to scrape a member scene without an acess token")
-    log.error(
-        "Please edit the scraper and populate the corresponding _ACCESS_TOKEN variable"
-    )
-
-scene_id = re.match(r".+\/([\w\d-]+)", scene_url)
-if not scene_id:
-    log.error(
-        "Error with the ID ({})\nAre you sure that the end of your URL is correct ?".format(
-            scene_id
-        )
-    )
-    sys.exit(1)
-scene_id = scene_id.group(1)
-use_local = 0
-json_file = os.path.join(DIR_JSON, scene_id + ".json")
-if os.path.isfile(json_file):
-    log.debug("Using local JSON...")
-    use_local = 1
-    with open(json_file, encoding="utf-8") as json_file:
-        scene_api_json = json.load(json_file)
-else:
+    scene_id = re.match(r".+\/([\w\d-]+)", scene_url)
+    if not scene_id:
+        log.error(f"Error with the ID ({scene_id}) - Are you sure that the end of your URL is correct ?")
+        sys.exit(1)
+    scene_id = scene_id.group(1)
     api_url = f"{API_BASE}{scene_id}"
-    headers = {"User-Agent": USER_AGENT}
-    if IS_MEMBER:
+    # scraping
+    api_resp = scrape_api(api_url, scene_id, True)
+    scene = parse_api_json(api_resp, True)
+    return scene
+
+def scrape_public(scene_url):
+    # bundle maps
+    BUNDLE_NAME="reptyle_bundle"
+    match scene_url:
+        case scene_url if "sayuncle.com" in scene_url:
+            BUNDLE_NAME="sau_network"
+        case scene_url if "teamskeet.com" in scene_url:
+            BUNDLE_NAME="ts_network"
+        case scene_url if "mylf.com" in scene_url:
+            BUNDLE_NAME="mylf_bundle"
+        case scene_url if "swappz.com" in scene_url:
+            BUNDLE_NAME="swap_bundle"
+        case scene_url if "freeuse.com" in scene_url:
+            BUNDLE_NAME="freeusebundle"
+        case scene_url if "pervz.com" in scene_url:
+            BUNDLE_NAME="pervbundle"
+        case scene_url if "familystrokes.com" in scene_url:
+            BUNDLE_NAME="familybundle"
+        case _:
+            log.warning("URL is not from a supported site. Attempting to continue with global bundle")
+    log.debug(BUNDLE_NAME)
+    scene_id = re.match(r".+\/([\w\d-]+)", scene_url)
+    if not scene_id:
+        log.error(f"Error with the ID ({scene_id}) - Are you sure that the end of your URL is correct ?")
+        sys.exit(1)
+    scene_id = scene_id.group(1)
+    api_url = f"https://tours-store.psmcdn.net/{BUNDLE_NAME}/_search?size=1&q=id:{scene_id}"
+    log.debug(f"Asking the API... {api_url}")
+    # scraping
+    api_resp = scrape_api(api_url, scene_id, False)
+    scene = parse_api_json(api_resp, False)
+    # if SAU, add gay tag
+    if "sayuncle.com" in scene_url:
+        scene["tags"].append({"name": "Gay"})
+    return scene
+
+def scrape_api(api_url, scene_id, MEMBER=False):
+    headers = {}
+    if MEMBER:
         headers.update({"Cookie": f"access_token={MEMBER_ACCESS_TOKEN}"})
     log.debug(f"Asking the API... {api_url}")
 
@@ -273,10 +245,11 @@ else:
             log.error("Scene not found (Wrong ID?)")
             log.debug(json.dumps(data, indent=2))
             sys.exit(1)
+        return scene_api_json
 
     except Exception:
         log.debug(r.status_code)
-        if r.status_code == 401 and IS_MEMBER:
+        if r.status_code == 401 and MEMBER:
             log.error("It's likely that your member access token needs to be replaced")
         if "Just a moment..." in r.text:
             log.error("Protected by Cloudflare. Retry later...")
@@ -284,84 +257,105 @@ else:
             log.error("Invalid page content")
         sys.exit(1)
 
-# Time to scrape all data
-scrape = {}
-scrape["title"] = scene_api_json.get("title")
-# for members, used publishedDateRank
-dt = (
-    scene_api_json.get("publishedDateRank")
-    if IS_MEMBER
-    else scene_api_json.get("publishedDate")
-)
+def parse_api_json(scene_api_json, MEMBERS=False):
+    # Time to scrape all data
+    scrape = {}
+    scrape["title"] = scene_api_json.get("title")
+    # for members, used publishedDateRank
+    dt = (
+        scene_api_json.get("publishedDateRank")
+        if MEMBERS
+        else scene_api_json.get("publishedDate")
+    )
 
-if dt:
-    dt = re.sub(r"T.+", "", dt)
-    date = datetime.strptime(dt, "%Y-%m-%d")
-    scrape["date"] = str(date.date())
+    if dt:
+        dt = re.sub(r"T.+", "", dt)
+        date = datetime.strptime(dt, "%Y-%m-%d")
+        scrape["date"] = str(date.date())
 
-# replace tags manually
-tags = scene_api_json.get("tags")
-if tags:
-    for i, tag in enumerate(tags):
-        # inconsistent use on TeamSkeet since it was added as a tag
-        if tag == "Pumps":
-            tags[i] = "Woman's Heels"
-        if tag.lower() == "null":
-            tags.pop(i)
+    # replace tags manually
+    tags = scene_api_json.get("tags")
+    if tags:
+        for i, tag in enumerate(tags):
+            # inconsistent use on TeamSkeet since it was added as a tag
+            if tag == "Pumps":
+                tags[i] = "Woman's Heels"
+            if tag.lower() == "null":
+                tags.pop(i)
 
-# fix for TeamKseet including HTML tags in Description
-CLEANR = re.compile("<.*?>")
-cleandescription = re.sub(CLEANR, "", scene_api_json.get("description"))
-scrape["details"] = cleandescription.strip()
-scrape["studio"] = {}
-# pull directly from siteName if member
-studioApiName = (
-    scene_api_json["site"].get("siteName")
-    if IS_MEMBER
-    else scene_api_json["site"].get("name")
-)
-log.debug("Studio API name is '" + studioApiName + "'")
-scrape["studio"]["name"] = (
-    studioMap[studioApiName] if studioApiName in studioMap else studioApiName
-)
-if " x " in scrape["studio"]["name"].lower():
-    tags.append("Redistribution")
-scrape["tags"] = [{"name": x} for x in tags]
-code = str(scene_api_json.get("itemId", ""))
-scrape["code"] = code
-for tag in studioDefaultTags.get(studioApiName, []):
-    log.debug("Assiging default tags - " + tag)
-    scrape["tags"].append({"name": tag})
-scrape["image"] = scene_api_json.get("img")
-# artifically construct members URL
-scrape["url"] = f"https://app.reptyle.com/movies/{code}"
-# handle members performers differently
-if IS_MEMBER:
-    scrape["performers"] = [
-        {"name": x.get("name")} for x in scene_api_json.get("models")
-    ]
+    # fix for TeamKseet including HTML tags in Description
+    CLEANR = re.compile("<.*?>")
+    cleandescription = re.sub(CLEANR, "", scene_api_json.get("description"))
+    scrape["details"] = cleandescription.strip()
+    scrape["studio"] = {}
+    # pull directly from siteName if member
+    studioApiName = (
+        scene_api_json["site"].get("siteName")
+        if MEMBERS
+        else scene_api_json["site"].get("name")
+    )
+    log.debug("Studio API name is '" + studioApiName + "'")
+    scrape["studio"]["name"] = (
+        studioMap[studioApiName] if studioApiName in studioMap else studioApiName
+    )
+    if " x " in scrape["studio"]["name"].lower():
+        tags.append("Redistribution")
+    scrape["tags"] = [{"name": x} for x in tags]
+    code = str(scene_api_json.get("itemId", ""))
+    scrape["code"] = code
+    for tag in studioDefaultTags.get(studioApiName, []):
+        log.debug("Assigning default tags - " + tag)
+        scrape["tags"].append({"name": tag})
+    scrape["image"] = scene_api_json.get("img")
+    # artifically construct members URL
+    if not MEMBERS:
+        scrape["url"] = f"https://app.reptyle.com/movies/{code}"
+    # handle members performers differently
+    if MEMBERS:
+        log.debug("members models")
+        scrape["performers"] = [
+            {"name": x.get("name")} for x in scene_api_json.get("models")
+        ]
+    else:
+        scrape["performers"] = [
+            {"name": x.get("title")} for x in scene_api_json.get("models")
+        ]
+
+    # Each of TeamSkeet, MYLF and SayUncle have different ways to handle
+    # high resolution scene images.  SayUncle is a high resoution right
+    # from the scrape.  TeamSkeet and MYLF have different mappings between
+    # the scraped value and the higher resolution version.
+
+    # try to (and check) higher res images if possible
+    high_res = try_img_replacement(scene_api_json.get("img"))
+
+    log.debug(f"Image before: {scrape['image']}")
+    log.debug(f"Image after: {high_res}")
+    scrape["image"] = high_res
+
+    log.debug(json.dumps(scrape))
+    return scrape
+
+fragment = json.loads(sys.stdin.read())
+if fragment["url"]:
+    scene_url = fragment["url"]
 else:
-    scrape["performers"] = [
-        {"name": x.get("title")} for x in scene_api_json.get("models")
-    ]
+    log.error("You need to set the URL (e.g. teamskeet.com/movies/*****)")
+    sys.exit(1)
 
-# Each of TeamSkeet, MYLF and SayUncle have different ways to handle
-# high resolution scene images.  SayUncle is a high resoution right
-# from the scrape.  TeamSkeet and MYLF have different mappings between
-# the scraped value and the higher resolution version.
-
-# try to (and check) higher res images if possible
-high_res = try_img_replacement(scene_api_json.get("img"))
-
-log.debug(f"Image before: {scrape['image']}")
-log.debug(f"Image after: {high_res}")
-scrape["image"] = high_res
-
-# If the scene is from sayuncle.com, we need to add the gay tag to the tags list
-if "sayuncle.com" in scene_url:
-    scrape["tags"].append({"name": "Gay"})
-
-if use_local == 0:
-    save_json(scene_api_json, scene_url)
-log.debug(json.dumps(scene_api_json))
-print(json.dumps(scrape))
+# if members scene, scrape agianst members
+if "app.reptyle.com" in scene_url:
+    scene = scrape_members(scene_url)
+    print(json.dumps(scene))
+else:
+    # do public scrape first
+    public_scene = scrape_public(scene_url)
+    if MEMBER_ACCESS_TOKEN != "":
+        log.debug("scraping members for additional info")
+        member_url = public_scene["url"]
+        log.debug(f"member url,{member_url}")
+        member_scrape = scrape_members(member_url)
+        # replace performers
+        public_scene["performers"] = member_scrape["performers"]
+        log.debug("Replaced public performers with members performers")
+    print(json.dumps(public_scene))
