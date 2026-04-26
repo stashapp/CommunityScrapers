@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
 # requires: AlgoliaAPI
-name: "AdultTime"
+name: AdultTime
 sceneByURL:
   - action: script
     url:
@@ -95,6 +95,26 @@ sceneByURL:
     script:
       - python
       - AdultTime.py
+      - girlsway
+      - scene-by-url
+  - action: script
+    url:
+      # these are affiliate sites that link to the same scenes as the main sites above
+      # but with different URLs, so we need to scrape them separately to get the correct scene URLs
+      - adulttimepilots.com
+      - allsexstudio.net
+      - daddysboy.org
+      - dareweshare.net
+      - gostuckyourself.net
+      - kissmefuckme.net
+      - milfoverload.net
+      - mommysboy.net
+      - preggoworld.net
+      - watchyoucheat.net
+    script:
+      - python
+      - AdultTime.py
+      - affiliate
       - girlsway
       - scene-by-url
 sceneByFragment:
@@ -247,4 +267,4 @@ performerByFragment:
     - AdultTime.py
     - girlsway
     - performer-by-fragment
-# Last Updated May 22, 2025
+# Last Updated April 2, 2026
