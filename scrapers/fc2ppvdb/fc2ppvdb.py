@@ -120,7 +120,7 @@ def url_from_frag(files) -> str:
     basename = os.path.basename(filename) if filename else None
     if not basename:
         return ""
-    code = re.match(r"(\d{5,})", basename)
+    code = re.search(r"(\d{5,})", basename)
     match = code.group(1) if code else None
     if match:
         return f"https://fc2ppvdb.com/articles/{match}"
