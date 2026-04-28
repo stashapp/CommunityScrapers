@@ -359,7 +359,7 @@ else:
         log.debug("scraping members for additional info")
         member_url = public_scene["url"]
         log.debug(f"member url,{member_url}")
-        member_scrape = scrape_members(member_url)a
+        member_scrape = scrape_members(member_url)
         # replace performers
         if member_scrape:
             public_scene["performers"] = member_scrape["performers"]
