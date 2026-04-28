@@ -171,11 +171,13 @@ def scrape_members(scene_url):
     scene_id = re.match(r".+\/([\w\d-]+)", scene_url)
     if not scene_id:
         log.error(f"Error with the ID ({scene_id}) - Are you sure that the end of your URL is correct ?")
-        sys.exit(1)
+        return
     scene_id = scene_id.group(1)
     api_url = f"{API_BASE}{scene_id}"
     # scraping
     api_resp = scrape_api(api_url, scene_id, True)
+    if api_resp == None:
+        return {}
     scene = parse_api_json(api_resp, True)
     return scene
 
@@ -241,6 +243,9 @@ def scrape_api(api_url, scene_id, MEMBER=False):
         # Get swappz search hit
         elif data.get("hits"):
             scene_api_json = data["hits"]["hits"][0]["_source"]
+        elif MEMBER:
+            log.error("Member scrape failed")
+            return None
         else:
             log.error("Scene not found (Wrong ID?)")
             log.debug(json.dumps(data, indent=2))
@@ -354,8 +359,9 @@ else:
         log.debug("scraping members for additional info")
         member_url = public_scene["url"]
         log.debug(f"member url,{member_url}")
-        member_scrape = scrape_members(member_url)
+        member_scrape = scrape_members(member_url)a
         # replace performers
-        public_scene["performers"] = member_scrape["performers"]
-        log.debug("Replaced public performers with members performers")
+        if member_scrape:
+            public_scene["performers"] = member_scrape["performers"]
+            log.debug("Replaced public performers with members performers")
     print(json.dumps(public_scene))
