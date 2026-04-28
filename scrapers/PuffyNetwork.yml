@@ -5,12 +5,10 @@ sceneByURL:
       - puffynetwork.com/videos/
     scraper: networkScraper
     queryURL: "{url}"
-    queryURLReplace:
+    queryURLReplace: &membersURLStrip
       url:
-        - regex: "members\\.puffynetwork\\.com"
-          with: "www.puffynetwork.com"
-        - regex: "^https?://puffynetwork\\.com"
-          with: "https://www.puffynetwork.com"
+        - regex: '^members\.'
+          with: ""
   - action: scrapeXPath
     url:
       - simplyanal.com/videos/
@@ -19,36 +17,14 @@ sceneByURL:
       - wetandpuffy.com/videos/
     scraper: siteScraper
     queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: "members\\.wetandpuffy\\.com"
-          with: "wetandpuffy.com"
-        - regex: "members\\.wetandpissy\\.com"
-          with: "wetandpissy.com"
-        - regex: "members\\.weliketosuck\\.com"
-          with: "weliketosuck.com"
-        - regex: "members\\.simplyanal\\.com"
-          with: "simplyanal.com"
-        - regex: "www\\.wetandpuffy\\.com"
-          with: "wetandpuffy.com"
-        - regex: "www\\.wetandpissy\\.com"
-          with: "wetandpissy.com"
-        - regex: "www\\.weliketosuck\\.com"
-          with: "weliketosuck.com"
-        - regex: "www\\.simplyanal\\.com"
-          with: "simplyanal.com"
+    queryURLReplace: &membersURLStrip
 galleryByURL:
   - action: scrapeXPath
     url:
       - puffynetwork.com/videos/
     scraper: networkScraper
     queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: "members\\.puffynetwork\\.com"
-          with: "www.puffynetwork.com"
-        - regex: "^https?://puffynetwork\\.com"
-          with: "https://www.puffynetwork.com"
+    queryURLReplace: &membersURLStrip
   - action: scrapeXPath
     url:
       - simplyanal.com/videos/
@@ -57,34 +33,15 @@ galleryByURL:
       - wetandpuffy.com/videos/
     scraper: siteScraper
     queryURL: "{url}"
-    queryURLReplace:
-      url:
-        - regex: "members\\.wetandpuffy\\.com"
-          with: "wetandpuffy.com"
-        - regex: "members\\.wetandpissy\\.com"
-          with: "wetandpissy.com"
-        - regex: "members\\.weliketosuck\\.com"
-          with: "weliketosuck.com"
-        - regex: "members\\.simplyanal\\.com"
-          with: "simplyanal.com"
-        - regex: "www\\.wetandpuffy\\.com"
-          with: "wetandpuffy.com"
-        - regex: "www\\.wetandpissy\\.com"
-          with: "wetandpissy.com"
-        - regex: "www\\.weliketosuck\\.com"
-          with: "weliketosuck.com"
-        - regex: "www\\.simplyanal\\.com"
-          with: "simplyanal.com"
+    queryURLReplace: &membersURLStrip
 xPathScrapers:
   networkScraper:
-    common:
-      $performer: //dl/dd/a
     scene:
       Title: &networkTitleAttr
         selector: //h2[@class="title"]/span/text()
         postProcess:
           - replace:
-              - regex: ^.*[—]\s+
+              - regex: ^.*—\s+
                 with:
               - regex: ^\s*in\s+
                 with:
@@ -97,7 +54,7 @@ xPathScrapers:
       Tags: &networkTagsAttr
         Name: //p[@class="tags"]/a/text()
       Performers: &networkPerformersAttr
-        Name: $performer/text()
+        Name: //dl/dd/a/text()
       Studio: &networkStudioAttr
         Name:
           selector: //h2[@class="title"]//div[contains(text(),"Site:")]/a/text()
@@ -122,18 +79,16 @@ xPathScrapers:
         selector: //div[@class="header-title"]/h2/text()[last()]
         postProcess:
           - replace:
-              - regex: ^.*[—]\s+
-                with:
-              - regex: ^\s*in\s+
+              - regex: ^.*—\s+
                 with:
       Date: &siteDateAttr
         selector: //span[@class="date-movie"]/b
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &siteDetailsAttr
-        selector: //div[@class="movie-description"]/text()[1]
+        selector: //div[@class="movie-description"][1]/text()
       Tags: &siteTagsAttr
-        Name: //div[@class="more-tags"]/a/text()
+        Name: //div[@class="more-tags"]/a/text() | //div[@class="tags-box"]//a/text()
       Performers: &sitePerformersAttr
         Name: //span[@class="model-movie"]//a/text()
       Studio: &siteStudioAttr
