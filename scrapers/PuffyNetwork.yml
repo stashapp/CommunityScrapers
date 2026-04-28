@@ -5,7 +5,7 @@ sceneByURL:
       - puffynetwork.com/videos/
     scraper: networkScraper
     queryURL: "{url}"
-    queryURLReplace: &membersURLStrip
+    queryURLReplace:
       url:
         - regex: '^members\.'
           with: ""
@@ -17,14 +17,20 @@ sceneByURL:
       - wetandpuffy.com/videos/
     scraper: siteScraper
     queryURL: "{url}"
-    queryURLReplace: &membersURLStrip
+    queryURLReplace:
+       url:
+        - regex: '^members\.'
+          with: ""
 galleryByURL:
   - action: scrapeXPath
     url:
       - puffynetwork.com/videos/
     scraper: networkScraper
     queryURL: "{url}"
-    queryURLReplace: &membersURLStrip
+    queryURLReplace:
+       url:
+        - regex: '^members\.'
+          with: ""
   - action: scrapeXPath
     url:
       - simplyanal.com/videos/
@@ -33,7 +39,10 @@ galleryByURL:
       - wetandpuffy.com/videos/
     scraper: siteScraper
     queryURL: "{url}"
-    queryURLReplace: &membersURLStrip
+    queryURLReplace:
+       url:
+        - regex: '^members\.'
+          with: ""
 xPathScrapers:
   networkScraper:
     scene:
