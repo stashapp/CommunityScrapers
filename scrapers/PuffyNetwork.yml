@@ -1,0 +1,123 @@
+name: PuffyNetwork
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - puffynetwork.com/videos/
+    scraper: networkScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '^members\.'
+          with: ""
+  - action: scrapeXPath
+    url:
+      - simplyanal.com/videos/
+      - weliketosuck.com/videos/
+      - wetandpissy.com/videos/
+      - wetandpuffy.com/videos/
+    scraper: siteScraper
+    queryURL: "{url}"
+    queryURLReplace:
+       url:
+        - regex: '^members\.'
+          with: ""
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - puffynetwork.com/videos/
+    scraper: networkScraper
+    queryURL: "{url}"
+    queryURLReplace:
+       url:
+        - regex: '^members\.'
+          with: ""
+  - action: scrapeXPath
+    url:
+      - simplyanal.com/videos/
+      - weliketosuck.com/videos/
+      - wetandpissy.com/videos/
+      - wetandpuffy.com/videos/
+    scraper: siteScraper
+    queryURL: "{url}"
+    queryURLReplace:
+       url:
+        - regex: '^members\.'
+          with: ""
+xPathScrapers:
+  networkScraper:
+    scene:
+      Title: &networkTitleAttr
+        selector: //h2[@class="title"]/span/text()
+        postProcess:
+          - replace:
+              - regex: ^.*—\s+
+                with:
+              - regex: ^\s*in\s+
+                with:
+      Date: &networkDateAttr
+        selector: //dl/dt[contains(text(),"Released on:")]/span/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: &networkDetailsAttr
+        selector: //div[@class="show_more"]/text()[1]
+      Tags: &networkTagsAttr
+        Name: //p[@class="tags"]/a/text()
+      Performers: &networkPerformersAttr
+        Name: //dl/dd/a/text()
+      Studio: &networkStudioAttr
+        Name:
+          selector: //h2[@class="title"]//div[contains(text(),"Site:")]/a/text()
+          postProcess:
+            - map:
+                Wetandpuffy: Wet And Puffy
+                Wetandpissy: Wet And Pissy
+                Weliketosuck: We Like To Suck
+                Simplyanal: Simply Anal
+                Eurobabefacials: Euro Babe Facials
+      Image: //video[@id="video"]/@poster
+    gallery:
+      Title: *networkTitleAttr
+      Date: *networkDateAttr
+      Details: *networkDetailsAttr
+      Tags: *networkTagsAttr
+      Performers: *networkPerformersAttr
+      Studio: *networkStudioAttr
+  siteScraper:
+    scene:
+      Title: &siteTitleAttr
+        selector: //div[@class="header-title"]/h2/text()[last()]
+        postProcess:
+          - replace:
+              - regex: ^.*—\s+
+                with:
+      Date: &siteDateAttr
+        selector: //span[@class="date-movie"]/b
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: &siteDetailsAttr
+        selector: //div[@class="movie-description"][1]/text()
+      Tags: &siteTagsAttr
+        Name: //div[@class="more-tags"]/a/text() | //div[@class="tags-box"]//a/text()
+      Performers: &sitePerformersAttr
+        Name: //span[@class="model-movie"]//a/text()
+      Studio: &siteStudioAttr
+        Name:
+          selector: //img[@class="logo-overley"]/@src
+          postProcess:
+            - replace:
+                - regex: .*\/\/media\.(.+?)\.com\/.+
+                  with: $1
+            - map:
+                wetandpuffy: Wet And Puffy
+                wetandpissy: Wet And Pissy
+                weliketosuck: We Like To Suck
+                simplyanal: Simply Anal
+      Image: //video[@id="video"]/@poster
+    gallery:
+      Title: *siteTitleAttr
+      Date: *siteDateAttr
+      Details: *siteDetailsAttr
+      Tags: *siteTagsAttr
+      Performers: *sitePerformersAttr
+      Studio: *siteStudioAttr
+# Last Updated April 27, 2026
