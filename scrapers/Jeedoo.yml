@@ -29,9 +29,13 @@ xPathScrapers:
               - regex: ((DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads|\s+Stream\s+&\s+Download)
                 with: ""
       Date:
-        selector: //b[contains(text(), "Release date:")]/following-sibling::text()
+        selector: //b[contains(text(), "Release date:")]/following-sibling::text() or //div[contains(text()[2],"Release date:")]/text()[2]
         postProcess:
+          - replace:
+              - regex: 'Release date:'
+                with: ""
           - parseDate: January 2, 2006
+          - parseDate: 01/02/2006
       Studio:
         Name: //a[@data-original-title="Label" or @title="Label"]/text()
       Synopsis: //meta[@property="og:description"]/@content
@@ -60,9 +64,13 @@ xPathScrapers:
       URL: &url
         selector: //link[@rel="alternate"][@hreflang="en"]/@href
       Date:
-        selector: //b[contains(text(), "Release date:")]/following-sibling::text()
+        selector: //b[contains(text(), "Release date:")]/following-sibling::text() or //div[contains(text()[2],"Release date:")]/text()[2]
         postProcess:
+          - replace:
+              - regex: 'Release date:'
+                with: ""
           - parseDate: January 2, 2006
+          - parseDate: 01/02/2006
       Studio:
         Name: //a[@title="Label"][1]/text()
       Details: //meta[@property="og:description"]/@content
