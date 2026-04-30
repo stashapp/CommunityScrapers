@@ -1,7 +1,5 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 import json
-import os
 import re
 import sys
 from typing import Any
@@ -9,8 +7,8 @@ from typing import Any
 from py_common.deps import ensure_requirements
 ensure_requirements("bs4:beautifulsoup4", "requests")
 import py_common.log as log
-from py_common.types import ScrapedGallery, ScrapedGroup, ScrapedPerformer, ScrapedScene, ScrapedStudio, ScrapedTag
-from py_common.util import dig, guess_nationality, scraper_args
+from py_common.types import ScrapedGallery, ScrapedPerformer, ScrapedScene, ScrapedStudio, ScrapedTag
+from py_common.util import guess_nationality, scraper_args
 
 import requests
 from bs4 import BeautifulSoup as bs, Tag
@@ -18,7 +16,6 @@ from bs4 import BeautifulSoup as bs, Tag
 STUDIO = ScrapedStudio(name="Dream Tranny", url="https://www.dreamtranny.com")
 
 def url_to_absolute(base_url: str, url: str) -> str:
-    log.debug(f"Converting URL to absolute: base_url={base_url}, relative_url={url}")
     if url.startswith("http"):
         log.debug(f"URL is already absolute: {url}")
         return url
@@ -41,8 +38,9 @@ def scrape_performers(performer_links):
         p_name = el.get_text(strip=True)
         p_url = el.get("href")
         if p_name and p_url:
-            log.debug(f"Found performer: name={p_name}, url={p_url}")
-            performers.append(ScrapedPerformer(name=p_name, url=p_url))
+            p_abs_url = url_to_absolute(STUDIO["url"], p_url)
+            log.debug(f"Found performer: name={p_name}, url={p_abs_url}")
+            performers.append(ScrapedPerformer(name=p_name, url=p_abs_url))
     return performers
 
 def scene_from_url(url: str) -> ScrapedScene:
@@ -231,6 +229,9 @@ def performer_from_url(url: str) -> ScrapedPerformer:
     res.raise_for_status()
     soup = bs(res.text, "html.parser")
 
+    # remove query parameters from URL and store as performer URL
+    performer["url"] = url.split("?")[0]
+
     # name from xpath //h1[@class="model-title"]/text()
     if name_elem := soup.select_one("h1.model-title"):
         performer["name"] = name_elem.get_text(strip=True)
@@ -249,6 +250,7 @@ def performer_from_url(url: str) -> ScrapedPerformer:
             spans = p_tag.find_all('span')
             for i, span in enumerate(spans):
                 # country from relative xpath /p/span[text()="NATIONALITY"]/following-sibling::span[1]
+                # the text values on the site are inconsistent, sometimes it can be "Brazil", other times "Brazilian"
                 if span.get_text(strip=True) == "NATIONALITY" and i + 1 < len(spans):
                     country = spans[i + 1].get_text(strip=True)
                     performer["country"] = guess_nationality(country)
@@ -269,6 +271,43 @@ def performer_from_url(url: str) -> ScrapedPerformer:
 
     return performer
 
+def performer_search(name: str) -> list[ScrapedPerformer]:
+    # the scene search results also include performer links, so we can reuse scene_search to find performers by name
+    if search_results := scene_search(name):
+        performers = []
+        for scene in search_results:
+            if "performers" in scene:
+                performers.extend(scene["performers"])
+        log.debug(f"Extracted {len(performers)} performers from search results for name: {name}")
+        # deduplicate performers by name and url
+        unique_performers = {}
+        for performer in performers:
+            key = (performer.get("name"), performer.get("url"))
+            if key not in unique_performers:
+                unique_performers[key] = performer
+        log.debug(f"Deduplicated performers to {len(unique_performers)} unique entries for name: {name}")
+        # only return performers that contain the search name (case-insensitive)
+        filtered_performers = [p for p in unique_performers.values() if name.lower() in p.get("name", "").lower()]
+        log.debug(f"Found {len(filtered_performers)} performers matching search name: {name}")
+        return filtered_performers
+    else:
+        log.warning(f"No search results found for performer name: {name}")
+    return []
+
+def performer_from_fragment(args: dict[str, Any]) -> list[ScrapedPerformer]:
+    # if url is provided, call performer_from_url
+    if url := args.get("url"):
+        log.debug(f"Extracting performer from URL fragment: {url}")
+        return performer_from_url(url)
+
+    # if name is provided, call performer_search and return results
+    if name := args.get("name"):
+        log.debug(f"Searching for performer by name fragment: {name}")
+        return performer_search(name)
+
+    log.error(f"No valid fragment provided for performer extraction in arguments: {args}")
+    return []
+
 if __name__ == "__main__":
     op, args = scraper_args()
 
@@ -288,10 +327,10 @@ if __name__ == "__main__":
             result = scene_from_fragment(args)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
-        # case "performer-by-fragment", args:
-        #     result = performer_from_fragment(args)
-        # case "performer-by-name", {"name": name} if name:
-        #     result = performer_search(name)
+        case "performer-by-fragment", args:
+            result = performer_from_fragment(args)
+        case "performer-by-name", {"name": name} if name:
+            result = performer_search(name)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

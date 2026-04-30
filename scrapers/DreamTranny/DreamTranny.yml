@@ -34,6 +34,18 @@ galleryByURL:
       - python
       - DreamTranny.py
       - gallery-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - performer-by-fragment
 performerByURL:
   - action: script
     url:
