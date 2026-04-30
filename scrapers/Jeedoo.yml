@@ -40,6 +40,15 @@ xPathScrapers:
       URL: //link[@rel="alternate"][@hreflang="en"]/@href
       Tags:
         Name: //a[@title="Categorie / Genre"]/text()
+      Director: //a[@title="Director"]/text()
+      Duration:
+        selector: //div[contains(text(),"Length:")]/text()[1]
+        postProcess:
+          - replace:
+              - regex: ^\[(.+)\]$ # handle movies with proper [xx:xx:xx] duration
+                with: $1
+              - regex: ^[^\d]*(\d+)\s*min.* # handle movies with only xx mins duration
+                with: "$1:00"
   sceneScraper:
     scene:
       Title: &title
@@ -70,7 +79,16 @@ xPathScrapers:
                 - regex: ^
                   with: "https://www.jeedoo.com"
       Tags:
-        Name: //a[@title="Categorie / Genre"]/text()                  
+        Name: //a[@title="Categorie / Genre"]/text()
+      Director: //a[@title="Director"]/text()
+      Duration:
+        selector: //div[contains(text(),"Length:")]/text()[1]
+        postProcess:
+          - replace:
+              - regex: ^\[(.+)\]$ # handle movies with proper [xx:xx:xx] duration
+                with: $1
+              - regex: ^[^\d]*(\d+)\s*min.* # handle movies with only xx mins duration
+                with: "$1:00"
   sceneSearch:
     common:
       $searchItem: //a[contains(@href,"/product/")]/img/..
