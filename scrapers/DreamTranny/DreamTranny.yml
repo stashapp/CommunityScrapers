@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
+# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: DreamTranny
 sceneByName:
   action: scrapeXPath
@@ -9,10 +9,13 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 sceneByURL:
-  - action: scrapeXPath
+  - action: script
     url:
       - dreamtranny.com
-    scraper: sceneScraper
+    script:
+      - python
+      - DreamTranny.py
+      - scene-by-url
 galleryByURL:
   - action: scrapeXPath
     url:
@@ -50,12 +53,15 @@ xPathScrapers:
           fixed: Dream Tranny
       Tags: &tagsAttr
         Name: //div[@class="model-categories"]/a/text()
-      URL: &urlAttr
+      URLs: &urlAttr
         selector: &urlSel //script[contains(.,"API_VIEW_URLS")]/text()
-        postProcess:
+        postProcess: &sceneURLPostProcess
           - replace:
               - regex: .*/api(/update/\d+)/view_count.*
                 with: "https://dreamtranny.com$1/"
+      # URLs:
+      #   selector: *urlSel
+      #   postProcess: *sceneURLPostProcess
       Code:
         selector: *urlSel
         postProcess:
@@ -119,4 +125,4 @@ driver:
   # site uses age verification for regions including UK and US
   # using CDP (set to true) with a VPN configured to another region, e.g. NL, will bypass this
   useCDP: false
-# Last Updated August 1, 2025
+# Last Updated April 30, 2026
