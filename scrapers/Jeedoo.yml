@@ -38,6 +38,8 @@ xPathScrapers:
       FrontImage: //img[contains(@class,"mainimage")][@rel="1"]/@src
       BackImage: //img[contains(@class,"mainimage")][@rel="2"]/@src
       URL: //link[@rel="alternate"][@hreflang="en"]/@href
+      Tags:
+        Name: //a[@title="Categorie / Genre"]/text()
   sceneScraper:
     scene:
       Title: &title
@@ -67,6 +69,8 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "https://www.jeedoo.com"
+      Tags:
+        Name: //a[@title="Categorie / Genre"]/text()                  
   sceneSearch:
     common:
       $searchItem: //a[contains(@href,"/product/")]/img/..
