@@ -109,4 +109,4 @@ xPathScrapers:
               - regex: ^
                 with: "https://www.jeedoo.com"
       Image: $searchItem/img/@data-src
-# Last Updated September 17, 2025
+# Last Updated April 30, 2026
