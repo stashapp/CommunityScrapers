@@ -20,16 +20,28 @@ sceneByURL:
       - python
       - DreamTranny.py
       - scene-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - gallery-by-fragment
 galleryByURL:
-  - action: scrapeXPath
+  - action: script
     url:
       - dreamtranny.com
-    scraper: galleryScraper
+    script:
+      - python
+      - DreamTranny.py
+      - gallery-by-url
 performerByURL:
-  - action: scrapeXPath
+  - action: script
     url:
       - dreamtranny.com/models/
-    scraper: performerScraper
+    script:
+      - python
+      - DreamTranny.py
+      - performer-by-url
 xPathScrapers:
   sceneScraper:
     scene:

@@ -160,7 +160,7 @@ def scene_search(name: str) -> list[ScrapedScene]:
     return scenes
 
 def scene_from_fragment(args: dict[str, Any]) -> list[ScrapedScene]:
-    # if url is provided, extract scene ID and call scene_from_url
+    # if url is provided, call scene_from_url
     if url := args.get("url"):
         log.debug(f"Extracting scene from URL fragment: {url}")
         return scene_from_url(url)
@@ -178,15 +178,61 @@ def scene_from_fragment(args: dict[str, Any]) -> list[ScrapedScene]:
     log.error(f"No valid fragment provided in arguments: {args}")
     return None
 
+def gallery_from_url(url: str) -> ScrapedGallery:
+    # reuse scene_from_url to get gallery info since the page structure is the same
+    if scene := scene_from_url(url):
+        gallery = ScrapedGallery(
+            title=scene.get("title", ""),
+            details=scene.get("details"),
+            date=scene.get("date"),
+            tags=scene.get("tags", []),
+            performers=scene.get("performers", []),
+            studio=scene.get("studio"),
+            url=scene.get("url", ""),
+            code=scene.get("code", ""),
+        )
+        return gallery
+    return None
+
+def gallery_from_fragment(args: dict[str, Any]) -> ScrapedGallery:
+    # if url is provided, call gallery_from_url
+    if url := args.get("url"):
+        log.debug(f"Extracting gallery from URL fragment: {url}")
+        return gallery_from_url(url)
+    
+    # if name is provided, call scene_search and convert first result to gallery
+    if name := args.get("name"):
+        log.debug(f"Searching for gallery by name fragment: {name}")
+        if search_results := scene_search(name):
+            log.debug(f"Found {len(search_results)} search results for name: {name}")
+            first_result = search_results[0]
+            gallery = ScrapedGallery(
+                title=first_result.get("title", ""),
+                details=first_result.get("details"),
+                date=first_result.get("date"),
+                tags=first_result.get("tags", []),
+                performers=first_result.get("performers", []),
+                studio=first_result.get("studio"),
+                url=first_result.get("url", ""),
+                code=first_result.get("code", ""),
+            )
+            return gallery
+        else:
+            log.warning(f"No search results found for name: {name}")
+            return None
+
+    log.error(f"No valid fragment provided for gallery extraction in arguments: {args}")
+    return None
+
 if __name__ == "__main__":
     op, args = scraper_args()
 
     log.debug(f"args: {args}")
     match op, args:
-        # case "gallery-by-url", {"url": url} if url:
-        #     result = gallery_from_url(url)
-        # case "gallery-by-fragment", args:
-        #     result = gallery_from_fragment(args)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url)
+        case "gallery-by-fragment", args:
+            result = gallery_from_fragment(args)
         # case "group-by-url", {"url": url} if url:
         #     result = group_from_url(url)
         case "scene-by-url", {"url": url} if url:
