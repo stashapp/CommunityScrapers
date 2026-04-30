@@ -22,30 +22,34 @@ sceneByQueryFragment:
 xPathScrapers:
   movieScraper:
     group:
-      Name:
+      Name: &title
         selector: //title/text()
         postProcess:
           - replace:
               - regex: ((DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads|\s+Stream\s+&\s+Download)
                 with: ""
-      Date:
-        selector: //b[contains(text(), "Release date:")]/following-sibling::text() or //div[contains(text()[2],"Release date:")]/text()[2]
+      Date: &date
+        selector: //b[contains(text(), "Release date:")]/following-sibling::text() or //div[contains(text()[2],"Release date:")]/text()[2] or //div[contains(text(),"released on")]/text()
         postProcess:
           - replace:
               - regex: 'Release date:'
                 with: ""
+              - regex: "released on "
+                with: ""
           - parseDate: January 2, 2006
           - parseDate: 01/02/2006
-      Studio:
+      Studio: &studio
         Name: //a[@data-original-title="Label" or @title="Label"]/text()
-      Synopsis: //meta[@property="og:description"]/@content
+      Synopsis: &details
+        selector: //meta[@property="og:description"]/@content
       FrontImage: //img[contains(@class,"mainimage")][@rel="1"]/@src
       BackImage: //img[contains(@class,"mainimage")][@rel="2"]/@src
-      URL: //link[@rel="alternate"][@hreflang="en"]/@href
-      Tags:
+      URL: &url
+      Tags: &tags
         Name: //a[@title="Categorie / Genre"]/text()
-      Director: //a[@title="Director"]/text()
-      Duration:
+      Director: &director
+        selector: //a[@title="Director"]/text()
+      Duration: &duration
         selector: //div[contains(text(),"Length:")]/text()[1]
         postProcess:
           - replace:
@@ -55,25 +59,11 @@ xPathScrapers:
                 with: "$1:00"
   sceneScraper:
     scene:
-      Title: &title
-        selector: //title/text()
-        postProcess:
-          - replace:
-              - regex: ((DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads|\s+Stream\s+&\s+Download)
-                with: ""
-      URL: &url
-        selector: //link[@rel="alternate"][@hreflang="en"]/@href
-      Date:
-        selector: //b[contains(text(), "Release date:")]/following-sibling::text() or //div[contains(text()[2],"Release date:")]/text()[2]
-        postProcess:
-          - replace:
-              - regex: 'Release date:'
-                with: ""
-          - parseDate: January 2, 2006
-          - parseDate: 01/02/2006
-      Studio:
-        Name: //a[@title="Label"][1]/text()
-      Details: //meta[@property="og:description"]/@content
+      Title: *title
+      URL: *url
+      Date: *date
+      Studio: *studio
+      Details: *details
       Groups:
         Name: *title
         URL: *url
@@ -86,17 +76,9 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: "https://www.jeedoo.com"
-      Tags:
-        Name: //a[@title="Categorie / Genre"]/text()
-      Director: //a[@title="Director"]/text()
-      Duration:
-        selector: //div[contains(text(),"Length:")]/text()[1]
-        postProcess:
-          - replace:
-              - regex: ^\[(.+)\]$ # handle movies with proper [xx:xx:xx] duration
-                with: $1
-              - regex: ^[^\d]*(\d+)\s*min.* # handle movies with only xx mins duration
-                with: "$1:00"
+      Tags: *tags
+      Director: *director
+      Duration: *duration
   sceneSearch:
     common:
       $searchItem: //a[contains(@href,"/product/")]/img/..
