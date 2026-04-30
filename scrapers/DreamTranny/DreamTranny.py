@@ -224,6 +224,51 @@ def gallery_from_fragment(args: dict[str, Any]) -> ScrapedGallery:
     log.error(f"No valid fragment provided for gallery extraction in arguments: {args}")
     return None
 
+def performer_from_url(url: str) -> ScrapedPerformer:
+    performer = ScrapedPerformer(gender="TRANSGENDER_FEMALE")
+    sess = requests.Session()
+    res = sess.get(url)
+    res.raise_for_status()
+    soup = bs(res.text, "html.parser")
+
+    # name from xpath //h1[@class="model-title"]/text()
+    if name_elem := soup.select_one("h1.model-title"):
+        performer["name"] = name_elem.get_text(strip=True)
+    else:
+        log.warning("Performer name not found")
+    
+    # image from xpath //div[@class="model-img"]/a/img[@class="img"]/@src
+    if img_elem := soup.select_one("div.model-img a img.img"):
+        if img_url := img_elem.get("src"):
+            performer["image"] = url_to_absolute(url, img_url)
+    else:
+        log.warning("Performer image not found")
+    
+    if model_content := soup.select_one('div.model-content'):
+        for p_tag in model_content.find_all('p'):
+            spans = p_tag.find_all('span')
+            for i, span in enumerate(spans):
+                # country from relative xpath /p/span[text()="NATIONALITY"]/following-sibling::span[1]
+                if span.get_text(strip=True) == "NATIONALITY" and i + 1 < len(spans):
+                    country = spans[i + 1].get_text(strip=True)
+                    performer["country"] = guess_nationality(country)
+                # birthdate from relative xpath /p/span[text()="DATE OF BIRTH"]/following-sibling::span[1]
+                if span.get_text(strip=True) == "DATE OF BIRTH" and i + 1 < len(spans):
+                    birthdate_elem = spans[i + 1]
+                    birthdate = birthdate_elem.get_text(strip=True)
+                    # remove ordinal suffixes from birthdate (e.g. "2nd" -> "2")
+                    birthdate = re.sub(r"(\d{1,2})(st|nd|rd|th)", r"\1", birthdate)
+                    # convert birthdate from format "January 2, 2006" to "2006-01-02"
+                    try:
+                        birthdate_obj = datetime.strptime(birthdate, "%B %d, %Y")
+                        performer["birthdate"] = birthdate_obj.strftime("%Y-%m-%d")
+                    except Exception as ex:
+                        log.warning(f"Error parsing performer birthdate: {ex}")
+    else:
+        log.warning("Performer model-content not found")
+
+    return performer
+
 if __name__ == "__main__":
     op, args = scraper_args()
 
@@ -241,8 +286,8 @@ if __name__ == "__main__":
             result = scene_search(name)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             result = scene_from_fragment(args)
-        # case "performer-by-url", {"url": url}:
-        #     result = performer_from_url(url)
+        case "performer-by-url", {"url": url}:
+            result = performer_from_url(url)
         # case "performer-by-fragment", args:
         #     result = performer_from_fragment(args)
         # case "performer-by-name", {"name": name} if name:
