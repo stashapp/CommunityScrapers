@@ -157,20 +157,20 @@ def scene_search(name: str) -> list[ScrapedScene]:
 
     return scenes
 
-def scene_from_fragment(args: dict[str, Any]) -> list[ScrapedScene]:
+def scene_from_fragment(args: dict[str, Any]) -> ScrapedScene:
     # if url is provided, call scene_from_url
     if url := args.get("url"):
         log.debug(f"Extracting scene from URL fragment: {url}")
         return scene_from_url(url)
 
-    # if name is provided, call scene_search
-    if name := args.get("name"):
-        log.debug(f"Searching for scene by name fragment: {name}")
-        if search_results := scene_search(name):
-            log.debug(f"Found {len(search_results)} search results for name: {name}")
-            return search_results[0]
+    # if title is provided, call scene_search
+    if title := args.get("title"):
+        log.debug(f"Searching for scene by title fragment: {title}")
+        if search_results := scene_search(title):
+            log.debug(f"Found {len(search_results)} search results for title: {title}")
+            return scene_from_url(search_results[0].get("url"))
         else:
-            log.warning(f"No search results found for name: {name}")
+            log.warning(f"No search results found for title: {title}")
             return None
 
     log.error(f"No valid fragment provided in arguments: {args}")
@@ -199,24 +199,25 @@ def gallery_from_fragment(args: dict[str, Any]) -> ScrapedGallery:
         return gallery_from_url(url)
     
     # if name is provided, call scene_search and convert first result to gallery
-    if name := args.get("name"):
-        log.debug(f"Searching for gallery by name fragment: {name}")
-        if search_results := scene_search(name):
-            log.debug(f"Found {len(search_results)} search results for name: {name}")
-            first_result = search_results[0]
+    if title := args.get("title"):
+        log.debug(f"Searching for gallery by title fragment: {title}")
+        args["name"] = title
+        # reuse scene_from_fragment to find the scene and then convert it to a gallery since the gallery is on the scene page
+        if scene := scene_from_fragment(args):
+            log.debug(f"Found scene for title: {title}")
             gallery = ScrapedGallery(
-                title=first_result.get("title", ""),
-                details=first_result.get("details"),
-                date=first_result.get("date"),
-                tags=first_result.get("tags", []),
-                performers=first_result.get("performers", []),
-                studio=first_result.get("studio"),
-                url=first_result.get("url", ""),
-                code=first_result.get("code", ""),
+                title=scene.get("title", ""),
+                details=scene.get("details"),
+                date=scene.get("date"),
+                tags=scene.get("tags", []),
+                performers=scene.get("performers", []),
+                studio=scene.get("studio"),
+                url=scene.get("url", ""),
+                code=scene.get("code", ""),
             )
             return gallery
         else:
-            log.warning(f"No search results found for name: {name}")
+            log.warning(f"No scene found for title: {title}")
             return None
 
     log.error(f"No valid fragment provided for gallery extraction in arguments: {args}")
