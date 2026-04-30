@@ -26,7 +26,7 @@ xPathScrapers:
         selector: //title/text()
         postProcess:
           - replace:
-              - regex: (DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads
+              - regex: ((DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads|\s+Stream\s+&\s+Download)
                 with: ""
       Date:
         selector: //b[contains(text(), "Release date:")]/following-sibling::text()
@@ -46,7 +46,7 @@ xPathScrapers:
         selector: //title/text()
         postProcess:
           - replace:
-              - regex: (DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads
+              - regex: ((DVD|HD\-DVD|VHS\-Video)\s+\-\s+Porn\s+Movies\s+Streams\s+and\s+Downloads|\s+Stream\s+&\s+Download)
                 with: ""
       URL: &url
         selector: //link[@rel="alternate"][@hreflang="en"]/@href
