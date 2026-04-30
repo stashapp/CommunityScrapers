@@ -78,7 +78,6 @@ xPathScrapers:
                   with: "https://www.jeedoo.com"
       Tags: *tags
       Director: *director
-      Duration: *duration
   sceneSearch:
     common:
       $searchItem: //a[contains(@href,"/product/")]/img/..
