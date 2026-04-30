@@ -1,13 +1,17 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
 name: DreamTranny
 sceneByName:
-  action: scrapeXPath
-  queryURL: https://dreamtranny.com/updates/?q={}
-  scraper: sceneListScraper
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - scene-by-name
 sceneByQueryFragment:
-  action: scrapeXPath
-  queryURL: "{url}"
-  scraper: sceneScraper
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - scene-by-query-fragment
 sceneByURL:
   - action: script
     url:
