@@ -24,20 +24,6 @@ performerByURL:
       - dreamtranny.com/models/
     scraper: performerScraper
 xPathScrapers:
-  sceneListScraper:
-    scene:
-      Title: //div[contains(@class, "video-item")]//div[@class="item-content"]//a
-      Image: //div[contains(@class, "video-item")]//a[@class="item-thumb"]/img/@src
-      Date:
-        selector: //div[contains(@class, "video-item")]//div[@class="item-content"]/div[2]/p
-        postProcess:
-          - parseDate: Jan 2, 2006
-      URL:
-        selector: //div[contains(@class, "video-item")]//div[@class="item-content"]//a/@href
-        postProcess:
-          - replace:
-              - regex: ^(/.*)
-                with: https://dreamtranny.com$1
   sceneScraper:
     scene:
       Title: &titleSel //div[@class="section-title"]/h4/text()
@@ -76,6 +62,34 @@ xPathScrapers:
           - replace:
               - regex: .*/api/update/(\d+)/view_count.*
                 with: "$1"
+  sceneListScraper:
+    common:
+      $videoItemContent: //div[contains(@class, "video-item")]//div[@class="item-content"]
+      $performerLink: //div[contains(@class, "video-item")]//div[@class="item-content"]//a[contains(@href, "/models/")]
+      $videoLink: //div[contains(@class, "video-item")]//div[@class="item-content"]//a[contains(@href, "/update/")]
+    scene:
+      Title: $videoLink/text()
+      Image: //div[contains(@class, "video-item")]//a[@class="item-thumb"]/img/@src
+      Date:
+        selector: $videoItemContent/div[2]/p
+        postProcess:
+          - parseDate: Jan 2, 2006
+      URL:
+        selector: $videoLink/@href
+        postProcess: &urlPostProcess
+          - replace:
+              - regex: ^(/.*)
+                with: https://dreamtranny.com$1
+      Studio: *studioAttr
+      # The following are not available on the listing page, so we will grab them from the scene page using the scene URL
+      Details:
+        selector: $videoLink/@href
+        postProcess:
+          - replace:
+              - regex: ^(/.*)
+                with: https://dreamtranny.com$1
+          - subScraper:
+              selector: *detailsSel
   galleryScraper:
     gallery:
       Title: *titleSel
@@ -92,10 +106,7 @@ xPathScrapers:
         fixed: transgender_female
       Image:
         selector: //div[@class="model-img"]/a/img[@class="img"]/@src
-        postProcess:
-          - replace:
-              - regex: ^(/.*)
-                with: https://dreamtranny.com/$1
+        postProcess: *urlPostProcess
       Country: //div[@class="model-content"]/p/span[text()="NATIONALITY"]/following-sibling::span[1]
       Birthdate:
         selector: //div[@class="model-content"]/p/span[text()="DATE OF BIRTH"]/following-sibling::span[1]
