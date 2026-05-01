@@ -11,8 +11,22 @@ sceneByName:
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
-  queryURL: "{url}"
+  queryURL: https://www.xnxx.com/video-{filename}/x
   scraper: sceneScraper
+  queryURLReplace:
+    filename:
+      # expect same format of [id]
+      # have seen 6-8ch [a-z0-9]
+
+      # yt-dlp square brackets
+      - regex: '.*\[([a-z0-9]{6,8})\]\..+'
+        with: "$1"
+      # jdownloader id_
+      - regex: '^([a-z0-9]{6,8})_.+'
+        with: "$1"
+      # clear the filename so that it doesn't leak
+      - regex: .*\.[^\.]+$
+        with: "."
 
 xPathScrapers:
   sceneSearch:
