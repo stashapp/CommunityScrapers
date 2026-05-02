@@ -113,6 +113,7 @@ def scene_from_url(url: str) -> ScrapedScene:
     scene["studio"] = { "name": dig(info, "writer", "name") }
     scene["tags"] = [{ "name": tag.get("name", "").strip() } for tag in info.get("tags", [])]
     scene["performers"] = [{ "name": performer.get("name", "").strip() } for performer in info.get("actresses", [])]
+    scene["urls"] = [url]
     return scene
 
 def url_from_frag(files) -> str:
