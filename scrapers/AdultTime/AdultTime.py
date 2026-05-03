@@ -23,6 +23,7 @@ from AlgoliaAPI.AlgoliaAPI import (
     site_from_url
 )
 
+from py_common import graphql
 from py_common import log
 from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedScene
 from py_common.util import dig, scraper_args
@@ -295,19 +296,92 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
 
 
 
-def process_action_tags(action_tags: list[dict[str, str | int]]) -> None:
+def process_action_tags(scene_id: str, action_tags: list[dict[str, str | int]]) -> None:
+    if not scene_id:
+        log.warning("No scene ID available, cannot create markers")
+        return
+
+    log.debug(f"Creating {len(action_tags)} markers for scene {scene_id}")
+
+    find_markers_query = """
+    query FindSceneMarkers($scene_id: ID!) {
+        findScene(id: $scene_id) {
+            scene_markers {
+                title
+                seconds
+            }
+        }
+    }
     """
-    action_tags is a list of {"name": str, "timecode": int}
-
-    You could use this to add markers via GraphQL
+    find_tag_query = """
+    query FindTag($name: String!) {
+        findTags(tag_filter: { name: { value: $name, modifier: EQUALS } }) {
+            tags { id }
+        }
+    }
     """
-    log.trace(f"action_tags: {action_tags}")
+    create_tag_query = """
+    mutation TagCreate($input: TagCreateInput!) {
+        tagCreate(input: $input) { id }
+    }
+    """
+    create_marker_query = """
+    mutation SceneMarkerCreate($input: SceneMarkerCreateInput!) {
+        sceneMarkerCreate(input: $input) { id }
+    }
+    """
 
-    # add some code here to use the action_tags data
-    # just return without doing anything for now
+    # get existing markers for this scene
+    existing_result = graphql.callGraphQL(find_markers_query, {"scene_id": scene_id})
+    existing_markers = existing_result.get("findScene", {}).get("scene_markers", [])
+    existing_set = {(m["title"], int(m["seconds"])) for m in existing_markers}
+    log.debug(f"Found {len(existing_set)} existing markers for scene {scene_id}")
+
+    tag_cache = {}
+
+    for action_tag in action_tags:
+        name = action_tag.get("name")
+        timecode = action_tag.get("timecode")
+        if not name or timecode is None:
+            continue
+
+        # skip if marker already exists
+        if (name, timecode) in existing_set:
+            log.debug(f"Skipping duplicate marker '{name}' at {timecode}s")
+            continue
+
+        # find or create tag
+        if name not in tag_cache:
+            tag_result = graphql.callGraphQL(find_tag_query, {"name": name})
+            tags = tag_result.get("findTags", {}).get("tags", [])
+            if tags:
+                tag_cache[name] = tags[0]["id"]
+                log.debug(f"Found tag '{name}' id={tag_cache[name]}")
+            else:
+                create_result = graphql.callGraphQL(create_tag_query, {"input": {"name": name}})
+                tag_cache[name] = create_result.get("tagCreate", {}).get("id")
+                log.debug(f"Created tag '{name}' id={tag_cache[name]}")
+
+        tag_id = tag_cache.get(name)
+        if not tag_id:
+            log.error(f"Could not find or create tag '{name}'")
+            continue
+
+        try:
+            graphql.callGraphQL(create_marker_query, {
+                "input": {
+                    "title": name,
+                    "seconds": timecode,
+                    "scene_id": scene_id,
+                    "primary_tag_id": tag_id,
+                }
+            })
+            log.debug(f"Created marker '{name}' at {timecode}s")
+        except Exception as e:
+            log.error(f"Failed to create marker '{name}': {e}")
 
 
-def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
+def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any], scene_id: str = None) -> ScrapedScene:
     """
     Applies post-processing to the scene
     """
@@ -334,7 +408,7 @@ def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> Scraped
         log.debug(f'scene"[urls]" (after extend with preview): {scene["urls"]}')
 
     if action_tags := api_scene.get("action_tags"):
-        process_action_tags(action_tags)
+        process_action_tags(scene_id, action_tags)
 
     return scene
 
@@ -378,7 +452,10 @@ if __name__ == "__main__":
             result = scene_search(name, sites, postprocess=postprocess_scene)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             sites = args.pop("extra")
-            result = scene_from_fragment(args, sites, postprocess=postprocess_scene)
+            scene_id = args.get("id")
+            def postprocess_with_id(scene, api_scene):
+                return postprocess_scene(scene, api_scene, scene_id=scene_id)
+            result = scene_from_fragment(args, sites, postprocess=postprocess_with_id)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
         case "performer-by-fragment", args:
