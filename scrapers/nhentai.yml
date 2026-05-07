@@ -29,6 +29,8 @@ jsonScrapers:
       Details:
         selector: "{title.english,title.japanese}.@values"
         concat: "\n\n"
+      Code: 
+        selector: id
       URL: 
         selector: id
         postProcess:
@@ -39,22 +41,24 @@ jsonScrapers:
         selector: upload_date
         postProcess:
           - parseDate: unix
-      # no category tags because of gjson limitation
+      Photographer:
+        selector: 'tags.#(type=="group")#|0.name'
       Tags:
-        Name: tags.#(type=="tag")#.name
+        Name: '[tags.#(type=="tag")#.name,tags.#(type=="parody")#.name,tags.#(type=="category")#.name]|@flatten'
       Performers:
-        Name: tags.#(type=="artist")#.name
+        Name: 'tags.#(type=="character")#.name'
       Studio:
-        Name: tags.#(type=="group").name
+        Name: '[tags.#(type=="artist")#,tags.#(type=="group")#]|@flatten.0.name'
 
 # apikey must be popualated manually
 # shared apikey would bypass their ratelimit (as per site admin)
 # see https://nhentai.net/api/v2/docs for details
 driver:
   headers:
-    - Key: Authorization
-      Value: Key YOUR_APIKEY_HERE
+     # API key seems to be optional
+     #- Key: Authorization
+     #  Value: Key YOUR_APIKEY_HERE
     - Key: User-Agent
       Value: stashapp/stash scraper
 
-# Last Updated April 2, 2026
+# Last Updated May 2, 2026

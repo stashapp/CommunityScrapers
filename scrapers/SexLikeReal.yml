@@ -70,7 +70,7 @@ xPathScrapers:
         Name: //a[starts-with(@href,"/pornstars/")]/text()
       Studio:
         Name:
-          selector: //h3/a[starts-with(@href,"/studios/")]/text()
+          selector: //h2/a[starts-with(@href,"/studios/")]/text()
           postProcess:
             - map:
                 DDFNetworkVR: DDF Network VR
@@ -113,4 +113,4 @@ xPathScrapers:
 #           Domain: .www.sexlikereal.com
 #           Path: /
 #           Value: "true"
-# Last Updated December 27, 2025
+# Last Updated May 5, 2026

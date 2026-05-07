@@ -118,6 +118,10 @@ def check_flaresolverr(url):
     requests.get(url, timeout=5)
     log.debug(f"[proxy] FlareSolverr detected at {url}")
     return True
+  except requests.exceptions.HTTPError as httperr:
+    if httperr.response.status_code == 405:
+      log.debug(f"[proxy] FlareSolverr detected at {url}")
+      return True
   except requests.exceptions.RequestException:
     log.info(f"[proxy] FlareSolverr not detected at {url}. Requests will be used without bypassing.")
     return False
