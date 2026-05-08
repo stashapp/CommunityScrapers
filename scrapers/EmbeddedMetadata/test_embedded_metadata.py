@@ -20,12 +20,11 @@ class TestEmbeddedMetadataExiftool(unittest.TestCase):
         self.assertEqual("Blue Square Test File - .jpg", data['Title'])
         self.assertEqual("2005-09-07", data['Date'])
         self.assertListEqual(
-           [{"Name": "XMP"}, {"Name": "Blue Square"}, {"Name": "test file"}, {"Name": "Photoshop"}, {"Name": ".jpg"}],
+           [{"Name": "XMP"}, {"Name": "Blue Square"}, {"Name": "test file"}, {"Name": "Photoshop"}, {"Name": ".jpg"},
+             {'Name': 'XMP keyword 1'},{'Name': 'XMP keyword 2'}],
             data['Tags']
         )
         self.assertEqual(('XMPFiles BlueSquare test file, created in Photoshop CS2, saved as .psd, '
- '.jpg, and .tif.\n'
- 'XMPFiles BlueSquare test file, created in Photoshop CS2, saved as .psd, '
  '.jpg, and .tif.\n'
  '\n'), data['Details'])
 
@@ -49,12 +48,12 @@ class TestEmbeddedMetadataPyexiv2tool(unittest.TestCase):
         self.assertEqual("Blue Square Test File - .jpg", data['Title'])
         self.assertEqual("2005-09-07", data['Date'])
         self.assertListEqual(
-            [{"Name": "XMP"}, {"Name": "Blue Square"}, {"Name": "test file"}, {"Name": "Photoshop"}, {"Name": ".jpg"}],
+            [{"Name": "XMP"}, {"Name": "Blue Square"}, {"Name": "test file"}, {"Name": "Photoshop"}, {"Name": ".jpg"},
+             {'Name': 'XMP keyword 1'},{'Name': 'XMP keyword 2'}
+             ],
             data['Tags']
         )
         self.assertEqual(('XMPFiles BlueSquare test file, created in Photoshop CS2, saved as .psd, '
- '.jpg, and .tif.\n'
- 'XMPFiles BlueSquare test file, created in Photoshop CS2, saved as .psd, '
  '.jpg, and .tif.\n'
  'XMPFiles BlueSquare test file, created in Photoshop CS2, saved as .psd, '
  '.jpg, and .tif.\n'

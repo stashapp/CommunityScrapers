@@ -174,7 +174,9 @@ def process_image(image_path: str):
 	# title
 	#
 	title_details = ''
-	for field in ['Exif.Image.DocumentName', 'EXIF:DocumentName', 'Exif.Image.XPTitle', 'EXIF:XPTitle', 'Exif.Photo.ImageTitle', 'EXIF:ImageTitle', 'Iptc.Application2.Headline', 'IPTC:Headline','Xmp.dc.title', 'XMP:Title', 'Xmp.dc.headline', 'XMP:Headline']:
+	for field in ['Exif.Image.DocumentName', 'EXIF:DocumentName', 'Exif.Image.XPTitle', 'EXIF:XPTitle', 'Exif.Photo.ImageTitle', 'EXIF:ImageTitle',
+				  'Iptc.Application2.Headline', 'IPTC:Headline', 'Xmp.dc.title', 'XMP:Title', 'Xmp.dc.headline', 'XMP:Headline',
+				  'Iptc.Application2.ObjectName', 'IPTC:ObjectName']:
 		if field not in data:
 			continue
 		value = data[field]
@@ -235,7 +237,7 @@ def process_image(image_path: str):
 	#
 	# tags
 	#
-	for field in ['Exif.Image.XPKeywords', 'EXIF:XPKeywords', 'Iptc.Application2.Keywords', 'IPTC:Keywords']:
+	for field in ['Exif.Image.XPKeywords', 'EXIF:XPKeywords', 'Iptc.Application2.Keywords', 'IPTC:Keywords', 'Xmp.pdf.Keywords', 'XMP:Keywords']:
 		if field not in data:
 			continue
 		value = data[field]
