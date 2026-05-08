@@ -20,6 +20,10 @@ groupByURL:
       - bang.com/dvd
       - bangpremium.com/dvd
     scraper: movieScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.bang.com/pornstars?term={}
+  scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
     url:
@@ -154,6 +158,14 @@ xPathScrapers:
           - replace:
               - regex: /front\.jpg?.*$
                 with: "/back.jpg"
+  performerSearch:
+    common:
+      $performers: //div[contains(@class, "search_container")]
+    performer:
+      Name: $performers//a//span
+      URLs:
+        selector: $performers//a/@href
+        postProcess: *prependHost
   performerScraper:
     common:
       $overlay: //div[@class="flex flex-col md:items-start items-center"]
