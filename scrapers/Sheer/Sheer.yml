@@ -1,0 +1,11 @@
+name: Sheer
+sceneByURL:
+  - action: script
+    url:
+      - sheer.com
+    script:
+      - python3
+      - Sheer.py
+    scraper: Sheer
+
+# Last Updated May 09, 2026
