@@ -9,13 +9,15 @@ sceneByURL:
     scraper: mainSite
   - action: scrapeXPath
     url:
-      - 5kteens.com/episodes
       - 5kporn.com/episodes
-    scraper: 5kSite
-  - action: scrapeXPath
-    url:
-      - 8kteens.com/episodes
+      - 5kteens.com/episodes
       - 8kmilfs.com/episodes
+      - 8kteens.com/episodes
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '5k(teens|porn)\.com'
+          with: 8kteens.com
     scraper: 8ksite
 xPathScrapers:
   mainSite:
@@ -67,59 +69,33 @@ xPathScrapers:
             - map:
                 Porn Fidelity: PornFidelity
                 Teen Fidelity: TeenFidelity
-  5kSite:
-    scene:
-      Title: //p[@class="trailer-title"]
-      Code:
-        selector: //span[contains(@class, "color-5K")]
-        postProcess:
-          - replace:
-              - regex: (?i)(eens|orn)
-                with: ""
-      Studio:
-        Name:
-          selector: //span[starts-with(@class, "color-")]/@class
-          postProcess:
-            - map:
-                color-5KT: 5Kteens
-                color-5KP: 5Kporn
-                color-8KM: 8K Milfs
-                color-8KT: 8K Teens
-      Details: //p[@class=""]
-      Performers:
-        Name:
-          selector: //h5[text()[contains(.,'Starring')]]
-          postProcess:
-            - replace:
-                - regex: Starring:\s([\w\s]+)
-                  with: $1
-      Date:
-        selector: //h5[text()[contains(.,'Published')]]
-        postProcess:
-          - replace:
-              - regex: Published\:\s(\d{4}-\d{2}-\d{2})
-                with: $1
-      Image:
-        selector: //img[@class="trailer-poster"]/@src | //script[contains(., "videojs(")]
-        postProcess:
-          - replace:
-              - regex: '^.+poster: "(.+?)".+$'
-                with: $1
-
   8ksite:
+    common:
+      $url: //link[@rel="canonical"]/@href
     scene:
       Title: //strong[text()="Title:"]/following-sibling::a
       Code:
-        selector: //strong[text()="Title:"]/following-sibling::a/@href
+        selector: $url
         postProcess:
           - replace:
-              - regex: .+?(8\w+)/(\d+)
-                with: "$1 #$2"
-      URL: //strong[text()="Title:"]/following-sibling::a/@href
+              - regex: .+?((5|8)\w+)/(\d+)
+                with: "$1 #$3"
+      URL:
+        selector: $url
+        postProcess:
+          - replace:
+            - regex: '8k.+\.com(.+5KP.+)'
+              with: "5kporn.com$1"
+            - regex: '8k.+\.com(.+5KT.+)'
+              with: "5kteens.com$1"
+            - regex: '8k.+\.com(.+8KM.+)'
+              with: "8kmilfs.com$1"
+            - regex: '8k.+\.com(.+8KT.+)'
+              with: "8kteens.com$1"
       Date: //i[contains(@class, "fa-calendar")]/following-sibling::span
-      Image: //video/@poster
+      Image: //meta[@property="og:image"]/@content
       Details:
-        selector: (//h2)[1]/following-sibling::p
+        selector: //text()[contains(., 'Episode Summary')]/ancestor::p[1]
         postProcess:
           - replace:
               - regex: ^Episode Summary:\s+
@@ -139,13 +115,25 @@ xPathScrapers:
                 # TODO: scrape as markers if we ever get support for that
                 - regex: \s*\(.+$
                   with: ""
+                # KMM scenes often include the "Amazon position" and tag it as "Amazon",
+                # but other studios use "Amazon" to mean a larger dominant woman.
+                - regex: Amazon
+                  with: Amazon Position
       Studio:
         Name:
-          selector: //meta[@property="og:site_name"]/@content
+          selector: $url
           postProcess:
-            - map:
-                8Kmilfs: 8K Milfs
-                8Kteens: 8K Teens
+            - replace:
+              - regex: '.+?((5|8)\w+)/\d+'
+                with: $1
+              - regex: '8KM'
+                with: 8K Milfs
+              - regex: '8KT'
+                with: 8K Teens
+              - regex: '5KP'
+                with: 5KPorn
+              - regex: '5KT'
+                with: 5Kteens
 
 driver:
   cookies:
@@ -162,4 +150,4 @@ driver:
           ValueRandom: 23
           Path: "/"
 
-# Last Updated May 2, 2026
+# Last Updated May 8, 2026
