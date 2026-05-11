@@ -1,0 +1,135 @@
+name: "Oppai"
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://oppai.stream/watch?e={filename}
+  queryURLReplace:
+    filename:
+      # Oppai keeps symbols in the url, so you can't filter out the "wrong" ones from the name
+      # 1. Removes tags inside square brackets [xxx]
+      - regex: '\[[^\]]*\]'
+        with: ""
+      
+      # 2. Removes tags inside parentheses (xxx)
+      - regex: '\([^)]*\)'
+        with: ""
+      
+      # 3. Removes file extensions (.mp4, .avi, .mkv...)
+      - regex: '\.\w{2,4}$'
+        with: ""
+      
+      # 4. Removes known tags: sub eng, engsub, uncensored, www
+      - regex: '(?i)(sub[\s\-_]?eng|engsub|uncensored|censored|www\.[^\s]+)'
+        with: ""
+      
+      # 5. Replaces problematic URL characters (no problem with: !?:()♪♥★→←☆)
+      - regex: '\-'
+        with: '~'
+      - regex: '\+'
+        with: 'Ž'
+      - regex: '\&'
+        with: 'č'
+        
+      # 6. Standardizes separators into hyphens
+      - regex: '[\s\._+]+'
+        with: '-'
+        
+      # 7. Removes extended prefixes for episodes and seasons (but keeps the number)
+      - regex: '(?i)(^|[\-])(?:ep|episode|episodio|act|vol|season|stagione)([\-]?\d{1,2})'
+        with: '$1$2'
+        
+      # 8. Converts short prefixes for seasons and episodes into numbers (e.g., S02E05 → 02-05)
+      - regex: '(?i)\b(e|s)(\d{1,2})((e|s)(\d{1,2}))?\b'
+        with: '$2-$5'
+
+      # 9. Removes version suffixes from numbers (v2, vFinal, vRev3)
+      - regex: '(?i)(\d{1,2})(?:-)?v(?:\d+|final|finale|rev\d*)\b'
+        with: '$1'
+
+      # 10. Converts any short number (max 2 digits) with a leading zero into -<number>
+      - regex: '(^|[^0-9])0?(\d{1,2})([^0-9]|$)'
+        with: '$1$2$3'
+      
+      # 11. Inserts a hyphen between letters and numbers (e.g., "abc2" → "abc-2")
+      - regex: '([a-zA-Z])(\d)'
+        with: '$1-$2'
+        
+      # 12. Removes everything after the last short number
+      - regex: '^(.*-\d{1,2})(?:-\d{1,2})*(?:-.*)?$'
+        with: '$1'
+        
+      # 13. Multiple hyphens → only one
+      - regex: '-+'
+        with: '-'
+      
+      # 14. Removes leading/trailing hyphens (with #12, trailing ones are already removed)
+      - regex: '^-+|-+$'
+        with: ""
+  scraper: sceneScraper
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - oppai.stream/watch?e=
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[contains(@class, "line")]/text()
+        postProcess:
+          - replace:
+              - regex: '(?i)\s+Ep\s+(\d+)$'
+                with: ' ep$1'
+              - regex: ' ep(\d{1})$'
+                with: ' ep0$1'
+      Details: &details //div[@class="description"]/h5/text()[1]
+      Tags:
+        Name:
+          selector: //a[contains(@class, "tag")]/h5/text()
+          postProcess:
+            - map:
+                "4k": ""
+                "hd": ""
+      Studio:
+        Name: //h6/a[@class="red"]/text()
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: '\?v=\d+$'
+                with: ""
+      # build the url from the title:
+      URL:
+        selector: //h1[contains(@class, "line")]/text()
+        postProcess:
+          - replace:
+              - regex: '\-'
+                with: '~'
+              - regex: '\+'
+                with: 'Ž'
+              - regex: '\&'
+                with: 'č'
+              - regex: '(?i)\s+Ep\s+(\d+)$'
+                with: ' $1'
+              - regex: '\s+'
+                with: '-'
+              - regex: '(.+)'
+                with: 'https://oppai.stream/watch?e=$1'
+      Movies:
+        Name:
+          selector: //h1[contains(@class, "line")]/text()
+          postProcess:
+          - replace:
+              - regex: '(?i)\s+Ep\s+\d+$'
+                with: ""
+        Aliases:
+          selector: //div[@class="description"]/h5/text()[2]
+          postProcess:
+          - replace:
+              - regex: '[^(]*\(([^)]*)\)[^)]*'
+                with: '$1'
+        Synopsis: *details
+
+# Last Updated June 24, 2025
