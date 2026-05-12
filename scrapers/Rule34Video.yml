@@ -58,11 +58,8 @@ xPathScrapers:
                 with: $1
       Tags:
         Name:
-          selector: $article//div[text()="Categories" or text()="Tags"]/following-sibling::a//text()
-          postProcess:
-            - replace:
-                - regex: '^\+.+Suggest$'
-                  with: ""
+          selector: $article//div[@data-suggest-type="tag"]//a[contains(@class, "tag_item") and not(contains(@class, "tag_item_suggest"))]/text()
+          
       Studio:
         Name: $article//div[text()="Artist"]/following-sibling::a/span
         URL: $article//div[text()="Artist"]/following-sibling::a/@href
