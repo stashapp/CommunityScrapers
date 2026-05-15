@@ -2,19 +2,24 @@ import os
 import sys
 import unittest
 
+# add scraper directory to loadable module path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__),'..','..','scrapers', 'EmbeddedMetadata'))
+# add py_common path to module path
+sys.path.insert(1, os.path.join(os.path.dirname(__file__),'..','..','scrapers'))
 import embedded_metadata
 
-import test_config
+import config
 
 
 class TestEmbeddedMetadataExiftool(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        test_config.FORCE_METHOD = "exiftool"
+        config.FORCE_METHOD = "exiftool"
 
     def test_EXIF_IPTC_XMP_keywords_title(self):
-        data = embedded_metadata.process_image(os.path.join(os.path.dirname(__file__), 'test-data/EXIF_IPTC_XMP_keywords_title.jpg'))
+        data = embedded_metadata.process_image(os.path.join(os.path.dirname(__file__),
+                                                            'test-data/EXIF_IPTC_XMP_keywords_title.jpg'))
 
         self.assertSetEqual({'Title', 'Date', 'Tags', 'Details'}, set(data.keys()))
         self.assertEqual("Blue Square Test File - .jpg", data['Title'])
@@ -39,10 +44,11 @@ class TestEmbeddedMetadataPyexiv2tool(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        test_config.FORCE_METHOD = "pyexiv2"
+        config.FORCE_METHOD = "pyexiv2"
 
     def test_EXIF_IPTC_XMP_keywords_title(self):
-        data = embedded_metadata.process_image(os.path.join(os.path.dirname(__file__), 'test-data/EXIF_IPTC_XMP_keywords_title.jpg'))
+        data = embedded_metadata.process_image(os.path.join(os.path.dirname(__file__),
+                                                            'test-data/EXIF_IPTC_XMP_keywords_title.jpg'))
 
         self.assertSetEqual({'Title', 'Date', 'Tags', 'Details'}, set(data.keys()))
         self.assertEqual("Blue Square Test File - .jpg", data['Title'])

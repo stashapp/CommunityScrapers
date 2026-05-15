@@ -1,7 +1,5 @@
 from datetime import datetime
-import hashlib
 import json
-import os
 import sys
 
 from py_common import graphql, log
@@ -12,12 +10,7 @@ from py_common.util import dig, scraper_args
 try:
 	import config
 except:
-	# is unit test -> load test config
-	if 'unittest' in sys.modules:
-		import test_config
-		config = test_config
-	else:
-		config = object()
+	config = object()
 
 skip_ensure_requirements = config.skip_ensure_requirements if hasattr(config, 'skip_ensure_requirements') else False
 
