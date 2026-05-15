@@ -1,0 +1,20 @@
+{
+    "title": "title",
+    "title_en": "title (en)",
+    "title_ja": "title (jp)",
+    "gallery_id": 12345,
+    "media_id": 123456789,
+    "date": 1612346789,
+    "scanlator": "",
+    "artist": ["artist 1", "artist 2"],
+    "group": ["group 1", "group 2"],
+    "parody": [ "parody 1", "parody 2" ],
+    "characters": [ "character 1", "character 2" ],
+    "tags": [ "tag 1", "tag 2", "tag 3"    ],
+    "type": "manga",
+    "lang": "en",
+    "language": "English",
+    "count": 123,
+    "category": "b",
+    "subcategory": "gallery"
+}
