@@ -1,6 +1,9 @@
 import os
+import sys
 import unittest
 
+# add scraper directory to loadable module path
+sys.path.insert(0, os.path.join(os.path.dirname(__file__),'..','..','scrapers', 'GalleryDLInfo'))  #
 import gallerydl_info
 
 

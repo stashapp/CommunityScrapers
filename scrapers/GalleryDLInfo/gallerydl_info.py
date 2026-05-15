@@ -5,9 +5,15 @@ import sys
 import typing
 import zipfile
 
-from py_common import graphql, log
-from py_common.deps import ensure_requirements
-from py_common.util import dig, scraper_args
+try:
+    from py_common import graphql, log
+    from py_common.util import dig, scraper_args
+except:
+    # can be ignored if running in test
+    if 'unittest' in sys.modules:
+        pass
+    else:
+        raise
 
 
 def get_gallery_metadatas(path:str) -> typing.Iterable[dict[str, str | list | dict]] | None:
