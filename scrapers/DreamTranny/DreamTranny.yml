@@ -1,0 +1,63 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+name: DreamTranny
+sceneByName:
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - scene-by-name
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - scene-by-fragment
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - scene-by-query-fragment
+sceneByURL:
+  - action: script
+    url:
+      - dreamtranny.com
+    script:
+      - python
+      - DreamTranny.py
+      - scene-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - gallery-by-fragment
+galleryByURL:
+  - action: script
+    url:
+      - dreamtranny.com
+    script:
+      - python
+      - DreamTranny.py
+      - gallery-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - DreamTranny.py
+    - performer-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - dreamtranny.com/models/
+    script:
+      - python
+      - DreamTranny.py
+      - performer-by-url
+# Last Updated April 30, 2026
