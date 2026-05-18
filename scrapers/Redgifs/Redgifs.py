@@ -179,7 +179,8 @@ if __name__ == "__main__":
         case "scene-by-url" | "scene-by-query-fragment", {"url": url}:
             result = scene_by_url(url)
         case "scene-by-name", {"name": identifier}:
-            result = [s for s in [to_scraped_scene(identifier.strip())] if s]
+            data = fetch_data(identifier.strip())
+            result = [to_scraped_scene(data)] if data else []
         case "scene-by-fragment", fragment:
             result = scene_by_fragment(fragment)
         case "image-by-url", {"url": url}:
