@@ -4,7 +4,7 @@ name: Tube8Vip
 galleryByURL:
   - action: script
     url:
-      - tube8vip/scene/
+      - tube8vip.com/scene/
     script:
       - python
       - Tube8Vip.py
@@ -18,7 +18,7 @@ galleryByFragment:
 sceneByURL:
   - action: script
     url:
-      - tube8vip/scene/
+      - tube8vip.com/scene/
     script:
       - python
       - Tube8Vip.py
@@ -50,7 +50,7 @@ performerByName:
 performerByURL:
   - action: script
     url:
-      - tube8vip/model/
+      - tube8vip.com/model/
     script:
       - python
       - Tube8Vip.py
@@ -64,9 +64,9 @@ performerByFragment:
 groupByURL:
   - action: script
     url:
-      - tube8vip/scene/
+      - tube8vip.com/scene/
       # Since scenes link to the movie we can scrape movies from scenes
-      - tube8vip/movie/
+      - tube8vip.com/movie/
     script:
       - python
       - Tube8Vip.py
