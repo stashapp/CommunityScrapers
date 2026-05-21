@@ -1,6 +1,10 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 # This is a sub-studio of Evil Erotic, but it has a separate search API, so it gets its own scraper.
 name: TGirls House
+performerByName:
+  action: scrapeJson
+  queryURL: "https://tgirlshouse.com/models/{}"
+  scraper: performerSearchScraper
 performerByURL:
   - action: scrapeXPath
     url:
@@ -20,6 +24,16 @@ sceneByURL:
       - tgirlshouse.com/videos/
     scraper: sceneScraper
 jsonScrapers:
+  performerSearchScraper:
+    performer:
+      Name: models.#.name
+      Image: models.#.image
+      URLs:
+        selector: models.#.slug
+        postProcess:
+          - replace:
+              - regex: "^(.+)$"
+                with: "https://tgirlshouse.com/models/${1}"
   sceneSearchScraper:
     scene:
       Title: videos.#.title

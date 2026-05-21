@@ -1,5 +1,9 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 name: Evil Erotic
+performerByName:
+  action: scrapeJson
+  queryURL: "https://evilerotic.com/models/{}"
+  scraper: performerSearchScraper
 performerByURL:
   - action: scrapeXPath
     url:
@@ -19,6 +23,16 @@ sceneByURL:
       - evilerotic.com/videos/
     scraper: sceneScraper
 jsonScrapers:
+  performerSearchScraper:
+    performer:
+      Name: models.#.name
+      Image: models.#.image
+      URLs:
+        selector: models.#.slug
+        postProcess:
+          - replace:
+              - regex: "^(.+)$"
+                with: "https://evilerotic.com/models/${1}"
   sceneSearchScraper:
     scene:
       Title: videos.#.title
