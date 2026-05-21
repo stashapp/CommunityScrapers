@@ -1,0 +1,43 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: Evil Erotic
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - evilerotic.com/videos/
+      - tgirlshouse.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="vd-title"]
+      Details:
+        selector: //div[@class="vid-desc-collapse"]/div/p
+        concat: "\n\n"
+      URLs: //meta[@property="og:url"]/@content
+      Date:
+        selector: //script[@type="application/ld+json"]/text()
+        postProcess:
+          - javascript: |
+              if (value?.length) {
+                const json = JSON.parse(value);
+                if (json?.uploadDate) {
+                  return json.uploadDate.substring(0, 10);
+                }
+              }
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          # Remove (scaled-down) resolution from image URL, e.g.
+          # https://example.com/wp-content/uploads/2026/05/Example-Something-768x432.webp
+          # becomes (854x480)
+          # https://example.com/wp-content/uploads/2026/05/Example-Something.webp
+          - replace:
+              - regex: -\d+x\d+
+                with: ""
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
+      Tags:
+        Name: //h2[text()="Tags"]/following-sibling::div/a/text()
+      Performers:
+        Name: //div[@class="vd-meta-models"]/a/text()
+# Last Updated May 21, 2026
