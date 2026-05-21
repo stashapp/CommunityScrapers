@@ -3,7 +3,7 @@
 name: TGirls House
 performerByName:
   action: scrapeJson
-  queryURL: "https://tgirlshouse.com/models/{}"
+  queryURL: "https://tgirlshouse.com/api/search?q={}"
   scraper: performerSearchScraper
 performerByURL:
   - action: scrapeXPath

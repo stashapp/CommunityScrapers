@@ -2,7 +2,7 @@
 name: Evil Erotic
 performerByName:
   action: scrapeJson
-  queryURL: "https://evilerotic.com/models/{}"
+  queryURL: "https://evilerotic.com/api/search?q={}"
   scraper: performerSearchScraper
 performerByURL:
   - action: scrapeXPath
