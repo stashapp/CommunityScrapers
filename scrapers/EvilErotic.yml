@@ -1,5 +1,10 @@
 # yaml-language-server: $schema=../validator/scraper.schema.json
 name: Evil Erotic
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - evilerotic.com/models/
+    scraper: performerScraper
 sceneByName:
   action: scrapeJson
   queryURL: "https://evilerotic.com/api/search?q={}"
@@ -25,6 +30,32 @@ jsonScrapers:
               - regex: "^(.+)$"
                 with: "https://evilerotic.com/videos/${1}"
 xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h1[@class="model-hero-name"]
+      Image: //div[contains(@class, "model-info-photo")]/img/@src
+      URLs: //meta[@property="og:url"]/@content
+      Birthdate:
+        selector: //span[@class="model-info-label" and text()="Birthday:"]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)(st|nd|rd|th)
+                with: $1
+          - parseDate: 2 January
+      Country: //span[@class="model-info-label" and text()="Country:"]/following-sibling::span/text()
+      Ethnicity: //span[@class="model-info-label" and text()="Ethnicity:"]/following-sibling::span/text()
+      Height:
+        selector: //span[@class="model-info-label" and text()="Height:"]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)\s*CM.*
+                with: $1
+      Weight:
+        selector: //span[@class="model-info-label" and text()="Weight:"]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)\s*KG.*
+                with: $1
   sceneScraper:
     scene:
       Title: //h1[@class="vd-title"]
