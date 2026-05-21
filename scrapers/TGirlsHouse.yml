@@ -1,0 +1,109 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+# This is a sub-studio of Evil Erotic, but it has a separate search API, so it gets its own scraper.
+name: TGirls House
+performerByName:
+  action: scrapeJson
+  queryURL: "https://tgirlshouse.com/api/search?q={}"
+  scraper: performerSearchScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - tgirlshouse.com/models/
+    scraper: performerScraper
+sceneByName:
+  action: scrapeJson
+  queryURL: "https://tgirlshouse.com/api/search?q={}"
+  scraper: sceneSearchScraper
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tgirlshouse.com/videos/
+    scraper: sceneScraper
+jsonScrapers:
+  performerSearchScraper:
+    performer:
+      Name: models.#.name
+      Image: models.#.image
+      URLs:
+        selector: models.#.slug
+        postProcess:
+          - replace:
+              - regex: "^(.+)$"
+                with: "https://tgirlshouse.com/models/${1}"
+  sceneSearchScraper:
+    scene:
+      Title: videos.#.title
+      Image: videos.#.image
+      URLs:
+        selector: videos.#.slug
+        postProcess:
+          - replace:
+              - regex: "^(.+)$"
+                with: "https://tgirlshouse.com/videos/${1}"
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h1[@class="model-hero-name"]
+      Image: //div[contains(@class, "model-info-photo")]/img/@src
+      URLs: //meta[@property="og:url"]/@content
+      Birthdate:
+        selector: //span[@class="model-info-label" and text()="Birthday:"]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)(st|nd|rd|th)
+                with: $1
+          - parseDate: 2 January
+      Country: //span[@class="model-info-label" and text()="Country:"]/following-sibling::span/text()
+      Ethnicity: //span[@class="model-info-label" and text()="Ethnicity:"]/following-sibling::span/text()
+      Height:
+        selector: //span[@class="model-info-label" and text()="Height:"]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)\s*CM.*
+                with: $1
+      Weight:
+        selector: //span[@class="model-info-label" and text()="Weight:"]/following-sibling::span/text()
+        postProcess:
+          - replace:
+              - regex: (\d+)\s*KG.*
+                with: $1
+      Gender:
+        fixed: transgender_female
+  sceneScraper:
+    scene:
+      Title: //h1[@class="vd-title"]
+      Details:
+        selector: //div[@class="vid-desc-collapse"]/div/p
+        concat: "\n\n"
+      URLs: //meta[@property="og:url"]/@content
+      Date:
+        selector: //script[@type="application/ld+json"]/text()
+        postProcess:
+          - javascript: |
+              if (value?.length) {
+                const json = JSON.parse(value);
+                if (json?.uploadDate) {
+                  return json.uploadDate.substring(0, 10);
+                }
+              }
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          # Remove (scaled-down) resolution from image URL, e.g.
+          # https://example.com/wp-content/uploads/2026/05/Example-Something-768x432.webp
+          # becomes (854x480)
+          # https://example.com/wp-content/uploads/2026/05/Example-Something.webp
+          - replace:
+              - regex: -\d+x\d+
+                with: ""
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
+      Tags:
+        Name: //h2[text()="Tags"]/following-sibling::div/a/text()
+      Performers:
+        Name: //div[@class="vd-meta-models"]/a/text()
+# Last Updated May 21, 2026
