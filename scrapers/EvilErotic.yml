@@ -70,6 +70,8 @@ xPathScrapers:
           - replace:
               - regex: (\d+)\s*KG.*
                 with: $1
+      Gender:
+        fixed: female
   sceneScraper:
     scene:
       Title: //h1[@class="vd-title"]
