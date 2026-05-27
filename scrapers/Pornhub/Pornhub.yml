@@ -79,7 +79,12 @@ xPathScrapers:
           - map:
               US: "USA"
               United States of America: "USA"
-      Gender: $infoPiece[contains(span,"Gender:")]/$smallInfo
+      Gender:
+        selector: $infoPiece[contains(span,"Gender:")]/$smallInfo
+        postProcess:
+          - map:
+              Trans Man: transgender_male
+              Trans Woman: transgender_female
       Twitter: //ul[contains(@class,"socialList")]//a[contains(@href,"twitter.com/")]/@href
       Instagram: //ul[contains(@class,"socialList")]//a[contains(@href,"instagram.com/")]/@href
       Measurements: $infoPiece[contains(span,"Measurements:")]/$smallInfo|$infoPiece[contains(span,"Measurements:")]/text()

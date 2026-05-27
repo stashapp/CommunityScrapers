@@ -59,7 +59,7 @@ def scrape_file(path):
 
 
 if __name__ == "__main__":
-    fragment = json.loads(sys.stdin.read())
+    fragment = json.loads(sys.stdin.buffer.read())
     scene_id = fragment["id"]
 
     if "files" not in fragment:
