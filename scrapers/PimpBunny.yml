@@ -17,7 +17,7 @@ xPathScrapers:
       $models: //ul[contains(@class, "pages-view-video-models")]
       $jsonld: //script[@type="application/ld+json"]
     scene:
-      Title: //h1[contains(@class, "pages-view-video-video-title")]
+      Title: //*[contains(@class, "pages-view-video-video-title")]
       Date:
         selector: $jsonld
         postProcess:
