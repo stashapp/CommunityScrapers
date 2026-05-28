@@ -26,8 +26,7 @@ xPathScrapers:
                 with: $1
           - parseDate: 2006-01-02
       Image: //meta[@property="og:image"]/@content
-      Details:
-        selector: //div[contains(@class, "pages-view-video-description")][normalize-space()] | //meta[@property="og:description"]/@content
+      Details: //div[contains(@class, "pages-view-video-description")] | //meta[@property="og:description"]/@content
       URL: //link[@rel="canonical"]/@href
       Studio:
         Name:
@@ -36,18 +35,16 @@ xPathScrapers:
         Name: $models//div[contains(@class, "pages-view-video-model-title")]//a
         URLs: $models//div[contains(@class, "pages-view-video-model-title")]//a/@href
       Tags:
-        Name:
-          selector: //ul[contains(@class, "pages-view-video-categories")]//a/text()
+        Name: //ul[contains(@class, "pages-view-video-categories")]//a
   performerScraper:
     performer:
       Name: //div[contains(@class,"model-view-title")]//h1
       Details: //div[contains(@class,"model-view-creator-description")]
       Image: //div[contains(@class,"model-view-thumbnail")]//img/@data-original
       Tags:
-        Name:
-          selector: //div[contains(@class,"model-view-top-lists")]//a/text()
+        Name: //div[contains(@class,"model-view-top-lists")]//a
       URLs: //div[contains(@class,"model-view-social-bar")]//a/@href | //meta[@property="og:url"]/@content
       Aliases:
         selector: //meta[@name="keywords"]/@content
         split: ", "
-# Last Updated May 27, 2026
+# Last Updated May 28, 2026
