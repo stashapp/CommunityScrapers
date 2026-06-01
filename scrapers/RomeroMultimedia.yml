@@ -28,7 +28,7 @@ xPathScrapers:
     scene:
       Title: //div[@class="left-top-part"]//h1
       Date:
-        selector: //div[contains(@class, "datesingle")]
+        selector: //div[contains(@class, "datesingle")]/text()
         postProcess:
           - parseDate: January 2, 2006
       Performers:
