@@ -9,6 +9,12 @@ groupByURL:
     url:
       - virtualtaboo.com/videos/
     scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - virtualtaboo.com/pornstars/
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -54,5 +60,26 @@ xPathScrapers:
           fixed: VirtualTaboo
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated August 04, 2023
+  performerScraper:
+    performer:  
+      Gender:
+        fixed: "Female"
+      Name:
+        selector: //meta[@property="og:alt"]/@content
+      URLs:
+        selector: //link[@rel="canonical"]/@href
+      Country: 
+        selector: //div[@class="actor-detail__info-value"]
+        postProcess:
+          - replace:
+            - regex: ",.*$"
+              with: ""
+      Birthdate:
+        selector: //table[@class="actor-detail__params-table"]//td[text()="Birthday:"]/following-sibling::td/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Tags:
+        Name: //div[@class="actor-detail__tags"]/div/a/text()
+      Image: //meta[@property="og:image"]/@content
 
+# Last Updated June 05, 2026
