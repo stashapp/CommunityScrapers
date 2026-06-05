@@ -27,6 +27,12 @@ xPathScrapers:
         postProcess:
           - parseDate: 02 January, 2006
       Details: &detailsSel $info//*[@class="description"]
+      Code:
+        selector: //a[contains(@href, "signup.php?vid=")]/@href
+        postProcess:
+          - replace:
+              - regex: .*=(\d+)$
+                with: $1
       Tags:
         Name: $info//div[starts-with( @class,"tag-list")]/a/text()
       Performers:
