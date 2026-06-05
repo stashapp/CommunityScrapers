@@ -1,9 +1,10 @@
 name: "VirtualTaboo"
-sceneByURL:
+sceneByURL: &byURL
   - action: scrapeXPath
     url:
       - virtualtaboo.com/videos/
     scraper: sceneScraper
+galleryByURL: *byURL
 groupByURL:
   - action: scrapeXPath
     url:
@@ -27,20 +28,28 @@ xPathScrapers:
         postProcess:
           - parseDate: 02 January, 2006
       Details: &detailsSel $info//*[@class="description"]
-      Code:
+      Code: &code
         selector: //a[contains(@href, "signup.php?vid=")]/@href
         postProcess:
           - replace:
               - regex: .*=(\d+)$
                 with: $1
-      Tags:
+      Tags: &tags
         Name: $info//div[starts-with( @class,"tag-list")]/a/text()
-      Performers:
+      Performers: &performers
         Name: $info//div[starts-with(@class,"info")]/a/text()
       Image: &imageSel //meta[@property="og:image"]/@content
-      Studio:
+      Studio: &studio
         Name:
           fixed: "Virtual Taboo"
+    gallery:
+      Title: *titleSel
+      Date: *dateAttr
+      Details: *detailsSel
+      Code: *code
+      Tags: *tags
+      Performers: *performers
+      Studio: *studio
   movieScraper:
     common:
       $info: *infoSel
