@@ -11,11 +11,7 @@ xPathScrapers:
       $performerTitle: //h1[@id="post-title"]/text()
     scene:
       Title:
-        selector: $performerTitle
-        postProcess:
-          - replace:
-            - regex: (.*) – (.*)
-              with: $2
+        selector: //meta[@property="og:title"]/@content
       Date:
         selector: //meta[@property="article:published_time"]/@content
         postProcess:
@@ -24,7 +20,12 @@ xPathScrapers:
               with: ""
           - parseDate: 2006-01-02
       Details: 
-        selector: //div[@class="postcontent"]/p
+        selector: //div[@class="postcontent"]/p//text()
+        concat: "\n\n"
+        postProcess:
+          - replace:
+            - regex: ([^.!?])\n\n
+              with: "$1 "
       Performers: 
         Name: 
           selector: $performerTitle
@@ -47,4 +48,4 @@ xPathScrapers:
             - regex: "\t"
               with: ""
 
-# Last Updated April 11, 2026
+# Last Updated June 5, 2026
