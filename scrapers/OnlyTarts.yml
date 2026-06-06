@@ -21,6 +21,12 @@ xPathScrapers:
                 with: $1
           - parseDate: 2 January, 2006
       Image: //meta[@property="og:image"]/@content
+      Code:
+        selector: //a[contains(@href, "signup.php?vid=")]/@href
+        postProcess:
+          - replace:
+              - regex: .*=(\d+)$
+                with: $1
       Studio:
         Name:
           fixed: OnlyTarts
@@ -29,4 +35,5 @@ xPathScrapers:
       Performers:
         Name: $desktopDetails//div[contains(@class, "video-info__text")]//a[contains(@href, "/model")]
         URLs: $desktopDetails//div[contains(@class, "video-info__text")]//a[contains(@href, "/model")]/@href
-# Last Updated September 17, 2025
+
+# Last Updated June 6, 2026
