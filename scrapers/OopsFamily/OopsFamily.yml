@@ -25,6 +25,12 @@ xPathScrapers:
           - replace:
               - regex: .*url":\s*"(.*poster[^"]*).*$
                 with: $1
+      Code:
+        selector: //a[contains(@href, "signup.php?vid=")]/@href
+        postProcess:
+          - replace:
+              - regex: .*=(\d+)$
+                with: $1
       Date:
         selector: //div[@class="video-info__time"]//text()
         postProcess:
@@ -32,4 +38,4 @@ xPathScrapers:
             - regex: (.*) • (.*)
               with: $2
           - parseDate: "2 January, 2006"
-# Last Updated October 17, 2025
+# Last Updated June 6, 2026
