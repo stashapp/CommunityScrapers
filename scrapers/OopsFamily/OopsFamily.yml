@@ -6,6 +6,11 @@ sceneByURL: &byURL
       - oopsfamily.com/video
     scraper: sceneScraper
 galleryByURL: *byURL
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - oopsfamily.com/model
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -19,7 +24,8 @@ xPathScrapers:
       Tags: &tags
         Name: //a[@class="tags__item"]//text()
       Performers: &performers
-        Name: //div[@class="video-info__text"]//a//text()
+        Name: //div[@class="video-info__text"]//a[contains(@href, "/model")]/text()
+        URLs: //div[@class="video-info__text"]//a[contains(@href, "/model")]/@href
       Image:
         selector: //script[contains(., "pluginSettings")]/text()
         postProcess:
@@ -47,5 +53,42 @@ xPathScrapers:
       Studio: *studio
       Code: *code
       Date: *date
-          
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1[@class="title-primary"]/text()
+      URLs:
+        selector: //link[@rel="canonical"]/@href
+      Country:
+        selector: //span[@class="pornstar-detail__info--title"]/text()
+        postProcess:
+          - replace:
+            - regex: " ,.*$"
+              with: ""
+      Birthdate:
+        selector: //table[contains(@class, "pornstar-detail__params--top")]//tr[td[@class="pornstar-detail__info--title" and normalize-space()="Birthday:"]]/td[2]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*(.*?)\s*•.*$'
+                with: "$1"
+          - parseDate: Jan 2, 2006
+      Measurements:
+        selector: //table[contains(@class, "pornstar-detail__params--top")]//tr[td[@class="pornstar-detail__info--title" and normalize-space()="Measurements:"]]/td[2]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*(.*?)\s*$'
+                with: "$1"
+      Height:
+        selector: //table[contains(@class, "pornstar-detail__params--top")]//tr[td[@class="pornstar-detail__info--title" and normalize-space()="Height:"]]/td[2]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*(\d+)\s+cm.*$'
+                with: "$1"
+      Weight:
+        selector: //table[contains(@class, "pornstar-detail__params--top")]//tr[td[@class="pornstar-detail__info--title" and normalize-space()="Weight:"]]/td[2]/text()
+        postProcess:
+          - replace:
+              - regex: '^\s*(\d+)\s+kg.*$'
+                with: "$1"
+      Image: //img[@class="pornstar-detail__picture"]/@src
 # Last Updated June 6, 2026
