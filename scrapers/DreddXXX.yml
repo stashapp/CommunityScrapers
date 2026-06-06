@@ -2,8 +2,13 @@ name: Dredd XXX
 sceneByURL:
   - action: scrapeXPath
     url:
-      - officialdreddxxx.com/scene/
+      - https://officialdreddxxx.com/scene/
+      - https://www.officialdreddxxx.com/scene/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - https://members.officialdreddxxx.com/scene/
+    scraper: membersScraper
 xPathScrapers:
   sceneScraper:
     scene:
@@ -23,7 +28,30 @@ xPathScrapers:
       Performers:
         Name: //a[contains(@href, "pornstar")]
 
+  membersScraper:
+    scene:
+      Title:
+        selector: //h1[contains(@class,"elementor-heading-title")]
+      Details:
+        selector: //div[@data-widget_type="theme-post-content.default"]//p[1]
+      URLs:
+        selector: //link[@rel="canonical"]/@href
+      Date:
+        selector: //li[@itemprop="datePublished"]//time
+        postProcess:
+          - parseDate: January 2, 2006
+      Studio:
+        Name:
+          fixed: DreddXXX
+      Tags:
+        Name:
+          selector: //a[contains(@href,"/scene-category/") and not(contains(@href,"/upcoming"))]
+      Performers:
+        Name:
+          selector: //a[contains(@href,"/pornstar/")]
+
 driver:
+  useCDP: true
   headers:
     - Key: User-Agent
       Value: stash-scraper/1.0
