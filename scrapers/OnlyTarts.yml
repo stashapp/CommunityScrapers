@@ -5,6 +5,11 @@ sceneByURL: &byURL
       - onlytarts.com/video
     scraper: sceneScraper
 galleryByURL: *byURL
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - onlytarts.com/model
+    scraper: performerScraper
 
 xPathScrapers:
   sceneScraper:
@@ -45,5 +50,45 @@ xPathScrapers:
         Studio: *studio
         Tags: *tags
         Performers: *performers
+  performerScraper:
+    performer:
+      Gender:
+        fixed: "Female"
+      Name:
+        selector: //h1[@class="title-primary"]/text()
+      URLs:
+        selector: //link[@rel="canonical"]/@href
+      Country:
+        selector: //div[@class="pornstar-detail__info mt-3"]/span[1]/text()
+        postProcess:
+          - replace:
+            - regex: ",.*$"
+              with: ""
+      Birthdate:
+        selector: //div[contains(@class, "pornstar-detail__params--top")]//strong[text()="Birthday"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: '^:\s+(.*?)\s*•.*'
+                with: "$1"
+          - parseDate: Jan 2, 2006
+      Measurements:
+        selector: //div[contains(@class, "pornstar-detail__params--top")]//strong[text()="Measurements"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: '^:\s+(.*?)\s*•.*'
+                with: "$1"
+      Height:
+        selector: //div[contains(@class, "pornstar-detail__params--top")]//strong[text()="Height"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: '^:\s+(\d+)\s+cm.*'
+                with: "$1"
+      Weight:
+        selector: //div[contains(@class, "pornstar-detail__params--top")]//strong[text()="Weight"]/following-sibling::text()[1]
+        postProcess:
+          - replace:
+              - regex: '^:\s+(\d+)\s+kg.*'
+                with: "$1"
+      Image: //img[@class="pornstar-detail__picture"]/@src
 
 # Last Updated June 6, 2026
