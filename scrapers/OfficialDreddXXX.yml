@@ -1,0 +1,32 @@
+name: OfficialDreddXXX
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - officialdreddxxx.com/scene/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[contains(@class,"elementor-heading-title")]
+      Details:
+        selector: //div[contains(@class,"elementor-widget-theme-post-content")]//p[1]
+      Date:
+        selector: //li[@itemprop="datePublished"]//time
+        postProcess:
+          - parseDate: January 2, 2006
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      URL:
+        selector: //link[@rel="canonical"]/@href
+      Tags:
+        Name:
+          selector: //a[contains(@href,"/scene-category/") and not(contains(@href,"/upcoming"))]
+      Performers:
+        Name:
+          selector: //a[contains(@href,"/pornstar/")]
+        URL:
+          selector: //a[contains(@href,"/pornstar/")]/@href
+      Studio:
+        Name:
+          fixed: DreddXXX
