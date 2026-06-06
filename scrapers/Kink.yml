@@ -279,4 +279,12 @@ driver:
           Domain: "www.kink.com"
           Value: "1"
           Path: "/"
-# Last Updated April 14, 2026
+        - Name: "age_gate_accepted"
+          Domain: "www.kinkmen.com"
+          Value: "1"
+          Path: "/"
+        - Name: "age_gate_accepted"
+          Domain: "www.kinktrans.com"
+          Value: "1"
+          Path: "/"
+# Last Updated June 6, 2026
