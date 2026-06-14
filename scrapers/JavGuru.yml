@@ -1,0 +1,99 @@
+# JavGuru
+#   Scene by URL / search, Performer (actress) by URL.
+#   Scene pages:   https://jav.guru/<id>/<slug>/
+#   Actress pages: https://jav.guru/actress/<slug>/
+name: JavGuru
+
+# ---- Scene -------------------------------------------------------------
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jav.guru/
+    scraper: sceneScraper
+
+# "Name" search box on the Scene edit page
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://jav.guru/?s={}
+  scraper: sceneSearch
+
+# Scrapes the full scene once a search result is chosen
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+
+# ---- Performer (actress) ----------------------------------------------
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - jav.guru/actress/
+    scraper: performerScraper
+
+xPathScrapers:
+  # Full scene page
+  sceneScraper:
+    common:
+      $info: //div[@class="infoleft"]
+    scene:
+      Title:
+        selector: //h1[@class="titl"]/text()
+        postProcess:
+          # drop the leading "[CODE] " prefix; Code is captured separately
+          - replace:
+              - regex: ^\s*\[[^\]]*\]\s*
+                with: ""
+      Details:
+        # jav.guru scenes have no synopsis; mirror the cleaned title
+        selector: //h1[@class="titl"]/text()
+        postProcess:
+          - replace:
+              - regex: ^\s*\[[^\]]*\]\s*
+                with: ""
+      URL:
+        fixed: "{inputURL}"
+      Code: $info//li[strong/span[contains(text(),"Code")]]/text()
+      Date:
+        selector: $info//li[strong/span[contains(text(),"Release Date")]]/text()
+        postProcess:
+          - parseDate: 2006-01-02
+      Image: //div[@class="large-screenimg"]/img/@src
+      Director: $info//li[strong[contains(text(),"Director")]]/a
+      Studio:
+        Name: $info//li[strong[contains(text(),"Studio")]]/a
+        URL: $info//li[strong[contains(text(),"Studio")]]/a/@href
+      Tags:
+        Name: $info//li[strong[contains(text(),"Tags")]]/a
+      Performers:
+        Name: $info//li[strong[contains(text(),"Actress")]]/a
+        URLs: $info//li[strong[contains(text(),"Actress")]]/a/@href
+
+  # Search results page (one or more cards)
+  sceneSearch:
+    common:
+      $item: //div[@class="inside-article"][div[@class="imgg"]]
+    scene:
+      Title:
+        selector: $item//div[@class="grid1"]/h2/a/text()
+        postProcess:
+          - replace:
+              - regex: ^\s*\[[^\]]*\]\s*
+                with: ""
+      URL: $item//div[@class="imgg"]/a/@href
+      Image: $item//div[@class="imgg"]/a/img/@src
+
+  performerScraper:
+    performer:
+      Name: //h1[@class="profile-h1"]/text()
+      Image: //img[@class="cp-avatar"]/@src
+      URLs:
+        fixed: "{inputURL}"
+      Country:
+        fixed: Japan
+
+# jav.guru rejects requests without a normal browser UA
+driver:
+  headers:
+    - Key: User-Agent
+      Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36
+# Last Updated June 14, 2026
