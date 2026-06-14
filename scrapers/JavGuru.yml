@@ -57,7 +57,14 @@ xPathScrapers:
         selector: $info//li[strong/span[contains(text(),"Release Date")]]/text()
         postProcess:
           - parseDate: 2006-01-02
-      Image: //div[@class="large-screenimg"]/img/@src
+      Image:
+        selector: //div[@class="large-screenimg"]/img/@src
+        postProcess:
+          # cdn.javmiku.com is Cloudflare-challenged for server-side fetches;
+          # cdn.javnorth.com mirrors the same paths and is reachable.
+          - replace:
+              - regex: cdn\.javmiku\.com
+                with: cdn.javnorth.com
       Director: $info//li[strong[contains(text(),"Director")]]/a
       Studio:
         Name: $info//li[strong[contains(text(),"Studio")]]/a
@@ -80,12 +87,22 @@ xPathScrapers:
               - regex: ^\s*\[[^\]]*\]\s*
                 with: ""
       URL: $item//div[@class="imgg"]/a/@href
-      Image: $item//div[@class="imgg"]/a/img/@src
+      Image:
+        selector: $item//div[@class="imgg"]/a/img/@src
+        postProcess:
+          - replace:
+              - regex: cdn\.javmiku\.com
+                with: cdn.javnorth.com
 
   performerScraper:
     performer:
       Name: //h1[@class="profile-h1"]/text()
-      Image: //img[@class="cp-avatar"]/@src
+      Image:
+        selector: //img[@class="cp-avatar"]/@src
+        postProcess:
+          - replace:
+              - regex: cdn\.javmiku\.com
+                with: cdn.javnorth.com
       URLs:
         fixed: "{inputURL}"
       Country:
