@@ -52,19 +52,21 @@ sceneByURL:
 
     scraper: sceneScraper
 xPathScrapers:
+  common:
+    $scene: //div[contains(@class, "video-container")
   sceneScraper:
     scene:
       Title: //h1[@class="title_bar trailer_title text-center text-3xl text-accent"]
-      Details: //p[@class="description-text"]
+      Details: $scene//p[@id="description"]
       Date:
-        selector: //label[contains(text(),"Date Added")]/following-sibling::p/text()
+        selector: $scene//label[contains(.,"Date Added")]/following-sibling::text()
         postProcess:
           - parseDate: 2006-01-02
       URLs: &url //meta[@property="og:url"]/@content
       Performers:
-        Name: //p[@class="mb-1"]//a
+        Name: $scene//a[contains(@href, "/models/")]
       Tags:
-        Name: //label[contains(., "Categories")]/following-sibling::div/ul/li/a
+        Name: $scene//a[contains(@href, "/porn-categories/")]
       Image:
         selector: //img[@alt="trailer"]/@src0_1x | //div[@id="video_player"]//@poster | //video[@id="my-player"]/@poster
         postProcess:
