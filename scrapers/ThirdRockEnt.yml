@@ -52,9 +52,9 @@ sceneByURL:
 
     scraper: sceneScraper
 xPathScrapers:
-  common:
-    $scene: //div[contains(@class, "video-container")
   sceneScraper:
+    common:
+      $scene: //div[contains(@class, "video-container")
     scene:
       Title: //h1[@class="title_bar trailer_title text-center text-3xl text-accent"]
       Details: $scene//p[@id="description"]
