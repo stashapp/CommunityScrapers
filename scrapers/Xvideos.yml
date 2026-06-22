@@ -21,18 +21,22 @@ sceneByFragment:
       # title_of_scene [id-here].mp4
       - regex: '.*\[([a-z0-9]{6,11})\]\..+'
         with: ".$1"
+      # expect a numeric ID at the beginning followed by an underscore, as saved by
+      # an older version of JDownloader by default
+      - regex: "^([0-9]{6,11})_.+"
+        with: $1
       # expect an ID at the beginning followed by an underscore, as saved by
       # JDownloader by default
-      - regex: '^([a-z0-9]{6,11})_.+'
-        with: $1
+      - regex: "^([a-z0-9]{6,11})_.+"
+        with: ".$1"
       # removed since it doesnt work with video. format
       # or expects a numeric id at the end of the filename
       # title_of_scene42069.mp4
       # - regex: '^.*?(\d{7})\..+$'
       #   with: ".$1"
       # if no id is found in the filename (there is still a file extension)
-      # clear the filename so that it doesn't leak
-      - regex: .*\.[^\.]+$
+      # only clear likely file extensions (1-5 chars), not ".<id>"
+      - regex: '(?i).*\.[a-z0-9]{1,5}$'
         with: "."
 
 xPathScrapers:
@@ -64,4 +68,4 @@ xPathScrapers:
               - regex: '[\S\s]+"uploadDate"\s*:\s*"(\d+-\d{2}-\d{2})[^"]+"[\S\s]+'
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated April 24, 2026
+# Last Updated May 6, 2026
