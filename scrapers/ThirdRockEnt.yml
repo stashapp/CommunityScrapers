@@ -54,7 +54,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $scene: //div[contains(@class, "video-container")
+      $scene: //div[contains(@class, "video-content")]
     scene:
       Title: //h1[@class="title_bar trailer_title text-center text-3xl text-accent"]
       Details: $scene//p[@id="description"]
@@ -68,9 +68,15 @@ xPathScrapers:
       Tags:
         Name: $scene//a[contains(@href, "/porn-categories/")]
       Image:
-        selector: //img[@alt="trailer"]/@src0_1x | //div[@id="video_player"]//@poster | //video[@id="my-player"]/@poster
+        selector: //meta[@property="og:url"]/@content | //meta[@property="og:image"]/@content
+        concat: __SEP__
         postProcess:
           - replace:
+              # CDN links have expiration times, validation tokens and are usually downscaled:
+              # let's grab the original image from the site domain instead
+              # https://regex101.com/r/tnFllS
+              - regex: https://(?P<domain>[^/]+).+__SEP__https://([^/]+mjedge\.net)/(?P<path>[^?]+).+
+                with: https://$domain/$path
               # If images have been resized we can get the full image instead, suffering no loss of quality (and maybe getting higher qualities!)
               - regex: (:?-[1-4]x)?\.jpg$
                 with: "-full.jpg"
@@ -123,3 +129,5 @@ xPathScrapers:
                 wifespov: Wifes POV
                 yourmomdoesanal: Your Mom Does Anal
                 yourmomdoesporn: Your Mom Does Porn
+debug:
+  printHTML: true
