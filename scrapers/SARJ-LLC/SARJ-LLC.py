@@ -66,6 +66,8 @@ def query(fragment, query_type):
 
         scraper = globals()['scrape_' + ('movie' if query_type == 'scene' else query_type)]
         res = scraper('https://metartnetwork.com', date, name)
+        if res is None:
+               res = scraper('https://www.rylskyart.com', date, name)
     return res
 
 def search(s_type, name):
