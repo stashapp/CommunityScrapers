@@ -25,11 +25,23 @@ xPathScrapers:
           - replace:
               - regex: "^AKA:"
                 with: ""
-      URLs: //a[@class="model-name"]/@href
+      URLs:
+        selector: //a[@class="model-name"]/@href
+        postProcess:
+          - replace:
+              # Normalize to canonical /_NNNNN.htm form (strip name prefix)
+              - regex: '(https://www\.thenude\.com/)[^_]*(_\d+\.htm)'
+                with: '$1$2'
   performerScraper:
     performer:
       Name: //span[@class="model-name"]
-      URLs: //link[@rel="canonical"]/@href
+      URLs:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              # Normalize to canonical /_NNNNN.htm form (strip name prefix)
+              - regex: '(https://www\.thenude\.com/)[^_]*(_\d+\.htm)'
+                with: '$1$2'
       Twitter:
         selector: //a[text()="TWITTER"]//@href
         postProcess:
@@ -63,8 +75,20 @@ xPathScrapers:
       Birthdate:
         selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
         postProcess:
-          - parseDate: January 2006
-          - parseDate: "??-??-2006"
+          - replace:
+              # Blank year-only dates (e.g. "1985")
+              - regex: '^\s*\d{4}\s*$'
+                with: ""
+              # Blank month+year-only dates (e.g. "November 1985") to prevent
+              # parseDate from defaulting the day to 01
+              - regex: '^\s*[A-Za-z]+\s+\d{4}\s*$'
+                with: ""
+              # Blank any date containing "??" (e.g. "??-??-1996", "15-??-1996")
+              # TheNude uses ?? as placeholder for unknown day/month components
+              - regex: '.*\?\?.*'
+                with: ""
+          - parseDate: 2 January 2006
+          - parseDate: January 2, 2006
       Ethnicity:
         selector: //li/span[@class="list-quest"][contains(text(),'Ethnicity')]/following-sibling::text()
         postProcess:
@@ -125,46 +149,19 @@ xPathScrapers:
           - replace:
               - regex: ^[^\(]+\(([^\)]+)\).*$
                 with: "$1"
-              - regex: Fake
-                with: "Augmented"
+              # "Real" maps to Stash internal value "Natural"
               - regex: Real
                 with: "Natural"
+              # "Fake" is already the correct Stash internal value — no mapping needed
+              # "Medium" is not a breast enhancement value — blank it
               - regex: Medium
                 with: ""
       CareerLength:
         selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/following-sibling::text()
-        concat: "-"
+        concat: " - "
       Aliases:
         selector: //meta[@itemprop="additionalName"]/@content
         concat: ", "
-      Tattoos:
-        selector: //li/span[@class="list-quest"][contains(text(),'Tattoos')]/../text()
-        postProcess:
-          - replace:
-              - regex: '\byes\b'
-                with: "Various"
-              - regex: '\bno\b'
-                with: "None"
-              - regex: '\bYes\b'
-                with: "Various"
-              - regex: "/bNo/b"
-                with: "None"
-              - regex: '\.'
-                with: ""
-      Piercings:
-        selector: //li/span[@class="list-quest"][contains(text(),'Piercings')]/../text()
-        postProcess:
-          - replace:
-              - regex: '\byes\b'
-                with: "Various"
-              - regex: '\bno\b'
-                with: "None"
-              - regex: '\bYes\b'
-                with: "Various"
-              - regex: "/bNo/b"
-                with: "None"
-              - regex: '\.'
-                with: ""
       Image:
         selector: //link[@rel="canonical"]/@href
         postProcess:
@@ -173,6 +170,9 @@ xPathScrapers:
                 with: "https://static.thenude.com/models/"
               - regex: \.htm
                 with: "/medhead.jpg"
+              # Encode spaces in performer names for valid image URLs
+              - regex: ' '
+                with: '%20'
       Gender:
         selector: //meta[@itemprop="gender"]/@content
       Details:
@@ -222,4 +222,4 @@ xPathScrapers:
       Tags: *tags
       Studio: *studio
       Photographer: *director
-# Last Updated September 17, 2025
+# Last Updated April 27, 2026
