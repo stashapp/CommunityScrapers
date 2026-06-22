@@ -1,13 +1,14 @@
-name: PimpBunny
+name: "PimpBunny"
 sceneByURL:
   - action: scrapeXPath
     url:
       - pimpbunny.com/videos/
     scraper: sceneScraper
+# Path fragment matches localized URLs (e.g. /es/onlyfans-creators/…) as well as the default locale.
 performerByURL:
   - action: scrapeXPath
     url:
-      - pimpbunny.com/onlyfans-models/
+      - pimpbunny.com/onlyfans-creators/
     scraper: performerScraper
 
 xPathScrapers:
@@ -16,7 +17,7 @@ xPathScrapers:
       $models: //ul[contains(@class, "pages-view-video-models")]
       $jsonld: //script[@type="application/ld+json"]
     scene:
-      Title: //h1[contains(@class, "pages-view-video-video-title")]
+      Title: //*[contains(@class, "pages-view-video-video-title")]
       Date:
         selector: $jsonld
         postProcess:
@@ -25,6 +26,7 @@ xPathScrapers:
                 with: $1
           - parseDate: 2006-01-02
       Image: //meta[@property="og:image"]/@content
+      Details: //div[contains(@class, "pages-view-video-description")] | //meta[@property="og:description"]/@content
       URL: //link[@rel="canonical"]/@href
       Studio:
         Name:
@@ -33,11 +35,16 @@ xPathScrapers:
         Name: $models//div[contains(@class, "pages-view-video-model-title")]//a
         URLs: $models//div[contains(@class, "pages-view-video-model-title")]//a/@href
       Tags:
-        Name: //ul[contains(@class, "pages-view-video-tags")][1]//a
+        Name: //ul[contains(@class, "pages-view-video-categories")]//a
   performerScraper:
     performer:
-      Name: //h1[contains(@class, "ui-heading-h1")]
-      Image: //div[contains(@class, "blocks-model-view-thumbnail")]//img/@data-original
+      Name: //div[contains(@class,"model-view-title")]//h1
+      Details: //div[contains(@class,"model-view-creator-description")]
+      Image: //div[contains(@class,"model-view-thumbnail")]//img/@data-original
       Tags:
-        Name: //div[contains(@class,"model-view-top-lists")]/a/text()
-      URLs: //div[contains(@class,"model-view-social-bar")]//a/@href
+        Name: //div[contains(@class,"model-view-top-lists")]//a
+      URLs: //div[contains(@class,"model-view-social-bar")]//a/@href | //meta[@property="og:url"]/@content
+      Aliases:
+        selector: //meta[@name="keywords"]/@content
+        split: ", "
+# Last Updated May 28, 2026
