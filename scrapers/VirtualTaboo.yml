@@ -1,14 +1,21 @@
 name: "VirtualTaboo"
-sceneByURL:
+sceneByURL: &byURL
   - action: scrapeXPath
     url:
       - virtualtaboo.com/videos/
     scraper: sceneScraper
+galleryByURL: *byURL
 groupByURL:
   - action: scrapeXPath
     url:
       - virtualtaboo.com/videos/
     scraper: movieScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - virtualtaboo.com/pornstars/
+    scraper: performerScraper
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -21,14 +28,28 @@ xPathScrapers:
         postProcess:
           - parseDate: 02 January, 2006
       Details: &detailsSel $info//*[@class="description"]
-      Tags:
+      Code: &code
+        selector: //a[contains(@href, "signup.php?vid=")]/@href
+        postProcess:
+          - replace:
+              - regex: .*=(\d+)$
+                with: $1
+      Tags: &tags
         Name: $info//div[starts-with( @class,"tag-list")]/a/text()
-      Performers:
+      Performers: &performers
         Name: $info//div[starts-with(@class,"info")]/a/text()
       Image: &imageSel //meta[@property="og:image"]/@content
-      Studio:
+      Studio: &studio
         Name:
           fixed: "Virtual Taboo"
+    gallery:
+      Title: *titleSel
+      Date: *dateAttr
+      Details: *detailsSel
+      Code: *code
+      Tags: *tags
+      Performers: *performers
+      Studio: *studio
   movieScraper:
     common:
       $info: *infoSel
@@ -54,5 +75,26 @@ xPathScrapers:
           fixed: VirtualTaboo
       Synopsis: *detailsSel
       FrontImage: *imageSel
-# Last Updated August 04, 2023
+  performerScraper:
+    performer:  
+      Gender:
+        fixed: "Female"
+      Name:
+        selector: //meta[@property="og:image:alt"]/@content
+      URLs:
+        selector: //link[@rel="canonical"]/@href
+      Country: 
+        selector: //div[@class="actor-detail__info-value"]
+        postProcess:
+          - replace:
+            - regex: ",.*$"
+              with: ""
+      Birthdate:
+        selector: //table[@class="actor-detail__params-table"]//td[text()="Birthday:"]/following-sibling::td/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Tags:
+        Name: //div[@class="actor-detail__tags"]/div/a/text()
+      Image: //meta[@property="og:image"]/@content
 
+# Last Updated June 05, 2026
