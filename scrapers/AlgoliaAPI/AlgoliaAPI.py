@@ -3,6 +3,8 @@ Stash scraper that uses the Algolia API Python client
 """
 from base64 import b64decode, b64encode
 import configparser
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timedelta
 from difflib import SequenceMatcher
 import json
 import os
@@ -460,10 +462,53 @@ def scene_from_url(
     postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
 ) -> ScrapedScene | None:
     "Scrapes a scene from a URL, running an optional postprocess function on the result"
+    if isinstance(sites, list) and "affiliate" in sites:
+        sites.remove("affiliate")
+        return scene_from_affiliate_url(_url, sites, fragment, postprocess)
     clip_id = id_from_url(_url)
     site = sites[0] # TODO: handle multiple sites
     log.debug(f"Clip ID: {clip_id}, Site: {site}")
     return scene_from_id(clip_id, [site], fragment, postprocess)
+
+def scene_from_affiliate_url(
+    _url: str,
+    sites: list[str],
+    fragment: dict[str, Any] = None,
+    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
+) -> ScrapedScene | None:
+    "Scrapes a scene from an affiliate URL, running an optional postprocess function on the result"
+    r = requests.get(_url, timeout=10)
+    if r.status_code != 200:
+        log.error(f"Failed to fetch affiliate URL: {r.status_code}")
+        return None
+    soup = bs(r.text, features='html.parser')
+    # attempt to extract title and date from the affiliate page, to use as a fragment for matching the correct scene
+    fragment = {}
+    # title is in //h2 tag
+    if h2 := soup.find("h2"):
+        fragment["title"] = h2.get_text(strip=True)
+    else:
+        # fallback to using the URL slug as the title, which is less reliable but better than nothing
+        parsed_url = urlparse(_url)
+        slug = parsed_url.path.split("/")[-1]
+        fragment["title"] = slug.replace("-", " ").title()
+    # date is in //div[@id="title-single"]/span
+    # format is usually like "March 18th, 2026" but can also be relative like "Yesterday"
+    if date_span := soup.select_one("#title-single > span"):
+        date_text = date_span.get_text(strip=True)
+        # parse relative date formats to absolute date, e.g. "Yesterday" -> "2026-03-17"
+        if date_text.lower() == "yesterday":
+            fragment["date"] = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
+        # parse absolute date formats to "YYYY-MM-DD"
+        else:
+            # This regex looks for digits (\d+) followed by st, nd, rd, or th
+            # and replaces just the suffix with an empty string.
+            clean_date_text = re.sub(r"(\d+)(st|nd|rd|th)", r"\1", date_text)
+            try:
+                fragment["date"] = datetime.strptime(clean_date_text, "%B %d, %Y").strftime("%Y-%m-%d")
+            except ValueError as e:
+                log.error(f"Failed to parse date from affiliate page: {e}")
+    return scene_from_fragment(fragment, sites, postprocess)
 
 def scene_url_from_photoset(photoset_from_api: dict[str, Any], site: str) -> str | None:
     "Extracts scene URL from API photoset properties"
@@ -743,10 +788,13 @@ def scene_search(
         if len(api_scenes := [hit.to_dict() for hit in response.hits]) == 1: # single search result
             return [postprocess(to_scraped_scene(api_scenes[0], site), api_scenes[0])]
         if len(api_scenes) > 1: # multiple search results
-            return [
-                postprocess(to_scraped_scene(api_scene, site), api_scene)
-                for api_scene in sort_api_scenes_by_match(api_scenes, fragment) # sort
-            ]
+            sorted_scenes = sort_api_scenes_by_match(api_scenes, fragment) # sort
+            # postprocess concurrently to save time
+            with ThreadPoolExecutor() as executor:
+                results = list(executor.map(
+                    lambda s: postprocess(to_scraped_scene(s, site), s), sorted_scenes
+                ))
+            return results
     return []
 
 def add_photoset_match_metadata(
