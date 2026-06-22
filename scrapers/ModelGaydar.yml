@@ -1,9 +1,9 @@
-name: "modelgaydar"
+name: "Gayerdar"
 sceneByURL:
   - action: scrapeJson
     url:
-      - modelgaydar.com/en-US/videos/
-    queryURL: https://api.modelgaydar.com/api/v2/videos/{url}
+      - gayerdar.com/en-US/videos/
+    queryURL: https://api.gayerdar.com/api/v2/videos/{url}
     queryURLReplace:
       url:
         - regex: .*\/videos\/([^?]*).*
@@ -11,8 +11,8 @@ sceneByURL:
     scraper: apiScraper_en
   - action: scrapeJson
     url:
-      - modelgaydar.com/zh-TW/videos/
-    queryURL: https://api.modelgaydar.com/api/v2/videos/{url}
+      - gayerdar.com/zh-TW/videos/
+    queryURL: https://api.gayerdar.com/api/v2/videos/{url}
     queryURLReplace:
       url:
         - regex: .*\/videos\/([^?]*).*
@@ -21,7 +21,7 @@ sceneByURL:
 
 sceneByFragment:
   action: scrapeJson
-  queryURL: https://api.modelgaydar.com/api/v2/videos/{filename}
+  queryURL: https://api.gayerdar.com/api/v2/videos/{filename}
   queryURLReplace:
     # Assume beginning part contains the code
     filename:
@@ -35,8 +35,8 @@ sceneByFragment:
 performerByURL:
   - action: scrapeJson
     url:
-      - modelgaydar.com/en-US/models/
-    queryURL: https://api.modelgaydar.com/api/v2/models/{url}
+      - gayerdar.com/en-US/models/
+    queryURL: https://api.gayerdar.com/api/v2/models/{url}
     queryURLReplace:
       url:
         - regex: .*\/models\/([^?]*).*
@@ -44,8 +44,8 @@ performerByURL:
     scraper: apiScraper_en
   - action: scrapeJson
     url:
-      - modelgaydar.com/zh-TW/models/
-    queryURL: https://api.modelgaydar.com/api/v2/models/{url}
+      - gayerdar.com/zh-TW/models/
+    queryURL: https://api.gayerdar.com/api/v2/models/{url}
     queryURLReplace:
       url:
         - regex: .*\/models\/([^?]*).*
@@ -57,7 +57,7 @@ jsonScrapers:
     performer:
       Name: data.name
       Disambiguation:
-        fixed: Model Gaydar
+        fixed: Gayerdar
       Aliases: data.name_cn
       Gender: data.gender
       Ethnicity:
@@ -89,16 +89,16 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: https://modelgaydar.com/en-US/videos/
+                with: https://gayerdar.com/en-US/videos/
       Tags: &tags
         Name: data.tags.#.name
       Studio:
         Name:
-          fixed: Model Gaydar
+          fixed: Gayerdar
       Performers:
         Name: data.models.#.name
         Disambiguation:
-          fixed: Model Gaydar
+          fixed: Gayerdar
         Aliases: data.models.#.name_cn
         Image: data.models.#.avatar
         Gender: data.models.#.gender
@@ -111,13 +111,13 @@ jsonScrapers:
           postProcess:
             - replace:
                 - regex: ^
-                  with: https://modelgaydar.com/en-US/models/
+                  with: https://gayerdar.com/en-US/models/
 
   apiScraper_cn:
     performer:
       Name: data.name_cn
       Disambiguation:
-        fixed: Model Gaydar
+        fixed: Gayerdar
       Aliases: data.name
       Gender: data.gender
       Ethnicity:
@@ -143,14 +143,14 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: https://modelgaydar.com/zh-TW/videos/
+                with: https://gayerdar.com/zh-TW/videos/
       Studio:
         Name:
-          fixed: Model Gaydar
+          fixed: Gayerdar
       Performers:
         Name: data.models.#.name_cn
         Disambiguation:
-          fixed: Model Gaydar
+          fixed: Gayerdar
         Aliases: data.models.#.name
         Image: data.models.#.avatar
         Gender: data.models.#.gender
@@ -163,5 +163,5 @@ jsonScrapers:
           postProcess:
             - replace:
                 - regex: ^
-                  with: https://modelgaydar.com/zh-TW/models/
-# Last Updated September 17, 2025
+                  with: https://gayerdar.com/zh-TW/models/
+# Last Updated June 21, 2026
