@@ -1,0 +1,195 @@
+name: "Hentai Sub Ita"
+
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.hentaisubita.net/{filename}/
+  queryURLReplace:
+    filename:
+      # [HSUB] Anime_02_Title - sub ita - E05v2 Uncensored (HD) www.example.com [3bb935c6].mp4
+      # 1. Rimuove tag tra parentesi quadre [xxx]
+      - regex: '\[[^\]]*\]'
+        with: ""
+      
+      # 2. Rimuove tag tra parentesi tonde (xxx)
+      - regex: '\([^)]*\)'
+        with: ""
+      
+      # 3. Rimuove estensione file (.mp4, .avi, .mkv...)
+      - regex: '\.\w{2,4}$'
+        with: ""
+      
+      # 4. Rimuove tag noti: sub ita, itasub, uncensored, www
+      - regex: '(?i)(sub[\s\-_]?ita|itasub|uncensored|censored|www\.[^\s]+)'
+        with: ""
+
+      # 5. Standardizza separatori in trattini
+      - regex: '[\s\._+]+'
+        with: '-'
+        
+      # 6. Rimuove prefissi estesi di episodi e stagioni (ma lascia il numero)
+      - regex: '(?i)(^|[\-])(?:ep|episode|episodio|act|vol|season|stagione)([\-]?\d{1,2})'
+        with: '$1$2'
+        
+      # 7. Converte prefissi brevi di stagione e episodio in numeri (es. S02E05 → 02-05)
+      - regex: '(?i)\b(e|s)(\d{1,2})((e|s)(\d{1,2}))?\b'
+        with: '$2-$5'
+
+      # 8. Rimuove suffissi di versione dai numeri (v2, vFinal, vRev3)
+      - regex: '(?i)(\d{1,2})(?:-)?v(?:\d+|final|finale|rev\d*)\b'
+        with: '$1'
+
+      # 9. Converte ogni numero breve (max 2 cifre) con zero iniziale in -<numero>
+      - regex: '(^|[^0-9])0?(\d{1,2})([^0-9]|$)'
+        with: '$1$2$3'
+      
+      # 10. Sostituisce caratteri non validi URL (ma lascia i trattini)
+      - regex: '[^a-zA-Z0-9\-]+'
+        with: '-'
+      
+      # 11. Inserisce trattino tra lettera e numero (es. "abc2" → "abc-2")
+      - regex: '([a-zA-Z])(\d)'
+        with: '$1-$2'
+        
+      # 12. Elimina tutto dopo l’ultimo numero breve
+      - regex: '^(.*-\d{1,2})(?:-\d{1,2})*(?:-.*)?$'
+        with: '$1'
+        
+      # 13. Trattini multipli → uno solo
+      - regex: '-+'
+        with: '-'
+      
+      # 14. Rimuove trattini iniziali/finali (con #12 i finali già non ci sono)
+      - regex: '^-+|-+$'
+        with: ""
+        
+      # 15. Aggiungi "episodio-" davanti all'ultimo numero
+      - regex: '(\d+)$'
+        with: 'episodio-$1'
+      
+      # 16. Se l'ultimo numero (episodio) è ad 1 cifra, aggiunge 0 davanti
+      - regex: '-(\d{1})$'
+        with: '-0$1'
+  scraper: sceneScraper
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hentaisubita.net/
+    scraper: sceneScraper
+
+# scrape some information for the scene through the series
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://www.hentaisubita.net/?s={}
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: "{url}"
+  scraper: ScenefromSeriesScraper
+
+movieByURL:
+  - action: scrapeXPath
+    url:
+      - hentaisubita.net/anime/
+    scraper: groupScraper
+
+xPathScrapers:
+  commonXPaths:
+    scene:
+      Title: &title //h1[@class="entry-title"]/text()
+      Details: &details
+        selector: //div[contains(@class, 'desc') and contains(@class, 'mindes')]//text()
+        concat: "\n\n"
+      URL: &url //meta[@property="og:url"]/@content
+      # Date is approximate having only the year
+      Date: &date
+        selector: //span[@class="split"][b[text()="Anno:"]]/text()
+        postProcess:
+          - replace:
+              - regex: '\s*(\d{4})'
+                with: '${1}-01-01'
+      # Site only have the covers (not thumbnails)
+      Image: &image //meta[@property="og:image"]/@content
+      Studio: &studio
+        Name: //div[@class="spe"]/span[b[text()="Studio:"]]/a/text()
+      Tags: &tags
+        Name:
+          selector: //div[@class="genxed"]/a[@rel="tag"]/text()
+          postProcess:
+            - map:
+                "Altro": ""
+                "Anime Bondage": "Bondage"
+                "HD": ""
+      Movies:
+        Name: &name //meta[@property="article:section"]/@content
+        Aliases: &aliases //span[@class="alter"]/text()
+        Synopsis: &synopsis
+          selector: //div[@class="entry-content"]/p//text()
+          concat: "\n\n"
+
+  sceneScraper:
+    scene:
+      Title:
+        selector: *title
+        postProcess:
+          - replace:
+              - regex: '(?i)\s+episodio\s+(\d+)$'
+                with: ' ep$1'
+      Date: *date
+      Details: *details
+      Tags: *tags
+      Studio: *studio
+      Image: *image
+      URL: *url
+      Movies:
+        Name: *name
+        Aliases: *aliases
+        Date: *date
+        Synopsis: *details
+        URL: (//li/a[@itemprop="item"])[2]/@href
+        FrontImage: *image
+        
+  sceneSearch:
+    scene:
+      Title: //article[@class="bs"]/div/a/div[@class="tt"]/text()
+      URL: //article[@class="bs"]/div/a[@class="tip"]/@href
+      Image: //article[@class="bs"]//img/@data-src
+
+  ScenefromSeriesScraper:
+    scene:
+      Title:
+        selector: *title
+        postProcess:
+          - replace:
+              - regex: '$'
+                with: ' ep00'
+      Date: *date
+      Details: *synopsis
+      Tags: *tags
+      Studio: *studio
+      Image: *image
+      URL: 
+        selector: *url
+        postProcess:
+          - replace:
+              - regex: '^(https://[^/]+)/anime/([^/]+)/'
+                with: '$1/$2-episodio-00/'
+      Movies:
+        Name: *title
+        Aliases: *aliases
+        Date: *date
+        Synopsis: *synopsis
+        URL: *url
+        FrontImage: *image
+
+  groupScraper:
+    movie:
+      Name: *title
+      Aliases: *aliases
+      Date: *date
+      Studio: *studio
+      Synopsis: *synopsis
+      FrontImage: *image
+
+# Last Updated June 25, 2025
