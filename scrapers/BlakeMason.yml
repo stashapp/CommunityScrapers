@@ -4,6 +4,14 @@ sceneByURL:
     url:
       - blakemason.com/videos/
     scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - blakemason.com/models
+    scraper: performerScraper
+
+
 xPathScrapers:
   sceneScraper:
     common:
@@ -38,4 +46,51 @@ xPathScrapers:
           - replace:
               - regex: ^//
                 with: https://
-# Last Updated October 03, 2023
+
+
+  performerScraper:
+    performer:
+      Name: //h2[contains(@class,'model-name')]//span/text()
+      Gender:
+        fixed: Male
+      Height:
+        selector: //div[contains(@class,'model-infos')]//li[h3[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'height')]]/p/text()
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+          - feetToCm: true
+      PenisLength:
+        selector: //div[contains(@class,'model-infos')]//li[h3[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'dick size')]]/p/text()
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+              - regex: ^(\d+(?:\.\d+)?)$
+                with: "0'$1"
+          - feetToCm: true
+      Circumcised:
+        selector: //div[contains(@class,'model-infos')]//li[h3[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'cut / uncut')]]/p/text()
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+          - map:
+              Uncut: UNCUT
+              Cut: CUT
+              uncut: UNCUT
+              cut: CUT
+      Details:
+        selector: //p[contains(@class,'description')]/text()
+        postProcess:
+          - replace:
+              - regex: \s+|\xA0+
+                with: " "
+              - regex: ^\s+|\s+$
+                with: ""
+      Image:
+        selector: //div[contains(@class,'model-img')]//img/@src
+        postProcess:
+          - replace:
+              - regex: ^//(.*)$
+                with: "https://$1"
