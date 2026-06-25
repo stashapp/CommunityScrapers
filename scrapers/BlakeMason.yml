@@ -80,6 +80,18 @@ xPathScrapers:
               Cut: CUT
               uncut: UNCUT
               cut: CUT
+      EyeColor:
+        selector: //div[contains(@class,'model-infos')]//li[h3[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'eyes')]]/p/text()
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+      HairColor:
+        selector: //div[contains(@class,'model-infos')]//li[h3[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'hair')]]/p/text()
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
       Details:
         selector: //p[contains(@class,'description')]/text()
         postProcess:
@@ -94,3 +106,6 @@ xPathScrapers:
           - replace:
               - regex: ^//(.*)$
                 with: "https://$1"
+
+  
+# Last Updated June 25, 2026
