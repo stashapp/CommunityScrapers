@@ -66,8 +66,8 @@ xPathScrapers:
         selector: //*[@id="waterfall"]/div[1]/div/div[1]/img/@src
         postProcess:
           - replace:
-            - regex: ^
-              with: https://www.javbus.com
+            - regex: ^/
+              with: https://www.javbus.com/
 
   sceneSearch: 
     scene: 
@@ -96,8 +96,8 @@ xPathScrapers:
         selector: //div[@class="row movie"]/div[@class="col-md-9 screencap"]/a[@class="bigImage"]/img/@src
         postProcess:
           - replace:
-            - regex: ^
-              with: https://www.javbus.com
+            - regex: ^/
+              with: https://www.javbus.com/
       Studio:
         Name: //div[@class="col-md-3 info"]//span[contains(text(), '發行商')]/../a/text()
 
