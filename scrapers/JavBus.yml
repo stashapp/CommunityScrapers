@@ -6,8 +6,17 @@ sceneByFragment:
     filename:
       - regex: -JG\d
         with: ""
-      - regex: (.*[^a-zA-Z0-9])*([a-zA-Z-]+\d+)(.+)
-        with: $2
+      # Drop disc/site junk tokens that look like codes (CD1, DISC2, JAV24, ...) so the real
+      # code is picked even when such junk appears before it in the filename.
+      - regex: (?i)\b(CD|DVD|DISC|PART|JAV)[-_ ]?\d{1,3}\b
+        with: " "
+      # Extract the first LETTERS-DIGITS code and normalize to LETTERS-DIGITS: dashless
+      # (DDT246), spaced/underscored, and double-dash ([GTJ--010]) names all become e.g.
+      # DDT-246 for the javbus.com/<code> lookup. Replaces the previous expression, which
+      # picked the LAST code-like token (e.g. a trailing -CD1), required text after the code
+      # (so a bare code at the end of the name failed), and left dashless codes dashless (404).
+      - regex: ^.*?([A-Za-z]{2,6})[-_ ]*(\d{2,5}).*$
+        with: $1-$2
   scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
