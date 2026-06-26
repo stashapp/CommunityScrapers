@@ -206,7 +206,7 @@ def get_code(site: str, raw_scene: dict) -> str | None:
         return match.group(1)
 
     if (trailer := dig(raw_scene, "trailer_url")) and (
-        match := re.search(r"/(\w{2,3}\d{4})", trailer)
+        match := re.search(r"^(\w{2,3}\d{4})", trailer.split('/')[-1])
     ):
         return match.group(1)
 
