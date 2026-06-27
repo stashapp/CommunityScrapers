@@ -28,10 +28,10 @@ CONFIG = {
         }
     },
     "ladyboygold": {
-        "cms_area_id": "a1fbacce-2340-45ef-9576-129e766e63f9",
+        "cms_area_id": "cd9a5600-5cda-4ed0-b356-f62af1887d96", # from homepage call to /config.json
         "studio_name": "LadyboyGold",
         "sets": {
-            "cms_block_id": "109727"
+            "cms_block_id": "114793" # from scene page call to /sets, query param
         }
     },
     "ladyboypussy": {
@@ -45,7 +45,7 @@ CONFIG = {
         "cms_area_id": "126f96ec-ffdc-4f4b-a459-c9a2e78b9b67",
         "studio_name": "Ladyboys Fucked Bareback",
         "sets": {
-            "cms_block_id": "105792"
+            "cms_block_id": "105724"
         }
     },
     "ladyboyvice": {
@@ -59,7 +59,7 @@ CONFIG = {
         "cms_area_id": "cc6bd0ac-a417-47d1-9868-7855b25986e5",
         "studio_name": "TSRaw",
         "sets": {
-            "cms_block_id": "102013"
+            "cms_block_id": "101951"
         }
     },
 }
@@ -149,6 +149,11 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
             scene["studio"] = {"name": CONFIG[main_website_name]["studio_name"]}
         else:
             scene["studio"] = {"name": main_website}
+    else:
+        # url
+        scene["url"] = f"https://members.{domain}.com/video/{cms_set['slug']}"
+        # studio
+        scene["studio"] = {"name": CONFIG[domain]["studio_name"]}
 
     categories = extract_names(cms_set, "Category")
     tags = extract_names(cms_set, "Tags")
@@ -464,6 +469,7 @@ def scene_from_fragment(
             r for r in search_results
             if r["title"] == fragment["title"]
             and r["date"] == fragment["date"]
+            and r["url"] == fragment["url"]
         ),
         None
     )
