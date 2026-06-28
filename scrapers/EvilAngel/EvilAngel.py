@@ -50,6 +50,7 @@ Each serie_name requiring a map/override should have a key-value here
 site_map = {
     "christophclarkonline": "Christoph Clark Online",
     "christophsbignaturaltits": "Christoph's Big Natural Tits",
+    "cockchokingsluts": "Cock Choking Sluts",
     "gapingangels": "Gaping Angels",
     "iloveblackshemales": "I Love Black Shemales",
     "jakemalone": "Jake Malone",
