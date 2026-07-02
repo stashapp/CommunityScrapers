@@ -1,28 +1,16 @@
 import json
-import os
 import re
 import sys
 from typing import Any
 
-CURRENT_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
-PARENT_DIR = os.path.dirname(CURRENT_SCRIPT_DIR)
-sys.path.append(PARENT_DIR)
+import py_common.log as log
+from py_common.util import scraper_args
+from py_common.types import ScrapedPerformer
+import requests
+from lxml import etree
+import cloudscraper
 
-try:
-    import py_common.log as log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit()
-
-try:
-    import requests
-    from lxml import etree
-except ModuleNotFoundError:
-    print("You need to install dependencies from requirements.txt")
-    sys.exit(1)
+scraper = cloudscraper.create_scraper()
 
 XPATHS = {
     "birthdate": "//span[text()='生年月日']/../p/text()",
@@ -186,10 +174,8 @@ def get_xpath_result(tree: Any, xpath_string: str) -> str | list[str] | None:
         return _result
 
 
-def performer_by_url(url):
-    lang = sys.argv[2]
-
-    request = requests.get(url)
+def performer_by_url(url, lang="EN"):
+    request = scraper.get(url)
     log.debug(request.status_code)
 
     tree = etree.HTML(request.text)
@@ -199,6 +185,7 @@ def performer_by_url(url):
 
     JAPANESE = True
 
+    kanji_name = None
     if origin_result := get_xpath_result(tree, XPATHS["origin"]):
         if origin_result == "海外":
             JAPANESE = False
@@ -245,29 +232,28 @@ def performer_by_url(url):
     scrape["urls"] = []
 
     if self_url_result := get_xpath_result(tree, XPATHS["url"]):
-        if self_url_result != None:
+        if self_url_result:
             scrape["urls"].append(self_url_result)
         else:
             log.debug("URL XPath matched, but no value found.")
 
     if twitter_url_result := get_xpath_result(tree, XPATHS["twitter"]):
-        if twitter_url_result != None:
+        if twitter_url_result:
             scrape["urls"].append(twitter_url_result)
         else:
             log.debug("Twitter XPath matched, but no value found.")
 
     if instagram_url_result := get_xpath_result(tree, XPATHS["instagram"]):
-        if instagram_url_result != None:
+        if instagram_url_result:
             scrape["urls"].append(instagram_url_result)
         else:
             log.debug("Instagram XPath matched, but no value found.")
 
     if birthdate_result := get_xpath_result(tree, XPATHS["birthdate"]):
         if match := re.search(
-            REGEXES["birthdate"], convert_to_halfwidth(birthdate_result)
+            REGEXES["birthdate"], convert_to_halfwidth(birthdate_result[0])
         ):
             scrape["birthdate"] = match["year"]+"-"+match["month"]+"-"+match["day"]
-            log.debug(match)
         else:
             log.debug("Birthday XPath matched, but no value found.")
 
@@ -327,75 +313,56 @@ def performer_by_url(url):
         scrape["hair_color"] = "Black"
         scrape["eye_color"] = "Brown"
     scrape["gender"] = "Female"
-    print(json.dumps(scrape))
+
+    return scrape
 
 
-def performer_by_name(name: str, retry=True) -> None:
-    lang = sys.argv[2]
+def performer_by_name(name: str, lang="EN", retry=True) -> list[ScrapedPerformer]:
     queryURL = f"https://www.minnano-av.com/search_result.php?search_scope=actress&search_word={name}"
 
-    result = requests.get(queryURL)
+    result = scraper.get(queryURL)
     tree = etree.HTML(result.text)
 
-    performer_list = []
-
     if re.search(REGEXES["url"], result.url):
-        performer_list.append({"name": name, "url": result.url})
+        return [{"name": name, "urls": [result.url]}]
     elif search_result := get_xpath_result(tree, XPATHS["search"]):
+        performer_list = []
+
         for node in search_result:
-            performer = {}
-            node_value = node.text
+            node_value = node
             if "/" not in node_value:
                 continue
+
             _, romanized_name = node_value.split(" / ")
-            performer["name"] = romanized_name
+            performer: ScrapedPerformer = {"name": romanized_name}
             if url_result := get_xpath_result(node, XPATHS["search_url"]):
                 url = ""
-                if match := re.search(REGEXES["id"], url_result):
+                if match := re.search(REGEXES["id"], url_result[0]):
                     url = str.format(FORMATS["url"], PERFORMER_ID=match[0])
-                performer["url"] = url
+                performer["urls"] = [url]
             performer_list.append(performer)
-    elif retry:
-        modified_name = reverse_first_last_name(name)
-        performer_by_name(modified_name, retry=False)
-    else:
-        performer_list.append({"name": "No performer found"})
+        return performer_list
 
-    print(json.dumps(performer_list))
+    if not retry:
+        return []
 
-
-def main():
-    if len(sys.argv) == 1:
-        log.error("No arguments")
-        sys.exit(1)
-
-    stdin = sys.stdin.read()
-
-    inputJSON = json.loads(stdin)
-    url = inputJSON.get("url", None)
-    name = inputJSON.get("name", None)
-
-    if "performer_by_url" in sys.argv:
-        log.debug("Processing performer by URL")
-        log.debug(stdin)
-        if url:
-            performer_by_url(url)
-        else:
-            log.error("Missing URL")
-    elif "performer_by_name" in sys.argv:
-        log.debug("Processing performer by name")
-        log.debug(stdin)
-        if name:
-            performer_by_name(name)
-        else:
-            log.error("Missing name")
-    else:
-        log.error("No argument processed")
-        log.debug(stdin)
+    modified_name = reverse_first_last_name(name)
+    return performer_by_name(modified_name, retry=False)
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        log.error(e)
+    op, args = scraper_args(prog="Minnano-AV")
+    result = None
+    log.debug(f"{op}: {json.dumps(args)}")
+    match op, args:
+        case "performer-by-url", {"url": url}:
+            result = performer_by_url(url)
+        case "performer-by-name", {"name": name}:
+            result = performer_by_name(name)
+        case "performer-by-fragment", {"url": url}:
+            result = performer_by_url(url)
+        case _:
+            log.error(f"Unknown operation {op}")
+            sys.exit(1)
+
+    print(json.dumps(result))
