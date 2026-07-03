@@ -71,15 +71,6 @@ def get_cookie_name(domain: str) -> str:
     b64_name = base64.b64encode(name.encode('utf-8')).decode('utf-8')
     return f"pcar%5f{b64_name.replace('=', '%3d')}"
 
-
-def has_valid_cookie(url: str) -> bool:
-    domain = urlparse(url).netloc.lower()
-    cookie_val = get_pcar_cookie(domain)
-    if cookie_val:
-        return True
-    return False
-
-
 def get_presumed_public_url(url: str) -> str:
     match = re.search(r'/members/scenes/(.*)_vids\.html', url, re.IGNORECASE)
     if match:
