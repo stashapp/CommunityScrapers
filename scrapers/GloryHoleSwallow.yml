@@ -2,8 +2,10 @@ name: "GloryHoleSwallow"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - gloryholeswallow.com
-      - cumpsters.com
+      - gloryholeswallow.com/tour
+      - gloryholeswallow.com/clips
+      - cumpsters.com/trailers
+      - cumpsters.com/clips
       - spytug.com
       - cumclinic.com
     queryURL: "{url}"
@@ -66,4 +68,4 @@ xPathScrapers:
                 spytug: SpyTug
                 cumclinic: CumClinic
       URL: //link[@rel='canonical']/@href
-# Last Updated August 01, 2024
+# Last Updated July 2, 2026
