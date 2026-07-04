@@ -5,21 +5,21 @@ sceneByFragment:
   queryURLReplace:
     filename:
       - regex: \..+$
-        with: ""
+        with: ''
   scraper: sceneQueryScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - dmm.co.jp/
     scraper: sceneScraper
-    queryURL: "{url}"
+    queryURL: '{url}'
 sceneByName:
   action: scrapeXPath
   queryURL: https://www.dmm.co.jp/mono/-/search/=/searchstr={}/
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
-  queryURL: "{url}"
+  queryURL: '{url}'
   scraper: sceneScraper
 
 xPathScrapers:
@@ -28,28 +28,27 @@ xPathScrapers:
       $videoItem: //*[@id="list"]
     scene:
       Title: $videoItem/li/div/p/a/span[@class="txt"]
-      URL: 
+      URL:
         selector: $videoItem/li/div/p/a/@href
       Image:
         selector: $videoItem/li/div/p/a/span[@class="img"]/img/@src
         postProcess:
           - replace:
               - regex: ^
-                with: "https:"
+                with: 'https:'
   sceneQueryScraper:
     common:
       $videoItem: //*[@id="list"]
     scene:
       Title: $videoItem/li/div/p/a/span[@class="txt"]
-      URL: 
+      URL:
         selector: $videoItem/li/div/p/a/@href
       Image:
         selector: $videoItem/li/div/p/a/span[@class="img"]/@src
         postProcess:
           - replace:
               - regex: ^
-                with: "https:"
-
+                with: 'https:'
   sceneScraper:
     scene:
       Title: //meta[@property="og:title"]/@content
@@ -61,7 +60,7 @@ xPathScrapers:
               - regex: (\d{4})/(\d{2})/(\d{2})
                 with: $1-$2-$3
           - parseDate: 2006-01-02
-      Code: 
+      Code:
         selector: //td[contains(.,"品番") and @class="nw"]/following-sibling::td
         postProcess:
           - replace:
@@ -72,7 +71,7 @@ xPathScrapers:
       Performers:
         Name: //td[contains(.,"出演者") and @class="nw"]/following-sibling::td/span/a
       Studio:
-        Name: 
+        Name:
           selector: //td[contains(.,"メーカー") and @class="nw"]/following-sibling::td/a
           postProcess:
             - map:
@@ -93,23 +92,22 @@ xPathScrapers:
                 大塚フロッピー: Otsuka Floppy
                 ムーディーズ: Moodyz
                 ヴィ: V
-                #キチックス/妄想族: Kitixx/妄想族
-                #バミューダ/妄想族: BERMUDA/妄想族
-                #ボニータ/妄想族: Bonita/妄想族
-                #タマネギ/妄想族: Onion/妄想族
-                #ミステリア/妄想族: Mystery/妄想族
-
+                # キチックス/妄想族: Kitixx/妄想族
+                # バミューダ/妄想族: BERMUDA/妄想族
+                # ボニータ/妄想族: Bonita/妄想族
+                # タマネギ/妄想族: Onion/妄想族
+                # ミステリア/妄想族: Mystery/妄想族
       Image: //meta[@property="og:image"]/@content
-      URL: 
+      URL:
         selector: //meta[@property="og:url"]/@content
       Director: //td[contains(.,"監督") and @class="nw"]/following-sibling::td/a
 
 driver:
   cookies:
-    - CookieURL: "https://www.dmm.co.jp"
+    - CookieURL: 'https://www.dmm.co.jp'
       Cookies:
-        - Name: "age_check_done"
-          Domain: ".dmm.co.jp"
-          Value: "1"
-          Path: "/"
+        - Name: 'age_check_done'
+          Domain: '.dmm.co.jp'
+          Value: '1'
+          Path: '/'
 # Last Updated Jan 10, 2024
