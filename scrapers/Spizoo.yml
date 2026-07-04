@@ -6,6 +6,7 @@ sceneByURL:
       - drdaddypov.com/updates/
       - firstclasspov.com/updates/
       - gothgirlfriends.com/updates/
+      - gothgirlfriendsvip.com/updates
       - mrluckylife.com/updates/
       - mrluckylife.com/members/
       - mrluckypov.com/updates/
@@ -69,6 +70,7 @@ xPathScrapers:
                 drdaddypov: Dr. Daddy POV
                 firstclasspov: First Class POV
                 gothgirlfriends: Goth Girlfriends
+                gothgirlfriendsvip: Goth GirlfriendsVIP
                 mrluckylife: Mr. LuckyLIFE
                 mrluckypov: Mr. LuckyPOV
                 mrluckyraw: Mr. LuckyRaw
@@ -94,4 +96,4 @@ driver:
           Domain: ".mrluckylife.com"
           Path: "/"
           Value: ""
-# Last Updated August 11, 2024
+# Last Updated July 4, 2026
