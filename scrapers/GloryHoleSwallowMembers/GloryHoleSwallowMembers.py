@@ -26,7 +26,7 @@ from py_common.config import get_config
 # return the logged-out URL if any exists, which can then be scraped by the non-members scraper.
 
 # TODO: Support additional related sites (spytug, cumclinic). There are currently a few spots
-# where they are mentioned in the code, but there is not actual support yet.
+# where they are mentioned in the code, but those sites have not been tested yet.
 
 config = get_config(
     # CONFIG_NOTES
@@ -81,6 +81,25 @@ def get_presumed_public_url(url: str) -> str:
         else:
             url = re.sub(r'/members/scenes/.*_vids\.html', f'/trailers/{scene_id}.html', url, flags=re.IGNORECASE)
     return url
+
+
+def check_public_url_validity(public_url: str) -> bool:
+    """
+    Returns true iff the public URL returns a 200 status code.
+    """
+    try:
+        # We disallow redirects because a hypothetical public URL for a scene which is not publicly
+        # visible redirects (302) to the tour index page.
+        response = requests.head(public_url, allow_redirects=False, timeout=5)
+        if response.status_code == 200:
+            log.debug(f"Public URL is valid (200): {public_url}")
+            return True
+        else:
+            log.debug(f"Public URL is invalid (status {response.status_code}): {public_url}")
+            return False
+    except Exception as e:
+        log.warning(f"Error checking public URL {public_url}: {e}")
+        return False
 
 
 def get_title_text(tree) -> str:
@@ -148,7 +167,7 @@ def get_release_date(tree) -> tuple[str, bool]:
     # Check whether that seems to apply here (or we just don't have a release date but do have a comment date!) and update accordingly
     if earliest_comment_date:
         if not release_date:
-            log.debug(f"No release date found, using comment date as estimated release date: {earliest_comment_date}")
+            log.info(f"No release date found, using comment date as estimated release date: {earliest_comment_date}")
             release_date = earliest_comment_date
             is_estimate = True
         else:
@@ -157,7 +176,7 @@ def get_release_date(tree) -> tuple[str, bool]:
                 release_dt = datetime.strptime(release_date, "%Y-%m-%d")
                 # Leave 4 day wiggle room for release schedule weirdness
                 if comment_dt < release_dt - timedelta(days=4):
-                    log.debug(f"Earliest comment date is significantly earlier than nominal release date. Using comment date as estimated release date: {earliest_comment_date}")
+                    log.info(f"Earliest comment date is significantly earlier than nominal release date. Using comment date as estimated release date: {earliest_comment_date}")
                     release_date = earliest_comment_date
                     is_estimate = True
             except ValueError:
@@ -189,13 +208,12 @@ def get_tags(tree) -> list:
 def get_image(tree, base_url: str = "") -> str:
     relative_image_url = ""
 
-    # When logged-in, cover image URL is only avaialable as part of an inline script, as `useimage = "/members/content//contentthumbs/xyz/abc.jpg";`
     scripts = tree.xpath("//script[contains(text(), 'useimage')]/text()")
     for script_content in scripts:
         useimage_match = re.search(r'useimage\s*=\s*"(.*?)"', script_content)
         if useimage_match:
-            # Image URLs that include `/members/` require a cookie to load, and we're just sending back a URL where the client might try to
-            # load without a cookie, so let's map to a public URL that should always work
+            # Image URLs that include `/members/` require a cookie to load, and we're just sending back a URL where the
+            # client might try to load without a cookie, so let's map to a public URL that should always work.
             raw_url = useimage_match.group(1).strip()
             if raw_url:
                 # gloryholeswallow and cumclinic include `/tour` in their publc image URL path; spytug and cumpsters do not.
@@ -215,38 +233,18 @@ def get_image(tree, base_url: str = "") -> str:
     return None
 
 
-def check_public_url_validity(public_url: str) -> bool:
-    """
-    Checks if the public URL returns a 200 status code.
-    """
-    log.debug(f"Checking if public URL is valid: {public_url}")
-    try:
-        # Check the public URL by making a HEAD request. We disallow redirects
-        # because a hypothetical public URL for a scene which is not publicly visible redirects (302) to the tour index page.
-        response = requests.head(public_url, allow_redirects=False, timeout=5)
-        if response.status_code == 200:
-            log.debug(f"Public URL is valid (200): {public_url}")
-            return True
-        else:
-            log.debug(f"Public URL is invalid (status {response.status_code}): {public_url}")
-            return False
-    except Exception as e:
-        log.warning(f"Error checking public URL {public_url}: {e}")
-        return False
-
 def get_download_filename_stem(tree):
-    # Get all links whose title attribute includes 'select save as to download'
     download_links = tree.xpath("//a[contains(@title, 'select save as to download')]/@href")
     if not download_links:
         return ""
-    # Get the base file name from all download links
-    filename_stems = []
+    # Get the basename from all download links (e.g. /foo/bar.mp4 --> bar.mp4)
+    basenames = []
     for link in download_links:
-        filename_stems.append(basename(urlparse(link).path))
-    if not filename_stems:
+        basenames.append(basename(urlparse(link).path))
+    if not basenames:
         return ""
     # Take the longest common prefix. Trim any trailing .mp4 extension or underscore (e.g. from "scene1_hd and scene1_sd")
-    common_prefix = commonprefix(filename_stems)
+    common_prefix = commonprefix(basenames)
     if common_prefix.endswith(".mp4"):
         common_prefix = common_prefix[:-4]
     if common_prefix.endswith("_"):
@@ -273,7 +271,6 @@ def scrape_scene_data(url: str) -> dict:
     
     cookies = {}
     cookie_name = get_cookie_name(domain)
-    log.debug(f"cookie_name: {cookie_name}")
     if cookie_name:
         cookies[cookie_name] = cookie_val
         cookies["warn"] = "true"
@@ -324,7 +321,6 @@ def scrape_scene_data(url: str) -> dict:
         scene["tags"].append({"name": "Members Only"})
     if release_date_is_estimate:
         scene["tags"].append({"name": "Estimated Date"})
-    
 
     # Extract Image URL
     image_url = get_image(tree, url)
@@ -347,6 +343,7 @@ def scrape_scene_data(url: str) -> dict:
         scene["studio"] = {"name": studio_name}
         log.debug(f"Mapped studio {studio_name} from domain {domain}")
 
+    # Add URLs
     scene["urls"] = [scene_url]
     if public_url_is_valid:
         scene["urls"].append(presumed_public_url)
@@ -354,6 +351,7 @@ def scrape_scene_data(url: str) -> dict:
         wayback_url = f"https://web.archive.org/web/*/{presumed_public_url}"
         log.debug(f"Scene would hypothetically have public URL of {presumed_public_url}, but it is not valid. You may try checking the Wayback Machine at {wayback_url}.")
 
+    # Determine "studio code"
     filename_stem = get_download_filename_stem(tree)
     if filename_stem:
         scene["code"] = filename_stem
