@@ -149,6 +149,8 @@ xPathScrapers:
       URLs:
         fixed: '{inputURL}'
 driver:
+  useCDP: true
+  sleep: 5
   cookies:
     - CookieURL: 'https://www.dmm.co.jp'
       Cookies:
