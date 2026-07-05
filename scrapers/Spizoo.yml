@@ -44,8 +44,10 @@ xPathScrapers:
       Title:
         selector: //div[@class="title" or @class="row"]//h1 | //div[@class="title-trailer"]//h2 | //h2[contains(@class, "titular")] | //title
         postProcess:
-          # RawAttack titles have a trailing dash and space
+          # RawAttack titles have leading "Tour - " and trailing " - "
           - replace:
+              - regex: ^Tour\s\-\s*
+                with:
               - regex: \s\-\s*$
                 with:
       Date:
