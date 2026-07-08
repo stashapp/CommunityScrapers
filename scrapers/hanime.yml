@@ -5,7 +5,7 @@ sceneByFragment:
   queryURLReplace:
     filename:
       - regex: ^(?P<slug>[a-z\-0-9]+?)-?(?P<resolution>[0-9]{3,4}p)?(-.1x)?\..+$
-        with: $1
+        with: $slug
   scraper: sceneScraper
 sceneByURL:
   - action: scrapeXPath
