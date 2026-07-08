@@ -75,6 +75,7 @@ studio_map = {
     "queercrush.com": "QueerCrush",
     "red-xxx.com": "Red-XXX",
     "rickysroom.com": "Ricky's Room",
+    "members.rickysroom.com": "Ricky's Room",
     "s3xus.com": "S3XUS",
     "seska.com": "Seska",
     "sextapes.com": "SexTapes",
