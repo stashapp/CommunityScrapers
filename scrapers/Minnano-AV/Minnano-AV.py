@@ -1,3 +1,4 @@
+from base64 import b64encode
 import json
 import re
 import sys
@@ -6,7 +7,6 @@ from typing import Any
 import py_common.log as log
 from py_common.util import scraper_args
 from py_common.types import ScrapedPerformer
-import requests
 from lxml import etree
 import cloudscraper
 
@@ -17,9 +17,11 @@ XPATHS = {
     "career": "//span[text()='AV出演期間']/../p/text()",
     "debut": "//span[text()='デビュー作品']/../p/text()",
     "url": "//meta[@property='og:url']/@content",
-    #"id": '//form[@class="add_favorite"]/@action',
+    # "id": '//form[@class="add_favorite"]/@action',
     "image": "//div[@class='act-area']/div[@class=\"thumb\"]/img/@src",
-    "instagram": ("//span[text()='ブログ']/../p/a[contains(@href,'instagram.com')]/@href"),
+    "instagram": (
+        "//span[text()='ブログ']/../p/a[contains(@href,'instagram.com')]/@href"
+    ),
     "measurements": (
         "//span[text()='サイズ']/../p/a/@href|//span[text()='サイズ']/../p/text()"
     ),
@@ -30,7 +32,9 @@ XPATHS = {
     "name": '//section[@class="main-column details"]/h1/span/text()',
     "search_url": '../h2[@class="ttl"]/a/@href',
     "search": '//p[@class="furi"]',
-    "twitter": ("//span[text()='ブログ']/../p/a[contains(@href,'twitter.com')]/@href|//span[text()='ブログ']/../p/a[contains(@href,'x.com')]/@href"),
+    "twitter": (
+        "//span[text()='ブログ']/../p/a[contains(@href,'twitter.com')]/@href|//span[text()='ブログ']/../p/a[contains(@href,'x.com')]/@href"
+    ),
 }
 
 REGEXES = {
@@ -39,7 +43,9 @@ REGEXES = {
     "id": r"\d+",
     "birthdate": r"(?P<year>\d{4})年(?P<month>\d{2})月(?P<day>\d{2})日",
     # https://regex101.com/r/FSqv0L/1
-    "career": (r"(?P<start>\d{4})年?(?:\d+月)? ?(?:\d+)?日?[-~]? ?(?:(?P<end>\d+)?)?年?"),
+    "career": (
+        r"(?P<start>\d{4})年?(?:\d+月)? ?(?:\d+)?日?[-~]? ?(?:(?P<end>\d+)?)?年?"
+    ),
     "measurements": (
         r"(?<=T)(?P<height>\d+)? / B(?P<bust>\d+)\([^=]+=(?P<cup>\w+)\) / W(?P<waist>\d+) / H(?P<hip>\d+)"
     ),
@@ -152,7 +158,6 @@ def convert_bra_jp_to_us(jp_size: str) -> str:
         "K": "I",
     }
 
-    converted_size = None
     converted_size = predefined_conversion_chart.get(jp_size, None)
 
     if converted_size is None:
@@ -220,14 +225,14 @@ def performer_by_url(url, lang="EN"):
             if match := re.match(REGEXES["alias"], alias):
                 aliases.add(match.group("kanji"))
                 try:
-                    if(JAPANESE):
+                    if JAPANESE:
                         aliases.add(reverse_first_last_name(match.group("romanized")))
                     else:
                         aliases.add(match.group("romanized"))
                 except:
                     pass
 
-    aliases.discard(scrape["name"]) # Remove performer name from aliases list
+    aliases.discard(scrape["name"])  # Remove performer name from aliases list
 
     scrape["urls"] = []
 
@@ -253,7 +258,9 @@ def performer_by_url(url, lang="EN"):
         if match := re.search(
             REGEXES["birthdate"], convert_to_halfwidth(birthdate_result[0])
         ):
-            scrape["birthdate"] = match["year"]+"-"+match["month"]+"-"+match["day"]
+            scrape["birthdate"] = (
+                match["year"] + "-" + match["month"] + "-" + match["day"]
+            )
         else:
             log.debug("Birthday XPath matched, but no value found.")
 
@@ -261,17 +268,19 @@ def performer_by_url(url, lang="EN"):
         combined = "".join(measurements_result)
         if match := re.search(REGEXES["measurements"], convert_to_halfwidth(combined)):
             if lang == "JP":
-                scrape["measurements"] = f"{match['bust']}{match['cup']}-{match['waist']}-{match['hip']}"
+                scrape["measurements"] = (
+                    f"{match['bust']}{match['cup']}-{match['waist']}-{match['hip']}"
+                )
             else:
                 waist_in_inches, hip_in_inches = [
                     cm_to_inches(int(measurement))
                     for measurement in [match["waist"], match["hip"]]
                 ]
 
-                bra_size = convert_bra_jp_to_us(f'{match["bust"]}{match["cup"]}')
+                bra_size = convert_bra_jp_to_us(f"{match['bust']}{match['cup']}")
 
                 scrape["measurements"] = f"{bra_size}-{waist_in_inches}-{hip_in_inches}"
-            if match["height"] != None:
+            if match["height"] is not None:
                 scrape["height"] = match["height"]
         else:
             log.debug("Measurements XPath matched, but no value found.")
@@ -280,8 +289,8 @@ def performer_by_url(url, lang="EN"):
         clean_career_result = convert_to_halfwidth(career_result).replace(" ", "")
         if match := re.match(REGEXES["career"], clean_career_result):
             groups = match.groups()
-            start = match["start"] + "-" if groups[0] != None else ""
-            end = match["end"] if groups[1] != None else ""
+            start = match["start"] + "-" if groups[0] is not None else ""
+            end = match["end"] if groups[1] is not None else ""
             scrape["career_length"] = start + end
         else:
             log.debug("Career debut XPath matched, but no value found.")
@@ -289,24 +298,35 @@ def performer_by_url(url, lang="EN"):
     elif debut_result := get_xpath_result(tree, XPATHS["debut"]):
         if match := re.search(REGEXES["career"], convert_to_halfwidth(debut_result)):
             groups = match.groups()
-            scrape[
-                "career_length"
-            ] = f'{match["start"] if groups[0] != None else ""}-{match["end"] if groups[1] != None else ""}'
+            scrape["career_length"] = (
+                f"{match['start'] if groups[0] is not None else ''}-{match['end'] if groups[1] is not None else ''}"
+            )
         else:
             log.debug("Career debut XPath matched, but no value found.")
 
     if image_result := get_xpath_result(tree, XPATHS["image"]):
         clean_url_fragment = str.replace(image_result, "?newav", "")
         if clean_url_fragment != "":
-            scrape["image"] = str.format(
+            image_url = str.format(
                 FORMATS["image"], IMAGE_URL_FRAGMENT=clean_url_fragment
             )
+            b64img_bytes = b64encode(scraper.get(image_url).content)
+            scrape["image"] = f"data:image/jpeg,base64;{b64img_bytes}"
         else:
             log.debug("Image XPath matched, but no value found.")
 
     aliases.discard(None)
     sorted_aliases = sorted(aliases)
-    scrape["aliases"] = ", ".join(sorted_aliases)
+    pattern = re.compile(r"^(.+?)\s*\((.+?)\)$")
+
+    split_aliases = [
+        part
+        for alias in sorted_aliases
+        for m in [pattern.match(alias)]
+        for part in (m.groups() if m else (alias,))
+    ]
+
+    scrape["aliases"] = ", ".join(split_aliases)
     if JAPANESE:
         scrape["country"] = "Japan"
         scrape["ethnicity"] = "Asian"
