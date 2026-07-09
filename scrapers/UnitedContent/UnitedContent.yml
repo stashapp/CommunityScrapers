@@ -1,0 +1,16 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+name: United Content
+# requires: py_common
+sceneByURL:
+  - action: script
+    url:
+      - orgasmabuse.com/video/
+      - rfmovies.com/video/
+      - taworship.com/video/
+      - texasbukkake.com/video/
+      - tickleabuse.com/video/
+    script:
+      - python
+      - UnitedContent.py
+      - scene-by-url
+# Last Updated July 9, 2026
