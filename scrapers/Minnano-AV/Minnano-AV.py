@@ -310,8 +310,8 @@ def performer_by_url(url, lang="EN"):
             image_url = str.format(
                 FORMATS["image"], IMAGE_URL_FRAGMENT=clean_url_fragment
             )
-            b64img_bytes = b64encode(scraper.get(image_url).content)
-            scrape["image"] = f"data:image/jpeg,base64;{b64img_bytes}"
+            b64img_bytes = b64encode(scraper.get(image_url).content).decode("utf-8")
+            scrape["images"] = [f"data:image/jpeg;base64,{b64img_bytes}"]
         else:
             log.debug("Image XPath matched, but no value found.")
 
