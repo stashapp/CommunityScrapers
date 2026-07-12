@@ -136,11 +136,12 @@ def performer_from_url(url) -> ScrapedPerformer:
     # get measurements
     measurements = biography_xpath_test(tree, "Measurements", "")
     cup_size = biography_xpath_test(tree, "Bra/cup size", "")
-    if measurements and cup_size:
-        measurements_split = measurements.split("-")
-        performer['measurements'] = f"{cup_size}-{measurements_split[1]}-{measurements_split[2]}"
-    if measurements and not cup_size:
-        performer['measurements'] = measurements
+    if measurements:
+        if cup_size and (m := re.search(r'(?P<band>\d+)(?:–|-)(?P<waist>\d+)(?:–|-)(?P<hip>\d+)', measurements)):
+            _, waist_size, hip_size = m.groups()
+            performer['measurements'] = f"{cup_size}-{waist_size}-{hip_size}"
+        else:
+            performer['measurements'] = measurements.removesuffix(" (")
     # get fake/naturals
     breast_type = biography_xpath_test(tree, "Boobs", "/a")
     if breast_type:
