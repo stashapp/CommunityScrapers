@@ -699,18 +699,19 @@ def performer_by_fragment(
     log.debug(f"fragment: {fragment}")
 
     # attempt to get from cached results first
-    search_results = load_cached_results(CACHED_PERFORMERS_FILE)
+    cached_results = load_cached_results(CACHED_PERFORMERS_FILE)
 
     # if a matching performer is found in the cached results, return it
-    if search_results and (cached_match := get_matching_performer(fragment, search_results)):
-        return cached_match
+    match = None
+    if cached_results and (match := get_matching_performer(fragment, cached_results)):
+        return match
 
     # if no performers retrieved from cached file, or no matches found, do an API search
-    if search_results is None or cached_match is None:
+    if search_results is None or match is None:
         search_results = performer_search(fragment["name"], search_domains=search_domains)
         log.debug(f"search_results: {search_results}")
-        if search_results and (search_match := get_matching_performer(fragment, search_results)):
-            return search_match
+        if search_results and (match := get_matching_performer(fragment, search_results)):
+            return match
     return None
 
 def get_matching_performer(fragment, search_results):
