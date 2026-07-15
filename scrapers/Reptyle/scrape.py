@@ -1,7 +1,7 @@
 import json
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from html import unescape
 from typing import Generator, Any, Callable
 from urllib.parse import urlsplit, urlunsplit
@@ -124,7 +124,7 @@ def default_postprocess(obj: Any, _) -> Any:
 def format_date(raw) -> str:
     # Members APIs have UNIX epoch timestamps
     if isinstance(raw, int):
-        return datetime.fromtimestamp(raw).date().isoformat()
+        return datetime.fromtimestamp(raw, tz=timezone.utc).date().isoformat()
 
     # Other sites generally have ISO-8601-compliant datetimes
     return datetime.fromisoformat(raw).date().isoformat()
