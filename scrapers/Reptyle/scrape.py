@@ -140,7 +140,7 @@ def upgrade_image(image_url: str) -> str:
         newurl = image_url.replace("shared/med", replacement)
         try:
             log.debug(f"Trying {newurl}")
-            if scraper.head(newurl, timeout=0.5).ok:
+            if scraper.head(newurl, timeout=2.5).ok:
                 log.debug(f"Found better image at {newurl}")
                 return newurl
         except:  # noqa: E722 we do not care which exception this is
