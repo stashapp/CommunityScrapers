@@ -1,0 +1,11 @@
+id: fc2db
+name: fc2db
+metadata: {}
+version: 1.0.0
+date: "2026-07-07 22:57:00"
+requires:
+- py_common
+source_repository: https://stashapp.github.io/CommunityScrapers/stable/index.yml
+files:
+- fc2db.py
+- fc2db.yml
