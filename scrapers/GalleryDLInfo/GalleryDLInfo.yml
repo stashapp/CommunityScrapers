@@ -1,0 +1,20 @@
+name: GalleryDLInfo
+# requires: py_common
+galleryByFragment:
+  action: script
+  script:
+  - python3
+  - gallerydl_info.py
+  - gallery-by-fragment
+imageByFragment:
+  action: script
+  script:
+  - python3
+  - gallerydl_info.py
+  - image-by-fragment
+sceneByFragment:
+  action: script
+  script:
+  - python3
+  - gallerydl_info.py
+  - scene-by-fragment
