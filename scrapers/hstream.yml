@@ -60,7 +60,7 @@ xPathScrapers:
               - regex: \s*(\d{4}-\d{2}-\d{2}).*
                 with: $1
           - parseDate: 2006-01-02
-      Details: //p[contains(text(), "Description")]/following-sibling::p
+      Details: //h2[contains(text(), "Description")]/following-sibling::p
       Tags:
         Name: //a[contains(@href, "tags")]
       Studio:
