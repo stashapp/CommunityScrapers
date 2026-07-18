@@ -16,7 +16,10 @@ sceneByFragment:
       # Strip out everything after the first [
       - regex: ([^[]+)\s.*
         with: $1
-      # Remove non-word characters
+      # Remove apostrophes
+      - regex: "'"
+        with: ''
+      # Replace non-word characters with hyphen
       - regex: \W+
         with: '-'
       # Remove leading zeroes
