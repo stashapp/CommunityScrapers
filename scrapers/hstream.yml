@@ -62,7 +62,7 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Details: //p[contains(text(), "Description")]/following-sibling::p
       Tags:
-        Name: //li[@class="inline-block p-1"]/a/text()
+        Name: //a[contains(@href, "tags")]
       Studio:
         Name: (//a[contains(@href, "studios")])[1]
       Image:
