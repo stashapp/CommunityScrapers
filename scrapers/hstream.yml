@@ -80,4 +80,4 @@ xPathScrapers:
                 with: $1.webp
 
       URL: //meta[@property="og:url"]/@content
-# Last Updated May 29, 2025
+# Last Updated July 18, 2026
