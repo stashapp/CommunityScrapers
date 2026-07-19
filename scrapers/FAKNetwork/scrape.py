@@ -47,16 +47,17 @@ def to_scraped_tag(api_obj: dict) -> ScrapedTag:
 
 
 def to_scraped_performer(api_obj: dict) -> ScrapedPerformer:
-    site_name = api_obj["product"]
     performer: ScrapedPerformer = {
         "name": api_obj["name"],
         "images": [
             f"https://almacen.fakings.com/almacen/actrices/{api_obj['profilePhoto']}"
         ],
-        "urls": [f"https://{site_name}.com/actrices-porno/{api_obj['slug']}"],
+        "urls": [],
     }
+    if site_name := dig(api_obj, "product"):
+        performer["urls"].append(f"https://{site_name}.com/actrices-porno/{api_obj['slug']}")
 
-    if loverfans := api_obj.get("loverfansUrl"):
+    if loverfans := dig(api_obj, "loverfansUrl"):
         performer["urls"].append(loverfans)
 
     return performer
@@ -83,7 +84,7 @@ def to_scraped_scene(data: dict, lang="en") -> ScrapedScene:
             f"https://player.faknetworks.com/almacen/videos/listado_horizontal_{image}"
         )
 
-    studio = to_scraped_studio(data["serie"], lang)
+    studio = to_scraped_studio(data["serie"], site_name, lang)
     if config.flatten_hierarchy:
         studio = studio["parent"]
 
