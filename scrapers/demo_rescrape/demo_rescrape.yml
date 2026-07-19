@@ -1,8 +1,0 @@
-name: Rescrape Demo
-sceneByURL:
-  - action: script
-    url:
-      - demo.rescrape.test
-    script:
-      - python3
-      - demo_rescrape.py
