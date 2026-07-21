@@ -126,7 +126,10 @@ xPathScrapers:
       $dataLayer: //script[@type="text/javascript"][contains(.,'window.dataLayer.push')]
     scene:
       Title:
-        selector: //h1
+        # we use the meta property first because it has not undergone
+        # any mangling by Pornhub, it's most likely the original
+        # title the uploader typed in, including casing
+        selector: //meta[@property="og:title"]/@content | //h1
         postProcess:
           - replace:
               # This scraper can be misused and end up pulling its information
