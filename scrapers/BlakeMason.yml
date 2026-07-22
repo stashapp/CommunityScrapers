@@ -11,7 +11,6 @@ performerByURL:
       - blakemason.com/models
     scraper: performerScraper
 
-
 xPathScrapers:
   sceneScraper:
     common:
@@ -26,7 +25,7 @@ xPathScrapers:
         selector: $imageUrl
         postProcess:
           - replace:
-              - regex: .*thumbs/(BM\d+)_.*
+              - regex: .*thumbs/(BM.?\d+)_.*
                 with: $1
       Details:
         selector: //div[@class='content-description']/p[@class='text-justify']/text()
@@ -46,7 +45,6 @@ xPathScrapers:
           - replace:
               - regex: ^//
                 with: https://
-
 
   performerScraper:
     performer:
@@ -107,5 +105,4 @@ xPathScrapers:
               - regex: ^//(.*)$
                 with: "https://$1"
 
-  
 # Last Updated June 25, 2026
