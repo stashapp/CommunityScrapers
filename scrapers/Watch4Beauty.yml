@@ -46,8 +46,8 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: (.+)
-                # Replace 'wide' with 'blank' for textless images
-                with: "https://covers.watch4beauty.com/$1/000-cover-wide-wide_2560.jpg"
+                # Replace 'text' with 'blank' for textless images
+                with: "https://covers.watch4beauty.com/$1/000-cover-wide-text_2560.jpg"
       Performers: &storiesPerformers
         Name:
           selector: 0.magazine_simple_title
