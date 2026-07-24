@@ -1,8 +1,7 @@
-name: IWantClips
-performerByName:
-  action: scrapeXPath
-  queryURL: https://iwantclips.com/artists?query={}
-  scraper: performerSearch
+# This is the "cheaper" option for scraping IWC URLs
+# that do not require CDP. Users who want scene/performer
+# search should use IWantClips-Search.yml
+name: IWantClips (No CDP)
 performerByURL:
   - action: scrapeXPath
     url:
@@ -13,14 +12,6 @@ sceneByURL:
     url:
       - iwantclips.com/store
     scraper: sceneScraper
-sceneByName:
-  action: scrapeXPath
-  queryURL: https://iwantclips.com/search/advsearch?query={}
-  scraper: sceneSearch
-sceneByQueryFragment:
-  action: scrapeXPath
-  queryURL: "{url}"
-  scraper: sceneScraper
 xPathScrapers:
   sceneSearch:
     scene:
@@ -34,7 +25,7 @@ xPathScrapers:
       Title: //h1[@class='no-style']
       URL: //link[@rel="canonical"]/@href
       Date:
-        selector: //div[@class="col-xs-12 date fix"]/span/em/text()
+        selector: //div[@class="col-xs-12 date fix"]/span/em
         postProcess:
           - replace:
               - regex: Published\s(.+)
@@ -68,26 +59,9 @@ xPathScrapers:
       Performers:
         Name: $model
   performerScraper:
-    common:
-      $sidebar: //div[@class="sideBar lg-sticky"]
     performer:
-      Name: $sidebar//div[@class="col-sm-12 profileName"]/span
-      Details: $sidebar//p
-      Image: $sidebar/div/div/img/@src
-  performerSearch:
-    common:
-      $artist: //li[@class="ais-Hits-item grid-artist-item"]
-    performer:
-      Name: $artist//h5/a/text()
-      Image: $artist//a/div/img/@src
-      URLs: $artist//h5/a/@href
-
-driver:
-  useCDP: true
-  cookies:
-    - Cookies:
-        - Name: iwc-new-design
-          Value: "on"
-          Domain: .iwantclips.com
-          Path: /
-# Last Updated September 17, 2025
+      Name: //div[@class="controls-box"]/p
+      Details:
+        selector: //div[@id="section-about"]/p
+        concat: "\n\n"
+      Image: //div[@class="avatar-box"]/img/@src
