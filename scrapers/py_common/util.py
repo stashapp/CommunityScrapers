@@ -1,6 +1,6 @@
 from argparse import ArgumentParser
 from functools import reduce
-from typing import Any, Callable, Iterable, Mapping, TypeVar
+from typing import Any, Callable, Iterable, Mapping, TypeVar, cast
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 import json
@@ -44,9 +44,9 @@ def dig(
 
 
 T = TypeVar("T")
+M = TypeVar("M", bound=Mapping[str, Any])
 
-
-def replace_all(obj: dict, key: str, replacement: Callable[[T], T]) -> dict:
+def replace_all(obj: M, key: str, replacement: Callable[[T], T]) -> M:
     """
     Helper function to recursively replace values in a nested dict, returning a new dict
 
@@ -81,10 +81,10 @@ def replace_all(obj: dict, key: str, replacement: Callable[[T], T]) -> dict:
             new[k] = [replace_all(x, key, replacement) for x in v]
         else:
             new[k] = v
-    return new
+    return cast(M, new)
 
 
-def replace_at(obj: dict, *path: str, replacement: Callable[[T], T]) -> dict:
+def replace_at(obj: M, *path: str, replacement: Callable[[T], T]) -> M:
     """
     Helper function to replace a value at a given path in a nested dict, returning a new dict
 
@@ -106,7 +106,7 @@ def replace_at(obj: dict, *path: str, replacement: Callable[[T], T]) -> dict:
     {'a': {'b': ['c', 'd'], 'f': {'g': 'h'}}}
     """
 
-    def inner(d: dict, *keys: str):
+    def inner(d: M, *keys: str):
         match keys:
             case [k] if isinstance(d, dict) and k in d:
                 if isinstance(d[k], list):
@@ -117,7 +117,7 @@ def replace_at(obj: dict, *path: str, replacement: Callable[[T], T]) -> dict:
             case _:
                 return d
 
-    return inner(obj, *path)  # type: ignore
+    return inner(obj, *path)
 
 
 def feet_to_cm(value: str) -> str:

@@ -2,11 +2,11 @@ name: hstream
 sceneByName:
   action: scrapeXPath
   queryURL: https://hstream.moe/search?search={}
-  scraper: sceneSearch 
+  scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
-  queryURL: "{url}"
-  scraper: sceneScraper     
+  queryURL: '{url}'
+  scraper: sceneScraper
 
 sceneByFragment:
   action: scrapeXPath
@@ -16,9 +16,12 @@ sceneByFragment:
       # Strip out everything after the first [
       - regex: ([^[]+)\s.*
         with: $1
-      # Remove non-word characters
+      # Remove apostrophes
+      - regex: "'"
+        with: ''
+      # Replace non-word characters with hyphen
       - regex: \W+
-        with: "-"
+        with: '-'
       # Remove leading zeroes
       - regex: 0+(\d)
         with: $1
@@ -29,17 +32,17 @@ sceneByURL:
       - hstream.moe/hentai/
     scraper: sceneScraper
 xPathScrapers:
-  sceneSearch:              
-     scene:
-      URL:   //div[contains(@class,'relative')]/a/@href
+  sceneSearch:
+    scene:
+      URL: //div[contains(@class,'p-1')]/a[contains(@href, "hentai")]/@href
       Title:
-        selector: //div[contains(@class,'relative')]/a/img/@alt
+        selector: //div[contains(@class,'relative')]/img/@alt
       Image:
-        selector: //div[contains(@class,'relative')]/a/img/@src
+        selector: //div[contains(@class,'relative')]/img/@src
         postProcess:
-          - replace:          
+          - replace:
               # 1) make relative paths absolute
-              - regex: '^/'                                     
+              - regex: '^/'
                 with: https://hstream.moe/
               # 2) turn “…/gallery‑…” into “…/cover‑…”
               - regex: '/gallery-'
@@ -65,16 +68,16 @@ xPathScrapers:
         Name: //h2[contains(text(), "Genres")]/following-sibling::div/a/text()
       Studio:
         Name: (//a[contains(@href, "studios")])[1]
-      Image: 
+      Image:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-                  # 1) gallery  ➜  cover
-                  - regex: gallery
-                    with: cover
-                  # 2) trim the trailing “-0” (or “-1”, etc.)
-                  - regex: (-ep-\d+)-\d+\.webp$
-                    with: $1.webp    
+              # 1) gallery  ➜  cover
+              - regex: gallery
+                with: cover
+              # 2) trim the trailing “-0” (or “-1”, etc.)
+              - regex: (-ep-\d+)-\d+\.webp$
+                with: $1.webp
 
       URL: //meta[@property="og:url"]/@content
-# Last Updated May 29, 2025
+# Last Updated July 18, 2026

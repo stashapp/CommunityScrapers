@@ -8,10 +8,12 @@ from typing import Any
 import requests
 
 import py_common.log as log
-from py_common.types import ScrapedPerformer, ScrapedScene
+from py_common.types import ScrapedGallery, ScrapedPerformer, ScrapedScene
 from py_common.util import guess_nationality, scraper_args
 
-CACHE_RESULTS_FILE = "islanddollars-cache.json"
+CACHED_GALLERIES_FILE = "islanddollars-galleries-cache.json"
+CACHED_PERFORMERS_FILE = "islanddollars-performers-cache.json"
+CACHED_SCENES_FILE = "islanddollars-scenes-cache.json"
 CONFIG = {
     "ladyboycrush": {
         "cms_area_id": "74175374-c756-4ae9-97b2-e011512a1521",
@@ -28,10 +30,10 @@ CONFIG = {
         }
     },
     "ladyboygold": {
-        "cms_area_id": "a1fbacce-2340-45ef-9576-129e766e63f9",
+        "cms_area_id": "cd9a5600-5cda-4ed0-b356-f62af1887d96", # from homepage call to /config.json
         "studio_name": "LadyboyGold",
         "sets": {
-            "cms_block_id": "109727"
+            "cms_block_id": "114793" # from scene page call to /sets, query param
         }
     },
     "ladyboypussy": {
@@ -45,14 +47,14 @@ CONFIG = {
         "cms_area_id": "126f96ec-ffdc-4f4b-a459-c9a2e78b9b67",
         "studio_name": "Ladyboys Fucked Bareback",
         "sets": {
-            "cms_block_id": "105792"
+            "cms_block_id": "105724"
         }
     },
     "ladyboyvice": {
         "cms_area_id": "c594b28c-ab09-44da-9166-0a332d33469f",
         "studio_name": "Ladyboy Vice",
         "sets": {
-            "cms_block_id": "106090"
+            "cms_block_id": "101951"
         }
     },
     "tsraw": {
@@ -160,6 +162,69 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
     scene["code"] = cms_set["cms_set_id"]
 
     return scene
+
+
+def parse_set_as_gallery(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedGallery:
+    gallery: ScrapedGallery = {}
+    log.trace(f"cms_set: {cms_set}")
+    if title := cms_set.get("title"):
+        log.trace(f"title from cms_set['title']: {title}")
+        gallery["title"] = title.rstrip(" 4K")
+    elif name := cms_set.get("name"):
+        log.trace(f"title from cms_set['name']: {name}")
+        gallery["title"] = name.rstrip(" 4K")
+    else:
+        log.error("No title or name found in cms_set")
+    
+    if description := cms_set.get("description"):
+        log.trace(f"description from cms_set['description']: {description}")
+        gallery["details"] = description.strip()
+
+    if slug := cms_set.get("slug"):
+        log.trace(f"slug from cms_set['slug']: {slug}")
+        gallery["url"] = f"https://members.{domain}.com/photo/{slug}"
+
+    if added_nice := cms_set.get("added_nice"):
+        log.trace(f"date from cms_set['added_nice']: {added_nice}")
+        gallery["date"] = added_nice
+
+    # get image
+    if cms_set_image := last_value(cms_set["preview_formatted"]["thumb"])[0]:
+        # get cdn url
+        if cdn_url := cdn_url_for_server_id(cdn_servers, cms_set_image["cms_content_server_id"]):
+            # gallery doesn't have an image or cover field, but it is useful to know which is
+            # the cover image for the gallery, so we will log it out here
+            cover_image_url = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
+            log.debug(f"Cover image URL for gallery '{gallery['title']}': {cover_image_url}")
+
+    if main_website := extract_names(cms_set, "MainWebsite"):
+        # url
+        gallery["url"] = f"https://members.{main_website[0].lower()}/photo/{cms_set['slug']}"
+
+        # studio
+        # use first value, remove .com or whatever suffix if present, and lowercase
+        main_website_name = re.sub(r'\..*$', '', main_website[0], flags=re.IGNORECASE).lower()
+        if main_website_name in CONFIG:
+            gallery["studio"] = {"name": CONFIG[main_website_name]["studio_name"]}
+        else:
+            gallery["studio"] = {"name": main_website}
+    else:
+        # url
+        gallery["url"] = f"https://members.{domain}.com/photo/{cms_set['slug']}"
+        # studio
+        gallery["studio"] = {"name": CONFIG[domain]["studio_name"]}
+
+    categories = extract_names(cms_set, "Category")
+    tags = extract_names(cms_set, "Tags")
+    categories_and_tags = categories + tags
+    performers = extract_names(cms_set, "Models")
+
+    gallery["tags"] = [ {"name": ct } for ct in categories_and_tags ]
+    gallery["performers"] = [ {"name": p } for p in performers ]
+    gallery["code"] = cms_set["cms_set_id"]
+
+    return gallery
+
 
 def calculate_dob(age: int, born_str: str, added: datetime) -> str | None:
     try:
@@ -385,11 +450,49 @@ def scene_search(
                 log.debug(e.with_traceback())
 
     # cache results
-    log.debug(f"writing {len(parsed_scenes)} parsed scenes to {CACHE_RESULTS_FILE}")
-    with open(CACHE_RESULTS_FILE, 'w', encoding='utf-8') as f:
+    log.debug(f"writing {len(parsed_scenes)} parsed scenes to {CACHED_SCENES_FILE}")
+    with open(CACHED_SCENES_FILE, 'w', encoding='utf-8') as f:
         f.write(json.dumps(parsed_scenes))
 
     return parsed_scenes
+
+
+def gallery_search(
+    query: str | None = None,
+    slug: str | None = None,
+    search_domains: list[str] | None = None,
+) -> list[ScrapedGallery]:
+    if not search_domains:
+        log.error("No search_domains provided")
+        return []
+
+    log.debug(f"Matching query: {query} and slug: {slug} against {len(search_domains)} sites")
+
+    parsed_galleries: list[ScrapedGallery] = []
+
+    def fetch_domain(domain):
+        cdn_servers = get_cdn_servers(domain)
+        log.trace(f"CDN servers: {cdn_servers}")
+        log.trace(f"Searching domain: {domain} for query: {query}")
+        photo_sets = get_sets(domain, content_type="image", text_search=query, slug=slug)
+        return [parse_set_as_gallery(domain, cms_set, cdn_servers) for cms_set in photo_sets]
+
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(fetch_domain, domain): domain for domain in search_domains}
+        for future in as_completed(futures):
+            try:
+                domain_parsed_galleries = future.result()
+                parsed_galleries.extend(domain_parsed_galleries)
+            except Exception as e:
+                log.error(f"Error processing domain {futures[future]}: {e}")
+                log.debug(e.with_traceback())
+
+    # cache results
+    log.debug(f"writing {len(parsed_galleries)} parsed galleries to {CACHED_GALLERIES_FILE}")
+    with open(CACHED_GALLERIES_FILE, 'w', encoding='utf-8') as f:
+        f.write(json.dumps(parsed_galleries))
+
+    return parsed_galleries
 
 
 def performer_search(
@@ -422,8 +525,8 @@ def performer_search(
                 log.error(f"Error processing domain {futures[future]}: {e}")
 
     # cache results
-    log.debug(f"writing {len(parsed_performers)} parsed performers to {CACHE_RESULTS_FILE}")
-    with open(CACHE_RESULTS_FILE, 'w', encoding='utf-8') as f:
+    log.debug(f"writing {len(parsed_performers)} parsed performers to {CACHED_PERFORMERS_FILE}")
+    with open(CACHED_PERFORMERS_FILE, 'w', encoding='utf-8') as f:
         f.write(json.dumps(parsed_performers))
 
     return parsed_performers
@@ -439,35 +542,109 @@ def scene_from_fragment(
     log.debug(f"fragment: {fragment}")
 
     # attempt to get from cached results first
-    search_results = None
-    try:
-        log.debug(f"Attempting to get result from {CACHE_RESULTS_FILE}")
-        with open(CACHE_RESULTS_FILE, 'r', encoding='utf-8') as f:
-            log.debug(f"Opened cache file {CACHE_RESULTS_FILE}")
-            cached_scenes = json.load(f)
-            log.debug(f"cached_scenes: {cached_scenes}")
-            search_results = cached_scenes
-    except FileNotFoundError:
-        log.error(f"Cache file {CACHE_RESULTS_FILE} not found")
-    except json.JSONDecodeError:
-        log.error(f"Error decoding JSON from {CACHE_RESULTS_FILE}")
-    except (OSError, IOError) as e:
-        log.error(f"An I/O error occurred: {e}")
-    except Exception as e:
-        log.error(f"An unexpected error occurred: {e}")
+    cached_results = load_cached_results(CACHED_SCENES_FILE)
+
+    # if a matching scene is found in the cached results, return it
+    match = None
+    if cached_results and (match := get_matching_scene(fragment, cached_results)):
+        log.debug(f"Found matching scene in cached results: {match}")
+        return match
 
     # if no scenes retrieved from cached file, do an API search
-    if search_results is None:
+    if cached_results is None or match is None:
         search_results = scene_search(fragment["title"], search_domains=search_domains)
+        if search_results and (match := get_matching_scene(fragment, search_results)):
+            return match
+    return None
+
+def get_matching_scene(fragment, search_results):
     first_match = next(
         (
             r for r in search_results
             if r["title"] == fragment["title"]
             and r["date"] == fragment["date"]
+            and r["url"] == fragment["url"]
         ),
         None
     )
+    return first_match
 
+
+def load_cached_results(filepath: str) -> list[ScrapedGallery] | list[ScrapedScene] |None:
+    cached_results = None
+    try:
+        log.debug(f"Attempting to get search results from {filepath}")
+        with open(filepath, 'r', encoding='utf-8') as f:
+            log.debug(f"Opened cache file {filepath}")
+            cached_results = json.load(f)
+            log.debug(f"cached_results: {cached_results}")
+    except FileNotFoundError:
+        log.error(f"Cache file {filepath} not found")
+    except json.JSONDecodeError:
+        log.error(f"Error decoding JSON from {filepath}")
+    except (OSError, IOError) as e:
+        log.error(f"An I/O error occurred with file {filepath}: {e}")
+    except Exception as e:
+        log.error(f"An unexpected error occurred with file {filepath}: {e}")
+    return cached_results
+
+
+def gallery_from_fragment(
+    fragment,
+    search_domains: list[str] | None = None,
+) -> ScrapedGallery | None:
+    if not fragment:
+        log.error("No fragment provided")
+        return None
+    log.debug(f"fragment: {fragment}")
+
+    # attempt to get from cached results first
+    cached_results = load_cached_results(CACHED_GALLERIES_FILE)
+
+    # if a matching gallery is found in the cached results, return it
+    match = None
+    if cached_results and (match := get_matching_gallery(fragment, cached_results)):
+        log.debug(f"Found matching gallery in cached results: {match}")
+        return match
+
+    # if no galleries retrieved from cached file, do an API search
+    if cached_results is None or match is None:
+        log.debug(f"No matching gallery found in cached results, performing API search for title: {fragment['title']}")
+        search_results = gallery_search(fragment["title"], search_domains=search_domains)
+        log.debug(f"search_results: {search_results}")
+        match = get_matching_gallery(fragment, search_results)
+        return match
+    return None
+
+def get_matching_gallery(fragment, search_results):
+    first_match = next(
+        (
+            r for r in search_results
+            if r["title"] == fragment["title"]
+        ),
+        None
+    )
+    return first_match
+
+def gallery_by_url(
+    url: str,
+    search_domains: list[str] | None = None,
+) -> ScrapedGallery:
+    # extract slug from url
+    match = re.search(r'/photo/([^/]+)', url)
+    if not match:
+        log.error(f"Could not extract slug from url: {url}")
+        return None
+    slug = match.group(1)
+
+    search_results = gallery_search(slug=slug, search_domains=search_domains)
+    first_match = next(
+        (
+            r for r in search_results
+            if r["url"].endswith(f"/photo/{slug}")
+        ),
+        None
+    )
     return first_match
 
 def performer_by_url(
@@ -516,8 +693,28 @@ def performer_by_fragment(
     fragment,
     search_domains: list[str] | None = None,
 ) -> ScrapedPerformer:
-    search_results = performer_search(fragment["name"], search_domains=search_domains)
-    log.debug(f"search_results: {search_results}")
+    if not fragment:
+        log.error("No fragment provided")
+        return None
+    log.debug(f"fragment: {fragment}")
+
+    # attempt to get from cached results first
+    cached_results = load_cached_results(CACHED_PERFORMERS_FILE)
+
+    # if a matching performer is found in the cached results, return it
+    match = None
+    if cached_results and (match := get_matching_performer(fragment, cached_results)):
+        return match
+
+    # if no performers retrieved from cached file, or no matches found, do an API search
+    if search_results is None or match is None:
+        search_results = performer_search(fragment["name"], search_domains=search_domains)
+        log.debug(f"search_results: {search_results}")
+        if search_results and (match := get_matching_performer(fragment, search_results)):
+            return match
+    return None
+
+def get_matching_performer(fragment, search_results):
     first_match = next(
         (
             r for r in search_results
@@ -525,7 +722,6 @@ def performer_by_fragment(
         ),
         {}
     )
-
     return first_match
 
 if __name__ == "__main__":
@@ -534,6 +730,12 @@ if __name__ == "__main__":
 
     result = None
     match op, args:
+        case "gallery-by-fragment", args:
+            log.debug(f"gallery-by-fragment, args: {args}, domains: {domains}")
+            result = gallery_from_fragment(args, search_domains=domains)
+        case "gallery-by-url", {"url": url} if url:
+            log.debug(f"gallery-by-url, url: {url}, domains: {domains}")
+            result = gallery_by_url(url, search_domains=domains)
         case "performer-by-fragment", args:
             log.debug(f"performer-by-fragment, args: {args}, domains: {domains}")
             result = performer_by_fragment(args, search_domains=domains)

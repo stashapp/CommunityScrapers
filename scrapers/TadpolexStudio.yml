@@ -7,35 +7,25 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $models: //div[contains(@class, "models-list-thumbs")]//a
+      $latestUpdate: //div[contains(@class, "latestUpdateBinfo")]
     scene:
       Studio:
-        Name: //a[@class="navbar-brand"]/@title
-
-      Title: //div[@class="video-player"]//h2[@class="section-title"]/text()
+        Name:
+          fixed: TadpolexStudio
+      Title: //h4
       Performers:
-        Name: $models/span
-        URLs: $models/@href
+        Name: $latestUpdate//a[contains(@href, "/models/")]
+        URLs: $latestUpdate//a[contains(@href, "/models/")]/@href
       Date:
-        selector: //strong[text()="Released:"]/following-sibling::text()
+        selector: $latestUpdate//comment()[contains(., "Date")]/following-sibling::text()
         postProcess:
-          - parseDate: January 2, 2006
+          - parseDate: "01/02/2006"
       Tags:
-        Name: //ul[@class="tags"]//a
+        Name: $latestUpdate//div[contains(@class, "blogTags")]//a
       Image:
-        selector: //base/@href | //div[@class="player-thumb"]//img[contains(@class, "update_thumb")]/@src0_1x
-        concat: "|"
+        selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-              - regex: "(^[^|]+)\\|([^\\.]+\\.jpg).*"
-                with: $1$2
-              - regex: "1x.jpg"
-                with: "full.jpg"
-      Details:
-        selector: //div[contains(@class, 'update-info-block')][h3[contains(., 'Description:')]]
-        concat: " "
-        postProcess:
-          - replace:
-            - regex: (Description:)
-              with: "" 
-# Last Updated March 5, 2026
+              - regex: -\dx.jpg
+                with: -full.jpg
+      Details: $latestUpdate//div[contains(@class, "vidImgContent")]

@@ -64,14 +64,9 @@ xPathScrapers:
           fixed: Dream Tranny
       Tags: &tagsAttr
         Name: //div[@class="model-categories"]/a/text()
-      URL: &urlAttr
-        selector: &urlSel //script[contains(.,"API_VIEW_URLS")]/text()
-        postProcess:
-          - replace:
-              - regex: .*/api(/update/\d+)/view_count.*
-                with: "https://dreamtranny.com$1/"
+      URL: &urlAttr //link[@rel="canonical"]/@href
       Code:
-        selector: *urlSel
+        selector: //script[contains(.,"API_VIEW_URLS")]/text()
         postProcess:
           - replace:
               - regex: .*/api/update/(\d+)/view_count.*

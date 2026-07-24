@@ -12,7 +12,7 @@ sceneByQueryFragment:
 sceneByURL:
   - action: scrapeXPath
     url:
-      - sexlikereal.com/trans/
+      - sexlikereal.com/trans/scenes/
     scraper: sceneScraper
 
 # as of 2025-10-24, code link does not work, either at /scenes or /
@@ -67,7 +67,7 @@ xPathScrapers:
       Tags:
         Name: //div/ul/li/a/span
       Performers:
-        Name: //a[starts-with(@href,"/trans/pornstars/")]/text()
+        Name: //a[starts-with(@href,"/trans/pornstars/")]/span/text()
       Studio:
         Name:
           selector: //h3/a[starts-with(@href,"/trans/studios/")]/text()
@@ -113,4 +113,4 @@ xPathScrapers:
 #           Domain: .www.sexlikereal.com
 #           Path: /
 #           Value: "true"
-# Last Updated December 1, 2025
+# Last Updated July 14, 2026
