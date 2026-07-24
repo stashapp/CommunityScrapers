@@ -65,7 +65,7 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Details: //h2[contains(text(), "Description")]/following-sibling::p
       Tags:
-        Name: //a[contains(@href, "tags")]
+        Name: //h2[contains(text(), "Genres")]/following-sibling::div/a/text()
       Studio:
         Name: (//a[contains(@href, "studios")])[1]
       Image:
