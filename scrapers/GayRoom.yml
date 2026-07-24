@@ -1,0 +1,265 @@
+name: GayRoom
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - bathhousebait.com/video/
+      - boysdestroyed.com/video/
+      - damnthatsbig.com/video/
+      - gaycastings.com/video/
+      - gaycreeps.com/video/
+      - gayroom.com/video/
+      - gayviolations.com/video/
+      - manroyale.com/video/
+      - massagebait.com/video/
+      - menpov.com/video/
+      - officecock.com/video/
+      - outhim.com/video/
+      - showerbait.com/video/
+      - thickandbig.com/video/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - bathhousebait.com/models/
+      - boysdestroyed.com/models/
+      - damnthatsbig.com/models/
+      - gaycastings.com/models/
+      - gaycreeps.com/models/
+      - gayroom.com/models/
+      - gayviolations.com/models/
+      - manroyale.com/models/
+      - massagebait.com/models/
+      - menpov.com/models/
+      - officecock.com/models/
+      - outhim.com/models/
+      - showerbait.com/models/
+      - thickandbig.com/models/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $nuxtData: //script[@id="__NUXT_DATA__"]/text()
+    scene:
+      Title:
+        selector: $nuxtData
+        postProcess:
+          - javascript: &locateRelease |
+              // Every site in the network is the same Nuxt SPA; the page
+              // renders no data into the DOM itself. Instead the data is
+              // SSR'd as a flattened, reference-based JSON array (devalue
+              // format) in a __NUXT_DATA__ script tag. Unflatten it, then
+              // find the single release object for the current page (as
+              // opposed to the list of recommended releases, which is also
+              // present in the payload).
+              function resolve(arr, i) {
+                if (typeof i !== "number") return i;
+                var v = arr[i];
+                if (v === null || typeof v !== "object") return v;
+                if (Array.isArray(v)) {
+                  if (typeof v[0] === "string") {
+                    return v[0] === "EmptyRef" ? null : resolve(arr, v[1]);
+                  }
+                  return v.map(function (x) {
+                    return resolve(arr, x);
+                  });
+                }
+                var obj = {};
+                for (var k in v) obj[k] = resolve(arr, v[k]);
+                return obj;
+              }
+              if (!value) return "";
+              var root = resolve(JSON.parse(value), 0);
+              var release = null;
+              for (var k in root.data) {
+                var v = root.data[k];
+                if (v && v.title && !v.items) {
+                  release = v;
+                  break;
+                }
+              }
+              return release ? JSON.stringify(release) : "";
+          - javascript: |
+              if (!value) return "";
+              return JSON.parse(value).title || "";
+      Details:
+        selector: $nuxtData
+        postProcess:
+          - javascript: *locateRelease
+          - javascript: |
+              if (!value) return "";
+              return JSON.parse(value).description || "";
+      URLs:
+        selector: $nuxtData
+        postProcess:
+          - javascript: *locateRelease
+          - javascript: |
+              if (!value) return [];
+              // Nearly every release is also mirrored on gayroom.com (the
+              // network's flagship/hub site) under the same slug, even when
+              // it's not the release's own site.
+              var release = JSON.parse(value);
+              var urls = ["https://" + release.site.slug + ".com/video/" + release.cachedSlug];
+              if (release.site.slug !== "gayroom") {
+                urls.push("https://gayroom.com/video/" + release.cachedSlug);
+              }
+              return urls;
+        split: ","
+      Date:
+        selector: $nuxtData
+        postProcess:
+          - javascript: *locateRelease
+          - javascript: |
+              if (!value) return "";
+              var releasedAt = JSON.parse(value).releasedAt;
+              return releasedAt ? releasedAt.substring(0, 10) : "";
+      Image:
+        selector: $nuxtData
+        postProcess:
+          - javascript: *locateRelease
+          - javascript: |
+              if (!value) return "";
+              var release = JSON.parse(value);
+              return release.posterUrl || release.thumbUrl || "";
+      Tags:
+        Name:
+          selector: $nuxtData
+          postProcess:
+            - javascript: *locateRelease
+            - javascript: |
+                if (!value) return [];
+                return JSON.parse(value).tags || [];
+          split: ","
+      Performers:
+        Name:
+          selector: $nuxtData
+          postProcess:
+            - javascript: *locateRelease
+            - javascript: |
+                if (!value) return [];
+                return (JSON.parse(value).actors || []).map(function (a) {
+                  return a.name;
+                });
+          split: ","
+        URLs:
+          selector: $nuxtData
+          postProcess:
+            - javascript: *locateRelease
+            - javascript: |
+                if (!value) return [];
+                // A performer's profile only resolves on the same domain as
+                // the release itself, not necessarily the sponsor's domain
+                // (releases are frequently cross-posted across the network).
+                var release = JSON.parse(value);
+                var host = release.site.slug + ".com";
+                return (release.actors || []).map(function (a) {
+                  return "https://" + host + "/models/" + a.cached_slug;
+                });
+          split: ","
+      Studio:
+        Name:
+          selector: $nuxtData
+          postProcess:
+            - javascript: *locateRelease
+            - javascript: |
+                if (!value) return "";
+                return JSON.parse(value).sponsor.name || "";
+        URL:
+          selector: $nuxtData
+          postProcess:
+            - javascript: *locateRelease
+            - javascript: |
+                if (!value) return "";
+                return "https://" + JSON.parse(value).sponsor.cachedSlug + ".com/";
+
+  performerScraper:
+    common:
+      $nuxtData: //script[@id="__NUXT_DATA__"]/text()
+    performer:
+      Name:
+        selector: $nuxtData
+        postProcess:
+          - javascript: &locatePerformer |
+              function resolve(arr, i) {
+                if (typeof i !== "number") return i;
+                var v = arr[i];
+                if (v === null || typeof v !== "object") return v;
+                if (Array.isArray(v)) {
+                  if (typeof v[0] === "string") {
+                    return v[0] === "EmptyRef" ? null : resolve(arr, v[1]);
+                  }
+                  return v.map(function (x) {
+                    return resolve(arr, x);
+                  });
+                }
+                var obj = {};
+                for (var k in v) obj[k] = resolve(arr, v[k]);
+                return obj;
+              }
+              if (!value) return "";
+              var root = resolve(JSON.parse(value), 0);
+              for (var k in root.data) {
+                var v = root.data[k];
+                if (v && v.name && !v.items) {
+                  return JSON.stringify(v);
+                }
+              }
+              return "";
+          - javascript: |
+              if (!value) return "";
+              return JSON.parse(value).name || "";
+      Gender:
+        selector: $nuxtData
+        postProcess:
+          - javascript: *locatePerformer
+          - javascript: |
+              if (!value) return "";
+              var gender = JSON.parse(value).gender;
+              return { guy: "Male", girl: "Female" }[gender] || "";
+      URLs:
+        # The performer JSON payload (unlike a release) doesn't carry a
+        # "site" field, so the current domain can't be read from the data.
+        # Instead read it off the favicon path, which every site in the
+        # network serves as /images/sites/{slug}/{slug}-favicon.ico.
+        selector: $nuxtData | //link[@rel="icon"]/@href
+        concat: "@@SPLIT@@"
+        postProcess:
+          - javascript: |
+              function resolve(arr, i) {
+                if (typeof i !== "number") return i;
+                var v = arr[i];
+                if (v === null || typeof v !== "object") return v;
+                if (Array.isArray(v)) {
+                  if (typeof v[0] === "string") {
+                    return v[0] === "EmptyRef" ? null : resolve(arr, v[1]);
+                  }
+                  return v.map(function (x) {
+                    return resolve(arr, x);
+                  });
+                }
+                var obj = {};
+                for (var k in v) obj[k] = resolve(arr, v[k]);
+                return obj;
+              }
+              if (!value) return [];
+              var parts = value.split("@@SPLIT@@");
+              var faviconPart = parts[0].indexOf("/images/sites/") === 0 ? parts[0] : parts[1] || "";
+              var jsonPart = faviconPart === parts[0] ? parts[1] || "" : parts[0];
+              var root = resolve(JSON.parse(jsonPart), 0);
+              var performer = null;
+              for (var k in root.data) {
+                var v = root.data[k];
+                if (v && v.name && !v.items) {
+                  performer = v;
+                  break;
+                }
+              }
+              if (!performer) return [];
+              var siteMatch = faviconPart.match(/\/images\/sites\/([^/]+)\//);
+              var site = siteMatch ? siteMatch[1] : "";
+              var urls = [];
+              if (site) urls.push("https://" + site + ".com/models/" + performer.cachedSlug);
+              if (site !== "gayroom") urls.push("https://gayroom.com/models/" + performer.cachedSlug);
+              return urls;
+        split: ","
+# No performer images: model pages don't expose an actual profile photo
+# (only a still frame from one of their scenes, or null).
