@@ -5,22 +5,30 @@ sceneByFragment:
   queryURLReplace:
     filename:
       - regex: \..+$
-        with: ""
+        with: ''
   scraper: sceneQueryScraper
 sceneByURL:
   - action: scrapeXPath
     url:
       - dmm.co.jp/
     scraper: sceneScraper
-    queryURL: "{url}"
+    queryURL: '{url}'
 sceneByName:
   action: scrapeXPath
   queryURL: https://www.dmm.co.jp/mono/-/search/=/searchstr={}/
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
-  queryURL: "{url}"
+  queryURL: '{url}'
   scraper: sceneScraper
+
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - dmm.co.jp/dc/doujin/-/detail/
+      - dmm.co.jp/digital/doujin/-/detail/
+    queryURL: '{url}'
+    scraper: doujinDetail
 
 xPathScrapers:
   sceneSearch:
@@ -28,28 +36,27 @@ xPathScrapers:
       $videoItem: //*[@id="list"]
     scene:
       Title: $videoItem/li/div/p/a/span[@class="txt"]
-      URL: 
+      URL:
         selector: $videoItem/li/div/p/a/@href
       Image:
         selector: $videoItem/li/div/p/a/span[@class="img"]/img/@src
         postProcess:
           - replace:
               - regex: ^
-                with: "https:"
+                with: 'https:'
   sceneQueryScraper:
     common:
       $videoItem: //*[@id="list"]
     scene:
       Title: $videoItem/li/div/p/a/span[@class="txt"]
-      URL: 
+      URL:
         selector: $videoItem/li/div/p/a/@href
       Image:
         selector: $videoItem/li/div/p/a/span[@class="img"]/@src
         postProcess:
           - replace:
               - regex: ^
-                with: "https:"
-
+                with: 'https:'
   sceneScraper:
     scene:
       Title: //meta[@property="og:title"]/@content
@@ -61,7 +68,7 @@ xPathScrapers:
               - regex: (\d{4})/(\d{2})/(\d{2})
                 with: $1-$2-$3
           - parseDate: 2006-01-02
-      Code: 
+      Code:
         selector: //td[contains(.,"品番") and @class="nw"]/following-sibling::td
         postProcess:
           - replace:
@@ -72,7 +79,7 @@ xPathScrapers:
       Performers:
         Name: //td[contains(.,"出演者") and @class="nw"]/following-sibling::td/span/a
       Studio:
-        Name: 
+        Name:
           selector: //td[contains(.,"メーカー") and @class="nw"]/following-sibling::td/a
           postProcess:
             - map:
@@ -93,23 +100,62 @@ xPathScrapers:
                 大塚フロッピー: Otsuka Floppy
                 ムーディーズ: Moodyz
                 ヴィ: V
-                #キチックス/妄想族: Kitixx/妄想族
-                #バミューダ/妄想族: BERMUDA/妄想族
-                #ボニータ/妄想族: Bonita/妄想族
-                #タマネギ/妄想族: Onion/妄想族
-                #ミステリア/妄想族: Mystery/妄想族
-
+                # キチックス/妄想族: Kitixx/妄想族
+                # バミューダ/妄想族: BERMUDA/妄想族
+                # ボニータ/妄想族: Bonita/妄想族
+                # タマネギ/妄想族: Onion/妄想族
+                # ミステリア/妄想族: Mystery/妄想族
       Image: //meta[@property="og:image"]/@content
-      URL: 
+      URL:
         selector: //meta[@property="og:url"]/@content
       Director: //td[contains(.,"監督") and @class="nw"]/following-sibling::td/a
-
+  doujinDetail:
+    gallery:
+      Title:
+        selector: (//meta[@property="og:title"]/@content | //h1[1]//text())[1]
+        postProcess:
+          - replace:
+              - regex: \s*[\-|｜]\s*(FANZA.*|DMM.*)$
+                with: ''
+              - regex: ^\s+|\s+$
+                with: ''
+      Details:
+        selector: (//meta[@property="og:description"]/@content | //p[contains(@class,"summary")][1]//text() | //div[contains(@class,"summary")][1]//text())[1]
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ''
+      Date:
+        selector: (//*[self::td or self::th or self::dt][contains(normalize-space(.), "発売日") or contains(normalize-space(.), "配信開始日") or contains(normalize-space(.), "販売日")]/following-sibling::*[1]//text())[1]
+        postProcess:
+          - replace:
+              - regex: .*?(\d{4})年(\d{1,2})月(\d{1,2})日.*
+                with: $1-$2-$3
+              - regex: .*?(\d{4})/(\d{1,2})/(\d{1,2}).*
+                with: $1-$2-$3
+              - regex: .*?(\d{4})-(\d{1,2})-(\d{1,2}).*
+                with: $1-$2-$3
+          - parseDate: 2006-1-2
+      Studio:
+        Name:
+          selector: (//div[contains(concat(" ", normalize-space(@class), " "), " circleInfo ")]//a[normalize-space()][1]/text() | //div[contains(concat(" ", normalize-space(@class), " "), " circleInfo ")]//*[self::span or self::p or self::li or self::dd][normalize-space()][1]/text()[normalize-space()][1])[1]
+      Performers:
+        Name:
+          selector: //*[self::td or self::th or self::dt][contains(normalize-space(.), "出演者") or contains(normalize-space(.), "作者") or contains(normalize-space(.), "著者") or contains(normalize-space(.), "作家")]/following-sibling::*[1]//a[normalize-space()]
+      Tags:
+        Name:
+          # Return each <a> as its own matched node so Stash creates separate tags.
+          selector: //*[self::td or self::th or self::dt][contains(normalize-space(.), "ジャンル")]/following-sibling::*[1]//a[normalize-space()]
+      URLs:
+        fixed: '{inputURL}'
 driver:
+  useCDP: true
+  sleep: 5
   cookies:
-    - CookieURL: "https://www.dmm.co.jp"
+    - CookieURL: 'https://www.dmm.co.jp'
       Cookies:
-        - Name: "age_check_done"
-          Domain: ".dmm.co.jp"
-          Value: "1"
-          Path: "/"
-# Last Updated Jan 10, 2024
+        - Name: 'age_check_done'
+          Domain: '.dmm.co.jp'
+          Value: '1'
+          Path: '/'
+# Last Updated July 04, 2026
