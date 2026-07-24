@@ -1,0 +1,151 @@
+name: Boys Destroyed
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - boysdestroyed.com/video/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - boysdestroyed.com/models/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $nuxtData: //script[@id="__NUXT_DATA__"]/text()
+    scene:
+      Title:
+        selector: $nuxtData
+        postProcess:
+          - javascript: &locateRelease |
+              // The site is a Nuxt SPA whose data is SSR'd as a flattened,
+              // reference-based JSON array (devalue format). Unflatten it,
+              // then find the single release object for the current page
+              // (as opposed to the list of recommended releases, which is
+              // also present in the payload).
+              function resolve(arr, i) {
+                if (typeof i !== "number") return i;
+                var v = arr[i];
+                if (v === null || typeof v !== "object") return v;
+                if (Array.isArray(v)) {
+                  if (typeof v[0] === "string") {
+                    return v[0] === "EmptyRef" ? null : resolve(arr, v[1]);
+                  }
+                  return v.map(function (x) {
+                    return resolve(arr, x);
+                  });
+                }
+                var obj = {};
+                for (var k in v) obj[k] = resolve(arr, v[k]);
+                return obj;
+              }
+              if (!value) return "";
+              var root = resolve(JSON.parse(value), 0);
+              var release = null;
+              for (var k in root.data) {
+                var v = root.data[k];
+                if (v && v.title && !v.items) {
+                  release = v;
+                  break;
+                }
+              }
+              return release ? JSON.stringify(release) : "";
+          - javascript: |
+              if (!value) return "";
+              return JSON.parse(value).title || "";
+      Details:
+        selector: $nuxtData
+        postProcess:
+          - javascript: *locateRelease
+          - javascript: |
+              if (!value) return "";
+              return JSON.parse(value).description || "";
+      Date:
+        selector: $nuxtData
+        postProcess:
+          - javascript: *locateRelease
+          - javascript: |
+              if (!value) return "";
+              var releasedAt = JSON.parse(value).releasedAt;
+              return releasedAt ? releasedAt.substring(0, 10) : "";
+      Image:
+        selector: $nuxtData
+        postProcess:
+          - javascript: *locateRelease
+          - javascript: |
+              if (!value) return "";
+              var release = JSON.parse(value);
+              return release.posterUrl || release.thumbUrl || "";
+      Tags:
+        Name:
+          selector: $nuxtData
+          postProcess:
+            - javascript: *locateRelease
+            - javascript: |
+                if (!value) return [];
+                return JSON.parse(value).tags || [];
+          split: ","
+      Performers:
+        Name:
+          selector: $nuxtData
+          postProcess:
+            - javascript: *locateRelease
+            - javascript: |
+                if (!value) return [];
+                return (JSON.parse(value).actors || []).map(function (a) {
+                  return a.name;
+                });
+          split: ","
+        URLs:
+          selector: $nuxtData
+          postProcess:
+            - javascript: *locateRelease
+            - javascript: |
+                if (!value) return [];
+                return (JSON.parse(value).actors || []).map(function (a) {
+                  return "https://boysdestroyed.com/models/" + a.cached_slug;
+                });
+          split: ","
+      Studio:
+        Name:
+          fixed: Boys Destroyed
+        URL:
+          fixed: https://boysdestroyed.com/
+
+  performerScraper:
+    common:
+      $nuxtData: //script[@id="__NUXT_DATA__"]/text()
+    performer:
+      Name:
+        selector: $nuxtData
+        postProcess:
+          - javascript: |
+              function resolve(arr, i) {
+                if (typeof i !== "number") return i;
+                var v = arr[i];
+                if (v === null || typeof v !== "object") return v;
+                if (Array.isArray(v)) {
+                  if (typeof v[0] === "string") {
+                    return v[0] === "EmptyRef" ? null : resolve(arr, v[1]);
+                  }
+                  return v.map(function (x) {
+                    return resolve(arr, x);
+                  });
+                }
+                var obj = {};
+                for (var k in v) obj[k] = resolve(arr, v[k]);
+                return obj;
+              }
+              if (!value) return "";
+              var root = resolve(JSON.parse(value), 0);
+              for (var k in root.data) {
+                var v = root.data[k];
+                if (v && v.name && !v.items) {
+                  return v.name;
+                }
+              }
+              return "";
+      Gender:
+        fixed: Male
+# No performer images: model pages don't expose an actual profile photo
+# (only a still frame from one of their scenes, or null).
