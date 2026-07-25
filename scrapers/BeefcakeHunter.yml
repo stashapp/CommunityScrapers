@@ -1,0 +1,59 @@
+name: BeefcakeHunter
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - beefcakehunter.com/video/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="sunday-funday-video-title"]
+      Details:
+        selector: //div[@id="dslc-theme-content-inner"]//p
+        concat: "\n\n"
+      Date:
+        selector: //meta[@property="article:published_time"]/@content
+        postProcess:
+          - replace:
+              - regex: ^(\d{4}-\d{2}-\d{2}).*
+                with: $1
+      Image: //video[@class="wp-video-shortcode"]/@poster
+      Tags:
+        Name:
+          # The site renders no clickable tag (or performer) links anywhere
+          # on the scene page; the only signal is this CSS class dump, which
+          # mixes descriptive tags and performer names in the same flat
+          # taxonomy with no reliable way to tell them apart per-page. So
+          # everything here - including performer names - comes through as
+          # a Tag.
+          selector: //div[contains(@class, "t7-video-single")]/@class
+          postProcess:
+            - javascript: |
+                if (!value) return [];
+                return value
+                  .split(/\s+/)
+                  .filter(function (c) {
+                    return c.indexOf("video-category-") === 0;
+                  })
+                  .map(function (c) {
+                    return c
+                      .replace("video-category-", "")
+                      .split("-")
+                      .map(function (w) {
+                        return w.charAt(0).toUpperCase() + w.slice(1);
+                      })
+                      .join(" ");
+                  });
+          split: ","
+      Performers:
+        Name:
+          # Victor is the site's host/narrator and is on-screen having sex
+          # with the guest model in every scene, so he's always credited.
+          # The guest model can't be reliably identified (see Tags above),
+          # so is intentionally left out of Performers.
+          fixed: Victor
+      Studio:
+        Name:
+          fixed: Beefcake Hunter
+        URL:
+          fixed: https://beefcakehunter.com/
