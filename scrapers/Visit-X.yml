@@ -1,26 +1,57 @@
 name: Visit-X
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - visit-x.net
     scraper: sceneScraper
-xPathScrapers:
+    queryURL: https://www.visit-x.net/rest/v1/gallery/open?language=en&albumId={url}
+    queryURLReplace:
+      url:
+        - regex: .+videos/(\d+).+
+          with: $1
+jsonScrapers:
   sceneScraper:
+    common:
+      $video: data.video
     scene:
-      Title: //div[@class="profile-video-details"]//h2
+      Title:
+        selector: $video.albumTitle
+        postProcess: &decodeHTML
+          - javascript: >-
+              if (value) {
+                return value.replace(
+                /&amp;|&lt;|&gt;|&#0?39;|&quot;/g,
+                tag =>
+                  ({
+                    '&amp;': '&',
+                    '&lt;': '<',
+                    '&gt;': '>',
+                    '&#39;': "'",
+                    '&#039;': "'",
+                    '&quot;': '"'
+                    }[tag] || tag)
+                ).replace(/<br\s*\/?>/gi, '\n');
+              }
+              return value
+
       Tags:
-        Name: //a[@class="profile-video-details--description-tags-list-item-tag"]/text()
+        Name: $video.videoTags
       Performers:
-        Name: //a[contains(@class, 'profile-video-details--description-complex-actors-link')]/text()
-      Details: //div[contains(@class, 'profile-video-details--description-text')]/text()
+        Name:
+          selector: $video.actorName
+          postProcess:
+            - replace:
+                - regex: \-
+                  with: " "
+      Details:
+        selector: $video.description
+        postProcess: *decodeHTML
       Date:
-        selector: //span[contains(@class, 'profile-video-details--description-complex-meta-item')][1]/text()
+        selector: $video.releaseDate
         postProcess:
           - parseDate: 02.01.2006
-      Image: //div[contains(@class, 'gallery__preview-image-container')]/img/@src
+      Code: $video.id
+      URLs: $video.absoluteUrl
+      Image: $video.previewPictureUrls.0.pictureUrl
       Studio:
-        Name:
-          fixed: Visit-X
-driver:
-  useCDP: true
-# Last Updated April 24, 2023
+        Name: $video.actorName
