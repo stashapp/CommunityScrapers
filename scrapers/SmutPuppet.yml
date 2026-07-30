@@ -2,57 +2,55 @@ name: SmutPuppet
 sceneByURL:
   - action: scrapeXPath
     url:
+      - porngutter.com/update
+      # All of these redirect to porngutter.com
+      # and so they need trickery to get correct
+      # dates and studio names
       - 3wayfuck.com/update
       - blackandbig.com/update
       - blondeslovedick.com/update
       - brunetteslovedick.com/update
       - cougarkingdom.com/update
       - darksodomy.com/update
-      - dothewife.com/update
-      - dreamtranny.com/update
       - eurosex4k.com/update
-      - genlez.com/update
-      - goldenslut.com/update
       - grannyvsbbc.com/update
       - groupfucksite.com/update
-      - hcjav.com/update
       - maturefucksteen.com/update
       - milfsodomy.com/update
       - porn-uk.com/update
-      - porngutter.com/update
       - smutmerchants.com/update
-      - suggabunny.com/update
       - teamfucksgirl.com/update
       - teenerotica.xxx/update
-    scraper: sceneScraper
+    scraper: networkScraper
   - action: scrapeXPath
     url:
+      # Subsites have dates and studio names
+      - dothewife.com/update
+      - dreamtranny.com/update
+      - genlez.com/update
+      - goldenslut.com/update
+      - hcjav.com/update
       - jeffsmodels.com/update
-    scraper: JeffsModelsScraper
-
+      - suggabunny.com/update
+    scraper: subSiteScraper
 xPathScrapers:
-  sceneScraper:
-    common:
-      $image: //div[@class="block-logo"]/a/img
-      $script: //script[contains(text(),"/api/update/")]
-      $title: //div[@class="section-title"]/h4
+  networkScraper:
     scene:
-      Performers: &performers
-        Name: //div[@class="model-rich"]/h4[@class="theme-color"]/a
-      Title: &title $title
-      Details: &details
-        selector: //p[@class="read-more"]/text()
+      Title: &title //div[@class="section-title"]
+      Code: &code
+        selector: &URL //link[@rel="canonical"]/@href
         postProcess:
           - replace:
-              - regex: '^\s*:\s*'
-                with:
-      Tags: &tags
-        Name:
-          selector: //div[@class="model-categories"]/a/text()
-      # Grab studio name from search
+              - regex: .+\/update\/0*(\d+).+
+                with: $1
+      Date: &date
+        selector: //small[@class="updated-at"]
+        postProcess:
+          - parseDate: Jan 2, 2006
+      # Use search to get the correct substudio
       Studio:
         Name:
-          selector: $title
+          selector: *title
           postProcess:
             - replace:
                 - regex: '\s'
@@ -63,55 +61,36 @@ xPathScrapers:
                   with: https://porngutter.com/updates/?step=2&show_bonus_sites=1&q=
             - subScraper:
                 selector: //a[@class="quick-tag"]
+            - replace:
+                - regex: \s\(18\+\)$
+                  with: ""
+      Performers: &performers
+        Name: //div[@class="model-rich"]/h4[@class="theme-color"]/a
+      Tags: &tags
+        Name: //div[@class="model-categories"]/a
+      Details: &details
+        selector: //p[@class="read-more"]
+        postProcess:
+          - replace:
+              - regex: '^\s*:\s*'
+                with:
+      URL: *URL
       Image: &image
         selector: //img[@class="video-banner"]/@src | //video/@poster
         postProcess:
           - replace:
               - regex: ^/
                 with: https://porngutter.com
-      Code: &code
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .+\/api\/update\/(\d{2,4})\/.+
-                with: $1
-      # Return the sanitized URL
-      URL: &URL
-        selector: $image/@src | $script
-        concat: "|"
-        postProcess:
-          - replace:
-              - regex: \/static\/(.+?\.[a-z]{3})\/.+\/api\/update\/(\d{2,4})\/.+
-                with: https://$1/update/$2/
-      # Grab date from porngutter.com
-      Date:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .+\/api\/update\/(\d{2,4})\/.+
-                with: https://porngutter.com/update/$1
-          - subScraper:
-              selector: &date //small[@class="updated-at"]/text()
-              postProcess:
-                - parseDate: Jan 2, 2006
-
-  JeffsModelsScraper:
+  subSiteScraper:
     common:
-      $image: //div[@class="block-logo"]/a/img
-      $script: //script[contains(text(),"/api/update/")]
-      $title: //div[@class="section-title"]/h4
+      $title: //div[@class="section-title"]
     scene:
-      Performers: *performers
       Title: *title
-      Details: *details
-      Tags: *tags
-      Studio:
-        Name:
-          fixed: Jeff's Models
-      Image: *image
       Code: *code
-      URL: *URL
-      Date:
-        selector: *date
-        postProcess:
-          - parseDate: Jan 2, 2006
+      Date: *date
+      Studio:
+        Name: //img[contains(@src, "logo.png")]/@alt
+      Performers: *performers
+      Tags: *tags
+      Details: *details
+      Image: *image
