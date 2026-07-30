@@ -116,4 +116,6 @@ driver:
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36
     - Key: Accept-Language
       Value: zh-cn
+    - Key: Cookie
+      Value: over18=18; existmag=mag
 # Last Updated September 17, 2025
