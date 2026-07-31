@@ -15,7 +15,6 @@ sceneByQueryFragment:
   script:
     - python3
     - javbus.py
-    - validSearch
 sceneByURL:
   - action: script
     url:
@@ -27,4 +26,3 @@ sceneByURL:
     script:
       - python3
       - javbus.py
-      - validSearch

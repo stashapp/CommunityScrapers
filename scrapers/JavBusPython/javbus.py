@@ -1,5 +1,5 @@
 import json, re, sys, urllib.request, ssl
-ctx = ssl._create_unverified_context()
+ctx = ssl.create_default_context()
 H = {"User-Agent": "Mozilla/5.0","Accept-Language": "zh-CN","Cookie": "over18=18; existmag=mag"}
 D = "https://www.javbus.com"
 
@@ -10,7 +10,8 @@ def fetch(url):
         return None
 
 def ec(t):
-    m = re.search(r"([A-Za-z0-9]{2,12})[-_ ]?(\d{2,5})", t, re.IGNORECASE)
+    t = re.sub(r"(?i)\b(CD|DVD|DISC|PART|JAV)[-_ ]?\d{1,3}\b", " ", t or "")
+    m = re.search(r"^.*?([A-Za-z][A-Za-z0-9]*?[A-Za-z])[-_ ]*(\d{2,5}).*$", t)
     return f"{m.group(1).upper()}-{m.group(2)}" if m else None
 
 def ps(h):
@@ -59,14 +60,15 @@ def ss(u):
     r["date"] = m.group(1).strip() if m else ""
     m = re.search("長度[^<]*</span>\\s*([^<\\n]+)", h)
     dv = re.search(r"\d+", m.group(1)) if m else None
-    r["duration"] = int(dv.group()) if dv else 0
+    if dv:
+        r["duration"] = int(dv.group()) * 60
     m = re.search("導演[^<]*</span>[^>]*<a[^>]*>([^<]+)", h)
     r["director"] = m.group(1).strip() if m else ""
     m = re.search("發行商[^<]*</span>\\s*<a[^>]*>([^<]+)", h)
     if not m:
         m = re.search("製作商[^<]*</span>\\s*<a[^>]*>([^<]+)", h)
     r["studio"] = {"name": m.group(1).strip()} if m else {}
-    r["tags"] = [{"name": t} for t in re.findall('class="genre">.*?<a[^>]*>([^<]+)', h, re.DOTALL)]
+    r["tags"] = [{"name": t} for t in re.findall('class="genre"><label>.*?<a[^>]*>([^<]+)', h, re.DOTALL)]
     r["performers"] = [{"name": p} for p in re.findall('class="star-name"[^>]*><a[^>]*>([^<]+)', h, re.DOTALL)]
     m = re.search('class="bigImage"[^>]*><img[^>]*src="([^"]+)"', h)
     if m:
@@ -75,15 +77,18 @@ def ss(u):
     return r
 
 f = json.loads(sys.stdin.read())
-n = f.get("name", "")
-u = f.get("url", "")
-c = ec(n or u)
+mode = sys.argv[1] if len(sys.argv) > 1 else ""
+u = f.get("url") or (f.get("urls") or [""])[0]
+n = f.get("name") or f.get("title") or ""
+c = ec(f.get("code") or n or u)
 
-if len(sys.argv) > 1 and sys.argv[1] == "searchName":
-    print(json.dumps(search(c) if c else []))
+if mode == "searchName":
+    print(json.dumps(search(c) if c else []))   # sceneByName → list
 elif u:
-    print(json.dumps(ss(u)))
+    print(json.dumps(ss(u)))                    # object
 elif c:
-    print(json.dumps(search(c)))
+    hits = search(c)                            # fragment 路径 → 单个对象
+    hit = next((x for x in hits if x.get("code", "").upper() == c.upper()), hits[0] if hits else None)
+    print(json.dumps(ss(hit["url"]) if hit else {}))
 else:
-    print(json.dumps([]))
+    print(json.dumps([] if mode == "searchName" else {}))
