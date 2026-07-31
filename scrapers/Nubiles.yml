@@ -138,7 +138,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsAttr
-        selector: //div[contains(@class, "content-pane-column")]//p/text()|//div[contains(@class, "content-pane-column")]/div/text()
+        selector: //div[contains(@class, "content-pane-column")]//p/text()|//div[contains(@class, "content-pane-column")]/div/text()|//div[contains(@class, "content-pane-column")]/div/div/text()
         concat: "\n\n"
       Performers: &performersAttr
         Name: //div[@class="content-pane-performers"]/a/text()
