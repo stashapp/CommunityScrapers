@@ -1,0 +1,30 @@
+name: "JavBus Python"
+sceneByFragment:
+  action: script
+  script:
+    - python3
+    - javbus.py
+sceneByName:
+  action: script
+  script:
+    - python3
+    - javbus.py
+    - searchName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python3
+    - javbus.py
+    - validSearch
+sceneByURL:
+  - action: script
+    url:
+      - https://www.javbus.com
+      - https://www.seejav.bid
+      - https://www.cdnbus.lol
+      - https://www.dmmbus.lol
+      - https://www.seedmm.cfd
+    script:
+      - python3
+      - javbus.py
+      - validSearch
