@@ -1,38 +1,236 @@
-name: hstream
-sceneByName:
+name: HStream
+
+# Using Portrait Poster as Stash Thumbnails
+# By default, the wide-screen video thumbnails are scraped, since they are of much higher resolution and a better fit with other scene thumbnails. If you would prefer to scrape the portrait style poster images, search for and uncomment the "POSTER IMAGE" lines below...
+
+# ==================== HStream Login Cookies ====================
+
+# To scrape scenes that are hidden behind a login page, you must login to HStream and then provide your browser cookies. Update these cookies whenever they expire.
+# Login to HStream, inspect the page, navigate to the "Storage" tab, and search for these cookie items by name...
+ 
+driver:
+  cookies:
+    - CookieURL: "https://hstream.moe/"
+      Cookies:
+
+        - Name: "XSRF-TOKEN"
+          Value: "" # Insert value
+          Domain: "hstream.moe"
+          Path: "/"
+
+        - Name: "hstream_session"
+          Value: "" # Insert value
+          Domain: "hstream.moe"
+          Path: "/"
+
+        - Name: "_pk_id.1.a11a"
+          Value: "" # Insert value
+          Domain: "hstream.moe"
+          Path: "/"
+
+        - Name: "_pk_ses.1.a11a"
+          Value: "1" # Insert value
+          Domain: "hstream.moe"
+          Path: "/"
+
+        - Name: "locale"
+          Value: "en" # Insert value
+          Domain: "hstream.moe"
+          Path: "/"
+
+
+# ==================== Scene Tagger View ====================
+
+sceneByFragment: # The "Scrape by Fragment" button
+  # Attempt to convert the scene's current title (filename) into a valid hstream link
+  # Example: "Nozoko Kanojo - 1 [720p]" > "https://hstream.moe/hentai/nozoki-kanojo-1"
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://hstream.moe/hentai/{filename}
+  queryURLReplace:
+    filename: # Try from most unique to least unique filename format
+      
+      # Studio first: [studio] {Title} - {ep#} (720p).mkv
+      - regex: ^\[.+?\] (.+) (- )?(\d+) \(\d+(p|k)\)(__\d+)?\.\w{3,4}$
+        with: "$1-$3"
+      
+      # Hstream DDL: {Title} - {ep#} [2160p...].mkv
+      - regex: ^(.+?) - (\d+) \[.+?\]\.\w{3,4}$
+        with: "$1-$2"
+        
+      # get-sauce downloader: {Title} - {ep#}_merged.mp4
+      - regex: ^(.+?)( - |-)?(\d+)_merged\.\w{3,4}$
+        with: "$1-$3"
+
+      # Generic title: {Title} - {ep#}.mkv
+      - regex: ^(.+?)( - | )(\d+)\.\w{3,4}$
+        with: "$1-$3"
+
+      # URL Title: hstream-url-as-filename.mp4
+      - regex: ^(.+?-\d+)\.\w{3,4}$
+        with: "$1"
+
+      # --- Convert parsed title to URL ---
+
+      # Remove non-word characters
+      - regex: "[^A-Za-z\\d\\-\\s]+"
+        with: ""
+ 
+      # Remove dash dividers
+      - regex: " - "
+        with: " "
+
+      # Replace spaces with URL hyphens
+      - regex: \s
+        with: "-"
+
+      # Remove leading zeroes from episode number
+      - regex: 0+(\d)
+        with: $1
+
+
+sceneByName: # The "Query Search" box 
+  # Search HStream by title to return a list of results (no episode #)
   action: scrapeXPath
   queryURL: https://hstream.moe/search?search={}
   scraper: sceneSearch
-sceneByQueryFragment:
-  action: scrapeXPath
-  queryURL: '{url}'
-  scraper: sceneScraper
 
-sceneByFragment:
+
+sceneByQueryFragment: # After using the "Query Search" box, scrape the selected scene page
   action: scrapeXPath
-  queryURL: https://hstream.moe/hentai/{filename}
-  queryURLReplace:
-    filename:
-      # Strip out everything after the first [
-      - regex: ([^[]+)\s.*
-        with: $1
-      # Remove apostrophes
-      - regex: "'"
-        with: ''
-      # Replace non-word characters with hyphen
-      - regex: \W+
-        with: '-'
-      # Remove leading zeroes
-      - regex: 0+(\d)
-        with: $1
-  scraper: sceneScraper
-sceneByURL:
+  queryURL: "{url}"
+  scraper: sceneScraper     
+
+
+# ==================== Scene Details Page ====================
+
+sceneByURL: # The "Scrape URL" button 
   - action: scrapeXPath
     url:
       - hstream.moe/hentai/
     scraper: sceneScraper
+
+
+# ==================== Group New\Edit Page ====================
+groupByURL: # The "Scrape URL" button
+  - action: scrapeXPath
+    url:
+      - hstream.moe/hentai/
+    scraper: groupScraper
+
+
+# ==================== Scrapers ====================
 xPathScrapers:
-  sceneSearch:
+
+  # ---------- Episode Page ----------
+  sceneScraper: 
+    scene:
+      Title:
+        selector: //h1/a[contains(@href, '/hentai/')]/parent::h1
+      Date:
+        selector: //i[contains(@class, "fa-calendar")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: \s*(\d{4}-\d{2}-\d{2}).*
+                with: $1
+          - parseDate: 2006-01-02
+      Studio:
+        Name: //a[contains(@href, "studios")]/text()
+      Image:
+        selector: //meta[@property="og:image"]/@content
+
+        # ******* POSTER IMAGE *******
+        # postProcess:
+        #   - replace:
+        #       # 1) gallery  ➜  cover
+        #       - regex: gallery
+        #         with: cover
+        #       # 2) trim the trailing “-0” (or “-1”, etc.)
+        #       - regex: (-ep-\d+)-\d+\.webp$
+        #         with: $1.webp
+
+      URL: //meta[@property="og:url"]/@content # HStream URL is not allowed in StashDB submissions
+      Details: //h2[contains(text(), "Description")]/following-sibling::p
+      Tags:
+        Name:
+          selector: //h2[contains(text(), "Genres")]/following-sibling::div/a/text()
+          concat: ___
+          postProcess:
+            - replace:
+              # Remove variable/unwanted tags
+              - regex: (?i)(1080p|4K|48Fps|4K 48FPS|Uncensored|Censored)
+                with: ""
+              # Append specific tags
+              - regex: $
+                with: "___Hentai"
+          split: ___
+
+      Groups: # When scraping from the "Scene Edit Tab", a group can also be created\assigned
+        URLs: //h1/a[contains(@href, '/hentai/')]/@href
+        Name: 
+          selector: //h1/a[contains(@href, '/hentai/')]/parent::h1
+          postProcess:
+            - replace:
+              # Remove the episode # from the title
+              - regex: ^(.+) - \d+
+                with: "$1"
+        FrontImage: 
+          selector: //img[contains(@src, 'cover-')]/@src
+          postProcess:
+            - replace:
+              - regex: ^
+                with: "https://hstream.moe"
+
+
+  # ---------- Series Page ----------
+  groupScraper: 
+    group:
+      Name:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: "(^.*) \\(.*\\)"
+                with: $1
+      Aliases:
+        selector: //h1/following-sibling::p/text()
+        postProcess:
+          - replace:
+              - regex: "(^.*) \\((.*)\\)"
+                with: $2
+      Studio:
+        Name: //a[contains(@href, "studios")]/text()
+      FrontImage: 
+        selector: //img[contains(@src, 'cover-')]/@src
+        postProcess:
+          - replace:
+            - regex: ^
+              with: "https://hstream.moe"
+      Date:
+        selector: //i[contains(@class, "fa-calendar")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: \s*(\d{4}-\d{2}-\d{2}).*
+                with: $1
+          - parseDate: 2006-01-02
+      Synopsis: //h2[contains(text(), "Description")]/following-sibling::p
+      Tags:
+        Name:
+          selector: //h2[contains(text(), "Genres")]/following-sibling::div/a/text()
+          concat: ___
+          postProcess:
+            - replace:
+              # Remove variable/unwanted tags
+              - regex: (?i)(1080p|4K|48Fps|4K 48FPS|Uncensored|Censored)
+                with: ""
+              # Append specific tags
+              - regex: $
+                with: "___Hentai"
+          split: ___
+
+
+  # ---------- Search Results Page ----------
+  # HStream searches do NOT support episode #
+  sceneSearch: 
     scene:
       URL: //div[contains(@class,'p-1')]/a[contains(@href, "hentai")]/@href
       Title:
@@ -44,40 +242,17 @@ xPathScrapers:
               # 1) make relative paths absolute
               - regex: '^/'
                 with: https://hstream.moe/
-              # 2) turn “…/gallery‑…” into “…/cover‑…”
-              - regex: '/gallery-'
-                with: '/cover-'
-              # 3) drop the “‑thumbnail” tag
-              - regex: '-thumbnail'
-                with:
-              # 4) remove the extra frame index after the episode number
-              - regex: '(-ep-\d+)-\d+\.webp$'
-                with: $1.webp
-  sceneScraper:
-    scene:
-      Title: //h1
-      Date:
-        selector: //i[contains(@class, "fa-calendar")]/following-sibling::text()
-        postProcess:
-          - replace:
-              - regex: \s*(\d{4}-\d{2}-\d{2}).*
-                with: $1
-          - parseDate: 2006-01-02
-      Details: //h2[contains(text(), "Description")]/following-sibling::p
-      Tags:
-        Name: //h2[contains(text(), "Genres")]/following-sibling::div/a/text()
-      Studio:
-        Name: (//a[contains(@href, "studios")])[1]
-      Image:
-        selector: //meta[@property="og:image"]/@content
-        postProcess:
-          - replace:
-              # 1) gallery  ➜  cover
-              - regex: gallery
-                with: cover
-              # 2) trim the trailing “-0” (or “-1”, etc.)
-              - regex: (-ep-\d+)-\d+\.webp$
-                with: $1.webp
+               
+              # ******* POSTER IMAGE *******
+              # # 2) turn “…/gallery‑…” into “…/cover‑…”
+              # - regex: '/gallery-'
+              #   with: '/cover-'
+              # # 3) drop the “‑thumbnail” tag
+              # - regex: '-thumbnail'
+              #   with:
+              # # 4) remove the extra frame index after the episode number
+              # - regex: '(-ep-\d+)-\d+\.webp$'
+              #   with: $1.webp
 
-      URL: //meta[@property="og:url"]/@content
-# Last Updated July 18, 2026
+
+# Last Updated August 01, 2026
