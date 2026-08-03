@@ -60,7 +60,7 @@ xPathScrapers:
             - replace:
                 - regex: \s*\[[^\]]+\]$
                   with: ""
-                - regex: "#0*1"
+                - regex: '#0*1\b'
                   with: ""
                 - regex: '#(\d+)'
                   with: $1
