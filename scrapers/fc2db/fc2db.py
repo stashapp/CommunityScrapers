@@ -39,6 +39,10 @@ except ModuleNotFoundError:
     sys.exit(1)
 
 
+# Flaresolverr
+FLARESOLVERR_URL = "http://localhost:8191/v1"
+FLARESOLVERR_TIMEOUT_MAX = 60000
+
 BASE_URL = "https://fc2db.net"
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0",
@@ -53,6 +57,28 @@ def fetch_page(url: str) -> lxml.html.HtmlElement | None:
     """Fetch a page and return the parsed HTML tree, or None on failure."""
     try:
         resp = requests.get(url, headers=HEADERS, timeout=15)
+        
+        # Check for Cloudflare challenge
+        if resp.status_code in (403, 503) or "One moment, please..." in resp.text or "Just a moment..." in resp.text:
+            log.info("Cloudflare challenge detected, attempting to use FlareSolverr...")
+            headers = {"Content-Type": "application/json"}
+            data = {
+                "cmd": "request.get",
+                "url": url,
+                "maxTimeout": FLARESOLVERR_TIMEOUT_MAX
+            }
+            try:
+                fs_resp = requests.post(FLARESOLVERR_URL, headers=headers, json=data, timeout=65)
+                json_input = fs_resp.json()
+                if json_input.get("status") == "ok" and "solution" in json_input:
+                    return lxml.html.fromstring(json_input["solution"]["response"])
+                else:
+                    log.error(f"FlareSolverr returned error: {json_input.get('message', 'Unknown error')}")
+                    return None
+            except requests.RequestException as e:
+                log.error(f"Failed to connect to FlareSolverr at {FLARESOLVERR_URL}: {e}")
+                return None
+        
         resp.raise_for_status()
         return lxml.html.fromstring(resp.content)
     except requests.RequestException as exc:
@@ -113,65 +139,64 @@ def scene_from_url(url: str) -> dict:
     # --- Primary: JSON-LD VideoObject ---
     ld = extract_jsonld(tree, "VideoObject")
 
-    if ld:
-        log.debug(f"Found JSON-LD VideoObject: {json.dumps(ld, ensure_ascii=False)[:200]}")
+    if not ld:
+        raise Exception(f"Failed to find JSON-LD VideoObject for {url}. Cloudflare challenge may have failed, or site layout changed.")
 
-        # Title: JSON-LD "name" is typically "FC2PPV-NNNNNN"
-        # Use the full title from <h1> instead, which includes the actual title text
-        ld_name = ld.get("name", "")
-        fc2_number = extract_fc2_number(ld_name)
+    log.debug(f"Found JSON-LD VideoObject: {json.dumps(ld, ensure_ascii=False)[:200]}")
 
-        # Code
-        if fc2_number:
-            scene["code"] = f"FC2-PPV-{fc2_number}"
+    # Title: JSON-LD "name" is typically "FC2PPV-NNNNNN"
+    # Use the full title from <h1> instead, which includes the actual title text
+    ld_name = ld.get("name", "")
+    fc2_number = extract_fc2_number(ld_name)
 
-        # Date
-        upload_date = ld.get("uploadDate", "")
-        if upload_date:
-            scene["date"] = upload_date
+    # Code
+    if fc2_number:
+        scene["code"] = f"FC2-PPV-{fc2_number}"
 
-        # Duration
-        duration_val = duration_to_seconds(ld.get("duration", ""))
-        if duration_val:
-            scene["duration"] = duration_val
+    # Date
+    upload_date = ld.get("uploadDate", "")
+    if upload_date:
+        scene["date"] = upload_date
 
-        # Cover image
-        thumbnail = ld.get("thumbnailUrl", "")
-        if thumbnail:
-            scene["image"] = thumbnail
+    # Duration
+    duration_val = duration_to_seconds(ld.get("duration", ""))
+    if duration_val:
+        scene["duration"] = duration_val
 
-        # Performers from JSON-LD actors
-        actors = ld.get("actor", [])
-        if isinstance(actors, dict):
-            actors = [actors]
-        performers = []
-        for actor in actors:
-            name = actor.get("name", "").strip()
-            if name:
-                actor_url = actor.get("url", "")
-                if actor_url:
-                    # Fetch full performer details (images, aliases) from their profile page
-                    perf = performer_from_url(actor_url)
-                else:
-                    perf = {"name": name, "gender": "FEMALE"}
-                performers.append(perf)
-        if performers:
-            scene["performers"] = performers
+    # Cover image
+    thumbnail = ld.get("thumbnailUrl", "")
+    if thumbnail:
+        scene["image"] = thumbnail
 
-        # Director (seller/publisher)
-        publisher = ld.get("publisher", {})
-        if isinstance(publisher, dict):
-            pub_name = publisher.get("name", "").strip()
-            if pub_name:
-                scene["director"] = pub_name
+    # Performers from JSON-LD actors
+    actors = ld.get("actor", [])
+    if isinstance(actors, dict):
+        actors = [actors]
+    performers = []
+    for actor in actors:
+        name = actor.get("name", "").strip()
+        if name:
+            actor_url = actor.get("url", "")
+            if actor_url:
+                # Fetch full performer details (images, aliases) from their profile page
+                perf = performer_from_url(actor_url)
+            else:
+                perf = {"name": name, "gender": "FEMALE"}
+            performers.append(perf)
+    if performers:
+        scene["performers"] = performers
 
-        # URL from JSON-LD
-        ld_url = ld.get("url", "")
-        if ld_url:
-            scene["urls"] = [ld_url]
-    else:
-        log.warning("No JSON-LD VideoObject found, falling back to HTML only")
-        scene["urls"] = [url]
+    # Director (seller/publisher)
+    publisher = ld.get("publisher", {})
+    if isinstance(publisher, dict):
+        pub_name = publisher.get("name", "").strip()
+        if pub_name:
+            scene["director"] = pub_name
+
+    # URL from JSON-LD
+    ld_url = ld.get("url", "")
+    if ld_url:
+        scene["urls"] = [ld_url]
 
     # --- HTML fallback / supplemental ---
 
@@ -268,55 +293,35 @@ def performer_from_url(url: str) -> dict:
     # --- Primary: JSON-LD Person ---
     ld = extract_jsonld(tree, "Person")
 
-    if ld:
-        log.debug(f"Found JSON-LD Person: {json.dumps(ld, ensure_ascii=False)[:200]}")
+    if not ld:
+        raise Exception(f"Failed to find JSON-LD Person for {url}. Cloudflare challenge may have failed, or site layout changed.")
 
-        # Name
-        name = ld.get("name", "").strip()
-        if name:
-            performer["name"] = name
+    log.debug(f"Found JSON-LD Person: {json.dumps(ld, ensure_ascii=False)[:200]}")
 
-        # Image
-        image = ld.get("image", "")
-        if image:
-            performer["images"] = [image]
+    # Name
+    name = ld.get("name", "").strip()
+    if name:
+        performer["name"] = name
 
-        # Aliases from alternateName
-        alt_names = ld.get("alternateName", [])
-        if isinstance(alt_names, str):
-            alt_names = [alt_names]
-        if alt_names:
-            performer["aliases"] = ", ".join(alt_names)
+    # Image
+    image = ld.get("image", "")
+    if image:
+        performer["images"] = [image]
 
-        # URLs: fc2db URL + sameAs URLs
-        urls = [url]
-        same_as = ld.get("sameAs", [])
-        if isinstance(same_as, str):
-            same_as = [same_as]
-        urls.extend(same_as)
-        performer["urls"] = urls
+    # Aliases from alternateName
+    alt_names = ld.get("alternateName", [])
+    if isinstance(alt_names, str):
+        alt_names = [alt_names]
+    if alt_names:
+        performer["aliases"] = ", ".join(alt_names)
 
-    else:
-        log.warning("No JSON-LD Person found, falling back to HTML only")
-
-        # Name from <h1> or breadcrumb
-        h1_elements = tree.xpath('//h1[contains(@class, "text-2xl")]')
-        if h1_elements:
-            # The <h1> on actress pages says "女優紹介" (actress intro), the name is in <h2>
-            pass
-        # Try breadcrumb
-        breadcrumb = tree.xpath('//nav[@class="mc-breadcrumb"]//span[@class="mc-breadcrumb__current"]')
-        if breadcrumb:
-            name = breadcrumb[-1].text_content().strip()
-            if name:
-                performer["name"] = name
-
-        # Image from og:image
-        og_images = tree.xpath('//meta[@property="og:image"]/@content')
-        if og_images:
-            performer["images"] = [og_images[0]]
-
-        performer["urls"] = [url]
+    # URLs: fc2db URL + sameAs URLs
+    urls = [url]
+    same_as = ld.get("sameAs", [])
+    if isinstance(same_as, str):
+        same_as = [same_as]
+    urls.extend(same_as)
+    performer["urls"] = urls
 
     # Gender default
     performer["gender"] = "FEMALE"
