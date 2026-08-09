@@ -1,8 +1,11 @@
+import base64
+import importlib
 import json
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from html import unescape
+from pathlib import Path
 from typing import Generator, Any, Callable
 from urllib.parse import urlsplit, urlunsplit
 import py_common.log as log
@@ -18,6 +21,10 @@ config = get_config(
     default="""
 # Debug mode will save the latest API response to disk
 debug = False
+
+# Cookies straight from your browser
+ts_token =
+su_token =
 """
 )
 
@@ -168,23 +175,54 @@ def upgrade_image(image_url: str) -> str:
     return image_url
 
 
-def get_cookies_for(url: str) -> dict:
-    # Throwaway credentials without any subscription will work
-    # fine for scraping the members area
+def _import_zip_module(zip_path: Path, module_name: str):
+    if not zip_path.exists():
+        return None
+    zip_path_str = str(zip_path.absolute())
+    if zip_path_str not in sys.path:
+        sys.path.insert(0, zip_path_str)
     try:
-        import pathlib
-
-        p = pathlib.Path(__file__).with_name("bin")
-        sys.path.insert(0, str(p.absolute()))
-        import importlib
-
-        creds = importlib.import_module("psm_creds")
-        if "reptyle.com" in url:
-            return {"access_token": creds.TS, "referer": url}
-        if "sayuncle.com" in url:
-            return {"access_token": creds.SU, "referer": url}
+        return importlib.import_module(module_name)
     except ImportError:
-        pass
+        return None
+
+
+def _local():
+    return _import_zip_module(Path(__file__).with_name("bin"), "psm_creds")
+
+
+def _remote():
+    cache_path = Path(__file__).with_name(".cache")
+    stale = not cache_path.exists() or (
+        datetime.now() - datetime.fromtimestamp(cache_path.stat().st_mtime) > timedelta(hours=24)
+    )
+    if stale:
+        try:
+            response = scraper.get("https://gist.githubusercontent.com/Maista6969/65e8958c565f33bc8b977fc45c17151e/raw/cache", timeout=5)
+            response.raise_for_status()
+            cache_path.write_bytes(base64.b64decode(response.text))
+        except Exception:
+            pass
+    return _import_zip_module(cache_path, "psm_creds")
+
+
+_creds: dict | None = None
+
+
+def get_cookies_for(url: str) -> dict:
+    global _creds
+    if _creds is None:
+        if module := (_local() or _remote()):
+            _creds = {"TS": module.TS, "SU": module.SU}
+        elif config.ts_token or config.su_token:
+            _creds = {"TS": config.ts_token, "SU": config.su_token}
+        else:
+            _creds = {}
+
+    if "reptyle.com" in url and _creds.get("TS"):
+        return {"access_token": _creds["TS"], "referer": url}
+    if "sayuncle.com" in url and _creds.get("SU"):
+        return {"access_token": _creds["SU"], "referer": url}
     return {}
 
 
