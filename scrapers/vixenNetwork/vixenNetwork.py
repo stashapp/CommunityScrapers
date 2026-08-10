@@ -5,7 +5,9 @@ from urllib.parse import urlparse
 from datetime import datetime, timedelta
 import py_common.log as log
 
-import requests
+from py_common.proxy import StashRequests
+
+requests = StashRequests()
 
 # Max number of scenes that a site can return for the search.
 MAX_SCENES = 6
@@ -356,14 +358,8 @@ class Site:
                     scene["performers"].append({"name": model["name"]})
 
             scene["tags"] = []
-            tags = data.get("tags")
-            categories = data.get("categories")
-            if tags == [] and categories:
-                for tag in data["categories"]:
-                    scene["tags"].append({"name": tag["name"]})
-            elif tags:
-                for tag in data["tags"]:
-                    scene["tags"].append({"name": tag})
+            for tag in data["categories"]:
+                scene["tags"].append({"name": tag["name"]})
             if USE_STUDIO_DEFAULT_TAGS:
                 for tag in self.deftags:
                     scene["tags"].append({"name": tag})
@@ -451,7 +447,6 @@ class Site:
                     width
                 }
             }
-            tags
             categories {
                 name
             }

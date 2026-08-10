@@ -19,9 +19,9 @@
       "description": "An array of one or more configurations for scraping scene info by URL(s).",
       "allOf": [{ "$ref": "#/definitions/anyByURL" }]
     },
-    "movieByURL": {
-      "title": "Movie by URL",
-      "description": "An array of one or more configurations for scraping movie info by URL(s).",
+    "groupByURL": {
+      "title": "Group by URL",
+      "description": "An array of one or more configurations for scraping group info by URL(s).",
       "allOf": [{ "$ref": "#/definitions/anyByURL" }]
     },
     "performerByURL": {
@@ -252,8 +252,14 @@
                     }
                   },
                   "oneOf": [
-                    { "required": ["ValueRandom"] },
-                    { "required": ["Value"] }
+                    {
+                      "required": ["ValueRandom"],
+                      "properties": { "ValueRandom": { "type": "integer", "minimum": 1 } }
+                    },
+                    {
+                      "required": ["Value"],
+                      "properties": { "Value": { "type": "string" } }
+                    }
                   ]
                 }
               }
@@ -348,7 +354,10 @@
                 "action": { "enum": ["scrapeXPath", "scrapeJson"] }
               }
             },
-            "then": { "required": ["scraper"] }
+            "then": {
+              "required": ["scraper"],
+              "properties": { "scraper": { "type": "string" } }
+            }
           },
           {
             "if": {
@@ -356,7 +365,16 @@
                 "action": { "const": "script" }
               }
             },
-            "then": { "required": ["script"] }
+            "then": {
+              "required": ["script"],
+              "properties": {
+                "script": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string" }
+                }
+              }
+            }
           }
         ]
       }
@@ -411,7 +429,13 @@
               "action": { "enum": ["scrapeXPath", "scrapeJson"] }
             }
           },
-          "then": { "required": ["scraper", "queryURL"] }
+          "then": {
+            "required": ["scraper", "queryURL"],
+            "properties": {
+              "scraper": { "type": "string" },
+              "queryURL": { "type": "string" }
+            }
+          }
         },
         {
           "if": {
@@ -419,7 +443,16 @@
               "action": { "const": "script" }
             }
           },
-          "then": { "required": ["script"] }
+          "then": {
+            "required": ["script"],
+            "properties": {
+              "script": {
+                "type": "array",
+                "minItems": 1,
+                "items": { "type": "string" }
+              }
+            }
+          }
         }
       ]
     },
@@ -441,7 +474,6 @@
         },
         "scene": { "$ref": "#/definitions/sceneObject" },
         "performer": { "$ref": "#/definitions/performerObject" },
-        "movie": { "$ref": "#/definitions/groupObject" },
         "group": { "$ref": "#/definitions/groupObject" },
         "gallery": { "$ref": "#/definitions/galleryObject" },
         "image": { "$ref": "#/definitions/imageObject" }
@@ -479,10 +511,6 @@
         "Studio": {
           "title": "Scene studio",
           "allOf": [{ "$ref": "#/definitions/studioObject" }]
-        },
-        "Movies": {
-          "title": "Scene groups",
-          "allOf": [{ "$ref": "#/definitions/groupObject" }]
         },
         "Groups": {
           "title": "Scene groups",
@@ -527,10 +555,6 @@
         "Gender": {
           "title": "Performer gender",
           "description": "Must be one of (case insensitive): `male`, `female`, `transgender_male`, `transgender_female`, `intersex`, `non_binary`",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URL": {
-          "title": "Performer URL",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "URLs": {
@@ -595,7 +619,16 @@
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "CareerLength": {
+          "deprecated": true,
           "title": "Performer career length",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "CareerStart": {
+          "title": "Performer career start",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "CareerEnd": {
+          "title": "Performer career end",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         },
         "Tattoos": {

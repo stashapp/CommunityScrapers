@@ -9,28 +9,26 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //div[@id="detail_title"]/text()
+        selector: //*[@class="detail_title_etc"]/div[contains(concat(' ', @class, ' '), ' leading-none ')]/text()
       Date:
-        selector: //div[@class="preview_feature_date"][contains(text(),"Video")]/text()|//div[@class="preview_feature_date"][1]/text()
+        selector: //*[@class="detail_title_etc"]/div[@class="links_to_pages"]/div[@class="text-xl"][contains(text()[1],"Video")]/text()[1]|//*[@class="detail_title_etc"]/div[@class="links_to_pages"]/div[@class="text-xl"][1]/text()
         postProcess:
           - replace:
               - regex: .*\s+added\s+(.*)
                 with: $1
           - parseDate: 02 Jan 2006
       Details:
-        selector: //p[@class="preview_description"]/text()
+        selector: //div[@id="main_content"]//p[@sanitize="false"]/text()
         concat: "\n\n"
       Performers:
         Name:
-          selector: //div[@class="preview_facets_listing"]/a[not(preceding-sibling::br)]/text()
+          selector: //div[@id="main_content"]/div[contains(concat(' ', @class, ' '), 'text-sm')]/a[not(preceding-sibling::text()[contains(., '-')]) and not(preceding-sibling::br)]/text()
       Tags:
         Name:
-          selector: //div[@class="preview_facets_listing"]/a[preceding-sibling::br]/text()
+          selector: //div[@id="main_content"]/div[contains(concat(' ', @class, ' '), 'text-sm')]/a[preceding-sibling::text()[contains(., '-')] or preceding-sibling::br]/text()
       Studio:
         Name:
           fixed: House of Gord
-      Image:
-        selector: //video[@id="0"]/@poster|//td[@class="previewpic_item" and @style="width:53%"][1]/img/@src|//td[@class="previewpic_item"][1]/img/@src
 
 driver:
   useCDP: true
@@ -40,4 +38,4 @@ driver:
           Domain: .houseofgord.com
           Value: yes
           Path: /
-# Last Updated July 09, 2021
+# Last Updated March 15, 2026

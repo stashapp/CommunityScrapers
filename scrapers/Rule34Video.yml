@@ -57,15 +57,10 @@ xPathScrapers:
               - regex: '.+thumbnailUrl": "(http[^"]+)".+'
                 with: $1
       Tags:
-        Name:
-          selector: $article//div[text()="Categories" or text()="Tags"]/following-sibling::a//text()
-          postProcess:
-            - replace:
-                - regex: '^\+.+Suggest$'
-                  with: ""
+        Name: //a[@class="tag_item"]
       Studio:
-        Name: $article//div[text()="Artist"]/following-sibling::a/span
-        URL: $article//div[text()="Artist"]/following-sibling::a/@href
+        Name: $article//div[text()="Artist"]/following-sibling::span/a/span
+        URL: $article//div[text()="Artist"]/following-sibling::span/a/@href
 debug:
   printHTML: true
 # see configuration notes in https://discourse.stashapp.cc/t/ddos-guard-for-scrapers/2369
@@ -109,4 +104,4 @@ driver:
           Value: "1"
           Domain: "rule34video.com"
           Path: "/"
-# Last Updated July 2, 2025
+# Last Updated May 19, 2026

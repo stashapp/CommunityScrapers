@@ -14,10 +14,7 @@ sceneByFragment:
 sceneByURL:
   - action: scrapeXPath
     url:
-      - javlibrary.com/
-      - p54u.com/
-      - d52q.com/
-      - n53i.com/
+      - javlibrary.com//
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
@@ -27,13 +24,10 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - javlibrary.com/
-      - p54u.com/
-      - d52q.com/
-      - n53i.com/
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
@@ -75,7 +69,7 @@ xPathScrapers:
       Studio:
         Name: //div[@id="video_maker"]/table/tbody/tr/td[@class="text"]/span/a/text()
   movieScraper:
-    movie:
+    group:
       Name: //div[@id="video_id"]/table/tbody/tr/td[@class="text"]/text()
       Director: //div[@id='video_director']/table/tbody/tr/td[@class="text"]/span/a/text()
       Duration: 

@@ -1,6 +1,6 @@
 name: JacquieEtMichelElite
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - jacquieetmichelelite.com/en/porn-movie
@@ -13,7 +13,7 @@ sceneByURL:
 
 xPathScrapers:
   movieScraper:
-    movie:
+    group:
       Name: //h1[contains(@class,"video-detail__title")]
       Director: 
         selector: //li[contains(@class,"video-detail__info") and contains(.,'Director:')]
@@ -68,7 +68,7 @@ xPathScrapers:
               with: 
       Performers:
         Name: //p[contains(@class,"actor-item__title")]
-      Movies:
+      Groups:
         Name: 
           selector: //a[contains(@class,"video-detail__poster")]/@href
           postProcess:

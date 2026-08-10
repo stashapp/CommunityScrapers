@@ -1,37 +1,27 @@
+from base64 import b64encode
 import json
-import os
 import re
 import sys
 from typing import Any
 
-CURRENT_SCRIPT_DIR = os.path.dirname(os.path.realpath(__file__))
-PARENT_DIR = os.path.dirname(CURRENT_SCRIPT_DIR)
-sys.path.append(PARENT_DIR)
+import py_common.log as log
+from py_common.util import scraper_args
+from py_common.types import ScrapedPerformer
+from lxml import etree
+import cloudscraper
 
-try:
-    import py_common.log as log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr,
-    )
-    sys.exit()
-
-try:
-    import requests
-    from lxml import etree
-except ModuleNotFoundError:
-    print("You need to install dependencies from requirements.txt")
-    sys.exit(1)
+scraper = cloudscraper.create_scraper()
 
 XPATHS = {
     "birthdate": "//span[text()='生年月日']/../p/text()",
     "career": "//span[text()='AV出演期間']/../p/text()",
     "debut": "//span[text()='デビュー作品']/../p/text()",
     "url": "//meta[@property='og:url']/@content",
-    #"id": '//form[@class="add_favorite"]/@action',
+    # "id": '//form[@class="add_favorite"]/@action',
     "image": "//div[@class='act-area']/div[@class=\"thumb\"]/img/@src",
-    "instagram": ("//span[text()='ブログ']/../p/a[contains(@href,'instagram.com')]/@href"),
+    "instagram": (
+        "//span[text()='ブログ']/../p/a[contains(@href,'instagram.com')]/@href"
+    ),
     "measurements": (
         "//span[text()='サイズ']/../p/a/@href|//span[text()='サイズ']/../p/text()"
     ),
@@ -42,7 +32,9 @@ XPATHS = {
     "name": '//section[@class="main-column details"]/h1/span/text()',
     "search_url": '../h2[@class="ttl"]/a/@href',
     "search": '//p[@class="furi"]',
-    "twitter": ("//span[text()='ブログ']/../p/a[contains(@href,'twitter.com')]/@href|//span[text()='ブログ']/../p/a[contains(@href,'x.com')]/@href"),
+    "twitter": (
+        "//span[text()='ブログ']/../p/a[contains(@href,'twitter.com')]/@href|//span[text()='ブログ']/../p/a[contains(@href,'x.com')]/@href"
+    ),
 }
 
 REGEXES = {
@@ -51,7 +43,9 @@ REGEXES = {
     "id": r"\d+",
     "birthdate": r"(?P<year>\d{4})年(?P<month>\d{2})月(?P<day>\d{2})日",
     # https://regex101.com/r/FSqv0L/1
-    "career": (r"(?P<start>\d{4})年?(?:\d+月)? ?(?:\d+)?日?[-~]? ?(?:(?P<end>\d+)?)?年?"),
+    "career": (
+        r"(?P<start>\d{4})年?(?:\d+月)? ?(?:\d+)?日?[-~]? ?(?:(?P<end>\d+)?)?年?"
+    ),
     "measurements": (
         r"(?<=T)(?P<height>\d+)? / B(?P<bust>\d+)\([^=]+=(?P<cup>\w+)\) / W(?P<waist>\d+) / H(?P<hip>\d+)"
     ),
@@ -164,7 +158,6 @@ def convert_bra_jp_to_us(jp_size: str) -> str:
         "K": "I",
     }
 
-    converted_size = None
     converted_size = predefined_conversion_chart.get(jp_size, None)
 
     if converted_size is None:
@@ -186,10 +179,8 @@ def get_xpath_result(tree: Any, xpath_string: str) -> str | list[str] | None:
         return _result
 
 
-def performer_by_url(url):
-    lang = sys.argv[2]
-
-    request = requests.get(url)
+def performer_by_url(url, lang="EN"):
+    request = scraper.get(url)
     log.debug(request.status_code)
 
     tree = etree.HTML(request.text)
@@ -199,6 +190,7 @@ def performer_by_url(url):
 
     JAPANESE = True
 
+    kanji_name = None
     if origin_result := get_xpath_result(tree, XPATHS["origin"]):
         if origin_result == "海外":
             JAPANESE = False
@@ -233,41 +225,42 @@ def performer_by_url(url):
             if match := re.match(REGEXES["alias"], alias):
                 aliases.add(match.group("kanji"))
                 try:
-                    if(JAPANESE):
+                    if JAPANESE:
                         aliases.add(reverse_first_last_name(match.group("romanized")))
                     else:
                         aliases.add(match.group("romanized"))
                 except:
                     pass
 
-    aliases.discard(scrape["name"]) # Remove performer name from aliases list
+    aliases.discard(scrape["name"])  # Remove performer name from aliases list
 
     scrape["urls"] = []
 
     if self_url_result := get_xpath_result(tree, XPATHS["url"]):
-        if self_url_result != None:
+        if self_url_result:
             scrape["urls"].append(self_url_result)
         else:
             log.debug("URL XPath matched, but no value found.")
 
     if twitter_url_result := get_xpath_result(tree, XPATHS["twitter"]):
-        if twitter_url_result != None:
+        if twitter_url_result:
             scrape["urls"].append(twitter_url_result)
         else:
             log.debug("Twitter XPath matched, but no value found.")
 
     if instagram_url_result := get_xpath_result(tree, XPATHS["instagram"]):
-        if instagram_url_result != None:
+        if instagram_url_result:
             scrape["urls"].append(instagram_url_result)
         else:
             log.debug("Instagram XPath matched, but no value found.")
 
     if birthdate_result := get_xpath_result(tree, XPATHS["birthdate"]):
         if match := re.search(
-            REGEXES["birthdate"], convert_to_halfwidth(birthdate_result)
+            REGEXES["birthdate"], convert_to_halfwidth(birthdate_result[0])
         ):
-            scrape["birthdate"] = match["year"]+"-"+match["month"]+"-"+match["day"]
-            log.debug(match)
+            scrape["birthdate"] = (
+                match["year"] + "-" + match["month"] + "-" + match["day"]
+            )
         else:
             log.debug("Birthday XPath matched, but no value found.")
 
@@ -275,17 +268,19 @@ def performer_by_url(url):
         combined = "".join(measurements_result)
         if match := re.search(REGEXES["measurements"], convert_to_halfwidth(combined)):
             if lang == "JP":
-                scrape["measurements"] = f"{match['bust']}{match['cup']}-{match['waist']}-{match['hip']}"
+                scrape["measurements"] = (
+                    f"{match['bust']}{match['cup']}-{match['waist']}-{match['hip']}"
+                )
             else:
                 waist_in_inches, hip_in_inches = [
                     cm_to_inches(int(measurement))
                     for measurement in [match["waist"], match["hip"]]
                 ]
 
-                bra_size = convert_bra_jp_to_us(f'{match["bust"]}{match["cup"]}')
+                bra_size = convert_bra_jp_to_us(f"{match['bust']}{match['cup']}")
 
                 scrape["measurements"] = f"{bra_size}-{waist_in_inches}-{hip_in_inches}"
-            if match["height"] != None:
+            if match["height"] is not None:
                 scrape["height"] = match["height"]
         else:
             log.debug("Measurements XPath matched, but no value found.")
@@ -294,8 +289,8 @@ def performer_by_url(url):
         clean_career_result = convert_to_halfwidth(career_result).replace(" ", "")
         if match := re.match(REGEXES["career"], clean_career_result):
             groups = match.groups()
-            start = match["start"] + "-" if groups[0] != None else ""
-            end = match["end"] if groups[1] != None else ""
+            start = match["start"] + "-" if groups[0] is not None else ""
+            end = match["end"] if groups[1] is not None else ""
             scrape["career_length"] = start + end
         else:
             log.debug("Career debut XPath matched, but no value found.")
@@ -303,99 +298,91 @@ def performer_by_url(url):
     elif debut_result := get_xpath_result(tree, XPATHS["debut"]):
         if match := re.search(REGEXES["career"], convert_to_halfwidth(debut_result)):
             groups = match.groups()
-            scrape[
-                "career_length"
-            ] = f'{match["start"] if groups[0] != None else ""}-{match["end"] if groups[1] != None else ""}'
+            scrape["career_length"] = (
+                f"{match['start'] if groups[0] is not None else ''}-{match['end'] if groups[1] is not None else ''}"
+            )
         else:
             log.debug("Career debut XPath matched, but no value found.")
 
     if image_result := get_xpath_result(tree, XPATHS["image"]):
         clean_url_fragment = str.replace(image_result, "?newav", "")
         if clean_url_fragment != "":
-            scrape["image"] = str.format(
+            image_url = str.format(
                 FORMATS["image"], IMAGE_URL_FRAGMENT=clean_url_fragment
             )
+            b64img_bytes = b64encode(scraper.get(image_url).content).decode("utf-8")
+            scrape["images"] = [f"data:image/jpeg;base64,{b64img_bytes}"]
         else:
             log.debug("Image XPath matched, but no value found.")
 
     aliases.discard(None)
     sorted_aliases = sorted(aliases)
-    scrape["aliases"] = ", ".join(sorted_aliases)
+    pattern = re.compile(r"^(.+?)\s*\((.+?)\)$")
+
+    split_aliases = [
+        part
+        for alias in sorted_aliases
+        for m in [pattern.match(alias)]
+        for part in (m.groups() if m else (alias,))
+    ]
+
+    scrape["aliases"] = ", ".join(split_aliases)
     if JAPANESE:
         scrape["country"] = "Japan"
         scrape["ethnicity"] = "Asian"
         scrape["hair_color"] = "Black"
         scrape["eye_color"] = "Brown"
     scrape["gender"] = "Female"
-    print(json.dumps(scrape))
+
+    return scrape
 
 
-def performer_by_name(name: str, retry=True) -> None:
-    lang = sys.argv[2]
+def performer_by_name(name: str, lang="EN", retry=True) -> list[ScrapedPerformer]:
     queryURL = f"https://www.minnano-av.com/search_result.php?search_scope=actress&search_word={name}"
 
-    result = requests.get(queryURL)
+    result = scraper.get(queryURL)
     tree = etree.HTML(result.text)
 
-    performer_list = []
-
     if re.search(REGEXES["url"], result.url):
-        performer_list.append({"name": name, "url": result.url})
+        return [{"name": name, "urls": [result.url]}]
     elif search_result := get_xpath_result(tree, XPATHS["search"]):
+        performer_list = []
+
         for node in search_result:
-            performer = {}
-            node_value = node.text
+            node_value = node
             if "/" not in node_value:
                 continue
+
             _, romanized_name = node_value.split(" / ")
-            performer["name"] = romanized_name
+            performer: ScrapedPerformer = {"name": romanized_name}
             if url_result := get_xpath_result(node, XPATHS["search_url"]):
                 url = ""
-                if match := re.search(REGEXES["id"], url_result):
+                if match := re.search(REGEXES["id"], url_result[0]):
                     url = str.format(FORMATS["url"], PERFORMER_ID=match[0])
-                performer["url"] = url
+                performer["urls"] = [url]
             performer_list.append(performer)
-    elif retry:
-        modified_name = reverse_first_last_name(name)
-        performer_by_name(modified_name, retry=False)
-    else:
-        performer_list.append({"name": "No performer found"})
+        return performer_list
 
-    print(json.dumps(performer_list))
+    if not retry:
+        return []
 
-
-def main():
-    if len(sys.argv) == 1:
-        log.error("No arguments")
-        sys.exit(1)
-
-    stdin = sys.stdin.read()
-
-    inputJSON = json.loads(stdin)
-    url = inputJSON.get("url", None)
-    name = inputJSON.get("name", None)
-
-    if "performer_by_url" in sys.argv:
-        log.debug("Processing performer by URL")
-        log.debug(stdin)
-        if url:
-            performer_by_url(url)
-        else:
-            log.error("Missing URL")
-    elif "performer_by_name" in sys.argv:
-        log.debug("Processing performer by name")
-        log.debug(stdin)
-        if name:
-            performer_by_name(name)
-        else:
-            log.error("Missing name")
-    else:
-        log.error("No argument processed")
-        log.debug(stdin)
+    modified_name = reverse_first_last_name(name)
+    return performer_by_name(modified_name, retry=False)
 
 
 if __name__ == "__main__":
-    try:
-        main()
-    except Exception as e:
-        log.error(e)
+    op, args = scraper_args(prog="Minnano-AV")
+    result = None
+    log.debug(f"{op}: {json.dumps(args)}")
+    match op, args:
+        case "performer-by-url", {"url": url}:
+            result = performer_by_url(url)
+        case "performer-by-name", {"name": name}:
+            result = performer_by_name(name)
+        case "performer-by-fragment", {"url": url}:
+            result = performer_by_url(url)
+        case _:
+            log.error(f"Unknown operation {op}")
+            sys.exit(1)
+
+    print(json.dumps(result))

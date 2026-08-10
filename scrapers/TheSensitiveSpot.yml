@@ -1,0 +1,25 @@
+name: "The Sensitive Spot"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - thesensitivespot.com/updates/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="contentD"]/h1
+      Date:
+        selector: //ul[@class="contentInfo"]/li[i[contains(@class, 'fa-calendar')]]/text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details: //div[contains(@class, 'videoDescription')]/p[string-length(normalize-space(.)) > 0]
+      Tags:
+        Name: //div[@class="tags"]/ul/li/a/text()
+      Performers:
+        Name: //div[@class="models"]//ul/li/a/text()[string-length(normalize-space(.)) > 0]
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: "The Sensitive Spot"
+

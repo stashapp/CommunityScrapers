@@ -15,7 +15,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - helixstudios.com/movie/
@@ -99,7 +99,7 @@ xPathScrapers:
           selector: //span[contains(@class, "studio-name")]/text()
 
   groupScraper:
-    movie:
+    group:
       Duration:
         selector: //span.info-item.duration/text()
         postProcess:
@@ -116,7 +116,7 @@ xPathScrapers:
       $result: //div[@class="grid-item-wrapper"]/a[@class="thumbnail-link"]
     performer:
       Name: $result/div[@class="thumbnail model-thumbnail"]/div[@class="thumbnail-meta"]/h4/text()
-      URL:
+      URLs:
         selector: $result/@href
         postProcess:
           - replace:
@@ -158,7 +158,7 @@ xPathScrapers:
         selector: //span[text()="Hair"]/following-sibling::text()
       EyeColor:
         selector: //span[text()="Eyes"]/following-sibling::text()
-      URL: //link[@rel="canonical"][1]/@href
+      URLs: //link[@rel="canonical"][1]/@href
       Image: //div[@class="model-headshot-image-wrapper"]/img/@src
       Details:
         selector: //div[@class="description"]//p[*]
@@ -167,4 +167,4 @@ xPathScrapers:
           - replace:
               - regex: $
                 with: " "
-# Last Updated Feb 08, 2025
+# Last Updated October 27, 2025

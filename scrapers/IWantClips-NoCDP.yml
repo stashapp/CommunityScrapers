@@ -1,0 +1,67 @@
+# This is the "cheaper" option for scraping IWC URLs
+# that do not require CDP. Users who want scene/performer
+# search should use IWantClips-Search.yml
+name: IWantClips (No CDP)
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - iwantclips.com/store
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - iwantclips.com/store
+    scraper: sceneScraper
+xPathScrapers:
+  sceneSearch:
+    scene:
+      Title: //div[@class='tittle-price d-flex flex-column text-ellipsis']//div[@class='content-title']//a/text()
+      URL: //div[@class='tittle-price d-flex flex-column text-ellipsis']//div[@class='content-title']//a/@href
+      Image: //div[@class='clip-thumb-16-9 visible-xs']//img[@class='lazy']/@data-original
+  sceneScraper:
+    common:
+      $model: //a[@class="modelLink"]
+    scene:
+      Title: //h1[@class='no-style']
+      URL: //link[@rel="canonical"]/@href
+      Date:
+        selector: //div[@class="col-xs-12 date fix"]/span/em
+        postProcess:
+          - replace:
+              - regex: Published\s(.+)
+                with: $1
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: //div[@class="col-xs-12 description fix"][last()]/span
+        concat: "\n\n"
+      Tags:
+        Name:
+          selector: //div[@class="col-xs-12 hashtags hashtags-grey fix"]/span/em | //div[@class="col-xs-12 category fix"]/a
+          concat: ","
+          postProcess:
+            - replace:
+                - regex: "Keywords:"
+                  with: $1
+                - regex: ',\s+'
+                  with: ","
+          split: ","
+      Image:
+        selector: //meta[@name='og:image']/@content
+        postProcess:
+          - replace:
+              - regex: (\d*_.*((\.gif)|(\.mp4)))
+                with: t_$1
+          - replace:
+              - regex: '(\.gif)|(\.mp4)'
+                with: ".jpg"
+      Studio:
+        Name: $model
+      Performers:
+        Name: $model
+  performerScraper:
+    performer:
+      Name: //div[@class="controls-box"]/p
+      Details:
+        selector: //div[@id="section-about"]/p
+        concat: "\n\n"
+      Image: //div[@class="avatar-box"]/img/@src

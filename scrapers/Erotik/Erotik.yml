@@ -1,0 +1,11 @@
+# requires: py_common
+name: Erotik
+groupByURL:
+  - action: script
+    url:
+      - erotik.com
+    script:
+      - python
+      - Ersties.py
+      - group-by-url
+# Last Updated: February 27, 2026

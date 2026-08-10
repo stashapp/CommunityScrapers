@@ -9,7 +9,7 @@ sceneByURL:
     url:
       - aebn.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - aebn.com
@@ -23,7 +23,7 @@ xPathScrapers:
         postProcess:
           - map:
               TS: transgender_female
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Birthdate:
         selector: //div[@class='section-detail dts-list-attributes']/ul/li[contains(.,"Birth Date")]
         postProcess:
@@ -85,7 +85,7 @@ xPathScrapers:
               - regex: ^([^?]+).*$
                 with: "https:$1" 
   movieScraper:
-    movie:
+    group:
       Name: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
       Director:
         selector: //li[@class='section-detail-list-item-director']//span//a
@@ -133,4 +133,4 @@ driver:
           Domain: "straight.aebn.com"
           Value: ""
           Path: "/"
-# Last Updated July 06, 2022
+# Last Updated September 17, 2025

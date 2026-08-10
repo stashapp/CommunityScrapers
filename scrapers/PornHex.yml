@@ -38,12 +38,11 @@ xPathScrapers:
         postProcess:
           - feetToCm: true
       Measurements: $pornstar//span[contains(text(),"Measurements -")]/following::span/text()
-      URL: $pornstar//span[contains(text(),"Official site -")]/following::a/@href
+      URLs: $pornstar//span[contains(text(),"Official site -")]/following::a/@href
       Image:
         selector: //section[@class="pornstar-header"]//div[@class="thumbnail-col-2 col-2"]/img[not(contains(@src,"default_portrait"))]/@src
         postProcess:
           - replace:
               - regex: ^
                 with: "https://pornhex.com"
-
-# Last Updated May 24, 2023
+# Last Updated September 17, 2025

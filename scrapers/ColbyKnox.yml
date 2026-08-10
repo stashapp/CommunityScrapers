@@ -20,7 +20,7 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name: $performer//h3/text()
-        URL: $performer/@href
+        URLs: $performer/@href
       Details:
         selector: //div[contains(@class, "video")]//p[contains(@class, "mb-5")]/text()
         concat: "\n\n"
@@ -28,4 +28,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Colby Knox
-# Last Updated September 23, 2023
+# Last Updated September 17, 2025

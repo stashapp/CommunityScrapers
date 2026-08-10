@@ -29,7 +29,7 @@ xPathScrapers:
                 with: $2$1
       Performers:
         Name: //p[@class="set-descr"]/a/text()|//a[contains(@href,"/models/preview/")]/@title
-        URL:
+        URLs:
           selector: //p[@class="set-descr"]/a/@href
           postProcess:
             - replace:
@@ -46,4 +46,4 @@ xPathScrapers:
                 - regex: \-
                   with: " "
       Title: //h1[@class="movie-name"]/text()
-# Last Updated July 18, 2023
+# Last Updated September 17, 2025

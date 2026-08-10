@@ -4,6 +4,7 @@ sceneByURL:
     url:
       - black4k.com
       - bride4k.com
+      - bufu.xxx
       - cuck4k.com
       - daddy4k.com
       - debt4k.com
@@ -14,13 +15,16 @@ sceneByURL:
       - loan4k.com
       - mature4k.com
       - mommy4k.com
+      - noir4k.com
       - old4k.com
       - pie4k.com
+      - pinhole.xxx
       - rim4k.com
       - serve4k.com
       - shame4k.com
       - sis.porn
       - stuck4k.com
+      - swap4k.com
       - tutor4k.com
       - vip4k.com
     scraper: sceneScraper
@@ -42,8 +46,9 @@ xPathScrapers:
           - replace:
               - regex: https.+/(\w+)/?$
                 with: $1
-      Image: 
-        selector: //picture[@class='player-item__inner']/img/@data-src
+      Image:
+        # scene with preview | scene without preview
+        selector: //div[@id='player-rmp']/@data-poster|//picture[@class='player-item__inner']/img/@src
         postProcess:
           - replace:
               - regex: ^//
@@ -57,4 +62,4 @@ xPathScrapers:
           postProcess:
             - map:
                 Sis: Sis.Porn
-# Last Updated December 11, 2023
+# Last Updated December 18, 2025

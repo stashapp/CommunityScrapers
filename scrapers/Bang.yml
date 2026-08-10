@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
 name: Bang
 sceneByURL:
   - action: scrapeXPath
@@ -13,18 +14,28 @@ sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
   scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - bang.com/dvd
       - bangpremium.com/dvd
     scraper: movieScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.bang.com/pornstars?term={}
+  scraper: performerSearch
 performerByURL:
   - action: scrapeXPath
     url:
       - bang.com/pornstar
       - bangpremium.com/pornstar
     scraper: performerScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - bang.com/photos/
+      - bangpremium.com/photos/
+    scraper: sceneScraper
 xPathScrapers:
   sceneSearch:
     common:
@@ -44,49 +55,86 @@ xPathScrapers:
                 with: https://www.bang.com
   sceneScraper:
     common:
+      $escapedJson: //div[@data-live-name-value="Video:RelatedPhotos"]/@data-live-props-value
       $movie: //div[@data-controller="video-entry"]//a[contains(@href,"/dvd/")]//div[contains(@class,"name")]/span[1]
       $performer: //p[contains(@class,"capitalize") and contains(text(),"With:")]/a[contains(@href,"/pornstar/")]
+      $title: //meta[@property="og:title"]/@content
     scene:
-      Title: //meta[@property="og:title"]/@content
+      Title: $title
       Details: //meta[@name="description"]/@content
       Image:
         selector: //meta[@property="og:image"]/@content
-        postProcess:
-          - replace:
-              - regex: (.+)(\?.+)
-                with: $1
-      Date:
-        selector: //p[contains(text(),"Date:")]/text()
-        postProcess:
-          - replace:
-              - regex: \w+:\s*(\w+\s)(\d+),(\s\d{4}).*
-                with: $1$2$3
-          - parseDate: Jan 2 2006
+      Date: //meta[@property="video:release_date"]/@content
       Tags:
         Name:
-          selector: //div[@class="actions"]/a
-      Performers:
+          selector: //a[@class="genres"]
+      Performers: &performers
         Name: $performer
-        URL:
+        URLs:
           selector: $performer/@href
           postProcess: *prependHost
       Studio:
         Name:
           selector: //a[starts-with(@href, "/originals/")]/text()
-          postProcess:
+          postProcess: &studioReplace
             - replace:
                 - regex: ^yngr\.com$
                   with: "YNGR"
-      Movies:
+      Groups:
         Name: $movie
         URL:
           selector: $movie/@href
           postProcess: *prependHost
+      Code:
+        selector: //meta[@property="og:video"]/@content
+        postProcess:
+          - replace:
+              - regex: .*/(\d+)/.*
+                with: $1
+    gallery:
+      Title: $title
+      Details: //meta[@name="twitter:description"]/@content
+      Date:
+        selector: $escapedJson
+        postProcess:
+          - replace:
+              - regex: .*releaseDate[^\d]*(\d{4}-\d{2}-\d{2}).*
+                with: $1
+      Performers: *performers
+      Tags:
+        Name:
+          selector: $escapedJson
+          postProcess:
+            - javascript: |
+                if (value?.length) {
+                  console.debug("Parsing tags from JSON");
+                  var tags = [];
+                  // replace HTMLescaped quotes and parse JSON
+                  var json = JSON.parse(value.replace(/&quot;/g, '"'));
+                  if (json?.relatedVideo?.genres?.length) {
+                    tags.push(...json.relatedVideo.genres);
+                  }
+                  if (json?.relatedVideo?.actions?.length) {
+                    tags.push(...json.relatedVideo.actions.map(a => a.name));
+                  }
+                  return tags;
+                }
+          split: ","
+      Studio:
+        Name:
+          selector: //a[contains(@href, "/originals/")]/text()
+          postProcess: *studioReplace
+      Code:
+        selector: $escapedJson
+        postProcess:
+          - replace:
+              - regex: .*identifier[^\d]*(\d+).*
+                with: $1
   movieScraper:
     common:
       $details: //div[@class="w-full"][1]
       $image: //body/div[contains(@class,"w-full")][3]/div/div/picture//img[contains(@src,"/front")]/@src
-    movie:
+    group:
       Name:
         selector: $details/h1
       Duration:
@@ -110,12 +158,20 @@ xPathScrapers:
           - replace:
               - regex: /front\.jpg?.*$
                 with: "/back.jpg"
+  performerSearch:
+    common:
+      $performers: //div[contains(@class, "search_container")]
+    performer:
+      Name: $performers//a//span
+      URLs:
+        selector: $performers//a/@href
+        postProcess: *prependHost
   performerScraper:
     common:
       $overlay: //div[@class="flex flex-col md:items-start items-center"]
     performer:
       Name: $overlay/h2
-      URL:
+      URLs:
         selector: //link[@rel="canonical"][1]/@href
       Birthdate:
         selector: $overlay//div[contains(text(),"Born")]/span[contains(text(),"old")]
@@ -138,4 +194,4 @@ xPathScrapers:
           - replace:
               - regex: \?.+$
                 with: ""
-# Last Updated November 21, 2024
+# Last Updated May 8, 2026

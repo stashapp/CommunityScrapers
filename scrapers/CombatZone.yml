@@ -9,7 +9,7 @@ sceneByURL:
       - tour.fillyfilms.com/trailers/
       - tour.smashpictures.com/trailers/
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
@@ -55,7 +55,7 @@ xPathScrapers:
                 SP: Smash Pictures
 
   movieScraper:
-    movie:
+    group:
       Name: //h1
       Date:
         selector: //p[span[contains(text(), "Release Date:")]]/text()[2]

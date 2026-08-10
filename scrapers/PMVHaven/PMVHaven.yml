@@ -1,20 +1,108 @@
 name: PMVHaven
-# requires: py_common
-
-sceneByFragment:
-  action: script
-  script:
-    - python
-    - PMVHaven.py
-    - sceneByFragment
-
 sceneByURL:
-  - url:
-     - pmvhaven.com/video/
-    action: script
-    script:
-      - python
-      - PMVHaven.py
-      - sceneByURL
-      
-# Last Updated May 4, 2024
+  - action: scrapeJson
+    url:
+      - pmvhaven.com/video/
+    queryURL: https://pmvhaven.com/api/videos/{url}
+    queryURLReplace:
+      url:
+        - regex: .*([a-f0-9]{24}).*
+          with: $1
+    scraper: sceneScraper
+sceneByFragment:
+  action: scrapeJson
+  queryURL: https://pmvhaven.com/api/videos/phash?hash={phash}&didstance=8
+  scraper: resultScraper
+sceneByName:
+  action: scrapeJson
+  queryURL: https://pmvhaven.com/api/videos/search?q={}&limit=20&page=1
+  scraper: sceneSearchScraper
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: https://pmvhaven.com/api/videos/{url}
+  queryURLReplace:
+    url:
+      - regex: .*([a-f0-9]{24}).*
+        with: $1
+  scraper: sceneScraper
+
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title: data.title
+      Code: data._id
+      Date:
+        selector: data.uploadDate
+        postProcess:
+          - replace:
+              - regex: "T(.*)$"
+                with: ""
+          - parseDate: 2006-01-02
+
+      Details: data.description
+      Tags:
+        Name: data.tags
+      Performers:
+        Name: data.starsTags
+      Image: data.thumbnailUrl
+      Studio:
+        Name: data.uploaderUsername
+      URL:
+        selector: data._id
+        postProcess:
+          - replace:
+            - regex: (.*)
+              with: https://pmvhaven.com/video/$1
+  resultScraper:
+    scene:
+      Title: videos.#.title
+      Date:
+        selector: videos.#.uploadDate
+        postProcess:
+          - replace:
+              - regex: "T(.*)$"
+                with: ""
+          - parseDate: 2006-01-02
+
+      Details: videos.#.description
+      Tags:
+        Name: videos.#.tags|@flatten
+      Performers:
+        Name: videos.#.starsTags|@flatten
+      Image: videos.#.thumbnailUrl
+      Studio:
+        Name: videos.#.uploaderUsername
+      URL:
+        selector: videos.#._id
+        postProcess:
+          - replace:
+            - regex: (.*)
+              with: https://pmvhaven.com/video/$1
+  sceneSearchScraper:
+    scene:
+      Title: videos.#.title
+      Code: videos.#._id
+      Date:
+        selector: videos.#.uploadDate
+        postProcess:
+          - replace:
+              - regex: "T(.*)$"
+                with: ""
+          - parseDate: 2006-01-02
+      Details: videos.#.description
+      Image: videos.#.thumbnailUrl
+      Studio:
+        Name: videos.#.uploaderUsername
+      URL:
+        selector: videos.#._id
+        postProcess:
+          - replace:
+            - regex: (.*)
+              with: https://pmvhaven.com/video/$1
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/v1
+
+# Last Updated April 4, 2026

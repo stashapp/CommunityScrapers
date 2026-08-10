@@ -4,6 +4,16 @@ sceneByURL:
     url:
       - cruelgf.com/Clip.php
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: https://cruelgf.com/Clip.php?clip_no={filename}
+  queryURLReplace:
+    filename:
+      - regex: ^(\d+).mp4$
+        with: $1
+      - regex: .*[a-z]CG(\d+)H?.mp4
+        with: $1
 xPathScrapers:
   sceneScraper:
     common:
@@ -71,6 +81,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Cruel Girlfriend
+      URL: //html/head/meta[@property="og:url"]/@content
       Code:
         selector: $script
         postProcess:
@@ -79,4 +90,4 @@ xPathScrapers:
                 with: $1
               - regex: "^{.+" #cleanup on non matches
                 with:
-# Last Updated January 06, 2023
+# Last Updated November 4, 2025

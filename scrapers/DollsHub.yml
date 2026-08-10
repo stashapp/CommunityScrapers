@@ -18,7 +18,7 @@ xPathScrapers:
         selector: //div[@class="col-sm-12 col-lg-12 col-md-12 scence-title-name"]/h2
       Performers:
         Name: //li/span/a
-        URL: //li/span/a/@href
+        URLs: //li/span/a/@href
       Details:
         selector: //h4[contains(text(),"Description")]/following-sibling::p
       Image:
@@ -39,4 +39,4 @@ xPathScrapers:
                 maturegynospy: Mature Gyno Spy
                 nastypublicsex: Nasty Public Sex
                 oldsfuckdolls: Old Fuck Dolls
-# Last Updated March 10, 2022
+# Last Updated September 17, 2025

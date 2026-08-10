@@ -32,7 +32,7 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers:
         Name: //div[@class="sample-model"]/a
-        URL:
+        URLs:
           selector: //div[@class="sample-model"]/a/@href
           postProcess:
             - replace:
@@ -71,4 +71,4 @@ xPathScrapers:
                 with: $2
       Gender:
         fixed: Female
-# Last Updated August 06, 2022
+# Last Updated September 17, 2025

@@ -47,7 +47,7 @@ galleryByURL:
       - GenderXFilms.py
       - genderxfilms
       - gallery-by-url
-movieByURL:
+groupByURL:
   - action: script
     url:
       - genderxfilms.com/en/movie/

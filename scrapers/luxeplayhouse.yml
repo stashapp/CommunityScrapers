@@ -1,0 +1,27 @@
+name: luxeplayhouse
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - luxeplayhouse.com/trailers/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="update-info-block"]/h3[@class="text-uppercase"]
+      Date:
+        selector: //div[@class="update-info-block"]/span[@class="update-info-value"][1]
+        postProcess:
+          - parseDate: January 2, 2006
+      Details:
+        selector: //div[@class="update-info-block"]/span[@class="update-info-value"][3]
+      Studio:
+        Name:
+          fixed: "luxeplayhouse"
+      Performers:
+        Name: //ul[@class="luxe-list"][1]/li/a
+      Tags:
+        Name: //ul[@id="tag-list"]/li/a[not(@id)]
+      Image:
+        selector: //div[@class="item-video-thumb bTRAILER"]/@data-videoposter
+# Last Updated August 15, 2025

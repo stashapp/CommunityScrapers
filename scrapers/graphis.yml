@@ -1,0 +1,71 @@
+name: graphis
+
+performerByName:
+  action: scrapeXPath
+  queryURL: https://graphis.ne.jp/monthly/?K={}
+  scraper: performerSearch
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - https://graphis.ne.jp/monthly/model.php
+    scraper: performerScraper
+xPathScrapers:
+  performerSearch:
+    performer:
+      Name: 
+        selector: //li[@class='name-en']/text()
+      URLs: 
+        selector: //div[@class='list-thumb-box']//a/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://graphis.ne.jp/
+  performerScraper:
+    performer:
+      Image:
+        selector: //div[@class='model-box2']/img/@src
+        postProcess:
+          - replace:
+            - regex: "model.jpg$"
+              with:  "prof.jpg"
+      # set name to romanized
+      Name: 
+        selector: //p[@class='pan-link']/text()[last()]
+        postProcess:
+          - replace:
+            - regex: '> (.+)\/(.+)'
+              with: "$2"
+      # set alias to JP name
+      Aliases:
+        selector: //p[@class='pan-link']/text()[last()]
+        postProcess:
+          - replace:
+            - regex: '> (.+)\/(.+)'
+              with: "$1"
+      # English \n\n Japanese
+      Details:
+        selector: //li[@class="text-en"]/text() | //li[@class="text-jp"]/text()
+        concat: "\n\n"
+      # only age, no birth date
+      Gender:
+        fixed: Female
+      Ethnicity:
+        fixed: Asian
+      Country:
+        fixed: Japan
+      Height:
+        selector: //li[@class="model-prof"]/div/ul/li[2]/span[2]/text()
+        postProcess:
+          - replace:
+            - regex: "cm"
+              with: ""
+      # skip measurements because of JP -> US conversions
+      # Measurements: //div/div[1]/div[1]/ul/li[1]/div/ul/li[3]/span[2]/text()
+      # HairColor
+      # Excluded because of outliers like Moka Haruhi
+
+
+# Authored by Orgaz (AGPL 3), modified by feederbox826
+# Written with the help of AI (Javascript & Regex)
+
+# Last Updated: 2026-04-22 

@@ -64,7 +64,7 @@ performerByFragment:
     - python
     - MileHighMedia_Gay.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - iconmale.com/movie/

@@ -7,27 +7,27 @@ sceneByURL:
 
 xPathScrapers:
   sceneScraper:
-    common:
-      $titleArea: //div[@class="title-zone"]
     scene:
-      Title: $titleArea/h1
+      Title: //meta[@itemprop="name"]/@content
       Date:
-        selector: $titleArea/div[@class="calendar"]
+        selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
           - parseDate: 01/02/2006
       Details:
-        selector: //div[@id="collapseTwo"]
+        selector: //meta[@itemprop="description"]/@content
         postProcess:
           - replace:
             - regex: \x{0020}|\x{00A0} # unicode SP, NBSP
               with: " "
+            - regex: \s*(<br>|</p>)\s*
+              with: "\n"
       Tags:
-        Name: $titleArea/ul[@class="scene-tags"]/li/a
+        Name: //ul[@class="scene-tags"]/li/a
       Performers:
-        Name: $titleArea/ul[@class="scene-models-list"]/li/a
+        Name: //ul[@class="rb-trailerModels"]/li/a
       Image: //meta[@itemprop="thumbnailUrl"]/@content
       URL: //link[@hreflang="x-default"]/@href
       Studio:
         Name:
           fixed: Randy Blue
-# Last Updated July 08, 2023
+# Last Updated July 13, 2026

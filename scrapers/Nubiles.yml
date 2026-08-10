@@ -40,6 +40,7 @@ sceneByURL:
       - petitehdporn.com/video/watch/
       - princesscum.com/video/watch/
       - realitysis.com/video/watch/
+      - shesbreedingmaterial.com/video/watch/
       - stepsiblingscaught.com/video/watch/
       - teacherfucksteens.com/video/watch/
       - youngermommy.com/video/watch
@@ -60,6 +61,7 @@ sceneByURL:
       - anilos.com/video/watch/
       - brattysis.com/video/watch/
       - deeplush.com/video/watch/
+      - glowingdesire.com/video/stream/
       - nfbusty.com/video/watch/
       - nubiles.net/video/watch/
       - smashed.xxx/video/watch/
@@ -97,6 +99,7 @@ galleryByURL:
       - petitehdporn.com/photo/gallery/
       - princesscum.com/photo/gallery/
       - realitysis.com/photo/gallery/
+      - shesbreedingmaterial.com/photo/gallery/
       - stepsiblingscaught.com/photo/gallery/
       - teacherfucksteens.com/photo/gallery/
       - youngermommy.com/photo/gallery/
@@ -116,6 +119,7 @@ galleryByURL:
       - anilos.com/photo/gallery/
       - brattysis.com/photo/gallery/
       - deeplush.com/photo/gallery/
+      - glowingdesire.com/photo/gallery/
       - nfbusty.com/photo/gallery/
       - nubiles.net/photo/gallery/
       - smashed.xxx/photo/gallery/
@@ -134,7 +138,7 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 2, 2006
       Details: &detailsAttr
-        selector: //div[contains(@class, "content-pane-column")]//p/text()|//div[contains(@class, "content-pane-column")]/div/text()
+        selector: //div[contains(@class, "content-pane-column")]//p/text()|//div[contains(@class, "content-pane-column")]/div/text()|//div[contains(@class, "content-pane-column")]/div/div/text()
         concat: "\n\n"
       Performers: &performersAttr
         Name: //div[@class="content-pane-performers"]/a/text()
@@ -251,4 +255,9 @@ xPathScrapers:
       Performers: *performersAttr
       Tags: *tagsAttr
       Studio: *studioFromTitleAttr
-# Last Updated July 14, 2024
+
+driver:
+  headers:
+    - Key: "User-Agent"
+      Value: "stashapp-scraper/v1"
+# Last Updated January 20, 2026

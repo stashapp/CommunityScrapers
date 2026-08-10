@@ -14,8 +14,8 @@ sceneByFragment:
       # expects an id in square brackets before extension, as saved by yt-dlp by default
       - regex: '.*\[([0-9a-zA-Z]{4,})\]\.[^\.]+'
         with: $1
-      # or expects an id starting with -xh
-      - regex: '(?i)^.+-(xh[^.]+)\..+$'
+      # or expects an id starting with xh somewhere in the filename
+      - regex: '(?i)^(?:.+[-\._])?(xh[^-\._]+)[-\._].+$'
         with: $1
       # if no id is found in the filename
       - regex: .*\.[^\.]+$
@@ -68,4 +68,4 @@ xPathScrapers:
       Performers:
         Name:
           selector: $player/nav//a[contains(@href,"/pornstars/")] | $creator | $user
-# Last Updated May 28, 2025
+# Last Updated December 12, 2025

@@ -1,0 +1,49 @@
+name: SayUncle
+# requires: Reptyle
+# scrapes: Anonimo, BlackGodz, Bottom Games, Boys At Camp, Boys Do Porn, Brother Crush, Bully Him, Butt Virgins, Dad Creep, Dick Rides, Doctor Tapes, Euro Hunk, EuroPeenz, Family Dick, Freeuse Twink, Just Say Uncle, Latin Leche, Military Dick, Missionary Boys, Pig Bottoms, SayUncle AllStars, SayUncle Classics, SayUncle Compilations, SayUncle Features, SayUncle Labs, Stay Home Bro, Sticky Rub, TherapyDick, Troop Sex, Twink Trade, Varsity Grip, Yes Father, Young Perps
+sceneByURL:
+  - action: script
+    url:
+      - blackgodz.com/movies/
+      - bottomgames.com/movies/
+      - boysatcamp.com/movies/
+      - boysdoporn.com/movies/
+      - brothercrush.com/movies/
+      - bullyhim.com/movies/
+      - dadcreep.com/movies/
+      - doctortapes.com/movies/
+      - dickrides.com/movies/
+      - familydick.com/movies/
+      - latinleche.com/movies/
+      - pigbottoms.com/movies/
+      - militarydick.com/movies/
+      - missionaryboys.com/movies/
+      - sayuncle.com/movies/
+      - stayhomebro.com/movies/
+      - therapydick.com/movies/
+      - twinktrade.com/movies/
+      - varsitygrip.com/movies/
+      - yesfather.com/movies/
+      - youngperps.com/movies/
+    script:
+      - python
+      - SayUncle.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - SayUncle.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - SayUncle.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - SayUncle.py
+    - scene-by-query-fragment

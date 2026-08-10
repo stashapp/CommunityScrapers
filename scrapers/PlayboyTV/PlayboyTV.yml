@@ -1,0 +1,40 @@
+name: PlayboyTV
+sceneByURL:
+  # New Algolia-based scraper for the current playboytv.com site
+  - action: script
+    url:
+      - playboytv.com/en/episode/
+    script:
+      - python
+      - PlayboyTV.py
+      - scene-by-url
+  # Legacy XPath scraper preserved for Wayback Machine / archived playboy.tv URLs
+  - action: scrapeXPath
+    url:
+      - playboy.tv/watch/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="title"]/text()
+      Date:
+        selector: //small[@class="subtitle"]/text()
+        postProcess:
+          - replace:
+              - regex: .+(?:• Added on )(.+)
+                with: $1
+          # Date is not always present, but when it is, it is in a set format in
+          # the description field
+          - parseDate: 02 January 2006
+      Details:
+        selector: //small[@class="subtitle"]/text()
+        postProcess:
+          - replace:
+              - regex: (.+)(?:• Added on )(?:.+)
+                with: $1
+        # The field sometimes, has a description, sometimes has episode details.
+        # When it has episode details, the date can be stripped out.
+      Image: //video[@id="video"]/@poster
+
+# Last Updated November 08, 2020 (XPath legacy scraper)
+# Algolia scraper added February 2026

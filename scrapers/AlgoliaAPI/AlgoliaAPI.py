@@ -15,8 +15,8 @@ from zipfile import ZipFile
 
 from py_common import graphql, log
 from py_common.deps import ensure_requirements
-from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene
-from py_common.util import dig, guess_nationality, is_valid_url, scraper_args
+from py_common.types import ScrapedGallery, ScrapedMovie, ScrapedPerformer, ScrapedScene, ScrapedTag
+from py_common.util import dig, guess_nationality, feet_to_cm, lb_to_kg, is_valid_url, scraper_args
 ensure_requirements("algoliasearch", "bs4:beautifulsoup4", "requests")
 
 from algoliasearch.search.client import SearchClientSync
@@ -29,7 +29,10 @@ T = TypeVar('T')
 CONFIG_FILE = 'AlgoliaAPI.ini'
 FIXED_USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0'
 IMAGE_CDN = "https://images03-fame.gammacdn.com"
+TRANSFORM_IMAGE_CDN = "https://transform.gammacdn.com"
 
+# Studios, that have identical scene title from scenes from same movie. Adding scene number to title.
+SCENE_NUMBER_STUDIOS = ["falconstudios", "hothouse", "ragingstallion"] 
 
 def slugify(text: str) -> str:
     "This _should_ reproduce the behaviour of the title/name URL slug transform"
@@ -50,10 +53,13 @@ def api_auth_cache_write(site: str, app_id: str, api_key: str):
         config.add_section(site)
     config.set(site, "app_id", app_id)
     config.set(site, "api_key", api_key)
-    if match := re.search(r"validUntil=(\d+)", b64decode(api_key).decode('utf-8')):
-        valid_until = match.group(1)
-    else:
-        valid_until = int(time())
+    # set a default valid_until to 24 hours from now
+    valid_until = str(int(time()) + 24 * 60 * 60)
+    try:
+        if match := re.search(r"validUntil=(\d+)", b64decode(api_key).decode('utf-8')):
+            valid_until = match.group(1)
+    except Exception as e:
+        log.debug(f"Could not extract validUntil from api_key: {e}")
     config.set(site, "valid_until", valid_until)
     with open(CONFIG_FILE, 'w', encoding='utf-8') as config_file:
         config.write(config_file)
@@ -91,17 +97,28 @@ def get_api_auth(site: str) -> tuple[str, str]:
     homepage = homepage_url(site)
     r = requests.get(homepage, headers=headers_for_homepage(homepage), timeout=10)
     # extract JSON
-    if not (match := re.search(r"window.env\s+=\s(.+);", r.text)):
+    if match := re.search(r"window.env\s*=\s*(.+);", r.text):
+        log.debug('Found JSON in window.env')
+        data = json.loads(match.group(1))
+        app_id = data['api']['algolia']['applicationID']
+        api_key = data['api']['algolia']['apiKey']
+    elif match := re.search(r"algoliaObj\s*=\s*(.+?);", r.text, re.DOTALL): # variant, e.g. VirtualRealPorn network sites
+        log.debug('Found JSON in algoliaObj')
+        data = json.loads(match.group(1))
+        app_id = data['api']['appId']
+        api_key = data['api']['searchKey']
+    else:
         log.error('Cannot find JSON in homepage for API keys')
+        log.debug(f'Homepage content: {r.text}')
         sys.exit(1)
-    data = json.loads(match.group(1))
-    app_id = data['api']['algolia']['applicationID']
-    api_key = data['api']['algolia']['apiKey']
+    log.debug(f'Fetched API auth: app_id={app_id}, api_key={api_key}')
     api_auth_cache_write(site, app_id, api_key)
     return app_id, api_key
 
 def homepage_url(site: str) -> str:
     "Generates the homepage (base URL) for a site/domain"
+    if site.startswith("virtualreal"): # VirtualRealPorn network sites do not use www
+        return f"https://{site}.com"
     return f"https://www.{site}.com"
 
 def clean_text(details: str) -> str:
@@ -127,7 +144,10 @@ def default_postprocess(obj: T, _) -> T:
     "This is the default function for the postprocess argument"
     return obj
 
-genders_map = {'shemale': 'transgender_female'}
+genders_map = {
+    'female_trans': 'transgender_female',
+    'shemale': 'transgender_female',
+}
 def parse_gender(gender: str) -> str:
     "Gets corresponding value from map, else returns argument value"
     return genders_map.get(gender, gender)
@@ -135,7 +155,7 @@ def parse_gender(gender: str) -> str:
 def movie_cover_image_url(cover_path: str, position: Literal["front", "back"]) -> str:
     "Gets corresponding value from map, else returns argument value"
     return (
-        "https://transform.gammacdn.com/movies"
+        f"{TRANSFORM_IMAGE_CDN}/movies"
         f"{cover_path}_{position}_400x625.jpg?width=450&height=636"
     )
 
@@ -173,9 +193,11 @@ def to_scraped_performer(performer_from_api: dict[str, Any], site: str) -> Scrap
     if alternate_names := dig(performer_from_api, "attributes", "alternate_names"):
         performer["aliases"] = alternate_names.strip()
     if height := dig(performer_from_api, "attributes", "height"):
-        performer["height"] = height.strip()
+        performer["height"] = feet_to_cm(height.strip())
     if weight := dig(performer_from_api, "attributes", "weight"):
-        performer["weight"] = weight.strip()
+        performer["weight"] = lb_to_kg(weight.strip())
+    if endowment := dig(performer_from_api, "attributes", "endowment"):
+        performer["penis_length"] = feet_to_cm("0'" + endowment.strip())
     if home := dig(performer_from_api, "attributes", "home"):
         performer["country"] = guess_nationality(home.strip())
     if performer_from_api.get("has_pictures") and (pictures := performer_from_api.get("pictures")):
@@ -255,27 +277,53 @@ def to_scraped_scene(scene_from_api: dict[str, Any], site: str) -> ScrapedScene:
         scene["studio"] = { "name": studio_name }
     if scene_from_api.get("movie_id"):
         scene["movies"] = [movie_from_api_scene(scene_from_api, site)]
+        # log out scene number
+        try:
+            movie_title = scene_from_api.get("movie_title")
+            clip_path = scene_from_api.get("clip_path")
+            [_, scene_number] = clip_path.split("_")
+            # it may be possible to populate the Scene Number field in the stash scene via a hook
+            # or something, but for now just log it out as an editing aid
+            log.info(f"{movie_title}, Scene #{scene_number}")
+        except Exception as e:
+            log.error(f"Could not determine scene number: {e}")
+    # set scene tags as empty in case any is missing
+    scene["tags"] = []
     if categories := scene_from_api.get("categories"):
-        scene["tags"] = name_values_as_list(categories)
+        scene["tags"] += name_values_as_list(categories)
+    if content_tags := scene_from_api.get("content_tags"):
+        mapped_content_tags = list_to_name_values(content_tags)
+        scene["tags"] += mapped_content_tags
     if actors := scene_from_api.get("actors"):
         scene["performers"] = actors_to_performers(actors, site)
     if directors := scene_from_api.get("directors"):
         scene["director"] = name_values_as_csv(directors)
+    if scene_from_api.get("sitename") in SCENE_NUMBER_STUDIOS:
+        if clip_path := scene_from_api.get("clip_path"):
+            try:
+                scene_number = clip_path.split("_")[1].replace("0", "")
+                scene["title"] = f"{scene['title']}, Scene {scene_number}"
+            except Exception as e:
+                log.error(f"Could not determine scene number: {e}")
     return scene
 
 def name_values_as_csv(objects: list[dict[str, Any]]) -> str:
     "Transforms list of objects with name property to CSV string"
     return ", ".join([ obj.get("name") for obj in objects ])
 
-def name_values_as_list(objects: list[dict[str, Any]]) -> list[str]:
+def name_values_as_list(objects: list[dict[str, Any]]) -> list[ScrapedTag]:
     "Transforms list of objects with name property to list of objects with only the name property"
     return [{ "name": obj.get("name") } for obj in objects]
+
+def list_to_name_values(objects: list[str]) -> list[ScrapedTag]:
+    "Transforms list of strings to list of objects with name property"
+    return [{ "name": obj } for obj in objects]
 
 def actors_to_performers(actors: list[dict[str, Any]], site: str) -> list[ScrapedPerformer]:
     "Converts API actors to list of ScrapedPerformer"
     return [
         {
-            "name": actor.get("name"),
+            "name": actor.get("name").strip(),
             "gender": parse_gender(actor.get("gender")),
             "urls": [ performer_url(site, actor.get("url_name"), actor.get("actor_id")) ]
         }
@@ -470,7 +518,7 @@ def to_scraped_gallery(api_hit: dict[str, Any], site: str) -> ScrapedGallery | N
     # photosets have their own cover image
     if picture := api_hit.get("picture"):
         # just log this out, to aid user in selecting the cover image
-        log.info(f"Cover image: {IMAGE_CDN}/photo_set{picture}")
+        log.info(f"Cover image: {TRANSFORM_IMAGE_CDN}/photo_set{picture}")
     return gallery
 
 def gallery_from_set_id(
@@ -579,6 +627,11 @@ def to_scraped_movie(movie_from_api: dict[str, Any], site: str) -> ScrapedMovie:
         and (movie_id := movie_from_api.get("movie_id"))
     ):
         movie["url"] = movie_url(site, url_title, movie_id)
+    if categories := movie_from_api.get("categories"):
+        movie["tags"] = name_values_as_list(categories)
+        if content_tags := movie_from_api.get("content_tags"):
+            mapped_content_tags = list_to_name_values(content_tags)
+            movie["tags"] += mapped_content_tags
     return movie
 
 def movie_from_url(

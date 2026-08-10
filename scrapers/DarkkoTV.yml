@@ -1,0 +1,115 @@
+name: DarkkoTV
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - darkkotv.com/scenes/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - darkkotv.com/models/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $content: //div[@class="vidImidWrap"]
+    scene:
+      Title:
+        selector: //h4[@class="text_light"]
+        postProcess:
+          - replace:
+            - regex: ^\s+
+              with: ""
+            - regex: \s+$
+              with: ""
+      Details:
+        selector: $content//div[@class="vidImgContent text_light"]/p//text()
+        concat: " ​"
+      Date:
+        selector: $content//i[@class="fa-solid fa-calendar"]/../../text()
+        postProcess:
+          - parseDate: 01-02-2006
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Darkko TV
+      Tags:
+        Name: //div[@class="blogTags"]/ul/li/a/text()
+      Performers:
+        Name: $content//i[@class="mlisti fa-solid fa-user text_med s_icon"]/../a/text()
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1/text()
+        postProcess:
+          - replace:
+            - regex: ^\s+
+              with: ""
+            - regex: \s+$
+              with: ""
+      Aliases:
+        selector: //div[@class="vitalStats"]/ul/li[contains(text(),"Aliases")]/text()
+        postProcess:
+          - replace:
+            - regex: 'Aliases:[^\w]+'
+              with: ""
+      Birthdate:
+        selector: //div[@class="vitalStats"]/ul/li[contains(text(),"Date of Birth")]/text()
+        postProcess:
+          - replace:
+            - regex: 'Date of Birth:[^\w]+'
+              with: ""
+          - parseDate: January 2, 2006
+      Height:
+        selector: //div[@class="vitalStats"]/ul/li[contains(text(),"Height")]/text()
+        postProcess:
+          - replace:
+            - regex: 'Height:[^\w]+'
+              with: ""
+          - replace:
+            - regex: "cm -.+"
+              with: ""
+      Weight:
+        selector: //div[@class="vitalStats"]/ul/li[contains(text(),"Weight")]/text()
+        postProcess:
+          - replace:
+            - regex: 'Weight:[^\w]+'
+              with: ""
+          - replace:
+            - regex: "kg.+"
+              with: ""
+      Measurements:
+        selector: //div[@class="vitalStats"]/ul/li[contains(text(),"Measurements")]/text()
+        postProcess:
+          - replace:
+            - regex: 'Measurements:[^\w]+'
+              with: ""
+      Piercings:
+        selector: //div[@class="vitalStats"]/ul/li[contains(text(),"Piercings")]/text()
+        postProcess:
+          - replace:
+            - regex: 'Piercings:[^\w]+'
+              with: ""
+      Tattoos:
+        selector: //div[@class="vitalStats"]/ul/li[contains(text(),"Tattoos")]/text()
+        postProcess:
+          - replace:
+            - regex: 'Tattoos:[^\w]+'
+              with: ""
+      # ethnicity/ country is mapped to
+      # City, State, Country
+      # No Eye Color
+      # Fake Tits is inverted
+      # No Height
+      # No Gender
+      # URLs are encoded with static strings
+
+driver:
+  cookies:
+    - CookieURL: "https://darkkotv.com"
+      Cookies:
+        - Name: "warn"
+          Domain: "darkkotv.com"
+          Value: "true"
+          Path: "/"

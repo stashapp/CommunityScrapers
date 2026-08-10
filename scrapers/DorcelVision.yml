@@ -5,7 +5,7 @@ sceneByURL:
       - https://www.dorcelvision.com/en/movies
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - https://www.dorcelvision.com/en/movies
@@ -65,12 +65,12 @@ xPathScrapers:
         Name: //div[contains(@class, "casting")]//div[contains(@class, "slider-xl")]//div[@class="col-xs-2"]//a/span/text()
       Studio: &studioAttr
         Name: //div[@class="row informations"]/div/div/strong[contains(., "Studio")]/parent::div/following-sibling::div
-      Movies:
+      Groups:
         Name: //meta[@property="og:title"]/@content
         URL: //meta[@property="og:url"]/@content
       URL: //meta[@property="og:url"]/@content
   movieScraper:
-    movie:
+    group:
       Name: *titleSel
       Date: *dateAttr
       Duration:

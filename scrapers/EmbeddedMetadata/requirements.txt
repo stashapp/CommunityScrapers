@@ -1,0 +1,2 @@
+pyexiv2
+pyexiftool

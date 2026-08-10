@@ -4,15 +4,15 @@ import re
 import sys
 from urllib.parse import urlparse, urlunparse
 
-from lxml import html
-import requests
-
 from py_common.deps import ensure_requirements
 import py_common.log as log
 from py_common.types import ScrapedPerformer, ScrapedScene
 from py_common.util import dig, is_valid_url, scraper_args
 
-ensure_requirements("lxml", "requests")
+ensure_requirements("lxml", "curl_cffi")
+
+from lxml import html  # noqa: E402
+from curl_cffi import requests  # noqa: E402
 
 
 STUDIO_MAP = {
@@ -107,8 +107,10 @@ STUDIO_MAP = {
     "yourwifemymeat": "Your Wife My Meat",
 }
 
-# Shared client because we're making multiple requests
-client = requests.Session()
+# Shared client because we're making multiple requests.
+# The sites reject non-browser TLS fingerprints: the handshake succeeds and the
+# connection is then reset at the first HTTP byte, so impersonation is required.
+client = requests.Session(impersonate="chrome")
 
 
 # Example element:
@@ -201,7 +203,7 @@ def scene_from_url(url: str) -> ScrapedScene:
 
     if not (
         video_page := tree.xpath(
-            '//section[@id="videos_page-page" or @id="mixed_page-page"]'
+            '//article[@id="videos_page-page" or @id="mixed_page-page"]'
         )
     ):
         log.error("Page layout has changed, scraper needs updating")

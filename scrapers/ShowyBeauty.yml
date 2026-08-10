@@ -27,7 +27,7 @@ xPathScrapers:
           - parseDate: 2006-01-02
       Performers: &performersAttr
         Name: $performer
-        URL:
+        URLs:
           selector: $performer/@href
           postProcess: &domainAttr
             - replace:
@@ -43,4 +43,4 @@ xPathScrapers:
       Image:
         selector: //div[contains(@class,"cover")]/div[@class="view"]/img/@src
         postProcess: *domainAttr
-# Last Updated October 24, 2021
+# Last Updated September 17, 2025

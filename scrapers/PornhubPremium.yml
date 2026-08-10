@@ -28,7 +28,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/text()
-      URL:
+      URLs:
         selector: //div[@class="wrap"]/div[@class="thumbnail-info-wrapper"]/a[@class="title"]/@href
         postProcess:
           - replace:
@@ -84,7 +84,7 @@ xPathScrapers:
           - replace:
               - regex: \s+to\s+
                 with: "-"
-      URL: //link[@rel="canonical"][1]/@href
+      URLs: //link[@rel="canonical"][1]/@href
       Image: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
   sceneScraper:
     common:
@@ -108,7 +108,7 @@ xPathScrapers:
         selector: //meta[@property="og:image"][1]/@content
       Performers:
         Name: $performer/@data-mxptext
-        URL: $performer/@href
+        URLs: $performer/@href
       Studio:
         Name: $studio
         URL: $studio/@href
@@ -121,4 +121,4 @@ driver:
           Value: "<'il' cookie value>"
           Path: "/"
 # Reference: https://github.com/stashapp/CommunityScrapers/blob/master/scrapers/Pornhub.yml
-# Last Updated October 11, 2021
+# Last Updated September 17, 2025

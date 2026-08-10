@@ -1,0 +1,39 @@
+name: CuckoldWish
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cuckoldwish.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $tags: //div[@class="video__rowWrapper bottom-margin-10"]//a[starts-with(@href, "https://cuckoldwish.com/tags/")]
+      $channels: //div[@class="video__rowWrapper"]//a[starts-with(@href, "https://cuckoldwish.com/channels/")]
+      $models: //div[@class="video__rowWrapper bottom-margin-10"]//a[starts-with(@href, "https://cuckoldwish.com/models/")]
+      
+    scene:
+      Title: //h1[@class="videos__title"]
+      Details: //div[@class="video__filmDescription"]
+      Date:
+        selector: //span[@class="videos__date"]/text()
+        postProcess:
+          - replace:
+            - regex: st|nd|rd|th
+              with:
+          - parseDate: 2 Jan 2006
+      Image:
+        selector: //meta[@property="og:image"]/@content
+      Studio:
+        Name: 
+          fixed: Cuckoldwish
+      Tags:
+        Name: 
+          selector: $tags | $channels
+          postProcess:
+            - replace:
+              - regex: ","
+                with:
+      Performers:
+        Name: $models/text()
+        URLs: $models/@href
+# Last Updated January 27, 2026

@@ -2,13 +2,22 @@
 
 name: BaDoink
 
+sceneByName:
+  action: scrapeXPath
+  scraper: sceneByNameBaDoinkVr
+  queryURL: https://badoinkvr.com/vrpornvideos/search/{}
+
+sceneByQueryFragment:
+  action: scrapeXPath
+  scraper: sceneScraper
+  queryURL: "{url}"
+
 sceneByURL:
   - action: scrapeXPath
     url: &urls
       - 18vr.com
       - babevr.com
       - badoinkvr.com
-      - kinkvr.com
       - realvr.com
       - vrcosplayx.com
     scraper: sceneScraper
@@ -41,16 +50,28 @@ performerByURL:
   - action: scrapeXPath
     url: *urls
     scraper: performerScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url: *urls
     scraper: movieScraper
 # Uncomment this section to enable Performer Search on this scraper
-# performerByName:
-#   action: scrapeXPath
-#   queryURL: https://kinkvr.com/bdsm-performers/search/{}?all=1
-#   scraper: performerSearch
+performerByName:
+  action: scrapeXPath
+  queryURL: https://badoinkvr.com/vr-pornstars/search/{}?all=1
+  scraper: performerSearch
 xPathScrapers:
+  sceneByNameBaDoinkVr:
+    common:
+      $card: //div[@data-video-card-scene-id]
+    scene:
+      Title: $card/a[@data-video-scene-name]/@title
+      URL:
+        selector: $card/a[@data-video-scene-name]/@href
+        postProcess:
+          - replace:
+              - regex: '^'
+                with:   https://badoinkvr.com$1
+      Image: $card//img/@data-src
   sceneScraper:
     common:
       $details: &detailsAttr //div[@class="video-rating-and-details"]
@@ -65,13 +86,26 @@ xPathScrapers:
           - parseDate: January 02, 2006
       Details: &detailsSel $details//p[@class="video-description"]
       Tags:
-        Name: $details//p[@class="video-tags"]//a
+        Name:
+          selector: >-
+            $details//p[@class="video-tags"]//a
+            |
+            $details//p[@class="video-tags"]//span[contains(@class, "video-tags-label")]
+          postProcess:
+            - replace:
+                - regex: "^.*Tags:.*$"
+                  with: Virtual Reality
       Performers:
         Name: $details//p[@class="video-actors"]/a
       Studio:
         Name: &studioName //meta[@name="dl8-customization-brand-name"]/@content
       Image: &imageSel
         selector: //div[@id="videoPreviewContainer"]//video[@id="video-preview-hover"]/@poster
+        postProcess:
+          # remove the _1 from the end of the filename to get the original/NSFW image
+          - replace:
+              - regex: _1\.jpg$
+                with: .jpg
       URL: &sceneUrl //link[@rel="canonical"]/@href
       Code:
         selector: *sceneUrl
@@ -82,27 +116,25 @@ xPathScrapers:
               - regex: '^.*[^\d].*$' # if no code is found in the url
                 with: # return an empty string
   # Uncomment this section to user Performer Search on this scraper
-  # performerSearch:
-  #   common:
-  #     $girlA: //div[@class="girl-card-info"]/a
-  #   performer:
-  #     Name: $girlA/span
-  #     URL:
-  #       selector: $girlA/@href
-  #       postProcess:
-  #         - replace:
-  #             - regex: .*badoinkvr\.com/girl/redirect/([^\?]+).+
-  #               with: https://badoinkvr.com/vr-pornstar/$1
-  #             - regex: .*vrcosplayx\.com/girl/redirect/([^\?]+).+
-  #               with: https://vrcosplayx.com/cosplaygirl/$1
-  #             - regex: .*18vr\.com/girl/redirect/([^\?]+).+
-  #               with: https://18vr.com/vrgirl/$1
-  #             - regex: .*babesvr\.com/girl/redirect/([^\?]+).+
-  #               with: https://babevr.com/vrbabe/$1
-  #             - regex: .*realvr\.com/girl/redirect/([^\?]+).+
-  #               with: https://realvr.com/pornstar/$1
-  #             - regex: ^/
-  #               with: https://kinkvr.com/
+  performerSearch:
+    common:
+      $girlA: //div[@class="girl-card-info"]/a
+    performer:
+      Name: $girlA/span
+      URLs:
+        selector: $girlA/@href
+        postProcess:
+          - replace:
+              - regex: ^/vr-pornstar/
+                with: https://badoinkvr.com/vr-pornstar/
+              - regex: ^/cosplaygirl/
+                with: https://vrcosplayx.com/cosplaygirl/
+              - regex: ^/vrgirl/
+                with: https://18vr.com/vrgirl/
+              - regex: ^/vrbabe/
+                with: https://babevr.com/vrbabe/
+              - regex: ^/pornstar/
+                with: https://realvr.com/pornstar/
   performerScraper:
     common:
       $stats: //ul[@id='girlOptionDetails']
@@ -116,7 +148,7 @@ xPathScrapers:
                 with: ""
       Gender:
         fixed: female
-      URL: //link[@rel='canonical']/@href
+      URLs: //link[@rel='canonical']/@href
       Twitter: //a[contains(@class,'social-media') and contains (@href,'x.com')]/@href
       Instagram: //a[contains(@class,'social-media') and contains (@href,'instagram.com')]/@href
       Ethnicity:
@@ -139,7 +171,7 @@ xPathScrapers:
   movieScraper:
     common:
       $details: *detailsAttr
-    movie:
+    group:
       Name:
         selector: //meta[@name="dl8-customization-brand-name"]/@content|$details/h1
         concat: " - "
@@ -156,3 +188,4 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
+# Last Updated December 2, 2025

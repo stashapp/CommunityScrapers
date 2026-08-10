@@ -1,40 +1,41 @@
-# requires: Algolia
+# requires: py_common, AyloAPI
 name: "TouchMyWife"
 sceneByURL:
   - action: script
     url:
-      - touchmywife.com/en/video
+      - touchmywife.com/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - touchmywife
+      - ../AyloAPI/scrape.py
+      - scene-by-url
 sceneByFragment:
     action: script
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AyloAPI/scrape.py
       - touchmywife
+      - scene-by-fragment
 sceneByName:
     action: script
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AyloAPI/scrape.py
       - touchmywife
-      - searchName
+      - scene-by-name
 sceneByQueryFragment:
     action: script
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AyloAPI/scrape.py
       - touchmywife
-      - validName
+      - cene-by-query-fragment
 galleryByURL:
   - action: script
     url:
-      - touchmywife.com/en/photo/
+      - touchmywife.com/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AyloAPI/scrape.py
       - touchmywife
-      - gallery
+      - gallery-by-url
 # Last Updated December 22, 2022

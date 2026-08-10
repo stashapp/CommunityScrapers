@@ -165,7 +165,7 @@ def _create_headers_for(domain: str) -> dict[str, str]:
     return api_headers
 
 
-def _construct_url(api_result: dict) -> str:
+def _construct_url(api_result: dict) -> str | None:
     """
     Tries to construct a valid public URL for an API result
 
@@ -177,6 +177,10 @@ def _construct_url(api_result: dict) -> str:
     """
 
     brand = api_result["brand"]
+    # exclude brands without their own sites
+    if brand in ["leviproductions"]: 
+        return None
+
     type_ = api_result["type"]
     id_ = api_result["id"]
     slug = slugify(api_result["title"])
@@ -285,8 +289,10 @@ def to_scraped_performer(
 
     # All remaining fields are only available when scraped directly
     if height := performer_from_api.get("height"):
-        # Convert to cm
-        performer["height"] = str(round(height * 2.54))
+        # Aylo sometimes returns unreasonably small heights for performers
+        if height > 5:
+            # Convert to cm
+            performer["height"] = str(round(height * 2.54))
 
     if weight := performer_from_api.get("weight"):
         # Convert to kg

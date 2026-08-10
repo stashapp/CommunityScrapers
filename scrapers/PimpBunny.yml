@@ -1,0 +1,43 @@
+name: PimpBunny
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pimpbunny.com/videos/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - pimpbunny.com/onlyfans-models/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $models: //ul[contains(@class, "pages-view-video-models")]
+      $jsonld: //script[@type="application/ld+json"]
+    scene:
+      Title: //h1[contains(@class, "pages-view-video-video-title")]
+      Date:
+        selector: $jsonld
+        postProcess:
+          - replace:
+              - regex: .*"uploadDate"\s*:\s*"(\d{4}-\d{2}-\d{2})".*
+                with: $1
+          - parseDate: 2006-01-02
+      Image: //meta[@property="og:image"]/@content
+      URL: //link[@rel="canonical"]/@href
+      Studio:
+        Name:
+          fixed: PimpBunny
+      Performers:
+        Name: $models//div[contains(@class, "pages-view-video-model-title")]//a
+        URLs: $models//div[contains(@class, "pages-view-video-model-title")]//a/@href
+      Tags:
+        Name: //ul[contains(@class, "pages-view-video-tags")][1]//a
+  performerScraper:
+    performer:
+      Name: //h1[contains(@class, "ui-heading-h1")]
+      Image: //div[contains(@class, "blocks-model-view-thumbnail")]//img/@data-original
+      Tags:
+        Name: //div[contains(@class,"model-view-top-lists")]/a/text()
+      URLs: //div[contains(@class,"model-view-social-bar")]//a/@href

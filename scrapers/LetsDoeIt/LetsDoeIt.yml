@@ -65,7 +65,7 @@ performerByFragment:
     - python
     - LetsDoeIt.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - letsdoeit.com/movie/
@@ -98,7 +98,7 @@ xPathScrapers:
       Studio:
         Name: $actors//a[contains(@href,'/channels/')]
       Performers:
-        URL: &performerURL $actors//a[contains(@href,'/models/')]/@href
+        URLs: &performerURL $actors//a[contains(@href,'/models/')]/@href
         Name: $actors//a[contains(@href,'/models/')]
         Gender:
           # The performer pages don't have a Gender tag, so the best we can do is use the
@@ -197,4 +197,4 @@ xPathScrapers:
                   with: $1
       Performers:
         Name: //div[span[contains(.,'Model')]//a[contains(@href,'/models/')]
-# Last Updated April 16, 2024
+# Last Updated September 17, 2025

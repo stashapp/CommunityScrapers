@@ -12,7 +12,7 @@ sceneByURL:
     url:
       - theclassicporn.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - theclassicporn.com
@@ -41,7 +41,7 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://theclassicporn.com
-      Movies:
+      Groups:
         Name: *title
         URL: *url
       Date: &date
@@ -55,7 +55,7 @@ xPathScrapers:
       Director:
         selector: //div[@class='video-data']/p[@class='data-row data-director']/a[@class='link-light-blue']        
   movieScraper:
-    movie:
+    group:
       Name: *title
       URL: *url
       Date: *date
@@ -71,7 +71,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //p[@class='title']/a[@class='link-blue link-no-border']/text()
-      URL:
+      URLs:
         selector: //p[@class='title']/a[@class='link-blue link-no-border']/@href
         postProcess:
           - replace:
@@ -79,7 +79,7 @@ xPathScrapers:
                 with: https://theclassicporn.com$1
   performerScraper:
     performer:
-      URL:
+      URLs:
         selector: //input[@name="redirect_to"]/@value
         postProcess:
           - replace:
@@ -185,4 +185,4 @@ xPathScrapers:
                 with: https://theclassicporn.com/
       Director:
         selector: //div[@class='video-data']/p[@class='data-row data-director']/a[@class='link-light-blue']                
-# Last Updated May 24, 2024
+# Last Updated September 17, 2025

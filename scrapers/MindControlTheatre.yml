@@ -140,7 +140,7 @@ xPathScrapers:
         URL:
           fixed: https://mindcontroltheatre.com
 
-      #Movies:
+      #Groups:
       # They have some "Part 1, Part 2" scenes. They also have a few "in the same universe" scenes.
       # They even have one 5-title, multipart (2, 3, and 5 parts!) saga of movies. But it's not
       # currently (2024) possible to see the connections easily on the webpage, much less

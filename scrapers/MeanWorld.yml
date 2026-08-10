@@ -1,0 +1,49 @@
+name: MeanWorld
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - megasite.meanworld.com/models/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - megasite.meanworld.com/scenes/
+    scraper: sceneScraper
+
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h1/text()
+      Image:
+        selector: //div[@class="modelBioPic"]/img/@src0_4x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://megasite.meanworld.com
+  sceneScraper:
+    scene:
+      Title:
+        selector: /html/head/title
+        postProcess:
+          - replace:
+            - regex: ".+ Megasite - "
+              with: ""
+            - regex: " - Movies$"
+              with: ""
+      Details: //div[@class="vidImgContent text_light"]/p/text()
+      Studio:
+        Name: //h4/a[2]/text()
+      Performers:
+        Name: //*[contains(@class,"fa-user")]/following-sibling::a/text()
+      Image:
+        selector: /html/head/meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: -2x.jpg
+                with: -4x.jpg
+      Date:
+        selector: //ul[@class="videoInfo"]/li[1]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+# Last Updated November 27, 2025

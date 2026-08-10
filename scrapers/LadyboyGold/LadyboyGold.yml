@@ -1,40 +1,105 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
-name: LadyboyGold / TSRAW
+name: LadyboyGold (Network)
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - island_dollars.py
+    - gallery-by-fragment
+galleryByURL:
+  - action: script
+    url: 
+      - ladyboycrush.com/photo/
+      - ladyboyglamour.com/photo/
+      - ladyboygold.com/photo/
+      - ladyboypussy.com/photo/
+      - ladyboysfuckedbareback.com/photo/
+      - ladyboyvice.com/photo/
+      - tsraw.com/photo/
+    script:
+      - python
+      - island_dollars.py
+      - gallery-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - island_dollars.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - island_dollars.py
+    - performer-by-name
 performerByURL:
   - action: scrapeXPath
     url:
       - ladyboygold.com/index.php
+      - ladyboygold.com/tour/index.php
     scraper: performerScraperLadyboyGold
-  - action: scrapeXPath
+  - action: script
     url:
+      - ladyboycrush.com/model/
+      - ladyboyglamour.com/model/
+      - ladyboypussy.com/model/
+      - ladyboysfuckedbareback.com/model/
+      - ladyboyvice.com/model/
       - tsraw.com/model/
-    scraper: performerScraperTSRaw
+    script:
+      - python
+      - island_dollars.py
+      - performer-by-url
 sceneByURL:
   - action: scrapeXPath
     url:
       - ladyboygold.com/tour
     scraper: sceneScraperLadyboyGold
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        # convert old style tour URL /tour/12345
+        - regex: '.+/tour/(\d+).*'
+          with: "https://ladyboygold.com/tour/show_video.php?galid=${1}&section=1552"
   - action: scrapeXPath
     url:
-      - tsraw.com
+      - ladyboycrush.com/show_video.php
+      - ladyboyglamour.com/show_video.php
+      - ladyboypussy.com/show_video.php
+      - ladyboysfuckedbareback.com/show_video.php
+      - ladyboyvice.com/show_video.php
+      - tsraw.com/show_video.php
     scraper: sceneScraperTSRaw
+  - action: script
+    url:
+      - ladyboycrush.com/video/
+      - ladyboyglamour.com/video/
+      - ladyboygold.com/video/
+      - ladyboypussy.com/video/
+      - ladyboysfuckedbareback.com/video/
+      - ladyboyvice.com/video/
+      - tsraw.com/video/
+    script:
+      - python
+      - island_dollars.py
+      - scene-by-url
 sceneByName:
   action: script
   script:
     - python
-    - TSRaw.py
+    - island_dollars.py
     - scene-by-name
 sceneByFragment:
   action: script
   script:
     - python
-    - TSRaw.py
+    - island_dollars.py
     - scene-by-fragment
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - TSRaw.py
+    - island_dollars.py
     - scene-by-query-fragment
 xPathScrapers:
   performerScraperLadyboyGold:
@@ -208,4 +273,4 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated June 18, 2025
+# Last Updated July 13, 2026

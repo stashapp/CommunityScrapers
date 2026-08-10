@@ -28,7 +28,7 @@ xPathScrapers:
       Performers:
         Name:
           selector: //a/div[@class='acteur']/div[@class='nom']
-        URL:
+        URLs:
           selector: //a[div[@class='acteur']]/@href
           postProcess: &prependDomain
             - replace:
@@ -70,4 +70,4 @@ driver:
           Domain: "www.ericvideos.com"
           Value: "1"
           Path: "/"
-# Last Updated May 23, 2022
+# Last Updated September 17, 2025

@@ -65,6 +65,8 @@ xPathScrapers:
       Performers: *performers
       Title: *title
       URL: *url
+      Tags:
+        Name: //div[@id='desc-container']/a[@class='pill-link']
       Image:
         selector: >
           //link[@rel="canonical"]/@href 

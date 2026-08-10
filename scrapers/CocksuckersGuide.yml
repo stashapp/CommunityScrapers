@@ -1,0 +1,38 @@
+name: Cocksuckers Guide
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - cocksuckersguide.com/starid
+      - cocksuckersguide.com/
+    scraper: performerScraper
+performerByName:
+  action: scrapeXPath
+  queryURL: https://cocksuckersguide.com/StarSearch/tosearch.php?todo=search&type=any&search_text={}
+  scraper: performerSearchScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //div[@class="entry"]/table[1]//h1
+      Gender:
+        fixed: MALE
+      # no year, unable to parse
+      # Birthdate:
+      # fails when state, intentional
+      Country: //a[starts-with(@href,"https://cocksuckersguide.com/origin/country")]/text()
+      CareerLength:
+        selector: //td/span[contains(text(),"Active Years")]/../../td[2]/span/text()
+        replace:
+          - regex: " to "
+            with: "-"
+      Aliases: //div[@id="page"]//ul/li/text()
+      Details: //td/p[2]/span/text()
+      Image:
+        selector: //img[contains(@src, "/mainimage/")]/@src
+        replace:
+          - regex: "^"
+            with: "https://cocksuckersguide.com/"
+  performerSearchScraper:
+    performer:
+      Name: //tbody/tr[1]/td[not(@rowspan)]//a/text()
+      URLs: //tbody/tr[1]/td[not(@rowspan)]//a/@href
+# Last Updated Nov 16, 2025

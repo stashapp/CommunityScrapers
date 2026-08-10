@@ -6,4 +6,4 @@ async function main() {
     await validateNewScrapers();
   } else await validateAllScrapers();
 }
-main()
+main();

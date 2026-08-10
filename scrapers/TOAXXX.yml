@@ -1,0 +1,44 @@
+name: TOAXXX
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - toaxxx.com
+      - breastsinpain.com
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h4[contains(@class, "post-title")]
+      Code:
+        selector: //div[contains(@class, "post-meta-trio")]
+        postProcess:
+          - replace:
+            - regex: ^([A-Z]+[0-9]+).*$
+              with: $1
+      Date:
+        selector: //time[contains(@class, "entry-date")]/@datetime
+        postProcess:
+          - replace:
+            - regex: T.*$
+              with: ""
+          - parseDate: 2006-01-02
+      Studio:
+        Name:
+          selector: //head//title
+          postProcess:
+            - replace:
+                - regex: ^.*\|
+                  with: ""
+      Performers:
+        Name:
+          selector: //div[contains(@class, "post-meta-trio")]/a[@rel="tag"]
+      Tags:
+        Name:
+          selector: //div[contains(@class, "post-meta-trio")]/a[@rel="category tag"]
+      Details:
+        selector: //div[contains(@class, "blog-post-excerpt")]/p
+      Image:
+        selector: //a[@rel="prettyPhoto"]/img/@src
+# Last Updated November 2, 2025

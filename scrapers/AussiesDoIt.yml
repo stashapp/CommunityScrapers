@@ -1,0 +1,109 @@
+name: AussiesDoIt
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - aussiesdoit.com/scenes/
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - aussiesdoit.com/models/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //meta[@property="og:title"]/@content
+      Details:
+        selector: //div[contains(@class, "description")]//text()
+        concat: "\n\n"
+      Image:
+        selector: //div[@class="view_limit"]/img/@src | //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: -3x\.jpg
+                with: -full.jpg
+      Studio:
+        Name:
+          fixed: AussiesDoIt
+        URL:
+          fixed: https://www.aussiesdoit.com/
+      Tags:
+        Name: //div[contains(@class, "v-tags")]/a[contains(@class, "btn")]
+      Performers:
+        Name: //div[contains(@class, "model-list")]//div[contains(@class, "m-name")]/a
+        URLs: //div[contains(@class, "model-list")]//div[contains(@class, "m-name")]/a/@href
+
+  performerScraper:
+    performer:
+      Name: //div[contains(@class, "model-info")]//h2
+      Image: //div[contains(@class, "model-bio")]//img/@src
+      Gender:
+        fixed: Male
+      Height:
+        selector: >-
+          //div[@class="stats-item"][contains(., "Height")] |
+          //div[starts-with(@class, "bio")]/text()[contains(., "Height")]
+        postProcess:
+          - replace:
+              - regex: "[^0-9.]"
+                with: ""
+          - javascript: |
+              if (!value) return "";
+              return Math.round(parseFloat(value) * 100).toString();
+      Weight:
+        selector: >-
+          //div[@class="stats-item"][contains(., "Weight")] |
+          //div[starts-with(@class, "bio")]/text()[contains(., "Weight")]
+        postProcess:
+          - replace:
+              - regex: "[^0-9.]"
+                with: ""
+          - javascript: |
+              if (!value) return "";
+              return Math.round(parseFloat(value)).toString();
+      PenisLength:
+        selector: >-
+          //div[@class="stats-item"][contains(., "Penis Size")] |
+          //div[starts-with(@class, "bio")]/text()[contains(., "Penis Size")]
+        postProcess:
+          - replace:
+              - regex: '.*Penis Size:\s*([\d.]+)\s*inches.*'
+                with: "$1"
+          - javascript: |
+              if (!value) return "";
+              return (parseFloat(value) * 2.54).toFixed(1);
+      Circumcised:
+        selector: //div[starts-with(@class, "bio")]/text()[contains(., "Cut or Uncut")]
+        postProcess:
+          - replace:
+              - regex: '.*Cut or Uncut:\s*(\w+).*'
+                with: "$1"
+          - map:
+              Cut: cut
+              Uncut: uncut
+      HairColor:
+        selector: //div[starts-with(@class, "bio")]/text()[contains(., "Hair Colour")]
+        postProcess:
+          - replace:
+              - regex: '.*Hair Colour:\s*(.*)'
+                with: "$1"
+      EyeColor:
+        selector: //div[starts-with(@class, "bio")]/text()[contains(., "Eye Colour")]
+        postProcess:
+          - replace:
+              - regex: '.*Eye Colour:\s*(.*)'
+                with: "$1"
+      Country:
+        selector: //div[starts-with(@class, "bio")]/text()[contains(., "From:")]
+        postProcess:
+          - replace:
+              - regex: '.*From:\s*(.*)'
+                with: "$1"
+          - javascript: |
+              if (!value) return "";
+              var parts = value.split(",");
+              return parts[parts.length - 1].trim();
+      Details:
+        selector: //div[starts-with(@class, "bio")]/text()
+        concat: "\n"

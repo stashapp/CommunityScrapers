@@ -4,41 +4,12 @@ import re
 import sys
 from datetime import datetime
 
-# to import from a parent directory we need to add that directory to the system path
-csd = os.path.dirname(os.path.realpath(__file__))  # get current script directory
-parent = os.path.dirname(csd)  # parent directory (should be the scrapers one)
-sys.path.append(
-    parent
-)  # add parent dir to sys path so that we can import py_common from there
+from py_common import log
+from py_common.deps import ensure_requirements
 
-try:
-    import cloudscraper
-except ModuleNotFoundError:
-    print("You need to install the cloudscraper module. (https://pypi.org/project/cloudscraper/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install cloudscraper", file=sys.stderr)
-    sys.exit()
-
-try:
-    import requests
-except ModuleNotFoundError:
-    print("You need to install the requests module. (https://docs.python-requests.org/en/latest/user/install/)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install requests", file=sys.stderr)
-    sys.exit()
-    
-try:
-    from lxml import html
-except ModuleNotFoundError:
-    print("You need to install the lxml module. (https://lxml.de/installation.html#installation)", file=sys.stderr)
-    print("If you have pip (normally installed with python), run this command in a terminal (cmd): pip install lxml", file=sys.stderr)
-    sys.exit()
-
-try:
-    import py_common.log as log
-except ModuleNotFoundError:
-    print(
-        "You need to download the folder 'py_common' from the community repo (CommunityScrapers/tree/master/scrapers/py_common)",
-        file=sys.stderr)
-    sys.exit(1)
+ensure_requirements("lxml", "requests")
+from lxml import html
+import requests
 
 #  --------------------------------------
 
@@ -119,12 +90,11 @@ def scrapeURL(url):
 
 
 def scrapeUrlToString(url):
-    scraper = cloudscraper.create_scraper()
-    try:
-        scraped = scraper.get(url)
-    except:
-        log.error("scrape error")
-        sys.exit(1)
+    # calculate timestamp for cookie
+    nowTime = str(int(datetime.now().timestamp()))
+    scraped = requests.get(url, cookies={"NOTABOT": nowTime})
+    log.debug(f"Scraping URL: {url}")
+    log.debug(scraped.status_code)
 
     if scraped.status_code >= 400:
         log.error('HTTP Error: %s' % scraped.status_code)

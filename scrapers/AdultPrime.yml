@@ -24,7 +24,7 @@ xPathScrapers:
     common:
       $scenes: //ul[@id="studio-videos-container"]
     scene:
-      Title: $scenes//span[contains(@class, "description-title")]
+      Title: //div[@class="ap-breadcrumbs"]//li[contains(@class, "active-crumb")]
       Date:
         selector: $scenes//span[@class="description-releasedate"]
         postProcess:
@@ -41,7 +41,7 @@ xPathScrapers:
     common:
       $scene: //div[@class="update-info-container"]
     scene:
-      Title: //span[@class="active-crumb"]
+      Title: //div[@class="ap-breadcrumbs"]//li[contains(@class, "active-crumb")]
       Date:
         selector: //div[@id="theatre-row"]//span[@class="description-releasedate"]/text()
         postProcess:

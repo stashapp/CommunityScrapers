@@ -2,40 +2,18 @@ name: AdultFilmIndex
 performerByURL:
   - action: scrapeXPath
     url:
-      - https://adultfilmindex.com
+      - adultfilmindex.com/actor/
     scraper: performerScraper
-sceneByURL:
+groupByURL:
   - action: scrapeJson
     url:
-      - https://adultfilmindex.com/movie/
-    scraper: sceneScraper
-    queryURL: https://adultfilmindex.com/api/v1/stash/scene/{url}
-    queryURLReplace:
-      url:
-        - regex: '.+/movie/([^/]+)/([^/]+)/scene/([^/]+)$'
-          with: '${3}'
-sceneByName:
-  action: scrapeJson
-  queryURL: https://adultfilmindex.com/api/v1/stash/scene_search/{}
-  scraper: sceneSearch
-sceneByQueryFragment:
-  action: scrapeJson
-  queryURL: '{url}'
-  scraper: sceneScraper
-sceneByFragment:
-  action: scrapeJson
-  queryURL: https://adultfilmindex.com/api/v1/stash/scene_fragment_search/{filename}/{oshash}
-  scraper: sceneScraper
-movieByURL:
-  - action: scrapeJson
-    url:
-      - https://adultfilmindex.com/movie/
+      - adultfilmindex.com/movie/
     scraper: movieScraper
     queryURL: https://adultfilmindex.com/api/v1/stash/movie/{url}
     queryURLReplace:
       url:
-        - regex: '.+/movie/([^/]+)/.+$'
-          with: '${1}'
+        - regex: .+/movie/([^/]+)/.+
+          with: $1
 xPathScrapers:
   performerScraper:
     performer:
@@ -45,72 +23,72 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: '.*"gender":"(\w{1,})".*'
-                with: '$1'
-      URL: //head/link[@rel='canonical']/@href
+                with: "$1"
+      URLs: //head/link[@rel='canonical']/@href
       Birthdate:
         selector: //strong[text()='Date of Birth:']/..
         postProcess:
           - replace:
-              - regex: 'Date of Birth: (.*)'
-                with: '$1'
+              - regex: "Date of Birth: (.*)"
+                with: "$1"
           - parseDate: 2006-01-02
       Ethnicity:
         selector: //strong[text()='Ethnicity:']/..
         postProcess:
           - replace:
-              - regex: 'Ethnicity: (.*)'
-                with: '$1'
+              - regex: "Ethnicity: (.*)"
+                with: "$1"
       Country:
         selector: //strong[text()='Country:']/..
         postProcess:
           - replace:
-              - regex: 'Country: (.*)'
-                with: '$1'
+              - regex: "Country: (.*)"
+                with: "$1"
       HairColor:
         selector: //strong[text()='Hair color:']/..
         postProcess:
           - replace:
-              - regex: 'Hair color: (.*)'
-                with: '$1'
+              - regex: "Hair color: (.*)"
+                with: "$1"
       EyeColor:
         selector: //strong[text()='EyeColor:']/..
         postProcess:
           - replace:
-              - regex: 'EyeColor: (.*)'
-                with: '$1'
+              - regex: "EyeColor: (.*)"
+                with: "$1"
       Height:
         selector: //strong[text()='Height:']/..
         postProcess:
           - replace:
               - regex: 'Height: ([\d]*).*'
-                with: '$1'
+                with: "$1"
       Weight:
         selector: //strong[text()='Weight:']/..
         postProcess:
           - replace:
               - regex: 'Weight: ([\d]*).*'
-                with: '$1'
+                with: "$1"
       Measurements:
         selector: //strong[text()='Measurements:']/..
         postProcess:
           - replace:
-              - regex: 'Measurements: (.*)'
-                with: '$1'
+              - regex: "Measurements: (.*)"
+                with: "$1"
       FakeTits:
         selector: //strong[text()='Natural boobs:']/..
         postProcess:
           - replace:
               - regex: 'Natural boobs: ([\w]*).*'
-                with: '$1'
+                with: "$1"
           - map:
-              'Yes': 'No'
-              'No': 'Yes'
+              "Yes": "No"
+              "No": "Yes"
       Tattoos:
         selector: //strong[text()='Tattoos:']/..
         postProcess:
           - replace:
-              - regex: 'Tattoos: (.*)'
-                with: '$1'
+              - regex: "Tattoos: (.*)"
+                with: "$1"
       Image: //div[@class='hero-body']/img[@class='actor-image']/@src
 jsonScrapers:
   sceneSearch:
@@ -131,9 +109,9 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: T.*$
-                with: ''
+                with: ""
           - parseDate: 2006-01-02
-      Movies:
+      Groups:
         Name: data.movie.title
       Performers:
         Name: data.actors.#.name
@@ -142,7 +120,7 @@ jsonScrapers:
       Tags:
         Name: data.tags.#.name
   movieScraper:
-    movie:
+    group:
       Name: data.title
       Synopsis: data.description
       URL: data.url
@@ -152,7 +130,7 @@ jsonScrapers:
         postProcess:
           - replace:
               - regex: T.*$
-                with: ''
+                with: ""
           - parseDate: 2006-01-02
       Studio:
         Name: data.studio.name
@@ -164,6 +142,3 @@ driver:
       Value: stashjson/1.0.0
     - Key: Authorization # Beta key, enabled and active for now
       Value: Bearer 4vY0iwSUVPH5cGAX1AUZarJ8pbuDUK53
-# Last Updated June 22, 2022
-
-

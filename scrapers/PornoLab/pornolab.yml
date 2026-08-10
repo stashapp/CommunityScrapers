@@ -15,7 +15,7 @@ sceneByFragment:
     - python
     - pornolab.py
     - scene-by-fragment
-movieByURL:
+groupByURL:
   - url:
       - pornolab.net/forum/viewtopic.php?t=
     action: script

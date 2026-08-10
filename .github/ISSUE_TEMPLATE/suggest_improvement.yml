@@ -1,0 +1,27 @@
+name: Suggest improvement
+description: Suggest an improvement to an existing scraper to enhance its functionality or metadata retrieval.
+labels: ["enhancement"]
+body:
+  - type: input
+    id: package-name
+    attributes:
+      label: Scraper name
+      description: Go to **Settings** > **Metadata Providers** > **Installed Scrapers** and under "Package" column, find the package name of the scraper.
+    validations:
+      required: true
+  - type: textarea
+    id: suggested-improvements
+    attributes:
+      label: Suggested improvements
+      description: | 
+        Please provide details about the improvements you are suggesting for the scraper.
+    validations:
+      required: true
+  - type: textarea
+    id: additional-details
+    attributes:
+      label: Additional details
+      description: |
+        If there are any additional details about the issue that you think may be relevant, please provide them here.
+    validations:
+      required: false

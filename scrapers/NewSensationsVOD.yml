@@ -1,0 +1,86 @@
+name: "NewSensationsVOD"
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - vod.newsensations.com/dvds
+    scraper: movieScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - vod.newsensations.com/scenes
+    scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - vod.newsensations.com/models
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="title_bar"]/span
+      Date:
+        selector: //div[@class="cell update_date"][1]
+        postProcess:
+          - parseDate: 01/02/2006
+      Details: //span[@class="update_description"]
+      Performers:
+        Name: //div[@class="gallery_info"]/span[@class="update_models"]/a/text()
+      Tags:
+        Name: //div[@class="gallery_info"]/span[@class="update_tags"]/a/text()
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+            - regex: "-2x"
+              with: "-4x"
+      Studio:
+        Name:
+          fixed: NewSensations
+      URL: //div[contains(@id,"packageinfo")][1]/@data-redirect
+  movieScraper:
+    group:
+      Name: /html/head/title
+      Date:
+        selector: //div[@class="cell dvd_info"]/span[@class="update_date"]/text()
+        postProcess:
+          - parseDate: 01/02/2006
+      Studio:
+        Name: //div[@class="dvd_details_overview"]/span[@class="update_date"]/a/text()
+      Synopsis:
+        selector: //div[@class="dvd_description dvd_info"]/text()
+      URL: //div[@class="cell_top cell_thumb"]/a/@href
+      FrontImage: //div[@class="cell_top cell_thumb"]/a/img/@src0_3x
+      Director:
+        selector: //div[@class="dvd_extra_fields"]/div[contains(text(), "Director")]/text()
+        postProcess:
+          - replace:
+            - regex: "Director:"
+              with: ""
+      Tags:
+        Name: //div[@class="update_tags dvd_info"]/a/text()
+  performerScraper:
+    performer:
+      Name: //span[@class="title_bar_hilite"]/text()
+      # Measurements:
+      #   selector: //div[@class="model_bio"]/text()[12]
+      #   postProcess:
+      #     - replace:
+      #       - regex: Measurements:&nbsp;\s+
+      #         with: ""
+      Height:
+        selector: //div[@class="model_bio"]/text()[11]
+        postProcess:
+          - replace:
+            - regex: .+(\d{3})cm
+              with: "$1"
+      # Birthdate:
+      #   selector: //div[@class="model_bio"]/text()[13]
+      #   postProcess:
+      #     - replace:
+      #       - regex: \s{2,}
+      #         with: ""
+      #       - regex: Birthday:\xc2\xa0
+      #         with: ""
+      #     - parseDate: January 2, 2006
+# Last Updated December 6, 2025

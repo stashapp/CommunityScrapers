@@ -32,7 +32,7 @@ xPathScrapers:
         Name: //span[@class='update_tags']/a
       Performers:
         Name: //div[@class='gallery_info']/span[@class='update_models']/a
-        URL: //div[@class='gallery_info']/span[@class='update_models']/a/@href
+        URLs: //div[@class='gallery_info']/span[@class='update_models']/a/@href
   performerScraper:
     performer:
       Name: //span[@class='title_bar_hilite']/text()
@@ -44,4 +44,4 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://jimweathersarchives.com
-# Last Updated September 13, 2022
+# Last Updated September 17, 2025

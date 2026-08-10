@@ -38,7 +38,7 @@ jsonScrapers:
           - parseDate: 2006-01-02
       Image: ThumbHigh
       Performers:
-        Name: Actresses
+        Name: ActressesJa
       Studio:
         Name:
           fixed: 10Musume

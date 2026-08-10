@@ -27,7 +27,7 @@ xPathScrapers:
           - replace:
             - regex: ^
               with: https://starsfetishfantasies.com$1
-      URL: //link[@rel='canonical']/@href
+      URLs: //link[@rel='canonical']/@href
   sceneScraper:
     common:
       $scene: //div[contains(@class, 'updatesBlock')]/div[@class='update_block']//div[@class='update_block_info']
@@ -56,5 +56,5 @@ xPathScrapers:
         Name: $scene/span[@class='update_tags']/a/text()
       Performers:
         Name: $scene/span[@class='tour_update_models']/a/text()
-        URL: $scene//span[@class='tour_update_models']/a/@href
-# Last Updated May 23, 2024
+        URLs: $scene//span[@class='tour_update_models']/a/@href
+# Last Updated September 17, 2025

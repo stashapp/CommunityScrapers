@@ -30,7 +30,7 @@ xPathScrapers:
         Name: //div[@class="content-links -tags"]//a
       Performers:
         Name: //div[@class="models-box"]/a
-        URL: //div[@class="models-box"]/a/@href
+        URLs: //div[@class="models-box"]/a/@href
       Image:
         selector: //video/@poster
       Studio:
@@ -43,11 +43,11 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //div[@class="item-col col -model"]/a/@title
-      URL: //div[@class="item-col col -model"]/a/@href
+      URLs: //div[@class="item-col col -model"]/a/@href
   performerScraper:
     performer:
       Name: //div[@class="title-col -normal col"]/h2
-      URL:  //link[@rel='canonical']/@href
+      URLs:  //link[@rel='canonical']/@href
       Gender:
         fixed: Male
       Measurements:
@@ -82,4 +82,4 @@ xPathScrapers:
       Image: //div[@class="image"]//@src
       Details:
         selector: //div[@class="expand-inner"]
-# Last Updated Oct 09. 2024
+# Last Updated September 17, 2025

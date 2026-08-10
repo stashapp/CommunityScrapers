@@ -1,9 +1,10 @@
 from argparse import ArgumentParser
 from functools import reduce
-from typing import Any, Callable, Iterable, Mapping, TypeVar
+from typing import Any, Callable, Iterable, Mapping, TypeVar, cast
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 import json
+import re
 import sys
 
 
@@ -43,9 +44,9 @@ def dig(
 
 
 T = TypeVar("T")
+M = TypeVar("M", bound=Mapping[str, Any])
 
-
-def replace_all(obj: dict, key: str, replacement: Callable[[T], T]) -> dict:
+def replace_all(obj: M, key: str, replacement: Callable[[T], T]) -> M:
     """
     Helper function to recursively replace values in a nested dict, returning a new dict
 
@@ -80,10 +81,10 @@ def replace_all(obj: dict, key: str, replacement: Callable[[T], T]) -> dict:
             new[k] = [replace_all(x, key, replacement) for x in v]
         else:
             new[k] = v
-    return new
+    return cast(M, new)
 
 
-def replace_at(obj: dict, *path: str, replacement: Callable[[T], T]) -> dict:
+def replace_at(obj: M, *path: str, replacement: Callable[[T], T]) -> M:
     """
     Helper function to replace a value at a given path in a nested dict, returning a new dict
 
@@ -105,7 +106,7 @@ def replace_at(obj: dict, *path: str, replacement: Callable[[T], T]) -> dict:
     {'a': {'b': ['c', 'd'], 'f': {'g': 'h'}}}
     """
 
-    def inner(d: dict, *keys: str):
+    def inner(d: M, *keys: str):
         match keys:
             case [k] if isinstance(d, dict) and k in d:
                 if isinstance(d[k], list):
@@ -116,7 +117,78 @@ def replace_at(obj: dict, *path: str, replacement: Callable[[T], T]) -> dict:
             case _:
                 return d
 
-    return inner(obj, *path)  # type: ignore
+    return inner(obj, *path)
+
+
+def feet_to_cm(value: str) -> str:
+    """
+    Converts a string representing height (feet and inches) to centimeters.
+
+    Examples handled:
+    - "5'7\"" -> "170"
+    - "5ft 7in" -> "170"
+    - "6'" -> "183"
+
+    :param value: The string to parse
+    :return: The height in cm as a string, rounded to the nearest integer.
+             Returns empty string if input is empty or if no numbers found.
+    """
+    if not value:
+        return ""
+
+    FOOT_IN_CM = 30.48
+    INCH_IN_CM = 2.54
+
+    filtered = re.findall(r"\d+", value)
+
+    if len(filtered) == 0:
+        return ""
+
+    feet = 0.0
+    inches = 0.0
+
+    if len(filtered) > 0:
+        feet = float(filtered[0])
+    if len(filtered) > 1:
+        inches = float(filtered[1])
+
+    length = feet * FOOT_IN_CM + inches * INCH_IN_CM
+    rounded = round(length)
+    return str(rounded) if rounded > 0 else ""
+
+
+def lb_to_kg(value: str) -> str:
+    """
+    Converts a string representing weight (pounds) to kilograms.
+
+    Examples handled:
+    - "120 lbs" -> "54"
+    - "130.5" -> "59"
+    - "Weight: 115 lbs" -> "52"
+
+    :param value: The string to parse
+    :return: The weight in kg as a string, rounded to the nearest integer.
+             Returns empty string if input is empty or on failure.
+    """
+    if not value:
+        return ""
+
+    LB_IN_KG = 0.45359237
+
+    try:
+        # Try direct conversion first (fastest)
+        weight = float(value)
+    except ValueError:
+        # Try extracting the first float number found in the string
+        match = re.search(r"(\d+(\.\d+)?)", value)
+        if match:
+            weight = float(match.group(1))
+        else:
+            return ""
+
+    weight *= LB_IN_KG
+    rounded = round(weight)
+    return str(rounded) if rounded > 0 else ""
 
 
 def is_valid_url(url):
@@ -156,8 +228,12 @@ def __default_parser(**kwargs):
     ).add_argument("--url")
 
     # Filling in an URL and hitting the "Scrape" icon
-    subparsers.add_parser(
+    subparsers.add_parser( # DEPRECATED, USE group-by-url instead
         "movie-by-url", help="Scrape a movie by its URL"
+    ).add_argument("--url")
+
+    subparsers.add_parser(
+        "group-by-url", help="Scrape a group by its URL"
     ).add_argument("--url")
 
     # The looking glass search icon
@@ -232,6 +308,7 @@ def scraper_args(**kwargs):
     - performer-by-fragment
     - performer-by-url
     - movie-by-url
+    - group-by-url
     - scene-by-name
     - scene-by-url
     - scene-by-fragment

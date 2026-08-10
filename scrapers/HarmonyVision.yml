@@ -5,7 +5,7 @@ sceneByURL:
       - harmonyvision.com/scene
     scraper: sceneScraper
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - harmonyvision.com/dvd
@@ -25,10 +25,10 @@ xPathScrapers:
           fixed: HarmonyVision
       Performers:
         Name: $meta/div/span[contains(.,"Featuring")]/../a/text()
-      Movies:
+      Groups:
         Name: $meta/div/span[contains(.,"Scene from")]/../a/text()
   movieScraper:
-    movie:
+    group:
       Name: //div[@class="info"]/div[contains(@class,"movie-title")]/text()
       Synopsis:
         selector: //div[@class="info"]/div[contains(@class,"description")]

@@ -1,5 +1,5 @@
 name: data18
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - data18.com/movies
@@ -24,11 +24,12 @@ xPathScrapers:
       $movie: //b[text()="Movie:"]/following-sibling::a[1]
     scene:
       Title:
-        selector: //title/text()
+        selector: //title
         postProcess:
           - replace:
               - regex: (.+?)(?:,\sw\/.+)?(?:\s\(\d{4}\))?(?:\sPorn\sScene)?\s\|\sDATA18
                 with: $1
+      URLs: //div[@id='h1div']/h1/a/@href
       Date:
         selector: //span[b[text()="Release date"]]
         postProcess:
@@ -48,25 +49,32 @@ xPathScrapers:
         Name: //b[text()='Categories:']/following-sibling::a
       Performers:
         Name: $performer
-        URL: $performer/@href
+        URLs: $performer/@href
       Studio:
         Name: $studio
         URL: $studio/@href
-      Movies:
+      Groups:
         Name:
-          selector: $movie/@title
+          selector: //select/option[contains(@value, 'referermovie=')] | //p[b[normalize-space(.)='Movie:']][not(//select/option[contains(@value, 'referermovie=')])]/a[contains(@href, '/movies/')]
           postProcess:
             - replace:
-                - regex: (.+?)(?:(?:\s#1)?$|(\s)#(\d+))
-                  with: $1$2$3
-        URL: $movie/@href
+                - regex: \s*\[[^\]]+\]$
+                  with: ""
+                - regex: '#0*1\b'
+                  with: ""
+                - regex: '#(\d+)'
+                  with: $1
+        URLs:
+          selector: //select/option[contains(@value, 'referermovie=')]/@value | //p[b[normalize-space(.)='Movie:']][not(//select/option[contains(@value, 'referermovie=')])]/a[contains(@href, '/movies/')]/@href
+          postProcess:
+            - javascript: return value.replace(/.*referermovie=(\d+).*/, "https://www.data18.com/movies/1$1")
       Image: //img[@id="playpriimage"]/@src
   movieScraper:
     common:
       $movieInfo: //div[@id="body2div_b"]
-      $studio: //b[text()=('Studio') or ('Network')]/following-sibling::b/a | //b[text()=('Studio') or ('Network')]/following-sibling::a
+      $studio: //b[text()='Studio' or text()='Network']/following-sibling::*[1]/descendant-or-self::a
       $performer: //div[h3[contains(text(), 'Pornstars / Cast')]]//a[@class='bold gen']
-    movie:
+    group:
       Name:
         selector: //title
         postProcess:
@@ -91,7 +99,7 @@ xPathScrapers:
                 with:
           - parseDate: January, 2006
       Studio:
-        Name: $studio/text()
+        Name: $studio
         URL: $studio/@href
       Director: //p[b[contains(text(),'Director')]]//a[@class='bold']
       Synopsis:
@@ -111,7 +119,7 @@ xPathScrapers:
               - regex: (.+?)(?:\s\(\d{4}\)\sPorn\sMovie\s\|\sDATA18)
                 with: $1
       Date:
-        selector: $movieInfo//span[contains(text(), "Release date")]/text()
+        selector: $movieInfo//span[contains(text(), "Release date")]
         postProcess:
           - replace:
               - regex: 'Release date:\s*'
@@ -123,7 +131,7 @@ xPathScrapers:
       Director: //p[b[contains(text(),'Director')]]//a[@class='bold']
       Performers:
         Name: $performer
-        URL: $performer/@href
+        URLs: $performer/@href
       Details:
         selector: //b[text()="Description"]/..
         concat: " "
@@ -131,7 +139,7 @@ xPathScrapers:
           - replace:
               - regex: '^Description\s*-\s*'
                 with:
-      Movies:
+      Groups:
         Name:
           selector: //title
           postProcess:
@@ -151,4 +159,3 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated April 30, 2024

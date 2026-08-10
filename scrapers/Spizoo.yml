@@ -6,6 +6,7 @@ sceneByURL:
       - drdaddypov.com/updates/
       - firstclasspov.com/updates/
       - gothgirlfriends.com/updates/
+      - gothgirlfriendsvip.com/updates
       - mrluckylife.com/updates/
       - mrluckylife.com/members/
       - mrluckypov.com/updates/
@@ -43,8 +44,10 @@ xPathScrapers:
       Title:
         selector: //div[@class="title" or @class="row"]//h1 | //div[@class="title-trailer"]//h2 | //h2[contains(@class, "titular")] | //title
         postProcess:
-          # RawAttack titles have a trailing dash and space
+          # RawAttack titles have leading "Tour - " and trailing " - "
           - replace:
+              - regex: ^Tour\s\-\s*
+                with:
               - regex: \s\-\s*$
                 with:
       Date:
@@ -69,6 +72,7 @@ xPathScrapers:
                 drdaddypov: Dr. Daddy POV
                 firstclasspov: First Class POV
                 gothgirlfriends: Goth Girlfriends
+                gothgirlfriendsvip: Goth GirlfriendsVIP
                 mrluckylife: Mr. LuckyLIFE
                 mrluckypov: Mr. LuckyPOV
                 mrluckyraw: Mr. LuckyRaw
@@ -94,4 +98,4 @@ driver:
           Domain: ".mrluckylife.com"
           Path: "/"
           Value: ""
-# Last Updated August 11, 2024
+# Last Updated July 4, 2026

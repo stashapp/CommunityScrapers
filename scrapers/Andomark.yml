@@ -90,6 +90,7 @@ sceneByURL:
     url:
       - evolvedfights.com/scenes/
       - goonmuse.com/scenes/
+      - thatfetishgirl.com/scenes/
     scraper: newStyle
   - action: scrapeXPath
     url:

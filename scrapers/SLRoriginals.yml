@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - slroriginals.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - slroriginals.com
@@ -33,7 +33,7 @@ xPathScrapers:
           - replace:
               - regex: .+url\((.+)\).+
                 with: $1
-      Movies:
+      Groups:
         Name: &movieNameAttr
           selector: //meta[@name="application-name"]/@content|//div[starts-with( @class,"c-page--video-right")]//h1[1]/text()
           concat: " - "
@@ -48,7 +48,7 @@ xPathScrapers:
   movieScraper:
     common:
       $info: *info
-    movie:
+    group:
       Name: *movieNameAttr
       Duration: *durationAttr
       Date: *dateAttr

@@ -1,7 +1,8 @@
 import json
 import re
 import sys
-import urllib3
+import html
+from urllib.parse import quote_plus
 
 from py_common import log
 from py_common.util import dig, scraper_args
@@ -13,13 +14,28 @@ from py_common.types import (
     ScrapedTag,
 )
 
-ensure_requirements("requests")
+ensure_requirements("requests", "pycountry")
 import requests  # noqa: E402
+import pycountry # needed for country guessing
+"""why pycountry?
+"home" seems to be a free-field text box with multiple formats without commas, which means we can't use py_common/util/guess_nationality
+nor does a static lookup table make sense
 
+Formats found so far:
+- "City Country"
+  - https://www.playboyplus.com/en/model/view/-/122006
+  - https://www.playboyplus.com/en/model/view/-/121668
+- "City, Country"
+  - https://www.playboyplus.com/en/model/view/-/122477
+- "Country"
+  - https://www.playboyplus.com/en/model/view/-/122230
+  - https://www.playboyplus.com/en/model/view/-/122337
 
-# Had to set verify=False due to a certificate issue with their site
-urllib3.disable_warnings()
-
+and even US is inconsistent, with state sometimes being shortened, USA/ United States
+"Los Angeles CA United States" https://www.playboyplus.com/en/model/view/-/118857
+"Los Angeles California USA" https://www.playboyplus.com/en/model/view/-/120984
+"Ashland KY USA" https://www.playboyplus.com/en/model/view/-/118164
+"""
 
 def __raw_photoset_from_api(set_id: str, headers) -> dict | None:
     app_id = headers["X-Algolia-Application-Id"]
@@ -69,8 +85,7 @@ def _create_headers() -> dict[str, str]:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
             "Referer": "https://www.playboyplus.com",
             "Origin": "https://www.playboyplus.com",
-        },
-        verify=False,
+        }
     )
     if (script_tag := re.search(r"window.env\s+=\s(.+);", r.text, re.MULTILINE)) and (
         page_json := json.loads(script_tag.group(1))
@@ -92,11 +107,44 @@ def _create_headers() -> dict[str, str]:
     }
 
 
+def clean_description(text: str) -> str:
+    """Strip HTML tags and unescape entities from description fields.
+    The PB+ API sometimes returns raw HTML (e.g. <p>...<br></p>),
+    and sometimes plain text. This handles both cases safely.
+    """
+    if not text:
+        return text
+    # Replace <br> variants with a newline before stripping other tags
+    text = re.sub(r"<\s*br\s*/?\s*>", "\n", text, flags=re.IGNORECASE)
+    # Strip all remaining HTML tags
+    text = re.sub(r"<[^>]+>", "", text)
+    # Unescape HTML entities (e.g. &amp; -> &)
+    text = html.unescape(text)
+    return text.strip()
+
+
 def to_scraped_tag(res: dict) -> ScrapedTag:
     return {
         "name": res["name"],
     }
 
+def country_lookup(home):
+    # if there is a comma, get last part
+    if "," in home:
+        comma_guess = home.split(",")[-1].strip()
+        if country := pycountry.countries.get(name=comma_guess):
+            return country.alpha_2
+    else:
+        # split and try RTL search
+        parts = home.split()
+        for i in range(len(parts)):
+            guess = " ".join(parts[i:]).strip()
+            try:
+                if result := pycountry.countries.search_fuzzy(guess):
+                    return result[0].alpha_2
+            except LookupError:
+                continue
+    return None
 
 def to_scraped_performer(res: dict) -> ScrapedPerformer:
     performer: ScrapedPerformer = {
@@ -106,21 +154,34 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
 
     if (actor_id := dig(res, "actor_id")) and (url_name := dig(res, "url_name")):
         performer["urls"] = [
-            f"https://www.playboyplus.com/en/model/view/{url_name}/{actor_id}"
+            f"https://www.playboyplus.com/en/model/view/{url_name}/{actor_id}",
+            f"https://members.playboyplus.com/en/model/view/{url_name}/{actor_id}",
         ]
 
     if details := dig(res, "description"):
-        performer["details"] = details
+        performer["details"] = clean_description(details)
 
-    if pictures := dig(res, "pictures"):
-        main_pic = list(pictures.values())[-1]
-        performer["images"] = [f"https://transform.gammacdn.com/actors{main_pic}"]
+    # PB+ uses /media/ as the CDN path prefix, not /actors/ like other Gamma sites.
+    # multicontent_data.nsfw is the primary image source despite pictures also existing,
+    # because pictures can contain broken legacy URLs (e.g. 119840/119840_500x750.jpg)
+    # while multicontent_data consistently points to the current CDN-hosted hero images.
+    # modelHeroMobile (1000x1600 portrait) is the correct variant for performer images —
+    # modelHero is a wide banner crop (1920x810) not suitable as a performer thumbnail.
+    # Fallback to pictures only if multicontent_data is absent.
+    if nsfw := dig(res, "multicontent_data", "nsfw"):
+        if img := next(
+            (e["file"] for e in nsfw if e.get("name") == "modelHeroMobile"), None
+        ):
+            performer["images"] = [f"https://transform.gammacdn.com/media/{img}"]
+    elif pictures := dig(res, "pictures"):
+        if main_pic := list(pictures.values())[-1]:
+            performer["images"] = [f"https://transform.gammacdn.com/media{main_pic}"]
 
     if eye_color := dig(res, "attributes", "eye_color"):
         performer["eye_color"] = eye_color
 
     if hair_color := dig(res, "attributes", "hair_color"):
-        performer["hair_color"] = hair_color
+        performer["hair_color"] = "Brunette" if hair_color == "Brown" else hair_color
 
     if height := dig(res, "attributes", "height"):
         performer["height"] = height
@@ -130,10 +191,11 @@ def to_scraped_performer(res: dict) -> ScrapedPerformer:
         performer["weight"] = str(round(float(weight) * 0.453))
 
     if home := dig(res, "attributes", "home"):
-        if home.endswith("United States"):
-            performer["country"] = "USA"
-        else:
-            performer["country"] = home.split()[-1]
+        home = home.strip()
+        if home and home != "N/A":
+            guess = country_lookup(home)
+            if guess:
+                performer["country"] = guess
 
     return performer
 
@@ -143,10 +205,11 @@ def to_scraped_gallery(res: dict) -> ScrapedGallery:
         "title": res["title"],
         "code": str(res["set_id"]),
         "date": res["date_online"],
-        "studio": {"name": res["studio_name"]},
     }
+    if studio_name := res.get("studio_name", "").strip():
+        gallery["studio"] = {"name": studio_name}
     if description := dig(res, "description"):
-        gallery["details"] = description
+        gallery["details"] = clean_description(description)
 
     if performers := dig(res, "actors"):
         gallery["performers"] = [to_scraped_performer(p) for p in performers]
@@ -164,11 +227,11 @@ def to_scraped_scene(res: dict) -> ScrapedScene:
     scene: ScrapedScene = {
         "title": res["title"],
         "date": res["release_date"],
-        "studio": {"name": res["studio_name"]},
     }
-
+    if studio_name := res.get("studio_name", "").strip():
+        scene["studio"] = {"name": studio_name}
     if description := dig(res, "description"):
-        scene["details"] = description
+        scene["details"] = clean_description(description)
 
     if performers := dig(res, "actors"):
         scene["performers"] = [to_scraped_performer(p) for p in performers]
@@ -198,9 +261,10 @@ def scene_from_url(url: str) -> ScrapedScene | None:
     if not (api_headers := _create_headers()):
         return None
 
-    if (photoset := __raw_photoset_from_api(set_id, api_headers)) and not (
-        clip_id := dig(photoset, "clip_id")
-    ):
+    if not (photoset := __raw_photoset_from_api(set_id, api_headers)):
+        return
+
+    if not (clip_id := dig(photoset, "clip_id")):
         log.error("Unable to scrape: this photoset has no associated video")
         return
 
@@ -216,6 +280,8 @@ def scene_from_url(url: str) -> ScrapedScene | None:
 
     # Using the clip_id is pointless here since those URLs do not resolve
     scene["code"] = set_id
+    if not dig(scene, "details") and (description := dig(photoset, "description")):
+        scene["details"] = clean_description(description)
 
     return scene
 
@@ -259,6 +325,21 @@ def performer_from_url(url: str) -> ScrapedPerformer | None:
     return to_scraped_performer(actor)
 
 
+def performer_search(query: str) -> list[ScrapedPerformer]:
+    if not (api_headers := _create_headers()):
+        return []
+    app_id = api_headers["X-Algolia-Application-Id"]
+    api_URL = f"https://{app_id.lower()}-dsn.algolia.net/1/indexes/all_actors/query"
+    payload = {"params": f"query={quote_plus(query)}&hitsPerPage=20"}
+    log.debug(f"Searching performers for '{query}'... {api_URL}")
+    res = requests.post(api_URL, headers=api_headers, json=payload).json()
+    hits = res.get("hits") or []
+    if not hits:
+        log.warning(f"No performers found for query: {query}")
+        return []
+    return [to_scraped_performer(hit) for hit in hits]
+
+
 def main_scraper():
     """
     Takes arguments from stdin or from the command line and dumps output as JSON to stdout
@@ -272,6 +353,8 @@ def main_scraper():
             result = scene_from_url(url)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
+        case "performer-by-name", {"name": name} if name:
+            result = performer_search(name)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

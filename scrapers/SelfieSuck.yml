@@ -24,8 +24,8 @@ xPathScrapers:
         Name: //li[contains(text(),"Tags:")]/following-sibling::text()
       Performers:
         Name: //li[@class="update_models"]/a
-        URL: //li[@class="update_models"]/a/@href
+        URLs: //li[@class="update_models"]/a/@href
       Studio:
         Name:
           fixed: Selfie Suck
-# Last Updated September 05, 2021
+# Last Updated September 17, 2025

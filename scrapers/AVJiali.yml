@@ -31,7 +31,7 @@ xPathScrapers:
           - parseDate: January 02, 2006
       Performers:
         Name: //div[@class="cat"][1]/a[starts-with(@href, 'https://avjiali.com/model')]
-        URL: //div[@class="cat"][1]/a/@href
+        URLs: //div[@class="cat"][1]/a/@href
       Tags:
         Name: //div[@class="cat"][2]/a
       Details: 
@@ -140,7 +140,7 @@ xPathScrapers:
                 with: $1
               - regex: None
                 with:
-      URL: //link[@rel="canonical"][1]/@href
+      URLs: //link[@rel="canonical"][1]/@href
       Image:
         selector: //div[@class="model-photo"]/img[@class="rounded"]/@src
         postProcess:
@@ -165,4 +165,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: AVJiali
-# Last Updated November 07, 2023
+# Last Updated September 17, 2025

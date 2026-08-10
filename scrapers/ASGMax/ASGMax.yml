@@ -1,4 +1,4 @@
-# requires: Algolia
+# requires: AlgoliaAPI
 name: ASGMax
 sceneByURL:
   - action: script
@@ -6,26 +6,61 @@ sceneByURL:
       - asgmax.com/en/video
     script:
       - python
-      - ../Algolia/Algolia.py
+      - ../AlgoliaAPI/AlgoliaAPI.py
       - asgmax
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - asgmax
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - asgmax
     - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../AlgoliaAPI/AlgoliaAPI.py
     - asgmax
-    - validName
-# Last Updated May 09, 2024
+    - scene-by-query-fragment
+groupByURL:
+  - action: script
+    url:
+      - asgmax.com/en/movie/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - movie-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - asgmax
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - asgmax
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - asgmax.com/en/pornstar/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - asgmax
+      - performer-by-url
+
+# Last Updated March 3, 2026

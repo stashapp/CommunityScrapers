@@ -75,6 +75,7 @@ xPathScrapers:
 
 driver:
   cookies:
+    # consent
     - CookieURL: "https://hardtied.com"
       Cookies:
         - Name: "consent"
@@ -111,5 +112,43 @@ driver:
           Value: "yes"
           Domain: "sexuallybroken.com"
           Path: "/"
+    # verified
+    # https://discord.com/channels/559159668438728723/651418567475986432/1420972996918775849
+    - CookieURL: "https://hardtied.com"
+      Cookies:
+        - Name: "verified"
+          Value: "400ede1e9d15aae91ec7c8f02a77253d"
+          Domain: "hardtied.com"
+          Path: "/"
+    - CookieURL: "https://infernalrestraints.com"
+      Cookies:
+        - Name: "verified"
+          Value: "e8ccb978568eae85b7b3fd86682b4556"
+          Domain: "infernalrestraints.com"
+          Path: "/"
+    - CookieURL: "https://insex.com"
+      Cookies:
+        - Name: "verified"
+          Value: "cec0cd62118bca2d9d9ec747c2e5a190"
+          Domain: "insex.com"
+          Path: "/"
+    - CookieURL: "https://insexondemand.com"
+      Cookies:
+        - Name: "verified"
+          Value: "c0ad0464211df447769db8938948f497"
+          Domain: "insexondemand.com"
+          Path: "/"
+    - CookieURL: "https://realtimebondage.com"
+      Cookies:
+        - Name: "verified"
+          Value: "2dc53afa5fb63020963cf8767d0c5a94"
+          Domain: "realtimebondage.com"
+          Path: "/"
+    - CookieURL: "https://sexuallybroken.com"
+      Cookies:
+        - Name: "verified"
+          Value: "98af6bd068b25aafd1365841998aa75a"
+          Domain: "sexuallybroken.com"
+          Path: "/"
 
-# Last Updated August 02, 2023
+# Last Updated September 25, 2025

@@ -20,7 +20,7 @@ xPathScrapers:
           - parseDate: 02/01/2006
       Performers:
         Name: //div[@class="model-name"]
-        URL: //div[@class="model-thumb"]/a/@href
+        URLs: //div[@class="model-thumb"]/a/@href
       Details: //div[@class="content-description"]/p
       Image:
         selector: //video[@id="ypp-player"]/@poster
@@ -68,4 +68,4 @@ xPathScrapers:
           - feetToCm: true
       HairColor: //div[p[text()="Hair"]]/$stat
       EyeColor: //div[p[text()="Eyes"]]/$stat
-# Last Updated April 7, 2024
+# Last Updated September 17, 2025

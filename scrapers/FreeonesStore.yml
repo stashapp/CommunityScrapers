@@ -1,5 +1,5 @@
 name: FreeonesStore
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - store.freeones.com
@@ -29,7 +29,7 @@ xPathScrapers:
                 with: $1
       Studio:
         Name: &studioSel //div[@class="studio"]/a
-      Movies:
+      Groups:
         Name: //div[@id="purchase-options"]/div[@class="card m-2"][contains(.,"Full Movie")][1]//small[contains(text(), "Full Movie")]/em/text()
         URL:
           selector: //div[@id="purchase-options"]/div[@class="card m-2"][contains(.,"Full Movie")][1]/div[@class="card-footer"]/a/@onclick
@@ -42,7 +42,7 @@ xPathScrapers:
       Tags:
         Name: //div[@class="categories"]/a
   movieScraper:
-    movie:
+    group:
       Name: *h1Sel
       Date: *dateAttr
       Duration:

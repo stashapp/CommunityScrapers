@@ -1,0 +1,62 @@
+name: New scraper request
+description: Request a new scraper for a site that is not currently supported.
+labels: ["new-scraper"]
+body:
+  - type: input
+    id: domain
+    attributes:
+      label: Site domain
+      description: Provide the domain of the site you want scraped.
+    validations:
+      required: true
+  - type: dropdown
+    id: scraper-type
+    attributes:
+      label: Which scraper type(s) are you requesting?
+      description: |
+        You can select more than one.
+
+        Learn more about scraper types [here](https://docs.stashapp.cc/in-app-manual/scraping/#scraper-types).
+      multiple: true
+      options:
+        - performerByName
+        - performerByFragment
+        - performerByURL
+        - sceneByName
+        - sceneByQueryFragment
+        - sceneByFragment
+        - sceneByURL
+        - groupByURL
+        - galleryByFragment
+        - galleryByURL
+        - imageByFragment
+        - imageByURL
+    validations:
+      required: true
+  - type: textarea
+    id: scraper-specific-examples
+    attributes:
+      label: Specific examples
+      description: |
+        Please provide specific example URLs or detail the implementation you want the scraper to have.
+    validations:
+      required: true
+  - type: textarea
+    id: additional-details
+    attributes:
+      label: Additional details
+      description: |
+        If there are any additional details about the site that you think may be relevant, please provide them here.
+
+        For example, does the site require an account to access content? Does it belong to a larger network? Does it have an API?
+    validations:
+      required: false
+  - type: checkboxes
+    id: already-exists
+    attributes:
+      label: Have you checked the existing scraper list?
+      description: |
+        Please ensure you have first [searched the existing scraper list](https://stashapp.github.io/CommunityScrapers) to make sure your request is not for a scraper that already exists.
+      options:
+        - label: I confirm that I have checked the existing scraper list.
+          required: true

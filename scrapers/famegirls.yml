@@ -25,7 +25,7 @@ xPathScrapers:
       Performers:
         Name: $performer//h3
         Image: $performer//img/@src
-        URL: $performer//a[@class="btn"]/@href
+        URLs: $performer//a[@class="btn"]/@href
         HairColor: $performer//div[contains(text(), "Hair:")]/span
         EyeColor: $performer//div[contains(text(), "Eyes:")]/span
         Height:
@@ -41,4 +41,4 @@ xPathScrapers:
                 - regex: (\d+).*
                   with: $1
         Measurements: $performer//div[contains(text(), "Body:")]/span
-# Last Updated January 13, 2025
+# Last Updated September 17, 2025

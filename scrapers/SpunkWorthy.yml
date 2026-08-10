@@ -23,7 +23,7 @@ xPathScrapers:
             - replace:
               - regex: "More of "
                 with: ""
-        URL:
+        URLs:
           selector: //div[@class="scene_models"]//p/a/@href
           postProcess:
             - replace:
@@ -69,5 +69,4 @@ xPathScrapers:
           - replace:
             - regex: "(.*)"
               with: "https://www.spunkworthy.com$1"
-
-# Last Updated October 02, 2023
+# Last Updated September 17, 2025

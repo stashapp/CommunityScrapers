@@ -2,6 +2,7 @@ name: CzechAV
 sceneByURL:
   - action: scrapeXPath
     url:
+      - annalovesshemale.com/
       - creativeporn.com/
       - czechamateurs.com/
       - czechbangbus.com/
@@ -45,6 +46,7 @@ sceneByURL:
       - movieporn.com/
       - perversefamily.com/
       - powerfetish.com/
+      - r51.com/
       - redneckjohn.com/
       - unusualpeople.com/
       - unrealporn.com/
@@ -52,26 +54,28 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //h1/span
+      Title: //h1//*[not(@class='visually-hidden')]/text()
       Code:
         selector: //h1/div/span
         postProcess:
           - replace:
               - regex: .+?(\d+)$
                 with: $1
-      Details: //div[contains(@class,'detail-description--longer')]/p
+      Details:
+        selector: //div[contains(@class,"read-more ")]/div/p/text()
+        concat: "\n\n"
       Tags:
         Name: //li[@class="tag ellipsis no-shrink"]/a/span/text()
       Performers:
         Name: //span[contains(., "Featuring:")]/following-sibling::a
       Studio:
         Name: //img[contains(@class, "logo")]/@alt
-      Image: //video/@poster
+      Image: //media-player/@poster
       Date:
-        selector: //script[@type="application/ld+json"]
+        selector: //script[@type="application/ld+json"][1]
         postProcess:
           - replace:
               - regex: .+(?:"uploadDate":\s*")([^T]+).+
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated July 29, 2025
+# Last Updated March 9, 2026

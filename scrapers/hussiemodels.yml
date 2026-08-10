@@ -9,7 +9,7 @@ sceneByURL:
       - seehimsolo.com/trailers/
       - povpornstars.com
     scraper: hussieScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - hussiepass.com/dvds/
@@ -20,7 +20,7 @@ xPathScrapers:
   hussieScraper:
     common:
       $image: //img[contains(@class, "update_thumb") or contains(@class, "trailer-thumb")]
-    movie:
+    group:
       Name: //div[contains(@class, "profile-details")]/h3
       Synopsis: &dvdSynopsis //div[contains(@class, "profile-about")]/p/text()
       FrontImage: &dvdCover
@@ -61,8 +61,8 @@ xPathScrapers:
       Performers:
         Name: //li[contains(@class, "update_models")]//a
       Tags:
-        Name: //div[contains(@class, "featuring")]//a[contains(@href, "/categories/")]
-      Movies:
+        Name: //div[contains(@class, "featuring")]//a[contains(@href, "categories/")]
+      Groups:
         Name: //div[contains(@class, "featuring")]//a[contains(@href, "/dvds/")]
         URL: //div[contains(@class, "featuring")]//a[contains(@href, "/dvds/")]/@href
         FrontImage:
@@ -83,18 +83,10 @@ xPathScrapers:
               - regex: ([!.?])([^!.?\s])
                 with: "$1\n\n$2"
       Image:
-        selector: //base/@href | //script[contains(text(),"var video_content")]/text()
-        concat: ","
+        # Hookup Hotshot have messed up their HTML and have multiple nodes like this:
+        # the first one is their studio logo, the last one is the scene cover image
+        selector: //meta[@property="og:image"][last()]/@content
         postProcess:
           - replace:
-              - regex: ',.+poster="(.+?)".+'
-                with: "$1"
-              - regex: 1x
-                with: 4x
-        # Some people prefer the higher res scene preview images
-        # selector: >-
-        #   $image/@src0_4x |
-        #   $image/@src0_3x |
-        #   $image/@src0_2x |
-        #   $image/@src0_1x
-# Last Updated July 4, 2025
+              - regex: -1x
+                with: -full

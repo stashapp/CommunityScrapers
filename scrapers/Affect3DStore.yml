@@ -1,0 +1,20 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: Affect3DStore
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - affect3dstore.com
+    scraper: affect3DStore
+xPathScrapers:
+  affect3DStore:
+    scene:
+      Title: //h1/span
+      Details:
+        selector: //div[contains(@class, "info-details-xl")]//div[contains(@class, "description")]/descendant::text()
+        concat: "\n\n"
+      Studio:
+        Name: //div[@class="box-inner1"]//span[@class="artist_name_m"]//a/text()
+      Tags:
+        Name: //div[contains(@class, "info-details-xl")]//table[contains(@class, "additional-attributes")]//td[not(@data-th="Artist/Circle")]/a/text()
+      Image: //img[@alt="main product photo"]/@src
+# Last Updated April 22, 2026

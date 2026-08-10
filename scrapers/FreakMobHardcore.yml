@@ -1,0 +1,27 @@
+name: FreakMobHardcore
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - freakmobhardcore.com/updates
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //span[@class="update_title"]/text()
+      Details: //span[@class="latest_update_description"]/text()
+      Studio:
+        Name:
+          fixed: Freak Mob Hardcore
+      Performers:
+        Name: //span[@class="tour_update_models"]/a/text()
+      # 4x is just zoom
+      Image:
+        selector: //div[@class="update_image"]/a/img[contains(@class,"stdimage")]/@src
+        postProcess:
+          - replace:
+            - regex: "^"
+              with: "https://www.freakmobhardcore.com/"
+
+# Last Updated August 20, 2025

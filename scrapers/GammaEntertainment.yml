@@ -78,7 +78,7 @@ xPathScrapers:
         Name: $tags/a/text()|//div[@class="sceneCol categories"]/a/text()|//div[@class="sceneCol sceneColCategories"]//span[not(@class="categorySeparator")]/text()|//div[@class="sceneCategories"]/a/text()
       Performers:
         Name: $actors/a/text()|$actors//span[not(@class="actorSeparator")]/text()|//div[@class="sceneCol actors"]/a/text()|//span[@class="slide-title"]/text()|//a[@class="pornstarName"]/strong/text()|//p[@class="starringLinks"]/a/text()|//p[@class="p-actors"]/a/text()
-      Movies:
+      Groups:
         Name:
           selector: $info/a/img/@title|//a[@class="sceneLink  "]/@title|//a[@class="dvdLink  "]/@title
         URL:
@@ -161,7 +161,7 @@ xPathScrapers:
       Image: //img[@class='actorPicture']/@src
 
   movieScraper:
-    movie:
+    group:
       Name: //h3[@class='dvdTitle']//text()
       Director: //ul[@class='directedBy']/li/a/text()
       Duration: //li[@class='length']/text()

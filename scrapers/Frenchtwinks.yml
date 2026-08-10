@@ -4,18 +4,42 @@ sceneByURL:
     url:
       - french-twinks.com
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - french-twinks.com/en/french-gay-porn-video
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $script: //script[@type='application/ld+json' and contains(text(), '"VideoObject"')]/text()
     scene:
       Title: //h1[@class="big_title2017"]
+      Code:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+            - regex: .*\/(\d+)\/\d+\.jpg
+              with: "fta$1"
       Details:
-        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article
+        selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article/*/text()
+        concat: "\n\n"
+      Director:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+(?:directors":\s")([^"]+).+
+                with: $1
       Date:
         selector: //time[@datetime]
         postProcess:
           - parseDate: 2006-01-02
       Image:
-        selector: //meta[@property="og:image"]/@content
+        selector: $script
+        postProcess:
+          - replace:
+            - regex: '.+thumbnailUrl": "(http[^"]+)".+'
+              with: "$1"
       Studio:
         Name:
           fixed: French Twinks
@@ -23,4 +47,29 @@ xPathScrapers:
         Name: //li[@class="vid_keywords"]/a
       Performers:
         Name: //li[@class="small_act_pic small_act_picvidpage"]/a
-# Last Updated January 10, 2022
+        URLs: //li[@class="small_act_pic small_act_picvidpage"]/a/@href
+  performerScraper:
+    performer:
+      Name: //h1[@class="subtitle_line"]
+      Image: //div[@id="mygallery"]/a/@href
+      EyeColor: 
+        selector: //td[contains(text(),"Eyes")]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: ": "
+                with: ""
+      Gender:
+         fixed: Male
+      Height:
+        selector: //td[contains(text(),"Height")]/following-sibling::td
+        postProcess:
+          - feetToCm: true
+      PenisLength:
+        selector: //td[contains(text(),"Cock")]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0'"
+          - feetToCm: true
+
+# Last Updated March 25, 2026

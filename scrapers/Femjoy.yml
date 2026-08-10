@@ -36,7 +36,7 @@ xPathScrapers:
       Director: //*[@class='post_title']/a[starts-with(@href,"/director")]
       Performers: &performersAttr
         Name: $performer
-        URL:
+        URLs:
           selector: $performer/@href
           postProcess: &prependDomain
             - replace:
@@ -69,5 +69,4 @@ xPathScrapers:
       Date: *dateAttr
       Performers: *performersAttr
       Details: *details
-
-# Last Updated August 03, 2023
+# Last Updated September 17, 2025

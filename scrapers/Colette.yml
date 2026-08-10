@@ -2,12 +2,12 @@ name: "Colette"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - colette.com/videos
+      - colettevideos.com/videos/
     scraper: sceneScraper
 galleryByURL:
   - action: scrapeXPath
     url:
-      - colette.com/galleries
+      - colettevideos.com/galleries/
     scraper: galleryScraper
 xPathScrapers:
   sceneScraper:
@@ -60,10 +60,10 @@ xPathScrapers:
           - parseDate: Jan 02, 2006
 driver:
   cookies:
-    - CookieURL: "https://www.colette.com"
+    - CookieURL: "https://www.colettevideos.com"
       Cookies:
         - Name: "_warning"
-          Domain: ".colette.com"
+          Domain: ".colettevideos.com"
           Value: "true"
           Path: "/"
-# Last Updated November 29, 2020
+# Last Updated December 29, 2025

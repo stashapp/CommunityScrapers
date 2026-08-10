@@ -1,0 +1,32 @@
+name: PandaMovies
+
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - pandamovies.pw/watch-
+    scraper: groupScraper
+
+xPathScrapers:
+  groupScraper:
+    group:
+      Name: '//h3[@itemprop="name"]'
+
+      Date:
+        selector: '//p[strong[normalize-space()="Released Date:"]]/text()[normalize-space()]'
+        postProcess:
+          - parseDate: 'Jan 02, 2006'
+
+      URLs: '//link[@rel="canonical"]/@href'
+
+      Synopsis: '//div[@itemprop="description"]'
+
+      Studio:
+        Name: '//p[strong[normalize-space()="Studio:"]]//a[1]'
+        URL: '//p[strong[normalize-space()="Studio:"]]//a[1]/@href'
+
+      Tags:
+        Name: '//p[strong[normalize-space()="Genres:"]]//a'
+
+      FrontImage: '//div[contains(@class, "mvic-thumb")]//img/@src'
+
+# Last Updated August 6, 2026

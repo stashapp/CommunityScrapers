@@ -1,5 +1,5 @@
 name: Kelly Madison Media
-# scrapes: PornFidelity, TeenFidelity, Kelly Madison, 5Kteens, 5KPorn
+# scrapes: PornFidelity, TeenFidelity, Kelly Madison, 5Kteens, 5Kporn, 8Kmilfs, 8Kteens
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -9,112 +9,93 @@ sceneByURL:
     scraper: mainSite
   - action: scrapeXPath
     url:
-      - 5kteens.com/episodes
       - 5kporn.com/episodes
-    scraper: 5kSite
-  - action: scrapeXPath
-    url:
-      - 8kteens.com/episodes
+      - 5kteens.com/episodes
       - 8kmilfs.com/episodes
+      - 8kteens.com/episodes
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '5k(teens|porn)\.com'
+          with: 8kteens.com
     scraper: 8ksite
 xPathScrapers:
   mainSite:
+    common:
+      $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]/text()
     scene:
       Title:
         selector: //h1
-        postProcess:
-          - replace:
-              - regex: \s*-.+
-                with: ""
       Code:
-        selector: //h1
+        selector: $ldjson
         postProcess:
           - replace:
-              - regex: .*-\s*(.+\s#\d+)
-                with: $1
-              - regex: Teenfidelity
+              - regex: '.+"description":"Episode (#\d+).+".+"@type":"Organization","name":"([^"]+)".+'
+                with: $2 $1
+              - regex: Teen Fidelity
                 with: TF
-              - regex: Pornfidelity
+              - regex: Porn Fidelity
                 with: PF
               - regex: Kelly Madison
                 with: KM
-      Details: //div[@class="column is-three-fifths"]//*[contains(text(),'Episode Summary')]/following-sibling::text()
+      Details: //div[contains(text(), "Episode Summary")]/../p/text()
       Date:
-        selector: //li[contains(.,'Published:')]/text()[2]
+        selector: $ldjson
         postProcess:
           - replace:
-              - regex: Published:\s
-                with:
+              - regex: '.+"uploadDate":"([^T]+).+'
+                with: "$1"
           - parseDate: 2006-01-02
       Performers:
-        Name: //a[@class and contains(@href,"/models/")]
-      Image:
-        # Some url don't have it. (https://www.pornfidelity.com/episodes/73238852)
-        selector: //script[contains(text(),"poster_image")]
-        postProcess:
-          - replace:
-              - regex: .+(?:poster:\s")([^"]+).+
-                with: $1
-      Studio:
         Name:
-          selector: //span[contains(text(),"Episode")]/following-sibling::text()[1]
+          selector: //div[contains(@class,"column-video-info")]/p[@class="mb-0"]/a/text()
           postProcess:
             - replace:
-                - regex: \s*#.+
-                  with: ""
-  5kSite:
-    scene:
-      Title: //p[@class="trailer-title"]
-      Code:
-        selector: //span[contains(@class, "color-5K")]
+              - regex: "Madison"
+                with: "Ryan Madison"
+      Image:
+        selector: $ldjson
         postProcess:
           - replace:
-              - regex: (?i)(eens|orn)
-                with: ""
+            - regex: '.+"thumbnailUrl":"([^"]+)".+'
+              with: "$1"
       Studio:
         Name:
-          selector: //span[starts-with(@class, "color-")]/@class
+          selector: $ldjson
           postProcess:
+            - replace:
+                - regex: '.+"@type":"Organization","name":"([^"]+)".+'
+                  with: "$1"
             - map:
-                color-5KT: 5Kteens
-                color-5KP: 5Kporn
-                color-8KM: 8K Milfs
-                color-8KT: 8K Teens
-      Details: //p[@class=""]
-      Performers:
-        Name:
-          selector: //h5[text()[contains(.,'Starring')]]
-          postProcess:
-            - replace:
-                - regex: Starring:\s([\w\s]+)
-                  with: $1
-      Date:
-        selector: //h5[text()[contains(.,'Published')]]
-        postProcess:
-          - replace:
-              - regex: Published\:\s(\d{4}-\d{2}-\d{2})
-                with: $1
-      Image:
-        selector: //img[@class="trailer-poster"]/@src | //script[contains(., "videojs(")]
-        postProcess:
-          - replace:
-              - regex: '^.+poster: "(.+?)".+$'
-                with: $1
-
+                Porn Fidelity: PornFidelity
+                Teen Fidelity: TeenFidelity
   8ksite:
+    common:
+      $url: //link[@rel="canonical"]/@href
     scene:
       Title: //strong[text()="Title:"]/following-sibling::a
       Code:
-        selector: //strong[text()="Title:"]/following-sibling::a/@href
+        selector: $url
         postProcess:
           - replace:
-              - regex: .+?(8\w+)/(\d+)
-                with: "$1 #$2"
-      URL: //strong[text()="Title:"]/following-sibling::a/@href
+              - regex: .+?((5|8)\w+)/(\d+)
+                with: "$1 #$3"
+      URL:
+        selector: $url
+        postProcess:
+          - replace:
+            - regex: '8k.+\.com(.+5KP.+)'
+              with: "5kporn.com$1"
+            - regex: '8k.+\.com(.+5KT.+)'
+              with: "5kteens.com$1"
+            - regex: '8k.+\.com(.+8KM.+)'
+              with: "8kmilfs.com$1"
+            - regex: '8k.+\.com(.+8KT.+)'
+              with: "8kteens.com$1"
       Date: //i[contains(@class, "fa-calendar")]/following-sibling::span
-      Image: //video/@poster
+      Image: //meta[@property="og:image"]/@content
       Details:
-        selector: (//h2)[1]/following-sibling::p
+        selector: //text()[contains(., 'Episode Summary')]/ancestor::p[1]
         postProcess:
           - replace:
               - regex: ^Episode Summary:\s+
@@ -134,34 +115,28 @@ xPathScrapers:
                 # TODO: scrape as markers if we ever get support for that
                 - regex: \s*\(.+$
                   with: ""
+                # KMM scenes often include the "Amazon position" and tag it as "Amazon",
+                # but other studios use "Amazon" to mean a larger dominant woman.
+                - regex: Amazon
+                  with: Amazon Position
       Studio:
         Name:
-          selector: //meta[@property="og:site_name"]/@content
+          selector: $url
           postProcess:
-            - map:
-                8Kmilfs: 8K Milfs
-                8Kteens: 8K Teens
+            - replace:
+              - regex: '.+?((5|8)\w+)/\d+'
+                with: $1
+              - regex: '8KM'
+                with: 8K Milfs
+              - regex: '8KT'
+                with: 8K Teens
+              - regex: '5KP'
+                with: 5KPorn
+              - regex: '5KT'
+                with: 5Kteens
 
 driver:
   cookies:
-    - CookieURL: "https://www.pornfidelity.com/"
-      Cookies:
-        - Name: "nats"
-          Domain: ".pornfidelity.com"
-          ValueRandom: 23
-          Path: "/"
-    - CookieURL: "https://www.teenfidelity.com/"
-      Cookies:
-        - Name: "nats"
-          Domain: ".teenfidelity.com"
-          ValueRandom: 23
-          Path: "/"
-    - CookieURL: "https://www.kellymadison.com/"
-      Cookies:
-        - Name: "nats"
-          Domain: ".kellymadison.com"
-          ValueRandom: 23
-          Path: "/"
     - CookieURL: "https://www.5kteens.com/"
       Cookies:
         - Name: "nats"
@@ -174,3 +149,5 @@ driver:
           Domain: ".5kporn.com"
           ValueRandom: 23
           Path: "/"
+
+# Last Updated May 8, 2026

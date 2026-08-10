@@ -137,7 +137,11 @@ xPathScrapers:
           split: ","
       Tags:
         Name:
-          selector: //div[@id="shootPage"]//a[contains(@class,"rounded-pill")]/text()
+          selector: //div[@id="shootPage"]//p[text()="Categories"]/../following-sibling::div/a
+          postProcess:
+            - replace:
+              - regex: \,\s*
+                with: ""
       Details:
         selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
@@ -164,7 +168,7 @@ xPathScrapers:
       $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
     performer:
       Name: $result/img/@alt
-      URL:
+      URLs:
         selector: $result/@href
         postProcess:
           - replace:
@@ -259,7 +263,7 @@ xPathScrapers:
               tsman: Transgender Male
               nonbinary: Non-Binary
               unknown: ""
-      URL:
+      URLs:
         selector: //script[contains(.,'KinkyTracking.all')] | //button[@data-id]/@data-id
         concat: "__SEP__"
         postProcess:
@@ -269,4 +273,10 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated March 9, 2025
+  cookies:
+    - Cookies:
+        - Name: "age_gate_accepted"
+          Domain: "www.kink.com"
+          Value: "1"
+          Path: "/"
+# Last Updated April 14, 2026

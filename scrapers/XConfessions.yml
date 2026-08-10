@@ -4,7 +4,7 @@ sceneByURL:
     url:
       - xconfessions.com
     scraper: sceneScraper
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - xconfessions.com
@@ -73,7 +73,7 @@ xPathScrapers:
       Studio: &studio
         Name:
           fixed: XConfessions
-      Movies:
+      Groups:
         Name: *title
         Director: *director
         Duration: &duration
@@ -90,7 +90,7 @@ xPathScrapers:
 
   movieScraper:
     common: *com
-    movie:
+    group:
       Name: *title
       Director: *director 
       Duration: *duration

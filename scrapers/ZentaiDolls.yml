@@ -17,7 +17,7 @@ xPathScrapers:
           - parseDate: January 02, 2006
       Performers:
         Name: $perf
-        URL: $perf/@href
+        URLs: $perf/@href
       Tags:
         Name: //strong[contains(text(),"Tags:")]/following-sibling::a
       Details:
@@ -31,4 +31,4 @@ xPathScrapers:
       Studio:
         Name:
           fixed: ZentaiDolls
-# Last Updated March 18, 2022
+# Last Updated September 17, 2025

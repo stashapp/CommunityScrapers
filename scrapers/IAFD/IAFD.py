@@ -377,6 +377,12 @@ def performer_query(query):
 
 
 def performer_from_tree(tree):
+    # handle career length seperately (#2584)
+    career_length = performer_careerlength(tree)
+    current_year = str(datetime.now().year)
+    if career_length and career_length.endswith(current_year):
+        # use rfind to replace
+        career_length = career_length[:career_length.rfind(current_year)]
     return {
         "name": performer_name(tree),
         "gender": performer_gender_map(tree),
@@ -391,7 +397,7 @@ def performer_from_tree(tree):
         "weight": performer_weight(tree),
         "hair_color": performer_haircolor(tree),
         "measurements": performer_measurements(tree),
-        "career_length": performer_careerlength(tree),
+        "career_length": career_length,
         "aliases": performer_aliases(tree),
         "tattoos": performer_tattoos(tree),
         "piercings": performer_piercings(tree),

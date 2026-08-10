@@ -70,7 +70,7 @@ performerByFragment:
     - python
     - FakeHub.py
     - performer-by-fragment
-movieByURL:
+groupByURL:
   - action: script
     url:
       - fakehub.com/movie/

@@ -103,7 +103,7 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraperAnime
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - https://anidb.net/
@@ -113,7 +113,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //td[@class="relid"]/a
-      URL:
+      URLs:
         selector: //td[@class="relid"]/a/@href
         postProcess:
           - replace:
@@ -135,7 +135,7 @@ xPathScrapers:
       Height: $tab_1_pane//tr[contains(@class, 'height')]//span[@itemprop="height"]
       Weight: $tab_1_pane//tr[contains(@class, 'weight')]//span[@itemprop="weight"]
       #Measurements: Todo
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Details: 
         selector: //div[@itemprop="description"]//text()
         concat: "\n"
@@ -190,20 +190,20 @@ xPathScrapers:
         Name: //div[@class="pane anime_tags"]//div[@class="tag" and (@data-anidb-weight="0" or number(@data-anidb-weight)>=200) and (@data-anidb-groupid="animetb_2604" or @data-anidb-groupid="animetb_2611" or @data-anidb-groupid="animetb_2608")]//span[@class="tagname"]
       Performers:
         Name: $character/a/span
-        URL: 
+        URLs:
           selector: $character/a/@href
           postProcess:
             - replace:
                 - regex: ^
                   with: https://anidb.net
-      Movies:
+      Groups:
         Name: $title
         URL: //link[@rel="canonical"]/@href
       Studio:
         Name: $info//table[@id="staffoverview"]//tr[last()]/td[@class="name creator"]/a
       Image: $info//div[@class="image"]//img/@src
       URL: //link[@rel="canonical"]/@href
-    movie:
+    group:
       Name: $title
       Aliases: $en_title
       Date: 
@@ -232,4 +232,4 @@ driver:
           Domain: "anidb.net"
           Value: "" # Enter the value of the 'adbuin' here
           Path: "/"
-# Last Updated Dec 20, 2023
+# Last Updated September 17, 2025

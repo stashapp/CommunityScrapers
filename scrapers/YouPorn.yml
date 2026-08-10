@@ -4,23 +4,33 @@ sceneByURL:
     url:
       - youporn.com/watch/
     scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://www.youporn.com/watch/{filename}/
+  queryURLReplace:
+    filename:
+      - regex: .*?([\d]{6,18}).*
+        with: $1
+      - regex: .*\.[^\.]+$ # if no yp id is found in the filename
+        with: # clear the filename so that it doesn't leak to yp
+  scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $tags: //div[@class='categoriesWrapper fullWidthRow js_categoriesWrapper']
+      $tags: //div[@class='js_categoriesWrapper tm_categoriesWrapper list_el']
     scene:
-      Title: //div[@class='watchVideoTitle']/h1/text()
+      Title: //meta[@property='og:title']/@content
       Date:
-        selector: //div[@class='video-uploaded']/span/text()
+        selector: //span[@class='publishedDate']/text()
         postProcess:
-          - parseDate: January 2, 2006
+          - parseDate: Published on January 2, 2006
       Image: //meta[@property='og:image']/@content
       Studio:
-        Name: //div[@class='watchTopInfoPanel']//a[@href[contains(.,'channel/')]]/text()
+        Name: //div[@class='watchTopInfoPanelTable']//div[@class="submitByLink"]/a/text()
       Tags:
         Name: $tags//a[@href[contains(.,'category/') or contains(.,'porntags/')]]/text()
       Performers:
         Name: $tags//a[@href[contains(.,'pornstar/')]]/text()
       URL: //meta[@property='og:url']/@content
 
-# Last Updated October 08, 2020
+# Last Updated August 28, 2025

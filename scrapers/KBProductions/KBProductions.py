@@ -38,6 +38,7 @@ studio_map = {
     "doggvision.com": "DoggVision",
     "dripdropprod.net": "DripDrip",
     "facialsforever.com": "Facials Forever",
+    "fantasypov.com": "FantasyPOV",
     "freakmobmedia.com": "FreakMob Media",
     "gogobarauditions.com": "Gogo Bar Auditions",
     "gogoworldporn.com": "GoGo World Porn",
@@ -59,6 +60,7 @@ studio_map = {
     "lukecooperx.com": "Luke CooperX",
     "machofactory.com": "Macho Factory",
     "meanfeetfetish.com": "Mean Feet Fetish",
+    "milflicious.com": "Milflicious",
     "members.hobybuchanon.com": "Hoby Buchanon",
     "mongerinasia.com": "Monger In Asia",
     "nickmarxx.com": "Nick Marxx",
@@ -73,11 +75,13 @@ studio_map = {
     "queercrush.com": "QueerCrush",
     "red-xxx.com": "Red-XXX",
     "rickysroom.com": "Ricky's Room",
+    "members.rickysroom.com": "Ricky's Room",
     "s3xus.com": "S3XUS",
     "seska.com": "Seska",
     "sextapes.com": "SexTapes",
     "sexymodernbull.com": "Sexy Modern Bull",
     "shesbrandnew.com": "She's Brand New",
+    "shehergirls.com": "SheHerGirls",
     "sidechick.com": "SIDECHICK",
     "suckthisdick.com": "Suck This Dick",
     "swallowed.com": "Swallowed",
@@ -85,8 +89,10 @@ studio_map = {
     "theartemixxx.com": "The ArtemiXXX",
     "topwebmodels.com": "Top Web Models",
     "topwebmodels-interviews.com": "TWM Interviews",
+    "3rdwheel.toughlovex.com": "ToughLoveX",
     "trueanal.com": "True Anal",
     "twmclassics.com": "TWM Classics",
+    "vrhush.com": "VRHush",
     "xful.com": "Xful",
     "yesgirlz.com": "Yes Girlz",
     "yummycouple.com": "Yummy Couple",
@@ -115,6 +121,7 @@ def fix_url(url: str) -> str:
     url = url.replace("suckthisdick.com", "hobybuchanon.com")
     url = url.replace("premium-nickmarxx.com", "nickmarxx.com")
     url = url.replace("api.nyseedxxx.com", "nyseedxxx.com")
+    url = url.replace("3rdwheel.toughlovex.com", "tour.toughlovex.com")
     tour_domain = (
         "nympho",
         "allanal",
@@ -193,6 +200,29 @@ def get_studio(site: str) -> ScrapedStudio:
     return studio
 
 
+def get_code(site: str, raw_scene: dict) -> str | None:
+    if (scene_code := dig(raw_scene, "scene_code")) and (
+        match := re.match(r"^([^_]+).*$", scene_code)
+    ):
+        return match.group(1)
+
+    if (trailer := dig(raw_scene, "trailer_url")) and (
+        match := re.search(r"^(\w{2,3}\d{4})", trailer.split('/')[-1])
+    ):
+        return match.group(1)
+
+    if _id := dig(raw_scene, "id"):
+        return str(_id)
+
+def torso_variant(url: str) -> str:
+    # Convert a thumbnail URL to a torso variant URL
+    torso_image_url = re.sub(r"^(.*)(\.jpg)", r"\1_torso\2", url)
+    # if it exists, use the torso variant, otherwise fall back to the original URL
+    r = requests.head(torso_image_url)
+    if r.status_code == 200:
+        return torso_image_url
+    return url
+
 def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     # Convert dict keys to lower case because, of couse, they can come in differently depending on studio.
     raw_performer = {key.lower(): value for key, value in raw_performer.items()}
@@ -201,6 +231,7 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     STUDIO_USES_IMPERIAL = [
         "joeschmoevideos.com",
         "jizzaddiction.com",
+        "shehergirls.com",
     ]
 
     performer: ScrapedPerformer = {
@@ -213,10 +244,10 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     }
 
     if image := raw_performer.get("thumb"):
-        performer["images"] = [image]
+        performer["images"] = [torso_variant(image)]
     elif image := raw_performer.get("thumbnail"):
         image = re.sub(r"^//", "https://", image)
-        performer["images"] = [image]
+        performer["images"] = [torso_variant(image)]
 
     if bio := raw_performer.get("bio"):
         performer["details"] = strip_tags(bio)
@@ -225,6 +256,8 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
         performer["birthdate"] = birthdate
 
     if measurements := raw_performer.get("measurements"):
+        # replace | with - for bra|waist|hips format
+        measurements = measurements.replace("|", "-")
         performer["measurements"] = measurements
 
     if eye_color := raw_performer.get("eyes"):
@@ -330,6 +363,7 @@ def to_scraped_movie(raw_movie: dict) -> ScrapedMovie:
 
 
 def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
+    log.debug(f"Raw scene data: {json.dumps(raw_scene)}")
     site = raw_scene["site_domain"]
     scene: ScrapedScene = {}
 
@@ -339,8 +373,8 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
         scene["date"] = date[:10].replace("/", "-")
     if details := raw_scene.get("description"):
         scene["details"] = strip_tags(details)
-    if scene_id := raw_scene.get("id"):
-        scene["code"] = str(scene_id)
+    if code := get_code(site, raw_scene):
+        scene["code"] = code
     if models := raw_scene.get("models_thumbs"):
         scene["performers"] = [
             {
@@ -351,6 +385,9 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
             for x in models
         ]
     if tags := raw_scene.get("tags"):
+        # add fixed tag "Virtual Reality" for VR studios
+        if site in ("vrhush.com") and "Virtual Reality" not in tags:
+            tags.append("Virtual Reality")
         scene["tags"] = [{"name": x} for x in tags]
 
     scene["studio"] = get_studio(site)
@@ -374,8 +411,8 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     # No animated scene covers
     img_exts = (".jpg", ".jpeg", ".png")
 
-    if scene_cover := next((x for x in cover_candidates if x.endswith(img_exts)), None):
-        scene["image"] = scene_cover
+    if scene_cover := next((x for x in cover_candidates if type(x) is str and x.endswith(img_exts)), None):
+        scene["image"] = re.sub(r"^//", "https://", scene_cover)
 
     # There is no reliable way to construct a scene URL from the data
 

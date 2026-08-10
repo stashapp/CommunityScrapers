@@ -58,8 +58,7 @@ const getSearchTypes = (scraper: ymlScraper): searchTypes => ({
     url: scraper.performerByURL !== undefined,
   },
   group: {
-    // check for deprecated movieByURL
-    url: scraper.groupByURL !== undefined || scraper.movieByURL !== undefined,
+    url: scraper.groupByURL !== undefined,
   },
   gallery: {
     fragment: scraper.galleryByFragment !== undefined,
@@ -76,7 +75,6 @@ function collectURLSites(scraper: ymlScraper): string[] {
   const urlActions = [
     "sceneByURL",
     "performerByURL",
-    "movieByURL", // deprecated
     "groupByURL",
     "galleryByURL",
     "imageByURL",
@@ -108,7 +106,6 @@ function hasPython(scraper: ymlScraper): boolean {
     "sceneByQueryFragment",
     "sceneByFragment",
     "sceneByURL",
-    "movieByURL", // deprecated
     "groupByURL",
     "galleryByFragment",
     "galleryByURL",
@@ -142,7 +139,7 @@ async function getLastUpdate(scraper: ymlScraper): Promise<Date | false> {
     .catch((err) => false);
   const chosenPath = isFolder ? folder : filename;
   const latestUpdate = await git
-    .log({ file: "../scrapers/"+chosenPath, maxCount: 1 })
+    .log({ file: "../scrapers/" + chosenPath, maxCount: 1 })
     .then((gitLog) => gitLog?.latest);
   return latestUpdate ? new Date(latestUpdate.date) : false;
 }

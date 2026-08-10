@@ -1,0 +1,25 @@
+name: CumEatingCuckolds
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cumeatingcuckolds.com/tour/updates/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="tour-banner-content"]/h1/text()
+      Code:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+            - regex: .+\/updates\/(\d+)
+              with: $1
+      Details: //p[@class="blurb"]/text()
+      URLs: //link[@rel="canonical"]/@href
+      Image: //div[@class="preview-media age-blur-context"]/img/@data-alt
+      Studio:
+        Name:
+          fixed: Cum Eating Cuckolds
+      Performers:
+        Name: //div[@class="preview-meta"]/div[@class="meta"]/a/text()
+# Last Updated December 16, 2025

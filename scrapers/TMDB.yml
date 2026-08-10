@@ -1,6 +1,6 @@
 name: TheMovieDB
 
-movieByURL:
+groupByURL:
   - action: scrapeXPath
     url:
       - themoviedb.org
@@ -13,7 +13,7 @@ sceneByURL:
 
 xPathScrapers:
   movieScraper:
-    movie:
+    group:
       Name: &title (//h2/a)[1]
       Director: &director
         selector: //div[@class='header_info']/ol[@class='people no_image']/li[@class='profile']/p[1]/a
@@ -54,7 +54,7 @@ xPathScrapers:
       Date: *date
       Image: *image
       Studio: *studio
-      Movies:
+      Groups:
         Name: *title
         URL: //link[@rel="canonical"]/@href
         Director: *director

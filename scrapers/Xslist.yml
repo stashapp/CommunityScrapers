@@ -13,7 +13,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //li[@class="clearfix"]/h3/a/@title
-      URL: 
+      URLs:
         selector: //li[@class="clearfix"]/h3/a/@href
   
   performerScraper:
@@ -36,7 +36,7 @@ xPathScrapers:
               with: $2$6
             - regex: ^,|,$
               with: 
-      URL: //head/meta[@property="og:url"]/@content
+      URLs: //head/meta[@property="og:url"]/@content
       Birthdate:
         selector: //div[@id="layout"]/div/p[1]/text()[not(contains(.,"n/a")) and contains(.,"Born")]
         postProcess:
@@ -78,4 +78,4 @@ xPathScrapers:
         fixed: "Female"
 driver:
   useCDP: true
-# Last Updated August 26, 2024
+# Last Updated September 17, 2025

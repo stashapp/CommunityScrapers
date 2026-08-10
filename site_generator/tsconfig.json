@@ -3,6 +3,6 @@
     "strict": true,
     "strictNullChecks": true,
     "target": "ES2020",
-    "moduleResolution": "node"
+    "types": ["node"],
   }
 }

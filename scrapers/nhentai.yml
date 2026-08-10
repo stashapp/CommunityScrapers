@@ -1,38 +1,64 @@
 name: nhentai
+
+# intended to extract gallery ID from folder / zip / cbz file names as produces by gallery-dl ("1234567 some gallery name.zip")
+galleryByFragment:
+  action: scrapeJson
+  queryURL: https://nhentai.net/api/v2/galleries/{filename}
+  queryURLReplace:
+    filename:
+      - regex: '(?:\[|^)?(\d+).*' # capture numeric sequence at begining as gallery ID
+        with: "$1"
+  scraper: galleryScraper
+
 galleryByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - nhentai.net/g/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '.+\/g\/(\d+)\/'
+          with: https://nhentai.net/api/v2/galleries/$1
     scraper: galleryScraper
-xPathScrapers:
+
+jsonScrapers:
   galleryScraper:
     gallery:
-      Title: 
-        selector: //h1[@class="title"]/span
-        concat: " "
+      Title:
+        selector: title.pretty
       Details:
-        selector: //h2[@class="title"]/span
-        concat: " "
+        selector: "{title.english,title.japanese}.@values"
+        concat: "\n\n"
+      Code: 
+        selector: id
       URL: 
-        selector: //div[@id="bigcontainer"]/div[@id="cover"]/a/@href
+        selector: id
         postProcess:
           - replace:
-            - regex: (.+\/)(.+)
-              with: $1
-            - regex: ^
-              with: https://nhentai.net
+            - regex: (\d+)
+              with: "https://nhentai.net/g/$1/"
       Date:
-        selector: //div[contains(@class,"tag-container") and contains(.,"Uploaded:")]//time/@datetime
+        selector: upload_date
         postProcess:
-          - replace:
-            - regex: (\d{4}-\d{2}-\d{2})(.+)
-              with: $1
-          - parseDate: 2006-01-02
+          - parseDate: unix
+      Photographer:
+        selector: 'tags.#(type=="group")#|0.name'
       Tags:
-        Name: //div[contains(@class,"tag-container") and contains(.,"Tags:")]//span[@class="name"]/text()|//div[contains(@class,"tag-container") and contains(.,"Parodies:")]//span[@class="name"]/text()
+        Name: '[tags.#(type=="tag")#.name,tags.#(type=="parody")#.name,tags.#(type=="category")#.name]|@flatten'
       Performers:
-        Name: //div[contains(@class,"tag-container") and contains(.,"Characters:")]//span[@class="name"]/text()
+        Name: 'tags.#(type=="character")#.name'
       Studio:
-        Name: //div[contains(@class,"tag-container") and contains(.,"Artists:")]//span[@class="name"]/text()
+        Name: '[tags.#(type=="artist")#,tags.#(type=="group")#]|@flatten.0.name'
 
-# Last Updated December 24, 2024
+# apikey must be popualated manually
+# shared apikey would bypass their ratelimit (as per site admin)
+# see https://nhentai.net/api/v2/docs for details
+driver:
+  headers:
+     # API key seems to be optional
+     #- Key: Authorization
+     #  Value: Key YOUR_APIKEY_HERE
+    - Key: User-Agent
+      Value: stashapp/stash scraper
+
+# Last Updated May 2, 2026

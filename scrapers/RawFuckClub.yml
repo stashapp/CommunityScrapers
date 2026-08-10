@@ -40,7 +40,7 @@ xPathScrapers:
       Title: //div[@class="col-12 pr-0"]/h2[not(contains(@class, 'section-title'))]
       Performers:
         Name: //span[@class="badge badge-primary"]
-        URL: //span[@class="badge badge-primary"]/../@href
+        URLs: //span[@class="badge badge-primary"]/../@href
       Tags:
         Name: //span[@class="badge badge-secondary"]
       Details:
@@ -77,7 +77,7 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //h1[@class="model-header model-header-name"]/text()
-      URL: //h1[@class="model-header model-header-name"]/a/@href
+      URLs: //h1[@class="model-header model-header-name"]/a/@href
       Details: //div[@class="model-description"]/text()
       Image: //div[@class="model-image-placeholder"]/img/@src
       Country:
@@ -97,7 +97,7 @@ xPathScrapers:
     # Note: Some channels may have multiple performers, so this is imperfect, but it's the best we can get our of the site.
     performer:
       Name: //div[@class='channel-info-block']/h2/a/text()
-      URL:
+      URLs:
         selector: //div[@class='channel-info-block']/h2/a/@onclick
         postProcess: # We have to split apart the location.href='<relative url>' and fix that too
           - replace:
@@ -124,4 +124,4 @@ driver:
           Domain: ".rawfuckclub.com"
           Value: "Y"
           Path: "/"
-# Last Updated June 03, 2024
+# Last Updated September 17, 2025

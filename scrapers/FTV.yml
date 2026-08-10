@@ -14,15 +14,23 @@ xPathScrapers:
           - replace:
               - regex: ^([^:]+).+
                 with: $1
-      Details:  //div[@class="OneHeader"]/p
+      Details: //div[@class="OneHeader"]/p
       Date:
         selector: //title
         postProcess:
           - replace:
-             - regex: ^.+Released\s*([a-zA-Z0-9,\s]+).*
-               with: $1
+              - regex: ^.+Released\s*([a-zA-Z0-9,\s]+).*
+                with: $1
           - parseDate: Jan 2, 2006
-      Image: //img[@id="Magazine"]/@src
+      Image:
+        # They have a typo in their classname and it really is 'Portait' without the r
+        selector: //img[@id="Magazine" or @id="MagazinePortait"]/@src
+        postProcess:
+          - replace:
+              # MagazinePortrait images are named tourup so we
+              # can't blindly replace 'touru'
+              - regex: touru\.
+                with: episode.
       Studio:
         Name:
           selector: //title
@@ -30,4 +38,3 @@ xPathScrapers:
             - replace:
                 - regex: ^.+on\s*(.+)\.com.+
                   with: $1
-# Last Updated March 27, 2024

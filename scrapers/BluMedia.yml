@@ -42,16 +42,12 @@ xPathScrapers:
       # This is a bad selector and should be improved
       Details: //div[@class="desc"]
       Image: (//div[@class="player"]//img)[1]/@src
-      Studio: &studioFromTitle
+      Studio:
         Name:
-          selector: //title/text()
-          postProcess:
-            - replace:
-                - regex: ( - .*)$
-                  with:
+          fixed: Boy Gusher
       Performers:
         Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
-        URL:
+        URLs:
           selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
           postProcess:
             - replace:
@@ -86,23 +82,24 @@ xPathScrapers:
         selector: //div[@class="vid-dtls"]/p
         concat: "\n\n"
       Image: //div[@class="player-main"]/img/@src
-      Studio: 
-        Name: //meta[@name="Author"]/@content
+      Studio:
+        Name:
+          fixed: Broke Straight Boys
       Performers:
         Name: //div[@class="vid-dtls"]/div[@class="vid-models"]/a
-        URL:
+        URLs:
           selector: //div[@class="vid-dtls"]/div[@class="vid-models"]/a/@href
           postProcess:
             - replace:
                 - regex: ^
                   with: https://brokestraightboys.com
     performer:
-      Name: 
+      Name:
         selector: //h1
         postProcess:
           - replace:
               - regex: '-\s*Gay Porn Videos$'
-                with: ''
+                with: ""
       Image: //div[@class="model-lft"]/span/img/@src
       Height:
         selector: //div[@class="model-lft"]//li[contains(., "Height")]/text()
@@ -117,9 +114,9 @@ xPathScrapers:
               - regex: .*\(\d*\s*lb).*
                 with: $1
               - regex: \d*\s*kg
-                with: ''
+                with: ""
               - regex: '[^\d]'
-                with: ''
+                with: ""
           - lbToKg: true
       PenisLength:
         selector: //div[@class="model-lft"]//li[contains(., "Cock")]/text()
@@ -135,10 +132,12 @@ xPathScrapers:
       Title: //div[@class="dettl"]
       Image: (//div[@class="player"]//img)[1]/@src
       Details: //div[@class="desc"]
-      Studio: *studioFromTitle
+      Studio:
+        Name:
+          fixed: College Boy Physicals
       Performers:
         Name: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/text()
-        URL:
+        URLs:
           selector: //div[contains(@class, "model-desc")]//a[contains(@href, "modelpage")]/@href
           postProcess:
             - replace:
@@ -171,7 +170,9 @@ xPathScrapers:
         selector: //div[@class="descD"]//p[string-length(text()) > 1]
         concat: "\n\n"
       Image: (//div[@class="player"]//img)[1]/@src
-      Studio: *studioFromTitle
+      Studio:
+        Name:
+          fixed: CollegeDudes
       Performers:
         Name: //div[@class="eimg"]//a/text()
         # This site does not link to their performers, but they DO have profiles
@@ -194,4 +195,3 @@ xPathScrapers:
           - replace:
               - regex: .*\)\s*(.*)
                 with: $1
-# Last Updated June 7, 2025

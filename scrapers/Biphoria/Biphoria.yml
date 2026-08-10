@@ -39,7 +39,7 @@ galleryByURL:
       - ../AlgoliaAPI/AlgoliaAPI.py
       - biphoria
       - gallery-by-url
-movieByURL:
+groupByURL:
   - action: script
     url:
       - biphoria.com/en/movie/

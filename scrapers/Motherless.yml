@@ -36,8 +36,9 @@ xPathScrapers:
   sceneScraper:
     common:
       $meta: //div[@class='media-meta']
+      $error: //div[contains(@class,'error-page view-page')]
     scene:
-      Title: $meta//h1/text()
+      Title: $error/h1 | $meta//h1/text()
       Date:
         selector: $meta//div[@class='media-meta-stats']/span[not(contains(.,'Views')) and not(contains(.,'Favorites'))]/text()
         postProcess:
@@ -66,4 +67,4 @@ xPathScrapers:
             - replace:
                 - regex: \#
                   with:
-# Last Updated April 01, 2025
+# Last Updated October 17, 2025

@@ -98,7 +98,7 @@ xPathScrapers:
         Name: >
           $scene//div[contains(@class, "scenePerformers")]/a
           | $scene//div[@class="scenePerf"]/span[@class="perfName"]
-        URL: >
+        URLs: >
           $scene//div[contains(@class, "scenePerformers")]/a/@href
           | $scene//div[@class="scenePerf"]/@data-href
       Tags:
@@ -139,7 +139,7 @@ xPathScrapers:
                   with: https://$1.com
       Performers:
         Name: $details//span[contains(@class, "perfImage")]/a
-        URL: $details//span[contains(@class, "perfImage")]/a/@href
+        URLs: $details//span[contains(@class, "perfImage")]/a/@href
       Details:
         selector: $details//p/text()
         concat: "\n\n"
@@ -183,4 +183,4 @@ xPathScrapers:
       Image: $modelProfile//div[@class="profile"]//img[contains(@class,"img-responsive")]
       Twitter: //a[contains(@href,"twitter.com")]/@href
       Details: $modelProfile//div[@class="main_title"]/p[not(@class)]/text()
-# Last Updated November 16, 2024
+# Last Updated September 17, 2025

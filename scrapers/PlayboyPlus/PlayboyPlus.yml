@@ -15,6 +15,12 @@ sceneByURL:
       - python
       - PlayboyPlus.py
       - scene-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - PlayboyPlus.py
+    - performer-by-name
 performerByURL:
   - action: script
     url:

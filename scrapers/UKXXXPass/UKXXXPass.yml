@@ -1,0 +1,40 @@
+name: ukxxxpass
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ukxxxpass.xxx/
+      - splatbukkake.xxx/
+      - ukpornparty.xxx/
+      - sexyukpornstars.xxx/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $movieMeta: //div[contains(@class, "movieMeta")]
+    scene:
+      Title: //div[@class="movieTitle"]/text()
+      Details: $movieMeta/div[1]/text()
+      Studio: 
+        Name: //a[contains(@href, '/movies/studio/')]/text()
+      Date:
+        selector: //div[contains(., "Released on:")]
+        postProcess:
+          - replace:
+            - regex: .+(\d{2}-\d{2}-\d{4}).+
+              with: $1
+          - parseDate: 02-01-2006
+      Performers:
+        Name: $movieMeta//a[contains(@href, "/model/")]/text()
+      Image:
+        # The img link is relative, so construct the full url manually
+        selector: //link[@rel="canonical"]/@href|//div[@class="movieDetailContent"]//img/@src
+        concat: "|"
+        # There seems to be a bug on the web page where the base URL is given as http:/ not
+        # https:// so correct for that as well
+        postProcess:
+          - replace:
+            - regex: (https?:\/\/?)([^|]+)\|(.+)
+              with: https://$2$3
+      Tags:
+        Name: $movieMeta//a[contains(@href, "/category/")]/text()
+# Last Updated September 21, 2025

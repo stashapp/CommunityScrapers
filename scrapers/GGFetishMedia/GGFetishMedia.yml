@@ -1,0 +1,12 @@
+name: GGFetishMedia
+sceneByURL:
+  - action: script
+    url:
+      - girlsgonehypnotized.com
+      - girlsgettingsleepy.com
+      - girlspoppingballoons.com
+      - girlsbarefoot.com
+    script:
+      - python
+      - GGFetishMedia.py
+      - scene-by-url

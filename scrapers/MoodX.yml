@@ -1,0 +1,30 @@
+name: "Mood X"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - moodx.tv
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //h1[@class="heading-movie"]/text()
+      Details:
+        selector: //div[@class="label" and text()="Description:"]/following-sibling::div[contains(@class, 'value')]/text()
+      Image:
+        selector: //video[@id="v_player"]/@poster
+        postProcess:
+          - replace:
+              - regex: ^(\/)(.*)$
+                with: https://moodx.tv/$2
+      Studio:
+        Name:
+          fixed: 'Mood X'
+      Date:
+        selector: //div[@class="label" and text()="Release Date:"]/following-sibling::div[contains(@class, 'value')]/text()
+        postProcess:
+          - replace:
+              - regex: .*(\d{4})-(\d{2})-(\d{2}).*
+                with: $1-$2-$3
+          - parseDate: 2006-01-02
+# Last Updated January 09, 2026

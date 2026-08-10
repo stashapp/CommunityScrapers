@@ -1,4 +1,19 @@
 name: Wallhaven
+
+# expects file to be named with wallhaven ID at end
+# "wallhaven-123abc.<ext>" (default name by site on right-click save)
+# "Something whatever 123abc.<ext>"
+imageByFragment:
+  action: scrapeJson
+  queryURL: "{filename}"
+  queryURLReplace:
+    filename:
+      - regex: "[^a-zA-Z\\d\\-._~ ]" # clean filename so that it can construct a valid url
+        with: ""
+      - regex: "^.*[ _.\\-]([a-z\\d]{6})\\.[a-zA-Z\\d]{3,}$" # try to extract ID postfix
+        with: "https://wallhaven.cc/api/v1/w/$1"
+  scraper: imageScraper
+
 imageByURL:
   - action: scrapeJson
     url: 

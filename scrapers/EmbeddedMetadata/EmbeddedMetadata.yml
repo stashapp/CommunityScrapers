@@ -1,0 +1,8 @@
+name: EmbeddedMetadata
+# requires: py_common
+imageByFragment:
+  action: script
+  script:
+  - python3
+  - embedded-metadata.py
+  - image-by-fragment

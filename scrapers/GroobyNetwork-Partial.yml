@@ -256,9 +256,15 @@ xPathScrapers:
           //div[@class="trailerposter"]/img/@src0
           |
           //div[@id="fakeplayer"]//img/@src
+          |
+          //div[@class="trailer_video"]//video/@data-poster
+          |
+          //script[contains(., "player.poster")]/text()
         concat: __SEPARATOR__
         postProcess:
           - replace:
+              - regex: (__SEPARATOR__).*player\.poster\s*=\s*['"]([^'"]+)['"].*$
+                with: __SEPARATOR__$2
               - regex: ^.*__SEPARATOR__// # img urls without protocol, but with domain, e.g. //bobstgirls.com/whatever
                 with: "https://"
               - regex: ^(https://[^/]*)/.*(__SEPARATOR__.*)$ # remove any path part from canonical URL
@@ -267,6 +273,8 @@ xPathScrapers:
                 with: content/
               - regex: __SEPARATOR__ # remove the separator we added to process the canonical link and relative image URL together
                 with: ''
+              - regex: (\d+).jpg
+                with: $1-full.jpg # get the highest res version of the image
       Tags:
         Name:
           selector: &tagsSel //div[@class="set_tags"]/ul/li//a/text()
@@ -281,7 +289,12 @@ xPathScrapers:
         Name: *tagsSel
   sceneScraperTransVR:
     scene:
-      Title: //dl8-video/@title
+      Title:
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: ^Trans\s*VR\s*-\s*
+                with: ""
       Date:
         selector: //div[@class="set_meta"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
@@ -293,9 +306,16 @@ xPathScrapers:
         Name: //div[@class="trailer_toptitle_left"]//a/text()
       Studio: *studio
       Image:
-        selector: //dl8-video/@poster
+        selector: >-
+          //dl8-video/@poster
+          |
+          //video/@data-poster
+          |
+          //script[contains(., "player.poster")]/text()
         postProcess:
           - replace:
+              - regex: ^.*player\.poster\s*=\s*['"]([^'"]+)['"].*$
+                with: $1
               - regex: content// # errant double slash
                 with: content/
               - regex: ^/
@@ -309,8 +329,4 @@ xPathScrapers:
           postProcess:
             - map:
                 Tags for This Scene: Virtual Reality
-
-# Use CDP with a configured proxy to bypass region-based age-verification
-driver:
-  useCDP: false
-# Last Updated August 13, 2025
+# Last Updated December 9, 2025

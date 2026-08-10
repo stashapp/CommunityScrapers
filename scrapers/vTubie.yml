@@ -13,7 +13,7 @@ xPathScrapers:
   performerSearch:
     performer:
       Name: //div[div/text()="VTubers"]/following-sibling::a/@title
-      URL: //div[div/text()="VTubers"]/following-sibling::a/@href
+      URLs: //div[div/text()="VTubers"]/following-sibling::a/@href
       Image:
         selector: //div[div/text()="VTubers"]/following-sibling::a//div[@class="ma-s-ajax-result-item-image"]/@style
         postProcess:
@@ -27,7 +27,7 @@ xPathScrapers:
       Aliases:
         selector: //div[@class="ma-section-content ma-aname-content"]//a/text()
         concat: ", "
-      URL:
+      URLs:
         selector: //a[@class="ma-pag-next"]/@href
         postProcess:
           - replace:
@@ -44,5 +44,4 @@ xPathScrapers:
               - regex: .*(\d{4}).*
                 with: $1-
       Image: //link[@rel="image_src"]/@href
-
-# Last Updated January 22, 2023
+# Last Updated September 17, 2025

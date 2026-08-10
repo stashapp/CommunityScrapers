@@ -2,14 +2,13 @@
   "licence": "GPL-3.0",
   "private": true,
   "dependencies": {
-    "fuse.js": "^7.1.0",
-    "glob": "^11.0.2",
-    "simple-git": "^3.28.0",
-    "yaml": "^2.8.0",
-    "zod": "^3.25.62"
+    "fuse.js": "^7.2.0",
+    "glob": "^13.0.6",
+    "simple-git": "^3.36.0",
+    "yaml": "^2.8.3",
+    "zod": "^4.3.6"
   },
   "scripts": {
-    "dev": "serve site/",
     "generate": "ts-node src/run.ts",
     "zod": "npx ts-to-zod src/types.ts src/zodType.ts",
     "fmt": "npx prettier --write src site",
@@ -17,11 +16,10 @@
     "ci-build": "npm run generate && npm run fuse-index"
   },
   "devDependencies": {
-    "@types/node": "^24.0.1",
-    "prettier": "^3.5.3",
-    "serve": "^14.2.4",
+    "@types/node": "^25.5.0",
     "ts-node": "^10.9.2",
-    "ts-to-zod": "^3.15.0",
-    "typescript": "^5.8.3"
-  }
+    "ts-to-zod": "^5.1.0",
+    "typescript": "^6.0.2"
+  },
+  "packageManager": "pnpm@10.33.0"
 }

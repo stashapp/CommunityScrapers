@@ -1,0 +1,96 @@
+name: Broken scraper report
+description: Report a scraper that is not working as expected.
+labels: ["bug"]
+body:
+  - type: input
+    id: package-name
+    attributes:
+      label: Scraper name
+      description: Go to **Settings** > **Metadata Providers** > **Installed Scrapers** and under "Package" column, find the package name of the scraper.
+      placeholder: ManyVids
+    validations:
+      required: true
+  - type: input
+    id: package-version
+    attributes:
+      label: Scraper version
+      description: Go to **Settings** > **Metadata Providers** > **Installed Scrapers** and under "Installed version" column, find the version of the scraper.
+      placeholder: 622231e
+    validations:
+      required: true
+  - type: dropdown
+    id: scraper-type
+    attributes:
+      label: Which scraper type(s) are affected?
+      description: | 
+        You can select more than one.
+
+        Learn more about scraper types [here](https://docs.stashapp.cc/in-app-manual/scraping/#scraper-types).
+      multiple: true
+      options:
+        - performerByName
+        - performerByFragment
+        - performerByURL
+        - sceneByName
+        - sceneByQueryFragment
+        - sceneByFragment
+        - sceneByURL
+        - groupByURL
+        - galleryByFragment
+        - galleryByURL
+        - imageByFragment
+        - imageByURL
+    validations:
+      required: true
+  - type: textarea
+    id: scraper-specific-examples
+    attributes:
+      label: Specific examples
+      description: |
+        Please provide additional details with relevant examples so that the issue can be accurately diagnosed and reproduced.
+        - For "\<object\>ByURL" scrapers, please provide an example URL that fails to scrape.
+        - For "\<object\>ByName" scrapers, please provide an example name/title that fails to scrape.
+        - If you are reporting an issue with a "\<object\>ByFragment" scrapers, we will follow up asking for additional details to diagnose the issue as these scrapers rely on metadata fragments which are unique for each scraper. 
+
+        \<object\> can be performer, scene, group, gallery, or image.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs
+      description: |
+        Please provide any relevant logs that may help in diagnosing the issue with the scraper. 
+        
+        You can find the logs in Stash under **Settings** > **Logs**. Make sure to set the Log level to Debug to get the most detailed logs.
+      render: shell
+    validations:
+      required: false
+  - type: textarea
+    id: additional-details
+    attributes:
+      label: Additional details
+      description: |
+        If there are any additional details about the issue that you think may be relevant, please provide them here.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirm-search
+    attributes:
+      label: Have you looked at existing bug reports?
+      description: |
+        Please ensure you have first [searched existing bug reports](https://github.com/stashapp/CommunityScrapers/issues?q=is%3Aissue%20label%3Abug) to make sure your report is not a duplicate.
+      options:
+        - label: I have searched the existing bug reports.
+          required: true
+  - type: checkboxes
+    id: geoblocking
+    attributes:
+      label: Are you in a country that may be geoblocked by the site being scraped?
+      description: |
+        Some sites may restrict access based on your geographic location.
+        
+        If you are unsure, please check if you can access the site being scraped in a web browser without using a VPN or proxy. If you cannot access the site, it is likely that you are in a geoblocked country.
+      options:
+        - label: I am not in a country that may be geoblocked.
+          required: false

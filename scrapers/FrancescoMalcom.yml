@@ -1,0 +1,49 @@
+# Jank ModelCentro scraper
+name: Francesco Malcom
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - francescomalcom.com/product
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //title/text()
+        postProcess:
+          - replace:
+              - regex: (.+) - FrancescoMalcom.com official content
+                with: $1
+      Details: //meta[@name="description"]/@content
+      # only date available is last update of page
+      Image:
+        selector: //div[@class="ac-p-poster"]/@style
+        postProcess:
+          - replace:
+            - regex: 'background-image: url\("(.*)"\);'
+              with: $1
+      Studio:
+        Name:
+          fixed: Francesco Malcom
+      Performers:
+        Name:
+          fixed: Francesco Malcom
+      Tags:
+        Name:
+          fixed: "Missing Performer (Female)"
+      Code:
+        selector: //script[contains(text(), 'processedLink')]/text()
+        postProcess:
+          - replace:
+            - regex: .+product\/(\d+)\/.+
+              with: $1
+
+driver:
+  useCDP: true
+  cookies:
+    - Cookies:
+        - Name: "splash"
+          Domain: "francescomalcom.com"
+          Value: "1"
+          Path: "/"
+# Last Updated September 26, 2025

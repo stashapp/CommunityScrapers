@@ -30,10 +30,10 @@ xPathScrapers:
           fixed: MariskaX
       Performers:
         Name: $perf
-        URL: $perf/@href
+        URLs: $perf/@href
 
   performerScraper:
     performer:
       Name: //h1[@class="model-name"]
       Image: //div[@class="model-photo"]/img/@data-src
-# Last Updated April 27, 2022
+# Last Updated September 17, 2025

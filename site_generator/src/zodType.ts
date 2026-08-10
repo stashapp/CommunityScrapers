@@ -29,7 +29,6 @@ export const arrayActionsSchema = z.union([
   z.literal("performerByURL"),
   z.literal("sceneByURL"),
   z.literal("groupByURL"),
-  z.literal("movieByURL"),
   z.literal("galleryByURL"),
   z.literal("imageByURL"),
 ]);
@@ -42,7 +41,7 @@ const replaceRegexSchema = z.object({
 const baseUrlScraperSchema = z.object({
   action: urlScrapeActionsSchema,
   scraper: z.string(),
-  queryURLReplace: z.record(z.array(replaceRegexSchema)).optional(),
+  queryURLReplace: z.record(z.string(), z.array(replaceRegexSchema)).optional(),
 });
 
 const byFragmentScraperSchema = baseUrlScraperSchema.extend({
@@ -62,6 +61,7 @@ export const byUrlScraperSchema = baseUrlScraperSchema.extend({
 });
 
 const xPathScraperSchema = z.record(
+  z.string(),
   z.object({
     fixed: z.string().optional(),
     selector: z.string().optional(),
@@ -128,7 +128,7 @@ export const anyScraperSchema = z.union([
   scriptScraperSchema,
 ]);
 
-export const ymlScraperSchema = z.record(z.any()).and(
+export const ymlScraperSchema = z.record(z.string(), z.any()).and(
   z.object({
     filename: z.string(),
     name: z.string(),
@@ -150,7 +150,6 @@ export const ymlScraperSchema = z.record(z.any()).and(
     sceneByFragment: byFragmentScraperDefnSchema.optional(),
     sceneByURL: z.array(byUrlScraperDefnSchema).optional(),
     groupByURL: z.array(byUrlScraperDefnSchema).optional(),
-    movieByURL: z.array(byUrlScraperDefnSchema).optional(),
     galleryByFragment: byFragmentScraperDefnSchema.optional(),
     galleryByURL: z.array(byUrlScraperDefnSchema).optional(),
     imageByURL: z.array(byUrlScraperDefnSchema).optional(),

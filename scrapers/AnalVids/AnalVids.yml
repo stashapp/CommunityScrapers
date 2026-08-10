@@ -47,7 +47,7 @@ xPathScrapers:
                 with: $1
       Performers:
         Name: //h1[contains(@class, "watch__title")]//a/text()
-        URL: //h1[contains(@class, "watch__title")]//a/@href
+        URLs: //h1[contains(@class, "watch__title")]//a/@href
       Studio:
         Name: //div[contains(@class, "genres-list")]//a[contains(@href, "/studios/")]
         URL: //div[contains(@class, "genres-list")]//a[contains(@href, "/studios/")]/@href
@@ -60,4 +60,4 @@ xPathScrapers:
       Name: //h1
       Country: //a[contains(@href, "nationality")]
       Image: //div[contains(@class, 'model__left')]//img/@src
-# Last Updated August 16, 2023
+# Last Updated September 17, 2025
