@@ -12,21 +12,12 @@ from py_common.types import (
 )
 from py_common.util import scraper_args
 
-ensure_requirements("cloudscraper", "fp:free-proxy", "lxml")
+ensure_requirements("cloudscraper", "lxml")
 import cloudscraper  # noqa: E402
-from fp.fp import FreeProxy
 from lxml import html
 
 
 scraper = cloudscraper.create_scraper()
-
-free_proxies = None
-
-
-def get_proxies() -> dict:
-    proxy = FreeProxy(rand=True).get()
-    log.debug("proxy: %s" % proxy)
-    return { 'http': proxy } if proxy.startswith('http:') else { 'https': proxy }
 
 def li_value(key: str) -> str:
     return f'//div[@class="info-box info"]/ul/li/span[text()="{key}:"]/../text()[2]'
@@ -48,9 +39,7 @@ def scrape_url_to_string(url, max_retries=5):
     while retries < max_retries:
         try:
             log.debug('about to execute scraper.get, attempt %d' % (retries + 1))
-            global free_proxies
-            free_proxies = get_proxies()
-            scraped = scraper.get(url, proxies=free_proxies)
+            scraped = scraper.get(url)
             if scraped.status_code == 200:
                 log.debug('HTTP Status: 200')
                 return scraped.text
@@ -122,7 +111,7 @@ def performer_from_url(url) -> ScrapedPerformer | None:
         performer["urls"] = [url] 
         if (social_media_links_out := iter(tree.xpath('//a[starts-with(@class, " social-")]/@href')), None) is not None:
             social_media_urls = [
-                remove_query(scraper.get(f"https://www.ashemaletube.com{link_out}", proxies=free_proxies).url)
+                remove_query(scraper.get(f"https://www.ashemaletube.com{link_out}").url)
                 for link_out in social_media_links_out
             ]
             log.debug("social media urls: %s" % social_media_urls)
@@ -146,25 +135,35 @@ def scene_from_url(_url: str) -> ScrapedScene | None:
     try:
         tree = scrape_url(_url)
         # title
-        if (title := next(iter(tree.xpath('//div[@id="item-info"]//h1/text()')), None)) is not None:
+        if (title := next(iter(tree.xpath('//div[contains(@class, "content-title-row")]/h1/text()')), None)) is not None:
             scene["title"] = title.strip()
+        else:
+            log.warning("could not scrape title")
         # date
-        if (added := next(iter(tree.xpath('//div[@id="item-info"]//div[contains(@class, "views-count-add")]/text()')), None)) is not None:
-            if match := re.search(r'Added\s(\d+-\d+-\d+)', added):
-                scene["date"] = match.group(1)
+        date = None
+        for text_node in tree.xpath('//div[contains(@class, "views-count")]//text()'):
+            if match := re.search(r'\d{4}-\d{2}-\d{2}', text_node or ''):
+                date = match.group(0)
+                break
+        if date:
+            scene["date"] = date
+        else:
+            log.warning("could not scrape date")
         # tags
-        if (tags := iter(tree.xpath('//a[contains(@class, "btn-tag")]/@title')), None) is not None:
+        if (tags := iter(tree.xpath('//a[contains(@class, "btn-tag") and not(contains(@class, "model-card"))]/text()')), None) is not None:
             scene["tags"] = [
-                { 'name': tag }
-                for tag in set(tags)
-                if tag.lower() != "suggest" and tag.lower() != "suggest tag"
+                { 'name': tag.strip() }
+                for tag in tags
+                if tag.strip() and tag.strip().lower() != "suggest" and tag.strip().lower() != "suggest tag"
             ]
         # performers
-        if (performers := iter(tree.xpath('//a[@class="model-card"]/text()[2]')), None) is not None:
-            scene["performers"] = [ { "name": re.sub(r'\n\t(.*)\n', r'\1', p) } for p in set(performers) ]
+        if (performers := iter(tree.xpath('//a[contains(@class, "model-card")][contains(@href, "/pornstars/")]/text()')), None) is not None:
+            scene["performers"] = [ { "name": p.strip() } for p in performers if p.strip() ]
         # image
         if (image := next(iter(tree.xpath('//meta[@property="og:image"]/@content')), None)) is not None:
             scene["image"] = image
+        else:
+            log.warning("could not scrape image")
     except Exception as e:
         log.error('error happened: %s' % e)
     log.debug("scene: %s" % scene)
