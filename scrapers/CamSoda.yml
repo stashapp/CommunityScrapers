@@ -6,27 +6,39 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $scene: //div[starts-with(@class, "index-module__wrapper")]/script[@type="application/ld+json"][1]
     scene:
-      Title: //title
+      Title: //h1[$scene]
+      URLs: //link[@rel="canonical"][$scene]/@href
       Date:
-        selector: //div[starts-with(@class,"index-module__wrapper")]/script[@type="application/ld+json"][1]/text()
+        selector: $scene
         postProcess:
           - replace:
-            - regex: '.+"uploadDate":"([\d-]+)T.+".+'
-              with: $1
+              - regex: .*"uploadDate":"([\d-]+)T.*
+                with: $1
           - parseDate: 2006-01-02
-      Image: //video/@poster
+      # TODO: enable when scrape dialog can show durations
+      # Duration:
+      #   selector: $scene
+      #   postProcess:
+      #     - javascript: |
+      #         const m = /"duration":"PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?"/.exec(value);
+      #         if (!m) return "";
+      #         return [m[1] || 0, m[2] || 0, m[3] || 0]
+      #           .map((n) => String(n).padStart(2, "0"))
+      #           .join(":");
+      Image: //meta[@property="og:image"][$scene]/@content
       Studio:
         Name:
-          selector: //div[starts-with(@class,"index-module__wrapper")]/script[@type="application/ld+json"][1]/text()
+          selector: //h1[$scene]
           postProcess:
             - replace:
-              - regex: .+"creator":{.+"name":"(.+?)".+
-                with: $1
+                - regex: ^.+$
+                  with: CamSoda
       Tags:
-        Name: //a[not(contains(@class,"index-module__tagModel"))][contains(@class,"index-module__tag")]/text()
+        Name: //a[not(contains(@class, "index-module__tagModel"))][contains(@class, "index-module__tag")][$scene]
       Performers:
-        Name: //a[contains(@class,"index-module__tagModel")]/text()
+        Name: //a[contains(@class, "index-module__tagModel")][$scene]
 driver:
-  useCDP: true
-# Last Updated February XX, 2025
+  useSurf: true

@@ -1,0 +1,63 @@
+name: Pornopedia
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - pornopedia.com
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ://www\.pornopedia\.com/
+          with: ://en.pornopedia.com/
+    scraper: performerScraper
+
+xPathScrapers:
+  performerScraper:
+    common:
+      $bio: //table[contains(@class, "biography")]
+    performer:
+      Name: //h1[@id="firstHeading"]
+      Birthdate:
+        selector: $bio//th[text()="Date of birth:"]/following-sibling::td
+        postProcess:
+          - javascript: |
+              const date = value.match(/\w+ \d+, \d{4}/) || value.match(/\d{4}/);
+              return date ? date[0] : "";
+          - parseDate: January 2, 2006
+      Country: $bio//th[text()="Nationality:"]/following-sibling::td
+      Measurements:
+        selector: $bio//th[text()="Measurements:"]/following-sibling::td[contains(., " cm")] | $bio//th[text()="Bra size:"]/following-sibling::td[not(ancestor::table//th[text()="Measurements:"]/following-sibling::td[contains(., " cm")])]
+        postProcess:
+          - replace:
+              - regex: ^.*?(\d+-\d+-\d+) cm.*$
+                with: $1
+      EyeColor: $bio//th[text()="Eye color:"]/following-sibling::td
+      HairColor: $bio//th[text()="Hair color:"]/following-sibling::td
+      Ethnicity: $bio//th[text()="Ethnicity:"]/following-sibling::td
+      Height:
+        selector: $bio//th[text()="Height:"]/following-sibling::td
+        postProcess:
+          # cm/kg are separated by a non-breaking space, which Go's \s does not match
+          - replace:
+              - regex: ^(\d)[.,](\d{2})\D.*$
+                with: $1$2
+              - regex: ^(\d+).*
+                with: $1
+      Weight:
+        selector: $bio//th[text()="Weight:"]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: ^(\d+).*
+                with: $1
+      Aliases: $bio//th[text()="Alias(es):"]/following-sibling::td
+      URLs: //meta[@property="og:url"]/@content
+      Images:
+        selector: //td[@class="infobox-image"]//img[not(contains(@src, "Photo_needed"))]/@src
+        postProcess:
+          - replace:
+              - regex: /thumb/
+                with: /
+              - regex: /\d+px.*$
+                with: ""
+
+driver:
+  useSurf: true
