@@ -419,9 +419,17 @@ xPathScrapers:
       URL: //link[@rel="canonical"]/@href
   performerSearch:
     common:
-      $result: //div/a[contains(@href, "/model") and contains(concat(" ", normalize-space(@class), " "), " model-link ")]
+      # every result page also carries a fixed "featured models" carousel that
+      # ignores the query - the real matches are the ones outside it
+      $result: //a[contains(@href, "/model/") and not(ancestor::div[contains(@class, "swimlane")])]
     performer:
-      Name: $result/img/@alt
+      Name:
+        selector: $result/img/@alt
+        postProcess:
+          - replace:
+              # alt text is "<name> BDSM - <tag>"
+              - regex: '\s+BDSM\b.*$'
+                with: ""
       URLs:
         selector: $result/@href
         postProcess:
@@ -430,41 +438,34 @@ xPathScrapers:
                 with: https://www.kink.com
 
   performerScraper:
+    common:
+      # the tag row's hrefs differ per domain (/tag/<slug>-bdsm on kink.com,
+      # bare slugs on kinktrans.com), but the labels are identical everywhere
+      $tag: //span[contains(text(), "Tags")]/following-sibling::a/span
     performer:
       Name:
-        selector: //h1/text() # //div[@font-size][number(translate(@font-size,"px",""))>=35]/text()
-        concat: " "
+        selector: //h1
         postProcess:
           - replace:
-              - regex: ^\s+
+              # every model page titles itself "<name> BDSM"
+              - regex: '\s+BDSM$'
                 with: ""
-              - regex: \s+$
-                with:
-      Twitter:
-        selector: '//div/a[contains(concat(" ", normalize-space(@class), " "), " social-link ") and contains(@href, "twitter.com")]/@href'
-      Image:
-        selector: //img[contains(@class,'kink-slider-img') and contains(@class,'active')]/@data-src
+      Twitter: //a[contains(@href, "twitter.com")]/@href
+      # two copies of the portrait are emitted, one per breakpoint
+      Image: (//div[contains(@class, "kink-slider-images")]//img/@data-src)[1]
+      Tags:
+        Name: $tag
       Tattoos:
-        selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/tattoo')]/span/text()
+        selector: $tag[normalize-space(text())="Tattoo"]
         postProcess:
           - replace:
               - regex: .+
                 with: "Yes"
       Piercings:
-        selector: //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/pierced')]/span/text()
+        selector: $tag[normalize-space(text())="Pierced"]
         concat: "\n"
-      Tags:
-        Name: //div/span[contains(text(),'tags:')]/following-sibling::a/span/text()
-      Details:
-        selector: //div/span/p[@class="bio"]/following-sibling::p
-        concat: "\n"
-        postProcess:
-          - replace:
-              - regex: "(?i)<a[^>]*>"
-                with: ""
       FakeTits:
-        selector: >
-          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/fake-boobs') or contains(@href,'/natural-boobs')]/span/text()
+        selector: $tag[normalize-space(text())="Fake Boobs" or normalize-space(text())="Natural Boobs"]
         postProcess:
           - replace:
               - regex: .*?Fake.+
@@ -472,34 +473,24 @@ xPathScrapers:
               - regex: .*?Natural.+
                 with: "No"
       HairColor:
-        selector: >
-          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black-hair')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunet')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/brunette')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blond')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/blonde')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/redhead')]/span/text()
+        selector: $tag[normalize-space(text())="Black Hair" or normalize-space(text())="Brunette" or normalize-space(text())="Blonde" or normalize-space(text())="Redhead"]
         postProcess:
           - replace:
               - regex: \sHair
                 with: ""
       Ethnicity:
-        selector: >
-          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/asian')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/black')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/latin')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/mixed')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/white')]/span/text()
+        selector: $tag[normalize-space(text())="White" or normalize-space(text())="Black" or normalize-space(text())="Latin" or normalize-space(text())="Asian" or normalize-space(text())="Mixed"]
       Circumcised:
-        selector: >
-          //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/circumcised')]/span/text()
-          | //div/span[contains(text(),'tags:')]/following-sibling::a[contains(@href,'/uncircumcised')]/span/text()
+        selector: $tag[normalize-space(text())="Circumcised" or normalize-space(text())="Uncircumcised"]
         postProcess:
           - replace:
               - regex: Uncircumcised
                 with: "Uncut"
               - regex: Circumcised
                 with: "Cut"
+      Details:
+        selector: //span[@id="bioDescription"]/text()
+        concat: "\n"
       Gender:
         selector: //script[contains(.,'KinkyTracking.all')]
         postProcess:
@@ -522,23 +513,28 @@ xPathScrapers:
         concat: "__SEP__"
         postProcess:
           - replace:
-              - regex: ^.+?multiSite:'([^']+).+?__SEP__(.+)
+              - regex: ^.+?multiSite:\s*'([^']+).+?__SEP__(.+)
                 with: https://$1/model/$2
 
 driver:
-  useCDP: true
+  # TLS impersonation is enough to get past the bot check: pages are server-rendered
+  useSurf: true
   cookies:
-    - Cookies:
+    # CookieURL is required outside of CDP: the cookie jar keys off it, not Domain
+    - CookieURL: "https://www.kink.com"
+      Cookies:
         - Name: "age_gate_accepted"
           Domain: "www.kink.com"
           Value: "1"
           Path: "/"
-    - Cookies:
+    - CookieURL: "https://www.kinkmen.com"
+      Cookies:
         - Name: "age_gate_accepted"
           Domain: "www.kinkmen.com"
           Value: "1"
           Path: "/"
-    - Cookies:
+    - CookieURL: "https://www.kinktrans.com"
+      Cookies:
         - Name: "age_gate_accepted"
           Domain: "www.kinktrans.com"
           Value: "1"

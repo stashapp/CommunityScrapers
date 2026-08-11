@@ -50,3 +50,5 @@ xPathScrapers:
       Date: *date
       Studio: *studio
       Performers: *performers
+driver:
+  useSurf: true

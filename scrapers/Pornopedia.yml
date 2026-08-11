@@ -1,0 +1,56 @@
+name: Pornopedia
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - pornopedia.com
+    scraper: performerScraper
+
+xPathScrapers:
+  performerScraper:
+    common:
+      $bio: //table[contains(@class, "biography")]
+    performer:
+      Name:
+        selector: //h1[@id="firstHeading"]//text()
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+      Birthdate:
+        selector: $bio//th[text()="Date of birth:"]/following-sibling::td
+        postProcess:
+          - replace:
+              - regex: (\w+ \d+, \d{4}).*
+                with: $1
+          - parseDate: January 2, 2006
+      Country: $bio//th[text()="Nationality:"]/following-sibling::td//text()
+      Measurements: $bio//th[text()="Bra size:"]/following-sibling::td//text()
+      EyeColor: $bio//th[text()="Eye color:"]/following-sibling::td//text()
+      HairColor: $bio//th[text()="Hair color:"]/following-sibling::td//text()
+      Ethnicity: $bio//th[text()="Ethnicity:"]/following-sibling::td//text()
+      Height:
+        selector: $bio//th[text()="Height:"]/following-sibling::td//text()
+        postProcess:
+          # cm/kg are separated by a non-breaking space, which Go's \s does not match
+          - replace:
+              - regex: ^(\d+).*
+                with: $1
+      Weight:
+        selector: $bio//th[text()="Weight:"]/following-sibling::td//text()
+        postProcess:
+          - replace:
+              - regex: ^(\d+).*
+                with: $1
+      Aliases: $bio//th[text()="Alias(es):"]/following-sibling::td//text()
+      URLs: //meta[@property="og:url"]/@content
+      Image:
+        selector: //td[@class="infobox-image"]//img/@src
+        postProcess:
+          - replace:
+              - regex: /thumb/
+                with: /
+              - regex: /\d+px.*$
+                with: ""
+
+driver:
+  useSurf: true
