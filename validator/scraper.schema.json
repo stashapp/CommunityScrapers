@@ -5,9 +5,7 @@
   "description": "A stash scraper config",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "name"
-  ],
+  "required": ["name"],
   "properties": {
     "name": {
       "title": "Scraper Name",
@@ -254,7 +252,9 @@
                   "oneOf": [
                     {
                       "required": ["ValueRandom"],
-                      "properties": { "ValueRandom": { "type": "integer", "minimum": 1 } }
+                      "properties": {
+                        "ValueRandom": { "type": "integer", "minimum": 1 }
+                      }
                     },
                     {
                       "required": ["Value"],
@@ -649,6 +649,10 @@
         },
         "Image": {
           "title": "Performer image",
+          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+        },
+        "Images": {
+          "title": "Performer images",
           "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
         }
       }
