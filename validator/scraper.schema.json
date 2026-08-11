@@ -173,6 +173,11 @@
           "description": "When set to true, will use the CDP path set in the Stash configuration.",
           "type": "boolean"
         },
+        "useSurf": {
+          "title": "Use TLS impersonation (surf)",
+          "description": "When set to true, will use TLS/HTTP2 fingerprint spoofing.",
+          "type": "boolean"
+        },
         "sleep": {
           "title": "Sleep",
           "description": "Wait N seconds after the page loads, before performing the scrape.\nIf unset, defaults to 2.",

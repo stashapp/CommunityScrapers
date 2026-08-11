@@ -162,9 +162,12 @@ xPathScrapers:
                 with: https://www.kinktrans.com
 
 driver:
-  useCDP: true
+  # TLS impersonation is enough to get past the bot check: pages are server-rendered
+  useSurf: true
   cookies:
-    - Cookies:
+    # CookieURL is required outside of CDP: the cookie jar keys off it, not Domain
+    - CookieURL: "https://www.kinktrans.com"
+      Cookies:
         - Name: "age_gate_accepted"
           Domain: "www.kinktrans.com"
           Value: "1"

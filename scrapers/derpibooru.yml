@@ -49,9 +49,6 @@ xPathScrapers:
       Details: *details
 
 driver:
-  useCDP: true
-  headers:
-    - Key: "User-Agent"
-      Value: "stashapp/stash scraper"
+  useSurf: true
 
 # Last Updated April 19, 2025

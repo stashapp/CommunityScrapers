@@ -1,0 +1,268 @@
+name: IAFD
+
+performerByName:
+  action: scrapeXPath
+  queryURL: https://www.iafd.com/results.asp?searchtype=comprehensive&searchstring={}
+  scraper: performerSearch
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - iafd.com/person.rme/id=
+      - iafd.com/person.rme/perfid=
+    scraper: performerScraper
+
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - iafd.com/title.rme/id=
+      - iafd.com/title.rme/title=
+    scraper: sceneScraper
+
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - iafd.com/title.rme/id=
+      - iafd.com/title.rme/title=
+    scraper: groupScraper
+
+xPathScrapers:
+  performerSearch:
+    common:
+      $result: //table[@id="tblFem" or @id="tblMal"]//td[a[img]]/following-sibling::td[1]/a
+    performer:
+      Name: $result/text()
+      URLs:
+        selector: $result/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.iafd.com
+
+  performerScraper:
+    performer:
+      Name:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+      Gender:
+        selector: //p[@class="bioheading" and contains(text(), "Gender")]/following-sibling::p[1]
+        postProcess:
+          - map:
+              Woman: Female
+              Man: Male
+              Trans woman: Transgender Female
+              Trans man: Transgender Male
+      URLs:
+        selector: //*[@data-src]/@data-src
+        postProcess:
+          - replace:
+              - regex: matchups
+                with: person
+      Twitter: //p[@class="biodata"]/a[contains(text(),"http://twitter.com/")]/@href
+      Instagram: //p[@class="biodata"]/a[contains(text(),"http://instagram.com/")]/@href
+      Birthdate:
+        selector: (//p[@class="bioheading"][text()="Birthday"]/following-sibling::p)[1]
+        postProcess: &iafdDate
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+              - regex: (\S+\s+\d+,\s+\d+).*
+                with: $1
+          - parseDate: January 2, 2006
+          - parseDate: Jan 2, 2006
+      DeathDate:
+        selector: (//p[@class="bioheading"][text()="Date of Death"]/following-sibling::p)[1]
+        postProcess: *iafdDate
+      Ethnicity:
+        selector: //div[p[text()="Ethnicity"]]/p[@class="biodata"][1]
+        postProcess:
+          - replace: &stripEmpty
+              - regex: (?i)^.*(no data|no director|none|unknown).*$
+                with: ""
+      Country:
+        selector: //div/p[text()="Nationality"]/following-sibling::p[1]
+        postProcess:
+          - replace:
+              - regex: ^American,.+
+                with: American
+      Height:
+        selector: //div/p[text()="Height"]/following-sibling::p[1]
+        postProcess:
+          - replace:
+              - regex: (?i)^.*(no data|none|unknown).*$
+                with: ""
+              - regex: .*\((\d+)\s+cm.*
+                with: $1
+      Weight:
+        selector: //div/p[text()="Weight"]/following-sibling::p[1]
+        postProcess:
+          - replace:
+              - regex: (?i)^.*(no data|none|unknown).*$
+                with: ""
+              - regex: .*\((\d+)\s+kg.*
+                with: $1
+      HairColor:
+        selector: //div/p[starts-with(.,"Hair Color")]/following-sibling::p[1]
+        postProcess:
+          - replace: *stripEmpty
+          - map:
+              Blond: Blonde
+              Brown: Brunette
+              Dark Brown: Brunette
+              Red: Redhead
+              Grey: Gray
+      EyeColor:
+        selector: //div/p[text()="Eye Color"]/following-sibling::p[1]
+        postProcess:
+          - replace: *stripEmpty
+      Measurements:
+        selector: //div/p[text()="Measurements"]/following-sibling::p[1]
+        postProcess:
+          - replace: *stripEmpty
+      CareerLength:
+        selector: //div/p[@class="bioheading"][contains(text(), "Active")][1]/following-sibling::p[1]
+        postProcess:
+          - replace:
+              - regex: (?i)^.*(no data|none|unknown).*$
+                with: ""
+              # drop the trailing "(Started around 19 years old)"
+              - regex: \s*\(.*\)\s*$
+                with: ""
+              - regex: \s*-\s*
+                with: " - "
+          - javascript: |
+              var m = value.match(/^(\d{4})\s*-\s*(\d{4})$/);
+              if (m && parseInt(m[2], 10) >= new Date().getFullYear()) {
+                return m[1] + " - ";
+              }
+              return value;
+      Tattoos:
+        selector: //div/p[text()="Tattoos"]/following-sibling::p[1]
+        postProcess:
+          - replace: *stripEmpty
+      Piercings:
+        selector: //div/p[text()="Piercings"]/following-sibling::p[1]
+        postProcess:
+          - replace: *stripEmpty
+      Aliases:
+        selector: >
+          //div[p[@class="bioheading" and contains(normalize-space(text()),"Performer AKA") or contains(normalize-space(text()),"AKA")]]
+          //div[@class="biodata" and not(normalize-space(text())="No known aliases")]/text()
+        concat: "__SEP__"
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+              # "X (studio.com)" is studio disambiguation, not part of the name
+              - regex: \s*\([^)]*\)
+                with: ""
+              # aliases of the form "X or Y" are indeterminate, drop the whole entry
+              - regex: __SEP__[^_]+or[^_]+
+                with: ""
+              - regex: __SEP__
+                with: ", "
+      Image: //div[@id="headshot"]//img/@src
+
+  sceneScraper:
+    common:
+      $bioheading: //p[@class="bioheading"]
+    scene:
+      Title:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+              - regex: \s*\(\d{4}\)$
+                with: ""
+      Date: &releaseDate
+        selector: >
+          $bioheading[contains(text(), "Release Date")]/following-sibling::p[@class="biodata"][1]
+          | //h1
+        concat: "__SEP__"
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: " "
+              - regex: (?i)no data|unknown
+                with: ""
+              # prefer an explicit release date wherever it appears in the pair,
+              # otherwise fall back to the year in the title: "(1999)" -> "1999-01-01"
+              - regex: ^.*?(\w{3,9} \d{1,2}, \d{4}).*$
+                with: $1
+              - regex: ^.*\((\d{4})\).*$
+                with: $1-01-01
+          - parseDate: January 2, 2006
+          - parseDate: Jan 2, 2006
+      Details: &synopsis
+        selector: //div[@id="synopsis"]/div[@class="padded-panel"]
+        postProcess:
+          - replace: *stripEmpty
+      Director: &director
+        selector: $bioheading[contains(text(),"Director") or contains(text(),"Directors")]/following-sibling::p[@class="biodata"][1]/a
+        postProcess:
+          - replace:
+              - regex: (?i)^.*(no data|no director|unknown).*$
+                with: ""
+              - regex: ^\s+|\s+$
+                with: ""
+      Studio: &studio
+        Name:
+          # falls back to the distributor when no studio is listed
+          selector: >
+            $bioheading[contains(text(),"Studio")]/following-sibling::p[@class="biodata"][1]
+            | $bioheading[contains(text(),"Distributor")]/following-sibling::p[@class="biodata"][1]
+          postProcess:
+            - replace: *stripEmpty
+      Performers:
+        Name: //div[@class="castbox"]/p/a
+        URLs:
+          selector: //div[@class="castbox"]/p/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.iafd.com
+        Images: //div[@class="castbox"]/p/a/img/@src
+      URLs: &videoURL
+        selector: //div/p[contains(., "should be linked to")][2]
+        postProcess:
+          - replace:
+              - regex: .*?(http.*)
+                with: $1
+              - regex: ^\s+|\s+$
+                with: ""
+
+  groupScraper:
+    common:
+      $bioheading: //p[@class="bioheading"]
+    group:
+      Name:
+        selector: //h1
+        postProcess:
+          - replace:
+              - regex: ^\s+|\s+$
+                with: ""
+              - regex: \s*\(\d+\)$
+                with: ""
+      Date: *releaseDate
+      Synopsis: *synopsis
+      Director: *director
+      Studio: *studio
+      URL: *videoURL
+      Duration:
+        selector: $bioheading[contains(text(), "Minutes")]/following-sibling::p[@class="biodata"][1]
+        postProcess:
+          - replace:
+              - regex: (?i)^.*(no data|none|unknown).*$
+                with: ""
+              - regex: ^(\d+)$
+                with: $1:00
+      Aliases:
+        selector: //div[@class="col-sm-12"]/dl/dd//text()
+        concat: ", "
+
+driver:
+  useSurf: true
