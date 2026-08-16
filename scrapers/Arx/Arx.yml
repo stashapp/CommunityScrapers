@@ -47,26 +47,11 @@ xPathScrapers:
                 with: $2
       Studio:
         Name: &studioName
-          selector: *imageSel
+          selector: //img[contains(@alt, "Logo")]/@alt
           postProcess:
             - replace:
-                - regex: '.*/scene_thumbs/([^\d]+).*'
-                  with: $1
-            - map:
-                hhdp: Anal Vault
-                chi: Cuck Hunter
-                hhsf: Honey Trans
-                hhsm: Honey Trans
-                hhsss: Honey Trans
-                jlo: Japan Lust
-                jly: Japan Lust
-                joi: JOI Babes
-                hhles: Les Worship
-                yoga: Nude Yoga Porn
-                pov: POV Masters
-                tsdl: Trans Daylight
-                tstm: Trans Midnight
-                tsrm: Trans Roommates
+                - regex: \s*Logo
+                  with: ""
         URL:
           selector: *urlSel
           postProcess:
