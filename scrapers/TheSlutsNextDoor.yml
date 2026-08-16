@@ -1,0 +1,125 @@
+name: TheSlutsNextDoor
+
+# Wordpress API for JSON
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - theslutsnextdoor.com/video/
+    queryURL: &videoQuery "https://theslutsnextdoor.com/wp-json/wp/v2/video?_embed=1&_fields=title,excerpt,date,link,_links,_embedded&slug={url}"
+    queryURLReplace: &videoSlug
+      url:
+        - regex: ".*/video/([^/?#]+)/?.*"
+          with: $1
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeJson
+  # only the image relation is needed; _embed=1 here is 7x the payload
+  queryURL: "https://theslutsnextdoor.com/wp-json/wp/v2/video?_embed=wp:featuredmedia&_fields=title,date,link,_links,_embedded&search={}"
+  scraper: sceneSearch
+
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: *videoQuery
+  queryURLReplace: *videoSlug
+  scraper: sceneScraper
+
+galleryByURL:
+  - action: scrapeJson
+    url:
+      - theslutsnextdoor.com/gallery/
+    queryURL: "https://theslutsnextdoor.com/wp-json/wp/v2/gallery?_embed=1&_fields=title,excerpt,date,link,_links,_embedded&slug={url}"
+    queryURLReplace:
+      url:
+        - regex: ".*/gallery/([^/?#]+)/?.*"
+          with: $1
+    scraper: galleryScraper
+
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: 0.title.rendered
+        postProcess: &cleanText
+          - replace:
+              - regex: <[^>]+>
+                with: ""
+              - regex: "&#8216;"
+                with: "‘"
+              - regex: "&#8217;"
+                with: "’"
+              - regex: "&#8220;"
+                with: "“"
+              - regex: "&#8221;"
+                with: "”"
+              - regex: "&#8211;"
+                with: "–"
+              - regex: "&#8212;"
+                with: "—"
+              - regex: "&#8230;|&hellip;"
+                with: "…"
+              - regex: "&#8243;"
+                with: "″"
+              - regex: "&#0?39;|&apos;"
+                with: "'"
+              - regex: "&quot;"
+                with: '"'
+              - regex: "&#160;|&nbsp;"
+                with: " "
+              - regex: "&#038;|&amp;"
+                with: "&"
+              - regex: '\s+'
+                with: " "
+              - regex: '^\s+|\s+$'
+                with: ""
+      Details:
+        selector: 0.excerpt.rendered
+        postProcess: *cleanText
+      # 470 of the 565 scenes share the 2025-01-03T12:05:12 timestamp
+      # but this is the only date the site publishes
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      Image: "0._embedded.wp:featuredmedia.0.source_url"
+      URLs: 0.link
+      Tags:
+        Name: "0._embedded.wp:term.0.#.name"
+      Studio:
+        Name:
+          fixed: TheSlutsNextDoor
+
+  sceneSearch:
+    scene:
+      Title:
+        selector: "#.title.rendered"
+        postProcess: *cleanText
+      Date:
+        selector: "#.date"
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      Image: "#._embedded.wp:featuredmedia.0.source_url"
+      URL: "#.link"
+
+  galleryScraper:
+    gallery:
+      Title:
+        selector: 0.title.rendered
+        postProcess: *cleanText
+      Details:
+        selector: 0.excerpt.rendered
+        postProcess: *cleanText
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      URLs: 0.link
+      Tags:
+        Name: "0._embedded.wp:term.0.#.name"
+      Studio:
+        Name:
+          fixed: TheSlutsNextDoor
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/v1
