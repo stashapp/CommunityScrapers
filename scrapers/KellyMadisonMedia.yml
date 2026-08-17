@@ -23,6 +23,7 @@ xPathScrapers:
   mainSite:
     common:
       $ldjson: //script[@type="application/ld+json"][contains(text(), '"@type":"VideoObject"')]/text()
+      $poster: //meta[@property="og:image"][contains(@content, "/poster_image/")]/@content
     scene:
       Title:
         selector: //h1
@@ -50,11 +51,15 @@ xPathScrapers:
         Name:
           selector: //div[contains(@class,"column-video-info")]/p[@class="mb-0"]/a/text()
           postProcess:
-            - replace:
-              - regex: "Madison"
-                with: "Ryan Madison"
+            # map is exact-match: a substring replace here also rewrites
+            # "Kelly Madison", "Madison Ivy", "Kenzie Madison" and friends
+            - map:
+                Madison: Ryan Madison
+      # The ld+json thumbnail is only 350-545px wide on most of the catalogue, so
+      # prefer the poster: it comes first in document order, and pre-2016 episodes
+      # have none (their og:image is a site-wide placeholder, hence the predicate)
       Image:
-        selector: $ldjson
+        selector: $poster | $ldjson
         postProcess:
           - replace:
             - regex: '.+"thumbnailUrl":"([^"]+)".+'
@@ -150,4 +155,4 @@ driver:
           ValueRandom: 23
           Path: "/"
 
-# Last Updated May 8, 2026
+# Last Updated August 17, 2026
