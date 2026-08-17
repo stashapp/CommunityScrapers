@@ -80,6 +80,8 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://teenmegaworld.net/
+              - regex: -1x
+                with: -2x
       Studio: &studio
         Name: //a[contains(@class, "video-site-link")]
     gallery:
@@ -119,4 +121,6 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: https://teenmegaworld.net/
-# Last Updated September 22, 2025
+              - regex: -1x
+                with: -2x
+# Last Updated August 17, 2026
