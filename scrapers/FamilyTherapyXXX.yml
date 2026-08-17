@@ -13,20 +13,17 @@ xPathScrapers:
     scene:
       Title: //h1/text()
       Date:
-        selector: //meta[@itemprop="uploadDate"]/@content
+        selector: //span[@class="published"]/text()
         postProcess:
-          - replace:
-              - regex: (?i)(T\d+.+)
-                with: ""
-          - parseDate: 2006-01-02
+          - parseDate: Jan 2, 2006
       Details:
-        selector: //div[@class="entry-content"]/p/text()
+        selector: //div[@class="entry-content"]/text()[normalize-space()] | //div[@class="entry-content"]/p/text()[normalize-space()]
         concat: "\n"
       Tags:
         Name: //p[@class="post-meta"]//a/text()
       Performers:
         Name:
-          selector: //div[@class="entry-content"]/p[contains(text(),'***')]
+          selector: //div[@class="entry-content"]/p/[contains(text(),'***')]
           postProcess:
             - replace:
                 - regex: \*+|Starring\s+
