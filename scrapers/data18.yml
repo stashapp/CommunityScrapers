@@ -102,7 +102,7 @@ xPathScrapers:
           - parseDate: January, 2006
       Studio:
         Name: $studio
-        URL: $studio/@href
+        URLs: $studio/@href
       Director: //p[b[contains(text(),'Director')]]//a[@class='bold']
       Synopsis:
         selector: //b[text()="Description"]/..
