@@ -36,11 +36,5 @@ xPathScrapers:
             - map:
                 Family Therapy: Family Therapy XXX
       Image:
-        selector: //meta[@itemprop="contentUrl"]/@content
-        postProcess:
-          - replace:
-              - regex: (https://[^/]+)/wp-content/uploads/\d{4}/\d{2}/(\w+)\.\w+
-                with: $1/?s=$2
-          - subScraper:
-              selector: //div[@id="left-area"]/article[1]//img/@src
+        selector: //meta[@property="og:image"]/@content
 # Last Updated December 19, 2022
