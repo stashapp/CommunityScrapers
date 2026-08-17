@@ -68,6 +68,8 @@ xPathScrapers:
           selector: //select/option[contains(@value, 'referermovie=')]/@value | //p[b[normalize-space(.)='Movie:']][not(//select/option[contains(@value, 'referermovie=')])]/a[contains(@href, '/movies/')]/@href
           postProcess:
             - javascript: return value.replace(/.*referermovie=(\d+).*/, "https://www.data18.com/movies/1$1")
+            - subScraper:
+                selector: //h1/a[contains(@href, '/movies/')]/@href
       Image: //img[@id="playpriimage"]/@src
   movieScraper:
     common:
