@@ -1,46 +1,128 @@
 name: "FamilyTherapyXXX"
+
+# Wordpress REST API for JSON
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - analtherapyxxx.com
       - familytherapyxxx.com
       - momcomesfirst.com
       - perfectgirlfriend.com
+    queryURL: "{url}"
+    queryURLReplace: &postQuery
+      url:
+        - regex: '^https?://(?:www\.)?([^/]+)/([^/?#]+).*$'
+          with: "https://${1}/wp-json/wp/v2/posts?_embed=1&_fields=title,content,date,link,_links,_embedded&slug=${2}"
     scraper: sceneScraper
-xPathScrapers:
+
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  queryURLReplace: *postQuery
+  scraper: sceneScraper
+
+jsonScrapers:
   sceneScraper:
-    common:
     scene:
-      Title: //h1/text()
-      Date:
-        selector: //span[@class="published"]/text()
+      Title:
+        selector: 0.title.rendered
         postProcess:
-          - parseDate: Jan 2, 2006
+          - &stripTags
+            replace:
+              - regex: <[^>]+>
+                with: ""
+          - &decodeEntities
+            replace:
+              - regex: "&#8216;"
+                with: "‘"
+              - regex: "&#8217;"
+                with: "’"
+              - regex: "&#8220;"
+                with: "“"
+              - regex: "&#8221;"
+                with: "”"
+              - regex: "&#8211;"
+                with: "–"
+              - regex: "&#8212;"
+                with: "—"
+              - regex: "&#8230;|&hellip;"
+                with: "…"
+              - regex: "&#0?39;|&apos;"
+                with: "'"
+              - regex: "&quot;"
+                with: '"'
+              # can't use \s because it's ascii-only in Go
+              - regex: '&#160;|&nbsp;|\x{00a0}'
+                with: " "
+              - regex: "&#038;|&amp;"
+                with: "&"
+          - replace:
+              - regex: '\s+'
+                with: " "
+              - regex: '^\s+|\s+$'
+                with: ""
       Details:
-        selector: //div[@class="entry-content"]/text()[normalize-space()] | //div[@class="entry-content"]/p/text()[normalize-space()]
-        concat: "\n"
-      Tags:
-        Name: //p[@class="post-meta"]//a/text()
-      Performers:
-        Name:
-          selector: //div[@class="entry-content"]/p/[contains(text(),'***')]
-          postProcess:
-            - replace:
-                - regex: \*+|Starring\s+
-                  with:
-          split: " & "
-      Studio:
-        Name:
-          selector: //img[@id="logo"]/@alt
-          postProcess:
-            - map:
-                Family Therapy: Family Therapy XXX
-      Image:
-        selector: //meta[@itemprop="contentUrl"]/@content
+        selector: 0.content.rendered
         postProcess:
           - replace:
-              - regex: (https://[^/]+)/wp-content/uploads/\d{4}/\d{2}/(\w+)\.\w+
-                with: $1/?s=$2
-          - subScraper:
-              selector: //div[@id="left-area"]/article[1]//img/@src
-# Last Updated December 19, 2022
+              - regex: <span[^>]*kgvid_title[^>]*>[^<]*</span>
+                with: ""
+              - regex: (?i)</p>|<br\s*/?>
+                with: "\n"
+          - *stripTags
+          - *decodeEntities
+          - replace:
+              - regex: \*+[^*]*\*+
+                with: ""
+              - regex: '[^\S\n]+'
+                with: " "
+              - regex: '\s*\n\s*'
+                with: "\n"
+              - regex: '^\s+|\s+$'
+                with: ""
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
+      # Performers are not structured data but usually appear
+      # at the end of the post body
+      Performers:
+        Name:
+          selector: 0.content.rendered
+          postProcess:
+            - replace:
+                - regex: '(?is)^.*\*+ *(?:[^*<>]*?sta[r]+ing)? *:? *([^*<>]+?) *\*+.*$'
+                  with: "${1}"
+                # uncredited scenes still hold the untouched document here
+                - regex: (?s)^.*[<>].*$
+                  with: ""
+            - *decodeEntities
+            - replace:
+                - regex: " *(?:&|,) *"
+                  with: " & "
+                # some credits have more than names, see https://familytherapyxxx.com/alone-with-mom/
+                # We rely on the fact that names are Title Cased while the other text is not
+                - regex: ' *& *[^A-Z\s][^&]*'
+                  with: ""
+                - regex: "^ +| +$"
+                  with: ""
+          split: " & "
+      Tags:
+        Name:
+          selector: "0._embedded.wp:term|@flatten.#.name"
+          postProcess:
+            - *decodeEntities
+      Image: "0._embedded.wp:featuredmedia.0.source_url"
+      URLs: 0.link
+      Studio:
+        Name:
+          selector: 0.link
+          postProcess:
+            - replace:
+                - regex: '^https?://(?:www\.)?([^/]+)/.*$'
+                  with: "${1}"
+            - map:
+                analtherapyxxx.com: Anal Therapy XXX
+                familytherapyxxx.com: Family Therapy XXX
+                momcomesfirst.com: Mom Comes First
+                perfectgirlfriend.com: Perfect Girlfriend
