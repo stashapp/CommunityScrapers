@@ -1,9 +1,11 @@
-name: "BellesaPlus"
+name: BellesaPlus
 sceneByURL:
   - action: script
     url:
-      - https://bellesaplus.co/videos/
-      - https://bellesaplus.co/studio-preview/
+      - bellesa.co/videos/
+      - bellesa.co/studio-preview/
+      - bellesaplus.co/videos/
+      - bellesaplus.co/studio-preview/
     script:
       - python
       - BellesaPlus.py
