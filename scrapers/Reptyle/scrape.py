@@ -353,6 +353,21 @@ def to_scraped_scene(scene_from_api: dict, better_image=True) -> ScrapedScene:
     return scene
 
 
+# Reptyle have started rolling out new pages built on Astro
+# and this lets us cover all pages regardless
+NETWORK_BUNDLES = (
+    ("sayuncle.com", "https://tours-store.psmcdn.net/sau_network/_search", "SayUncle"),
+    ("", "https://tours-store.psmcdn.net/ts_network/_search", "TeamSkeet"),
+)
+
+
+def get_network_bundle_for(netloc: str) -> tuple[str, str]:
+    for domain, api, network in NETWORK_BUNDLES:
+        if domain in netloc:
+            return api, network
+    raise AssertionError("unreachable: last bundle matches every netloc")
+
+
 def get_members_prefix(network: str) -> str:
     match network:
         case "SayUncle":
@@ -399,16 +414,15 @@ def get_endpoint_for(url: str) -> tuple[str, str, str] | None:
         and (network := n.group(1))
     ):
         log.debug(f"Found {network} endpoint at {url} | {api}")
-        return (
-            f"{api}?q=id:{identifier}&size=3",
-            get_members_prefix(network),
-            final_url,
-        )
+    else:
+        api, network = get_network_bundle_for(netloc)
+        log.debug(f"No endpoint in page data, falling back to {network} bundle | {api}")
 
-    log.error(
-        f"Unable to find endpoint in page data: are you sure this is a Paper Street Media URL? {url}"
+    return (
+        f'{api}?q=id.keyword:"{identifier}"&size=3',
+        get_members_prefix(network),
+        final_url,
     )
-    return None
 
 
 def scene_from_url(
