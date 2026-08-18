@@ -51,19 +51,15 @@ xPathScrapers:
         Name:
           selector: //div[contains(@class,"column-video-info")]/p[@class="mb-0"]/a/text()
           postProcess:
-            # map is exact-match: a substring replace here also rewrites
-            # "Kelly Madison", "Madison Ivy", "Kenzie Madison" and friends
             - map:
                 Madison: Ryan Madison
-      # The ld+json thumbnail is only 350-545px wide on most of the catalogue, so
-      # prefer the poster: it comes first in document order, and pre-2016 episodes
-      # have none (their og:image is a site-wide placeholder, hence the predicate)
       Image:
+        # Fallback for older scenes that do not have a poster
         selector: $poster | $ldjson
         postProcess:
           - replace:
-            - regex: '.+"thumbnailUrl":"([^"]+)".+'
-              with: "$1"
+              - regex: '.+"thumbnailUrl":"([^"]+)".+'
+                with: "$1"
       Studio:
         Name:
           selector: $ldjson
@@ -89,14 +85,14 @@ xPathScrapers:
         selector: $url
         postProcess:
           - replace:
-            - regex: '8k.+\.com(.+5KP.+)'
-              with: "5kporn.com$1"
-            - regex: '8k.+\.com(.+5KT.+)'
-              with: "5kteens.com$1"
-            - regex: '8k.+\.com(.+8KM.+)'
-              with: "8kmilfs.com$1"
-            - regex: '8k.+\.com(.+8KT.+)'
-              with: "8kteens.com$1"
+              - regex: '8k.+\.com(.+5KP.+)'
+                with: "5kporn.com$1"
+              - regex: '8k.+\.com(.+5KT.+)'
+                with: "5kteens.com$1"
+              - regex: '8k.+\.com(.+8KM.+)'
+                with: "8kmilfs.com$1"
+              - regex: '8k.+\.com(.+8KT.+)'
+                with: "8kteens.com$1"
       Date: //i[contains(@class, "fa-calendar")]/following-sibling::span
       Image: //meta[@property="og:image"]/@content
       Details:
@@ -129,16 +125,16 @@ xPathScrapers:
           selector: $url
           postProcess:
             - replace:
-              - regex: '.+?((5|8)\w+)/\d+'
-                with: $1
-              - regex: '8KM'
-                with: 8K Milfs
-              - regex: '8KT'
-                with: 8K Teens
-              - regex: '5KP'
-                with: 5KPorn
-              - regex: '5KT'
-                with: 5Kteens
+                - regex: '.+?((5|8)\w+)/\d+'
+                  with: $1
+                - regex: "8KM"
+                  with: 8K Milfs
+                - regex: "8KT"
+                  with: 8K Teens
+                - regex: "5KP"
+                  with: 5KPorn
+                - regex: "5KT"
+                  with: 5Kteens
 
 driver:
   cookies:
@@ -154,5 +150,3 @@ driver:
           Domain: ".5kporn.com"
           ValueRandom: 23
           Path: "/"
-
-# Last Updated August 17, 2026
