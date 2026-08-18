@@ -2,18 +2,23 @@ name: "NewSensationsNetworkSites"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - ashlynnbrooke.com/tour_ab/
-      - fourfingerclub.com/tour_ffc/
-      - freshoutofhighschool.com/tour_fohs/
       - familyxxx.com/tour_famxxx/
+      - fourfingerclub.com/tour_ffc/
+      - girlgirlxxx.com/tour_ffc/
       - girlgirlxxx.com/tour_girlgirlxxx/
-      - heavyhandfuls.com/tour_hh/
+      # freshouttahighschool.com is the canonical spelling: the other one redirects to it
+      - freshoutofhighschool.com/tour_fohs/
+      - freshouttahighschool.com/tour_fohs/
       - hotwifexxx.com/tour_hwxxx/
-      - jizzbomb.com/tour_jb/
       - newsensations.com/tour_rs/
       - parodypass.com/tour_pp/
+      - shanedieselxxx.com/tour_sdxxx/
+      # Retired: every path under these now redirects to a join funnel with no
+      # scene permalinks, so they are kept only to match already-stored URLs
+      - ashlynnbrooke.com/tour_ab/
+      - heavyhandfuls.com/tour_hh/
+      - jizzbomb.com/tour_jb/
       - shanedieselsbanginbabes.com/tour_sdbb/
-      - stretchedoutsnatch.com/tour_sos/
       - thelesbianexperience.com/tour_tle/
       - thetabutales.com/tour_tt/
       - unlimitedmilfs.com/tour_um/
@@ -21,9 +26,18 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="update_title"]/text() | //div[@class="indScene"]/h2
+      # Many different versions of the same tour pages
+      # selectors must work across all of them
+      Title: >-
+        //div[@class="update_title"]
+        | //div[@class="indScene"]/h1
+        | //div[@class="indScene"]/h2
+        | //div[@class="trailerMInfo"]/h2
       Date:
-        selector: //div[@class="cell update_date"]/text() | //div[@class='sceneDateP']/span[1]
+        selector: >-
+          //div[@class="cell update_date"]
+          | //div[@class="sceneDateP"]/span[1]
+          | //div[contains(@class,"released2")]
         postProcess:
           - replace:
               - regex: Released:\s
@@ -31,30 +45,46 @@ xPathScrapers:
               - regex: ^(\d{2}/\d{2}/\d{4}).+
                 with: $1
           - parseDate: 01/02/2006
-      Details: //span[@class="update_description"]/text() | //div[@class='description']/p[contains(span,"Description:")]/text()
+      Details: >-
+        //span[@class="update_description"]
+        | //div[@class="description"]/p[contains(span,"Description:")]
+        | //div[@class="description"]/h2
+        | //div[@class="videoDetails"]/p
       Tags:
         Name: //span[@class="update_tags"]/a/text()
       Performers:
-        Name: //span[@class="update_models"]/a/text() | //div[@class="sceneTextLink"]/p/span[@class="tour_update_models"]/a
-      Image: //video[@id]/@poster | //img[@alt="Join Today!"]/@src
+        Name: >-
+          //span[@class="update_models"]/a
+          | //div[@class="sceneTextLink"]/p/span[@class="tour_update_models"]/a
+          | //div[@class="trailerMInfo"]//div[contains(@class,"textLink")]/p/span[@class="tour_update_models"]/a
+      Image: >-
+        //video[@id]/@poster
+        | //img[@alt="Join Today!" and not(//video[@id]/@poster)]/@src
       Studio:
         Name:
           selector: //base/@href
           postProcess:
+            - replace:
+                - regex: .*/(tour_[a-z0-9]+)/?$
+                  with: $1
+                # Retired tours redirect to a join funnel with no tour_ segment:
+                # blank it so Stash is not offered a URL as a studio name
+                - regex: ^https?://.*
+                  with: ""
             - map:
-                https://ashlynnbrooke.com/tour_ab/: Ashynn Brooke
-                https://fourfingerclub.com/tour_ffc/: Four Finger Club
-                https://freshoutofhighschool.com/tour_fohs/: Fresh Out Of Highschool
-                https://jizzbomb.com/tour_jb/: Jizz Bomb
-                https://familyxxx.com/tour_famxxx/: FamilyXXX
-                https://girlgirlxxx.com/tour_girlgirlxxx/: Girl Girl XXX
-                https://heavyhandfuls.com/tour_hh/: Heavy Handfuls
-                https://hotwifexxx.com/tour_hwxxx/: Hot Wife XXX
-                https://newsensations.com/tour_rs/: New Sensations
-                https://parodypass.com/tour_pp/: Parody Pass
-                https://shanedieselsbanginbabes.com/tour_sdbb/: Shanedlesele Bangin Babes
-                https://stretchedoutsnatch.com/tour_sos/: Streched Out Snatch
-                https://thelesbianexperience.com/tour_tle/: The Lesbian Experience
-                https://thetabutales.com/tour_tt/: The Tabu Tales
-                https://unlimitedmilfs.com/tour_um/: Unlimited Milfs
-# Last Updated May 2, 2025
+                tour_ab: Ashlynn Brooke
+                tour_famxxx: FamilyXXX
+                tour_ffc: Four Finger Club
+                tour_fohs: Fresh Out Of Highschool
+                tour_girlgirlxxx: Girl Girl XXX
+                tour_hh: Heavy Handfuls
+                tour_hwxxx: Hot Wife XXX
+                tour_jb: Jizz Bomb
+                tour_pp: Parody Pass
+                tour_rs: The Romance Series
+                tour_sdbb: Shane Diesel's Bangin Babes
+                tour_sdxxx: Shane Diesel's Bangin Babes
+                tour_sos: Stretched Out Snatch
+                tour_tle: The Lesbian Experience
+                tour_tt: The Tabu Tales
+                tour_um: Unlimited Milfs

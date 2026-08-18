@@ -4,12 +4,18 @@ sceneByURL:
     url:
       - newsensations.com/tour_ns/updates
       - www.newsensations.com/tour_ns/updates
+      - newsensations.com/updates
+      - www.newsensations.com/updates
     scraper: sceneScraper
 groupByURL:
   - action: scrapeXPath
     url:
       - newsensations.com/tour_ns/dvds
       - www.newsensations.com/tour_ns/dvds
+      # Necessary because otherwise we'd match vod.newsensations.com/dvds
+      # which belongs to a different scraper
+      - //newsensations.com/dvds
+      - www.newsensations.com/dvds
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
@@ -33,7 +39,7 @@ xPathScrapers:
   movieScraper:
     group:
       Name:
-        selector: //div[@class='indSceneDVD']/h2
+        selector: //div[@class='indSceneDVD']/h1 | //div[@class='indSceneDVD']/h2
         postProcess:
           - replace:
               - regex: DVDS\s\/\s(.+)
@@ -50,8 +56,8 @@ xPathScrapers:
       Studio:
         Name:
           fixed: NewSensations
-      Synopsis:
-        selector: //div[@class='description']/p[contains(span,"Description:")]/text()
+      Synopsis: //div[@class='description']//h2
+      Tags:
+        Name: //div[@class='textLink']/p/a/text()
       URL: //link[@rel='canonical']/@href
       FrontImage: //span[@id='trailer_thumb']//img/@src
-# Last Updated October 26, 2024

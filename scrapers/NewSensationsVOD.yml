@@ -32,12 +32,11 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-            - regex: "-2x"
-              with: "-4x"
+              - regex: "-2x"
+                with: "-4x"
       Studio:
         Name:
           fixed: NewSensations
-      URL: //div[contains(@id,"packageinfo")][1]/@data-redirect
   movieScraper:
     group:
       Name: /html/head/title
@@ -55,32 +54,52 @@ xPathScrapers:
         selector: //div[@class="dvd_extra_fields"]/div[contains(text(), "Director")]/text()
         postProcess:
           - replace:
-            - regex: "Director:"
-              with: ""
+              - regex: "Director:"
+                with: ""
       Tags:
         Name: //div[@class="update_tags dvd_info"]/a/text()
   performerScraper:
     performer:
       Name: //span[@class="title_bar_hilite"]/text()
-      # Measurements:
-      #   selector: //div[@class="model_bio"]/text()[12]
-      #   postProcess:
-      #     - replace:
-      #       - regex: Measurements:&nbsp;\s+
-      #         with: ""
       Height:
-        selector: //div[@class="model_bio"]/text()[11]
+        selector: //div[@class="model_bio"]/text()[contains(.,"Height:")]
         postProcess:
           - replace:
-            - regex: .+(\d{3})cm
-              with: "$1"
-      # Birthdate:
-      #   selector: //div[@class="model_bio"]/text()[13]
-      #   postProcess:
-      #     - replace:
-      #       - regex: \s{2,}
-      #         with: ""
-      #       - regex: Birthday:\xc2\xa0
-      #         with: ""
-      #     - parseDate: January 2, 2006
-# Last Updated December 6, 2025
+              - regex: ^[^:]*:[\s\xA0]*
+                with: ""
+          - feetToCm: true
+      Measurements:
+        selector: //div[@class="model_bio"]/text()[contains(.,"Measurements:")]
+        postProcess:
+          - replace: &stripLabel
+              - regex: ^[^:]*:[\s\xA0]*
+                with: ""
+              - regex: ^Unknown$
+                with: ""
+      Birthdate:
+        selector: //div[@class="model_bio"]/text()[contains(.,"Birthday:")]
+        postProcess:
+          - replace: *stripLabel
+          - parseDate: January 2, 2006
+      Aliases:
+        selector: //div[@class="model_bio"]/text()[contains(.,"Aliases:")]
+        postProcess:
+          - replace: *stripLabel
+      Tattoos:
+        selector: //div[@class="model_bio"]/text()[contains(.,"Tattoos:")]
+        postProcess:
+          - replace: *stripLabel
+      Piercings:
+        selector: //div[@class="model_bio"]/text()[contains(.,"Piercings:")]
+        postProcess:
+          - replace: *stripLabel
+      Twitter:
+        selector: //div[@class="model_bio"]/text()[contains(.,"Twitter:")]
+        postProcess:
+          - replace:
+              - regex: ^[^:]*:[\s\xA0]*
+                with: ""
+              # Stash builds the profile URL itself, so the handle must be bare
+              - regex: ^@
+                with: ""
+# Last Updated August 18, 2026
