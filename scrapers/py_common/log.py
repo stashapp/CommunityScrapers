@@ -13,11 +13,26 @@ from functools import partial
 # messages.
 
 
+__MAX_LINE_BYTES = 64 * 1024 - 1024
+
+
+def __truncate(line: str) -> str:
+    encoded = line.encode("utf-8", "replace")
+    if len(encoded) <= __MAX_LINE_BYTES:
+        return line
+    omitted = len(encoded) - __MAX_LINE_BYTES
+    head = encoded[:__MAX_LINE_BYTES].decode("utf-8", "ignore")
+    return f"{head}[...{omitted} more bytes truncated]"
+
+
 def __log(level_char: str, s):
     lvl_char = "\x01{}\x02".format(level_char)
     s = re.sub(r"data:.+?;base64[^'\"]+", "[...]", str(s))
     for line in s.splitlines():
-        print(lvl_char, line, file=sys.stderr, flush=True)
+        try:
+            print(lvl_char, __truncate(line), file=sys.stderr, flush=True)
+        except (BrokenPipeError, ValueError):
+            return
 
 
 trace = partial(__log, "t")
