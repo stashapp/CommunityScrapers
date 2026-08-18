@@ -136,7 +136,7 @@ class ScenePage:
         log.info("Invoking self date")
         info_dd = self.soup.find("div", {"class": "infowrapper"}).find_all("dd")
         for dd in info_dd:
-            search = re.search("(\d{4})/(\d{2})/(\d{2})", dd.text)
+            search = re.search(r"(\d{4})/(\d{2})/(\d{2})", dd.text)
             if search:
                 date = f"{search[1]}-{search[2]}-{search[3]}"
                 return date
@@ -188,10 +188,10 @@ class TokyoHotModel:
         info_dict = dict(map(lambda k, v: (k.text, v.text), info_dt, info_dd))
 
         if info_dict.get("Height"):
-            parse_data = re.search("(\d{3})cm\s~\s(\d{3})cm", info_dict.get("Height"))
+            parse_data = re.search(r"(\d{3})cm\s~\s(\d{3})cm", info_dict.get("Height", ""))
             if parse_data:
                 data = (int(parse_data[1]) + int(parse_data[2])) / 2
-                return str(data)
+                return str(int(data))
         return None
 
     def get_weight(self):
@@ -200,11 +200,11 @@ class TokyoHotModel:
         info_dict = dict(map(lambda k, v: (k.text, v.text), info_dt, info_dd))
         if info_dict.get("Weight"):
             parse_data = re.search(
-                "(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Weight")
+                r"(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Weight", "")
             )
             if parse_data:
                 data = (int(parse_data[1]) + int(parse_data[2])) / 2
-                return str(data)
+                return str(int(data))
         return None
 
     def get_measurements(self):
@@ -218,30 +218,30 @@ class TokyoHotModel:
         hip = None
 
         if info_dict.get("Cup Size"):
-            parse_cup = re.search("^(\w)", info_dict.get("Cup Size"))
+            parse_cup = re.search(r"^(\w)", info_dict.get("Cup Size", ""))
             if parse_cup:
                 cup = JAP_TO_US_BUST.get(parse_cup[1].strip())
 
         if info_dict.get("Bust Size"):
             parse_bust = re.search(
-                "(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Bust Size")
+                r"(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Bust Size", "")
             )
             if parse_bust:
-                bust = round(((int(parse_bust[1]) + int(parse_bust[2])) / 2) * 0.393701)
+                bust = int(((int(parse_bust[1]) + int(parse_bust[2])) / 2) * 0.393701)
 
         if info_dict.get("Waist Size"):
             parse_waist = re.search(
-                "(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Waist Size")
+                r"(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Waist Size", "")
             )
             if parse_waist:
-                waist = round(
+                waist = int(
                     ((int(parse_waist[1]) + int(parse_waist[2])) / 2) * 0.393701
                 )
 
         if info_dict.get("Hip"):
-            parse_hip = re.search("(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Hip"))
+            parse_hip = re.search(r"(\d{2,3})cm\s~\s(\d{2,3})cm", info_dict.get("Hip", ""))
             if parse_hip:
-                hip = round(((int(parse_hip[1]) + int(parse_hip[2])) / 2) * 0.393701)
+                hip = int(((int(parse_hip[1]) + int(parse_hip[2])) / 2) * 0.393701)
 
         if cup and bust and waist and hip:
             return f"{bust}{cup}-{waist}-{hip}"
@@ -309,7 +309,7 @@ def _parse_media_search(soup):
     return detail_page_url
 
 
-def _extract_media_id(media_title: str, configuration: dict = MEDIA_CONFIGURATIONS):
+def _extract_media_id(media_title: str, configuration: list = MEDIA_CONFIGURATIONS):
     log.info(f"Extracting Media ID for {media_title}")
 
     def _extract_multi_part(search_results):
