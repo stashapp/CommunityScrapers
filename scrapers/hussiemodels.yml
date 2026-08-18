@@ -8,6 +8,7 @@ sceneByURL:
       - seehimfuck.com/trailers/
       - seehimsolo.com/trailers/
       - povpornstars.com
+      - ravebunnys.com/trailers/
     scraper: hussieScraper
 groupByURL:
   - action: scrapeXPath
@@ -49,8 +50,14 @@ xPathScrapers:
                 seehimfuck: See Him Fuck
                 seehimsolo: See Him Solo
                 povpornstars: POV Pornstars
+                ravebunnys: Rave Bunnys
     scene:
-      Title: //div[contains(@class, "videoDetails")]/*[starts-with(name(), 'h')]
+      Title:
+        selector: //div[contains(@class, "videoDetails")]/*[starts-with(name(), 'h')]
+        postProcess:
+          - replace:
+              - regex: '\s*-\s*Video$'
+                with: ""
       Date:
         selector: //div[contains(@class, "videoInfo")]/p[contains(span, "Date Added:")]/text()
         postProcess:
