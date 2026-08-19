@@ -57,7 +57,7 @@ xPathScrapers:
               - regex: '.+thumbnailUrl": "(http[^"]+)".+'
                 with: $1
       Tags:
-        Name: //a[@class="tag_item"]
+        Name: //span[@data-item-type="category"]//a//span | //a[@class="tag_item"]
       Studio:
         Name: $article//div[text()="Artist"]/following-sibling::span/a/span
         URL: $article//div[text()="Artist"]/following-sibling::span/a/@href
@@ -104,4 +104,4 @@ driver:
           Value: "1"
           Domain: "rule34video.com"
           Path: "/"
-# Last Updated May 19, 2026
+# Last Updated August 19, 2026
