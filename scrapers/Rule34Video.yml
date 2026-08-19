@@ -57,7 +57,7 @@ xPathScrapers:
               - regex: '.+thumbnailUrl": "(http[^"]+)".+'
                 with: $1
       Tags:
-        Name: //a[@class="tag_item"]
+        Name: //span[@data-item-type="category"]//a//span | //a[@class="tag_item"]
       Studio:
         Name: $article//div[text()="Artist"]/following-sibling::span/a/span
         URL: $article//div[text()="Artist"]/following-sibling::span/a/@href
