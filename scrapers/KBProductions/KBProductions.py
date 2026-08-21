@@ -102,7 +102,7 @@ studio_map = {
     "vrhush.com": "VRHush",
     "wankitnow.com": "Wank It Now",
     "xful.com": "Xful",
-    "xxxtryout.com": "XXXTryout",
+    "xxxtryout.com": "XXX Tryout",
     "yesgirlz.com": "Yes Girlz",
     "yummycouple.com": "Yummy Couple",
     "z-filmz-originals.com": "Z-Filmz",
