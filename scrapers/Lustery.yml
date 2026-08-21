@@ -118,4 +118,8 @@ xPathScrapers:
 
 driver:
   useCDP: true
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
 # Last Updated August 21, 2026
+
