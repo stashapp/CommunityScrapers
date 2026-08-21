@@ -1,6 +1,6 @@
 name: Lustery
 performerByURL:
-  - action: scrapeJson
+  - action: scrapeXPath
     url:
       - lustery.com/couple/
     queryURL: "{url}"
@@ -10,9 +10,9 @@ performerByURL:
           with: https://lustery.com/api/couple/$1
     scraper: performerScraper
 sceneByURL:
-  - action: scrapeJson
+  - action: scrapeXPath
     url:
-      - lustery.com/video-preview/
+      - lustery.com/video/
     queryURL: "{url}"
     queryURLReplace:
       url:
@@ -20,90 +20,102 @@ sceneByURL:
           with: https://lustery.com/api/video/$1
     scraper: sceneScraper
 
-jsonScrapers:
+xPathScrapers:
   performerScraper:
     performer:
-      Name: couple.name
-      Country:
-        selector: couple.location
+      Name:
+        selector: //pre
         postProcess:
+          - javascript: return JSON.parse(value).couple.name
+      Country:
+        selector: //pre
+        postProcess:
+          - javascript: return JSON.parse(value).couple.location
           - replace:
               - regex: .+,
                 with:
       Details:
-        selector: couple.permalink
+        selector: //pre
         postProcess:
-          - replace:
-              - regex: ^
-                with: https://lustery.com/api/couple/
-              - regex: $
-                with: /info
+          - javascript: |
+              const couple = JSON.parse(value).couple
+              return `https://lustery.com/api/couple/${couple.permalink}/info`
           - subScraper:
-              selector: coupleInfo.description
+              selector: //pre
+              postProcess:
+                - javascript: return JSON.parse(value).coupleInfo.description
       Image:
-        selector: couple.mainImage.staticPath
+        selector: //pre
         postProcess:
-          - replace:
-              - regex: ^
-                with: https://static.lustery.com/cdn-cgi/image/format=auto,width=750,quality=75/
+          - javascript: |
+              const path = JSON.parse(value).couple.mainImage.staticPath
+              return `https://img.lustery.com/cache/image/resize/format=auto,width=8000,quality=100/${path}`
 
   sceneScraper:
     scene:
-      Title: video.title
+      Title:
+        selector: //pre
+        postProcess:
+          - javascript: return JSON.parse(value).video.title
       Details:
-        selector: video.permalink
+        selector: //pre
         postProcess:
-          - replace:
-              - regex: ^
-                with: https://lustery.com/api/video/
-              - regex: $
-                with: /info
+          - javascript: |
+              const video = JSON.parse(value).video
+              return `https://lustery.com/api/video/${video.permalink}/info`
           - subScraper:
-              selector: videoInfo.description
-      Date: #not very accurate as it is the Last Edited Date
-        selector: video.publishAt
+              selector: //pre
+              postProcess:
+                - javascript: return JSON.parse(value).videoInfo.description
+      Date: # Last Edited Date
+        selector: //pre
         postProcess:
+          - javascript: return JSON.parse(value).video.publishAt
           - parseDate: unix
       URL:
-        selector: video.permalink
+        selector: //pre
         postProcess:
-          - replace:
-              - regex: ^
-                with: https://lustery.com/video-preview/
+          - javascript: |
+              const video = JSON.parse(value).video
+              return `https://lustery.com/video/${video.permalink}`
       Image:
-        selector: video.poster.staticPath
+        selector: //pre
         postProcess:
-          - replace:
-              - regex: ^
-                with: https://cdn77-public.lustery.com/cache/image/resize/format=auto,width=1920,quality=75/
+          - javascript: |
+              const path = JSON.parse(value).video.poster.staticPath
+              return `https://cdn77-public.lustery.com/cache/image/resize/format=auto,width=8000,quality=100/${path}`
       Performers:
         Name:
-          selector: "[video.couplePermalink,video.secondaryCouplePermalink]"
+          selector: //pre
           postProcess:
-            - replace:
-                - regex: ^
-                  with: https://lustery.com/api/couple/
-                - regex: $
-                  with: /info
+            - javascript: |
+                const video = JSON.parse(value).video
+                return `https://lustery.com/api/couple/${video.couplePermalink}/info`
             - subScraper:
-                selector: coupleInfo.members.#.name
-                concat: "|"
+                selector: //pre
+                postProcess:
+                  - javascript: return JSON.parse(value).coupleInfo.members.map(m => m.name).join("|")
           split: "|"
         URLs:
-          selector: "[video.couplePermalink,video.secondaryCouplePermalink]"
+          selector: //pre
           postProcess:
-            - replace:
-                - regex: ^
-                  with: https://lustery.com/couple/
+            - javascript: |
+                const video = JSON.parse(value).video
+                return [video.couplePermalink, video.secondaryCouplePermalink]
+                  .filter(Boolean)
+                  .map(p => `https://lustery.com/couple/${p}`)
+                  .join("|")
+          split: "|"
       Studio:
         Name:
           fixed: Lustery
       Tags:
-        Name: video.tags
-      Code: # Not sure, it seems unique though
-        selector: video.thumbnailsBasePath
-        postProcess:
-          - replace:
-              - regex: .*/(\d+)$
-                with: $1
-# Last Updated September 17, 2025
+        Name:
+          selector: //pre
+          postProcess:
+            - javascript: return JSON.parse(value).video.tags.join("|")
+          split: "|"
+
+driver:
+  useCDP: true
+# Last Updated August 21, 2026
