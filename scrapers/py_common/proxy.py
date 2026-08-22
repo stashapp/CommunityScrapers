@@ -229,8 +229,7 @@ class BackendManager:
       if backend.name == "flaresolverr" and flaresolverr_parameters is not None:
             common_kwargs['flaresolverrParameters'] = flaresolverr_parameters
       try:
-        res = backend.request(method, url, **common_kwargs)
-        return res 
+        return backend.request(method, url, **common_kwargs)
       except Exception as e:
         log.warning(f"[proxy] [{backend.name}] failed: {e}")
     raise Exception("All backends failed")
