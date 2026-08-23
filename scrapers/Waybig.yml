@@ -16,23 +16,21 @@ performerByName:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //meta[@name="twitter:title"]/@content
+      Title: //h1
       Date:
         selector: //div/i[@class="far fa-calendar"]/../span
         postProcess:
           - replace:
               - regex: ^(\d{4}-\d{2}-\d{2}).+
                 with: $1
-          - parseDate: 2006-01-02
-      Details:
-        selector: //div[@class="expand-inner"]
+          - parseDate: Jan 2, 2006
+      Details: //div[@class="expand-inner"]
       Tags:
         Name: //div[@class="content-links -tags"]//a
       Performers:
         Name: //div[@class="models-box"]/a
         URLs: //div[@class="models-box"]/a/@href
-      Image:
-        selector: //video/@poster
+      Image: //video/@poster
       Studio:
         Name:
           selector: //a[@class="hoverLink"]
@@ -47,7 +45,7 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //div[@class="title-col -normal col"]/h2
-      URLs:  //link[@rel='canonical']/@href
+      URLs: //link[@rel='canonical']/@href
       Gender:
         fixed: Male
       Measurements:
@@ -80,6 +78,4 @@ xPathScrapers:
       Twitter: //a[contains(@href,"https://twitter.com")]/@href
       Instagram: //a[contains(@href,"https://www.instagram.com/")]/@href
       Image: //div[@class="image"]//@src
-      Details:
-        selector: //div[@class="expand-inner"]
-# Last Updated September 17, 2025
+      Details: //div[@class="expand-inner"]
