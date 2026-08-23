@@ -1,10 +1,17 @@
 name: pornpics.com
+
 galleryByURL: &coverByURL
   - action: scrapeXPath
     url:
       - pornpics.com/galleries/
     scraper: galleryScraper
 imageByURL: *coverByURL
+performerByURL:
+- action: scrapeXPath
+  url:
+  - pornpics.com/pornstars/
+  scraper: performerScraper
+
 xPathScrapers:
   galleryScraper:
     gallery:
@@ -21,4 +28,57 @@ xPathScrapers:
       Tags: *tags
       Performers: *performers
       Studio: *studio
-# Last Updated June 21, 2025
+  performerScraper:
+    common:
+      $item: //div[@class="card-additional-info"]
+    performer:
+      Name: //div[@class="entity-card-title__name"]
+      Image: //div[@class="entity-card-avatar"]/img/@src
+      Aliases:
+        selector: $item//div[div[@class="label"][text()="Aliases:"]]/div[@class="item__content"]/div[@class="value"]
+      URLs:
+        selector: $item//div[div[@class="label"][text()="Links:"]]/div[@class="item__content"]/div[@class="value slider"]/a/@href
+      Gender:
+        selector: $item//div[div[@class="label"][text()="Gender:"]]/div[@class="item__content"]/div[@class="value"]
+        postProcess:
+        - map:
+            Female: female
+            Male: male
+            Transgender Female: transgender_female
+            Transgender Male: transgender_male
+      Country: $item//div[div[@class="label"][text()="Country of birth:"]]/div[@class="item__content"]/div[@class="value"]
+      Ethnicity: $item//div[div[@class="label"][text()="Ethnicity:"]]/div[@class="item__content"]/div[@class="value"]
+      Birthdate:
+        selector: $item//div[div[@class="label"][text()="Birthday:"]]/div[@class="item__content"]/div[@class="value"]
+        parseDate: 2006-01-02
+      Height:
+        selector: $item//div[div[@class="label"][text()="Height:"]]/div[@class="item__content"]/div[@class="value"]
+        postProcess:
+        - replace:
+          - regex: \s*cm.*
+            with: ""
+      Weight:
+        selector: $item//div[div[@class="label"][text()="Weight:"]]/div[@class="item__content"]/div[@class="value"]
+        postProcess:
+        - replace:
+          - regex: \s*kg.*
+            with: ""
+      HairColor: $item//div[div[@class="label"][text()="Hair color:"]]/div[@class="item__content"]/div[@class="value"]
+      Tattoos:
+        selector: $item//div[div[@class="label"][text()="Tattoos:"]]/div[@class="item__content"]/div[@class="value"]
+        postProcess:
+        - map:
+            Yes: "Yes"
+            No: "No"
+      Measurements: $item//div[div[@class="label"][text()="Breast size:"]]/div[@class="item__content"]/div[@class="value"]
+      FakeTits:
+        selector: $item//div[div[@class="label"][text()="Breast type:"]]/div[@class="item__content"]/div[@class="value"]
+        postProcess:
+        - map:
+            "Fake Tits": Fake
+            "Natural Tits": Natural
+      Tags:
+        Name:
+          selector: $item//div[div[@class="label"][text()="Categories:"]]/div[@class="item__content"]/div[@class="value"]
+          split: ","
+# Last Updated August 23, 2026
