@@ -26,10 +26,21 @@ sceneByQueryFragment:
   scraper: sceneScraper
 xPathScrapers:
   sceneSearch:
+    common:
+      # Each result has separate desktop/mobile title markup. Anchor the fields
+      # to the single mobile thumbnail so each clip produces exactly one scene.
+      $clip: //li[contains(concat(' ', normalize-space(@class), ' '), ' ais-Hits-item ')]/div[contains(concat(' ', normalize-space(@class), ' '), ' clip ')]
     scene:
-      Title: //div[@class='tittle-price d-flex flex-column text-ellipsis']//div[@class='content-title']//a/text()
-      URL: //div[@class='tittle-price d-flex flex-column text-ellipsis']//div[@class='content-title']//a/@href
-      Image: //div[@class='clip-thumb-16-9 visible-xs']//img[@class='lazy']/@data-original
+      Title: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' clip-thumb-16-9 ') and contains(concat(' ', normalize-space(@class), ' '), ' visible-xs ')]/a/img/@alt
+      URL: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' clip-thumb-16-9 ') and contains(concat(' ', normalize-space(@class), ' '), ' visible-xs ')]/a/@href
+      Image: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' clip-thumb-16-9 ') and contains(concat(' ', normalize-space(@class), ' '), ' visible-xs ')]/a/img/@data-original
+      Details: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' content-extended ')]//div[contains(concat(' ', normalize-space(@class), ' '), ' content-description ')]/p
+      Studio:
+        Name: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' content-footer ') and contains(concat(' ', normalize-space(@class), ' '), ' visible-xs ')]//div[contains(concat(' ', normalize-space(@class), ' '), ' content-price ')]/a[1]/@title
+      Tags:
+        Name:
+          selector: $clip//div[contains(concat(' ', normalize-space(@class), ' '), ' content-extended ')]//div[contains(concat(' ', normalize-space(@class), ' '), ' content-categories ')]/span[contains(concat(' ', normalize-space(@class), ' '), ' subtitle-2 ')]/text()
+          split: ", "
   sceneScraper:
     common:
       $model: //a[@class="modelLink"]
