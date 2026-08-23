@@ -27,6 +27,7 @@ studio_map = {
     "boppingbabes.com": "Bopping Babes",
     "cannonprod.com": "Cannon Productions",
     "comeinside.com": "Come Inside",
+    "cosplayxgirls.com": "CosplayXGirls",
     "cougarseason.com": "Cougar Season",
     "creampiethais.com": "Creampie Thais",
     "darkshade.com": "Darkshade",
@@ -93,6 +94,7 @@ studio_map = {
     "theartemixxx.com": "The ArtemiXXX",
     "topwebmodels.com": "Top Web Models",
     "topwebmodels-interviews.com": "TWM Interviews",
+    "trashyneverclassy.com": "Trashy Never Classy",
     "3rdwheel.toughlovex.com": "ToughLoveX",
     "trueanal.com": "True Anal",
     "twmclassics.com": "TWM Classics",
@@ -100,6 +102,7 @@ studio_map = {
     "vrhush.com": "VRHush",
     "wankitnow.com": "Wank It Now",
     "xful.com": "Xful",
+    "xxxtryout.com": "XXX Tryout",
     "yesgirlz.com": "Yes Girlz",
     "yummycouple.com": "Yummy Couple",
     "z-filmz-originals.com": "Z-Filmz",
@@ -257,6 +260,8 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
 
     if bio := raw_performer.get("bio"):
         performer["details"] = strip_tags(bio)
+    elif details := raw_performer.get("details"):
+        performer["details"] = strip_tags(details)
 
     if (birthdate := raw_performer.get("birthdate")) and birthdate != "1969-12-31":
         performer["birthdate"] = birthdate
@@ -291,7 +296,7 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
         performer["height"] = str(height_cm)
 
     if (weight_lb := raw_performer.get("weight")) and (
-        w := re.match(r"(\d+)\slbs", weight_lb)
+        w := re.match(r"(\d+)\slbs?", weight_lb)
     ):
         weight_kg = round(float(w.group(1)) / 2.2046)
         performer["weight"] = str(weight_kg)
