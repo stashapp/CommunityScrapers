@@ -92,7 +92,7 @@ xPathScrapers:
               - regex: "Show (Less|More)$"
                 with: ""
       Studio:
-        Name: //a[@label="Studio"]/text()
+        Name: //small[contains(text(),"Studio")]/following-sibling::a/text()
       FrontImage: //a[@id="front-cover"]/@data-href
       BackImage: //a[@id="back-cover"]/@href
       # Rating is not yet implemented in the UX
@@ -149,7 +149,7 @@ xPathScrapers:
       Director: //a[@label="Director"]/text()
       Image: //a[@id="front-cover"]/@data-href
       Studio:
-        Name: //a[@label="Studio"]/text()
+        Name: //small[contains(text(),"Studio")]/following-sibling::a/text()
       Groups:
         Name: //div[contains(@class, "title-rating-section")]//h1/text()
         URL: //link[@rel="canonical"]/@href
