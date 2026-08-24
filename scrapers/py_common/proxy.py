@@ -8,6 +8,8 @@
 # caches flaresolverr cookies, userAgent for subsequent requests to same host
 
 import os
+import re
+import html
 import time
 import json
 import urllib.parse
@@ -94,6 +96,9 @@ class FlareSolverrBackend(RequestBackend):
 
   def request(self, method, url, **kwargs):
     if check_flaresolverr(FLARESOLVERR_URL):
+      # FlareSolverr's API has no `params` field, so anything the caller passed
+      # that way has to be folded into the URL or it is silently dropped.
+      url = merge_params(url, kwargs.get("params"))
       log.info(f"[proxy] trying FlareSolverr for {url}")
       # HEAD is not supported
       if method == "head":
@@ -135,6 +140,42 @@ def get_useragent() -> str:
   chrome_ua = requests.get("https://feederbox826.github.io/user-agents/user-agents.json").json()[3]
   return chrome_ua
 
+def merge_params(url: str, params) -> str:
+  """Fold requests-style `params` into `url`, preserving any existing query."""
+  if not params:
+    return url
+  parts = urllib.parse.urlsplit(url)
+  if isinstance(params, (str, bytes)):
+    extra = params.decode() if isinstance(params, bytes) else params
+  else:
+    pairs = params.items() if hasattr(params, "items") else params
+    extra = urllib.parse.urlencode(
+      [(k, v) for k, v in pairs if v is not None], doseq=True
+    )
+  query = f"{parts.query}&{extra}" if parts.query else extra
+  return urllib.parse.urlunsplit(parts._replace(query=query))
+
+# Chrome renders non-HTML documents (JSON, plain text) in its built-in viewer, so
+# FlareSolverr hands back the *rendered DOM* rather than the raw body:
+#   <html><head>...</head><body><pre>{"the":"real payload"}</pre></body></html>
+# Any scraper calling .json() on that response dies with a JSONDecodeError, which
+# makes this backend unusable for JSON endpoints. Unwrap only when the document is
+# exactly that viewer shell, so a real page that merely contains a <pre> is left alone.
+_CHROME_VIEWER_RE = re.compile(
+  r"\A\s*<html[^>]*>\s*<head[^>]*>(?:\s*<meta[^>]*>)*\s*</head>\s*<body[^>]*>"
+  r"\s*<pre[^>]*>(?P<payload>.*)</pre>"
+  # Chrome appends an empty <div class="json-formatter-container"> after the <pre>
+  r"(?:\s*<div[^>]*>\s*</div>)*\s*</body>\s*</html>\s*\Z",
+  re.DOTALL | re.IGNORECASE,
+)
+
+def unwrap_chrome_viewer(text: str) -> str:
+  match = _CHROME_VIEWER_RE.match(text)
+  if not match:
+    return text
+  log.debug("[proxy] unwrapped Chrome's document viewer from the FlareSolverr response")
+  return html.unescape(match.group("payload"))
+
 def flaresolverr_req(url, method="get", postData=None, proxy=None) -> requests.Response:
   if proxy and "@" in proxy:
     log.warning("[proxy] Ignoring unsupported proxy for FlareSolverr")
@@ -152,7 +193,7 @@ def flaresolverr_req(url, method="get", postData=None, proxy=None) -> requests.R
   solution = response.json().get("solution")
   req_response = requests.Response()
   req_response.status_code = solution.get("status", 200)
-  req_response._content = solution.get("response", "").encode("utf-8")
+  req_response._content = unwrap_chrome_viewer(solution.get("response", "")).encode("utf-8")
   req_response.headers = solution.get("headers", {})
   req_response.url = solution.get("url", "")
   req_response.request = requests.Request(method, req_response.url, headers=req_response.headers).prepare()
