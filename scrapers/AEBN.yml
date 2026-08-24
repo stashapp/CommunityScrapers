@@ -88,7 +88,7 @@ xPathScrapers:
     group:
       Name: //h1[@class="dts-section-page-heading-title"]|//div[@class="dts-section-page-heading-title"]/h1
       Director:
-        selector: //li[@class='section-detail-list-item-director']//span//a
+        selector: //li[@class='section-detail-list-item-director']//a
         concat: ", "
       Duration: //li[@class='section-detail-list-item-duration'][contains(span,"Running Time")]/text()
       Date:
@@ -100,7 +100,7 @@ xPathScrapers:
           - parseDate: Jan 2, 2006
       Synopsis: //div[@class="dts-section-page-detail-description-body"]//text()
       Studio:
-        Name: //div[@class='dts-studio-name-wrapper']/a/text()
+        Name: //li[@class='section-detail-list-item-studio']//a/text()
       FrontImage:
         selector: //picture[@class="dts-movie-boxcover-front"]/img/@src
         postProcess:
@@ -119,18 +119,18 @@ driver:
       Cookies:
         - Name: "ageGated"
           Domain: "vod.aebn.com"
-          Value: ""
+          Value: "true"
           Path: "/"
     - CookieURL: "https://gay.aebn.com"
       Cookies:
         - Name: "ageGated"
           Domain: "gay.aebn.com"
-          Value: ""
+          Value: "true"
           Path: "/"
     - CookieURL: "https://straight.aebn.com"
       Cookies:
         - Name: "ageGated"
           Domain: "straight.aebn.com"
-          Value: ""
+          Value: "true"
           Path: "/"
 # Last Updated September 17, 2025
