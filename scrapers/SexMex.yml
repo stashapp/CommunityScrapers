@@ -23,49 +23,63 @@ xPathScrapers:
     common:
       $scene: //div[@data-setid]
     scene:
-      Title: $scene//h5
-      URL: $scene//h5/a/@href
+      Title: $scene//h3
+      URL: $scene//h3/a/@href
       Date:
-        selector: $scene/p[contains(@class, "scene-date")]
+        selector: $scene//p[contains(@class, "scene-date")]
         postProcess:
           - parseDate: 01/02/2006
       Image: $scene//img/@src
   sexmex:
+    common:
+      $jsonld: //script[@type="application/ld+json"]
     scene:
-      Title: &title
-        selector: &titleSel //div[@class="panel-body"]/h4
+      Title:
+        &title # ExposedLatinas and TransQueens still use the old layout so we keep both selectors
+        selector: //div[@class="panel-body"]/h2 | //div[@class="panel-body"]/h4
         postProcess:
           - replace:
-              - regex: ([^.]*)\s\..*
-                with: $1
+              - regex: ^Scenes:\s*
+                with: ""
+              - regex: \s*\..*
+                with: ""
       URL: &url
-        selector: //base/@href | //option[@selected]/@value
+        selector: //link[@rel="canonical"]/@href | //base[not(//link[@rel="canonical"])]/@href | //option[@selected][not(//link[@rel="canonical"])]/@value
         concat: "/"
         postProcess:
           - replace:
               - regex: tour/+tour
                 with: tour
-      # This uses the site search to find the scene so it
-      # will sometimes produce false positives
       Code: &code
-        selector: *titleSel
+        selector: $jsonld
         postProcess:
           - replace:
-              - regex: \s+
-                with: "+"
-              - regex: "&"
-                with: "%26"
-              - regex: ^
-                with: "https://sexmex.xxx/tour/search.php?query="
-          - subScraper:
-              selector: //div[@data-setid][1]/@data-setid
+              - regex: .*"contentUrl":"[^"]*/trailers/([^."]+)\.mp4".*
+                with: $1
+      Date: &date
+        selector: $jsonld
+        postProcess:
+          - replace:
+              - regex: .*"uploadDate":"([^"T]+)T.*
+                with: $1
+          - parseDate: 2006-01-02
       Details: &details //div[@class="panel-body"]/p[not(@class)]
       Tags: &tags
         Name:
           selector: //meta[@name="keywords"]/@content
+          postProcess:
+            - replace:
+                - regex: ", "
+                  with: ","
           split: ","
       Performers: &performers
-        Name: //div[@class="panel-body"]/p[@class="cptn-model"]/a//text()
+        Name:
+          selector: //div[@class="panel-body"]/p[@class="cptn-model"]/a//text()
+          postProcess:
+            - javascript: |
+                if (value?.length) {
+                  return value.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+                }
       Studio: &studio
         Name:
           selector: //base/@href
@@ -75,17 +89,18 @@ xPathScrapers:
                 https://sexmex.xxx/tour/: Sex Mex
                 https://transqueens.com/tour/: Trans Queens
       Image:
-        selector: //video/@poster
+        selector: $jsonld
         postProcess:
           - replace:
-              - regex: cover.jpg$
-                with: 1.jpg
+              - regex: .*"thumbnailUrl":\["([^"]+)"\].*
+                with: $1
 
     gallery:
       Title: *title
+      URL: *url
       Code: *code
+      Date: *date
       Details: *details
       Tags: *tags
       Performers: *performers
       Studio: *studio
-# Last Updated January 18, 2025
