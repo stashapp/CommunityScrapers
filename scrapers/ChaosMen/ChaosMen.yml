@@ -28,4 +28,27 @@ sceneByQueryFragment:
     - ../Algolia/Algolia.py
     - chaosmen
     - validName
-# Last Updated January 10, 2023
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - chaosmen
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../AlgoliaAPI/AlgoliaAPI.py
+    - chaosmen
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - chaosmen.com/en/pornstar/
+    script:
+      - python
+      - ../AlgoliaAPI/AlgoliaAPI.py
+      - chaosmen
+      - performer-by-url
+# Last Updated August 26, 2026
