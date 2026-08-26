@@ -1,0 +1,70 @@
+name: "Irmãos Dotados"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - irmaosdotados.com.br/video/
+    scraper: sceneScraper
+    queryURL: https://irmaosdotados.com.br/idioma.php?lgn=en&pg={url}
+    queryURLReplace:
+      url:
+        - regex: ^https?://[^/]+
+          with: ""
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - irmaosdotados.com.br/model/
+    scraper: performerScraper
+    queryURL: https://irmaosdotados.com.br/idioma.php?lgn=en&pg={url}
+    queryURLReplace:
+      url:
+        - regex: ^https?://[^/]+
+          with: ""
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //meta[@property="og:title"]/@content
+      Details:
+        selector: //div[@class="mt-0 text-white"]
+        postProcess:
+          - replace:
+              - regex: ^"|"$
+                with: ""
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: "Irmãos Dotados"
+  performerScraper:
+    performer:
+      Name: //div[@class="heading-block border-bottom-0 mb-4 text-center"]/h3
+      Image: //div[@class="col-md-6 col-12"]/img/@src
+      Gender:
+        fixed: Male
+      Height:
+        selector: //div[@class="text-white"]/li[contains(.,"Height and weight")]
+        postProcess:
+          - replace:
+              - regex: '.*Height and weight:\s*([\d.,]+)\s*cm.*'
+                with: "$1"
+          - javascript: |
+              if (!value) return "";
+              return Math.round(parseFloat(value.replace(",", ".")) * 100).toString();
+      Weight:
+        selector: //div[@class="text-white"]/li[contains(.,"Height and weight")]
+        postProcess:
+          - replace:
+              - regex: '.*/\s*([\d.]+)\s*kg.*'
+                with: "$1"
+      PenisLength:
+        selector: //div[@class="text-white"]/li[contains(.,"Dick size")]
+        postProcess:
+          - replace:
+              - regex: '.*Dick size:\s*([\d.]+).*'
+                with: "$1"
+      Details:
+        selector: //div[@class="text-white"]/li[contains(.,"Age") or contains(.,"Position")]
+        concat: "\n"
+
+# CDP is required so the redirect through idioma.php (which sets the English
+# session cookie) is followed with cookies intact, like a real browser would.
+driver:
+  useCDP: true
