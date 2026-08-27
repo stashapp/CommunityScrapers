@@ -1,25 +1,58 @@
 from argparse import ArgumentParser
 from functools import reduce
-from typing import Any, Callable, Iterable, Mapping, TypeVar, cast
+from typing import Any, Callable, Literal, Mapping, Sequence, TypeVar, cast, overload
 from urllib.error import URLError
 from urllib.request import Request, urlopen
 import json
 import re
 import sys
 
+_MISSING = object()
 
+T = TypeVar("T")
+
+ScraperOperation = Literal[
+    "performer-by-name",
+    "performer-by-fragment",
+    "performer-by-url",
+    "movie-by-url",
+    "group-by-url",
+    "scene-by-name",
+    "scene-by-url",
+    "scene-by-fragment",
+    "scene-by-query-fragment",
+    "gallery-by-url",
+    "gallery-by-fragment",
+    "image-by-url",
+    "image-by-fragment",
+]
+
+
+@overload
+def dig(c: Mapping | Sequence, *keys: str | int | tuple[str | int, ...]) -> Any: ...
+@overload
 def dig(
-    c: Mapping | Iterable, *keys: str | int | tuple[str | int, ...], default=None
+    c: Mapping | Sequence, *keys: str | int | tuple[str | int, ...], default: T
+) -> T | Any: ...
+def dig(
+    c: Mapping | Sequence, *keys: str | int | tuple[str | int, ...], default: Any = None
 ) -> Any:
     """
-    Helper function to get a value from a nested dict or list
+    Helper function to get a value from a nested Mapping (e.g. dict) or Sequence
+    (e.g. list, tuple)
 
     If a key is a tuple the items will be tried in order until a value is found
 
-    :param c: dict or list to search
+    The found value is inherently untyped (it's Any), since it comes from an
+    untyped nested structure - but if a typed `default` is given, the return
+    type is narrowed to `type(default) | Any` instead of a bare `Any`, so a
+    type checker can still catch a `default` that's obviously the wrong shape
+    for how the result is used.
+
+    :param c: Mapping or Sequence to search
     :param keys: keys to search for
-    :param default: default value to return if not found
-    :return: value if found, None otherwise
+    :param default: default value to return if not found at any point along the path
+    :return: value if found, else `default`
 
     >>> obj = {"a": {"b": ["c", "d"], "f": {"g": "h"}}}
     >>> dig(obj, "a", "b", 1)
@@ -28,23 +61,29 @@ def dig(
     'h'
     """
 
-    def inner(d: dict | list, key: str | int | tuple):
-        if isinstance(d, dict):
-            if isinstance(key, tuple):
-                for k in key:
-                    if k in d:
-                        return d[k]
-            return d.get(key, default)
-        elif isinstance(d, list) and isinstance(key, int) and key < len(d):
-            return d[key]
-        else:
-            return default
+    def inner(d, key: str | int | tuple[str | int, ...]):
+        if d is _MISSING:
+            return _MISSING
+        candidates = key if isinstance(key, tuple) else (key,)
+        if isinstance(d, Mapping):
+            return next((d[k] for k in candidates if k in d), _MISSING)
+        if isinstance(d, Sequence) and not isinstance(d, (str, bytes)):
+            return next(
+                (
+                    d[i]
+                    for i in candidates
+                    if isinstance(i, int) and -len(d) <= i < len(d)
+                ),
+                _MISSING,
+            )
+        return _MISSING
 
-    return reduce(inner, keys, c)  # type: ignore
+    result = reduce(inner, keys, c)
+    return default if result is _MISSING else result
 
 
-T = TypeVar("T")
 M = TypeVar("M", bound=Mapping[str, Any])
+
 
 def replace_all(obj: M, key: str, replacement: Callable[[T], T]) -> M:
     """
@@ -58,11 +97,11 @@ def replace_all(obj: M, key: str, replacement: Callable[[T], T]) -> M:
     :return: new dict
 
     >>> obj = {"a": {"b": ["c", "d"], "f": {"g": "h"}}}
-    >>> replace(obj, "g", lambda x: x.upper()) # Replace a single item
+    >>> replace_all(obj, "g", lambda x: x.upper()) # Replace a single item
     {'a': {'b': ['c', 'd'], 'f': {'g': 'H'}}}
-    >>> replace(obj, "b", lambda x: x.upper()) # Replace all items in a list
+    >>> replace_all(obj, "b", lambda x: x.upper()) # Replace all items in a list
     {'a': {'b': ['C', 'D'], 'f': {'g': 'h'}}}
-    >>> replace(obj, "z", lambda x: x.upper()) # Do nothing if the key is not found
+    >>> replace_all(obj, "z", lambda x: x.upper()) # Do nothing if the key is not found
     {'a': {'b': ['c', 'd'], 'f': {'g': 'h'}}}
     """
     if not isinstance(obj, dict):
@@ -203,7 +242,7 @@ def is_valid_url(url):
         return False
 
 
-def __default_parser(**kwargs):
+def __default_parser(**kwargs: Any) -> ArgumentParser:
     parser = ArgumentParser(**kwargs)
     # Some scrapers can take extra arguments so we can
     # do rudimentary configuration in the YAML file
@@ -228,7 +267,7 @@ def __default_parser(**kwargs):
     ).add_argument("--url")
 
     # Filling in an URL and hitting the "Scrape" icon
-    subparsers.add_parser( # DEPRECATED, USE group-by-url instead
+    subparsers.add_parser(  # DEPRECATED, USE group-by-url instead
         "movie-by-url", help="Scrape a movie by its URL"
     ).add_argument("--url")
 
@@ -296,7 +335,7 @@ def __default_parser(**kwargs):
     return parser
 
 
-def scraper_args(**kwargs):
+def scraper_args(**kwargs: Any) -> tuple[ScraperOperation, dict[str, Any]]:
     """
     Helper function to parse arguments for a scraper
 
@@ -315,6 +354,8 @@ def scraper_args(**kwargs):
     - scene-by-query-fragment
     - gallery-by-url
     - gallery-by-fragment
+    - image-by-url
+    - image-by-fragment
 
     A scraper can be configured to take extra arguments by adding them to the YAML file:
     ```yaml
