@@ -1,0 +1,88 @@
+name: Script Scraper Template
+
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ScriptScraperTemplate.py
+    - gallery-by-fragment
+galleryByURL:
+  - action: script
+    url:
+      - swag
+    script:
+      - python
+      - ScriptScraperTemplate.py
+      - gallery-by-url
+
+imageByFragment:
+  action: script
+  script:
+    - python
+    - ScriptScraperTemplate.py
+    - image-by-fragment
+imageByURL:
+  - action: script
+    url:
+      - swag
+    script:
+      - python
+      - ScriptScraperTemplate.py
+      - image-by-url
+
+movieByURL:
+  - action: script
+    url:
+      - swag
+    script:
+      - python
+      - ScriptScraperTemplate.py
+      - movie-by-url
+
+performerByName:
+  action: script
+  script:
+    - python
+    - ScriptScraperTemplate.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - swag
+    script:
+      - python
+      - ScriptScraperTemplate.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ScriptScraperTemplate.py
+    - performer-by-fragment
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ScriptScraperTemplate.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - ScriptScraperTemplate.py
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ScriptScraperTemplate.py
+    - scene-by-query-fragment
+sceneByURL:
+  - action: script
+    url:
+      - swag
+    script:
+      - python
+      - ScriptScraperTemplate.py
+      - scene-by-url
