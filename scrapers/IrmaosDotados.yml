@@ -35,7 +35,12 @@ xPathScrapers:
           fixed: "Irmãos Dotados"
   performerScraper:
     performer:
-      Name: //div[@class="heading-block border-bottom-0 mb-4 text-center"]/h3
+      Name:
+        selector: //div[@class="heading-block border-bottom-0 mb-4 text-center"]/h3
+        postProcess:
+          - javascript: |
+              if (!value) return "";
+              return value.toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase());
       Image: //div[@class="col-md-6 col-12"]/img/@src
       Gender:
         fixed: Male
