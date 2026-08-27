@@ -1,0 +1,20 @@
+# Clips4Sale has banned words, which cause searches to 404! Feel free to add more if you find them, or submit a pull request to add them to the default!
+forced
+force
+forc
+hypnotized
+hypnotics
+hypnotic
+hypnosis
+hypnos
+hypno
+hypnoed
+hypn
+hyp
+sleep
+cnc
+drunk
+intoxication
+intoxicated
+intoxicate
+unwilling
