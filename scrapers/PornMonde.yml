@@ -1,0 +1,88 @@
+name: Porn Monde
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - pornmonde.com/pornstar/
+    scraper: performerScraper
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - pornmonde.com/video
+    scraper: sceneScraper
+
+sceneByName:
+  action: scrapeXPath
+  queryURL: https://pornmonde.com/search?q={}
+  scraper: sceneSearch
+sceneByFragment:
+  action: scrapeXPath
+  queryURL: https://pornmonde.com/search?q={filename}
+  queryURLReplace:
+    filename:
+      - regex: ([^-]*?)(?:\s*-\s*)(?:.*)
+        with: $1
+      - regex: \s+
+        with: "%20"
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeXPath
+  queryURL: https://pornmonde.com/search?q={filename}
+  queryURLReplace:
+    filename:
+      - regex: (.*[^a-zA-Z])(?:- PornMonde(?:.+))
+        with: $1
+  scraper: sceneSearch
+
+xPathScrapers:
+  performerScraper:
+    common:
+      $infoPiece: //li/span[@class="Name"]
+    performer:
+      Name: //h1
+      Birthdate:
+        selector: $infoPiece[contains(text(), 'Birthday')]/following-sibling::span[@class="Value"]
+        parseDate: 02/01/2006
+      Twitter: //span[text() = 'Twitter']/../@href
+      Instagram: //span[text() = 'Instagram']/../@href
+      Measurements: $infoPiece[contains(text(), 'Measurements')]/following-sibling::span[@class="Value"]
+      Height:
+        selector: $infoPiece[contains(text(), 'Height')]/following-sibling::span[@class="Value"]
+        postProcess:
+          - replace:
+              - regex: (\d+) cm.*
+                with: $1
+      Ethnicity: $infoPiece[contains(text(), 'Ethnicity')]/following-sibling::span[@class="Value"]
+      FakeTits: $infoPiece[contains(text(), 'Fake Boobs')]/following-sibling::span[@class="Value"]
+      Piercings: $infoPiece[contains(text(), 'Piercing')]/following-sibling::span[@class="Value"]
+      Tattoos: $infoPiece[contains(text(), 'Tattoo')]/following-sibling::span[@class="Value"]
+
+  sceneScraper:
+    common:
+      $performer: //*[@class='VideoPornstars']/*[@class='CircleImageList']
+    scene:
+      Title: //*[@class='VideoTitle']/text()
+      Performers:
+        Name: $performer/li/a/*[@class='Popover']/text()
+        URLs: $performer//li/a/@href
+      Image: //meta[@property="og:image"]/@content
+      Date:
+        selector: //*[@class='Date']/*[@class='Value']/text()
+        postProcess:
+          - replace:
+              - regex: (\d{2})\.(\d{2})\.(\d{4})
+                with: $3-$2-$1
+      Tags:
+        Name: //*[@class='VideoCategories']/ul/li/a/*[@class='Popover']/text()
+
+  sceneSearch:
+    common:
+      $searchItem: //*[@class="VideosList singleRow"]/*[@class="SingleVideoItemLink"]
+    scene:
+      Title: $searchItem/*/*[@class="Title"]/text()
+      URL:
+        selector: $searchItem/@href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "https://pornmonde.com"
+      Image: $searchItem/*/*/*/img/@data-src
