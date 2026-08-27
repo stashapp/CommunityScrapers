@@ -1,0 +1,39 @@
+name: Lovingly Handmade Pornography
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lovinglyhandmadepornography.com/detail/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@id="detail_page"]//h1
+      Details:
+        selector: |
+          //div[@id="detail_page"]//h1/following-sibling::div[1]/p
+          | //div[@id="detail_page"]//h1/following-sibling::div[1][not(p)]
+        concat: "\n\n"
+      Director: Russell Harmon
+      URLs:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: ^http
+                with: "https"
+      Date:
+        selector: //div[@id="detail_page"]//h1/preceding-sibling::div[1]
+        postProcess:
+          - replace:
+              - regex: .*?Published:\s+(\d{4}-\d{2}-\d{2}).*
+                with: $1
+      Image: //video/@poster
+      Studio:
+        Name:
+          fixed: Lovingly Handmade Pornography
+      Tags:
+        Name: //a[@rel="tag"]
+
+driver:
+  headers:
+    - Key: "User-Agent"
+      Value: "stash-scraper/1.0"
