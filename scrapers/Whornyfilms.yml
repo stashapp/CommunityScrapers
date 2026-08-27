@@ -1,0 +1,31 @@
+name: Whorny Films
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - whornyfilms.com/videos/
+    scraper: sceneScraper
+
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="vd-title"]
+      URLs: //meta[@property="og:url"]/@content
+      Date:
+        selector: //script[@type="application/ld+json"]/text()
+        postProcess:
+          - javascript: |
+              var data = JSON.parse(value);
+              return data.uploadDate ? data.uploadDate.substring(0, 10) : null;
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: ^/
+                with: https://whornyfilms.com/
+      Studio:
+        Name:
+          fixed: Whorny Films
+      Tags:
+        Name: //h2[text()="Tags"]/following-sibling::div[1]/a[contains(@class,"tag-pill")][not(contains(@href,"tour-videos"))]
+      Performers:
+        Name: //div[@class="vd-meta-models"]/a
