@@ -74,7 +74,7 @@ def clean_text(text: str | None) -> str:
     text = re.sub(r'data-\w+="[^"]*"\s*', "", text)
     soup = BeautifulSoup(text, "html.parser")
     for br in soup.find_all("br"):
-        br.replace_with("\n")
+        br.replace_with("\n\n")
 
     return soup.get_text().strip()
 
