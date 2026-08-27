@@ -1,0 +1,36 @@
+name: UKHot Jocks
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - ukhotjocks.com/showgal.php
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h2[@class="parallelogram"]
+      Details: //div[@class="parallelogram"][text()="Description"]/following-sibling::p[not(@class="muted")][1]
+      Date:
+        selector: //p[@class="muted"][.//abbr[@title="Movie release date"]]
+        postProcess:
+          - replace:
+              - regex: .*?([A-Za-z]+ \d{1,2}, \d{4}).*
+                with: $1
+          - parseDate: January 2, 2006
+      Image:
+        selector: //script[contains(text(),'jwplayer("videoPlayer").setup')]/text()
+        postProcess:
+          - replace:
+              - regex: '.*image:\s*"([^"]+)".*'
+                with: $1
+              - regex: ^
+                with: https://www.ukhotjocks.com/
+      Studio:
+        Name:
+          fixed: UKHotJocks
+      Performers:
+        Name: //div[@class="parallelogram"][text()="Starring"]/following-sibling::div[1]/div/h6/a
+
+driver:
+  headers:
+    - Key: "User-Agent"
+      Value: "stash-scraper/1.0"
