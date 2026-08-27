@@ -25,4 +25,11 @@ xPathScrapers:
         Name: $info//div[@class="tags__container"]//a/text()
       Performers:
         Name: $info//div[@class="video-info__text"]//a/text()
-      Image: //meta[@property='og:image']/@content
+      Image:
+        selector: //meta[@property='og:image']/@content
+        postProcess:
+          - replace:
+              - regex: '(/ra/poster/\d+/)1200/'
+                with: ${1}1900/
+              - regex: /resized/lg/
+                with: /resized/xl/
