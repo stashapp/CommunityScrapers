@@ -1,4 +1,4 @@
-# requires: AlgoliaAPI
+# requires: Altwolia
 name: TabooHeat
 sceneByURL:
   - action: script
@@ -6,28 +6,26 @@ sceneByURL:
       - tabooheat.com/en/video/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - tabooheat
+      - ../Altwolia/scrape.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - tabooheat
+    - ../Altwolia/scrape.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
+    - ../Altwolia/scrape.py
     - tabooheat
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
+    - ../Altwolia/scrape.py
     - tabooheat
     - scene-by-query-fragment
 galleryByURL:
@@ -36,7 +34,5 @@ galleryByURL:
       - tabooheat.com/en/photo/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - tabooheat
+      - ../Altwolia/scrape.py
       - gallery-by-url
-# Last Updated January 30, 2025
