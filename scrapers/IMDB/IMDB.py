@@ -7,15 +7,23 @@ from html import unescape
 
 from lxml import html
 
-import py_common.log as log
-from py_common import proxy
-from py_common.util import scraper_args
-from py_common.types import (
-    PerformerSearchResult,
-    ScrapedGroup,
-    ScrapedPerformer,
-    ScrapedScene,
-)
+try:
+    import py_common.log as log
+    from py_common import proxy
+    from py_common.util import scraper_args
+    from py_common.types import (
+        PerformerSearchResult,
+        ScrapedGroup,
+        ScrapedPerformer,
+        ScrapedScene,
+    )
+except ModuleNotFoundError:
+    print(
+        "You need to download the folder 'py_common' from the community repo! "
+        "(CommunityScrapers/tree/master/scrapers/py_common)",
+        file=sys.stderr,
+    )
+    sys.exit()
 
 scraper = proxy.StashRequests()
 
@@ -152,28 +160,79 @@ def parse_duration(text: str) -> str | None:
 # field expects an ISO 3166-1 alpha-2 code. Unmapped countries pass through
 # by name.
 COUNTRY_CODES = {
-    "usa": "US", "united states": "US", "puerto rico": "PR",
-    "uk": "GB", "england": "GB", "scotland": "GB", "wales": "GB",
-    "northern ireland": "GB", "ireland": "IE",
-    "canada": "CA", "mexico": "MX", "brazil": "BR", "argentina": "AR",
-    "chile": "CL", "colombia": "CO", "venezuela": "VE", "peru": "PE",
+    "usa": "US",
+    "united states": "US",
+    "puerto rico": "PR",
+    "uk": "GB",
+    "england": "GB",
+    "scotland": "GB",
+    "wales": "GB",
+    "northern ireland": "GB",
+    "ireland": "IE",
+    "canada": "CA",
+    "mexico": "MX",
+    "brazil": "BR",
+    "argentina": "AR",
+    "chile": "CL",
+    "colombia": "CO",
+    "venezuela": "VE",
+    "peru": "PE",
     "cuba": "CU",
-    "france": "FR", "germany": "DE", "west germany": "DE", "east germany": "DE",
-    "italy": "IT", "spain": "ES", "portugal": "PT", "netherlands": "NL",
-    "belgium": "BE", "switzerland": "CH", "austria": "AT", "greece": "GR",
-    "sweden": "SE", "norway": "NO", "denmark": "DK", "finland": "FI",
-    "iceland": "IS", "poland": "PL", "czech republic": "CZ",
-    "czechoslovakia": "CZ", "slovakia": "SK", "hungary": "HU",
-    "romania": "RO", "bulgaria": "BG", "ukraine": "UA", "russia": "RU",
-    "soviet union": "RU", "ussr": "RU", "estonia": "EE", "latvia": "LV",
-    "lithuania": "LT", "croatia": "HR", "serbia": "RS", "yugoslavia": "RS",
+    "france": "FR",
+    "germany": "DE",
+    "west germany": "DE",
+    "east germany": "DE",
+    "italy": "IT",
+    "spain": "ES",
+    "portugal": "PT",
+    "netherlands": "NL",
+    "belgium": "BE",
+    "switzerland": "CH",
+    "austria": "AT",
+    "greece": "GR",
+    "sweden": "SE",
+    "norway": "NO",
+    "denmark": "DK",
+    "finland": "FI",
+    "iceland": "IS",
+    "poland": "PL",
+    "czech republic": "CZ",
+    "czechoslovakia": "CZ",
+    "slovakia": "SK",
+    "hungary": "HU",
+    "romania": "RO",
+    "bulgaria": "BG",
+    "ukraine": "UA",
+    "russia": "RU",
+    "soviet union": "RU",
+    "ussr": "RU",
+    "estonia": "EE",
+    "latvia": "LV",
+    "lithuania": "LT",
+    "croatia": "HR",
+    "serbia": "RS",
+    "yugoslavia": "RS",
     "slovenia": "SI",
-    "australia": "AU", "new zealand": "NZ",
-    "japan": "JP", "china": "CN", "hong kong": "HK", "taiwan": "TW",
-    "south korea": "KR", "korea": "KR", "india": "IN", "pakistan": "PK",
-    "thailand": "TH", "vietnam": "VN", "philippines": "PH",
-    "indonesia": "ID", "malaysia": "MY", "singapore": "SG",
-    "israel": "IL", "turkey": "TR", "iran": "IR", "egypt": "EG",
+    "australia": "AU",
+    "new zealand": "NZ",
+    "japan": "JP",
+    "china": "CN",
+    "hong kong": "HK",
+    "taiwan": "TW",
+    "south korea": "KR",
+    "korea": "KR",
+    "india": "IN",
+    "pakistan": "PK",
+    "thailand": "TH",
+    "vietnam": "VN",
+    "philippines": "PH",
+    "indonesia": "ID",
+    "malaysia": "MY",
+    "singapore": "SG",
+    "israel": "IL",
+    "turkey": "TR",
+    "iran": "IR",
+    "egypt": "EG",
     "south africa": "ZA",
 }
 
@@ -191,9 +250,7 @@ def performer_from_url(url: str) -> ScrapedPerformer:
     atf = props.get("aboveTheFold") or {}
     main = props.get("mainColumnData") or {}
 
-    name = dig(atf, "nameText", "text") or xpath_text(
-        tree, '//*[@data-testid="hero__primary-text"]'
-    )
+    name = dig(atf, "nameText", "text") or xpath_text(tree, '//*[@data-testid="hero__primary-text"]')
     if not name:
         raise Exception(f"Could not find performer name at {url}")
     performer: ScrapedPerformer = {
@@ -212,9 +269,7 @@ def performer_from_url(url: str) -> ScrapedPerformer:
         performer["death_date"] = death_date
 
     # actress/actor credit category is the only gender signal IMDB exposes
-    professions = [
-        dig(p, "category", "id") for p in atf.get("primaryProfessions") or []
-    ]
+    professions = [dig(p, "category", "id") for p in atf.get("primaryProfessions") or []]
     if "actress" in professions:
         performer["gender"] = "FEMALE"
     elif "actor" in professions:
@@ -231,32 +286,22 @@ def performer_from_url(url: str) -> ScrapedPerformer:
     if image:
         performer["images"] = [image]
 
-    external_links = [
-        dig(edge, "node", "url")
-        for edge in dig(main, "personalDetailsExternalLinks", "edges") or []
-    ]
+    external_links = [dig(edge, "node", "url") for edge in dig(main, "personalDetailsExternalLinks", "edges") or []]
     external_links = [link for link in external_links if link] or tree.xpath(
         '//li[@data-testid="details-officialsites"]//a[@target="_blank"]/@href'
     )
     performer["urls"].extend(external_links)
 
-    alias_texts = [
-        dig(nick, "displayableProperty", "value", "plainText")
-        for nick in main.get("nickNames") or []
-    ]
+    alias_texts = [dig(nick, "displayableProperty", "value", "plainText") for nick in main.get("nickNames") or []]
     alias_texts += [
-        dig(edge, "node", "displayableProperty", "value", "plainText")
-        or dig(edge, "node", "text")
+        dig(edge, "node", "displayableProperty", "value", "plainText") or dig(edge, "node", "text")
         for edge in dig(main, "akas", "edges") or []
     ]
     alias_texts = [a for a in alias_texts if a] or xpath_texts(
         tree,
-        '//li[@data-testid="nm_pd_ans"]//li'
-        ' | //span[contains(text(), "Nicknames")]/following-sibling::*//li/span',
+        '//li[@data-testid="nm_pd_ans"]//li' ' | //span[contains(text(), "Nicknames")]/following-sibling::*//li/span',
     )
-    aliases = sorted(
-        {a.strip() for text in alias_texts for a in text.split(",") if a.strip()}
-    )
+    aliases = sorted({a.strip() for text in alias_texts for a in text.split(",") if a.strip()})
     if aliases:
         performer["aliases"] = ", ".join(aliases)
 
@@ -333,9 +378,7 @@ def title_common(tree, url: str) -> dict:
 
     date = ld.get("datePublished")
     if not date:
-        raw = xpath_text(
-            tree, "//li[@data-testid='title-details-releasedate']/div/ul/li/a/text()"
-        )
+        raw = xpath_text(tree, "//li[@data-testid='title-details-releasedate']/div/ul/li/a/text()")
         date = parse_date(raw) if raw else None
     if date:
         common["date"] = date
@@ -362,9 +405,7 @@ def title_common(tree, url: str) -> dict:
     )
     genres = [unescape(g) for g in ld.get("genre") or []]
     seen = set()
-    common["tags"] = [
-        t for t in tags + genres if t.lower() not in seen and not seen.add(t.lower())
-    ]
+    common["tags"] = [t for t in tags + genres if t.lower() not in seen and not seen.add(t.lower())]
 
     common["ld"] = ld
     common["atf"] = atf
@@ -387,9 +428,7 @@ def scene_from_url(url: str) -> ScrapedScene:
     if common["tags"]:
         scene["tags"] = [{"name": tag} for tag in common["tags"]]
 
-    performers = xpath_texts(
-        tree, '//a[@data-testid="title-cast-item__actor"]'
-    ) or ld_names(common["ld"].get("actor"))
+    performers = xpath_texts(tree, '//a[@data-testid="title-cast-item__actor"]') or ld_names(common["ld"].get("actor"))
     if performers:
         scene["performers"] = [{"name": performer} for performer in performers]
 
