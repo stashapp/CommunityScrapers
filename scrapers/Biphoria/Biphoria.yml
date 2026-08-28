@@ -1,4 +1,4 @@
-# requires: AlgoliaAPI
+# requires: Altwolia
 name: Biphoria
 sceneByURL:
   - action: script
@@ -6,38 +6,35 @@ sceneByURL:
       - biphoria.com/en/video
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - biphoria
+      - ../Altwolia/scrape.py
       - scene-by-url
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - biphoria
-      - scene-by-fragment
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - scene-by-fragment
 sceneByName:
-    action: script
-    script:
-      - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - biphoria
-      - scene-by-name
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - biphoria
+    - scene-by-name
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - biphoria
-      - scene-by-query-fragment
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - biphoria
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
       - biphoria.com/en/photo/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - biphoria
+      - ../Altwolia/scrape.py
       - gallery-by-url
 groupByURL:
   - action: script
@@ -45,8 +42,5 @@ groupByURL:
       - biphoria.com/en/movie/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - biphoria
+      - ../Altwolia/scrape.py
       - movie-by-url
-# Last Updated January 30, 2025
-
