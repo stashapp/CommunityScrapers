@@ -1,58 +1,51 @@
-# requires: AlgoliaAPI
+# requires: Altwolia
 name: Raging Stallion
 sceneByURL:
   - action: script
     url:
       - ragingstallion.com/en/video
+      - ragingstallion.com/en/scene
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - ragingstallion
+      - RagingStallion.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - ragingstallion
+    - RagingStallion.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - ragingstallion
-    - searchName
+    - RagingStallion.py
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - ragingstallion
+    - RagingStallion.py
     - scene-by-query-fragment
 groupByURL:
   - action: script
     url:
       - ragingstallion.com/en/movie/
-      
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
+      - RagingStallion.py
       - movie-by-url
 performerByFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - ragingstallion
+    - RagingStallion.py
     - performer-by-fragment
 performerByName:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - ragingstallion
+    - RagingStallion.py
     - performer-by-name
 performerByURL:
   - action: script
@@ -60,8 +53,7 @@ performerByURL:
       - ragingstallion.com/en/pornstar/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - ragingstallion
+      - RagingStallion.py
       - performer-by-url
 
 # Last Updated March 3, 2026
