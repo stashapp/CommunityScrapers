@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
-# requires: AlgoliaAPI
+# requires: Altwolia
 name: "EvilAngel"
 sceneByURL:
   - action: script
@@ -19,7 +19,6 @@ sceneByURL:
     script:
       - python
       - EvilAngel.py
-      - evilangel
       - scene-by-url
 groupByURL:
   - action: script
@@ -31,35 +30,30 @@ groupByURL:
     script:
       - python
       - EvilAngel.py
-      - evilangel
       - movie-by-url
 sceneByFragment:
   action: script
   script:
     - python
     - EvilAngel.py
-    - evilangel
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
     - EvilAngel.py
-    - evilangel
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
     - EvilAngel.py
-    - evilangel
     - scene-by-query-fragment
 galleryByFragment:
   action: script
   script:
     - python
     - EvilAngel.py
-    - evilangel
     - gallery-by-fragment
 galleryByURL:
   - action: script
@@ -73,7 +67,6 @@ galleryByURL:
     script:
       - python
       - EvilAngel.py
-      - evilangel
       - gallery-by-url
 performerByURL:
   - action: script
@@ -88,13 +81,10 @@ performerByName:
   script:
     - python
     - EvilAngel.py
-    - evilangel
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
     - EvilAngel.py
-    - evilangel
     - performer-by-fragment
-# Last Updated June 3, 2025
