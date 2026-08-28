@@ -1,4 +1,4 @@
-# requires: AlgoliaAPI
+# requires: Altwolia
 name: GenderX Films
 sceneByURL:
   - action: script
@@ -7,35 +7,30 @@ sceneByURL:
     script:
       - python
       - GenderXFilms.py
-      - genderxfilms
       - scene-by-url
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - GenderXFilms.py
-      - genderxfilms
-      - scene-by-fragment
+  action: script
+  script:
+    - python
+    - GenderXFilms.py
+    - scene-by-fragment
 sceneByName:
-    action: script
-    script:
-      - python
-      - GenderXFilms.py
-      - genderxfilms
-      - scene-by-name
+  action: script
+  script:
+    - python
+    - GenderXFilms.py
+    - scene-by-name
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - GenderXFilms.py
-      - genderxfilms
-      - scene-by-query-fragment
+  action: script
+  script:
+    - python
+    - GenderXFilms.py
+    - scene-by-query-fragment
 galleryByFragment:
   action: script
   script:
     - python
     - GenderXFilms.py
-    - genderxfilms
     - gallery-by-fragment
 galleryByURL:
   - action: script
@@ -45,7 +40,6 @@ galleryByURL:
     script:
       - python
       - GenderXFilms.py
-      - genderxfilms
       - gallery-by-url
 groupByURL:
   - action: script
@@ -54,12 +48,11 @@ groupByURL:
     script:
       - python
       - GenderXFilms.py
-      - genderxfilms
       - movie-by-url
 performerByURL:
   - action: script
     url:
-      - evilangel.com/en/pornstar/
+      - genderxfilms.com/en/pornstar/
     script:
       - python
       - GenderXFilms.py
@@ -69,13 +62,10 @@ performerByName:
   script:
     - python
     - GenderXFilms.py
-    - genderxfilms
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
     - GenderXFilms.py
-    - genderxfilms
     - performer-by-fragment
-# Last Updated January 30, 2025
