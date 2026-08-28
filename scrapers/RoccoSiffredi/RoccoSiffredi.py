@@ -1,11 +1,8 @@
-"""
-Stash scraper for Rocco Siffredi that uses the Algolia API Python client
-"""
 import json
 import sys
 from typing import Any
 
-from AlgoliaAPI.AlgoliaAPI import (
+from Altwolia.scrape import (
     gallery_from_fragment,
     gallery_from_url,
     movie_from_url,
@@ -18,69 +15,38 @@ from AlgoliaAPI.AlgoliaAPI import (
 )
 
 from py_common import log
-from py_common.types import ScrapedMovie, ScrapedScene
-from py_common.util import scraper_args
-
-def fix_movie_url(_url: str) -> str:
-    """
-    Fixes the movie URL
-    """
-    return _url.replace("/en/movie/", "/en/dvd/")
-
-def postprocess_scene(scene: ScrapedScene, _: dict[str, Any]) -> ScrapedScene:
-    """
-    Applies post-processing to the scene
-    """
-    if movies := scene.get("movies"):
-        scene["movies"] = [
-            {
-                "url": fix_movie_url(movie.pop("url")),
-                **movie
-            } for movie in movies
-        ]
-
-    return scene
+from py_common.util import replace_all, scraper_args
 
 
-def postprocess_movie(movie: ScrapedMovie, _: dict[str, Any]) -> ScrapedMovie:
-    """
-    Applies post-processing to the movie
-    """
-    if _url := movie.get("url"):
-        movie["url"] = fix_movie_url(_url)
-
-    return movie
+def roccosiffredi(obj: Any, _) -> Any:
+    # Movie URLs use /en/dvd/ on the site itself, not /en/movie/
+    return replace_all(obj, "urls", lambda x: x.replace("/en/movie/", "/en/dvd/"))
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
 
+    site = "roccosiffredi"
     log.debug(f"args: {args}")
     match op, args:
-        case "gallery-by-url", {"url": url, "extra": extra} if url and extra:
-            sites = extra
-            result = gallery_from_url(url, sites)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url, site, postprocess=roccosiffredi)
         case "gallery-by-fragment", args:
-            sites = args.pop("extra")
-            result = gallery_from_fragment(args, sites)
-        case "scene-by-url", {"url": url, "extra": extra} if url and extra:
-            sites = extra
-            result = scene_from_url(url, sites, postprocess=postprocess_scene)
-        case "scene-by-name", {"name": name, "extra": extra} if name and extra:
-            sites = extra
-            result = scene_search(name, sites, postprocess=postprocess_scene)
+            result = gallery_from_fragment(args, site, postprocess=roccosiffredi)
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url, site, postprocess=roccosiffredi)
+        case "scene-by-name", {"name": name} if name:
+            result = scene_search(name, site, postprocess=roccosiffredi)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            sites = args.pop("extra")
-            result = scene_from_fragment(args, sites, postprocess=postprocess_scene)
+            result = scene_from_fragment(args, site, postprocess=roccosiffredi)
         case "performer-by-url", {"url": url}:
-            result = performer_from_url(url)
+            result = performer_from_url(url, site, postprocess=roccosiffredi)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args)
-        case "performer-by-name", {"name": name, "extra": extra} if name and extra:
-            sites = extra
-            result = performer_search(name, sites)
+            result = performer_from_fragment(args, site)
+        case "performer-by-name", {"name": name} if name:
+            result = performer_search(name, site, postprocess=roccosiffredi)
         case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url, postprocess=postprocess_movie)
+            result = movie_from_url(url, site, postprocess=roccosiffredi)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
