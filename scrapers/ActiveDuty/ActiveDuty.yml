@@ -1,31 +1,62 @@
-# requires: Algolia
+# requires: Altwolia
 name: "Active Duty"
 sceneByURL:
   - action: script
     url:
-      - activeduty.com/en/video
+      - activeduty.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - activeduty
+      - ActiveDuty.py
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - activeduty
+    - ActiveDuty.py
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - activeduty
-    - searchName
+    - ActiveDuty.py
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - activeduty
-    - validName
-# Last Updated September 26, 2023
+    - ActiveDuty.py
+    - scene-by-query-fragment
+galleryByURL:
+  - action: script
+    url:
+      - activeduty.com/en/photo/
+    script:
+      - python
+      - ActiveDuty.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ActiveDuty.py
+    - gallery-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - activeduty.com/en/pornstar/
+    script:
+      - python
+      - ActiveDuty.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ActiveDuty.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ActiveDuty.py
+    - performer-by-name
