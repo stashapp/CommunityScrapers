@@ -1,36 +1,34 @@
-# requires: Algolia
+# requires: Altwolia
 name: "Pride Studios"
 sceneByURL:
   - action: script
     url:
-      - extrabigdicks.com/en/video
-      - familycreep.com/en/video
-      - menover30.com/en/video
-      - pridestudios.com/en/video
+      - extrabigdicks.com/en/video/
+      - familycreep.com/en/video/
+      - menover30.com/en/video/
+      - pridestudios.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - pridestudios
+      - PrideStudios.py
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - pridestudios
+    - PrideStudios.py
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - pridestudios
-    - searchName
+    - PrideStudios.py
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - pridestudios
-    - validName
+    - PrideStudios.py
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
@@ -40,7 +38,34 @@ galleryByURL:
       - pridestudios.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - pridestudios
-      - gallery
-# Last Updated January 6, 2025
+      - PrideStudios.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - PrideStudios.py
+    - gallery-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - extrabigdicks.com/en/pornstar/
+      - familycreep.com/en/pornstar/
+      - menover30.com/en/pornstar/
+      - pridestudios.com/en/pornstar/
+    script:
+      - python
+      - PrideStudios.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - PrideStudios.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - PrideStudios.py
+    - performer-by-name
