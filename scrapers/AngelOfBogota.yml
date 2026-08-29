@@ -24,6 +24,7 @@ jsonScrapers:
                 with: " "
       Details: sets.0.description
       Date: sets.0.added_nice
+      Code: sets.0.slug
       Image:
         selector: sets.0.preview_formatted.thumb.1920-1080.0.[fileuri,signature].@tostr
         postProcess:
