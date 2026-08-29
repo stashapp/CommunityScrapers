@@ -41,7 +41,7 @@ def gaywire(obj: Any, _) -> Any:
         lambda x: x.replace("www.bangbros.com", "gaywire.com"),
     )
     fixed = replace_all(
-        obj,
+        fixed,
         "urls",
         lambda x: x.replace("www.bangbros.com", "gaywire.com"),
     )
@@ -52,7 +52,7 @@ def gaywire(obj: Any, _) -> Any:
     )
 
     fixed = replace_at(
-        fixed, "studio", "parent", "name", replacement=lambda x: "Gay Wire"
+        fixed, "studio", "parent", "name", replacement=lambda _: "Gay Wire"
     )
 
     return fixed
