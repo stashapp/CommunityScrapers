@@ -1,40 +1,56 @@
-# requires: Algolia
-name: "FilthyKings"
+# requires: Altwolia
+name: "Filthy Kings"
 sceneByURL:
   - action: script
     url:
-      - filthykings.com/en/video
+      - filthykings.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - filthykings
+      - filthykings.py
+      - scene-by-url
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - filthykings
+  action: script
+  script:
+    - python
+    - filthykings.py
+    - scene-by-fragment
 sceneByName:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - filthykings
-      - searchName
+  action: script
+  script:
+    - python
+    - filthykings.py
+    - scene-by-name
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - filthykings
-      - validName
+  action: script
+  script:
+    - python
+    - filthykings.py
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
       - filthykings.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - filthykings
-      - gallery
-# Last Updated December 22, 2022
+      - filthykings.py
+      - gallery-by-url
+performerByURL:
+  - action: script
+    url:
+      - filthykings.com/en/pornstar/
+    script:
+      - python
+      - filthykings.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - filthykings.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - filthykings.py
+    - performer-by-name
