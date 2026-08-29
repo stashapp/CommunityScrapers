@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+# Angel of Bogota runs on a NATS CMS "tour" site (an Angular SPA with no
+# server-rendered scene data), so scene details are pulled directly from the
+# CMS's JSON content API instead of scraping the page markup.
+name: Angel of Bogota
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - tour.angelofbogota.com/video/
+    queryURL: https://angelofcash.com/tour_api.php/content/sets?cms_area_id=1bf1ff96-f98e-4bb8-adbf-94ed89d246ad&cms_block_id=100026&data_types=1&slug={url}
+    queryURLReplace:
+      url:
+        - regex: .+/video/([^/?#]+).*
+          with: $1
+    scraper: sceneScraper
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: sets.0.name
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: " "
+      Details: sets.0.description
+      Date: sets.0.added_nice
+      Code: sets.0.cms_set_id
+      Image:
+        selector: sets.0.preview_formatted.thumb.1920-1080.0.[fileuri,signature].@tostr
+        postProcess:
+          - replace:
+              - regex: ^\["(.*)","(.*)"\]$
+                with: $1?$2
+          - javascript: 'return "https://c8b7fa4b1f.mjedge.net" + value;'
+      Tags:
+        Name: sets.0.data_types.#(shortname=="tags").data_values.#.name
+      Performers:
+        Name: sets.0.data_types.#(shortname=="models").data_values.#.name
+      Studio:
+        Name:
+          fixed: Angel of Bogota
+driver:
+  headers:
+    - Key: X-NATS-cms-area-id
+      Value: 1bf1ff96-f98e-4bb8-adbf-94ed89d246ad
+    - Key: X-nats-entity-decode
+      Value: "1"
