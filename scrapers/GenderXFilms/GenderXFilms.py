@@ -19,7 +19,7 @@ from py_common.util import scraper_args, replace_all
 
 
 def genderxfilms(obj: Any, _) -> Any:
-    return replace_all(obj, "studio", lambda s: {"name": "GenderXFilms", **s})
+    return replace_all(obj, "studio", lambda s: {**s, "name": "GenderXFilms"})
 
 
 if __name__ == "__main__":

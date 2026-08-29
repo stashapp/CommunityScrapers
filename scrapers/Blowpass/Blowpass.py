@@ -14,7 +14,7 @@ from Altwolia.scrape import (
 )
 
 from py_common import log
-from py_common.util import scraper_args
+from py_common.util import replace_all, scraper_args
 
 studio_rename = {
     "1000facials": "1000 Facials",
@@ -33,7 +33,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
 
 def blowpass(obj: Any, api_object: dict[str, Any]) -> Any:
     if studio_override := determine_studio(api_object):
-        obj = {**obj, "studio": {"name": studio_override}}
+        obj = replace_all(obj, "studio", lambda s: {**s, "name": studio_override})
     return obj
 
 

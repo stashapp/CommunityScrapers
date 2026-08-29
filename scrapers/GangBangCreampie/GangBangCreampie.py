@@ -10,10 +10,10 @@ from Altwolia.scrape import (
 )
 
 from py_common import log
-from py_common.util import scraper_args
+from py_common.util import replace_all, scraper_args
 
 def gangbangcreampie(obj: Any, _) -> Any:
-    return {**obj, "studio": {"name": "Gangbang Creampie"}}
+    return replace_all(obj, "studio", lambda s: {**s, "name": "Gangbang Creampie"})
 
 
 if __name__ == "__main__":

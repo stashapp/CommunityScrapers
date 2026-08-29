@@ -193,7 +193,7 @@ def public_url(api_object: dict[str, Any]) -> str | None:
 
 def adulttime(obj: Any, api_object: dict[str, Any]) -> Any:
     if studio_override := determine_studio(api_object):
-        obj = {**obj, "studio": {"name": studio_override}}
+        obj = replace_all(obj, "studio", lambda s: {**s, "name": studio_override})
 
     sitename = api_object.get("sitename")
 

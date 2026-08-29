@@ -13,7 +13,7 @@ from Altwolia.scrape import (
 )
 
 from py_common import log
-from py_common.util import scraper_args
+from py_common.util import replace_all, scraper_args
 
 # Overrides for sub-brands whose API studio_name doesn't match StashDB's
 # spelling exactly - every other domain in the network already matches as-is
@@ -31,7 +31,7 @@ def determine_studio(api_object: dict[str, Any]) -> str | None:
 
 def nextdoorstudios(obj: Any, api_object: dict[str, Any]) -> Any:
     if studio_override := determine_studio(api_object):
-        return {**obj, "studio": {"name": studio_override}}
+        return replace_all(obj, "studio", lambda s: {**s, "name": studio_override})
     return obj
 
 

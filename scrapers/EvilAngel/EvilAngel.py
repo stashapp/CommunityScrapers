@@ -17,7 +17,7 @@ from Altwolia.scrape import (
 )
 
 from py_common import log
-from py_common.util import dig, replace_at, scraper_args
+from py_common.util import dig, replace_all, replace_at, scraper_args
 
 # This map just contains overrides when using a channel name as the studio
 channel_name_map = {
@@ -155,7 +155,7 @@ def has_working_url_pattern(_url: str) -> bool:
 
 def evilangel(obj: Any, api_object: dict[str, Any]) -> Any:
     if studio_override := determine_studio(api_object):
-        obj = {**obj, "studio": {"name": studio_override}}
+        obj = replace_all(obj, "studio", lambda s: {**s, "name": studio_override})
 
     obj = replace_at(obj, "details", replacement=fix_ts_trans_find_replace)
     obj = replace_at(obj, "synopsis", replacement=fix_ts_trans_find_replace)
