@@ -16,6 +16,15 @@ type Ethnicity = Literal[
     "OTHER",
 ]
 
+type Gender = Literal[
+    "MALE",
+    "FEMALE",
+    "TRANSGENDER_MALE",
+    "TRANSGENDER_FEMALE",
+    "INTERSEX",
+    "NON_BINARY",
+]
+
 type EyeColor = Literal["BLUE", "BROWN", "GREEN", "GREY", "HAZEL", "RED"]
 type HairColor = Literal[
     "BLONDE",
@@ -44,14 +53,7 @@ class ScrapedPerformer(TypedDict, total=False):
     "Set if performer matched"
     disambiguation: str
     "This is only added through Tagger view"
-    gender: Literal[
-        "MALE",
-        "FEMALE",
-        "TRANSGENDER_MALE",
-        "TRANSGENDER_FEMALE",
-        "INTERSEX",
-        "NON_BINARY",
-    ]
+    gender: Gender
     urls: list[str]
     birthdate: str
     "Must be in the format YYYY-MM-DD"
