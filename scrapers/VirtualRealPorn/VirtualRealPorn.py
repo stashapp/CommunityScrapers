@@ -1,499 +1,407 @@
-"""
-Stash scraper for Evil Angel (Network) that uses the Algolia API Python client
-"""
 import json
+import re
 import sys
-from typing import Any, Callable
+from typing import Any
 from urllib.parse import unquote, urlparse
 
-from AlgoliaAPI.AlgoliaAPI import (
-    ScrapedGallery,
-    clean_text,
-    default_postprocess,
-    get_search_client,
-    parse_gender,
-    site_from_url,
-    sort_api_actors_by_match,
-    sort_api_scenes_by_match
-)
+import requests
+from algoliasearch.search.client import SearchClientSync
+from algoliasearch.search.config import SearchConfig
+from algoliasearch.search.models.search_response import SearchResponse
+
+from Altwolia import domains
+from Altwolia.scrape import clean_text, headers_for_homepage, match_ratio, sort_by_match
 
 from py_common import log
-from py_common.deps import ensure_requirements
-ensure_requirements("bs4:beautifulsoup4", "requests")
-from py_common.types import ScrapedPerformer, ScrapedScene
+from py_common.types import (
+    Gender,
+    ScrapedGallery,
+    ScrapedPerformer,
+    ScrapedScene,
+    ScrapedTag,
+)
 from py_common.util import guess_nationality, scraper_args
-from bs4 import BeautifulSoup as bs
-import requests
 
+# virtualrealamateurporn.com is dead (confirmed live: both the bare domain
+# and www. return a Cloudflare 530, origin unreachable) - dropped entirely.
+# Every other site shares one Algolia app/key; studio names below are
+# already exactly what the API's own site_slug implies and match StashDB,
+# no override needed.
 CONFIG = {
-    "virtualrealamateurporn": {
-        "indexes": {
-            "videos": "en_videos_virtualrealamateur",
-        },
-        "studio_name": "VirtualRealAmateur",
-    },
     "virtualrealgay": {
-        "indexes": {
-            "models": "en_models_virtualrealgay",
-            "videos": "en_videos_virtualrealgay",
-        },
+        "video_path": "vr-gay-porn-video",
+        "actor_path": "vr-models",
         "studio_name": "VirtualRealGay",
     },
     "virtualrealjapan": {
-        "indexes": {
-            "videos": "en_videos_virtualrealjapan",
-        },
+        "video_path": "vr-japanese-video",
+        "actor_path": "vr-models",
         "studio_name": "VirtualRealJapan",
     },
     "virtualrealpassion": {
-        "indexes": {
-            "models": "en_models_virtualrealpassion",
-            "videos": "en_videos_virtualrealpassion",
-        },
+        "video_path": "vr-female-pov-video",
+        "actor_path": "vr-models",
         "studio_name": "VirtualRealPassion",
     },
     "virtualrealporn": {
-        "indexes": {
-            "models": "en_models_virtualrealporn",
-            "videos": "en_videos_virtualrealporn",
-        },
+        "video_path": "vr-porn-video",
+        "actor_path": "vr-pornstars",
         "studio_name": "VirtualRealPorn",
     },
     "virtualrealtrans": {
-        "indexes": {
-            "models": "en_models_virtualrealtrans",
-            "videos": "en_videos_virtualrealtrans",
-        },
+        "video_path": "vr-trans-porn-video",
+        "actor_path": "vr-models",
         "studio_name": "VirtualRealTrans",
     },
 }
 
-def indexes_for_sites(index_type: str, sites: list[str]) -> list[str]:
-    """
-    Returns a list of index names for the given sites and index type
-    """
-    return [
-        CONFIG[site]["indexes"][index_type]
-        for site in sites
-        if site in CONFIG and index_type in CONFIG[site]["indexes"]
-    ]
+GENDER_MAP: dict[str, Gender] = {
+    "MALE": "MALE",
+    "FEMALE": "FEMALE",
+    "FEMALE_TRANS": "TRANSGENDER_FEMALE",
+    "SHEMALE": "TRANSGENDER_FEMALE",
+}
 
-def casting_to_performers(casting: list[dict[str, Any]]) -> list[ScrapedPerformer]:
-    "Converts API casting to list of ScrapedPerformer"
-    return [
-        {
-            "name": cast.get("name").strip(),
-            "gender": parse_gender(cast.get("gender")),
-            "country": cast.get("country"),
-            "tags": [{"name": c} for c in cast.get("categories")] if cast.get("categories") else None,
-        }
-        for cast in casting
-    ]
 
-def to_scraped_performer(performer_from_api: dict[str, Any]) -> ScrapedPerformer:
-    "Helper function to convert from Algolia's API to Stash's scraper return type"
-    performer: ScrapedPerformer = {}
-    if _name := performer_from_api.get("name"):
-        performer["name"] = _name.strip()
-    if gender := performer_from_api.get("gender"):
-        performer["gender"] = parse_gender(gender.strip())
-    if eye_color := performer_from_api.get("eyesColor"):
-        performer["eye_color"] = eye_color.strip().capitalize()
-    if hair_color := performer_from_api.get("hairColor"):
+def parse_gender(gender: str) -> Gender | None:
+    return GENDER_MAP.get(gender)
+
+
+def video_index(site: str) -> str:
+    return f"vrn_{site}_videos"
+
+
+def models_index(site: str) -> str:
+    return f"vrn_{site}_models"
+
+
+def video_url(site: str, slug: str) -> str:
+    return f"https://{site}.com/{CONFIG[site]['video_path']}/{slug}/"
+
+
+def actor_url(site: str, slug: str) -> str:
+    return f"https://{site}.com/{CONFIG[site]['actor_path']}/{slug}/"
+
+
+def slug_from_url(url: str) -> str:
+    # Algolia's search doesn't reliably match a raw hyphen-joined slug as a
+    # single token - converting to space-separated words fixes it (verified
+    # live: 0 hits with hyphens, 1 exact hit with spaces)
+    slug = urlparse(url).path.rstrip("/").split("/")[-1]
+    return unquote(slug).replace("-", " ")
+
+
+def fetch_instance_token(url: str) -> tuple[str, str] | None:
+    r = requests.get(url, headers=headers_for_homepage(url), timeout=10)
+    if not (
+        match := re.search(
+            r'data-algolia-app-id="([^"]+)"\s+data-algolia-search-key="([^"]+)"', r.text
+        )
+    ):
+        log.error(
+            f"Failed to get app_id/key from '{url}': page structure may have changed"
+        )
+        return None
+    return match.group(1), match.group(2)
+
+
+def get_search_client() -> SearchClientSync | None:
+    # The whole network shares one Algolia app/key, fetched from any one
+    # site's homepage - cached under a single "virtualrealporn" key
+    pair = domains.get_auth_for("virtualrealporn", fallback=fetch_instance_token)
+    if pair is None:
+        log.error(
+            "Unable to get Algolia authentication for the VirtualRealPorn network"
+        )
+        return None
+    app_id, api_key = pair
+    config = SearchConfig(app_id, api_key)
+    config.headers.update(headers_for_homepage("https://virtualrealporn.com"))
+    return SearchClientSync(config=config)
+
+
+def multi_search(
+    client: SearchClientSync, index_names: list[str], params: dict[str, Any]
+) -> list[dict[str, Any]]:
+    "Runs a multi-index search, ignoring any non-scene/performer (facet-value) responses"
+    responses = client.search(
+        search_method_params={
+            "requests": [
+                {"indexName": index_name, **params} for index_name in index_names
+            ]
+        },
+    )
+    hits: list[dict[str, Any]] = []
+    for result in responses.results:
+        instance = result.actual_instance
+        if isinstance(instance, SearchResponse) and instance.hits:
+            hits.extend(hit.to_dict() for hit in instance.hits)
+    return hits
+
+
+def sort_scenes_by_match(
+    api_scenes: list[dict[str, Any]], fragment: dict[str, Any] | None
+) -> list[dict[str, Any]]:
+    if not fragment:
+        return api_scenes
+    return sort_by_match(
+        api_scenes,
+        lambda s: [
+            match_ratio(
+                (fragment.get("title") or "").lower(), (s.get("title") or "").lower()
+            ),
+            match_ratio(fragment.get("date"), (s.get("published_at") or "")[:10]),
+            match_ratio(
+                fragment.get("details"), clean_text(s.get("description") or "")
+            ),
+        ],
+    )
+
+
+def sort_actors_by_match(
+    api_actors: list[dict[str, Any]], name: str | None
+) -> list[dict[str, Any]]:
+    if not name:
+        return api_actors
+    return sort_by_match(
+        api_actors,
+        lambda a: [match_ratio(name.lower(), (a.get("name") or "").lower())],
+    )
+
+
+def scene_actors_to_performers(
+    actors: list[dict[str, Any]], site: str
+) -> list[ScrapedPerformer]:
+    # Scene-embedded actor stubs only carry name/slug/avatar - no gender or
+    # country, unlike the standalone models index
+    performers: list[ScrapedPerformer] = []
+    for actor in actors:
+        performer: ScrapedPerformer = {"name": actor["name"].strip()}
+        if slug := actor.get("slug"):
+            performer["urls"] = [actor_url(site, slug)]
+        performers.append(performer)
+    return performers
+
+
+def to_scraped_performer(api_performer: dict[str, Any]) -> ScrapedPerformer:
+    site = api_performer.get("site_slug", "")
+    performer: ScrapedPerformer = {"name": api_performer.get("name", "").strip()}
+    if (gender := api_performer.get("gender")) and (
+        parsed_gender := parse_gender(gender)
+    ):
+        performer["gender"] = parsed_gender
+    if description := api_performer.get("description"):
+        performer["details"] = clean_text(description)
+    if eyes_color := api_performer.get("eyes_color"):
+        performer["eye_color"] = eyes_color.strip().capitalize()
+    if hair_color := api_performer.get("hair_color"):
         performer["hair_color"] = hair_color.strip().capitalize()
-    if country := performer_from_api.get("country"):
-        performer["country"] = guess_nationality(country.strip())
-    if image_url := performer_from_api.get("imageURL"):
-        performer["images"] = [image_url]
-    if permalink := performer_from_api.get("permalink"):
-        performer["url"] = permalink
+    if country_code := api_performer.get("country_code"):
+        performer["country"] = guess_nationality(country_code.strip())
+    if avatar := api_performer.get("avatar_url"):
+        performer["images"] = [avatar]
+    if slug := api_performer.get("slug"):
+        performer["urls"] = [actor_url(site, slug)]
     return performer
 
-def to_scraped_scene(scene_from_api: dict[str, Any]) -> ScrapedScene:
-    "Helper function to convert from Algolia's API (VirtualRealPorn variant) to Stash's scraper return type"
-    log.debug(f"to_scraped_scene, scene_from_api: {scene_from_api}")
+
+def to_scraped_scene(api_scene: dict[str, Any]) -> ScrapedScene:
+    site = api_scene.get("site_slug", "")
     scene: ScrapedScene = {}
-    # studio from _index
-    if index_name := scene_from_api.get("_index"):
-        for cfg_site, cfg in CONFIG.items():
-            if index_name in cfg.get("indexes", {}).values():
-                scene["studio"] = {"name": cfg.get("studio_name", cfg_site)}
-                break
-    # rest from API object
-    if object_id := scene_from_api.get("objectID", scene_from_api.get("object_id")):
+    if object_id := api_scene.get("objectID"):
         scene["code"] = str(object_id)
-    if title := scene_from_api.get("title"):
+    if title := api_scene.get("title"):
         scene["title"] = title.strip()
-    if description := scene_from_api.get("description"):
+    if description := api_scene.get("description"):
         scene["details"] = clean_text(description)
-    if permalink := scene_from_api.get("permalink"):
-        scene["url"] = permalink
-    if release_date := scene_from_api.get("release_date"):
-        # release date is in 'YYYY-MM-DD HH:MM:SS' format, we only want the date part, i.e. first 10 characters
-        scene["date"] = release_date[:10]
-    if poster := scene_from_api.get("poster"):
-        scene["image"] = poster
+    if (slug := api_scene.get("url_slug")) and site in CONFIG:
+        scene["urls"] = [video_url(site, slug)]
+    if published_at := api_scene.get("published_at"):
+        scene["date"] = published_at[:10]
+    if cover := api_scene.get("cover_url"):
+        scene["image"] = cover
+    if site in CONFIG:
+        scene["studio"] = {"name": CONFIG[site]["studio_name"]}
 
-    # tags
-    scene["tags"] = []
-    if categories := scene_from_api.get("categories"):
-        log.debug(f"categories: {categories}")
-        scene["tags"].extend([{"name": c} for c in categories])
-    if tags := scene_from_api.get("tags"):
-        log.debug(f"tags: {tags}")
-        scene["tags"].extend([{"name": t} for t in tags])
-    if "Virtual Reality" not in [tag["name"] for tag in scene["tags"]]:
-        scene["tags"].append({"name": "Virtual Reality"})
+    # "tags" on this API is internal/promotional labels (e.g. "most-viewed",
+    # "exclusive-video"), not content descriptors - only categories qualify
+    tags: list[ScrapedTag] = [{"name": c} for c in api_scene.get("categories", [])]
+    tags.append({"name": "Virtual Reality"})
+    scene["tags"] = tags
 
-    if casting := scene_from_api.get("casting"):
-        scene["performers"] = casting_to_performers(casting)
+    if actors := api_scene.get("actors"):
+        scene["performers"] = scene_actors_to_performers(actors, site)
     return scene
 
-def api_scene_from_id(
-    object_id: int | str,
-    sites: list[str],
-    fragment: dict[str, Any] = None,
-) -> dict[str, Any] | None:
-    "Searches a scene from a clip_id and returns the API result as-is"
-    # set a default api_scenes list
-    api_scenes: list[dict[str, Any]] = []
-    index_names = indexes_for_sites("videos", sites)
-    # if single index provided, use search_single_index for efficiency
+
+def to_scraped_gallery(api_scene: dict[str, Any]) -> ScrapedGallery:
+    # VirtualRealPorn has no separate photo sets - scene pages double as
+    # galleries, so a gallery is just a scene's fields relabelled
+    scene = to_scraped_scene(api_scene)
+    gallery: ScrapedGallery = {}
+    if title := scene.get("title"):
+        gallery["title"] = title
+    if details := scene.get("details"):
+        gallery["details"] = details
+    if urls := scene.get("urls"):
+        gallery["urls"] = urls
+    if date := scene.get("date"):
+        gallery["date"] = date
+    if studio := scene.get("studio"):
+        gallery["studio"] = studio
+    if tags := scene.get("tags"):
+        gallery["tags"] = tags
+    if performers := scene.get("performers"):
+        gallery["performers"] = performers
+    if code := scene.get("code"):
+        gallery["code"] = code
+    return gallery
+
+
+def api_scenes_search(
+    query: str, sites: list[str], length: int = 5
+) -> list[dict[str, Any]]:
+    if not (client := get_search_client()):
+        return []
+    index_names = [video_index(site) for site in sites if site in CONFIG]
+    if not index_names:
+        return []
     if len(index_names) == 1:
-        index_name = index_names[0]
-        search_response = get_search_client("virtualrealporn").search_single_index(
-            index_name=index_name,
+        response = client.search_single_index(
+            index_name=index_names[0],
+            search_params={
+                "attributesToHighlight": [],
+                "query": query,
+                "length": length,
+            },
+        )
+        return [hit.to_dict() for hit in response.hits]
+    return multi_search(client, index_names, {"query": query, "length": length})
+
+
+def api_scene_from_id(
+    object_id: str, sites: list[str], fragment: dict[str, Any] | None = None
+) -> dict[str, Any] | None:
+    if not (client := get_search_client()):
+        return None
+    index_names = [video_index(site) for site in sites if site in CONFIG]
+    if len(index_names) == 1:
+        response = client.search_single_index(
+            index_name=index_names[0],
             search_params={
                 "attributesToHighlight": [],
                 "filters": f"objectID:{object_id}",
                 "length": 1,
             },
         )
-        log.debug(f"Number of search hits: {search_response.nb_hits}")
-        if search_response.nb_hits:
-            # convert Algolia client search Hits to list of dicts
-            api_scenes = [
-                {
-                    **hit.model_dump(
-                        include={"object_id", "title", "permalink", "release_date", "poster", "categories", "tags", "casting", "description"},
-                    ),
-                    "_index": index_name
-                } for hit in search_response.hits
-            ]
-    else: # multiple indices
-        search_responses = get_search_client("virtualrealporn").search(
-            search_method_params={
-                "requests": [
-                    {
-                        "indexName": index_name,
-                        "filters": f"objectID:{object_id}",
-                        "length": 1,
-                    }
-                    for index_name in index_names
-                ]
-            },
+        api_scenes = [hit.to_dict() for hit in response.hits]
+    else:
+        api_scenes = multi_search(
+            client, index_names, {"filters": f"objectID:{object_id}", "length": 1}
         )
-        log.debug(f"Number of search hits: {", ".join([ f"{res.actual_instance.index}: {res.actual_instance.nb_hits}" for res in search_responses.results ])}")
-        api_scenes = [
-            {
-                **hit.model_dump(
-                        include={"object_id", "title", "permalink", "release_date", "poster", "categories", "tags", "casting", "description"},
-                    ),
-                "_index": index_names[i]
-            }
-            for i, result in enumerate(search_responses.results)
-            if len(result.actual_instance.hits) > 0
-            for hit in result.actual_instance.hits
-        ]
-    log.debug(f"api_scenes: {api_scenes}")
-    if len(api_scenes) == 1: # single search result
-        return api_scenes[0]
-    if len(api_scenes) > 1: # multiple search results
-        return sort_api_scenes_by_match(api_scenes, fragment)[0] # sort
-    return None
+    if not api_scenes:
+        return None
+    return sort_scenes_by_match(api_scenes, fragment)[0]
+
 
 def scene_from_id(
-    object_id,
-    sites: list[str],
-    fragment: dict[str, Any] = None,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
+    object_id: str, sites: list[str], fragment: dict[str, Any] | None = None
 ) -> ScrapedScene | None:
-    "Scrapes a scene from an objectID, running an optional postprocess function on the result"
-    api_scene = api_scene_from_id(object_id, sites, fragment)
-    if api_scene:
-        return postprocess(to_scraped_scene(api_scene), api_scene)
+    if api_scene := api_scene_from_id(object_id, sites, fragment):
+        return to_scraped_scene(api_scene)
     return None
 
-def scene_from_fragment(
-    fragment: dict[str, Any],
-    sites: list[str],
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess,
-) -> ScrapedScene:
-    """
-    This receives:
-    - sites
-    from the scraper YAML (array items)
-    - url
-    - title
-    - code
-    - details
-    - director
-    - date
-    - urls
-    from the result of the scene-by-name search
-    """
-    if _url := fragment.get("url"): # if a URL is present, scrape by URL
-        return scene_from_url(_url, postprocess)
-    if code := fragment.get("code"): # if the (studio) code is present, search by objectID
-        return scene_from_id(code, sites, fragment, postprocess)
-    if title := fragment.get("title"): # if a title is present, search by text
-        if len(scenes := scene_search(title, sites, fragment, postprocess)) > 0:
-            return scenes[0] # best match is sorted at the top
-    return {}
 
 def scene_search(
-    query: str,
-    sites: list[str],
-    fragment: dict[str, Any] = None,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene | ScrapedGallery] = default_postprocess,
+    query: str, sites: list[str], fragment: dict[str, Any] | None = None
 ) -> list[ScrapedScene]:
-    "Searches the API for scenes with a text query"
-    log.debug(f"scene_search, query: {query}, sites: {sites}, fragment: {fragment}")
-    # set a default api_scenes list
-    api_scenes: list[dict[str, Any]] = []
-    index_names = indexes_for_sites("videos", sites)
-    # if single index provided, use search_single_index for efficiency
-    if len(index_names) == 1:
-        index_name = index_names[0]
-        search_response = get_search_client("virtualrealporn").search_single_index(
-            index_name=index_name,
-            search_params={
-                "attributesToHighlight": [],
-                "query": query,
-                "length": 5,
-            },
-        )
-        log.debug(f"Number of search hits: {search_response.nb_hits}")
-        if search_response.nb_hits:
-            # convert Algolia client search Hits to list of dicts
-            api_scenes = [
-                {
-                    # .model_dump with selected fields only is required as .to_dict
-                    # can fail with Pydantic models that have nested models with circular references
-                    **hit.model_dump(
-                        include={"object_id", "title", "permalink", "release_date", "poster", "categories", "tags", "casting", "description"},
-                    ),
-                    "_index": index_name
-                } for hit in search_response.hits
-            ]
-    else: # multiple indices
-        search_responses = get_search_client("virtualrealporn").search(
-            search_method_params={
-                "requests": [
-                    {
-                        "indexName": index_name,
-                        "query": query,
-                        "filters": "visibleBy:group/all",
-                        "length": 5,
-                        "offset": 0,
-                    }
-                    for index_name in index_names
-                ]
-            },
-        )
-        log.debug(f"Number of search hits: {", ".join([ f"{res.actual_instance.index}: {res.actual_instance.nb_hits}" for res in search_responses.results ])}")
-        api_scenes = [
-            {
-                # .model_dump with selected fields only is required as .to_dict
-                # can fail with Pydantic models that have nested models with circular references
-                **hit.model_dump(
-                    include={"object_id", "title", "permalink", "release_date", "poster", "categories", "tags", "casting", "description"},
-                ),
-                "_index": index_names[i]
-            }
-            for i, result in enumerate(search_responses.results)
-            if len(result.actual_instance.hits) > 0
-            for hit in result.actual_instance.hits
-        ]
-    log.debug(f"api_scenes: {api_scenes}")
-    if len(api_scenes) == 1: # single search result
-        return [postprocess(to_scraped_scene(api_scenes[0]), api_scenes[0])]
-    if len(api_scenes) > 1: # multiple search results
-        return [
-            postprocess(to_scraped_scene(api_scene), api_scene)
-            for api_scene in sort_api_scenes_by_match(api_scenes, fragment) # sort
-        ]
-    return []
+    api_scenes = api_scenes_search(query, sites)
+    return [
+        to_scraped_scene(api_scene)
+        for api_scene in sort_scenes_by_match(api_scenes, fragment)
+    ]
 
-def postprocess_scene(scene: ScrapedScene, _: dict[str, Any]) -> ScrapedScene:
-    """
-    Applies post-processing to the scene
-    """
-    if _url := scene.get("url"):
-        if "virtualreal" in _url:
-            log.debug(f"postprocess_scene, fetching page for URL: {_url}")
-            # get the title from the web page to fix missing symbols in the API data
-            r = requests.get(_url)
-            soup = bs(r.content, "html.parser")
-            if title_tag := soup.find("h1"):
-                log.debug(f"Found title tag: {title_tag}")
-                scene["title"] = title_tag.text.strip()
 
-            # get the description from the web page to fix missing newlines in the API data
-            if description_tag := soup.find("div", class_="description_container"):
-                log.debug(f"Found description tag: {description_tag}")
-                # find each p tag inside description_container and join with newlines
-                paragraphs = description_tag.find_all("p")
-                scene["details"] = "\n\n".join(p.text.strip() for p in paragraphs)
+def scene_from_url(url: str, site: str) -> ScrapedScene | None:
+    scenes = scene_search(slug_from_url(url), [site])
+    return scenes[0] if scenes else None
 
-    return scene
 
-def scene_from_url(
-    _url: str,
-    postprocess: Callable[[ScrapedScene, dict], ScrapedScene] = default_postprocess
+def scene_from_fragment(
+    fragment: dict[str, Any], sites: list[str]
 ) -> ScrapedScene | None:
-    "Scrapes a scene from a URL, running an optional postprocess function on the result"
-    slug = urlparse(_url).path.rstrip("/").split("/")[-1]
-    # virtualrealjapan has special characters in slugs, we need to URL-decode it to work with search
-    slug = unquote(slug)
-    site = site_from_url(_url)
-    log.debug(f"slug: {slug}, site: {site}")
-    scenes = scene_search(slug, [site], postprocess=postprocess)
-    log.debug(f"scenes: {scenes}")
-    if scenes:
-        return scenes[0]
+    if url := fragment.get("url"):
+        site = domains.site_name(url)
+        return scene_from_url(url, site)
+    if code := fragment.get("code"):
+        return scene_from_id(code, sites, fragment)
+    if title := fragment.get("title"):
+        if scenes := scene_search(title, sites, fragment):
+            return scenes[0]
     return None
 
-def gallery_from_scene(scene: ScrapedScene) -> ScrapedGallery | None:
-    "Convert a ScrapedScene to a ScrapedGallery"
-    gallery: ScrapedGallery = {}
-    # copy relevant fields from scene to gallery
-    gallery["title"] = scene.get("title")
-    gallery["details"] = scene.get("details")
-    gallery["url"] = scene.get("url")
-    gallery["urls"] = scene.get("urls")
-    gallery["date"] = scene.get("date")
-    gallery["studio"] = scene.get("studio")
-    gallery["tags"] = scene.get("tags")
-    gallery["performers"] = scene.get("performers")
-    gallery["code"] = scene.get("code")
-    # map director to photographer
-    gallery["photographer"] = scene.get("director")
-    return gallery
 
-def gallery_from_url(
-    _url: str,
-    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess
-) -> ScrapedGallery | None:
-    """
-    Scrapes a gallery from a URL, running an optional postprocess function on the result
+def gallery_from_url(url: str, site: str) -> ScrapedGallery | None:
+    api_scenes = api_scenes_search(slug_from_url(url), [site])
+    if not api_scenes:
+        return None
+    return to_scraped_gallery(sort_scenes_by_match(api_scenes, None)[0])
 
-    VirtualRealPorn does not appear to have galleries, but photo sets appear on the scene pages
-    so we can treat scenes as galleries for this purpose
-    """
-    if scene := scene_from_url(_url, postprocess=postprocess):
-        return gallery_from_scene(scene)
-    return None
 
 def gallery_from_fragment(
-    fragment: dict[str, Any],
-    sites: list[str],
-    postprocess: Callable[[ScrapedGallery, dict], ScrapedGallery] = default_postprocess,
+    fragment: dict[str, Any], sites: list[str]
 ) -> ScrapedGallery | None:
-    "Scrapes a gallery from a fragment. URL, code, title"
-    scene = scene_from_fragment(fragment, sites, postprocess=postprocess)
-    log.debug(f"in gallery_from_fragment, scene: {scene}")
-    if scene:
-        return gallery_from_scene(scene)
+    if url := fragment.get("url"):
+        site = domains.site_name(url)
+        return gallery_from_url(url, site)
+    if code := fragment.get("code"):
+        if api_scene := api_scene_from_id(code, sites, fragment):
+            return to_scraped_gallery(api_scene)
+        return None
+    if title := fragment.get("title"):
+        api_scenes = api_scenes_search(title, sites)
+        if api_scenes:
+            return to_scraped_gallery(sort_scenes_by_match(api_scenes, fragment)[0])
     return None
 
-def performer_search(
-    query: str,
-    sites: list[str],
-    fragment: dict[str, Any] = None,
-    postprocess: Callable[[ScrapedPerformer, dict], ScrapedPerformer] = default_postprocess,
-) -> list[ScrapedPerformer]:
-    "Searches the API for actors with a text query"
-    log.debug(f"performer_search, query: {query}, sites: {sites}, fragment: {fragment}")
-    # set a default api_models list
-    api_models: list[dict[str, Any]] = []
-    index_names = indexes_for_sites("models", sites)
-    # if single index provided, use search_single_index for efficiency
+
+def performer_search(query: str, sites: list[str]) -> list[ScrapedPerformer]:
+    if not (client := get_search_client()):
+        return []
+    index_names = [models_index(site) for site in sites if site in CONFIG]
+    if not index_names:
+        return []
     if len(index_names) == 1:
-        index_name = index_names[0]
-        search_response = get_search_client("virtualrealporn").search_single_index(
-            index_name=index_name,
-            search_params={
-                "attributesToHighlight": [],
-                "query": query,
-                "length": 20,
-            },
+        response = client.search_single_index(
+            index_name=index_names[0],
+            search_params={"attributesToHighlight": [], "query": query, "length": 20},
         )
-        log.debug(f"Number of search hits: {search_response.nb_hits}")
-        if search_response.nb_hits:
-            # convert Algolia client search Hits to list of dicts
-            api_models = [hit.to_dict() for hit in search_response.hits]
-    else: # multiple indices
-        search_responses = get_search_client("virtualrealporn").search(
-            search_method_params={
-                "requests": [
-                    {
-                        "indexName": index_name,
-                        "query": query,
-                        "filters": "visibleBy:group/all",
-                        "length": 20,
-                        "offset": 0,
-                    }
-                    for index_name in index_names
-                ]
-            },
+        api_performers = [hit.to_dict() for hit in response.hits]
+    else:
+        api_performers = multi_search(
+            client, index_names, {"query": query, "length": 20}
         )
-        log.debug(f"Number of search hits: {", ".join([ f"{res.actual_instance.index}: {res.actual_instance.nb_hits}" for res in search_responses.results ])}")
-        api_models = [ hit.to_dict() for res in search_responses.results for hit in res.actual_instance.hits]
-    log.debug(f"api_models: {api_models}")
-    if len(api_models) == 1: # single search result
-        return [postprocess(to_scraped_performer(api_models[0]), api_models[0])]
-    if len(api_models) > 1: # multiple search results
-        return [
-            postprocess(to_scraped_performer(api_model), api_model)
-            for api_model in sort_api_actors_by_match(api_models, {"name": query}) # sort
-        ]
-    return []
+    return [
+        to_scraped_performer(api_performer)
+        for api_performer in sort_actors_by_match(api_performers, query)
+    ]
 
-def performer_from_url(
-    _url: str,
-    postprocess: Callable[[ScrapedPerformer, dict], ScrapedPerformer] = default_postprocess,
-) -> ScrapedPerformer | None:
-    "Scrapes a performer from a URL, running an optional postprocess function on the result"
-    slug = urlparse(_url).path.rstrip("/").split("/")[-1]
-    site = site_from_url(_url)
-    log.debug(f"Performer slug: {slug}, Site: {site}")
-    performers = performer_search(slug, [site], postprocess=postprocess)
-    log.debug(f"performers: {performers}")
-    if performers:
-        return performers[0]
-    return None
+
+def performer_from_url(url: str) -> ScrapedPerformer | None:
+    site = domains.site_name(url)
+    performers = performer_search(slug_from_url(url), [site])
+    return performers[0] if performers else None
+
 
 def performer_from_fragment(
-    fragment: dict[str, Any],
-    sites: list[str],
-    postprocess: Callable[[ScrapedPerformer, dict], ScrapedPerformer] = default_postprocess,
-) -> ScrapedPerformer:
-    """
-    This receives:
-    - name
-    - urls
-    - gender
-    from the result of the performer-by-name search
-    """
-    if urls := fragment.get("urls"):
-        # find first URL that contains "virtualreal"
-        if _url := next((url for url in urls if "virtualreal" in url), None):
-            return performer_from_url(_url, postprocess)
-    if name := fragment.get("name"): # if a name is present, search by text
-        if len(performers := performer_search(name, sites, fragment, postprocess)) > 0:
-            return performers[0] # best match is sorted at the top
-    return {}
+    fragment: dict[str, Any], sites: list[str]
+) -> ScrapedPerformer | None:
+    if url := fragment.get("url"):
+        return performer_from_url(url)
+    if name := fragment.get("name"):
+        if performers := performer_search(name, sites):
+            return performers[0]
+    return None
 
 
 if __name__ == "__main__":
@@ -501,28 +409,25 @@ if __name__ == "__main__":
 
     log.debug(f"args: {args}")
     match op, args:
-        case "gallery-by-url", {"url": url, "extra": extra} if url and extra:
-            sites = extra
-            result = gallery_from_url(url)
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url, domains.site_name(url))
+        case "scene-by-name", {"name": name, "extra": extra} if name and extra:
+            result = scene_search(name, extra)
+        case "scene-by-fragment" | "scene-by-query-fragment", args:
+            sites = args.pop("extra")
+            result = scene_from_fragment(args, sites)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url, domains.site_name(url))
         case "gallery-by-fragment", args:
             sites = args.pop("extra")
             result = gallery_from_fragment(args, sites)
-        case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, postprocess=postprocess_scene)
-        case "scene-by-name", {"name": name, "extra": extra} if name and extra:
-            sites = extra
-            result = scene_search(name, sites, postprocess=postprocess_scene)
-        case "scene-by-fragment" | "scene-by-query-fragment", args:
-            sites = args.pop("extra")
-            result = scene_from_fragment(args, sites, postprocess=postprocess_scene)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url)
         case "performer-by-fragment", args:
             sites = args.pop("extra")
             result = performer_from_fragment(args, sites)
         case "performer-by-name", {"name": name, "extra": extra} if name and extra:
-            sites = extra
-            result = performer_search(name, sites)
+            result = performer_search(name, extra)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

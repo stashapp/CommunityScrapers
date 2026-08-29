@@ -1,14 +1,12 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
-# requires: AlgoliaAPI
-# scrapes: VirtualRealAmateurPorn, VirtualRealGay, VirtualRealJapan, VirtualRealPassion, VirtualRealPorn, VirtualRealTrans
+# requires: Altwolia
+# scrapes: VirtualRealGay, VirtualRealJapan, VirtualRealPassion, VirtualRealPorn, VirtualRealTrans
 name: VirtualRealPorn (Network)
 sceneByURL:
   - action: script
     url: &videoUrls
-      - virtualrealamateurporn.com/vr-amateur-porn-video/
       - virtualrealgay.com/vr-gay-porn-video/
       - virtualrealjapan.com/vr-japanese-video/
-      - virtualrealpassion.com/vr-female-pov-porn-video/
+      - virtualrealpassion.com/vr-female-pov-video/
       - virtualrealporn.com/vr-porn-video/
       - virtualrealtrans.com/vr-trans-porn-video/
     script:
@@ -21,7 +19,6 @@ sceneByFragment:
     - python
     - VirtualRealPorn.py
     # you can specify which sites to search here (comment out any you don't want)
-    - virtualrealamateurporn
     - virtualrealgay
     - virtualrealjapan
     - virtualrealpassion
@@ -34,7 +31,6 @@ sceneByName:
     - python
     - VirtualRealPorn.py
     # you can specify which sites to search here (comment out any you don't want)
-    - virtualrealamateurporn
     - virtualrealgay
     - virtualrealjapan
     - virtualrealpassion
@@ -47,7 +43,6 @@ sceneByQueryFragment:
     - python
     - VirtualRealPorn.py
     # you can specify which sites to search here (comment out any you don't want)
-    - virtualrealamateurporn
     - virtualrealgay
     - virtualrealjapan
     - virtualrealpassion
@@ -60,7 +55,6 @@ galleryByFragment:
     - python
     - VirtualRealPorn.py
     # you can specify which sites to search here (comment out any you don't want)
-    - virtualrealamateurporn
     - virtualrealgay
     - virtualrealjapan
     - virtualrealpassion
@@ -78,6 +72,7 @@ performerByURL:
   - action: script
     url:
       - virtualrealgay.com/vr-models/
+      - virtualrealjapan.com/vr-models/
       - virtualrealpassion.com/vr-models/
       - virtualrealporn.com/vr-pornstars/
       - virtualrealtrans.com/vr-models/
@@ -92,6 +87,7 @@ performerByName:
     - VirtualRealPorn.py
     # you can specify which sites to search here (comment out any you don't want)
     - virtualrealgay
+    - virtualrealjapan
     - virtualrealpassion
     - virtualrealporn
     - virtualrealtrans
@@ -103,8 +99,8 @@ performerByFragment:
     - VirtualRealPorn.py
     # you can specify which sites to search here (comment out any you don't want)
     - virtualrealgay
+    - virtualrealjapan
     - virtualrealpassion
     - virtualrealporn
     - virtualrealtrans
     - performer-by-fragment
-# Last Updated December 10, 2025
