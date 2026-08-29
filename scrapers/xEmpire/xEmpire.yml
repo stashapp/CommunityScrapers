@@ -1,5 +1,5 @@
 # yaml-language-server: $schema=../../validator/scraper.schema.json
-# requires: AlgoliaAPI
+# requires: Altwolia
 name: xEmpire
 sceneByURL:
   - action: script
@@ -12,36 +12,31 @@ sceneByURL:
       - xempire.com/en/video/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - xempire
+      - xEmpire.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - xempire
+    - xEmpire.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - xempire
+    - xEmpire.py
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - xempire
+    - xEmpire.py
     - scene-by-query-fragment
 galleryByFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - xempire
+    - xEmpire.py
     - gallery-by-fragment
 galleryByURL:
   - action: script
@@ -54,8 +49,7 @@ galleryByURL:
       - xempire.com/en/photo/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - xempire
+      - xEmpire.py
       - gallery-by-url
 groupByURL:
   - action: script
@@ -68,22 +62,19 @@ groupByURL:
       - xempire.com/en/movie/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - xempire
+      - xEmpire.py
       - movie-by-url
 performerByFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - xempire
+    - xEmpire.py
     - performer-by-fragment
 performerByName:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - xempire
+    - xEmpire.py
     - performer-by-name
 performerByURL:
   - action: script
@@ -96,7 +87,6 @@ performerByURL:
       - xempire.com/en/pornstar/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - xempire
+      - xEmpire.py
       - performer-by-url
 # Last Updated May 12, 2025
