@@ -1,151 +1,64 @@
-"""
-Stash scraper for Blowpass (Network) that uses the Algolia API Python client
-"""
 import json
 import sys
 from typing import Any
 
-from AlgoliaAPI.AlgoliaAPI import (
-    ScrapedGallery,
-    ScrapedMovie,
+from Altwolia.scrape import (
     gallery_from_fragment,
     gallery_from_url,
-    movie_from_url,
     performer_from_fragment,
     performer_from_url,
     performer_search,
     scene_from_fragment,
     scene_from_url,
-    scene_search
+    scene_search,
 )
 
 from py_common import log
-from py_common.types import ScrapedScene
 from py_common.util import scraper_args
 
-channel_name_map = {
+studio_rename = {
+    "1000facials": "1000 Facials",
+    "immorallive": "Immoral Live",
+    "MommyBlowsBest": "Mommy Blows Best",
+    "onlyteenblowjobs": "Only Teen Blowjobs",
+    "Sunlustxxx": "Sun Lust XXX",
 }
-"""
-This map just contains overrides when using a channel name as the studio
-"""
 
-network_name_map = {
-}
-"""
-Each network_name requiring a map/override should have a key-value here
-"""
-
-serie_name_map = {
-}
-"""
-Each serie_name requiring a map/override should have a key-value here
-"""
-
-site_map = {
-    "sunlustxxx": "Sun Lust XXX",
-}
-"""
-Each site found in the logic should have a key-value here
-"""
 
 def determine_studio(api_object: dict[str, Any]) -> str | None:
-    """
-    Determine studio name from API object properties to use instead of the
-    `studio_name` property scraped by default
-    """
-    available_on_site = api_object.get("availableOnSite", [])
-    main_channel_name = api_object.get("mainChannel", {}).get("name")
-    network_name = api_object.get("network_name")
-    serie_name = api_object.get("serie_name")
-    sitename_pretty = api_object.get("sitename_pretty")
-    log.debug(
-        f"available_on_site: {available_on_site}, "
-        f"main_channel_name: {main_channel_name}, "
-        f"network_name: {network_name}, "
-        f"serie_name: {serie_name}, "
-        f"sitename_pretty: {sitename_pretty}, "
-    )
-
-    if serie_name in [
-        *serie_name_map,
-        "Blowbanged",
-        "Squirting Orgies",
-    ]:
-        log.debug(f"matched serie_name '{serie_name}'")
-        return serie_name_map.get(serie_name, serie_name)
-    # steps through api_scene["availableOnSite"], and picks the first match
-    if site_match := next(
-        (site for site in available_on_site if site in site_map),
-        None
-    ):
-        log.debug(f"matched site '{site_match}'")
-        return site_map.get(site_match, site_match)
-    if main_channel_name:
-        log.debug(f"matched main_channel_name '{main_channel_name}'")
-        # most scenes have the studio name as the main channel name
-        return channel_name_map.get(main_channel_name, main_channel_name)
-    return None
+    if api_object.get("serie_name") == "Squirting Orgies":
+        return "Squirting Orgies"
+    return studio_rename.get(api_object.get("studio_name"))
 
 
-def postprocess_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
-    """
-    Applies post-processing to the scene
-    """
-    if studio_override := determine_studio(api_scene):
-        scene["studio"] = { "name": studio_override }
-
-    return scene
-
-
-def postprocess_movie(movie: ScrapedMovie, api_movie: dict[str, Any]) -> ScrapedMovie:
-    """
-    Applies post-processing to the movie
-    """
-    if studio_override := determine_studio(api_movie):
-        movie["studio"] = { "name": studio_override }
-
-    return movie
-
-
-def postprocess_gallery(gallery: ScrapedGallery, api_gallery: dict[str, Any]) -> ScrapedGallery:
-    """
-    Applies post-processing to the gallery
-    """
-    if studio_override := determine_studio(api_gallery):
-        gallery["studio"] = { "name": studio_override }
-
-    return gallery
+def blowpass(obj: Any, api_object: dict[str, Any]) -> Any:
+    if studio_override := determine_studio(api_object):
+        obj = {**obj, "studio": {"name": studio_override}}
+    return obj
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
 
+    site = "blowpass"
     log.debug(f"args: {args}")
     match op, args:
-        case "gallery-by-url", {"url": url, "extra": extra} if url and extra:
-            sites = extra
-            result = gallery_from_url(url, sites, postprocess=postprocess_gallery)
-        case "gallery-by-fragment", args:
-            sites = args.pop("extra")
-            result = gallery_from_fragment(args, sites, postprocess=postprocess_gallery)
-        case "scene-by-url", {"url": url, "extra": extra} if url and extra:
-            sites = extra
-            result = scene_from_url(url, sites, postprocess=postprocess_scene)
-        case "scene-by-name", {"name": name, "extra": extra} if name and extra:
-            sites = extra
-            result = scene_search(name, sites, postprocess=postprocess_scene)
+        case "scene-by-url", {"url": url} if url:
+            result = scene_from_url(url, site, postprocess=blowpass)
+        case "scene-by-name", {"name": name} if name:
+            result = scene_search(name, site, postprocess=blowpass)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            sites = args.pop("extra")
-            result = scene_from_fragment(args, sites, postprocess=postprocess_scene)
+            result = scene_from_fragment(args, site, postprocess=blowpass)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url, site, postprocess=blowpass)
+        case "gallery-by-fragment", args:
+            result = gallery_from_fragment(args, site, postprocess=blowpass)
         case "performer-by-url", {"url": url}:
-            result = performer_from_url(url)
+            result = performer_from_url(url, site)
         case "performer-by-fragment", args:
-            result = performer_from_fragment(args)
-        case "performer-by-name", {"name": name, "extra": extra} if name and extra:
-            sites = extra
-            result = performer_search(name, sites)
-        case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url, postprocess=postprocess_movie)
+            result = performer_from_fragment(args, site)
+        case "performer-by-name", {"name": name} if name:
+            result = performer_search(name, site)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)

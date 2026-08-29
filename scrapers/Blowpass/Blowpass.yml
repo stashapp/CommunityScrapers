@@ -1,4 +1,4 @@
-# requires: AlgoliaAPI
+# requires: Altwolia
 name: Blowpass
 sceneByURL:
   - action: script
@@ -13,35 +13,30 @@ sceneByURL:
     script:
       - python
       - Blowpass.py
-      - blowpass
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
     - Blowpass.py
-    - blowpass
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
     - Blowpass.py
-    - blowpass
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
     - Blowpass.py
-    - blowpass
     - scene-by-query-fragment
 galleryByFragment:
   action: script
   script:
     - python
     - Blowpass.py
-    - blowpass
     - gallery-by-fragment
 galleryByURL:
   - action: script
@@ -61,7 +56,6 @@ galleryByURL:
     script:
       - python
       - Blowpass.py
-      - blowpass
       - gallery-by-url
 performerByURL:
   - action: script
@@ -81,13 +75,10 @@ performerByName:
   script:
     - python
     - Blowpass.py
-    - blowpass
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
     - Blowpass.py
-    - blowpass
     - performer-by-fragment
-# Last Updated May 23, 2025
