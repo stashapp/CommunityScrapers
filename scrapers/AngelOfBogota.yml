@@ -36,7 +36,8 @@ jsonScrapers:
               # "\/path\/to\/file" instead of "/path/to/file".
               - regex: \\/
                 with: /
-          - javascript: 'return "https://c8b7fa4b1f.mjedge.net" + value;'
+              - regex: ^
+                with: https://c8b7fa4b1f.mjedge.net
       Tags:
         Name: sets.0.data_types.#(shortname=="tags").data_values.#.name
       Performers:
