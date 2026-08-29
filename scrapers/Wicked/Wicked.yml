@@ -1,4 +1,4 @@
-# requires: Algolia
+# requires: Altwolia
 name: "Wicked"
 sceneByURL:
   - action: script
@@ -6,44 +6,62 @@ sceneByURL:
       - wicked.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - wicked
-groupByURL:
-  - action: script
-    url:
-      - wicked.com/en/movie/
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - wicked
-      - movie
+      - ../Altwolia/scrape.py
+      - scene-by-url
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - wicked
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - scene-by-fragment
 sceneByName:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - wicked
-      - searchName
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - wicked
+    - scene-by-name
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - wicked
-      - validName
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - wicked
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
       - wicked.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - wicked
-      - gallery
-# Last Updated December 22, 2022
+      - ../Altwolia/scrape.py
+      - gallery-by-url
+groupByURL:
+  - action: script
+    url:
+      - wicked.com/en/movie/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - movie-by-url
+performerByURL:
+  - action: script
+    url:
+      - wicked.com/en/pornstar/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - wicked
+    - performer-by-name
