@@ -5,9 +5,7 @@ from py_common import log
 from py_common.types import ScrapedScene
 from py_common.util import dig, scraper_args
 
-# AlgoliaAPI is a shared utility in the CommunityScrapers repo
-# that handles Algolia auth, caching, and common scraping logic
-from AlgoliaAPI.AlgoliaAPI import scene_from_url as algolia_scene_from_url
+from Altwolia.scrape import scene_from_url
 
 SITE = "playboytv"
 
@@ -44,7 +42,7 @@ def _build_urls(api_scene: dict) -> list[str]:
 
 def _postprocess(scene: ScrapedScene, api_scene: dict) -> ScrapedScene:
     """
-    PlayboyTV-specific overrides applied after AlgoliaAPI's generic scraping:
+    PlayboyTV-specific overrides applied after Altwolia's generic scraping:
     1. Title: constructed from serie_name + movie_title + title
     2. URLs: four variants (www/members x view/playboytv paths)
     3. Image: PlayboyTV uses multicontent_data.nsfw, not pictures.nsfw.top
@@ -72,7 +70,7 @@ def main_scraper():
     result = None
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = algolia_scene_from_url(url, [SITE], postprocess=_postprocess)
+            result = scene_from_url(url, SITE, postprocess=_postprocess)
         case _:
             log.error(f"Unsupported operation: {op}, args: {json.dumps(args)}")
             sys.exit(1)
