@@ -1,4 +1,4 @@
-# requires: Algolia
+# requires: Altwolia
 name: "ChaosMen"
 sceneByURL:
   - action: script
@@ -6,40 +6,39 @@ sceneByURL:
       - chaosmen.com/en/video
     script:
       - python
-      - ../Algolia/Algolia.py
-      - chaosmen
+      - ../Altwolia/scrape.py
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - chaosmen
+    - ../Altwolia/scrape.py
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../Altwolia/scrape.py
     - chaosmen
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../Altwolia/scrape.py
     - chaosmen
-    - validName
+    - scene-by-query-fragment
 performerByFragment:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
-    - chaosmen
+    - ../Altwolia/scrape.py
     - performer-by-fragment
 performerByName:
   action: script
   script:
     - python
-    - ../AlgoliaAPI/AlgoliaAPI.py
+    - ../Altwolia/scrape.py
     - chaosmen
     - performer-by-name
 performerByURL:
@@ -48,7 +47,5 @@ performerByURL:
       - chaosmen.com/en/pornstar/
     script:
       - python
-      - ../AlgoliaAPI/AlgoliaAPI.py
-      - chaosmen
+      - ../Altwolia/scrape.py
       - performer-by-url
-# Last Updated August 26, 2026
