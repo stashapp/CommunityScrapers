@@ -1,4 +1,4 @@
-# requires: Algolia
+# requires: Altwolia
 name: "Girlfriends Films"
 sceneByURL:
   - action: script
@@ -6,44 +6,59 @@ sceneByURL:
       - girlfriendsfilms.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - girlfriendsfilms
+      - Girlfriendsfilms.py
+      - scene-by-url
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - girlfriendsfilms
+  action: script
+  script:
+    - python
+    - Girlfriendsfilms.py
+    - scene-by-fragment
 sceneByName:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - girlfriendsfilms
-      - searchName
+  action: script
+  script:
+    - python
+    - Girlfriendsfilms.py
+    - scene-by-name
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - girlfriendsfilms
-      - validName
-groupByURL:
-  - action: script
-    url:
-      - girlfriendsfilms.com/en/movie/
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - girlfriendsfilms
-      - movie
+  action: script
+  script:
+    - python
+    - Girlfriendsfilms.py
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
       - girlfriendsfilms.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - girlfriendsfilms
-      - gallery
-# Last Updated December 22, 2022
+      - Girlfriendsfilms.py
+      - gallery-by-url
+groupByURL:
+  - action: script
+    url:
+      - girlfriendsfilms.com/en/movie/
+    script:
+      - python
+      - Girlfriendsfilms.py
+      - movie-by-url
+performerByURL:
+  - action: script
+    url:
+      - girlfriendsfilms.com/en/pornstar/
+    script:
+      - python
+      - Girlfriendsfilms.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - Girlfriendsfilms.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - Girlfriendsfilms.py
+    - performer-by-name
