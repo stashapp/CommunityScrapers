@@ -1,4 +1,4 @@
-# requires: AlgoliaAPI
+# requires: Altwolia
 name: ZeroToleranceFilms
 sceneByURL:
   - action: script
@@ -10,28 +10,24 @@ sceneByURL:
     script:
       - python
       - zerotolerancefilms.py
-      - zerotolerancefilms
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
     - zerotolerancefilms.py
-    - zerotolerancefilms
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
     - zerotolerancefilms.py
-    - zerotolerancefilms
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
     - zerotolerancefilms.py
-    - zerotolerancefilms
     - scene-by-query-fragment
 groupByURL:
   - action: script
@@ -42,7 +38,6 @@ groupByURL:
     script:
       - python
       - zerotolerancefilms.py
-      - zerotolerancefilms
       - movie-by-url
 galleryByURL:
   - action: script
@@ -53,6 +48,4 @@ galleryByURL:
     script:
       - python
       - zerotolerancefilms.py
-      - zerotolerancefilms
       - gallery-by-url
-# Last Updated January 30, 2025
