@@ -24,13 +24,17 @@ jsonScrapers:
                 with: " "
       Details: sets.0.description
       Date: sets.0.added_nice
-      Code: sets.0.cms_set_id
       Image:
         selector: sets.0.preview_formatted.thumb.1920-1080.0.[fileuri,signature].@tostr
         postProcess:
           - replace:
               - regex: ^\["(.*)","(.*)"\]$
                 with: $1?$2
+              # gjson's @tostr re-serializes the array without unescaping the
+              # forward slashes it JSON-escaped, so fileuri comes through as
+              # "\/path\/to\/file" instead of "/path/to/file".
+              - regex: \\/
+                with: /
           - javascript: 'return "https://c8b7fa4b1f.mjedge.net" + value;'
       Tags:
         Name: sets.0.data_types.#(shortname=="tags").data_values.#.name
