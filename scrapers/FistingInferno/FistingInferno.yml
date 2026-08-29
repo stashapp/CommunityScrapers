@@ -1,42 +1,78 @@
-# requires: Algolia
-name: "FistingInferno"
+# requires: Altwolia
+name: "Fisting Inferno"
 sceneByURL:
   - action: script
     url:
       - fistinginferno.com/en/video/
       - fistingcentral.com/en/video/
+      - clubinfernodungeon.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - fistinginferno
+      - FistingInferno.py
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - fistinginferno
+    - FistingInferno.py
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - fistinginferno
-    - searchName
+    - FistingInferno.py
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - fistinginferno
-    - validName
+    - FistingInferno.py
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
       - fistinginferno.com/en/photo/
       - fistingcentral.com/en/photo/
+      - clubinfernodungeon.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - fistinginferno
-      - gallery
-# Last Updated August 13, 2025
+      - FistingInferno.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - FistingInferno.py
+    - gallery-by-fragment
+groupByURL:
+  - action: script
+    url:
+      - fistinginferno.com/en/movie/
+      - fistingcentral.com/en/movie/
+      - clubinfernodungeon.com/en/movie/
+    script:
+      - python
+      - FistingInferno.py
+      - movie-by-url
+performerByURL:
+  - action: script
+    url:
+      - fistinginferno.com/en/pornstar/
+      - fistingcentral.com/en/pornstar/
+      - clubinfernodungeon.com/en/pornstar/
+    script:
+      - python
+      - FistingInferno.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - FistingInferno.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - FistingInferno.py
+    - performer-by-name
