@@ -1,5 +1,4 @@
-# requires: Algolia
-# scrapes: InterracialVision
+# requires: Altwolia
 name: InterracialVision
 sceneByURL:
   - action: script
@@ -7,44 +6,54 @@ sceneByURL:
       - interracialvision.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - interracialvision
-groupByURL:
-  - action: script
-    url:
-      - interracialvision.com/en/movie/
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - interracialvision
-      - movie
+      - ../Altwolia/scrape.py
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - interracialvision
+    - ../Altwolia/scrape.py
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../Altwolia/scrape.py
     - interracialvision
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../Altwolia/scrape.py
     - interracialvision
-    - validName
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
       - interracialvision.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - interracialvision
-      - gallery
-# Last Updated December 22, 2022
+      - ../Altwolia/scrape.py
+      - gallery-by-url
+performerByURL:
+  - action: script
+    url:
+      - interracialvision.com/en/pornstar/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - interracialvision
+    - performer-by-name
