@@ -1,50 +1,70 @@
-# requires: Algolia
+# requires: Altwolia
 name: "LethalHardcore"
 sceneByURL:
   - action: script
     url:
-      - https://www.lethalhardcore.com/en/video
-      - https://www.lethalhardcorevr.com/en/video
+      - lethalhardcore.com/en/video
+      - lethalhardcorevr.com/en/video
     script:
       - python
-      - ../Algolia/Algolia.py
-      - lethalhardcore
+      - ../Altwolia/scrape.py
+      - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
-    - lethalhardcore
+    - ../Altwolia/scrape.py
+    - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../Altwolia/scrape.py
     - lethalhardcore
-    - searchName
+    - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Algolia/Algolia.py
+    - ../Altwolia/scrape.py
     - lethalhardcore
-    - validName
+    - scene-by-query-fragment
+galleryByURL:
+  - action: script
+    url:
+      - lethalhardcore.com/en/photo/
+      - lethalhardcorevr.com/en/photo/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - gallery-by-url
 groupByURL:
   - action: script
     url:
       - lethalhardcore.com/en/movie
     script:
       - python
-      - ../Algolia/Algolia.py
-      - lethalhardcore
-      - movie
-galleryByURL:
+      - ../Altwolia/scrape.py
+      - movie-by-url
+performerByURL:
   - action: script
     url:
-      - lethalhardcore.com/en/photo/
+      - lethalhardcore.com/en/pornstar/
+      - lethalhardcorevr.com/en/pornstar/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - lethalhardcore
-      - gallery
-# Last Updated April 29, 2024
+      - ../Altwolia/scrape.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - lethalhardcore
+    - performer-by-name
