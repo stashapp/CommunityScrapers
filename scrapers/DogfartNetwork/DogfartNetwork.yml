@@ -1,70 +1,110 @@
-# requires: Algolia
-name: "DogfartNetwork"
+# requires: Altwolia
+name: Dogfart Network
 sceneByURL:
   - action: script
     url:
-      - blackmeatwhitefeet.com/en/video
-      - blacksonblondes.com/en/video
-      - blacksoncougars.com/en/video
-      - cuckoldsessions.com/en/video
-      - cumbang.com/en/video
-      - dfxtra.com/en/video
-      - dogfartnetwork.com/en/video
-      - downlowboys.com/en/video
-      - gloryhole.com/en/video
-      - gloryholeinitiations.com/en/video
-      - interracialblowbang.com/en/video
-      - interracialpickups.com/en/video
-      - watchingmydaughtergoblack.com/en/video
-      - watchingmymomgoblack.com/en/video
-      - wefuckblackgirls.com/en/video
-      - zebragirls.com/en/video
+      - blackmeatwhitefeet.com/en/video/
+      - blacksonblondes.com/en/video/
+      - blacksoncougars.com/en/video/
+      - cuckoldsessions.com/en/video/
+      - cumbang.com/en/video/
+      - dfxtra.com/en/video/
+      - dogfartnetwork.com/en/video/
+      - downlowboys.com/en/video/
+      - gloryhole.com/en/video/
+      - gloryhole-initiations.com/en/video/
+      - gloryholesandhandjobs.com/en/video/
+      - interracialblowbang.com/en/video/
+      - interracialpickups.com/en/video/
+      - watchingmydaughtergoblack.com/en/video/
+      - watchingmymomgoblack.com/en/video/
+      - wefuckblackgirls.com/en/video/
+      - zebragirls.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - dogfartnetwork
+      - DogfartNetwork.py
+      - scene-by-url
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - dogfartnetwork
+  action: script
+  script:
+    - python
+    - DogfartNetwork.py
+    - scene-by-fragment
 sceneByName:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - dogfartnetwork
-      - searchName
+  action: script
+  script:
+    - python
+    - DogfartNetwork.py
+    - scene-by-name
 sceneByQueryFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - dogfartnetwork
-      - validName
+  action: script
+  script:
+    - python
+    - DogfartNetwork.py
+    - scene-by-query-fragment
 galleryByURL:
   - action: script
     url:
-      - blackmeatwhitefeet.com/en/photo
-      - blacksonblondes.com/en/photo
-      - blacksoncougars.com/en/photo
-      - cuckoldsessions.com/en/photo
-      - cumbang.com/en/photo
-      - dfxtra.com/en/photo
-      - dogfartnetwork.com/en/photo
-      - downlowboys.com/en/photo
-      - gloryhole.com/en/photo
-      - gloryholeinitiations.com/en/photo
-      - interracialblowbang.com/en/photo
-      - interracialpickups.com/en/photo
-      - watchingmydaughtergoblack.com/en/photo
-      - watchingmymomgoblack.com/en/photo
-      - wefuckblackgirls.com/en/photo
-      - zebragirls.com/en/photo
+      - blackmeatwhitefeet.com/en/photo/
+      - blacksonblondes.com/en/photo/
+      - blacksoncougars.com/en/photo/
+      - cuckoldsessions.com/en/photo/
+      - cumbang.com/en/photo/
+      - dfxtra.com/en/photo/
+      - dogfartnetwork.com/en/photo/
+      - downlowboys.com/en/photo/
+      - gloryhole.com/en/photo/
+      - gloryhole-initiations.com/en/photo/
+      - gloryholesandhandjobs.com/en/photo/
+      - interracialblowbang.com/en/photo/
+      - interracialpickups.com/en/photo/
+      - watchingmydaughtergoblack.com/en/photo/
+      - watchingmymomgoblack.com/en/photo/
+      - wefuckblackgirls.com/en/photo/
+      - zebragirls.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - dogfartnetwork
-      - gallery
-# Last Updated July 27, 2023
+      - DogfartNetwork.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - DogfartNetwork.py
+    - gallery-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - blackmeatwhitefeet.com/en/pornstar/
+      - blacksonblondes.com/en/pornstar/
+      - blacksoncougars.com/en/pornstar/
+      - cuckoldsessions.com/en/pornstar/
+      - cumbang.com/en/pornstar/
+      - dfxtra.com/en/pornstar/
+      - dogfartnetwork.com/en/pornstar/
+      - downlowboys.com/en/pornstar/
+      - gloryhole.com/en/pornstar/
+      - gloryhole-initiations.com/en/pornstar/
+      - gloryholesandhandjobs.com/en/pornstar/
+      - interracialblowbang.com/en/pornstar/
+      - interracialpickups.com/en/pornstar/
+      - watchingmydaughtergoblack.com/en/pornstar/
+      - watchingmymomgoblack.com/en/pornstar/
+      - wefuckblackgirls.com/en/pornstar/
+      - zebragirls.com/en/pornstar/
+    script:
+      - python
+      - DogfartNetwork.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - DogfartNetwork.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - DogfartNetwork.py
+    - performer-by-name
