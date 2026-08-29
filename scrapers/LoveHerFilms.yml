@@ -1,32 +1,71 @@
 name: LoveHerFilms
+sceneByName:
+  action: scrapeJson
+  queryURL: "https://api.loveherfilms.com/v1/search/suggestions?q={}"
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: "{url}"
+  queryURLReplace:
+    url:
+      - regex: \.html/?$
+        with: ""
+      - regex: .*/tour/trailers/([^/]+).*
+        with: https://api.loveherfilms.com/v1/content-sets/$1
+  scraper: sceneScraper
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - loveherboobs.com/tour/trailers/
       - loveherfeet.com/tour/trailers/
       - loveherfilms.com/tour/trailers/
       - shelovesblack.com/tour/trailers/
+    queryURLReplace:
+      url:
+        - regex: \.html/?$
+          with: ""
+        - regex: .*/tour/trailers/([^/]+).*
+          with: https://api.loveherfilms.com/v1/content-sets/$1
+    queryURL: "{url}"
     scraper: sceneScraper
-sceneByFragment:
-  action: scrapeXPath
-  queryURL: "{url}"
-  scraper: sceneScraper
 performerByName:
   action: scrapeJson
   queryURL: "https://api.loveherfilms.com/v1/models?modelsNames[]={}"
   scraper: performerSearch
 performerByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - loveherboobs.com/tour/models/
       - loveherfeet.com/tour/models/
       - loveherfilms.com/tour/models/
       - shelovesblack.com/tour/models/
+    queryURLReplace:
+      url:
+        - regex: .*/tour/models/([^/]+)\.html.*
+          with: https://api.loveherfilms.com/v1/models/$1
+    queryURL: "{url}"
     scraper: performerScraper
 jsonScrapers:
+  sceneSearch:
+    scene:
+      Title: '#(type=="video")#.title'
+      Image: '#(type=="video")#.thumbUrl'
+      URL:
+        selector: '#(type=="video")#.slug'
+        replace:
+          - regex: "^"
+            with: "https://www.loveherfilms.com/tour/trailers/"
+          - regex: "$"
+            with: "/"
   performerSearch:
     performer:
       Name: items.#.modelName
+      Image:
+        selector: items.#.thumb.sources.3.path
+        postProcess:
+          - replace:
+              - regex: -4x\.jpg$
+                with: "-full.jpg"
       URLs:
         selector: items.#.slug
         replace:
@@ -34,77 +73,94 @@ jsonScrapers:
             with: "https://www.loveherfilms.com/tour/models/"
           - regex: "$"
             with: ".html"
-xPathScrapers:
-  sceneScraper:
-    scene:
-      Title: //h1/text()
-      Details:
-        selector: //section/div/p[contains(@class, "__body")]/text()
-      Date:
-        selector: //p[contains(@class,"dateText")]/text()
-        postProcess:
-          - parseDate: 2 January, 2006
-      # available in ld+json with CDP load, or for some reason in the CTA button
-      Image:
-        selector: //a[@aria-label="Get access"][contains(@class,"CTAButton")]/@href
-        postProcess:
-          - replace:
-            - regex: '.+imgUrl=(https:\/\/.+?)\?expires.+'
-              with: $1
-      Studio:
-        Name:
-          selector: //script[@id="video-json-ld"]/text()
-          postProcess:
-            - replace:
-              - regex: '.+"publisher":.+"name":"([^"]+).+'
-                with: $1
-      Tags:
-        Name: //a[contains(@class,"_tagItem")]//p/text()
-      Performers:
-        Name: //ul[contains(@class,"__modelList")]//a[contains(@class,"__model")]/p[1]/text()
-        URLs: //ul[contains(@class,"__modelList")]//a[contains(@class,"__model")]/@href
-  performerSearch:
-    performer:
-      Name: //h3/../a/@title
-      URLs: //h3/../a/@href
   performerScraper:
-    common:
-      $heroText: //div[contains(@class,"HeroModel_textWrapper")]
     performer:
-      Name: $heroText//h1
-      Details:
-        selector: heroText/p/text()
+      Name: modelName
+      Gender:
+        selector: gender
+        postProcess:
+          - map:
+              F: Female
+              M: Male
+      Details: bio
       Image:
-        selector: //picture/img/@src
+        selector: thumb.sources.3.path
         postProcess:
           - replace:
-            - regex: "-1x.jpg"
-              with: "-4x.jpg"
-      Ethnicity: $heroText//li/p[contains(text(),"Ethnicity")]/following-sibling::p/text()
-      EyeColor: $heroText//li/p[contains(text(),"Eye color")]/following-sibling::p/text()
+              - regex: -4x\.jpg$
+                with: "-full.jpg"
+      Ethnicity: ethnicity
+      EyeColor: eyecolor
+      HairColor: haircolor
+      Measurements: measurements
+      Tattoos: tattoos
+      Piercings: piercings
+      Twitter: twitterHandle
       Birthdate:
-        selector: $heroText//li/p[contains(text(),"Date of birth")]/following-sibling::p/text()
+        selector: birthdate
         postProcess:
           - parseDate: January 2, 2006
-      Measurements: $heroText//li/p[contains(text(),"Measurements")]/following-sibling::p/text()
-      HairColor: $heroText//li/p[contains(text(),"Hair color")]/following-sibling::p/text()
       Height:
-        selector: $heroText//li/p[contains(text(),"Height")]/following-sibling::p/text()
+        selector: height
         postProcess:
           - replace:
-            - regex: .+\((\d+) cm\)
-              with: "$1"
+              - regex: .+\((\d+) cm\)
+                with: "$1"
       Weight:
-        selector: $heroText//li/p[contains(text(),"Weight")]/following-sibling::p/text()
+        selector: weight
         postProcess:
           - replace:
-            - regex: .+\((\d+) kg\)
-              with: "$1"
-      Gender:
-        fixed: "Female"
-# hardcoded for performer search
+              - regex: .+\((\d+) kg\)
+                with: "$1"
+  sceneScraper:
+    scene:
+      Title: title
+      Details: description
+      Date:
+        selector: releaseDateVideo
+        postProcess:
+          - parseDate: "2006-01-02T15:04:05.000Z"
+      Image:
+        selector: thumbPhoto.sources.3.path
+        postProcess:
+          - replace:
+              - regex: -4x\.jpg$
+                with: "-full.jpg"
+      URLs:
+        selector: slug
+        replace:
+          - regex: "^"
+            with: "https://www.loveherfilms.com/tour/trailers/"
+          - regex: "$"
+            with: "/"
+      Studio:
+        Name:
+          selector: directory
+          postProcess:
+            - replace:
+                - regex: ^([A-Za-z]+)_.*
+                  with: "$1"
+            - map:
+                LHFilms: Love Her Films
+                LHF: Love Her Feet
+                LHB: Love Her Boobs
+                LHBT: Love Her Butt
+                SLB: She Loves Black
+            - replace:
+                - regex: ^[A-Za-z]+$
+                  with: Love Her Films
+      Tags:
+        Name: categories.#.title
+      Performers:
+        Name: models.#.modelName
+        URLs:
+          selector: models.#.slug
+          replace:
+            - regex: "^"
+              with: "https://www.loveherfilms.com/tour/models/"
+            - regex: "$"
+              with: ".html"
 driver:
   headers:
     - Key: X-Site-Id
       Value: 677d3f422e587cf94d1a9e5d
-# Last Updated April 5, 2026
