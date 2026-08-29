@@ -1,31 +1,65 @@
-# requires: Algolia
+# requires: Altwolia
 name: "Burning Angel"
 sceneByURL:
   - action: script
     url:
-      - burningangel.com/en/video
+      - burningangel.com/en/video/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - burningangel
+      - ../Altwolia/scrape.py
+      - scene-by-url
 sceneByFragment:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - burningangel
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - scene-by-fragment
 sceneByName:
-    action: script
-    script:
-      - python
-      - ../Algolia/Algolia.py
-      - burningangel
-      - searchName
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - burningangel
+    - scene-by-name
 sceneByQueryFragment:
-    action: script
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - burningangel
+    - scene-by-query-fragment
+galleryByURL:
+  - action: script
+    url:
+      - burningangel.com/en/photo/
     script:
       - python
-      - ../Algolia/Algolia.py
-      - burningangel
-      - validName
-# Last Updated March 23, 2022
+      - ../Altwolia/scrape.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - gallery-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - burningangel.com/en/pornstar/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - performer-by-url
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - performer-by-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - burningangel
+    - performer-by-name
