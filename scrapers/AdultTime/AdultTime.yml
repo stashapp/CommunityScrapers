@@ -1,5 +1,4 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
-# requires: AlgoliaAPI
+# requires: Altwolia
 name: "AdultTime"
 sceneByURL:
   - action: script
@@ -19,7 +18,6 @@ sceneByURL:
       - assholefever.com/en/video/
       - beingtrans247.com/en/video/
       - blowmepov.com/en/video/
-      - burningangel.com/en/video/
       - caughtfapping.com/en/video/
       - coupleswapping.com/en/video/
       - devilsfilm.com/en/video/
@@ -56,6 +54,7 @@ sceneByURL:
       - lezbebad.com/en/video/
       - lezcuties.com/en/video/
       - massage-parlor.com/en/video/
+      - members.adulttime.com/en/video/
       - milkingtable.com/en/video/
       - mixedx.com/en/video/
       - modeltime.com/en/video/
@@ -96,35 +95,30 @@ sceneByURL:
     script:
       - python
       - AdultTime.py
-      - girlsway
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
     - AdultTime.py
-    - girlsway
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
     - AdultTime.py
-    - girlsway
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
     - AdultTime.py
-    - girlsway
     - scene-by-query-fragment
 galleryByFragment:
   action: script
   script:
     - python
     - AdultTime.py
-    - puretaboo
     - gallery-by-fragment
 galleryByURL:
   - action: script
@@ -141,6 +135,7 @@ galleryByURL:
       - fantasymassage.com/en/photo/
       - girlsway.com/en/photo/
       - joymii.com/en/photo/
+      - members.adulttime.com/en/photo/
       - mommysgirl.com/en/photo/
       - nurumassage.com/en/photo/
       - oopsie.com/en/photo/
@@ -154,7 +149,6 @@ galleryByURL:
     script:
       - python
       - AdultTime.py
-      - puretaboo
       - gallery-by-url
 groupByURL:
   - action: script
@@ -162,11 +156,11 @@ groupByURL:
       - adulttime.com/en/dvd/
       - devilsfilm.com/en/dvd/
       - devilstgirls.com/en/dvd/
+      - members.adulttime.com/en/movie/
       - outofthefamily.com/en/dvd/
     script:
       - python
       - AdultTime.py
-      - puretaboo
       - movie-by-url
 performerByURL:
   - action: script
@@ -201,6 +195,7 @@ performerByURL:
       - lezbebad.com/en/pornstar/
       - lezcuties.com/en/pornstar/
       - massage-parlor.com/en/pornstar/
+      - members.adulttime.com/en/pornstar/
       - milkingtable.com/en/pornstar/
       - mixedx.com/en/pornstar/
       - modeltime.com/en/pornstar/
@@ -239,13 +234,10 @@ performerByName:
   script:
     - python
     - AdultTime.py
-    - girlsway
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
     - AdultTime.py
-    - girlsway
     - performer-by-fragment
-# Last Updated May 18, 2026
