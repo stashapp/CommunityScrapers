@@ -126,7 +126,7 @@ def run_search(query):
             results.append({
                 "Title": (link.get('title') or link.get_text()).strip(),
                 "URL": url,
-                "Image": thumb['src'] if thumb and thumb.get('src') else "",
+                "Image": upgrade_image(thumb['src'], check=False) if thumb and thumb.get('src') else "",
             })
 
         if found < 24:
@@ -144,14 +144,21 @@ def search_scenes(query):
     return []
 
 
-def upgrade_image(url):
-    """og:image is a 475x350 thumbnail. The CDN also serves a "-full" variant
-    which is 1800x1200 for most scenes and identical for the rest, so it is
-    never worse. Fall back to the thumbnail if it is not there."""
+def upgrade_image(url, check=True):
+    """Thumbnails are 475x350. The CDN also serves a "-full" variant which is
+    1800x1200 for most scenes and the same size for the rest, so it is never
+    worse.
+
+    Search results skip the check: one request per result would mean up to a
+    hundred of them, and picking a result re-scrapes the scene page anyway.
+    """
     if not url or "-full." in url:
         return url
 
     full = re.sub(r'(\.[a-z]+)$', r'-full\1', url, flags=re.I)
+    if not check:
+        return full
+
     try:
         if requests.head(full, headers=headers, timeout=15).status_code == 200:
             return full
