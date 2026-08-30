@@ -1,0 +1,43 @@
+name: CockyBoys
+sceneByURL:
+  - action: script
+    url:
+      - cockyboys.com/scenes/
+    script:
+      - python
+      - CockyBoys.py
+      - sceneByURL
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - CockyBoys.py
+    - sceneByFragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - CockyBoys.py
+    - sceneByName
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - CockyBoys.py
+    - sceneByQueryFragment
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - cockyboys.com/models/
+    scraper: performerScraper
+xPathScrapers:
+  performerScraper:
+    performer:
+      Name: //h1[@class="gothamy sectionTitle"]/text()
+      Gender:
+        # CockyBoys only has profile pages for male performers
+        fixed: Male
+      Image: //div[@id="modelInfo"]/img/@src
+# Last Updated Jan 10, 2026
