@@ -3,7 +3,9 @@ Scraper has been tested on 2026-08-30 and returns correct studio/network values 
 |        Network | Studio                  | URL                                                                                                                      |
 | -------------: | :---------------------- | :----------------------------------------------------------------------------------------------------------------------- |
 |                | FemDorado               | https://femdorado.com/video/479345/bikini-femdoms-punishing-slave-with-spitting-and-burping-lesson-while-smoking-outdoor |
+|                | Julia Reaves            | https://julia-reaves.com/video/395033/malle-cheating-wifes                                                               |
 |                | LezDorado               | https://lezdorado.com/video/482488/the-art-of-tribadism-volume-5                                                         |
+|                | Rubber Empire           | https://rubber-empire.com/video/489003/er-muss-alles-schlucken-und-dann-melkt-sie-ihn                                    |
 |                | Sappho Films            | https://sapphofilms.com/video/425211/love-sex-between-lesbians-5                                                         |
 | Teen Core Club | Defiled 18              | https://defiled18.com/video/205438/bic-2965                                                                              |
 | Teen Core Club | Girls Got Cream         | https://girlsgotcream.com/video/204616/bic-890                                                                           |

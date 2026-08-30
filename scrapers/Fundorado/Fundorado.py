@@ -58,6 +58,8 @@ OWN_SITES: dict[str, tuple[str, str | None]] = {
     "jerk-offpass.com": ("Jerk Off Pass", "Teen Core Club"),
     "teensgoporn.com": ("Teens Go Porn", "Teen Core Club"),
     "teencorezine.com": ("Teencore Zine", "Teen Core Club"),
+    "rubber-empire.com": ("Rubber Empire", None),
+    "julia-reaves.com": ("Julia Reaves", None),
 }
 
 SCENE_URL = re.compile(r"https?://(?:www\.)?([\w.-]+)/video/(\d+)")
