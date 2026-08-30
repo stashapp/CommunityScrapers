@@ -83,7 +83,7 @@ RESOLUTION_BY_DOMAIN: list[tuple[tuple[str, ...], str]] = [
             "www.thundercock.com",
             "www.tonightsts.com",
         ),
-        "1279x719",
+        "1279x852",
     ),
 ]
 
