@@ -2,7 +2,7 @@ name: "IKissGirls"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - ikissgirls.com
+      - girlskissxxx.com
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -31,6 +31,4 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^
-                with: https://ikissgirls.com
-
-# Last Updated March 03, 2021
+                with: https://girlskissxxx.com
