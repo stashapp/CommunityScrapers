@@ -6,6 +6,7 @@ sceneByURL:
       - splatbukkake.xxx/
       - ukpornparty.xxx/
       - sexyukpornstars.xxx/
+      - akalexromero.com/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -14,14 +15,14 @@ xPathScrapers:
     scene:
       Title: //div[@class="movieTitle"]/text()
       Details: $movieMeta/div[1]/text()
-      Studio: 
+      Studio:
         Name: //a[contains(@href, '/movies/studio/')]/text()
       Date:
         selector: //div[contains(., "Released on:")]
         postProcess:
           - replace:
-            - regex: .+(\d{2}-\d{2}-\d{4}).+
-              with: $1
+              - regex: .+(\d{2}-\d{2}-\d{4}).+
+                with: $1
           - parseDate: 02-01-2006
       Performers:
         Name: $movieMeta//a[contains(@href, "/model/")]/text()
@@ -33,8 +34,8 @@ xPathScrapers:
         # https:// so correct for that as well
         postProcess:
           - replace:
-            - regex: (https?:\/\/?)([^|]+)\|(.+)
-              with: https://$2$3
+              - regex: (https?:\/\/?)([^|]+)\|(.+)
+                with: https://$2$3
       Tags:
         Name: $movieMeta//a[contains(@href, "/category/")]/text()
 # Last Updated September 21, 2025
