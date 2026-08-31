@@ -1,0 +1,17 @@
+name: "LifeSelector"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lifeselector.com/game/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="title"]
+      Details: //div[@class="description"]/p
+      Performers:
+        Name: //div[@class="actors"]//a[contains(@class,"actor")]//p[@class="name"]
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: LifeSelector
