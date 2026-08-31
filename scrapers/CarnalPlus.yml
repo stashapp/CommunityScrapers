@@ -52,8 +52,8 @@ xPathScrapers:
     common:
       $scene: &sceneContainer //body/div[contains(@class, "mainContainer")]
     scene:
-      Title: &title
-        selector: //meta[@property="og:title"]/@content
+      Title: &title # Special handling for jockpack.com
+        selector: //meta[@property="og:title" and not(contains(@content, "World's Best Bareback Porn Network"))]/@content | //h2[contains(@class, "video-detail-h2")]
         postProcess:
           - replace:
               - regex: \s*\|.*$
@@ -113,8 +113,12 @@ xPathScrapers:
                 # they are called on their respective network sites
                 americanmusclehunks: American Muscle Hunks
                 bangbangboys: Bang Bang Boys
+                baptistboys: Baptist Boys
+                betabetapi: BetaBetaPi
                 boundtwinks: Bound Twinks
                 boyforsale: Boy For Sale
+                carnaloriginals: Carnal+ Originals
+                catholicboys: Catholic Boys
                 cumdumpsluts: Cum Dump Sluts
                 dirtyboysociety: Dirty Boy Society
                 edwardjames: Edward James
@@ -129,6 +133,7 @@ xPathScrapers:
                 rawfuckboys: Raw Fuck Boys
                 scoutboys: Scout Boys
                 staghomme: Stag Homme
+                studloads: StudLoads
                 teensandtwinks: Teens And Twinks
                 transcest: Transcest
                 twinks: Twinks
@@ -138,7 +143,7 @@ xPathScrapers:
       Tags: &tags
         Name: $scene//div[@id="catMovie"]//text()
       Performers: &performers
-        Name: 
+        Name:
           selector: $scene//div[contains(@class, "modelProfile")]//img/@alt
           postProcess:
             - replace:
@@ -155,15 +160,13 @@ xPathScrapers:
         concat: "\n\n"
       Image: *image
       Code:
-        selector: (//source/@src)[1]
+        selector: //script[contains(., "trailersource")]
         postProcess:
           - replace:
-              - regex: .*(\w{3}\d{4}).trailer.*
+              - regex: (?s).*\/(\w{3}\d{4})\/trailersource.*
                 with: $1
-              # Some of these trailer URLs will not contain the studio code
-              # so we need to remove those manually here
-              - regex: ^https.*
-                with:
+              - regex: (?s)^\(function.*
+                with: ""
       Date:
         selector: $scene//div[@class="releasedate"]
         postProcess:
@@ -251,8 +254,12 @@ xPathScrapers:
                 # they are called on their respective network sites
                 americanmusclehunks: American Muscle Hunks
                 bangbangboys: Bang Bang Boys
+                baptistboys: Baptist Boys
+                betabetapi: BetaBetaPi
                 boundtwinks: Bound Twinks
                 boyforsale: Boy For Sale
+                carnaloriginals: Carnal+ Originals
+                catholicboys: Catholic Boys
                 cumdumpsluts: Cum Dump Sluts
                 dirtyboysociety: Dirty Boy Society
                 edwardjames: Edward James
@@ -267,6 +274,7 @@ xPathScrapers:
                 rawfuckboys: Raw Fuck Boys
                 scoutboys: Scout Boys
                 staghomme: Stag Homme
+                studloads: StudLoads
                 teensandtwinks: Teens And Twinks
                 transcest: Transcest
                 twinks: Twinks
@@ -318,8 +326,12 @@ xPathScrapers:
                 # they are called on their respective network sites
                 americanmusclehunks: American Muscle Hunks
                 bangbangboys: Bang Bang Boys
+                baptistboys: Baptist Boys
+                betabetapi: BetaBetaPi
                 boundtwinks: Bound Twinks
                 boyforsale: Boy For Sale
+                carnaloriginals: Carnal+ Originals
+                catholicboys: Catholic Boys
                 cumdumpsluts: Cum Dump Sluts
                 dirtyboysociety: Dirty Boy Society
                 edwardjames: Edward James
@@ -334,6 +346,7 @@ xPathScrapers:
                 rawfuckboys: Raw Fuck Boys
                 scoutboys: Scout Boys
                 staghomme: Stag Homme
+                studloads: StudLoads
                 teensandtwinks: Teens And Twinks
                 transcest: Transcest
                 twinks: Twinks
@@ -345,4 +358,3 @@ xPathScrapers:
           - replace:
               - regex: dvd-.*?\.jpg
                 with: dvd-full.jpg
-# Last Updated March 20, 2026
