@@ -3,7 +3,6 @@ sceneByURL:
   - url:
       - youtube.com
       - youtu.be
-      - youtube-nocookie.com
       - m.youtube.com
     action: script
     script:

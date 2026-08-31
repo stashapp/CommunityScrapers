@@ -2,7 +2,6 @@ name: VegasDreamworks
 sceneByURL:
   - action: scrapeXPath
     url:
-      - paradisegfs.com
       - toticos.com
     scraper: sceneScraper
 xPathScrapers:

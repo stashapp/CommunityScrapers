@@ -7,7 +7,6 @@ sceneByURL:
       - tour.blackmarketxxx.com/trailers/
       - tour.combatzonexxx.com/trailers/
       - tour.fillyfilms.com/trailers/
-      - tour.smashpictures.com/trailers/
 
 groupByURL:
   - action: scrapeXPath

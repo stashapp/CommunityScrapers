@@ -4,7 +4,6 @@ sceneByURL:
     url: &urls
       - 1111customsxxx.com/tour1/
       - addisonstreet.com/tour1/
-      - amazinganna.com/tour1/
       - bouncychicks.com/tour1/
       - chickpass.com/tour1/
       - chickpassinternational.com/tour1/
@@ -30,7 +29,6 @@ sceneByURL:
       - tandalatinas.com/tour1/
       - tandaredheads.com/tour1/
       - xxxnj.com/tour1/
-      - zoiestarr.com/tour1/
     scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath

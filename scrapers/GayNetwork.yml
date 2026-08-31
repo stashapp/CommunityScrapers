@@ -4,7 +4,6 @@ sceneByURL:
     scraper: sceneScraper
     url:
       # Taken from https://www.gaynetwork.com/en/sites on 2025-05-17
-      - adamjacques.fr/en/videos/detail/
       - alphamales.com/en/videos/detail/
       - andolinixxl.com/en/videos/detail/
       - attackboys.com/en/videos/detail/
@@ -51,7 +50,6 @@ groupByURL:
   - action: scrapeXPath
     scraper: movieScraper
     url:
-      - adamjacques.fr/en/dvd/detail/
       - alphamales.com/en/dvd/detail/
       - andolinixxl.com/en/dvd/detail/
       - attackboys.com/en/dvd/detail/
