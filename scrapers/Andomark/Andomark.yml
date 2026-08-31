@@ -2,60 +2,45 @@ name: "Andomark"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - 1111customsxxx.com/updates/
-      - american-pornstar.com/updates/
       - ariellynn.com/tour/updates/
-      - ashley4k.com/updates/
       - behindtheporno.com/updates/
       - bigboobiesclub.com/updates/
       - bigbouncybabes.com/updates/
       - bigtoyxxx.com/updates/
       - bondagelegend.com/updates/
-      - boxofporn.info/tour/updates/
       - bradsterling.elxcomplete.com/updates/
       - britstudio.xxx/updates/
       - brittanyandrewsxxx.com/updates/
       - brittanysbubbles.com/updates/
       - brokemodel.com/tour
       - calisabliss.com/updates/
-      - charmmodels.net/updates/
       - charlieforde.com/updates/
       - chocolatepov.com/updates/
-      - collectivecorruption.com/updates/
       - dallasdiamondz.com/tour/
       - datingapphookup.com/updates/
       - dirtroadwarriors.com/updates/
       - dixiestrailerpark.com/tour/
-      - domingoview.com/updates/
       - dreamgirlsclips.com/updates/
       - dreamorgan.com/updates/
       - evolvedfightslez.com/updates/
-      - feelmevr.com/updates/
       - furrychicks.elxcomplete.com/updates/
       - grannycumshere.com/tour/
       - hollyhotwife.elxcomplete.com/updates/
-      - houseofyre.com/updates/
       - hotwiferio.com/newtour/updates
-      - humiliation4k.com/updates/
       - hungarianhoneys.com/tour/updates/
       - internationalnudes.com/updates/
       - johnnygoodluck.com/updates/
       - justgoodsex.com/updates/
-      - justpov.com/tour/updates/
       - lasvegasamateurs.com/tour/updates/
-      - letstryhard.com/updates/
-      - mackmovies.com/updates/
+      - laurenphillips.com/updates/
       - melaniehicksxxx.com/updates/
       - msparisandfriends.com/tour/updates/
-      - nicefeelings.com/updates/
-      - nylons4k.com/updates/
       - oldsexygrannies.com/updates/
       - onlybbc.com/tour/updates/
       - pawged.com/tour/updates/
       - pawgnextdoor.com/tour/updates/
       - playpetvictoria.com/updates/
       - ravenswallowzxxx.com/updates/
-      - reidmylips.com/updates/
       - rionkingxxx.com/updates/
       - seanmichaelsxxx.com/updates/
       - secretsusan.com/updates/
@@ -65,7 +50,6 @@ sceneByURL:
       - suburbantaboo.com/tour/
       - tabooadventures.elxcomplete.com/updates/
       - tampahousewives.com/tour/
-      - test-shoots.com/updates/
       - texaspattiusa.com/updates/
       - thatfetishgirl.com/updates/
       - tmfetish.com/updates/
@@ -86,9 +70,24 @@ sceneByURL:
     scraper: oldStyle
   - action: scrapeXPath
     url:
+      - charmmodels.net/updates/
+      - domingoview.com/updates/
+      - feelmevr.com/updates/
+      - letstryhard.com/updates/
+      - test-shoots.com/updates/
+    scraper: setpreviewStyle
+  - action: scrapeXPath
+    url:
+      - britstudio.xxx/scenes/
+      - charlieforde.com/scenes/
       - evolvedfights.com/scenes/
       - goonmuse.com/scenes/
+      - justgoodsex.com/scenes/
+      - ravenswallowzxxx.com/scenes/
+      - sofiemariexxx.com/scenes/
       - thatfetishgirl.com/scenes/
+      - tmfetish.com/scenes/
+      - yummysofie.com/scenes/
     scraper: newStyle
   - action: scrapeXPath
     url:
@@ -102,15 +101,12 @@ sceneByURL:
       # These sites have a members access section that is not linked from their main page
       # note that these pages often have more tags and a full description but no cover image
       - ariellynn.com/access/scenes/
-      - ashley4k.com/access/scenes/
-      - beatmeup.com/access/scenes/
       - behindtheporno.com/access/scenes/
       - bigboobiesclub.com/access/scenes/
       - bigbouncybabes.com/access/scenes/
       - bigtoyxxx.com/access/scenes/
       - bradsterling.elxcomplete.com/access/scenes/
       - brittanyandrewsxxx.com/access/scenes/
-      - brittanysbubbles.com/access/scenes/
       - calisabliss.com/access/scenes/
       - chocolatepov.com/access/scenes/
       - datingapphookup.com/access/scenes/
@@ -118,7 +114,6 @@ sceneByURL:
       - furrychicks.elxcomplete.com/access/scenes/
       - hollyhotwife.elxcomplete.com/access/scenes/
       - houseofyre.com/access/scenes/
-      - humiliation4k.com/access/scenes/
       # Hungarian Honeys has a members access section but it's not linked from the main page
       # it also serves pages with status 500 so they're unscrapable right now, making a note
       # here in case we ever rewrite to a script scraper
@@ -126,13 +121,10 @@ sceneByURL:
       - internationalnudes.com/access/scenes/
       - johnnygoodluck.com/access/scenes/
       - laurenphillips.com/access/scenes/
-      - mackmovies.com/access/scenes/
       - melaniehicksxxx.com/access/scenes/
-      - nylons4k.com/access/scenes/
       - oldsexygrannies.com/access/scenes/
       - playpetvictoria.com/access/scenes/
       - ravenswallowzxxx.com/access/scenes/
-      - reidmylips.com/access/scenes/
       - rionkingxxx.com/access/scenes/
       - seanmichaelsxxx.com/access/scenes/
       - secretsusan.com/access/scenes/
@@ -190,14 +182,11 @@ xPathScrapers:
                   with: $2
             - map:
                 ariellynn: Ariel Lynn
-                ashley4k: Ashley 4K
-                beatmeup: BeatMeUp
                 behindtheporno: Behind The Porno
                 bigboobiesclub: Big Boobies Club
                 bigbouncybabes: Big Bouncy Babes
                 bigtoyxxx: Big Toy XXX
                 bondagelegend: Bondage Legend
-                boxofporn: Box of Porn
                 bradsterling: Brad Sterling
                 britstudio: Brit Studio
                 brittanyandrewsxxx: Britttany Andrews
@@ -207,7 +196,6 @@ xPathScrapers:
                 charlieforde: Charlie Forde
                 charmmodels: Charm Models
                 chocolatepov: ChocolatePOV
-                collectivecorruption: Collective Corruption
                 cumperfection: Cum Perfection
                 dallasdiamondz: Dallas Diamondz
                 datingapphookup: Dating App Hook Ups
@@ -215,7 +203,7 @@ xPathScrapers:
                 dixiestrailerpark: Dixie's Trailer Park
                 domingoview: DomingoView
                 dreamgirlsclips: DreamGirls Clips
-                dreammorgan: Drea Morgan
+                dreamorgan: Drea Morgan
                 evolvedfightslez: Evolved Fights Lez
                 evolvedfights: Evolved Fights
                 feelmevr: FeelMeVR
@@ -223,29 +211,22 @@ xPathScrapers:
                 goonmuse: GoonMuse
                 grannycumshere: Granny Cums Here
                 hollyhotwife: HollyHotWife
-                houseofyre: House of Fyre
                 hotwiferio: Hot Wife Rio
-                humiliation4k: Humiliation 4K
                 hungarianhoneys: Hungarian Honeys
                 internationalnudes: International Nudes
                 johnnygoodluck: Johnny Goodluck
                 justgoodsex: JustGoodSex
-                justpov: Just POV
                 lasvegasamateurs: Las Vegas Amateurs
                 laurenphillips: Lauren Phillips
                 letstryhard: Let's Try Hard
-                mackmovies: Mack Movies
                 melaniehicksxxx: Melanie Hicks XXX
                 msparisandfriends: Ms Paris and Friends
-                nicefeelings: Nice Feelings
-                nylons4k: Nylons 4K
                 oldsexygrannies: OldSexyGrannies
                 onlybbc: Only BBC
                 pawged: PAWGED
                 pawgnextdoor: PAWG Next Door
                 playpetvictoria: PlaypetVictoria
                 ravenswallowzxxx: Raven Swallows
-                reidmylips: Reid My Lips
                 rionkingxxx: Rion King
                 seanmichaelsxxx: Sean Michaels
                 secretsusan: Secret Susan
@@ -257,11 +238,12 @@ xPathScrapers:
                 tabooadventures: Taboo Adventures
                 tampahousewives: Tampa Housewives
                 terapatrick: Terra Patrick
-                test-shoots.com: Test Shoots
+                test-shoots: Test Shoots
                 texaspattiusa: TexasPattiUSA
                 thatfetishgirl: That Fetish Girl
                 tmfetish: TMFetish
                 vanillapov: VanillaPOV
+                whorebaithals: WhoreBaitHals
                 willtilexxx: Will Tile XXX
                 xevunleashed: Xev Unleashed
                 xratedwife: X Rated Wife
@@ -307,7 +289,12 @@ xPathScrapers:
     common:
       $scene: //div[@class="vidImidWrap"]
     scene:
-      Title: $scene//h4
+      Title:
+        selector: $scene//h4/text()[last()]
+        postProcess:
+          - replace:
+              - regex: ^/\s*
+                with: ""
       Date:
         selector: $scene//span[./i[contains(@class, 'fa-calendar')]]/following-sibling::text()
         postProcess:
@@ -321,6 +308,31 @@ xPathScrapers:
       Studio:
         Name:
           selector: //base/@href
+          postProcess: *studioPostProcess
+  setpreviewStyle:
+    scene:
+      Title: //div[@class="setpreview-desc"]/h1
+      Details: //div[@class="setpreview-desc"]/p
+      Date:
+        selector: //span[@class="cover-date"]
+        postProcess:
+          - parseDate: 2006-01-02
+      Tags:
+        Name: //a[@class="category-link"]
+      Performers:
+        Name: //div[@class="setpreview-modelname"]/a
+      Image:
+        selector: //link[@rel="canonical"]/@href | //img[@class="setpreview-cover"]/@src
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: ^(https?://[^/]+).*__SEP__(/.*)$
+                with: $1$2
+              - regex: _cover_(200|400)\.webp
+                with: _cover_600.webp
+      Studio:
+        Name:
+          selector: //link[@rel="canonical"]/@href
           postProcess: *studioPostProcess
   proSceneScraper:
     common:
@@ -384,6 +396,9 @@ xPathScrapers:
                 with: /updates/
           - subScraper: *image
 driver:
+  headers:
+    - Key: "User-Agent"
+      Value: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
   cookies:
     - CookieURL: https://sheseducedme.com
       Cookies:
@@ -391,4 +406,3 @@ driver:
           Domain: sheseducedme.com
           ValueRandom: 36
           Path: /
-# Last Updated May 25, 2024

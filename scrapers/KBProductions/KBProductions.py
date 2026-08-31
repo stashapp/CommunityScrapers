@@ -27,6 +27,7 @@ studio_map = {
     "blackbullchallenge.com": "Black Bull Challenge",
     "boppingbabes.com": "Bopping Babes",
     "cannonprod.com": "Cannon Productions",
+    "collectivecorruption.com": "Collective Corruption",
     "comeinside.com": "Come Inside",
     "cosplayxgirls.com": "CosplayXGirls",
     "cougarseason.com": "Cougar Season",
