@@ -1,4 +1,5 @@
 name: AdultDoorway
+# scrapes: Amateur Throats, Anal Recruiters, Black On Black Crime, Busty Amateur Boobs, Club Amber Rayne, Ebony Cum Dumps, FacialAbuse, Fuck Me POV, Ghetto Gaggers, Huge Rubber Dicks, Joe The Pervert, Latina Abuse, Monster Cock Madness, Nasty Little Facials, Pink Kitty Girls, POV Hotel, Sexy Suck Jobs, Sperm Suckers, The Handjob Site, The Pantyhose Site
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -46,9 +47,9 @@ xPathScrapers:
       Image:
         selector: >
           //base/@href
-          | //div[@id='fakeplayer']//img/@src0_1x 
-          | //div[@id='fakeplayer']//img/@src0_2x 
-          | //div[@id='fakeplayer']//img/@src0_3x 
+          | //div[@id='fakeplayer']//img/@src0_1x
+          | //div[@id='fakeplayer']//img/@src0_2x
+          | //div[@id='fakeplayer']//img/@src0_3x
           | //div[@id='fakeplayer']//img/@src0_4x
         concat: __SEP__
         postProcess:
@@ -58,7 +59,7 @@ xPathScrapers:
               - regex: ^.+(https:.+)$
                 with: $1
       Tags:
-        Name: $scene//ul[@class='tags']/li/a/text()
+        Name: $scene//ul[@class='tags']/li/a
       Studio:
         Name:
           selector: //div[@class="update-info-block"]//span[contains(@class,"bg-secondary")]/text()
@@ -66,4 +67,3 @@ xPathScrapers:
             - replace:
                 - regex: "[^a-zA-Z0-9]+$"
                   with: ""
-# Last Updated March 28, 2024
