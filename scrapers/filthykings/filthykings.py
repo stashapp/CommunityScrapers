@@ -17,8 +17,16 @@ from py_common import log
 from py_common.util import replace_all, scraper_args
 
 
-def filthykings(obj: Any, _) -> Any:
-    return replace_all(obj, "studio", lambda s: {**s, "name": "Filthy Kings"})
+def studio_from_serie(api_object: dict[str, Any]) -> dict[str, Any]:
+    parent_name = api_object.get("sitename_pretty") or "Filthy Kings"
+    serie_name = api_object.get("serie_name")
+    if serie_name and serie_name != parent_name:
+        return {"name": serie_name, "parent": {"name": parent_name}}
+    return {"name": parent_name}
+
+
+def filthykings(obj: Any, api_object: dict[str, Any]) -> Any:
+    return replace_all(obj, "studio", lambda _: studio_from_serie(api_object))
 
 
 if __name__ == "__main__":
