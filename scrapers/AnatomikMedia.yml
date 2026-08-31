@@ -2,35 +2,27 @@ name: Anatomik Media
 sceneByURL:
   - action: scrapeXPath
     url:
-      - anatomikmedia.com/videos
+      - customfetishvideos.com/videos/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: 
-        selector: //h1
-        postProcess:
-          - replace:
-              - regex: ([^-]+).+
-                with: $1
-      Image: //img/@data-large_image
-      Details: //div[@id='tab-description']/p
+      Title: //h1[@class="product-title"]
+      Image: //meta[@property="og:image"]/@content
+      Details:
+        selector: (//div[@class="description-excerpt"] | //div[@class="description-full"])[last()]/p
+        concat: "\n\n"
       Date:
-        selector: //script[@class="yoast-schema-graph"]
+        selector: //script[@type="application/ld+json" and contains(., "uploadDate")]
         postProcess:
           - replace:
-              - regex: .+?datePublished[\s:"]+([^"]+)".+
+              - regex: .+?"uploadDate"\s*:\s*"([^"]+)".+
                 with: $1
           - parseDate: "2006-01-02T15:04:05+00:00"
       Studio:
         Name:
-          selector: //meta[@property='og:site_name']/@content
-          postProcess:
-            - replace:
-                - regex: .+-(.+)$
-                  with: $1
+          fixed: Anatomik Media
       Performers:
-        Name: //span[@class='tagged_as']/a
+        Name: //span[@class="featuring-links"]/a
       Tags:
-        Name: //span[@class='posted_in']/a
-# Last Updated April 24, 2024
+        Name: //div[@class="categories-expanded"]/a[@class="category-tag"]
