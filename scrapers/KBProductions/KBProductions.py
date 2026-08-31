@@ -14,6 +14,7 @@ from py_common.util import dig, guess_nationality, replace_all, scraper_args
 # to studio names currently used on StashDB
 studio_map = {
     "2girls1camera.com": "2 Girls 1 Camera",
+    "ad4x.com": "AD4X",
     "allanal.com": "All Anal",
     "alterotic.com": "Alt Erotic",
     "amazingfilms.com": "Amazing Films",
@@ -223,6 +224,17 @@ def get_code(site: str, raw_scene: dict) -> str | None:
     if _id := dig(raw_scene, "id"):
         return str(_id)
 
+def looks_like_image(url: str) -> bool:
+    # Some CDNs serve images from extensionless paths with a generic content-type
+    # so we sniff the magic bytes instead of trusting the URL
+    try:
+        r = requests.get(url, headers={"Range": "bytes=0-11"}, timeout=5)
+    except requests.RequestException:
+        return False
+    header = r.content
+    return header.startswith((b"\xff\xd8\xff", b"\x89PNG", b"GIF8")) or header[8:12] == b"WEBP"
+
+
 def torso_variant(url: str) -> str:
     # Convert a thumbnail URL to a torso variant URL
     torso_image_url = re.sub(r"^(.*)(\.jpg)", r"\1_torso\2", url)
@@ -293,7 +305,7 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     elif (height_cm := raw_performer.get("height")) and (
         h := re.match(r"^(\d)+$", height_cm)
     ):
-        performer["height"] = str(height_cm)
+        performer["height"] = str(h)
 
     if (weight_lb := raw_performer.get("weight")) and (
         w := re.match(r"(\d+)\slbs?", weight_lb)
@@ -422,7 +434,14 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     # No animated scene covers
     img_exts = (".jpg", ".jpeg", ".png")
 
-    if scene_cover := next((x for x in cover_candidates if type(x) is str and x.endswith(img_exts)), None):
+    if scene_cover := next(
+        (
+            x
+            for x in cover_candidates
+            if type(x) is str and (x.endswith(img_exts) or looks_like_image(x))
+        ),
+        None,
+    ):
         scene["image"] = re.sub(r"^//", "https://", scene_cover)
 
     # There is no reliable way to construct a scene URL from the data
@@ -502,6 +521,7 @@ if __name__ == "__main__":
             log.error(f"Invalid operation: {op}")
             sys.exit(1)
 
-    result = replace_all(result, "url", fix_url)  # type: ignore
-    result = replace_all(result, "urls", fix_url)  # type: ignore
+    if result:
+        result = replace_all(result, "url", fix_url)
+        result = replace_all(result, "urls", fix_url)
     print(json.dumps(result))
