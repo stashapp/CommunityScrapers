@@ -25,7 +25,9 @@ jsonScrapers:
         concat: "|" # get rid of empty result
         split: "|"
       Details:
-        selector: DescEn
+        selector: "[DescEn,Desc]"
+        concat: "|" # get rid of empty result
+        split: "|"
         postProcess:
           - replace:
               - regex: ^\s+(.+)\s+$
