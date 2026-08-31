@@ -1,4 +1,5 @@
 name: AdultSiteRunner
+# scrapes: Black Boy Addictionz, Blacks on Daddies, Bound Jocks, Boys Halfway House, Colt Studio Group, Daddy Carl, Hot Older Male, Monster Cub, My First Daddy, Older4Me, Play Daddy, Raunchy Bastards, Stocky Dudes, Top Latin Daddies
 performerByURL:
   - action: scrapeXPath
     scraper: performerScraper
@@ -20,7 +21,6 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - daddycarl.com/scene/
-      - naturalbornbreeders.com/scene/
     scraper: oldStyleSite
   - action: scrapeXPath
     url:
@@ -86,7 +86,7 @@ xPathScrapers:
                 older4me: Older4Me
                 playdaddy: Play Daddy
                 raunchybastards: Raunchy Bastards
-                stockydudees: Stocky dudes
+                stockydudes: Stocky Dudes
                 toplatindaddies: Top Latin Daddies
         URL:
           selector: *image
@@ -183,4 +183,3 @@ xPathScrapers:
       Image: $modelProfile//div[@class="profile"]//img[contains(@class,"img-responsive")]
       Twitter: //a[contains(@href,"twitter.com")]/@href
       Details: $modelProfile//div[@class="main_title"]/p[not(@class)]/text()
-# Last Updated September 17, 2025
