@@ -1,0 +1,41 @@
+name: "1 Pass For All Sites"
+# scrapes: 18 Virgin Sex, Amour Babes, Creampied Sweeties, Daddies and Darlings, Dirty Ass 2 Mouth, Dirty Daddys Girls, Dirty Home Vids, Do My Wife Slut, Drilled Mouths, Frisky Baby Sitters, Horny Thief Tales, Horny in Hospital, I Fucked Her Finally, Lovely Teen Land, MILFs on Sticks, Mommies Do Bunnies, Old Goes Young, Old Young Anal, Shabby Virgins, She Made Us Lesbians, Spoiled Virgins, Strapon Service, Tricky Old Teacher, Wild Young Honeys, Young Anal Tryouts, Young Cum Gulpers, Young Lesbians Portal, Young Models Casting, Young Porn Home Video, Young and Banged
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - 1passforallsites.com/episode/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: (^.+) - 1 .+$
+                with: $1
+      Details: //div[@class="sp-info-txt"]/p/text()
+      Performers:
+        Name:
+          selector: >-
+            //p[@class="sp-info-name"]/a/text()
+            | //p[@class="path"][not(//p[@class="sp-info-name"])]/span[@class="path-arrow"]/following-sibling::text()
+          postProcess:
+            - replace:
+                - regex: '[\s\x{a0}]+'
+                  with: " "
+                - regex: ',?\s*\d+\s*y\.?o\.?'
+                  with: ""
+          split: " and "
+      Tags:
+        Name: //p[@class="niches-list"]/a/text()
+      Studio:
+        Name: //a[contains(@href,'?site=')]
+      Date:
+        selector: //li[contains(text(),"Added:")]
+        postProcess:
+          - replace:
+              - regex: "Added\\: (.+)"
+                with: $1
+          - parseDate: 2 Jan 2006
+      Image: //video/@poster
