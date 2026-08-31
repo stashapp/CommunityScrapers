@@ -14,7 +14,12 @@ xPathScrapers:
     common:
       $performer: //*[@id="the_lot_more"]/table[4]/tbody/tr[3]/td[1]/div[1]/text()
     scene:
-      Title: //h1[@class="title"]/span
+      Title:
+        selector: //video/@title
+        postProcess: &titleFromVideo
+          - replace:
+              - regex: .*Street Meat Asia - (.+) -.*
+                with: $1
       Date:
         selector: //video/@poster
         postProcess:
@@ -26,10 +31,7 @@ xPathScrapers:
       Performers:
         Name:
           selector: //video/@title
-          postProcess:
-            - replace:
-                - regex: .*Street Meat Asia - (.+) -.*
-                  with: $1
+          postProcess: *titleFromVideo
       Details:
         selector: //div[@class="blurb" or @class="blurb_v3"]/a/text()
       Studio:
@@ -50,4 +52,3 @@ xPathScrapers:
       Ethnicity:
         fixed: Asian
       Image: //img[@class="lazy" or @width="300" or @width="400"]/@src
-# Last Updated February 17, 2024
