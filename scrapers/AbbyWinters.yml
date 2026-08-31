@@ -6,25 +6,32 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $url: //a[contains(@href,'#shoot-images')]/@href
     scene:
-      Studio:
-        Name:
-          fixed: AbbyWinters
+      Title: //div[starts-with(@class,'page-heading')]/div/h1
       Performers:
-        Name:
-          selector: //td/a[contains(@href,'/nude_girl/')]/text()
-      Title:
-        selector: //div[starts-with(@class,'page-heading')]/div/h1/text()
+        Name: //td/a[contains(@href,'/nude_girl/')]
       Date:
         selector: //th[text()='Release date']/following-sibling::td/text()
         postProcess:
-          - parseDate: 02 Jan 2006
+          - replace:
+              - regex: '\x{a0}'
+                with: " "
+          - parseDate: 02 Jan 2006
       Details:
         selector: //div[@class[contains(.,'description')]]//text()
         concat: " "
       Tags:
         Name:
-          selector: //p//a[contains(@href,'/fetish/') or contains(@href,'/browse') or contains(@href,'/amateurs/')]/text()
-      Image:
-        selector: //div[@class='video-player-container video-responsive']/@data-poster|//img[@class="img-responsive"]/@src
-# Last Updated April 02, 2024
+          selector: $url
+          postProcess:
+            - replace:
+                - regex: "^https?://[^/]+/[^/]+/([^/]+)/[^/#]+.*$"
+                  with: $1
+                - regex: _
+                  with: " "
+      Image: //div[@class='video-player-container video-responsive']/@data-poster|//img[@class="img-responsive"]/@src
+      Studio:
+        Name:
+          fixed: AbbyWinters
