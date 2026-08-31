@@ -84,6 +84,7 @@ studio_map = {
     "members.rickysroom.com": "Ricky's Room",
     "s3xus.com": "S3XUS",
     "seska.com": "Seska",
+    "severesexfilms.com": "Severe Sex Films",
     "sextapes.com": "SexTapes",
     "sexymodernbull.com": "Sexy Modern Bull",
     "shesbrandnew.com": "She's Brand New",

@@ -1,5 +1,5 @@
 name: AdultEmpireCash
-# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, Severe Sex Films, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
+# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
 # Sites ("Brands") from https://www.adultempirecash.com
 sceneByURL:
   - action: scrapeXPath
@@ -27,7 +27,6 @@ sceneByURL:
       - reaganfoxx.com/
       - realgirlsfuck.com
       - rodneymoorestore.com
-      - severesexfilms.com/
       - smutfactor.com/
       - spankmonster.com/
       - stephousexxx.com/
@@ -51,7 +50,6 @@ groupByURL:
       - helixstudios.com/
       - lewood.com/
       - rodneymoorestore.com
-      - severesexfilms.com/
       # - shemalestrokers.com/ # Scenes published as movies?
       - thirdworldxxx.com/
       - transationalfantasies.com/
@@ -91,20 +89,19 @@ xPathScrapers:
       Groups:
         Name: //h1[@class="description"]/following-sibling::p/a/text()
       Director:
-        selector: //div[@class="director"]/text()
+        selector: //div[@class="director"]//text()[not(parent::span)]
+        concat: " "
         postProcess:
           - replace:
               - regex: \s{2,}
                 with: " "
               - regex: " ,"
                 with: ","
-              - regex: "Francesca Le, Mark Wood"
-                with: "Le Wood"
       Code:
         selector: //meta[@name="og:url"]/@content
         postProcess:
           - replace:
-              - regex: ^https?://[^/]+/(\d+)/.+
+              - regex: ^https?://[^/]+/(?:shop/)?(\d+)/.+
                 with: $1
               - regex: ^http.*
                 with:
@@ -135,4 +132,3 @@ driver:
   headers:
     - Key: "Cookie"
       Value: "ageConfirmed=true"
-# Last Updated March 9, 2025
