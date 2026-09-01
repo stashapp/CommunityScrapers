@@ -69,8 +69,8 @@ xPathScrapers:
         selector: $card/a[@data-video-scene-name]/@href
         postProcess:
           - replace:
-              - regex: '^'
-                with:   https://badoinkvr.com$1
+              - regex: "^"
+                with: https://badoinkvr.com$1
       Image: $card//img/@data-src
   sceneScraper:
     common:
@@ -78,13 +78,22 @@ xPathScrapers:
     scene:
       Title: //h1[contains(@class, "video-title")]
       Date: &dateSel
-        selector: $details//p[@class="video-upload-date"]
+        selector: >-
+          $details//p[@class="video-upload-date"]/@content
+          |
+          //script[@type="application/ld+json" and contains(text(),'"uploadDate"') and not($details//p[@class="video-upload-date"])]/text()
         postProcess:
           - replace:
-              - regex: Uploaded:\s
-                with:
-          - parseDate: January 02, 2006
-      Details: &detailsSel $details//p[@class="video-description"]
+              - regex: ^.*"uploadDate":\s*"([^"]+)".*$
+                with: $1
+              - regex: T.*$
+                with: ""
+      Details: &detailsSel
+        selector: $details//p[@class="video-description"]/@content
+        postProcess:
+          - replace:
+              - regex: ^<p>(.*)</p>$
+                with: $1
       Tags:
         Name:
           selector: >-
@@ -100,11 +109,11 @@ xPathScrapers:
       Studio:
         Name: &studioName //meta[@name="dl8-customization-brand-name"]/@content
       Image: &imageSel
-        selector: //div[@id="videoPreviewContainer"]//video[@id="video-preview-hover"]/@poster
+        selector: //div[@id="videoPreviewContainer"]//dl8-video/@poster
         postProcess:
-          # remove the _1 from the end of the filename to get the original/NSFW image
+          # remove the _1 size suffix and resize query params to get the original/NSFW image
           - replace:
-              - regex: _1\.jpg$
+              - regex: _1\.jpg(\?.*)?$
                 with: .jpg
       URL: &sceneUrl //link[@rel="canonical"]/@href
       Code:
@@ -188,4 +197,3 @@ xPathScrapers:
       Studio:
         Name: *studioName
       FrontImage: *imageSel
-# Last Updated December 2, 2025
