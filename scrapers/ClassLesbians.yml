@@ -7,23 +7,22 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h1[@class="h1"]
+      Title: //h1[@class="h1"]
       Date:
         selector: //span[@class="period"]
         postProcess:
           - parseDate: 02.01.2006
       Performers:
         Name: //div[@class="main-info"]/p[@class="cast"]/a
-      Details: //h3[@class="h3" and contains(text(), "DESCRIPTION")]/following-sibling::text()
+      Details: //h3[@class="h3" and contains(text(), "DESCRIPTION")]/following-sibling::p[1]
       Image:
         selector: //div[@class="banner-video"]//@src
         postProcess:
           - replace:
-              - regex: ^
+              - regex: ^/web/
+                with: "https://web.archive.org/web/"
+              - regex: ^/
                 with: "http://class-lesbians.com/"
       Studio:
         Name:
           fixed: ClassLesbians
-# Last Updated April 08, 2021
-
