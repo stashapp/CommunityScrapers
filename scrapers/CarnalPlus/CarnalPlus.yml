@@ -9,18 +9,14 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - americanmusclehunks.com/videos/
-      - bangbangboys.com/videos/
       - cumdumpsluts.com/videos
       - dirtyboysociety.com/videos/
-      - edwardjames.com/videos/
       - ftmmen.com/videos/
       - hungfuckers.com/videos/
       - jalifstudio.com/videos/
-      - jasonsparkslive.com/videos/
       - jockbreeders.com/videos/
       - jockpussy.com/videos/
       - staghomme.com/videos/
-      - teensandtwinks.com/videos/
       - twinks.com/videos/
     scraper: sceneScraper
   # These studios organize their scenes into series with chapters
@@ -62,7 +58,7 @@ xPathScrapers:
         selector: $scene//div[@class="full-txt"]//text()
         concat: "\n\n"
       Image: &image
-        selector: $scene//video/@poster | $scene//img[contains(@class, "hiddenImg")]/@src0_1x | $scene//img[contains(@class, "hiddenImg")]/@src | $scene//img[contains(@class, "hiddenImg")]/@data-src
+        selector: $scene//video/@poster | $scene//img[contains(@class, "hiddenImg")]/@src0_1x | $scene//img[contains(@class, "hiddenImg")]/@src | $scene//img[contains(@class, "hiddenImg")]/@data-src | $scene//img[contains(@class, "videoThumb") and contains(@class, "stdimage")]/@src
         postProcess:
           - replace:
               - regex: -1x.*?\.jpg
@@ -127,6 +123,7 @@ xPathScrapers:
                 gaycest: Gaycest
                 hungfuckers: Hung Fuckers
                 jalifstudio: Jalif Studio
+                jasonsparkslive: JasonSparksLive
                 jockpussy: Jock Pussy
                 jockbreeders: Jock Breeders
                 masonicboys: Masonic Boys
@@ -237,7 +234,7 @@ xPathScrapers:
               - regex: TwinkTop
                 with: twinktop
       Tags:
-        Name: $scene//div[@class="update_tags"]//a
+        Name: //div[@class="update_tags"]//a
       Performers:
         Name: $scene//div[@class="update-models"]//a | $scene//span[contains(text(), "Played by")]//a
       Director:
@@ -268,6 +265,7 @@ xPathScrapers:
                 gaycest: Gaycest
                 hungfuckers: Hung Fuckers
                 jalifstudio: Jalif Studio
+                jasonsparkslive: JasonSparksLive
                 jockpussy: Jock Pussy
                 jockbreeders: Jock Breeders
                 masonicboys: Masonic Boys
@@ -340,6 +338,7 @@ xPathScrapers:
                 gaycest: Gaycest
                 hungfuckers: Hung Fuckers
                 jalifstudio: Jalif Studio
+                jasonsparkslive: JasonSparksLive
                 jockpussy: Jock Pussy
                 jockbreeders: Jock Breeders
                 masonicboys: Masonic Boys

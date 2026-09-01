@@ -42,6 +42,7 @@ studio_map = {
     "doggvision.com": "DoggVision",
     "downblousejerk.com": "Downblouse Jerk",
     "dripdropprod.net": "DripDrip",
+    "edwardjames.com": "Edward James",
     "facialsforever.com": "Facials Forever",
     "fantasypov.com": "FantasyPOV",
     "freakmobmedia.com": "FreakMob Media",
@@ -205,7 +206,8 @@ def get_studio(site: str) -> ScrapedStudio:
     name = studio_map.get(site, site)
     studio: ScrapedStudio = {
         "name": name,
-        "url": f"https://{site}",
+        "urls": [f"https://{site}"],
+
     }
     if name == "Suck This Dick":
         studio["parent"] = get_studio("hobybuchanon.com")
