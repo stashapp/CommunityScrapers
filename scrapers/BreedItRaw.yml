@@ -29,11 +29,18 @@ xPathScrapers:
         Name: $performer
         URLs: $performer/@href
       Image:
-        selector: //script[contains(text(),"poster")]/text()
+        selector: >-
+          //img[@class="update_thumb thumbs stdimage"][@src0_4x]/@src0_4x |
+          //img[@class="update_thumb thumbs stdimage"][@src0_3x][not(@src0_4x)]/@src0_3x |
+          //img[@class="update_thumb thumbs stdimage"][@src0_2x][not(@src0_3x)][not(@src0_4x)]/@src0_2x |
+          //img[@class="update_thumb thumbs stdimage"][@src0_1x][not(@src0_2x)][not(@src0_3x)][not(@src0_4x)]/@src0_1x |
+          //script[contains(text(),"poster")]/text()
         postProcess:
           - replace:
               - regex: '.+poster="([^"]+)".+'
-                with: https://www.breeditraw.net$1
+                with: $1
+              - regex: ^/
+                with: https://www.breeditraw.net/
               - regex: (1|2|3|4)x\.jpg
                 with: "full.jpg"
       Studio:
@@ -72,4 +79,3 @@ xPathScrapers:
                 with: https://www.breeditraw.net/
               - regex: (1|2|3|4)x\.jpg
                 with: "full.jpg"
-# Last Updated September 17, 2025
