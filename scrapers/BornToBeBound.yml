@@ -9,11 +9,21 @@ xPathScrapers:
     scene:
       Title: //h2[@class="art-PostHeader"]/a
       Code: //input[@name="comment_post_ID"]/@value
-      # either last p (first ones are run time)
-      # or in slidingproduct (p=10032)
+      # content isn't consistently wrapped in p vs div, and "run time" is
+      # sometimes its own sibling, sometimes nested inside the content div
       Details:
-        selector: //div[@class="art-PostContent"]/p[starts-with(., "run time")]/following-sibling::p
+        selector: >-
+          //div[@class="art-PostContent"][.//div[@id="gallery-1"]]/*[self::p or self::div]
+          [preceding-sibling::div[@id="gallery-1"]]
+          [normalize-space(.)]
+          [not(starts-with(normalize-space(.), "run time"))]
+          [not(contains(translate(., "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "right click here"))]
+          [not(contains(translate(., "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz"), "free preview clip"))]
         concat: "\n\n"
+        postProcess:
+          - replace:
+              - regex: '(?i)run time(\s+\w+)?\s+\d+\s+minutes?(\s+and\s+\d+\s+seconds?)?\.?'
+                with: ""
       Date:
         selector: //div[@class="art-PostMetadataHeader"]/div[contains(@class,"art-metadata-icons")]
         postProcess:
