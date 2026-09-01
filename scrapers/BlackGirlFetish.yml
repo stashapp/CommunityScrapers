@@ -4,23 +4,30 @@ sceneByURL:
     url:
       - blackgirlfetish.com
     scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '\?.*$'
+          with: ""
+        - regex: "$"
+          with: "?template=videos"
 
 xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1/text()
-      Date: 
+      Date:
         selector: //script[contains(.,'datePublished')] | //div[@class='datev']
         postProcess:
           - replace:
               - regex: '.+?datePublished":"([\d-]+).+'
                 with: $1
               - regex: 'Date:\s*'
-                with: ''
+                with: ""
           - parseDate: Jan 2, 2006
-      Details: 
-        selector: //div[@class='scrn-cap']/h4/text() | //div[@class='scrn-cap']/p/text() 
-        concat: ' '
+      Details:
+        selector: //div[@class='scrn-cap']//h4 | //div[@class='scrn-cap']//p
+        concat: " "
       Performers:
         Name: //div[@class='vdtls']/a
       Image:
@@ -30,13 +37,13 @@ xPathScrapers:
               - regex: .+?splashImages.+"url":"([^"]+).+
                 with: $1
               - regex: '\\/'
-                with: '/'
+                with: "/"
       Studio:
-        Name: 
+        Name:
           selector: //div[@class='logo']/a/@href
           postProcess:
             - replace:
-                - regex: '.+/([^/]+)/?$'
+                - regex: ".+/([^/]+)/?$"
                   with: $1
             - map:
                 blackgirlfetish.com: Black Girl Fetish
@@ -44,5 +51,3 @@ xPathScrapers:
                 bondagefantasycamp: Bondage Fantasy Camp
                 diamondortega: Diamond Ortega
                 freshfleshamateurs: Fresh Flesh Amateurs
-                    
-# Last Updated May 07, 2024
