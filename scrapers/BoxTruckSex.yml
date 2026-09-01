@@ -21,8 +21,11 @@ xPathScrapers:
         selector: //video[@id="jwbox_video"]/@poster
         postProcess:
           - replace:
-              - regex: ^
-                with: https://www.boxtrucksex.com
+              # site is dead/parked; content only reachable via Wayback
+              - regex: ^/web/
+                with: "https://web.archive.org/web/"
+              - regex: ^/
+                with: "https://www.boxtrucksex.com/"
       Studio:
         Name:
           fixed: BoxTruckSex
@@ -30,5 +33,3 @@ xPathScrapers:
         Name: $details//a[@href[contains(.,'/categories/')]]/text()
       Performers:
         Name: $details//a[@href[contains(.,'/models/')]]/text()
-
-# Last Updated October 12, 2020
