@@ -1,9 +1,9 @@
-name: Aziani
+name: CreamPiled
 sceneByURL:
   - action: scrapeJson
     url:
-      - aziani.com/video/
-    queryURL: https://azianistudios.com/tour_api.php/content/sets?cms_set_ids={url}&cms_block_id=138224&data_types=1
+      - creampiled.com/video/
+    queryURL: https://azianistudios.com/tour_api.php/content/sets?cms_set_ids={url}&cms_block_id=135720&data_types=1
     queryURLReplace:
       url:
         - regex: .+/video/([^/?#]+).*
@@ -28,7 +28,7 @@ jsonScrapers:
                 with: $1?$2
               # gjson's @tostr re-serializes the array without unescaping the
               # forward slashes it JSON-escaped, so fileuri comes through as
-              # "\/path\/to\/file" instead of "/path/to/file"
+              # "\/path\/to\/file" instead of "/path/to/file".
               - regex: \\/
                 with: /
               - regex: ^
@@ -39,10 +39,10 @@ jsonScrapers:
         Name: sets.0.data_types.#(shortname=="models").data_values.#.name
       Studio:
         Name:
-          fixed: Aziani
+          fixed: CreamPiled
 driver:
   headers:
     - Key: X-NATS-cms-area-id
-      Value: 3b4c609c-6a0d-4cb9-9cce-0605f32b79ec
+      Value: 29c61dae-db14-419b-93a4-d016b928dee9
     - Key: X-nats-entity-decode
       Value: "1"
