@@ -38,28 +38,29 @@ sceneByURL:
       - victorcodyxxx.com
       - workinmenxxx.com
       - younglatinostudz.com
+      - otbboyz.com
     scraper: sceneScraper
 
-  - action: scrapeXPath
-    url:
-      - otbboyz.com
-    scraper: diffStudioSelectorScraper
-        
 xPathScrapers:
-  commonScraper:
-    scene: 
-      Title: &title //span[@class='video_title']/text()
-      Details: &details
-        selector: //div[contains(@class,'intro-video')]//p[not(@class)]/text()
-      Date: &date //p[@class='video_date']/span
-      Image: &image  //video/@poster
-
   sceneScraper:
-    scene: 
-      Title: *title
-      Details: *details
-      Date: *date 
-      Image: *image 
+    scene:
+      Title: //span[@class="video_title"]/text()
+      Details: //div[contains(@class,'intro-video')]//p[not(@class)]/text()
+      Image:
+        selector: >-
+          //nav//a[starts-with(@href,"https://join.")]/@href |
+          //img[@class="img-responsive"][@alt="Join Now"]/@src
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: __SEP__.+__SEP__
+                with: ""
+              - regex: __SEP__
+                with: ""
+              - regex: 'https://join\.([^/]+)/.*?(/images/.*)'
+                with: "https://tour.$1$2"
+              - regex: "^https://join\\..*"
+                with: ""
       Studio:
         Name:
           selector: //title
@@ -68,25 +69,8 @@ xPathScrapers:
                 - regex: ^.+[-\|](.+)
                   with: $1
                 - regex: Gay Porn Network
-                  with: ''
+                  with: ""
                 - regex: ([a-z])([A-Z])
-                  with: '$1 $2'
+                  with: "$1 $2"
             - map:
                 pragueboyz: Prague Boyz
-
-  diffStudioSelectorScraper:
-    scene: 
-      Title: *title
-      Details: *details
-      Date: *date 
-      Image: *image 
-      Studio:
-        Name:
-          selector: //link[@rel='icon']/@href
-          postProcess:
-            - replace:
-                - regex: (https://)?([^/]+).+
-                  with: $2
-            - map:
-                otbboyz.com: OTB Boyz
-# Last Updated April 7, 2024
