@@ -1,9 +1,9 @@
-name: BadPuppy
+name: ClubAmateurUSA
 sceneByURL:
   - action: scrapeJson
     url:
-      - badpuppy.com/video/
-    queryURL: https://nats.puppycash.com/tour_api.php/content/sets?slug={url}&cms_block_id=100354&data_types=1
+      - clubamateurusa.com/video/
+    queryURL: https://nats.puppycash.com/tour_api.php/content/sets?slug={url}&cms_block_id=100034&data_types=1
     queryURLReplace:
       url:
         - regex: .+/video/([^/?#]+).*
@@ -36,10 +36,10 @@ jsonScrapers:
         Name: sets.0.data_types.#(shortname=="models").data_values.#.name
       Studio:
         Name:
-          fixed: BadPuppy
+          fixed: ClubAmateurUSA
 driver:
   headers:
     - Key: X-NATS-cms-area-id
-      Value: 6f4ac1b5-6e47-47b2-96c7-b8e0af0fe41d
+      Value: 98d5a921-2ccd-48ed-be80-804a5c16ae40
     - Key: X-nats-entity-decode
       Value: "1"
