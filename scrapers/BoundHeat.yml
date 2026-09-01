@@ -13,23 +13,21 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
-
-
 xPathScrapers:
   sceneSearch:
     common:
       $card: //div[@class="media-box"]
     scene:
       Title: $card/h2[@class="media-box__description"]/a
-      URL: 
+      URL:
         selector: $card/a[@class="media-box__img-container"]/@href
-        postProcess: 
+        postProcess:
           - replace:
-            - regex: (.*)
-              with: https://www.boundheat.com$1
-      Image: 
+              - regex: (.*)
+                with: https://www.boundheat.com$1
+      Image:
         selector: $card//img[@class="media-box__img"]/@src
-        postProcess: 
+        postProcess:
           - replace:
               - regex: (.*)
                 with: https://www.boundheat.com$1
@@ -37,33 +35,22 @@ xPathScrapers:
     common:
       $content: //div[@class="[ product ]  [ row ]"]
     scene:
-      Title:
-        selector: $content//h1[@class="heading heading--large"]
-      Details:
-        selector: $content//div[@class="product__description"]
+      Title: $content//h1[@class="heading heading--large"]
+      Details: $content//div[@class="product__description"]
       Performers:
         Name: $content//div[@class="[ product__star-name ]  [ media-body ]"]
       Image:
         selector: $content//img[@class="img-responsive"]/@src
-        postProcess: 
+        postProcess:
           - replace:
               - regex: (.*)
                 with: https://www.boundheat.com$1
       URL:
         selector: $content//img[@class="img-responsive"]/@src
-        postProcess: 
+        postProcess:
           - replace:
               - regex: /([^/]*)/.*
                 with: https://www.boundheat.com/video/$1
       Studio:
-        Name: 
+        Name:
           fixed: Bound Heat
-
-      Date:
-        selector: //div[contains(@class, "datesingle")]
-        postProcess:
-          - parseDate: January 2, 2006
-      
-      
-      
-# Last Updated October 22, 2023
