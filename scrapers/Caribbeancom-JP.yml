@@ -39,12 +39,12 @@ xPathScrapers:
               - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
                 with: https://www.caribbeancompr.com/moviepages/$3/index.html
       Date:
-        selector: //ul/li/span[contains(.,"配信日")]/../span[@class="spec-content"]
+        selector: //link[@hreflang="en-US"]/@href
         postProcess:
           - replace:
-              - regex: (\d{4}).(\d{2}).(\d{2})
-                with: $1-$2-$3
-          - parseDate: 2006-01-02
+              - regex: .*(\d{6})-\d{3}.*
+                with: $1
+          - parseDate: "010206"
       Performers:
         Name:
           selector: //ul/li/span[contains(.,"出演")]/..//a
@@ -86,8 +86,6 @@ xPathScrapers:
                 with: $1
               - regex: .*posterImage\s*=\s*\'/moviepages/\'\+movie_id\+\'/images/([^\']+)\'(.|\s)*MoviePlayer\.setImage..movie_id\s.*:\s\'(\d+_\d+)\'.*
                 with: $3
-debug:
-  printHTML: false
 
 driver:
   cookies:
@@ -105,4 +103,3 @@ driver:
           Domain: ".caribbeancompr.com"
           Value: "1"
           Path: "/"
-# Last Updated Jan 11, 2024
