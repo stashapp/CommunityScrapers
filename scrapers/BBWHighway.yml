@@ -31,7 +31,13 @@ xPathScrapers:
       Performers:
         Name: //span[@class="tour_update_models"]/a
       Tags:
-        Name: //span[@class="update_tags"]/a
+        Name:
+          selector: //p[@class="date"]
+          postProcess:
+            - replace:
+                - regex: ^.*Categories:\s*
+                  with: ""
+          split: ", "
       Image:
         # Sometimes the image is in the script tag, sometimes it's in an img tag
         selector: //script[contains(text(),"poster")] | //img[contains(@src0_1x, "contentthumb")]/@src0_1x
@@ -86,4 +92,3 @@ xPathScrapers:
                 with: https://bbwhighway.com/
               - regex: 1x
                 with: full
-# Last Updated April 11, 2024
