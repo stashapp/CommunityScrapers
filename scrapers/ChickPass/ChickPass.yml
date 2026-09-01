@@ -1,0 +1,51 @@
+name: ChickPass
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - chickpass.com/tour1/
+      - chickpass.com/video/
+    queryURL: https://www.chickpasscash.com/tour_api.php/content/sets?cms_area_id=2fac6e56-1fe9-4486-8519-c97affafaea7&cms_block_id=105324&data_types=1&content_type=video&slug={url}
+    queryURLReplace:
+      url:
+        - regex: .*/tour1/scenes/([^/?#]+)_vids\.html.*
+          with: $1
+        - regex: .*/video/([^/?#]+).*
+          with: $1
+    scraper: sceneScraper
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: sets.0.name
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: " "
+      Details: sets.0.description
+      Date: sets.0.added_nice
+      Image:
+        selector: sets.0.preview_formatted.thumb.@values|@reverse.0.0.[fileuri,signature].@tostr
+        postProcess:
+          - replace:
+              - regex: ^\["(.*)","(.*)"\]$
+                with: $1?$2
+              # gjson's @tostr re-serializes the array without unescaping the
+              # forward slashes it JSON-escaped, so fileuri comes through as
+              # "\/path\/to\/file" instead of "/path/to/file".
+              - regex: \\/
+                with: /
+              - regex: ^
+                with: https://c85cc592fd.mjedge.net
+      Tags:
+        Name: sets.0.data_types.#(shortname=="category").data_values.#.name
+      Performers:
+        Name: sets.0.data_types.#(shortname=="models").data_values.#.name
+      Studio:
+        Name:
+          fixed: ChickPass Amateurs
+driver:
+  headers:
+    - Key: X-NATS-cms-area-id
+      Value: 2fac6e56-1fe9-4486-8519-c97affafaea7
+    - Key: X-nats-entity-decode
+      Value: "1"
