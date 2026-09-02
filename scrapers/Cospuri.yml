@@ -71,4 +71,8 @@ xPathScrapers:
                 with: $2
       Gender:
         fixed: Female
-# Last Updated September 17, 2025
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
