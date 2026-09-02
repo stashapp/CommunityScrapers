@@ -48,7 +48,9 @@ xPathScrapers:
       Tags: &tags
         Name: //a[@class="more" and contains(@href, "tag=")]
       Image:
-        selector: //img[@class="shoot-splash-image"]/@src | //video/@data-poster
+        # scenes older than 10 years are pay-to-view and never render a <video>;
+        # they fall back to the free thumbnail gallery instead
+        selector: (//video/@data-poster | //div[@class="shoot-image"]/img/@src)[1]
         postProcess: *prependHost
       Studio: &studio
         Name:
