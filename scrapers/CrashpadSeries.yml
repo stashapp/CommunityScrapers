@@ -7,8 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //*[@id="primary-container"]//h2
+      Title: //h1[contains(@class,"link-pl-primary")]
       Date:
         selector: //script[@type="application/ld+json"]
         postProcess:
@@ -17,15 +16,19 @@ xPathScrapers:
                 with: $1
           - parseDate: 2006-01-02
       Performers:
-        Name: //div[@id="primary-container"]//div[contains(@class,"model-thumb")]//h4
+        Name: //div[contains(@class,"performer-thumb")]//a[contains(@href,"/character/")]
       Tags:
-        Name: //div[@id="primary-container"]//a[contains(@class,"content-icon")]/@data-original-title
+        Name: //a[contains(@href,"/content-tag/")]
       Details:
-        selector: //div[@id="primary-container"]//div[@class="ep-description"]/p
+        selector: //span[@class="ep-description"]/p
         concat: "\n\n"
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: CrashPad Series
-# Last Updated March 05, 2022
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
