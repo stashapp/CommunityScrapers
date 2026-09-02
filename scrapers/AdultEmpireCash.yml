@@ -1,5 +1,5 @@
 name: AdultEmpireCash
-# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
+# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Evil Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
 # Sites ("Brands") from https://www.adultempirecash.com
 sceneByURL:
   - action: scrapeXPath
@@ -30,6 +30,8 @@ sceneByURL:
       - smutfactor.com/
       - spankmonster.com/
       - stephousexxx.com/
+      - store.evilangel.com/
+      - store.evilangelvideo.com/
       - thirdworldxxx.com/
       - transationalfantasies.com/
       - wcpclub.com/
@@ -51,6 +53,8 @@ groupByURL:
       - lewood.com/
       - rodneymoorestore.com
       # - shemalestrokers.com/ # Scenes published as movies?
+      - store.evilangel.com/
+      - store.evilangelvideo.com/
       - thirdworldxxx.com/
       - transationalfantasies.com/
       - wcpclub.com/
@@ -69,14 +73,19 @@ xPathScrapers:
         selector: //div[@class="synopsis"]//text()
         concat: "\n\n"
       Tags:
-        Name: //div[@class="tags"]/a/text()|//div[@class="categories"]/a/text()
+        Name: //div[@class="tags"]/a/text()|//div[@class="categories"]/a/text()|//a[@data-label="Attribute"]/text()
       Performers:
         Name: //div[@class="video-performer"]/a//text()
       Studio:
         Name:
-          selector: //div[@class="studio"]/span[contains(text(),"Studio:")]/following-sibling::*
+          selector: &studioSel //div[@id="video-container-details"]//div[@class="studio"]/a/text()
           postProcess: &PP # Override studio name only when needed
+            - replace:
+                # trim whitespace first so the map below matches exactly
+                - regex: ^\s+|\s+$
+                  with:
             - map:
+                Evil Angel - Joey Silvera: Joey Silvera
                 Evil Angel - LeWood: LeWood
                 Jay Rock Clips: Jay's POV
                 LeWood Productions: LeWood
@@ -124,7 +133,7 @@ xPathScrapers:
                 with: ":00"
       Studio:
         Name:
-          selector: //div[@class="studio"]/a
+          selector: *studioSel
           postProcess: *PP
       FrontImage: //link[@rel="image_src"]/@href
       BackImage: //div[@class="carousel-item"]/img/@data-src
