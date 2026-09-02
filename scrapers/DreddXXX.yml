@@ -9,7 +9,7 @@ xPathScrapers:
     scene:
       Title: //h1
       Details: //div[@data-widget_type="theme-post-content.default"]
-      URLs: //link[@rel="canonical"]
+      URLs: //link[@rel="canonical"]/@href
       Date:
         selector: (//time)[1]
         postProcess:
