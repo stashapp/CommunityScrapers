@@ -22,7 +22,6 @@ xPathScrapers:
         selector: $info//li[i[contains(@class,"fa-calendar")]]
         postProcess:
           - parseDate: 02/01/2006
-      Details: $description/p
       Image: //meta[@property="og:image"]/@content
       Tags:
         Name: $description//a[@class="tag"]
