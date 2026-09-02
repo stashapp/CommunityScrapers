@@ -7,41 +7,27 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //div[@class="info-box-pink"]//h7/text()
-        postProcess:
-        - javascript:
-            if (value && value.length) {
-              let words = value.split(' ');
-              for (let i = 0; i < words.length; i++) {
-                words[i] = words[i].charAt(0).toUpperCase() + words[i].substring(1).toLowerCase();
-              }
-              return words.join(' ');
-            }
-      Details: //div[@class="info-box-white"]//h3/text()[1]
+      Title: //div[@class="media-video-copy"]/h3
+      Details:
+        selector: //div[@class="clip-description"]/text()
+        concat: "\n\n"
       Performers:
-        Name:
-          selector: //div[7]/div/div/h7
-          postProcess:
-           - replace:
-             - regex: '(?i)MORE CONTENT FROM.'
-               with: ""
+        Name: //div[@class="media-video-copy"]/p
       Date:
-        selector: //div[5]//h3/text()[2]
+        selector: //span[contains(text(),"Added:")]
         postProcess:
           - replace:
-            - regex: 'Added:\s(\d{2}\s\w{3}\s\d{4})(.*)'
-              with:  "$1"
-          - parseDate: "02 Jan 2006"
+              - regex: "Added:\\s(\\d{2}-\\d{2}-\\d{4})"
+                with: "$1"
+          - parseDate: "02-01-2006"
       Studio:
         Name:
-          fixed: 'Cruel Brats'
+          fixed: "Cruel Brats"
       Tags:
-        Name:  //div[5]//div/h3//a/text()
+        Name: //a[contains(@href,"?category=")]
       Image:
-        selector: //div[2]/div/video[contains(@poster,'images/Backgrounds/')]/@poster
+        selector: //img[@id="videoPosterOverlay"]/@src
         postProcess:
           - replace:
-            - regex: ^
-              with: https://cruelbrats.com/
-# Last Updated October 06, 2024
+              - regex: ^
+                with: https://cruelbrats.com/
