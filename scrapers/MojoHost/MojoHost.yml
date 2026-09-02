@@ -1,0 +1,272 @@
+name: MojoHost
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - balletflatsfetish.com/tour/
+      - barbarafeet.com/tour/
+      - blackph.com/tour/
+      - cosplayfeet.com/tour/
+      - dianafeet.com/tour/
+      - fantasyflipflop.com/tour/
+      - footfetishbeauties.com/tour/
+      - nylonfeetlove.com/tour/
+      - nylonup.com/tour/
+      - redpolishfeet.com/tour/
+      - sweetcarla.com/tour/
+      - transfeet.com/tour/
+      - dickdrainers.com/tour/
+      - hotlegsandfeet.fans/tour/
+      - blackpayback.com/tour/
+      - radicaljizzlam.com/tour/
+      - interracialpovs.com/trailers/
+      - brickyates.com/tour/
+      - breeditraw.net/tour/trailers/
+      - selfiesuck.com/tour/trailers/
+      - the-female-orgasm.com/explore/trailers/
+      - girls.dreamnet.com/tour/trailers/
+      - blowbanggirls.com/v3/trailers/
+      - femdomempire.com/tour/trailers/
+      - feminized.com/tour/trailers/
+      - hookuphotshot.com/trailers/
+      - hotandtatted.com/trailers/
+      - hussiepass.com/trailers/
+      - seehimfuck.com/trailers/
+      - seehimsolo.com/trailers/
+      - ravebunnys.com/trailers/
+      - povpornstars.com/tour/trailers/
+      - babearchives.com/trailers/
+      - emilyaddison.com/trailers/
+      - brandnewamateurs.com/trailers/
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - bathroomcreepers.com/creeper/trailers
+    scraper: hiddenDateScraper
+  - action: scrapeXPath
+    url:
+      - filthyfemdom.com/trailers/
+    scraper: hiddenImageScraper
+groupByURL:
+  - action: scrapeXPath
+    url:
+      - hussiepass.com/dvds/
+      - seehimfuck.com/dvds/
+      - seehimsolo.com/dvds/
+    scraper: glowModels
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - breeditraw.net/tour/models/
+    scraper: breeditrawPerformerScraper
+  - action: scrapeXPath
+    url:
+      - femdomempire.com/tour/models/
+      - feminized.com/tour/models/
+    scraper: femdomempirePerformerScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $scene: //div[@class="videoDetails clear"]
+    scene:
+      Title: &title $scene/*[self::h1 or self::h3]
+      # Workaround for some sites that have badly nested tags, grabbing the last <p>
+      # is a no-op for sites that do it correctly so this is safe
+      Details: &details $scene/p[last()]
+      Date: &date
+        selector: //span[contains(., "Date Added")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^\s*
+                with: ""
+          - parseDate: January 2, 2006
+      Performers: &performers
+        Name: //li[@class="update_models"]/a
+        URLs: //li[@class="update_models"]/a/@href
+      Tags: &tags
+        Name: //li[contains(text(), "Tags:") or contains(text(), "Categories:")]/following-sibling::li/a/text()
+      Image: &image
+        selector: >-
+          //base/@href |
+          //img[contains(@class,"update_thumb")][@src0_1x]/@src0_1x |
+          //img[contains(@class,"update_thumb")][@src0_2x]/@src0_2x |
+          //img[contains(@class,"update_thumb")][@src0_3x]/@src0_3x |
+          //img[contains(@class,"update_thumb")][@src0_4x]/@src0_4x
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: __SEP__.+__SEP__
+                with: ""
+              - regex: __SEP__
+                with: ""
+              - regex: ^(https?://[^/]+)/https?://[^/]+(/[^?]+).*
+                with: $1$2
+              - regex: /(tour|explore|creeper)//?(?:tour|explore|creeper)/
+                with: /$1/
+              - regex: (:?-[1-4]x)?\.jpg$
+                with: "-full.jpg"
+      Studio: &studio
+        Name:
+          selector: //base/@href
+          postProcess:
+            - replace:
+                - regex: ^https?://(?:www\.)?([^/]+)/?.*
+                  with: $1
+            - map:
+                balletflatsfetish.com: Ballet Flats Fetish
+                barbarafeet.com: Barbara Feet
+                blackph.com: Black PH
+                cosplayfeet.com: Cosplay Feet
+                dianafeet.com: Diana Feet
+                fantasyflipflop.com: Fantasy Flip Flop
+                footfetishbeauties.com: Foot Fetish Beauties
+                nylonfeetlove.com: Nylon Feet Love
+                nylonup.com: Nylon Up
+                redpolishfeet.com: Red Polish Feet
+                sweetcarla.com: Sweet Carla
+                transfeet.com: Trans Feet
+                dickdrainers.com: Dick Drainers
+                hotlegsandfeet.fans: Hot Legs and Feet
+                blackpayback.com: Black Payback
+                radicaljizzlam.com: Radical Jizzlam
+                interracialpovs.com: Interracial POVs
+                brickyates.com: Brick Yates
+                breeditraw.net: Breed It Raw
+                selfiesuck.com: Selfie Suck
+                the-female-orgasm.com: The Female Orgasm
+                girls.dreamnet.com: Dreamnet
+                blowbanggirls.com: BlowBang Girls
+                bathroomcreepers.com: Bathroom Creepers
+                femdomempire.com: Femdom Empire
+                feminized.com: Feminized
+                filthyfemdom.com: Filthy Femdom
+                hookuphotshot.com: HookUp Hotshot
+                hotandtatted.com: Hot and Tatted
+                hussiepass.com: Hussie Pass
+                seehimfuck.com: See Him Fuck
+                seehimsolo.com: See Him Solo
+                ravebunnys.com: Rave Bunnys
+                povpornstars.com: POV Pornstars
+                babearchives.com: Babe Archives
+                emilyaddison.com: Emily Addison
+                brandnewamateurs.com: Brand New Amateurs
+
+  hiddenDateScraper:
+    common:
+      $scene: //div[@class="videoDetails clear"]
+    scene:
+      Title: *title
+      Details: *details
+      # Different from other studios in that it hides the date inside a comment
+      Date:
+        selector: //comment()[contains(., "Date Added")]
+        postProcess:
+          - replace:
+              - regex: '.*?(\w+ \d{1,2}, \d{4}).*'
+                with: $1
+          - parseDate: January 2, 2006
+      Performers: *performers
+      Tags: *tags
+      Image: *image
+      Studio: *studio
+
+  hiddenImageScraper:
+    common:
+      $scene: //div[@class="videoDetails clear"]
+    scene:
+      Title: *title
+      Details: *details
+      Date: *date
+      Performers: *performers
+      Tags: *tags
+      Studio: *studio
+      # Different from other studios in that it hides the poster inside <script>
+      Image:
+        selector: //base/@href | //script[contains(text(), "video_content")]
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: (?s)^(https?://[^/]+)/__SEP__.*poster="([^"]+)".*
+                with: $1$2
+              - regex: (:?-[1-4]x)?\.jpg$
+                with: "-full.jpg"
+
+  glowModels:
+    common:
+      $scene: //div[@class="profile-details clear"]
+    group:
+      Name: $scene/h1
+      Synopsis: //div[@class="profile-about"]/p/text()
+      FrontImage:
+        selector: >-
+          //base/@href |
+          //img[contains(@class,"dvd_box")][@src0_1x]/@src0_1x |
+          //img[contains(@class,"dvd_box")][@src0_2x]/@src0_2x |
+          //img[contains(@class,"dvd_box")][@src0_3x]/@src0_3x |
+          //img[contains(@class,"dvd_box")][@src0_4x]/@src0_4x
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: __SEP__.+__SEP__
+                with: ""
+              - regex: __SEP__
+                with: ""
+              - regex: (:?-[1-4]x)?\.jpg$
+                with: "-full.jpg"
+      Studio: *studio
+
+  femdomempirePerformerScraper:
+    common:
+      $performerInfo: "//div[@class='contentBox'][1]"
+    performer:
+      Name:
+        selector: "$performerInfo//div[@class='profile-details']/h3"
+      Gender:
+        selector: "$performerInfo/div[@class='title']/h3"
+        postProcess:
+          - replace:
+              - regex: "^Mistress Sissy .*$"
+                with: Male
+          - replace:
+              - regex: "^Mistress (.*)$"
+                with: Female
+      Image:
+        selector: //base/@href|(//div[@class="flexslider-carousel"]//img/@src0_1x)[1]
+        concat: "|"
+        postProcess:
+          - replace:
+              - regex: "(^[^|]+)\\|/tour/([^\\.]+\\.jpg).*"
+                with: $1$2
+
+  breeditrawPerformerScraper:
+    performer:
+      Name:
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: \s*-\s*.*$
+                with: ""
+      Gender:
+        fixed: Male
+      Height:
+        selector: //strong[contains(., "Height:")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //strong[contains(., "Weight:")]/following-sibling::text()
+        postProcess:
+          - lbToKg: true
+      Measurements:
+        selector: //strong[contains(., "Dick Size:")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: ^
+                with: "0'"
+          - feetToCm: true
+      Image:
+        selector: //div[@class="profile-pic"]/img/@src0_2x
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.breeditraw.net/
+              - regex: (:?-[1-4]x)?\.jpg$
+                with: "-full.jpg"
