@@ -1,0 +1,18 @@
+# requires: py_common
+name: Bait Buddies
+sceneByURL:
+  - action: script
+    url:
+      - baitbuddies.com/video/
+    script:
+      - python
+      - BaitBuddies.py
+      - scene-by-url
+performerByURL:
+  - action: script
+    url:
+      - baitbuddies.com/models/
+    script:
+      - python
+      - BaitBuddies.py
+      - performer-by-url
