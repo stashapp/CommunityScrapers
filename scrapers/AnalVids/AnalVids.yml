@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
-
 name: "AnalVids"
 sceneByURL:
   - action: scrapeXPath
@@ -7,6 +5,10 @@ sceneByURL:
       - analvids.com/watch/
       - pissvids.com/watch/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - bustyworld.com/watch/
+    scraper: bustyworldSceneScraper
 performerByURL:
   - action: scrapeXPath
     url:
@@ -17,7 +19,6 @@ sceneByFragment:
   action: script
   script:
     - python
-    # use python3 instead if needed
     - AnalVids.py
     - query
 
@@ -26,38 +27,52 @@ xPathScrapers:
     common:
       $title: //title
     scene:
-      Title:
+      Title: &title
         selector: $title
         postProcess:
           - replace:
-              - regex: \s*-\s*(Piss|Anal)Vids$
+              - regex: \s*([A-Z]{2,3}\d+\s*)?-\s*((Piss|Anal)Vids|BustyPornWorld)$
                 with: ""
-      Date:
-        selector: //i[contains(@class, "bi-calendar3")]/text()
+      Date: &date
+        selector: //i[contains(@class, "bi-calendar3")]
         postProcess:
           - parseDate: 2006-01-02
-      Details:
+      Details: &details
         selector: //div[contains(@class, "text-mob-more")]//text()[not(parent::span[contains(@class, "dots")])]
         concat: " "
-      Code:
+      Code: &code
         selector: $title
         postProcess:
           - replace:
-              - regex: .+?([A-Z]{2,3}\d+)\s*-\s*(Piss|Anal)Vids$$|(.*)
+              - regex: .+?([A-Z]{2,3}\d+)\s*-\s*((Piss|Anal)Vids|BustyPornWorld)$$|(.*)
                 with: $1
-      Performers:
-        Name: //h1[contains(@class, "watch__title")]//a/text()
+      Performers: &performers
+        Name: //h1[contains(@class, "watch__title")]//a
         URLs: //h1[contains(@class, "watch__title")]//a/@href
       Studio:
         Name: //div[contains(@class, "genres-list")]//a[contains(@href, "/studios/")]
         URL: //div[contains(@class, "genres-list")]//a[contains(@href, "/studios/")]/@href
-      Tags:
+      Tags: &tags
         Name: //div[contains(@class, "genres-list")]//a[contains(@href, "/genre/")]
-      Image: //video/@data-poster
+      Image: &image //video/@data-poster
+
+  bustyworldSceneScraper:
+    common:
+      $title: //title
+    scene:
+      Title: *title
+      Date: *date
+      Details: *details
+      Code: *code
+      Performers: *performers
+      Tags: *tags
+      Studio:
+        Name:
+          fixed: DDF Busty
+      Image: *image
 
   performerScraper:
     performer:
       Name: //h1
       Country: //a[contains(@href, "nationality")]
       Image: //div[contains(@class, 'model__left')]//img/@src
-# Last Updated September 17, 2025
