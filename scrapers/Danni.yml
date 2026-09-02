@@ -7,8 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //div[@class="scene-title"]
+      Title: //div[@class="scene-title"]
       Performers:
         Name: //div[@class='danni-card-model-list-container']/a
       Tags:
@@ -22,4 +21,7 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Danni.com
-# Last Updated December 07, 2021
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
