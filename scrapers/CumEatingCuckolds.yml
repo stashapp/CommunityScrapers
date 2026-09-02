@@ -12,14 +12,18 @@ xPathScrapers:
         selector: //link[@rel="canonical"]/@href
         postProcess:
           - replace:
-            - regex: .+\/updates\/(\d+)
-              with: $1
+              - regex: .+\/updates\/(\d+)
+                with: $1
       Details: //p[@class="blurb"]/text()
       URLs: //link[@rel="canonical"]/@href
-      Image: //div[@class="preview-media age-blur-context"]/img/@data-alt
+      Image: //div[@class="preview-media"]/img/@src
       Studio:
         Name:
           fixed: Cum Eating Cuckolds
       Performers:
         Name: //div[@class="preview-meta"]/div[@class="meta"]/a/text()
-# Last Updated December 16, 2025
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
