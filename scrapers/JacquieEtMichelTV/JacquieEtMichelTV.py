@@ -17,6 +17,16 @@ from lxml import html  # noqa: E402
 scraper = cloudscraper.create_scraper()
 
 
+def _as_keyword_list(keywords) -> list[str]:
+    if not keywords:
+        return []
+    if isinstance(keywords, list):
+        return [k.strip() for k in keywords if k and k.strip()]
+    if isinstance(keywords, str):
+        return [k.strip() for k in keywords.split(",") if k.strip()]
+    return []
+
+
 def scene_from_url(url: str) -> ScrapedScene | None:
     try:
         scraped = scraper.get(url)
@@ -27,11 +37,34 @@ def scene_from_url(url: str) -> ScrapedScene | None:
 
     tree = html.fromstring(scraped.text)
 
+    video_data = None
     for d in tree.xpath("//script[@type='application/ld+json']"):
-        if '"@type": "VideoObject"' in d.text:
-            video_data = json.loads(d.text)[0]
+        if not d.text or "VideoObject" not in d.text:
+            continue
+        try:
+            data = json.loads(d.text)
+        except json.JSONDecodeError as ex:
+            log.debug(f"Failed to parse JSON-LD block: {ex}")
+            continue
+
+        # Normalize to a flat list of candidate dicts, since sites may emit
+        # a single object, a list of objects, or an object with an @graph
+        candidates = data if isinstance(data, list) else [data]
+        flattened = []
+        for c in candidates:
+            if isinstance(c, dict) and "@graph" in c:
+                flattened.extend(c["@graph"])
+            else:
+                flattened.append(c)
+
+        for c in flattened:
+            if isinstance(c, dict) and c.get("@type") == "VideoObject":
+                video_data = c
+                break
+        if video_data:
             break
-    else:
+
+    if not video_data:
         log.error(f"No VideoObject data found at {url}")
         return None
 
@@ -40,7 +73,7 @@ def scene_from_url(url: str) -> ScrapedScene | None:
         "title": video_data["name"],
         "details": unescape(video_data["description"]).strip(),
         "date": dt.fromisoformat(video_data["datePublished"]).date().isoformat(),
-        "tags": [{"name": t} for t in video_data["keywords"].split(",")],
+        "tags": [{"name": t} for t in _as_keyword_list(video_data.get("keywords"))],
     }
 
     if studio := dig(video_data, "productionCompany", "en"):
