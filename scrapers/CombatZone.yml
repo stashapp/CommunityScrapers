@@ -34,24 +34,22 @@ xPathScrapers:
         selector: //div[@id="fakeplayer"]//img/@src
         postProcess:
           - replace:
-              - regex: ^
-                with: https://tour.combatzonexxx.com
+              - regex: ^/web/
+                with: "https://web.archive.org/web/"
+              - regex: ^/
+                with: "https://tour.combatzonexxx.com/"
       Studio:
         Name:
-          # Search for the scene in order to get the correct studio
-          selector: //div[contains(@class, "title")]/h2
+          selector: //base/@href
           postProcess:
             - replace:
-                - regex: \s
-                  with: +
-                - regex: ^(.+)$
-                  with: https://tour.combatzonexxx.com/search.php?st=advanced&qall=$1&cat[]=5
-            - subScraper: //i[@class="site_badge"]/text()
+                - regex: .*tour\.([a-z]+)\..*
+                  with: $1
             - map:
-                BM: Black Market XXX
-                CZ: Combat Zone XXX
-                FF: Filly Films
-                SP: Smash Pictures
+                blackmarketxxx: Black Market XXX
+                combatzonexxx: Combat Zone XXX
+                fillyfilms: Filly Films
+                smashpictures: Smash Pictures
 
   movieScraper:
     group:
@@ -76,5 +74,3 @@ xPathScrapers:
                 with: https://www.combatzone.us/$1-l$2
       Studio:
         Name: //p[span[contains(text(), "Studio:")]]/text()[2]
-
-# Last Updated November 17, 2020
