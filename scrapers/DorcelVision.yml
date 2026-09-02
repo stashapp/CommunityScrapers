@@ -4,7 +4,6 @@ sceneByURL:
     url:
       - https://www.dorcelvision.com/en/movies
     scraper: sceneScraper
-
 groupByURL:
   - action: scrapeXPath
     url:
@@ -19,29 +18,27 @@ sceneByQueryFragment:
   queryURL: "{url}"
   scraper: sceneScraper
 
-
 xPathScrapers:
   sceneSearch:
     common:
       $card: //div[@id="entriesList"]/div
     scene:
       Title: $card/details/div/h3
-      URL: 
+      URL:
         selector: $card/a[@class="movies rolloverv2"]/@href
-        postProcess: 
+        postProcess:
           - replace:
-            - regex: (.*)
-              with: https://www.dorcelvision.com$1
-              
-      Image: 
+              - regex: (.*)
+                with: https://www.dorcelvision.com$1
+
+      Image:
         selector: $card/a[@class="movies rolloverv2"]/img[last()]/@data-src
-        postProcess: 
+        postProcess:
           - replace:
               - regex: (.*)
                 with: https://www.dorcelvision.com$1
       Details: $card/details//p[last()]
-        
-        
+
   sceneScraper:
     scene:
       Title: &titleSel //meta[@property="og:title"]/@content
@@ -55,16 +52,13 @@ xPathScrapers:
               - regex: (.*)
                 with: https://dorcelvision.com$1
       Date: &dateAttr
-        selector: //div[@class="row informations"]/div/div/strong[contains(., "Production year")]/parent::div/following-sibling::div
+        selector: //div[@class="row informations"]/div/div/h3[contains(., "Production year")]/parent::div/following-sibling::div
         postProcess:
-          - replace:
-              - regex: ^(\d+)$
-                with: $1-01-01
           - parseDate: 2006-01-02
       Performers:
-        Name: //div[contains(@class, "casting")]//div[contains(@class, "slider-xl")]//div[@class="col-xs-2"]//a/span/text()
+        Name: //div[contains(@class, "casting")]//div[contains(@class, "slider-xl")]//div[@class="col-xs-2"]//a/p/span/text()
       Studio: &studioAttr
-        Name: //div[@class="row informations"]/div/div/strong[contains(., "Studio")]/parent::div/following-sibling::div
+        Name: //div[@class="row informations"]/div/div/h3[contains(., "Studio")]/parent::div/following-sibling::div
       Groups:
         Name: //meta[@property="og:title"]/@content
         URL: //meta[@property="og:url"]/@content
@@ -74,15 +68,12 @@ xPathScrapers:
       Name: *titleSel
       Date: *dateAttr
       Duration:
-        selector: //div[@class="informations"]//span[@class="duration"]/text()
+        selector: //div[contains(@class, "informations")]//span[@class="duration"]/text()
         postProcess:
           - replace:
               - regex: \smin
                 with: ":00"
       Studio: *studioAttr
-      Director:
-        selector: //div[@class="informations"]//strong[contains(., "Directed by")]/following-sibling::a/text()
+      Director: //div[contains(@class, "informations")]//h3[contains(., "Directed by")]/parent::div/following-sibling::div/a/text()
       FrontImage: *imageAttr
       Synopsis: *detailsAttr
-# Reference: https://github.com/PAhelper/PhoenixAdult.bundle/blob/master/Contents/Code/siteDorcelVision.py
-# Last Updated December 13, 2023
