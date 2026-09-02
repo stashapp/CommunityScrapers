@@ -1,0 +1,38 @@
+# Python scraper: IMDB now fronts with an AWS WAF bot challenge that blocks
+# stash's built-in xpath scraping. IMDB.py falls back to FlareSolverr (see
+# py_common/proxy.py) when challenged. Set the FLARESOLVERR_URL environment
+# variable on the stash process if FlareSolverr is not at
+# http://localhost:8191/v1.
+name: IMDB
+performerByName:
+  action: script
+  script:
+    - python
+    - IMDB.py
+    - performer-by-name
+performerByURL:
+  - action: script
+    url:
+      - imdb.com
+    script:
+      - python
+      - IMDB.py
+      - performer-by-url
+sceneByURL:
+  - action: script
+    url:
+      - imdb.com/title/
+    script:
+      - python
+      - IMDB.py
+      - scene-by-url
+groupByURL:
+  - action: script
+    url:
+      - imdb.com/title/
+    script:
+      - python
+      - IMDB.py
+      - group-by-url
+# requires: py_common
+# Last Updated August 27, 2026
