@@ -19,69 +19,30 @@ xPathScrapers:
     common:
       $script: //script[@type="application/ld+json"]
     scene:
-      Title:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: '.+"name":\s*"([^"]+)".+'
-                with: $1
-          - javascript: &decodeHTML |
-              if (value) {
-                return value.replace(
-                /&amp;|&lt;|&gt;|&#0?39;|&quot;/g,
-                tag =>
-                  ({
-                    '&amp;': '&',
-                    '&lt;': '<',
-                    '&gt;': '>',
-                    '&#39;': "'",
-                    '&#039;': "'",
-                    '&quot;': '"'
-                    }[tag] || tag)
-                ).replace(/<br\s*\/?>/gi, '\n');
-              }
-              return value
+      Title: //div[@class="media-video-copy"]/h3
       Date:
-        selector: //comment()[contains(., 'CLIP DATE')]/following-sibling::text()
+        selector: //span[contains(text(),"Added:")]
         postProcess:
           - replace:
-              - regex: 'Added:\s*'
-                with: ""
-          - parseDate: 02-01-2006
+              - regex: "Added:\\s(\\d{2}-\\d{2}-\\d{4})"
+                with: "$1"
+          - parseDate: "02-01-2006"
       Performers:
-        Name:
-          selector: //title
-          postProcess:
-            - replace:
-                - regex: .+Featuring\s*([^|]+)\s\|.+
-                  with: $1
-                - regex: (?i)\s+(?:and|&)\s+
-                  with: __SEP__
-          split: __SEP__
+        Name: //div[@class="media-video-copy"]/p
       Details:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: '.+"description":\s*"([^"]+)".+'
-                with: $1
-          - javascript: *decodeHTML
-          - replace:
-              - regex: <[^>]+>|\s*...$
-                with: ""
-        split: __SEP__
-        concat: \n\n
+        selector: //div[@class="clip-description"]/text()
+        concat: "\n\n"
       Tags:
-        Name: //div[@class='info-box-white']/h3[contains(.,"Added:")]/a
+        Name: //a[contains(@href,"category=")]
       Image:
-        selector: $script
+        selector: //img[@id="videoPosterOverlay"]/@src
         postProcess:
           - replace:
-              - regex: '.+"([^"]+/Backgrounds/[^"]+)".+'
-                with: $1
+              - regex: ^
+                with: https://cruelgf.com/
       Studio:
         Name:
           fixed: Cruel Girlfriend
-      URL: //html/head/meta[@property="og:url"]/@content
       Code:
         selector: $script
         postProcess:
@@ -90,4 +51,3 @@ xPathScrapers:
                 with: $1
               - regex: "^{.+" #cleanup on non matches
                 with:
-# Last Updated November 4, 2025
