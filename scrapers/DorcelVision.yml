@@ -45,12 +45,12 @@ xPathScrapers:
       Details: &detailsAttr
         selector: //div[@id="biography"]/*/text()
         concat: "\n\n"
-      Image: &imageAttr
-        selector: //a[contains(@class, "cover")]/@href
+      Image:
+        selector: (//img[contains(@data-src, "/bannerfullxl1200/")]/@data-src)[1]
         postProcess:
           - replace:
-              - regex: (.*)
-                with: https://dorcelvision.com$1
+              - regex: ^
+                with: https://www.dorcelvision.com
       Date: &dateAttr
         selector: //div[@class="row informations"]/div/div/h3[contains(., "Production year")]/parent::div/following-sibling::div
         postProcess:
@@ -71,9 +71,20 @@ xPathScrapers:
         selector: //div[contains(@class, "informations")]//span[@class="duration"]/text()
         postProcess:
           - replace:
-              - regex: \smin
+              - regex: \smin\.?
                 with: ":00"
       Studio: *studioAttr
       Director: //div[contains(@class, "informations")]//h3[contains(., "Directed by")]/parent::div/following-sibling::div/a/text()
-      FrontImage: *imageAttr
+      FrontImage:
+        selector: //button[@class="cover"]/@data-href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.dorcelvision.com
+      BackImage:
+        selector: //button[@class="back fix-hard"]/@data-href
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.dorcelvision.com
       Synopsis: *detailsAttr
