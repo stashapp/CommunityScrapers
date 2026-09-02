@@ -56,10 +56,10 @@ xPathScrapers:
     scene:
       Title: //h1//*[not(@class='visually-hidden')]/text()
       Code:
-        selector: //h1/div/span
+        selector: //h1/span[@class="visually-hidden"]
         postProcess:
           - replace:
-              - regex: .+?(\d+)$
+              - regex: \D*(\d+).*
                 with: $1
       Details:
         selector: //div[contains(@class,"read-more ")]/div/p/text()
@@ -78,4 +78,3 @@ xPathScrapers:
               - regex: .+(?:"uploadDate":\s*")([^T]+).+
                 with: $1
           - parseDate: 2006-01-02
-# Last Updated March 9, 2026
