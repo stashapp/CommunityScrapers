@@ -13,30 +13,26 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //head/title/text()
-      Details: //meta[@property="twitter:description"]/@content
+      Title: //head/title
+      Details: //meta[@name="twitter:description"]/@content
       Performers:
-        Name: //div[@class="info-model"]//p[@class="name"]
+        Name: //div[@class="item"][contains(., "Models:")]/a
       Tags:
-        Name: //meta[@property="article:tag"]/@content
+        Name: //meta[@property="video:tag"]/@content
       Studio:
         Name:
           fixed: Fitting-Room
-      Image: //meta[@property="twitter:image"]/@content
-      URL: //meta[@property="twitter:url"]/@content
+      Image: //meta[@name="twitter:image"]/@content
+      URL: //meta[@property="og:url"]/@content
   galleryScraper:
     gallery:
-      Title:
-        selector: //head/title/text()
-      Details: //meta[@property="twitter:description"]/@content
+      Title: //head/title
+      Details: //meta[@name="twitter:description"]/@content
       Performers:
-        Name: //div[@class="info-model"]//p[@class="name"]
+        Name: //div[@class="item"][contains(., "Models:")]/a
       Tags:
-        Name: //meta[@property="article:tag"]/@content
+        Name: //meta[@property="video:tag"]/@content
       Studio:
         Name:
           fixed: Fitting-Room
-      URL: //meta[@property="twitter:url"]/@content
-
-# Last Updated October 23, 2020
+      URL: //meta[@property="og:url"]/@content
