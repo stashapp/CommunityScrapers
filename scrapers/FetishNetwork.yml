@@ -84,5 +84,7 @@ xPathScrapers:
                   with: $1
                 - regex: _
                   with: " "
-
-# Last Updated August 12, 2024
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
