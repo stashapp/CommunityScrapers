@@ -161,6 +161,7 @@ xPathScrapers:
         Name: $videoDetails//a[@data-label="channel"] | $studioButton
 
 driver:
+  useSurf: true
   cookies:
     - CookieURL: "https://www.pornhub.com"
       Cookies:
