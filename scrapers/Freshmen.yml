@@ -3,14 +3,15 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - club.freshmen.net/secure/
+      - freshmen.net/content/
     scraper: sceneScraper
-    
+
 performerByURL:
   - action: scrapeXPath
     url:
       - club.freshmen.net/secure/model
     scraper: performerScraper
-    
+
 xPathScrapers:
   sceneScraper:
     scene:
@@ -24,7 +25,7 @@ xPathScrapers:
         selector: //div[@class='content_detail__first_col__player__more__description']//div/p
         concat: "\n\n"
       Date:
-        selector: //div[@class='content_date']/text()
+        selector: //div[@class='content_date']
         postProcess:
           - parseDate: 01/02/2006
       Image: //div[@class="player"]//img/@src | //div[@class="player"]//video/@poster
@@ -32,28 +33,20 @@ xPathScrapers:
         Name:
           fixed: Freshmen
       Tags:
-        Name:
-          selector: //div[@class="wrapper tag_list"]/a/text()
+        Name: //div[@class="wrapper tag_list"]/a
       Performers:
-        Name: //div[@class='actors_list__actor']//h3/text()
-        
+        Name: //div[@class='actors_list__actor']//h3
+
   performerScraper:
     performer:
-      Name: //div[@class="content_detail__first_col"]//h1[1]/text()
+      Name: //div[@class="content_detail__first_col"]//h1[1]
       Gender:
         fixed: Male
-      HairColor:
-        selector: //td[contains(text(),"Hair color")]/following-sibling::td/text()
-      EyeColor:
-        selector: //td[contains(text(),"Eye color")]/following-sibling::td/text()
-      Weight:
-        selector: //td[contains(text(),"Weight")]/following-sibling::td/text()
-      Height:
-        selector: //td[contains(text(),"Height")]/following-sibling::td/text()
-      PenisLength:
-        selector: //td[contains(text(),"Dick size")]/following-sibling::td/text()
-      Details:  
+      HairColor: //td[contains(text(),"Hair color")]/following-sibling::td
+      EyeColor: //td[contains(text(),"Eye color")]/following-sibling::td
+      Weight: //td[contains(text(),"Weight")]/following-sibling::td
+      Height: //td[contains(text(),"Height")]/following-sibling::td
+      PenisLength: //td[contains(text(),"Dick size")]/following-sibling::td
+      Details:
         selector: //div[@class="content_detail__first_col__description__white_box"]/p
       Image: //div[@class="content_detail__first_col__top__gallery__big"]/img/@src
-
-# Last Updated July 3, 2025
