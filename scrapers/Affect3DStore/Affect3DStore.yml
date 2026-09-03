@@ -1,5 +1,23 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
+# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: Affect3DStore
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Affect3DStore.py
+    - scene-by-fragment
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - Affect3DStore.py
+    - scene-by-query-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - Affect3DStore.py
+    - scene-by-name
 sceneByURL:
   - action: script
     url:

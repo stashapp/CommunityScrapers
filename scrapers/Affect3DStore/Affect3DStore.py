@@ -84,6 +84,51 @@ def scene_from_url(_url: str) -> ScrapedScene | None:
 
     return scene
 
+def scene_search(_name: str) -> list[ScrapedScene] | None:
+    "Searches for scenes by name"
+    results: list[ScrapedScene] = []
+
+    try:
+        tree = scrape_url(f"https://affect3dstore.com/catalogsearch/result/?q={_name}")
+        # parse search results and populate the results list
+        if product_items := tree.xpath(
+            '//div[contains(@class, "products-grid") and contains(@class, "wrapper")]//li[contains(@class, "product-item")]'
+        ):
+            for product_item in product_items:
+                scene: ScrapedScene = {}
+                # link
+                if scene_link := product_item.xpath('.//a[contains(@class, "product-item-link")]'):
+                    # get href for URL
+                    scene["urls"] = [scene_link[0].get("href")]
+                    # get link text for title
+                    if scene_title := scene_link[0].text_content():
+                        scene["title"] = scene_title.strip()
+                # photo
+                if scene_photo := product_item.xpath('.//a[contains(@class, "product-item-photo")]//img/@src'):
+                    # sometimes this is lazy-loaded with JS for like image 7 onwards, for example,
+                    # and doesn't resolve the image URL, but it can resolve sometimes if you retry
+                    # the first several result images are not affected and always appear to
+                    # resolve correctly
+                    scene["image"] = scene_photo[0]
+                # artist name
+                if artist_name := product_item.xpath('.//span[contains(@class, "artist_name_m")]/a/text()'):
+                    scene["studio"] = {"name": STUDIO_MAPPER.get(artist_name[0]) or artist_name[0]}
+                results.append(scene)
+    except Exception as e:
+        log.error("Error searching for scenes by name: %s" % e)
+        return None
+    
+    return results
+
+def scene_from_fragment(fragment: dict) -> ScrapedScene | None:
+    "Retrieves a scene from a fragment containing either a URL or a title"
+    if 'url' in fragment:
+        return scene_from_url(fragment['url'])
+    if 'title' in fragment:
+        search_results = scene_search(fragment['title'])
+        return search_results[0] if search_results else None
+    return None
+
 
 if __name__ == "__main__":
     op, args = scraper_args()
@@ -92,10 +137,10 @@ if __name__ == "__main__":
     match op, args:
         case "scene-by-url", {"url": url} if url:
             result = scene_from_url(url)
-        # case "scene-by-name", {"name": name} if name:
-        #     result = scene_search(name)
-        # case "scene-by-fragment" | "scene-by-query-fragment", args:
-        #     result = scene_from_fragment(args)
+        case "scene-by-name", {"name": name} if name:
+            result = scene_search(name)
+        case "scene-by-fragment" | "scene-by-query-fragment", args:
+            result = scene_from_fragment(args)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
