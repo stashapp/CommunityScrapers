@@ -52,7 +52,7 @@ xPathScrapers:
               - regex: .*\/(\d+)\/.*
                 with: $1
       Details: &details
-        selector: //main//p
+        selector: //main//p[not(@class)][not(a)]
         postProcess:
           - replace:
               - regex: "(\\*Trailer not available for this update.|Join Now!)"
@@ -64,7 +64,7 @@ xPathScrapers:
               - regex: "Release Date:"
                 with: ""
       Studio: &studio
-        Name: //nav//h1
+        Name: //nav//span[@class="page-title"]
       Performers: &performers
         Name: //h2/a
         URLs:
@@ -73,7 +73,7 @@ xPathScrapers:
             - replace:
                 - regex: ^/
                   with: "https://footfetishdaily.com/"
-      Image: &image //video/@poster | //video-js/@poster | //img[@class="img-fluid"]/@src
+      Image: //video/@poster | //video-js/@poster | //img/@src[contains(.,"ffd_update_thumbs")]
       URL: &url
         selector: //link[contains(@rel,'canonical')]/@href
         postProcess:
@@ -90,11 +90,10 @@ xPathScrapers:
       URL: *url
   performerScraper:
     performer:
-      Name: //main//h1/text()
-      Ethnicity: //label[contains(text(),"Ethnicity")]/../..//p/text()
-      Measurements: //label[contains(text(),"Bra Size")]/../..//p/text()
-      Image:
-        selector: //img[@class="rounded-circle"]/@src
+      Name: //main//h1
+      Ethnicity: //label[contains(text(),"Ethnicity")]/../..//p
+      Measurements: //label[contains(text(),"Bra Size")]/../..//p
+      Image: //img[@class="img-fluid"]/@src
       ## * the studio is inconsistent w/ imperial & metric,
       ## REF: https://github.com/stashapp/CommunityScrapers/pull/1168
       # Height:
@@ -102,58 +101,62 @@ xPathScrapers:
       #   postProcess:
       #     - feetToCm: true
       Country:
-        selector: //label[contains(text(),"Home State")]/../..//p/text()
+        selector: //label[contains(text(),"Home State")]/../..//p
         postProcess:
-          - map: # props to brazzers.yml
-              AK: "USA"
-              AL: "USA"
-              AR: "USA"
-              AZ: "USA"
-              CA: "USA"
-              CO: "USA"
-              CT: "USA"
-              DC: "USA"
-              DE: "USA"
-              FL: "USA"
-              GA: "USA"
-              HI: "USA"
-              IA: "USA"
-              ID: "USA"
-              IL: "USA"
-              IN: "USA"
-              KS: "USA"
-              KY: "USA"
-              LA: "USA"
-              MA: "USA"
-              MD: "USA"
-              ME: "USA"
-              MI: "USA"
-              MN: "USA"
-              MO: "USA"
-              MS: "USA"
-              MT: "USA"
-              NC: "USA"
-              ND: "USA"
-              NE: "USA"
-              NH: "USA"
-              NJ: "USA"
-              NM: "USA"
-              NV: "USA"
-              NY: "USA"
-              OH: "USA"
-              OK: "USA"
-              OR: "USA"
-              PA: "USA"
-              RI: "USA"
-              SC: "USA"
-              SD: "USA"
-              TN: "USA"
-              TX: "USA"
-              UT: "USA"
-              VA: "USA"
-              VT: "USA"
-              WA: "USA"
-              WI: "USA"
-              WV: "USA"
-              WY: "USA"
-# Last Updated September 17, 2025
+          - map:
+              Alabama: "USA"
+              Alaska: "USA"
+              Arizona: "USA"
+              Arkansas: "USA"
+              California: "USA"
+              Colorado: "USA"
+              Connecticut: "USA"
+              Delaware: "USA"
+              "District of Columbia": "USA"
+              Florida: "USA"
+              Georgia: "USA"
+              Hawaii: "USA"
+              Idaho: "USA"
+              Illinois: "USA"
+              Indiana: "USA"
+              Iowa: "USA"
+              Kansas: "USA"
+              Kentucky: "USA"
+              Louisiana: "USA"
+              Maine: "USA"
+              Maryland: "USA"
+              Massachusetts: "USA"
+              Michigan: "USA"
+              Minnesota: "USA"
+              Mississippi: "USA"
+              Missouri: "USA"
+              Montana: "USA"
+              Nebraska: "USA"
+              Nevada: "USA"
+              "New Hampshire": "USA"
+              "New Jersey": "USA"
+              "New Mexico": "USA"
+              "New York": "USA"
+              "North Carolina": "USA"
+              "North Dakota": "USA"
+              Ohio: "USA"
+              Oklahoma: "USA"
+              Oregon: "USA"
+              Pennsylvania: "USA"
+              "Rhode Island": "USA"
+              "South Carolina": "USA"
+              "South Dakota": "USA"
+              Tennessee: "USA"
+              Texas: "USA"
+              Utah: "USA"
+              Vermont: "USA"
+              Virginia: "USA"
+              Washington: "USA"
+              "West Virginia": "USA"
+              Wisconsin: "USA"
+              Wyoming: "USA"
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
