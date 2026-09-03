@@ -19,8 +19,8 @@ xPathScrapers:
         selector: //meta[@property="og:image"]/@content
         postProcess:
           - replace:
-            - regex: .*\/(\d+)\/\d+\.jpg
-              with: "fta$1"
+              - regex: .*\/(\d+)\/\d+\.jpg
+                with: "fta$1"
       Details:
         selector: //div[@class="vid_txt_block2 vid_txt_block2017"]/article/*/text()
         concat: "\n\n"
@@ -31,35 +31,40 @@ xPathScrapers:
               - regex: .+(?:directors":\s")([^"]+).+
                 with: $1
       Date:
-        selector: //time[@datetime]
+        selector: $script
         postProcess:
-          - parseDate: 2006-01-02
+          - replace:
+              - regex: '.+uploadDate":\s*"(\d{4}-\d{2}-\d{2}).+'
+                with: "$1"
       Image:
         selector: $script
         postProcess:
           - replace:
-            - regex: '.+thumbnailUrl": "(http[^"]+)".+'
-              with: "$1"
+              - regex: '.+thumbnailUrl": "(http[^"]+)".+'
+                with: "$1"
       Studio:
         Name:
           fixed: French Twinks
-      Tags:
-        Name: //li[@class="vid_keywords"]/a
       Performers:
         Name: //li[@class="small_act_pic small_act_picvidpage"]/a
-        URLs: //li[@class="small_act_pic small_act_picvidpage"]/a/@href
+        URLs:
+          selector: //li[@class="small_act_pic small_act_picvidpage"]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^/
+                  with: "https://www.french-twinks.com/"
   performerScraper:
     performer:
       Name: //h1[@class="subtitle_line"]
       Image: //div[@id="mygallery"]/a/@href
-      EyeColor: 
+      EyeColor:
         selector: //td[contains(text(),"Eyes")]/following-sibling::td
         postProcess:
           - replace:
               - regex: ": "
                 with: ""
       Gender:
-         fixed: Male
+        fixed: Male
       Height:
         selector: //td[contains(text(),"Height")]/following-sibling::td
         postProcess:
@@ -71,5 +76,3 @@ xPathScrapers:
               - regex: ^
                 with: "0'"
           - feetToCm: true
-
-# Last Updated March 25, 2026
