@@ -6,27 +6,25 @@ sceneByURL:
       - falconstudios.com/en/video
     script:
       - python
-      - ../Altwolia/scrape.py
+      - FalconStudios.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - FalconStudios.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - falconstudios
+    - FalconStudios.py
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - falconstudios
+    - FalconStudios.py
     - scene-by-query-fragment
 groupByURL:
   - action: script
@@ -34,20 +32,19 @@ groupByURL:
       - falconstudios.com/en/movie/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - FalconStudios.py
       - movie-by-url
 performerByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - FalconStudios.py
     - performer-by-fragment
 performerByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - falconstudios
+    - FalconStudios.py
     - performer-by-name
 performerByURL:
   - action: script
@@ -55,5 +52,5 @@ performerByURL:
       - falconstudios.com/en/pornstar/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - FalconStudios.py
       - performer-by-url

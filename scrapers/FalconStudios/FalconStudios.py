@@ -12,26 +12,26 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
 from py_common import log
-from py_common.util import scraper_args, replace_all
+from py_common.util import scraper_args
 
-def ragingstallion(obj: Any, api_object: dict[str, Any]) -> Any:
-    obj = append_scene_number(obj, api_object)
-    return replace_all(obj, "studio", lambda s: {**s, "name": "Raging Stallion"})
+
+def falconstudios(obj: Any, api_object: dict[str, Any]) -> Any:
+    return append_scene_number(obj, api_object)
+
 
 if __name__ == "__main__":
     op, args = scraper_args()
-
-    site = "ragingstallion"
+    site = "falconstudios"
     log.debug(f"args: {args}")
+
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, site, postprocess=ragingstallion)
+            result = scene_from_url(url, site, postprocess=falconstudios)
         case "scene-by-name", {"name": name} if name:
-            result = scene_search(name, site, postprocess=ragingstallion)
+            result = scene_search(name, site, postprocess=falconstudios)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            result = scene_from_fragment(args, site, postprocess=ragingstallion)
+            result = scene_from_fragment(args, site, postprocess=falconstudios)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, site)
         case "performer-by-fragment", args:
@@ -39,7 +39,7 @@ if __name__ == "__main__":
         case "performer-by-name", {"name": name} if name:
             result = performer_search(name, site)
         case "movie-by-url", {"url": url} if url:
-            result = movie_from_url(url, site, postprocess=ragingstallion)
+            result = movie_from_url(url, site)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
             sys.exit(1)
