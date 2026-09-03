@@ -45,6 +45,7 @@ studio_map = {
     "edwardjames.com": "Edward James",
     "facialsforever.com": "Facials Forever",
     "fantasypov.com": "FantasyPOV",
+    "freakmobhardcore.com": "FreakMob Hardcore",
     "freakmobmedia.com": "FreakMob Media",
     "gogobarauditions.com": "Gogo Bar Auditions",
     "gogoworldporn.com": "GoGo World Porn",
