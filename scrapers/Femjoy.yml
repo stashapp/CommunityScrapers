@@ -20,7 +20,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $performer: //h1[@class='post_title']/a[starts-with(@href,"/models")]
+      $performer: //h1[@class='post_title']/a[not(contains(@class,'add_favorite'))]
     scene:
       Title: &titleSel //h1[@class='post_title']/span[last()]/text()
       Studio: &studioAttr
@@ -33,15 +33,15 @@ xPathScrapers:
               - regex: '.*released on\s+'
                 with:
           - parseDate: Jan 2, 2006
-      Director: //*[@class='post_title']/a[starts-with(@href,"/director")]
+      Director:
+        # scenes with no distinct director just credit the studio itself here
+        selector: //h2[@class='post_title']/a/text()
+        postProcess:
+          - replace:
+              - regex: ^FemJoy$
+                with:
       Performers: &performersAttr
         Name: $performer
-        URLs:
-          selector: $performer/@href
-          postProcess: &prependDomain
-            - replace:
-                - regex: ^
-                  with: https://femjoy.com
       Details: &details
         selector: //*[@class='post_description']//text()
         concat: "\n"
@@ -57,16 +57,18 @@ xPathScrapers:
         postProcess: *datePP
       URL:
         selector: $preview/@href
-        postProcess: *prependDomain
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://femjoy.com
       Image:
         selector: $preview/@data-media-poster
   galleryScraper:
     common:
-      $performer: //h1[@class='post_title']/a[starts-with(@href,"/models")]
+      $performer: //h1[@class='post_title']/a[not(contains(@class,'add_favorite'))]
     gallery:
       Title: *titleSel
       Studio: *studioAttr
       Date: *dateAttr
       Performers: *performersAttr
       Details: *details
-# Last Updated September 17, 2025
