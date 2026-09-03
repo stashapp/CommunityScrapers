@@ -233,19 +233,12 @@ def largest_scene_image(api_scene: dict[str, Any]) -> str | None:
     return None
 
 
-def scene_number(api_scene: dict[str, Any]) -> int | None:
-    """Return the numeric suffix of a scene's clip path, if it has one."""
-    if not (clip_path := api_scene.get("clip_path")):
-        return None
-    if not (match := re.search(r"_(\d+)$", clip_path)):
-        return None
-    return int(match.group(1))
-
-
 def append_scene_number(obj: Any, api_scene: dict[str, Any]) -> Any:
-    """Append a clip-path scene number to a scene title when one is available."""
-    if (title := obj.get("title")) and (number := scene_number(api_scene)) is not None:
-        obj["title"] = f"{title}, Scene {number}"
+    "Append the numeric clip-path suffix to a scene title when available."
+    if (title := obj.get("title")) and (
+        match := re.search(r"_(\d+)$", api_scene.get("clip_path", ""))
+    ):
+        obj["title"] = f"{title}, Scene {int(match.group(1))}"
     return obj
 
 
