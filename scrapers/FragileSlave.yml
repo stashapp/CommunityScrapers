@@ -9,32 +9,26 @@ xPathScrapers:
   sceneScraper:
     common:
       $details: //div[@class="videodetails"]/p[@class="date"]
-      $thumb: //div[@class='trailerblock'][1]
     scene:
-      Title:
-        selector: //div[@class="pagetitle"]//h1/text()
-      Details:
-        selector: //div[@class="videocontent"]/p/text()
-      Date:
-        selector: $details/text()[1]
-        postProcess:
-          - replace:
-              - regex: (\s*\|.*)
-                with:
-          - parseDate: 01/02/2006
-      Image:
-        selector: $thumb/script|$thumb//img[contains(@class,"thumbs")]
-        postProcess:
-          - replace:
-              - regex: .*<img.*src0_1x="(.*)".*
-                with: $1
+      Title: //div[@class="pagetitle"]//h1
+      Details: //div[@class="videocontent"]/p
+      Image: //div[@class="scenePhotos"]//img/@src
       Studio:
         Name:
           fixed: Fragile Slave
       Tags:
-        Name:
-          selector: $details/a/text()
+        Name: $details/a
       Performers:
-        Name:
-          selector: //span[@class="tour_update_models"]/a/text()
-# Last Updated March 14, 2022
+        Name: //span[@class="tour_update_models"]/a
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
+    # copy the full Cookie header from a request to fragileslave.com, it needs:
+    # XSRF-TOKEN
+    # fragile_slave_session
+    # age_verification_status
+    # av_cookie_version
+    # forever_cookie
+    - Key: Cookie
+      Value: ""
