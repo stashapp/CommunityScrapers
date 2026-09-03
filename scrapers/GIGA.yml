@@ -35,15 +35,15 @@ xPathScrapers:
         postProcess:
           - parseDate: "2006/01/02"
       Details:
-        selector: $videoItem/ul/li/a/img/@alt]
+        selector: $videoItem/ul/li/a/img/@alt
         postProcess:
           - replace:
-            - regex: "， "
-              with: ", "
-            - regex: "\\."
-              with: ".\n\n$1"
-            - regex: "\\.\n\n\\.\n\n\\.\n\n"
-              with: "..." 
+              - regex: "， "
+                with: ", "
+              - regex: "\\."
+                with: ".\n\n$1"
+              - regex: "\\.\n\n\\.\n\n\\.\n\n"
+                with: "..."
       Director: $videoItem/ul/li[2]/ul/li[2]/dl[1]/dd[1]
       Image:
         selector: $videoItem/ul/li/a/img/@src
@@ -61,8 +61,8 @@ xPathScrapers:
         concat: " "
         postProcess:
           - replace:
-            - regex: "， "
-              with: ", "
+              - regex: "， "
+                with: ", "
       URL:
         selector: $videoItem/ul/li/a/@href
         postProcess:
@@ -71,52 +71,46 @@ xPathScrapers:
                 with: https://www.akiba-web.com/product/
   sceneScraper:
     common:
-      $sceneCode: //*[@id="works_txt"]/ul/li[3]/dl/dd
-      $sceneTitle: //*[@id="works_txt"]/ul/li[2]/b
+      $meta: //div[@id="works_txt"][ul/li/dl/dt[text()="Product No"]]
     scene:
-      Code: $sceneCode
+      Code: $meta/ul/li/dl[dt="Product No"]/dd
       Date:
-        selector: //*[@id="works_txt"]/ul/li[7]/dl/dd
+        selector: $meta/ul/li/dl[dt="Release Date"]/dd
         postProcess:
           - parseDate: "2006/01/02"
       Details:
-        selector: $sceneTitle | //*[@id="story_list2"]/ul/li[@class="story_window"]
-        concat: "\n\n"
+        selector: //div[@id="story_list2"]//li[@class="story_window"]/text()[1]
         postProcess:
           - replace:
-            - regex: "， "
-              with: ", "
-            - regex: "\\."
-              with: ".\n\n$1"
-            - regex: "\\.\n\n\\.\n\n\\.\n\n"
-              with: "..." 
-      Director: //*[@id="works_txt"]/ul/li[5]/dl/dd
+              - regex: "， "
+                with: ", "
+              - regex: "\\."
+                with: ".\n\n$1"
+              - regex: "\\.\n\n\\.\n\n\\.\n\n"
+                with: "..."
+      Director: $meta/ul/li/dl[dt="Director"]/dd/a
       Image:
-        selector: //*[@id="works_pic"]/ul/li[1]/a/@href | //*[@id="works_pic"]/ul/li[1]/img/@src
+        selector: //div[@id="works_pic"]//img/@src
         postProcess:
           - replace:
               - regex: pac_s.jpg
                 with: pac_l.jpg
       Performers:
-        Name: //*[@id="works_txt"]/ul/li[4]/dl/dd/span/a
+        Name: $meta/ul/li/dl[dt="Actress"]/dd//a
       Studio:
         Name:
           fixed: "Giga"
-      Title:
-        selector: $sceneCode | $sceneTitle
-        concat: " "
-        postProcess:
-          - replace:
-            - regex: "， "
-              with: ", "
+      Title: //div[@id="works_pic"]//h5
       URL:
-        selector: //*[@id="works_pic"]/ul/li[3]/a[1]/@href
+        selector: //form[@name="form1"]/@action
         postProcess:
           - replace:
-              - regex: .*product_id=
-                with: https://www.akiba-web.com/product/index.php?product_id=
+              - regex: .*product_id=(\d+).*
+                with: https://www.akiba-web.com/product/index.php?product_id=$1
+
+debug:
+  printHTML: true
 driver:
-  useCDP: false 
   headers:
     - Key: Referer
       Value: https://www.akiba-web.com/
@@ -127,4 +121,8 @@ driver:
           Domain: ".www.akiba-web.com"
           Value: "yes"
           Path: "/"
-# Last Updated August 22, 2024
+        - Name: PHPSESSID
+          Domain: ".www.akiba-web.com"
+          # Replace this value with the one from your browser
+          Value: af2dea453ifcd7jqlen3bvvf7m
+          Path: "/"
