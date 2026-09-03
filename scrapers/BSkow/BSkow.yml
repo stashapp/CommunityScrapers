@@ -1,0 +1,74 @@
+# requires: Altwolia
+name: "BSkow"
+sceneByURL:
+  - action: script
+    url:
+      - bskow.com/en/video/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - bskow
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - bskow
+    - scene-by-query-fragment
+galleryByURL:
+  - action: script
+    url:
+      - bskow.com/en/photo/
+      - bskow.com/en/video/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - gallery-by-fragment
+groupByURL:
+  - action: script
+    url:
+      - bskow.com/en/movie/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - movie-by-url
+performerByURL:
+  - action: script
+    url:
+      - bskow.com/en/pornstar/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - bskow
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - performer-by-fragment

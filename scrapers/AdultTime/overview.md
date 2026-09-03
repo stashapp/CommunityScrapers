@@ -47,3 +47,14 @@ Scraper has been tested on 2026-08-29
 | Adult Time | Agent Red Girl         | https://agentredgirl.com/en/video/agentredgirl/Fairy-Pawg-Mother-2---Birdie-But-BIGGER/291951                                              |
 | Adult Time | Devil's Film           | https://devilsfilm.com/en/video/devilsfilm/Take-My-DP-Virginity---Lexi-Lore-Seth-Gamble--Scotty-P/289706                                   |
 | Adult Time | Mommy's Boy            | https://mommysboy.com/en/video/mommysboy/Dance-Dance-Jiggle-ution/290772                                                                   |
+| Adult Time | Girlfriends Films      | https://alettaoceanempire.com/en/video/ATLGirlfriendsFilms-channel/Lesbian-Neighbor-Affairs-03---Scene-3/292325                             |
+| Adult Time | Girlfriends Films      | https://bigfatcreampie.com/en/video/ATLGirlfriendsFilms-channel/Lesbian-Neighbor-Affairs-03---Scene-3/292325                                |
+| Adult Time | Girlfriends Films      | https://cumshotoasis.com/en/video/ATLGirlfriendsFilms-channel/Lesbian-Neighbor-Affairs-03---Scene-3/292325                                  |
+| Adult Time | Girlfriends Films      | https://currycreampie.com/en/video/ATLGirlfriendsFilms-channel/Lesbian-Neighbor-Affairs-03---Scene-3/292325                                 |
+| Adult Time | Girlfriends Films      | https://povthis.com/en/video/ATLGirlfriendsFilms-channel/Lesbian-Neighbor-Affairs-03---Scene-3/292325                                       |
+| Adult Time | Devils Film            | https://squirtalicious.com/en/video/squirtalicious/Neighborhood-Swingers-20---Scene-2/128938                                                |
+| Adult Time | Bushy Bushy            | https://www.bushybushy.com/en/video/bushybushy/Cum-On-My-Bushy-Beaver-05/59526                                                              |
+| Adult Time | Granny Ghetto          | https://www.grannyghetto.com/en/video/grannyghetto/I-Was-18-50-Years-Ago-02/12041                                                           |
+| Adult Time | Mother Fucker XXX      | https://motherfuckerxxx.com/en/video/motherfuckerxxx/40-More-Fucking-MILFs/58018                                                            |
+| Adult Time | Transsexual Roadtrip   | https://transsexualroadtrip.com/en/video/transsexualroadtrip/Filthy-Trans-Sluts/3500                                                        |
+| Adult Time | Girlfriends Films      | https://silviasaint.com/en/video/ATLGirlfriendsFilms-channel/Lesbian-Neighbor-Affairs-03---Scene-3/292325                                   |
