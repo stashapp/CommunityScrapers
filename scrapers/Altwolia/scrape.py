@@ -40,7 +40,6 @@ USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0"
 )
 
-
 def default_postprocess(obj: Any, _) -> Any:
     return obj
 
@@ -232,6 +231,22 @@ def largest_scene_image(api_scene: dict[str, Any]) -> str | None:
     if images := dig(api_scene, "pictures", ("nsfw", "sfw"), "top"):
         return next(iter(images.values()), None)
     return None
+
+
+def scene_number(api_scene: dict[str, Any]) -> int | None:
+    """Return the numeric suffix of a scene's clip path, if it has one."""
+    if not (clip_path := api_scene.get("clip_path")):
+        return None
+    if not (match := re.search(r"_(\d+)$", clip_path)):
+        return None
+    return int(match.group(1))
+
+
+def append_scene_number(obj: Any, api_scene: dict[str, Any]) -> Any:
+    """Append a clip-path scene number to a scene title when one is available."""
+    if (title := obj.get("title")) and (number := scene_number(api_scene)) is not None:
+        obj["title"] = f"{title}, Scene {number}"
+    return obj
 
 
 def to_scraped_scene(api_scene: dict[str, Any], site: str) -> ScrapedScene:
