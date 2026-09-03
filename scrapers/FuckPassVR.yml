@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
 name: FuckPassVR
 sceneByName:
   action: scrapeXPath
@@ -27,27 +26,32 @@ xPathScrapers:
     common:
       $card: //div[contains(@class, "videos__element")]
     performer:
-      Name: $card//a[contains(@href, "/vr-pornstars/")]/text()
+      Name: $card//a[contains(@href, "/vr-pornstars/")]/@title
       URLs: $card//a[contains(@href, "/vr-pornstars/")]/@href
     scene:
       Title: $card//a[@class="videos__videoTitle"]
-      URL: $card//a/@href
+      URLs: $card//a[@class="videos__videoTitle"]/@href
       Image: $card//img/@src
   fuckpassvrScraper:
     performer:
-      Name: //h1
-      Measurements: //p[contains(text(), "Measurements:")]/span/text()
-      Height: //p[contains(text(), "Height:")]/span/text()
-      Weight: //p[contains(text(), "Weight:")]/span/text()
-      EyeColor: //p[contains(text(), "Eye Color:")]/span/text()
-      HairColor: //p[contains(text(), "Hair Color:")]/span/text()
-      Country: //p[contains(text(), "Country:")]/span/text()
-      Image: //div[@class="pornstar"]/img/@src
+      Name:
+        selector: //h1[@id="fpvr-bioHero-title"]/text()
+        postProcess:
+          - replace:
+              - regex: \.\s*$
+                with:
+      Measurements: //span[contains(@class,"fpvr-bioStat__label") and text()="Measurements"]/preceding-sibling::span[contains(@class,"fpvr-bioStat__num")]/text()
+      Height: //span[contains(@class,"fpvr-bioStat__label") and text()="Height"]/preceding-sibling::span[contains(@class,"fpvr-bioStat__num")]/text()
+      Weight: //span[contains(@class,"fpvr-bioStat__label") and text()="Weight"]/preceding-sibling::span[contains(@class,"fpvr-bioStat__num")]/text()
+      EyeColor: //span[contains(@class,"fpvr-bioStat__label") and text()="Eye Color"]/preceding-sibling::span[contains(@class,"fpvr-bioStat__num")]/text()
+      HairColor: //span[contains(@class,"fpvr-bioStat__label") and text()="Hair Color"]/preceding-sibling::span[contains(@class,"fpvr-bioStat__num")]/text()
+      Country: //span[contains(@class,"fpvr-bioStat__label") and text()="Country"]/preceding-sibling::span[contains(@class,"fpvr-bioStat__num")]/text()
+      Image: //meta[@property="og:image"]/@content
       Gender:
         fixed: Female
-      URLs: //div[@class="pornstar__wrapper"]//div[contains(@class, "shareBtn__shareElement--copy")]/@data-url
+      URLs: //link[@rel="canonical"]/@href
     scene:
-      Title: //h1[@class='video__title']
+      Title: //h1[@class="scene-info__title"]/text()
       Details:
         selector: //meta[@property="og:description"]/@content
         postProcess:
@@ -72,14 +76,14 @@ xPathScrapers:
               }
       Tags:
         Name:
-          selector: //p[span[text()="Tags:"]]/*/text()
+          selector: //div[@class="scene-cats__pills"]/a | //h4[@class="scene-cats__label"]
           postProcess:
             - replace:
-                # this is a "hack" to add a fixed tag to the list of tags
-                - regex: ^Tags:$
+                # this is a "hack" to add a fixed tag to the list of tags, since every scene is VR
+                - regex: ^Categories$
                   with: Virtual Reality
       Performers:
-        Name: //div[@class="models"]/a//text()
+        Name: //a[@class="scene-cast__hostessPill"]/@title
       Image:
         selector: &imageSel //div[@class='video__videoWrapper']/pornhall-player/@poster
         postProcess:
@@ -90,14 +94,13 @@ xPathScrapers:
         Name:
           fixed: FuckPassVR
       Date:
-        selector: //span[text()="Released:"]//following-sibling::text()
+        selector: //span[@class="scene-cast__date"]/text()
         postProcess:
-          - parseDate: Jan 2 2006
+          - parseDate: Jan 2, 2006
       Code:
         selector: *imageSel
         postProcess:
           - replace:
               - regex: .*/scenes/([^/]*)/.*
                 with: $1
-      URL: //link[@rel="canonical"]/@href
-# Last Updated January 21, 2026
+      URLs: //link[@rel="canonical"]/@href
