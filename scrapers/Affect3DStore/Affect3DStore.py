@@ -78,6 +78,8 @@ def scene_from_url(_url: str) -> ScrapedScene | None:
         # image
         if main_product_photo := tree.xpath('//img[@alt="main product photo"]/@src'):
             scene['image'] = main_product_photo[0]
+        # url
+        scene["urls"] = [_url]
     except Exception as e:
         log.error("Error scraping scene from URL: %s" % e)
         return None
