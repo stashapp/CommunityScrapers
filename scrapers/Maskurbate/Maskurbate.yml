@@ -1,0 +1,66 @@
+# requires: Altwolia
+name: "Maskurbate"
+sceneByURL:
+  - action: script
+    url:
+      - maskurbate.com/en/video/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - maskurbate
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - maskurbate
+    - scene-by-query-fragment
+galleryByURL:
+  - action: script
+    url:
+      - maskurbate.com/en/photo/
+      - maskurbate.com/en/video/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - gallery-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - maskurbate.com/en/pornstar/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - maskurbate
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - performer-by-fragment

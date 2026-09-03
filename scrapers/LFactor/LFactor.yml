@@ -1,0 +1,74 @@
+# requires: Altwolia
+name: "LFactor"
+sceneByURL:
+  - action: script
+    url:
+      - lesbianfactor.com/en/video/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - lesbianfactor
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - lesbianfactor
+    - scene-by-query-fragment
+galleryByURL:
+  - action: script
+    url:
+      - lesbianfactor.com/en/photo/
+      - lesbianfactor.com/en/video/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - gallery-by-fragment
+groupByURL:
+  - action: script
+    url:
+      - lesbianfactor.com/en/movie/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - movie-by-url
+performerByURL:
+  - action: script
+    url:
+      - lesbianfactor.com/en/pornstar/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - lesbianfactor
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - performer-by-fragment

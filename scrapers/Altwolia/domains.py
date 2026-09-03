@@ -86,7 +86,7 @@ def get_auth_for(
     # Generate the app_id and key using the provided fallback function
     url = f"https://www.{domain}.com"
     pair = fallback(url)
-    if not pair:
+    if not pair or not all(pair):
         return None
     # And persist it
     __TOKENS[domain] = {"pair": pair}

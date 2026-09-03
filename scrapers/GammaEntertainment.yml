@@ -2,35 +2,10 @@ name: "GammaEntertainment"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - alettaoceanempire.com/en/video/
-      - ashleyfires.com/
-      - bigfatcreampie.com/
-      - bskow.com/en/video/
-      - bushybushy.com/
-      - buttman.com/
-      - cumshotoasis.com/
-      - currycreampie.com/
-      - devonlee.com/
-      - dylanryder.com/
-      - gapingangels.com/
       - girlsandstuds.com/
-      - grannyghetto.com/
       - jaysinxxx.com/
-      - lanesisters.com/
-      - lesbianfactor.com/
       - maledigital.com/en/video/
-      - maskurbate.com/en/video/
-      - motherfuckerxxx.com/
-      - myteenoasis.com/
-      - openlife.com/
-      - povthis.com/
-      - silverstonedvd.com/
-      - silviasaint.com/
-      - squirtalicious.com/
-      - squirtinglesbian.com/en/video/
-      - squirtingorgies.com/en/scene/
       - sunnyleone.com/
-      - transsexualroadtrip.com/
     scraper: sceneScraper
 
 performerByURL:
@@ -107,52 +82,10 @@ xPathScrapers:
                 - regex: \.com$
                   with: ""
             - map:
-                activeduty: Active Duty
-                alettaoceanempire: Aletta Ocean Empire
-                allblackx: All Black X
-                analacrobats: Anal Acrobats
-                ashleyfires: Ashley Fires
-                bigfatcreampie: Big Fat Cream Pie
-                bskow: BsKow
-                bushybushy: Bushy Bushy
-                buttman: Buttman
-                cumshotoasis: Cumshot Oasis
-                currycreampie: Curry Creampie
-                darkx: DarkX
-                devonlee: Devon Lee
-                dylanryder: Dylan Ryder
-                eroticax: EroticaX
-                evilangel: Evil Angel
-                familycreep: Family Creep
-                gapingangels: Gaping Angels
                 girlsandstuds: Girls And Studs
-                grannyghetto: Granny Ghetto
                 jaysinxxx: Jay Sin XXX
-                jonnidarkkoxxx: Jonni Darkko XXX
-                lanesisters: Lane Sisters
-                lesbianfactor: Lesbian Factor
-                lesbianx: Lesbian X
-                lexingtonsteele: Lexington Steele
                 maledigital: Male Digital
-                maskurbate: Maskurbate
-                motherfuckerxxx: Mother Fucker XXX
-                myteenoasis: My Teen Oasis
-                openlife: Open Life
-                outofthefamily: Out Of The Family
-                pantypops: Panty Pops
-                povblowjobs: POV Blowjobs
-                povthis: POV This
-                silverstonedvd: Silverstone DVD
-                silviasaint: Silvia Saint
-                squirtalicious: Squirtalicious
-                squirtinglesbian: Squirting Lesbian
-                squirtingorgies: Squirting Orgies
-                strapattackers: Strap Attackers
                 sunnyleone: Sunny Leone
-                tittycreampies: Titty Creampies
-                transsexualangel: Transsexual Angel
-                transsexualroadtrip: Transsexual Roadtrip
-                xempire: XEmpire
 
   performerScraper:
     performer:

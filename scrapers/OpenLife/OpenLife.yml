@@ -1,0 +1,76 @@
+# requires: Altwolia
+name: "OpenLife"
+sceneByURL:
+  - action: script
+    url:
+      - ashleyfires.com/en/video/
+      - devonlee.com/en/video/
+      - dylanryder.com/en/video/
+      - lanesisters.com/en/video/
+      - openlife.com/en/video/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - openlife
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - openlife
+    - scene-by-fragment
+sceneByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - openlife
+    - scene-by-name
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - openlife
+    - scene-by-query-fragment
+galleryByURL:
+  - action: script
+    url:
+      - openlife.com/en/photo/
+      - openlife.com/en/video/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - openlife
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - openlife
+    - gallery-by-fragment
+performerByURL:
+  - action: script
+    url:
+      - openlife.com/en/pornstar/
+    script:
+      - python
+      - ../Altwolia/scrape.py
+      - openlife
+      - performer-by-url
+performerByName:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - openlife
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - ../Altwolia/scrape.py
+    - openlife
+    - performer-by-fragment
