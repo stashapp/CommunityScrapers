@@ -7,7 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $platform: //div[@class="js-platform-video"]
+      $platform: //div[contains(@class,"js-platform-video")]
     scene:
       Title:
         selector: //div[@class="entry-title"]
@@ -26,13 +26,14 @@ xPathScrapers:
         selector: //div[@class="entry-content"]/p
         concat: "\n\n"
       Performers:
-        Name: //a[@rel="tag" and contains(@href,"/models/")]/text()
+        Name: //a[@rel="tag" and contains(@href,"/models/")]
       Tags:
-        Name: //a[@rel="tag" and not(contains(@href,"/models/"))]/text()
-      Image:
-        selector: $platform/img/@src
+        Name: //a[@rel="tag" and not(contains(@href,"/models/"))]
+      Image: $platform/img/@src
       Studio:
         Name:
           fixed: "FrolicMe"
-
-# Last Updated January 19, 2024
+driver:
+  # Only needs CDP because the server returns status code 403
+  # even when it should be returning 200 for a normal page
+  useCDP: true
