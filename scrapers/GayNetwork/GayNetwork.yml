@@ -44,6 +44,7 @@ sceneByURL:
       - universblack.com/en/videos/detail/
       - viktor-rom.com/en/videos/detail/
       - vintagegaymovies.com/en/videos/detail/
+      - wantonboy.com/en/videos/detail/
       - wurstfilm.com/en/videos/detail/
 
 groupByURL:
@@ -96,7 +97,7 @@ xPathScrapers:
     scene:
       Title: //h1
       Details: //h2
-      URL: &url //link[@rel="alternate" and hreflang="en"]/@href
+      URLs: &url //link[@rel="alternate" and @hreflang="en"]/@href
       Date: &date
         selector: //script[@type="application/ld+json"]/text()
         postProcess:
@@ -118,7 +119,7 @@ xPathScrapers:
             - replace:
                 - regex: DVD:\s*
                   with:
-        URL:
+        URLs:
           selector: //div[@class="row mb-4 px-0"]//a[h3[i[contains(@class, "fa-scrubber")]]]/@href | //link[//div[@class="row mb-4 px-0"]//a[h3[i[contains(@class, "fa-scrubber")]]]/@href and @rel="alternate" and @hreflang="en"]/@href
           concat: __SEPARATOR__
           postProcess:
@@ -134,13 +135,13 @@ xPathScrapers:
                   with: $2$1
             - subScraper: &dvdCover //div[@class="col-sm-8 col-lg-3 pt-4 px-0 px-lg-2 align-items-center"]//img/@src
       Performers:
-        Name: //div[contains(@class, "models-list-img")]//a
+        Name: //div[contains(@class, "row d-flex justify-content-center text-light")]/a//img/@alt
       Tags:
         Name: //div[@class="row mb-4 px-0"]//h3[not(i)]
   movieScraper:
     group:
       Name: //h1
-      URL: *url
+      URLs: *url
       Synopsis: //div[@class="mb-2 bg-light p-3 my-3 text-justify my-text psm-rounded"]
       FrontImage: *dvdCover
       Date: *date
