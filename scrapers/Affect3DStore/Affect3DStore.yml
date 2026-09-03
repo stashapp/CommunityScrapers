@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=../validator/scraper.schema.json
+name: Affect3DStore
+sceneByURL:
+  - action: script
+    url:
+      - affect3dstore.com
+    script:
+      - python
+      - Affect3DStore.py
+      - scene-by-url
+# Last Updated September 3, 2026
