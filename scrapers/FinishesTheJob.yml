@@ -12,33 +12,33 @@ xPathScrapers:
     common:
       $content: //main//div[contains(@class,"col")]
     scene:
-      Title: $content/h1/text()
+      Title: $content/h1[@itemprop="name"]/text() | $content/h1/span[@itemprop="name"]/text()
       Details: $content/p[2]/text()
       # only works when url is from finishesthejob.com
       Date:
         selector: $content/meta[@itemprop="uploadDate"]/@content
         postProcess:
           - replace:
-            - regex: "^(.+?)T.*"
-              with: $1
+              - regex: "^(.+?)T.*"
+                with: $1
           - parseDate: "2006-01-02"
       Performers:
-        Name: $content/h3/a/text()
+        Name: $content/h2[contains(., "Starring")]/a/text() | $content/h3[contains(., "Starring")]/a/text()
       Tags:
         Name: $content/p/a/text()
       Image:
         selector: //video/@poster
         postProcess:
           - replace:
-            - regex: (.+scenes\/)([a-z]+)(.+)
-              with: https://www.$2.com$1$2$3
+              - regex: (.+scenes\/)([a-z]+)(.+)
+                with: https://www.$2.com$1$2$3
       Studio:
-        Name: 
-          selector: $content/h2/text()
+        Name:
+          selector: $content/h1/small/text() | $content/h2[contains(., "Presented By")]/text()
           postProcess:
             - replace:
-              - regex: "Presented By: "
-                with: ""
-      URL: //link[@rel='canonical']/@href
-
-# Last Updated October 19, 2023
+                - regex: \sPresents.*
+                  with: ""
+                - regex: "Presented By:\\s*"
+                  with: ""
+      URLs: //link[@rel='canonical']/@href
