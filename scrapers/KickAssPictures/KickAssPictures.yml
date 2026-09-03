@@ -1,0 +1,111 @@
+name: Kick Ass Pictures
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - kickass.com/guest/video/
+      - aloadineveryhole.com/guest/video/
+      - barefootconfidential.com/guest/video/
+      - black-jelly.com/guest/video/
+      - chica-boom.com/guest/video/
+      - epichandjobs.com/guest/video/
+      - kickasspussypump.com/guest/video/
+      - 2blackmen4her.com/guest/video/
+      - milfdoesabonergood.com/guest/video/
+      - nakedgirlssmoking.com/guest/video/
+      - revengeisabitch.com/guest/video/
+      - babeswithglasses.com/guest/video/
+      - stoporillsquirt.com/guest/video/
+      - kickassteens.com/guest/video/
+      - ultracuckolds.com/guest/video/
+      - 10mancumslam.com/guest/video/
+      - organicshemales.com/guest/video/
+      - 5-guy-cream-pie.com/guest/video/
+    scraper: sceneScraper
+galleryByURL:
+  - action: scrapeXPath
+    url:
+      - kickass.com/guest/photoset/
+      - aloadineveryhole.com/guest/photoset/
+      - barefootconfidential.com/guest/photoset/
+      - black-jelly.com/guest/photoset/
+      - chica-boom.com/guest/photoset/
+      - epichandjobs.com/guest/photoset/
+      - kickasspussypump.com/guest/photoset/
+      - 2blackmen4her.com/guest/photoset/
+      - milfdoesabonergood.com/guest/photoset/
+      - nakedgirlssmoking.com/guest/photoset/
+      - revengeisabitch.com/guest/photoset/
+      - babeswithglasses.com/guest/photoset/
+      - stoporillsquirt.com/guest/photoset/
+      - kickassteens.com/guest/photoset/
+      - ultracuckolds.com/guest/photoset/
+      - 10mancumslam.com/guest/photoset/
+      - organicshemales.com/guest/photoset/
+      - 5-guy-cream-pie.com/guest/photoset/
+    scraper: galleryScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - kickass.com/guest/model/
+      - aloadineveryhole.com/guest/model/
+      - barefootconfidential.com/guest/model/
+      - black-jelly.com/guest/model/
+      - chica-boom.com/guest/model/
+      - epichandjobs.com/guest/model/
+      - kickasspussypump.com/guest/model/
+      - 2blackmen4her.com/guest/model/
+      - milfdoesabonergood.com/guest/model/
+      - nakedgirlssmoking.com/guest/model/
+      - revengeisabitch.com/guest/model/
+      - babeswithglasses.com/guest/model/
+      - stoporillsquirt.com/guest/model/
+      - kickassteens.com/guest/model/
+      - ultracuckolds.com/guest/model/
+      - 10mancumslam.com/guest/model/
+      - organicshemales.com/guest/model/
+      - 5-guy-cream-pie.com/guest/model/
+    scraper: performerScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //h1[@class="video-page-title"]
+      Code:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: .*[?&]id=(\d+).*
+                with: $1
+      Details: //p[@class="video-description"]
+      Date:
+        selector: //p[@class="video-publish-date"]
+        postProcess:
+          - parseDate: "January 2, 2006"
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
+      Performers:
+        Name: //div[@class="video-meta-info"]//a[@class="meta-value"]
+      Image: //video[@id="preview-video"]/@poster
+      URL: //link[@rel="canonical"]/@href
+  galleryScraper:
+    gallery:
+      Title: //h1[@class="photoset-title"]
+      Studio:
+        Name: //meta[@property="og:site_name"]/@content
+      Performers:
+        Name: //h1[@class="photoset-title"]
+      URL: //link[@rel="canonical"]/@href
+  performerScraper:
+    performer:
+      Name: //h1[@class="model-name"]
+      Height:
+        selector: //span[@class="bio-label" and contains(text(),"Height")]/following-sibling::span[@class="bio-value"]
+        postProcess:
+          - feetToCm: true
+      Measurements: //span[@class="bio-label" and contains(text(),"Bra")]/following-sibling::span[@class="bio-value"]
+      Ethnicity: //span[@class="bio-label" and contains(text(),"Ethnicity")]/following-sibling::span[@class="bio-value"]
+      Image: //div[@class="model-photo"]/img/@src
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
