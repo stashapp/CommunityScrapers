@@ -13,25 +13,19 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
+from Altwolia.utilities import append_scene_number, append_studio_name
 
 from py_common import log
 from py_common.util import dig, replace_all, scraper_args
+
 
 FALLBACK_STUDIO = "Fisting Inferno"
 
 
 def fistinginferno(obj: Any, api_object: dict[str, Any]) -> Any:
-    if studio_name := dig(api_object, "mainChannel", "name"):
-        return replace_all(
-            obj,
-            "studio",
-            lambda s: {
-                **s,
-                "name": studio_name,
-                "parent": {"name": FALLBACK_STUDIO},
-            },
-        )
-    return replace_all(obj, "studio", lambda s: {**s, "name": FALLBACK_STUDIO})
+    obj = append_studio_name(obj, api_object, fallback=FALLBACK_STUDIO)
+    obj = append_scene_number(obj, api_object)
+    return obj
 
 
 if __name__ == "__main__":
