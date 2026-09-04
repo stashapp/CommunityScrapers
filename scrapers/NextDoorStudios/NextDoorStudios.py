@@ -25,6 +25,10 @@ site_map = {
 
 def determine_studio(api_object: dict[str, Any]) -> str | None:
     available_on_site = api_object.get("availableOnSite", [])
+    if api_object.get("studio_name") == "Next Door Studios":
+        movie_title = api_object.get("movie_title")
+        if isinstance(movie_title, str) and movie_title.startswith("NDE - "):
+            return "Next Door Ebony"
     site_match = next((site for site in site_map if site in available_on_site), None)
     return site_map.get(site_match) if site_match else None
 
