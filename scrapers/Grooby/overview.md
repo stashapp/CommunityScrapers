@@ -17,3 +17,6 @@ Scraper has been tested on 2026-09-04
 | Ladyboy                | https://www.ladyboy.xxx/tour/trailers/Hot-And-Horny-Ae-.html                               |
 | TGirls                 | https://www.tgirls.xxx/tour/trailers/Kalena-Rios-Fucks-Rafa.html                           |
 | TGirlSex               | https://www.tgirlsex.xxx/tour/trailers/Ririca-The-Sex-Machine.html                         |
+| Futa                   | https://www.futa.xxx/tour/trailers/Crazy-Bar-Sluts.html                                    |
+| Jamie Kelly XXX        | https://www.jamiekellyxxx.com/tour/trailers/Trans6uals-2-PT-3-of-3.html                    |
+| T.Porn                 | https://www.t.porn/tour/trailers/Wendywilliams-Wendyrandall.html                           |
