@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - corbinfisher.com/sfw/trailers
+      - corbinfisher.com/tour/trailers
     scraper: sceneScraper
 
 performerByURL:
@@ -33,11 +34,8 @@ xPathScrapers:
           - replace:
               - regex: <br\s*\/?> 
                 with: "\n"
-      # Intentionally disabled
-      # https://github.com/stashapp/CommunityScrapers/pull/2496
-      # https://discourse.stashapp.cc/t/sfw-vs-nsfw-covers/3712
-      # Image:
-      #   selector: //img[@height="815"]/@src0_1x
+      Image:
+        selector: //img[@height="815"]/@src0_1x
       Studio:
         Name:
           fixed: Corbin Fisher
