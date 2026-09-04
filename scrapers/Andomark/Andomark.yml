@@ -148,6 +148,14 @@ sceneByURL:
       - yummysofie.com/access/scenes/
       - yummywomen.com/access/scenes/
     scraper: proSceneWithImgFallbackScraper
+  - action: scrapeXPath
+    url:
+      - gotcuffs.com/vod/scenes/
+    scraper: vodSceneScraper
+  - action: scrapeXPath
+    url:
+      - glosstightsglamour.com/vod/scenes/
+    scraper: vodSceneDDMMScraper
 
 xPathScrapers:
   oldStyle:
@@ -208,7 +216,9 @@ xPathScrapers:
                 evolvedfights: Evolved Fights
                 feelmevr: FeelMeVR
                 furrychicks: Furry Chicks
+                glosstightsglamour: Gloss Tights Glamour
                 goonmuse: GoonMuse
+                gotcuffs: Got Cuffs
                 grannycumshere: Granny Cums Here
                 hollyhotwife: HollyHotWife
                 hotwiferio: Hot Wife Rio
@@ -395,6 +405,43 @@ xPathScrapers:
               - regex: /access/scenes/
                 with: /updates/
           - subScraper: *image
+  vodSceneScraper:
+    common:
+      # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
+      $excludeUpdates: &vodExcludeUpdates not(ancestor::*[contains(@class, "category_listing_block")])
+    scene:
+      Title: &vodTitle //div[@class="title_bar"]/span
+      Date:
+        selector: //div[contains(@class, "update_date") and $excludeUpdates]
+        postProcess: *datePostProcess
+      Details: &vodDetails //span[@class="update_description"]
+      Performers:
+        Name: &vodPerformersName //span[@class="update_models" and $excludeUpdates]/a
+      Tags:
+        Name: &vodTagsName //*[@class="update_tags" and $excludeUpdates]/a
+      Studio: &vodStudio
+        Name:
+          selector: //base/@href
+          postProcess: *studioPostProcess
+      Image: &vodImage //meta[@property="og:image"]/@content
+  # Same template as vodSceneScraper, but this operator renders dates
+  # DD/MM/YYYY instead of the MM/DD/YYYY the rest of this family uses
+  vodSceneDDMMScraper:
+    common:
+      $excludeUpdates: *vodExcludeUpdates
+    scene:
+      Title: *vodTitle
+      Date:
+        selector: //div[contains(@class, "update_date") and $excludeUpdates]
+        postProcess:
+          - parseDate: 02/01/2006
+      Details: *vodDetails
+      Performers:
+        Name: *vodPerformersName
+      Tags:
+        Name: *vodTagsName
+      Studio: *vodStudio
+      Image: *vodImage
 driver:
   headers:
     - Key: "User-Agent"

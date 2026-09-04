@@ -68,4 +68,6 @@ Scraper has been tested on 2026-08-31
 | Yummygirlz               | https://yummygirlz.com/updates/YummygirlzRandi02-2.html                                                                      |
 | YummyPornClub            | https://yummypornclub.com/updates/YummyPornClubKATIEKOX-HCPBM0526.html                                                       |
 | Yummywomen               | https://yummywomen.com/updates/Shauna-Stream.html                                                                            |
+| Got Cuffs                | https://gotcuffs.com/vod/scenes/riley-jane-play-time_vids.html                                                               |
+| Gloss Tights Glamour     | https://www.glosstightsglamour.com/vod/scenes/rose-in-blue-dress-and-black-glossy-tights-vid_vids.html                       |
 | Yum Sofie                | https://yummysofie.com/scenes/SofieMarieXXXSMWhiteSheerBandeau457_highres.html                                               |
