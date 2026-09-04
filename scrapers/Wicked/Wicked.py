@@ -17,22 +17,22 @@ from py_common import log
 from py_common.util import scraper_args
 
 
-def bskow(obj: Any, api_object: dict[str, Any]) -> Any:
+def wicked(obj: Any, api_object: dict[str, Any]) -> Any:
     return append_scene_number(obj, api_object)
 
 
 if __name__ == "__main__":
     op, args = scraper_args()
-    site = "bskow"
+    site = "wicked"
     log.debug(f"args: {args}")
 
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, site, postprocess=bskow)
+            result = scene_from_url(url, site, postprocess=wicked)
         case "scene-by-name", {"name": name} if name:
-            result = scene_search(name, site, postprocess=bskow)
+            result = scene_search(name, site, postprocess=wicked)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            result = scene_from_fragment(args, site, postprocess=bskow)
+            result = scene_from_fragment(args, site, postprocess=wicked)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, site)
         case "performer-by-fragment", args:
