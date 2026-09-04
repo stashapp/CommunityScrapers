@@ -1,5 +1,7 @@
 import re
 from typing import Any
+from py_common.util import dig, replace_all
+
 
 def append_scene_number(
     obj: dict[str, Any],
@@ -15,3 +17,18 @@ def append_scene_number(
         obj["title"] = f"{title}{separator}Scene {int(match.group(1))}"
 
     return obj
+
+
+def append_studio_name(obj: Any, api_object: dict[str, Any], fallback: str) -> Any:
+    if studio_name := dig(api_object, "mainChannel", "name"):
+        return replace_all(
+            obj,
+            "studio",
+            lambda s: {
+                **s,
+                "name": studio_name,
+                "parent": {"name": fallback},
+            },
+        )
+    return replace_all(obj, "studio", lambda s: {**s, "name": fallback})
+
