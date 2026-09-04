@@ -11,13 +11,13 @@ xPathScrapers:
         selector: //div[@class="vid-title clearfix text-center-mobile"]/h1
         postProcess:
           - replace:
-            - regex: .+\"([^\"]+)\"
-              with: $1
+              - regex: .+\"([^\"]+)\"
+                with: $1
       Date:
         selector: //span[contains(@class, "released title")]/strong/text()
         postProcess:
           - parseDate: Jan 2, 2006
-      Details: //div[@class="col-md-9 col-sm-8 clearfix"]/p
+      Details: //div[@class="col-md-9 col-sm-8 clearfix"]/div[@class="video_text"]
       Performers:
         Name: //span[@class="feature title"]//a
       Image:
@@ -29,4 +29,3 @@ xPathScrapers:
       Studio:
         Name:
           fixed: Heavy On Hotties
-# Last Updated April 21, 2024
