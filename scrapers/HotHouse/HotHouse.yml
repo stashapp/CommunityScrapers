@@ -6,27 +6,25 @@ sceneByURL:
       - hothouse.com/en/video
     script:
       - python
-      - ../Altwolia/scrape.py
+      - HotHouse.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - HotHouse.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - hothouse
+    - HotHouse.py
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - hothouse
+    - HotHouse.py
     - scene-by-query-fragment
 groupByURL:
   - action: script
@@ -34,20 +32,19 @@ groupByURL:
       - hothouse.com/en/movie/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - HotHouse.py
       - movie-by-url
 performerByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - HotHouse.py
     - performer-by-fragment
 performerByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - hothouse
+    - HotHouse.py
     - performer-by-name
 performerByURL:
   - action: script
@@ -55,5 +52,5 @@ performerByURL:
       - hothouse.com/en/pornstar/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - HotHouse.py
       - performer-by-url
