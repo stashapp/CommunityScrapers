@@ -1,3 +1,8 @@
+# hegre.com renders page text (titles, details, performer bio labels) in a
+# locale auto-detected from the requester's IP, not from any cookie sent back
+# so only an explicit ?locale=en query param forces English
+#
+#  Every entry point below forces it so results don't depend on where Stash is hosted
 name: Hegre
 sceneByURL:
   - action: scrapeXPath
@@ -6,31 +11,43 @@ sceneByURL:
       - hegre.com/films
       - hegre.com/massage
       - hegre.com/sexed
+    queryURL: "{url}"
+    queryURLReplace: &forceEnglish
+      url:
+        - regex: \?.*$
+          with: ""
+        - regex: $
+          with: "?locale=en"
     scraper: sceneScraper
 
 sceneByName:
   action: scrapeXPath
-  queryURL: "https://www.hegre.com/?types=Film&q={}"
+  queryURL: "https://www.hegre.com/?types=Film&q={}&locale=en"
   scraper: sceneSearch
 
 sceneByQueryFragment:
   action: scrapeXPath
   queryURL: "{url}"
+  queryURLReplace: *forceEnglish
   scraper: sceneScraper
 
 galleryByURL:
   - action: scrapeXPath
     url:
       - hegre.com
+    queryURL: "{url}"
+    queryURLReplace: *forceEnglish
     scraper: galleryScraper
 performerByURL:
   - action: scrapeXPath
     url:
       - hegre.com
+    queryURL: "{url}"
+    queryURLReplace: *forceEnglish
     scraper: performerScraper
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.hegre.com/?q={}&types=Model
+  queryURL: https://www.hegre.com/?q={}&types=Model&locale=en
   scraper: performerSearch
 
 xPathScrapers:
