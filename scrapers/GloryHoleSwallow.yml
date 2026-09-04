@@ -11,8 +11,11 @@ sceneByURL:
     queryURL: "{url}"
     queryURLReplace:
       url:
+        # SpyTug doesn't use the /tour/ segment
+        - regex: spytug\.com\/members\/scenes\/(.*)_vids\.html
+          with: spytug.com/trailers/$1.html
         - regex: \/members\/scenes\/(.*)_vids\.html
-          with: /tour/trailers/$1.html 
+          with: /tour/trailers/$1.html
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -44,8 +47,8 @@ xPathScrapers:
         postProcess:
           # Spytug only studio that uses full path for images, so remove
           - replace:
-            - regex: https:\/\/spytug.com\/SEP
-              with: ""
+              - regex: https:\/\/spytug.com\/SEP
+                with: ""
           # Base for Gloryhole swallow includes /tour, which is also included in partial image path, remove this duplicate and sepertor
           - replace:
               - regex: \/tour\/SEP
@@ -54,7 +57,7 @@ xPathScrapers:
           - replace:
               - regex: \/SEP
                 with: ""
-          
+
       Studio:
         Name:
           selector: //base/@href
@@ -67,5 +70,4 @@ xPathScrapers:
                 gloryholeswallow: Gloryhole Swallow
                 spytug: SpyTug
                 cumclinic: CumClinic
-      URL: //link[@rel='canonical']/@href
-# Last Updated July 2, 2026
+      URLs: //link[@rel='canonical']/@href
