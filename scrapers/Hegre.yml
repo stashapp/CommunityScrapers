@@ -36,8 +36,7 @@ performerByName:
 xPathScrapers:
   sceneSearch:
     scene:
-      Title:
-        selector: //a[@class='open-in-content-overlay']/@title
+      Title: //a[@class='open-in-content-overlay']/@title
       Date:
         selector: //a[@class='open-in-content-overlay']//div[@class='details']/span[last()]/text()
         postProcess:
@@ -45,31 +44,26 @@ xPathScrapers:
               - regex: (st|nd|rd|th)
                 with: ""
           - parseDate: Jan 2, 2006
-      URL:
+      URLs:
         selector: //a[@class='open-in-content-overlay']/@href
         postProcess:
           - replace:
               - regex: ^
                 with: "https://www.hegre.com"
-      Image:
-        selector: //a[@class='open-in-content-overlay']//div[@class='img-holder']//img/@data-src
+      Image: //a[@class='open-in-content-overlay']//div[@class='img-holder']//img/@data-src
 
   sceneScraper:
     common:
       $actor: //a[@class="record-model"]
     scene:
       Title: //meta[@property="og:title"]/@content
-      URL: //link[@hreflang="x-default"]/@href
+      URLs: //link[@hreflang="x-default"]/@href
       Details:
         selector: |
           //div[contains(@class,"film-subtitle")]/text()
           |//div[@class="record-details-column"]//div[contains(@class, "massage-")]//text()
           |//div[@class="film-header"]/div[@class="intro"]//text()
         concat: "\n\n"
-      Date:
-        selector: //span[@class="date"]/text()
-        postProcess:
-          - parseDate: January 2, 2006
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
@@ -131,8 +125,7 @@ xPathScrapers:
               - regex: ^
                 with: "01 "
           - parseDate: 02 January, 2006
-      Country:
-        selector: //span[@class="label"][contains(text(),"Country")]/following-sibling::span/text()
+      Country: //span[@class="label"][contains(text(),"Country")]/following-sibling::span/text()
       Height:
         selector: //span[@class="label"][contains(text(),"Height")]/following-sibling::span/text()
         postProcess:
@@ -157,4 +150,3 @@ xPathScrapers:
         concat: "\n\n"
       Tags:
         Name: //div[contains(@class,"details")]//div[contains(@class,"current-tags")]//a[contains(@class,"tag")]/text()
-# Last Updated October 28, 2025
