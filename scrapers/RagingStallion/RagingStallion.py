@@ -27,8 +27,8 @@ def append_scene_number(obj: Any, api_scene: dict[str, Any]) -> Any:
 
 
 def ragingstallion(obj: Any, api_object: dict[str, Any]) -> Any:
-    obj = append_scene_number(obj, api_object)
-    return replace_all(obj, "studio", lambda s: {**s, "name": "Raging Stallion"})
+    return append_scene_number(obj, api_object)
+
 
 if __name__ == "__main__":
     op, args = scraper_args()
