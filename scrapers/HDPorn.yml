@@ -16,10 +16,13 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: ^.+?url\('([^']+).+
-                with: http://hdporn.com/$1
+                with: $1
+              - regex: ^/web/(\d+im_/https?:.+)$
+                with: http://web.archive.org/web/$1
+              - regex: ^/
+                with: http://hdporn.com/
       Tags:
         Name: //div[@class="tagLinks"]/span/a
       Studio:
         Name:
           fixed: "HD Porn"
-# Last Updated March 23, 2024
