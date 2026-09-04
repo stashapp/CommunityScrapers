@@ -2,42 +2,19 @@ name: "HarmonyVision"
 sceneByURL:
   - action: scrapeXPath
     url:
-      - harmonyvision.com/scene
+      - harmonyvision.com/watch/
     scraper: sceneScraper
-
-groupByURL:
-  - action: scrapeXPath
-    url:
-      - harmonyvision.com/dvd
-      - harmonyvision.com/movie
-    scraper: movieScraper
-
 xPathScrapers:
   sceneScraper:
-    common:
-      $meta: //div[@class="meta"]
     scene:
-      Title: $meta//a[@class="title"]/text()
-      Details:
-        selector: //div[@class="content"]//div[contains(@class,'dscrp')]
-      Studio:
-        Name:
-          fixed: HarmonyVision
-      Performers:
-        Name: $meta/div/span[contains(.,"Featuring")]/../a/text()
-      Groups:
-        Name: $meta/div/span[contains(.,"Scene from")]/../a/text()
-  movieScraper:
-    group:
-      Name: //div[@class="info"]/div[contains(@class,"movie-title")]/text()
-      Synopsis:
-        selector: //div[@class="info"]/div[contains(@class,"description")]
+      Title: //div[@class="gqHeading"]/span[@class="gqText"]
+      Details: //div[@class="gqHeading"]/span[@class="gqSubtitle"]
+      Image:
+        selector: //div[@class="gqVideoPlayer"]/@style
         postProcess:
           - replace:
-              - regex: ^Description:\s*
-                with:
+              - regex: ^.*url\(([^)]+)\).*$
+                with: $1
       Studio:
         Name:
           fixed: HarmonyVision
-      FrontImage: //div[@class="content"]//div[@class="cover"]/img/@src
-# Last Updated November 02, 2020

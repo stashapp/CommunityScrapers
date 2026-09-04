@@ -3,12 +3,14 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - gasm.com/post/details/
+      - harmonyvision.com/post/details/
     scraper: sceneScraper
 groupByURL:
   - action: scrapeXPath
     url:
       - gasm.com/dvd/
       - gasm.com/movies/
+      - harmonyvision.com/movies/
     scraper: movieScraper
 xPathScrapers:
   sceneScraper:
@@ -22,15 +24,15 @@ xPathScrapers:
         postProcess:
           - parseDate: Jan 02, 2006
       Performers:
-        Name: $details/a[@class="tags"][starts-with(@href, '/models/')]
+        Name: $details/a[@class="tags"][contains(@href, '/models/')]
       Tags:
-        Name: $details/a[@class="tags"][starts-with(@href, '/search?s=')]/text()
+        Name: $details/a[@class="tags"][contains(@href, '/search?s=')]/text()
       Details:
         selector: $details/h2[@class="post_description"]/text()
       Groups:
         Name: $dvd/h1/a/text()
         FrontImage: $dvd/div[@class="post_image"]/a/img[@class="item_cover"]/@src
-        URL:
+        URLs:
           selector: $dvd/h1/a/@href
           postProcess:
             - replace:
@@ -38,7 +40,7 @@ xPathScrapers:
                   with: https://www.gasm.com
       # Image is not accessible from the /post page
       Studio:
-        Name: $details/a[@class="tags" and starts-with(@href, '/studio/profile/')]
+        Name: $details/a[@class="tags" and contains(@href, '/studio/profile/')]
   movieScraper:
     common:
       $details: //div[@class="post_details"]/div[@class="post_details_main"]
@@ -57,4 +59,3 @@ xPathScrapers:
           - parseDate: Jan 2, 2006
       Synopsis: $details/h2[@class="post_description"]
       FrontImage: //div[@class="post_details"]/div[@class="post_details_left"]/img[@class="item_cover"]/@src
-# Last Updated 2024-08-12
