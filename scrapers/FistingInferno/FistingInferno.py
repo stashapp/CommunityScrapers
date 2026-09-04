@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 from typing import Any
 
@@ -20,7 +21,7 @@ from py_common.util import dig, replace_all, scraper_args
 FALLBACK_STUDIO = "Fisting Inferno"
 
 
-def fistinginferno(obj: Any, api_object: dict[str, Any]) -> Any:
+def append_studio_name(obj: Any, api_object: dict[str, Any], fallback: str = FALLBACK_STUDIO) -> Any:
     if studio_name := dig(api_object, "mainChannel", "name"):
         return replace_all(
             obj,
@@ -28,10 +29,25 @@ def fistinginferno(obj: Any, api_object: dict[str, Any]) -> Any:
             lambda s: {
                 **s,
                 "name": studio_name,
-                "parent": {"name": FALLBACK_STUDIO},
+                "parent": {"name": fallback},
             },
         )
-    return replace_all(obj, "studio", lambda s: {**s, "name": FALLBACK_STUDIO})
+    return replace_all(obj, "studio", lambda s: {**s, "name": fallback})
+
+
+def append_scene_number(obj: Any, api_scene: dict[str, Any]) -> Any:
+    "Append the numeric clip-path suffix to a scene title when available."
+    if (title := obj.get("title")) and (
+        match := re.search(r"_(\d+)$", api_scene.get("clip_path", ""))
+    ):
+        obj["title"] = f"{title}, Scene {int(match.group(1))}"
+    return obj
+
+
+def fistinginferno(obj: Any, api_object: dict[str, Any]) -> Any:
+    obj = append_studio_name(obj, api_object, fallback=FALLBACK_STUDIO)
+    obj = append_scene_number(obj, api_object)
+    return obj
 
 
 if __name__ == "__main__":
