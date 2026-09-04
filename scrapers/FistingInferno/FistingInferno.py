@@ -16,7 +16,7 @@ from Altwolia.scrape import (
 from Altwolia.utilities import append_scene_number, append_studio_name
 
 from py_common import log
-from py_common.util import dig, replace_all, scraper_args
+from py_common.util import scraper_args
 
 
 FALLBACK_STUDIO = "Fisting Inferno"
