@@ -58,3 +58,6 @@ Scraper has been tested on 2026-08-29
 | Adult Time | Mother Fucker XXX      | https://motherfuckerxxx.com/en/video/motherfuckerxxx/40-More-Fucking-MILFs/58018                                                            |
 | Adult Time | Transsexual Roadtrip   | https://transsexualroadtrip.com/en/video/transsexualroadtrip/Filthy-Trans-Sluts/3500                                                        |
 | Adult Time | Girlfriends Films      | https://silviasaint.com/en/video/ATLGirlfriendsFilms-channel/Lesbian-Neighbor-Affairs-03---Scene-3/292325                                   |
+| Adult Time | My Teen Oasis          | https://myteenoasis.com/en/video/myteenoasis/After-School-Glazing/23316                                                                      |
+| Adult Time | Cumshot Oasis          | https://silverstonedvd.com/en/Pick-up-lines-52-Scene-06/scene/516                                                                            |
+| Adult Time | Girlsway               | https://squirtinglesbian.com/en/video/girlsway/Compromising-Positions/249906                                                                 |

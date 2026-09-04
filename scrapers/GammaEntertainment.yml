@@ -5,9 +5,6 @@ sceneByURL:
       - girlsandstuds.com/
       - jaysinxxx.com/
       - maledigital.com/en/video/
-      - myteenoasis.com/
-      - silverstonedvd.com/
-      - squirtinglesbian.com/en/video/
       - sunnyleone.com/
     scraper: sceneScraper
 
@@ -57,8 +54,12 @@ xPathScrapers:
         Name: $actors/a/text()|$actors//span[not(@class="actorSeparator")]/text()|//div[@class="sceneCol actors"]/a/text()|//span[@class="slide-title"]/text()|//a[@class="pornstarName"]/strong/text()|//p[@class="starringLinks"]/a/text()|//p[@class="p-actors"]/a/text()
       Groups:
         Name:
-          selector: $info/a/img/@title|//a[@class="sceneLink  "]/@title|//a[@class="dvdLink  "]/@title
-        URL:
+          selector: $info/a/img/@title|//a[@class="sceneLink  "]/@title|//a[@class="dvdLink  "]/@title|//script[contains(text(),"movieInfos")][1]/text()
+          postProcess:
+            - replace:
+                - regex: .+"movieInfos":\{"dvdId":\d+,"dvdName":"([^"]+)".+
+                  with: $1
+        URLs:
           selector: //link[@rel='canonical']/@href|$info/a/@href
           concat: "|"
           postProcess:
@@ -77,60 +78,20 @@ xPathScrapers:
                 with: $1?width=1920&height=1080&enlarge=true
       Studio:
         Name:
-          selector: //*[local-name()="div" or local-name()=p][contains(text(),"is a site owned and operated by Gamma")]|//meta[@name="twitter:domain"]/@content
+          selector: //*[local-name()="div" or local-name()=p][contains(text(),"is a site owned and operated by Gamma")]|//meta[@name="twitter:domain"]/@content|//script[contains(text(),"siteName")]/text()
           postProcess:
             - replace:
+                - regex: .+"siteName":"([^"]+)".+
+                  with: $1
                 - regex: ([^\.]+)\.com(\s+)is(.+)
                   with: $1
                 - regex: \.com$
                   with: ""
             - map:
-                activeduty: Active Duty
-                alettaoceanempire: Aletta Ocean Empire
-                allblackx: All Black X
-                analacrobats: Anal Acrobats
-                ashleyfires: Ashley Fires
-                bigfatcreampie: Big Fat Cream Pie
-                bskow: BsKow
-                bushybushy: Bushy Bushy
-                buttman: Buttman
-                cumshotoasis: Cumshot Oasis
-                currycreampie: Curry Creampie
-                darkx: DarkX
-                devonlee: Devon Lee
-                dylanryder: Dylan Ryder
-                eroticax: EroticaX
-                evilangel: Evil Angel
-                familycreep: Family Creep
-                gapingangels: Gaping Angels
                 girlsandstuds: Girls And Studs
-                grannyghetto: Granny Ghetto
                 jaysinxxx: Jay Sin XXX
-                jonnidarkkoxxx: Jonni Darkko XXX
-                lanesisters: Lane Sisters
-                lesbianfactor: Lesbian Factor
-                lesbianx: Lesbian X
-                lexingtonsteele: Lexington Steele
                 maledigital: Male Digital
-                maskurbate: Maskurbate
-                motherfuckerxxx: Mother Fucker XXX
-                myteenoasis: My Teen Oasis
-                openlife: Open Life
-                outofthefamily: Out Of The Family
-                pantypops: Panty Pops
-                povblowjobs: POV Blowjobs
-                povthis: POV This
-                silverstonedvd: Silverstone DVD
-                silviasaint: Silvia Saint
-                squirtalicious: Squirtalicious
-                squirtinglesbian: Squirting Lesbian
-                squirtingorgies: Squirting Orgies
-                strapattackers: Strap Attackers
                 sunnyleone: Sunny Leone
-                tittycreampies: Titty Creampies
-                transsexualangel: Transsexual Angel
-                transsexualroadtrip: Transsexual Roadtrip
-                xempire: XEmpire
 
   performerScraper:
     performer:
@@ -151,4 +112,3 @@ xPathScrapers:
         Name: //a[contains(@class, 'GA_Id_headerLogo')]/span[@class='linkMainCaption']/text()
       FrontImage: //a[@class='frontCoverImg']/@href
       BackImage: //a[@class='backCoverImg']/@href
-# Last Updated August 13, 2025
