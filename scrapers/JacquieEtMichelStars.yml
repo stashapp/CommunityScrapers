@@ -8,19 +8,17 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //meta[@property="og:title"]/@content
-      Details: //div[@class='section__movie-description']/p
-      Image: //video/@poster
+      Title: //h1[contains(@class,"content-detail__title")]
+      Details: //div[contains(@class,"content-detail__description")]
+      Image: //meta[@property="og:image"]/@content
       Date:
-        selector: //p[contains(.,'Published on')]
+        selector: //div[contains(@class,"content-detail__infos__el") and contains(.,"Publication date")]/p
         postProcess:
-          - parseDate: Published on 02/01/2006
+          - parseDate: January 2, 2006
       Performers:
-        Name: //h3[@class='top-stars_details_title']
+        Name: //li[contains(@class,"content-detail__tag")]/a[contains(@href,"/actors/")]
       Studio:
         Name:
           fixed: Jacquie et Michel Stars
       Tags:
-        Name: //li/a[contains(@href,'/categorie/')]
-
-# Last Updated May 14, 2024
+        Name: //li[contains(@class,"content-detail__tag")]/a[contains(@href,"/tags/")]
