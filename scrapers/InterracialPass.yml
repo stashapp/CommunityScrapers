@@ -13,8 +13,7 @@ xPathScrapers:
         selector: //div[@class="update-info-row"]/strong[contains(.,"Released")]/following-sibling::text()
         postProcess:
           - parseDate: January 2, 2006
-      Details:
-        selector: //h3[contains(.,"Description:")]/following-sibling::text()
+      Details: //h3[contains(.,"Description:")]/following-sibling::text()
       Tags:
         Name: //ul[@class="tags"]//a
       Performers:
@@ -28,4 +27,3 @@ xPathScrapers:
                 with: ""
       Studio:
         Name: //a[@class="navbar-brand"]
-# Last Updated June 06, 2021
