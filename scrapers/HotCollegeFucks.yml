@@ -70,33 +70,33 @@ xPathScrapers:
               - regex: ^
                 with: "0'"
           - feetToCm: true
-      Measurements: 
+      Measurements:
         selector: |
           //span[contains(text(),"COCK THICKNESS:")]/text()|
           //span[contains(text(),"COCK THICKNESS:")]/following-sibling::text()|
-          //span[contains(text(),"BREAST SIZE:")]/text()| 
+          //span[contains(text(),"BREAST SIZE:")]/text()|
           //span[contains(text(),"BREAST SIZE:")]/following-sibling::text() |
           //span[contains(text(),"HIP SIZE:")]/text()|
           //span[contains(text(),"HIP SIZE:")]/following-sibling::text()
         concat: ","
         postProcess:
-            - javascript: |
-                let pairs = [];
-                const values = value.split(",").map(v => v.trim()).filter(v => v);                
-                for(let i = 0; i < values.length; i += 2) {
-                  const label = values[i];
-                  const val = values[i+1];
-                  if(!val) continue;
-                  const firstPart = val.toLowerCase().charAt(0).toUpperCase() + val.toLowerCase().slice(1);
-                  if(label.includes("COCK THICKNESS:")) {
-                    return firstPart;
-                  }
-                  else {
-                    pairs.push(firstPart);
-                  }
+          - javascript: |
+              let pairs = [];
+              const values = value.split(",").map(v => v.trim()).filter(v => v);
+              for(let i = 0; i < values.length; i += 2) {
+                const label = values[i];
+                const val = values[i+1];
+                if(!val) continue;
+                const firstPart = val.toLowerCase().charAt(0).toUpperCase() + val.toLowerCase().slice(1);
+                if(label.includes("COCK THICKNESS:")) {
+                  return firstPart;
                 }
-                return pairs.join("-");
-      Circumcised:  
+                else {
+                  pairs.push(firstPart);
+                }
+              }
+              return pairs.join("-");
+      Circumcised:
         selector: //span[contains(text(),"CUT:")]/following-sibling::text() | //span[contains(text(),"COCK THICKNESS:")]/text()
         concat: ","
         postProcess:
@@ -109,12 +109,12 @@ xPathScrapers:
                 return "UNCUT"
               }
               return ""
-      Details:  
+      Details:
         selector: //div[@class="modelContent"]/node()
         concat: "\n"
         postProcess:
           - replace:
-              - regex: <br\s*\/?> 
+              - regex: <br\s*\/?>
                 with: "\n"
       Disambiguation:
         fixed: Hot College Fucks
@@ -143,21 +143,21 @@ xPathScrapers:
             - javascript: |
                 let pairs = [];
                 const values = value.split(",").map(v => v.trim()).filter(v => v);
-                
+
                 // Aggiungiamo subito il tag Hot College Fucks
                 pairs.push("Hot College Fucks");
-                
+
                 // Determiniamo il genere
                 const isMale = values.some(v => v.includes("COCK THICKNESS:"));
                 const isFemale = values.some(v => v.includes("BREAST SIZE:"));
-                
+
                 for(let i = 0; i < values.length; i += 2) {
                   const label = values[i];
                   const val = values[i+1];
                   if(!val) continue;
-                  
+
                   const firstPart = val.toLowerCase().charAt(0).toUpperCase() + val.toLowerCase().slice(1);
-                  
+
                   // Tag comuni a entrambi i generi
                   if(label.includes("EYES:")) {
                     pairs.push(firstPart + " Eyes");
@@ -182,7 +182,7 @@ xPathScrapers:
                     };
                     pairs.push(bodyTypes[val.trim().toUpperCase()] || firstPart);
                   }
-                  
+
                   // Tag specifici per uomini
                   if(isMale) {
                     if(label.includes("AGE:") && !values.some(v => v.includes("CUT:"))) {
@@ -195,7 +195,7 @@ xPathScrapers:
                       pairs.push(firstPart + " Dick");
                     }
                   }
-                  
+
                   // Tag specifici per donne
                   if(isFemale) {
                     if(label.includes("BREAST SIZE:")) {
