@@ -14,74 +14,51 @@ sceneByURL:
 xPathScrapers:
   movieScraper:
     group:
-      Name: //h1[contains(@class,"video-detail__title")]
-      Director: 
-        selector: //li[contains(@class,"video-detail__info") and contains(.,'Director:')]
+      Name: //h1[contains(@class,"content-detail__title")]
+      Director:
+        selector: //li[contains(@class,"content-detail__info") and contains(.,'Director')]
         postProcess:
           - replace:
-            - regex: "^Director:"
-              with: 
+              - regex: '^Director\s*:\s*'
+                with:
       Duration:
-        selector: //li[contains(@class,"video-detail__info") and contains(.,'Duration:')]
+        selector: //li[contains(@class,"content-detail__info") and contains(.,'Duration')]
         postProcess:
           - replace:
-            - regex: "^Duration:"
-              with: 
-            - regex: " min.+"
-              with: ":00"
+              - regex: '^Duration\s*:\s*'
+                with:
+              - regex: " min.*"
+                with: ":00"
       Date:
         selector: //script[contains(.,"datePublished")]
         postProcess:
           - replace:
-            - regex: ^.+datePublished":\s*"(\d\d\d\d-\d\d-\d\d).+$
-              with: $1
-      Synopsis:
-        selector: //div[contains(@class,"video-detail__description")]//text()
+              - regex: ^.+datePublished":\s*"(\d\d\d\d-\d\d-\d\d).+$
+                with: $1
+      Synopsis: //div[contains(@class,"content-detail__description")]
       Studio:
-        Name: //li[contains(@class,"video-detail__info")]/strong[contains(.,'Studio:')]/following-sibling::a
-      FrontImage: //img[contains(@class,"video-detail__poster__img")]/@src | //img[contains(@class,"video-player__poster__img")]/@data-src
+        Name:
+          fixed: Jacquie et Michel Elite
+      FrontImage: //meta[@property="og:image"]/@content
   sceneScraper:
     scene:
-      Title: 
-        selector: //h1[contains(@class,"video-detail__title")]
-      Details:
-        selector: //div[contains(@class,"video-detail__description")]//text()
+      Title: //h1[contains(@class,"content-detail__title")]
+      Details: //div[contains(@class,"content-detail__description")]
       Date:
         selector: //script[contains(.,"datePublished")]
         postProcess:
           - replace:
-            - regex: ^.+datePublished":\s*"(\d\d\d\d-\d\d-\d\d).+$
-              with: $1
-      Image: 
-        selector: //div[contains(@class,"video-detail__handler")]/@style | //img[@id="video-player-poster"]/@src
-        postProcess:
-          - replace:
-            - regex: ^[^']*'([^']*).*
-              with: $1
-      Studio:
-        Name: //li[contains(@class,"video-detail__info")]/strong[contains(.,'Studio:')]/following-sibling::a
-      Director:
-        selector: //li[contains(@class,"video-detail__info") and contains(.,'Director:')]
-        postProcess:
-          - replace:
-            - regex: "^Director:"
-              with: 
-      Performers:
-        Name: //p[contains(@class,"actor-item__title")]
-      Groups:
-        Name: 
-          selector: //a[contains(@class,"video-detail__poster")]/@href
-          postProcess:
-            - replace:
-              - regex: .+?([^/]+)\.html
+              - regex: ^.+datePublished":\s*"(\d\d\d\d-\d\d-\d\d).+$
                 with: $1
-              - regex: "-"
-                with: " "
-        URL: 
-          selector: //a[contains(@class,"video-detail__poster")]/@href
-          postProcess:
-            - replace:
-              - regex: ^
-                with: https://www.jacquieetmichelelite.com 
-
-# Last Updated May 5, 2025
+      Image: //meta[@property="og:image"]/@content
+      Studio:
+        Name:
+          fixed: Jacquie et Michel Elite
+      Director:
+        selector: //li[contains(@class,"content-detail__info") and contains(.,'Director')]
+        postProcess:
+          - replace:
+              - regex: '^Director\s*:\s*'
+                with:
+      Performers:
+        Name: //div[contains(@class,"actor-item__title")]
