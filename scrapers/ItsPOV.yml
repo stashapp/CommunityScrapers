@@ -2,14 +2,7 @@ name: It's POV
 sceneByURL:
   - action: scrapeXPath
     url:
-      - backdoorpov.com/videos
-      - feetishpov.com/videos
-      - intimatepov.com/videos
       - itspov.com/videos
-      - officepov.com/videos
-      - petitepov.com/videos
-      - schoolpov.com/videos
-      - steppov.com/videos
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -19,15 +12,14 @@ xPathScrapers:
       Title: /html/head/meta[@property="og:title"]/@content
       Details: /html/head/meta[@name="description"]/@content
       Date:
-        selector: //span[@class="publish_date"]/text()
+        selector: //span[@class="publish_date"]
         postProcess:
           - parseDate: January 2, 2006
       Performers:
-        Name: $scene/div[@class="player"]/div[@class="actress"]/a/text()
+        Name: $scene/div[@class="player"]/div[@class="actress"]/a
       Image:
         selector: $scene/div[@class="player"]//picture/source[last()]/@data-srcset
         postProcess:
           - replace:
-            - regex: (.+1x, )(.+)( 2x)
-              with: $2
-# Last Updated October 28, 2025
+              - regex: (.+1x, )(.+)( 2x)
+                with: $2
