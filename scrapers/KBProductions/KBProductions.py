@@ -55,6 +55,7 @@ studio_map = {
     "inkedpov.com": "Inked POV",
     "inserted.com": "Inserted",
     "jav888.com": "JAV888",
+    "tour.javhub.com": "JavHub",
     "jizzaddiction.com": "Jizz Addiction",
     "joeschmoevideos.com": "Joe Schmoe Videos",
     "labelladx.com": "La BellaDX",

@@ -1,6 +1,6 @@
 name: KB Productions
 # requires: py_common
-# scrapes: 2 Girls 1 Camera, AD4X, All Anal, Alt Erotic, Amazing Films, Anal Jesse, Anal Only, Beddable Boys, Bemefi, Benefit Monkey, Best Bareback, Big Gulp Girls, BJ Raw, Black Bull Challenge, Bopping Babes, Cannon Productions, Collective Corruption, Come Inside, CosplayXGirls, Cougar Season, Creampie Thais, Darkshade, Deepthroat Sirens, DickHDDaily, Dire Desires, Dirty Auditions, Divine-DD, DoggVision, Downblouse Jerk, DripDrip, Edward James, Emo Twinks, Exposed Emos, Facials Forever, FantasyPOV, FreakMob Hardcore, FreakMob Media, Gogo Bar Auditions, GoGo World Porn, Got Filled, HardWerk, Hoby Buchanon, Homo Emo, Homo Scene, Inked POV, Inserted, JAV888, Jizz Addiction, Joe Schmoe Videos, La BellaDX, Lady Sonia, Legendary X, LezKey, Lil D's Playhouse, Lingerie Tales, Lollipop Twinks, LucidFlix, Luke CooperX, Macho Factory, Mean Feet Fetish, Milflicious, Monger In Asia, Nick Marxx, Nikki Zee, Nylon Perv, Nympho, NYSeed, PassionPOV, Pervect, Pounded Petite, POV Perv, QueerCrush, Real Bikini Girls, Red-XXX, Ricky's Room, S3XUS, Seska, Severe Sex Films, SexTapes, Sexy Modern Bull, She's Brand New, SheHerGirls, SIDECHICK, Suck This Dick, Swallowed, Thai Girls Wild, The ArtemiXXX, Top Web Models, ToughLoveX, Trashy Never Classy, True Anal, Twink Light, TWM Classics, TWM Interviews, Upskirt Jerk, VRHush, Wank It Now, Xful, XXX Tryout, Yes Girlz, Yummy Couple, Z-Filmz
+# scrapes: 2 Girls 1 Camera, AD4X, All Anal, Alt Erotic, Amazing Films, Anal Jesse, Anal Only, Beddable Boys, Bemefi, Benefit Monkey, Best Bareback, Big Gulp Girls, BJ Raw, Black Bull Challenge, Bopping Babes, Cannon Productions, Collective Corruption, Come Inside, CosplayXGirls, Cougar Season, Creampie Thais, Darkshade, Deepthroat Sirens, DickHDDaily, Dire Desires, Dirty Auditions, Divine-DD, DoggVision, Downblouse Jerk, DripDrip, Edward James, Emo Twinks, Exposed Emos, Facials Forever, FantasyPOV, FreakMob Hardcore, FreakMob Media, Gogo Bar Auditions, GoGo World Porn, Got Filled, HardWerk, Hoby Buchanon, Homo Emo, Homo Scene, Inked POV, Inserted, JAV888, JavHub, Jizz Addiction, Joe Schmoe Videos, La BellaDX, Lady Sonia, Legendary X, LezKey, Lil D's Playhouse, Lingerie Tales, Lollipop Twinks, LucidFlix, Luke CooperX, Macho Factory, Mean Feet Fetish, Milflicious, Monger In Asia, Nick Marxx, Nikki Zee, Nylon Perv, Nympho, NYSeed, PassionPOV, Pervect, Pounded Petite, POV Perv, QueerCrush, Real Bikini Girls, Red-XXX, Ricky's Room, S3XUS, Seska, Severe Sex Films, SexTapes, Sexy Modern Bull, She's Brand New, SheHerGirls, SIDECHICK, Suck This Dick, Swallowed, Thai Girls Wild, The ArtemiXXX, Top Web Models, ToughLoveX, Trashy Never Classy, True Anal, Twink Light, TWM Classics, TWM Interviews, Upskirt Jerk, VRHush, Wank It Now, Xful, XXX Tryout, Yes Girlz, Yummy Couple, Z-Filmz
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -53,6 +53,7 @@ sceneByURL:
       - inserted.com/tour/videos
       - inserted.com/videos
       - jav888.com/videos
+      - tour.javhub.com/videos
       - jizzaddiction.com/scenes
       - joeschmoevideos.com/scenes
       - johnnyrapid.com/videos
@@ -148,6 +149,7 @@ performerByURL:
       - inserted.com/models
       - inserted.com/tour/models
       - jav888.com/models
+      - tour.javhub.com/models
       - labelladx.com/model
       # lady-sonia.com has no model pages
       - lezkey.com/models
