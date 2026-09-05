@@ -15,7 +15,12 @@ xPathScrapers:
     common:
       $script: //script[@type="application/ld+json"]/text()
     scene:
-      Details: //h2[@class="content__desc"]
+      Details:
+        selector: $script
+        postProcess:
+          - replace:
+              - regex: .+"description":"([^"]+)".+
+                with: $1
       Performers:
         Name: //div[@class="content-info"]/a
       Image:
@@ -31,14 +36,13 @@ xPathScrapers:
               - regex: .+datePublished":"([^"]+)",.+
                 with: $1
           - parseDate: "2006-01-02T15:04:05-07:00"
-      Title:
-        selector: //h1[@class="content__title"]
+      Title: //h1[@class="title"]
       Tags:
-        Name: //div[@class="content-desc"]//a
+        Name: //section[contains(@class,"adaptive-page-video__categories")]//a/@title
       Studio:
         Name:
           fixed: JavHD
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
 
     performer:
       Name: //h1
@@ -60,4 +64,3 @@ xPathScrapers:
       Weight: //strong[contains(., "Weight")]/following-sibling::*
       Ethnicity: //strong[contains(., "Ethnicity")]/following-sibling::*
       FakeTits: //strong[contains(., "Breast factor")]/following-sibling::*
-# Last Updated September 17, 2025
