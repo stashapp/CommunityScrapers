@@ -3,29 +3,37 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - houseofgord.com/d
+    queryURL: "{url}"
+    queryURLReplace:
+      # Age-gate acceptance is tracked server-side against the session cookie,
+      # not just readable from a static client cookie value and routing through
+      # the real accept endpoint is what actually gets past it
+      url:
+        - regex: ^(https?://[^/]+)(/d/.*)$
+          with: $1/legal/accept/?original_page=$2
     scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
+    common:
+      $featuring: //div[@class="text-sm my-[10px] mx-0"]
     scene:
-      Title:
-        selector: //*[@class="detail_title_etc"]/div[contains(concat(' ', @class, ' '), ' leading-none ')]/text()
+      Title: //div[@id="main_content"]/div[contains(@class, "text-2xl")]
       Date:
-        selector: //*[@class="detail_title_etc"]/div[@class="links_to_pages"]/div[@class="text-xl"][contains(text()[1],"Video")]/text()[1]|//*[@class="detail_title_etc"]/div[@class="links_to_pages"]/div[@class="text-xl"][1]/text()
+        selector: (//div[contains(@class, "text-lg") and contains(@class, "md:text-xl")][contains(., "Video")])[1]
         postProcess:
           - replace:
-              - regex: .*\s+added\s+(.*)
+              - regex: .*?(\d{1,2}\s+\w+\s+\d{4}).*
                 with: $1
           - parseDate: 02 Jan 2006
-      Details:
-        selector: //div[@id="main_content"]//p[@sanitize="false"]/text()
-        concat: "\n\n"
+      Details: //div[@id="main_content"]//p[@sanitize="false"]
       Performers:
-        Name:
-          selector: //div[@id="main_content"]/div[contains(concat(' ', @class, ' '), 'text-sm')]/a[not(preceding-sibling::text()[contains(., '-')]) and not(preceding-sibling::br)]/text()
+        # lists both performers and any bondage apparatus used, e.g.
+        # "Featuring: Lydia McLane - Treadmill" but only the names before the
+        # first " - " are performers, the rest are equipment, not people
+        Name: $featuring/a[not(preceding-sibling::br) and not(preceding-sibling::text()[contains(., "-")])]
       Tags:
-        Name:
-          selector: //div[@id="main_content"]/div[contains(concat(' ', @class, ' '), 'text-sm')]/a[preceding-sibling::text()[contains(., '-')] or preceding-sibling::br]/text()
+        Name: $featuring/a[preceding-sibling::br]
       Studio:
         Name:
           fixed: House of Gord
@@ -38,4 +46,3 @@ driver:
           Domain: .houseofgord.com
           Value: yes
           Path: /
-# Last Updated March 15, 2026
