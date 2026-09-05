@@ -126,11 +126,16 @@ xPathScrapers:
                     - regex: ^
                       with: https://www.boobpedia.com
       URLs:
-        selector: //script[contains(.,"wgPageName")]
+        selector: //script[contains(.,"wgPageName")] | //tr[td//text()[contains(., 'Links and profiles') or contains(., 'Databases')]]/following-sibling::tr[not(td[@colspan='2' and @style])]//a/@href
         postProcess:
-          - replace:
-              - regex: '.+wgPageName":"([^"]+)".+'
-                with: "https://www.boobpedia.com/boobs/$1"
+        - javascript: |
+            if (value.indexOf("wgPageName") !== -1) {
+              var match = value.match(/"wgPageName"\s*:\s*"([^"]+)"/);
+              if (match) {
+                return "https://www.boobpedia.com/boobs/" + match[1];
+              }
+            }
+            return value;
       Details:
         selector: //div[@class="mw-parser-output"]/p
         concat: "\n\n"
@@ -444,4 +449,4 @@ xPathScrapers:
               "Zambian": "Zambia"
               "Zimbabwean": "Zimbabwe"
               "Åland Island": "Åland Islands"
-# Last Updated September 17, 2025
+# Last Updated September 2, 2026
