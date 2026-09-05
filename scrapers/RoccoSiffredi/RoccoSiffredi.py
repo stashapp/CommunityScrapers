@@ -14,11 +14,14 @@ from Altwolia.scrape import (
     scene_search,
 )
 
+from Altwolia.utilities import append_scene_number
+
 from py_common import log
 from py_common.util import replace_all, scraper_args
 
 
 def roccosiffredi(obj: Any, _) -> Any:
+    obj = append_scene_number(obj, _)
     # Movie URLs use /en/dvd/ on the site itself, not /en/movie/
     return replace_all(obj, "urls", lambda x: x.replace("/en/movie/", "/en/dvd/"))
 

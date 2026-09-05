@@ -12,23 +12,15 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
+from Altwolia.utilities import append_scene_number
 
 from py_common import log
 from py_common.util import scraper_args, replace_all
 
 
-def append_scene_number(obj: Any, api_scene: dict[str, Any]) -> Any:
-    "Append the numeric clip-path suffix to a scene title when available."
-    if (title := obj.get("title")) and (
-        match := re.search(r"_(\d+)$", api_scene.get("clip_path", ""))
-    ):
-        obj["title"] = f"{title}, Scene {int(match.group(1))}"
-    return obj
-
-
 def ragingstallion(obj: Any, api_object: dict[str, Any]) -> Any:
-    return append_scene_number(obj, api_object)
-
+    obj = append_scene_number(obj, api_object, separator=", ")
+    return replace_all(obj, "studio", lambda s: {**s, "name": "Raging Stallion"})
 
 if __name__ == "__main__":
     op, args = scraper_args()

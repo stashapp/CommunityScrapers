@@ -12,12 +12,13 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
+from Altwolia.utilities import append_scene_number
 
 from py_common import log
 from py_common.util import replace_all, scraper_args
 
-
 def girlfriendsfilms(obj: Any, _) -> Any:
+    obj = append_scene_number(obj, _, separator=" - ")
     return replace_all(obj, "studio", lambda s: {**s, "name": "Girlfriends Films"})
 
 

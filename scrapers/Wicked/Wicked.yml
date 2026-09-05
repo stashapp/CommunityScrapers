@@ -6,26 +6,26 @@ sceneByURL:
       - wicked.com/en/video/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - Wicked.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - Wicked.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - Wicked.py
     - wicked
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - Wicked.py
     - wicked
     - scene-by-query-fragment
 galleryByURL:
@@ -34,7 +34,7 @@ galleryByURL:
       - wicked.com/en/photo/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - Wicked.py
       - gallery-by-url
 groupByURL:
   - action: script
@@ -42,7 +42,7 @@ groupByURL:
       - wicked.com/en/movie/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - Wicked.py
       - movie-by-url
 performerByURL:
   - action: script
@@ -50,18 +50,18 @@ performerByURL:
       - wicked.com/en/pornstar/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - Wicked.py
       - performer-by-url
 performerByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - Wicked.py
     - performer-by-fragment
 performerByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - Wicked.py
     - wicked
     - performer-by-name
