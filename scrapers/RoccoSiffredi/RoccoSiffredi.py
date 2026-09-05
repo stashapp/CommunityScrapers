@@ -14,6 +14,8 @@ from Altwolia.scrape import (
     scene_search,
 )
 
+from Altwolia.utils import append_scene_number
+from py_common.types import ScrapedScene
 from py_common import log
 from py_common.util import replace_all, scraper_args
 
@@ -21,6 +23,12 @@ from py_common.util import replace_all, scraper_args
 def roccosiffredi(obj: Any, _) -> Any:
     # Movie URLs use /en/dvd/ on the site itself, not /en/movie/
     return replace_all(obj, "urls", lambda x: x.replace("/en/movie/", "/en/dvd/"))
+
+
+def roccosiffredi_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
+    return append_scene_number(
+        roccosiffredi(scene, api_scene), api_scene, separator=" - "
+    )
 
 
 if __name__ == "__main__":
@@ -34,11 +42,11 @@ if __name__ == "__main__":
         case "gallery-by-fragment", args:
             result = gallery_from_fragment(args, site, postprocess=roccosiffredi)
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, site, postprocess=roccosiffredi)
+            result = scene_from_url(url, site, postprocess=roccosiffredi_scene)
         case "scene-by-name", {"name": name} if name:
-            result = scene_search(name, site, postprocess=roccosiffredi)
+            result = scene_search(name, site, postprocess=roccosiffredi_scene)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            result = scene_from_fragment(args, site, postprocess=roccosiffredi)
+            result = scene_from_fragment(args, site, postprocess=roccosiffredi_scene)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, site, postprocess=roccosiffredi)
         case "performer-by-fragment", args:

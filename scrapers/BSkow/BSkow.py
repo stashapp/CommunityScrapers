@@ -2,6 +2,8 @@ import json
 import sys
 
 from Altwolia.scrape import (
+    gallery_from_fragment,
+    gallery_from_url,
     movie_from_url,
     performer_from_fragment,
     performer_from_url,
@@ -15,20 +17,24 @@ from py_common import log
 from py_common.util import scraper_args
 
 
-hothouse = append_scene_number
+bskow = append_scene_number
 
 if __name__ == "__main__":
     op, args = scraper_args()
-    site = "hothouse"
+    site = "bskow"
     log.debug(f"args: {args}")
 
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, site, postprocess=hothouse)
+            result = scene_from_url(url, site, postprocess=bskow)
         case "scene-by-name", {"name": name} if name:
-            result = scene_search(name, site, postprocess=hothouse)
+            result = scene_search(name, site, postprocess=bskow)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            result = scene_from_fragment(args, site, postprocess=hothouse)
+            result = scene_from_fragment(args, site, postprocess=bskow)
+        case "gallery-by-url", {"url": url} if url:
+            result = gallery_from_url(url, site)
+        case "gallery-by-fragment", args:
+            result = gallery_from_fragment(args, site)
         case "performer-by-url", {"url": url}:
             result = performer_from_url(url, site)
         case "performer-by-fragment", args:

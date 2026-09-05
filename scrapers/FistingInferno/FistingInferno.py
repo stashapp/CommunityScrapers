@@ -14,24 +14,20 @@ from Altwolia.scrape import (
     scene_search,
 )
 
+from Altwolia.utils import append_scene_number, append_studio_name
+from py_common.types import ScrapedScene
 from py_common import log
-from py_common.util import dig, replace_all, scraper_args
+from py_common.util import scraper_args
 
 FALLBACK_STUDIO = "Fisting Inferno"
 
 
 def fistinginferno(obj: Any, api_object: dict[str, Any]) -> Any:
-    if studio_name := dig(api_object, "mainChannel", "name"):
-        return replace_all(
-            obj,
-            "studio",
-            lambda s: {
-                **s,
-                "name": studio_name,
-                "parent": {"name": FALLBACK_STUDIO},
-            },
-        )
-    return replace_all(obj, "studio", lambda s: {**s, "name": FALLBACK_STUDIO})
+    return append_studio_name(obj, api_object, fallback=FALLBACK_STUDIO)
+
+
+def fistinginferno_scene(scene: ScrapedScene, api_scene: dict[str, Any]) -> ScrapedScene:
+    return append_scene_number(fistinginferno(scene, api_scene), api_scene)
 
 
 if __name__ == "__main__":
@@ -41,11 +37,11 @@ if __name__ == "__main__":
     log.debug(f"args: {args}")
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url, site, postprocess=fistinginferno)
+            result = scene_from_url(url, site, postprocess=fistinginferno_scene)
         case "scene-by-name", {"name": name} if name:
-            result = scene_search(name, site, postprocess=fistinginferno)
+            result = scene_search(name, site, postprocess=fistinginferno_scene)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
-            result = scene_from_fragment(args, site, postprocess=fistinginferno)
+            result = scene_from_fragment(args, site, postprocess=fistinginferno_scene)
         case "gallery-by-url", {"url": url} if url:
             result = gallery_from_url(url, site, postprocess=fistinginferno)
         case "gallery-by-fragment", args:

@@ -6,27 +6,25 @@ sceneByURL:
       - bskow.com/en/video/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - BSkow.py
       - scene-by-url
 sceneByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - BSkow.py
     - scene-by-fragment
 sceneByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - bskow
+    - BSkow.py
     - scene-by-name
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - bskow
+    - BSkow.py
     - scene-by-query-fragment
 galleryByURL:
   - action: script
@@ -35,13 +33,13 @@ galleryByURL:
       - bskow.com/en/video/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - BSkow.py
       - gallery-by-url
 galleryByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - BSkow.py
     - gallery-by-fragment
 groupByURL:
   - action: script
@@ -49,7 +47,7 @@ groupByURL:
       - bskow.com/en/movie/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - BSkow.py
       - movie-by-url
 performerByURL:
   - action: script
@@ -57,18 +55,17 @@ performerByURL:
       - bskow.com/en/pornstar/
     script:
       - python
-      - ../Altwolia/scrape.py
+      - BSkow.py
       - performer-by-url
 performerByName:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
-    - bskow
+    - BSkow.py
     - performer-by-name
 performerByFragment:
   action: script
   script:
     - python
-    - ../Altwolia/scrape.py
+    - BSkow.py
     - performer-by-fragment

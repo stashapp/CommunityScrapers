@@ -1,7 +1,5 @@
 import json
-import re
 import sys
-from typing import Any
 
 from Altwolia.scrape import (
     movie_from_url,
@@ -12,21 +10,12 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
+from Altwolia.utils import append_scene_number
 from py_common import log
 from py_common.util import scraper_args
 
 
-def append_scene_number(obj: Any, api_scene: dict[str, Any]) -> Any:
-    "Append the numeric clip-path suffix to a scene title when available."
-    if (title := obj.get("title")) and (
-        match := re.search(r"_(\d+)$", api_scene.get("clip_path", ""))
-    ):
-        obj["title"] = f"{title}, Scene {int(match.group(1))}"
-    return obj
-
-
-def falconstudios(obj: Any, api_object: dict[str, Any]) -> Any:
-    return append_scene_number(obj, api_object)
+falconstudios = append_scene_number
 
 
 if __name__ == "__main__":
