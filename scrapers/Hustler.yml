@@ -1,71 +1,196 @@
 name: "Hustler"
 sceneByURL:
+  # Wordpress custom post type 'hu_video_scenes' is for single scenes
+  - action: scrapeJson
+    url:
+      - hustlerunlimited.com/hu_video_scenes/
+    queryURL: &sceneQuery "https://hustlerunlimited.com/wp-json/wp/v2/{url}"
+    queryURLReplace: &sceneQueryReplace
+      url:
+        - regex: .*hustlerunlimited\.com/([a-z_]+)/([^/?#]+).*
+          with: $1?slug=$2&_embed=wp:term
+    scraper: sceneScraper
+  # Wordpress custom post type 'videos' is for full movies
   - action: scrapeXPath
     url:
-      - analhookers.com/model/
-      - asian18.com/model/
-      - asianfever.com/model/
-      - assmeat.com/model/
-      - barelylegal.com/model/
-      - battlebang.com/model/
-      - beaverhunt.com/model/
-      - bootyclapxxx.com/model/
-      - bootysisters.com/model/
-      - bossymilfs.com/model/
-      - bustybeauties.com/model/
-      - daddygetslucky.com/model/
-      - fuckfiesta.com/model/
-      - fuckinghardcore.com/model/
-      - hometowngirls.com/model/
-      - hometownhoneys.com/model/
-      - hottiemoms.com/model/
-      - hustlaz.com/model/
-      - hustler.com/model/
-      - hustlerhd.com/model/
-      - hustlerparodies.com/model/
-      - hustlerslesbians.com/model/
-      - hustlerstaboo.com/model/
-      - lesbianass.com/model/
-      - muchaslatinas.com/model/
-      - pornstarhardcore.com/model/
-      - scarybigdicks.com/model/
-      - seemysextapes.com/model/
-      - sexsee.com/model/
-      - sororitysluts.com/model/
-      - titworld.com/model/
-      - toomanytrannies.com/model/
-      - vcaxxx.com/model/
-      - watchreal.com/model/
-    scraper: sceneScraper
+      - hustlerunlimited.com/videos/
+    scraper: pageScraper
+groupByURL:
+  - action: scrapeJson
+    url:
+      - hustlerunlimited.com/videos/
+    queryURL: "https://hustlerunlimited.com/wp-json/wp/v2/{url}"
+    queryURLReplace:
+      url:
+        - regex: .*hustlerunlimited\.com/videos/([^/?#]+).*
+          with: videos?slug=$1&_embed=wp:term
+    scraper: groupScraper
+# Search returns single scenes
+sceneByName:
+  action: scrapeJson
+  queryURL: "https://hustlerunlimited.com/wp-json/wp/v2/hu_video_scenes?search={}&_embed=wp:term"
+  scraper: sceneSearch
+sceneByQueryFragment:
+  action: scrapeJson
+  queryURL: *sceneQuery
+  queryURLReplace: *sceneQueryReplace
+  scraper: sceneScraper
 xPathScrapers:
-  sceneScraper:
+  # XPath scraper is necessary to get the image, which does _not_ appear in the WP JSON API
+  # but needs to be fetched from Dacast based on
+  pageScraper:
     common:
-      $content: //div[@class="panel-content"]
+      $api: //link[@rel="canonical"][contains(@href,"/videos/")]/@href
+      $schema: //script[@class="yoast-schema-graph"]
     scene:
-      Title: //h3/a/text()|$content//h3[contains(@class, "headline")]/a/text()
-      URL: //link[@rel='canonical']/@href
-      Performers:
-        Name: 
-          selector: //span[@class="attr-key" and contains(text(),"Cast")]/following-sibling::span[@class="attr-value"]/a[not(text()="Hustler Models") and not(text()="Barely Legal Models")]/text()|$content//span[contains(text(), "Cast")]//following-sibling::span/a/text()
-      Date:
-        selector: //span[@class="attr-key" and contains(text(),"Released")]/following-sibling::span[@class="attr-value"]/text()|$content//span[contains(text(), "Released")]//following-sibling::span/text()
-        postProcess:
-          - parseDate: Jan 02, 2006
-      Details: //p[following-sibling::a[@class="clickable"]]|//meta[@property="og:description"]/@content|//div[@class="description"]/p
-      Image:
-        selector: //div[@class="img-container"]/img/@src|//div[contains(@class, "jw-preview")]/@style|$content/img/@src
+      Title:
+        selector: $schema
         postProcess:
           - replace:
-              - regex: (?:background-image:\s*url\(")(.+)(?:"\).*);?
+              - regex: '(?s).*"name":"Home".*?"name":"HU Videos".*?"name":"([^"]+)".*'
                 with: $1
+          - javascript: |
+              const named = { amp: "&", quot: '"', apos: "'", nbsp: " ", hellip: "…" };
+              return value.replace(/&(#\d+|amp|quot|apos|nbsp|hellip);/g, (m, e) =>
+                e[0] === "#" ? String.fromCharCode(parseInt(e.slice(1), 10)) : (named[e] || m)
+              );
+      URLs: $api
+      Date:
+        selector: $schema
+        postProcess:
+          - replace:
+              - regex: '(?s).*"datePublished":"([^"T]+).*'
+                with: $1
+          - parseDate: "2006-01-02"
+      Performers:
+        Name:
+          selector: $api
+          postProcess:
+            - replace:
+                - regex: .*/videos/([^/?#]+).*
+                  with: "https://hustlerunlimited.com/wp-json/wp/v2/videos?slug=$1&_embed=wp:term&_fields=_links,_embedded"
+            - subScraper:
+                selector: //body
+                postProcess:
+                  - javascript: |
+                      const named = { amp: "&", quot: '"', apos: "'", nbsp: " ", hellip: "…" };
+                      const decode = (s) => s.replace(/&(#\d+|amp|quot|apos|nbsp|hellip);/g, (m, e) =>
+                        e[0] === "#" ? String.fromCharCode(parseInt(e.slice(1), 10)) : (named[e] || m)
+                      );
+                      const re = /"name":"((?:[^"\\]|\\.)*)","slug":"[^"]*","taxonomy":"hu_actors"/g;
+                      const names = [];
+                      let m;
+                      while ((m = re.exec(value)) !== null) {
+                        names.push(decode(m[1].replace(/\\"/g, '"')));
+                      }
+                      return names.join(";");
+          split: ";"
       Tags:
-        Name: //div[@class="tag-list"]/a/text()
+        Name:
+          selector: $api
+          postProcess:
+            - replace:
+                - regex: .*/videos/([^/?#]+).*
+                  with: "https://hustlerunlimited.com/wp-json/wp/v2/videos?slug=$1&_embed=wp:term&_fields=_links,_embedded"
+            - subScraper:
+                selector: //body
+                postProcess:
+                  - javascript: |
+                      const named = { amp: "&", quot: '"', apos: "'", nbsp: " ", hellip: "…" };
+                      const decode = (s) => s.replace(/&(#\d+|amp|quot|apos|nbsp|hellip);/g, (m, e) =>
+                        e[0] === "#" ? String.fromCharCode(parseInt(e.slice(1), 10)) : (named[e] || m)
+                      );
+                      const re = /"name":"((?:[^"\\]|\\.)*)","slug":"[^"]*","taxonomy":"video_tags"/g;
+                      const names = [];
+                      let m;
+                      while ((m = re.exec(value)) !== null) {
+                        names.push(decode(m[1].replace(/\\"/g, '"')));
+                      }
+                      return names.join(";");
+          split: ";"
       Studio:
-        Name: //a[@class="logo active"]/img/@alt
-driver:
-  useCDP: true
-  sleep: 5
-  clicks:
-    - xpath: //a[@class="clickable"]
-      sleep: 2
-# Last Updated June 30, 2023
+        Name:
+          selector: $api
+          postProcess:
+            - replace:
+                - regex: .*/videos/([^/?#]+).*
+                  with: "https://hustlerunlimited.com/wp-json/wp/v2/videos?slug=$1&_embed=wp:term&_fields=_links,_embedded"
+            - subScraper:
+                selector: //body
+                postProcess:
+                  - javascript: |
+                      const named = { amp: "&", quot: '"', apos: "'", nbsp: " ", hellip: "…" };
+                      const decode = (s) => s.replace(/&(#\d+|amp|quot|apos|nbsp|hellip);/g, (m, e) =>
+                        e[0] === "#" ? String.fromCharCode(parseInt(e.slice(1), 10)) : (named[e] || m)
+                      );
+                      const re = /"name":"((?:[^"\\]|\\.)*)","slug":"[^"]*","taxonomy":"video_studio"/g;
+                      const m = re.exec(value);
+                      return m ? decode(m[1].replace(/\\"/g, '"')) : "";
+      Image:
+        selector: //script[contains(text(),"CONTENT_ID_1")]
+        postProcess:
+          - replace:
+              - regex: '(?s).*CONTENT_ID_1 = "([^"]+)".*'
+                with: "https://playback.dacast.com/content/info?contentId=$1&provider=default"
+          - subScraper:
+              selector: //body
+              postProcess:
+                - replace:
+                    - regex: '(?s).*"thumbnailUrl":"([^"]+)".*'
+                      with: $1
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: 0.title.rendered
+        postProcess: &decodeEntities
+          - javascript: |
+              const named = { amp: "&", quot: '"', apos: "'", nbsp: " ", hellip: "…" };
+              return value.replace(/&(#\d+|amp|quot|apos|nbsp|hellip);/g, (m, e) =>
+                e[0] === "#" ? String.fromCharCode(parseInt(e.slice(1), 10)) : (named[e] || m)
+              );
+      URLs: 0.link
+      Performers:
+        Name: 0._embedded.wp:term|@flatten|#(taxonomy=="hu_actors")#.name
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: "2006-01-02T15:04:05"
+      Tags:
+        Name:
+          selector: 0._embedded.wp:term|@flatten|#(taxonomy=="video_tags")#.name
+          postProcess: *decodeEntities
+      Studio:
+        Name:
+          selector: 0._embedded.wp:term|@flatten|#(taxonomy=="video_studio")#.name|0
+          postProcess: *decodeEntities
+
+  sceneSearch:
+    scene:
+      Title:
+        selector: "#.title.rendered"
+        postProcess: *decodeEntities
+      URLs: "#.link"
+      Date:
+        selector: "#.date"
+        postProcess:
+          - parseDate: "2006-01-02T15:04:05"
+
+  groupScraper:
+    group:
+      Name:
+        selector: 0.title.rendered
+        postProcess: *decodeEntities
+      URLs: 0.link
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: "2006-01-02T15:04:05"
+      Studio:
+        Name:
+          selector: 0._embedded.wp:term|@flatten|#(taxonomy=="video_studio")#.name|0
+          postProcess: *decodeEntities
+      Tags:
+        Name:
+          selector: 0._embedded.wp:term|@flatten|#(taxonomy=="video_tags")#.name
+          postProcess: *decodeEntities
