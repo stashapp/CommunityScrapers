@@ -29,11 +29,7 @@ xPathScrapers:
         Name:
           selector: //div[@class="actors_list"]//text()[not(contains(.,"Show more actors"))]
       Image:
-        selector: //div[@class="video_player"]//a[contains(@href,"Screen-")]/@href
-        postProcess:
-          - replace:
-              - regex: .*?Screen-([1-9].*)
-                with: https://freecdn.belamionline.com/Data/Contents/Content_$1/Thumbnail6.jpg
+          selector: //meta[@property="og:image"]/@content
       Tags:
         Name:
           selector: //*[@id="ContentPlaceHolder1_LabelTags"]/a
@@ -75,4 +71,4 @@ xPathScrapers:
         selector: //div[@class="model_des"]/p
       Image: //div[@class="main_card"]/div[@class="left"]/div[@class="img"]/img/@src
       
-# Last Updated July 3, 2025
+# Last Updated September 6, 2026
