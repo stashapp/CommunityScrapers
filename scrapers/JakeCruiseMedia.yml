@@ -20,17 +20,9 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //meta[@property="og:title"]/@content
+      Title: //meta[@property="og:title"]/@content
       Performers:
         Name: //ul[@class="featuredModels"]/li/a/span
-      Date:
-        selector: //span[@class="post-date"]/text()
-        postProcess:
-          - replace:
-              - regex: (st|[nr]d|th)
-                with: ""
-          - parseDate: 2 Jan 2006
       Image:
         selector: >
           //base/@href | //script[contains(text(),"poster=")]/text()
@@ -65,8 +57,8 @@ xPathScrapers:
               - regex: "logo"
                 with: "Female"
       Height:
-       selector: //li[@class='model_profile_height']/span
-       postProcess:
+        selector: //li[@class='model_profile_height']/span
+        postProcess:
           - replace:
               - regex: (\d+)['\s]+(\d+)?.+
                 with: $1.$2
@@ -110,4 +102,3 @@ xPathScrapers:
                 with: $1/$2
               - regex: ^(https:)?
                 with: "https:"
-# Last Updated May 10, 2023
