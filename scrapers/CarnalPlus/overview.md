@@ -6,6 +6,7 @@ Scraper has been tested on 2026-09-02
 | Bound Twinks          | https://boundtwinks.com/videos/tyler-tanner-ethan-tate-encounter-1.html          |
 | Boy For Sale          | https://boyforsale.com/videos/the-prize-the-boy-colton-vol-3.html                |
 | Carnal+               | https://carnalplus.com/videos/anthony-romero-alex-rock.html                      |
+| Catholic Boys         | https://catholicboys.com/videos/the-rectory-altar-boy-tyga-vol-1.html            |
 | Cum Dump Sluts        | https://cumdumpsluts.com/videos/andrew-skylar-cumdump-1.html                     |
 | Dirty Boy Society     | https://dirtyboysociety.com/videos/brian-taylor-and-brandon-lewis.html           |
 | FTM Men               | https://ftmmen.com/videos/worked-out-chapter-1.html                              |
