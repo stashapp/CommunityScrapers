@@ -116,6 +116,7 @@ studioMap = {
     "krisskiss":"Kriss Kiss",
     "kyleenash":"Kylee Nash",
     "ladysublime":"Lady Sublime",
+    "lasublimexxx":"La Sublime",
     "lilcandy":"LilCandy",
     "lilumoon":"Lilu Moon",
     "lilychey":"Lily Chey",
