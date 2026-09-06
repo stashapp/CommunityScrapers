@@ -11,7 +11,11 @@ xPathScrapers:
     scene:
       Title: $project//h1
       Details: $project//div[contains(@class, "desc-text")]
-      Image: //meta[@name="og:image"]/@content
+      Image:
+        selector: $project//iframe[contains(@class, "bunny-cdn-content-iframe")]/@src
+        postProcess:
+          - subScraper:
+              selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
           selector: $project/@class
@@ -38,4 +42,3 @@ xPathScrapers:
         Name: $project//div[contains(@class, "project-models")]//a
       Tags:
         Name: $project//div[contains(@class, "project-tags")]//a[@data-count]
-# Last Updated August 21, 2023
