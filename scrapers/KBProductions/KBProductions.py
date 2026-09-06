@@ -68,6 +68,7 @@ studio_map = {
     "lucidflix.com": "LucidFlix",
     "lukecooperx.com": "Luke CooperX",
     "machofactory.com": "Macho Factory",
+    "madbros-stream.b-cdn.net": "MadBros",
     "meanfeetfetish.com": "Mean Feet Fetish",
     "milflicious.com": "Milflicious",
     "members.hobybuchanon.com": "Hoby Buchanon",
@@ -455,11 +456,12 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     return scene
 
 
-def to_scraped_scene_from_video(raw_scene: dict) -> ScrapedScene:
+def to_scraped_scene_from_video(raw_scene: dict, page_url: str) -> ScrapedScene:
     # A different format is in the wild that uses the "video" element in the JSON provided in the script
     # This format uses a different structure than the "content" element that most sites employ.
-    # Currently only one site uses this format, so this section may be under rapid revision as more
-    # sites become known.
+    # Currently only NYSeed and MadBros use this format, and their performer sub-objects
+    # already differ (NYSeed has username/gender, MadBros doesn't), so this section may be
+    # under rapid revision as more sites become known
     site = urllib.parse.urlparse(raw_scene["thumbnail"]["url"]).netloc
     scene: ScrapedScene = {}
 
@@ -469,22 +471,26 @@ def to_scraped_scene_from_video(raw_scene: dict) -> ScrapedScene:
         scene["date"] = date[:10].replace("/", "-")
     if details := raw_scene.get("description"):
         scene["details"] = strip_tags(details)
-    if scene_id := raw_scene.get("id"):
+    if scene_id := dig(raw_scene, ("id", "_id")):
         scene["code"] = str(scene_id)
     if models := raw_scene.get("performers"):
-        scene["performers"] = [
-            {
-                "name": x["name"],
-                "image": x["avatar"],
-                "twitter": x["username"],
-                "gender": x["gender"].capitalize(),
-            }
-            for x in models
-        ]
+        performers = []
+        for x in models:
+            performer = {"name": x["name"], "image": x["avatar"]}
+            if username := x.get("username"):
+                performer["twitter"] = username
+            if gender := x.get("gender"):
+                performer["gender"] = gender.capitalize()
+            performers.append(performer)
+        scene["performers"] = performers
     if tags := raw_scene.get("categories"):
         scene["tags"] = [{"name": x["name"]} for x in tags]
 
-    scene["studio"] = get_studio(site)
+    studio = get_studio(site)
+    # The thumbnail CDN host used to identify the studio isn't a real, browsable
+    # site URL - use the domain the scene was actually requested from instead
+    studio["urls"] = [f"https://{urllib.parse.urlparse(page_url).netloc}"]
+    scene["studio"] = studio
     scene["image"] = raw_scene["thumbnail"]["url"]
 
     return scene
@@ -498,7 +504,7 @@ def scrape_scene(url: str) -> ScrapedScene | None:
     if content := props.get("content"):
         scene = to_scraped_scene_from_content(content)
     if video := props.get("video"):
-        scene = to_scraped_scene_from_video(video)
+        scene = to_scraped_scene_from_video(video, url)
     scene["urls"] = [url]
 
     if playlist := dig(props, "playlist", "data", 0):

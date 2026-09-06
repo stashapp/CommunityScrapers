@@ -1,4 +1,4 @@
-Scraper has been tested on 2026-08-31
+Scraper has been tested on 2026-09-06
 
 | Studio                | URL                                                                                                                           |
 | :-------------------- | :---------------------------------------------------------------------------------------------------------------------------- |
@@ -20,11 +20,11 @@ Scraper has been tested on 2026-08-31
 | Cougar Season         | https://tour.cougarseason.com/scenes/cock-craved-cougar                                                                       |
 | Darkshade             | https://darkshade.com/videos/classy-in-heels-and-lace                                                                         |
 | Deepthroat Sirens     | https://tour.deepthroatsirens.com/scenes/bonus-scene-dee-williams                                                             |
-| DickHDDaily           | https://dickhddaily.com/videos/thick-quick                                                                                    |
+| DickHDDaily           | https://dickhddaily.com/videos/cream-in-the-pink                                                                              |
 | Dire Desires          | https://diredesires.com/scenes/rellies-desires                                                                                |
 | Dirty Auditions       | https://dirtyauditions.com/scenes/lost-in-lust-with-luna                                                                      |
 | Divine-DD             | https://divine-dd.com/videos/fucking-your-step-sisters-f-cup-tits                                                             |
-| DoggVision            | https://doggvision.com/videos/older-man-pleasures-himself-with-blonde-employee                                                |
+| DoggVision            | https://doggvision.com/videos/40m-tits-squirting-bbw-power-fucked                                                             |
 | Downblouse Jerk       | https://downblousejerk.com/videos/stepmums-ironing-session                                                                    |
 | DripDrip              | https://dripdropprod.net/scenes/thick-latina-babe-jasmine-flower-bbw-busty-bexx-suck-his-nipples-and-fuck-the-shit-out-of-him |
 | Exposed Emos          | https://www.emonetwork.com/gay-emo-twinks-watch/ee0048_kevinnash                                                              |
@@ -53,6 +53,7 @@ Scraper has been tested on 2026-08-31
 | LucidFlix             | https://lucidflix.com/episodes/primal-episode-1-cheetah                                                                       |
 | Luke CooperX          | https://lukecooperx.com/videos/hot-fucking-natural-amateur-in-car                                                             |
 | Macho Factory         | https://machofactory.com/scenes/a-greedy-neighbor-seduces-viktor-rom-and-he-gives-him-his-well-deserved-big-cock              |
+| MadBros               | https://madbrosx.com/video/colombian-slut-smashed-hard-in-a-parking-lot-for-scratching-my-friends-car                         |
 | Mean Feet Fetish      | https://meanfeetfetish.com/videos/annoyed-giantess-eats-you                                                                   |
 | Milflicious           | https://milflicious.com/videos/working-out-my-stepmom-london-rivers-pussy-after-the-gym                                       |
 | Monger In Asia        | https://mongerinasia.com/scenes/mongerinasiavariety017-hong-var_vids.html                                                     |
