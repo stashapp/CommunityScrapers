@@ -400,12 +400,12 @@ xPathScrapers:
         selector: //head/script[@type='application/ld+json' and contains(text(), '"@type":"VideoObject"')]
         postProcess:
           - replace:
-            - regex: '.+"description":"(.+?)","duration".+'
-              with: "$1"
-            - regex: '( ?)\\n'
-              with: "\n"
-            - regex: \\"
-              with: '"'
+              - regex: '.+"description":"(.+?)","duration".+'
+                with: "$1"
+              - regex: '( ?)\\n'
+                with: "\n"
+              - regex: \\"
+                with: '"'
       Image:
         selector: //div[@data-setup]/@data-setup
         postProcess:
@@ -533,6 +533,13 @@ driver:
           Domain: "www.kink.com"
           Value: "1"
           Path: "/"
-# Last Updated April 14, 2026
-# Last Updated April 14, 2026 (modified: JSON-LD title; unmasked tags from /tag/ URL slugs)
-
+    - Cookies:
+        - Name: "age_gate_accepted"
+          Domain: "www.kinkmen.com"
+          Value: "1"
+          Path: "/"
+    - Cookies:
+        - Name: "age_gate_accepted"
+          Domain: "www.kinktrans.com"
+          Value: "1"
+          Path: "/"
