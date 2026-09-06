@@ -25,8 +25,8 @@ sceneByURL:
       - bondageplaydates.com
       - bound-feet.com
       - bound-men.com
-      - bound-neighbor-girl.com	
-      - bound-neighbor-girl-request.com	
+      - bound-neighbor-girl.com
+      - bound-neighbor-girl-request.com
       - bound-ticklish-girl.com
       - boundconvideo.com
       - boundstudio.de
@@ -81,6 +81,7 @@ sceneByURL:
       - jupudo.com
       - kinkhamster.com
       - kinkyfloridaamateurs.com
+      - kinkymistresses.com
       - kinkystyle.net
       - kyivjenny.com
       - leggingsnet.nl
@@ -90,7 +91,7 @@ sceneByURL:
       - mariskasworld.com
       - masterkeithmovies.com
       - minuitsasori.com
-      - mistresstokyovideo.com  ##
+      - mistresstokyovideo.com ##
       - mistresstopia.com
       - moiramona.com
       - my-bondage-girl.com
@@ -158,28 +159,29 @@ xPathScrapers:
       Details: //meta[@property='og:description']/@content | //meta[@name='description']/@content
       Image: //meta[@property='og:image']/@content
       Studio:
-        Name: 
+        Name:
           selector: //a[@class='navbar-brand' and text() !=''] | //a[@class='navbar-brand']/img/@alt | //a[@class='navbar-brand']/span
           postProcess:
             - replace:
                 - regex: \.com$
-                  with: ''
+                  with: ""
                 - regex: '[\s-]+Fetishclips$'
-                  with: ''
+                  with: ""
                 - regex: ^Buy Manyvids.fuckedfetish.+
                   with: Fucked Fetish
                 - regex: ^Smoking fetish videos with Russian.+
-                  with: Russian Smokers 
+                  with: Russian Smokers
                 - regex: '[\s-]*German GangBang Movies'
-                  with: ''
+                  with: ""
                 - regex: '[\s\|]*Brilliant Handjobs and Porn Movies'
-                  with: ''
+                  with: ""
                 - regex: .+?extrem-SM.+
                   with: extrem-SM
                 - regex: WEB STORE
-                  with: ''
+                  with: ""
             - map:
                 mystical-girl: Mystical Girl
+                Kinkymistresses: Kinky Mistresses
                 Shinynylonart: ShinyNylonArts
                 Shinynylonartsbound: ShinyNylonArts Bound
                 CamVivian Solo Girl: CamVivian
@@ -204,12 +206,12 @@ xPathScrapers:
                 SEXYRAINWEAR.online: Sexy Rainwear Online
                 Under my princess: Under My Princess
       Tags:
-        Name: 
+        Name:
           selector: //div[contains(.,'Tags')]/a/text() | //span[@title='Categories']//a/text()
-          concat: ','
-          split: ','
+          concat: ","
+          split: ","
       Performers:
-        Name: 
+        Name:
           selector: //span//a[contains(@href,'/models/')]
           postProcess:
             - replace:
@@ -217,5 +219,3 @@ xPathScrapers:
                   with: $1
                 - regex: (.+)?\s*-\s*Kinky Teen Model
                   with: $1
-
-# Last Updated April 26, 2024
