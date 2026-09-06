@@ -1,0 +1,121 @@
+# yaml-language-server: $schema=../../validator/scraper.schema.json
+name: MarsMedia (Network)
+# requires: py_common
+# scrapes: Bareback Cum Pigs, Bareback That Hole, Bear Films, Breed Me Raw, Bring Me A Boy, Bulldog Pit, Hairy And Raw, HardBritLads, Southern Strokes, Touch That Boy, Twinks In Shorts
+sceneByURL:
+  - action: script
+    url:
+      - barebackcumpigs.com/video/
+      - barebackcumpigs.com/tour/updates/
+      - barebackcumpigs.com/updates/
+      - barebackcumpigs.com/tour/trailers/
+      - barebackthathole.com/video/
+      - barebackthathole.com/tour/updates/
+      - barebackthathole.com/updates/
+      - barebackthathole.com/tour/trailers/
+      - bearfilms.com/video/
+      - bearfilms.com/tour/updates/
+      - bearfilms.com/updates/
+      - bearfilms.com/tour/trailers/
+      - breedmeraw.com/video/
+      - breedmeraw.com/tour/updates/
+      - breedmeraw.com/updates/
+      - breedmeraw.com/tour/trailers/
+      - bringmeaboy.com/video/
+      - bringmeaboy.com/tour/updates/
+      - bringmeaboy.com/updates/
+      - bringmeaboy.com/tour/trailers/
+      - bulldogpit.com/video/
+      - bulldogpit.com/tour/updates/
+      - bulldogpit.com/updates/
+      - bulldogpit.com/tour/trailers/
+      - hairyandraw.com/video/
+      - hairyandraw.com/tour/updates/
+      - hairyandraw.com/updates/
+      - hairyandraw.com/tour/trailers/
+      - hardbritlads.com/video/
+      - hardbritlads.com/tour/updates/
+      - hardbritlads.com/updates/
+      - hardbritlads.com/tour/trailers/
+      - southernstrokes.com/video/
+      - southernstrokes.com/tour/updates/
+      - southernstrokes.com/updates/
+      - southernstrokes.com/tour/trailers/
+      - touchthatboy.com/video/
+      - touchthatboy.com/tour/updates/
+      - touchthatboy.com/updates/
+      - touchthatboy.com/tour/trailers/
+      - twinksinshorts.com/video/
+      - twinksinshorts.com/tour/updates/
+      - twinksinshorts.com/updates/
+      - twinksinshorts.com/tour/trailers/
+    script:
+      - python
+      - MarsMedia.py
+      - scene-by-url
+galleryByURL:
+  - action: script
+    url:
+      - barebackcumpigs.com/photo/
+      - barebackthathole.com/photo/
+      - bearfilms.com/photo/
+      - breedmeraw.com/photo/
+      - bringmeaboy.com/photo/
+      - bulldogpit.com/photo/
+      - hairyandraw.com/photo/
+      - hardbritlads.com/photo/
+      - southernstrokes.com/photo/
+      - touchthatboy.com/photo/
+      - twinksinshorts.com/photo/
+    script:
+      - python
+      - MarsMedia.py
+      - gallery-by-url
+performerByURL:
+  - action: script
+    url:
+      - barebackcumpigs.com/model/
+      - barebackthathole.com/model/
+      - bearfilms.com/model/
+      - breedmeraw.com/model/
+      - bringmeaboy.com/model/
+      - bulldogpit.com/model/
+      - hairyandraw.com/model/
+      - hardbritlads.com/model/
+      - southernstrokes.com/model/
+      - touchthatboy.com/model/
+      - twinksinshorts.com/model/
+    script:
+      - python
+      - MarsMedia.py
+      - performer-by-url
+sceneByName:
+  action: script
+  script:
+    - python
+    - MarsMedia.py
+    - scene-by-name
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - MarsMedia.py
+    - scene-by-fragment
+sceneByQueryFragment:
+  action: script
+  script:
+    - python
+    - MarsMedia.py
+    - scene-by-query-fragment
+performerByName:
+  action: script
+  script:
+    - python
+    - MarsMedia.py
+    - performer-by-name
+performerByFragment:
+  action: script
+  script:
+    - python
+    - MarsMedia.py
+    - performer-by-fragment
