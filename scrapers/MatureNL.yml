@@ -15,7 +15,7 @@ xPathScrapers:
     common:
       $url: //link[@rel="canonical"]/@href
     scene:
-      URL: &url
+      URLs: &url
         selector: $url
         postProcess:
           - replace:
@@ -59,8 +59,7 @@ xPathScrapers:
                 - regex: (\w)\.,
                   with: $1,
           split: ", "
-      Image:
-        selector: (//video/@poster | //span[@id="spnPageUpdateTrailer"]/a/img/@data-src | //img[@class="img-responsive lazy"][1]/@data-src)[1]
+      Image: (//video/@poster | //img[contains(@data-src, "update_gallery")][1]/@data-src)[1]
       Date: &date
         selector: //span[@class="val-m"][1]
         postProcess:
@@ -72,14 +71,10 @@ xPathScrapers:
         Name:
           fixed: "Mature.nl"
     gallery:
-      URL: *url
+      URLs: *url
       Title: *title
       Details: *details
       Tags: *tags
       Performers: *performers
       Date: *date
       Studio: *studio
-
-debug:
-  printHTML: true
-# Last Updated July 11, 2023
