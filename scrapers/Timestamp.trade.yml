@@ -13,7 +13,7 @@ sceneByURL:
           
 sceneByFragment:
   action: scrapeJson
-  scraper: sceneScraper
+  scraper: sceneSearch
   queryURL: https://timestamp.trade/hash_lookup?md5={checksum}&ohash={oshash}
 
 galleryByURL: 
@@ -43,6 +43,17 @@ galleryByFragment:
 
 
 jsonScrapers:
+  sceneSearch:
+    scene:
+      Title: 0.title
+      Details: 0.description
+      URL:
+        selector: 0.id
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://timestamp.trade/scene/
+
   sceneScraper:
     scene:
       Title: title
