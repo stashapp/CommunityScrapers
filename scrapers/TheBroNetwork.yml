@@ -4,35 +4,51 @@ sceneByURL:
     url:
       - thebronetwork.com
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      # masqulin.com was folded into thebronetwork.com; its own redirects land
+      # on a generic category page rather than the matching scene, but the
+      # scene exists at the identical /updates/ path on thebronetwork.com
+      - masqulin.com
+    scraper: sceneScraper
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: masqulin\.com
+          with: thebronetwork.com
 
 performerByURL:
   - action: scrapeXPath
     url:
       - https://thebronetwork.com/models
     scraper: performerScraper
-    
-    
+
 xPathScrapers:
   sceneScraper:
+    common:
+      # Scope every field to the single scene's own container - a soft-404
+      # fallback page (e.g. a retired masqulin.com scene with no thebronetwork.com
+      # equivalent) has no gallery_info spacer at all, but does show unrelated
+      # teaser cards using these same class names, so unscoped selectors would
+      # silently grab a different scene's data instead of correctly finding nothing
+      $gallery: //div[@class="gallery_info spacer"]
     scene:
-      Title:
-        selector: //div[@class="gallery_info spacer"]/h1
+      Title: $gallery/h1
       Performers:
-        Name: //div[@class="gallery_info spacer"]//span[@class="tour_update_models"]/a
+        Name: $gallery//span[@class="tour_update_models"]/a
       Tags:
-        Name: //a[@class="tagsVideoPage"]
-      Details:
-        selector: //p[@id="textDesc"]
-      Image:
-        selector: //video-js[@id="trailervid"]/@poster
+        Name: $gallery//a[@class="tagsVideoPage"]
+      Details: $gallery//p[@id="textDesc"]
+      # trailervid lives outside the gallery_info container, but its id is
+      # unique to a real scene page so it's already safe unscoped
+      Image: //video-js[@id="trailervid"]/@poster
       Date:
-        selector: //span[@class='availdate'][1]
+        selector: $gallery//span[@class='availdate'][1]
         postProcess:
           - parseDate: Jan 02, 2006
       Studio:
         Name:
           fixed: The Bro Network
-          
   performerScraper:
     performer:
       Name: //div[@class="heroTitle"]//h1/text()
@@ -46,8 +62,7 @@ xPathScrapers:
         selector: //span[contains(text(),"Height:")]/following-sibling::text()
         postProcess:
           - feetToCm: true
-      Circumcised:  
-        selector: //span[contains(text(),"Cock:")]/following-sibling::text()
+      Circumcised: //span[contains(text(),"Cock:")]/following-sibling::text()
       PenisLength:
         selector: //span[contains(text(),"Cock Size:")]/following-sibling::text()
         postProcess:
@@ -56,5 +71,3 @@ xPathScrapers:
                 with: "0'"
           - feetToCm: true
       Image: //div[@class="model_picture"]/img/@src
-
-# Last Updated July 2, 2025
