@@ -1,0 +1,14 @@
+name: Kin8tengoku
+# requires: py_common
+sceneByURL:
+  - action: script
+    script:
+      - python3
+      - Kin8tengoku.py
+      - scene-by-url
+    url:
+      - en.kin8tengoku.com/moviepages/
+      - en.kin8tengoku.com/movie/
+      - enasianmusume.kin8tengoku.com/moviepages/
+      - enasianmusume.kin8tengoku.com/movie/
+      - enexbabes.kin8tengoku.com/
