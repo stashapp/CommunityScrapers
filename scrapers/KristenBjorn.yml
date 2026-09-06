@@ -21,7 +21,7 @@ xPathScrapers:
     common:
       $performer: //div[@class="scene-item"]/a[contains(@class,"scene-box")]
     scene:
-      Title: //h1[@class="StoreHeaderNew"]/text()
+      Title: //h1[@class="StoreHeaderNew"]
       Details: //div[@class="med-text"]/p
       Code:
         selector: //meta[@property="og:url"]/@content
@@ -30,9 +30,12 @@ xPathScrapers:
               - regex: ^.*\/video-(\d+)\/.*$
                 with: $1
       Date:
-        selector: //div[@id="main"]//div[@class="date"][1]/text()
+        selector: //script[@type="application/ld+json"][contains(text(),"VideoObject")]
         postProcess:
-          - parseDate: 02 Jan 2006
+          - replace:
+              - regex: '.+"uploadDate":\s*"([^ "]+).+'
+                with: "$1"
+          - parseDate: 2006-01-02
       Tags:
         Name:
           selector: //a[contains(@title,"Categorie:")]//text()
@@ -41,7 +44,7 @@ xPathScrapers:
                 - regex: (.*)\s\(\d+\)
                   with: $1
       Performers:
-        Name: $performer//h5/text()
+        Name: $performer//h5
         URLs:
           selector: $performer/@href
           postProcess: &appendDomain
@@ -94,8 +97,7 @@ xPathScrapers:
                 with: $1
       Gender:
         fixed: Male
-      Country:
-        selector: //h2[contains(text(),"Nationality:")]/following-sibling::text()[1]
+      Country: //h2[contains(text(),"Nationality:")]/following-sibling::text()[1]
       Height:
         selector: //h2[contains(text(),"Height:")]/following-sibling::text()[1]
         postProcess:
@@ -114,4 +116,3 @@ xPathScrapers:
               - regex: '[^\s]+ \((.*) cms\).*$'
                 with: $1
       Image: *imageAttr
-# Last Updated September 17, 2025
