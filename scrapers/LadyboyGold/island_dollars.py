@@ -82,14 +82,15 @@ def urls_match(url_a: str, url_b: str, path_segment: str) -> bool:
         return False
     return domain_from_url(url_a) == domain_from_url(url_b) and match_a.group(1) == match_b.group(1)
 
+# Only ladyboygold.com has public scene pages
 WORKING_SUBDOMAINS: dict[str, tuple[str, ...]] = {
-    "ladyboycrush": ("www",),
+    "ladyboycrush": (),
     "ladyboyglamour": (),
     "ladyboygold": ("www", "members"),
-    "ladyboypussy": ("www", "members"),
-    "ladyboysfuckedbareback": ("www", "members"),
-    "ladyboyvice": ("www",),
-    "tsraw": ("www", "members"),
+    "ladyboypussy": ("members",),
+    "ladyboysfuckedbareback": ("members",),
+    "ladyboyvice": (),
+    "tsraw": ("members",),
 }
 
 def known_urls(original_url: str, domain: str, slug: str, path_segment: str) -> list[str]:
