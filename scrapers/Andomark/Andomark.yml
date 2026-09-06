@@ -83,6 +83,7 @@ sceneByURL:
       - evolvedfights.com/scenes/
       - goonmuse.com/scenes/
       - justgoodsex.com/scenes/
+      - mongerinasia.com/scenes/
       - ravenswallowzxxx.com/scenes/
       - sofiemariexxx.com/scenes/
       - thatfetishgirl.com/scenes/
@@ -230,6 +231,7 @@ xPathScrapers:
                 laurenphillips: Lauren Phillips
                 letstryhard: Let's Try Hard
                 melaniehicksxxx: Melanie Hicks XXX
+                mongerinasia: Monger In Asia
                 msparisandfriends: Ms Paris and Friends
                 oldsexygrannies: OldSexyGrannies
                 onlybbc: Only BBC
@@ -309,6 +311,7 @@ xPathScrapers:
         selector: $scene//span[./i[contains(@class, 'fa-calendar')]]/following-sibling::text()
         postProcess:
           - parseDate: 01/02/2006
+          - parseDate: Jan 2, 2006
       Tags:
         Name: $scene//div[@class="blogTags"]//a
       Performers:

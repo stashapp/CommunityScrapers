@@ -56,7 +56,6 @@ Scraper has been tested on 2026-09-06
 | MadBros               | https://madbrosx.com/video/colombian-slut-smashed-hard-in-a-parking-lot-for-scratching-my-friends-car                         |
 | Mean Feet Fetish      | https://meanfeetfetish.com/videos/annoyed-giantess-eats-you                                                                   |
 | Milflicious           | https://milflicious.com/videos/working-out-my-stepmom-london-rivers-pussy-after-the-gym                                       |
-| Monger In Asia        | https://mongerinasia.com/scenes/mongerinasiavariety017-hong-var_vids.html                                                     |
 | Nick Marxx            | https://nickmarxx.com/videos/puerto-rican-my-first-day-date                                                                   |
 | Nikki Zee             | https://nikkizee.com/scenes/strap-battle-2026-blake-jones-vs-nikki-zee                                                        |
 | Nylon Perv            | https://nylonperv.com/videos/sweet-latina-doll-face-fucked-and-facialed                                                       |
@@ -79,7 +78,6 @@ Scraper has been tested on 2026-09-06
 | SheHerGirls           | https://shehergirls.com/videos/flower-delivery-takes-a-wicked-turn                                                            |
 | Suck This Dick        | https://hobybuchanon.com/suck-this-dick/marley-madden-sloppy-deepthroat-blowjob-3                                             |
 | Swallowed             | https://tour.swallowed.com/scenes/iris-wants-her-mouth-filled                                                                 |
-| Thai Girls Wild       | https://www.thaigirlswild.com/videos/thaigirlswildvideos989-deer                                                              |
 | The ArtemiXXX         | https://theartemixxx.com/videos/sophia-takes-it-all-ft-sophia-isabella                                                        |
 | Top Web Models        | https://tour.topwebmodels.com/scenes/memel-wilde-amazing-deepthroat-and-throatpie                                             |
 | ToughLoveX            | https://tour.toughlovex.com/view/149/audrey-noir-toughlove                                                                    |

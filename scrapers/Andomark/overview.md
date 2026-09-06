@@ -35,6 +35,7 @@ Scraper has been tested on 2026-08-31
 | Lauren Phillips          | https://laurenphillips.com/updates/Auntie-Lauren.html                                                                        |
 | Let's Try Hard           | https://letstryhard.com/updates/Reichel-sucks-cock-and-then-plays-with-kitty.html                                            |
 | Melanie Hicks XXX        | https://melaniehicksxxx.com/updates/Melanies-Complete-Stamina-Lesson-From-Handjob-to-Full-Sex-with-Stepsons-Best-Friend.html |
+| Monger In Asia           | https://mongerinasia.com/scenes/mongerinasiasts096-kik_vids.html                                                             |
 | Ms Paris and Friends     | https://www.msparisandfriends.com/tour/updates/Fucking-My-Sister-in-law.html                                                 |
 | OldSexyGrannies          | https://oldsexygrannies.com/updates/Unicorn-Confessions-Cowgirl-Fantasy.html                                                 |
 | Only BBC                 | https://onlybbc.com/tour/updates/Brit-Kylie-Jonesing-For-Big-Black-Cock.html                                                 |
