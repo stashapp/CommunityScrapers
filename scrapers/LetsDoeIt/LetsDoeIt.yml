@@ -4,7 +4,6 @@ sceneByURL:
   - action: scrapeXPath
     url: &URLs
       - amateureuro.com
-      - doegirls.com
       - doe-tv.com
       - forbondage.com
       - mamacitaz.com
@@ -14,6 +13,7 @@ sceneByURL:
   - action: script
     url: &ayloURLs
       - letsdoeit.com/scene/
+      - doegirls.com/watch/
     script:
       - python
       - LetsDoeIt.py
@@ -49,6 +49,7 @@ performerByURL:
   - action: script
     url:
       - letsdoeit.com/model/
+      - doegirls.com/models/
     script:
       - python
       - LetsDoeIt.py

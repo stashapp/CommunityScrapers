@@ -1,5 +1,6 @@
 import json
 import sys
+from requests import head
 from typing import Any
 from py_common import log
 from py_common.util import replace_all
@@ -20,6 +21,17 @@ studio_map = {
 }
 
 
+def redirect(url: str) -> str:
+    if not url or "doegirls.com" not in url:
+        return url
+    res = head(url, allow_redirects=True)
+    if redirect := res.url:
+        if redirect.rstrip("/").endswith("404"):
+            return url
+        return redirect if redirect.endswith("/") else redirect + "/"
+    return url
+
+
 def letsdoeit(obj: Any, _) -> Any:
     # Rename certain studios according to the map
     fixed = replace_all(obj, "name", replacement=lambda x: studio_map.get(x, x))
@@ -36,8 +48,10 @@ if __name__ == "__main__":
 
     match op, args:
         case "gallery-by-url", {"url": url} if url:
+            url = redirect(url)
             result = gallery_from_url(url, postprocess=letsdoeit)
         case "scene-by-url", {"url": url} if url:
+            url = redirect(url)
             result = scene_from_url(url, postprocess=letsdoeit)
         case "scene-by-name", {"name": name} if name:
             result = scene_search(name, search_domains=domains, postprocess=letsdoeit)
@@ -46,6 +60,7 @@ if __name__ == "__main__":
                 args, search_domains=domains, postprocess=letsdoeit
             )
         case "performer-by-url", {"url": url}:
+            url = redirect(url)
             result = performer_from_url(url, postprocess=letsdoeit)
         case "performer-by-fragment", args:
             result = performer_from_fragment(args)
@@ -54,6 +69,7 @@ if __name__ == "__main__":
                 name, search_domains=domains, postprocess=letsdoeit
             )
         case "movie-by-url", {"url": url} if url:
+            url = redirect(url)
             result = movie_from_url(url, postprocess=letsdoeit)
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
