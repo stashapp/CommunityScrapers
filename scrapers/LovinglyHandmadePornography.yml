@@ -13,7 +13,8 @@ xPathScrapers:
           //div[@id="detail_page"]//h1/following-sibling::div[1]/p
           | //div[@id="detail_page"]//h1/following-sibling::div[1][not(p)]
         concat: "\n\n"
-      Director: Russell Harmon
+      Director:
+        fixed: Russell Harmon
       URLs:
         selector: //link[@rel="canonical"]/@href
         postProcess:
