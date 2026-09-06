@@ -13,6 +13,7 @@ sceneByURL:
   - action: scrapeJson
     url:
       - lustery.com/video-preview/
+      - lustery.com/video/
     queryURL: "{url}"
     queryURLReplace:
       url:
@@ -64,12 +65,12 @@ jsonScrapers:
         selector: video.publishAt
         postProcess:
           - parseDate: unix
-      URL:
+      URLs:
         selector: video.permalink
         postProcess:
           - replace:
               - regex: ^
-                with: https://lustery.com/video-preview/
+                with: https://lustery.com/video/
       Image:
         selector: video.poster.staticPath
         postProcess:
