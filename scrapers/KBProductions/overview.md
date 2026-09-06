@@ -54,6 +54,7 @@ Scraper has been tested on 2026-09-06
 | Luke CooperX          | https://lukecooperx.com/videos/hot-fucking-natural-amateur-in-car                                                             |
 | Macho Factory         | https://machofactory.com/scenes/a-greedy-neighbor-seduces-viktor-rom-and-he-gives-him-his-well-deserved-big-cock              |
 | MadBros               | https://madbrosx.com/video/colombian-slut-smashed-hard-in-a-parking-lot-for-scratching-my-friends-car                         |
+| MariskaX              | https://tour.mariskax.com/view/33259/fucking-the-tourists-in-the-bar                                                          |
 | Mean Feet Fetish      | https://meanfeetfetish.com/videos/annoyed-giantess-eats-you                                                                   |
 | Milflicious           | https://milflicious.com/videos/working-out-my-stepmom-london-rivers-pussy-after-the-gym                                       |
 | Nick Marxx            | https://nickmarxx.com/videos/puerto-rican-my-first-day-date                                                                   |
