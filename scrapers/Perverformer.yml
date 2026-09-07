@@ -9,8 +9,7 @@ xPathScrapers:
     common:
       $tags: //div[@class="tag-cloud"]
     scene:
-      Title:
-        selector: //main/h1
+      Title: //main/h1
       Date:
         selector: //script[@type="application/ld+json"]
         postProcess:
@@ -25,11 +24,15 @@ xPathScrapers:
       Tags:
         Name: $tags/a/span[not(contains(@class, "category-21")) and not(contains(@class, "category-22"))]
       Details:
-        selector: //main/div[@class="columns"]/div[@class="secondary"]/div[@class="area"]/span[@class="collapsible-partial"]
+        selector: //div[@class="area"]/span[@class="collapsible-partial"]
         concat: "\n"
-      Image: //main/div[@class="columns"]//video/@poster
-      URL: //link[@rel="canonical"]/@href
+      Image:
+        selector: //img[@class="poster-image"]/@src
+        postProcess:
+          - replace:
+              - regex: 576x324
+                with: 1024x576
+      URLs: //link[@rel="canonical"]/@href
       Studio:
         Name:
           fixed: Perverformer
-# Last Updated April 11, 2026
