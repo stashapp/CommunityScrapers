@@ -82,7 +82,7 @@ jsonScrapers:
           - parseDate: unix
       Details: data.description
       Image: data.cover
-      URL:
+      URLs:
         selector: data.serial_number
         postProcess:
           - replace:
@@ -132,7 +132,7 @@ jsonScrapers:
       Details: data.description_cn
       Image: data.cover
       Tags: *tags
-      URL:
+      URLs:
         selector: data.serial_number
         postProcess:
           - replace:
@@ -156,4 +156,3 @@ jsonScrapers:
             - replace:
                 - regex: ^
                   with: https://modelmediaasia.com/zh-CN/models/
-# Last Updated September 17, 2025
