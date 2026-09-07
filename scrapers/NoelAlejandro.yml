@@ -7,30 +7,28 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: 
-        selector: //h1[@id="title"]
+      Title:
+        selector: //meta[@property="og:title"]/@content
       Image:
-        selector: //video[@id="product-img"]/@poster
+        selector: //meta[@property="og:image"]/@content
       Date:
         selector: //script[@class="yoast-schema-graph"]
         postProcess:
-          - replace: 
+          - replace:
               - regex: .+datePublished\"\:\"(\d{4}-\d{2}-\d{2}).+
                 with: $1
       Director:
         selector: //li[contains(.,"Director:")]
         postProcess:
-          - replace: 
+          - replace:
               - regex: ^\s*Director:\s*
-                with: ''
+                with: ""
       Details:
-        selector: //div[@class="film-prologue"]/p
+        selector: //div[@class="film-prologue"]/p[not(a)] | //div[@class="film-prologue"]/div[@class="collapse"]/p
         concat: "\n\n"
       Performers:
         Name:
           selector: //li[contains(.,"Cast:")]/a
       Studio:
         Name:
-          selector: //meta[@name="title"]/@content
-
-# Last Updated March 27, 2023
+          fixed: Noel Alejandro Films
