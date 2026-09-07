@@ -36,7 +36,7 @@ jsonScrapers:
       Tags:
         Name: UCNAMEEn
       Details: DescEn
-      URL:
+      URLs:
         selector: MovieID
         postProcess:
           - replace:
@@ -46,5 +46,4 @@ jsonScrapers:
                 with: "/"
       Studio:
         Name:
-          fixed: PacoPacoMama
-# Last Updated March 26, 2024
+          fixed: pacopacomama

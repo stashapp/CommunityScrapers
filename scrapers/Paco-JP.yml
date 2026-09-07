@@ -1,9 +1,10 @@
-# this is Japanese version of Pacopacomama scraper to scrape Text in Japanese, while there is another verison to scarp in English
+# this is Japanese version of Pacopacomama scraper to scrape Text in Japanese, while there is another version to scrape in English
 name: Paco-JP
 sceneByURL:
   - action: scrapeJson
     url:
       - www.pacopacomama.com
+      - pacopacomama.com
     scraper: sceneScraper
     queryURL: "{url}"
     queryURLReplace:
@@ -39,7 +40,7 @@ jsonScrapers:
       Details:
         selector: "[Desc,DescEn]"
         concat: "|" # get rid of empty result Desc
-      URL:
+      URLs:
         selector: MovieID
         postProcess:
           - replace:
@@ -49,12 +50,10 @@ jsonScrapers:
                 with: "/"
       Studio:
         Name:
-          fixed: PacoPacoMama
+          fixed: pacopacomama
       Code:
         selector: MovieID
         postProcess:
           - replace:
-            - regex: .*(\d{6}_\d{3}).*
-              with: $1
-# Last Updated Jan 11, 2024
-
+              - regex: .*(\d{6}_\d{3}).*
+                with: $1
