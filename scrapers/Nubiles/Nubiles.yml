@@ -260,4 +260,3 @@ driver:
   headers:
     - Key: "User-Agent"
       Value: "stashapp-scraper/v1"
-# Last Updated January 20, 2026
