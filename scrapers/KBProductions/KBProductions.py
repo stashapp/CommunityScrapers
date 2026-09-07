@@ -73,6 +73,7 @@ studio_map = {
     "meanfeetfetish.com": "Mean Feet Fetish",
     "milflicious.com": "Milflicious",
     "members.hobybuchanon.com": "Hoby Buchanon",
+    "nastydaddy.com": "Nasty Daddy",
     "nickmarxx.com": "Nick Marxx",
     "nikkizee.com": "Nikki Zee",
     "nylonperv.com": "Nylon Perv",

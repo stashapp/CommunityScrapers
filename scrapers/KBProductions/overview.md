@@ -57,6 +57,7 @@ Scraper has been tested on 2026-09-06
 | MariskaX              | https://tour.mariskax.com/view/33259/fucking-the-tourists-in-the-bar                                                          |
 | Mean Feet Fetish      | https://meanfeetfetish.com/videos/annoyed-giantess-eats-you                                                                   |
 | Milflicious           | https://milflicious.com/videos/working-out-my-stepmom-london-rivers-pussy-after-the-gym                                       |
+| Nasty Daddy           | https://nastydaddy.com/videos/home-movies-trenton-and-logan                                                                   |
 | Nick Marxx            | https://nickmarxx.com/videos/puerto-rican-my-first-day-date                                                                   |
 | Nikki Zee             | https://nikkizee.com/scenes/strap-battle-2026-blake-jones-vs-nikki-zee                                                        |
 | Nylon Perv            | https://nylonperv.com/videos/sweet-latina-doll-face-fucked-and-facialed                                                       |
