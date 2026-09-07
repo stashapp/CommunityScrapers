@@ -7,24 +7,27 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: 
-          selector: //div[@class="scene-title-and-social"]//h1/text()
-          postProcess:
-            - replace:
-                - regex: ^Video\s-\s
-                  with: ""
+      Title:
+        selector: //div[@class="scene-title-and-social"]//h1
+        postProcess:
+          - replace:
+              - regex: ^Video\s-\s
+                with: ""
       Details: //meta[@itemprop="description"]/@content
-      Date: 
+      Date:
         selector: //meta[@itemprop="uploadDate"]/@content
         postProcess:
           - parseDate: 01/02/2006
       Studio:
-        Name: 
-            fixed: "Penthouse Gold"
+        Name:
+          fixed: "Penthouse Gold"
       Performers:
         Name: //div[@class="model"]/a/@title
       Tags:
-        Name: //ul[@class="scene-tags"]/li/a/text()
+        Name: //ul[@class="scene-tags"]/li/a
       Image: //meta[@itemprop="thumbnailUrl"]/@content[not(contains(., "/no_video_preview_"))]
 
-# Last Updated April 27, 2024
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
