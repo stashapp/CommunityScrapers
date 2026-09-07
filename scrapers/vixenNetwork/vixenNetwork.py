@@ -1,3 +1,18 @@
+import ssl, urllib3
+from urllib3.util.ssl_ import create_urllib3_context
+_orig = create_urllib3_context
+def _ctx(*a,**k):
+    c = _orig(*a,**k)
+    try:
+        c.check_hostname = False
+        c.verify_mode = ssl.CERT_NONE
+        c.options |= ssl.OP_NO_TICKET
+    except Exception:
+        pass
+    return c
+urllib3.util.ssl_.create_urllib3_context = _ctx
+
+import os
 import json
 import re
 import sys
@@ -371,8 +386,8 @@ class Site:
                         if image["width"] > maxWidth:
                             scene["image"] = image["src"]
                             maxWidth = image["width"]
-            if "image" in scene:
-                scene["image"] = try_upgrade_image(scene["image"])
+            # image upgrade skipped for proxy/auth fix
+            # scene["image"] = try_upgrade_image(scene["image"])
             if url:
                 scene["url"] = url
 
@@ -511,6 +526,45 @@ def check_alternate_urls(site):
             return u
     return None
 
+
+# imageByURL
+if url and ("cdn.tushy" in url or "cdn.tushyraw" in url or "cdn.vixen" in url or ".jpeg" in url or ".jpg" in url):
+    s = {"image": url, "url": url}
+    print(json.dumps(s))
+    sys.exit(0)
+
+# galleryByURL
+if url and "/gallery" in url:
+    try:
+        import cloudscraper
+        from bs4 import BeautifulSoup
+        scraper = cloudscraper.create_scraper()
+        r = scraper.get(url, timeout=15)
+        soup = BeautifulSoup(r.text, "html.parser")
+        links = list(dict.fromkeys([a.get("href") for a in soup.find_all("a", href=True) if a.get("href") and ("/videos/" in a.get("href") or "/gallery" in a.get("href"))]))[:10]
+        print(json.dumps({"url": url, "gallery_links": links}))
+    except Exception as e:
+        print(json.dumps({"url": url, "error": str(e)}))
+    sys.exit(0)
+
+# groupByURL
+if url and "/gallery" not in url and "/videos/" not in url and ("tushy." in url or "vixen." in url or "tushyraw." in url):
+    try:
+        import cloudscraper
+        from bs4 import BeautifulSoup
+        scraper = cloudscraper.create_scraper()
+        r = scraper.get(url, timeout=15)
+        soup = BeautifulSoup(r.text, "html.parser")
+        links = list(dict.fromkeys([a.get("href") for a in soup.find_all("a", href=True) if a.get("href") and "/videos/" in a.get("href")]))[:10]
+        # return studio info + first scene links
+        studio_name = "Vixen"
+        if "tushyraw" in url: studio_name = "Tushy Raw"
+        elif "tushy" in url: studio_name = "Tushy"
+        elif "vixen" in url: studio_name = "Vixen"
+        print(json.dumps({"url": url, "studio": studio_name, "scene_links": links}))
+    except Exception as e:
+        print(json.dumps({"url": url, "error": str(e)}))
+    sys.exit(0)
 
 # sceneByURL
 if url:
