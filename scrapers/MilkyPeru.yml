@@ -1,26 +1,80 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/stashapp/CommunityScrapers/refs/heads/master/validator/scraper.schema.json
 name: "Milky Peru"
+
+# Wordpress REST API for JSON
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - milkyperu.com
-    scraper: milkyperu
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: '^https?://(?:www\.)?[^/]+/([^/?#]+).*$'
+          with: "https://milkyperu.com/wp-json/wp/v2/posts?_embed=1&_fields=title,content,date,link,_links,_embedded&slug=${1}"
+    scraper: sceneScraper
 
-xPathScrapers:
-  milkyperu:
+jsonScrapers:
+  sceneScraper:
     scene:
       Title:
-        selector: //meta[@property = "og:title"]/@content
+        selector: 0.title.rendered
         postProcess:
-        - replace:
-          - regex: "[. -]+$"
-            with: ""
-      URLs: //meta[@property = "og:url"]/@content
+          - &stripTags
+            replace:
+              - regex: <[^>]+>
+                with: ""
+          - &decodeEntities
+            javascript: |
+              var entities = {
+                "&#8216;": "‘",
+                "&#8217;": "’",
+                "&#8220;": "“",
+                "&#8221;": "”",
+                "&#8211;": "–",
+                "&#8212;": "—",
+                "&#8230;": "…",
+                "&hellip;": "…",
+                "&#39;": "'",
+                "&#039;": "'",
+                "&apos;": "'",
+                "&quot;": "\"",
+                "&#160;": " ",
+                "&nbsp;": " ",
+                "\u00A0": " ",
+                "&#038;": "&",
+                "&amp;": "&"
+              };
+              return value.replace(/&#?\w+;|\u00A0/g, function (m) {
+                return entities[m] || m;
+              });
+          - replace:
+              - regex: '\s+'
+                with: " "
+              - regex: '^\s+|\s+$'
+                with: ""
       Date:
-        selector: //meta[@property = "article:published_time"]/@content
+        selector: 0.date
         postProcess:
-        - parseDate: 2006-01-02T15:04:05-07:00
-      Details: //div[@data-elementor-type="wp-post"]//div[@class="elementor-widget-container"]/h2[contains(@class, "elementor-heading-title")]//text()
+          - parseDate: 2006-01-02T15:04:05
+      Details:
+        selector: 0.content.rendered
+        postProcess:
+          - replace:
+              # the description, when present, lives in a text-editor widget
+              # after a separate "Description" heading widget
+              - regex: '(?s)^.*elementor-widget-text-editor"[^>]*>.*?<div class="elementor-widget-container">(.*?)</section>.*$'
+                with: $1
+              # Clear remnants in the cases of videos with no description
+              - regex: "(?s)^.*<video.*$"
+                with: ""
+          - *stripTags
+          - *decodeEntities
+          - replace:
+              - regex: '\s+'
+                with: " "
+              - regex: '^\s+|\s+$'
+                with: ""
+      Image: "0._embedded.wp:featuredmedia.0.source_url"
+      URLs: 0.link
       Studio:
-        Name: //meta[@property = "og:site_name"]/@content
-      Image: //meta[@property = "og:image"]/@content
+        Name:
+          fixed: Milky Peru
