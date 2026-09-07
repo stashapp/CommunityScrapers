@@ -157,6 +157,10 @@ sceneByURL:
     url:
       - glosstightsglamour.com/vod/scenes/
     scraper: vodSceneDDMMScraper
+  - action: scrapeXPath
+    url:
+      - meanawolf.com/scenes/
+    scraper: vidsStyle
 
 xPathScrapers:
   oldStyle:
@@ -230,6 +234,7 @@ xPathScrapers:
                 lasvegasamateurs: Las Vegas Amateurs
                 laurenphillips: Lauren Phillips
                 letstryhard: Let's Try Hard
+                meanawolf: Meana Wolf
                 melaniehicksxxx: Melanie Hicks XXX
                 mongerinasia: Monger In Asia
                 msparisandfriends: Ms Paris and Friends
@@ -445,6 +450,31 @@ xPathScrapers:
         Name: *vodTagsName
       Studio: *vodStudio
       Image: *vodImage
+  # li/span-labelled variant, URLs end in "_vids.html"
+  vidsStyle:
+    scene:
+      Title: //h1
+      Date:
+        selector: //span[text()="ADDED:"]/following-sibling::text()
+        postProcess: *datePostProcess
+      Details: //div[@class="trailerContent"]/p
+      Performers:
+        Name: //span[text()="FEATURING:"]/following-sibling::a
+      Tags:
+        Name: //span[text()="TAGS:"]/following-sibling::a
+      Studio:
+        Name:
+          selector: //base/@href
+          postProcess: *studioPostProcess
+      Image:
+        selector: //base/@href | //script[contains(.,"useimage")]/text()
+        concat: __SEP__
+        postProcess:
+          - replace:
+              - regex: (https://[^/]+)/.*useimage\s=\s"https://[^/]+(/[^"?]+).*
+                with: $1$2
+              - regex: -[1-4]x\.jpg$
+                with: -full.jpg
 driver:
   headers:
     - Key: "User-Agent"
