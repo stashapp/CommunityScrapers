@@ -1,0 +1,77 @@
+name: "MistressCMS"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - blackdiamoond.net/de/shop/videos/v/
+      - blackdiamoond.net/en/store/videos/v/
+      - boss-girls.com/en/store/videos/v/
+      - carmen-rivera.com/en/store/videos/v/
+      - goddesskiragold.com/en/store/videos/v/
+      - goddess-lena.com/en/store/videos/v/
+      - goddesslil.net/en/store/videos/v/
+      - lady-magistra.com/en/store/videos/v/
+      - ladypina.com/en/store/videos/v/
+      - ladyscarlet.net/en/store/videos/v/
+      - ladytoxicsugga.com/en/store/videos/v/
+      - madame-ellen.com/en/store/videos/v/
+      - madame-svea.com/en/store/videos/v/
+      - missmortelle.com/de/shop/videos/v/
+      - missmortelle.com/en/store/videos/v/
+      - missyvanlicks.com/en/store/videos/v/
+      - mistress-anja.com/en/store/videos/v/
+      - mistress-iside.com/en/store/videos/v/
+      - naomirouge.com/en/store/videos/v/
+      - your-goddess.com/en/store/videos/v/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $detail: //div[contains(@class, "videodetail")]
+    scene:
+      Title: $detail/div[@class="panel-heading"]
+      Date:
+        selector: $detail/div[@class="panel-body"]/div[@class="row"]/div[@class="col-md-6"][1]/p/text()[contains(., "Added on") or contains(., "Hinzugefügt")]
+        postProcess:
+          - replace:
+              - regex: ^.*(\d{2}\.\d{2}\.\d{4}).*$
+                with: $1
+          - parseDate: "02.01.2006"
+      Details: //div[contains(@class, "videodescription")]
+      Studio:
+        Name:
+          selector: //meta[@name="og:url"]/@content
+          postProcess: &studioNamePostProcess
+            - replace:
+                - regex: 'https?://(?:www\.)?([^/]+)/.*'
+                  with: $1
+            - map:
+                blackdiamoond.net: Mistress Blackdiamoond
+                boss-girls.com: Boss Girls Productions
+                carmen-rivera.com: Carmen Rivera
+                goddesskiragold.com: Goddess Kira Gold
+                goddess-lena.com: Goddess Lena
+                goddesslil.net: Goddess Lil
+                lady-magistra.com: Lady Magistra
+                ladypina.com: Lady Pina
+                ladyscarlet.net: Lady Scarlet
+                ladytoxicsugga.com: Lady Toxicsugga
+                madame-ellen.com: Madame Ellen
+                madame-svea.com: Madame Svea
+                missmortelle.com: Miss Medea Mortelle
+                missyvanlicks.com: Missy Van Licks
+                mistress-anja.com: Mistress Anja
+                mistress-iside.com: Mistress Iside
+                naomirouge.com: Naomi Rouge
+                your-goddess.com: Your Goddess
+      Image: //meta[@name="og:image"]/@content
+      URLs: //meta[@name="og:url"]/@content
+      Performers:
+        Name:
+          selector: //meta[@name="og:url"][not(contains(@content, "boss-girls.com"))]/@content
+          postProcess: *studioNamePostProcess
+      Tags:
+        Name: //div[contains(@class, "videotags")]/a[contains(@href, "/t/")]
+driver:
+  headers:
+    - Key: "User-Agent"
+      Value: "stash-scraper/1.0"
