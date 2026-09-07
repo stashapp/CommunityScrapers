@@ -98,6 +98,7 @@ sceneByURL:
       - kellyquellxxx.com
       - ladyboy-ladyboy.com
       - ladyboy.xxx
+      - naughtynatural.com
       - realtgirls.com
       - t.porn
       - tgirlsex.xxx
@@ -225,6 +226,11 @@ xPathScrapers:
               # Strips the curly quotes used by some sites
               - regex: ^\s*in\s*[\x{201C}"](.+)[\x{201D}"]\s*$
                 with: $1
+              # Some sites put "in" in its own sibling <span> rather than
+              # in the same text node as the quoted title which makes the
+              # above regex a no-op and this catches the leftover quotes
+              - regex: ^\s*[\x{201C}"](.+)[\x{201D}"]\s*$
+                with: $1
       Date: &dateMain
         selector: //div[@class="setdesc"]//b[contains(.,"Added")]/following-sibling::text()[1]
         postProcess:
@@ -262,6 +268,9 @@ xPathScrapers:
                 return result.join('').trim();
               }
               return value;
+          - replace:
+              - regex: \s*Read More in Members Area\s*$
+                with: ""
       Performers: &performersMain
         Name: //div[@class="setdesc"]//a/text()
       Studio: &studio
