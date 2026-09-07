@@ -33,6 +33,7 @@ xPathScrapers:
         | //div[@class="indScene"]/h1
         | //div[@class="indScene"]/h2
         | //div[@class="trailerMInfo"]/h2
+        | //span[@class="title_bar_hilite"]
       Date:
         selector: >-
           //div[@class="cell update_date"]
