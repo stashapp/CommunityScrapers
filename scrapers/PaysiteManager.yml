@@ -28,7 +28,6 @@ sceneByURL:
       - lilmissy.uk
       - lptickling.shop
       - lvgvideostore.com
-      - missroper.com
       - nabher.com
       - onebarprison.com
       - naughtyties.com
@@ -37,7 +36,6 @@ sceneByURL:
       - respectfulbondage.com
       - ropexpert.com
       - ropexpertvideos.com
-      - selfgags.com
       - shbvisions.com
       - shinybound.com
       - shinysboundsluts.com
@@ -50,7 +48,6 @@ sceneByURL:
       - tinyguyclips.com
       - thesensitivespot.com
       - txfetishlegends.com
-      - vorevixens.com
     scraper: sceneScraper
 
 xPathScrapers:
@@ -61,18 +58,18 @@ xPathScrapers:
         selector: //div[contains(@class, "videoDescription")]/p
         concat: "\n"
       Date:
-        selector: //div[@class="contentT"]/ul[@class="contentInfo"]/li[./i[contains(@class, "fa-calendar")]]/text()
+        selector: //div[@class="contentT"]/ul[@class="contentInfo"]/li[./i[contains(@class, "fa-calendar")]]
         postProcess:
           - parseDate: Jan 2, 2006
       Tags:
         Name:
-          selector: //div[@class="tags"]//a/text()
+          selector: //div[@class="tags"]//a
           postProcess:
             - replace:
                 - regex: "^#"
                   with: ""
       Performers:
-        Name: //div[@class="models"]//a/text()
+        Name: //div[@class="models"]//a
       Code:
         selector: //a[contains(@id,"cart-item")]/@id
         postProcess:
@@ -114,7 +111,6 @@ xPathScrapers:
                 lingeriegallery: The Lingerie Gallery
                 lptickling: LP Tickling
                 lvgvideostore: LVG Video Store
-                missroper: Miss Roper
                 nabher: Nabher
                 naughtyties: Naughty Ties
                 onebarprison: OneBarPrison
@@ -124,7 +120,6 @@ xPathScrapers:
                 respectfulbondage: Respectful Bondage
                 ropexpert: Rope Expert
                 ropexpertvideos: Rope Expert
-                selfgags: Selfgags
                 shbvisions: SHB Visions
                 shinysboundsluts: ShinysBoundSluTS
                 shinybound: ShinyBound
@@ -137,11 +132,9 @@ xPathScrapers:
                 tinyguyclips: Tiny Guy's Foot Fetish Clips
                 thesensitivespot: The Sensitive Spot
                 txfetishlegends: Tx Fetish Legends
-                vorevixens: Vore Vixens
       Image:
         selector: //meta[@name="twitter:image"]/@content | //iframe/@src | //div[contains(@class, "videoPreview")]//img/@src
         postProcess:
           - replace:
               - regex: .*\?poster=(.*\.jpg).*
                 with: $1
-# Last Updated June 4, 2025
