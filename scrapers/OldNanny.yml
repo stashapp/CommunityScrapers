@@ -1,8 +1,7 @@
-# This scraper does not parse older scenes that use a different page layout
 name: "OldNanny"
 sceneByURL:
   - action: scrapeXPath
-    url: 
+    url:
       - oldnanny.com
     scraper: sceneScraper
 xPathScrapers:
@@ -10,30 +9,25 @@ xPathScrapers:
     scene:
       Studio:
         Name:
-          selector: //div[@class="col-12 col-xl-4"]//dl[2]//a/text()
-          postProcess:
-            - replace:
-                - regex: ([a-z])([A-Z])
-                  with: $1 $2
+          fixed: Old Nanny
       Title:
         selector: //title/text()
         postProcess:
           - replace:
               - regex: ^.+\s:\s(.+)$
                 with: $1
-      Tags: 
+      Tags:
         Name:
-          selector: //div[@class="col-12 col-xl-4"]//dl[3]//a/text()
+          selector: //a[@class="public-media-detail__tag"]/text()
       Date:
-        selector: //div[@class="col-12 text-center title-wrapp"]/h1/small/text()
+        selector: //script[@type="application/ld+json" and contains(text(),"uploadDate")]
         postProcess:
-          - parseDate: January 2, 2006
+          - replace:
+              - regex: .+"uploadDate":"([^T]+).+
+                with: $1
+          - parseDate: 2006-01-02
       Performers:
         Name:
-          selector: //div[@class="col-12 col-xl-4"]//dl[1]//a
-          postProcess:
-            - replace:
-                - regex: \,
-                  with:
-      Image: //video[@id="video-player"]/@poster
-# Last Updated July 27, 2023
+          selector: //a[contains(@class, "public-media-detail__model")]/text()
+      Image:
+        selector: //video[contains(@class, "public-media-detail__video")]/@poster
