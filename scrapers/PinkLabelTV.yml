@@ -19,6 +19,8 @@ sceneByQueryFragment:
   scraper: sceneScraper
 xPathScrapers:
   movieScraper:
+    common:
+      $filmDetails: //ul[@id="film_details"]
     group:
       Name: &title
         selector: //meta[@property='og:title']/@content
@@ -27,54 +29,51 @@ xPathScrapers:
               - regex: '\s- PinkLabel.*$'
                 with: ""
       Duration:
-        selector: //div[@class='col-md-12 col-sm-8']/h5[contains(text(),"Runtime:")]/text()
+        selector: $filmDetails/li[strong[contains(text(),"Runtime")]]/text()
         postProcess:
           - replace:
-              - regex: "Runtime: "
-                with: ""
-              - regex: "(.*) mins?. ?"
+              - regex: '(\d+) min\.?'
                 with: 00:$1:00
-      Director:
-        selector: //div[@class='col-md-12 col-sm-8']/h5[contains(text(),"Directed")]/text()
-        postProcess:
-          - replace:
-              - regex: "^.*Directed by (.*)$"
-                with: $1
+      Director: &director $filmDetails/li[strong[contains(text(),"Directed By")]]/a
       Date: &date
-        selector: //div[@class='col-md-12 col-sm-8']/h5[contains(text(),"Directed")]/text()
+        selector: $filmDetails/li[strong[contains(text(),"Date Added")]]/text()
         postProcess:
           - replace:
-              - regex: '^(\d+).*$'
-                with: $1-01-01
+              - regex: "/"
+                with: "-"
           - parseDate: 2006-01-02
       Synopsis: &details
-        selector: //div[@class='ep-description']/span[@class='dark-copy']/p
+        selector: //small[contains(@class,"text-secondary") and contains(text(),"Description")]/following-sibling::p
         concat: "\n\n"
-      URL: &url //meta[@property='og:url']/@content
+      URLs: &url //meta[@property='og:url']/@content
       FrontImage: &image //meta[@property='og:image']/@content
       Studio: &studio
-        Name: //div[@class='col-md-12 col-sm-8']/h4
+        Name: $filmDetails/li[strong[contains(text(),"Studio")]]/a
   sceneSearch:
     common:
       $post: //li[@class="list-group-item media plEpisode search-result shameless_film"]
     scene:
       Title:
         selector: $post/a/@title
-      URL:
+      URLs:
         selector: $post/a/@href
   sceneScraper:
+    common:
+      $filmDetails: //ul[@id="film_details"]
     scene:
       Title: *title
       Details: *details
       Date: *date
-      URL: *url
+      URLs: *url
       Image: *image
       Studio: *studio
-      Groups:
-        URL: //meta[@property='og:url']/@content
-        Name: *title
+      Director: *director
       Tags:
-        Name: //div[@class='col-md-8']/div[@class='ep-description']/div[contains(text(),"Tags:")]/a
+        Name: //div[contains(@class,"film-tags-box")]/a
       Performers:
-        Name: //div[@class='col-md-8']/div[@class='ep-description']/div[contains(text(),"Starring:")]/a
-# Last Updated July 27, 2022
+        Name: $filmDetails/li[strong[contains(text(),"Performers")]]/a
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
