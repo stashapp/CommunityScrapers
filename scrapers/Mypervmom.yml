@@ -1,6 +1,8 @@
 name: mypervmom.com
+
+# Wordpress REST API for JSON
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - boyfriendsharing.com
       - brattyfamily.com
@@ -14,33 +16,81 @@ sceneByURL:
       - mypervmom.com
       - mysislovesme.com
       - youngerloverofmine.com
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        # last path segment is the slug - some domains use flat /slug/
+        # permalinks, others use dated /YYYY/MM/DD/slug/ permalinks
+        - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
+          with: "https://${1}/wp-json/wp/v2/posts?_embed=1&_fields=title,date,link,_links,_embedded,meta&slug=${2}"
     scraper: sceneScraper
-xPathScrapers:
+
+jsonScrapers:
   sceneScraper:
     scene:
-      Title: //h2
-      Date:
-        selector: //div[@id="title-single"]/span
+      Title:
+        selector: 0.title.rendered
         postProcess:
-          - replace:
-              - regex: (\w+\s)(\d+)\w+,(\s\d\d\d\d)
-                with: $1$2$3
-          - parseDate: January 2 2006
+          - &decodeEntities
+            javascript: |
+              var entities = {
+                "&#8216;": "‘",
+                "&#8217;": "’",
+                "&#8220;": "“",
+                "&#8221;": "”",
+                "&#8211;": "–",
+                "&#8212;": "—",
+                "&#8230;": "…",
+                "&hellip;": "…",
+                "&#39;": "'",
+                "&#039;": "'",
+                "&apos;": "'",
+                "&quot;": "\"",
+                "&#160;": " ",
+                "&nbsp;": " ",
+                "\u00A0": " ",
+                "&#038;": "&",
+                "&amp;": "&"
+              };
+              return value.replace(/&#?\w+;|\u00A0/g, function (m) {
+                return entities[m] || m;
+              });
       Details:
-        selector: //p[@class="more"]|//span[@class="more"]/text()
+        selector: 0.meta.description
         postProcess:
-          - replace:
-              - regex: ^Description\:(.+)
-                with: $1
+          - *decodeEntities
+          - javascript: |
+              // some posts store a literal `\r\n`/`\n` in the description
+              // text itself rather than a real line break
+              return value.replace(/\\r\\n/g, "\n").replace(/\\n/g, "\n");
+      Date:
+        selector: 0.date
+        postProcess:
+          - parseDate: 2006-01-02T15:04:05
       Performers:
-        Name: //div[@id="title-single"]//a
-      Image:
-        selector: //div[@class="entry"]//video/@poster
+        Name:
+          selector: "0._embedded.wp:term.1.#.name"
+          postProcess:
+            - *decodeEntities
+      Image: "0._embedded.wp:featuredmedia.0.source_url"
+      URLs: 0.link
       Studio:
         Name:
-          selector: //a[@title="Home"]/img/@alt
+          selector: 0.link
           postProcess:
+            - replace:
+                - regex: '^https?://(?:www\.)?([^/]+)/.*$'
+                  with: "${1}"
             - map:
-                BrattySis: Bratty Sis
-                PervMom: Perv Mom
-# Last Updated November 05, 2022
+                boyfriendsharing.com: Share My BF
+                brattyfamily.com: Bratty Sis
+                gostuckyourself.net: Go Stuck Yourself
+                hugecockbreak.com: Don't Break Me
+                littlefromasia.com: Little Asians
+                mommysboy.net: Mommy's Boy
+                momxxx.org: Mom XXX
+                mybadmilfs.com: Bad MILFs
+                mydaughterswap.com: Daughter Swap
+                mypervmom.com: PervMom
+                mysislovesme.com: Sis Loves Me
+                youngerloverofmine.com: My Younger Lover
