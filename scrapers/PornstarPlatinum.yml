@@ -9,24 +9,12 @@ xPathScrapers:
     common:
       $panel: //div[@class="panel-content"]
     scene:
-      Title: //div[contains(@class,"video-slider-meta")]/h3/text()
-      Date: $panel/div[@class="video-author"]/span[2]/text()
-      Details: $panel/p/text()
-      Performers:
-        Name:
-          selector: //div[contains(@class,"video-slider-meta")]/h3/text()
-          postProcess:
-            - replace:
-                - regex: ^
-                  with: "https://www.pornstarplatinum.com/tour/index.php?search="
-                - regex: \s
-                  with: "+"
-            - subScraper: //div[@id="videos-list"]//span[@class="marker left"]
+      Title: //div[contains(@class,"video-slider-meta")]/h3
+      Date: $panel/div[contains(@class,"video-author")]/span[2]
+      Details: $panel/p
       Tags:
-        Name:
-          selector: $panel//div[@class="tagcloud"]/a/text()
+        Name: $panel//div[@class="tagcloud"]/a
       Studio:
         Name:
           fixed: "Pornstar Platinum"
-      Image: //video[@id="myVideo"]/@poster
-# Last Updated January 08, 2021
+      Image: //div[@class="otplayer-wrapper text-center f"]/a/img[not(contains(@src,"trailer-placeholder"))]/@src
