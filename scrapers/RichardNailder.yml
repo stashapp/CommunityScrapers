@@ -25,25 +25,25 @@ xPathScrapers:
         selector: //li[contains(.,'Published:')]
         postProcess:
           - replace:
-              - regex: 'Published:'
-                with: ''
+              - regex: "Published:"
+                with: ""
           - parseDate: 2 Jan 2006
       Tags:
-        Name: 
-          selector: //ul[contains(@class,'square')]/li[contains(.,'Tags:') or contains(.,'Category')]/a 
+        Name:
+          selector: //ul[contains(@class,'square')]/li[contains(.,'Tags:') or contains(.,'Category')]/a
           postProcess:
-            -  replace:
-                - regex: '^#'
-                  with: ''
+            - replace:
+                - regex: "^#"
+                  with: ""
       Performers:
         Name: //li[contains(.,'Featuring:')]/a
-      Image:  
+      Image:
         selector: //a[text()='Members Login']/@href | //img[contains(@src,'image.php')][1]/@src
-        concat: '/'
+        concat: "/"
         postProcess:
           - replace:
               - regex: 'members\.'
-                with: ''
+                with: ""
       Studio:
         Name: //li[contains(.,'Published on:')]/a | //a[text()='Members Login']/@title
 
@@ -54,79 +54,105 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: "('s )?Bio$"
-                with: ''
+                with: ""
       Image:
         selector: //a[text()='Members Login']/@href | //img[contains(@src,'size=3')]/@src
-        concat: '/'
+        concat: "/"
         postProcess:
           - replace:
               - regex: 'members\.'
-                with: ''
-      Gender: 
+                with: ""
+      Gender:
         selector: //li[contains(.,'Gender:')]
         postProcess:
           - replace:
-              - regex: 'Gender:'
-                with: ''
-      HairColor: 
+              - regex: "Gender:"
+                with: ""
+      HairColor:
         selector: //li[contains(.,'Hair Color:')]
         postProcess:
           - replace:
-              - regex: 'Hair Color:'
-                with: ''
-      EyeColor: 
+              - regex: "Hair Color:"
+                with: ""
+      EyeColor:
         selector: //li[contains(.,'Eye Color:')]
         postProcess:
           - replace:
-              - regex: 'Eye Color:'
-                with: ''
-      Tattoos: 
+              - regex: "Eye Color:"
+                with: ""
+      Tattoos:
         selector: //li[contains(.,'Tattoos:')]
         postProcess:
           - replace:
-              - regex: 'Tattoos:'
-                with: ''
-      Piercings: 
+              - regex: "Tattoos:"
+                with: ""
+      Piercings:
         selector: //li[contains(.,'Piercings:')]
         postProcess:
           - replace:
-              - regex: 'Piercings:'
-                with: ''
-      Ethnicity: 
+              - regex: "Piercings:"
+                with: ""
+      Ethnicity:
         selector: //li[contains(.,'Ethnicity:')]
         postProcess:
           - replace:
-              - regex: 'Ethnicity:'
-                with: ''
-      FakeTits: 
+              - regex: "Ethnicity:"
+                with: ""
+      FakeTits:
         selector: //li[contains(.,'Real Boobs:')]
         postProcess:
           - replace:
-              - regex: 'Real Boobs:'
-                with: ''
+              - regex: "Real Boobs:"
+                with: ""
               - regex: '^\s*Yes'
-                with: '%No'
+                with: "%No"
               - regex: '^\s*No'
-                with: '%Yes'
-              - regex: '^%'
-                with: ''
-      Height: 
+                with: "%Yes"
+              - regex: "^%"
+                with: ""
+      Height:
         selector: //li[contains(.,'Height:')]
         postProcess:
           - replace:
               - regex: '[^\d]:'
-                with: ''
+                with: ""
               - regex: ^
-                with: '0.'
+                with: "0."
           - feetToCm: true
-      Weight: 
+      Weight:
         selector: //li[contains(.,'Weight:')]
         postProcess:
           - replace:
               - regex: '[^\d]'
-                with: ''
+                with: ""
           - lbToKg: true
 
       Details: //div[contains(@class,'contentWrapper')]//div[@class='panel']
 
-# Last Updated May 1, 2024
+# Replace these when the scraper fails
+driver:
+  cookies:
+    - CookieURL: "https://bringmeyoursister.com"
+      Cookies:
+        - Name: PHPSESSID
+          Domain: ".bringmeyoursister.com"
+          Value: 84t9dg8lvalnl5gp0kmh68mbh7
+          Path: "/"
+    - CookieURL: "https://glassmannequin.com"
+      Cookies:
+        - Name: PHPSESSID
+          Domain: ".glassmannequin.com"
+          Value: mqk542rm87e209rdoedgp28n55
+          Path: "/"
+    - CookieURL: "https://realcoloradogirls.com"
+      Cookies:
+        - Name: PHPSESSID
+          Domain: ".realcoloradogirls.com"
+          Value: 2gc3qe8pd99mads6irarnb04n0
+          Path: "/"
+    - CookieURL: "https://richardnailder.com"
+      Cookies:
+        - Name: PHPSESSID
+          Domain: ".richardnailder.com"
+          Value: q09dhtlvkktkfa9h7fpbfs7h40
+          Path: "/"
