@@ -26,9 +26,15 @@ xPathScrapers:
     scene:
       Title: //div[@class="left-top-part"]//h1
       Date:
-        selector: //div[contains(@class, "datesingle")]/text()
+        selector: >-
+          //div[contains(@class, "datesingle")]
+          | //meta[@property="article:published_time" and not(//div[contains(@class,"datesingle")])]/@content
         postProcess:
+          - replace:
+              - regex: "<[^>]*>"
+                with: ""
           - parseDate: January 2, 2006
+          - parseDate: "2006-01-02T15:04:05-07:00"
       Performers:
         Name: //div[@class="left-top-part"]//div[contains(@class,"tagsmodels singletag")]//a
       Director: //div[contains(@class, "director")]//span
@@ -68,7 +74,7 @@ xPathScrapers:
   oldStyle:
     scene:
       Title: //h2[1]
-      Details: (//div[@class="post-content"]//div[@class="zapdesc"]/p[2])[1]
+      Details: //p[contains(., "Description")]/following-sibling::p[1]
       Date:
         selector: //meta[@property="article:published_time"]/@content
         postProcess:
