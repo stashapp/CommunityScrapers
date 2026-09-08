@@ -53,6 +53,7 @@ Scraper has been tested on 2026-09-08
 | PlaypetVictoria          | https://playpetvictoria.com/updates/Marti-Gras-With-Victoria-And-Ralph.html                                                  | oldStyle                       |
 | Pure CFNM                | https://www.purecfnm.com/scenes/photocopying-the-cock_vids.html                                                              | proSceneWithImgFallbackScraper |
 | Raven Swallows           | https://ravenswallowzxxx.com/scenes/RavenswallowsFunGirl_vids.html                                                           | newStyle                       |
+| Red Hot Straight Boys    | https://redhotstraightboys.com/tour/updates/Tyler-Davis-Interview.html                                                       | oldStyle                       |
 | Rion King                | https://rionkingxxx.com/updates/RionKingSolo2.html                                                                           | oldStyle                       |
 | Sean Michaels            | https://seanmichaelsxxx.com/updates/Athena-and-Sean.html                                                                     | oldStyle                       |
 | Secret Susan             | https://secretsusan.com/updates/YummygirlzSecretsusan32.html                                                                 | oldStyle                       |
