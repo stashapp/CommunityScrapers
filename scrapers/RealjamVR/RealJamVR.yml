@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
 name: RealJamVR
 sceneByName:
   action: script
@@ -47,24 +46,17 @@ xPathScrapers:
           - javascript: |
               return value.toLowerCase()
       Date: &date
-        selector: //div[@class="specs-icon"]/following-sibling::strong
+        selector: //script[@type="application/ld+json" and contains(., "VideoObject")]
         postProcess:
-          # both date formats are used interchangeably
-          # e.g.
-          # Jan. 2, 2006
-          # January 2, 2006
-          # Sept. 2, 2024
-          - replace:
-              - regex: ([\w]{3})([^\ ]+)?(.*)
-                with: $1$3
-          - parseDate: Jan 2, 2006
+          - javascript: |
+              return JSON.parse(value).uploadDate.split("T")[0]
       Performers: &performers
         Name:
-          selector: //a[contains(@href, 'actor')][contains(text(), 'VR')]
+          selector: //script[@type="application/ld+json" and contains(., "VideoObject")]
           postProcess:
-            - replace:
-              - regex: (.+)\sVR.+
-                with: $1
+            - javascript: |
+                return JSON.parse(value).actor.map(a => a.name).join(", ")
+          split: ", "
       Tags: &tags
         Name:
           selector: //a[starts-with(@href, "/scenes") and @class="tag"]/text() | //div[not(@class)]/div[@class="specs-icon"]
@@ -94,36 +86,35 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //h1
-      Gender: //div[span[text()="Gender:"]]/text()
+      Gender: //div[span[text()="Gender:"]]
       Country:
-        selector: //div[span[text()="Birth Place:"]]/text()
+        selector: //div[span[text()="Birth Place:"]]
         postProcess:
           - replace:
               - regex: .*,
                 with: ""
       Birthdate:
-        selector: //div[span[text()="Date of Birth:"]]/text()
+        selector: //div[span[text()="Date of Birth:"]]
         postProcess:
           # both date formats are used interchangeably
           - parseDate: Jan. 2, 2006
           - parseDate: January 2, 2006
       Height:
-        selector: //div[span[text()="Height:"]]/text()
+        selector: //div[span[text()="Height:"]]
         postProcess:
           - replace:
               - regex: .*\ (\d+)\ cm.*
                 with: $1
       Weight:
-        selector: //div[span[text()="Weight:"]]/text()
+        selector: //div[span[text()="Weight:"]]
         postProcess:
           - replace:
               - regex: .*\ (\d+)\ kg.*
                 with: $1
-      HairColor: //div[span[text()="Hair color:"]]/text()
-      EyeColor: //div[span[text()="Eyes color:"]]/text()
+      HairColor: //div[span[text()="Hair color:"]]
+      EyeColor: //div[span[text()="Eyes color:"]]
       Tags:
-        Name: //div[span[text()="Tags:"]]/a/text()
+        Name: //div[span[text()="Tags:"]]/a
       Image: //div[contains(@class, "actor-view")]//img/@src
-      Piercings: //div[span[text()="Piercing:"]]/text()
-      Tattoos: //div[span[text()="Tattoo:"]]/text()
-# Last Updated Sept 25, 2025
+      Piercings: //div[span[text()="Piercing:"]]
+      Tattoos: //div[span[text()="Tattoo:"]]
