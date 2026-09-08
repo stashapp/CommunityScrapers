@@ -4,56 +4,26 @@ sceneByURL:
     url:
       - slroriginals.com
     scraper: sceneScraper
-groupByURL:
-  - action: scrapeXPath
-    url:
-      - slroriginals.com
-    scraper: movieScraper
 xPathScrapers:
   sceneScraper:
     common:
-      $info: &info //div[starts-with( @class,"c-page--video-right")]
+      $info: //div[contains(@class,"c-page--video-right")]
     scene:
-      Title: &titleSel $info//h1[1]/text()
-      Date: &dateAttr
-        selector: $info//span[starts-with(@class,"u-inline-block")][1]/text()
+      Title: $info//h1[1]
+      Date:
+        selector: $info//span[contains(@class,"u-inline-block")][1]
         postProcess:
           - parseDate: Jan 2, 2006
-      Details: &detailsAttr
-        selector: $info//div[starts-with(@class,"u-mb--six")]
+      Details: $info//div[contains(@class,"u-mb--six")]
       Tags:
-        Name: $info//div[starts-with(@class,"u-mt--four")]//li/a/text()
+        Name: $info//div[contains(@class,"u-mt--four")]//li/a
       Performers:
-        Name: $info//div[starts-with(@class,"u-mt--three")]//a/text()
+        Name: $info//div[contains(@class,"u-mt--three")]//a
       Studio:
-        Name: &studioName //meta[@name="application-name"]/@content
-      Image: &imageSel
-        selector: //div[starts-with(@style,"background-image:")]/@style
+        Name: //meta[@name="application-name"]/@content
+      Image:
+        selector: //div[contains(@style,"background-image:")]/@style
         postProcess:
           - replace:
               - regex: .+url\((.+)\).+
                 with: $1
-      Groups:
-        Name: &movieNameAttr
-          selector: //meta[@name="application-name"]/@content|//div[starts-with( @class,"c-page--video-right")]//h1[1]/text()
-          concat: " - "
-        Duration: &durationAttr
-          selector: $info//span[contains(text(),"Duration:")]
-          postProcess:
-            - replace:
-                - regex: Duration:\s
-                  with: ""
-        Date: *dateAttr
-        Synopsis: *detailsAttr
-  movieScraper:
-    common:
-      $info: *info
-    group:
-      Name: *movieNameAttr
-      Duration: *durationAttr
-      Date: *dateAttr
-      Synopsis: *detailsAttr
-      Studio:
-        Name: *studioName
-      FrontImage: *imageSel
-# Last Updated October 21, 2021
