@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
 name: Pinkoclub
 galleryByURL:
   - action: scrapeXPath
@@ -8,7 +7,7 @@ galleryByURL:
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
-  queryURL: https://www.pinkotgirls.com/search/{}.php
+  queryURL: "https://www.pinkoclub.com/new-video.php?q={}"
   scraper: searchResultsScraper
 sceneByQueryFragment:
   action: scrapeXPath
@@ -20,41 +19,56 @@ sceneByURL:
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $detailList: //ul[@class="detail-list"]
     scene:
-      Title: &title
-        selector: //div[@class="titolo-video"]/h2
+      Title: &title //div[@class="titolo-video"]/h2 | //h1[@class="video-title"]
       Director:
-        selector: //div[@class="caption captionvideo"]/strong
+        selector: //div[@class="caption captionvideo"]/strong | $detailList/li[span[@class="k" and contains(text(),"Director")]]/span[@class="v"]
         postProcess:
           - replace:
               - regex: "Directed by (.*)"
                 with: "$1"
       Performers: &performers
-        Name: &performersName //h4/a
+        Name: //h4/a | //div[contains(@class,"side-card--performer")]/div[@class="performer"]/div/strong
       Details: &details
-        selector: //div[@class="caption captionvideo"]
+        selector: //div[@class="caption captionvideo"] | //span[@class="video-desc__full"]
         postProcess:
           - replace:
               - regex: "Directed by (.*)$"
                 with: ""
+      Date:
+        selector: //div[@class="video-meta"]
+        postProcess:
+          - replace:
+              - regex: '(?s).*(\d{2})/(\d{2})/(\d{4}).*'
+                with: $3-$2-$1
+          - parseDate: 2006-01-02
       Image:
         selector: &imageSel //meta[@property="og:image"]/@content
       Studio: &studio
-        Name: &studioName
-          selector: &canonical //link[@rel="canonical"]/@href
+        Name:
+          selector: $detailList/li[span[@class="k" and contains(text(),"Line")]]/span[@class="v" and (text()="XTime" or text()="Pinko Comics" or text()="Vintage" or text()="Pinko Classic" or text()="Frameleaks" or text()="Pinko Casting" or text()="Opera")] | //link[@rel="canonical"]/@href
           postProcess:
             - replace:
                 - regex: "https://.*/(.*)/.*"
                   with: $1
             - map:
                 frameleaks: Frameleaks
-                pinkocomics: PinkoComics
+                pinkocomics: Pinko Comics
                 porno-atv: ATV
                 the-canaglias: The Canaglias
                 video-porno-italiani: Pinko Club
                 videotrans: Pinko TGirls
                 xtime: XTime
-      URL: *canonical
+                Frameleaks: Frameleaks
+                Pinko Comics: Pinko Comics
+                Vintage: Pinko Vintage
+                Pinko Classic: Pinko Classic
+                Pinko Casting: Pinko Casting
+                Opera: Pinko Opera
+                XTime: XTime
+      URLs: //link[@rel="canonical"]/@href
       Code: &code
         selector: *imageSel
         postProcess:
@@ -69,15 +83,13 @@ xPathScrapers:
       Code: *code
   searchResultsScraper:
     common:
-      $results: //div[contains(@class, "container")]//div[contains(@class, "titolo-sezione")][h2[contains(text(), "Added search")]]/following-sibling::div
+      $card: //article[@class="card"]
     scene:
-      Title: $results//h4/a/@title
-      Details: $results//p/a/text()
-      Image: $results//a[@class="link-photo-home"]/img/@src
-      URL:
-        selector: $results//h4/a/@href
+      Title: $card/a/h3[@class="card__title"]
+      Image: $card/a/div[@class="card__media"]/img/@src
+      URLs:
+        selector: $card/a/@href
         postProcess:
           - replace:
               - regex: ^
-                with: "https://www.pinkotgirls.com"
-# Last Updated November 21, 2025
+                with: "https://www.pinkoclub.com"
