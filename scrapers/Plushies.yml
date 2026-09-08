@@ -15,46 +15,26 @@ sceneByURL:
 xPathScrapers:
   sceneSearch:
     common:
-      $searchItem: //div[@class='updateItem']/div[@class='updateDetails']
-      $searchThumb: //div[@class='updateItem']/a/img
+      $card: //div[@class="latestUpdateB"]
     scene:
-      Title:
-        selector: $searchItem/h4/a
-      Date:
-        selector: $searchItem/p/span[2]
-        postProcess:
-          - parseDate: 01/02/2006
-      URL:
-        selector: $searchItem/h4/a/@href
+      Title: $card//h4[@class="link_bright"]/a
+      URLs: $card//h4[@class="link_bright"]/a/@href
       Image:
-        selector: $searchThumb/@src
+        selector: $card//img/@src0_1x
         postProcess:
           - replace:
               - regex: ^
-                with: "https://plushies.tv/tour/"
+                with: "https://plushies.tv"
   sceneScraper:
-    common:
-      $ub: //div[@class="update_block_info"]
     scene:
-      Title:
-        selector: $ub/span[@class="update_title"]
-      Date:
-        selector: $ub/span[@class="update_date"]
-        postProcess:
-          - parseDate: 01/02/2006
+      Title: //div[@class="vidImgTitle"]/h4
+      Details: //div[@class="vidImgContent text_light"]/p
       Performers:
-        Name: $ub/span[@class="tour_update_models"]/a
+        Name: //p[@class="link_light"]/a[@class="link_bright infolink"]
       Tags:
-        Name: $ub/span[@class="tour_update_tags"]/a
-      Details:
-        selector: $ub/span[@class="latest_update_description"]
+        Name: //div[@class="blogTags"]//a
       Image:
-        selector: //img[@class="stdimage small_update_thumb thumbs"]/@src
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https://plushies.tv/tour/"
+        selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: Plushies
-# Last Updated March 30, 2023
