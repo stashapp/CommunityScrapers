@@ -4,7 +4,6 @@ sceneByURL:
     url:
       - cumcountdown.com/gallery.html
       - femaleworship.com/gallery.html
-      - goddesskitra.com/gallery.html
       - menareslaves.com/gallery.html
       - subbygirls.com/gallery.html
     scraper: sceneScraper
@@ -13,79 +12,52 @@ sceneByFragment:
   queryURL: https://www.{filename}
   queryURLReplace:
     filename:
-      - regex: ' '
-        with: ''
-      - regex: '^((?i)(?:Female\s*Worship|men\s*are\s*slaves|Cum\s*Countdown|Goddess\s*Kitra|Subby\s*Girls)).*?(?:#)?(\d+)' # site name - performers - #code 4k.ext
+      - regex: " "
+        with: ""
+      - regex: '^((?i)(?:Female\s*Worship|men\s*are\s*slaves|Cum\s*Countdown|Subby\s*Girls)).*?(?:#)?(\d+)' # site name - performers - #code 4k.ext
         with: $1.com/gallery.html?$2
       - regex: '(?i)\.mp4|mkv|wmv|avi$'
-        with: ''
-      - regex: '(?i)(4k|(?:480|720|1080|2160)p)' # sometimes '4k' gets mixed up with the studio code
-        with: ''
+        with: ""
+      - regex: "(?i)(4k|(?:480|720|1080|2160)p)" # sometimes '4k' gets mixed up with the studio code
+        with: ""
   scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //div[@id='galleryname']/text()
+        selector: //div[@id='galleryname'][1]/text()
         postProcess:
           - replace:
-              - regex: '\d{2}/\d{2}/\d{2}$'
-                with: ''
-          - replace:
-              - regex: '     '
-                with: ' '
-      Details:
-        selector: //div[@id='galleryname']/text()
-        postProcess:
-          - replace:
-              - regex: '\d{2}/\d{2}/\d{2}$'
-                with: ''
-          - replace:
-              - regex: '^#\d+'
+              - regex: '^\d{2}[/-]\d{2}[/-]\d{2}\s*'
                 with: ""
       Performers:
         Name:
           selector: //div[@id='galleryname'][1]/text()
           postProcess:
             - replace:
-                - regex: '\d{2}/\d{2}/\d{2}$'
-                  with: ''
-            - replace:
-                - regex: '^#\d+'
+                - regex: '^\d{2}[/-]\d{2}[/-]\d{2}\s*'
                   with: ""
-          split: ', '
+          split: ", "
       Date:
-        selector: //div[@id='galleryname']/text()
+        selector: //div[@id='galleryname'][1]/text()
         postProcess:
           - replace:
-              - regex: '([A-Za-z]+(?:\s[A-Za-z]+)?(?:,\s*[A-Za-z]+(?:\s[A-Za-z]+)?)*)'
-                with: ""
-          - replace:
-              - regex: '^#\d+'
-                with: ""
+              - regex: '^(\d{2}[/-]\d{2}[/-]\d{2}).*'
+                with: "$1"
           - parseDate: 01/02/06
+          - parseDate: 01-02-06
       Studio:
-        Name: //title/text()
+        Name: //title
       Image:
-          selector: //div[@id="footer"]/p/img/@src| (//*[@id="gallerycontainer"]//img[contains(@src, '') and not(contains(@src, 'header')) and not(contains(@src, 'company'))][1])/@src
-          concat: " "
-          postProcess:
+        selector: //div[@id="footer"]/p/img/@src| (//*[@id="gallerycontainer"]//img[not(contains(@src, 'header')) and not(contains(@src, 'company'))][1])/@src
+        concat: " "
+        postProcess:
           - replace:
-            - regex: (images\/.+\s)
-              with: ""
-      Code:
-          selector: //div[@id='galleryname'][1]/text()
-          postProcess:
-           - replace:
-             - regex: '([A-Za-z]+(?:\s[A-Za-z]+)?(?:,\s*[A-Za-z]+(?:\s[A-Za-z]+)?)*)'
-               with: ""
-           - replace:
-               - regex: '\d{2}/\d{2}/\d{2}$'
-                 with: ""
+              - regex: (images\/.+\s)
+                with: ""
       Tags:
-          Name:
-            selector: //*[@id="galleryname"][2]/text()
-            split: ', '
+        Name:
+          selector: //*[@id="galleryname"][2]/text()
+          split: ", "
 driver:
   useCDP: true
-# Last Updated December 17, 2024
