@@ -18,7 +18,7 @@ sceneByURL:
     scraper: siteScraper
     queryURL: "{url}"
     queryURLReplace:
-       url:
+      url:
         - regex: '^members\.'
           with: ""
 galleryByURL:
@@ -28,7 +28,7 @@ galleryByURL:
     scraper: networkScraper
     queryURL: "{url}"
     queryURLReplace:
-       url:
+      url:
         - regex: '^members\.'
           with: ""
   - action: scrapeXPath
@@ -40,7 +40,7 @@ galleryByURL:
     scraper: siteScraper
     queryURL: "{url}"
     queryURLReplace:
-       url:
+      url:
         - regex: '^members\.'
           with: ""
 xPathScrapers:
@@ -90,6 +90,8 @@ xPathScrapers:
           - replace:
               - regex: ^.*—\s+
                 with:
+              - regex: ^\s*in\s+
+                with:
       Date: &siteDateAttr
         selector: //span[@class="date-movie"]/b
         postProcess:
@@ -102,16 +104,19 @@ xPathScrapers:
         Name: //span[@class="model-movie"]//a/text()
       Studio: &siteStudioAttr
         Name:
-          selector: //img[@class="logo-overley"]/@src
+          selector: //img[@class="logo-overley"]/@src | //title[not(//img[@class="logo-overley"])]
           postProcess:
             - replace:
                 - regex: .*\/\/media\.(.+?)\.com\/.+
+                  with: $1
+                - regex: ^.*\s-\s([A-Za-z]+)\.com\s*$
                   with: $1
             - map:
                 wetandpuffy: Wet And Puffy
                 wetandpissy: Wet And Pissy
                 weliketosuck: We Like To Suck
                 simplyanal: Simply Anal
+                SimplyAnal: Simply Anal
       Image: //video[@id="video"]/@poster
     gallery:
       Title: *siteTitleAttr
@@ -120,4 +125,3 @@ xPathScrapers:
       Tags: *siteTagsAttr
       Performers: *sitePerformersAttr
       Studio: *siteStudioAttr
-# Last Updated April 27, 2026
