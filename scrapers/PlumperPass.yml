@@ -38,4 +38,8 @@ xPathScrapers:
         selector: $h3/text()[1]
         postProcess:
           - parseDate: January 2, 2006
-# Last Updated May 15, 2022
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
