@@ -2,6 +2,7 @@ name: "Andomark"
 sceneByURL:
   - action: scrapeXPath
     url:
+      - amateurcfnm.com/updates/
       - ariellynn.com/tour/updates/
       - behindtheporno.com/updates/
       - bigboobiesclub.com/updates/
@@ -14,6 +15,7 @@ sceneByURL:
       - brittanysbubbles.com/updates/
       - brokemodel.com/tour
       - calisabliss.com/updates/
+      - cfnmgames.com/updates/
       - charlieforde.com/updates/
       - chocolatepov.com/updates/
       - dallasdiamondz.com/tour/
@@ -24,6 +26,7 @@ sceneByURL:
       - dreamorgan.com/updates/
       - evolvedfightslez.com/updates/
       - furrychicks.elxcomplete.com/updates/
+      - girlsabuseguys.com/updates/
       - grannycumshere.com/tour/
       - hollyhotwife.elxcomplete.com/updates/
       - hotwiferio.com/newtour/updates
@@ -31,8 +34,10 @@ sceneByURL:
       - internationalnudes.com/updates/
       - johnnygoodluck.com/updates/
       - justgoodsex.com/updates/
+      - ladyvoyeurs.com/updates/
       - lasvegasamateurs.com/tour/updates/
       - laurenphillips.com/updates/
+      - littledick.club/updates/
       - melaniehicksxxx.com/updates/
       - msparisandfriends.com/tour/updates/
       - oldsexygrannies.com/updates/
@@ -40,6 +45,7 @@ sceneByURL:
       - pawged.com/tour/updates/
       - pawgnextdoor.com/tour/updates/
       - playpetvictoria.com/updates/
+      - purecfnm.com/updates/
       - ravenswallowzxxx.com/updates/
       - rionkingxxx.com/updates/
       - seanmichaelsxxx.com/updates/
@@ -148,6 +154,13 @@ sceneByURL:
       - yummysexclub.com/access/scenes/
       - yummysofie.com/access/scenes/
       - yummywomen.com/access/scenes/
+      # These sites serve the same page shape directly at plain /scenes/
+      - amateurcfnm.com/scenes/
+      - cfnmgames.com/scenes/
+      - girlsabuseguys.com/scenes/
+      - ladyvoyeurs.com/scenes/
+      - littledick.club/scenes/
+      - purecfnm.com/scenes/
     scraper: proSceneWithImgFallbackScraper
   - action: scrapeXPath
     url:
@@ -175,6 +188,7 @@ xPathScrapers:
           //*[(contains(@class, "availdate") or contains(@class, "update_date")) and contains(., "/")]
           | //*[(contains(@class, "availdate") or contains(@class, "update_date"))]/comment()
           | (//*[contains(@class,'fa-calendar')]/following-sibling::text())[1]
+          | //*[contains(@class, "update_date") and not(contains(., "/"))]
         postProcess: &datePostProcess
           - replace:
               - regex: ".*?([0-9]{2}/[0-9]{2}/[0-9]{4}).*"
@@ -194,6 +208,7 @@ xPathScrapers:
                 - regex: https?://(w{3}\.|free\.)?(.+?)(\..+)
                   with: $2
             - map:
+                amateurcfnm: Amateur CFNM
                 ariellynn: Ariel Lynn
                 behindtheporno: Behind The Porno
                 bigboobiesclub: Big Boobies Club
@@ -206,6 +221,7 @@ xPathScrapers:
                 brittanysbubbles: Brittany Andrews
                 brokemodel: Broke Model
                 calisabliss: Calisa Bliss
+                cfnmgames: CFNM Games
                 charlieforde: Charlie Forde
                 charmmodels: Charm Models
                 chocolatepov: ChocolatePOV
@@ -221,6 +237,7 @@ xPathScrapers:
                 evolvedfights: Evolved Fights
                 feelmevr: FeelMeVR
                 furrychicks: Furry Chicks
+                girlsabuseguys: Girls Abuse Guys
                 glosstightsglamour: Gloss Tights Glamour
                 goonmuse: GoonMuse
                 gotcuffs: Got Cuffs
@@ -231,9 +248,11 @@ xPathScrapers:
                 internationalnudes: International Nudes
                 johnnygoodluck: Johnny Goodluck
                 justgoodsex: JustGoodSex
+                ladyvoyeurs: Lady Voyeurs
                 lasvegasamateurs: Las Vegas Amateurs
                 laurenphillips: Lauren Phillips
                 letstryhard: Let's Try Hard
+                littledick: Little Dick Club
                 meanawolf: Meana Wolf
                 melaniehicksxxx: Melanie Hicks XXX
                 mongerinasia: Monger In Asia
@@ -243,6 +262,7 @@ xPathScrapers:
                 pawged: PAWGED
                 pawgnextdoor: PAWG Next Door
                 playpetvictoria: PlaypetVictoria
+                purecfnm: Pure CFNM
                 ravenswallowzxxx: Raven Swallows
                 rionkingxxx: Rion King
                 seanmichaelsxxx: Sean Michaels
@@ -280,7 +300,8 @@ xPathScrapers:
           //div[@class="update_image"]/a/img[@src0_2x]/@src0_2x |
           //div[@class="update_image"]/a/img[@src0_3x]/@src0_3x |
           //div[@class="update_image"]/a/img[@src0_4x]/@src0_4x |
-          //span[@class="model_update_thumb"]/img/@src
+          //span[@class="model_update_thumb"]/img/@src |
+          //img[contains(@class,"large_update_thumb")]/@src
         concat: __SEP__
         postProcess:
           - replace:
@@ -393,19 +414,24 @@ xPathScrapers:
     scene:
       Title: //div[@class="title_bar"]/span
       Date:
-        selector: //div[contains(@class, "update_date") and $excludeUpdates and contains(., "/")]
+        selector: >-
+          //div[contains(@class, "update_date") and $excludeUpdates and contains(., "/")]
+          | //div[contains(@class, "update_date") and $excludeUpdates and not(contains(., "/"))]
         postProcess: *datePostProcess
       Details: //span[@class="update_description"]
       Performers:
         Name: //span[@class="update_models" and $excludeUpdates]/a
       Tags:
-        Name: //span[@class="update_tags" and $excludeUpdates]/a
+        # PurePass family wraps this in a div instead of a span
+        Name: //*[@class="update_tags" and $excludeUpdates]/a
       Studio:
         Name:
           selector: //base/@href
           postProcess: *studioPostProcess
       Image:
-        selector: //a[@class="option_button"]/@href
+        selector: >-
+          //a[@class="option_button"]/@href |
+          //div[contains(@class,"content_tab_wrapper")]/div[@class="cell content_tab_current"]/a/@href
         postProcess:
           - replace:
               - regex: _(vids|caps|highres).html$
