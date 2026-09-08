@@ -7,15 +7,19 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h1[@id="video_title"]/text()
+      Title: //h1[@id="video_title"]
       Date:
         selector: //div[contains(@class, 'video_date')]
         postProcess:
           - parseDate: 2 Jan 2006
       Performers:
         Name:
-          fixed: Bruce and Morgan
+          selector: //h1[@id="video_title"]
+          postProcess:
+            - replace:
+                - regex: .*
+                  with: "Bruce,Morgan"
+          split: ","
       Tags:
         Name: //div[@id="video_tags"]/a
       Details:
@@ -30,4 +34,8 @@ xPathScrapers:
       Studio:
         Name:
           fixed: PissPlay
-# Last Updated February 01, 2022
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
