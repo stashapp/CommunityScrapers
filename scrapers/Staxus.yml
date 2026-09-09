@@ -3,6 +3,12 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - staxus.com/trial/
+    queryURL: "{url}"
+    queryURLReplace:
+      # The `&type=vids` is required
+      url:
+        - regex: "^(.*?[?&]id=\\d+).*$"
+          with: "$1&type=vids"
     scraper: sceneScraper
 
 performerByURL:
@@ -24,12 +30,6 @@ xPathScrapers:
         selector: //div[contains(@class,"cell avg_rating")]/div[4]/text()
         postProcess:
           - parseDate: 02/January/2006
-      Code:
-        selector: //a[contains(@class,"option_button")]/@href
-        postProcess:
-          - replace:
-              - regex: .+id\=(\d+).*
-                with: $1
       Details:
         selector: //span[contains(@class,"update_description")]/text()
         concat: "\n\n"
@@ -57,7 +57,7 @@ xPathScrapers:
 
   performerScraper:
     performer:
-      Name: //span[@class="title_bar_hilite"]/text()
+      Name: //span[@class="title_bar_hilite"]
       Image:
         selector: >
           //div[@class="cell_top cell_thumb"]/img/@src0_3x | //div[@class="cell_top cell_thumb"]/img/@src0
@@ -72,8 +72,8 @@ xPathScrapers:
           //div[@class="model_bio"]//b[contains(text(),'Height')]/../following-sibling::div/text()
         postProcess:
           - replace:
-              - regex: "[^0-9.]"
-                with: ""
+              - regex: ".*/\\s*(\\d+)\\s*cm.*"
+                with: $1
       PenisLength:
         selector: >
           //div[@class="model_bio"]//b[contains(text(),'Measurements')]/../following-sibling::div/text()
@@ -81,8 +81,8 @@ xPathScrapers:
           - replace:
               - regex: '\,.+'
                 with: ""
-              - regex: "[^0-9.]"
-                with: ""
+              - regex: ".*/\\s*(\\d+)\\s*cm.*"
+                with: $1
       Birthdate:
         selector: >
           //div[@class="model_bio"]//b[contains(text(),'Age')]/../following-sibling::div/text()
@@ -391,6 +391,4 @@ xPathScrapers:
               "Zambian": "Zambia"
               "Zimbabwean": "Zimbabwe"
               "Åland Island": "Åland Islands"
-      Details:
-        selector: //div[@class="model_bio"]/div[last()]/text()
-# Last Updated May 19, 2024
+      Details: //div[@class="model_bio"]/div[last()]
