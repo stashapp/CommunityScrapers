@@ -9,27 +9,20 @@ xPathScrapers:
     common:
       $detail: //div[@class="video-detail"]
     scene:
-      Title: $detail//h1/text()
+      Title: //dl8-video/@title
       Date:
-        selector: $detail//div[@class="video-detail__description--container"]/div[contains(@style, "padding-top")]/text()
+        selector: $detail//time/@datetime
         postProcess:
-          - parseDate: Jan 02, 2006
+          - parseDate: 2006-01-02
       Details:
-        selector: $detail//div[@class="readMoreWrapper"]//p
+        selector: >-
+          $detail//div[contains(@class,"sbvr-scene-about__prose")]/p |
+          $detail//div[contains(@class,"sbvr-scene-about__prose")][not(p)]
         concat: "\n\n"
-        postProcess:
-          - replace:
-              - regex: Read More$
-                with: ""
       Tags:
-        Name: $detail//div[@class="tags"]//a
+        Name: $detail//ul[contains(@class,"sbvr-scene-about__chips")]//a
       Performers:
-        Name:
-          selector: $detail//div[@class="video-detail__description--author"]//a
-          postProcess:
-            - replace:
-                - regex: ^\s*(.+)\s*$
-                  with: $1
+        Name: $detail//div[@class="video-detail__description--author"]//a
       Image: //dl8-video/@poster
       Studio:
         Name:
