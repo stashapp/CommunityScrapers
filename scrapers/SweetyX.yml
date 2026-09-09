@@ -22,10 +22,12 @@ xPathScrapers:
       Performers:
         Name:
           selector: $wrapper/div[@class="infos"]/span[@class="info"]/span[@class="data-model val"]/text()
-          split: ', '
+          split: ", "
       Tags:
         Name:
           selector: //meta[@name="keywords"]/@content
-          split: ', '
-
-# Last Updated December 26, 2020
+          split: ", "
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
