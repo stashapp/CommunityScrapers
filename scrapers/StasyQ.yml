@@ -3,127 +3,71 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - stasyq.com/r/
+      - stasyq.com/releases/
     scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
     url:
-      - stasyq.com/m/
+      - stasyq.com/models/
     scraper: performerScraper
 performerByName:
   action: scrapeXPath
-  queryURL: https://www.stasyq.com/search/{}
+  queryURL: https://www.stasyq.com/search?q={}
   scraper: performerSearch
 xPathScrapers:
   sceneScraper:
-    common:
-      $script: //script[contains(.,'VideoObject')]/text()
-      $performer: //div[@class="release-card"]//a[@class="custom-link"]
     scene:
-      Title: //h1/text()
+      Title:
+        selector: //div[contains(@class,"release-card__title")]/h1
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: " "
       Details: //div[@class="about-section__text"]
-      Date:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .+(?:uploadDate":\s")([^"]+).+
-                with: $1
-              - regex: .+schema\.org.+
-                with:
-          - parseDate: 2006-01-02
-      Image:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .+(?:thumbnailUrl":\s")([^"]+).+
-                with: $1
-              - regex: .+schema\.org.+
-                with:
+      Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: StasyQ
       Tags:
-        Name: //a[contains(@href,'/search/')]//text()
-
+        Name: //div[contains(@class,"about-section__title-text")]//a[@class="tag"]
       Performers:
-        Name: $performer//text()
-        URLs: $performer/@href
-      URL: //link[@rel='canonical']/@href
+        Name: //div[@class="release-card__model"]//a[@class="custom-link-footer"]
+        URLs: //div[@class="release-card__model"]//a[@class="custom-link-footer"]/@href
+      URLs: //link[@rel="canonical"]/@href
   performerSearch:
     performer:
-      Name: //div[@class="model-preview-card__info"]//a[contains(@href,'/m/')]/text()
-      URLs:
-        selector: //div[@class="model-preview-card__info"]//a[contains(@href,'/m/')]/@href
+      Name: //div[@class="model-preview-card__info"]//a[contains(@href,'/models/')]
+      URLs: //div[@class="model-preview-card__info"]//a[contains(@href,'/models/')]/@href
   performerScraper:
-    common:
-      $script: //script[contains(.,'schema')]/text()
     performer:
-      Name:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .+(?:name":\s")([^"]+).+
-                with: $1
-              - regex: .+schema\.org.+
-                with:
+      Name: //li[@itemtype="https://www.stasyq.com/models/modelItem"]//span[@itemprop="name"]
       Aliases:
-        selector: $script
+        selector: //li[p[text()="Name:"]]/p[@class="ml-auto"]
         postProcess:
           - replace:
-              - regex: .+(?:alternateName":.")([^"]+).+
+              - regex: ^([^(]+)\(.*$
                 with: $1
-              - regex: .+schema\.org.+
-                with:
-      Gender:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .+(?:gender"\s:\s")([^"]+).+
-                with: $1
-              - regex: .+schema\.org.+
-                with:
-      Country:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .+(?:birthPlace":\s")([^"]+).+
-                with: $1
-              - regex: .+schema\.org.+
-                with:
+      Country: //li[p[text()="Nationality:"]]/p[@class="ml-auto"]
       Height:
-        selector: $script
+        selector: //li[p[text()="Height:"]]/p[@class="ml-auto"]
         postProcess:
           - replace:
-              - regex: .+(?:height":\s")(\d+).+
+              - regex: ^(\d+).*$
                 with: $1
-              - regex: .+schema\.org.+
-                with:
       Weight:
-        selector: $script
+        selector: //li[p[text()="Weight:"]]/p[@class="ml-auto"]
         postProcess:
           - replace:
-              - regex: .+(?:weight":\s")(\d+).+
+              - regex: ^(\d+).*$
                 with: $1
-              - regex: .+schema\.org.+
-                with:
-      Image:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: .+(?:image":\s")([^"]+).+
-                with: $1
-              - regex: .+schema\.org.+
-                with:
-      Details:
-        selector: $script
-        postProcess:
-          - replace:
-              - regex: (\\u2019|&#39;|&rsquo;)
-                with: "'"
-              - regex: \\
-                with:
-              - regex: .+(?:description":")(.+)",".+
-                with: $1
-              - regex: .+schema\.org.+
-                with:
-      URLs: //link[@rel='canonical']/@href
-# Last Updated September 17, 2025
+      Image: //div[@class="model-card__img"]/img/@src
+      Details: //div[@class="model-bio__text"]
+      URLs: //link[@rel="canonical"]/@href
+driver:
+  cookies:
+    - CookieURL: "https://www.stasyq.com/"
+      Cookies:
+        - Name: stasyq_session
+          Domain: ".stasyq.com"
+          Path: "/"
+          Value: "eyJpdiI6InRpWkFFT0duZkFiWi9JaHRTU05DZWc9PSIsInZhbHVlIjoiTWxicG5QbndBOUJqODNSSXl5Tm5hbWNaUVhqOEZHUTMyeU4xdEtKdmUrRk5KN3k0RWlYMnRHblU4UHRwSnh0QXh2Z0VYdlAvRlk0cG5YWEdodzVLVUxMN0dFMUVaMnJBSzVkM3BaQ3JCVjhlcWdPN0xxZGN5ZFk5MXdqdjZSQ1kiLCJtYWMiOiJiMjM5MDg4NGVhMzA1ODk3YjI0OWVhYmY3MDEyNjI5OWYxZjUyODJmODNmZDgzOWFlZDQ5ZTJiZDU3YmFmODVjIiwidGFnIjoiIn0%3D"
