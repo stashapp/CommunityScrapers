@@ -9,29 +9,30 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //img[@class="rev-slidebg"]/@title
+      Title: //img[contains(@class,"rev-slidebg")]/@title
       Details:
         selector: //div[contains(@class,"woodmart-title-container")]//p
         concat: "\n\n"
       Image:
-        selector: //img[@class="rev-slidebg"]/@src
+        selector: //img[contains(@class,"rev-slidebg")]/@data-lazyload
         postProcess:
           - replace:
               - regex: ^
                 with: "https:"
+              # Wayback doesn't recognize data-lazyload as an asset URL to
+              # rewrite for raw bytes; force it into that mode when present
+              - regex: (web\.archive\.org/web/\d+)/
+                with: ${1}im_/
       Date:
-        selector: //div[@class="title-after_title"]/text()
+        selector: //div[contains(@class,"title-after_title")]/text()
         postProcess:
           - replace:
-              - regex: "\\sFEB\\s" # in one movie date has FEB instead of FEBRUARY
-                with: " FEBRUARY "
               - regex: "[^:]+:\\s+(\\w+)\\s+(\\d+)[^\\d]+(\\d+).*"
                 with: $1 $2 $3
           - parseDate: January 2 2006
       Studio:
         Name:
           fixed: Studio FOW
-        URL:
+        URLs:
           fixed: https://studiofow.com
-      URL: //link[@rel="canonical"]/@href
-# Last Updated December 01, 2020
+      URLs: //link[@rel="canonical"]/@href
