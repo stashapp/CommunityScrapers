@@ -17,7 +17,12 @@ xPathScrapers:
       $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
     gallery:
       Title: &titleSel $title
-      Code: &id //div[@class="rating_box" and $excludeUpdates]/@data-id
+      Code: &id
+        selector: //script[contains(text(), 'useimage = "/')]/text()
+        postProcess:
+          - replace:
+              - regex: ".*contentthumbs/(\\d+)\\..*"
+                with: $1
       Date: &dateAttr
         selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
         postProcess:
@@ -50,4 +55,3 @@ xPathScrapers:
               - regex: (https://[^/]+).*useimage = "([^"]*).*
                 with: $1$2
       Studio: *studioAttr
-# Last Updated May 01, 2024
