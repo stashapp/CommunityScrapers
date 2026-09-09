@@ -1,4 +1,5 @@
-name: assylum
+name: Assylum
+# Same template as Slavemouth
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -7,36 +8,31 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h3[@class='mas_title']/text()
-      Performers:
-        Name:
-          selector: //span[@class='lc_info mas_description']/text()[1]
-          postProcess:
-            - replace:
-                - regex: (?:[\w\s]+\:\s)?([A-Z]?[a-z]+\d?\d?\s[A-Z]?[a-z]+\d?\d?,|[A-Z]?[a-z]+\d?\d?,)\s?([A-Z]?[a-z]+\d?\d?\s[A-Z]?[a-z]+\d?\d?,|[A-Z]?[a-z]+\d?\d?,)?\s?([A-Z]?[a-z]+\d?\d?\s[A-Z]?[a-z]+\d?\d?,|[A-Z]?[a-z]+\d?\d?,)?|.+
-                  with: $1$2$3
-                - regex: \,\s+
-                  with: ","
-                - regex: ^\s+
-                  with:
-          split: ","
-      Image:
-        selector: //div[@class='mainpic']/comment()
-        postProcess:
-          - replace:
-              - regex: .*src=\"([^\"]+).*
-                with: https://www.assylum.com/$1
-
-      Tags:
-        Name:
-          selector: //p[@class='tags']/a/text()
-      Details: //p[@class='mas_longdescription']/text()
+      Title: //h3[contains(concat(" ", normalize-space(@class), " "), " mas_title ")]/text()
+      Details: //div[contains(concat(" ", normalize-space(@class), " "), " description ")]/p[contains(concat(" ", normalize-space(@class), " "), " mas_longdescription ")]/text()
       Date:
-        selector: //span[@class='lc_info mas_description']/text()[2]
+        selector: //div[contains(concat(" ", normalize-space(@class), " "), " lch ")]/span[contains(concat(" ", normalize-space(@class), " "), " lc_info ")]/text()[2]
         postProcess:
           - parseDate: January 2, 2006
+      Image:
+        selector: //div[contains(concat(" ", normalize-space(@class), " "), " jwpContainer ")]/script/text()
+        postProcess:
+          - replace:
+              - regex: .+splash:\ \'(.+\.jpg).+
+                with: https://www.assylum.com/$1
       Studio:
         Name:
           fixed: Assylum
-# Last Updated August 28, 2023
+      Tags:
+        Name:
+          selector: //div[@id="caseContainer"]/div/p[contains(concat(" ", normalize-space(@class), " "), " tags ")]
+          split: ", "
+          postProcess:
+            - replace:
+                - regex: ^Tags:(.+)
+                  with: $1
+      Performers:
+        Name:
+          selector: //div[contains(concat(" ", normalize-space(@class), " "), " lch ")]/span[contains(concat(" ", normalize-space(@class), " "), " lc_info ")]/text()
+          split: ","
+      Code: //div[@id="caseContainer"]/@data-lid
