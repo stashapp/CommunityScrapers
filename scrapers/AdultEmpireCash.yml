@@ -1,5 +1,5 @@
 name: AdultEmpireCash
-# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Evil Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
+# Scrapes: 18Lust, Black Massive Cocks, Brazilian Trans Girls, Brutha's Inc, Concoxxxion, Elegant Angel, Evil Angel, Forbidden Fruits Films, Helix Studios, Horny Household, Hot Wife Fun, Hot Wives Cheating, Jay's POV, Jodi West, Jonathan Jordan XXX, Kings of Fetish, Latino Guys Porn, Only3X, Reagan Foxx, Real Girls Fuck, Rodney Moore, SINematica, Smut Factor, Spankmonster, StepHouseXXX, Third World Media, Transational Fantasies, West Coast Productions
 # Sites ("Brands") from https://www.adultempirecash.com
 sceneByURL:
   - action: scrapeXPath
@@ -27,6 +27,7 @@ sceneByURL:
       - reaganfoxx.com/
       - realgirlsfuck.com
       - rodneymoorestore.com
+      - sinematica.com/
       - smutfactor.com/
       - spankmonster.com/
       - stephousexxx.com/
@@ -78,7 +79,9 @@ xPathScrapers:
         Name: //div[@class="video-performer"]/a//text()
       Studio:
         Name:
-          selector: &studioSel //div[@id="video-container-details"]//div[@class="studio"]/a/text()
+          selector: &studioSel >-
+            //div[@id="video-container-details"]//div[@class="studio"]/a/text() |
+            //div[@class="studio"]/span[not(@class)]/text()
           postProcess: &PP # Override studio name only when needed
             - replace:
                 # trim whitespace first so the map below matches exactly
