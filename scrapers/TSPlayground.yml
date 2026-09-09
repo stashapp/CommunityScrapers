@@ -12,24 +12,23 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="content-title"]/h1/text()
-      Details: //div[@class="content-desc more-desc"]
+      Title: //div[@class="content-title"]/h1
+      Details: //div[contains(@class,"more-desc") and not(contains(@class,"active"))]
       Date:
-        selector: //div[@class="content-date"]/div[@class="label"]/text()
+        selector: //div[@class="content-date"]/div[@class="label"]
         postProcess:
           - replace:
-              - regex: (\d{2}).(\d{2}).(\d{4})
+              - regex: ".*(\\d{2})\\.(\\d{2})\\.(\\d{4}).*"
                 with: $3-$2-$1
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: TS Playground
       Tags:
-        Name: //div[@class="content-tags"]//a/text()
+        Name: //div[@class="content-tags"]//a
       Performers:
-        Name: //div[@class="content-models"]//a/span/text()
+        Name: //div[@class="content-models"]//a/span
   performerScraper:
     performer:
-      Name: //div[contains(@class, "title-col")]/h1/text()
+      Name: //div[contains(@class, "title-col")]/h1
       Image: //div[@class="model-avatar"]/img/@src
-# Last Updated January 13, 2023

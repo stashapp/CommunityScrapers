@@ -15,14 +15,14 @@ xPathScrapers:
         selector: //div[contains(@class, "post-meta-trio")]
         postProcess:
           - replace:
-            - regex: ^([A-Z]+[0-9]+).*$
-              with: $1
+              - regex: ^([A-Z]+[0-9]+).*$
+                with: $1
       Date:
         selector: //time[contains(@class, "entry-date")]/@datetime
         postProcess:
           - replace:
-            - regex: T.*$
-              with: ""
+              - regex: T.*$
+                with: ""
           - parseDate: 2006-01-02
       Studio:
         Name:
