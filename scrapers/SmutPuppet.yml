@@ -25,14 +25,18 @@ sceneByURL:
   - action: scrapeXPath
     url:
       # Subsites have dates and studio names
-      - dothewife.com/update
       - dreamtranny.com/update
+      - hcjav.com/update
+    scraper: subSiteScraper
+  - action: scrapeXPath
+    url:
+      # These subsites don't render their own update date
+      - dothewife.com/update
       - genlez.com/update
       - goldenslut.com/update
-      - hcjav.com/update
       - jeffsmodels.com/update
       - suggabunny.com/update
-    scraper: subSiteScraper
+    scraper: subSiteScraperNoDate
 xPathScrapers:
   networkScraper:
     scene:
@@ -88,8 +92,28 @@ xPathScrapers:
       Title: *title
       Code: *code
       Date: *date
-      Studio:
+      Studio: &subSiteStudio
         Name: //img[contains(@src, "logo.png")]/@alt
+      Performers: *performers
+      Tags: *tags
+      Details: *details
+      Image: *image
+  subSiteScraperNoDate:
+    common:
+      $title: //div[@class="section-title"]
+    scene:
+      Title: *title
+      Code: *code
+      Date:
+        selector: *URL
+        postProcess:
+          - replace:
+              - regex: .+\/update\/0*(\d+).+
+                with: https://porngutter.com/update/$1/
+          - subScraper:
+              selector: //small[@class="updated-at"]
+          - parseDate: Jan 2, 2006
+      Studio: *subSiteStudio
       Performers: *performers
       Tags: *tags
       Details: *details
