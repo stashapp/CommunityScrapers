@@ -7,8 +7,7 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h1
+      Title: //h1
       Date:
         selector: //div[@class="content-date"]
         postProcess:
@@ -23,11 +22,10 @@ xPathScrapers:
       Tags:
         Name: //div[@class="box"]/a
       Details:
-        selector: //div[@class="content-desc more-desc"]
+        selector: //div[contains(@class,"content-desc")]
         concat: "\n"
       Image:
         selector: //meta[@property="og:image"]/@content
       Studio:
         Name:
           fixed: SwallowBay
-# Last Updated July 31, 2021
