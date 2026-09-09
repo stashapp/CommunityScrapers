@@ -1,0 +1,218 @@
+name: Digital J Media
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - spermmania.com/fhg
+    scraper: spermmaniaScraper
+  - action: scrapeXPath
+    url:
+      - cospuri.com/sample
+    scraper: cospuriScraper
+  - action: scrapeXPath
+    url:
+      - cutebutts.com/sample
+    scraper: cuteButtsScraper
+  - action: scrapeXPath
+    url:
+      - cumbuffet.com/sample
+    scraper: cumBuffetScraper
+  - action: scrapeXPath
+    url:
+      - fellatiojapan.com/fhg
+    scraper: fellatioJapanScraper
+  - action: scrapeXPath
+    url:
+      - handjobjapan.com/fhg
+    scraper: handjobJapanScraper
+  - action: scrapeXPath
+    url:
+      - legsjapan.com/fhg
+    scraper: legsJapanScraper
+  - action: scrapeXPath
+    url:
+      - transexjapan.com/fhg
+    scraper: transexJapanScraper
+
+xPathScrapers:
+  spermmaniaScraper:
+    scene:
+      Title: //div[contains(@class,"sample-title")]
+      Performers:
+        Name: //div[contains(@class,"sample-info")]//a[contains(@href,"actress")]/text()
+      Tags:
+        Name: //div[contains(@class,"sample-info")]//a[contains(@href,"type")]/text()
+      Image:
+        selector: //div[contains(@class,"player")]/@style
+        postProcess:
+          - replace:
+              - regex: '.*background:url\((.*)\).*'
+                with: $1
+      Details:
+        selector: //div[contains(@class,"sample-info")]//div[contains(.,"Cumshots")]/strong
+        postProcess:
+          - replace:
+              - regex: $
+                with: " cumshots"
+      Studio:
+        Name:
+          fixed: Sperm Mania
+
+  cospuriScraper:
+    scene:
+      Title:
+        selector: //div[contains(@class,"player")]/@style|//div[contains(@class,"sample-model")]
+        concat: ": "
+        postProcess:
+          - replace:
+              - regex: .*preview/([^/_]+)(?:_[^/]+)?/scene.*:\s*(.+)
+                with: "Cospuri #$1: $2"
+      Performers:
+        Name: //div[contains(@class,"sample-model")]/a
+        URLs:
+          selector: //div[contains(@class,"sample-model")]/a/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.cospuri.com
+      Tags:
+        Name: //div[contains(@class,"tags")]/a | //div[contains(@class,"sample-channel")]/a
+      Details:
+        selector: //div[contains(@class,"description")]
+      Image:
+        selector: //div[contains(@class,"player")]/@style
+        postProcess:
+          - replace:
+              - regex: '.*background:url\((.*)\).*'
+                with: $1
+      Studio:
+        Name:
+          fixed: Cospuri
+
+  cuteButtsScraper:
+    scene:
+      Title: //h1[contains(@class,"title")]
+      Performers:
+        Name: //h4[contains(@class,"model")]/a
+      Date:
+        selector: //div[contains(@class,"details")]/span[contains(.,"Date:")]
+        postProcess:
+          - replace:
+              - regex: ^Date:\s*
+                with: ""
+          - parseDate: 2006・01・02
+      Tags:
+        Name: //a[contains(@class,"tag")]
+      Image:
+        selector: //div[contains(@class,"player")]/@style
+        postProcess:
+          - replace:
+              - regex: '.*background:url\((.*)\).*'
+                with: $1
+      Studio:
+        Name:
+          fixed: Cute Butts
+
+  cumBuffetScraper:
+    scene:
+      Title:
+        selector: //h2[contains(@class,"st")]
+        postProcess:
+          - replace:
+              - regex: ^VIDEO:\s*
+                with: ""
+      Performers:
+        Name: //div[contains(@class,"tags")][strong[contains(.,"Model")]]/a
+      Tags:
+        Name: //div[contains(@class,"tags")][strong[contains(.,"Tags")]]//a[contains(@class,"tag")]
+      Image:
+        selector: //div[contains(@class,"player")]/@style
+        postProcess:
+          - replace:
+              - regex: '.*background:url\((.*)\).*'
+                with: $1
+      Studio:
+        Name:
+          fixed: Cum Buffet
+
+  fellatioJapanScraper:
+    scene:
+      Title:
+        selector: //div[contains(@class,"player")]/@style|//div[contains(@class,"tour-data")]/h2
+        concat: ": "
+        postProcess:
+          - replace:
+              - regex: .*preview/([^/_]+)(?:_[^/]+)?/scene.*:\s*(.+)
+                with: "Fellatio Japan #$1: $2"
+      Performers:
+        Name: //div[contains(@class,"tour-data")]/h2/a
+      Tags:
+        Name: //div[contains(@class,"tour-data")]//div[contains(@class,"data")]/a
+      Image:
+        selector: //div[contains(@class,"player")]/@style
+        postProcess:
+          - replace:
+              - regex: '.*background:url\((.*)\).*'
+                with: $1
+      Studio:
+        Name:
+          fixed: Fellatio Japan
+
+  handjobJapanScraper:
+    scene:
+      Title: //div[@id="m"]/h2
+      Performers:
+        Name:
+          selector: //div[@id="m"]/h1
+          split: ", "
+      Image:
+        selector: //div[contains(@class,"player")]/@style
+        postProcess:
+          - replace:
+              - regex: '.*background:url\((.*)\).*'
+                with: $1
+      Studio:
+        Name:
+          fixed: Handjob Japan
+
+  legsJapanScraper:
+    scene:
+      Title: //div[contains(@class,"tContent")]/h3[1]/strong
+      Performers:
+        # multi-performer scenes use 3 separate <h1>s incl. a literal
+        # "<h1> & </h1>" separator; only the real names are wrapped in <a>
+        Name: //h1[parent::a]
+      Tags:
+        Name: //div[contains(@class,"tContent")]/h4//a
+      Image:
+        selector: //div[contains(@class,"player")]/@style
+        postProcess:
+          - replace:
+              - regex: '.*background:url\((.*)\).*'
+                with: $1
+      Studio:
+        Name:
+          fixed: Legs Japan
+
+  transexJapanScraper:
+    scene:
+      Title: //div[contains(@class,"info-title")]/h1
+      Performers:
+        Name: //div[contains(@class,"info-title")]/a
+      Tags:
+        Name: //div[contains(@class,"info-tags")]/a
+      Details:
+        selector: //div[contains(@class,"info-dl")]/h2/following-sibling::text()
+      Image:
+        selector: //div[contains(@class,"player")]/@style
+        postProcess:
+          - replace:
+              - regex: '.*background:url\((.*)\).*'
+                with: $1
+      Studio:
+        Name:
+          fixed: Transex Japan
+
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
