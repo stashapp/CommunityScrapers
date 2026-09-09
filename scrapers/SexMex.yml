@@ -32,7 +32,7 @@ xPathScrapers:
       Image: $scene//img/@src
   sexmex:
     common:
-      $jsonld: //script[@type="application/ld+json"]
+      $jsonld: //script[@type="application/ld+json" and contains(., "uploadDate") and contains(., "contentUrl")]
     scene:
       Title:
         &title # ExposedLatinas and TransQueens still use the old layout so we keep both selectors
@@ -88,12 +88,7 @@ xPathScrapers:
                 https://exposedlatinas.com/tour/: Exposed Latinas
                 https://sexmex.xxx/tour/: Sex Mex
                 https://transqueens.com/tour/: Trans Queens
-      Image:
-        selector: $jsonld
-        postProcess:
-          - replace:
-              - regex: .*"thumbnailUrl":\["([^"]+)"\].*
-                with: $1
+      Image: //video[@id="vid1"]/@poster
 
     gallery:
       Title: *title
