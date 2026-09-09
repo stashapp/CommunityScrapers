@@ -8,14 +8,8 @@ xPathScrapers:
   sceneScraper:
     scene:
       Title: //h1
-      Image:
-        selector: //script[contains(., "coverSlider.init(")]
-        postProcess:
-          - replace:
-              - regex: '.+coverSlider\.init\(\"(.+?)\"\,.+$'
-                with: $1/slide_1.jpg
-      Details: //span[@id="movieDescription"]
+      Image: //div[@class="videoCover"]/img/@src
+      Details: //div[@id="description"]
       Studio:
         Name:
           fixed: Strapon Dreamer
-# Last Updated November 09, 2021
