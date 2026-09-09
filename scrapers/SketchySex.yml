@@ -1,5 +1,5 @@
 name: Sketchy Sex
-
+# Same layout as FratX
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -14,34 +14,29 @@ xPathScrapers:
         selector: //div[@class="VideoDescription"]
         postProcess:
           - replace:
-            - regex: \w+\s+\d+(?:st|nd|rd|th)?,\s+\d+\s*-\s*(.*)
-              with: $1
+              - regex: \w+\s+\d+(?:st|nd|rd|th)?,\s+\d+\s*-\s*(.*)
+                with: $1
       Date:
-        selector: //div[@class="date"]
+        selector: //div[@class="VideoDescription"]
         postProcess:
           - replace:
-            - regex: "ADDED:"
-              with: ""
-          - replace:
-            - regex: (\w+)\s+(\d+),\s+(\d+)
-              with: $1 $2, $3
-          - parseDate: Jan 2, 2006
+              - regex: ^(\w+)\s+(\d+)(?:st|nd|rd|th)?,\s+(\d+).*
+                with: $1 $2, $3
+          - parseDate: January 2, 2006
       Image:
-        selector: //video/@data-setup
+        selector: //video/@poster
         postProcess:
           - replace:
-            - regex: .*https://
-              with: https://
+              - regex: .*https://
+                with: https://
           - replace:
-            - regex: .jpg.*
-              with: .jpg
+              - regex: .jpg.*
+                with: .jpg
           - replace:
-            - regex: -[1-4]x\.
-              with: -full.
+              - regex: -[1-4]x\.
+                with: -full.
       Studio:
         Name:
           fixed: Sketchy Sex
         URL:
           fixed: https://www.sketchysex.com
-
-# Last Updated July 21, 2025
