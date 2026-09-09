@@ -1,54 +1,53 @@
 name: "StripzVR"
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - stripzvr.com
+    queryURL: &sceneQuery "https://www.stripzvr.com/wp-json/wp/v2/pages?_embed=up&slug={url}"
+    queryURLReplace: &sceneQueryReplace
+      url:
+        - regex: "^.*/([^/]+)/?$"
+          with: $1
     scraper: sceneScraper
 groupByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
       - stripzvr.com
+    queryURL: *sceneQuery
+    queryURLReplace: *sceneQueryReplace
     scraper: movieScraper
-xPathScrapers:
+jsonScrapers:
   sceneScraper:
     scene:
-      Title: &titleSel //meta[@property="og:title"]/@content
-      Date: &dateAttr
-        selector: //div[@class="elementor-text-editor elementor-clearfix"]/p[contains(@style,"right;")]
+      Title: 0.yoast_head_json.og_title
+      Date: &dateSel
+        selector: 0.date_gmt
         postProcess:
-          - replace:
-              - regex: "’"
-                with: " "
-              - regex: "June"
-                with: "Jun"
-              - regex: "July"
-                with: "Jul"
-              - regex: "March"
-                with: "Mar"
-              - regex: "April"
-                with: "Apr"
-              - regex: "Xmas Day"
-                with: "25 Dec"
-              - regex: "  "
-                with: " "
-          - parseDate: 2 Jan 06
-      Details: &detailsSel //meta[@property="og:description"]/@content
+          - parseDate: "2006-01-02T15:04:05"
+      Details: 0.yoast_head_json.og_description
       Studio:
-        Name: &studioName //meta[@property="og:site_name"]/@content
+        Name: &studioName 0.yoast_head_json.og_site_name
       Performers:
-        Name: //p[contains(text(), "MODEL :")]/a
-      Image: &imageSel //meta[@property="og:image"]/@content
+        Name:
+          selector: 0._embedded.up.0.title.rendered
+          postProcess:
+            - javascript: |
+                const named = { amp: "&", quot: '"', apos: "'", nbsp: " ", hellip: "…" };
+                const decoded = value.replace(/&(#\d+|amp|quot|apos|nbsp|hellip);/g, (m, e) =>
+                  e[0] === "#" ? String.fromCharCode(parseInt(e.slice(1), 10)) : (named[e] || m)
+                );
+                return decoded.replace(/\s*[-–—]\s*Tour$/, "");
+        URLs: 0._embedded.up.0.link
+      Image: 0.yoast_head_json.og_image.0.url
       Groups:
-        Name: *titleSel
-        Date: *dateAttr
-        URL: //meta[@property="og:url"]/@content
+        Name: 0.yoast_head_json.og_title
+        Date: *dateSel
+        URLs: 0.link
   movieScraper:
     group:
-      Name: *titleSel
-      Date: *dateAttr
+      Name: 0.yoast_head_json.og_title
+      Date: *dateSel
       Studio:
         Name: *studioName
-      Synopsis: *detailsSel
-      FrontImage: *imageSel
-# Last Updated December 11, 2021
-
+      Synopsis: 0.yoast_head_json.og_description
+      FrontImage: 0.yoast_head_json.og_image.0.url
