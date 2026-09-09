@@ -21,7 +21,6 @@ sceneByURL:
       - interracialpovs.com/trailers/
       - brickyates.com/tour/
       - breeditraw.net/tour/trailers/
-      - selfiesuck.com/tour/trailers/
       - the-female-orgasm.com/explore/trailers/
       - girls.dreamnet.com/tour/trailers/
       - blowbanggirls.com/v3/trailers/
@@ -41,6 +40,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - bathroomcreepers.com/creeper/trailers
+      - selfiesuck.com/tour/trailers/
     scraper: hiddenDateScraper
   - action: scrapeXPath
     url:
