@@ -73,7 +73,7 @@ xPathScrapers:
         Name: $content//a[contains(@href,"/models/")]
         URLs: $content//a[contains(@href,"/models/")]/@href
       Tags: &tags
-        Name: $content//a[@class="video-tag-link"]
+        Name: $content//a[contains(@class, "video-tag-link")]
       Image:
         selector: $content//img[@id="video-cover-image"]/@src
         postProcess:
@@ -83,7 +83,7 @@ xPathScrapers:
               - regex: -1x
                 with: -2x
       Studio: &studio
-        Name: //a[contains(@class, "video-site-link")]
+        Name: //meta[@property="og:site_name"]/@content
     gallery:
       Title: *title
       Code: *code
@@ -123,4 +123,3 @@ xPathScrapers:
                 with: https://teenmegaworld.net/
               - regex: -1x
                 with: -2x
-# Last Updated August 17, 2026
