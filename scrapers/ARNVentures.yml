@@ -1,0 +1,59 @@
+name: ARN Ventures
+# scrapes: Cum Dump Star, Face Down Ass Up, FratX, Sketchy Sex
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - cumdumpstar.com/trailer.php?id=
+      - facedownassup.com/trailer.php?id=
+      - fratx.com/trailer.php?id=
+      - sketchysex.com/trailer.php?id=
+    scraper: arnventures
+
+xPathScrapers:
+  arnventures:
+    scene:
+      Title: //div[@class="name"]
+      Details:
+        selector: //div[@class="VideoDescription"]
+        postProcess:
+          - replace:
+              - regex: \w+\s+\d+(?:st|nd|rd|th)?,\s+\d+\s*-\s*(.*)
+                with: $1
+      Date:
+        selector: >-
+          //div[@class="date"][normalize-space(.)] |
+          //div[@class="VideoDescription"][not(//div[@class="date"][normalize-space(.)])]
+        postProcess:
+          - replace:
+              - regex: ^(\w+)\s+(\d+)(?:st|nd|rd|th)?,\s+(\d+).*
+                with: $1 $2, $3
+          # full month name on fratx/sketchysex/facedownassup, abbreviated on cumdumpstar
+          - parseDate: January 2, 2006
+          - parseDate: Jan 2, 2006
+      Image:
+        selector: //video/@poster
+        postProcess:
+          - replace:
+              - regex: -[1-4]x\.
+                with: -full.
+      Studio:
+        Name:
+          selector: //title
+          postProcess:
+            - replace: &brandExtract
+                - regex: ^([A-Za-z]+)\.com\s*-.*
+                  with: $1
+            - map:
+                FratX: FratX
+                SketchySex: Sketchy Sex
+                FaceDownAssUp: FaceDownAssUp
+                CumDumpStar: Cum Dump Star
+        URL:
+          selector: //title
+          postProcess:
+            - replace: *brandExtract
+            - map:
+                FratX: https://www.fratx.com
+                SketchySex: https://www.sketchysex.com
+                FaceDownAssUp: https://www.facedownassup.com
+                CumDumpStar: https://www.cumdumpstar.com
