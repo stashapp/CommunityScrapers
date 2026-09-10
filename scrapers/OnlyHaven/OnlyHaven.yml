@@ -1,0 +1,44 @@
+name: OnlyHaven (cum.st)
+# requires: py_common
+sceneByURL:
+  - action: script
+    url:
+      - cum.st/
+    script:
+      - python
+      - OnlyHaven.py
+      - scene-by-url
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - OnlyHaven.py
+    - scene-by-fragment
+galleryByURL:
+  - action: script
+    url:
+      - cum.st/
+    script:
+      - python
+      - OnlyHaven.py
+      - gallery-by-url
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - OnlyHaven.py
+    - gallery-by-fragment
+imageByURL:
+  - action: script
+    url:
+      - cum.st/
+    script:
+      - python
+      - OnlyHaven.py
+      - image-by-url
+imageByFragment:
+  action: script
+  script:
+    - python
+    - OnlyHaven.py
+    - image-by-fragment
