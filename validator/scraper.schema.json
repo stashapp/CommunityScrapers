@@ -2,268 +2,763 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "$id": "scraper",
   "title": "Stash Scraper",
-  "description": "A stash scraper config",
+  "description": "A stash scraper config. Generated from stash v0.31.1.",
   "type": "object",
+  "required": [
+    "name"
+  ],
   "additionalProperties": false,
-  "required": ["name"],
   "properties": {
-    "name": {
-      "title": "Scraper Name",
-      "description": "The name of the scraper.",
-      "type": "string"
-    },
-    "sceneByURL": {
-      "title": "Scene by URL",
-      "description": "An array of one or more configurations for scraping scene info by URL(s).",
-      "allOf": [{ "$ref": "#/definitions/anyByURL" }]
-    },
-    "groupByURL": {
-      "title": "Group by URL",
-      "description": "An array of one or more configurations for scraping group info by URL(s).",
-      "allOf": [{ "$ref": "#/definitions/anyByURL" }]
-    },
-    "performerByURL": {
-      "title": "Performer by URL",
-      "description": "An array of one or more configurations for scraping performer info by URL(s).",
-      "allOf": [{ "$ref": "#/definitions/anyByURL" }]
-    },
-    "galleryByURL": {
-      "title": "Gallery by URL",
-      "description": "An array of one or more configurations for scraping gallery info by URL(s).",
-      "allOf": [{ "$ref": "#/definitions/anyByURL" }]
-    },
-    "imageByURL": {
-      "title": "Image by URL",
-      "description": "An array of one or more configurations for scraping image info by URL(s).",
-      "allOf": [{ "$ref": "#/definitions/anyByURL" }]
-    },
-    "sceneByName": {
-      "title": "Scene by name",
-      "description": "A single configuration for scraping scene info by the scene name.",
-      "type": "object",
+    "debug": {
+      "description": "Scraper debugging options",
       "allOf": [
-        { "$ref": "#/definitions/anyByFragment" },
         {
-          "propertyNames": {
-            "not": { "enum": ["queryURLReplace"] }
-          }
+          "$ref": "#/definitions/debugOptions"
         }
       ]
     },
-    "sceneByQueryFragment": {
-      "title": "Scene by query fragment",
-      "description": "A single configuration for scraping scene info by query fragment.",
-      "allOf": [{ "$ref": "#/definitions/anyByFragment" }]
-    },
-    "performerByName": {
-      "title": "Performer by name",
-      "description": "A single configuration for scraping performer info by their name.",
-      "type": "object",
+    "driver": {
+      "description": "Scraping driver options",
       "allOf": [
-        { "$ref": "#/definitions/anyByFragment" },
         {
-          "propertyNames": {
-            "not": { "enum": ["queryURLReplace"] }
-          }
-        }
-      ]
-    },
-    "sceneByFragment": {
-      "title": "Scene by fragment",
-      "description": "A single configuration for scraping scene info by fragment.",
-      "allOf": [{ "$ref": "#/definitions/anyByFragment" }]
-    },
-    "performerByFragment": {
-      "title": "Performer by fragment",
-      "description": "A single configuration for scraping performer info by fragment.",
-      "type": "object",
-      "allOf": [
-        { "$ref": "#/definitions/anyByFragment" },
-        {
-          "properties": {
-            "action": { "not": { "enum": ["scrapeXPath", "scrapeJson"] } }
-          }
+          "$ref": "#/definitions/driverOptions"
         }
       ]
     },
     "galleryByFragment": {
-      "title": "Gallery by fragment",
-      "description": "A single configuration for scraping gallery info by fragment.",
-      "type": "object",
+      "description": "Configuration for querying gallery by a Gallery fragment",
       "allOf": [
-        { "$ref": "#/definitions/anyByFragment" },
         {
+          "$ref": "#/definitions/byFragment"
+        },
+        {
+          "type": "object",
           "properties": {
-            "action": { "not": { "enum": ["stash"] } }
+            "queryURLReplace": {
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "checksum",
+                  "filename",
+                  "title",
+                  "url"
+                ]
+              }
+            }
           }
         }
       ]
     },
-    "imageByFragment": {
-      "title": "Image by fragment",
-      "description": "A single configuration for scraping Image info by fragment.",
-      "type": "object",
-      "allOf": [
-        { "$ref": "#/definitions/anyByFragment" },
-        {
-          "properties": {
-            "action": { "not": { "enum": ["stash"] } }
+    "galleryByURL": {
+      "description": "Configuration for querying a gallery by a URL",
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/byURL"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "queryURLReplace": {
+                "type": "object",
+                "propertyNames": {
+                  "enum": [
+                    "url"
+                  ]
+                }
+              }
+            }
           }
+        ]
+      }
+    },
+    "groupByURL": {
+      "description": "Configuration for querying a group by a URL",
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/byURL"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "queryURLReplace": {
+                "type": "object",
+                "propertyNames": {
+                  "enum": [
+                    "url"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "imageByFragment": {
+      "description": "Configuration for querying image by an Image fragment",
+      "allOf": [
+        {
+          "$ref": "#/definitions/byFragment"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "queryURLReplace": {
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "checksum",
+                  "filename",
+                  "title",
+                  "url"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "imageByURL": {
+      "description": "Configuration for querying an image by a URL",
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/byURL"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "queryURLReplace": {
+                "type": "object",
+                "propertyNames": {
+                  "enum": [
+                    "url"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "jsonScrapers": {
+      "title": "JSON scrapers",
+      "description": "Json scraping configurations",
+      "type": "object",
+      "additionalProperties": false,
+      "patternProperties": {
+        "^\\w+$": {
+          "$ref": "#/definitions/scraper"
+        }
+      }
+    },
+    "movieByURL": {
+      "description": "Deprecated: use groupByURL instead.",
+      "deprecated": true,
+      "deprecationMessage": "Deprecated: use groupByURL instead.",
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/byURL"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "queryURLReplace": {
+                "type": "object",
+                "propertyNames": {
+                  "enum": [
+                    "url"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "name": {
+      "title": "Scraper Name",
+      "description": "The name of the scraper, as displayed in the Stash UI.",
+      "type": "string"
+    },
+    "performerByFragment": {
+      "description": "Configuration for querying performers by a Performer fragment",
+      "allOf": [
+        {
+          "$ref": "#/definitions/byFragment"
+        }
+      ]
+    },
+    "performerByName": {
+      "description": "Configuration for querying performers by name",
+      "allOf": [
+        {
+          "$ref": "#/definitions/byName"
+        }
+      ]
+    },
+    "performerByURL": {
+      "description": "Configuration for querying a performer by a URL",
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/byURL"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "queryURLReplace": {
+                "type": "object",
+                "propertyNames": {
+                  "enum": [
+                    "url"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "sceneByFragment": {
+      "description": "Configuration for querying scenes by a Scene fragment",
+      "allOf": [
+        {
+          "$ref": "#/definitions/byFragment"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "queryURLReplace": {
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "checksum",
+                  "filename",
+                  "oshash",
+                  "phash",
+                  "title",
+                  "url"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sceneByName": {
+      "description": "Configuration for querying scenes by name",
+      "allOf": [
+        {
+          "$ref": "#/definitions/byName"
+        }
+      ]
+    },
+    "sceneByQueryFragment": {
+      "description": "Configuration for querying scenes by query fragment",
+      "allOf": [
+        {
+          "$ref": "#/definitions/byFragment"
+        },
+        {
+          "type": "object",
+          "properties": {
+            "queryURLReplace": {
+              "type": "object",
+              "propertyNames": {
+                "enum": [
+                  "code",
+                  "date",
+                  "details",
+                  "director",
+                  "remote_site_id",
+                  "title",
+                  "url"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sceneByURL": {
+      "description": "Configuration for querying a scene by a URL",
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/definitions/byURL"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "queryURLReplace": {
+                "type": "object",
+                "propertyNames": {
+                  "enum": [
+                    "url"
+                  ]
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "stashServer": {
+      "description": "Stash server configuration",
+      "allOf": [
+        {
+          "$ref": "#/definitions/stashServer"
         }
       ]
     },
     "xPathScrapers": {
       "title": "XPath scrapers",
-      "description": "A mapping of scraping configurations using XPath selectors.",
+      "description": "Xpath scraping configurations",
       "type": "object",
       "additionalProperties": false,
       "patternProperties": {
         "^\\w+$": {
-          "title": "XPath scraper",
-          "allOf": [{ "$ref": "#/definitions/scraper" }]
+          "$ref": "#/definitions/scraper"
         }
       }
+    }
+  },
+  "definitions": {
+    "action": {
+      "title": "Action",
+      "description": "The scrape method to use.",
+      "type": "string",
+      "enum": [
+        "scrapeJson",
+        "scrapeXPath",
+        "script",
+        "stash"
+      ]
     },
-    "jsonScrapers": {
-      "title": "JSON scrapers",
-      "description": "A mapping of scraping configurations using JSON selectors.",
+    "byFragment": {
       "type": "object",
+      "required": [
+        "action"
+      ],
       "additionalProperties": false,
-      "patternProperties": {
-        "^\\w+$": {
-          "title": "JSON scraper",
-          "allOf": [{ "$ref": "#/definitions/scraper" }]
-        }
-      }
-    },
-    "stashServer": {
-      "title": "Stash-Server configuration",
-      "description": "Used to configure a stash server scraping source.",
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["url"],
       "properties": {
+        "action": {
+          "$ref": "#/definitions/action"
+        },
+        "queryURL": {
+          "title": "Query URL",
+          "description": "The URL to fetch, built from the fragment's placeholders.",
+          "type": "string"
+        },
+        "queryURLReplace": {
+          "title": "Query URL replacements",
+          "description": "Regular expression replacements applied to the query URL placeholders before the request is made.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/replaceKey"
+          }
+        },
+        "scraper": {
+          "title": "Scraper definition name",
+          "description": "The name of a configuration under xPathScrapers or jsonScrapers, matching the chosen action.",
+          "type": "string"
+        },
+        "script": {
+          "title": "Script",
+          "description": "An executable and its arguments, run to perform the scrape.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "enum": [
+                  "scrapeXPath",
+                  "scrapeJson"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "scraper",
+              "queryURL"
+            ],
+            "properties": {
+              "queryURL": {
+                "type": "string"
+              },
+              "scraper": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "script"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "script"
+            ],
+            "properties": {
+              "script": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "byName": {
+      "type": "object",
+      "required": [
+        "action"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/action"
+        },
+        "queryURL": {
+          "title": "Query URL",
+          "description": "The URL to fetch. The search term is substituted for the {} placeholder.",
+          "type": "string"
+        },
+        "scraper": {
+          "title": "Scraper definition name",
+          "description": "The name of a configuration under xPathScrapers or jsonScrapers, matching the chosen action.",
+          "type": "string"
+        },
+        "script": {
+          "title": "Script",
+          "description": "An executable and its arguments, run to perform the scrape.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "enum": [
+                  "scrapeXPath",
+                  "scrapeJson"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "scraper",
+              "queryURL"
+            ],
+            "properties": {
+              "queryURL": {
+                "type": "string"
+              },
+              "scraper": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "script"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "script"
+            ],
+            "properties": {
+              "script": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "byURL": {
+      "type": "object",
+      "required": [
+        "action",
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "$ref": "#/definitions/action"
+        },
+        "queryURL": {
+          "title": "Query URL",
+          "description": "The URL to fetch, in place of the matched URL. Supports the {url} placeholder.",
+          "type": "string"
+        },
+        "queryURLReplace": {
+          "title": "Query URL replacements",
+          "description": "Regular expression replacements applied to the query URL placeholders before the request is made.",
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/replaceKey"
+          }
+        },
+        "scraper": {
+          "title": "Scraper definition name",
+          "description": "The name of a configuration under xPathScrapers or jsonScrapers, matching the chosen action.",
+          "type": "string"
+        },
+        "script": {
+          "title": "Script",
+          "description": "An executable and its arguments, run to perform the scrape.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
         "url": {
+          "title": "URLs",
+          "description": "Partial URLs this configuration applies to. Matching is a substring test, so keep these loose enough to also match archived copies of the page.",
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "enum": [
+                  "scrapeXPath",
+                  "scrapeJson"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "scraper"
+            ],
+            "properties": {
+              "scraper": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "const": "script"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "script"
+            ],
+            "properties": {
+              "script": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "clickOptions": {
+      "type": "object",
+      "required": [
+        "xpath"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "sleep": {
+          "title": "Sleep",
+          "description": "Wait this many seconds after clicking, before continuing.",
+          "type": "integer",
+          "default": 2,
+          "minimum": 1
+        },
+        "xpath": {
+          "title": "Selector",
+          "description": "XPath selector for the element to click.",
+          "type": "string"
+        }
+      }
+    },
+    "commonSelectors": {
+      "title": "Common selectors",
+      "description": "Selector fragments that can be referenced by name in the selectors below.",
+      "type": [
+        "object",
+        "null"
+      ],
+      "additionalProperties": false,
+      "patternProperties": {
+        "^[$].+$": {
+          "title": "Selector fragment",
+          "type": "string"
+        }
+      }
+    },
+    "cookie": {
+      "type": "object",
+      "required": [
+        "Domain",
+        "Path",
+        "Name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "Domain": {
+          "title": "Cookie domain",
+          "type": "string"
+        },
+        "Name": {
+          "title": "Cookie name",
+          "type": "string"
+        },
+        "Path": {
+          "title": "Cookie path",
+          "type": "string"
+        },
+        "Value": {
+          "title": "Cookie value",
+          "type": "string"
+        },
+        "ValueRandom": {
+          "title": "Random value length",
+          "description": "Generate a random string of this many characters as the cookie value.",
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "ValueRandom"
+          ],
+          "properties": {
+            "ValueRandom": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        {
+          "required": [
+            "Value"
+          ],
+          "properties": {
+            "Value": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "cookieOptions": {
+      "type": "object",
+      "required": [
+        "Cookies"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "CookieURL": {
+          "title": "URL to apply these cookies to",
+          "description": "Required if `useCDP` is `false`.",
           "type": "string",
           "format": "uri"
+        },
+        "Cookies": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/cookie"
+          }
         }
       }
     },
-    "debug": {
+    "debugOptions": {
       "title": "Debugging",
       "type": "object",
       "additionalProperties": false,
       "properties": {
         "printHTML": {
           "title": "Print HTML",
-          "description": "Print the received HTML/JSON from a scraper request to the log.",
+          "description": "Print the HTML/JSON received by the scraper to the log.",
           "type": "boolean"
         }
       }
     },
-    "driver": {
+    "driverOptions": {
       "title": "Scraper driver options",
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "useCDP": {
-          "title": "Use Chrome DevTools Protocol (CDP)",
-          "description": "When set to true, will use the CDP path set in the Stash configuration.",
-          "type": "boolean"
-        },
-        "sleep": {
-          "title": "Sleep",
-          "description": "Wait N seconds after the page loads, before performing the scrape.\nIf unset, defaults to 2.",
-          "type": "number",
-          "default": 2,
-          "minimum": 1
-        },
         "clicks": {
           "title": "Clicks",
-          "description": "Perform mouse clicks on elements.",
+          "description": "Mouse clicks to perform on the page before scraping it.",
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["xpath"],
-            "properties": {
-              "xpath": {
-                "title": "Selector",
-                "description": "XPath selector for the element to click.",
-                "type": "string"
-              },
-              "sleep": {
-                "title": "Sleep",
-                "description": "Wait N seconds after after clicking, before continuing the scrape.\nIf unset, defaults to 2.",
-                "type": "number",
-                "default": 2,
-                "minimum": 1
-              }
-            }
+            "$ref": "#/definitions/clickOptions"
           }
         },
         "cookies": {
           "title": "Cookie options",
-          "description": "An array of cookie items.",
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["Cookies"],
-            "properties": {
-              "CookieURL": {
-                "title": "URL to apply these cookies to",
-                "description": "Required if `useCDP` is `false`.",
-                "type": "string",
-                "format": "uri"
-              },
-              "Cookies": {
-                "type": "array",
-                "minItems": 1,
-                "items": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "required": ["Domain", "Path", "Name"],
-                  "properties": {
-                    "Name": {
-                      "title": "Cookie name",
-                      "type": "string"
-                    },
-                    "Value": {
-                      "title": "Cookie value",
-                      "type": "string"
-                    },
-                    "ValueRandom": {
-                      "title": "Generate a random string with the length of N (> 0) characters",
-                      "type": "integer",
-                      "minimum": 1
-                    },
-                    "Domain": {
-                      "title": "Cookie domain",
-                      "type": "string"
-                    },
-                    "Path": {
-                      "title": "Cookie path",
-                      "type": "string"
-                    }
-                  },
-                  "oneOf": [
-                    {
-                      "required": ["ValueRandom"],
-                      "properties": {
-                        "ValueRandom": { "type": "integer", "minimum": 1 }
-                      }
-                    },
-                    {
-                      "required": ["Value"],
-                      "properties": { "Value": { "type": "string" } }
-                    }
-                  ]
-                }
-              }
-            }
+            "$ref": "#/definitions/cookieOptions"
           }
         },
         "headers": {
@@ -272,723 +767,737 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "type": "object",
-            "additionalProperties": false,
-            "required": ["Key", "Value"],
-            "properties": {
-              "Key": {
-                "title": "Key",
-                "type": "string"
-              },
-              "Value": {
-                "title": "Value",
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "anyByURL": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["action", "url"],
-        "properties": {
-          "action": {
-            "title": "Action",
-            "description": "Scrape method to use",
-            "enum": ["script", "scrapeXPath", "scrapeJson"]
-          },
-          "url": {
-            "title": "URLs",
-            "description": "An array of partial URLs that this configuration applies to.",
-            "type": "array",
-            "minItems": 1,
-            "uniqueItems": true,
-            "items": {
-              "title": "URL",
-              "type": "string"
-            }
-          },
-          "scraper": {
-            "title": "Scraper definition name",
-            "description": "The name of the scraper definition, as defined in xPathScrapers or jsonScrapers, according to the defined action.",
-            "type": "string"
-          },
-          "script": {
-            "title": "Script",
-            "description": "A list of an executable and arguments to be used as a scraper.",
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "title": "Script executable/argument",
-              "type": "string"
-            }
-          },
-          "queryURL": {
-            "title": "Query URL",
-            "type": "string"
-          },
-          "queryURLReplace": {
-            "title": "Query URL Replace",
-            "type": "object",
-            "additionalProperties": false,
-            "propertyNames": {
-              "enum": ["url"]
-            },
-            "patternProperties": {
-              "^\\w+$": {
-                "$ref": "#/definitions/replaceKey"
-              }
-            }
+            "$ref": "#/definitions/header"
           }
         },
-        "allOf": [
-          {
-            "if": {
-              "properties": {
-                "action": { "enum": ["scrapeXPath", "scrapeJson"] }
-              }
-            },
-            "then": {
-              "required": ["scraper"],
-              "properties": { "scraper": { "type": "string" } }
-            }
-          },
-          {
-            "if": {
-              "properties": {
-                "action": { "const": "script" }
-              }
-            },
-            "then": {
-              "required": ["script"],
-              "properties": {
-                "script": {
-                  "type": "array",
-                  "minItems": 1,
-                  "items": { "type": "string" }
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    "anyByFragment": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["action"],
-      "properties": {
-        "action": {
-          "title": "Action",
-          "description": "Scrape method to use",
-          "enum": ["script", "scrapeXPath", "scrapeJson", "stash"]
+        "sleep": {
+          "title": "Sleep",
+          "description": "Wait this many seconds after the page loads, before scraping it.",
+          "type": "integer",
+          "default": 2,
+          "minimum": 1
         },
-        "scraper": {
-          "title": "Scraper definition name",
-          "description": "The name of the scraper definition, as defined in xPathScrapers or jsonScrapers, according to the defined action.",
-          "type": "string"
-        },
-        "script": {
-          "title": "Script",
-          "description": "A list of an executable and arguments to be used as a scraper.",
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "title": "Script executable/argument",
-            "type": "string"
-          }
-        },
-        "queryURL": {
-          "title": "Query URL",
-          "type": "string"
-        },
-        "queryURLReplace": {
-          "title": "Query URL Replace",
-          "type": "object",
-          "additionalProperties": false,
-          "propertyNames": {
-            "enum": ["checksum", "filename", "oshash", "title", "url"]
-          },
-          "patternProperties": {
-            "^\\w+$": {
-              "$ref": "#/definitions/replaceKey"
-            }
-          }
-        }
-      },
-      "allOf": [
-        {
-          "if": {
-            "properties": {
-              "action": { "enum": ["scrapeXPath", "scrapeJson"] }
-            }
-          },
-          "then": {
-            "required": ["scraper", "queryURL"],
-            "properties": {
-              "scraper": { "type": "string" },
-              "queryURL": { "type": "string" }
-            }
-          }
-        },
-        {
-          "if": {
-            "properties": {
-              "action": { "const": "script" }
-            }
-          },
-          "then": {
-            "required": ["script"],
-            "properties": {
-              "script": {
-                "type": "array",
-                "minItems": 1,
-                "items": { "type": "string" }
-              }
-            }
-          }
-        }
-      ]
-    },
-    "scraper": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "common": {
-          "title": "Common selectors",
-          "description": "Common selector fragments that can be referenced in the selector strings.",
-          "type": ["object", "null"],
-          "additionalProperties": false,
-          "patternProperties": {
-            "^[$].+$": {
-              "title": "Selector",
-              "type": "string"
-            }
-          }
-        },
-        "scene": { "$ref": "#/definitions/sceneObject" },
-        "performer": { "$ref": "#/definitions/performerObject" },
-        "group": { "$ref": "#/definitions/groupObject" },
-        "gallery": { "$ref": "#/definitions/galleryObject" },
-        "image": { "$ref": "#/definitions/imageObject" }
-      }
-    },
-    "sceneObject": {
-      "title": "Scene object",
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-        "Title": {
-          "title": "Scene title",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Details": {
-          "title": "Scene details",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URL": {
-          "title": "Scene URL",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URLs": {
-          "title": "Scene URLs",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Date": {
-          "title": "Scene date",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Image": {
-          "title": "Scene image",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Studio": {
-          "title": "Scene studio",
-          "allOf": [{ "$ref": "#/definitions/studioObject" }]
-        },
-        "Groups": {
-          "title": "Scene groups",
-          "allOf": [{ "$ref": "#/definitions/groupObject" }]
-        },
-        "Tags": {
-          "title": "Scene tags",
-          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
-        },
-        "Performers": {
-          "title": "Scene performers",
-          "allOf": [{ "$ref": "#/definitions/performerObject" }]
-        },
-        "Code": {
-          "title": "Scene studio code",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Director": {
-          "title": "Scene director",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        }
-      }
-    },
-    "performerObject": {
-      "title": "Performer object",
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["Name"],
-      "properties": {
-        "Name": {
-          "title": "Performer name",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Disambiguation": {
-          "title": "Performer disambiguation",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Aliases": {
-          "title": "Performer aliases",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Gender": {
-          "title": "Performer gender",
-          "description": "Must be one of (case insensitive): `male`, `female`, `transgender_male`, `transgender_female`, `intersex`, `non_binary`",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URLs": {
-          "title": "Performer URLs",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Twitter": {
-          "title": "Performer Twitter",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Instagram": {
-          "title": "Performer Instagram",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Birthdate": {
-          "title": "Performer birthdate",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "DeathDate": {
-          "title": "Performer death date",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Ethnicity": {
-          "title": "Performer ethnicity",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Country": {
-          "title": "Performer country",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "HairColor": {
-          "title": "Performer hair color",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "EyeColor": {
-          "title": "Performer eye color",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Height": {
-          "title": "Performer height",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Weight": {
-          "title": "Performer weight",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Measurements": {
-          "title": "Performer measurements",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "FakeTits": {
-          "title": "Performer fake tits",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "PenisLength": {
-          "title": "Performer penis length",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Circumcised": {
-          "title": "Performer circumcised",
-          "description": "Must be one of (case insensitive): `cut`, `uncut`",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "CareerLength": {
-          "deprecated": true,
-          "title": "Performer career length",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "CareerStart": {
-          "title": "Performer career start",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "CareerEnd": {
-          "title": "Performer career end",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Tattoos": {
-          "title": "Performer tattoos",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Piercings": {
-          "title": "Performer piercings",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Details": {
-          "title": "Performer details",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Tags": {
-          "title": "Performer tags",
-          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
-        },
-        "Image": {
-          "title": "Performer image",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Images": {
-          "title": "Performer images",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        }
-      }
-    },
-    "groupObject": {
-      "title": "Group object",
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["Name"],
-      "properties": {
-        "Name": {
-          "title": "Group name",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Date": {
-          "title": "Group date",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Duration": {
-          "title": "Group duration",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Director": {
-          "title": "Group director",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Synopsis": {
-          "title": "Group synopsis",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Studio": {
-          "title": "Group studio",
-          "allOf": [{ "$ref": "#/definitions/studioObject" }]
-        },
-        "FrontImage": {
-          "title": "Group front image",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "BackImage": {
-          "title": "Group back image",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URL": {
-          "title": "Group URL",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URLs": {
-          "title": "Group URLs",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Aliases": {
-          "title": "Group aliases",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Tags": {
-          "title": "Group tags",
-          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
+        "useCDP": {
+          "title": "Use Chrome DevTools Protocol (CDP)",
+          "description": "Fetch the page through the browser configured in Stash, rather than with a plain HTTP request.",
+          "type": "boolean"
         }
       }
     },
     "galleryObject": {
-      "title": "Gallery object",
+      "title": "Gallery",
       "type": "object",
+      "required": [
+        "Title"
+      ],
       "additionalProperties": false,
-      "required": ["Title"],
       "properties": {
-        "Title": {
-          "title": "Gallery title",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
         "Code": {
-          "title": "Gallery studio code",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Details": {
-          "title": "Gallery details",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URL": {
-          "title": "Gallery URL",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URLs": {
-          "title": "Gallery URLs",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+          "$ref": "#/definitions/nodeSelector"
         },
         "Date": {
-          "title": "Gallery date",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+          "$ref": "#/definitions/nodeSelector"
         },
-        "Studio": {
-          "title": "Gallery studio",
-          "allOf": [{ "$ref": "#/definitions/studioObject" }]
-        },
-        "Tags": {
-          "title": "Gallery tags",
-          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
+        "Details": {
+          "$ref": "#/definitions/nodeSelector"
         },
         "Performers": {
-          "title": "Gallery performers",
-          "allOf": [{ "$ref": "#/definitions/performerObject" }]
+          "$ref": "#/definitions/performerObject"
         },
         "Photographer": {
-          "title": "Gallery photographer",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        }
-      }
-    },
-    "studioObject": {
-      "title": "Studio object",
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["Name"],
-      "properties": {
-        "Name": {
-          "title": "Studio name",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Studio": {
+          "$ref": "#/definitions/studioObject"
+        },
+        "Tags": {
+          "$ref": "#/definitions/tagsObject"
+        },
+        "Title": {
+          "$ref": "#/definitions/nodeSelector"
         },
         "URL": {
-          "title": "Studio URL",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+          "description": "Deprecated: use URLs instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use URLs instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
         },
         "URLs": {
-          "title": "Studio URLs",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+          "$ref": "#/definitions/nodeSelector"
         }
       }
     },
-    "tagsObject": {
-      "title": "Tags object",
+    "groupObject": {
+      "title": "Group",
       "type": "object",
       "additionalProperties": false,
-      "required": ["Name"],
       "properties": {
+        "Aliases": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "BackImage": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Date": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Director": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Duration": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "FrontImage": {
+          "$ref": "#/definitions/nodeSelector"
+        },
         "Name": {
-          "title": "Tag name",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Studio": {
+          "$ref": "#/definitions/studioObject"
+        },
+        "Synopsis": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Tags": {
+          "$ref": "#/definitions/tagsObject"
+        },
+        "URL": {
+          "description": "Deprecated: use URLs instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use URLs instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        },
+        "URLs": {
+          "$ref": "#/definitions/nodeSelector"
+        }
+      }
+    },
+    "header": {
+      "type": "object",
+      "required": [
+        "Key",
+        "Value"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "Key": {
+          "title": "Key",
+          "type": "string"
+        },
+        "Value": {
+          "title": "Value",
+          "description": "An empty value is a placeholder for a value the user is expected to fill in themselves, such as their own session cookie.",
+          "type": "string"
         }
       }
     },
     "imageObject": {
-      "title": "Image object",
+      "title": "Image",
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "Title": {
-          "title": "Image title",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
         "Code": {
-          "title": "Image studio code",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "Details": {
-          "title": "Image details",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URL": {
-          "title": "Image URL",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-        },
-        "URLs": {
-          "title": "Image URLs",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+          "$ref": "#/definitions/nodeSelector"
         },
         "Date": {
-          "title": "Image date",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+          "$ref": "#/definitions/nodeSelector"
         },
-        "Studio": {
-          "title": "Image studio",
-          "allOf": [{ "$ref": "#/definitions/studioObject" }]
-        },
-        "Tags": {
-          "title": "Image tags",
-          "allOf": [{ "$ref": "#/definitions/tagsObject" }]
+        "Details": {
+          "$ref": "#/definitions/nodeSelector"
         },
         "Performers": {
-          "title": "Image performers",
-          "allOf": [{ "$ref": "#/definitions/performerObject" }]
+          "$ref": "#/definitions/performerObject"
         },
         "Photographer": {
-          "title": "Image photographer",
-          "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Studio": {
+          "$ref": "#/definitions/studioObject"
+        },
+        "Tags": {
+          "$ref": "#/definitions/tagsObject"
+        },
+        "Title": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "URLs": {
+          "$ref": "#/definitions/nodeSelector"
         }
       }
     },
-    "replaceKey": {
-      "title": "Regular Expression replacements",
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": ["regex", "with"],
-        "properties": {
-          "regex": {
-            "title": "Pattern to search for",
-            "type": "string"
-          },
-          "with": {
-            "title": "Replace matched pattern with",
-            "type": ["string", "null"]
-          }
+    "movieObject": {
+      "title": "Movie",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Aliases": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "BackImage": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Date": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Director": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Duration": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "FrontImage": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Name": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Synopsis": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "URLs": {
+          "$ref": "#/definitions/nodeSelector"
         }
       }
     },
     "nodeSelector": {
+      "title": "Selector",
       "oneOf": [
         {
           "title": "Simple selector",
-          "type": ["string", "null"]
+          "type": [
+            "string",
+            "null"
+          ]
         },
         {
           "title": "Fixed value",
           "type": "object",
+          "required": [
+            "fixed"
+          ],
           "additionalProperties": false,
-          "required": ["fixed"],
           "properties": {
             "fixed": {
               "title": "Fixed value",
+              "description": "Use a literal value rather than scraping one. Post-processing is not applied to fixed values.",
               "type": "string"
             }
           }
         },
         {
           "title": "Complex selector",
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["selector"],
-          "properties": {
-            "selector": {
-              "title": "Selector",
-              "type": "string"
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelectorObject"
             },
-            "postProcess": {
-              "title": "Post-processing operations",
-              "description": "Alter the value with one or more operations.\nPost-processing operations are performed in the order they are specified.",
-              "type": "array",
-              "items": {
-                "title": "Post-processing operation",
+            {
+              "type": "object",
+              "required": [
+                "selector"
+              ],
+              "properties": {
+                "selector": {
+                  "type": "string"
+                }
+              },
+              "not": {
                 "type": "object",
-                "additionalProperties": false,
-                "minProperties": 1,
-                "maxProperties": 1,
+                "required": [
+                  "fixed"
+                ],
                 "properties": {
-                  "parseDate": {
-                    "title": "Parse date from value",
-                    "type": "string",
-                    "examples": [
-                      "January 2, 2006",
-                      "Jan 02, 2006",
-                      "2006-01-02",
-                      "2006-01-02 15:04:05",
-                      "2006-01-02T15:04:05-07:00"
-                    ]
-                  },
-                  "replace": {
-                    "$ref": "#/definitions/replaceKey"
-                  },
-                  "map": {
-                    "title": "Map input values to output values",
-                    "description": "If the value matches one of the input values, it is replaced with the matching output value. If no value is matched, then value is unmodified.",
-                    "type": "object",
-                    "additionalProperties": false,
-                    "patternProperties": {
-                      "^.+$": {
-                        "title": "Replace matched string with value",
-                        "type": "string"
-                      }
-                    }
-                  },
-                  "subScraper": {
-                    "title": "Sub-scraper",
-                    "description": "Makes an HTTP request using the current value as the URL and applies a scraping configuration to the response.",
-                    "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-                  },
-                  "feetToCm": {
-                    "title": "Feet to Centimetres",
-                    "description": "Convert height measurement in feet and inches to centimetres.",
-                    "type": "boolean"
-                  },
-                  "dimensionToMetric": {
-                    "title": "Convert dimension to metric",
-                    "description": "Smart conversion to centimeters: can handle feet, inches or centimeters.",
-                    "type": "boolean"
-                  },
-                  "lbToKg": {
-                    "title": "Pounds to Kilograms",
-                    "description": "Convert weight measurement in pounds to kilograms.",
-                    "type": "boolean"
-                  },
-                  "subtractDays": {
-                    "title": "Subtract Days",
-                    "description": "Subtracts the value in days from the current date.",
-                    "type": "boolean"
-                  },
-                  "javascript": {
-                    "title": "Execute JavaScript",
-                    "description": "Executes the given JavaScript code and uses the result as the value.",
+                  "fixed": {
                     "type": "string"
                   }
                 }
               }
-            },
-            "concat": {
-              "title": "Concatenate",
-              "description": "If a selector matches multiple elements, all of the elements will be joined using the separator given.\nExecuted before `postProcess`.",
-              "type": "string"
-            },
-            "replace": {
-              "deprecated": true,
-              "title": "[DEPRECATED] Regular Expression replacements",
-              "description": "[DEPRECATED] Use `postProcess[].replace`",
-              "allOf": [{ "$ref": "#/definitions/replaceKey" }]
-            },
-            "subScraper": {
-              "deprecated": true,
-              "title": "[DEPRECATED] Sub-scraper",
-              "description": "[DEPRECATED] Use `postProcess[].subScraper`",
-              "allOf": [{ "$ref": "#/definitions/nodeSelector" }]
-            },
-            "parseDate": {
-              "deprecated": true,
-              "title": "[DEPRECATED] Parse date from value",
-              "description": "[DEPRECATED] Use `postProcess[].parseDate`",
-              "type": "string"
-            },
-            "split": {
-              "title": "Split",
-              "description": "Splits a string to more elements using the separator given.\nExecuted after `postProcess`.",
-              "type": "string"
             }
-          }
+          ]
         }
       ]
+    },
+    "nodeSelectorObject": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "concat": {
+          "title": "Concatenate matches",
+          "description": "Join every matched node into a single value, separated by this string.",
+          "type": "string"
+        },
+        "fixed": {
+          "type": "string"
+        },
+        "parseDate": {
+          "description": "Deprecated: use a parseDate operation under postProcess instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use a parseDate operation under postProcess instead.",
+          "type": "string"
+        },
+        "postProcess": {
+          "title": "Post-processing operations",
+          "description": "Alter the value with one or more operations, applied in the order they are given.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/postProcessAction"
+          }
+        },
+        "replace": {
+          "description": "Deprecated: use a replace operation under postProcess instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use a replace operation under postProcess instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/replaceKey"
+            }
+          ]
+        },
+        "selector": {
+          "title": "Selector",
+          "description": "XPath or GJSON expression selecting the value to scrape.",
+          "type": "string"
+        },
+        "split": {
+          "title": "Split match",
+          "description": "Split the value into multiple values on this string.",
+          "type": "string"
+        },
+        "subScraper": {
+          "description": "Deprecated: use a subScraper operation under postProcess instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use a subScraper operation under postProcess instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        }
+      }
+    },
+    "performerObject": {
+      "title": "Performer",
+      "type": "object",
+      "required": [
+        "Name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "Aliases": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Birthdate": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "CareerEnd": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "CareerLength": {
+          "description": "Deprecated: use CareerStart and CareerEnd instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use CareerStart and CareerEnd instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        },
+        "CareerStart": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Circumcised": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Country": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "DeathDate": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Details": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Disambiguation": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Ethnicity": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "EyeColor": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "FakeTits": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Gender": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "HairColor": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Height": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Image": {
+          "description": "Deprecated: use Images instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use Images instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        },
+        "Images": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Measurements": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Name": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "PenisLength": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Piercings": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Tags": {
+          "$ref": "#/definitions/tagsObject"
+        },
+        "Tattoos": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Twitter": {
+          "description": "Deprecated: add the profile to URLs instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: add the profile to URLs instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        },
+        "URL": {
+          "description": "Deprecated: use URLs instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use URLs instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        },
+        "URLs": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Weight": {
+          "$ref": "#/definitions/nodeSelector"
+        }
+      }
+    },
+    "postProcessAction": {
+      "title": "Post-processing operation",
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 1,
+      "additionalProperties": false,
+      "properties": {
+        "feetToCm": {
+          "title": "Feet to centimetres",
+          "description": "Convert a height in feet and inches to centimetres.",
+          "type": "boolean"
+        },
+        "javascript": {
+          "title": "JavaScript",
+          "description": "Transform the value with a JavaScript expression. The value is available as `value`.",
+          "type": "string"
+        },
+        "lbToKg": {
+          "title": "Pounds to kilograms",
+          "description": "Convert a weight in pounds to kilograms.",
+          "type": "boolean"
+        },
+        "map": {
+          "title": "Map input values to output values",
+          "description": "If the value matches one of the input values it is replaced with the matching output value; otherwise it is left alone.",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "parseDate": {
+          "title": "Parse date from value",
+          "description": "Parse the value as a date using a Go reference layout.",
+          "type": "string",
+          "examples": [
+            "January 2, 2006",
+            "Jan 02, 2006",
+            "2006-01-02",
+            "2006-01-02 15:04:05",
+            "2006-01-02T15:04:05-07:00"
+          ]
+        },
+        "replace": {
+          "title": "Regular expression replacements",
+          "allOf": [
+            {
+              "$ref": "#/definitions/replaceKey"
+            }
+          ]
+        },
+        "subScraper": {
+          "title": "Sub-scraper",
+          "description": "Make an HTTP request using the current value as the URL, and apply a scraping configuration to the response.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        },
+        "subtractDays": {
+          "title": "Subtract days",
+          "description": "Interpret a value like \"3 days ago\" by subtracting that many days from today.",
+          "type": "boolean"
+        }
+      }
+    },
+    "replaceKey": {
+      "title": "Regular expression replacements",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "regex",
+          "with"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "regex": {
+            "title": "Pattern to search for",
+            "description": "A Go RE2 regular expression. Backreferences are not supported.",
+            "type": "string"
+          },
+          "with": {
+            "title": "Replace matched pattern with",
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      }
+    },
+    "sceneGroupObject": {
+      "title": "Group",
+      "description": "Groups listed on a scene are a flat field map: nested Studio and Tags objects are only supported by a top-level group scraper.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Aliases": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "BackImage": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Date": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Director": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Duration": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "FrontImage": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Name": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Synopsis": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "URL": {
+          "description": "Deprecated: use URLs instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use URLs instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        },
+        "URLs": {
+          "$ref": "#/definitions/nodeSelector"
+        }
+      }
+    },
+    "sceneObject": {
+      "title": "Scene",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Code": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Date": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Details": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Director": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Duration": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Groups": {
+          "$ref": "#/definitions/sceneGroupObject"
+        },
+        "Image": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Movies": {
+          "$ref": "#/definitions/movieObject"
+        },
+        "Performers": {
+          "$ref": "#/definitions/performerObject"
+        },
+        "Studio": {
+          "$ref": "#/definitions/studioObject"
+        },
+        "Tags": {
+          "$ref": "#/definitions/tagsObject"
+        },
+        "Title": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "URL": {
+          "description": "Deprecated: use URLs instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use URLs instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        },
+        "URLs": {
+          "$ref": "#/definitions/nodeSelector"
+        }
+      }
+    },
+    "scraper": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "common": {
+          "$ref": "#/definitions/commonSelectors"
+        },
+        "gallery": {
+          "$ref": "#/definitions/galleryObject"
+        },
+        "group": {
+          "$ref": "#/definitions/groupObject"
+        },
+        "image": {
+          "$ref": "#/definitions/imageObject"
+        },
+        "movie": {
+          "description": "Deprecated: use group instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use group instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/groupObject"
+            }
+          ]
+        },
+        "performer": {
+          "$ref": "#/definitions/performerObject"
+        },
+        "scene": {
+          "$ref": "#/definitions/sceneObject"
+        }
+      }
+    },
+    "stashServer": {
+      "title": "Stash server configuration",
+      "description": "Configures another stash instance as a scraping source.",
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "apiKey": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "studioObject": {
+      "title": "Studio",
+      "type": "object",
+      "required": [
+        "Name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "Aliases": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Details": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Image": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "Name": {
+          "$ref": "#/definitions/nodeSelector"
+        },
+        "URL": {
+          "description": "Deprecated: use URLs instead.",
+          "deprecated": true,
+          "deprecationMessage": "Deprecated: use URLs instead.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/nodeSelector"
+            }
+          ]
+        },
+        "URLs": {
+          "$ref": "#/definitions/nodeSelector"
+        }
+      }
+    },
+    "tagsObject": {
+      "title": "Tags",
+      "type": "object",
+      "required": [
+        "Name"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "Name": {
+          "$ref": "#/definitions/nodeSelector"
+        }
+      }
     }
   }
 }
