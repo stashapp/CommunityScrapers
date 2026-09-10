@@ -1,90 +1,118 @@
 name: TrikePatrol
+# Wordpress REST API for JSON
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
-      - trikepatrol.com/
+      - trikepatrol.com/content/
+      - trikepatrol.com/videos/
+    queryURL: "https://trikepatrol.com/wp-json/wp/v2/rest-content?_embed&slug={url}"
+    queryURLReplace:
+      url:
+        - regex: "^.*/([^/]+)/?$"
+          with: $1
     scraper: sceneScraper
 performerByName:
-  action: scrapeXPath
-  queryURL: https://trikepatrol.com/?amp=1&s={}
+  action: scrapeJson
+  queryURL: "https://trikepatrol.com/wp-json/wp/v2/model?search={}"
   scraper: performerSearch
 
 performerByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
-      - https://trikepatrol.com/
+      - trikepatrol.com/model/
+    queryURL: "https://trikepatrol.com/wp-json/wp/v2/model?slug={url}"
+    queryURLReplace:
+      url:
+        - regex: "^.*/([^/]+)/?$"
+          with: $1
     scraper: performerScraper
 
-xPathScrapers:
+jsonScrapers:
   sceneScraper:
     scene:
       Title:
-        selector: //h1[@class='amp-single-title']
+        selector: 0.title.rendered
+        postProcess:
+          - &decodeEntities
+            javascript: |
+              const named = { amp: "&", quot: '"', apos: "'", nbsp: " ", hellip: "…" };
+              const numeric = { 8216: "‘", 8217: "’", 8220: "“", 8221: "”", 8211: "–", 8212: "—", 8230: "…", 39: "'", 160: " ", 38: "&" };
+              const decoded = value.replace(/&(#\d+|[a-z]+);/g, (match, entity) =>
+                entity[0] === "#" ? (numeric[parseInt(entity.slice(1), 10)] ?? match) : (named[entity] ?? match)
+              );
+              return decoded.replace(/\u00a0/g, " ");
       Details:
-        selector: //div[@class='cntn-wrp artl-cnt']/div[3]
+        selector: 0.content.rendered
+        postProcess:
+          - replace:
+              - regex: (?i)</p>|<br\s*/?>
+                with: "\n"
+          - &stripTags
+            replace:
+              - regex: <[^>]+>
+                with: ""
+          - *decodeEntities
+          - replace:
+              - regex: '[^\S\n]+'
+                with: " "
+              - regex: '\s*\n\s*'
+                with: "\n"
+              - regex: '^\s+|\s+$'
+                with: ""
+      Date:
+        selector: 0.date_gmt
+        postProcess:
+          - parseDate: "2006-01-02T15:04:05"
       Performers:
         Name:
-          selector: //div[@class='update-info']/a
+          selector: 0.acf_data.models
+          split: ","
       Tags:
         Name:
-          selector: //div[@class='amp-category']/span
+          selector: "0._embedded.wp:term|@flatten.#.name"
+          postProcess:
+            - *decodeEntities
+      Image: 0.acf.poster_image.url
+      URLs: 0.link
       Studio:
         Name:
           fixed: TrikePatrol
-      Image:
-        selector: //div[@id='myOverlay']//amp-img/@src
-      Date:
-        selector: //h1[@class='amp-single-title']
-        postProcess:
-          - replace:
-              - regex: \s
-                with: "%20" # spaces cause 400 error
-              - regex: ^
-                with: 'https://trikepatrol.com/?amp=1&s="'
-              - regex: $
-                with: '"'
-          - subScraper:
-              selector: (//div[@class="fsdate absolute"])[1]/span/text()
-              postProcess:
-                - parseDate: Jan 2, 2006
 
   performerSearch:
     performer:
-      Name:
-        selector: //div[@class='by-left']/a
-      URLs:
-        selector: //div[@class='by-left']/a/@href
+      Name: "#.title.rendered"
+      URLs: "#.link"
 
   performerScraper:
     performer:
       Name:
-        selector: //h1[@class='amp-model-title']/text()
+        selector: 0.title.rendered
+        postProcess:
+          - *decodeEntities
       Gender:
         fixed: Female
       Country:
         fixed: Philippines
       Ethnicity:
         fixed: Asian
-      Image:
-        selector: //div[@class='model-contr-colone']//amp-img/@src
-      EyeColor:
-        selector: //span[contains(text(),'Eye Color:')]/following-sibling::text()
-      HairColor:
-        selector: //span[contains(text(),'Hair Color:')]/following-sibling::text()
-      Height:
-        selector: //span[contains(text(),'Height:')]/following-sibling::text()
+      Image: 0.acf.portrait_image.url
+      Birthdate:
+        selector: 0.acf.date_of_birth
         postProcess:
-          - feetToCm: true
-      Weight:
-        selector: //span[contains(text(),'Weight:')]/following-sibling::text()
+          - parseDate: "01/02/2006"
+      Details:
+        selector: 0.content.rendered
         postProcess:
           - replace:
-              - regex: lbs
+              - regex: (?i)</p>|<br\s*/?>
+                with: "\n"
+          - *stripTags
+          - *decodeEntities
+          - replace:
+              - regex: '[^\S\n]+'
+                with: " "
+              - regex: '\s*\n\s*'
+                with: "\n"
+              - regex: '^\s+|\s+$'
                 with: ""
-          - lbToKg: true
-      Measurements:
-        selector: //span[contains(text(),'Measurements:')]/following-sibling::text()
-      Details: //div[@class='model-desc']
-
-      URLs: //link[@rel="canonical"]/@href
-# Last Updated September 17, 2025
+      URLs: 0.link
