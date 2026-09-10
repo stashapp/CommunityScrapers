@@ -21,3 +21,4 @@ Scraper has been tested on 2026-09-04
 | Jamie Kelly XXX        | https://www.jamiekellyxxx.com/tour/trailers/Trans6uals-2-PT-3-of-3.html                    |
 | T.Porn                 | https://www.t.porn/tour/trailers/Wendywilliams-Wendyrandall.html                           |
 | Naughty Natural        | https://www.naughtynatural.com/tour/trailers/first-boy-girl-video.html                     |
+| Transerotica           | https://tour.transerotica.com/trailers/Cross-Training.html                                 |
