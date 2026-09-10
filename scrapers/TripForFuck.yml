@@ -7,10 +7,9 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h1[@class="h3 mb-0"]/text()
+      Title: //h1[contains(@class, "h3")]
       Date:
-        selector: //div[@class="d-flex small movie-status"]/p
+        selector: //div[contains(@class, "movie-status")]/p
         postProcess:
           - replace:
               - regex: (\d),(\d)
@@ -19,13 +18,12 @@ xPathScrapers:
                 with: $1
           - subtractDays: true
       Performers:
-        Name: //p[@class="mb-0"]/a
+        Name: //div[@class="container"]//p[contains(@class, "mb-0")]/a
       Tags:
-        Name: //div[@class="search-tags mb-5 d-flex flex-wrap"]/a
-      Details:
-        selector: //div[@class="container"]/p
+        Name: //div[contains(@class, "search-tags")]/a
+      Details: //div[@class="container"]/p
       Image:
-        selector: //img[@class="mh-100 mw-100 lazyload"]/@data-src
+        selector: //img[contains(@class, "mh-100") and contains(@class, "mw-100")]/@data-src
         postProcess:
           - replace:
               - regex: ^
@@ -33,4 +31,3 @@ xPathScrapers:
       Studio:
         Name:
           fixed: TripForFuck
-# Last Updated January 20, 2022
