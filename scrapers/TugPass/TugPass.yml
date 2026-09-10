@@ -1,0 +1,148 @@
+name: "Tug Pass"
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - tugpass.com/videos
+    scraper: network
+  - action: scrapeXPath
+    url:
+      - nookies.com/video
+    scraper: nookiesScraper
+  - action: scrapeXPath
+    url:
+      - breedme.com/video
+      - cumblastcity.com/video
+      - clubtug.com/video
+      - edgequeens.com/video
+      - familylust.com/video
+      - finishhim.com/video
+      - gilfaf.com/video
+      - jawbreakerz.com/video
+      - meanmassage.com/video
+      - milfaf.com/video
+      - mylked.com/video
+      - over40handjobs.com/video
+      - seemomsuck.com/video
+      - shadyspa.com/video
+      - shereacts.com/video
+      - teasepov.com/video
+      - teentugs.com/video
+    scraper: sceneScraper
+
+xPathScrapers:
+  network:
+    scene:
+      Details: //meta[@name="description"]/@content
+      Title: &title
+        selector: //title
+        postProcess:
+          - replace:
+              - regex: \s*\|\s*(Tug Pass|Nookies)\s*$
+                with: ""
+      URLs: &url //link[@rel="canonical"]/@href
+      Image:
+        selector: //div[@class="player"]/img/@src
+        postProcess:
+          - replace:
+              - regex: ^
+                with: https://www.tugpass.com/
+      Studio:
+        Name:
+          selector: //div[@class="player"]/img/@src
+          postProcess:
+            - replace:
+                - regex: ^\/[A-Za-z_-]+\/([A-Za-z0-9-]+)\/.+
+                  with: $1
+            - map: &studioMap
+                BreedMe: Breed Me
+                ClubTug: Club Tug
+                CumBlastCity: Cum Blast City
+                EbonyTugs: Ebony Tugs
+                EdgeQueens: Edge Queens
+                FamilyLust: Family Lust
+                FinishHim: Finish Him
+                MeanMassage: Mean Massage
+                Over40Handjobs: Over 40 Handjobs
+                Petite18: Petite 18
+                SeeMomSuck: See Mom Suck
+                ShadySpa: Shady Spa
+                SheReacts: She Reacts
+                TeasePOV: Tease POV
+                TeenTugs: Teen Tugs
+
+  sceneScraper:
+    common:
+      $script: //script[@type="application/ld+json" and contains(., "VideoObject")]
+    scene:
+      Title:
+        selector: $script
+        postProcess:
+          - javascript: return JSON.parse(value).name;
+      Details:
+        selector: $script
+        postProcess:
+          - javascript: return JSON.parse(value).description;
+      Date:
+        selector: $script
+        postProcess:
+          - javascript: return JSON.parse(value).uploadDate;
+          - parseDate: "2006-01-02T15:04:05+00:00"
+      Image:
+        selector: $script
+        postProcess:
+          - javascript: return JSON.parse(value).thumbnailUrl;
+      Performers:
+        Name:
+          selector: $script
+          postProcess:
+            - javascript: |
+                const data = JSON.parse(value);
+                return (data.actor || []).map((a) => a.name).join(";");
+          split: ";"
+      Tags:
+        Name:
+          selector: $script
+          postProcess:
+            - javascript: |
+                const data = JSON.parse(value);
+                return (data.genre || []).join(";");
+          split: ";"
+      Studio:
+        Name:
+          selector: $script
+          postProcess:
+            - javascript: return JSON.parse(value).publisher.name;
+            - map: *studioMap
+      URLs: *url
+
+  nookiesScraper:
+    scene:
+      Title: *title
+      Details: //meta[@name="description"]/@content
+      Performers:
+        Name: //div[contains(@class, "video-models")]//a[contains(@class, "model-link")]
+      Tags:
+        Name: //div[contains(@class, "video-details-tags-list")]/a[contains(@class, "pill-link")]
+      Image:
+        selector: >
+          //link[@rel="canonical"]/@href
+          | //div[@class="responsive-image"]/img/@src
+          | //video/@poster
+          | //img[@id="playerImagePreview"]/@src
+          | //span[@class="video_here"]/img/@src
+          | //script/text()[contains(., "posterImage")]
+        concat: "__SEP__"
+        postProcess:
+          - replace:
+              - regex: ^(https:.+(\.com)).*'([^']+(jpe?g|gif))'.*
+                with: $1$3
+              - regex: ^https?:.+(https://.+)
+                with: $1
+              - regex: ^(https?:.+(\.com)).+__SEP__(.+)
+                with: $1$3
+      Studio:
+        Name:
+          selector: //a[contains(@class, "btn-site")]/img/@alt
+          postProcess:
+            - map: *studioMap
+      URLs: *url
