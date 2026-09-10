@@ -16,19 +16,19 @@ xPathScrapers:
     common:
       $info: //div[@class="text"]
     scene:
-      Title: $info/h1/text()
+      Title: $info/h1
       Date:
-        selector: $info/p[@class="date"]/text()
+        selector: $info/p[@class="date"]
         postProcess:
           - replace:
               - regex: \s–\s.*$
                 with:
           - parseDate: January 02, 2006
       Details:
-        selector: $info/p[@class="bodytext"]/text()
+        selector: $info/p[@class="bodytext"]
         concat: "\n\n"
       Tags:
-        Name: $info/p[@class="categories" and contains(text(), "Categories:")]/a/text()
+        Name: $info/p[@class="categories" and contains(text(), "Categories:")]/a
       Performers:
         Name:
           selector: $info/p[@class="categories" and contains(text(), "Men:")]
@@ -40,7 +40,7 @@ xPathScrapers:
                   with: $1
           split: ","
       Image:
-        selector: //div[@class="video player no-volume play-button"]/@style
+        selector: //div[contains(@class, "video-single")]//div[contains(@class, "player")]/@style
         postProcess:
           - replace:
               - regex: .+'(.+)'.+
@@ -68,5 +68,3 @@ xPathScrapers:
               - regex: ^.*\[(.*) cm\].*$
                 with: $1
       Image: //div[@class="model-details"]/img/@src
-
-# Last Updated November 08, 2020
