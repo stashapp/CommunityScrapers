@@ -20,7 +20,7 @@ jsonScrapers:
       Aliases:
         selector: entities.*.aliases.en.#.value
         concat: ", "
-      Image:
+      Images:
         selector: entities.*.claims.P470.#.mainsnak.datavalue.value
         postProcess:
           - replace:
@@ -54,12 +54,25 @@ jsonScrapers:
                 with:
               - regex: \.
                 with:
-      CareerLength:
+      CareerStart:
         selector: entities.*.claims.P153.#.mainsnak.datavalue.value.time
         postProcess:
           - replace:
               - regex: .*(\d{4}).*
                 with: $1
+          - javascript: |
+              const m = value.match(/\d{4}/);
+              return m ? m[0] : "";
+      CareerEnd:
+        selector: entities.*.claims.P153.#.mainsnak.datavalue.value.time
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}).*
+                with: $1
+          - javascript: |
+              // only a real second year counts as an end - "Present"/"-" mean ongoing
+              const years = value.match(/\d{4}/g) || [];
+              return years.length > 1 ? years[years.length - 1] : "";
       Gender:
         fixed: Male # gay porn
       HairColor:
@@ -102,18 +115,15 @@ jsonScrapers:
                 with: .json
           - subScraper:
               selector: entities.*.labels.en.value
-      Twitter:
-        selector: entities.*.claims.P137.#.mainsnak.datavalue.value
+      URLs:
+        selector: '{"insta":entities.*.claims.P349*.#.mainsnak.datavalue.value,"tw":entities.*.claims.P137.#.mainsnak.datavalue.value}'
         postProcess:
-          - replace:
-              - regex: ^
-                with: "https://twitter.com/"
-      Instagram:
-        selector: entities.*.claims.P349*.#.mainsnak.datavalue.value
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https://www.instagram.com/"
+          - javascript: |
+              const { insta, tw } = JSON.parse(value);
+              const list = (v) => (Array.isArray(v) ? v : v ? [v] : []);
+              return [
+                ...list(insta).map((h) => `https://www.instagram.com/${h}`),
+                ...list(tw).map((h) => `https://twitter.com/${h}`),
+              ].join("\n");
+        split: "\n"
       # too many other sites to reasonably map
-
-# Last Updated August 10, 2025

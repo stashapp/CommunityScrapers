@@ -11,6 +11,10 @@ sceneByName:
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
+  queryURL: "{url}"
+  scraper: sceneScraper
+sceneByFragment:
+  action: scrapeXPath
   queryURL: https://www.xnxx.com/video-{filename}/x
   scraper: sceneScraper
   queryURLReplace:
@@ -22,7 +26,7 @@ sceneByQueryFragment:
       - regex: '.*\[([a-z0-9]{6,8})\]\..+'
         with: "$1"
       # jdownloader id_
-      - regex: '^([a-z0-9]{6,8})_.+'
+      - regex: "^([a-z0-9]{6,8})_.+"
         with: "$1"
       # clear the filename so that it doesn't leak
       - regex: .*\.[^\.]+$
@@ -34,7 +38,7 @@ xPathScrapers:
       $searchItem: //div[@id="content-thumbs"]/div[@class="mozaique cust-nb-cols"]/div[contains(@class,"thumb-block")]
     scene:
       Title: $searchItem/div[@class="thumb-under"]/p/a/@title
-      URL:
+      URLs:
         selector: $searchItem/div[@class="thumb-under"]/p/a/@href
         postProcess:
           - replace:
@@ -70,4 +74,3 @@ xPathScrapers:
           - replace:
               - regex: ^.+(?:setThumbUrl169|url)\('(.+?\.jpg).+$
                 with: $1
-# Last Updated August 06, 2024

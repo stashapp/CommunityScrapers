@@ -82,12 +82,7 @@ xPathScrapers:
             - replace:
                 - regex: ^(\d+).+$
                   with: 00:$1:00
-        URL: //strong[contains(.,'Full Movie')]/../@href
-        Studio:
-          Name:
-            selector: //strong[contains(.,'Full Movie')]/../@href
-            postProcess:
-              - subScraper: *movieStudioName
+        URLs: //strong[contains(.,'Full Movie')]/../@href
         Synopsis:
           selector: //strong[contains(.,'Full Movie')]/../@href
           postProcess:
@@ -147,7 +142,7 @@ xPathScrapers:
         postProcess:
           - map:
               -: ""
-      Image: $performerData//img/@src
+      Images: $performerData//img/@src
       Gender:
         fixed: "Female"
 driver:
@@ -165,4 +160,3 @@ driver:
   headers:
     - Key: User-Agent
       Value: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:79.0) Gecko/20100101 Firefox/79.0)
-# Last Updated September 17, 2025

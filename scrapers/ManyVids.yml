@@ -55,30 +55,38 @@ jsonScrapers:
           - replace:
               - regex: ^
                 with: https://www.manyvids.com
-      Image: models.#.avatar.url
+      Images: models.#.avatar.url
   performerScraper:
     performer:
       Name: displayName
       Gender: identification
       URLs:
-        selector: "[legacyUserId,urlHandle]"
-        concat: /
+        selector: '{"id":legacyUserId,"handle":urlHandle,"insta":socLnkInstagram,"tw":socLnkTwitter}'
         postProcess:
-          - replace:
-              - regex: (.*)$
-                with: https://www.manyvids.com/Profile/$1/Store/Videos
-      Twitter:
-        selector: socLnkTwitter
-        postProcess:
-          - replace:
-              - regex: https://www.twitter.com/
-                with: ""
-      Instagram:
-        selector: socLnkInstagram
-        postProcess:
-          - replace:
-              - regex: https://instagram.com/
-                with: ""
+          - javascript: |
+              const norm = (raw, host) => {
+                if (!raw) return "";
+                const s = String(raw)
+                  .trim()
+                  .replace(/^https?:\/\//i, "")
+                  .replace(/^www\./i, "")
+                  .replace(/\/+$/, "");
+                if (!s) return "";
+                const slash = s.indexOf("/");
+                // a dot before the first slash means it really is a host
+                if (slash > 0 && s.slice(0, slash).includes(".")) {
+                  return "https://" + s.slice(0, slash).toLowerCase() + s.slice(slash);
+                }
+                return `https://${host}/${s.replace(/^@/, "")}`;
+              };
+              return [
+                `https://www.manyvids.com/Profile/${id}/${handle}/Store/Videos`,
+                norm(insta, "instagram.com"),
+                norm(tw, "twitter.com"),
+              ]
+                .filter(Boolean)
+                .join("\n");
+        split: "\n"
       Birthdate:
         selector: dob
         postProcess:
@@ -87,7 +95,7 @@ jsonScrapers:
       Ethnicity: ethnicity
       Country: location
       HairColor: hairColor
-      CareerLength:
+      CareerStart:
         selector: createdAt
         postProcess:
           - replace:
@@ -95,13 +103,28 @@ jsonScrapers:
                 with: ""
               - regex: "$"
                 with: " - Present"
-      Image: portrait
+          - javascript: |
+              const m = value.match(/\d{4}/);
+              return m ? m[0] : "";
+      CareerEnd:
+        selector: createdAt
+        postProcess:
+          - replace:
+              - regex: '\-.*'
+                with: ""
+              - regex: "$"
+                with: " - Present"
+          - javascript: |
+              // only a real second year counts as an end - "Present"/"-" mean ongoing
+              const years = value.match(/\d{4}/g) || [];
+              return years.length > 1 ? years[years.length - 1] : "";
+      Images: portrait
       Details: description
   sceneSearch:
     scene:
       Title: vids.#.title
       Code: vids.#.id
-      URL:
+      URLs:
         selector: "vids.#.{id,slug}.@values"
         postProcess:
           - replace:
@@ -143,7 +166,7 @@ jsonScrapers:
               - regex: "&gt;"
                 with: ">"
       Code: data.id
-      URL:
+      URLs:
         selector: data.url
         postProcess:
           - replace:
@@ -156,7 +179,7 @@ jsonScrapers:
       Image: data.screenshot
       Tags:
         Name: data.tagList.#.label
-      Performers: &performer
+      Performers:
         Name: data.model.displayName
         URLs:
           selector: data.model.profileUrl
@@ -166,7 +189,7 @@ jsonScrapers:
                   with: https://www.manyvids.com
       Studio:
         Name: data.model.displayName
-        URL:
+        URLs:
           selector: data.model.profileUrl
           postProcess:
             - replace:

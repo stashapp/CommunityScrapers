@@ -42,13 +42,10 @@ xPathScrapers:
       Tattoos: //a[@data-target="Tattoos"]/following-sibling::a/text()
       Piercings: //a[@data-target="Piercings"]/following-sibling::a/text()
       Aliases: //li[a[@data-target="AKA"]]/text()
-      Image: //div[@class="sdb-model"]//figure/img/@src
-      Twitter: //div[@id="Free Sites"]//a[starts-with(@href, "https://twitter.com")]/@href
-      Instagram:
-        selector: //div[@id="Free Sites"]//a[starts-with(@href, "https://instagram.com")]/@href
+      Images: //div[@class="sdb-model"]//figure/img/@src
+      URLs:
+        selector: //div[@id="Free Sites"]//a[starts-with(@href, "https://instagram.com") or starts-with(@href, "https://twitter.com")]/@href
         postProcess:
           - replace:
               - regex: '\?.*'
-                with: ''
-
-# Last Updated April 30, 2024
+                with: ""

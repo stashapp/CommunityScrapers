@@ -1,7 +1,7 @@
 name: Wikidata
 performerByName:
   action: scrapeJson
-  queryURL: https://query.wikidata.org/sparql?query=SELECT%20%3Fpornographic_actor%20%3Fpornographic_actorLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%22.%20%7D%0A%20%20%3Fpornographic_actor%20wdt%3AP106%20wd%3AQ488111%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20rdfs%3Alabel%20%3Flabel.%0A%20%20FILTER(LANG(%3Flabel)%20%3D%20%22en%22).%0A%20%20FILTER(STRSTARTS(lcase(%3Flabel)%2C%20lcase(%22{}%22)))%7D&format=json
+  queryURL: https://query.wikidata.org/sparql?query=SELECT%20DISTINCT%20%3Fpornographic_actor%20%3Fpornographic_actorLabel%20WHERE%20{%0A%20%20SERVICE%20wikibase%3Alabel%20{%20bd%3AserviceParam%20wikibase%3Alanguage%20%22en%2Cmul%22.%20}%0A%20%20%3Fpornographic_actor%20wdt%3AP106%20wd%3AQ488111%3B%0A%20%20%20%20%20%20%20%20%20%20%20%20rdfs%3Alabel%20%3Flabel.%0A%20%20FILTER%28LANG%28%3Flabel%29%20IN%20%28%22en%22%2C%20%22mul%22%29%29.%0A%20%20FILTER%28STRSTARTS%28lcase%28%3Flabel%29%2C%20lcase%28%22{}%22%29%29%29}&format=json
   scraper: performerSearch
 performerByURL:
   - action: scrapeJson
@@ -27,11 +27,16 @@ jsonScrapers:
                 with: https://www.wikidata.org/wiki/
   performerScraper:
     performer:
-      Name: entities.*.labels.en.value
+      Name:
+        selector: '{"en":entities.*.labels.en.value,"mul":entities.*.labels.mul.value}'
+        postProcess:
+          - javascript: |
+              const { en, mul } = JSON.parse(value);
+              return en || mul || "";
       Aliases:
         selector: entities.*.aliases.en.#.value
         concat: ", "
-      Image:
+      Images:
         selector: entities.*.claims.P18.#.mainsnak.datavalue.value
         postProcess:
           - replace:
@@ -65,12 +70,25 @@ jsonScrapers:
                 with:
               - regex: \.
                 with:
-      CareerLength:
+      CareerStart:
         selector: entities.*.claims.P2031.#.mainsnak.datavalue.value.time
         postProcess:
           - replace:
               - regex: .*(\d{4}).*
                 with: $1
+          - javascript: |
+              const m = value.match(/\d{4}/);
+              return m ? m[0] : "";
+      CareerEnd:
+        selector: entities.*.claims.P2031.#.mainsnak.datavalue.value.time
+        postProcess:
+          - replace:
+              - regex: .*(\d{4}).*
+                with: $1
+          - javascript: |
+              // only a real second year counts as an end - "Present"/"-" mean ongoing
+              const years = value.match(/\d{4}/g) || [];
+              return years.length > 1 ? years[years.length - 1] : "";
       Gender:
         selector: entities.*.claims.P21.#.mainsnak.datavalue.value.numeric-id
         postProcess:
@@ -121,27 +139,26 @@ jsonScrapers:
                 with: .json
           - subScraper:
               selector: entities.*.labels.en.value
-# Personal preference, keep the wikidata url instead of the official website of the performer
-#      URL:
-#        selector: entities.*.claims.P856.#.mainsnak.datavalue.value
-      Twitter:
-        selector: entities.*.claims.P2002.#.mainsnak.datavalue.value
+      # Personal preference, keep the wikidata url instead of the official website of the performer
+      #      URL:
+      #        selector: entities.*.claims.P856.#.mainsnak.datavalue.value
+      URLs:
+        selector: '{"insta":entities.*.claims.P2003.#.mainsnak.datavalue.value,"tw":entities.*.claims.P2002.#.mainsnak.datavalue.value}'
         postProcess:
-          - replace:
-              - regex: ^
-                with: "https://twitter.com/"
-      Instagram:
-        selector: entities.*.claims.P2003.#.mainsnak.datavalue.value
-        postProcess:
-          - replace:
-              - regex: ^
-                with: "https://www.instagram.com/"
+          - javascript: |
+              const { insta, tw } = JSON.parse(value);
+              const list = (v) => (Array.isArray(v) ? v : v ? [v] : []);
+              return [
+                ...list(insta).map((h) => `https://www.instagram.com/${h}`),
+                ...list(tw).map((h) => `https://twitter.com/${h}`),
+              ].join("\n");
+        split: "\n"
       Details:
         selector: entities.*.sitelinks.enwiki.title
         postProcess:
           - replace:
               - regex: " "
-                with:  "_"
+                with: "_"
               - regex: ^
                 with: "https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&explaintext&titles="
               - regex: $
@@ -152,4 +169,3 @@ driver:
   headers:
     - Key: User-Agent
       Value: Stash Scraper (https://github.com/stashapp/CommunityScrapers/; ) generic-library/0.0'
-# Last Updated April 10, 2026

@@ -52,7 +52,7 @@ xPathScrapers:
     scene:
       Title: $movieTitle/@alt
       Image: $movieTitle/@src
-      URL:
+      URLs:
         selector: //div[@data-test="teaser-vod"]/a/@href
         postProcess:
           - replace:
@@ -65,7 +65,7 @@ xPathScrapers:
       $performerName: //a[@data-test="link_Cast"]
     scene:
       Title: //h1
-      URL: //link[@rel="alternate"][1]/@href
+      URLs: //link[@rel="alternate"][1]/@href
       Details: $commonRoot//div[contains(concat(' ',normalize-space(@class),' '),' pb-2 ')]
       Studio:
         Name: $commonRoot//span[@data-test="link_span_Studio"]
@@ -74,22 +74,16 @@ xPathScrapers:
         selector: //div[contains(concat(' ',normalize-space(@class),' '),' uploaded-date ')]/text()
         postProcess:
           - replace:
-            - regex: .+?(\w+\s\d{1,2},\s\d{4}).+
-              with: $1
+              - regex: .+?(\w+\s\d{1,2},\s\d{4}).+
+                with: $1
           - parseDate: January 2, 2006
       Groups:
         Name: //h1
-        URL: //link[@rel="alternate"][1]/@href
+        URLs: //link[@rel="alternate"][1]/@href
       Performers:
         Name: $performerName/span
       Tags:
         Name: //li[@class="list-inline-item"]/a
-#        URL:
-#          selector: $performerName/@href
-#          postProcess:
-#            - replace:
-#              - regex: ^
-#                with: "https://www.freeones.com"
 
   movieScraper:
     common:
@@ -106,8 +100,8 @@ xPathScrapers:
         selector: //div[contains(concat(' ',normalize-space(@class),' '),' mid-content-pr-past-date ')]
         postProcess:
           - replace:
-            - regex: .+?(\w+\s\d{1,2},\s\d{4}).+
-              with: $1
+              - regex: .+?(\w+\s\d{1,2},\s\d{4}).+
+                with: $1
           - parseDate: January 2, 2006
       FrontImage: //*[@id="fxgp-gallery"]/a[1]/@href
       BackImage: //*[@id="fxgp-gallery"]/a[2]/@href
@@ -120,9 +114,10 @@ xPathScrapers:
           - replace:
               - regex: (.+)\sidentifies.+
                 with: $1
-      URLs: //link[@rel="alternate" and @hreflang="x-default"]/@href
-      Twitter: //form//a[contains(@href,'twitter.com/')]/@href
-      Instagram: //form//a[contains(@href,'instagram.com/')]/@href
+      URLs: >
+        //link[@rel="alternate" and @hreflang="x-default"]/@href
+        | //form//a[contains(@href,'instagram.com/')]/@href
+        | //form//a[contains(@href,'twitter.com/')]/@href
       Birthdate:
         selector: //span[@data-test="link_span_dateOfBirth"]/text()
         postProcess:
@@ -145,8 +140,8 @@ xPathScrapers:
         selector: //span[text()='Height:']/following-sibling::span/a
         postProcess:
           - replace:
-            - regex: \scm
-              with: ""
+              - regex: \scm
+                with: ""
           - map:
               Unknown: ""
       Measurements:
@@ -165,9 +160,21 @@ xPathScrapers:
               Unknown: ""
               Fake: "Yes"
               Natural: "No"
-      CareerLength:
+      CareerStart:
         selector: //div[contains(@class,'timeline-horizontal')]//p[@class='m-0']
         concat: "-"
+        postProcess:
+          - javascript: |
+              const m = value.match(/\d{4}/);
+              return m ? m[0] : "";
+      CareerEnd:
+        selector: //div[contains(@class,'timeline-horizontal')]//p[@class='m-0']
+        concat: "-"
+        postProcess:
+          - javascript: |
+              // only a real second year counts as an end - "Present"/"-" mean ongoing
+              const years = value.match(/\d{4}/g) || [];
+              return years.length > 1 ? years[years.length - 1] : "";
       Aliases:
         selector: //span[@data-test='link_span_aliases']/text()
         concat: ", "
@@ -181,14 +188,14 @@ xPathScrapers:
         postProcess:
           - map:
               Unknown: ""
-      Image:
+      Images:
         selector: //div[contains(@class,'image-container')]//a/img/@src
       Gender:
         selector: //h1/*[1]/*[1]/text()
         postProcess:
           - replace:
-            - regex: ".+ identifies as (.+)"
-              with: "$1"
+              - regex: ".+ identifies as (.+)"
+                with: "$1"
       #Details: //div[@data-test="biography"]
       DeathDate:
         selector: //div[contains(text(),'Passed away on')]
@@ -202,6 +209,5 @@ xPathScrapers:
         selector: //span[@data-test="link_span_weight"]
         postProcess:
           - replace:
-            - regex: \skg
-              with: ""
-# Last Updated September 17, 2025
+              - regex: \skg
+                with: ""

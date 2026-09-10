@@ -27,19 +27,10 @@ xPathScrapers:
               Boy groups: male
               Female idols: female
               Male idols: male
-      URLs: //link[@rel="canonical"]/@href
-      Twitter:
-        selector: //a[contains(@class, "fa-twitter")]/@href
-        postProcess:
-          - replace:
-              - regex: https://twitter.com/(\w+)\?lang=en
-                with: $1
-      Instagram:
-        selector: //a[contains(@class, "fa-instagram")]/@href
-        postProcess:
-          - replace:
-              - regex: https://www.instagram.com/(\w+)/\?hl=en
-                with: $1
+      URLs: >
+        //link[@rel="canonical"]/@href
+        | //a[contains(@class, "fa-instagram")]/@href
+        | //a[contains(@class, "fa-twitter")]/@href
       Birthdate:
         selector: $summary//div[@class="equal"][contains(., "Birthday:")]/following-sibling::div[1]/a/text()
         postProcess:
@@ -61,16 +52,29 @@ xPathScrapers:
           - replace:
               - regex: '.*?(\d+)[\s\xA0]*kg.*'
                 with: $1
-      CareerLength:
+      CareerStart:
         selector: //div[contains(@class, "data-grid")]/section[@class="cell"]/div[@class="name"][contains(text(), "Active years:")]/following-sibling::div[1]/text()
         postProcess:
           - replace:
               - regex: -present
                 with: " -"
+          - javascript: |
+              const m = value.match(/\d{4}/);
+              return m ? m[0] : "";
+      CareerEnd:
+        selector: //div[contains(@class, "data-grid")]/section[@class="cell"]/div[@class="name"][contains(text(), "Active years:")]/following-sibling::div[1]/text()
+        postProcess:
+          - replace:
+              - regex: -present
+                with: " -"
+          - javascript: |
+              // only a real second year counts as an end - "Present"/"-" mean ongoing
+              const years = value.match(/\d{4}/g) || [];
+              return years.length > 1 ? years[years.length - 1] : "";
       Aliases:
         selector: $summary//dfn[contains(text(), "Korean")]/following-sibling::text()|$summary//div[@class="equal"][contains(., "Full name:")]/following-sibling::div[1]/text()|$summary//div[@class="equal"][contains(., "Native name:")]/following-sibling::div[1]/text()
         concat: ", "
-      Image:
+      Images:
         selector: $summary//div[contains(@class, "whole-body")]/@data-bg
         postProcess:
           - replace:
@@ -79,4 +83,3 @@ xPathScrapers:
       Details:
         selector: //div[@class="box encyclopedia"]/h2[contains(., "Introduction to ")]/following-sibling::p/text()
         concat: "\r\n\r\n"
-# Last Updated September 17, 2025

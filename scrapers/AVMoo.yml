@@ -26,12 +26,12 @@ xPathScrapers:
       Image: &image //a[@class='bigImage']/img/@src
       Studio: &studio
         Name: //p[contains(.,'Studio:')]/following-sibling::p
-        URL:
+        URLs:
           selector: //p[contains(.,'Studio:')]/following-sibling::p/a/@href
           postProcess:
             - replace:
-                - regex: '^'
-                  with: 'https:'
+                - regex: "^"
+                  with: "https:"
       Code: //span[contains(.,'ID:')]/following-sibling::span
       Tags:
         Name: //span[@class="genre"]/a
@@ -40,19 +40,18 @@ xPathScrapers:
       Groups:
         Name: *title
         FrontImage: *image
-        Studio: *studio
         Duration: &duration
           selector: //p[span[contains(.,'Length:')]]/text()
           postProcess:
             - replace:
                 - regex: min
                   with: ":00"
-        URL: &url
+        URLs: &url
           selector: //ul[@class="dropdown-menu"]//a[contains(.,'English')]/@href
           postProcess:
             - replace:
-                - regex: '^'
-                  with: 'https:'
+                - regex: "^"
+                  with: "https:"
 
   movieScraper:
     group:
@@ -61,32 +60,30 @@ xPathScrapers:
       Duration: *duration
       FrontImage: *image
       Studio: *studio
-      URL: *url
+      URLs: *url
 
   performerScraper:
     common:
       $avatar: //div[@class='avatar-box']
     performer:
       Name: $avatar//span/text()
-      Image: $avatar//img/@src
+      Images: $avatar//img/@src
       Birthdate:
         selector: $avatar//p[contains(.,'Birthday:')]
         postProcess:
           - replace:
               - regex: '[^\d-]'
-                with: ''
+                with: ""
       Height:
         selector: $avatar//p[contains(.,'Height')]
         postProcess:
           - replace:
               - regex: '[^\d]'
-                with: ''
+                with: ""
       Measurements:
         selector: $avatar//p[contains(.,'Bust:')] | $avatar//p[contains(.,'Waist:')] | $avatar//p[contains(.,'Hips:')]
-        concat: '-'
+        concat: "-"
         postProcess:
           - replace:
               - regex: '[^\d-]'
-                with: ''
-
-# Last Updated April 16, 2024
+                with: ""

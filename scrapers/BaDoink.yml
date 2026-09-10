@@ -157,9 +157,10 @@ xPathScrapers:
                 with: ""
       Gender:
         fixed: female
-      URLs: //link[@rel='canonical']/@href
+      URLs: >
+        //link[@rel='canonical']/@href
+        | //a[contains(@class,'social-media') and contains (@href,'instagram.com')]/@href
       Twitter: //a[contains(@class,'social-media') and contains (@href,'x.com')]/@href
-      Instagram: //a[contains(@class,'social-media') and contains (@href,'instagram.com')]/@href
       Ethnicity:
         selector: $stats/li[span[contains(.,'Ethnicity')]]/span[contains(@class,'value')]
         postProcess:

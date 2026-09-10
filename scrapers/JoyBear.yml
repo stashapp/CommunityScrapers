@@ -33,16 +33,13 @@ xPathScrapers:
         concat: "\n\n"
       Groups:
         Name: //div[@class="fFilms"]//a/img/@alt
-        URL:
+        URLs:
           selector: //div[@class="fFilms"]//a/@href
           postProcess: &makeAbsolute
             - replace:
                 - regex: ^
                   with: https://joybear.com
         FrontImage: //div[@class="fFilms"]//a/img/@src
-        Studio: &studioName
-          Name:
-            fixed: JoyBear
       Performers:
         Name: //div[@class="castModels"]//a/span
         URLs:
@@ -50,7 +47,9 @@ xPathScrapers:
           postProcess: *makeAbsolute
       Tags:
         Name: //div[@class="categories"]//a
-      Studio: *studioName
+      Studio: &studioName
+        Name:
+          fixed: JoyBear
       Image: &image
         selector: //script[contains(text(), "poster")]
         postProcess:
@@ -76,7 +75,6 @@ xPathScrapers:
               - regex: "joybear original porn video"
                 with: ""
       Image: //div[@class="allVideos"]//video/@poster
-      URL:
+      URLs:
         selector: //div[@class="allVideos"]/a/@href
         postProcess: *makeAbsolute
-# Last Updated September 17, 2025

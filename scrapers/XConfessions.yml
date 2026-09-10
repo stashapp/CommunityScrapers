@@ -34,42 +34,47 @@ xPathScrapers:
       Performers:
         Name:
           selector: //p[span[contains(.,'Performers:')]]//a
-          concat: ' & '  # some performers are joined
-          split: ' & '  # with &
+          concat: " & " # some performers are joined
+          split: " & " # with &
       Director: &director //p[span[contains(.,'Director:')]]//a
       Tags:
-        Name: 
+        Name:
           selector: //div/a[contains(@href,'/categories/')] | //button/@data-test
           postProcess:
             - replace:
-                - regex: 'profile-'
-                  with: ''
+                - regex: "profile-"
+                  with: ""
       Image: &image
         selector: $script
-        postProcess: 
+        postProcess:
           - replace:
-                    # Most scenes have a cover_title_picture value in the script
+              # Most scenes have a cover_title_picture value in the script
               - regex: .+?cover_title_picture="([^"]+).+
-                with: $1
-                    # Some without the cover_title_picture will have twi consecutive images
-                    # with a UID.  The first is the movie poster, the second is the scene cover image
+                with:
+                  $1
+                  # Some without the cover_title_picture will have twi consecutive images
+                  # with a UID.  The first is the movie poster, the second is the scene cover image
               - regex: .+,"(https:[^"]+?-[^"]+?)","(https:[^"]+?-[^"]+)".*
-                with: $2
-                    # Some without the UID-style images instead have a sequence of images after
-                    # a time stamp.  The first is th movie poster, the second is the scene image
+                with:
+                  $2
+                  # Some without the UID-style images instead have a sequence of images after
+                  # a time stamp.  The first is th movie poster, the second is the scene image
               - regex: .+"\d\d\d\d-\d\d-\d\d\s+\d\d:\d\d:\d\d"[0-9a-zA-Z,"]*"(https:[^"]+?)","(https:[^"]+)".*
-                with: $2
-                    # Some don't have any of the above, but have a confession_cover_image value
-                    # that is pretty good, but doesn't have the scene name on it.
+                with:
+                  $2
+                  # Some don't have any of the above, but have a confession_cover_image value
+                  # that is pretty good, but doesn't have the scene name on it.
               - regex: .+?confession_cover_image:"([^"]+).+
-                with: $1
-                    # If nothing above matches, take the last image in the script.  Often this
-                    # is the scene image, but it's not 100% reliable.
+                with:
+                  $1
+                  # If nothing above matches, take the last image in the script.  Often this
+                  # is the scene image, but it's not 100% reliable.
               - regex: .+(https:[^"]+).*$
-                with: $1
-                    # Clean up UTF-8 coded slashes for real ones
+                with:
+                  $1
+                  # Clean up UTF-8 coded slashes for real ones
               - regex: '\\u002F'
-                with: '/'
+                with: "/"
       Studio: &studio
         Name:
           fixed: XConfessions
@@ -84,19 +89,17 @@ xPathScrapers:
                   with: $1
         Date: *date
         Synopsis: *details
-        Studio: *studio
-        URL: &url //link[@rel='canonical']/@href
+        URLs: &url //link[@rel='canonical']/@href
         FrontImage: &frontImage //article//div[contains(@class,'134px')]//img[contains(@sizes,'200px') or contains(@src,'jpeg') or contains(@src,'jpg')]/@src
 
   movieScraper:
     common: *com
     group:
       Name: *title
-      Director: *director 
+      Director: *director
       Duration: *duration
       Date: *date
       Synopsis: *details
       Studio: *studio
-      URL: *url
+      URLs: *url
       FrontImage: *frontImage
-# Last Updated April 13, 2024

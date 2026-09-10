@@ -24,8 +24,6 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //h1
-      Twitter: //table//tr/td/a[b[text()='Twitter']]/@href
-      Instagram: //table//tr/td/a[b[text()='Instagram']]/@href
       Birthdate:
         selector: //table//tr/td//b[text()='Born']/../following-sibling::td/a
         concat: " "
@@ -94,7 +92,7 @@ xPathScrapers:
               - regex: \[\d*\]
                 with: ""
       # nbsp; screws up the parsing, so use contains instead
-      CareerLength:
+      CareerStart:
         selector: //table//tr/td/b[text()[contains(.,'active')]]/../following-sibling::td
         postProcess:
           - replace:
@@ -106,13 +104,32 @@ xPathScrapers:
                 with: $1 - $2
               - regex: (?i)(present|current)
                 with: ""
+          - javascript: |
+              const m = value.match(/\d{4}/);
+              return m ? m[0] : "";
+      CareerEnd:
+        selector: //table//tr/td/b[text()[contains(.,'active')]]/../following-sibling::td
+        postProcess:
+          - replace:
+              - regex: \[\d*\] # Remove References
+                with: ""
+              - regex: (—|–)
+                with: "-"
+              - regex: (\S)-(\S)
+                with: $1 - $2
+              - regex: (?i)(present|current)
+                with: ""
+          - javascript: |
+              // only a real second year counts as an end - "Present"/"-" mean ongoing
+              const years = value.match(/\d{4}/g) || [];
+              return years.length > 1 ? years[years.length - 1] : "";
       Aliases:
         selector: //table//tr/td/b[text()[contains(.,'known')]]/../following-sibling::td
         postProcess:
           - replace:
               - regex: \[\d*\]
                 with: ""
-      Image:
+      Images:
         #selector: //table[@class="infobox"]//img/@src #alterntive image, no need for subScraper but gets lq image
         selector: //table[@class="infobox plainlinks"]//a[img[@src]]/@href
         postProcess:
@@ -128,14 +145,14 @@ xPathScrapers:
       URLs:
         selector: //script[contains(.,"wgPageName")] | //tr[td//text()[contains(., 'Links and profiles') or contains(., 'Databases')]]/following-sibling::tr[not(td[@colspan='2' and @style])]//a/@href
         postProcess:
-        - javascript: |
-            if (value.indexOf("wgPageName") !== -1) {
-              var match = value.match(/"wgPageName"\s*:\s*"([^"]+)"/);
-              if (match) {
-                return "https://www.boobpedia.com/boobs/" + match[1];
+          - javascript: |
+              if (value.indexOf("wgPageName") !== -1) {
+                var match = value.match(/"wgPageName"\s*:\s*"([^"]+)"/);
+                if (match) {
+                  return "https://www.boobpedia.com/boobs/" + match[1];
+                }
               }
-            }
-            return value;
+              return value;
       Details:
         selector: //div[@class="mw-parser-output"]/p
         concat: "\n\n"
@@ -449,4 +466,3 @@ xPathScrapers:
               "Zambian": "Zambia"
               "Zimbabwean": "Zimbabwe"
               "Åland Island": "Åland Islands"
-# Last Updated September 2, 2026

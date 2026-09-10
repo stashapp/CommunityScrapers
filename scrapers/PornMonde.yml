@@ -26,12 +26,8 @@ sceneByFragment:
   scraper: sceneSearch
 sceneByQueryFragment:
   action: scrapeXPath
-  queryURL: https://pornmonde.com/search?q={filename}
-  queryURLReplace:
-    filename:
-      - regex: (.*[^a-zA-Z])(?:- PornMonde(?:.+))
-        with: $1
-  scraper: sceneSearch
+  queryURL: "{url}"
+  scraper: sceneScraper
 
 xPathScrapers:
   performerScraper:
@@ -41,9 +37,9 @@ xPathScrapers:
       Name: //h1
       Birthdate:
         selector: $infoPiece[contains(text(), 'Birthday')]/following-sibling::span[@class="Value"]
-        parseDate: 02/01/2006
-      Twitter: //span[text() = 'Twitter']/../@href
-      Instagram: //span[text() = 'Instagram']/../@href
+        postProcess:
+          - parseDate: 02/01/2006
+      URLs: //span[text() = 'Instagram' or text() = 'Twitter']/../@href
       Measurements: $infoPiece[contains(text(), 'Measurements')]/following-sibling::span[@class="Value"]
       Height:
         selector: $infoPiece[contains(text(), 'Height')]/following-sibling::span[@class="Value"]
@@ -79,7 +75,7 @@ xPathScrapers:
       $searchItem: //*[@class="VideosList singleRow"]/*[@class="SingleVideoItemLink"]
     scene:
       Title: $searchItem/*/*[@class="Title"]/text()
-      URL:
+      URLs:
         selector: $searchItem/@href
         postProcess:
           - replace:

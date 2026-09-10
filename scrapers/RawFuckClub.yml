@@ -62,7 +62,7 @@ xPathScrapers:
       # parent studio ("Raw Fuck Club (Network)")
       Studio:
         Name: //p[@class="watch-channel-name"]/a[1]/text()
-        URL:
+        URLs:
           selector: //p[@class="watch-channel-name"]/a[1]/@href
           postProcess:
             - replace:
@@ -77,18 +77,19 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //h1[@class="model-header model-header-name"]/text()
-      URLs: //h1[@class="model-header model-header-name"]/a/@href
+      URLs: >
+        //h1[@class="model-header model-header-name"]/a/@href
+        | //a[contains(@href,'instagram.com/')]/@href
+        | //a[contains(@href,'twitter.com/') or contains(@href,'x.com/')]/@href
       Details: //div[@class="model-description"]/text()
-      Image: //div[@class="model-image-placeholder"]/img/@src
+      Images: //div[@class="model-image-placeholder"]/img/@src
       Country:
         selector: //span/img[contains(@src,'map_pin')]/../text()
         postProcess:
           - replace: # Remove whitespace at the start and end
               - regex: ^\s+|\s+$
                 with: ""
-      Instagram: //a[contains(@href,'instagram.com/')]/@href
       # Sometimes the site uses //a[@class='model-external-twitter-url']/@href, other times, it's freeform, so we use this method
-      Twitter: //a[contains(@href,'twitter.com/') or contains(@href,'x.com/')]/@href
       Gender:
         fixed: male
   globalSearch:
@@ -109,7 +110,7 @@ xPathScrapers:
                 with: "https://www.rawfuckclub.com/"
     scene:
       Title: //div[@class='last-update-title']/a/@title
-      URL:
+      URLs:
         selector: //div[@class='last-update-title']/a/@href
         postProcess:
           - replace:
@@ -124,4 +125,3 @@ driver:
           Domain: ".rawfuckclub.com"
           Value: "Y"
           Path: "/"
-# Last Updated September 17, 2025

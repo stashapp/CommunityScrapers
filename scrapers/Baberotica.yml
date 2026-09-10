@@ -3,7 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url: &urls
       - avidolz.com
-      - baberotica.com 
+      - baberotica.com
       - baberoticavr.com
       - nucosplay.com
       - suckmevr.com
@@ -11,7 +11,7 @@ sceneByURL:
       - vrpornpass.com
     scraper: sceneScraper
   - action: scrapeXPath
-    url: 
+    url:
       - hamezo.com
     scraper: altSceneScraper
 performerByURL:
@@ -30,8 +30,8 @@ xPathScrapers:
       Performers:
         Name: //p/span[@itemprop="actor"]/a/span | //div[@class="cat"][1]/a/text()
         URLs: //div[@class="cat"][1]/a/@href | //span[@itemprop="actor"]/a/@href
-      Date:  &Date
-      # vrpornpass.com does not currently provide the scene published date on the non-paid site
+      Date:
+        &Date # vrpornpass.com does not currently provide the scene published date on the non-paid site
         selector: //div[contains(@class, "pure-u-1")]//meta[@itemprop="datePublished"]/@content | //div[@class="video-date"]
         postProcess:
           - replace:
@@ -58,13 +58,13 @@ xPathScrapers:
           - replace:
               - regex: ^//
                 with: https://
-      URL: &URL
+      URLs: &URL
         selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href | //div[@class="title"]/h5/a/@href
         postProcess:
           - replace:
-            - regex: \s*(.*)\s*feed/$
-              with: $1
-      Studio: &Studio
+              - regex: \s*(.*)\s*feed/$
+                with: $1
+      Studio:
         Name:
           selector: //meta[@itemprop="url"]/@content
           postProcess:
@@ -86,12 +86,12 @@ xPathScrapers:
         URLs: //div[@class="model-thumb"]//h5/a/@href
       Tags:
         Name: //div[@class="cat"]/a
-      Studio: 
+      Studio:
         Name: //symbol[@id="logosvg"]/title
       Details: *Details
       Date: *Date
       Image: *Image
-      URL: *URL
+      URLs: *URL
   performerScraper:
     common:
       $profileBE: //div[@class="model-profile"]
@@ -115,7 +115,7 @@ xPathScrapers:
               - regex: None
                 with:
       Gender:
-      # These sites only have profiles for female performers, so using fixed: Female
+        # These sites only have profiles for female performers, so using fixed: Female
         fixed: Female
       Birthdate:
         selector: $profileBE[contains(strong, "Birth date:")]//text() | $profilePP[contains(strong, "Birth date:")]/following-sibling::*[1]/text()
@@ -203,16 +203,12 @@ xPathScrapers:
                 with: $1
               - regex: "None$|^No$|(?i)^No tattoo$"
                 with:
-      Instagram:
-        selector: $profileBE[contains(strong, "Instagram:")]/a/@href
       Measurements:
-        selector: $profileBE[contains(strong, "Body:")]//text() 
+        selector: $profileBE[contains(strong, "Body:")]//text()
         postProcess:
           - replace:
               - regex: .*Body:\s*(.*)\s*$
                 with: $1
-      Twitter:
-        selector: $profileBE[contains(strong, "Twitter:")]/a/@href
       Details:
         selector: //p[@itemprop="description"]//text() | //p[span[@class="readmore"]]
         postProcess:
@@ -220,12 +216,12 @@ xPathScrapers:
               - regex: ... Read More
                 with:
       URLs:
-        selector: //link[@rel="canonical"][1]/@href | //link[@rel="alternate"][1]/@href | //div[@class="model-info"]/a/@href
+        selector: //link[@rel="canonical"][1]/@href | //div[@class="model-info"]/a/@href | $profileBE[contains(strong, "Instagram:")]/a/@href | $profileBE[contains(strong, "Twitter:")]/a/@href
         postProcess:
           - replace:
-            - regex: \s*(.*)\s*feed/$
-              with: $1
-      Image:
+              - regex: \s*(.*)\s*feed/$
+                with: $1
+      Images:
         selector: //div[@class="model-photo"]/img[@class="rounded"]/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1-2"]//img/@src | //div[@class="pure-u-1-4 pure-u-sm-1-3 pure-u-xs-1"]//img/@src | //img[@class="smallroundedthumbs"]/@src
         postProcess:
           - replace:
@@ -235,4 +231,3 @@ xPathScrapers:
                 with: 690x960
               - regex: 270x480
                 with: 405x720
-# Last Updated September 17, 2025

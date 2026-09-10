@@ -133,7 +133,7 @@ xPathScrapers:
           - replace:
               - regex: Measurements. (.*)
                 with: $1
-      Image:
+      Images:
         selector: //div[@class="photoUpdate-image col-lg-3 col-md-3 col-sm-6"]/a/img[@class="img-responsive"]/@src
         postProcess:
           - replace:
@@ -165,7 +165,7 @@ xPathScrapers:
                 if (
                   parsedDate.getMonth() > now.getMonth()
                   ||
-                    (                  
+                    (
                       parsedDate.getMonth() === now.getMonth()
                       && parsedDate.getDate() > now.getDate()
                     )
@@ -204,20 +204,9 @@ xPathScrapers:
       Country: $infoList//dt[text()="Nationality"]/following-sibling::dd[1]//text()
       HairColor: $infoList//dt[text()="Hair Color"]/following-sibling::dd[1]//text()
       EyeColor: $infoList//dt[text()="Eye Color"]/following-sibling::dd[1]//text()
-      Image: //div[contains(@class, "model view")]//img/@src
+      Images: //div[contains(@class, "model view")]//img/@src
       Details: $description//text()
-      Twitter:
-        selector: $description//div[contains(text(), "twitter.com")]
-        postProcess:
-          - replace:
-              - regex: .*(https://twitter.com/[^\s\.]+).*
-                with: $1
-      Instagram:
-        selector: $description//div[contains(text(), "instagram.com")]
-        postProcess:
-          - replace:
-              - regex: .*(https://instagram.com/[^\s\.]+).*
-                with: $1
+      URLs: $description//div[contains(text(), "instagram.com") or contains(text(), "twitter.com")]
   sceneScraperLadyboyGold:
     scene:
       Title: &title
@@ -273,4 +262,3 @@ xPathScrapers:
 
 driver:
   useCDP: true
-# Last Updated July 13, 2026

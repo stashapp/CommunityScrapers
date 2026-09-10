@@ -32,8 +32,8 @@ xPathScrapers:
         selector: //meta[@name='description']/@content
         postProcess:
           - replace:
-            - regex: ^.*Posted (.* \d{4})\.$
-              with: $1
+              - regex: ^.*Posted (.* \d{4})\.$
+                with: $1
           - parseDate: "January 2006"
       Performers:
         Name: $performers
@@ -43,21 +43,22 @@ xPathScrapers:
             - replace:
                 - regex: ^
                   with: https://reflectivedesire.com
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Studio:
         Name:
           fixed: Reflective Desire
       Tags:
-        Name:  $album/div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/categories")]
+        Name: $album/div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/categories")]
   performerScraper:
     common:
       $socialLinks: //div[@class="title-container"]/div/span[@class="tag-links"]
     performer:
       Name: //div[@class="title-container"]/h2
-      Image: //link[@rel="image_src"]/@href
-      Twitter: $socialLinks/a[contains(@href,"https://twitter.com")]/@href
-      Instagram: $socialLinks/a[contains(@href,"https://instagram.com/")]/@href
-      URLs: //link[@rel="canonical"]/@href
+      Images: //link[@rel="image_src"]/@href
+      URLs: >
+        //link[@rel="canonical"]/@href
+        | $socialLinks/a[contains(@href,"https://instagram.com/")]/@href
+        | $socialLinks/a[contains(@href,"https://twitter.com")]/@href
   sceneScraper:
     common:
       $performers: //div[@class="item-text"]/p[@class="text-attributes"]/span/a[contains(@href, "/performers")]
@@ -70,14 +71,14 @@ xPathScrapers:
         selector: //p[contains(@class, "text-length")]
         postProcess:
           - replace:
-            - regex: ^.* Published (.* \d{4})\.?$
-              with: $1
+              - regex: ^.* Published (.* \d{4})\.?$
+                with: $1
           - parseDate: "January 2006"
       Studio:
         Name:
           fixed: Reflective Desire
       Image: //link[@rel="image_src"]/@href
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Performers:
         Name: $performers
         URLs:
@@ -95,4 +96,3 @@ xPathScrapers:
                 - regex: ',\s+'
                   with: ","
           split: ","
-# Last Updated September 17, 2025

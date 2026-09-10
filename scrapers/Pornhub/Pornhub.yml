@@ -48,7 +48,7 @@ xPathScrapers:
 
     scene:
       Title: $searchThumb//span[@class="title"]/a
-      URL:
+      URLs:
         selector: $searchThumb//span[@class="title"]/a/@href
         postProcess:
           - replace:
@@ -85,8 +85,6 @@ xPathScrapers:
           - map:
               Trans Man: transgender_male
               Trans Woman: transgender_female
-      Twitter: //ul[contains(@class,"socialList")]//a[contains(@href,"twitter.com/")]/@href
-      Instagram: //ul[contains(@class,"socialList")]//a[contains(@href,"instagram.com/")]/@href
       Measurements: $infoPiece[contains(span,"Measurements:")]/$smallInfo|$infoPiece[contains(span,"Measurements:")]/text()
       Weight:
         selector: $infoPiece[contains(span,"Weight:")]/$smallInfo|$infoPiece[contains(span,"Weight:")]/text()
@@ -106,14 +104,30 @@ xPathScrapers:
       Piercings: $infoPiece[contains(span,"Piercings:")]/$smallInfo
       Tattoos: $infoPiece[contains(span,"Tattoos:")]/$smallInfo
       HairColor: $infoPiece[contains(span,"Hair Color:")]/$smallInfo
-      CareerLength:
+      CareerStart:
         selector: $infoPiece[contains(span,"Career Start and End:")]/$smallInfo
         postProcess:
           - replace:
               - regex: \s+to\s+
                 with: "-"
-      URLs: //link[@rel="canonical"][1]/@href
-      Image: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
+          - javascript: |
+              const m = value.match(/\d{4}/);
+              return m ? m[0] : "";
+      CareerEnd:
+        selector: $infoPiece[contains(span,"Career Start and End:")]/$smallInfo
+        postProcess:
+          - replace:
+              - regex: \s+to\s+
+                with: "-"
+          - javascript: |
+              // only a real second year counts as an end - "Present"/"-" mean ongoing
+              const years = value.match(/\d{4}/g) || [];
+              return years.length > 1 ? years[years.length - 1] : "";
+      URLs: >
+        //link[@rel="canonical"][1]/@href
+        | //ul[contains(@class,"socialList")]//a[contains(@href,"instagram.com/")]/@href
+        | //ul[contains(@class,"socialList")]//a[contains(@href,"twitter.com/")]/@href
+      Images: //div[@class="thumbImage"]/img/@src|//img[@id="getAvatar"]/@src
   sceneScraper:
     common:
       $datablob: //script[contains(., 'VideoObject')]/text()
@@ -138,7 +152,7 @@ xPathScrapers:
               # this will make it return an empty result instead of an erroneous title
               - regex: ^Recently Featured Porn Videos$
                 with: ""
-      URL: //meta[@property="og:url"]/@content
+      URLs: //meta[@property="og:url"]/@content
       Date:
         selector: $dataLayer
         postProcess:
@@ -168,4 +182,3 @@ driver:
           Domain: ".pornhub.com"
           Value: "1"
           Path: "/"
-# Last Updated September 26, 2026

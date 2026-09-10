@@ -80,14 +80,14 @@ xPathScrapers:
                 vrbgay.com: VRB Gay
                 vrbtrans.com: VRB Trans
                 vrconk.com: VR Conk
-        URL: &studioURL
+        URLs: &studioURL
           selector: *studioURLSel
           postProcess:
             - replace:
                 - regex: ^
                   with: "https:"
       Image: &imageSel //div[contains(@class, "single-video-poster__preview")]/img/@src|//meta[@property="og:image"]/@content
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
     gallery:
       Title: *titleAttr
       Date: *dateAttr
@@ -112,7 +112,7 @@ xPathScrapers:
       Synopsis: *detailsAttr
       Studio:
         Name: *studioName
-        URL: *studioURL
+        URLs: *studioURL
       FrontImage: *imageSel
     performer:
       Name:
@@ -121,7 +121,7 @@ xPathScrapers:
           - replace:
               - regex: " (AR|VR).*$"
                 with: ""
-      Image: //div[contains(@class, "single-model-profile__image app-image")]/img/@src
+      Images: //div[contains(@class, "single-model-profile__image app-image")]/img/@src
       Birthdate:
         selector: $modelInfoItem/span[text()="Birthday:"]/following-sibling::span/text()
         postProcess:
@@ -136,10 +136,11 @@ xPathScrapers:
       EyeColor: $modelInfoItem/span[text()="Eye Color:"]/following-sibling::span/text()
       HairColor: $modelInfoItem/span[text()="Hair Color:"]/following-sibling::span/text()
       Aliases: $modelInfoItem/span[text()="Aka:"]/following-sibling::span/text()
-      Twitter: $modelLinks/a[contains(@href, "twitter")]/@href
-      Instagram: $modelLinks/a[contains(@href, "instagram")]/@href
-      URLs: //link[@rel="canonical"]/@href
+      URLs: >
+        //link[@rel="canonical"]/@href
+        | $modelLinks/a[contains(@href, "instagram")]/@href
+        | $modelLinks/a[contains(@href, "twitter")]/@href
+
 # you can use (a suitably configured) CDP to make use of a proxy/VPN to bypass region-based age-restriction
 # driver:
 #   useCDP: true
-# Last Updated September 17, 2025

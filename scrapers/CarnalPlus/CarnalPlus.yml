@@ -67,7 +67,7 @@ xPathScrapers:
                 with: -full.jpg
               - regex: width=1500
                 with: width=9999
-      URL: &url //link[@rel="canonical"]/@href
+      URLs: &url //link[@rel="canonical"]/@href
       Date: &dateSubscraper
         # We need to scrape the network site to get the date, but this scraper
         # has to work for multiple networks so we can't hardcode the network site.
@@ -138,7 +138,7 @@ xPathScrapers:
                 twinks: Twinks
                 twinkloads: Twink Loads
                 twinktop: Twink Top
-        URL: //base/@href
+        URLs: //base/@href
       Tags: &tags
         Name: $scene//div[@id="catMovie"]//text()
       Performers: &performers
@@ -172,7 +172,7 @@ xPathScrapers:
           - replace: *cleanDate
           - parseDate: January 02, 2006
 
-      URL:
+      URLs:
         # All scenes on network sites should be available from their subsites as well
         # so we construct a valid link to the subsite both to encourage people
         # to scrape from the canonical source as well as submitting both links to StashDB:
@@ -288,13 +288,12 @@ xPathScrapers:
             - replace:
                 - regex: ^(.*) series cover$
                   with: $1
-        URL:
+        URLs:
           selector: //div[contains(@class, "series-content")]//a[contains(@href, "/series")]/@href
           postProcess:
             - replace:
                 - regex: ^\/(.*)$
                   with: https://carnalplus.com/$1
-        Studio: *netStudio
   chapterSceneScraper:
     common:
       $scene: *sceneContainer
@@ -304,12 +303,11 @@ xPathScrapers:
       Date: *dateSubscraper
       Code: *studioCode
       Image: *image
-      URL: *url
+      URLs: *url
       Studio: *studio
       Groups:
         Name: //span[contains(@class, "dvdTitleScene")]
-        URL: //span[contains(@class, "dvdTitleScene")]//a/@href
-        Studio: *studio
+        URLs: //span[contains(@class, "dvdTitleScene")]//a/@href
       Tags: *tags
       Performers: *performers
 

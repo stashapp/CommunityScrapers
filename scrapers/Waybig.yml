@@ -45,7 +45,10 @@ xPathScrapers:
   performerScraper:
     performer:
       Name: //div[@class="title-col -normal col"]/h2
-      URLs: //link[@rel='canonical']/@href
+      URLs: >
+        //link[@rel='canonical']/@href
+        | //a[contains(@href,"https://www.instagram.com/")]/@href
+        | //a[contains(@href,"https://twitter.com")]/@href
       Gender:
         fixed: Male
       Measurements:
@@ -75,7 +78,5 @@ xPathScrapers:
         selector: //span[contains(text(),"Dob:")]/following-sibling::text()
         postProcess:
           - parseDate: 2006-01-02
-      Twitter: //a[contains(@href,"https://twitter.com")]/@href
-      Instagram: //a[contains(@href,"https://www.instagram.com/")]/@href
-      Image: //div[@class="image"]//@src
+      Images: //div[@class="image"]//@src
       Details: //div[@class="expand-inner"]

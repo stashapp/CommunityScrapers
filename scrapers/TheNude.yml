@@ -31,47 +31,17 @@ xPathScrapers:
           - replace:
               # Normalize to canonical /_NNNNN.htm form (strip name prefix)
               - regex: '(https://www\.thenude\.com/)[^_]*(_\d+\.htm)'
-                with: '$1$2'
+                with: "$1$2"
   performerScraper:
     performer:
       Name: //span[@class="model-name"]
       URLs:
-        selector: //link[@rel="canonical"]/@href
+        selector: //link[@rel="canonical"]/@href | //a[text()="INSTAGRAM"]//@href | //a[text()="TWITTER"]//@href
         postProcess:
           - replace:
               # Normalize to canonical /_NNNNN.htm form (strip name prefix)
               - regex: '(https://www\.thenude\.com/)[^_]*(_\d+\.htm)'
-                with: '$1$2'
-      Twitter:
-        selector: //a[text()="TWITTER"]//@href
-        postProcess:
-          - replace:
-              - regex: 'https?://(?:www.)?twitter\.com\/'
-                with: ""
-              - regex: 'https?://(?:www.)?x\.com\/'
-                with: ""
-              - regex: \/$
-                with: ""
-              - regex: "tv"
-                with: "TV"
-              - regex: "official"
-                with: "Official"
-              - regex: '\s\s'
-                with: " "
-      Instagram:
-        selector: //a[text()="INSTAGRAM"]//@href
-        postProcess:
-          - replace:
-              - regex: 'https?://(?:www.)?instagram\.com\/'
-                with: ""
-              - regex: \/$
-                with: ""
-              - regex: "tv"
-                with: "TV"
-              - regex: "official"
-                with: "Official"
-              - regex: '\s\s'
-                with: " "
+                with: "$1$2"
       Birthdate:
         selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
         postProcess:
@@ -156,13 +126,25 @@ xPathScrapers:
               # "Medium" is not a breast enhancement value — blank it
               - regex: Medium
                 with: ""
-      CareerLength:
+      CareerStart:
         selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/following-sibling::text()
         concat: " - "
+        postProcess:
+          - javascript: |
+              const m = value.match(/\d{4}/);
+              return m ? m[0] : "";
+      CareerEnd:
+        selector: //li/span[@class="list-quest"][contains(text(),'Seen')]/following-sibling::text()
+        concat: " - "
+        postProcess:
+          - javascript: |
+              // only a real second year counts as an end - "Present"/"-" mean ongoing
+              const years = value.match(/\d{4}/g) || [];
+              return years.length > 1 ? years[years.length - 1] : "";
       Aliases:
         selector: //meta[@itemprop="additionalName"]/@content
         concat: ", "
-      Image:
+      Images:
         selector: //link[@rel="canonical"]/@href
         postProcess:
           - replace:
@@ -171,10 +153,9 @@ xPathScrapers:
               - regex: \.htm
                 with: "/medhead.jpg"
               # Encode spaces in performer names for valid image URLs
-              - regex: ' '
-                with: '%20'
-      Gender:
-        selector: //meta[@itemprop="gender"]/@content
+              - regex: " "
+                with: "%20"
+      Gender: //meta[@itemprop="gender"]/@content
       Details:
         selector: //li/span[@class="list-quest"][contains(text(),'Born')]/following-sibling::text()
         postProcess:
@@ -204,10 +185,8 @@ xPathScrapers:
           split: ","
       Studio: &studio
         Name: //h1/span[3]/a/text()
-      Director: &director
-        selector: //h2/a
-      Image:
-        selector: //a[@class="gallery-image-link"]/img/@src
+      Director: &director //h2/a
+      Image: //a[@class="gallery-image-link"]/img/@src
     gallery:
       Title: *title
       Date: *date
@@ -222,4 +201,3 @@ xPathScrapers:
       Tags: *tags
       Studio: *studio
       Photographer: *director
-# Last Updated April 27, 2026
