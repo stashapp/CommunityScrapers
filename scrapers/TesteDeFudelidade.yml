@@ -20,27 +20,26 @@ xPathScrapers:
       $performer: //*[text()='Elenco:']/following-sibling::ul/li/a
       $movie: //div[contains(@class, 'filme')]/div[@class="capa"]/img
     scene:
-      Title:
-        selector: //*[@class="title"]/h1
-      Details:
-        selector: //*[@class="descript"]
+      Title: //*[@class="title"]/h1
+      Details: //*[@class="descript"]
       Date:
-        selector: //div[@class="cell desktop"]/div[@class="new"]/span
+        selector: //meta[@property="article:published_time"]/@content
         postProcess:
-          - parseDate: 02/01/2006
+          - parseDate: "2006-01-02T15:04:05Z07:00"
       Image:
-        selector: //*[@id="playerFk"]/img/@src
+        selector: //*[@id="playerFk"]/img/@src | //script[contains(text(), "poster:")]/text()
+        postProcess:
+          - replace:
+              - regex: .*poster:\s*'([^']+)'.*
+                with: $1
       Studio:
-        Name: 
+        Name:
           fixed: Teste de Fudelidade
       Groups:
         Name: $movie/@title
         FrontImage: $movie/@src
-        Studio: 
-          Name: Teste de Fudelidade
       Tags:
-        Name:
-          selector: //*[text()='Categorias:']/following-sibling::p/a/text()
+        Name: //*[text()='Categorias:']/following-sibling::p/a/text()
       Performers:
         Name: $performer/text()
         URLs: $performer/@href
@@ -56,4 +55,3 @@ xPathScrapers:
     performer:
       Name: //div[@class="titleGeral"]/div[1]/text()
       Image: //div[@class="photo"]/img/@src
-# Last Updated September 17, 2025
