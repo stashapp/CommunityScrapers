@@ -1,4 +1,5 @@
 name: ThirdRockEnt
+# scrapes: Abbie Maley, Anal Amateur, AnalBBC, Analized, Bad Daddy POV, Bad Family POV, Bad Mommy POV, Broken Sluts, Cum Dumpster Teens, DTF Sluts, Full Porn Network, Girlfaction, James Deen, Pork Vendors, Porn Force, Public Sex Date, Slut Inspection, Slutty BBWs, Teasing and Pleasing, Teenage Anal Sluts, Teenage Tryouts, Twisted Visual, Your Mom Does Porn
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -6,19 +7,13 @@ sceneByURL:
       - analamateur.com/trailers/
       - analbbc.com/trailers/
       - analized.com/trailers/
-      - analviolation.com/trailers/
       - baddaddypov.com/trailers/
+      - badmommypov.com/trailers/
       - brokensluts.net/trailers/
       - cumdumpsterteens.com/trailers/
       - dtfsluts.com/trailers/
       - girlfaction.com/trailers/
-      - hergape.com/trailers/
-      - homemadeanalwhores.com/trailers/
       - jamesdeen.com/trailers/
-      - lesbiananalsluts.com/trailers/
-      - mugfucked.com/trailers/
-      - onlyprince.com/trailers/
-      - pervertgallery.com/trailers/
       - porkvendors.com/trailers/
       - pornforce.com/trailers/
       - publicsexdate.com/trailers/
@@ -26,10 +21,8 @@ sceneByURL:
       - sluttybbws.com/trailers/
       - teasingandpleasing.com/trailers/
       - teenageanalsluts.com/trailers/
-      - teenagecorruption.com/trailers/
       - teenagetryouts.com/trailers/
       - twistedvisual.com/trailers/
-      - yourmomdoesanal.com/trailers/
       - yourmomdoesporn.com/trailers/
 
       # There is currently no known way to scrape the correct
@@ -37,18 +30,25 @@ sceneByURL:
       - badfamilypov.com/trailers/
       - fullpornnetwork.com/trailers/
 
-      # These sites no longer have public scenes but might open up again
-      - badmommypov.com/trailers/
+      # Old sites that now redirect entirely to a hub domain's channel page:
+      # no scene content of their own anymore, kept for Wayback matching
+      - analviolation.com/trailers/
       - daughterjoi.com/trailers/
-      - mommyjoi.com/trailers/
-
-      # Old sites that are just redirects now
       - downtofuckdating.com/trailers/
-      - realfuckingdating.com/trailers/
-      - wifespov.com/trailers/
-      - slutsbts.com/trailers/
+      - hergape.com/trailers/
+      - homemadeanalwhores.com/trailers/
+      - lesbiananalsluts.com/trailers/
+      - mommyjoi.com/trailers/
+      - mugfucked.com/trailers/
+      - onlyprince.com/trailers/
+      - pervertgallery.com/trailers/
       - povperverts.net/trailers/
+      - realfuckingdating.com/trailers/
       - shefucksonthefirstdate.com/trailers/
+      - slutsbts.com/trailers/
+      - teenagecorruption.com/trailers/
+      - wifespov.com/trailers/
+      - yourmomdoesanal.com/trailers/
 
     scraper: sceneScraper
 xPathScrapers:
@@ -129,5 +129,3 @@ xPathScrapers:
                 wifespov: Wifes POV
                 yourmomdoesanal: Your Mom Does Anal
                 yourmomdoesporn: Your Mom Does Porn
-debug:
-  printHTML: true
