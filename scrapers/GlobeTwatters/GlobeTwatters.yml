@@ -1,0 +1,232 @@
+name: Globe Twatters
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - asiansexdiary.com/
+      - helloladyboy.com/
+      - milftrip.com/
+      - trikepatrol.com/
+      - tuktukpatrol.com/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: "[?#].*$"
+          with: ""
+        - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
+          with: https://$1/wp-json/wp/v2/rest-content?_embed&slug=$2
+    scraper: sceneScraper
+  - action: scrapeJson
+    url:
+      - eurosexdiary.com/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: "[?#].*$"
+          with: ""
+        - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
+          with: https://$1/wp-json/wp/v2/posts?_embed&slug=$2
+    scraper: sceneScraper
+  - action: scrapeJson
+    url:
+      - toticos.com/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: "[?#].*$"
+          with: ""
+        - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
+          with: https://$1/wp-json/wp/v2/posts?_embed&slug=$2
+    scraper: toticosScraper
+  # Only scrapable through the Wayback Machine
+  - action: scrapeXPath
+    url:
+      - dateslam.com/
+      - screwmetoo.com/
+    scraper: legacyScraper
+
+performerByURL:
+  - action: scrapeJson
+    url:
+      - asiansexdiary.com/model/
+      - trikepatrol.com/model/
+      - tuktukpatrol.com/models/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: "[?#].*$"
+          with: ""
+        - regex: '^https?://(?:www\.)?([^/]+)/(?:.*/)?([^/]+)/?$'
+          with: https://$1/wp-json/wp/v2/model?slug=$2
+    scraper: performerScraper
+  - action: scrapeXPath
+    url:
+      - eurosexdiary.com/model/
+    scraper: legacyPerformerScraper
+
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: 0.title.rendered
+        postProcess:
+          - &htmlToText
+            javascript: |
+              const named = { amp: "&", quot: '"', apos: "'", nbsp: " ", hellip: "…" };
+              const numeric = { 8216: "‘", 8217: "’", 8220: "“", 8221: "”", 8211: "–", 8212: "—", 8230: "…", 39: "'", 160: " ", 38: "&" };
+              return value
+                .replace(/\[[a-z]+\]/gi, "")
+                .replace(/(?:<\/p>|<br\s*\/?>)/gi, "\n")
+                .replace(/<[^>]+>/g, "")
+                .replace(/&(#\d+|[a-z]+);/gi, (match, entity) =>
+                  entity[0] === "#" ? (numeric[parseInt(entity.slice(1), 10)] ?? match) : (named[entity] ?? match)
+                )
+                .replace(/\u00a0/g, " ")
+                .replace(/[^\S\n]+/g, " ")
+                .replace(/\s*\n\s*/g, "\n")
+                .trim();
+      Details:
+        selector: 0.content.rendered
+        postProcess:
+          - *htmlToText
+      Date: &date
+        selector: 0.date_gmt
+        postProcess:
+          - parseDate: "2006-01-02T15:04:05"
+      Performers:
+        Name:
+          selector: 0.acf_data
+          postProcess:
+            - javascript: |
+                const data = JSON.parse(value);
+                return (data.models || data.model_name || "")
+                  .split(",")
+                  .map((name) => name.trim())
+                  .join("__SEP__");
+          split: "__SEP__"
+      Tags: &tags
+        Name:
+          selector: "0._embedded.wp:term|@flatten.#.name"
+          postProcess:
+            - *htmlToText
+      Image:
+        selector: 0.acf_data.poster_image
+        postProcess:
+          # Get the full-size cover image
+          - replace:
+              - regex: '-\d+x\d+(\.[A-Za-z]+)$'
+                with: $1
+      URLs: &url 0.link
+      Studio: &studio
+        Name:
+          selector: 0.link
+          postProcess:
+            - replace:
+                - regex: '^https?://(?:www\.)?([^/]+)/.*$'
+                  with: $1
+            - map:
+                asiansexdiary.com: Asian Sex Diary
+                eurosexdiary.com: Euro Sex Diary
+                helloladyboy.com: Hello Ladyboy
+                milftrip.com: MILF Trip
+                toticos.com: Toticos
+                trikepatrol.com: Trike Patrol
+                tuktukpatrol.com: TukTuk Patrol
+
+  toticosScraper:
+    scene:
+      Title:
+        selector: 0.title.rendered
+        postProcess:
+          - *htmlToText
+      Details:
+        selector: 0.content.rendered
+        postProcess:
+          - *htmlToText
+      Date: *date
+      Tags: *tags
+      Image: "0._embedded.wp:featuredmedia.0.source_url"
+      URLs: *url
+      Studio: *studio
+
+  performerScraper:
+    performer:
+      Name:
+        selector: 0.title.rendered
+        postProcess:
+          - *htmlToText
+      Gender:
+        fixed: Female
+      Country:
+        selector: 0.link
+        postProcess:
+          - javascript: |
+              const country = { "trikepatrol.com": "Philippines", "tuktukpatrol.com": "Thailand" };
+              return country[value.split("/")[2].replace(/^www\./, "")] ?? "";
+      Ethnicity:
+        selector: 0.link
+        postProcess:
+          - javascript: |
+              const asian = ["asiansexdiary.com", "trikepatrol.com", "tuktukpatrol.com"];
+              return asian.includes(value.split("/")[2].replace(/^www\./, "")) ? "Asian" : "";
+      Image: 0.acf.portrait_image.url
+      Birthdate:
+        selector: 0.acf.date_of_birth
+        postProcess:
+          - javascript: |
+              const [day, month, year] = value.split("/").map(Number);
+              if (!year || year > new Date().getFullYear() - 18) return "";
+              return `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+      Details:
+        selector: 0.content.rendered
+        postProcess:
+          - *htmlToText
+      URLs: *url
+
+  performerSearch:
+    performer:
+      Name: "#.title.rendered"
+      URLs: "#.link"
+
+xPathScrapers:
+  legacyScraper:
+    scene:
+      Title: //h1[@class="amp-single-title"]
+      Date:
+        selector: //i[@class="fa fa-calendar-o"]/following-sibling::text()
+        postProcess:
+          - parseDate: Jan 2, 2006
+      Details:
+        selector: //div[@class="cntn-wrp artl-cnt"]//p
+        concat: "\n\n"
+      Performers:
+        Name: //div[@class="update-info"]/a
+      Tags:
+        Name: //div[@class="amp-category"]//a
+      Image: //amp-img[@layout="fill"]/@src
+      Studio:
+        Name:
+          fixed: Screw Me Too
+
+  legacyPerformerScraper:
+    performer:
+      Name: //h1[contains(@class, "amp-model-title")]
+      Gender:
+        fixed: Female
+      Image: //div[contains(@class, "model-contr-colone")]//amp-img/@src
+      Details:
+        selector: //div[contains(@class, "model-desc")]//*[self::h2 or self::p]
+        concat: "\n\n"
+      Height:
+        selector: //span[contains(text(), "Height")]/following-sibling::text()
+        postProcess:
+          - feetToCm: true
+      Weight:
+        selector: //span[contains(text(), "Weight")]/following-sibling::text()
+        postProcess:
+          - replace:
+              - regex: '\D'
+                with: ""
+          - lbToKg: true
+      EyeColor: //span[contains(text(), "Eye Color")]/following-sibling::text()
+      HairColor: //span[contains(text(), "Hair Color")]/following-sibling::text()
+      URLs: //link[@rel="canonical"]/@href
