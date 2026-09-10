@@ -2,13 +2,15 @@ import json
 import re
 import urllib.parse
 import urllib.request
+from datetime import date as datetype, timedelta
 
 from py_common import log
 from py_common.deps import ensure_requirements
 from py_common.util import feet_to_cm, lb_to_kg, scraper_args
 
-ensure_requirements("lxml")
+ensure_requirements("lxml", "cloudscraper")
 from lxml import html  # noqa: E402
+import cloudscraper  # noqa: E402
 
 HAIR_COLORS = {
     "blond": "Blonde",
@@ -122,6 +124,200 @@ def find_date(video_id, model_url):
     return None
 
 
+WAYBIG_STUDIO_URL = "https://www.waybig.com/studios/73/bait-buddies/"
+WAYBIG_MONTHS = {
+    m: i
+    for i, m in enumerate(
+        "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(), start=1
+    )
+}
+
+
+def find_waybig_url(date, performer_names):
+    """
+    WayBig runs its own writeup of most Bait Buddies scenes, on a reverse-
+    chronological archive. There's no shared id to match on, so the scene
+    is identified by release date, cross-checked against a credited
+    performer's first name to guard against same-day collisions. Only the
+    matched URL is used - no other WayBig data is pulled in.
+
+    WayBig's own posting date can land a day off from Bait Buddies' own
+    release date (timezone/publish-lag differences between the two sites),
+    so dates are matched within a +/-1 day tolerance rather than exactly.
+
+    The static pageN.html links advertised on the page are dead (redirect
+    back to page 1), but "?page=N" works and paginates correctly.
+    """
+    first_names = [n.split()[0].lower() for n in performer_names if n]
+
+    target = datetype.fromisoformat(date)
+    date_min = (target - timedelta(days=1)).isoformat()
+    date_max = (target + timedelta(days=1)).isoformat()
+
+    for page in range(1, 16):  # the archive currently spans ~13 pages
+        page_url = WAYBIG_STUDIO_URL if page == 1 else f"{WAYBIG_STUDIO_URL}?page={page}"
+        tree = fetch(page_url)
+        if tree is None:
+            break
+
+        items = tree.xpath('//div[@class="item-col col -video"]')
+        if not items:
+            break
+
+        for item in items:
+            date_text = next(iter(item.xpath('.//span[@class="item-date"]/text()')), "")
+            try:
+                month, day, year = date_text.replace(",", "").split()
+                item_date = f"{year}-{WAYBIG_MONTHS[month[:3]]:02d}-{int(day):02d}"
+            except (ValueError, KeyError):
+                continue
+
+            # The archive is strictly reverse-chronological, so once an item
+            # is older than the tolerance window, the target was never
+            # posted - no need to keep paging through even older entries.
+            if item_date < date_min:
+                return None
+            if item_date > date_max:
+                continue
+
+            # Not every post is tagged with performer names; only use the
+            # cross-check when there's actually something to check against.
+            models_text = " ".join(item.xpath('.//span[@class="item-models"]//text()')).lower()
+            if models_text and not any(name in models_text for name in first_names):
+                continue
+
+            href = next(iter(item.xpath('.//a[contains(@href,"/video/")]/@href')), None)
+            if href:
+                return href
+
+    return None
+
+
+GEVI_COMPANY_ID = 7282
+GEVI_EPISODES_URL = "https://gayeroticvideoindex.com/coep"
+
+
+def find_gevi_url(date, performer_names):
+    """
+    GEVI's episode list for this company is loaded from a small JSON API
+    rather than static HTML. Matched the same way as WayBig: exact release
+    date, cross-checked against a credited performer's first name to guard
+    against same-day collisions. Only the matched URL is used - no other
+    GEVI data (title, description, images) is pulled in.
+    """
+    if not performer_names:
+        return None
+
+    first_names = [n.split()[0].lower() for n in performer_names if n]
+
+    params = urllib.parse.urlencode(
+        {
+            "CompanyID": GEVI_COMPANY_ID,
+            "draw": 1,
+            "start": 0,
+            "length": 100,
+            "search[value]": performer_names[0],
+        }
+    )
+    req = urllib.request.Request(f"{GEVI_EPISODES_URL}?{params}", headers=HEADERS)
+    try:
+        with urllib.request.urlopen(req) as res:
+            if res.status != 200:
+                return None
+            payload = json.loads(res.read().decode())
+    except (urllib.error.URLError, json.JSONDecodeError):
+        return None
+
+    for row in payload.get("data", []):
+        if len(row) < 4 or row[1] != date:
+            continue
+
+        performers_html = row[3].lower()
+        if not any(name in performers_html for name in first_names):
+            continue
+
+        m = re.search(r"episode/(\d+)", row[2])
+        if m:
+            return f"https://gayeroticvideoindex.com/episode/{m.group(1)}"
+
+    return None
+
+
+IAFD_STUDIO_URL = "https://www.iafd.com/studio.rme/studio=6657/baitbuddies.com.htm"
+
+_iafd_scraper = None
+
+
+def iafd_sequel_number(title):
+    m = re.search(r"\((?:round|part)\s*(\d+)\)\s*$", title, re.IGNORECASE)
+    if m:
+        return int(m.group(1))
+    m = re.search(r"(?<!\d)(\d+)\s*$", title)
+    if m:
+        return int(m.group(1))
+    return None
+
+
+def find_iafd_url(date, part_match, performer_names):
+    """
+    IAFD catalogs every Bait Buddies release in one big alphabetical table
+    (title, label, year - no exact date, and no pagination to worry about).
+    There's no shared id, so matching relies on every credited performer's
+    first name appearing in the title (IAFD formats these the same way
+    this scraper builds Title: "X and Y"), cross-checked against the
+    release year and any "Part N"/"(Round N)" sequel suffix to disambiguate
+    scenes with the same cast. Cloudflare blocks plain requests here, hence
+    `cloudscraper`. Only the matched URL is used - no other IAFD data
+    (label, year, etc.) is pulled in.
+    """
+    global _iafd_scraper
+    if not performer_names:
+        return None
+
+    first_names = [n.split()[0].lower() for n in performer_names if n]
+
+    if _iafd_scraper is None:
+        _iafd_scraper = cloudscraper.create_scraper()
+    try:
+        res = _iafd_scraper.get(IAFD_STUDIO_URL, timeout=(5, 20))
+    except Exception as e:
+        log.warning(f"IAFD request failed: {e}")
+        return None
+    if res.status_code != 200:
+        return None
+
+    tree = html.fromstring(res.content)
+    target_year = date.split("-")[0] if date else None
+    target_number = int(part_match) if part_match else None
+
+    candidates = []
+    for row in tree.xpath('//table[@id="studio"]/tbody/tr'):
+        title_text = next(iter(row.xpath("./td[1]/a/text()")), "")
+        href = next(iter(row.xpath("./td[1]/a/@href")), None)
+        year = next(iter(row.xpath("./td[3]/text()")), "").strip()
+        if not title_text or not href:
+            continue
+
+        if not all(name in title_text.lower() for name in first_names):
+            continue
+
+        candidates.append((title_text, year, href))
+
+    if target_year:
+        by_year = [c for c in candidates if c[1] == target_year]
+        if by_year:
+            candidates = by_year
+
+    if len(candidates) == 1:
+        return f"https://www.iafd.com{candidates[0][2]}"
+
+    by_number = [c for c in candidates if iafd_sequel_number(c[0]) == target_number]
+    if len(by_number) == 1:
+        return f"https://www.iafd.com{by_number[0][2]}"
+
+    return None
+
+
 def order_performers_by_filename(og_title, performers):
     """
     The video's internal filename lists performers in a specific order
@@ -200,16 +396,24 @@ def scene_from_url(url):
     video_id = video_id_match.group(1) if video_id_match else None
 
     names = [p["name"] for p in performers]
-    if len(names) > 1:
-        title = ", ".join(names[:-1]) + " and " + names[-1]
+    if len(names) > 2:
+        title = ", ".join(names[:-1]) + ", and " + names[-1]
+    elif len(names) == 2:
+        title = names[0] + " and " + names[1]
     else:
         title = names[0] if names else ""
     if part_match:
         title += f", Part {part_match}"
 
+    code = code_match.group(1).lower() if code_match else None
+    # Older releases were coded without the "bb" prefix (e.g. "337" instead
+    # of "bb337"), so add it back in for a consistent code namespace.
+    if code and not code.startswith("bb"):
+        code = f"bb{code}"
+
     scene = {
         "title": title,
-        "code": code_match.group(1).lower() if code_match else None,
+        "code": code,
         "details": details,
         "urls": [url],
         "image": find_image(tree, video_id),
@@ -222,6 +426,15 @@ def scene_from_url(url):
         date = find_date(video_id, performers[0]["urls"][0])
         if date:
             scene["date"] = date
+            waybig_url = find_waybig_url(date, [p["name"] for p in performers])
+            if waybig_url:
+                scene["urls"].append(waybig_url)
+            gevi_url = find_gevi_url(date, [p["name"] for p in performers])
+            if gevi_url:
+                scene["urls"].append(gevi_url)
+            iafd_url = find_iafd_url(date, part_match, [p["name"] for p in performers])
+            if iafd_url:
+                scene["urls"].append(iafd_url)
 
     return {k: v for k, v in scene.items() if v not in (None, "", [])}
 
