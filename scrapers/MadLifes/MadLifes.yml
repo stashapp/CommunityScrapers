@@ -1,5 +1,6 @@
 name: MadLifes
 # requires: py_common, FAKNetwork
+# scrapes: 1ST TOURNAMENT: 2016, 2ND TOURNAMENT: 2017, I Fiesta MadLifes, II MadLifes Party, III MadLifes Party, IV MadLifes Party, MadLifes Festivities - 2018, MadLifes Festivities - 2019, V MadLifes Party, VII MadLifes Party, VIII MadLifes Party
 sceneByURL:
   - action: script
     url:

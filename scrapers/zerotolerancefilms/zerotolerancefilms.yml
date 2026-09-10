@@ -1,5 +1,6 @@
 # requires: Altwolia
 name: ZeroToleranceFilms
+# scrapes: 3rd Degree, Addicted 2 Girls, Diabolic, Zero Tolerance Films
 sceneByURL:
   - action: script
     url:

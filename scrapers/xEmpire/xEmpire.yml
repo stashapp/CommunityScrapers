@@ -1,6 +1,6 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
 # requires: Altwolia
 name: xEmpire
+# scrapes: AllBlackX, DarkX, EroticaX, HardX, LesbianX, XEmpire
 sceneByURL:
   - action: script
     url:

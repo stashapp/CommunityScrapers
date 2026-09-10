@@ -1,5 +1,6 @@
 name: Nigged
 # requires: py_common, FAKNetwork
+# scrapes: A present for my wife, Coffee liqueur, Girls get nigged, Help my mamma, My hidden secret, Nigged Party, Oh my nigged, Solidarity porn
 sceneByURL:
   - action: script
     url:

@@ -1,4 +1,5 @@
 name: GayNetwork
+# scrapes: Alexander, Alphamales, Andolini XXL, Berry Prod, Bravo Fucker, Brett Tyler, Bulldog 2.0, Cadinot, Cazzo, Citebeur, Clair Prod, Crunchboy, Darkcruising, Dreamboy, Flava, GayFrenchKiss, Hardkinks, HarlemSex, JNRC, Mackstudio, Maxence Angel, Men at Play, Menoboy, Mika Ayden, MilitaryGayXXX, Pro Access, Rafaboys, Raw Fuck, UKNM, Viktor Rom, WantonBoy, Wurstfilm, Young-males
 sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper

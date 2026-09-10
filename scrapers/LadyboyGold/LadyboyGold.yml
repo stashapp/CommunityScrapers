@@ -1,5 +1,5 @@
-# yaml-language-server: $schema=../../validator/scraper.schema.json
 name: LadyboyGold (Network)
+# scrapes: Ladyboy Crush, Ladyboy Glamour, Ladyboy Pussy, Ladyboy Vice, LadyboyGold, Ladyboys Fucked Bareback, TSRaw
 galleryByFragment:
   action: script
   script:
@@ -8,7 +8,7 @@ galleryByFragment:
     - gallery-by-fragment
 galleryByURL:
   - action: script
-    url: 
+    url:
       - ladyboycrush.com/photo/
       - ladyboyglamour.com/photo/
       - ladyboygold.com/photo/

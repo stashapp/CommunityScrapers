@@ -1,5 +1,6 @@
 # requires: Altwolia
 name: "Fisting Inferno"
+# scrapes: Club Inferno Dungeon, Fetish Force, Fisting Inferno
 sceneByURL:
   - action: script
     url:
