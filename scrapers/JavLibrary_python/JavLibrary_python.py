@@ -581,6 +581,44 @@ def regexreplace(input_replace):
     return re.sub(r"[\[\]\"]", "", output)
 
 
+def uncensor(text):
+    if not text:
+        return text
+    word_pattern = re.compile(r'(\w|\*)+')
+    return word_pattern.sub(replace_banned_words, text)
+
+
+def parse_duration_seconds(length_texts):
+    # javlibrary lists runtime as "<n> 分" / "<n> min."
+    if not length_texts:
+        return None
+    minutes = re.search(r"(\d+)", " ".join(length_texts))
+    if minutes:
+        return str(int(minutes.group(1)) * 60)
+    return None
+
+
+def build_group_synopsis(title, code, performers, label, user_rating):
+    # javlibrary titles are "<code> <description> <cast names>";
+    # the description is the closest thing the site has to a synopsis.
+    synopsis = title or ""
+    if code and synopsis.startswith(code):
+        synopsis = synopsis[len(code):]
+    for perf_name in performers or []:
+        synopsis = synopsis.replace(perf_name, " ")
+    synopsis = re.sub(r"\s+", " ", synopsis).strip()
+    synopsis = uncensor(synopsis)
+    # Metadata with no matching group field goes below the description
+    extra = []
+    if label:
+        extra.append(f"Label: {label}")
+    if user_rating:
+        extra.append(f"User rating: {user_rating}")
+    if extra:
+        synopsis = (synopsis + "\n\n" if synopsis else "") + "\n".join(extra)
+    return synopsis
+
+
 def getxpath(xpath, tree):
     if not xpath:
         return None
@@ -795,7 +833,7 @@ if FRAGMENT.get("title"):
 else:
     SCENE_TITLE = None
 
-if "validSearch" in sys.argv and SCENE_URL is None:
+if ("validSearch" in sys.argv or "group" in sys.argv) and SCENE_URL is None:
     sys.exit()
 
 if "searchName" in sys.argv:
@@ -894,6 +932,76 @@ if "searchName" in sys.argv:
 
 if JAV_SEARCH_HTML:
     JAV_MAIN_HTML = jav_search(JAV_SEARCH_HTML, jav_xPath_search)
+
+if "group" in sys.argv:
+    if JAV_MAIN_HTML is None:
+        log.info("No results found")
+        print(json.dumps({}))
+        sys.exit()
+    jav_tree = lxml.html.fromstring(JAV_MAIN_HTML.content)
+    group_raw = {}
+    for group_key in ("code", "title", "date", "director", "tags", "performers",
+                      "studio", "url", "image"):
+        group_raw[group_key] = getxpath(jav_xPath[group_key], jav_tree)
+    group_raw["length"] = getxpath(
+        '//div[@id="video_length"]//span[@class="text"]/text()', jav_tree)
+    group_raw["label"] = getxpath(
+        '//div[@id="video_label"]//span[@class="label"]/a/text()', jav_tree)
+    group_raw["user_rating"] = getxpath(
+        '//div[@id="video_review"]//span[@class="score"]/text()', jav_tree)
+    log.debug(f"[Group] {group_raw}")
+
+    group_title = next(iter(group_raw.get("title") or []), None)
+    group_code = next(iter(group_raw.get("code") or []), None)
+    group_label = next(iter(group_raw.get("label") or []), None)
+    group_user_rating = next(iter(group_raw.get("user_rating") or []), None)
+    if group_user_rating:
+        group_user_rating = group_user_rating.strip("()")
+
+    group = {}
+    if group_title:
+        group["name"] = uncensor(group_title)
+    group_date = next(iter(group_raw.get("date") or []), None)
+    if group_date:
+        group["date"] = group_date
+    group_duration = parse_duration_seconds(group_raw.get("length"))
+    if group_duration:
+        group["duration"] = group_duration
+    group_director = next(iter(group_raw.get("director") or []), None)
+    if group_director:
+        group["director"] = group_director
+    group_studio = next(iter(group_raw.get("studio") or []), None)
+    if group_studio:
+        group["studio"] = {"name": group_studio}
+    group_tags = buildlist_tagperf(group_raw.get("tags") or [], "tags")
+    if group_tags:
+        group["tags"] = [
+            {"name": tag_name.strip()}
+            for tag_dict in group_tags
+            for tag_name in tag_dict["name"].replace('·', ',').split(",")
+        ]
+    group_url = next(iter(group_raw.get("url") or []), None)
+    if group_url:
+        group["urls"] = ["https:" + re.sub(r"^https?:", "", group_url)]
+    group["synopsis"] = build_group_synopsis(group_title, group_code,
+                                             group_raw.get("performers"),
+                                             group_label, group_user_rating)
+    group_image = next(iter(group_raw.get("image") or []), None)
+    if group_image and "now_printing" not in group_image and "noimage" not in group_image:
+        group_image = "https:" + re.sub(r"^https?:", "", group_image)
+        try:
+            group_img_res = requests.get(group_image.replace("ps.jpg", "pl.jpg"),
+                                         timeout=10, headers=JAV_HEADERS)
+            if group_img_res.status_code == 200:
+                group["front_image"] = "data:image/jpeg;base64," + \
+                    base64.b64encode(group_img_res.content).decode('utf-8')
+            else:
+                log.debug(
+                    f"[Group] Bad image response ({group_img_res.status_code}) for <{group_image}>")
+        except Exception as group_img_exc:
+            log.debug(f"[Group] Failed to fetch jacket image: {group_img_exc}")
+    print(json.dumps(group))
+    sys.exit()
 
 if JAV_MAIN_HTML:
     #log.debug("[DEBUG] Javlibrary Page ({})".format(JAV_MAIN_HTML.url))

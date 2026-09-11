@@ -29,4 +29,15 @@ sceneByURL:
       - python
       - JavLibrary_python.py
       - validSearch
-# Last Updated January 24, 2026
+groupByURL:
+  - action: script
+    url:
+      - www.javlibrary.com/
+      - javlibrary.com/
+      - www.javlib.com/
+      - javlib.com/
+    script:
+      - python
+      - JavLibrary_python.py
+      - group
+# Last Updated September 11, 2026
