@@ -1,0 +1,42 @@
+name: "NebulaCMS"
+# scrapes: TGirl Playtime, Two Tgirls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - twotgirls.com
+    scraper: twoTgirlsScene
+  - action: scrapeXPath
+    url:
+      - tgirlplaytime.com
+    scraper: tgirlPlaytimeScene
+xPathScrapers:
+  twoTgirlsScene:
+    scene:
+      Title: &title //div[contains(@class, "video-details")]/h1
+      Details: &details # <br /> separated paragraphs inside a single <p>
+        selector: //div[contains(@class, "video-details")]/p[1]/text()
+        concat: "\n\n"
+      Performers:
+        Name: //p[contains(@class, "video-date")]/a
+      Studio:
+        Name:
+          fixed: Two Tgirls
+      Image: &image //video[@id="videojs-player"]/@poster
+      Tags: &tags
+        Name: //p[contains(@class, "video-tags")]/a
+  tgirlPlaytimeScene:
+    scene:
+      Title: *title
+      Details: *details
+      Date:
+        selector: //p[contains(@class, "video-date")]
+        postProcess:
+          - replace:
+              - regex: .*?([A-Za-z]+ \d{1,2})(?:st|nd|rd|th), (\d{4}).*
+                with: ${1}, ${2}
+          - parseDate: January 2, 2006
+      Studio:
+        Name:
+          fixed: TGirl Playtime
+      Image: *image
+      Tags: *tags
