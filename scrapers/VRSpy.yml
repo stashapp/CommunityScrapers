@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
 name: VRSpy
 
 performerByURL:
@@ -10,14 +9,14 @@ performerByURL:
 sceneByURL:
   - action: scrapeXPath
     url:
-      - vrspy.com/video/
+      - vrspy.com/video
     scraper: sceneScraper
 
 xPathScrapers:
   performerScraper:
     performer:
       Name: //a[@class="breadcrumbs--current"]/text()
-      Image: //div[@class="avatar"]/img/@src
+      Images: //div[@class="avatar"]/img/@src
       Height:
         selector: //div[@class="star-info-row"]/span[contains(text(), "Height:")]/following-sibling::span/text()
         postProcess: &postProcessRemoveNone
@@ -57,25 +56,14 @@ xPathScrapers:
 
   sceneScraper:
     scene:
-      Title: //dl8-video/@title
+      Title: //h1[//div[@class="player-cover"]]
       Date:
         selector: //div[@class="video-details-info-item"][contains(text(), "Release date:")]/span/text()
         postProcess:
           - parseDate: 2 January 2006
       Details:
-        selector: //div[@class="show-more-text"]/p
-        postProcess:
-          - replace:
-              # The blank lines in the p element are stripped as whitespace by stashapp, but they can be
-              # recreated by looking at the end and starts of sentences without a space following the "."
-              # or "!" or "?"
-              - regex: (\w[\.\!\?])(\w)
-                with: "$1\n\n$2"
-              # Some scene descriptions include b tags as pseudo-headings
-              # These all appear to end with a lowercase letter, and the following paragraph starts
-              # with an uppercase letter.
-              - regex: ([a-z])([A-Z])
-                with: "$1\n\n$2"
+        selector: //div[contains(@class, "show-more-text__content")]/*
+        concat: "\n\n"
       Studio:
         Name:
           fixed: VRSpy
@@ -105,16 +93,14 @@ xPathScrapers:
           - replace:
               - regex: .*w=\d+/(.*)
                 with: $1
-              - regex: cover-details  # this is seen on the scene URL page but isn't really the cover image
-                with: cover  # the actual scene cover images can be seen in scene listing, such as performer pages
+              - regex: cover-details # this is seen on the scene URL page but isn't really the cover image
+                with: cover # the actual scene cover images can be seen in scene listing, such as performer pages
       Performers:
         Name: //div[@class="video-actor-item"]/span/text()
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Code:
         selector: *imageSel
         postProcess:
           - replace:
               - regex: .*/videos/(\d+)/.*
                 with: $1
-
-# Last Updated June 3, 2025
