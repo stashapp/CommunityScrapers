@@ -14,7 +14,6 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
 from py_common import log
 from py_common.util import dig, replace_all, scraper_args
 
@@ -191,9 +190,55 @@ def public_url(api_object: dict[str, Any]) -> str | None:
     return None
 
 
+# StashDB models each of these networks as a parent studio. The key is the API's
+# own `network_name`, so a new sub-brand on an existing network inherits the
+# right parent without needing an entry of its own; the value is StashDB's name
+# for the parent, which often carries a "(Network)" suffix to distinguish it
+# from the same-named channel studio.
+NETWORK_PARENTS: dict[str, str] = {
+    "21 Naturals": "21 Naturals (Network)",
+    "21 Sextreme": "21 Sextreme (Network)",
+    "21 Sextury": "21 Sextury (Network)",
+    "Adult Time Originals": "Adult Time Originals",
+    "AgentRedGirl": "Adult Time (Network)",
+    "Blow Me POV": "Pegas Productions",
+    "Devil's Film": "Devil's Film (Network)",
+    "Fame Digital": "Fame Digital",
+    "Fantasy Massage": "Fantasy Massage (Network)",
+    "Girlfriends Films": "Girlfriends Films",
+    "Girlsway": "Girlsway (Network)",
+    "Heteroflexible": "Adult Time Originals",
+    "Joymii": "Adult Time (Network)",
+    "MixedX": "Adult Time (Network)",
+    "Model Time": "Adult Time (Network)",
+    "ModernDaySins": "Adult Time Originals",
+    "Pure Taboo": "Adult Time Originals",
+    "Transfixed": "Adult Time Originals",
+    "Vivid": "Vivid",
+}
+
+
+def determine_parent(api_object: dict[str, Any], studio_name: str | None) -> str | None:
+    """
+    Map the API's `network_name` onto the parent studio StashDB files the
+    channel under. A few networks are also studios in their own right (Vivid,
+    Girlfriends Films), so never hand a studio itself as its own parent.
+    """
+    if not (parent := NETWORK_PARENTS.get(api_object.get("network_name") or "")):
+        return None
+    return None if parent == studio_name else parent
+
+
 def adulttime(obj: Any, api_object: dict[str, Any]) -> Any:
-    if studio_override := determine_studio(api_object):
-        obj = replace_all(obj, "studio", lambda s: {**s, "name": studio_override})
+    studio_override = determine_studio(api_object)
+
+    def with_network(studio: dict[str, Any]) -> dict[str, Any]:
+        studio = {**studio, "name": studio_override} if studio_override else studio
+        if parent := determine_parent(api_object, studio.get("name")):
+            studio = {**studio, "parent": {"name": parent}}
+        return studio
+
+    obj = replace_all(obj, "studio", with_network)
 
     sitename = api_object.get("sitename")
 
