@@ -5,6 +5,7 @@ sceneByURL:
     url:
       - bang.com/video
       - bangpremium.com/video
+      - yngr.com/video
     scraper: sceneScraper
 sceneByName:
   action: scrapeXPath
@@ -19,6 +20,7 @@ groupByURL:
     url:
       - bang.com/dvd
       - bangpremium.com/dvd
+      - yngr.com/dvd
     scraper: movieScraper
 performerByName:
   action: scrapeXPath
@@ -29,12 +31,14 @@ performerByURL:
     url:
       - bang.com/pornstar
       - bangpremium.com/pornstar
+      - yngr.com/pornstar
     scraper: performerScraper
 galleryByURL:
   - action: scrapeXPath
     url:
       - bang.com/photos/
       - bangpremium.com/photos/
+      - yngr.com/photos/
     scraper: sceneScraper
 xPathScrapers:
   sceneSearch:
