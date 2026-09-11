@@ -9,48 +9,71 @@ galleryByURL:
   - action: scrapeXPath
     url:
       - velvetecstasy.com
-    queryURL: '{url}'
+    queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: '/galleries/'
-          with: '/pages/'
+        - regex: "/galleries/"
+          with: "/pages/"
         - regex: '_gallery\.htm'
-          with: '.htm'
+          with: ".htm"
 
     scraper: galleryScraper
 
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: &title //table//b[1]
-      Image:
-        selector: //link[@rel='icon' and contains(@href,'https:')]/@href | //a[contains(@href,'galleries')]/img[contains(@src,'/photos/')]/@src
-        concat: ','
+      Title: &title
+        selector: (//b)[1]
         postProcess:
+          # older pages wrap the title across source lines
           - replace:
-            - regex: favicon.png[^\/]+\/
-              with: '/visitors/bonus/archives/'
+              - regex: "  +"
+                with: " "
+      Image:
+        selector: //link[@rel='icon' and contains(@href,'https:')]/@href | //img[contains(@src,'graphics/navigations/')]/@src | //a[contains(@href,'galleries')]/img[contains(@src,'/photos/')]/@src
+        concat: "|"
+        postProcess:
+          - javascript: |
+              var parts = value.split("|");
+              if (parts.length < 3) return "";
+              var host = parts[0].replace(/\/favicon\.png.*$/, "");
+              var tree = parts[1].indexOf("../../../") === 0 ? "bonus/archives" : "scenes";
+              var photo = parts[parts.length - 1].replace(/^\.\.\//, "");
+              return host + "/visitors/" + tree + "/" + photo;
       Details: &details
-          selector: //font[not(a) and @size='2']
-          concat: '|'
-          postProcess:
-            - replace:
-                - regex: '([^\|]+)\|(.+)'
-                  with: |
-                        $1
-
-                        $2
+        # <font> tags nest here, so matching every size=2 font pulled in the
+        # wrappers too - which repeated the title, the performer credit and the
+        # Video/Photographs/Action line, each several times over. Excluding the
+        # nesting and label children leaves just the prose (<br> is kept: some
+        # pages hang the text off one). Pages carry a tagline plus a body, so
+        # both are joined as paragraphs.
+        selector: //font[@size='2' and not(font) and not(b) and not(a) and normalize-space()]
+        concat: "\n\n"
+        postProcess:
+          # the prose is wrapped across source lines
+          - replace:
+              - regex: "  +"
+                with: " "
       Studio: &studio
         Name:
           fixed: Velvet Ecstasy
       Tags: &tags
-        Name: 
+        Name:
           selector: //font/b[contains(.,'Action:')]/following-sibling::text()
-          split: ','
+          postProcess:
+            # literal spaces, not \s, around the separator before splitting
+            - replace:
+                - regex: " *, *"
+                  with: ","
+          split: ","
       Performers: &performers
-        Name: 
-          selector: //font[@size='3']/b/text()
-          split: '&'
+        Name:
+          selector: //font[@size='3']/b | //font[@size='2']/b[normalize-space()]
+          postProcess:
+            - replace:
+                - regex: \s*&\s*
+                  with: "__SEP__"
+          split: "__SEP__"
 
   galleryScraper:
     gallery:
@@ -59,5 +82,3 @@ xPathScrapers:
       Details: *details
       Tags: *tags
       Performers: *performers
-
-# Last Updated April 27, 2024
