@@ -3,6 +3,7 @@ sceneByURL:
   - action: scrapeXPath
     url:
       - xnxx.com
+      - xnxx.gold
       - xnxx3.com
     scraper: sceneScraper
 sceneByName:
@@ -44,8 +45,7 @@ xPathScrapers:
           - replace:
               - regex: ^
                 with: "https://www.xnxx.com"
-      Image:
-        selector: $searchItem//div[@class="thumb"]/a/img/@data-src
+      Image: $searchItem//div[@class="thumb"]/a/img/@data-src
 
   sceneScraper:
     scene:
@@ -63,10 +63,18 @@ xPathScrapers:
               - regex: .+(?:"uploadDate":\s*")([^T]+).+
                 with: $1
           - parseDate: 2006-01-02
+      URLs: //meta[@property="og:url"]/@content
       Tags:
-        Name: //div[@class="metadata-row video-tags"]/a/text()
+        Name: //div[@class="metadata-row video-tags"]/a[contains(@class, "is-keyword")]
+      Performers:
+        Name:
+          selector: //div[@class="metadata-row video-tags"]/a[contains(@class, "is-pornstar")]
+          postProcess:
+            - javascript: |
+                return value.replace(/\b\w/g, function (c) { return c.toUpperCase() })
       Studio:
-        Name: //span[@class="metadata"]/a[@class="gold-plate" or @class="free-plate"]/text()
+        Name: //span[@class="metadata"]/a[@class="gold-plate" or @class="free-plate"]
+      # premium pages have no description and no JSON-LD upload date
       Details: //p[@class="metadata-row video-description"]
       Image:
         selector: //script[contains(text(), "setThumbUrl169")]/text()|//div[@id="html5video"][span[@class="premium-log-overlay"]]/div[@class="embed-responsive-item"]/@style
