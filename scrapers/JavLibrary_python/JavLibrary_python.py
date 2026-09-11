@@ -1,5 +1,6 @@
 """JAVLibrary python scraper"""
 import base64
+import io
 import json
 import os
 import re
@@ -598,6 +599,39 @@ def parse_duration_seconds(length_texts):
     return None
 
 
+def split_jacket(image_bytes):
+    """Split a DMM DVD sleeve (back cover | spine | front cover) into
+    (front_image, back_image) data URLs. Returns the unsplit image as the
+    front and back=None when the image isn't a wide sleeve or Pillow is
+    unavailable."""
+    full = "data:image/jpeg;base64," + base64.b64encode(image_bytes).decode('utf-8')
+    try:
+        from PIL import Image
+    except ModuleNotFoundError:
+        log.debug("[Group] Pillow not installed, keeping the full sleeve as front image")
+        return full, None
+    try:
+        img = Image.open(io.BytesIO(image_bytes))
+        width, height = img.size
+        if height == 0 or width / height < 1.2:
+            # Front-only cover (e.g. thumbnails or amateur releases)
+            return full, None
+
+        # Same proportions as the standard 800px sleeve: back covers
+        # x 0-380, front x 420-800, with the spine between discarded
+        def encode(part):
+            buf = io.BytesIO()
+            part.convert("RGB").save(buf, format="JPEG", quality=92)
+            return "data:image/jpeg;base64," + base64.b64encode(buf.getvalue()).decode('utf-8')
+
+        front = encode(img.crop((round(width * 0.525), 0, width, height)))
+        back = encode(img.crop((0, 0, round(width * 0.475), height)))
+        return front, back
+    except Exception as split_exc:
+        log.debug(f"[Group] Failed to split jacket: {split_exc}")
+        return full, None
+
+
 def build_group_synopsis(title, code, performers, label, user_rating):
     # javlibrary titles are "<code> <description> <cast names>";
     # the description is the closest thing the site has to a synopsis.
@@ -993,8 +1027,10 @@ if "group" in sys.argv:
             group_img_res = requests.get(group_image.replace("ps.jpg", "pl.jpg"),
                                          timeout=10, headers=JAV_HEADERS)
             if group_img_res.status_code == 200:
-                group["front_image"] = "data:image/jpeg;base64," + \
-                    base64.b64encode(group_img_res.content).decode('utf-8')
+                group_front, group_back = split_jacket(group_img_res.content)
+                group["front_image"] = group_front
+                if group_back:
+                    group["back_image"] = group_back
             else:
                 log.debug(
                     f"[Group] Bad image response ({group_img_res.status_code}) for <{group_image}>")
