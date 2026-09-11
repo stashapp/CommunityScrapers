@@ -1,4 +1,4 @@
-name: 'Vip4K'
+name: "Vip4K"
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -28,7 +28,7 @@ sceneByURL:
       - tutor4k.com
       - vip4k.com
     scraper: sceneScraper
-    queryURL: '{url}'
+    queryURL: "{url}"
     queryURLReplace:
       url:
         - regex: ^.+(/\w+/videos/\d{1,4})
@@ -62,4 +62,7 @@ xPathScrapers:
           postProcess:
             - map:
                 Sis: Sis.Porn
-# Last Updated December 18, 2025
+driver:
+  headers:
+    - Key: User-Agent
+      Value: stash-scraper/1.0
