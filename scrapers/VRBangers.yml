@@ -1,5 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
-
 name: "VRBangers"
 
 sceneByURL:
@@ -46,6 +44,8 @@ xPathScrapers:
   vrbScraper:
     common:
       $info: //div[starts-with(@class,"video-item__info ")]|//div[@class="single-video-info"]
+      $secondText: //div[contains(@class,"second-text")]/div//text()
+      $videoDescription: //div[contains(@class,"single-video-description")]/div//p
       $modelInfoItem: //div[contains(@class, "single-model-profile__info-wrapper")]//div[@class="single-model-profile__info-item"]|//div[contains(@class, "single-model-profile")]//li[@class="model-info-item"]
       $modelLinks: //div[contains(@class, "single-model-profile__actions")]
     scene:
@@ -56,11 +56,16 @@ xPathScrapers:
               - regex: (Gay|Trans) VR Porn Video$
                 with: ""
       Date: &dateAttr
-        selector: $info//span[text()="Release date:"]/following-sibling::span/text()|$info//span[text()="Release date:"]/following-sibling::text()
+        selector: //script[@type="application/ld+json"]
         postProcess:
-          - parseDate: Jan 2, 2006
+          - replace:
+              - regex: (?s).*"datePublished":"(\d{4}-\d{2}-\d{2}).*
+                with: $1
+              # drop the raw JSON rather than pass it through if the field is absent
+              - regex: (?s)^\{.*
+                with: ""
       Details: &detailsAttr
-        selector: //div[contains(@class,"second-text")]/div//text()|//div[contains(@class,"single-video-description")]/div//p
+        selector: $secondText | $videoDescription | //meta[@name="description"][not($secondText)][not($videoDescription)]/@content
         concat: "\n\n"
       Tags: &tagsAttr
         Name: //div[@data-testid="video-categories-list"]/a[contains(@href,"category/")]/text()|//div[@class="single-video-categories"]//a[contains(@href,"category/")]//text()
@@ -103,7 +108,8 @@ xPathScrapers:
               - regex: ^
                 with: "VRBangers - "
       Duration:
-        selector: $info//span[contains(text(),"Duration:")]/following-sibling::text()
+        # the value sits in a sibling <span>, not a bare text node
+        selector: $info//span[contains(text(),"Duration:")]/following-sibling::span/text()|$info//span[contains(text(),"Duration:")]/following-sibling::text()
         postProcess:
           - replace:
               - regex: \smin
