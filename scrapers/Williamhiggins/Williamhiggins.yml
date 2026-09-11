@@ -42,10 +42,12 @@ xPathScrapers:
                   with: ""
             - map:
                 AmbushMassage: "Ambush Massage"
-                CFNMEU: "CFNMEU"
+                CFNMeu: "CFNM EU"
+                CFNMEU: "CFNM EU"
                 MaleFeet4U: "MaleFeet4U"
-                STR8HELL: "STR8HELL"
-                SWNUDE: "SW NUDE"
+                STR8HELL: "Str8 Hell"
+                SWNude: "SWNude"
+                SWNUDE: "SWNude"
                 WilliamHiggins: "William Higgins"
 driver:
   cookies:
@@ -80,8 +82,11 @@ driver:
           Value: "1"
           Path: "/"
   useCDP: true
+  # These sites store age verification in localStorage instead
+  # of a cookie which is why we need CDP
   clicks:
     - xpath: //a[@class="cc-btn cc-dismiss"]
+    - xpath: //*[contains(@class,"adult_agree_btn")]
+      sleep: 3
     - xpath: //span[@class="more_info_field_video"]
       sleep: 5
-# Last Updated January 16, 2022
