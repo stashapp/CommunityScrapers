@@ -1,4 +1,4 @@
-Scraper has been tested on 2026-09-02
+Scraper has been tested on 2026-09-11
 
 | Studio              | URL                                                                                                       |
 | ------------------- | --------------------------------------------------------------------------------------------------------- |
@@ -49,3 +49,4 @@ Scraper has been tested on 2026-09-02
 | Redneck John        | https://redneckjohn.com/video/nigerian-bombshell-part-1/                                                  |
 | Unreal Porn         | https://unrealporn.com/tour/preview/hairdresser/                                                          |
 | Unusual People      | https://unusualpeople.com/video/award-n3-girl-model-with-record-pubic-hair-phenomena/                     |
+| xVirtual            | https://xvirtual.com/video/porndora-in-180/                                                               |
