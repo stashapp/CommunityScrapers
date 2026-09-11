@@ -5,11 +5,12 @@ sceneByURL:
       - x-art.com/videos/
       - x-art.com/members/videos/
     scraper: sceneScraper
+    # the members path needs a login but the same scenes are publically available
     queryURL: "{url}"
     queryURLReplace:
       url:
-        - regex: members
-          with: ""
+        - regex: /members/
+          with: /
 
 galleryByURL:
   - action: scrapeXPath
@@ -20,50 +21,43 @@ galleryByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $featuring: //h2[span[contains(.,'featuring')]]
+      $info: //div[contains(@class, "columns info")]
+      $featuring: //div[contains(@class, "columns info")]/h2[span[contains(., "featuring")]]
     scene:
-      Title: //div[@class="row info"]//h1
+      Title: //div[contains(@class, "vid-title")]/h1 | //div[@class="row info"]//h1
       Date:
         selector: $featuring/preceding-sibling::h2[1]
         postProcess:
           - parseDate: Jan 02, 2006
       Details:
-        # Studio is as inconsistent as ever: we'll grab all but the first element from the info div
-        # (because that's their vote system) and just regex out everything after the date element
-        # this is as close as we can get to preserving the whole description, regardless of whether
-        # they've used <p> or <h2> or <strong> or what have you
-        selector: (//div[contains(@class, "info")])[2]/*[position()>1]
+        selector: $info/p[normalize-space()]
         concat: "\n\n"
-        postProcess:
-          # Everything after the date is "featuring" and "download in 4k" stuff
-          - replace:
-              - regex: (?s)\w{3} \d{2}, \d{4}.*
-                with: ""
       Performers:
-        Name: $featuring/a
-      Image: //div[@class="flex-video widescreen"]/a/img/@src
+        # scenes with no credited model still render an empty link
+        Name: $featuring/a[normalize-space()]
+        URLs: $featuring/a[normalize-space()]/@href
+      Image: //div[contains(@class, "flex-video")]//img[not(contains(@class, "start"))]/@src
       Studio:
         Name:
           fixed: X-Art
 
   galleryScraper:
     common:
-      $gallery: //div[@class="small-12 medium-12 large-6 columns info"]
+      $info: //div[contains(@class, "columns info")][h2]
+      $models: //div[contains(@class, "columns info")]/h2[span[contains(., "Model")]]
     gallery:
-      Title: //h1
-      Details:
-        # Studio is inconsistent with their layout: sometimes the description is found in a p tag adjacent
-        # to the p element with id="desc"
-        selector: //p[@id="desc"]/../p
-        concat: "\n\n"
+      Title: $info/h1
       Date:
-        selector: //h2[span[contains(text(),'Date')]]/text()
+        selector: $info/h2[span[contains(., "Date")]]/text()
         postProcess:
           - parseDate: Jan 02, 2006
+      Details:
+        # the first paragraph is members-only download boilerplate
+        selector: $info//div[contains(@class, "description-format")]/p[normalize-space()][not(.//a[contains(@href, "/members/")])] | $info/p[@id="desc"]
+        concat: "\n\n"
+      Performers:
+        Name: $models/a
+        URLs: $models/a/@href
       Studio:
         Name:
           fixed: X-Art
-      Performers:
-        Name: $gallery/h2/a
-        URLs: $gallery/h2/a/@href
-# Last Updated September 17, 2025
