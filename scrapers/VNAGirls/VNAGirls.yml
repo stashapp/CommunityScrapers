@@ -1,0 +1,41 @@
+name: VNAGirls
+# requires: py_common
+# scrapes: Angelina Castro, Best of Teal Conrad, Blown By Rone, Bobbi Eden Live, Carmen Valentina, Charlee Chase, Deauxma Live, FoXXedUp, Fucked Feet, Girl Girl Mania, It's Cleo Live, Jelena Jensen, Julia Ann Live, Kimber Lee Live, Kink305, Maggie Green Live, MaxineX, Nikki Benz, Nina Kayy, POV Mania, Penny Pax Live, Rome Major, RubberDoll.net, Samantha Grace, Sara Jay, Sex My Wife, Shanda Fay, Siri Pornstar, Sophie Dee, Sunny Lane, Vicky at Home
+sceneByURL:
+  - action: script
+    url:
+      - angelinacastrolive.com/
+      - bestoftealconrad.com/
+      - blownbyrone.com/
+      - bobbiedenlive.com/
+      - carmenvalentina.com/
+      - charleechaselive.com/
+      - deauxmalive.com/
+      - foxxedup.com/
+      - fuckedfeet.com/
+      - girlgirlmania.com/
+      - itscleolive.com/
+      - jelenajensen.com/
+      - juliaannlive.com/
+      - kimberleelive.com/
+      - kink305.com/
+      - maggiegreenlive.com/
+      - maxinex.com/
+      - nikkibenz.com/
+      - ninakayy.com/
+      - pennypaxlive.com/
+      - povmania.com/
+      - romemajor.com/
+      - rubberdoll.net/
+      - samanthagrace.net/
+      - sarajay.com/
+      - sexmywife.com/
+      - shandafay.com/
+      - siripornstar.com/
+      - sophiedeelive.com/
+      - sunnylanelive.com/
+      - vickyathome.com/
+    script:
+      - python
+      - VNAGirls.py
+      - scene-by-url
