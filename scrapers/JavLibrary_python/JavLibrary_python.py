@@ -1,7 +1,9 @@
 """JAVLibrary python scraper"""
 import base64
 import json
+import os
 import re
+import socket
 import sys
 import threading
 import time
@@ -42,8 +44,29 @@ PROTECTION_CLOUDFLARE = False
 
 # Flaresolverr
 FLARESOLVERR_ENABLED = True
-FLARESOLVERR_URL = "http://localhost:8191/v1"
 FLARESOLVERR_TIMEOUT_MAX = 60000
+
+def _resolve_flaresolverr_url():
+    # When stash runs in docker, "localhost" is the stash container itself, so
+    # probe host.docker.internal as well. Override with the FLARESOLVERR_URL env var.
+    env_url = os.environ.get("FLARESOLVERR_URL")
+    if env_url:
+        return env_url
+    candidates = [
+        ("localhost", 8191),
+        ("flaresolverr", 8191),
+        ("host.docker.internal", 8191),
+    ]
+    for host, port in candidates:
+        try:
+            with socket.create_connection((host, port), timeout=2):
+                return f"http://{host}:{port}/v1"
+        except OSError:
+            continue
+    log.warning("No reachable FlareSolverr instance found, defaulting to localhost:8191")
+    return "http://localhost:8191/v1"
+
+FLARESOLVERR_URL = _resolve_flaresolverr_url()
 
 JAV_HEADERS = {
     "User-Agent":
@@ -427,8 +450,7 @@ def bypass_protection(url, retries=4):
     site = "javlibrary"
     url_n = url.replace(url_domain, site)
     try:
-        if FLARESOLVERR_ENABLED:             
-            url = FLARESOLVERR_URL
+        if FLARESOLVERR_ENABLED:
             headers = {"Content-Type": "application/json"}
             data = {
                 "cmd": "request.get",
