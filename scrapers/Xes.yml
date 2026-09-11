@@ -7,23 +7,46 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     common:
-      $hidden: //div[@class="details_hidden"]/table/tbody/tr
+      $facts: //*[@class="videoFact"]
     scene:
-      Title: //div[@class="video-page"]/div/h1
-      URLs: //link[@rel="canonical"]/@href
-      Details:
-        selector: //div[@class="video-article-wrap"]/article/p
-        concat: "\n\n"
-      Performers:
-        Name: $hidden/td[text()="Aktorzy:" or text()="Actors:"]/following-sibling::td/ul/li/a
-      Studio:
-        Name: //a[@class="producerLink"]
-      Date: //div[@class="details"]/table/tbody/tr/td[text()="Data dodania:" or text()="Add date:"]/following-sibling::td
-      Tags:
-        Name: $hidden/td[text()="Kategorie:" or text()="Categories:"]/following-sibling::td/ul/li/a
-      Image:
-        selector: //div[@class="video-type-select"]/picture/img/@src
+      Title: //h1[@id="videoPageTitle"]
+      URLs: //meta[@property="og:url"]/@content
+      Code:
+        selector: //title
         postProcess:
           - replace:
-              - regex: ^//
-                with: https://
+              - regex: ^.*Epizod (\d+).*$
+                with: $1
+              - regex: ^.*polskie filmy porno$
+                with: ""
+      # Duration: $facts[i[contains(@class, "fa-clock-o")]]//strong
+      Date:
+        selector: $facts[i[contains(@class, "fa-calendar")]]//strong
+        postProcess:
+          - parseDate: 02.01.2006
+      Details: //div[@class="videoDescription"]
+      Tags:
+        Name: //div[@class="videoTags"]/a
+      Performers:
+        Name: //a[contains(@class, "videoHeroPerformer")]/span
+        URLs:
+          selector: //a[contains(@class, "videoHeroPerformer")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://xes.pl/
+      Studio:
+        Name: $facts[i[contains(@class, "fa-video-camera")]]//strong
+        URLs:
+          selector: $facts[i[contains(@class, "fa-video-camera")]]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://xes.pl/
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              # og:image is the frame at playback resolution; org.jpg is the unscaled upload
+              - regex: /\d+\.jpg$
+                with: /org.jpg
