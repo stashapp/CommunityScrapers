@@ -42,12 +42,20 @@ jsonScrapers:
               - regex: T.+
                 with: ""
       Image: &image
-        selector: 0.prefix
+        selector: "0"
         postProcess:
-          - replace:
-              - regex: (.+)
-                # Replace 'text' with 'blank' for textless images
-                with: "https://covers.watch4beauty.com/$1/000-cover-wide-text_2560.jpg"
+          # Older issues do not have a wide-text image
+          - javascript: |
+              var issue = JSON.parse(value);
+              var files = issue.cover_files || {};
+              // swap "wide-text" for "wide-blank" to prefer textless covers
+              var name = files["wide-text"];
+              if (!name) {
+                var keys = Object.keys(files);
+                name = keys.length ? files[keys[0]] : null;
+              }
+              if (!issue.prefix || !name) return "";
+              return "https://covers.watch4beauty.com/" + issue.prefix + "/" + name + "_2560.jpg";
       Performers: &storiesPerformers
         Name:
           selector: 0.magazine_simple_title
@@ -114,4 +122,3 @@ jsonScrapers:
       Date: *updatesDate
       Studio: *studioAttr
       Tags: *updatesTags
-# Last Updated July 5, 2021

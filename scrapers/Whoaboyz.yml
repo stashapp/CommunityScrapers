@@ -1,44 +1,66 @@
 name: Whoaboyz
 sceneByURL:
-  - action: scrapeXPath
+  - action: scrapeJson
     url:
-      - whoaboyz.com/tour/
-    scraper: woahboyz
-sceneByName:
-  action: scrapeXPath
-  queryURL: https://www.whoaboyz.com/tour/search.php?query={}
-  scraper: sceneSearch
-sceneByQueryFragment:
-  action: scrapeXPath
-  queryURL: "{url}"
-  scraper: woahboyz
-xPathScrapers:
-  sceneSearch:
+      - whoaboyz.com/video/
+    queryURL: https://whoabucks.com/tour_api.php/content/sets?cms_area_id=9713561d-384a-47b3-b5cc-999f9b86d135&cms_block_id=100021&data_types=1&slug={url}
+    queryURLReplace:
+      url:
+        - regex: .+/video/([^/?#]+).*
+          with: $1
+    scraper: sceneScraper
+  # We can rewrite legacy URLs to find them byin the API
+  - action: scrapeJson
+    url:
+      - whoaboyz.com/tour/trailers/
+    queryURL: https://whoabucks.com/tour_api.php/content/sets?cms_area_id=9713561d-384a-47b3-b5cc-999f9b86d135&cms_block_id=100021&data_types=1&slug={url}
+    queryURLReplace:
+      url:
+        - regex: .+/tour/trailers/([^/?#]+)\.html.*
+          with: $1
+        - regex: -{2,}
+          with: "-"
+    scraper: sceneScraper
+jsonScrapers:
+  sceneScraper:
     scene:
-      Title: //div[@class="item-wrapper"]//h3
-      URL: //div[@class="item-wrapper"]//h3/a/@href
-      Image:
-        selector: //div[@class="preview"]//img/@src
+      Title:
+        selector: sets.0.name
         postProcess:
           - replace:
-              - regex: ^
-                with: https://www.whoaboyz.com/tour/
-  woahboyz:
-    common:
-      $scene: //div[@class="trailer"]
-    scene:
-      Title: $scene/h2
-      Details: $scene/h2/following-sibling::p
-      URLs: //link[@rel="canonical"]/@href
-      Date:
-        selector: $scene/p[@class="date-trailer"]/span
+              - regex: \s+
+                with: " "
+      Details: sets.0.description
+      Date: sets.0.added_nice
+      Code: sets.0.slug
+      Image:
+        selector: sets.0.preview_formatted.thumb
         postProcess:
-          - parseDate: 01/02/2006
-      Image: //meta[@property="og:image"]/@content
+          - javascript: |
+              var thumbs = JSON.parse(value);
+              var best = null;
+              var bestWidth = -1;
+              for (var size in thumbs) {
+                var entry = (thumbs[size] || [])[0];
+                var width = parseInt(size.split("-")[0], 10);
+                if (entry && entry.fileuri && width > bestWidth) {
+                  bestWidth = width;
+                  best = entry;
+                }
+              }
+              if (!best) return "";
+              return "https://whoabucks.com" + best.fileuri +
+                (best.signature ? "?" + best.signature : "");
+      Tags:
+        Name: sets.0.data_types.#(shortname=="category").data_values.#.name
+      Performers:
+        Name: sets.0.data_types.#(shortname=="models").data_values.#.name
       Studio:
         Name:
           fixed: Whoaboyz
-      Tags:
-        Name: $scene/p[@class="tags"]//a
-      Performers:
-        Name: $scene/p[@class="casting"]//a
+driver:
+  headers:
+    - Key: X-NATS-cms-area-id
+      Value: 9713561d-384a-47b3-b5cc-999f9b86d135
+    - Key: X-nats-entity-decode
+      Value: "1"
