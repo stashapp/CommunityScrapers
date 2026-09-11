@@ -1,0 +1,65 @@
+name: WTFPass
+# scrapes: College Fuck Parties, Dolls Porn, Hard Fuck Girls, HD Massage Porn, HD Sex 18, Her Sex Debut, Meet Suck and Fuck, Panda Fuck, Pickup Fuck, Porn Weekends, Private Sex Tapes, Public Sex Adventures, The Art Porn
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - wtfpass.com/videos/
+      - collegefuckparties.com/videos/
+      - dollsporn.com/videos/
+      - hardfuckgirls.com/videos/
+      - hardfucktales.com/videos/
+      - hdmassageporn.com/videos/
+      - hdsex18.com/videos/
+      - hersexdebut.com/videos/
+      - meetsuckandfuck.com/videos/
+      - mypickupgirls.com/videos/
+      - pandafuck.com/videos/
+      - pickupfuck.com/videos/
+      - pornweekends.com/videos/
+      - privatesextapes.com/videos/
+      - publicsexadventures.com/videos/
+      - studentsexparties.com/videos/
+      - theartporn.com/videos/
+    # the site 404s on /videos/<id>/<slug> without the trailing slash
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ([^/])$
+          with: ${1}/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[contains(@class, "video-info-tabs")]//div[@class="video-page-tab-info"]
+    scene:
+      Title: //h2[@class="title big"]
+      URLs: //link[@rel="canonical"]/@href
+      Details: //meta[@property="og:description"]/@content
+      Code:
+        selector: //link[@rel="canonical"]/@href
+        postProcess:
+          - replace:
+              - regex: .*/videos/\d+/([a-z]{2,5}\d[a-z0-9]*)(_[^/]*)?/?$
+                with: ${1}
+              - regex: ^https?://.*
+                with: ""
+      Image:
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - replace:
+              - regex: _tr\.mp4
+                with: ""
+      Studio:
+        Name:
+          selector: $info//span[@class="site"]/a
+          postProcess:
+            # legacy mirror domains still show their old brand for the same scenes
+            - map:
+                Student Sex Parties: College Fuck Parties
+                Hard Fuck Tales: Hard Fuck Girls
+                My Pickup Girls: Pickup Fuck
+      Tags:
+        Name: $info//div[@class="data-row"]//a
+      Performers:
+        Name: $info//div[contains(@class, "data-actress")]/a
+        URLs: $info//div[contains(@class, "data-actress")]/a/@href
