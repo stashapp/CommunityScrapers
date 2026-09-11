@@ -4,6 +4,15 @@ sceneByURL:
     url:
       - whornyfilms.com/videos/
     scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - whornyfilms.com/blog/
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: .+/blog/\d{4}/\d{2}/\d{2}/([^/?#]+).*
+          with: https://whornyfilms.com/videos/$1
+    scraper: sceneScraper
 
 xPathScrapers:
   sceneScraper:
