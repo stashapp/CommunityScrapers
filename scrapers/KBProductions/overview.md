@@ -96,3 +96,5 @@ Scraper has been tested on 2026-09-06
 | Yes Girlz             | https://yesgirlz.com/scenes/pink-lingerie-pussy-play-and-fuck-fest                                                            |
 | Yummy Couple          | https://yummycouple.com/videos/gym-hottie-wants-all-your-cum                                                                  |
 | Z-Filmz               | https://z-filmz-originals.com/videos/morea-black-gets-cum-on-her-glasses                                                      |
+| Heaven                | https://tour.purgatoryx.com/episodes/genie-wishes-e1                                                                          |
+| Hell                  | https://tour.purgatoryx.com/episodes/kinky-in-law                                                                             |

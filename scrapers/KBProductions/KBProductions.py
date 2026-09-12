@@ -1,12 +1,12 @@
 import json
 import re
-import requests
 import sys
 import urllib.parse
-from unicodedata import normalize
 from html.parser import HTMLParser
+from unicodedata import normalize
 
-import py_common.log as log
+import requests
+from py_common import log
 from py_common.types import ScrapedMovie, ScrapedPerformer, ScrapedScene, ScrapedStudio
 from py_common.util import dig, guess_nationality, replace_all, scraper_args
 
@@ -83,6 +83,7 @@ studio_map = {
     "poundedpetite.com": "Pounded Petite",
     "povperv.com": "POV Perv",
     "premium-nickmarxx.com": "Nick Marxx",
+    "purgatoryx.com": "PurgatoryX",
     "queercrush.com": "QueerCrush",
     "realbikinigirls.com": "Real Bikini Girls",
     "red-xxx.com": "Red-XXX",
@@ -294,9 +295,7 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     if eye_color := raw_performer.get("eyes"):
         performer["eye_color"] = eye_color
 
-    if ethnicity := raw_performer.get("ethnicity"):
-        performer["ethnicity"] = ethnicity
-    elif ethnicity := raw_performer.get("race"):
+    if ethnicity := dig(raw_performer, ("ethnicity", "race")):
         performer["ethnicity"] = ethnicity
 
     if (height_ft := raw_performer.get("height")) and (
@@ -351,16 +350,15 @@ def to_scraped_performer(raw_performer: dict) -> ScrapedPerformer:
     if country := raw_performer.get("born"):
         performer["country"] = guess_nationality(country)
 
-    if twitter := raw_performer.get("wwitter", "").removeprefix("@"):
-        performer["twitter"] = f"https://twitter.com/{twitter}"
+    if twitter := raw_performer.get("twitter", "").removeprefix("@"):
+        performer["urls"].append(f"https://twitter.com/{twitter}")
 
     if instagram := raw_performer.get("instagram", "").removeprefix("@"):
-        performer["instagram"] = f"https://www.instagram.com/{instagram}"
+        performer["urls"].append(f"https://www.instagram.com/{instagram}")
 
     if "orientation" in raw_performer:
         performer["tags"].append({"name": raw_performer["orientation"]})
     if "sexual positions" in raw_performer:
-        log.debug("positions!")
         for x in raw_performer["sexual positions"].split(" "):
             performer["tags"].append({"name": x})
     if "body" in raw_performer:
@@ -399,7 +397,7 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
     scene: ScrapedScene = {}
 
     if title := raw_scene.get("title"):
-        scene["title"] = title
+        scene["title"] = title.strip()
     if date := raw_scene.get("publish_date"):
         scene["date"] = date[:10].replace("/", "-")
     if details := raw_scene.get("description"):
@@ -422,6 +420,12 @@ def to_scraped_scene_from_content(raw_scene: dict) -> ScrapedScene:
         scene["tags"] = [{"name": x} for x in tags]
 
     scene["studio"] = get_studio(site)
+    # PurgatoryX splits its catalogue into "Heaven" and "Hell" series, tagged
+    # as such; StashDB models them as child studios of PurgatoryX
+    if site == "purgatoryx.com" and (
+        series := next((t for t in raw_scene.get("tags", []) if t in ("Heaven", "Hell")), None)
+    ):
+        scene["studio"] = {"name": series, "parent": get_studio(site)}
 
     # trailer seems to give the best quality image (2024/08/28)
     # trailer_screencap is what's shown on most sites
@@ -475,15 +479,7 @@ def to_scraped_scene_from_video(raw_scene: dict, page_url: str) -> ScrapedScene:
     if scene_id := dig(raw_scene, ("id", "_id")):
         scene["code"] = str(scene_id)
     if models := raw_scene.get("performers"):
-        performers = []
-        for x in models:
-            performer = {"name": x["name"], "image": x["avatar"]}
-            if username := x.get("username"):
-                performer["twitter"] = username
-            if gender := x.get("gender"):
-                performer["gender"] = gender.capitalize()
-            performers.append(performer)
-        scene["performers"] = performers
+        scene["performers"] = [ScrapedPerformer(name=x["name"], image=x["avatar"]) for x in models]
     if tags := raw_scene.get("categories"):
         scene["tags"] = [{"name": x["name"]} for x in tags]
 
@@ -508,7 +504,10 @@ def scrape_scene(url: str) -> ScrapedScene | None:
         scene = to_scraped_scene_from_video(video, url)
     scene["urls"] = [url]
 
-    if playlist := dig(props, "playlist", "data", 0):
+    # some sites nest the playlist under "data", others (PurgatoryX) put it at the top level
+    if playlist := dig(props, "playlist", "data", 0) or (
+        dig(props, "playlist", "title") and props["playlist"]
+    ):
         scene["movies"] = [to_scraped_movie(playlist)]
 
     return scene

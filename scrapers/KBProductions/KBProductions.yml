@@ -1,6 +1,6 @@
 name: KB Productions
 # requires: py_common
-# scrapes: 2 Girls 1 Camera, AD4X, All Anal, Alt Erotic, Amazing Films, Anal Jesse, Anal Only, Beddable Boys, Bemefi, Benefit Monkey, Best Bareback, Big Gulp Girls, BJ Raw, Black Bull Challenge, Bopping Babes, Cannon Productions, Collective Corruption, Come Inside, CosplayXGirls, Cougar Season, Creampie Thais, Darkshade, Deepthroat Sirens, DickHDDaily, Dire Desires, Dirty Auditions, Divine-DD, DoggVision, Downblouse Jerk, DripDrip, Edward James, Emo Twinks, Exposed Emos, Facials Forever, FantasyPOV, FreakMob Hardcore, FreakMob Media, Gogo Bar Auditions, GoGo World Porn, Got Filled, HardWerk, Hoby Buchanon, Homo Emo, Homo Scene, Inked POV, Inserted, JAV888, JavHub, Jizz Addiction, Joe Schmoe Videos, La BellaDX, Lady Sonia, Legendary X, LezKey, Lil D's Playhouse, Lingerie Tales, Lollipop Twinks, LucidFlix, Luke CooperX, Macho Factory, MadBros, MariskaX, Mean Feet Fetish, Milflicious, Nasty Daddy, Nick Marxx, Nikki Zee, Nylon Perv, Nympho, NYSeed, PassionPOV, Pervect, Pounded Petite, POV Perv, QueerCrush, Real Bikini Girls, Red-XXX, Ricky's Room, S3XUS, Seska, Severe Sex Films, SexTapes, Sexy Modern Bull, She's Brand New, SheHerGirls, SIDECHICK, Suck This Dick, Swallowed, The ArtemiXXX, Top Web Models, ToughLoveX, Trashy Never Classy, True Anal, Twink Light, TWM Classics, TWM Interviews, Upskirt Jerk, VRHush, Wank It Now, Xful, XXX Tryout, Yes Girlz, Yummy Couple, Z-Filmz
+# scrapes: 2 Girls 1 Camera, AD4X, All Anal, Alt Erotic, Amazing Films, Anal Jesse, Anal Only, BJ Raw, Beddable Boys, Bemefi, Benefit Monkey, Best Bareback, Big Gulp Girls, Black Bull Challenge, Bopping Babes, Cannon Productions, Collective Corruption, Come Inside, CosplayXGirls, Cougar Season, Creampie Thais, Darkshade, Deepthroat Sirens, DickHDDaily, Dire Desires, Dirty Auditions, Divine-DD, DoggVision, Downblouse Jerk, DripDrip, Edward James, Emo Twinks, Exposed Emos, Facials Forever, FantasyPOV, FreakMob Hardcore, FreakMob Media, GoGo World Porn, Gogo Bar Auditions, Got Filled, HardWerk, Hoby Buchanon, Homo Emo, Homo Scene, Inked POV, Inserted, JAV888, JavHub, Jizz Addiction, Joe Schmoe Videos, La BellaDX, Lady Sonia, Legendary X, LezKey, Lil D's Playhouse, Lingerie Tales, Lollipop Twinks, LucidFlix, Luke CooperX, Macho Factory, MadBros, MariskaX, Mean Feet Fetish, Milflicious, NYSeed, Nasty Daddy, Nick Marxx, Nikki Zee, Nylon Perv, Nympho, POV Perv, PassionPOV, Pervect, Pounded Petite, PurgatoryX, QueerCrush, Real Bikini Girls, Red-XXX, Ricky's Room, S3XUS, SIDECHICK, Seska, Severe Sex Films, SexTapes, Sexy Modern Bull, She's Brand New, SheHerGirls, Suck This Dick, Swallowed, TWM Classics, TWM Interviews, The ArtemiXXX, Top Web Models, ToughLoveX, Trashy Never Classy, True Anal, Twink Light, Upskirt Jerk, VRHush, Wank It Now, XXX Tryout, Xful, Yes Girlz, Yummy Couple, Z-Filmz
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -78,6 +78,8 @@ sceneByURL:
       - nyseedxxx.com/video
       - passionpov.com/videos/
       - pervect.com/scenes
+      - purgatoryx.com/episodes
+      - purgatoryx.com/view
       - queercrush.com/videos
       - realbikinigirls.com/videos
       - red-xxx.com/scenes
@@ -200,7 +202,13 @@ performerByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //div[@class="trailer"]//img/@alt
+      Title:
+        # the trailer image no longer carries the title; the h1 is "<date> - <title>"
+        selector: //div[@class="trailer"]//img[@alt != ""]/@alt | //h1/text()[1]
+        postProcess:
+          - replace:
+              - regex: ^[A-Z][a-z]+\s+\d{1,2},\s+\d{4}\s+-\s+
+                with: ""
       Details: //div[@class="videoContainer"]//p[not(contains(@class,'vjs-no-js'))]/text()
       Performers:
         Name: //h2[contains(text(),'Models')]/a/text()
@@ -211,7 +219,7 @@ xPathScrapers:
               - regex: ^(https:)?
                 with: "https:"
       Date:
-        selector: //h1
+        selector: //h1/text()[1]
         postProcess:
           - replace:
               - regex: ^([^-]+).+
