@@ -1,4 +1,4 @@
-name: famegirls
+name: Famegirls
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -15,30 +15,29 @@ xPathScrapers:
         selector: //meta[@property="video:release_date"]/@content
         postProcess:
           - parseDate: 2006-01-02T15:04:05Z
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Image: //meta[@property="og:image"]/@content
       Studio:
         Name:
-          fixed: famegirls
+          fixed: Famegirls
       Tags:
         Name: //meta[@property="video:tag"]/@content
       Performers:
         Name: $performer//h3
-        Image: $performer//img/@src
+        Images: $performer//img/@src
         URLs: $performer//a[@class="btn"]/@href
-        HairColor: $performer//div[contains(text(), "Hair:")]/span
-        EyeColor: $performer//div[contains(text(), "Eyes:")]/span
+        HairColor: $performer//div[contains(text(), "Hair:")]/span[. != "N/A"]
+        EyeColor: $performer//div[contains(text(), "Eyes:")]/span[. != "N/A"]
         Height:
-          selector: $performer//div[contains(text(), "Height:")]/span
+          selector: $performer//div[contains(text(), "Height:")]/span[. != "N/A"]
           postProcess:
             - replace:
                 - regex: (\d+).*
                   with: $1
         Weight:
-          selector: $performer//div[contains(text(), "Weight:")]/span
+          selector: $performer//div[contains(text(), "Weight:")]/span[. != "N/A"]
           postProcess:
             - replace:
                 - regex: (\d+).*
                   with: $1
-        Measurements: $performer//div[contains(text(), "Body:")]/span
-# Last Updated September 17, 2025
+        Measurements: $performer//div[contains(text(), "Body:")]/span[. != "N/A"]
