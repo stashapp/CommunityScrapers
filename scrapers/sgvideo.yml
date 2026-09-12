@@ -1,24 +1,64 @@
 name: "SG Video"
+# scrapes: FETISH KING, SG Video
 sceneByURL:
   - action: scrapeXPath
     url:
-      - sg-video.com
+      - fetishking.com/details/
+      - sg-video.com/details/
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
+    common:
+      $texts: //div[@class="descriptions"]//div[@class="texts"]
     scene:
       Studio:
         Name:
-          fixed: SG Video
-      Title:
-        selector: //div//h2/text()
-      Details:
-        selector: //div[@class="descriptions"]//div[@class="texts"]//p[1]/text()
+          # og:image is the only absolute same-host URL on the page
+          selector: //meta[@property="og:image"]/@content
+          postProcess:
+            - replace:
+                - regex: ^https?://(?:www\.)?([^/]+)/.*$
+                  with: $1
+            - map:
+                fetishking.com: FETISH KING
+                sg-video.com: SG Video
+      # the h2 also holds a <small> with the running time
+      Title: //div//h2/text()
+      # Duration: //div//h2/small
+      Date:
+        # no date is rendered. The picture path holds two dates: the upload
+        # folder (year/month) and a timestamp in the filename; the filename can
+        # belong to a later re-upload, so it is only trusted when it falls in the
+        # folder's month, otherwise the date stays at month precision
+        selector: //meta[@property="og:image"]/@content
+        postProcess:
+          - javascript: |
+              var folder = value.match(/\/pictures\/(\d{4})\/(\d{2})\//);
+              if (!folder) return "";
+              var month = folder[1] + "-" + folder[2];
+              var stamp = value.match(/_(\d{4}-\d{2}-\d{2})_/);
+              return stamp && stamp[1].slice(0, 7) === month ? stamp[1] : month;
+      Details: $texts//p[1]
       Tags:
-        Name:
-          selector: //div[@class="descriptions"]//div[@class="texts"]//p[2]//a/text()
-      Image:
-        selector: //div[@class="descriptions"]//div[@id="thumbs"][@class="video fk"]//img
+        Name: $texts//a[starts-with(@href, "/results?q=")]
+      # only some scenes carry a "Pornstars:" line
       Performers:
-        Name: //div//h2//a/text()
-# Last Updated May 18, 2025
+        Name: $texts//a[starts-with(@href, "/pornstars/")]
+        URLs:
+          # profile links are relative; borrow the host from og:image
+          selector: //meta[@property="og:image"]/@content | $texts//a[starts-with(@href, "/pornstars/")]/@href
+          concat: "|"
+          postProcess:
+            - javascript: |
+                var parts = value.split("|");
+                var host = "";
+                var urls = [];
+                parts.forEach(function (p) {
+                  var m = p.match(/^(https?:\/\/[^\/]+)\/uploads\//);
+                  if (m) host = m[1];
+                  else if (p.indexOf("/pornstars/") === 0) urls.push(p);
+                });
+                return urls.map(function (u) { return host + u; }).join("|");
+          split: "|"
+      # the thumbnail links to the full-size picture
+      Image: //div[@class="descriptions"]//div[@id="thumbs"]/a/@href
