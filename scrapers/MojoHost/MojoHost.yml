@@ -86,22 +86,25 @@ xPathScrapers:
       Tags: &tags
         Name: //li[contains(text(), "Tags:") or contains(text(), "Categories:")]/following-sibling::li/a/text()
       Image: &image
+        # some tours still render the update_thumb img (first one; the preview strip
+        # reuses the class), others now build the player from an inline script
         selector: >-
           //base/@href |
-          //img[contains(@class,"update_thumb")][@src0_1x]/@src0_1x |
-          //img[contains(@class,"update_thumb")][@src0_2x]/@src0_2x |
-          //img[contains(@class,"update_thumb")][@src0_3x]/@src0_3x |
-          //img[contains(@class,"update_thumb")][@src0_4x]/@src0_4x
+          (//img[contains(@class,"update_thumb")][@src0_1x])[1]/@src0_1x |
+          //script[contains(., "src0_1x")]
         concat: __SEP__
         postProcess:
           - replace:
-              - regex: __SEP__.+__SEP__
-                with: ""
+              # script branch: reduce the script text to the src0_1x value
+              - regex: (?s)^(.*?)__SEP__.*?src0_1x="([^"?]+).*$
+                with: ${1}__SEP__${2}
               - regex: __SEP__
                 with: ""
-              - regex: ^(https?://[^/]+)/https?://[^/]+(/[^?]+).*
+              # absolute CDN src: drop the base path and the CDN host, keep the asset path
+              - regex: ^(https?://[^/]+)/(?:[^/]+/)*https?://[^/]+(/[^?]+).*
                 with: $1$2
-              - regex: /(tour|explore|creeper)//?(?:tour|explore|creeper)/
+              # relative src repeats the base's tour segment
+              - regex: /(tour|explore|creeper|v3)//?(?:tour|explore|creeper|v3)/
                 with: /$1/
               - regex: (:?-[1-4]x)?\.jpg$
                 with: "-full.jpg"
