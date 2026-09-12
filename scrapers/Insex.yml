@@ -1,0 +1,91 @@
+name: insex
+# scrapes: HardTied, Infernal Restraints, Insex, Realtime Bondage, Renderfiend, Sensual Pain, Sexually Broken, TopGrl
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - hardtied.com/ht
+      - infernalrestraints.com/ir
+      - insex.com/is
+      - insexondemand.com/iod
+      - realtimebondage.com/rtb
+      - renderfiend.com/rf
+      - sexuallybroken.com/sb
+      - topgrl.com/tg
+    scraper: sceneScraper
+    queryURL: "{url}"
+    # All sites now redirect to insex.com
+    queryURLReplace:
+      url:
+        - regex: ^https?://(?:www\.)?[a-z]+\.com/[a-z]+/play\.php\?id=
+          with: https://www.insex.com/is/play.php?id=
+  # Sensual Pain is the same network but runs its own site rather than the hub
+  - action: scrapeXPath
+    url:
+      - sensualpain.com/Media.php
+      - sensualpain.com/media.php
+    scraper: sensualPainScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $info: //div[@class="is-size-6 has-text-white-ter"][span[@class="tag is-dark"]]
+    scene:
+      Title:
+        selector: //div[@class="is-size-5 has-text-weight-bold"]
+        postProcess:
+          - replace:
+              - regex: ^(\[Archive\] )+
+                with: ""
+      Date: $info/span[@class="tag is-dark"][1]
+      Details:
+        selector: //div[@class="is-size-7 has-text-white-ter"]/preceding-sibling::div[1]
+        concat: "\n\n"
+      Performers:
+        Name: $info/a[@class="tag is-dark"]
+      Studio:
+        Name:
+          selector: $info/span[@class="tag is-dark"][2]
+          postProcess:
+            - map:
+                hardtied: HardTied
+                infernalrestraints: Infernal Restraints
+                insex: Insex
+                realtimebondage: Realtime Bondage
+                renderfiend: Renderfiend
+                sexuallybroken: Sexually Broken
+                topgrl: TopGrl
+      # older scenes have no trailer, and with it no poster
+      Image: //video-js[@id="videoPlayer"]/@poster
+  sensualPainScraper:
+    scene:
+      Title: //h1[@class="media-title"]
+      URLs: //meta[@property="og:url"]/@content
+      Date:
+        selector: //script[@type="application/ld+json"][contains(., "datePublished")]
+        postProcess:
+          - replace:
+              - regex: (?s)^.*?"datePublished":"(\d{4}-\d{2}-\d{2}).*$
+                with: $1
+          - parseDate: "2006-01-02"
+      Details:
+        selector: //p[@class="media-description"]/text()
+        concat: "\n\n"
+      Tags:
+        # performer names are filed as ordinary tags; the page has no separate credit
+        Name: //a[contains(@class, "media-chip-tag")]
+      Studio:
+        Name:
+          fixed: Sensual Pain
+      Image: //meta[@property="og:image"]/@content
+driver:
+  cookies:
+    - CookieURL: "https://insex.com"
+      Cookies:
+        - Name: "consent"
+          Value: "yes"
+          Domain: "insex.com"
+          Path: "/"
+        # https://discord.com/channels/559159668438728723/651418567475986432/1420972996918775849
+        - Name: "verified"
+          Value: "cec0cd62118bca2d9d9ec747c2e5a190"
+          Domain: "insex.com"
+          Path: "/"
