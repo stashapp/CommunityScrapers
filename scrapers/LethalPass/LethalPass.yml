@@ -1,0 +1,36 @@
+name: Lethal Pass
+# scrapes: Asian Chicks Like Black Dicks, Big Juicy Juggs, Big League Squirters, Cash For Chunkers, Cougars Crave Kittens, Couples Bang The Babysitter, Fuck My Mommy and Me, Gloryhole Admissions, Huge Cock Gloryholes, Jaw Dropping Asses, Lethal Cougars, Lethal Creampies, Lethal Interracial, My Stepdaughter Ate My Ass, Natural Born Swallowers, Seduced By A Real Lesbian, Spin On My Cock, Your Mom Tossed My Salad
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lethalpass.com
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $source: //div[@class="pdSRC"]
+    scene:
+      Title: //div[@class="title"]/h1/text() | $source//a[starts-with(@href, "/dvds/")]
+      Date:
+        selector: //div[@class="views"]/span
+        postProcess:
+          - replace:
+              - regex: "Added "
+                with: ""
+          - parseDate: 2 January 2006
+      Details: //div[@class="description"]/p
+      Performers:
+        Name: //a[@class="model"]
+      Groups:
+        Name: $source//a[starts-with(@href, "/dvds/")]
+      Tags:
+        Name: //a[@class="cat"]
+      Image: //a[@class="noplayer"]//@src
+      Studio:
+        Name: $source//img/@alt | //img[@alt="Lethal Pass"][not(//div[@class="pdSRC"]//img)]/@alt
+        URLs:
+          selector: $source//a[starts-with(@href, "/sites/")]/@href
+          postProcess:
+            - replace:
+                - regex: ^
+                  with: https://www.lethalpass.com
