@@ -1,21 +1,22 @@
 name: Perfect Gonzo
+# scrapes: All Internal, Ass Traffic, Cum For Cover, Fist Flush, Give Me Pink, Milf Thing, Perfect Gonzo, Prime Cups, Pure POV, Sapphic Erotica, Sapphix, Sperm Swap, Tamed Teens
 sceneByURL:
-  - action: script
-    script:
-      - python
-      - PerfectGonzo.py
+  - action: scrapeXPath
     url:
       - allinternal.com/movies/
       - asstraffic.com/movies/
       - cumforcover.com/movies/
       - fistflush.com/movies/
+      - givemepink.com/movies/
       - milfthing.com/movies/
       - perfectgonzo.com/movies/
       - primecups.com/movies/
       - purepov.com/movies/
+      - sapphicerotica.com/movies/
+      - sapphix.com/movies/
       - spermswap.com/movies/
       - tamedteens.com/movies/
-
+    scraper: sceneScraper
 performerByURL:
   - action: scrapeXPath
     url:
@@ -23,20 +24,74 @@ performerByURL:
       - asstraffic.com/models/
       - cumforcover.com/models/
       - fistflush.com/models/
+      - givemepink.com/models/
       - milfthing.com/models/
       - perfectgonzo.com/models/
       - primecups.com/models/
       - purepov.com/models/
+      - sapphicerotica.com/models/
+      - sapphix.com/models/
       - spermswap.com/models/
       - tamedteens.com/models/
     scraper: performerScraper
-
 xPathScrapers:
+  sceneScraper:
+    scene:
+      Title: //div[@class="container"]//h2
+      Date:
+        selector: //div[@class="container"]//span[contains(., "Added")]
+        postProcess:
+          - replace:
+              - regex: "Added|,"
+                with: ""
+          - parseDate: January 2 2006
+      Details: //p[@class="mg-md"]
+      Performers:
+        Name: //div[contains(h4, "Featured model")]//a
+      Tags:
+        Name:
+          selector: //div[contains(h4, "Tags:")]/node()[self::a or self::text()[normalize-space()]]
+          concat: "|"
+          postProcess:
+            - javascript: |
+                var categories = ["Art & Addons", "Body Type", "Breasts", "Butt", "Clothes", "Cumshot", "Ethnicity", "Eyes", "Face Type", "Fetish", "Fluids", "Furniture", "Hair", "Hair color", "Location", "Male - Cum", "Male - Dick size", "Male Models", "Position", "Pubic Hair", "Pussy/Labia", "Sex", "Skin tone", "Tease", "Toys"];
+                var category = "";
+                var tags = [];
+                value.split("|").forEach(function (item) {
+                  item = item.trim();
+                  if (!item) return;
+                  if (categories.indexOf(item) >= 0) { category = item; return; }
+                  tags.push(category ? category + ": " + item : item);
+                });
+                return tags.join("|");
+          split: "|"
+      Studio:
+        Name:
+          selector: //link[contains(@href, "favicon_")]/@href
+          postProcess:
+            - replace:
+                - regex: ^.*favicon_([a-z.]+)\.(?:png|ico).*$
+                  with: $1
+            - map:
+                allinternal.com: All Internal
+                asstraffic.com: Ass Traffic
+                cumforcover.com: Cum For Cover
+                fistflush.com: Fist Flush
+                givemepink.com: Give Me Pink
+                milfthing.com: Milf Thing
+                perfectgonzo.com: Perfect Gonzo
+                primecups.com: Prime Cups
+                purepov.com: Pure POV
+                sapphicerotica.com: Sapphic Erotica
+                sapphix.com: Sapphix
+                spermswap.com: Sperm Swap
+                tamedteens.com: Tamed Teens
+      Image: //video[@id="video"]/@poster | //div[@id="video-hero"]//img/@src | //div[@class="col-sm-12"]//img/@src
   performerScraper:
     performer:
       Name: //h3[@class="mg-md"]
       Country:
-        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Nationality:' or text()= 'Country:']/following-sibling::text()[1]
+        selector: //div[@class="col-md-4 modeldetail"]/strong[text() = "Nationality:" or text() = "Country:"]/following-sibling::text()[1]
         postProcess:
           - map:
               Austrian: Austria
@@ -53,12 +108,10 @@ xPathScrapers:
               Swiss: Switzerland
               Ukrainian: Ukraine
       Ethnicity:
-        selector: //div[@class='col-md-4 modeldetail']/strong[text() = 'Ethnicity:']/following-sibling::text()[1]
+        selector: //div[@class="col-md-4 modeldetail"]/strong[text() = "Ethnicity:"]/following-sibling::text()[1]
         postProcess:
           - map:
               caucasian: white
       Gender:
         fixed: Female
-      Image:
-        selector: //div[@class='col-md-8 bigmodelpic']/img/@src
-# Last Updated October 11, 2021
+      Images: //div[@class="col-md-8 bigmodelpic"]/img/@src
