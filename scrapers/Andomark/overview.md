@@ -46,6 +46,7 @@ Scraper has been tested on 2026-09-08
 | Melanie Hicks XXX        | https://melaniehicksxxx.com/updates/Melanies-Complete-Stamina-Lesson-From-Handjob-to-Full-Sex-with-Stepsons-Best-Friend.html | oldStyle                       |
 | Monger In Asia           | https://mongerinasia.com/scenes/mongerinasiasts096-kik_vids.html                                                             | newStyle                       |
 | Ms Paris and Friends     | https://www.msparisandfriends.com/tour/updates/Fucking-My-Sister-in-law.html                                                 | oldStyle                       |
+| MuscleGallery            | https://musclegallery.com/updates/Danny-Hindalov-Shower-Time.html                                                            | oldStyle                       |
 | OldSexyGrannies          | https://oldsexygrannies.com/updates/Unicorn-Confessions-Cowgirl-Fantasy.html                                                 | oldStyle                       |
 | Only BBC                 | https://onlybbc.com/tour/updates/Brit-Kylie-Jonesing-For-Big-Black-Cock.html                                                 | oldStyle                       |
 | PAWGED                   | https://pawged.com/tour/updates/PAWG-Poses-for-Prick.html                                                                    | oldStyle                       |
