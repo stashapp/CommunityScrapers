@@ -1,0 +1,54 @@
+name: Monster Partners
+# scrapes: Exploited Secretaries, LipstickBJ, Pantyjobs
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - lipstickbj.com/scenes/
+      - pantyjobs.com/scenes/
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - exploitedsecretaries.com/video/
+    scraper: exploitedSecretariesScraper
+xPathScrapers:
+  sceneScraper:
+    common:
+      $post: &post //div[@class="post-entry"]
+    scene:
+      Title:
+        selector: //meta[@property="og:title"]/@content
+        postProcess:
+          - replace:
+              - regex: \s*\|.*$
+                with: ""
+              - regex: \s+Panty Fetish$
+                with: ""
+      URLs: &urls //meta[@property="og:url"]/@content
+      Performers:
+        Name: $post/h2
+      Details: &details
+        selector: $post//p[not(starts-with(., "Members get full access"))]
+        concat: "\n\n"
+      Tags: &tags
+        Name: $post//a[@rel="tag"]
+      Image: &image //meta[@property="og:image"]/@content
+      Studio: &studio
+        Name: //meta[@property="og:site_name"]/@content
+  exploitedSecretariesScraper:
+    common:
+      $post: *post
+    scene:
+      # here the h2 is the scene title and the h1 is "<Performer> IS A SEXY SECRETARY"
+      Title: $post/h2
+      URLs: *urls
+      Performers:
+        Name:
+          selector: //section[@class="page-heading"]//h1
+          postProcess:
+            - replace:
+                - regex: \s+IS A SEXY SECRETARY$
+                  with: ""
+      Details: *details
+      Tags: *tags
+      Image: *image
+      Studio: *studio
