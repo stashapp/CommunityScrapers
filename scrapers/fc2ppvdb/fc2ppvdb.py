@@ -1,147 +1,202 @@
 import json
 import re
+import requests
 import sys
-import os
+import time
 
+from pathlib import Path
 from py_common import log
-from py_common.types import ScrapedScene
+from py_common.types import ScrapedScene, ScrapedPerformer
 from py_common.util import scraper_args, dig
 from py_common.config import get_config
+from py_common.cache import cache_to_disk
+from py_common.ratelimit import get_limiter_session
 
-ensure_deps = ["requests"]
+HOSTNAME = "fc2cmadb.com"
+BASE_URL = f"https://{HOSTNAME}"
 
-import requests
-
-FLARESOLVERR_URL = os.environ.get("FLARESOLVERR_URL", "http://localhost:8191/v1")
-
-# fc2ppvdb_session has to be manually defined and passed in
-# but is **extremely** long lived (token from 5mos ago still valid????)
 config = get_config(
     default="""
-# F12 -> Application -> Cookies
-
-fc2ppvdb_session =
-age_pass =
-xsrf_token = 
+fc2cmadb_session =
+scrape_scene_image = True
+unique_performer_name = False
+disambiguation_prefix = fc2cmadb-
 """
 )
 
-def check_login(text):
-    if 'https://fc2ppvdb.com/login' in text.lower():
-        log.error("Login prompt detected. Check cookies and try again.")
-        log.error("fc2ppv_session ends with %3D, age_pass with %3D%3D")
-        log.debug(f"age_pass cookie: {config['age_pass']}")
-        log.debug(f"fc2ppvdb_session cookie: {config['fc2ppvdb_session']}")
-        log.debug(f"XSRF-TOKEN cookie: {config['xsrf_token']}")
-        return True
-    return False
+def get_valid_image_url(url: str) -> str:
+    return url if (url and url.startswith(('http://', 'https://')) and not url.endswith("no-image.jpg")) else ""
 
-def get_flaresolverr_soln(url):
-    response = requests.post(FLARESOLVERR_URL, json={
-        "cmd": "request.get",
-        "url": url,
-        "cookies": [
-            { "name": "age_pass", "value": config["age_pass"] },
-            { "name": "fc2ppvdb_session", "value": config["fc2ppvdb_session"] },
-            { "name": "XSRF-TOKEN", "value": config["xsrf_token"] },
-        ],
-        "session_ttl_minutes": 5, # destroy session after 5 minutes
-    })
-    if response.status_code != 200:
-        raise Exception(f"FlareSolverr request failed with status code {response.status_code}: {response.text}")
-    return response.json().get("solution")
+def get_fresh_inertia_version() -> str:
+    # hacky - we can't force refresh get_inertia_version() or
+    # have access to the filename, so just hope this is the file
+    cache_file = Path(__file__).parent / "cache.json"
+    if cache_file.exists():
+        cache_file.unlink()
+    return get_inertia_version()
 
-def scene_from_url(url: str) -> ScrapedScene:
-    # if no config, throw error
-    if not config["age_pass"] or not config["fc2ppvdb_session"] or not config["xsrf_token"]:
-        log.error("Missing required cookies in config. Please update config and try again.")
-        log.debug(f"age_pass cookie: {config['age_pass']}")
-        log.debug(f"fc2ppvdb_session cookie: {config['fc2ppvdb_session']}")
-        log.debug(f"XSRF-TOKEN cookie: {config['xsrf_token']}")
-        return {}
-
-    log.debug("getting fresh cloudflare cookies")
-    # get solution
-    solution = get_flaresolverr_soln(url)
-
-    # set cookies from solution
+@cache_to_disk(ttl=86400)
+def get_inertia_version() -> str:
     session = requests.Session()
-    # disable proxies (ASN blocked)
-    session.proxies = {}
-    session.trust_env = False
-    # end disable proxies
-    soln_cookies = solution.get("cookies", [])
-    for cookie in soln_cookies:
-        session.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'], path=cookie['path'])
-    session.headers.update({"User-Agent": solution.get("userAgent")})
+    response = session.get(BASE_URL)
+    # get inertia version from the app script
+    pattern = r'<script[^>]*data-page="app"[^>]*>(.*?)</script>'
+    match = re.search(pattern, response.text, re.DOTALL)
+    if not match:
+        log.error("Can't extract app data.")
+        print("{}")
+        sys.exit(1)
+    json_content = match.group(1)
+    return json.loads(json_content).get("version")
 
-    # add get solution cookies
-    session.cookies.set("age_pass", config["age_pass"], domain="fc2ppvdb.com", path="/")
-    session.cookies.set("fc2ppvdb_session", config["fc2ppvdb_session"], domain="fc2ppvdb.com", path="/")
-    session.cookies.set("XSRF-TOKEN", config["xsrf_token"], domain="fc2ppvdb.com", path="/")
+def get_payload(session, url: str, headers=None):
+    log.debug(f"Fetching {url}")
+    # fill inertia headers to get json instead of html
+    session.headers.update({
+        "X-Inertia": "true",
+        "X-Inertia-Version": get_inertia_version(),
+        "X-Requested-With": "XMLHttpRequest",
+        "Referer": url,
+        "Cache-Control": "no-cache"
+    } | headers or {})
+    resp = session.get(url)
+    if resp.status_code == 409:
+        session.headers.update({ "X-Inertia-Version": get_fresh_inertia_version() })
+        resp = session.get(url)
+        log.debug("Refreshed inertia version")
 
-    # parse url to hit json endpoint, has to be done immediately
-    article_id = url.rstrip("/").split("/")[-1]
-    article_info_url = f"https://fc2ppvdb.com/articles/article-info?videoid={article_id}"
-
-    log.debug("cookies set, hitting article info endpoint")
-    # scrape main page, then info page with session cookies
-    init = session.get(url)
-    # check for CF ASN block
-    if init.status_code == 403 and "1005" in init.text:
-        log.error("Cloudflare ASN block detected. This scraper will not work from this IP address.")
-        return {}
-    if check_login(init.text):
-        return {}
-    # get actual info afterwards
     try:
-        info_res = session.get(article_info_url)
-        if check_login(info_res.text):
-            return {}
-        resp_json = info_res.json()
+        resp_json = resp.json()
+        user = resp_json.get("props", {}).get("auth", {}).get("user")
+        if user is None or user.get("id") is None:
+            log.error("Not logged in, please provide fresh fc2cmadb_session cookie")
+            sys.exit(1)
+        else:
+            log.debug(f"Logged in with ID: {user.get('id')}")
     except json.JSONDecodeError:
-        log.error("Invalid JSON response from article info endpoint. Try again.")
-        return {}
+        log.error("Invalid JSON response.")
+        log.debug(resp.text)
+        print("{}")
+        sys.exit(1)
 
-    info = resp_json.get("article", {})
+    if resp_json.get("component", "") == "Error":
+        log.error("API returned error with status: " + str(resp_json.get("props").get("status")))
+        log.debug(resp.text)
+        print("{}")
+        sys.exit(1)
+    return resp_json
+
+def scene_from_url(session, url: str) -> ScrapedScene:
+    resp_json = get_payload(session, url, {
+        "X-Inertia-Partial-Component": "Articles/Show",
+        "X-Inertia-Partial-Data": "article,actresses,auth"
+    })
+    article = resp_json.get("props").get('article')
+    # actresses may be returned as list or dict
+    actresses_data = resp_json.get("props", {}).get('actresses', [])
+    if isinstance(actresses_data, dict):
+        actresses = list(actresses_data.values())
+    else:
+        actresses = actresses_data
+
+    if not article:
+        log.error(f"Can't get article data from {url}")
+        log.debug(resp_json)
+        print("{}")
+        sys.exit(1)
 
     scene: ScrapedScene = {}
-    # images - all removed, even the uncensored ones
-    scene["title"] = info.get("title", "").strip()
-    scene["code"] = "FC2-PPV-" + str(info.get("video_id", ""))
-    scene["date"] = info.get("release_date", "")
-    scene["studio"] = { "name": dig(info, "writer", "name") }
-    scene["tags"] = [{ "name": tag.get("name", "").strip() } for tag in info.get("tags", [])]
-    scene["performers"] = [{ "name": performer.get("name", "").strip() } for performer in info.get("actresses", [])]
+    scene["title"] = article.get("title", "").strip()
+    scene["code"] = "FC2-PPV-" + str(article.get("video_id", ""))
+    scene["date"] = article.get("release_date", "")
+    scene["studio"] = { "name": dig(article, "writer", "name") }
+    scene["tags"] = [{ "name": tag.get("name", "").strip() } for tag in article.get("tags", [])]
     scene["urls"] = [url]
+    if config['scrape_scene_image']:
+        scene["image"] = get_valid_image_url(article.get("image_url", ""))
+
+    scene["performers"] = []
+    for actress in actresses:
+        scene["performers"].append(get_performer_from_actress(actress))
+
     return scene
 
+def get_performer_from_actress(actress) -> ScrapedPerformer:
+    performer_name = actress.get("name", "").strip()
+    if config['unique_performer_name']:
+        performer_name = f"{performer_name}_{actress['id']}"
+
+    if config['disambiguation_prefix']:
+        disambiguation = f"{config['disambiguation_prefix']}{actress['id']}"
+    else:
+        disambiguation = ""
+
+    performer: ScrapedPerformer = {
+        "name": performer_name,
+        "disambiguation": disambiguation,
+        "urls": [ f"{BASE_URL}/actresses/" + str(actress.get("id")) ],
+        "gender": "female",
+        "image": get_valid_image_url(actress.get("image_url", ""))
+    }
+    return performer
+
+def performer_from_url(session, url: str) -> ScrapedPerformer:
+    resp_json = get_payload(session, url, {
+        "X-Inertia-Partial-Component": "Actresses/Show",
+        "X-Inertia-Partial-Data": "actress,auth"
+    })
+
+    actress = resp_json.get("props").get('actress')
+
+    if not actress:
+        log.error(f"Can't get actress data from {url}")
+        log.debug(resp_json)
+        print("{}")
+        sys.exit(1)
+
+    return get_performer_from_actress(actress)
+
 def url_from_frag(files) -> str:
-    filename = files[0].get("path") if files else None
-    basename = os.path.basename(filename) if filename else None
-    if not basename:
-        return ""
-    code = re.search(r"(\d{5,})", basename)
+    filename = Path(files[0].get("path", ""))
+    code = re.search(r"(\d{5,})", filename.name)
     match = code.group(1) if code else None
     if match:
-        return f"https://fc2ppvdb.com/articles/{match}"
-    return ""
+        return f"{BASE_URL}/articles/{match}"
+    log.debug(f"No 5+ digit ID found in filename {filename}")
+    return None
 
 if __name__ == "__main__":
     op, args = scraper_args()
+
+    # if no config, throw error
+    if not config["fc2cmadb_session"]:
+        log.error("Missing required cookie in config. Please update config and try again.")
+        log.debug(f"fc2cmadb_session cookie: {config['fc2cmadb_session']}")
+        print("{}")
+        sys.exit(1)
+
+    session = get_limiter_session(per_second = 1, per_minute = 30, per_hour = 250)
+    session.cookies.set( "ageVerified", "true", domain=HOSTNAME, path="/" )
+    session.cookies.set( "fc2cmadb-session", config["fc2cmadb_session"], domain=f".{HOSTNAME}", path="/" )
+
     match op, args:
         case "scene-by-url", {"url": url} if url:
-            result = scene_from_url(url)
+            result = scene_from_url(session, url)
         case "scene-by-fragment" | "scene-by-query-fragment", args:
             files = args.get("files", [])
             url = url_from_frag(files)
             if url:
-                result = scene_from_url(url)
+                result = scene_from_url(session, url)
             else:
                 log.error("Could not extract article ID from filename")
+                print("{}")
                 sys.exit(1)
+        case "performer-by-url", {"url": url} if url:
+             result = performer_from_url(session, url)
+
         case _:
             log.error(f"Operation: {op}, arguments: {json.dumps(args)}")
+            print("{}")
             sys.exit(1)
 
     print(json.dumps(result))

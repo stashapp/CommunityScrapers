@@ -1,9 +1,9 @@
 name: fc2ppvdb
 
 sceneByURL:
-  - url:
-      - fc2ppvdb.com/articles/
-    action: script
+  - action: script
+    url:
+      - fc2cmadb.com/articles/
     script:
       - python
       - fc2ppvdb.py
@@ -16,4 +16,11 @@ sceneByFragment:
     - fc2ppvdb.py
     - scene-by-fragment
 
-# Last Updated April 16, 2026
+performerByURL:
+  - action: script
+    url:
+      - fc2cmadb.com/actresses/
+    script:
+      - python
+      - fc2ppvdb.py
+      - performer-by-url
