@@ -1,4 +1,3 @@
-# yaml-language-server: $schema=../validator/scraper.schema.json
 name: AmateurAllure
 galleryByURL:
   - action: scrapeXPath
@@ -24,8 +23,42 @@ xPathScrapers:
       $logo: //div[@id="logo"]//a/@href
       $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
     gallery:
-      Title: &titleSel $title
-      Code: &id //div[@class="rating_box" and $excludeUpdates]/@data-id
+      Title: &titleSel
+        selector: $title
+        postProcess: &decensor
+          - javascript: |
+              const words = [
+                "cum", "ass", "head", "heads", "heading", "cock", "cocks", "suck", "sucks",
+                "sucked", "sucker", "sucking", "fuck", "fucks", "fucked", "fucking", "load",
+                "loads", "loading", "blow", "blowjob", "blowjobs", "ball", "balls", "lick",
+                "licking", "deep", "oral", "orally", "porn", "pornstar", "pornstars", "teen",
+                "tits", "titty", "sperm", "spermcam", "pussy", "cream", "creamy", "creampie",
+                "creampies", "facial", "facials", "throat", "throats", "shaft", "dick", "dicks",
+                "nuts", "meat", "pole", "juices", "jerking", "cumshot", "cumshots", "handjob",
+                "handjobs", "cowgirl", "spinner", "spinners", "threesome", "threesomes",
+                "fingers", "fingering", "penetrate", "missionary", "doggystyle", "doggiestyle",
+                "deepthroat", "deepthroats", "deepthroater", "deepthroating", "orgasm",
+                "orgasms", "milf", "slut", "sluts", "deep throat", "deep throats",
+                "deep throater", "deep throating",
+              ];
+              const mask = (w) =>
+                w.replace(/./g, (c, i) =>
+                  c === " " || i === 0 || i === w.length - 1 || (w.length >= 7 && i % 3 === 0) ? c : "-",
+                );
+              const recase = (m, w) =>
+                /^[A-Z][^a-z]*[A-Z][^a-z]*$/.test(m)
+                  ? w.toUpperCase()
+                  : /^[A-Z]/.test(m)
+                    ? w.replace(/(^|\s)([a-z])/g, (_, sp, c) => sp + c.toUpperCase())
+                    : w;
+              // "head" and "hard" share the mask "h--d": pick "hard" only from context
+              value = value
+                .replace(/\b((?:and|me|so|rock|is|get|gets|getting|still|really|very|too) )(h)--d\b/gi, (_, pre, h) => pre + recase(h, "hard"))
+                .replace(/\b(h)--d(?= (?:pounding|f--k--g|fucking|from|&|and (?:deep|fast)))/gi, (_, h) => recase(h, "hard"));
+              for (const w of words.slice().sort((a, b) => b.length - a.length)) {
+                value = value.replace(new RegExp("(^|[^\\w-])" + mask(w) + "(?![\\w-])", "gi"), (m, pre) => pre + recase(m.slice(pre.length), w));
+              }
+              return value;
       Date: &dateAttr
         selector: //div[@class="backgroundcolor_info"]//div[@class='cell update_date']
         postProcess:
@@ -34,9 +67,13 @@ xPathScrapers:
               - regex: "Added:"
                 with: ""
           - parseDate: 01/02/2006
-      Details: &detailsSel //span[@class='update_description']
+      Details: &detailsSel
+        selector: //span[@class='update_description']
+        postProcess: *decensor
       Tags: &tagsAttr
-        Name: //span[@class='update_tags']//a/text()
+        Name:
+          selector: //span[@class='update_tags']//a
+          postProcess: *decensor
       Performers: &performersAttr
         Name: //div[@class='backgroundcolor_info']//span[@class='update_models']//a
       Studio: &studioAttr
@@ -44,7 +81,6 @@ xPathScrapers:
           fixed: Amateur Allure
     scene:
       Title: *titleSel
-      Code: *id
       Date: *dateAttr
       Details: *detailsSel
       Tags: *tagsAttr
@@ -85,13 +121,9 @@ xPathScrapers:
       $scene: //div[contains(@class, "gallery_info")]
       $excludeUpdates: not(ancestor::*[contains(@class, "category_listing_block")])
     gallery:
-      Title: &classicTitle //title
-      Code: &classicCode
-        selector: //script[contains(., "setid:")]
-        postProcess:
-          - replace:
-              - regex: .*setid:"(\d+).*
-                with: $1
+      Title: &classicTitle
+        selector: //title
+        postProcess: *decensor
       Date: &classicDate # Some sites hide their release date in a comment
         selector: //*[(contains(@class, "availdate") or contains(@class, "update_date")) and contains(., "/")]
         postProcess:
@@ -99,21 +131,23 @@ xPathScrapers:
               - regex: ".*?([0-9]{2}/[0-9]{2}/[0-9]{4}).*"
                 with: $1
           - parseDate: 01/02/2006
-      Details: &classicDetails $scene//span[@class="update_description"]
+      Details: &classicDetails
+        selector: $scene//span[@class="update_description"]
+        postProcess: *decensor
       Performers: &classicPerformers
         Name: $scene//span[@class="update_models" and $excludeUpdates]/a
       Tags: &classicTags
-        Name: $scene//span[contains(@class, "update_tags")]/a
+        Name:
+          selector: $scene//span[contains(@class, "update_tags")]/a
+          postProcess: *decensor
       Studio: &classicStudio
         Name:
           fixed: Amateur Allure Classics
     scene:
       Title: *classicTitle
-      Code: *classicCode
       Date: *classicDate
       Details: *classicDetails
       Performers: *classicPerformers
       Tags: *classicTags
       Studio: *classicStudio
       Image: //meta[@property="og:image"]/@content
-# Last Updated December 22, 2025
