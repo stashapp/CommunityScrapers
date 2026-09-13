@@ -1,9 +1,15 @@
 name: TeenMegaWorld
-# scrapes: Anal-Angels, Anal-Beauty, Beauty-Angels, Beauty4K, Creampie-Angels, Dirty-Coach, Dirty-Doctor, FirstBGG, FuckStudies, Gag-n-Gape, NoBoring, OhMyHoles, Old-n-Young, RawCouples, SoloTeenGirls, Teen Mega World, TeenSexMania, TeenSexMovs, TmwPOV, TmwVRnet, TrickyMasseur, X-Angels
+# scrapes: Anal-Angels, Anal-Beauty, Beauty-Angels, Beauty4K, Creampie-Angels, Dirty-Coach, Dirty-Doctor, FirstBGG, FuckStudies, Gag-n-Gape, NoBoring, OhMyHoles, Old-n-Young, RawCouples, SoloTeenGirls, Teen Mega World, TeenSexMania, TeenSexMovs, TmwPOV, TmwVRnet, TrickyMasseur, VogoV, X-Angels
 
 sceneByURL:
   - action: scrapeXPath
     scraper: sceneScraper
+    # vogov.com's pre-2020 /videos/<slug>/ URLs live on as /trailers/<slug>.html
+    queryURL: "{url}"
+    queryURLReplace:
+      url:
+        - regex: ^(https?://(?:www\.)?vogov\.com)/videos/([^/?]+)/?.*$
+          with: ${1}/trailers/${2}.html
     url: &urls
       - anal-angels.com
       - anal-beauty.com
@@ -26,6 +32,7 @@ sceneByURL:
       - tmwpov.com
       - tmwvrnet.com
       - trickymasseur.com
+      - vogov.com
       - x-angels.com
       # Behind paywall - Scenes for these sites can be scraped from the public https://teenmegaworld.net/ site
       # - 18firstsex.com

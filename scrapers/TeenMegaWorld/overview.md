@@ -24,3 +24,4 @@ Scraper has been tested on 2026-09-09
 | TmwVRnet        | https://tmwvrnet.com/trailers/Girl-In-A-Dark-Lingerie.html           |
 | TrickyMasseur   | https://trickymasseur.com/trailers/Ludmila-17677.html                |
 | X-Angels        | https://x-angels.com/trailers/Sandra-17980.html                      |
+| VogoV           | https://vogov.com/trailers/Wet-Pussy-Seduction.html                  |
