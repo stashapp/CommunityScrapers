@@ -3,6 +3,7 @@ galleryByURL:
   - action: scrapeXPath
     url: &urls
       - cherrypimps.com/trailers/
+      - wildoncam.com/trailers/
     scraper: galleryScraper
 sceneByURL:
   - action: scrapeXPath
@@ -15,31 +16,22 @@ xPathScrapers:
       Title: &titleSel //div[@class='item-title']/h1/text()
       Studio: &studioAttr
         Name:
-          selector: //a[contains(@href, 'cherrypimps.com/series/')]/@title
+          selector: //a[contains(@href, 'cherrypimps.com/series/')]/@title | //base[contains(@href, 'wildoncam.com')]/@href
           postProcess:
             - map:
-                CherryPimps : "Cherry Pimps"
-                Alt         : "Alt" 
-                BCM         : "BCM.XXX"
-                Bush        : "Bush"
-                Busted      : "Busted"
-                Cheese      : "Cheese"
-                Confessions : "Confessions.XXX"
-                Cucked      : "Cucked.XXX"
-                Drilled     : "Drilled.XXX"
-                Ebony xxx   : "Ebony"
-                Exotic      : "Exotic"
-                Femme       : "Femme"
-                Fresh       : "Fresh"
-                Ginger      : "Ginger"
-                Milf xxx    : "MILF"
-                Pegged      : "Pegged"
-                Petite      : "Petite.XXX"
-                Taboo       : "Taboo"
-                Cherry spot : "Cherry Spot"
-                Archives    : "CherryPimps Archives"
-                Wild on cam : "Wild on Cam"
-                COTM        : "Cherry of the Month"
+                https://wildoncam.com/: "Wild on Cam"
+                CherryPimps: "Cherry Pimps"
+                BCM: "BCM.XXX"
+                Confessions: "Confessions.XXX"
+                Cucked: "Cucked.XXX"
+                Drilled: "Drilled.XXX"
+                Ebony xxx: "Ebony"
+                Milf xxx: "MILF"
+                Petite: "Petite.XXX"
+                Cherry spot: "Cherry Spot"
+                Archives: "CherryPimps Archives"
+                Wild on cam: "Wild on Cam"
+                COTM: "Cherry of the Month"
       Date: &dateAttr
         selector: //i[@class='fa fa-calendar']/following-sibling::strong/following-sibling::text()
         postProcess:
@@ -48,8 +40,7 @@ xPathScrapers:
         Name: //div[@class='update-info-block models-list-thumbs']//span/text()
       Details: &detailsSel //h4[normalize-space('Description:')]/following-sibling::p/text()
       Tags: &tagsAttr
-        Name:
-          selector: //ul[@class='tags']/li/a/text()
+        Name: //ul[@class='tags']/li/a/text()
 
   sceneScraper:
     scene:
@@ -59,7 +50,4 @@ xPathScrapers:
       Performers: *perfAttr
       Details: *detailsSel
       Tags: *tagsAttr
-      Image:
-        selector: //div[@class="player-thumb"]/img/@src0_1x
-        
-# Last Updated January 19, 2024
+      Image: //div[@class="player-thumb"]/img/@src0_1x
