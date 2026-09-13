@@ -70,12 +70,7 @@ xPathScrapers:
                   with: ""
       Performers:
         Name: //div[@class="models"]//a
-      Code:
-        selector: //a[contains(@id,"cart-item")]/@id
-        postProcess:
-          - replace:
-              - regex: "^cart-item-"
-                with: ""
+      URLs: //meta[@property="og:url"]/@content
       Studio:
         Name:
           selector: //div[@class="logo"]/a/@href
