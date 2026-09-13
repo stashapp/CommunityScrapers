@@ -9,16 +9,15 @@ sceneByURL:
 xPathScrapers:
   sceneScraper:
     scene:
-      Title:
-        selector: //h1
+      Title: //h1
       Details: //div[@class="videocontent"]/p
       Image:
         selector: //base/@href | //script[contains(.,'poster')]
         concat: __SEP__
         postProcess:
           - replace:
-              - regex: ^.*(https://[^/]+).+src0_.x="([^"]+).+
-                with: $1$2
+              - regex: ^.*(https://[^/]+).+src0_1x="([^"]+)-1x\.jpg".+
+                with: ${1}${2}-full.jpg
       Date:
         selector: //div[@class="videodetails"]/p[@class="date"]
         postProcess:
@@ -27,7 +26,7 @@ xPathScrapers:
                 with: $1
           - parseDate: 01/02/2006
       Tags:
-        Name: //div[@class="videodetails"]//a[contains(@href,"categories")]/text()
+        Name: //div[@class="videodetails"]//a[contains(@href,"categories")]
       Performers:
         Name:
           selector: //p[@class="modelname"]/comment()
@@ -52,4 +51,3 @@ xPathScrapers:
                 akiralane: Akira Lane
                 akiralanebound: Akira Lane Bound
                 pantyhoselane: Pantyhose Lane
-# Last Updated April 1, 2024
