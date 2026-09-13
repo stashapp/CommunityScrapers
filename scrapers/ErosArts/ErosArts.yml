@@ -1,0 +1,61 @@
+name: Eros Arts
+# scrapes: Jerk Off Instructions, SexPOV, Stepmom Fun, Taboo Handjobs, Taboo POV
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - jerkoffinstructions.com/videos/
+      - sexpov.com/videos/
+      - stepmomfun.com/videos/
+      - taboohandjobs.com/videos/
+      - taboopov.com/videos/
+    scraper: sceneScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      # the title div also holds an empty favourite-star span
+      Title: //div[@class="title"]/text()
+      Performers:
+        Name: //a[contains(@href, "/models/")]
+      Details:
+        selector: //div[@class="title"]/following-sibling::p
+        concat: "\n\n"
+      Tags:
+        Name: //a[contains(@href, "/keywords/")]
+      Image:
+        # the cover src is relative; borrow the host from the site's own footer links
+        selector: //a[contains(@href, "/contact.php")]/@href | //img[@class="photo"]/@src
+        concat: "|"
+        postProcess:
+          - javascript: |
+              var host = "";
+              var src = "";
+              value.split("|").forEach(function (p) {
+                var m = p.match(/^(https?:\/\/[^\/]+)\/contact\.php/);
+                if (m) host = m[1];
+                else if (p.indexOf("/") === 0) src = p;
+              });
+              return src ? host + src : "";
+      Studio:
+        Name:
+          # every page title starts with the site's own name
+          selector: //title
+          postProcess:
+            - replace:
+                - regex: ^\s*(.*?)\s+-\s+Selected Video.*$
+                  with: $1
+            - map:
+                Jerkoff Instructions: Jerk Off Instructions
+                TabooPOV: Taboo POV
+      Date:
+        selector: //td[contains(., "Date Added:")]/text()
+        concat: " "
+        postProcess:
+          - replace:
+              - regex: .*Date Added:\s(\d{2}/\d{2}/\d{4}).*
+                with: $1
+          - parseDate: 01/02/2006
+driver:
+  headers:
+    # the sites 302 every tour page to an age gate unless a Referer is sent
+    - Key: Referer
+      Value: https://example.com
