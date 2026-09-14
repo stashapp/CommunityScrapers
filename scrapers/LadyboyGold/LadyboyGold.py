@@ -1,67 +1,61 @@
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime
 import json
 import re
 import sys
 import traceback
-from typing import Any
+from collections.abc import Callable, Mapping
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import date, datetime
+from typing import Any, TypeVar
 
 import requests
-
-import py_common.log as log
+from py_common import log
 from py_common.cache import cache_to_disk
-from py_common.types import Gender, ScrapedGallery, ScrapedPerformer, ScrapedScene, ScrapedStudio
-from py_common.util import guess_nationality, scraper_args
+from py_common.types import (
+    Gender,
+    ScrapedGallery,
+    ScrapedPerformer,
+    ScrapedScene,
+    ScrapedStudio,
+)
+from py_common.util import dig, guess_nationality, scraper_args
+
+NETWORK = "Ladyboy Gold"
 
 CONFIG = {
     "ladyboycrush": {
         "cms_area_id": "74175374-c756-4ae9-97b2-e011512a1521",
         "studio_name": "Ladyboy Crush",
-        "sets": {
-            "cms_block_id": "106093"
-        }
+        "cms_block_id": "106093",
     },
     "ladyboyglamour": {
         "cms_area_id": "60f34ef8-3a0e-44ae-8afc-5795ee75eeff",
         "studio_name": "Ladyboy Glamour",
-        "sets": {
-            "cms_block_id": "109727"
-        }
+        "cms_block_id": "109727",
     },
     "ladyboygold": {
         "cms_area_id": "cd9a5600-5cda-4ed0-b356-f62af1887d96", # from homepage call to /config.json
-        "studio_name": "LadyboyGold",
-        "sets": {
-            "cms_block_id": "114793" # from scene page call to /sets, query param
-        }
+        "studio_name": "Ladyboy Gold",
+        "cms_block_id": "114793", # from scene page call to /sets, query param
     },
     "ladyboypussy": {
         "cms_area_id": "3b74725d-ad01-45a1-8186-ac6be1bc1661",
         "studio_name": "Ladyboy Pussy",
-        "sets": {
-            "cms_block_id": "112975"
-        }
+        "cms_block_id": "112975",
     },
     "ladyboysfuckedbareback": {
         "cms_area_id": "126f96ec-ffdc-4f4b-a459-c9a2e78b9b67",
         "studio_name": "Ladyboys Fucked Bareback",
-        "sets": {
-            "cms_block_id": "105724"
-        }
+        "cms_block_id": "105724",
     },
     "ladyboyvice": {
         "cms_area_id": "c594b28c-ab09-44da-9166-0a332d33469f",
         "studio_name": "Ladyboy Vice",
-        "sets": {
-            "cms_block_id": "101951"
-        }
+        "cms_block_id": "101951",
     },
     "tsraw": {
         "cms_area_id": "cc6bd0ac-a417-47d1-9868-7855b25986e5",
         "studio_name": "TSRaw",
-        "sets": {
-            "cms_block_id": "102013"
-        }
+        "cms_block_id": "102013",
     },
 }
 GENDER_MAP: dict[str, Gender] = {
@@ -132,12 +126,42 @@ def get_cdn_servers(domain: str) -> dict[str, Any]:
     _result = res.json()
     return _result['servers']
 
-def last_value(d: dict[str, Any]) -> Any:
-    """Get the last value in a dictionary."""
-    if not d:
+def image_url(cdn_servers: dict[str, Any], renditions: Mapping[str, Any]) -> str | None:
+    if not renditions:
         return None
-    last_key = list(d.keys())[-1]
-    return d[last_key]
+    def rendition_width(size: str) -> int:
+        width = size.partition("-")[0]
+        return int(width) if width.isdigit() else 0
+    if not (image := dig(renditions, max(renditions, key=rendition_width), 0)):
+        return None
+    if not (cdn := dig(cdn_servers, image["cms_content_server_id"], "settings", "url")):
+        return None
+    return f"{cdn.rstrip('/')}{image['fileuri']}?{image['signature']}"
+
+
+T = TypeVar("T")
+
+
+def gather_by_domain(domains: list[str], fetch: Callable[[str], list[T]]) -> list[T]:
+    """Run `fetch` against every domain in parallel, skipping any that fail"""
+    gathered: list[T] = []
+    with ThreadPoolExecutor() as executor:
+        futures = {executor.submit(fetch, domain): domain for domain in domains}
+        for future in as_completed(futures):
+            try:
+                gathered.extend(future.result())
+            except Exception as e:  # noqa: BLE001
+                # one domain being down or changing shape must not sink the rest
+                log.error(f"Error processing domain {futures[future]}: {e}")
+                log.debug(traceback.format_exc())
+    return gathered
+
+
+def studio_with_parent(name: str) -> ScrapedStudio:
+    """Every site here is a Ladyboy Gold brand, so only the flagship has no parent"""
+    if name == NETWORK:
+        return {"name": name}
+    return {"name": name, "parent": {"name": NETWORK}}
 
 def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -> ScrapedScene:
     scene: ScrapedScene = {}
@@ -163,11 +187,8 @@ def parse_set_as_scene(domain: str, cms_set: Any, cdn_servers: dict[str, Any]) -
         log.trace(f"date from cms_set['added_nice']: {added_nice}")
         scene["date"] = added_nice
 
-    # get image
-    if cms_set_image := last_value(cms_set["preview_formatted"]["thumb"])[0]:
-        # get cdn url
-        if cdn_url := cdn_url_for_server_id(cdn_servers, cms_set_image["cms_content_server_id"]):
-            scene["image"] = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
+    if image := image_url(cdn_servers, dig(cms_set, "preview_formatted", "thumb", default={})):
+        scene["image"] = image
 
     if main_website := extract_names(cms_set, "MainWebsite"):
         scene["urls"] = [f"https://members.{main_website[0].lower()}/video/{cms_set['slug']}"]
@@ -211,14 +232,10 @@ def parse_set_as_gallery(domain: str, cms_set: Any, cdn_servers: dict[str, Any])
         log.trace(f"date from cms_set['added_nice']: {added_nice}")
         gallery["date"] = added_nice
 
-    # get image
-    if cms_set_image := last_value(cms_set["preview_formatted"]["thumb"])[0]:
-        # get cdn url
-        if cdn_url := cdn_url_for_server_id(cdn_servers, cms_set_image["cms_content_server_id"]):
-            # gallery doesn't have an image or cover field, but it is useful to know which is
-            # the cover image for the gallery, so we will log it out here
-            cover_image_url = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
-            log.debug(f"Cover image URL for gallery '{gallery.get('title')}': {cover_image_url}")
+    # ScrapedGallery has no image/cover field, but it's useful to know which
+    # one this set's cover would be, so just log it rather than dropping it
+    if cover := image_url(cdn_servers, dig(cms_set, "preview_formatted", "thumb", default={})):
+        log.debug(f"Cover image URL for gallery '{gallery.get('title')}': {cover}")
 
     if main_website := extract_names(cms_set, "MainWebsite"):
         gallery["urls"] = [f"https://members.{main_website[0].lower()}/photo/{cms_set['slug']}"]
@@ -238,29 +255,21 @@ def parse_set_as_gallery(domain: str, cms_set: Any, cdn_servers: dict[str, Any])
     return gallery
 
 
-def calculate_dob(age: int, born_str: str, added: datetime) -> str | None:
+def calculate_dob(age: int, born_str: str, added: date) -> str | None:
+    """Infer a date of birth from an age and a "May 25" birthday, as of `added`"""
     try:
         birth_year = added.year - age
-        birthday = datetime.strptime(born_str, "%B %d")
+        # a "May 25" birthday has no time of day, let alone a timezone
+        birthday = datetime.strptime(born_str, "%B %d").date()  # noqa: DTZ007
 
-        # check if birthday has occurred yet in added year
-        birthday_in_added_year = datetime(added.year, birthday.month, birthday.day)
-
-        if added < birthday_in_added_year:
+        # the model was still a year younger if the birthday hadn't come round yet
+        if added < birthday.replace(year=added.year):
             birth_year -= 1
 
-        date_of_birth = birthday.replace(year=birth_year)
-        return date_of_birth.strftime("%Y-%m-%d")
+        return birthday.replace(year=birth_year).strftime("%Y-%m-%d")
     except ValueError as e:
         log.error(f"Error parsing born date: {e}")
         return None
-
-def cdn_url_for_server_id(cdn_servers: dict[str, Any], server_id: str) -> str | None:
-    server_info = cdn_servers.get(server_id, None)
-    if server_info is None:
-        return None
-    cdn_url = server_info["settings"]["url"]
-    return cdn_url.rstrip("/")
 
 def parse_model_as_performer(domain: str, cms_data: Any, cdn_servers: dict[str, Any]) -> ScrapedPerformer:
     performer: ScrapedPerformer = {"name": cms_data["name"]}
@@ -270,11 +279,9 @@ def parse_model_as_performer(domain: str, cms_data: Any, cdn_servers: dict[str, 
 
     data_detail_values = cms_data.get("data_detail_values", {})
 
-    # get image
-    if cms_set_image := last_value(data_detail_values["preview"]["11"])[0]:
-        # get cdn url
-        if cdn_url := cdn_url_for_server_id(cdn_servers, cms_set_image["cms_content_server_id"]):
-            performer["image"] = f"{cdn_url}{cms_set_image["fileuri"]}?{cms_set_image["signature"]}"
+    # data detail 11 is the model's portrait
+    if image := image_url(cdn_servers, dig(data_detail_values, "preview", "11", default={})):
+        performer["image"] = image
 
     if weight := data_detail_values.get("4"):
         # object containing "value": "140lbs (63kg)", extract numeric weight in kg
@@ -282,26 +289,20 @@ def parse_model_as_performer(domain: str, cms_data: Any, cdn_servers: dict[str, 
         if match := re.search(r'(\d[\.\d+]*)\s*kg', weight_value):
             performer["weight"] = match.group(1)
 
-    if age := data_detail_values.get("2"):
-        # object containing "value": "23", extract numeric age
-        if born := data_detail_values.get("1"):
-            # get first cms_set_id from data_detail_values
-            if first_cms_set_id := next(iter(cms_data.get("cms_set_id", [])), None):
-                log.debug(f"first_cms_set_id: {first_cms_set_id}")
-                # get added date from cms_set
-                cms_sets = get_sets(domain, cms_set_id=first_cms_set_id)
-                if cms_sets and "added_nice" in cms_sets[0]:
-                    added_nice = cms_sets[0]["added_nice"]
-                    added = datetime.strptime(added_nice, "%Y-%m-%d")
-                else:
-                    added = datetime.now()
-            else:
-                added = datetime.now()
-            log.debug(f"added: {added}")
+    # age ("23") is only meaningful next to a birthday ("May 25") and the date the model's first set went out
+    if (age := data_detail_values.get("2")) and (born := data_detail_values.get("1")):
+        added = None
+        if first_cms_set_id := next(iter(cms_data.get("cms_set_id", [])), None):
+            log.debug(f"first_cms_set_id: {first_cms_set_id}")
+            cms_sets = get_sets(domain, cms_set_id=first_cms_set_id)
+            if added_nice := dig(cms_sets, 0, "added_nice"):
+                added = date.fromisoformat(added_nice)
+        if added is None:
+            added = date.today()  # noqa: DTZ011 - a publish date has no timezone
+        log.debug(f"added: {added}")
 
-            # object containing "value": "value": "May 25", extract born date
-            if inferred_birthday := calculate_dob(int(age["value"]), born["value"], added):
-                performer["birthdate"] = inferred_birthday
+        if inferred_birthday := calculate_dob(int(age["value"]), born["value"], added):
+            performer["birthdate"] = inferred_birthday
 
     if measurements := data_detail_values.get("6"):
         # object containing "value": "38C-32-40"
@@ -361,10 +362,10 @@ def resolve_studio(cms_set: Any) -> ScrapedStudio | None:
             continue
         key = re.sub(r'\..*$', '', values[0], flags=re.IGNORECASE).lower()
         if key in CONFIG:
-            return {"name": CONFIG[key]["studio_name"]}
+            return studio_with_parent(CONFIG[key]["studio_name"])
         # not one of our configured studios, fall back to its own display name
         names = extract_names(cms_set, tag)
-        return {"name": names[0] if names else values[0]}
+        return studio_with_parent(names[0] if names else values[0])
     return None
 
 @cache_to_disk(ttl=600)
@@ -374,7 +375,7 @@ def get_models(domain: str, start: int = 0, name: str | None = None, slug: str |
         "start": f"{start}",
         "count": "10",
         "orderby": "published_desc",
-        "cms_block_id": CONFIG[domain]["sets"]["cms_block_id"],
+        "cms_block_id": CONFIG[domain]["cms_block_id"],
         "name": name,
         "slug": slug
     }
@@ -384,7 +385,7 @@ def get_models(domain: str, start: int = 0, name: str | None = None, slug: str |
     data_values = []
     try:
         _result = res.json()
-    except Exception as e:
+    except ValueError as e:
         log.error(f"Error parsing JSON response: {e}")
         _result = {"data_values": []}
     else:
@@ -409,7 +410,7 @@ def get_sets(
         "content_count": "1",
         "count": "5",
         "start": f"{start}",
-        "cms_block_id": CONFIG[domain]["sets"]["cms_block_id"],
+        "cms_block_id": CONFIG[domain]["cms_block_id"],
         "orderby": "published_desc",
         "status": "enabled",
         "cms_area_id": CONFIG[domain]["cms_area_id"],
@@ -431,7 +432,7 @@ def get_sets(
     cms_sets = []
     try:
         _result = res.json()
-    except Exception as e:
+    except ValueError as e:
         log.error(f"Error parsing JSON response: {e}")
         _result = {"sets": []}
     else:
@@ -456,26 +457,14 @@ def scene_search(
 
     log.debug(f"Matching query: {query} and slug: {slug} against {len(search_domains)} sites")
 
-    parsed_scenes: list[ScrapedScene] = []
-
-    def fetch_domain(domain):
+    def fetch_domain(domain: str) -> list[ScrapedScene]:
         cdn_servers = get_cdn_servers(domain)
         log.trace(f"CDN servers: {cdn_servers}")
         log.trace(f"Searching domain: {domain} for query: {query}")
         video_sets = get_sets(domain, content_type="video", text_search=query, slug=slug)
         return [parse_set_as_scene(domain, cms_set, cdn_servers) for cms_set in video_sets]
 
-    with ThreadPoolExecutor() as executor:
-        futures = {executor.submit(fetch_domain, domain): domain for domain in search_domains}
-        for future in as_completed(futures):
-            try:
-                domain_parsed_scenes = future.result()
-                parsed_scenes.extend(domain_parsed_scenes)
-            except Exception as e:
-                log.error(f"Error processing domain {futures[future]}: {e}")
-                log.debug(traceback.format_exc())
-
-    return parsed_scenes
+    return gather_by_domain(search_domains, fetch_domain)
 
 
 def gallery_search(
@@ -489,26 +478,14 @@ def gallery_search(
 
     log.debug(f"Matching query: {query} and slug: {slug} against {len(search_domains)} sites")
 
-    parsed_galleries: list[ScrapedGallery] = []
-
-    def fetch_domain(domain):
+    def fetch_domain(domain: str) -> list[ScrapedGallery]:
         cdn_servers = get_cdn_servers(domain)
         log.trace(f"CDN servers: {cdn_servers}")
         log.trace(f"Searching domain: {domain} for query: {query}")
         photo_sets = get_sets(domain, content_type="image", text_search=query, slug=slug)
         return [parse_set_as_gallery(domain, cms_set, cdn_servers) for cms_set in photo_sets]
 
-    with ThreadPoolExecutor() as executor:
-        futures = {executor.submit(fetch_domain, domain): domain for domain in search_domains}
-        for future in as_completed(futures):
-            try:
-                domain_parsed_galleries = future.result()
-                parsed_galleries.extend(domain_parsed_galleries)
-            except Exception as e:
-                log.error(f"Error processing domain {futures[future]}: {e}")
-                log.debug(traceback.format_exc())
-
-    return parsed_galleries
+    return gather_by_domain(search_domains, fetch_domain)
 
 
 def performer_search(
@@ -522,25 +499,14 @@ def performer_search(
 
     log.debug(f"Matching name: {name} and slug: {slug} against {len(search_domains)} sites")
 
-    parsed_performers: list[ScrapedPerformer] = []
-
-    def fetch_domain(domain):
+    def fetch_domain(domain: str) -> list[ScrapedPerformer]:
         cdn_servers = get_cdn_servers(domain)
         log.trace(f"CDN servers: {cdn_servers}")
         log.trace(f"Searching domain: {domain} for query: {name}")
         models = get_models(domain, name=name, slug=slug)
         return [parse_model_as_performer(domain, cms_data, cdn_servers) for cms_data in models]
 
-    with ThreadPoolExecutor() as executor:
-        futures = {executor.submit(fetch_domain, domain): domain for domain in search_domains}
-        for future in as_completed(futures):
-            try:
-                domain_parsed_performers = future.result()
-                parsed_performers.extend(domain_parsed_performers)
-            except Exception as e:
-                log.error(f"Error processing domain {futures[future]}: {e}")
-
-    return parsed_performers
+    return gather_by_domain(search_domains, fetch_domain)
 
 
 def scene_from_fragment(
@@ -559,7 +525,7 @@ def scene_from_fragment(
         if slug_match := re.search(r'/video/([^/]+)', fragment.get("url", "")):
             match["urls"] = known_urls(fragment["url"], url_domain, slug_match.group(1), "video")
         if not match.get("studio"):
-            match["studio"] = {"name": CONFIG[url_domain]["studio_name"]}
+            match["studio"] = studio_with_parent(CONFIG[url_domain]["studio_name"])
 
     return match
 
@@ -593,7 +559,7 @@ def gallery_from_fragment(
         if slug_match := re.search(r'/photo/([^/]+)', fragment.get("url", "")):
             match["urls"] = known_urls(fragment["url"], url_domain, slug_match.group(1), "photo")
         if not match.get("studio"):
-            match["studio"] = {"name": CONFIG[url_domain]["studio_name"]}
+            match["studio"] = studio_with_parent(CONFIG[url_domain]["studio_name"])
 
     return match
 
@@ -638,7 +604,7 @@ def gallery_by_url(
         url_domain = domain_from_url(url)
         first_match["urls"] = known_urls(url, url_domain, slug, "photo") if url_domain else [url]
         if not first_match.get("studio") and url_domain:
-            first_match["studio"] = {"name": CONFIG[url_domain]["studio_name"]}
+            first_match["studio"] = studio_with_parent(CONFIG[url_domain]["studio_name"])
     return first_match
 
 def performer_by_url(
@@ -684,7 +650,7 @@ def scene_by_url(
         url_domain = domain_from_url(url)
         first_match["urls"] = known_urls(url, url_domain, slug, "video") if url_domain else [url]
         if not first_match.get("studio") and url_domain:
-            first_match["studio"] = {"name": CONFIG[url_domain]["studio_name"]}
+            first_match["studio"] = studio_with_parent(CONFIG[url_domain]["studio_name"])
 
     return first_match
 

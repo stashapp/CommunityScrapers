@@ -4,7 +4,7 @@ galleryByFragment:
   action: script
   script:
     - python
-    - island_dollars.py
+    - LadyboyGold.py
     - gallery-by-fragment
 galleryByURL:
   - action: script
@@ -18,19 +18,19 @@ galleryByURL:
       - tsraw.com/photo/
     script:
       - python
-      - island_dollars.py
+      - LadyboyGold.py
       - gallery-by-url
 performerByFragment:
   action: script
   script:
     - python
-    - island_dollars.py
+    - LadyboyGold.py
     - performer-by-fragment
 performerByName:
   action: script
   script:
     - python
-    - island_dollars.py
+    - LadyboyGold.py
     - performer-by-name
 performerByURL:
   - action: scrapeXPath
@@ -48,7 +48,7 @@ performerByURL:
       - tsraw.com/model/
     script:
       - python
-      - island_dollars.py
+      - LadyboyGold.py
       - performer-by-url
 sceneByURL:
   - action: scrapeXPath
@@ -81,25 +81,25 @@ sceneByURL:
       - tsraw.com/video/
     script:
       - python
-      - island_dollars.py
+      - LadyboyGold.py
       - scene-by-url
 sceneByName:
   action: script
   script:
     - python
-    - island_dollars.py
+    - LadyboyGold.py
     - scene-by-name
 sceneByFragment:
   action: script
   script:
     - python
-    - island_dollars.py
+    - LadyboyGold.py
     - scene-by-fragment
 sceneByQueryFragment:
   action: script
   script:
     - python
-    - island_dollars.py
+    - LadyboyGold.py
     - scene-by-query-fragment
 xPathScrapers:
   performerScraperLadyboyGold:
