@@ -145,9 +145,14 @@ xPathScrapers:
         Name: //div[@class="content-pane-performers"]/a/text()
       Studio: &studioFromSiteLinkAttr
         Name:
-          selector: $contentpane//a[@class="site-link"]/text() | $contentpane//span[@class="site-link"]/text()
+          selector: >-
+            $contentpane//a[@class="site-link"]/text() |
+            $contentpane//span[@class="site-link"]/text() |
+            //title/text()[not($contentpane//*[@class="site-link"])]
           postProcess:
             - replace:
+                - regex: ^([^-]+?)\s-\s.*$
+                  with: $1
                 - regex: (.+?)\.(com|xxx)
                   with: $1
                 # 'StepSiblingsCaught' => 'Step Siblings Caught'
@@ -163,7 +168,7 @@ xPathScrapers:
                 Moms Boy Toy: Mom's Boy Toy
                 Moms Family Secrets: Mom's Family Secrets
                 Moms Tight: Mom's Tight
-
+                Nubiles: Nubiles.net
                 Nubiles ET: NubilesET
       Tags: &tagsAttr
         Name: //div[@class="categories"]/a/text()
@@ -220,6 +225,7 @@ xPathScrapers:
 
     gallery:
       Title: *galleryTitleAttr
+      Code: *codeSelector
       Details: *detailsAttr
       Date: *dateAttr
       Performers: *performersAttr
