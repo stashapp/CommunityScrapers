@@ -24,23 +24,25 @@ sceneByURL:
     scraper: networkScraper
   - action: scrapeXPath
     url:
-      # Subsites have dates and studio names
-      - dreamtranny.com/update
+      # Subsites that render their own update date
       - hcjav.com/update
+      - jeffsmodels.com/update
     scraper: subSiteScraper
   - action: scrapeXPath
     url:
-      # These subsites don't render their own update date
+      # These subsites don't render their own update date, but they do share
+      # porngutter.com's update ids, so it can be read off the network page
       - dothewife.com/update
       - genlez.com/update
       - goldenslut.com/update
-      - jeffsmodels.com/update
       - suggabunny.com/update
     scraper: subSiteScraperNoDate
 xPathScrapers:
   networkScraper:
     scene:
       Title: &title //div[@class="section-title"]
+      # the update id is a real identifier here, not an incidental URL id:
+      # the sequence is gapless and has survived the site's layout changes
       Code: &code
         selector: &URL //link[@rel="canonical"]/@href
         postProcess:
@@ -77,17 +79,18 @@ xPathScrapers:
         postProcess:
           - replace:
               - regex: '^\s*:\s*'
-                with:
-      URL: *URL
+                with: ""
+      URLs: *URL
       Image: &image
         selector: //img[@class="video-banner"]/@src | //video/@poster
         postProcess:
           - replace:
+              # updates with no cover render the literal string "None"
+              - regex: ^None$
+                with: ""
               - regex: ^/
                 with: https://porngutter.com
   subSiteScraper:
-    common:
-      $title: //div[@class="section-title"]
     scene:
       Title: *title
       Code: *code
@@ -97,10 +100,9 @@ xPathScrapers:
       Performers: *performers
       Tags: *tags
       Details: *details
+      URLs: *URL
       Image: *image
   subSiteScraperNoDate:
-    common:
-      $title: //div[@class="section-title"]
     scene:
       Title: *title
       Code: *code
@@ -117,4 +119,5 @@ xPathScrapers:
       Performers: *performers
       Tags: *tags
       Details: *details
+      URLs: *URL
       Image: *image
