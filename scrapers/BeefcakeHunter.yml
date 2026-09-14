@@ -9,8 +9,11 @@ xPathScrapers:
     scene:
       Title: //h2[@class="sunday-funday-video-title"]
       Details:
-        selector: //div[@id="dslc-theme-content-inner"]//p
-        concat: "\n\n"
+        selector: //div[@id="dslc-theme-content-inner"]/div[1]
+        postProcess:
+          - replace:
+              - regex: \n+
+                with: "\n\n"
       Date:
         selector: //meta[@property="article:published_time"]/@content
         postProcess:
