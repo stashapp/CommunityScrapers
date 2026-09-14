@@ -48,6 +48,6 @@ xPathScrapers:
         Name: //div[contains(@class, "video-info")]//a[contains(@href, "category")]
       Image: //video/@data-poster | //deo-video/@cover-image
       Date: //meta[@property="video:release_date"]/@content
-      URL: //link[@rel="canonical"]/@href
+      URLs: //link[@rel="canonical"]/@href
       Studio:
         Name: //meta[@property="video:series"]/@content
