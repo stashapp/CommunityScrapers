@@ -1,0 +1,23 @@
+name: Sidecar
+# requires: py_common
+
+sceneByFragment:
+  action: script
+  script:
+    - python
+    - Sidecar.py
+    - scene-by-fragment
+
+galleryByFragment:
+  action: script
+  script:
+    - python
+    - Sidecar.py
+    - gallery-by-fragment
+
+imageByFragment:
+  action: script
+  script:
+    - python
+    - Sidecar.py
+    - image-by-fragment
