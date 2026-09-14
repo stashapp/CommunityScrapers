@@ -11,22 +11,40 @@ from Altwolia.scrape import (
     scene_from_url,
     scene_search,
 )
-
 from py_common import log
+from py_common.types import ScrapedStudio
 from py_common.util import dig, replace_all, scraper_args
 
+OWN_BRAND = "ASGmax"
 
-def determine_studio(api_object: dict[str, Any]) -> str | None:
-    if api_object.get("studio_name") != "ASGmax":
-        return None
-    if dig(api_object, "mainChannel", "name") == "ASGmax VR":
-        return "ASGmax VR"
-    return "ASGmax Originals"
+NOT_A_STUDIO = {"On The Set", "Bonus Content"}
+
+
+def determine_studio(api_object: dict[str, Any]) -> ScrapedStudio | None:
+    """
+    ASGMax carries other studios' catalogues, so studio_name is the network a
+    scene was licensed from while mainChannel is the sub-brand it belongs to
+    """
+    network = (api_object.get("studio_name") or "").strip()
+    channel = (dig(api_object, "mainChannel", "name") or "").strip() or (
+        "ASGmax Originals" if network == OWN_BRAND else None
+    )
+    if (
+        not channel
+        or channel in NOT_A_STUDIO
+        or (
+            dig(api_object, "mainChannel", "type") == "network" and network != OWN_BRAND
+        )
+    ):
+        return {"name": network} if network else None
+    if not network or network == channel:
+        return {"name": channel}
+    return {"name": channel, "parent": {"name": network}}
 
 
 def asgmax(obj: Any, api_object: dict[str, Any]) -> Any:
-    if studio_override := determine_studio(api_object):
-        obj = replace_all(obj, "studio", lambda s: {**s, "name": studio_override})
+    if studio := determine_studio(api_object):
+        obj = replace_all(obj, "studio", lambda s: {**s, **studio})
     return obj
 
 
