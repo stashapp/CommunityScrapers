@@ -162,8 +162,20 @@ jsonScrapers:
           postProcess: *decodeEntities
       Studio:
         Name:
-          selector: 0._embedded.wp:term|@flatten|#(taxonomy=="video_studio")#.name|0
-          postProcess: *decodeEntities
+          selector: "0"
+          postProcess:
+            - javascript: |
+                const groups = (JSON.parse(value)._embedded || {})["wp:term"] || [];
+                const terms = [].concat.apply([], groups);
+                const pick = (tax) =>
+                  (terms.find((t) => t && t.taxonomy === tax) || {}).name || "";
+                const name = pick("video_studio") || pick("video_channels");
+                const named = { amp: "&", quot: '"', apos: "'", nbsp: " ", hellip: "\u2026" };
+                return (name === "HUSTLER" ? "Hustler" : name).replace(
+                  /&(#\d+|amp|quot|apos|nbsp|hellip);/g,
+                  (m, e) =>
+                    e[0] === "#" ? String.fromCharCode(parseInt(e.slice(1), 10)) : named[e] || m
+                );
 
   sceneSearch:
     scene:
