@@ -1,0 +1,48 @@
+name: ChickPassLesbians
+sceneByURL:
+  - action: scrapeJson
+    url:
+      - chickpasslesbians.com/tour1/
+      - chickpasslesbians.com/video/
+    queryURL: https://www.chickpasscash.com/tour_api.php/content/sets?cms_area_id=6320bff5-cb14-473b-8a3a-fa774bc33d46&cms_block_id=111216&data_types=1&content_type=video&slug={url}
+    queryURLReplace:
+      url:
+        - regex: .*/tour1/scenes/([^/?#]+)_vids\.html.*
+          with: $1
+        - regex: .*/video/([^/?#]+).*
+          with: $1
+    scraper: sceneScraper
+jsonScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: sets.0.name
+        postProcess:
+          - replace:
+              - regex: \s+
+                with: " "
+      Details: sets.0.description
+      Date: sets.0.added_nice
+      Image:
+        selector: sets.0.preview_formatted.thumb.@values|@reverse.0.0.[fileuri,signature].@tostr
+        postProcess:
+          - replace:
+              - regex: ^\["(.*)","(.*)"\]$
+                with: $1?$2
+              - regex: \\/
+                with: /
+              - regex: ^
+                with: https://c85cc592fd.mjedge.net
+      Tags:
+        Name: sets.0.data_types.#(shortname=="category").data_values.#.name
+      Performers:
+        Name: sets.0.data_types.#(shortname=="models").data_values.#.name
+      Studio:
+        Name:
+          fixed: ChickPass Lesbians
+driver:
+  headers:
+    - Key: X-NATS-cms-area-id
+      Value: 6320bff5-cb14-473b-8a3a-fa774bc33d46
+    - Key: X-nats-entity-decode
+      Value: "1"
