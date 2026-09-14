@@ -5,10 +5,15 @@ sceneByURL:
     url:
       - chubsandcubs.com/tour/view_video/
     scraper: sceneScraper
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - chubsandcubs.com/tour/view_guy/
+    scraper: performerScraper
 xPathScrapers:
   sceneScraper:
     scene:
-      Title: //p[@class="h1"]/text()
+      Title: //p[@class="h1"]
       Details:
         selector: //div[@class="content"][1]/p/text()
         concat: "\n\n"
@@ -16,8 +21,8 @@ xPathScrapers:
         selector: //img[contains(@src,"poster.jpg")]/@src
         postProcess:
           - replace:
-            - regex: "^"
-              with: https://chubsandcubs.com/
+              - regex: "^"
+                with: https://chubsandcubs.com/
       Studio:
         Name:
           fixed: Chubs & Cubs
@@ -26,31 +31,37 @@ xPathScrapers:
           selector: //div[@class="scene_models"]//p/a/text()
           postProcess:
             - replace:
-              - regex: "More of "
-                with: ""
+                - regex: "More of "
+                  with: ""
   performerScraper:
     performer:
-      Name: //p[contains(@class, 'h1')]/span[contains(@class, 'h2')]/text()
+      Name: //p[contains(@class, 'h1')]
       Gender:
         fixed: Male
       Weight:
         selector: //div[@class='model_left']/p[1]/text()[contains(.,'Weight')]
         postProcess:
           - replace:
-            - regex: "Weight: "
-              with: ""
+              - regex: .*Weight:\s*(\d+).*
+                with: $1
           - lbToKg: true
       Height:
         selector: //div[@class='model_left']/p[1]/text()[contains(.,'Height')]
         postProcess:
           - replace:
-            - regex: "Height: "
-              with: ""
+              - regex: "Height: "
+                with: ""
           - feetToCm: true
-      Image:
-        selector: //div[@class='model_left']/img[1]/@src
+      PenisLength:
+        selector: //div[@class='model_left']/p/text()[contains(., 'Cock')]
         postProcess:
           - replace:
-            - regex: "(.*)"
-              with: "https://chubsandcubs.com$1"
-# Last Updated November 18, 2025
+              - regex: .*Cock:\s*(\d+).*
+                with: 0'$1
+          - feetToCm: true
+      Images:
+        selector: //div[@class='mod_pic']/img/@src
+        postProcess:
+          - replace:
+              - regex: "^"
+                with: https://chubsandcubs.com
