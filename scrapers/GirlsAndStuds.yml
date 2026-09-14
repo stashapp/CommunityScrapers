@@ -1,0 +1,65 @@
+name: Girls and Studs
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - girlsandstuds.com/
+    scraper: sceneScraper
+
+performerByURL:
+  - action: scrapeXPath
+    url:
+      - girlsandstuds.com/
+    scraper: performerScraper
+
+xPathScrapers:
+  sceneScraper:
+    common:
+      $playerOptions: //script[contains(text(), "picPreview")]
+    scene:
+      Title: //div[@id="scenePlayer"]//h1
+      Date:
+        selector: //p[contains(@class, "p-updated")]/text()[normalize-space()]
+        postProcess:
+          - parseDate: 01-02-2006
+      Details:
+        selector: //script[contains(text(), "sceneDetails")]
+        postProcess:
+          - javascript: |
+              const m = /"sceneDescription":("(?:[^"\\]|\\.)*")/.exec(value);
+              return m
+                ? JSON.parse(m[1])
+                    .replace(/<\/?br\s*\/?>/gi, "\n")
+                    .replace(/<\/?strong>/gi, "")
+                : "";
+      Tags:
+        Name: //div[contains(@class, "sceneColCategories")]/a
+      Performers:
+        Name: //p[contains(@class, "p-actors")]/a
+      Groups:
+        Name:
+          selector: $playerOptions
+          postProcess:
+            - replace:
+                - regex: .+"dvdName":"([^"]+)".+
+                  with: $1
+      Image:
+        selector: $playerOptions
+        postProcess:
+          - replace:
+              - regex: .+"picPreview":"([^"]+)".+
+                with: $1
+              - regex: '\\/'
+                with: /
+      Studio:
+        Name: //a[contains(@class, "GA_Id_headerLogo")]/span[@class="linkMainCaption"]
+
+  performerScraper:
+    performer:
+      Name: //h3[@class="actorName"]
+      Images:
+        # the linked variant is a 200x300 thumbnail, the unsuffixed original is 500x750
+        selector: //img[@class="actorPicture"]/@src
+        postProcess:
+          - replace:
+              - regex: _\d+x\d+(\.\w+)$
+                with: ${1}
