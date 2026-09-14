@@ -40,7 +40,6 @@ sceneByURL:
       - mistermale.com/en/videos/detail/
       - philippwants.com/en/videos/detail/
       - rawfuck.com/en/videos/detail/
-      - ridleydovarez.com/en/videos/detail/
       - sketboy.com/en/videos/detail/
       - universblack.com/en/videos/detail/
       - viktor-rom.com/en/videos/detail/
@@ -87,7 +86,6 @@ groupByURL:
       - mistermale.com/en/dvd/detail/
       - philippwants.com/en/dvd/detail/
       - rawfuck.com/en/dvd/detail/
-      - ridleydovarez.com/en/dvd/detail/
       - sketboy.com/en/dvd/detail/
       - universblack.com/en/dvd/detail/
       - viktor-rom.com/en/dvd/detail/
@@ -106,10 +104,11 @@ xPathScrapers:
               - regex: .*"datePublished"\s*:\s*"([^"]+)".*
                 with: $1
       Image:
+        # contentUrl is the ~40MB mp4, thumbnailUrl is the cover
         selector: //script[@type="application/ld+json"]/text()
         postProcess:
           - replace:
-              - regex: .*"contentUrl"\s*:\s*"([^"]+)".*
+              - regex: .*"thumbnailUrl"\s*:\s*"([^"]+)".*
                 with: $1
       Studio:
         Name: //*[i[contains(@class, "fa-video")]]/span
@@ -141,7 +140,12 @@ xPathScrapers:
         Name: //div[@class="row mb-4 px-0"]//h3[not(i)]
   movieScraper:
     group:
-      Name: //h1
+      Name:
+        selector: //script[@type="application/ld+json"]/text()
+        postProcess:
+          - replace:
+              - regex: .*?"name"\s*:\s*"([^"]+)".*
+                with: $1
       URLs: *url
       Synopsis: //div[@class="mb-2 bg-light p-3 my-3 text-justify my-text psm-rounded"]
       FrontImage: *dvdCover
