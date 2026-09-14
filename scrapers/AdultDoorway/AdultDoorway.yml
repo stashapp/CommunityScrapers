@@ -1,5 +1,5 @@
 name: AdultDoorway
-# scrapes: Amateur Throats, Anal Recruiters, Black On Black Crime, Busty Amateur Boobs, Club Amber Rayne, Ebony Cum Dumps, FacialAbuse, Fuck Me POV, Ghetto Gaggers, Huge Rubber Dicks, Joe The Pervert, Latina Abuse, Monster Cock Madness, Nasty Little Facials, Pink Kitty Girls, POV Hotel, Sexy Suck Jobs, Sperm Suckers, The Handjob Site, The Pantyhose Site
+# scrapes: Amateur Throats, Anal Recruiters, Black On Black Crime, Busty Amateur Boobs, Club Amber Rayne, Ebony Cum Dumps, FacialAbuse, Fuck Me POV, Ghetto Gaggers, Huge Rubber Dicks, Joe The Pervert, Latina Abuse, Lesbians Love Sex, Monster Cock Madness, Nasty Little Facials, POV Hotel, Pink Kitty Girls, Sexy Suck Jobs, Sperm Suckers, The Handjob Site, The Pantyhose Site
 sceneByURL:
   - action: scrapeXPath
     url:
@@ -21,13 +21,11 @@ sceneByURL:
       - monstercockmadness.com/tour/
       - nastylittlefacials.com/tour/
       - pinkkittygirls.com/tour/
-      - pornaddict.com/tour/
       - povhotel.com/tour/
       - sexysuckjobs.com/tour/
       - spermsuckers.com/tour/
       - thehandjobsite.com/tour/
       - thepantyhosesite.com/tour/
-
     scraper: sceneScraper
 xPathScrapers:
   sceneScraper:
@@ -59,7 +57,9 @@ xPathScrapers:
               - regex: ^.+(https:.+)$
                 with: $1
       Tags:
-        Name: $scene//ul[@class='tags']/li/a
+        Name: >-
+          $scene//ul[@class='tags']/li/a[not(contains(., " - Movies"))
+          and not(contains(., " - Photos"))]
       Studio:
         Name:
           selector: //div[@class="update-info-block"]//span[contains(@class,"bg-secondary")]/text()
