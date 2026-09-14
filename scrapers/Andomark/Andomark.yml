@@ -327,7 +327,7 @@ xPathScrapers:
               # Bypass the CDN (which is protected by a token) and grab it direct from the site
               - regex: (.+)(cdn\.)([^?]+).+
                 with: $1$3
-      URL: //link[@rel='canonical']/@href
+      URLs: &canonical //link[@rel="canonical"]/@href
   newStyle:
     common:
       $scene: //div[@class="vidImidWrap"]
@@ -339,7 +339,8 @@ xPathScrapers:
               - regex: ^/\s*
                 with: ""
       Date:
-        selector: $scene//span[./i[contains(@class, 'fa-calendar')]]/following-sibling::text()
+        # half these tours drop the fa-calendar icon, but they all have the comment
+        selector: $scene//ul[contains(@class, "videoInfo")]/li[comment()]/text()
         postProcess:
           - parseDate: 01/02/2006
           - parseDate: Jan 2, 2006
@@ -358,8 +359,14 @@ xPathScrapers:
       Title: //div[@class="setpreview-desc"]/h1
       Details: //div[@class="setpreview-desc"]/p
       Date:
-        selector: //span[@class="cover-date"]
+        # some of these tours drop the cover-date element but still emit JSON-LD
+        selector: >-
+          //span[@class="cover-date"]
+          | //script[@type="application/ld+json"][contains(., "uploadDate")]
         postProcess:
+          - replace:
+              - regex: .*"uploadDate":"(\d{4}-\d{2}-\d{2}).*
+                with: $1
           - parseDate: 2006-01-02
       Tags:
         Name: //a[@class="category-link"]
@@ -378,6 +385,7 @@ xPathScrapers:
         Name:
           selector: //link[@rel="canonical"]/@href
           postProcess: *studioPostProcess
+      URLs: *canonical
   proSceneScraper:
     common:
       # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
@@ -412,6 +420,7 @@ xPathScrapers:
               # Bypass the CDN (which is protected by a token) and grab it direct from the site
               - regex: (.+)(cdn\.)([^?]+).+
                 with: $1$3
+      URLs: *canonical
   proSceneWithImgFallbackScraper:
     common:
       # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
@@ -444,6 +453,7 @@ xPathScrapers:
               - regex: /access/scenes/
                 with: /updates/
           - subScraper: *image
+      URLs: *canonical
   vodSceneScraper:
     common:
       # We need to exclude anything inside a "category_listing_block" because those are suggested content and would give us false positives
@@ -506,6 +516,12 @@ xPathScrapers:
                 with: $1$2
               - regex: -[1-4]x\.jpg$
                 with: -full.jpg
+      URLs:
+        selector: *canonical
+        postProcess:
+          - replace:
+              - regex: ^(https?)//
+                with: ${1}://
 driver:
   headers:
     - Key: "User-Agent"
