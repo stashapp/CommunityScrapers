@@ -1,0 +1,70 @@
+name: Watch4Fetish
+# scrapes: DollRotic, FemLatex, Gymnastic, GymRotic, Watch4Fetish, ZentaiDolls
+sceneByURL:
+  - action: scrapeXPath
+    url:
+      - watch4fetish.com/trailers/
+    scraper: sceneScraper
+  - action: scrapeXPath
+    url:
+      - dollrotic.com/trailers/
+      - femlatex.com/trailers/
+      - gymnastic.xxx/trailers/
+      - gymrotic.com/trailers/
+      - zentaidolls.com/trailers/
+    scraper: tourScraper
+xPathScrapers:
+  sceneScraper:
+    scene:
+      Title:
+        selector: //div[@class="video-info-title"]/h1
+      URLs: &canonical //link[@rel="canonical"]/@href
+      Date:
+        selector: //div[@class="video-info-details"][1]
+        postProcess:
+          - replace:
+              - regex: 'Released:\s*'
+                with: ""
+          - parseDate: January 2, 2006
+      Performers:
+        Name: //div[@class='user-details-card-name']/text()
+        URLs: //a[@class="uk-flex"]/@href
+      Tags:
+        Name: //div[@class="abt-rw tgs"]/a
+      Details:
+        selector: //div[@class="video-info mt-3"]/p
+      Image: &image
+        selector: //base/@href | //div[@id="fakeplayer"]//img/@src0_1x
+        concat: "__SEP__"
+        postProcess:
+          - replace:
+              - regex: __SEP__
+                with: ""
+              - regex: -[1-4]x\.jpg
+                with: -full.jpg
+      Studio: &studio
+        Name:
+          selector: //meta[@name="author"]/@content
+          postProcess:
+            - replace:
+                # gymnastic.xxx is the one site not on a .com
+                - regex: '\.(com|xxx)$'
+                  with: ""
+  tourScraper:
+    common:
+      $perf: //strong[contains(text(),"Featuring:")]/following-sibling::a
+    scene:
+      Title: //li[contains(@class, "active")]
+      URLs: *canonical
+      Date:
+        selector: //strong[contains(text(),"Released:")]/following-sibling::text()
+        postProcess:
+          - parseDate: January 2, 2006
+      Performers:
+        Name: $perf
+        URLs: $perf/@href
+      Tags:
+        Name: //strong[contains(text(),"Tags:")]/following-sibling::a
+      Details: //div[contains(@class, "col-md-7")]//p
+      Image: *image
+      Studio: *studio
